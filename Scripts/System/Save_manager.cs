@@ -15,48 +15,51 @@ public class Save_manager : MonoBehaviour
     public Area_manager area;
     private void Start()
     {
-       // try
-       // {
+        try
+        {
             Load_items();
             Load_player();
             Load_pkm();
-    //    }
-      //  catch
-      //  {
-      //      dialogue.Write_Info("There was an error in loading you save data!","Details");
-      //      game_start.New_Player_Data();
-      //  }
+        }
+        catch
+        {
+            dialogue.Write_Info("There was an error in loading you save data!","Details");
+            game_start.New_Player_Data();
+        }
     }
     
     void Load_player()
     {
         CreateFolder("Assets/Save_data/Player");
         options.player_data = null;
-        int j = load_files("Assets/Save_data/Player", json_files);
-        for (int i = 0; i < j; i++)
+        int j = load_files("Assets/Save_data/Player");
+        if(j==1)
         {
-            options.player_data = Get_player("Assets/Save_data/Player/" + Path.GetFileName(json_files[i]));
+            options.player_data = Get_player("Assets/Save_data/Player/" + Path.GetFileName(json_files[0]));
         }
-        if (options.player_data==null)
+        else if(j>1)
+        {
+            dialogue.Write_Info("Please ensure only one player's data is in the save_data folder!","Details");
+        }
+        else
         {
             dialogue.Write_Info("There was no save data found!","Details");
             game_start.New_Player_Data();
         }
-        json_files.Clear();
     }
     void Load_items()
     {
         CreateFolder("Assets/Save_data/Items");
         playerBag.bag_items.Clear();
-        int j = load_files("Assets/Save_data/Items", json_files);
+        int j = load_files("Assets/Save_data/Items");
         for (int i = 0; i < j; i++)
         {
             playerBag.bag_items.Add(Get_Item("Assets/Save_data/Items/" + Path.GetFileName(json_files[i])));
         }
-        json_files.Clear();
     }
-    int load_files(string path, List<string> json_files)
+    int load_files(string path)
     {
+        json_files.Clear();
         string[] files = Directory.GetFiles(path);
         int j = 0;
         for (int i = 0; i < files.Length; i++)
@@ -83,7 +86,7 @@ public class Save_manager : MonoBehaviour
         }
         storage.non_party_pokemon.Clear();
         storage.all_pokemon.Clear();
-        int j = load_files("Assets/Save_data/Pokemon/", json_files);
+        int j = load_files("Assets/Save_data/Pokemon/");
         for (int i = 0; i < j; i++)
         {
             if (!storage.search_pkm_ID(Path.GetFileName(json_files[i]).Substring(0, Path.GetFileName(json_files[i]).Length - 5)))
@@ -93,7 +96,6 @@ public class Save_manager : MonoBehaviour
             storage.all_pokemon.Add(Get_Pokemon("Assets/Save_data/Pokemon/" + Path.GetFileName(json_files[i])));
             storage.num_pokemon++;
         }
-        json_files.Clear();
     }
     public void CreateFolder(string path)
     {
