@@ -18,8 +18,8 @@ public class Pokemon_party_member : MonoBehaviour
     private void Start()
     {
         Options.SetActive(false);
-    }//delete
-    public void placeh()
+    }
+    public void placeh()//delete
     {
         pkm.Level_up();
     }
@@ -52,8 +52,5 @@ public class Pokemon_party_member : MonoBehaviour
             Pkm_Lv.text = "Lv: " + pkm.Current_level.ToString();
             Pkm_name.text = pkm.Pokemon_name;
         }
-
     }
-
-
 }

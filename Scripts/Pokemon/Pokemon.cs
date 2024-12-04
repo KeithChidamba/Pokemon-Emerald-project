@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Xml.Linq;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 [CreateAssetMenu(fileName = "Pokemon", menuName = "pkm")]
 public class Pokemon : ScriptableObject
@@ -19,6 +16,8 @@ public class Pokemon : ScriptableObject
     public float Accuracy = 100;
     public int Current_level = 1;
     public float level_progress = 0;
+    public int base_exp_yield=0;
+    public bool has_trainer=false;
     public Type[] types;
     public string Status_effect = "None";
     public string type_Immunity = "None";
@@ -123,6 +122,32 @@ public class Pokemon : ScriptableObject
             {
                 Evolve(evolutions[i]);
             }
+        }
+    }
+
+    public void Get_exp(Pokemon enemy)
+    {
+        int level_difference = Current_level - enemy.Current_level;
+        float trainer_bonus = 0;
+        int exp;
+        if (enemy.has_trainer)
+            trainer_bonus = 1.5f;
+        if (level_difference < 0)//enemy is stronger, so more exp
+        { exp = (int)math.floor(enemy.base_exp_yield * level_difference * trainer_bonus);
+        }
+        else
+        {
+             exp = (int)(math.floor((enemy.base_exp_yield * trainer_bonus)/level_difference) );
+        }
+        level_progress += exp;
+        if (level_progress >= 100)
+        {
+            int num_levels = (int)math.trunc(level_progress / 100);
+            for (int i = 0; i < num_levels; i++)
+            {
+                Level_up();
+            }
+            level_progress -= 100 * num_levels;
         }
     }
     void Evolve(Evolution evo)

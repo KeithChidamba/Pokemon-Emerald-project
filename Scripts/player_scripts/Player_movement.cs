@@ -130,11 +130,11 @@ public class Player_movement : MonoBehaviour
             running = true;
             walking = false;
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift) && running)
+        if (Input.GetKeyUp(KeyCode.LeftShift) && running && !using_bike)
         {
             actions.canSwitch = true;
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift) && running && actions.canSwitch)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && running && actions.canSwitch && !using_bike)
         {
             running = false;
             actions.canSwitch = false;

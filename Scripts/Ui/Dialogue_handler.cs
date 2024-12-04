@@ -18,6 +18,8 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] int current_line_num = 0;
     [SerializeField] Player_movement movement;
     [SerializeField] GameObject dialogue_box;
+    [SerializeField] GameObject battle_box;
+    [SerializeField] GameObject info_box;
     [SerializeField] GameObject dialogue_next;
     [SerializeField] GameObject dialogue_exit;
     public Options_manager options;
@@ -25,6 +27,16 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] Text[] option_btns_txt;
     void Update()
     {
+        if (options.playerInBattle)
+        {
+            dialogue_box = battle_box;
+            info_box.SetActive(false);
+        }
+        else
+        {
+            battle_box = info_box;
+            battle_box.SetActive(false);
+        }
         if (Current_interaction != null)
         {
             if (Current_interaction.InterAction_type == "Options")
@@ -32,7 +44,6 @@ public class Dialogue_handler : MonoBehaviour
                 option_btns_txt[0].text =Current_interaction.options_txt[0];
                 option_btns_txt[1].text =Current_interaction.options_txt[1];
             }  
-            //lists
         }
         if (displaying && !text_finished)
         {

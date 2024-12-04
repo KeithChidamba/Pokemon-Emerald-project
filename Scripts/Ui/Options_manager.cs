@@ -13,6 +13,7 @@ public class Options_manager : MonoBehaviour
     public GameObject Menu_Options;
     public bool viewing_menu = false;
     public bool menu_off=true;
+    public bool playerInBattle = false;
     public pokemon_storage storage;
     public Poke_Mart market;
     public Player_data player_data;
