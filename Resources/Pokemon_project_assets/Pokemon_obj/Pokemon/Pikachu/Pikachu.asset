@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
+  m_Name: Pikachu
+  m_EditorClassIdentifier: 
+  Base_Pokemon_name: Pikachu
+  Pokemon_name: Pikachu
+  Pokemon_ID: 
+  HP: 12
+  max_HP: 12
+  Attack: 5
+  Defense: 2
+  SP_ATK: 9
+  SP_DEF: 4
+  speed: 12
+  Accuracy: 100
+  Current_level: 2
+  level_progress: 0
+  types:
+  - {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
+  Status_effect: None
+  evo_line:
+  - 18
+  learnSet:
+  - electric/thunder shock01
+  - electric/thunder wave03
+  - normal/quick attack07
+  - normal/tail whip09
+  move_set:
+  - {fileID: 11400000, guid: a4834cd0b33907a4c8866620b383fd8d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  ability: {fileID: 11400000, guid: e14cc0f589869f74585dfab11c944e42, type: 2}
+  evolutions:
+  - {fileID: 11400000, guid: 84257e89eafc79747b735d1c1052913e, type: 2}
+  front_picture: {fileID: 21300000, guid: c28e38aca92a874439086156a371957d, type: 3}
+  back_picture: {fileID: 21300000, guid: 4332c8302d541854ba01d58331af25b0, type: 3}
+  ability_name: 
+  evo_data:
+  - Raichu
+  type_data:
+  - 
+  - 
+  move_data:
+  - 
+  - 
+  - 
+  - 
+  num_moves: 0
+  num_types: 0
+  num_evo: 0

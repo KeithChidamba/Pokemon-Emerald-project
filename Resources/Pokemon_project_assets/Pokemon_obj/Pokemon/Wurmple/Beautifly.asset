@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b08819e8a6e5a46838808e39c37bb1, type: 3}
+  m_Name: Beautifly
+  m_EditorClassIdentifier: 
+  Evo_name: Beautifly
+  types:
+  - {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
+  - {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
+  ability: {fileID: 11400000, guid: 1399590b90613f74581252f98f7d9e0c, type: 2}
+  learnSet:
+  - bug/bug bite14
+  front_picture: {fileID: 21300000, guid: 9d48f881fcb6b7f4c8d4cd650a117a66, type: 3}
+  back_picture: {fileID: 21300000, guid: f3648bbb33e47f1469b260ea8a3cee13, type: 3}

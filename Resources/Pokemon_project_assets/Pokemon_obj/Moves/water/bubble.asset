@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
+  m_Name: bubble
+  m_EditorClassIdentifier: 
+  Move_name: Bubble
+  Move_damage: 30
+  Move_accuracy: 85
+  type: {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
+  isSpecial: 1
+  is_Buff_Debuff: 0
+  Priority: Normal
+  Powerpoints: 20
+  Status_effect: None
+  Status_chance: 0
+  Description: launches water bubbles at the foe
+  player_animtion: {fileID: 0}
+  enemy_animtion: {fileID: 0}

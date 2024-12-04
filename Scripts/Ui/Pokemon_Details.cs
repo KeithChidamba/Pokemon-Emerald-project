@@ -1,0 +1,144 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Pokemon_Details : MonoBehaviour
+{
+    public Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID;
+    public Text pkm_atk, pkm_sp_atk, pkm_def, pkm_sp_def, pkm_speed, pkm_hp;
+    public Text move_Description;
+    public GameObject[] moves_btns;
+    public Text[] moves_pp;
+    public Text[] moves;
+    public Image pkm_img;
+    public Image type1;
+    public Image type2;
+    public Image[] Move_type;
+    
+    public Pokemon current_pkm;
+    public GameObject Ability_ui;
+    public GameObject Stats_ui;
+    public GameObject Moves_ui;
+    public GameObject move_details;
+    public Text move_dmg, move_acc;
+    int current_page = 0;
+
+    public Pokemon_party party;
+    public void Exit_details()
+    {
+        gameObject.SetActive(false);
+        party.viewing_details = false;
+    }
+    public void Next()//next page
+    {
+        if (current_page < 3)
+        {
+            current_page++;
+        }
+        Load_ui(current_page);
+    }
+    public void Prev()//prev page
+     {
+         if (current_page > 1)
+         {
+             current_page--;
+         }
+         Load_ui(current_page);
+     }
+    //Set ui element values for each page
+    public void Move_Discription(int move_num)
+    {
+        move_Description.text=current_pkm.move_set[move_num - 1].Description;
+        move_acc.text = "Accuracy: "+current_pkm.move_set[move_num - 1].Move_accuracy.ToString();
+        move_dmg.text = "Damage: " + current_pkm.move_set[move_num - 1].Move_damage.ToString();
+        move_details.SetActive(true);
+    }
+
+    public void Load_ui(int Page)
+    {
+        switch (Page)
+        {
+            case 1:
+                load_Ablty_ui();
+                break;
+            case 2:
+                load_Stats_ui();
+                break;
+            case 3:
+                load_Moves_ui();
+                break;
+        }
+    }
+    void load_Ablty_ui()
+    {
+        Stats_ui.SetActive(false);
+        Moves_ui.SetActive(false);
+        if (current_pkm.types.Length > 1)
+        {
+            type1.sprite = current_pkm.types[0].type_img;
+            type2.sprite = current_pkm.types[1].type_img;
+            type1.gameObject.SetActive(true);
+            type2.gameObject.SetActive(true);
+        }
+        else
+        {
+            type1.sprite = current_pkm.types[0].type_img;
+            type1.gameObject.SetActive(true);
+            type2.gameObject.SetActive(false);
+        }
+        pkm_ablty_desc.text = current_pkm.ability.ability_description;
+        pkm_ablty.text = current_pkm.ability.ability;
+        Ability_ui.SetActive(true);
+    }    
+    void load_Stats_ui()
+    {
+        Ability_ui.SetActive(false);
+        Moves_ui.SetActive(false);
+        pkm_atk.text = current_pkm.Attack.ToString();
+        pkm_hp.text = current_pkm.HP.ToString()+"/"+ current_pkm.max_HP.ToString();
+        pkm_def.text = current_pkm.Defense.ToString();
+        pkm_sp_atk.text = current_pkm.SP_ATK.ToString();
+        pkm_speed.text = current_pkm.speed.ToString();
+        pkm_sp_def.text = current_pkm.SP_DEF.ToString();
+        Stats_ui.SetActive(true);
+    }     
+    void load_Moves_ui()
+    {
+        Ability_ui.SetActive(false);
+        Stats_ui.SetActive(false);
+        move_details.SetActive(false);
+        move_Description.text = "";//not null
+        int j = 0;
+        foreach(Move m in current_pkm.move_set)
+        {
+            if (m != null)
+            {
+                moves[j].text = current_pkm.move_set[j].Move_name;
+                Move_type[j].sprite = current_pkm.move_set[j].type.type_img;
+                Move_type[j].gameObject.SetActive(true);
+                moves_pp[j].text = "pp " + current_pkm.move_set[j].Powerpoints.ToString() + "/" + current_pkm.move_set[j].max_Powerpoints.ToString();
+                moves_btns[j].SetActive(true);
+                j++;
+            }
+        }
+        for (int i = j; i < 4; i++)
+        {
+            moves[i].text = "";
+            Move_type[i].gameObject.SetActive(false);
+            moves_pp[i].text = "";
+            moves_btns[i].SetActive(false);
+        }
+        Moves_ui.SetActive(true);
+    } 
+    public void Load_Details(Pokemon pokemon)
+    {
+        current_pkm=pokemon;
+        pkm_name.text = current_pkm.Pokemon_name;
+        pkm_ID.text = "ID: "+current_pkm.Pokemon_ID;
+        pkm_lv.text = "Lv "+current_pkm.Current_level.ToString();
+        pkm_img.sprite = current_pkm.front_picture;
+        current_page = 1;
+        Load_ui(current_page);
+    }
+}

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b08819e8a6e5a46838808e39c37bb1, type: 3}
+  m_Name: Swampert
+  m_EditorClassIdentifier: 
+  Evo_name: Swampert
+  types:
+  - {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
+  - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
+  ability: {fileID: 11400000, guid: 2d3aa5da1ed7a734cb1c25d192217a25, type: 2}
+  learnSet: []
+  front_picture: {fileID: 21300000, guid: b0076467b6bc5c34ca5fc05929d30891, type: 3}
+  back_picture: {fileID: 21300000, guid: 62038c4452eac334ebe7e2d837e8b022, type: 3}

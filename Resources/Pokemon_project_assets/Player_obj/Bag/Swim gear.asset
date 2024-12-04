@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
+  m_Name: Swim gear
+  m_EditorClassIdentifier: 
+  Item_ID: 
+  Item_name: Swim gear
+  Item_type: Action
+  Item_desc: Allows player to swim
+  price: 500
+  quantity: 1
+  Item_img: {fileID: -1515377947, guid: 84e56311fefcc6145b1b893fd4f5fa3b, type: 3}

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b08819e8a6e5a46838808e39c37bb1, type: 3}
+  m_Name: Combusken
+  m_EditorClassIdentifier: 
+  Evo_name: Combusken
+  types:
+  - {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
+  - {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
+  ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
+  learnSet:
+  - fire/flame thrower18
+  front_picture: {fileID: 21300000, guid: 481c8555e71c7f44eab6eb29249befe3, type: 3}
+  back_picture: {fileID: 21300000, guid: 234fb8644e5380d40b3475228962c5ea, type: 3}

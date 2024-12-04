@@ -1,0 +1,11 @@
+{
+    "Item_ID": "Potion20493145",
+    "Item_name": "Potion",
+    "Item_type": "Potion",
+    "Item_desc": "Heals 5hp",
+    "price": 18,
+    "quantity": 1,
+    "Item_img": {
+        "instanceID": 28968
+    }
+}

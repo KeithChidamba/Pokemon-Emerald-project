@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
+  m_Name: Trapinch
+  m_EditorClassIdentifier: 
+  Base_Pokemon_name: Trapinch
+  Pokemon_name: Trapinch
+  Pokemon_ID: 
+  HP: 13
+  max_HP: 13
+  Attack: 8
+  Defense: 8
+  SP_ATK: 8
+  SP_DEF: 8
+  speed: 8
+  Accuracy: 100
+  Current_level: 1
+  level_progress: 0
+  types:
+  - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
+  Status_effect: None
+  evo_line:
+  - 20
+  - 35
+  learnSet:
+  - dark/bite01
+  - dark/crunch05
+  - normal/tackle06
+  - ground/magnitude07
+  move_set:
+  - {fileID: 11400000, guid: 2d03686e73c8a174e8f1dd31d6ebdc76, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  ability: {fileID: 11400000, guid: 22b317c460bfdda4ba6608a82d464e03, type: 2}
+  evolutions:
+  - {fileID: 11400000, guid: 41c4f5dd85b85854084dc026be20084f, type: 2}
+  - {fileID: 11400000, guid: 36607a7c2c84636428574d7b94219d2e, type: 2}
+  front_picture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
+  back_picture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
+  ability_name: 
+  evo_data:
+  - Vibrava
+  - Flygon
+  type_data:
+  - 
+  - 
+  move_data:
+  - 
+  - 
+  - 
+  - 
+  num_moves: 0
+  num_types: 0
+  num_evo: 0

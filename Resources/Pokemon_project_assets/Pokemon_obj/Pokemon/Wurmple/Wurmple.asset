@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
+  m_Name: Wurmple
+  m_EditorClassIdentifier: 
+  Base_Pokemon_name: Wurmple
+  Pokemon_name: Wurmple
+  Pokemon_ID: 
+  HP: 15
+  max_HP: 15
+  Attack: 7
+  Defense: 2
+  SP_ATK: 5
+  SP_DEF: 4
+  speed: 8
+  Accuracy: 100
+  Current_level: 1
+  level_progress: 0
+  types:
+  - {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
+  Status_effect: None
+  evo_line:
+  - 5
+  - 13
+  learnSet:
+  - normal/tackle01
+  - bug/string shot02
+  - poison/poison sting03
+  move_set:
+  - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  ability: {fileID: 11400000, guid: 2753225943009a84284482e1ea9aae6b, type: 2}
+  evolutions:
+  - {fileID: 11400000, guid: 91a90426a0e18aa4890f91c50bc70adf, type: 2}
+  - {fileID: 11400000, guid: ddb36ec2bb47ec9468768b6e5931e0ce, type: 2}
+  front_picture: {fileID: 21300000, guid: ea9a85541a29aa940931d66a2ed59805, type: 3}
+  back_picture: {fileID: 21300000, guid: 662d6c66b57f6ed43809e4aafcf106f4, type: 3}
+  ability_name: 
+  evo_data:
+  - Silcoon
+  - Beautifly
+  type_data:
+  - 
+  - 
+  move_data:
+  - 
+  - 
+  - 
+  - 
+  num_moves: 0
+  num_types: 0
+  num_evo: 0

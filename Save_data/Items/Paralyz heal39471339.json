@@ -1,0 +1,11 @@
+{
+    "Item_ID": "Paralyz heal39471339",
+    "Item_name": "Paralyz heal",
+    "Item_type": "Status",
+    "Item_desc": "Heals paralysis",
+    "price": 20,
+    "quantity": 1,
+    "Item_img": {
+        "instanceID": 28966
+    }
+}
