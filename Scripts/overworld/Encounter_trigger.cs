@@ -5,11 +5,11 @@ using UnityEngine;
 public class Encounter_trigger : MonoBehaviour
 {
     public Encounter_handler handler;
+    bool triggered = false;
     private void OnTriggerStay2D(Collider2D collision)
     {
-        
         int encounter_chance = 20;
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && !triggered)
         {
             Player_movement player = collision.GetComponentInParent<Player_movement>();
             if (player.using_bike)
@@ -29,9 +29,19 @@ public class Encounter_trigger : MonoBehaviour
                     {
                         handler.Trigger_encounter();
                     }
+                    else
+                    {
+                        triggered = true;
+                        Invoke(nameof(Reset_trigger),2f);
+                    }
                 }
             }
         }
+    }
+
+    void Reset_trigger()
+    {
+        triggered = false;
     }
     void col(Collision2D collision)
     {

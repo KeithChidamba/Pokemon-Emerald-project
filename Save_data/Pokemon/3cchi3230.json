@@ -12,9 +12,11 @@
     "Accuracy": 100.0,
     "Current_level": 1,
     "level_progress": 0.0,
+    "base_exp_yield": 0,
+    "has_trainer": false,
     "types": [
         {
-            "instanceID": 29006
+            "instanceID": 29174
         }
     ],
     "Status_effect": "None",
@@ -31,7 +33,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -2994
+            "instanceID": -158276
         },
         {
             "instanceID": 0
@@ -44,21 +46,21 @@
         }
     ],
     "ability": {
-        "instanceID": 29010
+        "instanceID": 29178
     },
     "evolutions": [
         {
-            "instanceID": 29012
+            "instanceID": 29180
         },
         {
-            "instanceID": 29014
+            "instanceID": 29182
         }
     ],
     "front_picture": {
-        "instanceID": 28748
+        "instanceID": 28924
     },
     "back_picture": {
-        "instanceID": 29016
+        "instanceID": 29184
     },
     "ability_name": "Inferno",
     "evo_data": [

@@ -19,7 +19,6 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] Player_movement movement;
     [SerializeField] GameObject dialogue_box;
     [SerializeField] GameObject battle_box;
-    [SerializeField] GameObject info_box;
     [SerializeField] GameObject dialogue_next;
     [SerializeField] GameObject dialogue_exit;
     public Options_manager options;
@@ -27,16 +26,6 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] Text[] option_btns_txt;
     void Update()
     {
-        if (options.playerInBattle)
-        {
-            dialogue_box = battle_box;
-            info_box.SetActive(false);
-        }
-        else
-        {
-            battle_box = info_box;
-            battle_box.SetActive(false);
-        }
         if (Current_interaction != null)
         {
             if (Current_interaction.InterAction_type == "Options")
@@ -157,7 +146,12 @@ public class Dialogue_handler : MonoBehaviour
     {
         Display_Options(false);
         Current_interaction = null;
-        dialogue_box.SetActive(false);
+        if(!options.playerInBattle)
+            dialogue_box.SetActive(false);
+        else
+        {
+            battle_box.SetActive(false);
+        }
         current_line = "";
         Dialouge_txt.text = "";
         displaying = false;
@@ -176,7 +170,16 @@ public class Dialogue_handler : MonoBehaviour
         text_finished = false;
         displaying = true;
         num_lines = math.trunc(interaction.InteractionMsg.Length / Max_length);
-        dialogue_box.SetActive(true);
+        if (!options.playerInBattle)
+        {
+            dialogue_box.SetActive(true);
+            battle_box.SetActive(false);
+        }
+        else
+        {
+            battle_box.SetActive(true);
+            dialogue_box.SetActive(false);
+        }
         dialogue_exit.SetActive(true);
         if (interaction.InteractionMsg.Length > Max_length)
         {

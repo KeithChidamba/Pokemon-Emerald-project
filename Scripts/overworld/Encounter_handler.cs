@@ -35,15 +35,17 @@ public class Encounter_handler : MonoBehaviour
     }
     void Create_pkm(string pkm_name)
     {
-        wild_pkm = FindObjectOfType<pokemon_storage>().Add_pokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pkm_name.ToLower()+"/"+ pkm_name.ToLower()));
+        wild_pkm = options.ins_manager.set_Pokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pkm_name.ToLower()+"/"+ pkm_name.ToLower()));
         if (wild_pkm != null)
         {
             int rand_lv = Random.Range(area.min_lv, area.max_lv+1);
             for(int i=1;i<rand_lv;i++)
             {
-                wild_pkm.Level_up();
+                wild_pkm.Level_up(options.ins_manager);
             }
+            wild_pkm.HP=wild_pkm.max_HP;
             battle.Start_Battle(wild_pkm);
+            triggered_encounter = false;
         }
         else
         {

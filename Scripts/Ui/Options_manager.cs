@@ -59,6 +59,11 @@ public class Options_manager : MonoBehaviour
             Close_Store();
             dialogue.Write_Info("Would you like anything else?", "Options", "Buy_More","Sure, what would you like","Dont_Buy","Yes","No");
         }
+
+        if (playerInBattle)
+        {
+            player.doing_action = true;
+        }
     }
     //menu options
     public void Exit_To_menu()
@@ -96,6 +101,7 @@ public class Options_manager : MonoBehaviour
     }
     public void View_Bag()
     {
+        dialogue.Dialouge_off();
         player_bag.gameObject.SetActive(true);
         player.using_ui = true;
         player_bag.View_bag();
@@ -111,6 +117,7 @@ public class Options_manager : MonoBehaviour
     }
     public void View_pkm_Party()
     {
+        dialogue.Dialouge_off();
         party.party_ui.gameObject.SetActive(true);
         player.using_ui = true;
         party.View_party();

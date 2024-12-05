@@ -125,43 +125,46 @@ public class Player_movement : MonoBehaviour
             using_bike = false;
             actions.canSwitch = false;
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !running)
+        if (!using_bike)
         {
-            running = true;
-            walking = false;
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift) && running && !using_bike)
-        {
-            actions.canSwitch = true;
-        }
-        if (Input.GetKeyDown(KeyCode.LeftShift) && running && actions.canSwitch && !using_bike)
-        {
-            running = false;
-            actions.canSwitch = false;
-        }
-        if (!moving)
-        {
-            walking = false;
-        }
-        if (running)
-        {
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !running)
+            {
+                running = true;
+                walking = false;
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift) && running)
+            {
+                actions.canSwitch = true;
+            }
+            if (Input.GetKeyDown(KeyCode.LeftShift) && running && actions.canSwitch)
+            {
+                running = false;
+                actions.canSwitch = false;
+            }
             if (!moving)
             {
-                manager.change_animation_state(manager.Player_idle);
+                walking = false;
+            }
+            if (running)
+            {
+                if (!moving)
+                {
+                    manager.change_animation_state(manager.Player_idle);
+                }
+                else
+                {
+                    manager.change_animation_state(manager.Player_run);
+                }
+            }
+            if (moving && !running && !actions.canSwitch)
+            {
+                walking = true; 
+                manager.change_animation_state(manager.Player_walk);
             }
             else
             {
-                manager.change_animation_state(manager.Player_run);
+                walking = false;
             }
-        }
-        if (moving && !running && !actions.canSwitch)
-        {
-            walking = true; 
-            manager.change_animation_state(manager.Player_walk);
-        }
-        else
-        {
-            walking = false;
         }
     }
     void Move_Logic()

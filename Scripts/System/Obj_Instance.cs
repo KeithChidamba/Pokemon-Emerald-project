@@ -51,6 +51,15 @@ public class Obj_Instance : MonoBehaviour
         new_pkm.types = pkm.types;
         new_pkm.evolutions = pkm.evolutions;
         new_pkm.evo_line = pkm.evo_line;
+        int i = 0;
+        foreach (Move m in pkm.move_set)
+        {
+            if (m != null)
+            {
+                new_pkm.move_set[i] = set_move(m);
+            }
+            i++;
+        }
         return new_pkm;
     }
     int Get_rand(int exclusive_lim)

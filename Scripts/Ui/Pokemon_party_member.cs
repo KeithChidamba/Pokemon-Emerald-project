@@ -21,7 +21,7 @@ public class Pokemon_party_member : MonoBehaviour
     }
     public void placeh()//delete
     {
-        pkm.Level_up();
+        pkm.Level_up(FindObjectOfType<Obj_Instance>());
     }
     public void Set_Ui()
     {

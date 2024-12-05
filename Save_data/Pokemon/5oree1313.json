@@ -12,9 +12,11 @@
     "Accuracy": 100.0,
     "Current_level": 1,
     "level_progress": 0.0,
+    "base_exp_yield": 0,
+    "has_trainer": false,
     "types": [
         {
-            "instanceID": 28978
+            "instanceID": 29146
         }
     ],
     "Status_effect": "None",
@@ -31,7 +33,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -2762
+            "instanceID": -158280
         },
         {
             "instanceID": 0
@@ -44,21 +46,21 @@
         }
     ],
     "ability": {
-        "instanceID": 28982
+        "instanceID": 29150
     },
     "evolutions": [
         {
-            "instanceID": 28984
+            "instanceID": 29152
         },
         {
-            "instanceID": 28986
+            "instanceID": 29154
         }
     ],
     "front_picture": {
-        "instanceID": 28926
+        "instanceID": 29090
     },
     "back_picture": {
-        "instanceID": 28988
+        "instanceID": 29156
     },
     "ability_name": "Overgrow",
     "evo_data": [

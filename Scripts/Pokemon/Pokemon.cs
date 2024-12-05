@@ -125,7 +125,7 @@ public class Pokemon : ScriptableObject
         }
     }
 
-    public void Get_exp(Pokemon enemy)
+    public void Get_exp(Pokemon enemy,Obj_Instance ins)
     {
         int level_difference = Current_level - enemy.Current_level;
         float trainer_bonus = 0;
@@ -145,7 +145,7 @@ public class Pokemon : ScriptableObject
             int num_levels = (int)math.trunc(level_progress / 100);
             for (int i = 0; i < num_levels; i++)
             {
-                Level_up();
+                Level_up(ins);
             }
             level_progress -= 100 * num_levels;
         }
@@ -164,7 +164,7 @@ public class Pokemon : ScriptableObject
         SP_DEF += 3;
         speed += 3;
     }
-    public void Level_up()
+    public void Level_up(Obj_Instance ins)
     {
         Current_level++;
         Attack++;
@@ -192,11 +192,11 @@ public class Pokemon : ScriptableObject
                 string n = learnSet[i].Substring(pos, learnSet[i].Length - 2 - pos).ToLower();//move name
                 if (num_moves == 4)
                 {
-                    move_set[num_moves-1] = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n);
+                    move_set[num_moves-1] = ins.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
                 }
                 else
                 {
-                    move_set[num_moves] = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n);
+                    move_set[num_moves] = ins.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
                 }
 
                 break;
