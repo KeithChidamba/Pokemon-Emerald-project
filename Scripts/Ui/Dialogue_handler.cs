@@ -11,6 +11,7 @@ public class Dialogue_handler : MonoBehaviour
     public Text Dialouge_txt;
     [SerializeField] GameObject elipsis_txt;
     [SerializeField] bool text_finished = false;
+    private bool can_exit = true;
     public bool displaying = false;
     [SerializeField] string current_line = "";
     [SerializeField] int Max_length = 90;
@@ -32,11 +33,15 @@ public class Dialogue_handler : MonoBehaviour
             {
                 option_btns_txt[0].text =Current_interaction.options_txt[0];
                 option_btns_txt[1].text =Current_interaction.options_txt[1];
-            }  
+            }
+            if (Current_interaction.InterAction_type == "Battle info")
+            {
+                dialogue_exit.SetActive(false);
+                can_exit = false;
+            }
         }
         if (displaying && !text_finished)
         {
-
             if (Input.GetKeyDown(KeyCode.F))
             {
                 if (current_line_num < num_lines)
@@ -65,9 +70,10 @@ public class Dialogue_handler : MonoBehaviour
             if (options.player.doing_action )
             {
                 dialogue_exit.SetActive(false);
+                can_exit = false;
             }
         }
-        if (displaying && Input.GetKeyDown(KeyCode.R) && !options.player.doing_action)
+        if (displaying && Input.GetKeyDown(KeyCode.R) && can_exit)
         {
             Dialouge_off();
         }
@@ -173,11 +179,13 @@ public class Dialogue_handler : MonoBehaviour
         if (!options.playerInBattle)
         {
             dialogue_box.SetActive(true);
+            Dialouge_txt.color=Color.black;
             battle_box.SetActive(false);
         }
         else
         {
             battle_box.SetActive(true);
+            Dialouge_txt.color=Color.white;
             dialogue_box.SetActive(false);
         }
         dialogue_exit.SetActive(true);

@@ -20,7 +20,7 @@ public class Options_manager : MonoBehaviour
     public Obj_Instance ins_manager;
     public Recieve_Pokemon gift_pkm;
     public Game_Load game_state;
-
+    public Item_handler item_h;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !player.using_ui && !player.doing_action &&!viewing_menu)
@@ -133,7 +133,7 @@ public class Options_manager : MonoBehaviour
     {
 
     }
-    void Battle()
+    void Battle()//trainer battle after interaction
     {
 
     }
@@ -184,6 +184,7 @@ public class Options_manager : MonoBehaviour
     {
         string pkm_name = current_interaction.InterAction_result_msg;
         Pokemon pkm = Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pkm_name +"/"+ pkm_name);
+        pkm.has_trainer = true;
         party.Add_Member(pkm);
         dialogue.Dialouge_off();
         dialogue.Write_Info("You got a " + pkm.Pokemon_name, "Details");

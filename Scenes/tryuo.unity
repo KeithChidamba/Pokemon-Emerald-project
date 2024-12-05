@@ -4203,7 +4203,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &129269577
 Transform:
   m_ObjectHideFlags: 0
@@ -8072,7 +8072,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &278800110
 GameObject:
@@ -11914,8 +11914,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1829234815}
-        m_TargetAssemblyTypeName: Wild_pokemon_battle, Assembly-CSharp
+      - m_Target: {fileID: 1829234817}
+        m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
         m_MethodName: Select_Move
         m_Mode: 3
         m_Arguments:
@@ -13778,7 +13778,7 @@ Transform:
   - {fileID: 1740777792}
   - {fileID: 187727644}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &526579586
 GameObject:
@@ -19775,7 +19775,7 @@ RectTransform:
   - {fileID: 2105458974}
   - {fileID: 235881331}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -20203,7 +20203,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: NORMAL
+  m_Text: 
 --- !u!222 &717278677
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -26874,7 +26874,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &935983327
 MonoBehaviour:
@@ -27512,7 +27512,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd7756fe3484e147be81d81c8b38667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dictionary: {fileID: 11400000, guid: a54768c63323392478445f1a081b4431, type: 2}
+  All_moves:
+  - {fileID: 11400000, guid: 2cd67b76891307349b0ee315a2a7b669, type: 2}
+  - {fileID: 11400000, guid: 359e5c8587c85634d826bfeca51ae78e, type: 2}
+  - {fileID: 11400000, guid: 2d03686e73c8a174e8f1dd31d6ebdc76, type: 2}
+  - {fileID: 11400000, guid: e43bbff887f85434aaefcdb9c220fc13, type: 2}
+  - {fileID: 11400000, guid: 88bd6685312db15438e092430c87989c, type: 2}
+  - {fileID: 11400000, guid: 2a9211c580ffc4d40a536d2a284fc09a, type: 2}
+  - {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
+  - {fileID: 11400000, guid: 347e8d6b509bd8a49b47824d6d6ca87c, type: 2}
+  - {fileID: 11400000, guid: 60cffafaf669f5348b85921e94bfe643, type: 2}
+  - {fileID: 11400000, guid: abd7e2fa7b8631e45a3ef96ffe5c87bc, type: 2}
+  - {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}
+  - {fileID: 11400000, guid: ba7227d3cd2a00f4ca02f38ded4a2e32, type: 2}
+  - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+  - {fileID: 11400000, guid: 3fc4f8de5bc58824d940ff29a52a24ab, type: 2}
+  - {fileID: 11400000, guid: f397667296c72b94fafa4d62db35535a, type: 2}
+  - {fileID: 11400000, guid: e589d376f63838b43abf8c4492ec17ce, type: 2}
+  - {fileID: 11400000, guid: f0692df27620a0f4eb138d4c0063f186, type: 2}
+  - {fileID: 11400000, guid: 587287dff7e14084a93b6e42b9bd945f, type: 2}
+  - {fileID: 11400000, guid: 42d9568f55b98da4cac3a7ad520617cd, type: 2}
+  - {fileID: 11400000, guid: 37d12cb1bc0332d429d388ad6d37b17f, type: 2}
+  - {fileID: 11400000, guid: e814c71756f4bf849b975c47a51ff6d1, type: 2}
+  - {fileID: 11400000, guid: 7a19dc867aad2ed4faaf1e7bac06304f, type: 2}
+  - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+  - {fileID: 11400000, guid: 38b98d4bcb652754aadb472acfbc3201, type: 2}
+  - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
+  - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+  - {fileID: 11400000, guid: a4834cd0b33907a4c8866620b383fd8d, type: 2}
+  - {fileID: 11400000, guid: b777dec5f205a61448873e7760324510, type: 2}
+  - {fileID: 11400000, guid: 53fed834b2f80124ba1a685c0ffcbe2b, type: 2}
+  battle: {fileID: 1829234817}
+  dialogue: {fileID: 1097391156}
 --- !u!4 &951266805
 Transform:
   m_ObjectHideFlags: 0
@@ -36347,8 +36378,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1829234815}
-        m_TargetAssemblyTypeName: Wild_pokemon_battle, Assembly-CSharp
+      - m_Target: {fileID: 1829234817}
+        m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
         m_MethodName: Select_Move
         m_Mode: 3
         m_Arguments:
@@ -37377,8 +37408,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1829234815}
-        m_TargetAssemblyTypeName: Wild_pokemon_battle, Assembly-CSharp
+      - m_Target: {fileID: 1829234817}
+        m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
         m_MethodName: Select_Move
         m_Mode: 3
         m_Arguments:
@@ -37694,6 +37725,7 @@ MonoBehaviour:
   ins_manager: {fileID: 1295631327}
   gift_pkm: {fileID: 2040100125}
   game_state: {fileID: 2105458975}
+  item_h: {fileID: 1973257973}
 --- !u!114 &1295631327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43095,7 +43127,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: PP 19/30
+  m_Text: 
 --- !u!222 &1446964401
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -43795,7 +43827,7 @@ Transform:
   - {fileID: 1606520298}
   - {fileID: 1418617663}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1465551225
 MonoBehaviour:
@@ -47658,8 +47690,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1829234815}
-        m_TargetAssemblyTypeName: Wild_pokemon_battle, Assembly-CSharp
+      - m_Target: {fileID: 1829234817}
+        m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
         m_MethodName: Select_Move
         m_Mode: 3
         m_Arguments:
@@ -51792,15 +51824,30 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1829234816}
-  - component: {fileID: 1829234815}
+  - component: {fileID: 1829234817}
   m_Layer: 0
-  m_Name: Wild_Battle_handler
+  m_Name: Battle_handler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1829234815
+--- !u!4 &1829234816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829234814}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.8043309, y: -1.2276473, z: -0.009848446}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1829234817
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -51809,7 +51856,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1829234814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bad0078f20274654daf84aa7dbc2ba25, type: 3}
+  m_Script: {fileID: 11500000, guid: 4fb54eedceb9ad14887b323980217f59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Battle_ui: {fileID: 1009929159}
@@ -51840,25 +51887,14 @@ MonoBehaviour:
   - {fileID: 1232612188}
   - {fileID: 446498041}
   - {fileID: 1278527769}
+  is_trainer_battle: 0
   OverWorld: {fileID: 523264673}
   viewing_options: 0
   choosing_move: 0
   running_away: 0
---- !u!4 &1829234816
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1829234814}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.8043309, y: -1.2276473, z: -0.009848446}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  Selected_Move: 0
+  Doing_move: 0
+  move_h: {fileID: 951266804}
 --- !u!1 &1832286412
 GameObject:
   m_ObjectHideFlags: 0
@@ -56413,8 +56449,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1829234815}
-        m_TargetAssemblyTypeName: Wild_pokemon_battle, Assembly-CSharp
+      - m_Target: {fileID: 1829234817}
+        m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
         m_MethodName: Fight
         m_Mode: 1
         m_Arguments:
@@ -56547,6 +56583,52 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1973257971
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1973257972}
+  - component: {fileID: 1973257973}
+  m_Layer: 0
+  m_Name: Item_handler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1973257972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973257971}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5739653, y: -0.14173977, z: -0.01833768}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1973257973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973257971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 247f28c8ea9df014ca3497ac606f0571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  options: {fileID: 1295631326}
+  battle: {fileID: 1829234817}
 --- !u!1 &1973815862
 GameObject:
   m_ObjectHideFlags: 0
@@ -57552,8 +57634,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1829234815}
-        m_TargetAssemblyTypeName: Wild_pokemon_battle, Assembly-CSharp
+      - m_Target: {fileID: 1829234817}
+        m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
         m_MethodName: Run_away
         m_Mode: 1
         m_Arguments:
@@ -59311,7 +59393,7 @@ MonoBehaviour:
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
   encounter_triggers: {fileID: 1079166823}
   triggered_encounter: 0
-  battle: {fileID: 1829234815}
+  battle: {fileID: 1829234817}
   wild_pkm: {fileID: 0}
   options: {fileID: 1295631326}
 --- !u!1 &2056020629

@@ -320,15 +320,6 @@ public class pokemon_storage : MonoBehaviour
         {
             new_pkm.Pokemon_ID = Generate_ID(new_pkm.Pokemon_name);
         }
-        int i = 0;
-        foreach (Move m in pkm.move_set)
-        {
-            if (m != null)
-            {
-                new_pkm.move_set[i] = options.ins_manager.set_move(m);
-            }
-            i++;
-        }
         return new_pkm;
     }
 

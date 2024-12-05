@@ -7,7 +7,7 @@ public class Encounter_handler : MonoBehaviour
     public Encounter_Area area;
     public Transform encounter_triggers;
     public bool triggered_encounter = false;
-    public Wild_pokemon_battle battle;
+    public Battle_handler battle;
     public Pokemon wild_pkm;
     public Options_manager options;
     void Update()

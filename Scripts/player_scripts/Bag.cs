@@ -199,11 +199,9 @@ public class Bag : MonoBehaviour
             options.dialogue.Write_Info("Bag is full", "Details");
         }                                                                           
     }
-
-
     public void use_item()
     {
-
+        options.item_h.Use_Item(bag_items[top_index + Selected_item - 1]);
     }
     public void Close_bag()
     {

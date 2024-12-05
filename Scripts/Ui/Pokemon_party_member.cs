@@ -19,10 +19,6 @@ public class Pokemon_party_member : MonoBehaviour
     {
         Options.SetActive(false);
     }
-    public void placeh()//delete
-    {
-        pkm.Level_up(FindObjectOfType<Obj_Instance>());
-    }
     public void Set_Ui()
     {
         Pkm_front_img.sprite = pkm.front_picture;
