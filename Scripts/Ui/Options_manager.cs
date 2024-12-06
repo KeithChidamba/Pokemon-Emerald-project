@@ -20,7 +20,7 @@ public class Options_manager : MonoBehaviour
     public Obj_Instance ins_manager;
     public Recieve_Pokemon gift_pkm;
     public Game_Load game_state;
-    public Item_handler item_h;
+    public Battle_handler battle;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !player.using_ui && !player.doing_action &&!viewing_menu)

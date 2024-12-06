@@ -1,14 +1,68 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Abilities : MonoBehaviour
 {
-    //search for ability here using ability name and assign ability description
-    //methods of ability functions
-    //use ability name to invoke method
-    //public Ability Search_for_ability(string ability_name)
-    //{
+    public Options_manager options;
+    public Battle_handler battle;
+    public Battle_Participant participant;
+    [SerializeField] private string pkm_ability;
+    private void Update()
+    {
+        if (options.playerInBattle)
+        {
+            Invoke(pkm_ability,0f);
+        }
+    }
+    public void Set_ability()
+    { 
+        //underscore because some ability names are c# keywords
+        pkm_ability = participant.item_h.removeSpace(participant.pokemon.ability.ability.ToLower())+"_";
+    }
+    void inferno_()
+    {
 
-    //}
+    }
+    void guts_()
+    {
+        
+    }
+    void levitate_()
+    {
+        
+    }
+    void overgrow_()
+    {
+        
+    }
+    void paralysiscombo_()
+    {
+        
+    }
+    void regular_()
+    {
+        
+    }
+    void sandpit_()
+    {
+        
+    }
+    void shedskin_()
+    {
+        
+    }
+    void static_()
+    {
+        
+    }
+    void swarm_()
+    {
+        
+    }
+    void torrent_()
+    {
+        
+    }
 }

@@ -75,7 +75,7 @@ public class Poke_Mart : MonoBehaviour
             item.Item_type = mart_items[top_index + Selected_item - 1].Item_type;
             options.player_bag.Add_item(item);
             options.player_data.player_Money -= Selected_item_quantity * mart_items[top_index + Selected_item - 1].price;
-            Selected_item_quantity = 0;
+            Selected_item_quantity = 1;
             options.dialogue.Write_Info("You bought "+ item .quantity+ " "+item.Item_name+"'s", "Details");
             options.dialogue.Dialouge_off(1.2f);
         }

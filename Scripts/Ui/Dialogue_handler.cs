@@ -182,7 +182,7 @@ public class Dialogue_handler : MonoBehaviour
             Dialouge_txt.color=Color.black;
             battle_box.SetActive(false);
         }
-        else
+        else if(!options.player.using_ui)
         {
             battle_box.SetActive(true);
             Dialouge_txt.color=Color.white;

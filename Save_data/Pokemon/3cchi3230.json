@@ -2,7 +2,7 @@
     "Base_Pokemon_name": "Torchic",
     "Pokemon_name": "Torchic",
     "Pokemon_ID": "3cchi3230",
-    "HP": 15.0,
+    "HP": 6.0,
     "max_HP": 15.0,
     "Attack": 7.0,
     "Defense": 2.0,
@@ -16,7 +16,7 @@
     "has_trainer": false,
     "types": [
         {
-            "instanceID": 29174
+            "instanceID": 29458
         }
     ],
     "Status_effect": "None",
@@ -33,7 +33,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -158276
+            "instanceID": -52524
         },
         {
             "instanceID": 0
@@ -46,21 +46,21 @@
         }
     ],
     "ability": {
-        "instanceID": 29178
+        "instanceID": 29492
     },
     "evolutions": [
         {
-            "instanceID": 29180
+            "instanceID": 29494
         },
         {
-            "instanceID": 29182
+            "instanceID": 29496
         }
     ],
     "front_picture": {
-        "instanceID": 28924
+        "instanceID": 29156
     },
     "back_picture": {
-        "instanceID": 29184
+        "instanceID": 29498
     },
     "ability_name": "Inferno",
     "evo_data": [

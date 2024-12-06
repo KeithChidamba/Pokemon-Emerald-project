@@ -2,7 +2,7 @@
     "Base_Pokemon_name": "Treeko",
     "Pokemon_name": "Treeko",
     "Pokemon_ID": "5oree1313",
-    "HP": 15.0,
+    "HP": 1.0,
     "max_HP": 15.0,
     "Attack": 7.0,
     "Defense": 2.0,
@@ -16,10 +16,10 @@
     "has_trainer": false,
     "types": [
         {
-            "instanceID": 29146
+            "instanceID": 29444
         }
     ],
-    "Status_effect": "None",
+    "Status_effect": "Burn",
     "type_Immunity": "None",
     "evo_line": [
         "16",
@@ -33,7 +33,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -158280
+            "instanceID": -52528
         },
         {
             "instanceID": 0
@@ -46,21 +46,21 @@
         }
     ],
     "ability": {
-        "instanceID": 29150
+        "instanceID": 29466
     },
     "evolutions": [
         {
-            "instanceID": 29152
+            "instanceID": 29468
         },
         {
-            "instanceID": 29154
+            "instanceID": 29470
         }
     ],
     "front_picture": {
-        "instanceID": 29090
+        "instanceID": 29386
     },
     "back_picture": {
-        "instanceID": 29156
+        "instanceID": 29472
     },
     "ability_name": "Overgrow",
     "evo_data": [
