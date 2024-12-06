@@ -16,7 +16,7 @@
     "has_trainer": false,
     "types": [
         {
-            "instanceID": 29444
+            "instanceID": 29452
         }
     ],
     "Status_effect": "Burn",
@@ -33,7 +33,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -52528
+            "instanceID": -22982
         },
         {
             "instanceID": 0
@@ -46,21 +46,21 @@
         }
     ],
     "ability": {
-        "instanceID": 29466
+        "instanceID": 29474
     },
     "evolutions": [
         {
-            "instanceID": 29468
+            "instanceID": 29476
         },
         {
-            "instanceID": 29470
+            "instanceID": 29478
         }
     ],
     "front_picture": {
-        "instanceID": 29386
+        "instanceID": 29394
     },
     "back_picture": {
-        "instanceID": 29472
+        "instanceID": 29480
     },
     "ability_name": "Overgrow",
     "evo_data": [

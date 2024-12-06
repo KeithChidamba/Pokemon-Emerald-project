@@ -44,7 +44,9 @@ public class Encounter_handler : MonoBehaviour
                 wild_pkm.Level_up(options.ins_manager);
             }
             wild_pkm.HP=wild_pkm.max_HP;
-            battle.Start_Battle(wild_pkm);
+            //tests
+           // battle.Start_Battle(wild_pkm);
+            battle.Start_Battle(new Pokemon[]{wild_pkm,wild_pkm});
             triggered_encounter = false;
         }
         else

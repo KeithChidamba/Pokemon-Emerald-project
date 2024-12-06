@@ -87,7 +87,8 @@ public class Pokemon_party : MonoBehaviour
             member_indicator.SetActive(false);
             storage.options.dialogue.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
             storage.options.dialogue.Dialouge_off(1f);
-            
+            storage.options.battle.Switch_In(0);
+
         }
     }
     public void Add_Member(Pokemon pokemon)
