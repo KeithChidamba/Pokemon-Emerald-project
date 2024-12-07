@@ -7,8 +7,8 @@ public class Item_handler : MonoBehaviour
 {
     public Options_manager options;
     public Battle_handler battle;
-    public Battle_Participant Participant;
-
+    public Pokemon selected_party_pkm;
+    public bool Using_item = false;
     public string removeSpace(string name_)
     {
         char splitter = ' ';
@@ -45,7 +45,6 @@ public class Item_handler : MonoBehaviour
         item.quantity--;
         string n = removeSpace(item.Item_name.ToLower());
         Invoke(n,0f);
-        Debug.Log(item.Item_name);
     }
 
     void potion()
@@ -92,13 +91,12 @@ public class Item_handler : MonoBehaviour
     }
     void heal_status(string status)
     {
-        if (Participant.pokemon.Status_effect == status)
+        if (selected_party_pkm.Status_effect.ToLower() == status)
         {
-            Participant.pokemon.Status_effect = "";
+            selected_party_pkm.Status_effect = "";
             options.dialogue.Write_Info("Pokemon has been healed","Details");
-            Invoke(nameof(options.close_bag),1f);
         }
-        else if (Participant.pokemon.Status_effect == "None")
+        else if (selected_party_pkm.Status_effect == "None")
         {
             options.dialogue.Write_Info("Pokemon is healthy","Details");
         }
@@ -107,14 +105,21 @@ public class Item_handler : MonoBehaviour
             options.dialogue.Write_Info("Incorrect heal item","Details");
         }
         options.dialogue.Dialouge_off(1f);
+        Using_item = false;
+        options.party.Refresh_Member_Cards();
 }
     void heal(int heal_effect)
     {
-        if( (Participant.pokemon.HP + heal_effect) <= Participant.pokemon.max_HP)
-            Participant.pokemon.HP += heal_effect;
+        if ((selected_party_pkm.HP + heal_effect) <= selected_party_pkm.max_HP)
+        {
+            selected_party_pkm.HP += heal_effect;
+            options.dialogue.Write_Info(selected_party_pkm.Pokemon_name+" gained "+heal_effect.ToString()+" health points","Details");
+        }
         else
         {
             options.dialogue.Write_Info("Pokemon health is full","Details");
         }
+        options.dialogue.Dialouge_off(1f);
+        Using_item = false;
     }
 }

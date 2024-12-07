@@ -11,7 +11,6 @@ public class Battle_Participant : MonoBehaviour
     public Abilities ability_h;
     public Pokemon pokemon;
     public Pokemon[] Current_Enemies = {null,null};//will only ever be 2 because double battles
-    public Item_handler item_h;
     public Image pkm_img;
     public Text pkm_name, pkm_HP, pkm_lv;
     public bool isPlayer = false;

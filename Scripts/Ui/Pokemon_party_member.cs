@@ -8,7 +8,7 @@ public class Pokemon_party_member : MonoBehaviour
 {
     public Text Pkm_name;
     public Text Pkm_Lv;
-    public Image Pkm_front_img;
+    public Image Pkm_front_img,Status_img;
     public Slider pkm_hp;
     public Pokemon pkm;
     public int Party_pos = 0;
@@ -29,6 +29,15 @@ public class Pokemon_party_member : MonoBehaviour
         }
         isEmpty = false;
         empty_ui.SetActive(false);
+        if (pkm.Status_effect == "None")
+        {
+            Status_img.gameObject.SetActive(false);
+        }
+        else
+        {
+            Status_img.gameObject.SetActive(true);
+            Status_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/" + pkm.Status_effect.ToLower());
+        }
     }
     public void Reset_ui()
     {
@@ -37,6 +46,7 @@ public class Pokemon_party_member : MonoBehaviour
             ui.SetActive(false);
         }
         isEmpty = true;
+        Status_img.gameObject.SetActive(false);
         empty_ui.SetActive(true);
     }
     private void Update()

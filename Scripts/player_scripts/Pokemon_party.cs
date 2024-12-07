@@ -15,6 +15,7 @@ public class Pokemon_party : MonoBehaviour
     public GameObject party_ui;
     public GameObject member_indicator;
     public Pokemon_Details details;
+    private Item item_to_use;
     public void View_party()
     {
          viewing_party = true;
@@ -34,33 +35,47 @@ public class Pokemon_party : MonoBehaviour
         viewing_options = false;
         Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
     }
+
+    public void Recieve_item(Item item)
+    {
+        item_to_use = item;
+    }
     public void Member_Selected(int Member_position)
     {
-        if (Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().isEmpty)
+        if (storage.options.item_h.Using_item)
         {
-            Cancel();
+            storage.options.item_h.selected_party_pkm = Memeber_cards[Member_position - 1].pkm;
+            storage.options.item_h.Use_Item(item_to_use);
+            member_indicator.transform.position = Memeber_cards[Member_position - 1].transform.position;
+            member_indicator.SetActive(true);
         }
         else
         {
-            if (moving)
+            if (Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().isEmpty)
             {
-                 Selected_member = Member_position;
-                 Move_Member(Member_to_Move);
+                Cancel();
             }
-            else if (!viewing_options)
+            else
             {
-                if (Selected_member != 0)
+                if (moving)
                 {
-                    Cancel();
+                    Selected_member = Member_position;
+                    Move_Member(Member_to_Move);
                 }
-                Selected_member = Member_position;
-                viewing_options = true;
-                member_indicator.transform.position = Memeber_cards[Member_position - 1].transform.position;
-                member_indicator.SetActive(true);
-                Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(true);
+                else if (!viewing_options)
+                {
+                    if (Selected_member != 0)
+                    {
+                        Cancel();
+                    }
+                    Selected_member = Member_position;
+                    viewing_options = true;
+                    member_indicator.transform.position = Memeber_cards[Member_position - 1].transform.position;
+                    member_indicator.SetActive(true);
+                    Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(true);
+                }
             }
         }
-
     }
     public void Cancel()
     {
@@ -122,12 +137,6 @@ public class Pokemon_party : MonoBehaviour
             party[party.Length - 1] = null;
         }
     }
-    public void Replace_Member(int Party_position,Pokemon new_member)
-    {
-        Party_position--;
-        Remove_Member(Party_position);
-        Add_Member(new_member);
-    }
     public void Refresh_Member_Cards()
     {
         num_members = 0;
@@ -160,6 +169,5 @@ public class Pokemon_party : MonoBehaviour
         num_members--;
         storage.non_party_pokemon.Add(member);
         sort_Members(Party_position);
-
     }
 }

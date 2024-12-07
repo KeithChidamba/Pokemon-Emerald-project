@@ -201,7 +201,10 @@ public class Bag : MonoBehaviour
     }
     public void use_item()
     {
-        options.battle.Battle_P[0].item_h.Use_Item(bag_items[top_index + Selected_item - 1]);//player using item from bag
+        options.item_h.Using_item = true;
+        options.party.Recieve_item(bag_items[top_index + Selected_item - 1]);
+        options.close_bag();
+        options.View_pkm_Party();
     }
     public void Close_bag()
     {
