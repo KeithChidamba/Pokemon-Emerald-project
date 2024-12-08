@@ -61,6 +61,14 @@ public class Bag : MonoBehaviour
         options.dialogue.Write_Info("You made P"+profit.ToString()+ ", would you like to sell anything else?", "Options", "Sell_item","Sure, which item?","Dont_Buy","Yes","No");
         options.close_bag();
     }
+
+    public void check_Quantity(Item item)
+    {
+        if (item.quantity < 1)
+        {
+            bag_items.Remove(item);
+        }
+    }
     public void change_quant(int diff)
     {
         if (diff < 0)//lower quantity
@@ -130,23 +138,18 @@ public class Bag : MonoBehaviour
     }
     bool inBag(string item)
     {
-        bool val = false;
         foreach (Item itm in bag_items)
         {
             if (itm.Item_name == item)
             {
-                val = true;
+                return true;
             }
         }
-        return val;
+        return false;
     }
     public void Remove_item()
     {
-        for (int i = Selected_item-1; i < num_items-1; i++)
-        {
-            bag_items[i] = bag_items[i + 1];
-        }
-        bag_items.Remove(bag_items[num_items - 1]);
+        bag_items.Remove(bag_items[top_index + Selected_item - 1]);
         foreach (Item_ui i in bag_items_ui)
         {
             i.gameObject.SetActive(false);

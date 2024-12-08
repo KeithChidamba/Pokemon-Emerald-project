@@ -21,15 +21,17 @@ public class Battle_handler : MonoBehaviour
     public bool running_away = false;
     public bool Selected_Move = false;
     private int Current_Move = 0;
+    private int Current_pkm_turn = 0;
     public bool Doing_move = false;
     public Move_handler move_h;
+    [SerializeField]Encounter_handler current_encounter;
     void Update()
     {
         if (options_manager.playerInBattle)
         {
             if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)))
             {
-                Use_Move(Battle_P[0].pokemon.move_set[Current_Move]);
+                Use_Move(Battle_P[Current_pkm_turn].pokemon.move_set[Current_Move]);
             }
             if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
             {
@@ -63,28 +65,16 @@ public class Battle_handler : MonoBehaviour
             }
         }
     }
-    public void Switch_In(int participant)
+    public void Start_Battle(Pokemon enemy,Encounter_handler encounter)
     {
-        //refresh current pokemon after switch in
-        Battle_P[participant].pokemon = options_manager.ins_manager.set_Pokemon(options_manager.party.party[0]);
-        for(int i = 0; i < 2; i++)
-        {
-            if (Battle_P[i].pokemon != null)
-            {
-                Battle_P[i + 2].Current_Enemies[i] = Battle_P[i].pokemon;
-            }
-        }
-    }
-    public void Start_Battle(Pokemon enemy)
-    {
+        current_encounter = encounter;
         isDouble_battle = false;
         //single battle setup
         if (enemy.has_trainer)
             is_trainer_battle = true;
         Battle_P[0].Current_Enemies[0] = enemy;
         Battle_P[2].pokemon = enemy;
-        Switch_In(0);
-        Switch_In(2);
+        Set_pkm();
         Battle_P[2].Current_Enemies[0] = Battle_P[0].pokemon;
         options_manager.playerInBattle = true;
         Battle_ui.SetActive(true);
@@ -96,25 +86,36 @@ public class Battle_handler : MonoBehaviour
         Battle_P[2].ability_h.Set_ability();
         OverWorld.SetActive(false);
     }
-    public void Start_Battle(Pokemon[] enemies)
+    public void Start_Battle(Pokemon[] enemies,Encounter_handler encounter)
     {
+        current_encounter = encounter;
         isDouble_battle = true;
         //double battle setup, 2v2 or 1v2
         int participant_count = 2;//first 2 spaces are player's pokemon
         if (enemies[0].has_trainer)
             is_trainer_battle = true;
+        for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
+        {
+         Battle_P[participant_count].pokemon = enemies[i];
+         participant_count++;
+         //set to first enemy, enemies can be selected when attacking
+         Battle_P[0].Current_Enemies[i] = enemies[i];
+         Battle_P[1].Current_Enemies[i] = enemies[i];
+        }
+        Set_pkm();
+        options_manager.playerInBattle = true;
+        Battle_ui.SetActive(true);
+        moves_ui.SetActive(false);
+        options_ui.SetActive(true);
+        OverWorld.SetActive(false);
+    }
+
+    public void Set_pkm()
+    {
         Battle_P[0].pokemon = options_manager.ins_manager.set_Pokemon(options_manager.party.party[0]);
         if (options_manager.party.num_members > 1)//if you have more than one pokemon send in another
         {
             Battle_P[1].pokemon = options_manager.ins_manager.set_Pokemon(options_manager.party.party[1]);
-        }
-        for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
-        {
-            Battle_P[participant_count].pokemon = enemies[i];
-            participant_count++;
-            //set to first enemy, enemies can be selected when attacking
-            Battle_P[0].Current_Enemies[i] = enemies[i];
-            Battle_P[1].Current_Enemies[i] = enemies[i];
         }
         for(int i = 0; i < 2; i++)
         {
@@ -123,10 +124,6 @@ public class Battle_handler : MonoBehaviour
                 Battle_P[i + 2].Current_Enemies[i] = Battle_P[i].pokemon; //set enemies enemy equal to player's pkm
             }
         }
-        options_manager.playerInBattle = true;
-        Battle_ui.SetActive(true);
-        moves_ui.SetActive(false);
-        options_ui.SetActive(true);
         foreach(Battle_Participant p in Battle_P)
         {
             if (p != null)
@@ -135,7 +132,6 @@ public class Battle_handler : MonoBehaviour
                 p.ability_h.Set_ability();
             }
         }
-        OverWorld.SetActive(false);
     }
     void load_moves()
     {
@@ -201,6 +197,7 @@ public class Battle_handler : MonoBehaviour
             p.pokemon = null;
             p.Unload_ui();
         }
+        current_encounter.Reset_trigger();
         OverWorld.SetActive(true);
     }
     public void Run_away()//wild encounter is always single battle

@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Encounter_handler : MonoBehaviour
 {
@@ -10,17 +12,12 @@ public class Encounter_handler : MonoBehaviour
     public Battle_handler battle;
     public Pokemon wild_pkm;
     public Options_manager options;
-    void Update()
-    {
-        
-    }
+    public int encounter_chance = 2;
+
     public void Trigger_encounter()
     {
         triggered_encounter = true;
-        for (int i = 0; i < encounter_triggers.childCount; i++)
-        {
-            encounter_triggers.GetChild(i).gameObject.SetActive(false);
-        }
+        encounter_chance = 2;
         for (int i = 0; i < area.Pokemon.Length; i++)//send data to battle ui
         {
             int random = Random.Range(1, 101);
@@ -32,6 +29,7 @@ public class Encounter_handler : MonoBehaviour
                 break;
             }
         }
+        
     }
     void Create_pkm(string pkm_name)
     {
@@ -46,12 +44,19 @@ public class Encounter_handler : MonoBehaviour
             wild_pkm.HP=wild_pkm.max_HP;
             //tests
            // battle.Start_Battle(wild_pkm);
-            battle.Start_Battle(new Pokemon[]{wild_pkm,wild_pkm});
-            triggered_encounter = false;
+            battle.Start_Battle(new []{wild_pkm,wild_pkm},this);
         }
         else
         {
             Debug.Log("tried encounter but didnt find "+pkm_name);
         }
+    }
+    void trigger_off()
+    {
+        triggered_encounter = false;
+    }
+    public void Reset_trigger()
+    {
+        Invoke(nameof(trigger_off),1f);
     }
 }

@@ -12,6 +12,7 @@ public class Battle_Participant : MonoBehaviour
     public Pokemon pokemon;
     public Pokemon[] Current_Enemies = {null,null};//will only ever be 2 because double battles
     public Image pkm_img;
+    public Image status_img;
     public Text pkm_name, pkm_HP, pkm_lv;
     public bool isPlayer = false;
     public bool is_active = false;
@@ -62,6 +63,15 @@ public class Battle_Participant : MonoBehaviour
         player_hp.minValue = 0;
         is_active = true;
         participant_ui.SetActive(true);
+        if (pokemon.Status_effect == "None")
+        {
+            status_img.gameObject.SetActive(false);
+        }
+        else
+        {
+            status_img.gameObject.SetActive(true);
+            status_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/" + pokemon.Status_effect.ToLower());
+        }
         if (isPlayer)
         {
             if (battle.isDouble_battle)
@@ -80,5 +90,6 @@ public class Battle_Participant : MonoBehaviour
     public void Unload_ui()
     {
         participant_ui.SetActive(false);
+        is_active = false;
     }
 }

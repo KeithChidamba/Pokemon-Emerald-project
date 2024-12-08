@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Encounter_trigger : MonoBehaviour
 {
     public Encounter_handler handler;
-    bool triggered = false;
-    private void OnTriggerStay2D(Collider2D collision)
+    [SerializeField] bool triggered = false;
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        int encounter_chance = 20;
         if (collision.gameObject.CompareTag("Player") && !triggered)
         {
             Player_movement player = collision.GetComponentInParent<Player_movement>();
@@ -20,23 +21,25 @@ public class Encounter_trigger : MonoBehaviour
             {
                 if (player.running)
                 {
-                    encounter_chance = 40;
+                    handler.encounter_chance = 5;
                 }
-                int rand = Random.Range(1, 101);
-                if (rand < encounter_chance)
+                int rand = Random.Range(1, 11);
+                if (rand < handler.encounter_chance && !triggered)
                 {
                     if (!handler.triggered_encounter)
                     {
                         handler.Trigger_encounter();
                     }
-                    else
-                    {
-                        triggered = true;
-                        Invoke(nameof(Reset_trigger),2f);
-                    }
                 }
+                triggered = true;
             }
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+            Invoke(nameof(Reset_trigger),2f);
     }
 
     void Reset_trigger()

@@ -152,7 +152,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         Display_Options(false);
         Current_interaction = null;
-        if(!options.playerInBattle)
+        if(!options.playerInBattle || options.player.using_ui)
             dialogue_box.SetActive(false);
         else
         {
@@ -176,13 +176,13 @@ public class Dialogue_handler : MonoBehaviour
         text_finished = false;
         displaying = true;
         num_lines = math.trunc(interaction.InteractionMsg.Length / Max_length);
-        if (!options.playerInBattle)
+        if (!options.playerInBattle || options.player.using_ui)
         {
             dialogue_box.SetActive(true);
             Dialouge_txt.color=Color.black;
             battle_box.SetActive(false);
         }
-        else if(!options.player.using_ui)
+        else if(!options.player.using_ui && options.playerInBattle)
         {
             battle_box.SetActive(true);
             Dialouge_txt.color=Color.white;

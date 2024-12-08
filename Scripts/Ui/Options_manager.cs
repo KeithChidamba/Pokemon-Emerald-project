@@ -43,6 +43,10 @@ public class Options_manager : MonoBehaviour
             party.party_ui.gameObject.SetActive(false);
             player.using_ui = false;
             player.movement.canmove = true;
+            if (playerInBattle)
+            {
+                battle.Set_pkm();
+            }
         }
         if (Input.GetKeyDown(KeyCode.Escape) && player_bag.viewing_bag)
         {
@@ -86,6 +90,10 @@ public class Options_manager : MonoBehaviour
         player_bag.gameObject.SetActive(false);
         player.using_ui = false;
         player.movement.canmove = true;
+        if (playerInBattle)
+        {
+            battle.Set_pkm();
+        }
     }
     public void Menu_off()
     {
@@ -118,11 +126,11 @@ public class Options_manager : MonoBehaviour
     }
     public void View_pkm_Party()
     {
+        menu_reset();
         dialogue.Dialouge_off();
         party.party_ui.gameObject.SetActive(true);
         player.using_ui = true;
         party.View_party();
-        menu_reset();
     }
     //option methods
     void Exit_game()

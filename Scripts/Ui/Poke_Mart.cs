@@ -96,7 +96,7 @@ public class Poke_Mart : MonoBehaviour
             }
             else
             {
-                Selected_item_quantity = 0;
+                Selected_item_quantity = 1;
             }
         }
         else if(diff > 0)//increase quantity

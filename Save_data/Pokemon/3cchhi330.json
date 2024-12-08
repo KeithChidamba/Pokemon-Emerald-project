@@ -1,14 +1,14 @@
 {
-    "Base_Pokemon_name": "Treeko",
-    "Pokemon_name": "Treeko",
-    "Pokemon_ID": "5oree1313",
-    "HP": 1.0,
+    "Base_Pokemon_name": "Torchic",
+    "Pokemon_name": "Torchic",
+    "Pokemon_ID": "3cchhi330",
+    "HP": 12.0,
     "max_HP": 15.0,
     "Attack": 7.0,
     "Defense": 2.0,
-    "SP_ATK": 5.0,
+    "SP_ATK": 14.0,
     "SP_DEF": 4.0,
-    "speed": 8.0,
+    "speed": 10.0,
     "Accuracy": 100.0,
     "Current_level": 1,
     "level_progress": 0.0,
@@ -16,24 +16,24 @@
     "has_trainer": false,
     "types": [
         {
-            "instanceID": 29630
+            "instanceID": 29644
         }
     ],
-    "Status_effect": "Burn",
+    "Status_effect": "PoIson",
     "type_Immunity": "None",
     "evo_line": [
         "16",
         "30"
     ],
     "learnSet": [
-        "normal/pound01",
-        "grass/absorb03",
-        "normal/quick attack04",
-        "grass/bullet seed07"
+        "normal/scratch01",
+        "fire/ember03",
+        "fighting/double kick05",
+        "normal/focus energy07"
     ],
     "move_set": [
         {
-            "instanceID": -14400
+            "instanceID": -14392
         },
         {
             "instanceID": 0
@@ -46,33 +46,33 @@
         }
     ],
     "ability": {
-        "instanceID": 29652
+        "instanceID": 29678
     },
     "evolutions": [
         {
-            "instanceID": 29654
+            "instanceID": 29680
         },
         {
-            "instanceID": 29656
+            "instanceID": 29682
         }
     ],
     "front_picture": {
-        "instanceID": 29570
+        "instanceID": 29338
     },
     "back_picture": {
-        "instanceID": 29658
+        "instanceID": 29684
     },
-    "ability_name": "Overgrow",
+    "ability_name": "Inferno",
     "evo_data": [
-        "Grovyle",
-        "Sceptile"
+        "Combusken",
+        "Blaziken"
     ],
     "type_data": [
-        "Grass",
+        "Fire",
         ""
     ],
     "move_data": [
-        "Pound/Normal",
+        "Scratch/Normal",
         "",
         "",
         ""

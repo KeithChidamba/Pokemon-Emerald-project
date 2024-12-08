@@ -9,6 +9,7 @@ public class Item_handler : MonoBehaviour
     public Battle_handler battle;
     public Pokemon selected_party_pkm;
     public bool Using_item = false;
+    private Item item_in_use;
     public string removeSpace(string name_)
     {
         char splitter = ' ';
@@ -42,7 +43,7 @@ public class Item_handler : MonoBehaviour
     }
     public void Use_Item(Item item)
     {
-        item.quantity--;
+        item_in_use = item;
         string n = removeSpace(item.Item_name.ToLower());
         Invoke(n,0f);
     }
@@ -93,8 +94,10 @@ public class Item_handler : MonoBehaviour
     {
         if (selected_party_pkm.Status_effect.ToLower() == status)
         {
-            selected_party_pkm.Status_effect = "";
+            selected_party_pkm.Status_effect = "None";
             options.dialogue.Write_Info("Pokemon has been healed","Details");
+            item_in_use.quantity--;
+            options.player_bag.check_Quantity(item_in_use);
         }
         else if (selected_party_pkm.Status_effect == "None")
         {
@@ -114,6 +117,8 @@ public class Item_handler : MonoBehaviour
         {
             selected_party_pkm.HP += heal_effect;
             options.dialogue.Write_Info(selected_party_pkm.Pokemon_name+" gained "+heal_effect.ToString()+" health points","Details");
+            item_in_use.quantity--;
+            options.player_bag.check_Quantity(item_in_use);
         }
         else
         {

@@ -102,7 +102,7 @@ public class Pokemon_party : MonoBehaviour
             member_indicator.SetActive(false);
             storage.options.dialogue.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
             storage.options.dialogue.Dialouge_off(1f);
-            storage.options.battle.Switch_In(0);
+            storage.options.battle.Set_pkm();
 
         }
     }
@@ -137,7 +137,7 @@ public class Pokemon_party : MonoBehaviour
             party[party.Length - 1] = null;
         }
     }
-    public void Refresh_Member_Cards()
+    public void Refresh_Member_Cards()//call battle refresh
     {
         num_members = 0;
         foreach (Pokemon_party_member mon in Memeber_cards)
@@ -159,6 +159,8 @@ public class Pokemon_party : MonoBehaviour
                 Memeber_cards[i].Reset_ui();
             }
         }
+        if(storage.options.playerInBattle)
+            storage.options.battle.Set_pkm();
     }
     public void Remove_Member(int Party_position)
     {
