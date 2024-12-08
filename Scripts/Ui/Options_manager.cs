@@ -5,14 +5,10 @@ using UnityEngine.UIElements;
 public class Options_manager : MonoBehaviour
 {
     public Dialogue_handler dialogue;
-     Interaction current_interaction;
+    Interaction current_interaction;
     public overworld_actions player;
     public Pokemon_party party;
     public Bag player_bag;
-    public Player_Info_ui profile;
-    public GameObject Menu_Options;
-    public bool viewing_menu = false;
-    public bool menu_off=true;
     public bool playerInBattle = false;
     public pokemon_storage storage;
     public Poke_Mart market;
@@ -22,123 +18,26 @@ public class Options_manager : MonoBehaviour
     public Game_Load game_state;
     public Battle_handler battle;
     public Item_handler item_h;
+    public Game_ui_manager ui_m;
+    public Utility util;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !player.using_ui && !player.doing_action &&!viewing_menu)
-        {
-            Menu_Options.SetActive(true);
-            viewing_menu = true;
-            player.using_ui = true;
-        }
-        if (Input.GetKeyUp(KeyCode.Space) && !player.doing_action && viewing_menu)
-        {
-            menu_off = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && viewing_menu && !menu_off)
-        {
-            Menu_off();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && party.viewing_party && !party.viewing_details)
-        {
-            party.party_ui.gameObject.SetActive(false);
-            player.using_ui = false;
-            player.movement.canmove = true;
-            if (playerInBattle)
-            {
-                battle.Set_pkm();
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && player_bag.viewing_bag)
-        {
-            close_bag();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && profile.Viewing_profile)
-        {
-            profile.gameObject.SetActive(false);
-            profile.Viewing_profile = false;
-            player.using_ui = false;
-            player.movement.canmove = true;
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && market.viewing_store)
-        {
-            Close_Store();
-            dialogue.Write_Info("Would you like anything else?", "Options", "Buy_More","Sure, what would you like","Dont_Buy","Yes","No");
-        }
-
         if (playerInBattle)
         {
             player.doing_action = true;
         }
     }
-    //menu options
-    public void Exit_To_menu()
-    {
-        dialogue.Write_Info("Are you sure you want to exit?, you will lose unsaved data!", "Options", "Exit_game","Good bye!","","Yes","No");
-    }
-    
-    public void Close_Store()
-    {
-        market.Exit_Store();
-        market.gameObject.SetActive(false);
-        player.using_ui = false;
-        player.movement.canmove = true;
-    }
-
-    public void close_bag()
-    {
-        player_bag.Close_bag();
-        player_bag.gameObject.SetActive(false);
-        player.using_ui = false;
-        player.movement.canmove = true;
-        if (playerInBattle)
-        {
-            battle.Set_pkm();
-        }
-    }
-    public void Menu_off()
-    {
-        menu_reset();
-        player.using_ui = false;
-        player.movement.canmove = true;
-    }
-
-    void menu_reset()
-    {
-        Menu_Options.SetActive(false);
-        viewing_menu = false;
-        menu_off = true;
-    }
-    public void View_Bag()
-    {
-        dialogue.Dialouge_off();
-        player_bag.gameObject.SetActive(true);
-        player.using_ui = true;
-        player_bag.View_bag();
-        menu_reset();
-    }
-
-    public void View_Profile()
-    {
-        player.using_ui = true;
-        menu_reset();
-        profile.gameObject.SetActive(true);
-        profile.Load_Profile(player_data.Player_name, player_data.player_Money);
-    }
-    public void View_pkm_Party()
-    {
-        menu_reset();
-        dialogue.Dialouge_off();
-        party.party_ui.gameObject.SetActive(true);
-        player.using_ui = true;
-        party.View_party();
-    }
-    //option methods
+    //dialogue options
     void Exit_game()
     {
         dialogue.Dialouge_off();
         game_state.Exit_game();
     }
-    void Swim()
+    public void Exit_To_menu()
+    {
+        dialogue.Write_Info("Are you sure you want to exit?, you will lose unsaved data!", "Options", "Exit_game","Good bye!","","Yes","No");
+    }
+    void Swim()//will make later
     {
 
     }
@@ -167,21 +66,10 @@ public class Options_manager : MonoBehaviour
         storage.Open_pc();
         player.using_ui = true;
     }
-    void View_Market()
-    {
-        dialogue.Write_Info(current_interaction.InterAction_result_msg, "Details");
-        dialogue.Dialouge_off(1f);
-        player.using_ui = true;
-        Invoke(nameof(view_delay), 1f);
-    }
-    void view_delay()
-    {
-        market.gameObject.SetActive(true);
-        market.View_store();
-    }
     void Buy_More()
     {
         dialogue.Dialouge_off();
+        dialogue.Write_Info(current_interaction.InterAction_result_msg, "Details");
         View_Market();
     }
     void Dont_Buy()
@@ -199,7 +87,7 @@ public class Options_manager : MonoBehaviour
         dialogue.Write_Info("You got a " + pkm.Pokemon_name, "Details");
         gift_pkm.check_pkm(pkm_name);
     }
-    void Interact()
+    void Interact()//give player info about what they interacted with
     {
         dialogue.Write_Info(current_interaction.InterAction_result_msg, "Details");
         dialogue.Dialouge_off(2f);
@@ -214,9 +102,13 @@ public class Options_manager : MonoBehaviour
     {
         dialogue.Dialouge_off();
         player_bag.Selling_items = true;
-        View_Bag();
+        ui_m.View_Bag();
     }
-
+    void View_Market()
+    {
+        dialogue.Dialouge_off(0.4f);
+        ui_m.view_market();
+    }
     void Pick_Berry()
     {
         dialogue.Dialouge_off();
@@ -235,7 +127,7 @@ public class Options_manager : MonoBehaviour
         }
         if (interaction.InterAction_type == "List")
         {
-            //list logic
+            //list logic, might be useful later 
             //dialogue.Write_Info("Would you like to fish for pokemon", "List", "fishing...",new string[]{"Fish","No fish","cool fish"},new string[]{"Yes","No","new"});
         }
     }

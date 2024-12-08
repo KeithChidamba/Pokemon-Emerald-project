@@ -15,6 +15,7 @@ MonoBehaviour:
   Item_ID: 
   Item_name: Potion
   Item_type: Potion
+  Item_effect: 5
   Item_desc: Heals 5hp
   price: 18
   quantity: 1

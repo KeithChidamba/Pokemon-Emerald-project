@@ -1616,8 +1616,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1295631326}
-        m_TargetAssemblyTypeName: Options_manager, Assembly-CSharp
+      - m_Target: {fileID: 316697657}
+        m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
         m_MethodName: View_pkm_Party
         m_Mode: 1
         m_Arguments:
@@ -8115,6 +8115,7 @@ MonoBehaviour:
   storage: {fileID: 935983327}
   dialogue: {fileID: 1097391156}
   options: {fileID: 1295631326}
+  ui_m: {fileID: 316697657}
   party_IDs: []
   playerBag: {fileID: 2081052301}
   game_start: {fileID: 2105458975}
@@ -8132,7 +8133,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &279946561
 GameObject:
@@ -9370,6 +9371,61 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &316697655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 316697656}
+  - component: {fileID: 316697657}
+  m_Layer: 0
+  m_Name: Game_ui
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &316697656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316697655}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 399, y: 212.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &316697657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316697655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ca6940296c2c04fa4e0b3b0baec537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  options: {fileID: 1295631326}
+  Menu_Options: {fileID: 1316003124}
+  viewing_menu: 0
+  menu_off: 1
+  player: {fileID: 1606520304}
+  party: {fileID: 1465551228}
+  player_bag: {fileID: 2081052301}
+  battle: {fileID: 1829234817}
+  profile: {fileID: 690814249}
+  market: {fileID: 814604282}
+  dialogue: {fileID: 1097391156}
 --- !u!1 &319297257
 GameObject:
   m_ObjectHideFlags: 0
@@ -10789,8 +10845,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1295631326}
-        m_TargetAssemblyTypeName: Options_manager, Assembly-CSharp
+      - m_Target: {fileID: 316697657}
+        m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
         m_MethodName: View_Bag
         m_Mode: 1
         m_Arguments:
@@ -13570,7 +13626,7 @@ Transform:
   - {fileID: 1740777792}
   - {fileID: 187727644}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &526637702
 GameObject:
@@ -19649,7 +19705,7 @@ RectTransform:
   - {fileID: 2105458974}
   - {fileID: 235881331}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -26793,7 +26849,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &935983327
 MonoBehaviour:
@@ -27468,7 +27524,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &952613595
 GameObject:
@@ -30547,7 +30603,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -31916,8 +31972,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1295631326}
-        m_TargetAssemblyTypeName: Options_manager, Assembly-CSharp
+      - m_Target: {fileID: 316697657}
+        m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
         m_MethodName: View_Profile
         m_Mode: 1
         m_Arguments:
@@ -37701,8 +37757,9 @@ GameObject:
   - component: {fileID: 1295631325}
   - component: {fileID: 1295631326}
   - component: {fileID: 1295631327}
+  - component: {fileID: 1295631328}
   m_Layer: 0
-  m_Name: Game Manager
+  m_Name: Options Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37739,10 +37796,6 @@ MonoBehaviour:
   player: {fileID: 1606520304}
   party: {fileID: 1465551228}
   player_bag: {fileID: 2081052301}
-  profile: {fileID: 690814249}
-  Menu_Options: {fileID: 1316003124}
-  viewing_menu: 0
-  menu_off: 1
   playerInBattle: 0
   storage: {fileID: 935983327}
   market: {fileID: 814604282}
@@ -37752,6 +37805,8 @@ MonoBehaviour:
   game_state: {fileID: 2105458975}
   battle: {fileID: 1829234817}
   item_h: {fileID: 502433106}
+  ui_m: {fileID: 316697657}
+  util: {fileID: 1295631328}
 --- !u!114 &1295631327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37765,6 +37820,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bag: {fileID: 2081052301}
+--- !u!114 &1295631328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295631324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a72002ab8f11f6244b23a3004cb2f5e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1307266070
 GameObject:
   m_ObjectHideFlags: 0
@@ -41366,8 +41433,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1295631326}
-        m_TargetAssemblyTypeName: Options_manager, Assembly-CSharp
+      - m_Target: {fileID: 316697657}
+        m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
         m_MethodName: View_Bag
         m_Mode: 1
         m_Arguments:
@@ -43035,7 +43102,7 @@ Transform:
   - {fileID: 1606520298}
   - {fileID: 1418617663}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1465551225
 MonoBehaviour:
@@ -50792,7 +50859,7 @@ Transform:
   - {fileID: 2033618201}
   - {fileID: 502433105}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1829234817
 MonoBehaviour:
@@ -56359,8 +56426,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1295631326}
-        m_TargetAssemblyTypeName: Options_manager, Assembly-CSharp
+      - m_Target: {fileID: 316697657}
+        m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
         m_MethodName: View_pkm_Party
         m_Mode: 1
         m_Arguments:
@@ -59152,6 +59219,7 @@ MonoBehaviour:
   Selling_items: 0
   Selling_ui: {fileID: 1671983471}
   Sell_qty_txt: {fileID: 171129104}
+  ui_m: {fileID: 316697657}
 --- !u!1 &2082104842
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,7 +21,7 @@ public class Bag : MonoBehaviour
     public bool Selling_items = false;
     public GameObject Selling_ui;
     public Text Sell_qty_txt;
-
+    public Game_ui_manager ui_m;
     private void Update()
     {
         if (Selling_items)
@@ -59,7 +59,7 @@ public class Bag : MonoBehaviour
             Remove_item();
         }
         options.dialogue.Write_Info("You made P"+profit.ToString()+ ", would you like to sell anything else?", "Options", "Sell_item","Sure, which item?","Dont_Buy","Yes","No");
-        options.close_bag();
+        ui_m.close_bag();
     }
 
     public void check_Quantity(Item item)
@@ -198,7 +198,7 @@ public class Bag : MonoBehaviour
         }
         else
         {
-            options.Close_Store();
+            ui_m.Close_Store();
             options.dialogue.Write_Info("Bag is full", "Details");
         }                                                                           
     }
@@ -206,8 +206,8 @@ public class Bag : MonoBehaviour
     {
         options.item_h.Using_item = true;
         options.party.Recieve_item(bag_items[top_index + Selected_item - 1]);
-        options.close_bag();
-        options.View_pkm_Party();
+        ui_m.close_bag();
+        ui_m.View_pkm_Party();
     }
     public void Close_bag()
     {

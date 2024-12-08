@@ -15,6 +15,7 @@ MonoBehaviour:
   Item_ID: 
   Item_name: Paralyz heal
   Item_type: Status
+  Item_effect: paralysis
   Item_desc: Heals paralysis
   price: 20
   quantity: 1

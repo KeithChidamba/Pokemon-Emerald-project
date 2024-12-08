@@ -8,9 +8,10 @@ public class Save_manager : MonoBehaviour
     public pokemon_storage storage;
     public Dialogue_handler dialogue;
     public Options_manager options;
+    public Game_ui_manager ui_m;
     public List<string> party_IDs;
     public Bag playerBag;
-    List<string> json_files = new List<string> { };
+    List<string> json_files = new();
     public Game_Load game_start;
     public Area_manager area;
     private void Start()
@@ -28,7 +29,7 @@ public class Save_manager : MonoBehaviour
         }
     }
     
-    void Load_player()
+    private void Load_player()
     {
         CreateFolder("Assets/Save_data/Player");
         options.player_data = null;
@@ -47,7 +48,7 @@ public class Save_manager : MonoBehaviour
             game_start.New_Player_Data();
         }
     }
-    void Load_items()
+    private void Load_items()
     {
         CreateFolder("Assets/Save_data/Items");
         playerBag.bag_items.Clear();
@@ -57,7 +58,7 @@ public class Save_manager : MonoBehaviour
             playerBag.bag_items.Add(Get_Item("Assets/Save_data/Items/" + Path.GetFileName(json_files[i])));
         }
     }
-    int load_files(string path)
+    private int load_files(string path)
     {
         json_files.Clear();
         string[] files = Directory.GetFiles(path);
@@ -72,7 +73,7 @@ public class Save_manager : MonoBehaviour
         }
         return j;
     }
-    void Load_pkm()
+    private void Load_pkm()
     {
         CreateFolder("Assets/Save_data");
         CreateFolder("Assets/Save_data/Pokemon");
@@ -97,7 +98,7 @@ public class Save_manager : MonoBehaviour
             storage.num_pokemon++;
         }
     }
-    public void CreateFolder(string path)
+    private void CreateFolder(string path)
     {
         if (!Directory.Exists(path))
         {
@@ -112,7 +113,7 @@ public class Save_manager : MonoBehaviour
         Clear_directory("Assets/Save_data/Player");
         Clear_directory("Assets/Save_data/Party_Ids");
     }
-    void Clear_directory(string path)
+    private void Clear_directory(string path)
     {
         string[] files = Directory.GetFiles(path);
         foreach (string file in files)
@@ -138,7 +139,7 @@ public class Save_manager : MonoBehaviour
         Save_Player(options.player_data,options.player_data.Player_ID);
         Save_Pokemon_ID();
     }
-    public void Get_Pokemon_ID()
+    private void Get_Pokemon_ID()
     {
         storage.num_party_members = 0;
         int num_ids = 0;
@@ -157,7 +158,7 @@ public class Save_manager : MonoBehaviour
             storage.num_party_members++;
         }
     }
-    public void Save_Pokemon_ID()
+    private void Save_Pokemon_ID()
     {
         for (int i = 0; i < storage.num_party_members; i++)
         {
@@ -166,41 +167,39 @@ public class Save_manager : MonoBehaviour
         }
         dialogue.Write_Info("Game saved", "Details");
         dialogue.Dialouge_off(1f);
-        options.Menu_off();
+        ui_m.Menu_off();
     }
-    public void Save_Pokemon(Pokemon pkm, string file_name)
+    private void Save_Pokemon(Pokemon pkm, string file_name)
     {
         string directory = Path.Combine("Assets/Save_data/Pokemon", file_name + ".json");
         string json = JsonUtility.ToJson(pkm, true);
         File.WriteAllText(directory, json);
     }
-    public void Save_Player(Player_data player, string file_name)
+    private void Save_Player(Player_data player, string file_name)
     {
         string directory = Path.Combine("Assets/Save_data/Player", file_name + ".json");
         string json = JsonUtility.ToJson(player, true);
         File.WriteAllText(directory, json);
     }
-    public void Save_Item(Item itm, string file_name)
+    private void Save_Item(Item itm, string file_name)
     {
         string directory = Path.Combine("Assets/Save_data/Items", file_name + ".json");
         string json = JsonUtility.ToJson(itm, true);
         File.WriteAllText(directory, json);
     }
-    Pokemon Get_Pokemon(string filePath)
+    private Pokemon Get_Pokemon(string filePath)
     {
         if (File.Exists(filePath))
         {
             string json = File.ReadAllText(filePath);
             Pokemon pkm = ScriptableObject.CreateInstance<Pokemon>();
             JsonUtility.FromJsonOverwrite(json, pkm);
-            //Debug.Log("Loaded from: " + filePath);
             pkm.Set_Data(storage);
             return pkm;
         }
-        //Debug.LogError("File not found: " + filePath);
         return null;
     }
-    Item Get_Item(string filePath)
+    private Item Get_Item(string filePath)
     {
         if (File.Exists(filePath))
         {
@@ -212,7 +211,7 @@ public class Save_manager : MonoBehaviour
         }
         return null;
     }
-    Player_data Get_player(string filePath)
+    private Player_data Get_player(string filePath)
     {
         if (File.Exists(filePath))
         {

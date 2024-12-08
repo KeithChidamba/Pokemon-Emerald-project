@@ -77,6 +77,7 @@ public class Obj_Instance : MonoBehaviour
         new_item.price = item.price;
         new_item.Item_img = item.Item_img;
         new_item.quantity = item.quantity;
+        new_item.Item_effect = item.Item_effect;
         return new_item;
     }
 }

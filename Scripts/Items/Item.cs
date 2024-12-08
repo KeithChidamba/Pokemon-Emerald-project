@@ -7,6 +7,7 @@ public class Item : ScriptableObject
     public string Item_ID = "";
     public string Item_name = "";
     public string Item_type = "";
+    public string Item_effect = "";
     public string Item_desc = "";
     public int price = 0;
     public int quantity = 0;

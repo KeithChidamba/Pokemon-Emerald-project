@@ -15,6 +15,7 @@ MonoBehaviour:
   Item_ID: 
   Item_name: Super Potion
   Item_type: Potion
+  Item_effect: 15
   Item_desc: Heals 15hp
   price: 35
   quantity: 1

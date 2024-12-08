@@ -15,6 +15,7 @@ MonoBehaviour:
   Item_ID: 
   Item_name: Pokeball
   Item_type: Pokeball
+  Item_effect: 35
   Item_desc: Basic pokeball
   price: 15
   quantity: 1

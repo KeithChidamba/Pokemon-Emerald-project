@@ -15,6 +15,7 @@ MonoBehaviour:
   Item_ID: 
   Item_name: Hyper Potion
   Item_type: Potion
+  Item_effect: 30
   Item_desc: Heals 30hp
   price: 50
   quantity: 1

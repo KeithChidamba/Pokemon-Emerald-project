@@ -9,10 +9,6 @@ public class Area_manager : MonoBehaviour
     public Player_movement player;
     public bool save_area = false;
     [SerializeField]Switch_Area area_building;
-    void Update()
-    {
-        
-    }
     public void Switch_Area(Switch_Area area,float load_time)
     {
         if (area.has_animation)

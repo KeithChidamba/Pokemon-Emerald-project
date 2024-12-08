@@ -16,7 +16,7 @@
     "has_trainer": false,
     "types": [
         {
-            "instanceID": 29644
+            "instanceID": 29556
         }
     ],
     "Status_effect": "None",
@@ -33,7 +33,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -14396
+            "instanceID": -17664
         },
         {
             "instanceID": 0
@@ -46,21 +46,21 @@
         }
     ],
     "ability": {
-        "instanceID": 29678
+        "instanceID": 29590
     },
     "evolutions": [
         {
-            "instanceID": 29680
+            "instanceID": 29592
         },
         {
-            "instanceID": 29682
+            "instanceID": 29594
         }
     ],
     "front_picture": {
-        "instanceID": 29338
+        "instanceID": 29256
     },
     "back_picture": {
-        "instanceID": 29684
+        "instanceID": 29596
     },
     "ability_name": "Inferno",
     "evo_data": [
