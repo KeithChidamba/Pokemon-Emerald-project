@@ -34,21 +34,15 @@ public class pokemon_storage : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     private void Update()
     {
             view_details.interactable = Pkm_selected;
     }
-
-    int Get_rand(int exclusive_lim)
-    {
-        return Random.Range(0, exclusive_lim);
-    }
     public string Generate_ID(string name_)//pokemon's unique ID
     {
-        int rand = Get_rand(name_.Length);
-        string end_digits = Get_rand(name_.Length).ToString() + Get_rand(name_.Length).ToString() + Get_rand(name_.Length).ToString() + Get_rand(name_.Length).ToString();
+        int rand = Utility.Get_rand(0,name_.Length);
+        string end_digits = Utility.Get_rand(0,name_.Length).ToString() + Utility.Get_rand(0,name_.Length).ToString() + Utility.Get_rand(0,name_.Length).ToString() + Utility.Get_rand(0,name_.Length).ToString();
         string id = rand.ToString();
         id += name_[rand];
         if (rand >= name_.Length-1)

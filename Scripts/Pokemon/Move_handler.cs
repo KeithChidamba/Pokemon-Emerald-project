@@ -6,10 +6,22 @@ using UnityEngine;
 public class Move_handler : MonoBehaviour
 {
     public List<Move> All_moves;
+    public static Move_handler instance;
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+    }
     public void Do_move(Move move,Pokemon attacker,Pokemon victim)
     {
         Dialogue_handler.instance.Write_Info(attacker.Pokemon_name+" used "+move.Move_name+"!","Battle info");
-        //
+        Dialogue_handler.instance.Dialouge_off(1.2f);
+        Battle_handler.instance.Invoke(nameof(Battle_handler.instance.Next_turn),1.3f);
+
         //damage pokemon
         //call appropriate move for move effect
     }

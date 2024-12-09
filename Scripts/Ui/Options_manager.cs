@@ -16,7 +16,7 @@ public class Options_manager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
+         
     }
     private void Update()
     {

@@ -22,7 +22,7 @@ public class Bag : MonoBehaviour
     public Text Sell_qty_txt;
     public static Bag instance;
     public GameObject bag_ui;
-    private void Start()
+    private void Awake()
     {
         if (instance != null && instance != this)
         {
@@ -30,7 +30,6 @@ public class Bag : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     private void Update()
     {

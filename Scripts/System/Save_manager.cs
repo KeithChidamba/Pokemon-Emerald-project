@@ -15,17 +15,16 @@ public class Save_manager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     private void Start()
     {
-        //try
-      //  {
+       //try
+        //{
             Load_items();
             Load_player();
             Load_pkm();
-        /*}
-        catch
+        //}
+        /*catch
         {
             Dialogue_handler.instance.Write_Info("There was an error in loading you save data!","Details");
             Game_Load.instance.New_Player_Data();

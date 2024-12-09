@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 [CreateAssetMenu(fileName = "Pokemon", menuName = "pkm")]
@@ -113,6 +114,17 @@ public class Pokemon : ScriptableObject
             j++;
         }
     }
+    public bool isWeakTo(Type enemy_type)//is super effective
+    {
+        foreach (Type t in types)
+        {
+            if (t.type_check(t.weaknesses,enemy_type) && !t.type_check(t.Resistances,enemy_type) && !t.type_check(t.Non_effect,enemy_type))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     void Check_evolution()
     {
         for (int i = 0; i < evo_line.Length; i++)
@@ -124,7 +136,6 @@ public class Pokemon : ScriptableObject
             }
         }
     }
-
     public void Get_exp(Pokemon enemy)
     {
         int level_difference = Current_level - enemy.Current_level;
@@ -201,7 +212,6 @@ public class Pokemon : ScriptableObject
 
                 break;
             }
-            
         }
     }
 }

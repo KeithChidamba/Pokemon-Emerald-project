@@ -27,7 +27,6 @@ public class Poke_Mart : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     private void Update()
     {

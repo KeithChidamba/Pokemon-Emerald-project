@@ -19,7 +19,6 @@ public class Game_ui_manager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     private void Update()
     {

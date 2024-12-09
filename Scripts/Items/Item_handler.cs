@@ -17,7 +17,6 @@ public class Item_handler : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     public void Use_Item(Item item)
     {

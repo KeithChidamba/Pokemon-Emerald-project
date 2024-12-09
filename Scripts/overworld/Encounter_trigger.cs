@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 public class Encounter_trigger : MonoBehaviour
 {
     public Encounter_handler handler;
+    public Encounter_Area area;
     [SerializeField] bool triggered = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -28,7 +29,7 @@ public class Encounter_trigger : MonoBehaviour
                 {
                     if (!handler.triggered_encounter)
                     {
-                        handler.Trigger_encounter();
+                        handler.Trigger_encounter(area);
                     }
                 }
                 triggered = true;

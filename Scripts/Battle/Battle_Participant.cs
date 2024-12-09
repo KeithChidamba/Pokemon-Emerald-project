@@ -20,6 +20,7 @@ public class Battle_Participant : MonoBehaviour
     public GameObject[] single_battle_ui;
     public GameObject[] Double_battle_ui;
     public GameObject participant_ui;
+    public bool Selected_Enemy = false;
     private void Update()
     {
         if (!is_active) return;

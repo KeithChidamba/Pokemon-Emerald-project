@@ -35,7 +35,6 @@ public class Dialogue_handler : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     void Update()

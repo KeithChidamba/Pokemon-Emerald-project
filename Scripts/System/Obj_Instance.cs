@@ -61,15 +61,12 @@ public static class Obj_Instance
         }
         return new_pkm;
     }
-    static int Get_rand(int exclusive_lim)
-    {
-        return UnityEngine.Random.Range(0, exclusive_lim);
-    }
+
     public static Item set_Item(Item item)
     {
         Item new_item = ScriptableObject.CreateInstance<Item>();
         new_item.Item_name = item.Item_name;
-        string end_digits = Get_rand(50).ToString() + Get_rand(50).ToString() + Get_rand(50).ToString() + Get_rand(50).ToString();
+        string end_digits = Utility.Get_rand(0,50).ToString() + Utility.Get_rand(0,50).ToString() + Utility.Get_rand(0,50).ToString() + Utility.Get_rand(0,50).ToString();
         new_item.Item_ID = new_item.Item_name + end_digits;
         new_item.Item_type = item.Item_type;
         new_item.Item_desc = item.Item_desc;
