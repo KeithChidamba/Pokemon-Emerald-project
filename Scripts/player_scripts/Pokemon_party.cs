@@ -39,10 +39,18 @@ public class Pokemon_party : MonoBehaviour
     }
     public void Moving(int Member_position)
     {
-        moving = true;
-        Member_to_Move = Member_position;
-        viewing_options = false;
-        Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
+        if (num_members > 1)
+        {
+            moving = true;
+            Member_to_Move = Member_position;
+            viewing_options = false;
+            Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
+        }
+        else
+        {
+            Dialogue_handler.instance.Write_Info("There must be at least 2 Pokemon to swap","Details");
+            Dialogue_handler.instance.Dialouge_off(1f);
+        }
     }
 
     public void Recieve_item(Item item)

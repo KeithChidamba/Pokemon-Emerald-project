@@ -76,17 +76,16 @@ public class Poke_Mart : MonoBehaviour
     {
         if(Game_Load.instance.player_data.player_Money >= mart_items[top_index+Selected_item - 1].price)
         {
-            Item item = ScriptableObject.CreateInstance<Item>();
-            item.price = mart_items[top_index + Selected_item - 1].price;
-            item.quantity = Selected_item_quantity;
+            Item item = mart_items[top_index + Selected_item - 1];
+            /*item.quantity = Selected_item_quantity;
             item.Item_name = mart_items[top_index + Selected_item - 1].Item_name;
             item.Item_desc = mart_items[top_index + Selected_item - 1].Item_desc;
             item.Item_img = mart_items[top_index + Selected_item - 1].Item_img;
-            item.Item_type = mart_items[top_index + Selected_item - 1].Item_type;
-                Bag.instance.Add_item(item);
-            Game_Load.instance.player_data.player_Money -= Selected_item_quantity * mart_items[top_index + Selected_item - 1].price;
+            item.Item_type = mart_items[top_index + Selected_item - 1].Item_type;*/
+            Bag.instance.Add_item(item);
+            Game_Load.instance.player_data.player_Money -= Selected_item_quantity * item.price;
             Selected_item_quantity = 1;
-            Dialogue_handler.instance.Write_Info("You bought "+ item .quantity+ " "+item.Item_name+"'s", "Details");
+            Dialogue_handler.instance.Write_Info("You bought "+ item.quantity+ " "+item.Item_name+"'s", "Details");
             Dialogue_handler.instance.Dialouge_off(1.2f);
         }
         else
@@ -113,7 +112,6 @@ public class Poke_Mart : MonoBehaviour
         {
             if (Selected_item_quantity < 99)//below max quantity and affordable by player
             {
-
                 if(Game_Load.instance.player_data.player_Money >= ( (Selected_item_quantity+1) * mart_items[top_index + Selected_item - 1].price))
                 {
                     Selected_item_quantity += diff;

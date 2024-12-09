@@ -36,41 +36,44 @@ public class Battle_handler : MonoBehaviour
     }
     void Update()
     {
-        if (Options_manager.instance.playerInBattle)
+        if (!Options_manager.instance.playerInBattle) return;
+            Handle_battle();
+    }
+
+    private void Handle_battle()
+    {
+        if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)))
         {
-            if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)))
+            Use_Move(Battle_P[Current_pkm_turn].pokemon.move_set[Current_Move]);
+        }
+        if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
+        {
+            options_ui.SetActive(true);
+            moves_ui.SetActive(false);
+            choosing_move = false; 
+            Selected_Move = false; 
+            Current_Move = 0;
+            Move_btns[Current_Move].GetComponent<Button>().interactable = true;
+        }
+        if (overworld_actions.instance.using_ui)
+        {
+            options_ui.SetActive(false);
+            viewing_options = false;
+        }
+        else
+        {
+            if (!choosing_move && !running_away && !Doing_move)
             {
-                Use_Move(Battle_P[Current_pkm_turn].pokemon.move_set[Current_Move]);
-            }
-            if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
-            {
-                options_ui.SetActive(true);
-                moves_ui.SetActive(false);
-                choosing_move = false; 
-                Selected_Move = false; 
-                Current_Move = 0;
-                Move_btns[Current_Move].GetComponent<Button>().interactable = true;
-            }
-            if (overworld_actions.instance.using_ui)
-            {
-                options_ui.SetActive(false);
-                viewing_options = false;
+                viewing_options = true;//idle
             }
             else
             {
-                if (!choosing_move && !running_away && !Doing_move)
-                {
-                    viewing_options = true;//idle
-                }
-                else
-                {
-                    viewing_options = false;
-                }
-                if (viewing_options)
-                {
-                    Dialogue_handler.instance.Write_Info("What will you do?", "Details");
-                    options_ui.SetActive(true);
-                }
+                viewing_options = false;
+            }
+            if (viewing_options)
+            {
+                Dialogue_handler.instance.Write_Info("What will you do?", "Details");
+                options_ui.SetActive(true);
             }
         }
     }
@@ -135,7 +138,7 @@ public class Battle_handler : MonoBehaviour
         }
         foreach(Battle_Participant p in Battle_P)
         {
-            if (p != null)
+            if (p.pokemon != null)
             {
                 p.Load_ui();
                 p.ability_h.Set_ability();
@@ -177,7 +180,7 @@ public class Battle_handler : MonoBehaviour
     public void Select_Move(int move_num)
     { 
         Current_Move = move_num-1;
-        Move_pp.text = "PP: " + Battle_P[0].pokemon.move_set[Current_Move].Powerpoints.ToString() + "/" + Battle_P[0].pokemon.move_set[Current_Move].max_Powerpoints.ToString();
+        Move_pp.text = "PP: " + Battle_P[0].pokemon.move_set[Current_Move].Powerpoints+ "/" + Battle_P[0].pokemon.move_set[Current_Move].max_Powerpoints;
         Move_type.text = Battle_P[0].pokemon.move_set[Current_Move].type.Type_name;
         Selected_Move = true;
         Move_btns[Current_Move].GetComponent<Button>().interactable = false;

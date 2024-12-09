@@ -1147,7 +1147,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Pkm_Details
         m_Mode: 1
@@ -3245,6 +3245,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 95714747}
   m_CullTransparentMesh: 1
+--- !u!1 &100100229
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 100100231}
+  - component: {fileID: 100100230}
+  m_Layer: 0
+  m_Name: Player_party
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &100100230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100100229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65f63e6d678d0f14fa9ce1a3bccc7688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  party:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  num_members: 0
+  Selected_member: 0
+  Member_to_Move: 0
+  moving: 0
+  viewing_details: 0
+  viewing_options: 0
+  viewing_party: 0
+  Memeber_cards:
+  - {fileID: 1216270925}
+  - {fileID: 616383668}
+  - {fileID: 644034380}
+  - {fileID: 920685300}
+  - {fileID: 698573225}
+  - {fileID: 125591849}
+  party_ui: {fileID: 682367208}
+  member_indicator: {fileID: 1954685996}
+  details: {fileID: 946544333}
+--- !u!4 &100100231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100100229}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 399, y: 212.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &100425788
 GameObject:
   m_ObjectHideFlags: 0
@@ -3998,7 +4066,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Member_Selected
         m_Mode: 3
@@ -7262,7 +7330,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Moving
         m_Mode: 3
@@ -8192,7 +8260,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &279946561
 GameObject:
@@ -9644,7 +9712,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Cancel
         m_Mode: 1
@@ -10417,7 +10485,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Moving
         m_Mode: 3
@@ -13676,7 +13744,7 @@ Transform:
   - {fileID: 1740777792}
   - {fileID: 187727644}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &526637702
 GameObject:
@@ -15432,7 +15500,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Pkm_Details
         m_Mode: 1
@@ -16731,7 +16799,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Member_Selected
         m_Mode: 3
@@ -17942,7 +18010,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Moving
         m_Mode: 3
@@ -18112,7 +18180,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Member_Selected
         m_Mode: 3
@@ -19564,7 +19632,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Member_Selected
         m_Mode: 3
@@ -19755,7 +19823,7 @@ RectTransform:
   - {fileID: 2105458974}
   - {fileID: 235881331}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -26391,7 +26459,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Member_Selected
         m_Mode: 3
@@ -26859,7 +26927,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &935983327
 MonoBehaviour:
@@ -29099,7 +29167,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Moving
         m_Mode: 3
@@ -33224,7 +33292,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Member_Selected
         m_Mode: 3
@@ -36482,7 +36550,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Pkm_Details
         m_Mode: 1
@@ -37996,7 +38064,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Add_Member
         m_Mode: 2
@@ -40746,7 +40814,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Pkm_Details
         m_Mode: 1
@@ -42980,10 +43048,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 935983327}
-        m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: swap
-        m_Mode: 1
+      - m_Target: {fileID: 100100230}
+        m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
+        m_MethodName: Moving
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -43042,7 +43110,6 @@ GameObject:
   - component: {fileID: 1465551225}
   - component: {fileID: 1465551226}
   - component: {fileID: 1465551227}
-  - component: {fileID: 1465551228}
   m_Layer: 7
   m_Name: player
   m_TagString: Player
@@ -43066,7 +43133,7 @@ Transform:
   - {fileID: 1606520298}
   - {fileID: 1418617663}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1465551225
 MonoBehaviour:
@@ -43137,42 +43204,6 @@ MonoBehaviour:
   Fishing_Start: Fishing_Start
   Fishing_End: Fishing_End
   Fishing_idle: Fishing_idle
---- !u!114 &1465551228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465551221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65f63e6d678d0f14fa9ce1a3bccc7688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  party:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  num_members: 0
-  Selected_member: 0
-  Member_to_Move: 0
-  moving: 0
-  viewing_details: 0
-  viewing_options: 0
-  viewing_party: 0
-  Memeber_cards:
-  - {fileID: 1216270925}
-  - {fileID: 616383668}
-  - {fileID: 644034380}
-  - {fileID: 920685300}
-  - {fileID: 698573225}
-  - {fileID: 125591849}
-  party_ui: {fileID: 682367208}
-  member_indicator: {fileID: 1954685996}
-  details: {fileID: 946544333}
 --- !u!1 &1466714538
 GameObject:
   m_ObjectHideFlags: 0
@@ -43603,7 +43634,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Moving
         m_Mode: 3
@@ -48611,7 +48642,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Pkm_Details
         m_Mode: 1
@@ -50813,7 +50844,7 @@ Transform:
   - {fileID: 2033618201}
   - {fileID: 502433105}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1829234817
 MonoBehaviour:
@@ -51316,7 +51347,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Pkm_Details
         m_Mode: 1
@@ -54668,7 +54699,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Moving
         m_Mode: 3
@@ -56945,7 +56976,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Add_Member
         m_Mode: 2
@@ -59928,7 +59959,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1465551228}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
         m_MethodName: Add_Member
         m_Mode: 2

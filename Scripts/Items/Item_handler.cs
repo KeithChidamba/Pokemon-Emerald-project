@@ -34,15 +34,16 @@ public class Item_handler : MonoBehaviour
     }
     void Use_pokeball()
     {
-        if (Battle_handler.instance.is_trainer_battle)
-        {
-            Dialogue_handler.instance.Write_Info("Cant catch someone else's Pokemon!","Details");
-        }
-        else
-        {
-            //write catch logic later
-            //has trainer after catch
-        }
+        if(Options_manager.instance.playerInBattle)
+            if (Battle_handler.instance.is_trainer_battle)
+            {
+                Dialogue_handler.instance.Write_Info("Cant catch someone else's Pokemon!","Details");
+            }
+            else
+            {
+                //write catch logic later
+                //has trainer after catch
+            }
     }
     private void heal_status(string status)
     {
@@ -55,7 +56,7 @@ public class Item_handler : MonoBehaviour
         }
         else if (selected_party_pkm.Status_effect == "None")
         {
-            Dialogue_handler.instance.Write_Info("Pokemon is healthy","Details");
+            Dialogue_handler.instance.Write_Info("Pokemon is already healthy","Details");
         }
         else
         {
@@ -76,7 +77,7 @@ public class Item_handler : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.instance.Write_Info("Pokemon health is full","Details");
+            Dialogue_handler.instance.Write_Info("Pokemon health already is full","Details");
         }
         Dialogue_handler.instance.Dialouge_off(1f);
         Using_item = false;

@@ -9,10 +9,11 @@ public class Abilities : MonoBehaviour
     [SerializeField] private string pkm_ability;
     private void Update()
     {
-        if (Options_manager.instance.playerInBattle)
-        {
-            Invoke(pkm_ability,0f);
-        }
+        if(participant.pokemon==null) return;
+            if (Options_manager.instance.playerInBattle)
+            {
+                Invoke(pkm_ability,0f);
+            }
     }
     public void Set_ability()
     { 

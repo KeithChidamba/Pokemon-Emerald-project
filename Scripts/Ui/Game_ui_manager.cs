@@ -44,6 +44,7 @@ public class Game_ui_manager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && Pokemon_party.instance.viewing_party && !Pokemon_party.instance.viewing_details)
         {
             Pokemon_party.instance.party_ui.gameObject.SetActive(false);
+            Pokemon_party.instance.Cancel();
             if (Options_manager.instance.playerInBattle)
             {
                 Battle_handler.instance.Set_pkm();
