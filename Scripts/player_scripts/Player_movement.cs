@@ -18,9 +18,18 @@ public class Player_movement : MonoBehaviour
     [SerializeField] Vector2 movement;
     float current_direction = 0;
     public Animation_manager manager;
-    public overworld_actions actions;
     public bool canmove = true;
     [SerializeField] Transform interaction_point;
+    public static Player_movement instance { get; private set;}
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+    }
     void Update()
     {
         if (canmove)
@@ -46,9 +55,9 @@ public class Player_movement : MonoBehaviour
             running = false;
             walking = false;
             using_bike = false;
-            actions.canSwitch = false;
+            overworld_actions.instance.canSwitch = false;
             moving = false;
-            if (!actions.doing_action)
+            if (!overworld_actions.instance.doing_action)
             {
                 manager.change_animation_state(manager.Player_idle);
             }
@@ -65,7 +74,7 @@ public class Player_movement : MonoBehaviour
         {
             x = 0;
         }
-        if (y == 0 && x == 0 && !using_bike && !actions.doing_action)
+        if (y == 0 && x == 0 && !using_bike && !overworld_actions.instance.doing_action)
         {
             direction = 0;
             moving = false;
@@ -105,25 +114,25 @@ public class Player_movement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && !using_bike &&can_use_bike)
         {
-            actions.Use_Bike();
+            overworld_actions.instance.Use_Bike();
             using_bike = true;
             moving = false;
             running = false;
-            actions.canSwitch = false;
+            overworld_actions.instance.canSwitch = false;
         }       
         else if (Input.GetKeyDown(KeyCode.E) && !can_use_bike)
         {
-            actions.dialogue.Write_Info("Cant use bike here","Details");
-            actions.dialogue.Dialouge_off(1f);
+            Dialogue_handler.instance.Write_Info("Cant use bike here","Details");
+            Dialogue_handler.instance.Dialouge_off(1f);
         }
         if (Input.GetKeyUp(KeyCode.E) && using_bike)
         {
-            actions.canSwitch = true;
+            overworld_actions.instance.canSwitch = true;
         }
-        if (Input.GetKeyDown(KeyCode.E) && using_bike && actions.canSwitch)
+        if (Input.GetKeyDown(KeyCode.E) && using_bike && overworld_actions.instance.canSwitch)
         {
             using_bike = false;
-            actions.canSwitch = false;
+            overworld_actions.instance.canSwitch = false;
         }
         if (!using_bike)
         {
@@ -134,12 +143,12 @@ public class Player_movement : MonoBehaviour
             }
             if (Input.GetKeyUp(KeyCode.LeftShift) && running)
             {
-                actions.canSwitch = true;
+                overworld_actions.instance.canSwitch = true;
             }
-            if (Input.GetKeyDown(KeyCode.LeftShift) && running && actions.canSwitch)
+            if (Input.GetKeyDown(KeyCode.LeftShift) && running && overworld_actions.instance.canSwitch)
             {
                 running = false;
-                actions.canSwitch = false;
+                overworld_actions.instance.canSwitch = false;
             }
             if (!moving)
             {
@@ -156,7 +165,7 @@ public class Player_movement : MonoBehaviour
                     manager.change_animation_state(manager.Player_run);
                 }
             }
-            if (moving && !running && !actions.canSwitch)
+            if (moving && !running && !overworld_actions.instance.canSwitch)
             {
                 walking = true; 
                 manager.change_animation_state(manager.Player_walk);

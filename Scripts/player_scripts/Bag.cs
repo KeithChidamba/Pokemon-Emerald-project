@@ -15,13 +15,23 @@ public class Bag : MonoBehaviour
     public int num_items = 0;
     public int Selected_item = 0;
     public int top_index = 0;//keeps track of visible bag items
-    public Options_manager options;
     public GameObject[] item_actions;
     public int Sell_quantity = 1;
     public bool Selling_items = false;
     public GameObject Selling_ui;
     public Text Sell_qty_txt;
-    public Game_ui_manager ui_m;
+    public static Bag instance;
+    public GameObject bag_ui;
+    private void Start()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
     private void Update()
     {
         if (Selling_items)
@@ -52,14 +62,14 @@ public class Bag : MonoBehaviour
     {
         int price = bag_items[top_index + Selected_item - 1].price;
         int profit = (int)math.trunc((Sell_quantity * price)/2);
-        options.player_data.player_Money += profit;
+        Game_Load.instance.player_data.player_Money += profit;
         bag_items[top_index + Selected_item - 1].quantity -= Sell_quantity;
         if (bag_items[top_index + Selected_item - 1].quantity == 0)
         {
             Remove_item();
         }
-        options.dialogue.Write_Info("You made P"+profit.ToString()+ ", would you like to sell anything else?", "Options", "Sell_item","Sure, which item?","Dont_Buy","Yes","No");
-        ui_m.close_bag();
+        Dialogue_handler.instance.Write_Info("You made P"+profit.ToString()+ ", would you like to sell anything else?", "Options", "Sell_item","Sure, which item?","Dont_Buy","Yes","No");
+        Game_ui_manager.instance.close_bag();
     }
 
     public void check_Quantity(Item item)
@@ -178,7 +188,7 @@ public class Bag : MonoBehaviour
                     {
                         int quantity_gap = (99 - searched.quantity);
                         searched.quantity += quantity_gap;
-                        Item overflow = options.ins_manager.set_Item(item);
+                        Item overflow = Obj_Instance.set_Item(item);
                         overflow.quantity = item.quantity - quantity_gap;
                         bag_items.Add(overflow);
                         num_items++;
@@ -186,28 +196,28 @@ public class Bag : MonoBehaviour
                 }
                 else
                 {
-                    bag_items.Add(options.ins_manager.set_Item(item));
+                    bag_items.Add(Obj_Instance.set_Item(item));
                     num_items++;
                 }
             }
             else
             {
-                bag_items.Add(options.ins_manager.set_Item(item));
+                bag_items.Add(Obj_Instance.set_Item(item));
                 num_items++;
             }
         }
         else
         {
-            ui_m.Close_Store();
-            options.dialogue.Write_Info("Bag is full", "Details");
+            Game_ui_manager.instance.Close_Store();
+            Dialogue_handler.instance.Write_Info("Bag is full", "Details");
         }                                                                           
     }
     public void use_item()
     {
-        options.item_h.Using_item = true;
-        options.party.Recieve_item(bag_items[top_index + Selected_item - 1]);
-        ui_m.close_bag();
-        ui_m.View_pkm_Party();
+        Item_handler.instance.Using_item = true;
+        Pokemon_party.instance.Recieve_item(bag_items[top_index + Selected_item - 1]);
+        Game_ui_manager.instance.close_bag();
+        Game_ui_manager.instance.View_pkm_Party();
     }
     public void Close_bag()
     {

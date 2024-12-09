@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class Abilities : MonoBehaviour
 {
-    public Options_manager options;
-    public Battle_handler battle;
     public Battle_Participant participant;
     [SerializeField] private string pkm_ability;
     private void Update()
     {
-        if (options.playerInBattle)
+        if (Options_manager.instance.playerInBattle)
         {
             Invoke(pkm_ability,0f);
         }
@@ -19,7 +17,7 @@ public class Abilities : MonoBehaviour
     public void Set_ability()
     { 
         //underscore because some ability names are c# keywords
-        pkm_ability = options.util.removeSpace(participant.pokemon.ability.ability.ToLower())+"_";
+        pkm_ability = Utility.removeSpace(participant.pokemon.ability.ability.ToLower())+"_";
     }
     void inferno_()
     {

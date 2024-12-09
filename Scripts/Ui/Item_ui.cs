@@ -10,6 +10,7 @@ public class Item_ui : MonoBehaviour
     public Text item_name;
     public Text item_description;
     public Image item_img;
+    
     public void Load_item()
     {
         item_name.text = item.Item_name;

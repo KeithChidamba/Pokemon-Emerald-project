@@ -6,7 +6,6 @@ public class Area_manager : MonoBehaviour
 {
     public Switch_Area current_area;
     public Switch_Area[] Areas;
-    public Player_movement player;
     public bool save_area = false;
     [SerializeField]Switch_Area area_building;
     public void Switch_Area(Switch_Area area,float load_time)
@@ -52,8 +51,8 @@ public class Area_manager : MonoBehaviour
         {
             area_building.interior.SetActive(false);
             area_building.inside_area = false;
-            player.transform.localPosition = area_building.door_pos.localPosition;
-            player.canmove = false;
+            Player_movement.instance.transform.position = area_building.door_pos.localPosition;
+            Player_movement.instance.canmove = false;
         }
         foreach (Switch_Area a in Areas)
         {
@@ -66,7 +65,7 @@ public class Area_manager : MonoBehaviour
             }
         Invoke(nameof(reset_movement), 1f);
         current_area = find_area("Overworld");
-        player.can_use_bike = true;
+        Player_movement.instance.can_use_bike = true;
     }
     void Load_area()
     {
@@ -74,18 +73,18 @@ public class Area_manager : MonoBehaviour
         {
             a.overworld.SetActive(false);
         }
-        player.actions.doing_action = false;
-        player.canmove = false;
+        overworld_actions.instance.doing_action = false;
+        Player_movement.instance.canmove = false;
         current_area.inside_area = true;
         current_area.interior.SetActive(true);
         area_building = current_area;
         if(!save_area)
-            player.transform.position = current_area.Mat_pos.position;
+            Player_movement.instance.transform.position = current_area.Mat_pos.position;
         Invoke(nameof(reset_movement), 1f);
     }
     void reset_movement()
     {
-        player.canmove = true;
+        Player_movement.instance.canmove = true;
         save_area = false;
     }
 }

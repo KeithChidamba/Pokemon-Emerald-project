@@ -5,12 +5,20 @@ using UnityEngine;
 
 public class Item_handler : MonoBehaviour
 {
-    public Options_manager options;
-    public Battle_handler battle;
     public Pokemon selected_party_pkm;
     public bool Using_item = false;
     private Item item_in_use;
-
+    public static Item_handler instance;
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
     public void Use_Item(Item item)
     {
         item_in_use = item;
@@ -26,9 +34,9 @@ public class Item_handler : MonoBehaviour
     }
     void Use_pokeball()
     {
-        if (battle.is_trainer_battle)
+        if (Battle_handler.instance.is_trainer_battle)
         {
-            options.dialogue.Write_Info("Cant catch someone else's Pokemon!","Details");
+            Dialogue_handler.instance.Write_Info("Cant catch someone else's Pokemon!","Details");
         }
         else
         {
@@ -41,36 +49,36 @@ public class Item_handler : MonoBehaviour
         if (selected_party_pkm.Status_effect.ToLower() == status)
         {
             selected_party_pkm.Status_effect = "None";
-            options.dialogue.Write_Info("Pokemon has been healed","Details");
+            Dialogue_handler.instance.Write_Info("Pokemon has been healed","Details");
             item_in_use.quantity--;
-            options.player_bag.check_Quantity(item_in_use);
+            Bag.instance.check_Quantity(item_in_use);
         }
         else if (selected_party_pkm.Status_effect == "None")
         {
-            options.dialogue.Write_Info("Pokemon is healthy","Details");
+            Dialogue_handler.instance.Write_Info("Pokemon is healthy","Details");
         }
         else
         {
-            options.dialogue.Write_Info("Incorrect heal item","Details");
+            Dialogue_handler.instance.Write_Info("Incorrect heal item","Details");
         }
-        options.dialogue.Dialouge_off(1f);
+        Dialogue_handler.instance.Dialouge_off(1f);
         Using_item = false;
-        options.party.Refresh_Member_Cards();
+        Pokemon_party.instance.Refresh_Member_Cards();
 }
     private void Heal(int heal_effect)
     {
         if ((selected_party_pkm.HP + heal_effect) <= selected_party_pkm.max_HP)
         {
             selected_party_pkm.HP += heal_effect;
-            options.dialogue.Write_Info(selected_party_pkm.Pokemon_name+" gained "+heal_effect+" health points","Details");
+            Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+heal_effect+" health points","Details");
             item_in_use.quantity--;
-            options.player_bag.check_Quantity(item_in_use);
+            Bag.instance.check_Quantity(item_in_use);
         }
         else
         {
-            options.dialogue.Write_Info("Pokemon health is full","Details");
+            Dialogue_handler.instance.Write_Info("Pokemon health is full","Details");
         }
-        options.dialogue.Dialouge_off(1f);
+        Dialogue_handler.instance.Dialouge_off(1f);
         Using_item = false;
     }
 }

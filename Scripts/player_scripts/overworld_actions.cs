@@ -4,21 +4,29 @@ using UnityEngine;
 
 public class overworld_actions : MonoBehaviour
 {
-    public Player_movement movement;
     public Animation_manager manager;
-    public Dialogue_handler dialogue;
     float bike_speed = 2f;
     public bool canSwitch = false;
     public bool fishing = false;
     public bool doing_action = false;
     public bool using_ui = false;
+    public static overworld_actions instance;
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+    }
     void Update()
     {
         if (!using_ui)
         {
             if (doing_action)
             {
-                movement.canmove = false;
+                Player_movement.instance.canmove = false;
                 canSwitch = false;
             }
             if (fishing)
@@ -33,7 +41,7 @@ public class overworld_actions : MonoBehaviour
         }
         else
         {
-            movement.canmove = false;
+            Player_movement.instance.canmove = false;
         }
 
     }
@@ -46,15 +54,15 @@ public class overworld_actions : MonoBehaviour
         fishing = false;
         Invoke(nameof(Action_reset), 0.8f);
         manager.change_animation_state(manager.Fishing_End);
-        dialogue.Dialouge_off();
+        Dialogue_handler.instance.Dialouge_off();
     }
     void Action_reset()
     {
         doing_action = false;
-        movement.canmove = true;
+        Player_movement.instance.canmove = true;
     }
     public void Use_Bike()
     {
-        movement.movement_speed = bike_speed;
+        Player_movement.instance.movement_speed = bike_speed;
     }
 }

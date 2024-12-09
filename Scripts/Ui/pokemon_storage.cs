@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 
 public class pokemon_storage : MonoBehaviour
 {
-    public Pokemon_party party_;
     public List<Pokemon> all_pokemon;
     public List<Pokemon> non_party_pokemon;
     public int num_pokemon = 0;
@@ -22,13 +21,21 @@ public class pokemon_storage : MonoBehaviour
     public GameObject[] pkm_party_icons;
     public GameObject pkm_icon;
     public Transform storage_positions;
-    public Options_manager options;
     public bool swapping = false;
-    public Save_manager saves;
-    public Pokemon_Details details;
     public bool Pkm_selected = false;
     public Button view_details;
-
+    [SerializeField]private Pokemon_Details details;
+    public static pokemon_storage instance;
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
     private void Update()
     {
             view_details.interactable = Pkm_selected;
@@ -81,7 +88,7 @@ public class pokemon_storage : MonoBehaviour
     }
     public bool search_pkm_ID(string ID)
     {
-        foreach (string mon_ID in saves.party_IDs)
+        foreach (string mon_ID in Save_manager.instance.party_IDs)
         {
             if (mon_ID == ID)
             {
@@ -95,7 +102,7 @@ public class pokemon_storage : MonoBehaviour
         using_pc = true;
         Set_pkm_icon();
         storage_ui.SetActive(true);
-        options.dialogue.Dialouge_off();
+        Dialogue_handler.instance.Dialouge_off();
     }
     public void Close_pc()
     {
@@ -103,8 +110,7 @@ public class pokemon_storage : MonoBehaviour
         {
                 pos.GetComponent<PC_party_pkm>().options.SetActive(false);
         }
-        options.player.using_ui = false;
-        options.player.movement.canmove = true;
+        Game_ui_manager.instance.Reset_player_movement();
         using_pc = false;
         Pkm_selected = false;
         storage_ui.SetActive(false);
@@ -115,8 +121,8 @@ public class pokemon_storage : MonoBehaviour
         if (swapping)
         {
             storage_operetation = true;
-            Pokemon store = party_.party[party_pkm.party_pos - 1];
-            party_.party[party_pkm.party_pos - 1] = Add_pokemon(search_pkm(select_pkm_ID));
+            Pokemon store = Pokemon_party.instance.party[party_pkm.party_pos - 1];
+            Pokemon_party.instance.party[party_pkm.party_pos - 1] = Add_pokemon(search_pkm(select_pkm_ID));
             non_party_pokemon[search_pkm_pos(select_pkm_ID)] = Add_pokemon(store);
             swapping = false;
             Remove_pkm_icons();
@@ -212,7 +218,7 @@ public class pokemon_storage : MonoBehaviour
             }
         }
         num = 0;
-        foreach (Pokemon mon in party_.party)
+        foreach (Pokemon mon in Pokemon_party.instance.party)
         {
             if (mon != null)
             {
@@ -230,13 +236,13 @@ public class pokemon_storage : MonoBehaviour
     {
         if (num_party_members > 1)
         {
-            party_.Remove_Member(pkm.party_pos);
+            Pokemon_party.instance.Remove_Member(pkm.party_pos);
             num_party_members--;
             Cancel_options();
         }
         else
         {
-            options.dialogue.Write_Info("There must be at least 1 pokemon in your team","Details");
+            Dialogue_handler.instance.Write_Info("There must be at least 1 pokemon in your team","Details");
         }
 
     }
@@ -250,8 +256,8 @@ public class pokemon_storage : MonoBehaviour
                 string pkm_name = pkm_icon.pkm.Pokemon_name;
                 all_pokemon[index] = null;
                 sort_icons(index);
-                options.dialogue.Write_Info("You released "+ pkm_name, "Details");
-                options.dialogue.Dialouge_off(1.5f);
+                Dialogue_handler.instance.Write_Info("You released "+ pkm_name, "Details");
+                Dialogue_handler.instance.Dialouge_off(1.5f);
                 Cancel_options();
                 break;
             }
@@ -272,7 +278,7 @@ public class pokemon_storage : MonoBehaviour
         non_party_pokemon.Clear();
         foreach (Pokemon mon in all_pokemon)
         {
-            if (!saves.party_IDs.Contains(mon.Pokemon_ID))
+            if (!Save_manager.instance.party_IDs.Contains(mon.Pokemon_ID))
             {
                 non_party_pokemon.Add(mon);
             }
@@ -281,25 +287,25 @@ public class pokemon_storage : MonoBehaviour
     public void swap()
     {
         storage_positions.gameObject.SetActive(false);
-        options.dialogue.Write_Info("Pick a pokemon in your party to swap with", "Details");
-        options.dialogue.Dialouge_off(1.2f);
+        Dialogue_handler.instance.Write_Info("Pick a pokemon in your party to swap with", "Details");
+        Dialogue_handler.instance.Dialouge_off(1.2f);
         swapping = true;
     }
     public void  Add_to_Party()
     {
-        if (party_.num_members < 6)
+        if (Pokemon_party.instance.num_members < 6)
         {
             storage_operetation = true;
-            party_.party[party_.num_members] = Add_pokemon(search_pkm(select_pkm_ID));
+            Pokemon_party.instance.party[Pokemon_party.instance.num_members] = Add_pokemon(search_pkm(select_pkm_ID));
             //remove from box
             non_party_pokemon.Remove(search_pkm(select_pkm_ID));
             num_party_members++;
-            party_.num_members++;
+            Pokemon_party.instance.num_members++;
         }
         else
         {
-            options.dialogue.Write_Info("Party is full, you can still swap out pokemon though", "Details");
-            options.dialogue.Dialouge_off(2f);
+            Dialogue_handler.instance.Write_Info("Party is full, you can still swap out pokemon though", "Details");
+            Dialogue_handler.instance.Dialouge_off(2f);
         }
         storage_operetation = false;
         Cancel_options();
@@ -315,7 +321,7 @@ public class pokemon_storage : MonoBehaviour
             }
         }
         //add new pokemon
-        Pokemon new_pkm = options.ins_manager.set_Pokemon(pkm);
+        Pokemon new_pkm = Obj_Instance.set_Pokemon(pkm);
         if (!storage_operetation)
         {
             new_pkm.Pokemon_ID = Generate_ID(new_pkm.Pokemon_name);

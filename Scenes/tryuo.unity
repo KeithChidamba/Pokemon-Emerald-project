@@ -895,8 +895,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b24535b1294f8548bd38b2362ce5f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  options: {fileID: 1295631326}
-  battle: {fileID: 1829234817}
   participant: {fileID: 35621317}
   pkm_ability: 
 --- !u!114 &35621317
@@ -911,7 +909,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad9457ad21ecc540a8a99a0a59da0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battle: {fileID: 1829234817}
   ability_h: {fileID: 35621316}
   pokemon: {fileID: 0}
   Current_Enemies:
@@ -2659,7 +2656,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: change_quant
         m_Mode: 3
@@ -3198,7 +3195,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -4491,7 +4488,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -5057,7 +5054,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -5815,8 +5812,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b24535b1294f8548bd38b2362ce5f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  options: {fileID: 1295631326}
-  battle: {fileID: 1829234817}
   participant: {fileID: 190973850}
   pkm_ability: 
 --- !u!114 &190973850
@@ -5831,7 +5826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad9457ad21ecc540a8a99a0a59da0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battle: {fileID: 1829234817}
   ability_h: {fileID: 190973849}
   pokemon: {fileID: 0}
   Current_Enemies:
@@ -7457,7 +7451,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -7912,6 +7906,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260888803}
   m_CullTransparentMesh: 1
+--- !u!1 &261260551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 261260553}
+  - component: {fileID: 261260552}
+  m_Layer: 0
+  m_Name: Mart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &261260552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261260551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4e1a2327e555654f84be1bd96132529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mart_items:
+  - {fileID: 11400000, guid: 74de7d2c2ec6cf04a94d924a69fb7677, type: 2}
+  - {fileID: 11400000, guid: bbf8f3c9e78a1f545b93d07924e0b10c, type: 2}
+  - {fileID: 11400000, guid: 2971f0d1ef85ba44a874a6e765631d6b, type: 2}
+  - {fileID: 11400000, guid: ed582cc298cf1af429facd2f75ef230f, type: 2}
+  - {fileID: 11400000, guid: be8ce41201d6ebc4eb61ef28491ff841, type: 2}
+  - {fileID: 11400000, guid: 7ad6c5da8379d1444a6d58684a5a3ebe, type: 2}
+  - {fileID: 11400000, guid: 7888205ce0e84d443b42a52129737d64, type: 2}
+  - {fileID: 11400000, guid: bf50c7e185bb6d8479c2a091d319f2a2, type: 2}
+  viewing_store: 0
+  mart_items_ui:
+  - {fileID: 811032170}
+  - {fileID: 1629910213}
+  - {fileID: 95714749}
+  - {fileID: 900446230}
+  - {fileID: 1915389415}
+  - {fileID: 2097081414}
+  - {fileID: 2006514070}
+  num_items: 0
+  Selected_item: 0
+  Selected_item_quantity: 0
+  top_index: 0
+  buy: {fileID: 2046886019}
+  mart_ui: {fileID: 814604280}
+  quantity_parent: {fileID: 1405462731}
+  quantity: {fileID: 1083681939}
+  Player_Money: {fileID: 423028729}
+--- !u!4 &261260553
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261260551}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 399, y: 212.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &269040206
 GameObject:
   m_ObjectHideFlags: 0
@@ -8112,13 +8177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f498107559dcb644ebf29c14d6c457c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storage: {fileID: 935983327}
-  dialogue: {fileID: 1097391156}
-  options: {fileID: 1295631326}
-  ui_m: {fileID: 316697657}
   party_IDs: []
-  playerBag: {fileID: 2081052301}
-  game_start: {fileID: 2105458975}
   area: {fileID: 523264674}
 --- !u!4 &277133361
 Transform:
@@ -8133,7 +8192,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &279946561
 GameObject:
@@ -8311,7 +8370,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -9174,7 +9233,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: change_quant
         m_Mode: 3
@@ -9415,17 +9474,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ca6940296c2c04fa4e0b3b0baec537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  options: {fileID: 1295631326}
   Menu_Options: {fileID: 1316003124}
   viewing_menu: 0
   menu_off: 1
-  player: {fileID: 1606520304}
-  party: {fileID: 1465551228}
-  player_bag: {fileID: 2081052301}
-  battle: {fileID: 1829234817}
   profile: {fileID: 690814249}
-  market: {fileID: 814604282}
-  dialogue: {fileID: 1097391156}
+  game_manager: {fileID: 0}
 --- !u!1 &319297257
 GameObject:
   m_ObjectHideFlags: 0
@@ -12632,7 +12685,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Go_Up
         m_Mode: 1
@@ -13077,8 +13130,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 247f28c8ea9df014ca3497ac606f0571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  options: {fileID: 1295631326}
-  battle: {fileID: 1829234817}
   selected_party_pkm: {fileID: 0}
   Using_item: 0
 --- !u!1 &502675996
@@ -13605,7 +13656,6 @@ MonoBehaviour:
   - {fileID: 559372695}
   - {fileID: 301858637}
   - {fileID: 1819593989}
-  player: {fileID: 1465551225}
   save_area: 0
   area_building: {fileID: 0}
 --- !u!4 &523264675
@@ -13626,7 +13676,7 @@ Transform:
   - {fileID: 1740777792}
   - {fileID: 187727644}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &526637702
 GameObject:
@@ -19705,7 +19755,7 @@ RectTransform:
   - {fileID: 2105458974}
   - {fileID: 235881331}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -21701,7 +21751,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -22627,7 +22677,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -23095,7 +23145,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &807013651
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23562,7 +23612,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -23638,7 +23688,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 814604281}
-  - component: {fileID: 814604282}
   m_Layer: 5
   m_Name: Store_ui
   m_TagString: Untagged
@@ -23678,45 +23727,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &814604282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 814604280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4e1a2327e555654f84be1bd96132529, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mart_items:
-  - {fileID: 11400000, guid: 74de7d2c2ec6cf04a94d924a69fb7677, type: 2}
-  - {fileID: 11400000, guid: bbf8f3c9e78a1f545b93d07924e0b10c, type: 2}
-  - {fileID: 11400000, guid: 7888205ce0e84d443b42a52129737d64, type: 2}
-  - {fileID: 11400000, guid: 7ad6c5da8379d1444a6d58684a5a3ebe, type: 2}
-  - {fileID: 11400000, guid: be8ce41201d6ebc4eb61ef28491ff841, type: 2}
-  - {fileID: 11400000, guid: 2971f0d1ef85ba44a874a6e765631d6b, type: 2}
-  - {fileID: 11400000, guid: ed582cc298cf1af429facd2f75ef230f, type: 2}
-  - {fileID: 11400000, guid: bf50c7e185bb6d8479c2a091d319f2a2, type: 2}
-  viewing_store: 0
-  mart_items_ui:
-  - {fileID: 811032170}
-  - {fileID: 1629910213}
-  - {fileID: 95714749}
-  - {fileID: 900446230}
-  - {fileID: 1915389415}
-  - {fileID: 2097081414}
-  - {fileID: 2006514070}
-  num_items: 0
-  Selected_item: 0
-  Selected_item_quantity: 0
-  top_index: 0
-  options: {fileID: 1295631326}
-  buy: {fileID: 2046886019}
-  quantity_parent: {fileID: 1405462731}
-  quantity: {fileID: 1083681939}
-  Player_Money: {fileID: 423028729}
 --- !u!1 &820746969
 GameObject:
   m_ObjectHideFlags: 0
@@ -25475,7 +25485,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -25628,7 +25638,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -26849,7 +26859,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &935983327
 MonoBehaviour:
@@ -26863,7 +26873,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e1802d257a44384ba37124d0a8c69da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party_: {fileID: 1465551228}
   all_pokemon: []
   non_party_pokemon: []
   num_pokemon: 0
@@ -26884,12 +26893,10 @@ MonoBehaviour:
   - {fileID: 1041801303}
   pkm_icon: {fileID: 296821391}
   storage_positions: {fileID: 1330329151}
-  options: {fileID: 1295631326}
   swapping: 0
-  saves: {fileID: 277133360}
-  details: {fileID: 946544333}
   Pkm_selected: 0
   view_details: {fileID: 1807833599}
+  details: {fileID: 946544333}
 --- !u!1 &939642311
 GameObject:
   m_ObjectHideFlags: 0
@@ -27232,7 +27239,6 @@ MonoBehaviour:
   move_details: {fileID: 781067063}
   move_dmg: {fileID: 2056020631}
   move_acc: {fileID: 1200014909}
-  party: {fileID: 1465551228}
 --- !u!1 &948607672
 GameObject:
   m_ObjectHideFlags: 0
@@ -27509,8 +27515,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a4834cd0b33907a4c8866620b383fd8d, type: 2}
   - {fileID: 11400000, guid: b777dec5f205a61448873e7760324510, type: 2}
   - {fileID: 11400000, guid: 53fed834b2f80124ba1a685c0ffcbe2b, type: 2}
-  battle: {fileID: 1829234817}
-  dialogue: {fileID: 1097391156}
 --- !u!4 &951266805
 Transform:
   m_ObjectHideFlags: 0
@@ -28146,7 +28150,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Go_Up
         m_Mode: 1
@@ -29905,7 +29909,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: use_item
         m_Mode: 1
@@ -30752,7 +30756,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Remove_item
         m_Mode: 1
@@ -32207,7 +32211,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -37756,8 +37760,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1295631325}
   - component: {fileID: 1295631326}
-  - component: {fileID: 1295631327}
-  - component: {fileID: 1295631328}
   m_Layer: 0
   m_Name: Options Manager
   m_TagString: Untagged
@@ -37792,46 +37794,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79834dc79883e714aa735752a960caca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 1097391156}
-  player: {fileID: 1606520304}
-  party: {fileID: 1465551228}
-  player_bag: {fileID: 2081052301}
   playerInBattle: 0
-  storage: {fileID: 935983327}
-  market: {fileID: 814604282}
-  player_data: {fileID: 0}
-  ins_manager: {fileID: 1295631327}
   gift_pkm: {fileID: 2040100125}
-  game_state: {fileID: 2105458975}
-  battle: {fileID: 1829234817}
-  item_h: {fileID: 502433106}
-  ui_m: {fileID: 316697657}
-  util: {fileID: 1295631328}
---- !u!114 &1295631327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1295631324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d41871b0f8a32f84da7cde2a061b8b00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bag: {fileID: 2081052301}
---- !u!114 &1295631328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1295631324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a72002ab8f11f6244b23a3004cb2f5e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1307266070
 GameObject:
   m_ObjectHideFlags: 0
@@ -41223,7 +41187,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Go_Down
         m_Mode: 1
@@ -43102,7 +43066,7 @@ Transform:
   - {fileID: 1606520298}
   - {fileID: 1418617663}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1465551225
 MonoBehaviour:
@@ -43129,7 +43093,6 @@ MonoBehaviour:
   rb: {fileID: 1465551226}
   movement: {x: 0, y: 0}
   manager: {fileID: 1465551227}
-  actions: {fileID: 1606520304}
   canmove: 1
   interaction_point: {fileID: 1418617663}
 --- !u!50 &1465551226
@@ -43193,7 +43156,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  storage: {fileID: 935983327}
   num_members: 0
   Selected_member: 0
   Member_to_Move: 0
@@ -43507,7 +43469,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -45355,7 +45317,7 @@ GameObject:
   - component: {fileID: 1594180123}
   - component: {fileID: 1594180122}
   m_Layer: 5
-  m_Name: Use_item
+  m_Name: sell_item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45426,7 +45388,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Sell_to_Market
         m_Mode: 1
@@ -46007,9 +45969,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   interaction_point: {fileID: 1418617663}
-  dialogue: {fileID: 1097391156}
   detect_distance: 0.15
-  actions: {fileID: 1606520304}
 --- !u!114 &1606520304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46022,9 +45982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773679aa6efec744a35e94fd60d4789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 1465551225}
   manager: {fileID: 1465551227}
-  dialogue: {fileID: 1097391156}
   canSwitch: 0
   fishing: 0
   doing_action: 0
@@ -46041,7 +45999,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a60f1bdc8de1a7458c08557b2467054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1465551225}
   area: {fileID: 523264674}
   Door:
     serializedVersion: 2
@@ -46383,7 +46340,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -46784,8 +46741,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b24535b1294f8548bd38b2362ce5f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  options: {fileID: 1295631326}
-  battle: {fileID: 1829234817}
   participant: {fileID: 1636635380}
   pkm_ability: 
 --- !u!114 &1636635380
@@ -46800,7 +46755,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad9457ad21ecc540a8a99a0a59da0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battle: {fileID: 1829234817}
   ability_h: {fileID: 1636635379}
   pokemon: {fileID: 0}
   Current_Enemies:
@@ -48048,7 +48002,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Go_Down
         m_Mode: 1
@@ -48390,7 +48344,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -48865,7 +48819,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: change_quant
         m_Mode: 3
@@ -50859,7 +50813,7 @@ Transform:
   - {fileID: 2033618201}
   - {fileID: 502433105}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1829234817
 MonoBehaviour:
@@ -50876,7 +50830,6 @@ MonoBehaviour:
   Battle_ui: {fileID: 1009929159}
   moves_ui: {fileID: 871315345}
   options_ui: {fileID: 1186939303}
-  options_manager: {fileID: 1295631326}
   Battle_P:
   - {fileID: 1636635380}
   - {fileID: 35621317}
@@ -50902,7 +50855,6 @@ MonoBehaviour:
   running_away: 0
   Selected_Move: 0
   Doing_move: 0
-  move_h: {fileID: 951266804}
   current_encounter: {fileID: 0}
 --- !u!1 &1832286412
 GameObject:
@@ -54107,7 +54059,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -54350,6 +54302,75 @@ RectTransform:
   m_AnchoredPosition: {x: 228.5, y: 56.999992}
   m_SizeDelta: {x: 37.0051, y: 40.9837}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1926750167
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1926750169}
+  - component: {fileID: 1926750168}
+  m_Layer: 0
+  m_Name: Bag
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1926750168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926750167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec1aabead79f9c4c9b106efae77f6c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bag_items: []
+  viewing_bag: 0
+  bag_items_ui:
+  - {fileID: 280447244}
+  - {fileID: 901040788}
+  - {fileID: 141476651}
+  - {fileID: 157880918}
+  - {fileID: 1479602781}
+  - {fileID: 784261599}
+  - {fileID: 776300124}
+  - {fileID: 243644529}
+  - {fileID: 1183214665}
+  - {fileID: 1710059117}
+  max_capacity: 50
+  num_items: 0
+  Selected_item: 0
+  top_index: 0
+  item_actions:
+  - {fileID: 1079621028}
+  - {fileID: 1100212449}
+  Sell_quantity: 1
+  Selling_items: 0
+  Selling_ui: {fileID: 1671983471}
+  Sell_qty_txt: {fileID: 171129104}
+  bag_ui: {fileID: 2081052296}
+--- !u!4 &1926750169
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926750167}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 399, y: 212.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1932179477
 GameObject:
   m_ObjectHideFlags: 0
@@ -55707,7 +55728,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081052301}
+      - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
         m_MethodName: change_quant
         m_Mode: 3
@@ -56790,7 +56811,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -57685,8 +57706,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b24535b1294f8548bd38b2362ce5f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  options: {fileID: 1295631326}
-  battle: {fileID: 1829234817}
   participant: {fileID: 2033618204}
   pkm_ability: 
 --- !u!114 &2033618204
@@ -57701,7 +57720,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad9457ad21ecc540a8a99a0a59da0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battle: {fileID: 1829234817}
   ability_h: {fileID: 2033618203}
   pokemon: {fileID: 0}
   Current_Enemies:
@@ -58189,7 +58207,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Buy
         m_Mode: 1
@@ -58476,9 +58494,7 @@ MonoBehaviour:
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
   encounter_triggers: {fileID: 1079166823}
   triggered_encounter: 0
-  battle: {fileID: 1829234817}
   wild_pkm: {fileID: 0}
-  options: {fileID: 1295631326}
   encounter_chance: 2
 --- !u!1 &2056020629
 GameObject:
@@ -59146,7 +59162,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2081052297}
-  - component: {fileID: 2081052301}
   m_Layer: 5
   m_Name: Bag_ui
   m_TagString: Untagged
@@ -59182,44 +59197,6 @@ RectTransform:
   m_AnchoredPosition: {x: 469, y: 241}
   m_SizeDelta: {x: 717, y: 476}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2081052301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2081052296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ec1aabead79f9c4c9b106efae77f6c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bag_items: []
-  viewing_bag: 0
-  bag_items_ui:
-  - {fileID: 280447244}
-  - {fileID: 901040788}
-  - {fileID: 141476651}
-  - {fileID: 157880918}
-  - {fileID: 1479602781}
-  - {fileID: 784261599}
-  - {fileID: 776300124}
-  - {fileID: 243644529}
-  - {fileID: 1183214665}
-  - {fileID: 1710059117}
-  max_capacity: 50
-  num_items: 0
-  Selected_item: 0
-  top_index: 0
-  options: {fileID: 1295631326}
-  item_actions:
-  - {fileID: 1079621028}
-  - {fileID: 1100212449}
-  Sell_quantity: 0
-  Selling_items: 0
-  Selling_ui: {fileID: 1671983471}
-  Sell_qty_txt: {fileID: 171129104}
-  ui_m: {fileID: 316697657}
 --- !u!1 &2082104842
 GameObject:
   m_ObjectHideFlags: 0
@@ -59440,7 +59417,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 814604282}
+      - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
         m_MethodName: Select_Item
         m_Mode: 3
@@ -59773,17 +59750,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7acc92f78f9e97419f03d1b4e76c1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saves: {fileID: 277133360}
-  options: {fileID: 1295631326}
   load_btn: {fileID: 890177533}
   newGame_btn: {fileID: 1671515867}
   new_player_ui: {fileID: 544392291}
   Start_ui: {fileID: 1717460023}
   name_input: {fileID: 1774007660}
-  dialogue: {fileID: 1097391156}
-  Start_house_pos: {fileID: 1658256452}
+  Start_house_pos: {fileID: 1324613723}
   world_Map: {fileID: 523264673}
   area: {fileID: 523264674}
+  player_data: {fileID: 0}
+  player_movement: {fileID: 1465551225}
 --- !u!1 &2108408982
 GameObject:
   m_ObjectHideFlags: 0

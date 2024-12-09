@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Obj_Instance : MonoBehaviour
+public static class Obj_Instance
 {
-    public Bag bag;
-    public Move set_move(Move m)
+    public static Move set_move(Move m)
     {
         Move mv = ScriptableObject.CreateInstance<Move>();
         mv.Status_effect = m.Status_effect;
@@ -26,7 +25,7 @@ public class Obj_Instance : MonoBehaviour
         mv.enemy_animtion = m.enemy_animtion;
         return mv;
     }
-    public Pokemon set_Pokemon(Pokemon pkm)
+    public static Pokemon set_Pokemon(Pokemon pkm)
     {
         Pokemon new_pkm = ScriptableObject.CreateInstance<Pokemon>();
         new_pkm.Pokemon_name = pkm.Pokemon_name;
@@ -62,15 +61,15 @@ public class Obj_Instance : MonoBehaviour
         }
         return new_pkm;
     }
-    int Get_rand(int exclusive_lim)
+    static int Get_rand(int exclusive_lim)
     {
         return UnityEngine.Random.Range(0, exclusive_lim);
     }
-    public Item set_Item(Item item)
+    public static Item set_Item(Item item)
     {
         Item new_item = ScriptableObject.CreateInstance<Item>();
         new_item.Item_name = item.Item_name;
-        string end_digits = Get_rand(bag.max_capacity).ToString() + Get_rand(bag.max_capacity).ToString() + Get_rand(bag.max_capacity).ToString() + Get_rand(bag.max_capacity).ToString();
+        string end_digits = Get_rand(50).ToString() + Get_rand(50).ToString() + Get_rand(50).ToString() + Get_rand(50).ToString();
         new_item.Item_ID = new_item.Item_name + end_digits;
         new_item.Item_type = item.Item_type;
         new_item.Item_desc = item.Item_desc;

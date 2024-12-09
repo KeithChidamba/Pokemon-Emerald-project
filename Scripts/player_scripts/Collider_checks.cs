@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Collider_checks : MonoBehaviour
 {
-    public Player_movement player;
     public Area_manager area;
     [SerializeField] LayerMask Door;
     [SerializeField] Transform interaction_point;
@@ -19,30 +18,30 @@ public class Collider_checks : MonoBehaviour
         if (area.current_area!=null)
         {
             if(area.current_area.inside_area)
-                player.can_use_bike = false;
+                Player_movement.instance.can_use_bike = false;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Encounter") && !player.using_bike)
+        if (collision.gameObject.CompareTag("Encounter") && !Player_movement.instance.using_bike)
         {
-            player.can_use_bike = false;
+            Player_movement.instance.can_use_bike = false;
         }
 
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Encounter") && !player.using_bike)
+        if (collision.gameObject.CompareTag("Encounter") && !Player_movement.instance.using_bike)
         {
-            player.can_use_bike = true;
+            Player_movement.instance.can_use_bike = true;
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Encounter"))
         {
-            player.can_use_bike = false;
+            Player_movement.instance.can_use_bike = false;
         }
     }
     private void OnCollisionStay2D(Collision2D collision)

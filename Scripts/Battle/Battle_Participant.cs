@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class Battle_Participant : MonoBehaviour
 {
-    public Battle_handler battle;
     public Abilities ability_h;
     public Pokemon pokemon;
     public Pokemon[] Current_Enemies = {null,null};//will only ever be 2 because double battles
@@ -23,28 +22,29 @@ public class Battle_Participant : MonoBehaviour
     public GameObject participant_ui;
     private void Update()
     {
-        if (is_active)
-        {
-            pkm_name.text = pokemon.Pokemon_name;
-            pkm_lv.text = "Lv: " + pokemon.Current_level.ToString();
-            if (isPlayer)
-            {
-                pkm_img.sprite = pokemon.back_picture;
-                if (!battle.isDouble_battle)
-                {
-                    pkm_HP.text = pokemon.HP.ToString() + "/" + pokemon.max_HP.ToString();
-                    Exp_bar();
-                }
-            }
-            else
-            {
-                pkm_img.sprite = pokemon.front_picture;
-            }
-            player_hp.value = pokemon.HP;
-            player_hp.maxValue = pokemon.max_HP;
-        }
+        if (!is_active) return;
+        update_ui();
     }
-
+    private void update_ui()
+    {
+        pkm_name.text = pokemon.Pokemon_name;
+        pkm_lv.text = "Lv: " + pokemon.Current_level.ToString();
+        if (isPlayer)
+        {
+            pkm_img.sprite = pokemon.back_picture;
+            if (!Battle_handler.instance.isDouble_battle)
+            {
+                pkm_HP.text = pokemon.HP.ToString() + "/" + pokemon.max_HP.ToString();
+                Exp_bar();
+            }
+        }
+        else
+        {
+            pkm_img.sprite = pokemon.front_picture;
+        }
+        player_hp.value = pokemon.HP;
+        player_hp.maxValue = pokemon.max_HP;
+    }
     void UI_visible(GameObject[]arr,bool on)
     {
         foreach (GameObject obj in arr)
@@ -74,7 +74,7 @@ public class Battle_Participant : MonoBehaviour
         }
         if (isPlayer)
         {
-            if (battle.isDouble_battle)
+            if (Battle_handler.instance.isDouble_battle)
             {
                 UI_visible(Double_battle_ui, true);
                 UI_visible(single_battle_ui, false);

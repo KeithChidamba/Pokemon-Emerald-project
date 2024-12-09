@@ -95,7 +95,7 @@ public class Pokemon : ScriptableObject
             string name_ = move_data[i].Substring(0, pos - 1).ToLower();
             string type = move_data[i].Substring(pos,move_data[i].Length - pos).ToLower();
             Move move_copy = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + type + "/" + name_);
-            move_set[i] = storage.options.ins_manager.set_move(move_copy);
+            move_set[i] = Obj_Instance.set_move(move_copy);
             move_set[i].Powerpoints = move_pp_data[i];
         }
         for (int i = 0; i < num_types; i++)
@@ -125,7 +125,7 @@ public class Pokemon : ScriptableObject
         }
     }
 
-    public void Get_exp(Pokemon enemy,Obj_Instance ins)
+    public void Get_exp(Pokemon enemy)
     {
         int level_difference = Current_level - enemy.Current_level;
         float trainer_bonus = 0;
@@ -145,7 +145,7 @@ public class Pokemon : ScriptableObject
             int num_levels = (int)math.trunc(level_progress / 100);
             for (int i = 0; i < num_levels; i++)
             {
-                Level_up(ins);
+                Level_up();
             }
             level_progress -= 100 * num_levels;
         }
@@ -164,7 +164,7 @@ public class Pokemon : ScriptableObject
         SP_DEF += 3;
         speed += 3;
     }
-    public void Level_up(Obj_Instance ins)
+    public void Level_up()
     {
         Current_level++;
         Attack++;
@@ -174,12 +174,12 @@ public class Pokemon : ScriptableObject
         speed++;
         max_HP += (float)math.round(0.5 * Current_level);
         Check_evolution();
-        int num_moves = 0;
+        int numMoves = 0;
         foreach (Move m in move_set)
         {
             if (m != null)
             {
-                num_moves++;
+                numMoves++;
             }
         }
         for (int i = 0; i < learnSet.Length; i++)
@@ -190,13 +190,13 @@ public class Pokemon : ScriptableObject
                 int pos = pos_spliter(i, learnSet);
                 string t = learnSet[i].Substring(0, pos - 1).ToLower(); //move type 
                 string n = learnSet[i].Substring(pos, learnSet[i].Length - 2 - pos).ToLower();//move name
-                if (num_moves == 4)
+                if (numMoves == 4)
                 {
-                    move_set[num_moves-1] = ins.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
+                    move_set[numMoves-1] = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
                 }
                 else
                 {
-                    move_set[num_moves] = ins.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
+                    move_set[numMoves] = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
                 }
 
                 break;

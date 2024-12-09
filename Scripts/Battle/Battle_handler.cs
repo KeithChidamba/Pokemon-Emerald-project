@@ -8,7 +8,6 @@ public class Battle_handler : MonoBehaviour
     public GameObject Battle_ui;
     public GameObject moves_ui;
     public GameObject options_ui;
-    public Options_manager options_manager;
     public Battle_Participant[] Battle_P = {null,null,null,null};
     public Text Move_pp, Move_type;
     public Text[] moves;
@@ -23,11 +22,21 @@ public class Battle_handler : MonoBehaviour
     private int Current_Move = 0;
     private int Current_pkm_turn = 0;
     public bool Doing_move = false;
-    public Move_handler move_h;
     [SerializeField]Encounter_handler current_encounter;
+    public static Battle_handler instance;
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
     void Update()
     {
-        if (options_manager.playerInBattle)
+        if (Options_manager.instance.playerInBattle)
         {
             if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)))
             {
@@ -42,7 +51,7 @@ public class Battle_handler : MonoBehaviour
                 Current_Move = 0;
                 Move_btns[Current_Move].GetComponent<Button>().interactable = true;
             }
-            if (options_manager.player.using_ui)
+            if (overworld_actions.instance.using_ui)
             {
                 options_ui.SetActive(false);
                 viewing_options = false;
@@ -59,7 +68,7 @@ public class Battle_handler : MonoBehaviour
                 }
                 if (viewing_options)
                 {
-                    options_manager.dialogue.Write_Info("What will you do?", "Details");
+                    Dialogue_handler.instance.Write_Info("What will you do?", "Details");
                     options_ui.SetActive(true);
                 }
             }
@@ -76,7 +85,7 @@ public class Battle_handler : MonoBehaviour
         Battle_P[2].pokemon = enemy;
         Set_pkm();
         Battle_P[2].Current_Enemies[0] = Battle_P[0].pokemon;
-        options_manager.playerInBattle = true;
+        Options_manager.instance.playerInBattle = true;
         Battle_ui.SetActive(true);
         moves_ui.SetActive(false);
         options_ui.SetActive(true);
@@ -103,7 +112,7 @@ public class Battle_handler : MonoBehaviour
          Battle_P[1].Current_Enemies[i] = enemies[i];
         }
         Set_pkm();
-        options_manager.playerInBattle = true;
+        Options_manager.instance.playerInBattle = true;
         Battle_ui.SetActive(true);
         moves_ui.SetActive(false);
         options_ui.SetActive(true);
@@ -112,10 +121,10 @@ public class Battle_handler : MonoBehaviour
 
     public void Set_pkm()
     {
-        Battle_P[0].pokemon = options_manager.ins_manager.set_Pokemon(options_manager.party.party[0]);
-        if (options_manager.party.num_members > 1)//if you have more than one pokemon send in another
+        Battle_P[0].pokemon = Obj_Instance.set_Pokemon(Pokemon_party.instance.party[0]);
+        if (Pokemon_party.instance.num_members > 1)//if you have more than one pokemon send in another
         {
-            Battle_P[1].pokemon = options_manager.ins_manager.set_Pokemon(options_manager.party.party[1]);
+            Battle_P[1].pokemon = Obj_Instance.set_Pokemon(Pokemon_party.instance.party[1]);
         }
         for(int i = 0; i < 2; i++)
         {
@@ -178,11 +187,11 @@ public class Battle_handler : MonoBehaviour
     {
         if (hasWon)
         {
-            options_manager.dialogue.Write_Info(options_manager.player_data.Player_name + " won the battle", "Details");
+            Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " won the battle", "Details");
         }
         //get money if trainer, display msg of how much money
-        options_manager.playerInBattle = false;
-        options_manager.player.doing_action = false;
+        Options_manager.instance.playerInBattle = false;
+        overworld_actions.instance.doing_action = false;
         Battle_ui.SetActive(false);
         options_ui.SetActive(false);
         for(int i=0;i<4;i++)//skip first because that is the player, which has different ui
@@ -211,17 +220,17 @@ public class Battle_handler : MonoBehaviour
             if (random > 5)//initially 50/50 chance to run
             {
                 End_Battle(false);
-                options_manager.dialogue.Write_Info(options_manager.player_data.Player_name + " ran away", "Details");
-                options_manager.dialogue.Dialouge_off(.7f);
+                Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " ran away", "Details");
+                Dialogue_handler.instance.Dialouge_off(.7f);
             }
             else
             {
-                options_manager.dialogue.Write_Info("Can't run away","Details");
+                Dialogue_handler.instance.Write_Info("Can't run away","Details");
             }
         }
         else
         {
-            options_manager.dialogue.Write_Info("Can't run away from trainer battle","Details");
+            Dialogue_handler.instance.Write_Info("Can't run away from trainer battle","Details");
         }
         Invoke(nameof(run_Off),1f);
     }
@@ -240,17 +249,17 @@ void run_Off()
     public void Check_win()//run every turn
     {
         int faint_count = 0;
-        foreach (Pokemon p in options_manager.party.party)
+        foreach (Pokemon p in Pokemon_party.instance.party)
         {
             if (p.HP <= 0)
             {
                 faint_count++;
             }
         }
-        if (faint_count == options_manager.party.num_members)
+        if (faint_count == Pokemon_party.instance.num_members)
         {
             End_Battle(false);
-            options_manager.dialogue.Write_Info("All your pokemon have fainted","Details");
+            Dialogue_handler.instance.Write_Info("All your pokemon have fainted","Details");
         }
     }
 }

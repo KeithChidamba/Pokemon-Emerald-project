@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,18 @@ public class Dialogue_handler : MonoBehaviour
     public Options_manager options;
     [SerializeField] GameObject[] option_btns;
     [SerializeField] Text[] option_btns_txt;
+    public static Dialogue_handler instance;
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     void Update()
     {
         if (Current_interaction != null)
@@ -65,9 +78,9 @@ public class Dialogue_handler : MonoBehaviour
                 }
             }
         }
-        if (options.player!=null)
+        if (overworld_actions.instance !=null)
         {
-            if (options.player.doing_action )
+            if (overworld_actions.instance.doing_action )
             {
                 dialogue_exit.SetActive(false);
                 can_exit = false;
@@ -152,7 +165,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         Display_Options(false);
         Current_interaction = null;
-        if(!options.playerInBattle || options.player.using_ui)
+        if(!options.playerInBattle || overworld_actions.instance.using_ui)
             dialogue_box.SetActive(false);
         else
         {
@@ -176,13 +189,13 @@ public class Dialogue_handler : MonoBehaviour
         text_finished = false;
         displaying = true;
         num_lines = math.trunc(interaction.InteractionMsg.Length / Max_length);
-        if (!options.playerInBattle || options.player.using_ui)
+        if (!options.playerInBattle || overworld_actions.instance.using_ui)
         {
             dialogue_box.SetActive(true);
             Dialouge_txt.color=Color.black;
             battle_box.SetActive(false);
         }
-        else if(!options.player.using_ui && options.playerInBattle)
+        else if(!overworld_actions.instance.using_ui && options.playerInBattle)
         {
             battle_box.SetActive(true);
             Dialouge_txt.color=Color.white;

@@ -24,11 +24,10 @@ public class Pokemon_Details : MonoBehaviour
     public Text move_dmg, move_acc;
     int current_page = 0;
 
-    public Pokemon_party party;
     public void Exit_details()
     {
         gameObject.SetActive(false);
-        party.viewing_details = false;
+        Pokemon_party.instance.viewing_details = false;
     }
     public void Next()//next page
     {

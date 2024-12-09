@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
-public class Utility : MonoBehaviour
+public static class Utility
 {
-    public string removeSpace(string name_)
+    public static string removeSpace(string name_)
     {
         char splitter = ' ';
         int space_count = 0;

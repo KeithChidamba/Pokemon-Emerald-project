@@ -9,9 +9,7 @@ public class Encounter_handler : MonoBehaviour
     public Encounter_Area area;
     public Transform encounter_triggers;
     public bool triggered_encounter = false;
-    public Battle_handler battle;
     public Pokemon wild_pkm;
-    public Options_manager options;
     public int encounter_chance = 2;
 
     public void Trigger_encounter()
@@ -33,18 +31,18 @@ public class Encounter_handler : MonoBehaviour
     }
     void Create_pkm(string pkm_name)
     {
-        wild_pkm = options.ins_manager.set_Pokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pkm_name.ToLower()+"/"+ pkm_name.ToLower()));
+        wild_pkm = Obj_Instance.set_Pokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pkm_name.ToLower()+"/"+ pkm_name.ToLower()));
         if (wild_pkm != null)
         {
             int rand_lv = Random.Range(area.min_lv, area.max_lv+1);
             for(int i=1;i<rand_lv;i++)
             {
-                wild_pkm.Level_up(options.ins_manager);
+                wild_pkm.Level_up();
             }
             wild_pkm.HP=wild_pkm.max_HP;
             //tests
            // battle.Start_Battle(wild_pkm);
-            battle.Start_Battle(new []{wild_pkm,wild_pkm},this);
+           Battle_handler.instance.Start_Battle(new []{wild_pkm,wild_pkm},this);
         }
         else
         {

@@ -3,7 +3,6 @@ using UnityEngine;
 public class Pokemon_party : MonoBehaviour
 {
     public Pokemon[] party;
-    public pokemon_storage storage;
     public int num_members=0;
     public int Selected_member=0;
     public int Member_to_Move=0;
@@ -14,8 +13,18 @@ public class Pokemon_party : MonoBehaviour
     public Pokemon_party_member[] Memeber_cards;
     public GameObject party_ui;
     public GameObject member_indicator;
-    public Pokemon_Details details;
     private Item item_to_use;
+    [SerializeField]private Pokemon_Details details;
+    public static Pokemon_party instance;
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+    }
     public void View_party()
     {
          viewing_party = true;
@@ -42,10 +51,10 @@ public class Pokemon_party : MonoBehaviour
     }
     public void Member_Selected(int Member_position)
     {
-        if (storage.options.item_h.Using_item)
+        if (Item_handler.instance.Using_item)
         {
-            storage.options.item_h.selected_party_pkm = Memeber_cards[Member_position - 1].pkm;
-            storage.options.item_h.Use_Item(item_to_use);
+            Item_handler.instance.selected_party_pkm = Memeber_cards[Member_position - 1].pkm;
+            Item_handler.instance.Use_Item(item_to_use);
             member_indicator.transform.position = Memeber_cards[Member_position - 1].transform.position;
             member_indicator.SetActive(true);
         }
@@ -100,9 +109,9 @@ public class Pokemon_party : MonoBehaviour
             Selected_member = 0;
             Refresh_Member_Cards();
             member_indicator.SetActive(false);
-            storage.options.dialogue.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
-            storage.options.dialogue.Dialouge_off(1f);
-            storage.options.battle.Set_pkm();
+            Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
+            Dialogue_handler.instance.Dialouge_off(1f);
+            Battle_handler.instance.Set_pkm();
 
         }
     }
@@ -110,19 +119,19 @@ public class Pokemon_party : MonoBehaviour
     { //add new pokemon after catch or event
         if (num_members<6)
         {
-            party[num_members] = storage.Add_pokemon(pokemon);
-            storage.all_pokemon.Add(party[num_members]);
+            party[num_members] = pokemon_storage.instance.Add_pokemon(pokemon);
+            pokemon_storage.instance.all_pokemon.Add(party[num_members]);
             num_members++;
         }
         else
         {
-            if (storage.num_pokemon < storage.max_num_pokemon)
+            if (pokemon_storage.instance.num_pokemon < pokemon_storage.instance.max_num_pokemon)
             {
-                storage.storage_operetation = false;
-                storage.non_party_pokemon.Add(storage.Add_pokemon(pokemon));
-                storage.storage_operetation = true;
-                storage.all_pokemon.Add(storage.Add_pokemon(storage.non_party_pokemon[storage.num_pokemon-num_members-1]));
-                storage.storage_operetation = false;
+                pokemon_storage.instance.storage_operetation = false;
+                pokemon_storage.instance.non_party_pokemon.Add(pokemon_storage.instance.Add_pokemon(pokemon));
+                pokemon_storage.instance.storage_operetation = true;
+                pokemon_storage.instance.all_pokemon.Add(pokemon_storage.instance.Add_pokemon(pokemon_storage.instance.non_party_pokemon[pokemon_storage.instance.num_pokemon-num_members-1]));
+                pokemon_storage.instance.storage_operetation = false;
             }
         }
     }
@@ -159,8 +168,8 @@ public class Pokemon_party : MonoBehaviour
                 Memeber_cards[i].Reset_ui();
             }
         }
-        if(storage.options.playerInBattle)
-            storage.options.battle.Set_pkm();
+        if(Options_manager.instance.playerInBattle)
+            Battle_handler.instance.Set_pkm();
     }
     public void Remove_Member(int Party_position)
     {
@@ -169,7 +178,7 @@ public class Pokemon_party : MonoBehaviour
         Pokemon member = party[Party_position];
         party[Party_position] = null;
         num_members--;
-        storage.non_party_pokemon.Add(member);
+        pokemon_storage.instance.non_party_pokemon.Add(member);
         sort_Members(Party_position);
     }
 }
