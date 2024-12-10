@@ -215,7 +215,9 @@ public class Battle_handler : MonoBehaviour
         choosing_move = false;
         moves_ui.SetActive(false);
         options_ui.SetActive(false);
-        Move_handler.instance.Do_move(move,user,Battle_P[Current_pkm_Enemy].pokemon);//selected enemy
+        Turn current_trun = new Turn(move, user, Battle_P[Current_pkm_Enemy].pokemon);
+        ICommand use_move = new Pkm_Use_Move(current_trun);
+        Turn_Based_Combat.instance.ExecuteCommand(use_move);
     }
     public void Reset_move()
     {
