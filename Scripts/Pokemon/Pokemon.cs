@@ -19,6 +19,7 @@ public class Pokemon : ScriptableObject
     public float level_progress = 0;
     public int base_exp_yield=0;
     public bool has_trainer=false;
+    public bool can_attack = false;
     public Type[] types;
     public string Status_effect = "None";
     public string type_Immunity = "None";

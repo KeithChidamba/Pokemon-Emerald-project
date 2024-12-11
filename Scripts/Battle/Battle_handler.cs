@@ -15,18 +15,16 @@ public class Battle_handler : MonoBehaviour
     public GameObject[] Move_btns;
     public bool is_trainer_battle = false;
     public bool isDouble_battle = false;
+    public int Participant_count=0;
     public GameObject OverWorld;
     public bool viewing_options = false;
     public bool choosing_move = false;
     public bool running_away = false;
     public bool Selected_Move = false;
     private int Current_Move = 0;
-    public int Current_pkm_turn = 0;
     public int Current_pkm_Enemy = 0;
     public bool Doing_move = false;
     public static Battle_handler instance;
-    public delegate void New_turn();
-    public event New_turn OnNewTurn;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -44,7 +42,7 @@ public class Battle_handler : MonoBehaviour
 
     private void Handle_battle()
     {
-        if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)) && Battle_P[Current_pkm_turn].Selected_Enemy)
+        if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)) && Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy)
         {
             if(isDouble_battle)
                 Use_Move(Battle_P[Current_Move].pokemon.move_set[Current_Move],Battle_P[Current_Move].pokemon);//any of payer's 2 pkm using move
@@ -52,6 +50,7 @@ public class Battle_handler : MonoBehaviour
             {
                 Use_Move(Battle_P[0].pokemon.move_set[Current_Move],Battle_P[0].pokemon);//player using move
             }
+            choosing_move = false;
         }
         if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
         {
@@ -88,57 +87,40 @@ public class Battle_handler : MonoBehaviour
 
     void Battle_logic()
     {
-        if (!isDouble_battle && Current_pkm_turn == 0)//if single battle, auto aim at enemy
+        if (!isDouble_battle && Turn_Based_Combat.instance.Current_pkm_turn == 0)//if single battle, auto aim at enemy
         {
             Current_pkm_Enemy = 2;
+            Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
         }
-    }
-    public void Next_turn()
-    {
-        if (isDouble_battle)
-        {
-            Change_turn(4,1);
-        }
-        else
-        {
-            
-            Change_turn(3,2);
-        }
-    }
-    void Change_turn(int participant_index,int step)
-    {
-        if (Current_pkm_turn < participant_index-1)
-        {
-            Current_pkm_turn+=step;
-        }
-        else
-        {
-            moves_ui.SetActive(true);
-            options_ui.SetActive(true);
-            Current_pkm_turn = 0;
-           Battle_P[Current_pkm_turn].Selected_Enemy = false;//allow player to attack
-        }
-        OnNewTurn?.Invoke();
     }
 
+    public void View_options()
+    {
+        moves_ui.SetActive(false);
+        options_ui.SetActive(true); 
+    }
     public void Select_player()
     {
         //enemy choosing player
-        Battle_P[Current_pkm_turn].Selected_Enemy = true;
+        Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
         Current_pkm_Enemy = 0;
     }
     public void Select_enemy(int choice)
     {
-        if(Current_pkm_turn>1)return;//not player's turn
-        Battle_P[Current_pkm_turn].Selected_Enemy = true;
+        if(Turn_Based_Combat.instance.Current_pkm_turn>1)return;//not player's turn
+        Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
         Current_pkm_Enemy = choice;
     }
     private void Set_battle_ui()
     {
         Battle_ui.SetActive(true);
-        moves_ui.SetActive(false);
-        options_ui.SetActive(true);
         OverWorld.SetActive(false);
+    }
+    void set_battle()
+    {
+        Options_manager.instance.playerInBattle = true;
+        Set_battle_ui();
+        Turn_Based_Combat.instance.Change_turn(-1,0);
     }
     public void Start_Battle(Pokemon enemy)//only ever be for wild battles
     {
@@ -148,9 +130,7 @@ public class Battle_handler : MonoBehaviour
         Set_pkm();
         Wild_pkm.instance.Enemy_pokemon = Battle_P[0].pokemon;
         Wild_pkm.instance.InBattle = true;
-        Options_manager.instance.playerInBattle = true;
-        Set_battle_ui();
-        OnNewTurn?.Invoke();
+        set_battle();
     }
     public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
     {
@@ -164,9 +144,7 @@ public class Battle_handler : MonoBehaviour
              Battle_P[1].Current_Enemies[i] = enemies[i];
         }
         Set_pkm();
-        Options_manager.instance.playerInBattle = true;
-        Set_battle_ui();
-        OnNewTurn?.Invoke();
+        set_battle();
     }
     public void Set_pkm()
     {
@@ -182,12 +160,14 @@ public class Battle_handler : MonoBehaviour
                 Battle_P[i + 2].Current_Enemies[i] = Battle_P[i].pokemon; //set enemies enemy equal to player's pkm
             }
         }
+        Participant_count = 0;
         foreach(Battle_Participant p in Battle_P)
         {
             if (p.pokemon != null)
             {
                 p.Load_ui();
                 p.ability_h.Set_ability();
+                Participant_count++;
             }
         }
     }
@@ -215,9 +195,9 @@ public class Battle_handler : MonoBehaviour
         choosing_move = false;
         moves_ui.SetActive(false);
         options_ui.SetActive(false);
-        Turn current_trun = new Turn(move, user, Battle_P[Current_pkm_Enemy].pokemon);
-        ICommand use_move = new Pkm_Use_Move(current_trun);
-        Turn_Based_Combat.instance.ExecuteCommand(use_move);
+        Turn current_turn = new Turn(move, user, Battle_P[Current_pkm_Enemy].pokemon);
+        Pkm_Use_Move use_move = new Pkm_Use_Move(current_turn);
+        Turn_Based_Combat.instance.SaveMove(use_move);
     }
     public void Reset_move()
     {

@@ -43,6 +43,9 @@ public static class Obj_Instance
         new_pkm.learnSet = pkm.learnSet;
         new_pkm.Current_level = pkm.Current_level;
         new_pkm.level_progress = pkm.level_progress;
+        new_pkm.base_exp_yield = pkm.base_exp_yield;
+        new_pkm.has_trainer=pkm.has_trainer;
+        new_pkm.can_attack = pkm.can_attack;
         new_pkm.front_picture = pkm.front_picture;
         new_pkm.back_picture = pkm.back_picture;
         new_pkm.HP = pkm.HP;

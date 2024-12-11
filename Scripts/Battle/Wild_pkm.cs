@@ -21,11 +21,11 @@ public class Wild_pkm : MonoBehaviour
     }
     private void Start()
     {
-        Battle_handler.instance.OnNewTurn += Reset_move;
+        Turn_Based_Combat.instance.OnNewTurn += Reset_move;
     }
     private void OnDestroy()
     {
-        Battle_handler.instance.OnNewTurn -= Reset_move;
+        Turn_Based_Combat.instance.OnNewTurn -= Reset_move;
     }
     void Reset_move()
     {
@@ -39,7 +39,7 @@ public class Wild_pkm : MonoBehaviour
     private void Make_Decision()
     {
         //check if its pokemon's turn
-        if (Battle_handler.instance.Battle_P[Battle_handler.instance.Current_pkm_turn].pokemon == pokemon && !Used_move)
+        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon && !Used_move)
         {
             //check if have type advantage move that's not immune
             //or check if STAB move that's non-immune 

@@ -9,7 +9,6 @@ public class Game_ui_manager : MonoBehaviour
     public bool viewing_menu = false;
     public bool menu_off=true;
     public Player_Info_ui profile;
-    [SerializeField] private Game_Load game_manager;
     public static Game_ui_manager instance;
     private void Awake()
     {
