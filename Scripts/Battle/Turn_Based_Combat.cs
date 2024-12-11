@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Turn_Based_Combat : MonoBehaviour
 {
-    public static Turn_Based_Combat instance;
-    private readonly List<Pkm_Use_Move> Move_history = new();
+    public static Turn_Based_Combat instance; 
+    readonly List<Pkm_Use_Move> Move_history = new();
+    List<Pkm_Use_Move> speed_list = new();
+    List<Pkm_Use_Move> priority_list = new();
     public event Action OnNewTurn;
     public int Current_pkm_turn = 0;
     private void Awake()
@@ -31,14 +34,14 @@ public class Turn_Based_Combat : MonoBehaviour
         //flicnh gets removed after turn, others get removed randomly
         Move_history.Add(command);
         if (Current_pkm_turn == Battle_handler.instance.Participant_count)
-            ExecuteMoves(Set_priority());
+            StartCoroutine(ExecuteMoves(Set_priority()));
         else
             Next_turn();
     }
 
     bool Can_Attack(Pkm_Use_Move command)
     {
-        if (command._turn.attacker_.can_attack)
+        if (command._turn.attacker_.canAttack)
         {
             if (!Move_successful(command._turn.attacker_))
                 Dialogue_handler.instance.Write_Info(command._turn.attacker_+" missed the attack","Details");
@@ -55,15 +58,21 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         return false;
     }
-    void ExecuteMoves(List<Pkm_Use_Move> command_order)
+    IEnumerator ExecuteMoves(List<Pkm_Use_Move> command_order)
     {
         foreach (Pkm_Use_Move command in command_order)
         {
             if (Can_Attack(command))
-                command.Execute();//async
+            {
+                Debug.Log(command._turn.attacker_.Pokemon_name);
+                command.Execute();
+                yield return new WaitUntil(()=> !Move_handler.instance.Doing_move);
+            }
             else
                 CancelMoves(command);
         }
+        Next_turn();
+        yield return null;
     }
     public void CancelMoves(List<Pkm_Use_Move> commands)
     {
@@ -110,8 +119,8 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private List<Pkm_Use_Move> Set_priority()
     {
-        List<Pkm_Use_Move> speed_list = new();
-        List<Pkm_Use_Move> priority_list = new();
+        speed_list.Clear();
+        priority_list.Clear();
         speed_list = Move_history.OrderByDescending(p => p._turn.attacker_.speed).ToList();
         foreach (Pkm_Use_Move command in speed_list)
         {

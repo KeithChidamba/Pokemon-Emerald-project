@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Pkm_Use_Move : ICommand
 {
     public Turn _turn;
@@ -11,7 +7,8 @@ public class Pkm_Use_Move : ICommand
     }
     public void Execute()
     {
-        Move_handler.Do_move(_turn);
+        Move_handler.instance.Doing_move = true;
+        Move_handler.instance.Do_move(_turn);
     }
     public void Undo()
     {

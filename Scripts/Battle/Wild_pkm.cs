@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Wild_pkm : MonoBehaviour
@@ -25,7 +27,7 @@ public class Wild_pkm : MonoBehaviour
     }
     private void OnDestroy()
     {
-        Turn_Based_Combat.instance.OnNewTurn -= Reset_move;
+        Turn_Based_Combat.instance.OnNewTurn -= Reset_move;//chek for continuoues moves like rollout
     }
     void Reset_move()
     {
@@ -46,20 +48,29 @@ public class Wild_pkm : MonoBehaviour
             //or check highest damage, non-immune move
             // else use random move
             Battle_handler.instance.Select_player();//attack player, since its single battle
+            List<Move> strongest_move = new();
+            List<Move> mock_moveset = new();
             foreach (Move m in pokemon.move_set)
             {
                 if (m != null)
                 {
-                    if (Enemy_pokemon.isWeakTo(m.type))
+                    mock_moveset.Add(m);
+                    if (Enemy_pokemon.isWeakTo(m.type) )
                     {
-                        Debug.Log("Do move stab");
                         Battle_handler.instance.Use_Move(m,pokemon);
                         Used_move = true;
                     }
+                    else
+                    {
+                        strongest_move = mock_moveset.OrderByDescending(p => p.Move_damage).ToList();
+                        Battle_handler.instance.Use_Move( strongest_move[0],pokemon);
+                        Used_move = true;
+                    }
                 }
-                
             }
-            /*if(Utility.Get_rand(1,5)==0)
+            Debug.Log("Do move stab");
+            
+            /*if(Utility.Get_rand(1,3)<2)//50/50 chance
             {
                 
             }*/

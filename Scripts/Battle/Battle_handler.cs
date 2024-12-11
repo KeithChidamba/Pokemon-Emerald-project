@@ -54,12 +54,9 @@ public class Battle_handler : MonoBehaviour
         }
         if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
         {
-            options_ui.SetActive(true);
-            moves_ui.SetActive(false);
-            choosing_move = false; 
-            Selected_Move = false; 
-            Current_Move = 0;
-            Move_btns[Current_Move].GetComponent<Button>().interactable = true;
+            View_options();
+            choosing_move = false;
+            Reset_move();
         }
         if (overworld_actions.instance.using_ui)
         {

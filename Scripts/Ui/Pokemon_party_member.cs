@@ -60,4 +60,9 @@ public class Pokemon_party_member : MonoBehaviour
             Pkm_name.text = pkm.Pokemon_name;
         }
     }
+
+    public void lev()//remove this
+    {
+        pkm.Level_up();
+    }
 }
