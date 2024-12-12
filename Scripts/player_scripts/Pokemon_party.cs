@@ -128,7 +128,6 @@ public class Pokemon_party : MonoBehaviour
         if (num_members<6)
         {
             party[num_members] = pokemon_storage.instance.Add_pokemon(pokemon);
-            pokemon_storage.instance.all_pokemon.Add(party[num_members]);
             num_members++;
         }
         else
@@ -137,9 +136,7 @@ public class Pokemon_party : MonoBehaviour
             {
                 pokemon_storage.instance.storage_operetation = false;
                 pokemon_storage.instance.non_party_pokemon.Add(pokemon_storage.instance.Add_pokemon(pokemon));
-                pokemon_storage.instance.storage_operetation = true;
-                pokemon_storage.instance.all_pokemon.Add(pokemon_storage.instance.Add_pokemon(pokemon_storage.instance.non_party_pokemon[pokemon_storage.instance.num_pokemon-num_members-1]));
-                pokemon_storage.instance.storage_operetation = false;
+                pokemon_storage.instance.num_non_party_pokemon++;
             }
         }
     }

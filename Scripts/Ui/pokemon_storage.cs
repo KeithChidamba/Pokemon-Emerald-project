@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 
 public class pokemon_storage : MonoBehaviour
 {
-    public List<Pokemon> all_pokemon;
     public List<Pokemon> non_party_pokemon;
     public int num_pokemon = 0;
     public int num_non_party_pokemon = 0;
@@ -233,24 +232,24 @@ public class pokemon_storage : MonoBehaviour
         {
             Pokemon_party.instance.Remove_Member(pkm.party_pos);
             num_party_members--;
+            num_non_party_pokemon++;
             Cancel_options();
         }
         else
         {
             Dialogue_handler.instance.Write_Info("There must be at least 1 pokemon in your team","Details");
         }
-
     }
     public void Delete_pkm(PC_pkm pkm_icon)
     {
         int index = 0;
-        foreach(Pokemon mon in all_pokemon)
+        foreach(Pokemon mon in non_party_pokemon)
         {
             if (mon.Pokemon_ID == pkm_icon.pkm.Pokemon_ID)
             {
                 string pkm_name = pkm_icon.pkm.Pokemon_name;
-                all_pokemon[index] = null;
-                sort_icons(index);
+                non_party_pokemon[index] = null;
+                remove_pkm(index);
                 Dialogue_handler.instance.Write_Info("You released "+ pkm_name, "Details");
                 Dialogue_handler.instance.Dialouge_off(1.5f);
                 Cancel_options();
@@ -259,27 +258,11 @@ public class pokemon_storage : MonoBehaviour
             index++;
         }
     }
-    void sort_icons(int empty_position)
+    void remove_pkm(int empty_position)
     {
-        if (empty_position < num_pokemon - 1)
-        {
-            for (int i = empty_position; i < num_pokemon - 1; i++)
-            {
-                all_pokemon[i] = all_pokemon[i + 1];
-            }
-            all_pokemon.Remove(all_pokemon[num_pokemon - 1]);
-            num_pokemon--;
-        }
-        non_party_pokemon.Clear();
-        num_non_party_pokemon = 0;
-        foreach (Pokemon mon in all_pokemon)
-        {
-            if (!Save_manager.instance.party_IDs.Contains(mon.Pokemon_ID))
-            {
-                non_party_pokemon.Add(mon);
-                num_non_party_pokemon++;
-            }
-        }
+        non_party_pokemon.Remove(non_party_pokemon[empty_position]);
+        num_non_party_pokemon--;
+        num_pokemon--;
     }
     public void swap()
     {

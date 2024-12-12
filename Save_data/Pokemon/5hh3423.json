@@ -1,0 +1,84 @@
+{
+    "Base_Pokemon_name": "Pikachu",
+    "Pokemon_name": "Raichu",
+    "Pokemon_ID": "5hh3423",
+    "HP": 116.0,
+    "max_HP": 116.0,
+    "Attack": 26.0,
+    "Defense": 23.0,
+    "SP_ATK": 30.0,
+    "SP_DEF": 25.0,
+    "speed": 33.0,
+    "Accuracy": 100.0,
+    "Current_level": 20,
+    "level_progress": 0.0,
+    "base_exp_yield": 0,
+    "has_trainer": false,
+    "canAttack": true,
+    "isFlinched": false,
+    "types": [
+        {
+            "instanceID": 29794
+        }
+    ],
+    "Status_effect": "None",
+    "type_Immunity": "None",
+    "evo_line": [
+        "18"
+    ],
+    "learnSet": [
+        "electric/thunderbolt18"
+    ],
+    "move_set": [
+        {
+            "instanceID": -51166
+        },
+        {
+            "instanceID": -51168
+        },
+        {
+            "instanceID": -51170
+        },
+        {
+            "instanceID": -51172
+        }
+    ],
+    "ability": {
+        "instanceID": 29918
+    },
+    "evolutions": [
+        {
+            "instanceID": 29754
+        }
+    ],
+    "front_picture": {
+        "instanceID": 29812
+    },
+    "back_picture": {
+        "instanceID": 29970
+    },
+    "ability_name": "Static",
+    "evo_data": [
+        "Raichu",
+        ""
+    ],
+    "type_data": [
+        "Electric",
+        ""
+    ],
+    "move_data": [
+        "Thunder shock/Electric",
+        "Thunder wave/Electric",
+        "Quick attack/Normal",
+        "Thunderbolt/Electric"
+    ],
+    "move_pp_data": [
+        20,
+        20,
+        25,
+        15
+    ],
+    "num_moves": 4,
+    "num_types": 1,
+    "num_evo": 1
+}

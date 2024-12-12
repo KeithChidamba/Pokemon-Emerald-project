@@ -42,15 +42,18 @@ public class Battle_handler : MonoBehaviour
 
     private void Handle_battle()
     {
-        if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)) && Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy)
+        if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)) )
         {
-            if(isDouble_battle)
-                Use_Move(Battle_P[Current_Move].pokemon.move_set[Current_Move],Battle_P[Current_Move].pokemon);//any of payer's 2 pkm using move
-            else
+            if (Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy)
             {
-                Use_Move(Battle_P[0].pokemon.move_set[Current_Move],Battle_P[0].pokemon);//player using move
+                if(isDouble_battle)
+                    Use_Move(Battle_P[Current_Move].pokemon.move_set[Current_Move],Battle_P[Current_Move].pokemon);//any of payer's 2 pkm using move
+                else
+                    Use_Move(Battle_P[0].pokemon.move_set[Current_Move],Battle_P[0].pokemon);//player using move
+                choosing_move = false;
             }
-            choosing_move = false;
+            else
+                Dialogue_handler.instance.Write_Info("Click on who you will attack", "Details");
         }
         if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
         {
@@ -66,13 +69,9 @@ public class Battle_handler : MonoBehaviour
         else
         {
             if (!choosing_move && !running_away && !Doing_move)
-            {
-                viewing_options = true;//idle
-            }
+                viewing_options = true;
             else
-            {
                 viewing_options = false;
-            }
             if (viewing_options)
             {
                 Dialogue_handler.instance.Write_Info("What will you do?", "Details");
@@ -125,7 +124,6 @@ public class Battle_handler : MonoBehaviour
         Battle_P[2].pokemon = enemy;
         Wild_pkm.instance.pokemon = enemy;
         Set_pkm();
-        Wild_pkm.instance.Enemy_pokemon = Battle_P[0].pokemon;
         Wild_pkm.instance.InBattle = true;
         set_battle();
     }
@@ -157,6 +155,7 @@ public class Battle_handler : MonoBehaviour
                 Battle_P[i + 2].Current_Enemies[i] = Battle_P[i].pokemon; //set enemies enemy equal to player's pkm
             }
         }
+        Wild_pkm.instance.Enemy_pokemon = Battle_P[0].pokemon;
         Participant_count = 0;
         foreach(Battle_Participant p in Battle_P)
         {

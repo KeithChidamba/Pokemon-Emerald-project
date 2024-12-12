@@ -46,6 +46,7 @@ public static class Obj_Instance
         new_pkm.base_exp_yield = pkm.base_exp_yield;
         new_pkm.has_trainer=pkm.has_trainer;
         new_pkm.canAttack = pkm.canAttack;
+        new_pkm.isFlinched=pkm.isFlinched;
         new_pkm.front_picture = pkm.front_picture;
         new_pkm.back_picture = pkm.back_picture;
         new_pkm.HP = pkm.HP;

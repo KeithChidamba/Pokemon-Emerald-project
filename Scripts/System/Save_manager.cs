@@ -86,13 +86,8 @@ public class Save_manager : MonoBehaviour
         {
             Pokemon_party.instance.party[i] = Get_Pokemon("Assets/Save_data/Pokemon/" + party_IDs[i] + ".json");
             Pokemon_party.instance.num_members++;
-            /*Pokemon copy = ScriptableObject.CreateInstance<Pokemon>();
-            copy = Pokemon_party.instance.party[i];
-            Debug.Log(copy.Pokemon_name);
-           // pokemon_storage.instance.all_pokemon.Add(Obj_Instance.set_Pokemon(copy));*/
         }
         pokemon_storage.instance.non_party_pokemon.Clear();
-        pokemon_storage.instance.all_pokemon.Clear();
         int j = load_files("Assets/Save_data/Pokemon/");
         for (int i = 0; i < j; i++)
         {
@@ -101,7 +96,6 @@ public class Save_manager : MonoBehaviour
                 pokemon_storage.instance.non_party_pokemon.Add(Get_Pokemon("Assets/Save_data/Pokemon/" + Path.GetFileName(json_files[i])));
                 pokemon_storage.instance.num_non_party_pokemon++;
             }
-            pokemon_storage.instance.all_pokemon.Add(Get_Pokemon("Assets/Save_data/Pokemon/" + Path.GetFileName(json_files[i])));
             pokemon_storage.instance.num_pokemon++;
         }
     }

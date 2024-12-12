@@ -50,7 +50,7 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         else
         {
-            if (command._turn.attacker_.Status_effect == "Flinched")
+            if (command._turn.attacker_.isFlinched)
                 Dialogue_handler.instance.Write_Info(command._turn.attacker_+" flinched!","Details");
             else
                 //freeze,paralysis
