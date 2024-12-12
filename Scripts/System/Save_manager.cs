@@ -86,6 +86,10 @@ public class Save_manager : MonoBehaviour
         {
             Pokemon_party.instance.party[i] = Get_Pokemon("Assets/Save_data/Pokemon/" + party_IDs[i] + ".json");
             Pokemon_party.instance.num_members++;
+            /*Pokemon copy = ScriptableObject.CreateInstance<Pokemon>();
+            copy = Pokemon_party.instance.party[i];
+            Debug.Log(copy.Pokemon_name);
+           // pokemon_storage.instance.all_pokemon.Add(Obj_Instance.set_Pokemon(copy));*/
         }
         pokemon_storage.instance.non_party_pokemon.Clear();
         pokemon_storage.instance.all_pokemon.Clear();
@@ -95,6 +99,7 @@ public class Save_manager : MonoBehaviour
             if (!pokemon_storage.instance.search_pkm_ID(Path.GetFileName(json_files[i]).Substring(0, Path.GetFileName(json_files[i]).Length - 5)))
             {
                 pokemon_storage.instance.non_party_pokemon.Add(Get_Pokemon("Assets/Save_data/Pokemon/" + Path.GetFileName(json_files[i])));
+                pokemon_storage.instance.num_non_party_pokemon++;
             }
             pokemon_storage.instance.all_pokemon.Add(Get_Pokemon("Assets/Save_data/Pokemon/" + Path.GetFileName(json_files[i])));
             pokemon_storage.instance.num_pokemon++;
@@ -127,10 +132,15 @@ public class Save_manager : MonoBehaviour
     {
         Dialogue_handler.instance.Write_Info("Saving...", "Details");
         Erase_save();
-        for (int i = 0; i < pokemon_storage.instance.num_pokemon; i++)
+        for (int i = 0; i < Pokemon_party.instance.num_members; i++)
         {
-            pokemon_storage.instance.all_pokemon[i].Set_class_data();
-            Save_Pokemon(pokemon_storage.instance.all_pokemon[i], pokemon_storage.instance.all_pokemon[i].Pokemon_ID);
+            Pokemon_party.instance.party[i].Set_class_data();
+            Save_Pokemon(Pokemon_party.instance.party[i],  Pokemon_party.instance.party[i].Pokemon_ID);
+        }
+        for (int i = 0; i < pokemon_storage.instance.num_non_party_pokemon; i++)
+        {
+            pokemon_storage.instance.non_party_pokemon[i].Set_class_data();
+            Save_Pokemon(pokemon_storage.instance.non_party_pokemon[i], pokemon_storage.instance.non_party_pokemon[i].Pokemon_ID);
         }
         for (int i = 0; i < Bag.instance.num_items; i++)
         {

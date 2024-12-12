@@ -10,6 +10,7 @@ public class pokemon_storage : MonoBehaviour
     public List<Pokemon> all_pokemon;
     public List<Pokemon> non_party_pokemon;
     public int num_pokemon = 0;
+    public int num_non_party_pokemon = 0;
     public int max_num_pokemon = 40;
     public int num_party_members = 0;
     public GameObject Storage_options;
@@ -270,11 +271,13 @@ public class pokemon_storage : MonoBehaviour
             num_pokemon--;
         }
         non_party_pokemon.Clear();
+        num_non_party_pokemon = 0;
         foreach (Pokemon mon in all_pokemon)
         {
             if (!Save_manager.instance.party_IDs.Contains(mon.Pokemon_ID))
             {
                 non_party_pokemon.Add(mon);
+                num_non_party_pokemon++;
             }
         }
     }
@@ -294,6 +297,7 @@ public class pokemon_storage : MonoBehaviour
             //remove from box
             non_party_pokemon.Remove(search_pkm(select_pkm_ID));
             num_party_members++;
+            num_non_party_pokemon--;
             Pokemon_party.instance.num_members++;
         }
         else

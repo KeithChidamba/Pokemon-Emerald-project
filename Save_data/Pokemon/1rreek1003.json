@@ -1,19 +1,20 @@
 {
     "Base_Pokemon_name": "Treeko",
     "Pokemon_name": "Treeko",
-    "Pokemon_ID": "4kk0420",
+    "Pokemon_ID": "1rreek1003",
     "HP": 15.0,
-    "max_HP": 15.0,
-    "Attack": 7.0,
-    "Defense": 2.0,
-    "SP_ATK": 5.0,
-    "SP_DEF": 4.0,
-    "speed": 8.0,
+    "max_HP": 37.0,
+    "Attack": 15.0,
+    "Defense": 10.0,
+    "SP_ATK": 13.0,
+    "SP_DEF": 12.0,
+    "speed": 16.0,
     "Accuracy": 100.0,
-    "Current_level": 1,
+    "Current_level": 9,
     "level_progress": 0.0,
     "base_exp_yield": 0,
-    "has_trainer": false,
+    "has_trainer": true,
+    "canAttack": true,
     "types": [
         {
             "instanceID": 29570
@@ -33,34 +34,34 @@
     ],
     "move_set": [
         {
-            "instanceID": -74548
+            "instanceID": -18506
         },
         {
-            "instanceID": 0
+            "instanceID": -18706
         },
         {
-            "instanceID": 0
+            "instanceID": -18708
         },
         {
-            "instanceID": 0
+            "instanceID": -18710
         }
     ],
     "ability": {
-        "instanceID": 29592
+        "instanceID": 29574
     },
     "evolutions": [
         {
-            "instanceID": 29594
+            "instanceID": 29576
         },
         {
-            "instanceID": 29596
+            "instanceID": 29578
         }
     ],
     "front_picture": {
-        "instanceID": 29510
+        "instanceID": 29506
     },
     "back_picture": {
-        "instanceID": 29598
+        "instanceID": 29580
     },
     "ability_name": "Overgrow",
     "evo_data": [
@@ -73,17 +74,17 @@
     ],
     "move_data": [
         "Pound/Normal",
-        "",
-        "",
-        ""
+        "Absorb/Grass",
+        "Quick attack/Normal",
+        "Bullet seed/Grass"
     ],
     "move_pp_data": [
         25,
-        0,
-        0,
-        0
+        20,
+        25,
+        20
     ],
-    "num_moves": 1,
+    "num_moves": 4,
     "num_types": 1,
     "num_evo": 2
 }

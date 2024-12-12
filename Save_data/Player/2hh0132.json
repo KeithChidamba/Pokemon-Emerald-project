@@ -1,0 +1,11 @@
+{
+    "Player_name": "john",
+    "Player_ID": "2hh0132",
+    "player_Money": 100,
+    "player_Position": {
+        "x": 4.158990859985352,
+        "y": -0.10892705619335175,
+        "z": 0.0
+    },
+    "Location": "Player House"
+}

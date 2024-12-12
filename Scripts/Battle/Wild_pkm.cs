@@ -50,21 +50,23 @@ public class Wild_pkm : MonoBehaviour
             Battle_handler.instance.Select_player();//attack player, since its single battle
             List<Move> strongest_move = new();
             List<Move> mock_moveset = new();
-            foreach (Move m in pokemon.move_set)
+            for (int i = 0;i<pokemon.num_moves;i++)
             {
-                if (m != null)
+                if (pokemon.move_set[i] != null)
                 {
-                    mock_moveset.Add(m);
-                    if (Enemy_pokemon.isWeakTo(m.type) )
+                    mock_moveset.Add(pokemon.move_set[i]);
+                    if (Enemy_pokemon.isWeakTo(pokemon.move_set[i].type) )
                     {
-                        Battle_handler.instance.Use_Move(m,pokemon);
+                        Battle_handler.instance.Use_Move(pokemon.move_set[i],pokemon);
                         Used_move = true;
-                    }
-                    else
+                        break;
+                    } 
+                    if (i==pokemon.num_moves-1)
                     {
                         strongest_move = mock_moveset.OrderByDescending(p => p.Move_damage).ToList();
                         Battle_handler.instance.Use_Move( strongest_move[0],pokemon);
                         Used_move = true;
+                        break;
                     }
                 }
             }
