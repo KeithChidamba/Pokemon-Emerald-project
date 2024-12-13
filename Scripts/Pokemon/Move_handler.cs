@@ -4,6 +4,7 @@ public class Move_handler:MonoBehaviour
 {
     public bool Doing_move = false;
     public static Move_handler instance;
+    private Turn current_turn;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -15,14 +16,10 @@ public class Move_handler:MonoBehaviour
     }
     public void Do_move(Turn turn)
     {
+        current_turn=turn;
         Dialogue_handler.instance.Write_Info(turn.attacker_.Pokemon_name+" used "+turn.move_.Move_name+" on "+turn.victim_.Pokemon_name+"!","Battle info");
         Dialogue_handler.instance.Dialouge_off(1.8f); 
         Invoke(nameof(tests),2f);
-        /*while (Doing_move)
-        {
-            await Task.Yield();
-        }*/
-        
         //damage pokemon
         //call appropriate move for move effect
         //invoke move_name+effect methods

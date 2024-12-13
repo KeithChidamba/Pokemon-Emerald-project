@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using UnityEngine;
+
 public static class Utility
 {
     public static string removeSpace(string name_)
@@ -35,5 +37,43 @@ public static class Utility
     public static int Get_rand(int min,int exclusive_lim)
     {
         return UnityEngine.Random.Range(min, exclusive_lim);
+    }
+    public static bool isImmuneTo(Pokemon victim,Type enemy_type)
+    {
+        for (int i = 0; i < victim.num_types; i++)
+        {
+            if (victim.types[i].type_check(victim.types[i].Non_effect,enemy_type))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static float TypeEffectiveness(Pokemon victim,Type enemy_type)
+    {
+        float effectiveness = 0;
+        if (!isImmuneTo(victim, enemy_type))
+        {
+            if (victim.types[0].type_check(victim.types[0].weaknesses, enemy_type))
+            {
+                if (!victim.types[1].type_check(victim.types[1].Resistances, enemy_type) ||
+                    victim.types[1].type_check(victim.types[1].weaknesses, enemy_type))
+                    effectiveness = 4;
+                if (victim.types[1].type_check(victim.types[1].Resistances, enemy_type))
+                    effectiveness = 2;
+            }
+            if (victim.types[0].type_check(victim.types[0].Resistances, enemy_type))
+            {
+                if (victim.types[1].type_check(victim.types[1].Resistances, enemy_type))
+                    effectiveness = 0.5f;
+                if (victim.types[1].type_check(victim.types[1].weaknesses, enemy_type))
+                    effectiveness = 2;
+            }
+        }
+        else
+            effectiveness = 0;
+        Debug.Log(effectiveness);
+        return effectiveness;
+        
     }
 }

@@ -43,40 +43,66 @@ public class Wild_pkm : MonoBehaviour
         //check if its pokemon's turn
         if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon && !Used_move)
         {
-            //check if have type advantage move that's not immune
-            //or check if STAB move that's non-immune 
-            //or check highest damage, non-immune move
-            // else use random move
             Battle_handler.instance.Select_player();//attack player, since its single battle
-            List<Move> strongest_move = new();
-            List<Move> mock_moveset = new();
-            for (int i = 0;i<pokemon.num_moves;i++)
+            while(!Used_move)
+                choose_move();
+        }
+    }
+
+    private void choose_move()
+    {
+        if(Utility.Get_rand(1,11)<5)//40% chance
+        { //random move
+            int rand_move = Utility.Get_rand(0, pokemon.num_moves);
+            Battle_handler.instance.Use_Move(pokemon.move_set[rand_move],pokemon);
+            Used_move = true;
+            Debug.Log("random");
+        }
+        else
+        {
+            if (Utility.Get_rand(1, 11) < 8)
             {
-                if (pokemon.move_set[i] != null)
-                {
-                    mock_moveset.Add(pokemon.move_set[i]);
-                    if (Enemy_pokemon.isWeakTo(pokemon.move_set[i].type) )
+                Debug.Log("effective");
+                for (int i = 0; i < pokemon.num_moves; i++)
+                {//look for super effective attacking move
+                    float eff = Utility.TypeEffectiveness(Enemy_pokemon, pokemon.move_set[i].type);
+                    Debug.Log("eff: "+eff);
+                    if ( eff > 1 && !pokemon.move_set[i].is_Buff_Debuff) 
                     {
-                        Battle_handler.instance.Use_Move(pokemon.move_set[i],pokemon);
+                        Battle_handler.instance.Use_Move(pokemon.move_set[i], pokemon);
                         Used_move = true;
-                        break;
-                    } 
-                    if (i==pokemon.num_moves-1)
-                    {
-                        strongest_move = mock_moveset.OrderByDescending(p => p.Move_damage).ToList();
-                        Battle_handler.instance.Use_Move( strongest_move[0],pokemon);
-                        Used_move = true;
+                        
                         break;
                     }
+                    if (i == pokemon.num_moves - 1)
+                        UseStrongest_move();
                 }
             }
-            Debug.Log("Do move stab");
-            
-            /*if(Utility.Get_rand(1,3)<2)//50/50 chance
+            else
             {
-                
-            }*/
+                UseStrongest_move();
+            }
         }
     }
     
+    private void UseStrongest_move()
+    {
+        List<Move> strongest_move = new();
+        List<Move> mock_moveset = new();
+        Debug.Log("strongest");
+        for (int i = 0; i < pokemon.num_moves; i++) //check for null break point
+        {
+            if (!Utility.isImmuneTo(Enemy_pokemon, pokemon.move_set[i].type)) //look for all non-immune moves
+            {
+                mock_moveset.Add(pokemon.move_set[i]);
+            }
+            if (i==pokemon.num_moves-1)
+            {
+                strongest_move = mock_moveset.OrderByDescending(p => p.Move_damage).ToList();
+                Battle_handler.instance.Use_Move( strongest_move[0],pokemon);
+                Used_move = true;
+                
+            }
+        }
+    }
 }

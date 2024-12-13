@@ -22,23 +22,18 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         instance = this;
     }
-
-    private void Update()
-    {
-
-    }
-
     public void SaveMove(Pkm_Use_Move command)
     {
-        //flinching cancels the flinched pkm, call from move_h script
-        //flicnh gets removed after turn, others get removed randomly
         Move_history.Add(command);
         if (Current_pkm_turn == Battle_handler.instance.Participant_count)
             StartCoroutine(ExecuteMoves(Set_priority()));
         else
             Next_turn();
     }
-
+    void Reset_Moves()
+    {
+        Move_history.Clear();
+    }
     bool Can_Attack(Pkm_Use_Move command)
     {
         if (command._turn.attacker_.canAttack)
@@ -64,31 +59,24 @@ public class Turn_Based_Combat : MonoBehaviour
         {
             if (Can_Attack(command))
             {
-                Debug.Log(command._turn.attacker_.Pokemon_name);
                 command.Execute();
                 yield return new WaitUntil(()=> !Move_handler.instance.Doing_move);
             }
             else
-                CancelMoves(command);
+                CancelMove(command);
         }
         Next_turn();
+        Reset_Moves();
         yield return null;
     }
-    public void CancelMoves(List<Pkm_Use_Move> commands)
+    public void CancelMove(Pkm_Use_Move command)
     {
-        foreach (Pkm_Use_Move command in commands)
-        {
-            Move_history.Remove(command);
-            command.Undo();
-        }
-    }
-    public void CancelMoves(Pkm_Use_Move command)
-    {
-            Move_history.Remove(command);
-            command.Undo();
+        Move_history.Remove(command);
+        command.Undo();
     }
     public void Next_turn()
     {
+        //check on pokemon status,health etc
         Battle_handler.instance.Doing_move = false;
         if ( Battle_handler.instance.isDouble_battle)
             Change_turn(4,1);
@@ -109,7 +97,6 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         OnNewTurn?.Invoke();
     }
-
     private bool Move_successful(Pokemon pokemon)
     {
         int rand = Utility.Get_rand(1, 100);
