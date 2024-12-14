@@ -1,16 +1,16 @@
 {
     "Base_Pokemon_name": "Treeko",
-    "Pokemon_name": "Grovyle",
-    "Pokemon_ID": "1rreek1003",
-    "HP": 100.0,
-    "max_HP": 100.0,
-    "Attack": 27.0,
-    "Defense": 22.0,
-    "SP_ATK": 25.0,
-    "SP_DEF": 24.0,
-    "speed": 28.0,
+    "Pokemon_name": "Treeko",
+    "Pokemon_ID": "2eeek3023",
+    "HP": 37.0,
+    "max_HP": 37.0,
+    "Attack": 15.0,
+    "Defense": 10.0,
+    "SP_ATK": 13.0,
+    "SP_DEF": 12.0,
+    "speed": 16.0,
     "Accuracy": 100.0,
-    "Current_level": 18,
+    "Current_level": 9,
     "level_progress": 0.0,
     "base_exp_yield": 0,
     "has_trainer": true,
@@ -18,7 +18,7 @@
     "isFlinched": false,
     "types": [
         {
-            "instanceID": 29570
+            "instanceID": 29700
         }
     ],
     "Status_effect": "None",
@@ -28,38 +28,41 @@
         "30"
     ],
     "learnSet": [
-        "flying/arial ace16"
+        "normal/pound01",
+        "grass/absorb03",
+        "normal/quick attack04",
+        "grass/bullet seed07"
     ],
     "move_set": [
         {
-            "instanceID": -51176
+            "instanceID": -19068
         },
         {
-            "instanceID": -51178
+            "instanceID": -19070
         },
         {
-            "instanceID": -51180
+            "instanceID": -19072
         },
         {
-            "instanceID": -51182
+            "instanceID": -19074
         }
     ],
     "ability": {
-        "instanceID": 29574
+        "instanceID": 29704
     },
     "evolutions": [
         {
-            "instanceID": 29576
+            "instanceID": 29706
         },
         {
-            "instanceID": 29578
+            "instanceID": 29708
         }
     ],
     "front_picture": {
-        "instanceID": 29644
+        "instanceID": 29658
     },
     "back_picture": {
-        "instanceID": 29492
+        "instanceID": 29710
     },
     "ability_name": "Overgrow",
     "evo_data": [
@@ -67,22 +70,18 @@
         "Sceptile"
     ],
     "type_data": [
-        "Grass",
-        ""
+        "Grass"
     ],
     "move_data": [
         "Pound/Normal",
         "Absorb/Grass",
         "Quick attack/Normal",
-        "Arial Ace/Flying"
+        "Bullet seed/Grass"
     ],
     "move_pp_data": [
         25,
         20,
         25,
         20
-    ],
-    "num_moves": 4,
-    "num_types": 1,
-    "num_evo": 2
+    ]
 }

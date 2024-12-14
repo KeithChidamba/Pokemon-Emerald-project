@@ -25,9 +25,14 @@ MonoBehaviour:
   Accuracy: 100
   Current_level: 1
   level_progress: 0
+  base_exp_yield: 0
+  has_trainer: 0
+  canAttack: 1
+  isFlinched: 0
   types:
   - {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
   Status_effect: None
+  type_Immunity: None
   evo_line:
   - 16
   - 30
@@ -38,9 +43,6 @@ MonoBehaviour:
   - water/water gun10
   move_set:
   - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   ability: {fileID: 11400000, guid: 2d3aa5da1ed7a734cb1c25d192217a25, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 6aa55ab944ac75248a33b519ce0064a0, type: 2}
@@ -53,6 +55,4 @@ MonoBehaviour:
   - Swampert
   type_data: []
   move_data: []
-  num_moves: 0
-  num_types: 0
-  num_evo: 0
+  move_pp_data: 

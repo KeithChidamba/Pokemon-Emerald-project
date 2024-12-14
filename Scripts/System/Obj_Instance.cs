@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public static class Obj_Instance
@@ -54,15 +55,8 @@ public static class Obj_Instance
         new_pkm.types = pkm.types;
         new_pkm.evolutions = pkm.evolutions;
         new_pkm.evo_line = pkm.evo_line;
-        int i = 0;
         foreach (Move m in pkm.move_set)
-        {
-            if (m != null)
-            {
-                new_pkm.move_set[i] = set_move(m);
-            }
-            i++;
-        }
+            new_pkm.move_set.Add(set_move(m));
         return new_pkm;
     }
 

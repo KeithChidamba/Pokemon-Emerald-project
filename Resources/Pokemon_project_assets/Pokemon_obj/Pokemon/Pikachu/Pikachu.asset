@@ -28,6 +28,7 @@ MonoBehaviour:
   base_exp_yield: 0
   has_trainer: 0
   canAttack: 1
+  isFlinched: 0
   types:
   - {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
   Status_effect: None
@@ -41,9 +42,6 @@ MonoBehaviour:
   - normal/tail whip09
   move_set:
   - {fileID: 11400000, guid: a4834cd0b33907a4c8866620b383fd8d, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   ability: {fileID: 11400000, guid: e14cc0f589869f74585dfab11c944e42, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 84257e89eafc79747b735d1c1052913e, type: 2}
@@ -52,15 +50,6 @@ MonoBehaviour:
   ability_name: 
   evo_data:
   - Raichu
-  type_data:
-  - 
-  - 
-  move_data:
-  - 
-  - 
-  - 
-  - 
-  move_pp_data: 00000000000000000000000000000000
-  num_moves: 0
-  num_types: 0
-  num_evo: 0
+  type_data: []
+  move_data: []
+  move_pp_data: 

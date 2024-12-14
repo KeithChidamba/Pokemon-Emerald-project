@@ -25,9 +25,14 @@ MonoBehaviour:
   Accuracy: 100
   Current_level: 1
   level_progress: 0
+  base_exp_yield: 0
+  has_trainer: 0
+  canAttack: 1
+  isFlinched: 0
   types:
   - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   Status_effect: None
+  type_Immunity: None
   evo_line:
   - 20
   - 35
@@ -38,9 +43,6 @@ MonoBehaviour:
   - ground/magnitude07
   move_set:
   - {fileID: 11400000, guid: 2d03686e73c8a174e8f1dd31d6ebdc76, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   ability: {fileID: 11400000, guid: 22b317c460bfdda4ba6608a82d464e03, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 41c4f5dd85b85854084dc026be20084f, type: 2}
@@ -51,14 +53,6 @@ MonoBehaviour:
   evo_data:
   - Vibrava
   - Flygon
-  type_data:
-  - 
-  - 
-  move_data:
-  - 
-  - 
-  - 
-  - 
-  num_moves: 0
-  num_types: 0
-  num_evo: 0
+  type_data: []
+  move_data: []
+  move_pp_data: 

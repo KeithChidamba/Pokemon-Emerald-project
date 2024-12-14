@@ -5,7 +5,7 @@ using UnityEngine;
 public class Evolution : ScriptableObject
 {
     public string Evo_name;
-    public Type[] types;
+    public List<Type> types;
     public Ability ability;
     public string[] learnSet;
     public Sprite front_picture;

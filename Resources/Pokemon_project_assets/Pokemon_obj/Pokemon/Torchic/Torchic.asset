@@ -28,6 +28,7 @@ MonoBehaviour:
   base_exp_yield: 0
   has_trainer: 0
   canAttack: 1
+  isFlinched: 0
   types:
   - {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
   Status_effect: None
@@ -42,9 +43,6 @@ MonoBehaviour:
   - normal/focus energy07
   move_set:
   - {fileID: 11400000, guid: 38b98d4bcb652754aadb472acfbc3201, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
   evolutions:
   - {fileID: 11400000, guid: f49a231fd601fd84fb5426e0f3771111, type: 2}
@@ -55,15 +53,6 @@ MonoBehaviour:
   evo_data:
   - Combusken
   - Blaziken
-  type_data:
-  - 
-  - 
-  move_data:
-  - 
-  - 
-  - 
-  - 
-  move_pp_data: 00000000000000000000000000000000
-  num_moves: 0
-  num_types: 0
-  num_evo: 0
+  type_data: []
+  move_data: []
+  move_pp_data: 

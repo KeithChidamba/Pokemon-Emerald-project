@@ -25,9 +25,14 @@ MonoBehaviour:
   Accuracy: 100
   Current_level: 1
   level_progress: 0
+  base_exp_yield: 0
+  has_trainer: 0
+  canAttack: 1
+  isFlinched: 0
   types:
   - {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
   Status_effect: None
+  type_Immunity: None
   evo_line:
   - 16
   - 30
@@ -38,9 +43,6 @@ MonoBehaviour:
   - grass/bullet seed07
   move_set:
   - {fileID: 11400000, guid: e814c71756f4bf849b975c47a51ff6d1, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   ability: {fileID: 11400000, guid: 3a050f274b7d49d49aec9bd3ce16bbf1, type: 2}
   evolutions:
   - {fileID: 11400000, guid: bda93132d14286e4eae38e247c963eae, type: 2}
@@ -51,14 +53,6 @@ MonoBehaviour:
   evo_data:
   - Grovyle
   - Sceptile
-  type_data:
-  - 
-  - 
-  move_data:
-  - 
-  - 
-  - 
-  - 
-  num_moves: 0
-  num_types: 0
-  num_evo: 0
+  type_data: []
+  move_data: []
+  move_pp_data: 

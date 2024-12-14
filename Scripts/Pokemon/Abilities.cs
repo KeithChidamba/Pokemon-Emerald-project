@@ -18,7 +18,7 @@ public class Abilities : MonoBehaviour
     public void Set_ability()
     { 
         //underscore because some ability names are c# keywords
-        pkm_ability = Utility.removeSpace(participant.pokemon.ability.ability.ToLower())+"_";
+        pkm_ability = participant.pokemon.ability.ability.ToLower().Replace(" ", "")+"_";
     }
     void inferno_()
     {

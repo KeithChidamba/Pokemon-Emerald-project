@@ -21,9 +21,7 @@ public class Options_manager : MonoBehaviour
     private void Update()
     {
         if (playerInBattle)
-        {
             overworld_actions.instance.doing_action = true;
-        }
     }
     //Dialogue_handler.instance options
     void Exit_game()
@@ -50,10 +48,8 @@ public class Options_manager : MonoBehaviour
         for (int i = 0; i < Pokemon_party.instance.num_members; i++)
         {
             Pokemon_party.instance.party[i].HP = Pokemon_party.instance.party[i].max_HP;
-            for (int j = 0; j < Pokemon_party.instance.party[i].num_moves; j++)
-            {
-                Pokemon_party.instance.party[i].move_set[j].Powerpoints = Pokemon_party.instance.party[i].move_set[j].max_Powerpoints;
-            }
+            foreach (Move m in Pokemon_party.instance.party[i].move_set)
+                m.Powerpoints = m.max_Powerpoints;
         }
         overworld_actions.instance.doing_action = false;
         Dialogue_handler.instance.Write_Info("Your pokemon have been healed, you're welcome!", "Details");
@@ -120,9 +116,7 @@ public class Options_manager : MonoBehaviour
     {
         current_interaction = interaction;
         if (interaction.InterAction_type == "Options")
-        {
             Invoke(interaction.InterAction_options[option], 0f);
-        }
         if (interaction.InterAction_type == "List")
         {
             //list logic, might be useful later 

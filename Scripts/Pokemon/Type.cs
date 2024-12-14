@@ -16,6 +16,7 @@ public class Type : ScriptableObject
         {
             if (c == type.Type_name)
             {
+                //Debug.Log(c+" = "+type.Type_name);
                 return true;
             }
         }
