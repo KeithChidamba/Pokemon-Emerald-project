@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Move_name: Tail whip
   Move_damage: 0
-  Move_accuracy: 100
+  Move_accuracy: 90
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
   is_Buff_Debuff: 1

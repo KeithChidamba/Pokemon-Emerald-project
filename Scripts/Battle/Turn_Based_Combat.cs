@@ -38,18 +38,22 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         if (command._turn.attacker_.canAttack)
         {
-            if (!Move_successful(command._turn.attacker_))
-                Dialogue_handler.instance.Write_Info(command._turn.attacker_+" missed the attack","Details");
-            else
+            if (command._turn.move_.Move_accuracy < 100)//not a sure-hit move
+            {
+                if (!Move_successful(command._turn.attacker_))
+                    Dialogue_handler.instance.Write_Info(command._turn.attacker_+" missed the attack","Battle info");
+                else
+                    return true;
+            }else
                 return true;
         }
         else
         {
             if (command._turn.attacker_.isFlinched)
-                Dialogue_handler.instance.Write_Info(command._turn.attacker_+" flinched!","Details");
+                Dialogue_handler.instance.Write_Info(command._turn.attacker_+" flinched!","Battle info");
             else
                 //freeze,paralysis
-                Dialogue_handler.instance.Write_Info(command._turn.attacker_+" is "+ command._turn.attacker_.Status_effect,"Details");
+                Dialogue_handler.instance.Write_Info(command._turn.attacker_+" is "+ command._turn.attacker_.Status_effect,"Battle info");
         }
         return false;
     }

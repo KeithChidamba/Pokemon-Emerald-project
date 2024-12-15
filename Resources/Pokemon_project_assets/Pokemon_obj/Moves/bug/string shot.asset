@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Move_name: String shot
   Move_damage: 0
-  Move_accuracy: 100
+  Move_accuracy: 90
   type: {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
   isSpecial: 0
   is_Buff_Debuff: 1

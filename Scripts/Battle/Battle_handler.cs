@@ -53,7 +53,7 @@ public class Battle_handler : MonoBehaviour
                 choosing_move = false;
             }
             else
-                Dialogue_handler.instance.Write_Info("Click on who you will attack", "Details");
+                Dialogue_handler.instance.Write_Info("Click on who you will attack", "Battle info");
         }
         if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
         {
@@ -74,7 +74,7 @@ public class Battle_handler : MonoBehaviour
                 viewing_options = false;
             if (viewing_options)
             {
-                Dialogue_handler.instance.Write_Info("What will you do?", "Details");
+                Dialogue_handler.instance.Write_Info("What will you do?", "Battle info");
                 options_ui.SetActive(true);
             }
         }
@@ -195,14 +195,15 @@ public class Battle_handler : MonoBehaviour
         Pkm_Use_Move use_move = new Pkm_Use_Move(current_turn);
         Turn_Based_Combat.instance.SaveMove(use_move);
     }
-    public void Reset_move()
+    private void Reset_move()
     {
         Selected_Move = false; 
         Move_btns[Current_Move].GetComponent<Button>().interactable = true;
         Current_Move = 0;
     }
     public void Select_Move(int move_num)
-    { 
+    {
+        Reset_move();
         Current_Move = move_num-1;
         Move_pp.text = "PP: " + Battle_P[0].pokemon.move_set[Current_Move].Powerpoints+ "/" + Battle_P[0].pokemon.move_set[Current_Move].max_Powerpoints;
         Move_type.text = Battle_P[0].pokemon.move_set[Current_Move].type.Type_name;
@@ -214,7 +215,7 @@ public class Battle_handler : MonoBehaviour
     {
         if (hasWon)
         {
-            Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " won the battle", "Details");
+            Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " won the battle", "Battle info");
         }
         //get money if trainer, display msg of how much money
         Options_manager.instance.playerInBattle = false;
@@ -247,17 +248,17 @@ public class Battle_handler : MonoBehaviour
             if (random > 5)//initially 50/50 chance to run
             {
                 End_Battle(false);
-                Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " ran away", "Details");
+                Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " ran away", "Battle info");
                 Dialogue_handler.instance.Dialouge_off(.7f);
             }
             else
             {
-                Dialogue_handler.instance.Write_Info("Can't run away","Details");
+                Dialogue_handler.instance.Write_Info("Can't run away","Battle info");
             }
         }
         else
         {
-            Dialogue_handler.instance.Write_Info("Can't run away from trainer battle","Details");
+            Dialogue_handler.instance.Write_Info("Can't run away from trainer battle","Battle info");
         }
         Invoke(nameof(run_Off),1f);
     }
@@ -286,7 +287,7 @@ void run_Off()
         if (faint_count == Pokemon_party.instance.num_members)
         {
             End_Battle(false);
-            Dialogue_handler.instance.Write_Info("All your pokemon have fainted","Details");
+            Dialogue_handler.instance.Write_Info("All your pokemon have fainted","Battle info");
         }
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Move_name: Brick break
   Move_damage: 60
-  Move_accuracy: 100
+  Move_accuracy: 85
   type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
   is_Buff_Debuff: 1

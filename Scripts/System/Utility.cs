@@ -2,6 +2,7 @@ using UnityEngine;
 
 public static class Utility
 {
+    private static float effectiveness = 0;
     public static int Get_rand(int min,int exclusive_lim)
     {
         return Random.Range(min, exclusive_lim);
@@ -13,34 +14,44 @@ public static class Utility
                 return true;
         return false;
     } 
-    static float isWeakTo(Pokemon victim,Type enemy_type)
+    static void isWeakTo(Pokemon victim,Type enemy_type)
     {
-        float effectiveness = 0;
         foreach(Type t in victim.types)
             if (t.type_check(t.weaknesses, enemy_type))
-                effectiveness += 2f;
-        return effectiveness;
+            {
+                Debug.Log(victim.Pokemon_name + " is weak to "+enemy_type.Type_name);
+                effectiveness *= 2f;
+            }
     }
-    static float isResistantTo(Pokemon victim,Type enemy_type)
+    static void isResistantTo(Pokemon victim,Type enemy_type)
     {
-        float effectiveness = 0;
         foreach(Type t in victim.types)
             if (t.type_check(t.Resistances, enemy_type))
-                effectiveness -= 1f;
-        return effectiveness;
+            {
+                Debug.Log(victim.Pokemon_name + " is resistant to "+enemy_type.Type_name);
+                effectiveness /= 2f;
+            }
+    }
+
+    public static bool is_Stab(Pokemon pkm,Type move)
+    {
+        foreach(Type t in pkm.types)
+            if (t == move)
+                return true;
+        return false;
     }
     public static float TypeEffectiveness(Pokemon victim,Type enemy_type)
     {
-        float effectiveness = 0;
         if (isImmuneTo(victim, enemy_type))
         {
               effectiveness = 0;
-              //Debug.Log(victim.Pokemon_name + " is immune to "+enemy_type.Type_name);
+              Debug.Log(victim.Pokemon_name + " is immune to "+enemy_type.Type_name);
         }
         else
-        {//check
-            effectiveness += isWeakTo(victim, enemy_type);
-            effectiveness += isResistantTo(victim, enemy_type);
+        {
+            effectiveness = 1;
+            isWeakTo(victim, enemy_type);
+            isResistantTo(victim, enemy_type);
         }
         return effectiveness;
     }

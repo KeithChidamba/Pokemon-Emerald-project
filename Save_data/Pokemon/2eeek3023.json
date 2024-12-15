@@ -1,16 +1,17 @@
 {
     "Base_Pokemon_name": "Treeko",
-    "Pokemon_name": "Treeko",
+    "Pokemon_name": "Grovyle",
     "Pokemon_ID": "2eeek3023",
-    "HP": 37.0,
-    "max_HP": 37.0,
-    "Attack": 15.0,
-    "Defense": 10.0,
-    "SP_ATK": 13.0,
-    "SP_DEF": 12.0,
-    "speed": 16.0,
+    "HP": 177.0,
+    "max_HP": 177.0,
+    "Attack": 34.0,
+    "Defense": 29.0,
+    "SP_ATK": 32.0,
+    "SP_DEF": 31.0,
+    "speed": 35.0,
     "Accuracy": 100.0,
-    "Current_level": 9,
+    "crit_chance": 6.25,
+    "Current_level": 25,
     "level_progress": 0.0,
     "base_exp_yield": 0,
     "has_trainer": true,
@@ -28,23 +29,20 @@
         "30"
     ],
     "learnSet": [
-        "normal/pound01",
-        "grass/absorb03",
-        "normal/quick attack04",
-        "grass/bullet seed07"
+        "flying/arial ace16"
     ],
     "move_set": [
         {
-            "instanceID": -19068
+            "instanceID": -77200
         },
         {
-            "instanceID": -19070
+            "instanceID": -77202
         },
         {
-            "instanceID": -19072
+            "instanceID": -77204
         },
         {
-            "instanceID": -19074
+            "instanceID": -77480
         }
     ],
     "ability": {
@@ -59,10 +57,10 @@
         }
     ],
     "front_picture": {
-        "instanceID": 29658
+        "instanceID": 29818
     },
     "back_picture": {
-        "instanceID": 29710
+        "instanceID": 29648
     },
     "ability_name": "Overgrow",
     "evo_data": [
@@ -76,7 +74,7 @@
         "Pound/Normal",
         "Absorb/Grass",
         "Quick attack/Normal",
-        "Bullet seed/Grass"
+        "Arial Ace/Flying"
     ],
     "move_pp_data": [
         25,

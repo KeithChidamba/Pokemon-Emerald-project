@@ -44,7 +44,6 @@ public class Wild_pkm : MonoBehaviour
         if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon && !Used_move)
         {
             Battle_handler.instance.Select_player();//attack player, since its single battle
-           // while(!Used_move)//prevent constant running
             choose_move();
         }
     }
@@ -52,9 +51,7 @@ public class Wild_pkm : MonoBehaviour
     private void choose_move()
     {
         if(Utility.Get_rand(1,11)<5)//40% chance
-        {
             Use_random();
-        }
         else
         {
             if (Utility.Get_rand(1, 11) < 8)
@@ -62,13 +59,11 @@ public class Wild_pkm : MonoBehaviour
                 if (CanUse_effective());
                 else
                 {
-                    Debug.Log("strongest else");
                     UseStrongest_move();
                 }
             }
             else
             {
-                Debug.Log("strongest");
                 UseStrongest_move();
             }
         }
@@ -78,7 +73,7 @@ public class Wild_pkm : MonoBehaviour
     {
         List<Move> strongest_move = new();
         List<Move> mock_moveset = new();
-        foreach (Move m in pokemon.move_set) //check for null break point
+        foreach (Move m in pokemon.move_set)
         {
             if (!Utility.isImmuneTo(Enemy_pokemon, m.type)) //look for all non-immune moves
                 mock_moveset.Add(m);
@@ -96,7 +91,6 @@ public class Wild_pkm : MonoBehaviour
     {
         int rand_move = Utility.Get_rand(0, pokemon.move_set.Count);
         use_move(pokemon.move_set[rand_move]);
-        Debug.Log("random");
     }
 
     void use_move(Move move)
@@ -106,13 +100,11 @@ public class Wild_pkm : MonoBehaviour
     }
     bool CanUse_effective()
     {
-        Debug.Log("effective");
         foreach (Move m in pokemon.move_set)
         {//look for super effective attacking move
             float eff = Utility.TypeEffectiveness(Enemy_pokemon, m.type);
             if ( eff > 1 && !m.is_Buff_Debuff)
             {
-                Debug.Log("eff: "+eff);
                 use_move(m);
                 return true;
             }

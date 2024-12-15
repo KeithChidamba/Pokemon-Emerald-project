@@ -18,6 +18,7 @@ public class Pokemon : ScriptableObject
     public float SP_DEF;
     public float speed;
     public float Accuracy = 100;
+    public float crit_chance = 6.25f;
     public int Current_level = 1;
     public float level_progress = 0;
     public int base_exp_yield=0;
