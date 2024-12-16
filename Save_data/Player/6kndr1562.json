@@ -1,10 +1,10 @@
 {
     "Player_name": "kendrik",
     "Player_ID": "6kndr1562",
-    "player_Money": 100,
+    "player_Money": 10,
     "player_Position": {
-        "x": -0.47200024127960207,
-        "y": -1.4460011720657349,
+        "x": -2.062971830368042,
+        "y": -0.06197477877140045,
         "z": 0.0
     },
     "Location": "Overworld"

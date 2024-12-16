@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class Pokemon_party : MonoBehaviour
@@ -7,6 +8,7 @@ public class Pokemon_party : MonoBehaviour
     public int Selected_member=0;
     public int Member_to_Move=0;
     public bool moving = false;
+    public bool Swapping_in=false;
     public bool viewing_details = false;
     public bool viewing_options = false;
     public bool viewing_party = false;
@@ -59,7 +61,10 @@ public class Pokemon_party : MonoBehaviour
     }
     public void Member_Selected(int Member_position)
     {
-        if (Item_handler.instance.Using_item)
+        //selecting swap in
+        if (Swapping_in)
+            Move_Member(Member_position);
+        else if (Item_handler.instance.Using_item)
         {
             Item_handler.instance.selected_party_pkm = Memeber_cards[Member_position - 1].pkm;
             Item_handler.instance.Use_Item(item_to_use);
@@ -69,9 +74,7 @@ public class Pokemon_party : MonoBehaviour
         else
         {
             if (Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().isEmpty)
-            {
                 Cancel();
-            }
             else
             {
                 if (moving)
@@ -82,9 +85,7 @@ public class Pokemon_party : MonoBehaviour
                 else if (!viewing_options)
                 {
                     if (Selected_member != 0)
-                    {
                         Cancel();
-                    }
                     Selected_member = Member_position;
                     viewing_options = true;
                     member_indicator.transform.position = Memeber_cards[Member_position - 1].transform.position;
@@ -117,9 +118,17 @@ public class Pokemon_party : MonoBehaviour
             Selected_member = 0;
             Refresh_Member_Cards();
             member_indicator.SetActive(false);
-            Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
-            Dialogue_handler.instance.Dialouge_off(1f);
             Battle_handler.instance.Set_pkm();
+            if (Swapping_in)
+            {
+                Game_ui_manager.instance.Close_party();
+                Swapping_in = false;
+            }
+            else
+            {
+                Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
+                Dialogue_handler.instance.Dialouge_off(1f);
+            }
 
         }
     }

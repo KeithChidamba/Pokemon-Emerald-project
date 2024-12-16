@@ -58,14 +58,10 @@ public class Wild_pkm : MonoBehaviour
             {
                 if (CanUse_effective());
                 else
-                {
                     UseStrongest_move();
-                }
             }
             else
-            {
                 UseStrongest_move();
-            }
         }
     }
     

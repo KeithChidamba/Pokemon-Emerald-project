@@ -11,38 +11,28 @@ public class Area_manager : MonoBehaviour
     public void Switch_Area(Switch_Area area,float load_time)
     {
         if (area.has_animation)
-        {
             area.door.Play("Open");
-        }
         current_area = area;
-        Invoke(nameof(Load_area),load_time);
+        Invoke(nameof(Load_building),load_time);
     }
     public void Switch_Area(string area_name,float load_time)
     {
-        if (area_name != "Overworld")
+        if (area_name!="Overworld")
         {
-            Switch_Area a = find_area(area_name);   
+            Switch_Area a = find_area(area_name);
             if (a.has_animation)
-            {
                 a.door.Play("Open");
-            }
             current_area = a;
-            Invoke(nameof(Load_area), load_time);
+            Invoke(nameof(Load_building), load_time);
         }
         else
-        {
             To_Over_world();
-        }
     }
     private Switch_Area find_area(string area_name)
     {
         foreach (Switch_Area a in Areas)
-        {
             if (a.area_name == area_name)
-            {
                 return a;
-            }
-        }
         return null;
     }
     public void To_Over_world()
@@ -55,24 +45,18 @@ public class Area_manager : MonoBehaviour
             Player_movement.instance.canmove = false;
         }
         foreach (Switch_Area a in Areas)
-        {
             a.overworld.SetActive(true);
-        }
         if (area_building != null)
             if (area_building.has_animation)
-            {
                 area_building.door.Play("Close");
-            }
         Invoke(nameof(reset_movement), 1f);
         current_area = find_area("Overworld");
         Player_movement.instance.can_use_bike = true;
     }
-    void Load_area()
+    void Load_building()
     {
         foreach (Switch_Area a in Areas)
-        {
             a.overworld.SetActive(false);
-        }
         overworld_actions.instance.doing_action = false;
         Player_movement.instance.canmove = false;
         current_area.inside_area = true;

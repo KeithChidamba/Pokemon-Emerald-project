@@ -76,11 +76,6 @@ public class Poke_Mart : MonoBehaviour
         if(Game_Load.instance.player_data.player_Money >= mart_items[top_index+Selected_item - 1].price)
         {
             Item item = mart_items[top_index + Selected_item - 1];
-            /*item.quantity = Selected_item_quantity;
-            item.Item_name = mart_items[top_index + Selected_item - 1].Item_name;
-            item.Item_desc = mart_items[top_index + Selected_item - 1].Item_desc;
-            item.Item_img = mart_items[top_index + Selected_item - 1].Item_img;
-            item.Item_type = mart_items[top_index + Selected_item - 1].Item_type;*/
             Bag.instance.Add_item(item);
             Game_Load.instance.player_data.player_Money -= Selected_item_quantity * item.price;
             Selected_item_quantity = 1;
@@ -125,31 +120,21 @@ public class Poke_Mart : MonoBehaviour
 
     public void View_store()
     {
-        num_items = 0;
         viewing_store = true;
         Player_Money.text = Game_Load.instance.player_data.player_Money.ToString();
         int num_i = 0;
-        foreach (Item item in mart_items)
-        {
-            if (item != null)
-            {
-                num_items++;
-            }
-        }
+        num_items = mart_items.Count;
         if (num_items < 8)//if less than amount of ui elements, load that number
-        {
             num_i = num_items;
-        }
         else //if greater than amount of ui elements just load the first seven
-        {
             num_i = 7;
-        }
         for (int i = 0; i < num_i; i++)
         {
             mart_items_ui[i].item = mart_items[i];
             mart_items_ui[i].gameObject.SetActive(true);
             mart_items_ui[i].Load_item();
         }
+        Select_Item(1);
     }
     public void Exit_Store()
     {
@@ -166,5 +151,6 @@ public class Poke_Mart : MonoBehaviour
         {
             itm.Load_item();
         }
+        Select_Item(1);
     }
 }

@@ -36,6 +36,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     bool Can_Attack(Pkm_Use_Move command)
     {
+        if(command._turn.attacker_.HP<=0) return false;
         if (command._turn.attacker_.canAttack)
         {
             if (command._turn.move_.Move_accuracy < 100)//not a sure-hit move
@@ -81,7 +82,7 @@ public class Turn_Based_Combat : MonoBehaviour
     public void Next_turn()
     {
         //check on pokemon status,health etc
-        Battle_handler.instance.Doing_move = false;
+        
         if ( Battle_handler.instance.isDouble_battle)
             Change_turn(4,1);
         else
@@ -90,9 +91,7 @@ public class Turn_Based_Combat : MonoBehaviour
     public void Change_turn(int participant_index,int step)
     {
         if (Current_pkm_turn < participant_index-1)
-        {
             Current_pkm_turn+=step;
-        }
         else
         {
             Battle_handler.instance.View_options();
@@ -100,6 +99,7 @@ public class Turn_Based_Combat : MonoBehaviour
             Battle_handler.instance.Battle_P[Current_pkm_turn].Selected_Enemy = false;//allow player to attack
         }
         OnNewTurn?.Invoke();
+        Battle_handler.instance.Doing_move = false;
     }
     private bool Move_successful(Pokemon pokemon)
     {
@@ -114,19 +114,11 @@ public class Turn_Based_Combat : MonoBehaviour
         priority_list.Clear();
         speed_list = Move_history.OrderByDescending(p => p._turn.attacker_.speed).ToList();
         foreach (Pkm_Use_Move command in speed_list)
-        {
             if (command._turn.move_.Priority == "First")
-            {
                 priority_list.Add(command);
-            }
-        }
         foreach (Pkm_Use_Move command in speed_list)
-        {
             if (command._turn.move_.Priority != "First")
-            {
                 priority_list.Add(command);
-            }
-        }
         return priority_list;
     }
 }

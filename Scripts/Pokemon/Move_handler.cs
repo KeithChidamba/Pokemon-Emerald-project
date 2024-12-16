@@ -20,11 +20,12 @@ public class Move_handler:MonoBehaviour
         current_turn=turn;
         Dialogue_handler.instance.Write_Info(turn.attacker_.Pokemon_name+" used "+turn.move_.Move_name+" on "+turn.victim_.Pokemon_name+"!","Battle info");
         if(!current_turn.move_.is_Buff_Debuff)
-            Invoke(nameof(Deal_Damage),1.4f);
+            Invoke(nameof(Deal_Damage),1.4f);//call this in move effect instead of here. this is just for testing
         else
         {
             //just do move effect
-            //then remember Invoke(nameof(Move_done),1f);
+            //Dialogue_handler.instance.Write_Info("The move effect is happening", "Battle info"); 
+            Invoke(nameof(Move_done),1f);
         }
         //call appropriate move for move effect
         //invoke move_name+effect methods

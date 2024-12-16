@@ -1,0 +1,12 @@
+{
+    "Item_ID": "Pokeball42324846",
+    "Item_name": "Pokeball",
+    "Item_type": "Pokeball",
+    "Item_effect": "35",
+    "Item_desc": "Basic pokeball",
+    "price": 15,
+    "quantity": 1,
+    "Item_img": {
+        "instanceID": 29826
+    }
+}

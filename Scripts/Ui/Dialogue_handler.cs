@@ -39,6 +39,8 @@ public class Dialogue_handler : MonoBehaviour
 
     void Update()
     {
+        if(Options_manager.instance.playerInBattle)
+            Remove_Exit();
         if (Current_interaction != null)
         {
             if (Current_interaction.InterAction_type == "Options")
@@ -48,8 +50,7 @@ public class Dialogue_handler : MonoBehaviour
             }
             if (Current_interaction.InterAction_type == "Battle info")
             {
-                dialogue_exit.SetActive(false);
-                can_exit = false;
+                Remove_Exit();
             }
         }
         if (displaying && !text_finished)
@@ -81,8 +82,7 @@ public class Dialogue_handler : MonoBehaviour
         {
             if (overworld_actions.instance.doing_action )
             {
-                dialogue_exit.SetActive(false);
-                can_exit = false;
+                Remove_Exit();
             }
         }
         if (displaying && Input.GetKeyDown(KeyCode.R) && can_exit)
@@ -91,6 +91,11 @@ public class Dialogue_handler : MonoBehaviour
         }
     }
 
+    void Remove_Exit()
+    {
+        dialogue_exit.SetActive(false);
+        can_exit = false;
+    }
     Interaction new_interaction(string info,string type,string result)
     {
         Interaction inter = ScriptableObject.CreateInstance<Interaction>();
@@ -180,6 +185,7 @@ public class Dialogue_handler : MonoBehaviour
         dialogue_next.SetActive(false);
         elipsis_txt.SetActive(false);
         dialogue_exit.SetActive(false);
+        Battle_handler.instance.displaying_info = false;
     }
     public void Display(Interaction interaction)
     {

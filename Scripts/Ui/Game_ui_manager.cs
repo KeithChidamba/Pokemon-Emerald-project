@@ -41,17 +41,8 @@ public class Game_ui_manager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Escape) && Pokemon_party.instance.viewing_party && !Pokemon_party.instance.viewing_details)
         {
-            Pokemon_party.instance.party_ui.gameObject.SetActive(false);
-            Pokemon_party.instance.Cancel();
-            if (Options_manager.instance.playerInBattle)
-            {
-                Battle_handler.instance.Set_pkm();
-                overworld_actions.instance.using_ui = false;
-            }
-            else
-            {
-                Reset_player_movement();
-            }
+            if(!Pokemon_party.instance.Swapping_in)
+                Close_party();
         }
         if (Input.GetKeyDown(KeyCode.Escape) && Bag.instance.viewing_bag)
         {
@@ -101,6 +92,20 @@ public class Game_ui_manager : MonoBehaviour
         if (Options_manager.instance.playerInBattle)
         {
             Battle_handler.instance.Set_pkm();
+        }
+    }
+    public void Close_party()
+    {
+        Pokemon_party.instance.party_ui.gameObject.SetActive(false);
+        Pokemon_party.instance.Cancel();
+        if (Options_manager.instance.playerInBattle)
+        {
+            Battle_handler.instance.Set_pkm();
+            overworld_actions.instance.using_ui = false;
+        }
+        else
+        {
+            Reset_player_movement();
         }
     }
     public void Menu_off()

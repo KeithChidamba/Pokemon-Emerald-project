@@ -57,10 +57,10 @@ public class Player_movement : MonoBehaviour
             using_bike = false;
             overworld_actions.instance.canSwitch = false;
             moving = false;
-            if (!overworld_actions.instance.doing_action)
-            {
+            if (overworld_actions.instance.using_ui)
                 manager.change_animation_state(manager.Player_idle);
-            }
+            if (!overworld_actions.instance.doing_action && !overworld_actions.instance.using_ui)
+                manager.change_animation_state(manager.Player_idle);
         }
     }
     float Get_Direction()

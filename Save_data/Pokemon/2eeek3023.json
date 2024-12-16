@@ -19,7 +19,7 @@
     "isFlinched": false,
     "types": [
         {
-            "instanceID": 29700
+            "instanceID": 9562
         }
     ],
     "Status_effect": "None",
@@ -33,34 +33,34 @@
     ],
     "move_set": [
         {
-            "instanceID": -77200
+            "instanceID": -4126
         },
         {
-            "instanceID": -77202
+            "instanceID": -4128
         },
         {
-            "instanceID": -77204
+            "instanceID": -4130
         },
         {
-            "instanceID": -77480
+            "instanceID": -4132
         }
     ],
     "ability": {
-        "instanceID": 29704
+        "instanceID": 9566
     },
     "evolutions": [
         {
-            "instanceID": 29706
+            "instanceID": 9568
         },
         {
-            "instanceID": 29708
+            "instanceID": 9570
         }
     ],
     "front_picture": {
-        "instanceID": 29818
+        "instanceID": 9578
     },
     "back_picture": {
-        "instanceID": 29648
+        "instanceID": 9580
     },
     "ability_name": "Overgrow",
     "evo_data": [

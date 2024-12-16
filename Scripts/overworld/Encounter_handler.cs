@@ -45,20 +45,15 @@ public class Encounter_handler : MonoBehaviour
         {
             int rand_lv = Utility.Get_rand(current_area.min_lv, current_area.max_lv+1);
             for(int i=1;i<rand_lv;i++)
-            {
                 wild_pkm.Level_up();
-            }
             wild_pkm.HP=wild_pkm.max_HP;
             Battle_handler.instance.is_trainer_battle = false;
            Battle_handler.instance.isDouble_battle = false;
            //new []{wild_pkm,wild_pkm},this
            Battle_handler.instance.Start_Battle(wild_pkm);
-           current_area = null;
         }
         else
-        {
             Debug.Log("tried encounter but didnt find "+pkm_name);
-        }
     }
     void trigger_off()
     {

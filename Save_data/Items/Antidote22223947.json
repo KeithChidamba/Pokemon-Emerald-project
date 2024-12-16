@@ -1,0 +1,12 @@
+{
+    "Item_ID": "Antidote22223947",
+    "Item_name": "Antidote",
+    "Item_type": "Status",
+    "Item_effect": "poison",
+    "Item_desc": "Heals poison",
+    "price": 20,
+    "quantity": 1,
+    "Item_img": {
+        "instanceID": 29998
+    }
+}

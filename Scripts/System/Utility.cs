@@ -19,7 +19,7 @@ public static class Utility
         foreach(Type t in victim.types)
             if (t.type_check(t.weaknesses, enemy_type))
             {
-                Debug.Log(victim.Pokemon_name + " is weak to "+enemy_type.Type_name);
+                //Debug.Log(victim.Pokemon_name + " is weak to "+enemy_type.Type_name);
                 effectiveness *= 2f;
             }
     }
@@ -28,7 +28,7 @@ public static class Utility
         foreach(Type t in victim.types)
             if (t.type_check(t.Resistances, enemy_type))
             {
-                Debug.Log(victim.Pokemon_name + " is resistant to "+enemy_type.Type_name);
+                //Debug.Log(victim.Pokemon_name + " is resistant to "+enemy_type.Type_name);
                 effectiveness /= 2f;
             }
     }
@@ -45,7 +45,7 @@ public static class Utility
         if (isImmuneTo(victim, enemy_type))
         {
               effectiveness = 0;
-              Debug.Log(victim.Pokemon_name + " is immune to "+enemy_type.Type_name);
+              //Debug.Log(victim.Pokemon_name + " is immune to "+enemy_type.Type_name);
         }
         else
         {

@@ -16,7 +16,9 @@ public class Battle_handler : MonoBehaviour
     public bool is_trainer_battle = false;
     public bool isDouble_battle = false;
     public int Participant_count=0;
+    public bool displaying_info = false;
     public GameObject OverWorld;
+    public List<GameObject> Backgrounds;
     public bool viewing_options = false;
     public bool choosing_move = false;
     public bool running_away = false;
@@ -53,13 +55,22 @@ public class Battle_handler : MonoBehaviour
                 choosing_move = false;
             }
             else
+            {
+                displaying_info = true;
                 Dialogue_handler.instance.Write_Info("Click on who you will attack", "Battle info");
+            }
         }
         if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
         {
             View_options();
             choosing_move = false;
             Reset_move();
+        }
+
+        if (displaying_info)
+        {
+            options_ui.SetActive(false);
+            viewing_options = false;
         }
         if (overworld_actions.instance.using_ui)
         {
@@ -68,7 +79,7 @@ public class Battle_handler : MonoBehaviour
         }
         else
         {
-            if (!choosing_move && !running_away && !Doing_move)
+            if (!choosing_move && !running_away && !Doing_move && !displaying_info)
                 viewing_options = true;
             else
                 viewing_options = false;
@@ -118,8 +129,19 @@ public class Battle_handler : MonoBehaviour
         Set_battle_ui();
         Turn_Based_Combat.instance.Change_turn(-1,0);
     }
+
+    void Load_Area_bg()
+    {
+        foreach (GameObject g in Backgrounds)
+            if (g.name==Encounter_handler.instance.current_area.Biome_name.ToLower())
+                g.SetActive(true);
+            else
+                g.SetActive(false);
+        Encounter_handler.instance.current_area = null;
+    }
     public void Start_Battle(Pokemon enemy)//only ever be for wild battles
     {
+        Load_Area_bg();
         Battle_P[0].Current_Enemies[0] = enemy;
         Battle_P[2].pokemon = enemy;
         Wild_pkm.instance.pokemon = enemy;
@@ -130,6 +152,7 @@ public class Battle_handler : MonoBehaviour
     public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
     {
         //double battle setup, 2v2 or 1v2
+        Load_Area_bg();
         is_trainer_battle = true;
         for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
         {
@@ -145,16 +168,10 @@ public class Battle_handler : MonoBehaviour
     {
         Battle_P[0].pokemon = Obj_Instance.set_Pokemon(Pokemon_party.instance.party[0]);
         if (Pokemon_party.instance.num_members > 1 && isDouble_battle)//if you have more than one pokemon send in another
-        {
             Battle_P[1].pokemon = Obj_Instance.set_Pokemon(Pokemon_party.instance.party[1]);
-        }
         for(int i = 0; i < 2; i++)
-        {
             if (Battle_P[i].pokemon != null)
-            {
                 Battle_P[i + 2].Current_Enemies[i] = Battle_P[i].pokemon; //set enemies enemy equal to player's pkm
-            }
-        }
         Wild_pkm.instance.Enemy_pokemon = Battle_P[0].pokemon;
         Participant_count = 0;
         foreach(Battle_Participant p in Battle_P)
@@ -211,24 +228,32 @@ public class Battle_handler : MonoBehaviour
         Move_btns[Current_Move].GetComponent<Button>().interactable = false;
     }
 
-    private void End_Battle(bool hasWon)
+    public void End_Battle(bool Haswon)
     {
-        if (hasWon)
+        displaying_info = true;
+        if (running_away)
+            Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " ran away", "Battle info");
+        else
         {
-            Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " won the battle", "Battle info");
-        }
+            if (Haswon)
+                Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " won the battle", "Battle info");
+            else
+                Dialogue_handler.instance.Write_Info("All your pokemon have fainted","Battle info");
+        } 
+        Dialogue_handler.instance.Dialouge_off(2f);
+        Invoke(nameof(end_battle_ui),2f);
+    }
+
+    void end_battle_ui()
+    {
         //get money if trainer, display msg of how much money
         Options_manager.instance.playerInBattle = false;
         overworld_actions.instance.doing_action = false;
         Battle_ui.SetActive(false);
         options_ui.SetActive(false);
         for(int i=0;i<4;i++)
-        {
             if (Battle_P[i] != null)
-            {
                 Battle_P[i].is_active = false;
-            }
-        }
         foreach (Battle_Participant p in Battle_P)
         {
             p.pokemon = null;
@@ -240,26 +265,19 @@ public class Battle_handler : MonoBehaviour
     public void Run_away()//wild encounter is always single battle
     {
         running_away = true;
+        displaying_info = true;
         if (!is_trainer_battle)
         {
             int random = Utility.Get_rand(1,11);
             if (Battle_P[0].pokemon.Current_level < Battle_P[0].Current_Enemies[0].Current_level)//lower chance if weaker
                 random--;
             if (random > 5)//initially 50/50 chance to run
-            {
                 End_Battle(false);
-                Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " ran away", "Battle info");
-                Dialogue_handler.instance.Dialouge_off(.7f);
-            }
             else
-            {
                 Dialogue_handler.instance.Write_Info("Can't run away","Battle info");
-            }
         }
         else
-        {
             Dialogue_handler.instance.Write_Info("Can't run away from trainer battle","Battle info");
-        }
         Invoke(nameof(run_Off),1f);
     }
 void run_Off()
@@ -273,21 +291,5 @@ void run_Off()
         options_ui.SetActive(false);
         moves_ui.SetActive(true);
         load_moves();
-    }
-    public void Check_win()//run every turn
-    {
-        int faint_count = 0;
-        foreach (Pokemon p in Pokemon_party.instance.party)
-        {
-            if (p.HP <= 0)
-            {
-                faint_count++;
-            }
-        }
-        if (faint_count == Pokemon_party.instance.num_members)
-        {
-            End_Battle(false);
-            Dialogue_handler.instance.Write_Info("All your pokemon have fainted","Battle info");
-        }
     }
 }
