@@ -17,8 +17,11 @@ MonoBehaviour:
   Move_accuracy: 90
   type: {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 1
-  Priority: Normal
+  is_Buff_Debuff: 0
+  Has_status: 1
+  Has_effect: 0
+  Can_flinch: 0
+  Priority: 0
   Powerpoints: 20
   max_Powerpoints: 20
   Status_effect: Paralysis

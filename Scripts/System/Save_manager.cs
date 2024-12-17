@@ -129,6 +129,7 @@ public class Save_manager : MonoBehaviour
         for (int i = 0; i < Pokemon_party.instance.num_members; i++)
         {
             Pokemon_party.instance.party[i].Set_class_data();
+            
             Save_Pokemon(Pokemon_party.instance.party[i],  Pokemon_party.instance.party[i].Pokemon_ID);
         }
         for (int i = 0; i < pokemon_storage.instance.num_non_party_pokemon; i++)

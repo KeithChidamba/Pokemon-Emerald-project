@@ -18,7 +18,10 @@ MonoBehaviour:
   type: {fileID: 11400000, guid: 38c6bce976a9d6e41a1376db5bcf8f9e, type: 2}
   isSpecial: 0
   is_Buff_Debuff: 0
-  Priority: Normal
+  Has_status: 0
+  Has_effect: 0
+  Can_flinch: 1
+  Priority: 0
   Powerpoints: 20
   max_Powerpoints: 20
   Status_effect: None

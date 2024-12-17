@@ -10,7 +10,10 @@ public class Move : ScriptableObject
     public Type type;
     public bool isSpecial = false;
     public bool is_Buff_Debuff = false;
-    public string Priority="Normal";
+    public bool Has_status = false;
+    public bool Has_effect = false;
+    public bool Can_flinch = false;
+    public int Priority=0;
     public int Powerpoints;
     public int max_Powerpoints;
     public string Status_effect="None";

@@ -17,12 +17,15 @@ MonoBehaviour:
   Move_accuracy: 85
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
-  Priority: Normal
+  is_Buff_Debuff: 1
+  Has_status: 0
+  Has_effect: 0
+  Can_flinch: 0
+  Priority: 0
   Powerpoints: 15
   max_Powerpoints: 15
   Status_effect: None
-  Buff_Debuff: e-ACC
+  Buff_Debuff: e-acc
   Status_chance: 0
   Debuff_chance: 20
   Description: throws mud at the foe to lower their accuracy

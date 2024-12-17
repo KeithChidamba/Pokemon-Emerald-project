@@ -18,11 +18,14 @@ MonoBehaviour:
   type: {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
   isSpecial: 0
   is_Buff_Debuff: 1
-  Priority: Normal
+  Has_status: 0
+  Has_effect: 0
+  Can_flinch: 0
+  Priority: 0
   Powerpoints: 25
   max_Powerpoints: 25
   Status_effect: None
-  Buff_Debuff: e-SPEED
+  Buff_Debuff: e-spd
   Status_chance: 0
   Debuff_chance: 100
   Description: traps the enemy with strings to lower speed

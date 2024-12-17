@@ -18,13 +18,16 @@ MonoBehaviour:
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
   is_Buff_Debuff: 1
-  Priority: Normal
+  Has_status: 0
+  Has_effect: 0
+  Can_flinch: 0
+  Priority: 0
   Powerpoints: 20
   max_Powerpoints: 20
   Status_effect: None
   Buff_Debuff: p+DEF
   Status_chance: 0
-  Debuff_chance: 0
+  Debuff_chance: 100
   Description: Harden's shell, to raise defense
   player_animtion: {fileID: 0}
   enemy_animtion: {fileID: 0}

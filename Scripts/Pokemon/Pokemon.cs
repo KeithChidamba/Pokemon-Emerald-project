@@ -18,6 +18,7 @@ public class Pokemon : ScriptableObject
     public float SP_DEF;
     public float speed;
     public float Accuracy = 100;
+    public float Evasion = 100;
     public float crit_chance = 6.25f;
     public int Current_level = 1;
     public float level_progress = 0;
@@ -25,8 +26,10 @@ public class Pokemon : ScriptableObject
     public bool has_trainer=false;
     public bool canAttack = true;
     public bool isFlinched = false;
+    public bool CanBeDamaged = true;
     public List<Type> types;
     public string Status_effect = "None";
+    public string Buff_Debuff = "None";
     public string type_Immunity = "None";
     public string[] evo_line;
     public string[] learnSet;

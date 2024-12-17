@@ -113,12 +113,16 @@ public class Turn_Based_Combat : MonoBehaviour
         speed_list.Clear();
         priority_list.Clear();
         speed_list = Move_history.OrderByDescending(p => p._turn.attacker_.speed).ToList();
-        foreach (Pkm_Use_Move command in speed_list)
-            if (command._turn.move_.Priority == "First")
-                priority_list.Add(command);
-        foreach (Pkm_Use_Move command in speed_list)
+        priority_list = speed_list.OrderByDescending(p => p._turn.move_.Priority).ToList();
+        int count = 0;
+        foreach (Pkm_Use_Move command in priority_list)
+        {
+            count++;
+            Debug.Log("order :" + count + " " + command._turn.move_.Move_name);
+        }
+        /*foreach (Pkm_Use_Move command in speed_list)
             if (command._turn.move_.Priority != "First")
-                priority_list.Add(command);
+                priority_list.Add(command);#1#*/
         return priority_list;
     }
 }

@@ -17,14 +17,17 @@ MonoBehaviour:
   Move_accuracy: 90
   type: {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 1
-  Priority: Normal
+  is_Buff_Debuff: 0
+  Has_status: 0
+  Has_effect: 1
+  Can_flinch: 0
+  Priority: 0
   Powerpoints: 20
   max_Powerpoints: 20
   Status_effect: None
-  Buff_Debuff: p+CRIT
+  Buff_Debuff: 
   Status_chance: 0
-  Debuff_chance: 100
+  Debuff_chance: 0
   Description: A precise attack of pellets that raises crit chance
   player_animtion: {fileID: 0}
   enemy_animtion: {fileID: 0}

@@ -39,7 +39,10 @@ public static class Obj_Instance
         new_pkm.Defense = pkm.Defense;
         new_pkm.SP_DEF = pkm.SP_DEF;
         new_pkm.speed = pkm.speed;
+        new_pkm.Evasion = pkm.Evasion;
+        new_pkm.Buff_Debuff = pkm.Buff_Debuff;
         new_pkm.type_Immunity = pkm.type_Immunity;
+        new_pkm.CanBeDamaged=pkm.CanBeDamaged;
         new_pkm.Status_effect = pkm.Status_effect;
         new_pkm.learnSet = pkm.learnSet;
         new_pkm.Current_level = pkm.Current_level;
