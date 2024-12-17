@@ -15,6 +15,7 @@ MonoBehaviour:
   Base_Pokemon_name: Wurmple
   Pokemon_name: Wurmple
   Pokemon_ID: 
+  Personality_value: 0
   HP: 15
   max_HP: 15
   Attack: 7
@@ -23,19 +24,24 @@ MonoBehaviour:
   SP_DEF: 4
   speed: 8
   Accuracy: 100
+  Evasion: 100
+  crit_chance: 6.25
   Current_level: 1
   level_progress: 0
-  base_exp_yield: 0
+  exp_yield: 54
   has_trainer: 0
   canAttack: 1
   isFlinched: 0
+  CanBeDamaged: 1
   types:
   - {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
   Status_effect: None
+  Buff_Debuff: None
   type_Immunity: None
   evo_line:
   - 5
   - 13
+  split_evolution: 1
   learnSet:
   - normal/tackle01
   - bug/string shot02
@@ -46,6 +52,8 @@ MonoBehaviour:
   evolutions:
   - {fileID: 11400000, guid: 91a90426a0e18aa4890f91c50bc70adf, type: 2}
   - {fileID: 11400000, guid: ddb36ec2bb47ec9468768b6e5931e0ce, type: 2}
+  - {fileID: 11400000, guid: 11b7028df9f89b14eaab8d7baee180ad, type: 2}
+  - {fileID: 11400000, guid: 9f9a4db669e72184bbdb3e010f6edd75, type: 2}
   front_picture: {fileID: 21300000, guid: ea9a85541a29aa940931d66a2ed59805, type: 3}
   back_picture: {fileID: 21300000, guid: 662d6c66b57f6ed43809e4aafcf106f4, type: 3}
   ability_name: 

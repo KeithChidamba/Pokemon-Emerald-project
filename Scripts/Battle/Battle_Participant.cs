@@ -9,7 +9,7 @@ public class Battle_Participant : MonoBehaviour
 {
     public Abilities ability_h;
     public Pokemon pokemon;
-    public Pokemon[] Current_Enemies = {null,null};//will only ever be 2 because double battles
+    public List<Battle_Participant> Current_Enemies;//will only ever be 2 because double battles
     public Image pkm_img;
     public Image status_img;
     public Text pkm_name, pkm_HP, pkm_lv;
@@ -21,6 +21,7 @@ public class Battle_Participant : MonoBehaviour
     public GameObject[] Double_battle_ui;
     public GameObject participant_ui;
     public bool Selected_Enemy = false;
+    public event Action<Battle_Participant> Onfaint;
     private void Start()
     {
        Turn_Based_Combat.instance.OnNewTurn += Check_Status;
@@ -31,11 +32,17 @@ public class Battle_Participant : MonoBehaviour
         update_ui();
     }
 
+    public void Get_exp(Battle_Participant enemy)
+    {
+        Battle_handler.instance.Distribute_EXP(pokemon.Calc_Exp(enemy.pokemon));
+        Current_Enemies.Remove(enemy);
+    }
     void Check_Status()
     {
         if (!is_active) return;
         if (pokemon.HP <= 0)
         {
+            Onfaint?.Invoke(this);
             if (isPlayer)
                 Check_loss();
             else
@@ -55,11 +62,11 @@ public class Battle_Participant : MonoBehaviour
     }
     private void Check_loss()
     {
-        int faint_count = 0;
-        foreach (Pokemon p in Pokemon_party.instance.party)
-            if (p.HP <= 0)
+        int faint_count = 1;
+        for(int i=0;i<Pokemon_party.instance.num_members;i++)
+            if (Pokemon_party.instance.party[i].HP <= 0)
                 faint_count++;
-        if (faint_count == 0) return;
+        Debug.Log(faint_count+"fffffff");//keep testing
         if (faint_count == Pokemon_party.instance.num_members)
         {
             Battle_handler.instance.End_Battle(false);
@@ -114,6 +121,8 @@ public class Battle_Participant : MonoBehaviour
         }
         if (isPlayer)
         {
+            foreach (Battle_Participant p in Current_Enemies)
+                p.Onfaint+=Get_exp;
             if (Battle_handler.instance.isDouble_battle)
             {
                 UI_visible(Double_battle_ui, true);
@@ -131,5 +140,6 @@ public class Battle_Participant : MonoBehaviour
     {
         participant_ui.SetActive(false);
         is_active = false;
+        Current_Enemies.Clear();
     }
 }

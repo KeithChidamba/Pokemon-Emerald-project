@@ -10,6 +10,7 @@ public class Battle_handler : MonoBehaviour
     public GameObject moves_ui;
     public GameObject options_ui;
     public Battle_Participant[] Battle_P = {null,null,null,null};
+    public List<Pokemon> exp_recievers;
     public Text Move_pp, Move_type;
     public Text[] moves;
     public GameObject[] Move_btns;
@@ -142,7 +143,7 @@ public class Battle_handler : MonoBehaviour
     public void Start_Battle(Pokemon enemy)//only ever be for wild battles
     {
         Load_Area_bg();
-        Battle_P[0].Current_Enemies[0] = enemy;
+        Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].pokemon = enemy;
         Wild_pkm.instance.pokemon = enemy;
         Set_pkm();
@@ -158,8 +159,8 @@ public class Battle_handler : MonoBehaviour
         {
              Battle_P[i+2].pokemon = enemies[i];
              //set your 2 pokemon's enemies
-             Battle_P[0].Current_Enemies[i] = enemies[i];
-             Battle_P[1].Current_Enemies[i] = enemies[i];
+             Battle_P[0].Current_Enemies.Add(Battle_P[i + 2]);
+             Battle_P[1].Current_Enemies.Add(Battle_P[i + 2]);
         }
         Set_pkm();
         set_battle();
@@ -167,35 +168,35 @@ public class Battle_handler : MonoBehaviour
     public void Set_pkm()
     {
         Battle_P[0].pokemon = Obj_Instance.set_Pokemon(Pokemon_party.instance.party[0]);
-        if (Pokemon_party.instance.num_members > 1 && isDouble_battle)//if you have more than one pokemon send in another
+        AddToExpList(Battle_P[0].pokemon);
+        if (Pokemon_party.instance.num_members > 1 && isDouble_battle) //if you have more than one pokemon send in another
+        {
             Battle_P[1].pokemon = Obj_Instance.set_Pokemon(Pokemon_party.instance.party[1]);
+            AddToExpList(Battle_P[1].pokemon);
+        }
         for(int i = 0; i < 2; i++)
             if (Battle_P[i].pokemon != null)
-                Battle_P[i + 2].Current_Enemies[i] = Battle_P[i].pokemon; //set enemies enemy equal to player's pkm
+                Battle_P[i + 2].Current_Enemies.Add(Battle_P[i]); //set enemies enemy equal to player's pkm
         Wild_pkm.instance.Enemy_pokemon = Battle_P[0].pokemon;
         Participant_count = 0;
         foreach(Battle_Participant p in Battle_P)
-        {
             if (p.pokemon != null)
             {
                 p.Load_ui();
                 p.ability_h.Set_ability();
                 Participant_count++;
             }
-        }
     }
     void load_moves()
     {
         int j = 0;
         foreach(Move m in Battle_P[0].pokemon.move_set)
-        {
             if (m != null)
             {
                 moves[j].text = Battle_P[0].pokemon.move_set[j].Move_name;
                 Move_btns[j].SetActive(true);
                 j++;
             }
-        }
         for (int i = j; i < 4; i++)//only show available moves
         {
             moves[i].text = "";
@@ -235,18 +236,33 @@ public class Battle_handler : MonoBehaviour
             Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " ran away", "Battle info");
         else
         {
-            if (Haswon)
+            if (Haswon)//get money if trainer, display msg of how much money
                 Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " won the battle", "Battle info");
             else
+            {
                 Dialogue_handler.instance.Write_Info("All your pokemon have fainted","Battle info");
+                Area_manager.instance.Switch_Area("Poke Center",0f);
+            }
         } 
         Dialogue_handler.instance.Dialouge_off(2f);
         Invoke(nameof(end_battle_ui),2f);
     }
 
+    void AddToExpList(Pokemon pkm)
+    {
+        if(!exp_recievers.Contains(pkm))
+            exp_recievers.Add(pkm);
+    }
+    public void Distribute_EXP(float exp_from_enemy)
+    {
+        float exp = exp_from_enemy / exp_recievers.Count;
+        foreach (Pokemon p in exp_recievers)
+        {
+            p.Recieve_exp(exp);
+        }
+    }
     void end_battle_ui()
     {
-        //get money if trainer, display msg of how much money
         Options_manager.instance.playerInBattle = false;
         overworld_actions.instance.doing_action = false;
         Battle_ui.SetActive(false);
@@ -269,7 +285,7 @@ public class Battle_handler : MonoBehaviour
         if (!is_trainer_battle)
         {
             int random = Utility.Get_rand(1,11);
-            if (Battle_P[0].pokemon.Current_level < Battle_P[0].Current_Enemies[0].Current_level)//lower chance if weaker
+            if (Battle_P[0].pokemon.Current_level < Battle_P[0].Current_Enemies[0].pokemon.Current_level)//lower chance if weaker
                 random--;
             if (random > 5)//initially 50/50 chance to run
                 End_Battle(false);

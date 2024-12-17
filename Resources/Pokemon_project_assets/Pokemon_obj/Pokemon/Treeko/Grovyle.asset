@@ -16,6 +16,7 @@ MonoBehaviour:
   types:
   - {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
   ability: {fileID: 11400000, guid: 3a050f274b7d49d49aec9bd3ce16bbf1, type: 2}
+  exp_yield: 141
   learnSet:
   - flying/arial ace16
   front_picture: {fileID: 21300000, guid: 1bfc7ad03ccc0ff458c00eaf849697d4, type: 3}

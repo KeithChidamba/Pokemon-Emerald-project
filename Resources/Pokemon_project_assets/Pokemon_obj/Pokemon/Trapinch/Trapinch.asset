@@ -15,6 +15,7 @@ MonoBehaviour:
   Base_Pokemon_name: Trapinch
   Pokemon_name: Trapinch
   Pokemon_ID: 
+  Personality_value: 0
   HP: 13
   max_HP: 13
   Attack: 8
@@ -23,19 +24,24 @@ MonoBehaviour:
   SP_DEF: 8
   speed: 8
   Accuracy: 100
+  Evasion: 100
+  crit_chance: 6.25
   Current_level: 1
   level_progress: 0
-  base_exp_yield: 0
+  exp_yield: 73
   has_trainer: 0
   canAttack: 1
   isFlinched: 0
+  CanBeDamaged: 1
   types:
   - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   Status_effect: None
+  Buff_Debuff: None
   type_Immunity: None
   evo_line:
   - 20
   - 35
+  split_evolution: 0
   learnSet:
   - dark/bite01
   - dark/crunch05

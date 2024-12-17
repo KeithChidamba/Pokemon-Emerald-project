@@ -1,66 +1,77 @@
 {
     "Base_Pokemon_name": "Treeko",
-    "Pokemon_name": "Grovyle",
-    "Pokemon_ID": "2eeek3023",
-    "HP": 177.0,
-    "max_HP": 177.0,
-    "Attack": 34.0,
-    "Defense": 29.0,
-    "SP_ATK": 32.0,
-    "SP_DEF": 31.0,
-    "speed": 35.0,
+    "Pokemon_name": "Treeko",
+    "Pokemon_ID": "1rreek4133",
+    "Personality_value": 209791366,
+    "HP": 15.0,
+    "max_HP": 29.0,
+    "Attack": 13.0,
+    "Defense": 8.0,
+    "SP_ATK": 11.0,
+    "SP_DEF": 10.0,
+    "speed": 14.0,
     "Accuracy": 100.0,
+    "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 25,
+    "Current_level": 7,
     "level_progress": 0.0,
-    "base_exp_yield": 0,
+    "exp_yield": 65,
     "has_trainer": true,
     "canAttack": true,
     "isFlinched": false,
+    "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 9562
+            "instanceID": 29702
         }
     ],
     "Status_effect": "None",
+    "Buff_Debuff": "None",
     "type_Immunity": "None",
     "evo_line": [
         "16",
         "30"
     ],
+    "split_evolution": false,
     "learnSet": [
-        "flying/arial ace16"
+        "normal/pound01",
+        "grass/absorb03",
+        "normal/quick attack04",
+        "grass/bullet seed07"
     ],
     "move_set": [
         {
-            "instanceID": -4126
+            "instanceID": -13442
         },
         {
-            "instanceID": -4128
+            "instanceID": -13506
         },
         {
-            "instanceID": -4130
+            "instanceID": -13508
         },
         {
-            "instanceID": -4132
+            "instanceID": -13510
         }
     ],
     "ability": {
-        "instanceID": 9566
+        "instanceID": 29706
     },
     "evolutions": [
         {
-            "instanceID": 9568
+            "instanceID": 29708
         },
         {
-            "instanceID": 9570
+            "instanceID": 29710
         }
     ],
+    "HeldItem": {
+        "instanceID": 0
+    },
     "front_picture": {
-        "instanceID": 9578
+        "instanceID": 29660
     },
     "back_picture": {
-        "instanceID": 9580
+        "instanceID": 29712
     },
     "ability_name": "Overgrow",
     "evo_data": [
@@ -74,7 +85,7 @@
         "Pound/Normal",
         "Absorb/Grass",
         "Quick attack/Normal",
-        "Arial Ace/Flying"
+        "Bullet seed/Grass"
     ],
     "move_pp_data": [
         25,

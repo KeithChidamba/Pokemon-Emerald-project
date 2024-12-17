@@ -58,6 +58,10 @@ public class Pokemon_party_member : MonoBehaviour
             pkm_hp.minValue = 0;
             Pkm_Lv.text = "Lv: " + pkm.Current_level.ToString();
             Pkm_name.text = pkm.Pokemon_name;
+            if (pkm.HP <= 0)
+                Pkm_front_img.color=Color.HSVToRGB(17,96,54);//pkm fainted
+            else
+                Pkm_front_img.color=Color.HSVToRGB(0,0,100);
         }
     }
 

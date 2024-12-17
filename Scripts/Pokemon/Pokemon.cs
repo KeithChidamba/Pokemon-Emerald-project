@@ -10,6 +10,7 @@ public class Pokemon : ScriptableObject
     public string Base_Pokemon_name;
     public string Pokemon_name;
     public string Pokemon_ID = "";
+    public int Personality_value=0;
     public float HP;
     public float max_HP;
     public float Attack;
@@ -22,7 +23,7 @@ public class Pokemon : ScriptableObject
     public float crit_chance = 6.25f;
     public int Current_level = 1;
     public float level_progress = 0;
-    public int base_exp_yield=0;
+    public int exp_yield=0;
     public bool has_trainer=false;
     public bool canAttack = true;
     public bool isFlinched = false;
@@ -32,10 +33,12 @@ public class Pokemon : ScriptableObject
     public string Buff_Debuff = "None";
     public string type_Immunity = "None";
     public string[] evo_line;
+    public bool split_evolution = false;
     public string[] learnSet;
     public List<Move> move_set=new();
     public Ability ability;
     public List<Evolution> evolutions;
+    public Item HeldItem;
     public Sprite front_picture;
     public Sprite back_picture;
 
@@ -87,27 +90,27 @@ public class Pokemon : ScriptableObject
         for(int i =0; i < types.Count; i++)
             types[i].type_img = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + type_data[i].ToLower());
     }
-    void Check_evolution()
+    void Check_evolution(int evo_index)
     {
         for (int i = 0; i < evo_line.Length; i++)
         {
             int lv = int.Parse(evo_line[i]);
             if (Current_level == lv)
-                Evolve(evolutions[i]);
+                Evolve(evolutions[i+evo_index]);
         }
     }
-    public void Get_exp(Pokemon enemy)
+
+    void split_evo()
     {
-        int level_difference = Current_level - enemy.Current_level;
-        float trainer_bonus = 0;
-        int exp;
-        if (enemy.has_trainer)
-            trainer_bonus = 1.5f;
-        if (level_difference < 0)//enemy is stronger, so more exp
-            exp = (int)math.floor(enemy.base_exp_yield * level_difference * trainer_bonus);
-        else
-            exp = (int)(math.floor((enemy.base_exp_yield * trainer_bonus)/level_difference) );
-        level_progress += exp;
+        string lowerbits = Personality_value.ToString().Substring(Personality_value.ToString().Length-3,3);
+        if (int.Parse(lowerbits) >= 128)
+            Check_evolution(2);
+        else if (int.Parse(lowerbits) < 128)
+            Check_evolution(0);
+    }
+    public void Recieve_exp(float amount)
+    {
+        level_progress += math.trunc(amount);
         if (level_progress >= 100)
         {
             int num_levels = (int)math.trunc(level_progress / 100);
@@ -115,6 +118,20 @@ public class Pokemon : ScriptableObject
                 Level_up();
             level_progress -= 100 * num_levels;
         }
+        Debug.Log(Pokemon_name+" recieved "+ level_progress+" exp");
+    }
+    public float Calc_Exp(Pokemon enemy)
+    {
+        int level_difference = Current_level - enemy.Current_level;
+        float trainer_bonus = 0;
+        int exp;
+        if (enemy.has_trainer)
+            trainer_bonus = 1.5f;
+        if (level_difference < 0)//enemy is stronger, so more exp
+            exp = (int)math.floor(enemy.exp_yield * level_difference * trainer_bonus);
+        else
+            exp = (int)(math.floor((enemy.exp_yield * trainer_bonus)/level_difference) );
+        return exp;
     }
     void Evolve(Evolution evo)
     {
@@ -124,6 +141,7 @@ public class Pokemon : ScriptableObject
         learnSet = evo.learnSet;
         front_picture = evo.front_picture;
         back_picture = evo.back_picture;
+        exp_yield = evo.exp_yield;
         Attack += 3;
         SP_ATK += 3;
         Defense += 3;
@@ -139,7 +157,10 @@ public class Pokemon : ScriptableObject
         SP_DEF++;
         speed++;
         max_HP += (float)math.round(0.5 * Current_level);
-        Check_evolution();
+        if(split_evolution)
+            split_evo();
+        else
+            Check_evolution(0);
         foreach (String l in learnSet)
         {
             int lv = int.Parse(l.Substring(l.Length - 2, 2));

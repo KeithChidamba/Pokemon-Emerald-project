@@ -8,6 +8,16 @@ public class Area_manager : MonoBehaviour
     public Switch_Area[] Areas;
     public bool save_area = false;
     [SerializeField]Switch_Area area_building;
+    public static Area_manager instance;
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+    }
     public void Switch_Area(Switch_Area area,float load_time)
     {
         if (area.has_animation)

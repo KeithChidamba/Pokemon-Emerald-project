@@ -31,6 +31,7 @@ public static class Obj_Instance
         Pokemon new_pkm = ScriptableObject.CreateInstance<Pokemon>();
         new_pkm.Pokemon_name = pkm.Pokemon_name;
         new_pkm.Pokemon_ID = pkm.Pokemon_ID;
+        new_pkm.Personality_value = pkm.Personality_value;
         new_pkm.Base_Pokemon_name = pkm.Base_Pokemon_name;
         new_pkm.Attack = pkm.Attack;
         new_pkm.Accuracy = pkm.Accuracy;
@@ -47,10 +48,11 @@ public static class Obj_Instance
         new_pkm.learnSet = pkm.learnSet;
         new_pkm.Current_level = pkm.Current_level;
         new_pkm.level_progress = pkm.level_progress;
-        new_pkm.base_exp_yield = pkm.base_exp_yield;
+        new_pkm.exp_yield = pkm.exp_yield;
         new_pkm.has_trainer=pkm.has_trainer;
         new_pkm.canAttack = pkm.canAttack;
         new_pkm.isFlinched=pkm.isFlinched;
+        new_pkm.HeldItem = pkm.HeldItem;
         new_pkm.front_picture = pkm.front_picture;
         new_pkm.back_picture = pkm.back_picture;
         new_pkm.HP = pkm.HP;

@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
-
 public class pokemon_storage : MonoBehaviour
 {
     public List<Pokemon> non_party_pokemon;
@@ -306,6 +302,7 @@ public class pokemon_storage : MonoBehaviour
         if (!storage_operetation)
         {
             new_pkm.Pokemon_ID = Generate_ID(new_pkm.Pokemon_name);
+            new_pkm.Personality_value = Random.Range(0,429496729);
         }
         return new_pkm;
     }

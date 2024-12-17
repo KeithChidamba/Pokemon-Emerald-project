@@ -16,6 +16,7 @@ MonoBehaviour:
   types:
   - {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
   ability: {fileID: 11400000, guid: 6e3a5205ac780de4499e796e8ba8dce9, type: 2}
+  exp_yield: 72
   learnSet:
   - normal/harden05
   front_picture: {fileID: 21300000, guid: 3b0b679170e5a89488a43d5f5515c777, type: 3}

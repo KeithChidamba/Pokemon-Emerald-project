@@ -14,10 +14,9 @@ public class Game_Load : MonoBehaviour
     private int min_name_len = 4;
     public Transform Start_house_pos;
     public GameObject world_Map;
-    public Area_manager area;
     public Player_data player_data;
     [SerializeField]private Player_movement player_movement;//for initial game load
-    public static Game_Load instance { get; private set;}
+    public static Game_Load instance;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -84,8 +83,8 @@ public class Game_Load : MonoBehaviour
         player_movement.gameObject.SetActive(true);
         player_movement.transform.position = player_data.player_Position;
         world_Map.SetActive(true);
-        area.save_area = true;
-        area.Switch_Area(player_data.Location,0f);
+        Area_manager.instance.save_area = true;
+        Area_manager.instance.Switch_Area(player_data.Location,0f);
     }
 }
 

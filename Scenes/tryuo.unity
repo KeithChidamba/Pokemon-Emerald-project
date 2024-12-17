@@ -911,9 +911,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability_h: {fileID: 35621316}
   pokemon: {fileID: 0}
-  Current_Enemies:
-  - {fileID: 0}
-  - {fileID: 0}
+  Current_Enemies: []
   pkm_img: {fileID: 1900733081}
   status_img: {fileID: 249051072}
   pkm_name: {fileID: 831252460}
@@ -6036,9 +6034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability_h: {fileID: 190973849}
   pokemon: {fileID: 0}
-  Current_Enemies:
-  - {fileID: 0}
-  - {fileID: 0}
+  Current_Enemies: []
   pkm_img: {fileID: 291399123}
   status_img: {fileID: 740637269}
   pkm_name: {fileID: 133763986}
@@ -49041,9 +49037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability_h: {fileID: 1636635379}
   pokemon: {fileID: 0}
-  Current_Enemies:
-  - {fileID: 0}
-  - {fileID: 0}
+  Current_Enemies: []
   pkm_img: {fileID: 1689249222}
   status_img: {fileID: 2114106450}
   pkm_name: {fileID: 1511539073}
@@ -53293,6 +53287,7 @@ MonoBehaviour:
   - {fileID: 35621317}
   - {fileID: 190973850}
   - {fileID: 2033618204}
+  exp_recievers: []
   Move_pp: {fileID: 1446964400}
   Move_type: {fileID: 717278676}
   moves:
@@ -53308,6 +53303,7 @@ MonoBehaviour:
   is_trainer_battle: 0
   isDouble_battle: 0
   Participant_count: 0
+  displaying_info: 0
   OverWorld: {fileID: 523264673}
   Backgrounds:
   - {fileID: 1517456052}
@@ -60460,9 +60456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability_h: {fileID: 2033618203}
   pokemon: {fileID: 0}
-  Current_Enemies:
-  - {fileID: 0}
-  - {fileID: 0}
+  Current_Enemies: []
   pkm_img: {fileID: 690917499}
   status_img: {fileID: 1797037216}
   pkm_name: {fileID: 1150727739}
@@ -62495,7 +62489,6 @@ MonoBehaviour:
   name_input: {fileID: 1774007660}
   Start_house_pos: {fileID: 1324613723}
   world_Map: {fileID: 523264673}
-  area: {fileID: 523264674}
   player_data: {fileID: 0}
   player_movement: {fileID: 1465551225}
 --- !u!1 &2108408982
