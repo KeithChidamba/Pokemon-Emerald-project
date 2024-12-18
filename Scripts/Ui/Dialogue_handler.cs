@@ -12,7 +12,7 @@ public class Dialogue_handler : MonoBehaviour
     public Text Dialouge_txt;
     [SerializeField] GameObject elipsis_txt;
     [SerializeField] bool text_finished = false;
-    private bool can_exit = true;
+    public bool can_exit = true;
     public bool displaying = false;
     [SerializeField] string current_line = "";
     [SerializeField] int Max_length = 90;

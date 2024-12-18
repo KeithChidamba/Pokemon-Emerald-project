@@ -1,20 +1,22 @@
 {
     "Base_Pokemon_name": "Treeko",
     "Pokemon_name": "Treeko",
-    "Pokemon_ID": "1rreek4133",
-    "Personality_value": 209791366,
-    "HP": 15.0,
-    "max_HP": 29.0,
-    "Attack": 13.0,
-    "Defense": 8.0,
-    "SP_ATK": 11.0,
-    "SP_DEF": 10.0,
-    "speed": 14.0,
+    "Pokemon_ID": "0TTreek3100",
+    "Personality_value": "968347493688",
+    "Gender": "Male",
+    "has_gender": true,
+    "HP": 60.0,
+    "max_HP": 60.0,
+    "Attack": 19.0,
+    "Defense": 14.0,
+    "SP_ATK": 17.0,
+    "SP_DEF": 16.0,
+    "speed": 20.0,
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 7,
-    "level_progress": 0.0,
+    "Current_level": 13,
+    "level_progress": -6442450944.0,
     "exp_yield": 65,
     "has_trainer": true,
     "canAttack": true,
@@ -41,16 +43,16 @@
     ],
     "move_set": [
         {
-            "instanceID": -13442
+            "instanceID": -117720
         },
         {
-            "instanceID": -13506
+            "instanceID": -117722
         },
         {
-            "instanceID": -13508
+            "instanceID": -117724
         },
         {
-            "instanceID": -13510
+            "instanceID": -117726
         }
     ],
     "ability": {

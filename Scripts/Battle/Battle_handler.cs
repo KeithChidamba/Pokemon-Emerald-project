@@ -167,11 +167,11 @@ public class Battle_handler : MonoBehaviour
     }
     public void Set_pkm()
     {
-        Battle_P[0].pokemon = Obj_Instance.set_Pokemon(Pokemon_party.instance.party[0]);
+        Battle_P[0].pokemon = Pokemon_party.instance.party[0];//Obj_Instance.set_Pokemon();
         AddToExpList(Battle_P[0].pokemon);
         if (Pokemon_party.instance.num_members > 1 && isDouble_battle) //if you have more than one pokemon send in another
         {
-            Battle_P[1].pokemon = Obj_Instance.set_Pokemon(Pokemon_party.instance.party[1]);
+            Battle_P[1].pokemon = Pokemon_party.instance.party[1];//Obj_Instance.set_Pokemon(
             AddToExpList(Battle_P[1].pokemon);
         }
         for(int i = 0; i < 2; i++)
@@ -205,6 +205,8 @@ public class Battle_handler : MonoBehaviour
     }
     public void Use_Move(Move move,Battle_Participant user)
     {
+        if(move.Powerpoints==0)return;
+        move.Powerpoints--;
         Doing_move = true;
         choosing_move = false;
         moves_ui.SetActive(false);
@@ -224,6 +226,10 @@ public class Battle_handler : MonoBehaviour
         Reset_move();
         Current_Move = move_num-1;
         Move_pp.text = "PP: " + Battle_P[0].pokemon.move_set[Current_Move].Powerpoints+ "/" + Battle_P[0].pokemon.move_set[Current_Move].max_Powerpoints;
+        if (Battle_P[0].pokemon.move_set[Current_Move].Powerpoints == 0)
+            Move_pp.color = Color.red;
+        else
+            Move_pp.color = Color.black;
         Move_type.text = Battle_P[0].pokemon.move_set[Current_Move].type.Type_name;
         Selected_Move = true;
         Move_btns[Current_Move].GetComponent<Button>().interactable = false;
@@ -255,6 +261,7 @@ public class Battle_handler : MonoBehaviour
     }
     public void Distribute_EXP(float exp_from_enemy)
     {
+        Debug.Log(exp_from_enemy+" exp");
         float exp = exp_from_enemy / exp_recievers.Count;
         foreach (Pokemon p in exp_recievers)
         {
@@ -272,11 +279,15 @@ public class Battle_handler : MonoBehaviour
                 Battle_P[i].is_active = false;
         foreach (Battle_Participant p in Battle_P)
         {
-            p.pokemon = null;
-            p.Unload_ui();
+            if(p.pokemon!=null)
+            {
+                Battle_Data.Reset_Battle_state(p);
+                p.Unload_ui();
+            }
         }
         Encounter_handler.instance.Reset_trigger();
         OverWorld.SetActive(true);
+        Dialogue_handler.instance.can_exit = true;
     }
     public void Run_away()//wild encounter is always single battle
     {
@@ -299,6 +310,7 @@ public class Battle_handler : MonoBehaviour
 void run_Off()
 {
     running_away = false;
+    displaying_info = false;
 }
     public void Fight()
     {

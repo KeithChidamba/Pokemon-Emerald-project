@@ -9,8 +9,9 @@ using UnityEngine.UI;
 public class Battle_Participant : MonoBehaviour
 {
     public Abilities ability_h;
+    public Participant_Status status;
     public Pokemon pokemon;
-    public List<Battle_Participant> Current_Enemies;//will only ever be 2 because double battles
+    public List<Battle_Participant> Current_Enemies;
     public Image pkm_img;
     public Image status_img;
     public Text pkm_name, pkm_HP, pkm_lv;
@@ -22,13 +23,12 @@ public class Battle_Participant : MonoBehaviour
     public GameObject[] Double_battle_ui;
     public GameObject participant_ui;
     public bool Selected_Enemy = false;
-    private int status_duration = 0;
-    private int num_status_turns = 0;
+
     public event Action<Battle_Participant> Onfaint;
     private void Start()
     {
+        status = GetComponent<Participant_Status>();
        Turn_Based_Combat.instance.OnNewTurn += Check_Faint;
-       Turn_Based_Combat.instance.OnNewTurn += Check_status;
     }
     private void Update()
     {
@@ -54,6 +54,7 @@ public class Battle_Participant : MonoBehaviour
                 if (!Battle_handler.instance.is_trainer_battle)
                 {//end battle if wild
                     Wild_pkm.instance.InBattle = false;
+                    
                     Battle_handler.instance.End_Battle(true);
                 }
                 else
@@ -64,105 +65,23 @@ public class Battle_Participant : MonoBehaviour
             //play anim
         }
     }
-
-    public void Get_statusEffect(int num_turns)
-    {
-        status_duration = 0;
-        num_status_turns = num_turns;
-        StatusIMG();
-        Recovery_Chance();
-        Stat_drop();
-    }
-
-    void loose_HP(float percentage)
-    {
-        pokemon.HP -= pokemon.HP * percentage;
-    }
-    void Stat_drop()
-    {
-        if (pokemon.Status_effect == "Burn")
-            pokemon.Attack *= 0.5f;
-        if (pokemon.Status_effect == "Paralysis")
-            pokemon.speed *= 0.25f;
-    }
-    private void Check_status()
-    {
-        StatusIMG();
-        status_duration++;
-        Recovery_Chance();
-        if (pokemon.isFlinched)
-        {
-            pokemon.isFlinched = false;
-            pokemon.canAttack = true;
-        }
-    }
-    void Recovery_Chance()
-    {
-        Invoke("Check_"+pokemon.Status_effect.ToLower(),0f);
-    }
-    void Check_burn()
-    {
-        loose_HP(0.125f);
-    }
-    void Check_poison()
-    {
-        loose_HP(0.125f);
-    }
-    void Check_badlypoison()
-    {
-        loose_HP((status_duration+1)/16f);
-    }
-    void Check_freeze()
-    {
-        if (Utility.Get_rand(1, 101) < 10)//10% chance
-            remove_status_effect();
-        else
-            pokemon.canAttack = false;
-    }
-    void check_paralysis()
-    {
-        if (Utility.Get_rand(1, 101) < 75)//75% chance
-            pokemon.canAttack = true;
-        else
-            pokemon.canAttack = false;
-    }
-    void Check_sleep()
-    {
-        num_status_turns--;
-        if (num_status_turns == 0 && status_duration!=0)//at least sleep for 1 turn
-            remove_status_effect();
-        else
-        {
-            float[] chances = { 0.25f, 0.33f, 0.5f, 1 };
-            if (Utility.Get_rand(1, 101) < 100 * chances[status_duration])
-            {
-                //recover
-                num_status_turns = 0;
-                status_duration = 0;
-                remove_status_effect();
-            }
-            else
-                pokemon.canAttack = false;
-        }
-    } 
-    void remove_status_effect()
-    {
-        pokemon.Status_effect = "None";
-        pokemon.canAttack = true;
-    }
     private void Check_loss()
     {
-        int faint_count = 1;
+        int faint_count = 0;
         for(int i=0;i<Pokemon_party.instance.num_members;i++)
             if (Pokemon_party.instance.party[i].HP <= 0)
                 faint_count++;
-        Debug.Log(faint_count+"fffffff");//keep testing
         if (faint_count == Pokemon_party.instance.num_members)
+        {
             Battle_handler.instance.End_Battle(false);
+            if(!Battle_handler.instance.is_trainer_battle)
+                Wild_pkm.instance.InBattle = false;
+        }
         else
         {//select next pokemon to switch in
             Pokemon_party.instance.Swapping_in = true;
             Game_ui_manager.instance.View_pkm_Party();
+            Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");
         }
     }
     private void update_ui()
@@ -182,9 +101,11 @@ public class Battle_Participant : MonoBehaviour
             pkm_img.sprite = pokemon.front_picture;
         player_hp.value = pokemon.HP;
         player_hp.maxValue = pokemon.max_HP;
+        if(pokemon.HP<=0)
+            pokemon.HP = 0;
     }
 
-    void StatusIMG()
+    public void refresh_statusIMG()
     {
         if (pokemon.Status_effect == "None")
             status_img.gameObject.SetActive(false);
@@ -210,7 +131,7 @@ public class Battle_Participant : MonoBehaviour
         player_hp.minValue = 0;
         is_active = true;
         participant_ui.SetActive(true);
-        StatusIMG();
+        refresh_statusIMG();
         if (isPlayer)
         {
             foreach (Battle_Participant p in Current_Enemies)

@@ -53,7 +53,8 @@ public class Move_handler:MonoBehaviour
 
     float Calc_Damage()
     {
-        float damage_dealt=0;
+        if (current_turn.move_.Move_damage == 0) return 0f;
+        float damage_dealt;
         float level_factor = (float)((current_turn.attacker_.pokemon.Current_level * 2) / 5) + 2;
         float Stab = 1f;
         int crit = 1;
@@ -73,8 +74,11 @@ public class Move_handler:MonoBehaviour
         }
         if (Utility.is_Stab(current_turn.attacker_.pokemon, current_turn.move_.type))
             Stab = 1.5f;
-        if (Utility.Get_rand(1, (int)(100/current_turn.attacker_.pokemon.crit_chance)+1)<2)
+        if (Utility.Get_rand(1, (int)(100 / current_turn.attacker_.pokemon.crit_chance) + 1) < 2)
+        {
             crit = 2;
+            Dialogue_handler.instance.Write_Info("Critical Hit!", "Battle info");
+        }
         float base_Damage = (level_factor * current_turn.move_.Move_damage *
                              (Attack_type/ current_turn.move_.Move_damage))/current_turn.attacker_.pokemon.Current_level;
         float Modifier = crit*Stab*random_factor*type_effectiveness;
@@ -103,7 +107,7 @@ public class Move_handler:MonoBehaviour
             int num_turns = 0;
             if(current_turn.move_.Status_effect=="Sleep") 
                 num_turns = Utility.Get_rand(1, 5);
-            current_turn.victim_.Get_statusEffect(num_turns);
+            current_turn.victim_.status.Get_statusEffect(num_turns);
         }
     }
     void flinch_enemy()

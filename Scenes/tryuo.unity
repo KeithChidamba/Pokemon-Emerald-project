@@ -861,6 +861,7 @@ GameObject:
   - component: {fileID: 35621315}
   - component: {fileID: 35621317}
   - component: {fileID: 35621316}
+  - component: {fileID: 35621318}
   m_Layer: 0
   m_Name: Double_b partner
   m_TagString: Untagged
@@ -910,6 +911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ability_h: {fileID: 35621316}
+  status: {fileID: 35621318}
   pokemon: {fileID: 0}
   Current_Enemies: []
   pkm_img: {fileID: 1900733081}
@@ -925,6 +927,19 @@ MonoBehaviour:
   Double_battle_ui: []
   participant_ui: {fileID: 1656265309}
   Selected_Enemy: 0
+--- !u!114 &35621318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35621314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _participant: {fileID: 35621317}
 --- !u!1 &36667069
 GameObject:
   m_ObjectHideFlags: 0
@@ -5984,6 +5999,7 @@ GameObject:
   - component: {fileID: 190973847}
   - component: {fileID: 190973850}
   - component: {fileID: 190973849}
+  - component: {fileID: 190973851}
   m_Layer: 0
   m_Name: Single battle Enemy
   m_TagString: Untagged
@@ -6033,6 +6049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ability_h: {fileID: 190973849}
+  status: {fileID: 190973851}
   pokemon: {fileID: 0}
   Current_Enemies: []
   pkm_img: {fileID: 291399123}
@@ -6048,6 +6065,19 @@ MonoBehaviour:
   Double_battle_ui: []
   participant_ui: {fileID: 1780447230}
   Selected_Enemy: 0
+--- !u!114 &190973851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190973846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _participant: {fileID: 190973850}
 --- !u!1 &191277650
 GameObject:
   m_ObjectHideFlags: 0
@@ -31974,6 +32004,7 @@ MonoBehaviour:
   Dialouge_txt: {fileID: 1939792953}
   elipsis_txt: {fileID: 1284651672}
   text_finished: 0
+  can_exit: 1
   displaying: 0
   current_line: 
   Max_length: 90
@@ -48987,6 +49018,7 @@ GameObject:
   - component: {fileID: 1636635378}
   - component: {fileID: 1636635380}
   - component: {fileID: 1636635379}
+  - component: {fileID: 1636635381}
   m_Layer: 0
   m_Name: Player_participant
   m_TagString: Untagged
@@ -49036,6 +49068,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ability_h: {fileID: 1636635379}
+  status: {fileID: 1636635381}
   pokemon: {fileID: 0}
   Current_Enemies: []
   pkm_img: {fileID: 1689249222}
@@ -49055,6 +49088,19 @@ MonoBehaviour:
   - {fileID: 1940039930}
   participant_ui: {fileID: 443644594}
   Selected_Enemy: 0
+--- !u!114 &1636635381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636635377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _participant: {fileID: 1636635380}
 --- !u!1001 &1641952052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60406,6 +60452,7 @@ GameObject:
   - component: {fileID: 2033618201}
   - component: {fileID: 2033618204}
   - component: {fileID: 2033618203}
+  - component: {fileID: 2033618205}
   m_Layer: 0
   m_Name: Double battle Enemy
   m_TagString: Untagged
@@ -60455,6 +60502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ability_h: {fileID: 2033618203}
+  status: {fileID: 2033618205}
   pokemon: {fileID: 0}
   Current_Enemies: []
   pkm_img: {fileID: 690917499}
@@ -60470,6 +60518,19 @@ MonoBehaviour:
   Double_battle_ui: []
   participant_ui: {fileID: 173013067}
   Selected_Enemy: 0
+--- !u!114 &2033618205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033618200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _participant: {fileID: 2033618204}
 --- !u!1 &2035304021
 GameObject:
   m_ObjectHideFlags: 0

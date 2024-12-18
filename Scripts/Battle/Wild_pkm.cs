@@ -41,7 +41,7 @@ public class Wild_pkm : MonoBehaviour
     private void Make_Decision()
     {
         //check if its pokemon's turn
-        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon && !Used_move)
+        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon.pokemon && !Used_move)
         {
             Battle_handler.instance.Select_player();//attack player, since its single battle
             choose_move();

@@ -55,12 +55,8 @@ public class pokemon_storage : MonoBehaviour
     Pokemon search_pkm(string ID)
     {
         foreach(Pokemon mon in non_party_pokemon)
-        {
             if (mon.Pokemon_ID == ID)
-            {
                 return mon;
-            }
-        }
         return null;
     }
     int search_pkm_pos(string ID)
@@ -69,9 +65,7 @@ public class pokemon_storage : MonoBehaviour
         foreach (Pokemon mon in non_party_pokemon)
         {
             if (mon.Pokemon_ID == ID)
-            {
                 return i;
-            }
             i++;
         }
         return 0;

@@ -108,28 +108,33 @@ public class Pokemon_party : MonoBehaviour
     public void Move_Member(int Party_position)
     {
         Party_position--;
-        if (party[Selected_member-1] != party[Party_position])
+        if (Swapping_in)
         {
-            Pokemon Swap_store = party[Selected_member-1];
-            party[Selected_member-1] = party[Party_position];
-            party[Party_position] = Swap_store;
-            moving = false;
-            Member_to_Move = 0;
-            Selected_member = 0;
-            Refresh_Member_Cards();
-            member_indicator.SetActive(false);
-            Battle_handler.instance.Set_pkm();
-            if (Swapping_in)
-            {
-                Game_ui_manager.instance.Close_party();
-                Swapping_in = false;
-            }
-            else
-            {
-                Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
-                Dialogue_handler.instance.Dialouge_off(1f);
-            }
+            Selected_member = Party_position;
+            swap(Party_position);
+            Game_ui_manager.instance.Close_party();
+            Swapping_in = false;
+        }
+        else
+            if(party[Selected_member-1] != party[Party_position])
+                swap(Party_position);
+    }
 
+    void swap(int Party_position)
+    {
+        Pokemon Swap_store = party[Selected_member-1];
+        party[Selected_member-1] = party[Party_position];
+        party[Party_position] = Swap_store;
+        moving = false;
+        Member_to_Move = 0;
+        Selected_member = 0;
+        Refresh_Member_Cards();
+        member_indicator.SetActive(false);
+        Battle_handler.instance.Set_pkm();
+        if(!Swapping_in)
+        {
+            Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
+            Dialogue_handler.instance.Dialouge_off(1f);
         }
     }
     public void Add_Member(Pokemon pokemon)
