@@ -49,6 +49,8 @@ public class Item_handler : MonoBehaviour
         if (selected_party_pkm.Status_effect.ToLower() == status)
         {
             selected_party_pkm.Status_effect = "None";
+            if (status == "sleep" | status == "freeze"| status == "paralysis")
+                selected_party_pkm.canAttack = true;
             Dialogue_handler.instance.Write_Info("Pokemon has been healed","Details");
             item_in_use.quantity--;
             Bag.instance.check_Quantity(item_in_use);

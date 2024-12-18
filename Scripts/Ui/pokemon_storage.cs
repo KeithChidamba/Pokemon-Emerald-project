@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 public class pokemon_storage : MonoBehaviour
 {
     public List<Pokemon> non_party_pokemon;
@@ -287,22 +287,37 @@ public class pokemon_storage : MonoBehaviour
         storage_operetation = false;
         Cancel_options();
     }
+
+    string Generate_Personality()
+    {
+        string value = "";
+        for (int i = 0; i < 12; i++)
+        {
+            value+=Utility.Get_rand(1,10).ToString();
+        }
+        return value;
+    }
+
+    void get_Gender(Pokemon new_pkm)
+    {
+        int gender_check = int.Parse(new_pkm.Personality_value.Substring(new_pkm.Personality_value.Length - 3, 3));
+        if (gender_check >= 128)
+            new_pkm.Gender = "Male";
+        else
+            new_pkm.Gender = "Female";
+    }
     public Pokemon Add_pokemon(Pokemon pkm)
     {
+        Pokemon new_pkm = Obj_Instance.set_Pokemon(pkm);
         if (!storage_operetation)
         {
             num_pokemon++;
             if (num_party_members < 6)
-            {
                 num_party_members++;
-            }
-        }
-        //add new pokemon
-        Pokemon new_pkm = Obj_Instance.set_Pokemon(pkm);
-        if (!storage_operetation)
-        {
             new_pkm.Pokemon_ID = Generate_ID(new_pkm.Pokemon_name);
-            new_pkm.Personality_value = Random.Range(0,429496729);
+            new_pkm.Personality_value = Generate_Personality();
+            if(new_pkm.has_gender)
+                get_Gender(new_pkm);
         }
         return new_pkm;
     }

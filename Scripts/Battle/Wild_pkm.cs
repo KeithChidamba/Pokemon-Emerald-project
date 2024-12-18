@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class Wild_pkm : MonoBehaviour
 {
-    public Pokemon pokemon;
-    public Pokemon Enemy_pokemon;
+    public Battle_Participant pokemon;
+    public Battle_Participant Enemy_pokemon;
     public bool InBattle = false;
     public static Wild_pkm instance;
     [SerializeField]private bool Used_move = false;
@@ -69,9 +69,9 @@ public class Wild_pkm : MonoBehaviour
     {
         List<Move> strongest_move = new();
         List<Move> mock_moveset = new();
-        foreach (Move m in pokemon.move_set)
+        foreach (Move m in pokemon.pokemon.move_set)
         {
-            if (!Utility.isImmuneTo(Enemy_pokemon, m.type)) //look for all non-immune moves
+            if (!Utility.isImmuneTo(Enemy_pokemon.pokemon, m.type)) //look for all non-immune moves
                 mock_moveset.Add(m);
         }
         if (mock_moveset.Count > 0)
@@ -85,8 +85,8 @@ public class Wild_pkm : MonoBehaviour
 
     void Use_random()
     {
-        int rand_move = Utility.Get_rand(0, pokemon.move_set.Count);
-        use_move(pokemon.move_set[rand_move]);
+        int rand_move = Utility.Get_rand(0, pokemon.pokemon.move_set.Count);
+        use_move(pokemon.pokemon.move_set[rand_move]);
     }
 
     void use_move(Move move)
@@ -96,9 +96,9 @@ public class Wild_pkm : MonoBehaviour
     }
     bool CanUse_effective()
     {
-        foreach (Move m in pokemon.move_set)
+        foreach (Move m in pokemon.pokemon.move_set)
         {//look for super effective attacking move
-            float eff = Utility.TypeEffectiveness(Enemy_pokemon, m.type);
+            float eff = Utility.TypeEffectiveness(Enemy_pokemon.pokemon, m.type);
             if ( eff > 1 && !m.is_Buff_Debuff)
             {
                 use_move(m);

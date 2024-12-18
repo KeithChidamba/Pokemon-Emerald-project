@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using Unity.Mathematics;
 using UnityEngine;
 [CreateAssetMenu(fileName = "Pokemon", menuName = "pkm")]
@@ -10,7 +8,9 @@ public class Pokemon : ScriptableObject
     public string Base_Pokemon_name;
     public string Pokemon_name;
     public string Pokemon_ID = "";
-    public int Personality_value=0;
+    public string Personality_value = "";
+    public string Gender = "";
+    public bool has_gender = true;
     public float HP;
     public float max_HP;
     public float Attack;
@@ -102,7 +102,7 @@ public class Pokemon : ScriptableObject
 
     void split_evo()
     {
-        string lowerbits = Personality_value.ToString().Substring(Personality_value.ToString().Length-3,3);
+        string lowerbits = Personality_value.Substring(Personality_value.Length-3,3);
         if (int.Parse(lowerbits) >= 128)
             Check_evolution(2);
         else if (int.Parse(lowerbits) < 128)

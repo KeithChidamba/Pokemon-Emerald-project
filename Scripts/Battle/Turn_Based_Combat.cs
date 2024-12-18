@@ -36,13 +36,13 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     bool Can_Attack(Pkm_Use_Move command)
     {
-        if(command._turn.attacker_.HP<=0) return false;
-        if (command._turn.attacker_.canAttack)
+        if(command._turn.attacker_.pokemon.HP<=0) return false;
+        if (command._turn.attacker_.pokemon.canAttack)
         {
             if (command._turn.move_.Move_accuracy < 100)//not a sure-hit move
             {
-                if (!Move_successful(command._turn.attacker_))
-                    Dialogue_handler.instance.Write_Info(command._turn.attacker_+" missed the attack","Battle info");
+                if (!Move_successful(command._turn.attacker_.pokemon))
+                    Dialogue_handler.instance.Write_Info(command._turn.attacker_.pokemon+" missed the attack","Battle info");
                 else
                     return true;
             }else
@@ -50,11 +50,11 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         else
         {
-            if (command._turn.attacker_.isFlinched)
-                Dialogue_handler.instance.Write_Info(command._turn.attacker_+" flinched!","Battle info");
+            if (command._turn.attacker_.pokemon.isFlinched)
+                Dialogue_handler.instance.Write_Info(command._turn.attacker_.pokemon+" flinched!","Battle info");
             else
                 //freeze,paralysis
-                Dialogue_handler.instance.Write_Info(command._turn.attacker_+" is "+ command._turn.attacker_.Status_effect,"Battle info");
+                Dialogue_handler.instance.Write_Info(command._turn.attacker_.pokemon+" is "+ command._turn.attacker_.pokemon.Status_effect,"Battle info");
         }
         return false;
     }
@@ -82,7 +82,6 @@ public class Turn_Based_Combat : MonoBehaviour
     public void Next_turn()
     {
         //check on pokemon status,health etc
-        
         if ( Battle_handler.instance.isDouble_battle)
             Change_turn(4,1);
         else
@@ -112,7 +111,7 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         speed_list.Clear();
         priority_list.Clear();
-        speed_list = Move_history.OrderByDescending(p => p._turn.attacker_.speed).ToList();
+        speed_list = Move_history.OrderByDescending(p => p._turn.attacker_.pokemon.speed).ToList();
         priority_list = speed_list.OrderByDescending(p => p._turn.move_.Priority).ToList();
         return priority_list;
     }

@@ -50,9 +50,9 @@ public class Battle_handler : MonoBehaviour
             if (Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy)
             {
                 if(isDouble_battle)
-                    Use_Move(Battle_P[Current_Move].pokemon.move_set[Current_Move],Battle_P[Current_Move].pokemon);//any of payer's 2 pkm using move
+                    Use_Move(Battle_P[Current_Move].pokemon.move_set[Current_Move],Battle_P[Current_Move]);//any of payer's 2 pkm using move
                 else
-                    Use_Move(Battle_P[0].pokemon.move_set[Current_Move],Battle_P[0].pokemon);//player using move
+                    Use_Move(Battle_P[0].pokemon.move_set[Current_Move],Battle_P[0]);//player using move
                 choosing_move = false;
             }
             else
@@ -145,7 +145,7 @@ public class Battle_handler : MonoBehaviour
         Load_Area_bg();
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].pokemon = enemy;
-        Wild_pkm.instance.pokemon = enemy;
+        Wild_pkm.instance.pokemon = Battle_P[2];
         Set_pkm();
         Wild_pkm.instance.InBattle = true;
         set_battle();
@@ -177,7 +177,7 @@ public class Battle_handler : MonoBehaviour
         for(int i = 0; i < 2; i++)
             if (Battle_P[i].pokemon != null)
                 Battle_P[i + 2].Current_Enemies.Add(Battle_P[i]); //set enemies enemy equal to player's pkm
-        Wild_pkm.instance.Enemy_pokemon = Battle_P[0].pokemon;
+        Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
         Participant_count = 0;
         foreach(Battle_Participant p in Battle_P)
             if (p.pokemon != null)
@@ -203,13 +203,13 @@ public class Battle_handler : MonoBehaviour
             Move_btns[i].SetActive(false);
         }
     }
-    public void Use_Move(Move move,Pokemon user)
+    public void Use_Move(Move move,Battle_Participant user)
     {
         Doing_move = true;
         choosing_move = false;
         moves_ui.SetActive(false);
         options_ui.SetActive(false);
-        Turn current_turn = new Turn(move, user, Battle_P[Current_pkm_Enemy].pokemon);
+        Turn current_turn = new Turn(move, user, Battle_P[Current_pkm_Enemy]);
         Pkm_Use_Move use_move = new Pkm_Use_Move(current_turn);
         Turn_Based_Combat.instance.SaveMove(use_move);
     }
