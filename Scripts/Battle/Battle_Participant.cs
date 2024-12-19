@@ -10,6 +10,7 @@ public class Battle_Participant : MonoBehaviour
 {
     public Abilities ability_h;
     public Participant_Status status;
+    public Battle_Data data;
     public Pokemon pokemon;
     public List<Battle_Participant> Current_Enemies;
     public Image pkm_img;
@@ -28,6 +29,7 @@ public class Battle_Participant : MonoBehaviour
     private void Start()
     {
         status = GetComponent<Participant_Status>();
+        data = GetComponent<Battle_Data>();
        Turn_Based_Combat.instance.OnNewTurn += Check_Faint;
     }
     private void Update()
@@ -41,6 +43,7 @@ public class Battle_Participant : MonoBehaviour
         Battle_handler.instance.Distribute_EXP(pokemon.Calc_Exp(enemy.pokemon));
         Current_Enemies.Remove(enemy);
     }
+    
     void Check_Faint()
     {
         if (!is_active) return;
@@ -82,6 +85,7 @@ public class Battle_Participant : MonoBehaviour
             Pokemon_party.instance.Swapping_in = true;
             Game_ui_manager.instance.View_pkm_Party();
             Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");
+            data.Load_Stats(this);
         }
     }
     private void update_ui()

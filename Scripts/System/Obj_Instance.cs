@@ -32,6 +32,12 @@ public static class Obj_Instance
         new_pkm.Pokemon_name = pkm.Pokemon_name;
         new_pkm.Pokemon_ID = pkm.Pokemon_ID;
         new_pkm.Personality_value = pkm.Personality_value;
+        new_pkm.Nature = pkm.Nature;
+        new_pkm.BaseAttack = pkm.BaseAttack;
+        new_pkm.BaseDefense = pkm.BaseDefense;
+        new_pkm.BaseSP_ATK = pkm.BaseSP_ATK;
+        new_pkm.BaseSP_DEF = pkm.BaseSP_DEF;
+        new_pkm.Basespeed = pkm.Basespeed;
         new_pkm.Gender = pkm.Gender;
         new_pkm.has_gender=pkm.has_gender;
         new_pkm.Base_Pokemon_name = pkm.Base_Pokemon_name;
@@ -43,7 +49,7 @@ public static class Obj_Instance
         new_pkm.SP_DEF = pkm.SP_DEF;
         new_pkm.speed = pkm.speed;
         new_pkm.Evasion = pkm.Evasion;
-        new_pkm.Buff_Debuff = pkm.Buff_Debuff;
+        new_pkm.Buff_Debuffs = pkm.Buff_Debuffs;
         new_pkm.type_Immunity = pkm.type_Immunity;
         new_pkm.CanBeDamaged=pkm.CanBeDamaged;
         new_pkm.Status_effect = pkm.Status_effect;

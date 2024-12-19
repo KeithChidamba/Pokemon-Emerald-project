@@ -10,9 +10,16 @@ public class Pokemon : ScriptableObject
     public string Pokemon_ID = "";
     public string Personality_value = "";
     public string Gender = "";
+    public string Nature = "";
     public bool has_gender = true;
     public float HP;
     public float max_HP;
+    public float BaseHP;
+    public float BaseAttack;
+    public float BaseDefense;
+    public float BaseSP_ATK;
+    public float BaseSP_DEF;
+    public float Basespeed;
     public float Attack;
     public float Defense;
     public float SP_ATK;
@@ -30,7 +37,7 @@ public class Pokemon : ScriptableObject
     public bool CanBeDamaged = true;
     public List<Type> types;
     public string Status_effect = "None";
-    public string Buff_Debuff = "None";
+    public List<string> Buff_Debuffs = new();
     public string type_Immunity = "None";
     public string[] evo_line;
     public bool split_evolution = false;
@@ -142,21 +149,39 @@ public class Pokemon : ScriptableObject
         front_picture = evo.front_picture;
         back_picture = evo.back_picture;
         exp_yield = evo.exp_yield;
-        Attack += 3;
-        SP_ATK += 3;
-        Defense += 3;
-        SP_DEF += 3;
-        speed += 3;
+    }
+
+    void Increase_Stats()
+    {
+        Attack = Stat_Increase(BaseAttack);
+        Defense = Stat_Increase(BaseDefense);
+        speed = Stat_Increase(Basespeed);
+        SP_ATK = Stat_Increase(BaseSP_ATK);
+        SP_DEF = Stat_Increase(BaseSP_DEF);
+        max_HP = increase_HP();
+    }
+    float Get_nature_Modifier()
+    {//complete this
+        return 1;
+    }
+    float Stat_Increase(float baseStat)
+    {//create EV,IV
+        float EV = 4;
+        float IV = 1;
+        return math.round(((((baseStat*IV*(EV/4) * 2)/100)*Current_level)+Current_level+5)*Get_nature_Modifier());
+    }
+    float increase_HP()
+    {
+        float EV = 4;
+        float IV = 1;
+        return math.round((((BaseHP*IV*(EV/4) * 2)/100)*Current_level)+Current_level+10);
     }
     public void Level_up()
     {
         Current_level++;
-        Attack++;
-        SP_ATK++;
-        Defense++;
-        SP_DEF++;
-        speed++;
-        max_HP += (float)math.round(0.5 * Current_level);
+        Increase_Stats();
+        Battle_Data.Reset_Battle_state(this);
+        Battle_handler.instance.Set_pkm();
         if(split_evolution)
             split_evo();
         else

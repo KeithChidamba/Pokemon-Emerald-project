@@ -187,8 +187,6 @@ public class Pokemon_party : MonoBehaviour
                 Memeber_cards[i].Reset_ui();
             }
         }
-        if(Options_manager.instance.playerInBattle)
-            Battle_handler.instance.Set_pkm();
     }
     public void Remove_Member(int Party_position)
     {

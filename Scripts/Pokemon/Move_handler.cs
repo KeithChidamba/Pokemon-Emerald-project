@@ -156,7 +156,8 @@ public class Move_handler:MonoBehaviour
             reciever_pkm = current_turn.victim_.pokemon;
         else
             reciever_pkm = current_turn.attacker_.pokemon;
-        int current_buff = int.Parse(reciever_pkm.Buff_Debuff.Substring(current_turn.victim_.pokemon.Buff_Debuff.Length-2));
+        //work on this
+        int current_buff = 0;//int.Parse(reciever_pkm.Buff_Debuff.Substring(current_turn.victim_.pokemon.Buff_Debuff.Length-2));
         if (stat == "crit")
         {
             if (current_buff < 3)
@@ -174,9 +175,9 @@ public class Move_handler:MonoBehaviour
                 buff_Debuff = current_buff-1;
         }
         if(buff_Debuff!=0)
-            reciever_pkm.Buff_Debuff = stat + result + buff_Debuff;
-        else
-            reciever_pkm.Buff_Debuff = "None";    
+            //reciever_pkm.Buff_Debuff = stat + result + buff_Debuff; fix
+        //else
+            //reciever_pkm.Buff_Debuff = "None";    //fix
         if (stat == "acc" | stat == "eva")
             return stat_val * Accuracy_Evasion_Levels[buff_Debuff+6]; 
         if(stat=="crit")    

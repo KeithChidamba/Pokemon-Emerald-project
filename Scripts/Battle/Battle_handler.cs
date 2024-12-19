@@ -149,6 +149,9 @@ public class Battle_handler : MonoBehaviour
         Set_pkm();
         Wild_pkm.instance.InBattle = true;
         set_battle();
+        /*foreach(Battle_Participant p in Battle_P)
+            if (p.pokemon != null)
+                Battle_Data.save_stats(p);*/
     }
     public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
     {
@@ -167,11 +170,11 @@ public class Battle_handler : MonoBehaviour
     }
     public void Set_pkm()
     {
-        Battle_P[0].pokemon = Pokemon_party.instance.party[0];//Obj_Instance.set_Pokemon();
+        Battle_P[0].pokemon = Pokemon_party.instance.party[0];
         AddToExpList(Battle_P[0].pokemon);
         if (Pokemon_party.instance.num_members > 1 && isDouble_battle) //if you have more than one pokemon send in another
         {
-            Battle_P[1].pokemon = Pokemon_party.instance.party[1];//Obj_Instance.set_Pokemon(
+            Battle_P[1].pokemon = Pokemon_party.instance.party[1];
             AddToExpList(Battle_P[1].pokemon);
         }
         for(int i = 0; i < 2; i++)
@@ -185,6 +188,7 @@ public class Battle_handler : MonoBehaviour
                 p.Load_ui();
                 p.ability_h.Set_ability();
                 Participant_count++;
+                p.data.save_stats(p);
             }
     }
     void load_moves()
@@ -281,7 +285,9 @@ public class Battle_handler : MonoBehaviour
         {
             if(p.pokemon!=null)
             {
-                Battle_Data.Reset_Battle_state(p);
+                p.data.Load_Stats(p);
+                Battle_Data.Reset_Battle_state(p.pokemon);
+                p.pokemon = null;
                 p.Unload_ui();
             }
         }
