@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+
 public class pokemon_storage : MonoBehaviour
 {
     public List<Pokemon> non_party_pokemon;
@@ -35,23 +36,6 @@ public class pokemon_storage : MonoBehaviour
     {
             view_details.interactable = Pkm_selected;
     }
-    public string Generate_ID(string name_)//pokemon's unique ID
-    {
-        int rand = Utility.Get_rand(0,name_.Length);
-        string end_digits = Utility.Get_rand(0,name_.Length).ToString() + Utility.Get_rand(0,name_.Length).ToString() + Utility.Get_rand(0,name_.Length).ToString() + Utility.Get_rand(0,name_.Length).ToString();
-        string id = rand.ToString();
-        id += name_[rand];
-        if (rand >= name_.Length-1)
-        {
-            id += name_.Substring(rand-4, 3);
-        }
-        else
-        {
-            id += name_.Substring(rand, (name_.Length-1)-rand );
-        }
-        id += end_digits;
-        return id;
-    }
     Pokemon search_pkm(string ID)
     {
         foreach(Pokemon mon in non_party_pokemon)
@@ -73,12 +57,8 @@ public class pokemon_storage : MonoBehaviour
     public bool search_pkm_ID(string ID)
     {
         foreach (string mon_ID in Save_manager.instance.party_IDs)
-        {
             if (mon_ID == ID)
-            {
                 return true;
-            }
-        }
         return false;
     }
     public void Open_pc()
@@ -91,9 +71,7 @@ public class pokemon_storage : MonoBehaviour
     public void Close_pc()
     {
         foreach (GameObject pos in pkm_party_icons)
-        {
-                pos.GetComponent<PC_party_pkm>().options.SetActive(false);
-        }
+            pos.GetComponent<PC_party_pkm>().options.SetActive(false);
         Game_ui_manager.instance.Reset_player_movement();
         using_pc = false;
         Pkm_selected = false;
@@ -126,7 +104,6 @@ public class pokemon_storage : MonoBehaviour
                         pos.GetComponent<PC_party_pkm>().options.SetActive(false);
                         break;
                     }
-
                 }
             }
         }
@@ -134,9 +111,7 @@ public class pokemon_storage : MonoBehaviour
     public void Cancel_options()
     {
         foreach (GameObject pos in pkm_party_icons)
-        {
-                pos.GetComponent<PC_party_pkm>().options.SetActive(false);
-        }
+            pos.GetComponent<PC_party_pkm>().options.SetActive(false);
         Remove_pkm_icons();
         Set_pkm_icon();
         Pkm_selected = false;
@@ -173,9 +148,7 @@ public class pokemon_storage : MonoBehaviour
     {
         pkm_icons.Clear();
         for(int i = 0;i<storage_positions.childCount;i++)
-        {
             Destroy(storage_positions.GetChild(i).GetChild(0).gameObject);
-        }
         foreach (GameObject pos in pkm_party_icons)
         {
             pos.SetActive(false);
@@ -226,9 +199,7 @@ public class pokemon_storage : MonoBehaviour
             Cancel_options();
         }
         else
-        {
             Dialogue_handler.instance.Write_Info("There must be at least 1 pokemon in your team","Details");
-        }
     }
     public void Delete_pkm(PC_pkm pkm_icon)
     {
@@ -282,24 +253,6 @@ public class pokemon_storage : MonoBehaviour
         Cancel_options();
     }
 
-    string Generate_Personality()
-    {
-        string value = "";
-        for (int i = 0; i < 12; i++)
-        {
-            value+=Utility.Get_rand(1,10).ToString();
-        }
-        return value;
-    }
-
-    void get_Gender(Pokemon new_pkm)
-    {
-        int gender_check = int.Parse(new_pkm.Personality_value.Substring(new_pkm.Personality_value.Length - 3, 3));
-        if (gender_check >= 128)
-            new_pkm.Gender = "Male";
-        else
-            new_pkm.Gender = "Female";
-    }
     public Pokemon Add_pokemon(Pokemon pkm)
     {
         Pokemon new_pkm = Obj_Instance.set_Pokemon(pkm);
@@ -308,12 +261,14 @@ public class pokemon_storage : MonoBehaviour
             num_pokemon++;
             if (num_party_members < 6)
                 num_party_members++;
-            new_pkm.Pokemon_ID = Generate_ID(new_pkm.Pokemon_name);
-            new_pkm.Personality_value = Generate_Personality();
+            new_pkm.Pokemon_ID = PokemonOperations.Generate_ID(new_pkm.Pokemon_name);
+            new_pkm.Personality_value = PokemonOperations.Generate_Personality();
             if(new_pkm.has_gender)
-                get_Gender(new_pkm);
+                PokemonOperations.get_Gender(new_pkm);
             if (new_pkm.Current_level == 0)
                 new_pkm.Level_up();
+            PokemonOperations.getAbility(new_pkm);
+            PokemonOperations.getNature(new_pkm);
         }
         return new_pkm;
     }

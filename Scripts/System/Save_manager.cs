@@ -134,7 +134,7 @@ public class Save_manager : MonoBehaviour
         }
         Game_Load.instance.player_data.player_Position = Player_movement.instance.transform.position;
         Game_Load.instance.player_data.Location = area.current_area.area_name;
-        Save_Player(Game_Load.instance.player_data,Game_Load.instance.player_data.Player_ID);
+        Save_Player(Game_Load.instance.player_data,Game_Load.instance.player_data.Trainer_ID.ToString());
         Save_Pokemon_ID();
     }
     private void Get_Pokemon_ID()

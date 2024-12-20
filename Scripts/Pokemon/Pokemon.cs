@@ -8,9 +8,10 @@ public class Pokemon : ScriptableObject
     public string Base_Pokemon_name;
     public string Pokemon_name;
     public string Pokemon_ID = "";
-    public string Personality_value = "";
-    public string Gender = "";
-    public string Nature = "";
+    public int Personality_value;
+    public string Gender = "None";
+    public string GenderRatio = "50/50";
+    public Nature nature;
     public bool has_gender = true;
     public int EV;
     public int IV;
@@ -42,6 +43,7 @@ public class Pokemon : ScriptableObject
     public List<Buff_Debuff> Buff_Debuffs = new();
     public string type_Immunity = "None";
     public string[] evo_line;
+    public string[] abilities;
     public bool split_evolution = false;
     public string[] learnSet;
     public List<Move> move_set=new();
@@ -53,6 +55,7 @@ public class Pokemon : ScriptableObject
 
     //data conversion when json to obj
     public string ability_name;
+    public string natureName;
     public List<string> evo_data=new();
     public List<string> type_data=new();
     public List<string> move_data=new();
@@ -60,6 +63,7 @@ public class Pokemon : ScriptableObject
     public void Set_class_data()
     {
         ability_name = ability.ability;
+        natureName = nature.natureName;
         move_data.Clear();
         type_data.Clear();
         move_data.Clear();
@@ -79,6 +83,7 @@ public class Pokemon : ScriptableObject
     {
         front_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower());
         back_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower() + "_b");
+        nature = Resources.Load<Nature>("Pokemon_project_assets/Pokemon_obj/Natures/" + natureName.ToLower());
         ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + ability_name.ToLower());
         move_set.Clear();
         types.Clear();
@@ -110,11 +115,11 @@ public class Pokemon : ScriptableObject
     }
     void split_evo()
     {
-        string lowerbits = Personality_value.Substring(Personality_value.Length-3,3);
-        if (int.Parse(lowerbits) >= 128)
-            Check_evolution(2);
-        else if (int.Parse(lowerbits) < 128)
+        int evo = Personality_value % 10;
+        if (evo>=0 & evo<5)
             Check_evolution(0);
+        else if (evo>4 & evo<10)
+            Check_evolution(2);
     }
     public void Recieve_exp(float amount)
     {

@@ -61,7 +61,7 @@ public class Move_handler:MonoBehaviour
         float Attack_type = 0;
         float atk_def_ratio;
         float random_factor = (float)Utility.Get_rand(85, 101) / 100;
-        float type_effectiveness = Utility.TypeEffectiveness(current_turn.victim_.pokemon, current_turn.move_.type);
+        float type_effectiveness = BattleOperations.TypeEffectiveness(current_turn.victim_.pokemon, current_turn.move_.type);
         if (current_turn.move_.isSpecial)
         {
             Attack_type = current_turn.attacker_.pokemon.SP_ATK;
@@ -72,7 +72,7 @@ public class Move_handler:MonoBehaviour
             Attack_type = current_turn.attacker_.pokemon.Attack;
             atk_def_ratio = Attack_type / current_turn.victim_.pokemon.Defense;
         }
-        if (Utility.is_Stab(current_turn.attacker_.pokemon, current_turn.move_.type))
+        if (BattleOperations.is_Stab(current_turn.attacker_.pokemon, current_turn.move_.type))
             Stab = 1.5f;
         if (Utility.Get_rand(1, (int)(100 / current_turn.attacker_.pokemon.crit_chance) + 1) < 2)
         {
@@ -156,10 +156,10 @@ public class Move_handler:MonoBehaviour
         else
             reciever_pkm = current_turn.attacker_.pokemon;
         if (result=='+')
-            Utility.ChangeBuffs(reciever_pkm, stat, true);
+            BattleOperations.ChangeBuffs(reciever_pkm, stat, true);
         else 
-            Utility.ChangeBuffs(reciever_pkm, stat, false);
-        Buff_Debuff buff = Utility.GetBuff(reciever_pkm, stat);
+            BattleOperations.ChangeBuffs(reciever_pkm, stat, false);
+        Buff_Debuff buff = BattleOperations.GetBuff(reciever_pkm, stat);
         if (stat == "acc" | stat == "eva")
             return stat_val * Accuracy_Evasion_Levels[buff.Stage+6]; 
         if(stat=="crit")    

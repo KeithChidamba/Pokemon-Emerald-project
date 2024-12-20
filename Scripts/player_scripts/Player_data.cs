@@ -5,8 +5,15 @@ using UnityEngine;
 public class Player_data : ScriptableObject
 {
     public string Player_name;
-    public string Player_ID;
+    public int Trainer_ID;
     public int player_Money;
     public Vector3 player_Position;
     public string Location;
+
+    public int Generate_ID()
+    {
+        System.Random rand = new System.Random();
+        int randomInt = rand.Next(int.MinValue, int.MaxValue);
+        return randomInt;
+    }
 }
