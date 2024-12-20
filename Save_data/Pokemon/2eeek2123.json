@@ -1,22 +1,29 @@
 {
     "Base_Pokemon_name": "Treeko",
     "Pokemon_name": "Treeko",
-    "Pokemon_ID": "0TTreek3100",
-    "Personality_value": "968347493688",
+    "Pokemon_ID": "2eeek2123",
+    "Personality_value": "219648123938",
     "Gender": "Male",
+    "Nature": "",
     "has_gender": true,
-    "HP": 60.0,
-    "max_HP": 60.0,
+    "HP": 24.0,
+    "max_HP": 24.0,
+    "BaseHP": 0.0,
+    "BaseAttack": 0.0,
+    "BaseDefense": 0.0,
+    "BaseSP_ATK": 0.0,
+    "BaseSP_DEF": 0.0,
+    "Basespeed": 0.0,
     "Attack": 19.0,
-    "Defense": 14.0,
-    "SP_ATK": 17.0,
-    "SP_DEF": 16.0,
-    "speed": 20.0,
+    "Defense": 19.0,
+    "SP_ATK": 19.0,
+    "SP_DEF": 19.0,
+    "speed": 19.0,
     "Accuracy": 100.0,
-    "Evasion": 100.0,
+    "Evasion": 0.0,
     "crit_chance": 6.25,
-    "Current_level": 13,
-    "level_progress": -6442450944.0,
+    "Current_level": 14,
+    "level_progress": 0.0,
     "exp_yield": 65,
     "has_trainer": true,
     "canAttack": true,
@@ -24,11 +31,11 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29702
+            "instanceID": 29718
         }
     ],
     "Status_effect": "None",
-    "Buff_Debuff": "None",
+    "Buff_Debuffs": [],
     "type_Immunity": "None",
     "evo_line": [
         "16",
@@ -43,37 +50,37 @@
     ],
     "move_set": [
         {
-            "instanceID": -117720
+            "instanceID": -81952
         },
         {
-            "instanceID": -117722
+            "instanceID": -82202
         },
         {
-            "instanceID": -117724
+            "instanceID": -82204
         },
         {
-            "instanceID": -117726
+            "instanceID": -82206
         }
     ],
     "ability": {
-        "instanceID": 29706
+        "instanceID": 29722
     },
     "evolutions": [
         {
-            "instanceID": 29708
+            "instanceID": 29724
         },
         {
-            "instanceID": 29710
+            "instanceID": 29726
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29660
+        "instanceID": 29676
     },
     "back_picture": {
-        "instanceID": 29712
+        "instanceID": 29728
     },
     "ability_name": "Overgrow",
     "evo_data": [

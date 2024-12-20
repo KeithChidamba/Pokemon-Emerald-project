@@ -862,6 +862,7 @@ GameObject:
   - component: {fileID: 35621317}
   - component: {fileID: 35621316}
   - component: {fileID: 35621318}
+  - component: {fileID: 35621319}
   m_Layer: 0
   m_Name: Double_b partner
   m_TagString: Untagged
@@ -912,6 +913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability_h: {fileID: 35621316}
   status: {fileID: 35621318}
+  data: {fileID: 0}
   pokemon: {fileID: 0}
   Current_Enemies: []
   pkm_img: {fileID: 1900733081}
@@ -940,6 +942,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _participant: {fileID: 35621317}
+--- !u!114 &35621319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35621314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98b54c321b54c3e46a3217bf42c8b06b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
 --- !u!1 &36667069
 GameObject:
   m_ObjectHideFlags: 0
@@ -6000,6 +6019,7 @@ GameObject:
   - component: {fileID: 190973850}
   - component: {fileID: 190973849}
   - component: {fileID: 190973851}
+  - component: {fileID: 190973852}
   m_Layer: 0
   m_Name: Single battle Enemy
   m_TagString: Untagged
@@ -6050,6 +6070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability_h: {fileID: 190973849}
   status: {fileID: 190973851}
+  data: {fileID: 0}
   pokemon: {fileID: 0}
   Current_Enemies: []
   pkm_img: {fileID: 291399123}
@@ -6078,6 +6099,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _participant: {fileID: 190973850}
+--- !u!114 &190973852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190973846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98b54c321b54c3e46a3217bf42c8b06b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
 --- !u!1 &191277650
 GameObject:
   m_ObjectHideFlags: 0
@@ -49019,6 +49057,7 @@ GameObject:
   - component: {fileID: 1636635380}
   - component: {fileID: 1636635379}
   - component: {fileID: 1636635381}
+  - component: {fileID: 1636635382}
   m_Layer: 0
   m_Name: Player_participant
   m_TagString: Untagged
@@ -49069,6 +49108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability_h: {fileID: 1636635379}
   status: {fileID: 1636635381}
+  data: {fileID: 0}
   pokemon: {fileID: 0}
   Current_Enemies: []
   pkm_img: {fileID: 1689249222}
@@ -49101,6 +49141,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _participant: {fileID: 1636635380}
+--- !u!114 &1636635382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636635377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98b54c321b54c3e46a3217bf42c8b06b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
 --- !u!1001 &1641952052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60453,6 +60510,7 @@ GameObject:
   - component: {fileID: 2033618204}
   - component: {fileID: 2033618203}
   - component: {fileID: 2033618205}
+  - component: {fileID: 2033618206}
   m_Layer: 0
   m_Name: Double battle Enemy
   m_TagString: Untagged
@@ -60503,6 +60561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ability_h: {fileID: 2033618203}
   status: {fileID: 2033618205}
+  data: {fileID: 0}
   pokemon: {fileID: 0}
   Current_Enemies: []
   pkm_img: {fileID: 690917499}
@@ -60531,6 +60590,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _participant: {fileID: 2033618204}
+--- !u!114 &2033618206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033618200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98b54c321b54c3e46a3217bf42c8b06b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
 --- !u!1 &2035304021
 GameObject:
   m_ObjectHideFlags: 0

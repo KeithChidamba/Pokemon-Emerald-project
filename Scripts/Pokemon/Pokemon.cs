@@ -12,6 +12,8 @@ public class Pokemon : ScriptableObject
     public string Gender = "";
     public string Nature = "";
     public bool has_gender = true;
+    public int EV;
+    public int IV;
     public float HP;
     public float max_HP;
     public float BaseHP;
@@ -37,7 +39,7 @@ public class Pokemon : ScriptableObject
     public bool CanBeDamaged = true;
     public List<Type> types;
     public string Status_effect = "None";
-    public List<string> Buff_Debuffs = new();
+    public List<Buff_Debuff> Buff_Debuffs = new();
     public string type_Immunity = "None";
     public string[] evo_line;
     public bool split_evolution = false;
@@ -106,7 +108,6 @@ public class Pokemon : ScriptableObject
                 Evolve(evolutions[i+evo_index]);
         }
     }
-
     void split_evo()
     {
         string lowerbits = Personality_value.Substring(Personality_value.Length-3,3);
@@ -179,6 +180,7 @@ public class Pokemon : ScriptableObject
     public void Level_up()
     {
         Current_level++;
+        Buff_Debuffs.Clear();
         Increase_Stats();
         Battle_Data.Reset_Battle_state(this);
         Battle_handler.instance.Set_pkm();

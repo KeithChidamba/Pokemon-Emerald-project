@@ -11,4 +11,10 @@ public class Evolution : ScriptableObject
     public string[] learnSet;
     public Sprite front_picture;
     public Sprite back_picture;
+    public float BaseHP;
+    public float BaseAttack;
+    public float BaseDefense;
+    public float BaseSP_ATK;
+    public float BaseSP_DEF;
+    public float Basespeed;
 }

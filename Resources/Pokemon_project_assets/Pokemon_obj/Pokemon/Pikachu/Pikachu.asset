@@ -16,17 +16,28 @@ MonoBehaviour:
   Pokemon_name: Pikachu
   Pokemon_ID: 
   Personality_value: 0
+  Gender: 
+  Nature: 
+  has_gender: 1
+  EV: 0
+  IV: 0
   HP: 12
   max_HP: 12
-  Attack: 5
-  Defense: 2
-  SP_ATK: 9
-  SP_DEF: 4
-  speed: 12
+  BaseHP: 35
+  BaseAttack: 55
+  BaseDefense: 40
+  BaseSP_ATK: 50
+  BaseSP_DEF: 50
+  Basespeed: 90
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
   Accuracy: 100
-  Evasion: 100
+  Evasion: 0
   crit_chance: 6.25
-  Current_level: 1
+  Current_level: 0
   level_progress: 0
   exp_yield: 82
   has_trainer: 0
@@ -36,7 +47,7 @@ MonoBehaviour:
   types:
   - {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
   Status_effect: None
-  Buff_Debuff: None
+  Buff_Debuffs: []
   type_Immunity: None
   evo_line:
   - 18
@@ -46,11 +57,11 @@ MonoBehaviour:
   - electric/thunder wave03
   - normal/quick attack07
   - normal/tail whip09
-  move_set:
-  - {fileID: 11400000, guid: a4834cd0b33907a4c8866620b383fd8d, type: 2}
+  move_set: []
   ability: {fileID: 11400000, guid: e14cc0f589869f74585dfab11c944e42, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 84257e89eafc79747b735d1c1052913e, type: 2}
+  HeldItem: {fileID: 0}
   front_picture: {fileID: 21300000, guid: c28e38aca92a874439086156a371957d, type: 3}
   back_picture: {fileID: 21300000, guid: 4332c8302d541854ba01d58331af25b0, type: 3}
   ability_name: 

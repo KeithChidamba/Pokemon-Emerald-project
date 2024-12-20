@@ -16,17 +16,28 @@ MonoBehaviour:
   Pokemon_name: Zigzagoon
   Pokemon_ID: 
   Personality_value: 0
+  Gender: 
+  Nature: 
+  has_gender: 1
+  EV: 0
+  IV: 0
   HP: 18
   max_HP: 18
-  Attack: 7
-  Defense: 2
-  SP_ATK: 5
-  SP_DEF: 4
-  speed: 9
+  BaseHP: 38
+  BaseAttack: 30
+  BaseDefense: 41
+  BaseSP_ATK: 30
+  BaseSP_DEF: 41
+  Basespeed: 60
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
   Accuracy: 100
-  Evasion: 100
+  Evasion: 0
   crit_chance: 6.25
-  Current_level: 1
+  Current_level: 0
   level_progress: 0
   exp_yield: 60
   has_trainer: 0
@@ -36,7 +47,7 @@ MonoBehaviour:
   types:
   - {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   Status_effect: None
-  Buff_Debuff: None
+  Buff_Debuffs: []
   type_Immunity: None
   evo_line:
   - 20
@@ -47,11 +58,11 @@ MonoBehaviour:
   - normal/tackle04
   - water/surf05
   - normal/protect19
-  move_set:
-  - {fileID: 11400000, guid: 37d12cb1bc0332d429d388ad6d37b17f, type: 2}
+  move_set: []
   ability: {fileID: 11400000, guid: ed27e4020d5e6e94f93577121b591bf1, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 58a19d74a4fb9b440ab943d87b46a132, type: 2}
+  HeldItem: {fileID: 0}
   front_picture: {fileID: 21300000, guid: 7e01c2bc69a90a64ab6089cf5e57e7e8, type: 3}
   back_picture: {fileID: 21300000, guid: 90944854e7514ae4eab9ce6b7eb80726, type: 3}
   ability_name: 

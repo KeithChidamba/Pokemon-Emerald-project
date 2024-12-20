@@ -41,17 +41,26 @@ public class Pokemon_party : MonoBehaviour
     }
     public void Moving(int Member_position)
     {
-        if (num_members > 1)
+        if (Options_manager.instance.playerInBattle)
         {
-            moving = true;
-            Member_to_Move = Member_position;
-            viewing_options = false;
-            Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
+            Swapping_in = true;
+            Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Reset_pkm();
+            Move_Member(Member_position);
         }
         else
         {
-            Dialogue_handler.instance.Write_Info("There must be at least 2 Pokemon to swap","Details");
-            Dialogue_handler.instance.Dialouge_off(1f);
+            if (num_members > 1)
+            {
+                moving = true;
+                Member_to_Move = Member_position;
+                viewing_options = false;
+                Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
+            }
+            else
+            {
+                Dialogue_handler.instance.Write_Info("There must be at least 2 Pokemon to swap","Details");
+                Dialogue_handler.instance.Dialouge_off(1f);
+            }
         }
     }
 

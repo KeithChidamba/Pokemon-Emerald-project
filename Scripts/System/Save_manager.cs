@@ -37,13 +37,9 @@ public class Save_manager : MonoBehaviour
         Game_Load.instance.player_data = null;
         int j = load_files("Assets/Save_data/Player");
         if(j==1)
-        {
             Game_Load.instance.player_data = Get_player("Assets/Save_data/Player/" + Path.GetFileName(json_files[0]));
-        }
         else if(j>1)
-        {
             Dialogue_handler.instance.Write_Info("Please ensure only one player's data is in the save_data folder!","Details");
-        }
         else
         {
             Dialogue_handler.instance.Write_Info("There was no save data found!","Details");
@@ -56,9 +52,7 @@ public class Save_manager : MonoBehaviour
         Bag.instance.bag_items.Clear();
         int j = load_files("Assets/Save_data/Items");
         for (int i = 0; i < j; i++)
-        {
             Bag.instance.bag_items.Add(Get_Item("Assets/Save_data/Items/" + Path.GetFileName(json_files[i])));
-        }
     }
     private int load_files(string path)
     {
@@ -102,9 +96,7 @@ public class Save_manager : MonoBehaviour
     private void CreateFolder(string path)
     {
         if (!Directory.Exists(path))
-        {
             Directory.CreateDirectory(path);
-        }
     }
 
     public void Erase_save()
@@ -129,7 +121,6 @@ public class Save_manager : MonoBehaviour
         for (int i = 0; i < Pokemon_party.instance.num_members; i++)
         {
             Pokemon_party.instance.party[i].Set_class_data();
-            
             Save_Pokemon(Pokemon_party.instance.party[i],  Pokemon_party.instance.party[i].Pokemon_ID);
         }
         for (int i = 0; i < pokemon_storage.instance.num_non_party_pokemon; i++)

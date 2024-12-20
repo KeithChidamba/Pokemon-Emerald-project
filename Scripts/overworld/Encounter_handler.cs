@@ -49,7 +49,6 @@ public class Encounter_handler : MonoBehaviour
             wild_pkm.HP=wild_pkm.max_HP;
             Battle_handler.instance.is_trainer_battle = false;
            Battle_handler.instance.isDouble_battle = false;
-           //new []{wild_pkm,wild_pkm},this
            Battle_handler.instance.Start_Battle(wild_pkm);
         }
         else

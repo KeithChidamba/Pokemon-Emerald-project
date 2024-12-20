@@ -10,23 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
-  m_Name: treeko
+  m_Name: Treecko
   m_EditorClassIdentifier: 
-  Base_Pokemon_name: Treeko
-  Pokemon_name: Treeko
+  Base_Pokemon_name: Treecko
+  Pokemon_name: Treecko
   Pokemon_ID: 
   Personality_value: 0
+  Gender: 
+  Nature: 
+  has_gender: 1
+  EV: 0
+  IV: 0
   HP: 15
   max_HP: 15
-  Attack: 7
-  Defense: 2
-  SP_ATK: 5
-  SP_DEF: 4
-  speed: 8
+  BaseHP: 40
+  BaseAttack: 45
+  BaseDefense: 35
+  BaseSP_ATK: 65
+  BaseSP_DEF: 55
+  Basespeed: 70
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
   Accuracy: 100
-  Evasion: 100
+  Evasion: 0
   crit_chance: 6.25
-  Current_level: 1
+  Current_level: 0
   level_progress: 0
   exp_yield: 65
   has_trainer: 0
@@ -36,7 +47,7 @@ MonoBehaviour:
   types:
   - {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
   Status_effect: None
-  Buff_Debuff: None
+  Buff_Debuffs: []
   type_Immunity: None
   evo_line:
   - 16
@@ -47,12 +58,12 @@ MonoBehaviour:
   - grass/absorb03
   - normal/quick attack04
   - grass/bullet seed07
-  move_set:
-  - {fileID: 11400000, guid: e814c71756f4bf849b975c47a51ff6d1, type: 2}
+  move_set: []
   ability: {fileID: 11400000, guid: 3a050f274b7d49d49aec9bd3ce16bbf1, type: 2}
   evolutions:
   - {fileID: 11400000, guid: bda93132d14286e4eae38e247c963eae, type: 2}
   - {fileID: 11400000, guid: bde858374be6c77449ea632c3a1d18ab, type: 2}
+  HeldItem: {fileID: 0}
   front_picture: {fileID: 21300000, guid: 6ab83c745c1ddb2429fde5affee84619, type: 3}
   back_picture: {fileID: 21300000, guid: 0d8b2c661f58f204c90e608b4d5edd48, type: 3}
   ability_name: 

@@ -1,0 +1,105 @@
+{
+    "Base_Pokemon_name": "Torchic",
+    "Pokemon_name": "Torchic",
+    "Pokemon_ID": "0TTorchi5440",
+    "Personality_value": "341139541151",
+    "Gender": "Male",
+    "Nature": "",
+    "has_gender": true,
+    "HP": 22.0,
+    "max_HP": 22.0,
+    "BaseHP": 0.0,
+    "BaseAttack": 0.0,
+    "BaseDefense": 0.0,
+    "BaseSP_ATK": 0.0,
+    "BaseSP_DEF": 0.0,
+    "Basespeed": 0.0,
+    "Attack": 17.0,
+    "Defense": 17.0,
+    "SP_ATK": 17.0,
+    "SP_DEF": 17.0,
+    "speed": 17.0,
+    "Accuracy": 100.0,
+    "Evasion": 0.0,
+    "crit_chance": 6.25,
+    "Current_level": 12,
+    "level_progress": 0.0,
+    "exp_yield": 65,
+    "has_trainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 29796
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "type_Immunity": "None",
+    "evo_line": [
+        "16",
+        "30"
+    ],
+    "split_evolution": false,
+    "learnSet": [
+        "normal/scratch01",
+        "fire/ember03",
+        "fighting/double kick05",
+        "normal/focus energy07"
+    ],
+    "move_set": [
+        {
+            "instanceID": -81948
+        },
+        {
+            "instanceID": -82194
+        },
+        {
+            "instanceID": -82196
+        },
+        {
+            "instanceID": -82198
+        }
+    ],
+    "ability": {
+        "instanceID": 29800
+    },
+    "evolutions": [
+        {
+            "instanceID": 29802
+        },
+        {
+            "instanceID": 29804
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "front_picture": {
+        "instanceID": 29520
+    },
+    "back_picture": {
+        "instanceID": 29806
+    },
+    "ability_name": "Inferno",
+    "evo_data": [
+        "Combusken",
+        "Blaziken"
+    ],
+    "type_data": [
+        "Fire"
+    ],
+    "move_data": [
+        "Scratch/Normal",
+        "Ember/Fire",
+        "Double kick/Fighting",
+        "Focus Energy/Normal"
+    ],
+    "move_pp_data": [
+        25,
+        20,
+        20,
+        15
+    ]
+}

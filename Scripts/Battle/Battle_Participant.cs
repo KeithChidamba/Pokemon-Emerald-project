@@ -85,8 +85,14 @@ public class Battle_Participant : MonoBehaviour
             Pokemon_party.instance.Swapping_in = true;
             Game_ui_manager.instance.View_pkm_Party();
             Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");
-            data.Load_Stats(this);
+            Reset_pkm();
         }
+    }
+
+    public void Reset_pkm()
+    {
+        data.Load_Stats(this);
+        Battle_Data.Reset_Battle_state(pokemon);
     }
     private void update_ui()
     {

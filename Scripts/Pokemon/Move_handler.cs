@@ -117,8 +117,8 @@ public class Move_handler:MonoBehaviour
     }
     void Set_buff_Debuff(string effect)
     {
-        char result = effect[1];
-        char reciever = effect[0];
+        char result = effect[1];//buff or debuff
+        char reciever = effect[0];//who the change is effecting
         string stat = effect.Substring(2, effect.Length - 3);
         switch (stat.ToLower())
         {
@@ -150,39 +150,21 @@ public class Move_handler:MonoBehaviour
     }
     float Get_buff_debuff(float stat_val,string stat,char reciever,char result)
     {
-        int buff_Debuff=0;
         Pokemon reciever_pkm;
         if (reciever == 'e')
             reciever_pkm = current_turn.victim_.pokemon;
         else
             reciever_pkm = current_turn.attacker_.pokemon;
-        //work on this
-        int current_buff = 0;//int.Parse(reciever_pkm.Buff_Debuff.Substring(current_turn.victim_.pokemon.Buff_Debuff.Length-2));
-        if (stat == "crit")
-        {
-            if (current_buff < 3)
-                if(result=='+')
-                    buff_Debuff += 1;
-                else 
-                    if (current_buff > 1)
-                        buff_Debuff = current_buff-1;
-        }
-        else if (current_buff < 6 & current_buff > -6)
-        {
-            if(result=='+')
-                buff_Debuff = current_buff+1;
-            else
-                buff_Debuff = current_buff-1;
-        }
-        if(buff_Debuff!=0)
-            //reciever_pkm.Buff_Debuff = stat + result + buff_Debuff; fix
-        //else
-            //reciever_pkm.Buff_Debuff = "None";    //fix
+        if (result=='+')
+            Utility.ChangeBuffs(reciever_pkm, stat, true);
+        else 
+            Utility.ChangeBuffs(reciever_pkm, stat, false);
+        Buff_Debuff buff = Utility.GetBuff(reciever_pkm, stat);
         if (stat == "acc" | stat == "eva")
-            return stat_val * Accuracy_Evasion_Levels[buff_Debuff+6]; 
+            return stat_val * Accuracy_Evasion_Levels[buff.Stage+6]; 
         if(stat=="crit")    
-            return stat_val * Crit_Levels[buff_Debuff];
-        return stat_val * Stat_Levels[buff_Debuff+6];
+            return stat_val * Crit_Levels[buff.Stage];
+        return stat_val * Stat_Levels[buff.Stage+6];
     }
     void absorb()
     {

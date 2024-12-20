@@ -312,6 +312,8 @@ public class pokemon_storage : MonoBehaviour
             new_pkm.Personality_value = Generate_Personality();
             if(new_pkm.has_gender)
                 get_Gender(new_pkm);
+            if (new_pkm.Current_level == 0)
+                new_pkm.Level_up();
         }
         return new_pkm;
     }

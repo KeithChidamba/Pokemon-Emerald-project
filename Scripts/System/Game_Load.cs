@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 public class Game_Load : MonoBehaviour
@@ -26,6 +28,7 @@ public class Game_Load : MonoBehaviour
         }
         instance = this;
     }
+
     private void Start()
     {
         Start_ui.SetActive(true);
@@ -34,6 +37,7 @@ public class Game_Load : MonoBehaviour
         load_btn.gameObject.SetActive(true);
         newGame_btn.gameObject.SetActive(true);
     }
+
     public void New_player_page()
     {
         load_btn.gameObject.SetActive(false);

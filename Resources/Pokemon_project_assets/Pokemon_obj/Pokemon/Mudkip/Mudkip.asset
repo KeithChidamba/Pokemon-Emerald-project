@@ -16,27 +16,38 @@ MonoBehaviour:
   Pokemon_name: Mudkip
   Pokemon_ID: 
   Personality_value: 0
+  Gender: 
+  Nature: 
+  has_gender: 1
+  EV: 0
+  IV: 0
   HP: 15
   max_HP: 15
-  Attack: 8
-  Defense: 8
-  SP_ATK: 11
-  SP_DEF: 12
-  speed: 6
+  BaseHP: 50
+  BaseAttack: 70
+  BaseDefense: 50
+  BaseSP_ATK: 50
+  BaseSP_DEF: 50
+  Basespeed: 40
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
   Accuracy: 100
-  Evasion: 100
+  Evasion: 0
   crit_chance: 6.25
-  Current_level: 1
+  Current_level: 0
   level_progress: 0
   exp_yield: 65
-  has_trainer: 0
+  has_trainer: 1
   canAttack: 1
   isFlinched: 0
   CanBeDamaged: 1
   types:
   - {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
   Status_effect: None
-  Buff_Debuff: None
+  Buff_Debuffs: []
   type_Immunity: None
   evo_line:
   - 16
@@ -47,12 +58,12 @@ MonoBehaviour:
   - water/bubble03
   - ground/mud slap05
   - water/water gun10
-  move_set:
-  - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
+  move_set: []
   ability: {fileID: 11400000, guid: 2d3aa5da1ed7a734cb1c25d192217a25, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 6aa55ab944ac75248a33b519ce0064a0, type: 2}
   - {fileID: 11400000, guid: 37e389aea5cce4241b3eadeba0d90bd7, type: 2}
+  HeldItem: {fileID: 0}
   front_picture: {fileID: 21300000, guid: ec063f34578c9664e9bb2d73e12a3355, type: 3}
   back_picture: {fileID: 21300000, guid: 066fd874056eacd4cb2ca5a7e5c828cf, type: 3}
   ability_name: 

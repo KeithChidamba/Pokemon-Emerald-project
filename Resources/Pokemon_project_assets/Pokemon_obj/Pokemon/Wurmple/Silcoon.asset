@@ -21,3 +21,9 @@ MonoBehaviour:
   - normal/harden05
   front_picture: {fileID: 21300000, guid: 3b0b679170e5a89488a43d5f5515c777, type: 3}
   back_picture: {fileID: 21300000, guid: 66e09a87a862bf445a54a85be5447369, type: 3}
+  BaseHP: 50
+  BaseAttack: 35
+  BaseDefense: 55
+  BaseSP_ATK: 25
+  BaseSP_DEF: 25
+  Basespeed: 15

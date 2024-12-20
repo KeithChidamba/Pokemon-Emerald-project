@@ -22,3 +22,9 @@ MonoBehaviour:
   - bug/bug bite14
   front_picture: {fileID: 21300000, guid: 9d48f881fcb6b7f4c8d4cd650a117a66, type: 3}
   back_picture: {fileID: 21300000, guid: f3648bbb33e47f1469b260ea8a3cee13, type: 3}
+  BaseHP: 60
+  BaseAttack: 70
+  BaseDefense: 50
+  BaseSP_ATK: 100
+  BaseSP_DEF: 50
+  Basespeed: 65

@@ -16,17 +16,28 @@ MonoBehaviour:
   Pokemon_name: Trapinch
   Pokemon_ID: 
   Personality_value: 0
-  HP: 13
-  max_HP: 13
-  Attack: 8
-  Defense: 8
-  SP_ATK: 8
-  SP_DEF: 8
-  speed: 8
+  Gender: 
+  Nature: 
+  has_gender: 1
+  EV: 0
+  IV: 0
+  HP: 0
+  max_HP: 0
+  BaseHP: 45
+  BaseAttack: 100
+  BaseDefense: 45
+  BaseSP_ATK: 45
+  BaseSP_DEF: 45
+  Basespeed: 10
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
   Accuracy: 100
   Evasion: 100
   crit_chance: 6.25
-  Current_level: 1
+  Current_level: 0
   level_progress: 0
   exp_yield: 73
   has_trainer: 0
@@ -36,7 +47,7 @@ MonoBehaviour:
   types:
   - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   Status_effect: None
-  Buff_Debuff: None
+  Buff_Debuffs: []
   type_Immunity: None
   evo_line:
   - 20
@@ -47,12 +58,12 @@ MonoBehaviour:
   - dark/crunch05
   - normal/tackle06
   - ground/magnitude07
-  move_set:
-  - {fileID: 11400000, guid: 2d03686e73c8a174e8f1dd31d6ebdc76, type: 2}
+  move_set: []
   ability: {fileID: 11400000, guid: 22b317c460bfdda4ba6608a82d464e03, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 41c4f5dd85b85854084dc026be20084f, type: 2}
   - {fileID: 11400000, guid: 36607a7c2c84636428574d7b94219d2e, type: 2}
+  HeldItem: {fileID: 0}
   front_picture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
   back_picture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
   ability_name: 

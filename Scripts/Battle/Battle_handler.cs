@@ -149,9 +149,6 @@ public class Battle_handler : MonoBehaviour
         Set_pkm();
         Wild_pkm.instance.InBattle = true;
         set_battle();
-        /*foreach(Battle_Participant p in Battle_P)
-            if (p.pokemon != null)
-                Battle_Data.save_stats(p);*/
     }
     public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
     {

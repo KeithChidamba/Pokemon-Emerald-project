@@ -16,17 +16,28 @@ MonoBehaviour:
   Pokemon_name: Torchic
   Pokemon_ID: 
   Personality_value: 0
+  Gender: 
+  Nature: 
+  has_gender: 1
+  EV: 0
+  IV: 0
   HP: 15
   max_HP: 15
-  Attack: 7
-  Defense: 2
-  SP_ATK: 14
-  SP_DEF: 4
-  speed: 10
+  BaseHP: 45
+  BaseAttack: 60
+  BaseDefense: 40
+  BaseSP_ATK: 70
+  BaseSP_DEF: 50
+  Basespeed: 45
+  Attack: 0
+  Defense: 0
+  SP_ATK: 0
+  SP_DEF: 0
+  speed: 0
   Accuracy: 100
-  Evasion: 100
+  Evasion: 0
   crit_chance: 6.25
-  Current_level: 1
+  Current_level: 0
   level_progress: 0
   exp_yield: 65
   has_trainer: 0
@@ -36,7 +47,7 @@ MonoBehaviour:
   types:
   - {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
   Status_effect: None
-  Buff_Debuff: None
+  Buff_Debuffs: []
   type_Immunity: None
   evo_line:
   - 16
@@ -47,12 +58,12 @@ MonoBehaviour:
   - fire/ember03
   - fighting/double kick05
   - normal/focus energy07
-  move_set:
-  - {fileID: 11400000, guid: 38b98d4bcb652754aadb472acfbc3201, type: 2}
+  move_set: []
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
   evolutions:
   - {fileID: 11400000, guid: f49a231fd601fd84fb5426e0f3771111, type: 2}
   - {fileID: 11400000, guid: fbaeb98064185304bbf6b6fffb76ece1, type: 2}
+  HeldItem: {fileID: 0}
   front_picture: {fileID: 21300000, guid: 0f8036093f73bd94e8ce6120dbdf5bdd, type: 3}
   back_picture: {fileID: 21300000, guid: 704c9966ce2589749963a045076d0db4, type: 3}
   ability_name: 

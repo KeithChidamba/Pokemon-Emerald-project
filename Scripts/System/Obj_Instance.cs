@@ -65,6 +65,7 @@ public static class Obj_Instance
         new_pkm.back_picture = pkm.back_picture;
         new_pkm.HP = pkm.HP;
         new_pkm.max_HP = pkm.max_HP;
+        new_pkm.BaseHP = pkm.BaseHP;
         new_pkm.types = pkm.types;
         new_pkm.evolutions = pkm.evolutions;
         new_pkm.evo_line = pkm.evo_line;

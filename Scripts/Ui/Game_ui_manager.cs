@@ -88,11 +88,6 @@ public class Game_ui_manager : MonoBehaviour
         {
             overworld_actions.instance.using_ui = false;
         }
-            
-        if (Options_manager.instance.playerInBattle)
-        {
-            Battle_handler.instance.Set_pkm();
-        }
     }
     public void Close_party()
     {
@@ -100,7 +95,6 @@ public class Game_ui_manager : MonoBehaviour
         Pokemon_party.instance.Cancel();
         if (Options_manager.instance.playerInBattle)
         {
-            Battle_handler.instance.Set_pkm();
             overworld_actions.instance.using_ui = false;
         }
         else
