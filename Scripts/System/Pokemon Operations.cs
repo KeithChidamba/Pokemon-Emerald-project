@@ -39,7 +39,7 @@ public static class PokemonOperations
     public static void getNature(Pokemon new_pkm)
     {
         int NatureValue = new_pkm.Personality_value % 25;
-        string[] natures = new string[]
+        string[] natures =
         {
             "Hardy", "Lonely", "Brave", "Adamant", "Naughty",
             "Bold", "Docile", "Relaxed", "Impish", "Lax",
@@ -52,6 +52,16 @@ public static class PokemonOperations
             n = Resources.Load<Nature>("Pokemon_project_assets/Pokemon_obj/Natures/" + nature);
         if (n?.PValue == NatureValue)
             new_pkm.nature = n;
+    }
+
+    public static void Generate_IVs(Pokemon new_pkm)
+    {
+        new_pkm.HP_IV =  Utility.Get_rand(0,32);
+        new_pkm.Attack_IV = Utility.Get_rand(0,32);
+        new_pkm.Defense_IV =  Utility.Get_rand(0,32);
+        new_pkm.SP_ATK_IV =  Utility.Get_rand(0,32);
+        new_pkm.SP_DEF_IV =  Utility.Get_rand(0,32);
+        new_pkm.speed_IV =  Utility.Get_rand(0,32);
     }
     public static void get_Gender(Pokemon new_pkm)
     {

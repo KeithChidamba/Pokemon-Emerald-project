@@ -17,7 +17,8 @@ MonoBehaviour:
   Pokemon_ID: 
   Personality_value: 0
   Gender: 
-  Nature: 
+  GenderRatio: 87.5/12.5
+  nature: {fileID: 0}
   has_gender: 1
   EV: 0
   IV: 0
@@ -52,6 +53,7 @@ MonoBehaviour:
   evo_line:
   - 16
   - 30
+  abilities: []
   split_evolution: 0
   learnSet:
   - normal/pound01
@@ -67,6 +69,7 @@ MonoBehaviour:
   front_picture: {fileID: 21300000, guid: 6ab83c745c1ddb2429fde5affee84619, type: 3}
   back_picture: {fileID: 21300000, guid: 0d8b2c661f58f204c90e608b4d5edd48, type: 3}
   ability_name: 
+  natureName: 
   evo_data:
   - Grovyle
   - Sceptile

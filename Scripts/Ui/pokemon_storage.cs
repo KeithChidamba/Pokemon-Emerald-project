@@ -269,6 +269,7 @@ public class pokemon_storage : MonoBehaviour
                 new_pkm.Level_up();
             PokemonOperations.getAbility(new_pkm);
             PokemonOperations.getNature(new_pkm);
+            PokemonOperations.Generate_IVs(new_pkm);
         }
         return new_pkm;
     }

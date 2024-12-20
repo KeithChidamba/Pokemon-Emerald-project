@@ -28,6 +28,18 @@ public class Pokemon : ScriptableObject
     public float SP_ATK;
     public float SP_DEF;
     public float speed;
+    public float HP_IV;
+    public float Attack_IV;
+    public float Defense_IV;
+    public float SP_ATK_IV;
+    public float SP_DEF_IV;
+    public float speed_IV;
+    public float HP_EV=0;
+    public float Attack_EV=0;
+    public float Defense_EV=0;
+    public float SP_ATK_EV=0;
+    public float SP_DEF_EV=0;
+    public float speed_EV=0;
     public float Accuracy = 100;
     public float Evasion = 100;
     public float crit_chance = 6.25f;
@@ -159,28 +171,28 @@ public class Pokemon : ScriptableObject
 
     void Increase_Stats()
     {
-        Attack = Stat_Increase(BaseAttack);
-        Defense = Stat_Increase(BaseDefense);
-        speed = Stat_Increase(Basespeed);
-        SP_ATK = Stat_Increase(BaseSP_ATK);
-        SP_DEF = Stat_Increase(BaseSP_DEF);
+        Attack = Stat_Increase(BaseAttack,Attack_IV,Attack_EV,"Attack");
+        Defense = Stat_Increase(BaseDefense,Defense_IV,Defense_EV,"Defense");
+        speed = Stat_Increase(Basespeed,speed_IV,speed_EV,"Speed");
+        SP_ATK = Stat_Increase(BaseSP_ATK,SP_ATK_IV,SP_ATK_EV,"Special Attack");
+        SP_DEF = Stat_Increase(BaseSP_DEF,SP_DEF_IV,SP_DEF_EV,"Special Defense");
         max_HP = increase_HP();
     }
-    float Get_nature_Modifier()
-    {//complete this
-        return 1;
-    }
-    float Stat_Increase(float baseStat)
-    {//create EV,IV
-        float EV = 4;
-        float IV = 1;
-        return math.round(((((baseStat*IV*(EV/4) * 2)/100)*Current_level)+Current_level+5)*Get_nature_Modifier());
+    float Get_nature_Modifier(string stat)
+     {
+         if (nature.StatIncrease == stat)
+             return 1.1f;
+         if (nature.StatDecrease == stat)
+             return 0.9f;
+         return 1;
+     }
+    float Stat_Increase(float baseStat,float IV,float EV,string stat)
+    {
+        return math.round(((((baseStat*IV*(EV/4) * 2)/100)*Current_level)+Current_level+5)*Get_nature_Modifier(stat));
     }
     float increase_HP()
     {
-        float EV = 4;
-        float IV = 1;
-        return math.round((((BaseHP*IV*(EV/4) * 2)/100)*Current_level)+Current_level+10);
+        return math.round((((BaseHP*HP_IV*(HP_EV/4) * 2)/100)*Current_level)+Current_level+10);
     }
     public void Level_up()
     {
