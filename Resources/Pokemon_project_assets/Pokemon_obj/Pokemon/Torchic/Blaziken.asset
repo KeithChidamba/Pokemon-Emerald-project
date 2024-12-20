@@ -21,3 +21,11 @@ MonoBehaviour:
   learnSet: []
   front_picture: {fileID: 21300000, guid: 2953767c4b6a1fd4e91dbf1385b441d8, type: 3}
   back_picture: {fileID: 21300000, guid: 5ece2024af04caa458ea223d84f7cc91, type: 3}
+  BaseHP: 80
+  BaseAttack: 120
+  BaseDefense: 70
+  BaseSP_ATK: 110
+  BaseSP_DEF: 70
+  Basespeed: 80
+  EVs:
+  - Attack3

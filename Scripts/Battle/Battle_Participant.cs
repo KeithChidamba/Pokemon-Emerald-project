@@ -15,6 +15,7 @@ public class Battle_Participant : MonoBehaviour
     public List<Battle_Participant> Current_Enemies;
     public Image pkm_img;
     public Image status_img;
+    public Image Gender_img;
     public Text pkm_name, pkm_HP, pkm_lv;
     public bool isPlayer = false;
     public bool is_active = false;
@@ -31,19 +32,27 @@ public class Battle_Participant : MonoBehaviour
         status = GetComponent<Participant_Status>();
         data = GetComponent<Battle_Data>();
        Turn_Based_Combat.instance.OnNewTurn += Check_Faint;
+       
     }
     private void Update()
     {
         if (!is_active) return;
         update_ui();
     }
-
     public void Get_exp(Battle_Participant enemy)
     {
         Battle_handler.instance.Distribute_EXP(pokemon.Calc_Exp(enemy.pokemon));
         Current_Enemies.Remove(enemy);
     }
-    
+    public void Get_EVs(Battle_Participant enemy)
+    {
+        foreach (string ev in enemy.pokemon.EVs)
+        {
+            float evAmount = float.Parse(ev.Substring(ev.Length - 1, 1));
+            string evStat = ev.Substring(0 ,ev.Length - 1);
+            PokemonOperations.GetEV(evStat,evAmount,pokemon);
+        }
+    }
     void Check_Faint()
     {
         if (!is_active) return;
@@ -92,7 +101,7 @@ public class Battle_Participant : MonoBehaviour
     public void Reset_pkm()
     {
         data.Load_Stats(this);
-        Battle_Data.Reset_Battle_state(pokemon);
+        data.Reset_Battle_state(pokemon);
     }
     private void update_ui()
     {
@@ -141,11 +150,16 @@ public class Battle_Participant : MonoBehaviour
         player_hp.minValue = 0;
         is_active = true;
         participant_ui.SetActive(true);
+        gender_img();
         refresh_statusIMG();
         if (isPlayer)
         {
+            pokemon.OnLevelUP += Reset_pkm;
             foreach (Battle_Participant p in Current_Enemies)
-                p.Onfaint+=Get_exp;
+            {
+                p.Onfaint += Get_exp;
+                p.Onfaint += Get_EVs;
+            }
             if (Battle_handler.instance.isDouble_battle)
             {
                 UI_visible(Double_battle_ui, true);
@@ -158,7 +172,16 @@ public class Battle_Participant : MonoBehaviour
             }
         }
     }
-
+    void gender_img()
+    {
+        Gender_img.gameObject.SetActive(true);
+        if(pokemon.has_gender)
+            Gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+pokemon.Gender.ToLower());
+        else
+        {
+            Gender_img.gameObject.SetActive(false);
+        }
+    }
     public void Unload_ui()
     {
         participant_ui.SetActive(false);

@@ -17,4 +17,5 @@ public class Evolution : ScriptableObject
     public float BaseSP_ATK;
     public float BaseSP_DEF;
     public float Basespeed;
+    public List<string> EVs=new();
 }

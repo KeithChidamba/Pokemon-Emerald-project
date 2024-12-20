@@ -27,3 +27,6 @@ MonoBehaviour:
   BaseSP_ATK: 80
   BaseSP_DEF: 80
   Basespeed: 100
+  EVs:
+  - Attack1
+  - Speed2

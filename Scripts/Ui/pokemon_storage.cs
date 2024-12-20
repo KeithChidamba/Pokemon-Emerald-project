@@ -261,17 +261,12 @@ public class pokemon_storage : MonoBehaviour
             num_pokemon++;
             if (num_party_members < 6)
                 num_party_members++;
-            new_pkm.Pokemon_ID = PokemonOperations.Generate_ID(new_pkm.Pokemon_name);
-            new_pkm.Personality_value = PokemonOperations.Generate_Personality();
-            if(new_pkm.has_gender)
-                PokemonOperations.get_Gender(new_pkm);
+            PokemonOperations.SetPkmtraits(new_pkm);
             if (new_pkm.Current_level == 0)
                 new_pkm.Level_up();
-            PokemonOperations.getAbility(new_pkm);
-            PokemonOperations.getNature(new_pkm);
-            PokemonOperations.Generate_IVs(new_pkm);
         }
         return new_pkm;
     }
+
 
 }

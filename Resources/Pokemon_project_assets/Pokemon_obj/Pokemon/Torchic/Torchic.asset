@@ -35,6 +35,20 @@ MonoBehaviour:
   SP_ATK: 0
   SP_DEF: 0
   speed: 0
+  HP_IV: 0
+  Attack_IV: 0
+  Defense_IV: 0
+  SP_ATK_IV: 0
+  SP_DEF_IV: 0
+  speed_IV: 0
+  HP_EV: 0
+  Attack_EV: 0
+  Defense_EV: 0
+  SP_ATK_EV: 0
+  SP_DEF_EV: 0
+  speed_EV: 0
+  EVs:
+  - Speed1
   Accuracy: 100
   Evasion: 0
   crit_chance: 6.25
@@ -53,7 +67,8 @@ MonoBehaviour:
   evo_line:
   - 16
   - 30
-  abilities: []
+  abilities:
+  - Inferno
   split_evolution: 0
   learnSet:
   - normal/scratch01

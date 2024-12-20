@@ -1,0 +1,126 @@
+{
+    "Base_Pokemon_name": "Treecko",
+    "Pokemon_name": "Grovyle",
+    "Pokemon_ID": "5kk4151",
+    "Personality_value": 1075418644,
+    "Gender": "Male",
+    "GenderRatio": "87.5/12.5",
+    "nature": {
+        "instanceID": 31860
+    },
+    "has_gender": true,
+    "EV": 0,
+    "IV": 0,
+    "HP": 29.0,
+    "max_HP": 29.0,
+    "BaseHP": 50.0,
+    "BaseAttack": 65.0,
+    "BaseDefense": 45.0,
+    "BaseSP_ATK": 85.0,
+    "BaseSP_DEF": 65.0,
+    "Basespeed": 95.0,
+    "Attack": 24.0,
+    "Defense": 24.0,
+    "SP_ATK": 26.0,
+    "SP_DEF": 22.0,
+    "speed": 24.0,
+    "HP_IV": 26.0,
+    "Attack_IV": 9.0,
+    "Defense_IV": 31.0,
+    "SP_ATK_IV": 16.0,
+    "SP_DEF_IV": 10.0,
+    "speed_IV": 7.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "Speed2"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 0.0,
+    "crit_chance": 6.25,
+    "Current_level": 19,
+    "level_progress": 0.0,
+    "exp_yield": 141,
+    "has_trainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 29746
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "type_Immunity": "None",
+    "evo_line": [
+        "16",
+        "30"
+    ],
+    "abilities": [
+        "Overgrow"
+    ],
+    "split_evolution": false,
+    "learnSet": [
+        "flying/arial ace16"
+    ],
+    "move_set": [
+        {
+            "instanceID": -64432
+        },
+        {
+            "instanceID": -64434
+        },
+        {
+            "instanceID": -64436
+        },
+        {
+            "instanceID": -64438
+        }
+    ],
+    "ability": {
+        "instanceID": 29748
+    },
+    "evolutions": [
+        {
+            "instanceID": 29750
+        },
+        {
+            "instanceID": 29752
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "front_picture": {
+        "instanceID": 29856
+    },
+    "back_picture": {
+        "instanceID": 29694
+    },
+    "ability_name": "Overgrow",
+    "natureName": "Rash",
+    "evo_data": [
+        "Grovyle",
+        "Sceptile"
+    ],
+    "type_data": [
+        "Grass"
+    ],
+    "move_data": [
+        "Pound/Normal",
+        "Absorb/Grass",
+        "Quick attack/Normal",
+        "Arial Ace/Flying"
+    ],
+    "move_pp_data": [
+        25,
+        20,
+        25,
+        20
+    ]
+}

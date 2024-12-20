@@ -13,7 +13,7 @@ public class Player_data : ScriptableObject
     public int Generate_ID()
     {
         System.Random rand = new System.Random();
-        int randomInt = rand.Next(int.MinValue, int.MaxValue);
-        return randomInt;
+        int random32bit = rand.Next(0, 65536);
+        return random32bit;
     }
 }

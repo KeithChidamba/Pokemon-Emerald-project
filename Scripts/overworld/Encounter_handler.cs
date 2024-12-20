@@ -43,6 +43,7 @@ public class Encounter_handler : MonoBehaviour
         wild_pkm = Obj_Instance.set_Pokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pkm_name.ToLower()+"/"+ pkm_name.ToLower()));
         if (wild_pkm != null)
         {
+            PokemonOperations.SetPkmtraits(wild_pkm);
             int rand_lv = Utility.Get_rand(current_area.min_lv, current_area.max_lv+1);
             for(int i=1;i<rand_lv;i++)
                 wild_pkm.Level_up();

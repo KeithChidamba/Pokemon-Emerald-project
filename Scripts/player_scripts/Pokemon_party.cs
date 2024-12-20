@@ -123,6 +123,7 @@ public class Pokemon_party : MonoBehaviour
             swap(Party_position);
             Game_ui_manager.instance.Close_party();
             Swapping_in = false;
+            Turn_Based_Combat.instance.Next_turn();
         }
         else
             if(party[Selected_member-1] != party[Party_position])

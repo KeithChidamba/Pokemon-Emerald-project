@@ -22,3 +22,12 @@ MonoBehaviour:
   - fire/flame thrower18
   front_picture: {fileID: 21300000, guid: 481c8555e71c7f44eab6eb29249befe3, type: 3}
   back_picture: {fileID: 21300000, guid: 234fb8644e5380d40b3475228962c5ea, type: 3}
+  BaseHP: 60
+  BaseAttack: 85
+  BaseDefense: 60
+  BaseSP_ATK: 85
+  BaseSP_DEF: 60
+  Basespeed: 55
+  EVs:
+  - Speed1
+  - Attack1

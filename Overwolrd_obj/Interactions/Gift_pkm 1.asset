@@ -17,7 +17,7 @@ MonoBehaviour:
   InterAction_options:
   - Gift_pkm
   - 
-  InterAction_result_msg: Treeko
+  InterAction_result_msg: Treecko
   options_txt:
   - Yes
   - No

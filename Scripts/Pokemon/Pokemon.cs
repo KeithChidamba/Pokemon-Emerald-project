@@ -40,6 +40,7 @@ public class Pokemon : ScriptableObject
     public float SP_ATK_EV=0;
     public float SP_DEF_EV=0;
     public float speed_EV=0;
+    public List<string> EVs=new();
     public float Accuracy = 100;
     public float Evasion = 100;
     public float crit_chance = 6.25f;
@@ -72,6 +73,8 @@ public class Pokemon : ScriptableObject
     public List<string> type_data=new();
     public List<string> move_data=new();
     public List<int> move_pp_data=new();
+
+    public event Action OnLevelUP;
     public void Set_class_data()
     {
         ability_name = ability.ability;
@@ -154,6 +157,8 @@ public class Pokemon : ScriptableObject
             trainer_bonus = 1.5f;
         if (level_difference < 0)//enemy is stronger, so more exp
             exp = (int)math.floor(enemy.exp_yield * level_difference * trainer_bonus);
+        else if (level_difference == 0)
+            exp = (int)(math.floor(enemy.exp_yield * trainer_bonus ));
         else
             exp = (int)(math.floor((enemy.exp_yield * trainer_bonus)/level_difference) );
         return exp;
@@ -161,12 +166,19 @@ public class Pokemon : ScriptableObject
     void Evolve(Evolution evo)
     {
         Pokemon_name = evo.Evo_name;
+        EVs=evo.EVs;
         types = evo.types;
         ability = evo.ability;
         learnSet = evo.learnSet;
         front_picture = evo.front_picture;
         back_picture = evo.back_picture;
         exp_yield = evo.exp_yield;
+        BaseHP=evo.BaseHP;
+        BaseAttack=evo.BaseAttack;
+        BaseDefense=evo.BaseDefense;
+        BaseSP_ATK=evo.BaseSP_ATK;
+        BaseSP_DEF=evo.BaseSP_DEF;
+        Basespeed = evo.Basespeed;
     }
 
     void Increase_Stats()
@@ -196,10 +208,9 @@ public class Pokemon : ScriptableObject
     }
     public void Level_up()
     {
+        OnLevelUP?.Invoke();
         Current_level++;
-        Buff_Debuffs.Clear();
         Increase_Stats();
-        Battle_Data.Reset_Battle_state(this);
         Battle_handler.instance.Set_pkm();
         if(split_evolution)
             split_evo();

@@ -27,3 +27,5 @@ MonoBehaviour:
   BaseSP_ATK: 25
   BaseSP_DEF: 25
   Basespeed: 15
+  EVs:
+  - Defense2

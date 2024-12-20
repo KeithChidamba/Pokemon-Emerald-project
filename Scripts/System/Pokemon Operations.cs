@@ -18,8 +18,9 @@ public static class PokemonOperations
     public static int Generate_Personality()
     {
         System.Random rand = new System.Random();
-        int randomInt = rand.Next(int.MinValue, int.MaxValue);
-        return randomInt;
+        int part1 = rand.Next(0, 65536); // 16-bit random value
+        int part2 = rand.Next(0, 65536); // 16-bit random value
+        return math.abs((part1 << 16) | part2);
     }
     public static void getAbility(Pokemon new_pkm)
     {
@@ -38,7 +39,9 @@ public static class PokemonOperations
 
     public static void getNature(Pokemon new_pkm)
     {
-        int NatureValue = new_pkm.Personality_value % 25;
+        int NatureValue = 0;
+        if(new_pkm.Personality_value>0)
+             NatureValue = new_pkm.Personality_value % 25;
         string[] natures =
         {
             "Hardy", "Lonely", "Brave", "Adamant", "Naughty",
@@ -47,13 +50,48 @@ public static class PokemonOperations
             "Modest", "Mild", "Quiet", "Bashful", "Rash",
             "Calm", "Gentle", "Sassy", "Careful", "Quirky"
         };
-        Nature n=null;
         foreach (string nature in natures)
-            n = Resources.Load<Nature>("Pokemon_project_assets/Pokemon_obj/Natures/" + nature);
-        if (n?.PValue == NatureValue)
-            new_pkm.nature = n;
+        {
+            Nature n = Resources.Load<Nature>("Pokemon_project_assets/Pokemon_obj/Natures/" + nature);
+            if (n.PValue == NatureValue)
+            {
+                new_pkm.nature = n;
+                break;
+            }
+        }
     }
 
+    public static void GetEV(string stat,float EVamount,Pokemon pkm)
+    {
+        switch (stat)
+        {
+            case "HP": 
+                pkm.HP_EV=checkEV(pkm.HP_EV,EVamount,pkm);
+                break;
+            case "Attack": 
+                pkm.Attack_EV=checkEV(pkm.Attack_EV,EVamount,pkm);
+                break;
+            case "Defense": 
+                pkm.Defense_EV=checkEV(pkm.Defense_EV,EVamount,pkm);
+                break;
+            case "Special Attack": 
+                pkm.SP_ATK_EV=checkEV(pkm.SP_ATK_EV,EVamount,pkm);
+                break;
+            case "Special Defense": 
+                pkm.SP_DEF_EV=checkEV(pkm.SP_DEF_EV,EVamount,pkm);
+                break;
+            case "Speed": 
+                pkm.speed_EV=checkEV(pkm.speed_EV,EVamount,pkm);
+                break;
+        }
+    }
+    static float checkEV(float ev,float amount,Pokemon pkm)
+    {
+        float sumEV = pkm.HP_EV + pkm.Attack_EV + pkm.Defense_EV + pkm.SP_ATK_EV + pkm.SP_DEF_EV + pkm.speed_EV;
+        if (ev < 255 && sumEV < 510)
+            return ev+=amount;
+        return 0;
+    }
     public static void Generate_IVs(Pokemon new_pkm)
     {
         new_pkm.HP_IV =  Utility.Get_rand(0,32);
@@ -65,14 +103,26 @@ public static class PokemonOperations
     }
     public static void get_Gender(Pokemon new_pkm)
     {
-        int gender_check = new_pkm.Personality_value % 256;
+        int gender_check = 0;
+        if(new_pkm.Personality_value>0)
+            gender_check = new_pkm.Personality_value % 256;
         int pos = new_pkm.GenderRatio.IndexOf('/');
-        int ratio_female = int.Parse(new_pkm.GenderRatio.Substring(pos + 1, new_pkm.GenderRatio.Length - pos - 1));
-        int Gender_threshold = (int)math.trunc(((ratio_female / 100) * 256));
-        Debug.Log("gender: "+gender_check +"/"+Gender_threshold);
+        string ratio = new_pkm.GenderRatio.Substring(pos + 1, new_pkm.GenderRatio.Length - pos - 1);
+        float ratio_female = float.Parse(ratio);
+        int Gender_threshold = math.abs((int)math.trunc(((ratio_female / 100) * 256)));
         if (gender_check < Gender_threshold)
             new_pkm.Gender = "Male";
         else
             new_pkm.Gender = "Female";
+    }
+    public static void SetPkmtraits(Pokemon new_pkm)
+    {
+        new_pkm.Pokemon_ID = Generate_ID(new_pkm.Pokemon_name);
+        new_pkm.Personality_value = Generate_Personality();
+        if(new_pkm.has_gender)
+            get_Gender(new_pkm);
+        getAbility(new_pkm);
+        getNature(new_pkm);
+        Generate_IVs(new_pkm);
     }
 }

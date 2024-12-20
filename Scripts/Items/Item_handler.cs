@@ -64,9 +64,18 @@ public class Item_handler : MonoBehaviour
             Dialogue_handler.instance.Write_Info("Incorrect heal item","Details");
         }
         Dialogue_handler.instance.Dialouge_off(1f);
-        Using_item = false;
         Pokemon_party.instance.Refresh_Member_Cards();
-}
+        Using_item = false;
+        skipTurn();
+    }
+    void skipTurn()
+    {
+        if (Options_manager.instance.playerInBattle)
+        {
+            Game_ui_manager.instance.Close_party();
+            Turn_Based_Combat.instance.Next_turn();
+        }
+    }
     private void Heal(int heal_effect)
     {
         if ((selected_party_pkm.HP + heal_effect) <= selected_party_pkm.max_HP)
@@ -82,5 +91,6 @@ public class Item_handler : MonoBehaviour
         }
         Dialogue_handler.instance.Dialouge_off(1f);
         Using_item = false;
+        skipTurn();
     }
 }

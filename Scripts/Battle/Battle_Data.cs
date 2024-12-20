@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public  class Battle_Data:MonoBehaviour
+public class Battle_Data:MonoBehaviour
 {
     public float Attack;
     public float Defense;
@@ -25,7 +25,7 @@ public  class Battle_Data:MonoBehaviour
         participant.pokemon.SP_DEF=SP_DEF;
         participant.pokemon.speed=speed;
     }
-    public static void Reset_Battle_state(Pokemon pokemon)
+    public void Reset_Battle_state(Pokemon pokemon)
     {
         pokemon.Accuracy = 100;
         pokemon.Evasion = 0;

@@ -5,13 +5,14 @@ using UnityEngine.UI;
 
 public class Pokemon_Details : MonoBehaviour
 {
-    public Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID;
+    public Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID,pkm_nature,Trainer_Name;
     public Text pkm_atk, pkm_sp_atk, pkm_def, pkm_sp_def, pkm_speed, pkm_hp;
     public Text move_Description;
     public GameObject[] moves_btns;
     public Text[] moves_pp;
     public Text[] moves;
     public Image pkm_img;
+    public Image gender_img;
     public Image type1;
     public Image type2;
     public Image[] Move_type;
@@ -55,7 +56,7 @@ public class Pokemon_Details : MonoBehaviour
         switch (Page)
         {
             case 1:
-                load_Ablty_ui();
+                load_Ability_ui();
                 break;
             case 2:
                 load_Stats_ui();
@@ -65,7 +66,7 @@ public class Pokemon_Details : MonoBehaviour
                 break;
         }
     }
-    void load_Ablty_ui()
+    void load_Ability_ui()
     {
         Stats_ui.SetActive(false);
         Moves_ui.SetActive(false);
@@ -83,7 +84,9 @@ public class Pokemon_Details : MonoBehaviour
             type2.gameObject.SetActive(false);
         }
         pkm_ablty_desc.text = current_pkm.ability.ability_description;
-        pkm_ablty.text = current_pkm.ability.ability;
+        Trainer_Name.text = Game_Load.instance.player_data.Player_name;
+        pkm_ablty.text = current_pkm.ability.ability.ToUpper();
+        pkm_nature.text = current_pkm.nature.natureName.ToUpper();
         Ability_ui.SetActive(true);
     }    
     void load_Stats_ui()
@@ -130,6 +133,11 @@ public class Pokemon_Details : MonoBehaviour
         pkm_ID.text = "ID: "+current_pkm.Pokemon_ID;
         pkm_lv.text = "Lv "+current_pkm.Current_level;
         pkm_img.sprite = current_pkm.front_picture;
+        gender_img.gameObject.SetActive(true);
+        if(current_pkm.has_gender)
+            gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+current_pkm.Gender.ToLower());
+        else
+            gender_img.gameObject.SetActive(false);
         current_page = 1;
         Load_ui(current_page);
     }

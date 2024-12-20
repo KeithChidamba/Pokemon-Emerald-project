@@ -52,6 +52,7 @@ public static class Obj_Instance
         new_pkm.Defense = pkm.Defense;
         new_pkm.SP_DEF = pkm.SP_DEF;
         new_pkm.speed = pkm.speed;
+        new_pkm.EVs = pkm.EVs;
         new_pkm.HP_IV =  pkm.HP_IV;
         new_pkm.Attack_IV = pkm.Attack_IV;
         new_pkm.Defense_IV =  pkm.Defense_IV;

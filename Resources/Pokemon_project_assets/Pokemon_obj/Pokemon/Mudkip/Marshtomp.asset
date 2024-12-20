@@ -22,3 +22,11 @@ MonoBehaviour:
   - fighting/brick break16
   front_picture: {fileID: 21300000, guid: 68d5d916696bf4847a62a5e9f301130a, type: 3}
   back_picture: {fileID: 21300000, guid: 46f8d9b349517904085fbd4a20c04abc, type: 3}
+  BaseHP: 70
+  BaseAttack: 85
+  BaseDefense: 70
+  BaseSP_ATK: 60
+  BaseSP_DEF: 70
+  Basespeed: 50
+  EVs:
+  - Attack2
