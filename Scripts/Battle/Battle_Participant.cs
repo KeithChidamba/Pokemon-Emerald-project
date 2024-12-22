@@ -59,7 +59,6 @@ public class Battle_Participant : MonoBehaviour
         {
             Onfaint?.Invoke(this);
             Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
-            Dialogue_handler.instance.info_off(1f);
             if (isPlayer)
                 Invoke(nameof(Check_loss),1f);
             else

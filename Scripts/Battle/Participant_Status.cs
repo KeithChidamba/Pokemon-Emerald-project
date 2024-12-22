@@ -54,19 +54,19 @@ public class Participant_Status : MonoBehaviour
     void Check_burn()
     {
         Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is hurt by the burn");
-        Dialogue_handler.instance.info_off(1f);
+        
         loose_HP(0.125f);
     }
     void Check_poison()
     {
         Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is poisoned");
-        Dialogue_handler.instance.info_off(1f);
+        
         loose_HP(0.125f);
     }
     void Check_badlypoison()
     {
         Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is badly poisoned");
-        Dialogue_handler.instance.info_off(1f);
+        
         loose_HP((status_duration+1)/16f);
     }
     void Check_freeze()
@@ -74,7 +74,7 @@ public class Participant_Status : MonoBehaviour
         if (Utility.Get_rand(1, 101) < 10) //10% chance
         {
             Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Unfroze!");
-            Dialogue_handler.instance.info_off(1f);
+            
             remove_status_effect();
         }
         else
@@ -100,7 +100,7 @@ public class Participant_Status : MonoBehaviour
             if (Utility.Get_rand(1, 101) < 100 * chances[status_duration])
             {
                 Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Woke UP!");
-                Dialogue_handler.instance.info_off(1f);
+                
                 remove_status_effect();
             }
             else

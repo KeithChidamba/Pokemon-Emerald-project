@@ -95,7 +95,6 @@ public static class BattleOperations
                 Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher");
             else 
                 Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
-            Dialogue_handler.instance.info_off(1f);
             return 0;
         }
         if ((buff.Stage + buff_amount) < limit_low)

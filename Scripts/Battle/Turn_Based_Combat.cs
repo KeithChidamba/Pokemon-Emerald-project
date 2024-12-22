@@ -57,8 +57,6 @@ public class Turn_Based_Combat : MonoBehaviour
             else if(command._turn.attacker_.pokemon.Status_effect!="None")
                 Dialogue_handler.instance.Battle_Info(command._turn.attacker_.pokemon.Pokemon_name+" is affected by "+ command._turn.attacker_.pokemon.Status_effect);
         }
-        if(Battle_handler.instance.displaying_info)
-            Dialogue_handler.instance.info_off(1f);
         return false;
     }
     IEnumerator ExecuteMoves(List<Pkm_Use_Move> command_order)

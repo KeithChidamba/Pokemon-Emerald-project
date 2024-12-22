@@ -94,12 +94,10 @@ public class Move_handler:MonoBehaviour
             current_turn.victim_.pokemon.HP -= Calc_Damage();
         else
             Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" protected itself");
-        Invoke(nameof(Move_done),1f);
     }
-    void Move_done()
+    public void Move_done()
     {
         Doing_move = false;
-        Dialogue_handler.instance.info_off();
     }
     void Get_status()
     {
@@ -188,7 +186,7 @@ public class Move_handler:MonoBehaviour
         current_turn.victim_.pokemon.HP -= damage;
         float heal_amount = math.abs(current_turn.victim_.pokemon.HP - enemy_previous_hp);
         current_turn.attacker_.pokemon.HP += math.trunc(heal_amount/2f);
-        Invoke(nameof(Move_done),1f);
+        //Invoke(nameof(Move_done),1f);
     }
     void doublekick()
     {

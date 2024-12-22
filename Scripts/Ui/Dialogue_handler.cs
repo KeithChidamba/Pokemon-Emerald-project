@@ -26,6 +26,8 @@ public class Dialogue_handler : MonoBehaviour
     public Options_manager options;
     [SerializeField] GameObject[] option_btns;
     [SerializeField] Text[] option_btns_txt;
+    public List<Interaction> Message_Qeue;
+    public bool messagesLoading = false;
     public static Dialogue_handler instance;
     private void Awake()
     {
@@ -68,23 +70,15 @@ public class Dialogue_handler : MonoBehaviour
                     Dialouge_txt.text = current_line;
                     text_finished = true;
                     if (Current_interaction.InterAction_type == "Options")
-                    {
                         Display_Options(true);
-                    }   
                 }
             }
         }
         if (overworld_actions.instance !=null)
-        {
             if (overworld_actions.instance.doing_action )
-            {
                 Remove_Exit();
-            }
-        }
         if (displaying && Input.GetKeyDown(KeyCode.R) && can_exit)
-        {
             Dialouge_off();
-        }
     }
 
     void Remove_Exit()
@@ -125,9 +119,27 @@ public class Dialogue_handler : MonoBehaviour
         Remove_Exit();
         Battle_handler.instance.displaying_info = true;
         Interaction details = new_interaction(info,"Battle Info","");
-        Current_interaction = details;
-        Display(Current_interaction);
+        Message_Qeue.Add(details);
+        if(!messagesLoading)
+            StartCoroutine(ProccessQeue());
     }
+    IEnumerator ProccessQeue()
+    {
+        foreach (Interaction msg in new List<Interaction>(Message_Qeue))
+        {
+            messagesLoading = true;
+            Current_interaction = new_interaction(msg.InteractionMsg,"Battle Info","");
+            Display(Current_interaction);
+            Message_Qeue.Remove(msg);
+            yield return new WaitForSeconds(1f); //WaitUntil(()=>Message_Qeue.Count==0);
+        }
+        if (Message_Qeue.Count == 0 )
+            messagesLoading = false;
+        Battle_handler.instance.displaying_info = false;
+        Move_handler.instance.Move_done();
+        yield return null;
+    }
+
     public void Write_Info(string info, string type, string option1, string result, string option2,string opTxt1,string opTxt2)//display a choice, with a result when they choose NO
     {
         Interaction details = new_interaction(info,type,result);
@@ -141,9 +153,7 @@ public class Dialogue_handler : MonoBehaviour
     public void Display_Options(bool display)
     {
         foreach (GameObject obj in option_btns)
-        {
             obj.SetActive(display);
-        }
     }
     public void Option_choice(string choice)
     {//only ever be 2 options, unless list type dialogue 
@@ -169,14 +179,15 @@ public class Dialogue_handler : MonoBehaviour
     {
         Invoke(nameof(Dialouge_off), delay);
     }
-    public void info_off()
+    /*public void info_off()
     {
         Battle_handler.instance.displaying_info = false;
+        messagesLoading = false;
     }
-    public void info_off(float delay)
+    private void info_off(float delay)
     {
         Invoke(nameof(info_off), delay);
-    }
+    }*/
     public void  Dialouge_off()
     {
         Display_Options(false);

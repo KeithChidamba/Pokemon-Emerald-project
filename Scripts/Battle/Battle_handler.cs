@@ -58,7 +58,7 @@ public class Battle_handler : MonoBehaviour
             else
             {
                 displaying_info = true;
-                Dialogue_handler.instance.Write_Info("Click on who you will attack", "Battle info");
+                Dialogue_handler.instance.Write_Info("Click on who you will attack", "Battle info");//details
             }
         }
         if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
@@ -86,7 +86,7 @@ public class Battle_handler : MonoBehaviour
                 viewing_options = false;
             if (viewing_options)
             {
-                Dialogue_handler.instance.Write_Info("What will you do?", "Battle info");
+               Dialogue_handler.instance.Write_Info("What will you do?", "Details");
                 options_ui.SetActive(true);
             }
         }
