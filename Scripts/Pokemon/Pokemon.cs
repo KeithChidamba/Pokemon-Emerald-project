@@ -144,7 +144,7 @@ public class Pokemon : ScriptableObject
                 Level_up();
             level_progress -= 100 * num_levels;
         }
-        Debug.Log(Pokemon_name+" recieved "+ level_progress+" exp");
+        //Debug.Log(Pokemon_name+" recieved "+ level_progress+" exp");
     }
     public float Calc_Exp(Pokemon enemy)
     {
@@ -209,7 +209,6 @@ public class Pokemon : ScriptableObject
         OnLevelUP?.Invoke();
         Current_level++;
         Increase_Stats();
-        Battle_handler.instance.Set_pkm();
         if(split_evolution)
             split_evo();
         else

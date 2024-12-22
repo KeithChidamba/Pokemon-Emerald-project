@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public static class BattleOperations
 {
     private static float effectiveness = 0;
@@ -90,9 +92,10 @@ public static class BattleOperations
         if ( buff.Stage < limit_low | buff.Stage > limit_high)
         {
             if(increased)
-                Dialogue_handler.instance.Write_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher","Battle Info");
+                Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher");
             else 
-                Dialogue_handler.instance.Write_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower","Battle Info");
+                Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
+            Dialogue_handler.instance.info_off(1f);
             return 0;
         }
         if ((buff.Stage + buff_amount) < limit_low)
@@ -110,7 +113,10 @@ public static class BattleOperations
             Stage+=amount;
         else
             Stage-=amount;
-        return new Buff_Debuff(stat_name, Stage);
+        Buff_Debuff buff = ScriptableObject.CreateInstance<Buff_Debuff>();
+        buff.Stat = stat_name;
+        buff.Stage = Stage;
+        return buff;
     }
     public static Buff_Debuff GetBuff(Pokemon pkm,string stat_name)
     {

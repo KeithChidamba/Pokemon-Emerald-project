@@ -36,14 +36,15 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     bool Can_Attack(Pkm_Use_Move command)
     {
-        Battle_handler.instance.displaying_info = true;
         if(command._turn.attacker_.pokemon.HP<=0) return false;
         if (command._turn.attacker_.pokemon.canAttack)
         {
             if (command._turn.move_.Move_accuracy < 100)//not a sure-hit move
             {
                 if (!Move_successful(command._turn.attacker_.pokemon))
-                    Dialogue_handler.instance.Write_Info(command._turn.attacker_.pokemon+" missed the attack","Battle info");
+                {
+                    Dialogue_handler.instance.Battle_Info(command._turn.attacker_.pokemon+" missed the attack");
+                }
                 else
                     return true;
             }else
@@ -52,12 +53,12 @@ public class Turn_Based_Combat : MonoBehaviour
         else
         {
             if (command._turn.attacker_.pokemon.isFlinched)
-                Dialogue_handler.instance.Write_Info(command._turn.attacker_.pokemon.Pokemon_name+" flinched!","Battle info");
-            else
-                //freeze,paralysis
-                Dialogue_handler.instance.Write_Info(command._turn.attacker_.pokemon.Pokemon_name+" is affected by "+ command._turn.attacker_.pokemon.Status_effect,"Battle info");
+                Dialogue_handler.instance.Battle_Info(command._turn.attacker_.pokemon.Pokemon_name+" flinched!");
+            else if(command._turn.attacker_.pokemon.Status_effect!="None")
+                Dialogue_handler.instance.Battle_Info(command._turn.attacker_.pokemon.Pokemon_name+" is affected by "+ command._turn.attacker_.pokemon.Status_effect);
         }
-        Dialogue_handler.instance.Dialouge_off(1f);
+        if(Battle_handler.instance.displaying_info)
+            Dialogue_handler.instance.info_off(1f);
         return false;
     }
     IEnumerator ExecuteMoves(List<Pkm_Use_Move> command_order)

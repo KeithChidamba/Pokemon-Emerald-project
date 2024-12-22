@@ -24,12 +24,14 @@ public class Battle_Data:MonoBehaviour
         participant.pokemon.Defense=Defense;
         participant.pokemon.SP_DEF=SP_DEF;
         participant.pokemon.speed=speed;
+        save_stats(participant);
     }
-    public void Reset_Battle_state(Pokemon pokemon)
+    public void Reset_Battle_state(Pokemon pokemon,bool NotBattling)
     {
         pokemon.Accuracy = 100;
         pokemon.Evasion = 0;
-        pokemon.canAttack = true;
+        if(NotBattling)
+            pokemon.canAttack = true;
         pokemon.CanBeDamaged = true;
         pokemon.isFlinched = false;
         pokemon.Buff_Debuffs.Clear();

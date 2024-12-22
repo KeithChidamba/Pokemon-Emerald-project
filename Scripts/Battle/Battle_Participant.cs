@@ -32,7 +32,6 @@ public class Battle_Participant : MonoBehaviour
         status = GetComponent<Participant_Status>();
         data = GetComponent<Battle_Data>();
        Turn_Based_Combat.instance.OnNewTurn += Check_Faint;
-       
     }
     private void Update()
     {
@@ -59,14 +58,15 @@ public class Battle_Participant : MonoBehaviour
         if (pokemon.HP <= 0)
         {
             Onfaint?.Invoke(this);
+            Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
+            Dialogue_handler.instance.info_off(1f);
             if (isPlayer)
-                Check_loss();
+                Invoke(nameof(Check_loss),1f);
             else
             {
                 if (!Battle_handler.instance.is_trainer_battle)
                 {//end battle if wild
                     Wild_pkm.instance.InBattle = false;
-                    
                     Battle_handler.instance.End_Battle(true);
                 }
                 else
@@ -101,7 +101,7 @@ public class Battle_Participant : MonoBehaviour
     public void Reset_pkm()
     {
         data.Load_Stats(this);
-        data.Reset_Battle_state(pokemon);
+        data.Reset_Battle_state(pokemon,false);
     }
     private void update_ui()
     {
@@ -151,9 +151,7 @@ public class Battle_Participant : MonoBehaviour
         is_active = true;
         participant_ui.SetActive(true);
         gender_img();
-        refresh_statusIMG();
-        //data.Load_Stats(this);
-        status.Stat_drop();
+        Move_handler.instance.Set_Status(this, pokemon.Status_effect);
         if (isPlayer)
         {
             pokemon.OnLevelUP += Reset_pkm;

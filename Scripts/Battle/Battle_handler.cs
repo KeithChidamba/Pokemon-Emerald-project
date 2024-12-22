@@ -146,7 +146,10 @@ public class Battle_handler : MonoBehaviour
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].pokemon = enemy;
         Wild_pkm.instance.pokemon = Battle_P[2];
-        Set_pkm();
+        Set_pkm(false);
+        foreach(Battle_Participant p in Battle_P)
+            if (p.pokemon != null)
+                p.data.save_stats(p);
         Wild_pkm.instance.InBattle = true;
         set_battle();
     }
@@ -162,10 +165,10 @@ public class Battle_handler : MonoBehaviour
              Battle_P[0].Current_Enemies.Add(Battle_P[i + 2]);
              Battle_P[1].Current_Enemies.Add(Battle_P[i + 2]);
         }
-        Set_pkm();
+        Set_pkm(false);
         set_battle();
     }
-    public void Set_pkm()
+    public void Set_pkm(bool switchIn)
     {
         Battle_P[0].pokemon = Pokemon_party.instance.party[0];
         AddToExpList(Battle_P[0].pokemon);
@@ -174,13 +177,9 @@ public class Battle_handler : MonoBehaviour
             Battle_P[1].pokemon = Pokemon_party.instance.party[1];
             AddToExpList(Battle_P[1].pokemon);
         }
-        //double battle stuff
-        /*for(int i = 0; i < 2; i++)
-            if (Battle_P[i].pokemon != null)
-            {
-                Battle_P[i+2].Current_Enemies.Clear();
-                Battle_P[i + 2].Current_Enemies.Add(Battle_P[i]); //set enemies enemy equal to player's pkm
-}*/
+        if(switchIn)
+            Battle_P[0].data.save_stats(Battle_P[0]);
+        //only trainer needs to keep track of enemies
         Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
         Participant_count = 0;
         foreach(Battle_Participant p in Battle_P)
@@ -189,8 +188,8 @@ public class Battle_handler : MonoBehaviour
                 p.Load_ui();
                 p.ability_h.Set_ability();
                 Participant_count++;
-                p.data.save_stats(p);
             }
+
     }
 
     public void reload_participant_ui()
@@ -251,14 +250,14 @@ public class Battle_handler : MonoBehaviour
     {
         displaying_info = true;
         if (running_away)
-            Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " ran away", "Battle info");
+            Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
         else
         {
             if (Haswon)//get money if trainer, display msg of how much money
-                Dialogue_handler.instance.Write_Info(Game_Load.instance.player_data.Player_name + " won the battle", "Battle info");
+                Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
             else
             {
-                Dialogue_handler.instance.Write_Info("All your pokemon have fainted","Battle info");
+                Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
                 Area_manager.instance.Switch_Area("Poke Center",0f);
             }
         } 
@@ -275,9 +274,7 @@ public class Battle_handler : MonoBehaviour
         Debug.Log(exp_from_enemy+" exp");
         float exp = exp_from_enemy / exp_recievers.Count;
         foreach (Pokemon p in exp_recievers)
-        {
             p.Recieve_exp(exp);
-        }
     }
     void end_battle_ui()
     {
@@ -294,7 +291,7 @@ public class Battle_handler : MonoBehaviour
             if(p.pokemon!=null)
             {
                 p.data.Load_Stats(p);
-                p.data.Reset_Battle_state(p.pokemon);
+                p.data.Reset_Battle_state(p.pokemon,true);
                 p.pokemon = null;
                 p.Unload_ui();
             }
@@ -316,10 +313,13 @@ public class Battle_handler : MonoBehaviour
             if (random > 5)//initially 50/50 chance to run
                 End_Battle(false);
             else
-                Dialogue_handler.instance.Write_Info("Can't run away","Battle info");
+            {
+                Dialogue_handler.instance.Battle_Info("Can't run away");
+                Turn_Based_Combat.instance.Invoke(nameof(Turn_Based_Combat.instance.Next_turn),0.9f);
+            }
         }
         else
-            Dialogue_handler.instance.Write_Info("Can't run away from trainer battle","Battle info");
+            Dialogue_handler.instance.Battle_Info("Can't run away from trainer battle");
         Invoke(nameof(run_Off),1f);
     }
 void run_Off()

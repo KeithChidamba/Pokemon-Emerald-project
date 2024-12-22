@@ -48,10 +48,6 @@ public class Dialogue_handler : MonoBehaviour
                 option_btns_txt[0].text =Current_interaction.options_txt[0];
                 option_btns_txt[1].text =Current_interaction.options_txt[1];
             }
-            if (Current_interaction.InterAction_type == "Battle info")
-            {
-                Remove_Exit();
-            }
         }
         if (displaying && !text_finished)
         {
@@ -124,6 +120,14 @@ public class Dialogue_handler : MonoBehaviour
         Current_interaction = details;
         Display(Current_interaction);
     }
+    public void Battle_Info(string info)//display plain text info to player
+    {
+        Remove_Exit();
+        Battle_handler.instance.displaying_info = true;
+        Interaction details = new_interaction(info,"Battle Info","");
+        Current_interaction = details;
+        Display(Current_interaction);
+    }
     public void Write_Info(string info, string type, string option1, string result, string option2,string opTxt1,string opTxt2)//display a choice, with a result when they choose NO
     {
         Interaction details = new_interaction(info,type,result);
@@ -164,6 +168,14 @@ public class Dialogue_handler : MonoBehaviour
     public void Dialouge_off(float delay)
     {
         Invoke(nameof(Dialouge_off), delay);
+    }
+    public void info_off()
+    {
+        Battle_handler.instance.displaying_info = false;
+    }
+    public void info_off(float delay)
+    {
+        Invoke(nameof(info_off), delay);
     }
     public void  Dialouge_off()
     {

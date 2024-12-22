@@ -7,7 +7,7 @@ using UnityEngine;
 public class Participant_Status : MonoBehaviour
 {
     public Battle_Participant _participant;
-    private int status_duration = 0;
+    public int status_duration = 0;
     private int num_status_turns = 0;
     void Start()
     {
@@ -16,6 +16,7 @@ public class Participant_Status : MonoBehaviour
     }
     public void Get_statusEffect(int num_turns)
     {
+        if (_participant.pokemon.Status_effect == "None") return;
         status_duration = 0;
         num_status_turns = num_turns;
         _participant.refresh_statusIMG();
@@ -41,13 +42,10 @@ public class Participant_Status : MonoBehaviour
             _participant.pokemon.isFlinched = false;
             _participant.pokemon.canAttack = true;
         }
-        else
-        {
-            if (_participant.pokemon.Status_effect == "None") return;
-            _participant.refresh_statusIMG();
-            status_duration++;
-            Recovery_Chance();
-        }
+        if (_participant.pokemon.Status_effect == "None") return;
+        _participant.refresh_statusIMG();
+        status_duration++;
+        Recovery_Chance();
     }
     void Recovery_Chance()
     {
@@ -55,28 +53,36 @@ public class Participant_Status : MonoBehaviour
     }
     void Check_burn()
     {
-        Dialogue_handler.instance.Write_Info(_participant.pokemon.Pokemon_name+" is hurt by the burn","Battle info");
+        Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is hurt by the burn");
+        Dialogue_handler.instance.info_off(1f);
         loose_HP(0.125f);
     }
     void Check_poison()
     {
-        Dialogue_handler.instance.Write_Info(_participant.pokemon.Pokemon_name+" is poisoned","Battle info");
+        Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is poisoned");
+        Dialogue_handler.instance.info_off(1f);
         loose_HP(0.125f);
     }
     void Check_badlypoison()
     {
-        Dialogue_handler.instance.Write_Info(_participant.pokemon.Pokemon_name+" is badly poisoned","Battle info");
+        Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is badly poisoned");
+        Dialogue_handler.instance.info_off(1f);
         loose_HP((status_duration+1)/16f);
     }
     void Check_freeze()
     {
-        if (Utility.Get_rand(1, 101) < 10)//10% chance
+        if (Utility.Get_rand(1, 101) < 10) //10% chance
+        {
+            Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Unfroze!");
+            Dialogue_handler.instance.info_off(1f);
             remove_status_effect();
+        }
         else
             _participant.pokemon.canAttack = false;
     }
     void Check_paralysis()
     {
+        if (_participant.pokemon.isFlinched) return;
         if (Utility.Get_rand(1, 101) < 75)//75% chance
             _participant.pokemon.canAttack = true;
         else
@@ -90,11 +96,11 @@ public class Participant_Status : MonoBehaviour
         else
         {
             float[] chances = { 0.25f, 0.33f, 0.5f, 1 };
+            Debug.Log("sleep: "+status_duration);
             if (Utility.Get_rand(1, 101) < 100 * chances[status_duration])
             {
-                //recover
-                num_status_turns = 0;
-                status_duration = 0;
+                Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Woke UP!");
+                Dialogue_handler.instance.info_off(1f);
                 remove_status_effect();
             }
             else

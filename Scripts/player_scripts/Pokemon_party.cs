@@ -148,7 +148,7 @@ public class Pokemon_party : MonoBehaviour
         Refresh_Member_Cards();
         member_indicator.SetActive(false);
         if(Options_manager.instance.playerInBattle)
-            Battle_handler.instance.Set_pkm();
+            Battle_handler.instance.Set_pkm(true);
         if(!Swapping_in && !SwapOutNext)
         {
             Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");

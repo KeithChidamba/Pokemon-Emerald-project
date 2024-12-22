@@ -22,7 +22,7 @@ public class Move_handler:MonoBehaviour
     public void Do_move(Turn turn)
     {
         current_turn=turn;
-        Dialogue_handler.instance.Write_Info(turn.attacker_.pokemon.Pokemon_name+" used "+turn.move_.Move_name+" on "+turn.victim_.pokemon.Pokemon_name+"!","Battle info");
+        Dialogue_handler.instance.Battle_Info(turn.attacker_.pokemon.Pokemon_name+" used "+turn.move_.Move_name+" on "+turn.victim_.pokemon.Pokemon_name+"!");
         Invoke(nameof(Move_effect),1f);//remove after adding animations
         //Invoke(nameof(PlayAnimation),1f);
     }
@@ -78,14 +78,14 @@ public class Move_handler:MonoBehaviour
         if (Utility.Get_rand(1, (int)(100 / current_turn.attacker_.pokemon.crit_chance) + 1) < 2)
         {
             crit = 2;
-            Dialogue_handler.instance.Write_Info("Critical Hit!", "Battle info");
+            Dialogue_handler.instance.Battle_Info("Critical Hit!");
         }
         float base_Damage = (level_factor * current_turn.move_.Move_damage *
                              (Attack_type/ current_turn.move_.Move_damage))/current_turn.attacker_.pokemon.Current_level;
         float Modifier = crit*Stab*random_factor*type_effectiveness;
         damage_dealt = math.trunc(Modifier * base_Damage * atk_def_ratio);
         if (type_effectiveness > 1)
-            Dialogue_handler.instance.Write_Info("The move is Super effective!", "Battle info");
+            Dialogue_handler.instance.Battle_Info("The move is Super effective!");
         return damage_dealt;
     }
     void Deal_Damage()//anim event
@@ -93,24 +93,26 @@ public class Move_handler:MonoBehaviour
         if (current_turn.victim_.pokemon.CanBeDamaged)
             current_turn.victim_.pokemon.HP -= Calc_Damage();
         else
-            Dialogue_handler.instance.Write_Info(current_turn.victim_.pokemon.Pokemon_name+" protected itself", "Battle info");
+            Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" protected itself");
         Invoke(nameof(Move_done),1f);
     }
     void Move_done()
     {
         Doing_move = false;
-        Dialogue_handler.instance.Dialouge_off();
+        Dialogue_handler.instance.info_off();
     }
     void Get_status()
     {
         if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
-        {
-            current_turn.victim_.pokemon.Status_effect = current_turn.move_.Status_effect;
-            int num_turns = 0;
-            if(current_turn.move_.Status_effect=="Sleep") 
-                num_turns = Utility.Get_rand(1, 5);
-            current_turn.victim_.status.Get_statusEffect(num_turns);
-        }
+            Set_Status(current_turn.victim_,current_turn.move_.Status_effect);
+    }
+    public void Set_Status(Battle_Participant p,String Status)
+    {
+        p.pokemon.Status_effect = Status;
+        int num_turns = 0;
+        if(Status=="Sleep") 
+            num_turns = Utility.Get_rand(1, 5);
+        p.status.Get_statusEffect(num_turns);
     }
     void flinch_enemy()
     {
@@ -123,6 +125,7 @@ public class Move_handler:MonoBehaviour
         int buff_amount = int.Parse(effect[2].ToString());
         char reciever = effect[0];//who the change is effecting
         string stat = effect.Substring(3, effect.Length - 3);
+        Debug.Log(stat+" "+result +buff_amount);
         switch (stat.ToLower())
         {
             case"Defense":
@@ -170,7 +173,8 @@ public class Move_handler:MonoBehaviour
             result_txt = "Decreased";
         }
         Buff_Debuff buff = BattleOperations.GetBuff(reciever_pkm, stat);
-        Dialogue_handler.instance.Write_Info(reciever_pkm.Pokemon_name+"'s "+buff.Stat+" "+result_txt+"!", "Battle info");
+        Debug.Log(reciever_pkm.Pokemon_name+"'s "+buff.Stat+" "+result_txt+"!");
+        Dialogue_handler.instance.Battle_Info(reciever_pkm.Pokemon_name+"'s "+buff.Stat+" "+result_txt+"!");
         if (stat == "Accuracy" | stat == "Evasion")
             return math.trunc(stat_val * Accuracy_Evasion_Levels[buff.Stage+6]); 
         if(stat=="Crit")    
