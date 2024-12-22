@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Participant_Status : MonoBehaviour
@@ -23,9 +24,9 @@ public class Participant_Status : MonoBehaviour
     }
     void loose_HP(float percentage)
     {
-        _participant.pokemon.HP -= _participant.pokemon.HP * percentage;
+        _participant.pokemon.HP -= math.trunc(_participant.pokemon.HP * percentage);
     }
-    void Stat_drop()
+    public void Stat_drop()
     {
         if (_participant.pokemon.Status_effect == "Burn")
             _participant.pokemon.Attack *= 0.5f;
@@ -35,14 +36,17 @@ public class Participant_Status : MonoBehaviour
     private void Check_status()
     {
         if (!_participant.is_active) return;
-        if (_participant.pokemon.Status_effect == "None") return;
-        _participant.refresh_statusIMG();
-        status_duration++;
-        Recovery_Chance();
         if (_participant.pokemon.isFlinched)
         {
             _participant.pokemon.isFlinched = false;
             _participant.pokemon.canAttack = true;
+        }
+        else
+        {
+            if (_participant.pokemon.Status_effect == "None") return;
+            _participant.refresh_statusIMG();
+            status_duration++;
+            Recovery_Chance();
         }
     }
     void Recovery_Chance()
@@ -51,14 +55,17 @@ public class Participant_Status : MonoBehaviour
     }
     void Check_burn()
     {
+        Dialogue_handler.instance.Write_Info(_participant.pokemon.Pokemon_name+" is hurt by the burn","Battle info");
         loose_HP(0.125f);
     }
     void Check_poison()
     {
+        Dialogue_handler.instance.Write_Info(_participant.pokemon.Pokemon_name+" is poisoned","Battle info");
         loose_HP(0.125f);
     }
     void Check_badlypoison()
     {
+        Dialogue_handler.instance.Write_Info(_participant.pokemon.Pokemon_name+" is badly poisoned","Battle info");
         loose_HP((status_duration+1)/16f);
     }
     void Check_freeze()
@@ -68,7 +75,7 @@ public class Participant_Status : MonoBehaviour
         else
             _participant.pokemon.canAttack = false;
     }
-    void check_paralysis()
+    void Check_paralysis()
     {
         if (Utility.Get_rand(1, 101) < 75)//75% chance
             _participant.pokemon.canAttack = true;
@@ -98,5 +105,6 @@ public class Participant_Status : MonoBehaviour
     {
         _participant.pokemon.Status_effect = "None";
         _participant.pokemon.canAttack = true;
+        _participant.refresh_statusIMG();
     }
 }

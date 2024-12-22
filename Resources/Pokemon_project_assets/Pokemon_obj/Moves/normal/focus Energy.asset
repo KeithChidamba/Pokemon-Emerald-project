@@ -25,7 +25,7 @@ MonoBehaviour:
   Powerpoints: 15
   max_Powerpoints: 15
   Status_effect: None
-  Buff_Debuff: p+crit
+  Buff_Debuff: p+2Crit
   Status_chance: 0
   Debuff_chance: 100
   Description: Raises pokemon's focus to increase crit chance

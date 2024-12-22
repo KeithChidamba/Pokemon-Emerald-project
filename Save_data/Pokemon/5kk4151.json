@@ -6,24 +6,22 @@
     "Gender": "Male",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31860
+        "instanceID": 30192
     },
     "has_gender": true,
-    "EV": 0,
-    "IV": 0,
-    "HP": 29.0,
-    "max_HP": 29.0,
+    "HP": 30.0,
+    "max_HP": 30.0,
     "BaseHP": 50.0,
     "BaseAttack": 65.0,
     "BaseDefense": 45.0,
     "BaseSP_ATK": 85.0,
     "BaseSP_DEF": 65.0,
     "Basespeed": 95.0,
-    "Attack": 24.0,
-    "Defense": 24.0,
-    "SP_ATK": 26.0,
+    "Attack": 3552.0,
+    "Defense": 25.0,
+    "SP_ATK": 28.0,
     "SP_DEF": 22.0,
-    "speed": 24.0,
+    "speed": 2419.0,
     "HP_IV": 26.0,
     "Attack_IV": 9.0,
     "Defense_IV": 31.0,
@@ -31,18 +29,18 @@
     "SP_DEF_IV": 10.0,
     "speed_IV": 7.0,
     "HP_EV": 0.0,
-    "Attack_EV": 0.0,
+    "Attack_EV": 109.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 0.0,
+    "speed_EV": 219.0,
     "EVs": [
         "Speed2"
     ],
     "Accuracy": 100.0,
     "Evasion": 0.0,
     "crit_chance": 6.25,
-    "Current_level": 19,
+    "Current_level": 20,
     "level_progress": 0.0,
     "exp_yield": 141,
     "has_trainer": true,
@@ -51,11 +49,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29746
+            "instanceID": 29812
         }
     ],
-    "Status_effect": "None",
-    "Buff_Debuffs": [],
+    "Status_effect": "Burn",
     "type_Immunity": "None",
     "evo_line": [
         "16",
@@ -70,37 +67,37 @@
     ],
     "move_set": [
         {
-            "instanceID": -64432
+            "instanceID": -122550
         },
         {
-            "instanceID": -64434
+            "instanceID": -122552
         },
         {
-            "instanceID": -64436
+            "instanceID": -122554
         },
         {
-            "instanceID": -64438
+            "instanceID": -122556
         }
     ],
     "ability": {
-        "instanceID": 29748
+        "instanceID": 29814
     },
     "evolutions": [
         {
-            "instanceID": 29750
+            "instanceID": 29816
         },
         {
-            "instanceID": 29752
+            "instanceID": 29818
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29856
+        "instanceID": 29922
     },
     "back_picture": {
-        "instanceID": 29694
+        "instanceID": 29758
     },
     "ability_name": "Overgrow",
     "natureName": "Rash",

@@ -1,0 +1,128 @@
+{
+    "Base_Pokemon_name": "Torchic",
+    "Pokemon_name": "Combusken",
+    "Pokemon_ID": "5ii6136",
+    "Personality_value": 273193767,
+    "Gender": "Female",
+    "GenderRatio": "87.5/12.5",
+    "nature": {
+        "instanceID": 30228
+    },
+    "has_gender": true,
+    "HP": 27.0,
+    "max_HP": 27.0,
+    "BaseHP": 60.0,
+    "BaseAttack": 85.0,
+    "BaseDefense": 60.0,
+    "BaseSP_ATK": 85.0,
+    "BaseSP_DEF": 60.0,
+    "Basespeed": 55.0,
+    "Attack": 22.0,
+    "Defense": 22.0,
+    "SP_ATK": 24.0,
+    "SP_DEF": 22.0,
+    "speed": 20.0,
+    "HP_IV": 15.0,
+    "Attack_IV": 16.0,
+    "Defense_IV": 2.0,
+    "SP_ATK_IV": 17.0,
+    "SP_DEF_IV": 18.0,
+    "speed_IV": 20.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "Speed1",
+        "Attack1"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 0.0,
+    "crit_chance": 6.25,
+    "Current_level": 17,
+    "level_progress": 0.0,
+    "exp_yield": 142,
+    "has_trainer": false,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 29882
+        },
+        {
+            "instanceID": 29968
+        }
+    ],
+    "Status_effect": "Sleep",
+    "type_Immunity": "None",
+    "evo_line": [
+        "16",
+        "30"
+    ],
+    "abilities": [
+        "Inferno"
+    ],
+    "split_evolution": false,
+    "learnSet": [
+        "fire/flame thrower18"
+    ],
+    "move_set": [
+        {
+            "instanceID": -122580
+        },
+        {
+            "instanceID": -122582
+        },
+        {
+            "instanceID": -122584
+        },
+        {
+            "instanceID": -122586
+        }
+    ],
+    "ability": {
+        "instanceID": 29884
+    },
+    "evolutions": [
+        {
+            "instanceID": 29886
+        },
+        {
+            "instanceID": 29888
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "front_picture": {
+        "instanceID": 29970
+    },
+    "back_picture": {
+        "instanceID": 29972
+    },
+    "ability_name": "Inferno",
+    "natureName": "Quiet",
+    "evo_data": [
+        "Combusken",
+        "Blaziken"
+    ],
+    "type_data": [
+        "Fire",
+        "Fighting"
+    ],
+    "move_data": [
+        "Scratch/Normal",
+        "Ember/Fire",
+        "Double kick/Fighting",
+        "Focus Energy/Normal"
+    ],
+    "move_pp_data": [
+        25,
+        20,
+        20,
+        15
+    ]
+}

@@ -91,7 +91,7 @@ public class Battle_Participant : MonoBehaviour
         }
         else
         {//select next pokemon to switch in
-            Pokemon_party.instance.Swapping_in = true;
+            Pokemon_party.instance.SwapOutNext = true;
             Game_ui_manager.instance.View_pkm_Party();
             Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");
             Reset_pkm();
@@ -152,6 +152,8 @@ public class Battle_Participant : MonoBehaviour
         participant_ui.SetActive(true);
         gender_img();
         refresh_statusIMG();
+        //data.Load_Stats(this);
+        status.Stat_drop();
         if (isPlayer)
         {
             pokemon.OnLevelUP += Reset_pkm;
@@ -178,9 +180,7 @@ public class Battle_Participant : MonoBehaviour
         if(pokemon.has_gender)
             Gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+pokemon.Gender.ToLower());
         else
-        {
             Gender_img.gameObject.SetActive(false);
-        }
     }
     public void Unload_ui()
     {

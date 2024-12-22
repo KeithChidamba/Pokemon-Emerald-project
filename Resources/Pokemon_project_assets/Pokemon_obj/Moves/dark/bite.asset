@@ -26,7 +26,7 @@ MonoBehaviour:
   max_Powerpoints: 20
   Status_effect: None
   Buff_Debuff: None
-  Status_chance: 0
+  Status_chance: 60
   Debuff_chance: 0
   Description: 'a strong bite to the foe '
   player_animtion: {fileID: 0}

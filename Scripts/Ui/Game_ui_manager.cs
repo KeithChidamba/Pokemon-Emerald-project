@@ -41,7 +41,7 @@ public class Game_ui_manager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Escape) && Pokemon_party.instance.viewing_party && !Pokemon_party.instance.viewing_details)
         {
-            if(!Pokemon_party.instance.Swapping_in)
+            if(!Pokemon_party.instance.SwapOutNext)
                 Close_party();
         }
         if (Input.GetKeyDown(KeyCode.Escape) && Bag.instance.viewing_bag)

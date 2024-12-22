@@ -9,6 +9,7 @@ public class Pokemon_party : MonoBehaviour
     public int Member_to_Move=0;
     public bool moving = false;
     public bool Swapping_in=false;
+    public bool SwapOutNext = false;
     public bool viewing_details = false;
     public bool viewing_options = false;
     public bool viewing_party = false;
@@ -44,6 +45,7 @@ public class Pokemon_party : MonoBehaviour
         if (Options_manager.instance.playerInBattle)
         {
             Swapping_in = true;
+            SwapOutNext = false;
             Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Reset_pkm();
             Move_Member(Member_position);
         }
@@ -71,7 +73,7 @@ public class Pokemon_party : MonoBehaviour
     public void Member_Selected(int Member_position)
     {
         //selecting swap in
-        if (Swapping_in)
+        if (SwapOutNext)
             Move_Member(Member_position);
         else if (Item_handler.instance.Using_item)
         {
@@ -117,19 +119,24 @@ public class Pokemon_party : MonoBehaviour
     public void Move_Member(int Party_position)
     {
         Party_position--;
-        if (Swapping_in)
+        if (SwapOutNext | Swapping_in)
         {
-            Selected_member = Party_position;
+            Selected_member = 1;
             swap(Party_position);
-            Game_ui_manager.instance.Close_party();
-            Swapping_in = false;
-            Turn_Based_Combat.instance.Next_turn();
+            Invoke(nameof(switchIn),1f);
         }
         else
             if(party[Selected_member-1] != party[Party_position])
                 swap(Party_position);
     }
 
+    void switchIn()
+    {
+        Game_ui_manager.instance.Close_party();
+        SwapOutNext = false;
+        Swapping_in = false;
+        Turn_Based_Combat.instance.Next_turn();
+    }
     void swap(int Party_position)
     {
         Pokemon Swap_store = party[Selected_member-1];
@@ -140,8 +147,9 @@ public class Pokemon_party : MonoBehaviour
         Selected_member = 0;
         Refresh_Member_Cards();
         member_indicator.SetActive(false);
-        Battle_handler.instance.Set_pkm();
-        if(!Swapping_in)
+        if(Options_manager.instance.playerInBattle)
+            Battle_handler.instance.Set_pkm();
+        if(!Swapping_in && !SwapOutNext)
         {
             Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
             Dialogue_handler.instance.Dialouge_off(1f);

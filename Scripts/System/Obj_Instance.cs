@@ -34,8 +34,6 @@ public static class Obj_Instance
         new_pkm.Personality_value = pkm.Personality_value;
         new_pkm.nature = pkm.nature;
         new_pkm.GenderRatio = pkm.GenderRatio;
-        new_pkm.IV = pkm.IV;
-        new_pkm.EV = pkm.EV;
         new_pkm.BaseAttack = pkm.BaseAttack;
         new_pkm.BaseDefense = pkm.BaseDefense;
         new_pkm.BaseSP_ATK = pkm.BaseSP_ATK;

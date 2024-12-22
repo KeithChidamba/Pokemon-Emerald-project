@@ -35,9 +35,7 @@ public class Item_handler : MonoBehaviour
     {
         if(Options_manager.instance.playerInBattle)
             if (Battle_handler.instance.is_trainer_battle)
-            {
                 Dialogue_handler.instance.Write_Info("Cant catch someone else's Pokemon!","Details");
-            }
             else
             {
                 //write catch logic later
@@ -54,19 +52,16 @@ public class Item_handler : MonoBehaviour
             Dialogue_handler.instance.Write_Info("Pokemon has been healed","Details");
             item_in_use.quantity--;
             Bag.instance.check_Quantity(item_in_use);
+            Battle_handler.instance.reload_participant_ui();
         }
         else if (selected_party_pkm.Status_effect == "None")
-        {
             Dialogue_handler.instance.Write_Info("Pokemon is already healthy","Details");
-        }
         else
-        {
             Dialogue_handler.instance.Write_Info("Incorrect heal item","Details");
-        }
         Dialogue_handler.instance.Dialouge_off(1f);
         Pokemon_party.instance.Refresh_Member_Cards();
         Using_item = false;
-        skipTurn();
+        Invoke(nameof(skipTurn),1.3f);
     }
     void skipTurn()
     {
@@ -85,12 +80,17 @@ public class Item_handler : MonoBehaviour
             item_in_use.quantity--;
             Bag.instance.check_Quantity(item_in_use);
         }
-        else
+        else if(selected_party_pkm.HP>=selected_party_pkm.max_HP)
         {
             Dialogue_handler.instance.Write_Info("Pokemon health already is full","Details");
         }
+        else if ((selected_party_pkm.HP + heal_effect) >= selected_party_pkm.max_HP)
+        {
+            selected_party_pkm.HP = selected_party_pkm.max_HP;
+            Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+ (heal_effect-(selected_party_pkm.max_HP - selected_party_pkm.HP))+" health points","Details");
+        }
         Dialogue_handler.instance.Dialouge_off(1f);
         Using_item = false;
-        skipTurn();
+        Invoke(nameof(skipTurn),1.3f);
     }
 }

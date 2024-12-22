@@ -25,7 +25,7 @@ MonoBehaviour:
   Powerpoints: 20
   max_Powerpoints: 20
   Status_effect: None
-  Buff_Debuff: e-sp_def
+  Buff_Debuff: e-2Special Defense
   Status_chance: 0
   Debuff_chance: 75
   Description: an intense bite that may lower special defense

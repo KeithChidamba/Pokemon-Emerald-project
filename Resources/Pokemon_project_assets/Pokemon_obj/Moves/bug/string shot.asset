@@ -25,7 +25,7 @@ MonoBehaviour:
   Powerpoints: 25
   max_Powerpoints: 25
   Status_effect: None
-  Buff_Debuff: e-spd
+  Buff_Debuff: e-1Speed
   Status_chance: 0
   Debuff_chance: 100
   Description: traps the enemy with strings to lower speed

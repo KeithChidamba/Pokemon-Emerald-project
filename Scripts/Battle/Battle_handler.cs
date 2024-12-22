@@ -174,9 +174,13 @@ public class Battle_handler : MonoBehaviour
             Battle_P[1].pokemon = Pokemon_party.instance.party[1];
             AddToExpList(Battle_P[1].pokemon);
         }
-        for(int i = 0; i < 2; i++)
+        //double battle stuff
+        /*for(int i = 0; i < 2; i++)
             if (Battle_P[i].pokemon != null)
+            {
+                Battle_P[i+2].Current_Enemies.Clear();
                 Battle_P[i + 2].Current_Enemies.Add(Battle_P[i]); //set enemies enemy equal to player's pkm
+}*/
         Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
         Participant_count = 0;
         foreach(Battle_Participant p in Battle_P)
@@ -187,6 +191,13 @@ public class Battle_handler : MonoBehaviour
                 Participant_count++;
                 p.data.save_stats(p);
             }
+    }
+
+    public void reload_participant_ui()
+    {
+        foreach(Battle_Participant p in Battle_P)
+            if (p.pokemon != null)
+                p.refresh_statusIMG();
     }
     void load_moves()
     {
@@ -251,8 +262,7 @@ public class Battle_handler : MonoBehaviour
                 Area_manager.instance.Switch_Area("Poke Center",0f);
             }
         } 
-        Dialogue_handler.instance.Dialouge_off(2f);
-        Invoke(nameof(end_battle_ui),2f);
+        Invoke(nameof(end_battle_ui),1.5f);
     }
 
     void AddToExpList(Pokemon pkm)
@@ -271,6 +281,7 @@ public class Battle_handler : MonoBehaviour
     }
     void end_battle_ui()
     {
+        Dialogue_handler.instance.Dialouge_off();
         Options_manager.instance.playerInBattle = false;
         overworld_actions.instance.doing_action = false;
         Battle_ui.SetActive(false);
@@ -291,6 +302,7 @@ public class Battle_handler : MonoBehaviour
         Encounter_handler.instance.Reset_trigger();
         OverWorld.SetActive(true);
         Dialogue_handler.instance.can_exit = true;
+        
     }
     public void Run_away()//wild encounter is always single battle
     {
@@ -312,6 +324,7 @@ public class Battle_handler : MonoBehaviour
     }
 void run_Off()
 {
+    Wild_pkm.instance.InBattle = false;
     running_away = false;
     displaying_info = false;
 }

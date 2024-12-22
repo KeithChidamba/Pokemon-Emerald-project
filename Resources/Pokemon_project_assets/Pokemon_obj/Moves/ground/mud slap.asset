@@ -25,7 +25,7 @@ MonoBehaviour:
   Powerpoints: 15
   max_Powerpoints: 15
   Status_effect: None
-  Buff_Debuff: e-acc
+  Buff_Debuff: e-1Accuracy
   Status_chance: 0
   Debuff_chance: 20
   Description: throws mud at the foe to lower their accuracy

@@ -25,7 +25,7 @@ MonoBehaviour:
   Powerpoints: 25
   max_Powerpoints: 25
   Status_effect: None
-  Buff_Debuff: e-DEF
+  Buff_Debuff: e-1Defense
   Status_chance: 0
   Debuff_chance: 100
   Description: lowers enemy defense with a distraction

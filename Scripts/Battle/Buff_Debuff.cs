@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Buff_Debuff:MonoBehaviour
+public class Buff_Debuff
 {
     public string Stat;
     public int Stage = 0;

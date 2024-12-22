@@ -56,7 +56,7 @@ public static class BattleOperations
                 return true;
         return false;
     }
-    public static void ChangeBuffs(Pokemon pkm,string stat_name,bool increase)
+    public static void ChangeBuffs(Pokemon pkm,string stat_name,int buff_amount,bool increase)
     {
         if(Hasbuff_Debuff(pkm, stat_name))
         {
@@ -64,33 +64,52 @@ public static class BattleOperations
                 if (b.Stat == stat_name)
                 {
                     if (increase)
-                        b.Stage+=CheckBuffLimit(b);
+                        b.Stage+=CheckBuffLimit(pkm,b,true,buff_amount);
                     else
-                        b.Stage-=CheckBuffLimit(b);
+                        b.Stage-=CheckBuffLimit(pkm,b,false,buff_amount);
                 }
         }else
-            pkm.Buff_Debuffs.Add(NewBuff(stat_name, increase));
+            pkm.Buff_Debuffs.Add(NewBuff(stat_name,buff_amount, increase));
         CheckBuffs(pkm);
     }
-    static int CheckBuffLimit(Buff_Debuff buff)
+    static int CheckBuffLimit(Pokemon pkm,Buff_Debuff buff,bool increased,int buff_amount)
     {
         int change = 0;
-        if (buff.Stat == "crit")
+        int limit_high;
+        int limit_low;
+        if (buff.Stat == "Crit")
         {
-            if (buff.Stage > -1 & buff.Stage < 3)
-                change = 1;
+            limit_high = 2;
+            limit_low = 1;
         }
-        else if (buff.Stage < 6 & buff.Stage > -6)
-                change = 1;
+        else
+        {
+            limit_high = 5;
+            limit_low = -5;
+        }
+        if ( buff.Stage < limit_low | buff.Stage > limit_high)
+        {
+            if(increased)
+                Dialogue_handler.instance.Write_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher","Battle Info");
+            else 
+                Dialogue_handler.instance.Write_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower","Battle Info");
+            return 0;
+        }
+        if ((buff.Stage + buff_amount) < limit_low)
+            buff.Stage = limit_low - 1;
+        else if( (buff.Stage + buff_amount) > limit_high)
+            buff.Stage = limit_high + 1;
+        else
+            change = buff_amount;
         return change;
     }
-    private static Buff_Debuff NewBuff(string stat_name,bool increase)
+    private static Buff_Debuff NewBuff(string stat_name,int amount,bool increase)
     {
         int Stage = 0;
         if (increase)
-            Stage++;
+            Stage+=amount;
         else
-            Stage--;
+            Stage-=amount;
         return new Buff_Debuff(stat_name, Stage);
     }
     public static Buff_Debuff GetBuff(Pokemon pkm,string stat_name)

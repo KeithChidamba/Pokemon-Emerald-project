@@ -33,7 +33,7 @@ public class Move_handler:MonoBehaviour
     }
     void Move_effect()//anim event
     {
-        Invoke(nameof(Deal_Damage),1f);//remove this, just testing
+        //remove this, just testing
         if (current_turn.move_.Has_status)
             Get_status();
         if (current_turn.move_.is_Buff_Debuff)
@@ -49,6 +49,7 @@ public class Move_handler:MonoBehaviour
             Console.WriteLine(e);
             throw;
         }
+        Invoke(nameof(Deal_Damage),1f);
     }
 
     float Calc_Damage()
@@ -98,6 +99,7 @@ public class Move_handler:MonoBehaviour
     void Move_done()
     {
         Doing_move = false;
+        Dialogue_handler.instance.Dialouge_off();
     }
     void Get_status()
     {
@@ -118,59 +120,70 @@ public class Move_handler:MonoBehaviour
     void Set_buff_Debuff(string effect)
     {
         char result = effect[1];//buff or debuff
+        int buff_amount = int.Parse(effect[2].ToString());
         char reciever = effect[0];//who the change is effecting
-        string stat = effect.Substring(2, effect.Length - 3);
+        string stat = effect.Substring(3, effect.Length - 3);
         switch (stat.ToLower())
         {
-            case"def":
-                current_turn.victim_.pokemon.Defense = Get_buff_debuff(current_turn.victim_.pokemon.Defense,stat,reciever,result);
+            case"Defense":
+                current_turn.victim_.pokemon.Defense = Get_buff_debuff(current_turn.victim_.pokemon.Defense,stat,buff_amount,reciever,result);
                     break;
-            case"atk":
-                current_turn.victim_.pokemon.Attack = Get_buff_debuff(current_turn.victim_.pokemon.Attack,stat,reciever,result);
+            case"Attack":
+                current_turn.victim_.pokemon.Attack = Get_buff_debuff(current_turn.victim_.pokemon.Attack,stat,buff_amount,reciever,result);
                 break;
-            case"sp_def":
-                current_turn.victim_.pokemon.SP_DEF = Get_buff_debuff(current_turn.victim_.pokemon.SP_DEF,stat,reciever,result);
+            case"Special Defense":
+                current_turn.victim_.pokemon.SP_DEF = Get_buff_debuff(current_turn.victim_.pokemon.SP_DEF,stat,buff_amount,reciever,result);
                 break;
-            case"sp_atk":
-                current_turn.victim_.pokemon.SP_ATK = Get_buff_debuff(current_turn.victim_.pokemon.SP_ATK,stat,reciever,result);
+            case"Special Attack":
+                current_turn.victim_.pokemon.SP_ATK = Get_buff_debuff(current_turn.victim_.pokemon.SP_ATK,stat,buff_amount,reciever,result);
                 break;
-            case"spd":
-                current_turn.victim_.pokemon.speed = Get_buff_debuff(current_turn.victim_.pokemon.speed,stat,reciever,result);
+            case"Speed":
+                current_turn.victim_.pokemon.speed = Get_buff_debuff(current_turn.victim_.pokemon.speed,stat,buff_amount,reciever,result);
                 break;
-            case"acc":
-                current_turn.victim_.pokemon.Accuracy = Get_buff_debuff(current_turn.victim_.pokemon.Accuracy,stat,reciever,result);
+            case"Accuracy":
+                current_turn.victim_.pokemon.Accuracy = Get_buff_debuff(current_turn.victim_.pokemon.Accuracy,stat,buff_amount,reciever,result);
                 break;
-            case"eva":
-                current_turn.victim_.pokemon.Evasion = Get_buff_debuff(current_turn.victim_.pokemon.Evasion,stat,reciever,result);
+            case"Evasion":
+                current_turn.victim_.pokemon.Evasion = Get_buff_debuff(current_turn.victim_.pokemon.Evasion,stat,buff_amount,reciever,result);
                 break;
-            case"crit":
-                current_turn.victim_.pokemon.crit_chance = Get_buff_debuff(current_turn.victim_.pokemon.crit_chance,stat,reciever,result);
+            case"Crit":
+                current_turn.victim_.pokemon.crit_chance = Get_buff_debuff(current_turn.victim_.pokemon.crit_chance,stat,buff_amount,reciever,result);
                 break;
         }
     }
-    float Get_buff_debuff(float stat_val,string stat,char reciever,char result)
+    float Get_buff_debuff(float stat_val,string stat,int buff_amount,char reciever,char result)
     {
         Pokemon reciever_pkm;
+        string result_txt;
         if (reciever == 'e')
             reciever_pkm = current_turn.victim_.pokemon;
         else
             reciever_pkm = current_turn.attacker_.pokemon;
-        if (result=='+')
-            BattleOperations.ChangeBuffs(reciever_pkm, stat, true);
-        else 
-            BattleOperations.ChangeBuffs(reciever_pkm, stat, false);
+        if (result == '+')
+        {
+            BattleOperations.ChangeBuffs(reciever_pkm, stat,buff_amount, true);
+            result_txt = "Increased";
+        }
+        else
+        {
+            BattleOperations.ChangeBuffs(reciever_pkm, stat,buff_amount, false);
+            result_txt = "Decreased";
+        }
         Buff_Debuff buff = BattleOperations.GetBuff(reciever_pkm, stat);
-        if (stat == "acc" | stat == "eva")
-            return stat_val * Accuracy_Evasion_Levels[buff.Stage+6]; 
-        if(stat=="crit")    
-            return stat_val * Crit_Levels[buff.Stage];
-        return stat_val * Stat_Levels[buff.Stage+6];
+        Dialogue_handler.instance.Write_Info(reciever_pkm.Pokemon_name+"'s "+buff.Stat+" "+result_txt+"!", "Battle info");
+        if (stat == "Accuracy" | stat == "Evasion")
+            return math.trunc(stat_val * Accuracy_Evasion_Levels[buff.Stage+6]); 
+        if(stat=="Crit")    
+            return math.trunc(stat_val * Crit_Levels[buff.Stage]);
+        return math.trunc(stat_val * Stat_Levels[buff.Stage+6]);
     }
     void absorb()
     {
         float damage = Calc_Damage();
+        float enemy_previous_hp = current_turn.victim_.pokemon.HP;
         current_turn.victim_.pokemon.HP -= damage;
-        current_turn.attacker_.pokemon.HP += math.trunc(damage/2f);
+        float heal_amount = math.abs(current_turn.victim_.pokemon.HP - enemy_previous_hp);
+        current_turn.attacker_.pokemon.HP += math.trunc(heal_amount/2f);
         Invoke(nameof(Move_done),1f);
     }
     void doublekick()

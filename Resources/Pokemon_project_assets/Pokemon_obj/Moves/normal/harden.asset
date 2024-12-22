@@ -25,7 +25,7 @@ MonoBehaviour:
   Powerpoints: 20
   max_Powerpoints: 20
   Status_effect: None
-  Buff_Debuff: p+DEF
+  Buff_Debuff: p+1Defense
   Status_chance: 0
   Debuff_chance: 100
   Description: Harden's shell, to raise defense
