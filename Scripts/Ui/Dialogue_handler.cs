@@ -26,7 +26,6 @@ public class Dialogue_handler : MonoBehaviour
     public Options_manager options;
     [SerializeField] GameObject[] option_btns;
     [SerializeField] Text[] option_btns_txt;
-    public List<Interaction> Message_Qeue;
     public bool messagesLoading = false;
     public static Dialogue_handler instance;
     private void Awake()
@@ -37,6 +36,11 @@ public class Dialogue_handler : MonoBehaviour
             return;
         }
         instance = this;
+    }
+
+    private void Start()
+    {
+        Battle_handler.instance.onBattleEnd += StopAllCoroutines;
     }
 
     void Update()
@@ -98,13 +102,9 @@ public class Dialogue_handler : MonoBehaviour
     {
         Interaction details = new_interaction(info,type,result);
         foreach (string option in options)
-        {
             details.InterAction_options.Add(option);
-        }
         foreach (string txt in options_txt)
-        {
             details.options_txt.Add(txt);
-        }
         Current_interaction = details;
         Display(Current_interaction);
     }
@@ -119,27 +119,21 @@ public class Dialogue_handler : MonoBehaviour
         Remove_Exit();
         Battle_handler.instance.displaying_info = true;
         Interaction details = new_interaction(info,"Battle Info","");
-        Message_Qeue.Add(details);
-        if(!messagesLoading)
-            StartCoroutine(ProccessQeue());
+        StartCoroutine(ProccessQeue(details));
     }
-    IEnumerator ProccessQeue()
+    IEnumerator ProccessQeue(Interaction interaction)
     {
-        foreach (Interaction msg in new List<Interaction>(Message_Qeue))
-        {
-            messagesLoading = true;
-            Current_interaction = new_interaction(msg.InteractionMsg,"Battle Info","");
-            Display(Current_interaction);
-            Message_Qeue.Remove(msg);
-            yield return new WaitForSeconds(1f); //WaitUntil(()=>Message_Qeue.Count==0);
-        }
-        if (Message_Qeue.Count == 0 )
-            messagesLoading = false;
-        Battle_handler.instance.displaying_info = false;
-        Move_handler.instance.Move_done();
-        yield return null;
+        yield return new WaitUntil(() => !messagesLoading);
+        messagesLoading = true;
+        Current_interaction = new_interaction(interaction.InteractionMsg,"Battle Info","");
+        Display(Current_interaction);
+        Invoke(nameof(reset_message),1f);
     }
-
+    void reset_message()
+    {
+        messagesLoading = false;
+        Battle_handler.instance.displaying_info = false;
+    }
     public void Write_Info(string info, string type, string option1, string result, string option2,string opTxt1,string opTxt2)//display a choice, with a result when they choose NO
     {
         Interaction details = new_interaction(info,type,result);
@@ -165,29 +159,15 @@ public class Dialogue_handler : MonoBehaviour
         else if (choice == "Option 2")
         {
             if (Current_interaction.InterAction_options[1] == "")//if no option 2,basically the player chose NO
-            {
                 Dialouge_off();
-            }
             else
-            {
                 options.Complete_Interaction(Current_interaction,1);//do second option
-            }
         }
     }
-    //public void List choice
     public void Dialouge_off(float delay)
     {
         Invoke(nameof(Dialouge_off), delay);
     }
-    /*public void info_off()
-    {
-        Battle_handler.instance.displaying_info = false;
-        messagesLoading = false;
-    }
-    private void info_off(float delay)
-    {
-        Invoke(nameof(info_off), delay);
-    }*/
     public void  Dialouge_off()
     {
         Display_Options(false);
@@ -195,9 +175,7 @@ public class Dialogue_handler : MonoBehaviour
         if(!options.playerInBattle || overworld_actions.instance.using_ui)
             dialogue_box.SetActive(false);
         else
-        {
             battle_box.SetActive(false);
-        }
         current_line = "";
         Dialouge_txt.text = "";
         displaying = false;
@@ -241,13 +219,9 @@ public class Dialogue_handler : MonoBehaviour
         else
         {
             if (interaction.InterAction_type == "Options")
-            {
                 Display_Options(true);
-            }
             else
-            {          
                 Display_Options(false);
-            }   
             dialogue_next.SetActive(false);
             num_lines = 1;
             current_line_num = 1;

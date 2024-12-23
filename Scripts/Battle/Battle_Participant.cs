@@ -32,6 +32,7 @@ public class Battle_Participant : MonoBehaviour
         status = GetComponent<Participant_Status>();
         data = GetComponent<Battle_Data>();
        Turn_Based_Combat.instance.OnNewTurn += Check_Faint;
+       Battle_handler.instance.onBattleEnd += Deactivate_pkm;
     }
     private void Update()
     {
@@ -97,6 +98,10 @@ public class Battle_Participant : MonoBehaviour
         }
     }
 
+    void Deactivate_pkm()
+    {
+        is_active = false;
+    }
     public void Reset_pkm()
     {
         data.Load_Stats(this);
@@ -182,7 +187,6 @@ public class Battle_Participant : MonoBehaviour
     public void Unload_ui()
     {
         participant_ui.SetActive(false);
-        is_active = false;
         Current_Enemies.Clear();
     }
 }

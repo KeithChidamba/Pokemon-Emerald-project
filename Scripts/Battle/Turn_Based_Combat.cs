@@ -22,6 +22,10 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         instance = this;
     }
+    private void Start()
+    {
+        Battle_handler.instance.onBattleEnd += StopAllCoroutines;
+    }
     public void SaveMove(Pkm_Use_Move command)
     {
         Move_history.Add(command);
@@ -69,20 +73,22 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(()=> !Move_handler.instance.Doing_move);
             }
             else
+            {
                 CancelMove(command);
+                yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
+            }
         }
         Next_turn();
         Reset_Moves();
         yield return null;
     }
-    public void CancelMove(Pkm_Use_Move command)
+    private void CancelMove(Pkm_Use_Move command)
     {
         Move_history.Remove(command);
         command.Undo();
     }
     public void Next_turn()
     {
-        //check on pokemon status,health etc
         if ( Battle_handler.instance.isDouble_battle)
             Change_turn(4,1);
         else

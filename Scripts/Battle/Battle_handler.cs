@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -18,6 +19,7 @@ public class Battle_handler : MonoBehaviour
     public bool isDouble_battle = false;
     public int Participant_count=0;
     public bool displaying_info = false;
+    public bool BattleOver = false;
     public GameObject OverWorld;
     public List<GameObject> Backgrounds;
     public bool viewing_options = false;
@@ -28,6 +30,7 @@ public class Battle_handler : MonoBehaviour
     public int Current_pkm_Enemy = 0;
     public bool Doing_move = false;
     public static Battle_handler instance;
+    public event Action onBattleEnd;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -80,7 +83,7 @@ public class Battle_handler : MonoBehaviour
         }
         else
         {
-            if (!choosing_move && !running_away && !Doing_move && !displaying_info)
+            if (!choosing_move && !running_away && !Doing_move && !displaying_info && !Doing_move && !BattleOver)
                 viewing_options = true;
             else
                 viewing_options = false;
@@ -142,6 +145,7 @@ public class Battle_handler : MonoBehaviour
     }
     public void Start_Battle(Pokemon enemy)//only ever be for wild battles
     {
+        BattleOver = false;
         Load_Area_bg();
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].pokemon = enemy;
@@ -156,6 +160,7 @@ public class Battle_handler : MonoBehaviour
     public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
     {
         //double battle setup, 2v2 or 1v2
+        BattleOver = false;
         Load_Area_bg();
         is_trainer_battle = true;
         for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
@@ -189,7 +194,6 @@ public class Battle_handler : MonoBehaviour
                 p.ability_h.Set_ability();
                 Participant_count++;
             }
-
     }
 
     public void reload_participant_ui()
@@ -248,6 +252,8 @@ public class Battle_handler : MonoBehaviour
 
     public void End_Battle(bool Haswon)
     {
+        onBattleEnd?.Invoke();
+        BattleOver = true;
         displaying_info = true;
         if (running_away)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");

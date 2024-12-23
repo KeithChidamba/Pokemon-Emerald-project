@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -7,9 +9,11 @@ public class Move_handler:MonoBehaviour
     public bool Doing_move = false;
     public static Move_handler instance;
     private Turn current_turn;
-    private readonly float[] Stat_Levels = new float[13]{0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
-    private readonly float[] Accuracy_Evasion_Levels = new float[13]{0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
-    private readonly float[] Crit_Levels = new float[4]{6.25f,12.5f,25f,50f};
+    private readonly float[] Stat_Levels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
+    private readonly float[] Accuracy_Evasion_Levels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
+    private readonly float[] Crit_Levels = {6.25f,12.5f,25f,50f};
+    private Battle_event[] Dialouge_order={null,null,null,null,null};
+    public event Action OnTurnEnd;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -19,11 +23,17 @@ public class Move_handler:MonoBehaviour
         }
         instance = this;
     }
+
+    private void Start()
+    {
+        Battle_handler.instance.onBattleEnd += StopAllCoroutines;
+    }
+
     public void Do_move(Turn turn)
     {
         current_turn=turn;
         Dialogue_handler.instance.Battle_Info(turn.attacker_.pokemon.Pokemon_name+" used "+turn.move_.Move_name+" on "+turn.victim_.pokemon.Pokemon_name+"!");
-        Invoke(nameof(Move_effect),1f);//remove after adding animations
+        StartCoroutine(Move_Sequence());
         //Invoke(nameof(PlayAnimation),1f);
     }
     void PlayAnimation()
@@ -31,30 +41,46 @@ public class Move_handler:MonoBehaviour
         //call anim script and run move_name as anim
         //Move_effect in anim event
     }
-    void Move_effect()//anim event
+    void Set_Sequences()
     {
-        //remove this, just testing
-        if (current_turn.move_.Has_status)
-            Get_status();
-        if (current_turn.move_.is_Buff_Debuff)
-            Set_buff_Debuff(current_turn.move_.Buff_Debuff);
-        if(current_turn.move_.Can_flinch)
-            flinch_enemy();
-        try
+        Dialouge_order[0] = new("Deal_Damage", current_turn.move_.Move_damage > 0,2.5f);
+        Dialouge_order[1] = new("Get_status", current_turn.move_.Has_status,1.5f);
+        Dialouge_order[2] = new("Move_effect", current_turn.move_.Has_effect,2f);
+        Dialouge_order[3] = new("Set_buff_Debuff", current_turn.move_.is_Buff_Debuff,1.5f);
+        Dialouge_order[4] = new("flinch_enemy", current_turn.move_.Can_flinch,1f);
+    }
+    IEnumerator Move_Sequence()//anim event
+    {
+        Set_Sequences();
+        foreach (Battle_event d in Dialouge_order)
         {
-            Invoke(current_turn.move_.Move_name.ToLower(), 0f);
-        } //remove spaces
-        catch(Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
+            if (d.Condition)
+            {
+                d.Execute();
+                yield return new WaitForSeconds(d.duration);
+            }
+            else
+            {
+                d.Execute();
+            }
         }
-        Invoke(nameof(Deal_Damage),1f);
+        Move_done();
+        yield return null;
     }
 
+    void Move_effect()
+    {
+        if (!current_turn.move_.Has_effect) return;
+        Invoke(current_turn.move_.Move_name.ToLower(), 0f);
+    }
     float Calc_Damage()
     {
         if (current_turn.move_.Move_damage == 0) return 0f;
+        if (!current_turn.victim_.pokemon.CanBeDamaged)
+        {
+            Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" protected itself");
+            return 0f;
+        }
         float damage_dealt;
         float level_factor = (float)((current_turn.attacker_.pokemon.Current_level * 2) / 5) + 2;
         float Stab = 1f;
@@ -90,19 +116,24 @@ public class Move_handler:MonoBehaviour
     }
     void Deal_Damage()//anim event
     {
-        if (current_turn.victim_.pokemon.CanBeDamaged)
-            current_turn.victim_.pokemon.HP -= Calc_Damage();
-        else
-            Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" protected itself");
+        if (current_turn.move_.Has_effect) return;
+        current_turn.victim_.pokemon.HP -= Calc_Damage();
     }
     public void Move_done()
     {
         Doing_move = false;
+        OnTurnEnd?.Invoke();
     }
     void Get_status()
     {
+        if (!current_turn.move_.Has_status)return;
+        if (current_turn.victim_.pokemon.Status_effect != "None") return;
         if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
             Set_Status(current_turn.victim_,current_turn.move_.Status_effect);
+        else
+        {
+            Debug.Log("status failed");
+        }
     }
     public void Set_Status(Battle_Participant p,String Status)
     {
@@ -114,11 +145,19 @@ public class Move_handler:MonoBehaviour
     }
     void flinch_enemy()
     {
+        if (!current_turn.move_.Can_flinch) return;
         if (Utility.Get_rand(1, 11) < current_turn.move_.Status_chance)
             current_turn.victim_.pokemon.isFlinched=true;
     }
-    void Set_buff_Debuff(string effect)
+    void Set_buff_Debuff()
     {
+        if (!current_turn.move_.is_Buff_Debuff) return;
+        if (Utility.Get_rand(1, 101) > current_turn.move_.Debuff_chance)
+        {
+            Debug.Log("debuff failed");
+            return;
+        }
+        string effect = current_turn.move_.Buff_Debuff;
         char result = effect[1];//buff or debuff
         int buff_amount = int.Parse(effect[2].ToString());
         char reciever = effect[0];//who the change is effecting
@@ -186,7 +225,6 @@ public class Move_handler:MonoBehaviour
         current_turn.victim_.pokemon.HP -= damage;
         float heal_amount = math.abs(current_turn.victim_.pokemon.HP - enemy_previous_hp);
         current_turn.attacker_.pokemon.HP += math.trunc(heal_amount/2f);
-        //Invoke(nameof(Move_done),1f);
     }
     void doublekick()
     {

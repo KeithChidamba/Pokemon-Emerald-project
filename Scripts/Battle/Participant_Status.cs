@@ -12,7 +12,11 @@ public class Participant_Status : MonoBehaviour
     void Start()
     {
         _participant = GetComponent<Battle_Participant>();
-        Turn_Based_Combat.instance.OnNewTurn += Check_status;
+        if (_participant.is_active)
+        {
+            Move_handler.instance.OnTurnEnd += Check_status;
+            Turn_Based_Combat.instance.OnNewTurn += StunCheck;
+        }
     }
     public void Get_statusEffect(int num_turns)
     {
@@ -36,7 +40,8 @@ public class Participant_Status : MonoBehaviour
     }
     private void Check_status()
     {
-        if (!_participant.is_active) return;
+        if (!_participant.is_active | _participant.pokemon.HP<=0 ) return;
+        if(Battle_handler.instance.BattleOver)return;
         if (_participant.pokemon.isFlinched)
         {
             _participant.pokemon.isFlinched = false;
@@ -47,6 +52,12 @@ public class Participant_Status : MonoBehaviour
         status_duration++;
         Recovery_Chance();
     }
+
+    void StunCheck()
+    {
+        if (_participant.pokemon.Status_effect == "None") return;
+        Invoke(_participant.pokemon.Status_effect.ToLower()+"_check",0f);
+    }
     void Recovery_Chance()
     {
         Invoke("Check_"+_participant.pokemon.Status_effect.ToLower(),0f);
@@ -54,33 +65,29 @@ public class Participant_Status : MonoBehaviour
     void Check_burn()
     {
         Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is hurt by the burn");
-        
         loose_HP(0.125f);
     }
     void Check_poison()
     {
         Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is poisoned");
-        
         loose_HP(0.125f);
     }
     void Check_badlypoison()
     {
         Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is badly poisoned");
-        
         loose_HP((status_duration+1)/16f);
     }
-    void Check_freeze()
+    void freeze_check()
     {
         if (Utility.Get_rand(1, 101) < 10) //10% chance
         {
             Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Unfroze!");
-            
             remove_status_effect();
         }
         else
             _participant.pokemon.canAttack = false;
     }
-    void Check_paralysis()
+    void paralysis_check()
     {
         if (_participant.pokemon.isFlinched) return;
         if (Utility.Get_rand(1, 101) < 75)//75% chance
@@ -88,7 +95,7 @@ public class Participant_Status : MonoBehaviour
         else
             _participant.pokemon.canAttack = false;
     }
-    void Check_sleep()
+    void sleep_check()
     {
         num_status_turns--;
         if (num_status_turns == 0 && status_duration!=0)//at least sleep for 1 turn
@@ -100,7 +107,6 @@ public class Participant_Status : MonoBehaviour
             if (Utility.Get_rand(1, 101) < 100 * chances[status_duration])
             {
                 Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Woke UP!");
-                
                 remove_status_effect();
             }
             else
