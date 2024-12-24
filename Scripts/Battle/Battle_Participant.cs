@@ -155,6 +155,8 @@ public class Battle_Participant : MonoBehaviour
         is_active = true;
         participant_ui.SetActive(true);
         gender_img();
+        if (pokemon.Status_effect == "BadlyPoison")
+            pokemon.Status_effect = "Poison";
         Move_handler.instance.Set_Status(this, pokemon.Status_effect);
         if (isPlayer)
         {

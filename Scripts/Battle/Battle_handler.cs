@@ -175,13 +175,13 @@ public class Battle_handler : MonoBehaviour
     }
     public void Set_pkm(bool switchIn)
     {
-        Battle_P[0].pokemon = Pokemon_party.instance.party[0];
+        Battle_P[0].pokemon = Pokemon_party.instance.GetAlive();
         AddToExpList(Battle_P[0].pokemon);
-        if (Pokemon_party.instance.num_members > 1 && isDouble_battle) //if you have more than one pokemon send in another
+        /*if (Pokemon_party.instance.num_members > 1 && isDouble_battle) //if you have more than one pokemon send in another
         {
             Battle_P[1].pokemon = Pokemon_party.instance.party[1];
             AddToExpList(Battle_P[1].pokemon);
-        }
+        }*/
         if(switchIn)
             Battle_P[0].data.save_stats(Battle_P[0]);
         //only trainer needs to keep track of enemies

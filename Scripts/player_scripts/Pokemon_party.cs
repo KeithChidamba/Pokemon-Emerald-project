@@ -73,6 +73,7 @@ public class Pokemon_party : MonoBehaviour
     public void Member_Selected(int Member_position)
     {
         //selecting swap in
+        if (Options_manager.instance.playerInBattle && Memeber_cards[Member_position - 1].pkm.HP <= 0) return;
         if (SwapOutNext)
             Move_Member(Member_position);
         else if (Item_handler.instance.Using_item)
@@ -154,6 +155,15 @@ public class Pokemon_party : MonoBehaviour
             Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
             Dialogue_handler.instance.Dialouge_off(1f);
         }
+    }
+
+    public Pokemon GetAlive()
+    {
+        foreach (Pokemon p in party)
+            if(p!=null)
+                if (p.HP > 0)
+                    return p;
+        return null;
     }
     public void Add_Member(Pokemon pokemon)
     { //add new pokemon after catch or event

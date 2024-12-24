@@ -81,38 +81,63 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" protected itself");
             return 0f;
         }
-        float damage_dealt;
-        float level_factor = (float)((current_turn.attacker_.pokemon.Current_level * 2) / 5) + 2;
-        float Stab = 1f;
         int crit = 1;
-        float Attack_type = 0;
-        float atk_def_ratio;
-        float random_factor = (float)Utility.Get_rand(85, 101) / 100;
-        float type_effectiveness = BattleOperations.TypeEffectiveness(current_turn.victim_.pokemon, current_turn.move_.type);
-        if (current_turn.move_.isSpecial)
-        {
-            Attack_type = current_turn.attacker_.pokemon.SP_ATK;
-            atk_def_ratio = Attack_type / current_turn.victim_.pokemon.SP_DEF;
-        }
-        else
-        {
-            Attack_type = current_turn.attacker_.pokemon.Attack;
-            atk_def_ratio = Attack_type / current_turn.victim_.pokemon.Defense;
-        }
-        if (BattleOperations.is_Stab(current_turn.attacker_.pokemon, current_turn.move_.type))
-            Stab = 1.5f;
         if (Utility.Get_rand(1, (int)(100 / current_turn.attacker_.pokemon.crit_chance) + 1) < 2)
         {
             crit = 2;
             Dialogue_handler.instance.Battle_Info("Critical Hit!");
         }
+        float damage_dealt;
+        float level_factor = (float)((current_turn.attacker_.pokemon.Current_level * 2) / 5) + 2;
+        float Stab = 1f;
+        float Attack_type = 0;
+        float atk_def_ratio;
+        float random_factor = (float)Utility.Get_rand(85, 101) / 100;
+        float type_effectiveness = BattleOperations.TypeEffectiveness(current_turn.victim_.pokemon, current_turn.move_.type);
+        if (current_turn.move_.isSpecial)
+            Attack_type = current_turn.attacker_.pokemon.SP_ATK;
+        else
+            Attack_type = current_turn.attacker_.pokemon.Attack;
+        atk_def_ratio = Set_AtkDef(crit,Attack_type,current_turn.move_.isSpecial);
+        if (BattleOperations.is_Stab(current_turn.attacker_.pokemon, current_turn.move_.type))
+            Stab = 1.5f;
         float base_Damage = (level_factor * current_turn.move_.Move_damage *
                              (Attack_type/ current_turn.move_.Move_damage))/current_turn.attacker_.pokemon.Current_level;
         float Modifier = crit*Stab*random_factor*type_effectiveness;
         damage_dealt = math.trunc(Modifier * base_Damage * atk_def_ratio);
         if (type_effectiveness > 1)
             Dialogue_handler.instance.Battle_Info("The move is Super effective!");
+        else if (type_effectiveness == 0)
+            Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" was not affected!");
+        else if(type_effectiveness < 1)
+            Dialogue_handler.instance.Battle_Info("The move is not very effective!");
         return damage_dealt;
+    }
+
+    float Set_AtkDef(float crit,float AttackType,bool isSpecial)
+    {
+        float Ratio=0;
+        float def = AttackType/current_turn.victim_.pokemon.Defense;
+        float spDef =  AttackType/current_turn.victim_.pokemon.SP_DEF;
+        if (crit == 1)
+            if (!isSpecial)
+                Ratio = def;
+            else
+                Ratio = spDef;
+        else if (crit == 2)
+        {
+            if (!isSpecial)
+                if (current_turn.victim_.data.Defense < current_turn.victim_.pokemon.Defense) //def buff
+                    Ratio = AttackType / current_turn.victim_.data.Defense;
+                else
+                    Ratio = def;
+            else
+                if (current_turn.victim_.data.SP_DEF < current_turn.victim_.pokemon.SP_DEF) //def buff
+                    Ratio = AttackType / current_turn.victim_.data.SP_DEF;
+                else
+                    Ratio = spDef;
+        }
+        return Ratio;
     }
     void Deal_Damage()//anim event
     {
@@ -135,8 +160,20 @@ public class Move_handler:MonoBehaviour
             Debug.Log("status failed");
         }
     }
+
+    bool CheckInvalidStatusEffect(string status,string type_name)
+    {
+        string[] InvalidCombinations = {
+            "poisonpoison","badlypoisonpoison", "burnfire", "paralysiselectric", "freezeice" };
+        foreach(string s in InvalidCombinations)
+            if ((status + type_name).ToLower() == s)
+                return true;
+        return false;
+    }
     public void Set_Status(Battle_Participant p,String Status)
     {
+        foreach (Type t in p.pokemon.types)
+            if(CheckInvalidStatusEffect(Status, t.Type_name))return;
         p.pokemon.Status_effect = Status;
         int num_turns = 0;
         if(Status=="Sleep") 
@@ -162,7 +199,7 @@ public class Move_handler:MonoBehaviour
         int buff_amount = int.Parse(effect[2].ToString());
         char reciever = effect[0];//who the change is effecting
         string stat = effect.Substring(3, effect.Length - 3);
-        Debug.Log(stat+" "+result +buff_amount);
+        Debug.Log(5+stat+result +buff_amount);
         switch (stat.ToLower())
         {
             case"Defense":

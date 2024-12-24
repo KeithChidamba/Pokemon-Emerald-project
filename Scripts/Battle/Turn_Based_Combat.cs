@@ -43,11 +43,16 @@ public class Turn_Based_Combat : MonoBehaviour
         if(command._turn.attacker_.pokemon.HP<=0) return false;
         if (command._turn.attacker_.pokemon.canAttack)
         {
+            /*if (!ProbabilityCheck(command._turn.victim_.pokemon.Evasion))
+            {
+                Dialogue_handler.instance.Battle_Info(command._turn.victim_.pokemon.Pokemon_name+" avoided the attack");
+                return false;
+            }*/
             if (command._turn.move_.Move_accuracy < 100)//not a sure-hit move
             {
-                if (!Move_successful(command._turn.attacker_.pokemon))
+                if (!MoveSuccessfull(command._turn.attacker_.pokemon))
                 {
-                    Dialogue_handler.instance.Battle_Info(command._turn.attacker_.pokemon+" missed the attack");
+                    Dialogue_handler.instance.Battle_Info(command._turn.attacker_.pokemon.Pokemon_name+" missed the attack");
                 }
                 else
                     return true;
@@ -107,7 +112,7 @@ public class Turn_Based_Combat : MonoBehaviour
         OnNewTurn?.Invoke();
         Battle_handler.instance.Doing_move = false;
     }
-    private bool Move_successful(Pokemon pokemon)
+    private bool MoveSuccessfull(Pokemon pokemon)
     {
         int rand = Utility.Get_rand(1, 100);
         if (pokemon.Accuracy > rand)
