@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Biome_name: Beach
   Pokemon:
-  - mudkip010
+  - treecko050
   - trapinch070
   - torchic020
   min_lv: 11

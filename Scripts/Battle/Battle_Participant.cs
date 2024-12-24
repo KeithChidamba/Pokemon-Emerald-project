@@ -31,7 +31,7 @@ public class Battle_Participant : MonoBehaviour
     {
         status = GetComponent<Participant_Status>();
         data = GetComponent<Battle_Data>();
-       Turn_Based_Combat.instance.OnNewTurn += Check_Faint;
+        Move_handler.instance.OnTurnEnd += Check_Faint;
        Battle_handler.instance.onBattleEnd += Deactivate_pkm;
     }
     private void Update()
@@ -158,6 +158,8 @@ public class Battle_Participant : MonoBehaviour
         if (pokemon.Status_effect == "BadlyPoison")
             pokemon.Status_effect = "Poison";
         Move_handler.instance.Set_Status(this, pokemon.Status_effect);
+        Move_handler.instance.OnTurnEnd += status.Check_status;
+        Turn_Based_Combat.instance.OnNewTurn += status.StunCheck;
         if (isPlayer)
         {
             pokemon.OnLevelUP += Reset_pkm;

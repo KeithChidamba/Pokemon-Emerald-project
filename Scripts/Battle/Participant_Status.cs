@@ -12,11 +12,6 @@ public class Participant_Status : MonoBehaviour
     void Start()
     {
         _participant = GetComponent<Battle_Participant>();
-        if (_participant.is_active)
-        {
-            Move_handler.instance.OnTurnEnd += Check_status;
-            Turn_Based_Combat.instance.OnNewTurn += StunCheck;
-        }
     }
     public void Get_statusEffect(int num_turns)
     {
@@ -29,7 +24,7 @@ public class Participant_Status : MonoBehaviour
     }
     void loose_HP(float percentage)
     {
-        _participant.pokemon.HP -= math.trunc(_participant.pokemon.HP * percentage);
+        _participant.pokemon.HP -= math.trunc(_participant.pokemon.max_HP * percentage);
     }
     public void Stat_drop()
     {
@@ -38,8 +33,9 @@ public class Participant_Status : MonoBehaviour
         if (_participant.pokemon.Status_effect == "Paralysis")
             _participant.pokemon.speed *= 0.25f;
     }
-    private void Check_status()
+    public void Check_status()
     {
+        if (overworld_actions.instance.using_ui) return;
         if (!_participant.is_active | _participant.pokemon.HP<=0 ) return;
         if(Battle_handler.instance.BattleOver)return;
         if (_participant.pokemon.isFlinched)
@@ -53,8 +49,10 @@ public class Participant_Status : MonoBehaviour
         Recovery_Chance();
     }
 
-    void StunCheck()
+    public void StunCheck()
     {
+        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon !=
+            _participant.pokemon) return;
         if (_participant.pokemon.Status_effect == "None") return;
         Invoke(_participant.pokemon.Status_effect.ToLower()+"_check",0f);
     }
@@ -98,7 +96,7 @@ public class Participant_Status : MonoBehaviour
     void sleep_check()
     {
         num_status_turns--;
-        if (num_status_turns == 0 && status_duration!=0)//at least sleep for 1 turn
+        if (num_status_turns <= 0 && status_duration>0)//at least sleep for 1 turn
             remove_status_effect();
         else
         {
@@ -111,6 +109,7 @@ public class Participant_Status : MonoBehaviour
             }
             else
                 _participant.pokemon.canAttack = false;
+            status_duration++;
         }
     } 
     void remove_status_effect()

@@ -156,15 +156,6 @@ public class Pokemon_party : MonoBehaviour
             Dialogue_handler.instance.Dialouge_off(1f);
         }
     }
-
-    public Pokemon GetAlive()
-    {
-        foreach (Pokemon p in party)
-            if(p!=null)
-                if (p.HP > 0)
-                    return p;
-        return null;
-    }
     public void Add_Member(Pokemon pokemon)
     { //add new pokemon after catch or event
         if (num_members<6)

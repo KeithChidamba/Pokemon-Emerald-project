@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -78,6 +79,7 @@ public class Battle_handler : MonoBehaviour
         }
         if (overworld_actions.instance.using_ui)
         {
+            Wild_pkm.instance.CanAttack = false;
             options_ui.SetActive(false);
             viewing_options = false;
         }
@@ -88,8 +90,9 @@ public class Battle_handler : MonoBehaviour
             else
                 viewing_options = false;
             if (viewing_options)
-            {
-               Dialogue_handler.instance.Write_Info("What will you do?", "Details");
+            { 
+                Wild_pkm.instance.Invoke(nameof(Wild_pkm.instance.Can_Attack),1f);
+                Dialogue_handler.instance.Write_Info("What will you do?", "Details");
                 options_ui.SetActive(true);
             }
         }
@@ -151,9 +154,6 @@ public class Battle_handler : MonoBehaviour
         Battle_P[2].pokemon = enemy;
         Wild_pkm.instance.pokemon = Battle_P[2];
         Set_pkm(false);
-        foreach(Battle_Participant p in Battle_P)
-            if (p.pokemon != null)
-                p.data.save_stats(p);
         Wild_pkm.instance.InBattle = true;
         set_battle();
     }
@@ -175,13 +175,17 @@ public class Battle_handler : MonoBehaviour
     }
     public void Set_pkm(bool switchIn)
     {
-        Battle_P[0].pokemon = Pokemon_party.instance.GetAlive();
+        List<Pokemon> Alive_pkm=new();
+        foreach(Pokemon p in Pokemon_party.instance.party)
+            if (p != null && p.HP>0)
+                Alive_pkm.Add(p); 
+        Battle_P[0].pokemon = Alive_pkm[0];
         AddToExpList(Battle_P[0].pokemon);
-        /*if (Pokemon_party.instance.num_members > 1 && isDouble_battle) //if you have more than one pokemon send in another
+        if (Pokemon_party.instance.num_members > 1 && isDouble_battle) //if you have more than one pokemon send in another
         {
-            Battle_P[1].pokemon = Pokemon_party.instance.party[1];
+            Battle_P[1].pokemon = Alive_pkm[1];
             AddToExpList(Battle_P[1].pokemon);
-        }*/
+        }
         if(switchIn)
             Battle_P[0].data.save_stats(Battle_P[0]);
         //only trainer needs to keep track of enemies
@@ -190,6 +194,7 @@ public class Battle_handler : MonoBehaviour
         foreach(Battle_Participant p in Battle_P)
             if (p.pokemon != null)
             {
+                p.data.save_stats(p);
                 p.Load_ui();
                 p.ability_h.Set_ability();
                 Participant_count++;

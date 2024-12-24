@@ -10,6 +10,7 @@ public class Wild_pkm : MonoBehaviour
     public Battle_Participant pokemon;
     public Battle_Participant Enemy_pokemon;
     public bool InBattle = false;
+    public bool CanAttack = true;
     public static Wild_pkm instance;
     [SerializeField]private bool Used_move = false;
     private void Awake()
@@ -25,9 +26,10 @@ public class Wild_pkm : MonoBehaviour
     {
         Turn_Based_Combat.instance.OnNewTurn += Reset_move;
     }
-    private void OnDestroy()
+
+    public void Can_Attack()
     {
-        Turn_Based_Combat.instance.OnNewTurn -= Reset_move;//chek for continuoues moves like rollout
+        CanAttack = true;
     }
     void Reset_move()
     {
@@ -41,7 +43,7 @@ public class Wild_pkm : MonoBehaviour
     private void Make_Decision()
     {
         //check if its pokemon's turn
-        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon.pokemon && !Used_move)
+        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon.pokemon && !Used_move && CanAttack)
         {
             Battle_handler.instance.Select_player();//attack player, since its single battle
             choose_move();

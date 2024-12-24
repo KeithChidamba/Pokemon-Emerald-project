@@ -943,6 +943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _participant: {fileID: 35621317}
+  status_duration: 0
 --- !u!114 &35621319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5893,8 +5894,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 29.7, y: 0}
-  m_SizeDelta: {x: 0.6245, y: 0}
+  m_AnchoredPosition: {x: 55.277817, y: 0}
+  m_SizeDelta: {x: 51.7801, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &179732366
 MonoBehaviour:
@@ -5929,7 +5930,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Tackle
+  m_Text: Quick Attack
 --- !u!222 &179732367
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6103,6 +6104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _participant: {fileID: 190973850}
+  status_duration: 0
 --- !u!114 &190973852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8500,8 +8502,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 38.8, y: 0}
-  m_SizeDelta: {x: 11.048, y: 0}
+  m_AnchoredPosition: {x: 66.11336, y: 0}
+  m_SizeDelta: {x: 65.6747, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &269040208
 MonoBehaviour:
@@ -8536,7 +8538,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Tackle
+  m_Text: Quaick Attack
 --- !u!222 &269040209
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17324,8 +17326,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 30.8, y: 0}
-  m_SizeDelta: {x: 0.6245, y: 0}
+  m_AnchoredPosition: {x: 57.64399, y: 0}
+  m_SizeDelta: {x: 54.3125, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &602817083
 MonoBehaviour:
@@ -17360,7 +17362,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Tackle
+  m_Text: Quick Attack
 --- !u!222 &602817084
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -26467,6 +26469,7 @@ MonoBehaviour:
   pokemon: {fileID: 0}
   Enemy_pokemon: {fileID: 0}
   InBattle: 0
+  CanAttack: 1
   Used_move: 0
 --- !u!1 &848811386
 GameObject:
@@ -26770,8 +26773,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1376260001}
-  - {fileID: 1656839803}
   - {fileID: 1232612189}
+  - {fileID: 1656839803}
   - {fileID: 446498042}
   - {fileID: 1278527770}
   - {fileID: 556300430}
@@ -31246,8 +31249,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 32, y: 0}
-  m_SizeDelta: {x: 0.62452, y: 0}
+  m_AnchoredPosition: {x: 67.7, y: 0}
+  m_SizeDelta: {x: 65.8489, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1064097935
 MonoBehaviour:
@@ -31282,7 +31285,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Tackle
+  m_Text: Quick Attack
 --- !u!222 &1064097936
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -32460,6 +32463,7 @@ MonoBehaviour:
   option_btns_txt:
   - {fileID: 1811095305}
   - {fileID: 1512806514}
+  messagesLoading: 0
 --- !u!114 &1097391157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38280,7 +38284,7 @@ RectTransform:
   m_Children:
   - {fileID: 602817082}
   m_Father: {fileID: 871315346}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -49619,6 +49623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _participant: {fileID: 1636635380}
+  status_duration: 0
 --- !u!114 &1636635382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50064,7 +50069,7 @@ RectTransform:
   m_Children:
   - {fileID: 269040207}
   m_Father: {fileID: 871315346}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -53887,6 +53892,7 @@ MonoBehaviour:
   isDouble_battle: 0
   Participant_count: 0
   displaying_info: 0
+  BattleOver: 0
   OverWorld: {fileID: 523264673}
   Backgrounds:
   - {fileID: 1517456052}
@@ -61233,6 +61239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _participant: {fileID: 2033618204}
+  status_duration: 0
 --- !u!114 &2033618206
 MonoBehaviour:
   m_ObjectHideFlags: 0

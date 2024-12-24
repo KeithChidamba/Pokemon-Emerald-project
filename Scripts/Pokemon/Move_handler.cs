@@ -54,6 +54,7 @@ public class Move_handler:MonoBehaviour
         Set_Sequences();
         foreach (Battle_event d in Dialouge_order)
         {
+            yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
             if (d.Condition)
             {
                 d.Execute();
