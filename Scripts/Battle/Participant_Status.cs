@@ -18,6 +18,7 @@ public class Participant_Status : MonoBehaviour
         if (_participant.pokemon.Status_effect == "None") return;
         status_duration = 0;
         num_status_turns = num_turns;
+        Debug.Log("num status turns:"+num_status_turns);
         _participant.refresh_statusIMG();
         Recovery_Chance();
         Stat_drop();
@@ -95,14 +96,19 @@ public class Participant_Status : MonoBehaviour
     }
     void sleep_check()
     {
-        num_status_turns--;
-        if (num_status_turns <= 0 && status_duration>0)//at least sleep for 1 turn
+        if (status_duration < 1)
+        {
+            _participant.pokemon.canAttack = false;
+            status_duration++;
+            return;
+        }
+        Debug.Log("sleep: "+status_duration+"/"+num_status_turns);
+        if (num_status_turns == status_duration)//at least sleep for 1 turn
             remove_status_effect();
         else
         {
-            float[] chances = { 0.25f, 0.33f, 0.5f, 1 };
-            Debug.Log("sleep: "+status_duration);
-            if (Utility.Get_rand(1, 101) < 100 * chances[status_duration])
+            int[] chances = { 25, 33, 50, 100 };
+            if (Utility.Get_rand(1, 101) < chances[status_duration-1])
             {
                 Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Woke UP!");
                 remove_status_effect();

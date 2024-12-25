@@ -15,7 +15,7 @@ MonoBehaviour:
   Biome_name: Beach
   Pokemon:
   - treecko050
-  - trapinch070
+  - trapinch010
   - torchic020
   min_lv: 11
   max_lv: 15

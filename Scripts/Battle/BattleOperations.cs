@@ -8,10 +8,10 @@ public static class BattleOperations
         foreach(Type t in victim.types)
             if (t.type_check(enemy_type.Non_effect, enemy_type))
             {
-                Debug.Log(victim.Pokemon_name + " is Immune to "+enemy_type.Type_name);
+                //Debug.Log(victim.Pokemon_name + " is Immune to "+enemy_type.Type_name);
                 return true;
             }
-        Debug.Log(victim.Pokemon_name + " is Not Immune to "+enemy_type.Type_name);
+        //Debug.Log(victim.Pokemon_name + " is Not Immune to "+enemy_type.Type_name);
         return false;
     } 
     static void isWeakTo(Pokemon victim,Type enemy_type)
@@ -19,7 +19,7 @@ public static class BattleOperations
         foreach(Type t in victim.types)
             if (t.type_check(t.weaknesses, enemy_type))
             {
-                Debug.Log(victim.Pokemon_name + " is weak to "+enemy_type.Type_name);
+                //Debug.Log(victim.Pokemon_name + " is weak to "+enemy_type.Type_name);
                 effectiveness *= 2f;
             }
     }
