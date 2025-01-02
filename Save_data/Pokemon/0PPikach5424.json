@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 30262
+        "instanceID": 31056
     },
     "has_gender": true,
     "HP": 20.0,
@@ -49,10 +49,11 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29830
+            "instanceID": 29828
         }
     ],
-    "Status_effect": "Freeze",
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
     "type_Immunity": "None",
     "evo_line": [
         "18"
@@ -69,34 +70,34 @@
     ],
     "move_set": [
         {
-            "instanceID": -122842
+            "instanceID": -124682
         },
         {
-            "instanceID": -122858
+            "instanceID": -124684
         },
         {
-            "instanceID": -122860
+            "instanceID": -124686
         },
         {
-            "instanceID": -122862
+            "instanceID": -124688
         }
     ],
     "ability": {
-        "instanceID": 29832
+        "instanceID": 29830
     },
     "evolutions": [
         {
-            "instanceID": 29834
+            "instanceID": 29832
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29836
+        "instanceID": 29834
     },
     "back_picture": {
-        "instanceID": 29838
+        "instanceID": 29836
     },
     "ability_name": "Static",
     "natureName": "Bold",

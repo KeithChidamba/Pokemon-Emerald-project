@@ -13,7 +13,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] Accuracy_Evasion_Levels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] Crit_Levels = {6.25f,12.5f,25f,50f};
     private Battle_event[] Dialouge_order={null,null,null,null,null};
-    public event Action OnTurnEnd;
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -61,10 +61,9 @@ public class Move_handler:MonoBehaviour
                 yield return new WaitForSeconds(d.duration);
             }
             else
-            {
                 d.Execute();
-            }
         }
+        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         Move_done();
         yield return null;
     }
@@ -148,7 +147,6 @@ public class Move_handler:MonoBehaviour
     public void Move_done()
     {
         Doing_move = false;
-        OnTurnEnd?.Invoke();
     }
     void Get_status()
     {
@@ -168,7 +166,11 @@ public class Move_handler:MonoBehaviour
             "poisonpoison","badlypoisonpoison", "burnfire", "paralysiselectric", "freezeice" };
         foreach(string s in InvalidCombinations)
             if ((status + type_name).ToLower() == s)
+            {
+                Debug.Log(type_name+" cant be affected by "+status);
                 return true;
+            }
+        Debug.Log(type_name+" can be affected by "+status);
         return false;
     }
     public void Set_Status(Battle_Participant p,String Status)

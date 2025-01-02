@@ -12,6 +12,8 @@ public class Turn_Based_Combat : MonoBehaviour
     List<Pkm_Use_Move> speed_list = new();
     List<Pkm_Use_Move> priority_list = new();
     public event Action OnNewTurn;
+    public event Action OnMoveExecute;
+    public event Action OnTurnEnd;
     public int Current_pkm_turn = 0;
     private void Awake()
     {
@@ -72,6 +74,8 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         foreach (Pkm_Use_Move command in command_order)
         {
+            OnMoveExecute?.Invoke();
+            yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
             if (Can_Attack(command))
             {
                 command.Execute();
@@ -83,6 +87,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
             }
         }
+        OnTurnEnd?.Invoke();
         Next_turn();
         Reset_Moves();
         yield return null;

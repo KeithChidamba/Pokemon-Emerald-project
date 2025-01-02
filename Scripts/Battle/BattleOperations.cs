@@ -6,31 +6,21 @@ public static class BattleOperations
     public static bool isImmuneTo(Pokemon victim,Type enemy_type)
     {
         foreach(Type t in victim.types)
-            if (t.type_check(enemy_type.Non_effect, enemy_type))
-            {
-                //Debug.Log(victim.Pokemon_name + " is Immune to "+enemy_type.Type_name);
+            if (enemy_type.type_check(enemy_type.Non_effect, t))
                 return true;
-            }
-        //Debug.Log(victim.Pokemon_name + " is Not Immune to "+enemy_type.Type_name);
         return false;
     } 
     static void isWeakTo(Pokemon victim,Type enemy_type)
     {
         foreach(Type t in victim.types)
             if (t.type_check(t.weaknesses, enemy_type))
-            {
-                //Debug.Log(victim.Pokemon_name + " is weak to "+enemy_type.Type_name);
                 effectiveness *= 2f;
-            }
     }
     static void isResistantTo(Pokemon victim,Type enemy_type)
     {
         foreach(Type t in victim.types)
             if (t.type_check(t.Resistances, enemy_type))
-            {
-                //Debug.Log(victim.Pokemon_name + " is resistant to "+enemy_type.Type_name);
                 effectiveness /= 2f;
-            }
     }
     public static bool is_Stab(Pokemon pkm,Type move_type)
     {
@@ -42,10 +32,7 @@ public static class BattleOperations
     public static float TypeEffectiveness(Pokemon victim,Type enemy_type)
     {
         if (isImmuneTo(victim, enemy_type))
-        {
               effectiveness = 0;
-              //Debug.Log(victim.Pokemon_name + " is immune to "+enemy_type.Type_name);
-        }
         else
         {
             effectiveness = 1;

@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 30326
+        "instanceID": 31124
     },
     "has_gender": true,
     "HP": 28.0,
@@ -49,10 +49,11 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29830
+            "instanceID": 29828
         }
     ],
     "Status_effect": "Poison",
+    "Buff_Debuffs": [],
     "type_Immunity": "None",
     "evo_line": [
         "18"
@@ -66,34 +67,34 @@
     ],
     "move_set": [
         {
-            "instanceID": -122570
+            "instanceID": -124702
         },
         {
-            "instanceID": -122572
+            "instanceID": -124704
         },
         {
-            "instanceID": -122574
+            "instanceID": -124706
         },
         {
-            "instanceID": -122576
+            "instanceID": -124708
         }
     ],
     "ability": {
-        "instanceID": 29832
+        "instanceID": 29830
     },
     "evolutions": [
         {
-            "instanceID": 29834
+            "instanceID": 29832
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29932
+        "instanceID": 29920
     },
     "back_picture": {
-        "instanceID": 29934
+        "instanceID": 29922
     },
     "ability_name": "Static",
     "natureName": "Lonely",

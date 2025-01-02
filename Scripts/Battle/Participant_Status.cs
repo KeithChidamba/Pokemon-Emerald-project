@@ -8,7 +8,8 @@ public class Participant_Status : MonoBehaviour
 {
     public Battle_Participant _participant;
     public int status_duration = 0;
-    private int num_status_turns = 0;
+    [SerializeField]private int num_status_turns = 0;
+    [SerializeField]private bool Healed = false;
     void Start()
     {
         _participant = GetComponent<Battle_Participant>();
@@ -18,9 +19,7 @@ public class Participant_Status : MonoBehaviour
         if (_participant.pokemon.Status_effect == "None") return;
         status_duration = 0;
         num_status_turns = num_turns;
-        Debug.Log("num status turns:"+num_status_turns);
         _participant.refresh_statusIMG();
-        Recovery_Chance();
         Stat_drop();
     }
     void loose_HP(float percentage)
@@ -46,10 +45,8 @@ public class Participant_Status : MonoBehaviour
         }
         if (_participant.pokemon.Status_effect == "None") return;
         _participant.refresh_statusIMG();
-        status_duration++;
-        Recovery_Chance();
+        Status_damage();
     }
-
     public void StunCheck()
     {
         if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon !=
@@ -57,32 +54,26 @@ public class Participant_Status : MonoBehaviour
         if (_participant.pokemon.Status_effect == "None") return;
         Invoke(_participant.pokemon.Status_effect.ToLower()+"_check",0f);
     }
-    void Recovery_Chance()
+    void Status_damage()
     {
         Invoke("Check_"+_participant.pokemon.Status_effect.ToLower(),0f);
     }
     void Check_burn()
     {
-        Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is hurt by the burn");
-        loose_HP(0.125f);
+        Status_Damage_msg(" is hurt by the burn",0.125f); ;
     }
     void Check_poison()
     {
-        Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is poisoned");
-        loose_HP(0.125f);
+        Status_Damage_msg(" is poisoned", 0.125f);
     }
     void Check_badlypoison()
     {
-        Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" is badly poisoned");
-        loose_HP((status_duration+1)/16f);
+        Status_Damage_msg(" is badly poisoned", (status_duration + 1) / 16f);
     }
     void freeze_check()
     {
         if (Utility.Get_rand(1, 101) < 10) //10% chance
-        {
-            Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Unfroze!");
-            remove_status_effect();
-        }
+            SetHeal();
         else
             _participant.pokemon.canAttack = false;
     }
@@ -96,28 +87,49 @@ public class Participant_Status : MonoBehaviour
     }
     void sleep_check()
     {
-        if (status_duration < 1)
+        if (status_duration < 1)//at least sleep for 1 turn
         {
             _participant.pokemon.canAttack = false;
             status_duration++;
             return;
         }
-        Debug.Log("sleep: "+status_duration+"/"+num_status_turns);
-        if (num_status_turns == status_duration)//at least sleep for 1 turn
-            remove_status_effect();
-        else
+        if (num_status_turns == status_duration)//after 4 turns wake up
+            SetHeal();
+        else //wake up early if lucky
         {
             int[] chances = { 25, 33, 50, 100 };
             if (Utility.Get_rand(1, 101) < chances[status_duration-1])
-            {
-                Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Woke UP!");
-                remove_status_effect();
-            }
+                SetHeal();
             else
                 _participant.pokemon.canAttack = false;
             status_duration++;
         }
-    } 
+    }
+    void Status_Damage_msg(string msg,float damage)
+    {
+        Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+msg);
+        loose_HP(damage);
+        status_duration++;
+    }
+    public void Notify_Healing()
+    {
+        if (!Healed) return;
+        switch (_participant.pokemon.Status_effect)
+        {
+            case "Sleep":
+                Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Woke UP!");
+                break;
+            case "Freeze":
+                Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Unfroze!");
+                break;
+        }
+        remove_status_effect();
+        Healed = false;
+    }
+    void SetHeal()
+    {
+        Healed = true;
+    }
     void remove_status_effect()
     {
         _participant.pokemon.Status_effect = "None";
