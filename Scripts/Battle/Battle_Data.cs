@@ -30,6 +30,7 @@ public class Battle_Data:MonoBehaviour
     {
         pokemon.Accuracy = 100;
         pokemon.Evasion = 0;
+        pokemon.crit_chance = 6.25f;
         if(NotBattling)
             pokemon.canAttack = true;
         pokemon.CanBeDamaged = true;

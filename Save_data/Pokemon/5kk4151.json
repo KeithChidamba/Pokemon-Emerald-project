@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30984
+        "instanceID": 30880
     },
     "has_gender": true,
     "HP": 30.0,
@@ -49,7 +49,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29810
+            "instanceID": 29820
         }
     ],
     "Status_effect": "Burn",
@@ -68,37 +68,37 @@
     ],
     "move_set": [
         {
-            "instanceID": -124722
+            "instanceID": -36858
         },
         {
-            "instanceID": -124724
+            "instanceID": -36860
         },
         {
-            "instanceID": -124726
+            "instanceID": -36862
         },
         {
-            "instanceID": -124728
+            "instanceID": -36864
         }
     ],
     "ability": {
-        "instanceID": 29812
+        "instanceID": 29822
     },
     "evolutions": [
         {
-            "instanceID": 29814
+            "instanceID": 29824
         },
         {
-            "instanceID": 29816
+            "instanceID": 29826
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29910
+        "instanceID": 29920
     },
     "back_picture": {
-        "instanceID": 29756
+        "instanceID": 29766
     },
     "ability_name": "Overgrow",
     "natureName": "Rash",

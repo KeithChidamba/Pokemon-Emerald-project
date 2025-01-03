@@ -16,10 +16,10 @@ public class Participant_Status : MonoBehaviour
     }
     public void Get_statusEffect(int num_turns)
     {
+        _participant.refresh_statusIMG();
         if (_participant.pokemon.Status_effect == "None") return;
         status_duration = 0;
         num_status_turns = num_turns;
-        _participant.refresh_statusIMG();
         Stat_drop();
     }
     void loose_HP(float percentage)

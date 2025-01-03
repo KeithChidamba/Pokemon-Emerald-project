@@ -294,9 +294,6 @@ public class Battle_handler : MonoBehaviour
         overworld_actions.instance.doing_action = false;
         Battle_ui.SetActive(false);
         options_ui.SetActive(false);
-        for(int i=0;i<4;i++)
-            if (Battle_P[i] != null)
-                Battle_P[i].is_active = false;
         foreach (Battle_Participant p in Battle_P)
         {
             if(p.pokemon!=null)
@@ -310,7 +307,6 @@ public class Battle_handler : MonoBehaviour
         Encounter_handler.instance.Reset_trigger();
         OverWorld.SetActive(true);
         Dialogue_handler.instance.can_exit = true;
-        
     }
     public void Run_away()//wild encounter is always single battle
     {

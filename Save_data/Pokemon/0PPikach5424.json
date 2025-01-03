@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 31056
+        "instanceID": 30952
     },
     "has_gender": true,
     "HP": 20.0,
@@ -49,7 +49,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29828
+            "instanceID": 29838
         }
     ],
     "Status_effect": "None",
@@ -70,34 +70,34 @@
     ],
     "move_set": [
         {
-            "instanceID": -124682
+            "instanceID": -36848
         },
         {
-            "instanceID": -124684
+            "instanceID": -36850
         },
         {
-            "instanceID": -124686
+            "instanceID": -36852
         },
         {
-            "instanceID": -124688
+            "instanceID": -36854
         }
     ],
     "ability": {
-        "instanceID": 29830
+        "instanceID": 29840
     },
     "evolutions": [
         {
-            "instanceID": 29832
+            "instanceID": 29842
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29834
+        "instanceID": 29844
     },
     "back_picture": {
-        "instanceID": 29836
+        "instanceID": 29846
     },
     "ability_name": "Static",
     "natureName": "Bold",

@@ -31,13 +31,13 @@ public class Battle_Participant : MonoBehaviour
     {
         status = GetComponent<Participant_Status>();
         data = GetComponent<Battle_Data>();
-        Turn_Based_Combat.instance.OnTurnEnd += Check_Faint;
        Battle_handler.instance.onBattleEnd += Deactivate_pkm;
     }
     private void Update()
     {
         if (!is_active) return;
         update_ui();
+        Check_Faint();
     }
     public void Get_exp(Battle_Participant enemy)
     {
@@ -56,25 +56,19 @@ public class Battle_Participant : MonoBehaviour
     void Check_Faint()
     {
         if (!is_active) return;
-        if (pokemon.HP <= 0)
+        if (pokemon.HP > 0) return;
+        Onfaint?.Invoke(this);
+        Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
+        if (isPlayer)
+            Invoke(nameof(Check_loss),1f);
+        else
         {
-            Onfaint?.Invoke(this);
-            Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
-            if (isPlayer)
-                Invoke(nameof(Check_loss),1f);
-            else
-            {
-                if (!Battle_handler.instance.is_trainer_battle)
-                {//end battle if wild
-                    Wild_pkm.instance.InBattle = false;
-                    Battle_handler.instance.End_Battle(true);
-                }
-                else
-                {
-                    //swap in new pkm if trainer or end battle
-                }
+            if (!Battle_handler.instance.is_trainer_battle)
+            {//end battle if wild
+                Wild_pkm.instance.InBattle = false;
+                Battle_handler.instance.End_Battle(true);
             }
-            //play anim
+            //swap in new pkm if trainer or end battle
         }
     }
     private void Check_loss()
@@ -97,7 +91,6 @@ public class Battle_Participant : MonoBehaviour
             Reset_pkm();
         }
     }
-
     void Deactivate_pkm()
     {
         is_active = false;

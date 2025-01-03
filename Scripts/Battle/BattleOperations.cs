@@ -7,20 +7,29 @@ public static class BattleOperations
     {
         foreach(Type t in victim.types)
             if (enemy_type.type_check(enemy_type.Non_effect, t))
+            {
+                Debug.Log(t +" is immune to "+ enemy_type);
                 return true;
+            }
         return false;
     } 
     static void isWeakTo(Pokemon victim,Type enemy_type)
     {
         foreach(Type t in victim.types)
             if (t.type_check(t.weaknesses, enemy_type))
+            {
+                Debug.Log(enemy_type +" is effective against "+ t);
                 effectiveness *= 2f;
+            }
     }
     static void isResistantTo(Pokemon victim,Type enemy_type)
     {
         foreach(Type t in victim.types)
             if (t.type_check(t.Resistances, enemy_type))
+            {
+                Debug.Log(enemy_type +" is not effective against "+ t);
                 effectiveness /= 2f;
+            }
     }
     public static bool is_Stab(Pokemon pkm,Type move_type)
     {
@@ -80,12 +89,14 @@ public static class BattleOperations
             limit_high = 5;
             limit_low = -5;
         }
-        if ( buff.Stage < limit_low | buff.Stage > limit_high)
+        if (buff.Stage > limit_high && increased)
         {
-            if(increased)
-                Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher");
-            else 
-                Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
+            Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher");
+            return 0;
+        }
+        if (buff.Stage < limit_low && !increased)
+        {
+            Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
             return 0;
         }
         if ((buff.Stage + buff_amount) < limit_low)
@@ -94,6 +105,11 @@ public static class BattleOperations
             buff.Stage = limit_high + 1;
         else
             change = buff_amount;
+        if(increased)
+            Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" Increased!");
+        else 
+            Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" Decreased!");
+        Debug.Log("change"+change);
         return change;
     }
     private static Buff_Debuff NewBuff(string stat_name,int amount,bool increase)

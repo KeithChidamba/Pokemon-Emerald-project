@@ -10,10 +10,9 @@ public class Move_handler:MonoBehaviour
     public static Move_handler instance;
     private Turn current_turn;
     private readonly float[] Stat_Levels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
-    private readonly float[] Accuracy_Evasion_Levels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
+    private readonly float[] Accuracy_And_Evasion_Levels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] Crit_Levels = {6.25f,12.5f,25f,50f};
     private Battle_event[] Dialouge_order={null,null,null,null,null};
-
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -32,18 +31,17 @@ public class Move_handler:MonoBehaviour
     public void Do_move(Turn turn)
     {
         current_turn=turn;
-        Dialogue_handler.instance.Battle_Info(turn.attacker_.pokemon.Pokemon_name+" used "+turn.move_.Move_name+" on "+turn.victim_.pokemon.Pokemon_name+"!");
+        if(current_turn.move_.Move_damage>0)
+            Dialogue_handler.instance.Battle_Info(turn.attacker_.pokemon.Pokemon_name+" used "+turn.move_.Move_name+" on "+turn.victim_.pokemon.Pokemon_name+"!");
+        else
+        {
+            Dialogue_handler.instance.Battle_Info(turn.attacker_.pokemon.Pokemon_name+" used "+turn.move_.Move_name+"!");
+        }
         StartCoroutine(Move_Sequence());
-        //Invoke(nameof(PlayAnimation),1f);
-    }
-    void PlayAnimation()
-    {
-        //call anim script and run move_name as anim
-        //Move_effect in anim event
     }
     void Set_Sequences()
     {
-        Dialouge_order[0] = new("Deal_Damage", current_turn.move_.Move_damage > 0,2.5f);
+        Dialouge_order[0] = new("Deal_Damage", current_turn.move_.Move_damage > 0,2f);//can change this duration
         Dialouge_order[1] = new("Get_status", current_turn.move_.Has_status,1.5f);
         Dialouge_order[2] = new("Move_effect", current_turn.move_.Has_effect,2f);
         Dialouge_order[3] = new("Set_buff_Debuff", current_turn.move_.is_Buff_Debuff,1.5f);
@@ -111,6 +109,7 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" was not affected!");
         else if(type_effectiveness < 1)
             Dialogue_handler.instance.Battle_Info("The move is not very effective!");
+        Debug.Log(type_effectiveness+" eff dmg; " + damage_dealt);
         return damage_dealt;
     }
 
@@ -119,12 +118,12 @@ public class Move_handler:MonoBehaviour
         float Ratio=0;
         float def = AttackType/current_turn.victim_.pokemon.Defense;
         float spDef =  AttackType/current_turn.victim_.pokemon.SP_DEF;
-        if (crit == 1)
+        if (crit == 1)//if no crit
             if (!isSpecial)
                 Ratio = def;
             else
                 Ratio = spDef;
-        else if (crit == 2)
+        else if (crit == 2)//if crit, ignore enemy defense buff, and attacker attack debuff
         {
             if (!isSpecial)
                 if (current_turn.victim_.data.Defense < current_turn.victim_.pokemon.Defense) //def buff
@@ -143,8 +142,8 @@ public class Move_handler:MonoBehaviour
     {
         if (current_turn.move_.Has_effect) return;
         current_turn.victim_.pokemon.HP -= Calc_Damage();
-    }
-    public void Move_done()
+    } 
+    void Move_done()
     {
         Doing_move = false;
     }
@@ -153,30 +152,27 @@ public class Move_handler:MonoBehaviour
         if (!current_turn.move_.Has_status)return;
         if (current_turn.victim_.pokemon.Status_effect != "None") return;
         if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
-            Set_Status(current_turn.victim_,current_turn.move_.Status_effect);
-        else
-        {
-            Debug.Log("status failed");
-        }
+            CheckStatus();
     }
-
     bool CheckInvalidStatusEffect(string status,string type_name)
     {
         string[] InvalidCombinations = {
             "poisonpoison","badlypoisonpoison", "burnfire", "paralysiselectric", "freezeice" };
         foreach(string s in InvalidCombinations)
             if ((status + type_name).ToLower() == s)
-            {
-                Debug.Log(type_name+" cant be affected by "+status);
                 return true;
-            }
-        Debug.Log(type_name+" can be affected by "+status);
         return false;
+    }
+
+    void CheckStatus()
+    {
+        foreach (Type t in current_turn.victim_.pokemon.types)
+            if(CheckInvalidStatusEffect(current_turn.move_.Status_effect, t.Type_name))return;
+        Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" recieved a "+current_turn.move_.Status_effect+" effect!");
+        Set_Status(current_turn.victim_,current_turn.move_.Status_effect);
     }
     public void Set_Status(Battle_Participant p,String Status)
     {
-        foreach (Type t in p.pokemon.types)
-            if(CheckInvalidStatusEffect(Status, t.Type_name))return;
         p.pokemon.Status_effect = Status;
         int num_turns = 0;
         if(Status=="Sleep") 
@@ -193,69 +189,55 @@ public class Move_handler:MonoBehaviour
     {
         if (!current_turn.move_.is_Buff_Debuff) return;
         if (Utility.Get_rand(1, 101) > current_turn.move_.Debuff_chance)
-        {
-            Debug.Log("debuff failed");
             return;
-        }
         string effect = current_turn.move_.Buff_Debuff;
         char result = effect[1];//buff or debuff
         int buff_amount = int.Parse(effect[2].ToString());
-        char reciever = effect[0];//who the change is effecting
         string stat = effect.Substring(3, effect.Length - 3);
-        Debug.Log(5+stat+result +buff_amount);
-        switch (stat.ToLower())
-        {
-            case"Defense":
-                current_turn.victim_.pokemon.Defense = Get_buff_debuff(current_turn.victim_.pokemon.Defense,stat,buff_amount,reciever,result);
-                    break;
-            case"Attack":
-                current_turn.victim_.pokemon.Attack = Get_buff_debuff(current_turn.victim_.pokemon.Attack,stat,buff_amount,reciever,result);
-                break;
-            case"Special Defense":
-                current_turn.victim_.pokemon.SP_DEF = Get_buff_debuff(current_turn.victim_.pokemon.SP_DEF,stat,buff_amount,reciever,result);
-                break;
-            case"Special Attack":
-                current_turn.victim_.pokemon.SP_ATK = Get_buff_debuff(current_turn.victim_.pokemon.SP_ATK,stat,buff_amount,reciever,result);
-                break;
-            case"Speed":
-                current_turn.victim_.pokemon.speed = Get_buff_debuff(current_turn.victim_.pokemon.speed,stat,buff_amount,reciever,result);
-                break;
-            case"Accuracy":
-                current_turn.victim_.pokemon.Accuracy = Get_buff_debuff(current_turn.victim_.pokemon.Accuracy,stat,buff_amount,reciever,result);
-                break;
-            case"Evasion":
-                current_turn.victim_.pokemon.Evasion = Get_buff_debuff(current_turn.victim_.pokemon.Evasion,stat,buff_amount,reciever,result);
-                break;
-            case"Crit":
-                current_turn.victim_.pokemon.crit_chance = Get_buff_debuff(current_turn.victim_.pokemon.crit_chance,stat,buff_amount,reciever,result);
-                break;
-        }
-    }
-    float Get_buff_debuff(float stat_val,string stat,int buff_amount,char reciever,char result)
-    {
         Pokemon reciever_pkm;
-        string result_txt;
-        if (reciever == 'e')
+        if (effect[0] == 'e')//who the change is effecting
             reciever_pkm = current_turn.victim_.pokemon;
         else
             reciever_pkm = current_turn.attacker_.pokemon;
+        switch (stat)
+        {
+            case"Defense":
+                reciever_pkm.Defense = Get_buff_debuff(current_turn.victim_.pokemon.Defense,stat,buff_amount,result,reciever_pkm);
+                    break;
+            case"Attack":
+                reciever_pkm.Attack = Get_buff_debuff(current_turn.victim_.pokemon.Attack,stat,buff_amount,result,reciever_pkm);
+                break;
+            case"Special Defense":
+                reciever_pkm.SP_DEF = Get_buff_debuff(current_turn.victim_.pokemon.SP_DEF,stat,buff_amount,result,reciever_pkm);
+                break;
+            case"Special Attack":
+                reciever_pkm.SP_ATK = Get_buff_debuff(current_turn.victim_.pokemon.SP_ATK,stat,buff_amount,result,reciever_pkm);
+                break;
+            case"Speed":
+                reciever_pkm.speed = Get_buff_debuff(current_turn.victim_.pokemon.speed,stat,buff_amount,result,reciever_pkm);
+                break;
+            case"Accuracy":
+                reciever_pkm.Accuracy = Get_buff_debuff(current_turn.victim_.pokemon.Accuracy,stat,buff_amount,result,reciever_pkm);
+                break;
+            case"Evasion":
+                reciever_pkm.Evasion = Get_buff_debuff(current_turn.victim_.pokemon.Evasion,stat,buff_amount,result,reciever_pkm);
+                break;
+            case"Crit":
+                reciever_pkm.crit_chance = Get_buff_debuff(current_turn.victim_.pokemon.crit_chance,stat,buff_amount,result,reciever_pkm);
+                break;
+        }
+    }
+    float Get_buff_debuff(float stat_val,string stat,int buff_amount,char result,Pokemon reciever_pkm)
+    {
         if (result == '+')
-        {
             BattleOperations.ChangeBuffs(reciever_pkm, stat,buff_amount, true);
-            result_txt = "Increased";
-        }
         else
-        {
             BattleOperations.ChangeBuffs(reciever_pkm, stat,buff_amount, false);
-            result_txt = "Decreased";
-        }
         Buff_Debuff buff = BattleOperations.GetBuff(reciever_pkm, stat);
-        Debug.Log(reciever_pkm.Pokemon_name+"'s "+buff.Stat+" "+result_txt+"!");
-        Dialogue_handler.instance.Battle_Info(reciever_pkm.Pokemon_name+"'s "+buff.Stat+" "+result_txt+"!");
         if (stat == "Accuracy" | stat == "Evasion")
-            return math.trunc(stat_val * Accuracy_Evasion_Levels[buff.Stage+6]); 
+            return math.trunc(stat_val * Accuracy_And_Evasion_Levels[buff.Stage+6]); 
         if(stat=="Crit")    
-            return math.trunc(stat_val * Crit_Levels[buff.Stage]);
+            return Crit_Levels[buff.Stage];
         return math.trunc(stat_val * Stat_Levels[buff.Stage+6]);
     }
     void absorb()

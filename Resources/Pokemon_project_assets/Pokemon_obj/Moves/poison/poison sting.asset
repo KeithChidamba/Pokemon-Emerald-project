@@ -18,12 +18,14 @@ MonoBehaviour:
   type: {fileID: 11400000, guid: 3185f3c7151af7d48b86d9e6f6b6c269, type: 2}
   isSpecial: 0
   is_Buff_Debuff: 0
-  Priority: Normal
+  Has_status: 1
+  Has_effect: 0
+  Can_flinch: 0
+  Priority: 0
   Powerpoints: 30
+  max_Powerpoints: 0
   Status_effect: Poison
   Buff_Debuff: None
   Status_chance: 40
   Debuff_chance: 0
   Description: a weak sting that may poison
-  player_animtion: {fileID: 0}
-  enemy_animtion: {fileID: 0}

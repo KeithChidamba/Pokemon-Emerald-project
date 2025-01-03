@@ -17,10 +17,8 @@ public class Move : ScriptableObject
     public int Powerpoints;
     public int max_Powerpoints;
     public string Status_effect="None";
-    public string Buff_Debuff="None";//e-DEF
+    public string Buff_Debuff="None";
     public float Status_chance = 0;
     public float Debuff_chance = 0;
     public string Description;
-    public Animation player_animtion;
-    public Animation enemy_animtion;
 }

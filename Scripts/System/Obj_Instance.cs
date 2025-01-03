@@ -14,6 +14,9 @@ public static class Obj_Instance
         mv.Move_accuracy = m.Move_accuracy;
         mv.type = m.type;
         mv.isSpecial = m.isSpecial;
+        mv.Has_status = m.Has_status;
+        mv.Has_effect = m.Has_effect;
+        mv.Can_flinch = m.Can_flinch;
         mv.is_Buff_Debuff = m.is_Buff_Debuff;
         mv.Priority = m.Priority;
         mv.Powerpoints = m.Powerpoints;
@@ -22,8 +25,6 @@ public static class Obj_Instance
         mv.Status_chance = m.Status_chance;
         mv.Debuff_chance = m.Debuff_chance;
         mv.Description = m.Description;
-        mv.player_animtion = m.player_animtion;
-        mv.enemy_animtion = m.enemy_animtion;
         return mv;
     }
     public static Pokemon set_Pokemon(Pokemon pkm)
