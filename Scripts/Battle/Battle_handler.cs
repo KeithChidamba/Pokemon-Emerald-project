@@ -283,9 +283,14 @@ public class Battle_handler : MonoBehaviour
     public void Distribute_EXP(float exp_from_enemy)
     {
         Debug.Log(exp_from_enemy+" exp");
-        float exp = exp_from_enemy / exp_recievers.Count;
-        foreach (Pokemon p in exp_recievers)
-            p.Recieve_exp(exp);
+        List<Pokemon> Alive_pkm = new();
+        foreach(Pokemon p in exp_recievers)
+            if (p.HP>0)
+                Alive_pkm.Add(p); 
+        float exp = exp_from_enemy / Alive_pkm.Count;
+        foreach (Pokemon p in Alive_pkm)
+                p.Recieve_exp(exp);
+        exp_recievers.Clear();
     }
     void end_battle_ui()
     {

@@ -88,6 +88,7 @@ public class Turn_Based_Combat : MonoBehaviour
             }
         }
         OnTurnEnd?.Invoke();
+        yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         Next_turn();
         Reset_Moves();
         yield return null;

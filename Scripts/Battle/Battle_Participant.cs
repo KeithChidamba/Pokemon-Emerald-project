@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class Battle_Participant : MonoBehaviour
     public Text pkm_name, pkm_HP, pkm_lv;
     public bool isPlayer = false;
     public bool is_active = false;
+    private bool fainted = false;
     public Slider player_hp;
     public Slider player_exp;
     public GameObject[] single_battle_ui;
@@ -31,13 +33,15 @@ public class Battle_Participant : MonoBehaviour
     {
         status = GetComponent<Participant_Status>();
         data = GetComponent<Battle_Data>();
+        Turn_Based_Combat.instance.OnTurnEnd += Check_Faint;
+        Move_handler.instance.OnMoveEnd += Check_Faint;
+        Turn_Based_Combat.instance.OnMoveExecute += Check_Faint;
        Battle_handler.instance.onBattleEnd += Deactivate_pkm;
     }
     private void Update()
     {
         if (!is_active) return;
         update_ui();
-        Check_Faint();
     }
     public void Get_exp(Battle_Participant enemy)
     {
@@ -53,23 +57,24 @@ public class Battle_Participant : MonoBehaviour
             PokemonOperations.GetEV(evStat,evAmount,pokemon);
         }
     }
-    void Check_Faint()
+    public void Check_Faint()
     {
         if (!is_active) return;
         if (pokemon.HP > 0) return;
-        Onfaint?.Invoke(this);
+        if (fainted) return;
+        fainted = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         if (isPlayer)
             Invoke(nameof(Check_loss),1f);
         else
-        {
             if (!Battle_handler.instance.is_trainer_battle)
-            {//end battle if wild
-                Wild_pkm.instance.InBattle = false;
-                Battle_handler.instance.End_Battle(true);
-            }
-            //swap in new pkm if trainer or end battle
-        }
+                Invoke(nameof(EndWildBattle),1f);
+        Onfaint?.Invoke(this);
+    }
+    void EndWildBattle()
+    {
+        Wild_pkm.instance.InBattle = false;
+        Battle_handler.instance.End_Battle(true);
     }
     private void Check_loss()
     {
@@ -145,6 +150,7 @@ public class Battle_Participant : MonoBehaviour
     public void Load_ui()
     {
         player_hp.minValue = 0;
+        fainted = false;
         is_active = true;
         participant_ui.SetActive(true);
         gender_img();

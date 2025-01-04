@@ -56,19 +56,18 @@ public class Participant_Status : MonoBehaviour
     }
     void Status_damage()
     {
-        Invoke("Check_"+_participant.pokemon.Status_effect.ToLower(),0f);
-    }
-    void Check_burn()
-    {
-        Status_Damage_msg(" is hurt by the burn",0.125f); ;
-    }
-    void Check_poison()
-    {
-        Status_Damage_msg(" is poisoned", 0.125f);
-    }
-    void Check_badlypoison()
-    {
-        Status_Damage_msg(" is badly poisoned", (status_duration + 1) / 16f);
+        switch (_participant.pokemon.Status_effect.ToLower())
+        {
+            case "burn":
+                Status_Damage_msg(" is hurt by the burn",0.125f);
+                break;
+            case "poison":
+                Status_Damage_msg(" is poisoned", 0.125f);
+                break;
+            case "badlypoison":
+                Status_Damage_msg(" is badly poisoned", (status_duration + 1) / 16f);
+                break;
+        }
     }
     void freeze_check()
     {
@@ -110,6 +109,7 @@ public class Participant_Status : MonoBehaviour
         Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+msg);
         loose_HP(damage);
         status_duration++;
+        _participant.Invoke(nameof(_participant.Check_Faint),0.9f);
     }
     public void Notify_Healing()
     {

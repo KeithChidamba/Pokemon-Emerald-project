@@ -8,7 +8,7 @@ public static class BattleOperations
         foreach(Type t in victim.types)
             if (enemy_type.type_check(enemy_type.Non_effect, t))
             {
-                Debug.Log(t +" is immune to "+ enemy_type);
+                //Debug.Log(t +" is immune to "+ enemy_type);
                 return true;
             }
         return false;
@@ -18,7 +18,7 @@ public static class BattleOperations
         foreach(Type t in victim.types)
             if (t.type_check(t.weaknesses, enemy_type))
             {
-                Debug.Log(enemy_type +" is effective against "+ t);
+                //Debug.Log(enemy_type +" is effective against "+ t);
                 effectiveness *= 2f;
             }
     }
@@ -27,7 +27,7 @@ public static class BattleOperations
         foreach(Type t in victim.types)
             if (t.type_check(t.Resistances, enemy_type))
             {
-                Debug.Log(enemy_type +" is not effective against "+ t);
+                //Debug.Log(enemy_type +" is not effective against "+ t);
                 effectiveness /= 2f;
             }
     }
@@ -64,14 +64,14 @@ public static class BattleOperations
         {
             foreach (Buff_Debuff b in pkm.Buff_Debuffs)
                 if (b.Stat == stat_name)
-                {
-                    if (increase)
-                        b.Stage+=CheckBuffLimit(pkm,b,true,buff_amount);
-                    else
-                        b.Stage-=CheckBuffLimit(pkm,b,false,buff_amount);
-                }
-        }else
-            pkm.Buff_Debuffs.Add(NewBuff(stat_name,buff_amount, increase));
+                        b.Stage=CheckBuffLimit(pkm,b,increase,buff_amount);
+        }
+        else
+        {
+            pkm.Buff_Debuffs.Add(NewBuff(stat_name));
+            ChangeBuffs(pkm,stat_name,buff_amount,increase);
+            return;
+        }
         CheckBuffs(pkm);
     }
     static int CheckBuffLimit(Pokemon pkm,Buff_Debuff buff,bool increased,int buff_amount)
@@ -100,28 +100,27 @@ public static class BattleOperations
             return 0;
         }
         if ((buff.Stage + buff_amount) < limit_low)
-            buff.Stage = limit_low - 1;
-        else if( (buff.Stage + buff_amount) > limit_high)
-            buff.Stage = limit_high + 1;
-        else
-            change = buff_amount;
-        if(increased)
+            return limit_low - 1; 
+        if( (buff.Stage + buff_amount) > limit_high)
+            return limit_high + 1;
+        if (increased)
+        {
+            change = buff.Stage+buff_amount;
             Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" Increased!");
-        else 
+        }
+        else
+        {
+            change = buff.Stage-buff_amount;
             Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" Decreased!");
-        Debug.Log("change"+change);
+        }
+        Debug.Log("changed buff: "+change);
         return change;
     }
-    private static Buff_Debuff NewBuff(string stat_name,int amount,bool increase)
+    private static Buff_Debuff NewBuff(string stat_name)
     {
-        int Stage = 0;
-        if (increase)
-            Stage+=amount;
-        else
-            Stage-=amount;
         Buff_Debuff buff = ScriptableObject.CreateInstance<Buff_Debuff>();
         buff.Stat = stat_name;
-        buff.Stage = Stage;
+        buff.Stage = 0;
         return buff;
     }
     public static Buff_Debuff GetBuff(Pokemon pkm,string stat_name)
