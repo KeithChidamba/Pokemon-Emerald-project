@@ -944,6 +944,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _participant: {fileID: 35621317}
   status_duration: 0
+  num_status_turns: 0
+  Healed: 0
 --- !u!114 &35621319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6105,6 +6107,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _participant: {fileID: 190973850}
   status_duration: 0
+  num_status_turns: 0
+  Healed: 0
 --- !u!114 &190973852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14356,7 +14360,7 @@ MonoBehaviour:
         m_MethodName: Add_Member
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+          m_ObjectArgument: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
           m_ObjectArgumentAssemblyTypeName: Pokemon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -49624,6 +49628,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _participant: {fileID: 1636635380}
   status_duration: 0
+  num_status_turns: 0
+  Healed: 0
 --- !u!114 &1636635382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61240,6 +61246,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _participant: {fileID: 2033618204}
   status_duration: 0
+  num_status_turns: 0
+  Healed: 0
 --- !u!114 &2033618206
 MonoBehaviour:
   m_ObjectHideFlags: 0

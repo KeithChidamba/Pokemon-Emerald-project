@@ -99,10 +99,6 @@ public static class BattleOperations
             Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
             return 0;
         }
-        if ((buff.Stage + buff_amount) < limit_low)
-            return limit_low - 1; 
-        if( (buff.Stage + buff_amount) > limit_high)
-            return limit_high + 1;
         if (increased)
         {
             change = buff.Stage+buff_amount;
@@ -113,7 +109,11 @@ public static class BattleOperations
             change = buff.Stage-buff_amount;
             Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" Decreased!");
         }
-        Debug.Log("changed buff: "+change);
+        Debug.Log("changed: "+change+" limit high "+ (limit_high + 1) +" limit low "+(limit_low - 1));
+        if(change>limit_high)
+            return limit_high + 1;
+        if(change<limit_low)
+            return limit_low - 1; 
         return change;
     }
     private static Buff_Debuff NewBuff(string stat_name)

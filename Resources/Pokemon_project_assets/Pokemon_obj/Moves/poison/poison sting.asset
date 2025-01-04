@@ -23,7 +23,7 @@ MonoBehaviour:
   Can_flinch: 0
   Priority: 0
   Powerpoints: 30
-  max_Powerpoints: 0
+  max_Powerpoints: 30
   Status_effect: Poison
   Buff_Debuff: None
   Status_chance: 40

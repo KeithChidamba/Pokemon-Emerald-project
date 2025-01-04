@@ -43,6 +43,7 @@ public static class Obj_Instance
         new_pkm.Gender = pkm.Gender;
         new_pkm.abilities = pkm.abilities;
         new_pkm.has_gender=pkm.has_gender;
+        new_pkm.split_evolution = pkm.split_evolution;
         new_pkm.Base_Pokemon_name = pkm.Base_Pokemon_name;
         new_pkm.Attack = pkm.Attack;
         new_pkm.Accuracy = pkm.Accuracy;

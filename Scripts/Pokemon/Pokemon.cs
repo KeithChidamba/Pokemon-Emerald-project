@@ -222,8 +222,8 @@ public class Pokemon : ScriptableObject
                 string t = l.Substring(0, pos - 1).ToLower(); //move type 
                 string n = l.Substring(pos, l.Length - 2 - pos).ToLower();//move name
                 if (move_set.Count==4)//new move ui, allow player to replace move or reject new move
-                    //move_set[move_set.Count-1] = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
-                    Debug.Log("moves full");
+                    move_set[move_set.Count-1] = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
+                    //Debug.Log("moves full");
                 else
                     move_set.Add(Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n)));
                 break;

@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 31020
+        "instanceID": 32058
     },
     "has_gender": true,
     "HP": 28.0,
@@ -49,7 +49,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29838
+            "instanceID": 29834
         }
     ],
     "Status_effect": "Poison",
@@ -67,34 +67,34 @@
     ],
     "move_set": [
         {
-            "instanceID": -36838
+            "instanceID": -154358
         },
         {
-            "instanceID": -36840
+            "instanceID": -154360
         },
         {
-            "instanceID": -36842
+            "instanceID": -154362
         },
         {
-            "instanceID": -36844
+            "instanceID": -154364
         }
     ],
     "ability": {
-        "instanceID": 29840
+        "instanceID": 29836
     },
     "evolutions": [
         {
-            "instanceID": 29842
+            "instanceID": 29838
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29930
+        "instanceID": 29926
     },
     "back_picture": {
-        "instanceID": 29932
+        "instanceID": 29928
     },
     "ability_name": "Static",
     "natureName": "Lonely",

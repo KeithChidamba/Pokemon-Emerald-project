@@ -1,0 +1,132 @@
+{
+    "Base_Pokemon_name": "Wurmple",
+    "Pokemon_name": "Silcoon",
+    "Pokemon_ID": "1uurmpl2530",
+    "Personality_value": 1465772501,
+    "Gender": "Female",
+    "GenderRatio": "50/50",
+    "nature": {
+        "instanceID": 32058
+    },
+    "has_gender": true,
+    "HP": 17.0,
+    "max_HP": 17.0,
+    "BaseHP": 50.0,
+    "BaseAttack": 35.0,
+    "BaseDefense": 55.0,
+    "BaseSP_ATK": 25.0,
+    "BaseSP_DEF": 25.0,
+    "Basespeed": 15.0,
+    "Attack": 13.0,
+    "Defense": 11.0,
+    "SP_ATK": 12.0,
+    "SP_DEF": 12.0,
+    "speed": 12.0,
+    "HP_IV": 30.0,
+    "Attack_IV": 2.0,
+    "Defense_IV": 10.0,
+    "SP_ATK_IV": 0.0,
+    "SP_DEF_IV": 17.0,
+    "speed_IV": 0.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "Defense2"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 0.0,
+    "crit_chance": 6.25,
+    "Current_level": 7,
+    "level_progress": 0.0,
+    "exp_yield": 72,
+    "has_trainer": false,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 31988
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "type_Immunity": "None",
+    "evo_line": [
+        "5",
+        "13"
+    ],
+    "abilities": [
+        "Paralysis Combo"
+    ],
+    "split_evolution": true,
+    "learnSet": [
+        "normal/harden05"
+    ],
+    "move_set": [
+        {
+            "instanceID": -154332
+        },
+        {
+            "instanceID": -154334
+        },
+        {
+            "instanceID": -154336
+        },
+        {
+            "instanceID": -154338
+        }
+    ],
+    "ability": {
+        "instanceID": 32042
+    },
+    "evolutions": [
+        {
+            "instanceID": 31892
+        },
+        {
+            "instanceID": 31978
+        },
+        {
+            "instanceID": 31806
+        },
+        {
+            "instanceID": 32004
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "front_picture": {
+        "instanceID": 31890
+    },
+    "back_picture": {
+        "instanceID": 31820
+    },
+    "ability_name": "Shed Skin",
+    "natureName": "Lonely",
+    "evo_data": [
+        "Silcoon",
+        "Beautifly",
+        "Cascoon",
+        "Dustox"
+    ],
+    "type_data": [
+        "Bug"
+    ],
+    "move_data": [
+        "Tackle/Normal",
+        "String shot/Bug",
+        "Poison sting/Poison",
+        "Harden/Normal"
+    ],
+    "move_pp_data": [
+        20,
+        25,
+        0,
+        20
+    ]
+}

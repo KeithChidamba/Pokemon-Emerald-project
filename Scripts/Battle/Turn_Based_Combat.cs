@@ -8,9 +8,7 @@ using UnityEngine;
 public class Turn_Based_Combat : MonoBehaviour
 {
     public static Turn_Based_Combat instance; 
-    readonly List<Pkm_Use_Move> Move_history = new();
-    List<Pkm_Use_Move> speed_list = new();
-    List<Pkm_Use_Move> priority_list = new();
+    List<Pkm_Use_Move> Move_history = new();
     public event Action OnNewTurn;
     public event Action OnMoveExecute;
     public event Action OnTurnEnd;
@@ -26,6 +24,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private void Start()
     {
+        Battle_handler.instance.onBattleEnd += Reset_Moves;
         Battle_handler.instance.onBattleEnd += StopAllCoroutines;
     }
     public void SaveMove(Pkm_Use_Move command)
@@ -87,10 +86,10 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
             }
         }
+        Reset_Moves();
         OnTurnEnd?.Invoke();
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         Next_turn();
-        Reset_Moves();
         yield return null;
     }
     private void CancelMove(Pkm_Use_Move command)
@@ -127,8 +126,8 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private List<Pkm_Use_Move> Set_priority()
     {
-        speed_list.Clear();
-        priority_list.Clear();
+        List<Pkm_Use_Move> speed_list = new();
+        List<Pkm_Use_Move> priority_list = new();
         speed_list = Move_history.OrderByDescending(p => p._turn.attacker_.pokemon.speed).ToList();
         priority_list = speed_list.OrderByDescending(p => p._turn.move_.Priority).ToList();
         return priority_list;

@@ -23,11 +23,9 @@ MonoBehaviour:
   Can_flinch: 0
   Priority: 0
   Powerpoints: 10
-  max_Powerpoints: 0
+  max_Powerpoints: 10
   Status_effect: BadlyPoison
   Buff_Debuff: None
   Status_chance: 100
   Debuff_chance: 0
   Description: A dangerous move that badly poisons the target
-  player_animtion: {fileID: 0}
-  enemy_animtion: {fileID: 0}

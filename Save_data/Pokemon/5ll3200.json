@@ -1,0 +1,119 @@
+{
+    "Base_Pokemon_name": "Wurmple",
+    "Pokemon_name": "Wurmple",
+    "Pokemon_ID": "5ll3200",
+    "Personality_value": 1954902831,
+    "Gender": "Male",
+    "GenderRatio": "50/50",
+    "nature": {
+        "instanceID": 31774
+    },
+    "has_gender": true,
+    "HP": 11.0,
+    "max_HP": 11.0,
+    "BaseHP": 45.0,
+    "BaseAttack": 45.0,
+    "BaseDefense": 35.0,
+    "BaseSP_ATK": 20.0,
+    "BaseSP_DEF": 30.0,
+    "Basespeed": 20.0,
+    "Attack": 6.0,
+    "Defense": 6.0,
+    "SP_ATK": 6.0,
+    "SP_DEF": 6.0,
+    "speed": 6.0,
+    "HP_IV": 15.0,
+    "Attack_IV": 24.0,
+    "Defense_IV": 4.0,
+    "SP_ATK_IV": 19.0,
+    "SP_DEF_IV": 17.0,
+    "speed_IV": 16.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "HP1"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 0.0,
+    "crit_chance": 6.25,
+    "Current_level": 1,
+    "level_progress": 0.0,
+    "exp_yield": 54,
+    "has_trainer": false,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 31988
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "type_Immunity": "None",
+    "evo_line": [
+        "5",
+        "13"
+    ],
+    "abilities": [
+        "Paralysis Combo"
+    ],
+    "split_evolution": true,
+    "learnSet": [
+        "normal/tackle01",
+        "bug/string shot02",
+        "poison/poison sting03"
+    ],
+    "move_set": [
+        {
+            "instanceID": -154354
+        }
+    ],
+    "ability": {
+        "instanceID": 31946
+    },
+    "evolutions": [
+        {
+            "instanceID": 31892
+        },
+        {
+            "instanceID": 31978
+        },
+        {
+            "instanceID": 31806
+        },
+        {
+            "instanceID": 32004
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "front_picture": {
+        "instanceID": 32064
+    },
+    "back_picture": {
+        "instanceID": 31880
+    },
+    "ability_name": "Paralysis Combo",
+    "natureName": "Docile",
+    "evo_data": [
+        "Silcoon",
+        "Beautifly",
+        "Cascoon",
+        "Dustox"
+    ],
+    "type_data": [
+        "Bug"
+    ],
+    "move_data": [
+        "Tackle/Normal"
+    ],
+    "move_pp_data": [
+        20
+    ]
+}
