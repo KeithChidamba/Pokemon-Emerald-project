@@ -102,7 +102,7 @@ public class Battle_Participant : MonoBehaviour
     }
     public void Reset_pkm()
     {
-        data.Load_Stats(this);
+        data.Load_Stats();
         data.Reset_Battle_state(pokemon,false);
     }
     private void update_ui()

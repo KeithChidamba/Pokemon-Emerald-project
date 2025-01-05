@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,12 @@ public class Battle_Data:MonoBehaviour
     public float SP_ATK;
     public float SP_DEF;
     public float speed;
-    public void save_stats(Battle_Participant participant)
+    [SerializeField] private Battle_Participant participant;
+    private void Start()
+    {
+        participant = GetComponent<Battle_Participant>();
+    }
+    public void save_stats()
     {
         Attack = participant.pokemon.Attack;
         SP_ATK = participant.pokemon.SP_ATK;
@@ -17,14 +23,14 @@ public class Battle_Data:MonoBehaviour
         SP_DEF = participant.pokemon.SP_DEF;
         speed = participant.pokemon.speed;
     }
-    public void Load_Stats(Battle_Participant participant)
+    public void Load_Stats()
     {
         participant.pokemon.Attack=Attack;
         participant.pokemon.SP_ATK=SP_ATK;
         participant.pokemon.Defense=Defense;
         participant.pokemon.SP_DEF=SP_DEF;
         participant.pokemon.speed=speed;
-        save_stats(participant);
+        save_stats();
     }
     public void Reset_Battle_state(Pokemon pokemon,bool NotBattling)
     {

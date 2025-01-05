@@ -18,7 +18,7 @@ public class Battle_handler : MonoBehaviour
     public GameObject[] Move_btns;
     public bool is_trainer_battle = false;
     public bool isDouble_battle = false;
-    public int Participant_count=0;
+    public int Participant_count = 0;
     public bool displaying_info = false;
     public bool BattleOver = false;
     public GameObject OverWorld;
@@ -150,10 +150,13 @@ public class Battle_handler : MonoBehaviour
     {
         BattleOver = false;
         Load_Area_bg();
+        Battle_P[0].pokemon = Pokemon_party.instance.party[0];
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].pokemon = enemy;
-        Wild_pkm.instance.pokemon = Battle_P[2];
-        Set_pkm(false);
+        Wild_pkm.instance.pokemon_participant = Battle_P[2];
+        foreach(Battle_Participant p in Battle_P)
+            if (p.pokemon != null)
+                Set_participants(p);
         Wild_pkm.instance.InBattle = true;
         set_battle();
     }
@@ -170,37 +173,33 @@ public class Battle_handler : MonoBehaviour
              Battle_P[0].Current_Enemies.Add(Battle_P[i + 2]);
              Battle_P[1].Current_Enemies.Add(Battle_P[i + 2]);
         }
-        Set_pkm(false);
+        //Set_participants();
         set_battle();
     }
-    public void Set_pkm(bool switchIn)
+    public void Set_participants(Battle_Participant Participant)
     {
+        if(!is_trainer_battle)
+            Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
         List<Pokemon> Alive_pkm=new();
+        Participant.data.save_stats();
+        Participant.Load_ui();
+        Participant.ability_h.Set_ability();
+        check_Participants();
+        if (!Participant.isPlayer) return;
+        //for switch-ins
         foreach(Pokemon p in Pokemon_party.instance.party)
             if (p != null && p.HP>0)
                 Alive_pkm.Add(p); 
-        Battle_P[0].pokemon = Alive_pkm[0];
-        AddToExpList(Battle_P[0].pokemon);
-        if (Pokemon_party.instance.num_members > 1 && isDouble_battle) //if you have more than one pokemon send in another
-        {
-            Battle_P[1].pokemon = Alive_pkm[1];
-            AddToExpList(Battle_P[1].pokemon);
-        }
-        if(switchIn)
-            Battle_P[0].data.save_stats(Battle_P[0]);
-        //only trainer needs to keep track of enemies
-        Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
-        Participant_count = 0;
-        foreach(Battle_Participant p in Battle_P)
-            if (p.pokemon != null)
-            {
-                p.data.save_stats(p);
-                p.Load_ui();
-                p.ability_h.Set_ability();
-                Participant_count++;
-            }
+        Participant.pokemon = Alive_pkm[Turn_Based_Combat.instance.Current_pkm_turn];
+        AddToExpList(Participant.pokemon);
     }
-
+    void check_Participants()
+    {
+        Participant_count = 0;
+        foreach (Battle_Participant p in Battle_P)
+            if(p.pokemon!=null)
+                Participant_count++;
+    }
     public void reload_participant_ui()
     {
         foreach(Battle_Participant p in Battle_P)
@@ -303,7 +302,7 @@ public class Battle_handler : MonoBehaviour
         {
             if(p.pokemon!=null)
             {
-                p.data.Load_Stats(p);
+                p.data.Load_Stats();
                 p.data.Reset_Battle_state(p.pokemon,true);
                 p.pokemon = null;
                 p.Unload_ui();

@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 31774
+        "instanceID": 31864
     },
     "has_gender": true,
     "HP": 11.0,
@@ -49,7 +49,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 31988
+            "instanceID": 29846
         }
     ],
     "Status_effect": "None",
@@ -70,34 +70,34 @@
     ],
     "move_set": [
         {
-            "instanceID": -154354
+            "instanceID": -35472
         }
     ],
     "ability": {
-        "instanceID": 31946
+        "instanceID": 29848
     },
     "evolutions": [
         {
-            "instanceID": 31892
+            "instanceID": 29850
         },
         {
-            "instanceID": 31978
+            "instanceID": 29852
         },
         {
-            "instanceID": 31806
+            "instanceID": 29854
         },
         {
-            "instanceID": 32004
+            "instanceID": 29856
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 32064
+        "instanceID": 29858
     },
     "back_picture": {
-        "instanceID": 31880
+        "instanceID": 29860
     },
     "ability_name": "Paralysis Combo",
     "natureName": "Docile",

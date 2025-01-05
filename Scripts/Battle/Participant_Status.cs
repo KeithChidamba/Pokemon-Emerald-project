@@ -65,7 +65,8 @@ public class Participant_Status : MonoBehaviour
                 Status_Damage_msg(" is poisoned", 0.125f);
                 break;
             case "badlypoison":
-                Status_Damage_msg(" is badly poisoned", (status_duration + 1) / 16f);
+                Status_Damage_msg(" is badly poisoned", (1+status_duration) / 16f );
+                Debug.Log("toxic effect: "+(1+status_duration)+"/16");
                 break;
         }
     }

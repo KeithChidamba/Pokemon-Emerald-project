@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 32058
+        "instanceID": 32090
     },
     "has_gender": true,
     "HP": 17.0,
@@ -49,7 +49,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 31988
+            "instanceID": 29846
         }
     ],
     "Status_effect": "None",
@@ -68,43 +68,43 @@
     ],
     "move_set": [
         {
-            "instanceID": -154332
+            "instanceID": -35450
         },
         {
-            "instanceID": -154334
+            "instanceID": -35452
         },
         {
-            "instanceID": -154336
+            "instanceID": -35454
         },
         {
-            "instanceID": -154338
+            "instanceID": -35456
         }
     ],
     "ability": {
-        "instanceID": 32042
+        "instanceID": 29954
     },
     "evolutions": [
         {
-            "instanceID": 31892
+            "instanceID": 29850
         },
         {
-            "instanceID": 31978
+            "instanceID": 29852
         },
         {
-            "instanceID": 31806
+            "instanceID": 29854
         },
         {
-            "instanceID": 32004
+            "instanceID": 29856
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 31890
+        "instanceID": 29956
     },
     "back_picture": {
-        "instanceID": 31820
+        "instanceID": 29958
     },
     "ability_name": "Shed Skin",
     "natureName": "Lonely",

@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 32048
+        "instanceID": 32080
     },
     "has_gender": true,
     "HP": 18.0,
@@ -49,10 +49,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 31988
+            "instanceID": 29846
         },
         {
-            "instanceID": 31934
+            "instanceID": 29972
         }
     ],
     "Status_effect": "None",
@@ -71,43 +71,43 @@
     ],
     "move_set": [
         {
-            "instanceID": -154322
+            "instanceID": -35440
         },
         {
-            "instanceID": -154324
+            "instanceID": -35442
         },
         {
-            "instanceID": -154326
+            "instanceID": -35444
         },
         {
-            "instanceID": -154328
+            "instanceID": -35446
         }
     ],
     "ability": {
-        "instanceID": 31804
+        "instanceID": 29962
     },
     "evolutions": [
         {
-            "instanceID": 31892
+            "instanceID": 29850
         },
         {
-            "instanceID": 31978
+            "instanceID": 29852
         },
         {
-            "instanceID": 31806
+            "instanceID": 29854
         },
         {
-            "instanceID": 32004
+            "instanceID": 29856
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 31762
+        "instanceID": 29974
     },
     "back_picture": {
-        "instanceID": 32020
+        "instanceID": 29976
     },
     "ability_name": "Swarm",
     "natureName": "Jolly",
@@ -130,7 +130,7 @@
     "move_pp_data": [
         20,
         23,
-        0,
-        0
+        30,
+        10
     ]
 }

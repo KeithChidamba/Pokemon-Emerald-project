@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 
 public class Pokemon_party : MonoBehaviour
@@ -27,6 +28,10 @@ public class Pokemon_party : MonoBehaviour
             return;
         }
         instance = this;
+    }
+    private void Start()
+    {
+        Battle_handler.instance.onBattleEnd += close_party;
     }
     public void View_party()
     {
@@ -122,7 +127,7 @@ public class Pokemon_party : MonoBehaviour
         Party_position--;
         if (SwapOutNext | Swapping_in)
         {
-            Selected_member = 1;
+            Selected_member = Turn_Based_Combat.instance.Current_pkm_turn+1;
             swap(Party_position);
             Invoke(nameof(switchIn),1f);
         }
@@ -130,13 +135,17 @@ public class Pokemon_party : MonoBehaviour
             if(party[Selected_member-1] != party[Party_position])
                 swap(Party_position);
     }
-
+void close_party()
+{
+    Game_ui_manager.instance.Close_party();
+    SwapOutNext = false;
+    Swapping_in = false;
+}
     void switchIn()
     {
-        Game_ui_manager.instance.Close_party();
-        SwapOutNext = false;
-        Swapping_in = false;
-        Turn_Based_Combat.instance.Next_turn();
+        if(Swapping_in)
+            Turn_Based_Combat.instance.Next_turn();
+        close_party();
     }
     void swap(int Party_position)
     {
@@ -149,7 +158,7 @@ public class Pokemon_party : MonoBehaviour
         Refresh_Member_Cards();
         member_indicator.SetActive(false);
         if(Options_manager.instance.playerInBattle)
-            Battle_handler.instance.Set_pkm(true);
+            Battle_handler.instance.Set_participants(Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn]);
         if(!Swapping_in && !SwapOutNext)
         {
             Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");

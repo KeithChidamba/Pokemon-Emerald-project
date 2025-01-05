@@ -106,9 +106,9 @@ public class Pokemon : ScriptableObject
             int pos = move_data[i].IndexOf('/')+1;
             string name_ = move_data[i].Substring(0, pos - 1).ToLower();
             string type = move_data[i].Substring(pos,move_data[i].Length - pos).ToLower();
-            Move move_copy = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + type + "/" + name_);
+            Move move_copy = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + type + "/" + name_));
             move_copy.Powerpoints = move_pp_data[i];
-            move_set.Add(Obj_Instance.set_move(move_copy));//check here
+            move_set.Add(move_copy);
         }
         foreach (String t in type_data)
             types.Add(Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/" + t.ToLower()));

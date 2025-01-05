@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Wild_pkm : MonoBehaviour
 {
-    public Battle_Participant pokemon;
+    public Battle_Participant pokemon_participant;
     public Battle_Participant Enemy_pokemon;
     public bool InBattle = false;
     public bool CanAttack = true;
@@ -43,7 +43,7 @@ public class Wild_pkm : MonoBehaviour
     private void Make_Decision()
     {
         //check if its pokemon's turn
-        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon.pokemon && !Used_move && CanAttack)
+        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon_participant.pokemon && !Used_move && CanAttack)
         {
             Battle_handler.instance.Select_player();//attack player, since its single battle
             choose_move();
@@ -71,7 +71,7 @@ public class Wild_pkm : MonoBehaviour
     {
         List<Move> strongest_move = new();
         List<Move> mock_moveset = new();
-        foreach (Move m in pokemon.pokemon.move_set)
+        foreach (Move m in pokemon_participant.pokemon.move_set)
         {
             if (!BattleOperations.isImmuneTo(Enemy_pokemon.pokemon, m.type)) //look for all non-immune moves
                 mock_moveset.Add(m);
@@ -87,18 +87,18 @@ public class Wild_pkm : MonoBehaviour
 
     void Use_random()
     {
-        int rand_move = Utility.Get_rand(0, pokemon.pokemon.move_set.Count);
-        use_move(pokemon.pokemon.move_set[rand_move]);
+        int rand_move = Utility.Get_rand(0, pokemon_participant.pokemon.move_set.Count);
+        use_move(pokemon_participant.pokemon.move_set[rand_move]);
     }
 
     void use_move(Move move)
     {
-        Battle_handler.instance.Use_Move(move,pokemon);
+        Battle_handler.instance.Use_Move(move,pokemon_participant);
         Used_move = true;
     }
     bool CanUse_effective()
     {
-        foreach (Move m in pokemon.pokemon.move_set)
+        foreach (Move m in pokemon_participant.pokemon.move_set)
         {//look for super effective attacking move
             float eff = BattleOperations.TypeEffectiveness(Enemy_pokemon.pokemon, m.type);
             if ( eff > 1 && !m.is_Buff_Debuff)
