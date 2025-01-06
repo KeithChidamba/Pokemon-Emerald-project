@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,12 @@ public class Pokemon_Details : MonoBehaviour
     public GameObject move_details;
     public Text move_dmg, move_acc;
     int current_page = 0;
+
+    private void Update()
+    {
+        if(current_pkm != null)
+            player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLvExpAmount)*100);
+    }
 
     public void Exit_details()
     {
@@ -92,7 +99,6 @@ public class Pokemon_Details : MonoBehaviour
     }    
     void load_Stats_ui()
     {
-        player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLvExpAmount)*100);
         Ability_ui.SetActive(false);
         Moves_ui.SetActive(false);
         pkm_atk.text = current_pkm.Attack.ToString();
@@ -136,7 +142,6 @@ public class Pokemon_Details : MonoBehaviour
         pkm_lv.text = "Lv "+current_pkm.Current_level;
         pkm_img.sprite = current_pkm.front_picture;
         gender_img.gameObject.SetActive(true);
-        player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLvExpAmount)*100);
         if(current_pkm.has_gender)
             gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+current_pkm.Gender.ToLower());
         else

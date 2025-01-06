@@ -4,27 +4,19 @@ using UnityEditor.Timeline.Actions;
 
 public static class PokemonOperations
 {
-    public static string Generate_ID(string name_)//pokemon's unique ID
+    private static ulong Generate_ID(Pokemon pkm)//pokemon's unique ID
     {
-        int rand = Utility.Get_rand(0,name_.Length);
-        string end_digits = Utility.Get_rand(0,name_.Length).ToString() + Utility.Get_rand(0,name_.Length).ToString() + Utility.Get_rand(0,name_.Length).ToString() + Utility.Get_rand(0,name_.Length).ToString();
-        string id = rand.ToString();
-        id += name_[rand];
-        if (rand >= name_.Length-1)
-            id += name_.Substring(rand-4, 3);
-        else
-            id += name_.Substring(rand, (name_.Length-1)-rand );
-        id += end_digits;
-        return id;
+        uint CombinedIDs = ((uint)Game_Load.instance.player_data.Trainer_ID << 16) | Game_Load.instance.player_data.Secret_ID;
+        return ((ulong)CombinedIDs << 32) | pkm.Personality_value;    
     }
-    public static int Generate_Personality()
+    private static uint Generate_Personality()
     {
         System.Random rand = new System.Random();
         int part1 = rand.Next(0, 65536); // 16-bit random value
         int part2 = rand.Next(0, 65536); // 16-bit random value
-        return math.abs((part1 << 16) | part2);
+        return (uint)math.abs((part1 << 16) | part2);
     }
-    public static void getAbility(Pokemon new_pkm)
+    private static void getAbility(Pokemon new_pkm)
     {
         new_pkm.ability = null;
         if (new_pkm.abilities.Length > 1)
@@ -39,11 +31,11 @@ public static class PokemonOperations
         new_pkm.ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + new_pkm.ability_name.ToLower());
     }
 
-    public static void getNature(Pokemon new_pkm)
+    private static void getNature(Pokemon new_pkm)
     {
         int NatureValue = 0;
         if (new_pkm.Personality_value > 0)
-            NatureValue = new_pkm.Personality_value % 25;
+            NatureValue = (int)new_pkm.Personality_value % 25;
         string[] natures =
         {
             "Hardy", "Lonely", "Brave", "Adamant", "Naughty",
@@ -90,21 +82,23 @@ public static class PokemonOperations
     }
     static int Calc_Erratic(int level)
     {
-        if (0 < level & level < 51)
+        if (0 < level & level <= 50)
             return (int)math.trunc( ((level ^ 3) * (100 - level)) / 50f );
-        if (50 < level & level < 69)
+        if (50 < level & level <= 68)
             return (int)math.trunc( ((level ^ 3) * (150 - level)) / 100f );
-        if (0 < level & level < 51)
+        if (68 < level & level <= 98)
             return (int)math.trunc( ( (level ^ 3) * (1911 - (10*level) ) ) / 1500f );
+        if (98 < level & level <= 100)
+            return (int)math.trunc( ((level ^ 3) * (160 - level)) / 100f );
         return 0;
     }
     static int CalcFluctuating(int level)
     {
-        if (0 < level & level < 16)
+        if (0 < level & level <= 15)
             return (int)math.trunc( (level ^ 3) *  (24 + math.floor((level+1) / 3f) / 50f) );
-        if (16 < level & level < 37)
+        if (15 < level & level <= 36)
             return (int)math.trunc( (level ^ 3) *  ( (14 + level) / 50f) );
-        if (37 < level & level < 101)
+        if (36 < level & level <= 100)
             return (int)math.trunc( (level ^ 3) * ( (32 + math.floor(level/2f) ) / 50f) );
         return 0;
     }
@@ -139,7 +133,7 @@ public static class PokemonOperations
             return ev+=amount;
         return 0;
     }
-    public static void Generate_IVs(Pokemon new_pkm)
+    private static void Generate_IVs(Pokemon new_pkm)
     {
         new_pkm.HP_IV =  Utility.Get_rand(0,32);
         new_pkm.Attack_IV = Utility.Get_rand(0,32);
@@ -148,11 +142,11 @@ public static class PokemonOperations
         new_pkm.SP_DEF_IV =  Utility.Get_rand(0,32);
         new_pkm.speed_IV =  Utility.Get_rand(0,32);
     }
-    public static void get_Gender(Pokemon new_pkm)
+    private static void get_Gender(Pokemon new_pkm)
     {
         int gender_check = 0;
         if(new_pkm.Personality_value>0)
-            gender_check = new_pkm.Personality_value % 256;
+            gender_check = (int)new_pkm.Personality_value % 256;
         int pos = new_pkm.GenderRatio.IndexOf('/');
         string ratio = new_pkm.GenderRatio.Substring(pos + 1, new_pkm.GenderRatio.Length - pos - 1);
         float ratio_female = float.Parse(ratio);
@@ -164,7 +158,7 @@ public static class PokemonOperations
     }
     public static void SetPkmtraits(Pokemon new_pkm)
     {
-        new_pkm.Pokemon_ID = Generate_ID(new_pkm.Pokemon_name);
+        new_pkm.Pokemon_ID = Generate_ID(new_pkm);
         new_pkm.Personality_value = Generate_Personality();
         if(new_pkm.has_gender)
             get_Gender(new_pkm);

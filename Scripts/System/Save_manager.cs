@@ -121,12 +121,12 @@ public class Save_manager : MonoBehaviour
         for (int i = 0; i < Pokemon_party.instance.num_members; i++)
         {
             Pokemon_party.instance.party[i].Set_class_data();
-            Save_Pokemon(Pokemon_party.instance.party[i],  Pokemon_party.instance.party[i].Pokemon_ID);
+            Save_Pokemon(Pokemon_party.instance.party[i],  Pokemon_party.instance.party[i].Pokemon_ID.ToString());
         }
         for (int i = 0; i < pokemon_storage.instance.num_non_party_pokemon; i++)
         {
             pokemon_storage.instance.non_party_pokemon[i].Set_class_data();
-            Save_Pokemon(pokemon_storage.instance.non_party_pokemon[i], pokemon_storage.instance.non_party_pokemon[i].Pokemon_ID);
+            Save_Pokemon(pokemon_storage.instance.non_party_pokemon[i], pokemon_storage.instance.non_party_pokemon[i].Pokemon_ID.ToString());
         }
         for (int i = 0; i < Bag.instance.num_items; i++)
         {
@@ -161,7 +161,7 @@ public class Save_manager : MonoBehaviour
         for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
         {
             string path = Path.Combine("Assets/Save_data/Party_Ids/", "pkm_" + (i + 1).ToString() + ".txt");
-            File.WriteAllText(path, Pokemon_party.instance.party[i].Pokemon_ID);
+            File.WriteAllText(path, Pokemon_party.instance.party[i].Pokemon_ID.ToString());
         }
         Dialogue_handler.instance.Write_Info("Game saved", "Details");
         Dialogue_handler.instance.Dialouge_off(1f);

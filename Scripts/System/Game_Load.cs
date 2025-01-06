@@ -58,6 +58,7 @@ public class Game_Load : MonoBehaviour
             pl_data.Player_name = player_name;
             pl_data.player_Money = 300;
             pl_data.Trainer_ID = pl_data.Generate_ID();
+            pl_data.Secret_ID = pl_data.Generate_ID();
             pl_data.player_Position = Start_house_pos.position;
             pl_data.Location = "Player House";
             player_data = pl_data;

@@ -7,8 +7,8 @@ public class Pokemon : ScriptableObject
 {
     public string Base_Pokemon_name;
     public string Pokemon_name;
-    public string Pokemon_ID = "";
-    public int Personality_value;
+    public ulong Pokemon_ID = 0;
+    public uint Personality_value;
     public string Gender = "None";
     public string GenderRatio = "50/50";
     public Nature nature;
@@ -130,7 +130,7 @@ public class Pokemon : ScriptableObject
     }
     void split_evo()
     {
-        int evo = Personality_value % 10;
+        int evo = (int)Personality_value % 10;
         if (evo>=0 & evo<5)
             Check_evolution(0);
         else if (evo>4 & evo<10)
@@ -148,7 +148,7 @@ public class Pokemon : ScriptableObject
     public int Calc_Exp(Pokemon enemy)
     {
         float trainer_bonus = 1;
-        float BaseExp = (enemy.exp_yield*enemy.Current_level) / 5f;
+        float BaseExp = (enemy.exp_yield*enemy.Current_level) / 7f;
         float Exp_item_bonus = 1f;
         if (HeldItem!=null)
             if (HeldItem.Item_type == "Exp Gain")

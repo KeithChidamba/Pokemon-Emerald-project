@@ -39,7 +39,7 @@ public class pokemon_storage : MonoBehaviour
     Pokemon search_pkm(string ID)
     {
         foreach(Pokemon mon in non_party_pokemon)
-            if (mon.Pokemon_ID == ID)
+            if (mon.Pokemon_ID.ToString() == ID)
                 return mon;
         return null;
     }
@@ -48,7 +48,7 @@ public class pokemon_storage : MonoBehaviour
         int i = 0;
         foreach (Pokemon mon in non_party_pokemon)
         {
-            if (mon.Pokemon_ID == ID)
+            if (mon.Pokemon_ID.ToString() == ID)
                 return i;
             i++;
         }
@@ -130,7 +130,7 @@ public class pokemon_storage : MonoBehaviour
         if (!swapping)
         {
             Pkm_selected = true;
-            select_pkm_ID = pkm_icon.pkm.Pokemon_ID;
+            select_pkm_ID = pkm_icon.pkm.Pokemon_ID.ToString();
             pkm_icon.options.SetActive(true);
             pkm_icon.options.SetActive(true);
             foreach (GameObject pos in pkm_icons)
