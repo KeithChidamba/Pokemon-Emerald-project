@@ -26,6 +26,6 @@ MonoBehaviour:
   max_Powerpoints: 20
   Status_effect: Burn
   Buff_Debuff: None
-  Status_chance: 100
+  Status_chance: 10
   Debuff_chance: 0
   Description: fires small embers at the foe

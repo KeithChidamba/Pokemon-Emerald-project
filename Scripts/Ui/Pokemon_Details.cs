@@ -16,6 +16,7 @@ public class Pokemon_Details : MonoBehaviour
     public Image type1;
     public Image type2;
     public Image[] Move_type;
+    public Slider player_exp;
     
     public Pokemon current_pkm;
     public GameObject Ability_ui;
@@ -91,6 +92,7 @@ public class Pokemon_Details : MonoBehaviour
     }    
     void load_Stats_ui()
     {
+        player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLvExpAmount)*100);
         Ability_ui.SetActive(false);
         Moves_ui.SetActive(false);
         pkm_atk.text = current_pkm.Attack.ToString();
@@ -134,6 +136,7 @@ public class Pokemon_Details : MonoBehaviour
         pkm_lv.text = "Lv "+current_pkm.Current_level;
         pkm_img.sprite = current_pkm.front_picture;
         gender_img.gameObject.SetActive(true);
+        player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLvExpAmount)*100);
         if(current_pkm.has_gender)
             gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+current_pkm.Gender.ToLower());
         else

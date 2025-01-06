@@ -154,6 +154,7 @@ public class Battle_handler : MonoBehaviour
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].pokemon = enemy;
         Wild_pkm.instance.pokemon_participant = Battle_P[2];
+        AddToExpList(Battle_P[0].pokemon);
         foreach(Battle_Participant p in Battle_P)
             if (p.pokemon != null)
                 Set_participants(p);
@@ -187,6 +188,7 @@ public class Battle_handler : MonoBehaviour
         check_Participants();
         if (!Participant.isPlayer) return;
         //for switch-ins
+        if (!Pokemon_party.instance.Swapping_in & !Pokemon_party.instance.SwapOutNext) return;
         foreach(Pokemon p in Pokemon_party.instance.party)
             if (p != null && p.HP>0)
                 Alive_pkm.Add(p); 
@@ -279,16 +281,37 @@ public class Battle_handler : MonoBehaviour
         if(!exp_recievers.Contains(pkm))
             exp_recievers.Add(pkm);
     }
-    public void Distribute_EXP(float exp_from_enemy)
+    public void Distribute_EXP(int exp_from_enemy)
     {
-        Debug.Log(exp_from_enemy+" exp");
-        List<Pokemon> Alive_pkm = new();
-        foreach(Pokemon p in exp_recievers)
-            if (p.HP>0)
-                Alive_pkm.Add(p); 
-        float exp = exp_from_enemy / Alive_pkm.Count;
-        foreach (Pokemon p in Alive_pkm)
+        exp_recievers.RemoveAll(p => p.HP <= 0);
+        if(exp_recievers.Count<1)return;
+        Debug.Log(exp_from_enemy+" exp from enemy");
+        if (exp_recievers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
+        {
+            exp_recievers[0].Recieve_exp(exp_from_enemy);
+            exp_recievers.Clear();
+            return;
+        }
+        foreach(Pokemon p in Pokemon_party.instance.party)//exp share split
+            if (p != null && p.HP>0 && p.HeldItem!=null)
+            {
+                if(p.HeldItem.Item_name == "Exp Share")
+                {
+                    p.Recieve_exp(exp_from_enemy / 2);
+                    Debug.Log(p.Pokemon_name + " recieved " + exp_from_enemy / 2f + " exp using exp share");
+                    exp_from_enemy /= 2;
+                    break;
+                }
+            }
+        int exp = exp_from_enemy / exp_recievers.Count;
+        foreach (Pokemon p in exp_recievers)
+        {
+            if(p.HeldItem == null)
                 p.Recieve_exp(exp);
+            else
+                if (p.HeldItem.Item_name != "Exp Share")
+                    p.Recieve_exp(exp);
+        }
         exp_recievers.Clear();
     }
     void end_battle_ui()

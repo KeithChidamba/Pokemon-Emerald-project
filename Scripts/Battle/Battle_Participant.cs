@@ -62,6 +62,7 @@ public class Battle_Participant : MonoBehaviour
         if (!is_active) return;
         if (pokemon.HP > 0) return;
         if (fainted) return;
+        Onfaint?.Invoke(this);
         fainted = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         if (isPlayer)
@@ -69,7 +70,6 @@ public class Battle_Participant : MonoBehaviour
         else
             if (!Battle_handler.instance.is_trainer_battle)
                 Invoke(nameof(EndWildBattle),1f);
-        Onfaint?.Invoke(this);
     }
     void EndWildBattle()
     {
@@ -143,7 +143,7 @@ public class Battle_Participant : MonoBehaviour
     }
     void Exp_bar()
     {
-        player_exp.value = pokemon.level_progress;
+        player_exp.value = ((pokemon.CurrentExpAmount/pokemon.NextLvExpAmount)*100);
         player_exp.maxValue = 100;
         player_exp.minValue = 0;
     }

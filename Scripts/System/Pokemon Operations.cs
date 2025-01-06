@@ -1,5 +1,7 @@
 using UnityEngine;
 using Unity.Mathematics;
+using UnityEditor.Timeline.Actions;
+
 public static class PokemonOperations
 {
     public static string Generate_ID(string name_)//pokemon's unique ID
@@ -40,8 +42,8 @@ public static class PokemonOperations
     public static void getNature(Pokemon new_pkm)
     {
         int NatureValue = 0;
-        if(new_pkm.Personality_value>0)
-             NatureValue = new_pkm.Personality_value % 25;
+        if (new_pkm.Personality_value > 0)
+            NatureValue = new_pkm.Personality_value % 25;
         string[] natures =
         {
             "Hardy", "Lonely", "Brave", "Adamant", "Naughty",
@@ -60,7 +62,52 @@ public static class PokemonOperations
             }
         }
     }
-
+    public static int GetNextLv(Pokemon pkm)
+    {
+        int NextLevelExp=0;
+        switch (pkm.EXPGroup)
+        {
+            case "Erratic": 
+                NextLevelExp = Calc_Erratic(pkm.Current_level);
+                break;
+            case "Fast": 
+                NextLevelExp = (int)math.trunc((4 * (pkm.Current_level^3) ) / 5f );
+                break;
+            case "Medium Fast": 
+                NextLevelExp = pkm.Current_level^3;
+                break;
+            case "Medium Slow":
+                NextLevelExp = (int)math.trunc( ( (6 * (pkm.Current_level ^ 3) ) / 5f) - (15 * (pkm.Current_level ^ 2) ) + (100 * pkm.Current_level) - 140 );
+                break;
+            case "Slow":
+                NextLevelExp =  (int)math.trunc((5 * (pkm.Current_level ^ 3) ) / 4f);
+                break;
+            case "Fluctuating":
+                NextLevelExp =  CalcFluctuating(pkm.Current_level);
+                break;
+        }
+        return NextLevelExp;
+    }
+    static int Calc_Erratic(int level)
+    {
+        if (0 < level & level < 51)
+            return (int)math.trunc( ((level ^ 3) * (100 - level)) / 50f );
+        if (50 < level & level < 69)
+            return (int)math.trunc( ((level ^ 3) * (150 - level)) / 100f );
+        if (0 < level & level < 51)
+            return (int)math.trunc( ( (level ^ 3) * (1911 - (10*level) ) ) / 1500f );
+        return 0;
+    }
+    static int CalcFluctuating(int level)
+    {
+        if (0 < level & level < 16)
+            return (int)math.trunc( (level ^ 3) *  (24 + math.floor((level+1) / 3f) / 50f) );
+        if (16 < level & level < 37)
+            return (int)math.trunc( (level ^ 3) *  ( (14 + level) / 50f) );
+        if (37 < level & level < 101)
+            return (int)math.trunc( (level ^ 3) * ( (32 + math.floor(level/2f) ) / 50f) );
+        return 0;
+    }
     public static void GetEV(string stat,float EVamount,Pokemon pkm)
     {
         switch (stat)

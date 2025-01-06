@@ -35,7 +35,7 @@ public class Battle_Data:MonoBehaviour
     public void Reset_Battle_state(Pokemon pokemon,bool NotBattling)
     {
         pokemon.Accuracy = 100;
-        pokemon.Evasion = 0;
+        pokemon.Evasion = 100;
         pokemon.crit_chance = 6.25f;
         if(NotBattling)
             pokemon.canAttack = true;

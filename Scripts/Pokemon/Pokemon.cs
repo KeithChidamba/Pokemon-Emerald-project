@@ -43,7 +43,9 @@ public class Pokemon : ScriptableObject
     public float Evasion = 100;
     public float crit_chance = 6.25f;
     public int Current_level = 1;
-    public float level_progress = 0;
+    public int CurrentExpAmount = 0;
+    public float NextLvExpAmount = 0;
+    public string EXPGroup = "";
     public int exp_yield=0;
     public bool has_trainer=false;
     public bool canAttack = true;
@@ -134,32 +136,26 @@ public class Pokemon : ScriptableObject
         else if (evo>4 & evo<10)
             Check_evolution(2);
     }
-    public void Recieve_exp(float amount)
+    public void Recieve_exp(int amount)
     {
-        level_progress += math.trunc(amount);
-        if (level_progress >= 100)
-        {
-            int num_levels = (int)math.trunc(level_progress / 100);
-            for (int i = 0; i < num_levels; i++)
-                Level_up();
-            level_progress -= 100 * num_levels;
-        }
-        //Debug.Log(Pokemon_name+" recieved "+ level_progress+" exp");
+        CurrentExpAmount += amount;
+        Debug.Log(Pokemon_name+" recieved "+ amount +" exp current exp: "+CurrentExpAmount);
+        Debug.Log("next lv exp: "+PokemonOperations.GetNextLv(this));
+        NextLvExpAmount = PokemonOperations.GetNextLv(this);
+        if(CurrentExpAmount>=PokemonOperations.GetNextLv(this))
+            Level_up();
     }
-    public float Calc_Exp(Pokemon enemy)
+    public int Calc_Exp(Pokemon enemy)
     {
-        int level_difference = Current_level - enemy.Current_level;
-        float trainer_bonus = 0;
-        int exp;
+        float trainer_bonus = 1;
+        float BaseExp = (enemy.exp_yield*enemy.Current_level) / 5f;
+        float Exp_item_bonus = 1f;
+        if (HeldItem!=null)
+            if (HeldItem.Item_type == "Exp Gain")
+                Exp_item_bonus = float.Parse(HeldItem.Item_effect);
         if (enemy.has_trainer)
             trainer_bonus = 1.5f;
-        if (level_difference < 0)//enemy is stronger, so more exp
-            exp = (int)math.floor(enemy.exp_yield * level_difference * trainer_bonus);
-        else if (level_difference == 0)
-            exp = (int)(math.floor(enemy.exp_yield * trainer_bonus ));
-        else
-            exp = (int)(math.floor((enemy.exp_yield * trainer_bonus)/level_difference) );
-        return exp;
+        return (int)math.trunc(BaseExp * trainer_bonus * Exp_item_bonus);
     }
     void Evolve(Evolution evo)
     {
@@ -206,8 +202,9 @@ public class Pokemon : ScriptableObject
     }
     public void Level_up()
     {
-        OnLevelUP?.Invoke();
+        OnLevelUP?.Invoke(); 
         Current_level++;
+        NextLvExpAmount = PokemonOperations.GetNextLv(this);
         Increase_Stats();
         if(split_evolution)
             split_evo();

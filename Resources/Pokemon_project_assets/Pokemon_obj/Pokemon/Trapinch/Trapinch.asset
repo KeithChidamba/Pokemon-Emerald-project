@@ -20,8 +20,6 @@ MonoBehaviour:
   GenderRatio: 50/50
   nature: {fileID: 0}
   has_gender: 1
-  EV: 0
-  IV: 0
   HP: 0
   max_HP: 0
   BaseHP: 45
@@ -53,7 +51,9 @@ MonoBehaviour:
   Evasion: 100
   crit_chance: 6.25
   Current_level: 0
+  CurrentExpAmount: 0
   level_progress: 0
+  EXPGroup: Medium Slow
   exp_yield: 73
   has_trainer: 0
   canAttack: 1

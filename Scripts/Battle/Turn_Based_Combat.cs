@@ -44,16 +44,14 @@ public class Turn_Based_Combat : MonoBehaviour
         if(command._turn.attacker_.pokemon.HP<=0) return false;
         if (command._turn.attacker_.pokemon.canAttack)
         {
-            /*if (!ProbabilityCheck(command._turn.victim_.pokemon.Evasion))
-            {
-                Dialogue_handler.instance.Battle_Info(command._turn.victim_.pokemon.Pokemon_name+" avoided the attack");
-                return false;
-            }*/
             if (command._turn.move_.Move_accuracy < 100)//not a sure-hit move
             {
-                if (!MoveSuccessfull(command._turn.attacker_.pokemon))
+                if (!MoveSuccessfull(command))
                 {
-                    Dialogue_handler.instance.Battle_Info(command._turn.attacker_.pokemon.Pokemon_name+" missed the attack");
+                    if(command._turn.attacker_.pokemon.Accuracy > command._turn.victim_.pokemon.Evasion)
+                        Dialogue_handler.instance.Battle_Info(command._turn.attacker_.pokemon.Pokemon_name+" missed the attack");
+                    else
+                        Dialogue_handler.instance.Battle_Info(command._turn.victim_.pokemon.Pokemon_name+" dodged the attack");
                 }
                 else
                     return true;
@@ -117,10 +115,13 @@ public class Turn_Based_Combat : MonoBehaviour
         OnNewTurn?.Invoke();
         Battle_handler.instance.Doing_move = false;
     }
-    private bool MoveSuccessfull(Pokemon pokemon)
+    private bool MoveSuccessfull(Pkm_Use_Move command)
     {
         int rand = Utility.Get_rand(1, 100);
-        if (pokemon.Accuracy > rand)
+        float Hit_Chance = command._turn.move_.Move_accuracy *
+                           (command._turn.attacker_.pokemon.Accuracy / command._turn.victim_.pokemon.Evasion);
+        //Debug.Log("hit chance:"+Hit_Chance+" vs Random: "+rand);
+        if (Hit_Chance>rand)
             return true;
         return false;
     }
