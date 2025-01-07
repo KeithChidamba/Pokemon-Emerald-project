@@ -4,10 +4,16 @@ using UnityEditor.Timeline.Actions;
 
 public static class PokemonOperations
 {
-    private static ulong Generate_ID(Pokemon pkm)//pokemon's unique ID
+    public static bool LearningNewMove = false;
+    public static Pokemon CurrentPkm;
+    private static Move NewMove;
+    private static long Generate_ID(Pokemon pkm)//pokemon's unique ID
     {
-        uint CombinedIDs = ((uint)Game_Load.instance.player_data.Trainer_ID << 16) | Game_Load.instance.player_data.Secret_ID;
-        return ((ulong)CombinedIDs << 32) | pkm.Personality_value;    
+        int CombinedIDs = Game_Load.instance.player_data.Trainer_ID;
+        CombinedIDs <<= 16;
+        CombinedIDs += Game_Load.instance.player_data.Secret_ID;
+        long pkmID = (((long)CombinedIDs)<<32) | pkm.Personality_value;
+        return math.abs(pkmID);
     }
     private static uint Generate_Personality()
     {
@@ -33,9 +39,9 @@ public static class PokemonOperations
 
     private static void getNature(Pokemon new_pkm)
     {
-        int NatureValue = 0;
+        uint NatureValue = 0;
         if (new_pkm.Personality_value > 0)
-            NatureValue = (int)new_pkm.Personality_value % 25;
+            NatureValue = new_pkm.Personality_value % 25;
         string[] natures =
         {
             "Hardy", "Lonely", "Brave", "Adamant", "Naughty",
@@ -130,7 +136,7 @@ public static class PokemonOperations
     {
         float sumEV = pkm.HP_EV + pkm.Attack_EV + pkm.Defense_EV + pkm.SP_ATK_EV + pkm.SP_DEF_EV + pkm.speed_EV;
         if (ev < 255 && sumEV < 510)
-            return ev+=amount;
+            return ev+amount;
         return 0;
     }
     private static void Generate_IVs(Pokemon new_pkm)
@@ -142,11 +148,53 @@ public static class PokemonOperations
         new_pkm.SP_DEF_IV =  Utility.Get_rand(0,32);
         new_pkm.speed_IV =  Utility.Get_rand(0,32);
     }
+
+    public static void GetNewMove(Pokemon pkm)
+    {
+        LearningNewMove = true;
+        CurrentPkm = pkm;
+        foreach (string l in CurrentPkm.learnSet)
+        {
+            int lv = int.Parse(l.Substring(l.Length - 2, 2));
+            if (CurrentPkm.Current_level == lv)
+            {
+                int pos = l.IndexOf('/')+1;
+                string t = l.Substring(0, pos - 1).ToLower(); //move type 
+                string n = l.Substring(pos, l.Length - 2 - pos).ToLower();//move name
+                if (CurrentPkm.move_set.Count == 4) //new move ui, allow player to replace move or reject new move
+                {
+                    if(Options_manager.instance.playerInBattle)//remember to alter for rare candy 
+                    {
+                        Dialogue_handler.instance.Write_Info(
+                            CurrentPkm.Pokemon_name + " is trying to learn " + n + ", do you want it to learn " + n +
+                            "?", "Options", "Learn_Move", "", "", "Yes", "No");
+                        NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n);
+                    }
+                    else
+                        CurrentPkm.move_set[Utility.Get_rand(0,4)] = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
+                }
+                else
+                {
+                    if(Options_manager.instance.playerInBattle)
+                        Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" learned "+n);
+                    CurrentPkm.move_set.Add(Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n)));
+                    LearningNewMove = false;
+                }
+                break;
+            }
+        }
+    }
+    public static void Learn_move(int index)
+    {
+        Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" forgot "+CurrentPkm.move_set[index].Move_name+" and learned "+NewMove.Move_name);
+        CurrentPkm.move_set[index] = Obj_Instance.set_move(NewMove);
+        Pokemon_Details.instance.LearningMove = false;
+    }
     private static void get_Gender(Pokemon new_pkm)
     {
-        int gender_check = 0;
+        uint gender_check = 0;
         if(new_pkm.Personality_value>0)
-            gender_check = (int)new_pkm.Personality_value % 256;
+            gender_check = new_pkm.Personality_value % 256;
         int pos = new_pkm.GenderRatio.IndexOf('/');
         string ratio = new_pkm.GenderRatio.Substring(pos + 1, new_pkm.GenderRatio.Length - pos - 1);
         float ratio_female = float.Parse(ratio);
@@ -158,8 +206,8 @@ public static class PokemonOperations
     }
     public static void SetPkmtraits(Pokemon new_pkm)
     {
-        new_pkm.Pokemon_ID = Generate_ID(new_pkm);
         new_pkm.Personality_value = Generate_Personality();
+        new_pkm.Pokemon_ID = Generate_ID(new_pkm);
         if(new_pkm.has_gender)
             get_Gender(new_pkm);
         getAbility(new_pkm);

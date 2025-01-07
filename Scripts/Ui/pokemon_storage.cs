@@ -21,7 +21,6 @@ public class pokemon_storage : MonoBehaviour
     public bool swapping = false;
     public bool Pkm_selected = false;
     public Button view_details;
-    [SerializeField]private Pokemon_Details details;
     public static pokemon_storage instance;
     private void Awake()
     {
@@ -120,10 +119,7 @@ public class pokemon_storage : MonoBehaviour
     public void View_pc_pkm_details()
     {
         if (Pkm_selected && !swapping)
-        {
-            details.gameObject.SetActive(true);
-            details.Load_Details(search_pkm(select_pkm_ID));
-        }
+            Pokemon_Details.instance.Load_Details(search_pkm(select_pkm_ID));
     }
     public void Select_pc_pkm(PC_pkm pkm_icon)
     {

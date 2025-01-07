@@ -129,7 +129,7 @@ public class Game_ui_manager : MonoBehaviour
     {
         Use_ui(profile.gameObject);
         menu_reset();
-        profile.Load_Profile(Game_Load.instance.player_data.Player_name, Game_Load.instance.player_data.player_Money);
+        profile.Load_Profile(Game_Load.instance.player_data);
     }
     public void View_pkm_Party()
     {

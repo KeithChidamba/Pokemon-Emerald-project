@@ -23,29 +23,47 @@ public class Pokemon_Details : MonoBehaviour
     public GameObject Ability_ui;
     public GameObject Stats_ui;
     public GameObject Moves_ui;
+    public GameObject OverlayUi;
     public GameObject move_details;
     public Text move_dmg, move_acc;
     int current_page = 0;
-
+    public bool LearningMove = false;
+    public static Pokemon_Details instance;
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+    }
     private void Update()
     {
-        if(current_pkm != null)
-            player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLvExpAmount)*100);
+        if(current_pkm == null)return;
+        if (LearningMove)
+            current_page = 3;
+        player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLvExpAmount)*100);
     }
 
     public void Exit_details()
     {
-        gameObject.SetActive(false);
+        OverlayUi.SetActive(false);
+        Stats_ui.SetActive(false);
+        Moves_ui.SetActive(false);
+        Ability_ui.SetActive(false);
         Pokemon_party.instance.viewing_details = false;
     }
     public void Next()//next page
     {
+        if (LearningMove) return;
         if (current_page < 3)
             current_page++;
         Load_ui(current_page);
     }
     public void Prev()//prev page
-     {
+    {
+        if (LearningMove) return;
          if (current_page > 1)
              current_page--;
          Load_ui(current_page);
@@ -53,6 +71,11 @@ public class Pokemon_Details : MonoBehaviour
     //Set ui element values for each page
     public void Move_Discription(int move_num)
     {
+        if (LearningMove)
+        {
+            PokemonOperations.Learn_move(move_num-1);
+            return;
+        }
         move_Description.text=current_pkm.move_set[move_num - 1].Description;
         move_acc.text = "Accuracy: "+current_pkm.move_set[move_num - 1].Move_accuracy;
         move_dmg.text = "Damage: " + current_pkm.move_set[move_num - 1].Move_damage;
@@ -136,6 +159,7 @@ public class Pokemon_Details : MonoBehaviour
     } 
     public void Load_Details(Pokemon pokemon)
     {
+        OverlayUi.SetActive(true);
         current_pkm=pokemon;
         pkm_name.text = current_pkm.Pokemon_name;
         pkm_ID.text = "ID: "+current_pkm.Pokemon_ID;
@@ -146,7 +170,8 @@ public class Pokemon_Details : MonoBehaviour
             gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+current_pkm.Gender.ToLower());
         else
             gender_img.gameObject.SetActive(false);
-        current_page = 1;
+        if (!LearningMove)
+            current_page = 1;
         Load_ui(current_page);
     }
 }

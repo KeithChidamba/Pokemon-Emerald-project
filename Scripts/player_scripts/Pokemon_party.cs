@@ -18,7 +18,6 @@ public class Pokemon_party : MonoBehaviour
     public GameObject party_ui;
     public GameObject member_indicator;
     private Item item_to_use;
-    [SerializeField]private Pokemon_Details details;
     public static Pokemon_party instance;
     private void Awake()
     {
@@ -40,8 +39,7 @@ public class Pokemon_party : MonoBehaviour
     }
     public void Pkm_Details()
     {
-        details.gameObject.SetActive(true);
-        details.Load_Details(party[Selected_member-1]);
+        Pokemon_Details.instance.Load_Details(party[Selected_member-1]);
         viewing_details = true;
         Cancel();
     }
@@ -122,7 +120,7 @@ public class Pokemon_party : MonoBehaviour
             Memeber_cards[i].GetComponent<Pokemon_party_member>().Options.SetActive(false);
         }
     }
-    public void Move_Member(int Party_position)
+    private void Move_Member(int Party_position)
     {
         Party_position--;
         if (SwapOutNext | Swapping_in)

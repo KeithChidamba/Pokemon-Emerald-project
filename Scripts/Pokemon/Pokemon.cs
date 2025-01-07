@@ -7,7 +7,7 @@ public class Pokemon : ScriptableObject
 {
     public string Base_Pokemon_name;
     public string Pokemon_name;
-    public ulong Pokemon_ID = 0;
+    public long Pokemon_ID = 0;
     public uint Personality_value;
     public string Gender = "None";
     public string GenderRatio = "50/50";
@@ -73,7 +73,8 @@ public class Pokemon : ScriptableObject
     public List<string> type_data=new();
     public List<string> move_data=new();
     public List<int> move_pp_data=new();
-
+    
+    public event Action<Pokemon> OnLevelUp;
     public event Action OnLevelUP;
     public void Set_class_data()
     {
@@ -202,6 +203,7 @@ public class Pokemon : ScriptableObject
     }
     public void Level_up()
     {
+        OnLevelUp?.Invoke(this);
         OnLevelUP?.Invoke(); 
         Current_level++;
         NextLvExpAmount = PokemonOperations.GetNextLv(this);
@@ -210,21 +212,6 @@ public class Pokemon : ScriptableObject
             split_evo();
         else
             Check_evolution(0);
-        foreach (String l in learnSet)
-        {
-            int lv = int.Parse(l.Substring(l.Length - 2, 2));
-            if (Current_level == lv)
-            {
-                int pos = l.IndexOf('/')+1;
-                string t = l.Substring(0, pos - 1).ToLower(); //move type 
-                string n = l.Substring(pos, l.Length - 2 - pos).ToLower();//move name
-                if (move_set.Count==4)//new move ui, allow player to replace move or reject new move
-                    move_set[move_set.Count-1] = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
-                    //Debug.Log("moves full");
-                else
-                    move_set.Add(Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n)));
-                break;
-            }
-        }
+        PokemonOperations.GetNewMove(this);
     }
 }

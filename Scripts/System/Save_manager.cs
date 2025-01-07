@@ -18,17 +18,9 @@ public class Save_manager : MonoBehaviour
     }
     private void Start()
     {
-       //try
-        //{
             Load_items();
             Load_player();
             Load_pkm();
-        //}
-        /*catch
-        {
-            Dialogue_handler.instance.Write_Info("There was an error in loading you save data!","Details");
-            Game_Load.instance.New_Player_Data();
-        }*/
     }
     
     private void Load_player()
@@ -85,9 +77,10 @@ public class Save_manager : MonoBehaviour
         int j = load_files("Assets/Save_data/Pokemon/");
         for (int i = 0; i < j; i++)
         {
-            if (!pokemon_storage.instance.search_pkm_ID(Path.GetFileName(json_files[i]).Substring(0, Path.GetFileName(json_files[i]).Length - 5)))
+            string file_name = Path.GetFileName(json_files[i]);
+            if (!pokemon_storage.instance.search_pkm_ID(file_name.Substring(0, file_name.Length - 5)))
             {
-                pokemon_storage.instance.non_party_pokemon.Add(Get_Pokemon("Assets/Save_data/Pokemon/" + Path.GetFileName(json_files[i])));
+                pokemon_storage.instance.non_party_pokemon.Add(Get_Pokemon("Assets/Save_data/Pokemon/" + file_name));
                 pokemon_storage.instance.num_non_party_pokemon++;
             }
             pokemon_storage.instance.num_pokemon++;
@@ -110,23 +103,21 @@ public class Save_manager : MonoBehaviour
     {
         string[] files = Directory.GetFiles(path);
         foreach (string file in files)
-        {
             File.Delete(file);
-        }
     }
     public void Save_all()
     {
         Dialogue_handler.instance.Write_Info("Saving...", "Details");
         Erase_save();
-        for (int i = 0; i < Pokemon_party.instance.num_members; i++)
+        for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
         {
             Pokemon_party.instance.party[i].Set_class_data();
-            Save_Pokemon(Pokemon_party.instance.party[i],  Pokemon_party.instance.party[i].Pokemon_ID.ToString());
+            Save_Pokemon(Pokemon_party.instance.party[i]);
         }
         for (int i = 0; i < pokemon_storage.instance.num_non_party_pokemon; i++)
         {
             pokemon_storage.instance.non_party_pokemon[i].Set_class_data();
-            Save_Pokemon(pokemon_storage.instance.non_party_pokemon[i], pokemon_storage.instance.non_party_pokemon[i].Pokemon_ID.ToString());
+            Save_Pokemon(pokemon_storage.instance.non_party_pokemon[i]);
         }
         for (int i = 0; i < Bag.instance.num_items; i++)
         {
@@ -167,9 +158,9 @@ public class Save_manager : MonoBehaviour
         Dialogue_handler.instance.Dialouge_off(1f);
         Game_ui_manager.instance.Menu_off();
     }
-    private void Save_Pokemon(Pokemon pkm, string file_name)
+    private void Save_Pokemon(Pokemon pkm)
     {
-        string directory = Path.Combine("Assets/Save_data/Pokemon", file_name + ".json");
+        string directory = Path.Combine("Assets/Save_data/Pokemon/", pkm.Pokemon_ID + ".json");
         string json = JsonUtility.ToJson(pkm, true);
         File.WriteAllText(directory, json);
     }

@@ -147,6 +147,11 @@ public class Battle_Participant : MonoBehaviour
         player_exp.maxValue = 100;
         player_exp.minValue = 0;
     }
+
+    void levelCheck(Pokemon p)
+    {
+        Debug.Log("level check "+p.Pokemon_name);
+    }
     public void Load_ui()
     {
         player_hp.minValue = 0;
@@ -163,6 +168,8 @@ public class Battle_Participant : MonoBehaviour
         if (isPlayer)
         {
             pokemon.OnLevelUP += Reset_pkm;
+            pokemon.OnLevelUp += Move_handler.instance.LevelUpEvent;
+            pokemon.OnLevelUp += levelCheck;
             foreach (Battle_Participant p in Current_Enemies)
             {
                 p.Onfaint += Get_exp;

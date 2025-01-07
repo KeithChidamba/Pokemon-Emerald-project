@@ -75,12 +75,13 @@ public class Poke_Mart : MonoBehaviour
     {
         if(Game_Load.instance.player_data.player_Money >= mart_items[top_index+Selected_item - 1].price)
         {
-            Item item = mart_items[top_index + Selected_item - 1];
+            Item item = Obj_Instance.set_Item(mart_items[top_index + Selected_item - 1]);
+            item.quantity = Selected_item_quantity;
             Bag.instance.Add_item(item);
             Game_Load.instance.player_data.player_Money -= Selected_item_quantity * item.price;
-            Selected_item_quantity = 1;
             Dialogue_handler.instance.Write_Info("You bought "+ item.quantity+ " "+item.Item_name+"'s", "Details");
             Dialogue_handler.instance.Dialouge_off(1.2f);
+            Selected_item_quantity = 1;
         }
         else
         {

@@ -67,6 +67,20 @@ public class Move_handler:MonoBehaviour
         yield return null;
     }
 
+    public void LevelUpEvent(Pokemon pkm)
+    {
+        Debug.Log("leveled");
+        StartCoroutine(LevelUp_Sequence(pkm));
+    }
+    IEnumerator LevelUp_Sequence(Pokemon pkm)//anim event
+    {
+        Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+" leveled up!");
+        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+        if(PokemonOperations.LearningNewMove)
+            yield return new WaitUntil(() => !PokemonOperations.LearningNewMove);
+        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+        yield return null;
+    }
     void Move_effect()
     {
         if (!current_turn.move_.Has_effect) return;
@@ -110,7 +124,6 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" was not affected!");
         else if(type_effectiveness < 1)
             Dialogue_handler.instance.Battle_Info("The move is not very effective!");
-        //Debug.Log(type_effectiveness+" eff dmg; " + damage_dealt);
         return damage_dealt;
     }
 

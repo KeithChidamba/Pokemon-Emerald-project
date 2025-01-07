@@ -16,14 +16,12 @@ public class Options_manager : MonoBehaviour
             return;
         }
         instance = this;
-         
     }
     private void Update()
     {
         if (playerInBattle)
             overworld_actions.instance.doing_action = true;
     }
-    //Dialogue_handler.instance options
     void Exit_game()
     {
         Dialogue_handler.instance.Dialouge_off();
@@ -40,6 +38,12 @@ public class Options_manager : MonoBehaviour
     void Battle()//trainer battle after interaction
     {
 
+    }
+
+    void Learn_Move()
+    {
+        Pokemon_Details.instance.LearningMove = true;
+        Pokemon_Details.instance.Load_Details(PokemonOperations.CurrentPkm);
     }
     void Heal_Pokemon()
     {
@@ -81,7 +85,7 @@ public class Options_manager : MonoBehaviour
         Dialogue_handler.instance.Write_Info("You got a " + pkm.Pokemon_name, "Details");
         gift_pkm.check_pkm(pkm_name);
     }
-    void Interact()//give overworld_actions.instance info about what they interacted with
+    void Interact()
     {
         Dialogue_handler.instance.Write_Info(current_interaction.InterAction_result_msg, "Details");
         Dialogue_handler.instance.Dialouge_off(2f);
