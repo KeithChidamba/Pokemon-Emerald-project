@@ -65,7 +65,8 @@ public class Pokemon : ScriptableObject
     public Item HeldItem;
     public Sprite front_picture;
     public Sprite back_picture;
-
+    public event Action OnLevelUP;
+    public event Action<Pokemon> OnLevelUp;
     //data conversion when json to obj
     public string ability_name;
     public string natureName;
@@ -74,8 +75,6 @@ public class Pokemon : ScriptableObject
     public List<string> move_data=new();
     public List<int> move_pp_data=new();
     
-    public event Action<Pokemon> OnLevelUp;
-    public event Action OnLevelUP;
     public void Set_class_data()
     {
         ability_name = ability.ability;
@@ -119,6 +118,7 @@ public class Pokemon : ScriptableObject
              evolutions.Add(Resources.Load<Evolution>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + Base_Pokemon_name + "/" +e));
         for(int i =0; i < types.Count; i++)
             types[i].type_img = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + type_data[i].ToLower());
+        Battle_handler.instance.onBattleEnd += clearEvents;
     }
     void Check_evolution(int evo_index)
     {
@@ -203,8 +203,8 @@ public class Pokemon : ScriptableObject
     }
     public void Level_up()
     {
-        OnLevelUp?.Invoke(this);
         OnLevelUP?.Invoke(); 
+        OnLevelUp?.Invoke(this); 
         Current_level++;
         NextLvExpAmount = PokemonOperations.GetNextLv(this);
         Increase_Stats();
@@ -212,6 +212,13 @@ public class Pokemon : ScriptableObject
             split_evo();
         else
             Check_evolution(0);
-        PokemonOperations.GetNewMove(this);
+        if (!Options_manager.instance.playerInBattle)
+            PokemonOperations.GetNewMove(this);
+    }
+
+    void clearEvents()
+    {
+        OnLevelUP = null;
+        OnLevelUp = null;
     }
 }

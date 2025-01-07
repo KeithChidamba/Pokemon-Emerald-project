@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Unity.Mathematics;
 using UnityEditor.Timeline.Actions;
@@ -6,7 +7,7 @@ public static class PokemonOperations
 {
     public static bool LearningNewMove = false;
     public static Pokemon CurrentPkm;
-    private static Move NewMove;
+    public static Move NewMove;
     private static long Generate_ID(Pokemon pkm)//pokemon's unique ID
     {
         int CombinedIDs = Game_Load.instance.player_data.Trainer_ID;
@@ -153,6 +154,7 @@ public static class PokemonOperations
     {
         LearningNewMove = true;
         CurrentPkm = pkm;
+        int counter = 0;
         foreach (string l in CurrentPkm.learnSet)
         {
             int lv = int.Parse(l.Substring(l.Length - 2, 2));
@@ -167,7 +169,7 @@ public static class PokemonOperations
                     {
                         Dialogue_handler.instance.Write_Info(
                             CurrentPkm.Pokemon_name + " is trying to learn " + n + ", do you want it to learn " + n +
-                            "?", "Options", "Learn_Move", "", "", "Yes", "No");
+                            "?", "Options", "Learn_Move", "", "Skip_Move", "Yes", "No");
                         NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n);
                     }
                     else
@@ -182,7 +184,10 @@ public static class PokemonOperations
                 }
                 break;
             }
+            counter++;
         }
+        if(counter==4)
+            LearningNewMove = false;
     }
     public static void Learn_move(int index)
     {

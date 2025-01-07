@@ -101,6 +101,7 @@ public class Game_ui_manager : MonoBehaviour
         {
             Reset_player_movement();
         }
+        Item_handler.instance.Using_item = false;
     }
     public void Menu_off()
     {

@@ -99,8 +99,7 @@ public static class Obj_Instance
     {
         Item new_item = ScriptableObject.CreateInstance<Item>();
         new_item.Item_name = item.Item_name;
-        string end_digits = Utility.Get_rand(0,50).ToString() + Utility.Get_rand(0,50).ToString() + Utility.Get_rand(0,50).ToString() + Utility.Get_rand(0,50).ToString();
-        new_item.Item_ID = new_item.Item_name + end_digits;
+        new_item.Item_ID = new_item.Item_name + Utility.Generate_ID();
         new_item.Item_type = item.Item_type;
         new_item.Item_desc = item.Item_desc;
         new_item.price = item.price;

@@ -25,7 +25,6 @@ public class Turn_Based_Combat : MonoBehaviour
     private void Start()
     {
         Battle_handler.instance.onBattleEnd += Reset_Moves;
-        Battle_handler.instance.onBattleEnd += StopAllCoroutines;
     }
     public void SaveMove(Pkm_Use_Move command)
     {
@@ -38,6 +37,7 @@ public class Turn_Based_Combat : MonoBehaviour
     void Reset_Moves()
     {
         Move_history.Clear();
+        StopAllCoroutines();
     }
     bool Can_Attack(Pkm_Use_Move command)
     {
@@ -84,9 +84,10 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
             }
         }
-        Reset_Moves();
+        Move_history.Clear();
         OnTurnEnd?.Invoke();
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
+        Battle_handler.instance.Reset_move();
         Next_turn();
         yield return null;
     }
@@ -120,7 +121,6 @@ public class Turn_Based_Combat : MonoBehaviour
         int rand = Utility.Get_rand(1, 100);
         float Hit_Chance = command._turn.move_.Move_accuracy *
                            (command._turn.attacker_.pokemon.Accuracy / command._turn.victim_.pokemon.Evasion);
-        //Debug.Log("hit chance:"+Hit_Chance+" vs Random: "+rand);
         if (Hit_Chance>rand)
             return true;
         return false;

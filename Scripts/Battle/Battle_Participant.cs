@@ -27,7 +27,6 @@ public class Battle_Participant : MonoBehaviour
     public GameObject[] Double_battle_ui;
     public GameObject participant_ui;
     public bool Selected_Enemy = false;
-
     public event Action<Battle_Participant> Onfaint;
     private void Start()
     {
@@ -36,19 +35,19 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.instance.OnTurnEnd += Check_Faint;
         Move_handler.instance.OnMoveEnd += Check_Faint;
         Turn_Based_Combat.instance.OnMoveExecute += Check_Faint;
-       Battle_handler.instance.onBattleEnd += Deactivate_pkm;
+        Battle_handler.instance.onBattleEnd += Deactivate_pkm;
     }
     private void Update()
     {
         if (!is_active) return;
         update_ui();
     }
-    public void Get_exp(Battle_Participant enemy)
+    private void Get_exp(Battle_Participant enemy)
     {
         Battle_handler.instance.Distribute_EXP(pokemon.Calc_Exp(enemy.pokemon));
         Current_Enemies.Remove(enemy);
     }
-    public void Get_EVs(Battle_Participant enemy)
+    private void Get_EVs(Battle_Participant enemy)
     {
         foreach (string ev in enemy.pokemon.EVs)
         {
@@ -68,8 +67,8 @@ public class Battle_Participant : MonoBehaviour
         if (isPlayer)
             Invoke(nameof(Check_loss),1f);
         else
-            if (!Battle_handler.instance.is_trainer_battle)
-                Invoke(nameof(EndWildBattle),1f);
+        if (!Battle_handler.instance.is_trainer_battle)
+            Invoke(nameof(EndWildBattle),1f);
     }
     void EndWildBattle()
     {
@@ -99,6 +98,10 @@ public class Battle_Participant : MonoBehaviour
     void Deactivate_pkm()
     {
         is_active = false;
+        Onfaint = null;
+        Turn_Based_Combat.instance.OnTurnEnd -= status.Check_status;
+        Turn_Based_Combat.instance.OnNewTurn -= status.StunCheck;
+        Turn_Based_Combat.instance.OnMoveExecute -= status.Notify_Healing;
     }
     public void Reset_pkm()
     {
@@ -147,11 +150,6 @@ public class Battle_Participant : MonoBehaviour
         player_exp.maxValue = 100;
         player_exp.minValue = 0;
     }
-
-    void levelCheck(Pokemon p)
-    {
-        Debug.Log("level check "+p.Pokemon_name);
-    }
     public void Load_ui()
     {
         player_hp.minValue = 0;
@@ -168,8 +166,7 @@ public class Battle_Participant : MonoBehaviour
         if (isPlayer)
         {
             pokemon.OnLevelUP += Reset_pkm;
-            pokemon.OnLevelUp += Move_handler.instance.LevelUpEvent;
-            pokemon.OnLevelUp += levelCheck;
+            pokemon.OnLevelUp += Battle_handler.instance.LevelUpEvent;
             foreach (Battle_Participant p in Current_Enemies)
             {
                 p.Onfaint += Get_exp;

@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31064
+        "instanceID": 30994
     },
     "has_gender": true,
     "HP": 12.0,
@@ -41,7 +41,7 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "Current_level": 2,
-    "CurrentExpAmount": 21,
+    "CurrentExpAmount": 40,
     "NextLvExpAmount": 61.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29880
+            "instanceID": 29918
         }
     ],
     "Status_effect": "None",
@@ -73,28 +73,28 @@
     ],
     "move_set": [
         {
-            "instanceID": -160418
+            "instanceID": -147104
         }
     ],
     "ability": {
-        "instanceID": 29882
+        "instanceID": 29920
     },
     "evolutions": [
         {
-            "instanceID": 29884
+            "instanceID": 29922
         },
         {
-            "instanceID": 29886
+            "instanceID": 29924
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29888
+        "instanceID": 29926
     },
     "back_picture": {
-        "instanceID": 29890
+        "instanceID": 29928
     },
     "ability_name": "Torrent",
     "natureName": "Serious",

@@ -6,10 +6,10 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30950
+        "instanceID": 30880
     },
     "has_gender": true,
-    "HP": 4.0,
+    "HP": 12.0,
     "max_HP": 12.0,
     "BaseHP": 50.0,
     "BaseAttack": 70.0,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29880
+            "instanceID": 29918
         }
     ],
     "Status_effect": "None",
@@ -73,28 +73,28 @@
     ],
     "move_set": [
         {
-            "instanceID": -160422
+            "instanceID": -147096
         }
     ],
     "ability": {
-        "instanceID": 29882
+        "instanceID": 29920
     },
     "evolutions": [
         {
-            "instanceID": 29884
+            "instanceID": 29922
         },
         {
-            "instanceID": 29886
+            "instanceID": 29924
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29888
+        "instanceID": 29926
     },
     "back_picture": {
-        "instanceID": 29890
+        "instanceID": 29928
     },
     "ability_name": "Torrent",
     "natureName": "Timid",
@@ -109,6 +109,6 @@
         "Tackle/Normal"
     ],
     "move_pp_data": [
-        19
+        20
     ]
 }

@@ -48,6 +48,7 @@ public class Pokemon_Details : MonoBehaviour
 
     public void Exit_details()
     {
+        if (LearningMove) return;
         OverlayUi.SetActive(false);
         Stats_ui.SetActive(false);
         Moves_ui.SetActive(false);

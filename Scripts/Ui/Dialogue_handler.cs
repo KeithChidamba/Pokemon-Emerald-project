@@ -127,7 +127,8 @@ public class Dialogue_handler : MonoBehaviour
         messagesLoading = true;
         Current_interaction = new_interaction(interaction.InteractionMsg,"Battle Info","");
         Display(Current_interaction);
-        Invoke(nameof(reset_message),1f);
+        yield return new WaitForSeconds(1f);
+        reset_message();
     }
     void reset_message()
     {
@@ -151,10 +152,13 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void Option_choice(string choice)
     {//only ever be 2 options, unless list type dialogue 
+
         if (choice == "Option 1")
         {
             Display_Options(false);
             options.Complete_Interaction(Current_interaction,0);
+            if (PokemonOperations.LearningNewMove)
+                Options_manager.instance.ChoosingNewMove = true;
         }
         else if (choice == "Option 2")
         {
@@ -162,6 +166,8 @@ public class Dialogue_handler : MonoBehaviour
                 Dialouge_off();
             else
                 options.Complete_Interaction(Current_interaction,1);//do second option
+            if (PokemonOperations.LearningNewMove)
+                Options_manager.instance.ChoosingNewMove = false;
         }
     }
     public void Dialouge_off(float delay)

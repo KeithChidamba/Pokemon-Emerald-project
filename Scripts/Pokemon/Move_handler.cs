@@ -28,7 +28,6 @@ public class Move_handler:MonoBehaviour
     {
         Battle_handler.instance.onBattleEnd += StopAllCoroutines;
     }
-
     public void Do_move(Turn turn)
     {
         current_turn=turn;
@@ -67,20 +66,7 @@ public class Move_handler:MonoBehaviour
         yield return null;
     }
 
-    public void LevelUpEvent(Pokemon pkm)
-    {
-        Debug.Log("leveled");
-        StartCoroutine(LevelUp_Sequence(pkm));
-    }
-    IEnumerator LevelUp_Sequence(Pokemon pkm)//anim event
-    {
-        Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+" leveled up!");
-        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-        if(PokemonOperations.LearningNewMove)
-            yield return new WaitUntil(() => !PokemonOperations.LearningNewMove);
-        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-        yield return null;
-    }
+
     void Move_effect()
     {
         if (!current_turn.move_.Has_effect) return;

@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31052
+        "instanceID": 30982
     },
     "has_gender": true,
     "HP": 12.0,
@@ -41,7 +41,7 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "Current_level": 2,
-    "CurrentExpAmount": 10,
+    "CurrentExpAmount": 29,
     "NextLvExpAmount": 61.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29902
+            "instanceID": 29940
         }
     ],
     "Status_effect": "None",
@@ -73,28 +73,28 @@
     ],
     "move_set": [
         {
-            "instanceID": -160414
+            "instanceID": -147100
         }
     ],
     "ability": {
-        "instanceID": 29904
+        "instanceID": 29942
     },
     "evolutions": [
         {
-            "instanceID": 29906
+            "instanceID": 29944
         },
         {
-            "instanceID": 29908
+            "instanceID": 29946
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29626
+        "instanceID": 29664
     },
     "back_picture": {
-        "instanceID": 29910
+        "instanceID": 29948
     },
     "ability_name": "Inferno",
     "natureName": "Quiet",
