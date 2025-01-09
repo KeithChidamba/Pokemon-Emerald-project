@@ -45,8 +45,6 @@ public class Dialogue_handler : MonoBehaviour
 
     void Update()
     {
-        if(Options_manager.instance.playerInBattle)
-            Remove_Exit();
         if (Current_interaction != null)
         {
             if (Current_interaction.InterAction_type == "Options")
@@ -152,7 +150,6 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void Option_choice(string choice)
     {//only ever be 2 options, unless list type dialogue 
-
         if (choice == "Option 1")
         {
             Display_Options(false);
@@ -192,6 +189,7 @@ public class Dialogue_handler : MonoBehaviour
         dialogue_next.SetActive(false);
         elipsis_txt.SetActive(false);
         dialogue_exit.SetActive(false);
+        StopAllCoroutines();
         Battle_handler.instance.displaying_info = false;
     }
     public void Display(Interaction interaction)
@@ -213,7 +211,8 @@ public class Dialogue_handler : MonoBehaviour
             Dialouge_txt.color=Color.white;
             dialogue_box.SetActive(false);
         }
-        dialogue_exit.SetActive(true);
+        if(!Options_manager.instance.playerInBattle)
+            dialogue_exit.SetActive(true);
         if (interaction.InteractionMsg.Length > Max_length)
         {
             dialogue_next.SetActive(true);

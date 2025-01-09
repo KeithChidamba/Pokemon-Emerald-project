@@ -61,7 +61,6 @@ public class Battle_Participant : MonoBehaviour
         if (!is_active) return;
         if (pokemon.HP > 0) return;
         if (fainted) return;
-        Onfaint?.Invoke(this);
         fainted = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         if (isPlayer)
@@ -72,11 +71,13 @@ public class Battle_Participant : MonoBehaviour
     }
     void EndWildBattle()
     {
+        Onfaint?.Invoke(this);
         Wild_pkm.instance.InBattle = false;
         Battle_handler.instance.End_Battle(true);
     }
     private void Check_loss()
     {
+        Onfaint?.Invoke(this);
         int faint_count = 0;
         for(int i=0;i<Pokemon_party.instance.num_members;i++)
             if (Pokemon_party.instance.party[i].HP <= 0)

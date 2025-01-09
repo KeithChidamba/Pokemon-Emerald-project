@@ -45,13 +45,16 @@ public class Options_manager : MonoBehaviour
     {
         Pokemon_Details.instance.LearningMove = true;
         Pokemon_Details.instance.Load_Details(PokemonOperations.CurrentPkm);
+        Dialogue_handler.instance.Battle_Info("Which move will you replace?");
+        ChoosingNewMove = false;
     }
     void Skip_Move()
     {
+        ChoosingNewMove = false;
         Pokemon_Details.instance.LearningMove = false;
         PokemonOperations.LearningNewMove = false;
-        Dialogue_handler.instance.Dialouge_off();
         Dialogue_handler.instance.Battle_Info(PokemonOperations.CurrentPkm.Pokemon_name+" did not learn "+PokemonOperations.NewMove.Move_name);
+        Battle_handler.instance.levelUpQueue.RemoveAll(p=>p.pokemon==PokemonOperations.CurrentPkm);
     }
     void Heal_Pokemon()
     {

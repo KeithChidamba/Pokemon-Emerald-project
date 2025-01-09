@@ -22,7 +22,7 @@ public class Battle_handler : MonoBehaviour
     public int Participant_count = 0;
     public bool displaying_info = false;
     public bool BattleOver = false;
-    private bool BattleWon = false;
+    public bool BattleWon = false;
     public GameObject OverWorld;
     public List<GameObject> Backgrounds;
     public bool viewing_options = false;
@@ -157,6 +157,7 @@ public class Battle_handler : MonoBehaviour
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].pokemon = enemy;
         Wild_pkm.instance.pokemon_participant = Battle_P[2];
+        levelUpQueue.Clear();
         AddToExpList(Battle_P[0].pokemon);
         foreach(Battle_Participant p in Battle_P)
             if (p.pokemon != null)
@@ -164,7 +165,7 @@ public class Battle_handler : MonoBehaviour
         Wild_pkm.instance.InBattle = true;
         set_battle();
     }
-    public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
+    /*public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
     {
         //double battle setup, 2v2 or 1v2
         BattleOver = false;
@@ -179,7 +180,7 @@ public class Battle_handler : MonoBehaviour
         }
         //Set_participants();
         set_battle();
-    }
+    }*/
     public void Set_participants(Battle_Participant Participant)
     {
         if(!is_trainer_battle)
@@ -260,33 +261,30 @@ public class Battle_handler : MonoBehaviour
     }
     IEnumerator DelayBattleEnd()
     {
-        Debug.Log("here 5");
+        yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-        Debug.Log("here 6");
-        levelUpQueue.Clear();
-        onBattleEnd?.Invoke();
-        displaying_info = true;
         if (running_away)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
         else
         {
-            if (BattleWon)//get money if trainer, display msg of how much money
+            if (BattleWon)
                 Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
             else
             {
                 Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
                 Area_manager.instance.Switch_Area("Poke Center",0f);
             }
-        } 
-        yield return new WaitForSeconds(1.5f);
+        }
+        yield return new WaitForSeconds(2f);
         end_battle_ui();
         yield return null;
     }
     public void LevelUpEvent(Pokemon pkm)
     {
         levelUpQueue.Add(new LevelUpEvent(pkm));
+        StartCoroutine(LevelUp_Sequence());
     }
-    IEnumerator LevelUp_Sequence()//anim event
+    public IEnumerator LevelUp_Sequence()
     {
         if(levelUpQueue.Count>0)
             foreach (LevelUpEvent pkm in levelUpQueue)
@@ -294,36 +292,30 @@ public class Battle_handler : MonoBehaviour
                 yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
                 Dialogue_handler.instance.Battle_Info(pkm.pokemon.Pokemon_name+" leveled up!");
                 yield return new WaitUntil(() => !displaying_info);
-                displaying_info = true;
                 pkm.Execute();
                 yield return new WaitForSeconds(.5f);
                 if (PokemonOperations.LearningNewMove)
                 {
-                    if(pkm.pokemon.move_set.Count>3)
+                    if (pkm.pokemon.move_set.Count > 3)
                     {
                         yield return new WaitUntil(() => Options_manager.instance.ChoosingNewMove);
                         yield return new WaitForSeconds(.5f);
-                        Debug.Log("here 1");
+                        if (Pokemon_Details.instance.LearningMove)
+                            yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
                     }
-                    Debug.Log("here 1.5");
-                    if (Pokemon_Details.instance.LearningMove)
-                        yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
-                    yield return new WaitUntil(() => !displaying_info);
-                    Debug.Log("here 2");
-                    Pokemon_Details.instance.Exit_details();
-                    yield return new WaitUntil(() => !PokemonOperations.LearningNewMove);
                 }
             }
-        Debug.Log("here 3");
-        Options_manager.instance.ChoosingNewMove = false;
-        StartCoroutine(DelayBattleEnd());
+        yield return new WaitForSeconds(.5f);
+        levelUpQueue.Clear();
+        if(BattleOver)
+            End_Battle(BattleWon);
         yield return null;
     }
     public void End_Battle(bool Haswon)
     {
         BattleWon = Haswon;
         BattleOver = true;
-        StartCoroutine(LevelUp_Sequence());
+        StartCoroutine(DelayBattleEnd());
     }
     void AddToExpList(Pokemon pkm)
     {
@@ -365,6 +357,7 @@ public class Battle_handler : MonoBehaviour
     }
     void end_battle_ui()
     {
+        onBattleEnd?.Invoke();
         Dialogue_handler.instance.Dialouge_off();
         Options_manager.instance.playerInBattle = false;
         overworld_actions.instance.doing_action = false;
@@ -383,6 +376,8 @@ public class Battle_handler : MonoBehaviour
         Encounter_handler.instance.Reset_trigger();
         OverWorld.SetActive(true);
         Dialogue_handler.instance.can_exit = true;
+        BattleWon = false;
+        BattleOver = false;
         StopAllCoroutines();
     }
     public void Run_away()//wild encounter is always single battle

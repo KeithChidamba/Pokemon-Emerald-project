@@ -41,8 +41,6 @@ public class Pokemon_Details : MonoBehaviour
     private void Update()
     {
         if(current_pkm == null)return;
-        if (LearningMove)
-            current_page = 3;
         player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLvExpAmount)*100);
     }
 
@@ -53,6 +51,7 @@ public class Pokemon_Details : MonoBehaviour
         Stats_ui.SetActive(false);
         Moves_ui.SetActive(false);
         Ability_ui.SetActive(false);
+        current_pkm = null;
         Pokemon_party.instance.viewing_details = false;
     }
     public void Next()//next page
@@ -173,6 +172,8 @@ public class Pokemon_Details : MonoBehaviour
             gender_img.gameObject.SetActive(false);
         if (!LearningMove)
             current_page = 1;
+        else
+            current_page = 3;
         Load_ui(current_page);
     }
 }
