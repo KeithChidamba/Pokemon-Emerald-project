@@ -47,10 +47,10 @@ public class Dialogue_handler : MonoBehaviour
     {
         if (Current_interaction != null)
         {
-            if (Current_interaction.InterAction_type == "Options")
+            if (Current_interaction.InteractionType == "Options")
             {
-                option_btns_txt[0].text =Current_interaction.options_txt[0];
-                option_btns_txt[1].text =Current_interaction.options_txt[1];
+                option_btns_txt[0].text =Current_interaction.OptionsUiText[0];
+                option_btns_txt[1].text =Current_interaction.OptionsUiText[1];
             }
         }
         if (displaying && !text_finished)
@@ -71,7 +71,7 @@ public class Dialogue_handler : MonoBehaviour
                     current_line = Current_interaction.InteractionMsg.Substring(current_line_num * Max_length, Current_interaction.InteractionMsg.Length - (current_line_num * Max_length));
                     Dialouge_txt.text = current_line;
                     text_finished = true;
-                    if (Current_interaction.InterAction_type == "Options")
+                    if (Current_interaction.InteractionType == "Options")
                         Display_Options(true);
                 }
             }
@@ -92,17 +92,17 @@ public class Dialogue_handler : MonoBehaviour
     {
         Interaction inter = ScriptableObject.CreateInstance<Interaction>();
         inter.InteractionMsg = info;
-        inter.InterAction_type = type;
-        inter.InterAction_result_msg = result;
+        inter.InteractionType = type;
+        inter.ResultMessage = result;
         return inter;
     }
     public void Write_Info(string info,string type,string result,string[] options, string[]options_txt)//list info
     {
         Interaction details = new_interaction(info,type,result);
         foreach (string option in options)
-            details.InterAction_options.Add(option);
+            details.InteractionOptions.Add(option);
         foreach (string txt in options_txt)
-            details.options_txt.Add(txt);
+            details.OptionsUiText.Add(txt);
         Current_interaction = details;
         Display(Current_interaction);
     }
@@ -136,10 +136,10 @@ public class Dialogue_handler : MonoBehaviour
     public void Write_Info(string info, string type, string option1, string result, string option2,string opTxt1,string opTxt2)//display a choice, with a result when they choose NO
     {
         Interaction details = new_interaction(info,type,result);
-        details.InterAction_options.Add(option1);
-        details.InterAction_options.Add(option2);
-        details.options_txt.Add(opTxt1);
-        details.options_txt.Add(opTxt2);
+        details.InteractionOptions.Add(option1);
+        details.InteractionOptions.Add(option2);
+        details.OptionsUiText.Add(opTxt1);
+        details.OptionsUiText.Add(opTxt2);
         Current_interaction = details;
         Display(Current_interaction);
     }
@@ -159,7 +159,7 @@ public class Dialogue_handler : MonoBehaviour
         }
         else if (choice == "Option 2")
         {
-            if (Current_interaction.InterAction_options[1] == "")//if no option 2,basically the player chose NO
+            if (Current_interaction.InteractionOptions[1] == "")//if no option 2,basically the player chose NO
                 Dialouge_off();
             else
                 options.Complete_Interaction(Current_interaction,1);//do second option
@@ -223,7 +223,7 @@ public class Dialogue_handler : MonoBehaviour
         }
         else
         {
-            if (interaction.InterAction_type == "Options")
+            if (interaction.InteractionType == "Options")
                 Display_Options(true);
             else
                 Display_Options(false);

@@ -252,6 +252,7 @@ public class pokemon_storage : MonoBehaviour
     public Pokemon Add_pokemon(Pokemon pkm)
     {
         Pokemon new_pkm = Obj_Instance.set_Pokemon(pkm);
+        new_pkm.has_trainer = true;
         if (!storage_operetation)
         {
             num_pokemon++;

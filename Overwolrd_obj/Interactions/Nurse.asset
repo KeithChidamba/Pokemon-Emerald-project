@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Nurse
   m_EditorClassIdentifier: 
   InteractionMsg: Hello, would you like to heal your pokemon?
-  InterAction_type: Options
-  InterAction_options:
+  InteractionType: Options
+  InteractionOptions:
   - Heal_Pokemon
   - 
-  InterAction_result_msg: Please wait a moment...
-  options_txt:
+  ResultMessage: Please wait a moment...
+  OptionsUiText:
   - Yes
   - No

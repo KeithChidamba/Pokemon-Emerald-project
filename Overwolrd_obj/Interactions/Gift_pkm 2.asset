@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Gift_pkm 2
   m_EditorClassIdentifier: 
   InteractionMsg: It's a pokeball with a pokemon inside, take it?
-  InterAction_type: Options
-  InterAction_options:
+  InteractionType: Options
+  InteractionOptions:
   - Gift_pkm
   - 
-  InterAction_result_msg: Torchic
-  options_txt:
+  ResultMessage: Torchic
+  OptionsUiText:
   - Yes
   - No

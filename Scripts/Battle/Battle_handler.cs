@@ -196,7 +196,7 @@ public class Battle_handler : MonoBehaviour
         foreach(Pokemon p in Pokemon_party.instance.party)
             if (p != null && p.HP>0)
                 Alive_pkm.Add(p); 
-        Participant.pokemon = Alive_pkm[Turn_Based_Combat.instance.Current_pkm_turn];
+        Participant.pokemon = Alive_pkm[0];//doesnt account for double battle, use current turn 
         AddToExpList(Participant.pokemon);
     }
     void check_Participants()
@@ -266,7 +266,6 @@ public class Battle_handler : MonoBehaviour
         if (running_away)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
         else
-        {
             if (BattleWon)
                 Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
             else
@@ -274,7 +273,6 @@ public class Battle_handler : MonoBehaviour
                 Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
                 Area_manager.instance.Switch_Area("Poke Center",0f);
             }
-        }
         yield return new WaitForSeconds(2f);
         end_battle_ui();
         yield return null;
@@ -283,28 +281,28 @@ public class Battle_handler : MonoBehaviour
     {
         levelUpQueue.Add(new LevelUpEvent(pkm));
         StartCoroutine(LevelUp_Sequence());
-    }
-    public IEnumerator LevelUp_Sequence()
+    } 
+    IEnumerator LevelUp_Sequence()
     {
-        if(levelUpQueue.Count>0)
-            foreach (LevelUpEvent pkm in levelUpQueue)
-            {
-                yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-                Dialogue_handler.instance.Battle_Info(pkm.pokemon.Pokemon_name+" leveled up!");
-                yield return new WaitUntil(() => !displaying_info);
-                pkm.Execute();
-                yield return new WaitForSeconds(.5f);
-                if (PokemonOperations.LearningNewMove)
+        foreach (LevelUpEvent pkm in new List<LevelUpEvent>(levelUpQueue))
+        {
+            yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+            Dialogue_handler.instance.Battle_Info(pkm.pokemon.Pokemon_name+" leveled up!");
+            yield return new WaitUntil(() => !displaying_info);
+            pkm.Execute();
+            yield return new WaitForSeconds(.5f);
+            if (PokemonOperations.LearningNewMove)
+                if (pkm.pokemon.move_set.Count > 3)
                 {
-                    if (pkm.pokemon.move_set.Count > 3)
+                    yield return new WaitUntil(() => Options_manager.instance.ChoosingNewMove);
+                    yield return new WaitForSeconds(.5f);
+                    if (Pokemon_Details.instance.LearningMove)
                     {
-                        yield return new WaitUntil(() => Options_manager.instance.ChoosingNewMove);
-                        yield return new WaitForSeconds(.5f);
-                        if (Pokemon_Details.instance.LearningMove)
-                            yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
+                        yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
+                        yield return new WaitForSeconds(1f);
                     }
                 }
-            }
+        }
         yield return new WaitForSeconds(.5f);
         levelUpQueue.Clear();
         if(BattleOver)
@@ -333,9 +331,8 @@ public class Battle_handler : MonoBehaviour
             exp_recievers.Clear();
             return;
         }
-        foreach(Pokemon p in Pokemon_party.instance.party)//exp share split
+        foreach(Pokemon p in Pokemon_party.instance.party)//exp share split, assuming there's only ever 1 exp share in the game
             if (p != null && p.HP>0 && p.HeldItem!=null)
-            {
                 if(p.HeldItem.Item_name == "Exp Share")
                 {
                     p.Recieve_exp(exp_from_enemy / 2);
@@ -343,7 +340,6 @@ public class Battle_handler : MonoBehaviour
                     exp_from_enemy /= 2;
                     break;
                 }
-            }
         int exp = exp_from_enemy / exp_recievers.Count;
         foreach (Pokemon p in exp_recievers)
         {
@@ -364,7 +360,6 @@ public class Battle_handler : MonoBehaviour
         Battle_ui.SetActive(false);
         options_ui.SetActive(false);
         foreach (Battle_Participant p in Battle_P)
-        {
             if(p.pokemon!=null)
             {
                 p.data.Load_Stats();
@@ -372,7 +367,6 @@ public class Battle_handler : MonoBehaviour
                 p.pokemon = null;
                 p.Unload_ui();
             }
-        }
         Encounter_handler.instance.Reset_trigger();
         OverWorld.SetActive(true);
         Dialogue_handler.instance.can_exit = true;

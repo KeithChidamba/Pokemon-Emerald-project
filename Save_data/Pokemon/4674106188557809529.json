@@ -1,48 +1,48 @@
 {
-    "Base_Pokemon_name": "Mudkip",
-    "Pokemon_name": "Mudkip",
-    "Pokemon_ID": 4787813415295229844,
-    "Personality_value": 763731860,
+    "Base_Pokemon_name": "Torchic",
+    "Pokemon_name": "Torchic",
+    "Pokemon_ID": 4674106188557809529,
+    "Personality_value": 1668380537,
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30880
+        "instanceID": 30972
     },
     "has_gender": true,
     "HP": 12.0,
     "max_HP": 12.0,
-    "BaseHP": 50.0,
-    "BaseAttack": 70.0,
-    "BaseDefense": 50.0,
-    "BaseSP_ATK": 50.0,
+    "BaseHP": 45.0,
+    "BaseAttack": 60.0,
+    "BaseDefense": 40.0,
+    "BaseSP_ATK": 70.0,
     "BaseSP_DEF": 50.0,
-    "Basespeed": 40.0,
-    "Attack": 5.0,
-    "Defense": 6.0,
+    "Basespeed": 45.0,
+    "Attack": 6.0,
+    "Defense": 5.0,
     "SP_ATK": 6.0,
     "SP_DEF": 6.0,
-    "speed": 7.0,
-    "HP_IV": 20.0,
-    "Attack_IV": 5.0,
-    "Defense_IV": 30.0,
-    "SP_ATK_IV": 0.0,
-    "SP_DEF_IV": 15.0,
-    "speed_IV": 18.0,
+    "speed": 5.0,
+    "HP_IV": 31.0,
+    "Attack_IV": 17.0,
+    "Defense_IV": 16.0,
+    "SP_ATK_IV": 20.0,
+    "SP_DEF_IV": 2.0,
+    "speed_IV": 1.0,
     "HP_EV": 0.0,
-    "Attack_EV": 2.0,
+    "Attack_EV": 0.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
     "speed_EV": 0.0,
     "EVs": [
-        "Attack1"
+        "Speed1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 2,
-    "CurrentExpAmount": 20,
-    "NextLvExpAmount": 61.0,
+    "Current_level": 1,
+    "CurrentExpAmount": 0,
+    "NextLvExpAmount": -82.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -62,18 +62,18 @@
         "30"
     ],
     "abilities": [
-        "Torrent"
+        "Inferno"
     ],
     "split_evolution": false,
     "learnSet": [
-        "normal/tackle01",
-        "water/bubble03",
-        "ground/mud slap05",
-        "water/water gun10"
+        "normal/scratch01",
+        "fire/ember03",
+        "fighting/double kick05",
+        "normal/focus energy07"
     ],
     "move_set": [
         {
-            "instanceID": -147096
+            "instanceID": -67104
         }
     ],
     "ability": {
@@ -91,24 +91,24 @@
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29926
+        "instanceID": 29642
     },
     "back_picture": {
-        "instanceID": 29928
+        "instanceID": 29926
     },
-    "ability_name": "Torrent",
-    "natureName": "Timid",
+    "ability_name": "Inferno",
+    "natureName": "Serious",
     "evo_data": [
-        "Marshtomp",
-        "Swampert"
+        "Combusken",
+        "Blaziken"
     ],
     "type_data": [
-        "Water"
+        "Fire"
     ],
     "move_data": [
-        "Tackle/Normal"
+        "Scratch/Normal"
     ],
     "move_pp_data": [
-        20
+        25
     ]
 }

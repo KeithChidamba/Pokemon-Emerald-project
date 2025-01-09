@@ -1,16 +1,16 @@
 {
     "Base_Pokemon_name": "Treecko",
     "Pokemon_name": "Treecko",
-    "Pokemon_ID": 4787813416203989228,
-    "Personality_value": 1672491244,
+    "Pokemon_ID": 4674106187429890217,
+    "Personality_value": 540461225,
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30960
+        "instanceID": 30980
     },
     "has_gender": true,
-    "HP": 10289.0,
-    "max_HP": 25.0,
+    "HP": 12.0,
+    "max_HP": 12.0,
     "BaseHP": 40.0,
     "BaseAttack": 45.0,
     "BaseDefense": 35.0,
@@ -18,31 +18,31 @@
     "BaseSP_DEF": 55.0,
     "Basespeed": 70.0,
     "Attack": 5.0,
-    "Defense": 6.0,
-    "SP_ATK": 600.0,
+    "Defense": 5.0,
+    "SP_ATK": 6.0,
     "SP_DEF": 6.0,
-    "speed": 700.0,
-    "HP_IV": 28.0,
-    "Attack_IV": 22.0,
+    "speed": 6.0,
+    "HP_IV": 27.0,
+    "Attack_IV": 9.0,
     "Defense_IV": 24.0,
-    "SP_ATK_IV": 10.0,
-    "SP_DEF_IV": 27.0,
-    "speed_IV": 5.0,
+    "SP_ATK_IV": 0.0,
+    "SP_DEF_IV": 15.0,
+    "speed_IV": 7.0,
     "HP_EV": 0.0,
-    "Attack_EV": 57.0,
+    "Attack_EV": 0.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 7.0,
+    "speed_EV": 0.0,
     "EVs": [
         "Speed1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 15,
-    "CurrentExpAmount": 5063,
-    "NextLvExpAmount": 1179.0,
+    "Current_level": 1,
+    "CurrentExpAmount": 0,
+    "NextLvExpAmount": -82.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29864
+            "instanceID": 29842
         }
     ],
     "Status_effect": "None",
@@ -73,40 +73,31 @@
     ],
     "move_set": [
         {
-            "instanceID": -147086
-        },
-        {
-            "instanceID": -147088
-        },
-        {
-            "instanceID": -147090
-        },
-        {
-            "instanceID": -147092
+            "instanceID": -67100
         }
     ],
     "ability": {
-        "instanceID": 29866
+        "instanceID": 29844
     },
     "evolutions": [
         {
-            "instanceID": 29868
+            "instanceID": 29846
         },
         {
-            "instanceID": 29870
+            "instanceID": 29848
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29820
+        "instanceID": 29798
     },
     "back_picture": {
-        "instanceID": 29872
+        "instanceID": 29850
     },
     "ability_name": "Overgrow",
-    "natureName": "Rash",
+    "natureName": "Hardy",
     "evo_data": [
         "Grovyle",
         "Sceptile"
@@ -115,15 +106,9 @@
         "Grass"
     ],
     "move_data": [
-        "Pound/Normal",
-        "Absorb/Grass",
-        "Quick attack/Normal",
-        "Bullet seed/Grass"
+        "Pound/Normal"
     ],
     "move_pp_data": [
-        25,
-        9,
-        25,
-        20
+        25
     ]
 }

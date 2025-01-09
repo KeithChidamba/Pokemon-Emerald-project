@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using Unity.Mathematics;
 using UnityEditor.Timeline.Actions;
@@ -155,31 +156,32 @@ public static class PokemonOperations
         LearningNewMove = true;
         CurrentPkm = pkm;
         int counter = 0;
-        foreach (string l in CurrentPkm.learnSet)
+        foreach (string move in CurrentPkm.learnSet)
         {
-            int lv = int.Parse(l.Substring(l.Length - 2, 2));
-            if (CurrentPkm.Current_level == lv)
+            int requiredLevel = int.Parse(move.Substring(move.Length - 2, 2));
+            if (CurrentPkm.Current_level == requiredLevel)
             {
-                int pos = l.IndexOf('/')+1;
-                string t = l.Substring(0, pos - 1).ToLower(); //move type 
-                string n = l.Substring(pos, l.Length - 2 - pos).ToLower();//move name
-                if (CurrentPkm.move_set.Count == 4) //new move ui, allow player to replace move or reject new move
+                int pos = move.IndexOf('/')+1;
+                string moveType = move.Substring(0, pos - 1).ToLower();
+                string moveName = move.Substring(pos, move.Length - 2 - pos).ToLower();
+                if (CurrentPkm.move_set.Count == 4) 
                 {
-                    if(Options_manager.instance.playerInBattle)//remember to alter for rare candy 
+                    if(Options_manager.instance.playerInBattle || Pokemon_party.instance.party.Contains(CurrentPkm))//leveling up from battle or rare candies
                     {
                         Dialogue_handler.instance.Write_Info(
-                            CurrentPkm.Pokemon_name + " is trying to learn " + n + ", do you want it to learn " + n +
+                            CurrentPkm.Pokemon_name + " is trying to learn " + moveName + ", do you want it to learn " + moveName +
                             "?", "Options", "Learn_Move", "", "Skip_Move", "Yes", "No");
-                        NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n);
+                        NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName);
                     }
-                    else
-                        CurrentPkm.move_set[Utility.Get_rand(0,4)] = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n));
+                    //wild pokemon get generated with somewhat random moveset choices
+                    CurrentPkm.move_set[Utility.Get_rand(0,4)] = Obj_Instance.set_move(Resources.Load<Move>(
+                            "Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
                 }
                 else
                 {
                     if(Options_manager.instance.playerInBattle)
-                        Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" learned "+n);
-                    CurrentPkm.move_set.Add(Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + t + "/" + n)));
+                        Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" learned "+moveName);
+                    CurrentPkm.move_set.Add(Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName)));
                     LearningNewMove = false;
                 }
                 break;

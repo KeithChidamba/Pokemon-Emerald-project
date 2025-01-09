@@ -111,12 +111,12 @@ public class Save_manager : MonoBehaviour
         Erase_save();
         for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
         {
-            Pokemon_party.instance.party[i].Set_class_data();
+            Pokemon_party.instance.party[i].Save_class_data();
             Save_Pokemon(Pokemon_party.instance.party[i]);
         }
         for (int i = 0; i < pokemon_storage.instance.num_non_party_pokemon; i++)
         {
-            pokemon_storage.instance.non_party_pokemon[i].Set_class_data();
+            pokemon_storage.instance.non_party_pokemon[i].Save_class_data();
             Save_Pokemon(pokemon_storage.instance.non_party_pokemon[i]);
         }
         for (int i = 0; i < Bag.instance.num_items; i++)

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Oran Berry Tree
   m_EditorClassIdentifier: 
   InteractionMsg: It's a oran berry tree, pick a bery?
-  InterAction_type: Options
-  InterAction_options:
+  InteractionType: Options
+  InteractionOptions:
   - Pick_Berry
   - 
-  InterAction_result_msg: Oran berry
-  options_txt:
+  ResultMessage: Oran berry
+  OptionsUiText:
   - Yes
-  - No
+  - No thanks

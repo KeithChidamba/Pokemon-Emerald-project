@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Base_Pokemon_name: Pikachu
   Pokemon_name: Pikachu
-  Pokemon_ID: 
+  Pokemon_ID: 0
   Personality_value: 0
   Gender: 
   GenderRatio: 50/50
   nature: {fileID: 0}
   has_gender: 1
-  HP: 12
-  max_HP: 12
+  HP: 0
+  max_HP: 0
   BaseHP: 35
   BaseAttack: 55
   BaseDefense: 40
@@ -52,7 +52,7 @@ MonoBehaviour:
   crit_chance: 6.25
   Current_level: 0
   CurrentExpAmount: 0
-  level_progress: 0
+  NextLvExpAmount: 0
   EXPGroup: Medium Fast
   exp_yield: 82
   has_trainer: 0

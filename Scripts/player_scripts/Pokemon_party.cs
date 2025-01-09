@@ -1,5 +1,8 @@
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Pokemon_party : MonoBehaviour
@@ -125,7 +128,7 @@ public class Pokemon_party : MonoBehaviour
         Party_position--;
         if (SwapOutNext | Swapping_in)
         {
-            Selected_member = Turn_Based_Combat.instance.Current_pkm_turn+1;
+            Selected_member = 1;//doesnt account for double battles
             swap(Party_position);
             Invoke(nameof(switchIn),1f);
         }
@@ -133,6 +136,27 @@ public class Pokemon_party : MonoBehaviour
             if(party[Selected_member-1] != party[Party_position])
                 swap(Party_position);
     }
+
+    /*IEnumerator SwitchInPokemon()
+    {
+        foreach (Pokemon pokemon in _faintedPokemon)//new List<Pokemon>(_faintedPokemon))
+        {
+            Selected_member = party.ToList().IndexOf(pokemon)+1;
+
+            yield return new WaitForSeconds(1f);
+            List<Pokemon> alive_pokemon = new();
+            alive_pokemon = party.ToList();
+            alive_pokemon.RemoveAll(p => p.HP <= 0);
+            Debug.Log(alive_pokemon.Count());
+            if(Battle_handler.instance.isDouble_battle &&  alive_pokemon.Count>1)
+                Dialogue_handler.instance.Write_Info("Pick the next substitute ","Details");
+            else
+                break;
+        }
+        _faintedPokemon.Clear();
+        
+        yield return null;
+    }*/
 void close_party()
 {
     Game_ui_manager.instance.Close_party();
@@ -141,6 +165,8 @@ void close_party()
 }
     void switchIn()
     {
+        if(Turn_Based_Combat.instance.Current_pkm_turn>1 && SwapOutNext)//not equal to ur turn, check this with double batttles
+            Turn_Based_Combat.instance.Next_turn();
         if(Swapping_in)
             Turn_Based_Combat.instance.Next_turn();
         close_party();
@@ -156,7 +182,7 @@ void close_party()
         Refresh_Member_Cards();
         member_indicator.SetActive(false);
         if(Options_manager.instance.playerInBattle)
-            Battle_handler.instance.Set_participants(Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn]);
+            Battle_handler.instance.Set_participants(Battle_handler.instance.Battle_P[0]);//doesnt account for double battle, use current turn 
         if(!Swapping_in && !SwapOutNext)
         {
             Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");

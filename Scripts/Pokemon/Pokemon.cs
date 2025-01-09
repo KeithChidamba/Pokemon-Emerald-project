@@ -75,7 +75,7 @@ public class Pokemon : ScriptableObject
     public List<string> move_data=new();
     public List<int> move_pp_data=new();
     
-    public void Set_class_data()
+    public void Save_class_data()//saves values of attributes that cant be serialized into json
     {
         ability_name = ability.ability;
         natureName = nature.natureName;
@@ -94,7 +94,7 @@ public class Pokemon : ScriptableObject
         foreach (Evolution e in evolutions)
             evo_data.Add(e.Evo_name);
     }
-    public void Set_Data(pokemon_storage storage)
+    public void Set_Data(pokemon_storage storage)//gives values to attributes that cant be serialized into json, using saved values
     {
         front_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower());
         back_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower() + "_b");
@@ -184,6 +184,8 @@ public class Pokemon : ScriptableObject
         SP_ATK = Stat_Increase(BaseSP_ATK,SP_ATK_IV,SP_ATK_EV,"Special Attack");
         SP_DEF = Stat_Increase(BaseSP_DEF,SP_DEF_IV,SP_DEF_EV,"Special Defense");
         max_HP = increase_HP();
+        if (Current_level == 1)
+            HP = max_HP;
     }
     float Get_nature_Modifier(string stat)
      {
@@ -195,11 +197,17 @@ public class Pokemon : ScriptableObject
      }
     float Stat_Increase(float baseStat,float IV,float EV,string stat)
     {
-        return math.round(((((baseStat*IV*(EV/4) * 2)/100)*Current_level)+Current_level+5)*Get_nature_Modifier(stat));
+        float brackets1 = (2*baseStat) + IV + (EV / 4);
+        float bracket2 = brackets1 * (Current_level / 100f);
+        float bracket3 = bracket2 + 5f;
+        return math.floor(bracket3 * Get_nature_Modifier(stat));
     }
     float increase_HP()
     {
-        return math.round((((BaseHP*HP_IV*(HP_EV/4) * 2)/100)*Current_level)+Current_level+10);
+        float brackets1 = (2*BaseHP) + HP_IV + (HP_EV / 4);
+        float bracket2 = brackets1 * (Current_level / 100f);
+        float bracket3 = bracket2 + Current_level + 10f;
+        return math.floor(bracket3);
     }
     public void Level_up()
     {

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Clerk
   m_EditorClassIdentifier: 
   InteractionMsg: Hello, what can i help you with?
-  InterAction_type: Options
-  InterAction_options:
-  - View_Market
+  InteractionType: Options
+  InteractionOptions:
+  - ViewMarketDelayed
   - Sell_item
-  InterAction_result_msg: What would you like
-  options_txt:
+  ResultMessage: What would you like
+  OptionsUiText:
   - Buy
   - Sell

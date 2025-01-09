@@ -94,14 +94,9 @@ public class Game_ui_manager : MonoBehaviour
         Pokemon_party.instance.party_ui.gameObject.SetActive(false);
         Pokemon_party.instance.Cancel();
         if (Options_manager.instance.playerInBattle)
-        {
             overworld_actions.instance.using_ui = false;
-        }
         else
-        {
             Reset_player_movement();
-        }
-        Item_handler.instance.Using_item = false;
     }
     public void Menu_off()
     {

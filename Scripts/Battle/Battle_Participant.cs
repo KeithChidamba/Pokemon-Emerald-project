@@ -20,7 +20,7 @@ public class Battle_Participant : MonoBehaviour
     public Text pkm_name, pkm_HP, pkm_lv;
     public bool isPlayer = false;
     public bool is_active = false;
-    private bool fainted = false;
+    public bool fainted = false;
     public Slider player_hp;
     public Slider player_exp;
     public GameObject[] single_battle_ui;

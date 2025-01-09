@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Gift_pkm 3
   m_EditorClassIdentifier: 
   InteractionMsg: It's a pokeball with a pokemon inside, take it?
-  InterAction_type: Options
-  InterAction_options:
+  InteractionType: Options
+  InteractionOptions:
   - Gift_pkm
   - 
-  InterAction_result_msg: Mudkip
-  options_txt:
+  ResultMessage: Mudkip
+  OptionsUiText:
   - Yes
   - No

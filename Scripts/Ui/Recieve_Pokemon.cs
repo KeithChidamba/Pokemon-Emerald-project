@@ -9,7 +9,7 @@ public class Recieve_Pokemon : MonoBehaviour
    {
         foreach (Overworld_interactable p in pkm)
         {
-            if (p.interaction.InterAction_result_msg == gift_pkm)
+            if (p.interaction.ResultMessage == gift_pkm)
             {
                 p.gameObject.SetActive(false);
             }

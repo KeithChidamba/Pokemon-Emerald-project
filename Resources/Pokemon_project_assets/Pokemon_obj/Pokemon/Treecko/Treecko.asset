@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Base_Pokemon_name: Treecko
   Pokemon_name: Treecko
-  Pokemon_ID: 
+  Pokemon_ID: 0
   Personality_value: 0
   Gender: 
   GenderRatio: 87.5/12.5
   nature: {fileID: 0}
   has_gender: 1
-  HP: 15
-  max_HP: 15
+  HP: 0
+  max_HP: 0
   BaseHP: 40
   BaseAttack: 45
   BaseDefense: 35
@@ -52,10 +52,10 @@ MonoBehaviour:
   crit_chance: 6.25
   Current_level: 0
   CurrentExpAmount: 0
-  level_progress: 0
+  NextLvExpAmount: 0
   EXPGroup: Medium Slow
   exp_yield: 65
-  has_trainer: 1
+  has_trainer: 0
   canAttack: 1
   isFlinched: 0
   CanBeDamaged: 1
