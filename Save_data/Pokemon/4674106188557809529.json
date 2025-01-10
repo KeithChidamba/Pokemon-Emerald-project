@@ -6,22 +6,22 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31914
+        "instanceID": 31946
     },
     "has_gender": true,
     "HP": 12.0,
-    "max_HP": 12.0,
+    "max_HP": 14.0,
     "BaseHP": 45.0,
     "BaseAttack": 60.0,
     "BaseDefense": 40.0,
     "BaseSP_ATK": 70.0,
     "BaseSP_DEF": 50.0,
     "Basespeed": 45.0,
-    "Attack": 6.0,
-    "Defense": 5.0,
-    "SP_ATK": 6.0,
-    "SP_DEF": 6.0,
-    "speed": 5.0,
+    "Attack": 7.0,
+    "Defense": 6.0,
+    "SP_ATK": 8.0,
+    "SP_DEF": 7.0,
+    "speed": 6.0,
     "HP_IV": 31.0,
     "Attack_IV": 17.0,
     "Defense_IV": 16.0,
@@ -40,9 +40,9 @@
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 1,
-    "CurrentExpAmount": 0,
-    "NextLvExpAmount": -82.0,
+    "Current_level": 2,
+    "CurrentExpAmount": 27,
+    "NextLvExpAmount": 61.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29920
+            "instanceID": 29952
         }
     ],
     "Status_effect": "None",
@@ -73,28 +73,28 @@
     ],
     "move_set": [
         {
-            "instanceID": -169692
+            "instanceID": -164574
         }
     ],
     "ability": {
-        "instanceID": 29922
+        "instanceID": 29954
     },
     "evolutions": [
         {
-            "instanceID": 29924
+            "instanceID": 29956
         },
         {
-            "instanceID": 29926
+            "instanceID": 29958
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29644
+        "instanceID": 29672
     },
     "back_picture": {
-        "instanceID": 29928
+        "instanceID": 29960
     },
     "ability_name": "Inferno",
     "natureName": "Serious",

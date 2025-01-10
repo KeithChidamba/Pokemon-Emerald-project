@@ -66,6 +66,7 @@ public class Pokemon : ScriptableObject
     public Sprite front_picture;
     public Sprite back_picture;
     public event Action OnLevelUP;
+    public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
     //data conversion when json to obj
     public string ability_name;
@@ -226,11 +227,13 @@ public class Pokemon : ScriptableObject
             CurrentExpAmount = ArtificialLevelUpExp;
             PokemonOperations.GetNewMove(this);
         }
+        OnNewLevel?.Invoke();
     }
 
     void clearEvents()
     {
         OnLevelUP = null;
         OnLevelUp = null;
+        OnNewLevel = null;
     }
 }

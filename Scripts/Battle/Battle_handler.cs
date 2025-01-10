@@ -64,7 +64,7 @@ public class Battle_handler : MonoBehaviour
             else
             {
                 displaying_info = true;
-                Dialogue_handler.instance.Write_Info("Click on who you will attack", "Battle info");//details
+                Dialogue_handler.instance.Write_Info("Click on who you will attack", "Details");//details
             }
         }
         if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
@@ -159,6 +159,7 @@ public class Battle_handler : MonoBehaviour
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].pokemon = enemy;
         Wild_pkm.instance.pokemon_participant = Battle_P[2];
+        Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
         levelUpQueue.Clear();
         AddToExpList(Battle_P[0].pokemon);
         foreach(Battle_Participant p in Battle_P)
@@ -205,8 +206,6 @@ public class Battle_handler : MonoBehaviour
     }*/
     public void Set_participants(Battle_Participant Participant)
     {
-        if(!is_trainer_battle)
-            Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
         List<Pokemon> Alive_pkm=new();
         //always set pokemon then save stats, then load ui
         if (Participant.isPlayer)
@@ -392,6 +391,8 @@ public class Battle_handler : MonoBehaviour
                 p.data.Reset_Battle_state(p.pokemon,true);
                 p.pokemon = null;
                 p.Unload_ui();
+                if (p.trainer != null)
+                    p.trainer.InBattle = false;
             }
         Encounter_handler.instance.Reset_trigger();
         OverWorld.SetActive(true);

@@ -6,22 +6,22 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31922
+        "instanceID": 31954
     },
     "has_gender": true,
     "HP": 12.0,
-    "max_HP": 12.0,
+    "max_HP": 14.0,
     "BaseHP": 40.0,
     "BaseAttack": 45.0,
     "BaseDefense": 35.0,
     "BaseSP_ATK": 65.0,
     "BaseSP_DEF": 55.0,
     "Basespeed": 70.0,
-    "Attack": 5.0,
-    "Defense": 5.0,
-    "SP_ATK": 6.0,
-    "SP_DEF": 6.0,
-    "speed": 6.0,
+    "Attack": 6.0,
+    "Defense": 6.0,
+    "SP_ATK": 7.0,
+    "SP_DEF": 7.0,
+    "speed": 7.0,
     "HP_IV": 27.0,
     "Attack_IV": 9.0,
     "Defense_IV": 24.0,
@@ -33,16 +33,16 @@
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 0.0,
+    "speed_EV": 2.0,
     "EVs": [
         "Speed1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 1,
-    "CurrentExpAmount": 0,
-    "NextLvExpAmount": -82.0,
+    "Current_level": 2,
+    "CurrentExpAmount": 27,
+    "NextLvExpAmount": 61.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29844
+            "instanceID": 29876
         }
     ],
     "Status_effect": "Paralysis",
@@ -73,28 +73,28 @@
     ],
     "move_set": [
         {
-            "instanceID": -169688
+            "instanceID": -164578
         }
     ],
     "ability": {
-        "instanceID": 29846
+        "instanceID": 29878
     },
     "evolutions": [
         {
-            "instanceID": 29848
+            "instanceID": 29880
         },
         {
-            "instanceID": 29850
+            "instanceID": 29882
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29800
+        "instanceID": 29832
     },
     "back_picture": {
-        "instanceID": 29852
+        "instanceID": 29884
     },
     "ability_name": "Overgrow",
     "natureName": "Hardy",
@@ -109,6 +109,6 @@
         "Pound/Normal"
     ],
     "move_pp_data": [
-        25
+        23
     ]
 }

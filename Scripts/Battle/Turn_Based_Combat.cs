@@ -8,7 +8,7 @@ using UnityEngine;
 public class Turn_Based_Combat : MonoBehaviour
 {
     public static Turn_Based_Combat instance; 
-    List<Pkm_Use_Move> Move_history = new();
+    [SerializeField]List<Pkm_Use_Move> Move_history = new();
     public event Action OnNewTurn;
     public event Action OnMoveExecute;
     public event Action OnTurnEnd;
@@ -29,8 +29,12 @@ public class Turn_Based_Combat : MonoBehaviour
     public void SaveMove(Pkm_Use_Move command)
     {
         Move_history.Add(command);
+        //Debug.Log(command._turn.attacker_.pokemon.Pokemon_name + " turn added");
         if (Current_pkm_turn == Battle_handler.instance.Participant_count)
+        {
+            //Debug.Log("executing moves");
             StartCoroutine(ExecuteMoves(Set_priority()));
+        }
         else
             Next_turn();
     }
@@ -75,16 +79,19 @@ public class Turn_Based_Combat : MonoBehaviour
             yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
             if (Can_Attack(command))
             {
+                //Debug.Log(command._turn.attacker_.pokemon.Pokemon_name + "'s turn");
                 command.Execute();
                 yield return new WaitUntil(()=> !Move_handler.instance.Doing_move);
+                CancelMove(command);
             }
             else
             {
+                //Debug.Log(command._turn.attacker_.pokemon.Pokemon_name + "'s turn cancelled");
                 CancelMove(command);
                 yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
             }
         }
-        Move_history.Clear();
+        //Debug.Log("moves over");
         OnTurnEnd?.Invoke();
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         Battle_handler.instance.Reset_move();
@@ -97,7 +104,7 @@ public class Turn_Based_Combat : MonoBehaviour
         command.Undo();
     }
     public void Next_turn()
-    {
+    { 
         if ( Battle_handler.instance.isDouble_battle)
             Change_turn(4,1);
         else

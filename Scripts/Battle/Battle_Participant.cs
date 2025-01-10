@@ -179,6 +179,7 @@ public class Battle_Participant : MonoBehaviour
         {
             pokemon.OnLevelUP += Reset_pkm;
             pokemon.OnLevelUp += Battle_handler.instance.LevelUpEvent;
+            pokemon.OnNewLevel += data.save_stats;
             foreach (Battle_Participant p in Current_Enemies)
             {
                 p.Onfaint += Get_exp;

@@ -106,6 +106,7 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void Write_Info(string info,string type)//display plain text info to player
     {
+        messagesLoading = false;
         Interaction details = new_interaction(info,type,"");
         Current_interaction = details;
         Display(Current_interaction);

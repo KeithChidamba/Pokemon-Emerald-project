@@ -46,8 +46,8 @@ public class Enemy_trainer : MonoBehaviour
     }
     void use_move(Move move)
     {
+        Debug.Log(" move: "+move.Move_name);
         Battle_handler.instance.Use_Move(move,participant);
-        Debug.Log("here "+participant.Current_Enemies.Count+" move: "+move.Move_name);
         Used_move = true;
     }
     public void Select_player(int selectedIndex)
@@ -60,8 +60,11 @@ public class Enemy_trainer : MonoBehaviour
     {
         if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon && !Used_move && CanAttack)
         {
-            Select_player(Utility.Get_rand(0,participant.Current_Enemies.Count));
-            use_move(participant.pokemon.move_set[Utility.Get_rand(0,participant.pokemon.move_set.Count)]);//random move
+            int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
+            Select_player(randome_enemy);
+            int randomMove = Utility.Get_rand(0, participant.pokemon.move_set.Count);
+            Debug.Log("decision "+randome_enemy+" move: "+randomMove);
+            use_move(participant.pokemon.move_set[randomMove]);//random move
 
         }
     }
