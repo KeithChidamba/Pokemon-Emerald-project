@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Interable_obj", menuName = "obj")]
+[CreateAssetMenu(fileName = "Interable_obj", menuName = "interaction")]
 public class Interaction : ScriptableObject
 {
     public string InteractionMsg = "";

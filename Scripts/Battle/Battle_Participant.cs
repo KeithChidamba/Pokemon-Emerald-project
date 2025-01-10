@@ -11,6 +11,7 @@ public class Battle_Participant : MonoBehaviour
 {
     public Abilities ability_h;
     public Participant_Status status;
+    public Enemy_trainer trainer;
     public Battle_Data data;
     public Pokemon pokemon;
     public List<Battle_Participant> Current_Enemies;
@@ -90,6 +91,7 @@ public class Battle_Participant : MonoBehaviour
         }
         else
         {//select next pokemon to switch in
+            Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.instance.Battle_P, this)+1;
             Pokemon_party.instance.SwapOutNext = true;
             Game_ui_manager.instance.View_pkm_Party();
             Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");

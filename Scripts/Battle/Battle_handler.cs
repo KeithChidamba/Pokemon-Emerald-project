@@ -165,6 +165,24 @@ public class Battle_handler : MonoBehaviour
         Wild_pkm.instance.InBattle = true;
         set_battle();
     }
+    public void Start_Battle(string trainerName)//single trainer battle
+    {
+        BattleOver = false;
+        is_trainer_battle = true;
+        Load_Area_bg();
+        Battle_P[0].pokemon = Pokemon_party.instance.party[0];
+        Battle_P[0].Current_Enemies.Add(Battle_P[2]);
+        Battle_P[2].Current_Enemies.Add(Battle_P[0]);
+        Battle_P[2].trainer = Battle_P[2].GetComponent<Enemy_trainer>();
+        Battle_P[2].trainer.StartBattle(trainerName);
+        Battle_P[2].pokemon = Battle_P[2].trainer._TrainerData.PokemonMovesets[0].pokemon;
+        levelUpQueue.Clear();
+        AddToExpList(Battle_P[0].pokemon);
+        foreach(Battle_Participant p in Battle_P)
+            if (p.pokemon != null)
+                Set_participants(p);
+        set_battle();
+    }
     /*public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
     {
         //double battle setup, 2v2 or 1v2
@@ -196,7 +214,7 @@ public class Battle_handler : MonoBehaviour
         foreach(Pokemon p in Pokemon_party.instance.party)
             if (p != null && p.HP>0)
                 Alive_pkm.Add(p); 
-        Participant.pokemon = Alive_pkm[0];//doesnt account for double battle, use current turn 
+        Participant.pokemon = Alive_pkm[Pokemon_party.instance.Selected_member-1];
         AddToExpList(Participant.pokemon);
     }
     void check_Participants()
@@ -324,7 +342,7 @@ public class Battle_handler : MonoBehaviour
     {
         exp_recievers.RemoveAll(p => p.HP <= 0);
         if(exp_recievers.Count<1)return;
-        Debug.Log(exp_from_enemy+" exp from enemy");
+        //Debug.Log(exp_from_enemy+" exp from enemy");
         if (exp_recievers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
         {
             exp_recievers[0].Recieve_exp(exp_from_enemy);
@@ -336,7 +354,7 @@ public class Battle_handler : MonoBehaviour
                 if(p.HeldItem.Item_name == "Exp Share")
                 {
                     p.Recieve_exp(exp_from_enemy / 2);
-                    Debug.Log(p.Pokemon_name + " recieved " + exp_from_enemy / 2f + " exp using exp share");
+                    //Debug.Log(p.Pokemon_name + " recieved " + exp_from_enemy / 2f + " exp using exp share");
                     exp_from_enemy /= 2;
                     break;
                 }

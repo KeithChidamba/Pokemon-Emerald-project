@@ -95,6 +95,19 @@ public static class Obj_Instance
         return new_pkm;
     }
 
+    public static TrainerData SetTrainer(TrainerData data)
+    {
+        TrainerData trainer_copy = ScriptableObject.CreateInstance<TrainerData>();
+        trainer_copy.TarinerName = data.TarinerName;
+        trainer_copy.TrainerType = data.TrainerType;
+        trainer_copy.PokemonMovesets = data.PokemonMovesets;
+        foreach (TrainerPokemonData member in trainer_copy.PokemonMovesets)
+        {
+            member.pokemon = set_Pokemon(member.pokemon);
+            PokemonOperations.SetPkmtraits(member.pokemon);
+        }
+        return trainer_copy;
+    }
     public static Item set_Item(Item item)
     {
         Item new_item = ScriptableObject.CreateInstance<Item>();

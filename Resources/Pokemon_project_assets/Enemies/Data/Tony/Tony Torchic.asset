@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1b1c629dc4d92448879b10db63290f, type: 3}
+  m_Name: Tony Torchic
+  m_EditorClassIdentifier: 
+  pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+  PokemonLevel: 6
+  hasItem: 0
+  heldItem: {fileID: 0}
+  moveSet:
+  - {fileID: 11400000, guid: 38b98d4bcb652754aadb472acfbc3201, type: 2}
+  - {fileID: 11400000, guid: e589d376f63838b43abf8c4492ec17ce, type: 2}
+  - {fileID: 11400000, guid: ba7227d3cd2a00f4ca02f38ded4a2e32, type: 2}

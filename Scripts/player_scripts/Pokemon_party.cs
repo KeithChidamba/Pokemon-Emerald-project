@@ -126,9 +126,14 @@ public class Pokemon_party : MonoBehaviour
     private void Move_Member(int Party_position)
     {
         Party_position--;
-        if (SwapOutNext | Swapping_in)
+        if (SwapOutNext)
         {
-            Selected_member = 1;//doesnt account for double battles
+            swap(Party_position);
+            Invoke(nameof(switchIn),1f);
+        }
+        else if (Swapping_in)
+        {
+            Selected_member = Turn_Based_Combat.instance.Current_pkm_turn;
             swap(Party_position);
             Invoke(nameof(switchIn),1f);
         }
@@ -165,7 +170,7 @@ void close_party()
 }
     void switchIn()
     {
-        if(Turn_Based_Combat.instance.Current_pkm_turn>1 && SwapOutNext)//not equal to ur turn, check this with double batttles
+        if(Turn_Based_Combat.instance.Current_pkm_turn > 1 && SwapOutNext)//not equal to ur turn, check this with double batttles
             Turn_Based_Combat.instance.Next_turn();
         if(Swapping_in)
             Turn_Based_Combat.instance.Next_turn();
@@ -177,12 +182,12 @@ void close_party()
         party[Selected_member-1] = party[Party_position];
         party[Party_position] = Swap_store;
         moving = false;
+        if (Options_manager.instance.playerInBattle)
+            Battle_handler.instance.Set_participants(Battle_handler.instance.Battle_P[Selected_member-1]);
         Member_to_Move = 0;
         Selected_member = 0;
         Refresh_Member_Cards();
         member_indicator.SetActive(false);
-        if(Options_manager.instance.playerInBattle)
-            Battle_handler.instance.Set_participants(Battle_handler.instance.Battle_P[0]);//doesnt account for double battle, use current turn 
         if(!Swapping_in && !SwapOutNext)
         {
             Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
