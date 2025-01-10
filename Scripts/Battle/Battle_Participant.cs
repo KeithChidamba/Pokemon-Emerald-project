@@ -67,13 +67,21 @@ public class Battle_Participant : MonoBehaviour
         if (isPlayer)
             Invoke(nameof(Check_loss),1f);
         else
-        if (!Battle_handler.instance.is_trainer_battle)
-            Invoke(nameof(EndWildBattle),1f);
+            if (!Battle_handler.instance.is_trainer_battle)
+                Invoke(nameof(EndWildBattle),1f);
+            else
+                Invoke(nameof(EndTrainerBattle),1f);
     }
     void EndWildBattle()
     {
         Onfaint?.Invoke(this);
         Wild_pkm.instance.InBattle = false;
+        Battle_handler.instance.End_Battle(true);
+    }
+    void EndTrainerBattle()
+    {
+        Onfaint?.Invoke(this);
+        trainer.InBattle = false;
         Battle_handler.instance.End_Battle(true);
     }
     private void Check_loss()
@@ -155,6 +163,7 @@ public class Battle_Participant : MonoBehaviour
     }
     public void Load_ui()
     {
+        refresh_statusIMG();
         player_hp.minValue = 0;
         fainted = false;
         is_active = true;

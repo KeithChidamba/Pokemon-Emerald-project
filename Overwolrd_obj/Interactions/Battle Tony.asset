@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
-  m_Name: Trainer Battle
+  m_Name: Battle Tony
   m_EditorClassIdentifier: 
   InteractionMsg: Hey! let's fight
   InteractionType: Event
   InteractionOptions:
   - Battle
-  ResultMessage: 
+  ResultMessage: Tony
   OptionsUiText: []

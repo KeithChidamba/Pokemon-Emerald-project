@@ -98,15 +98,24 @@ public static class Obj_Instance
     public static TrainerData SetTrainer(TrainerData data)
     {
         TrainerData trainer_copy = ScriptableObject.CreateInstance<TrainerData>();
-        trainer_copy.TarinerName = data.TarinerName;
+        trainer_copy.TrainerName = data.TrainerName;
         trainer_copy.TrainerType = data.TrainerType;
-        trainer_copy.PokemonMovesets = data.PokemonMovesets;
-        foreach (TrainerPokemonData member in trainer_copy.PokemonMovesets)
-        {
-            member.pokemon = set_Pokemon(member.pokemon);
-            PokemonOperations.SetPkmtraits(member.pokemon);
-        }
+        trainer_copy.TrainerLocation = data.TrainerLocation;
+        foreach (TrainerPokemonData member in data.PokemonMovesets)
+            trainer_copy.PokemonMovesets.Add(SetTrainerPkmData(member));
         return trainer_copy;
+    }
+
+    public static TrainerPokemonData SetTrainerPkmData(TrainerPokemonData data)
+    {
+        TrainerPokemonData dataCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
+        dataCopy.pokemon = set_Pokemon(data.pokemon);
+        PokemonOperations.SetPkmtraits(dataCopy.pokemon);
+        dataCopy.moveSet = data.moveSet;
+        dataCopy.PokemonLevel = data.PokemonLevel;
+        dataCopy.hasItem = data.hasItem;
+        dataCopy.heldItem = data.heldItem;
+        return dataCopy;
     }
     public static Item set_Item(Item item)
     {

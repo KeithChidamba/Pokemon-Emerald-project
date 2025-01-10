@@ -212,7 +212,8 @@ public class Pokemon : ScriptableObject
     public void Level_up()
     {
         OnLevelUP?.Invoke(); 
-        OnLevelUp?.Invoke(this); 
+        OnLevelUp?.Invoke(this);
+        int ArtificialLevelUpExp = PokemonOperations.GetNextLv(this);
         Current_level++;
         NextLvExpAmount = PokemonOperations.GetNextLv(this);
         Increase_Stats();
@@ -220,8 +221,11 @@ public class Pokemon : ScriptableObject
             split_evo();
         else
             Check_evolution(0);
-        if (!Options_manager.instance.playerInBattle)
+        if (!Options_manager.instance.playerInBattle)//artificial level up
+        {
+            CurrentExpAmount = ArtificialLevelUpExp;
             PokemonOperations.GetNewMove(this);
+        }
     }
 
     void clearEvents()

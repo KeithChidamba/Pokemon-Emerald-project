@@ -92,8 +92,8 @@ public class Battle_handler : MonoBehaviour
             else
                 viewing_options = false;
             if (viewing_options)
-            { 
-                Wild_pkm.instance.Invoke(nameof(Wild_pkm.instance.Can_Attack),1f);
+            {
+                ResetAi();
                 Dialogue_handler.instance.Write_Info("What will you do?", "Details");
                 options_ui.SetActive(true);
             }
@@ -101,6 +101,15 @@ public class Battle_handler : MonoBehaviour
         Battle_logic();
     }
 
+    void ResetAi()
+    {
+        if (!is_trainer_battle)
+            Wild_pkm.instance.Invoke(nameof(Wild_pkm.instance.Can_Attack),1f);
+        else
+            foreach(Battle_Participant p in Battle_P)
+                if (p.pokemon != null & !p.isPlayer)
+                    p.trainer.Invoke(nameof(p.trainer.Can_Attack),1f);
+    }
     void Battle_logic()
     {
         if (!isDouble_battle && Turn_Based_Combat.instance.Current_pkm_turn == 0)//if single battle, auto aim at enemy
@@ -115,12 +124,6 @@ public class Battle_handler : MonoBehaviour
         if (BattleOver) return;
         moves_ui.SetActive(false);
         options_ui.SetActive(true); 
-    }
-    public void Select_player()
-    {
-        //enemy choosing player
-        Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
-        Current_pkm_Enemy = 0;
     }
     public void Select_enemy(int choice)
     {
@@ -140,19 +143,18 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.instance.Change_turn(-1,0);
     }
 
-    void Load_Area_bg()
+    void Load_Area_bg(Encounter_Area area)
     {
         foreach (GameObject g in Backgrounds)
-            if (g.name==Encounter_handler.instance.current_area.Biome_name.ToLower())
+            if (g.name==area.Biome_name.ToLower())
                 g.SetActive(true);
             else
                 g.SetActive(false);
-        Encounter_handler.instance.current_area = null;
     }
     public void Start_Battle(Pokemon enemy)//only ever be for wild battles
     {
         BattleOver = false;
-        Load_Area_bg();
+        Load_Area_bg(Encounter_handler.instance.current_area);
         Battle_P[0].pokemon = Pokemon_party.instance.party[0];
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].pokemon = enemy;
@@ -164,23 +166,25 @@ public class Battle_handler : MonoBehaviour
                 Set_participants(p);
         Wild_pkm.instance.InBattle = true;
         set_battle();
+        Encounter_handler.instance.current_area = null;
     }
     public void Start_Battle(string trainerName)//single trainer battle
     {
         BattleOver = false;
         is_trainer_battle = true;
-        Load_Area_bg();
         Battle_P[0].pokemon = Pokemon_party.instance.party[0];
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].Current_Enemies.Add(Battle_P[0]);
         Battle_P[2].trainer = Battle_P[2].GetComponent<Enemy_trainer>();
         Battle_P[2].trainer.StartBattle(trainerName);
         Battle_P[2].pokemon = Battle_P[2].trainer._TrainerData.PokemonMovesets[0].pokemon;
+        Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
         levelUpQueue.Clear();
         AddToExpList(Battle_P[0].pokemon);
         foreach(Battle_Participant p in Battle_P)
             if (p.pokemon != null)
                 Set_participants(p);
+        Battle_P[2].trainer.InBattle = true;
         set_battle();
     }
     /*public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
@@ -204,18 +208,22 @@ public class Battle_handler : MonoBehaviour
         if(!is_trainer_battle)
             Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
         List<Pokemon> Alive_pkm=new();
+        //always set pokemon then save stats, then load ui
+        if (Participant.isPlayer)
+        { //for switch-ins
+            if (Pokemon_party.instance.Swapping_in || Pokemon_party.instance.SwapOutNext)
+            {
+                foreach (Pokemon p in Pokemon_party.instance.party)
+                    if (p != null && p.HP > 0)
+                        Alive_pkm.Add(p);
+                Participant.pokemon = Alive_pkm[Pokemon_party.instance.Selected_member - 1];
+                AddToExpList(Participant.pokemon);
+            }
+        }
         Participant.data.save_stats();
         Participant.Load_ui();
         Participant.ability_h.Set_ability();
         check_Participants();
-        if (!Participant.isPlayer) return;
-        //for switch-ins
-        if (!Pokemon_party.instance.Swapping_in & !Pokemon_party.instance.SwapOutNext) return;
-        foreach(Pokemon p in Pokemon_party.instance.party)
-            if (p != null && p.HP>0)
-                Alive_pkm.Add(p); 
-        Participant.pokemon = Alive_pkm[Pokemon_party.instance.Selected_member-1];
-        AddToExpList(Participant.pokemon);
     }
     void check_Participants()
     {

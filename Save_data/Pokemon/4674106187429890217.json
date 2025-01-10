@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30980
+        "instanceID": 31922
     },
     "has_gender": true,
     "HP": 12.0,
@@ -51,10 +51,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29842
+            "instanceID": 29844
         }
     ],
-    "Status_effect": "None",
+    "Status_effect": "Paralysis",
     "Buff_Debuffs": [],
     "type_Immunity": "None",
     "evo_line": [
@@ -73,28 +73,28 @@
     ],
     "move_set": [
         {
-            "instanceID": -67100
+            "instanceID": -169688
         }
     ],
     "ability": {
-        "instanceID": 29844
+        "instanceID": 29846
     },
     "evolutions": [
         {
-            "instanceID": 29846
+            "instanceID": 29848
         },
         {
-            "instanceID": 29848
+            "instanceID": 29850
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29798
+        "instanceID": 29800
     },
     "back_picture": {
-        "instanceID": 29850
+        "instanceID": 29852
     },
     "ability_name": "Overgrow",
     "natureName": "Hardy",
