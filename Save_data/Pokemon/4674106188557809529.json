@@ -6,10 +6,10 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31946
+        "instanceID": 31956
     },
     "has_gender": true,
-    "HP": 12.0,
+    "HP": 14.0,
     "max_HP": 14.0,
     "BaseHP": 45.0,
     "BaseAttack": 60.0,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29952
+            "instanceID": 29962
         }
     ],
     "Status_effect": "None",
@@ -73,28 +73,28 @@
     ],
     "move_set": [
         {
-            "instanceID": -164574
+            "instanceID": -54638
         }
     ],
     "ability": {
-        "instanceID": 29954
+        "instanceID": 29964
     },
     "evolutions": [
         {
-            "instanceID": 29956
+            "instanceID": 29966
         },
         {
-            "instanceID": 29958
+            "instanceID": 29968
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29672
+        "instanceID": 29682
     },
     "back_picture": {
-        "instanceID": 29960
+        "instanceID": 29970
     },
     "ability_name": "Inferno",
     "natureName": "Serious",

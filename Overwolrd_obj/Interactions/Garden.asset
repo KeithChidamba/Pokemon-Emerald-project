@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
-  m_Name: Battle Tony
+  m_Name: Garden
   m_EditorClassIdentifier: 
-  InteractionMsg: Hey! Where do you think you're going
-  InteractionType: Event
-  InteractionOptions:
-  - Battle
-  ResultMessage: Tony
+  InteractionMsg: It's a garden of flowers!
+  InteractionType: Info
+  InteractionOptions: []
+  ResultMessage: 
   OptionsUiText: []

@@ -17,5 +17,5 @@ MonoBehaviour:
   - zigzagoon010
   - mudkip040
   - trapinch050
-  min_lv: 50
-  max_lv: 100
+  min_lv: 2
+  max_lv: 7

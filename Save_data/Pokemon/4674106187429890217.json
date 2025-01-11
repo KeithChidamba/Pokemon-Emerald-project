@@ -6,10 +6,10 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31954
+        "instanceID": 31964
     },
     "has_gender": true,
-    "HP": 12.0,
+    "HP": 14.0,
     "max_HP": 14.0,
     "BaseHP": 40.0,
     "BaseAttack": 45.0,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29876
+            "instanceID": 29886
         }
     ],
     "Status_effect": "Paralysis",
@@ -73,28 +73,28 @@
     ],
     "move_set": [
         {
-            "instanceID": -164578
+            "instanceID": -54642
         }
     ],
     "ability": {
-        "instanceID": 29878
+        "instanceID": 29888
     },
     "evolutions": [
         {
-            "instanceID": 29880
+            "instanceID": 29890
         },
         {
-            "instanceID": 29882
+            "instanceID": 29892
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29832
+        "instanceID": 29842
     },
     "back_picture": {
-        "instanceID": 29884
+        "instanceID": 29894
     },
     "ability_name": "Overgrow",
     "natureName": "Hardy",
@@ -109,6 +109,6 @@
         "Pound/Normal"
     ],
     "move_pp_data": [
-        23
+        25
     ]
 }
