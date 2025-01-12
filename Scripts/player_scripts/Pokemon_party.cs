@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Pokemon_party : MonoBehaviour
 {
@@ -17,7 +18,8 @@ public class Pokemon_party : MonoBehaviour
     public bool viewing_details = false;
     public bool viewing_options = false;
     public bool viewing_party = false;
-    public Pokemon_party_member[] Memeber_cards;
+    public bool Giving_item = false;
+    [FormerlySerializedAs("Memeber_cards")] public Pokemon_party_member[] Member_cards;
     public GameObject party_ui;
     public GameObject member_indicator;
     private Item item_to_use;
@@ -63,7 +65,7 @@ public class Pokemon_party : MonoBehaviour
                 moving = true;
                 Member_to_Move = Member_position;
                 viewing_options = false;
-                Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
+                Member_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
             }
             else
             {
@@ -80,19 +82,43 @@ public class Pokemon_party : MonoBehaviour
     public void Member_Selected(int Member_position)
     {
         //selecting swap in
-        if (Options_manager.instance.playerInBattle && Memeber_cards[Member_position - 1].pkm.HP <= 0) return;
+        if (Options_manager.instance.playerInBattle && Member_cards[Member_position - 1].pkm.HP <= 0) return;
         if (SwapOutNext)
             Move_Member(Member_position);
         else if (Item_handler.instance.Using_item)
         {
-            Item_handler.instance.selected_party_pkm = Memeber_cards[Member_position - 1].pkm;
+            Item_handler.instance.selected_party_pkm = Member_cards[Member_position - 1].pkm;
             Item_handler.instance.Use_Item(item_to_use);
-            member_indicator.transform.position = Memeber_cards[Member_position - 1].transform.position;
+            member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
             member_indicator.SetActive(true);
+        }
+        else if (Giving_item)
+        {
+            if (Member_cards[Member_position - 1].pkm.HeldItem != null)
+            {
+                Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
+                                                     +" is already holding something","Details");
+                Dialogue_handler.instance.Dialouge_off(1f);
+                Giving_item = false;
+                item_to_use = null;
+                Game_ui_manager.instance.Close_party();
+                Game_ui_manager.instance.View_Bag();
+                return;
+            }
+            Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
+                                                 +" recieved a "+item_to_use.Item_name,"Details");
+            Member_cards[Member_position - 1].pkm.HeldItem = Obj_Instance.set_Item(item_to_use);
+            Member_cards[Member_position - 1].pkm.HeldItem.quantity = 1;
+            item_to_use.quantity--;
+            Bag.instance.check_Quantity(item_to_use);
+            member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
+            member_indicator.SetActive(true);
+            Giving_item = false;
+            item_to_use = null;
         }
         else
         {
-            if (Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().isEmpty)
+            if (Member_cards[Member_position - 1].GetComponent<Pokemon_party_member>().isEmpty)
                 Cancel();
             else
             {
@@ -107,9 +133,9 @@ public class Pokemon_party : MonoBehaviour
                         Cancel();
                     Selected_member = Member_position;
                     viewing_options = true;
-                    member_indicator.transform.position = Memeber_cards[Member_position - 1].transform.position;
+                    member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
                     member_indicator.SetActive(true);
-                    Memeber_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(true);
+                    Member_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(true);
                 }
             }
         }
@@ -121,7 +147,7 @@ public class Pokemon_party : MonoBehaviour
         member_indicator.SetActive(false);
         for (int i = 0; i < num_members; i++)
         {
-            Memeber_cards[i].GetComponent<Pokemon_party_member>().Options.SetActive(false);
+            Member_cards[i].GetComponent<Pokemon_party_member>().Options.SetActive(false);
         }
     }
     private void Move_Member(int Party_position)
@@ -220,23 +246,23 @@ void close_party()
     public void Refresh_Member_Cards()//call battle refresh
     {
         num_members = 0;
-        foreach (Pokemon_party_member mon in Memeber_cards)
+        foreach (Pokemon_party_member mon in Member_cards)
         {
-                Memeber_cards[num_members].pkm = null;
-                Memeber_cards[num_members].Reset_ui();
+                Member_cards[num_members].pkm = null;
+                Member_cards[num_members].Reset_ui();
         }
         for (int i=0;i<6;i++)
         {
             if (party[i] != null)
             {
-                Memeber_cards[num_members].pkm = party[i];
-                Memeber_cards[num_members].Party_pos = num_members + 1;
-                Memeber_cards[num_members].Set_Ui();
+                Member_cards[num_members].pkm = party[i];
+                Member_cards[num_members].Party_pos = num_members + 1;
+                Member_cards[num_members].Set_Ui();
                 num_members++;
             }
             else
             {
-                Memeber_cards[i].Reset_ui();
+                Member_cards[i].Reset_ui();
             }
         }
     }

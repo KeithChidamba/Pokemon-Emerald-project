@@ -1,0 +1,17 @@
+{
+    "Item_ID": "Paralyz heal15049",
+    "Item_name": "Paralyz heal",
+    "Item_type": "Status",
+    "Item_effect": "paralysis",
+    "Item_desc": "Heals paralysis",
+    "price": 20,
+    "quantity": 3,
+    "Item_img": {
+        "instanceID": 30144
+    },
+    "CanBeUsedInOverworld": true,
+    "CanBeUsedInBattle": true,
+    "isHeldItem": false,
+    "CanBeHeld": true,
+    "CanBeSold": true
+}

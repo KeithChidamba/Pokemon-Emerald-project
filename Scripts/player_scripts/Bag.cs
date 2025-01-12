@@ -37,8 +37,8 @@ public class Bag : MonoBehaviour
         {
            Sell_qty_txt.text = "X"+Sell_quantity.ToString();
         }
+        
     }
-
     public void Select_Item(int Item_pos)
     {
         Selected_item = Item_pos;
@@ -59,14 +59,17 @@ public class Bag : MonoBehaviour
     
     public void Sell_to_Market()
     {
+        if (!bag_items[top_index + Selected_item - 1].CanBeSold)
+        {
+            Dialogue_handler.instance.Write_Info("You cant sell that!","Details");
+            return;
+        }
         int price = bag_items[top_index + Selected_item - 1].price;
         int profit = (int)math.trunc((Sell_quantity * price)/2);
         Game_Load.instance.player_data.player_Money += profit;
         bag_items[top_index + Selected_item - 1].quantity -= Sell_quantity;
         if (bag_items[top_index + Selected_item - 1].quantity == 0)
-        {
             Remove_item();
-        }
         Dialogue_handler.instance.Write_Info("You made P"+profit.ToString()+ ", would you like to sell anything else?", "Options", "Sell_item","Sure, which item?","Dont_Buy","Yes","No");
         Game_ui_manager.instance.close_bag();
     }
@@ -76,6 +79,7 @@ public class Bag : MonoBehaviour
         if (item.quantity < 1)
         {
             bag_items.Remove(item);
+            num_items--;
         }
     }
     public void change_quant(int diff)
@@ -169,6 +173,14 @@ public class Bag : MonoBehaviour
             i.SetActive(false);
         }
         View_bag();
+    }
+
+    public void GiveItem()
+    {
+        Pokemon_party.instance.Giving_item = true;
+        Pokemon_party.instance.Recieve_item(bag_items[top_index + Selected_item - 1]);
+        Game_ui_manager.instance.close_bag();
+        Game_ui_manager.instance.View_pkm_Party();
     }
     public void Add_item(Item item)
     {

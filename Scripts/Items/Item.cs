@@ -12,6 +12,11 @@ public class Item : ScriptableObject
     public int price = 0;
     public int quantity = 0;
     public Sprite Item_img;
+    public bool CanBeUsedInOverworld = true;
+    public bool CanBeUsedInBattle = true;
+    public bool isHeldItem = false;
+    public bool CanBeHeld = false;
+    public bool CanBeSold = true;
     public void Set_img()
     {
         Item_img = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + Item_name.ToLower());

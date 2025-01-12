@@ -230,7 +230,7 @@ public class Pokemon : ScriptableObject
         OnNewLevel?.Invoke();
     }
 
-    void clearEvents()
+    public void clearEvents()
     {
         OnLevelUP = null;
         OnLevelUp = null;

@@ -50,18 +50,15 @@ public class Item_handler : MonoBehaviour
             if (status == "sleep" | status == "freeze"| status == "paralysis")
                 selected_party_pkm.canAttack = true;
             Dialogue_handler.instance.Write_Info("Pokemon has been healed","Details");
-            item_in_use.quantity--;
-            Bag.instance.check_Quantity(item_in_use);
+            DepleteItem();
             Battle_handler.instance.reload_participant_ui();
         }
         else if (selected_party_pkm.Status_effect == "None")
             Dialogue_handler.instance.Write_Info("Pokemon is already healthy","Details");
         else
             Dialogue_handler.instance.Write_Info("Incorrect heal item","Details");
-        Dialogue_handler.instance.Dialouge_off(1f);
         Pokemon_party.instance.Refresh_Member_Cards();
-        Using_item = false;
-        Invoke(nameof(skipTurn),1.3f);
+        ResetItemUsage();
     }
     void skipTurn()
     {
@@ -73,24 +70,37 @@ public class Item_handler : MonoBehaviour
     }
     private void Heal(int heal_effect)
     {
-        if ((selected_party_pkm.HP + heal_effect) <= selected_party_pkm.max_HP)
+        if(selected_party_pkm.HP>=selected_party_pkm.max_HP)
+        {
+            Dialogue_handler.instance.Write_Info("Pokemon health already is full","Details");
+            ResetItemUsage();
+            return;
+        }
+        if ((selected_party_pkm.HP + heal_effect) < selected_party_pkm.max_HP)
         {
             selected_party_pkm.HP += heal_effect;
             Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+heal_effect+" health points","Details");
-            item_in_use.quantity--;
-            Bag.instance.check_Quantity(item_in_use);
-        }
-        else if(selected_party_pkm.HP>=selected_party_pkm.max_HP)
-        {
-            Dialogue_handler.instance.Write_Info("Pokemon health already is full","Details");
+            DepleteItem();
         }
         else if ((selected_party_pkm.HP + heal_effect) >= selected_party_pkm.max_HP)
         {
             selected_party_pkm.HP = selected_party_pkm.max_HP;
             Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+ (heal_effect-(selected_party_pkm.max_HP - selected_party_pkm.HP))+" health points","Details");
+            DepleteItem();
         }
+        ResetItemUsage();
+    }
+
+    void DepleteItem()
+    {
+        item_in_use.quantity--;
+        Bag.instance.check_Quantity(item_in_use);
+    }
+    void ResetItemUsage()
+    {
         Dialogue_handler.instance.Dialouge_off(1f);
         Using_item = false;
+        selected_party_pkm = null;
         Invoke(nameof(skipTurn),1.3f);
     }
 }

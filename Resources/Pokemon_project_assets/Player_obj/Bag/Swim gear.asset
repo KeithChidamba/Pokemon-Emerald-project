@@ -15,7 +15,13 @@ MonoBehaviour:
   Item_ID: 
   Item_name: Swim gear
   Item_type: Action
+  Item_effect: 
   Item_desc: Allows player to swim
   price: 500
   quantity: 1
   Item_img: {fileID: -1515377947, guid: 84e56311fefcc6145b1b893fd4f5fa3b, type: 3}
+  CanBeUsedInOverworld: 0
+  CanBeUsedInBattle: 0
+  isHeldItem: 1
+  CanBeHeld: 0
+  CanBeSold: 0

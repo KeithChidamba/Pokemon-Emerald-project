@@ -118,6 +118,7 @@ public class Battle_Participant : MonoBehaviour
     {
         data.Load_Stats();
         data.Reset_Battle_state(pokemon,false);
+        pokemon.OnLevelUP -= Reset_pkm;
     }
     private void update_ui()
     {

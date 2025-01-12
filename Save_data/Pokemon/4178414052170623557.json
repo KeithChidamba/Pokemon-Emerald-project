@@ -1,33 +1,33 @@
 {
     "Base_Pokemon_name": "Torchic",
     "Pokemon_name": "Torchic",
-    "Pokemon_ID": 4674106188557809529,
-    "Personality_value": 1668380537,
+    "Pokemon_ID": 4178414052170623557,
+    "Personality_value": 941713989,
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31956
+        "instanceID": 30762
     },
     "has_gender": true,
-    "HP": 14.0,
-    "max_HP": 14.0,
+    "HP": 12.0,
+    "max_HP": 12.0,
     "BaseHP": 45.0,
     "BaseAttack": 60.0,
     "BaseDefense": 40.0,
     "BaseSP_ATK": 70.0,
     "BaseSP_DEF": 50.0,
     "Basespeed": 45.0,
-    "Attack": 7.0,
-    "Defense": 6.0,
-    "SP_ATK": 8.0,
-    "SP_DEF": 7.0,
+    "Attack": 6.0,
+    "Defense": 5.0,
+    "SP_ATK": 6.0,
+    "SP_DEF": 5.0,
     "speed": 6.0,
-    "HP_IV": 31.0,
-    "Attack_IV": 17.0,
-    "Defense_IV": 16.0,
-    "SP_ATK_IV": 20.0,
-    "SP_DEF_IV": 2.0,
-    "speed_IV": 1.0,
+    "HP_IV": 26.0,
+    "Attack_IV": 14.0,
+    "Defense_IV": 15.0,
+    "SP_ATK_IV": 6.0,
+    "SP_DEF_IV": 12.0,
+    "speed_IV": 13.0,
     "HP_EV": 0.0,
     "Attack_EV": 0.0,
     "Defense_EV": 0.0,
@@ -40,9 +40,9 @@
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 2,
-    "CurrentExpAmount": 27,
-    "NextLvExpAmount": 61.0,
+    "Current_level": 1,
+    "CurrentExpAmount": -166,
+    "NextLvExpAmount": -82.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 29962
+            "instanceID": 30226
         }
     ],
     "Status_effect": "None",
@@ -73,31 +73,31 @@
     ],
     "move_set": [
         {
-            "instanceID": -54638
+            "instanceID": -54398
         }
     ],
     "ability": {
-        "instanceID": 29964
+        "instanceID": 30228
     },
     "evolutions": [
         {
-            "instanceID": 29966
+            "instanceID": 30230
         },
         {
-            "instanceID": 29968
+            "instanceID": 30232
         }
     ],
     "HeldItem": {
         "instanceID": 0
     },
     "front_picture": {
-        "instanceID": 29682
+        "instanceID": 29926
     },
     "back_picture": {
-        "instanceID": 29970
+        "instanceID": 30234
     },
     "ability_name": "Inferno",
-    "natureName": "Serious",
+    "natureName": "Naive",
     "evo_data": [
         "Combusken",
         "Blaziken"

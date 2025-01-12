@@ -184,7 +184,8 @@ public class Dialogue_handler : MonoBehaviour
         text_finished = false;
         num_lines = 0;
         current_line_num = 0;
-        Player_movement.instance.canmove = true;
+        if(Player_movement.instance)
+            Player_movement.instance.canmove = true;
         dialogue_next.SetActive(false);
         elipsis_txt.SetActive(false);
         dialogue_exit.SetActive(false);
@@ -193,8 +194,11 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void Display(Interaction interaction)
     {
-        Player_movement.instance.canmove = false;
-        Player_movement.instance.moving = false;
+        if(Player_movement.instance)
+        {
+            Player_movement.instance.canmove = false;
+            Player_movement.instance.moving = false;
+        }
         text_finished = false;
         displaying = true;
         num_lines = math.trunc(interaction.InteractionMsg.Length / Max_length);

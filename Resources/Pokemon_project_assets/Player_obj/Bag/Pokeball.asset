@@ -20,3 +20,8 @@ MonoBehaviour:
   price: 15
   quantity: 1
   Item_img: {fileID: 1578386913, guid: 49f22e65e4bc4404bb12fe408daecb38, type: 3}
+  CanBeUsedInOverworld: 0
+  CanBeUsedInBattle: 1
+  isHeldItem: 0
+  CanBeHeld: 0
+  CanBeSold: 1
