@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30906
+        "instanceID": 32346
     },
     "has_gender": true,
     "HP": 11.0,
@@ -33,7 +33,7 @@
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 0.0,
+    "speed_EV": 1.0,
     "EVs": [
         "Speed1"
     ],
@@ -41,7 +41,7 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "Current_level": 1,
-    "CurrentExpAmount": -166,
+    "CurrentExpAmount": -111,
     "NextLvExpAmount": -82.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30150
+            "instanceID": 30160
         }
     ],
     "Status_effect": "None",
@@ -73,28 +73,29 @@
     ],
     "move_set": [
         {
-            "instanceID": -54394
+            "instanceID": -28292
         }
     ],
     "ability": {
-        "instanceID": 30152
+        "instanceID": 30162
     },
     "evolutions": [
         {
-            "instanceID": 30154
+            "instanceID": 30164
         },
         {
-            "instanceID": 30156
+            "instanceID": 30166
         }
     ],
     "HeldItem": {
-        "instanceID": 0
+        "instanceID": -28294
     },
+    "HasItem": true,
     "front_picture": {
-        "instanceID": 30106
+        "instanceID": 30116
     },
     "back_picture": {
-        "instanceID": 30158
+        "instanceID": 30168
     },
     "ability_name": "Overgrow",
     "natureName": "Careful",
@@ -109,6 +110,6 @@
         "Pound/Normal"
     ],
     "move_pp_data": [
-        25
+        24
     ]
 }

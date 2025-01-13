@@ -15,6 +15,7 @@ public class Pokemon_party_member : MonoBehaviour
     public GameObject Options;
     public GameObject[] main_ui;
     public GameObject empty_ui;
+    public GameObject HeldItem_img;
     public bool isEmpty = false;
     private void Start()
     {
@@ -24,15 +25,15 @@ public class Pokemon_party_member : MonoBehaviour
     {
         Pkm_front_img.sprite = pkm.front_picture;
         foreach (GameObject ui in main_ui)
-        {
             ui.SetActive(true);
-        }
         isEmpty = false;
         empty_ui.SetActive(false);
+        if (pkm.HasItem)
+            HeldItem_img.SetActive(true);
+        else
+            HeldItem_img.SetActive(false);
         if (pkm.Status_effect == "None")
-        {
             Status_img.gameObject.SetActive(false);
-        }
         else
         {
             Status_img.gameObject.SetActive(true);
@@ -42,10 +43,9 @@ public class Pokemon_party_member : MonoBehaviour
     public void Reset_ui()
     {
         foreach (GameObject ui in main_ui)
-        {
             ui.SetActive(false);
-        }
         isEmpty = true;
+        HeldItem_img.gameObject.SetActive(false);
         Status_img.gameObject.SetActive(false);
         empty_ui.SetActive(true);
     }
@@ -63,10 +63,5 @@ public class Pokemon_party_member : MonoBehaviour
             else
                 Pkm_front_img.color=Color.HSVToRGB(0,0,100);
         }
-    }
-
-    public void lev()//remove this
-    {
-        pkm.Level_up();
     }
 }

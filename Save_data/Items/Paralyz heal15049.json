@@ -5,9 +5,9 @@
     "Item_effect": "paralysis",
     "Item_desc": "Heals paralysis",
     "price": 20,
-    "quantity": 3,
+    "quantity": 2,
     "Item_img": {
-        "instanceID": 30144
+        "instanceID": 30154
     },
     "CanBeUsedInOverworld": true,
     "CanBeUsedInBattle": true,

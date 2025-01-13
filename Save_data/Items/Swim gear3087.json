@@ -1,0 +1,17 @@
+{
+    "Item_ID": "Swim gear3087",
+    "Item_name": "Swim gear",
+    "Item_type": "Action",
+    "Item_effect": "",
+    "Item_desc": "Allows player to swim",
+    "price": 500,
+    "quantity": 1,
+    "Item_img": {
+        "instanceID": 0
+    },
+    "CanBeUsedInOverworld": false,
+    "CanBeUsedInBattle": false,
+    "isHeldItem": true,
+    "CanBeHeld": true,
+    "CanBeSold": false
+}

@@ -10,7 +10,7 @@ public class Item_ui : MonoBehaviour
     public Text item_name;
     public Text item_description;
     public Image item_img;
-    public Button Use, Give;
+    public Button Use, Give, Drop;
     public void Load_item()
     {
         item_name.text = item.Item_name;
@@ -18,15 +18,20 @@ public class Item_ui : MonoBehaviour
     }
     public void Load_item_info()
     {
-        if(Options_manager.instance.playerInBattle)
+        if (Options_manager.instance.playerInBattle)
+        {
+            Drop.interactable = false;
+            Give.interactable = false;
             Use.interactable = item.CanBeUsedInBattle;
+        }
         else
         {
-            if (!item.isHeldItem)
-                Use.interactable = true;
+            Drop.interactable = true;
+            Use.interactable = item.CanBeUsedInOverworld;
+            if (item.isHeldItem)
+                Use.interactable = false;
+            Give.interactable = item.CanBeHeld;
         }
-        if(item.isHeldItem | item.CanBeHeld)
-            Give.interactable = true;
         item_description.text = item.Item_desc;
         item_img.sprite=item.Item_img;
     }

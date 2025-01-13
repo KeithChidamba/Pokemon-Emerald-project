@@ -94,7 +94,7 @@ public class Pokemon_party : MonoBehaviour
         }
         else if (Giving_item)
         {
-            if (Member_cards[Member_position - 1].pkm.HeldItem != null)
+            if (Member_cards[Member_position - 1].pkm.HasItem)
             {
                 Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
                                                      +" is already holding something","Details");
@@ -109,12 +109,15 @@ public class Pokemon_party : MonoBehaviour
                                                  +" recieved a "+item_to_use.Item_name,"Details");
             Member_cards[Member_position - 1].pkm.HeldItem = Obj_Instance.set_Item(item_to_use);
             Member_cards[Member_position - 1].pkm.HeldItem.quantity = 1;
+            Member_cards[Member_position - 1].pkm.HasItem = true;
             item_to_use.quantity--;
             Bag.instance.check_Quantity(item_to_use);
             member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
             member_indicator.SetActive(true);
             Giving_item = false;
             item_to_use = null;
+            Refresh_Member_Cards();
+            Dialogue_handler.instance.Dialouge_off(1f);
         }
         else
         {
@@ -243,7 +246,7 @@ void close_party()
             party[party.Length - 1] = null;
         }
     }
-    public void Refresh_Member_Cards()//call battle refresh
+    public void Refresh_Member_Cards()
     {
         num_members = 0;
         foreach (Pokemon_party_member mon in Member_cards)

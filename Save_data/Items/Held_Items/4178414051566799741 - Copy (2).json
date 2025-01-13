@@ -1,17 +1,17 @@
 {
-    "Item_ID": "Potion18636",
-    "Item_name": "Potion",
-    "Item_type": "Potion",
+    "Item_ID": "Oran berry12083",
+    "Item_name": "Oran berry",
+    "Item_type": "Berry",
     "Item_effect": "5",
     "Item_desc": "Heals 5hp",
-    "price": 18,
+    "price": 5,
     "quantity": 1,
     "Item_img": {
-        "instanceID": 30150
+        "instanceID": 32260
     },
     "CanBeUsedInOverworld": true,
     "CanBeUsedInBattle": true,
     "isHeldItem": false,
-    "CanBeHeld": false,
+    "CanBeHeld": true,
     "CanBeSold": true
 }

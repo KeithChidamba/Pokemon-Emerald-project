@@ -63,6 +63,7 @@ public class Pokemon : ScriptableObject
     public Ability ability;
     public List<Evolution> evolutions;
     public Item HeldItem;
+    public bool HasItem = false;
     public Sprite front_picture;
     public Sprite back_picture;
     public event Action OnLevelUP;
@@ -80,6 +81,10 @@ public class Pokemon : ScriptableObject
     {
         ability_name = ability.ability;
         natureName = nature.natureName;
+        if (HeldItem!=null)
+            HasItem = true;
+        else
+            HasItem = false;
         move_data.Clear();
         type_data.Clear();
         move_data.Clear();

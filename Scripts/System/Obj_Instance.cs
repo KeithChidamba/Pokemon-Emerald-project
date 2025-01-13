@@ -89,6 +89,7 @@ public static class Obj_Instance
         new_pkm.ability = pkm.ability;
         new_pkm.evolutions = pkm.evolutions;
         new_pkm.HeldItem = pkm.HeldItem;
+        new_pkm.HasItem = pkm.HasItem;
         new_pkm.front_picture = pkm.front_picture;
         new_pkm.Pokemon_name = pkm.Pokemon_name;
         new_pkm.back_picture = pkm.back_picture;

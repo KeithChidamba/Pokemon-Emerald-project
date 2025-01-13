@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+
+
 public class Save_manager : MonoBehaviour
 {
     public List<string> party_IDs;
@@ -18,19 +20,19 @@ public class Save_manager : MonoBehaviour
     }
     private void Start()
     {
-            Load_items();
-            Load_player();
-            Load_pkm();
+        Load_items();    
+        Load_player();
+        Load_pkm();
     }
     
     private void Load_player()
     {
         CreateFolder("Assets/Save_data/Player");
         Game_Load.instance.player_data = null;
-        int j = load_files("Assets/Save_data/Player");
-        if(j==1)
+        int numFiles = load_files("Assets/Save_data/Player");
+        if(numFiles==1)
             Game_Load.instance.player_data = Get_player("Assets/Save_data/Player/" + Path.GetFileName(json_files[0]));
-        else if(j>1)
+        else if(numFiles>1)
             Dialogue_handler.instance.Write_Info("Please ensure only one player's data is in the save_data folder!","Details");
         else
         {
@@ -41,25 +43,31 @@ public class Save_manager : MonoBehaviour
     private void Load_items()
     {
         CreateFolder("Assets/Save_data/Items");
+        CreateFolder("Assets/Save_data/Items/Held_Items");
         Bag.instance.bag_items.Clear();
-        int j = load_files("Assets/Save_data/Items");
-        for (int i = 0; i < j; i++)
+        int numFiles = load_files("Assets/Save_data/Items");
+        for (int i = 0; i < numFiles; i++)
             Bag.instance.bag_items.Add(Get_Item("Assets/Save_data/Items/" + Path.GetFileName(json_files[i])));
     }
     private int load_files(string path)
     {
         json_files.Clear();
         string[] files = Directory.GetFiles(path);
-        int j = 0;
+        int numFiles = 0;
         for (int i = 0; i < files.Length; i++)
         {
             if (files[i].Substring(files[i].Length - 5, 5) == ".json")
             {
                 json_files.Add(files[i]);
-                j++;
+                numFiles++;
             }
         }
-        return j;
+        return numFiles;
+    }
+
+    string RemoveExtenstion(string filename)
+    {
+        return filename.Split('.')[0];
     }
     private void Load_pkm()
     {
@@ -70,12 +78,23 @@ public class Save_manager : MonoBehaviour
         Get_Pokemon_ID();
         for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
         {
-            Pokemon_party.instance.party[i] = Get_Pokemon("Assets/Save_data/Pokemon/" + party_IDs[i] + ".json");
+            Pokemon party_pkm = Get_Pokemon("Assets/Save_data/Pokemon/" + party_IDs[i] + ".json");
+            if(party_pkm.HasItem)
+            {
+                int numFiles = load_files("Assets/Save_data/Items/Held_Items");
+                if (numFiles > 0)
+                {
+                    json_files.RemoveAll(id => RemoveExtenstion(Path.GetFileName(id)) != party_pkm.Pokemon_ID.ToString());
+                    string HeldItemID = json_files[0];
+                    party_pkm.HeldItem = Get_Item(HeldItemID);
+                }
+            }
+            Pokemon_party.instance.party[i] = party_pkm;
             Pokemon_party.instance.num_members++;
         }
         pokemon_storage.instance.non_party_pokemon.Clear();
-        int j = load_files("Assets/Save_data/Pokemon/");
-        for (int i = 0; i < j; i++)
+        int numfiles = load_files("Assets/Save_data/Pokemon/");
+        for (int i = 0; i < numfiles; i++)
         {
             string file_name = Path.GetFileName(json_files[i]);
             if (!pokemon_storage.instance.search_pkm_ID(file_name.Substring(0, file_name.Length - 5)))
@@ -152,11 +171,20 @@ public class Save_manager : MonoBehaviour
         for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
         {
             string path = Path.Combine("Assets/Save_data/Party_Ids/", "pkm_" + (i + 1).ToString() + ".txt");
+            if(Pokemon_party.instance.party[i].HeldItem!=null)
+                SaveHeldItem(Pokemon_party.instance.party[i].HeldItem, Pokemon_party.instance.party[i].Pokemon_ID.ToString());
             File.WriteAllText(path, Pokemon_party.instance.party[i].Pokemon_ID.ToString());
         }
         Dialogue_handler.instance.Write_Info("Game saved", "Details");
         Dialogue_handler.instance.Dialouge_off(1f);
         Game_ui_manager.instance.Menu_off();
+    }
+
+    private void SaveHeldItem(Item itm, string file_name)
+    {
+        string directory = Path.Combine("Assets/Save_data/Items/Held_Items", file_name + ".json");
+        string json = JsonUtility.ToJson(itm, true);
+        File.WriteAllText(directory, json);
     }
     private void Save_Pokemon(Pokemon pkm)
     {
