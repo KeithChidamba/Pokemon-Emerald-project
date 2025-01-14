@@ -102,7 +102,7 @@ public class Pokemon_party : MonoBehaviour
                 Giving_item = false;
                 item_to_use = null;
                 Game_ui_manager.instance.Close_party();
-                Game_ui_manager.instance.View_Bag();
+                Game_ui_manager.instance.Invoke(nameof(Game_ui_manager.instance.View_Bag),1.1f);
                 return;
             }
             Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name

@@ -102,8 +102,8 @@ public static class Obj_Instance
         trainer_copy.TrainerName = data.TrainerName;
         trainer_copy.TrainerType = data.TrainerType;
         trainer_copy.TrainerLocation = data.TrainerLocation;
-        foreach (TrainerPokemonData member in data.PokemonMovesets)
-            trainer_copy.PokemonMovesets.Add(SetTrainerPkmData(member));
+        foreach (TrainerPokemonData member in data.PokemonParty)
+            trainer_copy.PokemonParty.Add(SetTrainerPkmData(member));
         return trainer_copy;
     }
 

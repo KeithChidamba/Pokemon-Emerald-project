@@ -70,7 +70,7 @@ public class Battle_Participant : MonoBehaviour
             if (!Battle_handler.instance.is_trainer_battle)
                 Invoke(nameof(EndWildBattle),1f);
             else
-                Invoke(nameof(EndTrainerBattle),1f);
+                Invoke(nameof(CheckTrainerLoss),1f);
     }
     void EndWildBattle()
     {
@@ -78,11 +78,10 @@ public class Battle_Participant : MonoBehaviour
         Wild_pkm.instance.InBattle = false;
         Battle_handler.instance.End_Battle(true);
     }
-    void EndTrainerBattle()
+    void CheckTrainerLoss()
     {
         Onfaint?.Invoke(this);
-        trainer.InBattle = false;
-        Battle_handler.instance.End_Battle(true);
+        trainer.CheckLoss(Array.IndexOf(Battle_handler.instance.Battle_P, this));
     }
     private void Check_loss()
     {

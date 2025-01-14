@@ -178,7 +178,7 @@ public class Battle_handler : MonoBehaviour
         Battle_P[2].Current_Enemies.Add(Battle_P[0]);
         Battle_P[2].trainer = Battle_P[2].GetComponent<Enemy_trainer>();
         Battle_P[2].trainer.StartBattle(trainerName);
-        Battle_P[2].pokemon = Battle_P[2].trainer._TrainerData.PokemonMovesets[0].pokemon;
+        Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
         Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
         levelUpQueue.Clear();
         AddToExpList(Battle_P[0].pokemon);

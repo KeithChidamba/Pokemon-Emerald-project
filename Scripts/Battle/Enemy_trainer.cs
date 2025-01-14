@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Enemy_trainer : MonoBehaviour
 {
     public Battle_Participant participant;
     public TrainerData _TrainerData;
+    public List<Pokemon> TrainerParty;
     public bool InBattle = false;
     public bool CanAttack = true;
     [SerializeField]private bool Used_move = false;
@@ -27,13 +29,28 @@ public class Enemy_trainer : MonoBehaviour
     {
         Used_move = false;
     }
+
+    public void CheckLoss(int ParticipantIndex)
+    {
+        List<Pokemon> numAlive = TrainerParty.ToList();
+        numAlive.RemoveAll(p => p.HP <= 0);
+        if (numAlive.Count == 0)
+            Battle_handler.instance.End_Battle(true);
+        else
+        {
+            int randomMemeber = Utility.Get_rand(0, numAlive.Count-1);
+            Battle_handler.instance.Battle_P[ParticipantIndex].pokemon = numAlive[randomMemeber];
+            Battle_handler.instance.Set_participants(Battle_handler.instance.Battle_P[ParticipantIndex]);
+        }
+    }
     public void StartBattle(string TrainerName)
     {
         participant = GetComponent<Battle_Participant>();
         TrainerData copy = Resources.Load<TrainerData>("Pokemon_project_assets/Enemies/Data/" + TrainerName +"/"+ TrainerName);
         _TrainerData = Obj_Instance.SetTrainer(copy);
-        foreach (TrainerPokemonData member in _TrainerData.PokemonMovesets)
+        foreach (TrainerPokemonData member in _TrainerData.PokemonParty)
         {
+            TrainerParty.Add(member.pokemon);
             for(int i=0;i<member.PokemonLevel;i++)
                 member.pokemon.Level_up();
             member.pokemon.HP = member.pokemon.max_HP;
@@ -65,7 +82,6 @@ public class Enemy_trainer : MonoBehaviour
             int randomMove = Utility.Get_rand(0, participant.pokemon.move_set.Count);
             Debug.Log("decision "+randome_enemy+" move: "+randomMove);
             use_move(participant.pokemon.move_set[randomMove]);//random move
-
         }
     }
 }
