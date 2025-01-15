@@ -12,7 +12,6 @@ public class Battle_handler : MonoBehaviour
     public GameObject moves_ui;
     public GameObject options_ui;
     public Battle_Participant[] Battle_P = {null,null,null,null};
-    public List<Pokemon> exp_recievers;
     public List<LevelUpEvent> levelUpQueue=new();
     public Text Move_pp, Move_type;
     public Text[] moves;
@@ -56,16 +55,14 @@ public class Battle_handler : MonoBehaviour
             if (Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy)
             {
                 if(isDouble_battle)
-                    Use_Move(Battle_P[Current_Move].pokemon.move_set[Current_Move],Battle_P[Current_Move]);//any of payer's 2 pkm using move
+                    Use_Move(Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move],
+                        Battle_P[Turn_Based_Combat.instance.Current_pkm_turn]);//any of payer's 2 pkm using move
                 else
                     Use_Move(Battle_P[0].pokemon.move_set[Current_Move],Battle_P[0]);//player using move
                 choosing_move = false;
             }
             else
-            {
-                displaying_info = true;
                 Dialogue_handler.instance.Write_Info("Click on who you will attack", "Details");//details
-            }
         }
         if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
         {
@@ -151,9 +148,11 @@ public class Battle_handler : MonoBehaviour
             else
                 g.SetActive(false);
     }
-    public void Start_Battle(Pokemon enemy)//only ever be for wild battles
+    public void StartWildBattle(Pokemon enemy)//only ever be for wild battles
     {
         BattleOver = false;
+        is_trainer_battle = false;
+        isDouble_battle = false;
         Load_Area_bg(Encounter_handler.instance.current_area);
         Battle_P[0].pokemon = Pokemon_party.instance.party[0];
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
@@ -161,7 +160,7 @@ public class Battle_handler : MonoBehaviour
         Wild_pkm.instance.pokemon_participant = Battle_P[2];
         Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
         levelUpQueue.Clear();
-        AddToExpList(Battle_P[0].pokemon);
+        Battle_P[2].AddToExpList(Battle_P[0].pokemon);
         foreach(Battle_Participant p in Battle_P)
             if (p.pokemon != null)
                 Set_participants(p);
@@ -169,10 +168,26 @@ public class Battle_handler : MonoBehaviour
         set_battle();
         Encounter_handler.instance.current_area = null;
     }
-    public void Start_Battle(string trainerName)//single trainer battle
+    public void SetBattleType(List<string>trainerNames,string battleType)
+    {
+        switch (battleType)
+        {
+            case "single": 
+                StartSingleBattle(trainerNames[0]);
+                break;
+            case "single-double": 
+                StartSingleDoubleBattle(trainerNames[0]);
+                break;
+            case "double": 
+                //StartDoubleBattle(trainerNames);
+                break;
+        }
+    }
+    private void StartSingleBattle(string trainerName)//single trainer battle
     {
         BattleOver = false;
         is_trainer_battle = true;
+        isDouble_battle = false;
         Battle_P[0].pokemon = Pokemon_party.instance.party[0];
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].Current_Enemies.Add(Battle_P[0]);
@@ -181,14 +196,14 @@ public class Battle_handler : MonoBehaviour
         Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
         Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
         levelUpQueue.Clear();
-        AddToExpList(Battle_P[0].pokemon);
+        Battle_P[2].AddToExpList(Battle_P[0].pokemon);
         foreach(Battle_Participant p in Battle_P)
             if (p.pokemon != null)
                 Set_participants(p);
         Battle_P[2].trainer.InBattle = true;
         set_battle();
     }
-    /*public void Start_Battle(Pokemon[] enemies)//trainer battles, single and double
+    /*public void StartDoubleBattle(List<string> trainerNames)//trainer double battle
     {
         //double battle setup, 2v2 or 1v2
         BattleOver = false;
@@ -204,6 +219,44 @@ public class Battle_handler : MonoBehaviour
         //Set_participants();
         set_battle();
     }*/
+    private void StartSingleDoubleBattle(string trainerName)//trainer single double battles
+    {
+        BattleOver = false;
+        is_trainer_battle = true;
+        isDouble_battle = true;
+        List<Pokemon> Alive_pkm=new();
+        foreach (Pokemon p in Pokemon_party.instance.party)
+            if (p != null && p.HP > 0)
+                Alive_pkm.Add(p);
+        Battle_P[0].pokemon = Alive_pkm[0];
+        if(Pokemon_party.instance.num_members>1)
+            Battle_P[1].pokemon = Alive_pkm[1];
+        for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
+        {
+            Battle_P[0].Current_Enemies.Add(Battle_P[i + 2]);
+            if(Pokemon_party.instance.num_members>1)
+                Battle_P[1].Current_Enemies.Add(Battle_P[i + 2]);
+            Battle_P[2].Current_Enemies.Add(Battle_P[i]);
+            Battle_P[3].Current_Enemies.Add(Battle_P[i]);
+        }
+        Battle_P[2].trainer = Battle_P[2].GetComponent<Enemy_trainer>();
+        Battle_P[3].trainer = Battle_P[2].trainer;
+        Battle_P[2].trainer.StartBattle(trainerName);
+        Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
+        Battle_P[3].pokemon = Battle_P[2].trainer.TrainerParty[1];
+        Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
+        levelUpQueue.Clear();
+        foreach (Battle_Participant participant in Battle_P)
+            if (participant.pokemon != null)
+                foreach (Battle_Participant enemy  in participant.Current_Enemies)
+                    enemy.AddToExpList(participant.pokemon);
+        foreach(Battle_Participant p in Battle_P)
+            if (p.pokemon != null)
+                Set_participants(p);
+        Battle_P[2].trainer.InBattle = true;
+        set_battle();
+
+    }
     public void Set_participants(Battle_Participant Participant)
     {
         List<Pokemon> Alive_pkm=new();
@@ -216,7 +269,10 @@ public class Battle_handler : MonoBehaviour
                     if (p != null && p.HP > 0)
                         Alive_pkm.Add(p);
                 Participant.pokemon = Alive_pkm[Pokemon_party.instance.Selected_member - 1];
-                AddToExpList(Participant.pokemon);
+                foreach (Battle_Participant p  in Participant.Current_Enemies)
+                {
+                    p.AddToExpList(Participant.pokemon);
+                }
             }
         }
         Participant.data.save_stats();
@@ -240,10 +296,10 @@ public class Battle_handler : MonoBehaviour
     void load_moves()
     {
         int j = 0;
-        foreach(Move m in Battle_P[0].pokemon.move_set)
+        foreach(Move m in Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set)
             if (m != null)
             {
-                moves[j].text = Battle_P[0].pokemon.move_set[j].Move_name;
+                moves[j].text = Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[j].Move_name;
                 Move_btns[j].SetActive(true);
                 j++;
             }
@@ -340,42 +396,7 @@ public class Battle_handler : MonoBehaviour
         BattleOver = true;
         StartCoroutine(DelayBattleEnd());
     }
-    void AddToExpList(Pokemon pkm)
-    {
-        if(!exp_recievers.Contains(pkm))
-            exp_recievers.Add(pkm);
-    }
-    public void Distribute_EXP(int exp_from_enemy)
-    {
-        exp_recievers.RemoveAll(p => p.HP <= 0);
-        if(exp_recievers.Count<1)return;
-        //Debug.Log(exp_from_enemy+" exp from enemy");
-        if (exp_recievers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
-        {
-            exp_recievers[0].Recieve_exp(exp_from_enemy);
-            exp_recievers.Clear();
-            return;
-        }
-        foreach(Pokemon p in Pokemon_party.instance.party)//exp share split, assuming there's only ever 1 exp share in the game
-            if (p != null && p.HP>0 && p.HeldItem!=null)
-                if(p.HeldItem.Item_name == "Exp Share")
-                {
-                    p.Recieve_exp(exp_from_enemy / 2);
-                    //Debug.Log(p.Pokemon_name + " recieved " + exp_from_enemy / 2f + " exp using exp share");
-                    exp_from_enemy /= 2;
-                    break;
-                }
-        int exp = exp_from_enemy / exp_recievers.Count;
-        foreach (Pokemon p in exp_recievers)
-        {
-            if(p.HeldItem == null)
-                p.Recieve_exp(exp);
-            else
-                if (p.HeldItem.Item_name != "Exp Share")
-                    p.Recieve_exp(exp);
-        }
-        exp_recievers.Clear();
-    }
+    
     void end_battle_ui()
     {
         onBattleEnd?.Invoke();

@@ -29,12 +29,10 @@ public class Turn_Based_Combat : MonoBehaviour
     public void SaveMove(Pkm_Use_Move command)
     {
         Move_history.Add(command);
-        //Debug.Log(command._turn.attacker_.pokemon.Pokemon_name + " turn added");
-        if (Current_pkm_turn == Battle_handler.instance.Participant_count)
-        {
-            //Debug.Log("executing moves");
+        Debug.Log(command._turn.attacker_.pokemon.Pokemon_name + " turn added lv" +command._turn.attacker_.pokemon.Current_level);
+        if( (Battle_handler.instance.isDouble_battle && Current_pkm_turn == Battle_handler.instance.Participant_count-1 )
+         || (Current_pkm_turn == Battle_handler.instance.Participant_count ))
             StartCoroutine(ExecuteMoves(Set_priority()));
-        }
         else
             Next_turn();
     }

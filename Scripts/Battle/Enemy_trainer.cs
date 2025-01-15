@@ -27,7 +27,10 @@ public class Enemy_trainer : MonoBehaviour
     }
     void Reset_move()
     {
+        if (!InBattle) return;
+        Debug.Log("reset move");
         Used_move = false;
+
     }
 
     public void CheckLoss(int ParticipantIndex)
@@ -58,30 +61,33 @@ public class Enemy_trainer : MonoBehaviour
             foreach (Move move in member.moveSet)
                 member.pokemon.move_set.Add(Obj_Instance.set_move(move));
             if (member.hasItem)
-                member.pokemon.HeldItem = member.heldItem;
+                member.pokemon.HeldItem = Obj_Instance.set_Item(member.heldItem);
         }
     }
     void use_move(Move move)
     {
-        Debug.Log(" move: "+move.Move_name);
-        Battle_handler.instance.Use_Move(move,participant);
-        Used_move = true;
+        if (Turn_Based_Combat.instance.Current_pkm_turn > 1)
+            Used_move = true;
+        CanAttack = true;
+        Debug.Log(Turn_Based_Combat.instance.Current_pkm_turn+" "+Used_move+" move: "+move.Move_name);
+        Battle_handler.instance.Use_Move(move,Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn]);
     }
     public void Select_player(int selectedIndex)
     {
         //enemy choosing player
-        participant.Selected_Enemy = true;
+        Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
         Battle_handler.instance.Current_pkm_Enemy = selectedIndex;
     }
     private void Make_Decision()
     {
-        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon && !Used_move && CanAttack)
+        if (TrainerParty.Contains(Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon) && !Used_move && CanAttack)
         {
-            int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
+            int randome_enemy = Utility.Get_rand(0, Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Current_Enemies.Count);
             Select_player(randome_enemy);
-            int randomMove = Utility.Get_rand(0, participant.pokemon.move_set.Count);
+            int randomMove = Utility.Get_rand(0, Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set.Count);
             Debug.Log("decision "+randome_enemy+" move: "+randomMove);
-            use_move(participant.pokemon.move_set[randomMove]);//random move
+            use_move(Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[randomMove]);
+            CanAttack = false;
         }
     }
 }

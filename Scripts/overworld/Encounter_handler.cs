@@ -48,9 +48,7 @@ public class Encounter_handler : MonoBehaviour
             for(int i=1;i<rand_lv;i++)
                 wild_pkm.Level_up();
             wild_pkm.HP=wild_pkm.max_HP;
-            Battle_handler.instance.is_trainer_battle = false;
-           Battle_handler.instance.isDouble_battle = false;
-           Battle_handler.instance.Start_Battle(wild_pkm);
+           Battle_handler.instance.StartWildBattle(wild_pkm);
         }
         else
             Debug.Log("tried encounter but didnt find "+pkm_name);

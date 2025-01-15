@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
   PokemonLevel: 6
-  hasItem: 0
-  heldItem: {fileID: 0}
+  hasItem: 1
+  heldItem: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}
   moveSet:
   - {fileID: 11400000, guid: 38b98d4bcb652754aadb472acfbc3201, type: 2}
   - {fileID: 11400000, guid: e589d376f63838b43abf8c4492ec17ce, type: 2}

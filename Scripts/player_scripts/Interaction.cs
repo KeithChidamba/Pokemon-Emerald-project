@@ -11,4 +11,5 @@ public class Interaction : ScriptableObject
     public List<string> InteractionOptions = new();
     public string ResultMessage = "";
     public List<string> OptionsUiText= new();
+    public List<string> AdditionalInfo = new();
 }

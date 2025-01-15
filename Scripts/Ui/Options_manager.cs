@@ -37,8 +37,9 @@ public class Options_manager : MonoBehaviour
 
     }
     void Battle()
-    {//start battlle with trainer name
-        Battle_handler.instance.Start_Battle(current_interaction.ResultMessage);
+    {
+        string battleType = current_interaction.ResultMessage;
+        Battle_handler.instance.SetBattleType(current_interaction.AdditionalInfo,battleType);
     }
 
     void Learn_Move()
@@ -133,7 +134,6 @@ public class Options_manager : MonoBehaviour
     public void Complete_Interaction(Interaction interaction,int option)
     {
         current_interaction = interaction;
-        //if (interaction.InteractionType == "Options") 
         Invoke(interaction.InteractionOptions[option], 0f);
         if (interaction.InteractionType == "List")
         {

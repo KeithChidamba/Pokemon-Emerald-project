@@ -29,7 +29,7 @@
     "SP_DEF_IV": 12.0,
     "speed_IV": 13.0,
     "HP_EV": 0.0,
-    "Attack_EV": 0.0,
+    "Attack_EV": 2.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
@@ -73,7 +73,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -106762
+            "instanceID": -62174
         }
     ],
     "ability": {
@@ -88,7 +88,7 @@
         }
     ],
     "HeldItem": {
-        "instanceID": -106764
+        "instanceID": -62176
     },
     "HasItem": true,
     "front_picture": {
@@ -110,6 +110,6 @@
         "Scratch/Normal"
     ],
     "move_pp_data": [
-        25
+        24
     ]
 }

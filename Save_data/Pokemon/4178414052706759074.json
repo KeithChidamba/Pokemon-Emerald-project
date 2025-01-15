@@ -9,7 +9,7 @@
         "instanceID": 30812
     },
     "has_gender": true,
-    "HP": 12.0,
+    "HP": 0.0,
     "max_HP": 12.0,
     "BaseHP": 50.0,
     "BaseAttack": 70.0,
@@ -29,7 +29,7 @@
     "SP_DEF_IV": 21.0,
     "speed_IV": 5.0,
     "HP_EV": 0.0,
-    "Attack_EV": 0.0,
+    "Attack_EV": 1.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
@@ -73,7 +73,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -106756
+            "instanceID": -62168
         }
     ],
     "ability": {
@@ -88,7 +88,7 @@
         }
     ],
     "HeldItem": {
-        "instanceID": -106758
+        "instanceID": -62170
     },
     "HasItem": true,
     "front_picture": {
@@ -110,6 +110,6 @@
         "Tackle/Normal"
     ],
     "move_pp_data": [
-        20
+        18
     ]
 }
