@@ -6,10 +6,10 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30812
+        "instanceID": 30806
     },
     "has_gender": true,
-    "HP": 0.0,
+    "HP": 12.0,
     "max_HP": 12.0,
     "BaseHP": 50.0,
     "BaseAttack": 70.0,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30288
+            "instanceID": 30282
         }
     ],
     "Status_effect": "None",
@@ -73,29 +73,29 @@
     ],
     "move_set": [
         {
-            "instanceID": -62168
+            "instanceID": -107868
         }
     ],
     "ability": {
-        "instanceID": 30290
+        "instanceID": 30284
     },
     "evolutions": [
         {
-            "instanceID": 30292
+            "instanceID": 30286
         },
         {
-            "instanceID": 30294
+            "instanceID": 30288
         }
     ],
     "HeldItem": {
-        "instanceID": -62170
+        "instanceID": -107870
     },
     "HasItem": true,
     "front_picture": {
-        "instanceID": 30296
+        "instanceID": 30290
     },
     "back_picture": {
-        "instanceID": 30298
+        "instanceID": 30292
     },
     "ability_name": "Torrent",
     "natureName": "Docile",
@@ -110,6 +110,6 @@
         "Tackle/Normal"
     ],
     "move_pp_data": [
-        18
+        20
     ]
 }

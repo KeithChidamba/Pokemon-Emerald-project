@@ -29,7 +29,8 @@ public class Turn_Based_Combat : MonoBehaviour
     public void SaveMove(Pkm_Use_Move command)
     {
         Move_history.Add(command);
-        Debug.Log(command._turn.attacker_.pokemon.Pokemon_name + " turn added lv" +command._turn.attacker_.pokemon.Current_level);
+        //Debug.Log(Battle_handler.instance.Participant_count+" part count");
+       // Debug.Log(command._turn.attacker_.pokemon.Pokemon_name + " turn added lv" +command._turn.attacker_.pokemon.Current_level);
         if( (Battle_handler.instance.isDouble_battle && Current_pkm_turn == Battle_handler.instance.Participant_count-1 )
          || (Current_pkm_turn == Battle_handler.instance.Participant_count ))
             StartCoroutine(ExecuteMoves(Set_priority()));
@@ -44,6 +45,11 @@ public class Turn_Based_Combat : MonoBehaviour
     bool Can_Attack(Pkm_Use_Move command)
     {
         if(command._turn.attacker_.pokemon.HP<=0) return false;
+        if (!command._turn.victim_.is_active)
+        {
+            Dialogue_handler.instance.Battle_Info(command._turn.attacker_.pokemon.Pokemon_name+" missed the attack");
+            return false;
+        }
         if (command._turn.attacker_.pokemon.canAttack)
         {
             if (command._turn.move_.Move_accuracy < 100)//not a sure-hit move
@@ -120,6 +126,8 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         OnNewTurn?.Invoke();
         Battle_handler.instance.Doing_move = false;
+        if (!Battle_handler.instance.Battle_P[Current_pkm_turn].is_active)
+            Next_turn();
     }
     private bool MoveSuccessfull(Pkm_Use_Move command)
     {

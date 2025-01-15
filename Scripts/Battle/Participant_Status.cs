@@ -36,7 +36,8 @@ public class Participant_Status : MonoBehaviour
     public void Check_status()
     {
         if (overworld_actions.instance.using_ui) return;
-        if (!_participant.is_active | _participant.pokemon.HP<=0 ) return;
+        if (!_participant.is_active) return;
+        if(_participant.pokemon.HP<=0 )return;
         if(Battle_handler.instance.BattleOver)return;
         if (_participant.pokemon.isFlinched)
         {

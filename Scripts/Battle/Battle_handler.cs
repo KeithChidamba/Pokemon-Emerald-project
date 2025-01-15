@@ -192,7 +192,7 @@ public class Battle_handler : MonoBehaviour
         Battle_P[0].Current_Enemies.Add(Battle_P[2]);
         Battle_P[2].Current_Enemies.Add(Battle_P[0]);
         Battle_P[2].trainer = Battle_P[2].GetComponent<Enemy_trainer>();
-        Battle_P[2].trainer.StartBattle(trainerName);
+        Battle_P[2].trainer.StartBattle(trainerName,false);
         Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
         Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
         levelUpQueue.Clear();
@@ -240,10 +240,13 @@ public class Battle_handler : MonoBehaviour
             Battle_P[3].Current_Enemies.Add(Battle_P[i]);
         }
         Battle_P[2].trainer = Battle_P[2].GetComponent<Enemy_trainer>();
-        Battle_P[3].trainer = Battle_P[2].trainer;
-        Battle_P[2].trainer.StartBattle(trainerName);
+        Battle_P[3].trainer = Battle_P[3].GetComponent<Enemy_trainer>();
+        Battle_P[2].trainer.StartBattle(trainerName,false);
+        Battle_P[3].trainer.StartBattle(trainerName,true);
+        Battle_P[3].trainer._TrainerData = Battle_P[2].trainer._TrainerData;
+        Battle_P[3].trainer.TrainerParty = Battle_P[2].trainer.TrainerParty;
         Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
-        Battle_P[3].pokemon = Battle_P[2].trainer.TrainerParty[1];
+        Battle_P[3].pokemon = Battle_P[3].trainer.TrainerParty[1];
         Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
         levelUpQueue.Clear();
         foreach (Battle_Participant participant in Battle_P)
@@ -254,6 +257,7 @@ public class Battle_handler : MonoBehaviour
             if (p.pokemon != null)
                 Set_participants(p);
         Battle_P[2].trainer.InBattle = true;
+        Battle_P[3].trainer.InBattle = true;
         set_battle();
 
     }
@@ -280,7 +284,7 @@ public class Battle_handler : MonoBehaviour
         Participant.ability_h.Set_ability();
         check_Participants();
     }
-    void check_Participants()
+    public void check_Participants()
     {
         Participant_count = 0;
         foreach (Battle_Participant p in Battle_P)

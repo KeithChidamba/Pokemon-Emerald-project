@@ -118,16 +118,16 @@ public class Battle_Participant : MonoBehaviour
     void CheckTrainerLoss()
     {
         Onfaint?.Invoke(this);
-        trainer.CheckLoss(Array.IndexOf(Battle_handler.instance.Battle_P, this));
+        trainer.CheckLoss();
     }
     private void Check_loss()
     {
         Onfaint?.Invoke(this);
-        int faint_count = 0;
+        int numAlive=Pokemon_party.instance.num_members;
         for(int i=0;i<Pokemon_party.instance.num_members;i++)
             if (Pokemon_party.instance.party[i].HP <= 0)
-                faint_count++;
-        if (faint_count == Pokemon_party.instance.num_members)
+                numAlive--;
+        if (numAlive==0)
         {
             Battle_handler.instance.End_Battle(false);
             if(!Battle_handler.instance.is_trainer_battle)
@@ -135,14 +135,25 @@ public class Battle_Participant : MonoBehaviour
         }
         else
         {//select next pokemon to switch in
-            Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.instance.Battle_P, this)+1;
-            Pokemon_party.instance.SwapOutNext = true;
-            Game_ui_manager.instance.View_pkm_Party();
-            Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");
-            Reset_pkm();
+            if ( (Battle_handler.instance.isDouble_battle && numAlive > 1) || 
+            (!Battle_handler.instance.isDouble_battle && numAlive > 0) )
+            {
+                Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.instance.Battle_P, this)+1;
+                Pokemon_party.instance.SwapOutNext = true;
+                Game_ui_manager.instance.View_pkm_Party();
+                Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");
+                Reset_pkm();
+            }
+            if (Battle_handler.instance.isDouble_battle && numAlive > 0)//1 left
+            {
+                pokemon = null;
+                is_active = false;
+                Unload_ui();
+                Battle_handler.instance.check_Participants();
+            }
         }
     }
-    void Deactivate_pkm()
+    public void Deactivate_pkm()
     {
         is_active = false;
         Onfaint = null;

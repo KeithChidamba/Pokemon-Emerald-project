@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30848
+        "instanceID": 30842
     },
     "has_gender": true,
     "HP": 12.0,
@@ -33,7 +33,7 @@
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 0.0,
+    "speed_EV": 1.0,
     "EVs": [
         "Speed1"
     ],
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30310
+            "instanceID": 30304
         }
     ],
     "Status_effect": "None",
@@ -73,29 +73,29 @@
     ],
     "move_set": [
         {
-            "instanceID": -62174
+            "instanceID": -107862
         }
     ],
     "ability": {
-        "instanceID": 30312
+        "instanceID": 30306
     },
     "evolutions": [
         {
-            "instanceID": 30314
+            "instanceID": 30308
         },
         {
-            "instanceID": 30316
+            "instanceID": 30310
         }
     ],
     "HeldItem": {
-        "instanceID": -62176
+        "instanceID": -107864
     },
     "HasItem": true,
     "front_picture": {
-        "instanceID": 30008
+        "instanceID": 30002
     },
     "back_picture": {
-        "instanceID": 30318
+        "instanceID": 30312
     },
     "ability_name": "Inferno",
     "natureName": "Naive",
@@ -110,6 +110,6 @@
         "Scratch/Normal"
     ],
     "move_pp_data": [
-        24
+        25
     ]
 }

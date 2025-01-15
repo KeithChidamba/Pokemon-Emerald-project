@@ -18,4 +18,4 @@ MonoBehaviour:
   PokemonParty:
   - {fileID: 11400000, guid: 77b1ba36c17122c4e8506c57e727b5f9, type: 2}
   - {fileID: 11400000, guid: 0fc76359d43737649a1cb709b210046f, type: 2}
-  - {fileID: 11400000, guid: 0fc76359d43737649a1cb709b210046f, type: 2}
+  - {fileID: 11400000, guid: 3e8d8061c10ded54b9dc6eb6cb56057f, type: 2}
