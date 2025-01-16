@@ -50,6 +50,7 @@ public class Participant_Status : MonoBehaviour
     }
     public void StunCheck()
     {
+        if (!_participant.is_active) return;
         if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon !=
             _participant.pokemon) return;
         if (_participant.pokemon.Status_effect == "None") return;

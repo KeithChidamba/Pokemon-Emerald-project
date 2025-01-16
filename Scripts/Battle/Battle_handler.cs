@@ -322,8 +322,7 @@ public class Battle_handler : MonoBehaviour
         moves_ui.SetActive(false);
         options_ui.SetActive(false);
         Turn current_turn = new Turn(move, user, Battle_P[Current_pkm_Enemy]);
-        Pkm_Use_Move use_move = new Pkm_Use_Move(current_turn);
-        Turn_Based_Combat.instance.SaveMove(use_move);
+        Turn_Based_Combat.instance.SaveMove(current_turn);
     }
     public void Reset_move()
     {

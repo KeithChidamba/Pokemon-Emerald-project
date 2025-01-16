@@ -35,7 +35,7 @@ public class Enemy_trainer : MonoBehaviour
     {
         List<Pokemon> numAlive = TrainerParty.ToList();
         numAlive.RemoveAll(p => p.HP <= 0);
-        Debug.Log("alive: "+numAlive.Count);
+        //Debug.Log("alive: "+numAlive.Count);
         if (numAlive.Count == 0)
             Battle_handler.instance.End_Battle(true);
         else
@@ -48,13 +48,12 @@ public class Enemy_trainer : MonoBehaviour
                         NotParticipatingList.Add(pokemon);
                 // = TrainerParty.GetRange(2, TrainerParty.Count-2);
                 NotParticipatingList.RemoveAll(p => p.HP <= 0);
-                Debug.Log("partic alive: "+NotParticipatingList.Count);
+                //Debug.Log("partic alive: "+NotParticipatingList.Count);
                 if (NotParticipatingList.Count == 0)
                 {//1 left
                     if(participant.pokemon.HP<=0)
                     {
-                        Debug.Log("ui reset");
-                        
+                       // Debug.Log("ui reset");
                         participant.Deactivate_pkm();
                         participant.pokemon = null;
                         participant.is_active = false;
@@ -89,7 +88,11 @@ public class Enemy_trainer : MonoBehaviour
             TrainerParty.Add(member.pokemon);
             for(int i=0;i<member.PokemonLevel;i++)
                 member.pokemon.Level_up();
-            member.pokemon.HP = member.pokemon.max_HP;
+            //debug necessary stats
+            member.pokemon.HP = 1;//member.pokemon.max_HP;
+            member.pokemon.Attack = 1;
+            member.pokemon.SP_ATK = 1;
+            member.pokemon.speed = 1;
             member.pokemon.move_set.Clear();
             foreach (Move move in member.moveSet)
                 member.pokemon.move_set.Add(Obj_Instance.set_move(move));

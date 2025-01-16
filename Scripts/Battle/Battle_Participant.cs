@@ -101,6 +101,7 @@ public class Battle_Participant : MonoBehaviour
         if (fainted) return;
         fainted = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
+        Turn_Based_Combat.instance.RemoveTurn(this);
         if (isPlayer)
             Invoke(nameof(Check_loss),1f);
         else

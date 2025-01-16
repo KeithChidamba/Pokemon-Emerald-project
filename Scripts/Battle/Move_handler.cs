@@ -30,7 +30,7 @@ public class Move_handler:MonoBehaviour
     }
     public void Do_move(Turn turn)
     {
-        current_turn=turn;
+        current_turn= new Turn(turn.move_,turn.attacker_,turn.victim_);
         if(current_turn.move_.Move_damage>0)
             Dialogue_handler.instance.Battle_Info(turn.attacker_.pokemon.Pokemon_name+" used "+turn.move_.Move_name+" on "+turn.victim_.pokemon.Pokemon_name+"!");
         else
