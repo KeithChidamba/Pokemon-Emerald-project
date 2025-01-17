@@ -1,7 +1,8 @@
-[System.Serializable]
+//[System.Serializable]
+/*
 public class Pkm_Use_Move : ICommand
 {
-    public Turn _turn;
+    /*public Turn _turn;
     public Pkm_Use_Move(Turn t)
     {
         _turn  = new Turn(t.move_,t.attacker_,t.victim_);
@@ -14,6 +15,7 @@ public class Pkm_Use_Move : ICommand
     public void Undo()
     {
         _turn = null;
-    }
+    }#1#
     
 }
+*/

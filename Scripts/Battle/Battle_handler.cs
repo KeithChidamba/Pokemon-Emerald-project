@@ -321,7 +321,7 @@ public class Battle_handler : MonoBehaviour
         choosing_move = false;
         moves_ui.SetActive(false);
         options_ui.SetActive(false);
-        Turn current_turn = new Turn(move, user, Battle_P[Current_pkm_Enemy]);
+        Turn current_turn = new Turn(move, Array.IndexOf(Battle_P,user), Current_pkm_Enemy);
         Turn_Based_Combat.instance.SaveMove(current_turn);
     }
     public void Reset_move()

@@ -4,14 +4,14 @@ using UnityEngine;
 [System.Serializable]
 public class Turn
 {
-     [SerializeField]public Battle_Participant attacker_;
-     [SerializeField]public Battle_Participant victim_;
+     [SerializeField]public int attackerIndex;
+     [SerializeField]public int victimIndex;
      [SerializeField]public Move move_;
-
-     public Turn(Move move,Battle_Participant attacker,Battle_Participant victim)
+     
+     public Turn(Move move,int attacker,int victim)
      {
           move_ = move;
-          attacker_ = attacker;
-          victim_ = victim;
+          attackerIndex = attacker;
+          victimIndex = victim;
      }
 }

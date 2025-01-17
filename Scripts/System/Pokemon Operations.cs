@@ -65,6 +65,7 @@ public static class PokemonOperations
     public static int GetNextLv(Pokemon pkm)
     {
         int NextLevelExp=0;
+        if (pkm.Current_level == 0) return 0;
         switch (pkm.EXPGroup)
         {
             case "Erratic": 

@@ -9,6 +9,8 @@ public class Move_handler:MonoBehaviour
     public bool Doing_move = false;
     public static Move_handler instance;
     private Turn current_turn;
+    private Battle_Participant attacker_;
+    private Battle_Participant victim_;
     private readonly float[] Stat_Levels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
     private readonly float[] Accuracy_And_Evasion_Levels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] Crit_Levels = {6.25f,12.5f,25f,50f};
@@ -30,12 +32,14 @@ public class Move_handler:MonoBehaviour
     }
     public void Do_move(Turn turn)
     {
-        current_turn= new Turn(turn.move_,turn.attacker_,turn.victim_);
+        current_turn = turn;
+        attacker_ = Battle_handler.instance.Battle_P[turn.attackerIndex];
+        victim_ = Battle_handler.instance.Battle_P[turn.victimIndex];
         if(current_turn.move_.Move_damage>0)
-            Dialogue_handler.instance.Battle_Info(turn.attacker_.pokemon.Pokemon_name+" used "+turn.move_.Move_name+" on "+turn.victim_.pokemon.Pokemon_name+"!");
+            Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" used "+current_turn.move_.Move_name+" on "+victim_.pokemon.Pokemon_name+"!");
         else
         {
-            Dialogue_handler.instance.Battle_Info(turn.attacker_.pokemon.Pokemon_name+" used "+turn.move_.Move_name+"!");
+            Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" used "+current_turn.move_.Move_name+"!");
         }
         StartCoroutine(Move_Sequence());
     }
@@ -75,39 +79,39 @@ public class Move_handler:MonoBehaviour
     float Calc_Damage()
     {
         if (current_turn.move_.Move_damage == 0) return 0f;
-        if (!current_turn.victim_.pokemon.CanBeDamaged)
+        if (!victim_.pokemon.CanBeDamaged)
         {
-            Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" protected itself");
+            Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" protected itself");
             return 0f;
         }
         int crit = 1;
-        if (Utility.Get_rand(1, (int)(100 / current_turn.attacker_.pokemon.crit_chance) + 1) < 2)
+        if (Utility.Get_rand(1, (int)(100 / attacker_.pokemon.crit_chance) + 1) < 2)
         {
             crit = 2;
             Dialogue_handler.instance.Battle_Info("Critical Hit!");
         }
         float damage_dealt;
-        float level_factor = (float)((current_turn.attacker_.pokemon.Current_level * 2) / 5) + 2;
+        float level_factor = (float)((attacker_.pokemon.Current_level * 2) / 5) + 2;
         float Stab = 1f;
         float Attack_type = 0;
         float atk_def_ratio;
         float random_factor = (float)Utility.Get_rand(85, 101) / 100;
-        float type_effectiveness = BattleOperations.TypeEffectiveness(current_turn.victim_.pokemon, current_turn.move_.type);
+        float type_effectiveness = BattleOperations.TypeEffectiveness(victim_.pokemon, current_turn.move_.type);
         if (current_turn.move_.isSpecial)
-            Attack_type = current_turn.attacker_.pokemon.SP_ATK;
+            Attack_type = attacker_.pokemon.SP_ATK;
         else
-            Attack_type = current_turn.attacker_.pokemon.Attack;
+            Attack_type = attacker_.pokemon.Attack;
         atk_def_ratio = Set_AtkDef(crit,Attack_type,current_turn.move_.isSpecial);
-        if (BattleOperations.is_Stab(current_turn.attacker_.pokemon, current_turn.move_.type))
+        if (BattleOperations.is_Stab(attacker_.pokemon, current_turn.move_.type))
             Stab = 1.5f;
         float base_Damage = (level_factor * current_turn.move_.Move_damage *
-                             (Attack_type/ current_turn.move_.Move_damage))/current_turn.attacker_.pokemon.Current_level;
+                             (Attack_type/ current_turn.move_.Move_damage))/attacker_.pokemon.Current_level;
         float Modifier = crit*Stab*random_factor*type_effectiveness;
         damage_dealt = math.trunc(Modifier * base_Damage * atk_def_ratio);
         if (type_effectiveness > 1)
             Dialogue_handler.instance.Battle_Info("The move is Super effective!");
         else if (type_effectiveness == 0)
-            Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" was not affected!");
+            Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" was not affected!");
         else if(type_effectiveness < 1)
             Dialogue_handler.instance.Battle_Info("The move is not very effective!");
         return damage_dealt;
@@ -116,8 +120,8 @@ public class Move_handler:MonoBehaviour
     float Set_AtkDef(float crit,float AttackType,bool isSpecial)
     {
         float Ratio=0;
-        float def = AttackType/current_turn.victim_.pokemon.Defense;
-        float spDef =  AttackType/current_turn.victim_.pokemon.SP_DEF;
+        float def = AttackType/victim_.pokemon.Defense;
+        float spDef =  AttackType/victim_.pokemon.SP_DEF;
         if (crit == 1)//if no crit
             if (!isSpecial)
                 Ratio = def;
@@ -126,13 +130,13 @@ public class Move_handler:MonoBehaviour
         else if (crit == 2)//if crit, ignore enemy defense buff, and attacker attack debuff
         {
             if (!isSpecial)
-                if (current_turn.victim_.data.Defense < current_turn.victim_.pokemon.Defense) //def buff
-                    Ratio = AttackType / current_turn.victim_.data.Defense;
+                if (victim_.data.Defense < victim_.pokemon.Defense) //def buff
+                    Ratio = AttackType / victim_.data.Defense;
                 else
                     Ratio = def;
             else
-                if (current_turn.victim_.data.SP_DEF < current_turn.victim_.pokemon.SP_DEF) //def buff
-                    Ratio = AttackType / current_turn.victim_.data.SP_DEF;
+                if (victim_.data.SP_DEF < victim_.pokemon.SP_DEF) //def buff
+                    Ratio = AttackType / victim_.data.SP_DEF;
                 else
                     Ratio = spDef;
         }
@@ -141,7 +145,7 @@ public class Move_handler:MonoBehaviour
     void Deal_Damage()//anim event
     {
         if (current_turn.move_.Has_effect) return;
-        current_turn.victim_.pokemon.HP -= Calc_Damage();
+        victim_.pokemon.HP -= Calc_Damage();
     } 
     void Move_done()
     {
@@ -151,8 +155,8 @@ public class Move_handler:MonoBehaviour
     void Get_status()
     {
         if (!current_turn.move_.Has_status)return;
-        if (current_turn.victim_.pokemon.Status_effect != "None") return;
-        if (current_turn.victim_.pokemon.HP <= 0) return;
+        if (victim_.pokemon.Status_effect != "None") return;
+        if (victim_.pokemon.HP <= 0) return;
         if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
             CheckStatus();
     }
@@ -168,10 +172,10 @@ public class Move_handler:MonoBehaviour
 
     void CheckStatus()
     {
-        foreach (Type t in current_turn.victim_.pokemon.types)
+        foreach (Type t in victim_.pokemon.types)
             if(CheckInvalidStatusEffect(current_turn.move_.Status_effect, t.Type_name))return;
-        Dialogue_handler.instance.Battle_Info(current_turn.victim_.pokemon.Pokemon_name+" recieved a "+current_turn.move_.Status_effect+" effect!");
-        Set_Status(current_turn.victim_,current_turn.move_.Status_effect);
+        Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" recieved a "+current_turn.move_.Status_effect+" effect!");
+        Set_Status(victim_,current_turn.move_.Status_effect);
     }
     public void Set_Status(Battle_Participant p,String Status)
     {
@@ -185,7 +189,7 @@ public class Move_handler:MonoBehaviour
     {
         if (!current_turn.move_.Can_flinch) return;
         if (Utility.Get_rand(1, 11) < current_turn.move_.Status_chance)
-            current_turn.victim_.pokemon.isFlinched=true;
+            victim_.pokemon.isFlinched=true;
     }
     void Set_buff_Debuff()
     {
@@ -198,34 +202,34 @@ public class Move_handler:MonoBehaviour
         string stat = effect.Substring(3, effect.Length - 3);
         Pokemon reciever_pkm;
         if (effect[0] == 'e')//who the change is effecting
-            reciever_pkm = current_turn.victim_.pokemon;
+            reciever_pkm = victim_.pokemon;
         else
-            reciever_pkm = current_turn.attacker_.pokemon;
+            reciever_pkm = attacker_.pokemon;
         switch (stat)
         {
             case"Defense":
-                reciever_pkm.Defense = Get_buff_debuff(current_turn.victim_.pokemon.Defense,stat,buff_amount,result,reciever_pkm);
+                reciever_pkm.Defense = Get_buff_debuff(victim_.pokemon.Defense,stat,buff_amount,result,reciever_pkm);
                     break;
             case"Attack":
-                reciever_pkm.Attack = Get_buff_debuff(current_turn.victim_.pokemon.Attack,stat,buff_amount,result,reciever_pkm);
+                reciever_pkm.Attack = Get_buff_debuff(victim_.pokemon.Attack,stat,buff_amount,result,reciever_pkm);
                 break;
             case"Special Defense":
-                reciever_pkm.SP_DEF = Get_buff_debuff(current_turn.victim_.pokemon.SP_DEF,stat,buff_amount,result,reciever_pkm);
+                reciever_pkm.SP_DEF = Get_buff_debuff(victim_.pokemon.SP_DEF,stat,buff_amount,result,reciever_pkm);
                 break;
             case"Special Attack":
-                reciever_pkm.SP_ATK = Get_buff_debuff(current_turn.victim_.pokemon.SP_ATK,stat,buff_amount,result,reciever_pkm);
+                reciever_pkm.SP_ATK = Get_buff_debuff(victim_.pokemon.SP_ATK,stat,buff_amount,result,reciever_pkm);
                 break;
             case"Speed":
-                reciever_pkm.speed = Get_buff_debuff(current_turn.victim_.pokemon.speed,stat,buff_amount,result,reciever_pkm);
+                reciever_pkm.speed = Get_buff_debuff(victim_.pokemon.speed,stat,buff_amount,result,reciever_pkm);
                 break;
             case"Accuracy":
-                reciever_pkm.Accuracy = Get_buff_debuff(current_turn.victim_.pokemon.Accuracy,stat,buff_amount,result,reciever_pkm);
+                reciever_pkm.Accuracy = Get_buff_debuff(victim_.pokemon.Accuracy,stat,buff_amount,result,reciever_pkm);
                 break;
             case"Evasion":
-                reciever_pkm.Evasion = Get_buff_debuff(current_turn.victim_.pokemon.Evasion,stat,buff_amount,result,reciever_pkm);
+                reciever_pkm.Evasion = Get_buff_debuff(victim_.pokemon.Evasion,stat,buff_amount,result,reciever_pkm);
                 break;
             case"Crit":
-                reciever_pkm.crit_chance = Get_buff_debuff(current_turn.victim_.pokemon.crit_chance,stat,buff_amount,result,reciever_pkm);
+                reciever_pkm.crit_chance = Get_buff_debuff(victim_.pokemon.crit_chance,stat,buff_amount,result,reciever_pkm);
                 break;
         }
     }
@@ -245,10 +249,10 @@ public class Move_handler:MonoBehaviour
     void absorb()
     {
         float damage = Calc_Damage();
-        float enemy_previous_hp = current_turn.victim_.pokemon.HP;
-        current_turn.victim_.pokemon.HP -= damage;
-        float heal_amount = math.abs(current_turn.victim_.pokemon.HP - enemy_previous_hp);
-        current_turn.attacker_.pokemon.HP += math.trunc(heal_amount/2f);
+        float enemy_previous_hp = victim_.pokemon.HP;
+        victim_.pokemon.HP -= damage;
+        float heal_amount = math.abs(victim_.pokemon.HP - enemy_previous_hp);
+        attacker_.pokemon.HP += math.trunc(heal_amount/2f);
     }
     void doublekick()
     {

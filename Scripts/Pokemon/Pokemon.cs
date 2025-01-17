@@ -146,8 +146,8 @@ public class Pokemon : ScriptableObject
     public void Recieve_exp(int amount)
     {
         CurrentExpAmount += amount;
-        //Debug.Log(Pokemon_name+" recieved "+ amount +" exp current exp: "+CurrentExpAmount);
-        //Debug.Log("next lv exp: "+PokemonOperations.GetNextLv(this));
+        Debug.Log(Pokemon_name+" recieved "+ amount +" exp current exp: "+CurrentExpAmount);
+        Debug.Log("next lv exp: "+PokemonOperations.GetNextLv(this));
         NextLvExpAmount = PokemonOperations.GetNextLv(this);
         if(CurrentExpAmount>=PokemonOperations.GetNextLv(this))
             Level_up();

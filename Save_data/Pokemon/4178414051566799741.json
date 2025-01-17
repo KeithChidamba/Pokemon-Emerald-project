@@ -9,7 +9,7 @@
         "instanceID": 30988
     },
     "has_gender": true,
-    "HP": 11.0,
+    "HP": 0.0,
     "max_HP": 11.0,
     "BaseHP": 40.0,
     "BaseAttack": 45.0,
@@ -41,7 +41,7 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "Current_level": 1,
-    "CurrentExpAmount": -111,
+    "CurrentExpAmount": 0,
     "NextLvExpAmount": -82.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
@@ -73,7 +73,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -30572
+            "instanceID": -91032
         }
     ],
     "ability": {
@@ -88,7 +88,7 @@
         }
     ],
     "HeldItem": {
-        "instanceID": -30574
+        "instanceID": -91034
     },
     "HasItem": true,
     "front_picture": {
@@ -110,6 +110,6 @@
         "Pound/Normal"
     ],
     "move_pp_data": [
-        25
+        24
     ]
 }

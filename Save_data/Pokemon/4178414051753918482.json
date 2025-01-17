@@ -1,48 +1,48 @@
 {
     "Base_Pokemon_name": "Torchic",
     "Pokemon_name": "Torchic",
-    "Pokemon_ID": 4178414052170623557,
-    "Personality_value": 941713989,
-    "Gender": "Female",
+    "Pokemon_ID": 4178414051753918482,
+    "Personality_value": 525008914,
+    "Gender": "Male",
     "GenderRatio": "87.5/12.5",
     "nature": {
         "instanceID": 30842
     },
     "has_gender": true,
-    "HP": 12.0,
-    "max_HP": 12.0,
+    "HP": 11.0,
+    "max_HP": 13.0,
     "BaseHP": 45.0,
     "BaseAttack": 60.0,
     "BaseDefense": 40.0,
     "BaseSP_ATK": 70.0,
     "BaseSP_DEF": 50.0,
     "Basespeed": 45.0,
-    "Attack": 6.0,
-    "Defense": 5.0,
-    "SP_ATK": 6.0,
-    "SP_DEF": 5.0,
-    "speed": 6.0,
-    "HP_IV": 26.0,
-    "Attack_IV": 14.0,
-    "Defense_IV": 15.0,
-    "SP_ATK_IV": 6.0,
-    "SP_DEF_IV": 12.0,
-    "speed_IV": 13.0,
+    "Attack": 8.0,
+    "Defense": 7.0,
+    "SP_ATK": 8.0,
+    "SP_DEF": 6.0,
+    "speed": 7.0,
+    "HP_IV": 4.0,
+    "Attack_IV": 30.0,
+    "Defense_IV": 21.0,
+    "SP_ATK_IV": 11.0,
+    "SP_DEF_IV": 4.0,
+    "speed_IV": 6.0,
     "HP_EV": 0.0,
     "Attack_EV": 2.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 1.0,
+    "speed_EV": 0.0,
     "EVs": [
         "Speed1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 1,
-    "CurrentExpAmount": -166,
-    "NextLvExpAmount": -82.0,
+    "Current_level": 2,
+    "CurrentExpAmount": 20,
+    "NextLvExpAmount": 61.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -73,7 +73,7 @@
     ],
     "move_set": [
         {
-            "instanceID": -91020
+            "instanceID": -101538
         }
     ],
     "ability": {
@@ -88,9 +88,9 @@
         }
     ],
     "HeldItem": {
-        "instanceID": -91022
+        "instanceID": 0
     },
-    "HasItem": true,
+    "HasItem": false,
     "front_picture": {
         "instanceID": 30002
     },
@@ -110,6 +110,6 @@
         "Scratch/Normal"
     ],
     "move_pp_data": [
-        25
+        24
     ]
 }
