@@ -122,8 +122,7 @@ public class Player_movement : MonoBehaviour
         }       
         else if (Input.GetKeyDown(KeyCode.E) && !can_use_bike)
         {
-            Dialogue_handler.instance.Write_Info("Cant use bike here","Details");
-            Dialogue_handler.instance.Dialouge_off(1f);
+            Dialogue_handler.instance.Write_Info("Cant use bike here","Details",1f);
         }
         if (Input.GetKeyUp(KeyCode.E) && using_bike)
         {

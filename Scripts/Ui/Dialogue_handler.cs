@@ -104,12 +104,18 @@ public class Dialogue_handler : MonoBehaviour
         Current_interaction = details;
         Display(Current_interaction);
     }
+    
     public void Write_Info(string info,string type)//display plain text info to player
     {
         messagesLoading = false;
         Interaction details = new_interaction(info,type,"");
         Current_interaction = details;
         Display(Current_interaction);
+    }
+    public void Write_Info(string info,string type,float dialogeOff)//display plain text info to player
+    {
+        Write_Info(info,type);
+        Dialouge_off(dialogeOff);
     }
     public void Battle_Info(string info)//display plain text info to player
     {

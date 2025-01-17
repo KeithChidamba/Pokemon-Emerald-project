@@ -111,9 +111,11 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         if (Battle_handler.instance.Battle_P[turn.attackerIndex].is_active & Battle_handler.instance.Battle_P[turn.victimIndex].is_active)
             if (!Battle_handler.instance.Battle_P[turn.attackerIndex].fainted & !Battle_handler.instance.Battle_P[turn.victimIndex].fainted)
-                if (Battle_handler.instance.Battle_P[turn.attackerIndex].pokemon != null & 
+                if (Battle_handler.instance.Battle_P[turn.attackerIndex].pokemon != null &
                     Battle_handler.instance.Battle_P[turn.attackerIndex].pokemon != null)
                     return true;
+        if(Battle_handler.instance.Battle_P[turn.attackerIndex].pokemon != null)
+            Dialogue_handler.instance.Battle_Info(Battle_handler.instance.Battle_P[turn.attackerIndex].pokemon.Pokemon_name+" missed!");
         return false;
     } 
     void CancelTurn(Turn turn)

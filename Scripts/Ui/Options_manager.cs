@@ -84,8 +84,7 @@ public class Options_manager : MonoBehaviour
     }
     void Dont_Buy()
     {
-        Dialogue_handler.instance.Write_Info("Have a great day!", "Details");
-        Dialogue_handler.instance.Dialouge_off(1f);
+        Dialogue_handler.instance.Write_Info("Have a great day!", "Details",1f);
     }
     void Gift_pkm()
     {
@@ -98,8 +97,7 @@ public class Options_manager : MonoBehaviour
     }
     void Interact()
     {
-        Dialogue_handler.instance.Write_Info(current_interaction.ResultMessage, "Details");
-        Dialogue_handler.instance.Dialouge_off(2f);
+        Dialogue_handler.instance.Write_Info(current_interaction.ResultMessage, "Details",2f);
     }
     void Fish()
     {
@@ -128,8 +126,7 @@ public class Options_manager : MonoBehaviour
         string berry = current_interaction.ResultMessage;
         Item bry = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/" + berry);
         Bag.instance.Add_item(Obj_Instance.set_Item(bry));
-        Dialogue_handler.instance.Write_Info("You picked up a "+berry, "Details");
-        Dialogue_handler.instance.Dialouge_off(1f);
+        Dialogue_handler.instance.Write_Info("You picked up a "+berry, "Details",1f);
     }
     public void Complete_Interaction(Interaction interaction,int option)
     {

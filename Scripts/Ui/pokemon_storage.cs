@@ -207,8 +207,7 @@ public class pokemon_storage : MonoBehaviour
                 string pkm_name = pkm_icon.pkm.Pokemon_name;
                 non_party_pokemon[index] = null;
                 remove_pkm(index);
-                Dialogue_handler.instance.Write_Info("You released "+ pkm_name, "Details");
-                Dialogue_handler.instance.Dialouge_off(1.5f);
+                Dialogue_handler.instance.Write_Info("You released "+ pkm_name, "Details",1.5f);
                 Cancel_options();
                 break;
             }
@@ -224,8 +223,7 @@ public class pokemon_storage : MonoBehaviour
     public void swap()
     {
         storage_positions.gameObject.SetActive(false);
-        Dialogue_handler.instance.Write_Info("Pick a pokemon in your party to swap with", "Details");
-        Dialogue_handler.instance.Dialouge_off(1.2f);
+        Dialogue_handler.instance.Write_Info("Pick a pokemon in your party to swap with", "Details",1.2f);
         swapping = true;
     }
     public void  Add_to_Party()
@@ -241,10 +239,7 @@ public class pokemon_storage : MonoBehaviour
             Pokemon_party.instance.num_members++;
         }
         else
-        {
-            Dialogue_handler.instance.Write_Info("Party is full, you can still swap out pokemon though", "Details");
-            Dialogue_handler.instance.Dialouge_off(2f);
-        }
+            Dialogue_handler.instance.Write_Info("Party is full, you can still swap out pokemon though", "Details",2f);
         storage_operetation = false;
         Cancel_options();
     }

@@ -1090,6 +1090,7 @@ MonoBehaviour:
   Double_battle_ui: []
   participant_ui: {fileID: 1656265309}
   Selected_Enemy: 0
+  exp_recievers: []
 --- !u!114 &35621318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4349,6 +4350,86 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6164762090088097862, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
   m_PrefabInstance: {fileID: 118491277}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &122992661
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 122992662}
+  - component: {fileID: 122992664}
+  - component: {fileID: 122992663}
+  m_Layer: 5
+  m_Name: Current Exp ui
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &122992662
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122992661}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 836092160}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 213.46, y: -257}
+  m_SizeDelta: {x: 185.6, y: 24.256}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &122992663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122992661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 20
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 1300
+--- !u!222 &122992664
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122992661}
+  m_CullTransparentMesh: 1
 --- !u!1 &125591848
 GameObject:
   m_ObjectHideFlags: 0
@@ -6467,6 +6548,7 @@ MonoBehaviour:
   Double_battle_ui: []
   participant_ui: {fileID: 1780447230}
   Selected_Enemy: 0
+  exp_recievers: []
 --- !u!114 &190973851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6515,6 +6597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   participant: {fileID: 0}
   _TrainerData: {fileID: 0}
+  TrainerParty: []
   InBattle: 0
   CanAttack: 1
   Used_move: 0
@@ -10706,7 +10789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0f43972d84b42479cf023b35145d7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Move_history: []
+  Turn_history: []
   Current_pkm_turn: 0
 --- !u!4 &326276941
 Transform:
@@ -27383,6 +27466,8 @@ RectTransform:
   - {fileID: 1756957669}
   - {fileID: 168897809}
   - {fileID: 723923129}
+  - {fileID: 122992662}
+  - {fileID: 1424981574}
   m_Father: {fileID: 946544332}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -30452,6 +30537,8 @@ MonoBehaviour:
   pkm_hp: {fileID: 2033545600}
   move_Description: {fileID: 1078179823}
   pkm_HeldItem: {fileID: 1756957670}
+  pkm_CurrentExp: {fileID: 122992663}
+  pkm_NextLvExp: {fileID: 1424981575}
   moves_btns:
   - {fileID: 784413341}
   - {fileID: 671687230}
@@ -64188,6 +64275,88 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1424151350}
   m_CullTransparentMesh: 1
+--- !u!1 &1424981573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1424981574}
+  - component: {fileID: 1424981576}
+  - component: {fileID: 1424981575}
+  m_Layer: 5
+  m_Name: Nxt Lv exp ui
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1424981574
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424981573}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 836092160}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 213.4572, y: -288}
+  m_SizeDelta: {x: 185.5956, y: 24.256}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1424981575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424981573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 20
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: '156887
+
+'
+--- !u!222 &1424981576
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424981573}
+  m_CullTransparentMesh: 1
 --- !u!1 &1425198209
 GameObject:
   m_ObjectHideFlags: 0
@@ -69834,6 +70003,7 @@ MonoBehaviour:
   - {fileID: 1940039930}
   participant_ui: {fileID: 443644594}
   Selected_Enemy: 0
+  exp_recievers: []
 --- !u!114 &1636635381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74651,7 +74821,6 @@ MonoBehaviour:
   - {fileID: 35621317}
   - {fileID: 190973850}
   - {fileID: 2033618204}
-  exp_recievers: []
   Move_pp: {fileID: 1446964400}
   Move_type: {fileID: 717278676}
   moves:
@@ -95400,6 +95569,7 @@ MonoBehaviour:
   Double_battle_ui: []
   participant_ui: {fileID: 173013067}
   Selected_Enemy: 0
+  exp_recievers: []
 --- !u!114 &2033618205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95448,6 +95618,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   participant: {fileID: 0}
   _TrainerData: {fileID: 0}
+  TrainerParty: []
   InBattle: 0
   CanAttack: 1
   Used_move: 0

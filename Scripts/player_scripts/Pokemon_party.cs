@@ -51,7 +51,15 @@ public class Pokemon_party : MonoBehaviour
     public void Moving(int Member_position)
     {
         if (Options_manager.instance.playerInBattle)
-        {
+        {//cant swap in a member who is already in
+            if(Member_position<3)
+                if(Battle_handler.instance.Battle_P[Member_position - 1].pokemon!=null)
+                    if (Battle_handler.instance.Battle_P[Member_position - 1].pokemon == party[Member_position - 1]) 
+                    {
+                        Dialogue_handler.instance.Write_Info(Battle_handler.instance.Battle_P[Member_position - 1].pokemon.Pokemon_name+
+                                                             " is already in battle","Details",1f);
+                        return;
+                    }
             Swapping_in = true;
             SwapOutNext = false;
             Selected_member = Turn_Based_Combat.instance.Current_pkm_turn+1;
@@ -69,8 +77,7 @@ public class Pokemon_party : MonoBehaviour
             }
             else
             {
-                Dialogue_handler.instance.Write_Info("There must be at least 2 Pokemon to swap","Details");
-                Dialogue_handler.instance.Dialouge_off(1f);
+                Dialogue_handler.instance.Write_Info("There must be at least 2 Pokemon to swap","Details",1f);
             }
         }
     }
@@ -84,7 +91,17 @@ public class Pokemon_party : MonoBehaviour
         //selecting swap in
         if (Options_manager.instance.playerInBattle && Member_cards[Member_position - 1].pkm.HP <= 0) return;
         if (SwapOutNext)
+        {
+            if(Member_position<3)
+                if(Battle_handler.instance.Battle_P[Member_position - 1].pokemon!=null)
+                    if (Battle_handler.instance.Battle_P[Member_position - 1].pokemon == party[Member_position - 1]) 
+                    {
+                        Dialogue_handler.instance.Write_Info(Battle_handler.instance.Battle_P[Member_position - 1].pokemon.Pokemon_name+
+                                                             " is already in battle","Details",1f);
+                        return;
+                    }
             Move_Member(Member_position);
+        }
         else if (Item_handler.instance.Using_item)
         {
             Item_handler.instance.selected_party_pkm = Member_cards[Member_position - 1].pkm;
@@ -97,8 +114,7 @@ public class Pokemon_party : MonoBehaviour
             if (Member_cards[Member_position - 1].pkm.HasItem)
             {
                 Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
-                                                     +" is already holding something","Details");
-                Dialogue_handler.instance.Dialouge_off(1f);
+                                                     +" is already holding something","Details",1f);
                 Giving_item = false;
                 item_to_use = null;
                 Game_ui_manager.instance.Close_party();
@@ -106,7 +122,7 @@ public class Pokemon_party : MonoBehaviour
                 return;
             }
             Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
-                                                 +" recieved a "+item_to_use.Item_name,"Details");
+                                                 +" recieved a "+item_to_use.Item_name,"Details",1.3f);
             Member_cards[Member_position - 1].pkm.HeldItem = Obj_Instance.set_Item(item_to_use);
             Member_cards[Member_position - 1].pkm.HeldItem.quantity = 1;
             Member_cards[Member_position - 1].pkm.HasItem = true;
@@ -117,7 +133,6 @@ public class Pokemon_party : MonoBehaviour
             Giving_item = false;
             item_to_use = null;
             Refresh_Member_Cards();
-            Dialogue_handler.instance.Dialouge_off(1f);
         }
         else
         {
@@ -213,10 +228,7 @@ void close_party()
         Refresh_Member_Cards();
         member_indicator.SetActive(false);
         if(!Swapping_in && !SwapOutNext)
-        {
-            Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details");
-            Dialogue_handler.instance.Dialouge_off(1f);
-        }
+            Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details",1f);
     }
     public void Add_Member(Pokemon pokemon)
     { //add new pokemon after catch or event

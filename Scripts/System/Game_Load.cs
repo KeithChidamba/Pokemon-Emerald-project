@@ -62,14 +62,12 @@ public class Game_Load : MonoBehaviour
             pl_data.player_Position = Start_house_pos.position;
             pl_data.Location = "Player House";
             player_data = pl_data;
-            Dialogue_handler.instance.Write_Info("Welcome "+player_name,"Details");
-            Dialogue_handler.instance.Dialouge_off(1f);
+            Dialogue_handler.instance.Write_Info("Welcome "+player_name,"Details",1f);
             Start_Game();
         }
         else
         {
-            Dialogue_handler.instance.Write_Info("Name must be between 4 and 14 characters","Details");
-            Dialogue_handler.instance.Dialouge_off(1.5f);
+            Dialogue_handler.instance.Write_Info("Name must be between 4 and 14 characters","Details",1.5f);
         }
     }
     public void Exit_game()

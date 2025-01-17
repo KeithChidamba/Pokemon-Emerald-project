@@ -8,7 +8,7 @@ public class Pokemon_Details : MonoBehaviour
 {
     public Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID,pkm_nature,Trainer_Name;
     public Text pkm_atk, pkm_sp_atk, pkm_def, pkm_sp_def, pkm_speed, pkm_hp;
-    public Text move_Description,pkm_HeldItem;
+    public Text move_Description,pkm_HeldItem,pkm_CurrentExp,pkm_NextLvExp;
     public GameObject[] moves_btns;
     public Text[] moves_pp;
     public Text[] moves;
@@ -130,6 +130,8 @@ public class Pokemon_Details : MonoBehaviour
         pkm_sp_atk.text = current_pkm.SP_ATK.ToString();
         pkm_speed.text = current_pkm.speed.ToString();
         pkm_sp_def.text = current_pkm.SP_DEF.ToString();
+        pkm_CurrentExp.text = current_pkm.CurrentExpAmount.ToString();
+        pkm_NextLvExp.text = current_pkm.NextLvExpAmount.ToString();
         if(!current_pkm.HasItem)
             pkm_HeldItem.text = "NONE";
         else

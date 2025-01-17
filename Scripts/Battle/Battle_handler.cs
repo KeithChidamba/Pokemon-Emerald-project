@@ -125,6 +125,7 @@ public class Battle_handler : MonoBehaviour
     public void Select_enemy(int choice)
     {
         if(Turn_Based_Combat.instance.Current_pkm_turn>1)return;//not player's turn
+        if (isDouble_battle & choice < 2) return;//cant attack own pokemon
         Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
         Current_pkm_Enemy = choice;
     }
@@ -334,12 +335,13 @@ public class Battle_handler : MonoBehaviour
     {
         Reset_move();
         Current_Move = move_num-1;
-        Move_pp.text = "PP: " + Battle_P[0].pokemon.move_set[Current_Move].Powerpoints+ "/" + Battle_P[0].pokemon.move_set[Current_Move].max_Powerpoints;
-        if (Battle_P[0].pokemon.move_set[Current_Move].Powerpoints == 0)
+        Move_pp.text = "PP: " + Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].Powerpoints+ "/" 
+                       + Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].max_Powerpoints;
+        if (Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].Powerpoints == 0)
             Move_pp.color = Color.red;
         else
             Move_pp.color = Color.black;
-        Move_type.text = Battle_P[0].pokemon.move_set[Current_Move].type.Type_name;
+        Move_type.text = Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].type.Type_name;
         Selected_Move = true;
         Move_btns[Current_Move].GetComponent<Button>().interactable = false;
     }

@@ -6,22 +6,22 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30988
+        "instanceID": 31116
     },
     "has_gender": true,
-    "HP": 0.0,
-    "max_HP": 11.0,
+    "HP": 13.0,
+    "max_HP": 13.0,
     "BaseHP": 40.0,
     "BaseAttack": 45.0,
     "BaseDefense": 35.0,
     "BaseSP_ATK": 65.0,
     "BaseSP_DEF": 55.0,
     "Basespeed": 70.0,
-    "Attack": 6.0,
-    "Defense": 5.0,
-    "SP_ATK": 5.0,
-    "SP_DEF": 6.0,
-    "speed": 6.0,
+    "Attack": 7.0,
+    "Defense": 6.0,
+    "SP_ATK": 7.0,
+    "SP_DEF": 8.0,
+    "speed": 8.0,
     "HP_IV": 16.0,
     "Attack_IV": 18.0,
     "Defense_IV": 17.0,
@@ -29,20 +29,20 @@
     "SP_DEF_IV": 22.0,
     "speed_IV": 25.0,
     "HP_EV": 0.0,
-    "Attack_EV": 0.0,
+    "Attack_EV": 1.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 2.0,
+    "speed_EV": 5.0,
     "EVs": [
         "Speed1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 1,
-    "CurrentExpAmount": 0,
-    "NextLvExpAmount": -82.0,
+    "Current_level": 2,
+    "CurrentExpAmount": 56,
+    "NextLvExpAmount": 61.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30228
+            "instanceID": 30254
         }
     ],
     "Status_effect": "None",
@@ -73,29 +73,29 @@
     ],
     "move_set": [
         {
-            "instanceID": -91032
+            "instanceID": -87700
         }
     ],
     "ability": {
-        "instanceID": 30230
+        "instanceID": 30256
     },
     "evolutions": [
         {
-            "instanceID": 30232
+            "instanceID": 30258
         },
         {
-            "instanceID": 30234
+            "instanceID": 30260
         }
     ],
     "HeldItem": {
-        "instanceID": -91034
+        "instanceID": -87702
     },
     "HasItem": true,
     "front_picture": {
-        "instanceID": 30182
+        "instanceID": 30208
     },
     "back_picture": {
-        "instanceID": 30236
+        "instanceID": 30262
     },
     "ability_name": "Overgrow",
     "natureName": "Careful",
@@ -110,6 +110,6 @@
         "Pound/Normal"
     ],
     "move_pp_data": [
-        24
+        25
     ]
 }

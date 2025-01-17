@@ -29,7 +29,6 @@ public class Battle_Participant : MonoBehaviour
     public GameObject participant_ui;
     public bool Selected_Enemy = false;
     public List<Pokemon> exp_recievers;
-    public event Action<Battle_Participant> Onfaint;
     private void Start()
     {
         status = GetComponent<Participant_Status>();
@@ -49,13 +48,13 @@ public class Battle_Participant : MonoBehaviour
     {
         Distribute_EXP(pokemon.Calc_Exp(pokemon));
     }
-    private void Get_EVs(Battle_Participant enemy)
+    private void Give_EVs(Battle_Participant enemy)
     {
-        foreach (string ev in enemy.pokemon.EVs)
+        foreach (string ev in pokemon.EVs)
         {
             float evAmount = float.Parse(ev.Substring(ev.Length - 1, 1));
             string evStat = ev.Substring(0 ,ev.Length - 1);
-            PokemonOperations.GetEV(evStat,evAmount,pokemon);
+            PokemonOperations.GetEV(evStat,evAmount,enemy.pokemon);
         }
     }
     public  void AddToExpList(Pokemon pkm)
@@ -67,7 +66,7 @@ public class Battle_Participant : MonoBehaviour
     {
         exp_recievers.RemoveAll(p => p.HP <= 0);
         if(exp_recievers.Count<1)return;
-        Debug.Log(exp_from_enemy+" exp from "+pokemon.Pokemon_name);
+        //Debug.Log(exp_from_enemy+" exp from "+pokemon.Pokemon_name);
         if (exp_recievers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
         {
             exp_recievers[0].Recieve_exp(exp_from_enemy);
@@ -103,28 +102,24 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.instance.RemoveTurn(this);
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         Give_exp();
+        foreach (Battle_Participant enemy in Current_Enemies)
+            if(enemy.pokemon!=null)
+                Give_EVs(enemy);
         if (isPlayer)
             Invoke(nameof(Check_loss),1f);
         else
             if (!Battle_handler.instance.is_trainer_battle)
                 Invoke(nameof(EndWildBattle),1f);
             else
-                Invoke(nameof(CheckTrainerLoss),1f);
+                trainer.Invoke(nameof(trainer.CheckLoss),1f);
     }
     void EndWildBattle()
     {
-        Onfaint?.Invoke(this);
         Wild_pkm.instance.InBattle = false;
         Battle_handler.instance.End_Battle(true);
     }
-    void CheckTrainerLoss()
-    {
-        Onfaint?.Invoke(this);
-        trainer.CheckLoss();
-    }
     private void Check_loss()
     {
-        Onfaint?.Invoke(this);
         int numAlive=Pokemon_party.instance.num_members;
         for(int i=0;i<Pokemon_party.instance.num_members;i++)
             if (Pokemon_party.instance.party[i].HP <= 0)
@@ -158,7 +153,6 @@ public class Battle_Participant : MonoBehaviour
     public void Deactivate_pkm()
     {
         is_active = false;
-        Onfaint = null;
         Turn_Based_Combat.instance.OnTurnEnd -= status.Check_status;
         Turn_Based_Combat.instance.OnNewTurn -= status.StunCheck;
         Turn_Based_Combat.instance.OnMoveExecute -= status.Notify_Healing;
@@ -230,11 +224,6 @@ public class Battle_Participant : MonoBehaviour
             pokemon.OnLevelUP += Reset_pkm;
             pokemon.OnLevelUp += Battle_handler.instance.LevelUpEvent;
             pokemon.OnNewLevel += data.save_stats;
-            foreach (Battle_Participant p in Current_Enemies)
-            {
-                //p.Onfaint += Get_exp;
-                p.Onfaint += Get_EVs;
-            }
             if (Battle_handler.instance.isDouble_battle)
             {
                 UI_visible(Double_battle_ui, true);
