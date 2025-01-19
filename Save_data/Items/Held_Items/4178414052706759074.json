@@ -7,7 +7,7 @@
     "price": 20,
     "quantity": 1,
     "Item_img": {
-        "instanceID": 30240
+        "instanceID": 30228
     },
     "CanBeUsedInOverworld": true,
     "CanBeUsedInBattle": true,

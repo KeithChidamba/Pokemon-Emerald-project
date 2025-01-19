@@ -75,6 +75,7 @@ public class Enemy_trainer : MonoBehaviour
                 participant.pokemon = numAlive[randomMemeber];
                 Battle_handler.instance.Set_participants(participant);
             }
+            Turn_Based_Combat.instance.FainEventDelay = false;
         }
     }
     public void StartBattle(string TrainerName, bool isSameTrainer)
@@ -119,7 +120,7 @@ public class Enemy_trainer : MonoBehaviour
             int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
             Select_player(randome_enemy);
             int randomMove = Utility.Get_rand(0, participant.pokemon.move_set.Count);
-            //Debug.Log("decision "+randome_enemy+" move: "+randomMove);
+            Debug.Log(participant.pokemon.Pokemon_name+" is gonna use move: "+participant.pokemon.move_set[randomMove].Move_name);
             use_move(participant.pokemon.move_set[randomMove]);
             CanAttack = false;
         }

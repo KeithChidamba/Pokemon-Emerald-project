@@ -15,6 +15,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] Accuracy_And_Evasion_Levels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] Crit_Levels = {6.25f,12.5f,25f,50f};
     private Battle_event[] Dialouge_order={null,null,null,null,null};
+    
     public event Action OnMoveEnd;
     private void Awake()
     {

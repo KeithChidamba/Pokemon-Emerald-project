@@ -125,7 +125,11 @@ public class Battle_handler : MonoBehaviour
     public void Select_enemy(int choice)
     {
         if(Turn_Based_Combat.instance.Current_pkm_turn>1)return;//not player's turn
-        if (isDouble_battle & choice < 2) return;//cant attack own pokemon
+        if (isDouble_battle & choice < 2)
+        {//cant attack own pokemon
+            Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = false;
+            return;
+        }
         Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
         Current_pkm_Enemy = choice;
     }
@@ -373,6 +377,7 @@ public class Battle_handler : MonoBehaviour
         foreach (LevelUpEvent pkm in new List<LevelUpEvent>(levelUpQueue))
         {
             yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+            Turn_Based_Combat.instance.LevelEventDelay = true;
             Dialogue_handler.instance.Battle_Info(pkm.pokemon.Pokemon_name+" leveled up!");
             yield return new WaitUntil(() => !displaying_info);
             pkm.Execute();
@@ -390,6 +395,7 @@ public class Battle_handler : MonoBehaviour
                 }
         }
         yield return new WaitForSeconds(.5f);
+        Turn_Based_Combat.instance.LevelEventDelay = false;
         levelUpQueue.Clear();
         if(BattleOver)
             End_Battle(BattleWon);

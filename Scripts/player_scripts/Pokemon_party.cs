@@ -209,6 +209,7 @@ void close_party()
 }
     void switchIn()
     {
+        Turn_Based_Combat.instance.FainEventDelay = false;
         if(Turn_Based_Combat.instance.Current_pkm_turn > 1 && SwapOutNext)//not equal to ur turn, check this with double batttles
             Turn_Based_Combat.instance.Next_turn();
         if(Swapping_in)

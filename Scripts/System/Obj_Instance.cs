@@ -107,7 +107,7 @@ public static class Obj_Instance
         return trainer_copy;
     }
 
-    public static TrainerPokemonData SetTrainerPkmData(TrainerPokemonData data)
+    private static TrainerPokemonData SetTrainerPkmData(TrainerPokemonData data)
     {
         TrainerPokemonData dataCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
         dataCopy.pokemon = set_Pokemon(data.pokemon);

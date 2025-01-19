@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30976
+        "instanceID": 30856
     },
     "has_gender": true,
     "HP": 15.0,
@@ -29,11 +29,11 @@
     "SP_DEF_IV": 4.0,
     "speed_IV": 6.0,
     "HP_EV": 0.0,
-    "Attack_EV": 2.0,
+    "Attack_EV": 3.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 3.0,
+    "speed_EV": 6.0,
     "EVs": [
         "Speed1"
     ],
@@ -41,7 +41,7 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "Current_level": 3,
-    "CurrentExpAmount": 76,
+    "CurrentExpAmount": 132,
     "NextLvExpAmount": 145.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30330
+            "instanceID": 30318
         }
     ],
     "Status_effect": "Paralysis",
@@ -73,21 +73,21 @@
     ],
     "move_set": [
         {
-            "instanceID": -87712
+            "instanceID": -57202
         },
         {
-            "instanceID": -87714
+            "instanceID": -57204
         }
     ],
     "ability": {
-        "instanceID": 30332
+        "instanceID": 30320
     },
     "evolutions": [
         {
-            "instanceID": 30334
+            "instanceID": 30322
         },
         {
-            "instanceID": 30336
+            "instanceID": 30324
         }
     ],
     "HeldItem": {
@@ -95,10 +95,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30028
+        "instanceID": 30016
     },
     "back_picture": {
-        "instanceID": 30338
+        "instanceID": 30326
     },
     "ability_name": "Inferno",
     "natureName": "Naive",
