@@ -32,8 +32,6 @@ public class Turn_Based_Combat : MonoBehaviour
     public void SaveMove(Turn turn)
     {
         Turn_history.Add(turn);
-        //Debug.Log(Battle_handler.instance.Participant_count+" part count");
-       // Debug.Log(turn._turn.attacker_.pokemon.Pokemon_name + " turn added lv" +turn._turn.attacker_.pokemon.Current_level);
         if( (Battle_handler.instance.isDouble_battle && Current_pkm_turn == Battle_handler.instance.Participant_count-1 )
          || (Current_pkm_turn == Battle_handler.instance.Participant_count ))
             StartCoroutine(ExecuteMoves(Set_priority()));
@@ -47,10 +45,8 @@ public class Turn_Based_Combat : MonoBehaviour
         LevelEventDelay = false;
         StopAllCoroutines();
     }
-    bool Can_Attack(Turn turn)
+    bool Can_Attack(Turn turn, Battle_Participant attacker_,Battle_Participant victim_)
     {
-        Battle_Participant attacker_=Battle_handler.instance.Battle_P[turn.attackerIndex];
-        Battle_Participant victim_=Battle_handler.instance.Battle_P[turn.victimIndex];
         if(attacker_.pokemon.HP<=0) return false;
         if (attacker_.pokemon.canAttack)
         {
@@ -81,33 +77,35 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         foreach (Turn CurrentTurn in TurnOrder)
         {
-            if (!CheckParticipantState(Battle_handler.instance.Battle_P[CurrentTurn.attackerIndex]) |
-                !CheckParticipantState(Battle_handler.instance.Battle_P[CurrentTurn.victimIndex]))
-            {
-                CancelTurn(CurrentTurn);
+            Battle_Participant attacker_=Battle_handler.instance.Battle_P[CurrentTurn.attackerIndex];
+            Battle_Participant victim_=Battle_handler.instance.Battle_P[CurrentTurn.victimIndex];
+            if (!CheckParticipantState(attacker_))
+                continue;
+            if (!isValidParticipant(CurrentTurn,attacker_))
+                continue;
+            
+            if (!CheckParticipantState(victim_))
+            {//if attack was directed at a pokemon that just fainted
+                Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" missed the attack");
+                yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
                 continue;
             }
             OnMoveExecute?.Invoke();
             yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
-            if (Can_Attack(CurrentTurn))
+            if (Can_Attack(CurrentTurn,attacker_,victim_))
             {
-                Debug.Log(Battle_handler.instance.Battle_P[CurrentTurn.attackerIndex].pokemon.Pokemon_name + " is attacking"+
-                          Battle_handler.instance.Battle_P[CurrentTurn.victimIndex].pokemon.Pokemon_name);
                 Move_handler.instance.Doing_move = true;
                 Move_handler.instance.Do_move(CurrentTurn);
                 yield return new WaitUntil(() => !Move_handler.instance.Doing_move);
-                CancelTurn(CurrentTurn);
                 yield return new WaitUntil(() => !LevelEventDelay);
                 yield return new WaitUntil(() => !FainEventDelay);
             }
             else
             {
-                //Debug.Log(CurrentTurn.attacker_.pokemon.Pokemon_name + "'s turn cancelled");
-                CancelTurn(CurrentTurn);
                 yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
             }
         }
-        //Debug.Log("moves over");
+        Turn_history.Clear();
         OnTurnEnd?.Invoke();
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         yield return new WaitUntil(() => !FainEventDelay);
@@ -123,29 +121,15 @@ public class Turn_Based_Combat : MonoBehaviour
             if (!participant.fainted)
                 if (participant.pokemon != null)
                     return true;
-        /*if (!victim_.is_active)
-        {
-            Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" missed the attack");
-            return false;
-        }*/
-        Debug.Log("invalid state: "+participant.name);
         return false;
-    } 
-    void CancelTurn(Turn turn)
-    {
-        Turn_history.Remove(turn);
     }
 
-    public void RemoveTurn(Pokemon faintedPokemon)
+    bool isValidParticipant(Turn turn,Battle_Participant participant)
     {
-        foreach(Turn turn in Turn_history)
-            if (Battle_handler.instance.Battle_P[turn.attackerIndex].pokemon.Pokemon_ID == faintedPokemon.Pokemon_ID)
-            {
-                CancelTurn(turn); 
-                //Debug.Log("removed");
-                //EditorApplication.isPaused = true;
-                break;
-            }
+        if (turn.attackerID == participant.pokemon.Pokemon_ID.ToString()|
+            turn.victimID == participant.pokemon.Pokemon_ID.ToString())
+            return true;
+        return false;
     }
     public void Next_turn()
     { 

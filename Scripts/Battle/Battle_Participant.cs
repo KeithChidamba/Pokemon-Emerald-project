@@ -100,7 +100,6 @@ public class Battle_Participant : MonoBehaviour
         if (fainted) return;
         fainted = true;
         Turn_Based_Combat.instance.FainEventDelay = true;
-        Turn_Based_Combat.instance.RemoveTurn(pokemon);
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         Give_exp();
         foreach (Battle_Participant enemy in Current_Enemies)

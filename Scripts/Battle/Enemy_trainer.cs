@@ -71,7 +71,7 @@ public class Enemy_trainer : MonoBehaviour
             }
             else
             {
-                int randomMemeber = Utility.Get_rand(2, numAlive.Count - 1);
+                int randomMemeber = Utility.Get_rand(0, numAlive.Count - 1);
                 participant.pokemon = numAlive[randomMemeber];
                 Battle_handler.instance.Set_participants(participant);
             }
