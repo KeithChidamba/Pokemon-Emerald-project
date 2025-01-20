@@ -154,6 +154,7 @@ public static class PokemonOperations
 
     public static void GetNewMove(Pokemon pkm)
     {
+        
         LearningNewMove = true;
         CurrentPkm = pkm;
         int counter = 0;

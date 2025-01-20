@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public class LevelUpEvent : ICommand
 {
-    public Pokemon pokemon;
+    [SerializeField]public Pokemon pokemon;
     public LevelUpEvent(Pokemon pokemon_)
     {
         pokemon = pokemon_;

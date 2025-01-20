@@ -79,7 +79,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     IEnumerator ExecuteMoves(List<Turn> TurnOrder)
     {
-        foreach (Turn CurrentTurn in new List<Turn>(TurnOrder))
+        foreach (Turn CurrentTurn in TurnOrder)
         {
             if (!CheckParticipantState(Battle_handler.instance.Battle_P[CurrentTurn.attackerIndex]) |
                 !CheckParticipantState(Battle_handler.instance.Battle_P[CurrentTurn.victimIndex]))
@@ -109,6 +109,8 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         //Debug.Log("moves over");
         OnTurnEnd?.Invoke();
+        yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
+        yield return new WaitUntil(() => !FainEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         Battle_handler.instance.Reset_move();
         Next_turn();

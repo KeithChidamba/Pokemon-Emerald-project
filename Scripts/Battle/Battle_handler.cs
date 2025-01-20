@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -374,7 +375,7 @@ public class Battle_handler : MonoBehaviour
     } 
     IEnumerator LevelUp_Sequence()
     {
-        foreach (LevelUpEvent pkm in new List<LevelUpEvent>(levelUpQueue))
+        foreach (LevelUpEvent pkm in levelUpQueue )
         {
             yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
             Turn_Based_Combat.instance.LevelEventDelay = true;

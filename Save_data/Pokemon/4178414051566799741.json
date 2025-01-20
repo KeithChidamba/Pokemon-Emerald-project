@@ -73,10 +73,10 @@
     ],
     "move_set": [
         {
-            "instanceID": -57196
+            "instanceID": -2472
         },
         {
-            "instanceID": -57748
+            "instanceID": -2474
         }
     ],
     "ability": {
@@ -91,7 +91,7 @@
         }
     ],
     "HeldItem": {
-        "instanceID": -57198
+        "instanceID": -2476
     },
     "HasItem": true,
     "front_picture": {
