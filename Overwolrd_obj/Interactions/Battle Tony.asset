@@ -16,7 +16,7 @@ MonoBehaviour:
   InteractionType: Event
   InteractionOptions:
   - Battle
-  ResultMessage: single
+  ResultMessage: single-double
   OptionsUiText: []
   AdditionalInfo:
   - Tony

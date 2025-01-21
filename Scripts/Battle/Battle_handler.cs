@@ -141,6 +141,7 @@ public class Battle_handler : MonoBehaviour
     }
     void set_battle()
     {
+        levelUpQueue.Clear();
         Options_manager.instance.playerInBattle = true;
         Set_battle_ui();
         Turn_Based_Combat.instance.Change_turn(-1,0);
@@ -165,7 +166,6 @@ public class Battle_handler : MonoBehaviour
         Battle_P[2].pokemon = enemy;
         Wild_pkm.instance.pokemon_participant = Battle_P[2];
         Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
-        levelUpQueue.Clear();
         Battle_P[2].AddToExpList(Battle_P[0].pokemon);
         foreach(Battle_Participant p in Battle_P)
             if (p.pokemon != null)
@@ -201,7 +201,6 @@ public class Battle_handler : MonoBehaviour
         Battle_P[2].trainer.StartBattle(trainerName,false);
         Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
         Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
-        levelUpQueue.Clear();
         Battle_P[2].AddToExpList(Battle_P[0].pokemon);
         foreach(Battle_Participant p in Battle_P)
             if (p.pokemon != null)
@@ -254,7 +253,6 @@ public class Battle_handler : MonoBehaviour
         Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
         Battle_P[3].pokemon = Battle_P[3].trainer.TrainerParty[1];
         Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
-        levelUpQueue.Clear();
         foreach (Battle_Participant participant in Battle_P)
             if (participant.pokemon != null)
                 foreach (Battle_Participant enemy  in participant.Current_Enemies)
@@ -353,7 +351,6 @@ public class Battle_handler : MonoBehaviour
     }
     IEnumerator DelayBattleEnd()
     {
-        yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         if (running_away)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
@@ -371,35 +368,33 @@ public class Battle_handler : MonoBehaviour
     }
     public void LevelUpEvent(Pokemon pkm)
     {
-        levelUpQueue.Add(new LevelUpEvent(pkm));
-        StartCoroutine(LevelUp_Sequence());
+        LevelUpEvent PkmLevelUp=new LevelUpEvent(pkm);
+        levelUpQueue.Add(PkmLevelUp);
+        StartCoroutine(LevelUp_Sequence(PkmLevelUp));
     } 
-    IEnumerator LevelUp_Sequence()
+    IEnumerator LevelUp_Sequence(LevelUpEvent pkmLevelUp)
     {
-        foreach (LevelUpEvent pkm in levelUpQueue )
-        {
-            yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-            Turn_Based_Combat.instance.LevelEventDelay = true;
-            Dialogue_handler.instance.Battle_Info(pkm.pokemon.Pokemon_name+" leveled up!");
-            yield return new WaitUntil(() => !displaying_info);
-            pkm.Execute();
-            yield return new WaitForSeconds(.5f);
-            if (PokemonOperations.LearningNewMove)
-                if (pkm.pokemon.move_set.Count > 3)
-                {
-                    yield return new WaitUntil(() => Options_manager.instance.ChoosingNewMove);
-                    yield return new WaitForSeconds(.5f);
-                    if (Pokemon_Details.instance.LearningMove)
-                    {
-                        yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
-                        yield return new WaitForSeconds(1f);
-                    }
-                }
-        }
+        yield return new WaitUntil(() => !Turn_Based_Combat.instance.LevelEventDelay);
+        Turn_Based_Combat.instance.LevelEventDelay = true;
+        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+        Dialogue_handler.instance.Battle_Info(pkmLevelUp.pokemon.Pokemon_name+" leveled up!");
+        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+        pkmLevelUp.Execute();
         yield return new WaitForSeconds(.5f);
+        if (PokemonOperations.LearningNewMove)
+            if (pkmLevelUp.pokemon.move_set.Count > 3)
+            {
+                yield return new WaitUntil(() => Options_manager.instance.ChoosingNewMove);
+                yield return new WaitForSeconds(.5f);
+                if (Pokemon_Details.instance.LearningMove)
+                {
+                    yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
+                    yield return new WaitForSeconds(1f);
+                }
+            }
+        levelUpQueue.Remove(pkmLevelUp);
         Turn_Based_Combat.instance.LevelEventDelay = false;
-        levelUpQueue.Clear();
-        if(BattleOver)
+        if(BattleOver & levelUpQueue.Count==0)
             End_Battle(BattleWon);
         yield return null;
     }

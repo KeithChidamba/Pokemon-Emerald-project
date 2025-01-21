@@ -97,6 +97,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 Move_handler.instance.Doing_move = true;
                 Move_handler.instance.Do_move(CurrentTurn);
                 yield return new WaitUntil(() => !Move_handler.instance.Doing_move);
+                yield return new WaitForSeconds(0.5f);
                 yield return new WaitUntil(() => !LevelEventDelay);
                 yield return new WaitUntil(() => !FainEventDelay);
             }

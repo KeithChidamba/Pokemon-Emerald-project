@@ -55,7 +55,6 @@ public class Options_manager : MonoBehaviour
         Pokemon_Details.instance.LearningMove = false;
         PokemonOperations.LearningNewMove = false;
         Dialogue_handler.instance.Battle_Info(PokemonOperations.CurrentPkm.Pokemon_name+" did not learn "+PokemonOperations.NewMove.Move_name);
-        Battle_handler.instance.levelUpQueue.RemoveAll(p=>p.pokemon==PokemonOperations.CurrentPkm);
     }
     void Heal_Pokemon()
     {
@@ -66,6 +65,7 @@ public class Options_manager : MonoBehaviour
             Pokemon_party.instance.party[i].HP = Pokemon_party.instance.party[i].max_HP;
             foreach (Move m in Pokemon_party.instance.party[i].move_set)
                 m.Powerpoints = m.max_Powerpoints;
+            Pokemon_party.instance.party[i].Status_effect = "None";
         }
         overworld_actions.instance.doing_action = false;
         Dialogue_handler.instance.Write_Info("Your pokemon have been healed, you're welcome!", "Details");

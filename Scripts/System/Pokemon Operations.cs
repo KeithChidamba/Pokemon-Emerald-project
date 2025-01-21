@@ -199,7 +199,7 @@ public static class PokemonOperations
         Pokemon_Details.instance.Exit_details();
         Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" forgot "+CurrentPkm.move_set[index].Move_name+" and learned "+NewMove.Move_name);
         CurrentPkm.move_set[index] = Obj_Instance.set_move(NewMove);
-        Battle_handler.instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);
+       // Battle_handler.instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);
     }
     private static void get_Gender(Pokemon new_pkm)
     {

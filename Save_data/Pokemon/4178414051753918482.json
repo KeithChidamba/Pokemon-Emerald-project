@@ -6,22 +6,22 @@
     "Gender": "Male",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30856
+        "instanceID": 32484
     },
     "has_gender": true,
-    "HP": 15.0,
-    "max_HP": 15.0,
+    "HP": 19.0,
+    "max_HP": 19.0,
     "BaseHP": 45.0,
     "BaseAttack": 60.0,
     "BaseDefense": 40.0,
     "BaseSP_ATK": 70.0,
     "BaseSP_DEF": 50.0,
     "Basespeed": 45.0,
-    "Attack": 9.0,
-    "Defense": 8.0,
-    "SP_ATK": 9.0,
-    "SP_DEF": 7.0,
-    "speed": 8.0,
+    "Attack": 12.0,
+    "Defense": 10.0,
+    "SP_ATK": 12.0,
+    "SP_DEF": 9.0,
+    "speed": 10.0,
     "HP_IV": 4.0,
     "Attack_IV": 30.0,
     "Defense_IV": 21.0,
@@ -29,20 +29,20 @@
     "SP_DEF_IV": 4.0,
     "speed_IV": 6.0,
     "HP_EV": 0.0,
-    "Attack_EV": 3.0,
+    "Attack_EV": 4.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 6.0,
+    "speed_EV": 9.0,
     "EVs": [
         "Speed1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 3,
-    "CurrentExpAmount": 132,
-    "NextLvExpAmount": 145.0,
+    "Current_level": 5,
+    "CurrentExpAmount": 188,
+    "NextLvExpAmount": 262.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -51,10 +51,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30318
+            "instanceID": 9496
         }
     ],
-    "Status_effect": "Paralysis",
+    "Status_effect": "None",
     "Buff_Debuffs": [],
     "type_Immunity": "None",
     "evo_line": [
@@ -73,21 +73,24 @@
     ],
     "move_set": [
         {
-            "instanceID": -2480
+            "instanceID": -50112
         },
         {
-            "instanceID": -2482
+            "instanceID": -50114
+        },
+        {
+            "instanceID": -50116
         }
     ],
     "ability": {
-        "instanceID": 30320
+        "instanceID": 9498
     },
     "evolutions": [
         {
-            "instanceID": 30322
+            "instanceID": 9500
         },
         {
-            "instanceID": 30324
+            "instanceID": 9502
         }
     ],
     "HeldItem": {
@@ -95,10 +98,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30016
+        "instanceID": 9504
     },
     "back_picture": {
-        "instanceID": 30326
+        "instanceID": 9506
     },
     "ability_name": "Inferno",
     "natureName": "Naive",
@@ -111,10 +114,12 @@
     ],
     "move_data": [
         "Scratch/Normal",
-        "Ember/Fire"
+        "Ember/Fire",
+        "Double kick/Fighting"
     ],
     "move_pp_data": [
         25,
+        20,
         20
     ]
 }

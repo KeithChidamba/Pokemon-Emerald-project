@@ -6,22 +6,22 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31002
+        "instanceID": 32592
     },
     "has_gender": true,
-    "HP": 15.0,
-    "max_HP": 15.0,
+    "HP": 17.0,
+    "max_HP": 17.0,
     "BaseHP": 40.0,
     "BaseAttack": 45.0,
     "BaseDefense": 35.0,
     "BaseSP_ATK": 65.0,
     "BaseSP_DEF": 55.0,
     "Basespeed": 70.0,
-    "Attack": 8.0,
-    "Defense": 7.0,
-    "SP_ATK": 8.0,
-    "SP_DEF": 9.0,
-    "speed": 9.0,
+    "Attack": 9.0,
+    "Defense": 8.0,
+    "SP_ATK": 9.0,
+    "SP_DEF": 11.0,
+    "speed": 11.0,
     "HP_IV": 16.0,
     "Attack_IV": 18.0,
     "Defense_IV": 17.0,
@@ -29,20 +29,20 @@
     "SP_DEF_IV": 22.0,
     "speed_IV": 25.0,
     "HP_EV": 0.0,
-    "Attack_EV": 2.0,
+    "Attack_EV": 3.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 8.0,
+    "speed_EV": 11.0,
     "EVs": [
         "Speed1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 3,
-    "CurrentExpAmount": 112,
-    "NextLvExpAmount": 145.0,
+    "Current_level": 4,
+    "CurrentExpAmount": 168,
+    "NextLvExpAmount": 178.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30242
+            "instanceID": 31486
         }
     ],
     "Status_effect": "None",
@@ -73,32 +73,35 @@
     ],
     "move_set": [
         {
-            "instanceID": -2472
+            "instanceID": -50102
         },
         {
-            "instanceID": -2474
+            "instanceID": -50104
+        },
+        {
+            "instanceID": -50106
         }
     ],
     "ability": {
-        "instanceID": 30244
+        "instanceID": 31488
     },
     "evolutions": [
         {
-            "instanceID": 30246
+            "instanceID": 31490
         },
         {
-            "instanceID": 30248
+            "instanceID": 31492
         }
     ],
     "HeldItem": {
-        "instanceID": -2476
+        "instanceID": -50108
     },
     "HasItem": true,
     "front_picture": {
-        "instanceID": 30196
+        "instanceID": 31452
     },
     "back_picture": {
-        "instanceID": 30250
+        "instanceID": 31494
     },
     "ability_name": "Overgrow",
     "natureName": "Careful",
@@ -111,10 +114,12 @@
     ],
     "move_data": [
         "Pound/Normal",
-        "Absorb/Grass"
+        "Absorb/Grass",
+        "Quick attack/Normal"
     ],
     "move_pp_data": [
         25,
-        20
+        20,
+        25
     ]
 }
