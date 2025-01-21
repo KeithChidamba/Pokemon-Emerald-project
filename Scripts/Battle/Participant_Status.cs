@@ -44,6 +44,8 @@ public class Participant_Status : MonoBehaviour
             _participant.pokemon.isFlinched = false;
             _participant.pokemon.canAttack = true;
         }
+        if (!_participant.pokemon.CanBeDamaged)
+            _participant.pokemon.CanBeDamaged = true;
         if (_participant.pokemon.Status_effect == "None") return;
         _participant.refresh_statusIMG();
         Status_damage();

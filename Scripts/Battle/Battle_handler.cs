@@ -419,6 +419,7 @@ public class Battle_handler : MonoBehaviour
                 p.data.Load_Stats();
                 p.data.Reset_Battle_state(p.pokemon,true);
                 p.pokemon = null;
+                p.previousMove = "";
                 p.Unload_ui();
                 if (p.trainer != null)
                     p.trainer.InBattle = false;

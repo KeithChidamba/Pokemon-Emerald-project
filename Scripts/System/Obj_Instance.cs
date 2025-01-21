@@ -18,6 +18,7 @@ public static class Obj_Instance
         mv.Has_effect = m.Has_effect;
         mv.Can_flinch = m.Can_flinch;
         mv.is_Buff_Debuff = m.is_Buff_Debuff;
+        mv.is_Consecutive = m.is_Consecutive;
         mv.Priority = m.Priority;
         mv.Powerpoints = m.Powerpoints;
         mv.max_Powerpoints = m.max_Powerpoints;

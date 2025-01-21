@@ -13,6 +13,7 @@ public class Move : ScriptableObject
     public bool Has_status = false;
     public bool Has_effect = false;
     public bool Can_flinch = false;
+    public bool is_Consecutive = false;
     public int Priority=0;
     public int Powerpoints;
     public int max_Powerpoints;

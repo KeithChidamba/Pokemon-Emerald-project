@@ -95,6 +95,11 @@ public class Turn_Based_Combat : MonoBehaviour
             if (Can_Attack(CurrentTurn,attacker_,victim_))
             {
                 Move_handler.instance.Doing_move = true;
+                if(attacker_.previousMove.Split('/')[0] == CurrentTurn.move_.Move_name)
+                    attacker_.previousMove = CurrentTurn.move_.Move_name + 
+                                             (int.Parse(attacker_.previousMove.Split('/')[1])+1);
+                else
+                    attacker_.previousMove = CurrentTurn.move_.Move_name + "1";
                 Move_handler.instance.Do_move(CurrentTurn);
                 yield return new WaitUntil(() => !Move_handler.instance.Doing_move);
                 yield return new WaitForSeconds(0.5f);
