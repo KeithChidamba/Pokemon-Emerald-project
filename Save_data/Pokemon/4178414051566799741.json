@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 32592
+        "instanceID": 31002
     },
     "has_gender": true,
     "HP": 17.0,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 31486
+            "instanceID": 30242
         }
     ],
     "Status_effect": "None",
@@ -73,35 +73,35 @@
     ],
     "move_set": [
         {
-            "instanceID": -50102
+            "instanceID": -33214
         },
         {
-            "instanceID": -50104
+            "instanceID": -33216
         },
         {
-            "instanceID": -50106
+            "instanceID": -33218
         }
     ],
     "ability": {
-        "instanceID": 31488
+        "instanceID": 30244
     },
     "evolutions": [
         {
-            "instanceID": 31490
+            "instanceID": 30246
         },
         {
-            "instanceID": 31492
+            "instanceID": 30248
         }
     ],
     "HeldItem": {
-        "instanceID": -50108
+        "instanceID": -33220
     },
     "HasItem": true,
     "front_picture": {
-        "instanceID": 31452
+        "instanceID": 30196
     },
     "back_picture": {
-        "instanceID": 31494
+        "instanceID": 30250
     },
     "ability_name": "Overgrow",
     "natureName": "Careful",

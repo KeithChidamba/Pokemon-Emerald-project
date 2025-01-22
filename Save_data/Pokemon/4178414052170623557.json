@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 32484
+        "instanceID": 30856
     },
     "has_gender": true,
     "HP": 12.0,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 9496
+            "instanceID": 30318
         }
     ],
     "Status_effect": "None",
@@ -73,29 +73,29 @@
     ],
     "move_set": [
         {
-            "instanceID": -50120
+            "instanceID": -33238
         }
     ],
     "ability": {
-        "instanceID": 9498
+        "instanceID": 30320
     },
     "evolutions": [
         {
-            "instanceID": 9500
+            "instanceID": 30322
         },
         {
-            "instanceID": 9502
+            "instanceID": 30324
         }
     ],
     "HeldItem": {
-        "instanceID": -50122
+        "instanceID": -33240
     },
     "HasItem": true,
     "front_picture": {
-        "instanceID": 9504
+        "instanceID": 30016
     },
     "back_picture": {
-        "instanceID": 9506
+        "instanceID": 30326
     },
     "ability_name": "Inferno",
     "natureName": "Naive",

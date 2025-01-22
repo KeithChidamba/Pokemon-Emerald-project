@@ -17,17 +17,16 @@ MonoBehaviour:
   Move_accuracy: 85
   type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
+  is_Buff_Debuff: 1
   Has_status: 0
   Has_effect: 0
   Can_flinch: 0
+  is_Consecutive: 0
   Priority: 0
   Powerpoints: 15
   max_Powerpoints: 15
   Status_effect: None
-  Buff_Debuff: None
+  Buff_Debuff: e-1Defense
   Status_chance: 0
-  Debuff_chance: 0
+  Debuff_chance: 30
   Description: a violent attack that can lower defense
-  player_animtion: {fileID: 0}
-  enemy_animtion: {fileID: 0}

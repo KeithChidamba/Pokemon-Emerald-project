@@ -18,16 +18,15 @@ MonoBehaviour:
   type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
   is_Buff_Debuff: 0
-  Has_status: 0
+  Has_status: 1
   Has_effect: 1
   Can_flinch: 0
+  is_Consecutive: 1
   Priority: 0
   Powerpoints: 20
   max_Powerpoints: 20
-  Status_effect: None
+  Status_effect: Paralysis
   Buff_Debuff: None
-  Status_chance: 0
+  Status_chance: 10
   Debuff_chance: 0
   Description: two successive kicks that may paralys the foe
-  player_animtion: {fileID: 0}
-  enemy_animtion: {fileID: 0}
