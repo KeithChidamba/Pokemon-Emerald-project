@@ -163,6 +163,7 @@ public class Move_handler:MonoBehaviour
     }
     void Get_status()
     {
+        if (current_turn.move_.Has_effect) return;
         if (!current_turn.move_.Has_status)return;
         if (victim_.pokemon.Status_effect != "None") return;
         if (victim_.pokemon.HP <= 0) return;
@@ -172,7 +173,12 @@ public class Move_handler:MonoBehaviour
             return;
         }
         if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
-            CheckStatus();
+            if(current_turn.move_.isMultiTarget)
+                foreach (Battle_Participant enemy in attacker_.Current_Enemies)
+                    CheckStatus(enemy);
+            else{
+                CheckStatus(victim_);
+            }
     }
     bool CheckInvalidStatusEffect(string status,string type_name)
     {
@@ -184,12 +190,12 @@ public class Move_handler:MonoBehaviour
         return false;
     }
 
-    void CheckStatus()
+    void CheckStatus(Battle_Participant victim)
     {
-        foreach (Type t in victim_.pokemon.types)
+        foreach (Type t in victim.pokemon.types)
             if(CheckInvalidStatusEffect(current_turn.move_.Status_effect, t.Type_name))return;
-        Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" recieved a "+current_turn.move_.Status_effect+" effect!");
-        Set_Status(victim_,current_turn.move_.Status_effect);
+        Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" recieved a "+current_turn.move_.Status_effect+" effect!");
+        Set_Status(victim,current_turn.move_.Status_effect);
     }
     public void Set_Status(Battle_Participant p,String Status)
     {
@@ -215,23 +221,39 @@ public class Move_handler:MonoBehaviour
         char result = effect[1];//buff or debuff
         int buff_amount = int.Parse(effect[2].ToString());
         string stat = effect.Substring(3, effect.Length - 3);
-        Pokemon reciever_pkm;
+        Pokemon reciever_pkm = victim_.pokemon;
         if (effect[0] == 'e') //who the change is effecting
         {//affecting enemy
-            if (!victim_.pokemon.CanBeDamaged)
+            if(!current_turn.move_.isMultiTarget)
             {
-                Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" protected itself");
-                return;
+                if (!victim_.pokemon.CanBeDamaged)
+                {
+                    Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name + " protected itself");
+                    return;
+                }
+                reciever_pkm = victim_.pokemon;
             }
-            reciever_pkm = victim_.pokemon;
+            else {
+                foreach (Battle_Participant enemy in attacker_.Current_Enemies)
+                    if (enemy.pokemon.CanBeDamaged)
+                        GiveBuff_Debuff(stat,enemy.pokemon,buff_amount,result);
+                    else {
+                        Dialogue_handler.instance.Battle_Info(enemy.pokemon.Pokemon_name + " protected itself");
+                    }
+            }
         }
-        else
+        else//affecting attacker
             reciever_pkm = attacker_.pokemon;
+        GiveBuff_Debuff(stat,reciever_pkm,buff_amount,result);
+    }
+
+    void GiveBuff_Debuff(string stat, Pokemon reciever_pkm, int buff_amount, char result)
+    {
         switch (stat)
         {
             case"Defense":
                 reciever_pkm.Defense = Get_buff_debuff(victim_.pokemon.Defense,stat,buff_amount,result,reciever_pkm);
-                    break;
+                break;
             case"Attack":
                 reciever_pkm.Attack = Get_buff_debuff(victim_.pokemon.Attack,stat,buff_amount,result,reciever_pkm);
                 break;
@@ -278,12 +300,10 @@ public class Move_handler:MonoBehaviour
         MoveDelay = false;
     }
 
-    void MultiTargetMove()
+    void MultiTargetMoveDamage()
     {
         foreach (Battle_Participant enemy in attacker_.Current_Enemies)
-        {
             enemy.pokemon.HP -= Calc_Damage(current_turn.move_,enemy);
-        }
     }
     IEnumerator ConsecutiveMove()
     {
@@ -319,6 +339,11 @@ public class Move_handler:MonoBehaviour
         }
         else//success
           attacker_.pokemon.CanBeDamaged = false;
+    }
+
+    void surf()
+    {
+        MultiTargetMoveDamage();
     }
     void magnitude()
     {

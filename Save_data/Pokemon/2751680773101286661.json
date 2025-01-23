@@ -1,39 +1,39 @@
 {
-    "Base_Pokemon_name": "Torchic",
-    "Pokemon_name": "Torchic",
-    "Pokemon_ID": 4178414052170623557,
-    "Personality_value": 941713989,
+    "Base_Pokemon_name": "Treecko",
+    "Pokemon_name": "Treecko",
+    "Pokemon_ID": 2751680773101286661,
+    "Personality_value": 2013694715,
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30856
+        "instanceID": 31002
     },
     "has_gender": true,
     "HP": 12.0,
     "max_HP": 12.0,
-    "BaseHP": 45.0,
-    "BaseAttack": 60.0,
-    "BaseDefense": 40.0,
-    "BaseSP_ATK": 70.0,
-    "BaseSP_DEF": 50.0,
-    "Basespeed": 45.0,
-    "Attack": 6.0,
+    "BaseHP": 40.0,
+    "BaseAttack": 45.0,
+    "BaseDefense": 35.0,
+    "BaseSP_ATK": 65.0,
+    "BaseSP_DEF": 55.0,
+    "Basespeed": 70.0,
+    "Attack": 5.0,
     "Defense": 5.0,
-    "SP_ATK": 6.0,
-    "SP_DEF": 5.0,
+    "SP_ATK": 7.0,
+    "SP_DEF": 6.0,
     "speed": 6.0,
-    "HP_IV": 26.0,
-    "Attack_IV": 14.0,
-    "Defense_IV": 15.0,
-    "SP_ATK_IV": 6.0,
-    "SP_DEF_IV": 12.0,
-    "speed_IV": 13.0,
+    "HP_IV": 23.0,
+    "Attack_IV": 27.0,
+    "Defense_IV": 10.0,
+    "SP_ATK_IV": 24.0,
+    "SP_DEF_IV": 6.0,
+    "speed_IV": 29.0,
     "HP_EV": 0.0,
-    "Attack_EV": 2.0,
+    "Attack_EV": 0.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 1.0,
+    "speed_EV": 0.0,
     "EVs": [
         "Speed1"
     ],
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30318
+            "instanceID": 30272
         }
     ],
     "Status_effect": "None",
@@ -62,52 +62,52 @@
         "30"
     ],
     "abilities": [
-        "Inferno"
+        "Overgrow"
     ],
     "split_evolution": false,
     "learnSet": [
-        "normal/scratch01",
-        "fire/ember03",
-        "fighting/double kick05",
-        "normal/focus energy07"
+        "normal/pound01",
+        "grass/absorb03",
+        "normal/quick attack04",
+        "grass/bullet seed07"
     ],
     "move_set": [
         {
-            "instanceID": -33238
+            "instanceID": -4584
         }
     ],
     "ability": {
-        "instanceID": 30320
+        "instanceID": 30274
     },
     "evolutions": [
         {
-            "instanceID": 30322
+            "instanceID": 30276
         },
         {
-            "instanceID": 30324
+            "instanceID": 30278
         }
     ],
     "HeldItem": {
-        "instanceID": -33240
+        "instanceID": 0
     },
-    "HasItem": true,
+    "HasItem": false,
     "front_picture": {
-        "instanceID": 30016
+        "instanceID": 30226
     },
     "back_picture": {
-        "instanceID": 30326
+        "instanceID": 30280
     },
-    "ability_name": "Inferno",
-    "natureName": "Naive",
+    "ability_name": "Overgrow",
+    "natureName": "Modest",
     "evo_data": [
-        "Combusken",
-        "Blaziken"
+        "Grovyle",
+        "Sceptile"
     ],
     "type_data": [
-        "Fire"
+        "Grass"
     ],
     "move_data": [
-        "Scratch/Normal"
+        "Pound/Normal"
     ],
     "move_pp_data": [
         25
