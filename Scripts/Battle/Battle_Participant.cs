@@ -155,6 +155,7 @@ public class Battle_Participant : MonoBehaviour
     public void Deactivate_pkm()
     {
         is_active = false;
+        Current_Enemies.Clear();
         Turn_Based_Combat.instance.OnTurnEnd -= status.Check_status;
         Turn_Based_Combat.instance.OnNewTurn -= status.StunCheck;
         Turn_Based_Combat.instance.OnMoveExecute -= status.Notify_Healing;
@@ -249,6 +250,5 @@ public class Battle_Participant : MonoBehaviour
     public void Unload_ui()
     {
         participant_ui.SetActive(false);
-        Current_Enemies.Clear();
     }
 }

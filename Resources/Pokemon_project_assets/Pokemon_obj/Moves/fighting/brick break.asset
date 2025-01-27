@@ -22,11 +22,13 @@ MonoBehaviour:
   Has_effect: 0
   Can_flinch: 0
   is_Consecutive: 0
+  isMultiTarget: 0
+  isSelfTargeted: 0
   Priority: 0
   Powerpoints: 15
   max_Powerpoints: 15
   Status_effect: None
-  Buff_Debuff: e-1Defense
+  Buff_Debuff: -1Defense
   Status_chance: 0
   Debuff_chance: 30
   Description: a violent attack that can lower defense

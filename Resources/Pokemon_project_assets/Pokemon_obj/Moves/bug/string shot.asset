@@ -23,11 +23,12 @@ MonoBehaviour:
   Can_flinch: 0
   is_Consecutive: 0
   isMultiTarget: 1
+  isSelfTargeted: 0
   Priority: 0
   Powerpoints: 25
   max_Powerpoints: 25
   Status_effect: None
-  Buff_Debuff: e-1Speed
+  Buff_Debuff: -1Speed
   Status_chance: 0
   Debuff_chance: 100
   Description: traps the enemy with strings to lower speed

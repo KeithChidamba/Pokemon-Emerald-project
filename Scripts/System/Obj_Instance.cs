@@ -19,6 +19,7 @@ public static class Obj_Instance
         mv.Can_flinch = m.Can_flinch;
         mv.is_Buff_Debuff = m.is_Buff_Debuff;
         mv.is_Consecutive = m.is_Consecutive;
+        mv.isSelfTargeted = m.isSelfTargeted;
         mv.isMultiTarget = m.isMultiTarget;
         mv.Priority = m.Priority;
         mv.Powerpoints = m.Powerpoints;
@@ -102,7 +103,8 @@ public static class Obj_Instance
     {
         TrainerData trainer_copy = ScriptableObject.CreateInstance<TrainerData>();
         trainer_copy.TrainerName = data.TrainerName;
-        trainer_copy.TrainerType = data.TrainerType;
+        trainer_copy.TrainerType = data.TrainerType;        
+        trainer_copy.BattleMoneyReward = data.BattleMoneyReward;
         trainer_copy.TrainerLocation = data.TrainerLocation;
         foreach (TrainerPokemonData member in data.PokemonParty)
             trainer_copy.PokemonParty.Add(SetTrainerPkmData(member));

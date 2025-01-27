@@ -25,6 +25,7 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] GameObject[] option_btns;
     [SerializeField] Text[] option_btns_txt;
     public bool messagesLoading = false;
+    public List<Interaction> PendingMessages = new();
     public static Dialogue_handler instance;
     private void Awake()
     {
@@ -122,21 +123,31 @@ public class Dialogue_handler : MonoBehaviour
         Remove_Exit();
         Battle_handler.instance.displaying_info = true;
         Interaction details = new_interaction(info,"Battle Info","");
-        StartCoroutine(ProccessQeue(details));
+        PendingMessages.Add(details);
+        if(!messagesLoading)
+            StartCoroutine(ProccessQeue(details));
     }
     IEnumerator ProccessQeue(Interaction interaction)
     {
-        yield return new WaitUntil(() => !messagesLoading);
         messagesLoading = true;
         Current_interaction = new_interaction(interaction.InteractionMsg,"Battle Info","");
         Display(Current_interaction);
+        PendingMessages.Remove(interaction);
         yield return new WaitForSeconds(1f);
         reset_message();
     }
     void reset_message()
     {
-        messagesLoading = false;
-        Battle_handler.instance.displaying_info = false;
+        if (PendingMessages.Count > 0)
+        {
+            foreach (Interaction msg in new List<Interaction>(PendingMessages))
+                StartCoroutine(ProccessQeue(msg));
+        }
+        else
+        {
+            messagesLoading = false;
+            Battle_handler.instance.displaying_info = false;
+        }
     }
     public void Write_Info(string info, string type, string option1, string result, string option2,string opTxt1,string opTxt2)//display a choice, with a result when they choose NO
     {

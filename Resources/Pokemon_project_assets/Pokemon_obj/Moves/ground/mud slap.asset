@@ -21,13 +21,14 @@ MonoBehaviour:
   Has_status: 0
   Has_effect: 0
   Can_flinch: 0
+  is_Consecutive: 0
+  isMultiTarget: 0
+  isSelfTargeted: 0
   Priority: 0
   Powerpoints: 15
   max_Powerpoints: 15
   Status_effect: None
-  Buff_Debuff: e-1Accuracy
+  Buff_Debuff: -1Accuracy
   Status_chance: 0
   Debuff_chance: 20
   Description: throws mud at the foe to lower their accuracy
-  player_animtion: {fileID: 0}
-  enemy_animtion: {fileID: 0}

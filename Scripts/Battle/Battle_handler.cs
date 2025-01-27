@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -236,14 +237,6 @@ public class Battle_handler : MonoBehaviour
         Battle_P[0].pokemon = Alive_pkm[0];
         if(Pokemon_party.instance.num_members>1)
             Battle_P[1].pokemon = Alive_pkm[1];
-        for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
-        {
-            Battle_P[0].Current_Enemies.Add(Battle_P[i + 2]);
-            if(Pokemon_party.instance.num_members>1)
-                Battle_P[1].Current_Enemies.Add(Battle_P[i + 2]);
-            Battle_P[2].Current_Enemies.Add(Battle_P[i]);
-            Battle_P[3].Current_Enemies.Add(Battle_P[i]);
-        }
         Battle_P[2].trainer = Battle_P[2].GetComponent<Enemy_trainer>();
         Battle_P[3].trainer = Battle_P[3].GetComponent<Enemy_trainer>();
         Battle_P[2].trainer.StartBattle(trainerName,false);
@@ -251,8 +244,21 @@ public class Battle_handler : MonoBehaviour
         Battle_P[3].trainer._TrainerData = Battle_P[2].trainer._TrainerData;
         Battle_P[3].trainer.TrainerParty = Battle_P[2].trainer.TrainerParty;
         Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
-        Battle_P[3].pokemon = Battle_P[3].trainer.TrainerParty[1];
-        Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
+        Battle_P[3].pokemon = Battle_P[3].trainer.TrainerParty[1]; 
+        for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
+        {
+              if(Battle_P[i + 2].pokemon!=null)
+              {
+                  Battle_P[0].Current_Enemies.Add(Battle_P[i + 2]);
+                  if (Pokemon_party.instance.num_members > 1)
+                      Battle_P[1].Current_Enemies.Add(Battle_P[i + 2]);
+              }
+              if (Battle_P[i].pokemon != null)
+              {
+                  Battle_P[2].Current_Enemies.Add(Battle_P[i]);
+                  Battle_P[3].Current_Enemies.Add(Battle_P[i]);
+              }
+        }
         foreach (Battle_Participant participant in Battle_P)
             if (participant.pokemon != null)
                 foreach (Battle_Participant enemy  in participant.Current_Enemies)
@@ -261,9 +267,9 @@ public class Battle_handler : MonoBehaviour
             if (p.pokemon != null)
                 Set_participants(p);
         Battle_P[2].trainer.InBattle = true;
-        Battle_P[3].trainer.InBattle = true;
+        Battle_P[3].trainer.InBattle = true; 
+        Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
         set_battle();
-
     }
     public void Set_participants(Battle_Participant Participant)
     {
@@ -354,14 +360,22 @@ public class Battle_handler : MonoBehaviour
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         if (running_away)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
-        else
-            if (BattleWon)
-                Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
-            else
+        else if (BattleWon)
+        {
+            Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
+            if (is_trainer_battle)
             {
-                Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
-                Area_manager.instance.Switch_Area("Poke Center",0f);
+                int moneyReward = Battle_P[0].Current_Enemies[0].trainer._TrainerData.BattleMoneyReward;
+                Game_Load.instance.player_data.player_Money += moneyReward;           
+                Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P"+ moneyReward);
             }
+        }
+        else
+        {
+            Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
+            Game_Load.instance.player_data.player_Money -= (int)math.ceil(Game_Load.instance.player_data.player_Money*0.33f);   
+            Area_manager.instance.Switch_Area("Poke Center",0f);
+        }
         yield return new WaitForSeconds(2f);
         end_battle_ui();
         yield return null;

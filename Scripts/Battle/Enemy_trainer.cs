@@ -90,10 +90,10 @@ public class Enemy_trainer : MonoBehaviour
             for(int i=0;i<member.PokemonLevel;i++)
                 member.pokemon.Level_up();
             member.pokemon.HP = member.pokemon.max_HP;
-            //member.pokemon.HP = 1;
-            /*member.pokemon.Attack = 1;
+            member.pokemon.HP = 1;
+            member.pokemon.Attack = 1;
             member.pokemon.SP_ATK = 1;
-            member.pokemon.speed = 1;*/
+            member.pokemon.speed = 1;
             member.pokemon.move_set.Clear();
             foreach (Move move in member.moveSet)
                 member.pokemon.move_set.Add(Obj_Instance.set_move(move));
@@ -120,7 +120,7 @@ public class Enemy_trainer : MonoBehaviour
             int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
             Select_player(randome_enemy);
             int randomMove = Utility.Get_rand(0, participant.pokemon.move_set.Count);
-            Debug.Log(participant.pokemon.Pokemon_name+" is gonna use move: "+participant.pokemon.move_set[randomMove].Move_name);
+            //Debug.Log(participant.pokemon.Pokemon_name+" is gonna use move: "+participant.pokemon.move_set[randomMove].Move_name);
             use_move(participant.pokemon.move_set[randomMove]);
             CanAttack = false;
         }

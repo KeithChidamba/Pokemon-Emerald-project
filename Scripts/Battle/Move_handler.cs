@@ -36,23 +36,21 @@ public class Move_handler:MonoBehaviour
         current_turn = turn;
         attacker_ = Battle_handler.instance.Battle_P[turn.attackerIndex];
         victim_ = Battle_handler.instance.Battle_P[turn.victimIndex];
-        if(current_turn.move_.Move_damage>0)
-            Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" used "+current_turn.move_.Move_name+" on "+victim_.pokemon.Pokemon_name+"!");
-        else
-        {
+        if (current_turn.move_.isMultiTarget || current_turn.move_.isSelfTargeted)
             Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" used "+current_turn.move_.Move_name+"!");
-        }
+        else
+            Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" used "+current_turn.move_.Move_name+" on "+victim_.pokemon.Pokemon_name+"!");
         StartCoroutine(Move_Sequence());
     }
     void Set_Sequences()
     {
-        Dialouge_order[0] = new("Deal_Damage", current_turn.move_.Move_damage > 0,1.5f);//can change this duration
+        Dialouge_order[0] = new("Deal_Damage", current_turn.move_.Move_damage > 0,1.5f);
         Dialouge_order[1] = new("Get_status", current_turn.move_.Has_status,1.5f);
         Dialouge_order[2] = new("Move_effect", current_turn.move_.Has_effect,2f);
         Dialouge_order[3] = new("Set_buff_Debuff", current_turn.move_.is_Buff_Debuff,1.5f);
         Dialouge_order[4] = new("flinch_enemy", current_turn.move_.Can_flinch,1f);
     }
-    IEnumerator Move_Sequence()//anim event
+    IEnumerator Move_Sequence()
     {
         Set_Sequences();
         foreach (Battle_event d in Dialouge_order)
@@ -218,11 +216,11 @@ public class Move_handler:MonoBehaviour
         if (Utility.Get_rand(1, 101) > current_turn.move_.Debuff_chance)
             return;
         string effect = current_turn.move_.Buff_Debuff;
-        char result = effect[1];//buff or debuff
-        int buff_amount = int.Parse(effect[2].ToString());
-        string stat = effect.Substring(3, effect.Length - 3);
+        char result = effect[0];//buff or debuff
+        int buff_amount = int.Parse(effect[1].ToString());
+        string stat = effect.Substring(2, effect.Length - 2);
         Pokemon reciever_pkm = victim_.pokemon;
-        if (effect[0] == 'e') //who the change is effecting
+        if (!current_turn.move_.isSelfTargeted)
         {//affecting enemy
             if(!current_turn.move_.isMultiTarget)
             {
