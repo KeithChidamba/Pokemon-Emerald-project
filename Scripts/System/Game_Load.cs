@@ -57,6 +57,7 @@ public class Game_Load : MonoBehaviour
             Player_data pl_data = ScriptableObject.CreateInstance<Player_data>();
             pl_data.Player_name = player_name;
             pl_data.player_Money = 300;
+            pl_data.NumBadges = 0;
             pl_data.Trainer_ID = Utility.Generate_ID();
             pl_data.Secret_ID = Utility.Generate_ID();
             pl_data.player_Position = Start_house_pos.position;

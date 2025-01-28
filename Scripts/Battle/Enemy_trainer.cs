@@ -37,7 +37,10 @@ public class Enemy_trainer : MonoBehaviour
         numAlive.RemoveAll(p => p.HP <= 0);
         //Debug.Log("alive: "+numAlive.Count);
         if (numAlive.Count == 0)
+        {
+            Battle_handler.instance.LastOpponent = participant.pokemon;
             Battle_handler.instance.End_Battle(true);
+        }
         else
         {
             if (Battle_handler.instance.isDouble_battle)//double battle

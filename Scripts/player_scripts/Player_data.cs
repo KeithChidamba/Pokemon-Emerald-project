@@ -8,6 +8,7 @@ public class Player_data : ScriptableObject
     public int  Trainer_ID;
     public int  Secret_ID;
     public int player_Money;
+    public int NumBadges = 0;
     public Vector3 player_Position;
     public string Location;
 }

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TrainerName: Tony
   TrainerType: Magma Grunt
+  BaseMoneyPayout: 250
   TrainerLocation: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
   PokemonParty:
   - {fileID: 11400000, guid: 77b1ba36c17122c4e8506c57e727b5f9, type: 2}

@@ -33,6 +33,7 @@ public class Battle_handler : MonoBehaviour
     private int Current_Move = 0;
     public int Current_pkm_Enemy = 0;
     public bool Doing_move = false;
+    public Pokemon LastOpponent;
     public static Battle_handler instance;
     public event Action onBattleEnd;
     private void Awake()
@@ -355,9 +356,22 @@ public class Battle_handler : MonoBehaviour
         Selected_Move = true;
         Move_btns[Current_Move].GetComponent<Button>().interactable = false;
     }
+    int MoneyModifier()
+    {
+        /*foreach(Pokemon p in Pokemon_party.instance.party)
+            if (p != null && p.HP>0 && p.HeldItem!=null)
+                if(p.HeldItem.Item_name == "Amulet Coin")
+                    return 2;*/
+        List < Pokemon > party= Pokemon_party.instance.party.ToList().
+                Where(p=>p.HeldItem.Item_name == "Amulet Coin").ToList();
+        if(party.Count>0)
+            return 2;
+        return 1;
+    }
     IEnumerator DelayBattleEnd()
     {
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+        int BaseMoneyPayout = Battle_P[0].Current_Enemies[0].trainer._TrainerData.BaseMoneyPayout;
         if (running_away)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
         else if (BattleWon)
@@ -365,15 +379,18 @@ public class Battle_handler : MonoBehaviour
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
             if (is_trainer_battle)
             {
-                int moneyReward = Battle_P[0].Current_Enemies[0].trainer._TrainerData.BattleMoneyReward;
-                Game_Load.instance.player_data.player_Money += moneyReward;           
-                Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P"+ moneyReward);
+                Debug.Log("modifier: "+MoneyModifier());
+                int MoneyGained = BaseMoneyPayout * LastOpponent.Current_level * MoneyModifier();
+                Game_Load.instance.player_data.player_Money += MoneyGained;           
+                Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P"+ MoneyGained);
             }
         }
         else
         {
+            if (is_trainer_battle)
+                Game_Load.instance.player_data.player_Money -= BaseMoneyPayout * Game_Load.instance.player_data.NumBadges
+                                                                               * LastOpponent.Current_level;  
             Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
-            Game_Load.instance.player_data.player_Money -= (int)math.ceil(Game_Load.instance.player_data.player_Money*0.33f);   
             Area_manager.instance.Switch_Area("Poke Center",0f);
         }
         yield return new WaitForSeconds(2f);
@@ -418,7 +435,6 @@ public class Battle_handler : MonoBehaviour
         BattleOver = true;
         StartCoroutine(DelayBattleEnd());
     }
-    
     void end_battle_ui()
     {
         onBattleEnd?.Invoke();
@@ -427,6 +443,7 @@ public class Battle_handler : MonoBehaviour
         overworld_actions.instance.doing_action = false;
         Battle_ui.SetActive(false);
         options_ui.SetActive(false);
+        LastOpponent = null;
         foreach (Battle_Participant p in Battle_P)
             if(p.pokemon!=null)
             {

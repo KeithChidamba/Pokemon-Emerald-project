@@ -77,13 +77,13 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         foreach (Turn CurrentTurn in TurnOrder)
         {
+            yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
             Battle_Participant attacker_=Battle_handler.instance.Battle_P[CurrentTurn.attackerIndex];
             Battle_Participant victim_=Battle_handler.instance.Battle_P[CurrentTurn.victimIndex];
             if (!CheckParticipantState(attacker_))
                 continue;
             if (!isValidParticipant(CurrentTurn,attacker_))
                 continue;
-            
             if (!CheckParticipantState(victim_))
             {//if attack was directed at a pokemon that just fainted
                 Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" missed the attack");

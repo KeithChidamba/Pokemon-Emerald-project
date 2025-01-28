@@ -104,7 +104,7 @@ public static class Obj_Instance
         TrainerData trainer_copy = ScriptableObject.CreateInstance<TrainerData>();
         trainer_copy.TrainerName = data.TrainerName;
         trainer_copy.TrainerType = data.TrainerType;        
-        trainer_copy.BattleMoneyReward = data.BattleMoneyReward;
+        trainer_copy.BaseMoneyPayout = data.BaseMoneyPayout;
         trainer_copy.TrainerLocation = data.TrainerLocation;
         foreach (TrainerPokemonData member in data.PokemonParty)
             trainer_copy.PokemonParty.Add(SetTrainerPkmData(member));
