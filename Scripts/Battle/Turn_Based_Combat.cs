@@ -75,9 +75,8 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     IEnumerator ExecuteMoves(List<Turn> TurnOrder)
     {
-        foreach (Turn CurrentTurn in TurnOrder)
+        foreach (Turn CurrentTurn in TurnOrder )
         {
-            yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
             Battle_Participant attacker_=Battle_handler.instance.Battle_P[CurrentTurn.attackerIndex];
             Battle_Participant victim_=Battle_handler.instance.Battle_P[CurrentTurn.victimIndex];
             if (!CheckParticipantState(attacker_))

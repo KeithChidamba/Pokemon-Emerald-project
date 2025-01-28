@@ -358,14 +358,10 @@ public class Battle_handler : MonoBehaviour
     }
     int MoneyModifier()
     {
-        /*foreach(Pokemon p in Pokemon_party.instance.party)
+        foreach(Pokemon p in Pokemon_party.instance.party)
             if (p != null && p.HP>0 && p.HeldItem!=null)
                 if(p.HeldItem.Item_name == "Amulet Coin")
-                    return 2;*/
-        List < Pokemon > party= Pokemon_party.instance.party.ToList().
-                Where(p=>p.HeldItem.Item_name == "Amulet Coin").ToList();
-        if(party.Count>0)
-            return 2;
+                    return 2;
         return 1;
     }
     IEnumerator DelayBattleEnd()

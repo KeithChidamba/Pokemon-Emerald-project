@@ -93,6 +93,7 @@ public class Enemy_trainer : MonoBehaviour
             for(int i=0;i<member.PokemonLevel;i++)
                 member.pokemon.Level_up();
             member.pokemon.HP = member.pokemon.max_HP;
+            //for testing
             member.pokemon.HP = 1;
             member.pokemon.Attack = 1;
             member.pokemon.SP_ATK = 1;
@@ -118,7 +119,8 @@ public class Enemy_trainer : MonoBehaviour
     }
     private void Make_Decision()
     {
-        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon && !Used_move && CanAttack)
+        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon &&
+            Battle_handler.instance.isDouble_battle && CanAttack)
         {
             int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
             Select_player(randome_enemy);
@@ -127,5 +129,16 @@ public class Enemy_trainer : MonoBehaviour
             use_move(participant.pokemon.move_set[randomMove]);
             CanAttack = false;
         }
+        
+            if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon && !Used_move && CanAttack)
+            {
+                int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
+                Select_player(randome_enemy);
+                int randomMove = Utility.Get_rand(0, participant.pokemon.move_set.Count);
+                //Debug.Log(participant.pokemon.Pokemon_name+" is gonna use move: "+participant.pokemon.move_set[randomMove].Move_name);
+                use_move(participant.pokemon.move_set[randomMove]);
+                CanAttack = false;
+            }
     }
+   // }
 }
