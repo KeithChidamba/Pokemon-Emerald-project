@@ -1,0 +1,125 @@
+{
+    "Base_Pokemon_name": "Pikachu",
+    "Pokemon_name": "Pikachu",
+    "Pokemon_ID": 3869840064341591701,
+    "Personality_value": 78104213,
+    "Gender": "Female",
+    "GenderRatio": "50/50",
+    "nature": {
+        "instanceID": 30892
+    },
+    "has_gender": true,
+    "HP": 12.0,
+    "max_HP": 34.0,
+    "BaseHP": 35.0,
+    "BaseAttack": 55.0,
+    "BaseDefense": 40.0,
+    "BaseSP_ATK": 50.0,
+    "BaseSP_DEF": 50.0,
+    "Basespeed": 90.0,
+    "Attack": 20.0,
+    "Defense": 18.0,
+    "SP_ATK": 17.0,
+    "SP_DEF": 20.0,
+    "speed": 34.0,
+    "HP_IV": 20.0,
+    "Attack_IV": 10.0,
+    "Defense_IV": 21.0,
+    "SP_ATK_IV": 10.0,
+    "SP_DEF_IV": 18.0,
+    "speed_IV": 19.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 4.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 9.0,
+    "SP_DEF_EV": 3.0,
+    "speed_EV": 4.0,
+    "EVs": [
+        "Speed2"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 100.0,
+    "crit_chance": 6.25,
+    "Current_level": 13,
+    "CurrentExpAmount": 862,
+    "NextLvExpAmount": 14.0,
+    "EXPGroup": "Medium Fast",
+    "exp_yield": 82,
+    "has_trainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 30272
+        }
+    ],
+    "Status_effect": "BadlyPoison",
+    "Buff_Debuffs": [],
+    "type_Immunity": "None",
+    "evo_line": [
+        "18"
+    ],
+    "abilities": [
+        "Static"
+    ],
+    "split_evolution": false,
+    "learnSet": [
+        "electric/thunder shock01",
+        "electric/thunder wave03",
+        "normal/quick attack07",
+        "normal/tail whip09"
+    ],
+    "move_set": [
+        {
+            "instanceID": -34530
+        },
+        {
+            "instanceID": -34532
+        },
+        {
+            "instanceID": -38062
+        },
+        {
+            "instanceID": -38936
+        }
+    ],
+    "ability": {
+        "instanceID": 30274
+    },
+    "evolutions": [
+        {
+            "instanceID": 30276
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "HasItem": false,
+    "front_picture": {
+        "instanceID": 30278
+    },
+    "back_picture": {
+        "instanceID": 30280
+    },
+    "ability_name": "Static",
+    "natureName": "Jolly",
+    "evo_data": [
+        "Raichu"
+    ],
+    "type_data": [
+        "Electric"
+    ],
+    "move_data": [
+        "Thunder shock/Electric",
+        "Thunder wave/Electric",
+        "Quick attack/Normal",
+        "Tail whip/Normal"
+    ],
+    "move_pp_data": [
+        17,
+        19,
+        23,
+        22
+    ]
+}

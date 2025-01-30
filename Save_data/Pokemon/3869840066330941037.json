@@ -6,22 +6,22 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30822
+        "instanceID": 30830
     },
     "has_gender": true,
-    "HP": 12.0,
-    "max_HP": 34.0,
+    "HP": 0.0,
+    "max_HP": 38.0,
     "BaseHP": 45.0,
     "BaseAttack": 60.0,
     "BaseDefense": 40.0,
     "BaseSP_ATK": 70.0,
     "BaseSP_DEF": 50.0,
     "Basespeed": 45.0,
-    "Attack": 21.0,
-    "Defense": 17.0,
-    "SP_ATK": 25.0,
-    "SP_DEF": 18.0,
-    "speed": 18.0,
+    "Attack": 24.0,
+    "Defense": 19.0,
+    "SP_ATK": 29.0,
+    "SP_DEF": 20.0,
+    "speed": 20.0,
     "HP_IV": 16.0,
     "Attack_IV": 18.0,
     "Defense_IV": 26.0,
@@ -40,9 +40,9 @@
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 12,
-    "CurrentExpAmount": 870,
-    "NextLvExpAmount": 868.0,
+    "Current_level": 14,
+    "CurrentExpAmount": 1000,
+    "NextLvExpAmount": 1095.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30328
+            "instanceID": 30330
         }
     ],
     "Status_effect": "None",
@@ -73,27 +73,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -90564
+            "instanceID": -34546
         },
         {
-            "instanceID": -90566
+            "instanceID": -34548
         },
         {
-            "instanceID": -90568
+            "instanceID": -34550
         },
         {
-            "instanceID": -90570
+            "instanceID": -34552
         }
     ],
     "ability": {
-        "instanceID": 30330
+        "instanceID": 30332
     },
     "evolutions": [
         {
-            "instanceID": 30332
+            "instanceID": 30334
         },
         {
-            "instanceID": 30334
+            "instanceID": 30336
         }
     ],
     "HeldItem": {
@@ -104,7 +104,7 @@
         "instanceID": 30026
     },
     "back_picture": {
-        "instanceID": 30336
+        "instanceID": 30338
     },
     "ability_name": "Inferno",
     "natureName": "Quirky",
@@ -122,9 +122,9 @@
         "Focus Energy/Normal"
     ],
     "move_pp_data": [
-        17,
-        16,
-        17,
-        14
+        25,
+        20,
+        20,
+        13
     ]
 }

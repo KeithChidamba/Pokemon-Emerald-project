@@ -43,7 +43,7 @@ public class Pokemon_party : MonoBehaviour
          Refresh_Member_Cards();
     }
     public void Pkm_Details()
-    {
+    {//view pokemon details from button click
         Pokemon_Details.instance.Load_Details(party[Selected_member-1]);
         viewing_details = true;
         Cancel();
@@ -51,7 +51,7 @@ public class Pokemon_party : MonoBehaviour
     public void Moving(int Member_position)
     {
         if (Options_manager.instance.playerInBattle)
-        {//cant swap in a member who is already in
+        {//cant swap in a member who is already fighting
             if(Member_position<3)
                 if(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon!=null)
                     if (Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon == party[Member_position - 1]) 
@@ -76,9 +76,7 @@ public class Pokemon_party : MonoBehaviour
                 Member_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
             }
             else
-            {
                 Dialogue_handler.instance.Write_Info("There must be at least 2 Pokemon to swap","Details",1f);
-            }
         }
     }
 
@@ -88,10 +86,9 @@ public class Pokemon_party : MonoBehaviour
     }
     public void Member_Selected(int Member_position)
     {
-        //selecting swap in
         if (Options_manager.instance.playerInBattle && Member_cards[Member_position - 1].pkm.HP <= 0) return;
         if (SwapOutNext)
-        {
+        {//selecting a swap in
             if(Member_position<3)
                 if(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon!=null)
                     if (Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon == party[Member_position - 1]) 
@@ -103,39 +100,16 @@ public class Pokemon_party : MonoBehaviour
             Move_Member(Member_position);
         }
         else if (Item_handler.instance.Using_item)
-        {
+        {//use item on pokemon
             Item_handler.instance.selected_party_pkm = Member_cards[Member_position - 1].pkm;
             Item_handler.instance.Use_Item(item_to_use);
             member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
             member_indicator.SetActive(true);
         }
         else if (Giving_item)
-        {
-            if (Member_cards[Member_position - 1].pkm.HasItem)
-            {
-                Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
-                                                     +" is already holding something","Details",1f);
-                Giving_item = false;
-                item_to_use = null;
-                Game_ui_manager.instance.Close_party();
-                Game_ui_manager.instance.Invoke(nameof(Game_ui_manager.instance.View_Bag),1.1f);
-                return;
-            }
-            Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
-                                                 +" recieved a "+item_to_use.Item_name,"Details",1.3f);
-            Member_cards[Member_position - 1].pkm.HeldItem = Obj_Instance.set_Item(item_to_use);
-            Member_cards[Member_position - 1].pkm.HeldItem.quantity = 1;
-            Member_cards[Member_position - 1].pkm.HasItem = true;
-            item_to_use.quantity--;
-            Bag.instance.check_Quantity(item_to_use);
-            member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
-            member_indicator.SetActive(true);
-            Giving_item = false;
-            item_to_use = null;
-            Refresh_Member_Cards();
-        }
+            GiveItem(Member_position);
         else
-        {
+        {//move around members in party
             if (Member_cards[Member_position - 1].GetComponent<Pokemon_party_member>().isEmpty)
                 Cancel();
             else
@@ -164,9 +138,33 @@ public class Pokemon_party : MonoBehaviour
         moving = false;
         member_indicator.SetActive(false);
         for (int i = 0; i < num_members; i++)
-        {
             Member_cards[i].GetComponent<Pokemon_party_member>().Options.SetActive(false);
+    }
+
+    private void GiveItem(int Member_position)
+    {
+        if (Member_cards[Member_position - 1].pkm.HasItem)
+        {
+            Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
+                                                 +" is already holding something","Details",1f);
+            Giving_item = false;
+            item_to_use = null;
+            Game_ui_manager.instance.Close_party();
+            Game_ui_manager.instance.Invoke(nameof(Game_ui_manager.instance.View_Bag),1.1f);
+            return;
         }
+        Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
+                                             +" recieved a "+item_to_use.Item_name,"Details",1.3f);
+        Member_cards[Member_position - 1].pkm.HeldItem = Obj_Instance.set_Item(item_to_use);
+        Member_cards[Member_position - 1].pkm.HeldItem.quantity = 1;
+        Member_cards[Member_position - 1].pkm.HasItem = true;
+        item_to_use.quantity--;
+        Bag.instance.check_Quantity(item_to_use);
+        member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
+        member_indicator.SetActive(true);
+        Giving_item = false;
+        item_to_use = null;
+        Refresh_Member_Cards();
     }
     private void Move_Member(int Party_position)
     {
@@ -250,12 +248,10 @@ void close_party()
     }
     void sort_Members(int empty_position)
     {
-        if(empty_position < party.Length-1)//empty pos in not at the end
+        if(empty_position < party.Length-1)
         {
             for (int i = empty_position; i < party.Length - 1; i++)
-            {
                 party[i] = party[i + 1];
-            }
             party[party.Length - 1] = null;
         }
     }
@@ -277,9 +273,7 @@ void close_party()
                 num_members++;
             }
             else
-            {
                 Member_cards[i].Reset_ui();
-            }
         }
     }
     public void Remove_Member(int Party_position)

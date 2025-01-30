@@ -261,10 +261,10 @@ public class Battle_handler : MonoBehaviour
                   Battle_Participants[3].Current_Enemies.Add(Battle_Participants[i]);
               }
         }
-        foreach (Battle_Participant participant in Battle_Participants)
-            if (participant.pokemon != null)
-                foreach (Battle_Participant enemy  in participant.Current_Enemies)
-                    enemy.AddToExpList(participant.pokemon);
+        for (int i = 0; i < 2; i++)
+            if (Battle_Participants[i].pokemon != null)
+                foreach (Battle_Participant enemy  in Battle_Participants[i].Current_Enemies)
+                    enemy.AddToExpList(Battle_Participants[i].pokemon);
         foreach(Battle_Participant p in Battle_Participants)
             if (p.pokemon != null)
                 Set_participants(p);
@@ -370,27 +370,33 @@ public class Battle_handler : MonoBehaviour
     IEnumerator DelayBattleEnd()
     {
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-        int BaseMoneyPayout = Battle_Participants[0].Current_Enemies[0].trainer._TrainerData.BaseMoneyPayout;
         if (running_away)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
-        else if (BattleWon)
-        {
-            Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
-            if (is_trainer_battle)
-            {
-                Debug.Log("modifier: "+MoneyModifier());
-                int MoneyGained = BaseMoneyPayout * LastOpponent.Current_level * MoneyModifier();
-                Game_Load.instance.player_data.player_Money += MoneyGained;           
-                Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P"+ MoneyGained);
-            }
-        }
         else
         {
-            if (is_trainer_battle)
-                Game_Load.instance.player_data.player_Money -= BaseMoneyPayout * Game_Load.instance.player_data.NumBadges
-                                                                               * LastOpponent.Current_level;  
-            Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
-            Area_manager.instance.Switch_Area("Poke Center",0f);
+            int BaseMoneyPayout=0;
+            if(is_trainer_battle)
+                BaseMoneyPayout=Battle_Participants[0].Current_Enemies[0].trainer._TrainerData.BaseMoneyPayout;
+            if (BattleWon)
+            {
+                Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
+                if (is_trainer_battle)
+                {
+                    int MoneyGained = BaseMoneyPayout * LastOpponent.Current_level * MoneyModifier();
+                    Game_Load.instance.player_data.player_Money += MoneyGained;
+                    Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P" +
+                                                          MoneyGained);
+                }
+            }
+            else
+            {
+                if (is_trainer_battle)
+                    Game_Load.instance.player_data.player_Money -= BaseMoneyPayout *
+                                                                   Game_Load.instance.player_data.NumBadges
+                                                                   * LastOpponent.Current_level;
+                Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
+                Area_manager.instance.Switch_Area("Poke Center", 0f);
+            }
         }
         yield return new WaitForSeconds(2f);
         end_battle_ui();

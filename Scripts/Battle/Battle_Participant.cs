@@ -214,7 +214,6 @@ public class Battle_Participant : MonoBehaviour
         player_hp.minValue = 0;
         fainted = false;
         is_active = true;
-        exp_recievers.Clear();
         participant_ui.SetActive(true);
         gender_img();
         if (pokemon.Status_effect == "BadlyPoison")

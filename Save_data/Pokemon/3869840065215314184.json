@@ -1,27 +1,27 @@
 {
     "Base_Pokemon_name": "Treecko",
-    "Pokemon_name": "Treecko",
+    "Pokemon_name": "Grovyle",
     "Pokemon_ID": 3869840065215314184,
     "Personality_value": 951826696,
     "Gender": "Male",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30644
+        "instanceID": 30646
     },
     "has_gender": true,
-    "HP": 29.0,
-    "max_HP": 28.0,
-    "BaseHP": 40.0,
-    "BaseAttack": 45.0,
-    "BaseDefense": 35.0,
-    "BaseSP_ATK": 65.0,
-    "BaseSP_DEF": 55.0,
-    "Basespeed": 70.0,
-    "Attack": 15.0,
-    "Defense": 10.0,
-    "SP_ATK": 17.0,
-    "SP_DEF": 16.0,
-    "speed": 18.0,
+    "HP": 33.0,
+    "max_HP": 53.0,
+    "BaseHP": 50.0,
+    "BaseAttack": 65.0,
+    "BaseDefense": 45.0,
+    "BaseSP_ATK": 85.0,
+    "BaseSP_DEF": 65.0,
+    "Basespeed": 95.0,
+    "Attack": 35.0,
+    "Defense": 19.0,
+    "SP_ATK": 39.0,
+    "SP_DEF": 33.0,
+    "speed": 43.0,
     "HP_IV": 31.0,
     "Attack_IV": 28.0,
     "Defense_IV": 0.0,
@@ -29,29 +29,29 @@
     "SP_DEF_IV": 4.0,
     "speed_IV": 10.0,
     "HP_EV": 0.0,
-    "Attack_EV": 5.0,
+    "Attack_EV": 9.0,
     "Defense_EV": 0.0,
-    "SP_ATK_EV": 9.0,
-    "SP_DEF_EV": 0.0,
-    "speed_EV": 9.0,
+    "SP_ATK_EV": 18.0,
+    "SP_DEF_EV": 3.0,
+    "speed_EV": 13.0,
     "EVs": [
-        "Speed1"
+        "Speed2"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 9,
-    "CurrentExpAmount": 633,
-    "NextLvExpAmount": 607.0,
+    "Current_level": 19,
+    "CurrentExpAmount": 1495,
+    "NextLvExpAmount": 1524.0,
     "EXPGroup": "Medium Slow",
-    "exp_yield": 65,
+    "exp_yield": 141,
     "has_trainer": true,
     "canAttack": true,
     "isFlinched": false,
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30252
+            "instanceID": 30254
         }
     ],
     "Status_effect": "None",
@@ -66,34 +66,31 @@
     ],
     "split_evolution": false,
     "learnSet": [
-        "normal/pound01",
-        "grass/absorb03",
-        "normal/quick attack04",
-        "grass/bullet seed07"
+        "flying/arial ace16"
     ],
     "move_set": [
         {
-            "instanceID": -90574
+            "instanceID": -34536
         },
         {
-            "instanceID": -90576
+            "instanceID": -34538
         },
         {
-            "instanceID": -90578
+            "instanceID": -48234
         },
         {
-            "instanceID": -90580
+            "instanceID": -34542
         }
     ],
     "ability": {
-        "instanceID": 30254
+        "instanceID": 30256
     },
     "evolutions": [
         {
-            "instanceID": 30256
+            "instanceID": 30258
         },
         {
-            "instanceID": 30258
+            "instanceID": 30260
         }
     ],
     "HeldItem": {
@@ -101,10 +98,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30206
+        "instanceID": 30368
     },
     "back_picture": {
-        "instanceID": 30260
+        "instanceID": 30180
     },
     "ability_name": "Overgrow",
     "natureName": "Gentle",
@@ -118,12 +115,12 @@
     "move_data": [
         "Pound/Normal",
         "Absorb/Grass",
-        "Quick attack/Normal",
+        "Arial Ace/Flying",
         "Bullet seed/Grass"
     ],
     "move_pp_data": [
-        24,
-        19,
+        25,
+        20,
         19,
         19
     ]
