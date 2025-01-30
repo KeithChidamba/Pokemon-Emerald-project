@@ -34,8 +34,8 @@ public class Move_handler:MonoBehaviour
     public void Do_move(Turn turn)
     {
         current_turn = turn;
-        attacker_ = Battle_handler.instance.Battle_P[turn.attackerIndex];
-        victim_ = Battle_handler.instance.Battle_P[turn.victimIndex];
+        attacker_ = Battle_handler.instance.Battle_Participants[turn.attackerIndex];
+        victim_ = Battle_handler.instance.Battle_Participants[turn.victimIndex];
         if (current_turn.move_.isMultiTarget || current_turn.move_.isSelfTargeted)
             Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" used "+current_turn.move_.Move_name+"!");
         else

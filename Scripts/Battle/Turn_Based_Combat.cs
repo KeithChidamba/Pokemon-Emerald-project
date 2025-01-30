@@ -32,11 +32,22 @@ public class Turn_Based_Combat : MonoBehaviour
     public void SaveMove(Turn turn)
     {
         Turn_history.Add(turn);
-        if( (Battle_handler.instance.isDouble_battle && Current_pkm_turn == Battle_handler.instance.Participant_count-1 )
+        if( (Battle_handler.instance.isDouble_battle && isLastParticipant())
          || (Current_pkm_turn == Battle_handler.instance.Participant_count ))
             StartCoroutine(ExecuteMoves(Set_priority()));
         else
             Next_turn();
+    }
+
+    bool isLastParticipant()
+    {
+        List <Battle_Participant> activeParticipants = new();
+        activeParticipants = Battle_handler.instance.Battle_Participants.ToList();
+        activeParticipants.RemoveAll(participant => participant.pokemon==null);
+        if (activeParticipants.Last() ==
+            Battle_handler.instance.Battle_Participants[Current_pkm_turn])
+            return true;
+        return false;
     }
     void Reset_Moves()
     {
@@ -77,8 +88,8 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         foreach (Turn CurrentTurn in TurnOrder )
         {
-            Battle_Participant attacker_=Battle_handler.instance.Battle_P[CurrentTurn.attackerIndex];
-            Battle_Participant victim_=Battle_handler.instance.Battle_P[CurrentTurn.victimIndex];
+            Battle_Participant attacker_=Battle_handler.instance.Battle_Participants[CurrentTurn.attackerIndex];
+            Battle_Participant victim_=Battle_handler.instance.Battle_Participants[CurrentTurn.victimIndex];
             if (!CheckParticipantState(attacker_))
                 continue;
             if (!isValidParticipant(CurrentTurn,attacker_))
@@ -151,19 +162,19 @@ public class Turn_Based_Combat : MonoBehaviour
         {
             Battle_handler.instance.View_options();
             Current_pkm_turn = 0;
-            Battle_handler.instance.Battle_P[Current_pkm_turn].Selected_Enemy = false;//allow player to attack
+            Battle_handler.instance.Battle_Participants[Current_pkm_turn].Selected_Enemy = false;//allow player to attack
         }
         OnNewTurn?.Invoke();
         Battle_handler.instance.Doing_move = false;
-        if (!Battle_handler.instance.Battle_P[Current_pkm_turn].is_active)
+        if (!Battle_handler.instance.Battle_Participants[Current_pkm_turn].is_active)
             Next_turn();
     }
     private bool MoveSuccessfull(Turn turn)
     {
         int rand = Utility.Get_rand(1, 100);
         float Hit_Chance = turn.move_.Move_accuracy *
-                           (Battle_handler.instance.Battle_P[turn.attackerIndex].pokemon.Accuracy / 
-                            Battle_handler.instance.Battle_P[turn.victimIndex].pokemon.Evasion);
+                           (Battle_handler.instance.Battle_Participants[turn.attackerIndex].pokemon.Accuracy / 
+                            Battle_handler.instance.Battle_Participants[turn.victimIndex].pokemon.Evasion);
         if (Hit_Chance>rand)
             return true;
         return false;
@@ -172,7 +183,7 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         List<Turn> speed_list = new();
         List<Turn> priority_list = new();
-        speed_list = Turn_history.OrderByDescending(p => Battle_handler.instance.Battle_P[p.attackerIndex].pokemon.speed).ToList();
+        speed_list = Turn_history.OrderByDescending(p => Battle_handler.instance.Battle_Participants[p.attackerIndex].pokemon.speed).ToList();
         priority_list = speed_list.OrderByDescending(p => p.move_.Priority).ToList();
         return priority_list;
     }

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1b1c629dc4d92448879b10db63290f, type: 3}
+  m_Name: Trevor Treeko
+  m_EditorClassIdentifier: 
+  pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+  PokemonLevel: 5
+  hasItem: 0
+  heldItem: {fileID: 0}
+  moveSet:
+  - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+  - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+  - {fileID: 11400000, guid: 37d12cb1bc0332d429d388ad6d37b17f, type: 2}
+  - {fileID: 11400000, guid: 2cd67b76891307349b0ee315a2a7b669, type: 2}

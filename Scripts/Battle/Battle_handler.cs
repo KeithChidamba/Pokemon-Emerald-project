@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Battle_handler : MonoBehaviour
@@ -13,7 +14,7 @@ public class Battle_handler : MonoBehaviour
     public GameObject Battle_ui;
     public GameObject moves_ui;
     public GameObject options_ui;
-    public Battle_Participant[] Battle_P = {null,null,null,null};
+    [FormerlySerializedAs("Battle_P")] public Battle_Participant[] Battle_Participants = {null,null,null,null};
     public List<LevelUpEvent> levelUpQueue=new();
     public Text Move_pp, Move_type;
     public Text[] moves;
@@ -55,13 +56,13 @@ public class Battle_handler : MonoBehaviour
     {
         if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)) )
         {
-            if (Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy)
+            if (Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy)
             {
                 if(isDouble_battle)
-                    Use_Move(Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move],
-                        Battle_P[Turn_Based_Combat.instance.Current_pkm_turn]);//any of payer's 2 pkm using move
+                    Use_Move(Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move],
+                        Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn]);//any of payer's 2 pkm using move
                 else
-                    Use_Move(Battle_P[0].pokemon.move_set[Current_Move],Battle_P[0]);//player using move
+                    Use_Move(Battle_Participants[0].pokemon.move_set[Current_Move],Battle_Participants[0]);//player using move
                 choosing_move = false;
             }
             else
@@ -106,7 +107,7 @@ public class Battle_handler : MonoBehaviour
         if (!is_trainer_battle)
             Wild_pkm.instance.Invoke(nameof(Wild_pkm.instance.Can_Attack),1f);
         else
-            foreach(Battle_Participant p in Battle_P)
+            foreach(Battle_Participant p in Battle_Participants)
                 if (p.pokemon != null & !p.isPlayer)
                     p.trainer.Invoke(nameof(p.trainer.Can_Attack),1f);
     }
@@ -115,7 +116,7 @@ public class Battle_handler : MonoBehaviour
         if (!isDouble_battle && Turn_Based_Combat.instance.Current_pkm_turn == 0)//if single battle, auto aim at enemy
         {
             Current_pkm_Enemy = 2;
-            Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
+            Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
         }
     }
 
@@ -130,10 +131,10 @@ public class Battle_handler : MonoBehaviour
         if(Turn_Based_Combat.instance.Current_pkm_turn>1)return;//not player's turn
         if (isDouble_battle & choice < 2)
         {//cant attack own pokemon
-            Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = false;
+            Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = false;
             return;
         }
-        Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
+        Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
         Current_pkm_Enemy = choice;
     }
     private void Set_battle_ui()
@@ -163,13 +164,13 @@ public class Battle_handler : MonoBehaviour
         is_trainer_battle = false;
         isDouble_battle = false;
         Load_Area_bg(Encounter_handler.instance.current_area);
-        Battle_P[0].pokemon = Pokemon_party.instance.party[0];
-        Battle_P[0].Current_Enemies.Add(Battle_P[2]);
-        Battle_P[2].pokemon = enemy;
-        Wild_pkm.instance.pokemon_participant = Battle_P[2];
-        Wild_pkm.instance.Enemy_pokemon = Battle_P[0];
-        Battle_P[2].AddToExpList(Battle_P[0].pokemon);
-        foreach(Battle_Participant p in Battle_P)
+        Battle_Participants[0].pokemon = Pokemon_party.instance.party[0];
+        Battle_Participants[0].Current_Enemies.Add(Battle_Participants[2]);
+        Battle_Participants[2].pokemon = enemy;
+        Wild_pkm.instance.pokemon_participant = Battle_Participants[2];
+        Wild_pkm.instance.Enemy_pokemon = Battle_Participants[0];
+        Battle_Participants[2].AddToExpList(Battle_Participants[0].pokemon);
+        foreach(Battle_Participant p in Battle_Participants)
             if (p.pokemon != null)
                 Set_participants(p);
         Wild_pkm.instance.InBattle = true;
@@ -196,18 +197,18 @@ public class Battle_handler : MonoBehaviour
         BattleOver = false;
         is_trainer_battle = true;
         isDouble_battle = false;
-        Battle_P[0].pokemon = Pokemon_party.instance.party[0];
-        Battle_P[0].Current_Enemies.Add(Battle_P[2]);
-        Battle_P[2].Current_Enemies.Add(Battle_P[0]);
-        Battle_P[2].trainer = Battle_P[2].GetComponent<Enemy_trainer>();
-        Battle_P[2].trainer.StartBattle(trainerName,false);
-        Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
-        Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
-        Battle_P[2].AddToExpList(Battle_P[0].pokemon);
-        foreach(Battle_Participant p in Battle_P)
+        Battle_Participants[0].pokemon = Pokemon_party.instance.party[0];
+        Battle_Participants[0].Current_Enemies.Add(Battle_Participants[2]);
+        Battle_Participants[2].Current_Enemies.Add(Battle_Participants[0]);
+        Battle_Participants[2].trainer = Battle_Participants[2].GetComponent<Enemy_trainer>();
+        Battle_Participants[2].trainer.StartBattle(trainerName,false);
+        Battle_Participants[2].pokemon = Battle_Participants[2].trainer.TrainerParty[0];
+        Load_Area_bg(Battle_Participants[2].trainer._TrainerData.TrainerLocation);
+        Battle_Participants[2].AddToExpList(Battle_Participants[0].pokemon);
+        foreach(Battle_Participant p in Battle_Participants)
             if (p.pokemon != null)
                 Set_participants(p);
-        Battle_P[2].trainer.InBattle = true;
+        Battle_Participants[2].trainer.InBattle = true;
         set_battle();
     }
     /*public void StartDoubleBattle(List<string> trainerNames)//trainer double battle
@@ -235,47 +236,46 @@ public class Battle_handler : MonoBehaviour
         foreach (Pokemon p in Pokemon_party.instance.party)
             if (p != null && p.HP > 0)
                 Alive_pkm.Add(p);
-        Battle_P[0].pokemon = Alive_pkm[0];
+        Battle_Participants[0].pokemon = Alive_pkm[0];
         if(Pokemon_party.instance.num_members>1)
-            Battle_P[1].pokemon = Alive_pkm[1];
-        Battle_P[2].trainer = Battle_P[2].GetComponent<Enemy_trainer>();
-        Battle_P[3].trainer = Battle_P[3].GetComponent<Enemy_trainer>();
-        Battle_P[2].trainer.StartBattle(trainerName,false);
-        Battle_P[3].trainer.StartBattle(trainerName,true);
-        Battle_P[3].trainer._TrainerData = Battle_P[2].trainer._TrainerData;
-        Battle_P[3].trainer.TrainerParty = Battle_P[2].trainer.TrainerParty;
-        Battle_P[2].pokemon = Battle_P[2].trainer.TrainerParty[0];
-        Battle_P[3].pokemon = Battle_P[3].trainer.TrainerParty[1]; 
+            Battle_Participants[1].pokemon = Alive_pkm[1];
+        Battle_Participants[2].trainer = Battle_Participants[2].GetComponent<Enemy_trainer>();
+        Battle_Participants[3].trainer = Battle_Participants[3].GetComponent<Enemy_trainer>();
+        Battle_Participants[2].trainer.StartBattle(trainerName,false);
+        Battle_Participants[3].trainer.StartBattle(trainerName,true);
+        Battle_Participants[3].trainer._TrainerData = Battle_Participants[2].trainer._TrainerData;
+        Battle_Participants[3].trainer.TrainerParty = Battle_Participants[2].trainer.TrainerParty;
+        Battle_Participants[2].pokemon = Battle_Participants[2].trainer.TrainerParty[0];
+        Battle_Participants[3].pokemon = Battle_Participants[3].trainer.TrainerParty[1]; 
         for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
         {
-              if(Battle_P[i + 2].pokemon!=null)
+              if(Battle_Participants[i + 2].pokemon!=null)
               {
-                  Battle_P[0].Current_Enemies.Add(Battle_P[i + 2]);
+                  Battle_Participants[0].Current_Enemies.Add(Battle_Participants[i + 2]);
                   if (Pokemon_party.instance.num_members > 1)
-                      Battle_P[1].Current_Enemies.Add(Battle_P[i + 2]);
+                      Battle_Participants[1].Current_Enemies.Add(Battle_Participants[i + 2]);
               }
-              if (Battle_P[i].pokemon != null)
+              if (Battle_Participants[i].pokemon != null)
               {
-                  Battle_P[2].Current_Enemies.Add(Battle_P[i]);
-                  Battle_P[3].Current_Enemies.Add(Battle_P[i]);
+                  Battle_Participants[2].Current_Enemies.Add(Battle_Participants[i]);
+                  Battle_Participants[3].Current_Enemies.Add(Battle_Participants[i]);
               }
         }
-        foreach (Battle_Participant participant in Battle_P)
+        foreach (Battle_Participant participant in Battle_Participants)
             if (participant.pokemon != null)
                 foreach (Battle_Participant enemy  in participant.Current_Enemies)
                     enemy.AddToExpList(participant.pokemon);
-        foreach(Battle_Participant p in Battle_P)
+        foreach(Battle_Participant p in Battle_Participants)
             if (p.pokemon != null)
                 Set_participants(p);
-        Battle_P[2].trainer.InBattle = true;
-        Battle_P[3].trainer.InBattle = true; 
-        Load_Area_bg(Battle_P[2].trainer._TrainerData.TrainerLocation);
+        Battle_Participants[2].trainer.InBattle = true;
+        Battle_Participants[3].trainer.InBattle = true; 
+        Load_Area_bg(Battle_Participants[2].trainer._TrainerData.TrainerLocation);
         set_battle();
     }
     public void Set_participants(Battle_Participant Participant)
     {
         List<Pokemon> Alive_pkm=new();
-        //always set pokemon then save stats, then load ui
         if (Participant.isPlayer)
         { //for switch-ins
             if (Pokemon_party.instance.Swapping_in || Pokemon_party.instance.SwapOutNext)
@@ -284,11 +284,14 @@ public class Battle_handler : MonoBehaviour
                     if (p != null && p.HP > 0)
                         Alive_pkm.Add(p);
                 Participant.pokemon = Alive_pkm[Pokemon_party.instance.Selected_member - 1];
-                foreach (Battle_Participant p  in Participant.Current_Enemies)
-                {
-                    p.AddToExpList(Participant.pokemon);
-                }
+                foreach (Battle_Participant enemyParticipant  in Participant.Current_Enemies)
+                    enemyParticipant.AddToExpList(Participant.pokemon);
             }
+        }
+        else
+        {//add player participants to get exp from switched in enemy
+            foreach (Battle_Participant playerParticipant  in Participant.Current_Enemies)
+                Participant.AddToExpList(playerParticipant.pokemon);
         }
         Participant.data.save_stats();
         Participant.Load_ui();
@@ -298,23 +301,23 @@ public class Battle_handler : MonoBehaviour
     public void check_Participants()
     {
         Participant_count = 0;
-        foreach (Battle_Participant p in Battle_P)
+        foreach (Battle_Participant p in Battle_Participants)
             if(p.pokemon!=null)
                 Participant_count++;
     }
     public void reload_participant_ui()
     {
-        foreach(Battle_Participant p in Battle_P)
+        foreach(Battle_Participant p in Battle_Participants)
             if (p.pokemon != null)
                 p.refresh_statusIMG();
     }
     void load_moves()
     {
         int j = 0;
-        foreach(Move m in Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set)
+        foreach(Move m in Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set)
             if (m != null)
             {
-                moves[j].text = Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[j].Move_name;
+                moves[j].text = Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[j].Move_name;
                 Move_btns[j].SetActive(true);
                 j++;
             }
@@ -332,8 +335,8 @@ public class Battle_handler : MonoBehaviour
         choosing_move = false;
         moves_ui.SetActive(false);
         options_ui.SetActive(false);
-        Turn current_turn = new Turn(move, Array.IndexOf(Battle_P,user), Current_pkm_Enemy, user.pokemon.Pokemon_ID.ToString(),
-            Battle_P[Current_pkm_Enemy].pokemon.Pokemon_ID.ToString());
+        Turn current_turn = new Turn(move, Array.IndexOf(Battle_Participants,user), Current_pkm_Enemy, user.pokemon.Pokemon_ID.ToString(),
+            Battle_Participants[Current_pkm_Enemy].pokemon.Pokemon_ID.ToString());
         Turn_Based_Combat.instance.SaveMove(current_turn);
     }
     public void Reset_move()
@@ -346,13 +349,13 @@ public class Battle_handler : MonoBehaviour
     {
         Reset_move();
         Current_Move = move_num-1;
-        Move_pp.text = "PP: " + Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].Powerpoints+ "/" 
-                       + Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].max_Powerpoints;
-        if (Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].Powerpoints == 0)
+        Move_pp.text = "PP: " + Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].Powerpoints+ "/" 
+                       + Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].max_Powerpoints;
+        if (Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].Powerpoints == 0)
             Move_pp.color = Color.red;
         else
             Move_pp.color = Color.black;
-        Move_type.text = Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].type.Type_name;
+        Move_type.text = Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].type.Type_name;
         Selected_Move = true;
         Move_btns[Current_Move].GetComponent<Button>().interactable = false;
     }
@@ -367,7 +370,7 @@ public class Battle_handler : MonoBehaviour
     IEnumerator DelayBattleEnd()
     {
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-        int BaseMoneyPayout = Battle_P[0].Current_Enemies[0].trainer._TrainerData.BaseMoneyPayout;
+        int BaseMoneyPayout = Battle_Participants[0].Current_Enemies[0].trainer._TrainerData.BaseMoneyPayout;
         if (running_away)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
         else if (BattleWon)
@@ -440,7 +443,7 @@ public class Battle_handler : MonoBehaviour
         Battle_ui.SetActive(false);
         options_ui.SetActive(false);
         LastOpponent = null;
-        foreach (Battle_Participant p in Battle_P)
+        foreach (Battle_Participant p in Battle_Participants)
             if(p.pokemon!=null)
             {
                 p.data.Load_Stats();
@@ -465,7 +468,7 @@ public class Battle_handler : MonoBehaviour
         if (!is_trainer_battle)
         {
             int random = Utility.Get_rand(1,11);
-            if (Battle_P[0].pokemon.Current_level < Battle_P[0].Current_Enemies[0].pokemon.Current_level)//lower chance if weaker
+            if (Battle_Participants[0].pokemon.Current_level < Battle_Participants[0].Current_Enemies[0].pokemon.Current_level)//lower chance if weaker
                 random--;
             if (random > 5)//initially 50/50 chance to run
                 End_Battle(false);

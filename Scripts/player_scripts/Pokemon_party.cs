@@ -53,17 +53,17 @@ public class Pokemon_party : MonoBehaviour
         if (Options_manager.instance.playerInBattle)
         {//cant swap in a member who is already in
             if(Member_position<3)
-                if(Battle_handler.instance.Battle_P[Member_position - 1].pokemon!=null)
-                    if (Battle_handler.instance.Battle_P[Member_position - 1].pokemon == party[Member_position - 1]) 
+                if(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon!=null)
+                    if (Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon == party[Member_position - 1]) 
                     {
-                        Dialogue_handler.instance.Write_Info(Battle_handler.instance.Battle_P[Member_position - 1].pokemon.Pokemon_name+
+                        Dialogue_handler.instance.Write_Info(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon.Pokemon_name+
                                                              " is already in battle","Details",1f);
                         return;
                     }
             Swapping_in = true;
             SwapOutNext = false;
             Selected_member = Turn_Based_Combat.instance.Current_pkm_turn+1;
-            Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].Reset_pkm();
+            Battle_handler.instance.Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Reset_pkm();
             Move_Member(Member_position);
         }
         else
@@ -93,10 +93,10 @@ public class Pokemon_party : MonoBehaviour
         if (SwapOutNext)
         {
             if(Member_position<3)
-                if(Battle_handler.instance.Battle_P[Member_position - 1].pokemon!=null)
-                    if (Battle_handler.instance.Battle_P[Member_position - 1].pokemon == party[Member_position - 1]) 
+                if(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon!=null)
+                    if (Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon == party[Member_position - 1]) 
                     {
-                        Dialogue_handler.instance.Write_Info(Battle_handler.instance.Battle_P[Member_position - 1].pokemon.Pokemon_name+
+                        Dialogue_handler.instance.Write_Info(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon.Pokemon_name+
                                                              " is already in battle","Details",1f);
                         return;
                     }
@@ -223,7 +223,7 @@ void close_party()
         party[Party_position] = Swap_store;
         moving = false;
         if (Options_manager.instance.playerInBattle)
-            Battle_handler.instance.Set_participants(Battle_handler.instance.Battle_P[Selected_member-1]);
+            Battle_handler.instance.Set_participants(Battle_handler.instance.Battle_Participants[Selected_member-1]);
         Member_to_Move = 0;
         Selected_member = 0;
         Refresh_Member_Cards();

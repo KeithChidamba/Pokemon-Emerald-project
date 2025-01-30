@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1b1c629dc4d92448879b10db63290f, type: 3}
+  m_Name: Trevor Mudkip
+  m_EditorClassIdentifier: 
+  pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+  PokemonLevel: 8
+  hasItem: 0
+  heldItem: {fileID: 0}
+  moveSet:
+  - {fileID: 11400000, guid: 2a9211c580ffc4d40a536d2a284fc09a, type: 2}
+  - {fileID: 11400000, guid: 37d12cb1bc0332d429d388ad6d37b17f, type: 2}
+  - {fileID: 11400000, guid: 347e8d6b509bd8a49b47824d6d6ca87c, type: 2}
+  - {fileID: 11400000, guid: f397667296c72b94fafa4d62db35535a, type: 2}

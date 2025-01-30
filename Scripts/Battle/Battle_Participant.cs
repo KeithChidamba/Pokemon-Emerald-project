@@ -136,7 +136,7 @@ public class Battle_Participant : MonoBehaviour
             if ( (Battle_handler.instance.isDouble_battle && numAlive > 1) || 
             (!Battle_handler.instance.isDouble_battle && numAlive > 0) )
             {
-                Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.instance.Battle_P, this)+1;
+                Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.instance.Battle_Participants, this)+1;
                 Pokemon_party.instance.SwapOutNext = true;
                 Game_ui_manager.instance.View_pkm_Party();
                 Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");
@@ -214,6 +214,7 @@ public class Battle_Participant : MonoBehaviour
         player_hp.minValue = 0;
         fainted = false;
         is_active = true;
+        exp_recievers.Clear();
         participant_ui.SetActive(true);
         gender_img();
         if (pokemon.Status_effect == "BadlyPoison")

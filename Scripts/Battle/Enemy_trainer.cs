@@ -20,10 +20,17 @@ public class Enemy_trainer : MonoBehaviour
     private void Start()
     {
         Turn_Based_Combat.instance.OnNewTurn += Reset_move;
+        Battle_handler.instance.onBattleEnd += ResetAfterBattle;
     }
     public void Can_Attack()
     {
         CanAttack = true;
+    }
+
+    void ResetAfterBattle()
+    {
+        _TrainerData = null;
+        TrainerParty.Clear();
     }
     void Reset_move()
     {
@@ -47,7 +54,7 @@ public class Enemy_trainer : MonoBehaviour
             {//only select the pokemon that werent in battle
                 List<Pokemon> NotParticipatingList = new();
                 foreach (Pokemon pokemon in TrainerParty)
-                    if(pokemon!=Battle_handler.instance.Battle_P[2].pokemon && pokemon!=Battle_handler.instance.Battle_P[3].pokemon)
+                    if(pokemon!=Battle_handler.instance.Battle_Participants[2].pokemon && pokemon!=Battle_handler.instance.Battle_Participants[3].pokemon)
                         NotParticipatingList.Add(pokemon);
                 // = TrainerParty.GetRange(2, TrainerParty.Count-2);
                 NotParticipatingList.RemoveAll(p => p.HP <= 0);
@@ -119,18 +126,7 @@ public class Enemy_trainer : MonoBehaviour
     }
     private void Make_Decision()
     {
-        if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon &&
-            Battle_handler.instance.isDouble_battle && CanAttack)
-        {
-            int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
-            Select_player(randome_enemy);
-            int randomMove = Utility.Get_rand(0, participant.pokemon.move_set.Count);
-            //Debug.Log(participant.pokemon.Pokemon_name+" is gonna use move: "+participant.pokemon.move_set[randomMove].Move_name);
-            use_move(participant.pokemon.move_set[randomMove]);
-            CanAttack = false;
-        }
-        
-            if (Battle_handler.instance.Battle_P[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon && !Used_move && CanAttack)
+            if (Battle_handler.instance.Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon && !Used_move && CanAttack)
             {
                 int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
                 Select_player(randome_enemy);
