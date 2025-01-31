@@ -6,22 +6,22 @@
     "Gender": "Female",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 30816
+        "instanceID": 30840
     },
     "has_gender": true,
-    "HP": 12.0,
-    "max_HP": 12.0,
+    "HP": 18.0,
+    "max_HP": 18.0,
     "BaseHP": 45.0,
     "BaseAttack": 45.0,
     "BaseDefense": 35.0,
     "BaseSP_ATK": 20.0,
     "BaseSP_DEF": 30.0,
     "Basespeed": 20.0,
-    "Attack": 5.0,
-    "Defense": 5.0,
-    "SP_ATK": 6.0,
-    "SP_DEF": 5.0,
-    "speed": 5.0,
+    "Attack": 8.0,
+    "Defense": 8.0,
+    "SP_ATK": 8.0,
+    "SP_DEF": 7.0,
+    "speed": 7.0,
     "HP_IV": 29.0,
     "Attack_IV": 25.0,
     "Defense_IV": 21.0,
@@ -29,20 +29,20 @@
     "SP_DEF_IV": 2.0,
     "speed_IV": 16.0,
     "HP_EV": 0.0,
-    "Attack_EV": 0.0,
+    "Attack_EV": 1.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 0.0,
+    "speed_EV": 3.0,
     "EVs": [
         "HP1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 1,
-    "CurrentExpAmount": 0,
-    "NextLvExpAmount": 3.0,
+    "Current_level": 4,
+    "CurrentExpAmount": 175,
+    "NextLvExpAmount": 13.0,
     "EXPGroup": "Erratic",
     "exp_yield": 54,
     "has_trainer": true,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30282
+            "instanceID": 30306
         }
     ],
     "Status_effect": "None",
@@ -72,24 +72,30 @@
     ],
     "move_set": [
         {
-            "instanceID": -34556
+            "instanceID": -58686
+        },
+        {
+            "instanceID": -65512
+        },
+        {
+            "instanceID": -67922
         }
     ],
     "ability": {
-        "instanceID": 30284
+        "instanceID": 30308
     },
     "evolutions": [
         {
-            "instanceID": 30286
+            "instanceID": 30310
         },
         {
-            "instanceID": 30288
+            "instanceID": 30312
         },
         {
-            "instanceID": 30290
+            "instanceID": 30314
         },
         {
-            "instanceID": 30292
+            "instanceID": 30316
         }
     ],
     "HeldItem": {
@@ -97,10 +103,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30294
+        "instanceID": 30318
     },
     "back_picture": {
-        "instanceID": 30296
+        "instanceID": 30320
     },
     "ability_name": "Paralysis Combo",
     "natureName": "Modest",
@@ -114,9 +120,13 @@
         "Bug"
     ],
     "move_data": [
-        "Tackle/Normal"
+        "Tackle/Normal",
+        "String shot/Bug",
+        "Poison sting/Poison"
     ],
     "move_pp_data": [
-        20
+        20,
+        25,
+        30
     ]
 }

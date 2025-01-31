@@ -6,22 +6,22 @@
     "Gender": "Female",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 30892
+        "instanceID": 30916
     },
     "has_gender": true,
-    "HP": 12.0,
-    "max_HP": 34.0,
+    "HP": 40.0,
+    "max_HP": 40.0,
     "BaseHP": 35.0,
     "BaseAttack": 55.0,
     "BaseDefense": 40.0,
     "BaseSP_ATK": 50.0,
     "BaseSP_DEF": 50.0,
     "Basespeed": 90.0,
-    "Attack": 20.0,
-    "Defense": 18.0,
-    "SP_ATK": 17.0,
-    "SP_DEF": 20.0,
-    "speed": 34.0,
+    "Attack": 24.0,
+    "Defense": 21.0,
+    "SP_ATK": 20.0,
+    "SP_DEF": 24.0,
+    "speed": 40.0,
     "HP_IV": 20.0,
     "Attack_IV": 10.0,
     "Defense_IV": 21.0,
@@ -29,20 +29,20 @@
     "SP_DEF_IV": 18.0,
     "speed_IV": 19.0,
     "HP_EV": 0.0,
-    "Attack_EV": 4.0,
+    "Attack_EV": 5.0,
     "Defense_EV": 0.0,
-    "SP_ATK_EV": 9.0,
+    "SP_ATK_EV": 12.0,
     "SP_DEF_EV": 3.0,
-    "speed_EV": 4.0,
+    "speed_EV": 5.0,
     "EVs": [
         "Speed2"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 13,
-    "CurrentExpAmount": 862,
-    "NextLvExpAmount": 14.0,
+    "Current_level": 16,
+    "CurrentExpAmount": 1094,
+    "NextLvExpAmount": 19.0,
     "EXPGroup": "Medium Fast",
     "exp_yield": 82,
     "has_trainer": true,
@@ -51,10 +51,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30272
+            "instanceID": 30296
         }
     ],
-    "Status_effect": "BadlyPoison",
+    "Status_effect": "None",
     "Buff_Debuffs": [],
     "type_Immunity": "None",
     "evo_line": [
@@ -72,24 +72,24 @@
     ],
     "move_set": [
         {
-            "instanceID": -34530
+            "instanceID": -58656
         },
         {
-            "instanceID": -34532
+            "instanceID": -58658
         },
         {
-            "instanceID": -38062
+            "instanceID": -58660
         },
         {
-            "instanceID": -38936
+            "instanceID": -58662
         }
     ],
     "ability": {
-        "instanceID": 30274
+        "instanceID": 30298
     },
     "evolutions": [
         {
-            "instanceID": 30276
+            "instanceID": 30300
         }
     ],
     "HeldItem": {
@@ -97,10 +97,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30278
+        "instanceID": 30302
     },
     "back_picture": {
-        "instanceID": 30280
+        "instanceID": 30304
     },
     "ability_name": "Static",
     "natureName": "Jolly",
@@ -117,9 +117,9 @@
         "Tail whip/Normal"
     ],
     "move_pp_data": [
-        17,
-        19,
-        23,
-        22
+        20,
+        20,
+        25,
+        25
     ]
 }

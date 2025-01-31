@@ -117,14 +117,12 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(() => !FainEventDelay);
             }
             else
-            {
                 yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-            }
         }
+        yield return new WaitUntil(() => !FainEventDelay);
+        yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         Turn_history.Clear();
         OnTurnEnd?.Invoke();
-        yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
-        yield return new WaitUntil(() => !FainEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         Battle_handler.instance.Reset_move();
         Next_turn();

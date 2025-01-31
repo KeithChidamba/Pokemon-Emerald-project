@@ -6,7 +6,7 @@ public class Options_manager : MonoBehaviour
 {
     private Interaction current_interaction;
     public bool playerInBattle = false;
-    public bool ChoosingNewMove = false;
+    public bool SelectedNewMoveOption = false;
     [SerializeField] private Recieve_Pokemon gift_pkm;
     public static Options_manager instance;
     private void Awake()
@@ -43,18 +43,18 @@ public class Options_manager : MonoBehaviour
     }
 
     void Learn_Move()
-    {
+    {        
         Pokemon_Details.instance.LearningMove = true;
         Pokemon_Details.instance.Load_Details(PokemonOperations.CurrentPkm);
         Dialogue_handler.instance.Battle_Info("Which move will you replace?");
-        ChoosingNewMove = false;
+        SelectedNewMoveOption = false;
     }
     void Skip_Move()
     {
-        ChoosingNewMove = false;
         Pokemon_Details.instance.LearningMove = false;
         PokemonOperations.LearningNewMove = false;
         Dialogue_handler.instance.Battle_Info(PokemonOperations.CurrentPkm.Pokemon_name+" did not learn "+PokemonOperations.NewMove.Move_name);
+        SelectedNewMoveOption = false;
     }
     void Heal_Pokemon()
     {

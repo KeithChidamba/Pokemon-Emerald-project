@@ -416,12 +416,10 @@ public class Battle_handler : MonoBehaviour
         Dialogue_handler.instance.Battle_Info(pkmLevelUp.pokemon.Pokemon_name+" leveled up!");
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         pkmLevelUp.Execute();
-        yield return new WaitForSeconds(.5f);
         if (PokemonOperations.LearningNewMove)
             if (pkmLevelUp.pokemon.move_set.Count > 3)
             {
-                yield return new WaitUntil(() => Options_manager.instance.ChoosingNewMove);
-                yield return new WaitForSeconds(.5f);
+                yield return new WaitUntil(() => Options_manager.instance.SelectedNewMoveOption);
                 if (Pokemon_Details.instance.LearningMove)
                 {
                     yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);

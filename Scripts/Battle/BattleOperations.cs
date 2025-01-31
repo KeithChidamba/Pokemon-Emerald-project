@@ -58,21 +58,21 @@ public static class BattleOperations
                 return true;
         return false;
     }
-    public static void ChangeBuffs(Pokemon pkm,string stat_name,int buff_amount,bool increase)
+    public static void ChangeBuffs(BuffDebuffData data)
     {
-        if(Hasbuff_Debuff(pkm, stat_name))
+        if(Hasbuff_Debuff(data.Reciever, data.StatName))
         {
-            foreach (Buff_Debuff b in pkm.Buff_Debuffs)
-                if (b.Stat == stat_name)
-                        b.Stage=CheckBuffLimit(pkm,b,increase,buff_amount);
+            foreach (Buff_Debuff buff in data.Reciever.Buff_Debuffs)
+                if (buff.Stat == data.StatName)
+                        buff.Stage=CheckBuffLimit(data.Reciever,buff,data.isIncreasing,data.EffectAmount);
         }
         else
         {
-            pkm.Buff_Debuffs.Add(NewBuff(stat_name));
-            ChangeBuffs(pkm,stat_name,buff_amount,increase);
+            data.Reciever.Buff_Debuffs.Add(NewBuff(data.StatName));
+            ChangeBuffs(data);
             return;
         }
-        CheckBuffs(pkm);
+        CheckBuffs(data.Reciever);
     }
     static int CheckBuffLimit(Pokemon pkm,Buff_Debuff buff,bool increased,int buff_amount)
     {

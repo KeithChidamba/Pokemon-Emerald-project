@@ -102,6 +102,7 @@ public class Battle_Participant : MonoBehaviour
         fainted = true;
         Turn_Based_Combat.instance.FainEventDelay = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
+        pokemon.Status_effect = "None";
         Give_exp();
         foreach (Battle_Participant enemy in Current_Enemies)
             if(enemy.pokemon!=null)

@@ -215,11 +215,11 @@ public class Move_handler:MonoBehaviour
         if (!current_turn.move_.is_Buff_Debuff) return;
         if (Utility.Get_rand(1, 101) > current_turn.move_.Debuff_chance)
             return;
-        string effect = current_turn.move_.Buff_Debuff;
-        char result = effect[0];//buff or debuff
-        int buff_amount = int.Parse(effect[1].ToString());
-        string stat = effect.Substring(2, effect.Length - 2);
+        string buffDebuffInfo = current_turn.move_.Buff_Debuff;
+        int buff_amount = int.Parse(buffDebuffInfo[1].ToString());
+        string stat = buffDebuffInfo.Substring(2, buffDebuffInfo.Length - 2);
         Pokemon reciever_pkm = victim_.pokemon;
+        bool isIncreasing = (buffDebuffInfo[0] == '+');//buff or debuff
         if (!current_turn.move_.isSelfTargeted)
         {//affecting enemy
             if(!current_turn.move_.isMultiTarget)
@@ -231,60 +231,67 @@ public class Move_handler:MonoBehaviour
                 }
                 reciever_pkm = victim_.pokemon;
             }
-            else {
-                foreach (Battle_Participant enemy in attacker_.Current_Enemies)
-                    if (enemy.pokemon.CanBeDamaged)
-                        GiveBuff_Debuff(stat,enemy.pokemon,buff_amount,result);
-                    else {
-                        Dialogue_handler.instance.Battle_Info(enemy.pokemon.Pokemon_name + " protected itself");
-                    }
-            }
+            else
+                StartCoroutine(MultiTargetBuff_Debuff(stat,isIncreasing,buff_amount));
         }
         else//affecting attacker
             reciever_pkm = attacker_.pokemon;
-        GiveBuff_Debuff(stat,reciever_pkm,buff_amount,result);
+        BuffDebuffData buff_debuff = new BuffDebuffData(reciever_pkm, stat, isIncreasing,buff_amount);
+        GiveBuff_Debuff(buff_debuff);
     }
 
-    void GiveBuff_Debuff(string stat, Pokemon reciever_pkm, int buff_amount, char result)
+    IEnumerator MultiTargetBuff_Debuff(string stat, bool isIncreasing,int buff_amount)
     {
-        switch (stat)
+        foreach (Battle_Participant enemy in attacker_.Current_Enemies)
+        {
+            BuffDebuffData buff_debuff = new BuffDebuffData(enemy.pokemon, stat, isIncreasing,buff_amount);
+            if (enemy.pokemon.CanBeDamaged)
+                GiveBuff_Debuff(buff_debuff);
+            else
+            {
+                Dialogue_handler.instance.Battle_Info(enemy.pokemon.Pokemon_name + " protected itself");
+            }
+            yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
+        }
+        yield return null;
+    }
+    void GiveBuff_Debuff(BuffDebuffData data)
+    {
+        switch (data.StatName)
         {
             case"Defense":
-                reciever_pkm.Defense = Get_buff_debuff(victim_.pokemon.Defense,stat,buff_amount,result,reciever_pkm);
+                data.Reciever.Defense = Get_buff_debuff(victim_.pokemon.Defense,data);
                 break;
             case"Attack":
-                reciever_pkm.Attack = Get_buff_debuff(victim_.pokemon.Attack,stat,buff_amount,result,reciever_pkm);
+                data.Reciever.Attack = Get_buff_debuff(victim_.pokemon.Attack,data);
                 break;
             case"Special Defense":
-                reciever_pkm.SP_DEF = Get_buff_debuff(victim_.pokemon.SP_DEF,stat,buff_amount,result,reciever_pkm);
+                data.Reciever.SP_DEF = Get_buff_debuff(victim_.pokemon.SP_DEF,data);
                 break;
             case"Special Attack":
-                reciever_pkm.SP_ATK = Get_buff_debuff(victim_.pokemon.SP_ATK,stat,buff_amount,result,reciever_pkm);
+                data.Reciever.SP_ATK = Get_buff_debuff(victim_.pokemon.SP_ATK,data);
                 break;
             case"Speed":
-                reciever_pkm.speed = Get_buff_debuff(victim_.pokemon.speed,stat,buff_amount,result,reciever_pkm);
+                data.Reciever.speed = Get_buff_debuff(victim_.pokemon.speed,data);
                 break;
             case"Accuracy":
-                reciever_pkm.Accuracy = Get_buff_debuff(victim_.pokemon.Accuracy,stat,buff_amount,result,reciever_pkm);
+                data.Reciever.Accuracy = Get_buff_debuff(victim_.pokemon.Accuracy,data);
                 break;
             case"Evasion":
-                reciever_pkm.Evasion = Get_buff_debuff(victim_.pokemon.Evasion,stat,buff_amount,result,reciever_pkm);
+                data.Reciever.Evasion = Get_buff_debuff(victim_.pokemon.Evasion,data);
                 break;
             case"Crit":
-                reciever_pkm.crit_chance = Get_buff_debuff(victim_.pokemon.crit_chance,stat,buff_amount,result,reciever_pkm);
+                data.Reciever.crit_chance = Get_buff_debuff(victim_.pokemon.crit_chance,data);
                 break;
         }
     }
-    float Get_buff_debuff(float stat_val,string stat,int buff_amount,char result,Pokemon reciever_pkm)
+    float Get_buff_debuff(float stat_val, BuffDebuffData data)
     {
-        if (result == '+')
-            BattleOperations.ChangeBuffs(reciever_pkm, stat,buff_amount, true);
-        else
-            BattleOperations.ChangeBuffs(reciever_pkm, stat,buff_amount, false);
-        Buff_Debuff buff = BattleOperations.GetBuff(reciever_pkm, stat);
-        if (stat == "Accuracy" | stat == "Evasion")
+        BattleOperations.ChangeBuffs(data);
+        Buff_Debuff buff = BattleOperations.GetBuff(data.Reciever, data.StatName);
+        if (data.StatName == "Accuracy" | data.StatName == "Evasion")
             return math.trunc(stat_val * Accuracy_And_Evasion_Levels[buff.Stage+6]); 
-        if(stat=="Crit")    
+        if(data.StatName=="Crit")    
             return Crit_Levels[buff.Stage];
         return math.trunc(stat_val * Stat_Levels[buff.Stage+6]);
     }
