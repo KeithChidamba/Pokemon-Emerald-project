@@ -15,7 +15,7 @@ MonoBehaviour:
   Biome_name: Beach
   Pokemon:
   - zigzagoon010
-  - wurmple040
-  - trapinch010
+  - mudkip040
+  - trapinch050
   min_lv: 2
   max_lv: 7

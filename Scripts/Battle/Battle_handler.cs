@@ -14,7 +14,7 @@ public class Battle_handler : MonoBehaviour
     public GameObject Battle_ui;
     public GameObject moves_ui;
     public GameObject options_ui;
-    [FormerlySerializedAs("Battle_P")] public Battle_Participant[] Battle_Participants = {null,null,null,null};
+    public Battle_Participant[] Battle_Participants = {null,null,null,null};
     public List<LevelUpEvent> levelUpQueue=new();
     public Text Move_pp, Move_type;
     public Text[] moves;
@@ -390,8 +390,10 @@ public class Battle_handler : MonoBehaviour
             else
             {
                 if (is_trainer_battle)
+                {
+                    LastOpponent = Battle_Participants[0].Current_Enemies[0].pokemon;
                     Game_Load.instance.player_data.player_Money -= BaseMoneyPayout * Game_Load.instance.player_data.NumBadges
-                                                                   * LastOpponent.Current_level;
+                                                                   * LastOpponent.Current_level;}
                 Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
                 Area_manager.instance.Switch_Area("Poke Center", 0f);
             }
