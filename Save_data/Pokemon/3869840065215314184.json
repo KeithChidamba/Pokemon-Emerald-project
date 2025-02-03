@@ -1,27 +1,27 @@
 {
     "Base_Pokemon_name": "Treecko",
-    "Pokemon_name": "Grovyle",
+    "Pokemon_name": "Sceptile",
     "Pokemon_ID": 3869840065215314184,
     "Personality_value": 951826696,
     "Gender": "Male",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30670
+        "instanceID": 30784
     },
     "has_gender": true,
-    "HP": 58.0,
-    "max_HP": 58.0,
-    "BaseHP": 50.0,
-    "BaseAttack": 65.0,
-    "BaseDefense": 45.0,
-    "BaseSP_ATK": 85.0,
-    "BaseSP_DEF": 65.0,
-    "Basespeed": 95.0,
-    "Attack": 38.0,
-    "Defense": 21.0,
-    "SP_ATK": 43.0,
-    "SP_DEF": 36.0,
-    "speed": 47.0,
+    "HP": 65.0,
+    "max_HP": 79.0,
+    "BaseHP": 70.0,
+    "BaseAttack": 85.0,
+    "BaseDefense": 65.0,
+    "BaseSP_ATK": 105.0,
+    "BaseSP_DEF": 85.0,
+    "Basespeed": 120.0,
+    "Attack": 53.0,
+    "Defense": 28.0,
+    "SP_ATK": 60.0,
+    "SP_DEF": 50.0,
+    "speed": 66.0,
     "HP_IV": 31.0,
     "Attack_IV": 28.0,
     "Defense_IV": 0.0,
@@ -29,29 +29,29 @@
     "SP_DEF_IV": 4.0,
     "speed_IV": 10.0,
     "HP_EV": 0.0,
-    "Attack_EV": 10.0,
+    "Attack_EV": 13.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 21.0,
-    "SP_DEF_EV": 3.0,
-    "speed_EV": 14.0,
+    "SP_DEF_EV": 12.0,
+    "speed_EV": 17.0,
     "EVs": [
-        "Speed2"
+        "Speed3"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 21,
-    "CurrentExpAmount": 1727,
-    "NextLvExpAmount": 1641.0,
+    "Current_level": 30,
+    "CurrentExpAmount": 2420,
+    "NextLvExpAmount": 2474.0,
     "EXPGroup": "Medium Slow",
-    "exp_yield": 141,
+    "exp_yield": 208,
     "has_trainer": true,
     "canAttack": true,
     "isFlinched": false,
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30278
+            "instanceID": 30260
         }
     ],
     "Status_effect": "None",
@@ -65,32 +65,30 @@
         "Overgrow"
     ],
     "split_evolution": false,
-    "learnSet": [
-        "flying/arial ace16"
-    ],
+    "learnSet": [],
     "move_set": [
         {
-            "instanceID": -58666
+            "instanceID": -64118
         },
         {
-            "instanceID": -58668
+            "instanceID": -64120
         },
         {
-            "instanceID": -58670
+            "instanceID": -64122
         },
         {
-            "instanceID": -58672
+            "instanceID": -64124
         }
     ],
     "ability": {
-        "instanceID": 30280
+        "instanceID": 30262
     },
     "evolutions": [
         {
-            "instanceID": 30282
+            "instanceID": 30264
         },
         {
-            "instanceID": 30284
+            "instanceID": 30266
         }
     ],
     "HeldItem": {
@@ -98,10 +96,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30392
+        "instanceID": 30376
     },
     "back_picture": {
-        "instanceID": 30204
+        "instanceID": 30378
     },
     "ability_name": "Overgrow",
     "natureName": "Gentle",
@@ -120,8 +118,8 @@
     ],
     "move_pp_data": [
         25,
-        20,
-        20,
-        20
+        19,
+        18,
+        19
     ]
 }

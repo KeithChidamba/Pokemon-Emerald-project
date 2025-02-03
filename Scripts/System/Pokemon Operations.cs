@@ -190,7 +190,7 @@ public static class PokemonOperations
             }
             counter++;
         }
-        if(counter==4)
+        if(counter==CurrentPkm.learnSet.Length)
             LearningNewMove = false;
     }
     public static void Learn_move(int index)

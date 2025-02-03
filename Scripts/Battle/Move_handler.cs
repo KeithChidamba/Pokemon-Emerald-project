@@ -242,7 +242,7 @@ public class Move_handler:MonoBehaviour
 
     IEnumerator MultiTargetBuff_Debuff(string stat, bool isIncreasing,int buff_amount)
     {
-        foreach (Battle_Participant enemy in attacker_.Current_Enemies)
+        foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker_.Current_Enemies) )
         {
             BuffDebuffData buff_debuff = new BuffDebuffData(enemy.pokemon, stat, isIncreasing,buff_amount);
             if (enemy.pokemon.CanBeDamaged)

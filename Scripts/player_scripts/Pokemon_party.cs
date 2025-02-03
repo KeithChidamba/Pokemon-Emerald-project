@@ -172,33 +172,12 @@ public class Pokemon_party : MonoBehaviour
         if (SwapOutNext || Swapping_in)
         {
             swap(Party_position);
-            Invoke(nameof(switchIn),1f);
+            Invoke(nameof(switchIn),1f);//
         }
         else
             if(party[Selected_member-1] != party[Party_position])
                 swap(Party_position);
     }
-
-    /*IEnumerator SwitchInPokemon()
-    {
-        foreach (Pokemon pokemon in _faintedPokemon)//new List<Pokemon>(_faintedPokemon))
-        {
-            Selected_member = party.ToList().IndexOf(pokemon)+1;
-
-            yield return new WaitForSeconds(1f);
-            List<Pokemon> alive_pokemon = new();
-            alive_pokemon = party.ToList();
-            alive_pokemon.RemoveAll(p => p.HP <= 0);
-            Debug.Log(alive_pokemon.Count());
-            if(Battle_handler.instance.isDouble_battle &&  alive_pokemon.Count>1)
-                Dialogue_handler.instance.Write_Info("Pick the next substitute ","Details");
-            else
-                break;
-        }
-        _faintedPokemon.Clear();
-        
-        yield return null;
-    }*/
 void close_party()
 {
     Game_ui_manager.instance.Close_party();
@@ -207,9 +186,15 @@ void close_party()
 }
     void switchIn()
     {
-        Turn_Based_Combat.instance.FainEventDelay = false;
-        if(Turn_Based_Combat.instance.Current_pkm_turn > 1 && SwapOutNext)//not equal to ur turn, check this with double batttles
+        Debug.Log("switch in");
+        if (SwapOutNext)
+            Turn_Based_Combat.instance.FainEventDelay = false;
+        if (Turn_Based_Combat.instance.Current_pkm_turn > 1 &&
+            SwapOutNext) //not equal to ur turn, check this with double batttles
+        {
+            Debug.Log("swap next turn switch");
             Turn_Based_Combat.instance.Next_turn();
+        }
         if(Swapping_in)
             Turn_Based_Combat.instance.Next_turn();
         close_party();

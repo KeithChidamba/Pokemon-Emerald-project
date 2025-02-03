@@ -1,27 +1,27 @@
 {
     "Base_Pokemon_name": "Pikachu",
-    "Pokemon_name": "Pikachu",
+    "Pokemon_name": "Raichu",
     "Pokemon_ID": 3869840064341591701,
     "Personality_value": 78104213,
     "Gender": "Female",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 30916
+        "instanceID": 31022
     },
     "has_gender": true,
-    "HP": 40.0,
-    "max_HP": 40.0,
-    "BaseHP": 35.0,
-    "BaseAttack": 55.0,
-    "BaseDefense": 40.0,
-    "BaseSP_ATK": 50.0,
-    "BaseSP_DEF": 50.0,
-    "Basespeed": 90.0,
-    "Attack": 24.0,
-    "Defense": 21.0,
-    "SP_ATK": 20.0,
-    "SP_DEF": 24.0,
-    "speed": 40.0,
+    "HP": 44.0,
+    "max_HP": 60.0,
+    "BaseHP": 60.0,
+    "BaseAttack": 90.0,
+    "BaseDefense": 55.0,
+    "BaseSP_ATK": 90.0,
+    "BaseSP_DEF": 80.0,
+    "Basespeed": 110.0,
+    "Attack": 45.0,
+    "Defense": 32.0,
+    "SP_ATK": 40.0,
+    "SP_DEF": 42.0,
+    "speed": 61.0,
     "HP_IV": 20.0,
     "Attack_IV": 10.0,
     "Defense_IV": 21.0,
@@ -29,29 +29,29 @@
     "SP_DEF_IV": 18.0,
     "speed_IV": 19.0,
     "HP_EV": 0.0,
-    "Attack_EV": 5.0,
+    "Attack_EV": 7.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 12.0,
-    "SP_DEF_EV": 3.0,
-    "speed_EV": 5.0,
+    "SP_DEF_EV": 9.0,
+    "speed_EV": 6.0,
     "EVs": [
-        "Speed2"
+        "Speed3"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 16,
-    "CurrentExpAmount": 1094,
-    "NextLvExpAmount": 19.0,
+    "Current_level": 21,
+    "CurrentExpAmount": 1533,
+    "NextLvExpAmount": 22.0,
     "EXPGroup": "Medium Fast",
-    "exp_yield": 82,
+    "exp_yield": 122,
     "has_trainer": true,
     "canAttack": true,
     "isFlinched": false,
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30296
+            "instanceID": 30278
         }
     ],
     "Status_effect": "None",
@@ -65,31 +65,28 @@
     ],
     "split_evolution": false,
     "learnSet": [
-        "electric/thunder shock01",
-        "electric/thunder wave03",
-        "normal/quick attack07",
-        "normal/tail whip09"
+        "electric/thunderbolt18"
     ],
     "move_set": [
         {
-            "instanceID": -58656
+            "instanceID": -64108
         },
         {
-            "instanceID": -58658
+            "instanceID": -64110
         },
         {
-            "instanceID": -58660
+            "instanceID": -64112
         },
         {
-            "instanceID": -58662
+            "instanceID": -64114
         }
     ],
     "ability": {
-        "instanceID": 30298
+        "instanceID": 30280
     },
     "evolutions": [
         {
-            "instanceID": 30300
+            "instanceID": 30282
         }
     ],
     "HeldItem": {
@@ -97,10 +94,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30302
+        "instanceID": 30384
     },
     "back_picture": {
-        "instanceID": 30304
+        "instanceID": 30386
     },
     "ability_name": "Static",
     "natureName": "Jolly",
@@ -113,13 +110,13 @@
     "move_data": [
         "Thunder shock/Electric",
         "Thunder wave/Electric",
-        "Quick attack/Normal",
+        "Thunderbolt/Electric",
         "Tail whip/Normal"
     ],
     "move_pp_data": [
+        19,
         20,
-        20,
-        25,
+        14,
         25
     ]
 }

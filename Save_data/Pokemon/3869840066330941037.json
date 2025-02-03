@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30854
+        "instanceID": 30960
     },
     "has_gender": true,
     "HP": 38.0,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30354
+            "instanceID": 30336
         }
     ],
     "Status_effect": "None",
@@ -73,27 +73,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -58676
+            "instanceID": -64128
         },
         {
-            "instanceID": -58678
+            "instanceID": -64130
         },
         {
-            "instanceID": -58680
+            "instanceID": -64132
         },
         {
-            "instanceID": -58682
+            "instanceID": -64134
         }
     ],
     "ability": {
-        "instanceID": 30356
+        "instanceID": 30338
     },
     "evolutions": [
         {
-            "instanceID": 30358
+            "instanceID": 30340
         },
         {
-            "instanceID": 30360
+            "instanceID": 30342
         }
     ],
     "HeldItem": {
@@ -101,10 +101,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30050
+        "instanceID": 30032
     },
     "back_picture": {
-        "instanceID": 30362
+        "instanceID": 30344
     },
     "ability_name": "Inferno",
     "natureName": "Quirky",

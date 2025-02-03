@@ -384,15 +384,13 @@ public class Battle_handler : MonoBehaviour
                 {
                     int MoneyGained = BaseMoneyPayout * LastOpponent.Current_level * MoneyModifier();
                     Game_Load.instance.player_data.player_Money += MoneyGained;
-                    Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P" +
-                                                          MoneyGained);
+                    Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P" + MoneyGained);
                 }
             }
             else
             {
                 if (is_trainer_battle)
-                    Game_Load.instance.player_data.player_Money -= BaseMoneyPayout *
-                                                                   Game_Load.instance.player_data.NumBadges
+                    Game_Load.instance.player_data.player_Money -= BaseMoneyPayout * Game_Load.instance.player_data.NumBadges
                                                                    * LastOpponent.Current_level;
                 Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
                 Area_manager.instance.Switch_Area("Poke Center", 0f);

@@ -143,8 +143,9 @@ public class Battle_Participant : MonoBehaviour
                 Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");
                 Reset_pkm();
             }
-            if (Battle_handler.instance.isDouble_battle && numAlive > 0)//1 left
+            else if (Battle_handler.instance.isDouble_battle && numAlive == 1)//1 left
             {
+                Debug.Log("1 l;eft reset");
                 pokemon = null;
                 is_active = false;
                 Unload_ui();
