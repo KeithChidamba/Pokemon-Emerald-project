@@ -232,7 +232,10 @@ public class Move_handler:MonoBehaviour
                 reciever_pkm = victim_.pokemon;
             }
             else
+            {
                 StartCoroutine(MultiTargetBuff_Debuff(stat,isIncreasing,buff_amount));
+                return;
+            }
         }
         else//affecting attacker
             reciever_pkm = attacker_.pokemon;
@@ -349,6 +352,7 @@ public class Move_handler:MonoBehaviour
     void surf()
     {
         MultiTargetMoveDamage();
+        MoveDelay = false;
     }
     void magnitude()
     {
@@ -363,5 +367,6 @@ public class Move_handler:MonoBehaviour
         Dialogue_handler.instance.Battle_Info("Magnitude level "+MagnitudeStrength);
         current_turn.move_.Move_damage = baseDamage;
         victim_.pokemon.HP -= Calc_Damage(current_turn.move_,victim_);
+        MoveDelay = false;
     }
 }

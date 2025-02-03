@@ -167,16 +167,18 @@ public static class PokemonOperations
                 string moveType = move.Substring(0, pos - 1).ToLower();
                 string moveName = move.Substring(pos, move.Length - 2 - pos).ToLower();
                 if (CurrentPkm.move_set.Count == 4) 
-                {
-                    if(Options_manager.instance.playerInBattle || Pokemon_party.instance.party.Contains(CurrentPkm))//leveling up from battle or rare candies
+                {//leveling up from battle or rare candies
+                    if(Options_manager.instance.playerInBattle || Pokemon_party.instance.party.Contains(CurrentPkm))
                     {
+                        Debug.Log("learning new move");
                         Dialogue_handler.instance.Write_Info(
                             CurrentPkm.Pokemon_name + " is trying to learn " + moveName + ", do you want it to learn " + moveName +
                             "?", "Options", "Learn_Move", "", "Skip_Move", "Yes", "No");
                         NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName);
                     }
                     //wild pokemon get generated with somewhat random moveset choices
-                    CurrentPkm.move_set[Utility.Get_rand(0,4)] = Obj_Instance.set_move(Resources.Load<Move>(
+                    else
+                        CurrentPkm.move_set[Utility.Get_rand(0,4)] = Obj_Instance.set_move(Resources.Load<Move>(
                             "Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
                 }
                 else
