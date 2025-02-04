@@ -21,6 +21,12 @@ public class Pokemon_party_member : MonoBehaviour
     {
         Options.SetActive(false);
     }
+
+    public void Levelup()
+    {
+        //debugging purposes
+        pkm.Level_up();
+    }
     public void Set_Ui()
     {
         Pkm_front_img.sprite = pkm.front_picture;

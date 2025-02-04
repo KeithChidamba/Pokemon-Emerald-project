@@ -13814,7 +13814,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &450309582
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14963,7 +14963,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &505938597
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15037,7 +15037,7 @@ MonoBehaviour:
         m_MethodName: Add_Member
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+          m_ObjectArgument: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
           m_ObjectArgumentAssemblyTypeName: Pokemon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -60908,7 +60908,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1216270925}
         m_TargetAssemblyTypeName: Pokemon_party_member, Assembly-CSharp
-        m_MethodName: lev
+        m_MethodName: Levelup
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -73026,7 +73026,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1756327573
 RectTransform:
   m_ObjectHideFlags: 0

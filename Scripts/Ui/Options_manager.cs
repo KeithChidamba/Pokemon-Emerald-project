@@ -55,6 +55,7 @@ public class Options_manager : MonoBehaviour
         PokemonOperations.LearningNewMove = false;
         Dialogue_handler.instance.Battle_Info(PokemonOperations.CurrentPkm.Pokemon_name+" did not learn "+PokemonOperations.NewMove.Move_name);
         SelectedNewMoveOption = false;
+        Battle_handler.instance.levelUpQueue.RemoveAll(p=>p.pokemon==PokemonOperations.CurrentPkm);
     }
     void Heal_Pokemon()
     {

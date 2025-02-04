@@ -369,6 +369,7 @@ public class Battle_handler : MonoBehaviour
     }
     IEnumerator DelayBattleEnd()
     {
+        yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         if (running_away)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
@@ -421,12 +422,9 @@ public class Battle_handler : MonoBehaviour
             {
                 yield return new WaitUntil(() => Options_manager.instance.SelectedNewMoveOption);
                 if (Pokemon_Details.instance.LearningMove)
-                {
                     yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
-                    yield return new WaitForSeconds(1f);
-                }
-            }
-        levelUpQueue.Remove(pkmLevelUp);
+            } 
+        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         Turn_Based_Combat.instance.LevelEventDelay = false;
         if(BattleOver & levelUpQueue.Count==0)
             End_Battle(BattleWon);

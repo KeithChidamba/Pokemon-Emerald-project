@@ -303,7 +303,10 @@ public class Move_handler:MonoBehaviour
         float damage = Calc_Damage(current_turn.move_,victim_);
         float heal_amount = damage/ 2f;
         victim_.pokemon.HP -= damage;
-        attacker_.pokemon.HP += math.trunc(math.abs(heal_amount));
+        if( (heal_amount+attacker_.pokemon.HP) < attacker_.pokemon.max_HP)
+            attacker_.pokemon.HP += math.trunc(math.abs(heal_amount));
+        else
+            attacker_.pokemon.HP = attacker_.pokemon.max_HP;
         Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" gained health");
         MoveDelay = false;
     }

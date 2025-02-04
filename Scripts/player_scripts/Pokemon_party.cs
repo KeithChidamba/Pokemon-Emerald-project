@@ -193,7 +193,7 @@ void close_party()
             SwapOutNext) //not equal to ur turn, check this with double batttles
         {
             Debug.Log("swap next turn switch");
-            Turn_Based_Combat.instance.Next_turn();
+            //Turn_Based_Combat.instance.Next_turn();
         }
         if(Swapping_in)
             Turn_Based_Combat.instance.Next_turn();

@@ -154,7 +154,6 @@ public static class PokemonOperations
 
     public static void GetNewMove(Pokemon pkm)
     {
-        
         LearningNewMove = true;
         CurrentPkm = pkm;
         int counter = 0;
@@ -170,7 +169,7 @@ public static class PokemonOperations
                 {//leveling up from battle or rare candies
                     if(Options_manager.instance.playerInBattle || Pokemon_party.instance.party.Contains(CurrentPkm))
                     {
-                        Debug.Log("learning new move");
+                        Battle_handler.instance.displaying_info = true;
                         Dialogue_handler.instance.Write_Info(
                             CurrentPkm.Pokemon_name + " is trying to learn " + moveName + ", do you want it to learn " + moveName +
                             "?", "Options", "Learn_Move", "", "Skip_Move", "Yes", "No");
@@ -192,7 +191,7 @@ public static class PokemonOperations
             }
             counter++;
         }
-        if(counter==CurrentPkm.learnSet.Length)
+        if (counter == CurrentPkm.learnSet.Length)
             LearningNewMove = false;
     }
     public static void Learn_move(int index)
@@ -201,7 +200,7 @@ public static class PokemonOperations
         Pokemon_Details.instance.Exit_details();
         Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" forgot "+CurrentPkm.move_set[index].Move_name+" and learned "+NewMove.Move_name);
         CurrentPkm.move_set[index] = Obj_Instance.set_move(NewMove);
-       // Battle_handler.instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);
+        Battle_handler.instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);
     }
     private static void get_Gender(Pokemon new_pkm)
     {
