@@ -115,9 +115,10 @@ public class Battle_Participant : MonoBehaviour
             else
                 trainer.Invoke(nameof(trainer.CheckLoss),1f);
     }
-    void EndWildBattle()
+    public void EndWildBattle()
     {
         Wild_pkm.instance.InBattle = false;
+        Turn_Based_Combat.instance.FainEventDelay = false;
         Battle_handler.instance.End_Battle(true);
     }
     private void Check_loss()

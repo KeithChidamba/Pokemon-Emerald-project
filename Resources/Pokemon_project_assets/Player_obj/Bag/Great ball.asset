@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
-  m_Name: Swim gear
+  m_Name: Great ball
   m_EditorClassIdentifier: 
   Item_ID: 
-  Item_name: Swim gear
-  Item_type: Action
-  Item_effect: 
-  Item_desc: Allows player to swim
-  price: 500
+  Item_name: Great ball
+  Item_type: Pokeball
+  Item_effect: 50
+  Item_desc: 50% higher chance to catch compared to pokeball
+  price: 30
   quantity: 1
-  Item_img: {fileID: -1515377947, guid: 84e56311fefcc6145b1b893fd4f5fa3b, type: 3}
+  Item_img: {fileID: 21300000, guid: 08dc3317621433d4da311c90ec140508, type: 3}
+  ForPartyUse: 0
   CanBeUsedInOverworld: 0
-  CanBeUsedInBattle: 0
-  isHeldItem: 1
-  CanBeHeld: 1
-  CanBeSold: 0
+  CanBeUsedInBattle: 1
+  isHeldItem: 0
+  CanBeHeld: 0
+  CanBeSold: 1

@@ -12,6 +12,7 @@ public class Item : ScriptableObject
     public int price = 0;
     public int quantity = 0;
     public Sprite Item_img;
+    public bool ForPartyUse = true;
     public bool CanBeUsedInOverworld = true;
     public bool CanBeUsedInBattle = true;
     public bool isHeldItem = false;

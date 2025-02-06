@@ -29,18 +29,48 @@ public class Item_handler : MonoBehaviour
             case "status":
                 heal_status(item.Item_effect.ToLower());
                 break;
+            case "pokeball":
+                UsePokeball(item);
+                break;
         }
     }
-    void Use_pokeball()
+    void UsePokeball(Item pokeball)
     {
         if(Options_manager.instance.playerInBattle)
+        {
             if (Battle_handler.instance.is_trainer_battle)
-                Dialogue_handler.instance.Write_Info("Cant catch someone else's Pokemon!","Details");
+                Dialogue_handler.instance.Write_Info("Cant catch someone else's Pokemon!", "Details");
             else
             {
-                //write catch logic later
-                //has trainer after catch
+                DepleteItem();
+                StartCoroutine(TryCatchPokemon(pokeball));
             }
+        }
+        else
+            Dialogue_handler.instance.Write_Info("Cant use that right now!", "Details");
+    }
+
+    IEnumerator TryCatchPokemon(Item pokeball)
+    {
+        Pokemon WildPokemon = Wild_pkm.instance.pokemon_participant.pokemon;//pokemon only caught in wild
+        Dialogue_handler.instance.Battle_Info("Trying to catch "+WildPokemon.Pokemon_name+" .....");
+        yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
+        if ( Utility.Get_rand(1, 101) < int.Parse(pokeball.Item_effect) )
+        {
+            Dialogue_handler.instance.Battle_Info("Well done "+WildPokemon.Pokemon_name+" has been caught");
+            Pokemon_party.instance.Add_Member(WildPokemon);
+            yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
+            Wild_pkm.instance.pokemon_participant.EndWildBattle();
+        }
+        else
+        {
+            Dialogue_handler.instance.Battle_Info(WildPokemon.Pokemon_name+" escaped the pokeball");
+            yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
+            skipTurn();
+        } 
+        ResetItemUsage();
+        StopAllCoroutines();
+        yield return null;
     }
     private void heal_status(string status)
     {
@@ -58,6 +88,8 @@ public class Item_handler : MonoBehaviour
         else
             Dialogue_handler.instance.Write_Info("Incorrect heal item","Details");
         Pokemon_party.instance.Refresh_Member_Cards();
+        Dialogue_handler.instance.Dialouge_off(1f);
+        Invoke(nameof(skipTurn),1.3f);
         ResetItemUsage();
     }
     void skipTurn()
@@ -73,6 +105,8 @@ public class Item_handler : MonoBehaviour
         if(selected_party_pkm.HP>=selected_party_pkm.max_HP)
         {
             Dialogue_handler.instance.Write_Info("Pokemon health already is full","Details");
+            Dialogue_handler.instance.Dialouge_off(1f);
+            Invoke(nameof(skipTurn),1.3f);
             ResetItemUsage();
             return;
         }
@@ -88,6 +122,8 @@ public class Item_handler : MonoBehaviour
             Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+ (heal_effect-(selected_party_pkm.max_HP - selected_party_pkm.HP))+" health points","Details");
             DepleteItem();
         }
+        Dialogue_handler.instance.Dialouge_off(1f);
+        Invoke(nameof(skipTurn),1.3f);
         ResetItemUsage();
     }
 
@@ -98,9 +134,7 @@ public class Item_handler : MonoBehaviour
     }
     void ResetItemUsage()
     {
-        Dialogue_handler.instance.Dialouge_off(1f);
         Using_item = false;
         selected_party_pkm = null;
-        Invoke(nameof(skipTurn),1.3f);
     }
 }

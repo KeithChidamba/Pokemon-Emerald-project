@@ -225,10 +225,16 @@ public class Bag : MonoBehaviour
     }
     public void use_item()
     {
+        Item ItemToUse = bag_items[top_index + Selected_item - 1];
         Item_handler.instance.Using_item = true;
-        Pokemon_party.instance.Recieve_item(bag_items[top_index + Selected_item - 1]);
+        if(ItemToUse.ForPartyUse)
+        {
+            Pokemon_party.instance.Recieve_item(ItemToUse);
+            Game_ui_manager.instance.View_pkm_Party();
+        }
+        else
+            Item_handler.instance.Use_Item(ItemToUse);
         Game_ui_manager.instance.close_bag();
-        Game_ui_manager.instance.View_pkm_Party();
     }
     public void Close_bag()
     {

@@ -133,6 +133,7 @@ public static class Obj_Instance
         new_item.Item_img = item.Item_img;
         new_item.quantity = item.quantity;
         new_item.Item_effect = item.Item_effect;
+        new_item.ForPartyUse = item.ForPartyUse;
         new_item.CanBeUsedInOverworld = item.CanBeUsedInOverworld;
         new_item.CanBeUsedInBattle = item.CanBeUsedInBattle;
         new_item.isHeldItem = item.isHeldItem;

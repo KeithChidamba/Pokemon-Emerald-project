@@ -1,0 +1,115 @@
+{
+    "Base_Pokemon_name": "Trapinch",
+    "Pokemon_name": "Trapinch",
+    "Pokemon_ID": 8465656885321627593,
+    "Personality_value": 1880131639,
+    "Gender": "Male",
+    "GenderRatio": "50/50",
+    "nature": {
+        "instanceID": 30560
+    },
+    "has_gender": true,
+    "HP": 13.0,
+    "max_HP": 13.0,
+    "BaseHP": 45.0,
+    "BaseAttack": 100.0,
+    "BaseDefense": 45.0,
+    "BaseSP_ATK": 45.0,
+    "BaseSP_DEF": 45.0,
+    "Basespeed": 10.0,
+    "Attack": 10.0,
+    "Defense": 6.0,
+    "SP_ATK": 7.0,
+    "SP_DEF": 6.0,
+    "speed": 5.0,
+    "HP_IV": 31.0,
+    "Attack_IV": 16.0,
+    "Defense_IV": 26.0,
+    "SP_ATK_IV": 10.0,
+    "SP_DEF_IV": 5.0,
+    "speed_IV": 22.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "Attack1"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 100.0,
+    "crit_chance": 6.25,
+    "Current_level": 2,
+    "CurrentExpAmount": -82,
+    "NextLvExpAmount": 61.0,
+    "EXPGroup": "Medium Slow",
+    "exp_yield": 73,
+    "has_trainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 30396
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "type_Immunity": "None",
+    "evo_line": [
+        "20",
+        "35"
+    ],
+    "abilities": [
+        "Sand pit"
+    ],
+    "split_evolution": false,
+    "learnSet": [
+        "dark/bite01",
+        "dark/crunch05",
+        "normal/tackle06",
+        "ground/magnitude07"
+    ],
+    "move_set": [
+        {
+            "instanceID": -45862
+        }
+    ],
+    "ability": {
+        "instanceID": 30632
+    },
+    "evolutions": [
+        {
+            "instanceID": 30612
+        },
+        {
+            "instanceID": 30722
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "HasItem": false,
+    "front_picture": {
+        "instanceID": 30664
+    },
+    "back_picture": {
+        "instanceID": 30664
+    },
+    "ability_name": "Sand pit",
+    "natureName": "Naive",
+    "evo_data": [
+        "Vibrava",
+        "Flygon"
+    ],
+    "type_data": [
+        "Ground"
+    ],
+    "move_data": [
+        "Bite/Dark"
+    ],
+    "move_pp_data": [
+        20
+    ]
+}

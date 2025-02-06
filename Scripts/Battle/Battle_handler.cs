@@ -395,6 +395,7 @@ public class Battle_handler : MonoBehaviour
                 {
                     LastOpponent = Battle_Participants[0].Current_Enemies[0].pokemon;
                     Game_Load.instance.player_data.player_Money -= BaseMoneyPayout * Game_Load.instance.player_data.NumBadges
+                        
                                                                    * LastOpponent.Current_level;}
                 Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
                 Area_manager.instance.Switch_Area("Poke Center", 0f);

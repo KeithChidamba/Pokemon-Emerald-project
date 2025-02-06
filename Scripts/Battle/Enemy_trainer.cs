@@ -42,7 +42,6 @@ public class Enemy_trainer : MonoBehaviour
     {
         List<Pokemon> numAlive = TrainerParty.ToList();
         numAlive.RemoveAll(p => p.HP <= 0);
-        //Debug.Log("alive: "+numAlive.Count);
         if (numAlive.Count == 0)
         {
             Battle_handler.instance.LastOpponent = participant.pokemon;
@@ -56,14 +55,11 @@ public class Enemy_trainer : MonoBehaviour
                 foreach (Pokemon pokemon in TrainerParty)
                     if(pokemon!=Battle_handler.instance.Battle_Participants[2].pokemon && pokemon!=Battle_handler.instance.Battle_Participants[3].pokemon)
                         NotParticipatingList.Add(pokemon);
-                // = TrainerParty.GetRange(2, TrainerParty.Count-2);
                 NotParticipatingList.RemoveAll(p => p.HP <= 0);
-                //Debug.Log("partic alive: "+NotParticipatingList.Count);
                 if (NotParticipatingList.Count == 0)
                 {//1 left
                     if(participant.pokemon.HP<=0)
                     {
-                       // Debug.Log("ui reset");
                         participant.Deactivate_pkm();
                         participant.pokemon = null;
                         participant.is_active = false;
@@ -85,8 +81,8 @@ public class Enemy_trainer : MonoBehaviour
                 participant.pokemon = numAlive[randomMemeber];
                 Battle_handler.instance.Set_participants(participant);
             }
-            Turn_Based_Combat.instance.FainEventDelay = false;
         }
+        Turn_Based_Combat.instance.FainEventDelay = false;
     }
     public void StartBattle(string TrainerName, bool isSameTrainer)
     {

@@ -1,0 +1,130 @@
+{
+    "Base_Pokemon_name": "Torchic",
+    "Pokemon_name": "Torchic",
+    "Pokemon_ID": 8465656885728299635,
+    "Personality_value": 1473459597,
+    "Gender": "Female",
+    "GenderRatio": "87.5/12.5",
+    "nature": {
+        "instanceID": 30528
+    },
+    "has_gender": true,
+    "HP": 40.0,
+    "max_HP": 40.0,
+    "BaseHP": 45.0,
+    "BaseAttack": 60.0,
+    "BaseDefense": 40.0,
+    "BaseSP_ATK": 70.0,
+    "BaseSP_DEF": 50.0,
+    "Basespeed": 45.0,
+    "Attack": 23.0,
+    "Defense": 16.0,
+    "SP_ATK": 28.0,
+    "SP_DEF": 22.0,
+    "speed": 16.0,
+    "HP_IV": 29.0,
+    "Attack_IV": 10.0,
+    "Defense_IV": 2.0,
+    "SP_ATK_IV": 26.0,
+    "SP_DEF_IV": 13.0,
+    "speed_IV": 9.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "Speed1"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 100.0,
+    "crit_chance": 6.25,
+    "Current_level": 14,
+    "CurrentExpAmount": 951,
+    "NextLvExpAmount": 1095.0,
+    "EXPGroup": "Medium Slow",
+    "exp_yield": 65,
+    "has_trainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 30292
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "type_Immunity": "None",
+    "evo_line": [
+        "16",
+        "30"
+    ],
+    "abilities": [
+        "Inferno"
+    ],
+    "split_evolution": false,
+    "learnSet": [
+        "normal/scratch01",
+        "fire/ember03",
+        "fighting/double kick05",
+        "normal/focus energy07"
+    ],
+    "move_set": [
+        {
+            "instanceID": -45090
+        },
+        {
+            "instanceID": -45092
+        },
+        {
+            "instanceID": -45094
+        },
+        {
+            "instanceID": -45096
+        }
+    ],
+    "ability": {
+        "instanceID": 30294
+    },
+    "evolutions": [
+        {
+            "instanceID": 30296
+        },
+        {
+            "instanceID": 30298
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "HasItem": false,
+    "front_picture": {
+        "instanceID": 30042
+    },
+    "back_picture": {
+        "instanceID": 30300
+    },
+    "ability_name": "Inferno",
+    "natureName": "Sassy",
+    "evo_data": [
+        "Combusken",
+        "Blaziken"
+    ],
+    "type_data": [
+        "Fire"
+    ],
+    "move_data": [
+        "Scratch/Normal",
+        "Ember/Fire",
+        "Double kick/Fighting",
+        "Focus Energy/Normal"
+    ],
+    "move_pp_data": [
+        25,
+        20,
+        20,
+        15
+    ]
+}

@@ -1,0 +1,130 @@
+{
+    "Base_Pokemon_name": "Mudkip",
+    "Pokemon_name": "Mudkip",
+    "Pokemon_ID": 8465656885080137938,
+    "Personality_value": 2121621294,
+    "Gender": "Female",
+    "GenderRatio": "87.5/12.5",
+    "nature": {
+        "instanceID": 30666
+    },
+    "has_gender": true,
+    "HP": 31.0,
+    "max_HP": 31.0,
+    "BaseHP": 50.0,
+    "BaseAttack": 70.0,
+    "BaseDefense": 50.0,
+    "BaseSP_ATK": 50.0,
+    "BaseSP_DEF": 50.0,
+    "Basespeed": 40.0,
+    "Attack": 19.0,
+    "Defense": 15.0,
+    "SP_ATK": 18.0,
+    "SP_DEF": 15.0,
+    "speed": 15.0,
+    "HP_IV": 14.0,
+    "Attack_IV": 0.0,
+    "Defense_IV": 2.0,
+    "SP_ATK_IV": 22.0,
+    "SP_DEF_IV": 27.0,
+    "speed_IV": 26.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "Attack1"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 100.0,
+    "crit_chance": 6.25,
+    "Current_level": 10,
+    "CurrentExpAmount": 627,
+    "NextLvExpAmount": 750.0,
+    "EXPGroup": "Medium Slow",
+    "exp_yield": 65,
+    "has_trainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 30312
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "type_Immunity": "None",
+    "evo_line": [
+        "16",
+        "30"
+    ],
+    "abilities": [
+        "Torrent"
+    ],
+    "split_evolution": false,
+    "learnSet": [
+        "normal/tackle01",
+        "water/bubble03",
+        "ground/mud slap05",
+        "water/water gun10"
+    ],
+    "move_set": [
+        {
+            "instanceID": -45070
+        },
+        {
+            "instanceID": -45072
+        },
+        {
+            "instanceID": -45074
+        },
+        {
+            "instanceID": -45076
+        }
+    ],
+    "ability": {
+        "instanceID": 30314
+    },
+    "evolutions": [
+        {
+            "instanceID": 30316
+        },
+        {
+            "instanceID": 30318
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "HasItem": false,
+    "front_picture": {
+        "instanceID": 30320
+    },
+    "back_picture": {
+        "instanceID": 30322
+    },
+    "ability_name": "Torrent",
+    "natureName": "Rash",
+    "evo_data": [
+        "Marshtomp",
+        "Swampert"
+    ],
+    "type_data": [
+        "Water"
+    ],
+    "move_data": [
+        "Tackle/Normal",
+        "Bubble/Water",
+        "Mud slap/Ground",
+        "Water Gun/Water"
+    ],
+    "move_pp_data": [
+        20,
+        20,
+        15,
+        25
+    ]
+}
