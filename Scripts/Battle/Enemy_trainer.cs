@@ -128,6 +128,7 @@ public class Enemy_trainer : MonoBehaviour
     {
             if (Battle_handler.instance.Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon && !Used_move && CanAttack)
             {
+                Debug.Log("ai ataccked wit: "+participant.pokemon.Pokemon_name);
                 int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
                 Select_player(randome_enemy);
                 int randomMove = Utility.Get_rand(0, participant.pokemon.move_set.Count);

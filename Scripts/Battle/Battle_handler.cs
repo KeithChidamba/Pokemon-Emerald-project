@@ -330,6 +330,7 @@ public class Battle_handler : MonoBehaviour
     public void Use_Move(Move move,Battle_Participant user)
     {
         if(move.Powerpoints==0)return;
+        Debug.Log(user.name);
         move.Powerpoints--;
         Doing_move = true;
         choosing_move = false;
@@ -406,6 +407,7 @@ public class Battle_handler : MonoBehaviour
     public void LevelUpEvent(Pokemon pkm)
     {
         LevelUpEvent PkmLevelUp=new LevelUpEvent(pkm);
+        if (levelUpQueue.Contains(PkmLevelUp)) return;
         levelUpQueue.Add(PkmLevelUp);
         StartCoroutine(LevelUp_Sequence(PkmLevelUp));
     } 
