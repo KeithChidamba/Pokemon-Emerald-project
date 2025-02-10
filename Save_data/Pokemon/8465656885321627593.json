@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 30560
+        "instanceID": 30646
     },
     "has_gender": true,
     "HP": 13.0,
@@ -33,7 +33,7 @@
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 0.0,
+    "speed_EV": 4.0,
     "EVs": [
         "Attack1"
     ],
@@ -41,7 +41,7 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "Current_level": 2,
-    "CurrentExpAmount": -82,
+    "CurrentExpAmount": 38,
     "NextLvExpAmount": 61.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 73,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30396
+            "instanceID": 30392
         }
     ],
     "Status_effect": "None",
@@ -73,29 +73,29 @@
     ],
     "move_set": [
         {
-            "instanceID": -45862
+            "instanceID": -60270
         }
     ],
     "ability": {
-        "instanceID": 30632
+        "instanceID": 30718
     },
     "evolutions": [
         {
-            "instanceID": 30612
+            "instanceID": 30698
         },
         {
-            "instanceID": 30722
+            "instanceID": 30808
         }
     ],
     "HeldItem": {
-        "instanceID": 0
+        "instanceID": -60592
     },
-    "HasItem": false,
+    "HasItem": true,
     "front_picture": {
-        "instanceID": 30664
+        "instanceID": 30750
     },
     "back_picture": {
-        "instanceID": 30664
+        "instanceID": 30676
     },
     "ability_name": "Sand pit",
     "natureName": "Naive",
@@ -110,6 +110,6 @@
         "Bite/Dark"
     ],
     "move_pp_data": [
-        20
+        16
     ]
 }

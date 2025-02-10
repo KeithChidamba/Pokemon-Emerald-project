@@ -52,23 +52,27 @@ public class Move_handler:MonoBehaviour
     }
     IEnumerator Move_Sequence()
     {
-        Set_Sequences();
-        foreach (Battle_event d in Dialouge_order)
+        float MoveEffectiveness = BattleOperations.TypeEffectiveness(victim_.pokemon, current_turn.move_.type);
+        if (MoveEffectiveness == 0)
+            Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" is immune to it!");
+        else
         {
-            yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-            d.Execute();
-            if (d.Condition)
-                yield return new WaitForSeconds(d.duration);
-            yield return new WaitUntil(() => !MoveDelay);
-            yield return new WaitUntil(() => !Turn_Based_Combat.instance.LevelEventDelay);
-            yield return new WaitUntil(() => !Turn_Based_Combat.instance.FainEventDelay);
+            Set_Sequences();
+            foreach (Battle_event d in Dialouge_order)
+            {
+                yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+                d.Execute();
+                if (d.Condition)
+                    yield return new WaitForSeconds(d.duration);
+                yield return new WaitUntil(() => !MoveDelay);
+                yield return new WaitUntil(() => !Turn_Based_Combat.instance.LevelEventDelay);
+                yield return new WaitUntil(() => !Turn_Based_Combat.instance.FainEventDelay);
+            } 
         }
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         Move_done();
         yield return null;
     }
-
-
     void Move_effect()
     {
         if (!current_turn.move_.Has_effect) return;

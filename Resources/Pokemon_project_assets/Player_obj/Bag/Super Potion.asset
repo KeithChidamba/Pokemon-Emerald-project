@@ -19,4 +19,10 @@ MonoBehaviour:
   Item_desc: Heals 15hp
   price: 35
   quantity: 1
-  Item_img: {fileID: 21300000, guid: ae377a2af154f854386a1d6c202154f7, type: 3}
+  Item_img: {fileID: 21300000, guid: 357f351f3d09edb47b33782059202b28, type: 3}
+  ForPartyUse: 1
+  CanBeUsedInOverworld: 1
+  CanBeUsedInBattle: 1
+  isHeldItem: 0
+  CanBeHeld: 0
+  CanBeSold: 1

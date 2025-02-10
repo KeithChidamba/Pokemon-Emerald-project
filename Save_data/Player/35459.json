@@ -2,12 +2,12 @@
     "Player_name": "kelvin",
     "Trainer_ID": 35459,
     "Secret_ID": 61930,
-    "player_Money": 120,
+    "player_Money": 9380,
     "NumBadges": 0,
     "player_Position": {
-        "x": 3.440999984741211,
-        "y": 0.5786893367767334,
+        "x": 5.527996063232422,
+        "y": 0.31899982690811159,
         "z": 0.0
     },
-    "Location": "Poke Center"
+    "Location": "Overworld"
 }

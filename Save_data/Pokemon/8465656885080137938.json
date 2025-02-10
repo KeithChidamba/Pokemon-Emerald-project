@@ -6,10 +6,10 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30666
+        "instanceID": 30752
     },
     "has_gender": true,
-    "HP": 31.0,
+    "HP": 0.0,
     "max_HP": 31.0,
     "BaseHP": 50.0,
     "BaseAttack": 70.0,
@@ -33,7 +33,7 @@
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 0.0,
+    "speed_EV": 1.0,
     "EVs": [
         "Attack1"
     ],
@@ -41,7 +41,7 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "Current_level": 10,
-    "CurrentExpAmount": 627,
+    "CurrentExpAmount": 650,
     "NextLvExpAmount": 750.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
@@ -51,7 +51,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30312
+            "instanceID": 30308
         }
     ],
     "Status_effect": "None",
@@ -73,27 +73,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -45070
+            "instanceID": -60260
         },
         {
-            "instanceID": -45072
+            "instanceID": -60262
         },
         {
-            "instanceID": -45074
+            "instanceID": -60264
         },
         {
-            "instanceID": -45076
+            "instanceID": -60266
         }
     ],
     "ability": {
-        "instanceID": 30314
+        "instanceID": 30310
     },
     "evolutions": [
         {
-            "instanceID": 30316
+            "instanceID": 30312
         },
         {
-            "instanceID": 30318
+            "instanceID": 30314
         }
     ],
     "HeldItem": {
@@ -101,10 +101,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30320
+        "instanceID": 30316
     },
     "back_picture": {
-        "instanceID": 30322
+        "instanceID": 30318
     },
     "ability_name": "Torrent",
     "natureName": "Rash",
@@ -125,6 +125,6 @@
         20,
         20,
         15,
-        25
+        24
     ]
 }
