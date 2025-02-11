@@ -187,7 +187,7 @@ public class Move_handler:MonoBehaviour
         string[] InvalidCombinations = {
             "poisonpoison","badlypoisonpoison", "burnfire", "paralysiselectric", "freezeice" };
         foreach(string s in InvalidCombinations)
-            if ((status + type_name).ToLower() == s)
+            if ( (status.Replace(" ","") + type_name).ToLower() == s)
                 return true;
         return false;
     }

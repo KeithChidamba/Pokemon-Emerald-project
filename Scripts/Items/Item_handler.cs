@@ -55,7 +55,8 @@ public class Item_handler : MonoBehaviour
         Pokemon WildPokemon = Wild_pkm.instance.pokemon_participant.pokemon;//pokemon only caught in wild
         Dialogue_handler.instance.Battle_Info("Trying to catch "+WildPokemon.Pokemon_name+" .....");
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
-        if ( Utility.Get_rand(1, 101) < int.Parse(pokeball.Item_effect) )
+        int CatchProbabililty = int.Parse(pokeball.Item_effect);// add other determining factors
+        if ( Utility.Get_rand(1, 101) < CatchProbabililty )
         {
             Dialogue_handler.instance.Battle_Info("Well done "+WildPokemon.Pokemon_name+" has been caught");
             Pokemon_party.instance.Add_Member(WildPokemon);

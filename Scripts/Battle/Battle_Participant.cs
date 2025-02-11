@@ -219,7 +219,7 @@ public class Battle_Participant : MonoBehaviour
         is_active = true;
         participant_ui.SetActive(true);
         gender_img();
-        if (pokemon.Status_effect == "BadlyPoison")
+        if (pokemon.Status_effect == "Badly poison")
             pokemon.Status_effect = "Poison";
         Move_handler.instance.Set_Status(this, pokemon.Status_effect);
         Turn_Based_Combat.instance.OnTurnEnd += status.Check_status;
