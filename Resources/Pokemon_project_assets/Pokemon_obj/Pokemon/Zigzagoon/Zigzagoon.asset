@@ -50,6 +50,7 @@ MonoBehaviour:
   Accuracy: 100
   Evasion: 100
   crit_chance: 6.25
+  CatchRate: 255
   Current_level: 0
   CurrentExpAmount: 0
   NextLvExpAmount: 0
@@ -80,6 +81,7 @@ MonoBehaviour:
   evolutions:
   - {fileID: 11400000, guid: 58a19d74a4fb9b440ab943d87b46a132, type: 2}
   HeldItem: {fileID: 0}
+  HasItem: 0
   front_picture: {fileID: 21300000, guid: 7e01c2bc69a90a64ab6089cf5e57e7e8, type: 3}
   back_picture: {fileID: 21300000, guid: 90944854e7514ae4eab9ce6b7eb80726, type: 3}
   ability_name: 

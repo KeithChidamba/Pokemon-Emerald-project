@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3185f3c7151af7d48b86d9e6f6b6c269, type: 2}
   ability: {fileID: 11400000, guid: 1399590b90613f74581252f98f7d9e0c, type: 2}
   exp_yield: 160
+  CatchRate: 45
   learnSet:
   - poison/toxic14
   front_picture: {fileID: 21300000, guid: 8879d5784dc1e0d45bce22cfdee1331b, type: 3}

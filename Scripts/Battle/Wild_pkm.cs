@@ -10,6 +10,7 @@ public class Wild_pkm : MonoBehaviour
     public Battle_Participant pokemon_participant;
     public Battle_Participant Enemy_pokemon;
     public bool InBattle = false;
+    public bool RanAway = false;
     public bool CanAttack = true;
     public static Wild_pkm instance;
     [SerializeField]private bool Used_move = false;
@@ -38,7 +39,8 @@ public class Wild_pkm : MonoBehaviour
     private void Update()
     {
         if (!InBattle) return;
-            Make_Decision();
+        RanAway = false;
+        Make_Decision();
     }
     private void Make_Decision()
     {
@@ -46,8 +48,19 @@ public class Wild_pkm : MonoBehaviour
         if (Battle_handler.instance.Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon_participant.pokemon && !Used_move && CanAttack)
         {
             Select_player(0);//attack player, since its single battle
-            choose_move();
+            if(Utility.Get_rand(1,11)>3)//70% chance
+                choose_move();
+            else
+                RunAway();
         }
+    }
+
+    void RunAway()
+    {
+        Dialogue_handler.instance.Battle_Info(pokemon_participant.pokemon.Pokemon_name+" ran away");
+        Battle_handler.instance.End_Battle(false);
+        InBattle = false;
+        RanAway = true;
     }
     public void Select_player(int selectedIndex)
     {

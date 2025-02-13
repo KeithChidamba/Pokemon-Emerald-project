@@ -16,17 +16,18 @@ public class Pokemon_party_member : MonoBehaviour
     public GameObject[] main_ui;
     public GameObject empty_ui;
     public GameObject HeldItem_img;
+    public Button TakeHeldItem_btn;
     public bool isEmpty = false;
     private void Start()
     {
         Options.SetActive(false);
     }
 
-    public void Levelup()
+    /*public void Levelup()
     {
         //debugging purposes
         pkm.Level_up();
-    }
+    }*/
     public void Set_Ui()
     {
         Pkm_front_img.sprite = pkm.front_picture;
@@ -34,10 +35,8 @@ public class Pokemon_party_member : MonoBehaviour
             ui.SetActive(true);
         isEmpty = false;
         empty_ui.SetActive(false);
-        if (pkm.HasItem)
-            HeldItem_img.SetActive(true);
-        else
-            HeldItem_img.SetActive(false);
+        HeldItem_img.SetActive(pkm.HasItem);
+        TakeHeldItem_btn.interactable = pkm.HasItem;
         if (pkm.Status_effect == "None")
             Status_img.gameObject.SetActive(false);
         else

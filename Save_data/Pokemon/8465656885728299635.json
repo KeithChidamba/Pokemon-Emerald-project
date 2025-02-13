@@ -6,22 +6,22 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30614
+        "instanceID": 31950
     },
     "has_gender": true,
-    "HP": 0.0,
-    "max_HP": 52.0,
+    "HP": 54.0,
+    "max_HP": 54.0,
     "BaseHP": 60.0,
     "BaseAttack": 85.0,
     "BaseDefense": 60.0,
     "BaseSP_ATK": 85.0,
     "BaseSP_DEF": 60.0,
     "Basespeed": 55.0,
-    "Attack": 35.0,
-    "Defense": 25.0,
-    "SP_ATK": 38.0,
-    "SP_DEF": 30.0,
-    "speed": 22.0,
+    "Attack": 37.0,
+    "Defense": 26.0,
+    "SP_ATK": 40.0,
+    "SP_DEF": 31.0,
+    "speed": 23.0,
     "HP_IV": 29.0,
     "Attack_IV": 10.0,
     "Defense_IV": 2.0,
@@ -41,9 +41,10 @@
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "Current_level": 17,
-    "CurrentExpAmount": 1270,
-    "NextLvExpAmount": 1296.0,
+    "CatchRate": 0.0,
+    "Current_level": 18,
+    "CurrentExpAmount": 1319,
+    "NextLvExpAmount": 1440.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 142,
     "has_trainer": true,
@@ -52,10 +53,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30288
+            "instanceID": 30282
         },
         {
-            "instanceID": 30378
+            "instanceID": 30374
         }
     ],
     "Status_effect": "None",
@@ -74,38 +75,38 @@
     ],
     "move_set": [
         {
-            "instanceID": -60250
+            "instanceID": -75534
         },
         {
-            "instanceID": -60252
+            "instanceID": -75536
         },
         {
-            "instanceID": -60254
+            "instanceID": -75538
         },
         {
-            "instanceID": -60256
+            "instanceID": -75540
         }
     ],
     "ability": {
-        "instanceID": 30290
+        "instanceID": 30284
     },
     "evolutions": [
         {
-            "instanceID": 30292
+            "instanceID": 30286
         },
         {
-            "instanceID": 30294
+            "instanceID": 30288
         }
     ],
     "HeldItem": {
-        "instanceID": 0
+        "instanceID": -75542
     },
-    "HasItem": false,
+    "HasItem": true,
     "front_picture": {
-        "instanceID": 30380
+        "instanceID": 30376
     },
     "back_picture": {
-        "instanceID": 30382
+        "instanceID": 30378
     },
     "ability_name": "Inferno",
     "natureName": "Sassy",
@@ -118,15 +119,15 @@
         "Fighting"
     ],
     "move_data": [
-        "Scratch/Normal",
+        "Flame thrower/Fire",
         "Ember/Fire",
         "Double kick/Fighting",
         "Focus Energy/Normal"
     ],
     "move_pp_data": [
-        25,
-        19,
-        18,
+        20,
+        20,
+        20,
         15
     ]
 }

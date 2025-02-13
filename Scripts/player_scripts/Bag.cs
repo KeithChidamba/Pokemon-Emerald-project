@@ -34,10 +34,7 @@ public class Bag : MonoBehaviour
     private void Update()
     {
         if (Selling_items)
-        {
            Sell_qty_txt.text = "X"+Sell_quantity.ToString();
-        }
-        
     }
     public void Select_Item(int Item_pos)
     {
@@ -51,9 +48,7 @@ public class Bag : MonoBehaviour
         else
         {
             foreach (GameObject i in item_actions)
-            {
                 i.SetActive(true);
-            }
         }
     }
     
@@ -87,24 +82,16 @@ public class Bag : MonoBehaviour
         if (diff < 0)//lower quantity
         {
             if (Sell_quantity > 1)
-            {
                 Sell_quantity += diff;
-            }
             else
-            {
                 Sell_quantity = 1;
-            }
         }
         else if(diff > 0)//increase quantity
         {
             if (Sell_quantity<bag_items[top_index+Selected_item-1].quantity)//below max available item quantity
-            {
                 Sell_quantity += diff;
-            }
             else
-            {
                 Sell_quantity=bag_items[top_index+Selected_item-1].quantity;
-            }
         }
     }
     public void Go_Down()
@@ -112,9 +99,7 @@ public class Bag : MonoBehaviour
         if (top_index < num_items-10)
         {
             for (int i = 0; i < 9; i++)
-            {
                 bag_items_ui[i].item = bag_items_ui[i + 1].item;  
-            }
             bag_items_ui[9].item = bag_items[top_index + 10];
             Reload_items();
             top_index++;
@@ -126,9 +111,7 @@ public class Bag : MonoBehaviour
         if (top_index > 0)
         {
             for (int i = 9; i > 0; i--)
-            {
                 bag_items_ui[i].item = bag_items_ui[i-1].item;
-            }
             bag_items_ui[0].item = bag_items[top_index - 1];
             Reload_items();
             top_index--;
@@ -140,41 +123,44 @@ public class Bag : MonoBehaviour
         foreach (Item itm in bag_items)
         {
             if (itm.Item_name == item )
-            {
                 if(itm.quantity < 99)
-                {
                     item_ = itm;
-                }         
-            }
         }
         return item_;
     }
     bool inBag(string item)
     {
         foreach (Item itm in bag_items)
-        {
             if (itm.Item_name == item)
-            {
                 return true;
-            }
-        }
         return false;
     }
     public void Remove_item()
     {
         bag_items.Remove(bag_items[top_index + Selected_item - 1]);
         foreach (Item_ui i in bag_items_ui)
-        {
             i.gameObject.SetActive(false);
-        }
         bag_items_ui[0].Clear_ui();
         foreach (GameObject i in item_actions)
-        {
             i.SetActive(false);
-        }
         View_bag();
     }
-
+    public void TakeItem(int memeberIndex)
+    {
+        if (num_items >= max_capacity)
+        {
+            Dialogue_handler.instance.Write_Info("Bag is full", "Details");
+            return;
+        }
+        Pokemon partymemeber = Pokemon_party.instance.party[memeberIndex - 1];
+        Dialogue_handler.instance.Write_Info("You took a " + partymemeber.HeldItem.Item_name +" from "
+                                             + partymemeber.Pokemon_name, "Details");
+        Add_item(partymemeber.HeldItem);
+        partymemeber.HeldItem = null;
+        partymemeber.HasItem = false;
+        Pokemon_party.instance.Cancel();
+        Pokemon_party.instance.Refresh_Member_Cards();
+    }
     public void GiveItem()
     {
         Pokemon_party.instance.Giving_item = true;
@@ -192,9 +178,7 @@ public class Bag : MonoBehaviour
                 if (searched != null)
                 {
                     if ( item.quantity < (99 - searched.quantity))
-                    {
                         searched.quantity += item.quantity;
-                    }
                     else
                     {
                         int quantity_gap = (99 - searched.quantity);
@@ -219,7 +203,8 @@ public class Bag : MonoBehaviour
         }
         else
         {
-            Game_ui_manager.instance.Close_Store();
+            if(Poke_Mart.instance.viewing_store)
+                Game_ui_manager.instance.Close_Store();
             Dialogue_handler.instance.Write_Info("Bag is full", "Details");
         }                                                                           
     }
@@ -242,13 +227,9 @@ public class Bag : MonoBehaviour
         Selling_ui.SetActive(false);
         Selling_items = false;
         foreach (GameObject i in item_actions)
-        {
             i.SetActive(false);
-        }
         for (int i = 0; i < 10; i++)
-        {
             bag_items_ui[i].gameObject.SetActive(false);
-        }
         bag_items_ui[0].Clear_ui();
     }
     public void View_bag()
@@ -257,20 +238,12 @@ public class Bag : MonoBehaviour
         viewing_bag = true;
         int num_i = 0;
         foreach (Item item in bag_items)
-        {
             if (item != null)
-            {
                 num_items++;
-            }
-        }
         if (num_items < 11)
-        {
             num_i = num_items;
-        }
         else
-        {
             num_i = 10;
-        }
         for (int i = 0; i < num_i; i++)
         {
             bag_items_ui[i].item = bag_items[i];
@@ -282,9 +255,7 @@ public class Bag : MonoBehaviour
     {
         bag_items_ui[0].Clear_ui();
         foreach (Item_ui itm in bag_items_ui)
-        {
             itm.Load_item();
-        }
     }
 }
 

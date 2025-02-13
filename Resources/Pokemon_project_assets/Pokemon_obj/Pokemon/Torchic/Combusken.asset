@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
   exp_yield: 142
+  CatchRate: 45
   learnSet:
   - fire/flame thrower18
   front_picture: {fileID: 21300000, guid: 481c8555e71c7f44eab6eb29249befe3, type: 3}

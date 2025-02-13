@@ -233,7 +233,6 @@ public class Move_handler:MonoBehaviour
                     Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name + " protected itself");
                     return;
                 }
-                reciever_pkm = victim_.pokemon;
             }
             else
             {
@@ -249,15 +248,13 @@ public class Move_handler:MonoBehaviour
 
     IEnumerator MultiTargetBuff_Debuff(string stat, bool isIncreasing,int buff_amount)
     {
-        foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker_.Current_Enemies) )
+        foreach (Battle_Participant enemy in attacker_.Current_Enemies )
         {
             BuffDebuffData buff_debuff = new BuffDebuffData(enemy.pokemon, stat, isIncreasing,buff_amount);
             if (enemy.pokemon.CanBeDamaged)
                 GiveBuff_Debuff(buff_debuff);
             else
-            {
                 Dialogue_handler.instance.Battle_Info(enemy.pokemon.Pokemon_name + " protected itself");
-            }
             yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
         }
         yield return null;
@@ -323,16 +320,18 @@ public class Move_handler:MonoBehaviour
     IEnumerator ConsecutiveMove()
     {
         int NumRepetitions = Utility.Get_rand(1, 6);
+        int NumHits = 0;
         for (int i = 0; i < NumRepetitions; i++)
         {
             if (victim_.pokemon.HP <= 0) break;
-            Dialogue_handler.instance.Battle_Info("Hit "+(i+1)+"!");//remove 
+            Dialogue_handler.instance.Battle_Info("Hit "+(i+1)+"!");//remove later if added animations
             victim_.pokemon.HP -= Calc_Damage(current_turn.move_,victim_);
-            yield return new WaitForSeconds(1f);
+            NumHits++;
+            yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         }
         GetEffectiveness(BattleOperations.TypeEffectiveness(victim_.pokemon, current_turn.move_.type),victim_);
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-        Dialogue_handler.instance.Battle_Info("It hit (x"+NumRepetitions+") times");
+        Dialogue_handler.instance.Battle_Info("It hit (x"+NumHits+") times");
         MoveDelay = false;
         yield return null;
     }

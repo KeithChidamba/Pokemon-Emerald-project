@@ -15,7 +15,7 @@ MonoBehaviour:
   Item_ID: 
   Item_name: Great ball
   Item_type: Pokeball
-  Item_effect: 50
+  Item_effect: 1.5
   Item_desc: 50% higher chance to catch compared to pokeball
   price: 30
   quantity: 1

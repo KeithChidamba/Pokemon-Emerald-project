@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Biome_name: Beach
   Pokemon:
-  - zigzagoon010
-  - mudkip040
-  - trapinch050
-  min_lv: 2
-  max_lv: 7
+  - wurmple090
+  - mudkip010
+  - trapinch010
+  min_lv: 25
+  max_lv: 45

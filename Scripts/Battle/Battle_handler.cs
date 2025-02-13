@@ -395,10 +395,12 @@ public class Battle_handler : MonoBehaviour
                 {
                     LastOpponent = Battle_Participants[0].Current_Enemies[0].pokemon;
                     Game_Load.instance.player_data.player_Money -= BaseMoneyPayout * Game_Load.instance.player_data.NumBadges
-                        
                                                                    * LastOpponent.Current_level;}
-                Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
-                Area_manager.instance.Switch_Area("Poke Center", 0f);
+                if(!Wild_pkm.instance.RanAway)
+                {
+                    Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
+                    Area_manager.instance.Switch_Area("Poke Center", 0f);
+                }
             }
         }
         yield return new WaitForSeconds(2f);
@@ -426,6 +428,7 @@ public class Battle_handler : MonoBehaviour
             if (pkmLevelUp.pokemon.move_set.Count > 3)
             {
                 yield return new WaitUntil(() => Options_manager.instance.SelectedNewMoveOption);
+                yield return new WaitForSeconds(0.5f);
                 if (Pokemon_Details.instance.LearningMove)
                     yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
                 else
@@ -483,8 +486,11 @@ public class Battle_handler : MonoBehaviour
             int random = Utility.Get_rand(1,11);
             if (Battle_Participants[0].pokemon.Current_level < Battle_Participants[0].Current_Enemies[0].pokemon.Current_level)//lower chance if weaker
                 random--;
-            if (random > 5)//initially 50/50 chance to run
+            if (random > 5) //initially 50/50 chance to run
+            {
+                Wild_pkm.instance.InBattle = false;
                 End_Battle(false);
+            }
             else
             {
                 Dialogue_handler.instance.Battle_Info("Can't run away");
@@ -497,7 +503,6 @@ public class Battle_handler : MonoBehaviour
     }
 void run_Off()
 {
-    Wild_pkm.instance.InBattle = false;
     running_away = false;
     displaying_info = false;
 }

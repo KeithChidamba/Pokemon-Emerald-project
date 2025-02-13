@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
   ability: {fileID: 11400000, guid: 1399590b90613f74581252f98f7d9e0c, type: 2}
   exp_yield: 161
+  CatchRate: 45
   learnSet:
   - bug/bug bite14
   front_picture: {fileID: 21300000, guid: 9d48f881fcb6b7f4c8d4cd650a117a66, type: 3}

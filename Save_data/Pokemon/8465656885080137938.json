@@ -6,10 +6,10 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30752
+        "instanceID": 32088
     },
     "has_gender": true,
-    "HP": 0.0,
+    "HP": 31.0,
     "max_HP": 31.0,
     "BaseHP": 50.0,
     "BaseAttack": 70.0,
@@ -29,7 +29,7 @@
     "SP_DEF_IV": 27.0,
     "speed_IV": 26.0,
     "HP_EV": 0.0,
-    "Attack_EV": 0.0,
+    "Attack_EV": 1.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
@@ -40,8 +40,9 @@
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
+    "CatchRate": 0.0,
     "Current_level": 10,
-    "CurrentExpAmount": 650,
+    "CurrentExpAmount": 681,
     "NextLvExpAmount": 750.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
@@ -51,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30308
+            "instanceID": 30302
         }
     ],
     "Status_effect": "None",
@@ -73,27 +74,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -60260
+            "instanceID": -75524
         },
         {
-            "instanceID": -60262
+            "instanceID": -75526
         },
         {
-            "instanceID": -60264
+            "instanceID": -75528
         },
         {
-            "instanceID": -60266
+            "instanceID": -75530
         }
     ],
     "ability": {
-        "instanceID": 30310
+        "instanceID": 30304
     },
     "evolutions": [
         {
-            "instanceID": 30312
+            "instanceID": 30306
         },
         {
-            "instanceID": 30314
+            "instanceID": 30308
         }
     ],
     "HeldItem": {
@@ -101,10 +102,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30316
+        "instanceID": 30310
     },
     "back_picture": {
-        "instanceID": 30318
+        "instanceID": 30312
     },
     "ability_name": "Torrent",
     "natureName": "Rash",
@@ -125,6 +126,6 @@
         20,
         20,
         15,
-        24
+        25
     ]
 }

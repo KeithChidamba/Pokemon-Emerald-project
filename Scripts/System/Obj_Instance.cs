@@ -70,6 +70,7 @@ public static class Obj_Instance
         new_pkm.Accuracy = pkm.Accuracy;
         new_pkm.Evasion = pkm.Evasion;
         new_pkm.crit_chance = pkm.crit_chance;
+        new_pkm.CatchRate = pkm.CatchRate;
         new_pkm.Current_level = pkm.Current_level;
         new_pkm.CurrentExpAmount = pkm.CurrentExpAmount;
         new_pkm.NextLvExpAmount = pkm.NextLvExpAmount;

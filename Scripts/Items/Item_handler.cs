@@ -49,26 +49,35 @@ public class Item_handler : MonoBehaviour
         else
             Dialogue_handler.instance.Write_Info("Cant use that right now!", "Details");
     }
-
+    
     IEnumerator TryCatchPokemon(Item pokeball)
     {
+        bool isCaught = false;
         Pokemon WildPokemon = Wild_pkm.instance.pokemon_participant.pokemon;//pokemon only caught in wild
         Dialogue_handler.instance.Battle_Info("Trying to catch "+WildPokemon.Pokemon_name+" .....");
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
-        int CatchProbabililty = int.Parse(pokeball.Item_effect);// add other determining factors
-        if ( Utility.Get_rand(1, 101) < CatchProbabililty )
+        float BallRate = float.Parse(pokeball.Item_effect);
+        float bracket1 = (3 * (WildPokemon.max_HP - 2) * WildPokemon.HP) / (3 * WildPokemon.max_HP);
+        float CatchValue = bracket1 * WildPokemon.CatchRate * BallRate * BattleOperations.GetStatusBonus(WildPokemon.Status_effect);
+        if(BattleOperations.IsImmediateCatch(CatchValue))
+            isCaught = true;
+        else
+        {
+            if (BattleOperations.ShakeCheck(CatchValue))
+                isCaught = true;
+        }
+        if (isCaught)
         {
             Dialogue_handler.instance.Battle_Info("Well done "+WildPokemon.Pokemon_name+" has been caught");
             Pokemon_party.instance.Add_Member(WildPokemon);
             yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
             Wild_pkm.instance.pokemon_participant.EndWildBattle();
-        }
-        else
+        }else
         {
             Dialogue_handler.instance.Battle_Info(WildPokemon.Pokemon_name+" escaped the pokeball");
             yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
             skipTurn();
-        } 
+        }
         ResetItemUsage();
         StopAllCoroutines();
         yield return null;

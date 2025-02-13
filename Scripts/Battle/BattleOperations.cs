@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public static class BattleOperations
@@ -49,6 +50,31 @@ public static class BattleOperations
             isResistantTo(victim, enemy_type);
         }
         return effectiveness;
+    }
+    //Pokeballs
+    public static float GetStatusBonus(string statusName)
+    {
+        if (statusName == "None") return 1;
+        if (statusName == "Sleep" | statusName == "Freeze")
+            return 2.5f;
+        return 1.5f;
+    }
+
+    public static bool IsImmediateCatch(float catchvalue)
+    {
+        for (int i = 0; i < 3; i++)
+            if (Utility.Get_rand(0, 256) > catchvalue)
+                return false;
+        return true;
+    }
+
+    public static bool ShakeCheck(float catchvalue)
+    {
+        float ShakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchvalue)  );
+        for (int i = 0; i < 3; i++)
+            if (Utility.Get_rand(0, 256) > ShakeProbability)
+                return false;
+        return true;
     }
 //Buffs
     public static bool Hasbuff_Debuff(Pokemon pkm,string stat_name)

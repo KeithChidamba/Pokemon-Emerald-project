@@ -42,6 +42,7 @@ public class Pokemon : ScriptableObject
     public float Accuracy = 100;
     public float Evasion = 100;
     public float crit_chance = 6.25f;
+    public float CatchRate = 0;
     public int Current_level = 1;
     public int CurrentExpAmount = 0;
     public float NextLvExpAmount = 0;
@@ -174,6 +175,7 @@ public class Pokemon : ScriptableObject
         front_picture = evo.front_picture;
         back_picture = evo.back_picture;
         exp_yield = evo.exp_yield;
+        CatchRate = evo.CatchRate;
         BaseHP=evo.BaseHP;
         BaseAttack=evo.BaseAttack;
         BaseDefense=evo.BaseDefense;

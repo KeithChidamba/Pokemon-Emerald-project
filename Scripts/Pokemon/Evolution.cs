@@ -8,6 +8,7 @@ public class Evolution : ScriptableObject
     public List<Type> types;
     public Ability ability;
     public int exp_yield=0;
+    public float CatchRate = 0;
     public string[] learnSet;
     public Sprite front_picture;
     public Sprite back_picture;

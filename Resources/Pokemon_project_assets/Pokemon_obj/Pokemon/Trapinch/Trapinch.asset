@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Base_Pokemon_name: Trapinch
   Pokemon_name: Trapinch
-  Pokemon_ID: 
+  Pokemon_ID: 0
   Personality_value: 0
   Gender: 
   GenderRatio: 50/50
@@ -50,9 +50,10 @@ MonoBehaviour:
   Accuracy: 100
   Evasion: 100
   crit_chance: 6.25
+  CatchRate: 255
   Current_level: 0
   CurrentExpAmount: 0
-  level_progress: 0
+  NextLvExpAmount: 0
   EXPGroup: Medium Slow
   exp_yield: 73
   has_trainer: 0
@@ -81,6 +82,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 41c4f5dd85b85854084dc026be20084f, type: 2}
   - {fileID: 11400000, guid: 36607a7c2c84636428574d7b94219d2e, type: 2}
   HeldItem: {fileID: 0}
+  HasItem: 0
   front_picture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
   back_picture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
   ability_name: 

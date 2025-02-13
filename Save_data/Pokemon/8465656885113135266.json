@@ -1,51 +1,52 @@
 {
     "Base_Pokemon_name": "Trapinch",
-    "Pokemon_name": "Trapinch",
-    "Pokemon_ID": 8465656885321627593,
-    "Personality_value": 1880131639,
+    "Pokemon_name": "Vibrava",
+    "Pokemon_ID": 8465656885113135266,
+    "Personality_value": 2088623966,
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 31982
+        "instanceID": 32210
     },
     "has_gender": true,
-    "HP": 16.0,
-    "max_HP": 16.0,
-    "BaseHP": 45.0,
-    "BaseAttack": 100.0,
-    "BaseDefense": 45.0,
-    "BaseSP_ATK": 45.0,
-    "BaseSP_DEF": 45.0,
-    "Basespeed": 10.0,
-    "Attack": 11.0,
-    "Defense": 8.0,
-    "SP_ATK": 8.0,
-    "SP_DEF": 7.0,
-    "speed": 6.0,
-    "HP_IV": 31.0,
-    "Attack_IV": 16.0,
-    "Defense_IV": 26.0,
-    "SP_ATK_IV": 10.0,
-    "SP_DEF_IV": 5.0,
-    "speed_IV": 22.0,
+    "HP": 76.0,
+    "max_HP": 76.0,
+    "BaseHP": 50.0,
+    "BaseAttack": 70.0,
+    "BaseDefense": 50.0,
+    "BaseSP_ATK": 50.0,
+    "BaseSP_DEF": 50.0,
+    "Basespeed": 70.0,
+    "Attack": 49.0,
+    "Defense": 35.0,
+    "SP_ATK": 37.0,
+    "SP_DEF": 39.0,
+    "speed": 52.0,
+    "HP_IV": 29.0,
+    "Attack_IV": 29.0,
+    "Defense_IV": 13.0,
+    "SP_ATK_IV": 6.0,
+    "SP_DEF_IV": 25.0,
+    "speed_IV": 9.0,
     "HP_EV": 0.0,
     "Attack_EV": 0.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 6.0,
+    "speed_EV": 0.0,
     "EVs": [
-        "Attack1"
+        "Attack1",
+        "Speed1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "CatchRate": 0.0,
-    "Current_level": 3,
-    "CurrentExpAmount": 127,
-    "NextLvExpAmount": 145.0,
+    "CatchRate": 120.0,
+    "Current_level": 30,
+    "CurrentExpAmount": 2331,
+    "NextLvExpAmount": 2474.0,
     "EXPGroup": "Medium Slow",
-    "exp_yield": 73,
+    "exp_yield": 126,
     "has_trainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -53,6 +54,9 @@
     "types": [
         {
             "instanceID": 30388
+        },
+        {
+            "instanceID": 32166
         }
     ],
     "Status_effect": "None",
@@ -67,14 +71,20 @@
     ],
     "split_evolution": false,
     "learnSet": [
-        "dark/bite01",
-        "dark/crunch05",
-        "normal/tackle06",
-        "ground/magnitude07"
+        "ground/earthquake21"
     ],
     "move_set": [
         {
-            "instanceID": -75558
+            "instanceID": -76368
+        },
+        {
+            "instanceID": -76370
+        },
+        {
+            "instanceID": -76372
+        },
+        {
+            "instanceID": -76374
         }
     ],
     "ability": {
@@ -93,24 +103,31 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 32086
+        "instanceID": 32214
     },
     "back_picture": {
-        "instanceID": 32012
+        "instanceID": 32208
     },
     "ability_name": "Sand pit",
-    "natureName": "Naive",
+    "natureName": "Mild",
     "evo_data": [
         "Vibrava",
         "Flygon"
     ],
     "type_data": [
-        "Ground"
+        "Ground",
+        "Dragon"
     ],
     "move_data": [
-        "Bite/Dark"
+        "Bite/Dark",
+        "Crunch/Dark",
+        "Earthquake/Ground",
+        "Magnitude/Ground"
     ],
     "move_pp_data": [
+        20,
+        20,
+        15,
         20
     ]
 }

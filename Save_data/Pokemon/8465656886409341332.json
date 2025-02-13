@@ -6,10 +6,10 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30814
+        "instanceID": 32150
     },
     "has_gender": true,
-    "HP": 51.0,
+    "HP": 53.0,
     "max_HP": 53.0,
     "BaseHP": 50.0,
     "BaseAttack": 65.0,
@@ -17,7 +17,7 @@
     "BaseSP_ATK": 85.0,
     "BaseSP_DEF": 65.0,
     "Basespeed": 95.0,
-    "Attack": 32.0,
+    "Attack": 16.0,
     "Defense": 26.0,
     "SP_ATK": 42.0,
     "SP_DEF": 33.0,
@@ -33,15 +33,16 @@
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 3.0,
-    "speed_EV": 2.0,
+    "speed_EV": 3.0,
     "EVs": [
         "Speed2"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
+    "CatchRate": 0.0,
     "Current_level": 20,
-    "CurrentExpAmount": 1526,
+    "CurrentExpAmount": 1553,
     "NextLvExpAmount": 1557.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 141,
@@ -51,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30260
+            "instanceID": 30254
         }
     ],
     "Status_effect": "None",
@@ -70,38 +71,38 @@
     ],
     "move_set": [
         {
-            "instanceID": -60240
+            "instanceID": -75546
         },
         {
-            "instanceID": -60242
+            "instanceID": -75548
         },
         {
-            "instanceID": -60244
+            "instanceID": -75550
         },
         {
-            "instanceID": -60246
+            "instanceID": -75552
         }
     ],
     "ability": {
-        "instanceID": 30262
+        "instanceID": 30256
     },
     "evolutions": [
         {
-            "instanceID": 30264
+            "instanceID": 30258
         },
         {
-            "instanceID": 30266
+            "instanceID": 30260
         }
     ],
     "HeldItem": {
-        "instanceID": -60588
+        "instanceID": -75554
     },
     "HasItem": true,
     "front_picture": {
-        "instanceID": 30358
+        "instanceID": 30354
     },
     "back_picture": {
-        "instanceID": 30186
+        "instanceID": 30180
     },
     "ability_name": "Overgrow",
     "natureName": "Hardy",
@@ -119,9 +120,9 @@
         "Bullet seed/Grass"
     ],
     "move_pp_data": [
-        18,
-        18,
-        23,
+        20,
+        20,
+        25,
         20
     ]
 }
