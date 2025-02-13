@@ -48,18 +48,25 @@ public class Pokemon_party : MonoBehaviour
         viewing_details = true;
         Cancel();
     }
+
+    private bool isvalidSwap(int Member_position)
+    {
+        Battle_Participant Swapin = Battle_handler.instance.Battle_Participants[Member_position - 1];
+        if(Member_position<3)
+            if(Swapin.pokemon!=null)
+                if (Swapin.pokemon == party[Member_position - 1]) 
+                {
+                    Dialogue_handler.instance.Write_Info(Swapin.pokemon.Pokemon_name+
+                                                         " is already in battle","Details",1f);
+                    return false;
+                }
+        return true;
+    }
     public void Moving(int Member_position)
     {
         if (Options_manager.instance.playerInBattle)
         {//cant swap in a member who is already fighting
-            if(Member_position<3)
-                if(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon!=null)
-                    if (Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon == party[Member_position - 1]) 
-                    {
-                        Dialogue_handler.instance.Write_Info(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon.Pokemon_name+
-                                                             " is already in battle","Details",1f);
-                        return;
-                    }
+            if (!isvalidSwap(Member_position)) return;
             Swapping_in = true;
             SwapOutNext = false;
             Selected_member = Turn_Based_Combat.instance.Current_pkm_turn+1;
@@ -86,31 +93,25 @@ public class Pokemon_party : MonoBehaviour
     }
     public void Member_Selected(int Member_position)
     {
-        if (Options_manager.instance.playerInBattle && Member_cards[Member_position - 1].pkm.HP <= 0) return;
+        Pokemon_party_member selectedMember = Member_cards[Member_position - 1];
+        if (Options_manager.instance.playerInBattle && selectedMember.pkm.HP <= 0) return;
         if (SwapOutNext)
         {//selecting a swap in
-            if(Member_position<3)
-                if(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon!=null)
-                    if (Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon == party[Member_position - 1]) 
-                    {
-                        Dialogue_handler.instance.Write_Info(Battle_handler.instance.Battle_Participants[Member_position - 1].pokemon.Pokemon_name+
-                                                             " is already in battle","Details",1f);
-                        return;
-                    }
+            if (!isvalidSwap(Member_position)) return;
             Move_Member(Member_position);
         }
         else if (Item_handler.instance.Using_item)
         {//use item on pokemon
-            Item_handler.instance.selected_party_pkm = Member_cards[Member_position - 1].pkm;
+            Item_handler.instance.selected_party_pkm = selectedMember.pkm;
             Item_handler.instance.Use_Item(item_to_use);
-            member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
+            member_indicator.transform.position = selectedMember.transform.position;
             member_indicator.SetActive(true);
         }
         else if (Giving_item)
             GiveItem(Member_position);
         else
         {//move around members in party
-            if (Member_cards[Member_position - 1].GetComponent<Pokemon_party_member>().isEmpty)
+            if (selectedMember.GetComponent<Pokemon_party_member>().isEmpty)
                 Cancel();
             else
             {
@@ -119,15 +120,14 @@ public class Pokemon_party : MonoBehaviour
                     Selected_member = Member_position;
                     Move_Member(Member_to_Move);
                 }
-                else if (!viewing_options)
+                else
                 {
-                    if (Selected_member != 0)
-                        Cancel();
+                    Cancel();
                     Selected_member = Member_position;
                     viewing_options = true;
-                    member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
+                    member_indicator.transform.position = selectedMember.transform.position;
                     member_indicator.SetActive(true);
-                    Member_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(true);
+                    selectedMember.GetComponent<Pokemon_party_member>().Options.SetActive(true);
                 }
             }
         }
@@ -143,9 +143,10 @@ public class Pokemon_party : MonoBehaviour
 
     private void GiveItem(int Member_position)
     {
-        if (Member_cards[Member_position - 1].pkm.HasItem)
+        Pokemon_party_member selectedMember = Member_cards[Member_position - 1];
+        if (selectedMember.pkm.HasItem)
         {
-            Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
+            Dialogue_handler.instance.Write_Info(selectedMember.pkm.Pokemon_name
                                                  +" is already holding something","Details",1f);
             Giving_item = false;
             item_to_use = null;
@@ -153,14 +154,14 @@ public class Pokemon_party : MonoBehaviour
             Game_ui_manager.instance.Invoke(nameof(Game_ui_manager.instance.View_Bag),1.1f);
             return;
         }
-        Dialogue_handler.instance.Write_Info(Member_cards[Member_position - 1].pkm.Pokemon_name
+        Dialogue_handler.instance.Write_Info(selectedMember.pkm.Pokemon_name
                                              +" recieved a "+item_to_use.Item_name,"Details",1.3f);
-        Member_cards[Member_position - 1].pkm.HeldItem = Obj_Instance.set_Item(item_to_use);
-        Member_cards[Member_position - 1].pkm.HeldItem.quantity = 1;
-        Member_cards[Member_position - 1].pkm.HasItem = true;
+        selectedMember.pkm.HeldItem = Obj_Instance.set_Item(item_to_use);
+        selectedMember.pkm.HeldItem.quantity = 1;
+        selectedMember.pkm.HasItem = true;
         item_to_use.quantity--;
         Bag.instance.check_Quantity(item_to_use);
-        member_indicator.transform.position = Member_cards[Member_position - 1].transform.position;
+        member_indicator.transform.position = selectedMember.transform.position;
         member_indicator.SetActive(true);
         Giving_item = false;
         item_to_use = null;
@@ -186,15 +187,8 @@ void close_party()
 }
     void switchIn()
     {
-        Debug.Log("switch in");
         if (SwapOutNext)
             Turn_Based_Combat.instance.FainEventDelay = false;
-        if (Turn_Based_Combat.instance.Current_pkm_turn > 1 &&
-            SwapOutNext) //not equal to ur turn, check this with double batttles
-        {
-            Debug.Log("swap next turn switch");
-            //Turn_Based_Combat.instance.Next_turn();
-        }
         if(Swapping_in)
             Turn_Based_Combat.instance.Next_turn();
         close_party();

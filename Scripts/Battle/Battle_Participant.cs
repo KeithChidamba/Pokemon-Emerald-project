@@ -146,7 +146,6 @@ public class Battle_Participant : MonoBehaviour
             }
             else if (Battle_handler.instance.isDouble_battle && numAlive == 1)//1 left
             {
-                Debug.Log("1 l;eft reset");
                 pokemon = null;
                 is_active = false;
                 Unload_ui();

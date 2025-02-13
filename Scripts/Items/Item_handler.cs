@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Item_handler : MonoBehaviour
@@ -57,9 +58,10 @@ public class Item_handler : MonoBehaviour
         Dialogue_handler.instance.Battle_Info("Trying to catch "+WildPokemon.Pokemon_name+" .....");
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         float BallRate = float.Parse(pokeball.Item_effect);
-        float bracket1 = (3 * (WildPokemon.max_HP - 2) * WildPokemon.HP) / (3 * WildPokemon.max_HP);
-        float CatchValue = bracket1 * WildPokemon.CatchRate * BallRate * BattleOperations.GetStatusBonus(WildPokemon.Status_effect);
-        if(BattleOperations.IsImmediateCatch(CatchValue))
+        float bracket1 = (3 * WildPokemon.max_HP - 2 * WildPokemon.HP) / (3 * WildPokemon.max_HP);
+        float CatchValue = math.trunc(bracket1 * WildPokemon.CatchRate * BallRate * 
+                                      BattleOperations.GetStatusBonus(WildPokemon.Status_effect));
+        if (BattleOperations.IsImmediateCatch(CatchValue))
             isCaught = true;
         else
         {

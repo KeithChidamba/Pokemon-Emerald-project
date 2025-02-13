@@ -2,11 +2,11 @@
     "Player_name": "kelvin",
     "Trainer_ID": 35459,
     "Secret_ID": 61930,
-    "player_Money": 10715,
+    "player_Money": 10415,
     "NumBadges": 0,
     "player_Position": {
-        "x": 1.6039999723434449,
-        "y": 1.5640000104904175,
+        "x": -1.9119983911514283,
+        "y": -0.033000290393829349,
         "z": 0.0
     },
     "Location": "Overworld"

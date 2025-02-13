@@ -127,7 +127,7 @@ public static class Obj_Instance
     {
         Item new_item = ScriptableObject.CreateInstance<Item>();
         new_item.Item_name = item.Item_name;
-        new_item.Item_ID = new_item.Item_name + Utility.Generate_ID();
+        new_item.Item_ID = new_item.Item_name + Utility.Random16Bit();
         new_item.Item_type = item.Item_type;
         new_item.Item_desc = item.Item_desc;
         new_item.price = item.price;

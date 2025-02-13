@@ -9,8 +9,8 @@ public class Move_handler:MonoBehaviour
     public bool Doing_move = false;
     public static Move_handler instance;
     private Turn current_turn;
-    private Battle_Participant attacker_;
-    private Battle_Participant victim_;
+    [SerializeField]private Battle_Participant attacker_;
+    [SerializeField]private Battle_Participant victim_;
     private readonly float[] Stat_Levels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
     private readonly float[] Accuracy_And_Evasion_Levels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] Crit_Levels = {6.25f,12.5f,25f,50f};
@@ -189,6 +189,8 @@ public class Move_handler:MonoBehaviour
         foreach(string s in InvalidCombinations)
             if ( (status.Replace(" ","") + type_name).ToLower() == s)
                 return true;
+        if(current_turn.move_.Move_damage==0)//if its only a status causing move
+            Dialogue_handler.instance.Battle_Info("It failed");
         return false;
     }
 
@@ -222,37 +224,38 @@ public class Move_handler:MonoBehaviour
         string buffDebuffInfo = current_turn.move_.Buff_Debuff;
         int buff_amount = int.Parse(buffDebuffInfo[1].ToString());
         string stat = buffDebuffInfo.Substring(2, buffDebuffInfo.Length - 2);
-        Pokemon reciever_pkm = victim_.pokemon;
         bool isIncreasing = (buffDebuffInfo[0] == '+');//buff or debuff
         if (!current_turn.move_.isSelfTargeted)
         {//affecting enemy
             if(!current_turn.move_.isMultiTarget)
             {
                 if (!victim_.pokemon.CanBeDamaged)
-                {
                     Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name + " protected itself");
-                    return;
+                else
+                {
+                    BuffDebuffData buff_debuff = new BuffDebuffData(victim_.pokemon, stat, isIncreasing, buff_amount);
+                    GiveBuff_Debuff(buff_debuff);
                 }
             }
             else
-            {
                 StartCoroutine(MultiTargetBuff_Debuff(stat,isIncreasing,buff_amount));
-                return;
-            }
         }
         else//affecting attacker
-            reciever_pkm = attacker_.pokemon;
-        BuffDebuffData buff_debuff = new BuffDebuffData(reciever_pkm, stat, isIncreasing,buff_amount);
-        GiveBuff_Debuff(buff_debuff);
+        {
+            BuffDebuffData buff_debuff = new BuffDebuffData(attacker_.pokemon, stat, isIncreasing, buff_amount);
+            GiveBuff_Debuff(buff_debuff);
+        }
     }
 
     IEnumerator MultiTargetBuff_Debuff(string stat, bool isIncreasing,int buff_amount)
     {
         foreach (Battle_Participant enemy in attacker_.Current_Enemies )
         {
-            BuffDebuffData buff_debuff = new BuffDebuffData(enemy.pokemon, stat, isIncreasing,buff_amount);
             if (enemy.pokemon.CanBeDamaged)
+            {
+                BuffDebuffData buff_debuff = new BuffDebuffData(enemy.pokemon, stat, isIncreasing,buff_amount);
                 GiveBuff_Debuff(buff_debuff);
+            }
             else
                 Dialogue_handler.instance.Battle_Info(enemy.pokemon.Pokemon_name + " protected itself");
             yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);

@@ -189,15 +189,11 @@ public static class PokemonOperations
                 }
                 break;
             }
-            else
-                counter++;
+            counter++;
         }
 
         if (counter == CurrentPkm.learnSet.Length)
-        {
-            Debug.Log("end of learnset "+CurrentPkm.Pokemon_name);
             LearningNewMove = false;
-        }
     }
     public static void Learn_move(int index)
     {

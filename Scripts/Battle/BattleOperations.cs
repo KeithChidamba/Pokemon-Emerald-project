@@ -59,12 +59,14 @@ public static class BattleOperations
             return 2.5f;
         return 1.5f;
     }
-
     public static bool IsImmediateCatch(float catchvalue)
     {
-        for (int i = 0; i < 3; i++)
-            if (Utility.Get_rand(0, 256) > catchvalue)
+        for (int i = 0; i < 4; i++)
+        {
+            int rand = Utility.Get_rand(0, 256);
+            if (rand > catchvalue)
                 return false;
+        }
         return true;
     }
 
@@ -72,9 +74,12 @@ public static class BattleOperations
     {
         float ShakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchvalue)  );
         for (int i = 0; i < 3; i++)
-            if (Utility.Get_rand(0, 256) > ShakeProbability)
-                return false;
-        return true;
+        {
+            int rand = Utility.Random16Bit();
+            if (rand < (ShakeProbability * (i+1)) )
+                return true;
+        }
+        return false;
     }
 //Buffs
     public static bool Hasbuff_Debuff(Pokemon pkm,string stat_name)

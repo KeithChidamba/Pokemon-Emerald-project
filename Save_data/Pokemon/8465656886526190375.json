@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 32140
+        "instanceID": 32252
     },
     "has_gender": true,
     "HP": 67.0,
@@ -52,10 +52,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 32164
+            "instanceID": 32276
         },
         {
-            "instanceID": 32108
+            "instanceID": 32220
         }
     ],
     "Status_effect": "None",
@@ -74,44 +74,44 @@
     ],
     "move_set": [
         {
-            "instanceID": -77100
+            "instanceID": -65550
         },
         {
-            "instanceID": -77102
+            "instanceID": -65552
         },
         {
-            "instanceID": -77104
+            "instanceID": -65554
         },
         {
-            "instanceID": -77106
+            "instanceID": -65556
         }
     ],
     "ability": {
-        "instanceID": 32120
+        "instanceID": 32232
     },
     "evolutions": [
         {
-            "instanceID": 32064
+            "instanceID": 32176
         },
         {
-            "instanceID": 32152
+            "instanceID": 32264
         },
         {
-            "instanceID": 31974
+            "instanceID": 32086
         },
         {
-            "instanceID": 32178
+            "instanceID": 32290
         }
     ],
     "HeldItem": {
-        "instanceID": 0
+        "instanceID": -65794
     },
-    "HasItem": false,
+    "HasItem": true,
     "front_picture": {
-        "instanceID": 31930
+        "instanceID": 32042
     },
     "back_picture": {
-        "instanceID": 32196
+        "instanceID": 32308
     },
     "ability_name": "Paralysis Combo",
     "natureName": "Relaxed",

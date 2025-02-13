@@ -19,7 +19,7 @@ MonoBehaviour:
   Item_desc: Basic pokeball
   price: 15
   quantity: 1
-  Item_img: {fileID: 1578386913, guid: 49f22e65e4bc4404bb12fe408daecb38, type: 3}
+  Item_img: {fileID: 21300000, guid: 069158d6bcfcab541a6d328c67cb4fea, type: 3}
   ForPartyUse: 0
   CanBeUsedInOverworld: 0
   CanBeUsedInBattle: 1

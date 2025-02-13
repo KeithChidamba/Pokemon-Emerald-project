@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 32210
+        "instanceID": 32322
     },
     "has_gender": true,
     "HP": 76.0,
@@ -53,10 +53,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30388
+            "instanceID": 30496
         },
         {
-            "instanceID": 32166
+            "instanceID": 32278
         }
     ],
     "Status_effect": "None",
@@ -75,38 +75,38 @@
     ],
     "move_set": [
         {
-            "instanceID": -76368
+            "instanceID": -65560
         },
         {
-            "instanceID": -76370
+            "instanceID": -65562
         },
         {
-            "instanceID": -76372
+            "instanceID": -65564
         },
         {
-            "instanceID": -76374
+            "instanceID": -65566
         }
     ],
     "ability": {
-        "instanceID": 32054
+        "instanceID": 32166
     },
     "evolutions": [
         {
-            "instanceID": 32034
+            "instanceID": 32146
         },
         {
-            "instanceID": 32144
+            "instanceID": 32256
         }
     ],
     "HeldItem": {
-        "instanceID": 0
+        "instanceID": -65798
     },
-    "HasItem": false,
+    "HasItem": true,
     "front_picture": {
-        "instanceID": 32214
+        "instanceID": 32326
     },
     "back_picture": {
-        "instanceID": 32208
+        "instanceID": 32320
     },
     "ability_name": "Sand pit",
     "natureName": "Mild",
