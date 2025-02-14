@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 32062
+        "instanceID": 32066
     },
     "has_gender": true,
     "HP": 54.0,
@@ -53,10 +53,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30392
+            "instanceID": 30400
         },
         {
-            "instanceID": 30482
+            "instanceID": 30492
         }
     ],
     "Status_effect": "None",
@@ -75,27 +75,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -65572
+            "instanceID": -190610
         },
         {
-            "instanceID": -65574
+            "instanceID": -190612
         },
         {
-            "instanceID": -65576
+            "instanceID": -190614
         },
         {
-            "instanceID": -65578
+            "instanceID": -190616
         }
     ],
     "ability": {
-        "instanceID": 30394
+        "instanceID": 30402
     },
     "evolutions": [
         {
-            "instanceID": 30396
+            "instanceID": 30404
         },
         {
-            "instanceID": 30398
+            "instanceID": 30406
         }
     ],
     "HeldItem": {
@@ -103,10 +103,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30484
+        "instanceID": 30494
     },
     "back_picture": {
-        "instanceID": 30486
+        "instanceID": 30496
     },
     "ability_name": "Inferno",
     "natureName": "Sassy",

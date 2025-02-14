@@ -147,6 +147,11 @@ public class Bag : MonoBehaviour
     }
     public void TakeItem(int memeberIndex)
     {
+        if (Options_manager.instance.playerInBattle)
+        {
+            Dialogue_handler.instance.Write_Info("Can't do that in battle", "Details",1f);
+            return;
+        }
         if (num_items >= max_capacity)
         {
             Dialogue_handler.instance.Write_Info("Bag is full", "Details");

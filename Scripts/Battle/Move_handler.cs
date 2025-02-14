@@ -187,10 +187,12 @@ public class Move_handler:MonoBehaviour
         string[] InvalidCombinations = {
             "poisonpoison","badlypoisonpoison", "burnfire", "paralysiselectric", "freezeice" };
         foreach(string s in InvalidCombinations)
-            if ( (status.Replace(" ","") + type_name).ToLower() == s)
+            if ((status.Replace(" ", "") + type_name).ToLower() == s)
+            {
+                if(current_turn.move_.Move_damage==0)//if its only a status causing move
+                    Dialogue_handler.instance.Battle_Info("It failed");
                 return true;
-        if(current_turn.move_.Move_damage==0)//if its only a status causing move
-            Dialogue_handler.instance.Battle_Info("It failed");
+            }
         return false;
     }
 
@@ -227,7 +229,7 @@ public class Move_handler:MonoBehaviour
         bool isIncreasing = (buffDebuffInfo[0] == '+');//buff or debuff
         if (!current_turn.move_.isSelfTargeted)
         {//affecting enemy
-            if(!current_turn.move_.isMultiTarget)
+            if(!current_turn.move_.isMultiTarget | !Battle_handler.instance.isDouble_battle)
             {
                 if (!victim_.pokemon.CanBeDamaged)
                     Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name + " protected itself");
@@ -238,7 +240,8 @@ public class Move_handler:MonoBehaviour
                 }
             }
             else
-                StartCoroutine(MultiTargetBuff_Debuff(stat,isIncreasing,buff_amount));
+                StartCoroutine(MultiTargetBuff_Debuff(stat, isIncreasing, buff_amount));
+            
         }
         else//affecting attacker
         {

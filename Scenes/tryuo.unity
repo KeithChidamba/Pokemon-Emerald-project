@@ -1037,7 +1037,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Remove_pkm
+        m_MethodName: RemoveFromParty
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 2099830503}
@@ -5011,7 +5011,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.5, y: -7.9}
+  m_AnchoredPosition: {x: -88.7, y: -7.9}
   m_SizeDelta: {x: 81.4054, y: 86.8732}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &141476649
@@ -5454,7 +5454,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Remove_pkm
+        m_MethodName: RemoveFromParty
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1041801305}
@@ -9948,7 +9948,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1711038842}
-  - {fileID: 1528205379}
   m_Father: {fileID: 733500844}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9971,7 +9970,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pkm: {fileID: 0}
   pkm_sprite: {fileID: 296821394}
-  options: {fileID: 1528205378}
 --- !u!114 &296821394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13200,44 +13198,6 @@ MonoBehaviour:
   m_Text: '1,000,000
 
 '
---- !u!1 &429554288
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 429554289}
-  m_Layer: 0
-  m_Name: Storage_options
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &429554289
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429554288}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1807833598}
-  - {fileID: 708761680}
-  m_Father: {fileID: 733500844}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 45, y: 16}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &434876549
 GameObject:
   m_ObjectHideFlags: 0
@@ -17945,6 +17905,44 @@ Transform:
   m_Father: {fileID: 187727644}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &587495900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 587495901}
+  m_Layer: 0
+  m_Name: PC Options
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &587495901
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 587495900}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1807833598}
+  - {fileID: 1528205379}
+  m_Father: {fileID: 733500844}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 45, y: 16}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &591072019
 GameObject:
   m_ObjectHideFlags: 0
@@ -22539,19 +22537,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 708761679}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1910921263}
   - {fileID: 339056401}
-  m_Father: {fileID: 429554289}
-  m_RootOrder: 1
+  m_Father: {fileID: 733500844}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -303, y: 180}
+  m_AnchoredPosition: {x: -258, y: 196.00002}
   m_SizeDelta: {x: 116.1825, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &708761681
@@ -23443,8 +23441,9 @@ RectTransform:
   - {fileID: 1277508686}
   - {fileID: 296821392}
   - {fileID: 1330329151}
-  - {fileID: 429554289}
+  - {fileID: 708761680}
   - {fileID: 711287879}
+  - {fileID: 587495901}
   m_Father: {fileID: 704029578}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27427,7 +27426,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Remove
+  m_text: Release
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -29938,7 +29937,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Remove_pkm
+        m_MethodName: RemoveFromParty
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 591072021}
@@ -30576,7 +30575,11 @@ MonoBehaviour:
   num_non_party_pokemon: 0
   max_num_pokemon: 40
   num_party_members: 0
-  Storage_options: {fileID: 429554288}
+  Storage_options:
+  - {fileID: 1807833599}
+  - {fileID: 1465486954}
+  - {fileID: 1945079470}
+  - {fileID: 1147526103}
   storage_ui: {fileID: 733500843}
   select_pkm_ID: 
   storage_operetation: 0
@@ -30593,7 +30596,6 @@ MonoBehaviour:
   storage_positions: {fileID: 1330329151}
   swapping: 0
   Pkm_selected: 0
-  view_details: {fileID: 1807833599}
 --- !u!1 &939642311
 GameObject:
   m_ObjectHideFlags: 0
@@ -34113,7 +34115,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Remove_pkm
+        m_MethodName: RemoveFromParty
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1896785821}
@@ -35796,8 +35798,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.35381317, y: -26.81}
-  m_SizeDelta: {x: 66.7777, y: 25.629}
+  m_AnchoredPosition: {x: 47.2, y: -4.197}
+  m_SizeDelta: {x: 66.7777, y: 24.023}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1147526103
 MonoBehaviour:
@@ -35824,7 +35826,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.53640085, g: 0.54294115, b: 0.9245283, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 0.62352943}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -35838,7 +35840,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1147526104}
   m_OnClick:
     m_PersistentCalls:
@@ -35846,10 +35848,10 @@ MonoBehaviour:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
         m_MethodName: Delete_pkm
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 296821393}
-          m_ObjectArgumentAssemblyTypeName: PC_pkm, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -37663,7 +37665,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -86.8, y: -7.9}
+  m_AnchoredPosition: {x: -2, y: 65}
   m_SizeDelta: {x: 81.4054, y: 86.8732}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1209787860
@@ -59697,7 +59699,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Remove_pkm
+        m_MethodName: RemoveFromParty
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 100425790}
@@ -62240,7 +62242,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -428, y: 156}
+  m_AnchoredPosition: {x: -413, y: 261}
   m_SizeDelta: {x: 116.1825, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1334591698
@@ -62289,7 +62291,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Cancel_options
+        m_MethodName: RefreshUi
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -65035,8 +65037,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.3, y: -0.00010395}
-  m_SizeDelta: {x: 77.4935, y: 86.873}
+  m_AnchoredPosition: {x: -35.67477, y: -5.3}
+  m_SizeDelta: {x: 289.8805, y: 29.026}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1417936530
 MonoBehaviour:
@@ -66304,7 +66306,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.4538116, y: -0.513}
+  m_AnchoredPosition: {x: -121.7, y: -4.5}
   m_SizeDelta: {x: 66.7777, y: 23.4169}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1465486954
@@ -66332,7 +66334,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5952446, g: 0.56181026, b: 0.9528302, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 0.62352943}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -66346,7 +66348,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1465486955}
   m_OnClick:
     m_PersistentCalls:
@@ -68152,12 +68154,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1528205379}
   m_Layer: 5
-  m_Name: icon_Options
+  m_Name: Pokemon options
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1528205379
 RectTransform:
   m_ObjectHideFlags: 0
@@ -68174,13 +68176,13 @@ RectTransform:
   - {fileID: 1465486953}
   - {fileID: 1945079469}
   - {fileID: 1147526102}
-  m_Father: {fileID: 296821392}
+  m_Father: {fileID: 587495901}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.9, y: 4.5}
-  m_SizeDelta: {x: 81.4054, y: 86.8732}
+  m_AnchoredPosition: {x: -102.68652, y: 80.0986}
+  m_SizeDelta: {x: 344.0323, y: 29.0259}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1528551261
 GameObject:
@@ -70210,7 +70212,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.2, y: -7.9}
+  m_AnchoredPosition: {x: 3, y: 45}
   m_SizeDelta: {x: 81.4054, y: 86.8732}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1597412878
@@ -76014,18 +76016,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1807833597}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 622320307}
-  m_Father: {fileID: 429554289}
+  m_Father: {fileID: 587495901}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -298, y: 75}
+  m_AnchoredPosition: {x: -357, y: 75}
   m_SizeDelta: {x: 130.9675, y: 28.4335}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1807833599
@@ -94062,8 +94064,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.35381317, y: 25.9}
-  m_SizeDelta: {x: 66.7777, y: 28.8486}
+  m_AnchoredPosition: {x: -37.8, y: -4.5001}
+  m_SizeDelta: {x: 84.189, y: 23.417}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1945079470
 MonoBehaviour:
@@ -94090,7 +94092,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.53640085, g: 0.54294115, b: 0.9245283, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 0.62352943}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -94104,7 +94106,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1945079471}
   m_OnClick:
     m_PersistentCalls:
@@ -95683,7 +95685,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Remove_pkm
+        m_MethodName: RemoveFromParty
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1068557184}

@@ -150,7 +150,7 @@ public class Pokemon : ScriptableObject
         //Debug.Log(Pokemon_name+" recieved "+ amount +" exp current exp: "+CurrentExpAmount);
         //Debug.Log("next lv exp: "+PokemonOperations.GetNextLv(this));
         NextLvExpAmount = PokemonOperations.GetNextLv(this);
-        if(CurrentExpAmount>=PokemonOperations.GetNextLv(this))
+        if(CurrentExpAmount>=NextLvExpAmount)
             Level_up();
     }
     public int Calc_Exp(Pokemon enemy)
@@ -235,9 +235,11 @@ public class Pokemon : ScriptableObject
             PokemonOperations.GetNewMove(this);
         }
         OnNewLevel?.Invoke();
+        if (Options_manager.instance.playerInBattle)
+            if(CurrentExpAmount>=NextLvExpAmount)
+                Level_up();
     }
-
-    public void clearEvents()
+    void clearEvents()
     {
         OnLevelUP = null;
         OnLevelUp = null;

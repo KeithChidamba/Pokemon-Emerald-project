@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 32094
+        "instanceID": 32098
     },
     "has_gender": true,
     "HP": 16.0,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30496
+            "instanceID": 30506
         }
     ],
     "Status_effect": "None",
@@ -74,18 +74,18 @@
     ],
     "move_set": [
         {
-            "instanceID": -65602
+            "instanceID": -190594
         }
     ],
     "ability": {
-        "instanceID": 32166
+        "instanceID": 32170
     },
     "evolutions": [
         {
-            "instanceID": 32146
+            "instanceID": 32150
         },
         {
-            "instanceID": 32256
+            "instanceID": 32260
         }
     ],
     "HeldItem": {
@@ -93,10 +93,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 32198
+        "instanceID": 32202
     },
     "back_picture": {
-        "instanceID": 32124
+        "instanceID": 32128
     },
     "ability_name": "Sand pit",
     "natureName": "Naive",

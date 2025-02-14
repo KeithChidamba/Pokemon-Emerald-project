@@ -51,15 +51,17 @@ public class Pokemon_party : MonoBehaviour
 
     private bool isvalidSwap(int Member_position)
     {
-        Battle_Participant Swapin = Battle_handler.instance.Battle_Participants[Member_position - 1];
         if(Member_position<3)
-            if(Swapin.pokemon!=null)
-                if (Swapin.pokemon == party[Member_position - 1]) 
+        {
+            Battle_Participant Swapin = Battle_handler.instance.Battle_Participants[Member_position - 1];
+            if (Swapin.pokemon != null)
+                if (Swapin.pokemon == party[Member_position - 1])
                 {
-                    Dialogue_handler.instance.Write_Info(Swapin.pokemon.Pokemon_name+
-                                                         " is already in battle","Details",1f);
+                    Dialogue_handler.instance.Write_Info(Swapin.pokemon.Pokemon_name +
+                                                         " is already in battle", "Details", 1f);
                     return false;
                 }
+        }
         return true;
     }
     public void Moving(int Member_position)
@@ -205,6 +207,7 @@ void close_party()
         Selected_member = 0;
         Refresh_Member_Cards();
         member_indicator.SetActive(false);
+        Cancel();
         if(!Swapping_in && !SwapOutNext)
             Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details",1f);
     }

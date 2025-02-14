@@ -81,7 +81,7 @@ public class Item_handler : MonoBehaviour
             skipTurn();
         }
         ResetItemUsage();
-        StopAllCoroutines();
+        StopCoroutine(nameof(TryCatchPokemon));
         yield return null;
     }
     private void heal_status(string status)

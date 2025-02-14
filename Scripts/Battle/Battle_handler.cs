@@ -409,7 +409,6 @@ public class Battle_handler : MonoBehaviour
     public void LevelUpEvent(Pokemon pkm)
     {
         LevelUpEvent PkmLevelUp=new LevelUpEvent(pkm);
-        if (levelUpQueue.Contains(PkmLevelUp)) return;
         levelUpQueue.Add(PkmLevelUp);
         StartCoroutine(LevelUp_Sequence(PkmLevelUp));
     } 

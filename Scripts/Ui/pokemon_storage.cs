@@ -9,7 +9,7 @@ public class pokemon_storage : MonoBehaviour
     public int num_non_party_pokemon = 0;
     public int max_num_pokemon = 40;
     public int num_party_members = 0;
-    public GameObject Storage_options;
+    public Button[] Storage_options;
     public GameObject storage_ui;
     public string select_pkm_ID;
     public bool storage_operetation = false;
@@ -20,7 +20,6 @@ public class pokemon_storage : MonoBehaviour
     public Transform storage_positions;
     public bool swapping = false;
     public bool Pkm_selected = false;
-    public Button view_details;
     public static pokemon_storage instance;
     private void Awake()
     {
@@ -30,10 +29,6 @@ public class pokemon_storage : MonoBehaviour
             return;
         }
         instance = this;
-    }
-    private void Update()
-    {
-            view_details.interactable = Pkm_selected;
     }
     Pokemon search_pkm(string ID)
     {
@@ -66,6 +61,7 @@ public class pokemon_storage : MonoBehaviour
         Set_pkm_icon();
         storage_ui.SetActive(true);
         Dialogue_handler.instance.Dialouge_off();
+        DisableOptions();
     }
     public void Close_pc()
     {
@@ -95,22 +91,32 @@ public class pokemon_storage : MonoBehaviour
         {
             if (!Pkm_selected)
             {
+                ResetPartyUi();
                 party_pkm.options.SetActive(true);
-                foreach (GameObject pos in pkm_party_icons)
-                {
-                    if (pos != party_pkm.gameObject)
-                    {
-                        pos.GetComponent<PC_party_pkm>().options.SetActive(false);
-                        break;
-                    }
-                }
             }
         }
     }
-    public void Cancel_options()
+    void LoadOptions()
     {
-        foreach (GameObject pos in pkm_party_icons)
-            pos.GetComponent<PC_party_pkm>().options.SetActive(false);
+        foreach (GameObject icon in pkm_icons)
+            icon.GetComponent<PC_pkm>().pkm_sprite.color=Color.HSVToRGB(0,0,100);
+        foreach (var btn in Storage_options)
+            btn.interactable = true;
+    }
+    void DisableOptions()
+    {
+        foreach (var btn in Storage_options)
+            btn.interactable = false;
+        ResetPartyUi();
+    }
+    void ResetPartyUi()
+    {
+        foreach (GameObject icon in pkm_party_icons)
+            icon.GetComponent<PC_party_pkm>().options.SetActive(false);
+    }
+    public void RefreshUi()
+    {
+        DisableOptions();
         Remove_pkm_icons();
         Set_pkm_icon();
         Pkm_selected = false;
@@ -125,19 +131,11 @@ public class pokemon_storage : MonoBehaviour
     {
         if (!swapping)
         {
+            DisableOptions();
+            LoadOptions();
             Pkm_selected = true;
             select_pkm_ID = pkm_icon.pkm.Pokemon_ID.ToString();
-            pkm_icon.options.SetActive(true);
-            pkm_icon.options.SetActive(true);
-            foreach (GameObject pos in pkm_icons)
-            {
-                if (pos != pkm_icon.gameObject)
-                {
-                    pos.GetComponent<PC_pkm>().options.SetActive(false);
-                    break;
-                }
-
-            }
+            pkm_icon.pkm_sprite.color=Color.HSVToRGB(17,96,54);
         }
     }
     void Remove_pkm_icons()
@@ -151,7 +149,7 @@ public class pokemon_storage : MonoBehaviour
             pos.GetComponent<PC_party_pkm>().pkm = null;
         }
     }
-    public void Set_pkm_icon()
+    private void Set_pkm_icon()
     {
         int num = 0;
         foreach (Transform pos in storage_positions)
@@ -185,30 +183,30 @@ public class pokemon_storage : MonoBehaviour
         storage_operetation = false;
         storage_positions.gameObject.SetActive(true);
     }
-    public void Remove_pkm(PC_party_pkm pkm)
+    public void RemoveFromParty(PC_party_pkm pkm)
     {
         if (num_party_members > 1)
         {
             Pokemon_party.instance.Remove_Member(pkm.party_pos);
             num_party_members--;
             num_non_party_pokemon++;
-            Cancel_options();
+            RefreshUi();
         }
         else
             Dialogue_handler.instance.Write_Info("There must be at least 1 pokemon in your team","Details");
     }
-    public void Delete_pkm(PC_pkm pkm_icon)
+    public void Delete_pkm()
     {
         int index = 0;
         foreach(Pokemon mon in non_party_pokemon)
         {
-            if (mon.Pokemon_ID == pkm_icon.pkm.Pokemon_ID)
+            if (mon.Pokemon_ID.ToString() == select_pkm_ID)
             {
-                string pkm_name = pkm_icon.pkm.Pokemon_name;
+                string pkm_name = search_pkm(select_pkm_ID).Pokemon_name;
                 non_party_pokemon[index] = null;
                 remove_pkm(index);
                 Dialogue_handler.instance.Write_Info("You released "+ pkm_name, "Details",1.5f);
-                Cancel_options();
+                RefreshUi();
                 break;
             }
             index++;
@@ -222,6 +220,7 @@ public class pokemon_storage : MonoBehaviour
     }
     public void swap()
     {
+        DisableOptions();
         storage_positions.gameObject.SetActive(false);
         Dialogue_handler.instance.Write_Info("Pick a pokemon in your party to swap with", "Details",1.2f);
         swapping = true;
@@ -241,7 +240,7 @@ public class pokemon_storage : MonoBehaviour
         else
             Dialogue_handler.instance.Write_Info("Party is full, you can still swap out pokemon though", "Details",2f);
         storage_operetation = false;
-        Cancel_options();
+        RefreshUi();
     }
 
     public Pokemon Add_pokemon(Pokemon pkm)
