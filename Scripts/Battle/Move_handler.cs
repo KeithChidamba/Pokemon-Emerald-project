@@ -215,7 +215,7 @@ public class Move_handler:MonoBehaviour
     {
         if (!current_turn.move_.Can_flinch) return;
         if (!victim_.pokemon.CanBeDamaged) return;
-        if (Utility.Get_rand(1, 11) < current_turn.move_.Status_chance)
+        if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
             victim_.pokemon.isFlinched=true;
     }
     void Set_buff_Debuff()
@@ -241,7 +241,6 @@ public class Move_handler:MonoBehaviour
             }
             else
                 StartCoroutine(MultiTargetBuff_Debuff(stat, isIncreasing, buff_amount));
-            
         }
         else//affecting attacker
         {

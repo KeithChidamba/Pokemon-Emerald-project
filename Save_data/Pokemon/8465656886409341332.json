@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 32266
+        "instanceID": 31054
     },
     "has_gender": true,
     "HP": 53.0,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30372
+            "instanceID": 30366
         }
     ],
     "Status_effect": "None",
@@ -71,27 +71,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -190584
+            "instanceID": -2364
         },
         {
-            "instanceID": -190586
+            "instanceID": -2366
         },
         {
-            "instanceID": -190588
+            "instanceID": -2368
         },
         {
-            "instanceID": -190590
+            "instanceID": -2370
         }
     ],
     "ability": {
-        "instanceID": 30374
+        "instanceID": 30368
     },
     "evolutions": [
         {
-            "instanceID": 30376
+            "instanceID": 30370
         },
         {
-            "instanceID": 30378
+            "instanceID": 30372
         }
     ],
     "HeldItem": {
@@ -99,10 +99,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30472
+        "instanceID": 30466
     },
     "back_picture": {
-        "instanceID": 30294
+        "instanceID": 30288
     },
     "ability_name": "Overgrow",
     "natureName": "Hardy",

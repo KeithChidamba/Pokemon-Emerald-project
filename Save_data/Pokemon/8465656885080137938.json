@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 32204
+        "instanceID": 30992
     },
     "has_gender": true,
     "HP": 31.0,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30418
+            "instanceID": 30412
         }
     ],
     "Status_effect": "None",
@@ -74,27 +74,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -190574
+            "instanceID": -2354
         },
         {
-            "instanceID": -190576
+            "instanceID": -2356
         },
         {
-            "instanceID": -190578
+            "instanceID": -2358
         },
         {
-            "instanceID": -190580
+            "instanceID": -2360
         }
     ],
     "ability": {
-        "instanceID": 30420
+        "instanceID": 30414
     },
     "evolutions": [
         {
-            "instanceID": 30422
+            "instanceID": 30416
         },
         {
-            "instanceID": 30424
+            "instanceID": 30418
         }
     ],
     "HeldItem": {
@@ -102,10 +102,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30426
+        "instanceID": 30420
     },
     "back_picture": {
-        "instanceID": 30428
+        "instanceID": 30422
     },
     "ability_name": "Torrent",
     "natureName": "Rash",
