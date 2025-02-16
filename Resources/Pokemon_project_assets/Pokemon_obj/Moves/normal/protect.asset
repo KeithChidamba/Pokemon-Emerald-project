@@ -21,6 +21,9 @@ MonoBehaviour:
   Has_status: 0
   Has_effect: 1
   Can_flinch: 0
+  is_Consecutive: 0
+  isMultiTarget: 0
+  isSelfTargeted: 0
   Priority: 4
   Powerpoints: 10
   max_Powerpoints: 10
@@ -29,5 +32,3 @@ MonoBehaviour:
   Status_chance: 0
   Debuff_chance: 0
   Description: a move that protects from harm
-  player_animtion: {fileID: 0}
-  enemy_animtion: {fileID: 0}

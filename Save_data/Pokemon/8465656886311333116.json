@@ -1,0 +1,127 @@
+{
+    "Base_Pokemon_name": "Zigzagoon",
+    "Pokemon_name": "Zigzagoon",
+    "Pokemon_ID": 8465656886311333116,
+    "Personality_value": 890426116,
+    "Gender": "Male",
+    "GenderRatio": "50/50",
+    "nature": {
+        "instanceID": 31002
+    },
+    "has_gender": true,
+    "HP": 41.0,
+    "max_HP": 41.0,
+    "BaseHP": 38.0,
+    "BaseAttack": 30.0,
+    "BaseDefense": 41.0,
+    "BaseSP_ATK": 30.0,
+    "BaseSP_DEF": 41.0,
+    "Basespeed": 60.0,
+    "Attack": 19.0,
+    "Defense": 23.0,
+    "SP_ATK": 16.0,
+    "SP_DEF": 23.0,
+    "speed": 28.0,
+    "HP_IV": 7.0,
+    "Attack_IV": 19.0,
+    "Defense_IV": 19.0,
+    "SP_ATK_IV": 21.0,
+    "SP_DEF_IV": 24.0,
+    "speed_IV": 5.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "Speed1"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 100.0,
+    "crit_chance": 6.25,
+    "CatchRate": 255.0,
+    "Current_level": 18,
+    "CurrentExpAmount": 14,
+    "NextLvExpAmount": 13.0,
+    "EXPGroup": "Fast",
+    "exp_yield": 60,
+    "has_trainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 31028
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "type_Immunity": "None",
+    "evo_line": [
+        "20"
+    ],
+    "abilities": [
+        "Pickup"
+    ],
+    "split_evolution": false,
+    "learnSet": [
+        "normal/headbutt01",
+        "normal/tail whip02",
+        "normal/tackle04",
+        "water/surf05",
+        "normal/protect19"
+    ],
+    "move_set": [
+        {
+            "instanceID": -129102
+        },
+        {
+            "instanceID": -129104
+        },
+        {
+            "instanceID": -129106
+        },
+        {
+            "instanceID": -129108
+        }
+    ],
+    "ability": {
+        "instanceID": 30760
+    },
+    "evolutions": [
+        {
+            "instanceID": 30756
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "HasItem": false,
+    "front_picture": {
+        "instanceID": 30866
+    },
+    "back_picture": {
+        "instanceID": 30740
+    },
+    "ability_name": "Pickup",
+    "natureName": "Mild",
+    "evo_data": [
+        "Linoone"
+    ],
+    "type_data": [
+        "Normal"
+    ],
+    "move_data": [
+        "Headbutt/Normal",
+        "Tail whip/Normal",
+        "Tackle/Normal",
+        "Surf/Water"
+    ],
+    "move_pp_data": [
+        25,
+        24,
+        20,
+        25
+    ]
+}

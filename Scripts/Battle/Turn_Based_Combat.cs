@@ -65,7 +65,7 @@ public class Turn_Based_Combat : MonoBehaviour
             {
                 if (!MoveSuccessfull(turn))
                 {
-                    if(attacker_.pokemon.Accuracy > victim_.pokemon.Evasion)
+                    if(attacker_.pokemon.Accuracy >= victim_.pokemon.Evasion)
                         Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" missed the attack");
                     else
                         Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" dodged the attack");
@@ -128,10 +128,10 @@ public class Turn_Based_Combat : MonoBehaviour
     void CheckRepeatedMove(Battle_Participant attacker_, Move move_)
     {
         if(attacker_.previousMove.Split('/')[0] == move_.Move_name)
-            attacker_.previousMove = move_.Move_name + 
+            attacker_.previousMove = move_.Move_name +"/"+
                                      (int.Parse(attacker_.previousMove.Split('/')[1])+1);
         else
-            attacker_.previousMove = move_.Move_name + "1";
+            attacker_.previousMove = move_.Move_name + "/1";
     }
     bool CheckParticipantState(Battle_Participant participant)
     {

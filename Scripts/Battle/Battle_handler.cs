@@ -167,6 +167,7 @@ public class Battle_handler : MonoBehaviour
         Battle_Participants[0].pokemon = Pokemon_party.instance.party[0];
         Battle_Participants[0].Current_Enemies.Add(Battle_Participants[2]);
         Battle_Participants[2].pokemon = enemy;
+        Battle_Participants[2].Current_Enemies.Add(Battle_Participants[0]);
         Wild_pkm.instance.pokemon_participant = Battle_Participants[2];
         Wild_pkm.instance.Enemy_pokemon = Battle_Participants[0];
         Battle_Participants[2].AddToExpList(Battle_Participants[0].pokemon);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] Crit_Levels = {6.25f,12.5f,25f,50f};
     private Battle_event[] Dialouge_order={null,null,null,null,null};
     private bool MoveDelay = false;
+    private bool CancelMove = false;
     public event Action OnMoveEnd;
     private void Awake()
     {
@@ -53,13 +55,15 @@ public class Move_handler:MonoBehaviour
     IEnumerator Move_Sequence()
     {
         float MoveEffectiveness = BattleOperations.TypeEffectiveness(victim_.pokemon, current_turn.move_.type);
-        if (MoveEffectiveness == 0)
+        if (MoveEffectiveness == 0 & !current_turn.move_.isMultiTarget)
             Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" is immune to it!");
         else
         {
             Set_Sequences();
             foreach (Battle_event d in Dialouge_order)
             {
+                if (CancelMove)
+                    break;
                 yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
                 d.Execute();
                 if (d.Condition)
@@ -83,10 +87,12 @@ public class Move_handler:MonoBehaviour
             StartCoroutine(ConsecutiveMove());
     }
     float Calc_Damage(Move move,Battle_Participant CurrentVictim)
-    { 
-        if (!CurrentVictim.pokemon.CanBeDamaged & !current_turn.move_.Has_status & !current_turn.move_.is_Buff_Debuff)
+    {
+        if (!CurrentVictim.pokemon.CanBeDamaged & move.Move_damage > 0)
         {
              Dialogue_handler.instance.Battle_Info(CurrentVictim.pokemon.Pokemon_name+" protected itself");
+             if(!current_turn.move_.isMultiTarget)
+                CancelMove = true;
              return 0f;
         }
         if (move.Move_damage == 0) return 0f;
@@ -162,6 +168,7 @@ public class Move_handler:MonoBehaviour
     {
         OnMoveEnd?.Invoke();
         Doing_move = false;
+        CancelMove = false;
     }
     void Get_status()
     {
@@ -216,7 +223,10 @@ public class Move_handler:MonoBehaviour
         if (!current_turn.move_.Can_flinch) return;
         if (!victim_.pokemon.CanBeDamaged) return;
         if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
+        {
+            victim_.pokemon.canAttack = false;
             victim_.pokemon.isFlinched=true;
+        }
     }
     void Set_buff_Debuff()
     {
@@ -304,22 +314,18 @@ public class Move_handler:MonoBehaviour
             return Crit_Levels[buff.Stage];
         return math.trunc(stat_val * Stat_Levels[buff.Stage+6]);
     }
-    void absorb()
-    {
-        float damage = Calc_Damage(current_turn.move_,victim_);
-        float heal_amount = damage/ 2f;
-        victim_.pokemon.HP -= damage;
-        if( (heal_amount+attacker_.pokemon.HP) < attacker_.pokemon.max_HP)
-            attacker_.pokemon.HP += math.trunc(math.abs(heal_amount));
-        else
-            attacker_.pokemon.HP = attacker_.pokemon.max_HP;
-        Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" gained health");
-        MoveDelay = false;
-    }
 
-    void MultiTargetMoveDamage()
+    List<Battle_Participant> SetTargets()
     {
-        foreach (Battle_Participant enemy in attacker_.Current_Enemies)
+        List<Battle_Participant> OtherParticipants = Battle_handler.instance.Battle_Participants.ToList();
+        OtherParticipants = Battle_handler.instance.Battle_Participants.ToList().Where(p =>
+            p.is_active).ToList();
+        OtherParticipants.RemoveAll(p => p.pokemon.Pokemon_ID == attacker_.pokemon.Pokemon_ID);
+        return OtherParticipants;
+    }
+    void MultiTargetMoveDamage(List<Battle_Participant> Targets)
+    {
+        foreach (Battle_Participant enemy in Targets)
             enemy.pokemon.HP -= Calc_Damage(current_turn.move_,enemy);
     }
     IEnumerator ConsecutiveMove()
@@ -328,21 +334,38 @@ public class Move_handler:MonoBehaviour
         int NumHits = 0;
         for (int i = 0; i < NumRepetitions; i++)
         {
+            if (!victim_.pokemon.CanBeDamaged)
+                break;
             if (victim_.pokemon.HP <= 0) break;
             Dialogue_handler.instance.Battle_Info("Hit "+(i+1)+"!");//remove later if added animations
             victim_.pokemon.HP -= Calc_Damage(current_turn.move_,victim_);
             NumHits++;
             yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         }
-        GetEffectiveness(BattleOperations.TypeEffectiveness(victim_.pokemon, current_turn.move_.type),victim_);
-        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-        Dialogue_handler.instance.Battle_Info("It hit (x"+NumHits+") times");
+        if (NumHits>0)
+        {
+            GetEffectiveness(BattleOperations.TypeEffectiveness(victim_.pokemon, current_turn.move_.type), victim_);
+            yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+            Dialogue_handler.instance.Battle_Info("It hit (x" + NumHits + ") times");
+        }
         MoveDelay = false;
         yield return null;
-    }
+    } 
+    void absorb()
+     {
+         float damage = Calc_Damage(current_turn.move_,victim_);
+         float heal_amount = damage/ 2f;
+         victim_.pokemon.HP -= damage;
+         if( (heal_amount+attacker_.pokemon.HP) < attacker_.pokemon.max_HP)
+             attacker_.pokemon.HP += math.trunc(math.abs(heal_amount));
+         else
+             attacker_.pokemon.HP = attacker_.pokemon.max_HP;
+         Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" gained health");
+         MoveDelay = false;
+     }
     void protect()
     {
-        if(attacker_.previousMove.Split('/')[0] == "protect")
+        if(attacker_.previousMove.Split('/')[0] == "Protect")
         {
             int numUses = int.Parse(attacker_.previousMove.Split('/')[1]);
             int chance = 100;
@@ -358,11 +381,17 @@ public class Move_handler:MonoBehaviour
         }
         else//success
           attacker_.pokemon.CanBeDamaged = false;
+        MoveDelay = false;
     }
 
     void surf()
     {
-        MultiTargetMoveDamage();
+        MultiTargetMoveDamage(attacker_.Current_Enemies);
+        MoveDelay = false;
+    }
+    void earthquake()
+    {
+        MultiTargetMoveDamage(SetTargets());
         MoveDelay = false;
     }
     void magnitude()
@@ -377,7 +406,7 @@ public class Move_handler:MonoBehaviour
             baseDamage += 20f;
         Dialogue_handler.instance.Battle_Info("Magnitude level "+MagnitudeStrength);
         current_turn.move_.Move_damage = baseDamage;
-        victim_.pokemon.HP -= Calc_Damage(current_turn.move_,victim_);
+        MultiTargetMoveDamage(SetTargets());
         MoveDelay = false;
     }
 }

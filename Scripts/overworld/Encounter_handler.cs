@@ -45,7 +45,7 @@ public class Encounter_handler : MonoBehaviour
         {
             PokemonOperations.SetPkmtraits(wild_pkm);
             int rand_lv = Utility.Get_rand(current_area.min_lv, current_area.max_lv+1);
-            for(int i=1;i<rand_lv;i++)
+            for(int i=0;i<rand_lv;i++)
                 wild_pkm.Level_up();
             wild_pkm.HP=wild_pkm.max_HP;
            Battle_handler.instance.StartWildBattle(wild_pkm);

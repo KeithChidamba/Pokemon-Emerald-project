@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 31054
+        "instanceID": 30942
     },
     "has_gender": true,
     "HP": 53.0,
@@ -71,16 +71,16 @@
     ],
     "move_set": [
         {
-            "instanceID": -2364
+            "instanceID": -129078
         },
         {
-            "instanceID": -2366
+            "instanceID": -129080
         },
         {
-            "instanceID": -2368
+            "instanceID": -129082
         },
         {
-            "instanceID": -2370
+            "instanceID": -129084
         }
     ],
     "ability": {

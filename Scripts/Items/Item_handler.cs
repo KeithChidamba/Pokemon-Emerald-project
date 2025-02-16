@@ -40,7 +40,10 @@ public class Item_handler : MonoBehaviour
         if(Options_manager.instance.playerInBattle)
         {
             if (Battle_handler.instance.is_trainer_battle)
-                Dialogue_handler.instance.Write_Info("Cant catch someone else's Pokemon!", "Details");
+            {
+                Battle_handler.instance.displaying_info = true;
+                Dialogue_handler.instance.Write_Info("Cant catch someone else's Pokemon!", "Details",1f);
+            }
             else
             {
                 DepleteItem();
