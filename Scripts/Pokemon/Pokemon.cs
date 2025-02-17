@@ -146,11 +146,10 @@ public class Pokemon : ScriptableObject
     }
     public void Recieve_exp(int amount)
     {
+        if (Current_level > 99) return;
         CurrentExpAmount += amount;
-        //Debug.Log(Pokemon_name+" recieved "+ amount +" exp current exp: "+CurrentExpAmount);
-        //Debug.Log("next lv exp: "+PokemonOperations.GetNextLv(this));
-        NextLvExpAmount = PokemonOperations.GetNextLv(this);
-        if(CurrentExpAmount>=NextLvExpAmount)
+        NextLvExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
+        if(CurrentExpAmount>NextLvExpAmount)
             Level_up();
     }
     public int Calc_Exp(Pokemon enemy)
@@ -174,6 +173,7 @@ public class Pokemon : ScriptableObject
         learnSet = evo.learnSet;
         front_picture = evo.front_picture;
         back_picture = evo.back_picture;
+        EXPGroup = evo.EXPGroup;
         exp_yield = evo.exp_yield;
         CatchRate = evo.CatchRate;
         BaseHP=evo.BaseHP;
@@ -221,23 +221,18 @@ public class Pokemon : ScriptableObject
     {
         OnLevelUP?.Invoke(); 
         OnLevelUp?.Invoke(this);
-        int ArtificialLevelUpExp = PokemonOperations.GetNextLv(this);
         Current_level++;
-        NextLvExpAmount = PokemonOperations.GetNextLv(this);
+        NextLvExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
         Increase_Stats();
         if(split_evolution)
             split_evo();
         else
             Check_evolution(0);
         if (!Options_manager.instance.playerInBattle)//artificial level up
-        {
-            CurrentExpAmount = ArtificialLevelUpExp;
             PokemonOperations.GetNewMove(this);
-        }
         OnNewLevel?.Invoke();
-        if (Options_manager.instance.playerInBattle)
-            if(CurrentExpAmount>=NextLvExpAmount)
-                Level_up();
+        while(CurrentExpAmount>NextLvExpAmount)
+            Level_up();
     }
     void clearEvents()
     {

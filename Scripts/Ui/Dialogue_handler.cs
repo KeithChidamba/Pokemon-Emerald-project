@@ -36,12 +36,6 @@ public class Dialogue_handler : MonoBehaviour
         }
         instance = this;
     }
-
-    private void Start()
-    {
-        Battle_handler.instance.onBattleEnd += StopAllCoroutines;
-    }
-
     void Update()
     {
         if (Current_interaction != null)

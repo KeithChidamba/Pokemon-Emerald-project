@@ -7,6 +7,7 @@ public class Evolution : ScriptableObject
     public string Evo_name;
     public List<Type> types;
     public Ability ability;
+    public string EXPGroup = "";
     public int exp_yield=0;
     public float CatchRate = 0;
     public string[] learnSet;

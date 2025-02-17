@@ -12,4 +12,13 @@ public static class Utility
         int  random16bit = rand.Next(0, 65536);
         return random16bit;
     }
+
+    public static int Cube(int num)
+    {
+        return num * num * num;
+    }
+    public static int Square(int num)
+    {
+        return num * num;
+    }
 }

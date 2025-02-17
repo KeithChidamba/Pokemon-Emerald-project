@@ -1,0 +1,13 @@
+{
+    "Player_name": "kelvin",
+    "Trainer_ID": 12541,
+    "Secret_ID": 14632,
+    "player_Money": 300,
+    "NumBadges": 0,
+    "player_Position": {
+        "x": 1.1265898942947388,
+        "y": 0.8210009336471558,
+        "z": 0.0
+    },
+    "Location": "Overworld"
+}

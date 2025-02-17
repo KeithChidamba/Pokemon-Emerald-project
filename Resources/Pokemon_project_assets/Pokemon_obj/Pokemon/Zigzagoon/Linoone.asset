@@ -16,6 +16,7 @@ MonoBehaviour:
   types:
   - {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   ability: {fileID: 11400000, guid: 85dcc6faadb78b141a0d8d003e16a7e6, type: 2}
+  EXPGroup: Medium Fast
   exp_yield: 128
   CatchRate: 90
   learnSet: []

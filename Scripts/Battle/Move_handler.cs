@@ -28,11 +28,6 @@ public class Move_handler:MonoBehaviour
         }
         instance = this;
     }
-
-    private void Start()
-    {
-        Battle_handler.instance.onBattleEnd += StopAllCoroutines;
-    }
     public void Do_move(Turn turn)
     {
         current_turn = turn;
@@ -75,7 +70,6 @@ public class Move_handler:MonoBehaviour
         }
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         Move_done();
-        yield return null;
     }
     void Move_effect()
     {
@@ -272,7 +266,6 @@ public class Move_handler:MonoBehaviour
                 Dialogue_handler.instance.Battle_Info(enemy.pokemon.Pokemon_name + " protected itself");
             yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
         }
-        yield return null;
     }
     void GiveBuff_Debuff(BuffDebuffData data)
     {
@@ -349,7 +342,6 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.instance.Battle_Info("It hit (x" + NumHits + ") times");
         }
         MoveDelay = false;
-        yield return null;
     } 
     void absorb()
      {

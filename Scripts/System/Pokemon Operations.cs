@@ -62,53 +62,50 @@ public static class PokemonOperations
             }
         }
     }
-    public static int GetNextLv(Pokemon pkm)
+    public static int GetNextLv(int Current_level, string EXPGroup)
     {
-        int NextLevelExp=0;
-        if (pkm.Current_level == 0) return 0;
-        switch (pkm.EXPGroup)
+        if (Current_level == 0) return 0;
+        int cube = Utility.Cube(Current_level);
+        int square = Utility.Square(Current_level);
+        switch (EXPGroup)
         {
             case "Erratic": 
-                NextLevelExp = Calc_Erratic(pkm.Current_level);
-                break;
+                return Calc_Erratic(Current_level);
             case "Fast": 
-                NextLevelExp = (int)math.trunc((4 * (pkm.Current_level^3) ) / 5f );
-                break;
+                return (int)math.trunc((4 * cube ) / 5f );
             case "Medium Fast": 
-                NextLevelExp = pkm.Current_level^3;
-                break;
+                return cube;
             case "Medium Slow":
-                NextLevelExp = (int)math.trunc( ( (6 * (pkm.Current_level ^ 3) ) / 5f) - (15 * (pkm.Current_level ^ 2) ) + (100 * pkm.Current_level) - 140 );
-                break;
+                return (int)math.trunc( ( (6 * cube ) / 5f) - (15 * square ) + (100 * Current_level) - 140 );
             case "Slow":
-                NextLevelExp =  (int)math.trunc((5 * (pkm.Current_level ^ 3) ) / 4f);
-                break;
+                return (int)math.trunc((5 * cube ) / 4f);
             case "Fluctuating":
-                NextLevelExp =  CalcFluctuating(pkm.Current_level);
-                break;
-        }
-        return NextLevelExp;
+                return CalcFluctuating(Current_level);
+        }Debug.Log("pokemon has no exp group");
+        return 0;
     }
     static int Calc_Erratic(int level)
     {
+        int cube = Utility.Cube(level);
         if (0 < level & level <= 50)
-            return (int)math.trunc( ((level ^ 3) * (100 - level)) / 50f );
+            return (int)math.trunc( (cube * (100 - level)) / 50f );
         if (50 < level & level <= 68)
-            return (int)math.trunc( ((level ^ 3) * (150 - level)) / 100f );
+            return (int)math.trunc( ( cube * (150 - level)) / 100f );
         if (68 < level & level <= 98)
-            return (int)math.trunc( ( (level ^ 3) * (1911 - (10*level) ) ) / 1500f );
+            return (int)math.trunc( ( cube * (1911 - (10*level) ) ) / 1500f );
         if (98 < level & level <= 100)
-            return (int)math.trunc( ((level ^ 3) * (160 - level)) / 100f );
+            return (int)math.trunc( ( cube * (160 - level)) / 100f );
         return 0;
     }
     static int CalcFluctuating(int level)
     {
+        int cube = Utility.Cube(level);
         if (0 < level & level <= 15)
-            return (int)math.trunc( (level ^ 3) *  (24 + math.floor((level+1) / 3f) / 50f) );
+            return (int)math.trunc( cube *  (24 + math.floor((level+1) / 3f) / 50f) );
         if (15 < level & level <= 36)
-            return (int)math.trunc( (level ^ 3) *  ( (14 + level) / 50f) );
+            return (int)math.trunc( cube *  ( (14 + level) / 50f) );
         if (36 < level & level <= 100)
-            return (int)math.trunc( (level ^ 3) * ( (32 + math.floor(level/2f) ) / 50f) );
+            return (int)math.trunc( cube * ( (32 + math.floor(level/2f) ) / 50f) );
         return 0;
     }
     public static void GetEV(string stat,float EVamount,Pokemon pkm)

@@ -54,7 +54,7 @@ MonoBehaviour:
   Current_level: 0
   CurrentExpAmount: 0
   NextLvExpAmount: 0
-  EXPGroup: Fast
+  EXPGroup: Medium Fast
   exp_yield: 60
   has_trainer: 0
   canAttack: 1

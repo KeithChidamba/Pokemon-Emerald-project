@@ -32,10 +32,6 @@ public class Options_manager : MonoBehaviour
     {
         Dialogue_handler.instance.Write_Info("Are you sure you want to exit?, you will lose unsaved data!", "Options", "Exit_game","Good bye!","","Yes","No");
     }
-    void Swim()//will make later
-    {
-
-    }
     void Battle()
     {
         string battleType = current_interaction.ResultMessage;
@@ -114,7 +110,7 @@ public class Options_manager : MonoBehaviour
     }
     void ViewMarketDelayed()//used in interaction as well
     {
-        Invoke(nameof(View_Market),1f);
+        Invoke(nameof(View_Market),0.7f);
     }
     void View_Market()
     {

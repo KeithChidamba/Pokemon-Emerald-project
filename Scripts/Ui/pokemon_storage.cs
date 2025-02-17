@@ -193,7 +193,7 @@ public class pokemon_storage : MonoBehaviour
             RefreshUi();
         }
         else
-            Dialogue_handler.instance.Write_Info("There must be at least 1 pokemon in your team","Details");
+            Dialogue_handler.instance.Write_Info("There must be at least 1 pokemon in your team","Details",1f);
     }
     public void Delete_pkm()
     {

@@ -38,7 +38,7 @@ public class Area_manager : MonoBehaviour
         else
             To_Over_world();
     }
-    private Switch_Area find_area(string area_name)
+    public Switch_Area find_area(string area_name)
     {
         foreach (Switch_Area a in Areas)
             if (a.area_name == area_name)
@@ -54,6 +54,8 @@ public class Area_manager : MonoBehaviour
             Player_movement.instance.transform.position = area_building.door_pos.localPosition;
             Player_movement.instance.canmove = false;
         }
+        else
+            Player_movement.instance.transform.position = Game_Load.instance.player_data.player_Position;
         foreach (Switch_Area a in Areas)
             a.overworld.SetActive(true);
         if (area_building != null)
@@ -62,6 +64,8 @@ public class Area_manager : MonoBehaviour
         Invoke(nameof(reset_movement), 1f);
         current_area = find_area("Overworld");
         Player_movement.instance.can_use_bike = true;
+        Game_Load.instance.player_data.Location = current_area.area_name;
+        area_building = null;
     }
     void Load_building()
     {
@@ -75,6 +79,7 @@ public class Area_manager : MonoBehaviour
         if(!save_area)
             Player_movement.instance.transform.position = current_area.Mat_pos.position;
         Invoke(nameof(reset_movement), 1f);
+        Game_Load.instance.player_data.Location = current_area.area_name;
     }
     void reset_movement()
     {

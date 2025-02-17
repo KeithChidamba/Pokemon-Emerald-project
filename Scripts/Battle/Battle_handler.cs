@@ -122,7 +122,7 @@ public class Battle_handler : MonoBehaviour
 
     public void View_options()
     {
-        if (BattleOver) return;
+        if(!Options_manager.instance.playerInBattle)return;
         moves_ui.SetActive(false);
         options_ui.SetActive(true); 
     }
@@ -370,6 +370,7 @@ public class Battle_handler : MonoBehaviour
     }
     IEnumerator DelayBattleEnd()
     {
+        bool PlayerWhiteOut = false;
         yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         if (running_away)
@@ -396,16 +397,18 @@ public class Battle_handler : MonoBehaviour
                     LastOpponent = Battle_Participants[0].Current_Enemies[0].pokemon;
                     Game_Load.instance.player_data.player_Money -= BaseMoneyPayout * Game_Load.instance.player_data.NumBadges
                                                                    * LastOpponent.Current_level;}
-                if(!Wild_pkm.instance.RanAway)
+
+                if (!Wild_pkm.instance.RanAway)
                 {
                     Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
-                    Area_manager.instance.Switch_Area("Poke Center", 0f);
+                    PlayerWhiteOut = true;
                 }
             }
         }
         yield return new WaitForSeconds(2f);
-        end_battle_ui();
-        yield return null;
+        end_battle_ui(PlayerWhiteOut);
+        if(overworld_actions.instance.fishing)
+            overworld_actions.instance.Done_fishing();
     }
     public void LevelUpEvent(Pokemon pkm)
     {
@@ -418,6 +421,8 @@ public class Battle_handler : MonoBehaviour
         yield return new WaitUntil(() => !Turn_Based_Combat.instance.LevelEventDelay);
         Turn_Based_Combat.instance.LevelEventDelay = true;
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+        Dialogue_handler.instance.Battle_Info("Wow!");
+        yield return new WaitForSeconds(0.5f);
         Dialogue_handler.instance.Battle_Info(pkmLevelUp.pokemon.Pokemon_name+" leveled up!");
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         pkmLevelUp.Execute();
@@ -441,7 +446,6 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.instance.LevelEventDelay = false;
         if(BattleOver & levelUpQueue.Count==0)
             End_Battle(BattleWon);
-        yield return null;
     }
     public void End_Battle(bool Haswon)
     {
@@ -449,7 +453,7 @@ public class Battle_handler : MonoBehaviour
         BattleOver = true;
         StartCoroutine(DelayBattleEnd());
     }
-    void end_battle_ui()
+    void end_battle_ui(bool PlayerWhiteOut)
     {
         onBattleEnd?.Invoke();
         Dialogue_handler.instance.Dialouge_off();
@@ -471,10 +475,13 @@ public class Battle_handler : MonoBehaviour
             }
         Encounter_handler.instance.Reset_trigger();
         OverWorld.SetActive(true);
+        if(PlayerWhiteOut)
+            Area_manager.instance.Switch_Area("Poke Center", 0f);
+        else
+           Area_manager.instance.Switch_Area(Game_Load.instance.player_data.Location,0f);
         Dialogue_handler.instance.can_exit = true;
         BattleWon = false;
         BattleOver = false;
-        StopAllCoroutines();
     }
     public void Run_away()//wild encounter is always single battle
     {

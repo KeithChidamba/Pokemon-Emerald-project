@@ -93,14 +93,9 @@ public class Enemy_trainer : MonoBehaviour
         foreach (TrainerPokemonData member in _TrainerData.PokemonParty)
         {
             TrainerParty.Add(member.pokemon);
-            for(int i=0;i<member.PokemonLevel;i++)
-                member.pokemon.Level_up();
+            int exp = PokemonOperations.GetNextLv(member.PokemonLevel, member.pokemon.EXPGroup)+1;
+            member.pokemon.Recieve_exp(exp);
             member.pokemon.HP = member.pokemon.max_HP;
-            //for testing
-            /*member.pokemon.HP = 1;
-            member.pokemon.Attack = 1;
-            member.pokemon.SP_ATK = 1;
-            member.pokemon.speed = 1;*/
             member.pokemon.move_set.Clear();
             foreach (Move move in member.moveSet)
                 member.pokemon.move_set.Add(Obj_Instance.set_move(move));

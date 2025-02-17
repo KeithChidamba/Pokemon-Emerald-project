@@ -54,7 +54,6 @@ public class Turn_Based_Combat : MonoBehaviour
         Turn_history.Clear();
         FainEventDelay = false;
         LevelEventDelay = false;
-        StopAllCoroutines();
     }
     bool Can_Attack(Turn turn, Battle_Participant attacker_,Battle_Participant victim_)
     {
@@ -122,7 +121,6 @@ public class Turn_Based_Combat : MonoBehaviour
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         Battle_handler.instance.Reset_move();
         Next_turn();
-        yield return null;
     }
 
     void CheckRepeatedMove(Battle_Participant attacker_, Move move_)
@@ -168,7 +166,7 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         OnNewTurn?.Invoke();
         Battle_handler.instance.Doing_move = false;
-        if (!Battle_handler.instance.Battle_Participants[Current_pkm_turn].is_active)
+        if (!Battle_handler.instance.Battle_Participants[Current_pkm_turn].is_active & Options_manager.instance.playerInBattle)
             Next_turn();
     }
     private bool MoveSuccessfull(Turn turn)

@@ -1,52 +1,51 @@
 {
     "Base_Pokemon_name": "Torchic",
-    "Pokemon_name": "Combusken",
-    "Pokemon_ID": 8465656885728299635,
-    "Personality_value": 1473459597,
+    "Pokemon_name": "Torchic",
+    "Pokemon_ID": 3530040527050999543,
+    "Personality_value": 161187575,
     "Gender": "Female",
     "GenderRatio": "87.5/12.5",
     "nature": {
-        "instanceID": 30742
+        "instanceID": 30942
     },
     "has_gender": true,
-    "HP": 52.0,
-    "max_HP": 54.0,
-    "BaseHP": 60.0,
-    "BaseAttack": 85.0,
-    "BaseDefense": 60.0,
-    "BaseSP_ATK": 85.0,
-    "BaseSP_DEF": 60.0,
-    "Basespeed": 55.0,
-    "Attack": 37.0,
-    "Defense": 26.0,
-    "SP_ATK": 40.0,
-    "SP_DEF": 31.0,
-    "speed": 23.0,
-    "HP_IV": 29.0,
+    "HP": 27.0,
+    "max_HP": 29.0,
+    "BaseHP": 45.0,
+    "BaseAttack": 60.0,
+    "BaseDefense": 40.0,
+    "BaseSP_ATK": 70.0,
+    "BaseSP_DEF": 50.0,
+    "Basespeed": 45.0,
+    "Attack": 18.0,
+    "Defense": 15.0,
+    "SP_ATK": 19.0,
+    "SP_DEF": 17.0,
+    "speed": 16.0,
+    "HP_IV": 9.0,
     "Attack_IV": 10.0,
-    "Defense_IV": 2.0,
-    "SP_ATK_IV": 26.0,
-    "SP_DEF_IV": 13.0,
-    "speed_IV": 9.0,
+    "Defense_IV": 29.0,
+    "SP_ATK_IV": 5.0,
+    "SP_DEF_IV": 26.0,
+    "speed_IV": 24.0,
     "HP_EV": 0.0,
-    "Attack_EV": 1.0,
+    "Attack_EV": 2.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
-    "SP_DEF_EV": 3.0,
-    "speed_EV": 1.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
     "EVs": [
-        "Speed1",
-        "Attack1"
+        "Speed1"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
-    "CatchRate": 0.0,
-    "Current_level": 18,
-    "CurrentExpAmount": 1319,
-    "NextLvExpAmount": 1440.0,
+    "CatchRate": 45.0,
+    "Current_level": 10,
+    "CurrentExpAmount": 491,
+    "NextLvExpAmount": 560.0,
     "EXPGroup": "Medium Slow",
-    "exp_yield": 142,
+    "exp_yield": 65,
     "has_trainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -54,9 +53,6 @@
     "types": [
         {
             "instanceID": 30394
-        },
-        {
-            "instanceID": 30486
         }
     ],
     "Status_effect": "None",
@@ -71,20 +67,23 @@
     ],
     "split_evolution": false,
     "learnSet": [
-        "fire/flame thrower18"
+        "normal/scratch01",
+        "fire/ember03",
+        "fighting/double kick05",
+        "normal/focus energy07"
     ],
     "move_set": [
         {
-            "instanceID": -129068
+            "instanceID": -174814
         },
         {
-            "instanceID": -129070
+            "instanceID": -174816
         },
         {
-            "instanceID": -129072
+            "instanceID": -174818
         },
         {
-            "instanceID": -129074
+            "instanceID": -174820
         }
     ],
     "ability": {
@@ -103,31 +102,30 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30488
+        "instanceID": 30142
     },
     "back_picture": {
-        "instanceID": 30490
+        "instanceID": 30402
     },
     "ability_name": "Inferno",
-    "natureName": "Sassy",
+    "natureName": "Hardy",
     "evo_data": [
         "Combusken",
         "Blaziken"
     ],
     "type_data": [
-        "Fire",
-        "Fighting"
+        "Fire"
     ],
     "move_data": [
-        "Flame thrower/Fire",
+        "Scratch/Normal",
         "Ember/Fire",
         "Double kick/Fighting",
         "Focus Energy/Normal"
     ],
     "move_pp_data": [
+        25,
         20,
-        20,
-        20,
+        17,
         15
     ]
 }

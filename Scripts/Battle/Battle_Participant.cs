@@ -67,7 +67,6 @@ public class Battle_Participant : MonoBehaviour
     {
         exp_recievers.RemoveAll(p => p.HP <= 0);
         if(exp_recievers.Count<1)return;
-        //Debug.Log(exp_from_enemy+" exp from "+pokemon.Pokemon_name);
         if (exp_recievers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
         {
             exp_recievers[0].Recieve_exp(exp_from_enemy);
@@ -79,7 +78,6 @@ public class Battle_Participant : MonoBehaviour
                 if(p.HeldItem.Item_name == "Exp Share")
                 {
                     p.Recieve_exp(exp_from_enemy / 2);
-                    //Debug.Log(p.Pokemon_name + " recieved " + exp_from_enemy / 2f + " exp using exp share");
                     exp_from_enemy /= 2;
                     break;
                 }
@@ -141,7 +139,7 @@ public class Battle_Participant : MonoBehaviour
                 Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.instance.Battle_Participants, this)+1;
                 Pokemon_party.instance.SwapOutNext = true;
                 Game_ui_manager.instance.View_pkm_Party();
-                Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details");
+                Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details",2f);
                 Reset_pkm();
             }
             else if (Battle_handler.instance.isDouble_battle && numAlive == 1)//1 left

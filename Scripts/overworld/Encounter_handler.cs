@@ -23,6 +23,8 @@ public class Encounter_handler : MonoBehaviour
     public void Trigger_encounter(Encounter_Area area)
     {
         current_area = area;
+        Game_Load.instance.player_data.player_Position = Player_movement.instance.transform.position;
+        Game_Load.instance.player_data.Location = current_area.Location;
         triggered_encounter = true;
         encounter_chance = 2;
         for (int i = 0; i < current_area.Pokemon.Length; i++)//send data to battle ui
@@ -45,8 +47,8 @@ public class Encounter_handler : MonoBehaviour
         {
             PokemonOperations.SetPkmtraits(wild_pkm);
             int rand_lv = Utility.Get_rand(current_area.min_lv, current_area.max_lv+1);
-            for(int i=0;i<rand_lv;i++)
-                wild_pkm.Level_up();
+            int exp = PokemonOperations.GetNextLv(rand_lv - 1, wild_pkm.EXPGroup)+1;
+            wild_pkm.Recieve_exp(exp);
             wild_pkm.HP=wild_pkm.max_HP;
            Battle_handler.instance.StartWildBattle(wild_pkm);
         }

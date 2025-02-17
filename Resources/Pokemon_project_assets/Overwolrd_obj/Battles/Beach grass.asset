@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Beach grass
   m_EditorClassIdentifier: 
   Biome_name: Beach
+  Location: Overworld
   Pokemon:
   - zigzagoon090
-  - mudkip020
+  - wurmple020
   - trapinch010
-  min_lv: 19
-  max_lv: 20
+  min_lv: 45
+  max_lv: 70
