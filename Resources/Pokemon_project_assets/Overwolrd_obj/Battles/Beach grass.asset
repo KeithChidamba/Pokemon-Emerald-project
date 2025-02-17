@@ -15,8 +15,11 @@ MonoBehaviour:
   Biome_name: Beach
   Location: Overworld
   Pokemon:
-  - zigzagoon090
-  - wurmple020
+  - zigzagoon030
+  - wurmple015
+  - pikachu010
+  - torchic020
+  - treecko015
   - trapinch010
-  min_lv: 45
-  max_lv: 70
+  min_lv: 3
+  max_lv: 20

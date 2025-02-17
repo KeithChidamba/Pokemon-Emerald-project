@@ -144,6 +144,7 @@ public class Battle_handler : MonoBehaviour
     }
     void set_battle()
     {
+        Game_Load.instance.player_data.player_Position = Player_movement.instance.transform.position;
         levelUpQueue.Clear();
         Options_manager.instance.playerInBattle = true;
         Set_battle_ui();

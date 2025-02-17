@@ -23,8 +23,6 @@ public class Encounter_handler : MonoBehaviour
     public void Trigger_encounter(Encounter_Area area)
     {
         current_area = area;
-        Game_Load.instance.player_data.player_Position = Player_movement.instance.transform.position;
-        Game_Load.instance.player_data.Location = current_area.Location;
         triggered_encounter = true;
         encounter_chance = 2;
         for (int i = 0; i < current_area.Pokemon.Length; i++)//send data to battle ui
