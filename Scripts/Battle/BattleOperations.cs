@@ -8,29 +8,20 @@ public static class BattleOperations
     {
         foreach(Type t in victim.types)
             if (enemy_type.type_check(enemy_type.Non_effect, t))
-            {
-                //Debug.Log(t +" is immune to "+ enemy_type);
                 return true;
-            }
         return false;
     } 
     static void isWeakTo(Pokemon victim,Type enemy_type)
     {
         foreach(Type t in victim.types)
             if (t.type_check(t.weaknesses, enemy_type))
-            {
-                //Debug.Log(enemy_type +" is effective against "+ t);
                 effectiveness *= 2f;
-            }
     }
     static void isResistantTo(Pokemon victim,Type enemy_type)
     {
         foreach(Type t in victim.types)
             if (t.type_check(t.Resistances, enemy_type))
-            {
-                //Debug.Log(enemy_type +" is not effective against "+ t);
                 effectiveness /= 2f;
-            }
     }
     public static bool is_Stab(Pokemon pkm,Type move_type)
     {
@@ -140,7 +131,6 @@ public static class BattleOperations
             change = buff.Stage-buff_amount;
             Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" Decreased!");
         }
-        //Debug.Log("changed: "+change+" limit high "+ (limit_high + 1) +" limit low "+(limit_low - 1));
         if(change>limit_high)
             return limit_high + 1;
         if(change<limit_low)

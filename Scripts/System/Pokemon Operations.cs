@@ -26,12 +26,7 @@ public static class PokemonOperations
     {
         new_pkm.ability = null;
         if (new_pkm.abilities.Length > 1)
-        {
-            if (new_pkm.Personality_value % 2 == 0)
-                new_pkm.ability_name = new_pkm.abilities[0];
-            else if (new_pkm.Personality_value % 2 == 1)
-                new_pkm.ability_name = new_pkm.abilities[1];
-        }
+            new_pkm.ability_name = new_pkm.abilities[new_pkm.Personality_value % 2];
         else
             new_pkm.ability_name = new_pkm.abilities[0];
         new_pkm.ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + new_pkm.ability_name.ToLower());

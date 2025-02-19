@@ -29,6 +29,7 @@ public class Battle_Participant : MonoBehaviour
     public GameObject participant_ui;
     public bool Selected_Enemy = false;
     public string previousMove="";
+    public string type_Immunity = "None";
     public List<Pokemon> exp_recievers;
     private void Start()
     {

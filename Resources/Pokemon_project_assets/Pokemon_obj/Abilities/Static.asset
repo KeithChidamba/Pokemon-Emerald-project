@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd94003ad6a8bc42b79e8b33a350c0d, type: 3}
   m_Name: Static
   m_EditorClassIdentifier: 
-  ability: Static
+  abilityName: Static
   ability_description: Chance to paralyze foe on contact
+  AbilityType: 

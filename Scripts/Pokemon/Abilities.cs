@@ -1,28 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Abilities : MonoBehaviour
 {
     public Battle_Participant participant;
-    [SerializeField] private string pkm_ability;
-    private void Update()
-    {
-        /*if(participant.pokemon==null) return;
-            if (Options_manager.instance.playerInBattle)
-            {
-                Invoke(pkm_ability,0f);
-            }*/
-    }
     public void Set_ability()
     { 
         //underscore because some ability names are c# keywords
-        pkm_ability = participant.pokemon.ability.ability.ToLower().Replace(" ", "")+"_";
+        //pkm_ability = participant.pokemon.ability.abilityName.ToLower().Replace(" ", "")+"_";
     }
-    void inferno_()
-    {
 
+    void ChangeStats()
+    {
+        if (participant.pokemon.HP < (participant.pokemon.max_HP * 0.33f))
+        {
+            BuffDebuffData buffData = new BuffDebuffData(participant.pokemon, "Attack", true, 1);
+            Move_handler.instance.GiveBuff_Debuff(buffData);
+        }
+    }
+    void blaze_()
+    {
+            
     }
     void guts_()
     {
@@ -37,10 +34,6 @@ public class Abilities : MonoBehaviour
         
     }
     void paralysiscombo_()
-    {
-        
-    }
-    void regular_()
     {
         
     }

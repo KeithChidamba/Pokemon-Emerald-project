@@ -83,7 +83,6 @@ public static class Obj_Instance
         new_pkm.types = pkm.types;
         new_pkm.Status_effect = pkm.Status_effect;
         new_pkm.Buff_Debuffs = pkm.Buff_Debuffs;
-        new_pkm.type_Immunity = pkm.type_Immunity;
         new_pkm.evo_line = pkm.evo_line;
         new_pkm.abilities = pkm.abilities;
         new_pkm.split_evolution = pkm.split_evolution;

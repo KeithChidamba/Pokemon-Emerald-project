@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd94003ad6a8bc42b79e8b33a350c0d, type: 3}
   m_Name: Pickup
   m_EditorClassIdentifier: 
-  ability: Pickup
+  abilityName: Pickup
   ability_description: Zigzagoon has a 10% chance to pick up an item if it is not
     already holding one
+  AbilityType: 

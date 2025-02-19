@@ -267,7 +267,7 @@ public class Move_handler:MonoBehaviour
             yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
         }
     }
-    void GiveBuff_Debuff(BuffDebuffData data)
+    public void GiveBuff_Debuff(BuffDebuffData data)
     {
         switch (data.StatName)
         {
@@ -297,7 +297,7 @@ public class Move_handler:MonoBehaviour
                 break;
         }
     }
-    float Get_buff_debuff(float stat_val, BuffDebuffData data)
+    private float Get_buff_debuff(float stat_val, BuffDebuffData data)
     {
         BattleOperations.ChangeBuffs(data);
         Buff_Debuff buff = BattleOperations.GetBuff(data.Reciever, data.StatName);

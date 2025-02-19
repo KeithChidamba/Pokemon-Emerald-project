@@ -55,7 +55,6 @@ public class Pokemon : ScriptableObject
     public List<Type> types;
     public string Status_effect = "None";
     public List<Buff_Debuff> Buff_Debuffs = new();
-    public string type_Immunity = "None";
     public string[] evo_line;
     public string[] abilities;
     public bool split_evolution = false;
@@ -80,7 +79,7 @@ public class Pokemon : ScriptableObject
     
     public void Save_class_data()//saves values of attributes that cant be serialized into json
     {
-        ability_name = ability.ability;
+        ability_name = ability.abilityName;
         natureName = nature.natureName;
         if (HeldItem!=null)
             HasItem = true;
