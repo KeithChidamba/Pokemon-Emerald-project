@@ -1,21 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Battle_event : ICommand
 {
-    private string event_name;
+    private Action OnEventTriggered;
     public bool Condition;
     public float duration;
-    public Battle_event(string eventName, bool condition,float duration_)
+    public Battle_event(Action eventmethod, bool condition,float duration_)
     {
-        event_name = eventName;
+        OnEventTriggered+=eventmethod;
         Condition = condition;
         duration = duration_;
     }
     public void Execute()
     {
-        Move_handler.instance.Invoke(event_name,0f);
+        OnEventTriggered?.Invoke();
     }
     public void Undo()
     {

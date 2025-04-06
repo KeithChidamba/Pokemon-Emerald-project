@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Battle_Participant : MonoBehaviour
@@ -25,9 +26,8 @@ public class Battle_Participant : MonoBehaviour
     public GameObject participant_ui;
     public bool Selected_Enemy = false;
     public string previousMove="";
-    public string type_Immunity = "None";
+    public Type AddtionalTypeImmunity;
     public List<Pokemon> exp_recievers;
-    public event Action OnAbilityUsed;
     private void Start()
     {
         status = GetComponent<Participant_Status>();
@@ -36,12 +36,6 @@ public class Battle_Participant : MonoBehaviour
         Move_handler.instance.OnMoveEnd += Check_Faint;
         Turn_Based_Combat.instance.OnMoveExecute += Check_Faint;
         Battle_handler.instance.onBattleEnd += Deactivate_pkm;
-        Turn_Based_Combat.instance.OnNewTurn += CheckAbilityUsage;
-    }
-
-    void CheckAbilityUsage()
-    {
-        OnAbilityUsed?.Invoke();
     }
     private void Update()
     {
@@ -159,8 +153,6 @@ public class Battle_Participant : MonoBehaviour
     {
         is_active = false;
         Current_Enemies.Clear();
-        OnAbilityUsed = null;
-        ability_h.ResetState();
         Turn_Based_Combat.instance.OnTurnEnd -= status.Check_status;
         Turn_Based_Combat.instance.OnNewTurn -= status.StunCheck;
         Turn_Based_Combat.instance.OnMoveExecute -= status.Notify_Healing;
@@ -170,6 +162,8 @@ public class Battle_Participant : MonoBehaviour
         data.Load_Stats();
         data.Reset_Battle_state(pokemon,false);
         pokemon.OnLevelUP -= Reset_pkm;
+        ability_h.ResetState();
+        AddtionalTypeImmunity = null;
     }
     private void update_ui()
     {

@@ -118,7 +118,7 @@ public class Wild_pkm : MonoBehaviour
     {
         foreach (Move m in pokemon_participant.pokemon.move_set)
         {//look for super effective attacking move
-            float eff = BattleOperations.TypeEffectiveness(Enemy_pokemon.pokemon, m.type);
+            float eff = BattleOperations.TypeEffectiveness(Enemy_pokemon, m.type);
             if ( eff > 1 && !m.is_Buff_Debuff)
             {
                 use_move(m);

@@ -30,15 +30,22 @@ public static class BattleOperations
                 return true;
         return false;
     }
-    public static float TypeEffectiveness(Pokemon victim,Type enemy_type)
+    public static float TypeEffectiveness(Battle_Participant victim,Type enemy_type)
     {
-        if (isImmuneTo(victim, enemy_type))
-              effectiveness = 0;
-        else
+        if (victim.AddtionalTypeImmunity!=null)
         {
-            effectiveness = 1;
-            isWeakTo(victim, enemy_type);
-            isResistantTo(victim, enemy_type);
+            if (victim.AddtionalTypeImmunity == enemy_type)
+                effectiveness = 0;
+        }
+        else{
+            if (isImmuneTo(victim.pokemon, enemy_type)) 
+                effectiveness = 0;
+            else
+            {
+                effectiveness = 1;
+                isWeakTo(victim.pokemon, enemy_type);
+                isResistantTo(victim.pokemon, enemy_type);
+            }
         }
         return effectiveness;
     }

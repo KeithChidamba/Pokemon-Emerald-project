@@ -14,4 +14,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Sand pit
   ability_description: doubles speed but removes defense in a pinch
-  AbilityType: 
