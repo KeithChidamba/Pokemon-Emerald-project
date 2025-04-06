@@ -17,7 +17,7 @@ MonoBehaviour:
   Pokemon_ID: 0
   Personality_value: 0
   Gender: 
-  GenderRatio: 87.5/12.5
+  GenderRatio: 87,5/12,5
   nature: {fileID: 0}
   has_gender: 1
   HP: 0
@@ -64,7 +64,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
   Status_effect: None
   Buff_Debuffs: []
-  type_Immunity: None
   evo_line:
   - 16
   - 30

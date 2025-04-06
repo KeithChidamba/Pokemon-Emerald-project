@@ -272,28 +272,28 @@ public class Move_handler:MonoBehaviour
         switch (data.StatName)
         {
             case"Defense":
-                data.Reciever.Defense = Get_buff_debuff(victim_.pokemon.Defense,data);
+                data.Reciever.Defense = Get_buff_debuff(data.Reciever.Defense,data);
                 break;
             case"Attack":
-                data.Reciever.Attack = Get_buff_debuff(victim_.pokemon.Attack,data);
+                data.Reciever.Attack = Get_buff_debuff(data.Reciever.Attack,data);
                 break;
             case"Special Defense":
-                data.Reciever.SP_DEF = Get_buff_debuff(victim_.pokemon.SP_DEF,data);
+                data.Reciever.SP_DEF = Get_buff_debuff(data.Reciever.SP_DEF,data);
                 break;
             case"Special Attack":
-                data.Reciever.SP_ATK = Get_buff_debuff(victim_.pokemon.SP_ATK,data);
+                data.Reciever.SP_ATK = Get_buff_debuff(data.Reciever.SP_ATK,data);
                 break;
             case"Speed":
-                data.Reciever.speed = Get_buff_debuff(victim_.pokemon.speed,data);
+                data.Reciever.speed = Get_buff_debuff(data.Reciever.speed,data);
                 break;
             case"Accuracy":
-                data.Reciever.Accuracy = Get_buff_debuff(victim_.pokemon.Accuracy,data);
+                data.Reciever.Accuracy = Get_buff_debuff(data.Reciever.Accuracy,data);
                 break;
             case"Evasion":
-                data.Reciever.Evasion = Get_buff_debuff(victim_.pokemon.Evasion,data);
+                data.Reciever.Evasion = Get_buff_debuff(data.Reciever.Evasion,data);
                 break;
             case"Crit":
-                data.Reciever.crit_chance = Get_buff_debuff(victim_.pokemon.crit_chance,data);
+                data.Reciever.crit_chance = Get_buff_debuff(data.Reciever.crit_chance,data);
                 break;
         }
     }

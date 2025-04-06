@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,6 +27,7 @@ public class Battle_Participant : MonoBehaviour
     public string previousMove="";
     public string type_Immunity = "None";
     public List<Pokemon> exp_recievers;
+    public event Action OnAbilityUsed;
     private void Start()
     {
         status = GetComponent<Participant_Status>();
@@ -39,7 +36,12 @@ public class Battle_Participant : MonoBehaviour
         Move_handler.instance.OnMoveEnd += Check_Faint;
         Turn_Based_Combat.instance.OnMoveExecute += Check_Faint;
         Battle_handler.instance.onBattleEnd += Deactivate_pkm;
+        Turn_Based_Combat.instance.OnNewTurn += CheckAbilityUsage;
+    }
 
+    void CheckAbilityUsage()
+    {
+        OnAbilityUsed?.Invoke();
     }
     private void Update()
     {
@@ -157,6 +159,8 @@ public class Battle_Participant : MonoBehaviour
     {
         is_active = false;
         Current_Enemies.Clear();
+        OnAbilityUsed = null;
+        ability_h.ResetState();
         Turn_Based_Combat.instance.OnTurnEnd -= status.Check_status;
         Turn_Based_Combat.instance.OnNewTurn -= status.StunCheck;
         Turn_Based_Combat.instance.OnMoveExecute -= status.Notify_Healing;

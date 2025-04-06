@@ -9,4 +9,7 @@ public class Ability : ScriptableObject
     public string abilityName;
     public string ability_description = "";
     public string AbilityType = "";
+    public bool IsOnEnter = false;
+    public bool IsOnExit = false;
+    public bool isOnceOff = false;
 }

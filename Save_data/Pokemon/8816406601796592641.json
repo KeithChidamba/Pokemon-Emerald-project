@@ -1,0 +1,120 @@
+{
+    "Base_Pokemon_name": "Zigzagoon",
+    "Pokemon_name": "Linoone",
+    "Pokemon_ID": 8816406601796592641,
+    "Personality_value": 813784063,
+    "Gender": "Female",
+    "GenderRatio": "50/50",
+    "nature": {
+        "instanceID": 30916
+    },
+    "has_gender": true,
+    "HP": 67.0,
+    "max_HP": 67.0,
+    "BaseHP": 78.0,
+    "BaseAttack": 70.0,
+    "BaseDefense": 61.0,
+    "BaseSP_ATK": 50.0,
+    "BaseSP_DEF": 61.0,
+    "Basespeed": 100.0,
+    "Attack": 38.0,
+    "Defense": 33.0,
+    "SP_ATK": 23.0,
+    "SP_DEF": 35.0,
+    "speed": 58.0,
+    "HP_IV": 19.0,
+    "Attack_IV": 19.0,
+    "Defense_IV": 16.0,
+    "SP_ATK_IV": 0.0,
+    "SP_DEF_IV": 24.0,
+    "speed_IV": 28.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "Speed2"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 100.0,
+    "crit_chance": 6.25,
+    "CatchRate": 90.0,
+    "Current_level": 21,
+    "CurrentExpAmount": 9011,
+    "NextLvExpAmount": 9261.0,
+    "EXPGroup": "Medium Fast",
+    "exp_yield": 128,
+    "has_trainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 30924
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "evo_line": [
+        "20"
+    ],
+    "abilities": [
+        "Pickup"
+    ],
+    "split_evolution": false,
+    "learnSet": [],
+    "move_set": [
+        {
+            "instanceID": -21530
+        },
+        {
+            "instanceID": -21532
+        },
+        {
+            "instanceID": -21600
+        },
+        {
+            "instanceID": -21536
+        }
+    ],
+    "ability": {
+        "instanceID": 30876
+    },
+    "evolutions": [
+        {
+            "instanceID": 30648
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "HasItem": false,
+    "front_picture": {
+        "instanceID": 30666
+    },
+    "back_picture": {
+        "instanceID": 30682
+    },
+    "ability_name": "Guts",
+    "natureName": "Jolly",
+    "evo_data": [
+        "Linoone"
+    ],
+    "type_data": [
+        "Normal"
+    ],
+    "move_data": [
+        "Headbutt/Normal",
+        "Tail whip/Normal",
+        "Protect/Normal",
+        "Surf/Water"
+    ],
+    "move_pp_data": [
+        25,
+        25,
+        10,
+        24
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "Item_ID": "Pokeball45215",
+    "Item_name": "Pokeball",
+    "Item_type": "Pokeball",
+    "Item_effect": "1",
+    "Item_desc": "Basic pokeball",
+    "price": 15,
+    "quantity": 2,
+    "Item_img": {
+        "instanceID": 30362
+    },
+    "ForPartyUse": false,
+    "CanBeUsedInOverworld": false,
+    "CanBeUsedInBattle": true,
+    "isHeldItem": false,
+    "CanBeHeld": false,
+    "CanBeSold": true
+}
