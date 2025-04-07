@@ -28,6 +28,7 @@ public class Battle_Participant : MonoBehaviour
     public string previousMove="";
     public Type AddtionalTypeImmunity;
     public List<Pokemon> exp_recievers;
+    public bool CanEscape = true;
     private void Start()
     {
         status = GetComponent<Participant_Status>();
@@ -163,6 +164,7 @@ public class Battle_Participant : MonoBehaviour
         data.Reset_Battle_state(pokemon,false);
         pokemon.OnLevelUP -= Reset_pkm;
         ability_h.ResetState();
+        CanEscape = true;
         AddtionalTypeImmunity = null;
     }
     private void update_ui()

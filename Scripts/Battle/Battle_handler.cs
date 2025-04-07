@@ -488,24 +488,32 @@ public class Battle_handler : MonoBehaviour
     {
         running_away = true;
         displaying_info = true;
-        if (!is_trainer_battle)
+        if(!is_trainer_battle & !Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].CanEscape)
         {
-            int random = Utility.Get_rand(1,11);
-            if (Battle_Participants[0].pokemon.Current_level < Battle_Participants[0].Current_Enemies[0].pokemon.Current_level)//lower chance if weaker
-                random--;
-            if (random > 5) //initially 50/50 chance to run
-            {
-                Wild_pkm.instance.InBattle = false;
-                End_Battle(false);
-            }
-            else
-            {
-                Dialogue_handler.instance.Battle_Info("Can't run away");
-                Turn_Based_Combat.instance.Invoke(nameof(Turn_Based_Combat.instance.Next_turn),0.9f);
-            }
+            Dialogue_handler.instance.Battle_Info(Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].
+                                                      pokemon.Pokemon_name +" is trapped");
         }
         else
-            Dialogue_handler.instance.Battle_Info("Can't run away from trainer battle");
+        {
+            if (is_trainer_battle )
+                Dialogue_handler.instance.Battle_Info("Can't run away from trainer battle");
+            else
+            { 
+                int random = Utility.Get_rand(1,11);
+                if (Battle_Participants[0].pokemon.Current_level < Battle_Participants[0].Current_Enemies[0].pokemon.Current_level)//lower chance if weaker
+                    random--;
+                if (random > 5) //initially 50/50 chance to run
+                {
+                    Wild_pkm.instance.InBattle = false;
+                    End_Battle(false);
+                }
+                else
+                {
+                    Dialogue_handler.instance.Battle_Info("Can't run away");
+                    Turn_Based_Combat.instance.Invoke(nameof(Turn_Based_Combat.instance.Next_turn),0.9f);
+                }
+            }
+        }
         Invoke(nameof(run_Off),1f);
     }
 void run_Off()

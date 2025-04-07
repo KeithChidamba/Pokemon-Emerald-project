@@ -14,4 +14,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Swarm
   ability_description: When hp below 1/3, the power of bug moves increased by 50%
-  AbilityType: 

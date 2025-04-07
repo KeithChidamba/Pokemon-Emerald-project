@@ -126,6 +126,15 @@ public class Pokemon : ScriptableObject
             types[i].type_img = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + type_data[i].ToLower());
         Battle_handler.instance.onBattleEnd += clearEvents;
     }
+
+    public bool HasType(string typeName)
+    {
+        Type type = Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/"+typeName.ToLower());
+        foreach (Type t in types)
+            if (t == type)
+                return true;
+        return false;
+    }
     void Check_evolution(int evo_index)
     {
         for (int i = 0; i < evo_line.Length; i++)

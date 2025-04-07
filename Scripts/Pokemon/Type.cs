@@ -9,7 +9,7 @@ public class Type : ScriptableObject
     public string[] Resistances;
     public string[] Non_effect;//immune
     public Sprite type_img;
-
+    
     public bool type_check(string[]check ,Type type)
     {
         foreach (string c in check)

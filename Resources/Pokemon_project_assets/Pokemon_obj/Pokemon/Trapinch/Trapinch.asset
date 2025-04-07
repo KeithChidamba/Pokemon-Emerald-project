@@ -64,7 +64,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   Status_effect: None
   Buff_Debuffs: []
-  type_Immunity: None
   evo_line:
   - 20
   - 35
@@ -77,7 +76,7 @@ MonoBehaviour:
   - normal/tackle06
   - ground/magnitude07
   move_set: []
-  ability: {fileID: 11400000, guid: 22b317c460bfdda4ba6608a82d464e03, type: 2}
+  ability: {fileID: 11400000, guid: 6e3a5205ac780de4499e796e8ba8dce9, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 41c4f5dd85b85854084dc026be20084f, type: 2}
   - {fileID: 11400000, guid: 36607a7c2c84636428574d7b94219d2e, type: 2}
