@@ -75,32 +75,28 @@ public class Pokemon : ScriptableObject
     public List<string> evo_data=new();
     public List<string> type_data=new();
     public List<string> move_data=new();
-    public List<int> move_pp_data=new();
+    public List<string> move_pp_data=new();
     
     public void Save_class_data()//saves values of attributes that cant be serialized into json
     {
         ability_name = ability.abilityName;
         natureName = nature.natureName;
-        if (HeldItem!=null)
-            HasItem = true;
-        else
-            HasItem = false;
+        HasItem = (HeldItem != null);
         move_data.Clear();
         type_data.Clear();
-        move_data.Clear();
         move_pp_data.Clear();
         evo_data.Clear();
         foreach (Move m in move_set)
         {
             move_data.Add(m.Move_name + "/" + m.type.Type_name);
-            move_pp_data.Add(m.Powerpoints);
+            move_pp_data.Add(m.Powerpoints+"/"+m.max_Powerpoints);
         }
         foreach (Type t in types)
             type_data.Add(t.Type_name);
         foreach (Evolution e in evolutions)
             evo_data.Add(e.Evo_name);
     }
-    public void Set_Data(pokemon_storage storage)//gives values to attributes that cant be serialized into json, using saved values
+    public void Set_Data(pokemon_storage storage)//gives values to attributes that cant be deserialized, using saved values
     {
         front_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower());
         back_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower() + "_b");
@@ -115,7 +111,9 @@ public class Pokemon : ScriptableObject
             string name_ = move_data[i].Substring(0, pos - 1).ToLower();
             string type = move_data[i].Substring(pos,move_data[i].Length - pos).ToLower();
             Move move_copy = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + type + "/" + name_));
-            move_copy.Powerpoints = move_pp_data[i];
+            int pos_ = move_pp_data[i].IndexOf('/')+1;
+            move_copy.Powerpoints = int.Parse(move_pp_data[i].Substring(0, pos_-1));
+            move_copy.max_Powerpoints = int.Parse(move_pp_data[i].Substring(pos_, move_pp_data[i].Length - pos_));
             move_set.Add(move_copy);
         }
         foreach (String t in type_data)
