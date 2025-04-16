@@ -1098,6 +1098,7 @@ GameObject:
   - component: {fileID: 35621316}
   - component: {fileID: 35621318}
   - component: {fileID: 35621319}
+  - component: {fileID: 35621320}
   m_Layer: 0
   m_Name: Double_b partner
   m_TagString: Untagged
@@ -1133,7 +1134,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   participant: {fileID: 35621317}
-  pkm_ability: 
 --- !u!114 &35621317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1168,7 +1168,9 @@ MonoBehaviour:
   participant_ui: {fileID: 1656265309}
   Selected_Enemy: 0
   previousMove: 
+  AddtionalTypeImmunity: {fileID: 0}
   exp_recievers: []
+  CanEscape: 1
 --- !u!114 &35621318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,6 +1205,19 @@ MonoBehaviour:
   SP_DEF: 0
   speed: 0
   participant: {fileID: 0}
+--- !u!114 &35621320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35621314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  participant: {fileID: 35621317}
 --- !u!1 &37522244
 GameObject:
   m_ObjectHideFlags: 0
@@ -6750,6 +6765,7 @@ GameObject:
   - component: {fileID: 190973851}
   - component: {fileID: 190973852}
   - component: {fileID: 190973853}
+  - component: {fileID: 190973854}
   m_Layer: 0
   m_Name: Single battle Enemy
   m_TagString: Untagged
@@ -6785,7 +6801,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   participant: {fileID: 190973850}
-  pkm_ability: 
 --- !u!114 &190973850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6820,7 +6835,9 @@ MonoBehaviour:
   participant_ui: {fileID: 1780447230}
   Selected_Enemy: 0
   previousMove: 
+  AddtionalTypeImmunity: {fileID: 0}
   exp_recievers: []
+  CanEscape: 1
 --- !u!114 &190973851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6873,6 +6890,19 @@ MonoBehaviour:
   InBattle: 0
   CanAttack: 1
   Used_move: 0
+--- !u!114 &190973854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190973846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  participant: {fileID: 190973850}
 --- !u!1 &192485166
 GameObject:
   m_ObjectHideFlags: 0
@@ -8799,6 +8829,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ba1d78b859371bf48a68f1fa3df43b27, type: 2}
   - {fileID: 11400000, guid: 7ad6c5da8379d1444a6d58684a5a3ebe, type: 2}
   - {fileID: 11400000, guid: 7888205ce0e84d443b42a52129737d64, type: 2}
+  - {fileID: 11400000, guid: 66b0c584894456d41acbf539f0156cf9, type: 2}
+  - {fileID: 11400000, guid: 7bd06e7fd82ccd84287ad4082f2768cd, type: 2}
+  - {fileID: 11400000, guid: b5c5fea330546694b9375ab834137de9, type: 2}
+  - {fileID: 11400000, guid: 2f70d8cf599d161449cf3b248842013d, type: 2}
   viewing_store: 0
   mart_items_ui:
   - {fileID: 811032170}
@@ -15374,6 +15408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selected_party_pkm: {fileID: 0}
   Using_item: 0
+  isHeldItem: 0
 --- !u!1 &505212004
 GameObject:
   m_ObjectHideFlags: 0
@@ -30935,6 +30970,7 @@ MonoBehaviour:
   move_dmg: {fileID: 2056020631}
   move_acc: {fileID: 1200014909}
   LearningMove: 0
+  ChangingMoveData: 0
 --- !u!1 &948607672
 GameObject:
   m_ObjectHideFlags: 0
@@ -71482,6 +71518,7 @@ GameObject:
   - component: {fileID: 1636635379}
   - component: {fileID: 1636635381}
   - component: {fileID: 1636635382}
+  - component: {fileID: 1636635383}
   m_Layer: 0
   m_Name: Player_participant
   m_TagString: Untagged
@@ -71517,7 +71554,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   participant: {fileID: 1636635380}
-  pkm_ability: 
 --- !u!114 &1636635380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71556,7 +71592,9 @@ MonoBehaviour:
   participant_ui: {fileID: 443644594}
   Selected_Enemy: 0
   previousMove: 
+  AddtionalTypeImmunity: {fileID: 0}
   exp_recievers: []
+  CanEscape: 1
 --- !u!114 &1636635381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71591,6 +71629,19 @@ MonoBehaviour:
   SP_DEF: 0
   speed: 0
   participant: {fileID: 0}
+--- !u!114 &1636635383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636635377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  participant: {fileID: 1636635380}
 --- !u!1001 &1641952052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -97371,6 +97422,7 @@ GameObject:
   - component: {fileID: 2033618205}
   - component: {fileID: 2033618206}
   - component: {fileID: 2033618207}
+  - component: {fileID: 2033618208}
   m_Layer: 0
   m_Name: Double battle Enemy
   m_TagString: Untagged
@@ -97406,7 +97458,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   participant: {fileID: 2033618204}
-  pkm_ability: 
 --- !u!114 &2033618204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97441,7 +97492,9 @@ MonoBehaviour:
   participant_ui: {fileID: 173013067}
   Selected_Enemy: 0
   previousMove: 
+  AddtionalTypeImmunity: {fileID: 0}
   exp_recievers: []
+  CanEscape: 1
 --- !u!114 &2033618205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97494,6 +97547,19 @@ MonoBehaviour:
   InBattle: 0
   CanAttack: 1
   Used_move: 0
+--- !u!114 &2033618208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033618200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  participant: {fileID: 2033618204}
 --- !u!1 &2035705803
 GameObject:
   m_ObjectHideFlags: 0

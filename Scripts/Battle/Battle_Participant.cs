@@ -92,10 +92,12 @@ public class Battle_Participant : MonoBehaviour
     }
     public void Check_Faint()
     {
+        if (pokemon != null & pokemon.HP > 0 & !is_active)
+        {is_active = true;participant_ui.SetActive(true);}
         if (!is_active) return;
         if (pokemon.HP > 0) return;
+        fainted = (pokemon.HP <=0);
         if (fainted) return;
-        fainted = true;
         Turn_Based_Combat.instance.FainEventDelay = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         pokemon.Status_effect = "None";
@@ -142,7 +144,6 @@ public class Battle_Participant : MonoBehaviour
             }
             else if (Battle_handler.instance.isDouble_battle && numAlive == 1)//1 left
             {
-                pokemon = null;
                 is_active = false;
                 Unload_ui();
                 Battle_handler.instance.check_Participants();

@@ -164,7 +164,7 @@ public class Pokemon : ScriptableObject
         float BaseExp = (enemy.exp_yield*enemy.Current_level) / 7f;
         float Exp_item_bonus = 1f;
         if (HeldItem!=null)
-            if (HeldItem.Item_type == "Exp Gain")
+            if (HeldItem.Item_type == "Exp Gain")//lucky egg
                 Exp_item_bonus = float.Parse(HeldItem.Item_effect);
         if (enemy.has_trainer)
             trainer_bonus = 1.5f;

@@ -18,6 +18,7 @@ public class Move : ScriptableObject
     public bool isSelfTargeted = false;
     public int Priority=0;
     public int Powerpoints;
+    public int BasePowerpoints;
     public int max_Powerpoints;
     public string Status_effect="None";
     public string Buff_Debuff="None";

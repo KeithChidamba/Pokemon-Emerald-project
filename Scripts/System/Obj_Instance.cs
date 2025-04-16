@@ -23,6 +23,7 @@ public static class Obj_Instance
         mv.isMultiTarget = m.isMultiTarget;
         mv.Priority = m.Priority;
         mv.Powerpoints = m.Powerpoints;
+        mv.BasePowerpoints = m.BasePowerpoints;
         mv.max_Powerpoints = m.max_Powerpoints;
         mv.Buff_Debuff = m.Buff_Debuff;
         mv.Status_chance = m.Status_chance;

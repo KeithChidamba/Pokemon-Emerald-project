@@ -27,7 +27,9 @@ public class Pokemon_Details : MonoBehaviour
     public GameObject move_details;
     public Text move_dmg, move_acc;
     int current_page = 0;
+    public Action<int> OnMoveSelected;
     public bool LearningMove = false;
+    public bool ChangingMoveData = false;
     public static Pokemon_Details instance;
     private void Awake()
     {
@@ -47,6 +49,7 @@ public class Pokemon_Details : MonoBehaviour
     public void Exit_details()
     {
         if (LearningMove) return;
+        ChangingMoveData = false;
         OverlayUi.SetActive(false);
         Stats_ui.SetActive(false);
         Moves_ui.SetActive(false);
@@ -54,16 +57,16 @@ public class Pokemon_Details : MonoBehaviour
         current_pkm = null;
         Pokemon_party.instance.viewing_details = false;
     }
-    public void Next()//next page
+    public void Next()
     {
-        if (LearningMove) return;
+        if (LearningMove || ChangingMoveData) return;
         if (current_page < 3)
             current_page++;
         Load_ui(current_page);
     }
     public void Prev()//prev page
     {
-        if (LearningMove) return;
+        if (LearningMove || ChangingMoveData) return;
          if (current_page > 1)
              current_page--;
          Load_ui(current_page);
@@ -71,11 +74,8 @@ public class Pokemon_Details : MonoBehaviour
     //Set ui element values for each page
     public void Move_Discription(int move_num)
     {
-        if (LearningMove)
-        {
-            PokemonOperations.Learn_move(move_num-1);
-            return;
-        }
+        OnMoveSelected?.Invoke(move_num-1);
+        if (LearningMove | ChangingMoveData) return;
         move_Description.text=current_pkm.move_set[move_num - 1].Description;
         move_acc.text = "Accuracy: "+current_pkm.move_set[move_num - 1].Move_accuracy;
         move_dmg.text = "Damage: " + current_pkm.move_set[move_num - 1].Move_damage;
@@ -176,10 +176,7 @@ public class Pokemon_Details : MonoBehaviour
             gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+current_pkm.Gender.ToLower());
         else
             gender_img.gameObject.SetActive(false);
-        if (!LearningMove)
-            current_page = 1;
-        else
-            current_page = 3;
+        current_page = (LearningMove || ChangingMoveData) ? 3 : 1;
         Load_ui(current_page);
     }
 }

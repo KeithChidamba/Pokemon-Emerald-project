@@ -442,7 +442,7 @@ public class Battle_handler : MonoBehaviour
             yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         }
         else
-        //incase if leveled up and didnt learn move
+        //in case if leveled up and didn't learn move
             levelUpQueue.Remove(pkmLevelUp);
         Turn_Based_Combat.instance.LevelEventDelay = false;
         if(BattleOver & levelUpQueue.Count==0)

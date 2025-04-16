@@ -41,6 +41,7 @@ public class Options_manager : MonoBehaviour
     void Learn_Move()
     {        
         Pokemon_Details.instance.LearningMove = true;
+        Pokemon_Details.instance.OnMoveSelected += PokemonOperations.Learn_move;
         Pokemon_Details.instance.Load_Details(PokemonOperations.CurrentPkm);
         Dialogue_handler.instance.Battle_Info("Which move will you replace?");
         SelectedNewMoveOption = false;

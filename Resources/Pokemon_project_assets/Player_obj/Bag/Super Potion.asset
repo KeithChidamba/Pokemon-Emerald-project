@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Item_ID: 
   Item_name: Super Potion
-  Item_type: Potion
+  Item_type: Heal HP
   Item_effect: 15
   Item_desc: Heals 15hp
   price: 35

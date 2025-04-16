@@ -8,6 +8,7 @@ public class Item_handler : MonoBehaviour
 {
     public Pokemon selected_party_pkm;
     public bool Using_item = false;
+    public bool isHeldItem = false;
     private Item item_in_use;
     public static Item_handler instance;
     private void Awake()
@@ -24,16 +25,55 @@ public class Item_handler : MonoBehaviour
         item_in_use = item;
         switch (item.Item_type.ToLower())
         {
-            case "potion":
+            case "heal hp":
                 heal_health(int.Parse(item.Item_effect));
+                break;
+            case "revive":
+                RevivePokemon(item.Item_type.ToLower());
                 break;
             case "status":
                 heal_status(item.Item_effect.ToLower());
                 break;
+            case "stats":
+                ChangeStats(item.Item_effect.ToLower());
+                break;
             case "pokeball":
                 UsePokeball(item);
                 break;
+            case "rare candy":
+                LevelUp();
+                break;
         }
+    }
+
+    void LevelUp()
+    {
+        int exp = PokemonOperations.GetNextLv(selected_party_pkm.Current_level, selected_party_pkm.EXPGroup);
+        selected_party_pkm.Recieve_exp(exp-selected_party_pkm.CurrentExpAmount+1);
+    }
+    void ChangeStats(string Stat)
+    {
+        if (Stat == "pp")
+        {
+            Pokemon_Details.instance.ChangingMoveData = true;
+            Pokemon_Details.instance.OnMoveSelected += IncreasePP;
+            Pokemon_Details.instance.Load_Details(selected_party_pkm);
+        }
+        //if i add proteins,calcium etc. Then i can just add them here in a switch based on stat they change
+    }
+
+    void RevivePokemon(string ReviveType)
+    {
+        if (selected_party_pkm.HP > 0) return;
+        selected_party_pkm.HP = (ReviveType=="revive")? math.trunc(selected_party_pkm.max_HP*0.5f): selected_party_pkm.max_HP;
+    }
+    void IncreasePP(int MoveIndex)
+    {
+        Pokemon_Details.instance.OnMoveSelected -= IncreasePP;
+        double PowerpointRatio = selected_party_pkm.move_set[MoveIndex].max_Powerpoints/
+                             selected_party_pkm.move_set[MoveIndex].BasePowerpoints;
+        if (Math.Round(PowerpointRatio,1) >= 1.6) return;
+        selected_party_pkm.move_set[MoveIndex].max_Powerpoints+=(int)math.floor((0.2*selected_party_pkm.move_set[MoveIndex].BasePowerpoints));
     }
     void UsePokeball(Item pokeball)
     {
@@ -85,21 +125,26 @@ public class Item_handler : MonoBehaviour
         }
         ResetItemUsage();
     }
-    private void heal_status(string status)
+    private void heal_status(string StatusToHeal)
     {
-        if (selected_party_pkm.Status_effect.ToLower() == status)
-        {
-            selected_party_pkm.Status_effect = "None";
-            if (status == "sleep" | status == "freeze"| status == "paralysis")
-                selected_party_pkm.canAttack = true;
-            Dialogue_handler.instance.Write_Info("Pokemon has been healed","Details");
-            DepleteItem();
-            Battle_handler.instance.reload_participant_ui();
-        }
-        else if (selected_party_pkm.Status_effect == "None")
-            Dialogue_handler.instance.Write_Info("Pokemon is already healthy","Details");
+        if (selected_party_pkm.Status_effect == "None")
+        {Dialogue_handler.instance.Write_Info("Pokemon is already healthy","Details");return; }
+        if (StatusToHeal == "full heal") {selected_party_pkm.Status_effect = "None";}
         else
-            Dialogue_handler.instance.Write_Info("Incorrect heal item","Details");
+        {
+            if (selected_party_pkm.Status_effect.ToLower() == StatusToHeal)
+            {
+                selected_party_pkm.Status_effect = "None";
+                if (StatusToHeal == "sleep" | StatusToHeal == "freeze"| StatusToHeal == "paralysis")
+                    selected_party_pkm.canAttack = true;
+                Dialogue_handler.instance.Write_Info("Pokemon has been healed","Details");
+                Battle_handler.instance.reload_participant_ui();
+            }
+            else
+            {Dialogue_handler.instance.Write_Info("Incorrect heal item","Details"); return; }
+        }
+        if (isHeldItem) {isHeldItem = false;return;}
+        DepleteItem();
         Pokemon_party.instance.Refresh_Member_Cards();
         Dialogue_handler.instance.Dialouge_off(1f);
         Invoke(nameof(skipTurn),1.3f);
@@ -126,14 +171,14 @@ public class Item_handler : MonoBehaviour
         {
             selected_party_pkm.HP += heal_effect;
             Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+heal_effect+" health points","Details",1f);
-            DepleteItem();
         }
         else if ((selected_party_pkm.HP + heal_effect) >= selected_party_pkm.max_HP)
         {
             selected_party_pkm.HP = selected_party_pkm.max_HP;
             Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+ (heal_effect-(selected_party_pkm.max_HP - selected_party_pkm.HP))+" health points","Details",1f);
-            DepleteItem();
         }
+        if (isHeldItem) {isHeldItem = false;return;}
+        DepleteItem();
         Invoke(nameof(skipTurn),1.3f);
         ResetItemUsage();
     }
