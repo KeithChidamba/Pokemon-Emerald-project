@@ -119,7 +119,7 @@ public class Move_handler:MonoBehaviour
         damage_dealt = math.trunc(Modifier * base_Damage * atk_def_ratio);
         if(!current_turn.move_.is_Consecutive)
             GetEffectiveness(type_effectiveness,CurrentVictim);
-        damage_dealt = OnDamageDeal.Invoke(attacker_,victim_,current_turn.move_,damage_dealt);
+        damage_dealt = OnDamageDeal?.Invoke(attacker_,victim_,current_turn.move_,damage_dealt) ?? 0;
         return damage_dealt;
     }
     void GetEffectiveness(float type_effectiveness,Battle_Participant victim)

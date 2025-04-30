@@ -202,7 +202,6 @@ public static class PokemonOperations
             gender_check = new_pkm.Personality_value % 256;
         int pos = new_pkm.GenderRatio.IndexOf('/');
         string ratio = new_pkm.GenderRatio.Substring(pos + 1, new_pkm.GenderRatio.Length - pos - 1);
-        Debug.Log("ratio: "+ratio);
         float ratio_female = float.Parse(ratio);
         int Gender_threshold = math.abs((int)math.trunc(((ratio_female / 100) * 256)));
         if (gender_check < Gender_threshold)

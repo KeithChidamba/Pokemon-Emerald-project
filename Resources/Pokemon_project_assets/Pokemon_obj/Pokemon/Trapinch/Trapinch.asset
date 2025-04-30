@@ -68,7 +68,7 @@ MonoBehaviour:
   - 20
   - 35
   abilities:
-  - Sand pit
+  - Arena Trap
   split_evolution: 0
   learnSet:
   - dark/bite01
@@ -91,4 +91,4 @@ MonoBehaviour:
   - Flygon
   type_data: []
   move_data: []
-  move_pp_data: 
+  move_pp_data: []

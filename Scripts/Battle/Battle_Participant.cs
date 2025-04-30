@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Battle_Participant : MonoBehaviour
 {
-    public Abilities ability_h;
+    public AbilityHandler ability_h;
     public Participant_Status status;
     public Enemy_trainer trainer;
     public Battle_Data data;
@@ -92,8 +92,9 @@ public class Battle_Participant : MonoBehaviour
     }
     public void Check_Faint()
     {
-        if (pokemon != null & pokemon.HP > 0 & !is_active)
-        {is_active = true;participant_ui.SetActive(true);}
+        if (pokemon != null)
+            if(pokemon.HP > 0 & !is_active)
+            {is_active = true;participant_ui.SetActive(true);}
         if (!is_active) return;
         if (pokemon.HP > 0) return;
         fainted = (pokemon.HP <=0);

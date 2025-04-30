@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 30916
+        "instanceID": 25462
     },
     "has_gender": true,
     "HP": 67.0,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30924
+            "instanceID": 25470
         }
     ],
     "Status_effect": "None",
@@ -67,24 +67,24 @@
     "learnSet": [],
     "move_set": [
         {
-            "instanceID": -21530
+            "instanceID": -2768
         },
         {
-            "instanceID": -21532
+            "instanceID": -2770
         },
         {
-            "instanceID": -21600
+            "instanceID": -2772
         },
         {
-            "instanceID": -21536
+            "instanceID": -2774
         }
     ],
     "ability": {
-        "instanceID": 30876
+        "instanceID": 25970
     },
     "evolutions": [
         {
-            "instanceID": 30648
+            "instanceID": 25610
         }
     ],
     "HeldItem": {
@@ -92,10 +92,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30666
+        "instanceID": 32254
     },
     "back_picture": {
-        "instanceID": 30682
+        "instanceID": 32262
     },
     "ability_name": "Guts",
     "natureName": "Jolly",

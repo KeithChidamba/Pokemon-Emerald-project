@@ -12,6 +12,7 @@ public class Held_Items : MonoBehaviour
 
     void CheckUsableItem()
     {
+        if(!participant.is_active)return;
         if (participant.pokemon.HeldItem == null) return;
         if (!participant.pokemon.HeldItem.CanBeUsedInBattle) return;
         switch (participant.pokemon.HeldItem.Item_type.ToLower())
@@ -28,8 +29,9 @@ public class Held_Items : MonoBehaviour
 
     void CheckHealCondition()
     {
-        if(participant.pokemon.HP >= 50) return;
+        if(participant.pokemon.HP >= (participant.pokemon.max_HP/2)) return;
         Item_handler.instance.isHeldItem = true;
+        Item_handler.instance.selected_party_pkm = participant.pokemon;
         Item_handler.instance.Use_Item(participant.pokemon.HeldItem);
     }
 
@@ -37,6 +39,7 @@ public class Held_Items : MonoBehaviour
     {
         if(participant.pokemon.Status_effect == "None") return;
         Item_handler.instance.isHeldItem = true;
+        Item_handler.instance.selected_party_pkm = participant.pokemon;
         Item_handler.instance.Use_Item(participant.pokemon.HeldItem);
     }
 }

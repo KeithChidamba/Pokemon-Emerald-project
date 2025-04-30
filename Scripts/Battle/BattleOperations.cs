@@ -1,9 +1,10 @@
 using Unity.Mathematics;
 using UnityEngine;
-
+using System;
 public static class BattleOperations
 {
     private static float effectiveness = 0;
+    public static bool CanDisplayDialougue = true;
     public static bool isImmuneTo(Pokemon victim,Type enemy_type)
     {
         foreach(Type t in victim.types)
@@ -101,43 +102,40 @@ public static class BattleOperations
             ChangeBuffs(data);
             return;
         }
+
+        CanDisplayDialougue = true;
         CheckBuffs(data.Reciever);
     }
     static int CheckBuffLimit(Pokemon pkm,Buff_Debuff buff,bool increased,int buff_amount)
     {
         int change = 0;
-        int limit_high;
-        int limit_low;
-        if (buff.Stat == "Crit")
-        {
-            limit_high = 2;
-            limit_low = 1;
-        }
-        else
-        {
-            limit_high = 5;
-            limit_low = -5;
-        }
+        string message="";
+        int limit_high = (buff.Stat == "Crit") ? 2 : 5;
+        int limit_low = (buff.Stat == "Crit") ? 1 : -5;
         if (buff.Stage > limit_high && increased)
         {
-            Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher");
+            if(CanDisplayDialougue)
+                Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher");
             return 0;
         }
         if (buff.Stage < limit_low && !increased)
         {
-            Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
+            if(CanDisplayDialougue)
+                Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
             return 0;
         }
         if (increased)
         {
             change = buff.Stage+buff_amount;
-            Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" Increased!");
+            message = pkm.Pokemon_name+"'s "+buff.Stat+" Increased!";
         }
         else
         {
             change = buff.Stage-buff_amount;
-            Dialogue_handler.instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" Decreased!");
+            message = pkm.Pokemon_name+"'s "+buff.Stat+" Decreased!";
         }
+        if(CanDisplayDialougue)
+            Dialogue_handler.instance.Battle_Info(message);
         if(change>limit_high)
             return limit_high + 1;
         if(change<limit_low)

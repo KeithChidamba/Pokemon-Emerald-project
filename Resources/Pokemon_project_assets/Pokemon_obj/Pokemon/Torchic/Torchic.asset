@@ -68,7 +68,7 @@ MonoBehaviour:
   - 16
   - 30
   abilities:
-  - Inferno
+  - Blaze
   split_evolution: 0
   learnSet:
   - normal/scratch01
@@ -91,4 +91,4 @@ MonoBehaviour:
   - Blaziken
   type_data: []
   move_data: []
-  move_pp_data: 
+  move_pp_data: []

@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 30624
+        "instanceID": 24960
     },
     "has_gender": true,
     "HP": 51.0,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 30370
+            "instanceID": 25612
         }
     ],
     "Status_effect": "None",
@@ -70,27 +70,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -19926
+            "instanceID": -2778
         },
         {
-            "instanceID": -19928
+            "instanceID": -2780
         },
         {
-            "instanceID": -19930
+            "instanceID": -2782
         },
         {
-            "instanceID": -19932
+            "instanceID": -2784
         }
     ],
     "ability": {
-        "instanceID": 30372
+        "instanceID": 25836
     },
     "evolutions": [
         {
-            "instanceID": 30374
+            "instanceID": 25986
         },
         {
-            "instanceID": 30376
+            "instanceID": 24948
         }
     ],
     "HeldItem": {
@@ -98,10 +98,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 30470
+        "instanceID": 32092
     },
     "back_picture": {
-        "instanceID": 30292
+        "instanceID": 31952
     },
     "ability_name": "Overgrow",
     "natureName": "Docile",

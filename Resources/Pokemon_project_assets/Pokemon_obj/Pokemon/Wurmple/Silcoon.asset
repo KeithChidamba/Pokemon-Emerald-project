@@ -15,7 +15,7 @@ MonoBehaviour:
   Evo_name: Silcoon
   types:
   - {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
-  ability: {fileID: 11400000, guid: 6e3a5205ac780de4499e796e8ba8dce9, type: 2}
+  ability: {fileID: 11400000, guid: f31e996f8e8e6824fa14608d17500389, type: 2}
   EXPGroup: Fast
   exp_yield: 72
   CatchRate: 120
