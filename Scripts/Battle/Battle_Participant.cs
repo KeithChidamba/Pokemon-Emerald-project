@@ -29,7 +29,7 @@ public class Battle_Participant : MonoBehaviour
     public Type AddtionalTypeImmunity;
     public List<Pokemon> exp_recievers;
     public bool CanEscape = true;
-    private void Start()
+    private void Start()//check
     {
         status = GetComponent<Participant_Status>();
         data = GetComponent<Battle_Data>();
