@@ -1563,7 +1563,7 @@ GameObject:
   - component: {fileID: 48330471}
   - component: {fileID: 48330473}
   - component: {fileID: 48330472}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: mat_mart
   m_TagString: Switch_Area
   m_Icon: {fileID: 0}
@@ -12355,7 +12355,7 @@ GameObject:
   - component: {fileID: 358362942}
   - component: {fileID: 358362946}
   - component: {fileID: 358362945}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Door_museum
   m_TagString: Switch_Area
   m_Icon: {fileID: 0}
@@ -21679,7 +21679,7 @@ GameObject:
   - component: {fileID: 651987839}
   - component: {fileID: 651987841}
   - component: {fileID: 651987840}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: museum Exit2
   m_TagString: Switch_Area
   m_Icon: {fileID: 0}
@@ -27703,7 +27703,7 @@ GameObject:
   - component: {fileID: 796627810}
   - component: {fileID: 796627812}
   - component: {fileID: 796627811}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: museumExit
   m_TagString: Switch_Area
   m_Icon: {fileID: 0}
@@ -69068,7 +69068,7 @@ GameObject:
   - component: {fileID: 1491496371}
   - component: {fileID: 1491496373}
   - component: {fileID: 1491496372}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: mat
   m_TagString: Switch_Area
   m_Icon: {fileID: 0}
@@ -96608,7 +96608,7 @@ GameObject:
   - component: {fileID: 1957045979}
   - component: {fileID: 1957045981}
   - component: {fileID: 1957045980}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: mat
   m_TagString: Switch_Area
   m_Icon: {fileID: 0}
