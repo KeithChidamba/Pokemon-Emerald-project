@@ -97,8 +97,7 @@ public class Battle_Participant : MonoBehaviour
             {is_active = true;participant_ui.SetActive(true);}
         if (!is_active) return;
         if (pokemon.HP > 0) return;
-        fainted = (pokemon.HP <=0);
-        if (fainted) return;
+        fainted = (pokemon.HP <= 0);
         Turn_Based_Combat.instance.FainEventDelay = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         pokemon.Status_effect = "None";
