@@ -10,18 +10,18 @@
     },
     "has_gender": true,
     "HP": 12.0,
-    "max_HP": 67.0,
+    "max_HP": 70.0,
     "BaseHP": 78.0,
     "BaseAttack": 70.0,
     "BaseDefense": 61.0,
     "BaseSP_ATK": 50.0,
     "BaseSP_DEF": 61.0,
     "Basespeed": 100.0,
-    "Attack": 38.0,
-    "Defense": 33.0,
-    "SP_ATK": 23.0,
-    "SP_DEF": 35.0,
-    "speed": 58.0,
+    "Attack": 39.0,
+    "Defense": 35.0,
+    "SP_ATK": 24.0,
+    "SP_DEF": 37.0,
+    "speed": 60.0,
     "HP_IV": 19.0,
     "Attack_IV": 19.0,
     "Defense_IV": 16.0,
@@ -41,9 +41,9 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "CatchRate": 90.0,
-    "Current_level": 21,
-    "CurrentExpAmount": 9011,
-    "NextLvExpAmount": 9261.0,
+    "Current_level": 22,
+    "CurrentExpAmount": 9262,
+    "NextLvExpAmount": 10648.0,
     "EXPGroup": "Medium Fast",
     "exp_yield": 128,
     "has_trainer": true,
@@ -67,16 +67,16 @@
     "learnSet": [],
     "move_set": [
         {
-            "instanceID": -34990
+            "instanceID": -13706
         },
         {
-            "instanceID": -34992
+            "instanceID": -13708
         },
         {
-            "instanceID": -34994
+            "instanceID": -13710
         },
         {
-            "instanceID": -34996
+            "instanceID": -13712
         }
     ],
     "ability": {

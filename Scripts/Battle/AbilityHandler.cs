@@ -58,6 +58,7 @@ public class AbilityHandler : MonoBehaviour
 
     void arena_trap()
     {
+        Debug.Log("triggered arena trap");
         foreach (var enemy in participant.Current_Enemies)
         {
             if(!enemy.pokemon.HasType("Flying") & enemy.pokemon.ability.abilityName!="Levitate")
@@ -84,6 +85,7 @@ public class AbilityHandler : MonoBehaviour
     void levitate()
     {
         if (AbilityTriggered) return;
+        Debug.Log("activated levitate");
         participant.AddtionalTypeImmunity = Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/Ground");
         AbilityTriggered = true;
     }
@@ -101,6 +103,7 @@ public class AbilityHandler : MonoBehaviour
     }
     void shed_skin()
     {
+        Debug.Log("triggered shedskin");
         if (participant.pokemon.Status_effect == "None") return;
         if (Utility.Get_rand(1, 4) < 2)
         {
@@ -131,6 +134,7 @@ public class AbilityHandler : MonoBehaviour
 
     void GiveItem()
     {
+        Debug.Log("triggered pickup");
         if (participant.pokemon.HeldItem != null) return;
         //Check level and 10% pickup chance
         if (participant.pokemon.Current_level < 5) return;
@@ -166,6 +170,7 @@ public class AbilityHandler : MonoBehaviour
     }
     void GiveStatic(Battle_Participant attacker,Battle_Participant victim,bool isSpecialMove)
     {
+        Debug.Log("triggered static");
         if (victim.pokemon.Status_effect != "None") return;
         if (!victim.pokemon.CanBeDamaged)
             return;
@@ -176,6 +181,7 @@ public class AbilityHandler : MonoBehaviour
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {
+        Debug.Log("upped Damage with "+pkm_ability);
         if (pkm_ability == "swarm" & (participant.pokemon.HP < (participant.pokemon.max_HP * 0.33f)) & move.type.Type_name=="Bug")
             return damage*1.5f;
         if (pkm_ability == "paralysiscombo")

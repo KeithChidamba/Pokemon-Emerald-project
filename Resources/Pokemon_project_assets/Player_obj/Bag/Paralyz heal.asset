@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
-  m_Name: Paralyz Heal
+  m_Name: Paralyz heal
   m_EditorClassIdentifier: 
   Item_ID: 
-  Item_name: Paralyz Heal
+  Item_name: Paralyz heal
   Item_type: Status
   Item_effect: paralysis
   Item_desc: Heals paralysis

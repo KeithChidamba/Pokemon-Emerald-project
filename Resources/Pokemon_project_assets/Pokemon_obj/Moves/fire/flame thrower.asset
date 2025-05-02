@@ -21,13 +21,15 @@ MonoBehaviour:
   Has_status: 1
   Has_effect: 0
   Can_flinch: 0
+  is_Consecutive: 0
+  isMultiTarget: 0
+  isSelfTargeted: 0
   Priority: 0
   Powerpoints: 20
+  BasePowerpoints: 20
   max_Powerpoints: 20
   Status_effect: Burn
   Buff_Debuff: None
   Status_chance: 15
   Debuff_chance: 0
   Description: A powerful fire attack that may inflict a burn
-  player_animtion: {fileID: 0}
-  enemy_animtion: {fileID: 0}

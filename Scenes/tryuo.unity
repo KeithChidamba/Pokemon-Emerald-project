@@ -9158,10 +9158,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ba1d78b859371bf48a68f1fa3df43b27, type: 2}
   - {fileID: 11400000, guid: 7ad6c5da8379d1444a6d58684a5a3ebe, type: 2}
   - {fileID: 11400000, guid: 7888205ce0e84d443b42a52129737d64, type: 2}
-  - {fileID: 11400000, guid: 66b0c584894456d41acbf539f0156cf9, type: 2}
+  - {fileID: 11400000, guid: bd1890fa94a38d84b8185a950d7bdbf0, type: 2}
   - {fileID: 11400000, guid: 7bd06e7fd82ccd84287ad4082f2768cd, type: 2}
   - {fileID: 11400000, guid: b5c5fea330546694b9375ab834137de9, type: 2}
   - {fileID: 11400000, guid: 2f70d8cf599d161449cf3b248842013d, type: 2}
+  - {fileID: 11400000, guid: a9e80ce5b26eb8b4db5a9eb0aa81bd85, type: 2}
+  - {fileID: 11400000, guid: 786cbaaf3a4d5444f84826c78c8c2c28, type: 2}
+  - {fileID: 11400000, guid: f735ee6ad29e58e49810fcc6ba7a60bc, type: 2}
   viewing_store: 0
   mart_items_ui:
   - {fileID: 811032170}
@@ -32136,7 +32139,6 @@ GameObject:
   m_Component:
   - component: {fileID: 946544332}
   - component: {fileID: 946544331}
-  - component: {fileID: 946544330}
   - component: {fileID: 946544329}
   - component: {fileID: 946544333}
   m_Layer: 5
@@ -32163,29 +32165,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &946544330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 946544328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
 --- !u!223 &946544331
 Canvas:
   m_ObjectHideFlags: 0
@@ -32203,8 +32182,8 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0

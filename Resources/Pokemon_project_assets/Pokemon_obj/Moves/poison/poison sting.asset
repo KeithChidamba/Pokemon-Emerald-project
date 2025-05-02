@@ -21,8 +21,12 @@ MonoBehaviour:
   Has_status: 1
   Has_effect: 0
   Can_flinch: 0
+  is_Consecutive: 0
+  isMultiTarget: 0
+  isSelfTargeted: 0
   Priority: 0
   Powerpoints: 30
+  BasePowerpoints: 30
   max_Powerpoints: 30
   Status_effect: Poison
   Buff_Debuff: None

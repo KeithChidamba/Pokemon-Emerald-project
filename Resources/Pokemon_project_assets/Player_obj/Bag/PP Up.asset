@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Item_ID: 
   Item_name: PP Up
-  Item_type: stat
+  Item_type: stats
   Item_effect: pp
   Item_desc: increases the poweperpoints of a move
   price: 2000
   quantity: 1
   Item_img: {fileID: 21300000, guid: 32d0055789286df4482ac73bfdeaa012, type: 3}
-  ForPartyUse: 0
+  ForPartyUse: 1
   CanBeUsedInOverworld: 1
   CanBeUsedInBattle: 0
   isHeldItem: 0

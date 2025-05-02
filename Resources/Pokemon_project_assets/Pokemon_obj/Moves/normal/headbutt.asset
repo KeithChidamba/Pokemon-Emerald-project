@@ -18,13 +18,18 @@ MonoBehaviour:
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
   is_Buff_Debuff: 0
-  Priority: Normal
+  Has_status: 0
+  Has_effect: 0
+  Can_flinch: 0
+  is_Consecutive: 0
+  isMultiTarget: 0
+  isSelfTargeted: 0
+  Priority: 0
   Powerpoints: 25
+  BasePowerpoints: 25
   max_Powerpoints: 25
   Status_effect: None
   Buff_Debuff: None
   Status_chance: 0
   Debuff_chance: 0
   Description: Attack the foe with a Headbutt
-  player_animtion: {fileID: 0}
-  enemy_animtion: {fileID: 0}

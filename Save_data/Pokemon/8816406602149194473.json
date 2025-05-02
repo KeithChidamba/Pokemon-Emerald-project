@@ -70,16 +70,16 @@
     ],
     "move_set": [
         {
-            "instanceID": -35000
+            "instanceID": -13716
         },
         {
-            "instanceID": -35002
+            "instanceID": -13718
         },
         {
-            "instanceID": -35004
+            "instanceID": -13720
         },
         {
-            "instanceID": -35006
+            "instanceID": -13722
         }
     ],
     "ability": {
@@ -121,7 +121,7 @@
     "move_pp_data": [
         "20/20",
         "20/20",
-        "25/25",
+        "25/30",
         "20/20"
     ]
 }

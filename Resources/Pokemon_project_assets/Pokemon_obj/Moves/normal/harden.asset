@@ -26,6 +26,7 @@ MonoBehaviour:
   isSelfTargeted: 1
   Priority: 0
   Powerpoints: 20
+  BasePowerpoints: 20
   max_Powerpoints: 20
   Status_effect: None
   Buff_Debuff: +1Defense

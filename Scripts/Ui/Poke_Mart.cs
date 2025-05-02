@@ -119,6 +119,7 @@ public class Poke_Mart : MonoBehaviour
     {
         viewing_store = true;
         Player_Money.text = Game_Load.instance.player_data.player_Money.ToString();
+        top_index = 0;
         int num_i = 0;
         num_items = mart_items.Count;
         if (num_items < 8)//if less than amount of ui elements, load that number

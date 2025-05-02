@@ -181,7 +181,7 @@ public class Pokemon_party : MonoBehaviour
             if(party[Selected_member-1] != party[Party_position])
                 swap(Party_position);
     }
-void close_party()
+public void close_party()
 {
     Game_ui_manager.instance.Close_party();
     SwapOutNext = false;

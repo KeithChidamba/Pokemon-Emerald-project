@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
-  m_Name: Burn Heal
+  m_Name: Burn heal
   m_EditorClassIdentifier: 
   Item_ID: 
-  Item_name: Burn Heal
+  Item_name: Burn heal
   Item_type: Status
   Item_effect: burn
   Item_desc: Heals burns
