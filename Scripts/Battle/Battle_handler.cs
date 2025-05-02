@@ -364,7 +364,7 @@ public class Battle_handler : MonoBehaviour
     int MoneyModifier()
     {
         foreach(Pokemon p in Pokemon_party.instance.party)
-            if (p != null && p.HP>0 && p.HeldItem!=null)
+            if (p != null && p.HP>0 && p.HasItem)
                 if(p.HeldItem.Item_name == "Amulet Coin")
                     return 2;
         return 1;

@@ -60,7 +60,6 @@ public class Item_handler : MonoBehaviour
         {
             Pokemon_Details.instance.ChangingMoveData = true;
             Pokemon_Details.instance.OnMoveSelected += IncreasePP;
-            Pokemon_party.instance.close_party();
             Pokemon_Details.instance.Load_Details(selected_party_pkm);
         }
         //if i add proteins,calcium etc. Then i can just add them here in a switch based on stat they change
@@ -142,9 +141,9 @@ public class Item_handler : MonoBehaviour
     private void heal_status(string StatusToHeal)
     {
         if (selected_party_pkm.Status_effect == "None")
-        {Dialogue_handler.instance.Write_Info("Pokemon is already healthy","Details");return; }
+        {Dialogue_handler.instance.Write_Info("Pokemon is already healthy","Feedback");return; }
         if (StatusToHeal == "full heal") {selected_party_pkm.Status_effect = "None";
-            Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" has been healed","Details");
+            Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" has been healed","Feedback");
         }
         else
         {
@@ -153,18 +152,24 @@ public class Item_handler : MonoBehaviour
                 selected_party_pkm.Status_effect = "None";
                 if (StatusToHeal == "sleep" | StatusToHeal == "freeze"| StatusToHeal == "paralysis")
                     selected_party_pkm.canAttack = true;
-                Dialogue_handler.instance.Write_Info("Pokemon has been healed","Details");
+                Dialogue_handler.instance.Write_Info("Pokemon has been healed","Feedback");
                 Battle_handler.instance.reload_participant_ui();
             }
             else
-            {Dialogue_handler.instance.Write_Info("Incorrect heal item","Details"); return; }
+            {Dialogue_handler.instance.Write_Info("Incorrect heal item","Feedback"); return; }
         }
-        if (isHeldItem) {isHeldItem = false;return;}
+        ResetItemUsage();
+        if (isHeldItem)
+        {
+            isHeldItem = false; 
+            item_in_use.quantity = (item_in_use.isHeldItem)? 1 : item_in_use.quantity-1; 
+            return;
+        }
+        Invoke(nameof(skipTurn),1.3f);
         DepleteItem();
         Pokemon_party.instance.Refresh_Member_Cards();
         Dialogue_handler.instance.Dialouge_off(1f);
         Invoke(nameof(skipTurn),1.3f);
-        ResetItemUsage();
     }
     void skipTurn()
     {
@@ -179,24 +184,29 @@ public class Item_handler : MonoBehaviour
         if(selected_party_pkm.HP<1 | selected_party_pkm.HP>=selected_party_pkm.max_HP)
         {
             string message = (selected_party_pkm.HP<=0)? "Pokemon has already fainted" : "Pokemon health already is full";
-            Dialogue_handler.instance.Write_Info(message,"Details",1f);
+            Dialogue_handler.instance.Write_Info(message,"Feedback",1f);
             ResetItemUsage();
             return;
         }
         if ((selected_party_pkm.HP + heal_effect) < selected_party_pkm.max_HP)
         {
             selected_party_pkm.HP += heal_effect;
-            Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+heal_effect+" health points","Details",1f);
+            Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+heal_effect+" health points","Feedback",1f);
         }
         else if ((selected_party_pkm.HP + heal_effect) >= selected_party_pkm.max_HP)
         {
             selected_party_pkm.HP = selected_party_pkm.max_HP;
-            Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+ (heal_effect-(selected_party_pkm.max_HP - selected_party_pkm.HP))+" health points","Details",1f);
+            Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" gained "+ (heal_effect-(selected_party_pkm.max_HP - selected_party_pkm.HP))+" health points","Feedback",1f);
         }
-        if (isHeldItem) {isHeldItem = false;return;}
+        ResetItemUsage();
+        if (isHeldItem)
+        {
+            isHeldItem = false; 
+            item_in_use.quantity = (item_in_use.isHeldItem)? 1 : item_in_use.quantity-1; 
+            return;
+        }
         DepleteItem();
         Invoke(nameof(skipTurn),1.3f);
-        ResetItemUsage();
     }
 
     void DepleteItem()

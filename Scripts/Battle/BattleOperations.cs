@@ -1,6 +1,8 @@
 using Unity.Mathematics;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+
 public static class BattleOperations
 {
     private static float effectiveness = 0;
@@ -100,9 +102,9 @@ public static class BattleOperations
         {
             data.Reciever.Buff_Debuffs.Add(NewBuff(data.StatName));
             ChangeBuffs(data);
-            return;
+            {Move_handler.instance.ProcessingOrder = false;return;}
         }
-
+        Move_handler.instance.ProcessingOrder = false;
         CanDisplayDialougue = true;
         CheckBuffs(data.Reciever);
     }
@@ -158,7 +160,7 @@ public static class BattleOperations
     }
     private static void CheckBuffs(Pokemon pkm)
     {
-        foreach (Buff_Debuff b in pkm.Buff_Debuffs)
+        foreach (Buff_Debuff b in new List<Buff_Debuff>(pkm.Buff_Debuffs))
             if (b.Stage==0)
                 pkm.Buff_Debuffs.Remove(b);
     }

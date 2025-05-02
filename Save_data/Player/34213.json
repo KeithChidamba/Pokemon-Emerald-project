@@ -2,12 +2,12 @@
     "Player_name": "dasdaw",
     "Trainer_ID": 34213,
     "Secret_ID": 54504,
-    "player_Money": 5050,
+    "player_Money": 6800,
     "NumBadges": 0,
     "player_Position": {
-        "x": 3.4364986419677736,
-        "y": 0.491794615983963,
+        "x": 10.09998893737793,
+        "y": 3.4262428283691408,
         "z": 0.0
     },
-    "Location": "Poke Mart"
+    "Location": "Overworld"
 }

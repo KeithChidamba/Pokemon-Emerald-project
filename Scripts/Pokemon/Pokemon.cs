@@ -125,6 +125,18 @@ public class Pokemon : ScriptableObject
         Battle_handler.instance.onBattleEnd += clearEvents;
     }
 
+    public void RemoveHeldItem()
+    {
+        HeldItem = null;
+        HasItem = false;
+    }
+
+    public void GiveItem(Item item_to_give)
+    {
+        HeldItem = Obj_Instance.set_Item(item_to_give);
+        HeldItem.quantity = 1;
+        HasItem = true;
+    }
     public bool HasType(string typeName)
     {
         Type type = Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/"+typeName.ToLower());

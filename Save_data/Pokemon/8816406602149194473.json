@@ -70,16 +70,16 @@
     ],
     "move_set": [
         {
-            "instanceID": -13716
+            "instanceID": -50438
         },
         {
-            "instanceID": -13718
+            "instanceID": -50440
         },
         {
-            "instanceID": -13720
+            "instanceID": -50442
         },
         {
-            "instanceID": -13722
+            "instanceID": -50444
         }
     ],
     "ability": {
@@ -94,14 +94,14 @@
         }
     ],
     "HeldItem": {
-        "instanceID": 0
+        "instanceID": -50562
     },
-    "HasItem": false,
+    "HasItem": true,
     "front_picture": {
-        "instanceID": 32088
+        "instanceID": 32092
     },
     "back_picture": {
-        "instanceID": 31948
+        "instanceID": 31944
     },
     "ability_name": "Overgrow",
     "natureName": "Docile",
@@ -121,7 +121,7 @@
     "move_pp_data": [
         "20/20",
         "20/20",
-        "25/30",
+        "30/30",
         "20/20"
     ]
 }

@@ -158,9 +158,7 @@ public class Pokemon_party : MonoBehaviour
         }
         Dialogue_handler.instance.Write_Info(selectedMember.pkm.Pokemon_name
                                              +" recieved a "+item_to_use.Item_name,"Details",1.3f);
-        selectedMember.pkm.HeldItem = Obj_Instance.set_Item(item_to_use);
-        selectedMember.pkm.HeldItem.quantity = 1;
-        selectedMember.pkm.HasItem = true;
+        selectedMember.pkm.GiveItem(Obj_Instance.set_Item(item_to_use));
         item_to_use.quantity--;
         Bag.instance.check_Quantity(item_to_use);
         member_indicator.transform.position = selectedMember.transform.position;
@@ -181,7 +179,7 @@ public class Pokemon_party : MonoBehaviour
             if(party[Selected_member-1] != party[Party_position])
                 swap(Party_position);
     }
-public void close_party()
+private void close_party()
 {
     Game_ui_manager.instance.Close_party();
     SwapOutNext = false;

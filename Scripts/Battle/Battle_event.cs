@@ -7,12 +7,10 @@ public class Battle_event : ICommand
 {
     private Action OnEventTriggered;
     public bool Condition;
-    public float duration;
-    public Battle_event(Action eventmethod, bool condition,float duration_)
+    public Battle_event(Action eventmethod, bool condition)
     {
         OnEventTriggered+=eventmethod;
         Condition = condition;
-        duration = duration_;
     }
     public void Execute()
     {

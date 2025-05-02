@@ -161,8 +161,7 @@ public class Bag : MonoBehaviour
         Dialogue_handler.instance.Write_Info("You took a " + partymemeber.HeldItem.Item_name +" from "
                                              + partymemeber.Pokemon_name, "Details");
         Add_item(partymemeber.HeldItem);
-        partymemeber.HeldItem = null;
-        partymemeber.HasItem = false;
+        partymemeber.RemoveHeldItem();
         Pokemon_party.instance.Cancel();
         Pokemon_party.instance.Refresh_Member_Cards();
     }

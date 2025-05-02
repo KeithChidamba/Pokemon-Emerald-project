@@ -9,7 +9,7 @@
         "instanceID": 25458
     },
     "has_gender": true,
-    "HP": 12.0,
+    "HP": 70.0,
     "max_HP": 70.0,
     "BaseHP": 78.0,
     "BaseAttack": 70.0,
@@ -29,11 +29,11 @@
     "SP_DEF_IV": 24.0,
     "speed_IV": 28.0,
     "HP_EV": 0.0,
-    "Attack_EV": 0.0,
+    "Attack_EV": 1.0,
     "Defense_EV": 0.0,
     "SP_ATK_EV": 0.0,
     "SP_DEF_EV": 0.0,
-    "speed_EV": 0.0,
+    "speed_EV": 3.0,
     "EVs": [
         "Speed2"
     ],
@@ -42,7 +42,7 @@
     "crit_chance": 6.25,
     "CatchRate": 90.0,
     "Current_level": 22,
-    "CurrentExpAmount": 9262,
+    "CurrentExpAmount": 9470,
     "NextLvExpAmount": 10648.0,
     "EXPGroup": "Medium Fast",
     "exp_yield": 128,
@@ -67,16 +67,16 @@
     "learnSet": [],
     "move_set": [
         {
-            "instanceID": -13706
+            "instanceID": -50428
         },
         {
-            "instanceID": -13708
+            "instanceID": -50430
         },
         {
-            "instanceID": -13710
+            "instanceID": -50432
         },
         {
-            "instanceID": -13712
+            "instanceID": -50434
         }
     ],
     "ability": {
@@ -88,14 +88,14 @@
         }
     ],
     "HeldItem": {
-        "instanceID": 0
+        "instanceID": -50576
     },
-    "HasItem": false,
+    "HasItem": true,
     "front_picture": {
-        "instanceID": 32226
+        "instanceID": 32234
     },
     "back_picture": {
-        "instanceID": 32234
+        "instanceID": 32242
     },
     "ability_name": "Guts",
     "natureName": "Jolly",

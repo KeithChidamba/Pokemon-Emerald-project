@@ -18,9 +18,11 @@ public class Move_handler:MonoBehaviour
     private Battle_event[] Dialouge_order={null,null,null,null,null};
     private bool MoveDelay = false;
     private bool CancelMove = false;
+    public bool ProcessingOrder = false;
     public event Action OnMoveEnd;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageDeal;
     public event Action<Battle_Participant,Battle_Participant,bool> OnMoveHit;
+    public event Action<Battle_Participant,string> OnStatusEffectHit;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -43,11 +45,11 @@ public class Move_handler:MonoBehaviour
     }
     void Set_Sequences()
     {
-        Dialouge_order[0] = new(Deal_Damage, current_turn.move_.Move_damage > 0,1.5f);
-        Dialouge_order[1] = new(Get_status, current_turn.move_.Has_status,1.5f);
-        Dialouge_order[2] = new(Move_effect, current_turn.move_.Has_effect,2f);
-        Dialouge_order[3] = new(Set_buff_Debuff, current_turn.move_.is_Buff_Debuff,1.5f);
-        Dialouge_order[4] = new(flinch_enemy, current_turn.move_.Can_flinch,1f);
+        Dialouge_order[0] = new(Deal_Damage, current_turn.move_.Move_damage > 0);
+        Dialouge_order[1] = new(Get_status, current_turn.move_.Has_status);
+        Dialouge_order[2] = new(Move_effect, current_turn.move_.Has_effect);
+        Dialouge_order[3] = new(Set_buff_Debuff, current_turn.move_.is_Buff_Debuff);
+        Dialouge_order[4] = new(flinch_enemy, current_turn.move_.Can_flinch);
     }
     IEnumerator Move_Sequence()
     {
@@ -64,7 +66,10 @@ public class Move_handler:MonoBehaviour
                 yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
                 d.Execute();
                 if (d.Condition)
-                    yield return new WaitForSeconds(d.duration);
+                {
+                    ProcessingOrder = true;
+                    yield return new WaitUntil(() => !ProcessingOrder);
+                }
                 yield return new WaitUntil(() => !MoveDelay);
                 yield return new WaitUntil(() => !Turn_Based_Combat.instance.LevelEventDelay);
                 yield return new WaitUntil(() => !Turn_Based_Combat.instance.FainEventDelay);
@@ -81,6 +86,7 @@ public class Move_handler:MonoBehaviour
             Invoke(current_turn.move_.Move_name.ToLower(), 0f);
         else
             StartCoroutine(ConsecutiveMove());
+        ProcessingOrder = false;
     }
     float Calc_Damage(Move move,Battle_Participant CurrentVictim)
     {
@@ -92,7 +98,7 @@ public class Move_handler:MonoBehaviour
              return 0f;
         }
         if (move.Move_damage == 0) return 0f;
-        OnMoveHit?.Invoke(attacker_,victim_,current_turn.move_.isSpecial);
+       
         int crit = 1;
         if (Utility.Get_rand(1, (int)(100 / attacker_.pokemon.crit_chance) + 1) < 2)
         {
@@ -119,7 +125,8 @@ public class Move_handler:MonoBehaviour
         damage_dealt = math.trunc(Modifier * base_Damage * atk_def_ratio);
         if(!current_turn.move_.is_Consecutive)
             GetEffectiveness(type_effectiveness,CurrentVictim);
-        damage_dealt = OnDamageDeal?.Invoke(attacker_,victim_,current_turn.move_,damage_dealt) ?? 0;
+        damage_dealt = OnDamageDeal?.Invoke(attacker_,victim_,current_turn.move_,damage_dealt) ?? 0; 
+        OnMoveHit?.Invoke(attacker_,victim_,move.isSpecial);
         return damage_dealt;
     }
     void GetEffectiveness(float type_effectiveness,Battle_Participant victim)
@@ -160,6 +167,10 @@ public class Move_handler:MonoBehaviour
     {
         if (current_turn.move_.Has_effect) return;
         victim_.pokemon.HP -= Calc_Damage(current_turn.move_,victim_);
+        ProcessingOrder = false;
+        // float damage = Calc_Damage(current_turn.move_,victim_);
+        // victim_.pokemon.HP -= damage;
+        // if(damage>0){OnMoveHit?.Invoke(attacker_,victim_,current_turn.move_.isSpecial);}
     } 
     void Move_done()
     {
@@ -167,16 +178,21 @@ public class Move_handler:MonoBehaviour
         Doing_move = false;
         CancelMove = false;
     }
+
     void Get_status()
     {
-        if (current_turn.move_.Has_effect) return;
-        if (!current_turn.move_.Has_status)return;
-        if (victim_.pokemon.Status_effect != "None") return;
-        if (victim_.pokemon.HP <= 0) return;
+        if (current_turn.move_.Has_effect | !current_turn.move_.Has_status)
+        { ProcessingOrder = false; return; }
+        if (victim_.pokemon.Status_effect != "None")
+        { 
+            Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" already has a "+victim_.pokemon.Status_effect+" effect!");
+            ProcessingOrder = false;return;
+        }
+        if (victim_.pokemon.HP <= 0){ProcessingOrder = false; return;}
         if (!victim_.pokemon.CanBeDamaged)
         {
             Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" protected itself");
-            return;
+            ProcessingOrder = false;return;
         }
         if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
             if(current_turn.move_.isMultiTarget)
@@ -186,14 +202,14 @@ public class Move_handler:MonoBehaviour
                 CheckStatus(victim_,current_turn.move_);
             }
     }
-    bool CheckInvalidStatusEffect(string status,string type_name)
+    bool CheckInvalidStatusEffect(string status,string type_name,Move move)
     {
         string[] InvalidCombinations = {
             "poisonpoison","badlypoisonpoison", "burnfire", "paralysiselectric", "freezeice" };
         foreach(string s in InvalidCombinations)
             if ((status.Replace(" ", "") + type_name).ToLower() == s)
             {
-                if(current_turn.move_.Move_damage==0)//if its only a status causing move
+                if(move.Move_damage==0)//if its only a status causing move
                     Dialogue_handler.instance.Battle_Info("It failed");
                 return true;
             }
@@ -203,9 +219,11 @@ public class Move_handler:MonoBehaviour
     public void CheckStatus(Battle_Participant victim,Move move)
     {
         foreach (Type t in victim.pokemon.types)
-            if(CheckInvalidStatusEffect(move.Status_effect, t.Type_name))return;
-        Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" recieved a "+current_turn.move_.Status_effect+" effect!");
+            if(CheckInvalidStatusEffect(move.Status_effect, t.Type_name,move))return;
+        OnStatusEffectHit?.Invoke(victim,move.Status_effect);
+        Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" recieved a "+move.Status_effect+" effect!");
         Set_Status(victim,move.Status_effect);
+        ProcessingOrder = false;
     }
     public void Set_Status(Battle_Participant p,String Status)
     {
@@ -217,19 +235,20 @@ public class Move_handler:MonoBehaviour
     }
     void flinch_enemy()
     {
-        if (!current_turn.move_.Can_flinch) return;
-        if (!victim_.pokemon.CanBeDamaged) return;
+        if (!current_turn.move_.Can_flinch) {ProcessingOrder = false;return;}
+        if (!victim_.pokemon.CanBeDamaged) {ProcessingOrder = false;return;}
         if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
         {
             victim_.pokemon.canAttack = false;
             victim_.pokemon.isFlinched=true;
         }
+        ProcessingOrder = false;
     }
     void Set_buff_Debuff()
     {
-        if (!current_turn.move_.is_Buff_Debuff) return;
+        if (!current_turn.move_.is_Buff_Debuff) { ProcessingOrder = false;return;}
         if (Utility.Get_rand(1, 101) > current_turn.move_.Debuff_chance)
-            return;
+        { ProcessingOrder = false; return;}
         string buffDebuffInfo = current_turn.move_.Buff_Debuff;
         int buff_amount = int.Parse(buffDebuffInfo[1].ToString());
         string stat = buffDebuffInfo.Substring(2, buffDebuffInfo.Length - 2);
@@ -254,6 +273,7 @@ public class Move_handler:MonoBehaviour
             BuffDebuffData buff_debuff = new BuffDebuffData(attacker_.pokemon, stat, isIncreasing, buff_amount);
             GiveBuff_Debuff(buff_debuff);
         }
+        
     }
 
     IEnumerator MultiTargetBuff_Debuff(string stat, bool isIncreasing,int buff_amount)

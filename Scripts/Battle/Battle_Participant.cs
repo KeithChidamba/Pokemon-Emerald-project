@@ -72,7 +72,7 @@ public class Battle_Participant : MonoBehaviour
             return;
         }
         foreach(Pokemon p in Pokemon_party.instance.party)//exp share split, assuming there's only ever 1 exp share in the game
-            if (p != null && p.HP>0 && p.HeldItem!=null)
+            if (p != null && p.HP>0 && p.HasItem)
                 if(p.HeldItem.Item_name == "Exp Share")
                 {
                     p.Recieve_exp(exp_from_enemy / 2);
@@ -82,7 +82,7 @@ public class Battle_Participant : MonoBehaviour
         int exp = exp_from_enemy / exp_recievers.Count;
         foreach (Pokemon p in exp_recievers)
         {
-            if(p.HeldItem == null)
+            if(!p.HasItem)
                 p.Recieve_exp(exp);
             else
             if (p.HeldItem.Item_name != "Exp Share")
@@ -96,8 +96,8 @@ public class Battle_Participant : MonoBehaviour
             if(pokemon.HP > 0 & !is_active)
             {is_active = true;participant_ui.SetActive(true);}
         if (!is_active) return;
-        if (pokemon.HP > 0) return;
         fainted = (pokemon.HP <= 0);
+        if (pokemon.HP > 0) return;
         Turn_Based_Combat.instance.FainEventDelay = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         pokemon.Status_effect = "None";
@@ -111,7 +111,10 @@ public class Battle_Participant : MonoBehaviour
             if (!Battle_handler.instance.is_trainer_battle)
                 Invoke(nameof(EndWildBattle),1f);
             else
+            {
+                Reset_pkm();
                 trainer.Invoke(nameof(trainer.CheckLoss),1f);
+            }
     }
     public void EndWildBattle()
     {
@@ -163,7 +166,8 @@ public class Battle_Participant : MonoBehaviour
     {
         data.Load_Stats();
         data.Reset_Battle_state(pokemon,false);
-        pokemon.OnLevelUP -= Reset_pkm;
+        if (isPlayer)
+            pokemon.OnLevelUP -= Reset_pkm;
         ability_h.ResetState();
         CanEscape = true;
         AddtionalTypeImmunity = null;

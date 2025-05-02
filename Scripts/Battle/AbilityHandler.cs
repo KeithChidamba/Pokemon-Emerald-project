@@ -11,7 +11,7 @@ public class AbilityHandler : MonoBehaviour
     private Dictionary<string, Action> AbilityMethods = new ();
     private void Start()
     {
-        Turn_Based_Combat.instance.OnNewTurn += CheckAbilityUsage;
+        Turn_Based_Combat.instance.OnMoveExecute += CheckAbilityUsage;
         AbilityMethods.Add("pickup",pick_up);
         AbilityMethods.Add("blaze",blaze);
         AbilityMethods.Add("guts",guts);
@@ -27,7 +27,8 @@ public class AbilityHandler : MonoBehaviour
 
     void CheckAbilityUsage()
     {
-        OnAbilityUsed?.Invoke();
+        if(!participant.fainted)
+            OnAbilityUsed?.Invoke();
     }
 
     public void Set_ability()
@@ -48,6 +49,7 @@ public class AbilityHandler : MonoBehaviour
         Move_handler.instance.OnMoveHit -= GiveStatic;
         Battle_handler.instance.onBattleEnd -= GiveItem;
         Move_handler.instance.OnDamageDeal -= IncreaseDamage;
+        Move_handler.instance.OnStatusEffectHit -= HealStatus;
     }
     void pick_up()
     {
@@ -101,16 +103,24 @@ public class AbilityHandler : MonoBehaviour
         Move_handler.instance.OnDamageDeal += IncreaseDamage;
         AbilityTriggered = true;
     }
-    void shed_skin()
+    void HealStatus(Battle_Participant victim,string status)
     {
-        Debug.Log("triggered shedskin");
-        if (participant.pokemon.Status_effect == "None") return;
+        if (victim != participant) return;
+        if (participant.pokemon.Status_effect == "None") return;Debug.Log("triggered shedskin");
         if (Utility.Get_rand(1, 4) < 2)
         {
             participant.pokemon.Status_effect = "None";
             if (participant.pokemon.Status_effect == "sleep" | participant.pokemon.Status_effect == "freeze"| participant.pokemon.Status_effect == "paralysis")
                 participant.pokemon.canAttack = true;
+            Dialogue_handler.instance.Battle_Info(participant.pokemon.Pokemon_name+"'s shed skin healed it");
         }
+    }
+    void shed_skin()
+    {
+        HealStatus(participant,participant.pokemon.Status_effect);//incase you already had status
+        if (AbilityTriggered) return;
+        Move_handler.instance.OnStatusEffectHit += HealStatus;
+        AbilityTriggered = true;
     }
     void static_()
     {
@@ -135,7 +145,7 @@ public class AbilityHandler : MonoBehaviour
     void GiveItem()
     {
         Debug.Log("triggered pickup");
-        if (participant.pokemon.HeldItem != null) return;
+        if (participant.pokemon.HasItem) return;
         //Check level and 10% pickup chance
         if (participant.pokemon.Current_level < 5) return;
         if (Utility.Get_rand(1, 101) > 10) return;
@@ -170,8 +180,7 @@ public class AbilityHandler : MonoBehaviour
     }
     void GiveStatic(Battle_Participant attacker,Battle_Participant victim,bool isSpecialMove)
     {
-        Debug.Log("triggered static");
-        if (victim.pokemon.Status_effect != "None") return;
+        if (victim.pokemon.Status_effect != "None") return;        Debug.Log("triggered static");
         if (!victim.pokemon.CanBeDamaged)
             return;
         if(isSpecialMove)return;
