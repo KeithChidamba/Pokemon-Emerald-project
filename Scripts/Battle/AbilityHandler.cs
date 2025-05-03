@@ -178,10 +178,11 @@ public class AbilityHandler : MonoBehaviour
         }
 
     }
-    void GiveStatic(Battle_Participant attacker,Battle_Participant victim,bool isSpecialMove)
+    void GiveStatic(Battle_Participant attacker,bool isSpecialMove)
     {
-        if (victim.pokemon.Status_effect != "None") return;        Debug.Log("triggered static");
-        if (!victim.pokemon.CanBeDamaged)
+        if (attacker.pokemon.Status_effect != "None") return;        
+        Debug.Log("triggered static: "+attacker.pokemon.Pokemon_name);
+        if (!attacker.pokemon.CanBeDamaged)
             return;
         if(isSpecialMove)return;
         Move PlaceholderMove = new Move();
@@ -190,7 +191,6 @@ public class AbilityHandler : MonoBehaviour
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {
-        Debug.Log("upped Damage with "+pkm_ability);
         if (pkm_ability == "swarm" & (participant.pokemon.HP < (participant.pokemon.max_HP * 0.33f)) & move.type.Type_name=="Bug")
             return damage*1.5f;
         if (pkm_ability == "paralysiscombo")

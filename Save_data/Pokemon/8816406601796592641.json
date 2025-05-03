@@ -67,16 +67,16 @@
     "learnSet": [],
     "move_set": [
         {
-            "instanceID": -50428
+            "instanceID": -8574
         },
         {
-            "instanceID": -50430
+            "instanceID": -8576
         },
         {
-            "instanceID": -50432
+            "instanceID": -8578
         },
         {
-            "instanceID": -50434
+            "instanceID": -8580
         }
     ],
     "ability": {
@@ -88,7 +88,7 @@
         }
     ],
     "HeldItem": {
-        "instanceID": -50576
+        "instanceID": -8582
     },
     "HasItem": true,
     "front_picture": {

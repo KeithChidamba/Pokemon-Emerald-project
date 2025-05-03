@@ -92,22 +92,21 @@ public static class BattleOperations
     }
     public static void ChangeBuffs(BuffDebuffData data)
     {
-        if(Hasbuff_Debuff(data.Reciever, data.StatName))
-        {
-            foreach (Buff_Debuff buff in data.Reciever.Buff_Debuffs)
-                if (buff.Stat == data.StatName)
-                        buff.Stage=CheckBuffLimit(data.Reciever,buff,data.isIncreasing,data.EffectAmount);
-        }
-        else
+        if (!Hasbuff_Debuff(data.Reciever, data.StatName))
         {
             data.Reciever.Buff_Debuffs.Add(NewBuff(data.StatName));
-            ChangeBuffs(data);
-            {Move_handler.instance.ProcessingOrder = false;return;}
         }
-        Move_handler.instance.ProcessingOrder = false;
+        foreach (Buff_Debuff buff in data.Reciever.Buff_Debuffs)
+        {
+            if (buff.Stat == data.StatName)
+            {
+                buff.Stage = CheckBuffLimit(data.Reciever, buff, data.isIncreasing, data.EffectAmount);
+            }
+        }
         CanDisplayDialougue = true;
         CheckBuffs(data.Reciever);
     }
+
     static int CheckBuffLimit(Pokemon pkm,Buff_Debuff buff,bool increased,int buff_amount)
     {
         int change = 0;
@@ -163,5 +162,6 @@ public static class BattleOperations
         foreach (Buff_Debuff b in new List<Buff_Debuff>(pkm.Buff_Debuffs))
             if (b.Stage==0)
                 pkm.Buff_Debuffs.Remove(b);
+        Move_handler.instance.ProcessingOrder = false;
     }
 }

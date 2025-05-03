@@ -188,7 +188,7 @@ private void close_party()
     void switchIn()
     {
         if (SwapOutNext)
-            Turn_Based_Combat.instance.FainEventDelay = false;
+            Turn_Based_Combat.instance.FaintEventDelay = false;
         if(Swapping_in)
             Turn_Based_Combat.instance.Next_turn();
         close_party();

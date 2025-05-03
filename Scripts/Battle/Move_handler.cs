@@ -21,7 +21,7 @@ public class Move_handler:MonoBehaviour
     public bool ProcessingOrder = false;
     public event Action OnMoveEnd;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageDeal;
-    public event Action<Battle_Participant,Battle_Participant,bool> OnMoveHit;
+    public event Action<Battle_Participant,bool> OnMoveHit;
     public event Action<Battle_Participant,string> OnStatusEffectHit;
     private void Awake()
     {
@@ -64,15 +64,14 @@ public class Move_handler:MonoBehaviour
                 if (CancelMove)
                     break;
                 yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+                if (!d.Condition)
+                    continue;
+                ProcessingOrder = true;
                 d.Execute();
-                if (d.Condition)
-                {
-                    ProcessingOrder = true;
-                    yield return new WaitUntil(() => !ProcessingOrder);
-                }
+                yield return new WaitUntil(() => !ProcessingOrder);
                 yield return new WaitUntil(() => !MoveDelay);
                 yield return new WaitUntil(() => !Turn_Based_Combat.instance.LevelEventDelay);
-                yield return new WaitUntil(() => !Turn_Based_Combat.instance.FainEventDelay);
+                yield return new WaitUntil(() => !Turn_Based_Combat.instance.FaintEventDelay);
             } 
         }
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
@@ -126,7 +125,7 @@ public class Move_handler:MonoBehaviour
         if(!current_turn.move_.is_Consecutive)
             GetEffectiveness(type_effectiveness,CurrentVictim);
         damage_dealt = OnDamageDeal?.Invoke(attacker_,victim_,current_turn.move_,damage_dealt) ?? 0; 
-        OnMoveHit?.Invoke(attacker_,victim_,move.isSpecial);
+        OnMoveHit?.Invoke(attacker_,move.isSpecial);
         return damage_dealt;
     }
     void GetEffectiveness(float type_effectiveness,Battle_Participant victim)
@@ -151,26 +150,25 @@ public class Move_handler:MonoBehaviour
         else if (crit == 2)//if crit, ignore enemy defense buff, and attacker attack debuff
         {
             if (!isSpecial)
-                if (victim.data.Defense < victim.pokemon.Defense) //def buff
+                if (victim.data.Defense > victim.pokemon.Defense) //def buff
                     Ratio = AttackType / victim.data.Defense;
                 else
                     Ratio = def;
             else
-                if (victim.data.SP_DEF < victim.pokemon.SP_DEF) //def buff
+                if (victim.data.SP_DEF > victim.pokemon.SP_DEF) //special def buff
                     Ratio = AttackType / victim.data.SP_DEF;
                 else
                     Ratio = spDef;
         }
         return Ratio;
     }
+    
     void Deal_Damage()
     {
-        if (current_turn.move_.Has_effect) return;
+        if (current_turn.move_.Has_effect)
+        { ProcessingOrder = false; return; }
         victim_.pokemon.HP -= Calc_Damage(current_turn.move_,victim_);
         ProcessingOrder = false;
-        // float damage = Calc_Damage(current_turn.move_,victim_);
-        // victim_.pokemon.HP -= damage;
-        // if(damage>0){OnMoveHit?.Invoke(attacker_,victim_,current_turn.move_.isSpecial);}
     } 
     void Move_done()
     {
@@ -201,6 +199,7 @@ public class Move_handler:MonoBehaviour
             else{
                 CheckStatus(victim_,current_turn.move_);
             }
+        ProcessingOrder = false;
     }
     bool CheckInvalidStatusEffect(string status,string type_name,Move move)
     {
@@ -221,9 +220,8 @@ public class Move_handler:MonoBehaviour
         foreach (Type t in victim.pokemon.types)
             if(CheckInvalidStatusEffect(move.Status_effect, t.Type_name,move))return;
         OnStatusEffectHit?.Invoke(victim,move.Status_effect);
-        Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" recieved a "+move.Status_effect+" effect!");
+        Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" received a "+move.Status_effect+" effect!");
         Set_Status(victim,move.Status_effect);
-        ProcessingOrder = false;
     }
     public void Set_Status(Battle_Participant p,String Status)
     {
@@ -365,6 +363,7 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.instance.Battle_Info("It hit (x" + NumHits + ") times");
         }
         MoveDelay = false;
+        ProcessingOrder = false;
     } 
     void absorb()
      {
@@ -377,6 +376,7 @@ public class Move_handler:MonoBehaviour
              attacker_.pokemon.HP = attacker_.pokemon.max_HP;
          Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" gained health");
          MoveDelay = false;
+         ProcessingOrder = false;
      }
     void protect()
     {
@@ -397,17 +397,20 @@ public class Move_handler:MonoBehaviour
         else//success
           attacker_.pokemon.CanBeDamaged = false;
         MoveDelay = false;
+        ProcessingOrder = false;
     }
 
     void surf()
     {
         MultiTargetMoveDamage(attacker_.Current_Enemies);
         MoveDelay = false;
+        ProcessingOrder = false;
     }
     void earthquake()
     {
         MultiTargetMoveDamage(SetTargets());
         MoveDelay = false;
+        ProcessingOrder = false;
     }
     void magnitude()
     {
@@ -423,5 +426,6 @@ public class Move_handler:MonoBehaviour
         current_turn.move_.Move_damage = baseDamage;
         MultiTargetMoveDamage(SetTargets());
         MoveDelay = false;
+        ProcessingOrder = false;
     }
 }

@@ -82,7 +82,7 @@ public class Enemy_trainer : MonoBehaviour
                 Battle_handler.instance.Set_participants(participant);
             }
         }
-        Turn_Based_Combat.instance.FainEventDelay = false;
+        Turn_Based_Combat.instance.FaintEventDelay = false;
     }
     public void StartBattle(string TrainerName, bool isSameTrainer)
     {

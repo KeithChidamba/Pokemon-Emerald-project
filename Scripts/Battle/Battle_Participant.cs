@@ -98,7 +98,7 @@ public class Battle_Participant : MonoBehaviour
         if (!is_active) return;
         fainted = (pokemon.HP <= 0);
         if (pokemon.HP > 0) return;
-        Turn_Based_Combat.instance.FainEventDelay = true;
+        Turn_Based_Combat.instance.FaintEventDelay = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         pokemon.Status_effect = "None";
         Give_exp();
@@ -119,7 +119,7 @@ public class Battle_Participant : MonoBehaviour
     public void EndWildBattle()
     {
         Wild_pkm.instance.InBattle = false;
-        Turn_Based_Combat.instance.FainEventDelay = false;
+        Turn_Based_Combat.instance.FaintEventDelay = false;
         Battle_handler.instance.End_Battle(true);
     }
     private void Check_loss()
@@ -150,7 +150,7 @@ public class Battle_Participant : MonoBehaviour
                 is_active = false;
                 Unload_ui();
                 Battle_handler.instance.check_Participants();
-                Turn_Based_Combat.instance.FainEventDelay = false;
+                Turn_Based_Combat.instance.FaintEventDelay = false;
             }
         }
     }

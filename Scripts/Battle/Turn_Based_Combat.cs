@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Turn_Based_Combat : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class Turn_Based_Combat : MonoBehaviour
     public event Action OnTurnEnd;
     public int Current_pkm_turn = 0;
     public bool LevelEventDelay = false;
-    public bool FainEventDelay = false;
+    public bool FaintEventDelay = false;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -52,7 +53,7 @@ public class Turn_Based_Combat : MonoBehaviour
     void Reset_Moves()
     {
         Turn_history.Clear();
-        FainEventDelay = false;
+        FaintEventDelay = false;
         LevelEventDelay = false;
     }
     bool Can_Attack(Turn turn, Battle_Participant attacker_,Battle_Participant victim_)
@@ -108,13 +109,13 @@ public class Turn_Based_Combat : MonoBehaviour
                 Move_handler.instance.Do_move(CurrentTurn);
                 yield return new WaitUntil(() => !Move_handler.instance.Doing_move);
                 yield return new WaitUntil(() => !LevelEventDelay);
-                yield return new WaitUntil(() => !FainEventDelay);
+                yield return new WaitUntil(() => !FaintEventDelay);
             }
             else
                 yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         }
         yield return new WaitUntil(() => !LevelEventDelay);
-        yield return new WaitUntil(() => !FainEventDelay);
+        yield return new WaitUntil(() => !FaintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         Turn_history.Clear();
         OnTurnEnd?.Invoke();
