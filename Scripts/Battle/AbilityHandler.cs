@@ -180,7 +180,8 @@ public class AbilityHandler : MonoBehaviour
     }
     void GiveStatic(Battle_Participant attacker,bool isSpecialMove)
     {
-        if (attacker.pokemon.Status_effect != "None") return;        
+        if (attacker.pokemon.Status_effect != "None") return;
+        if (attacker == participant) return;
         Debug.Log("triggered static: "+attacker.pokemon.Pokemon_name);
         if (!attacker.pokemon.CanBeDamaged)
             return;

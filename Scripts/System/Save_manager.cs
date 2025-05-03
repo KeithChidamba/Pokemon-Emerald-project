@@ -59,7 +59,7 @@ public class Save_manager : MonoBehaviour
         return json_files.ToList();
     }
 
-    string RemoveExtenstion(string filename)
+    string RemoveExtension(string filename)
     {
         return filename.Split('.')[0];
     }
@@ -82,7 +82,7 @@ public class Save_manager : MonoBehaviour
         foreach(string file in PokemonList)
         {
             string file_name = Path.GetFileName(file);
-            if (!pokemon_storage.instance.search_pkm_ID(RemoveExtenstion(file_name)))
+            if (!pokemon_storage.instance.search_pkm_ID(RemoveExtension(file_name)))
             {
                 Pokemon NonParty_pkm = Get_Pokemon("Assets/Save_data/Pokemon/" + file_name);
                 LoadHeldItems(NonParty_pkm);
@@ -99,9 +99,9 @@ public class Save_manager : MonoBehaviour
         List<string> HeldItemList = load_files("Assets/Save_data/Items/Held_Items");
         if (HeldItemList.Count > 0)
         {
-            HeldItemList.RemoveAll(id => RemoveExtenstion(Path.GetFileName(id)) != pokemon.Pokemon_ID.ToString());
-            string HeldItemID = HeldItemList[0];
-            pokemon.HeldItem = Get_Item(HeldItemID);
+            string HeldItemID = HeldItemList
+                .FirstOrDefault(id => RemoveExtension(Path.GetFileName(id)) == pokemon.Pokemon_ID.ToString());
+            pokemon.HeldItem = (string.IsNullOrEmpty(HeldItemID))? null : Get_Item(HeldItemID);
         }
     }
     private void CreateFolder(string path)

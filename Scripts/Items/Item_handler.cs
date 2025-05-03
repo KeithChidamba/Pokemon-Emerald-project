@@ -46,6 +46,29 @@ public class Item_handler : MonoBehaviour
         }
     }
 
+    void RestorePP(int MoveIndex)
+    {
+        Pokemon_Details.instance.OnMoveSelected -= RestorePP;
+        int PointsToAdd = 0;
+        Move CurrentMove = selected_party_pkm.move_set[MoveIndex];
+        
+        if (item_in_use.Item_type.ToLower() == "ether")
+            PointsToAdd = 10;
+        
+        if (item_in_use.Item_type.ToLower() == "max ether")
+            PointsToAdd = CurrentMove.max_Powerpoints;
+        
+        int SumPoints = CurrentMove.Powerpoints + PointsToAdd;
+        
+        CurrentMove.Powerpoints = (SumPoints > CurrentMove.max_Powerpoints) ? CurrentMove.max_Powerpoints : SumPoints;
+
+        Dialogue_handler.instance.Write_Info( CurrentMove.Move_name+" pp was restored!", "Details",1f);
+        DepleteItem();
+        ResetItemUsage();
+        skipTurn();
+        Pokemon_Details.instance.Exit_details();
+        Bag.instance.View_bag();
+    }
     void LevelUp()
     {
         int exp = PokemonOperations.GetNextLv(selected_party_pkm.Current_level, selected_party_pkm.EXPGroup);
@@ -59,7 +82,10 @@ public class Item_handler : MonoBehaviour
         if (Stat == "pp")
         {
             Pokemon_Details.instance.ChangingMoveData = true;
-            Pokemon_Details.instance.OnMoveSelected += IncreasePP;
+            if (item_in_use.Item_type.ToLower() == "ether")
+                Pokemon_Details.instance.OnMoveSelected += RestorePP;
+            else
+                Pokemon_Details.instance.OnMoveSelected += IncreasePP;
             Pokemon_Details.instance.Load_Details(selected_party_pkm);
         }
         //if i add proteins,calcium etc. Then i can just add them here in a switch based on stat they change
@@ -73,12 +99,11 @@ public class Item_handler : MonoBehaviour
         DepleteItem();
         Invoke(nameof(skipTurn),1.2f);
         ResetItemUsage();
-        Bag.instance.View_bag();
     }
     void IncreasePP(int MoveIndex)
     {
         Pokemon_Details.instance.OnMoveSelected -= IncreasePP;
-        double PowerpointRatio = selected_party_pkm.move_set[MoveIndex].max_Powerpoints/
+        double PowerpointRatio = (float)selected_party_pkm.move_set[MoveIndex].max_Powerpoints/
                              selected_party_pkm.move_set[MoveIndex].BasePowerpoints;
         if (Math.Round(PowerpointRatio,1) >= 1.6) return;
         selected_party_pkm.move_set[MoveIndex].max_Powerpoints+=(int)math.floor((0.2*selected_party_pkm.move_set[MoveIndex].BasePowerpoints));

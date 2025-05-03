@@ -9151,17 +9151,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mart_items:
   - {fileID: 11400000, guid: 74de7d2c2ec6cf04a94d924a69fb7677, type: 2}
+  - {fileID: 11400000, guid: 298b4b511499bc5bab4e6536cc5e2db0, type: 2}
   - {fileID: 11400000, guid: bbf8f3c9e78a1f545b93d07924e0b10c, type: 2}
+  - {fileID: 11400000, guid: 068a8fce4f2bf1675ad92edc8cc0e97e, type: 2}
+  - {fileID: 11400000, guid: 7ad6c5da8379d1444a6d58684a5a3ebe, type: 2}
+  - {fileID: 11400000, guid: 2f70d8cf599d161449cf3b248842013d, type: 2}
   - {fileID: 11400000, guid: 2971f0d1ef85ba44a874a6e765631d6b, type: 2}
   - {fileID: 11400000, guid: ed582cc298cf1af429facd2f75ef230f, type: 2}
-  - {fileID: 11400000, guid: be8ce41201d6ebc4eb61ef28491ff841, type: 2}
-  - {fileID: 11400000, guid: ba1d78b859371bf48a68f1fa3df43b27, type: 2}
-  - {fileID: 11400000, guid: 7ad6c5da8379d1444a6d58684a5a3ebe, type: 2}
   - {fileID: 11400000, guid: 7888205ce0e84d443b42a52129737d64, type: 2}
-  - {fileID: 11400000, guid: bd1890fa94a38d84b8185a950d7bdbf0, type: 2}
   - {fileID: 11400000, guid: 7bd06e7fd82ccd84287ad4082f2768cd, type: 2}
   - {fileID: 11400000, guid: b5c5fea330546694b9375ab834137de9, type: 2}
-  - {fileID: 11400000, guid: 2f70d8cf599d161449cf3b248842013d, type: 2}
+  - {fileID: 11400000, guid: be8ce41201d6ebc4eb61ef28491ff841, type: 2}
+  - {fileID: 11400000, guid: ba1d78b859371bf48a68f1fa3df43b27, type: 2}
+  - {fileID: 11400000, guid: e29610323c1a9b70eb8888076953b70a, type: 2}
+  - {fileID: 11400000, guid: bd1890fa94a38d84b8185a950d7bdbf0, type: 2}
   - {fileID: 11400000, guid: a9e80ce5b26eb8b4db5a9eb0aa81bd85, type: 2}
   - {fileID: 11400000, guid: 786cbaaf3a4d5444f84826c78c8c2c28, type: 2}
   - {fileID: 11400000, guid: f735ee6ad29e58e49810fcc6ba7a60bc, type: 2}
@@ -11324,7 +11327,7 @@ MonoBehaviour:
   Turn_history: []
   Current_pkm_turn: 0
   LevelEventDelay: 0
-  FainEventDelay: 0
+  FaintEventDelay: 0
 --- !u!4 &326276941
 Transform:
   m_ObjectHideFlags: 0
@@ -37446,6 +37449,7 @@ MonoBehaviour:
   Doing_move: 0
   attacker_: {fileID: 0}
   victim_: {fileID: 0}
+  ProcessingOrder: 0
 --- !u!4 &1148144462
 Transform:
   m_ObjectHideFlags: 0

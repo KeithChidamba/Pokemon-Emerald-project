@@ -115,7 +115,7 @@ public class Move_handler:MonoBehaviour
             Attack_type = attacker_.pokemon.SP_ATK;
         else
             Attack_type = attacker_.pokemon.Attack;
-        atk_def_ratio = Set_AtkDefRatio(crit,Attack_type,current_turn.move_.isSpecial,CurrentVictim);
+        atk_def_ratio = SetAtkDefRatio(crit,current_turn.move_.isSpecial,attacker_,CurrentVictim);
         if (BattleOperations.is_Stab(attacker_.pokemon, current_turn.move_.type))
             Stab = 1.5f;
         float base_Damage = (level_factor * move.Move_damage *
@@ -124,9 +124,9 @@ public class Move_handler:MonoBehaviour
         damage_dealt = math.trunc(Modifier * base_Damage * atk_def_ratio);
         if(!current_turn.move_.is_Consecutive)
             GetEffectiveness(type_effectiveness,CurrentVictim);
-        damage_dealt = OnDamageDeal?.Invoke(attacker_,victim_,current_turn.move_,damage_dealt) ?? 0; 
+        float DamageAfterBuff = OnDamageDeal?.Invoke(attacker_,victim_,current_turn.move_,damage_dealt) ?? damage_dealt; 
         OnMoveHit?.Invoke(attacker_,move.isSpecial);
-        return damage_dealt;
+        return DamageAfterBuff;
     }
     void GetEffectiveness(float type_effectiveness,Battle_Participant victim)
     {
@@ -137,37 +137,38 @@ public class Move_handler:MonoBehaviour
         else if(type_effectiveness < 1)
             Dialogue_handler.instance.Battle_Info("The move is not very effective!");
     }
-    float Set_AtkDefRatio(float crit,float AttackType,bool isSpecial,Battle_Participant victim)
+    float SetAtkDefRatio(int crit, bool isSpecial, Battle_Participant attacker, Battle_Participant victim)
     {
-        float Ratio=0;
-        float def = AttackType/victim.pokemon.Defense;
-        float spDef =  AttackType/victim.pokemon.SP_DEF;
-        if (crit == 1)//if no crit
-            if (!isSpecial)
-                Ratio = def;
-            else
-                Ratio = spDef;
-        else if (crit == 2)//if crit, ignore enemy defense buff, and attacker attack debuff
+        float atk, def;
+        bool canIgnoreStages = attacker.pokemon.Current_level >= victim.pokemon.Current_level  && crit == 2;
+        if (!isSpecial)
         {
-            if (!isSpecial)
-                if (victim.data.Defense > victim.pokemon.Defense) //def buff
-                    Ratio = AttackType / victim.data.Defense;
-                else
-                    Ratio = def;
-            else
-                if (victim.data.SP_DEF > victim.pokemon.SP_DEF) //special def buff
-                    Ratio = AttackType / victim.data.SP_DEF;
-                else
-                    Ratio = spDef;
+            atk = canIgnoreStages && attacker.data.Attack < attacker.pokemon.Attack
+                ? attacker.pokemon.Attack  // Ignore debuff
+                : attacker.data.Attack;
+            
+            def = canIgnoreStages && victim.data.Defense > victim.pokemon.Defense
+                ? victim.pokemon.Defense  // Ignore buff
+                : victim.data.Defense;
         }
-        return Ratio;
+        else
+        {
+            atk = canIgnoreStages && attacker.data.SP_ATK < attacker.pokemon.SP_ATK
+                ? attacker.pokemon.SP_ATK
+                : attacker.data.SP_ATK;
+            
+            def = canIgnoreStages && victim.data.SP_DEF > victim.pokemon.SP_DEF
+                ? victim.pokemon.SP_DEF
+                : victim.data.SP_DEF;
+        }
+        return atk / def;
     }
-    
+
     void Deal_Damage()
     {
         if (current_turn.move_.Has_effect)
         { ProcessingOrder = false; return; }
-        victim_.pokemon.HP -= Calc_Damage(current_turn.move_,victim_);
+        victim_.pokemon.HP -= Calc_Damage(current_turn.move_, victim_);
         ProcessingOrder = false;
     } 
     void Move_done()
@@ -226,9 +227,7 @@ public class Move_handler:MonoBehaviour
     public void Set_Status(Battle_Participant p,String Status)
     {
         p.pokemon.Status_effect = Status;
-        int num_turns = 0;
-        if(Status=="Sleep") 
-            num_turns = Utility.Get_rand(1, 5);
+        int num_turns = (Status=="Sleep")? Utility.Get_rand(1, 5) : 0;
         p.status.Get_statusEffect(num_turns);
     }
     void flinch_enemy()
