@@ -99,7 +99,7 @@ public class Move_handler:MonoBehaviour
         if (move.Move_damage == 0) return 0f;
        
         int crit = 1;
-        if (Utility.Get_rand(1, (int)(100 / attacker_.pokemon.crit_chance) + 1) < 2)
+        if (Utility.RandomRange(1, (int)(100 / attacker_.pokemon.crit_chance) + 1) < 2)
         {
             crit = 2;
             Dialogue_handler.instance.Battle_Info("Critical Hit!");
@@ -109,7 +109,7 @@ public class Move_handler:MonoBehaviour
         float Stab = 1f;
         float Attack_type = 0;
         float atk_def_ratio;
-        float random_factor = (float)Utility.Get_rand(85, 101) / 100;
+        float random_factor = (float)Utility.RandomRange(85, 101) / 100;
         float type_effectiveness = BattleOperations.TypeEffectiveness(CurrentVictim, current_turn.move_.type);
         if (current_turn.move_.isSpecial)
             Attack_type = attacker_.pokemon.SP_ATK;
@@ -193,7 +193,7 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" protected itself");
             ProcessingOrder = false;return;
         }
-        if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
+        if (Utility.RandomRange(1, 101) < current_turn.move_.Status_chance)
             if(current_turn.move_.isMultiTarget)
                 foreach (Battle_Participant enemy in attacker_.Current_Enemies)
                     CheckStatus(enemy,current_turn.move_);
@@ -227,14 +227,14 @@ public class Move_handler:MonoBehaviour
     public void Set_Status(Battle_Participant p,String Status)
     {
         p.pokemon.Status_effect = Status;
-        int num_turns = (Status=="Sleep")? Utility.Get_rand(1, 5) : 0;
+        int num_turns = (Status=="Sleep")? Utility.RandomRange(1, 5) : 0;
         p.status.Get_statusEffect(num_turns);
     }
     void flinch_enemy()
     {
         if (!current_turn.move_.Can_flinch) {ProcessingOrder = false;return;}
         if (!victim_.pokemon.CanBeDamaged) {ProcessingOrder = false;return;}
-        if (Utility.Get_rand(1, 101) < current_turn.move_.Status_chance)
+        if (Utility.RandomRange(1, 101) < current_turn.move_.Status_chance)
         {
             victim_.pokemon.canAttack = false;
             victim_.pokemon.isFlinched=true;
@@ -244,7 +244,7 @@ public class Move_handler:MonoBehaviour
     void Set_buff_Debuff()
     {
         if (!current_turn.move_.is_Buff_Debuff) { ProcessingOrder = false;return;}
-        if (Utility.Get_rand(1, 101) > current_turn.move_.Debuff_chance)
+        if (Utility.RandomRange(1, 101) > current_turn.move_.Debuff_chance)
         { ProcessingOrder = false; return;}
         string buffDebuffInfo = current_turn.move_.Buff_Debuff;
         int buff_amount = int.Parse(buffDebuffInfo[1].ToString());
@@ -343,7 +343,7 @@ public class Move_handler:MonoBehaviour
     }
     IEnumerator ConsecutiveMove()
     {
-        int NumRepetitions = Utility.Get_rand(1, 6);
+        int NumRepetitions = Utility.RandomRange(1, 6);
         int NumHits = 0;
         for (int i = 0; i < NumRepetitions; i++)
         {
@@ -385,7 +385,7 @@ public class Move_handler:MonoBehaviour
             int chance = 100;
             for (int i = 0; i < numUses; i++)
                 chance /= 2;
-            if (Utility.Get_rand(1, 101) <= chance) //success
+            if (Utility.RandomRange(1, 101) <= chance) //success
                 attacker_.pokemon.CanBeDamaged = false;
             else
             {
@@ -413,7 +413,7 @@ public class Move_handler:MonoBehaviour
     }
     void magnitude()
     {
-        int MagnitudeStrength = Utility.Get_rand(4, 11);
+        int MagnitudeStrength = Utility.RandomRange(4, 11);
         float baseDamage = 10f;
         float DamageIncrease = 0f;
         if(MagnitudeStrength > 4)

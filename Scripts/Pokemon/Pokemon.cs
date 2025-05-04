@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 [CreateAssetMenu(fileName = "Pokemon", menuName = "pkm")]
 public class Pokemon : ScriptableObject
 {
@@ -45,7 +47,7 @@ public class Pokemon : ScriptableObject
     public float CatchRate = 0;
     public int Current_level = 1;
     public int CurrentExpAmount = 0;
-    public float NextLvExpAmount = 0;
+    public float NextLevelExpAmount = 0;
     public string EXPGroup = "";
     public int exp_yield=0;
     public bool has_trainer=false;
@@ -56,6 +58,8 @@ public class Pokemon : ScriptableObject
     public string Status_effect = "None";
     public List<Buff_Debuff> Buff_Debuffs = new();
     public string[] evo_line;
+    public bool RequiresEvolutionStone = false;
+    public string EvolutionStoneName = "None";
     public string[] abilities;
     public bool split_evolution = false;
     public string[] learnSet;
@@ -66,7 +70,6 @@ public class Pokemon : ScriptableObject
     public bool HasItem = false;
     public Sprite front_picture;
     public Sprite back_picture;
-    public event Action OnLevelUP;
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
     //data conversion when json to obj
@@ -96,7 +99,7 @@ public class Pokemon : ScriptableObject
         foreach (Evolution e in evolutions)
             evo_data.Add(e.Evo_name);
     }
-    public void Set_Data(pokemon_storage storage)//gives values to attributes that cant be deserialized, using saved values
+    public void Set_Data()//gives values to attributes that cant be deserialized, using saved values
     {
         front_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower());
         back_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower() + "_b");
@@ -122,7 +125,7 @@ public class Pokemon : ScriptableObject
              evolutions.Add(Resources.Load<Evolution>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + Base_Pokemon_name + "/" +e));
         for(int i =0; i < types.Count; i++)
             types[i].type_img = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + type_data[i].ToLower());
-        Battle_handler.instance.onBattleEnd += clearEvents;
+        Battle_handler.instance.OnBattleEnd += ClearEvents;
     }
 
     public void RemoveHeldItem()
@@ -145,32 +148,38 @@ public class Pokemon : ScriptableObject
                 return true;
         return false;
     }
-    void Check_evolution(int evo_index)
+    public void CheckEvolutionRequirements(int evo_index)
     {
+        if (RequiresEvolutionStone)
+        { Evolve(evolutions[evo_index]); return; }
+        
         for (int i = 0; i < evo_line.Length; i++)
         {
-            int lv = int.Parse(evo_line[i]);
-            if (Current_level == lv)
+            int RequiredLevelToEvolve = int.Parse(evo_line[i]);
+            if (Current_level == RequiredLevelToEvolve)
+            {
                 Evolve(evolutions[i+evo_index]);
+                break;
+            }
         }
     }
-    void split_evo()
+    void DetermineEvolution()
     {
-        int evo = (int)Personality_value % 10;
-        if (evo>=0 & evo<5)
-            Check_evolution(0);
-        else if (evo>4 & evo<10)
-            Check_evolution(2);
+        int EvolutionValue = (int)Personality_value % 10;
+        if (EvolutionValue>=0 & EvolutionValue<5)
+            CheckEvolutionRequirements(0);
+        else if (EvolutionValue>4 & EvolutionValue<10)
+            CheckEvolutionRequirements(2);
     }
     public void Recieve_exp(int amount)
     {
         if (Current_level > 99) return;
         CurrentExpAmount += amount;
-        NextLvExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
-        if(CurrentExpAmount>NextLvExpAmount)
+        NextLevelExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
+        if(CurrentExpAmount>NextLevelExpAmount)
             Level_up();
     }
-    public int Calc_Exp(Pokemon enemy)
+    public int CalculateExp(Pokemon enemy)
     {
         float trainer_bonus = 1;
         float BaseExp = (enemy.exp_yield*enemy.Current_level) / 7f;
@@ -204,12 +213,12 @@ public class Pokemon : ScriptableObject
 
     void Increase_Stats()
     {
-        Attack = Stat_Increase(BaseAttack,Attack_IV,Attack_EV,"Attack");
-        Defense = Stat_Increase(BaseDefense,Defense_IV,Defense_EV,"Defense");
-        speed = Stat_Increase(Basespeed,speed_IV,speed_EV,"Speed");
-        SP_ATK = Stat_Increase(BaseSP_ATK,SP_ATK_IV,SP_ATK_EV,"Special Attack");
-        SP_DEF = Stat_Increase(BaseSP_DEF,SP_DEF_IV,SP_DEF_EV,"Special Defense");
-        max_HP = increase_HP();
+        Attack = DetermineStatIncrease(BaseAttack,Attack_IV,Attack_EV,"Attack");
+        Defense = DetermineStatIncrease(BaseDefense,Defense_IV,Defense_EV,"Defense");
+        speed = DetermineStatIncrease(Basespeed,speed_IV,speed_EV,"Speed");
+        SP_ATK = DetermineStatIncrease(BaseSP_ATK,SP_ATK_IV,SP_ATK_EV,"Special Attack");
+        SP_DEF = DetermineStatIncrease(BaseSP_DEF,SP_DEF_IV,SP_DEF_EV,"Special Defense");
+        max_HP = DetermineHealthIncrease();
         if (Current_level == 1)
             HP = max_HP;
     }
@@ -221,14 +230,14 @@ public class Pokemon : ScriptableObject
              return 0.9f;
          return 1;
      }
-    float Stat_Increase(float baseStat,float IV,float EV,string stat)
+    float DetermineStatIncrease(float baseStat,float IV,float EV,string stat)
     {
         float brackets1 = (2*baseStat) + IV + (EV / 4);
         float bracket2 = brackets1 * (Current_level / 100f);
         float bracket3 = bracket2 + 5f;
         return math.floor(bracket3 * Get_nature_Modifier(stat));
     }
-    float increase_HP()
+    float DetermineHealthIncrease()
     {
         float brackets1 = (2*BaseHP) + HP_IV + (HP_EV / 4);
         float bracket2 = brackets1 * (Current_level / 100f);
@@ -237,24 +246,25 @@ public class Pokemon : ScriptableObject
     }
     public void Level_up()
     {
-        OnLevelUP?.Invoke(); 
         OnLevelUp?.Invoke(this);
         Current_level++;
-        NextLvExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
+        NextLevelExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
         Increase_Stats();
-        if(split_evolution)
-            split_evo();
-        else
-            Check_evolution(0);
+        if (!RequiresEvolutionStone)
+        {
+            if(split_evolution)
+                DetermineEvolution();
+            else
+                CheckEvolutionRequirements(0);
+        }
         if (!Options_manager.instance.playerInBattle)//artificial level up
             PokemonOperations.GetNewMove(this);
         OnNewLevel?.Invoke();
-        while(CurrentExpAmount>NextLvExpAmount)
+        while(CurrentExpAmount>NextLevelExpAmount)
             Level_up();
     }
-    void clearEvents()
+    void ClearEvents()
     {
-        OnLevelUP = null;
         OnLevelUp = null;
         OnNewLevel = null;
     }

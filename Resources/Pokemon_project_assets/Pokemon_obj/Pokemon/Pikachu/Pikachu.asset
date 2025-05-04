@@ -53,7 +53,7 @@ MonoBehaviour:
   CatchRate: 190
   Current_level: 0
   CurrentExpAmount: 0
-  NextLvExpAmount: 0
+  NextLevelExpAmount: 0
   EXPGroup: Medium Fast
   exp_yield: 82
   has_trainer: 0
@@ -64,9 +64,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
   Status_effect: None
   Buff_Debuffs: []
-  type_Immunity: None
-  evo_line:
-  - 18
+  evo_line: []
+  RequiresEvolutionStone: 1
+  EvolutionStoneName: Thunder Stone
   abilities:
   - Static
   split_evolution: 0
@@ -89,4 +89,4 @@ MonoBehaviour:
   - Raichu
   type_data: []
   move_data: []
-  move_pp_data: 
+  move_pp_data: []

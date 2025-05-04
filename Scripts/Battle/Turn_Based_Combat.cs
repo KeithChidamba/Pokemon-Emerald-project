@@ -28,7 +28,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private void Start()
     {
-        Battle_handler.instance.onBattleEnd += Reset_Moves;
+        Battle_handler.instance.OnBattleEnd += Reset_Moves;
     }
     public void SaveMove(Turn turn)
     {
@@ -172,7 +172,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private bool MoveSuccessfull(Turn turn)
     {
-        int rand = Utility.Get_rand(1, 100);
+        int rand = Utility.RandomRange(1, 100);
         float Hit_Chance = turn.move_.Move_accuracy *
                            (Battle_handler.instance.Battle_Participants[turn.attackerIndex].pokemon.Accuracy / 
                             Battle_handler.instance.Battle_Participants[turn.victimIndex].pokemon.Evasion);

@@ -64,7 +64,7 @@ public static class BattleOperations
     {
         for (int i = 0; i < 4; i++)
         {
-            int rand = Utility.Get_rand(0, 256);
+            int rand = Utility.RandomRange(0, 256);
             if (rand > catchvalue)
                 return false;
         }

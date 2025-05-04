@@ -51,7 +51,7 @@ public class overworld_actions : MonoBehaviour
 
     IEnumerator TryFishing()
     {
-        int random = Utility.Get_rand(1, 11);
+        int random = Utility.RandomRange(1, 11);
         yield return new WaitForSeconds(1f);
         if (!fishing) yield break;
         if (random< 5)

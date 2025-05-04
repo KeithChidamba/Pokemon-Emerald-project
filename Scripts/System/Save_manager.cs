@@ -205,7 +205,7 @@ public class Save_manager : MonoBehaviour
             string json = File.ReadAllText(filePath);
             Pokemon pkm = ScriptableObject.CreateInstance<Pokemon>();
             JsonUtility.FromJsonOverwrite(json, pkm);
-            pkm.Set_Data(pokemon_storage.instance);
+            pkm.Set_Data();
             return pkm;
         }
         return null;

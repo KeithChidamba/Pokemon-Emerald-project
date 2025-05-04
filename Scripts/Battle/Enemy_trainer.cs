@@ -20,7 +20,7 @@ public class Enemy_trainer : MonoBehaviour
     private void Start()
     {
         Turn_Based_Combat.instance.OnNewTurn += Reset_move;
-        Battle_handler.instance.onBattleEnd += ResetAfterBattle;
+        Battle_handler.instance.OnBattleEnd += ResetAfterBattle;
     }
     public void Can_Attack()
     {
@@ -70,14 +70,14 @@ public class Enemy_trainer : MonoBehaviour
                 }
                 else
                 {
-                    int randomLeftOver = Utility.Get_rand(0, NotParticipatingList.Count - 1);
+                    int randomLeftOver = Utility.RandomRange(0, NotParticipatingList.Count - 1);
                     participant.pokemon = NotParticipatingList[randomLeftOver];
                     Battle_handler.instance.Set_participants(participant);
                 }
             }
             else
             {
-                int randomMemeber = Utility.Get_rand(0, numAlive.Count - 1);
+                int randomMemeber = Utility.RandomRange(0, numAlive.Count - 1);
                 participant.pokemon = numAlive[randomMemeber];
                 Battle_handler.instance.Set_participants(participant);
             }
@@ -120,9 +120,9 @@ public class Enemy_trainer : MonoBehaviour
             if (Battle_handler.instance.Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon && !Used_move && CanAttack)
             {
                 //Debug.Log("ai ataccked wit: "+participant.pokemon.Pokemon_name);
-                int randome_enemy = Utility.Get_rand(0, participant.Current_Enemies.Count);
+                int randome_enemy = Utility.RandomRange(0, participant.Current_Enemies.Count);
                 Select_player(randome_enemy);
-                int randomMove = Utility.Get_rand(0, participant.pokemon.move_set.Count);
+                int randomMove = Utility.RandomRange(0, participant.pokemon.move_set.Count);
                 //Debug.Log(participant.pokemon.Pokemon_name+" is gonna use move: "+participant.pokemon.move_set[randomMove].Move_name);
                 use_move(participant.pokemon.move_set[randomMove]);
                 CanAttack = false;

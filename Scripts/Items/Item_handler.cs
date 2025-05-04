@@ -40,34 +40,13 @@ public class Item_handler : MonoBehaviour
             case "pokeball":
                 UsePokeball(item);
                 break;
+            case "evolution stone":
+                StoneEvolution(item.Item_name.ToLower());
+                break;
             case "rare candy":
                 LevelUp();
                 break;
         }
-    }
-
-    void RestorePP(int MoveIndex)
-    {
-        Pokemon_Details.instance.OnMoveSelected -= RestorePP;
-        int PointsToAdd = 0;
-        Move CurrentMove = selected_party_pkm.move_set[MoveIndex];
-        
-        if (item_in_use.Item_type.ToLower() == "ether")
-            PointsToAdd = 10;
-        
-        if (item_in_use.Item_type.ToLower() == "max ether")
-            PointsToAdd = CurrentMove.max_Powerpoints;
-        
-        int SumPoints = CurrentMove.Powerpoints + PointsToAdd;
-        
-        CurrentMove.Powerpoints = (SumPoints > CurrentMove.max_Powerpoints) ? CurrentMove.max_Powerpoints : SumPoints;
-
-        Dialogue_handler.instance.Write_Info( CurrentMove.Move_name+" pp was restored!", "Details",1f);
-        DepleteItem();
-        ResetItemUsage();
-        skipTurn();
-        Pokemon_Details.instance.Exit_details();
-        Bag.instance.View_bag();
     }
     void LevelUp()
     {
@@ -76,6 +55,18 @@ public class Item_handler : MonoBehaviour
         Dialogue_handler.instance.Write_Info(selected_party_pkm.Pokemon_name+" leveled up!", "Details",1f);
         DepleteItem();
         ResetItemUsage();
+    }
+
+    void StoneEvolution(string EvolutionStoneName)
+    {
+        if (selected_party_pkm.EvolutionStoneName.ToLower() == EvolutionStoneName)
+        {
+            DepleteItem();
+            ResetItemUsage();
+            selected_party_pkm.CheckEvolutionRequirements(0);
+        } 
+        else
+            Dialogue_handler.instance.Write_Info("Cant use that on "+selected_party_pkm.Pokemon_name, "Details",1f);
     }
     void ChangeStats(string Stat)
     {
@@ -99,7 +90,30 @@ public class Item_handler : MonoBehaviour
         DepleteItem();
         Invoke(nameof(skipTurn),1.2f);
         ResetItemUsage();
-    }
+    } 
+    void RestorePP(int MoveIndex)
+     {
+         Pokemon_Details.instance.OnMoveSelected -= RestorePP;
+         int PointsToAdd = 0;
+         Move CurrentMove = selected_party_pkm.move_set[MoveIndex];
+         
+         if (item_in_use.Item_name.ToLower() == "ether")
+             PointsToAdd = 10;
+         
+         if (item_in_use.Item_name.ToLower() == "max ether")
+             PointsToAdd = CurrentMove.max_Powerpoints;
+         
+         int SumPoints = CurrentMove.Powerpoints + PointsToAdd;
+         
+         CurrentMove.Powerpoints = (SumPoints > CurrentMove.max_Powerpoints) ? CurrentMove.max_Powerpoints : SumPoints;
+ 
+         Dialogue_handler.instance.Write_Info( CurrentMove.Move_name+" pp was restored!", "Details",1f);
+         DepleteItem();
+         ResetItemUsage();
+         skipTurn();
+         Pokemon_Details.instance.Exit_details();
+         Bag.instance.View_bag();
+     }
     void IncreasePP(int MoveIndex)
     {
         Pokemon_Details.instance.OnMoveSelected -= IncreasePP;

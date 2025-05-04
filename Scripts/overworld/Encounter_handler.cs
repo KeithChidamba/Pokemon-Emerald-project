@@ -27,7 +27,7 @@ public class Encounter_handler : MonoBehaviour
         encounter_chance = 2;
         for (int i = 0; i < current_area.Pokemon.Length; i++)//send data to battle ui
         {
-            int random = Utility.Get_rand(1,101);
+            int random = Utility.RandomRange(1,101);
             int chance = int.Parse(current_area.Pokemon[i].Substring(current_area.Pokemon[i].Length - 3, 3));
             if ( (i == current_area.Pokemon.Length - 1) /*pick last option if none in range*/ || (random < chance) )//pick option within chance range
             {
@@ -44,7 +44,7 @@ public class Encounter_handler : MonoBehaviour
         if (wild_pkm != null)
         {
             PokemonOperations.SetPkmtraits(wild_pkm);
-            int rand_lv = Utility.Get_rand(current_area.min_lv, current_area.max_lv+1);
+            int rand_lv = Utility.RandomRange(current_area.min_lv, current_area.max_lv+1);
             int exp = PokemonOperations.GetNextLv(rand_lv - 1, wild_pkm.EXPGroup)+1;
             wild_pkm.Recieve_exp(exp);
             wild_pkm.HP=wild_pkm.max_HP;

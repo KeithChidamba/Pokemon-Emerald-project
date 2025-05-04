@@ -75,7 +75,7 @@ public class Participant_Status : MonoBehaviour
     }
     void freeze_check()
     {
-        if (Utility.Get_rand(1, 101) < 10) //10% chance
+        if (Utility.RandomRange(1, 101) < 10) //10% chance
             SetHeal();
         else
             _participant.pokemon.canAttack = false;
@@ -83,7 +83,7 @@ public class Participant_Status : MonoBehaviour
     void paralysis_check()
     {
         if (_participant.pokemon.isFlinched) return;
-        if (Utility.Get_rand(1, 101) < 75)//75% chance
+        if (Utility.RandomRange(1, 101) < 75)//75% chance
             _participant.pokemon.canAttack = true;
         else
             _participant.pokemon.canAttack = false;
@@ -101,7 +101,7 @@ public class Participant_Status : MonoBehaviour
         else //wake up early if lucky
         {
             int[] chances = { 25, 33, 50, 100 };
-            if (Utility.Get_rand(1, 101) < chances[status_duration-1])
+            if (Utility.RandomRange(1, 101) < chances[status_duration-1])
                 SetHeal();
             else
                 _participant.pokemon.canAttack = false;

@@ -5,7 +5,6 @@ public class AbilityHandler : MonoBehaviour
 {
     public Battle_Participant participant;
     public event Action OnAbilityUsed;
-    private Ability CurrentAbility;
     private bool AbilityTriggered;
     private string pkm_ability;
     private Dictionary<string, Action> AbilityMethods = new ();
@@ -33,8 +32,7 @@ public class AbilityHandler : MonoBehaviour
 
     public void Set_ability()
     {
-        CurrentAbility = participant.pokemon.ability;
-        pkm_ability = CurrentAbility.abilityName.ToLower().Replace(" ","");
+        pkm_ability = participant.pokemon.ability.abilityName.ToLower().Replace(" ","");
         if (AbilityMethods.TryGetValue(pkm_ability, out Action ability))
             OnAbilityUsed += ability;
         else
@@ -47,14 +45,14 @@ public class AbilityHandler : MonoBehaviour
         OnAbilityUsed = null;
         AbilityTriggered = false;
         Move_handler.instance.OnMoveHit -= GiveStatic;
-        Battle_handler.instance.onBattleEnd -= GiveItem;
+        Battle_handler.instance.OnBattleEnd -= GiveItem;
         Move_handler.instance.OnDamageDeal -= IncreaseDamage;
-        Move_handler.instance.OnStatusEffectHit -= HealStatus;
+        Move_handler.instance.OnStatusEffectHit -= HealStatusEffect;
     }
     void pick_up()
     {
         if (AbilityTriggered) return;
-        Battle_handler.instance.onBattleEnd += GiveItem;
+        Battle_handler.instance.OnBattleEnd += GiveItem;
         AbilityTriggered = true;
     }
 
@@ -103,11 +101,11 @@ public class AbilityHandler : MonoBehaviour
         Move_handler.instance.OnDamageDeal += IncreaseDamage;
         AbilityTriggered = true;
     }
-    void HealStatus(Battle_Participant victim,string status)
+    void HealStatusEffect(Battle_Participant victim,string status)
     {
         if (victim != participant) return;
-        if (participant.pokemon.Status_effect == "None") return;Debug.Log("triggered shedskin");
-        if (Utility.Get_rand(1, 4) < 2)
+        if (participant.pokemon.Status_effect == "None") return;
+        if (Utility.RandomRange(1, 4) < 2)
         {
             participant.pokemon.Status_effect = "None";
             if (participant.pokemon.Status_effect == "sleep" | participant.pokemon.Status_effect == "freeze"| participant.pokemon.Status_effect == "paralysis")
@@ -117,16 +115,16 @@ public class AbilityHandler : MonoBehaviour
     }
     void shed_skin()
     {
-        HealStatus(participant,participant.pokemon.Status_effect);//incase you already had status
+        HealStatusEffect(participant,participant.pokemon.Status_effect);//incase you already had status
         if (AbilityTriggered) return;
-        Move_handler.instance.OnStatusEffectHit += HealStatus;
+        Move_handler.instance.OnStatusEffectHit += HealStatusEffect;
         AbilityTriggered = true;
     }
     void static_()
     {
         if (AbilityTriggered) return;
-        AbilityTriggered = true;
         Move_handler.instance.OnMoveHit += GiveStatic;
+        AbilityTriggered = true;
     }
     
     void swarm()
@@ -144,11 +142,10 @@ public class AbilityHandler : MonoBehaviour
 
     void GiveItem()
     {
-        Debug.Log("triggered pickup");
         if (participant.pokemon.HasItem) return;
         //Check level and 10% pickup chance
         if (participant.pokemon.Current_level < 5) return;
-        if (Utility.Get_rand(1, 101) > 10) return;
+        if (Utility.RandomRange(1, 101) > 10) return;
         List<(int MinLevel, int MaxLevel, string[] Items)> ItemPool = new()
         {
             (5, 9, new[] { "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
@@ -171,9 +168,9 @@ public class AbilityHandler : MonoBehaviour
         }
         if (PossibleItems != null)
         {
-            int ItemWonIndex = Utility.Get_rand(0, PossibleItems.Length);
+            int ItemWonIndex = Utility.RandomRange(0, PossibleItems.Length);
             Item ItemWon = Resources.Load<Item>("Assets/Save_data/Items/" + PossibleItems[ItemWonIndex]);
-            if (Utility.Get_rand(1, 101) < participant.pokemon.Current_level)
+            if (Utility.RandomRange(1, 101) < participant.pokemon.Current_level)
                 participant.pokemon.HeldItem = Obj_Instance.set_Item(ItemWon);
         }
 

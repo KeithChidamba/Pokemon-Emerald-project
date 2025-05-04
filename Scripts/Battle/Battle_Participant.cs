@@ -29,6 +29,7 @@ public class Battle_Participant : MonoBehaviour
     public Type AddtionalTypeImmunity;
     public List<Pokemon> exp_recievers;
     public bool CanEscape = true;
+    private Action<Pokemon> _resetHandler;
     private void Start()
     {
         status = GetComponent<Participant_Status>();
@@ -36,7 +37,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.instance.OnTurnEnd += Check_Faint;
         Move_handler.instance.OnMoveEnd += Check_Faint;
         Turn_Based_Combat.instance.OnMoveExecute += Check_Faint;
-        Battle_handler.instance.onBattleEnd += Deactivate_pkm;
+        Battle_handler.instance.OnBattleEnd += Deactivate_pkm;
     }
     private void Update()
     {
@@ -45,7 +46,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private void Give_exp()
     {
-        Distribute_EXP(pokemon.Calc_Exp(pokemon));
+        Distribute_EXP(pokemon.CalculateExp(pokemon));
     }
     private void Give_EVs(Battle_Participant enemy)
     {
@@ -167,7 +168,7 @@ public class Battle_Participant : MonoBehaviour
         data.Load_Stats();
         data.Reset_Battle_state(pokemon,false);
         if (isPlayer)
-            pokemon.OnLevelUP -= Reset_pkm;
+            pokemon.OnLevelUp -= _resetHandler;
         ability_h.ResetState();
         CanEscape = true;
         AddtionalTypeImmunity = null;
@@ -210,7 +211,7 @@ public class Battle_Participant : MonoBehaviour
     }
     void Exp_bar()
     {
-        player_exp.value = ((pokemon.CurrentExpAmount/pokemon.NextLvExpAmount)*100);
+        player_exp.value = ((pokemon.CurrentExpAmount/pokemon.NextLevelExpAmount)*100);
         player_exp.maxValue = 100;
         player_exp.minValue = 0;
     }
@@ -230,7 +231,8 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.instance.OnMoveExecute += status.Notify_Healing;
         if (isPlayer)
         {
-            pokemon.OnLevelUP += Reset_pkm;
+            _resetHandler = pkm => Reset_pkm();
+            pokemon.OnLevelUp += _resetHandler;
             pokemon.OnLevelUp += Battle_handler.instance.LevelUpEvent;
             pokemon.OnNewLevel += data.save_stats;
             if (Battle_handler.instance.isDouble_battle)

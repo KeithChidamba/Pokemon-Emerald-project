@@ -35,7 +35,7 @@ public class Pokemon_party : MonoBehaviour
     }
     private void Start()
     {
-        Battle_handler.instance.onBattleEnd += close_party;
+        Battle_handler.instance.OnBattleEnd += close_party;
     }
     public void View_party()
     {

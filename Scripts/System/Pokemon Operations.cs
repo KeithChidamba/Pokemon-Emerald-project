@@ -134,12 +134,12 @@ public static class PokemonOperations
     }
     private static void Generate_IVs(Pokemon new_pkm)
     {
-        new_pkm.HP_IV =  Utility.Get_rand(0,32);
-        new_pkm.Attack_IV = Utility.Get_rand(0,32);
-        new_pkm.Defense_IV =  Utility.Get_rand(0,32);
-        new_pkm.SP_ATK_IV =  Utility.Get_rand(0,32);
-        new_pkm.SP_DEF_IV =  Utility.Get_rand(0,32);
-        new_pkm.speed_IV =  Utility.Get_rand(0,32);
+        new_pkm.HP_IV =  Utility.RandomRange(0,32);
+        new_pkm.Attack_IV = Utility.RandomRange(0,32);
+        new_pkm.Defense_IV =  Utility.RandomRange(0,32);
+        new_pkm.SP_ATK_IV =  Utility.RandomRange(0,32);
+        new_pkm.SP_DEF_IV =  Utility.RandomRange(0,32);
+        new_pkm.speed_IV =  Utility.RandomRange(0,32);
     }
 
     public static void GetNewMove(Pokemon pkm)
@@ -167,7 +167,7 @@ public static class PokemonOperations
                     }
                     //wild pokemon get generated with somewhat random moveset choices
                     else
-                        CurrentPkm.move_set[Utility.Get_rand(0,4)] = Obj_Instance.set_move(Resources.Load<Move>(
+                        CurrentPkm.move_set[Utility.RandomRange(0,4)] = Obj_Instance.set_move(Resources.Load<Move>(
                             "Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
                 }
                 else

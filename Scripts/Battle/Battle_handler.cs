@@ -36,7 +36,7 @@ public class Battle_handler : MonoBehaviour
     public bool Doing_move = false;
     public Pokemon LastOpponent;
     public static Battle_handler instance;
-    public event Action onBattleEnd;
+    public event Action OnBattleEnd;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -456,7 +456,7 @@ public class Battle_handler : MonoBehaviour
     }
     void end_battle_ui(bool PlayerWhiteOut)
     {
-        onBattleEnd?.Invoke();
+        OnBattleEnd?.Invoke();
         Dialogue_handler.instance.Dialouge_off();
         Options_manager.instance.playerInBattle = false;
         overworld_actions.instance.doing_action = false;
@@ -499,7 +499,7 @@ public class Battle_handler : MonoBehaviour
                 Dialogue_handler.instance.Battle_Info("Can't run away from trainer battle");
             else
             { 
-                int random = Utility.Get_rand(1,11);
+                int random = Utility.RandomRange(1,11);
                 if (Battle_Participants[0].pokemon.Current_level < Battle_Participants[0].Current_Enemies[0].pokemon.Current_level)//lower chance if weaker
                     random--;
                 if (random > 5) //initially 50/50 chance to run

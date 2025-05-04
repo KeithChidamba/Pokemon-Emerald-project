@@ -43,7 +43,7 @@ public class Pokemon_Details : MonoBehaviour
     private void Update()
     {
         if(current_pkm == null)return;
-        player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLvExpAmount)*100);
+        player_exp.value = ((current_pkm.CurrentExpAmount/current_pkm.NextLevelExpAmount)*100);
     }
 
     public void Exit_details()
@@ -131,7 +131,7 @@ public class Pokemon_Details : MonoBehaviour
         pkm_speed.text = current_pkm.speed.ToString();
         pkm_sp_def.text = current_pkm.SP_DEF.ToString();
         pkm_CurrentExp.text = current_pkm.CurrentExpAmount.ToString();
-        pkm_NextLvExp.text = current_pkm.NextLvExpAmount.ToString();
+        pkm_NextLvExp.text = current_pkm.NextLevelExpAmount.ToString();
         pkm_HeldItem.text = (current_pkm.HasItem)? current_pkm.HeldItem.Item_name: "NONE";
         Stats_ui.SetActive(true);
     }     

@@ -74,7 +74,7 @@ public static class Obj_Instance
         new_pkm.CatchRate = pkm.CatchRate;
         new_pkm.Current_level = pkm.Current_level;
         new_pkm.CurrentExpAmount = pkm.CurrentExpAmount;
-        new_pkm.NextLvExpAmount = pkm.NextLvExpAmount;
+        new_pkm.NextLevelExpAmount = pkm.NextLevelExpAmount;
         new_pkm.EXPGroup = pkm.EXPGroup;
         new_pkm.exp_yield = pkm.exp_yield;
         new_pkm.has_trainer = pkm.has_trainer;

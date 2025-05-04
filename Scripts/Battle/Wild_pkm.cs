@@ -48,7 +48,7 @@ public class Wild_pkm : MonoBehaviour
         if (Battle_handler.instance.Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon_participant.pokemon && !Used_move && CanAttack)
         {
             Select_player(0);//attack player, since its single battle
-            if(Utility.Get_rand(1,11)>3)//70% chance
+            if(Utility.RandomRange(1,11)>3)//70% chance
                 choose_move();
             else
                 RunAway();
@@ -75,11 +75,11 @@ public class Wild_pkm : MonoBehaviour
     }
     private void choose_move()
     {
-        if(Utility.Get_rand(1,11)<5)//40% chance
+        if(Utility.RandomRange(1,11)<5)//40% chance
             Use_random();
         else
         {
-            if (Utility.Get_rand(1, 11) < 8)
+            if (Utility.RandomRange(1, 11) < 8)
             {
                 if (CanUse_effective());
                 else
@@ -110,7 +110,7 @@ public class Wild_pkm : MonoBehaviour
 
     void Use_random()
     {
-        int rand_move = Utility.Get_rand(0, pokemon_participant.pokemon.move_set.Count);
+        int rand_move = Utility.RandomRange(0, pokemon_participant.pokemon.move_set.Count);
         use_move(pokemon_participant.pokemon.move_set[rand_move]);
     }
 
