@@ -209,13 +209,13 @@ public class Battle_handler : MonoBehaviour
         battleParticipants[2].currentEnemies.Add(battleParticipants[0]);
         battleParticipants[2].pokemonTrainerAI = battleParticipants[2].GetComponent<Enemy_trainer>();
         battleParticipants[2].pokemonTrainerAI.StartBattle(trainerName, false);
-        battleParticipants[2].pokemon = battleParticipants[2].pokemonTrainerAI.TrainerParty[0];
-        LoadAreaBackground(battleParticipants[2].pokemonTrainerAI._TrainerData.TrainerLocation);
+        battleParticipants[2].pokemon = battleParticipants[2].pokemonTrainerAI.trainerParty[0];
+        LoadAreaBackground(battleParticipants[2].pokemonTrainerAI.trainerData.TrainerLocation);
         battleParticipants[2].AddToExpList(battleParticipants[0].pokemon);
         foreach (Battle_Participant p in battleParticipants)
             if (p.pokemon != null)
                 SetParticipant(p);
-        battleParticipants[2].pokemonTrainerAI.InBattle = true;
+        battleParticipants[2].pokemonTrainerAI.inBattle = true;
         SetupBattle();
     }
 
@@ -232,10 +232,10 @@ public class Battle_handler : MonoBehaviour
         battleParticipants[3].pokemonTrainerAI = battleParticipants[3].GetComponent<Enemy_trainer>();
         battleParticipants[2].pokemonTrainerAI.StartBattle(trainerName, false);
         battleParticipants[3].pokemonTrainerAI.StartBattle(trainerName, true);
-        battleParticipants[3].pokemonTrainerAI._TrainerData = battleParticipants[2].pokemonTrainerAI._TrainerData;
-        battleParticipants[3].pokemonTrainerAI.TrainerParty = battleParticipants[2].pokemonTrainerAI.TrainerParty;
-        battleParticipants[2].pokemon = battleParticipants[2].pokemonTrainerAI.TrainerParty[0];
-        battleParticipants[3].pokemon = battleParticipants[3].pokemonTrainerAI.TrainerParty[1];
+        battleParticipants[3].pokemonTrainerAI.trainerData = battleParticipants[2].pokemonTrainerAI.trainerData;
+        battleParticipants[3].pokemonTrainerAI.trainerParty = battleParticipants[2].pokemonTrainerAI.trainerParty;
+        battleParticipants[2].pokemon = battleParticipants[2].pokemonTrainerAI.trainerParty[0];
+        battleParticipants[3].pokemon = battleParticipants[3].pokemonTrainerAI.trainerParty[1];
         for (int i = 0; i < 2; i++) //double battle always has 2 enemies enter
         {
             if (battleParticipants[i + 2].pokemon != null)
@@ -258,9 +258,9 @@ public class Battle_handler : MonoBehaviour
         foreach (Battle_Participant p in battleParticipants)
             if (p.pokemon != null)
                 SetParticipant(p);
-        battleParticipants[2].pokemonTrainerAI.InBattle = true;
-        battleParticipants[3].pokemonTrainerAI.InBattle = true;
-        LoadAreaBackground(battleParticipants[2].pokemonTrainerAI._TrainerData.TrainerLocation);
+        battleParticipants[2].pokemonTrainerAI.inBattle = true;
+        battleParticipants[3].pokemonTrainerAI.inBattle = true;
+        LoadAreaBackground(battleParticipants[2].pokemonTrainerAI.trainerData.TrainerLocation);
         SetupBattle();
     }
 public void SetParticipant(Battle_Participant participant)
@@ -361,7 +361,7 @@ public void SetParticipant(Battle_Participant participant)
         {
             int baseMoneyPayout=0;
             if(isTrainerBattle)
-                baseMoneyPayout=battleParticipants[0].currentEnemies[0].pokemonTrainerAI._TrainerData.BaseMoneyPayout;
+                baseMoneyPayout=battleParticipants[0].currentEnemies[0].pokemonTrainerAI.trainerData.BaseMoneyPayout;
             if (battleWon)
             {
                 Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
@@ -454,7 +454,7 @@ public void SetParticipant(Battle_Participant participant)
                 p.previousMove = "";
                 p.DeactivateUI();
                 if (p.pokemonTrainerAI != null)
-                    p.pokemonTrainerAI.InBattle = false;
+                    p.pokemonTrainerAI.inBattle = false;
             }
         Encounter_handler.instance.Reset_trigger();
         overWorld.SetActive(true);

@@ -155,7 +155,7 @@ public class Item_handler : MonoBehaviour
         float BallRate = float.Parse(pokeball.Item_effect);
         float bracket1 = (3 * WildPokemon.max_HP - 2 * WildPokemon.HP) / (3 * WildPokemon.max_HP);
         float CatchValue = math.trunc(bracket1 * WildPokemon.CatchRate * BallRate * 
-                                      BattleOperations.GetStatusBonus(WildPokemon.Status_effect));
+                                      BattleOperations.GetCatchRateBonusFromStatus(WildPokemon.Status_effect));
         if (BattleOperations.IsImmediateCatch(CatchValue))
             isCaught = true;
         else

@@ -96,7 +96,7 @@ public class Wild_pkm : MonoBehaviour
         List<Move> mock_moveset = new();
         foreach (Move m in pokemon_participant.pokemon.move_set)
         {
-            if (!BattleOperations.isImmuneTo(Enemy_pokemon.pokemon, m.type)) //look for all non-immune moves
+            if (!BattleOperations.IsImmuneTo(Enemy_pokemon.pokemon, m.type)) //look for all non-immune moves
                 mock_moveset.Add(m);
         }
         if (mock_moveset.Count > 0)
@@ -123,7 +123,7 @@ public class Wild_pkm : MonoBehaviour
     {
         foreach (Move m in pokemon_participant.pokemon.move_set)
         {//look for super effective attacking move
-            float eff = BattleOperations.TypeEffectiveness(Enemy_pokemon, m.type);
+            float eff = BattleOperations.GetTypeEffectiveness(Enemy_pokemon, m.type);
             if ( eff > 1 && !m.is_Buff_Debuff)
             {
                 use_move(m);

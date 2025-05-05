@@ -53,7 +53,7 @@ public class Move_handler:MonoBehaviour
     }
     IEnumerator Move_Sequence()
     {
-        float MoveEffectiveness = BattleOperations.TypeEffectiveness(victim_, current_turn.move_.type);
+        float MoveEffectiveness = BattleOperations.GetTypeEffectiveness(victim_, current_turn.move_.type);
         if (MoveEffectiveness == 0 & !current_turn.move_.isMultiTarget)
             Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" is immune to it!");
         else
@@ -110,7 +110,7 @@ public class Move_handler:MonoBehaviour
         float Attack_type = 0;
         float atk_def_ratio;
         float random_factor = (float)Utility.RandomRange(85, 101) / 100;
-        float type_effectiveness = BattleOperations.TypeEffectiveness(CurrentVictim, current_turn.move_.type);
+        float type_effectiveness = BattleOperations.GetTypeEffectiveness(CurrentVictim, current_turn.move_.type);
         if (current_turn.move_.isSpecial)
             Attack_type = attacker_.pokemon.SP_ATK;
         else
@@ -319,7 +319,7 @@ public class Move_handler:MonoBehaviour
     }
     private float Get_buff_debuff(float stat_val, BuffDebuffData data)
     {
-        BattleOperations.ChangeBuffs(data);
+        BattleOperations.ChangeBuff(data);
         Buff_Debuff buff = BattleOperations.GetBuff(data.Reciever, data.StatName);
         if (data.StatName == "Accuracy" | data.StatName == "Evasion")
             return math.trunc(stat_val * Accuracy_And_Evasion_Levels[buff.Stage+6]); 
@@ -353,7 +353,7 @@ public class Move_handler:MonoBehaviour
         }
         if (NumHits>0)
         {
-            GetEffectiveness(BattleOperations.TypeEffectiveness(victim_, current_turn.move_.type), victim_);
+            GetEffectiveness(BattleOperations.GetTypeEffectiveness(victim_, current_turn.move_.type), victim_);
             yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
             Dialogue_handler.instance.Battle_Info("It hit (x" + NumHits + ") times");
         }
