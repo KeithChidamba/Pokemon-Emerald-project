@@ -11,355 +11,336 @@ using UnityEngine.UI;
 
 public class Battle_handler : MonoBehaviour
 {
-    public GameObject Battle_ui;
-    public GameObject moves_ui;
-    public GameObject options_ui;
-    public Battle_Participant[] Battle_Participants = {null,null,null,null};
-    public List<LevelUpEvent> levelUpQueue=new();
-    public Text Move_pp, Move_type;
-    public Text[] moves;
-    public GameObject[] Move_btns;
-    public bool is_trainer_battle = false;
-    public bool isDouble_battle = false;
-    public int Participant_count = 0;
-    public bool displaying_info = false;
-    public bool BattleOver = false;
-    public bool BattleWon = false;
-    public GameObject OverWorld;
-    public List<GameObject> Backgrounds;
-    public bool viewing_options = false;
-    public bool choosing_move = false;
-    public bool running_away = false;
-    public bool Selected_Move = false;
-    private int Current_Move = 0;
-    public int Current_pkm_Enemy = 0;
-    public bool Doing_move = false;
-    public Pokemon LastOpponent;
-    public static Battle_handler instance;
+    public GameObject battleUI;
+    public GameObject movesUI;
+    public GameObject optionsUI;
+    public Battle_Participant[] battleParticipants = { null, null, null, null };
+    public List<LevelUpEvent> levelUpQueue = new();
+    public Text movePowerPointsText;
+    public Text moveTypeText;
+    public Text[] availableMovesText;
+    public GameObject[] moveButtons;
+    public bool isTrainerBattle = false;
+    public bool isDoubleBattle = false;
+    public int participantCount = 0;
+    public bool displayingInfo = false;
+    public bool battleOver = false;
+    public bool battleWon = false;
+    public GameObject overWorld;
+    public List<GameObject> backgrounds;
+    public bool viewingOptions = false;
+    public bool choosingMove = false;
+    public bool runningAway = false;
+    public bool selectedMove = false;
+    private int _currentMoveIndex = 0;
+    public int currentEnemyIndex = 0;
+    public bool doingMove = false;
+    public Pokemon lastOpponent;
+    private Battle_Participant _currentParticipant;
+    public static Battle_handler Instance;
     public event Action OnBattleEnd;
+
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+
+        Instance = this;
     }
+
     void Update()
     {
         if (!Options_manager.instance.playerInBattle) return;
-            Handle_battle();
+        HandlePlayerInput();
     }
 
-    private void Handle_battle()
+    private void HandlePlayerInput()
     {
-        if (Selected_Move &&(Input.GetKeyDown(KeyCode.F)) )
+        _currentParticipant = battleParticipants[Turn_Based_Combat.instance.Current_pkm_turn];
+        if (selectedMove && (Input.GetKeyDown(KeyCode.F)))
         {
-            if (Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy)
+            if (_currentParticipant.enemySelected)
             {
-                if(isDouble_battle)
-                    Use_Move(Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move],
-                        Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn]);//any of payer's 2 pkm using move
-                else
-                    Use_Move(Battle_Participants[0].pokemon.move_set[Current_Move],Battle_Participants[0]);//player using move
-                choosing_move = false;
+                UseMove(_currentParticipant.pokemon.move_set[_currentMoveIndex], _currentParticipant);
+                choosingMove = false;
             }
             else
-                Dialogue_handler.instance.Write_Info("Click on who you will attack", "Details");//details
-        }
-        if(choosing_move && (Input.GetKeyDown(KeyCode.Escape)))//exit move selection
-        {
-            View_options();
-            choosing_move = false;
-            Reset_move();
+                Dialogue_handler.instance.Write_Info("Click on who you will attack", "Details");
         }
 
-        if (displaying_info || BattleOver)
+        if (choosingMove && (Input.GetKeyDown(KeyCode.Escape))) //exit move selection
         {
-            options_ui.SetActive(false);
-            viewing_options = false;
+            ViewOptions();
+            choosingMove = false;
+            ResetMoveUsability();
         }
+
+        if (displayingInfo || battleOver)
+        {
+            optionsUI.SetActive(false);
+            viewingOptions = false;
+        }
+
         if (overworld_actions.instance.using_ui)
         {
             Wild_pkm.instance.CanAttack = false;
-            options_ui.SetActive(false);
-            viewing_options = false;
+            optionsUI.SetActive(false);
+            viewingOptions = false;
         }
         else
         {
-            if (!choosing_move && !running_away && !Doing_move && !displaying_info && !Doing_move && !BattleOver)
-                viewing_options = true;
+            if (!choosingMove && !runningAway && !doingMove && !displayingInfo && !doingMove && !battleOver)
+                viewingOptions = true;
             else
-                viewing_options = false;
-            if (viewing_options)
+                viewingOptions = false;
+            if (viewingOptions)
             {
                 ResetAi();
                 Dialogue_handler.instance.Write_Info("What will you do?", "Details");
-                options_ui.SetActive(true);
+                optionsUI.SetActive(true);
             }
         }
-        Battle_logic();
+        AutoAim();
     }
 
     void ResetAi()
     {
-        if (!is_trainer_battle)
-            Wild_pkm.instance.Invoke(nameof(Wild_pkm.instance.Can_Attack),1f);
+        //improve eventually to work as proper strategy AI
+        if (!isTrainerBattle)
+            Wild_pkm.instance.Invoke(nameof(Wild_pkm.instance.Can_Attack), 1f);
         else
-            foreach(Battle_Participant p in Battle_Participants)
+            foreach (Battle_Participant p in battleParticipants)
                 if (p.pokemon != null & !p.isPlayer)
-                    p.trainer.Invoke(nameof(p.trainer.Can_Attack),1f);
+                    p.pokemonTrainerAI.Invoke(nameof(p.pokemonTrainerAI.Can_Attack), 1f);
     }
-    void Battle_logic()
+
+    void AutoAim()
     {
-        if (!isDouble_battle && Turn_Based_Combat.instance.Current_pkm_turn == 0)//if single battle, auto aim at enemy
+        if (!isDoubleBattle && Turn_Based_Combat.instance.Current_pkm_turn == 0) //if single battle, auto aim at enemy
         {
-            Current_pkm_Enemy = 2;
-            Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
+            currentEnemyIndex = 2;
+            _currentParticipant.enemySelected = true;
         }
     }
 
-    public void View_options()
+    public void ViewOptions()
     {
-        if(!Options_manager.instance.playerInBattle)return;
-        moves_ui.SetActive(false);
-        options_ui.SetActive(true); 
+        if (!Options_manager.instance.playerInBattle) return;
+        movesUI.SetActive(false);
+        optionsUI.SetActive(true);
     }
-    public void Select_enemy(int choice)
+
+    public void SelectEnemy(int choice)
     {
-        if(Turn_Based_Combat.instance.Current_pkm_turn>1)return;//not player's turn
-        if (isDouble_battle & choice < 2)
-        {//cant attack own pokemon
-            Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = false;
+        if (Turn_Based_Combat.instance.Current_pkm_turn > 1) return; //not player's turn
+        if (isDoubleBattle & choice < 2)
+        {
+            //cant attack own pokemon
+            _currentParticipant.enemySelected = false;
             return;
         }
-        Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Selected_Enemy = true;
-        Current_pkm_Enemy = choice;
+        _currentParticipant.enemySelected = true;
+        currentEnemyIndex = choice;
     }
-    private void Set_battle_ui()
-    {
-        Battle_ui.SetActive(true);
-        OverWorld.SetActive(false);
-    }
-    void set_battle()
+
+    void SetupBattle()
     {
         Game_Load.instance.player_data.player_Position = Player_movement.instance.transform.position;
         levelUpQueue.Clear();
         Options_manager.instance.playerInBattle = true;
-        Set_battle_ui();
-        Turn_Based_Combat.instance.Change_turn(-1,0);
+        battleUI.SetActive(true);
+        overWorld.SetActive(false);
+        Turn_Based_Combat.instance.Change_turn(-1, 0);
     }
 
-    void Load_Area_bg(Encounter_Area area)
+    void LoadAreaBackground(Encounter_Area area)
     {
-        foreach (GameObject g in Backgrounds)
-            if (g.name==area.Biome_name.ToLower())
-                g.SetActive(true);
-            else
-                g.SetActive(false);
+        foreach (GameObject background in backgrounds)
+            background.SetActive(background.name == area.Biome_name.ToLower());
     }
-    public void StartWildBattle(Pokemon enemy)//only ever be for wild battles
+
+    public void StartWildBattle(Pokemon enemy) //only ever be for wild battles
     {
-        BattleOver = false;
-        is_trainer_battle = false;
-        isDouble_battle = false;
-        Load_Area_bg(Encounter_handler.instance.current_area);
-        Battle_Participants[0].pokemon = Pokemon_party.instance.party[0];
-        Battle_Participants[0].Current_Enemies.Add(Battle_Participants[2]);
-        Battle_Participants[2].pokemon = enemy;
-        Battle_Participants[2].Current_Enemies.Add(Battle_Participants[0]);
-        Wild_pkm.instance.pokemon_participant = Battle_Participants[2];
-        Wild_pkm.instance.Enemy_pokemon = Battle_Participants[0];
-        Battle_Participants[2].AddToExpList(Battle_Participants[0].pokemon);
-        foreach(Battle_Participant p in Battle_Participants)
+        battleOver = false;
+        isTrainerBattle = false;
+        isDoubleBattle = false;
+        LoadAreaBackground(Encounter_handler.instance.current_area);
+        battleParticipants[0].pokemon = Pokemon_party.instance.party[0];
+        battleParticipants[0].currentEnemies.Add(battleParticipants[2]);
+        battleParticipants[2].pokemon = enemy;
+        battleParticipants[2].currentEnemies.Add(battleParticipants[0]);
+        Wild_pkm.instance.pokemon_participant = battleParticipants[2];
+        Wild_pkm.instance.Enemy_pokemon = battleParticipants[0];
+        battleParticipants[2].AddToExpList(battleParticipants[0].pokemon);
+        foreach (Battle_Participant p in battleParticipants)
             if (p.pokemon != null)
-                Set_participants(p);
+                SetParticipant(p);
         Wild_pkm.instance.InBattle = true;
-        set_battle();
+        SetupBattle();
         Encounter_handler.instance.current_area = null;
     }
-    public void SetBattleType(List<string>trainerNames,string battleType)
+
+    public void SetBattleType(List<string> trainerNames, string battleType)
     {
         switch (battleType)
         {
-            case "single": 
+            case "single":
                 StartSingleBattle(trainerNames[0]);
                 break;
-            case "single-double": 
+            case "single-double":
                 StartSingleDoubleBattle(trainerNames[0]);
                 break;
-            case "double": 
+            case "double":
                 //StartDoubleBattle(trainerNames);
                 break;
         }
     }
-    private void StartSingleBattle(string trainerName)//single trainer battle
+
+    private void StartSingleBattle(string trainerName) //single trainer battle
     {
-        BattleOver = false;
-        is_trainer_battle = true;
-        isDouble_battle = false;
-        Battle_Participants[0].pokemon = Pokemon_party.instance.party[0];
-        Battle_Participants[0].Current_Enemies.Add(Battle_Participants[2]);
-        Battle_Participants[2].Current_Enemies.Add(Battle_Participants[0]);
-        Battle_Participants[2].trainer = Battle_Participants[2].GetComponent<Enemy_trainer>();
-        Battle_Participants[2].trainer.StartBattle(trainerName,false);
-        Battle_Participants[2].pokemon = Battle_Participants[2].trainer.TrainerParty[0];
-        Load_Area_bg(Battle_Participants[2].trainer._TrainerData.TrainerLocation);
-        Battle_Participants[2].AddToExpList(Battle_Participants[0].pokemon);
-        foreach(Battle_Participant p in Battle_Participants)
+        battleOver = false;
+        isTrainerBattle = true;
+        isDoubleBattle = false;
+        battleParticipants[0].pokemon = Pokemon_party.instance.party[0];
+        battleParticipants[0].currentEnemies.Add(battleParticipants[2]);
+        battleParticipants[2].currentEnemies.Add(battleParticipants[0]);
+        battleParticipants[2].pokemonTrainerAI = battleParticipants[2].GetComponent<Enemy_trainer>();
+        battleParticipants[2].pokemonTrainerAI.StartBattle(trainerName, false);
+        battleParticipants[2].pokemon = battleParticipants[2].pokemonTrainerAI.TrainerParty[0];
+        LoadAreaBackground(battleParticipants[2].pokemonTrainerAI._TrainerData.TrainerLocation);
+        battleParticipants[2].AddToExpList(battleParticipants[0].pokemon);
+        foreach (Battle_Participant p in battleParticipants)
             if (p.pokemon != null)
-                Set_participants(p);
-        Battle_Participants[2].trainer.InBattle = true;
-        set_battle();
+                SetParticipant(p);
+        battleParticipants[2].pokemonTrainerAI.InBattle = true;
+        SetupBattle();
     }
-    /*public void StartDoubleBattle(List<string> trainerNames)//trainer double battle
+
+    private void StartSingleDoubleBattle(string trainerName) //1v1 trainer double battle
     {
-        //double battle setup, 2v2 or 1v2
-        BattleOver = false;
-        Load_Area_bg();
-        is_trainer_battle = true;
-        for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
+        battleOver = false;
+        isTrainerBattle = true;
+        isDoubleBattle = true;
+        List<Pokemon> alivePokemon = Pokemon_party.instance.GetLivingPokemon();
+        battleParticipants[0].pokemon = alivePokemon[0];
+        if (Pokemon_party.instance.num_members > 1)
+            battleParticipants[1].pokemon = alivePokemon[1];
+        battleParticipants[2].pokemonTrainerAI = battleParticipants[2].GetComponent<Enemy_trainer>();
+        battleParticipants[3].pokemonTrainerAI = battleParticipants[3].GetComponent<Enemy_trainer>();
+        battleParticipants[2].pokemonTrainerAI.StartBattle(trainerName, false);
+        battleParticipants[3].pokemonTrainerAI.StartBattle(trainerName, true);
+        battleParticipants[3].pokemonTrainerAI._TrainerData = battleParticipants[2].pokemonTrainerAI._TrainerData;
+        battleParticipants[3].pokemonTrainerAI.TrainerParty = battleParticipants[2].pokemonTrainerAI.TrainerParty;
+        battleParticipants[2].pokemon = battleParticipants[2].pokemonTrainerAI.TrainerParty[0];
+        battleParticipants[3].pokemon = battleParticipants[3].pokemonTrainerAI.TrainerParty[1];
+        for (int i = 0; i < 2; i++) //double battle always has 2 enemies enter
         {
-             Battle_P[i+2].pokemon = enemies[i];
-             //set your 2 pokemon's enemies
-             Battle_P[0].Current_Enemies.Add(Battle_P[i + 2]);
-             Battle_P[1].Current_Enemies.Add(Battle_P[i + 2]);
-        }
-        //Set_participants();
-        set_battle();
-    }*/
-    private void StartSingleDoubleBattle(string trainerName)//trainer single double battles
-    {
-        BattleOver = false;
-        is_trainer_battle = true;
-        isDouble_battle = true;
-        List<Pokemon> Alive_pkm=new();
-        foreach (Pokemon p in Pokemon_party.instance.party)
-            if (p != null && p.HP > 0)
-                Alive_pkm.Add(p);
-        Battle_Participants[0].pokemon = Alive_pkm[0];
-        if(Pokemon_party.instance.num_members>1)
-            Battle_Participants[1].pokemon = Alive_pkm[1];
-        Battle_Participants[2].trainer = Battle_Participants[2].GetComponent<Enemy_trainer>();
-        Battle_Participants[3].trainer = Battle_Participants[3].GetComponent<Enemy_trainer>();
-        Battle_Participants[2].trainer.StartBattle(trainerName,false);
-        Battle_Participants[3].trainer.StartBattle(trainerName,true);
-        Battle_Participants[3].trainer._TrainerData = Battle_Participants[2].trainer._TrainerData;
-        Battle_Participants[3].trainer.TrainerParty = Battle_Participants[2].trainer.TrainerParty;
-        Battle_Participants[2].pokemon = Battle_Participants[2].trainer.TrainerParty[0];
-        Battle_Participants[3].pokemon = Battle_Participants[3].trainer.TrainerParty[1]; 
-        for(int i = 0; i < 2; i++)//double battle always has 2 enemies enter
-        {
-              if(Battle_Participants[i + 2].pokemon!=null)
-              {
-                  Battle_Participants[0].Current_Enemies.Add(Battle_Participants[i + 2]);
-                  if (Pokemon_party.instance.num_members > 1)
-                      Battle_Participants[1].Current_Enemies.Add(Battle_Participants[i + 2]);
-              }
-              if (Battle_Participants[i].pokemon != null)
-              {
-                  Battle_Participants[2].Current_Enemies.Add(Battle_Participants[i]);
-                  Battle_Participants[3].Current_Enemies.Add(Battle_Participants[i]);
-              }
+            if (battleParticipants[i + 2].pokemon != null)
+            {
+                battleParticipants[0].currentEnemies.Add(battleParticipants[i + 2]);
+                if (Pokemon_party.instance.num_members > 1)
+                    battleParticipants[1].currentEnemies.Add(battleParticipants[i + 2]);
+            }
+
+            if (battleParticipants[i].pokemon != null)
+            {
+                battleParticipants[2].currentEnemies.Add(battleParticipants[i]);
+                battleParticipants[3].currentEnemies.Add(battleParticipants[i]);
+            }
         }
         for (int i = 0; i < 2; i++)
-            if (Battle_Participants[i].pokemon != null)
-                foreach (Battle_Participant enemy  in Battle_Participants[i].Current_Enemies)
-                    enemy.AddToExpList(Battle_Participants[i].pokemon);
-        foreach(Battle_Participant p in Battle_Participants)
+            if (battleParticipants[i].pokemon != null)
+                foreach (Battle_Participant enemy in battleParticipants[i].currentEnemies)
+                    enemy.AddToExpList(battleParticipants[i].pokemon);
+        foreach (Battle_Participant p in battleParticipants)
             if (p.pokemon != null)
-                Set_participants(p);
-        Battle_Participants[2].trainer.InBattle = true;
-        Battle_Participants[3].trainer.InBattle = true; 
-        Load_Area_bg(Battle_Participants[2].trainer._TrainerData.TrainerLocation);
-        set_battle();
+                SetParticipant(p);
+        battleParticipants[2].pokemonTrainerAI.InBattle = true;
+        battleParticipants[3].pokemonTrainerAI.InBattle = true;
+        LoadAreaBackground(battleParticipants[2].pokemonTrainerAI._TrainerData.TrainerLocation);
+        SetupBattle();
     }
-    public void Set_participants(Battle_Participant Participant)
+public void SetParticipant(Battle_Participant participant)
     {
-        List<Pokemon> Alive_pkm=new();
-        if (Participant.isPlayer)
+        if (participant.isPlayer)
         { //for switch-ins
             if (Pokemon_party.instance.Swapping_in || Pokemon_party.instance.SwapOutNext)
             {
-                foreach (Pokemon p in Pokemon_party.instance.party)
-                    if (p != null && p.HP > 0)
-                        Alive_pkm.Add(p);
-                Participant.pokemon = Alive_pkm[Pokemon_party.instance.Selected_member - 1];
-                foreach (Battle_Participant enemyParticipant  in Participant.Current_Enemies)
-                    enemyParticipant.AddToExpList(Participant.pokemon);
+                List<Pokemon> alivePokemon=Pokemon_party.instance.GetLivingPokemon();
+                participant.pokemon = alivePokemon[Pokemon_party.instance.Selected_member - 1];
+                foreach (Battle_Participant enemyParticipant  in participant.currentEnemies)
+                    enemyParticipant.AddToExpList(participant.pokemon);
             }
         }
         else
         {//add player participants to get exp from switched in enemy
-            foreach (Battle_Participant playerParticipant  in Participant.Current_Enemies)
-                Participant.AddToExpList(playerParticipant.pokemon);
+            foreach (Battle_Participant playerParticipant  in participant.currentEnemies)
+                participant.AddToExpList(playerParticipant.pokemon);
         }
-        Participant.data.save_stats();
-        Participant.Load_ui();
-        Participant.ability_h.Set_ability();
-        check_Participants();
+        participant.statData.SaveActualStats();
+        participant.ActivateParticipant();
+        participant.abilityHandler.SetAbilityMethod();
+        CountParticipants();
     }
-    public void check_Participants()
+    public void CountParticipants()
     {
-        Participant_count = 0;
-        foreach (Battle_Participant p in Battle_Participants)
-            if(p.pokemon!=null)
-                Participant_count++;
+         participantCount = battleParticipants.Count(p => p.pokemon != null);
     }
-    public void reload_participant_ui()
+    public void RefreshParticipantUI()
     {
-        foreach(Battle_Participant p in Battle_Participants)
+        foreach(Battle_Participant p in battleParticipants)
             if (p.pokemon != null)
-                p.refresh_statusIMG();
+                p.RefreshStatusEffectImage();
     }
-    void load_moves()
+    void LoadTextDataForMoves()
     {
         int j = 0;
-        foreach(Move m in Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set)
+        foreach(Move m in _currentParticipant.pokemon.move_set)
             if (m != null)
             {
-                moves[j].text = Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[j].Move_name;
-                Move_btns[j].SetActive(true);
+                availableMovesText[j].text = _currentParticipant.pokemon.move_set[j].Move_name;
+                moveButtons[j].SetActive(true);
                 j++;
             }
         for (int i = j; i < 4; i++)//only show available moves
         {
-            moves[i].text = "";
-            Move_btns[i].SetActive(false);
+            availableMovesText[i].text = "";
+            moveButtons[i].SetActive(false);
         }
     }
-    public void Use_Move(Move move,Battle_Participant user)
+    public void UseMove(Move move,Battle_Participant user)
     {
         if(move.Powerpoints==0)return;
         move.Powerpoints--;
-        Doing_move = true;
-        choosing_move = false;
-        moves_ui.SetActive(false);
-        options_ui.SetActive(false);
-        Turn current_turn = new Turn(move, Array.IndexOf(Battle_Participants,user), Current_pkm_Enemy, user.pokemon.Pokemon_ID.ToString(),
-            Battle_Participants[Current_pkm_Enemy].pokemon.Pokemon_ID.ToString());
-        Turn_Based_Combat.instance.SaveMove(current_turn);
+        doingMove = true;
+        choosingMove = false;
+        movesUI.SetActive(false);
+        optionsUI.SetActive(false);
+        Turn currentTurn = new Turn(move, Array.IndexOf(battleParticipants,user)
+            ,currentEnemyIndex
+            , user.pokemon.Pokemon_ID.ToString()
+            ,battleParticipants[currentEnemyIndex].pokemon.Pokemon_ID.ToString());
+        Turn_Based_Combat.instance.SaveMove(currentTurn);
     }
-    public void Reset_move()
+    public void ResetMoveUsability()
     {
-        Selected_Move = false; 
-        Move_btns[Current_Move].GetComponent<Button>().interactable = true;
-        Current_Move = 0;
+        selectedMove = false; 
+        moveButtons[_currentMoveIndex].GetComponent<Button>().interactable = true;
+        _currentMoveIndex = 0;
     }
-    public void Select_Move(int move_num)
+    public void Select_Move(int moveNum)
     {
-        Reset_move();
-        Current_Move = move_num-1;
-        Move_pp.text = "PP: " + Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].Powerpoints+ "/" 
-                       + Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].max_Powerpoints;
-        if (Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].Powerpoints == 0)
-            Move_pp.color = Color.red;
-        else
-            Move_pp.color = Color.black;
-        Move_type.text = Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon.move_set[Current_Move].type.Type_name;
-        Selected_Move = true;
-        Move_btns[Current_Move].GetComponent<Button>().interactable = false;
+        ResetMoveUsability();
+        _currentMoveIndex = moveNum-1;
+        Move currentMove = _currentParticipant.pokemon.move_set[_currentMoveIndex];
+        movePowerPointsText.text = "PP: " + currentMove.Powerpoints+ "/" + currentMove.max_Powerpoints;
+        movePowerPointsText.color = (currentMove.Powerpoints == 0)? Color.red : Color.black;
+        moveTypeText.text = currentMove.type.Type_name;
+        selectedMove = true;
+        moveButtons[_currentMoveIndex].GetComponent<Button>().interactable = false;
     }
     int MoneyModifier()
     {
@@ -371,51 +352,52 @@ public class Battle_handler : MonoBehaviour
     }
     IEnumerator DelayBattleEnd()
     {
-        bool PlayerWhiteOut = false;
+        bool playerWhiteOut = false;
         yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-        if (running_away)
+        if (runningAway)
             Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
         else
         {
-            int BaseMoneyPayout=0;
-            if(is_trainer_battle)
-                BaseMoneyPayout=Battle_Participants[0].Current_Enemies[0].trainer._TrainerData.BaseMoneyPayout;
-            if (BattleWon)
+            int baseMoneyPayout=0;
+            if(isTrainerBattle)
+                baseMoneyPayout=battleParticipants[0].currentEnemies[0].pokemonTrainerAI._TrainerData.BaseMoneyPayout;
+            if (battleWon)
             {
                 Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
-                if (is_trainer_battle)
+                if (isTrainerBattle)
                 {
-                    int MoneyGained = BaseMoneyPayout * LastOpponent.Current_level * MoneyModifier();
-                    Game_Load.instance.player_data.player_Money += MoneyGained;
-                    Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P" + MoneyGained);
+                    int moneyGained = baseMoneyPayout * lastOpponent.Current_level * MoneyModifier();
+                    Game_Load.instance.player_data.player_Money += moneyGained;
+                    Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P" + moneyGained);
                 }
             }
             else
             {
-                if (is_trainer_battle)
+                if (isTrainerBattle)
                 {
-                    LastOpponent = Battle_Participants[0].Current_Enemies[0].pokemon;
-                    Game_Load.instance.player_data.player_Money -= BaseMoneyPayout * Game_Load.instance.player_data.NumBadges
-                                                                   * LastOpponent.Current_level;}
-
+                    lastOpponent = battleParticipants[0].currentEnemies[0].pokemon;
+                    Game_Load.instance.player_data.player_Money -= baseMoneyPayout 
+                                                                   * Game_Load.instance.player_data.NumBadges 
+                                                                   * lastOpponent.Current_level;
+                }
                 if (!Wild_pkm.instance.RanAway)
                 {
                     Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
-                    PlayerWhiteOut = true;
+                    playerWhiteOut = true;
                 }
             }
         }
         yield return new WaitForSeconds(2f);
-        end_battle_ui(PlayerWhiteOut);
+        ResetUiAfterBattle(playerWhiteOut);
         if(overworld_actions.instance.fishing)
             overworld_actions.instance.Done_fishing();
     }
     public void LevelUpEvent(Pokemon pkm)
     {
-        LevelUpEvent PkmLevelUp=new LevelUpEvent(pkm);
-        levelUpQueue.Add(PkmLevelUp);
-        StartCoroutine(LevelUp_Sequence(PkmLevelUp));
+        LevelUpEvent levelEvent=new LevelUpEvent(pkm);
+        levelUpQueue.Add(levelEvent);
+        StartCoroutine(LevelUp_Sequence(levelEvent));
     } 
     IEnumerator LevelUp_Sequence(LevelUpEvent pkmLevelUp)
     {
@@ -445,62 +427,58 @@ public class Battle_handler : MonoBehaviour
         //in case if leveled up and didn't learn move
             levelUpQueue.Remove(pkmLevelUp);
         Turn_Based_Combat.instance.LevelEventDelay = false;
-        if(BattleOver & levelUpQueue.Count==0)
-            End_Battle(BattleWon);
+        if(battleOver & levelUpQueue.Count==0)
+            End_Battle(battleWon);
     }
     public void End_Battle(bool Haswon)
     {
-        BattleWon = Haswon;
-        BattleOver = true;
+        battleWon = Haswon;
+        battleOver = true;
         StartCoroutine(DelayBattleEnd());
     }
-    void end_battle_ui(bool PlayerWhiteOut)
+    void ResetUiAfterBattle(bool playerWhiteOut)
     {
         OnBattleEnd?.Invoke();
         Dialogue_handler.instance.Dialouge_off();
         Options_manager.instance.playerInBattle = false;
         overworld_actions.instance.doing_action = false;
-        Battle_ui.SetActive(false);
-        options_ui.SetActive(false);
-        LastOpponent = null;
-        foreach (Battle_Participant p in Battle_Participants)
+        battleUI.SetActive(false);
+        optionsUI.SetActive(false);
+        lastOpponent = null;
+        foreach (Battle_Participant p in battleParticipants)
             if(p.pokemon!=null)
             {
-                p.data.Load_Stats();
-                p.data.Reset_Battle_state(p.pokemon,true);
+                p.statData.LoadActualStats();
+                p.statData.ResetBattleState(p.pokemon,true);
                 p.pokemon = null;
                 p.previousMove = "";
-                p.Unload_ui();
-                if (p.trainer != null)
-                    p.trainer.InBattle = false;
+                p.DeactivateUI();
+                if (p.pokemonTrainerAI != null)
+                    p.pokemonTrainerAI.InBattle = false;
             }
         Encounter_handler.instance.Reset_trigger();
-        OverWorld.SetActive(true);
-        if(PlayerWhiteOut)
-            Area_manager.instance.Switch_Area("Poke Center", 0f);
-        else
-           Area_manager.instance.Switch_Area(Game_Load.instance.player_data.Location,0f);
+        overWorld.SetActive(true);
+        string location = (playerWhiteOut)? "Poke Center" : Game_Load.instance.player_data.Location;
+        Area_manager.instance.Switch_Area(location, 0f);
         Dialogue_handler.instance.can_exit = true;
-        BattleWon = false;
-        BattleOver = false;
+        battleWon = false;
+        battleOver = false;
     }
-    public void Run_away()//wild encounter is always single battle
+    public void RunAway()
     {
-        running_away = true;
-        displaying_info = true;
-        if(!is_trainer_battle & !Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].CanEscape)
-        {
-            Dialogue_handler.instance.Battle_Info(Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].
-                                                      pokemon.Pokemon_name +" is trapped");
-        }
+        runningAway = true;
+        displayingInfo = true;
+        if(!isTrainerBattle & !_currentParticipant.canEscape)
+            Dialogue_handler.instance.Battle_Info(_currentParticipant.pokemon.Pokemon_name +" is trapped");
         else
         {
-            if (is_trainer_battle )
+            if (isTrainerBattle )
                 Dialogue_handler.instance.Battle_Info("Can't run away from trainer battle");
             else
             { 
                 int random = Utility.RandomRange(1,11);
-                if (Battle_Participants[0].pokemon.Current_level < Battle_Participants[0].Current_Enemies[0].pokemon.Current_level)//lower chance if weaker
+                if (battleParticipants[0].pokemon.Current_level < 
+                    battleParticipants[0].currentEnemies[0].pokemon.Current_level)//lower chance if weaker
                     random--;
                 if (random > 5) //initially 50/50 chance to run
                 {
@@ -514,19 +492,19 @@ public class Battle_handler : MonoBehaviour
                 }
             }
         }
-        Invoke(nameof(run_Off),1f);
+        Invoke(nameof(ResetRunLogic),1f);
     }
-void run_Off()
+void ResetRunLogic()
 {
-    running_away = false;
-    displaying_info = false;
+    runningAway = false;
+    displayingInfo = false;
 }
-    public void Fight()
+    public void DisplayMovesUI()
     {
-        choosing_move = true;
-        viewing_options = false;
-        options_ui.SetActive(false);
-        moves_ui.SetActive(true);
-        load_moves();
+        choosingMove = true;
+        viewingOptions = false;
+        optionsUI.SetActive(false);
+        movesUI.SetActive(true);
+        LoadTextDataForMoves();
     }
 }

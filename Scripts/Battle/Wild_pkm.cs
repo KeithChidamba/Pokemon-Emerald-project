@@ -45,7 +45,7 @@ public class Wild_pkm : MonoBehaviour
     private void Make_Decision()
     {
         //check if its pokemon's turn
-        if (Battle_handler.instance.Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon_participant.pokemon && !Used_move && CanAttack)
+        if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == pokemon_participant.pokemon && !Used_move && CanAttack)
         {
             Select_player(0);//attack player, since its single battle
             if(Utility.RandomRange(1,11)>3)//70% chance
@@ -57,21 +57,21 @@ public class Wild_pkm : MonoBehaviour
 
     void RunAway()
     {
-        if(!pokemon_participant.CanEscape)
+        if(!pokemon_participant.canEscape)
         {
             Dialogue_handler.instance.Battle_Info(pokemon_participant.pokemon.Pokemon_name +" is trapped");
             return;
         }
         Dialogue_handler.instance.Battle_Info(pokemon_participant.pokemon.Pokemon_name+" ran away");
-        Battle_handler.instance.End_Battle(false);
+        Battle_handler.Instance.End_Battle(false);
         InBattle = false;
         RanAway = true;
     }
     public void Select_player(int selectedIndex)
     {
         //enemy choosing player
-        pokemon_participant.Selected_Enemy = true;
-        Battle_handler.instance.Current_pkm_Enemy = selectedIndex;
+        pokemon_participant.enemySelected = true;
+        Battle_handler.Instance.currentEnemyIndex = selectedIndex;
     }
     private void choose_move()
     {
@@ -116,7 +116,7 @@ public class Wild_pkm : MonoBehaviour
 
     void use_move(Move move)
     {
-        Battle_handler.instance.Use_Move(move,pokemon_participant);
+        Battle_handler.Instance.UseMove(move,pokemon_participant);
         Used_move = true;
     }
     bool CanUse_effective()

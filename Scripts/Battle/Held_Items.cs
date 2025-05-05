@@ -1,25 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Held_Items : MonoBehaviour
 {
-    public Battle_Participant participant;
+    private Battle_Participant _participant;
     void Start()
     {
+        _participant =  GetComponent<Battle_Participant>();
         Turn_Based_Combat.instance.OnMoveExecute += CheckUsableItem;
     }
 
     void CheckUsableItem()
     {
-        if(!participant.is_active)return;
-        if (!participant.pokemon.HasItem) return;
-        if (participant.pokemon.HeldItem.quantity == 0 & !participant.pokemon.HeldItem.isHeldItem)
+        if(!_participant.isActive)return;
+        if (!_participant.pokemon.HasItem) return;
+        if (_participant.pokemon.HeldItem.quantity == 0 & !_participant.pokemon.HeldItem.isHeldItem)
         {//remove consumable held items that are depleted, not ones that just have special functionality
-            participant.pokemon.RemoveHeldItem(); return; 
+            _participant.pokemon.RemoveHeldItem(); return; 
         }
-        if (!participant.pokemon.HeldItem.CanBeUsedInBattle) return;
-        switch (participant.pokemon.HeldItem.Item_type.ToLower())
+        if (!_participant.pokemon.HeldItem.CanBeUsedInBattle) return;
+        switch (_participant.pokemon.HeldItem.Item_type.ToLower())
         {
             case "heal hp":
                 CheckHealCondition();
@@ -33,17 +35,17 @@ public class Held_Items : MonoBehaviour
 
     void CheckHealCondition()
     {
-        if(participant.pokemon.HP >= (participant.pokemon.max_HP/2)) return;        Debug.Log("triggered heal held item");
+        if(_participant.pokemon.HP >= (_participant.pokemon.max_HP/2)) return;        Debug.Log("triggered heal held item");
         Item_handler.instance.isHeldItem = true;
-        Item_handler.instance.selected_party_pkm = participant.pokemon;
-        Item_handler.instance.Use_Item(participant.pokemon.HeldItem);
+        Item_handler.instance.selected_party_pkm = _participant.pokemon;
+        Item_handler.instance.Use_Item(_participant.pokemon.HeldItem);
     }
 
     void CheckStatusCondition()
     {
-        if(participant.pokemon.Status_effect == "None") return;        Debug.Log("triggered status held item");
+        if(_participant.pokemon.Status_effect == "None") return;        Debug.Log("triggered status held item");
         Item_handler.instance.isHeldItem = true;
-        Item_handler.instance.selected_party_pkm = participant.pokemon;
-        Item_handler.instance.Use_Item(participant.pokemon.HeldItem);
+        Item_handler.instance.selected_party_pkm = _participant.pokemon;
+        Item_handler.instance.Use_Item(_participant.pokemon.HeldItem);
     }
 }

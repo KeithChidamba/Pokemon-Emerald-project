@@ -1220,31 +1220,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad9457ad21ecc540a8a99a0a59da0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ability_h: {fileID: 35621321}
-  status: {fileID: 35621318}
-  trainer: {fileID: 0}
-  data: {fileID: 0}
+  abilityHandler: {fileID: 0}
+  statusHandler: {fileID: 0}
+  pokemonTrainerAI: {fileID: 0}
+  statData: {fileID: 0}
   pokemon: {fileID: 0}
-  Current_Enemies: []
-  pkm_img: {fileID: 1900733081}
-  status_img: {fileID: 249051072}
-  Gender_img: {fileID: 192485168}
-  pkm_name: {fileID: 831252460}
-  pkm_HP: {fileID: 0}
-  pkm_lv: {fileID: 1175943805}
+  currentEnemies: []
+  pokemonImage: {fileID: 1851276598}
+  statusImage: {fileID: 249051072}
+  pokemonGenderImage: {fileID: 192485168}
+  pokemonNameText: {fileID: 831252460}
+  pokemonHealthText: {fileID: 0}
+  pokemonLevelText: {fileID: 1175943805}
   isPlayer: 1
-  is_active: 0
+  isActive: 0
   fainted: 0
-  player_hp: {fileID: 274821928}
-  player_exp: {fileID: 0}
-  single_battle_ui: []
-  Double_battle_ui: []
-  participant_ui: {fileID: 1656265309}
-  Selected_Enemy: 0
+  playerHpSlider: {fileID: 274821928}
+  playerExpSlider: {fileID: 0}
+  singleBattleUI: []
+  doubleBattleUI: []
+  participantUI: {fileID: 1656265309}
+  enemySelected: 0
   previousMove: 
-  AddtionalTypeImmunity: {fileID: 0}
-  exp_recievers: []
-  CanEscape: 1
+  additionalTypeImmunity: {fileID: 0}
+  expReceivers: []
+  canEscape: 1
 --- !u!114 &35621318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1273,12 +1273,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b54c321b54c3e46a3217bf42c8b06b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Attack: 0
-  Defense: 0
-  SP_ATK: 0
-  SP_DEF: 0
+  attack: 0
+  defense: 0
+  spAtk: 0
+  spDef: 0
   speed: 0
-  participant: {fileID: 0}
 --- !u!114 &35621320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1291,7 +1290,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participant: {fileID: 35621317}
 --- !u!114 &35621321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,7 +1302,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086a8b95aa628cd31ae9abe6b0bb8562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participant: {fileID: 35621317}
 --- !u!1 &37522244
 GameObject:
   m_ObjectHideFlags: 0
@@ -7084,31 +7081,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad9457ad21ecc540a8a99a0a59da0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ability_h: {fileID: 190973855}
-  status: {fileID: 190973851}
-  trainer: {fileID: 0}
-  data: {fileID: 0}
+  abilityHandler: {fileID: 0}
+  statusHandler: {fileID: 0}
+  pokemonTrainerAI: {fileID: 0}
+  statData: {fileID: 0}
   pokemon: {fileID: 0}
-  Current_Enemies: []
-  pkm_img: {fileID: 291399123}
-  status_img: {fileID: 740637269}
-  Gender_img: {fileID: 1288664054}
-  pkm_name: {fileID: 133763986}
-  pkm_HP: {fileID: 0}
-  pkm_lv: {fileID: 761220744}
+  currentEnemies: []
+  pokemonImage: {fileID: 291399123}
+  statusImage: {fileID: 740637269}
+  pokemonGenderImage: {fileID: 1288664054}
+  pokemonNameText: {fileID: 133763986}
+  pokemonHealthText: {fileID: 0}
+  pokemonLevelText: {fileID: 761220744}
   isPlayer: 0
-  is_active: 0
+  isActive: 0
   fainted: 0
-  player_hp: {fileID: 1509615510}
-  player_exp: {fileID: 0}
-  single_battle_ui: []
-  Double_battle_ui: []
-  participant_ui: {fileID: 1780447230}
-  Selected_Enemy: 0
+  playerHpSlider: {fileID: 1509615510}
+  playerExpSlider: {fileID: 0}
+  singleBattleUI: []
+  doubleBattleUI: []
+  participantUI: {fileID: 1780447230}
+  enemySelected: 0
   previousMove: 
-  AddtionalTypeImmunity: {fileID: 0}
-  exp_recievers: []
-  CanEscape: 1
+  additionalTypeImmunity: {fileID: 0}
+  expReceivers: []
+  canEscape: 1
 --- !u!114 &190973851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7137,12 +7134,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b54c321b54c3e46a3217bf42c8b06b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Attack: 0
-  Defense: 0
-  SP_ATK: 0
-  SP_DEF: 0
+  attack: 0
+  defense: 0
+  spAtk: 0
+  spDef: 0
   speed: 0
-  participant: {fileID: 0}
 --- !u!114 &190973853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7173,7 +7169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participant: {fileID: 190973850}
 --- !u!114 &190973855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7186,7 +7181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086a8b95aa628cd31ae9abe6b0bb8562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participant: {fileID: 190973850}
 --- !u!1 &192485166
 GameObject:
   m_ObjectHideFlags: 0
@@ -29813,8 +29807,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1376260001}
-  - {fileID: 1232612189}
   - {fileID: 1656839803}
+  - {fileID: 1232612189}
   - {fileID: 446498042}
   - {fileID: 1278527770}
   - {fileID: 556300430}
@@ -33663,7 +33657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1009929160
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36438,7 +36432,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829234817}
         m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
-        m_MethodName: Select_enemy
+        m_MethodName: SelectEnemy
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -73472,35 +73466,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad9457ad21ecc540a8a99a0a59da0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ability_h: {fileID: 1636635384}
-  status: {fileID: 1636635381}
-  trainer: {fileID: 0}
-  data: {fileID: 0}
+  abilityHandler: {fileID: 0}
+  statusHandler: {fileID: 0}
+  pokemonTrainerAI: {fileID: 0}
+  statData: {fileID: 0}
   pokemon: {fileID: 0}
-  Current_Enemies: []
-  pkm_img: {fileID: 1689249222}
-  status_img: {fileID: 2114106450}
-  Gender_img: {fileID: 784649345}
-  pkm_name: {fileID: 1511539073}
-  pkm_HP: {fileID: 152226813}
-  pkm_lv: {fileID: 2137321981}
+  currentEnemies: []
+  pokemonImage: {fileID: 1689249222}
+  statusImage: {fileID: 2114106450}
+  pokemonGenderImage: {fileID: 784649345}
+  pokemonNameText: {fileID: 1511539073}
+  pokemonHealthText: {fileID: 152226813}
+  pokemonLevelText: {fileID: 2137321981}
   isPlayer: 1
-  is_active: 0
+  isActive: 0
   fainted: 0
-  player_hp: {fileID: 684725532}
-  player_exp: {fileID: 752174744}
-  single_battle_ui:
+  playerHpSlider: {fileID: 684725532}
+  playerExpSlider: {fileID: 752174744}
+  singleBattleUI:
   - {fileID: 752174742}
   - {fileID: 152226811}
   - {fileID: 1752282694}
-  Double_battle_ui:
+  doubleBattleUI:
   - {fileID: 1940039930}
-  participant_ui: {fileID: 443644594}
-  Selected_Enemy: 0
+  participantUI: {fileID: 443644594}
+  enemySelected: 0
   previousMove: 
-  AddtionalTypeImmunity: {fileID: 0}
-  exp_recievers: []
-  CanEscape: 1
+  additionalTypeImmunity: {fileID: 0}
+  expReceivers: []
+  canEscape: 1
 --- !u!114 &1636635381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73529,12 +73523,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b54c321b54c3e46a3217bf42c8b06b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Attack: 0
-  Defense: 0
-  SP_ATK: 0
-  SP_DEF: 0
+  attack: 0
+  defense: 0
+  spAtk: 0
+  spDef: 0
   speed: 0
-  participant: {fileID: 0}
 --- !u!114 &1636635383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73547,7 +73540,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participant: {fileID: 1636635380}
 --- !u!114 &1636635384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73560,7 +73552,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086a8b95aa628cd31ae9abe6b0bb8562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participant: {fileID: 1636635380}
 --- !u!1001 &1641952052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -76195,7 +76186,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829234817}
         m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
-        m_MethodName: Select_enemy
+        m_MethodName: SelectEnemy
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -78933,45 +78924,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fb54eedceb9ad14887b323980217f59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Battle_ui: {fileID: 1009929159}
-  moves_ui: {fileID: 871315345}
-  options_ui: {fileID: 1186939303}
-  Battle_Participants:
+  battleUI: {fileID: 1009929159}
+  movesUI: {fileID: 871315345}
+  optionsUI: {fileID: 1186939303}
+  battleParticipants:
   - {fileID: 1636635380}
   - {fileID: 35621317}
   - {fileID: 190973850}
   - {fileID: 2033618204}
   levelUpQueue: []
-  Move_pp: {fileID: 1446964400}
-  Move_type: {fileID: 717278676}
-  moves:
+  movePowerPointsText: {fileID: 1446964400}
+  moveTypeText: {fileID: 717278676}
+  availableMovesText:
   - {fileID: 269040208}
   - {fileID: 602817083}
   - {fileID: 1064097935}
   - {fileID: 179732366}
-  Move_btns:
+  moveButtons:
   - {fileID: 1656839802}
   - {fileID: 1232612188}
   - {fileID: 446498041}
   - {fileID: 1278527769}
-  is_trainer_battle: 0
-  isDouble_battle: 0
-  Participant_count: 0
-  displaying_info: 0
-  BattleOver: 0
-  BattleWon: 0
-  OverWorld: {fileID: 523264673}
-  Backgrounds:
+  isTrainerBattle: 0
+  isDoubleBattle: 0
+  participantCount: 0
+  displayingInfo: 0
+  battleOver: 0
+  battleWon: 0
+  overWorld: {fileID: 523264673}
+  backgrounds:
   - {fileID: 1517456052}
   - {fileID: 1362177396}
   - {fileID: 794004208}
-  viewing_options: 0
-  choosing_move: 0
-  running_away: 0
-  Selected_Move: 0
-  Current_pkm_Enemy: 0
-  Doing_move: 0
-  LastOpponent: {fileID: 0}
+  viewingOptions: 0
+  choosingMove: 0
+  runningAway: 0
+  selectedMove: 0
+  currentEnemyIndex: 0
+  doingMove: 0
+  lastOpponent: {fileID: 0}
 --- !u!1 &1831388021
 GameObject:
   m_ObjectHideFlags: 0
@@ -79843,7 +79834,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829234817}
         m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
-        m_MethodName: Select_enemy
+        m_MethodName: SelectEnemy
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -97341,7 +97332,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829234817}
         m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
-        m_MethodName: Fight
+        m_MethodName: DisplayMovesUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -98384,7 +98375,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829234817}
         m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
-        m_MethodName: Run_away
+        m_MethodName: RunAway
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -99720,31 +99711,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad9457ad21ecc540a8a99a0a59da0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ability_h: {fileID: 2033618209}
-  status: {fileID: 2033618205}
-  trainer: {fileID: 0}
-  data: {fileID: 0}
+  abilityHandler: {fileID: 0}
+  statusHandler: {fileID: 0}
+  pokemonTrainerAI: {fileID: 0}
+  statData: {fileID: 0}
   pokemon: {fileID: 0}
-  Current_Enemies: []
-  pkm_img: {fileID: 690917499}
-  status_img: {fileID: 1797037216}
-  Gender_img: {fileID: 355894040}
-  pkm_name: {fileID: 1150727739}
-  pkm_HP: {fileID: 0}
-  pkm_lv: {fileID: 1767282373}
+  currentEnemies: []
+  pokemonImage: {fileID: 690917499}
+  statusImage: {fileID: 1797037216}
+  pokemonGenderImage: {fileID: 355894040}
+  pokemonNameText: {fileID: 1150727739}
+  pokemonHealthText: {fileID: 0}
+  pokemonLevelText: {fileID: 1767282373}
   isPlayer: 0
-  is_active: 0
+  isActive: 0
   fainted: 0
-  player_hp: {fileID: 2073673345}
-  player_exp: {fileID: 0}
-  single_battle_ui: []
-  Double_battle_ui: []
-  participant_ui: {fileID: 173013067}
-  Selected_Enemy: 0
+  playerHpSlider: {fileID: 2073673345}
+  playerExpSlider: {fileID: 0}
+  singleBattleUI: []
+  doubleBattleUI: []
+  participantUI: {fileID: 173013067}
+  enemySelected: 0
   previousMove: 
-  AddtionalTypeImmunity: {fileID: 0}
-  exp_recievers: []
-  CanEscape: 1
+  additionalTypeImmunity: {fileID: 0}
+  expReceivers: []
+  canEscape: 1
 --- !u!114 &2033618205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99773,12 +99764,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b54c321b54c3e46a3217bf42c8b06b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Attack: 0
-  Defense: 0
-  SP_ATK: 0
-  SP_DEF: 0
+  attack: 0
+  defense: 0
+  spAtk: 0
+  spDef: 0
   speed: 0
-  participant: {fileID: 0}
 --- !u!114 &2033618207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99809,7 +99799,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participant: {fileID: 2033618204}
 --- !u!114 &2033618209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99822,7 +99811,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086a8b95aa628cd31ae9abe6b0bb8562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  participant: {fileID: 2033618204}
 --- !u!1 &2035705803
 GameObject:
   m_ObjectHideFlags: 0

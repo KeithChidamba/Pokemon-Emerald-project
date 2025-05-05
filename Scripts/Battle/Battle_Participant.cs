@@ -6,43 +6,46 @@ using UnityEngine.UI;
 
 public class Battle_Participant : MonoBehaviour
 {
-    public AbilityHandler ability_h;
-    public Participant_Status status;
-    public Enemy_trainer trainer;
-    public Battle_Data data;
+    public AbilityHandler abilityHandler;
+    public Participant_Status statusHandler;
+    public Enemy_trainer pokemonTrainerAI;
+    public Battle_Data statData;
     public Pokemon pokemon;
-    public List<Battle_Participant> Current_Enemies;
-    public Image pkm_img;
-    public Image status_img;
-    public Image Gender_img;
-    public Text pkm_name, pkm_HP, pkm_lv;
+    public List<Battle_Participant> currentEnemies;
+    public Image pokemonImage;
+    public Image statusImage;
+    public Image pokemonGenderImage;
+    public Text pokemonNameText;
+    public Text pokemonHealthText;
+    public Text pokemonLevelText;
     public bool isPlayer = false;
-    public bool is_active = false;
+    public bool isActive = false;
     public bool fainted = false;
-    public Slider player_hp;
-    public Slider player_exp;
-    public GameObject[] single_battle_ui;
-    public GameObject[] Double_battle_ui;
-    public GameObject participant_ui;
-    public bool Selected_Enemy = false;
+    public Slider playerHpSlider;
+    public Slider playerExpSlider;
+    public GameObject[] singleBattleUI;
+    public GameObject[] doubleBattleUI;
+    public GameObject participantUI;
+    public bool enemySelected = false;
     public string previousMove="";
-    public Type AddtionalTypeImmunity;
-    public List<Pokemon> exp_recievers;
-    public bool CanEscape = true;
+    public Type additionalTypeImmunity;
+    public List<Pokemon> expReceivers;
+    public bool canEscape = true;
     private Action<Pokemon> _resetHandler;
     private void Start()
     {
-        status = GetComponent<Participant_Status>();
-        data = GetComponent<Battle_Data>();
-        Turn_Based_Combat.instance.OnTurnEnd += Check_Faint;
-        Move_handler.instance.OnMoveEnd += Check_Faint;
-        Turn_Based_Combat.instance.OnMoveExecute += Check_Faint;
-        Battle_handler.instance.OnBattleEnd += Deactivate_pkm;
+        statusHandler = GetComponent<Participant_Status>();
+        abilityHandler = GetComponent<AbilityHandler>();
+        statData = GetComponent<Battle_Data>();
+        Turn_Based_Combat.instance.OnTurnEnd += CheckIfFainted;
+        Move_handler.instance.OnMoveEnd += CheckIfFainted;
+        Turn_Based_Combat.instance.OnMoveExecute += CheckIfFainted;
+        Battle_handler.Instance.OnBattleEnd += Deactivate_pkm;
     }
     private void Update()
     {
-        if (!is_active) return;
-        update_ui();
+        if (!isActive) return;
+        UpdateUI();
     }
     private void Give_exp()
     {
@@ -52,24 +55,24 @@ public class Battle_Participant : MonoBehaviour
     {
         foreach (string ev in pokemon.EVs)
         {
-            float evAmount = float.Parse(ev.Substring(ev.Length - 1, 1));
-            string evStat = ev.Substring(0 ,ev.Length - 1);
+            var evAmount = float.Parse(ev.Substring(ev.Length - 1, 1));
+            var evStat = ev.Substring(0 ,ev.Length - 1);
             PokemonOperations.GetEV(evStat,evAmount,enemy.pokemon);
         }
     }
     public  void AddToExpList(Pokemon pkm)
     {
-        if(!exp_recievers.Contains(pkm))
-            exp_recievers.Add(pkm);
+        if(!expReceivers.Contains(pkm))
+            expReceivers.Add(pkm);
     }
     private void Distribute_EXP(int exp_from_enemy)
     {
-        exp_recievers.RemoveAll(p => p.HP <= 0);
-        if(exp_recievers.Count<1)return;
-        if (exp_recievers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
+        expReceivers.RemoveAll(p => p.HP <= 0);
+        if(expReceivers.Count<1)return;
+        if (expReceivers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
         {
-            exp_recievers[0].Recieve_exp(exp_from_enemy);
-            exp_recievers.Clear();
+            expReceivers[0].Recieve_exp(exp_from_enemy);
+            expReceivers.Clear();
             return;
         }
         foreach(Pokemon p in Pokemon_party.instance.party)//exp share split, assuming there's only ever 1 exp share in the game
@@ -80,183 +83,180 @@ public class Battle_Participant : MonoBehaviour
                     exp_from_enemy /= 2;
                     break;
                 }
-        int exp = exp_from_enemy / exp_recievers.Count;
-        foreach (Pokemon p in exp_recievers)
-        {
-            if(!p.HasItem)
+        var exp = exp_from_enemy / expReceivers.Count;
+        foreach (Pokemon p in expReceivers)
+            if(!p.HasItem | p.HeldItem.Item_name != "Exp Share")
                 p.Recieve_exp(exp);
-            else
-            if (p.HeldItem.Item_name != "Exp Share")
-                p.Recieve_exp(exp);
-        }
-        exp_recievers.Clear();
+        expReceivers.Clear();
     }
-    public void Check_Faint()
+    public void CheckIfFainted()
     {
         if (pokemon != null)
-            if(pokemon.HP > 0 & !is_active)
-            {is_active = true;participant_ui.SetActive(true);}
-        if (!is_active) return;
+        {//if revived during double battle for example
+            if (pokemon.HP > 0 & !isActive)
+            {
+                isActive = true;
+                participantUI.SetActive(true);
+            }
+        }
+        if (!isActive) return;
         fainted = (pokemon.HP <= 0);
         if (pokemon.HP > 0) return;
         Turn_Based_Combat.instance.FaintEventDelay = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         pokemon.Status_effect = "None";
         Give_exp();
-        foreach (Battle_Participant enemy in Current_Enemies)
+        foreach (Battle_Participant enemy in currentEnemies)
             if(enemy.pokemon!=null)
                 Give_EVs(enemy);
         if (isPlayer)
-            Invoke(nameof(Check_loss),1f);
+            Invoke(nameof(CheckIfLoss),1f);
         else
-            if (!Battle_handler.instance.is_trainer_battle)
+            if (!Battle_handler.Instance.isTrainerBattle)
                 Invoke(nameof(EndWildBattle),1f);
             else
             {
-                Reset_pkm();
-                trainer.Invoke(nameof(trainer.CheckLoss),1f);
+                ResetParticipantState();
+                pokemonTrainerAI.Invoke(nameof(pokemonTrainerAI.CheckLoss),1f);
             }
     }
     public void EndWildBattle()
     {
         Wild_pkm.instance.InBattle = false;
         Turn_Based_Combat.instance.FaintEventDelay = false;
-        Battle_handler.instance.End_Battle(true);
+        Battle_handler.Instance.End_Battle(true);
     }
-    private void Check_loss()
+    private void CheckIfLoss()
     {
-        int numAlive=Pokemon_party.instance.num_members;
-        for(int i=0;i<Pokemon_party.instance.num_members;i++)
-            if (Pokemon_party.instance.party[i].HP <= 0)
-                numAlive--;
-        if (numAlive==0)
+        List<Pokemon> alivePokemon = Pokemon_party.instance.GetLivingPokemon();
+        if (alivePokemon.Count==0)
         {
-            Battle_handler.instance.End_Battle(false);
-            if(!Battle_handler.instance.is_trainer_battle)
+            Battle_handler.Instance.End_Battle(false);
+            if(!Battle_handler.Instance.isTrainerBattle)
                 Wild_pkm.instance.InBattle = false;
         }
         else
         {//select next pokemon to switch in
-            if ( (Battle_handler.instance.isDouble_battle && numAlive > 1) || 
-            (!Battle_handler.instance.isDouble_battle && numAlive > 0) )
+            if ( (Battle_handler.Instance.isDoubleBattle && alivePokemon.Count > 1) || 
+            (!Battle_handler.Instance.isDoubleBattle && alivePokemon.Count > 0) )
             {
-                Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.instance.Battle_Participants, this)+1;
+                Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
                 Pokemon_party.instance.SwapOutNext = true;
                 Game_ui_manager.instance.View_pkm_Party();
                 Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details",2f);
-                Reset_pkm();
+                ResetParticipantState();
             }
-            else if (Battle_handler.instance.isDouble_battle && numAlive == 1)//1 left
+            else if (Battle_handler.Instance.isDoubleBattle && alivePokemon.Count == 1)//1 left
             {
-                is_active = false;
-                Unload_ui();
-                Battle_handler.instance.check_Participants();
+                isActive = false;
+                DeactivateUI();
+                Battle_handler.Instance.CountParticipants();
                 Turn_Based_Combat.instance.FaintEventDelay = false;
             }
         }
     }
     public void Deactivate_pkm()
     {
-        is_active = false;
-        Current_Enemies.Clear();
-        Turn_Based_Combat.instance.OnTurnEnd -= status.Check_status;
-        Turn_Based_Combat.instance.OnNewTurn -= status.StunCheck;
-        Turn_Based_Combat.instance.OnMoveExecute -= status.Notify_Healing;
+        isActive = false;
+        currentEnemies.Clear();
+        Turn_Based_Combat.instance.OnTurnEnd -= statusHandler.Check_status;
+        Turn_Based_Combat.instance.OnNewTurn -= statusHandler.StunCheck;
+        Turn_Based_Combat.instance.OnMoveExecute -= statusHandler.Notify_Healing;
     }
-    public void Reset_pkm()
+    public void ResetParticipantState()
     {
-        data.Load_Stats();
-        data.Reset_Battle_state(pokemon,false);
+        statData.LoadActualStats();
+        statData.ResetBattleState(pokemon,false);
         if (isPlayer)
             pokemon.OnLevelUp -= _resetHandler;
-        ability_h.ResetState();
-        CanEscape = true;
-        AddtionalTypeImmunity = null;
+        abilityHandler.ResetState();
+        canEscape = true;
+        additionalTypeImmunity = null;
     }
-    private void update_ui()
+    private void UpdateUI()
     {
-        pkm_name.text = pokemon.Pokemon_name;
-        pkm_lv.text = "Lv: " + pokemon.Current_level;
+        pokemonNameText.text = pokemon.Pokemon_name;
+        pokemonLevelText.text = "Lv: " + pokemon.Current_level;
         if (isPlayer)
         {
-            pkm_img.sprite = pokemon.back_picture;
-            if (!Battle_handler.instance.isDouble_battle)
+            pokemonImage.sprite = pokemon.back_picture;
+            if (!Battle_handler.Instance.isDoubleBattle)
             {
-                pkm_HP.text = pokemon.HP + "/" + pokemon.max_HP;
-                Exp_bar();
+                pokemonHealthText.text = pokemon.HP + "/" + pokemon.max_HP;
+                SetExpBarValue();
             }
         }
         else
-            pkm_img.sprite = pokemon.front_picture;
-        player_hp.value = pokemon.HP;
-        player_hp.maxValue = pokemon.max_HP;
+            pokemonImage.sprite = pokemon.front_picture;
+        playerHpSlider.value = pokemon.HP;
+        playerHpSlider.maxValue = pokemon.max_HP;
         if(pokemon.HP<=0)
             pokemon.HP = 0;
     }
 
-    public void refresh_statusIMG()
+    public void RefreshStatusEffectImage()
     {
         if (pokemon.Status_effect == "None")
-            status_img.gameObject.SetActive(false);
+            statusImage.gameObject.SetActive(false);
         else
         {
-            status_img.gameObject.SetActive(true);
-            status_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/" + pokemon.Status_effect.ToLower());
+            statusImage.gameObject.SetActive(true);
+            statusImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/" + pokemon.Status_effect.ToLower());
         }
     }
-    void UI_visible(GameObject[]arr,bool on)
+    void ActivateUI(GameObject[]arr,bool on)
     {
         foreach (GameObject obj in arr)
             obj.SetActive(on);
     }
-    void Exp_bar()
+    void SetExpBarValue()
     {
-        player_exp.value = ((pokemon.CurrentExpAmount/pokemon.NextLevelExpAmount)*100);
-        player_exp.maxValue = 100;
-        player_exp.minValue = 0;
+        playerExpSlider.value = ((pokemon.CurrentExpAmount/pokemon.NextLevelExpAmount)*100);
+        playerExpSlider.maxValue = 100;
+        playerExpSlider.minValue = 0;
     }
-    public void Load_ui()
+    public void ActivateParticipant()
     {
-        refresh_statusIMG();
-        player_hp.minValue = 0;
+        RefreshStatusEffectImage();
+        playerHpSlider.minValue = 0;
         fainted = false;
-        is_active = true;
-        participant_ui.SetActive(true);
-        gender_img();
+        isActive = true;
+        participantUI.SetActive(true);
+        ActivateGenderImage();
         if (pokemon.Status_effect == "Badly poison")
             pokemon.Status_effect = "Poison";
         Move_handler.instance.Set_Status(this, pokemon.Status_effect);
-        Turn_Based_Combat.instance.OnTurnEnd += status.Check_status;
-        Turn_Based_Combat.instance.OnNewTurn += status.StunCheck;
-        Turn_Based_Combat.instance.OnMoveExecute += status.Notify_Healing;
+        Turn_Based_Combat.instance.OnTurnEnd += statusHandler.Check_status;
+        Turn_Based_Combat.instance.OnNewTurn += statusHandler.StunCheck;
+        Turn_Based_Combat.instance.OnMoveExecute += statusHandler.Notify_Healing;
         if (isPlayer)
         {
-            _resetHandler = pkm => Reset_pkm();
+            _resetHandler = pkm => ResetParticipantState();
             pokemon.OnLevelUp += _resetHandler;
-            pokemon.OnLevelUp += Battle_handler.instance.LevelUpEvent;
-            pokemon.OnNewLevel += data.save_stats;
-            if (Battle_handler.instance.isDouble_battle)
+            pokemon.OnLevelUp += Battle_handler.Instance.LevelUpEvent;
+            pokemon.OnNewLevel += statData.SaveActualStats;
+            if (Battle_handler.Instance.isDoubleBattle)
             {
-                UI_visible(Double_battle_ui, true);
-                UI_visible(single_battle_ui, false);
+                ActivateUI(doubleBattleUI, true);
+                ActivateUI(singleBattleUI, false);
             }
             else
             {
-                UI_visible(Double_battle_ui, false);
-                UI_visible(single_battle_ui, true);
+                ActivateUI(doubleBattleUI, false);
+                ActivateUI(singleBattleUI, true);
             }
         }
     }
-    void gender_img()
+    void ActivateGenderImage()
     {
-        Gender_img.gameObject.SetActive(true);
+        pokemonGenderImage.gameObject.SetActive(true);
         if(pokemon.has_gender)
-            Gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+pokemon.Gender.ToLower());
+            pokemonGenderImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+pokemon.Gender.ToLower());
         else
-            Gender_img.gameObject.SetActive(false);
+            pokemonGenderImage.gameObject.SetActive(false);
     }
-    public void Unload_ui()
+    public void DeactivateUI()
     {
-        participant_ui.SetActive(false);
+        participantUI.SetActive(false);
     }
 }

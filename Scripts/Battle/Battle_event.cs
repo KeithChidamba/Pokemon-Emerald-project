@@ -3,21 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Battle_event : ICommand
+public class Battle_event
 {
     private Action OnEventTriggered;
     public bool Condition;
-    public Battle_event(Action eventmethod, bool condition)
+    public Battle_event(Action eventMethod, bool condition)
     {
-        OnEventTriggered+=eventmethod;
+        OnEventTriggered+=eventMethod;
         Condition = condition;
     }
     public void Execute()
     {
         OnEventTriggered?.Invoke();
-    }
-    public void Undo()
-    {
-
     }
 }

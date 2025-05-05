@@ -35,7 +35,7 @@ public class Options_manager : MonoBehaviour
     void Battle()
     {
         string battleType = current_interaction.ResultMessage;
-        Battle_handler.instance.SetBattleType(current_interaction.AdditionalInfo,battleType);
+        Battle_handler.Instance.SetBattleType(current_interaction.AdditionalInfo,battleType);
     }
 
     void Learn_Move()
@@ -52,7 +52,7 @@ public class Options_manager : MonoBehaviour
         PokemonOperations.LearningNewMove = false;
         Dialogue_handler.instance.Battle_Info(PokemonOperations.CurrentPkm.Pokemon_name+" did not learn "+PokemonOperations.NewMove.Move_name);
         SelectedNewMoveOption = false;
-        Battle_handler.instance.levelUpQueue.RemoveAll(p=>p.pokemon==PokemonOperations.CurrentPkm);
+        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==PokemonOperations.CurrentPkm);
     }
     void Heal_Pokemon()
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public class LevelUpEvent : ICommand
+public class LevelUpEvent
 {
     [SerializeField]public Pokemon pokemon;
     public LevelUpEvent(Pokemon pokemon_)
@@ -12,9 +12,5 @@ public class LevelUpEvent : ICommand
     public void Execute()
     {
         PokemonOperations.GetNewMove(pokemon);
-    }
-    public void Undo()
-    {
-
     }
 }

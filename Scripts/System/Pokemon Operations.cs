@@ -159,7 +159,7 @@ public static class PokemonOperations
                 {//leveling up from battle or rare candies
                     if(Options_manager.instance.playerInBattle || Pokemon_party.instance.party.Contains(CurrentPkm))
                     {
-                        Battle_handler.instance.displaying_info = true;
+                        Battle_handler.Instance.displayingInfo = true;
                         Dialogue_handler.instance.Write_Info(
                             CurrentPkm.Pokemon_name + " is trying to learn " + moveName + ", do you want it to learn " + moveName +
                             "?", "Options", "Learn_Move", "", "Skip_Move", "Yes", "No");
@@ -192,7 +192,7 @@ public static class PokemonOperations
         Pokemon_Details.instance.Exit_details();
         Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" forgot "+CurrentPkm.move_set[index].Move_name+" and learned "+NewMove.Move_name);
         CurrentPkm.move_set[index] = Obj_Instance.set_move(NewMove);
-        Battle_handler.instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);
+        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);
         Turn_Based_Combat.instance.LevelEventDelay = false;
     }
     private static void get_Gender(Pokemon new_pkm)

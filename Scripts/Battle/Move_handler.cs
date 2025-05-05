@@ -35,8 +35,8 @@ public class Move_handler:MonoBehaviour
     public void Do_move(Turn turn)
     {
         current_turn = turn;
-        attacker_ = Battle_handler.instance.Battle_Participants[turn.attackerIndex];
-        victim_ = Battle_handler.instance.Battle_Participants[turn.victimIndex];
+        attacker_ = Battle_handler.Instance.battleParticipants[turn.attackerIndex];
+        victim_ = Battle_handler.Instance.battleParticipants[turn.victimIndex];
         if (current_turn.move_.isMultiTarget || current_turn.move_.isSelfTargeted)
             Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" used "+current_turn.move_.Move_name+"!");
         else
@@ -143,23 +143,23 @@ public class Move_handler:MonoBehaviour
         bool canIgnoreStages = attacker.pokemon.Current_level >= victim.pokemon.Current_level  && crit == 2;
         if (!isSpecial)
         {
-            atk = canIgnoreStages && attacker.data.Attack < attacker.pokemon.Attack
+            atk = canIgnoreStages && attacker.statData.attack < attacker.pokemon.Attack
                 ? attacker.pokemon.Attack  // Ignore debuff
-                : attacker.data.Attack;
+                : attacker.statData.attack;
             
-            def = canIgnoreStages && victim.data.Defense > victim.pokemon.Defense
+            def = canIgnoreStages && victim.statData.defense > victim.pokemon.Defense
                 ? victim.pokemon.Defense  // Ignore buff
-                : victim.data.Defense;
+                : victim.statData.defense;
         }
         else
         {
-            atk = canIgnoreStages && attacker.data.SP_ATK < attacker.pokemon.SP_ATK
+            atk = canIgnoreStages && attacker.statData.spAtk < attacker.pokemon.SP_ATK
                 ? attacker.pokemon.SP_ATK
-                : attacker.data.SP_ATK;
+                : attacker.statData.spAtk;
             
-            def = canIgnoreStages && victim.data.SP_DEF > victim.pokemon.SP_DEF
+            def = canIgnoreStages && victim.statData.spDef > victim.pokemon.SP_DEF
                 ? victim.pokemon.SP_DEF
-                : victim.data.SP_DEF;
+                : victim.statData.spDef;
         }
         return atk / def;
     }
@@ -195,7 +195,7 @@ public class Move_handler:MonoBehaviour
         }
         if (Utility.RandomRange(1, 101) < current_turn.move_.Status_chance)
             if(current_turn.move_.isMultiTarget)
-                foreach (Battle_Participant enemy in attacker_.Current_Enemies)
+                foreach (Battle_Participant enemy in attacker_.currentEnemies)
                     CheckStatus(enemy,current_turn.move_);
             else{
                 CheckStatus(victim_,current_turn.move_);
@@ -228,7 +228,7 @@ public class Move_handler:MonoBehaviour
     {
         p.pokemon.Status_effect = Status;
         int num_turns = (Status=="Sleep")? Utility.RandomRange(1, 5) : 0;
-        p.status.Get_statusEffect(num_turns);
+        p.statusHandler.Get_statusEffect(num_turns);
     }
     void flinch_enemy()
     {
@@ -252,7 +252,7 @@ public class Move_handler:MonoBehaviour
         bool isIncreasing = (buffDebuffInfo[0] == '+');//buff or debuff
         if (!current_turn.move_.isSelfTargeted)
         {//affecting enemy
-            if(!current_turn.move_.isMultiTarget | !Battle_handler.instance.isDouble_battle)
+            if(!current_turn.move_.isMultiTarget | !Battle_handler.Instance.isDoubleBattle)
             {
                 if (!victim_.pokemon.CanBeDamaged)
                     Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name + " protected itself");
@@ -275,7 +275,7 @@ public class Move_handler:MonoBehaviour
 
     IEnumerator MultiTargetBuff_Debuff(string stat, bool isIncreasing,int buff_amount)
     {
-        foreach (Battle_Participant enemy in attacker_.Current_Enemies )
+        foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker_.currentEnemies) )
         {
             if (enemy.pokemon.CanBeDamaged)
             {
@@ -330,17 +330,13 @@ public class Move_handler:MonoBehaviour
 
     List<Battle_Participant> SetTargets()
     {
-        List<Battle_Participant> OtherParticipants = Battle_handler.instance.Battle_Participants.ToList();
-        OtherParticipants = Battle_handler.instance.Battle_Participants.ToList().Where(p =>
-            p.is_active).ToList();
+        List<Battle_Participant> OtherParticipants = Battle_handler.Instance.battleParticipants.ToList();
+        OtherParticipants = Battle_handler.Instance.battleParticipants.ToList().Where(p =>
+            p.isActive).ToList();
         OtherParticipants.RemoveAll(p => p.pokemon.Pokemon_ID == attacker_.pokemon.Pokemon_ID);
         return OtherParticipants;
     }
-    void MultiTargetMoveDamage(List<Battle_Participant> Targets)
-    {
-        foreach (Battle_Participant enemy in Targets)
-            enemy.pokemon.HP -= Calc_Damage(current_turn.move_,enemy);
-    }
+
     IEnumerator ConsecutiveMove()
     {
         int NumRepetitions = Utility.RandomRange(1, 6);
@@ -398,18 +394,21 @@ public class Move_handler:MonoBehaviour
         MoveDelay = false;
         ProcessingOrder = false;
     }
-
-    void surf()
+    IEnumerator MultiTargetMoveDamage(List<Battle_Participant> Targets)
     {
-        MultiTargetMoveDamage(attacker_.Current_Enemies);
+        foreach (Battle_Participant enemy in Targets)
+            enemy.pokemon.HP -= Calc_Damage(current_turn.move_,enemy);
+        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         MoveDelay = false;
         ProcessingOrder = false;
     }
+    void surf()
+    {
+        StartCoroutine(MultiTargetMoveDamage(attacker_.currentEnemies));
+    }
     void earthquake()
     {
-        MultiTargetMoveDamage(SetTargets());
-        MoveDelay = false;
-        ProcessingOrder = false;
+        StartCoroutine(MultiTargetMoveDamage(SetTargets()));
     }
     void magnitude()
     {
@@ -423,8 +422,6 @@ public class Move_handler:MonoBehaviour
             baseDamage += 20f;
         Dialogue_handler.instance.Battle_Info("Magnitude level "+MagnitudeStrength);
         current_turn.move_.Move_damage = baseDamage;
-        MultiTargetMoveDamage(SetTargets());
-        MoveDelay = false;
-        ProcessingOrder = false;
+        StartCoroutine(MultiTargetMoveDamage(SetTargets()));
     }
 }

@@ -35,7 +35,15 @@ public class Pokemon_party : MonoBehaviour
     }
     private void Start()
     {
-        Battle_handler.instance.OnBattleEnd += close_party;
+        Battle_handler.Instance.OnBattleEnd += close_party;
+    }
+    public List<Pokemon> GetLivingPokemon()
+    {
+        List<Pokemon> alivePokemon=new();
+        foreach (Pokemon p in Pokemon_party.instance.party)
+            if (p != null && p.HP > 0)
+                alivePokemon.Add(p);
+        return alivePokemon;
     }
     public void View_party()
     {
@@ -53,7 +61,7 @@ public class Pokemon_party : MonoBehaviour
     {
         if(Member_position<3)
         {
-            Battle_Participant Swapin = Battle_handler.instance.Battle_Participants[Member_position - 1];
+            Battle_Participant Swapin = Battle_handler.Instance.battleParticipants[Member_position - 1];
             if (Swapin.pokemon != null)
                 if (Swapin.pokemon == party[Member_position - 1])
                 {
@@ -72,7 +80,7 @@ public class Pokemon_party : MonoBehaviour
             Swapping_in = true;
             SwapOutNext = false;
             Selected_member = Turn_Based_Combat.instance.Current_pkm_turn+1;
-            Battle_handler.instance.Battle_Participants[Turn_Based_Combat.instance.Current_pkm_turn].Reset_pkm();
+            Battle_handler.Instance.battleParticipants[Turn_Based_Combat.instance.Current_pkm_turn].ResetParticipantState();
             Move_Member(Member_position);
         }
         else
@@ -200,7 +208,7 @@ private void close_party()
         party[Party_position] = Swap_store;
         moving = false;
         if (Options_manager.instance.playerInBattle)
-            Battle_handler.instance.Set_participants(Battle_handler.instance.Battle_Participants[Selected_member-1]);
+            Battle_handler.Instance.SetParticipant(Battle_handler.Instance.battleParticipants[Selected_member-1]);
         Member_to_Move = 0;
         Selected_member = 0;
         Refresh_Member_Cards();

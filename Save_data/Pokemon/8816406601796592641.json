@@ -6,7 +6,7 @@
     "Gender": "Female",
     "GenderRatio": "50/50",
     "nature": {
-        "instanceID": 25458
+        "instanceID": 25460
     },
     "has_gender": true,
     "HP": 70.0,
@@ -43,7 +43,7 @@
     "CatchRate": 90.0,
     "Current_level": 22,
     "CurrentExpAmount": 9470,
-    "NextLvExpAmount": 10648.0,
+    "NextLevelExpAmount": 0.0,
     "EXPGroup": "Medium Fast",
     "exp_yield": 128,
     "has_trainer": true,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25466
+            "instanceID": 25468
         }
     ],
     "Status_effect": "None",
@@ -60,6 +60,8 @@
     "evo_line": [
         "20"
     ],
+    "RequiresEvolutionStone": false,
+    "EvolutionStoneName": "None",
     "abilities": [
         "Pickup"
     ],
@@ -67,35 +69,35 @@
     "learnSet": [],
     "move_set": [
         {
-            "instanceID": -8574
+            "instanceID": -17942
         },
         {
-            "instanceID": -8576
+            "instanceID": -17944
         },
         {
-            "instanceID": -8578
+            "instanceID": -17946
         },
         {
-            "instanceID": -8580
+            "instanceID": -17948
         }
     ],
     "ability": {
-        "instanceID": 25966
+        "instanceID": 25976
     },
     "evolutions": [
         {
-            "instanceID": 25606
+            "instanceID": 25610
         }
     ],
     "HeldItem": {
-        "instanceID": -8582
+        "instanceID": -17950
     },
     "HasItem": true,
     "front_picture": {
-        "instanceID": 32234
+        "instanceID": 32252
     },
     "back_picture": {
-        "instanceID": 32242
+        "instanceID": 32260
     },
     "ability_name": "Guts",
     "natureName": "Jolly",

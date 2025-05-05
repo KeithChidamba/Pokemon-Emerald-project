@@ -121,7 +121,7 @@ public class Dialogue_handler : MonoBehaviour
     public void Battle_Info(string info)//display plain text info to player
     {
         Remove_Exit();
-        Battle_handler.instance.displaying_info = true;
+        Battle_handler.Instance.displayingInfo = true;
         Interaction details = new_interaction(info,"Battle Info","");
         PendingMessages.Add(details);
         if(!messagesLoading)
@@ -146,7 +146,7 @@ public class Dialogue_handler : MonoBehaviour
         else
         {
             messagesLoading = false;
-            Battle_handler.instance.displaying_info = false;
+            Battle_handler.Instance.displayingInfo = false;
         }
     }
     public void Write_Info(string info, string type, string option1, string result, string option2,string opTxt1,string opTxt2)//display a choice, with a result when they choose NO
@@ -205,7 +205,7 @@ public class Dialogue_handler : MonoBehaviour
         elipsis_txt.SetActive(false);
         dialogue_exit.SetActive(false);
         StopAllCoroutines();
-        Battle_handler.instance.displaying_info = false;
+        Battle_handler.Instance.displayingInfo = false;
     }
     public void Display(Interaction interaction)
     {

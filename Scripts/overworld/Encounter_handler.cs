@@ -48,7 +48,7 @@ public class Encounter_handler : MonoBehaviour
             int exp = PokemonOperations.GetNextLv(rand_lv - 1, wild_pkm.EXPGroup)+1;
             wild_pkm.Recieve_exp(exp);
             wild_pkm.HP=wild_pkm.max_HP;
-           Battle_handler.instance.StartWildBattle(wild_pkm);
+           Battle_handler.Instance.StartWildBattle(wild_pkm);
         }
         else
             Debug.Log("tried encounter but didnt find "+pkm_name);

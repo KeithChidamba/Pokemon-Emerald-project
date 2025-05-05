@@ -28,13 +28,13 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private void Start()
     {
-        Battle_handler.instance.OnBattleEnd += Reset_Moves;
+        Battle_handler.Instance.OnBattleEnd += Reset_Moves;
     }
     public void SaveMove(Turn turn)
     {
         Turn_history.Add(turn);
-        if( (Battle_handler.instance.isDouble_battle && isLastParticipant())
-         || (Current_pkm_turn == Battle_handler.instance.Participant_count ))
+        if( (Battle_handler.Instance.isDoubleBattle && isLastParticipant())
+         || (Current_pkm_turn == Battle_handler.Instance.participantCount ))
             StartCoroutine(ExecuteMoves(Set_priority()));
         else
             Next_turn();
@@ -43,10 +43,10 @@ public class Turn_Based_Combat : MonoBehaviour
     bool isLastParticipant()
     {
         List <Battle_Participant> activeParticipants = new();
-        activeParticipants = Battle_handler.instance.Battle_Participants.ToList();
+        activeParticipants = Battle_handler.Instance.battleParticipants.ToList();
         activeParticipants.RemoveAll(participant => participant.pokemon==null);
         if (activeParticipants.Last() ==
-            Battle_handler.instance.Battle_Participants[Current_pkm_turn])
+            Battle_handler.Instance.battleParticipants[Current_pkm_turn])
             return true;
         return false;
     }
@@ -88,8 +88,8 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         foreach (Turn CurrentTurn in TurnOrder )
         {
-            Battle_Participant attacker_=Battle_handler.instance.Battle_Participants[CurrentTurn.attackerIndex];
-            Battle_Participant victim_=Battle_handler.instance.Battle_Participants[CurrentTurn.victimIndex];
+            Battle_Participant attacker_=Battle_handler.Instance.battleParticipants[CurrentTurn.attackerIndex];
+            Battle_Participant victim_=Battle_handler.Instance.battleParticipants[CurrentTurn.victimIndex];
             if (!CheckParticipantState(attacker_))
                 continue;
             if (!isValidParticipant(CurrentTurn,attacker_))
@@ -120,7 +120,7 @@ public class Turn_Based_Combat : MonoBehaviour
         Turn_history.Clear();
         OnTurnEnd?.Invoke();
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
-        Battle_handler.instance.Reset_move();
+        Battle_handler.Instance.ResetMoveUsability();
         Next_turn();
     }
 
@@ -134,7 +134,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     bool CheckParticipantState(Battle_Participant participant)
     {
-        if (participant.is_active)
+        if (participant.isActive)
             if (!participant.fainted)
                 if (participant.pokemon != null)
                     return true;
@@ -150,7 +150,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     public void Next_turn()
     { 
-        if ( Battle_handler.instance.isDouble_battle)
+        if ( Battle_handler.Instance.isDoubleBattle)
             Change_turn(4,1);
         else
             Change_turn(3,2);
@@ -161,21 +161,21 @@ public class Turn_Based_Combat : MonoBehaviour
             Current_pkm_turn+=step;
         else
         {
-            Battle_handler.instance.View_options();
+            Battle_handler.Instance.ViewOptions();
             Current_pkm_turn = 0;
-            Battle_handler.instance.Battle_Participants[Current_pkm_turn].Selected_Enemy = false;//allow player to attack
+            Battle_handler.Instance.battleParticipants[Current_pkm_turn].enemySelected = false;//allow player to attack
         }
         OnNewTurn?.Invoke();
-        Battle_handler.instance.Doing_move = false;
-        if (!Battle_handler.instance.Battle_Participants[Current_pkm_turn].is_active & Options_manager.instance.playerInBattle)
+        Battle_handler.Instance.doingMove = false;
+        if (!Battle_handler.Instance.battleParticipants[Current_pkm_turn].isActive & Options_manager.instance.playerInBattle)
             Next_turn();
     }
     private bool MoveSuccessfull(Turn turn)
     {
         int rand = Utility.RandomRange(1, 100);
         float Hit_Chance = turn.move_.Move_accuracy *
-                           (Battle_handler.instance.Battle_Participants[turn.attackerIndex].pokemon.Accuracy / 
-                            Battle_handler.instance.Battle_Participants[turn.victimIndex].pokemon.Evasion);
+                           (Battle_handler.Instance.battleParticipants[turn.attackerIndex].pokemon.Accuracy / 
+                            Battle_handler.Instance.battleParticipants[turn.victimIndex].pokemon.Evasion);
         if (Hit_Chance>rand)
             return true;
         return false;
@@ -184,7 +184,7 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         List<Turn> speed_list = new();
         List<Turn> priority_list = new();
-        speed_list = Turn_history.OrderByDescending(p => Battle_handler.instance.Battle_Participants[p.attackerIndex].pokemon.speed).ToList();
+        speed_list = Turn_history.OrderByDescending(p => Battle_handler.Instance.battleParticipants[p.attackerIndex].pokemon.speed).ToList();
         priority_list = speed_list.OrderByDescending(p => p.move_.Priority).ToList();
         return priority_list;
     }

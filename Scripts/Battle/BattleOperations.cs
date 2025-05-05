@@ -35,9 +35,9 @@ public static class BattleOperations
     }
     public static float TypeEffectiveness(Battle_Participant victim,Type enemy_type)
     {
-        if (victim.AddtionalTypeImmunity!=null)
+        if (victim.additionalTypeImmunity!=null)
         {
-            if (victim.AddtionalTypeImmunity == enemy_type)
+            if (victim.additionalTypeImmunity == enemy_type)
                 effectiveness = 0;
         }
         else{

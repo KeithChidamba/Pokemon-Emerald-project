@@ -2,36 +2,37 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Battle_Data:MonoBehaviour
 {
-    public float Attack;
-    public float Defense;
-    public float SP_ATK;
-    public float SP_DEF;
+    public float attack;
+    public float defense;
+    public float spAtk;
+    public float spDef;
     public float speed;
-    [SerializeField] private Battle_Participant participant;
+    private Battle_Participant _participant;
     private void Start()
     {
-        participant = GetComponent<Battle_Participant>();
+        _participant = GetComponent<Battle_Participant>();
     }
-    public void save_stats()
+    public void SaveActualStats()
     {
-        Attack = participant.pokemon.Attack;
-        SP_ATK = participant.pokemon.SP_ATK;
-        Defense = participant.pokemon.Defense;
-        SP_DEF = participant.pokemon.SP_DEF;
-        speed = participant.pokemon.speed;
+        attack = _participant.pokemon.Attack;
+        spAtk = _participant.pokemon.SP_ATK;
+        defense = _participant.pokemon.Defense;
+        spDef = _participant.pokemon.SP_DEF;
+        speed = _participant.pokemon.speed;
     }
-    public void Load_Stats()
+    public void LoadActualStats()
     {
-        participant.pokemon.Attack=Attack;
-        participant.pokemon.SP_ATK=SP_ATK;
-        participant.pokemon.Defense=Defense;
-        participant.pokemon.SP_DEF=SP_DEF;
-        participant.pokemon.speed=speed;
+        _participant.pokemon.Attack=attack;
+        _participant.pokemon.SP_ATK=spAtk;
+        _participant.pokemon.Defense=defense;
+        _participant.pokemon.SP_DEF=spDef;
+        _participant.pokemon.speed=speed;
     }
-    public void Reset_Battle_state(Pokemon pokemon,bool NotBattling)
+    public void ResetBattleState(Pokemon pokemon,bool NotBattling)
     {
         pokemon.Accuracy = 100;
         pokemon.Evasion = 100;

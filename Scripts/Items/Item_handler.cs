@@ -131,9 +131,9 @@ public class Item_handler : MonoBehaviour
     {
         if(Options_manager.instance.playerInBattle)
         {
-            if (Battle_handler.instance.is_trainer_battle)
+            if (Battle_handler.Instance.isTrainerBattle)
             {
-                Battle_handler.instance.displaying_info = true;
+                Battle_handler.Instance.displayingInfo = true;
                 Dialogue_handler.instance.Write_Info("Cant catch someone else's Pokemon!", "Details",1f);
             }
             else
@@ -192,7 +192,7 @@ public class Item_handler : MonoBehaviour
                 if (StatusToHeal == "sleep" | StatusToHeal == "freeze"| StatusToHeal == "paralysis")
                     selected_party_pkm.canAttack = true;
                 Dialogue_handler.instance.Write_Info("Pokemon has been healed","Feedback");
-                Battle_handler.instance.reload_participant_ui();
+                Battle_handler.Instance.RefreshParticipantUI();
             }
             else
             {Dialogue_handler.instance.Write_Info("Incorrect heal item","Feedback"); return; }

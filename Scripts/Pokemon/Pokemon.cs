@@ -125,7 +125,7 @@ public class Pokemon : ScriptableObject
              evolutions.Add(Resources.Load<Evolution>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + Base_Pokemon_name + "/" +e));
         for(int i =0; i < types.Count; i++)
             types[i].type_img = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + type_data[i].ToLower());
-        Battle_handler.instance.OnBattleEnd += ClearEvents;
+        Battle_handler.Instance.OnBattleEnd += ClearEvents;
     }
 
     public void RemoveHeldItem()

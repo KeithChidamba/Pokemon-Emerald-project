@@ -43,7 +43,7 @@
     "CatchRate": 45.0,
     "Current_level": 18,
     "CurrentExpAmount": 3775,
-    "NextLvExpAmount": 3798.0,
+    "NextLevelExpAmount": 0.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 141,
     "has_trainer": true,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25608
+            "instanceID": 25612
         }
     ],
     "Status_effect": "None",
@@ -61,6 +61,8 @@
         "16",
         "30"
     ],
+    "RequiresEvolutionStone": false,
+    "EvolutionStoneName": "None",
     "abilities": [
         "Overgrow"
     ],
@@ -70,38 +72,38 @@
     ],
     "move_set": [
         {
-            "instanceID": -8586
+            "instanceID": -17954
         },
         {
-            "instanceID": -8588
+            "instanceID": -17956
         },
         {
-            "instanceID": -8590
+            "instanceID": -17958
         },
         {
-            "instanceID": -8592
+            "instanceID": -17960
         }
     ],
     "ability": {
-        "instanceID": 25832
+        "instanceID": 25838
     },
     "evolutions": [
         {
-            "instanceID": 25982
+            "instanceID": 25992
         },
         {
             "instanceID": 24944
         }
     ],
     "HeldItem": {
-        "instanceID": -8594
+        "instanceID": -17962
     },
     "HasItem": true,
     "front_picture": {
-        "instanceID": 32092
+        "instanceID": 32108
     },
     "back_picture": {
-        "instanceID": 31944
+        "instanceID": 31954
     },
     "ability_name": "Overgrow",
     "natureName": "Docile",
