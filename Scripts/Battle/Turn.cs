@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 [System.Serializable]
 public class Turn
 {
@@ -8,14 +10,14 @@ public class Turn
      [SerializeField]public int victimIndex;
      [SerializeField]public string victimID;
      [SerializeField]public string attackerID;
-     [SerializeField]public Move move_;
+     [SerializeField]public Move move;
      
-     public Turn(Move move,int attacker,int victim, string attackerID_,string victimID_)
+     public Turn(Move move,int attacker,int victim, string attackerID,string victimID)
      {
-          move_ = move;
+          this.move = move;
           attackerIndex = attacker;
           victimIndex = victim;
-          attackerID= attackerID_;
-          victimID = victimID_;
+          this.attackerID= attackerID;
+          this.victimID = victimID;
      }
 }

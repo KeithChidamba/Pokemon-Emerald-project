@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tony Torchic
   m_EditorClassIdentifier: 
   pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
-  PokemonLevel: 6
+  pokemonLevel: 6
   hasItem: 1
   heldItem: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}
   moveSet:

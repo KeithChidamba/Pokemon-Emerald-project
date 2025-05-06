@@ -79,8 +79,8 @@ public class Pokemon_party : MonoBehaviour
             if (!isvalidSwap(Member_position)) return;
             Swapping_in = true;
             SwapOutNext = false;
-            Selected_member = Turn_Based_Combat.instance.Current_pkm_turn+1;
-            Battle_handler.Instance.battleParticipants[Turn_Based_Combat.instance.Current_pkm_turn].ResetParticipantState();
+            Selected_member = Turn_Based_Combat.Instance.currentTurnIndex+1;
+            Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].ResetParticipantState();
             Move_Member(Member_position);
         }
         else
@@ -196,9 +196,9 @@ private void close_party()
     void switchIn()
     {
         if (SwapOutNext)
-            Turn_Based_Combat.instance.FaintEventDelay = false;
+            Turn_Based_Combat.Instance.faintEventDelay = false;
         if(Swapping_in)
-            Turn_Based_Combat.instance.Next_turn();
+            Turn_Based_Combat.Instance.NextTurn();
         close_party();
     }
     void swap(int Party_position)

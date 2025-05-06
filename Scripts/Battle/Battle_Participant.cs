@@ -37,9 +37,9 @@ public class Battle_Participant : MonoBehaviour
         statusHandler = GetComponent<Participant_Status>();
         abilityHandler = GetComponent<AbilityHandler>();
         statData = GetComponent<Battle_Data>();
-        Turn_Based_Combat.instance.OnTurnEnd += CheckIfFainted;
-        Move_handler.instance.OnMoveEnd += CheckIfFainted;
-        Turn_Based_Combat.instance.OnMoveExecute += CheckIfFainted;
+        Turn_Based_Combat.Instance.OnTurnEnd += CheckIfFainted;
+        Move_handler.Instance.OnMoveEnd += CheckIfFainted;
+        Turn_Based_Combat.Instance.OnMoveExecute += CheckIfFainted;
         Battle_handler.Instance.OnBattleEnd += Deactivate_pkm;
     }
     private void Update()
@@ -102,7 +102,7 @@ public class Battle_Participant : MonoBehaviour
         if (!isActive) return;
         fainted = (pokemon.HP <= 0);
         if (pokemon.HP > 0) return;
-        Turn_Based_Combat.instance.FaintEventDelay = true;
+        Turn_Based_Combat.Instance.faintEventDelay = true;
         Dialogue_handler.instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
         pokemon.Status_effect = "None";
         Give_exp();
@@ -117,13 +117,13 @@ public class Battle_Participant : MonoBehaviour
             else
             {
                 ResetParticipantState();
-                pokemonTrainerAI.Invoke(nameof(pokemonTrainerAI.CheckLoss),1f);
+                pokemonTrainerAI.Invoke(nameof(pokemonTrainerAI.CheckIfLoss),1f);
             }
     }
     public void EndWildBattle()
     {
-        Wild_pkm.instance.InBattle = false;
-        Turn_Based_Combat.instance.FaintEventDelay = false;
+        Wild_pkm.Instance.inBattle = false;
+        Turn_Based_Combat.Instance.faintEventDelay = false;
         Battle_handler.Instance.End_Battle(true);
     }
     private void CheckIfLoss()
@@ -133,7 +133,7 @@ public class Battle_Participant : MonoBehaviour
         {
             Battle_handler.Instance.End_Battle(false);
             if(!Battle_handler.Instance.isTrainerBattle)
-                Wild_pkm.instance.InBattle = false;
+                Wild_pkm.Instance.inBattle = false;
         }
         else
         {//select next pokemon to switch in
@@ -151,7 +151,7 @@ public class Battle_Participant : MonoBehaviour
                 isActive = false;
                 DeactivateUI();
                 Battle_handler.Instance.CountParticipants();
-                Turn_Based_Combat.instance.FaintEventDelay = false;
+                Turn_Based_Combat.Instance.faintEventDelay = false;
             }
         }
     }
@@ -159,9 +159,9 @@ public class Battle_Participant : MonoBehaviour
     {
         isActive = false;
         currentEnemies.Clear();
-        Turn_Based_Combat.instance.OnTurnEnd -= statusHandler.Check_status;
-        Turn_Based_Combat.instance.OnNewTurn -= statusHandler.StunCheck;
-        Turn_Based_Combat.instance.OnMoveExecute -= statusHandler.Notify_Healing;
+        Turn_Based_Combat.Instance.OnTurnEnd -= statusHandler.Check_status;
+        Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
+        Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.Notify_Healing;
     }
     public void ResetParticipantState()
     {
@@ -225,10 +225,10 @@ public class Battle_Participant : MonoBehaviour
         ActivateGenderImage();
         if (pokemon.Status_effect == "Badly poison")
             pokemon.Status_effect = "Poison";
-        Move_handler.instance.Set_Status(this, pokemon.Status_effect);
-        Turn_Based_Combat.instance.OnTurnEnd += statusHandler.Check_status;
-        Turn_Based_Combat.instance.OnNewTurn += statusHandler.StunCheck;
-        Turn_Based_Combat.instance.OnMoveExecute += statusHandler.Notify_Healing;
+        Move_handler.Instance.ApplyStatusToVictim(this, pokemon.Status_effect);
+        Turn_Based_Combat.Instance.OnTurnEnd += statusHandler.Check_status;
+        Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
+        Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.Notify_Healing;
         if (isPlayer)
         {
             _resetHandler = pkm => ResetParticipantState();

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tony Pikachu
   m_EditorClassIdentifier: 
   pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
-  PokemonLevel: 5
+  pokemonLevel: 5
   hasItem: 0
   heldItem: {fileID: 0}
   moveSet:

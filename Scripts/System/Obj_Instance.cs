@@ -118,7 +118,7 @@ public static class Obj_Instance
         dataCopy.pokemon = set_Pokemon(data.pokemon);
         PokemonOperations.SetPkmtraits(dataCopy.pokemon);
         dataCopy.moveSet = data.moveSet;
-        dataCopy.PokemonLevel = data.PokemonLevel;
+        dataCopy.pokemonLevel = data.pokemonLevel;
         dataCopy.hasItem = data.hasItem;
         dataCopy.heldItem = data.heldItem;
         return dataCopy;

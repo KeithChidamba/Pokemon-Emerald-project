@@ -59,7 +59,7 @@ public class Battle_handler : MonoBehaviour
 
     private void HandlePlayerInput()
     {
-        _currentParticipant = battleParticipants[Turn_Based_Combat.instance.Current_pkm_turn];
+        _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
         if (selectedMove && (Input.GetKeyDown(KeyCode.F)))
         {
             if (_currentParticipant.enemySelected)
@@ -86,7 +86,7 @@ public class Battle_handler : MonoBehaviour
 
         if (overworld_actions.instance.using_ui)
         {
-            Wild_pkm.instance.CanAttack = false;
+            Wild_pkm.Instance.canAttack = false;
             optionsUI.SetActive(false);
             viewingOptions = false;
         }
@@ -110,16 +110,16 @@ public class Battle_handler : MonoBehaviour
     {
         //improve eventually to work as proper strategy AI
         if (!isTrainerBattle)
-            Wild_pkm.instance.Invoke(nameof(Wild_pkm.instance.Can_Attack), 1f);
+            Wild_pkm.Instance.Invoke(nameof(Wild_pkm.Instance.CanAttack), 1f);
         else
             foreach (Battle_Participant p in battleParticipants)
                 if (p.pokemon != null & !p.isPlayer)
-                    p.pokemonTrainerAI.Invoke(nameof(p.pokemonTrainerAI.Can_Attack), 1f);
+                    p.pokemonTrainerAI.Invoke(nameof(p.pokemonTrainerAI.CanAttack), 1f);
     }
 
     void AutoAim()
     {
-        if (!isDoubleBattle && Turn_Based_Combat.instance.Current_pkm_turn == 0) //if single battle, auto aim at enemy
+        if (!isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex == 0) //if single battle, auto aim at enemy
         {
             currentEnemyIndex = 2;
             _currentParticipant.enemySelected = true;
@@ -135,7 +135,7 @@ public class Battle_handler : MonoBehaviour
 
     public void SelectEnemy(int choice)
     {
-        if (Turn_Based_Combat.instance.Current_pkm_turn > 1) return; //not player's turn
+        if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return; //not player's turn
         if (isDoubleBattle & choice < 2)
         {
             //cant attack own pokemon
@@ -153,7 +153,7 @@ public class Battle_handler : MonoBehaviour
         Options_manager.instance.playerInBattle = true;
         battleUI.SetActive(true);
         overWorld.SetActive(false);
-        Turn_Based_Combat.instance.Change_turn(-1, 0);
+        Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
     }
 
     void LoadAreaBackground(Encounter_Area area)
@@ -172,13 +172,13 @@ public class Battle_handler : MonoBehaviour
         battleParticipants[0].currentEnemies.Add(battleParticipants[2]);
         battleParticipants[2].pokemon = enemy;
         battleParticipants[2].currentEnemies.Add(battleParticipants[0]);
-        Wild_pkm.instance.pokemon_participant = battleParticipants[2];
-        Wild_pkm.instance.Enemy_pokemon = battleParticipants[0];
+        Wild_pkm.Instance.participant = battleParticipants[2];
+        Wild_pkm.Instance.currentEnemyPokemon = battleParticipants[0];
         battleParticipants[2].AddToExpList(battleParticipants[0].pokemon);
         foreach (Battle_Participant p in battleParticipants)
             if (p.pokemon != null)
                 SetParticipant(p);
-        Wild_pkm.instance.InBattle = true;
+        Wild_pkm.Instance.inBattle = true;
         SetupBattle();
         Encounter_handler.instance.current_area = null;
     }
@@ -208,7 +208,7 @@ public class Battle_handler : MonoBehaviour
         battleParticipants[0].currentEnemies.Add(battleParticipants[2]);
         battleParticipants[2].currentEnemies.Add(battleParticipants[0]);
         battleParticipants[2].pokemonTrainerAI = battleParticipants[2].GetComponent<Enemy_trainer>();
-        battleParticipants[2].pokemonTrainerAI.StartBattle(trainerName, false);
+        battleParticipants[2].pokemonTrainerAI.SetupTrainerForBattle(trainerName, false);
         battleParticipants[2].pokemon = battleParticipants[2].pokemonTrainerAI.trainerParty[0];
         LoadAreaBackground(battleParticipants[2].pokemonTrainerAI.trainerData.TrainerLocation);
         battleParticipants[2].AddToExpList(battleParticipants[0].pokemon);
@@ -230,8 +230,8 @@ public class Battle_handler : MonoBehaviour
             battleParticipants[1].pokemon = alivePokemon[1];
         battleParticipants[2].pokemonTrainerAI = battleParticipants[2].GetComponent<Enemy_trainer>();
         battleParticipants[3].pokemonTrainerAI = battleParticipants[3].GetComponent<Enemy_trainer>();
-        battleParticipants[2].pokemonTrainerAI.StartBattle(trainerName, false);
-        battleParticipants[3].pokemonTrainerAI.StartBattle(trainerName, true);
+        battleParticipants[2].pokemonTrainerAI.SetupTrainerForBattle(trainerName, false);
+        battleParticipants[3].pokemonTrainerAI.SetupTrainerForBattle(trainerName, true);
         battleParticipants[3].pokemonTrainerAI.trainerData = battleParticipants[2].pokemonTrainerAI.trainerData;
         battleParticipants[3].pokemonTrainerAI.trainerParty = battleParticipants[2].pokemonTrainerAI.trainerParty;
         battleParticipants[2].pokemon = battleParticipants[2].pokemonTrainerAI.trainerParty[0];
@@ -323,7 +323,7 @@ public void SetParticipant(Battle_Participant participant)
             ,currentEnemyIndex
             , user.pokemon.Pokemon_ID.ToString()
             ,battleParticipants[currentEnemyIndex].pokemon.Pokemon_ID.ToString());
-        Turn_Based_Combat.instance.SaveMove(currentTurn);
+        Turn_Based_Combat.Instance.SaveMove(currentTurn);
     }
     public void ResetMoveUsability()
     {
@@ -381,7 +381,7 @@ public void SetParticipant(Battle_Participant participant)
                                                                    * Game_Load.instance.player_data.NumBadges 
                                                                    * lastOpponent.Current_level;
                 }
-                if (!Wild_pkm.instance.RanAway)
+                if (!Wild_pkm.Instance.ranAway)
                 {
                     Dialogue_handler.instance.Battle_Info("All your pokemon have fainted");
                     playerWhiteOut = true;
@@ -401,8 +401,8 @@ public void SetParticipant(Battle_Participant participant)
     } 
     IEnumerator LevelUp_Sequence(LevelUpEvent pkmLevelUp)
     {
-        yield return new WaitUntil(() => !Turn_Based_Combat.instance.LevelEventDelay);
-        Turn_Based_Combat.instance.LevelEventDelay = true;
+        yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
+        Turn_Based_Combat.Instance.levelEventDelay = true;
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         Dialogue_handler.instance.Battle_Info("Wow!");
         yield return new WaitForSeconds(0.5f);
@@ -419,14 +419,14 @@ public void SetParticipant(Battle_Participant participant)
                 if (Pokemon_Details.instance.LearningMove)
                     yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
                 else
-                    Turn_Based_Combat.instance.LevelEventDelay = false;
+                    Turn_Based_Combat.Instance.levelEventDelay = false;
             }
             yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         }
         else
         //in case if leveled up and didn't learn move
             levelUpQueue.Remove(pkmLevelUp);
-        Turn_Based_Combat.instance.LevelEventDelay = false;
+        Turn_Based_Combat.Instance.levelEventDelay = false;
         if(battleOver & levelUpQueue.Count==0)
             End_Battle(battleWon);
     }
@@ -482,13 +482,13 @@ public void SetParticipant(Battle_Participant participant)
                     random--;
                 if (random > 5) //initially 50/50 chance to run
                 {
-                    Wild_pkm.instance.InBattle = false;
+                    Wild_pkm.Instance.inBattle = false;
                     End_Battle(false);
                 }
                 else
                 {
                     Dialogue_handler.instance.Battle_Info("Can't run away");
-                    Turn_Based_Combat.instance.Invoke(nameof(Turn_Based_Combat.instance.Next_turn),0.9f);
+                    Turn_Based_Combat.Instance.Invoke(nameof(Turn_Based_Combat.Instance.NextTurn),0.9f);
                 }
             }
         }

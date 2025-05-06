@@ -5,26 +5,26 @@ using System.Collections.Generic;
 
 public static class BattleOperations
 {
-    private static float effectiveness = 0;
+    private static float _effectiveness = 0;
     public static bool CanDisplayDialougue = true;
-    public static bool IsImmuneTo(Pokemon victim,Type enemyType)
+    public static bool CheckImmunity(Pokemon victim,Type enemyType)
     {
         foreach(Type t in victim.types)
             if (enemyType.type_check(enemyType.Non_effect, t))
                 return true;
         return false;
     } 
-    static void IsWeakTo(Pokemon victim,Type enemyType)
+    private static void IsWeakTo(Pokemon victim,Type enemyType)
     {
         foreach(Type t in victim.types)
             if (t.type_check(t.weaknesses, enemyType))
-                effectiveness *= 2f;
+                _effectiveness *= 2f;
     }
-    static void IsResistantTo(Pokemon victim,Type enemyType)
+    private static void IsResistantTo(Pokemon victim,Type enemyType)
     {
         foreach(Type t in victim.types)
             if (t.type_check(t.Resistances, enemyType))
-                effectiveness /= 2f;
+                _effectiveness /= 2f;
     }
     public static bool is_Stab(Pokemon pkm,Type moveType)
     {
@@ -38,19 +38,19 @@ public static class BattleOperations
         if (victim.additionalTypeImmunity!=null)
         {
             if (victim.additionalTypeImmunity == enemyType)
-                effectiveness = 0;
+                _effectiveness = 0;
         }
         else{
-            if (IsImmuneTo(victim.pokemon, enemyType)) 
-                effectiveness = 0;
+            if (CheckImmunity(victim.pokemon, enemyType)) 
+                _effectiveness = 0;
             else
             {
-                effectiveness = 1;
+                _effectiveness = 1;
                 IsWeakTo(victim.pokemon, enemyType);
                 IsResistantTo(victim.pokemon, enemyType);
             }
         }
-        return effectiveness;
+        return _effectiveness;
     }
     //Pokeballs
     public static float GetCatchRateBonusFromStatus(string statusName)
@@ -71,13 +71,13 @@ public static class BattleOperations
         return true;
     }
 
-    public static bool ShakeCheck(float catchvalue)
+    public static bool PassedPokeballShakeTest(float catchvalue)
     {
-        float ShakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchvalue)  );
+        float shakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchvalue)  );
         for (int i = 0; i < 3; i++)
         {
             int rand = Utility.Random16Bit();
-            if (rand < (ShakeProbability * (i+1)) )
+            if (rand < (shakeProbability * (i+1)) )
                 return true;
         }
         return false;
@@ -90,7 +90,7 @@ public static class BattleOperations
                 return true;
         return false;
     }
-    public static void ChangeBuff(BuffDebuffData data)
+    public static void ChangeOrCreateBuffOrDebuff(BuffDebuffData data)
     {
         if (!HasBuffOrDebuff(data.Reciever, data.StatName))
         {
@@ -150,7 +150,7 @@ public static class BattleOperations
         buff.Stage = 0;
         return buff;
     }
-    public static Buff_Debuff GetBuff(Pokemon pkm,string statName)
+    public static Buff_Debuff SearchForBuffOrDebuff(Pokemon pkm,string statName)
     {
         foreach (Buff_Debuff b in pkm.Buff_Debuffs)
             if (b.Stat == statName)
@@ -162,6 +162,6 @@ public static class BattleOperations
         foreach (Buff_Debuff b in new List<Buff_Debuff>(pkm.Buff_Debuffs))
             if (b.Stage==0)
                 pkm.Buff_Debuffs.Remove(b);
-        Move_handler.instance.ProcessingOrder = false;
+        Move_handler.Instance.processingOrder = false;
     }
 }

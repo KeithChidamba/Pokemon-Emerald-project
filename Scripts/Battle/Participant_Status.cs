@@ -1,37 +1,46 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.Mathematics;
 using UnityEngine;
+using System;
+
 
 public class Participant_Status : MonoBehaviour
 {
-    public Battle_Participant _participant;
-    public int status_duration = 0;
-    [SerializeField]private int num_status_turns = 0;
-    [SerializeField]private bool Healed = false;
+    private Battle_Participant _participant;
+    private int _statusDuration = 0;
+    private int _statusDurationInTurns = 0;
+    private bool _healed = false;
+    private readonly Dictionary<string, Action> _statusEffectMethods = new ();
     void Start()
     {
         _participant = GetComponent<Battle_Participant>();
+        _statusEffectMethods.Add("freeze",freeze_check);
+        _statusEffectMethods.Add("sleep",sleep_check);
+        _statusEffectMethods.Add("paralysis",paralysis_check);
     }
-    public void Get_statusEffect(int num_turns)
+    public void Get_statusEffect(int numTurns)
     {
         _participant.RefreshStatusEffectImage();
         if (_participant.pokemon.Status_effect == "None") return;
-        status_duration = 0;
-        num_status_turns = num_turns;
+        _statusDuration = 0;
+        _statusDurationInTurns = numTurns;
         Stat_drop();
     }
     void loose_HP(float percentage)
     {
         _participant.pokemon.HP -= math.trunc(_participant.pokemon.max_HP * percentage);
     }
-    public void Stat_drop()
+    private void Stat_drop()
     {
-        if (_participant.pokemon.Status_effect == "Burn")
-            _participant.pokemon.Attack *= 0.5f;
-        if (_participant.pokemon.Status_effect == "Paralysis")
-            _participant.pokemon.speed *= 0.25f;
+        switch (_participant.pokemon.Status_effect)
+        {
+            case "Burn":
+                _participant.pokemon.Attack *= 0.5f;
+                break;
+            case "Paralysis":
+                _participant.pokemon.speed *= 0.25f;
+                break;
+        }
     }
     public void Check_status()
     {
@@ -53,10 +62,14 @@ public class Participant_Status : MonoBehaviour
     public void StunCheck()
     {
         if (!_participant.isActive) return;
-        if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon !=
+        if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon !=
             _participant.pokemon) return;
         if (_participant.pokemon.Status_effect == "None") return;
-        Invoke(_participant.pokemon.Status_effect.ToLower()+"_check",0f);
+        
+        if (_statusEffectMethods.TryGetValue(_participant.pokemon.Status_effect.ToLower(),out Action method))
+            method();
+        else
+            Debug.Log("couldn't find method for status: " + _participant.pokemon.Status_effect.ToLower());
     }
     void Status_damage()
     {
@@ -69,7 +82,7 @@ public class Participant_Status : MonoBehaviour
                 Status_Damage_msg(" is poisoned", 0.125f);
                 break;
             case "badly poison":
-                Status_Damage_msg(" is badly poisoned", (1+status_duration) / 16f );
+                Status_Damage_msg(" is badly poisoned", (1+_statusDuration) / 16f );
                 break;
         }
     }
@@ -83,41 +96,39 @@ public class Participant_Status : MonoBehaviour
     void paralysis_check()
     {
         if (_participant.pokemon.isFlinched) return;
-        if (Utility.RandomRange(1, 101) < 75)//75% chance
-            _participant.pokemon.canAttack = true;
-        else
-            _participant.pokemon.canAttack = false;
+        //75% chance
+        _participant.pokemon.canAttack = Utility.RandomRange(1, 101) < 75;
     }
     void sleep_check()
     {
-        if (status_duration < 1)//at least sleep for 1 turn
+        if (_statusDuration < 1)//at least sleep for 1 turn
         {
             _participant.pokemon.canAttack = false;
-            status_duration++;
+            _statusDuration++;
             return;
         }
-        if (num_status_turns == status_duration)//after 4 turns wake up
+        if (_statusDurationInTurns == _statusDuration)//after 4 turns wake up
             SetHeal();
         else //wake up early if lucky
         {
             int[] chances = { 25, 33, 50, 100 };
-            if (Utility.RandomRange(1, 101) < chances[status_duration-1])
+            if (Utility.RandomRange(1, 101) < chances[_statusDuration-1])
                 SetHeal();
             else
                 _participant.pokemon.canAttack = false;
-            status_duration++;
+            _statusDuration++;
         }
     }
     void Status_Damage_msg(string msg,float damage)
     {
         Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+msg);
         loose_HP(damage);
-        status_duration++;
+        _statusDuration++;
         _participant.Invoke(nameof(_participant.CheckIfFainted),0.9f);
     }
     public void Notify_Healing()
     {
-        if (!Healed) return;
+        if (!_healed) return;
         switch (_participant.pokemon.Status_effect)
         {
             case "Sleep":
@@ -128,11 +139,11 @@ public class Participant_Status : MonoBehaviour
                 break;
         }
         remove_status_effect();
-        Healed = false;
+        _healed = false;
     }
     void SetHeal()
     {
-        Healed = true;
+        _healed = true;
     }
     void remove_status_effect()
     {

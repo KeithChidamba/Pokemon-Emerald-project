@@ -9,66 +9,65 @@ using UnityEngine.Serialization;
 
 public class Turn_Based_Combat : MonoBehaviour
 {
-    public static Turn_Based_Combat instance; 
-    [SerializeField]List<Turn> Turn_history = new();
+    public static Turn_Based_Combat Instance; 
+    List<Turn> _turnHistory = new();
     public event Action OnNewTurn;
     public event Action OnMoveExecute;
     public event Action OnTurnEnd;
-    public int Current_pkm_turn = 0;
-    public bool LevelEventDelay = false;
-    public bool FaintEventDelay = false;
+    public int currentTurnIndex = 0;
+    public bool levelEventDelay = false;
+    public bool faintEventDelay = false;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
     private void Start()
     {
-        Battle_handler.Instance.OnBattleEnd += Reset_Moves;
+        Battle_handler.Instance.OnBattleEnd += ResetTurnState;
     }
     public void SaveMove(Turn turn)
     {
-        Turn_history.Add(turn);
-        if( (Battle_handler.Instance.isDoubleBattle && isLastParticipant())
-         || (Current_pkm_turn == Battle_handler.Instance.participantCount ))
+        _turnHistory.Add(turn);
+        if( (Battle_handler.Instance.isDoubleBattle && IsLastParticipant())
+         || (currentTurnIndex == Battle_handler.Instance.participantCount ))
             StartCoroutine(ExecuteMoves(Set_priority()));
         else
-            Next_turn();
+            NextTurn();
     }
 
-    bool isLastParticipant()
+    private bool IsLastParticipant()
     {
-        List <Battle_Participant> activeParticipants = new();
-        activeParticipants = Battle_handler.Instance.battleParticipants.ToList();
-        activeParticipants.RemoveAll(participant => participant.pokemon==null);
-        if (activeParticipants.Last() ==
-            Battle_handler.Instance.battleParticipants[Current_pkm_turn])
+        var livingParticipants = Battle_handler.Instance.battleParticipants.ToList();
+        livingParticipants.RemoveAll(participant => participant.pokemon==null);
+        if (livingParticipants.Last() ==
+            Battle_handler.Instance.battleParticipants[currentTurnIndex])
             return true;
         return false;
     }
-    void Reset_Moves()
+    private void ResetTurnState()
     {
-        Turn_history.Clear();
-        FaintEventDelay = false;
-        LevelEventDelay = false;
+        _turnHistory.Clear();
+        faintEventDelay = false;
+        levelEventDelay = false;
     }
-    bool Can_Attack(Turn turn, Battle_Participant attacker_,Battle_Participant victim_)
+    private bool CanAttack(Turn turn, Battle_Participant attacker,Battle_Participant victim)
     {
-        if(attacker_.pokemon.HP<=0) return false;
-        if (attacker_.pokemon.canAttack)
+        if(attacker.pokemon.HP<=0) return false;
+        if (attacker.pokemon.canAttack)
         {
-            if (turn.move_.Move_accuracy < 100)//not a sure-hit move
+            if (turn.move.Move_accuracy < 100)//not a sure-hit move
             {
                 if (!MoveSuccessfull(turn))
                 {
-                    if(attacker_.pokemon.Accuracy >= victim_.pokemon.Evasion)
-                        Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" missed the attack");
+                    if(attacker.pokemon.Accuracy >= victim.pokemon.Evasion)
+                        Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" missed the attack");
                     else
-                        Dialogue_handler.instance.Battle_Info(victim_.pokemon.Pokemon_name+" dodged the attack");
+                        Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" dodged the attack");
                 }
                 else
                     return true;
@@ -77,115 +76,107 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         else
         {
-            if (attacker_.pokemon.isFlinched)
-                Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" flinched!");
-            else if(attacker_.pokemon.Status_effect!="None")
-                Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" is affected by "+ attacker_.pokemon.Status_effect);
+            if (attacker.pokemon.isFlinched)
+                Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" flinched!");
+            else if(attacker.pokemon.Status_effect!="None")
+                Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" is affected by "+ attacker.pokemon.Status_effect);
         }
         return false;
     }
-    IEnumerator ExecuteMoves(List<Turn> TurnOrder)
+    private IEnumerator ExecuteMoves(List<Turn> turnOrder)
     {
-        foreach (Turn CurrentTurn in TurnOrder )
+        foreach (Turn currentTurn in turnOrder )
         {
-            Battle_Participant attacker_=Battle_handler.Instance.battleParticipants[CurrentTurn.attackerIndex];
-            Battle_Participant victim_=Battle_handler.Instance.battleParticipants[CurrentTurn.victimIndex];
-            if (!CheckParticipantState(attacker_))
+            var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
+            var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
+            if (!IsValidParticipantState(attacker))
                 continue;
-            if (!isValidParticipant(CurrentTurn,attacker_))
+            if (!IsValidParticipant(currentTurn,attacker))
                 continue;
-            if (!CheckParticipantState(victim_))
+            if (!IsValidParticipantState(victim))
             {//if attack was directed at a pokemon that just fainted
-                Dialogue_handler.instance.Battle_Info(attacker_.pokemon.Pokemon_name+" missed the attack");
+                Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" missed the attack");
                 yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
                 continue;
             }
             OnMoveExecute?.Invoke();
             yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
-            if (Can_Attack(CurrentTurn,attacker_,victim_))
+            if (CanAttack(currentTurn,attacker,victim))
             {
-                Move_handler.instance.Doing_move = true;
-                CheckRepeatedMove(attacker_,CurrentTurn.move_);
-                Move_handler.instance.Do_move(CurrentTurn);
-                yield return new WaitUntil(() => !Move_handler.instance.Doing_move);
-                yield return new WaitUntil(() => !LevelEventDelay);
-                yield return new WaitUntil(() => !FaintEventDelay);
+                Move_handler.Instance.doingMove = true;
+                CheckRepeatedMove(attacker,currentTurn.move);
+                Move_handler.Instance.ExecuteMove(currentTurn);
+                yield return new WaitUntil(() => !Move_handler.Instance.doingMove);
+                yield return new WaitUntil(() => !levelEventDelay);
+                yield return new WaitUntil(() => !faintEventDelay);
             }
             else
                 yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         }
-        yield return new WaitUntil(() => !LevelEventDelay);
-        yield return new WaitUntil(() => !FaintEventDelay);
+        yield return new WaitUntil(() => !levelEventDelay);
+        yield return new WaitUntil(() => !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
-        Turn_history.Clear();
+        _turnHistory.Clear();
         OnTurnEnd?.Invoke();
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
         Battle_handler.Instance.ResetMoveUsability();
-        Next_turn();
+        NextTurn();
     }
 
-    void CheckRepeatedMove(Battle_Participant attacker_, Move move_)
+    void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
-        if(attacker_.previousMove.Split('/')[0] == move_.Move_name)
-            attacker_.previousMove = move_.Move_name +"/"+
-                                     (int.Parse(attacker_.previousMove.Split('/')[1])+1);
-        else
-            attacker_.previousMove = move_.Move_name + "/1";
+        var previousMoveName = attacker.previousMove.Split('/')[0];
+        var previousMoveRepetitions = int.Parse(attacker.previousMove.Split('/')[1]);
+        
+        attacker.previousMove = (previousMoveName == move.Move_name)?
+             move.Move_name +"/"+ (previousMoveRepetitions + 1) : move.Move_name + "/1";
     }
-    bool CheckParticipantState(Battle_Participant participant)
+    bool IsValidParticipantState(Battle_Participant participant)
     {
-        if (participant.isActive)
-            if (!participant.fainted)
-                if (participant.pokemon != null)
-                    return true;
-        return false;
+        if (!participant.isActive) return false;
+        if (participant.fainted) return false;
+        return participant.pokemon != null;
     }
 
-    bool isValidParticipant(Turn turn,Battle_Participant participant)
+    bool IsValidParticipant(Turn turn,Battle_Participant participant)
     {
-        if (turn.attackerID == participant.pokemon.Pokemon_ID.ToString()|
-            turn.victimID == participant.pokemon.Pokemon_ID.ToString())
-            return true;
-        return false;
+        return (turn.attackerID == participant.pokemon.Pokemon_ID.ToString() |
+                turn.victimID == participant.pokemon.Pokemon_ID.ToString());
     }
-    public void Next_turn()
+    public void NextTurn()
     { 
         if ( Battle_handler.Instance.isDoubleBattle)
-            Change_turn(4,1);
+            ChangeTurn(4,1);
         else
-            Change_turn(3,2);
+            ChangeTurn(3,2);
     }
-    public void Change_turn(int participant_index,int step)
+    public void ChangeTurn(int participantIndex,int step)
     {
-        if (Current_pkm_turn < participant_index-1)
-            Current_pkm_turn+=step;
+        if (currentTurnIndex < participantIndex-1)
+            currentTurnIndex+=step;
         else
         {
             Battle_handler.Instance.ViewOptions();
-            Current_pkm_turn = 0;
-            Battle_handler.Instance.battleParticipants[Current_pkm_turn].enemySelected = false;//allow player to attack
+            currentTurnIndex = 0;
+            Battle_handler.Instance.battleParticipants[currentTurnIndex].enemySelected = false;//allow player to attack
         }
         OnNewTurn?.Invoke();
         Battle_handler.Instance.doingMove = false;
-        if (!Battle_handler.Instance.battleParticipants[Current_pkm_turn].isActive & Options_manager.instance.playerInBattle)
-            Next_turn();
+        if (!Battle_handler.Instance.battleParticipants[currentTurnIndex].isActive & Options_manager.instance.playerInBattle)
+            NextTurn();
     }
     private bool MoveSuccessfull(Turn turn)
     {
-        int rand = Utility.RandomRange(1, 100);
-        float Hit_Chance = turn.move_.Move_accuracy *
+        var rand = Utility.RandomRange(1, 100);
+        var hitChance = turn.move.Move_accuracy *
                            (Battle_handler.Instance.battleParticipants[turn.attackerIndex].pokemon.Accuracy / 
                             Battle_handler.Instance.battleParticipants[turn.victimIndex].pokemon.Evasion);
-        if (Hit_Chance>rand)
-            return true;
-        return false;
+        return hitChance>rand;
     }
     private List<Turn> Set_priority()
     {
-        List<Turn> speed_list = new();
-        List<Turn> priority_list = new();
-        speed_list = Turn_history.OrderByDescending(p => Battle_handler.Instance.battleParticipants[p.attackerIndex].pokemon.speed).ToList();
-        priority_list = speed_list.OrderByDescending(p => p.move_.Priority).ToList();
-        return priority_list;
+        var orderBySpeed = _turnHistory.OrderByDescending(p => Battle_handler.Instance.battleParticipants[p.attackerIndex].pokemon.speed).ToList();
+        var priorityList = orderBySpeed.OrderByDescending(p => p.move.Priority).ToList();
+        return priorityList;
     }
 }

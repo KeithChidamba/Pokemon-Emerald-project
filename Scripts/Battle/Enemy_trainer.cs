@@ -8,22 +8,22 @@ using UnityEngine.Serialization;
 public class Enemy_trainer : MonoBehaviour
 {
     public Battle_Participant participant;
-    [FormerlySerializedAs("_trainerData")] public TrainerData trainerData;
-    [FormerlySerializedAs("TrainerParty")] public List<Pokemon> trainerParty;
-    [FormerlySerializedAs("InBattle")] public bool inBattle = false;
-    [FormerlySerializedAs("CanAttack")] public bool canAttack = true;
-    [FormerlySerializedAs("Used_move")] [SerializeField]private bool usedMove = false;
+    public TrainerData trainerData;
+    public List<Pokemon> trainerParty;
+    public bool inBattle;
+    public bool canAttack = true;
+    [SerializeField]private bool usedMove;
     private void Update()
     {
         if (!inBattle) return;
-        Make_Decision();
+        MakeBattleDecision();
     }
     private void Start()
     {
-        Turn_Based_Combat.instance.OnNewTurn += Reset_move;
+        Turn_Based_Combat.Instance.OnNewTurn += ResetMoveUsage;
         Battle_handler.Instance.OnBattleEnd += ResetAfterBattle;
     }
-    public void Can_Attack()
+    public void CanAttack()
     {
         canAttack = true;
     }
@@ -33,15 +33,15 @@ public class Enemy_trainer : MonoBehaviour
         trainerData = null;
         trainerParty.Clear();
     }
-    void Reset_move()
+    void ResetMoveUsage()
     {
         if (!inBattle) return;
         usedMove = false;
     }
 
-    public void CheckLoss()
+    public void CheckIfLoss()
     {
-        List<Pokemon> numAlive = trainerParty.ToList();
+        var numAlive = trainerParty.ToList();
         numAlive.RemoveAll(p => p.HP <= 0);
         if (numAlive.Count == 0)
         {
@@ -52,12 +52,12 @@ public class Enemy_trainer : MonoBehaviour
         {
             if (Battle_handler.Instance.isDoubleBattle)//double battle
             {//only select the pokemon that werent in battle
-                List<Pokemon> NotParticipatingList = new();
+                List<Pokemon> notParticipatingList = new();
                 foreach (Pokemon pokemon in trainerParty)
                     if(pokemon!=Battle_handler.Instance.battleParticipants[2].pokemon && pokemon!=Battle_handler.Instance.battleParticipants[3].pokemon)
-                        NotParticipatingList.Add(pokemon);
-                NotParticipatingList.RemoveAll(p => p.HP <= 0);
-                if (NotParticipatingList.Count == 0)
+                        notParticipatingList.Add(pokemon);
+                notParticipatingList.RemoveAll(p => p.HP <= 0);
+                if (notParticipatingList.Count == 0)
                 {//1 left
                     if(participant.pokemon.HP<=0)
                     {
@@ -71,31 +71,31 @@ public class Enemy_trainer : MonoBehaviour
                 }
                 else
                 {
-                    int randomLeftOver = Utility.RandomRange(0, NotParticipatingList.Count - 1);
-                    participant.pokemon = NotParticipatingList[randomLeftOver];
+                    var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count - 1);
+                    participant.pokemon = notParticipatingList[randomLeftOver];
                     Battle_handler.Instance.SetParticipant(participant);
                 }
             }
             else
             {
-                int randomMemeber = Utility.RandomRange(0, numAlive.Count - 1);
-                participant.pokemon = numAlive[randomMemeber];
+                var randomMember = Utility.RandomRange(0, numAlive.Count - 1);
+                participant.pokemon = numAlive[randomMember];
                 Battle_handler.Instance.SetParticipant(participant);
             }
         }
-        Turn_Based_Combat.instance.FaintEventDelay = false;
+        Turn_Based_Combat.Instance.faintEventDelay = false;
     }
-    public void StartBattle(string TrainerName, bool isSameTrainer)
+    public void SetupTrainerForBattle(string trainerName, bool isSameTrainer)
     {
         participant = GetComponent<Battle_Participant>();
         if (isSameTrainer) return;
-        TrainerData copy = Resources.Load<TrainerData>("Pokemon_project_assets/Enemies/Data/" + TrainerName +"/"+ TrainerName);
-        trainerData = Obj_Instance.SetTrainer(copy);
+        var copyOfTrainerData = Resources.Load<TrainerData>("Pokemon_project_assets/Enemies/Data/" + trainerName +"/"+ trainerName);
+        trainerData = Obj_Instance.SetTrainer(copyOfTrainerData);
         foreach (TrainerPokemonData member in trainerData.PokemonParty)
         {
             trainerParty.Add(member.pokemon);
-            int exp = PokemonOperations.GetNextLv(member.PokemonLevel, member.pokemon.EXPGroup)+1;
-            member.pokemon.Recieve_exp(exp);
+            var expForNextLevel = PokemonOperations.GetNextLv(member.pokemonLevel, member.pokemon.EXPGroup)+1;
+            member.pokemon.Recieve_exp(expForNextLevel);
             member.pokemon.HP = member.pokemon.max_HP;
             member.pokemon.move_set.Clear();
             foreach (Move move in member.moveSet)
@@ -104,29 +104,29 @@ public class Enemy_trainer : MonoBehaviour
                 member.pokemon.HeldItem = Obj_Instance.set_Item(member.heldItem);
         }
     }
-    void use_move(Move move)
+    void UseMove(Move move)
     {
         //Debug.Log(Turn_Based_Combat.instance.Current_pkm_turn+" "+Used_move+" move: "+move.Move_name);
         Battle_handler.Instance.UseMove(move,participant);
         usedMove = true;
     }
-    public void Select_player(int selectedIndex)
+    private void TargetPlayer(int selectedIndex)
     {
         //enemy choosing player
         participant.enemySelected = true;
         Battle_handler.Instance.currentEnemyIndex = selectedIndex;
     }
-    private void Make_Decision()
+    private void MakeBattleDecision()
     {
-            if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.instance.Current_pkm_turn].pokemon == participant.pokemon && !usedMove && canAttack)
-            {
-                //Debug.Log("ai ataccked wit: "+participant.pokemon.Pokemon_name);
-                int randome_enemy = Utility.RandomRange(0, participant.currentEnemies.Count);
-                Select_player(randome_enemy);
-                int randomMove = Utility.RandomRange(0, participant.pokemon.move_set.Count);
-                //Debug.Log(participant.pokemon.Pokemon_name+" is gonna use move: "+participant.pokemon.move_set[randomMove].Move_name);
-                use_move(participant.pokemon.move_set[randomMove]);
-                canAttack = false;
-            }
+        if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon
+            != participant.pokemon)return;
+        if (usedMove || !canAttack) return;
+        //Debug.Log("ai ataccked wit: "+participant.pokemon.Pokemon_name);
+        var randomEnemy = Utility.RandomRange(0, participant.currentEnemies.Count);
+        TargetPlayer(randomEnemy);
+        var randomMoveIndex = Utility.RandomRange(0, participant.pokemon.move_set.Count);
+        //Debug.Log(participant.pokemon.Pokemon_name+" is gonna use move: "+participant.pokemon.move_set[randomMoveIndex].Move_name);
+        UseMove(participant.pokemon.move_set[randomMoveIndex]);
+        canAttack = false;
     }
 }

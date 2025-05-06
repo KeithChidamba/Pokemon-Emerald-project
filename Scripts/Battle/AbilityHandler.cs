@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class AbilityHandler : MonoBehaviour
     private void Start()
     {
         _participant =  GetComponent<Battle_Participant>();
-        Turn_Based_Combat.instance.OnMoveExecute += CheckAbilityUsability;
+        Turn_Based_Combat.Instance.OnMoveExecute += CheckAbilityUsability;
         _abilityMethods.Add("pickup",pick_up);
         _abilityMethods.Add("blaze",blaze);
         _abilityMethods.Add("guts",guts);
@@ -47,10 +46,10 @@ public class AbilityHandler : MonoBehaviour
     {
         OnAbilityUsed = null;
         _abilityTriggered = false;
-        Move_handler.instance.OnMoveHit -= GiveStatic;
+        Move_handler.Instance.OnMoveHit -= GiveStatic;
         Battle_handler.Instance.OnBattleEnd -= GiveItem;
-        Move_handler.instance.OnDamageDeal -= IncreaseDamage;
-        Move_handler.instance.OnStatusEffectHit -= HealStatusEffect;
+        Move_handler.Instance.OnDamageDeal -= IncreaseDamage;
+        Move_handler.Instance.OnStatusEffectHit -= HealStatusEffect;
     }
     void pick_up()
     {
@@ -71,7 +70,7 @@ public class AbilityHandler : MonoBehaviour
     void blaze()
     {
         if (_abilityTriggered) return;
-        Move_handler.instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
     void guts()
@@ -81,7 +80,7 @@ public class AbilityHandler : MonoBehaviour
         {
             BuffDebuffData AttackBuffData = new BuffDebuffData(_participant.pokemon, "Attack", true, 1);
             BattleOperations.CanDisplayDialougue = false; 
-            Move_handler.instance.GiveBuff_Debuff(AttackBuffData);
+            Move_handler.Instance.SelectRelevantBuffOrDebuff(AttackBuffData);
             _abilityTriggered = true;
         }
     }
@@ -95,13 +94,13 @@ public class AbilityHandler : MonoBehaviour
     void overgrow()
     {
         if (_abilityTriggered) return;
-        Move_handler.instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
     void paralysis_combo()
     {
         if (_abilityTriggered) return;
-        Move_handler.instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
     void HealStatusEffect(Battle_Participant victim,string status)
@@ -120,26 +119,26 @@ public class AbilityHandler : MonoBehaviour
     {
         HealStatusEffect(_participant,_participant.pokemon.Status_effect);//incase you already had status when entering battle
         if (_abilityTriggered) return;
-        Move_handler.instance.OnStatusEffectHit += HealStatusEffect;
+        Move_handler.Instance.OnStatusEffectHit += HealStatusEffect;
         _abilityTriggered = true;
     }
     void static_()
     {
         if (_abilityTriggered) return;
-        Move_handler.instance.OnMoveHit += GiveStatic;
+        Move_handler.Instance.OnMoveHit += GiveStatic;
         _abilityTriggered = true;
     }
     
     void swarm()
     {
         if (_abilityTriggered) return;
-        Move_handler.instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
     void torrent()
     {
         if (_abilityTriggered) return;
-        Move_handler.instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
 
@@ -189,7 +188,7 @@ public class AbilityHandler : MonoBehaviour
         //simulate a pokemon's attack
         Move PlaceholderMove = ScriptableObject.CreateInstance<Move>();
         PlaceholderMove.Status_effect = "Paralysis";
-        Move_handler.instance.CheckStatus(attacker, PlaceholderMove);
+        Move_handler.Instance.HandleStatusApplication(attacker, PlaceholderMove);
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {

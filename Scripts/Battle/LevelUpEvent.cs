@@ -5,9 +5,9 @@ using UnityEngine;
 public class LevelUpEvent
 {
     [SerializeField]public Pokemon pokemon;
-    public LevelUpEvent(Pokemon pokemon_)
+    public LevelUpEvent(Pokemon pokemon)
     {
-        pokemon = pokemon_;
+        this.pokemon = pokemon;
     }
     public void Execute()
     {

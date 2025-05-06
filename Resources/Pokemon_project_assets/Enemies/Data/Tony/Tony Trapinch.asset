@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tony Trapinch
   m_EditorClassIdentifier: 
   pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
-  PokemonLevel: 6
+  pokemonLevel: 5
   hasItem: 0
   heldItem: {fileID: 0}
   moveSet:
