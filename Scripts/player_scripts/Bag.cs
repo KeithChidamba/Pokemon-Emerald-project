@@ -54,7 +54,7 @@ public class Bag : MonoBehaviour
     
     public void Sell_to_Market()
     {
-        if (!bag_items[top_index + Selected_item - 1].CanBeSold)
+        if (!bag_items[top_index + Selected_item - 1].canBeSold)
         {
             Dialogue_handler.instance.Write_Info("You cant sell that!","Details");
             return;
@@ -122,7 +122,7 @@ public class Bag : MonoBehaviour
         Item item_ = null;
         foreach (Item itm in bag_items)
         {
-            if (itm.Item_name == item )
+            if (itm.itemName == item )
                 if(itm.quantity < 99)
                     item_ = itm;
         }
@@ -131,7 +131,7 @@ public class Bag : MonoBehaviour
     bool inBag(string item)
     {
         foreach (Item itm in bag_items)
-            if (itm.Item_name == item)
+            if (itm.itemName == item)
                 return true;
         return false;
     }
@@ -158,7 +158,7 @@ public class Bag : MonoBehaviour
             return;
         }
         Pokemon partymemeber = Pokemon_party.instance.party[memeberIndex - 1];
-        Dialogue_handler.instance.Write_Info("You took a " + partymemeber.HeldItem.Item_name +" from "
+        Dialogue_handler.instance.Write_Info("You took a " + partymemeber.HeldItem.itemName +" from "
                                              + partymemeber.Pokemon_name, "Details");
         Add_item(partymemeber.HeldItem);
         partymemeber.RemoveHeldItem();
@@ -176,9 +176,9 @@ public class Bag : MonoBehaviour
     {
         if (num_items < max_capacity)
         {
-            if (inBag(item.Item_name))
+            if (inBag(item.itemName))
             {
-                Item searched = Search_items(item.Item_name);
+                Item searched = Search_items(item.itemName);
                 if (searched != null)
                 {
                     if ( item.quantity < (99 - searched.quantity))
@@ -216,7 +216,7 @@ public class Bag : MonoBehaviour
     {
         Item ItemToUse = bag_items[top_index + Selected_item - 1];
         Item_handler.instance.Using_item = true;
-        if(ItemToUse.ForPartyUse)
+        if(ItemToUse.forPartyUse)
         {
             Pokemon_party.instance.Recieve_item(ItemToUse);
             Game_ui_manager.instance.View_pkm_Party();

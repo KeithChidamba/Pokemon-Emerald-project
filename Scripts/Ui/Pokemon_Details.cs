@@ -132,7 +132,7 @@ public class Pokemon_Details : MonoBehaviour
         pkm_sp_def.text = current_pkm.SP_DEF.ToString();
         pkm_CurrentExp.text = current_pkm.CurrentExpAmount.ToString();
         pkm_NextLvExp.text = current_pkm.NextLevelExpAmount.ToString();
-        pkm_HeldItem.text = (current_pkm.HasItem)? current_pkm.HeldItem.Item_name: "NONE";
+        pkm_HeldItem.text = (current_pkm.HasItem)? current_pkm.HeldItem.itemName: "NONE";
         Stats_ui.SetActive(true);
     }     
     void load_Moves_ui()

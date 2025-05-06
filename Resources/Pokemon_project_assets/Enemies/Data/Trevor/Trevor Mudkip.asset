@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Trevor Mudkip
   m_EditorClassIdentifier: 
   pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
-  PokemonLevel: 8
+  pokemonLevel: 15
   hasItem: 0
   heldItem: {fileID: 0}
   moveSet:

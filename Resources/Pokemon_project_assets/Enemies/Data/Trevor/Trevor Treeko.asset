@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Trevor Treeko
   m_EditorClassIdentifier: 
   pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
-  PokemonLevel: 5
+  pokemonLevel: 18
   hasItem: 0
   heldItem: {fileID: 0}
   moveSet:

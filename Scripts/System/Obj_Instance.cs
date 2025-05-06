@@ -126,20 +126,20 @@ public static class Obj_Instance
     public static Item set_Item(Item item)
     {
         Item new_item = ScriptableObject.CreateInstance<Item>();
-        new_item.Item_name = item.Item_name;
-        new_item.Item_ID = new_item.Item_name + Utility.Random16Bit();
-        new_item.Item_type = item.Item_type;
-        new_item.Item_desc = item.Item_desc;
+        new_item.itemName = item.itemName;
+        new_item.itemID = new_item.itemName + Utility.Random16Bit();
+        new_item.itemType = item.itemType;
+        new_item.itemDescription = item.itemDescription;
         new_item.price = item.price;
-        new_item.Item_img = item.Item_img;
+        new_item.itemImage = item.itemImage;
         new_item.quantity = item.quantity;
-        new_item.Item_effect = item.Item_effect;
-        new_item.ForPartyUse = item.ForPartyUse;
-        new_item.CanBeUsedInOverworld = item.CanBeUsedInOverworld;
-        new_item.CanBeUsedInBattle = item.CanBeUsedInBattle;
+        new_item.itemEffect = item.itemEffect;
+        new_item.forPartyUse = item.forPartyUse;
+        new_item.canBeUsedInOverworld = item.canBeUsedInOverworld;
+        new_item.canBeUsedInBattle = item.canBeUsedInBattle;
         new_item.isHeldItem = item.isHeldItem;
-        new_item.CanBeSold = item.CanBeSold;
-        new_item.CanBeHeld = item.CanBeHeld;
+        new_item.canBeSold = item.canBeSold;
+        new_item.canBeHeld = item.canBeHeld;
         return new_item;
     }
 }

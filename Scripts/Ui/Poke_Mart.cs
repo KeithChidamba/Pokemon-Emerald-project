@@ -79,7 +79,7 @@ public class Poke_Mart : MonoBehaviour
             item.quantity = Selected_item_quantity;
             Bag.instance.Add_item(item);
             Game_Load.instance.player_data.player_Money -= Selected_item_quantity * item.price;
-            Dialogue_handler.instance.Write_Info("You bought "+ item.quantity+ " "+item.Item_name+"'s", "Details",1.2f);
+            Dialogue_handler.instance.Write_Info("You bought "+ item.quantity+ " "+item.itemName+"'s", "Details",1.2f);
             Selected_item_quantity = 1;
         }
         else

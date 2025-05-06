@@ -13,7 +13,7 @@ public class Item_ui : MonoBehaviour
     public Button Use, Give, Drop;
     public void Load_item()
     {
-        item_name.text = item.Item_name;
+        item_name.text = item.itemName;
         quantity.text = "X"+item.quantity.ToString();
     }
     public void Load_item_info()
@@ -22,18 +22,18 @@ public class Item_ui : MonoBehaviour
         {
             Drop.interactable = false;
             Give.interactable = false;
-            Use.interactable = item.CanBeUsedInBattle;
+            Use.interactable = item.canBeUsedInBattle;
         }
         else
         {
             Drop.interactable = true;
-            Use.interactable = item.CanBeUsedInOverworld;
+            Use.interactable = item.canBeUsedInOverworld;
             if (item.isHeldItem)
                 Use.interactable = false;
-            Give.interactable = item.CanBeHeld;
+            Give.interactable = item.canBeHeld;
         }
-        item_description.text = item.Item_desc;
-        item_img.sprite=item.Item_img;
+        item_description.text = item.itemDescription;
+        item_img.sprite=item.itemImage;
     }
     public void Clear_ui()
     {

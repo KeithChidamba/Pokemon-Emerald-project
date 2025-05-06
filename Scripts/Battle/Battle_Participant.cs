@@ -77,7 +77,7 @@ public class Battle_Participant : MonoBehaviour
         }
         foreach(Pokemon p in Pokemon_party.instance.party)//exp share split, assuming there's only ever 1 exp share in the game
             if (p != null && p.HP>0 && p.HasItem)
-                if(p.HeldItem.Item_name == "Exp Share")
+                if(p.HeldItem.itemName == "Exp Share")
                 {
                     p.Recieve_exp(exp_from_enemy / 2);
                     exp_from_enemy /= 2;
@@ -85,7 +85,7 @@ public class Battle_Participant : MonoBehaviour
                 }
         var exp = exp_from_enemy / expReceivers.Count;
         foreach (Pokemon p in expReceivers)
-            if(!p.HasItem | p.HeldItem.Item_name != "Exp Share")
+            if(!p.HasItem | p.HeldItem.itemName != "Exp Share")
                 p.Recieve_exp(exp);
         expReceivers.Clear();
     }
@@ -201,7 +201,8 @@ public class Battle_Participant : MonoBehaviour
         else
         {
             statusImage.gameObject.SetActive(true);
-            statusImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/" + pokemon.Status_effect.ToLower());
+            statusImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/" 
+                                                        + pokemon.Status_effect.Replace(" ","").ToLower());
         }
     }
     void ActivateUI(GameObject[]arr,bool on)

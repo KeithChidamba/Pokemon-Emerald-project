@@ -23,25 +23,25 @@ public class Item_handler : MonoBehaviour
     public void Use_Item(Item item)
     {
         item_in_use = item;
-        switch (item.Item_type.ToLower())
+        switch (item.itemType.ToLower())
         {
             case "heal hp":
-                heal_health(int.Parse(item.Item_effect));
+                heal_health(int.Parse(item.itemEffect));
                 break;
             case "revive":
-                RevivePokemon(item.Item_name.ToLower());
+                RevivePokemon(item.itemName.ToLower());
                 break;
             case "status":
-                heal_status(item.Item_effect.ToLower());
+                heal_status(item.itemEffect.ToLower());
                 break;
             case "stats":
-                ChangeStats(item.Item_effect.ToLower());
+                ChangeStats(item.itemEffect.ToLower());
                 break;
             case "pokeball":
                 UsePokeball(item);
                 break;
             case "evolution stone":
-                StoneEvolution(item.Item_name.ToLower());
+                StoneEvolution(item.itemName.ToLower());
                 break;
             case "rare candy":
                 LevelUp();
@@ -73,7 +73,7 @@ public class Item_handler : MonoBehaviour
         if (Stat == "pp")
         {
             Pokemon_Details.instance.ChangingMoveData = true;
-            if (item_in_use.Item_type.ToLower() == "ether")
+            if (item_in_use.itemType.ToLower() == "ether")
                 Pokemon_Details.instance.OnMoveSelected += RestorePP;
             else
                 Pokemon_Details.instance.OnMoveSelected += IncreasePP;
@@ -97,10 +97,10 @@ public class Item_handler : MonoBehaviour
          int PointsToAdd = 0;
          Move CurrentMove = selected_party_pkm.move_set[MoveIndex];
          
-         if (item_in_use.Item_name.ToLower() == "ether")
+         if (item_in_use.itemName.ToLower() == "ether")
              PointsToAdd = 10;
          
-         if (item_in_use.Item_name.ToLower() == "max ether")
+         if (item_in_use.itemName.ToLower() == "max ether")
              PointsToAdd = CurrentMove.max_Powerpoints;
          
          int SumPoints = CurrentMove.Powerpoints + PointsToAdd;
@@ -152,7 +152,7 @@ public class Item_handler : MonoBehaviour
         Pokemon WildPokemon = Wild_pkm.Instance.participant.pokemon;//pokemon only caught in wild
         Dialogue_handler.instance.Battle_Info("Trying to catch "+WildPokemon.Pokemon_name+" .....");
         yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
-        float BallRate = float.Parse(pokeball.Item_effect);
+        float BallRate = float.Parse(pokeball.itemEffect);
         float bracket1 = (3 * WildPokemon.max_HP - 2 * WildPokemon.HP) / (3 * WildPokemon.max_HP);
         float CatchValue = math.trunc(bracket1 * WildPokemon.CatchRate * BallRate * 
                                       BattleOperations.GetCatchRateBonusFromStatus(WildPokemon.Status_effect));

@@ -20,8 +20,8 @@ public class Held_Items : MonoBehaviour
         {//remove consumable held items that are depleted, not ones that just have special functionality
             _participant.pokemon.RemoveHeldItem(); return; 
         }
-        if (!_participant.pokemon.HeldItem.CanBeUsedInBattle) return;
-        switch (_participant.pokemon.HeldItem.Item_type.ToLower())
+        if (!_participant.pokemon.HeldItem.canBeUsedInBattle) return;
+        switch (_participant.pokemon.HeldItem.itemType.ToLower())
         {
             case "heal hp":
                 CheckHealCondition();

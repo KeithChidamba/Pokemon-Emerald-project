@@ -346,7 +346,7 @@ public void SetParticipant(Battle_Participant participant)
     {
         foreach(Pokemon p in Pokemon_party.instance.party)
             if (p != null && p.HP>0 && p.HasItem)
-                if(p.HeldItem.Item_name == "Amulet Coin")
+                if(p.HeldItem.itemName == "Amulet Coin")
                     return 2;
         return 1;
     }

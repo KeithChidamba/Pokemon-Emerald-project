@@ -44,7 +44,8 @@ public class Pokemon_party_member : MonoBehaviour
         else
         {
             Status_img.gameObject.SetActive(true);
-            Status_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/" + pkm.Status_effect.ToLower());
+            Status_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/"
+                                                       + pkm.Status_effect.Replace(" ","").ToLower());
         }
     }
     public void Reset_ui()

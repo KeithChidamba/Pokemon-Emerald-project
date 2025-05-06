@@ -125,11 +125,16 @@ public class Turn_Based_Combat : MonoBehaviour
 
     void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
+        if (string.IsNullOrEmpty(attacker.previousMove))
+        {
+            attacker.previousMove = move.Move_name + "/0";
+            return;
+        }
         var previousMoveName = attacker.previousMove.Split('/')[0];
         var previousMoveRepetitions = int.Parse(attacker.previousMove.Split('/')[1]);
         
         attacker.previousMove = (previousMoveName == move.Move_name)?
-             move.Move_name +"/"+ (previousMoveRepetitions + 1) : move.Move_name + "/1";
+             move.Move_name +"/"+ (previousMoveRepetitions + 1) : move.Move_name + "/0";
     }
     bool IsValidParticipantState(Battle_Participant participant)
     {

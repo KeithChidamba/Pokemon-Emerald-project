@@ -10,13 +10,13 @@ public class Store_Item_ui : MonoBehaviour
     public Image item_img;
     public void Load_item()
     {
-        item_name.text = item.Item_name;
+        item_name.text = item.itemName;
         Price.text = item.price.ToString();
     }
     public void Load_item_info()
     {
-        item_description.text = item.Item_desc;
-        item_img.sprite = item.Item_img;
+        item_description.text = item.itemDescription;
+        item_img.sprite = item.itemImage;
     }
     public void Clear_ui()
     {

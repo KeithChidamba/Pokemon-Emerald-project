@@ -1,25 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 [CreateAssetMenu(fileName = "Item", menuName = "itm")]
 public class Item : ScriptableObject
 {
-    public string Item_ID = "";
-    public string Item_name = "";
-    public string Item_type = "";
-    public string Item_effect = "";
-    public string Item_desc = "";
+    [FormerlySerializedAs("Item_ID")] public string itemID = "";
+    [FormerlySerializedAs("Item_name")] public string itemName = "";
+    [FormerlySerializedAs("Item_type")] public string itemType = "";
+    [FormerlySerializedAs("Item_effect")] public string itemEffect = "";
+    [FormerlySerializedAs("Item_desc")] public string itemDescription = "";
     public int price = 0;
     public int quantity = 0;
-    public Sprite Item_img;
-    public bool ForPartyUse = true;
-    public bool CanBeUsedInOverworld = true;
-    public bool CanBeUsedInBattle = true;
+    [FormerlySerializedAs("Item_img")] public Sprite itemImage;
+    [FormerlySerializedAs("ForPartyUse")] public bool forPartyUse = true;
+    [FormerlySerializedAs("CanBeUsedInOverworld")] public bool canBeUsedInOverworld = true;
+    [FormerlySerializedAs("CanBeUsedInBattle")] public bool canBeUsedInBattle = true;
     public bool isHeldItem = false;
-    public bool CanBeHeld = false;
-    public bool CanBeSold = true;
-    public void Set_img()
+    [FormerlySerializedAs("CanBeHeld")] public bool canBeHeld = false;
+    [FormerlySerializedAs("CanBeSold")] public bool canBeSold = true;
+    public void LoadImage()
     {
-        Item_img = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + Item_name.ToLower());
+        itemImage = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + itemName.ToLower());
     }
 }

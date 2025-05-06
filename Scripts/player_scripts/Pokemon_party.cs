@@ -165,7 +165,7 @@ public class Pokemon_party : MonoBehaviour
             return;
         }
         Dialogue_handler.instance.Write_Info(selectedMember.pkm.Pokemon_name
-                                             +" recieved a "+item_to_use.Item_name,"Details",1.3f);
+                                             +" recieved a "+item_to_use.itemName,"Details",1.3f);
         selectedMember.pkm.GiveItem(Obj_Instance.set_Item(item_to_use));
         item_to_use.quantity--;
         Bag.instance.check_Quantity(item_to_use);

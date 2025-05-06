@@ -141,7 +141,7 @@ public class Save_manager : MonoBehaviour
             Save_Pokemon(pokemon_storage.instance.non_party_pokemon[i]);
         }
         for (int i = 0; i < Bag.instance.num_items; i++)
-            Save_Item(Bag.instance.bag_items[i], Bag.instance.bag_items[i].Item_ID);
+            Save_Item(Bag.instance.bag_items[i], Bag.instance.bag_items[i].itemID);
         Game_Load.instance.player_data.player_Position = Player_movement.instance.transform.position;
         Game_Load.instance.player_data.Location = area.current_area.area_name;
         Save_Player(Game_Load.instance.player_data,Game_Load.instance.player_data.Trainer_ID.ToString());
@@ -217,7 +217,7 @@ public class Save_manager : MonoBehaviour
             string json = File.ReadAllText(filePath);
             Item itm = ScriptableObject.CreateInstance<Item>();
             JsonUtility.FromJsonOverwrite(json, itm);
-            itm.Set_img();
+            itm.LoadImage();
             return itm;
         }
         return null;
