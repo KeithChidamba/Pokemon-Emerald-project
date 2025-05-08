@@ -61,7 +61,7 @@ public class Bag : MonoBehaviour
         }
         int price = bag_items[top_index + Selected_item - 1].price;
         int profit = (int)math.trunc((Sell_quantity * price)/2);
-        Game_Load.instance.player_data.player_Money += profit;
+        Game_Load.Instance.playerData.player_Money += profit;
         bag_items[top_index + Selected_item - 1].quantity -= Sell_quantity;
         if (bag_items[top_index + Selected_item - 1].quantity == 0)
             Remove_item();
@@ -215,14 +215,14 @@ public class Bag : MonoBehaviour
     public void use_item()
     {
         Item ItemToUse = bag_items[top_index + Selected_item - 1];
-        Item_handler.instance.Using_item = true;
+        Item_handler.Instance.usingItem = true;
         if(ItemToUse.forPartyUse)
         {
             Pokemon_party.instance.Recieve_item(ItemToUse);
             Game_ui_manager.instance.View_pkm_Party();
         }
         else
-            Item_handler.instance.Use_Item(ItemToUse);
+            Item_handler.Instance.UseItem(ItemToUse);
         Game_ui_manager.instance.close_bag();
     }
     public void Close_bag()

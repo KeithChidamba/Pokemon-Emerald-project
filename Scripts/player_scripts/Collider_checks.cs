@@ -15,9 +15,9 @@ public class Collider_checks : MonoBehaviour
     }
     private void Update()
     {
-        if (area.current_area!=null)
+        if (area.currentArea!=null)
         {
-            if(area.current_area.inside_area)
+            if(area.currentArea.insideArea)
                 Player_movement.instance.can_use_bike = false;
         }
     }
@@ -52,13 +52,13 @@ public class Collider_checks : MonoBehaviour
             if (hit.transform)
             {
                 Switch_Area a = collision.transform.GetComponent<Switch_Area>();
-                if (a.exiting_area)
+                if (a.exitingArea)
                 {
-                    area.To_Over_world();
+                    area.GoToOverworld();
                 }
                 else
                 {
-                    area.Switch_Area(a,1f);
+                    area.SwitchToArea(a,1f);
                 }
             }
         }

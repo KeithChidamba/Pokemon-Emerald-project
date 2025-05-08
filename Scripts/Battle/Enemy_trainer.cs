@@ -95,7 +95,7 @@ public class Enemy_trainer : MonoBehaviour
         {
             trainerParty.Add(member.pokemon);
             var expForNextLevel = PokemonOperations.GetNextLv(member.pokemonLevel, member.pokemon.EXPGroup)+1;
-            member.pokemon.Recieve_exp(expForNextLevel);
+            member.pokemon.ReceiveExperience(expForNextLevel);
             member.pokemon.HP = member.pokemon.max_HP;
             member.pokemon.move_set.Clear();
             foreach (Move move in member.moveSet)

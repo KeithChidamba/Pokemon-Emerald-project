@@ -33,7 +33,7 @@ public class Poke_Mart : MonoBehaviour
         if(viewing_store)
         {
             quantity.text = Selected_item_quantity.ToString();
-            Player_Money.text = Game_Load.instance.player_data.player_Money.ToString();
+            Player_Money.text = Game_Load.Instance.playerData.player_Money.ToString();
         }
     }
     public void Select_Item(int Item_pos)
@@ -73,12 +73,12 @@ public class Poke_Mart : MonoBehaviour
     }
     public void Buy()
     {
-        if(Game_Load.instance.player_data.player_Money >= mart_items[top_index+Selected_item - 1].price)
+        if(Game_Load.Instance.playerData.player_Money >= mart_items[top_index+Selected_item - 1].price)
         {
             Item item = Obj_Instance.set_Item(mart_items[top_index + Selected_item - 1]);
             item.quantity = Selected_item_quantity;
             Bag.instance.Add_item(item);
-            Game_Load.instance.player_data.player_Money -= Selected_item_quantity * item.price;
+            Game_Load.Instance.playerData.player_Money -= Selected_item_quantity * item.price;
             Dialogue_handler.instance.Write_Info("You bought "+ item.quantity+ " "+item.itemName+"'s", "Details",1.2f);
             Selected_item_quantity = 1;
         }
@@ -103,7 +103,7 @@ public class Poke_Mart : MonoBehaviour
         {
             if (Selected_item_quantity < 99)//below max quantity and affordable by player
             {
-                if(Game_Load.instance.player_data.player_Money >= ( (Selected_item_quantity+1) * mart_items[top_index + Selected_item - 1].price))
+                if(Game_Load.Instance.playerData.player_Money >= ( (Selected_item_quantity+1) * mart_items[top_index + Selected_item - 1].price))
                 {
                     Selected_item_quantity += diff;
                 }  
@@ -118,7 +118,7 @@ public class Poke_Mart : MonoBehaviour
     public void View_store()
     {
         viewing_store = true;
-        Player_Money.text = Game_Load.instance.player_data.player_Money.ToString();
+        Player_Money.text = Game_Load.Instance.playerData.player_Money.ToString();
         top_index = 0;
         int num_i = 0;
         num_items = mart_items.Count;

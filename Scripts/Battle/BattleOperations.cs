@@ -10,20 +10,20 @@ public static class BattleOperations
     public static bool CheckImmunity(Pokemon victim,Type enemyType)
     {
         foreach(Type t in victim.types)
-            if (enemyType.type_check(enemyType.Non_effect, t))
+            if (PokemonOperations.ContainsType(enemyType.Non_effect, t))
                 return true;
         return false;
     } 
     private static void IsWeakTo(Pokemon victim,Type enemyType)
     {
         foreach(Type t in victim.types)
-            if (t.type_check(t.weaknesses, enemyType))
+            if (PokemonOperations.ContainsType(t.weaknesses, enemyType))
                 _effectiveness *= 2f;
     }
     private static void IsResistantTo(Pokemon victim,Type enemyType)
     {
         foreach(Type t in victim.types)
-            if (t.type_check(t.Resistances, enemyType))
+            if (PokemonOperations.ContainsType(t.Resistances, enemyType))
                 _effectiveness /= 2f;
     }
     public static bool is_Stab(Pokemon pkm,Type moveType)

@@ -8,9 +8,9 @@ public static class Utility
     }
     public static int Random16Bit()
     {
-        System.Random rand = new System.Random();
-        int  random16bit = rand.Next(0, 65536);
-        return random16bit;
+        var rand = new System.Random();
+        int  random16BIT = rand.Next(0, 65536);
+        return random16BIT;
     }
 
     public static int Cube(int num)

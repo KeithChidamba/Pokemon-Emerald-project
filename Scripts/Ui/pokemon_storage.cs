@@ -254,7 +254,7 @@ public class pokemon_storage : MonoBehaviour
                 num_party_members++;
             PokemonOperations.SetPkmtraits(new_pkm);
             if (new_pkm.Current_level == 0)
-                new_pkm.Level_up();
+                new_pkm.LevelUp();
         }
         return new_pkm;
     }

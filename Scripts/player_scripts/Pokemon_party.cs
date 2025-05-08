@@ -110,10 +110,10 @@ public class Pokemon_party : MonoBehaviour
             if (!isvalidSwap(Member_position)) return;
             Move_Member(Member_position);
         }
-        else if (Item_handler.instance.Using_item)
+        else if (Item_handler.Instance.usingItem)
         {//use item on pokemon
-            Item_handler.instance.selected_party_pkm = selectedMember.pkm;
-            Item_handler.instance.Use_Item(item_to_use);
+            Item_handler.Instance.selectedPartyPokemon = selectedMember.pkm;
+            Item_handler.Instance.UseItem(item_to_use);
             member_indicator.transform.position = selectedMember.transform.position;
             member_indicator.SetActive(true);
         }

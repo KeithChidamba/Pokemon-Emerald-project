@@ -933,13 +933,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 492393978}
   interior: {fileID: 2040100123}
-  area_name: Player House
-  exiting_area: 0
-  inside_area: 0
-  has_animation: 1
-  door: {fileID: 30296274}
-  Mat_pos: {fileID: 1324613723}
-  door_pos: {fileID: 1658256452}
+  areaName: Player House
+  exitingArea: 0
+  insideArea: 0
+  hasDoorAnimation: 1
+  doorAnimation: {fileID: 30296274}
+  doormatPosition: {fileID: 1324613723}
+  doorPosition: {fileID: 1658256452}
 --- !u!4 &30296273
 Transform:
   m_ObjectHideFlags: 0
@@ -1257,10 +1257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _participant: {fileID: 35621317}
-  status_duration: 0
-  num_status_turns: 0
-  Healed: 0
 --- !u!114 &35621319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1596,13 +1592,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  area_name: 
-  exiting_area: 1
-  inside_area: 0
-  has_animation: 0
-  door: {fileID: 0}
-  Mat_pos: {fileID: 0}
-  door_pos: {fileID: 0}
+  areaName: 
+  exitingArea: 1
+  insideArea: 0
+  hasDoorAnimation: 0
+  doorAnimation: {fileID: 0}
+  doormatPosition: {fileID: 0}
+  doorPosition: {fileID: 0}
 --- !u!61 &48330473
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4221,7 +4217,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &107175195
 GameObject:
   m_ObjectHideFlags: 0
@@ -5829,7 +5824,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &157880916
 GameObject:
   m_ObjectHideFlags: 0
@@ -6600,7 +6594,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &179732364
 GameObject:
   m_ObjectHideFlags: 0
@@ -7118,10 +7111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _participant: {fileID: 190973850}
-  status_duration: 0
-  num_status_turns: 0
-  Healed: 0
 --- !u!114 &190973852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7152,11 +7141,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   participant: {fileID: 0}
-  _TrainerData: {fileID: 0}
-  TrainerParty: []
-  InBattle: 0
-  CanAttack: 1
-  Used_move: 0
+  trainerData: {fileID: 0}
+  trainerParty: []
+  inBattle: 0
+  canAttack: 1
+  usedMove: 0
 --- !u!114 &190973854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10065,7 +10054,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &291062542
 GameObject:
   m_ObjectHideFlags: 0
@@ -10621,13 +10609,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 780263340}
   interior: {fileID: 660524007}
-  area_name: Poke Mart
-  exiting_area: 0
-  inside_area: 0
-  has_animation: 1
-  door: {fileID: 301858639}
-  Mat_pos: {fileID: 2048362484}
-  door_pos: {fileID: 573038577}
+  areaName: Poke Mart
+  exitingArea: 0
+  insideArea: 0
+  hasDoorAnimation: 1
+  doorAnimation: {fileID: 301858639}
+  doormatPosition: {fileID: 2048362484}
+  doorPosition: {fileID: 573038577}
 --- !u!4 &301858638
 Transform:
   m_ObjectHideFlags: 0
@@ -11319,10 +11307,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0f43972d84b42479cf023b35145d7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Turn_history: []
-  Current_pkm_turn: 0
-  LevelEventDelay: 0
-  FaintEventDelay: 0
+  currentTurnIndex: 0
+  levelEventDelay: 0
+  faintEventDelay: 0
 --- !u!4 &326276941
 Transform:
   m_ObjectHideFlags: 0
@@ -12392,13 +12379,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 5159739}
   interior: {fileID: 1375233029}
-  area_name: Museum
-  exiting_area: 0
-  inside_area: 0
-  has_animation: 0
-  door: {fileID: 0}
-  Mat_pos: {fileID: 204117124}
-  door_pos: {fileID: 434876550}
+  areaName: Museum
+  exitingArea: 0
+  insideArea: 0
+  hasDoorAnimation: 0
+  doorAnimation: {fileID: 0}
+  doormatPosition: {fileID: 204117124}
+  doorPosition: {fileID: 434876550}
 --- !u!61 &358362946
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -13462,7 +13449,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &416045415
 GameObject:
   m_ObjectHideFlags: 0
@@ -14819,7 +14805,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &464479400
 GameObject:
   m_ObjectHideFlags: 0
@@ -16018,9 +16003,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 247f28c8ea9df014ca3497ac606f0571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selected_party_pkm: {fileID: 0}
-  Using_item: 0
-  isHeldItem: 0
+  selectedPartyPokemon: {fileID: 0}
+  usingItem: 0
+  usingHeldItem: 0
 --- !u!1 &505212004
 GameObject:
   m_ObjectHideFlags: 0
@@ -16465,7 +16450,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &512971111
 GameObject:
   m_ObjectHideFlags: 0
@@ -16889,15 +16873,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 800d6c3a85cc8dc4bb2b8eafb198e004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  current_area: {fileID: 0}
-  Areas:
+  currentArea: {fileID: 0}
+  overworldAreas:
   - {fileID: 30296272}
   - {fileID: 559372695}
   - {fileID: 301858637}
   - {fileID: 1819593989}
   - {fileID: 358362945}
-  save_area: 0
-  area_building: {fileID: 0}
+  loadingPLayerFromSave: 0
 --- !u!4 &523264675
 Transform:
   m_ObjectHideFlags: 0
@@ -17374,7 +17357,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &534120588
 GameObject:
   m_ObjectHideFlags: 0
@@ -18365,13 +18347,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 133303393}
   interior: {fileID: 1423924570}
-  area_name: Poke Center
-  exiting_area: 0
-  inside_area: 0
-  has_animation: 1
-  door: {fileID: 559372697}
-  Mat_pos: {fileID: 489173252}
-  door_pos: {fileID: 1523077771}
+  areaName: Poke Center
+  exitingArea: 0
+  insideArea: 0
+  hasDoorAnimation: 1
+  doorAnimation: {fileID: 559372697}
+  doormatPosition: {fileID: 489173252}
+  doorPosition: {fileID: 1523077771}
 --- !u!4 &559372696
 Transform:
   m_ObjectHideFlags: 0
@@ -18560,7 +18542,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &569010215
 GameObject:
   m_ObjectHideFlags: 0
@@ -20904,7 +20885,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &636283199
 GameObject:
   m_ObjectHideFlags: 0
@@ -21175,7 +21155,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &642036640
 GameObject:
   m_ObjectHideFlags: 0
@@ -21716,13 +21695,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  area_name: 
-  exiting_area: 1
-  inside_area: 0
-  has_animation: 0
-  door: {fileID: 0}
-  Mat_pos: {fileID: 0}
-  door_pos: {fileID: 0}
+  areaName: 
+  exitingArea: 1
+  insideArea: 0
+  hasDoorAnimation: 0
+  doorAnimation: {fileID: 0}
+  doormatPosition: {fileID: 0}
+  doorPosition: {fileID: 0}
 --- !u!61 &651987841
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -27740,13 +27719,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  area_name: 
-  exiting_area: 1
-  inside_area: 0
-  has_animation: 0
-  door: {fileID: 0}
-  Mat_pos: {fileID: 0}
-  door_pos: {fileID: 0}
+  areaName: 
+  exitingArea: 1
+  insideArea: 0
+  hasDoorAnimation: 0
+  doorAnimation: {fileID: 0}
+  doormatPosition: {fileID: 0}
+  doorPosition: {fileID: 0}
 --- !u!61 &796627812
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -28796,7 +28775,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &829108407
 GameObject:
   m_ObjectHideFlags: 0
@@ -28962,7 +28940,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &831252458
 GameObject:
   m_ObjectHideFlags: 0
@@ -29503,12 +29480,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 824aefbe1490d9146b5193dac23c58dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pokemon_participant: {fileID: 0}
-  Enemy_pokemon: {fileID: 0}
-  InBattle: 0
-  RanAway: 0
-  CanAttack: 1
-  Used_move: 0
+  participant: {fileID: 0}
+  currentEnemyPokemon: {fileID: 0}
+  inBattle: 0
+  ranAway: 0
+  canAttack: 1
 --- !u!1 &848811386
 GameObject:
   m_ObjectHideFlags: 0
@@ -29915,7 +29891,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &880329035
 GameObject:
   m_ObjectHideFlags: 0
@@ -30190,7 +30165,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2105458975}
         m_TargetAssemblyTypeName: Game_Load, Assembly-CSharp
-        m_MethodName: Start_Game
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -30326,7 +30301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &897250149
 GameObject:
   m_ObjectHideFlags: 0
@@ -30877,7 +30851,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1001 &903626648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30966,7 +30939,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &907149429
 GameObject:
   m_ObjectHideFlags: 0
@@ -31738,7 +31710,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &926858416
 GameObject:
   m_ObjectHideFlags: 0
@@ -36863,7 +36834,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1127568617
 GameObject:
   m_ObjectHideFlags: 0
@@ -37441,10 +37411,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd7756fe3484e147be81d81c8b38667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Doing_move: 0
-  attacker_: {fileID: 0}
-  victim_: {fileID: 0}
-  ProcessingOrder: 0
+  doingMove: 0
+  attacker: {fileID: 0}
+  victim: {fileID: 0}
+  processingOrder: 0
 --- !u!4 &1148144462
 Transform:
   m_ObjectHideFlags: 0
@@ -37923,7 +37893,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2105458975}
         m_TargetAssemblyTypeName: Game_Load, Assembly-CSharp
-        m_MethodName: Create_Player
+        m_MethodName: CreateNewPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -60588,7 +60558,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1229866070
 GameObject:
   m_ObjectHideFlags: 0
@@ -61466,7 +61435,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1273616160
 GameObject:
   m_ObjectHideFlags: 0
@@ -62090,7 +62058,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1284651672
 GameObject:
   m_ObjectHideFlags: 0
@@ -62393,7 +62360,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1288664052
 GameObject:
   m_ObjectHideFlags: 0
@@ -62627,7 +62593,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1295631324
 GameObject:
   m_ObjectHideFlags: 0
@@ -69082,13 +69047,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  area_name: 
-  exiting_area: 1
-  inside_area: 0
-  has_animation: 0
-  door: {fileID: 0}
-  Mat_pos: {fileID: 0}
-  door_pos: {fileID: 0}
+  areaName: 
+  exitingArea: 1
+  insideArea: 0
+  hasDoorAnimation: 0
+  doorAnimation: {fileID: 0}
+  doormatPosition: {fileID: 0}
+  doorPosition: {fileID: 0}
 --- !u!61 &1491496373
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -70684,7 +70649,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1550788077
 GameObject:
   m_ObjectHideFlags: 0
@@ -72087,7 +72051,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1597189062
 GameObject:
   m_ObjectHideFlags: 0
@@ -72440,12 +72403,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25afd76aed14e2c4ea8776c98cf103d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Interactable:
+  interactable:
     serializedVersion: 2
-    m_Bits: 8
-  interaction_point: {fileID: 1418617663}
-  detect_distance: 0.15
-  checkForInteraction: 0
+    m_Bits: 0
+  interactionPoint: {fileID: 1418617663}
+  detectDistance: 0.15
+  canCheckForInteraction: 0
 --- !u!114 &1606520304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73133,7 +73096,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1635771535
 GameObject:
   m_ObjectHideFlags: 0
@@ -73507,10 +73469,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _participant: {fileID: 1636635380}
-  status_duration: 0
-  num_status_turns: 0
-  Healed: 0
 --- !u!114 &1636635382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73640,7 +73598,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1646540687
 GameObject:
   m_ObjectHideFlags: 0
@@ -74741,7 +74698,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2105458975}
         m_TargetAssemblyTypeName: Game_Load, Assembly-CSharp
-        m_MethodName: New_game
+        m_MethodName: NewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -78663,13 +78620,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 1819593988}
   interior: {fileID: 0}
-  area_name: Overworld
-  exiting_area: 0
-  inside_area: 0
-  has_animation: 0
-  door: {fileID: 0}
-  Mat_pos: {fileID: 0}
-  door_pos: {fileID: 0}
+  areaName: Overworld
+  exitingArea: 0
+  insideArea: 0
+  hasDoorAnimation: 0
+  doorAnimation: {fileID: 0}
+  doormatPosition: {fileID: 0}
+  doorPosition: {fileID: 0}
 --- !u!4 &1819593990
 Transform:
   m_ObjectHideFlags: 0
@@ -80045,7 +80002,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1860845881
 GameObject:
   m_ObjectHideFlags: 0
@@ -80584,7 +80540,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1878660689
 GameObject:
   m_ObjectHideFlags: 0
@@ -81234,7 +81189,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1893378720
 GameObject:
   m_ObjectHideFlags: 0
@@ -81851,7 +81805,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1913989970
 GameObject:
   m_ObjectHideFlags: 0
@@ -95765,7 +95718,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &1920848968
 GameObject:
   m_ObjectHideFlags: 0
@@ -96619,13 +96571,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  area_name: 
-  exiting_area: 1
-  inside_area: 0
-  has_animation: 0
-  door: {fileID: 0}
-  Mat_pos: {fileID: 0}
-  door_pos: {fileID: 0}
+  areaName: 
+  exitingArea: 1
+  insideArea: 0
+  hasDoorAnimation: 0
+  doorAnimation: {fileID: 0}
+  doormatPosition: {fileID: 0}
+  doorPosition: {fileID: 0}
 --- !u!61 &1957045981
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -99201,7 +99153,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &2019594716
 GameObject:
   m_ObjectHideFlags: 0
@@ -99748,10 +99699,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _participant: {fileID: 2033618204}
-  status_duration: 0
-  num_status_turns: 0
-  Healed: 0
 --- !u!114 &2033618206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99782,11 +99729,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   participant: {fileID: 0}
-  _TrainerData: {fileID: 0}
-  TrainerParty: []
-  InBattle: 0
-  CanAttack: 1
-  Used_move: 0
+  trainerData: {fileID: 0}
+  trainerParty: []
+  inBattle: 0
+  canAttack: 1
+  usedMove: 0
 --- !u!114 &2033618208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99934,7 +99881,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &2037761303
 GameObject:
   m_ObjectHideFlags: 0
@@ -100655,10 +100601,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1edd56c5d156cfa45ba83c93349bbddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  current_area: {fileID: 0}
-  triggered_encounter: 0
-  wild_pkm: {fileID: 0}
-  encounter_chance: 2
+  currentArea: {fileID: 0}
+  encounterTriggered: 0
+  wildPokemon: {fileID: 0}
+  encounterChance: 2
 --- !u!1 &2056020629
 GameObject:
   m_ObjectHideFlags: 0
@@ -102887,7 +102833,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handler: {fileID: 2055512472}
   area: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
-  triggered: 0
 --- !u!1 &2137321979
 GameObject:
   m_ObjectHideFlags: 0

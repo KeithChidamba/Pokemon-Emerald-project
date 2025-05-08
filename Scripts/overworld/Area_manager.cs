@@ -1,89 +1,90 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Area_manager : MonoBehaviour
 {
-    public Switch_Area current_area;
-    public Switch_Area[] Areas;
-    public bool save_area = false;
-    [SerializeField]Switch_Area area_building;
-    public static Area_manager instance;
+    [FormerlySerializedAs("current_area")] public Switch_Area currentArea;
+    [FormerlySerializedAs("Areas")] public Switch_Area[] overworldAreas;
+    public bool loadingPLayerFromSave;
+    private Switch_Area _areaBuilding;
+    public static Area_manager Instance;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
-    public void Switch_Area(Switch_Area area,float load_time)
+    public void SwitchToArea(Switch_Area area,float loadTime)
     {
-        if (area.has_animation)
-            area.door.Play("Open");
-        current_area = area;
-        Invoke(nameof(Load_building),load_time);
+        if (area.hasDoorAnimation)
+            area.doorAnimation.Play("Open");
+        currentArea = area;
+        Invoke(nameof(LoadBuilding),loadTime);
     }
-    public void Switch_Area(string area_name,float load_time)
+    public void SwitchToArea(string areaName,float loadTime)
     {
-        if (area_name!="Overworld")
+        if (areaName!="Overworld")
         {
-            Switch_Area a = find_area(area_name);
-            if (a.has_animation)
-                a.door.Play("Open");
-            current_area = a;
-            Invoke(nameof(Load_building), load_time);
+            var area = FindArea(areaName);
+            if (area.hasDoorAnimation)
+                area.doorAnimation.Play("Open");
+            currentArea = area;
+            Invoke(nameof(LoadBuilding), loadTime);
         }
         else
-            To_Over_world();
+            GoToOverworld();
     }
-    public Switch_Area find_area(string area_name)
+    private Switch_Area FindArea(string areaName)
     {
-        foreach (Switch_Area a in Areas)
-            if (a.area_name == area_name)
+        foreach (Switch_Area a in overworldAreas)
+            if (a.areaName == areaName)
                 return a;
         return null;
     }
-    public void To_Over_world()
+    public void GoToOverworld()
     {
-        if (area_building != null)
-        {
-            area_building.interior.SetActive(false);
-            area_building.inside_area = false;
-            Player_movement.instance.transform.position = area_building.door_pos.localPosition;
+        if (_areaBuilding != null)
+        {//from building to over world
+            _areaBuilding.interior.SetActive(false);
+            _areaBuilding.insideArea = false;
+            Player_movement.instance.transform.position = _areaBuilding.doorPosition.localPosition;
             Player_movement.instance.canmove = false;
         }
-        else
-            Player_movement.instance.transform.position = Game_Load.instance.player_data.player_Position;
-        foreach (Switch_Area a in Areas)
-            a.overworld.SetActive(true);
-        if (area_building != null)
-            if (area_building.has_animation)
-                area_building.door.Play("Close");
-        Invoke(nameof(reset_movement), 1f);
-        current_area = find_area("Overworld");
+        else //from save point in overworld
+            Player_movement.instance.transform.position = Game_Load.Instance.playerData.player_Position;
+        foreach (var area in overworldAreas)
+            area.overworld.SetActive(true);
+        if (_areaBuilding != null)
+            if (_areaBuilding.hasDoorAnimation)
+                _areaBuilding.doorAnimation.Play("Close");
+        Invoke(nameof(ResetPlayerMovement), 1f);
+        currentArea = FindArea("Overworld");
         Player_movement.instance.can_use_bike = true;
-        Game_Load.instance.player_data.Location = current_area.area_name;
-        area_building = null;
+        Game_Load.Instance.playerData.Location = currentArea.areaName;
+        _areaBuilding = null;
     }
-    void Load_building()
+    private void LoadBuilding()
     {
-        foreach (Switch_Area a in Areas)
-            a.overworld.SetActive(false);
+        foreach (var area in overworldAreas)
+            area.overworld.SetActive(false);
         overworld_actions.instance.doing_action = false;
         Player_movement.instance.canmove = false;
-        current_area.inside_area = true;
-        current_area.interior.SetActive(true);
-        area_building = current_area;
-        if(!save_area)
-            Player_movement.instance.transform.position = current_area.Mat_pos.position;
-        Invoke(nameof(reset_movement), 1f);
-        Game_Load.instance.player_data.Location = current_area.area_name;
+        currentArea.insideArea = true;
+        currentArea.interior.SetActive(true);
+        _areaBuilding = currentArea;
+        if(!loadingPLayerFromSave)
+            Player_movement.instance.transform.position = currentArea.doormatPosition.position;
+        Invoke(nameof(ResetPlayerMovement), 1f);
+        Game_Load.Instance.playerData.Location = currentArea.areaName;
     }
-    void reset_movement()
+    private void ResetPlayerMovement()
     {
         Player_movement.instance.canmove = true;
-        save_area = false;
+        loadingPLayerFromSave = false;
     }
 }

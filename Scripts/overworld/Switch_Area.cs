@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Switch_Area : MonoBehaviour
 {
     public GameObject overworld;
     public GameObject interior;
-    public string area_name ="";
-    public bool exiting_area = false;
-    public bool inside_area = false;
-    public bool has_animation=false;
-    public Animator door;
-    public Transform Mat_pos;
-    public Transform door_pos;
+    [FormerlySerializedAs("area_name")] public string areaName ="";
+    [FormerlySerializedAs("exiting_area")] public bool exitingArea = false;
+    [FormerlySerializedAs("inside_area")] public bool insideArea = false;
+    [FormerlySerializedAs("has_animation")] public bool hasDoorAnimation=false;
+    [FormerlySerializedAs("door")] public Animator doorAnimation;
+    [FormerlySerializedAs("Mat_pos")] public Transform doormatPosition;
+    [FormerlySerializedAs("door_pos")] public Transform doorPosition;
 }

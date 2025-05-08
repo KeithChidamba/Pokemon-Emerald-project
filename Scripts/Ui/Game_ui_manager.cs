@@ -97,7 +97,7 @@ public class Game_ui_manager : MonoBehaviour
             overworld_actions.instance.using_ui = false;
         else
             Reset_player_movement();
-        Item_handler.instance.Using_item = false;//in case player closes before using item
+        Item_handler.Instance.usingItem = false;//in case player closes before using item
         Pokemon_party.instance.Giving_item = false;
     }
     public void Menu_off()
@@ -127,7 +127,7 @@ public class Game_ui_manager : MonoBehaviour
     {
         Use_ui(profile.gameObject);
         menu_reset();
-        profile.Load_Profile(Game_Load.instance.player_data);
+        profile.Load_Profile(Game_Load.Instance.playerData);
     }
     public void View_pkm_Party()
     {

@@ -28,16 +28,16 @@ public class Save_manager : MonoBehaviour
     private void Load_player()
     {
         CreateFolder("Assets/Save_data/Player");
-        Game_Load.instance.player_data = null;
+        Game_Load.Instance.playerData = null;
         List<string> playerList = load_files("Assets/Save_data/Player");
         if(playerList.Count==1)
-            Game_Load.instance.player_data = Get_player("Assets/Save_data/Player/" + Path.GetFileName(playerList[0]));
+            Game_Load.Instance.playerData = Get_player("Assets/Save_data/Player/" + Path.GetFileName(playerList[0]));
         else if(playerList.Count>1)
             Dialogue_handler.instance.Write_Info("Please ensure only one player's data is in the save_data folder!","Details");
         else
         {
             Dialogue_handler.instance.Write_Info("There was no save data found!","Details");
-            Game_Load.instance.New_Player_Data();
+            Game_Load.Instance.PreventGameLoad();
         }
     }
     private void Load_items()
@@ -128,23 +128,23 @@ public class Save_manager : MonoBehaviour
         Erase_save();
         for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
         {
-            Pokemon_party.instance.party[i].Save_class_data();
+            Pokemon_party.instance.party[i].SaveUnserializableData();
             if(Pokemon_party.instance.party[i].HasItem)
                 SaveHeldItem(Pokemon_party.instance.party[i].HeldItem, Pokemon_party.instance.party[i].Pokemon_ID.ToString());
             Save_Pokemon(Pokemon_party.instance.party[i]);
         }
         for (int i = 0; i < pokemon_storage.instance.num_non_party_pokemon; i++)
         {
-            pokemon_storage.instance.non_party_pokemon[i].Save_class_data();
+            pokemon_storage.instance.non_party_pokemon[i].SaveUnserializableData();
             if(pokemon_storage.instance.non_party_pokemon[i].HasItem)
                 SaveHeldItem(pokemon_storage.instance.non_party_pokemon[i].HeldItem, pokemon_storage.instance.non_party_pokemon[i].Pokemon_ID.ToString());
             Save_Pokemon(pokemon_storage.instance.non_party_pokemon[i]);
         }
         for (int i = 0; i < Bag.instance.num_items; i++)
             Save_Item(Bag.instance.bag_items[i], Bag.instance.bag_items[i].itemID);
-        Game_Load.instance.player_data.player_Position = Player_movement.instance.transform.position;
-        Game_Load.instance.player_data.Location = area.current_area.area_name;
-        Save_Player(Game_Load.instance.player_data,Game_Load.instance.player_data.Trainer_ID.ToString());
+        Game_Load.Instance.playerData.player_Position = Player_movement.instance.transform.position;
+        Game_Load.Instance.playerData.Location = area.currentArea.areaName;
+        Save_Player(Game_Load.Instance.playerData,Game_Load.Instance.playerData.Trainer_ID.ToString());
         Save_Pokemon_ID();
     }
     private void Get_Pokemon_ID()
@@ -205,7 +205,7 @@ public class Save_manager : MonoBehaviour
             string json = File.ReadAllText(filePath);
             Pokemon pkm = ScriptableObject.CreateInstance<Pokemon>();
             JsonUtility.FromJsonOverwrite(json, pkm);
-            pkm.Set_Data();
+            pkm.LoadUnserializedData();
             return pkm;
         }
         return null;

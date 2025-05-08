@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Revive
   m_EditorClassIdentifier: 
-  Item_ID: 
-  Item_name: Revive
-  Item_type: Revive
-  Item_effect: 5
-  Item_desc: Revives a pokemon with 20% health
+  itemID: 
+  itemName: Revive
+  itemType: Revive
+  itemEffect: Revive
+  itemDescription: Revives a pokemon with 20% health
   price: 45
   quantity: 1
-  Item_img: {fileID: 21300000, guid: d8c7660cb2ddf504aa76fa2615ff5648, type: 3}
-  ForPartyUse: 1
-  CanBeUsedInOverworld: 1
-  CanBeUsedInBattle: 1
+  itemImage: {fileID: 21300000, guid: d8c7660cb2ddf504aa76fa2615ff5648, type: 3}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 1
   isHeldItem: 0
-  CanBeHeld: 0
-  CanBeSold: 1
+  canBeHeld: 0
+  canBeSold: 1

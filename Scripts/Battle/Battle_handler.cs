@@ -148,7 +148,7 @@ public class Battle_handler : MonoBehaviour
 
     void SetupBattle()
     {
-        Game_Load.instance.player_data.player_Position = Player_movement.instance.transform.position;
+        Game_Load.Instance.playerData.player_Position = Player_movement.instance.transform.position;
         levelUpQueue.Clear();
         Options_manager.instance.playerInBattle = true;
         battleUI.SetActive(true);
@@ -159,7 +159,7 @@ public class Battle_handler : MonoBehaviour
     void LoadAreaBackground(Encounter_Area area)
     {
         foreach (GameObject background in backgrounds)
-            background.SetActive(background.name == area.Biome_name.ToLower());
+            background.SetActive(background.name == area.biomeName.ToLower());
     }
 
     public void StartWildBattle(Pokemon enemy) //only ever be for wild battles
@@ -167,7 +167,7 @@ public class Battle_handler : MonoBehaviour
         battleOver = false;
         isTrainerBattle = false;
         isDoubleBattle = false;
-        LoadAreaBackground(Encounter_handler.instance.current_area);
+        LoadAreaBackground(Encounter_handler.Instance.currentArea);
         battleParticipants[0].pokemon = Pokemon_party.instance.party[0];
         battleParticipants[0].currentEnemies.Add(battleParticipants[2]);
         battleParticipants[2].pokemon = enemy;
@@ -180,7 +180,7 @@ public class Battle_handler : MonoBehaviour
                 SetParticipant(p);
         Wild_pkm.Instance.inBattle = true;
         SetupBattle();
-        Encounter_handler.instance.current_area = null;
+        Encounter_handler.Instance.currentArea = null;
     }
 
     public void SetBattleType(List<string> trainerNames, string battleType)
@@ -356,7 +356,7 @@ public void SetParticipant(Battle_Participant participant)
         yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         if (runningAway)
-            Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " ran away");
+            Dialogue_handler.instance.Battle_Info(Game_Load.Instance.playerData.Player_name + " ran away");
         else
         {
             int baseMoneyPayout=0;
@@ -364,12 +364,12 @@ public void SetParticipant(Battle_Participant participant)
                 baseMoneyPayout=battleParticipants[0].currentEnemies[0].pokemonTrainerAI.trainerData.BaseMoneyPayout;
             if (battleWon)
             {
-                Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " won the battle");
+                Dialogue_handler.instance.Battle_Info(Game_Load.Instance.playerData.Player_name + " won the battle");
                 if (isTrainerBattle)
                 {
                     int moneyGained = baseMoneyPayout * lastOpponent.Current_level * MoneyModifier();
-                    Game_Load.instance.player_data.player_Money += moneyGained;
-                    Dialogue_handler.instance.Battle_Info(Game_Load.instance.player_data.Player_name + " recieved P" + moneyGained);
+                    Game_Load.Instance.playerData.player_Money += moneyGained;
+                    Dialogue_handler.instance.Battle_Info(Game_Load.Instance.playerData.Player_name + " recieved P" + moneyGained);
                 }
             }
             else
@@ -377,8 +377,8 @@ public void SetParticipant(Battle_Participant participant)
                 if (isTrainerBattle)
                 {
                     lastOpponent = battleParticipants[0].currentEnemies[0].pokemon;
-                    Game_Load.instance.player_data.player_Money -= baseMoneyPayout 
-                                                                   * Game_Load.instance.player_data.NumBadges 
+                    Game_Load.Instance.playerData.player_Money -= baseMoneyPayout 
+                                                                   * Game_Load.Instance.playerData.NumBadges 
                                                                    * lastOpponent.Current_level;
                 }
                 if (!Wild_pkm.Instance.ranAway)
@@ -456,10 +456,10 @@ public void SetParticipant(Battle_Participant participant)
                 if (p.pokemonTrainerAI != null)
                     p.pokemonTrainerAI.inBattle = false;
             }
-        Encounter_handler.instance.Reset_trigger();
+        Encounter_handler.Instance.ResetTrigger();
         overWorld.SetActive(true);
-        string location = (playerWhiteOut)? "Poke Center" : Game_Load.instance.player_data.Location;
-        Area_manager.instance.Switch_Area(location, 0f);
+        string location = (playerWhiteOut)? "Poke Center" : Game_Load.Instance.playerData.Location;
+        Area_manager.Instance.SwitchToArea(location, 0f);
         Dialogue_handler.instance.can_exit = true;
         battleWon = false;
         battleOver = false;

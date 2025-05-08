@@ -35,7 +35,7 @@ public class overworld_actions : MonoBehaviour
             if (PokemonBiting & Input.GetKeyDown(KeyCode.F))
             {
                 PokemonBiting = false;
-                Encounter_handler.instance.Trigger_encounter(fishingArea);
+                Encounter_handler.Instance.Trigger_encounter(fishingArea);
             }
             if (fishing)
             {

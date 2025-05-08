@@ -26,7 +26,7 @@ public class Options_manager : MonoBehaviour
     void Exit_game()
     {
         Dialogue_handler.instance.Dialouge_off();
-        Game_Load.instance.Exit_game();
+        Game_Load.Instance.ExitGame();
     }
     public void Exit_To_menu()
     {

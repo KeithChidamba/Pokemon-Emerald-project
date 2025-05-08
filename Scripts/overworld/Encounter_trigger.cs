@@ -2,72 +2,64 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class Encounter_trigger : MonoBehaviour
 {
     public Encounter_handler handler;
     public Encounter_Area area;
-    [SerializeField] bool triggered = false;
+    private bool _triggeredEncounter;
+    private Collider2D _triggerCheckCollider;
+    private void Start()
+    {
+        _triggerCheckCollider = gameObject.GetComponent<Collider2D>();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && !triggered)
+        if (!collision.gameObject.CompareTag("Player") || _triggeredEncounter) return;
+        var player = collision.GetComponentInParent<Player_movement>();
+        if (player.using_bike)
+            _triggerCheckCollider.isTrigger = false;
+        else
         {
-            Player_movement player = collision.GetComponentInParent<Player_movement>();
-            if (player.using_bike)
-            {
-                gameObject.GetComponent<Collider2D>().isTrigger = false;
-            }
-            else
-            {
-                if (player.running)
-                {
-                    handler.encounter_chance = 5;
-                }
-                int rand = Random.Range(1, 11);
-                if (rand < handler.encounter_chance && !triggered)
-                {
-                    if (!handler.triggered_encounter)
-                    {
-                        handler.Trigger_encounter(area);
-                    }
-                }
-                triggered = true;
-            }
+            if (player.running)
+                handler.encounterChance = 5;
+            var randomNumber = Random.Range(1, 11);
+            if (randomNumber < handler.encounterChance & !handler.encounterTriggered)
+                handler.Trigger_encounter(area);
+            _triggeredEncounter = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
-            Invoke(nameof(Reset_trigger),2f);
+            Invoke(nameof(ResetTrigger),2f);
     }
 
-    void Reset_trigger()
+    void ResetTrigger()
     {
-        triggered = false;
+        _triggeredEncounter = false;
     }
-    void col(Collision2D collision)
+    private void CheckCollision(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Player_movement player = collision.transform.GetComponentInParent<Player_movement>();
-            if (!player.using_bike)
-            {
-                gameObject.GetComponent<Collider2D>().isTrigger = true;
-            }
-        }
+        if (!collision.gameObject.CompareTag("Player")) return;
+        var player = collision.transform.GetComponentInParent<Player_movement>();
+        if (!player.using_bike)
+            gameObject.GetComponent<Collider2D>().isTrigger = true;
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
-        col(collision);
+        CheckCollision(collision);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        col(collision);
+        CheckCollision(collision);
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
-        col(collision);
+        CheckCollision(collision);
     }
 }

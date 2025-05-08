@@ -9,9 +9,9 @@ public static class PokemonOperations
     public static Move NewMove;
     private static long Generate_ID(Pokemon pkm)//pokemon's unique ID
     {
-        int CombinedIDs = Game_Load.instance.player_data.Trainer_ID;
+        int CombinedIDs = Game_Load.Instance.playerData.Trainer_ID;
         CombinedIDs <<= 16;
-        CombinedIDs += Game_Load.instance.player_data.Secret_ID;
+        CombinedIDs += Game_Load.Instance.playerData.Secret_ID;
         long pkmID = (((long)CombinedIDs)<<32) | pkm.Personality_value;
         return math.abs(pkmID);
     }
@@ -31,7 +31,13 @@ public static class PokemonOperations
             new_pkm.ability_name = new_pkm.abilities[0];
         new_pkm.ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + new_pkm.ability_name.ToLower());
     }
-
+    public static bool ContainsType(string[]typesList ,Type typeToCheck)
+    {
+        foreach (string type in typesList)
+            if (type == typeToCheck.Type_name)
+                return true;
+        return false;
+    }
     private static void getNature(Pokemon new_pkm)
     {
         uint NatureValue = 0;

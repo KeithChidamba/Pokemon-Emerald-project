@@ -36,16 +36,16 @@ public class Held_Items : MonoBehaviour
     void CheckHealCondition()
     {
         if(_participant.pokemon.HP >= (_participant.pokemon.max_HP/2)) return;        Debug.Log("triggered heal held item");
-        Item_handler.instance.isHeldItem = true;
-        Item_handler.instance.selected_party_pkm = _participant.pokemon;
-        Item_handler.instance.Use_Item(_participant.pokemon.HeldItem);
+        Item_handler.Instance.usingHeldItem = true;
+        Item_handler.Instance.selectedPartyPokemon = _participant.pokemon;
+        Item_handler.Instance.UseItem(_participant.pokemon.HeldItem);
     }
 
     void CheckStatusCondition()
     {
         if(_participant.pokemon.Status_effect == "None") return;        Debug.Log("triggered status held item");
-        Item_handler.instance.isHeldItem = true;
-        Item_handler.instance.selected_party_pkm = _participant.pokemon;
-        Item_handler.instance.Use_Item(_participant.pokemon.HeldItem);
+        Item_handler.Instance.usingHeldItem = true;
+        Item_handler.Instance.selectedPartyPokemon = _participant.pokemon;
+        Item_handler.Instance.UseItem(_participant.pokemon.HeldItem);
     }
 }

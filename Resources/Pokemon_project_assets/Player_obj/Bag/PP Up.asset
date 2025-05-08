@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: PP Up
   m_EditorClassIdentifier: 
-  Item_ID: 
-  Item_name: PP Up
-  Item_type: stats
-  Item_effect: pp
-  Item_desc: increases the poweperpoints of a move
+  itemID: 
+  itemName: PP Up
+  itemType: Stat Increase
+  itemEffect: pp
+  itemDescription: increases the poweperpoints of a move
   price: 2000
   quantity: 1
-  Item_img: {fileID: 21300000, guid: 32d0055789286df4482ac73bfdeaa012, type: 3}
-  ForPartyUse: 1
-  CanBeUsedInOverworld: 1
-  CanBeUsedInBattle: 0
+  itemImage: {fileID: 21300000, guid: 32d0055789286df4482ac73bfdeaa012, type: 3}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 0
   isHeldItem: 0
-  CanBeHeld: 0
-  CanBeSold: 1
+  canBeHeld: 0
+  canBeSold: 1

@@ -1,36 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 public class Interaction_handler : MonoBehaviour
 {
-    [SerializeField] LayerMask Interactable;
-    [SerializeField] Transform interaction_point;
-    [SerializeField] float detect_distance=0.15f;
-    [SerializeField] private bool checkForInteraction = false;
+    [SerializeField] LayerMask interactable;
+    [SerializeField] Transform interactionPoint;
+    [SerializeField] float detectDistance=0.15f;
+    [SerializeField] private bool canCheckForInteraction;
     private void Start()
     {
-        Interactable = 1 << LayerMask.NameToLayer("Interactable");
+        interactable = 1 << LayerMask.NameToLayer("Interactable");
     }
     void Update()
     {
         if (Input.GetKey(KeyCode.F) | Input.GetKey(KeyCode.Q))
-            if(!checkForInteraction)
+            if(!canCheckForInteraction)
                 StartCoroutine(DelayRayCast());
-        if(checkForInteraction)
-            CheckFront();
+        if(canCheckForInteraction)
+            RaycastForInteraction();
     }
 
     IEnumerator DelayRayCast()
     {
-        checkForInteraction = true;
-        yield return new WaitForSeconds(5f);
-        checkForInteraction = false;
+        canCheckForInteraction = true;
+        yield return new WaitForSeconds(1f);
+        canCheckForInteraction = false;
     }
-    void CheckFront()
+    void RaycastForInteraction()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, interaction_point.forward, detect_distance, Interactable);
+        var hit = Physics2D.Raycast(transform.position, interactionPoint.forward, detectDistance, interactable);
         if (hit.transform && !Dialogue_handler.instance.displaying && !overworld_actions.instance.using_ui)
         {
             if (Input.GetKeyDown(KeyCode.F))

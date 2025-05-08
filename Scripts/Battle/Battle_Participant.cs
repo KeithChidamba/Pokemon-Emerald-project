@@ -49,7 +49,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private void Give_exp()
     {
-        Distribute_EXP(pokemon.CalculateExp(pokemon));
+        Distribute_EXP(pokemon.CalculateExperience(pokemon));
     }
     private void Give_EVs(Battle_Participant enemy)
     {
@@ -71,7 +71,7 @@ public class Battle_Participant : MonoBehaviour
         if(expReceivers.Count<1)return;
         if (expReceivers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
         {
-            expReceivers[0].Recieve_exp(exp_from_enemy);
+            expReceivers[0].ReceiveExperience(exp_from_enemy);
             expReceivers.Clear();
             return;
         }
@@ -79,14 +79,14 @@ public class Battle_Participant : MonoBehaviour
             if (p != null && p.HP>0 && p.HasItem)
                 if(p.HeldItem.itemName == "Exp Share")
                 {
-                    p.Recieve_exp(exp_from_enemy / 2);
+                    p.ReceiveExperience(exp_from_enemy / 2);
                     exp_from_enemy /= 2;
                     break;
                 }
         var exp = exp_from_enemy / expReceivers.Count;
         foreach (Pokemon p in expReceivers)
             if(!p.HasItem | p.HeldItem.itemName != "Exp Share")
-                p.Recieve_exp(exp);
+                p.ReceiveExperience(exp);
         expReceivers.Clear();
     }
     public void CheckIfFainted()
@@ -100,6 +100,7 @@ public class Battle_Participant : MonoBehaviour
             }
         }
         if (!isActive) return;
+        if (fainted) return;
         fainted = (pokemon.HP <= 0);
         if (pokemon.HP > 0) return;
         Turn_Based_Combat.Instance.faintEventDelay = true;

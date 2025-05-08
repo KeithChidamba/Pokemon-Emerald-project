@@ -2,63 +2,64 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class Encounter_handler : MonoBehaviour
 {
-    public Encounter_Area current_area;
-    public bool triggered_encounter = false;
-    public Pokemon wild_pkm;
-    public int encounter_chance = 2;
-    public static Encounter_handler instance;
+    public Encounter_Area currentArea;
+    public bool encounterTriggered = false;
+    public Pokemon wildPokemon;
+    public int encounterChance = 2;
+    public static Encounter_handler Instance;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
     public void Trigger_encounter(Encounter_Area area)
     {
-        current_area = area;
-        triggered_encounter = true;
-        encounter_chance = 2;
-        for (int i = 0; i < current_area.Pokemon.Length; i++)//send data to battle ui
+        currentArea = area;
+        encounterTriggered = true;
+        encounterChance = 2;
+        for (int i = 0; i < currentArea.availablePokemon.Length; i++)
         {
-            int random = Utility.RandomRange(1,101);
-            int chance = int.Parse(current_area.Pokemon[i].Substring(current_area.Pokemon[i].Length - 3, 3));
-            if ( (i == current_area.Pokemon.Length - 1) /*pick last option if none in range*/ || (random < chance) )//pick option within chance range
+            var random = Utility.RandomRange(1,101);
+            var chance = int.Parse(currentArea.availablePokemon[i].Substring(currentArea.availablePokemon[i].Length - 3, 3));
+            if ( (i == currentArea.availablePokemon.Length - 1) /*pick last option if none in range*/ || (random < chance) )//pick option within chance range
             {
-                string pkm_name = current_area.Pokemon[i].Substring(0, current_area.Pokemon[i].Length - 3);
-                Create_pkm(pkm_name);
+                var pokemonName = currentArea.availablePokemon[i].Substring(0, currentArea.availablePokemon[i].Length - 3);
+                CreateWildPokemon(pokemonName);
                 break;
             }
         }
         
     }
-    void Create_pkm(string pkm_name)
+    void CreateWildPokemon(string pokemonName)
     {
-        wild_pkm = Obj_Instance.set_Pokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pkm_name.ToLower()+"/"+ pkm_name.ToLower()));
-        if (wild_pkm != null)
+        wildPokemon = Obj_Instance.set_Pokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName.ToLower()+"/"+ pokemonName.ToLower()));
+        if (wildPokemon != null)
         {
-            PokemonOperations.SetPkmtraits(wild_pkm);
-            int rand_lv = Utility.RandomRange(current_area.min_lv, current_area.max_lv+1);
-            int exp = PokemonOperations.GetNextLv(rand_lv - 1, wild_pkm.EXPGroup)+1;
-            wild_pkm.Recieve_exp(exp);
-            wild_pkm.HP=wild_pkm.max_HP;
-           Battle_handler.Instance.StartWildBattle(wild_pkm);
+            PokemonOperations.SetPkmtraits(wildPokemon);
+            var randomLevel = Utility.RandomRange(currentArea.minimumLevelOfPokemon, currentArea.maximumLevelOfPokemon+1);
+            var expForRequiredLevel = PokemonOperations.GetNextLv(randomLevel - 1, wildPokemon.EXPGroup)+1;
+            wildPokemon.ReceiveExperience(expForRequiredLevel);
+            wildPokemon.HP=wildPokemon.max_HP;
+           Battle_handler.Instance.StartWildBattle(wildPokemon);
         }
         else
-            Debug.Log("tried encounter but didnt find "+pkm_name);
+            Debug.Log("tried encounter but didnt find "+pokemonName);
     }
-    void trigger_off()
+    void TurnOffTrigger()
     {
-        triggered_encounter = false;
+        encounterTriggered = false;
     }
-    public void Reset_trigger()
+    public void ResetTrigger()
     {
-        Invoke(nameof(trigger_off),1f);
+        Invoke(nameof(TurnOffTrigger),1f);
     }
 }

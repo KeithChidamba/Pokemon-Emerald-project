@@ -80,7 +80,7 @@ public class Pokemon : ScriptableObject
     public List<string> move_data=new();
     public List<string> move_pp_data=new();
     
-    public void Save_class_data()//saves values of attributes that cant be serialized into json
+    public void SaveUnserializableData()
     {
         ability_name = ability.abilityName;
         natureName = nature.natureName;
@@ -89,17 +89,17 @@ public class Pokemon : ScriptableObject
         type_data.Clear();
         move_pp_data.Clear();
         evo_data.Clear();
-        foreach (Move m in move_set)
+        foreach (var move in move_set)
         {
-            move_data.Add(m.Move_name + "/" + m.type.Type_name);
-            move_pp_data.Add(m.Powerpoints+"/"+m.max_Powerpoints);
+            move_data.Add(move.Move_name + "/" + move.type.Type_name);
+            move_pp_data.Add(move.Powerpoints+"/"+move.max_Powerpoints);
         }
         foreach (Type t in types)
             type_data.Add(t.Type_name);
         foreach (Evolution e in evolutions)
             evo_data.Add(e.Evo_name);
     }
-    public void Set_Data()//gives values to attributes that cant be deserialized, using saved values
+    public void LoadUnserializedData()//gives values to attributes that cant be deserialized, using saved values
     {
         front_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower());
         back_picture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + Pokemon_name.ToLower() + "_b");
@@ -110,14 +110,14 @@ public class Pokemon : ScriptableObject
         evolutions.Clear();
         for (int i = 0; i < move_data.Count; i++)
         {
-            int pos = move_data[i].IndexOf('/')+1;
-            string name_ = move_data[i].Substring(0, pos - 1).ToLower();
-            string type = move_data[i].Substring(pos,move_data[i].Length - pos).ToLower();
-            Move move_copy = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + type + "/" + name_));
-            int pos_ = move_pp_data[i].IndexOf('/')+1;
-            move_copy.Powerpoints = int.Parse(move_pp_data[i].Substring(0, pos_-1));
-            move_copy.max_Powerpoints = int.Parse(move_pp_data[i].Substring(pos_, move_pp_data[i].Length - pos_));
-            move_set.Add(move_copy);
+            var splitPos1 = move_data[i].IndexOf('/')+1;
+            var moveName = move_data[i].Substring(0, splitPos1 - 1).ToLower();
+            var moveType = move_data[i].Substring(splitPos1,move_data[i].Length - splitPos1).ToLower();
+            var moveCopy = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
+            var splitPos2 = move_pp_data[i].IndexOf('/')+1;
+            moveCopy.Powerpoints = int.Parse(move_pp_data[i].Substring(0, splitPos2-1));
+            moveCopy.max_Powerpoints = int.Parse(move_pp_data[i].Substring(splitPos2, move_pp_data[i].Length - splitPos2));
+            move_set.Add(moveCopy);
         }
         foreach (String t in type_data)
             types.Add(Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/" + t.ToLower()));
@@ -134,9 +134,9 @@ public class Pokemon : ScriptableObject
         HasItem = false;
     }
 
-    public void GiveItem(Item item_to_give)
+    public void GiveItem(Item itemToGive)
     {
-        HeldItem = Obj_Instance.set_Item(item_to_give);
+        HeldItem = Obj_Instance.set_Item(itemToGive);
         HeldItem.quantity = 1;
         HasItem = true;
     }
@@ -148,48 +148,48 @@ public class Pokemon : ScriptableObject
                 return true;
         return false;
     }
-    public void CheckEvolutionRequirements(int evo_index)
+    public void CheckEvolutionRequirements(int evoIndex)
     {
         if (RequiresEvolutionStone)
-        { Evolve(evolutions[evo_index]); return; }
+        { Evolve(evolutions[evoIndex]); return; }
         
         for (int i = 0; i < evo_line.Length; i++)
         {
-            int RequiredLevelToEvolve = int.Parse(evo_line[i]);
-            if (Current_level == RequiredLevelToEvolve)
+            var requiredLevelToEvolve = int.Parse(evo_line[i]);
+            if (Current_level == requiredLevelToEvolve)
             {
-                Evolve(evolutions[i+evo_index]);
+                Evolve(evolutions[i+evoIndex]);
                 break;
             }
         }
     }
     void DetermineEvolution()
     {
-        int EvolutionValue = (int)Personality_value % 10;
-        if (EvolutionValue>=0 & EvolutionValue<5)
+        int evolutionValue = (int)Personality_value % 10;
+        if (evolutionValue>=0 & evolutionValue<5)
             CheckEvolutionRequirements(0);
-        else if (EvolutionValue>4 & EvolutionValue<10)
+        else if (evolutionValue>4 & evolutionValue<10)
             CheckEvolutionRequirements(2);
     }
-    public void Recieve_exp(int amount)
+    public void ReceiveExperience(int amount)
     {
         if (Current_level > 99) return;
         CurrentExpAmount += amount;
         NextLevelExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
         if(CurrentExpAmount>NextLevelExpAmount)
-            Level_up();
+            LevelUp();
     }
-    public int CalculateExp(Pokemon enemy)
+    public int CalculateExperience(Pokemon enemy)
     {
-        float trainer_bonus = 1;
-        float BaseExp = (enemy.exp_yield*enemy.Current_level) / 7f;
-        float Exp_item_bonus = 1f;
+        var trainerBonus = 1f;
+        var baseExp = (enemy.exp_yield*enemy.Current_level) / 7f;
+        var expItemBonus = 1f;
         if (HeldItem!=null)
             if (HeldItem.itemType == "Exp Gain")//lucky egg
-                Exp_item_bonus = float.Parse(HeldItem.itemEffect);
+                expItemBonus = float.Parse(HeldItem.itemEffect);
         if (enemy.has_trainer)
-            trainer_bonus = 1.5f;
-        return (int)math.trunc(BaseExp * trainer_bonus * Exp_item_bonus);
+            trainerBonus = 1.5f;
+        return (int)math.trunc(baseExp * trainerBonus * expItemBonus);
     }
     void Evolve(Evolution evo)
     {
@@ -211,7 +211,7 @@ public class Pokemon : ScriptableObject
         Basespeed = evo.Basespeed;
     }
 
-    void Increase_Stats()
+    void IncreaseStats()
     {
         Attack = DetermineStatIncrease(BaseAttack,Attack_IV,Attack_EV,"Attack");
         Defense = DetermineStatIncrease(BaseDefense,Defense_IV,Defense_EV,"Defense");
@@ -222,7 +222,7 @@ public class Pokemon : ScriptableObject
         if (Current_level == 1)
             HP = max_HP;
     }
-    float Get_nature_Modifier(string stat)
+    float GetNatureModifier(string stat)
      {
          if (nature.StatIncrease == stat)
              return 1.1f;
@@ -235,7 +235,7 @@ public class Pokemon : ScriptableObject
         float brackets1 = (2*baseStat) + IV + (EV / 4);
         float bracket2 = brackets1 * (Current_level / 100f);
         float bracket3 = bracket2 + 5f;
-        return math.floor(bracket3 * Get_nature_Modifier(stat));
+        return math.floor(bracket3 * GetNatureModifier(stat));
     }
     float DetermineHealthIncrease()
     {
@@ -244,12 +244,12 @@ public class Pokemon : ScriptableObject
         float bracket3 = bracket2 + Current_level + 10f;
         return math.floor(bracket3);
     }
-    public void Level_up()
+    public void LevelUp()
     {
         OnLevelUp?.Invoke(this);
         Current_level++;
         NextLevelExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
-        Increase_Stats();
+        IncreaseStats();
         if (!RequiresEvolutionStone)
         {
             if(split_evolution)
@@ -261,9 +261,9 @@ public class Pokemon : ScriptableObject
             PokemonOperations.GetNewMove(this);
         OnNewLevel?.Invoke();
         while(CurrentExpAmount>NextLevelExpAmount)
-            Level_up();
+            LevelUp();
     }
-    void ClearEvents()
+    private void ClearEvents()
     {
         OnLevelUp = null;
         OnNewLevel = null;

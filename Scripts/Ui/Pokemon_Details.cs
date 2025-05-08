@@ -114,8 +114,8 @@ public class Pokemon_Details : MonoBehaviour
             type1.gameObject.SetActive(true);
             type2.gameObject.SetActive(false);
         }
-        pkm_ablty_desc.text = current_pkm.ability.ability_description;
-        Trainer_Name.text = Game_Load.instance.player_data.Player_name;
+        pkm_ablty_desc.text = current_pkm.ability.abilityDescription;
+        Trainer_Name.text = Game_Load.Instance.playerData.Player_name;
         pkm_ablty.text = current_pkm.ability.abilityName.ToUpper();
         pkm_nature.text = current_pkm.nature.natureName.ToUpper();
         Ability_ui.SetActive(true);
