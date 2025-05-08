@@ -116,7 +116,7 @@ public static class Obj_Instance
     {
         var dataCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
         dataCopy.pokemon = set_Pokemon(data.pokemon);
-        PokemonOperations.SetPkmtraits(dataCopy.pokemon);
+        PokemonOperations.SetPokemonTraits(dataCopy.pokemon);
         dataCopy.moveSet = data.moveSet;
         dataCopy.pokemonLevel = data.pokemonLevel;
         dataCopy.hasItem = data.hasItem;

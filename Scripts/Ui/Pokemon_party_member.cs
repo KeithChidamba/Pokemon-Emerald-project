@@ -26,7 +26,7 @@ public class Pokemon_party_member : MonoBehaviour
     {
         //debugging purposes
         if(pkm==null)return;
-        int exp = PokemonOperations.GetNextLv(pkm.Current_level, pkm.EXPGroup)+1;
+        int exp = PokemonOperations.CalculateExpForNextLevel(pkm.Current_level, pkm.EXPGroup)+1;
         pkm.ReceiveExperience(exp);
         pkm.HP=pkm.max_HP;
     }

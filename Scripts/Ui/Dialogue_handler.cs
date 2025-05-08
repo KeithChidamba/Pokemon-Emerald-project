@@ -102,10 +102,12 @@ public class Dialogue_handler : MonoBehaviour
     
     public void Write_Info(string info,string type)//display plain text info to player
     {
-        if (!overworld_actions.instance.using_ui & type == "Feedback")
-        {
-            Battle_Info(info);
-            return;
+        if(Options_manager.instance.playerInBattle){ 
+            if (!overworld_actions.instance.using_ui & type == "Feedback")
+            {
+                Battle_Info(info);
+                return;
+            }
         }
         messagesLoading = false;
         Interaction details = new_interaction(info,type,"");

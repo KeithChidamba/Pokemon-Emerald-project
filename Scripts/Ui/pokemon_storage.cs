@@ -48,10 +48,10 @@ public class pokemon_storage : MonoBehaviour
         }
         return 0;
     }
-    public bool search_pkm_ID(string ID)
+    public bool IsPartyPokemon(string id)
     {
-        foreach (string mon_ID in Save_manager.instance.party_IDs)
-            if (mon_ID == ID)
+        foreach (var pokemonID in Save_manager.Instance.partyIDs)
+            if (pokemonID == id)
                 return true;
         return false;
     }
@@ -252,7 +252,7 @@ public class pokemon_storage : MonoBehaviour
             num_pokemon++;
             if (num_party_members < 6)
                 num_party_members++;
-            PokemonOperations.SetPkmtraits(new_pkm);
+            PokemonOperations.SetPokemonTraits(new_pkm);
             if (new_pkm.Current_level == 0)
                 new_pkm.LevelUp();
         }

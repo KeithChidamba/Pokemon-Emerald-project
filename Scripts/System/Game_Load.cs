@@ -78,7 +78,7 @@ public class Game_Load : MonoBehaviour
     }
     public void NewGame()
     {
-        Save_manager.instance.Erase_save();
+        Save_manager.Instance.EraseSaveData();
         LoadNewPlayerPage();
     }
     public void StartGame()

@@ -44,9 +44,9 @@ public class Encounter_handler : MonoBehaviour
         wildPokemon = Obj_Instance.set_Pokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName.ToLower()+"/"+ pokemonName.ToLower()));
         if (wildPokemon != null)
         {
-            PokemonOperations.SetPkmtraits(wildPokemon);
+            PokemonOperations.SetPokemonTraits(wildPokemon);
             var randomLevel = Utility.RandomRange(currentArea.minimumLevelOfPokemon, currentArea.maximumLevelOfPokemon+1);
-            var expForRequiredLevel = PokemonOperations.GetNextLv(randomLevel - 1, wildPokemon.EXPGroup)+1;
+            var expForRequiredLevel = PokemonOperations.CalculateExpForNextLevel(randomLevel - 1, wildPokemon.EXPGroup)+1;
             wildPokemon.ReceiveExperience(expForRequiredLevel);
             wildPokemon.HP=wildPokemon.max_HP;
            Battle_handler.Instance.StartWildBattle(wildPokemon);

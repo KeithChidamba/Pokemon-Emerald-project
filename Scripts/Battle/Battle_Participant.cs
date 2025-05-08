@@ -57,7 +57,7 @@ public class Battle_Participant : MonoBehaviour
         {
             var evAmount = float.Parse(ev.Substring(ev.Length - 1, 1));
             var evStat = ev.Substring(0 ,ev.Length - 1);
-            PokemonOperations.GetEV(evStat,evAmount,enemy.pokemon);
+            PokemonOperations.CalculateEvForStat(evStat,evAmount,enemy.pokemon);
         }
     }
     public  void AddToExpList(Pokemon pkm)

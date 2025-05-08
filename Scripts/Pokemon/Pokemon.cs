@@ -175,7 +175,7 @@ public class Pokemon : ScriptableObject
     {
         if (Current_level > 99) return;
         CurrentExpAmount += amount;
-        NextLevelExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
+        NextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(Current_level,EXPGroup);
         if(CurrentExpAmount>NextLevelExpAmount)
             LevelUp();
     }
@@ -224,9 +224,9 @@ public class Pokemon : ScriptableObject
     }
     float GetNatureModifier(string stat)
      {
-         if (nature.StatIncrease == stat)
+         if (nature.statIncrease == stat)
              return 1.1f;
-         if (nature.StatDecrease == stat)
+         if (nature.statDecrease == stat)
              return 0.9f;
          return 1;
      }
@@ -248,7 +248,7 @@ public class Pokemon : ScriptableObject
     {
         OnLevelUp?.Invoke(this);
         Current_level++;
-        NextLevelExpAmount = PokemonOperations.GetNextLv(Current_level,EXPGroup);
+        NextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(Current_level,EXPGroup);
         IncreaseStats();
         if (!RequiresEvolutionStone)
         {

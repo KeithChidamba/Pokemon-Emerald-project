@@ -51,7 +51,7 @@ public class Item_handler : MonoBehaviour
     }
     void LevelUpWithItem()
     {
-        var exp = PokemonOperations.GetNextLv(selectedPartyPokemon.Current_level, selectedPartyPokemon.EXPGroup);
+        var exp = PokemonOperations.CalculateExpForNextLevel(selectedPartyPokemon.Current_level, selectedPartyPokemon.EXPGroup);
         selectedPartyPokemon.ReceiveExperience(exp-selectedPartyPokemon.CurrentExpAmount+1);
         Dialogue_handler.instance.Write_Info(selectedPartyPokemon.Pokemon_name+" leveled up!", "Details",1f);
         DepleteItem();

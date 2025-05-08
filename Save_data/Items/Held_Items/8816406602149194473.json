@@ -1,18 +1,18 @@
 {
-    "Item_ID": "Exp Share63355",
-    "Item_name": "Exp Share",
-    "Item_type": "Exp Share",
-    "Item_effect": "5",
-    "Item_desc": "Allows pokemon to gain exp without battling",
+    "itemID": "",
+    "itemName": "",
+    "itemType": "",
+    "itemEffect": "",
+    "itemDescription": "",
     "price": 0,
     "quantity": 1,
-    "Item_img": {
-        "instanceID": 31978
+    "itemImage": {
+        "instanceID": 0
     },
-    "ForPartyUse": false,
-    "CanBeUsedInOverworld": false,
-    "CanBeUsedInBattle": false,
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": true,
     "isHeldItem": true,
-    "CanBeHeld": true,
-    "CanBeSold": false
+    "canBeHeld": false,
+    "canBeSold": true
 }

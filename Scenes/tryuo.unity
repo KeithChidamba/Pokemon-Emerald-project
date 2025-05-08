@@ -9626,7 +9626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f498107559dcb644ebf29c14d6c457c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party_IDs: []
+  partyIDs: []
   area: {fileID: 523264674}
 --- !u!4 &277133361
 Transform:
@@ -66990,7 +66990,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 277133360}
         m_TargetAssemblyTypeName: Save_manager, Assembly-CSharp
-        m_MethodName: Save_all
+        m_MethodName: SaveAllData
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -102085,8 +102085,8 @@ MonoBehaviour:
   name_input: {fileID: 1774007660}
   Start_house_pos: {fileID: 1324613723}
   world_Map: {fileID: 523264673}
-  player_data: {fileID: 0}
-  player_movement: {fileID: 1465551225}
+  playerData: {fileID: 0}
+  playerMovement: {fileID: 1465551225}
 --- !u!1 &2108408982
 GameObject:
   m_ObjectHideFlags: 0
