@@ -73,9 +73,9 @@ public class Poke_Mart : MonoBehaviour
     }
     public void Buy()
     {
-        if(Game_Load.Instance.playerData.player_Money >= mart_items[top_index+Selected_item - 1].price)
+        var item = Obj_Instance.set_Item(mart_items[top_index + Selected_item - 1]);
+        if(Game_Load.Instance.playerData.player_Money >= item.price)
         {
-            Item item = Obj_Instance.set_Item(mart_items[top_index + Selected_item - 1]);
             item.quantity = Selected_item_quantity;
             Bag.instance.Add_item(item);
             Game_Load.Instance.playerData.player_Money -= Selected_item_quantity * item.price;

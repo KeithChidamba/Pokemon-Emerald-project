@@ -13,17 +13,17 @@ public class AbilityHandler : MonoBehaviour
     {
         _participant =  GetComponent<Battle_Participant>();
         Turn_Based_Combat.Instance.OnMoveExecute += CheckAbilityUsability;
-        _abilityMethods.Add("pickup",pick_up);
-        _abilityMethods.Add("blaze",blaze);
-        _abilityMethods.Add("guts",guts);
-        _abilityMethods.Add("levitate",levitate);
-        _abilityMethods.Add("overgrow",overgrow);
-        _abilityMethods.Add("torrent",torrent);
-        _abilityMethods.Add("paralysiscombo",paralysis_combo);
+        _abilityMethods.Add("pickup",PickUp);
+        _abilityMethods.Add("blaze",Blaze);
+        _abilityMethods.Add("guts",Guts);
+        _abilityMethods.Add("levitate",Levitate);
+        _abilityMethods.Add("overgrow",Overgrow);
+        _abilityMethods.Add("torrent",Torrent);
+        _abilityMethods.Add("paralysiscombo",ParalysisCombo);
         _abilityMethods.Add("arenatrap",arena_trap);
-        _abilityMethods.Add("static",static_);//underscore because some ability names are c# keywords
-        _abilityMethods.Add("shedskin",shed_skin);
-        _abilityMethods.Add("swarm",swarm);
+        _abilityMethods.Add("static",Static);//underscore because some ability names are c# keywords
+        _abilityMethods.Add("shedskin",ShedSkin);
+        _abilityMethods.Add("swarm",Swarm);
     }
 
     void CheckAbilityUsability()
@@ -51,7 +51,7 @@ public class AbilityHandler : MonoBehaviour
         Move_handler.Instance.OnDamageDeal -= IncreaseDamage;
         Move_handler.Instance.OnStatusEffectHit -= HealStatusEffect;
     }
-    void pick_up()
+    void PickUp()
     {
         if (_abilityTriggered) return;
         Battle_handler.Instance.OnBattleEnd += GiveItem;
@@ -67,13 +67,13 @@ public class AbilityHandler : MonoBehaviour
                 enemy.canEscape = false;
         }
     }
-    void blaze()
+    void Blaze()
     {
         if (_abilityTriggered) return;
         Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
-    void guts()
+    void Guts()
     {
         if (_abilityTriggered) return;
         if (_participant.pokemon.HP < (_participant.pokemon.max_HP * 0.33f))
@@ -84,20 +84,20 @@ public class AbilityHandler : MonoBehaviour
             _abilityTriggered = true;
         }
     }
-    void levitate()
+    void Levitate()
     {
         if (_abilityTriggered) return;
         Debug.Log("activated levitate");
         _participant.additionalTypeImmunity = Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/Ground");
         _abilityTriggered = true;
     }
-    void overgrow()
+    void Overgrow()
     {
         if (_abilityTriggered) return;
         Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
-    void paralysis_combo()
+    void ParalysisCombo()
     {
         if (_abilityTriggered) return;
         Move_handler.Instance.OnDamageDeal += IncreaseDamage;
@@ -115,27 +115,27 @@ public class AbilityHandler : MonoBehaviour
             Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+"'s shed skin healed it");
         }
     }
-    void shed_skin()
+    void ShedSkin()
     {
         HealStatusEffect(_participant,_participant.pokemon.Status_effect);//incase you already had status when entering battle
         if (_abilityTriggered) return;
         Move_handler.Instance.OnStatusEffectHit += HealStatusEffect;
         _abilityTriggered = true;
     }
-    void static_()
+    void Static()
     {
         if (_abilityTriggered) return;
         Move_handler.Instance.OnMoveHit += GiveStatic;
         _abilityTriggered = true;
     }
     
-    void swarm()
+    void Swarm()
     {
         if (_abilityTriggered) return;
         Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
-    void torrent()
+    void Torrent()
     {
         if (_abilityTriggered) return;
         Move_handler.Instance.OnDamageDeal += IncreaseDamage;

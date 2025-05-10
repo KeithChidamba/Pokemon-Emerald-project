@@ -74,7 +74,7 @@ public class Pokemon_party : MonoBehaviour
     }
     public void Moving(int Member_position)
     {
-        if (Options_manager.instance.playerInBattle)
+        if (Options_manager.Instance.playerInBattle)
         {//cant swap in a member who is already fighting
             if (!isvalidSwap(Member_position)) return;
             Swapping_in = true;
@@ -104,7 +104,7 @@ public class Pokemon_party : MonoBehaviour
     public void Member_Selected(int Member_position)
     {
         Pokemon_party_member selectedMember = Member_cards[Member_position - 1];
-        if (Options_manager.instance.playerInBattle && selectedMember.pkm.HP <= 0) return;
+        if (Options_manager.Instance.playerInBattle && selectedMember.pkm.HP <= 0) return;
         if (SwapOutNext)
         {//selecting a swap in
             if (!isvalidSwap(Member_position)) return;
@@ -207,7 +207,7 @@ private void close_party()
         party[Selected_member-1] = party[Party_position];
         party[Party_position] = Swap_store;
         moving = false;
-        if (Options_manager.instance.playerInBattle)
+        if (Options_manager.Instance.playerInBattle)
             Battle_handler.Instance.SetParticipant(Battle_handler.Instance.battleParticipants[Selected_member-1]);
         Member_to_Move = 0;
         Selected_member = 0;

@@ -1,41 +1,44 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 public class Options_manager : MonoBehaviour
 {
-    private Interaction current_interaction;
+    private Interaction _currentInteraction;
     public bool playerInBattle = false;
-    public bool SelectedNewMoveOption = false;
-    [SerializeField] private Recieve_Pokemon gift_pkm;
-    public static Options_manager instance;
+    public bool selectedNewMoveOption = false;
+    [SerializeField] private Recieve_Pokemon starterPokemonGiftEvent;
+    public static Options_manager Instance;
+    private readonly Dictionary<string, Action> _interactionMethods = new ();
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
-    private void Update()
+
+    private void Start()
     {
-        if (playerInBattle)
-            overworld_actions.instance.doing_action = true;
+        _interactionMethods.Add("ExitGame",ExitGame);
     }
-    void Exit_game()
+
+    void ExitGame()
     {
         Dialogue_handler.instance.Dialouge_off();
         Game_Load.Instance.ExitGame();
     }
-    public void Exit_To_menu()
+    public void ExitToMenu()
     {
-        Dialogue_handler.instance.Write_Info("Are you sure you want to exit?, you will lose unsaved data!", "Options", "Exit_game","Good bye!","","Yes","No");
+        Dialogue_handler.instance.Write_Info("Are you sure you want to exit?, you will lose unsaved data!", "Options", "ExitGame","Good bye!","","Yes","No");
     }
     void Battle()
     {
-        string battleType = current_interaction.ResultMessage;
-        Battle_handler.Instance.SetBattleType(current_interaction.AdditionalInfo,battleType);
+        string battleType = _currentInteraction.ResultMessage;
+        Battle_handler.Instance.SetBattleType(_currentInteraction.AdditionalInfo,battleType);
     }
 
     void Learn_Move()
@@ -44,20 +47,20 @@ public class Options_manager : MonoBehaviour
         Pokemon_Details.instance.OnMoveSelected += PokemonOperations.LearnSelectedMove;
         Pokemon_Details.instance.Load_Details(PokemonOperations.CurrentPkm);
         Dialogue_handler.instance.Battle_Info("Which move will you replace?");
-        SelectedNewMoveOption = false;
+        selectedNewMoveOption = false;
     }
     void Skip_Move()
     {
         Pokemon_Details.instance.LearningMove = false;
         PokemonOperations.LearningNewMove = false;
         Dialogue_handler.instance.Battle_Info(PokemonOperations.CurrentPkm.Pokemon_name+" did not learn "+PokemonOperations.NewMove.Move_name);
-        SelectedNewMoveOption = false;
+        selectedNewMoveOption = false;
         Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==PokemonOperations.CurrentPkm);
     }
     void Heal_Pokemon()
     {
         overworld_actions.instance.doing_action = true;
-        Dialogue_handler.instance.Write_Info(current_interaction.ResultMessage, "Details");
+        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details");
         for (int i = 0; i < Pokemon_party.instance.num_members; i++)
         {
             Pokemon_party.instance.party[i].HP = Pokemon_party.instance.party[i].max_HP;
@@ -70,14 +73,14 @@ public class Options_manager : MonoBehaviour
     }
     void PC_storage()
     {
-        Dialogue_handler.instance.Write_Info(current_interaction.ResultMessage, "Details");
+        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details");
         pokemon_storage.instance.Open_pc();
         overworld_actions.instance.using_ui = true;
     }
     void Buy_More()
     {
         Dialogue_handler.instance.Dialouge_off();
-        Dialogue_handler.instance.Write_Info(current_interaction.ResultMessage, "Details");
+        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details");
         ViewMarketDelayed();
     }
     void Dont_Buy()
@@ -86,22 +89,22 @@ public class Options_manager : MonoBehaviour
     }
     void Gift_pkm()
     {
-        string pkm_name = current_interaction.ResultMessage;
-        Pokemon pkm = Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pkm_name +"/"+ pkm_name);
-        Pokemon_party.instance.Add_Member(pkm);
+        var pokemonName = _currentInteraction.ResultMessage;
+        var pokemon = Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName +"/"+ pokemonName);
+        Pokemon_party.instance.Add_Member(pokemon);
         Dialogue_handler.instance.Dialouge_off();
-        Dialogue_handler.instance.Write_Info("You got a " + pkm.Pokemon_name, "Details");
-        gift_pkm.check_pkm(pkm_name);
+        Dialogue_handler.instance.Write_Info("You got a " + pokemon.Pokemon_name, "Details");
+        starterPokemonGiftEvent.PickGiftPokemon(pokemonName);
     }
     void Interact()
     {
-        Dialogue_handler.instance.Write_Info(current_interaction.ResultMessage, "Details",2f);
+        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details",2f);
     }
     void Fish()
     {
         overworld_actions.instance.doing_action = true;
         overworld_actions.instance.manager.change_animation_state(overworld_actions.instance.manager.Fishing_Start);
-        Dialogue_handler.instance.Write_Info(current_interaction.ResultMessage, "Details");
+        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details");
     }
     void Sell_item()
     {
@@ -121,15 +124,18 @@ public class Options_manager : MonoBehaviour
     void Pick_Berry()
     {
         Dialogue_handler.instance.Dialouge_off();
-        string berry = current_interaction.ResultMessage;
+        string berry = _currentInteraction.ResultMessage;
         Item bry = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/" + berry);
         Bag.instance.Add_item(Obj_Instance.set_Item(bry));
         Dialogue_handler.instance.Write_Info("You picked up a "+berry, "Details",1f);
     }
     public void Complete_Interaction(Interaction interaction,int option)
     {
-        current_interaction = interaction;
-        Invoke(interaction.InteractionOptions[option], 0f);
+        _currentInteraction = interaction;
+        if (_interactionMethods.TryGetValue(interaction.InteractionOptions[option],out Action method))
+            method();
+        else
+            Debug.Log("couldn't find method for interaction: " + interaction.InteractionOptions[option]);
         if (interaction.InteractionType == "List")
         {
             //list logic, might be useful later 

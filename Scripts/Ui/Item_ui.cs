@@ -18,7 +18,7 @@ public class Item_ui : MonoBehaviour
     }
     public void Load_item_info()
     {
-        if (Options_manager.instance.playerInBattle)
+        if (Options_manager.Instance.playerInBattle)
         {
             Drop.interactable = false;
             Give.interactable = false;

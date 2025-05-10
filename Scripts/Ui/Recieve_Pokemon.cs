@@ -1,19 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Recieve_Pokemon : MonoBehaviour
 {
-    public Overworld_interactable[] pkm;
-   public void check_pkm(string gift_pkm)
+    [FormerlySerializedAs("pkm")] public Overworld_interactable[] giftPokemon;
+   public void PickGiftPokemon(string giftPokemonName)
    {
-        foreach (Overworld_interactable p in pkm)
+        foreach (var giftInteraction in giftPokemon)
         {
-            if (p.interaction.ResultMessage == gift_pkm)
-            {
-                p.gameObject.SetActive(false);
-            }
-            p.gameObject.layer = 0;//prevent them from being interacted with
+            if (giftInteraction.interaction.ResultMessage == giftPokemonName)
+                giftInteraction.gameObject.SetActive(false);
+            giftInteraction.gameObject.layer = 0;//prevent them from being interacted with
         }
     }
 }

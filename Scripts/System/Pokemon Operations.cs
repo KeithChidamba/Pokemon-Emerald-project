@@ -160,7 +160,7 @@ public static class PokemonOperations
                 var moveName = move.Substring(pos, move.Length - 2 - pos).ToLower();
                 if (CurrentPkm.move_set.Count == 4) 
                 {//leveling up from battle or rare candies
-                    if(Options_manager.instance.playerInBattle || Pokemon_party.instance.party.Contains(CurrentPkm))
+                    if(Options_manager.Instance.playerInBattle || Pokemon_party.instance.party.Contains(CurrentPkm))
                     {
                         Battle_handler.Instance.displayingInfo = true;
                         Dialogue_handler.instance.Write_Info(
@@ -175,7 +175,7 @@ public static class PokemonOperations
                 }
                 else
                 {
-                    if(Options_manager.instance.playerInBattle)
+                    if(Options_manager.Instance.playerInBattle)
                         Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" learned "+moveName);
                     CurrentPkm.move_set.Add(Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName)));
                     LearningNewMove = false;

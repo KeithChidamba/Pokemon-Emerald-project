@@ -132,7 +132,7 @@ public class Item_handler : MonoBehaviour
     }
     private void UsePokeball(Item pokeball)
     {
-        if (!Options_manager.instance.playerInBattle)
+        if (!Options_manager.Instance.playerInBattle)
         {
             Dialogue_handler.instance.Write_Info("Cant use that right now!", "Details");
             return;
@@ -207,7 +207,7 @@ public class Item_handler : MonoBehaviour
     }
     private void SkipTurn()
     {
-        if (!Options_manager.instance.playerInBattle) return;
+        if (!Options_manager.Instance.playerInBattle) return;
         Game_ui_manager.instance.Close_party();
         Turn_Based_Combat.Instance.NextTurn();
     }

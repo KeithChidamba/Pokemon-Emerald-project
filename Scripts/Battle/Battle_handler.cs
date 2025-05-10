@@ -53,7 +53,7 @@ public class Battle_handler : MonoBehaviour
 
     void Update()
     {
-        if (!Options_manager.instance.playerInBattle) return;
+        if (!Options_manager.Instance.playerInBattle) return;
         HandlePlayerInput();
     }
 
@@ -128,7 +128,7 @@ public class Battle_handler : MonoBehaviour
 
     public void ViewOptions()
     {
-        if (!Options_manager.instance.playerInBattle) return;
+        if (!Options_manager.Instance.playerInBattle) return;
         movesUI.SetActive(false);
         optionsUI.SetActive(true);
     }
@@ -150,7 +150,8 @@ public class Battle_handler : MonoBehaviour
     {
         Game_Load.Instance.playerData.player_Position = Player_movement.instance.transform.position;
         levelUpQueue.Clear();
-        Options_manager.instance.playerInBattle = true;
+        Options_manager.Instance.playerInBattle = true;
+        overworld_actions.instance.doing_action = true;
         battleUI.SetActive(true);
         overWorld.SetActive(false);
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
@@ -414,7 +415,7 @@ public void SetParticipant(Battle_Participant participant)
         {
             if (pkmLevelUp.pokemon.move_set.Count > 3)
             {
-                yield return new WaitUntil(() => Options_manager.instance.SelectedNewMoveOption);
+                yield return new WaitUntil(() => Options_manager.Instance.selectedNewMoveOption);
                 yield return new WaitForSeconds(0.5f);
                 if (Pokemon_Details.instance.LearningMove)
                     yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
@@ -440,7 +441,7 @@ public void SetParticipant(Battle_Participant participant)
     {
         OnBattleEnd?.Invoke();
         Dialogue_handler.instance.Dialouge_off();
-        Options_manager.instance.playerInBattle = false;
+        Options_manager.Instance.playerInBattle = false;
         overworld_actions.instance.doing_action = false;
         battleUI.SetActive(false);
         optionsUI.SetActive(false);

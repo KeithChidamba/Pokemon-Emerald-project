@@ -80,7 +80,7 @@ public class Game_ui_manager : MonoBehaviour
     {
         Bag.instance.Close_bag();
         Bag.instance.bag_ui.SetActive(false);
-        if (!Options_manager.instance.playerInBattle)
+        if (!Options_manager.Instance.playerInBattle)
         {
             Reset_player_movement();
         }
@@ -93,7 +93,7 @@ public class Game_ui_manager : MonoBehaviour
     {
         Pokemon_party.instance.party_ui.gameObject.SetActive(false);
         Pokemon_party.instance.Cancel();
-        if (Options_manager.instance.playerInBattle)
+        if (Options_manager.Instance.playerInBattle)
             overworld_actions.instance.using_ui = false;
         else
             Reset_player_movement();

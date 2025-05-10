@@ -167,7 +167,7 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         OnNewTurn?.Invoke();
         Battle_handler.Instance.doingMove = false;
-        if (!Battle_handler.Instance.battleParticipants[currentTurnIndex].isActive & Options_manager.instance.playerInBattle)
+        if (!Battle_handler.Instance.battleParticipants[currentTurnIndex].isActive & Options_manager.Instance.playerInBattle)
             NextTurn();
     }
     private bool MoveSuccessfull(Turn turn)

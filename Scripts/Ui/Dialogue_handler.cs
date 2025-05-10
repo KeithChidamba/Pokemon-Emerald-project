@@ -102,7 +102,7 @@ public class Dialogue_handler : MonoBehaviour
     
     public void Write_Info(string info,string type)//display plain text info to player
     {
-        if(Options_manager.instance.playerInBattle){ 
+        if(Options_manager.Instance.playerInBattle){ 
             if (!overworld_actions.instance.using_ui & type == "Feedback")
             {
                 Battle_Info(info);
@@ -169,18 +169,18 @@ public class Dialogue_handler : MonoBehaviour
     public void Option_choice(string choice)
     {//only ever be 2 options, unless list type dialogue 
         if (PokemonOperations.LearningNewMove)
-            Options_manager.instance.SelectedNewMoveOption = true;
+            Options_manager.Instance.selectedNewMoveOption = true;
         if (choice == "Option 1")
         {
             Display_Options(false);
-            Options_manager.instance.Complete_Interaction(Current_interaction,0);
+            Options_manager.Instance.Complete_Interaction(Current_interaction,0);
         }
         else if (choice == "Option 2")
         {
             if (Current_interaction.InteractionOptions[1] == "")//if no option 2,basically the player chose NO
                 Dialouge_off();
             else
-                Options_manager.instance.Complete_Interaction(Current_interaction,1);//do second option
+                Options_manager.Instance.Complete_Interaction(Current_interaction,1);//do second option
         }
     }
     public void Dialouge_off(float delay)
@@ -191,7 +191,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         Display_Options(false);
         Current_interaction = null;
-        if(!Options_manager.instance.playerInBattle || overworld_actions.instance.using_ui)
+        if(!Options_manager.Instance.playerInBattle || overworld_actions.instance.using_ui)
             dialogue_box.SetActive(false);
         else
             battle_box.SetActive(false);
@@ -219,19 +219,19 @@ public class Dialogue_handler : MonoBehaviour
         text_finished = false;
         displaying = true;
         num_lines = math.trunc(interaction.InteractionMsg.Length / Max_length);
-        if (!Options_manager.instance.playerInBattle || overworld_actions.instance.using_ui)
+        if (!Options_manager.Instance.playerInBattle || overworld_actions.instance.using_ui)
         {
             dialogue_box.SetActive(true);
             Dialouge_txt.color=Color.black;
             battle_box.SetActive(false);
         }
-        else if(!overworld_actions.instance.using_ui && Options_manager.instance.playerInBattle)
+        else if(!overworld_actions.instance.using_ui && Options_manager.Instance.playerInBattle)
         {
             battle_box.SetActive(true);
             Dialouge_txt.color=Color.white;
             dialogue_box.SetActive(false);
         }
-        if(!Options_manager.instance.playerInBattle)
+        if(!Options_manager.Instance.playerInBattle)
             dialogue_exit.SetActive(true);
         if (interaction.InteractionMsg.Length > Max_length)
         {
@@ -248,7 +248,7 @@ public class Dialogue_handler : MonoBehaviour
             else
                 Display_Options(false);
             if (interaction.InteractionType == "Event")
-                Options_manager.instance.Complete_Interaction(Current_interaction,0);
+                Options_manager.Instance.Complete_Interaction(Current_interaction,0);
             dialogue_next.SetActive(false);
             num_lines = 1;
             current_line_num = 1;

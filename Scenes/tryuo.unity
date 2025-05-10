@@ -2075,7 +2075,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1295631326}
         m_TargetAssemblyTypeName: Options_manager, Assembly-CSharp
-        m_MethodName: Exit_To_menu
+        m_MethodName: ExitToMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -62638,8 +62638,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInBattle: 0
-  SelectedNewMoveOption: 0
-  gift_pkm: {fileID: 2040100125}
+  selectedNewMoveOption: 0
+  starterPokemonGiftEvent: {fileID: 2040100125}
 --- !u!1 &1307266070
 GameObject:
   m_ObjectHideFlags: 0
@@ -100077,7 +100077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77f5b1f034c17dc40919199e880ec54c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pkm:
+  giftPokemon:
   - {fileID: 107175198}
   - {fileID: 1747713580}
   - {fileID: 130446707}

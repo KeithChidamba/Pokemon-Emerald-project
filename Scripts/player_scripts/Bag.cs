@@ -147,7 +147,7 @@ public class Bag : MonoBehaviour
     }
     public void TakeItem(int memeberIndex)
     {
-        if (Options_manager.instance.playerInBattle)
+        if (Options_manager.Instance.playerInBattle)
         {
             Dialogue_handler.instance.Write_Info("Can't do that in battle", "Details",1f);
             return;
