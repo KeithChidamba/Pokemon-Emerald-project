@@ -67,7 +67,7 @@ public class pokemon_storage : MonoBehaviour
     {
         foreach (GameObject pos in pkm_party_icons)
             pos.GetComponent<PC_party_pkm>().options.SetActive(false);
-        Game_ui_manager.instance.Reset_player_movement();
+        Game_ui_manager.Instance.ResetPlayerMovement();
         using_pc = false;
         Pkm_selected = false;
         storage_ui.SetActive(false);
@@ -245,7 +245,7 @@ public class pokemon_storage : MonoBehaviour
 
     public Pokemon Add_pokemon(Pokemon pkm)
     {
-        Pokemon new_pkm = Obj_Instance.set_Pokemon(pkm);
+        Pokemon new_pkm = Obj_Instance.CreatePokemon(pkm);
         new_pkm.has_trainer = true;
         if (!storage_operetation)
         {

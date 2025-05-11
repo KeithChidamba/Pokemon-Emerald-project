@@ -9,9 +9,9 @@ public static class PokemonOperations
     public static Move NewMove;
     private static long GeneratePokemonID(Pokemon pokemon)//pokemon's unique ID
     {
-        int combinedIDs = Game_Load.Instance.playerData.Trainer_ID;
+        int combinedIDs = Game_Load.Instance.playerData.trainerID;
         combinedIDs <<= 16;
-        combinedIDs += Game_Load.Instance.playerData.Secret_ID;
+        combinedIDs += Game_Load.Instance.playerData.secretID;
         long pkmID = (((long)combinedIDs)<<32) | pokemon.Personality_value;
         return math.abs(pkmID);
     }
@@ -165,19 +165,19 @@ public static class PokemonOperations
                         Battle_handler.Instance.displayingInfo = true;
                         Dialogue_handler.instance.Write_Info(
                             CurrentPkm.Pokemon_name + " is trying to learn " + moveName + ", do you want it to learn " + moveName +
-                            "?", "Options", "Learn_Move", "", "Skip_Move", "Yes", "No");
+                            "?", "Options", "LearnMove", "", "SkipMove", "Yes", "No");
                         NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName);
                     }
                     //wild pokemon get generated with somewhat random moveset choices
                     else
-                        CurrentPkm.move_set[Utility.RandomRange(0,4)] = Obj_Instance.set_move(Resources.Load<Move>(
+                        CurrentPkm.move_set[Utility.RandomRange(0,4)] = Obj_Instance.CreateMove(Resources.Load<Move>(
                             "Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
                 }
                 else
                 {
                     if(Options_manager.Instance.playerInBattle)
                         Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" learned "+moveName);
-                    CurrentPkm.move_set.Add(Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName)));
+                    CurrentPkm.move_set.Add(Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName)));
                     LearningNewMove = false;
                 }
                 break;
@@ -194,7 +194,7 @@ public static class PokemonOperations
         Pokemon_Details.instance.LearningMove = false;
         Pokemon_Details.instance.Exit_details();
         Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" forgot "+CurrentPkm.move_set[moveIndex].Move_name+" and learned "+NewMove.Move_name);
-        CurrentPkm.move_set[moveIndex] = Obj_Instance.set_move(NewMove);
+        CurrentPkm.move_set[moveIndex] = Obj_Instance.CreateMove(NewMove);
         Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);
         Turn_Based_Combat.Instance.levelEventDelay = false;
     }

@@ -3,263 +3,243 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 using Unity.Mathematics;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Bag : MonoBehaviour
 {
-    public List<Item> bag_items;
-    public bool viewing_bag = false;
-    public Item_ui[] bag_items_ui;
-    public int max_capacity = 50;
-    public int num_items = 0;
-    public int Selected_item = 0;
-    public int top_index = 0;//keeps track of visible bag items
-    public GameObject[] item_actions;
-    public int Sell_quantity = 1;
-    public bool Selling_items = false;
-    public GameObject Selling_ui;
-    public Text Sell_qty_txt;
-    public static Bag instance;
-    public GameObject bag_ui;
+    public List<Item> bagItems;
+    public bool viewingBag;
+    public Item_ui[] bagItemsUI;
+    public int maxCapacity = 50;
+    public int numItems;
+    public int selectedItem;
+    public int topIndex;//keeps track of visible bag items
+    public GameObject[] itemUIActions;
+    public int sellQuantity = 1;
+    public bool sellingItems;
+    public GameObject sellingItemUI;
+    public Text sellQuantityText;
+    public static Bag Instance;
+    public GameObject bagUI;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
     private void Update()
     {
-        if (Selling_items)
-           Sell_qty_txt.text = "X"+Sell_quantity.ToString();
+        if (sellingItems)
+            sellQuantityText.text = "X" + sellQuantity;
     }
-    public void Select_Item(int Item_pos)
+    public void SelectItem(int itemPosition)
     {
-        Selected_item = Item_pos;
-        bag_items_ui[Selected_item - 1].Load_item_info();
-        if (Selling_items)
+        selectedItem = itemPosition - 1;
+        bagItemsUI[selectedItem].LoadItemDescription();
+        if (sellingItems)
         {
-            Sell_quantity = 1;
-            Selling_ui.SetActive(true);
+            sellQuantity = 1;
+            sellingItemUI.SetActive(true);
         }
         else
         {
-            foreach (GameObject i in item_actions)
-                i.SetActive(true);
+            foreach (var obj in itemUIActions)
+                obj.SetActive(true);
         }
     }
     
-    public void Sell_to_Market()
+    public void SellToMarket()
     {
-        if (!bag_items[top_index + Selected_item - 1].canBeSold)
+        var itemToSell = bagItems[topIndex + selectedItem - 1];
+        if (!itemToSell.canBeSold)
         {
             Dialogue_handler.instance.Write_Info("You cant sell that!","Details");
             return;
         }
-        int price = bag_items[top_index + Selected_item - 1].price;
-        int profit = (int)math.trunc((Sell_quantity * price)/2);
-        Game_Load.Instance.playerData.player_Money += profit;
-        bag_items[top_index + Selected_item - 1].quantity -= Sell_quantity;
-        if (bag_items[top_index + Selected_item - 1].quantity == 0)
-            Remove_item();
-        Dialogue_handler.instance.Write_Info("You made P"+profit.ToString()+ ", would you like to sell anything else?", "Options", "Sell_item","Sure, which item?","Dont_Buy","Yes","No");
-        Game_ui_manager.instance.close_bag();
+        var price = itemToSell.price;
+        var profit = (int)math.trunc((sellQuantity * price)/2f);
+        Game_Load.Instance.playerData.playerMoney += profit;
+        itemToSell.quantity -= sellQuantity;
+        if (itemToSell.quantity == 0)
+            RemoveItem();
+        Dialogue_handler.instance.Write_Info("You made P"+profit+ ", would you like to sell anything else?", "Options", "Sell_item","Sure, which item?","Dont_Buy","Yes","No");
+        Game_ui_manager.Instance.CloseBag();
     }
 
     public void check_Quantity(Item item)
     {
-        if (item.quantity < 1)
+        if (item.quantity > 0) return;
+        bagItems.Remove(item);
+        numItems--;
+    }
+    public void ChangeQuantity(int value)
+    {
+        if (value < 0)//lower quantity
         {
-            bag_items.Remove(item);
-            num_items--;
+            sellQuantity = (sellQuantity > 1)? sellQuantity + value : 1;
+        }
+        else if(value > 0)//increase quantity
+        {
+            var currentItem = bagItems[topIndex + selectedItem - 1];
+            sellQuantity = (sellQuantity < currentItem.quantity) ? sellQuantity + value : currentItem.quantity;
         }
     }
-    public void change_quant(int diff)
+    public void NavigateDown()
     {
-        if (diff < 0)//lower quantity
-        {
-            if (Sell_quantity > 1)
-                Sell_quantity += diff;
-            else
-                Sell_quantity = 1;
-        }
-        else if(diff > 0)//increase quantity
-        {
-            if (Sell_quantity<bag_items[top_index+Selected_item-1].quantity)//below max available item quantity
-                Sell_quantity += diff;
-            else
-                Sell_quantity=bag_items[top_index+Selected_item-1].quantity;
-        }
-    }
-    public void Go_Down()
-    {
-        if (top_index < num_items-10)
+        if (topIndex < numItems-10)
         {
             for (int i = 0; i < 9; i++)
-                bag_items_ui[i].item = bag_items_ui[i + 1].item;  
-            bag_items_ui[9].item = bag_items[top_index + 10];
-            Reload_items();
-            top_index++;
+                bagItemsUI[i].item = bagItemsUI[i + 1].item;  
+            bagItemsUI[9].item = bagItems[topIndex + 10];
+            ReloadItemUI();
+            topIndex++;
         }
 
     }
-    public void Go_Up()
+    public void NavigateUp()
     {
-        if (top_index > 0)
+        if (topIndex > 0)
         {
             for (int i = 9; i > 0; i--)
-                bag_items_ui[i].item = bag_items_ui[i-1].item;
-            bag_items_ui[0].item = bag_items[top_index - 1];
-            Reload_items();
-            top_index--;
+                bagItemsUI[i].item = bagItemsUI[i-1].item;
+            bagItemsUI[0].item = bagItems[topIndex - 1];
+            ReloadItemUI();
+            topIndex--;
         }
     }
-    Item Search_items(string item)
+    private Item SearchForItem(string itemName)
     {
-        Item item_ = null;
-        foreach (Item itm in bag_items)
-        {
-            if (itm.itemName == item )
-                if(itm.quantity < 99)
-                    item_ = itm;
-        }
-        return item_;
+        return bagItems.FirstOrDefault(item => item.itemName == itemName & item.quantity < 99);
     }
-    bool inBag(string item)
+    private bool BagContainsItem(string itemName)
     {
-        foreach (Item itm in bag_items)
-            if (itm.itemName == item)
-                return true;
-        return false;
+        return bagItems.Any(item => item.itemName == itemName);
     }
-    public void Remove_item()
+    public void RemoveItem()
     {
-        bag_items.Remove(bag_items[top_index + Selected_item - 1]);
-        foreach (Item_ui i in bag_items_ui)
-            i.gameObject.SetActive(false);
-        bag_items_ui[0].Clear_ui();
-        foreach (GameObject i in item_actions)
+        bagItems.Remove(bagItems[topIndex + selectedItem - 1]);
+        foreach (var itemUI in bagItemsUI)
+            itemUI.gameObject.SetActive(false);
+        bagItemsUI[0].ResetUI();
+        foreach (GameObject i in itemUIActions)
             i.SetActive(false);
-        View_bag();
+        ViewBag();
     }
-    public void TakeItem(int memeberIndex)
+    public void TakeItem(int memberIndex)
     {
         if (Options_manager.Instance.playerInBattle)
         {
             Dialogue_handler.instance.Write_Info("Can't do that in battle", "Details",1f);
             return;
         }
-        if (num_items >= max_capacity)
+        if (numItems >= maxCapacity)
         {
             Dialogue_handler.instance.Write_Info("Bag is full", "Details");
             return;
         }
-        Pokemon partymemeber = Pokemon_party.instance.party[memeberIndex - 1];
-        Dialogue_handler.instance.Write_Info("You took a " + partymemeber.HeldItem.itemName +" from "
-                                             + partymemeber.Pokemon_name, "Details");
-        Add_item(partymemeber.HeldItem);
-        partymemeber.RemoveHeldItem();
+        var partyMember = Pokemon_party.instance.party[memberIndex - 1];
+        Dialogue_handler.instance.Write_Info("You took a " + partyMember.HeldItem.itemName +" from "
+                                             + partyMember.Pokemon_name, "Details");
+        AddItem(partyMember.HeldItem);
+        partyMember.RemoveHeldItem();
         Pokemon_party.instance.Cancel();
         Pokemon_party.instance.Refresh_Member_Cards();
     }
     public void GiveItem()
     {
         Pokemon_party.instance.Giving_item = true;
-        Pokemon_party.instance.Recieve_item(bag_items[top_index + Selected_item - 1]);
-        Game_ui_manager.instance.close_bag();
-        Game_ui_manager.instance.View_pkm_Party();
+        Pokemon_party.instance.Recieve_item(bagItems[topIndex + selectedItem - 1]);
+        Game_ui_manager.Instance.CloseBag();
+        Game_ui_manager.Instance.ViewPokemonParty();
     }
-    public void Add_item(Item item)
+    public void AddItem(Item item)
     {
-        if (num_items < max_capacity)
+        if (numItems < maxCapacity)
         {
-            if (inBag(item.itemName))
+            if (BagContainsItem(item.itemName))
             {
-                Item searched = Search_items(item.itemName);
-                if (searched != null)
+                var itemFound = SearchForItem(item.itemName);
+                if (itemFound != null)
                 {
-                    if ( item.quantity < (99 - searched.quantity))
-                        searched.quantity += item.quantity;
+                    if ( item.quantity < (99 - itemFound.quantity))
+                        itemFound.quantity += item.quantity;
                     else
                     {
-                        int quantity_gap = (99 - searched.quantity);
-                        searched.quantity += quantity_gap;
-                        Item overflow = Obj_Instance.set_Item(item);
-                        overflow.quantity = item.quantity - quantity_gap;
-                        bag_items.Add(overflow);
-                        num_items++;
+                        var quantityGap = (99 - itemFound.quantity);
+                        itemFound.quantity += quantityGap;
+                        var overflow = Obj_Instance.CreateItem(item);
+                        overflow.quantity = item.quantity - quantityGap;
+                        bagItems.Add(overflow);
+                        numItems++;
                     }
                 }
                 else
                 {
-                    bag_items.Add(Obj_Instance.set_Item(item));
-                    num_items++;
+                    bagItems.Add(Obj_Instance.CreateItem(item));
+                    numItems++;
                 }
             }
             else
             {
-                bag_items.Add(Obj_Instance.set_Item(item));
-                num_items++;
+                bagItems.Add(Obj_Instance.CreateItem(item));
+                numItems++;
             }
         }
         else
         {
             if(Poke_Mart.instance.viewing_store)
-                Game_ui_manager.instance.Close_Store();
+                Game_ui_manager.Instance.CloseStore();
             Dialogue_handler.instance.Write_Info("Bag is full", "Details");
         }                                                                           
     }
-    public void use_item()
+    public void UseItem()
     {
-        Item ItemToUse = bag_items[top_index + Selected_item - 1];
+        var itemToUse = bagItems[topIndex + selectedItem - 1];
         Item_handler.Instance.usingItem = true;
-        if(ItemToUse.forPartyUse)
+        if(itemToUse.forPartyUse)
         {
-            Pokemon_party.instance.Recieve_item(ItemToUse);
-            Game_ui_manager.instance.View_pkm_Party();
+            Pokemon_party.instance.Recieve_item(itemToUse);
+            Game_ui_manager.Instance.ViewPokemonParty();
         }
         else
-            Item_handler.Instance.UseItem(ItemToUse);
-        Game_ui_manager.instance.close_bag();
+            Item_handler.Instance.UseItem(itemToUse);
+        Game_ui_manager.Instance.CloseBag();
     }
-    public void Close_bag()
+    public void CloseBag()
     {
-        Selected_item = 0;
-        Selling_ui.SetActive(false);
-        Selling_items = false;
-        foreach (GameObject i in item_actions)
-            i.SetActive(false);
+        selectedItem = 0;
+        sellingItemUI.SetActive(false);
+        sellingItems = false;
+        foreach (var obj in itemUIActions)
+            obj.SetActive(false);
         for (int i = 0; i < 10; i++)
-            bag_items_ui[i].gameObject.SetActive(false);
-        bag_items_ui[0].Clear_ui();
+            bagItemsUI[i].gameObject.SetActive(false);
+        bagItemsUI[0].ResetUI();
     }
-    public void View_bag()
+    public void ViewBag()
     {
-        num_items = 0;
-        viewing_bag = true;
-        int num_i = 0;
-        foreach (Item item in bag_items)
-            if (item != null)
-                num_items++;
-        if (num_items < 11)
-            num_i = num_items;
-        else
-            num_i = 10;
-        for (int i = 0; i < num_i; i++)
+        numItems = 0; 
+        viewingBag = true; 
+        numItems = bagItems.Count(item => item != null);
+        var numItemsForView = (numItems < 11) ? numItems : 10; 
+        for (int i = 0; i < numItemsForView; i++)
         {
-            bag_items_ui[i].item = bag_items[i];
-            bag_items_ui[i].gameObject.SetActive(true);
-            bag_items_ui[i].Load_item();
+            bagItemsUI[i].item = bagItems[i];
+            bagItemsUI[i].gameObject.SetActive(true);
+            bagItemsUI[i].LoadItemUI();
         }
     }
-    void Reload_items()
+    void ReloadItemUI()
     {
-        bag_items_ui[0].Clear_ui();
-        foreach (Item_ui itm in bag_items_ui)
-            itm.Load_item();
+        bagItemsUI[0].ResetUI();
+        foreach (Item_ui itm in bagItemsUI)
+            itm.LoadItemUI();
     }
 }
 

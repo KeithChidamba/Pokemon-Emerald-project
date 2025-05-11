@@ -113,7 +113,7 @@ public class Item_handler : MonoBehaviour
          ResetItemUsage();
          SkipTurn();
          Pokemon_Details.instance.Exit_details();
-         Bag.instance.View_bag();
+         Bag.Instance.ViewBag();
      }
     private void IncreasePowerpoints(int moveIndex)
     {
@@ -128,7 +128,7 @@ public class Item_handler : MonoBehaviour
         DepleteItem();
         ResetItemUsage();
         Pokemon_Details.instance.Exit_details();
-        Bag.instance.View_bag();
+        Bag.Instance.ViewBag();
     }
     private void UsePokeball(Item pokeball)
     {
@@ -208,7 +208,7 @@ public class Item_handler : MonoBehaviour
     private void SkipTurn()
     {
         if (!Options_manager.Instance.playerInBattle) return;
-        Game_ui_manager.instance.Close_party();
+        Game_ui_manager.Instance.CloseParty();
         Turn_Based_Combat.Instance.NextTurn();
     }
     private void RestoreHealth(int healEffect)
@@ -249,7 +249,7 @@ public class Item_handler : MonoBehaviour
     void DepleteItem()
     {
         _itemInUse.quantity--;
-        Bag.instance.check_Quantity(_itemInUse);
+        Bag.Instance.check_Quantity(_itemInUse);
     }
     void ResetItemUsage()
     {

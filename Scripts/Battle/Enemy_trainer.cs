@@ -90,7 +90,7 @@ public class Enemy_trainer : MonoBehaviour
         participant = GetComponent<Battle_Participant>();
         if (isSameTrainer) return;
         var copyOfTrainerData = Resources.Load<TrainerData>("Pokemon_project_assets/Enemies/Data/" + trainerName +"/"+ trainerName);
-        trainerData = Obj_Instance.SetTrainer(copyOfTrainerData);
+        trainerData = Obj_Instance.CreateTrainer(copyOfTrainerData);
         foreach (TrainerPokemonData member in trainerData.PokemonParty)
         {
             trainerParty.Add(member.pokemon);
@@ -99,9 +99,9 @@ public class Enemy_trainer : MonoBehaviour
             member.pokemon.HP = member.pokemon.max_HP;
             member.pokemon.move_set.Clear();
             foreach (Move move in member.moveSet)
-                member.pokemon.move_set.Add(Obj_Instance.set_move(move));
+                member.pokemon.move_set.Add(Obj_Instance.CreateMove(move));
             if (member.hasItem)
-                member.pokemon.HeldItem = Obj_Instance.set_Item(member.heldItem);
+                member.pokemon.HeldItem = Obj_Instance.CreateItem(member.heldItem);
         }
     }
     void UseMove(Move move)

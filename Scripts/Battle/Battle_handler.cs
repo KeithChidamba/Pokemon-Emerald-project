@@ -148,7 +148,7 @@ public class Battle_handler : MonoBehaviour
 
     void SetupBattle()
     {
-        Game_Load.Instance.playerData.player_Position = Player_movement.instance.transform.position;
+        Game_Load.Instance.playerData.playerPosition = Player_movement.instance.transform.position;
         levelUpQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
         overworld_actions.instance.doing_action = true;
@@ -357,7 +357,7 @@ public void SetParticipant(Battle_Participant participant)
         yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
         if (runningAway)
-            Dialogue_handler.instance.Battle_Info(Game_Load.Instance.playerData.Player_name + " ran away");
+            Dialogue_handler.instance.Battle_Info(Game_Load.Instance.playerData.playerName + " ran away");
         else
         {
             int baseMoneyPayout=0;
@@ -365,12 +365,12 @@ public void SetParticipant(Battle_Participant participant)
                 baseMoneyPayout=battleParticipants[0].currentEnemies[0].pokemonTrainerAI.trainerData.BaseMoneyPayout;
             if (battleWon)
             {
-                Dialogue_handler.instance.Battle_Info(Game_Load.Instance.playerData.Player_name + " won the battle");
+                Dialogue_handler.instance.Battle_Info(Game_Load.Instance.playerData.playerName + " won the battle");
                 if (isTrainerBattle)
                 {
                     int moneyGained = baseMoneyPayout * lastOpponent.Current_level * MoneyModifier();
-                    Game_Load.Instance.playerData.player_Money += moneyGained;
-                    Dialogue_handler.instance.Battle_Info(Game_Load.Instance.playerData.Player_name + " recieved P" + moneyGained);
+                    Game_Load.Instance.playerData.playerMoney += moneyGained;
+                    Dialogue_handler.instance.Battle_Info(Game_Load.Instance.playerData.playerName + " recieved P" + moneyGained);
                 }
             }
             else
@@ -378,8 +378,8 @@ public void SetParticipant(Battle_Participant participant)
                 if (isTrainerBattle)
                 {
                     lastOpponent = battleParticipants[0].currentEnemies[0].pokemon;
-                    Game_Load.Instance.playerData.player_Money -= baseMoneyPayout 
-                                                                   * Game_Load.Instance.playerData.NumBadges 
+                    Game_Load.Instance.playerData.playerMoney -= baseMoneyPayout 
+                                                                   * Game_Load.Instance.playerData.numBadges 
                                                                    * lastOpponent.Current_level;
                 }
                 if (!Wild_pkm.Instance.ranAway)
@@ -459,7 +459,7 @@ public void SetParticipant(Battle_Participant participant)
             }
         Encounter_handler.Instance.ResetTrigger();
         overWorld.SetActive(true);
-        string location = (playerWhiteOut)? "Poke Center" : Game_Load.Instance.playerData.Location;
+        string location = (playerWhiteOut)? "Poke Center" : Game_Load.Instance.playerData.location;
         Area_manager.Instance.SwitchToArea(location, 0f);
         Dialogue_handler.instance.can_exit = true;
         battleWon = false;

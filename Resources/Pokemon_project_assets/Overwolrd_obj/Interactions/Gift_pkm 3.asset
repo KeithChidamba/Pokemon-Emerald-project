@@ -15,9 +15,10 @@ MonoBehaviour:
   InteractionMsg: It's a pokeball with a pokemon inside, take it?
   InteractionType: Options
   InteractionOptions:
-  - Gift_pkm
+  - ReceiveGiftPokemon
   - 
   ResultMessage: Mudkip
   OptionsUiText:
   - Yes
   - No
+  AdditionalInfo: []

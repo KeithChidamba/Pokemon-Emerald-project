@@ -143,7 +143,7 @@ public class Battle_Participant : MonoBehaviour
             {
                 Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
                 Pokemon_party.instance.SwapOutNext = true;
-                Game_ui_manager.instance.View_pkm_Party();
+                Game_ui_manager.Instance.ViewPokemonParty();
                 Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details",2f);
                 ResetParticipantState();
             }
