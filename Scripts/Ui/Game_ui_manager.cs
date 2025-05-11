@@ -1,23 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Game_ui_manager : MonoBehaviour
 {
 
-    public GameObject Menu_Options;
-    public bool viewing_menu = false;
-    public bool menu_off=true;
+    public GameObject menuOptions;
+    public bool viewingMenu;
+    public bool menuOff=true;
     public Player_Info_ui profile;
-    public static Game_ui_manager instance;
+    public static Game_ui_manager Instance;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
     private void Update()
     {
@@ -26,114 +27,106 @@ public class Game_ui_manager : MonoBehaviour
     }
     private void Ui_inputs()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !overworld_actions.instance.using_ui && !overworld_actions.instance.doing_action &&!viewing_menu)
+        if (Input.GetKeyDown(KeyCode.Space) && !overworld_actions.instance.using_ui && !overworld_actions.instance.doing_action &&!viewingMenu)
         {
-            viewing_menu = true;
-            Use_ui(Menu_Options);
+            viewingMenu = true;
+            ActivateUiElement(menuOptions);
         }
-        if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.instance.doing_action && viewing_menu)
-        {
-            menu_off = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && viewing_menu && !menu_off)
-        {
-            Menu_off();
-        }
+        if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.instance.doing_action && viewingMenu)
+            menuOff = false;
+        
+        if (Input.GetKeyDown(KeyCode.Space) && viewingMenu && !menuOff)
+            CloseMenu();
+        
         if (Input.GetKeyDown(KeyCode.Escape) && Pokemon_party.instance.viewing_party && !Pokemon_party.instance.viewing_details)
-        {
             if(!Pokemon_party.instance.SwapOutNext)
-                Close_party();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && Bag.instance.viewing_bag)
-        {
-            close_bag();
-        }
+                CloseParty();
+        
+        if (Input.GetKeyDown(KeyCode.Escape) && Bag.Instance.viewingBag)
+            CloseBag();
+        
         if (Input.GetKeyDown(KeyCode.Escape) && profile.Viewing_profile)
         {
             profile.gameObject.SetActive(false);
             profile.Viewing_profile = false;
-            Reset_player_movement();
+            ResetPlayerMovement();
         }
         if (Input.GetKeyDown(KeyCode.Escape) && Poke_Mart.instance.viewing_store)
         {
-            Close_Store();
-            Dialogue_handler.instance.Write_Info("Would you like anything else?", "Options", "Buy_More","Sure, what would you like","Dont_Buy","Yes","No");
+            CloseStore();
+            Dialogue_handler.instance.Write_Info("Would you like anything else?", "Options", "BuyMore","Sure, what would you like","DontBuyMore","Yes","No");
         }
     } 
-    public void Reset_player_movement()
+    public void ResetPlayerMovement()
     {
         overworld_actions.instance.using_ui = false;
         Player_movement.instance.canmove = true;
     }
-    void Use_ui(GameObject ui)
+    private void ActivateUiElement(GameObject ui)
     {
         ui.SetActive(true);
         overworld_actions.instance.using_ui = true;
     }
-    public void Close_Store()
+    public void CloseStore()
     {
         Poke_Mart.instance.Exit_Store();
         Poke_Mart.instance.mart_ui.SetActive(false);
-        Reset_player_movement();
+        ResetPlayerMovement();
     }
-    public void close_bag()
+    public void CloseBag()
     {
-        Bag.instance.Close_bag();
-        Bag.instance.bag_ui.SetActive(false);
+        Bag.Instance.CloseBag();
+        Bag.Instance.bagUI.SetActive(false);
         if (!Options_manager.Instance.playerInBattle)
-        {
-            Reset_player_movement();
-        }
+            ResetPlayerMovement();
         else
-        {
             overworld_actions.instance.using_ui = false;
-        }
     }
-    public void Close_party()
+    public void CloseParty()
     {
         Pokemon_party.instance.party_ui.gameObject.SetActive(false);
         Pokemon_party.instance.Cancel();
         if (Options_manager.Instance.playerInBattle)
             overworld_actions.instance.using_ui = false;
         else
-            Reset_player_movement();
+            ResetPlayerMovement();
         Item_handler.Instance.usingItem = false;//in case player closes before using item
         Pokemon_party.instance.Giving_item = false;
     }
-    public void Menu_off()
+    public void CloseMenu()
     {
-        menu_reset();
-        Reset_player_movement();
+        ResetMenuState();
+        ResetPlayerMovement();
     }
-    void menu_reset()
+    private void ResetMenuState()
     {
-        Menu_Options.SetActive(false);
-        viewing_menu = false;
-        menu_off = true;
+        menuOptions.SetActive(false);
+        viewingMenu = false;
+        menuOff = true;
     }
-    public void view_market()
+    public void ViewMarket()
     {
-        Use_ui(Poke_Mart.instance.mart_ui);
+        ActivateUiElement(Poke_Mart.instance.mart_ui);
         Poke_Mart.instance.View_store();
     }
-    public void View_Bag()
+    public void ViewBag()
     {
         Dialogue_handler.instance.Dialouge_off();
-        Use_ui(Bag.instance.bag_ui);
-        Bag.instance.View_bag();
-        menu_reset();
+        ActivateUiElement(Bag.Instance.bagUI);
+        Bag.Instance.ViewBag();
+        ResetMenuState();
     }
-    public void View_Profile()
+    public void ViewProfile()
     {
-        Use_ui(profile.gameObject);
-        menu_reset();
+        ActivateUiElement(profile.gameObject);
+        ResetMenuState();
         profile.Load_Profile(Game_Load.Instance.playerData);
     }
-    public void View_pkm_Party()
+    public void ViewPokemonParty()
     {
-        menu_reset();
+        ResetMenuState();
         Dialogue_handler.instance.Dialouge_off();
-        Use_ui(Pokemon_party.instance.party_ui);
+        ActivateUiElement(Pokemon_party.instance.party_ui);
         Pokemon_party.instance.View_party();
     }
 }

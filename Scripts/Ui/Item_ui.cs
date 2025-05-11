@@ -1,43 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Item_ui : MonoBehaviour
 {
     public Item item;
     public Text quantity;
-    public Text item_name;
-    public Text item_description;
-    public Image item_img;
+    [FormerlySerializedAs("item_name")] public Text itemName;
+    [FormerlySerializedAs("item_description")] public Text itemDescription;
+    [FormerlySerializedAs("item_img")] public Image itemImg;
     public Button Use, Give, Drop;
-    public void Load_item()
+    public void LoadItemUI()
     {
-        item_name.text = item.itemName;
-        quantity.text = "X"+item.quantity.ToString();
+        itemName.text = item.itemName;
+        quantity.text = "X"+item.quantity;
     }
-    public void Load_item_info()
+    public void LoadItemDescription()
     {
+        Drop.interactable = !Options_manager.Instance.playerInBattle;
         if (Options_manager.Instance.playerInBattle)
         {
-            Drop.interactable = false;
-            Give.interactable = false;
             Use.interactable = item.canBeUsedInBattle;
+            Give.interactable = false;
         }
         else
         {
-            Drop.interactable = true;
             Use.interactable = item.canBeUsedInOverworld;
             if (item.isHeldItem)
                 Use.interactable = false;
             Give.interactable = item.canBeHeld;
         }
-        item_description.text = item.itemDescription;
-        item_img.sprite=item.itemImage;
+        itemDescription.text = item.itemDescription;
+        itemImg.sprite = item.itemImage;
     }
-    public void Clear_ui()
+    public void ResetUI()
     {
-        item_description.text = "";
-        item_img.sprite = null;
+        itemDescription.text = "";
+        itemImg.sprite = null;
     }
 }

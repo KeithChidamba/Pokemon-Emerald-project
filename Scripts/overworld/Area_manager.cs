@@ -56,7 +56,7 @@ public class Area_manager : MonoBehaviour
             Player_movement.instance.canmove = false;
         }
         else //from save point in overworld
-            Player_movement.instance.transform.position = Game_Load.Instance.playerData.player_Position;
+            Player_movement.instance.transform.position = Game_Load.Instance.playerData.playerPosition;
         foreach (var area in overworldAreas)
             area.overworld.SetActive(true);
         if (_areaBuilding != null)
@@ -65,7 +65,7 @@ public class Area_manager : MonoBehaviour
         Invoke(nameof(ResetPlayerMovement), 1f);
         currentArea = FindArea("Overworld");
         Player_movement.instance.can_use_bike = true;
-        Game_Load.Instance.playerData.Location = currentArea.areaName;
+        Game_Load.Instance.playerData.location = currentArea.areaName;
         _areaBuilding = null;
     }
     private void LoadBuilding()
@@ -80,7 +80,7 @@ public class Area_manager : MonoBehaviour
         if(!loadingPLayerFromSave)
             Player_movement.instance.transform.position = currentArea.doormatPosition.position;
         Invoke(nameof(ResetPlayerMovement), 1f);
-        Game_Load.Instance.playerData.Location = currentArea.areaName;
+        Game_Load.Instance.playerData.location = currentArea.areaName;
     }
     private void ResetPlayerMovement()
     {

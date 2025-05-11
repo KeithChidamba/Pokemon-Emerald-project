@@ -173,7 +173,7 @@ public class AbilityHandler : MonoBehaviour
             int ItemWonIndex = Utility.RandomRange(0, PossibleItems.Length);
             Item ItemWon = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/" + PossibleItems[ItemWonIndex]);
             if (Utility.RandomRange(1, 101) < _participant.pokemon.Current_level)
-                _participant.pokemon.HeldItem = Obj_Instance.set_Item(ItemWon);
+                _participant.pokemon.HeldItem = Obj_Instance.CreateItem(ItemWon);
         }
 
     }

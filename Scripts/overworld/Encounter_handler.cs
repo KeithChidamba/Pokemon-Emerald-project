@@ -30,7 +30,8 @@ public class Encounter_handler : MonoBehaviour
         {
             var random = Utility.RandomRange(1,101);
             var chance = int.Parse(currentArea.availablePokemon[i].Substring(currentArea.availablePokemon[i].Length - 3, 3));
-            if ( (i == currentArea.availablePokemon.Length - 1) /*pick last option if none in range*/ || (random < chance) )//pick option within chance range
+            if ( (i == currentArea.availablePokemon.Length - 1) /*pick last option if none in range*/ 
+                 || (random < chance) )//pick option within chance range
             {
                 var pokemonName = currentArea.availablePokemon[i].Substring(0, currentArea.availablePokemon[i].Length - 3);
                 CreateWildPokemon(pokemonName);
@@ -41,7 +42,7 @@ public class Encounter_handler : MonoBehaviour
     }
     void CreateWildPokemon(string pokemonName)
     {
-        wildPokemon = Obj_Instance.set_Pokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName.ToLower()+"/"+ pokemonName.ToLower()));
+        wildPokemon = Obj_Instance.CreatePokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName.ToLower()+"/"+ pokemonName.ToLower()));
         if (wildPokemon != null)
         {
             PokemonOperations.SetPokemonTraits(wildPokemon);

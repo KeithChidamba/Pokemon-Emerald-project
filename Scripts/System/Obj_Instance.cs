@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class Obj_Instance
 {
-    public static Move set_move(Move m)
+    public static Move CreateMove(Move m)
     {
         var newMove = ScriptableObject.CreateInstance<Move>();
         newMove.Status_effect = m.Status_effect;
@@ -31,7 +31,7 @@ public static class Obj_Instance
         newMove.Description = m.Description;
         return newMove;
     }
-    public static Pokemon set_Pokemon(Pokemon pkm)
+    public static Pokemon CreatePokemon(Pokemon pkm)
     {
         Pokemon newPokemon = ScriptableObject.CreateInstance<Pokemon>();
         newPokemon.Base_Pokemon_name = pkm.Base_Pokemon_name;;
@@ -88,8 +88,8 @@ public static class Obj_Instance
         newPokemon.abilities = pkm.abilities;
         newPokemon.split_evolution = pkm.split_evolution;
         newPokemon.learnSet = pkm.learnSet;
-        foreach (Move m in pkm.move_set)
-            newPokemon.move_set.Add(set_move(m));
+        foreach (var move in pkm.move_set)
+            newPokemon.move_set.Add(CreateMove(move));
         newPokemon.ability = pkm.ability;
         newPokemon.evolutions = pkm.evolutions;
         newPokemon.HeldItem = pkm.HeldItem;
@@ -100,22 +100,22 @@ public static class Obj_Instance
         return newPokemon;
     }
 
-    public static TrainerData SetTrainer(TrainerData data)
+    public static TrainerData CreateTrainer(TrainerData data)
     {
         var trainerCopy = ScriptableObject.CreateInstance<TrainerData>();
         trainerCopy.TrainerName = data.TrainerName;
         trainerCopy.TrainerType = data.TrainerType;        
         trainerCopy.BaseMoneyPayout = data.BaseMoneyPayout;
         trainerCopy.TrainerLocation = data.TrainerLocation;
-        foreach (TrainerPokemonData member in data.PokemonParty)
-            trainerCopy.PokemonParty.Add(SetTrainerPkmData(member));
+        foreach (var member in data.PokemonParty)
+            trainerCopy.PokemonParty.Add(CreateTrainerPokemonData(member));
         return trainerCopy;
     }
 
-    private static TrainerPokemonData SetTrainerPkmData(TrainerPokemonData data)
+    private static TrainerPokemonData CreateTrainerPokemonData(TrainerPokemonData data)
     {
         var dataCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
-        dataCopy.pokemon = set_Pokemon(data.pokemon);
+        dataCopy.pokemon = CreatePokemon(data.pokemon);
         PokemonOperations.SetPokemonTraits(dataCopy.pokemon);
         dataCopy.moveSet = data.moveSet;
         dataCopy.pokemonLevel = data.pokemonLevel;
@@ -123,7 +123,7 @@ public static class Obj_Instance
         dataCopy.heldItem = data.heldItem;
         return dataCopy;
     }
-    public static Item set_Item(Item item)
+    public static Item CreateItem(Item item)
     {
         var newItem = ScriptableObject.CreateInstance<Item>();
         newItem.itemName = item.itemName;

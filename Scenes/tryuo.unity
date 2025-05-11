@@ -2285,7 +2285,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 316697657}
         m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
-        m_MethodName: View_pkm_Party
+        m_MethodName: ViewPokemonParty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5308,9 +5308,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 376893888}
-  item_name: {fileID: 1464642200}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 1464642200}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -5360,7 +5360,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5879,9 +5879,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 1962762784}
-  item_name: {fileID: 721482994}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 721482994}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -5931,7 +5931,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8456,9 +8456,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 329948442}
-  item_name: {fileID: 1723543424}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 1723543424}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -8508,7 +8508,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9819,7 +9819,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9881,9 +9881,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 1324846225}
-  item_name: {fileID: 58141819}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 58141819}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -10927,9 +10927,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ca6940296c2c04fa4e0b3b0baec537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Menu_Options: {fileID: 1316003124}
-  viewing_menu: 0
-  menu_off: 1
+  menuOptions: {fileID: 1316003124}
+  viewingMenu: 0
+  menuOff: 1
   profile: {fileID: 690814249}
 --- !u!1 &319297257
 GameObject:
@@ -12743,7 +12743,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 316697657}
         m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
-        m_MethodName: View_Bag
+        m_MethodName: ViewBag
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -25945,9 +25945,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 2097458499}
-  item_name: {fileID: 1591817296}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 1591817296}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -25997,7 +25997,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26891,9 +26891,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 1045842057}
-  item_name: {fileID: 992255651}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 992255651}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -26943,7 +26943,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -30663,9 +30663,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 1209787862}
-  item_name: {fileID: 907149431}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 907149431}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -30715,7 +30715,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -33202,7 +33202,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Go_Up
+        m_MethodName: NavigateUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -35272,7 +35272,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: use_item
+        m_MethodName: UseItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -36271,7 +36271,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Remove_item
+        m_MethodName: RemoveItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -38101,7 +38101,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 316697657}
         m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
-        m_MethodName: View_Profile
+        m_MethodName: ViewProfile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -38419,9 +38419,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 228039061}
-  item_name: {fileID: 50798718}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 50798718}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -38471,7 +38471,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -66334,7 +66334,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 316697657}
         m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
-        m_MethodName: View_Bag
+        m_MethodName: ViewBag
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -68657,9 +68657,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 1187147160}
-  item_name: {fileID: 531356828}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 531356828}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -68709,7 +68709,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -71915,7 +71915,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Sell_to_Market
+        m_MethodName: SellToMarket
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -74974,7 +74974,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Go_Down
+        m_MethodName: NavigateDown
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -75334,9 +75334,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   quantity: {fileID: 1364710614}
-  item_name: {fileID: 238529004}
-  item_description: {fileID: 146311788}
-  item_img: {fileID: 1808804725}
+  itemName: {fileID: 238529004}
+  itemDescription: {fileID: 146311788}
+  itemImg: {fileID: 1808804725}
   Use: {fileID: 1079621030}
   Give: {fileID: 1905874449}
   Drop: {fileID: 1100212451}
@@ -75386,7 +75386,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -75932,7 +75932,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: change_quant
+        m_MethodName: ChangeQuantity
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -95936,9 +95936,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec1aabead79f9c4c9b106efae77f6c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bag_items: []
-  viewing_bag: 0
-  bag_items_ui:
+  bagItems: []
+  viewingBag: 0
+  bagItemsUI:
   - {fileID: 280447244}
   - {fileID: 901040788}
   - {fileID: 141476651}
@@ -95949,19 +95949,19 @@ MonoBehaviour:
   - {fileID: 243644529}
   - {fileID: 1183214665}
   - {fileID: 1710059117}
-  max_capacity: 50
-  num_items: 0
-  Selected_item: 0
-  top_index: 0
-  item_actions:
+  maxCapacity: 50
+  numItems: 0
+  selectedItem: 0
+  topIndex: 0
+  itemUIActions:
   - {fileID: 1079621028}
-  - {fileID: 1100212449}
   - {fileID: 1905874447}
-  Sell_quantity: 1
-  Selling_items: 0
-  Selling_ui: {fileID: 1671983471}
-  Sell_qty_txt: {fileID: 171129104}
-  bag_ui: {fileID: 2081052296}
+  - {fileID: 1100212449}
+  sellQuantity: 1
+  sellingItems: 0
+  sellingItemUI: {fileID: 1671983471}
+  sellQuantityText: {fileID: 171129104}
+  bagUI: {fileID: 2081052296}
 --- !u!4 &1926750169
 Transform:
   m_ObjectHideFlags: 0
@@ -97151,7 +97151,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1926750168}
         m_TargetAssemblyTypeName: Bag, Assembly-CSharp
-        m_MethodName: change_quant
+        m_MethodName: ChangeQuantity
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -98117,7 +98117,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 316697657}
         m_TargetAssemblyTypeName: Game_ui_manager, Assembly-CSharp
-        m_MethodName: View_pkm_Party
+        m_MethodName: ViewPokemonParty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

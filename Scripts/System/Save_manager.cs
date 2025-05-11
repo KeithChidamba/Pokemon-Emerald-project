@@ -48,10 +48,10 @@ public class Save_manager : MonoBehaviour
     {
         CreateFolder("Assets/Save_data/Items");
         CreateFolder("Assets/Save_data/Items/Held_Items");
-        Bag.instance.bag_items.Clear();
+        Bag.Instance.bagItems.Clear();
         var itemList = GetJsonFilesFromPath("Assets/Save_data/Items");
         foreach(var item in itemList)
-            Bag.instance.bag_items.Add(LoadItemFromJson("Assets/Save_data/Items/" + Path.GetFileName(item)));
+            Bag.Instance.bagItems.Add(LoadItemFromJson("Assets/Save_data/Items/" + Path.GetFileName(item)));
     }
     private List<string> GetJsonFilesFromPath(string path)
     {
@@ -148,11 +148,11 @@ public class Save_manager : MonoBehaviour
                 SaveHeldItem(pokemon_storage.instance.non_party_pokemon[i].HeldItem, pokemon_storage.instance.non_party_pokemon[i].Pokemon_ID.ToString());
             SavePokemonDataAsJson(pokemon_storage.instance.non_party_pokemon[i]);
         }
-        for (int i = 0; i < Bag.instance.num_items; i++)
-            SaveItemDataAsJson(Bag.instance.bag_items[i], Bag.instance.bag_items[i].itemID);
-        Game_Load.Instance.playerData.player_Position = Player_movement.instance.transform.position;
-        Game_Load.Instance.playerData.Location = area.currentArea.areaName;
-        SavePlayerDataAsJson(Game_Load.Instance.playerData,Game_Load.Instance.playerData.Trainer_ID.ToString());
+        for (int i = 0; i < Bag.Instance.numItems; i++)
+            SaveItemDataAsJson(Bag.Instance.bagItems[i], Bag.Instance.bagItems[i].itemID);
+        Game_Load.Instance.playerData.playerPosition = Player_movement.instance.transform.position;
+        Game_Load.Instance.playerData.location = area.currentArea.areaName;
+        SavePlayerDataAsJson(Game_Load.Instance.playerData,Game_Load.Instance.playerData.trainerID.ToString());
         SavePartyPokemonIDs();
     }
     private void GetPartyPokemonIDs()
@@ -179,7 +179,7 @@ public class Save_manager : MonoBehaviour
         }
         Dialogue_handler.instance.Write_Info("Game saved", "Details");
         Dialogue_handler.instance.Dialouge_off(1f);
-        Game_ui_manager.instance.Menu_off();
+        Game_ui_manager.Instance.CloseMenu();
     }
 
     private void SaveHeldItem(Item itm, string fileName)

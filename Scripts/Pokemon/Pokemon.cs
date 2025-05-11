@@ -113,7 +113,7 @@ public class Pokemon : ScriptableObject
             var splitPos1 = move_data[i].IndexOf('/')+1;
             var moveName = move_data[i].Substring(0, splitPos1 - 1).ToLower();
             var moveType = move_data[i].Substring(splitPos1,move_data[i].Length - splitPos1).ToLower();
-            var moveCopy = Obj_Instance.set_move(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
+            var moveCopy = Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
             var splitPos2 = move_pp_data[i].IndexOf('/')+1;
             moveCopy.Powerpoints = int.Parse(move_pp_data[i].Substring(0, splitPos2-1));
             moveCopy.max_Powerpoints = int.Parse(move_pp_data[i].Substring(splitPos2, move_pp_data[i].Length - splitPos2));
@@ -136,7 +136,7 @@ public class Pokemon : ScriptableObject
 
     public void GiveItem(Item itemToGive)
     {
-        HeldItem = Obj_Instance.set_Item(itemToGive);
+        HeldItem = Obj_Instance.CreateItem(itemToGive);
         HeldItem.quantity = 1;
         HasItem = true;
     }

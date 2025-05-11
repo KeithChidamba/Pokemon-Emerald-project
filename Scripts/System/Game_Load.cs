@@ -56,13 +56,13 @@ public class Game_Load : MonoBehaviour
         {
             var playerName = name_input.text;
             var data = ScriptableObject.CreateInstance<Player_data>();
-            data.Player_name = playerName;
-            data.player_Money = 300;
-            data.NumBadges = 0;
-            data.Trainer_ID = Utility.Random16Bit();
-            data.Secret_ID = Utility.Random16Bit();
-            data.player_Position = Start_house_pos.position;
-            data.Location = "Player House";
+            data.playerName = playerName;
+            data.playerMoney = 300;
+            data.numBadges = 0;
+            data.trainerID = Utility.Random16Bit();
+            data.secretID = Utility.Random16Bit();
+            data.playerPosition = Start_house_pos.position;
+            data.location = "Player House";
             playerData = data;
             Dialogue_handler.instance.Write_Info("Welcome "+playerName,"Details",1f);
             StartGame();
@@ -86,10 +86,10 @@ public class Game_Load : MonoBehaviour
         new_player_ui.SetActive(false);
         Start_ui.SetActive(false);
         playerMovement.gameObject.SetActive(true);
-        playerMovement.transform.position = playerData.player_Position;
+        playerMovement.transform.position = playerData.playerPosition;
         world_Map.SetActive(true);
         Area_manager.Instance.loadingPLayerFromSave = true;
-        Area_manager.Instance.SwitchToArea(playerData.Location,0f);
+        Area_manager.Instance.SwitchToArea(playerData.location,0f);
     }
 }
 

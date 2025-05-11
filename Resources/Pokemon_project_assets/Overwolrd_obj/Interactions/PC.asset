@@ -15,9 +15,10 @@ MonoBehaviour:
   InteractionMsg: Would you like to use the PC?
   InteractionType: Options
   InteractionOptions:
-  - PC_storage
+  - OpenPokemonStorage
   - 
   ResultMessage: Booted up PC!
   OptionsUiText:
   - Yes
   - No
+  AdditionalInfo: []

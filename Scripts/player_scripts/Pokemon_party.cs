@@ -160,15 +160,15 @@ public class Pokemon_party : MonoBehaviour
                                                  +" is already holding something","Details",1f);
             Giving_item = false;
             item_to_use = null;
-            Game_ui_manager.instance.Close_party();
-            Game_ui_manager.instance.Invoke(nameof(Game_ui_manager.instance.View_Bag),1.1f);
+            Game_ui_manager.Instance.CloseParty();
+            Game_ui_manager.Instance.Invoke(nameof(Game_ui_manager.Instance.ViewBag),1.1f);
             return;
         }
         Dialogue_handler.instance.Write_Info(selectedMember.pkm.Pokemon_name
                                              +" recieved a "+item_to_use.itemName,"Details",1.3f);
-        selectedMember.pkm.GiveItem(Obj_Instance.set_Item(item_to_use));
+        selectedMember.pkm.GiveItem(Obj_Instance.CreateItem(item_to_use));
         item_to_use.quantity--;
-        Bag.instance.check_Quantity(item_to_use);
+        Bag.Instance.CheckItemQuantity(item_to_use);
         member_indicator.transform.position = selectedMember.transform.position;
         member_indicator.SetActive(true);
         Giving_item = false;
@@ -189,7 +189,7 @@ public class Pokemon_party : MonoBehaviour
     }
 private void close_party()
 {
-    Game_ui_manager.instance.Close_party();
+    Game_ui_manager.Instance.CloseParty();
     SwapOutNext = false;
     Swapping_in = false;
 }

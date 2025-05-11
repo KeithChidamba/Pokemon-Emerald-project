@@ -15,9 +15,10 @@ MonoBehaviour:
   InteractionMsg: Hello, what can i help you with?
   InteractionType: Options
   InteractionOptions:
-  - ViewMarketDelayed
-  - Sell_item
+  - View Market Delayed
+  - Sell Item
   ResultMessage: What would you like
   OptionsUiText:
   - Buy
   - Sell
+  AdditionalInfo: []
