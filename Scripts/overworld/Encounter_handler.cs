@@ -21,7 +21,7 @@ public class Encounter_handler : MonoBehaviour
         }
         Instance = this;
     }
-    public void Trigger_encounter(Encounter_Area area)
+    public void TriggerEncounter(Encounter_Area area)
     {
         currentArea = area;
         encounterTriggered = true;

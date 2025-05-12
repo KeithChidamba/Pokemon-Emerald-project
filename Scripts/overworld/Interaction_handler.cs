@@ -32,7 +32,7 @@ public class Interaction_handler : MonoBehaviour
     void RaycastForInteraction()
     {
         var hit = Physics2D.Raycast(transform.position, interactionPoint.forward, detectDistance, interactable);
-        if (hit.transform && !Dialogue_handler.instance.displaying && !overworld_actions.instance.using_ui)
+        if (hit.transform && !Dialogue_handler.instance.displaying && !overworld_actions.Instance.usingUI)
         {
             var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
             if (Input.GetKeyDown(KeyCode.F))
@@ -43,11 +43,11 @@ public class Interaction_handler : MonoBehaviour
                     Dialogue_handler.instance.Display(Dialogue_handler.instance.Current_interaction);
                 }
             }
-            if (Input.GetKeyDown(KeyCode.Q) && !overworld_actions.instance.doing_action)
+            if (Input.GetKeyDown(KeyCode.Q) && !overworld_actions.Instance.doingAction)
             {
                 if (hit.transform.gameObject.CompareTag("Water"))
                 { 
-                   overworld_actions.instance.fishingArea = interactableObject.area;
+                   overworld_actions.Instance.fishingArea = interactableObject.area;
                    Dialogue_handler.instance.Write_Info("Would you like to fish for pokemon", "Options", "Fish", "fishing...","","Yes","No");
                 }
                 else

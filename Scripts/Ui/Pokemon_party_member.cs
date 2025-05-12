@@ -53,6 +53,7 @@ public class Pokemon_party_member : MonoBehaviour
         foreach (GameObject ui in main_ui)
             ui.SetActive(false);
         isEmpty = true;
+        pkm = null;
         HeldItem_img.gameObject.SetActive(false);
         Status_img.gameObject.SetActive(false);
         empty_ui.SetActive(true);

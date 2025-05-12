@@ -29,6 +29,7 @@ public class Options_manager : MonoBehaviour
         _interactionMethods.Add("SkipMove",SkipMove);
         _interactionMethods.Add("Fish",Fish);
         _interactionMethods.Add("Interact",Interact);
+        _interactionMethods.Add("ViewMarketDelayed",ViewMarketDelayed);
         _interactionMethods.Add("SellItem",SellItem);
         _interactionMethods.Add("BuyMore",BuyMore);
         _interactionMethods.Add("DontBuyMore",DontBuyMore);
@@ -49,8 +50,8 @@ public class Options_manager : MonoBehaviour
     }
     void Battle()
     {
-        var battleType = _currentInteraction.ResultMessage;
-        Battle_handler.Instance.SetBattleType(_currentInteraction.AdditionalInfo,battleType);
+        var battleType = _currentInteraction.resultMessage;
+        Battle_handler.Instance.SetBattleType(_currentInteraction.additionalInfo,battleType);
     }
 
     void LearnMove()
@@ -71,29 +72,29 @@ public class Options_manager : MonoBehaviour
     }
     void HealPokemon()
     {
-        overworld_actions.instance.doing_action = true;
-        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details");
-        for (int i = 0; i < Pokemon_party.instance.num_members; i++)
+        overworld_actions.Instance.doingAction = true;
+        Dialogue_handler.instance.Write_Info(_currentInteraction.resultMessage, "Details");
+        for (int i = 0; i < Pokemon_party.Instance.numMembers; i++)
         {
-            var pokemon = Pokemon_party.instance.party[i];
+            var pokemon = Pokemon_party.Instance.party[i];
             pokemon.HP = pokemon.max_HP;
             foreach (var move in pokemon.move_set)
                 move.Powerpoints = move.max_Powerpoints;
             pokemon.Status_effect = "None";
         }
-        overworld_actions.instance.doing_action = false;
+        overworld_actions.Instance.doingAction = false;
         Dialogue_handler.instance.Write_Info("Your pokemon have been healed, you're welcome!", "Details");
     }
     void OpenPokemonStorage()
     {
-        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details");
+        Dialogue_handler.instance.Write_Info(_currentInteraction.resultMessage, "Details");
         pokemon_storage.instance.Open_pc();
-        overworld_actions.instance.using_ui = true;
+        overworld_actions.Instance.usingUI = true;
     }
     void BuyMore()
     {
         Dialogue_handler.instance.Dialouge_off();
-        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details");
+        Dialogue_handler.instance.Write_Info(_currentInteraction.resultMessage, "Details");
         ViewMarketDelayed();
     }
     void DontBuyMore()
@@ -102,22 +103,22 @@ public class Options_manager : MonoBehaviour
     }
     void ReceiveGiftPokemon()
     {
-        var pokemonName = _currentInteraction.ResultMessage;
+        var pokemonName = _currentInteraction.resultMessage;
         var pokemon = Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName +"/"+ pokemonName);
-        Pokemon_party.instance.Add_Member(pokemon);
+        Pokemon_party.Instance.AddMember(pokemon);
         Dialogue_handler.instance.Dialouge_off();
         Dialogue_handler.instance.Write_Info("You got a " + pokemon.Pokemon_name, "Details");
         starterPokemonGiftEvent.PickGiftPokemon(pokemonName);
     }
     void Interact()
     {
-        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details",2f);
+        Dialogue_handler.instance.Write_Info(_currentInteraction.resultMessage, "Details",2f);
     }
     void Fish()
     {
-        overworld_actions.instance.doing_action = true;
-        overworld_actions.instance.manager.change_animation_state(overworld_actions.instance.manager.Fishing_Start);
-        Dialogue_handler.instance.Write_Info(_currentInteraction.ResultMessage, "Details");
+        overworld_actions.Instance.doingAction = true;
+        overworld_actions.Instance.manager.change_animation_state(overworld_actions.Instance.manager.Fishing_Start);
+        Dialogue_handler.instance.Write_Info(_currentInteraction.resultMessage, "Details");
     }
     void SellItem()
     {
@@ -137,7 +138,7 @@ public class Options_manager : MonoBehaviour
     void PickBerryFromTree()
     {
         Dialogue_handler.instance.Dialouge_off();
-        var berry = _currentInteraction.ResultMessage;
+        var berry = _currentInteraction.resultMessage;
         var bry = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/" + berry);
         Bag.Instance.AddItem(Obj_Instance.CreateItem(bry));
         Dialogue_handler.instance.Write_Info("You picked up a "+berry, "Details",1f);
@@ -145,12 +146,12 @@ public class Options_manager : MonoBehaviour
     public void Complete_Interaction(Interaction interaction,int option)
     {
         _currentInteraction = interaction;
-        var methodName = interaction.InteractionOptions[option].Replace(" ", "");
+        var methodName = interaction.interactionOptions[option].Replace(" ", "");
         if (_interactionMethods.TryGetValue(methodName,out var method))
             method();
         else
-            Debug.Log("couldn't find method for interaction: " + interaction.InteractionOptions[option]);
-        if (interaction.InteractionType == "List")
+            Debug.Log("couldn't find method for interaction: " + methodName);
+        if (interaction.interactionType == "List")
         {
             //list logic, might be useful later 
             //Dialogue_handler.instance.Write_Info("Would you like to fish for pokemon", "List", "fishing...",new string[]{"Fish","No fish","cool fish"},new string[]{"Yes","No","new"});

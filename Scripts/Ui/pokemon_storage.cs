@@ -78,8 +78,8 @@ public class pokemon_storage : MonoBehaviour
         if (swapping)
         {
             storage_operetation = true;
-            Pokemon store = Pokemon_party.instance.party[party_pkm.party_pos - 1];
-            Pokemon_party.instance.party[party_pkm.party_pos - 1] = Add_pokemon(search_pkm(select_pkm_ID));
+            Pokemon store = Pokemon_party.Instance.party[party_pkm.party_pos - 1];
+            Pokemon_party.Instance.party[party_pkm.party_pos - 1] = Add_pokemon(search_pkm(select_pkm_ID));
             non_party_pokemon[search_pkm_pos(select_pkm_ID)] = Add_pokemon(store);
             swapping = false;
             Remove_pkm_icons();
@@ -169,7 +169,7 @@ public class pokemon_storage : MonoBehaviour
             }
         }
         num = 0;
-        foreach (Pokemon mon in Pokemon_party.instance.party)
+        foreach (Pokemon mon in Pokemon_party.Instance.party)
         {
             if (mon != null)
             {
@@ -187,7 +187,7 @@ public class pokemon_storage : MonoBehaviour
     {
         if (num_party_members > 1)
         {
-            Pokemon_party.instance.Remove_Member(pkm.party_pos);
+            Pokemon_party.Instance.RemoveMember(pkm.party_pos);
             num_party_members--;
             num_non_party_pokemon++;
             RefreshUi();
@@ -227,15 +227,15 @@ public class pokemon_storage : MonoBehaviour
     }
     public void  Add_to_Party()
     {
-        if (Pokemon_party.instance.num_members < 6)
+        if (Pokemon_party.Instance.numMembers < 6)
         {
             storage_operetation = true;
-            Pokemon_party.instance.party[Pokemon_party.instance.num_members] = Add_pokemon(search_pkm(select_pkm_ID));
+            Pokemon_party.Instance.party[Pokemon_party.Instance.numMembers] = Add_pokemon(search_pkm(select_pkm_ID));
             //remove from box
             non_party_pokemon.Remove(search_pkm(select_pkm_ID));
             num_party_members++;
             num_non_party_pokemon--;
-            Pokemon_party.instance.num_members++;
+            Pokemon_party.Instance.numMembers++;
         }
         else
             Dialogue_handler.instance.Write_Info("Party is full, you can still swap out pokemon though", "Details",2f);

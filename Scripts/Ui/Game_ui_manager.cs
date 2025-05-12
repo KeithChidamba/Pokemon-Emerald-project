@@ -22,24 +22,24 @@ public class Game_ui_manager : MonoBehaviour
     }
     private void Update()
     {
-        if (overworld_actions.instance == null) return;
+        if (overworld_actions.Instance == null) return;
             Ui_inputs();
     }
     private void Ui_inputs()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !overworld_actions.instance.using_ui && !overworld_actions.instance.doing_action &&!viewingMenu)
+        if (Input.GetKeyDown(KeyCode.Space) && !overworld_actions.Instance.usingUI && !overworld_actions.Instance.doingAction &&!viewingMenu)
         {
             viewingMenu = true;
             ActivateUiElement(menuOptions);
         }
-        if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.instance.doing_action && viewingMenu)
+        if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.Instance.doingAction && viewingMenu)
             menuOff = false;
         
         if (Input.GetKeyDown(KeyCode.Space) && viewingMenu && !menuOff)
             CloseMenu();
         
-        if (Input.GetKeyDown(KeyCode.Escape) && Pokemon_party.instance.viewing_party && !Pokemon_party.instance.viewing_details)
-            if(!Pokemon_party.instance.SwapOutNext)
+        if (Input.GetKeyDown(KeyCode.Escape) && Pokemon_party.Instance.viewingParty && !Pokemon_party.Instance.viewingDetails)
+            if(!Pokemon_party.Instance.swapOutNext)
                 CloseParty();
         
         if (Input.GetKeyDown(KeyCode.Escape) && Bag.Instance.viewingBag)
@@ -59,13 +59,13 @@ public class Game_ui_manager : MonoBehaviour
     } 
     public void ResetPlayerMovement()
     {
-        overworld_actions.instance.using_ui = false;
+        overworld_actions.Instance.usingUI = false;
         Player_movement.instance.canmove = true;
     }
     private void ActivateUiElement(GameObject ui)
     {
         ui.SetActive(true);
-        overworld_actions.instance.using_ui = true;
+        overworld_actions.Instance.usingUI = true;
     }
     public void CloseStore()
     {
@@ -80,18 +80,18 @@ public class Game_ui_manager : MonoBehaviour
         if (!Options_manager.Instance.playerInBattle)
             ResetPlayerMovement();
         else
-            overworld_actions.instance.using_ui = false;
+            overworld_actions.Instance.usingUI = false;
     }
     public void CloseParty()
     {
-        Pokemon_party.instance.party_ui.gameObject.SetActive(false);
-        Pokemon_party.instance.Cancel();
+        Pokemon_party.Instance.partyUI.gameObject.SetActive(false);
+        Pokemon_party.Instance.ClearSelectionUI();
         if (Options_manager.Instance.playerInBattle)
-            overworld_actions.instance.using_ui = false;
+            overworld_actions.Instance.usingUI = false;
         else
             ResetPlayerMovement();
         Item_handler.Instance.usingItem = false;//in case player closes before using item
-        Pokemon_party.instance.Giving_item = false;
+        Pokemon_party.Instance.givingItem = false;
     }
     public void CloseMenu()
     {
@@ -126,7 +126,7 @@ public class Game_ui_manager : MonoBehaviour
     {
         ResetMenuState();
         Dialogue_handler.instance.Dialouge_off();
-        ActivateUiElement(Pokemon_party.instance.party_ui);
-        Pokemon_party.instance.View_party();
+        ActivateUiElement(Pokemon_party.Instance.partyUI);
+        Pokemon_party.Instance.ViewParty();
     }
 }

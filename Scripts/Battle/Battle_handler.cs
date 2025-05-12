@@ -84,7 +84,7 @@ public class Battle_handler : MonoBehaviour
             viewingOptions = false;
         }
 
-        if (overworld_actions.instance.using_ui)
+        if (overworld_actions.Instance.usingUI)
         {
             Wild_pkm.Instance.canAttack = false;
             optionsUI.SetActive(false);
@@ -112,9 +112,9 @@ public class Battle_handler : MonoBehaviour
         if (!isTrainerBattle)
             Wild_pkm.Instance.Invoke(nameof(Wild_pkm.Instance.CanAttack), 1f);
         else
-            foreach (Battle_Participant p in battleParticipants)
-                if (p.pokemon != null & !p.isPlayer)
-                    p.pokemonTrainerAI.Invoke(nameof(p.pokemonTrainerAI.CanAttack), 1f);
+            foreach (var participant in battleParticipants)
+                if (participant.pokemon != null & !participant.isPlayer)
+                    participant.pokemonTrainerAI.Invoke(nameof(participant.pokemonTrainerAI.CanAttack), 1f);
     }
 
     void AutoAim()
@@ -151,12 +151,18 @@ public class Battle_handler : MonoBehaviour
         Game_Load.Instance.playerData.playerPosition = Player_movement.instance.transform.position;
         levelUpQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
-        overworld_actions.instance.doing_action = true;
+        overworld_actions.Instance.doingAction = true;
         battleUI.SetActive(true);
         overWorld.SetActive(false);
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
     }
 
+    void SetValidParticipants()
+    {
+        foreach (var participant in battleParticipants)
+            if (participant.pokemon != null)
+                SetParticipant(participant);
+    }
     void LoadAreaBackground(Encounter_Area area)
     {
         foreach (GameObject background in backgrounds)
@@ -169,16 +175,14 @@ public class Battle_handler : MonoBehaviour
         isTrainerBattle = false;
         isDoubleBattle = false;
         LoadAreaBackground(Encounter_handler.Instance.currentArea);
-        battleParticipants[0].pokemon = Pokemon_party.instance.party[0];
+        battleParticipants[0].pokemon = Pokemon_party.Instance.party[0];
         battleParticipants[0].currentEnemies.Add(battleParticipants[2]);
         battleParticipants[2].pokemon = enemy;
         battleParticipants[2].currentEnemies.Add(battleParticipants[0]);
         Wild_pkm.Instance.participant = battleParticipants[2];
         Wild_pkm.Instance.currentEnemyPokemon = battleParticipants[0];
         battleParticipants[2].AddToExpList(battleParticipants[0].pokemon);
-        foreach (Battle_Participant p in battleParticipants)
-            if (p.pokemon != null)
-                SetParticipant(p);
+        SetValidParticipants();
         Wild_pkm.Instance.inBattle = true;
         SetupBattle();
         Encounter_handler.Instance.currentArea = null;
@@ -205,7 +209,7 @@ public class Battle_handler : MonoBehaviour
         battleOver = false;
         isTrainerBattle = true;
         isDoubleBattle = false;
-        battleParticipants[0].pokemon = Pokemon_party.instance.party[0];
+        battleParticipants[0].pokemon = Pokemon_party.Instance.party[0];
         battleParticipants[0].currentEnemies.Add(battleParticipants[2]);
         battleParticipants[2].currentEnemies.Add(battleParticipants[0]);
         battleParticipants[2].pokemonTrainerAI = battleParticipants[2].GetComponent<Enemy_trainer>();
@@ -213,9 +217,7 @@ public class Battle_handler : MonoBehaviour
         battleParticipants[2].pokemon = battleParticipants[2].pokemonTrainerAI.trainerParty[0];
         LoadAreaBackground(battleParticipants[2].pokemonTrainerAI.trainerData.TrainerLocation);
         battleParticipants[2].AddToExpList(battleParticipants[0].pokemon);
-        foreach (Battle_Participant p in battleParticipants)
-            if (p.pokemon != null)
-                SetParticipant(p);
+        SetValidParticipants();
         battleParticipants[2].pokemonTrainerAI.inBattle = true;
         SetupBattle();
     }
@@ -225,9 +227,9 @@ public class Battle_handler : MonoBehaviour
         battleOver = false;
         isTrainerBattle = true;
         isDoubleBattle = true;
-        List<Pokemon> alivePokemon = Pokemon_party.instance.GetLivingPokemon();
+        var alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
         battleParticipants[0].pokemon = alivePokemon[0];
-        if (Pokemon_party.instance.num_members > 1)
+        if (Pokemon_party.Instance.numMembers > 1)
             battleParticipants[1].pokemon = alivePokemon[1];
         battleParticipants[2].pokemonTrainerAI = battleParticipants[2].GetComponent<Enemy_trainer>();
         battleParticipants[3].pokemonTrainerAI = battleParticipants[3].GetComponent<Enemy_trainer>();
@@ -242,7 +244,7 @@ public class Battle_handler : MonoBehaviour
             if (battleParticipants[i + 2].pokemon != null)
             {
                 battleParticipants[0].currentEnemies.Add(battleParticipants[i + 2]);
-                if (Pokemon_party.instance.num_members > 1)
+                if (Pokemon_party.Instance.numMembers > 1)
                     battleParticipants[1].currentEnemies.Add(battleParticipants[i + 2]);
             }
 
@@ -254,11 +256,9 @@ public class Battle_handler : MonoBehaviour
         }
         for (int i = 0; i < 2; i++)
             if (battleParticipants[i].pokemon != null)
-                foreach (Battle_Participant enemy in battleParticipants[i].currentEnemies)
+                foreach (var enemy in battleParticipants[i].currentEnemies)
                     enemy.AddToExpList(battleParticipants[i].pokemon);
-        foreach (Battle_Participant p in battleParticipants)
-            if (p.pokemon != null)
-                SetParticipant(p);
+        SetValidParticipants();
         battleParticipants[2].pokemonTrainerAI.inBattle = true;
         battleParticipants[3].pokemonTrainerAI.inBattle = true;
         LoadAreaBackground(battleParticipants[2].pokemonTrainerAI.trainerData.TrainerLocation);
@@ -268,10 +268,10 @@ public void SetParticipant(Battle_Participant participant)
     {
         if (participant.isPlayer)
         { //for switch-ins
-            if (Pokemon_party.instance.Swapping_in || Pokemon_party.instance.SwapOutNext)
+            if (Pokemon_party.Instance.swappingIn || Pokemon_party.Instance.swapOutNext)
             {
-                List<Pokemon> alivePokemon=Pokemon_party.instance.GetLivingPokemon();
-                participant.pokemon = alivePokemon[Pokemon_party.instance.Selected_member - 1];
+                var alivePokemon=Pokemon_party.Instance.GetLivingPokemon();
+                participant.pokemon = alivePokemon[Pokemon_party.Instance.selectedMemberIndex - 1];
                 foreach (Battle_Participant enemyParticipant  in participant.currentEnemies)
                     enemyParticipant.AddToExpList(participant.pokemon);
             }
@@ -345,9 +345,10 @@ public void SetParticipant(Battle_Participant participant)
     }
     int MoneyModifier()
     {
-        foreach(Pokemon p in Pokemon_party.instance.party)
-            if (p != null && p.HP>0 && p.HasItem)
-                if(p.HeldItem.itemName == "Amulet Coin")
+        var alivePokemon = Pokemon_party.Instance.GetLivingPokemon(); 
+        foreach(var currentPokemon in alivePokemon)//exp share split, assuming there's only ever 1 exp share in the game
+            if (currentPokemon.HasItem)
+                if(currentPokemon.HeldItem.itemName == "Amulet Coin")
                     return 2;
         return 1;
     }
@@ -391,8 +392,8 @@ public void SetParticipant(Battle_Participant participant)
         }
         yield return new WaitForSeconds(2f);
         ResetUiAfterBattle(playerWhiteOut);
-        if(overworld_actions.instance.fishing)
-            overworld_actions.instance.Done_fishing();
+        if(overworld_actions.Instance.fishing)
+            overworld_actions.Instance.ResetFishingAction();
     }
     public void LevelUpEvent(Pokemon pkm)
     {
@@ -442,7 +443,7 @@ public void SetParticipant(Battle_Participant participant)
         OnBattleEnd?.Invoke();
         Dialogue_handler.instance.Dialouge_off();
         Options_manager.Instance.playerInBattle = false;
-        overworld_actions.instance.doing_action = false;
+        overworld_actions.Instance.doingAction = false;
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
         lastOpponent = null;

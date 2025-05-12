@@ -28,7 +28,7 @@ public class Encounter_trigger : MonoBehaviour
                 handler.encounterChance = 5;
             var randomNumber = Random.Range(1, 11);
             if (randomNumber < handler.encounterChance & !handler.encounterTriggered)
-                handler.Trigger_encounter(area);
+                handler.TriggerEncounter(area);
             _triggeredEncounter = true;
         }
     }

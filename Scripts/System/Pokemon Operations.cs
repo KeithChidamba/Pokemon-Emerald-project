@@ -160,7 +160,7 @@ public static class PokemonOperations
                 var moveName = move.Substring(pos, move.Length - 2 - pos).ToLower();
                 if (CurrentPkm.move_set.Count == 4) 
                 {//leveling up from battle or rare candies
-                    if(Options_manager.Instance.playerInBattle || Pokemon_party.instance.party.Contains(CurrentPkm))
+                    if(Options_manager.Instance.playerInBattle || Pokemon_party.Instance.party.Contains(CurrentPkm))
                     {
                         Battle_handler.Instance.displayingInfo = true;
                         Dialogue_handler.instance.Write_Info(

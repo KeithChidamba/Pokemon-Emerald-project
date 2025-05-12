@@ -72,7 +72,7 @@ public class Area_manager : MonoBehaviour
     {
         foreach (var area in overworldAreas)
             area.overworld.SetActive(false);
-        overworld_actions.instance.doing_action = false;
+        overworld_actions.Instance.doingAction = false;
         Player_movement.instance.canmove = false;
         currentArea.insideArea = true;
         currentArea.interior.SetActive(true);

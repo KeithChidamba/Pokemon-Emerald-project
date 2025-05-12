@@ -165,7 +165,7 @@ public class Item_handler : MonoBehaviour
         if (isCaught)
         {
             Dialogue_handler.instance.Battle_Info("Well done "+wildPokemon.Pokemon_name+" has been caught");
-            Pokemon_party.instance.Add_Member(wildPokemon);
+            Pokemon_party.Instance.AddMember(wildPokemon);
             yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
             Wild_pkm.Instance.participant.EndWildBattle();
         }else
@@ -201,7 +201,7 @@ public class Item_handler : MonoBehaviour
         ResetItemUsage();
         if (usingHeldItem) { DepleteHeldItem();return;}
         DepleteItem();
-        Pokemon_party.instance.Refresh_Member_Cards();
+        Pokemon_party.Instance.RefreshMemberCards();
         Dialogue_handler.instance.Dialouge_off(1f);
         Invoke(nameof(SkipTurn),1.3f);
     }

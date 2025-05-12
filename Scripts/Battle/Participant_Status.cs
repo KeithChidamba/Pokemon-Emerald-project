@@ -44,7 +44,7 @@ public class Participant_Status : MonoBehaviour
     }
     public void Check_status()
     {
-        if (overworld_actions.instance.using_ui) return;
+        if (overworld_actions.Instance.usingUI) return;
         if (!_participant.isActive) return;
         if(_participant.pokemon.HP<=0 )return;
         if(Battle_handler.Instance.battleOver)return;

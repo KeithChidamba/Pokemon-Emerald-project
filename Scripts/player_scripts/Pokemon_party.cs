@@ -9,220 +9,220 @@ using UnityEngine.Serialization;
 public class Pokemon_party : MonoBehaviour
 {
     public Pokemon[] party;
-    public int num_members=0;
-    public int Selected_member=0;
-    public int Member_to_Move=0;
-    public bool moving = false;
-    public bool Swapping_in=false;
-    public bool SwapOutNext = false;
-    public bool viewing_details = false;
-    public bool viewing_options = false;
-    public bool viewing_party = false;
-    public bool Giving_item = false;
-    [FormerlySerializedAs("Memeber_cards")] public Pokemon_party_member[] Member_cards;
-    public GameObject party_ui;
-    public GameObject member_indicator;
-    private Item item_to_use;
-    public static Pokemon_party instance;
+    public int numMembers;
+    public int selectedMemberIndex;
+    public int memberToMove;
+    public bool moving;
+    public bool swappingIn;
+    public bool swapOutNext;
+    public bool viewingDetails;
+    public bool viewingOptions;
+    public bool viewingParty;
+    public bool givingItem;
+    public Pokemon_party_member[] memberCards;
+    public GameObject partyUI;
+    public GameObject memberIndicator;
+    private Item _itemToUse;
+    public static Pokemon_party Instance;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
     private void Start()
     {
-        Battle_handler.Instance.OnBattleEnd += close_party;
-    }
-    public List<Pokemon> GetLivingPokemon()
-    {
-        List<Pokemon> alivePokemon=new();
-        foreach (Pokemon p in Pokemon_party.instance.party)
-            if (p != null && p.HP > 0)
-                alivePokemon.Add(p);
-        return alivePokemon;
-    }
-    public void View_party()
-    {
-         viewing_party = true;
-         Refresh_Member_Cards();
-    }
-    public void Pkm_Details()
-    {//view pokemon details from button click
-        Pokemon_Details.instance.Load_Details(party[Selected_member-1]);
-        viewing_details = true;
-        Cancel();
+        Battle_handler.Instance.OnBattleEnd += CloseParty;
     }
 
-    private bool isvalidSwap(int Member_position)
+    public List<Pokemon> GetLivingPokemon()
     {
-        if(Member_position<3)
+        List<Pokemon> alivePokemon = new();
+        for (int i = 0; i < 6; i++)
+            if (party[i] != null)
+                if(party[i].HP > 0)
+                    alivePokemon.Add(party[i]);
+        return alivePokemon;
+    }
+    public void ViewParty()
+    {
+         viewingParty = true;
+         RefreshMemberCards();
+    }
+    public void ViewPokemonDetails()
+    {//view pokemon details from button click
+        Pokemon_Details.instance.Load_Details(party[selectedMemberIndex-1]);
+        viewingDetails = true;
+        ClearSelectionUI();
+    }
+
+    private bool IsValidSwap(int memberPosition)
+    { 
+        if (memberPosition >= 3) return false;
+        var swapIn = Battle_handler.Instance.battleParticipants[memberPosition - 1];
+        if (swapIn.pokemon == null) return false;
+        if (swapIn.pokemon == party[memberPosition - 1])
         {
-            Battle_Participant Swapin = Battle_handler.Instance.battleParticipants[Member_position - 1];
-            if (Swapin.pokemon != null)
-                if (Swapin.pokemon == party[Member_position - 1])
-                {
-                    Dialogue_handler.instance.Write_Info(Swapin.pokemon.Pokemon_name +
-                                                         " is already in battle", "Details", 1f);
-                    return false;
-                }
+            Dialogue_handler.instance.Write_Info(swapIn.pokemon.Pokemon_name +
+                                                 " is already in battle", "Details", 1f);
+            return false;
         }
         return true;
     }
-    public void Moving(int Member_position)
+    public void SelectMemberToBeSwapped(int memberPosition)
     {
         if (Options_manager.Instance.playerInBattle)
         {//cant swap in a member who is already fighting
-            if (!isvalidSwap(Member_position)) return;
-            Swapping_in = true;
-            SwapOutNext = false;
-            Selected_member = Turn_Based_Combat.Instance.currentTurnIndex+1;
+            if (!IsValidSwap(memberPosition)) return;
+            swappingIn = true;
+            swapOutNext = false;
+            selectedMemberIndex = Turn_Based_Combat.Instance.currentTurnIndex+1;
             Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].ResetParticipantState();
-            Move_Member(Member_position);
+            MoveMember(memberPosition);
         }
         else
         {
-            if (num_members > 1)
+            if (numMembers > 1)
             {
                 moving = true;
-                Member_to_Move = Member_position;
-                viewing_options = false;
-                Member_cards[Member_position - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
+                memberToMove = memberPosition;
+                viewingOptions = false;
+                memberCards[memberPosition - 1].GetComponent<Pokemon_party_member>().Options.SetActive(false);
             }
             else
                 Dialogue_handler.instance.Write_Info("There must be at least 2 Pokemon to swap","Details",1f);
         }
     }
 
-    public void Recieve_item(Item item)
+    public void ReceiveItem(Item item)
     {
-        item_to_use = item;
+        _itemToUse = item;
     }
-    public void Member_Selected(int Member_position)
+    public void SelectMember(int memberPosition)
     {
-        Pokemon_party_member selectedMember = Member_cards[Member_position - 1];
+        var selectedMember = memberCards[memberPosition - 1];
         if (Options_manager.Instance.playerInBattle && selectedMember.pkm.HP <= 0) return;
-        if (SwapOutNext)
+        if (swapOutNext)
         {//selecting a swap in
-            if (!isvalidSwap(Member_position)) return;
-            Move_Member(Member_position);
+            if (!IsValidSwap(memberPosition)) return;
+            MoveMember(memberPosition);
         }
         else if (Item_handler.Instance.usingItem)
         {//use item on pokemon
             Item_handler.Instance.selectedPartyPokemon = selectedMember.pkm;
-            Item_handler.Instance.UseItem(item_to_use);
-            member_indicator.transform.position = selectedMember.transform.position;
-            member_indicator.SetActive(true);
+            Item_handler.Instance.UseItem(_itemToUse);
+            memberIndicator.transform.position = selectedMember.transform.position;
+            memberIndicator.SetActive(true);
         }
-        else if (Giving_item)
-            GiveItem(Member_position);
+        else if (givingItem)
+            GiveItemToMember(memberPosition);
         else
         {//move around members in party
-            if (selectedMember.GetComponent<Pokemon_party_member>().isEmpty)
-                Cancel();
+            if (selectedMember.isEmpty)
+                ClearSelectionUI();
             else
             {
                 if (moving)
                 {
-                    Selected_member = Member_position;
-                    Move_Member(Member_to_Move);
+                    selectedMemberIndex = memberPosition;
+                    MoveMember(memberToMove);
                 }
                 else
                 {
-                    Cancel();
-                    Selected_member = Member_position;
-                    viewing_options = true;
-                    member_indicator.transform.position = selectedMember.transform.position;
-                    member_indicator.SetActive(true);
-                    selectedMember.GetComponent<Pokemon_party_member>().Options.SetActive(true);
+                    ClearSelectionUI();
+                    selectedMemberIndex = memberPosition;
+                    viewingOptions = true;
+                    memberIndicator.transform.position = selectedMember.transform.position;
+                    memberIndicator.SetActive(true);
+                    selectedMember.Options.SetActive(true);
                 }
             }
         }
     }
-    public void Cancel()
+    public void ClearSelectionUI()
     {
-        viewing_options = false;
+        viewingOptions = false;
         moving = false;
-        member_indicator.SetActive(false);
-        for (int i = 0; i < num_members; i++)
-            Member_cards[i].GetComponent<Pokemon_party_member>().Options.SetActive(false);
+        memberIndicator.SetActive(false);
+        for (int i = 0; i < numMembers; i++)
+            memberCards[i].GetComponent<Pokemon_party_member>().Options.SetActive(false);
     }
 
-    private void GiveItem(int Member_position)
+    private void GiveItemToMember(int memberPosition)
     {
-        Pokemon_party_member selectedMember = Member_cards[Member_position - 1];
+        var selectedMember = memberCards[memberPosition - 1];
         if (selectedMember.pkm.HasItem)
         {
             Dialogue_handler.instance.Write_Info(selectedMember.pkm.Pokemon_name
                                                  +" is already holding something","Details",1f);
-            Giving_item = false;
-            item_to_use = null;
+            givingItem = false;
+            _itemToUse = null;
             Game_ui_manager.Instance.CloseParty();
             Game_ui_manager.Instance.Invoke(nameof(Game_ui_manager.Instance.ViewBag),1.1f);
             return;
         }
         Dialogue_handler.instance.Write_Info(selectedMember.pkm.Pokemon_name
-                                             +" recieved a "+item_to_use.itemName,"Details",1.3f);
-        selectedMember.pkm.GiveItem(Obj_Instance.CreateItem(item_to_use));
-        item_to_use.quantity--;
-        Bag.Instance.CheckItemQuantity(item_to_use);
-        member_indicator.transform.position = selectedMember.transform.position;
-        member_indicator.SetActive(true);
-        Giving_item = false;
-        item_to_use = null;
-        Refresh_Member_Cards();
+                                             +" recieved a "+_itemToUse.itemName,"Details",1.3f);
+        selectedMember.pkm.GiveItem(Obj_Instance.CreateItem(_itemToUse));
+        _itemToUse.quantity--;
+        Bag.Instance.CheckItemQuantity(_itemToUse);
+        memberIndicator.transform.position = selectedMember.transform.position;
+        memberIndicator.SetActive(true);
+        givingItem = false;
+        _itemToUse = null;
+        RefreshMemberCards();
     }
-    private void Move_Member(int Party_position)
+    private void MoveMember(int partyPosition)
     {
-        Party_position--;
-        if (SwapOutNext || Swapping_in)
+        partyPosition--;
+        if (swapOutNext || swappingIn)
         {
-            swap(Party_position);
-            Invoke(nameof(switchIn),1f);//
+            SwapMembers(partyPosition);
+            Invoke(nameof(SwitchIn),1f);
         }
         else
-            if(party[Selected_member-1] != party[Party_position])
-                swap(Party_position);
+            if(party[selectedMemberIndex-1] != party[partyPosition])
+                SwapMembers(partyPosition);
     }
-private void close_party()
+private void CloseParty()
 {
     Game_ui_manager.Instance.CloseParty();
-    SwapOutNext = false;
-    Swapping_in = false;
+    swapOutNext = false;
+    swappingIn = false;
 }
-    void switchIn()
+    void SwitchIn()
     {
-        if (SwapOutNext)
+        if (swapOutNext)
             Turn_Based_Combat.Instance.faintEventDelay = false;
-        if(Swapping_in)
+        if(swappingIn)
             Turn_Based_Combat.Instance.NextTurn();
-        close_party();
+        CloseParty();
     }
-    void swap(int Party_position)
+    private void SwapMembers(int partyPosition)
     {
-        Pokemon Swap_store = party[Selected_member-1];
-        party[Selected_member-1] = party[Party_position];
-        party[Party_position] = Swap_store;
+        var swapStore = party[selectedMemberIndex-1];
+        party[selectedMemberIndex-1] = party[partyPosition];
+        party[partyPosition] = swapStore;
         moving = false;
         if (Options_manager.Instance.playerInBattle)
-            Battle_handler.Instance.SetParticipant(Battle_handler.Instance.battleParticipants[Selected_member-1]);
-        Member_to_Move = 0;
-        Selected_member = 0;
-        Refresh_Member_Cards();
-        member_indicator.SetActive(false);
-        Cancel();
-        if(!Swapping_in && !SwapOutNext)
-            Dialogue_handler.instance.Write_Info("You swapped " + Swap_store.Pokemon_name+ " with "+ party[Party_position].Pokemon_name,"Details",1f);
+            Battle_handler.Instance.SetParticipant(Battle_handler.Instance.battleParticipants[selectedMemberIndex-1]);
+        memberToMove = 0;
+        selectedMemberIndex = 0;
+        RefreshMemberCards();
+        memberIndicator.SetActive(false);
+        ClearSelectionUI();
+        if(!swappingIn && !swapOutNext)
+            Dialogue_handler.instance.Write_Info("You swapped " + swapStore.Pokemon_name+ " with "+ party[partyPosition].Pokemon_name,"Details",1f);
     }
-    public void Add_Member(Pokemon pokemon)
+    public void AddMember(Pokemon pokemon)
     { //add new pokemon after catch or event
-        if (num_members<6)
+        if (numMembers<6)
         {
-            party[num_members] = pokemon_storage.instance.Add_pokemon(pokemon);
-            num_members++;
+            party[numMembers] = pokemon_storage.instance.Add_pokemon(pokemon);
+            numMembers++;
         }
         else
         {
@@ -234,44 +234,39 @@ private void close_party()
             }
         }
     }
-    void sort_Members(int empty_position)
+    void SortMembers(int emptyPosition)
     {
-        if(empty_position < party.Length-1)
+        if(emptyPosition < party.Length-1)
         {
-            for (int i = empty_position; i < party.Length - 1; i++)
+            for (int i = emptyPosition; i < party.Length - 1; i++)
                 party[i] = party[i + 1];
             party[party.Length - 1] = null;
         }
     }
-    public void Refresh_Member_Cards()
+    public void RefreshMemberCards()
     {
-        num_members = 0;
-        foreach (Pokemon_party_member mon in Member_cards)
-        {
-                Member_cards[num_members].pkm = null;
-                Member_cards[num_members].Reset_ui();
-        }
+        numMembers = 0;
         for (int i=0;i<6;i++)
         {
             if (party[i] != null)
             {
-                Member_cards[num_members].pkm = party[i];
-                Member_cards[num_members].Party_pos = num_members + 1;
-                Member_cards[num_members].Set_Ui();
-                num_members++;
+                memberCards[numMembers].pkm = party[i];
+                memberCards[numMembers].Party_pos = numMembers + 1;
+                memberCards[numMembers].Set_Ui();
+                numMembers++;
             }
             else
-                Member_cards[i].Reset_ui();
+                memberCards[i].Reset_ui();
         }
     }
-    public void Remove_Member(int Party_position)
+    public void RemoveMember(int Party_position)
     {
         //pc operation remove from party
         Party_position--;
-        Pokemon member = party[Party_position];
+        var member = party[Party_position];
         party[Party_position] = null;
-        num_members--;
+        numMembers--;
         pokemon_storage.instance.non_party_pokemon.Add(member);
-        sort_Members(Party_position);
+        SortMembers(Party_position);
     }
 }

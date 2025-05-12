@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Nurse
   m_EditorClassIdentifier: 
-  InteractionMsg: Hello, would you like to heal your pokemon?
-  InteractionType: Options
-  InteractionOptions:
-  - Heal_Pokemon
+  interactionMessage: Hello, would you like to heal your pokemon?
+  interactionType: Options
+  interactionOptions:
+  - HealPokemon
   - 
-  ResultMessage: Please wait a moment...
-  OptionsUiText:
+  resultMessage: Please wait a moment...
+  optionsUiText:
   - Yes
   - No
+  additionalInfo: []

@@ -6,10 +6,10 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "Interable_obj", menuName = "interaction")]
 public class Interaction : ScriptableObject
 {
-    public string InteractionMsg = "";
-    public string InteractionType = "";
-    public List<string> InteractionOptions = new();
-    public string ResultMessage = "";
-    public List<string> OptionsUiText= new();
-    public List<string> AdditionalInfo = new();
+    [FormerlySerializedAs("InteractionMsg")] public string interactionMessage = "";
+    [FormerlySerializedAs("InteractionType")] public string interactionType = "";
+    [FormerlySerializedAs("InteractionOptions")] public List<string> interactionOptions = new();
+    [FormerlySerializedAs("ResultMessage")] public string resultMessage = "";
+    [FormerlySerializedAs("OptionsUiText")] public List<string> optionsUiText= new();
+    [FormerlySerializedAs("AdditionalInfo")] public List<string> additionalInfo = new();
 }

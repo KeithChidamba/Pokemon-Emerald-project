@@ -81,8 +81,8 @@ public class Save_manager : MonoBehaviour
         {
             var pokemon = LoadPokemonFromJson("Assets/Save_data/Pokemon/" + partyIDs[i] + ".json");
             LoadHeldItems(pokemon);
-            Pokemon_party.instance.party[i] = pokemon;
-            Pokemon_party.instance.num_members++;
+            Pokemon_party.Instance.party[i] = pokemon;
+            Pokemon_party.Instance.numMembers++;
         }
         pokemon_storage.instance.non_party_pokemon.Clear();
         var pokemonList = GetJsonFilesFromPath("Assets/Save_data/Pokemon/");
@@ -136,10 +136,10 @@ public class Save_manager : MonoBehaviour
         EraseSaveData();
         for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
         {
-            Pokemon_party.instance.party[i].SaveUnserializableData();
-            if(Pokemon_party.instance.party[i].HasItem)
-                SaveHeldItem(Pokemon_party.instance.party[i].HeldItem, Pokemon_party.instance.party[i].Pokemon_ID.ToString());
-            SavePokemonDataAsJson(Pokemon_party.instance.party[i]);
+            Pokemon_party.Instance.party[i].SaveUnserializableData();
+            if(Pokemon_party.Instance.party[i].HasItem)
+                SaveHeldItem(Pokemon_party.Instance.party[i].HeldItem, Pokemon_party.Instance.party[i].Pokemon_ID.ToString());
+            SavePokemonDataAsJson(Pokemon_party.Instance.party[i]);
         }
         for (int i = 0; i < pokemon_storage.instance.num_non_party_pokemon; i++)
         {
@@ -151,7 +151,9 @@ public class Save_manager : MonoBehaviour
         for (int i = 0; i < Bag.Instance.numItems; i++)
             SaveItemDataAsJson(Bag.Instance.bagItems[i], Bag.Instance.bagItems[i].itemID);
         Game_Load.Instance.playerData.playerPosition = Player_movement.instance.transform.position;
-        Game_Load.Instance.playerData.location = area.currentArea.areaName;
+        Game_Load.Instance.playerData.location = (Game_Load.Instance.playerData.location==string.Empty) ? 
+            "Overworld" 
+            : area.currentArea.areaName;
         SavePlayerDataAsJson(Game_Load.Instance.playerData,Game_Load.Instance.playerData.trainerID.ToString());
         SavePartyPokemonIDs();
     }
@@ -175,7 +177,7 @@ public class Save_manager : MonoBehaviour
         for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
         {
             var path = Path.Combine("Assets/Save_data/Party_Ids/", "pkm_" + (i + 1) + ".txt");
-            File.WriteAllText(path, Pokemon_party.instance.party[i].Pokemon_ID.ToString());
+            File.WriteAllText(path, Pokemon_party.Instance.party[i].Pokemon_ID.ToString());
         }
         Dialogue_handler.instance.Write_Info("Game saved", "Details");
         Dialogue_handler.instance.Dialouge_off(1f);

@@ -40,10 +40,10 @@ public class Dialogue_handler : MonoBehaviour
     {
         if (Current_interaction != null)
         {
-            if (Current_interaction.InteractionType == "Options")
+            if (Current_interaction.interactionType == "Options")
             {
-                option_btns_txt[0].text =Current_interaction.OptionsUiText[0];
-                option_btns_txt[1].text =Current_interaction.OptionsUiText[1];
+                option_btns_txt[0].text =Current_interaction.optionsUiText[0];
+                option_btns_txt[1].text =Current_interaction.optionsUiText[1];
             }
         }
         if (displaying && !text_finished)
@@ -53,7 +53,7 @@ public class Dialogue_handler : MonoBehaviour
                 if (current_line_num < num_lines)
                 {
                     current_line_num++;
-                    current_line = Current_interaction.InteractionMsg.Substring((current_line_num - 1) * Max_length, Max_length);    
+                    current_line = Current_interaction.interactionMessage.Substring((current_line_num - 1) * Max_length, Max_length);    
                     Dialouge_txt.text = current_line;
                     text_finished = false;
                 }
@@ -61,16 +61,16 @@ public class Dialogue_handler : MonoBehaviour
                 {
                     dialogue_next.SetActive(false);
                     elipsis_txt.SetActive(false);
-                    current_line = Current_interaction.InteractionMsg.Substring(current_line_num * Max_length, Current_interaction.InteractionMsg.Length - (current_line_num * Max_length));
+                    current_line = Current_interaction.interactionMessage.Substring(current_line_num * Max_length, Current_interaction.interactionMessage.Length - (current_line_num * Max_length));
                     Dialouge_txt.text = current_line;
                     text_finished = true;
-                    if (Current_interaction.InteractionType == "Options")
+                    if (Current_interaction.interactionType == "Options")
                         Display_Options(true);
                 }
             }
         }
-        if (overworld_actions.instance !=null)
-            if (overworld_actions.instance.doing_action )
+        if (overworld_actions.Instance !=null)
+            if (overworld_actions.Instance.doingAction )
                 Remove_Exit();
         if (displaying && Input.GetKeyDown(KeyCode.R) && can_exit)
             Dialouge_off();
@@ -84,18 +84,18 @@ public class Dialogue_handler : MonoBehaviour
     Interaction new_interaction(string info,string type,string result)
     {
         Interaction inter = ScriptableObject.CreateInstance<Interaction>();
-        inter.InteractionMsg = info;
-        inter.InteractionType = type;
-        inter.ResultMessage = result;
+        inter.interactionMessage = info;
+        inter.interactionType = type;
+        inter.resultMessage = result;
         return inter;
     }
     public void Write_Info(string info,string type,string result,string[] options, string[]options_txt)//list info
     {
         Interaction details = new_interaction(info,type,result);
         foreach (string option in options)
-            details.InteractionOptions.Add(option);
+            details.interactionOptions.Add(option);
         foreach (string txt in options_txt)
-            details.OptionsUiText.Add(txt);
+            details.optionsUiText.Add(txt);
         Current_interaction = details;
         Display(Current_interaction);
     }
@@ -103,7 +103,7 @@ public class Dialogue_handler : MonoBehaviour
     public void Write_Info(string info,string type)//display plain text info to player
     {
         if(Options_manager.Instance.playerInBattle){ 
-            if (!overworld_actions.instance.using_ui & type == "Feedback")
+            if (!overworld_actions.Instance.usingUI & type == "Feedback")
             {
                 Battle_Info(info);
                 return;
@@ -117,7 +117,12 @@ public class Dialogue_handler : MonoBehaviour
     public void Write_Info(string info,string type,float dialogeOff)//display plain text info to player
     {
         Write_Info(info,type);
-        if (overworld_actions.instance.using_ui)
+        if (Options_manager.Instance.playerInBattle)
+        {
+            if (overworld_actions.Instance.usingUI)
+                Dialouge_off(dialogeOff);
+        }
+        else
             Dialouge_off(dialogeOff);
     }
     public void Battle_Info(string info)//display plain text info to player
@@ -132,7 +137,7 @@ public class Dialogue_handler : MonoBehaviour
     IEnumerator ProccessQeue(Interaction interaction)
     {
         messagesLoading = true;
-        Current_interaction = new_interaction(interaction.InteractionMsg,"Battle Info","");
+        Current_interaction = new_interaction(interaction.interactionMessage,"Battle Info","");
         Display(Current_interaction);
         PendingMessages.Remove(interaction);
         yield return new WaitForSeconds(1f);
@@ -154,10 +159,10 @@ public class Dialogue_handler : MonoBehaviour
     public void Write_Info(string info, string type, string option1, string result, string option2,string opTxt1,string opTxt2)//display a choice, with a result when they choose NO
     {
         Interaction details = new_interaction(info,type,result);
-        details.InteractionOptions.Add(option1);
-        details.InteractionOptions.Add(option2);
-        details.OptionsUiText.Add(opTxt1);
-        details.OptionsUiText.Add(opTxt2);
+        details.interactionOptions.Add(option1);
+        details.interactionOptions.Add(option2);
+        details.optionsUiText.Add(opTxt1);
+        details.optionsUiText.Add(opTxt2);
         Current_interaction = details;
         Display(Current_interaction);
     }
@@ -177,7 +182,7 @@ public class Dialogue_handler : MonoBehaviour
         }
         else if (choice == "Option 2")
         {
-            if (Current_interaction.InteractionOptions[1] == "")//if no option 2,basically the player chose NO
+            if (Current_interaction.interactionOptions[1] == "")//if no option 2,basically the player chose NO
                 Dialouge_off();
             else
                 Options_manager.Instance.Complete_Interaction(Current_interaction,1);//do second option
@@ -191,7 +196,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         Display_Options(false);
         Current_interaction = null;
-        if(!Options_manager.Instance.playerInBattle || overworld_actions.instance.using_ui)
+        if(!Options_manager.Instance.playerInBattle || overworld_actions.Instance.usingUI)
             dialogue_box.SetActive(false);
         else
             battle_box.SetActive(false);
@@ -218,14 +223,14 @@ public class Dialogue_handler : MonoBehaviour
         }
         text_finished = false;
         displaying = true;
-        num_lines = math.trunc(interaction.InteractionMsg.Length / Max_length);
-        if (!Options_manager.Instance.playerInBattle || overworld_actions.instance.using_ui)
+        num_lines = math.trunc(interaction.interactionMessage.Length / Max_length);
+        if (!Options_manager.Instance.playerInBattle || overworld_actions.Instance.usingUI)
         {
             dialogue_box.SetActive(true);
             Dialouge_txt.color=Color.black;
             battle_box.SetActive(false);
         }
-        else if(!overworld_actions.instance.using_ui && Options_manager.Instance.playerInBattle)
+        else if(!overworld_actions.Instance.usingUI && Options_manager.Instance.playerInBattle)
         {
             battle_box.SetActive(true);
             Dialouge_txt.color=Color.white;
@@ -233,26 +238,26 @@ public class Dialogue_handler : MonoBehaviour
         }
         if(!Options_manager.Instance.playerInBattle)
             dialogue_exit.SetActive(true);
-        if (interaction.InteractionMsg.Length > Max_length)
+        if (interaction.interactionMessage.Length > Max_length)
         {
             dialogue_next.SetActive(true);
             elipsis_txt.SetActive(true);
-            current_line = interaction.InteractionMsg.Substring(0,Max_length);
+            current_line = interaction.interactionMessage.Substring(0,Max_length);
             Dialouge_txt.text = current_line;
             current_line_num++;
         }
         else
         {
-            if (interaction.InteractionType == "Options")
+            if (interaction.interactionType == "Options")
                 Display_Options(true);
             else
                 Display_Options(false);
-            if (interaction.InteractionType == "Event")
+            if (interaction.interactionType == "Event")
                 Options_manager.Instance.Complete_Interaction(Current_interaction,0);
             dialogue_next.SetActive(false);
             num_lines = 1;
             current_line_num = 1;
-            Dialouge_txt.text = interaction.InteractionMsg;
+            Dialouge_txt.text = interaction.interactionMessage;
             text_finished = true;
         }
 

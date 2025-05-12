@@ -1,96 +1,96 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class overworld_actions : MonoBehaviour
 {
     public Animation_manager manager;
-    float bike_speed = 2f;
-    public bool canSwitch = false;
-    public bool fishing = false;
-    [SerializeField] private bool PokemonBiting = false;
-    public bool doing_action = false;
-    public bool using_ui = false;
+    private const float BikeSpeed = 2f;
+    public bool canSwitchMovement;
+    public bool fishing;
+    [SerializeField] private bool pokemonBitingPole;
+    public bool doingAction;
+    public bool usingUI;
     public Encounter_Area fishingArea;
-    public static overworld_actions instance;
+    public static overworld_actions Instance;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
     void Update()
     {
-        if (!using_ui)
+        if (usingUI)
         {
-            if (doing_action)
-            {
-                Player_movement.instance.canmove = false;
-                canSwitch = false;
-            }
-
-            if (PokemonBiting & Input.GetKeyDown(KeyCode.F))
-            {
-                PokemonBiting = false;
-                Encounter_handler.Instance.Trigger_encounter(fishingArea);
-            }
-            if (fishing)
-            {
-                doing_action = true;
-                manager.change_animation_state(manager.Fishing_idle);
-                if (Input.GetKeyDown(KeyCode.Q))
-                    Done_fishing();
-            }
-        }
-        else
             Player_movement.instance.canmove = false;
+            return;
+        }
+        if (doingAction)
+        {
+            Player_movement.instance.canmove = false;
+            canSwitchMovement = false;
+        }
+        if (pokemonBitingPole & Input.GetKeyDown(KeyCode.F))
+        {
+            pokemonBitingPole = false;
+            Encounter_handler.Instance.TriggerEncounter(fishingArea);
+        }
+        if (fishing)
+        {
+            doingAction = true;
+            manager.change_animation_state(manager.Fishing_idle);
+            if (Input.GetKeyDown(KeyCode.Q))
+                ResetFishingAction();
+        }
     }
 
     IEnumerator TryFishing()
     {
-        int random = Utility.RandomRange(1, 11);
+        var random = Utility.RandomRange(1, 11);
         yield return new WaitForSeconds(1f);
         if (!fishing) yield break;
         if (random< 5)
         {
-            PokemonBiting = true;
+            pokemonBitingPole = true;
             Dialogue_handler.instance.Write_Info("Oh!, a Bite!, Press F","Details");
-            yield return new WaitForSeconds( (2 * (random/10) ) + 1f);
-            if (PokemonBiting)
+            yield return new WaitForSeconds( (2 * (random/10f) ) + 1f);
+            if (pokemonBitingPole)
             {
                 Dialogue_handler.instance.Write_Info("It got away","Details");
-                Done_fishing();
+                ResetFishingAction();
             }
         }
         else
         {
             Dialogue_handler.instance.Write_Info("Dang...nothing","Details");
-            Done_fishing();
+            ResetFishingAction();
         }
     }
-    void Start_fishing()
+    void StartFishingAction()
     {
         fishing = true;
         StartCoroutine(TryFishing());
     }
-    public void Done_fishing()
+    public void ResetFishingAction()
     {
         fishing = false;
-        PokemonBiting = false;
-        Invoke(nameof(Action_reset), 0.8f);
+        pokemonBitingPole = false;
+        Invoke(nameof(ActionReset), 0.8f);
         manager.change_animation_state(manager.Fishing_End);
         Dialogue_handler.instance.Dialouge_off();
     }
-    void Action_reset()
+    void ActionReset()
     {
-        doing_action = false;
+        doingAction = false;
         Player_movement.instance.canmove = true;
     }
-    public void Use_Bike()
+    public void SetBikeMovementSpeed()
     {
-        Player_movement.instance.movement_speed = bike_speed;
+        Player_movement.instance.movement_speed = BikeSpeed;
     }
 }

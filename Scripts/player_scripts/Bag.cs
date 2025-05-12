@@ -143,18 +143,18 @@ public class Bag : MonoBehaviour
             Dialogue_handler.instance.Write_Info("Bag is full", "Details");
             return;
         }
-        var partyMember = Pokemon_party.instance.party[memberIndex - 1];
+        var partyMember = Pokemon_party.Instance.party[memberIndex - 1];
         Dialogue_handler.instance.Write_Info("You took a " + partyMember.HeldItem.itemName +" from "
                                              + partyMember.Pokemon_name, "Details");
         AddItem(partyMember.HeldItem);
         partyMember.RemoveHeldItem();
-        Pokemon_party.instance.Cancel();
-        Pokemon_party.instance.Refresh_Member_Cards();
+        Pokemon_party.Instance.ClearSelectionUI();
+        Pokemon_party.Instance.RefreshMemberCards();
     }
     public void GiveItem()
     {
-        Pokemon_party.instance.Giving_item = true;
-        Pokemon_party.instance.Recieve_item(bagItems[topIndex + selectedItem - 1]);
+        Pokemon_party.Instance.givingItem = true;
+        Pokemon_party.Instance.ReceiveItem(bagItems[topIndex + selectedItem - 1]);
         Game_ui_manager.Instance.CloseBag();
         Game_ui_manager.Instance.ViewPokemonParty();
     }
@@ -204,7 +204,7 @@ public class Bag : MonoBehaviour
         Item_handler.Instance.usingItem = true;
         if(itemToUse.forPartyUse)
         {
-            Pokemon_party.instance.Recieve_item(itemToUse);
+            Pokemon_party.Instance.ReceiveItem(itemToUse);
             Game_ui_manager.Instance.ViewPokemonParty();
         }
         else

@@ -65,25 +65,26 @@ public class Battle_Participant : MonoBehaviour
         if(!expReceivers.Contains(pkm))
             expReceivers.Add(pkm);
     }
-    private void Distribute_EXP(int exp_from_enemy)
+    private void Distribute_EXP(int expFromEnemy)
     {
         expReceivers.RemoveAll(p => p.HP <= 0);
         if(expReceivers.Count<1)return;
         if (expReceivers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
         {
-            expReceivers[0].ReceiveExperience(exp_from_enemy);
+            expReceivers[0].ReceiveExperience(expFromEnemy);
             expReceivers.Clear();
             return;
         }
-        foreach(Pokemon p in Pokemon_party.instance.party)//exp share split, assuming there's only ever 1 exp share in the game
-            if (p != null && p.HP>0 && p.HasItem)
-                if(p.HeldItem.itemName == "Exp Share")
+        var alivePokemon = Pokemon_party.Instance.GetLivingPokemon(); 
+        foreach(var currentPokemon in alivePokemon)//exp share split, assuming there's only ever 1 exp share in the game
+            if (currentPokemon.HasItem)
+                if(currentPokemon.HeldItem.itemName == "Exp Share")
                 {
-                    p.ReceiveExperience(exp_from_enemy / 2);
-                    exp_from_enemy /= 2;
+                    currentPokemon.ReceiveExperience(expFromEnemy / 2);
+                    expFromEnemy /= 2;
                     break;
                 }
-        var exp = exp_from_enemy / expReceivers.Count;
+        var exp = expFromEnemy / expReceivers.Count;
         foreach (Pokemon p in expReceivers)
             if(!p.HasItem | p.HeldItem.itemName != "Exp Share")
                 p.ReceiveExperience(exp);
@@ -129,7 +130,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private void CheckIfLoss()
     {
-        List<Pokemon> alivePokemon = Pokemon_party.instance.GetLivingPokemon();
+        List<Pokemon> alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
         if (alivePokemon.Count==0)
         {
             Battle_handler.Instance.End_Battle(false);
@@ -141,8 +142,8 @@ public class Battle_Participant : MonoBehaviour
             if ( (Battle_handler.Instance.isDoubleBattle && alivePokemon.Count > 1) || 
             (!Battle_handler.Instance.isDoubleBattle && alivePokemon.Count > 0) )
             {
-                Pokemon_party.instance.Selected_member = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
-                Pokemon_party.instance.SwapOutNext = true;
+                Pokemon_party.Instance.selectedMemberIndex = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
+                Pokemon_party.Instance.swapOutNext = true;
                 Game_ui_manager.Instance.ViewPokemonParty();
                 Dialogue_handler.instance.Write_Info("Select a Pokemon to switch in","Details",2f);
                 ResetParticipantState();

@@ -10,7 +10,7 @@ public class Recieve_Pokemon : MonoBehaviour
    {
         foreach (var giftInteraction in giftPokemon)
         {
-            if (giftInteraction.interaction.ResultMessage == giftPokemonName)
+            if (giftInteraction.interaction.resultMessage == giftPokemonName)
                 giftInteraction.gameObject.SetActive(false);
             giftInteraction.gameObject.layer = 0;//prevent them from being interacted with
         }

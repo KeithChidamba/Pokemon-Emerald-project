@@ -55,7 +55,7 @@ public class Pokemon_Details : MonoBehaviour
         Moves_ui.SetActive(false);
         Ability_ui.SetActive(false);
         current_pkm = null;
-        Pokemon_party.instance.viewing_details = false;
+        Pokemon_party.Instance.viewingDetails = false;
     }
     public void Next()
     {
