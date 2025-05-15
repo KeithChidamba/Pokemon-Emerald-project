@@ -1,154 +1,136 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Poke_Mart : MonoBehaviour
 {
-    public List<Item> mart_items;
-    public bool viewing_store = false;
-    public Store_Item_ui[] mart_items_ui;
-
-    public int num_items = 0;
-    public int Selected_item = 0;
-    public int Selected_item_quantity = 0;
-    public int top_index = 0;
-    public GameObject buy;
-    public GameObject mart_ui;
-    public GameObject quantity_parent;
+    public List<Item> storeItems;
+    public bool viewingStore;
+    public Store_Item_ui[] storeItemsUI;
+    public int numItems = 0;
+    public int selectedItemIndex = 0;
+    public int selectedItemQuantity = 0;
+    public int topIndex = 0;
+    public GameObject purchaseButton;
+    public GameObject storeUI;
+    public GameObject quantityUI;
     public Text quantity;    
-    public Text Player_Money;
-    public static Poke_Mart instance;
+    public Text playerMoneyText;
+    public static Poke_Mart Instance;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
     private void Update()
     {
-        if(viewing_store)
-        {
-            quantity.text = Selected_item_quantity.ToString();
-            Player_Money.text = Game_Load.Instance.playerData.playerMoney.ToString();
-        }
+        if (!viewingStore) return;
+        quantity.text = selectedItemQuantity.ToString();
+        playerMoneyText.text = Game_Load.Instance.playerData.playerMoney.ToString();
     }
-    public void Select_Item(int Item_pos)
+    public void SelectItem(int itemPos)
     {
-        Selected_item = Item_pos;
-        Selected_item_quantity = 1;
-        mart_items_ui[Selected_item - 1].Load_item_info();
-        buy.SetActive(true);
-        quantity_parent.SetActive(true);
+        selectedItemIndex = itemPos;
+        selectedItemQuantity = 1;
+        storeItemsUI[selectedItemIndex - 1].LoadItemDescription();
+        purchaseButton.SetActive(true);
+        quantityUI.SetActive(true);
     }
-    public void Go_Down()
+    public void NavigateDown()
     {
-        if (top_index < num_items - 7)
+        if (topIndex < numItems - 7)
         {
             for (int i = 0; i < 6; i++)
             {
-                mart_items_ui[i].item = mart_items_ui[i + 1].item;
+                storeItemsUI[i].item = storeItemsUI[i + 1].item;
             }
-            mart_items_ui[6].item = mart_items[top_index + 7];
-            Reload_items();
-            top_index++;
+            storeItemsUI[6].item = storeItems[topIndex + 7];
+            ReloadItems();
+            topIndex++;
         }
-
     }
-    public void Go_Up()
+    public void NavigateUp()
     {
-        if (top_index > 0)
+        if (topIndex > 0)
         {
             for (int i = 6; i > 0; i--)
             {
-                mart_items_ui[i].item = mart_items_ui[i - 1].item;
+                storeItemsUI[i].item = storeItemsUI[i - 1].item;
             }
-            mart_items_ui[0].item = mart_items[top_index - 1];
-            Reload_items();
-            top_index--;
+            storeItemsUI[0].item = storeItems[topIndex - 1];
+            ReloadItems();
+            topIndex--;
         }
     }
-    public void Buy()
+    public void BuyItem()
     {
-        var item = Obj_Instance.CreateItem(mart_items[top_index + Selected_item - 1]);
+        var item = Obj_Instance.CreateItem(storeItems[topIndex + selectedItemIndex - 1]);
         if(Game_Load.Instance.playerData.playerMoney >= item.price)
         {
-            item.quantity = Selected_item_quantity;
+            item.quantity = selectedItemQuantity;
             Bag.Instance.AddItem(item);
-            Game_Load.Instance.playerData.playerMoney -= Selected_item_quantity * item.price;
+            Game_Load.Instance.playerData.playerMoney -= selectedItemQuantity * item.price;
             Dialogue_handler.instance.Write_Info("You bought "+ item.quantity+ " "+item.itemName+"'s", "Details",1.2f);
-            Selected_item_quantity = 1;
+            selectedItemQuantity = 1;
         }
         else
             Dialogue_handler.instance.Write_Info("You dont have enough money for that!", "Details",1f);
     }
-    public void change_quant(int diff)
+    public void ChangeItemQuantity(int value)
     {
-
-        if (diff < 0)//lower quantity
+        if (value < 0)//lower quantity
         {
-            if (Selected_item_quantity > 1)
+            selectedItemQuantity = (selectedItemQuantity > 1)? selectedItemQuantity + value : 1;
+        }
+        else if(value > 0)//increase quantity
+        {
+            if (selectedItemQuantity < 99)//below max quantity and affordable by player
             {
-                Selected_item_quantity += diff;
+                var priceOfItem = (selectedItemQuantity + 1) * storeItems[topIndex + selectedItemIndex - 1].price;
+                if(Game_Load.Instance.playerData.playerMoney >= priceOfItem)
+                    selectedItemQuantity += value;
             }
             else
-            {
-                Selected_item_quantity = 1;
-            }
-        }
-        else if(diff > 0)//increase quantity
-        {
-            if (Selected_item_quantity < 99)//below max quantity and affordable by player
-            {
-                if(Game_Load.Instance.playerData.playerMoney >= ( (Selected_item_quantity+1) * mart_items[top_index + Selected_item - 1].price))
-                {
-                    Selected_item_quantity += diff;
-                }  
-            }
-            else
-            {
-                Selected_item_quantity = 99;
-            }
+                selectedItemQuantity = 99;
         }
     }
-
-    public void View_store()
+    public void ViewStore()
     {
-        viewing_store = true;
-        Player_Money.text = Game_Load.Instance.playerData.playerMoney.ToString();
-        top_index = 0;
-        int num_i = 0;
-        num_items = mart_items.Count;
-        if (num_items < 8)//if less than amount of ui elements, load that number
-            num_i = num_items;
-        else //if greater than amount of ui elements just load the first seven
-            num_i = 7;
-        for (int i = 0; i < num_i; i++)
+        viewingStore = true;
+        playerMoneyText.text = Game_Load.Instance.playerData.playerMoney.ToString();
+        topIndex = 0;
+        numItems = storeItems.Count;
+        //if less than amount of ui elements, load that number, otherwise just load the first seven
+        var numItemsForView = (numItems < 8) ? numItems : 7; 
+        for (int i = 0; i < numItemsForView; i++)
         {
-            mart_items_ui[i].item = mart_items[i];
-            mart_items_ui[i].gameObject.SetActive(true);
-            mart_items_ui[i].Load_item();
+            storeItemsUI[i].item = storeItems[i];
+            storeItemsUI[i].gameObject.SetActive(true);
+            storeItemsUI[i].LoadItemUI();
         }
-        Select_Item(1);
+        SelectItem(1);
     }
-    public void Exit_Store()
+    public void ExitStore()
     {
-        Selected_item = 0;
-        buy.SetActive(false);
-        quantity_parent.SetActive(false);
-        mart_items_ui[0].Clear_ui();
-        viewing_store = false;
+        selectedItemIndex = 0;
+        purchaseButton.SetActive(false);
+        quantityUI.SetActive(false);
+        storeItemsUI[0].ResetUI();
+        viewingStore = false;
     }
-    void Reload_items()
+    void ReloadItems()
     {
-        mart_items_ui[0].Clear_ui();
-        foreach (Store_Item_ui itm in mart_items_ui)
+        storeItemsUI[0].ResetUI();
+        foreach (var item in storeItemsUI)
         {
-            itm.Load_item();
+            item.LoadItemUI();
         }
-        Select_Item(1);
+        SelectItem(1);
     }
 }

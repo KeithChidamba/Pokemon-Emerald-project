@@ -1,0 +1,117 @@
+{
+    "Base_Pokemon_name": "Mudkip",
+    "Pokemon_name": "Mudkip",
+    "Pokemon_ID": 8274281317167320773,
+    "Personality_value": 647442747,
+    "Gender": "Male",
+    "GenderRatio": "87,5/12,5",
+    "nature": {
+        "instanceID": 24966
+    },
+    "has_gender": true,
+    "HP": 14.0,
+    "max_HP": 14.0,
+    "BaseHP": 50.0,
+    "BaseAttack": 70.0,
+    "BaseDefense": 50.0,
+    "BaseSP_ATK": 50.0,
+    "BaseSP_DEF": 50.0,
+    "Basespeed": 40.0,
+    "Attack": 8.0,
+    "Defense": 7.0,
+    "SP_ATK": 7.0,
+    "SP_DEF": 7.0,
+    "speed": 6.0,
+    "HP_IV": 6.0,
+    "Attack_IV": 23.0,
+    "Defense_IV": 30.0,
+    "SP_ATK_IV": 14.0,
+    "SP_DEF_IV": 8.0,
+    "speed_IV": 13.0,
+    "HP_EV": 0.0,
+    "Attack_EV": 0.0,
+    "Defense_EV": 0.0,
+    "SP_ATK_EV": 0.0,
+    "SP_DEF_EV": 0.0,
+    "speed_EV": 0.0,
+    "EVs": [
+        "Attack1"
+    ],
+    "Accuracy": 100.0,
+    "Evasion": 100.0,
+    "crit_chance": 6.25,
+    "CatchRate": 45.0,
+    "Current_level": 2,
+    "CurrentExpAmount": 0,
+    "NextLevelExpAmount": 9.0,
+    "EXPGroup": "Medium Slow",
+    "exp_yield": 65,
+    "has_trainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "CanBeDamaged": true,
+    "types": [
+        {
+            "instanceID": 25208
+        }
+    ],
+    "Status_effect": "None",
+    "Buff_Debuffs": [],
+    "evo_line": [
+        "16",
+        "30"
+    ],
+    "RequiresEvolutionStone": false,
+    "EvolutionStoneName": "None",
+    "abilities": [
+        "Torrent"
+    ],
+    "split_evolution": false,
+    "learnSet": [
+        "normal/tackle01",
+        "water/bubble03",
+        "ground/mud slap05",
+        "water/water gun10"
+    ],
+    "move_set": [
+        {
+            "instanceID": -16968
+        }
+    ],
+    "ability": {
+        "instanceID": 25470
+    },
+    "evolutions": [
+        {
+            "instanceID": 25724
+        },
+        {
+            "instanceID": 25588
+        }
+    ],
+    "HeldItem": {
+        "instanceID": 0
+    },
+    "HasItem": false,
+    "front_picture": {
+        "instanceID": 32010
+    },
+    "back_picture": {
+        "instanceID": 32012
+    },
+    "ability_name": "Torrent",
+    "natureName": "Sassy",
+    "evo_data": [
+        "Marshtomp",
+        "Swampert"
+    ],
+    "type_data": [
+        "Water"
+    ],
+    "move_data": [
+        "Tackle/Normal"
+    ],
+    "move_pp_data": [
+        "20/20"
+    ]
+}

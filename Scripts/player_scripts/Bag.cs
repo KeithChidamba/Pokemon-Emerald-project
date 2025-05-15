@@ -40,8 +40,8 @@ public class Bag : MonoBehaviour
     }
     public void SelectItem(int itemPosition)
     {
-        selectedItem = itemPosition - 1;
-        bagItemsUI[selectedItem].LoadItemDescription();
+        selectedItem = itemPosition;
+        bagItemsUI[selectedItem-1].LoadItemDescription();
         if (sellingItems)
         {
             sellQuantity = 1;
@@ -193,7 +193,7 @@ public class Bag : MonoBehaviour
         }
         else
         {
-            if(Poke_Mart.instance.viewing_store)
+            if(Poke_Mart.Instance.viewingStore)
                 Game_ui_manager.Instance.CloseStore();
             Dialogue_handler.instance.Write_Info("Bag is full", "Details");
         }                                                                           

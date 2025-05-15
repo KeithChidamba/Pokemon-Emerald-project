@@ -2,75 +2,73 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Pokemon_party_member : MonoBehaviour
 {
-    public Text Pkm_name;
-    public Text Pkm_Lv;
-    public Image Pkm_front_img,Status_img;
-    public Slider pkm_hp;
-    public Pokemon pkm;
-    public int Party_pos = 0;
-    public GameObject Options;
-    public GameObject[] main_ui;
-    public GameObject empty_ui;
-    public GameObject HeldItem_img;
-    public Button TakeHeldItem_btn;
+    [FormerlySerializedAs("Pkm_name")] public Text pokemonNameText;
+    [FormerlySerializedAs("Pkm_Lv")] public Text pokemonLevelText;
+    [FormerlySerializedAs("Pkm_front_img")] public Image pokemonFrontImage;
+    [FormerlySerializedAs("Status_img")] public Image statusEffectImage;
+    [FormerlySerializedAs("pkm_hp")] public Slider pokemonHealthBarUI;
+    [FormerlySerializedAs("pkm")] public Pokemon pokemon;
+    public int partyPosition;
+    [FormerlySerializedAs("Options")] public GameObject options;
+    [FormerlySerializedAs("main_ui")] public GameObject[] mainUI;
+    [FormerlySerializedAs("empty_ui")] public GameObject emptySlotUI;
+    [FormerlySerializedAs("HeldItem_img")] public GameObject heldItemImage;
+    [FormerlySerializedAs("TakeHeldItem_btn")] public Button takeHeldItemButton;
     public bool isEmpty = false;
     private void Start()
     {
-        Options.SetActive(false);
+        options.SetActive(false);
     }
-    public void Levelup()
+    public void Levelup()//debugging purposes
     {
-        //debugging purposes
-        if(pkm==null)return;
-        int exp = PokemonOperations.CalculateExpForNextLevel(pkm.Current_level, pkm.EXPGroup)+1;
-        pkm.ReceiveExperience(exp);
-        pkm.HP=pkm.max_HP;
+        if(pokemon==null)return;
+        var exp = PokemonOperations.CalculateExpForNextLevel(pokemon.Current_level, pokemon.EXPGroup)+1;
+        pokemon.ReceiveExperience(exp);
+        pokemon.HP=pokemon.max_HP;
     }
-    public void Set_Ui()
+    public void ActivateUI()
     {
-        Pkm_front_img.sprite = pkm.front_picture;
-        foreach (GameObject ui in main_ui)
+        pokemonFrontImage.sprite = pokemon.front_picture;
+        foreach (var ui in mainUI)
             ui.SetActive(true);
         isEmpty = false;
-        empty_ui.SetActive(false);
-        HeldItem_img.SetActive(pkm.HasItem);
-        TakeHeldItem_btn.interactable = pkm.HasItem;
-        if (pkm.Status_effect == "None")
-            Status_img.gameObject.SetActive(false);
+        emptySlotUI.SetActive(false);
+        heldItemImage.SetActive(pokemon.HasItem);
+        takeHeldItemButton.interactable = pokemon.HasItem;
+        if (pokemon.Status_effect == "None")
+            statusEffectImage.gameObject.SetActive(false);
         else
         {
-            Status_img.gameObject.SetActive(true);
-            Status_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/"
-                                                       + pkm.Status_effect.Replace(" ","").ToLower());
+            statusEffectImage.gameObject.SetActive(true);
+            statusEffectImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/"
+                                                       + pokemon.Status_effect.Replace(" ","").ToLower());
         }
     }
-    public void Reset_ui()
+    public void ResetUI()
     {
-        foreach (GameObject ui in main_ui)
+        foreach (var ui in mainUI)
             ui.SetActive(false);
         isEmpty = true;
-        pkm = null;
-        HeldItem_img.gameObject.SetActive(false);
-        Status_img.gameObject.SetActive(false);
-        empty_ui.SetActive(true);
+        pokemon = null;
+        heldItemImage.gameObject.SetActive(false);
+        statusEffectImage.gameObject.SetActive(false);
+        emptySlotUI.SetActive(true);
     }
     private void Update()
     {
-        if (!isEmpty)
-        {
-            pkm_hp.value = pkm.HP;
-            pkm_hp.maxValue = pkm.max_HP;
-            pkm_hp.minValue = 0;
-            Pkm_Lv.text = "Lv: " + pkm.Current_level.ToString();
-            Pkm_name.text = pkm.Pokemon_name;
-            if (pkm.HP <= 0)
-                Pkm_front_img.color=Color.HSVToRGB(17,96,54);//pkm fainted
-            else
-                Pkm_front_img.color=Color.HSVToRGB(0,0,100);
-        }
+        if (isEmpty) return;
+        pokemonHealthBarUI.value = pokemon.HP;
+        pokemonHealthBarUI.maxValue = pokemon.max_HP;
+        pokemonHealthBarUI.minValue = 0;
+        pokemonLevelText.text = "Lv: " + pokemon.Current_level;
+        pokemonNameText.text = pokemon.Pokemon_name;
+        pokemonFrontImage.color = ((pokemon.HP <= 0))? 
+             Color.HSVToRGB(17, 96, 54)
+            :Color.HSVToRGB(0,0,100);
     }
 }

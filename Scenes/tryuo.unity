@@ -3462,7 +3462,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: change_quant
+        m_MethodName: ChangeItemQuantity
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3811,10 +3811,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
-  Price: {fileID: 319297259}
-  item_name: {fileID: 83585837}
-  item_description: {fileID: 968055022}
-  item_img: {fileID: 1850626300}
+  price: {fileID: 319297259}
+  itemName: {fileID: 83585837}
+  itemDescription: {fileID: 968055022}
+  itemImage: {fileID: 1850626300}
 --- !u!114 &95714750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3861,7 +3861,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3945,25 +3945,25 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  num_members: 0
-  Selected_member: 0
-  Member_to_Move: 0
+  numMembers: 0
+  selectedMemberIndex: 0
+  memberToMove: 0
   moving: 0
-  Swapping_in: 0
-  SwapOutNext: 0
-  viewing_details: 0
-  viewing_options: 0
-  viewing_party: 0
-  Giving_item: 0
-  Member_cards:
+  swappingIn: 0
+  swapOutNext: 0
+  viewingDetails: 0
+  viewingOptions: 0
+  viewingParty: 0
+  givingItem: 0
+  memberCards:
   - {fileID: 1216270925}
   - {fileID: 616383668}
   - {fileID: 644034380}
   - {fileID: 920685300}
   - {fileID: 698573225}
   - {fileID: 125591849}
-  party_ui: {fileID: 682367208}
-  member_indicator: {fileID: 1954685996}
+  partyUI: {fileID: 682367208}
+  memberIndicator: {fileID: 1954685996}
 --- !u!4 &100100231
 Transform:
   m_ObjectHideFlags: 0
@@ -4031,9 +4031,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7232ef78ffa609640957f220df0ce70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party_pos: 5
-  pkm_img: {fileID: 100425791}
-  pkm: {fileID: 0}
+  partyPosition: 5
+  pokemonSprite: {fileID: 0}
+  pokemon: {fileID: 0}
   options: {fileID: 551131091}
 --- !u!114 &100425791
 MonoBehaviour:
@@ -4628,23 +4628,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635662e11e6d86e4d8ae64a2b3f6d808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pkm_name: {fileID: 1646540690}
-  Pkm_Lv: {fileID: 74092554}
-  Pkm_front_img: {fileID: 2019594719}
-  Status_img: {fileID: 1489584227}
-  pkm_hp: {fileID: 80550801}
-  pkm: {fileID: 0}
-  Party_pos: 0
-  Options: {fileID: 1185534391}
-  main_ui:
+  pokemonNameText: {fileID: 1646540690}
+  pokemonLevelText: {fileID: 74092554}
+  pokemonFrontImage: {fileID: 2019594719}
+  statusEffectImage: {fileID: 1489584227}
+  pokemonHealthBarUI: {fileID: 80550801}
+  pokemon: {fileID: 0}
+  partyPosition: 6
+  options: {fileID: 1185534391}
+  mainUI:
   - {fileID: 685427839}
   - {fileID: 2019594716}
   - {fileID: 80550799}
   - {fileID: 1646540687}
   - {fileID: 74092551}
-  empty_ui: {fileID: 630311544}
-  HeldItem_img: {fileID: 1405492004}
-  TakeHeldItem_btn: {fileID: 1661506635}
+  emptySlotUI: {fileID: 630311544}
+  heldItemImage: {fileID: 1405492004}
+  takeHeldItemButton: {fileID: 1661506635}
   isEmpty: 0
 --- !u!224 &125591850
 RectTransform:
@@ -9132,28 +9132,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4e1a2327e555654f84be1bd96132529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mart_items:
+  storeItems:
+  - {fileID: 11400000, guid: 786cbaaf3a4d5444f84826c78c8c2c28, type: 2}
   - {fileID: 11400000, guid: 74de7d2c2ec6cf04a94d924a69fb7677, type: 2}
   - {fileID: 11400000, guid: 298b4b511499bc5bab4e6536cc5e2db0, type: 2}
   - {fileID: 11400000, guid: bbf8f3c9e78a1f545b93d07924e0b10c, type: 2}
-  - {fileID: 11400000, guid: 068a8fce4f2bf1675ad92edc8cc0e97e, type: 2}
-  - {fileID: 11400000, guid: 7ad6c5da8379d1444a6d58684a5a3ebe, type: 2}
-  - {fileID: 11400000, guid: 2f70d8cf599d161449cf3b248842013d, type: 2}
-  - {fileID: 11400000, guid: 2971f0d1ef85ba44a874a6e765631d6b, type: 2}
-  - {fileID: 11400000, guid: ed582cc298cf1af429facd2f75ef230f, type: 2}
-  - {fileID: 11400000, guid: 7888205ce0e84d443b42a52129737d64, type: 2}
-  - {fileID: 11400000, guid: 7bd06e7fd82ccd84287ad4082f2768cd, type: 2}
-  - {fileID: 11400000, guid: b5c5fea330546694b9375ab834137de9, type: 2}
-  - {fileID: 11400000, guid: be8ce41201d6ebc4eb61ef28491ff841, type: 2}
-  - {fileID: 11400000, guid: ba1d78b859371bf48a68f1fa3df43b27, type: 2}
   - {fileID: 11400000, guid: e29610323c1a9b70eb8888076953b70a, type: 2}
-  - {fileID: 11400000, guid: bd1890fa94a38d84b8185a950d7bdbf0, type: 2}
-  - {fileID: 11400000, guid: e7cf064fae39c411ab988019c8396d16, type: 2}
-  - {fileID: 11400000, guid: a9e80ce5b26eb8b4db5a9eb0aa81bd85, type: 2}
-  - {fileID: 11400000, guid: 786cbaaf3a4d5444f84826c78c8c2c28, type: 2}
   - {fileID: 11400000, guid: f735ee6ad29e58e49810fcc6ba7a60bc, type: 2}
-  viewing_store: 0
-  mart_items_ui:
+  - {fileID: 11400000, guid: 2f70d8cf599d161449cf3b248842013d, type: 2}
+  - {fileID: 11400000, guid: ba1d78b859371bf48a68f1fa3df43b27, type: 2}
+  - {fileID: 11400000, guid: 7888205ce0e84d443b42a52129737d64, type: 2}
+  - {fileID: 11400000, guid: 068a8fce4f2bf1675ad92edc8cc0e97e, type: 2}
+  - {fileID: 11400000, guid: b5c5fea330546694b9375ab834137de9, type: 2}
+  - {fileID: 11400000, guid: 7ad6c5da8379d1444a6d58684a5a3ebe, type: 2}
+  - {fileID: 11400000, guid: be8ce41201d6ebc4eb61ef28491ff841, type: 2}
+  - {fileID: 11400000, guid: 2971f0d1ef85ba44a874a6e765631d6b, type: 2}
+  - {fileID: 11400000, guid: a9e80ce5b26eb8b4db5a9eb0aa81bd85, type: 2}
+  - {fileID: 11400000, guid: bd1890fa94a38d84b8185a950d7bdbf0, type: 2}
+  - {fileID: 11400000, guid: 7bd06e7fd82ccd84287ad4082f2768cd, type: 2}
+  - {fileID: 11400000, guid: ed582cc298cf1af429facd2f75ef230f, type: 2}
+  - {fileID: 11400000, guid: e7cf064fae39c411ab988019c8396d16, type: 2}
+  viewingStore: 0
+  storeItemsUI:
   - {fileID: 811032170}
   - {fileID: 1629910213}
   - {fileID: 95714749}
@@ -9161,15 +9161,15 @@ MonoBehaviour:
   - {fileID: 1915389415}
   - {fileID: 2097081414}
   - {fileID: 2006514070}
-  num_items: 0
-  Selected_item: 0
-  Selected_item_quantity: 0
-  top_index: 0
-  buy: {fileID: 2046886019}
-  mart_ui: {fileID: 814604280}
-  quantity_parent: {fileID: 1405462731}
+  numItems: 0
+  selectedItemIndex: 0
+  selectedItemQuantity: 0
+  topIndex: 0
+  purchaseButton: {fileID: 2046886019}
+  storeUI: {fileID: 814604280}
+  quantityUI: {fileID: 1405462731}
   quantity: {fileID: 1083681939}
-  Player_Money: {fileID: 423028729}
+  playerMoneyText: {fileID: 423028729}
 --- !u!4 &261260553
 Transform:
   m_ObjectHideFlags: 0
@@ -10374,8 +10374,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e41005956c80ea4d8169744f83c349d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pkm: {fileID: 0}
-  pkm_sprite: {fileID: 296821394}
+  pokemon: {fileID: 0}
+  pokemonSprite: {fileID: 0}
 --- !u!114 &296821394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10800,7 +10800,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: change_quant
+        m_MethodName: ChangeItemQuantity
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15370,7 +15370,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Go_Up
+        m_MethodName: NavigateUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18737,9 +18737,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7232ef78ffa609640957f220df0ce70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party_pos: 1
-  pkm_img: {fileID: 591072022}
-  pkm: {fileID: 0}
+  partyPosition: 1
+  pokemonSprite: {fileID: 0}
+  pokemon: {fileID: 0}
   options: {fileID: 1206404536}
 --- !u!114 &591072022
 MonoBehaviour:
@@ -19920,23 +19920,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635662e11e6d86e4d8ae64a2b3f6d808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pkm_name: {fileID: 1424151352}
-  Pkm_Lv: {fileID: 555920685}
-  Pkm_front_img: {fileID: 417229423}
-  Status_img: {fileID: 1457961434}
-  pkm_hp: {fileID: 1525119334}
-  pkm: {fileID: 0}
-  Party_pos: 0
-  Options: {fileID: 1542286615}
-  main_ui:
+  pokemonNameText: {fileID: 1424151352}
+  pokemonLevelText: {fileID: 555920685}
+  pokemonFrontImage: {fileID: 417229423}
+  statusEffectImage: {fileID: 1457961434}
+  pokemonHealthBarUI: {fileID: 1525119334}
+  pokemon: {fileID: 0}
+  partyPosition: 2
+  options: {fileID: 1542286615}
+  mainUI:
   - {fileID: 215878850}
   - {fileID: 417229421}
   - {fileID: 1525119332}
   - {fileID: 1424151350}
   - {fileID: 555920683}
-  empty_ui: {fileID: 93984539}
-  HeldItem_img: {fileID: 524972687}
-  TakeHeldItem_btn: {fileID: 2115958156}
+  emptySlotUI: {fileID: 93984539}
+  heldItemImage: {fileID: 524972687}
+  takeHeldItemButton: {fileID: 2115958156}
   isEmpty: 0
 --- !u!114 &616383669
 MonoBehaviour:
@@ -21398,23 +21398,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635662e11e6d86e4d8ae64a2b3f6d808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pkm_name: {fileID: 677776762}
-  Pkm_Lv: {fileID: 1409256374}
-  Pkm_front_img: {fileID: 1317746958}
-  Status_img: {fileID: 1144923000}
-  pkm_hp: {fileID: 347697869}
-  pkm: {fileID: 0}
-  Party_pos: 0
-  Options: {fileID: 1382960931}
-  main_ui:
+  pokemonNameText: {fileID: 677776762}
+  pokemonLevelText: {fileID: 1409256374}
+  pokemonFrontImage: {fileID: 1317746958}
+  statusEffectImage: {fileID: 1144923000}
+  pokemonHealthBarUI: {fileID: 347697869}
+  pokemon: {fileID: 0}
+  partyPosition: 3
+  options: {fileID: 1382960931}
+  mainUI:
   - {fileID: 1636204922}
   - {fileID: 1317746955}
   - {fileID: 347697867}
   - {fileID: 677776759}
   - {fileID: 1409256371}
-  empty_ui: {fileID: 218440258}
-  HeldItem_img: {fileID: 807462336}
-  TakeHeldItem_btn: {fileID: 400794034}
+  emptySlotUI: {fileID: 218440258}
+  heldItemImage: {fileID: 807462336}
+  takeHeldItemButton: {fileID: 400794034}
   isEmpty: 0
 --- !u!224 &644034381
 RectTransform:
@@ -22861,10 +22861,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c48e59755041e584997a5e70fbf73be7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_name: {fileID: 1832286414}
-  player_money: {fileID: 1841323215}
-  TrainerID: {fileID: 1921761837}
-  Viewing_profile: 0
+  playerName: {fileID: 1832286414}
+  playerMoney: {fileID: 1841323215}
+  trainerID: {fileID: 1921761837}
+  viewingProfile: 0
 --- !u!1 &690917497
 GameObject:
   m_ObjectHideFlags: 0
@@ -23184,23 +23184,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635662e11e6d86e4d8ae64a2b3f6d808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pkm_name: {fileID: 1314105029}
-  Pkm_Lv: {fileID: 1445825010}
-  Pkm_front_img: {fileID: 757401343}
-  Status_img: {fileID: 1837177799}
-  pkm_hp: {fileID: 279946563}
-  pkm: {fileID: 0}
-  Party_pos: 0
-  Options: {fileID: 930964458}
-  main_ui:
+  pokemonNameText: {fileID: 1314105029}
+  pokemonLevelText: {fileID: 1445825010}
+  pokemonFrontImage: {fileID: 757401343}
+  statusEffectImage: {fileID: 1837177799}
+  pokemonHealthBarUI: {fileID: 279946563}
+  pokemon: {fileID: 0}
+  partyPosition: 5
+  options: {fileID: 930964458}
+  mainUI:
   - {fileID: 394100806}
   - {fileID: 757401340}
   - {fileID: 279946561}
   - {fileID: 1314105026}
   - {fileID: 1445825007}
-  empty_ui: {fileID: 2070867562}
-  HeldItem_img: {fileID: 14262317}
-  TakeHeldItem_btn: {fileID: 171432877}
+  emptySlotUI: {fileID: 2070867562}
+  heldItemImage: {fileID: 14262317}
+  takeHeldItemButton: {fileID: 171432877}
   isEmpty: 0
 --- !u!224 &698573226
 RectTransform:
@@ -28366,7 +28366,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -28427,10 +28427,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
-  Price: {fileID: 286323681}
-  item_name: {fileID: 591361036}
-  item_description: {fileID: 968055022}
-  item_img: {fileID: 1850626300}
+  price: {fileID: 286323681}
+  itemName: {fileID: 591361036}
+  itemDescription: {fileID: 968055022}
+  itemImage: {fileID: 1850626300}
 --- !u!1 &812897150
 GameObject:
   m_ObjectHideFlags: 0
@@ -30510,10 +30510,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
-  Price: {fileID: 2042481450}
-  item_name: {fileID: 1657565257}
-  item_description: {fileID: 968055022}
-  item_img: {fileID: 1850626300}
+  price: {fileID: 2042481450}
+  itemName: {fileID: 1657565257}
+  itemDescription: {fileID: 968055022}
+  itemImage: {fileID: 1850626300}
 --- !u!114 &900446231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30560,7 +30560,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -31407,23 +31407,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635662e11e6d86e4d8ae64a2b3f6d808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pkm_name: {fileID: 837433602}
-  Pkm_Lv: {fileID: 2053874436}
-  Pkm_front_img: {fileID: 1268647952}
-  Status_img: {fileID: 939920381}
-  pkm_hp: {fileID: 782409712}
-  pkm: {fileID: 0}
-  Party_pos: 0
-  Options: {fileID: 1714986929}
-  main_ui:
+  pokemonNameText: {fileID: 837433602}
+  pokemonLevelText: {fileID: 2053874436}
+  pokemonFrontImage: {fileID: 1268647952}
+  statusEffectImage: {fileID: 939920381}
+  pokemonHealthBarUI: {fileID: 782409712}
+  pokemon: {fileID: 0}
+  partyPosition: 4
+  options: {fileID: 1714986929}
+  mainUI:
   - {fileID: 1816840660}
   - {fileID: 1268647949}
   - {fileID: 782409710}
   - {fileID: 837433599}
   - {fileID: 2053874433}
-  empty_ui: {fileID: 741638278}
-  HeldItem_img: {fileID: 1918374907}
-  TakeHeldItem_btn: {fileID: 1883509786}
+  emptySlotUI: {fileID: 741638278}
+  heldItemImage: {fileID: 1918374907}
+  takeHeldItemButton: {fileID: 1883509786}
   isEmpty: 0
 --- !u!224 &920685301
 RectTransform:
@@ -34088,9 +34088,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7232ef78ffa609640957f220df0ce70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party_pos: 6
-  pkm_img: {fileID: 1041801306}
-  pkm: {fileID: 0}
+  partyPosition: 6
+  pokemonSprite: {fileID: 0}
+  pokemon: {fileID: 0}
   options: {fileID: 39356509}
 --- !u!114 &1041801306
 MonoBehaviour:
@@ -34769,9 +34769,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7232ef78ffa609640957f220df0ce70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party_pos: 4
-  pkm_img: {fileID: 1068557185}
-  pkm: {fileID: 0}
+  partyPosition: 4
+  pokemonSprite: {fileID: 0}
+  pokemon: {fileID: 0}
   options: {fileID: 147888247}
 --- !u!114 &1068557185
 MonoBehaviour:
@@ -39739,23 +39739,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635662e11e6d86e4d8ae64a2b3f6d808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pkm_name: {fileID: 608684885}
-  Pkm_Lv: {fileID: 1066947441}
-  Pkm_front_img: {fileID: 1920848970}
-  Status_img: {fileID: 848811388}
-  pkm_hp: {fileID: 1761249113}
-  pkm: {fileID: 0}
-  Party_pos: 0
-  Options: {fileID: 17691962}
-  main_ui:
+  pokemonNameText: {fileID: 608684885}
+  pokemonLevelText: {fileID: 1066947441}
+  pokemonFrontImage: {fileID: 1920848970}
+  statusEffectImage: {fileID: 848811388}
+  pokemonHealthBarUI: {fileID: 1761249113}
+  pokemon: {fileID: 0}
+  partyPosition: 1
+  options: {fileID: 17691962}
+  mainUI:
   - {fileID: 2024210777}
   - {fileID: 1920848968}
   - {fileID: 1761249111}
   - {fileID: 608684883}
   - {fileID: 1066947439}
-  empty_ui: {fileID: 1173366040}
-  HeldItem_img: {fileID: 1075351109}
-  TakeHeldItem_btn: {fileID: 183954981}
+  emptySlotUI: {fileID: 1173366040}
+  heldItemImage: {fileID: 1075351109}
+  takeHeldItemButton: {fileID: 183954981}
   isEmpty: 0
 --- !u!114 &1216270926
 MonoBehaviour:
@@ -66126,7 +66126,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Go_Down
+        m_MethodName: NavigateDown
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -72765,10 +72765,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
-  Price: {fileID: 1840717315}
-  item_name: {fileID: 1054597634}
-  item_description: {fileID: 968055022}
-  item_img: {fileID: 1850626300}
+  price: {fileID: 1840717315}
+  itemName: {fileID: 1054597634}
+  itemDescription: {fileID: 968055022}
+  itemImage: {fileID: 1850626300}
 --- !u!114 &1629910214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72815,7 +72815,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -81273,9 +81273,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7232ef78ffa609640957f220df0ce70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party_pos: 2
-  pkm_img: {fileID: 1896785822}
-  pkm: {fileID: 0}
+  partyPosition: 2
+  pokemonSprite: {fileID: 0}
+  pokemon: {fileID: 0}
   options: {fileID: 1597189062}
 --- !u!114 &1896785822
 MonoBehaviour:
@@ -95454,10 +95454,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
-  Price: {fileID: 1276837400}
-  item_name: {fileID: 1863779584}
-  item_description: {fileID: 968055022}
-  item_img: {fileID: 1850626300}
+  price: {fileID: 1276837400}
+  itemName: {fileID: 1863779584}
+  itemDescription: {fileID: 968055022}
+  itemImage: {fileID: 1850626300}
 --- !u!114 &1915389416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95504,7 +95504,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -98502,10 +98502,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
-  Price: {fileID: 71447123}
-  item_name: {fileID: 173013187}
-  item_description: {fileID: 968055022}
-  item_img: {fileID: 1850626300}
+  price: {fileID: 71447123}
+  itemName: {fileID: 173013187}
+  itemDescription: {fileID: 968055022}
+  itemImage: {fileID: 1850626300}
 --- !u!114 &2006514071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98552,7 +98552,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -100319,7 +100319,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Buy
+        m_MethodName: BuyItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -101697,10 +101697,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
-  Price: {fileID: 482864440}
-  item_name: {fileID: 159552583}
-  item_description: {fileID: 968055022}
-  item_img: {fileID: 1850626300}
+  price: {fileID: 482864440}
+  itemName: {fileID: 159552583}
+  itemDescription: {fileID: 968055022}
+  itemImage: {fileID: 1850626300}
 --- !u!114 &2097081415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101747,7 +101747,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 261260552}
         m_TargetAssemblyTypeName: Poke_Mart, Assembly-CSharp
-        m_MethodName: Select_Item
+        m_MethodName: SelectItem
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -101928,9 +101928,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7232ef78ffa609640957f220df0ce70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  party_pos: 3
-  pkm_img: {fileID: 2099830504}
-  pkm: {fileID: 0}
+  partyPosition: 3
+  pokemonSprite: {fileID: 0}
+  pokemon: {fileID: 0}
   options: {fileID: 139910316}
 --- !u!114 &2099830504
 MonoBehaviour:

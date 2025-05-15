@@ -78,8 +78,8 @@ public class pokemon_storage : MonoBehaviour
         if (swapping)
         {
             storage_operetation = true;
-            Pokemon store = Pokemon_party.Instance.party[party_pkm.party_pos - 1];
-            Pokemon_party.Instance.party[party_pkm.party_pos - 1] = Add_pokemon(search_pkm(select_pkm_ID));
+            Pokemon store = Pokemon_party.Instance.party[party_pkm.partyPosition - 1];
+            Pokemon_party.Instance.party[party_pkm.partyPosition - 1] = Add_pokemon(search_pkm(select_pkm_ID));
             non_party_pokemon[search_pkm_pos(select_pkm_ID)] = Add_pokemon(store);
             swapping = false;
             Remove_pkm_icons();
@@ -99,7 +99,7 @@ public class pokemon_storage : MonoBehaviour
     void LoadOptions()
     {
         foreach (GameObject icon in pkm_icons)
-            icon.GetComponent<PC_pkm>().pkm_sprite.color=Color.HSVToRGB(0,0,100);
+            icon.GetComponent<PC_pkm>().pokemonSprite.color=Color.HSVToRGB(0,0,100);
         foreach (var btn in Storage_options)
             btn.interactable = true;
     }
@@ -134,51 +134,43 @@ public class pokemon_storage : MonoBehaviour
             DisableOptions();
             LoadOptions();
             Pkm_selected = true;
-            select_pkm_ID = pkm_icon.pkm.Pokemon_ID.ToString();
-            pkm_icon.pkm_sprite.color=Color.HSVToRGB(17,96,54);
+            select_pkm_ID = pkm_icon.pokemon.Pokemon_ID.ToString();
+            pkm_icon.pokemonSprite.color=Color.HSVToRGB(17,96,54);
         }
     }
     void Remove_pkm_icons()
     {
         pkm_icons.Clear();
-        for(int i = 0;i<storage_positions.childCount;i++)
-            Destroy(storage_positions.GetChild(i).GetChild(0).gameObject);
+        for (int i = 0; i < storage_positions.childCount; i++)
+        {
+            var currentIconPosition = storage_positions.GetChild(i);
+            if (currentIconPosition.childCount < 1) continue;
+            Destroy(currentIconPosition.GetChild(0).gameObject);
+        }
         foreach (GameObject pos in pkm_party_icons)
         {
             pos.SetActive(false);
-            pos.GetComponent<PC_party_pkm>().pkm = null;
+            pos.GetComponent<PC_party_pkm>().pokemon = null;
         }
     }
     private void Set_pkm_icon()
     {
-        int num = 0;
-        foreach (Transform pos in storage_positions)
+        for (var i = 0;i<non_party_pokemon.Count;i++)
         {
-            GameObject pkm = Instantiate(pkm_icon, pos);
-            pkm_icons.Add(pkm);
+            if (non_party_pokemon[i] == null) continue;
+            var pokemonIcon = Instantiate(pkm_icon, storage_positions.GetChild(i));
+            pokemonIcon.SetActive(true);
+            pokemonIcon.GetComponent<PC_pkm>().pokemon = non_party_pokemon[i];
+            pokemonIcon.GetComponent<PC_pkm>().LoadImage();
+            pkm_icons.Add(pokemonIcon);
         }
-        foreach (Pokemon mon in non_party_pokemon)
+        for (var i = 0;i < num_party_members;i++)
         {
-            if (mon != null)
-            {
-                pkm_icons[num].SetActive(true);
-                pkm_icons[num].GetComponent<PC_pkm>().pkm = mon;
-                pkm_icons[num].GetComponent<PC_pkm>().Load_image();
-                storage_operetation = true;
-                num++;
-            }
-        }
-        num = 0;
-        foreach (Pokemon mon in Pokemon_party.Instance.party)
-        {
-            if (mon != null)
-            {
-                pkm_party_icons[num].SetActive(true);
-                pkm_party_icons[num].GetComponent<PC_party_pkm>().pkm = mon;
-                pkm_party_icons[num].GetComponent<PC_party_pkm>().Load_image();
-                storage_operetation = true;
-                num++;
-            }
+            if (Pokemon_party.Instance.party[i] == null) continue;
+            pkm_party_icons[i].SetActive(true);
+            pkm_party_icons[i].GetComponent<PC_party_pkm>().pokemon = Pokemon_party.Instance.party[i] ;
+            pkm_party_icons[i].GetComponent<PC_party_pkm>().LoadImage();
+            storage_operetation = true;
         }
         storage_operetation = false;
         storage_positions.gameObject.SetActive(true);
@@ -187,7 +179,7 @@ public class pokemon_storage : MonoBehaviour
     {
         if (num_party_members > 1)
         {
-            Pokemon_party.Instance.RemoveMember(pkm.party_pos);
+            Pokemon_party.Instance.RemoveMember(pkm.partyPosition);
             num_party_members--;
             num_non_party_pokemon++;
             RefreshUi();

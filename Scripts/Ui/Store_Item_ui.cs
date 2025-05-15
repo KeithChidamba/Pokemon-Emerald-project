@@ -1,26 +1,27 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Store_Item_ui : MonoBehaviour
 {
     public Item item;
-    public Text Price;
-    public Text item_name;
-    public Text item_description;
-    public Image item_img;
-    public void Load_item()
+    [FormerlySerializedAs("Price")] public Text price;
+    [FormerlySerializedAs("item_name")] public Text itemName;
+    [FormerlySerializedAs("item_description")] public Text itemDescription;
+    [FormerlySerializedAs("item_img")] public Image itemImage;
+    public void LoadItemUI()
     {
-        item_name.text = item.itemName;
-        Price.text = item.price.ToString();
+        itemName.text = item.itemName;
+        price.text = item.price.ToString();
     }
-    public void Load_item_info()
+    public void LoadItemDescription()
     {
-        item_description.text = item.itemDescription;
-        item_img.sprite = item.itemImage;
+        itemDescription.text = item.itemDescription;
+        itemImage.sprite = item.itemImage;
     }
-    public void Clear_ui()
+    public void ResetUI()
     {
-        item_description.text = "";
-        item_img.sprite = null;
+        itemDescription.text = "";
+        itemImage.sprite = null;
     }
 }

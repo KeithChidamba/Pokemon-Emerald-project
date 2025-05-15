@@ -23,9 +23,9 @@ public class Game_ui_manager : MonoBehaviour
     private void Update()
     {
         if (overworld_actions.Instance == null) return;
-            Ui_inputs();
+            UiInputs();
     }
-    private void Ui_inputs()
+    private void UiInputs()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !overworld_actions.Instance.usingUI && !overworld_actions.Instance.doingAction &&!viewingMenu)
         {
@@ -45,13 +45,13 @@ public class Game_ui_manager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && Bag.Instance.viewingBag)
             CloseBag();
         
-        if (Input.GetKeyDown(KeyCode.Escape) && profile.Viewing_profile)
+        if (Input.GetKeyDown(KeyCode.Escape) && profile.viewingProfile)
         {
             profile.gameObject.SetActive(false);
-            profile.Viewing_profile = false;
+            profile.viewingProfile = false;
             ResetPlayerMovement();
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && Poke_Mart.instance.viewing_store)
+        if (Input.GetKeyDown(KeyCode.Escape) && Poke_Mart.Instance.viewingStore)
         {
             CloseStore();
             Dialogue_handler.instance.Write_Info("Would you like anything else?", "Options", "BuyMore","Sure, what would you like","DontBuyMore","Yes","No");
@@ -69,8 +69,8 @@ public class Game_ui_manager : MonoBehaviour
     }
     public void CloseStore()
     {
-        Poke_Mart.instance.Exit_Store();
-        Poke_Mart.instance.mart_ui.SetActive(false);
+        Poke_Mart.Instance.ExitStore();
+        Poke_Mart.Instance.storeUI.SetActive(false);
         ResetPlayerMovement();
     }
     public void CloseBag()
@@ -106,8 +106,8 @@ public class Game_ui_manager : MonoBehaviour
     }
     public void ViewMarket()
     {
-        ActivateUiElement(Poke_Mart.instance.mart_ui);
-        Poke_Mart.instance.View_store();
+        ActivateUiElement(Poke_Mart.Instance.storeUI);
+        Poke_Mart.Instance.ViewStore();
     }
     public void ViewBag()
     {
