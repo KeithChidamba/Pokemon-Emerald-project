@@ -77,26 +77,26 @@ public class Save_manager : MonoBehaviour
         CreateFolder("Assets/Save_data/Party_Ids");
         partyIDs.Clear();
         GetPartyPokemonIDs();
-        for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
+        for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
         {
             var pokemon = LoadPokemonFromJson("Assets/Save_data/Pokemon/" + partyIDs[i] + ".json");
             LoadHeldItems(pokemon);
             Pokemon_party.Instance.party[i] = pokemon;
             Pokemon_party.Instance.numMembers++;
         }
-        pokemon_storage.instance.non_party_pokemon.Clear();
+        pokemon_storage.Instance.nonPartyPokemon.Clear();
         var pokemonList = GetJsonFilesFromPath("Assets/Save_data/Pokemon/");
         foreach(var file in pokemonList)
         {
             var fileName = Path.GetFileName(file);//filename is the pokemon id
-            if (!pokemon_storage.instance.IsPartyPokemon(RemoveFileExtension(fileName)))
+            if (!pokemon_storage.Instance.IsPartyPokemon(RemoveFileExtension(fileName)))
             {
                 var nonPartyPokemon = LoadPokemonFromJson("Assets/Save_data/Pokemon/" + fileName);
                 LoadHeldItems(nonPartyPokemon);
-                pokemon_storage.instance.non_party_pokemon.Add(nonPartyPokemon);
-                pokemon_storage.instance.num_non_party_pokemon++;
+                pokemon_storage.Instance.nonPartyPokemon.Add(nonPartyPokemon);
+                pokemon_storage.Instance.numNonPartyPokemon++;
             }
-            pokemon_storage.instance.num_pokemon++;
+            pokemon_storage.Instance.totalPokemonCount++;
         }
     }
 
@@ -134,19 +134,19 @@ public class Save_manager : MonoBehaviour
     {
         Dialogue_handler.instance.Write_Info("Saving...", "Details");
         EraseSaveData();
-        for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
+        for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
         {
             Pokemon_party.Instance.party[i].SaveUnserializableData();
             if(Pokemon_party.Instance.party[i].HasItem)
                 SaveHeldItem(Pokemon_party.Instance.party[i].HeldItem, Pokemon_party.Instance.party[i].Pokemon_ID.ToString());
             SavePokemonDataAsJson(Pokemon_party.Instance.party[i]);
         }
-        for (int i = 0; i < pokemon_storage.instance.num_non_party_pokemon; i++)
+        for (int i = 0; i < pokemon_storage.Instance.numNonPartyPokemon; i++)
         {
-            pokemon_storage.instance.non_party_pokemon[i].SaveUnserializableData();
-            if(pokemon_storage.instance.non_party_pokemon[i].HasItem)
-                SaveHeldItem(pokemon_storage.instance.non_party_pokemon[i].HeldItem, pokemon_storage.instance.non_party_pokemon[i].Pokemon_ID.ToString());
-            SavePokemonDataAsJson(pokemon_storage.instance.non_party_pokemon[i]);
+            pokemon_storage.Instance.nonPartyPokemon[i].SaveUnserializableData();
+            if(pokemon_storage.Instance.nonPartyPokemon[i].HasItem)
+                SaveHeldItem(pokemon_storage.Instance.nonPartyPokemon[i].HeldItem, pokemon_storage.Instance.nonPartyPokemon[i].Pokemon_ID.ToString());
+            SavePokemonDataAsJson(pokemon_storage.Instance.nonPartyPokemon[i]);
         }
         for (int i = 0; i < Bag.Instance.numItems; i++)
             SaveItemDataAsJson(Bag.Instance.bagItems[i], Bag.Instance.bagItems[i].itemID);
@@ -159,7 +159,7 @@ public class Save_manager : MonoBehaviour
     }
     private void GetPartyPokemonIDs()
     {
-        pokemon_storage.instance.num_party_members = 0;
+        pokemon_storage.Instance.numPartyMembers = 0;
         var numIds = 0;
         var files = Directory.GetFiles("Assets/Save_data/Party_Ids/");
         foreach(var file in files)
@@ -169,12 +169,12 @@ public class Save_manager : MonoBehaviour
         {
             var currentID = File.ReadAllText("Assets/Save_data/Party_Ids/" + "pkm_" + (i + 1) + ".txt");
             partyIDs.Add(currentID);
-            pokemon_storage.instance.num_party_members++;
+            pokemon_storage.Instance.numPartyMembers++;
         }
     }
     private void SavePartyPokemonIDs()
     {
-        for (int i = 0; i < pokemon_storage.instance.num_party_members; i++)
+        for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
         {
             var path = Path.Combine("Assets/Save_data/Party_Ids/", "pkm_" + (i + 1) + ".txt");
             File.WriteAllText(path, Pokemon_party.Instance.party[i].Pokemon_ID.ToString());

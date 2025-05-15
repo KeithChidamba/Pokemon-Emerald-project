@@ -150,9 +150,11 @@ public static class PokemonOperations
         LearningNewMove = true;
         CurrentPkm = pokemon;
         var counter = 0;
+        
         foreach (var move in CurrentPkm.learnSet)
         {
             var requiredLevel = int.Parse(move.Substring(move.Length - 2, 2));
+            
             if (CurrentPkm.Current_level == requiredLevel)
             {
                 var pos = move.IndexOf('/')+1;
@@ -162,7 +164,8 @@ public static class PokemonOperations
                 {//leveling up from battle or rare candies
                     if(Options_manager.Instance.playerInBattle || Pokemon_party.Instance.party.Contains(CurrentPkm))
                     {
-                        Battle_handler.Instance.displayingInfo = true;
+                        if(Options_manager.Instance.playerInBattle)
+                            Battle_handler.Instance.displayingInfo = true;
                         Dialogue_handler.instance.Write_Info(
                             CurrentPkm.Pokemon_name + " is trying to learn " + moveName + ", do you want it to learn " + moveName +
                             "?", "Options", "LearnMove", "", "SkipMove", "Yes", "No");
@@ -190,9 +193,9 @@ public static class PokemonOperations
     }
     public static void LearnSelectedMove(int moveIndex)
     {
-        Pokemon_Details.instance.OnMoveSelected -= LearnSelectedMove;
-        Pokemon_Details.instance.LearningMove = false;
-        Pokemon_Details.instance.Exit_details();
+        Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
+        Pokemon_Details.Instance.learningMove = false;
+        Pokemon_Details.Instance.ExitDetails();
         Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" forgot "+CurrentPkm.move_set[moveIndex].Move_name+" and learned "+NewMove.Move_name);
         CurrentPkm.move_set[moveIndex] = Obj_Instance.CreateMove(NewMove);
         Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);

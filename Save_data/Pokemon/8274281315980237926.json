@@ -6,22 +6,22 @@
     "Gender": "Male",
     "GenderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25184
+        "instanceID": 25212
     },
     "has_gender": true,
     "HP": 13.0,
-    "max_HP": 13.0,
+    "max_HP": 38.0,
     "BaseHP": 40.0,
     "BaseAttack": 45.0,
     "BaseDefense": 35.0,
     "BaseSP_ATK": 65.0,
     "BaseSP_DEF": 55.0,
     "Basespeed": 70.0,
-    "Attack": 7.0,
-    "Defense": 6.0,
-    "SP_ATK": 8.0,
-    "SP_DEF": 6.0,
-    "speed": 7.0,
+    "Attack": 20.0,
+    "Defense": 16.0,
+    "SP_ATK": 29.0,
+    "SP_DEF": 22.0,
+    "speed": 26.0,
     "HP_IV": 13.0,
     "Attack_IV": 11.0,
     "Defense_IV": 9.0,
@@ -41,9 +41,9 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "CatchRate": 45.0,
-    "Current_level": 2,
-    "CurrentExpAmount": 0,
-    "NextLevelExpAmount": 9.0,
+    "Current_level": 15,
+    "CurrentExpAmount": 1613,
+    "NextLevelExpAmount": 2035.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25610
+            "instanceID": 25638
         }
     ],
     "Status_effect": "None",
@@ -75,18 +75,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -17218
+            "instanceID": -9502
+        },
+        {
+            "instanceID": -9504
+        },
+        {
+            "instanceID": -9506
+        },
+        {
+            "instanceID": -9508
         }
     ],
     "ability": {
-        "instanceID": 25836
+        "instanceID": 25864
     },
     "evolutions": [
         {
-            "instanceID": 25990
+            "instanceID": 26018
         },
         {
-            "instanceID": 24942
+            "instanceID": 24970
         }
     ],
     "HeldItem": {
@@ -94,10 +103,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 31970
+        "instanceID": 31998
     },
     "back_picture": {
-        "instanceID": 32000
+        "instanceID": 32028
     },
     "ability_name": "Overgrow",
     "natureName": "Rash",
@@ -109,9 +118,15 @@
         "Grass"
     ],
     "move_data": [
-        "Pound/Normal"
+        "Pound/Normal",
+        "Absorb/Grass",
+        "Quick attack/Normal",
+        "Bullet seed/Grass"
     ],
     "move_pp_data": [
-        "25/25"
+        "25/25",
+        "20/20",
+        "25/25",
+        "20/20"
     ]
 }

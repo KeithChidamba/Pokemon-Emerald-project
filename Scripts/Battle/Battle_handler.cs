@@ -418,8 +418,8 @@ public void SetParticipant(Battle_Participant participant)
             {
                 yield return new WaitUntil(() => Options_manager.Instance.selectedNewMoveOption);
                 yield return new WaitForSeconds(0.5f);
-                if (Pokemon_Details.instance.LearningMove)
-                    yield return new WaitUntil(() => !Pokemon_Details.instance.LearningMove);
+                if (Pokemon_Details.Instance.learningMove)
+                    yield return new WaitUntil(() => !Pokemon_Details.Instance.learningMove);
                 else
                     Turn_Based_Combat.Instance.levelEventDelay = false;
             }

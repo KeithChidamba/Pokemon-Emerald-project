@@ -56,15 +56,15 @@ public class Options_manager : MonoBehaviour
 
     void LearnMove()
     {        
-        Pokemon_Details.instance.LearningMove = true;
-        Pokemon_Details.instance.OnMoveSelected += PokemonOperations.LearnSelectedMove;
-        Pokemon_Details.instance.Load_Details(PokemonOperations.CurrentPkm);
+        Pokemon_Details.Instance.learningMove = true;
+        Pokemon_Details.Instance.OnMoveSelected += PokemonOperations.LearnSelectedMove;
+        Pokemon_Details.Instance.LoadDetails(PokemonOperations.CurrentPkm);
         Dialogue_handler.instance.Battle_Info("Which move will you replace?");
         selectedNewMoveOption = false;
     }
     void SkipMove()
     {
-        Pokemon_Details.instance.LearningMove = false;
+        Pokemon_Details.Instance.learningMove = false;
         PokemonOperations.LearningNewMove = false;
         Dialogue_handler.instance.Battle_Info(PokemonOperations.CurrentPkm.Pokemon_name+" did not learn "+PokemonOperations.NewMove.Move_name);
         selectedNewMoveOption = false;
@@ -88,7 +88,7 @@ public class Options_manager : MonoBehaviour
     void OpenPokemonStorage()
     {
         Dialogue_handler.instance.Write_Info(_currentInteraction.resultMessage, "Details");
-        pokemon_storage.instance.Open_pc();
+        pokemon_storage.Instance.OpenPC();
         overworld_actions.Instance.usingUI = true;
     }
     void BuyMore()

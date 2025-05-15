@@ -52,7 +52,7 @@ public class Item_handler : MonoBehaviour
     void LevelUpWithItem()
     {
         var exp = PokemonOperations.CalculateExpForNextLevel(selectedPartyPokemon.Current_level, selectedPartyPokemon.EXPGroup);
-        selectedPartyPokemon.ReceiveExperience(exp-selectedPartyPokemon.CurrentExpAmount+1);
+        selectedPartyPokemon.ReceiveExperience((exp-selectedPartyPokemon.CurrentExpAmount)+1);
         Dialogue_handler.instance.Write_Info(selectedPartyPokemon.Pokemon_name+" leveled up!", "Details",1f);
         DepleteItem();
         ResetItemUsage();
@@ -73,12 +73,12 @@ public class Item_handler : MonoBehaviour
     {
         if (stat == "pp")
         {
-            Pokemon_Details.instance.ChangingMoveData = true;
+            Pokemon_Details.Instance.changingMoveData = true;
             if (_itemInUse.itemType.ToLower() == "ether")
-                Pokemon_Details.instance.OnMoveSelected += RestorePowerpoints;
+                Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
             if (_itemInUse.itemType.ToLower() == "stat increase")
-                Pokemon_Details.instance.OnMoveSelected += IncreasePowerpoints;
-            Pokemon_Details.instance.Load_Details(selectedPartyPokemon);
+                Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
+            Pokemon_Details.Instance.LoadDetails(selectedPartyPokemon);
         }
         //if i add proteins,calcium etc. Then i can just add them here in a switch based on stat they change
     }
@@ -94,7 +94,7 @@ public class Item_handler : MonoBehaviour
     } 
     private void RestorePowerpoints(int moveIndex)
      {
-         Pokemon_Details.instance.OnMoveSelected -= RestorePowerpoints;
+         Pokemon_Details.Instance.OnMoveSelected -= RestorePowerpoints;
          var pointsToAdd = 0;
          var currentMove = selectedPartyPokemon.move_set[moveIndex];
          
@@ -112,12 +112,12 @@ public class Item_handler : MonoBehaviour
          DepleteItem();
          ResetItemUsage();
          SkipTurn();
-         Pokemon_Details.instance.Exit_details();
+         Pokemon_Details.Instance.ExitDetails();
          Bag.Instance.ViewBag();
      }
     private void IncreasePowerpoints(int moveIndex)
     {
-        Pokemon_Details.instance.OnMoveSelected -= IncreasePowerpoints;
+        Pokemon_Details.Instance.OnMoveSelected -= IncreasePowerpoints;
         var currentMove = selectedPartyPokemon.move_set[moveIndex];
         double powerpointRatio = (float) currentMove.max_Powerpoints / currentMove.BasePowerpoints;
         if (Math.Round(powerpointRatio,1) >= 1.6) return;
@@ -127,7 +127,7 @@ public class Item_handler : MonoBehaviour
         
         DepleteItem();
         ResetItemUsage();
-        Pokemon_Details.instance.Exit_details();
+        Pokemon_Details.Instance.ExitDetails();
         Bag.Instance.ViewBag();
     }
     private void UsePokeball(Item pokeball)
@@ -250,6 +250,8 @@ public class Item_handler : MonoBehaviour
     {
         _itemInUse.quantity--;
         Bag.Instance.CheckItemQuantity(_itemInUse);
+        //if (!Options_manager.Instance.playerInBattle) 
+            //Game_ui_manager.Instance.ViewBag();
     }
     void ResetItemUsage()
     {

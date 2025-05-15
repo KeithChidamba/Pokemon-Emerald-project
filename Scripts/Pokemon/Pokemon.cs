@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -142,11 +143,7 @@ public class Pokemon : ScriptableObject
     }
     public bool HasType(string typeName)
     {
-        Type type = Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/"+typeName.ToLower());
-        foreach (Type t in types)
-            if (t == type)
-                return true;
-        return false;
+        return types.Any(type => type.Type_name == typeName);
     }
     public void CheckEvolutionRequirements(int evoIndex)
     {
@@ -184,7 +181,7 @@ public class Pokemon : ScriptableObject
         var trainerBonus = 1f;
         var baseExp = (enemy.exp_yield*enemy.Current_level) / 7f;
         var expItemBonus = 1f;
-        if (HeldItem!=null)
+        if (HasItem)
             if (HeldItem.itemType == "Exp Gain")//lucky egg
                 expItemBonus = float.Parse(HeldItem.itemEffect);
         if (enemy.has_trainer)

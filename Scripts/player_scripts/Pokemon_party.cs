@@ -54,7 +54,7 @@ public class Pokemon_party : MonoBehaviour
     }
     public void ViewPokemonDetails()
     {//view pokemon details from button click
-        Pokemon_Details.instance.Load_Details(party[selectedMemberIndex-1]);
+        Pokemon_Details.Instance.LoadDetails(party[selectedMemberIndex-1]);
         viewingDetails = true;
         ClearSelectionUI();
     }
@@ -218,16 +218,16 @@ private void CloseParty()
     { //add new pokemon after catch or event
         if (numMembers<6)
         {
-            party[numMembers] = pokemon_storage.instance.Add_pokemon(pokemon);
+            party[numMembers] = pokemon_storage.Instance.CreateAndSetupPokemon(pokemon);
             numMembers++;
         }
         else
         {
-            if (pokemon_storage.instance.num_pokemon < pokemon_storage.instance.max_num_pokemon)
+            if (pokemon_storage.Instance.totalPokemonCount < pokemon_storage.Instance.maxPokemonCapacity)
             {
-                pokemon_storage.instance.storage_operetation = false;
-                pokemon_storage.instance.non_party_pokemon.Add(pokemon_storage.instance.Add_pokemon(pokemon));
-                pokemon_storage.instance.num_non_party_pokemon++;
+                pokemon_storage.Instance.doingStorageOperation = false;
+                pokemon_storage.Instance.nonPartyPokemon.Add(pokemon_storage.Instance.CreateAndSetupPokemon(pokemon));
+                pokemon_storage.Instance.numNonPartyPokemon++;
             }
         }
     }
@@ -263,7 +263,7 @@ private void CloseParty()
         var member = party[Party_position];
         party[Party_position] = null;
         numMembers--;
-        pokemon_storage.instance.non_party_pokemon.Add(member);
+        pokemon_storage.Instance.nonPartyPokemon.Add(member);
         SortMembers(Party_position);
     }
 }

@@ -158,6 +158,7 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void Write_Info(string info, string type, string option1, string result, string option2,string opTxt1,string opTxt2)//display a choice, with a result when they choose NO
     {
+        Debug.Log("here");
         Interaction details = new_interaction(info,type,result);
         details.interactionOptions.Add(option1);
         details.interactionOptions.Add(option2);

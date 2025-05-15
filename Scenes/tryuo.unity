@@ -2716,7 +2716,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: Next
+        m_MethodName: NextPage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4119,7 +4119,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Select_party_pkm
+        m_MethodName: SelectPartyPokemon
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 100425790}
@@ -4394,7 +4394,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: Move_Discription
+        m_MethodName: DisplayMoveDescription
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18109,7 +18109,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: Exit_details
+        m_MethodName: ExitDetails
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18825,7 +18825,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Select_party_pkm
+        m_MethodName: SelectPartyPokemon
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 591072021}
@@ -21936,7 +21936,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: Move_Discription
+        m_MethodName: DisplayMoveDescription
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -23557,7 +23557,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Close_pc
+        m_MethodName: ClosePC
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26565,7 +26565,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: Move_Discription
+        m_MethodName: DisplayMoveDescription
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -27075,7 +27075,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: Move_Discription
+        m_MethodName: DisplayMoveDescription
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -31905,32 +31905,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e1802d257a44384ba37124d0a8c69da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  non_party_pokemon: []
-  num_pokemon: 0
-  num_non_party_pokemon: 0
-  max_num_pokemon: 40
-  num_party_members: 0
-  Storage_options:
+  nonPartyPokemon: []
+  totalPokemonCount: 0
+  numNonPartyPokemon: 0
+  maxPokemonCapacity: 40
+  numPartyMembers: 0
+  storageOptions:
   - {fileID: 1807833599}
   - {fileID: 1465486954}
   - {fileID: 1945079470}
   - {fileID: 1147526103}
-  storage_ui: {fileID: 733500843}
-  select_pkm_ID: 
-  storage_operetation: 0
-  using_pc: 0
-  pkm_icons: []
-  pkm_party_icons:
+  storageUI: {fileID: 733500843}
+  selectedPokemonID: 
+  doingStorageOperation: 0
+  usingPC: 0
+  nonPartyIcons: []
+  partyPokemonIcons:
   - {fileID: 591072019}
   - {fileID: 1896785819}
   - {fileID: 2099830501}
   - {fileID: 1068557182}
   - {fileID: 100425788}
   - {fileID: 1041801303}
-  pkm_icon: {fileID: 296821391}
-  storage_positions: {fileID: 1330329151}
+  pokemonIconTemplate: {fileID: 296821391}
+  storageIconPositionsParent: {fileID: 1330329151}
   swapping: 0
-  Pkm_selected: 0
+  hasSelectedPokemon: 0
 --- !u!1 &939642311
 GameObject:
   m_ObjectHideFlags: 0
@@ -32376,7 +32376,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: Prev
+        m_MethodName: PreviousPage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -34176,7 +34176,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Select_party_pkm
+        m_MethodName: SelectPartyPokemon
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1041801305}
@@ -34857,7 +34857,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Select_party_pkm
+        m_MethodName: SelectPartyPokemon
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1068557184}
@@ -37334,7 +37334,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Delete_pkm
+        m_MethodName: DeletePokemon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -68044,7 +68044,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: swap
+        m_MethodName: SwapWithPartyPokemon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -75515,7 +75515,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Select_pc_pkm
+        m_MethodName: SelectNonPartyPokemon
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 296821393}
@@ -78074,7 +78074,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: View_pc_pkm_details
+        m_MethodName: ViewNonPartyPokemonDetails
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -81361,7 +81361,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Select_party_pkm
+        m_MethodName: SelectPartyPokemon
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1896785821}
@@ -96323,7 +96323,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Add_to_Party
+        m_MethodName: AddPokemonToParty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -102016,7 +102016,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 935983327}
         m_TargetAssemblyTypeName: pokemon_storage, Assembly-CSharp
-        m_MethodName: Select_party_pkm
+        m_MethodName: SelectPartyPokemon
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 2099830503}

@@ -1,254 +1,230 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.Serialization;
 
 public class pokemon_storage : MonoBehaviour
 {
-    public List<Pokemon> non_party_pokemon;
-    public int num_pokemon = 0;
-    public int num_non_party_pokemon = 0;
-    public int max_num_pokemon = 40;
-    public int num_party_members = 0;
-    public Button[] Storage_options;
-    public GameObject storage_ui;
-    public string select_pkm_ID;
-    public bool storage_operetation = false;
-    public bool using_pc = false;
-    public List<GameObject> pkm_icons;
-    public GameObject[] pkm_party_icons;
-    public GameObject pkm_icon;
-    public Transform storage_positions;
-    public bool swapping = false;
-    public bool Pkm_selected = false;
-    public static pokemon_storage instance;
+    public List<Pokemon> nonPartyPokemon;
+    public int totalPokemonCount;
+    public int numNonPartyPokemon;
+    public int maxPokemonCapacity = 40;
+    public int numPartyMembers;
+    public Button[] storageOptions;
+    public GameObject storageUI;
+    public string selectedPokemonID;
+    public bool doingStorageOperation;
+    public bool usingPC;
+    public List<GameObject> nonPartyIcons;
+    public GameObject[] partyPokemonIcons;
+    public GameObject pokemonIconTemplate;
+    public Transform storageIconPositionsParent;
+    public bool swapping;
+    public bool hasSelectedPokemon;
+    public static pokemon_storage Instance;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
-    Pokemon search_pkm(string ID)
+    private int SearchForPokemonIndex(string pokemonID)
     {
-        foreach(Pokemon mon in non_party_pokemon)
-            if (mon.Pokemon_ID.ToString() == ID)
-                return mon;
-        return null;
+        return nonPartyPokemon.FindIndex(p => p.Pokemon_ID.ToString() == pokemonID);
     }
-    int search_pkm_pos(string ID)
+    public bool IsPartyPokemon(string pokemonID)
     {
-        int i = 0;
-        foreach (Pokemon mon in non_party_pokemon)
-        {
-            if (mon.Pokemon_ID.ToString() == ID)
-                return i;
-            i++;
-        }
-        return 0;
+        return Save_manager.Instance.partyIDs.Any(id => id == pokemonID);
     }
-    public bool IsPartyPokemon(string id)
+    public void OpenPC()
     {
-        foreach (var pokemonID in Save_manager.Instance.partyIDs)
-            if (pokemonID == id)
-                return true;
-        return false;
-    }
-    public void Open_pc()
-    {
-        using_pc = true;
-        Set_pkm_icon();
-        storage_ui.SetActive(true);
+        Game_ui_manager.Instance.ManageScreens(1);
+        usingPC = true;
+        ActivatePokemonIcons();
+        storageUI.SetActive(true);
         Dialogue_handler.instance.Dialouge_off();
         DisableOptions();
     }
-    public void Close_pc()
+    public void ClosePC()
     {
-        foreach (GameObject pos in pkm_party_icons)
-            pos.GetComponent<PC_party_pkm>().options.SetActive(false);
-        Game_ui_manager.Instance.ResetPlayerMovement();
-        using_pc = false;
-        Pkm_selected = false;
-        storage_ui.SetActive(false);
-        Remove_pkm_icons();
+        foreach (var icon in partyPokemonIcons)
+            icon.GetComponent<PC_party_pkm>().options.SetActive(false);
+        usingPC = false;
+        hasSelectedPokemon = false;
+        storageUI.SetActive(false);
+        RemovePokemonIcons();
+        Game_ui_manager.Instance.ManageScreens(-1);
     }
-    public void Select_party_pkm(PC_party_pkm party_pkm)
+    public void SelectPartyPokemon(PC_party_pkm partyPokemon)
     {
         if (swapping)
         {
-            storage_operetation = true;
-            Pokemon store = Pokemon_party.Instance.party[party_pkm.partyPosition - 1];
-            Pokemon_party.Instance.party[party_pkm.partyPosition - 1] = Add_pokemon(search_pkm(select_pkm_ID));
-            non_party_pokemon[search_pkm_pos(select_pkm_ID)] = Add_pokemon(store);
+            doingStorageOperation = true;
+            var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
+            var swapStore = Pokemon_party.Instance.party[partyPokemon.partyPosition - 1];
+            Pokemon_party.Instance.party[partyPokemon.partyPosition - 1] = CreateAndSetupPokemon(nonPartyPokemon[pokemonIndex]);
+            nonPartyPokemon[pokemonIndex] = CreateAndSetupPokemon(swapStore);
             swapping = false;
-            Remove_pkm_icons();
-            Set_pkm_icon();
-            storage_operetation = false;
-            Pkm_selected = false;
+            RemovePokemonIcons();
+            ActivatePokemonIcons();
+            doingStorageOperation = false;
+            hasSelectedPokemon = false;
         }
         else
         {
-            if (!Pkm_selected)
+            if (!hasSelectedPokemon)
             {
                 ResetPartyUi();
-                party_pkm.options.SetActive(true);
+                partyPokemon.options.SetActive(true);
             }
         }
     }
     void LoadOptions()
     {
-        foreach (GameObject icon in pkm_icons)
-            icon.GetComponent<PC_pkm>().pokemonSprite.color=Color.HSVToRGB(0,0,100);
-        foreach (var btn in Storage_options)
+        for (var i = 0 ; i<nonPartyPokemon.Count; i++)
+            nonPartyIcons[i].GetComponent<PC_pkm>().pokemonSprite.color=Color.HSVToRGB(0,0,100);
+        foreach (var btn in storageOptions)
             btn.interactable = true;
     }
-    void DisableOptions()
+    private void DisableOptions()
     {
-        foreach (var btn in Storage_options)
+        foreach (var btn in storageOptions)
             btn.interactable = false;
         ResetPartyUi();
     }
     void ResetPartyUi()
     {
-        foreach (GameObject icon in pkm_party_icons)
+        foreach (var icon in partyPokemonIcons)
             icon.GetComponent<PC_party_pkm>().options.SetActive(false);
     }
     public void RefreshUi()
     {
         DisableOptions();
-        Remove_pkm_icons();
-        Set_pkm_icon();
-        Pkm_selected = false;
+        RemovePokemonIcons();
+        ActivatePokemonIcons();
+        hasSelectedPokemon = false;
         swapping = false;
     }
-    public void View_pc_pkm_details()
+    public void ViewNonPartyPokemonDetails()
     {
-        if (Pkm_selected && !swapping)
-            Pokemon_Details.instance.Load_Details(search_pkm(select_pkm_ID));
+        if (hasSelectedPokemon && !swapping)
+            Pokemon_Details.Instance.LoadDetails(nonPartyPokemon[SearchForPokemonIndex(selectedPokemonID)]);
     }
-    public void Select_pc_pkm(PC_pkm pkm_icon)
+    public void SelectNonPartyPokemon(PC_pkm pokemonIcon)
     {
         if (!swapping)
         {
             DisableOptions();
             LoadOptions();
-            Pkm_selected = true;
-            select_pkm_ID = pkm_icon.pokemon.Pokemon_ID.ToString();
-            pkm_icon.pokemonSprite.color=Color.HSVToRGB(17,96,54);
+            hasSelectedPokemon = true;
+            selectedPokemonID = pokemonIcon.pokemon.Pokemon_ID.ToString();
+            pokemonIcon.pokemonSprite.color=Color.HSVToRGB(17,96,54);
         }
     }
-    void Remove_pkm_icons()
+    private void RemovePokemonIcons()
     {
-        pkm_icons.Clear();
-        for (int i = 0; i < storage_positions.childCount; i++)
+        nonPartyIcons.Clear();
+        for (var i = 0; i < storageIconPositionsParent.childCount; i++)
         {
-            var currentIconPosition = storage_positions.GetChild(i);
+            var currentIconPosition = storageIconPositionsParent.GetChild(i);
             if (currentIconPosition.childCount < 1) continue;
             Destroy(currentIconPosition.GetChild(0).gameObject);
         }
-        foreach (GameObject pos in pkm_party_icons)
+        foreach (var icon in partyPokemonIcons)
         {
-            pos.SetActive(false);
-            pos.GetComponent<PC_party_pkm>().pokemon = null;
+            icon.SetActive(false);
+            icon.GetComponent<PC_party_pkm>().pokemon = null;
         }
     }
-    private void Set_pkm_icon()
+    private void ActivatePokemonIcons()
     {
-        for (var i = 0;i<non_party_pokemon.Count;i++)
+        for (var i = 0;i<nonPartyPokemon.Count;i++)
         {
-            if (non_party_pokemon[i] == null) continue;
-            var pokemonIcon = Instantiate(pkm_icon, storage_positions.GetChild(i));
+            if (nonPartyPokemon[i] == null) continue;
+            var pokemonIcon = Instantiate(pokemonIconTemplate, storageIconPositionsParent.GetChild(i));
             pokemonIcon.SetActive(true);
-            pokemonIcon.GetComponent<PC_pkm>().pokemon = non_party_pokemon[i];
+            pokemonIcon.GetComponent<PC_pkm>().pokemon = nonPartyPokemon[i];
             pokemonIcon.GetComponent<PC_pkm>().LoadImage();
-            pkm_icons.Add(pokemonIcon);
+            nonPartyIcons.Add(pokemonIcon);
         }
-        for (var i = 0;i < num_party_members;i++)
+        for (var i = 0;i < numPartyMembers;i++)
         {
             if (Pokemon_party.Instance.party[i] == null) continue;
-            pkm_party_icons[i].SetActive(true);
-            pkm_party_icons[i].GetComponent<PC_party_pkm>().pokemon = Pokemon_party.Instance.party[i] ;
-            pkm_party_icons[i].GetComponent<PC_party_pkm>().LoadImage();
-            storage_operetation = true;
+            partyPokemonIcons[i].SetActive(true);
+            partyPokemonIcons[i].GetComponent<PC_party_pkm>().pokemon = Pokemon_party.Instance.party[i] ;
+            partyPokemonIcons[i].GetComponent<PC_party_pkm>().LoadImage();
+            doingStorageOperation = true;
         }
-        storage_operetation = false;
-        storage_positions.gameObject.SetActive(true);
+        doingStorageOperation = false;
+        storageIconPositionsParent.gameObject.SetActive(true);
     }
-    public void RemoveFromParty(PC_party_pkm pkm)
+    public void RemoveFromParty(PC_party_pkm partyPokemon)
     {
-        if (num_party_members > 1)
+        if (numPartyMembers > 1)
         {
-            Pokemon_party.Instance.RemoveMember(pkm.partyPosition);
-            num_party_members--;
-            num_non_party_pokemon++;
+            Pokemon_party.Instance.RemoveMember(partyPokemon.partyPosition);
+            numPartyMembers--;
+            numNonPartyPokemon++;
             RefreshUi();
         }
         else
             Dialogue_handler.instance.Write_Info("There must be at least 1 pokemon in your team","Details",1f);
     }
-    public void Delete_pkm()
+    public void DeletePokemon()
     {
-        int index = 0;
-        foreach(Pokemon mon in non_party_pokemon)
-        {
-            if (mon.Pokemon_ID.ToString() == select_pkm_ID)
-            {
-                string pkm_name = search_pkm(select_pkm_ID).Pokemon_name;
-                non_party_pokemon[index] = null;
-                remove_pkm(index);
-                Dialogue_handler.instance.Write_Info("You released "+ pkm_name, "Details",1.5f);
-                RefreshUi();
-                break;
-            }
-            index++;
-        }
+        var indexToDelete= SearchForPokemonIndex(selectedPokemonID);
+        Dialogue_handler.instance.Write_Info("You released "+ nonPartyPokemon[indexToDelete].Pokemon_name, "Details",1.5f);
+        DeleteNonPartyPokemon(indexToDelete);
+        RefreshUi();
     }
-    void remove_pkm(int empty_position)
+    private void DeleteNonPartyPokemon(int index)
     {
-        non_party_pokemon.Remove(non_party_pokemon[empty_position]);
-        num_non_party_pokemon--;
-        num_pokemon--;
+        nonPartyPokemon.Remove(nonPartyPokemon[index]);
+        numNonPartyPokemon--;
+        totalPokemonCount--;
     }
-    public void swap()
+    public void SwapWithPartyPokemon()
     {
         DisableOptions();
-        storage_positions.gameObject.SetActive(false);
+        storageIconPositionsParent.gameObject.SetActive(false);
         Dialogue_handler.instance.Write_Info("Pick a pokemon in your party to swap with", "Details",1.2f);
         swapping = true;
     }
-    public void  Add_to_Party()
+    public void AddPokemonToParty()
     {
         if (Pokemon_party.Instance.numMembers < 6)
         {
-            storage_operetation = true;
-            Pokemon_party.Instance.party[Pokemon_party.Instance.numMembers] = Add_pokemon(search_pkm(select_pkm_ID));
-            //remove from box
-            non_party_pokemon.Remove(search_pkm(select_pkm_ID));
-            num_party_members++;
-            num_non_party_pokemon--;
+            doingStorageOperation = true;
+            var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
+            Pokemon_party.Instance.party[Pokemon_party.Instance.numMembers] = CreateAndSetupPokemon(nonPartyPokemon[pokemonIndex]);
+            DeleteNonPartyPokemon(pokemonIndex);
             Pokemon_party.Instance.numMembers++;
+            numPartyMembers++;
         }
         else
             Dialogue_handler.instance.Write_Info("Party is full, you can still swap out pokemon though", "Details",2f);
-        storage_operetation = false;
+        doingStorageOperation = false;
         RefreshUi();
     }
 
-    public Pokemon Add_pokemon(Pokemon pkm)
+    public Pokemon CreateAndSetupPokemon(Pokemon template)
     {
-        Pokemon new_pkm = Obj_Instance.CreatePokemon(pkm);
-        new_pkm.has_trainer = true;
-        if (!storage_operetation)
+        var newPokemon = Obj_Instance.CreatePokemon(template);
+        newPokemon.has_trainer = true; 
+        if (!doingStorageOperation)
         {
-            num_pokemon++;
-            if (num_party_members < 6)
-                num_party_members++;
-            PokemonOperations.SetPokemonTraits(new_pkm);
-            if (new_pkm.Current_level == 0)
-                new_pkm.LevelUp();
+            totalPokemonCount++;
+            if (numPartyMembers < 6)
+                numPartyMembers++;
+            PokemonOperations.SetPokemonTraits(newPokemon);
+            if (newPokemon.Current_level == 0)
+                newPokemon.LevelUp();
         }
-        return new_pkm;
+        return newPokemon;
     }
 
 

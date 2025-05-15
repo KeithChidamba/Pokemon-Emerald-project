@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 24966
+        "instanceID": 24994
     },
     "has_gender": true,
     "HP": 14.0,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25208
+            "instanceID": 25236
         }
     ],
     "Status_effect": "None",
@@ -75,18 +75,18 @@
     ],
     "move_set": [
         {
-            "instanceID": -16968
+            "instanceID": -9516
         }
     ],
     "ability": {
-        "instanceID": 25470
+        "instanceID": 25498
     },
     "evolutions": [
         {
-            "instanceID": 25724
+            "instanceID": 25752
         },
         {
-            "instanceID": 25588
+            "instanceID": 25616
         }
     ],
     "HeldItem": {
@@ -94,10 +94,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 32010
+        "instanceID": 32038
     },
     "back_picture": {
-        "instanceID": 32012
+        "instanceID": 32040
     },
     "ability_name": "Torrent",
     "natureName": "Sassy",
