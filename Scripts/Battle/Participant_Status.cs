@@ -121,7 +121,7 @@ public class Participant_Status : MonoBehaviour
     }
     void Status_Damage_msg(string msg,float damage)
     {
-        Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+msg);
+        Dialogue_handler.Instance.Battle_Info(_participant.pokemon.Pokemon_name+msg);
         loose_HP(damage);
         _statusDuration++;
         _participant.Invoke(nameof(_participant.CheckIfFainted),0.9f);
@@ -132,10 +132,10 @@ public class Participant_Status : MonoBehaviour
         switch (_participant.pokemon.Status_effect)
         {
             case "Sleep":
-                Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Woke UP!");
+                Dialogue_handler.Instance.Battle_Info(_participant.pokemon.Pokemon_name+" Woke UP!");
                 break;
             case "Freeze":
-                Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+" Unfroze!");
+                Dialogue_handler.Instance.Battle_Info(_participant.pokemon.Pokemon_name+" Unfroze!");
                 break;
         }
         remove_status_effect();

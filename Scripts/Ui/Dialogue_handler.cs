@@ -5,99 +5,130 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.Mathematics;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class Dialogue_handler : MonoBehaviour
 {
-    public Interaction Current_interaction;
-    public Text Dialouge_txt;
-    [SerializeField] GameObject elipsis_txt;
-    [SerializeField] bool text_finished = false;
-    public bool can_exit = true;
-    public bool displaying = false;
-    [SerializeField] string current_line = "";
-    [SerializeField] int Max_length = 90;
-    [SerializeField] float num_lines = 0;
-    [SerializeField] int current_line_num = 0;
-    [SerializeField] GameObject dialogue_box;
-    [SerializeField] GameObject battle_box;
-    [SerializeField] GameObject dialogue_next;
-    [SerializeField] GameObject dialogue_exit;
-    [SerializeField] GameObject[] option_btns;
-    [SerializeField] Text[] option_btns_txt;
+    public Interaction currentInteraction;
+    [SerializeField] private Text dialougeText;
+    [SerializeField] GameObject elipsisSymbol;
+    [SerializeField] private bool dialogueFinished ;
+    public bool canExitDialogue = true;
+    public bool displaying;
+    [SerializeField] private string currentLineContent = "";
+   [SerializeField] private int maxCharacterLength = 90;
+    [SerializeField] private int dialogueLength;
+    [SerializeField] private int dialogueProgress;
+    [SerializeField] private GameObject infoDialogueBox;
+    [SerializeField] private GameObject battleDialogueBox;
+    [SerializeField] private GameObject clickNextIndicator;
+    [SerializeField] private GameObject dialogueExitIndicator;
+    [SerializeField] private GameObject dialogueOptionPrefab;
+    [SerializeField] private Transform dialogueOptionParent;
+    private DialogueOptionsManager _dialogueOptionsManager;
     public bool messagesLoading = false;
-    public List<Interaction> PendingMessages = new();
-    public static Dialogue_handler instance;
+    public List<Interaction> pendingMessages = new();
+    public static Dialogue_handler Instance;
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
     }
+
+    private void Start()
+    {
+        _dialogueOptionsManager = dialogueOptionParent.GetComponent<DialogueOptionsManager>();
+    }
+
     void Update()
     {
-        if (Current_interaction != null)
+        if (currentInteraction != null)
         {
-            if (Current_interaction.interactionType == "Options")
-            {
-                option_btns_txt[0].text =Current_interaction.optionsUiText[0];
-                option_btns_txt[1].text =Current_interaction.optionsUiText[1];
-            }
+
         }
-        if (displaying && !text_finished)
+        if (displaying && !dialogueFinished)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                if (current_line_num < num_lines)
+                if (dialogueProgress < dialogueLength)
                 {
-                    current_line_num++;
-                    current_line = Current_interaction.interactionMessage.Substring((current_line_num - 1) * Max_length, Max_length);    
-                    Dialouge_txt.text = current_line;
-                    text_finished = false;
+                    dialogueProgress++;
+                    currentLineContent = currentInteraction.interactionMessage.Substring((dialogueProgress - 1) * maxCharacterLength, maxCharacterLength);    
+                    dialougeText.text = currentLineContent;
+                    dialogueFinished = false;
                 }
-                else if (current_line_num == num_lines)
+                else if (dialogueProgress == dialogueLength)
                 {
-                    dialogue_next.SetActive(false);
-                    elipsis_txt.SetActive(false);
-                    current_line = Current_interaction.interactionMessage.Substring(current_line_num * Max_length, Current_interaction.interactionMessage.Length - (current_line_num * Max_length));
-                    Dialouge_txt.text = current_line;
-                    text_finished = true;
-                    if (Current_interaction.interactionType == "Options")
-                        Display_Options(true);
+                    clickNextIndicator.SetActive(false);
+                    elipsisSymbol.SetActive(false);
+                    currentLineContent = currentInteraction.interactionMessage.Substring(dialogueProgress * maxCharacterLength, currentInteraction.interactionMessage.Length - (dialogueProgress * maxCharacterLength));
+                    dialougeText.text = currentLineContent;
+                    dialogueFinished = true;
+                    if (currentInteraction.interactionType == "Options")
+                        CreateDialogueOptions();
                 }
             }
         }
-        if (overworld_actions.Instance !=null)
+        if (overworld_actions.Instance != null)
             if (overworld_actions.Instance.doingAction )
-                Remove_Exit();
-        if (displaying && Input.GetKeyDown(KeyCode.R) && can_exit)
-            Dialouge_off();
+                DisableDialogueExit();
+        if (displaying && Input.GetKeyDown(KeyCode.R) && canExitDialogue)
+            EndDialogue();
     }
 
-    void Remove_Exit()
+    private void CreateDialogueOptions()
     {
-        dialogue_exit.SetActive(false);
-        can_exit = false;
+        dialogueOptionParent.gameObject.SetActive(true);
+        _dialogueOptionsManager.currentOptions.Clear();
+        for(var i = 0; i < currentInteraction.interactionOptions.Count; i++)
+        {
+            var newOption = Instantiate(dialogueOptionPrefab, dialogueOptionParent);
+            var optionScript = newOption.GetComponent<DialogueOption>();
+            optionScript.SetupOption(i,currentInteraction.optionsUiText[i]);
+            _dialogueOptionsManager.currentOptions.Add(optionScript);
+        }
+        _dialogueOptionsManager.LoadUiSize();
+        ActivateOptions(true);
+    } 
+    public void SelectOption(int optionIndex)
+    {
+        if (PokemonOperations.LearningNewMove)
+            Options_manager.Instance.selectedNewMoveOption = true;
+        ActivateOptions(false);
+        Options_manager.Instance.CompleteInteraction(currentInteraction,optionIndex);
     }
-    Interaction new_interaction(string info,string type,string result)
+    private void ActivateOptions(bool display)
+     {
+         dialogueOptionParent.gameObject.SetActive(display);
+         foreach (var obj in _dialogueOptionsManager.currentOptions)
+             obj.gameObject.SetActive(display);
+     }
+    private void DisableDialogueExit()
     {
-        Interaction inter = ScriptableObject.CreateInstance<Interaction>();
-        inter.interactionMessage = info;
-        inter.interactionType = type;
-        inter.resultMessage = result;
-        return inter;
+        dialogueExitIndicator.SetActive(false);
+        canExitDialogue = false;
     }
-    public void Write_Info(string info,string type,string result,string[] options, string[]options_txt)//list info
+    Interaction NewInteraction(string info,string type,string result)
     {
-        Interaction details = new_interaction(info,type,result);
+        var newInteraction = ScriptableObject.CreateInstance<Interaction>();
+        newInteraction.interactionMessage = info;
+        newInteraction.interactionType = type;
+        newInteraction.resultMessage = result;
+        return newInteraction;
+    }
+    public void DisplayList(string info,string result,string[] options, string[]optionsText)//list info
+    {
+        var details = NewInteraction(info,"Options",result);
         foreach (string option in options)
             details.interactionOptions.Add(option);
-        foreach (string txt in options_txt)
+        foreach (string txt in optionsText)
             details.optionsUiText.Add(txt);
-        Current_interaction = details;
-        Display(Current_interaction);
+        currentInteraction = details;
+        Display(currentInteraction);
     }
     
     public void Write_Info(string info,string type)//display plain text info to player
@@ -110,9 +141,9 @@ public class Dialogue_handler : MonoBehaviour
             }
         }
         messagesLoading = false;
-        Interaction details = new_interaction(info,type,"");
-        Current_interaction = details;
-        Display(Current_interaction);
+        Interaction details = NewInteraction(info,type,"");
+        currentInteraction = details;
+        Display(currentInteraction);
     }
     public void Write_Info(string info,string type,float dialogeOff)//display plain text info to player
     {
@@ -120,34 +151,34 @@ public class Dialogue_handler : MonoBehaviour
         if (Options_manager.Instance.playerInBattle)
         {
             if (overworld_actions.Instance.usingUI)
-                Dialouge_off(dialogeOff);
+                EndDialogue(dialogeOff);
         }
         else
-            Dialouge_off(dialogeOff);
+            EndDialogue(dialogeOff);
     }
     public void Battle_Info(string info)//display plain text info to player
     {
-        Remove_Exit();
+        DisableDialogueExit();
         Battle_handler.Instance.displayingInfo = true;
-        Interaction details = new_interaction(info,"Battle Info","");
-        PendingMessages.Add(details);
+        Interaction details = NewInteraction(info,"Battle Info","");
+        pendingMessages.Add(details);
         if(!messagesLoading)
             StartCoroutine(ProccessQeue(details));
     }
     IEnumerator ProccessQeue(Interaction interaction)
     {
         messagesLoading = true;
-        Current_interaction = new_interaction(interaction.interactionMessage,"Battle Info","");
-        Display(Current_interaction);
-        PendingMessages.Remove(interaction);
+        currentInteraction = NewInteraction(interaction.interactionMessage,"Battle Info","");
+        Display(currentInteraction);
+        pendingMessages.Remove(interaction);
         yield return new WaitForSeconds(1f);
         reset_message();
     }
     void reset_message()
     {
-        if (PendingMessages.Count > 0)
+        if (pendingMessages.Count > 0)
         {
-            foreach (Interaction msg in new List<Interaction>(PendingMessages))
+            foreach (Interaction msg in new List<Interaction>(pendingMessages))
                 StartCoroutine(ProccessQeue(msg));
         }
         else
@@ -156,62 +187,29 @@ public class Dialogue_handler : MonoBehaviour
             Battle_handler.Instance.displayingInfo = false;
         }
     }
-    public void Write_Info(string info, string type, string option1, string result, string option2,string opTxt1,string opTxt2)//display a choice, with a result when they choose NO
+
+    public void EndDialogue(float delay)
     {
-        Debug.Log("here");
-        Interaction details = new_interaction(info,type,result);
-        details.interactionOptions.Add(option1);
-        details.interactionOptions.Add(option2);
-        details.optionsUiText.Add(opTxt1);
-        details.optionsUiText.Add(opTxt2);
-        Current_interaction = details;
-        Display(Current_interaction);
+        Invoke(nameof(EndDialogue), delay);
     }
-    public void Display_Options(bool display)
+    public void EndDialogue()
     {
-        foreach (GameObject obj in option_btns)
-            obj.SetActive(display);
-    }
-    public void Option_choice(string choice)
-    {//only ever be 2 options, unless list type dialogue 
-        if (PokemonOperations.LearningNewMove)
-            Options_manager.Instance.selectedNewMoveOption = true;
-        if (choice == "Option 1")
-        {
-            Display_Options(false);
-            Options_manager.Instance.Complete_Interaction(Current_interaction,0);
-        }
-        else if (choice == "Option 2")
-        {
-            if (Current_interaction.interactionOptions[1] == "")//if no option 2,basically the player chose NO
-                Dialouge_off();
-            else
-                Options_manager.Instance.Complete_Interaction(Current_interaction,1);//do second option
-        }
-    }
-    public void Dialouge_off(float delay)
-    {
-        Invoke(nameof(Dialouge_off), delay);
-    }
-    public void  Dialouge_off()
-    {
-        Display_Options(false);
-        Current_interaction = null;
+        ActivateOptions(false);
+        currentInteraction = null;
         if(!Options_manager.Instance.playerInBattle || overworld_actions.Instance.usingUI)
-            dialogue_box.SetActive(false);
+            infoDialogueBox.SetActive(false);
         else
-            battle_box.SetActive(false);
-        current_line = "";
-        Dialouge_txt.text = "";
+            battleDialogueBox.SetActive(false);
+        currentLineContent = "";
+        dialougeText.text = "";
         displaying = false;
-        text_finished = false;
-        num_lines = 0;
-        current_line_num = 0;
-        if(Player_movement.instance)
-            Player_movement.instance.canmove = true;
-        dialogue_next.SetActive(false);
-        elipsis_txt.SetActive(false);
-        dialogue_exit.SetActive(false);
+        dialogueFinished = false;
+        dialogueLength = 0;
+        dialogueProgress = 0;
+        if(Player_movement.instance) Player_movement.instance.canmove = true;
+        clickNextIndicator.SetActive(false);
+        elipsisSymbol.SetActive(false);
+        dialogueExitIndicator.SetActive(false);
         StopAllCoroutines();
         Battle_handler.Instance.displayingInfo = false;
     }
@@ -222,44 +220,43 @@ public class Dialogue_handler : MonoBehaviour
             Player_movement.instance.canmove = false;
             Player_movement.instance.moving = false;
         }
-        text_finished = false;
-        displaying = true;
-        num_lines = math.trunc(interaction.interactionMessage.Length / Max_length);
+        dialogueFinished = false;
+        displaying = true;  
+        var numDialoguePages = (float)interaction.interactionMessage.Length / maxCharacterLength;
+        var remainder = math.frac(numDialoguePages); 
+        dialogueLength = (remainder>0)? (int)math.ceil(numDialoguePages) : (int)numDialoguePages;
         if (!Options_manager.Instance.playerInBattle || overworld_actions.Instance.usingUI)
         {
-            dialogue_box.SetActive(true);
-            Dialouge_txt.color=Color.black;
-            battle_box.SetActive(false);
+            infoDialogueBox.SetActive(true);
+            dialougeText.color=Color.black;
+            battleDialogueBox.SetActive(false);
         }
         else if(!overworld_actions.Instance.usingUI && Options_manager.Instance.playerInBattle)
         {
-            battle_box.SetActive(true);
-            Dialouge_txt.color=Color.white;
-            dialogue_box.SetActive(false);
+            battleDialogueBox.SetActive(true);
+            dialougeText.color=Color.white;
+            infoDialogueBox.SetActive(false);
         }
-        if(!Options_manager.Instance.playerInBattle)
-            dialogue_exit.SetActive(true);
-        if (interaction.interactionMessage.Length > Max_length)
+        if(!Options_manager.Instance.playerInBattle) dialogueExitIndicator.SetActive(true);
+        if (interaction.interactionMessage.Length > maxCharacterLength)
         {
-            dialogue_next.SetActive(true);
-            elipsis_txt.SetActive(true);
-            current_line = interaction.interactionMessage.Substring(0,Max_length);
-            Dialouge_txt.text = current_line;
-            current_line_num++;
+            clickNextIndicator.SetActive(true);
+            elipsisSymbol.SetActive(true);
+            currentLineContent = interaction.interactionMessage.Substring(0,maxCharacterLength);
+            dialougeText.text = currentLineContent;
+            dialogueProgress++;
         }
         else
         {
-            if (interaction.interactionType == "Options")
-                Display_Options(true);
-            else
-                Display_Options(false);
+            if (currentInteraction.interactionType == "Options")
+                CreateDialogueOptions();
             if (interaction.interactionType == "Event")
-                Options_manager.Instance.Complete_Interaction(Current_interaction,0);
-            dialogue_next.SetActive(false);
-            num_lines = 1;
-            current_line_num = 1;
-            Dialouge_txt.text = interaction.interactionMessage;
-            text_finished = true;
+                Options_manager.Instance.CompleteInteraction(currentInteraction,0);
+            clickNextIndicator.SetActive(false);
+            dialogueLength = 1;
+            dialogueProgress = 1;
+            dialougeText.text = interaction.interactionMessage;
+            dialogueFinished = true;
         }
 
     }

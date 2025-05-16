@@ -32,15 +32,15 @@ public class Interaction_handler : MonoBehaviour
     void RaycastForInteraction()
     {
         var hit = Physics2D.Raycast(transform.position, interactionPoint.forward, detectDistance, interactable);
-        if (hit.transform && !Dialogue_handler.instance.displaying && !overworld_actions.Instance.usingUI)
+        if (hit.transform && !Dialogue_handler.Instance.displaying && !overworld_actions.Instance.usingUI)
         {
             var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
             if (Input.GetKeyDown(KeyCode.F))
             {
                 if (interactableObject.interaction != null)
                 {
-                    Dialogue_handler.instance.Current_interaction = interactableObject.interaction;
-                    Dialogue_handler.instance.Display(Dialogue_handler.instance.Current_interaction);
+                    Dialogue_handler.Instance.currentInteraction = interactableObject.interaction;
+                    Dialogue_handler.Instance.Display(Dialogue_handler.Instance.currentInteraction);
                 }
             }
             if (Input.GetKeyDown(KeyCode.Q) && !overworld_actions.Instance.doingAction)
@@ -48,17 +48,18 @@ public class Interaction_handler : MonoBehaviour
                 if (hit.transform.gameObject.CompareTag("Water"))
                 { 
                    overworld_actions.Instance.fishingArea = interactableObject.area;
-                   Dialogue_handler.instance.Write_Info("Would you like to fish for pokemon", "Options", "Fish", "fishing...","","Yes","No");
+                   Dialogue_handler.Instance.DisplayList("Would you like to fish for pokemon"
+                       , "fishing...", new[]{ "Fish","" }, new[]{"Yes", "No"});
                 }
                 else
                 {
-                    Dialogue_handler.instance.Write_Info("Cant fish here", "Info");
+                    Dialogue_handler.Instance.Write_Info("Cant fish here", "Info");
                 }
             }
         }
         if (Input.GetKeyDown(KeyCode.Q) && !hit.transform)
         {
-            Dialogue_handler.instance.Write_Info("Cant fish here", "Info");
+            Dialogue_handler.Instance.Write_Info("Cant fish here", "Info");
         }
     }
 }

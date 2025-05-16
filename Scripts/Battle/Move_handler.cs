@@ -39,9 +39,9 @@ public class Move_handler:MonoBehaviour
         attacker = Battle_handler.Instance.battleParticipants[turn.attackerIndex];
         victim = Battle_handler.Instance.battleParticipants[turn.victimIndex];
         if (_currentTurn.move.isMultiTarget || _currentTurn.move.isSelfTargeted)
-            Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" used "+_currentTurn.move.Move_name+"!");
+            Dialogue_handler.Instance.Battle_Info(attacker.pokemon.Pokemon_name+" used "+_currentTurn.move.Move_name+"!");
         else
-            Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" used "+_currentTurn.move.Move_name+" on "+victim.pokemon.Pokemon_name+"!");
+            Dialogue_handler.Instance.Battle_Info(attacker.pokemon.Pokemon_name+" used "+_currentTurn.move.Move_name+" on "+victim.pokemon.Pokemon_name+"!");
         StartCoroutine(MoveSequence());
     }
     void SetMoveSequence()
@@ -56,7 +56,7 @@ public class Move_handler:MonoBehaviour
     {
         var moveEffectiveness = BattleOperations.GetTypeEffectiveness(victim, _currentTurn.move.type);
         if (moveEffectiveness == 0 & !_currentTurn.move.isMultiTarget)
-            Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" is immune to it!");
+            Dialogue_handler.Instance.Battle_Info(victim.pokemon.Pokemon_name+" is immune to it!");
         else
         {
             SetMoveSequence();
@@ -64,7 +64,7 @@ public class Move_handler:MonoBehaviour
             {
                 if (_cancelMove)
                     break;
-                yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                 if (!d.Condition)
                     continue;
                 processingOrder = true;
@@ -75,7 +75,7 @@ public class Move_handler:MonoBehaviour
                 yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
             } 
         }
-        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         ResetMoveUsage();
     }
     void ExecuteMoveWithSpecialEffect()
@@ -91,7 +91,7 @@ public class Move_handler:MonoBehaviour
     private bool IsInvincible(Move move,Battle_Participant currentVictim)
     {
         if (currentVictim.pokemon.CanBeDamaged || move.Move_damage == 0) return false;
-        Dialogue_handler.instance.Battle_Info(currentVictim.pokemon.Pokemon_name+" protected itself");
+        Dialogue_handler.Instance.Battle_Info(currentVictim.pokemon.Pokemon_name+" protected itself");
         if(!_currentTurn.move.isMultiTarget)
             _cancelMove = true;
         return true;
@@ -100,7 +100,7 @@ public class Move_handler:MonoBehaviour
     {
         float critChance = attacker.pokemon.crit_chance;
         if (UnityEngine.Random.Range(0f, 100f) >= critChance) return 1;
-        Dialogue_handler.instance.Battle_Info("Critical Hit!");
+        Dialogue_handler.Instance.Battle_Info("Critical Hit!");
         return 2;
     }
 
@@ -137,7 +137,7 @@ public class Move_handler:MonoBehaviour
             message=currentVictim.pokemon.Pokemon_name+" was not affected!";
         else
             message=(typeEffectiveness > 1)?"The move is Super effective!":"The move is not very effective!";
-        Dialogue_handler.instance.Battle_Info(message);
+        Dialogue_handler.Instance.Battle_Info(message);
     }
     private float SetAtkDefRatio(int crit, bool isSpecial, Battle_Participant currentAttacker, Battle_Participant currentVictim)
     {
@@ -186,13 +186,13 @@ public class Move_handler:MonoBehaviour
         { processingOrder = false; return; }
         if (victim.pokemon.Status_effect != "None")
         { 
-            Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" already has a "+victim.pokemon.Status_effect+" effect!");
+            Dialogue_handler.Instance.Battle_Info(victim.pokemon.Pokemon_name+" already has a "+victim.pokemon.Status_effect+" effect!");
             processingOrder = false;return;
         }
         if (victim.pokemon.HP <= 0){processingOrder = false; return;}
         if (!victim.pokemon.CanBeDamaged)
         {
-            Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" protected itself");
+            Dialogue_handler.Instance.Battle_Info(victim.pokemon.Pokemon_name+" protected itself");
             processingOrder = false;return;
         }
         if (Utility.RandomRange(1, 101) < _currentTurn.move.Status_chance)
@@ -212,7 +212,7 @@ public class Move_handler:MonoBehaviour
             if ((status.Replace(" ", "") + typeName).ToLower() == s)
             {
                 if(move.Move_damage==0)//if its only a status causing move
-                    Dialogue_handler.instance.Battle_Info("It failed");
+                    Dialogue_handler.Instance.Battle_Info("It failed");
                 return true;
             }
         return false;
@@ -223,7 +223,7 @@ public class Move_handler:MonoBehaviour
         foreach (Type t in currentVictim.pokemon.types)
             if(CheckInvalidStatusEffect(move.Status_effect, t.Type_name,move))return;
         OnStatusEffectHit?.Invoke(currentVictim,move.Status_effect);
-        Dialogue_handler.instance.Battle_Info(currentVictim.pokemon.Pokemon_name+" received a "+move.Status_effect+" effect!");
+        Dialogue_handler.Instance.Battle_Info(currentVictim.pokemon.Pokemon_name+" received a "+move.Status_effect+" effect!");
         ApplyStatusToVictim(currentVictim,move.Status_effect);
     }
     public void ApplyStatusToVictim(Battle_Participant participant,string status)
@@ -257,7 +257,7 @@ public class Move_handler:MonoBehaviour
             if(!_currentTurn.move.isMultiTarget | !Battle_handler.Instance.isDoubleBattle)
             {
                 if (!victim.pokemon.CanBeDamaged)
-                    Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name + " protected itself");
+                    Dialogue_handler.Instance.Battle_Info(victim.pokemon.Pokemon_name + " protected itself");
                 else
                 {
                     var data = new BuffDebuffData(victim.pokemon, statName, isIncreasing, buffAmount);
@@ -285,8 +285,8 @@ public class Move_handler:MonoBehaviour
                 SelectRelevantBuffOrDebuff(data);
             }
             else
-                Dialogue_handler.instance.Battle_Info(enemy.pokemon.Pokemon_name + " protected itself");
-            yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
+                Dialogue_handler.Instance.Battle_Info(enemy.pokemon.Pokemon_name + " protected itself");
+            yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
         }
     }
     public void SelectRelevantBuffOrDebuff(BuffDebuffData data)
@@ -347,16 +347,16 @@ public class Move_handler:MonoBehaviour
             if (!victim.pokemon.CanBeDamaged)
                 break;
             if (victim.pokemon.HP <= 0) break;
-            Dialogue_handler.instance.Battle_Info("Hit "+(i+1)+"!");//remove later if added animations
+            Dialogue_handler.Instance.Battle_Info("Hit "+(i+1)+"!");//remove later if added animations
             victim.pokemon.HP -= CalculateMoveDamage(_currentTurn.move,victim);
             numHits++;
-            yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
         if (numHits>0)
         {
             DisplayEffectiveness(BattleOperations.GetTypeEffectiveness(victim, _currentTurn.move.type), victim);
-            yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
-            Dialogue_handler.instance.Battle_Info("It hit (x" + numHits + ") times");
+            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            Dialogue_handler.Instance.Battle_Info("It hit (x" + numHits + ") times");
         }
         _moveDelay = false;
         processingOrder = false;
@@ -370,7 +370,7 @@ public class Move_handler:MonoBehaviour
              attacker.pokemon.HP += math.trunc(math.abs(heal_amount));
          else
              attacker.pokemon.HP = attacker.pokemon.max_HP;
-         Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" gained health");
+         Dialogue_handler.Instance.Battle_Info(attacker.pokemon.Pokemon_name+" gained health");
          _moveDelay = false;
          processingOrder = false;
      }
@@ -387,7 +387,7 @@ public class Move_handler:MonoBehaviour
             else
             {
                 attacker.pokemon.CanBeDamaged = true;
-                Dialogue_handler.instance.Battle_Info("It failed!");
+                Dialogue_handler.Instance.Battle_Info("It failed!");
             }
         }
         else//success
@@ -399,7 +399,7 @@ public class Move_handler:MonoBehaviour
     {
         foreach (Battle_Participant enemy in targets)
             enemy.pokemon.HP -= CalculateMoveDamage(_currentTurn.move,enemy);
-        yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         _moveDelay = false;
         processingOrder = false;
     }
@@ -421,7 +421,7 @@ public class Move_handler:MonoBehaviour
         baseDamage += damageIncrease * (magnitudeStrength - 4);
         if (magnitudeStrength == 10)
             baseDamage += 20f;
-        Dialogue_handler.instance.Battle_Info("Magnitude level "+magnitudeStrength);
+        Dialogue_handler.Instance.Battle_Info("Magnitude level "+magnitudeStrength);
         _currentTurn.move.Move_damage = baseDamage;
         StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
     }

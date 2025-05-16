@@ -35,12 +35,12 @@ public class Save_manager : MonoBehaviour
             Game_Load.Instance.playerData = LoadPlayerFromJson("Assets/Save_data/Player/" + Path.GetFileName(playerList[0]));
         else if (playerList.Count > 1)
         {
-            Dialogue_handler.instance.Write_Info("Please ensure only one player's data is in the save_data folder!","Details");
+            Dialogue_handler.Instance.Write_Info("Please ensure only one player's data is in the save_data folder!","Details");
             Game_Load.Instance.PreventGameLoad();
         }
         else
         {
-            Dialogue_handler.instance.Write_Info("There was no save data found!","Details");
+            Dialogue_handler.Instance.Write_Info("There was no save data found!","Details");
             Game_Load.Instance.PreventGameLoad();
         }
     }
@@ -132,7 +132,7 @@ public class Save_manager : MonoBehaviour
     }
     public void SaveAllData()
     {
-        Dialogue_handler.instance.Write_Info("Saving...", "Details");
+        Dialogue_handler.Instance.Write_Info("Saving...", "Details");
         EraseSaveData();
         for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
         {
@@ -179,8 +179,8 @@ public class Save_manager : MonoBehaviour
             var path = Path.Combine("Assets/Save_data/Party_Ids/", "pkm_" + (i + 1) + ".txt");
             File.WriteAllText(path, Pokemon_party.Instance.party[i].Pokemon_ID.ToString());
         }
-        Dialogue_handler.instance.Write_Info("Game saved", "Details");
-        Dialogue_handler.instance.Dialouge_off(1f);
+        Dialogue_handler.Instance.Write_Info("Game saved", "Details");
+        Dialogue_handler.Instance.EndDialogue(1f);
         Game_ui_manager.Instance.CloseMenu();
     }
 

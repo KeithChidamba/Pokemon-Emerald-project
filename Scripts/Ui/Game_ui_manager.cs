@@ -61,7 +61,8 @@ public class Game_ui_manager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && Poke_Mart.Instance.viewingStore)
         {
             CloseStore();
-            Dialogue_handler.instance.Write_Info("Would you like anything else?", "Options", "BuyMore","Sure, what would you like","DontBuyMore","Yes","No");
+            Dialogue_handler.Instance.DisplayList("Would you like anything else?",
+                 "", new[]{ "BuyMore","LeaveStore" }, new[]{"Yes", "No"});
         }
     } 
 
@@ -112,7 +113,7 @@ public class Game_ui_manager : MonoBehaviour
     public void ViewBag()
     {
         ManageScreens(1);
-        Dialogue_handler.instance.Dialouge_off();
+        Dialogue_handler.Instance.EndDialogue();
         ActivateUiElement(Bag.Instance.bagUI);
         Bag.Instance.ViewBag();
         CloseMenu();
@@ -128,7 +129,7 @@ public class Game_ui_manager : MonoBehaviour
     {
         ManageScreens(1);
         CloseMenu();
-        Dialogue_handler.instance.Dialouge_off();
+        Dialogue_handler.Instance.EndDialogue();
         ActivateUiElement(Pokemon_party.Instance.partyUI);
         Pokemon_party.Instance.ViewParty();
     }

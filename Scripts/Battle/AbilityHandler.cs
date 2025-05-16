@@ -112,7 +112,7 @@ public class AbilityHandler : MonoBehaviour
             _participant.pokemon.Status_effect = "None";
             if (_participant.pokemon.Status_effect == "sleep" | _participant.pokemon.Status_effect == "freeze"| _participant.pokemon.Status_effect == "paralysis")
                 _participant.pokemon.canAttack = true;
-            Dialogue_handler.instance.Battle_Info(_participant.pokemon.Pokemon_name+"'s shed skin healed it");
+            Dialogue_handler.Instance.Battle_Info(_participant.pokemon.Pokemon_name+"'s shed skin healed it");
         }
     }
     void ShedSkin()

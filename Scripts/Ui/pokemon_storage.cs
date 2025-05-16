@@ -46,7 +46,7 @@ public class pokemon_storage : MonoBehaviour
         usingPC = true;
         ActivatePokemonIcons();
         storageUI.SetActive(true);
-        Dialogue_handler.instance.Dialouge_off();
+        Dialogue_handler.Instance.EndDialogue();
         DisableOptions();
     }
     public void ClosePC()
@@ -172,12 +172,12 @@ public class pokemon_storage : MonoBehaviour
             RefreshUi();
         }
         else
-            Dialogue_handler.instance.Write_Info("There must be at least 1 pokemon in your team","Details",1f);
+            Dialogue_handler.Instance.Write_Info("There must be at least 1 pokemon in your team","Details",1f);
     }
     public void DeletePokemon()
     {
         var indexToDelete= SearchForPokemonIndex(selectedPokemonID);
-        Dialogue_handler.instance.Write_Info("You released "+ nonPartyPokemon[indexToDelete].Pokemon_name, "Details",1.5f);
+        Dialogue_handler.Instance.Write_Info("You released "+ nonPartyPokemon[indexToDelete].Pokemon_name, "Details",1.5f);
         DeleteNonPartyPokemon(indexToDelete);
         RefreshUi();
     }
@@ -191,7 +191,7 @@ public class pokemon_storage : MonoBehaviour
     {
         DisableOptions();
         storageIconPositionsParent.gameObject.SetActive(false);
-        Dialogue_handler.instance.Write_Info("Pick a pokemon in your party to swap with", "Details",1.2f);
+        Dialogue_handler.Instance.Write_Info("Pick a pokemon in your party to swap with", "Details",1.2f);
         swapping = true;
     }
     public void AddPokemonToParty()
@@ -206,7 +206,7 @@ public class pokemon_storage : MonoBehaviour
             numPartyMembers++;
         }
         else
-            Dialogue_handler.instance.Write_Info("Party is full, you can still swap out pokemon though", "Details",2f);
+            Dialogue_handler.Instance.Write_Info("Party is full, you can still swap out pokemon though", "Details",2f);
         doingStorageOperation = false;
         RefreshUi();
     }

@@ -59,7 +59,7 @@ public class Bag : MonoBehaviour
         var itemToSell = bagItems[topIndex + selectedItem - 1];
         if (!itemToSell.canBeSold)
         {
-            Dialogue_handler.instance.Write_Info("You cant sell that!","Details");
+            Dialogue_handler.Instance.Write_Info("You cant sell that!","Details");
             return;
         }
         var price = itemToSell.price;
@@ -68,7 +68,8 @@ public class Bag : MonoBehaviour
         itemToSell.quantity -= sellQuantity;
         if (itemToSell.quantity == 0)
             RemoveItem();
-        Dialogue_handler.instance.Write_Info("You made P"+profit+ ", would you like to sell anything else?", "Options", "Sell_item","Sure, which item?","Dont_Buy","Yes","No");
+        Dialogue_handler.Instance.DisplayList("You made P"+profit+ ", would you like to sell anything else?",
+             "Sure, which item?", new[]{ "SellItem","LeaveStore" }, new[]{"Yes", "No"});
         Game_ui_manager.Instance.CloseBag();
     }
 
@@ -135,16 +136,16 @@ public class Bag : MonoBehaviour
     {
         if (Options_manager.Instance.playerInBattle)
         {
-            Dialogue_handler.instance.Write_Info("Can't do that in battle", "Details",1f);
+            Dialogue_handler.Instance.Write_Info("Can't do that in battle", "Details",1f);
             return;
         }
         if (numItems >= maxCapacity)
         {
-            Dialogue_handler.instance.Write_Info("Bag is full", "Details");
+            Dialogue_handler.Instance.Write_Info("Bag is full", "Details");
             return;
         }
         var partyMember = Pokemon_party.Instance.party[memberIndex - 1];
-        Dialogue_handler.instance.Write_Info("You took a " + partyMember.HeldItem.itemName +" from "
+        Dialogue_handler.Instance.Write_Info("You took a " + partyMember.HeldItem.itemName +" from "
                                              + partyMember.Pokemon_name, "Details");
         AddItem(partyMember.HeldItem);
         partyMember.RemoveHeldItem();
@@ -195,7 +196,7 @@ public class Bag : MonoBehaviour
         {
             if(Poke_Mart.Instance.viewingStore)
                 Game_ui_manager.Instance.CloseStore();
-            Dialogue_handler.instance.Write_Info("Bag is full", "Details");
+            Dialogue_handler.Instance.Write_Info("Bag is full", "Details");
         }                                                                           
     }
     public void UseItem()

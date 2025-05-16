@@ -166,9 +166,9 @@ public static class PokemonOperations
                     {
                         if(Options_manager.Instance.playerInBattle)
                             Battle_handler.Instance.displayingInfo = true;
-                        Dialogue_handler.instance.Write_Info(
-                            CurrentPkm.Pokemon_name + " is trying to learn " + moveName + ", do you want it to learn " + moveName +
-                            "?", "Options", "LearnMove", "", "SkipMove", "Yes", "No");
+                        Dialogue_handler.Instance.DisplayList(
+                            $"{CurrentPkm.Pokemon_name} is trying to learn {moveName} ,do you want it to learn {moveName}?",
+                            "", new[]{ "LearnMove","SkipMove" }, new[]{"Yes", "No"});
                         NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName);
                     }
                     //wild pokemon get generated with somewhat random moveset choices
@@ -179,7 +179,7 @@ public static class PokemonOperations
                 else
                 {
                     if(Options_manager.Instance.playerInBattle)
-                        Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" learned "+moveName);
+                        Dialogue_handler.Instance.Battle_Info(CurrentPkm.Pokemon_name+" learned "+moveName);
                     CurrentPkm.move_set.Add(Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName)));
                     LearningNewMove = false;
                 }
@@ -196,7 +196,7 @@ public static class PokemonOperations
         Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
         Pokemon_Details.Instance.learningMove = false;
         Pokemon_Details.Instance.ExitDetails();
-        Dialogue_handler.instance.Battle_Info(CurrentPkm.Pokemon_name+" forgot "+CurrentPkm.move_set[moveIndex].Move_name+" and learned "+NewMove.Move_name);
+        Dialogue_handler.Instance.Battle_Info(CurrentPkm.Pokemon_name+" forgot "+CurrentPkm.move_set[moveIndex].Move_name+" and learned "+NewMove.Move_name);
         CurrentPkm.move_set[moveIndex] = Obj_Instance.CreateMove(NewMove);
         Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);
         Turn_Based_Combat.Instance.levelEventDelay = false;

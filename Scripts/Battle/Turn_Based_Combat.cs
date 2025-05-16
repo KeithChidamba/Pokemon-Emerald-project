@@ -65,9 +65,9 @@ public class Turn_Based_Combat : MonoBehaviour
                 if (!MoveSuccessfull(turn))
                 {
                     if(attacker.pokemon.Accuracy >= victim.pokemon.Evasion)
-                        Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" missed the attack");
+                        Dialogue_handler.Instance.Battle_Info(attacker.pokemon.Pokemon_name+" missed the attack");
                     else
-                        Dialogue_handler.instance.Battle_Info(victim.pokemon.Pokemon_name+" dodged the attack");
+                        Dialogue_handler.Instance.Battle_Info(victim.pokemon.Pokemon_name+" dodged the attack");
                 }
                 else
                     return true;
@@ -77,9 +77,9 @@ public class Turn_Based_Combat : MonoBehaviour
         else
         {
             if (attacker.pokemon.isFlinched)
-                Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" flinched!");
+                Dialogue_handler.Instance.Battle_Info(attacker.pokemon.Pokemon_name+" flinched!");
             else if(attacker.pokemon.Status_effect!="None")
-                Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" is affected by "+ attacker.pokemon.Status_effect);
+                Dialogue_handler.Instance.Battle_Info(attacker.pokemon.Pokemon_name+" is affected by "+ attacker.pokemon.Status_effect);
         }
         return false;
     }
@@ -95,12 +95,12 @@ public class Turn_Based_Combat : MonoBehaviour
                 continue;
             if (!IsValidParticipantState(victim))
             {//if attack was directed at a pokemon that just fainted
-                Dialogue_handler.instance.Battle_Info(attacker.pokemon.Pokemon_name+" missed the attack");
-                yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
+                Dialogue_handler.Instance.Battle_Info(attacker.pokemon.Pokemon_name+" missed the attack");
+                yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
                 continue;
             }
             OnMoveExecute?.Invoke();
-            yield return new WaitUntil(()=>!Dialogue_handler.instance.messagesLoading);
+            yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
             if (CanAttack(currentTurn,attacker,victim))
             {
                 Move_handler.Instance.doingMove = true;
@@ -111,14 +111,14 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(() => !faintEventDelay);
             }
             else
-                yield return new WaitUntil(() => !Dialogue_handler.instance.messagesLoading);
+                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
         yield return new WaitUntil(() => !levelEventDelay);
         yield return new WaitUntil(() => !faintEventDelay);
-        yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
+        yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         _turnHistory.Clear();
         OnTurnEnd?.Invoke();
-        yield return new WaitUntil(()=> !Dialogue_handler.instance.messagesLoading);
+        yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         Battle_handler.Instance.ResetMoveUsability();
         NextTurn();
     }
