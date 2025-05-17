@@ -12,6 +12,7 @@ public class Game_ui_manager : MonoBehaviour
     public Player_Info_ui profile;
     public static Game_ui_manager Instance;
     private int _numUIScreensOpen;
+    public bool canExitParty = true;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -20,6 +21,7 @@ public class Game_ui_manager : MonoBehaviour
             return;
         }
         Instance = this;
+        canExitParty = true;
     }
     private void Update()
     {
@@ -48,7 +50,7 @@ public class Game_ui_manager : MonoBehaviour
             CloseMenu();
         
         if (Input.GetKeyDown(KeyCode.Escape) && Pokemon_party.Instance.viewingParty && !Pokemon_party.Instance.viewingDetails)
-            if(!Pokemon_party.Instance.swapOutNext)
+            if(!Pokemon_party.Instance.swapOutNext & canExitParty)
                 CloseParty();
         
         if (Input.GetKeyDown(KeyCode.Escape) && Bag.Instance.viewingBag)

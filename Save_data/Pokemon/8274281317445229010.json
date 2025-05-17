@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25228
+        "instanceID": 25086
     },
     "has_gender": true,
     "HP": 13.0,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25860
+            "instanceID": 25718
         }
     ],
     "Status_effect": "None",
@@ -75,18 +75,18 @@
     ],
     "move_set": [
         {
-            "instanceID": -10080
+            "instanceID": -54458
         }
     ],
     "ability": {
-        "instanceID": 25110
+        "instanceID": 24968
     },
     "evolutions": [
         {
-            "instanceID": 26186
+            "instanceID": 26046
         },
         {
-            "instanceID": 25082
+            "instanceID": 24940
         }
     ],
     "HeldItem": {
@@ -94,10 +94,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 32032
+        "instanceID": 31894
     },
     "back_picture": {
-        "instanceID": 32106
+        "instanceID": 31978
     },
     "ability_name": "Blaze",
     "natureName": "Timid",

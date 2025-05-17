@@ -116,13 +116,13 @@ public static class BattleOperations
         if (buff.Stage > indexLimitHigh && increased)
         {
             if(CanDisplayDialougue)
-                Dialogue_handler.Instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher");
+                Dialogue_handler.Instance.DisplayBattleInfo(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher");
             return 0;
         }
         if (buff.Stage < indexLimitLow && !increased)
         {
             if(CanDisplayDialougue)
-                Dialogue_handler.Instance.Battle_Info(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
+                Dialogue_handler.Instance.DisplayBattleInfo(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
             return 0;
         }
         if (increased)
@@ -136,7 +136,7 @@ public static class BattleOperations
             message = pkm.Pokemon_name+"'s "+buff.Stat+" Decreased!";
         }
         if(CanDisplayDialougue)
-            Dialogue_handler.Instance.Battle_Info(message);
+            Dialogue_handler.Instance.DisplayBattleInfo(message);
         if(change>indexLimitHigh)
             return indexLimitHigh + 1;
         if(change<indexLimitLow)

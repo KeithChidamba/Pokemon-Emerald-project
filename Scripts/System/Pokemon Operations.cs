@@ -5,7 +5,7 @@ using Unity.Mathematics;
 public static class PokemonOperations
 {
     public static bool LearningNewMove = false;
-    public static Pokemon CurrentPkm;
+    public static Pokemon CurrentPokemon;
     public static Move NewMove;
     private static long GeneratePokemonID(Pokemon pokemon)//pokemon's unique ID
     {
@@ -148,39 +148,40 @@ public static class PokemonOperations
     public static void GetNewMove(Pokemon pokemon)
     {
         LearningNewMove = true;
-        CurrentPkm = pokemon;
+        CurrentPokemon = pokemon;
         var counter = 0;
         
-        foreach (var move in CurrentPkm.learnSet)
+        foreach (var move in CurrentPokemon.learnSet)
         {
             var requiredLevel = int.Parse(move.Substring(move.Length - 2, 2));
             
-            if (CurrentPkm.Current_level == requiredLevel)
+            if (CurrentPokemon.Current_level == requiredLevel)
             {
                 var pos = move.IndexOf('/')+1;
                 var moveType = move.Substring(0, pos - 1).ToLower();
                 var moveName = move.Substring(pos, move.Length - 2 - pos).ToLower();
-                if (CurrentPkm.move_set.Count == 4) 
+                if (CurrentPokemon.move_set.Count == 4) 
                 {//leveling up from battle or rare candies
-                    if(Options_manager.Instance.playerInBattle || Pokemon_party.Instance.party.Contains(CurrentPkm))
+                    if(Options_manager.Instance.playerInBattle || Pokemon_party.Instance.party.Contains(CurrentPokemon))
                     {
                         if(Options_manager.Instance.playerInBattle)
                             Battle_handler.Instance.displayingInfo = true;
+                        Dialogue_handler.Instance.DisableDialogueExit();
                         Dialogue_handler.Instance.DisplayList(
-                            $"{CurrentPkm.Pokemon_name} is trying to learn {moveName} ,do you want it to learn {moveName}?",
+                            $"{CurrentPokemon.Pokemon_name} is trying to learn {moveName} ,do you want it to learn {moveName}?",
                             "", new[]{ "LearnMove","SkipMove" }, new[]{"Yes", "No"});
                         NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName);
                     }
                     //wild pokemon get generated with somewhat random moveset choices
                     else
-                        CurrentPkm.move_set[Utility.RandomRange(0,4)] = Obj_Instance.CreateMove(Resources.Load<Move>(
+                        CurrentPokemon.move_set[Utility.RandomRange(0,4)] = Obj_Instance.CreateMove(Resources.Load<Move>(
                             "Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
                 }
                 else
                 {
                     if(Options_manager.Instance.playerInBattle)
-                        Dialogue_handler.Instance.Battle_Info(CurrentPkm.Pokemon_name+" learned "+moveName);
-                    CurrentPkm.move_set.Add(Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName)));
+                        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.Pokemon_name+" learned "+moveName);
+                    CurrentPokemon.move_set.Add(Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName)));
                     LearningNewMove = false;
                 }
                 break;
@@ -188,7 +189,7 @@ public static class PokemonOperations
             counter++;
         }
 
-        if (counter == CurrentPkm.learnSet.Length)
+        if (counter == CurrentPokemon.learnSet.Length)
             LearningNewMove = false;
     }
     public static void LearnSelectedMove(int moveIndex)
@@ -196,10 +197,13 @@ public static class PokemonOperations
         Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
         Pokemon_Details.Instance.learningMove = false;
         Pokemon_Details.Instance.ExitDetails();
-        Dialogue_handler.Instance.Battle_Info(CurrentPkm.Pokemon_name+" forgot "+CurrentPkm.move_set[moveIndex].Move_name+" and learned "+NewMove.Move_name);
-        CurrentPkm.move_set[moveIndex] = Obj_Instance.CreateMove(NewMove);
-        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPkm);
+        Dialogue_handler.Instance.EndDialogue();
+        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.Pokemon_name + " forgot " + 
+                                                    CurrentPokemon.move_set[moveIndex].Move_name + " and learned " + NewMove.Move_name);
+        CurrentPokemon.move_set[moveIndex] = Obj_Instance.CreateMove(NewMove);
+        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPokemon);
         Turn_Based_Combat.Instance.levelEventDelay = false;
+        Game_ui_manager.Instance.canExitParty = true;
     }
     private static void AssignPokemonGender(Pokemon pokemon)
     {

@@ -12,13 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Oran Berry Tree
   m_EditorClassIdentifier: 
-  InteractionMsg: It's a berry tree, do you want to pick a bery?
-  InteractionType: Options
-  InteractionOptions:
+  interactionMessage: It's a berry tree, do you want to pick a bery?
+  interactionType: Options
+  interactionOptions:
   - PickBerryFromTree
   - 
-  ResultMessage: Oran berry
-  OptionsUiText:
-  - Yes
+  - 
+  - 
+  resultMessage: Oran berry
+  optionsUiText:
+  - Yes, definately ill take a berry
   - No thanks
-  AdditionalInfo: []
+  - Maybe
+  - Yessir
+  additionalInfo: []

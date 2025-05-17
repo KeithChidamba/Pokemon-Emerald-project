@@ -11,17 +11,24 @@ using UnityEngine.Serialization;
 public class DialogueOptionsManager : MonoBehaviour
 {
     public List<DialogueOption> currentOptions;
-    private int _widthMultiplier = 16;
-    private int _heightMultiplier = 50;
-    private int _minWidth = 85;
+    private int _widthMultiplier = 10;
+    private int _heightMultiplier = 32;
+    private int _minWidth = 100;
     RectTransform rectTransform;
-    public void LoadUiSize()
+
+    private void OnEnable()
     {
         rectTransform = GetComponent<RectTransform>();
-        var longestOptionLength = currentOptions.OrderByDescending(option => option.textContent).First().textContent.Length;
+    }
+    public void LoadUiSize()
+    {
+        var listOfLongest = currentOptions.OrderByDescending(option => option.textContent.Length).ToList();
+        var longestOptionLength = listOfLongest.First().textContent.Length;
         var width = longestOptionLength * _widthMultiplier;
         if (width < _minWidth) width = _minWidth;
         var height =  currentOptions.Count*_heightMultiplier;
-        rectTransform.localScale = new Vector3(width,height, 0);
+        foreach (var option in currentOptions)
+            option.SetWidth(width);
+        rectTransform.sizeDelta = new Vector2(width, height - currentOptions.Count);
     }
 }

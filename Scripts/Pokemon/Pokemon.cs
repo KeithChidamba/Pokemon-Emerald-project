@@ -206,6 +206,7 @@ public class Pokemon : ScriptableObject
         BaseSP_ATK=evo.BaseSP_ATK;
         BaseSP_DEF=evo.BaseSP_DEF;
         Basespeed = evo.Basespeed;
+        Pokemon_party.Instance.RefreshMemberCards();
     }
 
     void IncreaseStats()

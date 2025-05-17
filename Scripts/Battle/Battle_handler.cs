@@ -68,7 +68,7 @@ public class Battle_handler : MonoBehaviour
                 choosingMove = false;
             }
             else
-                Dialogue_handler.Instance.Write_Info("Click on who you will attack", "Details");
+                Dialogue_handler.Instance.DisplayInfo("Click on who you will attack", "Details");
         }
 
         if (choosingMove && (Input.GetKeyDown(KeyCode.Escape))) //exit move selection
@@ -99,7 +99,7 @@ public class Battle_handler : MonoBehaviour
             if (viewingOptions)
             {
                 ResetAi();
-                Dialogue_handler.Instance.Write_Info("What will you do?", "Details");
+                Dialogue_handler.Instance.DisplayInfo("What will you do?", "Details");
                 optionsUI.SetActive(true);
             }
         }
@@ -358,7 +358,7 @@ public void SetParticipant(Battle_Participant participant)
         yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         if (runningAway)
-            Dialogue_handler.Instance.Battle_Info(Game_Load.Instance.playerData.playerName + " ran away");
+            Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " ran away");
         else
         {
             int baseMoneyPayout=0;
@@ -366,12 +366,12 @@ public void SetParticipant(Battle_Participant participant)
                 baseMoneyPayout=battleParticipants[0].currentEnemies[0].pokemonTrainerAI.trainerData.BaseMoneyPayout;
             if (battleWon)
             {
-                Dialogue_handler.Instance.Battle_Info(Game_Load.Instance.playerData.playerName + " won the battle");
+                Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " won the battle");
                 if (isTrainerBattle)
                 {
                     int moneyGained = baseMoneyPayout * lastOpponent.Current_level * MoneyModifier();
                     Game_Load.Instance.playerData.playerMoney += moneyGained;
-                    Dialogue_handler.Instance.Battle_Info(Game_Load.Instance.playerData.playerName + " recieved P" + moneyGained);
+                    Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " recieved P" + moneyGained);
                 }
             }
             else
@@ -385,7 +385,7 @@ public void SetParticipant(Battle_Participant participant)
                 }
                 if (!Wild_pkm.Instance.ranAway)
                 {
-                    Dialogue_handler.Instance.Battle_Info("All your pokemon have fainted");
+                    Dialogue_handler.Instance.DisplayBattleInfo("All your pokemon have fainted");
                     playerWhiteOut = true;
                 }
             }
@@ -406,9 +406,9 @@ public void SetParticipant(Battle_Participant participant)
         yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
         Turn_Based_Combat.Instance.levelEventDelay = true;
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        Dialogue_handler.Instance.Battle_Info("Wow!");
+        Dialogue_handler.Instance.DisplayBattleInfo("Wow!");
         yield return new WaitForSeconds(0.5f);
-        Dialogue_handler.Instance.Battle_Info(pkmLevelUp.pokemon.Pokemon_name+" leveled up!");
+        Dialogue_handler.Instance.DisplayBattleInfo(pkmLevelUp.pokemon.Pokemon_name+" leveled up!");
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         pkmLevelUp.Execute();
         yield return new WaitForSeconds(0.5f);
@@ -471,11 +471,11 @@ public void SetParticipant(Battle_Participant participant)
         runningAway = true;
         displayingInfo = true;
         if(!isTrainerBattle & !_currentParticipant.canEscape)
-            Dialogue_handler.Instance.Battle_Info(_currentParticipant.pokemon.Pokemon_name +" is trapped");
+            Dialogue_handler.Instance.DisplayBattleInfo(_currentParticipant.pokemon.Pokemon_name +" is trapped");
         else
         {
             if (isTrainerBattle )
-                Dialogue_handler.Instance.Battle_Info("Can't run away from trainer battle");
+                Dialogue_handler.Instance.DisplayBattleInfo("Can't run away from trainer battle");
             else
             { 
                 int random = Utility.RandomRange(1,11);
@@ -489,7 +489,7 @@ public void SetParticipant(Battle_Participant participant)
                 }
                 else
                 {
-                    Dialogue_handler.Instance.Battle_Info("Can't run away");
+                    Dialogue_handler.Instance.DisplayBattleInfo("Can't run away");
                     Turn_Based_Combat.Instance.Invoke(nameof(Turn_Based_Combat.Instance.NextTurn),0.9f);
                 }
             }

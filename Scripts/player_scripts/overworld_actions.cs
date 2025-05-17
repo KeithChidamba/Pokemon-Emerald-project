@@ -57,17 +57,17 @@ public class overworld_actions : MonoBehaviour
         if (random< 5)
         {
             pokemonBitingPole = true;
-            Dialogue_handler.Instance.Write_Info("Oh!, a Bite!, Press F","Details");
+            Dialogue_handler.Instance.DisplayInfo("Oh!, a Bite!, Press F","Details");
             yield return new WaitForSeconds( (2 * (random/10f) ) + 1f);
             if (pokemonBitingPole)
             {
-                Dialogue_handler.Instance.Write_Info("It got away","Details");
+                Dialogue_handler.Instance.DisplayInfo("It got away","Details");
                 ResetFishingAction();
             }
         }
         else
         {
-            Dialogue_handler.Instance.Write_Info("Dang...nothing","Details");
+            Dialogue_handler.Instance.DisplayInfo("Dang...nothing","Details");
             ResetFishingAction();
         }
     }

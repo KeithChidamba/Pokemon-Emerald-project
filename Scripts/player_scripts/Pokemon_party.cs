@@ -66,7 +66,7 @@ public class Pokemon_party : MonoBehaviour
         if (swapIn.pokemon == null) return false;
         if (swapIn.pokemon == party[memberPosition - 1])
         {
-            Dialogue_handler.Instance.Write_Info(swapIn.pokemon.Pokemon_name +
+            Dialogue_handler.Instance.DisplayInfo(swapIn.pokemon.Pokemon_name +
                                                  " is already in battle", "Details", 1f);
             return false;
         }
@@ -93,7 +93,7 @@ public class Pokemon_party : MonoBehaviour
                 memberCards[memberPosition - 1].GetComponent<Pokemon_party_member>().options.SetActive(false);
             }
             else
-                Dialogue_handler.Instance.Write_Info("There must be at least 2 Pokemon to swap","Details",1f);
+                Dialogue_handler.Instance.DisplayInfo("There must be at least 2 Pokemon to swap","Details",1f);
         }
     }
 
@@ -153,7 +153,7 @@ public class Pokemon_party : MonoBehaviour
         var selectedMember = memberCards[memberPosition - 1];
         if (selectedMember.pokemon.HasItem)
         {
-            Dialogue_handler.Instance.Write_Info(selectedMember.pokemon.Pokemon_name
+            Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.Pokemon_name
                                                  +" is already holding something","Details",1f);
             givingItem = false;
             _itemToUse = null;
@@ -161,7 +161,7 @@ public class Pokemon_party : MonoBehaviour
             Game_ui_manager.Instance.Invoke(nameof(Game_ui_manager.Instance.ViewBag),1.1f);
             return;
         }
-        Dialogue_handler.Instance.Write_Info(selectedMember.pokemon.Pokemon_name
+        Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.Pokemon_name
                                              +" recieved a "+_itemToUse.itemName,"Details",1.3f);
         selectedMember.pokemon.GiveItem(Obj_Instance.CreateItem(_itemToUse));
         _itemToUse.quantity--;
@@ -212,7 +212,7 @@ private void CloseParty()
         memberIndicator.SetActive(false);
         ClearSelectionUI();
         if(!swappingIn && !swapOutNext)
-            Dialogue_handler.Instance.Write_Info("You swapped " + swapStore.Pokemon_name+ " with "+ party[partyPosition].Pokemon_name,"Details",1f);
+            Dialogue_handler.Instance.DisplayInfo("You swapped " + swapStore.Pokemon_name+ " with "+ party[partyPosition].Pokemon_name,"Details",1f);
     }
     public void AddMember(Pokemon pokemon)
     { //add new pokemon after catch or event

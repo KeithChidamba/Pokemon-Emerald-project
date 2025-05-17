@@ -1,22 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class DialogueOption : MonoBehaviour
 {
-    
     public Text optionText;
     public int optionIndex;
     public string textContent;
-
-    public void SetupOption(int index, string text)
+    private RectTransform _rectTransform;
+    public void SetupOption(int index,int numOptions, string text)
     {
+        _rectTransform = GetComponent<RectTransform>();
         optionIndex = index;
         optionText = GetComponentInChildren<Text>();
         textContent = text;
         optionText.text = textContent;
-        var rectTransform = GetComponent<RectTransform>();
-        rectTransform.localPosition = new Vector3(rectTransform.localPosition.x, rectTransform.localPosition.y+(optionIndex*30), 0);
+        var offsetY = numOptions>5? 5:numOptions;
+        _rectTransform.localPosition = new Vector3(_rectTransform.localPosition.x
+            , _rectTransform.localPosition.y+(optionIndex*25)+offsetY, 0);
     }
 
     public void SelectThisOption()
@@ -24,4 +26,8 @@ public class DialogueOption : MonoBehaviour
         Dialogue_handler.Instance.SelectOption(optionIndex);
     }
 
+    public void SetWidth(int width)
+    {
+        _rectTransform.sizeDelta = new Vector2(width*0.8f, _rectTransform.rect.height);
+    }
 }

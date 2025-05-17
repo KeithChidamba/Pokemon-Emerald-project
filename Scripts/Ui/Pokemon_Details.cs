@@ -87,8 +87,12 @@ public class Pokemon_Details : MonoBehaviour
     
     public void DisplayMoveDescription(int moveIndex)
     {
-        OnMoveSelected?.Invoke(moveIndex-1);
-        if (learningMove | changingMoveData) return;
+        if (learningMove)
+        {
+            OnMoveSelected?.Invoke(moveIndex-1);
+            return;
+        }
+        if (changingMoveData) return;
         move_Description.text = currentPokemon.move_set[moveIndex - 1].Description;
         move_acc.text = "Accuracy: "+currentPokemon.move_set[moveIndex - 1].Move_accuracy;
         move_dmg.text = "Damage: " + currentPokemon.move_set[moveIndex - 1].Move_damage;

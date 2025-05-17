@@ -105,7 +105,7 @@ public class Battle_Participant : MonoBehaviour
         fainted = (pokemon.HP <= 0);
         if (pokemon.HP > 0) return;
         Turn_Based_Combat.Instance.faintEventDelay = true;
-        Dialogue_handler.Instance.Battle_Info(pokemon.Pokemon_name+" fainted!");
+        Dialogue_handler.Instance.DisplayBattleInfo(pokemon.Pokemon_name+" fainted!");
         pokemon.Status_effect = "None";
         Give_exp();
         foreach (Battle_Participant enemy in currentEnemies)
@@ -145,7 +145,7 @@ public class Battle_Participant : MonoBehaviour
                 Pokemon_party.Instance.selectedMemberIndex = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
                 Pokemon_party.Instance.swapOutNext = true;
                 Game_ui_manager.Instance.ViewPokemonParty();
-                Dialogue_handler.Instance.Write_Info("Select a Pokemon to switch in","Details",2f);
+                Dialogue_handler.Instance.DisplayInfo("Select a Pokemon to switch in","Details",2f);
                 ResetParticipantState();
             }
             else if (Battle_handler.Instance.isDoubleBattle && alivePokemon.Count == 1)//1 left
