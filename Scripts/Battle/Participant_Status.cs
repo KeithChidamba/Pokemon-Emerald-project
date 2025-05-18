@@ -126,7 +126,7 @@ public class Participant_Status : MonoBehaviour
         _statusDuration++;
         _participant.Invoke(nameof(_participant.CheckIfFainted),0.9f);
     }
-    public void Notify_Healing()
+    public void NotifyHealing()
     {
         if (!_healed) return;
         switch (_participant.pokemon.Status_effect)

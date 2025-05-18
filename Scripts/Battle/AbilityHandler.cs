@@ -20,7 +20,7 @@ public class AbilityHandler : MonoBehaviour
         _abilityMethods.Add("overgrow",Overgrow);
         _abilityMethods.Add("torrent",Torrent);
         _abilityMethods.Add("paralysiscombo",ParalysisCombo);
-        _abilityMethods.Add("arenatrap",arena_trap);
+        _abilityMethods.Add("arenatrap",ArenaTrap);
         _abilityMethods.Add("static",Static);//underscore because some ability names are c# keywords
         _abilityMethods.Add("shedskin",ShedSkin);
         _abilityMethods.Add("swarm",Swarm);
@@ -58,7 +58,7 @@ public class AbilityHandler : MonoBehaviour
         _abilityTriggered = true;
     }
 
-    void arena_trap()
+    void ArenaTrap()
     {
         Debug.Log("triggered arena trap");
         foreach (var enemy in _participant.currentEnemies)

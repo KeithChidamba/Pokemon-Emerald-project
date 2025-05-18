@@ -150,23 +150,24 @@ public static class PokemonOperations
         LearningNewMove = true;
         CurrentPokemon = pokemon;
         var counter = 0;
-        
+        var isPartyPokemon = Pokemon_party.Instance.party.Contains(CurrentPokemon);
+        var inBattle = Options_manager.Instance.playerInBattle;
         foreach (var move in CurrentPokemon.learnSet)
         {
             var requiredLevel = int.Parse(move.Substring(move.Length - 2, 2));
-            
             if (CurrentPokemon.Current_level == requiredLevel)
             {
                 var pos = move.IndexOf('/')+1;
                 var moveType = move.Substring(0, pos - 1).ToLower();
                 var moveName = move.Substring(pos, move.Length - 2 - pos).ToLower();
+                if(!inBattle & isPartyPokemon)
+                    Game_ui_manager.Instance.canExitParty = false;
+                
                 if (CurrentPokemon.move_set.Count == 4) 
                 {//leveling up from battle or rare candies
-                    if(Options_manager.Instance.playerInBattle || Pokemon_party.Instance.party.Contains(CurrentPokemon))
+                    if(inBattle || isPartyPokemon)
                     {
-                        if(Options_manager.Instance.playerInBattle)
-                            Battle_handler.Instance.displayingInfo = true;
-                        Dialogue_handler.Instance.DisableDialogueExit();
+                        Battle_handler.Instance.displayingInfo = inBattle;
                         Dialogue_handler.Instance.DisplayList(
                             $"{CurrentPokemon.Pokemon_name} is trying to learn {moveName} ,do you want it to learn {moveName}?",
                             "", new[]{ "LearnMove","SkipMove" }, new[]{"Yes", "No"});
@@ -174,34 +175,43 @@ public static class PokemonOperations
                     }
                     //wild pokemon get generated with somewhat random moveset choices
                     else
-                        CurrentPokemon.move_set[Utility.RandomRange(0,4)] = Obj_Instance.CreateMove(Resources.Load<Move>(
-                            "Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
+                        CurrentPokemon.move_set[Utility.RandomRange(0,4)] = Obj_Instance.CreateMove(
+                            Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
                 }
                 else
                 {
-                    if(Options_manager.Instance.playerInBattle)
-                        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.Pokemon_name+" learned "+moveName);
-                    CurrentPokemon.move_set.Add(Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName)));
+                    if (isPartyPokemon)
+                    {
+                        if(!inBattle)
+                            Game_ui_manager.Instance.canExitParty = true;
+                        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.Pokemon_name+" learned "+moveName,true);
+                    }
+                    var newMove = Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
+                    if (!CurrentPokemon.move_set.Contains(newMove))
+                        CurrentPokemon.move_set.Add(newMove);
                     LearningNewMove = false;
                 }
                 break;
             }
             counter++;
         }
-
         if (counter == CurrentPokemon.learnSet.Length)
+        {
+            if (Pokemon_party.Instance.party.Contains(CurrentPokemon) & !Options_manager.Instance.playerInBattle)
+                Game_ui_manager.Instance.canExitParty = true;
             LearningNewMove = false;
+        }
     }
     public static void LearnSelectedMove(int moveIndex)
     {
         Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
         Pokemon_Details.Instance.learningMove = false;
         Pokemon_Details.Instance.ExitDetails();
-        Dialogue_handler.Instance.EndDialogue();
-        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.Pokemon_name + " forgot " + 
-                                                    CurrentPokemon.move_set[moveIndex].Move_name + " and learned " + NewMove.Move_name);
+        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.Pokemon_name + " forgot " 
+            + CurrentPokemon.move_set[moveIndex].Move_name 
+            + " and learned " + NewMove.Move_name,true);
         CurrentPokemon.move_set[moveIndex] = Obj_Instance.CreateMove(NewMove);
-        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==CurrentPokemon);
+        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon.Pokemon_ID==CurrentPokemon.Pokemon_ID);
         Turn_Based_Combat.Instance.levelEventDelay = false;
         Game_ui_manager.Instance.canExitParty = true;
     }

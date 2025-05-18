@@ -24,8 +24,9 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] private GameObject clickNextIndicator;
     [SerializeField] private GameObject dialogueExitIndicator;
     [SerializeField] private GameObject dialogueOptionPrefab;
-    [SerializeField] private Transform dialogueOptionParent;
+    [SerializeField] private GameObject dialogueOptionBox;
     private DialogueOptionsManager _dialogueOptionsManager;
+    [SerializeField] private Transform dialogueUiParent;
     private List<GameObject> _currentDialogueOptions = new();
     public bool messagesLoading = false;
     public List<Interaction> pendingMessages = new();
@@ -42,7 +43,7 @@ public class Dialogue_handler : MonoBehaviour
 
     private void Start()
     {
-        _dialogueOptionsManager = dialogueOptionParent.GetComponent<DialogueOptionsManager>();
+        _dialogueOptionsManager = dialogueOptionBox.GetComponent<DialogueOptionsManager>();
     }
 
     void Update()
@@ -86,16 +87,18 @@ public class Dialogue_handler : MonoBehaviour
     }
     private void CreateDialogueOptions()
     {
-        dialogueOptionParent.gameObject.SetActive(true);
+        dialogueOptionBox.gameObject.SetActive(true);
         DeletePreviousOptions();
-        for(var i = 0; i < currentInteraction.interactionOptions.Count; i++)
+        var numOptions = currentInteraction.interactionOptions.Count;
+        for(var i = 0; i < numOptions; i++)
         {
-            var newOption = Instantiate(dialogueOptionPrefab, dialogueOptionParent.parent);
+            var newOption = Instantiate(dialogueOptionPrefab, dialogueUiParent);
             var optionScript = newOption.GetComponent<DialogueOption>();
             _currentDialogueOptions.Add(newOption);
-            optionScript.SetupOption(i,currentInteraction.interactionOptions.Count,currentInteraction.optionsUiText[i]);
+            optionScript.SetupOption(i,numOptions,currentInteraction.optionsUiText[i]);
             _dialogueOptionsManager.currentOptions.Add(optionScript);
         }
+        _currentDialogueOptions.Reverse();
         _dialogueOptionsManager.LoadUiSize();
         ActivateOptions(true);
     } 
@@ -108,11 +111,11 @@ public class Dialogue_handler : MonoBehaviour
     }
     private void ActivateOptions(bool display)
      {
-         dialogueOptionParent.gameObject.SetActive(display);
+         dialogueOptionBox.gameObject.SetActive(display);
          foreach (var obj in _dialogueOptionsManager.currentOptions)
              obj.gameObject.SetActive(display);
      }
-    public void DisableDialogueExit()
+    private void DisableDialogueExit()
     {
         dialogueExitIndicator.SetActive(false);
         canExitDialogue = false;
@@ -127,12 +130,13 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void DisplayList(string info,string result,string[] options, string[]optionsText)//list info
     {
-        var details = NewInteraction(info,"Options",result);
+        DisableDialogueExit();
+        var newInteraction = NewInteraction(info,"Options",result);
         foreach (string option in options)
-            details.interactionOptions.Add(option);
+            newInteraction.interactionOptions.Add(option);
         foreach (string txt in optionsText)
-            details.optionsUiText.Add(txt);
-        currentInteraction = details;
+            newInteraction.optionsUiText.Add(txt);
+        currentInteraction = newInteraction;
         Display(currentInteraction);
     }
     
@@ -146,13 +150,14 @@ public class Dialogue_handler : MonoBehaviour
             }
         }
         messagesLoading = false;
-        Interaction details = NewInteraction(info,type,"");
-        currentInteraction = details;
+        var newInteraction = NewInteraction(info,type,"");
+        currentInteraction = newInteraction;
         Display(currentInteraction);
     }
     public void DisplayInfo(string info,string type,float dialogueDuration)
     {
         DisplayInfo(info,type);
+        //dont remove this
         if (Options_manager.Instance.playerInBattle)
         {
             if (overworld_actions.Instance.usingUI)
@@ -160,6 +165,14 @@ public class Dialogue_handler : MonoBehaviour
         }
         else
             EndDialogue(dialogueDuration);
+    }
+    public void DisplayBattleInfo(string info, bool canExit)//display plain text info to player
+    {
+        if(canExit)
+            EndDialogue();
+        else
+            DisableDialogueExit();
+        DisplayBattleInfo(info);
     }
     public void DisplayBattleInfo(string info)//display plain text info to player
     {
@@ -170,10 +183,10 @@ public class Dialogue_handler : MonoBehaviour
         }
         Battle_handler.Instance.displayingInfo = true;
         DisableDialogueExit();
-        var details = NewInteraction(info,"Battle Info","");
-        pendingMessages.Add(details);
+        var newInteraction = NewInteraction(info,"Battle Info","");
+        pendingMessages.Add(newInteraction);
         if(!messagesLoading)
-            StartCoroutine(ProcessQueue(details));
+            StartCoroutine(ProcessQueue(newInteraction));
     }
     private IEnumerator ProcessQueue(Interaction interaction)
     {
@@ -188,8 +201,8 @@ public class Dialogue_handler : MonoBehaviour
     {
         if (pendingMessages.Count > 0)
         {
-            foreach (Interaction msg in new List<Interaction>(pendingMessages))
-                StartCoroutine(ProcessQueue(msg));
+            foreach (var message in new List<Interaction>(pendingMessages))
+                StartCoroutine(ProcessQueue(message));
         }
         else
         {
@@ -207,10 +220,8 @@ public class Dialogue_handler : MonoBehaviour
         canExitDialogue=true;
         ActivateOptions(false);
         currentInteraction = null;
-        if(!Options_manager.Instance.playerInBattle || overworld_actions.Instance.usingUI)
-            infoDialogueBox.SetActive(false);
-        else
-            battleDialogueBox.SetActive(false);
+        infoDialogueBox.SetActive(false);
+        battleDialogueBox.SetActive(false);
         currentLineContent = "";
         dialougeText.text = "";
         displaying = false;

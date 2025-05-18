@@ -60,8 +60,7 @@ public class Options_manager : MonoBehaviour
         Pokemon_Details.Instance.learningMove = true;
         Pokemon_Details.Instance.OnMoveSelected += PokemonOperations.LearnSelectedMove;
         Pokemon_Details.Instance.LoadDetails(PokemonOperations.CurrentPokemon);
-        Dialogue_handler.Instance.DisableDialogueExit();
-        Dialogue_handler.Instance.DisplayBattleInfo("Which move will you replace?");
+        Dialogue_handler.Instance.DisplayBattleInfo("Which move will you replace?",false);
         selectedNewMoveOption = false;
     }
     void SkipMove()
@@ -69,11 +68,10 @@ public class Options_manager : MonoBehaviour
         Game_ui_manager.Instance.canExitParty = true;
         Pokemon_Details.Instance.learningMove = false;
         PokemonOperations.LearningNewMove = false;
-        Dialogue_handler.Instance.EndDialogue();
         Dialogue_handler.Instance.DisplayBattleInfo(PokemonOperations.CurrentPokemon.Pokemon_name +
-                                                    " did not learn "+PokemonOperations.NewMove.Move_name);
+                                                    " did not learn "+PokemonOperations.NewMove.Move_name,true);
         selectedNewMoveOption = false;
-        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon==PokemonOperations.CurrentPokemon);
+        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon.Pokemon_ID==PokemonOperations.CurrentPokemon.Pokemon_ID);
     }
     void HealPokemon()
     {

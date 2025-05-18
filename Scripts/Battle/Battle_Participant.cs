@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -40,18 +41,19 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnTurnEnd += CheckIfFainted;
         Move_handler.Instance.OnMoveEnd += CheckIfFainted;
         Turn_Based_Combat.Instance.OnMoveExecute += CheckIfFainted;
-        Battle_handler.Instance.OnBattleEnd += Deactivate_pkm;
+        Battle_handler.Instance.OnBattleEnd += DeactivatePokemon;
     }
     private void Update()
     {
         if (!isActive) return;
         UpdateUI();
     }
-    private void Give_exp()
+    private void GiveExp(Pokemon enemy)
     {
-        Distribute_EXP(pokemon.CalculateExperience(pokemon));
+        //let the enemy that knocked you out, calculate exp 
+        DistributeExp(enemy.CalculateExperience(pokemon));
     }
-    private void Give_EVs(Battle_Participant enemy)
+    private void GiveEVs(Battle_Participant enemy)
     {
         foreach (string ev in pokemon.EVs)
         {
@@ -65,29 +67,42 @@ public class Battle_Participant : MonoBehaviour
         if(!expReceivers.Contains(pkm))
             expReceivers.Add(pkm);
     }
-    private void Distribute_EXP(int expFromEnemy)
+    private void DistributeExp(int expFromEnemy)
     {
+        // Remove fainted or invalid Pokémon
         expReceivers.RemoveAll(p => p.HP <= 0);
-        if(expReceivers.Count<1)return;
-        if (expReceivers.Count == 1)//let the pokemon with exp share get all exp if it fought alone
+        expReceivers.RemoveAll(p => !Pokemon_party.Instance.party.Contains(p));
+        if (expReceivers.Count < 1) return;
+
+        // Separate holders and participants
+        var expShareHolders = expReceivers
+            .Where(p => p.HasItem && p.HeldItem.itemName == "Exp Share")
+            .ToList();
+
+        var participants = expReceivers
+            .Where(p => !expShareHolders.Contains(p))
+            .ToList();
+
+        int totalExp = expFromEnemy;
+
+        // Distribute 50% to EXP Share holders
+        int expShareTotal = totalExp / 2;
+        if (expShareHolders.Count > 0)
         {
-            expReceivers[0].ReceiveExperience(expFromEnemy);
-            expReceivers.Clear();
-            return;
+            int shareExpPerHolder = expShareTotal / expShareHolders.Count;
+            foreach (var p in expShareHolders)
+                p.ReceiveExperience(shareExpPerHolder);
         }
-        var alivePokemon = Pokemon_party.Instance.GetLivingPokemon(); 
-        foreach(var currentPokemon in alivePokemon)//exp share split, assuming there's only ever 1 exp share in the game
-            if (currentPokemon.HasItem)
-                if(currentPokemon.HeldItem.itemName == "Exp Share")
-                {
-                    currentPokemon.ReceiveExperience(expFromEnemy / 2);
-                    expFromEnemy /= 2;
-                    break;
-                }
-        var exp = expFromEnemy / expReceivers.Count;
-        foreach (Pokemon p in expReceivers)
-            if(!p.HasItem | p.HeldItem.itemName != "Exp Share")
-                p.ReceiveExperience(exp);
+
+        // Distribute remaining 50% among participants
+        int participantTotalExp = totalExp - expShareTotal;
+        if (participants.Count > 0)
+        {
+            int shareExpPerParticipant = participantTotalExp / participants.Count;
+            foreach (var p in participants)
+                p.ReceiveExperience(shareExpPerParticipant);
+        }
+
         expReceivers.Clear();
     }
     public void CheckIfFainted()
@@ -101,16 +116,19 @@ public class Battle_Participant : MonoBehaviour
             }
         }
         if (!isActive) return;
-        if (fainted) return;
+        if (fainted) return; 
         fainted = (pokemon.HP <= 0);
         if (pokemon.HP > 0) return;
         Turn_Based_Combat.Instance.faintEventDelay = true;
         Dialogue_handler.Instance.DisplayBattleInfo(pokemon.Pokemon_name+" fainted!");
         pokemon.Status_effect = "None";
-        Give_exp();
-        foreach (Battle_Participant enemy in currentEnemies)
+        
+        if (!isPlayer) 
+            GiveExp(Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon);
+        
+        foreach (var enemy in currentEnemies)
             if(enemy.pokemon!=null)
-                Give_EVs(enemy);
+                GiveEVs(enemy);
         if (isPlayer)
             Invoke(nameof(CheckIfLoss),1f);
         else
@@ -157,13 +175,13 @@ public class Battle_Participant : MonoBehaviour
             }
         }
     }
-    public void Deactivate_pkm()
+    public void DeactivatePokemon()
     {
         isActive = false;
         currentEnemies.Clear();
         Turn_Based_Combat.Instance.OnTurnEnd -= statusHandler.Check_status;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
-        Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.Notify_Healing;
+        Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.NotifyHealing;
     }
     public void ResetParticipantState()
     {
@@ -231,7 +249,7 @@ public class Battle_Participant : MonoBehaviour
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.Status_effect);
         Turn_Based_Combat.Instance.OnTurnEnd += statusHandler.Check_status;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
-        Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.Notify_Healing;
+        Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
         if (isPlayer)
         {
             _resetHandler = pkm => ResetParticipantState();

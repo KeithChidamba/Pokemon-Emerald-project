@@ -1226,7 +1226,7 @@ MonoBehaviour:
   statData: {fileID: 0}
   pokemon: {fileID: 0}
   currentEnemies: []
-  pokemonImage: {fileID: 1851276598}
+  pokemonImage: {fileID: 1900733081}
   statusImage: {fileID: 249051072}
   pokemonGenderImage: {fileID: 192485168}
   pokemonNameText: {fileID: 831252460}
@@ -10877,6 +10877,7 @@ MonoBehaviour:
   viewingMenu: 0
   menuOff: 1
   profile: {fileID: 690814249}
+  canExitParty: 1
 --- !u!1 &319297257
 GameObject:
   m_ObjectHideFlags: 0
@@ -31687,7 +31688,7 @@ GameObject:
   - component: {fileID: 935651800}
   - component: {fileID: 935651799}
   m_Layer: 5
-  m_Name: OptionsParent
+  m_Name: OptionsBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35789,7 +35790,8 @@ MonoBehaviour:
   clickNextIndicator: {fileID: 857896472}
   dialogueExitIndicator: {fileID: 1627378941}
   dialogueOptionPrefab: {fileID: 1670115779}
-  dialogueOptionParent: {fileID: 935651798}
+  dialogueOptionBox: {fileID: 935651797}
+  dialogueUiParent: {fileID: 235881331}
   messagesLoading: 0
   pendingMessages: []
 --- !u!114 &1097391157

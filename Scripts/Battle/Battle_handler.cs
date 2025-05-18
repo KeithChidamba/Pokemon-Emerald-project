@@ -86,6 +86,7 @@ public class Battle_handler : MonoBehaviour
 
         if (overworld_actions.Instance.usingUI)
         {
+           // Dialogue_handler.Instance.EndDialogue();
             Wild_pkm.Instance.canAttack = false;
             optionsUI.SetActive(false);
             viewingOptions = false;
@@ -378,7 +379,9 @@ public void SetParticipant(Battle_Participant participant)
             {
                 if (isTrainerBattle)
                 {
-                    lastOpponent = battleParticipants[0].currentEnemies[0].pokemon;
+                    var playerLastParticipant = battleParticipants.ToList()
+                        .Where(p => p.isActive & p.isPlayer).ToList()[0];//last participant is always not null in this case
+                    lastOpponent = playerLastParticipant.currentEnemies.Where(p=>p.isActive).ToList()[0].pokemon;
                     Game_Load.Instance.playerData.playerMoney -= baseMoneyPayout 
                                                                    * Game_Load.Instance.playerData.numBadges 
                                                                    * lastOpponent.Current_level;
@@ -460,7 +463,7 @@ public void SetParticipant(Battle_Participant participant)
             }
         Encounter_handler.Instance.ResetTrigger();
         overWorld.SetActive(true);
-        string location = (playerWhiteOut)? "Poke Center" : Game_Load.Instance.playerData.location;
+        var location = (playerWhiteOut)? "Poke Center" : Game_Load.Instance.playerData.location;
         Area_manager.Instance.SwitchToArea(location, 0f);
         Dialogue_handler.Instance.canExitDialogue = true;
         battleWon = false;

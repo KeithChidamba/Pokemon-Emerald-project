@@ -10,7 +10,7 @@ public class Player_Info_ui : MonoBehaviour
     public Text playerMoney;
     public Text trainerID;
     public bool viewingProfile;
-    public void Load_Profile(Player_data player)
+    public void LoadProfile(Player_data player)
     {
         viewingProfile = true;
         trainerID.text = "ID: "+player.trainerID;

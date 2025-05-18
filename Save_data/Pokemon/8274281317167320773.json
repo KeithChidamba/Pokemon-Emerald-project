@@ -6,22 +6,22 @@
     "Gender": "Male",
     "GenderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 24970
+        "instanceID": 24978
     },
     "has_gender": true,
-    "HP": 14.0,
-    "max_HP": 14.0,
+    "HP": 36.0,
+    "max_HP": 40.0,
     "BaseHP": 50.0,
     "BaseAttack": 70.0,
     "BaseDefense": 50.0,
     "BaseSP_ATK": 50.0,
     "BaseSP_DEF": 50.0,
     "Basespeed": 40.0,
-    "Attack": 8.0,
-    "Defense": 7.0,
-    "SP_ATK": 7.0,
-    "SP_DEF": 7.0,
-    "speed": 6.0,
+    "Attack": 29.0,
+    "Defense": 24.0,
+    "SP_ATK": 22.0,
+    "SP_DEF": 23.0,
+    "speed": 17.0,
     "HP_IV": 6.0,
     "Attack_IV": 23.0,
     "Defense_IV": 30.0,
@@ -41,9 +41,9 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "CatchRate": 45.0,
-    "Current_level": 2,
-    "CurrentExpAmount": 0,
-    "NextLevelExpAmount": 9.0,
+    "Current_level": 15,
+    "CurrentExpAmount": 1613,
+    "NextLevelExpAmount": 2035.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25212
+            "instanceID": 25220
         }
     ],
     "Status_effect": "None",
@@ -75,18 +75,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -54462
+            "instanceID": -33722
+        },
+        {
+            "instanceID": -33724
+        },
+        {
+            "instanceID": -33726
+        },
+        {
+            "instanceID": -33728
         }
     ],
     "ability": {
-        "instanceID": 25474
+        "instanceID": 25482
     },
     "evolutions": [
         {
-            "instanceID": 25728
+            "instanceID": 25736
         },
         {
-            "instanceID": 25592
+            "instanceID": 25600
         }
     ],
     "HeldItem": {
@@ -94,10 +103,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 32008
+        "instanceID": 32016
     },
     "back_picture": {
-        "instanceID": 32010
+        "instanceID": 32018
     },
     "ability_name": "Torrent",
     "natureName": "Sassy",
@@ -109,9 +118,15 @@
         "Water"
     ],
     "move_data": [
-        "Tackle/Normal"
+        "Tackle/Normal",
+        "Bubble/Water",
+        "Mud slap/Ground",
+        "Water Gun/Water"
     ],
     "move_pp_data": [
-        "20/20"
+        "20/20",
+        "20/20",
+        "15/15",
+        "25/25"
     ]
 }

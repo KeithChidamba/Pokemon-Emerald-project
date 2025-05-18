@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class Game_ui_manager : MonoBehaviour
     public bool menuOff=true;
     public Player_Info_ui profile;
     public static Game_ui_manager Instance;
-    private int _numUIScreensOpen;
+    [SerializeField]private int _numUIScreensOpen;
     public bool canExitParty = true;
     private void Awake()
     {
@@ -21,8 +22,13 @@ public class Game_ui_manager : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    private void Start()
+    {
         canExitParty = true;
     }
+
     private void Update()
     {
         if (overworld_actions.Instance == null) return;
@@ -101,6 +107,7 @@ public class Game_ui_manager : MonoBehaviour
 
     public void CloseMenu()
     {
+        if (!viewingMenu) return;
         ManageScreens(-1);
         menuOptions.SetActive(false);
         viewingMenu = false;
@@ -125,7 +132,7 @@ public class Game_ui_manager : MonoBehaviour
         ManageScreens(1);
         ActivateUiElement(profile.gameObject);
         CloseMenu();
-        profile.Load_Profile(Game_Load.Instance.playerData);
+        profile.LoadProfile(Game_Load.Instance.playerData);
     }
     public void ViewPokemonParty()
     {

@@ -52,9 +52,9 @@ public class Item_handler : MonoBehaviour
     IEnumerator LevelUpWithItem()
     {
         Game_ui_manager.Instance.canExitParty = false;
-        Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name+" leveled up!", "Details",1f);
-        yield return new WaitForSeconds(1.1f);
         var exp = PokemonOperations.CalculateExpForNextLevel(selectedPartyPokemon.Current_level, selectedPartyPokemon.EXPGroup);
+        Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name+" leveled up!", "Details",1f);
+        yield return new WaitForSeconds(1f);
         selectedPartyPokemon.ReceiveExperience((exp-selectedPartyPokemon.CurrentExpAmount)+1);
         DepleteItem();
         ResetItemUsage();

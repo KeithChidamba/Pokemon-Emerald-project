@@ -363,13 +363,11 @@ public class Move_handler:MonoBehaviour
     } 
     void absorb()
      {
-         float damage = CalculateMoveDamage(_currentTurn.move,victim);
-         float heal_amount = damage/ 2f;
+         var damage = CalculateMoveDamage(_currentTurn.move,victim);
+         var healAmount = damage/ 2f;
          victim.pokemon.HP -= damage;
-         if( (heal_amount+attacker.pokemon.HP) < attacker.pokemon.max_HP)
-             attacker.pokemon.HP += math.trunc(math.abs(heal_amount));
-         else
-             attacker.pokemon.HP = attacker.pokemon.max_HP;
+         attacker.pokemon.HP =( (healAmount+attacker.pokemon.HP) < attacker.pokemon.max_HP)? 
+             math.trunc(math.abs(healAmount)) : attacker.pokemon.max_HP;
          Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.Pokemon_name+" gained health");
          _moveDelay = false;
          processingOrder = false;
