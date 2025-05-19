@@ -98,16 +98,14 @@ public class Dialogue_handler : MonoBehaviour
             optionScript.SetupOption(i,numOptions,currentInteraction.optionsUiText[i]);
             _dialogueOptionsManager.currentOptions.Add(optionScript);
         }
-        _currentDialogueOptions.Reverse();
         _dialogueOptionsManager.LoadUiSize();
         ActivateOptions(true);
     } 
     public void SelectOption(int optionIndex)
     {
-        if (PokemonOperations.LearningNewMove)
-            Options_manager.Instance.selectedNewMoveOption = true;
         ActivateOptions(false);
         Options_manager.Instance.CompleteInteraction(currentInteraction,optionIndex);
+        DeletePreviousOptions();
     }
     private void ActivateOptions(bool display)
      {

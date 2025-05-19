@@ -15,7 +15,7 @@ public class Battle_handler : MonoBehaviour
     public GameObject movesUI;
     public GameObject optionsUI;
     public Battle_Participant[] battleParticipants = { null, null, null, null };
-    public List<LevelUpEvent> levelUpQueue = new();
+    public List<Pokemon> levelUpQueue = new();
     public Text movePowerPointsText;
     public Text moveTypeText;
     public Text[] availableMovesText;
@@ -378,10 +378,11 @@ public void SetParticipant(Battle_Participant participant)
             else
             {
                 if (isTrainerBattle)
-                {
+                {//last participant is always not null in this situation
                     var playerLastParticipant = battleParticipants.ToList()
-                        .Where(p => p.isActive & p.isPlayer).ToList()[0];//last participant is always not null in this case
-                    lastOpponent = playerLastParticipant.currentEnemies.Where(p=>p.isActive).ToList()[0].pokemon;
+                        .Where(p => p.isActive & p.isPlayer).ToList()[0];
+                    lastOpponent = playerLastParticipant.currentEnemies
+                        .Where(p=>p.isActive).ToList()[0].pokemon;
                     Game_Load.Instance.playerData.playerMoney -= baseMoneyPayout 
                                                                    * Game_Load.Instance.playerData.numBadges 
                                                                    * lastOpponent.Current_level;
@@ -398,46 +399,39 @@ public void SetParticipant(Battle_Participant participant)
         if(overworld_actions.Instance.fishing)
             overworld_actions.Instance.ResetFishingAction();
     }
-    public void LevelUpEvent(Pokemon pkm)
+    public void LevelUpEvent(Pokemon pokemon)
     {
-        LevelUpEvent levelEvent=new LevelUpEvent(pkm);
-        levelUpQueue.Add(levelEvent);
-        StartCoroutine(LevelUp_Sequence(levelEvent));
+        levelUpQueue.Add(pokemon);
+        StartCoroutine(LevelUpSequence(pokemon));
     } 
-    IEnumerator LevelUp_Sequence(LevelUpEvent pkmLevelUp)
+    private IEnumerator LevelUpSequence(Pokemon pokemonToLevelUp)
     {
         yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
         Turn_Based_Combat.Instance.levelEventDelay = true;
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         Dialogue_handler.Instance.DisplayBattleInfo("Wow!");
-        yield return new WaitForSeconds(0.5f);
-        Dialogue_handler.Instance.DisplayBattleInfo(pkmLevelUp.pokemon.Pokemon_name+" leveled up!");
+        Dialogue_handler.Instance.DisplayBattleInfo(pokemonToLevelUp.Pokemon_name+" leveled up!");
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        pkmLevelUp.Execute();
-        yield return new WaitForSeconds(0.5f);
+        PokemonOperations.CheckForNewMove(pokemonToLevelUp);
         if (PokemonOperations.LearningNewMove)
         {
-            if (pkmLevelUp.pokemon.move_set.Count > 3)
+            if (pokemonToLevelUp.move_set.Count == 4)
             {
-                yield return new WaitUntil(() => Options_manager.Instance.selectedNewMoveOption);
-                yield return new WaitForSeconds(0.5f);
-                if (Pokemon_Details.Instance.learningMove)
-                    yield return new WaitUntil(() => !Pokemon_Details.Instance.learningMove);
-                else
-                    Turn_Based_Combat.Instance.levelEventDelay = false;
+                yield return new WaitUntil(() => PokemonOperations.SelectingMoveReplacement);
+                yield return new WaitUntil(() => !PokemonOperations.SelectingMoveReplacement);
             }
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
-        else
-        //in case if leveled up and didn't learn move
-            levelUpQueue.Remove(pkmLevelUp);
+        yield return new WaitUntil(() => !PokemonOperations.LearningNewMove);
+        levelUpQueue.Remove(pokemonToLevelUp);
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         Turn_Based_Combat.Instance.levelEventDelay = false;
         if(battleOver & levelUpQueue.Count==0)
-            End_Battle(battleWon);
+            EndBattle(battleWon);
     }
-    public void End_Battle(bool Haswon)
+    public void EndBattle(bool hasWon)
     {
-        battleWon = Haswon;
+        battleWon = hasWon;
         battleOver = true;
         StartCoroutine(DelayBattleEnd());
     }
@@ -450,16 +444,16 @@ public void SetParticipant(Battle_Participant participant)
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
         lastOpponent = null;
-        foreach (Battle_Participant p in battleParticipants)
-            if(p.pokemon!=null)
+        foreach (var participant in battleParticipants)
+            if(participant.pokemon!=null)
             {
-                p.statData.LoadActualStats();
-                p.statData.ResetBattleState(p.pokemon,true);
-                p.pokemon = null;
-                p.previousMove = "";
-                p.DeactivateUI();
-                if (p.pokemonTrainerAI != null)
-                    p.pokemonTrainerAI.inBattle = false;
+                participant.statData.LoadActualStats();
+                participant.statData.ResetBattleState(participant.pokemon,true);
+                participant.pokemon = null;
+                participant.previousMove = "";
+                participant.DeactivateUI();
+                if (participant.pokemonTrainerAI != null)
+                    participant.pokemonTrainerAI.inBattle = false;
             }
         Encounter_handler.Instance.ResetTrigger();
         overWorld.SetActive(true);
@@ -488,7 +482,7 @@ public void SetParticipant(Battle_Participant participant)
                 if (random > 5) //initially 50/50 chance to run
                 {
                     Wild_pkm.Instance.inBattle = false;
-                    End_Battle(false);
+                    EndBattle(false);
                 }
                 else
                 {

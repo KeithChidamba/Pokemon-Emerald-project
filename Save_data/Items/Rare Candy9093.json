@@ -1,0 +1,18 @@
+{
+    "itemID": "Rare Candy9093",
+    "itemName": "Rare Candy",
+    "itemType": "Rare Candy",
+    "itemEffect": "1",
+    "itemDescription": "Levels up a pokemon",
+    "price": 0,
+    "quantity": 5,
+    "itemImage": {
+        "instanceID": 31988
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}

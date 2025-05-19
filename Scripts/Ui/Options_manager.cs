@@ -7,7 +7,6 @@ public class Options_manager : MonoBehaviour
 {
     private Interaction _currentInteraction;
     public bool playerInBattle;
-    public bool selectedNewMoveOption;
     [SerializeField] private Recieve_Pokemon starterPokemonGiftEvent;
     public static Options_manager Instance;
     private readonly Dictionary<string, Action> _interactionMethods = new ();
@@ -61,17 +60,15 @@ public class Options_manager : MonoBehaviour
         Pokemon_Details.Instance.OnMoveSelected += PokemonOperations.LearnSelectedMove;
         Pokemon_Details.Instance.LoadDetails(PokemonOperations.CurrentPokemon);
         Dialogue_handler.Instance.DisplayBattleInfo("Which move will you replace?",false);
-        selectedNewMoveOption = false;
     }
     void SkipMove()
     {
         Game_ui_manager.Instance.canExitParty = true;
         Pokemon_Details.Instance.learningMove = false;
+        PokemonOperations.SelectingMoveReplacement = false;
         PokemonOperations.LearningNewMove = false;
         Dialogue_handler.Instance.DisplayBattleInfo(PokemonOperations.CurrentPokemon.Pokemon_name +
                                                     " did not learn "+PokemonOperations.NewMove.Move_name,true);
-        selectedNewMoveOption = false;
-        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon.Pokemon_ID==PokemonOperations.CurrentPokemon.Pokemon_ID);
     }
     void HealPokemon()
     {

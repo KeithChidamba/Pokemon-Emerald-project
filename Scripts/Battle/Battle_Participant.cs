@@ -144,14 +144,14 @@ public class Battle_Participant : MonoBehaviour
     {
         Wild_pkm.Instance.inBattle = false;
         Turn_Based_Combat.Instance.faintEventDelay = false;
-        Battle_handler.Instance.End_Battle(true);
+        Battle_handler.Instance.EndBattle(true);
     }
     private void CheckIfLoss()
     {
         List<Pokemon> alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
         if (alivePokemon.Count==0)
         {
-            Battle_handler.Instance.End_Battle(false);
+            Battle_handler.Instance.EndBattle(false);
             if(!Battle_handler.Instance.isTrainerBattle)
                 Wild_pkm.Instance.inBattle = false;
         }

@@ -21,7 +21,7 @@ public class AbilityHandler : MonoBehaviour
         _abilityMethods.Add("torrent",Torrent);
         _abilityMethods.Add("paralysiscombo",ParalysisCombo);
         _abilityMethods.Add("arenatrap",ArenaTrap);
-        _abilityMethods.Add("static",Static);//underscore because some ability names are c# keywords
+        _abilityMethods.Add("static",Static);
         _abilityMethods.Add("shedskin",ShedSkin);
         _abilityMethods.Add("swarm",Swarm);
     }
@@ -159,21 +159,21 @@ public class AbilityHandler : MonoBehaviour
             (60, 69, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "Escape Rope" }),
             (70, 100, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "PP Up" })
         };
-        string[] PossibleItems = null;
+        string[] possibleItems = null;
         foreach (var pool in ItemPools)
         {
             if (_participant.pokemon.Current_level >= pool.MinLevel && _participant.pokemon.Current_level <= pool.MaxLevel)
             {
-                PossibleItems = pool.Items;
+                possibleItems = pool.Items;
                 break;
             }
         }
-        if (PossibleItems != null)
+        if (possibleItems != null)
         {
-            int ItemWonIndex = Utility.RandomRange(0, PossibleItems.Length);
-            Item ItemWon = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/" + PossibleItems[ItemWonIndex]);
+            var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
+            var itemWon = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/" + possibleItems[itemWonIndex]);
             if (Utility.RandomRange(1, 101) < _participant.pokemon.Current_level)
-                _participant.pokemon.HeldItem = Obj_Instance.CreateItem(ItemWon);
+                _participant.pokemon.HeldItem = Obj_Instance.CreateItem(itemWon);
         }
 
     }
@@ -184,11 +184,11 @@ public class AbilityHandler : MonoBehaviour
         Debug.Log("triggered static: "+attacker.pokemon.Pokemon_name);
         if (!attacker.pokemon.CanBeDamaged)
             return;
-        if(isSpecialMove)return;
+        if(isSpecialMove)return; 
         //simulate a pokemon's attack
-        Move PlaceholderMove = ScriptableObject.CreateInstance<Move>();
-        PlaceholderMove.Status_effect = "Paralysis";
-        Move_handler.Instance.HandleStatusApplication(attacker, PlaceholderMove);
+        var placeholderMove = ScriptableObject.CreateInstance<Move>();
+        placeholderMove.Status_effect = "Paralysis";
+        Move_handler.Instance.HandleStatusApplication(attacker, placeholderMove);
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {

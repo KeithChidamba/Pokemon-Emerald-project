@@ -256,7 +256,7 @@ public class Pokemon : ScriptableObject
                 CheckEvolutionRequirements(0);
         }
         if (!Options_manager.Instance.playerInBattle)//artificial level up
-            PokemonOperations.GetNewMove(this);
+            PokemonOperations.CheckForNewMove(this);
         OnNewLevel?.Invoke();
         while(CurrentExpAmount>NextLevelExpAmount)
             LevelUp();

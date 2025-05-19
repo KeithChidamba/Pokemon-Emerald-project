@@ -46,7 +46,7 @@ public class Enemy_trainer : MonoBehaviour
         if (numAlive.Count == 0)
         {
             Battle_handler.Instance.lastOpponent = participant.pokemon;
-            Battle_handler.Instance.End_Battle(true);
+            Battle_handler.Instance.EndBattle(true);
         }
         else
         {

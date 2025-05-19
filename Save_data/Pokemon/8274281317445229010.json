@@ -6,22 +6,22 @@
     "Gender": "Male",
     "GenderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25094
+        "instanceID": 25086
     },
     "has_gender": true,
-    "HP": 13.0,
-    "max_HP": 13.0,
+    "HP": 33.0,
+    "max_HP": 33.0,
     "BaseHP": 45.0,
     "BaseAttack": 60.0,
     "BaseDefense": 40.0,
     "BaseSP_ATK": 70.0,
     "BaseSP_DEF": 50.0,
     "Basespeed": 45.0,
-    "Attack": 6.0,
-    "Defense": 7.0,
-    "SP_ATK": 8.0,
-    "SP_DEF": 7.0,
-    "speed": 7.0,
+    "Attack": 1800.0,
+    "Defense": 17.0,
+    "SP_ATK": 25.0,
+    "SP_DEF": 18.0,
+    "speed": 190.0,
     "HP_IV": 4.0,
     "Attack_IV": 14.0,
     "Defense_IV": 24.0,
@@ -41,9 +41,9 @@
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "CatchRate": 45.0,
-    "Current_level": 2,
-    "CurrentExpAmount": 0,
-    "NextLevelExpAmount": 9.0,
+    "Current_level": 12,
+    "CurrentExpAmount": 765,
+    "NextLevelExpAmount": 973.0,
     "EXPGroup": "Medium Slow",
     "exp_yield": 65,
     "has_trainer": true,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25726
+            "instanceID": 25718
         }
     ],
     "Status_effect": "None",
@@ -75,18 +75,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -33732
+            "instanceID": -38352
+        },
+        {
+            "instanceID": -38354
+        },
+        {
+            "instanceID": -38356
+        },
+        {
+            "instanceID": -38358
         }
     ],
     "ability": {
-        "instanceID": 24976
+        "instanceID": 24968
     },
     "evolutions": [
         {
-            "instanceID": 26054
+            "instanceID": 26046
         },
         {
-            "instanceID": 24948
+            "instanceID": 24940
         }
     ],
     "HeldItem": {
@@ -94,10 +103,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 31902
+        "instanceID": 31894
     },
     "back_picture": {
-        "instanceID": 31986
+        "instanceID": 31978
     },
     "ability_name": "Blaze",
     "natureName": "Timid",
@@ -109,9 +118,15 @@
         "Fire"
     ],
     "move_data": [
-        "Scratch/Normal"
+        "Scratch/Normal",
+        "Ember/Fire",
+        "Double kick/Fighting",
+        "Focus Energy/Normal"
     ],
     "move_pp_data": [
-        "25/25"
+        "25/25",
+        "20/20",
+        "20/20",
+        "15/15"
     ]
 }

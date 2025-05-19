@@ -4,7 +4,8 @@ using Unity.Mathematics;
 
 public static class PokemonOperations
 {
-    public static bool LearningNewMove = false;
+    public static bool LearningNewMove;
+    public static bool SelectingMoveReplacement;
     public static Pokemon CurrentPokemon;
     public static Move NewMove;
     private static long GeneratePokemonID(Pokemon pokemon)//pokemon's unique ID
@@ -145,7 +146,7 @@ public static class PokemonOperations
         pokemon.speed_IV =  Utility.RandomRange(0,32);
     }
 
-    public static void GetNewMove(Pokemon pokemon)
+    public static void CheckForNewMove(Pokemon pokemon)
     {
         LearningNewMove = true;
         CurrentPokemon = pokemon;
@@ -167,6 +168,7 @@ public static class PokemonOperations
                 {//leveling up from battle or rare candies
                     if(inBattle || isPartyPokemon)
                     {
+                        SelectingMoveReplacement = true;
                         Battle_handler.Instance.displayingInfo = inBattle;
                         Dialogue_handler.Instance.DisplayList(
                             $"{CurrentPokemon.Pokemon_name} is trying to learn {moveName} ,do you want it to learn {moveName}?",
@@ -197,7 +199,7 @@ public static class PokemonOperations
         }
         if (counter == CurrentPokemon.learnSet.Length)
         {
-            if (Pokemon_party.Instance.party.Contains(CurrentPokemon) & !Options_manager.Instance.playerInBattle)
+            if (isPartyPokemon & !inBattle)
                 Game_ui_manager.Instance.canExitParty = true;
             LearningNewMove = false;
         }
@@ -211,8 +213,8 @@ public static class PokemonOperations
             + CurrentPokemon.move_set[moveIndex].Move_name 
             + " and learned " + NewMove.Move_name,true);
         CurrentPokemon.move_set[moveIndex] = Obj_Instance.CreateMove(NewMove);
-        Battle_handler.Instance.levelUpQueue.RemoveAll(p=>p.pokemon.Pokemon_ID==CurrentPokemon.Pokemon_ID);
-        Turn_Based_Combat.Instance.levelEventDelay = false;
+        SelectingMoveReplacement = false;
+        LearningNewMove = false;
         Game_ui_manager.Instance.canExitParty = true;
     }
     private static void AssignPokemonGender(Pokemon pokemon)

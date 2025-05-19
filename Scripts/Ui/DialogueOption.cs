@@ -18,7 +18,7 @@ public class DialogueOption : MonoBehaviour
         optionText.text = textContent;
         var offsetY = numOptions>5? 5:numOptions;
         _rectTransform.localPosition = new Vector3(_rectTransform.localPosition.x
-            , _rectTransform.localPosition.y+(optionIndex*25)+offsetY, 0);
+            , _rectTransform.localPosition.y+( (numOptions-1-optionIndex)*25)+offsetY, 0);
     }
 
     public void SelectThisOption()

@@ -103,6 +103,8 @@ public class Turn_Based_Combat : MonoBehaviour
             yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
             if (CanAttack(currentTurn,attacker,victim))
             {
+                yield return new WaitUntil(() => !levelEventDelay);
+                yield return new WaitUntil(() => !faintEventDelay);
                 Move_handler.Instance.doingMove = true;
                 CheckRepeatedMove(attacker,currentTurn.move);
                 Move_handler.Instance.ExecuteMove(currentTurn);

@@ -65,7 +65,7 @@ public class Wild_pkm : MonoBehaviour
             return;
         }
         Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.Pokemon_name+" ran away");
-        Battle_handler.Instance.End_Battle(false);
+        Battle_handler.Instance.EndBattle(false);
         inBattle = false;
         ranAway = true;
     }
