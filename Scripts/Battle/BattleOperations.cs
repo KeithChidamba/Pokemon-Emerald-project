@@ -96,7 +96,7 @@ public static class BattleOperations
         {
             data.Reciever.Buff_Debuffs.Add(CreateNewBuff(data.StatName));
         }
-        foreach (Buff_Debuff buff in data.Reciever.Buff_Debuffs)
+        foreach (var buff in data.Reciever.Buff_Debuffs)
         {
             if (buff.Stat == data.StatName)
             {

@@ -76,13 +76,11 @@ public class AbilityHandler : MonoBehaviour
     void Guts()
     {
         if (_abilityTriggered) return;
-        if (_participant.pokemon.HP < (_participant.pokemon.max_HP * 0.33f))
-        {
-            BuffDebuffData AttackBuffData = new BuffDebuffData(_participant.pokemon, "Attack", true, 1);
-            BattleOperations.CanDisplayDialougue = false; 
-            Move_handler.Instance.SelectRelevantBuffOrDebuff(AttackBuffData);
-            _abilityTriggered = true;
-        }
+        if (_participant.pokemon.Status_effect == "None") return;
+        var attackBuffData = new BuffDebuffData(_participant.pokemon, "Attack", true, 1);
+        BattleOperations.CanDisplayDialougue = false; 
+        Move_handler.Instance.SelectRelevantBuffOrDebuff(attackBuffData);
+        _abilityTriggered = true;
     }
     void Levitate()
     {
