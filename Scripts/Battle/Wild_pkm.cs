@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 public class Wild_pkm : MonoBehaviour
 {
     public Battle_Participant participant;
-    public Battle_Participant currentEnemyPokemon;
+    public Battle_Participant currentEnemyParticipant;
     public bool inBattle = false;
     public bool ranAway = false;
     public bool canAttack = true;
@@ -99,7 +99,7 @@ public class Wild_pkm : MonoBehaviour
         List<Move> validMoves = new();
         foreach (Move m in participant.pokemon.move_set)
         {//look for all non-immune moves
-            if (!BattleOperations.CheckImmunity(currentEnemyPokemon.pokemon, m.type)) 
+            if (!BattleOperations.CheckImmunity(currentEnemyParticipant.pokemon, m.type)) 
                 validMoves.Add(m);
         }
         if (validMoves.Count > 0)
@@ -126,7 +126,7 @@ public class Wild_pkm : MonoBehaviour
     {
         foreach (Move move in participant.pokemon.move_set)
         {//look for super effective attacking move
-            var effectiveness = BattleOperations.GetTypeEffectiveness(currentEnemyPokemon, move.type);
+            var effectiveness = BattleOperations.GetTypeEffectiveness(currentEnemyParticipant, move.type);
             if ( effectiveness < 2 || move.is_Buff_Debuff) continue;
             return move;
         }

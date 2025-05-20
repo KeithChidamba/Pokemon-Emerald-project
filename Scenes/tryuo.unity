@@ -13926,7 +13926,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829234817}
         m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
-        m_MethodName: Select_Move
+        m_MethodName: SelectMove
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -60657,7 +60657,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829234817}
         m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
-        m_MethodName: Select_Move
+        m_MethodName: SelectMove
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -61688,7 +61688,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829234817}
         m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
-        m_MethodName: Select_Move
+        m_MethodName: SelectMove
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -73808,7 +73808,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829234817}
         m_TargetAssemblyTypeName: Battle_handler, Assembly-CSharp
-        m_MethodName: Select_Move
+        m_MethodName: SelectMove
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

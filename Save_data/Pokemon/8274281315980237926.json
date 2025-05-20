@@ -6,7 +6,7 @@
     "Gender": "Male",
     "GenderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25188
+        "instanceID": 25218
     },
     "has_gender": true,
     "HP": 13.0,
@@ -52,7 +52,7 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25614
+            "instanceID": 25644
         }
     ],
     "Status_effect": "None",
@@ -75,27 +75,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -38362
+            "instanceID": -6008
         },
         {
-            "instanceID": -38364
+            "instanceID": -6010
         },
         {
-            "instanceID": -38366
+            "instanceID": -6012
         },
         {
-            "instanceID": -38368
+            "instanceID": -6014
         }
     ],
     "ability": {
-        "instanceID": 25840
+        "instanceID": 25870
     },
     "evolutions": [
         {
-            "instanceID": 25994
+            "instanceID": 26024
         },
         {
-            "instanceID": 24946
+            "instanceID": 24976
         }
     ],
     "HeldItem": {
@@ -103,10 +103,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 31968
+        "instanceID": 31998
     },
     "back_picture": {
-        "instanceID": 31998
+        "instanceID": 32028
     },
     "ability_name": "Overgrow",
     "natureName": "Rash",

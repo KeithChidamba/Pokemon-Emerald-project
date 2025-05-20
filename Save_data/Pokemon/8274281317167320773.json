@@ -1,27 +1,27 @@
 {
     "Base_Pokemon_name": "Mudkip",
-    "Pokemon_name": "Mudkip",
+    "Pokemon_name": "Marshtomp",
     "Pokemon_ID": 8274281317167320773,
     "Personality_value": 647442747,
     "Gender": "Male",
     "GenderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 24970
+        "instanceID": 25000
     },
     "has_gender": true,
-    "HP": 36.0,
-    "max_HP": 40.0,
-    "BaseHP": 50.0,
-    "BaseAttack": 70.0,
-    "BaseDefense": 50.0,
-    "BaseSP_ATK": 50.0,
-    "BaseSP_DEF": 50.0,
-    "Basespeed": 40.0,
-    "Attack": 2900.0,
-    "Defense": 24.0,
-    "SP_ATK": 22.0,
-    "SP_DEF": 23.0,
-    "speed": 170.0,
+    "HP": 42.0,
+    "max_HP": 42.0,
+    "BaseHP": 70.0,
+    "BaseAttack": 85.0,
+    "BaseDefense": 70.0,
+    "BaseSP_ATK": 60.0,
+    "BaseSP_DEF": 70.0,
+    "Basespeed": 50.0,
+    "Attack": 31.0,
+    "Defense": 25.0,
+    "SP_ATK": 23.0,
+    "SP_DEF": 24.0,
+    "speed": 17.0,
     "HP_IV": 6.0,
     "Attack_IV": 23.0,
     "Defense_IV": 30.0,
@@ -31,28 +31,31 @@
     "HP_EV": 0.0,
     "Attack_EV": 0.0,
     "Defense_EV": 0.0,
-    "SP_ATK_EV": 0.0,
+    "SP_ATK_EV": 3.0,
     "SP_DEF_EV": 0.0,
     "speed_EV": 0.0,
     "EVs": [
-        "Attack1"
+        "Attack2"
     ],
     "Accuracy": 100.0,
     "Evasion": 100.0,
     "crit_chance": 6.25,
     "CatchRate": 45.0,
-    "Current_level": 15,
-    "CurrentExpAmount": 2000,
-    "NextLevelExpAmount": 2035.0,
+    "Current_level": 16,
+    "CurrentExpAmount": 2196,
+    "NextLevelExpAmount": 2535.0,
     "EXPGroup": "Medium Slow",
-    "exp_yield": 65,
+    "exp_yield": 143,
     "has_trainer": true,
     "canAttack": true,
     "isFlinched": false,
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25212
+            "instanceID": 25242
+        },
+        {
+            "instanceID": 25174
         }
     ],
     "Status_effect": "None",
@@ -68,34 +71,31 @@
     ],
     "split_evolution": false,
     "learnSet": [
-        "normal/tackle01",
-        "water/bubble03",
-        "ground/mud slap05",
-        "water/water gun10"
+        "fighting/brick break16"
     ],
     "move_set": [
         {
-            "instanceID": -38342
+            "instanceID": -6538
         },
         {
-            "instanceID": -38344
+            "instanceID": -5990
         },
         {
-            "instanceID": -38346
+            "instanceID": -5992
         },
         {
-            "instanceID": -38348
+            "instanceID": -5994
         }
     ],
     "ability": {
-        "instanceID": 25474
+        "instanceID": 25504
     },
     "evolutions": [
         {
-            "instanceID": 25728
+            "instanceID": 25758
         },
         {
-            "instanceID": 25592
+            "instanceID": 25622
         }
     ],
     "HeldItem": {
@@ -103,10 +103,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 32008
+        "instanceID": 32130
     },
     "back_picture": {
-        "instanceID": 32010
+        "instanceID": 32132
     },
     "ability_name": "Torrent",
     "natureName": "Sassy",
@@ -115,16 +115,17 @@
         "Swampert"
     ],
     "type_data": [
-        "Water"
+        "Water",
+        "Ground"
     ],
     "move_data": [
-        "Tackle/Normal",
+        "Brick break/Fighting",
         "Bubble/Water",
         "Mud slap/Ground",
         "Water Gun/Water"
     ],
     "move_pp_data": [
-        "20/20",
+        "15/15",
         "20/20",
         "15/15",
         "25/25"

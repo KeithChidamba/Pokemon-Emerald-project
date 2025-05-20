@@ -135,7 +135,7 @@ public class Dialogue_handler : MonoBehaviour
         foreach (string txt in optionsText)
             newInteraction.optionsUiText.Add(txt);
         currentInteraction = newInteraction;
-        Display(currentInteraction);
+        HandleInteraction(currentInteraction);
     }
     
     public void DisplayInfo(string info,string type)
@@ -150,7 +150,7 @@ public class Dialogue_handler : MonoBehaviour
         messagesLoading = false;
         var newInteraction = NewInteraction(info,type,"");
         currentInteraction = newInteraction;
-        Display(currentInteraction);
+        HandleInteraction(currentInteraction);
     }
     public void DisplayInfo(string info,string type,float dialogueDuration)
     {
@@ -190,7 +190,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         messagesLoading = true;
         currentInteraction = NewInteraction(interaction.interactionMessage,"Battle Info","");
-        Display(currentInteraction);
+        HandleInteraction(currentInteraction);
         pendingMessages.Remove(interaction);
         yield return new WaitForSeconds(1f);
         reset_message();
@@ -233,7 +233,7 @@ public class Dialogue_handler : MonoBehaviour
         StopAllCoroutines();
         Battle_handler.Instance.displayingInfo = false;
     }
-    public void Display(Interaction interaction)
+    public void HandleInteraction(Interaction interaction)
     {
         if(Player_movement.instance)
         {

@@ -71,7 +71,7 @@ public class Battle_Participant : MonoBehaviour
     {
         // Remove fainted or invalid Pokémon
         expReceivers.RemoveAll(p => p.HP <= 0);
-        expReceivers.RemoveAll(p => !Pokemon_party.Instance.party.Contains(p));
+        expReceivers.RemoveAll(p => !Pokemon_party.Instance.party.Contains(p));//only player pokemon receive exp
         if (expReceivers.Count < 1) return;
 
         // Separate holders and participants
@@ -83,22 +83,22 @@ public class Battle_Participant : MonoBehaviour
             .Where(p => !expShareHolders.Contains(p))
             .ToList();
 
-        int totalExp = expFromEnemy;
+        var totalExp = expFromEnemy;
 
         // Distribute 50% to EXP Share holders
-        int expShareTotal = totalExp / 2;
+        var expShareTotal = totalExp / 2;
         if (expShareHolders.Count > 0)
         {
-            int shareExpPerHolder = expShareTotal / expShareHolders.Count;
+            var shareExpPerHolder = expShareTotal / expShareHolders.Count;
             foreach (var p in expShareHolders)
                 p.ReceiveExperience(shareExpPerHolder);
         }
 
         // Distribute remaining 50% among participants
-        int participantTotalExp = totalExp - expShareTotal;
+        var participantTotalExp = totalExp - expShareTotal; 
         if (participants.Count > 0)
         {
-            int shareExpPerParticipant = participantTotalExp / participants.Count;
+            var shareExpPerParticipant = participantTotalExp / participants.Count;
             foreach (var p in participants)
                 p.ReceiveExperience(shareExpPerParticipant);
         }
@@ -119,16 +119,19 @@ public class Battle_Participant : MonoBehaviour
         if (fainted) return; 
         fainted = (pokemon.HP <= 0);
         if (pokemon.HP > 0) return;
+        
         Turn_Based_Combat.Instance.faintEventDelay = true;
         Dialogue_handler.Instance.DisplayBattleInfo(pokemon.Pokemon_name+" fainted!");
         pokemon.Status_effect = "None";
-        
-        if (!isPlayer) 
+
+        if (!isPlayer)
+        {
             GiveExp(Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon);
-        
-        foreach (var enemy in currentEnemies)
-            if(enemy.pokemon!=null)
-                GiveEVs(enemy);
+            foreach (var enemy in currentEnemies)
+                if(enemy.isActive)
+                    GiveEVs(enemy);
+        }
+
         if (isPlayer)
             Invoke(nameof(CheckIfLoss),1f);
         else
@@ -148,7 +151,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private void CheckIfLoss()
     {
-        List<Pokemon> alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
+        var alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
         if (alivePokemon.Count==0)
         {
             Battle_handler.Instance.EndBattle(false);
@@ -250,25 +253,15 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnTurnEnd += statusHandler.Check_status;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
-        if (isPlayer)
-        {
-            _resetHandler = pkm => ResetParticipantState();
-            pokemon.OnLevelUp += _resetHandler;
-            pokemon.OnLevelUp += Battle_handler.Instance.LevelUpEvent;
-            pokemon.OnNewLevel += statData.SaveActualStats;
-            if (Battle_handler.Instance.isDoubleBattle)
-            {
-                ActivateUI(doubleBattleUI, true);
-                ActivateUI(singleBattleUI, false);
-            }
-            else
-            {
-                ActivateUI(doubleBattleUI, false);
-                ActivateUI(singleBattleUI, true);
-            }
-        }
+        if (!isPlayer) return;
+        _resetHandler = pkm => ResetParticipantState();
+        pokemon.OnLevelUp += _resetHandler;
+        pokemon.OnLevelUp += Battle_handler.Instance.LevelUpEvent;
+        pokemon.OnNewLevel += statData.SaveActualStats;
+        ActivateUI(doubleBattleUI, Battle_handler.Instance.isDoubleBattle);
+        ActivateUI(singleBattleUI, !Battle_handler.Instance.isDoubleBattle);
     }
-    void ActivateGenderImage()
+    private void ActivateGenderImage()
     {
         pokemonGenderImage.gameObject.SetActive(true);
         if(pokemon.has_gender)

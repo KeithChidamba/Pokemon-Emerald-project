@@ -51,6 +51,12 @@ public class Options_manager : MonoBehaviour
     void Battle()
     {
         var battleType = _currentInteraction.resultMessage;
+        var alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
+        if (alivePokemon.Count < 2 & battleType.ToLower().Contains("double"))
+        {//if double battle enemy but you don't have enough pokemon alive
+            Battle_handler.Instance.SetBattleType(_currentInteraction.additionalInfo,"single");
+            return;
+        }
         Battle_handler.Instance.SetBattleType(_currentInteraction.additionalInfo,battleType);
     }
 
@@ -70,10 +76,17 @@ public class Options_manager : MonoBehaviour
         Dialogue_handler.Instance.DisplayBattleInfo(PokemonOperations.CurrentPokemon.Pokemon_name +
                                                     " did not learn "+PokemonOperations.NewMove.Move_name,true);
     }
+
     void HealPokemon()
     {
         overworld_actions.Instance.doingAction = true;
         Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
+        HealPartyPokemon();
+        overworld_actions.Instance.doingAction = false;
+        Dialogue_handler.Instance.DisplayInfo("Your pokemon have been healed, you're welcome!", "Details");
+    }
+    public void HealPartyPokemon()
+    {
         for (int i = 0; i < Pokemon_party.Instance.numMembers; i++)
         {
             var pokemon = Pokemon_party.Instance.party[i];
@@ -82,8 +95,6 @@ public class Options_manager : MonoBehaviour
                 move.Powerpoints = move.max_Powerpoints;
             pokemon.Status_effect = "None";
         }
-        overworld_actions.Instance.doingAction = false;
-        Dialogue_handler.Instance.DisplayInfo("Your pokemon have been healed, you're welcome!", "Details");
     }
     void OpenPokemonStorage()
     {

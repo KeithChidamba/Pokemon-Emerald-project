@@ -40,7 +40,7 @@ public class Interaction_handler : MonoBehaviour
                 if (interactableObject.interaction != null)
                 {
                     Dialogue_handler.Instance.currentInteraction = interactableObject.interaction;
-                    Dialogue_handler.Instance.Display(Dialogue_handler.Instance.currentInteraction);
+                    Dialogue_handler.Instance.HandleInteraction(Dialogue_handler.Instance.currentInteraction);
                 }
             }
             if (Input.GetKeyDown(KeyCode.Q) && !overworld_actions.Instance.doingAction)
