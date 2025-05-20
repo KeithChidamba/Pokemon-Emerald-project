@@ -20,6 +20,7 @@ public class Battle_Participant : MonoBehaviour
     public Text pokemonHealthText;
     public Text pokemonLevelText;
     public bool isPlayer = false;
+    public bool isEnemy = false;
     public bool isActive = false;
     public bool fainted = false;
     public Slider playerHpSlider;
@@ -198,7 +199,8 @@ public class Battle_Participant : MonoBehaviour
     }
     private void UpdateUI()
     {
-        pokemonNameText.text = pokemon.Pokemon_name;
+        var rawName = (isEnemy)? pokemon.Pokemon_name.Replace("Foe ", "") : pokemon.Pokemon_name;
+        pokemonNameText.text = rawName;
         pokemonLevelText.text = "Lv: " + pokemon.Current_level;
         if (isPlayer)
         {

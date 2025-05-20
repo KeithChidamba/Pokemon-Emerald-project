@@ -284,6 +284,7 @@ public class Battle_handler : MonoBehaviour
     }
 public void SetParticipant(Battle_Participant participant)
     {
+        participant.isEnemy = Array.IndexOf(battleParticipants, participant) > 1 ;
         if (participant.isPlayer)
         { //for switch-ins
             if (Pokemon_party.Instance.swappingIn || Pokemon_party.Instance.swapOutNext)
@@ -299,8 +300,8 @@ public void SetParticipant(Battle_Participant participant)
             foreach (var playerParticipant  in participant.currentEnemies)
                 participant.AddToExpList(playerParticipant.pokemon);
             
-            if(Array.IndexOf(battleParticipants ,participant)>1)//is an enemy
-                participant.pokemon.Pokemon_name = "Foe " + participant.pokemon.Pokemon_name;
+            participant.pokemon.Pokemon_name = (participant.isEnemy )? 
+                "Foe " + participant.pokemon.Pokemon_name : participant.pokemon.Pokemon_name;
         }
         //setup participant for battle
         participant.statData.SaveActualStats();
