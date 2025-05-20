@@ -145,6 +145,11 @@ public class Item_handler : MonoBehaviour
             Dialogue_handler.Instance.DisplayInfo("Cant catch someone else's Pokemon!", "Details",1f);
             return;
         }
+        if(pokemon_storage.Instance.MaxPokemonCapacity())
+        {
+            Dialogue_handler.Instance.DisplayInfo("Can no longer catch more pokemon, free up space in pc!", "Details");
+            return;
+        }
         DepleteItem();
         StartCoroutine(TryToCatchPokemon(pokeball));
     }

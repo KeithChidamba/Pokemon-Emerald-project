@@ -298,6 +298,9 @@ public void SetParticipant(Battle_Participant participant)
         {//add player participants to get exp from switched in enemy
             foreach (var playerParticipant  in participant.currentEnemies)
                 participant.AddToExpList(playerParticipant.pokemon);
+            
+            if(Array.IndexOf(battleParticipants ,participant)>1)//is an enemy
+                participant.pokemon.Pokemon_name = "Foe " + participant.pokemon.Pokemon_name;
         }
         //setup participant for battle
         participant.statData.SaveActualStats();

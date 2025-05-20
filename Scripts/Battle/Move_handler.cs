@@ -198,9 +198,9 @@ public class Move_handler:MonoBehaviour
         if (Utility.RandomRange(1, 101) < _currentTurn.move.Status_chance)
             if(_currentTurn.move.isMultiTarget)
                 foreach (Battle_Participant enemy in attacker.currentEnemies)
-                    HandleStatusApplication(enemy,_currentTurn.move);
+                    HandleStatusApplication(enemy,_currentTurn.move,true);
             else{
-                HandleStatusApplication(victim,_currentTurn.move);
+                HandleStatusApplication(victim,_currentTurn.move,true);
             }
         processingOrder = false;
     }
@@ -218,12 +218,13 @@ public class Move_handler:MonoBehaviour
         return false;
     }
 
-    public void HandleStatusApplication(Battle_Participant currentVictim,Move move)
+    public void HandleStatusApplication(Battle_Participant currentVictim,Move move, bool displayMessage)
     {
-        foreach (Type t in currentVictim.pokemon.types)
-            if(CheckInvalidStatusEffect(move.Status_effect, t.Type_name,move))return;
+        foreach (var type in currentVictim.pokemon.types)
+            if(CheckInvalidStatusEffect(move.Status_effect, type.Type_name,move))return; 
         OnStatusEffectHit?.Invoke(currentVictim,move.Status_effect);
-        Dialogue_handler.Instance.DisplayBattleInfo(currentVictim.pokemon.Pokemon_name+" received a "+move.Status_effect+" effect!");
+        if(displayMessage)
+            Dialogue_handler.Instance.DisplayBattleInfo(currentVictim.pokemon.Pokemon_name+" received a "+move.Status_effect+" effect!");
         ApplyStatusToVictim(currentVictim,move.Status_effect);
     }
     public void ApplyStatusToVictim(Battle_Participant participant,string status)

@@ -187,14 +187,19 @@ public class pokemon_storage : MonoBehaviour
         numNonPartyPokemon--;
         totalPokemonCount--;
     }
-    public void SwapWithPartyPokemon()
+    public void SwapWithPartyPokemon()//from pc operations
     {
         DisableOptions();
         storageIconPositionsParent.gameObject.SetActive(false);
         Dialogue_handler.Instance.DisplayInfo("Pick a pokemon in your party to swap with", "Details",1.2f);
         swapping = true;
     }
-    public void AddPokemonToParty()
+
+    public bool MaxPokemonCapacity()
+    {
+        return totalPokemonCount >= maxPokemonCapacity;
+    }
+    public void AddPokemonToParty()//from pc operations
     {
         if (Pokemon_party.Instance.numMembers < 6)
         {

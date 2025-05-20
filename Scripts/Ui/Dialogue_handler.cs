@@ -192,10 +192,10 @@ public class Dialogue_handler : MonoBehaviour
         currentInteraction = NewInteraction(interaction.interactionMessage,"Battle Info","");
         HandleInteraction(currentInteraction);
         pendingMessages.Remove(interaction);
-        yield return new WaitForSeconds(1f);
-        reset_message();
+        yield return new WaitForSeconds(2f);
+        ContinueMessageQueue();
     }
-    void reset_message()
+    void ContinueMessageQueue()
     {
         if (pendingMessages.Count > 0)
         {

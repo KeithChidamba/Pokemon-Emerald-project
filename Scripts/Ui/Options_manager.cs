@@ -114,6 +114,11 @@ public class Options_manager : MonoBehaviour
     }
     void ReceiveGiftPokemon()
     {
+        if(pokemon_storage.Instance.MaxPokemonCapacity())
+        {
+            Dialogue_handler.Instance.DisplayInfo("Can no longer obtain more pokemon, free up space in pc!", "Details");
+            return;
+        }
         var pokemonName = _currentInteraction.resultMessage;
         var pokemon = Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName +"/"+ pokemonName);
         Pokemon_party.Instance.AddMember(pokemon);

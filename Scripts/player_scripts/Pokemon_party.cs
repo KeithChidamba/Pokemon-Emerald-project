@@ -223,12 +223,9 @@ private void CloseParty()
         }
         else
         {
-            if (pokemon_storage.Instance.totalPokemonCount < pokemon_storage.Instance.maxPokemonCapacity)
-            {
-                pokemon_storage.Instance.doingStorageOperation = false;
-                pokemon_storage.Instance.nonPartyPokemon.Add(pokemon_storage.Instance.CreateAndSetupPokemon(pokemon));
-                pokemon_storage.Instance.numNonPartyPokemon++;
-            }
+            pokemon_storage.Instance.doingStorageOperation = false;
+            pokemon_storage.Instance.nonPartyPokemon.Add(pokemon_storage.Instance.CreateAndSetupPokemon(pokemon));
+            pokemon_storage.Instance.numNonPartyPokemon++;
         }
     }
     void SortMembers(int emptyPosition)

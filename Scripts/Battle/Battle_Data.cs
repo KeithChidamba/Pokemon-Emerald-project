@@ -11,6 +11,7 @@ public class Battle_Data:MonoBehaviour
     public float spAtk;
     public float spDef;
     public float speed;
+    public string pokemonName;
     private Battle_Participant _participant;
     private void Start()
     {
@@ -18,6 +19,7 @@ public class Battle_Data:MonoBehaviour
     }
     public void SaveActualStats()
     {
+        pokemonName = _participant.pokemon.Pokemon_name;
         attack = _participant.pokemon.Attack;
         spAtk = _participant.pokemon.SP_ATK;
         defense = _participant.pokemon.Defense;
@@ -26,19 +28,19 @@ public class Battle_Data:MonoBehaviour
     }
     public void LoadActualStats()
     {
+        _participant.pokemon.Pokemon_name = pokemonName;
         _participant.pokemon.Attack=attack;
         _participant.pokemon.SP_ATK=spAtk;
         _participant.pokemon.Defense=defense;
         _participant.pokemon.SP_DEF=spDef;
         _participant.pokemon.speed=speed;
     }
-    public void ResetBattleState(Pokemon pokemon,bool NotBattling)
+    public void ResetBattleState(Pokemon pokemon,bool notBattling)
     {
         pokemon.Accuracy = 100;
         pokemon.Evasion = 100;
         pokemon.crit_chance = 6.25f;
-        if(NotBattling)
-            pokemon.canAttack = true;
+        pokemon.canAttack = notBattling;
         pokemon.CanBeDamaged = true;
         pokemon.isFlinched = false;
         pokemon.Buff_Debuffs.Clear();

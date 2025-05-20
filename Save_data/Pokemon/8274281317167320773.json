@@ -6,10 +6,10 @@
     "Gender": "Male",
     "GenderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25000
+        "instanceID": 24996
     },
     "has_gender": true,
-    "HP": 42.0,
+    "HP": 40.0,
     "max_HP": 42.0,
     "BaseHP": 70.0,
     "BaseAttack": 85.0,
@@ -17,7 +17,7 @@
     "BaseSP_ATK": 60.0,
     "BaseSP_DEF": 70.0,
     "Basespeed": 50.0,
-    "Attack": 31.0,
+    "Attack": 1.0,
     "Defense": 25.0,
     "SP_ATK": 23.0,
     "SP_DEF": 24.0,
@@ -52,10 +52,10 @@
     "CanBeDamaged": true,
     "types": [
         {
-            "instanceID": 25242
+            "instanceID": 25238
         },
         {
-            "instanceID": 25174
+            "instanceID": 25170
         }
     ],
     "Status_effect": "None",
@@ -75,27 +75,27 @@
     ],
     "move_set": [
         {
-            "instanceID": -6538
+            "instanceID": -9976
         },
         {
-            "instanceID": -5990
+            "instanceID": -9978
         },
         {
-            "instanceID": -5992
+            "instanceID": -9980
         },
         {
-            "instanceID": -5994
+            "instanceID": -9982
         }
     ],
     "ability": {
-        "instanceID": 25504
+        "instanceID": 25500
     },
     "evolutions": [
         {
-            "instanceID": 25758
+            "instanceID": 25754
         },
         {
-            "instanceID": 25622
+            "instanceID": 25618
         }
     ],
     "HeldItem": {
@@ -103,10 +103,10 @@
     },
     "HasItem": false,
     "front_picture": {
-        "instanceID": 32130
+        "instanceID": 32126
     },
     "back_picture": {
-        "instanceID": 32132
+        "instanceID": 32128
     },
     "ability_name": "Torrent",
     "natureName": "Sassy",
