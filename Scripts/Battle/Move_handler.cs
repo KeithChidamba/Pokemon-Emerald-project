@@ -217,11 +217,10 @@ public class Move_handler:MonoBehaviour
             }
         return false;
     }
-
     public void HandleStatusApplication(Battle_Participant currentVictim,Move move, bool displayMessage)
     {
         foreach (var type in currentVictim.pokemon.types)
-            if(CheckInvalidStatusEffect(move.Status_effect, type.Type_name,move))return; 
+            if(CheckInvalidStatusEffect(move.Status_effect, type.Type_name,move))return;
         OnStatusEffectHit?.Invoke(currentVictim,move.Status_effect);
         if(displayMessage)
             Dialogue_handler.Instance.DisplayBattleInfo(currentVictim.pokemon.Pokemon_name+" received a "+move.Status_effect+" effect!");
@@ -232,6 +231,12 @@ public class Move_handler:MonoBehaviour
         participant.pokemon.Status_effect = status;
         var numTurnsOfStatus = (status=="Sleep")? Utility.RandomRange(1, 5) : 0;
         participant.statusHandler.Get_statusEffect(numTurnsOfStatus);
+    }
+
+    public void ApplyStatDropImmunity(Battle_Participant participant,int numTurns)
+    {
+        if (!participant.isActive) return;
+        participant.statusHandler.GetStatDropImmunity(numTurns);
     }
     void FlinchEnemy()
     {
@@ -255,17 +260,20 @@ public class Move_handler:MonoBehaviour
         var isIncreasing = (buffDebuffInfo[0] == '+');
         if (!_currentTurn.move.isSelfTargeted)
         {//affecting enemy
-            if(!_currentTurn.move.isMultiTarget | !Battle_handler.Instance.isDoubleBattle)
+            if ( (_currentTurn.move.isMultiTarget & !Battle_handler.Instance.isDoubleBattle) 
+                | !_currentTurn.move.isMultiTarget)
             {
-                if (!victim.pokemon.CanBeDamaged)
+                if (!victim.pokemon.CanBeDamaged | victim.pokemon.immuneToStatReduction)
+                {
                     Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.Pokemon_name + " protected itself");
+                }
                 else
                 {
                     var data = new BuffDebuffData(victim.pokemon, statName, isIncreasing, buffAmount);
                     SelectRelevantBuffOrDebuff(data);
                 }
-            }
-            else
+            } 
+            if(_currentTurn.move.isMultiTarget & Battle_handler.Instance.isDoubleBattle)
                 StartCoroutine(MultiTargetBuff_Debuff(statName, isIncreasing, buffAmount));
         }
         else//affecting attacker
@@ -273,16 +281,16 @@ public class Move_handler:MonoBehaviour
             var data = new BuffDebuffData(attacker.pokemon, statName, isIncreasing, buffAmount);
             SelectRelevantBuffOrDebuff(data);
         }
-        
+        processingOrder = false;
     }
 
-    IEnumerator MultiTargetBuff_Debuff(string stat, bool isIncreasing,int buff_amount)
+    IEnumerator MultiTargetBuff_Debuff(string stat, bool isIncreasing,int buffAmount)
     {
         foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker.currentEnemies) )
         {
-            if (enemy.pokemon.CanBeDamaged)
+            if (enemy.pokemon.CanBeDamaged & !enemy.pokemon.immuneToStatReduction)
             {
-                var data = new BuffDebuffData(enemy.pokemon, stat, isIncreasing,buff_amount);
+                var data = new BuffDebuffData(enemy.pokemon, stat, isIncreasing,buffAmount);
                 SelectRelevantBuffOrDebuff(data);
             }
             else

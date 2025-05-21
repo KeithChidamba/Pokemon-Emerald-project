@@ -1,0 +1,18 @@
+{
+    "itemID": "X Accuracy48761",
+    "itemName": "X Accuracy",
+    "itemType": "X Item",
+    "itemEffect": "Accuracy",
+    "itemDescription": "increases a pokemon's accuracy during battle",
+    "price": 100,
+    "quantity": 2,
+    "itemImage": {
+        "instanceID": 32774
+    },
+    "forPartyUse": false,
+    "canBeUsedInOverworld": false,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}

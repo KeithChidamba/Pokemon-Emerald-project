@@ -41,6 +41,7 @@ public class Battle_Data:MonoBehaviour
         pokemon.Evasion = 100;
         pokemon.crit_chance = 6.25f;
         pokemon.canAttack = notBattling;
+        pokemon.immuneToStatReduction = !notBattling;
         pokemon.CanBeDamaged = true;
         pokemon.isFlinched = false;
         pokemon.Buff_Debuffs.Clear();

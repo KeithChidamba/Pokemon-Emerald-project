@@ -1233,6 +1233,7 @@ MonoBehaviour:
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 1175943805}
   isPlayer: 1
+  isEnemy: 0
   isActive: 0
   fainted: 0
   playerHpSlider: {fileID: 274821928}
@@ -1274,6 +1275,7 @@ MonoBehaviour:
   spAtk: 0
   spDef: 0
   speed: 0
+  pokemonName: 
 --- !u!114 &35621320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7166,6 +7168,7 @@ MonoBehaviour:
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 761220744}
   isPlayer: 0
+  isEnemy: 0
   isActive: 0
   fainted: 0
   playerHpSlider: {fileID: 1509615510}
@@ -7207,6 +7210,7 @@ MonoBehaviour:
   spAtk: 0
   spDef: 0
   speed: 0
+  pokemonName: 
 --- !u!114 &190973853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9098,6 +9102,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7bd06e7fd82ccd84287ad4082f2768cd, type: 2}
   - {fileID: 11400000, guid: ed582cc298cf1af429facd2f75ef230f, type: 2}
   - {fileID: 11400000, guid: e7cf064fae39c411ab988019c8396d16, type: 2}
+  - {fileID: 11400000, guid: 5019050691d217861a3b4bc8344d7cc0, type: 2}
+  - {fileID: 11400000, guid: fb8230fc4d8a73fa2924ec2c4011d812, type: 2}
+  - {fileID: 11400000, guid: fa6f2974fbe58b38cb479e424617210c, type: 2}
+  - {fileID: 11400000, guid: 155859b1890c4a13e9be75d34b91e8d3, type: 2}
+  - {fileID: 11400000, guid: f4169bf7d00cf7c87a038781e9a365bd, type: 2}
+  - {fileID: 11400000, guid: 482b93217da099cb0a4288870a7cba98, type: 2}
+  - {fileID: 11400000, guid: d4e61450f096864ef90cb0d02a005739, type: 2}
+  - {fileID: 11400000, guid: 4684140888a0d4463b92b60c003be475, type: 2}
   viewingStore: 0
   storeItemsUI:
   - {fileID: 811032170}
@@ -10877,6 +10889,7 @@ MonoBehaviour:
   viewingMenu: 0
   menuOff: 1
   profile: {fileID: 690814249}
+  _numUIScreensOpen: 0
   canExitParty: 1
 --- !u!1 &319297257
 GameObject:
@@ -29295,7 +29308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   participant: {fileID: 0}
-  currentEnemyPokemon: {fileID: 0}
+  currentEnemyParticipant: {fileID: 0}
   inBattle: 0
   ranAway: 0
   canAttack: 1
@@ -62538,7 +62551,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInBattle: 0
-  selectedNewMoveOption: 0
   starterPokemonGiftEvent: {fileID: 2040100125}
 --- !u!1 &1307266070
 GameObject:
@@ -73257,6 +73269,7 @@ MonoBehaviour:
   pokemonHealthText: {fileID: 152226813}
   pokemonLevelText: {fileID: 2137321981}
   isPlayer: 1
+  isEnemy: 0
   isActive: 0
   fainted: 0
   playerHpSlider: {fileID: 684725532}
@@ -73302,6 +73315,7 @@ MonoBehaviour:
   spAtk: 0
   spDef: 0
   speed: 0
+  pokemonName: 
 --- !u!114 &1636635383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99561,6 +99575,7 @@ MonoBehaviour:
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 1767282373}
   isPlayer: 0
+  isEnemy: 0
   isActive: 0
   fainted: 0
   playerHpSlider: {fileID: 2073673345}
@@ -99602,6 +99617,7 @@ MonoBehaviour:
   spAtk: 0
   spDef: 0
   speed: 0
+  pokemonName: 
 --- !u!114 &2033618207
 MonoBehaviour:
   m_ObjectHideFlags: 0

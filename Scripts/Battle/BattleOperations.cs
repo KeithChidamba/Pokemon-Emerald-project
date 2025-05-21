@@ -96,18 +96,13 @@ public static class BattleOperations
         {
             data.Reciever.Buff_Debuffs.Add(CreateNewBuff(data.StatName));
         }
-        foreach (var buff in data.Reciever.Buff_Debuffs)
-        {
-            if (buff.Stat == data.StatName)
-            {
-                buff.Stage = ValidateBuffLimit(data.Reciever, buff, data.IsIncreasing, data.EffectAmount);
-            }
-        }
+        var buff = SearchForBuffOrDebuff(data.Reciever, data.StatName);//wont ever be null
+        buff.Stage = ValidateBuffLimit(data.Reciever, buff, data.IsIncreasing, data.EffectAmount);
         CanDisplayDialougue = true;
         RemoveInvalidBuffsOrDebuffs(data.Reciever);
     }
 
-    static int ValidateBuffLimit(Pokemon pkm,Buff_Debuff buff,bool increased,int changeValue)
+    private static int ValidateBuffLimit(Pokemon pkm,Buff_Debuff buff,bool increased,int changeValue)
     {
         var change = 0;
         var message="";

@@ -47,6 +47,9 @@ public class Item_handler : MonoBehaviour
             case "rare candy":
                 StartCoroutine(LevelUpWithItem());
                 break;
+            case "x item":
+                ItemBuffOrDebuff(item.itemEffect);
+                break;
         }
     }
     IEnumerator LevelUpWithItem()
@@ -71,7 +74,7 @@ public class Item_handler : MonoBehaviour
         else
             Dialogue_handler.Instance.DisplayInfo("Cant use that on "+selectedPartyPokemon.Pokemon_name, "Details",1f);
     }
-    void ChangeStats(string stat)
+    private void ChangeStats(string stat)
     {
         if (stat == "pp")
         {
@@ -85,6 +88,49 @@ public class Item_handler : MonoBehaviour
         //if i add proteins,calcium etc. Then i can just add them here in a switch based on stat they change
     }
 
+    private void ItemBuffOrDebuff(string statName)
+    {
+        var currentTurnIndex = Turn_Based_Combat.Instance.currentTurnIndex;
+        selectedPartyPokemon = Battle_handler.Instance.battleParticipants[currentTurnIndex].pokemon;
+        if (statName == "Stat Reduction")//Guard Spec applies all user's participant
+        {
+            if (selectedPartyPokemon.immuneToStatReduction)
+            {
+                Dialogue_handler.Instance.DisplayInfo("Your pokemon are already protected","Details");
+                return;
+            }
+            var partnerIndex = (currentTurnIndex > 0) ? 0 : 1;
+            var player = Battle_handler.Instance.battleParticipants[currentTurnIndex];
+            var partner = Battle_handler.Instance.battleParticipants[partnerIndex];
+            var pokemonProtected = (partner.isActive) ? 
+                selectedPartyPokemon.Pokemon_name+" and "+ partner.pokemon.Pokemon_name
+                :selectedPartyPokemon.Pokemon_name;
+            
+            Move_handler.Instance.ApplyStatDropImmunity(player,5);
+            if(Battle_handler.Instance.isDoubleBattle)
+                Move_handler.Instance.ApplyStatDropImmunity(partner,5);
+            
+            Dialogue_handler.Instance.DisplayBattleInfo("A veil of light covers "+pokemonProtected);
+            DepleteItem();
+            Invoke(nameof(SkipTurn),1f);
+            ResetItemUsage();
+            return;
+        }
+        var buff = BattleOperations.SearchForBuffOrDebuff(selectedPartyPokemon, statName);
+        if(buff!=null)
+            if (buff.Stage > 5)
+            {
+                Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name + "'s " + statName
+                                                      + " cant go any higher", "Details");
+                ResetItemUsage();
+                return;
+            }
+        var xBuffData = new BuffDebuffData(selectedPartyPokemon, statName, true, 1);
+        Move_handler.Instance.SelectRelevantBuffOrDebuff(xBuffData);
+        DepleteItem();
+        Invoke(nameof(SkipTurn),1f);
+        ResetItemUsage();
+    }
     private void RevivePokemon(string reviveType)
     {
         if (selectedPartyPokemon.HP > 0) {Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name+" has not fainted!", "Details",1f); return;}
@@ -257,8 +303,6 @@ public class Item_handler : MonoBehaviour
     {
         _itemInUse.quantity--;
         Bag.Instance.CheckItemQuantity(_itemInUse);
-        //if (!Options_manager.Instance.playerInBattle) 
-            //Game_ui_manager.Instance.ViewBag();
     }
     void ResetItemUsage()
     {

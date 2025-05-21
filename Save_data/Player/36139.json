@@ -2,11 +2,11 @@
     "playerName": "kevlar",
     "trainerID": 36139,
     "secretID": 55547,
-    "playerMoney": 40,
+    "playerMoney": 38200,
     "numBadges": 0,
     "playerPosition": {
-        "x": 10.105146408081055,
-        "y": 3.3766252994537355,
+        "x": 10.023985862731934,
+        "y": 3.3509974479675295,
         "z": 0.0
     },
     "location": "Overworld"

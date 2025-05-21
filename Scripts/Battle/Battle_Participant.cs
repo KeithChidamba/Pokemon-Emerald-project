@@ -185,6 +185,7 @@ public class Battle_Participant : MonoBehaviour
         currentEnemies.Clear();
         Turn_Based_Combat.Instance.OnTurnEnd -= statusHandler.Check_status;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
+        Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.NotifyHealing;
     }
     public void ResetParticipantState()
@@ -253,6 +254,7 @@ public class Battle_Participant : MonoBehaviour
             pokemon.Status_effect = "Poison";
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.Status_effect);
         Turn_Based_Combat.Instance.OnTurnEnd += statusHandler.Check_status;
+        Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
         if (!isPlayer) return;

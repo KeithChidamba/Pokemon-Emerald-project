@@ -1,0 +1,18 @@
+{
+    "itemID": "X Speed59985",
+    "itemName": "X Speed",
+    "itemType": "X Item",
+    "itemEffect": "Speed",
+    "itemDescription": "increases a pokemon's speed during battle",
+    "price": 100,
+    "quantity": 2,
+    "itemImage": {
+        "instanceID": 32782
+    },
+    "forPartyUse": false,
+    "canBeUsedInOverworld": false,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}

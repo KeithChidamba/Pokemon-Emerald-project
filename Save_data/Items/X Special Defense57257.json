@@ -1,0 +1,18 @@
+{
+    "itemID": "X Special Defense57257",
+    "itemName": "X Special Defense",
+    "itemType": "X Item",
+    "itemEffect": "Special Defense",
+    "itemDescription": "increases a pokemon's special defense during battle",
+    "price": 100,
+    "quantity": 2,
+    "itemImage": {
+        "instanceID": 0
+    },
+    "forPartyUse": false,
+    "canBeUsedInOverworld": false,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}

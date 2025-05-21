@@ -10,6 +10,7 @@ public class Participant_Status : MonoBehaviour
     private int _statusDuration = 0;
     private int _statusDurationInTurns = 0;
     private bool _healed = false;
+    private int _statDropImmunityDuration = 0;
     private readonly Dictionary<string, Action> _statusEffectMethods = new ();
     void Start()
     {
@@ -25,6 +26,12 @@ public class Participant_Status : MonoBehaviour
         _statusDuration = 0;
         _statusDurationInTurns = numTurns;
         Stat_drop();
+    }
+
+    public void GetStatDropImmunity(int numTurns)
+    {
+        _statDropImmunityDuration = numTurns;
+        _participant.pokemon.immuneToStatReduction = true;
     }
     void loose_HP(float percentage)
     {
@@ -85,6 +92,14 @@ public class Participant_Status : MonoBehaviour
                 Status_Damage_msg(" is badly poisoned", (1+_statusDuration) / 16f );
                 break;
         }
+    }
+    
+    public void CheckStatDropImmunity()
+    {
+        if (!_participant.pokemon.immuneToStatReduction) return;
+        _participant.pokemon.immuneToStatReduction = _statDropImmunityDuration > 0;
+        if (_statDropImmunityDuration > 0)
+            _statDropImmunityDuration--;
     }
     void freeze_check()
     {

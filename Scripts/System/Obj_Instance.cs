@@ -81,6 +81,7 @@ public static class Obj_Instance
         newPokemon.canAttack = pkm.canAttack;
         newPokemon.isFlinched = pkm.isFlinched;
         newPokemon.CanBeDamaged = pkm.CanBeDamaged;
+        newPokemon.immuneToStatReduction = pkm.immuneToStatReduction;
         newPokemon.types = pkm.types;
         newPokemon.Status_effect = pkm.Status_effect;
         newPokemon.Buff_Debuffs = pkm.Buff_Debuffs;

@@ -1,0 +1,18 @@
+{
+    "itemID": "Dire Hit4919",
+    "itemName": "Dire Hit",
+    "itemType": "X Item",
+    "itemEffect": "Crit",
+    "itemDescription": "increases a pokemon's crit rate during battle",
+    "price": 100,
+    "quantity": 2,
+    "itemImage": {
+        "instanceID": 32786
+    },
+    "forPartyUse": false,
+    "canBeUsedInOverworld": false,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}

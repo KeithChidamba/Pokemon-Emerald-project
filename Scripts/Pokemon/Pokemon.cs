@@ -55,6 +55,7 @@ public class Pokemon : ScriptableObject
     public bool canAttack = true;
     public bool isFlinched = false;
     public bool CanBeDamaged = true;
+    public bool immuneToStatReduction = false;
     public List<Type> types;
     public string Status_effect = "None";
     public List<Buff_Debuff> Buff_Debuffs = new();
