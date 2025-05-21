@@ -1,26 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Animation_manager : MonoBehaviour
 {
     public Animator animator;
-    private string current_state;
+    private string _currentState;
     //states
-    public string Player_walk = "Player_walk";
-    public string Player_idle = "Player_idle";
-    public string Player_run = "Player_run";
-    public string Ride_Bike = "Ride_Bike";
-    public string Bike_idle = "Bike_idle";
-    public string Fishing_Start = "Fishing_Start";
-    public string Fishing_End = "Fishing_End";
-    public string Fishing_idle = "Fishing_idle";
+    public string playerWalk = "Player_walk";
+    public string playerIdle = "Player_idle";
+    public string playerRun = "Player_run";
+    public string rideBike = "Ride_Bike";
+    public string bikeIdle = "Bike_idle";
+    public string fishingStart = "Fishing_Start";
+    public string fishingEnd = "Fishing_End";
+    public string fishingIdle = "Fishing_idle";
 
-    public void change_animation_state(string new_state)
+    public void change_animation_state(string newState)
     {
-        if (current_state == new_state) return;
-        animator.Play(new_state);
-        current_state = new_state;
+        if (_currentState == newState) return;
+        animator.Play(newState);
+        _currentState = newState;
     }
 
 }

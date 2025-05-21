@@ -18,25 +18,25 @@ public class Collider_checks : MonoBehaviour
     {
         if (area.currentArea == null) return;
         if(area.currentArea.insideArea)
-            Player_movement.instance.can_use_bike = false;
+            Player_movement.Instance.canUseBike = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Encounter") && !Player_movement.instance.using_bike)
-            Player_movement.instance.can_use_bike = false;
+        if (collision.gameObject.CompareTag("Encounter") && !Player_movement.Instance.usingBike)
+            Player_movement.Instance.canUseBike = false;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Encounter") && !Player_movement.instance.using_bike)
-            Player_movement.instance.can_use_bike = true;
+        if (collision.gameObject.CompareTag("Encounter") && !Player_movement.Instance.usingBike)
+            Player_movement.Instance.canUseBike = true;
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Encounter"))
-            Player_movement.instance.can_use_bike = false;
+            Player_movement.Instance.canUseBike = false;
     }
     private void OnCollisionStay2D(Collision2D collision)
     { 

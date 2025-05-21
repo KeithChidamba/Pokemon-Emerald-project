@@ -56,7 +56,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private void GiveEVs(Battle_Participant enemy)
     {
-        foreach (string ev in pokemon.EVs)
+        foreach (string ev in pokemon.effortValues)
         {
             var evAmount = float.Parse(ev.Substring(ev.Length - 1, 1));
             var evStat = ev.Substring(0 ,ev.Length - 1);
@@ -71,13 +71,13 @@ public class Battle_Participant : MonoBehaviour
     private void DistributeExp(int expFromEnemy)
     {
         // Remove fainted or invalid Pokémon
-        expReceivers.RemoveAll(p => p.HP <= 0);
+        expReceivers.RemoveAll(p => p.hp <= 0);
         expReceivers.RemoveAll(p => !Pokemon_party.Instance.party.Contains(p));//only player pokemon receive exp
         if (expReceivers.Count < 1) return;
 
         // Separate holders and participants
         var expShareHolders = expReceivers
-            .Where(p => p.HasItem && p.HeldItem.itemName == "Exp Share")
+            .Where(p => p.hasItem && p.heldItem.itemName == "Exp Share")
             .ToList();
 
         var participants = expReceivers
@@ -110,7 +110,7 @@ public class Battle_Participant : MonoBehaviour
     {
         if (pokemon != null)
         {//if revived during double battle for example
-            if (pokemon.HP > 0 & !isActive)
+            if (pokemon.hp > 0 & !isActive)
             {
                 isActive = true;
                 participantUI.SetActive(true);
@@ -118,12 +118,12 @@ public class Battle_Participant : MonoBehaviour
         }
         if (!isActive) return;
         if (fainted) return; 
-        fainted = (pokemon.HP <= 0);
-        if (pokemon.HP > 0) return;
+        fainted = (pokemon.hp <= 0);
+        if (pokemon.hp > 0) return;
         
         Turn_Based_Combat.Instance.faintEventDelay = true;
-        Dialogue_handler.Instance.DisplayBattleInfo(pokemon.Pokemon_name+" fainted!");
-        pokemon.Status_effect = "None";
+        Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName+" fainted!");
+        pokemon.statusEffect = "None";
 
         if (!isPlayer)
         {
@@ -200,35 +200,35 @@ public class Battle_Participant : MonoBehaviour
     }
     private void UpdateUI()
     {
-        var rawName = (isEnemy)? pokemon.Pokemon_name.Replace("Foe ", "") : pokemon.Pokemon_name;
+        var rawName = (isEnemy)? pokemon.pokemonName.Replace("Foe ", "") : pokemon.pokemonName;
         pokemonNameText.text = rawName;
-        pokemonLevelText.text = "Lv: " + pokemon.Current_level;
+        pokemonLevelText.text = "Lv: " + pokemon.currentLevel;
         if (isPlayer)
         {
-            pokemonImage.sprite = pokemon.back_picture;
+            pokemonImage.sprite = pokemon.backPicture;
             if (!Battle_handler.Instance.isDoubleBattle)
             {
-                pokemonHealthText.text = pokemon.HP + "/" + pokemon.max_HP;
+                pokemonHealthText.text = pokemon.hp + "/" + pokemon.maxHp;
                 SetExpBarValue();
             }
         }
         else
-            pokemonImage.sprite = pokemon.front_picture;
-        playerHpSlider.value = pokemon.HP;
-        playerHpSlider.maxValue = pokemon.max_HP;
-        if(pokemon.HP<=0)
-            pokemon.HP = 0;
+            pokemonImage.sprite = pokemon.frontPicture;
+        playerHpSlider.value = pokemon.hp;
+        playerHpSlider.maxValue = pokemon.maxHp;
+        if(pokemon.hp<=0)
+            pokemon.hp = 0;
     }
 
     public void RefreshStatusEffectImage()
     {
-        if (pokemon.Status_effect == "None")
+        if (pokemon.statusEffect == "None")
             statusImage.gameObject.SetActive(false);
         else
         {
             statusImage.gameObject.SetActive(true);
             statusImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/" 
-                                                        + pokemon.Status_effect.Replace(" ","").ToLower());
+                                                        + pokemon.statusEffect.Replace(" ","").ToLower());
         }
     }
     void ActivateUI(GameObject[]arr,bool on)
@@ -238,7 +238,7 @@ public class Battle_Participant : MonoBehaviour
     }
     void SetExpBarValue()
     {
-        playerExpSlider.value = ((pokemon.CurrentExpAmount/pokemon.NextLevelExpAmount)*100);
+        playerExpSlider.value = ((pokemon.currentExpAmount/pokemon.nextLevelExpAmount)*100);
         playerExpSlider.maxValue = 100;
         playerExpSlider.minValue = 0;
     }
@@ -250,9 +250,9 @@ public class Battle_Participant : MonoBehaviour
         isActive = true;
         participantUI.SetActive(true);
         ActivateGenderImage();
-        if (pokemon.Status_effect == "Badly poison")
-            pokemon.Status_effect = "Poison";
-        Move_handler.Instance.ApplyStatusToVictim(this, pokemon.Status_effect);
+        if (pokemon.statusEffect == "Badly poison")
+            pokemon.statusEffect = "Poison";
+        Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
         Turn_Based_Combat.Instance.OnTurnEnd += statusHandler.Check_status;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
@@ -268,8 +268,8 @@ public class Battle_Participant : MonoBehaviour
     private void ActivateGenderImage()
     {
         pokemonGenderImage.gameObject.SetActive(true);
-        if(pokemon.has_gender)
-            pokemonGenderImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+pokemon.Gender.ToLower());
+        if(pokemon.hasGender)
+            pokemonGenderImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+pokemon.gender.ToLower());
         else
             pokemonGenderImage.gameObject.SetActive(false);
     }

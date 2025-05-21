@@ -76,7 +76,7 @@ public class AbilityHandler : MonoBehaviour
     void Guts()
     {
         if (_abilityTriggered) return;
-        if (_participant.pokemon.Status_effect == "None") return;
+        if (_participant.pokemon.statusEffect == "None") return;
         var attackBuffData = new BuffDebuffData(_participant.pokemon, "Attack", true, 1);
         BattleOperations.CanDisplayDialougue = false; 
         Move_handler.Instance.SelectRelevantBuffOrDebuff(attackBuffData);
@@ -104,18 +104,18 @@ public class AbilityHandler : MonoBehaviour
     void HealStatusEffect(Battle_Participant victim,string status)
     {
         if (victim != _participant) return;
-        if (_participant.pokemon.Status_effect == "None") return;
+        if (_participant.pokemon.statusEffect == "None") return;
         if (Utility.RandomRange(1, 4) < 2)
         {
-            _participant.pokemon.Status_effect = "None";
-            if (_participant.pokemon.Status_effect == "sleep" | _participant.pokemon.Status_effect == "freeze"| _participant.pokemon.Status_effect == "paralysis")
+            _participant.pokemon.statusEffect = "None";
+            if (_participant.pokemon.statusEffect == "sleep" | _participant.pokemon.statusEffect == "freeze"| _participant.pokemon.statusEffect == "paralysis")
                 _participant.pokemon.canAttack = true;
-            Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.Pokemon_name+"'s shed skin healed it");
+            Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
         }
     }
     void ShedSkin()
     {
-        HealStatusEffect(_participant,_participant.pokemon.Status_effect);//incase you already had status when entering battle
+        HealStatusEffect(_participant,_participant.pokemon.statusEffect);//incase you already had status when entering battle
         if (_abilityTriggered) return;
         Move_handler.Instance.OnStatusEffectHit += HealStatusEffect;
         _abilityTriggered = true;
@@ -142,9 +142,9 @@ public class AbilityHandler : MonoBehaviour
 
     void GiveItem()
     {
-        if (_participant.pokemon.HasItem) return;
+        if (_participant.pokemon.hasItem) return;
         //Check level and 10% pickup chance
-        if (_participant.pokemon.Current_level < 5) return;
+        if (_participant.pokemon.currentLevel < 5) return;
         if (Utility.RandomRange(1, 101) > 10) return;
         List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
         {
@@ -160,7 +160,7 @@ public class AbilityHandler : MonoBehaviour
         string[] possibleItems = null;
         foreach (var pool in itemPools)
         {
-            if (_participant.pokemon.Current_level >= pool.MinLevel && _participant.pokemon.Current_level <= pool.MaxLevel)
+            if (_participant.pokemon.currentLevel >= pool.MinLevel && _participant.pokemon.currentLevel <= pool.MaxLevel)
             {
                 possibleItems = pool.Items;
                 break;
@@ -170,45 +170,45 @@ public class AbilityHandler : MonoBehaviour
         
         var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
         var itemWon = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/" + possibleItems[itemWonIndex]);
-        if (Utility.RandomRange(1, 101) < _participant.pokemon.Current_level)
-            _participant.pokemon.HeldItem = Obj_Instance.CreateItem(itemWon);
+        if (Utility.RandomRange(1, 101) < _participant.pokemon.currentLevel)
+            _participant.pokemon.heldItem = Obj_Instance.CreateItem(itemWon);
     }
     void GiveStatic(Battle_Participant attacker,bool isSpecialMove)
     {
-        if (attacker.pokemon.Status_effect != "None") return;
+        if (attacker.pokemon.statusEffect != "None") return;
         if (attacker == _participant) return;
-        if (!attacker.pokemon.CanBeDamaged)
+        if (!attacker.pokemon.canBeDamaged)
             return;
         if(isSpecialMove)return; 
         //simulate a pokemon's attack
         Move_handler.Instance.OnStatusEffectHit+=NotifyStaticHit; 
         var placeholderMove = ScriptableObject.CreateInstance<Move>();
-        placeholderMove.Status_effect = "Paralysis";
+        placeholderMove.statusEffect = "Paralysis";
         Move_handler.Instance.HandleStatusApplication(attacker, placeholderMove,false);
     }
 
     private void NotifyStaticHit(Battle_Participant attacker,string status)//status is unused here but is required for method signature
     {
         Move_handler.Instance.OnStatusEffectHit-=NotifyStaticHit; 
-        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.Pokemon_name+"'s static paralysed "+attacker.pokemon.Pokemon_name);
+        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s static paralysed "+attacker.pokemon.pokemonName);
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {
-        if (_currentAbility == "swarm" & (_participant.pokemon.HP < (_participant.pokemon.max_HP * 0.33f)) & move.type.Type_name=="Bug")
+        if (_currentAbility == "swarm" & (_participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f)) & move.type.typeName=="Bug")
             return damage*1.5f;
         if (_currentAbility == "paralysiscombo")
         {
-            if (victim.pokemon.Status_effect=="Paralysis")
+            if (victim.pokemon.statusEffect=="Paralysis")
                 return damage*2;
         }
-        if (_currentAbility == "torrent" & _participant.pokemon.HP < (_participant.pokemon.max_HP * 0.33f))
-            if (move.type.Type_name == "Water")
+        if (_currentAbility == "torrent" & _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
+            if (move.type.typeName == "Water")
                 return damage*1.5f;
-        if (_currentAbility == "overgrow" & _participant.pokemon.HP < (_participant.pokemon.max_HP * 0.33f))
-            if (move.type.Type_name == "Grass")
+        if (_currentAbility == "overgrow" & _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
+            if (move.type.typeName == "Grass")
                 return damage*1.5f;
-        if (_currentAbility == "blaze" & _participant.pokemon.HP < (_participant.pokemon.max_HP * 0.33f))
-            if (move.type.Type_name == "Fire")
+        if (_currentAbility == "blaze" & _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
+            if (move.type.typeName == "Fire")
                 return damage*1.5f;
         return damage;
     }

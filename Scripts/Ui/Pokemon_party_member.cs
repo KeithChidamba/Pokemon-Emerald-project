@@ -27,26 +27,26 @@ public class Pokemon_party_member : MonoBehaviour
     public void Levelup()//debugging purposes
     {
         if(pokemon==null)return;
-        var exp = PokemonOperations.CalculateExpForNextLevel(pokemon.Current_level, pokemon.EXPGroup)+1;
+        var exp = PokemonOperations.CalculateExpForNextLevel(pokemon.currentLevel, pokemon.expGroup)+1;
         pokemon.ReceiveExperience(exp);
-        pokemon.HP=pokemon.max_HP;
+        pokemon.hp=pokemon.maxHp;
     }
     public void ActivateUI()
     {
-        pokemonFrontImage.sprite = pokemon.front_picture;
+        pokemonFrontImage.sprite = pokemon.frontPicture;
         foreach (var ui in mainUI)
             ui.SetActive(true);
         isEmpty = false;
         emptySlotUI.SetActive(false);
-        heldItemImage.SetActive(pokemon.HasItem);
-        takeHeldItemButton.interactable = pokemon.HasItem;
-        if (pokemon.Status_effect == "None")
+        heldItemImage.SetActive(pokemon.hasItem);
+        takeHeldItemButton.interactable = pokemon.hasItem;
+        if (pokemon.statusEffect == "None")
             statusEffectImage.gameObject.SetActive(false);
         else
         {
             statusEffectImage.gameObject.SetActive(true);
             statusEffectImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/"
-                                                       + pokemon.Status_effect.Replace(" ","").ToLower());
+                                                       + pokemon.statusEffect.Replace(" ","").ToLower());
         }
     }
     public void ResetUI()
@@ -62,12 +62,12 @@ public class Pokemon_party_member : MonoBehaviour
     private void Update()
     {
         if (isEmpty) return;
-        pokemonHealthBarUI.value = pokemon.HP;
-        pokemonHealthBarUI.maxValue = pokemon.max_HP;
+        pokemonHealthBarUI.value = pokemon.hp;
+        pokemonHealthBarUI.maxValue = pokemon.maxHp;
         pokemonHealthBarUI.minValue = 0;
-        pokemonLevelText.text = "Lv: " + pokemon.Current_level;
-        pokemonNameText.text = pokemon.Pokemon_name;
-        pokemonFrontImage.color = ((pokemon.HP <= 0))? 
+        pokemonLevelText.text = "Lv: " + pokemon.currentLevel;
+        pokemonNameText.text = pokemon.pokemonName;
+        pokemonFrontImage.color = ((pokemon.hp <= 0))? 
              Color.HSVToRGB(17, 96, 54)
             :Color.HSVToRGB(0,0,100);
     }

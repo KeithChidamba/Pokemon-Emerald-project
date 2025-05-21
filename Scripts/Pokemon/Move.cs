@@ -1,28 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 [CreateAssetMenu(fileName = "Move", menuName = "p_Move")]
 public class Move : ScriptableObject
 {
-    public string Move_name;
-    public float Move_damage;
-    public float Move_accuracy;
+    [FormerlySerializedAs("Move_name")] public string moveName;
+    [FormerlySerializedAs("Move_damage")] public float moveDamage;
+    [FormerlySerializedAs("Move_accuracy")] public float moveAccuracy;
     public Type type;
-    public bool isSpecial = false;
-    public bool is_Buff_Debuff = false;
-    public bool Has_status = false;
-    public bool Has_effect = false;
-    public bool Can_flinch = false;
-    public bool is_Consecutive = false;
-    public bool isMultiTarget = false;
-    public bool isSelfTargeted = false;
-    public int Priority=0;
-    public int Powerpoints;
-    public int BasePowerpoints;
-    public int max_Powerpoints;
-    public string Status_effect="None";
-    public string Buff_Debuff="None";
-    public float Status_chance = 0;
-    public float Debuff_chance = 0;
-    public string Description;
+    public bool isSpecial;
+    [FormerlySerializedAs("is_Buff_Debuff")] public bool isBuffOrDebuff;
+    [FormerlySerializedAs("Has_status")] public bool hasStatus;
+    [FormerlySerializedAs("Has_effect")] public bool hasSpecialEffect;
+    [FormerlySerializedAs("Can_flinch")] public bool canCauseFlinch;
+    [FormerlySerializedAs("is_Consecutive")] public bool isConsecutive;
+    public bool isMultiTarget;
+    public bool isSelfTargeted;
+    [FormerlySerializedAs("Priority")] public int priority;
+    [FormerlySerializedAs("Powerpoints")] public int powerpoints;
+    [FormerlySerializedAs("BasePowerpoints")] public int basePowerpoints;
+    [FormerlySerializedAs("max_Powerpoints")] public int maxPowerpoints;
+    [FormerlySerializedAs("Status_effect")] public string statusEffect = "None";
+    [FormerlySerializedAs("Buff_Debuff")] public string buffOrDebuffName = "None";
+    [FormerlySerializedAs("Status_chance")] public float statusChance;
+    [FormerlySerializedAs("Debuff_chance")] public float buffOrDebuffChance;
+    [FormerlySerializedAs("Description")] public string description;
 }

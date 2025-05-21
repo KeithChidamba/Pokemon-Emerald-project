@@ -42,7 +42,7 @@ public class Enemy_trainer : MonoBehaviour
     public void CheckIfLoss()
     {
         var numAlive = trainerParty.ToList();
-        numAlive.RemoveAll(p => p.HP <= 0);
+        numAlive.RemoveAll(p => p.hp <= 0);
         if (numAlive.Count == 0)
         {
             Battle_handler.Instance.lastOpponent = participant.pokemon;
@@ -56,10 +56,10 @@ public class Enemy_trainer : MonoBehaviour
                 foreach (Pokemon pokemon in trainerParty)
                     if(pokemon!=Battle_handler.Instance.battleParticipants[2].pokemon && pokemon!=Battle_handler.Instance.battleParticipants[3].pokemon)
                         notParticipatingList.Add(pokemon);
-                notParticipatingList.RemoveAll(p => p.HP <= 0);
+                notParticipatingList.RemoveAll(p => p.hp <= 0);
                 if (notParticipatingList.Count == 0)
                 {//1 left
-                    if(participant.pokemon.HP<=0)
+                    if(participant.pokemon.hp<=0)
                     {
                         participant.DeactivatePokemon();
                         participant.pokemon = null;
@@ -94,14 +94,14 @@ public class Enemy_trainer : MonoBehaviour
         foreach (TrainerPokemonData member in trainerData.PokemonParty)
         {
             trainerParty.Add(member.pokemon);
-            var expForNextLevel = PokemonOperations.CalculateExpForNextLevel(member.pokemonLevel, member.pokemon.EXPGroup)+1;
+            var expForNextLevel = PokemonOperations.CalculateExpForNextLevel(member.pokemonLevel, member.pokemon.expGroup)+1;
             member.pokemon.ReceiveExperience(expForNextLevel);
-            member.pokemon.HP = member.pokemon.max_HP;
-            member.pokemon.move_set.Clear();
+            member.pokemon.hp = member.pokemon.maxHp;
+            member.pokemon.moveSet.Clear();
             foreach (Move move in member.moveSet)
-                member.pokemon.move_set.Add(Obj_Instance.CreateMove(move));
+                member.pokemon.moveSet.Add(Obj_Instance.CreateMove(move));
             if (member.hasItem)
-                member.pokemon.HeldItem = Obj_Instance.CreateItem(member.heldItem);
+                member.pokemon.heldItem = Obj_Instance.CreateItem(member.heldItem);
         }
     }
     void UseMove(Move move)
@@ -124,9 +124,9 @@ public class Enemy_trainer : MonoBehaviour
         //Debug.Log("ai ataccked wit: "+participant.pokemon.Pokemon_name);
         var randomEnemy = Utility.RandomRange(0, participant.currentEnemies.Count);
         TargetPlayer(randomEnemy);
-        var randomMoveIndex = Utility.RandomRange(0, participant.pokemon.move_set.Count);
+        var randomMoveIndex = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
         //Debug.Log(participant.pokemon.Pokemon_name+" is gonna use move: "+participant.pokemon.move_set[randomMoveIndex].Move_name);
-        UseMove(participant.pokemon.move_set[randomMoveIndex]);
+        UseMove(participant.pokemon.moveSet[randomMoveIndex]);
         canAttack = false;
     }
 }

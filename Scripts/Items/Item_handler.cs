@@ -55,24 +55,24 @@ public class Item_handler : MonoBehaviour
     IEnumerator LevelUpWithItem()
     {
         Game_ui_manager.Instance.canExitParty = false;
-        var exp = PokemonOperations.CalculateExpForNextLevel(selectedPartyPokemon.Current_level, selectedPartyPokemon.EXPGroup);
-        Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name+" leveled up!", "Details",1f);
+        var exp = PokemonOperations.CalculateExpForNextLevel(selectedPartyPokemon.currentLevel, selectedPartyPokemon.expGroup);
+        Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" leveled up!", "Details",1f);
         yield return new WaitForSeconds(1f);
-        selectedPartyPokemon.ReceiveExperience((exp-selectedPartyPokemon.CurrentExpAmount)+1);
+        selectedPartyPokemon.ReceiveExperience((exp-selectedPartyPokemon.currentExpAmount)+1);
         DepleteItem();
         ResetItemUsage();
     }
 
     void TriggerStoneEvolution(string evolutionStoneName)
     {
-        if (selectedPartyPokemon.EvolutionStoneName.ToLower() == evolutionStoneName)
+        if (selectedPartyPokemon.evolutionStoneName.ToLower() == evolutionStoneName)
         {
             DepleteItem();
             ResetItemUsage();
             selectedPartyPokemon.CheckEvolutionRequirements(0);
         } 
         else
-            Dialogue_handler.Instance.DisplayInfo("Cant use that on "+selectedPartyPokemon.Pokemon_name, "Details",1f);
+            Dialogue_handler.Instance.DisplayInfo("Cant use that on "+selectedPartyPokemon.pokemonName, "Details",1f);
     }
     private void ChangeStats(string stat)
     {
@@ -103,8 +103,8 @@ public class Item_handler : MonoBehaviour
             var player = Battle_handler.Instance.battleParticipants[currentTurnIndex];
             var partner = Battle_handler.Instance.battleParticipants[partnerIndex];
             var pokemonProtected = (partner.isActive) ? 
-                selectedPartyPokemon.Pokemon_name+" and "+ partner.pokemon.Pokemon_name
-                :selectedPartyPokemon.Pokemon_name;
+                selectedPartyPokemon.pokemonName+" and "+ partner.pokemon.pokemonName
+                :selectedPartyPokemon.pokemonName;
             
             Move_handler.Instance.ApplyStatDropImmunity(player,5);
             if(Battle_handler.Instance.isDoubleBattle)
@@ -120,7 +120,7 @@ public class Item_handler : MonoBehaviour
         if(buff!=null)
             if (buff.Stage > 5)
             {
-                Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name + "'s " + statName
+                Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName + "'s " + statName
                                                       + " cant go any higher", "Details");
                 ResetItemUsage();
                 return;
@@ -133,9 +133,9 @@ public class Item_handler : MonoBehaviour
     }
     private void RevivePokemon(string reviveType)
     {
-        if (selectedPartyPokemon.HP > 0) {Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name+" has not fainted!", "Details",1f); return;}
-        selectedPartyPokemon.HP = (reviveType=="max revive")? selectedPartyPokemon.max_HP : math.trunc(selectedPartyPokemon.max_HP*0.5f);
-        Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name+" has been revived!", "Details",1f);
+        if (selectedPartyPokemon.hp > 0) {Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" has not fainted!", "Details",1f); return;}
+        selectedPartyPokemon.hp = (reviveType=="max revive")? selectedPartyPokemon.maxHp : math.trunc(selectedPartyPokemon.maxHp*0.5f);
+        Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" has been revived!", "Details",1f);
         DepleteItem();
         Invoke(nameof(SkipTurn),1.2f);
         ResetItemUsage();
@@ -144,19 +144,19 @@ public class Item_handler : MonoBehaviour
      {
          Pokemon_Details.Instance.OnMoveSelected -= RestorePowerpoints;
          var pointsToAdd = 0;
-         var currentMove = selectedPartyPokemon.move_set[moveIndex];
+         var currentMove = selectedPartyPokemon.moveSet[moveIndex];
          
          if (_itemInUse.itemName.ToLower() == "ether")
              pointsToAdd = 10;
          
          if (_itemInUse.itemName.ToLower() == "max ether")
-             pointsToAdd = currentMove.max_Powerpoints;
+             pointsToAdd = currentMove.maxPowerpoints;
          
-         var sumPoints = currentMove.Powerpoints + pointsToAdd;
+         var sumPoints = currentMove.powerpoints + pointsToAdd;
          
-         currentMove.Powerpoints = (sumPoints > currentMove.max_Powerpoints) ? currentMove.max_Powerpoints : sumPoints;
+         currentMove.powerpoints = (sumPoints > currentMove.maxPowerpoints) ? currentMove.maxPowerpoints : sumPoints;
  
-         Dialogue_handler.Instance.DisplayInfo( currentMove.Move_name+" pp was restored!", "Details",1f);
+         Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp was restored!", "Details",1f);
          DepleteItem();
          ResetItemUsage();
          SkipTurn();
@@ -166,12 +166,12 @@ public class Item_handler : MonoBehaviour
     private void IncreasePowerpoints(int moveIndex)
     {
         Pokemon_Details.Instance.OnMoveSelected -= IncreasePowerpoints;
-        var currentMove = selectedPartyPokemon.move_set[moveIndex];
-        double powerpointRatio = (float) currentMove.max_Powerpoints / currentMove.BasePowerpoints;
+        var currentMove = selectedPartyPokemon.moveSet[moveIndex];
+        double powerpointRatio = (float) currentMove.maxPowerpoints / currentMove.basePowerpoints;
         if (Math.Round(powerpointRatio,1) >= 1.6) return;
         
-        currentMove.max_Powerpoints += (int)math.floor((0.2*currentMove.BasePowerpoints));
-        Dialogue_handler.Instance.DisplayInfo( currentMove.Move_name+"'s pp was increased!", "Details",1f);
+        currentMove.maxPowerpoints += (int)math.floor((0.2*currentMove.basePowerpoints));
+        Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was increased!", "Details",1f);
         
         DepleteItem();
         ResetItemUsage();
@@ -204,12 +204,12 @@ public class Item_handler : MonoBehaviour
     {
         var isCaught = false;
         var wildPokemon = Wild_pkm.Instance.participant.pokemon;//pokemon only caught in wild
-        Dialogue_handler.Instance.DisplayBattleInfo("Trying to catch "+wildPokemon.Pokemon_name+" .....");
+        Dialogue_handler.Instance.DisplayBattleInfo("Trying to catch "+wildPokemon.pokemonName+" .....");
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         var ballRate = float.Parse(pokeball.itemEffect);
-        var bracket1 = (3 * wildPokemon.max_HP - 2 * wildPokemon.HP) / (3 * wildPokemon.max_HP);
-        var catchValue = math.trunc(bracket1 * wildPokemon.CatchRate * ballRate * 
-                                      BattleOperations.GetCatchRateBonusFromStatus(wildPokemon.Status_effect));
+        var bracket1 = (3 * wildPokemon.maxHp - 2 * wildPokemon.hp) / (3 * wildPokemon.maxHp);
+        var catchValue = math.trunc(bracket1 * wildPokemon.catchRate * ballRate * 
+                                      BattleOperations.GetCatchRateBonusFromStatus(wildPokemon.statusEffect));
         
         if (BattleOperations.IsImmediateCatch(catchValue) 
             | BattleOperations.PassedPokeballShakeTest(catchValue))
@@ -217,13 +217,13 @@ public class Item_handler : MonoBehaviour
   
         if (isCaught)
         {
-            Dialogue_handler.Instance.DisplayBattleInfo("Well done "+wildPokemon.Pokemon_name+" has been caught");
+            Dialogue_handler.Instance.DisplayBattleInfo("Well done "+wildPokemon.pokemonName+" has been caught");
             Pokemon_party.Instance.AddMember(wildPokemon);
             yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
             Wild_pkm.Instance.participant.EndWildBattle();
         }else
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(wildPokemon.Pokemon_name+" escaped the pokeball");
+            Dialogue_handler.Instance.DisplayBattleInfo(wildPokemon.pokemonName+" escaped the pokeball");
             yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
             SkipTurn();
         }
@@ -231,18 +231,18 @@ public class Item_handler : MonoBehaviour
     }
     private void HealStatusEffect(string curableStatus)
     {
-        if (selectedPartyPokemon.Status_effect == "None")
+        if (selectedPartyPokemon.statusEffect == "None")
         {Dialogue_handler.Instance.DisplayInfo("Pokemon is already healthy","Feedback");return; }
         if (curableStatus == "full heal") 
         {
-            selectedPartyPokemon.Status_effect = "None";
-            Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name+" has been healed","Feedback");
+            selectedPartyPokemon.statusEffect = "None";
+            Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" has been healed","Feedback");
         }
         else
         {
-            if (selectedPartyPokemon.Status_effect.ToLower() == curableStatus)
+            if (selectedPartyPokemon.statusEffect.ToLower() == curableStatus)
             {
-                selectedPartyPokemon.Status_effect = "None";
+                selectedPartyPokemon.statusEffect = "None";
                 if (curableStatus == "sleep" | curableStatus == "freeze"| curableStatus == "paralysis")
                     selectedPartyPokemon.canAttack = true;
                 Dialogue_handler.Instance.DisplayInfo("Pokemon has been healed","Feedback");
@@ -266,27 +266,27 @@ public class Item_handler : MonoBehaviour
     }
     private void RestoreHealth(int healEffect)
     {
-        if (selectedPartyPokemon.HP <= 0)
+        if (selectedPartyPokemon.hp <= 0)
         {
             Dialogue_handler.Instance.DisplayInfo( "Pokemon has already fainted","Feedback",1f);
             ResetItemUsage();
             return;
         } 
-        if(selectedPartyPokemon.HP>=selectedPartyPokemon.max_HP)
+        if(selectedPartyPokemon.hp>=selectedPartyPokemon.maxHp)
         {
             Dialogue_handler.Instance.DisplayInfo("Pokemon health already is full","Feedback",1f);
             ResetItemUsage();
             return;
         }
-        if ((selectedPartyPokemon.HP + healEffect) < selectedPartyPokemon.max_HP)
+        if ((selectedPartyPokemon.hp + healEffect) < selectedPartyPokemon.maxHp)
         {
-            selectedPartyPokemon.HP += healEffect;
-            Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name+" gained "+healEffect+" health points","Feedback",1f);
+            selectedPartyPokemon.hp += healEffect;
+            Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points","Feedback",1f);
         }
-        else if ((selectedPartyPokemon.HP + healEffect) >= selectedPartyPokemon.max_HP)
+        else if ((selectedPartyPokemon.hp + healEffect) >= selectedPartyPokemon.maxHp)
         {
-            selectedPartyPokemon.HP = selectedPartyPokemon.max_HP;
-            Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.Pokemon_name+" gained full health points","Feedback",1f);
+            selectedPartyPokemon.hp = selectedPartyPokemon.maxHp;
+            Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" gained full health points","Feedback",1f);
         }
         ResetItemUsage();
         if (usingHeldItem) { DepleteHeldItem();return;}

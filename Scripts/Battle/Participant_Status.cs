@@ -22,7 +22,7 @@ public class Participant_Status : MonoBehaviour
     public void Get_statusEffect(int numTurns)
     {
         _participant.RefreshStatusEffectImage();
-        if (_participant.pokemon.Status_effect == "None") return;
+        if (_participant.pokemon.statusEffect == "None") return;
         _statusDuration = 0;
         _statusDurationInTurns = numTurns;
         Stat_drop();
@@ -35,14 +35,14 @@ public class Participant_Status : MonoBehaviour
     }
     void loose_HP(float percentage)
     {
-        _participant.pokemon.HP -= math.trunc(_participant.pokemon.max_HP * percentage);
+        _participant.pokemon.hp -= math.trunc(_participant.pokemon.maxHp * percentage);
     }
     private void Stat_drop()
     {
-        switch (_participant.pokemon.Status_effect)
+        switch (_participant.pokemon.statusEffect)
         {
             case "Burn":
-                _participant.pokemon.Attack *= 0.5f;
+                _participant.pokemon.attack *= 0.5f;
                 break;
             case "Paralysis":
                 _participant.pokemon.speed *= 0.25f;
@@ -53,16 +53,16 @@ public class Participant_Status : MonoBehaviour
     {
         if (overworld_actions.Instance.usingUI) return;
         if (!_participant.isActive) return;
-        if(_participant.pokemon.HP<=0 )return;
+        if(_participant.pokemon.hp<=0 )return;
         if(Battle_handler.Instance.battleOver)return;
         if (_participant.pokemon.isFlinched)
         {
             _participant.pokemon.isFlinched = false;
             _participant.pokemon.canAttack = true;
         }
-        if (!_participant.pokemon.CanBeDamaged)
-            _participant.pokemon.CanBeDamaged = true;
-        if (_participant.pokemon.Status_effect == "None") return;
+        if (!_participant.pokemon.canBeDamaged)
+            _participant.pokemon.canBeDamaged = true;
+        if (_participant.pokemon.statusEffect == "None") return;
         _participant.RefreshStatusEffectImage();
         Status_damage();
     }
@@ -71,16 +71,16 @@ public class Participant_Status : MonoBehaviour
         if (!_participant.isActive) return;
         if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon !=
             _participant.pokemon) return;
-        if (_participant.pokemon.Status_effect == "None") return;
+        if (_participant.pokemon.statusEffect == "None") return;
         
-        if (_statusEffectMethods.TryGetValue(_participant.pokemon.Status_effect.ToLower(),out Action method))
+        if (_statusEffectMethods.TryGetValue(_participant.pokemon.statusEffect.ToLower(),out Action method))
             method();
         else
-            Debug.Log("couldn't find method for status: " + _participant.pokemon.Status_effect.ToLower());
+            Debug.Log("couldn't find method for status: " + _participant.pokemon.statusEffect.ToLower());
     }
     void Status_damage()
     {
-        switch (_participant.pokemon.Status_effect.Replace(" ","").ToLower())
+        switch (_participant.pokemon.statusEffect.Replace(" ","").ToLower())
         {
             case "burn":
                 Status_Damage_msg(" is hurt by the burn",0.125f);
@@ -136,7 +136,7 @@ public class Participant_Status : MonoBehaviour
     }
     void Status_Damage_msg(string msg,float damage)
     {
-        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.Pokemon_name+msg);
+        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+msg);
         loose_HP(damage);
         _statusDuration++;
         _participant.Invoke(nameof(_participant.CheckIfFainted),0.9f);
@@ -144,13 +144,13 @@ public class Participant_Status : MonoBehaviour
     public void NotifyHealing()
     {
         if (!_healed) return;
-        switch (_participant.pokemon.Status_effect)
+        switch (_participant.pokemon.statusEffect)
         {
             case "Sleep":
-                Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.Pokemon_name+" Woke UP!");
+                Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+" Woke UP!");
                 break;
             case "Freeze":
-                Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.Pokemon_name+" Unfroze!");
+                Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+" Unfroze!");
                 break;
         }
         remove_status_effect();
@@ -162,7 +162,7 @@ public class Participant_Status : MonoBehaviour
     }
     void remove_status_effect()
     {
-        _participant.pokemon.Status_effect = "None";
+        _participant.pokemon.statusEffect = "None";
         _participant.pokemon.canAttack = true;
         _participant.RefreshStatusEffectImage();
     }

@@ -15,13 +15,13 @@ public class Held_Items : MonoBehaviour
     void CheckForUsableItem()
     {
         if(!_participant.isActive)return;
-        if (!_participant.pokemon.HasItem) return;
-        if (_participant.pokemon.HeldItem.quantity == 0 & !_participant.pokemon.HeldItem.isHeldItem)
+        if (!_participant.pokemon.hasItem) return;
+        if (_participant.pokemon.heldItem.quantity == 0 & !_participant.pokemon.heldItem.isHeldItem)
         {//remove consumable held items that are depleted, not ones that just have special functionality
             _participant.pokemon.RemoveHeldItem(); return; 
         }
-        if (!_participant.pokemon.HeldItem.canBeUsedInBattle) return;
-        switch (_participant.pokemon.HeldItem.itemType.ToLower())
+        if (!_participant.pokemon.heldItem.canBeUsedInBattle) return;
+        switch (_participant.pokemon.heldItem.itemType.ToLower())
         {
             case "heal hp":
                 CheckHealCondition();
@@ -35,17 +35,17 @@ public class Held_Items : MonoBehaviour
 
     void CheckHealCondition()
     {
-        if(_participant.pokemon.HP >= (_participant.pokemon.max_HP/2)) return;        Debug.Log("triggered heal held item");
+        if(_participant.pokemon.hp >= (_participant.pokemon.maxHp/2)) return;        Debug.Log("triggered heal held item");
         Item_handler.Instance.usingHeldItem = true;
         Item_handler.Instance.selectedPartyPokemon = _participant.pokemon;
-        Item_handler.Instance.UseItem(_participant.pokemon.HeldItem);
+        Item_handler.Instance.UseItem(_participant.pokemon.heldItem);
     }
 
     void CheckStatusCondition()
     {
-        if(_participant.pokemon.Status_effect == "None") return;        Debug.Log("triggered status held item");
+        if(_participant.pokemon.statusEffect == "None") return;        Debug.Log("triggered status held item");
         Item_handler.Instance.usingHeldItem = true;
         Item_handler.Instance.selectedPartyPokemon = _participant.pokemon;
-        Item_handler.Instance.UseItem(_participant.pokemon.HeldItem);
+        Item_handler.Instance.UseItem(_participant.pokemon.heldItem);
     }
 }

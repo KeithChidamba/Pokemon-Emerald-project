@@ -20,7 +20,7 @@ public class Encounter_trigger : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag("Player") || _triggeredEncounter) return;
         var player = collision.GetComponentInParent<Player_movement>();
-        if (player.using_bike)
+        if (player.usingBike)
             _triggerCheckCollider.isTrigger = false;
         else
         {
@@ -47,7 +47,7 @@ public class Encounter_trigger : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag("Player")) return;
         var player = collision.transform.GetComponentInParent<Player_movement>();
-        if (!player.using_bike)
+        if (!player.usingBike)
             gameObject.GetComponent<Collider2D>().isTrigger = true;
     }
     private void OnCollisionExit2D(Collision2D collision)

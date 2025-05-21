@@ -145,9 +145,9 @@ public class Bag : MonoBehaviour
             return;
         }
         var partyMember = Pokemon_party.Instance.party[memberIndex - 1];
-        Dialogue_handler.Instance.DisplayInfo("You took a " + partyMember.HeldItem.itemName +" from "
-                                             + partyMember.Pokemon_name, "Details");
-        AddItem(partyMember.HeldItem);
+        Dialogue_handler.Instance.DisplayInfo("You took a " + partyMember.heldItem.itemName +" from "
+                                             + partyMember.pokemonName, "Details");
+        AddItem(partyMember.heldItem);
         partyMember.RemoveHeldItem();
         Pokemon_party.Instance.ClearSelectionUI();
         Pokemon_party.Instance.RefreshMemberCards();

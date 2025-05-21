@@ -68053,21 +68053,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5b00c22eb7fc294da1ea8ba2894d537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement_speed: 0
-  walk_speed: 0.8
-  run_speed: 1.5
+  movementSpeed: 0
+  walkSpeed: 0.8
+  runSpeed: 1.5
   running: 0
   walking: 0
   moving: 0
-  using_bike: 0
-  can_use_bike: 1
+  usingBike: 0
+  canUseBike: 1
   x: 0
   y: 0
   rb: {fileID: 1465551226}
   movement: {x: 0, y: 0}
   manager: {fileID: 1465551227}
-  canmove: 1
-  interaction_point: {fileID: 1418617663}
+  canMove: 1
+  interactionPoint: {fileID: 1418617663}
 --- !u!50 &1465551226
 Rigidbody2D:
   serializedVersion: 4
@@ -68108,14 +68108,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1606520301}
-  Player_walk: Player_walk
-  Player_idle: Player_idle
-  Player_run: Player_run
-  Ride_Bike: Ride_Bike
-  Bike_idle: Bike_idle
-  Fishing_Start: Fishing_Start
-  Fishing_End: Fishing_End
-  Fishing_idle: Fishing_idle
+  playerWalk: Player_walk
+  playerIdle: Player_idle
+  playerRun: Player_run
+  rideBike: Ride_Bike
+  bikeIdle: Bike_idle
+  fishingStart: Fishing_Start
+  fishingEnd: Fishing_End
+  fishingIdle: Fishing_idle
 --- !u!1 &1465891483
 GameObject:
   m_ObjectHideFlags: 0

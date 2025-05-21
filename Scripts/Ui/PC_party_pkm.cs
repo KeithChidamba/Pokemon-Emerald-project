@@ -14,6 +14,6 @@ public class PC_party_pkm : MonoBehaviour
     public void LoadImage()
     {
         pokemonSprite = GetComponent<Image>();
-        pokemonSprite.sprite = pokemon.front_picture;
+        pokemonSprite.sprite = pokemon.frontPicture;
     }
 }

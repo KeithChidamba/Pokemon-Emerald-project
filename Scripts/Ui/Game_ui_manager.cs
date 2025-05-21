@@ -39,8 +39,8 @@ public class Game_ui_manager : MonoBehaviour
         _numUIScreensOpen += change;
         if (_numUIScreensOpen < 0) _numUIScreensOpen = 0;
         overworld_actions.Instance.usingUI = _numUIScreensOpen>0;
-        Player_movement.instance.canmove = _numUIScreensOpen==0;
-        if(Options_manager.Instance.playerInBattle) Player_movement.instance.canmove = false;
+        Player_movement.Instance.canMove = _numUIScreensOpen==0;
+        if(Options_manager.Instance.playerInBattle) Player_movement.Instance.canMove = false;
     }
     private void UiInputs()
     {

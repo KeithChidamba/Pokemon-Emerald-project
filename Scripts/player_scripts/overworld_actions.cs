@@ -27,12 +27,12 @@ public class overworld_actions : MonoBehaviour
     {
         if (usingUI)
         {
-            Player_movement.instance.canmove = false;
+            Player_movement.Instance.canMove = false;
             return;
         }
         if (doingAction)
         {
-            Player_movement.instance.canmove = false;
+            Player_movement.Instance.canMove = false;
             canSwitchMovement = false;
         }
         if (pokemonBitingPole & Input.GetKeyDown(KeyCode.F))
@@ -43,7 +43,7 @@ public class overworld_actions : MonoBehaviour
         if (fishing)
         {
             doingAction = true;
-            manager.change_animation_state(manager.Fishing_idle);
+            manager.change_animation_state(manager.fishingIdle);
             if (Input.GetKeyDown(KeyCode.Q))
                 ResetFishingAction();
         }
@@ -81,16 +81,16 @@ public class overworld_actions : MonoBehaviour
         fishing = false;
         pokemonBitingPole = false;
         Invoke(nameof(ActionReset), 0.8f);
-        manager.change_animation_state(manager.Fishing_End);
+        manager.change_animation_state(manager.fishingEnd);
         Dialogue_handler.Instance.EndDialogue();
     }
     void ActionReset()
     {
         doingAction = false;
-        Player_movement.instance.canmove = true;
+        Player_movement.Instance.canMove = true;
     }
     public void SetBikeMovementSpeed()
     {
-        Player_movement.instance.movement_speed = BikeSpeed;
+        Player_movement.Instance.movementSpeed = BikeSpeed;
     }
 }

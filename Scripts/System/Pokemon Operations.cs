@@ -13,7 +13,7 @@ public static class PokemonOperations
         int combinedIDs = Game_Load.Instance.playerData.trainerID;
         combinedIDs <<= 16;
         combinedIDs += Game_Load.Instance.playerData.secretID;
-        long pkmID = (((long)combinedIDs)<<32) | pokemon.Personality_value;
+        long pkmID = (((long)combinedIDs)<<32) | pokemon.personalityValue;
         return math.abs(pkmID);
     }
     private static uint GeneratePersonalityValue()
@@ -26,23 +26,23 @@ public static class PokemonOperations
     private static void AssignPokemonAbility(Pokemon pokemon)
     {
         pokemon.ability = null;
-        pokemon.ability_name = (pokemon.abilities.Length > 1)? 
-             pokemon.abilities[pokemon.Personality_value % 2]
+        pokemon.abilityName = (pokemon.abilities.Length > 1)? 
+             pokemon.abilities[pokemon.personalityValue % 2]
             :pokemon.abilities[0];
-        pokemon.ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + pokemon.ability_name.ToLower());
+        pokemon.ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + pokemon.abilityName.ToLower());
     }
     public static bool ContainsType(string[]typesList ,Type typeToCheck)
     {
         foreach (string type in typesList)
-            if (type == typeToCheck.Type_name)
+            if (type == typeToCheck.typeName)
                 return true;
         return false;
     }
     private static void AssignPokemonNature(Pokemon pokemon)
     {
         uint natureValue = 0;
-        if (pokemon.Personality_value > 0)
-            natureValue = pokemon.Personality_value % 25;
+        if (pokemon.personalityValue > 0)
+            natureValue = pokemon.personalityValue % 25;
         string[] natures =
         {
             "Hardy", "Lonely", "Brave", "Adamant", "Naughty",
@@ -110,40 +110,40 @@ public static class PokemonOperations
         switch (stat)
         {
             case "HP": 
-                pkm.HP_EV=CheckEvLimit(pkm.HP_EV,evAmount,pkm);
+                pkm.hpEv=CheckEvLimit(pkm.hpEv,evAmount,pkm);
                 break;
             case "Attack": 
-                pkm.Attack_EV=CheckEvLimit(pkm.Attack_EV,evAmount,pkm);
+                pkm.attackEv=CheckEvLimit(pkm.attackEv,evAmount,pkm);
                 break;
             case "Defense": 
-                pkm.Defense_EV=CheckEvLimit(pkm.Defense_EV,evAmount,pkm);
+                pkm.defenseEv=CheckEvLimit(pkm.defenseEv,evAmount,pkm);
                 break;
             case "Special Attack": 
-                pkm.SP_ATK_EV=CheckEvLimit(pkm.SP_ATK_EV,evAmount,pkm);
+                pkm.specialAttackEv=CheckEvLimit(pkm.specialAttackEv,evAmount,pkm);
                 break;
             case "Special Defense": 
-                pkm.SP_DEF_EV=CheckEvLimit(pkm.SP_DEF_EV,evAmount,pkm);
+                pkm.specialDefenseEv=CheckEvLimit(pkm.specialDefenseEv,evAmount,pkm);
                 break;
             case "Speed": 
-                pkm.speed_EV=CheckEvLimit(pkm.speed_EV,evAmount,pkm);
+                pkm.speedEv=CheckEvLimit(pkm.speedEv,evAmount,pkm);
                 break;
         }
     }
     static float CheckEvLimit(float ev,float amount,Pokemon pokemon)
     {
-        var sumOfEvs = pokemon.HP_EV + pokemon.Attack_EV + pokemon.Defense_EV + pokemon.SP_ATK_EV + pokemon.SP_DEF_EV + pokemon.speed_EV;
+        var sumOfEvs = pokemon.hpEv + pokemon.attackEv + pokemon.defenseEv + pokemon.specialAttackEv + pokemon.specialDefenseEv + pokemon.speedEv;
         if (ev < 255 && sumOfEvs < 510)
             return ev+amount;
         return ev;
     }
     private static void GeneratePokemonIVs(Pokemon pokemon)
     {
-        pokemon.HP_IV =  Utility.RandomRange(0,32);
-        pokemon.Attack_IV = Utility.RandomRange(0,32);
-        pokemon.Defense_IV =  Utility.RandomRange(0,32);
-        pokemon.SP_ATK_IV =  Utility.RandomRange(0,32);
-        pokemon.SP_DEF_IV =  Utility.RandomRange(0,32);
-        pokemon.speed_IV =  Utility.RandomRange(0,32);
+        pokemon.hpIv =  Utility.RandomRange(0,32);
+        pokemon.attackIv = Utility.RandomRange(0,32);
+        pokemon.defenseIv =  Utility.RandomRange(0,32);
+        pokemon.specialAttackIv =  Utility.RandomRange(0,32);
+        pokemon.specialDefenseIv =  Utility.RandomRange(0,32);
+        pokemon.speedIv =  Utility.RandomRange(0,32);
     }
 
     public static void CheckForNewMove(Pokemon pokemon)
@@ -156,7 +156,7 @@ public static class PokemonOperations
         foreach (var move in CurrentPokemon.learnSet)
         {
             var requiredLevel = int.Parse(move.Substring(move.Length - 2, 2));
-            if (CurrentPokemon.Current_level == requiredLevel)
+            if (CurrentPokemon.currentLevel == requiredLevel)
             {
                 var pos = move.IndexOf('/')+1;
                 var moveType = move.Substring(0, pos - 1).ToLower();
@@ -164,20 +164,20 @@ public static class PokemonOperations
                 if(!inBattle & isPartyPokemon)
                     Game_ui_manager.Instance.canExitParty = false;
                 
-                if (CurrentPokemon.move_set.Count == 4) 
+                if (CurrentPokemon.moveSet.Count == 4) 
                 {//leveling up from battle or rare candies
                     if(inBattle || isPartyPokemon)
                     {
                         SelectingMoveReplacement = true;
                         Battle_handler.Instance.displayingInfo = inBattle;
                         Dialogue_handler.Instance.DisplayList(
-                            $"{CurrentPokemon.Pokemon_name} is trying to learn {moveName} ,do you want it to learn {moveName}?",
+                            $"{CurrentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn {moveName}?",
                             "", new[]{ "LearnMove","SkipMove" }, new[]{"Yes", "No"});
                         NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName);
                     }
                     //wild pokemon get generated with somewhat random moveset choices
                     else
-                        CurrentPokemon.move_set[Utility.RandomRange(0,4)] = Obj_Instance.CreateMove(
+                        CurrentPokemon.moveSet[Utility.RandomRange(0,4)] = Obj_Instance.CreateMove(
                             Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
                 }
                 else
@@ -186,11 +186,11 @@ public static class PokemonOperations
                     {
                         if(!inBattle)
                             Game_ui_manager.Instance.canExitParty = true;
-                        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.Pokemon_name+" learned "+moveName,true);
+                        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName+" learned "+moveName,true);
                     }
                     var newMove = Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
-                    if (!CurrentPokemon.move_set.Contains(newMove))
-                        CurrentPokemon.move_set.Add(newMove);
+                    if (!CurrentPokemon.moveSet.Contains(newMove))
+                        CurrentPokemon.moveSet.Add(newMove);
                     LearningNewMove = false;
                 }
                 break;
@@ -209,10 +209,10 @@ public static class PokemonOperations
         Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
         Pokemon_Details.Instance.learningMove = false;
         Pokemon_Details.Instance.ExitDetails();
-        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.Pokemon_name + " forgot " 
-            + CurrentPokemon.move_set[moveIndex].Move_name 
-            + " and learned " + NewMove.Move_name,true);
-        CurrentPokemon.move_set[moveIndex] = Obj_Instance.CreateMove(NewMove);
+        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName + " forgot " 
+            + CurrentPokemon.moveSet[moveIndex].moveName 
+            + " and learned " + NewMove.moveName,true);
+        CurrentPokemon.moveSet[moveIndex] = Obj_Instance.CreateMove(NewMove);
         SelectingMoveReplacement = false;
         LearningNewMove = false;
         Game_ui_manager.Instance.canExitParty = true;
@@ -220,19 +220,19 @@ public static class PokemonOperations
     private static void AssignPokemonGender(Pokemon pokemon)
     {
         uint genderValue = 0;
-        if(pokemon.Personality_value>0)
-            genderValue = pokemon.Personality_value % 256;
-        var pos = pokemon.GenderRatio.IndexOf('/');
-        var ratio = pokemon.GenderRatio.Substring(pos + 1, pokemon.GenderRatio.Length - pos - 1);
+        if(pokemon.personalityValue>0)
+            genderValue = pokemon.personalityValue % 256;
+        var pos = pokemon.genderRatio.IndexOf('/');
+        var ratio = pokemon.genderRatio.Substring(pos + 1, pokemon.genderRatio.Length - pos - 1);
         var ratioFemale = float.Parse(ratio);
         var genderThreshold = math.abs((int)math.trunc(((ratioFemale / 100) * 256)));
-        pokemon.Gender = (genderValue < genderThreshold)? "Male" : "Female";
+        pokemon.gender = (genderValue < genderThreshold)? "Male" : "Female";
     }
     public static void SetPokemonTraits(Pokemon newPokemon)
     {
-        newPokemon.Personality_value = GeneratePersonalityValue();
-        newPokemon.Pokemon_ID = GeneratePokemonID(newPokemon);
-        if(newPokemon.has_gender)
+        newPokemon.personalityValue = GeneratePersonalityValue();
+        newPokemon.pokemonID = GeneratePokemonID(newPokemon);
+        if(newPokemon.hasGender)
             AssignPokemonGender(newPokemon);
         AssignPokemonAbility(newPokemon);
         AssignPokemonNature(newPokemon);

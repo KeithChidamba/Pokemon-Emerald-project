@@ -55,7 +55,7 @@ public class Pokemon_Details : MonoBehaviour
     private void Update()
     {
         if(currentPokemon == null)return;
-        player_exp.value = ((currentPokemon.CurrentExpAmount/currentPokemon.NextLevelExpAmount)*100);
+        player_exp.value = ((currentPokemon.currentExpAmount/currentPokemon.nextLevelExpAmount)*100);
     }
 
     public void ExitDetails()
@@ -93,9 +93,9 @@ public class Pokemon_Details : MonoBehaviour
             return;
         }
         if (changingMoveData) return;
-        move_Description.text = currentPokemon.move_set[moveIndex - 1].Description;
-        move_acc.text = "Accuracy: "+currentPokemon.move_set[moveIndex - 1].Move_accuracy;
-        move_dmg.text = "Damage: " + currentPokemon.move_set[moveIndex - 1].Move_damage;
+        move_Description.text = currentPokemon.moveSet[moveIndex - 1].description;
+        move_acc.text = "Accuracy: "+currentPokemon.moveSet[moveIndex - 1].moveAccuracy;
+        move_dmg.text = "Damage: " + currentPokemon.moveSet[moveIndex - 1].moveDamage;
         move_details.SetActive(true);
     }
 
@@ -115,7 +115,7 @@ public class Pokemon_Details : MonoBehaviour
         {
             typeImages[i].gameObject.SetActive(false);
             if (i >= currentPokemon.types.Count) break;
-            typeImages[i].sprite = currentPokemon.types[i].type_img;
+            typeImages[i].sprite = currentPokemon.types[i].typeImage;
             typeImages[i].gameObject.SetActive(true);
         }
         pkm_ablty_desc.text = currentPokemon.ability.abilityDescription;
@@ -128,15 +128,15 @@ public class Pokemon_Details : MonoBehaviour
     {
         Ability_ui.SetActive(false);
         Moves_ui.SetActive(false);
-        pkm_atk.text = currentPokemon.Attack.ToString();
-        pkm_hp.text = currentPokemon.HP+"/"+ currentPokemon.max_HP;
-        pkm_def.text = currentPokemon.Defense.ToString();
-        pkm_sp_atk.text = currentPokemon.SP_ATK.ToString();
+        pkm_atk.text = currentPokemon.attack.ToString();
+        pkm_hp.text = currentPokemon.hp+"/"+ currentPokemon.maxHp;
+        pkm_def.text = currentPokemon.defense.ToString();
+        pkm_sp_atk.text = currentPokemon.specialAttack.ToString();
         pkm_speed.text = currentPokemon.speed.ToString();
-        pkm_sp_def.text = currentPokemon.SP_DEF.ToString();
-        pkm_CurrentExp.text = currentPokemon.CurrentExpAmount.ToString();
-        pkm_NextLvExp.text = currentPokemon.NextLevelExpAmount.ToString();
-        pkm_HeldItem.text = (currentPokemon.HasItem)? currentPokemon.HeldItem.itemName: "NONE";
+        pkm_sp_def.text = currentPokemon.specialDefense.ToString();
+        pkm_CurrentExp.text = currentPokemon.currentExpAmount.ToString();
+        pkm_NextLvExp.text = currentPokemon.nextLevelExpAmount.ToString();
+        pkm_HeldItem.text = (currentPokemon.hasItem)? currentPokemon.heldItem.itemName: "NONE";
         Stats_ui.SetActive(true);
     }     
     private void LoadMovesUiPage()
@@ -145,15 +145,15 @@ public class Pokemon_Details : MonoBehaviour
         Stats_ui.SetActive(false);
         move_details.SetActive(false);
         move_Description.text = string.Empty;
-        for (var j = 0; j < currentPokemon.move_set.Count; j++)
+        for (var j = 0; j < currentPokemon.moveSet.Count; j++)
         {
-            moves[j].text = currentPokemon.move_set[j].Move_name;
-            Move_type[j].sprite = currentPokemon.move_set[j].type.type_img;
+            moves[j].text = currentPokemon.moveSet[j].moveName;
+            Move_type[j].sprite = currentPokemon.moveSet[j].type.typeImage;
             Move_type[j].gameObject.SetActive(true);
-            moves_pp[j].text = "pp " + currentPokemon.move_set[j].Powerpoints + "/" + currentPokemon.move_set[j].max_Powerpoints;
+            moves_pp[j].text = "pp " + currentPokemon.moveSet[j].powerpoints + "/" + currentPokemon.moveSet[j].maxPowerpoints;
             moves_btns[j].SetActive(true);
         }
-        for (var i = currentPokemon.move_set.Count; i < 4; i++)
+        for (var i = currentPokemon.moveSet.Count; i < 4; i++)
         {
             moves[i].text = string.Empty;
             Move_type[i].gameObject.SetActive(false);
@@ -167,13 +167,13 @@ public class Pokemon_Details : MonoBehaviour
         Game_ui_manager.Instance.ManageScreens(1);
         OverlayUi.SetActive(true);
         currentPokemon=pokemon;
-        pkm_name.text = currentPokemon.Pokemon_name;
-        pkm_ID.text = "ID: "+currentPokemon.Pokemon_ID;
-        pkm_lv.text = "Lv "+currentPokemon.Current_level;
-        pkm_img.sprite = currentPokemon.front_picture;
+        pkm_name.text = currentPokemon.pokemonName;
+        pkm_ID.text = "ID: "+currentPokemon.pokemonID;
+        pkm_lv.text = "Lv "+currentPokemon.currentLevel;
+        pkm_img.sprite = currentPokemon.frontPicture;
         gender_img.gameObject.SetActive(true);
-        if(currentPokemon.has_gender)
-            gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+currentPokemon.Gender.ToLower());
+        if(currentPokemon.hasGender)
+            gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+currentPokemon.gender.ToLower());
         else
             gender_img.gameObject.SetActive(false);
         _currentPage = (learningMove || changingMoveData) ? 3 : 1;

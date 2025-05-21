@@ -52,11 +52,11 @@ public class Area_manager : MonoBehaviour
         {//from building to over world
             _areaBuilding.interior.SetActive(false);
             _areaBuilding.insideArea = false;
-            Player_movement.instance.transform.position = _areaBuilding.doorPosition.localPosition;
-            Player_movement.instance.canmove = false;
+            Player_movement.Instance.transform.position = _areaBuilding.doorPosition.localPosition;
+            Player_movement.Instance.canMove = false;
         }
         else //from save point in overworld
-            Player_movement.instance.transform.position = Game_Load.Instance.playerData.playerPosition;
+            Player_movement.Instance.transform.position = Game_Load.Instance.playerData.playerPosition;
         foreach (var area in overworldAreas)
             area.overworld.SetActive(true);
         if (_areaBuilding != null)
@@ -64,7 +64,7 @@ public class Area_manager : MonoBehaviour
                 _areaBuilding.doorAnimation.Play("Close");
         Invoke(nameof(ResetPlayerMovement), 1f);
         currentArea = FindArea("Overworld");
-        Player_movement.instance.can_use_bike = true;
+        Player_movement.Instance.canUseBike = true;
         Game_Load.Instance.playerData.location = currentArea.areaName;
         _areaBuilding = null;
     }
@@ -73,18 +73,18 @@ public class Area_manager : MonoBehaviour
         foreach (var area in overworldAreas)
             area.overworld.SetActive(false);
         overworld_actions.Instance.doingAction = false;
-        Player_movement.instance.canmove = false;
+        Player_movement.Instance.canMove = false;
         currentArea.insideArea = true;
         currentArea.interior.SetActive(true);
         _areaBuilding = currentArea;
         if(!loadingPLayerFromSave)
-            Player_movement.instance.transform.position = currentArea.doormatPosition.position;
+            Player_movement.Instance.transform.position = currentArea.doormatPosition.position;
         Invoke(nameof(ResetPlayerMovement), 1f);
         Game_Load.Instance.playerData.location = currentArea.areaName;
     }
     private void ResetPlayerMovement()
     {
-        Player_movement.instance.canmove = true;
+        Player_movement.Instance.canMove = true;
         loadingPLayerFromSave = false;
     }
 }

@@ -64,7 +64,7 @@ public class Battle_handler : MonoBehaviour
         {
             if (_currentParticipant.enemySelected)
             {
-                UseMove(_currentParticipant.pokemon.move_set[_currentMoveIndex], _currentParticipant);
+                UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant);
                 choosingMove = false;
             }
             else
@@ -149,7 +149,7 @@ public class Battle_handler : MonoBehaviour
 
     void SetupBattle()
     {
-        Game_Load.Instance.playerData.playerPosition = Player_movement.instance.transform.position;
+        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
         levelUpQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
         overworld_actions.Instance.doingAction = true;
@@ -300,8 +300,8 @@ public void SetParticipant(Battle_Participant participant)
             foreach (var playerParticipant  in participant.currentEnemies)
                 participant.AddToExpList(playerParticipant.pokemon);
             
-            participant.pokemon.Pokemon_name = (participant.isEnemy )? 
-                "Foe " + participant.pokemon.Pokemon_name : participant.pokemon.Pokemon_name;
+            participant.pokemon.pokemonName = (participant.isEnemy )? 
+                "Foe " + participant.pokemon.pokemonName : participant.pokemon.pokemonName;
         }
         //setup participant for battle
         participant.statData.SaveActualStats();
@@ -322,10 +322,10 @@ public void SetParticipant(Battle_Participant participant)
     void LoadTextDataForMoves()
     {
         var j = 0;
-        foreach(var move in _currentParticipant.pokemon.move_set)
+        foreach(var move in _currentParticipant.pokemon.moveSet)
             if (move != null)
             {
-                availableMovesText[j].text = _currentParticipant.pokemon.move_set[j].Move_name;
+                availableMovesText[j].text = _currentParticipant.pokemon.moveSet[j].moveName;
                 moveButtons[j].SetActive(true);
                 j++;
             }
@@ -337,16 +337,16 @@ public void SetParticipant(Battle_Participant participant)
     }
     public void UseMove(Move move,Battle_Participant user)
     {
-        if(move.Powerpoints==0)return;
-        move.Powerpoints--;
+        if(move.powerpoints==0)return;
+        move.powerpoints--;
         doingMove = true;
         choosingMove = false;
         movesUI.SetActive(false);
         optionsUI.SetActive(false);
         Turn currentTurn = new Turn(move, Array.IndexOf(battleParticipants,user)
             ,currentEnemyIndex
-            , user.pokemon.Pokemon_ID.ToString()
-            ,battleParticipants[currentEnemyIndex].pokemon.Pokemon_ID.ToString());
+            , user.pokemon.pokemonID.ToString()
+            ,battleParticipants[currentEnemyIndex].pokemon.pokemonID.ToString());
         Turn_Based_Combat.Instance.SaveMove(currentTurn);
     }
     public void ResetMoveUsability()
@@ -359,10 +359,10 @@ public void SetParticipant(Battle_Participant participant)
     {
         ResetMoveUsability();
         _currentMoveIndex = moveNum-1;
-        var currentMove = _currentParticipant.pokemon.move_set[_currentMoveIndex];
-        movePowerPointsText.text = "PP: " + currentMove.Powerpoints+ "/" + currentMove.max_Powerpoints;
-        movePowerPointsText.color = (currentMove.Powerpoints == 0)? Color.red : Color.black;
-        moveTypeText.text = currentMove.type.Type_name;
+        var currentMove = _currentParticipant.pokemon.moveSet[_currentMoveIndex];
+        movePowerPointsText.text = "PP: " + currentMove.powerpoints+ "/" + currentMove.maxPowerpoints;
+        movePowerPointsText.color = (currentMove.powerpoints == 0)? Color.red : Color.black;
+        moveTypeText.text = currentMove.type.typeName;
         selectedMove = true;
         moveButtons[_currentMoveIndex].GetComponent<Button>().interactable = false;
     }
@@ -371,8 +371,8 @@ public void SetParticipant(Battle_Participant participant)
         var playerParticipants = battleParticipants.ToList()
             .Where(p => p.isActive & p.isPlayer).ToList();
         foreach(var participant in playerParticipants)
-            if (participant.pokemon.HasItem)
-                if(participant.pokemon.HeldItem.itemName == "Amulet Coin")
+            if (participant.pokemon.hasItem)
+                if(participant.pokemon.heldItem.itemName == "Amulet Coin")
                     return 2;
         return 1;
     }
@@ -393,7 +393,7 @@ public void SetParticipant(Battle_Participant participant)
                 Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " won the battle");
                 if (isTrainerBattle)
                 {
-                    var moneyGained = baseMoneyPayout * lastOpponent.Current_level * MoneyModifier();
+                    var moneyGained = baseMoneyPayout * lastOpponent.currentLevel * MoneyModifier();
                     Game_Load.Instance.playerData.playerMoney += moneyGained;
                     Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " recieved P" + moneyGained);
                 }
@@ -408,7 +408,7 @@ public void SetParticipant(Battle_Participant participant)
                         .Where(p=>p.isActive).ToList()[0].pokemon;
                     Game_Load.Instance.playerData.playerMoney -= baseMoneyPayout 
                                                                    * Game_Load.Instance.playerData.numBadges 
-                                                                   * lastOpponent.Current_level;
+                                                                   * lastOpponent.currentLevel;
                 }
                 if (!Wild_pkm.Instance.ranAway)
                 {
@@ -433,12 +433,12 @@ public void SetParticipant(Battle_Participant participant)
         Turn_Based_Combat.Instance.levelEventDelay = true;
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         Dialogue_handler.Instance.DisplayBattleInfo("Wow!");
-        Dialogue_handler.Instance.DisplayBattleInfo(pokemonToLevelUp.Pokemon_name+" leveled up!");
+        Dialogue_handler.Instance.DisplayBattleInfo(pokemonToLevelUp.pokemonName+" leveled up!");
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         PokemonOperations.CheckForNewMove(pokemonToLevelUp);
         if (PokemonOperations.LearningNewMove)
         {
-            if (pokemonToLevelUp.move_set.Count == 4)
+            if (pokemonToLevelUp.moveSet.Count == 4)
             {
                 yield return new WaitUntil(() => PokemonOperations.SelectingMoveReplacement);
                 yield return new WaitUntil(() => !PokemonOperations.SelectingMoveReplacement);
@@ -492,7 +492,7 @@ public void SetParticipant(Battle_Participant participant)
         runningAway = true;
         displayingInfo = true;
         if(!isTrainerBattle & !_currentParticipant.canEscape)
-            Dialogue_handler.Instance.DisplayBattleInfo(_currentParticipant.pokemon.Pokemon_name +" is trapped");
+            Dialogue_handler.Instance.DisplayBattleInfo(_currentParticipant.pokemon.pokemonName +" is trapped");
         else
         {
             if (isTrainerBattle )
@@ -500,8 +500,8 @@ public void SetParticipant(Battle_Participant participant)
             else
             { 
                 int random = Utility.RandomRange(1,11);
-                if (battleParticipants[0].pokemon.Current_level < 
-                    battleParticipants[0].currentEnemies[0].pokemon.Current_level)//lower chance if weaker
+                if (battleParticipants[0].pokemon.currentLevel < 
+                    battleParticipants[0].currentEnemies[0].pokemon.currentLevel)//lower chance if weaker
                     random--;
                 if (random > 5) //initially 50/50 chance to run
                 {

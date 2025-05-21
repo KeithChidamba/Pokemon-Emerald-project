@@ -10,7 +10,7 @@ public static class BattleOperations
     public static bool CheckImmunity(Pokemon victim,Type enemyType)
     {
         foreach(Type t in victim.types)
-            if (PokemonOperations.ContainsType(enemyType.Non_effect, t))
+            if (PokemonOperations.ContainsType(enemyType.unaffectedTypes, t))
                 return true;
         return false;
     } 
@@ -23,7 +23,7 @@ public static class BattleOperations
     private static void IsResistantTo(Pokemon victim,Type enemyType)
     {
         foreach(Type t in victim.types)
-            if (PokemonOperations.ContainsType(t.Resistances, enemyType))
+            if (PokemonOperations.ContainsType(t.resistances, enemyType))
                 _effectiveness /= 2f;
     }
     public static bool is_Stab(Pokemon pkm,Type moveType)
@@ -85,7 +85,7 @@ public static class BattleOperations
 //Buffs
     private static bool HasBuffOrDebuff(Pokemon pkm,string stat_name)
     {
-        foreach (Buff_Debuff b in pkm.Buff_Debuffs)
+        foreach (Buff_Debuff b in pkm.buffAndDebuffs)
             if (b.Stat == stat_name)
                 return true;
         return false;
@@ -94,7 +94,7 @@ public static class BattleOperations
     {
         if (!HasBuffOrDebuff(data.Reciever, data.StatName))
         {
-            data.Reciever.Buff_Debuffs.Add(CreateNewBuff(data.StatName));
+            data.Reciever.buffAndDebuffs.Add(CreateNewBuff(data.StatName));
         }
         var buff = SearchForBuffOrDebuff(data.Reciever, data.StatName);//wont ever be null
         buff.Stage = ValidateBuffLimit(data.Reciever, buff, data.IsIncreasing, data.EffectAmount);
@@ -111,24 +111,24 @@ public static class BattleOperations
         if (buff.Stage > indexLimitHigh && increased)
         {
             if(CanDisplayDialougue)
-                Dialogue_handler.Instance.DisplayBattleInfo(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any higher");
+                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.Stat+" cant go any higher");
             return 0;
         }
         if (buff.Stage < indexLimitLow && !increased)
         {
             if(CanDisplayDialougue)
-                Dialogue_handler.Instance.DisplayBattleInfo(pkm.Pokemon_name+"'s "+buff.Stat+" cant go any lower");
+                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.Stat+" cant go any lower");
             return 0;
         }
         if (increased)
         {
             change = buff.Stage+changeValue;
-            message = pkm.Pokemon_name+"'s "+buff.Stat+" Increased!";
+            message = pkm.pokemonName+"'s "+buff.Stat+" Increased!";
         }
         else
         {
             change = buff.Stage-changeValue;
-            message = pkm.Pokemon_name+"'s "+buff.Stat+" Decreased!";
+            message = pkm.pokemonName+"'s "+buff.Stat+" Decreased!";
         }
         if(CanDisplayDialougue)
             Dialogue_handler.Instance.DisplayBattleInfo(message);
@@ -147,16 +147,16 @@ public static class BattleOperations
     }
     public static Buff_Debuff SearchForBuffOrDebuff(Pokemon pkm,string statName)
     {
-        foreach (Buff_Debuff b in pkm.Buff_Debuffs)
+        foreach (Buff_Debuff b in pkm.buffAndDebuffs)
             if (b.Stat == statName)
                 return b;
         return null;
     }
     private static void RemoveInvalidBuffsOrDebuffs(Pokemon pkm)
     {
-        foreach (Buff_Debuff b in new List<Buff_Debuff>(pkm.Buff_Debuffs))
+        foreach (Buff_Debuff b in new List<Buff_Debuff>(pkm.buffAndDebuffs))
             if (b.Stage==0)
-                pkm.Buff_Debuffs.Remove(b);
+                pkm.buffAndDebuffs.Remove(b);
         Move_handler.Instance.processingOrder = false;
     }
 }

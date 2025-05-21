@@ -102,14 +102,14 @@ public class Save_manager : MonoBehaviour
 
     private void LoadHeldItems(Pokemon pokemon)
     {
-        if (!pokemon.HasItem) return;
+        if (!pokemon.hasItem) return;
         var heldItemList = GetJsonFilesFromPath("Assets/Save_data/Items/Held_Items");
         if (heldItemList.Count > 0)
         {
             var heldItemID = heldItemList
                 .FirstOrDefault(id => RemoveFileExtension(Path.GetFileName(id)) 
-                                      == pokemon.Pokemon_ID.ToString());
-            pokemon.HeldItem = (string.IsNullOrEmpty(heldItemID))? null : LoadItemFromJson(heldItemID);
+                                      == pokemon.pokemonID.ToString());
+            pokemon.heldItem = (string.IsNullOrEmpty(heldItemID))? null : LoadItemFromJson(heldItemID);
         }
     }
     private void CreateFolder(string path)
@@ -137,20 +137,20 @@ public class Save_manager : MonoBehaviour
         for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
         {
             Pokemon_party.Instance.party[i].SaveUnserializableData();
-            if(Pokemon_party.Instance.party[i].HasItem)
-                SaveHeldItem(Pokemon_party.Instance.party[i].HeldItem, Pokemon_party.Instance.party[i].Pokemon_ID.ToString());
+            if(Pokemon_party.Instance.party[i].hasItem)
+                SaveHeldItem(Pokemon_party.Instance.party[i].heldItem, Pokemon_party.Instance.party[i].pokemonID.ToString());
             SavePokemonDataAsJson(Pokemon_party.Instance.party[i]);
         }
         for (int i = 0; i < pokemon_storage.Instance.numNonPartyPokemon; i++)
         {
             pokemon_storage.Instance.nonPartyPokemon[i].SaveUnserializableData();
-            if(pokemon_storage.Instance.nonPartyPokemon[i].HasItem)
-                SaveHeldItem(pokemon_storage.Instance.nonPartyPokemon[i].HeldItem, pokemon_storage.Instance.nonPartyPokemon[i].Pokemon_ID.ToString());
+            if(pokemon_storage.Instance.nonPartyPokemon[i].hasItem)
+                SaveHeldItem(pokemon_storage.Instance.nonPartyPokemon[i].heldItem, pokemon_storage.Instance.nonPartyPokemon[i].pokemonID.ToString());
             SavePokemonDataAsJson(pokemon_storage.Instance.nonPartyPokemon[i]);
         }
         for (int i = 0; i < Bag.Instance.numItems; i++)
             SaveItemDataAsJson(Bag.Instance.bagItems[i], Bag.Instance.bagItems[i].itemID);
-        Game_Load.Instance.playerData.playerPosition = Player_movement.instance.transform.position;
+        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
         Game_Load.Instance.playerData.location = (Game_Load.Instance.playerData.location==string.Empty) ? 
             "Overworld" 
             : area.currentArea.areaName;
@@ -177,7 +177,7 @@ public class Save_manager : MonoBehaviour
         for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
         {
             var path = Path.Combine("Assets/Save_data/Party_Ids/", "pkm_" + (i + 1) + ".txt");
-            File.WriteAllText(path, Pokemon_party.Instance.party[i].Pokemon_ID.ToString());
+            File.WriteAllText(path, Pokemon_party.Instance.party[i].pokemonID.ToString());
         }
         Dialogue_handler.Instance.DisplayInfo("Game saved", "Details");
         Dialogue_handler.Instance.EndDialogue(1f);
@@ -192,7 +192,7 @@ public class Save_manager : MonoBehaviour
     }
     private void SavePokemonDataAsJson(Pokemon pokemon)
     {
-        var directory = Path.Combine("Assets/Save_data/Pokemon/", pokemon.Pokemon_ID + ".json");
+        var directory = Path.Combine("Assets/Save_data/Pokemon/", pokemon.pokemonID + ".json");
         var json = JsonUtility.ToJson(pokemon, true);
         File.WriteAllText(directory, json);
     }

@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 [CreateAssetMenu(fileName = "Pkm_types", menuName = "p_types")]
 public class Type : ScriptableObject 
 {
-    public string Type_name;
+    [FormerlySerializedAs("Type_name")] public string typeName;
     public string[] weaknesses;
-    public string[] Resistances;
-    public string[] Non_effect;//immune
-    public Sprite type_img;
+    [FormerlySerializedAs("Resistances")] public string[] resistances; 
+    [FormerlySerializedAs("Non_effect")] public string[] unaffectedTypes;
+    [FormerlySerializedAs("type_img")] public Sprite typeImage;
 }

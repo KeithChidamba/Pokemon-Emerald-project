@@ -43,7 +43,7 @@ public class Pokemon_party : MonoBehaviour
         List<Pokemon> alivePokemon = new();
         for (int i = 0; i < 6; i++)
             if (party[i] != null)
-                if(party[i].HP > 0)
+                if(party[i].hp > 0)
                     alivePokemon.Add(party[i]);
         return alivePokemon;
     }
@@ -66,7 +66,7 @@ public class Pokemon_party : MonoBehaviour
         if (swapIn.pokemon == null) return false;
         if (swapIn.pokemon == party[memberPosition - 1])
         {
-            Dialogue_handler.Instance.DisplayInfo(swapIn.pokemon.Pokemon_name +
+            Dialogue_handler.Instance.DisplayInfo(swapIn.pokemon.pokemonName +
                                                  " is already in battle", "Details", 1f);
             return false;
         }
@@ -104,7 +104,7 @@ public class Pokemon_party : MonoBehaviour
     public void SelectMember(int memberPosition)
     {
         var selectedMember = memberCards[memberPosition - 1];
-        if (Options_manager.Instance.playerInBattle && selectedMember.pokemon.HP <= 0) return;
+        if (Options_manager.Instance.playerInBattle && selectedMember.pokemon.hp <= 0) return;
         if (swapOutNext)
         {//selecting a swap in
             if (!IsValidSwap(memberPosition)) return;
@@ -151,9 +151,9 @@ public class Pokemon_party : MonoBehaviour
     private void GiveItemToMember(int memberPosition)
     {
         var selectedMember = memberCards[memberPosition - 1];
-        if (selectedMember.pokemon.HasItem)
+        if (selectedMember.pokemon.hasItem)
         {
-            Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.Pokemon_name
+            Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.pokemonName
                                                  +" is already holding something","Details",1f);
             givingItem = false;
             _itemToUse = null;
@@ -161,7 +161,7 @@ public class Pokemon_party : MonoBehaviour
             Game_ui_manager.Instance.Invoke(nameof(Game_ui_manager.Instance.ViewBag),1.1f);
             return;
         }
-        Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.Pokemon_name
+        Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.pokemonName
                                              +" recieved a "+_itemToUse.itemName,"Details",1.3f);
         selectedMember.pokemon.GiveItem(Obj_Instance.CreateItem(_itemToUse));
         _itemToUse.quantity--;
@@ -212,7 +212,7 @@ private void CloseParty()
         memberIndicator.SetActive(false);
         ClearSelectionUI();
         if(!swappingIn && !swapOutNext)
-            Dialogue_handler.Instance.DisplayInfo("You swapped " + swapStore.Pokemon_name+ " with "+ party[partyPosition].Pokemon_name,"Details",1f);
+            Dialogue_handler.Instance.DisplayInfo("You swapped " + swapStore.pokemonName+ " with "+ party[partyPosition].pokemonName,"Details",1f);
     }
     public void AddMember(Pokemon pokemon)
     { //add new pokemon after catch or event

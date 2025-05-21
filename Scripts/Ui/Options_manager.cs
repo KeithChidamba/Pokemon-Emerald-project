@@ -73,8 +73,8 @@ public class Options_manager : MonoBehaviour
         Pokemon_Details.Instance.learningMove = false;
         PokemonOperations.SelectingMoveReplacement = false;
         PokemonOperations.LearningNewMove = false;
-        Dialogue_handler.Instance.DisplayBattleInfo(PokemonOperations.CurrentPokemon.Pokemon_name +
-                                                    " did not learn "+PokemonOperations.NewMove.Move_name,true);
+        Dialogue_handler.Instance.DisplayBattleInfo(PokemonOperations.CurrentPokemon.pokemonName +
+                                                    " did not learn "+PokemonOperations.NewMove.moveName,true);
     }
 
     void HealPokemon()
@@ -90,10 +90,10 @@ public class Options_manager : MonoBehaviour
         for (int i = 0; i < Pokemon_party.Instance.numMembers; i++)
         {
             var pokemon = Pokemon_party.Instance.party[i];
-            pokemon.HP = pokemon.max_HP;
-            foreach (var move in pokemon.move_set)
-                move.Powerpoints = move.max_Powerpoints;
-            pokemon.Status_effect = "None";
+            pokemon.hp = pokemon.maxHp;
+            foreach (var move in pokemon.moveSet)
+                move.powerpoints = move.maxPowerpoints;
+            pokemon.statusEffect = "None";
         }
     }
     void OpenPokemonStorage()
@@ -123,7 +123,7 @@ public class Options_manager : MonoBehaviour
         var pokemon = Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName +"/"+ pokemonName);
         Pokemon_party.Instance.AddMember(pokemon);
         Dialogue_handler.Instance.EndDialogue();
-        Dialogue_handler.Instance.DisplayInfo("You got a " + pokemon.Pokemon_name, "Details");
+        Dialogue_handler.Instance.DisplayInfo("You got a " + pokemon.pokemonName, "Details");
         starterPokemonGiftEvent.PickGiftPokemon(pokemonName);
     }
     void Interact()
@@ -133,7 +133,7 @@ public class Options_manager : MonoBehaviour
     void Fish()
     {
         overworld_actions.Instance.doingAction = true;
-        overworld_actions.Instance.manager.change_animation_state(overworld_actions.Instance.manager.Fishing_Start);
+        overworld_actions.Instance.manager.change_animation_state(overworld_actions.Instance.manager.fishingStart);
         Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
     }
     void SellItem()

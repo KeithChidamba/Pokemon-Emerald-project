@@ -34,7 +34,7 @@ public class pokemon_storage : MonoBehaviour
     }
     private int SearchForPokemonIndex(string pokemonID)
     {
-        return nonPartyPokemon.FindIndex(p => p.Pokemon_ID.ToString() == pokemonID);
+        return nonPartyPokemon.FindIndex(p => p.pokemonID.ToString() == pokemonID);
     }
     public bool IsPartyPokemon(string pokemonID)
     {
@@ -121,7 +121,7 @@ public class pokemon_storage : MonoBehaviour
             DisableOptions();
             LoadOptions();
             hasSelectedPokemon = true;
-            selectedPokemonID = pokemonIcon.pokemon.Pokemon_ID.ToString();
+            selectedPokemonID = pokemonIcon.pokemon.pokemonID.ToString();
             pokemonIcon.pokemonSprite.color=Color.HSVToRGB(17,96,54);
         }
     }
@@ -177,7 +177,7 @@ public class pokemon_storage : MonoBehaviour
     public void DeletePokemon()
     {
         var indexToDelete= SearchForPokemonIndex(selectedPokemonID);
-        Dialogue_handler.Instance.DisplayInfo("You released "+ nonPartyPokemon[indexToDelete].Pokemon_name, "Details",1.5f);
+        Dialogue_handler.Instance.DisplayInfo("You released "+ nonPartyPokemon[indexToDelete].pokemonName, "Details",1.5f);
         DeleteNonPartyPokemon(indexToDelete);
         RefreshUi();
     }
@@ -219,15 +219,16 @@ public class pokemon_storage : MonoBehaviour
     public Pokemon CreateAndSetupPokemon(Pokemon template)
     {
         var newPokemon = Obj_Instance.CreatePokemon(template);
-        newPokemon.has_trainer = true; 
+        newPokemon.hasTrainer = true; 
         if (!doingStorageOperation)
         {
             totalPokemonCount++;
             if (numPartyMembers < 6)
                 numPartyMembers++;
             PokemonOperations.SetPokemonTraits(newPokemon);
-            if (newPokemon.Current_level == 0)
+            if (newPokemon.currentLevel == 0)
                 newPokemon.LevelUp();
+            newPokemon.hp = newPokemon.maxHp;
         }
         return newPokemon;
     }

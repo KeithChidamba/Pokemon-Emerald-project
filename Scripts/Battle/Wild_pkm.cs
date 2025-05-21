@@ -61,10 +61,10 @@ public class Wild_pkm : MonoBehaviour
     {
         if(!participant.canEscape)
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.Pokemon_name +" is trapped");
+            Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName +" is trapped");
             return;
         }
-        Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.Pokemon_name+" ran away");
+        Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
         Battle_handler.Instance.EndBattle(false);
         inBattle = false;
         ranAway = true;
@@ -97,14 +97,14 @@ public class Wild_pkm : MonoBehaviour
     private void UseStrongestMove()
     {
         List<Move> validMoves = new();
-        foreach (Move m in participant.pokemon.move_set)
+        foreach (Move m in participant.pokemon.moveSet)
         {//look for all non-immune moves
             if (!BattleOperations.CheckImmunity(currentEnemyParticipant.pokemon, m.type)) 
                 validMoves.Add(m);
         }
         if (validMoves.Count > 0)
         {
-            var strongestMove = validMoves.OrderByDescending(p => p.Move_damage).ToList();
+            var strongestMove = validMoves.OrderByDescending(p => p.moveDamage).ToList();
             UseMove(strongestMove[0]);
         }
         else
@@ -113,8 +113,8 @@ public class Wild_pkm : MonoBehaviour
 
     private void UseRandom()
     {
-        var randMove = Utility.RandomRange(0, participant.pokemon.move_set.Count);
-        UseMove(participant.pokemon.move_set[randMove]);
+        var randMove = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
+        UseMove(participant.pokemon.moveSet[randMove]);
     }
 
     private void UseMove(Move move)
@@ -124,10 +124,10 @@ public class Wild_pkm : MonoBehaviour
     }
     private Move GetEffectiveMove()
     {
-        foreach (Move move in participant.pokemon.move_set)
+        foreach (Move move in participant.pokemon.moveSet)
         {//look for super effective attacking move
             var effectiveness = BattleOperations.GetTypeEffectiveness(currentEnemyParticipant, move.type);
-            if ( effectiveness < 2 || move.is_Buff_Debuff) continue;
+            if ( effectiveness < 2 || move.isBuffOrDebuff) continue;
             return move;
         }
         return null;

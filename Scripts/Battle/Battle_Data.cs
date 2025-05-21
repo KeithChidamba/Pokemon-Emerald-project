@@ -19,31 +19,31 @@ public class Battle_Data:MonoBehaviour
     }
     public void SaveActualStats()
     {
-        pokemonName = _participant.pokemon.Pokemon_name;
-        attack = _participant.pokemon.Attack;
-        spAtk = _participant.pokemon.SP_ATK;
-        defense = _participant.pokemon.Defense;
-        spDef = _participant.pokemon.SP_DEF;
+        pokemonName = _participant.pokemon.pokemonName;
+        attack = _participant.pokemon.attack;
+        spAtk = _participant.pokemon.specialAttack;
+        defense = _participant.pokemon.defense;
+        spDef = _participant.pokemon.specialDefense;
         speed = _participant.pokemon.speed;
     }
     public void LoadActualStats()
     {
-        _participant.pokemon.Pokemon_name = pokemonName;
-        _participant.pokemon.Attack=attack;
-        _participant.pokemon.SP_ATK=spAtk;
-        _participant.pokemon.Defense=defense;
-        _participant.pokemon.SP_DEF=spDef;
+        _participant.pokemon.pokemonName = pokemonName;
+        _participant.pokemon.attack=attack;
+        _participant.pokemon.specialAttack=spAtk;
+        _participant.pokemon.defense=defense;
+        _participant.pokemon.specialDefense=spDef;
         _participant.pokemon.speed=speed;
     }
     public void ResetBattleState(Pokemon pokemon,bool notBattling)
     {
-        pokemon.Accuracy = 100;
-        pokemon.Evasion = 100;
-        pokemon.crit_chance = 6.25f;
+        pokemon.accuracy = 100;
+        pokemon.evasion = 100;
+        pokemon.critChance = 6.25f;
         pokemon.canAttack = notBattling;
         pokemon.immuneToStatReduction = !notBattling;
-        pokemon.CanBeDamaged = true;
+        pokemon.canBeDamaged = true;
         pokemon.isFlinched = false;
-        pokemon.Buff_Debuffs.Clear();
+        pokemon.buffAndDebuffs.Clear();
     }
 }

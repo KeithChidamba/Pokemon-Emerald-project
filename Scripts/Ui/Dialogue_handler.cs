@@ -226,7 +226,7 @@ public class Dialogue_handler : MonoBehaviour
         dialogueFinished = false;
         dialogueLength = 0;
         dialogueProgress = 0;
-        if(Player_movement.instance) Player_movement.instance.canmove = true;
+        if(Player_movement.Instance) Player_movement.Instance.canMove = true;
         clickNextIndicator.SetActive(false);
         elipsisSymbol.SetActive(false);
         dialogueExitIndicator.SetActive(false);
@@ -235,10 +235,10 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void HandleInteraction(Interaction interaction)
     {
-        if(Player_movement.instance)
+        if(Player_movement.Instance)
         {
-            Player_movement.instance.canmove = false;
-            Player_movement.instance.moving = false;
+            Player_movement.Instance.canMove = false;
+            Player_movement.Instance.moving = false;
         }
         dialogueFinished = false;
         displaying = true;  
