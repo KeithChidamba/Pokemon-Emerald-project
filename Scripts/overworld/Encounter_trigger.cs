@@ -24,7 +24,7 @@ public class Encounter_trigger : MonoBehaviour
             _triggerCheckCollider.isTrigger = false;
         else
         {
-            if (player.running)
+            if (player.runningInput)
                 handler.encounterChance = 5;
             var randomNumber = Random.Range(1, 11);
             if (randomNumber < handler.encounterChance & !handler.encounterTriggered)

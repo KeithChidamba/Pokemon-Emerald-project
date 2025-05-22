@@ -133,7 +133,7 @@ public class Options_manager : MonoBehaviour
     void Fish()
     {
         overworld_actions.Instance.doingAction = true;
-        overworld_actions.Instance.manager.change_animation_state(overworld_actions.Instance.manager.fishingStart);
+        overworld_actions.Instance.manager.ChangeAnimationState(overworld_actions.Instance.manager.fishingStart);
         Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
     }
     void SellItem()

@@ -370,17 +370,47 @@ public class Move_handler:MonoBehaviour
         _moveDelay = false;
         processingOrder = false;
     } 
+    IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
+    {
+        foreach (Battle_Participant enemy in targets)
+            enemy.pokemon.hp -= CalculateMoveDamage(_currentTurn.move,enemy);
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        _moveDelay = false;
+        processingOrder = false;
+    }
+    void surf()
+    {
+        StartCoroutine(ApplyMultiTargetDamage(attacker.currentEnemies));
+    }
+    void earthquake()
+    {
+        StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
+    }
     void absorb()
-     {
-         var damage = CalculateMoveDamage(_currentTurn.move,victim);
-         var healAmount = damage/ 2f;
-         victim.pokemon.hp -= damage;
-         attacker.pokemon.hp =( (healAmount+attacker.pokemon.hp) < attacker.pokemon.maxHp)? 
-             math.trunc(math.abs(healAmount)) : attacker.pokemon.maxHp;
-         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
-         _moveDelay = false;
-         processingOrder = false;
-     }
+    {
+        var damage = CalculateMoveDamage(_currentTurn.move,victim);
+        var healAmount = damage/ 2f;
+        victim.pokemon.hp -= damage;
+        attacker.pokemon.hp =( (healAmount+attacker.pokemon.hp) < attacker.pokemon.maxHp)? 
+            math.trunc(math.abs(healAmount)) : attacker.pokemon.maxHp;
+        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
+        _moveDelay = false;
+        processingOrder = false;
+    }
+    void magnitude()
+    {
+        var magnitudeStrength = Utility.RandomRange(4, 11);
+        var baseDamage = 10f;
+        var damageIncrease = 0f;
+        if(magnitudeStrength > 4)
+            damageIncrease = 20f;
+        baseDamage += damageIncrease * (magnitudeStrength - 4);
+        if (magnitudeStrength == 10)
+            baseDamage += 20f;
+        Dialogue_handler.Instance.DisplayBattleInfo("Magnitude level "+magnitudeStrength);
+        _currentTurn.move.moveDamage = baseDamage;
+        StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
+    }
     void protect()
     {
         if(attacker.previousMove.Split('/')[0] == "Protect")
@@ -398,38 +428,8 @@ public class Move_handler:MonoBehaviour
             }
         }
         else//success
-          attacker.pokemon.canBeDamaged = false;
+            attacker.pokemon.canBeDamaged = false;
         _moveDelay = false;
         processingOrder = false;
-    }
-    IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
-    {
-        foreach (Battle_Participant enemy in targets)
-            enemy.pokemon.hp -= CalculateMoveDamage(_currentTurn.move,enemy);
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        _moveDelay = false;
-        processingOrder = false;
-    }
-    void surf()
-    {
-        StartCoroutine(ApplyMultiTargetDamage(attacker.currentEnemies));
-    }
-    void earthquake()
-    {
-        StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
-    }
-    void magnitude()
-    {
-        var magnitudeStrength = Utility.RandomRange(4, 11);
-        var baseDamage = 10f;
-        var damageIncrease = 0f;
-        if(magnitudeStrength > 4)
-            damageIncrease = 20f;
-        baseDamage += damageIncrease * (magnitudeStrength - 4);
-        if (magnitudeStrength == 10)
-            baseDamage += 20f;
-        Dialogue_handler.Instance.DisplayBattleInfo("Magnitude level "+magnitudeStrength);
-        _currentTurn.move.moveDamage = baseDamage;
-        StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
     }
 }

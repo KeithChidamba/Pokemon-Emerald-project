@@ -9,19 +9,22 @@ public class Player_movement : MonoBehaviour
     public float movementSpeed = 0f;
     [SerializeField] float walkSpeed = 0.8f;
     [SerializeField] float runSpeed = 1.5f;
-    public bool running;
+    private const float BikeSpeed = 2f; 
+    public bool runningInput;
     public bool walking;
-    public bool moving;
+    public bool movingOnFoot;
     public bool usingBike = false;
     public bool canUseBike = true;
-    [SerializeField] float x, y;
+    private bool _canSwitchMovement; 
+    [SerializeField] private float xAxisInput;
+    [SerializeField] private float yAxisInput;
     public Rigidbody2D rb;
-    [SerializeField] Vector2 movement;
-    float _currentDirection = 0;
-    public Animation_manager manager;
+    [SerializeField] private Vector2 movement;
+    private float _currentDirection = 0;
+    private Animation_manager _animationManager;
     public bool canMove = true;
     [SerializeField] Transform interactionPoint;
-    public static Player_movement Instance { get; private set;}
+    public static Player_movement Instance;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,203 +33,146 @@ public class Player_movement : MonoBehaviour
             return;
         }
         Instance = this;
+        _animationManager = GetComponent<Animation_manager>();
     }
-    void Update()
+    private void Update()
     {
         if (canMove)
         {
-            manager.animator.SetFloat("idleDir", _currentDirection);
-            manager.animator.SetFloat("Movement_direction", Get_Direction());
-            Inputs();
-            Move();
-            Bike_logic();
-            if (!usingBike)
-            {
-                Move_Logic();
-            }
-            else
-            {
-                running = false;
-                walking = false;
-            }
+            _animationManager.animator.SetFloat(_animationManager.idleDirectionParameter, _currentDirection);
+            _animationManager.animator.SetFloat(_animationManager.movementDirectionParameter, GetMovementDirection());
+            HandleBikeInputs();
+            HandleRunInputs();
+            HandlePlayerPhysicsMovement();
+            MovementWithBikeLogic();
+            MovementOnFootLogic();
         }
         else
-        {
-            rb.velocity = Vector2.zero;
-            running = false;
-            walking = false;
-            usingBike = false;
-            overworld_actions.Instance.canSwitchMovement = false;
-            moving = false;
-            if (overworld_actions.Instance.usingUI)
-                manager.change_animation_state(manager.playerIdle);
-            if (!overworld_actions.Instance.doingAction && !overworld_actions.Instance.usingUI)
-                manager.change_animation_state(manager.playerIdle);
-        }
+            DisablePlayerMovement();
     }
-    float Get_Direction()
+
+    private void DisablePlayerMovement()
+    {
+        rb.velocity = Vector2.zero;
+        walking = false;
+        movingOnFoot = false;
+        if (overworld_actions.Instance.usingUI)
+            _animationManager.ChangeAnimationState(_animationManager.playerIdle);
+        if (!overworld_actions.Instance.doingAction && !overworld_actions.Instance.usingUI) //dont want to interrupt fishing animation
+            _animationManager.ChangeAnimationState(_animationManager.playerIdle);
+    }
+    private float GetMovementDirection()
     {
         float direction = 0;
-        if (x != 0 )
+        yAxisInput = (xAxisInput != 0)? 0 : yAxisInput;
+        xAxisInput = (yAxisInput != 0)? 0 : xAxisInput;
+        var idle = yAxisInput == 0 && xAxisInput == 0;
+        
+        if (idle)
         {
-            y = 0;
-        }
-        if(y != 0)
-        {
-            x = 0;
-        }
-        if (y == 0 && x == 0 && !usingBike && !overworld_actions.Instance.doingAction)
-        {
-            direction = 0;
-            moving = false;
-            manager.change_animation_state(manager.playerIdle);
+            if( !usingBike && !overworld_actions.Instance.doingAction)
+            {
+                direction = 0;
+                movingOnFoot = false;
+                _animationManager.ChangeAnimationState(_animationManager.playerIdle);
+            }
         }
         else
         {
-            if (y > 0)
-            {
-                direction = 2;
-                interactionPoint.rotation = Quaternion.Euler(-90, 0, 0);
+            if (yAxisInput != 0)
+            { 
+                var verticalRotation = (yAxisInput > 0)? -90: 90;
+                direction = (yAxisInput > 0)? 2: 1;
+                interactionPoint.rotation = Quaternion.Euler(verticalRotation, 0, 0);
             }
-            if (y < 0)
-            {
-                direction = 1;
-                interactionPoint.rotation = Quaternion.Euler(90, 0, 0);
-            }
-            if (x < 0)
-            {
-                direction = 3;
-                interactionPoint.rotation = Quaternion.Euler(0, -90, 0);
-            }
-            if (x > 0)
-            {
-                direction = 4;
-                interactionPoint.rotation = Quaternion.Euler(0, 90, 0);
+            if (xAxisInput != 0)
+            {  
+                var horizontalRotation = (xAxisInput > 0)? 90: -90;
+                direction = (xAxisInput > 0)? 4: 3;
+                interactionPoint.rotation = Quaternion.Euler(0, horizontalRotation, 0);
             }
         }
         if (direction != 0)
-        {
             _currentDirection = direction;
-        }
 
         return direction; 
     }
-    void Inputs()
+
+    private void HandleRunInputs()
+    {
+        if (usingBike) return;
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !runningInput)
+        {
+            runningInput = true;
+            walking = false;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift) && runningInput)
+            _canSwitchMovement = true;
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift) && runningInput && _canSwitchMovement)
+        {
+            runningInput = false;
+            _canSwitchMovement = false;
+        }
+    }
+    private void HandleBikeInputs()
     {
         if (Input.GetKeyDown(KeyCode.E) && !usingBike &&canUseBike)
         {
-            overworld_actions.Instance.SetBikeMovementSpeed();
             usingBike = true;
-            moving = false;
-            running = false;
-            overworld_actions.Instance.canSwitchMovement = false;
+            movingOnFoot = false;
+            runningInput = false;
+            walking = false;
+            _canSwitchMovement = false;
         }       
         else if (Input.GetKeyDown(KeyCode.E) && !canUseBike)
-        {
             Dialogue_handler.Instance.DisplayInfo("Cant use bike here","Details",1f);
-        }
+        
         if (Input.GetKeyUp(KeyCode.E) && usingBike)
-        {
-            overworld_actions.Instance.canSwitchMovement = true;
-        }
-        if (Input.GetKeyDown(KeyCode.E) && usingBike && overworld_actions.Instance.canSwitchMovement)
+            _canSwitchMovement = true;
+        
+        if (Input.GetKeyDown(KeyCode.E) && usingBike && _canSwitchMovement)
         {
             usingBike = false;
-            overworld_actions.Instance.canSwitchMovement = false;
-        }
-        if (!usingBike)
-        {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !running)
-            {
-                running = true;
-                walking = false;
-            }
-            if (Input.GetKeyUp(KeyCode.LeftShift) && running)
-            {
-                overworld_actions.Instance.canSwitchMovement = true;
-            }
-            if (Input.GetKeyDown(KeyCode.LeftShift) && running && overworld_actions.Instance.canSwitchMovement)
-            {
-                running = false;
-                overworld_actions.Instance.canSwitchMovement = false;
-            }
-            if (!moving)
-            {
-                walking = false;
-            }
-            if (running)
-            {
-                if (!moving)
-                {
-                    manager.change_animation_state(manager.playerIdle);
-                }
-                else
-                {
-                    manager.change_animation_state(manager.playerRun);
-                }
-            }
-            if (moving && !running && !overworld_actions.Instance.canSwitchMovement)
-            {
-                walking = true; 
-                manager.change_animation_state(manager.playerWalk);
-            }
-            else
-            {
-                walking = false;
-            }
+            _canSwitchMovement = false;
         }
     }
-    void Move_Logic()
+    
+    private void MovementOnFootLogic()
     {
-        if (running)
-        {
-            movementSpeed = runSpeed;
-        }
-        else
-        {
-            movementSpeed = walkSpeed;
-        }
-        if (rb.velocity != Vector2.zero)
-        {
-            moving = true;
-        }
-        else
-        {
-            moving = false;
-        }
-
-    }
-    void Bike_logic()
-    {
-        if (y == 0 && x == 0 && usingBike)
-        {
-            manager.change_animation_state(manager.bikeIdle);
-        }
-        if ((y != 0 || x != 0) && usingBike)
-        {
-            manager.change_animation_state(manager.rideBike);
-        }
-    }
-    void Move()
-    {
+        if (usingBike) return;
+        movementSpeed = runningInput? runSpeed : walkSpeed;
+        movingOnFoot = rb.velocity != Vector2.zero;
         
-        int move_check_x;
-        int move_check_y;
-
-        if (Get_Direction() > 2)
+        if(runningInput)
         {
-            move_check_x = 1;
-            move_check_y = 0;
+            var animationName = (movingOnFoot) ? _animationManager.playerRun : _animationManager.playerIdle;
+            _animationManager.ChangeAnimationState(animationName);
+        }
+        if (movingOnFoot && !runningInput && !_canSwitchMovement)
+        {
+            walking = true; 
+            _animationManager.ChangeAnimationState(_animationManager.playerWalk);
         }
         else
-        {
-            move_check_x = 0;
-            move_check_y = 1;
-        }
-        x = Input.GetAxisRaw("Horizontal");
-        y = Input.GetAxisRaw("Vertical");
-        movement = new Vector2(x * movementSpeed * move_check_x, y * movementSpeed * move_check_y);
+            walking = false;
+    }
+    private void MovementWithBikeLogic() 
+    {
+        if(!usingBike)return; 
+        movementSpeed = BikeSpeed;
+        var idleWithBike = yAxisInput == 0 && xAxisInput == 0;
+        var animationName = (idleWithBike)? _animationManager.bikeIdle : _animationManager.rideBike;
+        _animationManager.ChangeAnimationState(animationName);
+    }
+    private void HandlePlayerPhysicsMovement()
+    {
+        var movementDirection = GetMovementDirection(); 
+        var horizontalDirection = (movementDirection > 2) ? 1 : 0;
+        var verticalDirection = (movementDirection > 2) ? 0 : 1;
+        xAxisInput = Input.GetAxisRaw("Horizontal");
+        yAxisInput = Input.GetAxisRaw("Vertical");
+        movement = new Vector2(xAxisInput * movementSpeed * horizontalDirection, yAxisInput * movementSpeed * verticalDirection);
         rb.velocity = movement;
-
     }
 }

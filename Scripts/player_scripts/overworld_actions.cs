@@ -6,8 +6,7 @@ using UnityEngine.Serialization;
 public class overworld_actions : MonoBehaviour
 {
     public Animation_manager manager;
-    private const float BikeSpeed = 2f;
-    public bool canSwitchMovement;
+
     public bool fishing;
     [SerializeField] private bool pokemonBitingPole;
     public bool doingAction;
@@ -31,10 +30,8 @@ public class overworld_actions : MonoBehaviour
             return;
         }
         if (doingAction)
-        {
             Player_movement.Instance.canMove = false;
-            canSwitchMovement = false;
-        }
+        
         if (pokemonBitingPole & Input.GetKeyDown(KeyCode.F))
         {
             pokemonBitingPole = false;
@@ -43,7 +40,7 @@ public class overworld_actions : MonoBehaviour
         if (fishing)
         {
             doingAction = true;
-            manager.change_animation_state(manager.fishingIdle);
+            manager.ChangeAnimationState(manager.fishingIdle);
             if (Input.GetKeyDown(KeyCode.Q))
                 ResetFishingAction();
         }
@@ -54,7 +51,7 @@ public class overworld_actions : MonoBehaviour
         var random = Utility.RandomRange(1, 11);
         yield return new WaitForSeconds(1f);
         if (!fishing) yield break;
-        if (random< 5)
+        if (random < 5)
         {
             pokemonBitingPole = true;
             Dialogue_handler.Instance.DisplayInfo("Oh!, a Bite!, Press F","Details");
@@ -81,16 +78,12 @@ public class overworld_actions : MonoBehaviour
         fishing = false;
         pokemonBitingPole = false;
         Invoke(nameof(ActionReset), 0.8f);
-        manager.change_animation_state(manager.fishingEnd);
+        manager.ChangeAnimationState(manager.fishingEnd);
         Dialogue_handler.Instance.EndDialogue();
     }
     void ActionReset()
     {
         doingAction = false;
         Player_movement.Instance.canMove = true;
-    }
-    public void SetBikeMovementSpeed()
-    {
-        Player_movement.Instance.movementSpeed = BikeSpeed;
     }
 }

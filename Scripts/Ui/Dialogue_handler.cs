@@ -238,7 +238,7 @@ public class Dialogue_handler : MonoBehaviour
         if(Player_movement.Instance)
         {
             Player_movement.Instance.canMove = false;
-            Player_movement.Instance.moving = false;
+            Player_movement.Instance.movingOnFoot = false;
         }
         dialogueFinished = false;
         displaying = true;  

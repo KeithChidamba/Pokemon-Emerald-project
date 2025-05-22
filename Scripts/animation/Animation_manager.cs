@@ -16,8 +16,9 @@ public class Animation_manager : MonoBehaviour
     public string fishingStart = "Fishing_Start";
     public string fishingEnd = "Fishing_End";
     public string fishingIdle = "Fishing_idle";
-
-    public void change_animation_state(string newState)
+    public string movementDirectionParameter = "Movement Direction";
+    public string idleDirectionParameter = "Idle Direction";
+    public void ChangeAnimationState(string newState)
     {
         if (_currentState == newState) return;
         animator.Play(newState);

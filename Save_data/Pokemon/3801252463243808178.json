@@ -1,0 +1,118 @@
+{
+    "basePokemonName": "Torchic",
+    "pokemonName": "Torchic",
+    "pokemonID": 3801252463243808178,
+    "personalityValue": 1254502990,
+    "gender": "Male",
+    "genderRatio": "87,5/12,5",
+    "nature": {
+        "instanceID": 25916
+    },
+    "hasGender": true,
+    "hp": 14.0,
+    "maxHp": 14.0,
+    "baseHp": 45.0,
+    "baseAttack": 60.0,
+    "baseDefense": 40.0,
+    "baseSpecialAttack": 70.0,
+    "baseSpecialDefense": 50.0,
+    "baseSpeed": 45.0,
+    "attack": 6.0,
+    "defense": 7.0,
+    "specialAttack": 8.0,
+    "specialDefense": 7.0,
+    "speed": 7.0,
+    "hpIv": 18.0,
+    "attackIv": 3.0,
+    "defenseIv": 21.0,
+    "specialAttackIv": 13.0,
+    "specialDefenseIv": 11.0,
+    "speedIv": 28.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        "Speed1"
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 45.0,
+    "currentLevel": 2,
+    "currentExpAmount": 0,
+    "nextLevelExpAmount": 9.0,
+    "expGroup": "Medium Slow",
+    "expYield": 65,
+    "hasTrainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "canBeDamaged": true,
+    "immuneToStatReduction": false,
+    "types": [
+        {
+            "instanceID": 25730
+        }
+    ],
+    "statusEffect": "None",
+    "buffAndDebuffs": [],
+    "evolutionLineLevels": [
+        "16",
+        "30"
+    ],
+    "requiresEvolutionStone": false,
+    "evolutionStoneName": "None",
+    "abilities": [
+        "Blaze"
+    ],
+    "splitEvolution": false,
+    "learnSet": [
+        "normal/scratch01",
+        "fire/ember03",
+        "fighting/double kick05",
+        "normal/focus energy07"
+    ],
+    "moveSet": [
+        {
+            "instanceID": -5994
+        }
+    ],
+    "ability": {
+        "instanceID": 24974
+    },
+    "evolutions": [
+        {
+            "instanceID": 26068
+        },
+        {
+            "instanceID": 24946
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 31916
+    },
+    "backPicture": {
+        "instanceID": 32000
+    },
+    "abilityName": "Blaze",
+    "natureName": "Modest",
+    "evolutionData": [
+        "Combusken",
+        "Blaziken"
+    ],
+    "typeData": [
+        "Fire"
+    ],
+    "moveData": [
+        "Scratch/Normal"
+    ],
+    "movePpData": [
+        "25/25"
+    ]
+}
