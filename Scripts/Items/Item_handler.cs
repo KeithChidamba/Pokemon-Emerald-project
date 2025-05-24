@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class Item_handler : MonoBehaviour
 {
-    public Pokemon selectedPartyPokemon;
+    private Pokemon _selectedPartyPokemon;
     public bool usingItem = false;
     public bool usingHeldItem = false;
     private Item _itemInUse;
@@ -21,8 +22,9 @@ public class Item_handler : MonoBehaviour
         }
         Instance = this;
     }
-    public void UseItem(Item item)
+    public void UseItem(Item item,[CanBeNull] Pokemon selectedPokemon)
     {
+        _selectedPartyPokemon = selectedPokemon;
         _itemInUse = item;
         switch (item.itemType.ToLower())
         {
@@ -55,24 +57,24 @@ public class Item_handler : MonoBehaviour
     IEnumerator LevelUpWithItem()
     {
         Game_ui_manager.Instance.canExitParty = false;
-        var exp = PokemonOperations.CalculateExpForNextLevel(selectedPartyPokemon.currentLevel, selectedPartyPokemon.expGroup);
-        Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" leveled up!", "Details",1f);
+        var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup);
+        Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" leveled up!", "Details",1f);
         yield return new WaitForSeconds(1f);
-        selectedPartyPokemon.ReceiveExperience((exp-selectedPartyPokemon.currentExpAmount)+1);
+        _selectedPartyPokemon.ReceiveExperience((exp-_selectedPartyPokemon.currentExpAmount)+1);
         DepleteItem();
         ResetItemUsage();
     }
 
     void TriggerStoneEvolution(string evolutionStoneName)
     {
-        if (selectedPartyPokemon.evolutionStoneName.ToLower() == evolutionStoneName)
+        if (_selectedPartyPokemon.evolutionStoneName.ToLower() == evolutionStoneName)
         {
             DepleteItem();
             ResetItemUsage();
-            selectedPartyPokemon.CheckEvolutionRequirements(0);
+            _selectedPartyPokemon.CheckEvolutionRequirements(0);
         } 
         else
-            Dialogue_handler.Instance.DisplayInfo("Cant use that on "+selectedPartyPokemon.pokemonName, "Details",1f);
+            Dialogue_handler.Instance.DisplayInfo("Cant use that on "+_selectedPartyPokemon.pokemonName, "Details",1f);
     }
     private void ChangeStats(string stat)
     {
@@ -83,7 +85,7 @@ public class Item_handler : MonoBehaviour
                 Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
             if (_itemInUse.itemType.ToLower() == "stat increase")
                 Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
-            Pokemon_Details.Instance.LoadDetails(selectedPartyPokemon);
+            Pokemon_Details.Instance.LoadDetails(_selectedPartyPokemon);
         }
         //if i add proteins,calcium etc. Then i can just add them here in a switch based on stat they change
     }
@@ -91,10 +93,10 @@ public class Item_handler : MonoBehaviour
     private void ItemBuffOrDebuff(string statName)
     {
         var currentTurnIndex = Turn_Based_Combat.Instance.currentTurnIndex;
-        selectedPartyPokemon = Battle_handler.Instance.battleParticipants[currentTurnIndex].pokemon;
+        _selectedPartyPokemon = Battle_handler.Instance.battleParticipants[currentTurnIndex].pokemon;
         if (statName == "Stat Reduction")//Guard Spec applies all user's participant
         {
-            if (selectedPartyPokemon.immuneToStatReduction)
+            if (_selectedPartyPokemon.immuneToStatReduction)
             {
                 Dialogue_handler.Instance.DisplayInfo("Your pokemon are already protected","Details");
                 return;
@@ -103,8 +105,8 @@ public class Item_handler : MonoBehaviour
             var player = Battle_handler.Instance.battleParticipants[currentTurnIndex];
             var partner = Battle_handler.Instance.battleParticipants[partnerIndex];
             var pokemonProtected = (partner.isActive) ? 
-                selectedPartyPokemon.pokemonName+" and "+ partner.pokemon.pokemonName
-                :selectedPartyPokemon.pokemonName;
+                _selectedPartyPokemon.pokemonName+" and "+ partner.pokemon.pokemonName
+                :_selectedPartyPokemon.pokemonName;
             
             Move_handler.Instance.ApplyStatDropImmunity(player,5);
             if(Battle_handler.Instance.isDoubleBattle)
@@ -116,16 +118,16 @@ public class Item_handler : MonoBehaviour
             ResetItemUsage();
             return;
         }
-        var buff = BattleOperations.SearchForBuffOrDebuff(selectedPartyPokemon, statName);
+        var buff = BattleOperations.SearchForBuffOrDebuff(_selectedPartyPokemon, statName);
         if(buff!=null)
             if (buff.Stage > 5)
             {
-                Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName + "'s " + statName
+                Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName + "'s " + statName
                                                       + " cant go any higher", "Details");
                 ResetItemUsage();
                 return;
             }
-        var xBuffData = new BuffDebuffData(selectedPartyPokemon, statName, true, 1);
+        var xBuffData = new BuffDebuffData(_selectedPartyPokemon, statName, true, 1);
         Move_handler.Instance.SelectRelevantBuffOrDebuff(xBuffData);
         DepleteItem();
         Invoke(nameof(SkipTurn),1f);
@@ -133,9 +135,9 @@ public class Item_handler : MonoBehaviour
     }
     private void RevivePokemon(string reviveType)
     {
-        if (selectedPartyPokemon.hp > 0) {Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" has not fainted!", "Details",1f); return;}
-        selectedPartyPokemon.hp = (reviveType=="max revive")? selectedPartyPokemon.maxHp : math.trunc(selectedPartyPokemon.maxHp*0.5f);
-        Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" has been revived!", "Details",1f);
+        if (_selectedPartyPokemon.hp > 0) {Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" has not fainted!", "Details",1f); return;}
+        _selectedPartyPokemon.hp = (reviveType=="max revive")? _selectedPartyPokemon.maxHp : math.trunc(_selectedPartyPokemon.maxHp*0.5f);
+        Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" has been revived!", "Details",1f);
         DepleteItem();
         Invoke(nameof(SkipTurn),1.2f);
         ResetItemUsage();
@@ -144,7 +146,7 @@ public class Item_handler : MonoBehaviour
      {
          Pokemon_Details.Instance.OnMoveSelected -= RestorePowerpoints;
          var pointsToAdd = 0;
-         var currentMove = selectedPartyPokemon.moveSet[moveIndex];
+         var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
          
          if (_itemInUse.itemName.ToLower() == "ether")
              pointsToAdd = 10;
@@ -166,7 +168,7 @@ public class Item_handler : MonoBehaviour
     private void IncreasePowerpoints(int moveIndex)
     {
         Pokemon_Details.Instance.OnMoveSelected -= IncreasePowerpoints;
-        var currentMove = selectedPartyPokemon.moveSet[moveIndex];
+        var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
         double powerpointRatio = (float) currentMove.maxPowerpoints / currentMove.basePowerpoints;
         if (Math.Round(powerpointRatio,1) >= 1.6) return;
         
@@ -231,20 +233,20 @@ public class Item_handler : MonoBehaviour
     }
     private void HealStatusEffect(string curableStatus)
     {
-        if (selectedPartyPokemon.statusEffect == "None")
+        if (_selectedPartyPokemon.statusEffect == "None")
         {Dialogue_handler.Instance.DisplayInfo("Pokemon is already healthy","Feedback");return; }
         if (curableStatus == "full heal") 
         {
-            selectedPartyPokemon.statusEffect = "None";
-            Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" has been healed","Feedback");
+            _selectedPartyPokemon.statusEffect = "None";
+            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" has been healed","Feedback");
         }
         else
         {
-            if (selectedPartyPokemon.statusEffect.ToLower() == curableStatus)
+            if (_selectedPartyPokemon.statusEffect.ToLower() == curableStatus)
             {
-                selectedPartyPokemon.statusEffect = "None";
+                _selectedPartyPokemon.statusEffect = "None";
                 if (curableStatus == "sleep" | curableStatus == "freeze"| curableStatus == "paralysis")
-                    selectedPartyPokemon.canAttack = true;
+                    _selectedPartyPokemon.canAttack = true;
                 Dialogue_handler.Instance.DisplayInfo("Pokemon has been healed","Feedback");
                 Battle_handler.Instance.RefreshParticipantUI();
             }
@@ -266,27 +268,27 @@ public class Item_handler : MonoBehaviour
     }
     private void RestoreHealth(int healEffect)
     {
-        if (selectedPartyPokemon.hp <= 0)
+        if (_selectedPartyPokemon.hp <= 0)
         {
             Dialogue_handler.Instance.DisplayInfo( "Pokemon has already fainted","Feedback",1f);
             ResetItemUsage();
             return;
         } 
-        if(selectedPartyPokemon.hp>=selectedPartyPokemon.maxHp)
+        if(_selectedPartyPokemon.hp>=_selectedPartyPokemon.maxHp)
         {
             Dialogue_handler.Instance.DisplayInfo("Pokemon health already is full","Feedback",1f);
             ResetItemUsage();
             return;
         }
-        if ((selectedPartyPokemon.hp + healEffect) < selectedPartyPokemon.maxHp)
+        if ((_selectedPartyPokemon.hp + healEffect) < _selectedPartyPokemon.maxHp)
         {
-            selectedPartyPokemon.hp += healEffect;
-            Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points","Feedback",1f);
+            _selectedPartyPokemon.hp += healEffect;
+            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points","Feedback",1f);
         }
-        else if ((selectedPartyPokemon.hp + healEffect) >= selectedPartyPokemon.maxHp)
+        else if ((_selectedPartyPokemon.hp + healEffect) >= _selectedPartyPokemon.maxHp)
         {
-            selectedPartyPokemon.hp = selectedPartyPokemon.maxHp;
-            Dialogue_handler.Instance.DisplayInfo(selectedPartyPokemon.pokemonName+" gained full health points","Feedback",1f);
+            _selectedPartyPokemon.hp = _selectedPartyPokemon.maxHp;
+            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" gained full health points","Feedback",1f);
         }
         ResetItemUsage();
         if (usingHeldItem) { DepleteHeldItem();return;}
@@ -307,6 +309,6 @@ public class Item_handler : MonoBehaviour
     void ResetItemUsage()
     {
         usingItem = false;
-        selectedPartyPokemon = null;
+        _selectedPartyPokemon = null;
     }
 }

@@ -7,7 +7,7 @@ public class Area_manager : MonoBehaviour
 {
     [FormerlySerializedAs("current_area")] public Switch_Area currentArea;
     [FormerlySerializedAs("Areas")] public Switch_Area[] overworldAreas;
-    public bool loadingPLayerFromSave;
+    [FormerlySerializedAs("loadingPLayerFromSave")] public bool loadingPlayerFromSave;
     private Switch_Area _areaBuilding;
     public static Area_manager Instance;
     private void Awake()
@@ -77,14 +77,15 @@ public class Area_manager : MonoBehaviour
         currentArea.insideArea = true;
         currentArea.interior.SetActive(true);
         _areaBuilding = currentArea;
-        if(!loadingPLayerFromSave)
+        if(!loadingPlayerFromSave)
             Player_movement.Instance.transform.position = currentArea.doormatPosition.position;
+        Player_movement.Instance.ForceWalkMovement();
         Invoke(nameof(ResetPlayerMovement), 1f);
         Game_Load.Instance.playerData.location = currentArea.areaName;
     }
     private void ResetPlayerMovement()
     {
         Player_movement.Instance.canMove = true;
-        loadingPLayerFromSave = false;
+        loadingPlayerFromSave = false;
     }
 }

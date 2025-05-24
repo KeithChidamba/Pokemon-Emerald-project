@@ -88,7 +88,7 @@ public class Game_Load : MonoBehaviour
         playerMovement.gameObject.SetActive(true);
         playerMovement.transform.position = playerData.playerPosition;
         world_Map.SetActive(true);
-        Area_manager.Instance.loadingPLayerFromSave = true;
+        Area_manager.Instance.loadingPlayerFromSave = true;
         Area_manager.Instance.SwitchToArea(playerData.location,0f);
     }
 }

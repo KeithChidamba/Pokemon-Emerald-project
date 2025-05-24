@@ -15,17 +15,17 @@ public class Participant_Status : MonoBehaviour
     void Start()
     {
         _participant = GetComponent<Battle_Participant>();
-        _statusEffectMethods.Add("freeze",freeze_check);
-        _statusEffectMethods.Add("sleep",sleep_check);
-        _statusEffectMethods.Add("paralysis",paralysis_check);
+        _statusEffectMethods.Add("freeze",FreezeCheck);
+        _statusEffectMethods.Add("sleep",SleepCheck);
+        _statusEffectMethods.Add("paralysis",ParalysisCheck);
     }
-    public void Get_statusEffect(int numTurns)
+    public void GetStatusEffect(int numTurns)
     {
         _participant.RefreshStatusEffectImage();
         if (_participant.pokemon.statusEffect == "None") return;
         _statusDuration = 0;
         _statusDurationInTurns = numTurns;
-        Stat_drop();
+        StatDrop();
     }
 
     public void GetStatDropImmunity(int numTurns)
@@ -33,11 +33,11 @@ public class Participant_Status : MonoBehaviour
         _statDropImmunityDuration = numTurns;
         _participant.pokemon.immuneToStatReduction = true;
     }
-    void loose_HP(float percentage)
+    void LooseHp(float percentage)
     {
-        _participant.pokemon.hp -= math.trunc(_participant.pokemon.maxHp * percentage);
+        _participant.pokemon.hp -= math.ceil(_participant.pokemon.maxHp * percentage);
     }
-    private void Stat_drop()
+    private void StatDrop()
     {
         switch (_participant.pokemon.statusEffect)
         {
@@ -49,7 +49,7 @@ public class Participant_Status : MonoBehaviour
                 break;
         }
     }
-    public void Check_status()
+    public void CheckStatus()
     {
         if (overworld_actions.Instance.usingUI) return;
         if (!_participant.isActive) return;
@@ -64,7 +64,7 @@ public class Participant_Status : MonoBehaviour
             _participant.pokemon.canBeDamaged = true;
         if (_participant.pokemon.statusEffect == "None") return;
         _participant.RefreshStatusEffectImage();
-        Status_damage();
+        AssignStatusDamage();
     }
     public void StunCheck()
     {
@@ -78,18 +78,18 @@ public class Participant_Status : MonoBehaviour
         else
             Debug.Log("couldn't find method for status: " + _participant.pokemon.statusEffect.ToLower());
     }
-    void Status_damage()
+    private void AssignStatusDamage()
     {
         switch (_participant.pokemon.statusEffect.Replace(" ","").ToLower())
         {
             case "burn":
-                Status_Damage_msg(" is hurt by the burn",0.125f);
+                GetDamageFromStatus(" is hurt by the burn",0.125f);
                 break;
             case "poison":
-                Status_Damage_msg(" is poisoned", 0.125f);
+                GetDamageFromStatus(" is poisoned", 0.125f);
                 break;
             case "badly poison":
-                Status_Damage_msg(" is badly poisoned", (1+_statusDuration) / 16f );
+                GetDamageFromStatus(" is badly poisoned", (1+_statusDuration) / 16f );
                 break;
         }
     }
@@ -101,20 +101,20 @@ public class Participant_Status : MonoBehaviour
         if (_statDropImmunityDuration > 0)
             _statDropImmunityDuration--;
     }
-    void freeze_check()
+    void FreezeCheck()
     {
         if (Utility.RandomRange(1, 101) < 10) //10% chance
             SetHeal();
         else
             _participant.pokemon.canAttack = false;
     }
-    void paralysis_check()
+    void ParalysisCheck()
     {
         if (_participant.pokemon.isFlinched) return;
         //75% chance
         _participant.pokemon.canAttack = Utility.RandomRange(1, 101) < 75;
     }
-    void sleep_check()
+    void SleepCheck()
     {
         if (_statusDuration < 1)//at least sleep for 1 turn
         {
@@ -134,10 +134,10 @@ public class Participant_Status : MonoBehaviour
             _statusDuration++;
         }
     }
-    void Status_Damage_msg(string msg,float damage)
+    private void GetDamageFromStatus(string msg,float damage)
     {
         Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+msg);
-        loose_HP(damage);
+        LooseHp(damage);
         _statusDuration++;
         _participant.Invoke(nameof(_participant.CheckIfFainted),0.9f);
     }
@@ -153,14 +153,14 @@ public class Participant_Status : MonoBehaviour
                 Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+" Unfroze!");
                 break;
         }
-        remove_status_effect();
+        RemoveStatusEffect();
         _healed = false;
     }
     void SetHeal()
     {
         _healed = true;
     }
-    void remove_status_effect()
+    void RemoveStatusEffect()
     {
         _participant.pokemon.statusEffect = "None";
         _participant.pokemon.canAttack = true;

@@ -40,7 +40,7 @@ public class Battle_Data:MonoBehaviour
         pokemon.accuracy = 100;
         pokemon.evasion = 100;
         pokemon.critChance = 6.25f;
-        pokemon.canAttack = notBattling;
+        pokemon.canAttack = !notBattling;
         pokemon.immuneToStatReduction = !notBattling;
         pokemon.canBeDamaged = true;
         pokemon.isFlinched = false;

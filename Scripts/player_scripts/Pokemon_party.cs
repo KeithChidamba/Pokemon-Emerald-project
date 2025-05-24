@@ -104,7 +104,11 @@ public class Pokemon_party : MonoBehaviour
     public void SelectMember(int memberPosition)
     {
         var selectedMember = memberCards[memberPosition - 1];
-        if (Options_manager.Instance.playerInBattle && selectedMember.pokemon.hp <= 0) return;
+        
+        if (Options_manager.Instance.playerInBattle && selectedMember.pokemon.hp <= 0)
+            if (!Item_handler.Instance.usingItem | swapOutNext)
+                return;
+        
         if (swapOutNext)
         {//selecting a swap in
             if (!IsValidSwap(memberPosition)) return;
@@ -112,8 +116,7 @@ public class Pokemon_party : MonoBehaviour
         }
         else if (Item_handler.Instance.usingItem)
         {//use item on pokemon
-            Item_handler.Instance.selectedPartyPokemon = selectedMember.pokemon;
-            Item_handler.Instance.UseItem(_itemToUse);
+            Item_handler.Instance.UseItem(_itemToUse,selectedMember.pokemon);
             memberIndicator.transform.position = selectedMember.transform.position;
             memberIndicator.SetActive(true);
         }

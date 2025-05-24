@@ -85,7 +85,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private IEnumerator ExecuteMoves(List<Turn> turnOrder)
     {
-        foreach (Turn currentTurn in turnOrder )
+        foreach (var currentTurn in turnOrder )
         {
             var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
             var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];

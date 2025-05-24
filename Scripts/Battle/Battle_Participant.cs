@@ -108,14 +108,6 @@ public class Battle_Participant : MonoBehaviour
     }
     public void CheckIfFainted()
     {
-        if (pokemon != null)
-        {//if revived during double battle for example
-            if (pokemon.hp > 0 & !isActive)
-            {
-                isActive = true;
-                participantUI.SetActive(true);
-            }
-        }
         if (!isActive) return;
         if (fainted) return; 
         fainted = (pokemon.hp <= 0);
@@ -174,7 +166,7 @@ public class Battle_Participant : MonoBehaviour
             {
                 isActive = false;
                 DeactivateUI();
-                Battle_handler.Instance.CountParticipants();
+                Battle_handler.Instance.CheckParticipantStates();
                 Turn_Based_Combat.Instance.faintEventDelay = false;
             }
         }
@@ -183,7 +175,7 @@ public class Battle_Participant : MonoBehaviour
     {
         isActive = false;
         currentEnemies.Clear();
-        Turn_Based_Combat.Instance.OnTurnEnd -= statusHandler.Check_status;
+        Turn_Based_Combat.Instance.OnTurnEnd -= statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.NotifyHealing;
@@ -231,12 +223,12 @@ public class Battle_Participant : MonoBehaviour
                                                         + pokemon.statusEffect.Replace(" ","").ToLower());
         }
     }
-    void ActivateUI(GameObject[]arr,bool on)
+    private void ActivateUI(GameObject[]arr,bool on)
     {
         foreach (GameObject obj in arr)
             obj.SetActive(on);
     }
-    void SetExpBarValue()
+    private void SetExpBarValue()
     {
         playerExpSlider.value = ((pokemon.currentExpAmount/pokemon.nextLevelExpAmount)*100);
         playerExpSlider.maxValue = 100;
@@ -253,7 +245,7 @@ public class Battle_Participant : MonoBehaviour
         if (pokemon.statusEffect == "Badly poison")
             pokemon.statusEffect = "Poison";
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
-        Turn_Based_Combat.Instance.OnTurnEnd += statusHandler.Check_status;
+        Turn_Based_Combat.Instance.OnTurnEnd += statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;

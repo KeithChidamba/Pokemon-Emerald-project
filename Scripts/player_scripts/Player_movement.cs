@@ -61,6 +61,14 @@ public class Player_movement : MonoBehaviour
         if (!overworld_actions.Instance.doingAction && !overworld_actions.Instance.usingUI) //dont want to interrupt fishing animation
             _animationManager.ChangeAnimationState(_animationManager.playerIdle);
     }
+
+    public void ForceWalkMovement()
+    {
+        usingBike = false;
+        runningInput = false;
+        _canSwitchMovement = false;
+        walking = true;
+    }
     private float GetMovementDirection()
     {
         float direction = 0;

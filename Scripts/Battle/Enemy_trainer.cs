@@ -66,7 +66,7 @@ public class Enemy_trainer : MonoBehaviour
                         participant.isActive = false;
                         inBattle = false;
                         participant.DeactivateUI();
-                        Battle_handler.Instance.CountParticipants();
+                        Battle_handler.Instance.CheckParticipantStates();
                     }
                 }
                 else

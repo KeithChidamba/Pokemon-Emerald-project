@@ -230,7 +230,7 @@ public class Move_handler:MonoBehaviour
     {
         participant.pokemon.statusEffect = status;
         var numTurnsOfStatus = (status=="Sleep")? Utility.RandomRange(1, 5) : 0;
-        participant.statusHandler.Get_statusEffect(numTurnsOfStatus);
+        participant.statusHandler.GetStatusEffect(numTurnsOfStatus);
     }
 
     public void ApplyStatDropImmunity(Battle_Participant participant,int numTurns)

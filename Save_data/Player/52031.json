@@ -2,11 +2,11 @@
     "playerName": "kelvar",
     "trainerID": 52031,
     "secretID": 15622,
-    "playerMoney": 300,
+    "playerMoney": 100,
     "numBadges": 0,
     "playerPosition": {
-        "x": -2.1999998092651369,
-        "y": 2.659322500228882,
+        "x": 10.663986206054688,
+        "y": 3.4262776374816896,
         "z": 0.0
     },
     "location": "Overworld"

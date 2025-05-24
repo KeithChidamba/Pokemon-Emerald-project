@@ -209,7 +209,7 @@ public class Bag : MonoBehaviour
             Game_ui_manager.Instance.ViewPokemonParty();
         }
         else
-            Item_handler.Instance.UseItem(itemToUse);
+            Item_handler.Instance.UseItem(itemToUse,null);
         Game_ui_manager.Instance.CloseBag();
     }
     public void CloseBag()

@@ -80,7 +80,7 @@ public class Poke_Mart : MonoBehaviour
             selectedItemQuantity = 1;
         }
         else
-            Dialogue_handler.Instance.DisplayInfo("You dont have enough money for that!", "Details",1f);
+            Dialogue_handler.Instance.DisplayInfo("You dont have enough money for that!", "Details",1.5f);
     }
     public void ChangeItemQuantity(int value)
     {
@@ -93,8 +93,10 @@ public class Poke_Mart : MonoBehaviour
             if (selectedItemQuantity < 99)//below max quantity and affordable by player
             {
                 var priceOfItem = (selectedItemQuantity + 1) * storeItems[topIndex + selectedItemIndex - 1].price;
-                if(Game_Load.Instance.playerData.playerMoney >= priceOfItem)
+                if (Game_Load.Instance.playerData.playerMoney >= priceOfItem)
                     selectedItemQuantity += value;
+                else
+                    Dialogue_handler.Instance.DisplayInfo("Not enough money to buy that much!", "Details",1.5f);
             }
             else
                 selectedItemQuantity = 99;

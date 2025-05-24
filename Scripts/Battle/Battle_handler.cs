@@ -147,8 +147,9 @@ public class Battle_handler : MonoBehaviour
         currentEnemyIndex = choice;
     }
 
-    void SetupBattle()
+    private void SetupBattle()
     {
+        Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantStates;
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
         levelUpQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
@@ -307,11 +308,19 @@ public void SetParticipant(Battle_Participant participant)
         participant.statData.SaveActualStats();
         participant.ActivateParticipant();
         participant.abilityHandler.SetAbilityMethod();
-        CountParticipants();
+        CheckParticipantStates();
     }
-    public void CountParticipants()
+
+    public void CheckParticipantStates()
     {
-         participantCount = battleParticipants.Count(p => p.pokemon != null);
+        foreach (var participant in battleParticipants)
+        {
+            if (participant.pokemon == null) continue;
+            participantCount++;
+            //if revived during double battle for example
+            if (participant.pokemon.hp > 0 & !participant.isActive)
+                participant.ActivateParticipant();
+        }
     }
     public void RefreshParticipantUI()
     {
@@ -461,6 +470,7 @@ public void SetParticipant(Battle_Participant participant)
     void ResetUiAfterBattle(bool playerWhiteOut)
     {
         OnBattleEnd?.Invoke();
+        Turn_Based_Combat.Instance.OnNewTurn -= CheckParticipantStates;
         Dialogue_handler.Instance.EndDialogue();
         Options_manager.Instance.playerInBattle = false;
         overworld_actions.Instance.doingAction = false;

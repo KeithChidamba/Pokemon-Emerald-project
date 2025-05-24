@@ -1,0 +1,18 @@
+{
+    "itemID": "Max Revive62346",
+    "itemName": "Max Revive",
+    "itemType": "Revive",
+    "itemEffect": "Max Revive",
+    "itemDescription": "Revives a pokemon with 100% health",
+    "price": 200,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 32012
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}
