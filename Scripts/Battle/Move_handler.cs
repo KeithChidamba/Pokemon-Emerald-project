@@ -331,12 +331,14 @@ public class Move_handler:MonoBehaviour
     private float GetUpdatedStat(float currentStatValue, BuffDebuffData data)
     {
         BattleOperations.ChangeOrCreateBuffOrDebuff(data);
-        Buff_Debuff buff = BattleOperations.SearchForBuffOrDebuff(data.Reciever, data.StatName);
+        var buff = BattleOperations.SearchForBuffOrDebuff(data.Reciever, data.StatName) 
+                   ?? new Buff_Debuff(string.Empty,0,true); // if null return same value
+        if (buff.isAtLimit) return currentStatValue;
         if (data.StatName == "Accuracy" | data.StatName == "Evasion")
-            return math.trunc(currentStatValue * _accuracyAndEvasionLevels[buff.Stage+6]); 
+            return math.trunc(currentStatValue * _accuracyAndEvasionLevels[buff.stage+6]); 
         if(data.StatName=="Crit")    
-            return _critLevels[buff.Stage];
-        return math.trunc(currentStatValue * _statLevels[buff.Stage+6]);
+            return _critLevels[buff.stage];
+        return math.trunc(currentStatValue * _statLevels[buff.stage+6]);
     }
 
     List<Battle_Participant> TargetAllExceptSelf()

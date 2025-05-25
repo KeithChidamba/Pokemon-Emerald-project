@@ -13,7 +13,7 @@ public class Turn_Based_Combat : MonoBehaviour
     List<Turn> _turnHistory = new();
     public event Action OnNewTurn;
     public event Action OnMoveExecute;
-    public event Action OnTurnEnd;
+    public event Action OnTurnsCompleted;
     public int currentTurnIndex = 0;
     public bool levelEventDelay = false;
     public bool faintEventDelay = false;
@@ -52,6 +52,9 @@ public class Turn_Based_Combat : MonoBehaviour
     private void ResetTurnState()
     {
         _turnHistory.Clear();
+        OnNewTurn = null;
+        OnMoveExecute = null;
+        OnTurnsCompleted = null;
         faintEventDelay = false;
         levelEventDelay = false;
     }
@@ -62,7 +65,7 @@ public class Turn_Based_Combat : MonoBehaviour
         {
             if (turn.move.moveAccuracy < 100)//not a sure-hit move
             {
-                if (!MoveSuccessfull(turn))
+                if (!MoveSuccessful(turn))
                 {
                     if(attacker.pokemon.accuracy >= victim.pokemon.evasion)
                         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
@@ -91,10 +94,13 @@ public class Turn_Based_Combat : MonoBehaviour
             var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
             if (!IsValidParticipantState(attacker))
                 continue;
+            
             if (!IsValidParticipant(currentTurn,attacker))
                 continue;
+            
             if (!IsValidParticipantState(victim))
             {//if attack was directed at a pokemon that just fainted
+               
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
                 yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
                 continue;
@@ -119,7 +125,7 @@ public class Turn_Based_Combat : MonoBehaviour
         yield return new WaitUntil(() => !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         _turnHistory.Clear();
-        OnTurnEnd?.Invoke();
+        OnTurnsCompleted?.Invoke();
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         Battle_handler.Instance.ResetMoveUsability();
         NextTurn();
@@ -172,7 +178,7 @@ public class Turn_Based_Combat : MonoBehaviour
         if (!Battle_handler.Instance.battleParticipants[currentTurnIndex].isActive & Options_manager.Instance.playerInBattle)
             NextTurn();
     }
-    private bool MoveSuccessfull(Turn turn)
+    private bool MoveSuccessful(Turn turn)
     {
         var rand = Utility.RandomRange(1, 100);
         var hitChance = turn.move.moveAccuracy *

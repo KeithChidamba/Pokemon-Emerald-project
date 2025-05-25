@@ -39,7 +39,7 @@ public class Battle_Participant : MonoBehaviour
         statusHandler = GetComponent<Participant_Status>();
         abilityHandler = GetComponent<AbilityHandler>();
         statData = GetComponent<Battle_Data>();
-        Turn_Based_Combat.Instance.OnTurnEnd += CheckIfFainted;
+        Turn_Based_Combat.Instance.OnTurnsCompleted += CheckIfFainted;
         Move_handler.Instance.OnMoveEnd += CheckIfFainted;
         Turn_Based_Combat.Instance.OnMoveExecute += CheckIfFainted;
         Battle_handler.Instance.OnBattleEnd += DeactivatePokemon;
@@ -175,7 +175,7 @@ public class Battle_Participant : MonoBehaviour
     {
         isActive = false;
         currentEnemies.Clear();
-        Turn_Based_Combat.Instance.OnTurnEnd -= statusHandler.CheckStatus;
+        Turn_Based_Combat.Instance.OnTurnsCompleted -= statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.NotifyHealing;
@@ -184,11 +184,15 @@ public class Battle_Participant : MonoBehaviour
     {
         statData.LoadActualStats();
         statData.ResetBattleState(pokemon,false);
-        if (isPlayer)
-            pokemon.OnLevelUp -= _resetHandler;
         abilityHandler.ResetState();
         canEscape = true;
         additionalTypeImmunity = null;
+        if (isPlayer) pokemon.OnLevelUp -= _resetHandler;
+    }
+    private void ResetParticipantStateAfterLevelUp()
+    {
+        statData.LoadActualStats();
+        statData.ResetBattleState(pokemon,true);
     }
     private void UpdateUI()
     {
@@ -245,12 +249,12 @@ public class Battle_Participant : MonoBehaviour
         if (pokemon.statusEffect == "Badly poison")
             pokemon.statusEffect = "Poison";
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
-        Turn_Based_Combat.Instance.OnTurnEnd += statusHandler.CheckStatus;
+        Turn_Based_Combat.Instance.OnTurnsCompleted += statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
         if (!isPlayer) return;
-        _resetHandler = pkm => ResetParticipantState();
+        _resetHandler = pkm => ResetParticipantStateAfterLevelUp();
         pokemon.OnLevelUp += _resetHandler;
         pokemon.OnLevelUp += Battle_handler.Instance.LevelUpEvent;
         pokemon.OnNewLevel += statData.SaveActualStats;

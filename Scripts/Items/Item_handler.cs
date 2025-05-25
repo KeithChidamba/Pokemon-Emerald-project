@@ -120,7 +120,7 @@ public class Item_handler : MonoBehaviour
         }
         var buff = BattleOperations.SearchForBuffOrDebuff(_selectedPartyPokemon, statName);
         if(buff!=null)
-            if (buff.Stage > 5)
+            if (buff.stage > 5)
             {
                 Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName + "'s " + statName
                                                       + " cant go any higher", "Details");

@@ -1,9 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Buff_Debuff:ScriptableObject
+[System.Serializable]
+public class Buff_Debuff
 {
-    public string Stat;
-    public int Stage = 0;
+    [SerializeField]public bool isAtLimit;
+    [SerializeField]public string stat;
+    [SerializeField]public int stage;
+
+    public Buff_Debuff(string statName, int stage, bool isAtLimit)
+    {
+        stat = statName;
+        this.stage = stage;
+        this.isAtLimit = isAtLimit;
+    }
 }

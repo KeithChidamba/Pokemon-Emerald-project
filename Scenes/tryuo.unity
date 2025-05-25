@@ -2988,7 +2988,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 12
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
@@ -15963,7 +15963,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 247f28c8ea9df014ca3497ac606f0571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedPartyPokemon: {fileID: 0}
   usingItem: 0
   usingHeldItem: 0
 --- !u!1 &505212004
@@ -16840,7 +16839,7 @@ MonoBehaviour:
   - {fileID: 301858637}
   - {fileID: 1819593989}
   - {fileID: 358362945}
-  loadingPLayerFromSave: 0
+  loadingPlayerFromSave: 0
 --- !u!4 &523264675
 Transform:
   m_ObjectHideFlags: 0
@@ -17963,7 +17962,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 12
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
@@ -34586,8 +34585,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 94.52698, y: -11}
-  m_SizeDelta: {x: -126.709, y: -11.2762}
+  m_AnchoredPosition: {x: 91.4, y: -12.1}
+  m_SizeDelta: {x: -117.0379, y: -11.2762}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1066947441
 MonoBehaviour:
@@ -34612,7 +34611,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 12
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
@@ -34622,7 +34621,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Lv
+  m_Text: 'Lv: 100
 
 '
 --- !u!222 &1066947442
@@ -66584,7 +66583,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 12
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
@@ -67434,7 +67433,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 12
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
@@ -68056,16 +68055,15 @@ MonoBehaviour:
   movementSpeed: 0
   walkSpeed: 0.8
   runSpeed: 1.5
-  running: 0
+  runningInput: 0
   walking: 0
-  moving: 0
+  movingOnFoot: 0
   usingBike: 0
   canUseBike: 1
-  x: 0
-  y: 0
+  xAxisInput: 0
+  yAxisInput: 0
   rb: {fileID: 1465551226}
   movement: {x: 0, y: 0}
-  manager: {fileID: 1465551227}
   canMove: 1
   interactionPoint: {fileID: 1418617663}
 --- !u!50 &1465551226
@@ -68116,6 +68114,8 @@ MonoBehaviour:
   fishingStart: Fishing_Start
   fishingEnd: Fishing_End
   fishingIdle: Fishing_idle
+  movementDirectionParameter: Movement Direction
+  idleDirectionParameter: Idle Direction
 --- !u!1 &1465891483
 GameObject:
   m_ObjectHideFlags: 0
@@ -72253,7 +72253,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 1465551227}
-  canSwitchMovement: 0
   fishing: 0
   pokemonBitingPole: 0
   doingAction: 0
@@ -100446,7 +100445,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 12
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40

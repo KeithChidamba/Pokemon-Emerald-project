@@ -51,7 +51,7 @@ public class Participant_Status : MonoBehaviour
     }
     public void CheckStatus()
     {
-        if (overworld_actions.Instance.usingUI) return;
+        if (overworld_actions.Instance.usingUI) return; 
         if (!_participant.isActive) return;
         if(_participant.pokemon.hp<=0 )return;
         if(Battle_handler.Instance.battleOver)return;
@@ -75,8 +75,7 @@ public class Participant_Status : MonoBehaviour
         
         if (_statusEffectMethods.TryGetValue(_participant.pokemon.statusEffect.ToLower(),out Action method))
             method();
-        else
-            Debug.Log("couldn't find method for status: " + _participant.pokemon.statusEffect.ToLower());
+
     }
     private void AssignStatusDamage()
     {
@@ -88,7 +87,7 @@ public class Participant_Status : MonoBehaviour
             case "poison":
                 GetDamageFromStatus(" is poisoned", 0.125f);
                 break;
-            case "badly poison":
+            case "badlypoison":
                 GetDamageFromStatus(" is badly poisoned", (1+_statusDuration) / 16f );
                 break;
         }
@@ -96,6 +95,7 @@ public class Participant_Status : MonoBehaviour
     
     public void CheckStatDropImmunity()
     {
+        if (!_participant.isActive) return;
         if (!_participant.pokemon.immuneToStatReduction) return;
         _participant.pokemon.immuneToStatReduction = _statDropImmunityDuration > 0;
         if (_statDropImmunityDuration > 0)
@@ -137,6 +137,7 @@ public class Participant_Status : MonoBehaviour
     private void GetDamageFromStatus(string msg,float damage)
     {
         Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+msg);
+        Debug.Log("damaging:  "+msg+" dur: "+_statusDuration);
         LooseHp(damage);
         _statusDuration++;
         _participant.Invoke(nameof(_participant.CheckIfFainted),0.9f);

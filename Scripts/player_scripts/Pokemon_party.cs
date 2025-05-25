@@ -60,14 +60,12 @@ public class Pokemon_party : MonoBehaviour
     }
 
     private bool IsValidSwap(int memberPosition)
-    { 
-        if (memberPosition >= 3) return false;
-        var swapIn = Battle_handler.Instance.battleParticipants[memberPosition - 1];
-        if (swapIn.pokemon == null) return false;
-        if (swapIn.pokemon == party[memberPosition - 1])
+    {
+        if (memberPosition < 3)
         {
+            var swapIn = Battle_handler.Instance.battleParticipants[memberPosition - 1];
             Dialogue_handler.Instance.DisplayInfo(swapIn.pokemon.pokemonName +
-                                                 " is already in battle", "Details", 1f);
+                                                  " is already in battle", "Details", 1f);
             return false;
         }
         return true;
@@ -104,6 +102,7 @@ public class Pokemon_party : MonoBehaviour
     public void SelectMember(int memberPosition)
     {
         var selectedMember = memberCards[memberPosition - 1];
+        if (selectedMember.isEmpty) return;
         
         if (Options_manager.Instance.playerInBattle && selectedMember.pokemon.hp <= 0)
             if (!Item_handler.Instance.usingItem | swapOutNext)

@@ -2,6 +2,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class BattleOperations
 {
@@ -83,12 +84,9 @@ public static class BattleOperations
         return false;
     }
 //Buffs
-    private static bool HasBuffOrDebuff(Pokemon pkm,string stat_name)
+    private static bool HasBuffOrDebuff(Pokemon pokemon,string statName)
     {
-        foreach (Buff_Debuff b in pkm.buffAndDebuffs)
-            if (b.Stat == stat_name)
-                return true;
-        return false;
+        return pokemon.buffAndDebuffs.Any(b=>b.stat==statName);
     }
     public static void ChangeOrCreateBuffOrDebuff(BuffDebuffData data)
     {
@@ -97,7 +95,7 @@ public static class BattleOperations
             data.Reciever.buffAndDebuffs.Add(CreateNewBuff(data.StatName));
         }
         var buff = SearchForBuffOrDebuff(data.Reciever, data.StatName);//wont ever be null
-        buff.Stage = ValidateBuffLimit(data.Reciever, buff, data.IsIncreasing, data.EffectAmount);
+        buff.stage = ValidateBuffLimit(data.Reciever, buff, data.IsIncreasing, data.EffectAmount);
         CanDisplayDialougue = true;
         RemoveInvalidBuffsOrDebuffs(data.Reciever);
     }
@@ -106,29 +104,31 @@ public static class BattleOperations
     {
         var change = 0;
         var message="";
-        var indexLimitHigh = (buff.Stat == "Crit") ? 2 : 5;
-        var indexLimitLow = (buff.Stat == "Crit") ? 1 : -5;
-        if (buff.Stage > indexLimitHigh && increased)
+        var indexLimitHigh = (buff.stat == "Crit") ? 2 : 5;
+        var indexLimitLow = (buff.stat == "Crit") ? 1 : -5;
+        if (buff.stage > indexLimitHigh && increased)
         {
+            buff.isAtLimit = true;
             if(CanDisplayDialougue)
-                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.Stat+" cant go any higher");
-            return 0;
+                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.stat+" cant go any higher");
+            return buff.stage;
         }
-        if (buff.Stage < indexLimitLow && !increased)
+        if (buff.stage < indexLimitLow && !increased)
         {
+            buff.isAtLimit = true;
             if(CanDisplayDialougue)
-                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.Stat+" cant go any lower");
-            return 0;
+                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.stat+" cant go any lower");
+            return buff.stage;;
         }
         if (increased)
         {
-            change = buff.Stage+changeValue;
-            message = pkm.pokemonName+"'s "+buff.Stat+" Increased!";
+            change = buff.stage+changeValue;
+            message = pkm.pokemonName+"'s "+buff.stat+" Increased!";
         }
         else
         {
-            change = buff.Stage-changeValue;
-            message = pkm.pokemonName+"'s "+buff.Stat+" Decreased!";
+            change = buff.stage-changeValue;
+            message = pkm.pokemonName+"'s "+buff.stat+" Decreased!";
         }
         if(CanDisplayDialougue)
             Dialogue_handler.Instance.DisplayBattleInfo(message);
@@ -140,23 +140,15 @@ public static class BattleOperations
     }
     private static Buff_Debuff CreateNewBuff(string statName)
     {
-        Buff_Debuff buff = ScriptableObject.CreateInstance<Buff_Debuff>();
-        buff.Stat = statName;
-        buff.Stage = 0;
-        return buff;
+        return new Buff_Debuff(statName,0,false);
     }
-    public static Buff_Debuff SearchForBuffOrDebuff(Pokemon pkm,string statName)
+    public static Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon,string statName)
     {
-        foreach (Buff_Debuff b in pkm.buffAndDebuffs)
-            if (b.Stat == statName)
-                return b;
-        return null;
+        return pokemon.buffAndDebuffs.FirstOrDefault(b=>b.stat==statName);
     }
-    private static void RemoveInvalidBuffsOrDebuffs(Pokemon pkm)
+    private static void RemoveInvalidBuffsOrDebuffs(Pokemon pokemon)
     {
-        foreach (Buff_Debuff b in new List<Buff_Debuff>(pkm.buffAndDebuffs))
-            if (b.Stage==0)
-                pkm.buffAndDebuffs.Remove(b);
+        pokemon.buffAndDebuffs.RemoveAll(b=>b.stage==0);
         Move_handler.Instance.processingOrder = false;
     }
 }
