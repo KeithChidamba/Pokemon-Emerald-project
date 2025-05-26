@@ -9,6 +9,6 @@ public class Type : ScriptableObject
     [FormerlySerializedAs("Type_name")] public string typeName;
     public string[] weaknesses;
     [FormerlySerializedAs("Resistances")] public string[] resistances; 
-    [FormerlySerializedAs("Non_effect")] public string[] unaffectedTypes;
+    public string[] immunities;
     [FormerlySerializedAs("type_img")] public Sprite typeImage;
 }

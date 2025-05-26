@@ -306,7 +306,7 @@ public class Battle_handler : MonoBehaviour
             foreach (var playerParticipant  in participant.currentEnemies)
                 participant.AddToExpList(playerParticipant.pokemon);
             
-            participant.pokemon.pokemonName = (participant.isEnemy )? 
+            participant.pokemon.pokemonName = (participant.isEnemy)? 
                 "Foe " + participant.pokemon.pokemonName : participant.pokemon.pokemonName;
         }
         //setup participant for battle
@@ -488,7 +488,7 @@ public class Battle_handler : MonoBehaviour
             if(participant.pokemon!=null)
             {
                 participant.statData.LoadActualStats();
-                participant.statData.ResetBattleState(participant.pokemon,true);
+                participant.statData.ResetBattleState(participant.pokemon,false);
                 participant.pokemon = null;
                 participant.previousMove = "";
                 participant.DeactivateUI();

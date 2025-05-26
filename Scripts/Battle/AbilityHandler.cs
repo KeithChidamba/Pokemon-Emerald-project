@@ -140,7 +140,7 @@ public class AbilityHandler : MonoBehaviour
         foreach (var enemy in _participant.currentEnemies)
         {
             if(!enemy.canEscape)continue;
-            if(!enemy.pokemon.HasType("Flying") & enemy.pokemon.ability.abilityName!="Levitate")
+            if(!enemy.pokemon.HasType("Flying") & !enemy.pokemon.HasType("Ghost") & enemy.pokemon.ability.abilityName!="Levitate")
                 enemy.canEscape = false;
         }
     }

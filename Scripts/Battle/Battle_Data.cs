@@ -11,7 +11,6 @@ public class Battle_Data:MonoBehaviour
     public float spAtk;
     public float spDef;
     public float speed;
-    public string pokemonName;
     private Battle_Participant _participant;
     private void Start()
     {
@@ -19,7 +18,6 @@ public class Battle_Data:MonoBehaviour
     }
     public void SaveActualStats()
     {
-        pokemonName = _participant.pokemon.pokemonName;
         attack = _participant.pokemon.attack;
         spAtk = _participant.pokemon.specialAttack;
         defense = _participant.pokemon.defense;
@@ -28,7 +26,6 @@ public class Battle_Data:MonoBehaviour
     }
     public void LoadActualStats()
     {
-        _participant.pokemon.pokemonName = pokemonName;
         _participant.pokemon.attack=attack;
         _participant.pokemon.specialAttack=spAtk;
         _participant.pokemon.defense=defense;
@@ -46,5 +43,8 @@ public class Battle_Data:MonoBehaviour
         pokemon.immuneToStatReduction = false;
         pokemon.canBeDamaged = true;
         pokemon.isFlinched = false;
+
+        var rawName = pokemon.pokemonName.Replace("Foe ", "");
+        pokemon.pokemonName = rawName;
     }
 }

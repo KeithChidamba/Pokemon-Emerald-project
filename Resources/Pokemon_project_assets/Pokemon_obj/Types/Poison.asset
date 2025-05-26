@@ -12,16 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: 
-  Type_name: Poison
+  typeName: Poison
   weaknesses:
-  - Steel
   - Psychic
   - Ground
-  Resistances:
+  resistances:
   - Grass
   - Fighting
   - Bug
-  Non_effect:
-  - Steel
   - Poison
-  type_img: {fileID: -1862244052, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}
+  immunities: []
+  typeImage: {fileID: -1862244052, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

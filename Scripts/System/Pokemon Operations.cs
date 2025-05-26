@@ -131,9 +131,10 @@ public static class PokemonOperations
     }
     static float CheckEvLimit(float ev,float amount,Pokemon pokemon)
     {
+        if (ev >= 252) return ev;
         var sumOfEvs = pokemon.hpEv + pokemon.attackEv + pokemon.defenseEv + pokemon.specialAttackEv + pokemon.specialDefenseEv + pokemon.speedEv;
-        if (ev < 255 && sumOfEvs < 510)
-            return ev+amount;
+        if (ev + amount >= 252) amount = (ev + amount)-252;
+        if (sumOfEvs < 510) return ev+amount;
         return ev;
     }
     private static void GeneratePokemonIVs(Pokemon pokemon)

@@ -84,10 +84,16 @@ public class Item_handler : MonoBehaviour
             if (_itemInUse.itemType.ToLower() == "ether")
                 Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
             if (_itemInUse.itemType.ToLower() == "stat increase")
-                Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
+            {
+                if (_itemInUse.itemName.ToLower() == "pp max")
+                    Pokemon_Details.Instance.OnMoveSelected += MaximisePowerpoints;
+                else
+                    Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
+            }
             Pokemon_Details.Instance.LoadDetails(_selectedPartyPokemon);
         }
-        //if i add proteins,calcium etc. Then i can just add them here in a switch based on stat they change
+        else
+            PokemonOperations.CalculateEvForStat(stat, 10, _selectedPartyPokemon);
     }
 
     private void ItemBuffOrDebuff(string statName)
@@ -180,6 +186,23 @@ public class Item_handler : MonoBehaviour
         Pokemon_Details.Instance.ExitDetails();
         Bag.Instance.ViewBag();
     }
+
+    private void MaximisePowerpoints(int moveIndex)
+    {
+        Pokemon_Details.Instance.OnMoveSelected -= MaximisePowerpoints;
+        var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
+
+        if (currentMove.maxPowerpoints >= (currentMove.basePowerpoints * 1.6)) return;
+        
+        currentMove.maxPowerpoints = (int)math.floor( currentMove.basePowerpoints * 1.6 );
+        
+        Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was maxed out!", "Details",1f);
+        
+        DepleteItem();
+        ResetItemUsage();
+        Pokemon_Details.Instance.ExitDetails();
+        Bag.Instance.ViewBag();
+    }
     private void UsePokeball(Item pokeball)
     {
         if (!Options_manager.Instance.playerInBattle)
@@ -220,6 +243,8 @@ public class Item_handler : MonoBehaviour
         if (isCaught)
         {
             Dialogue_handler.Instance.DisplayBattleInfo("Well done "+wildPokemon.pokemonName+" has been caught");
+            var rawName = wildPokemon.pokemonName.Replace("Foe ", "");
+            wildPokemon.pokemonName = rawName;
             Pokemon_party.Instance.AddMember(wildPokemon);
             yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
             Wild_pkm.Instance.participant.EndWildBattle();

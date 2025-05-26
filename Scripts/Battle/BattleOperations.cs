@@ -10,8 +10,8 @@ public static class BattleOperations
     public static bool CanDisplayDialougue = true;
     public static bool CheckImmunity(Pokemon victim,Type enemyType)
     {
-        foreach(Type t in victim.types)
-            if (PokemonOperations.ContainsType(enemyType.unaffectedTypes, t))
+        foreach(var type in victim.types)
+            if (PokemonOperations.ContainsType(type.immunities,enemyType))
                 return true;
         return false;
     } 

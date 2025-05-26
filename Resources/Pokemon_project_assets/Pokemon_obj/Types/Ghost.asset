@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
-  m_Name: Dark
+  m_Name: Ghost
   m_EditorClassIdentifier: 
-  typeName: Dark
+  typeName: Ghost
   weaknesses:
-  - Fighting
-  - Bug
-  resistances:
   - Ghost
   - Dark
+  resistances:
+  - Bug
+  - Poison
   immunities:
-  - Psychic
-  typeImage: {fileID: 1744360660, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}
+  - Normal
+  - Fighting
+  typeImage: {fileID: -1515030263, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

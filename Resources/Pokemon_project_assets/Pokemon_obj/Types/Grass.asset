@@ -12,19 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Grass
   m_EditorClassIdentifier: 
-  Type_name: Grass
+  typeName: Grass
   weaknesses:
   - Fire
   - Bug
   - Flying
   - Ice
   - Poison
-  Resistances:
+  resistances:
   - Water
   - Grass
-  - Rock
   - Ground
   - Electric
-  Non_effect:
-  - None
-  type_img: {fileID: 1695200540, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}
+  immunities: []
+  typeImage: {fileID: 1695200540, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

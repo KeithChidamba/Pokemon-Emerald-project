@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Electric
   m_EditorClassIdentifier: 
-  Type_name: Electric
+  typeName: Electric
   weaknesses:
   - Ground
-  Resistances:
+  resistances:
   - Flying
-  Non_effect:
-  - Ground
-  type_img: {fileID: 1920608075, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}
+  - Electric
+  - Steel
+  immunities: []
+  typeImage: {fileID: 1920608075, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}
