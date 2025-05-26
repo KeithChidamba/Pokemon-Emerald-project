@@ -12,7 +12,7 @@ public class AbilityHandler : MonoBehaviour
     private void Start()
     {
         _participant =  GetComponent<Battle_Participant>();
-        Turn_Based_Combat.Instance.OnMoveExecute += CheckAbilityUsability;
+        Turn_Based_Combat.Instance.OnNewTurn += CheckAbilityUsability;
         _abilityMethods.Add("pickup",PickUp);
         _abilityMethods.Add("blaze",Blaze);
         _abilityMethods.Add("guts",Guts);
@@ -38,7 +38,7 @@ public class AbilityHandler : MonoBehaviour
         if (_abilityMethods.TryGetValue(_currentAbility, out Action abilityMethod))
             OnAbilityUsed += abilityMethod;
         else
-            Console.WriteLine($"Ability '{_currentAbility}' not found!");
+            Debug.Log($"Ability '{_currentAbility}' not found!");
         _abilityTriggered = false;
     }
 
@@ -50,6 +50,8 @@ public class AbilityHandler : MonoBehaviour
         Battle_handler.Instance.OnBattleEnd -= GiveItem;
         Move_handler.Instance.OnDamageDeal -= IncreaseDamage;
         Move_handler.Instance.OnStatusEffectHit -= HealStatusEffect;
+        Battle_handler.Instance.OnSwitchIn -= TrapEnemy;
+        Battle_handler.Instance.OnSwitchOut -= RemoveTrap;
     }
     void PickUp()
     {
@@ -57,15 +59,13 @@ public class AbilityHandler : MonoBehaviour
         Battle_handler.Instance.OnBattleEnd += GiveItem;
         _abilityTriggered = true;
     }
-
     void ArenaTrap()
     {
-        Debug.Log("triggered arena trap");
-        foreach (var enemy in _participant.currentEnemies)
-        {
-            if(!enemy.pokemon.HasType("Flying") & enemy.pokemon.ability.abilityName!="Levitate")
-                enemy.canEscape = false;
-        }
+        if (_abilityTriggered) return;
+        TrapEnemy();//first entry in battle doesnt count as switch in, so leave this here
+        Battle_handler.Instance.OnSwitchIn += TrapEnemy;
+        Battle_handler.Instance.OnSwitchOut += RemoveTrap;
+        _abilityTriggered = true;
     }
     void Blaze()
     {
@@ -101,18 +101,7 @@ public class AbilityHandler : MonoBehaviour
         Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
-    void HealStatusEffect(Battle_Participant victim,string status)
-    {
-        if (victim != _participant) return;
-        if (_participant.pokemon.statusEffect == "None") return;
-        if (Utility.RandomRange(1, 4) < 2)
-        {
-            _participant.pokemon.statusEffect = "None";
-            if (_participant.pokemon.statusEffect == "sleep" | _participant.pokemon.statusEffect == "freeze"| _participant.pokemon.statusEffect == "paralysis")
-                _participant.pokemon.canAttack = true;
-            Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
-        }
-    }
+
     void ShedSkin()
     {
         HealStatusEffect(_participant,_participant.pokemon.statusEffect);//incase you already had status when entering battle
@@ -140,6 +129,33 @@ public class AbilityHandler : MonoBehaviour
         _abilityTriggered = true;
     }
 
+    private void RemoveTrap(Battle_Participant participant)
+    {
+        if (participant != _participant) return;
+        foreach (var enemy in _participant.currentEnemies)
+            enemy.canEscape = true;
+    }
+    private void TrapEnemy()
+    {
+        foreach (var enemy in _participant.currentEnemies)
+        {
+            if(!enemy.canEscape)continue;
+            if(!enemy.pokemon.HasType("Flying") & enemy.pokemon.ability.abilityName!="Levitate")
+                enemy.canEscape = false;
+        }
+    }
+    void HealStatusEffect(Battle_Participant victim,string status)
+    {
+        if (victim != _participant) return;
+        if (_participant.pokemon.statusEffect == "None") return;
+        if (Utility.RandomRange(1, 4) < 2)
+        {
+            _participant.pokemon.statusEffect = "None";
+            if (_participant.pokemon.statusEffect == "sleep" | _participant.pokemon.statusEffect == "freeze"| _participant.pokemon.statusEffect == "paralysis")
+                _participant.pokemon.canAttack = true;
+            Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
+        }
+    }
     void GiveItem()
     {
         if (_participant.pokemon.hasItem) return;

@@ -39,7 +39,9 @@ public class Battle_handler : MonoBehaviour
     private Battle_Participant _currentParticipant;
     public static Battle_handler Instance;
     public event Action OnBattleEnd;
-
+    public event Action OnSwitchIn;
+    public event Action<Battle_Participant> OnSwitchOut;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -54,23 +56,12 @@ public class Battle_handler : MonoBehaviour
     void Update()
     {
         if (!Options_manager.Instance.playerInBattle) return;
+
         HandlePlayerInput();
     }
 
     private void HandlePlayerInput()
     {
-        _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
-        if (selectedMove && (Input.GetKeyDown(KeyCode.F)))
-        {
-            if (_currentParticipant.enemySelected)
-            {
-                UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant);
-                choosingMove = false;
-            }
-            else
-                Dialogue_handler.Instance.DisplayInfo("Click on who you will attack", "Details");
-        }
-
         if (choosingMove && (Input.GetKeyDown(KeyCode.Escape))) //exit move selection
         {
             ViewOptions();
@@ -104,7 +95,20 @@ public class Battle_handler : MonoBehaviour
                 optionsUI.SetActive(true);
             }
         }
+        if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
+        _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
         AutoAim();
+        if (selectedMove && (Input.GetKeyDown(KeyCode.F)))
+        {
+            if (_currentParticipant.enemySelected)
+            {
+                UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant);
+                choosingMove = false;
+            }
+            else
+                Dialogue_handler.Instance.DisplayInfo("Click on who you will attack", "Details");
+        }        
+        
     }
 
     void ResetAi()
@@ -283,8 +287,9 @@ public class Battle_handler : MonoBehaviour
         LoadAreaBackground(enemy.pokemonTrainerAI.trainerData.TrainerLocation);
         SetupBattle();
     }
-public void SetParticipant(Battle_Participant participant)
-    {
+    public void SetParticipant(Battle_Participant participant)
+    { 
+        OnSwitchOut?.Invoke(participant);
         participant.isEnemy = Array.IndexOf(battleParticipants, participant) > 1 ;
         if (participant.isPlayer)
         { //for switch-ins
@@ -309,10 +314,12 @@ public void SetParticipant(Battle_Participant participant)
         participant.ActivateParticipant();
         participant.abilityHandler.SetAbilityMethod();
         CheckParticipantStates();
+        OnSwitchIn?.Invoke();
     }
 
     public void CheckParticipantStates()
     {
+        participantCount = 0;
         foreach (var participant in battleParticipants)
         {
             if (participant.pokemon == null) continue;

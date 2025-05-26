@@ -61,11 +61,18 @@ public class Pokemon_party : MonoBehaviour
 
     private bool IsValidSwap(int memberPosition)
     {
-        if (memberPosition < 3)
+        if ( (memberPosition < 3 & Battle_handler.Instance.isDoubleBattle) | memberPosition == 1)
         {
             var swapIn = Battle_handler.Instance.battleParticipants[memberPosition - 1];
             Dialogue_handler.Instance.DisplayInfo(swapIn.pokemon.pokemonName +
                                                   " is already in battle", "Details", 1f);
+            return false;
+        }
+        var currentParticipant = Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
+        if (!currentParticipant.canEscape)
+        {
+            Dialogue_handler.Instance.DisplayInfo(currentParticipant.pokemon.pokemonName +
+                                                  " is trapped", "Details", 1f);
             return false;
         }
         return true;
