@@ -60,7 +60,7 @@ public class Save_manager : MonoBehaviour
         foreach(var file in files)
             if (GetFileExtension(file) == ".json")
                 jsonFiles.Add(file);
-        return jsonFiles.ToList();
+        return jsonFiles;
     }
     private string GetFileExtension(string filename)
     {

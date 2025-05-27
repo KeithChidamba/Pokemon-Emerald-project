@@ -428,6 +428,9 @@ public class Battle_handler : MonoBehaviour
                 }
                 if (!Wild_pkm.Instance.ranAway)
                 {
+                    var partyPokemon = Pokemon_party.Instance.party.ToList();
+                    Game_Load.Instance.playerData.playerMoney -= 100 * partyPokemon.OrderByDescending(p=>p.currentLevel)
+                        .First().currentLevel;//highest leveled pokemon in party
                     Dialogue_handler.Instance.DisplayBattleInfo("All your pokemon have fainted");
                     playerWhiteOut = true;
                 }
@@ -490,7 +493,7 @@ public class Battle_handler : MonoBehaviour
                 participant.statData.LoadActualStats();
                 participant.statData.ResetBattleState(participant.pokemon,false);
                 participant.pokemon = null;
-                participant.previousMove = "";
+                participant.previousMove = string.Empty;
                 participant.DeactivateUI();
                 if (participant.pokemonTrainerAI != null)
                     participant.pokemonTrainerAI.inBattle = false;

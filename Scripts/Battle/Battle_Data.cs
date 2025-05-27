@@ -11,6 +11,10 @@ public class Battle_Data:MonoBehaviour
     public float spAtk;
     public float spDef;
     public float speed;
+    //keep this here for use in buffs and debuffs
+    public float accuracy;
+    public float evasion;
+    public float crit;
     private Battle_Participant _participant;
     private void Start()
     {
@@ -23,6 +27,9 @@ public class Battle_Data:MonoBehaviour
         defense = _participant.pokemon.defense;
         spDef = _participant.pokemon.specialDefense;
         speed = _participant.pokemon.speed;
+        accuracy = _participant.pokemon.accuracy;
+        evasion = _participant.pokemon.evasion;
+        crit = _participant.pokemon.critChance;
     }
     public void LoadActualStats()
     {

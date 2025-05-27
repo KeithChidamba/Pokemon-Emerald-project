@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class BuffDebuffData
 {
-    public readonly Pokemon Reciever;
+    public readonly Battle_Participant Receiver;
     public readonly string StatName;
     public readonly bool IsIncreasing;
     public readonly int EffectAmount;
-    public BuffDebuffData(Pokemon reciever, string statName, bool isIncreasing, int effectAmount)
+    public BuffDebuffData(Battle_Participant receiver, string statName, bool isIncreasing, int effectAmount)
     {
-        Reciever = reciever;
+        Receiver = receiver;
         StatName = statName;
         IsIncreasing = isIncreasing;
         EffectAmount = effectAmount;

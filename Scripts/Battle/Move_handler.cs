@@ -269,7 +269,7 @@ public class Move_handler:MonoBehaviour
                 }
                 else
                 {
-                    var data = new BuffDebuffData(victim.pokemon, statName, isIncreasing, buffAmount);
+                    var data = new BuffDebuffData(victim, statName, isIncreasing, buffAmount);
                     SelectRelevantBuffOrDebuff(data);
                 }
             } 
@@ -278,7 +278,7 @@ public class Move_handler:MonoBehaviour
         }
         else//affecting attacker
         {
-            var data = new BuffDebuffData(attacker.pokemon, statName, isIncreasing, buffAmount);
+            var data = new BuffDebuffData(attacker, statName, isIncreasing, buffAmount);
             SelectRelevantBuffOrDebuff(data);
         }
         processingOrder = false;
@@ -290,7 +290,7 @@ public class Move_handler:MonoBehaviour
         {
             if (enemy.pokemon.canBeDamaged & !enemy.pokemon.immuneToStatReduction)
             {
-                var data = new BuffDebuffData(enemy.pokemon, stat, isIncreasing,buffAmount);
+                var data = new BuffDebuffData(enemy, stat, isIncreasing,buffAmount);
                 SelectRelevantBuffOrDebuff(data);
             }
             else
@@ -300,45 +300,47 @@ public class Move_handler:MonoBehaviour
     }
     public void SelectRelevantBuffOrDebuff(BuffDebuffData data)
     {
+        var unModifiedStats = data.Receiver.statData;
+        var affectedPokemon = data.Receiver.pokemon;
         switch (data.StatName)
         {
             case"Defense":
-                data.Reciever.defense = GetUpdatedStat(data.Reciever.defense,data);
+                affectedPokemon.defense = GetUpdatedStat(unModifiedStats.defense,data) ?? affectedPokemon.defense;
                 break;
             case"Attack":
-                data.Reciever.attack = GetUpdatedStat(data.Reciever.attack,data);
+                affectedPokemon.attack = GetUpdatedStat(unModifiedStats.attack,data) ?? affectedPokemon.attack;
                 break;
             case"Special Defense":
-                data.Reciever.specialDefense = GetUpdatedStat(data.Reciever.specialDefense,data);
+                affectedPokemon.specialDefense = GetUpdatedStat(unModifiedStats.spDef,data) ?? affectedPokemon.specialDefense;
                 break;
             case"Special Attack":
-                data.Reciever.specialAttack = GetUpdatedStat(data.Reciever.specialAttack,data);
+                affectedPokemon.specialAttack = GetUpdatedStat(unModifiedStats.spAtk,data) ?? affectedPokemon.specialAttack;
                 break;
             case"Speed":
-                data.Reciever.speed = GetUpdatedStat(data.Reciever.speed,data);
+                affectedPokemon.speed = GetUpdatedStat(unModifiedStats.speed,data) ?? affectedPokemon.speed;
                 break;
             case"Accuracy":
-                data.Reciever.accuracy = GetUpdatedStat(data.Reciever.accuracy,data);
+                affectedPokemon.accuracy = GetUpdatedStat(unModifiedStats.accuracy,data) ?? affectedPokemon.accuracy;
                 break;
             case"Evasion":
-                data.Reciever.evasion = GetUpdatedStat(data.Reciever.evasion,data);
+                affectedPokemon.evasion = GetUpdatedStat(unModifiedStats.evasion,data) ?? affectedPokemon.evasion;
                 break;
             case"Crit":
-                data.Reciever.critChance = GetUpdatedStat(data.Reciever.critChance,data);
-                break;
+                affectedPokemon.critChance = GetUpdatedStat(unModifiedStats.crit,data)?? affectedPokemon.critChance;
+                break; 
         }
     }
-    private float GetUpdatedStat(float currentStatValue, BuffDebuffData data)
+    private float? GetUpdatedStat(float unmodifiedStatValue, BuffDebuffData data)
     {
         BattleOperations.ChangeOrCreateBuffOrDebuff(data);
-        var buff = BattleOperations.SearchForBuffOrDebuff(data.Reciever, data.StatName) 
+        var buff = BattleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.StatName) 
                    ?? new Buff_Debuff(string.Empty,0,true); // if null return same value
-        if (buff.isAtLimit) return currentStatValue;
+        if (buff.isAtLimit) return null;
         if (data.StatName == "Accuracy" | data.StatName == "Evasion")
-            return math.trunc(currentStatValue * _accuracyAndEvasionLevels[buff.stage+6]); 
+            return math.trunc(unmodifiedStatValue * _accuracyAndEvasionLevels[buff.stage+6]); 
         if(data.StatName=="Crit")    
             return _critLevels[buff.stage];
-        return math.trunc(currentStatValue * _statLevels[buff.stage+6]);
+        return math.trunc(unmodifiedStatValue * _statLevels[buff.stage+6]); 
     }
 
     List<Battle_Participant> TargetAllExceptSelf()

@@ -99,7 +99,8 @@ public class Item_handler : MonoBehaviour
     private void ItemBuffOrDebuff(string statName)
     {
         var currentTurnIndex = Turn_Based_Combat.Instance.currentTurnIndex;
-        _selectedPartyPokemon = Battle_handler.Instance.battleParticipants[currentTurnIndex].pokemon;
+        var currentParticipant = Battle_handler.Instance.battleParticipants[currentTurnIndex];
+        _selectedPartyPokemon = currentParticipant.pokemon;
         if (statName == "Stat Reduction")//Guard Spec applies all user's participant
         {
             if (_selectedPartyPokemon.immuneToStatReduction)
@@ -133,7 +134,8 @@ public class Item_handler : MonoBehaviour
                 ResetItemUsage();
                 return;
             }
-        var xBuffData = new BuffDebuffData(_selectedPartyPokemon, statName, true, 1);
+        
+        var xBuffData = new BuffDebuffData(currentParticipant, statName, true, 1);
         Move_handler.Instance.SelectRelevantBuffOrDebuff(xBuffData);
         DepleteItem();
         Invoke(nameof(SkipTurn),1f);

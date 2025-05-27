@@ -77,7 +77,7 @@ public class AbilityHandler : MonoBehaviour
     {
         if (_abilityTriggered) return;
         if (_participant.pokemon.statusEffect == "None") return;
-        var attackBuffData = new BuffDebuffData(_participant.pokemon, "Attack", true, 1);
+        var attackBuffData = new BuffDebuffData(_participant, "Attack", true, 1);
         BattleOperations.CanDisplayDialougue = false; 
         Move_handler.Instance.SelectRelevantBuffOrDebuff(attackBuffData);
         _abilityTriggered = true;
