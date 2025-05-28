@@ -21,5 +21,6 @@ MonoBehaviour:
   - Water
   - Grass
   - Electric
-  immunities: []
+  immunities:
+  - None
   typeImage: {fileID: 21300000, guid: 64aad44408ac10c4d93daa003a1575d5, type: 2}

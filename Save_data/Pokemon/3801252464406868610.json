@@ -1,0 +1,129 @@
+{
+    "basePokemonName": "Zigzagoon",
+    "pokemonName": "Zigzagoon",
+    "pokemonID": 3801252464406868610,
+    "personalityValue": 91442558,
+    "gender": "Male",
+    "genderRatio": "50/50",
+    "nature": {
+        "instanceID": 25760
+    },
+    "hasGender": true,
+    "hp": 36.0,
+    "maxHp": 36.0,
+    "baseHp": 38.0,
+    "baseAttack": 30.0,
+    "baseDefense": 41.0,
+    "baseSpecialAttack": 30.0,
+    "baseSpecialDefense": 41.0,
+    "baseSpeed": 60.0,
+    "attack": 16.0,
+    "defense": 19.0,
+    "specialAttack": 17.0,
+    "specialDefense": 19.0,
+    "speed": 24.0,
+    "hpIv": 18.0,
+    "attackIv": 18.0,
+    "defenseIv": 9.0,
+    "specialAttackIv": 14.0,
+    "specialDefenseIv": 5.0,
+    "speedIv": 10.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        "Speed1"
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 255.0,
+    "currentLevel": 14,
+    "currentExpAmount": 2198,
+    "nextLevelExpAmount": 2744.0,
+    "expGroup": "Medium Fast",
+    "expYield": 60,
+    "hasTrainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "canBeDamaged": true,
+    "immuneToStatReduction": false,
+    "types": [
+        {
+            "instanceID": 25480
+        }
+    ],
+    "statusEffect": "None",
+    "buffAndDebuffs": [],
+    "evolutionLineLevels": [
+        "20"
+    ],
+    "requiresEvolutionStone": false,
+    "evolutionStoneName": "None",
+    "abilities": [
+        "Pickup"
+    ],
+    "splitEvolution": false,
+    "learnSet": [
+        "normal/headbutt01",
+        "normal/tail whip02",
+        "normal/tackle04",
+        "water/surf05",
+        "normal/protect19"
+    ],
+    "moveSet": [
+        {
+            "instanceID": -46828
+        },
+        {
+            "instanceID": -46830
+        },
+        {
+            "instanceID": -46832
+        },
+        {
+            "instanceID": -46834
+        }
+    ],
+    "ability": {
+        "instanceID": 25636
+    },
+    "evolutions": [
+        {
+            "instanceID": 25622
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 32386
+    },
+    "backPicture": {
+        "instanceID": 32318
+    },
+    "abilityName": "Pickup",
+    "natureName": "Impish",
+    "evolutionData": [
+        "Linoone"
+    ],
+    "typeData": [
+        "Normal"
+    ],
+    "moveData": [
+        "Headbutt/Normal",
+        "Tail whip/Normal",
+        "Tackle/Normal",
+        "Surf/Water"
+    ],
+    "movePpData": [
+        "25/25",
+        "25/25",
+        "20/20",
+        "25/25"
+    ]
+}

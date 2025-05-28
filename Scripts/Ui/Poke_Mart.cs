@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -27,6 +30,32 @@ public class Poke_Mart : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    private void Start()
+    {
+        InitialiseItems();
+    }
+
+    private void InitialiseItems()
+    {        
+        storeItems.Clear();
+        var martItemNames = Directory.GetFiles("Assets/Resources/Pokemon_project_assets/Player_obj/Bag/");
+        List<Item> itemAssets = new();
+        foreach (var itemName in martItemNames)
+        {
+            if(Path.GetFileName(itemName).Contains(".meta"))continue;
+            
+            var rawName = itemName.Split('.')[0];//remove extension
+            var item = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/"+Path.GetFileName(rawName));
+            itemAssets.Add(item);
+        }
+        var orderedItems = itemAssets.OrderBy(item => item.price);
+        foreach (var group in orderedItems.GroupBy(item => item.itemType).ToList())
+        {
+            foreach (var item in group)
+                storeItems.Add(item);
+        }
     }
     private void Update()
     {

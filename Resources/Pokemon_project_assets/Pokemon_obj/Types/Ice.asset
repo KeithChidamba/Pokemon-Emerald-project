@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Ice
   m_EditorClassIdentifier: 
-  Type_name: Ice
+  typeName: Ice
   weaknesses:
   - Fighting
   - Rock
   - Steel
   - Fire
-  Resistances:
+  resistances:
   - Ice
-  Non_effect:
+  immunities:
   - None
-  type_img: {fileID: 211762680, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}
+  typeImage: {fileID: 211762680, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

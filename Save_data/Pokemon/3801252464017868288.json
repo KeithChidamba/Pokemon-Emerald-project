@@ -6,22 +6,22 @@
     "gender": "Male",
     "genderRatio": "50/50",
     "nature": {
-        "instanceID": 25936
+        "instanceID": 25954
     },
     "hasGender": true,
-    "hp": 18.0,
-    "maxHp": 18.0,
+    "hp": 45.0,
+    "maxHp": 49.0,
     "baseHp": 45.0,
     "baseAttack": 100.0,
     "baseDefense": 45.0,
     "baseSpecialAttack": 45.0,
     "baseSpecialDefense": 45.0,
     "baseSpeed": 10.0,
-    "attack": 12.0,
-    "defense": 8.0,
-    "specialAttack": 10.0,
-    "specialDefense": 9.0,
-    "speed": 6.0,
+    "attack": 37.0,
+    "defense": 26.0,
+    "specialAttack": 26.0,
+    "specialDefense": 25.0,
+    "speed": 13.0,
     "hpIv": 31.0,
     "attackIv": 6.0,
     "defenseIv": 17.0,
@@ -41,9 +41,9 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 255.0,
-    "currentLevel": 4,
-    "currentExpAmount": 58,
-    "nextLevelExpAmount": 96.0,
+    "currentLevel": 18,
+    "currentExpAmount": 3765,
+    "nextLevelExpAmount": 3798.0,
     "expGroup": "Medium Slow",
     "expYield": 73,
     "hasTrainer": true,
@@ -53,7 +53,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25144
+            "instanceID": 25154
         }
     ],
     "statusEffect": "None",
@@ -76,18 +76,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -23358
+            "instanceID": -46788
+        },
+        {
+            "instanceID": -46790
+        },
+        {
+            "instanceID": -46792
+        },
+        {
+            "instanceID": -46794
         }
     ],
     "ability": {
-        "instanceID": 25454
+        "instanceID": 25464
     },
     "evolutions": [
         {
-            "instanceID": 25136
+            "instanceID": 25144
         },
         {
-            "instanceID": 25916
+            "instanceID": 25934
         }
     ],
     "heldItem": {
@@ -95,10 +104,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32350
+        "instanceID": 32394
     },
     "backPicture": {
-        "instanceID": 32350
+        "instanceID": 32358
     },
     "abilityName": "Arena Trap",
     "natureName": "Bold",
@@ -110,9 +119,15 @@
         "Ground"
     ],
     "moveData": [
-        "Bite/Dark"
+        "Bite/Dark",
+        "Crunch/Dark",
+        "Tackle/Normal",
+        "Magnitude/Ground"
     ],
     "movePpData": [
-        "20/20"
+        "20/20",
+        "20/20",
+        "20/20",
+        "15/15"
     ]
 }

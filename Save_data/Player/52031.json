@@ -2,12 +2,12 @@
     "playerName": "kelvar",
     "trainerID": 52031,
     "secretID": 15622,
-    "playerMoney": 850,
+    "playerMoney": 730,
     "numBadges": 0,
     "playerPosition": {
-        "x": 1.6039998531341553,
-        "y": 1.5640000104904175,
+        "x": 3.4364986419677736,
+        "y": 1.1478101015090943,
         "z": 0.0
     },
-    "location": "Overworld"
+    "location": "Poke Mart"
 }

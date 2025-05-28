@@ -1,5 +1,5 @@
 {
-    "itemID": "Great ball16272",
+    "itemID": "Great ball5307",
     "itemName": "Great ball",
     "itemType": "Pokeball",
     "itemEffect": "1,5",
@@ -7,7 +7,7 @@
     "price": 30,
     "quantity": 3,
     "itemImage": {
-        "instanceID": 31984
+        "instanceID": 32008
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": false,

@@ -25,7 +25,6 @@ public class Save_manager : MonoBehaviour
         LoadPlayerData();
         LoadPokemonData();
     }
-    
     private void LoadPlayerData()
     {
         CreateFolder("Assets/Save_data/Player");

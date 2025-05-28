@@ -64,12 +64,16 @@ public class Pokemon_party : MonoBehaviour
         if ( (memberPosition < 3 & Battle_handler.Instance.isDoubleBattle) | memberPosition == 1)
         {
             var swapIn = Battle_handler.Instance.battleParticipants[memberPosition - 1];
+            
             Dialogue_handler.Instance.DisplayInfo(swapIn.pokemon.pokemonName +
                                                   " is already in battle", "Details", 1f);
             return false;
         }
-        var currentParticipant = Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
-        if (!currentParticipant.canEscape)
+        var participantIndex = (Battle_handler.Instance.isDoubleBattle & swappingIn)
+            ?Turn_Based_Combat.Instance.currentTurnIndex :0;
+        
+        var currentParticipant = Battle_handler.Instance.battleParticipants[participantIndex];
+        if (!currentParticipant.canEscape & swappingIn)
         {
             Dialogue_handler.Instance.DisplayInfo(currentParticipant.pokemon.pokemonName +
                                                   " is trapped", "Details", 1f);
@@ -79,23 +83,27 @@ public class Pokemon_party : MonoBehaviour
     }
     public void SelectMemberToBeSwapped(int memberPosition)
     {
+        var selectedMember = memberCards[memberPosition - 1]; 
         if (Options_manager.Instance.playerInBattle)
         {//cant swap in a member who is already fighting
-            if (!IsValidSwap(memberPosition)) return;
+            var currentParticipant = Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
+           
             swappingIn = true;
+            if (!IsValidSwap(memberPosition)) { swappingIn = false; return;}
             swapOutNext = false;
             selectedMemberIndex = Turn_Based_Combat.Instance.currentTurnIndex+1;
-            Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].ResetParticipantState();
+            currentParticipant.ResetParticipantState();
             MoveMember(memberPosition);
         }
         else
         {
             if (numMembers > 1)
             {
+                Dialogue_handler.Instance.DisplayInfo("Select Pokemon to swap with","Details");
                 moving = true;
                 memberToMove = memberPosition;
                 viewingOptions = false;
-                memberCards[memberPosition - 1].GetComponent<Pokemon_party_member>().options.SetActive(false);
+                selectedMember.GetComponent<Pokemon_party_member>().options.SetActive(false);
             }
             else
                 Dialogue_handler.Instance.DisplayInfo("There must be at least 2 Pokemon to swap","Details",1f);
@@ -171,7 +179,7 @@ public class Pokemon_party : MonoBehaviour
             return;
         }
         Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.pokemonName
-                                             +" recieved a "+_itemToUse.itemName,"Details",1.3f);
+                                             +" received a "+_itemToUse.itemName,"Details",1.3f);
         selectedMember.pokemon.GiveItem(Obj_Instance.CreateItem(_itemToUse));
         _itemToUse.quantity--;
         Bag.Instance.CheckItemQuantity(_itemToUse);

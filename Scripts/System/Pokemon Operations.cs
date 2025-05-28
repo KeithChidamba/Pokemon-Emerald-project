@@ -107,24 +107,24 @@ public static class PokemonOperations
     }
     public static void CalculateEvForStat(string stat,float evAmount,Pokemon pkm)
     {
-        switch (stat)
+        switch (stat.ToLower())
         {
-            case "HP": 
+            case "hp": 
                 pkm.hpEv=CheckEvLimit(pkm.hpEv,evAmount,pkm);
                 break;
-            case "Attack": 
+            case "attack": 
                 pkm.attackEv=CheckEvLimit(pkm.attackEv,evAmount,pkm);
                 break;
-            case "Defense": 
+            case "defense": 
                 pkm.defenseEv=CheckEvLimit(pkm.defenseEv,evAmount,pkm);
                 break;
-            case "Special Attack": 
+            case "special attack": 
                 pkm.specialAttackEv=CheckEvLimit(pkm.specialAttackEv,evAmount,pkm);
                 break;
-            case "Special Defense": 
+            case "special defense": 
                 pkm.specialDefenseEv=CheckEvLimit(pkm.specialDefenseEv,evAmount,pkm);
                 break;
-            case "Speed": 
+            case "speed": 
                 pkm.speedEv=CheckEvLimit(pkm.speedEv,evAmount,pkm);
                 break;
         }

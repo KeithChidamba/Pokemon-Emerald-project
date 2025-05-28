@@ -377,7 +377,10 @@ public class Move_handler:MonoBehaviour
     IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
     {
         foreach (Battle_Participant enemy in targets)
+        {
             enemy.pokemon.hp -= CalculateMoveDamage(_currentTurn.move,enemy);
+            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         _moveDelay = false;
         processingOrder = false;

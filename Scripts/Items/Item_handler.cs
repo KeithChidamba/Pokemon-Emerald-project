@@ -93,7 +93,13 @@ public class Item_handler : MonoBehaviour
             Pokemon_Details.Instance.LoadDetails(_selectedPartyPokemon);
         }
         else
+        {
             PokemonOperations.CalculateEvForStat(stat, 10, _selectedPartyPokemon);
+            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+"'s "+stat+" was increased", "Details",1f);
+            DepleteItem();
+            ResetItemUsage();
+            Pokemon_Details.Instance.ExitDetails();
+        }
     }
 
     private void ItemBuffOrDebuff(string statName)
@@ -169,9 +175,8 @@ public class Item_handler : MonoBehaviour
          Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp was restored!", "Details",1f);
          DepleteItem();
          ResetItemUsage();
-         SkipTurn();
          Pokemon_Details.Instance.ExitDetails();
-         Bag.Instance.ViewBag();
+         SkipTurn();
      }
     private void IncreasePowerpoints(int moveIndex)
     {
@@ -186,7 +191,6 @@ public class Item_handler : MonoBehaviour
         DepleteItem();
         ResetItemUsage();
         Pokemon_Details.Instance.ExitDetails();
-        Bag.Instance.ViewBag();
     }
 
     private void MaximisePowerpoints(int moveIndex)
@@ -203,7 +207,6 @@ public class Item_handler : MonoBehaviour
         DepleteItem();
         ResetItemUsage();
         Pokemon_Details.Instance.ExitDetails();
-        Bag.Instance.ViewBag();
     }
     private void UsePokeball(Item pokeball)
     {

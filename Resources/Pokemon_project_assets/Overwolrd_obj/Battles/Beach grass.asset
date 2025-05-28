@@ -15,6 +15,6 @@ MonoBehaviour:
   biomeName: Beach
   location: Overworld
   availablePokemon:
-  - trapinch100
+  - zigzagoon100
   minimumLevelOfPokemon: 3
   maximumLevelOfPokemon: 20
