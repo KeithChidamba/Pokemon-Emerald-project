@@ -16,7 +16,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _statLevels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
     private readonly float[] _accuracyAndEvasionLevels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
-    private Battle_event[] _dialougeOrder={null,null,null,null,null};
+    private Battle_event[] _dialougeOrder={null,null,null,null};
     private bool _moveDelay = false;
     private bool _cancelMove = false;
     public bool processingOrder = false;
@@ -48,9 +48,8 @@ public class Move_handler:MonoBehaviour
     {
         _dialougeOrder[0] = new Battle_event(DealDamage, _currentTurn.move.moveDamage > 0);
         _dialougeOrder[1] = new Battle_event(CheckVictimVulnerabilityToStatus, _currentTurn.move.hasStatus);
-        _dialougeOrder[2] = new Battle_event(ExecuteMoveWithSpecialEffect, _currentTurn.move.hasSpecialEffect);
-        _dialougeOrder[3] = new Battle_event(CheckBuffOrDebuffApplicability, _currentTurn.move.isBuffOrDebuff);
-        _dialougeOrder[4] = new Battle_event(FlinchEnemy, _currentTurn.move.canCauseFlinch);
+        _dialougeOrder[2] = new Battle_event(CheckBuffOrDebuffApplicability, _currentTurn.move.isBuffOrDebuff);
+        _dialougeOrder[3] = new Battle_event(FlinchEnemy, _currentTurn.move.canCauseFlinch);
     }
     private IEnumerator MoveSequence()
     {
@@ -60,15 +59,24 @@ public class Move_handler:MonoBehaviour
         else
         {
             SetMoveSequence();
-            foreach (Battle_event d in _dialougeOrder)
+            foreach (var battleEvent in _dialougeOrder)
             {
                 if (_cancelMove)
                     break;
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-                if (!d.Condition)
-                    continue;
-                processingOrder = true;
-                d.Execute();
+
+                if (_currentTurn.move.hasSpecialEffect)
+                {
+                    processingOrder = true;
+                    ExecuteMoveWithSpecialEffect();
+                }
+                else
+                {
+                    if (!battleEvent.Condition) continue;
+                    processingOrder = true;
+                    battleEvent.Execute();
+                }
+
                 yield return new WaitUntil(() => !processingOrder);
                 yield return new WaitUntil(() => !_moveDelay);
                 yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
@@ -86,7 +94,6 @@ public class Move_handler:MonoBehaviour
             Invoke(_currentTurn.move.moveName.Replace(" ", "").ToLower(), 0f);
         else
             StartCoroutine(ExecuteConsecutiveMove());
-        processingOrder = false;
     }
     private bool IsInvincible(Move move,Battle_Participant currentVictim)
     {
@@ -136,10 +143,10 @@ public class Move_handler:MonoBehaviour
     {
         foreach (var barrier in currentVictim.Barrieirs)
         {
-            if (move.isSpecial & barrier.BarrierName == "Light Screen")
-                return  damage/barrier.BarrierEffect;
-            if (!move.isSpecial & barrier.BarrierName == "Reflect")
-                return  damage/barrier.BarrierEffect;
+            if (move.isSpecial & barrier.barrierName == "Light Screen")
+                return  damage*barrier.barrierEffect;
+            if (!move.isSpecial & barrier.barrierName == "Reflect")
+                return  damage*barrier.barrierEffect;
         }
         return damage;
     }
@@ -352,7 +359,7 @@ public class Move_handler:MonoBehaviour
         if (buff.isAtLimit) return null;
         if (data.StatName == "Accuracy" | data.StatName == "Evasion")
             return math.trunc(unmodifiedStatValue * _accuracyAndEvasionLevels[buff.stage+6]); 
-        if(data.StatName=="Crit")    
+        if (data.StatName=="Crit")    
             return _critLevels[buff.stage];
         return math.trunc(unmodifiedStatValue * _statLevels[buff.stage+6]); 
     }
@@ -460,13 +467,12 @@ public class Move_handler:MonoBehaviour
     {
         StartCoroutine(ShatterBarriers());
     }
-
     private IEnumerator ShatterBarriers()
     {
         foreach (var enemy in attacker.currentEnemies)
         {
             foreach (var barrier in enemy.Barrieirs)
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon+" shattered "+barrier.BarrierName);
+                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon+" shattered "+barrier.barrierName);
             enemy.Barrieirs.Clear();
         }
         
@@ -477,5 +483,72 @@ public class Move_handler:MonoBehaviour
         
         _moveDelay = false;
         processingOrder = false;
+    }
+
+    private IEnumerator CreateBarriers(string barrierName)
+    {
+        if (Battle_handler.Instance.isDoubleBattle)
+        {
+            var participants = (_currentTurn.attackerIndex < 2) ? new[] { 0, 1 } : new[] { 2, 3 };
+            //in double battle both partner share barriers, so only need to check one of them
+            for (var i = 0; i < 2; i++)
+            {
+                var currentParticipant = Battle_handler.Instance.battleParticipants[participants[i]];
+                
+                if(!currentParticipant.isActive)continue;
+                
+                if (HasDuplicateBarrier(currentParticipant, barrierName)) break;
+
+                Barrier newBarrier;
+                newBarrier.barrierName = barrierName;
+                newBarrier.barrierEffect = 0.33f;
+                
+                foreach (var index in participants)
+                {
+                    if(!currentParticipant.isActive) continue;
+                    var participant = Battle_handler.Instance.battleParticipants[participants[index]];
+                    participant.Barrieirs.Add(newBarrier);
+                }
+                Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
+                break;
+            }
+        }
+        else
+        {
+            
+            var currentParticipant = Battle_handler.Instance.battleParticipants[_currentTurn.attackerIndex];
+
+            if (HasDuplicateBarrier(currentParticipant, barrierName))
+                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            else
+            {
+                Barrier newBarrier;
+                newBarrier.barrierName = barrierName;
+                newBarrier.barrierEffect = 0.5f;
+                currentParticipant.Barrieirs.Add(newBarrier);
+                Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
+            }
+        }
+        
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        
+        _moveDelay = false;
+        processingOrder = false;
+    }
+
+    bool HasDuplicateBarrier(Battle_Participant currentParticipant,string  barrierName)
+    {
+        var duplicateBarrier = currentParticipant.Barrieirs.Any(b => b.barrierName == barrierName); 
+        if (duplicateBarrier) Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " is already activated");
+        return duplicateBarrier;
+    }
+    void reflect()
+    {
+        StartCoroutine(CreateBarriers("Reflect"));
+    }
+
+    void lightscreen()
+    {
+        StartCoroutine(CreateBarriers("Light Screen"));
     }
 }

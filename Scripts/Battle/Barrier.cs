@@ -1,5 +1,8 @@
+using UnityEngine.Serialization;
+
+[System.Serializable]
 public struct Barrier
 {
-    public string BarrierName;
-    public float BarrierEffect;
+    public string barrierName;
+    public float barrierEffect;
 }
