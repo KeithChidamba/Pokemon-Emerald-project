@@ -47,7 +47,6 @@ public class Save_manager : MonoBehaviour
     {
         CreateFolder("Assets/Save_data/Items");
         CreateFolder("Assets/Save_data/Items/Held_Items");
-        Bag.Instance.bagItems.Clear();
         var itemList = GetJsonFilesFromPath("Assets/Save_data/Items");
         foreach(var item in itemList)
             Bag.Instance.bagItems.Add(LoadItemFromJson("Assets/Save_data/Items/" + Path.GetFileName(item)));

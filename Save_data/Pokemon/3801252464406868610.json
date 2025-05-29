@@ -1,6 +1,6 @@
 {
     "basePokemonName": "Zigzagoon",
-    "pokemonName": "Zigzagoon",
+    "pokemonName": "Linoone",
     "pokemonID": 3801252464406868610,
     "personalityValue": 91442558,
     "gender": "Male",
@@ -9,19 +9,19 @@
         "instanceID": 25760
     },
     "hasGender": true,
-    "hp": 36.0,
-    "maxHp": 36.0,
-    "baseHp": 38.0,
-    "baseAttack": 30.0,
-    "baseDefense": 41.0,
-    "baseSpecialAttack": 30.0,
-    "baseSpecialDefense": 41.0,
-    "baseSpeed": 60.0,
-    "attack": 16.0,
-    "defense": 19.0,
-    "specialAttack": 17.0,
-    "specialDefense": 19.0,
-    "speed": 24.0,
+    "hp": 73.0,
+    "maxHp": 73.0,
+    "baseHp": 78.0,
+    "baseAttack": 70.0,
+    "baseDefense": 61.0,
+    "baseSpecialAttack": 50.0,
+    "baseSpecialDefense": 61.0,
+    "baseSpeed": 100.0,
+    "attack": 41.0,
+    "defense": 38.0,
+    "specialAttack": 28.0,
+    "specialDefense": 34.0,
+    "speed": 53.0,
     "hpIv": 18.0,
     "attackIv": 18.0,
     "defenseIv": 9.0,
@@ -35,17 +35,17 @@
     "specialDefenseEv": 0.0,
     "speedEv": 0.0,
     "effortValues": [
-        "Speed1"
+        "Speed2"
     ],
     "accuracy": 100.0,
     "evasion": 100.0,
     "critChance": 6.25,
-    "catchRate": 255.0,
-    "currentLevel": 14,
-    "currentExpAmount": 2198,
-    "nextLevelExpAmount": 2744.0,
+    "catchRate": 90.0,
+    "currentLevel": 23,
+    "currentExpAmount": 10776,
+    "nextLevelExpAmount": 12167.0,
     "expGroup": "Medium Fast",
-    "expYield": 60,
+    "expYield": 128,
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -67,29 +67,23 @@
         "Pickup"
     ],
     "splitEvolution": false,
-    "learnSet": [
-        "normal/headbutt01",
-        "normal/tail whip02",
-        "normal/tackle04",
-        "water/surf05",
-        "normal/protect19"
-    ],
+    "learnSet": [],
     "moveSet": [
         {
-            "instanceID": -46828
+            "instanceID": -38228
         },
         {
-            "instanceID": -46830
+            "instanceID": -38230
         },
         {
-            "instanceID": -46832
+            "instanceID": -38862
         },
         {
-            "instanceID": -46834
+            "instanceID": -38234
         }
     ],
     "ability": {
-        "instanceID": 25636
+        "instanceID": 26010
     },
     "evolutions": [
         {
@@ -101,12 +95,12 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32386
+        "instanceID": 32330
     },
     "backPicture": {
-        "instanceID": 32318
+        "instanceID": 32342
     },
-    "abilityName": "Pickup",
+    "abilityName": "Guts",
     "natureName": "Impish",
     "evolutionData": [
         "Linoone"
@@ -117,13 +111,13 @@
     "moveData": [
         "Headbutt/Normal",
         "Tail whip/Normal",
-        "Tackle/Normal",
+        "Protect/Normal",
         "Surf/Water"
     ],
     "movePpData": [
         "25/25",
         "25/25",
-        "20/20",
+        "10/10",
         "25/25"
     ]
 }

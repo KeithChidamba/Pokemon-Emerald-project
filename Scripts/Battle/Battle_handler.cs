@@ -77,7 +77,6 @@ public class Battle_handler : MonoBehaviour
 
         if (overworld_actions.Instance.usingUI)
         {
-           // Dialogue_handler.Instance.EndDialogue();
             Wild_pkm.Instance.canAttack = false;
             optionsUI.SetActive(false);
             viewingOptions = false;
@@ -288,13 +287,14 @@ public class Battle_handler : MonoBehaviour
         SetupBattle();
     }
     public void SetParticipant(Battle_Participant participant)
-    { 
+    {
         OnSwitchOut?.Invoke(participant);
         participant.isEnemy = Array.IndexOf(battleParticipants, participant) > 1 ;
         if (participant.isPlayer)
         { //for switch-ins
             if (Pokemon_party.Instance.swappingIn || Pokemon_party.Instance.swapOutNext)
             { 
+
                 var alivePokemon=Pokemon_party.Instance.GetLivingPokemon();
                 participant.pokemon = alivePokemon[Pokemon_party.Instance.selectedMemberIndex - 1];
                 foreach (var enemyParticipant  in participant.currentEnemies)
@@ -429,6 +429,7 @@ public class Battle_handler : MonoBehaviour
                 if (!Wild_pkm.Instance.ranAway)
                 {
                     var partyPokemon = Pokemon_party.Instance.party.ToList();
+                    partyPokemon.RemoveAll(p => p == null);
                     Game_Load.Instance.playerData.playerMoney -= 100 * partyPokemon.OrderByDescending(p=>p.currentLevel)
                         .First().currentLevel;//highest leveled pokemon in party
                     Dialogue_handler.Instance.DisplayBattleInfo("All your pokemon have fainted");
@@ -490,6 +491,7 @@ public class Battle_handler : MonoBehaviour
         foreach (var participant in battleParticipants)
             if(participant.pokemon!=null)
             {
+                participant.Barrieirs.Clear();
                 participant.statData.LoadActualStats();
                 participant.statData.ResetBattleState(participant.pokemon,false);
                 participant.pokemon = null;

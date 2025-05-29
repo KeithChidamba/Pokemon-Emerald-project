@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -34,6 +35,7 @@ public class Battle_Participant : MonoBehaviour
     public List<Pokemon> expReceivers;
     public bool canEscape = true;
     private Action<Pokemon> _resetHandler;
+    public List<Barrier> Barrieirs = new();
     private void Start()
     {
         statusHandler = GetComponent<Participant_Status>();

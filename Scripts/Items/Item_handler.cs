@@ -26,6 +26,13 @@ public class Item_handler : MonoBehaviour
     {
         _selectedPartyPokemon = selectedPokemon;
         _itemInUse = item;
+
+        if (item.itemEffect.ToLower() == "pp")
+        {
+            ChangePowerpoints();
+            return;
+        }
+        
         switch (item.itemType.ToLower())
         {
             case "heal hp":
@@ -37,8 +44,8 @@ public class Item_handler : MonoBehaviour
             case "status":
                 HealStatusEffect(item.itemEffect.ToLower());
                 break;
-            case "stats":
-                ChangeStats(item.itemEffect.ToLower());
+            case "stat increase":
+                GetEVsFromItem(_itemInUse.itemEffect);
                 break;
             case "pokeball":
                 UsePokeball(item);
@@ -76,30 +83,25 @@ public class Item_handler : MonoBehaviour
         else
             Dialogue_handler.Instance.DisplayInfo("Cant use that on "+_selectedPartyPokemon.pokemonName, "Details",1f);
     }
-    private void ChangeStats(string stat)
+
+    private void GetEVsFromItem(string stat)
     {
-        if (stat == "pp")
-        {
-            Pokemon_Details.Instance.changingMoveData = true;
-            if (_itemInUse.itemType.ToLower() == "ether")
-                Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
-            if (_itemInUse.itemType.ToLower() == "stat increase")
-            {
-                if (_itemInUse.itemName.ToLower() == "pp max")
-                    Pokemon_Details.Instance.OnMoveSelected += MaximisePowerpoints;
-                else
-                    Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
-            }
-            Pokemon_Details.Instance.LoadDetails(_selectedPartyPokemon);
-        }
-        else
-        {
-            PokemonOperations.CalculateEvForStat(stat, 10, _selectedPartyPokemon);
-            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+"'s "+stat+" was increased", "Details",1f);
-            DepleteItem();
-            ResetItemUsage();
-            Pokemon_Details.Instance.ExitDetails();
-        }
+        PokemonOperations.CalculateEvForStat(stat, 10, _selectedPartyPokemon);
+        Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+"'s "+stat+" was increased", "Details",1f);
+        DepleteItem();
+        ResetItemUsage();
+        Pokemon_Details.Instance.ExitDetails();
+    }
+    private void ChangePowerpoints()
+    {
+        Pokemon_Details.Instance.changingMoveData = true;
+        if (_itemInUse.itemType.ToLower() == "ether")
+            Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
+        if (_itemInUse.itemName.ToLower() == "pp max")
+            Pokemon_Details.Instance.OnMoveSelected += MaximisePowerpoints;
+        if (_itemInUse.itemName.ToLower() == "pp up")
+            Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
+        Pokemon_Details.Instance.LoadDetails(_selectedPartyPokemon);
     }
 
     private void ItemBuffOrDebuff(string statName)

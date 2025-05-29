@@ -14,7 +14,7 @@ public class Wild_pkm : MonoBehaviour
     public bool ranAway = false;
     public bool canAttack = true;
     public static Wild_pkm Instance;
-    private bool _usedMove = false;
+    [SerializeField]private bool _usedMove = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -23,12 +23,8 @@ public class Wild_pkm : MonoBehaviour
             return;
         }
         Instance = this;
-    }
-    private void Start()
-    {
         Turn_Based_Combat.Instance.OnNewTurn += ResetMoveUsage;
     }
-
     public void CanAttack()
     {
         canAttack = true;
@@ -54,7 +50,6 @@ public class Wild_pkm : MonoBehaviour
             choose_move();
         else
             RunAway();
-        
     }
 
     private void RunAway()

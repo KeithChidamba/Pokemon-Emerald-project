@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: double kick
   m_EditorClassIdentifier: 
-  Move_name: Double kick
-  Move_damage: 45
-  Move_accuracy: 90
+  moveName: Double kick
+  moveDamage: 45
+  moveAccuracy: 90
   type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
-  Has_status: 1
-  Has_effect: 1
-  Can_flinch: 0
-  is_Consecutive: 1
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 1
+  canCauseFlinch: 0
+  isConsecutive: 1
   isMultiTarget: 0
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 20
-  BasePowerpoints: 20
-  max_Powerpoints: 20
-  Status_effect: Paralysis
-  Buff_Debuff: None
-  Status_chance: 10
-  Debuff_chance: 0
-  Description: two successive kicks that may paralys the foe
+  priority: 0
+  powerpoints: 20
+  basePowerpoints: 20
+  maxPowerpoints: 20
+  statusEffect: None
+  buffOrDebuffName: None
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: A strong succession of kicks

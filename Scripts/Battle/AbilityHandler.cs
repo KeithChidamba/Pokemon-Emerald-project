@@ -50,8 +50,6 @@ public class AbilityHandler : MonoBehaviour
         Battle_handler.Instance.OnBattleEnd -= GiveItem;
         Move_handler.Instance.OnDamageDeal -= IncreaseDamage;
         Move_handler.Instance.OnStatusEffectHit -= HealStatusEffect;
-        Battle_handler.Instance.OnSwitchIn -= TrapEnemy;
-        Battle_handler.Instance.OnSwitchOut -= RemoveTrap;
     }
     void PickUp()
     {
@@ -134,6 +132,8 @@ public class AbilityHandler : MonoBehaviour
         if (participant != _participant) return;
         foreach (var enemy in _participant.currentEnemies)
             enemy.canEscape = true;
+        Battle_handler.Instance.OnSwitchIn -= TrapEnemy;
+        Battle_handler.Instance.OnSwitchOut -= RemoveTrap;
     }
     private void TrapEnemy()
     {

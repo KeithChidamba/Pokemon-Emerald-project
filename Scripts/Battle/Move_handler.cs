@@ -83,7 +83,7 @@ public class Move_handler:MonoBehaviour
         if (!_currentTurn.move.hasSpecialEffect) return;
         _moveDelay = true;
         if(!_currentTurn.move.isConsecutive)
-            Invoke(_currentTurn.move.moveName.ToLower(), 0f);
+            Invoke(_currentTurn.move.moveName.Replace(" ", "").ToLower(), 0f);
         else
             StartCoroutine(ExecuteConsecutiveMove());
         processingOrder = false;
@@ -125,9 +125,23 @@ public class Move_handler:MonoBehaviour
         damageDealt = math.trunc(damageModifier * baseDamage * attackDefenseRatio);
         if(!_currentTurn.move.isConsecutive)
             DisplayEffectiveness(typeEffectiveness,currentVictim);
+        
         float damageAfterBuff = OnDamageDeal?.Invoke(attacker,victim,_currentTurn.move,damageDealt) ?? damageDealt; 
         OnMoveHit?.Invoke(attacker,move.isSpecial);
+        damageAfterBuff = AccountForVictimsBarriers(move,currentVictim,damageAfterBuff);
         return damageAfterBuff;
+    }
+
+    private float AccountForVictimsBarriers(Move move,Battle_Participant currentVictim,float damage)
+    {
+        foreach (var barrier in currentVictim.Barrieirs)
+        {
+            if (move.isSpecial & barrier.BarrierName == "Light Screen")
+                return  damage/barrier.BarrierEffect;
+            if (!move.isSpecial & barrier.BarrierName == "Reflect")
+                return  damage/barrier.BarrierEffect;
+        }
+        return damage;
     }
     private void DisplayEffectiveness(float typeEffectiveness,Battle_Participant currentVictim)
     {
@@ -360,6 +374,9 @@ public class Move_handler:MonoBehaviour
             if (!victim.pokemon.canBeDamaged)
                 break;
             if (victim.pokemon.hp <= 0) break;
+            
+            if (!Turn_Based_Combat.Instance.MoveSuccessful(_currentTurn)) break; //if miss
+            
             Dialogue_handler.Instance.DisplayBattleInfo("Hit "+(i+1)+"!");//remove later if added animations
             victim.pokemon.hp -= CalculateMoveDamage(_currentTurn.move,victim);
             numHits++;
@@ -376,7 +393,7 @@ public class Move_handler:MonoBehaviour
     } 
     IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
     {
-        foreach (Battle_Participant enemy in targets)
+        foreach (var enemy in targets)
         {
             enemy.pokemon.hp -= CalculateMoveDamage(_currentTurn.move,enemy);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
@@ -436,6 +453,28 @@ public class Move_handler:MonoBehaviour
         }
         else//success
             attacker.pokemon.canBeDamaged = false;
+        _moveDelay = false;
+        processingOrder = false;
+    }
+    void brickbreak()
+    {
+        StartCoroutine(ShatterBarriers());
+    }
+
+    private IEnumerator ShatterBarriers()
+    {
+        foreach (var enemy in attacker.currentEnemies)
+        {
+            foreach (var barrier in enemy.Barrieirs)
+                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon+" shattered "+barrier.BarrierName);
+            enemy.Barrieirs.Clear();
+        }
+        
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        
+        var damage = CalculateMoveDamage(_currentTurn.move,victim);
+        victim.pokemon.hp -= damage; 
+        
         _moveDelay = false;
         processingOrder = false;
     }

@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: brick break
   m_EditorClassIdentifier: 
-  Move_name: Brick break
-  Move_damage: 60
-  Move_accuracy: 85
+  moveName: Brick break
+  moveDamage: 60
+  moveAccuracy: 85
   type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 1
-  Has_status: 0
-  Has_effect: 0
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 1
+  canCauseFlinch: 0
+  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 15
-  BasePowerpoints: 15
-  max_Powerpoints: 15
-  Status_effect: None
-  Buff_Debuff: -1Defense
-  Status_chance: 0
-  Debuff_chance: 30
-  Description: a violent attack that can lower defense
+  priority: 0
+  powerpoints: 15
+  basePowerpoints: 15
+  maxPowerpoints: 15
+  statusEffect: None
+  buffOrDebuffName: None
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: a violent attack that can break defensive barriers

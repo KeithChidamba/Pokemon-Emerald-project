@@ -1275,7 +1275,9 @@ MonoBehaviour:
   spAtk: 0
   spDef: 0
   speed: 0
-  pokemonName: 
+  accuracy: 0
+  evasion: 0
+  crit: 0
 --- !u!114 &35621320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7210,7 +7212,9 @@ MonoBehaviour:
   spAtk: 0
   spDef: 0
   speed: 0
-  pokemonName: 
+  accuracy: 0
+  evasion: 0
+  crit: 0
 --- !u!114 &190973853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30320,7 +30324,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 152, y: 22}
+  m_AnchoredPosition: {x: 152, y: 20.7}
   m_SizeDelta: {x: 261.87, y: 42.3846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &900446230
@@ -72579,7 +72583,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 152, y: 117}
+  m_AnchoredPosition: {x: 152, y: 118.8}
   m_SizeDelta: {x: 261.87, y: 42.3846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1629910213
@@ -73314,7 +73318,9 @@ MonoBehaviour:
   spAtk: 0
   spDef: 0
   speed: 0
-  pokemonName: 
+  accuracy: 0
+  evasion: 0
+  crit: 0
 --- !u!114 &1636635383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79565,8 +79571,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0.6, y: 0.2}
+  m_SizeDelta: {x: 81.9815, y: 79.579}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1850626300
 MonoBehaviour:
@@ -95340,7 +95346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 151, y: -28}
+  m_AnchoredPosition: {x: 153, y: -28}
   m_SizeDelta: {x: 261.87, y: 42.3846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1915389415
@@ -98388,7 +98394,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 150, y: -127}
+  m_AnchoredPosition: {x: 153.8, y: -122.5}
   m_SizeDelta: {x: 261.87, y: 42.3846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2006514070
@@ -99616,7 +99622,9 @@ MonoBehaviour:
   spAtk: 0
   spDef: 0
   speed: 0
-  pokemonName: 
+  accuracy: 0
+  evasion: 0
+  crit: 0
 --- !u!114 &2033618207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101585,7 +101593,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 152, y: -80}
+  m_AnchoredPosition: {x: 152.6, y: -75.7}
   m_SizeDelta: {x: 261.87, y: 42.3846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2097081414

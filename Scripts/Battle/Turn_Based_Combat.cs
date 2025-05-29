@@ -178,7 +178,7 @@ public class Turn_Based_Combat : MonoBehaviour
         if (!Battle_handler.Instance.battleParticipants[currentTurnIndex].isActive & Options_manager.Instance.playerInBattle)
             NextTurn();
     }
-    private bool MoveSuccessful(Turn turn)
+    public bool MoveSuccessful(Turn turn)
     {
         var rand = Utility.RandomRange(1, 100);
         var hitChance = turn.move.moveAccuracy *
