@@ -23,6 +23,9 @@ public class Participant_Status : MonoBehaviour
     {
         _participant.RefreshStatusEffectImage();
         if (_participant.pokemon.statusEffect == "None") return;
+        if (_participant.pokemon.statusEffect == "Freeze")
+            Move_handler.Instance.OnMoveHit += RemoveFreezeStatusWithFire;
+        
         _statusDuration = 0;
         _statusDurationInTurns = numTurns;
         StatDrop();
@@ -107,6 +110,14 @@ public class Participant_Status : MonoBehaviour
             SetHeal();
         else
             _participant.pokemon.canAttack = false;
+    }
+
+    void RemoveFreezeStatusWithFire(Battle_Participant attacker, Move moveUsed)
+    {
+        if (moveUsed.type.typeName != "Fire") return;
+        SetHeal(); 
+        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+" was thawed out!");
+        Move_handler.Instance.OnMoveHit -= RemoveFreezeStatusWithFire;
     }
     void ParalysisCheck()
     {

@@ -48,6 +48,7 @@ public class Save_manager : MonoBehaviour
         CreateFolder("Assets/Save_data/Items");
         CreateFolder("Assets/Save_data/Items/Held_Items");
         var itemList = GetJsonFilesFromPath("Assets/Save_data/Items");
+        Bag.Instance.bagItems.Clear();
         foreach(var item in itemList)
             Bag.Instance.bagItems.Add(LoadItemFromJson("Assets/Save_data/Items/" + Path.GetFileName(item)));
     }
@@ -75,6 +76,9 @@ public class Save_manager : MonoBehaviour
         CreateFolder("Assets/Save_data/Party_Ids");
         partyIDs.Clear();
         GetPartyPokemonIDs();
+        pokemon_storage.Instance.numNonPartyPokemon = 0;
+        pokemon_storage.Instance.totalPokemonCount = 0;
+        Pokemon_party.Instance.numMembers = 0;
         for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
         {
             var pokemon = LoadPokemonFromJson("Assets/Save_data/Pokemon/" + partyIDs[i] + ".json");
@@ -146,8 +150,8 @@ public class Save_manager : MonoBehaviour
                 SaveHeldItem(pokemon_storage.Instance.nonPartyPokemon[i].heldItem, pokemon_storage.Instance.nonPartyPokemon[i].pokemonID.ToString());
             SavePokemonDataAsJson(pokemon_storage.Instance.nonPartyPokemon[i]);
         }
-        for (int i = 0; i < Bag.Instance.numItems; i++)
-            SaveItemDataAsJson(Bag.Instance.bagItems[i], Bag.Instance.bagItems[i].itemID);
+        foreach(var item in Bag.Instance.bagItems)
+            SaveItemDataAsJson(item, item.itemID);
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
         Game_Load.Instance.playerData.location = (Game_Load.Instance.playerData.location==string.Empty) ? 
             "Overworld" 

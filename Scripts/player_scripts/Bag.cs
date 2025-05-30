@@ -14,7 +14,7 @@ public class Bag : MonoBehaviour
     public bool viewingBag;
     public Item_ui[] bagItemsUI;
     public int maxCapacity = 50;
-    public int numItems;
+    private int _numItems;
     public int selectedItem;
     public int topIndex;//keeps track of visible bag items
     public GameObject[] itemUIActions;
@@ -77,7 +77,7 @@ public class Bag : MonoBehaviour
     {
         if (item.quantity > 0) return;
         bagItems.Remove(item);
-        numItems--;
+        _numItems--;
     }
     public void ChangeQuantity(int value)
     {
@@ -93,7 +93,7 @@ public class Bag : MonoBehaviour
     }
     public void NavigateDown()
     {
-        if (topIndex < numItems-10)
+        if (topIndex < _numItems-10)
         {
             for (int i = 0; i < 9; i++)
                 bagItemsUI[i].item = bagItemsUI[i + 1].item;  
@@ -139,7 +139,7 @@ public class Bag : MonoBehaviour
             Dialogue_handler.Instance.DisplayInfo("Can't do that in battle", "Details",1f);
             return;
         }
-        if (numItems >= maxCapacity)
+        if (_numItems >= maxCapacity)
         {
             Dialogue_handler.Instance.DisplayInfo("Bag is full", "Details");
             return;
@@ -161,7 +161,7 @@ public class Bag : MonoBehaviour
     }
     public void AddItem(Item item)
     {
-        if (numItems < maxCapacity)
+        if (_numItems < maxCapacity)
         {
             if (BagContainsItem(item.itemName))
             {
@@ -177,19 +177,19 @@ public class Bag : MonoBehaviour
                         var overflow = Obj_Instance.CreateItem(item);
                         overflow.quantity = item.quantity - quantityGap;
                         bagItems.Add(overflow);
-                        numItems++;
+                        _numItems++;
                     }
                 }
                 else
                 {
                     bagItems.Add(Obj_Instance.CreateItem(item));
-                    numItems++;
+                    _numItems++;
                 }
             }
             else
             {
                 bagItems.Add(Obj_Instance.CreateItem(item));
-                numItems++;
+                _numItems++;
             }
         }
         else
@@ -225,10 +225,10 @@ public class Bag : MonoBehaviour
     }
     public void ViewBag()
     {
-        numItems = 0; 
+        _numItems = 0; 
         viewingBag = true; 
-        numItems = bagItems.Count;
-        var numItemsForView = (numItems < 11) ? numItems : 10; 
+        _numItems = bagItems.Count;
+        var numItemsForView = (_numItems < 11) ? _numItems : 10; 
         for (int i = 0; i < numItemsForView; i++)
         {
             bagItemsUI[i].item = bagItems[i];

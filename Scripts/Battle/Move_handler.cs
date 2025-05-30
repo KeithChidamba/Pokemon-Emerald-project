@@ -22,7 +22,7 @@ public class Move_handler:MonoBehaviour
     public bool processingOrder = false;
     public event Action OnMoveEnd;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageDeal;
-    public event Action<Battle_Participant,bool> OnMoveHit;
+    public event Action<Battle_Participant,Move> OnMoveHit;
     public event Action<Battle_Participant,string> OnStatusEffectHit;
     private void Awake()
     {
@@ -134,7 +134,7 @@ public class Move_handler:MonoBehaviour
             DisplayEffectiveness(typeEffectiveness,currentVictim);
         
         float damageAfterBuff = OnDamageDeal?.Invoke(attacker,victim,_currentTurn.move,damageDealt) ?? damageDealt; 
-        OnMoveHit?.Invoke(attacker,move.isSpecial);
+        OnMoveHit?.Invoke(attacker,move);
         damageAfterBuff = AccountForVictimsBarriers(move,currentVictim,damageAfterBuff);
         return damageAfterBuff;
     }

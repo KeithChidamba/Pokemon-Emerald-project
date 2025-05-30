@@ -189,13 +189,13 @@ public class AbilityHandler : MonoBehaviour
         if (Utility.RandomRange(1, 101) < _participant.pokemon.currentLevel)
             _participant.pokemon.heldItem = Obj_Instance.CreateItem(itemWon);
     }
-    void GiveStatic(Battle_Participant attacker,bool isSpecialMove)
+    void GiveStatic(Battle_Participant attacker,Move moveUsed)
     {
         if (attacker.pokemon.statusEffect != "None") return;
         if (attacker == _participant) return;
         if (!attacker.pokemon.canBeDamaged)
             return;
-        if(isSpecialMove)return; 
+        if(moveUsed.isSpecial)return; 
         //simulate a pokemon's attack
         Move_handler.Instance.OnStatusEffectHit+=NotifyStaticHit; 
         var placeholderMove = ScriptableObject.CreateInstance<Move>();

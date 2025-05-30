@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -47,7 +48,7 @@ public class Wild_pkm : MonoBehaviour
             return;
         TargetPlayer(0);//attack player, since its single battle
         if(Utility.RandomRange(1,11)>3)//70% chance
-            choose_move();
+            DetermineMoveChoice();
         else
             RunAway();
     }
@@ -70,7 +71,7 @@ public class Wild_pkm : MonoBehaviour
         participant.enemySelected = true;
         Battle_handler.Instance.currentEnemyIndex = selectedIndex;
     }
-    private void choose_move()
+    private void DetermineMoveChoice()
     {
         if(Utility.RandomRange(1,11)<5)//40% chance
             UseRandom();
@@ -92,10 +93,10 @@ public class Wild_pkm : MonoBehaviour
     private void UseStrongestMove()
     {
         List<Move> validMoves = new();
-        foreach (Move m in participant.pokemon.moveSet)
+        foreach (var move in participant.pokemon.moveSet)
         {//look for all non-immune moves
-            if (!BattleOperations.CheckImmunity(currentEnemyParticipant.pokemon, m.type)) 
-                validMoves.Add(m);
+            if (!BattleOperations.CheckImmunity(currentEnemyParticipant.pokemon, move.type)) 
+                validMoves.Add(move);
         }
         if (validMoves.Count > 0)
         {
@@ -117,9 +118,10 @@ public class Wild_pkm : MonoBehaviour
         Battle_handler.Instance.UseMove(move,participant);
         _usedMove = true;
     }
+
     private Move GetEffectiveMove()
     {
-        foreach (Move move in participant.pokemon.moveSet)
+        foreach (var move in participant.pokemon.moveSet)
         {//look for super effective attacking move
             var effectiveness = BattleOperations.GetTypeEffectiveness(currentEnemyParticipant, move.type);
             if ( effectiveness < 2 || move.isBuffOrDebuff) continue;
