@@ -35,6 +35,9 @@ public class Item_handler : MonoBehaviour
         
         switch (item.itemType.ToLower())
         {
+            case "herb":
+                UseHerbs(item.itemName);
+                break;
             case "heal hp":
                 RestoreHealth(int.Parse(item.itemEffect));
                 break;
@@ -46,6 +49,9 @@ public class Item_handler : MonoBehaviour
                 break;
             case "stat increase":
                 GetEVsFromItem(_itemInUse.itemEffect);
+                break;
+            case "friendship increase":
+                GetFriendshipFromItem(_itemInUse.itemEffect);
                 break;
             case "pokeball":
                 UsePokeball(item);
@@ -60,6 +66,31 @@ public class Item_handler : MonoBehaviour
                 ItemBuffOrDebuff(item.itemEffect);
                 break;
         }
+    }
+
+    private void UseHerbs(string herbType)
+    {
+        var friendshipLoss = 0;
+        switch (herbType)
+        {
+            case "Energy Powder":
+                RestoreHealth(int.Parse(_itemInUse.itemEffect));
+                friendshipLoss = 5;
+                break;
+            case "Energy Root":
+                RestoreHealth(int.Parse(_itemInUse.itemEffect));
+                friendshipLoss = 10;
+                break;
+            case "Heal Powder":
+                HealStatusEffect("full heal");
+                friendshipLoss = 5;
+                break;
+            case "Revival Herb":
+                RevivePokemon("max revive");
+                friendshipLoss = 15;
+                break;
+        }
+        _selectedPartyPokemon.ChangeFriendshipLevel(friendshipLoss);
     }
     IEnumerator LevelUpWithItem()
     {
@@ -84,13 +115,34 @@ public class Item_handler : MonoBehaviour
             Dialogue_handler.Instance.DisplayInfo("Cant use that on "+_selectedPartyPokemon.pokemonName, "Details",1f);
     }
 
-    private void GetEVsFromItem(string stat)
+    private void GetFriendshipFromItem(string statToDecrease)
     {
-        PokemonOperations.CalculateEvForStat(stat, 10, _selectedPartyPokemon);
-        Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+"'s "+stat+" was increased", "Details",1f);
+        //if ev > 100, = 100 ; or if below 100 lowers by 10
+        PokemonOperations.CalculateEvForStat(statToDecrease, -10, _selectedPartyPokemon);
+        _selectedPartyPokemon.ChangeFriendshipLevel(10);
         DepleteItem();
         ResetItemUsage();
-        Pokemon_Details.Instance.ExitDetails();
+    }
+    private void GetEVsFromItem(string stat) 
+    {
+        PokemonOperations.OnEvChange += CheckEvChange;
+        PokemonOperations.CalculateEvForStat(stat, 10, _selectedPartyPokemon);
+    }
+
+    private void CheckEvChange(bool hasChanged)
+    {
+        PokemonOperations.OnEvChange -= CheckEvChange;
+        var message = _selectedPartyPokemon.pokemonName + "'s " + _itemInUse.itemEffect;
+        
+        message += (hasChanged)? " was increased" : " can't get any higher";
+
+        if (hasChanged)
+        {
+            _selectedPartyPokemon.DetermineFriendshipLevelChange(true,"Vitamin");
+            DepleteItem();
+        }
+        Dialogue_handler.Instance.DisplayInfo(message, "Details", 1f);
+        ResetItemUsage();
     }
     private void ChangePowerpoints()
     {
@@ -252,6 +304,7 @@ public class Item_handler : MonoBehaviour
             Dialogue_handler.Instance.DisplayBattleInfo("Well done "+wildPokemon.pokemonName+" has been caught");
             var rawName = wildPokemon.pokemonName.Replace("Foe ", "");
             wildPokemon.pokemonName = rawName;
+            wildPokemon.ChangeFriendshipLevel(70);
             Pokemon_party.Instance.AddMember(wildPokemon);
             yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
             Wild_pkm.Instance.participant.EndWildBattle();

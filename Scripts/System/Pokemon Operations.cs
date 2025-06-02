@@ -1,3 +1,5 @@
+using System;
+using System.Dynamic;
 using System.Linq;
 using UnityEngine;
 using Unity.Mathematics;
@@ -8,6 +10,7 @@ public static class PokemonOperations
     public static bool SelectingMoveReplacement;
     public static Pokemon CurrentPokemon;
     public static Move NewMove;
+    public static Action<bool> OnEvChange;
     private static long GeneratePokemonID(Pokemon pokemon)//pokemon's unique ID
     {
         int combinedIDs = Game_Load.Instance.playerData.trainerID;
@@ -131,10 +134,19 @@ public static class PokemonOperations
     }
     static float CheckEvLimit(float ev,float amount,Pokemon pokemon)
     {
-        if (ev >= 252) return ev;
+        if (ev >= 252)
+        {
+            OnEvChange?.Invoke(false);
+            return ev;
+        }
         var sumOfEvs = pokemon.hpEv + pokemon.attackEv + pokemon.defenseEv + pokemon.specialAttackEv + pokemon.specialDefenseEv + pokemon.speedEv;
         if (ev + amount >= 252) amount = (ev + amount)-252;
-        if (sumOfEvs < 510) return ev+amount;
+        if (sumOfEvs < 510)
+        {
+            OnEvChange?.Invoke(true);
+            return ev+amount;
+        }
+        OnEvChange?.Invoke(false);
         return ev;
     }
     private static void GeneratePokemonIVs(Pokemon pokemon)

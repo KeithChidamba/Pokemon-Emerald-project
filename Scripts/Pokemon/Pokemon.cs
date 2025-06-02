@@ -51,6 +51,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("NextLevelExpAmount")] public float nextLevelExpAmount = 0;
     [FormerlySerializedAs("EXPGroup")] public string expGroup = "";
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
+    public int friendshipLevel = 0;
     [FormerlySerializedAs("has_trainer")] public bool hasTrainer=false;
     public bool canAttack = true;
     public bool isFlinched = false;
@@ -145,6 +146,53 @@ public class Pokemon : ScriptableObject
     public bool HasType(string typeName)
     {
         return types.Any(type => type.typeName == typeName);
+    }
+
+    private int ApplyFriendshipModifier(int currentIncrease)
+    {
+        if (!hasItem) return currentIncrease;
+        
+        if (heldItem.itemName == "Soothe Bell")
+            return (int)math.ceil(currentIncrease * 1.5f);
+        
+        return currentIncrease;
+    }
+
+    public void ChangeFriendshipLevel(int amount)
+    {
+        friendshipLevel = Math.Clamp(friendshipLevel + amount, 0, 255);
+    }
+    public void DetermineFriendshipLevelChange(bool isIncreasing, string action)
+    {
+        if (friendshipLevel > 254 && isIncreasing) return;
+        
+        var isHighFriendship = friendshipLevel > 219;
+        
+        if (action == "Fainted") ChangeFriendshipLevel( friendshipLevel>99? -1 : -5 );
+        
+        if (action == "Level Up")
+        {
+            var increaseLimitLow = (isHighFriendship)? 1 : 3;
+            var increaseLimitHigh = (isHighFriendship)? 3 : 6;
+            var randomIncrease = Utility.RandomRange(increaseLimitLow, increaseLimitHigh);
+            var amount = ApplyFriendshipModifier(randomIncrease);
+            ChangeFriendshipLevel( isIncreasing?  amount : -amount );
+        }
+        
+        if (action == "Vitamin")
+        {
+            var increaseAmount = friendshipLevel switch
+            {
+                < 100 => 5,
+                < 200 => 3,
+                < 255 => 2,
+                _ => 0
+            };
+            var amount = ApplyFriendshipModifier(increaseAmount);
+            ChangeFriendshipLevel(isIncreasing?  amount: -amount );
+        }
+        
+        if (action == "EV Berry") ChangeFriendshipLevel(ApplyFriendshipModifier(10) );
     }
     public void CheckEvolutionRequirements(int evoIndex)
     {
@@ -246,6 +294,7 @@ public class Pokemon : ScriptableObject
     public void LevelUp()
     {
         OnLevelUp?.Invoke(this);
+        DetermineFriendshipLevelChange(true, "Level Up");
         currentLevel++;
         nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel,expGroup);
         IncreaseStats();

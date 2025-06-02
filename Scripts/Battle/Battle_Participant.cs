@@ -118,7 +118,8 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.faintEventDelay = true;
         Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName+" fainted!");
         pokemon.statusEffect = "None";
-
+        pokemon.DetermineFriendshipLevelChange(false,"Fainted");
+        
         if (!isPlayer)
         {
             GiveExp(Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon);

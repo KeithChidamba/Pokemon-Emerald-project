@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
+  m_Name: Energy Root
+  m_EditorClassIdentifier: 
+  itemID: 
+  itemName: Energy Root
+  itemType: Herb
+  itemEffect: 200
+  itemDescription: A bitter herb that restores 200 Hp
+  price: 18
+  quantity: 1
+  itemImage: {fileID: 21300000, guid: 12d4abae9e4225d4789382ac23092d64, type: 3}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 1
+  isHeldItem: 0
+  canBeHeld: 0
+  canBeSold: 1
