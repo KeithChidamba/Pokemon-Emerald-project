@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Increases a pokemon's friendship but lowers hp
   price: 5
   quantity: 1
-  itemImage: {fileID: 21300000, guid: b16bbfec99ee5b54ab691eacfb469d7b, type: 3}
+  itemImage: {fileID: 21300000, guid: e4dfa24a441c5e04dbf5fe2e9398c104, type: 3}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0

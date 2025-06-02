@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: A bitter herb that restores 50 Hp
   price: 18
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 12d4abae9e4225d4789382ac23092d64, type: 3}
+  itemImage: {fileID: 21300000, guid: ad394f88e1697d771a43e973ee88cc7b, type: 3}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1

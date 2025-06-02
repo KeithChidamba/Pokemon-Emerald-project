@@ -12,16 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Antidote
   m_EditorClassIdentifier: 
-  Item_ID: 
-  Item_name: Antidote
-  Item_type: Status
-  Item_effect: poison
-  Item_desc: Heals poison
+  itemID: 
+  itemName: Antidote
+  itemType: Status
+  itemEffect: poison
+  itemDescription: Heals poison
   price: 20
   quantity: 1
-  Item_img: {fileID: 21300000, guid: 7b6e6ab33a066684a8915fdcd6f59aaf, type: 3}
-  CanBeUsedInOverworld: 1
-  CanBeUsedInBattle: 1
+  itemImage: {fileID: 21300000, guid: c6ed97d2e56c6ca908e7eac99c32d696, type: 3}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 1
   isHeldItem: 0
-  CanBeHeld: 1
-  CanBeSold: 1
+  canBeHeld: 1
+  canBeSold: 1
