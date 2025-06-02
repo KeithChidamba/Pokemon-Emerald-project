@@ -115,7 +115,7 @@ public class Participant_Status : MonoBehaviour
     void RemoveFreezeStatusWithFire(Battle_Participant attacker, Move moveUsed)
     {
         if (moveUsed.type.typeName != "Fire") return;
-        SetHeal(); 
+        RemoveStatusEffect(); //didnt use SetHeal() because i want to only show the message below
         Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+" was thawed out!");
         Move_handler.Instance.OnMoveHit -= RemoveFreezeStatusWithFire;
     }

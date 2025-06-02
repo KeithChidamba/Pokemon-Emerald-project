@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "50/50",
     "nature": {
-        "instanceID": 25760
+        "instanceID": 25776
     },
     "hasGender": true,
     "hp": 73.0,
@@ -53,7 +53,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25480
+            "instanceID": 25494
         }
     ],
     "statusEffect": "None",
@@ -70,24 +70,24 @@
     "learnSet": [],
     "moveSet": [
         {
-            "instanceID": -38228
+            "instanceID": -9670
         },
         {
-            "instanceID": -38230
+            "instanceID": -9672
         },
         {
-            "instanceID": -38862
+            "instanceID": -9674
         },
         {
-            "instanceID": -38234
+            "instanceID": -9676
         }
     ],
     "ability": {
-        "instanceID": 26010
+        "instanceID": 26026
     },
     "evolutions": [
         {
-            "instanceID": 25622
+            "instanceID": 25636
         }
     ],
     "heldItem": {
@@ -95,10 +95,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32330
+        "instanceID": 32348
     },
     "backPicture": {
-        "instanceID": 32342
+        "instanceID": 32360
     },
     "abilityName": "Guts",
     "natureName": "Impish",

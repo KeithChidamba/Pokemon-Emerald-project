@@ -218,6 +218,7 @@ private void CloseParty()
     private void SwapMembers(int partyPosition)
     {
         var swapStore = party[selectedMemberIndex-1];
+        var message = $"You swapped {party[partyPosition].pokemonName} with {swapStore.pokemonName}";
         party[selectedMemberIndex-1] = party[partyPosition];
         party[partyPosition] = swapStore;
         moving = false;
@@ -229,7 +230,7 @@ private void CloseParty()
         memberIndicator.SetActive(false);
         ClearSelectionUI();
         if(!swappingIn && !swapOutNext)
-            Dialogue_handler.Instance.DisplayInfo("You swapped " + swapStore.pokemonName+ " with "+ party[partyPosition].pokemonName,"Details",1f);
+            Dialogue_handler.Instance.DisplayInfo(message,"Details",1f);
     }
     public void AddMember(Pokemon pokemon)
     { //add new pokemon after catch or event

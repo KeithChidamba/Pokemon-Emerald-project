@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25760
+        "instanceID": 25776
     },
     "hasGender": true,
     "hp": 42.0,
@@ -53,7 +53,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25222
+            "instanceID": 25236
         }
     ],
     "statusEffect": "None",
@@ -76,27 +76,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -38218
+            "instanceID": -9700
         },
         {
-            "instanceID": -38220
+            "instanceID": -9702
         },
         {
-            "instanceID": -38222
+            "instanceID": -9704
         },
         {
-            "instanceID": -38224
+            "instanceID": -9706
         }
     ],
     "ability": {
-        "instanceID": 25484
+        "instanceID": 25498
     },
     "evolutions": [
         {
-            "instanceID": 25744
+            "instanceID": 25760
         },
         {
-            "instanceID": 25602
+            "instanceID": 25616
         }
     ],
     "heldItem": {
@@ -104,10 +104,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32052
+        "instanceID": 32070
     },
     "backPicture": {
-        "instanceID": 32054
+        "instanceID": 32072
     },
     "abilityName": "Torrent",
     "natureName": "Impish",

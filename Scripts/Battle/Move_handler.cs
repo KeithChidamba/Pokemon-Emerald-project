@@ -207,8 +207,10 @@ public class Move_handler:MonoBehaviour
         { processingOrder = false; return; }
         if (victim.pokemon.statusEffect != "None")
         { 
-            Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" already has a "+victim.pokemon.statusEffect+" effect!");
-            processingOrder = false;return;
+            if(_currentTurn.move.statusEffect==victim.pokemon.statusEffect)
+                Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" already has a "+victim.pokemon.statusEffect+" effect!");
+            processingOrder = false;
+            return;
         }
         if (victim.pokemon.hp <= 0){processingOrder = false; return;}
         if (!victim.pokemon.canBeDamaged)

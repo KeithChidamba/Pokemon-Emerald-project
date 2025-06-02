@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25776
+        "instanceID": 25792
     },
     "hasGender": true,
     "hp": 49.0,
@@ -53,7 +53,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25624
+            "instanceID": 25638
         }
     ],
     "statusEffect": "None",
@@ -73,27 +73,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -38208
+            "instanceID": -9690
         },
         {
-            "instanceID": -38210
+            "instanceID": -9692
         },
         {
-            "instanceID": -38212
+            "instanceID": -9694
         },
         {
-            "instanceID": -38214
+            "instanceID": -9696
         }
     ],
     "ability": {
-        "instanceID": 25860
+        "instanceID": 25876
     },
     "evolutions": [
         {
-            "instanceID": 26026
+            "instanceID": 26042
         },
         {
-            "instanceID": 24948
+            "instanceID": 24962
         }
     ],
     "heldItem": {
@@ -101,10 +101,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32158
+        "instanceID": 32176
     },
     "backPicture": {
-        "instanceID": 31988
+        "instanceID": 32006
     },
     "abilityName": "Overgrow",
     "natureName": "Hasty",
