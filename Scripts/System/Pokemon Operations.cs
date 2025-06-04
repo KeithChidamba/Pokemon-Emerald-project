@@ -108,46 +108,46 @@ public static class PokemonOperations
             return (int)math.trunc( cube * ( (32 + math.floor(level/2f) ) / 50f) );
         return 0;
     }
-    public static void CalculateEvForStat(string stat,float evAmount,Pokemon pkm)
+
+    public static ref float GetEvStatRef(string stat, Pokemon pkm)
     {
         switch (stat.ToLower())
         {
-            case "hp": 
-                pkm.hpEv=CheckEvLimit(pkm.hpEv,evAmount,pkm);
-                break;
-            case "attack": 
-                pkm.attackEv=CheckEvLimit(pkm.attackEv,evAmount,pkm);
-                break;
-            case "defense": 
-                pkm.defenseEv=CheckEvLimit(pkm.defenseEv,evAmount,pkm);
-                break;
-            case "special attack": 
-                pkm.specialAttackEv=CheckEvLimit(pkm.specialAttackEv,evAmount,pkm);
-                break;
-            case "special defense": 
-                pkm.specialDefenseEv=CheckEvLimit(pkm.specialDefenseEv,evAmount,pkm);
-                break;
-            case "speed": 
-                pkm.speedEv=CheckEvLimit(pkm.speedEv,evAmount,pkm);
-                break;
+            case "hp": return ref pkm.hpEv;
+            case "attack": return ref pkm.attackEv;
+            case "defense": return ref pkm.defenseEv;
+            case "special attack": return ref pkm.specialAttackEv;
+            case "special defense": return ref pkm.specialDefenseEv;
+            case "speed": return ref pkm.speedEv;
+            default:
+                throw new ArgumentException($"Invalid stat name: {stat}");
         }
     }
-    static float CheckEvLimit(float ev,float amount,Pokemon pokemon)
+    public static void CalculateEvForStat(string stat,float evAmount,Pokemon pkm)
     {
-        if (ev >= 252)
+        ref float evRef = ref GetEvStatRef(stat, pkm);
+        evRef = CheckEvLimit(evRef,evAmount,pkm);
+    }
+    static float CheckEvLimit(float currentEv,float amount,Pokemon pokemon)
+    {
+        var totalEv = pokemon.hpEv + pokemon.attackEv + pokemon.defenseEv +
+                        pokemon.specialAttackEv + pokemon.specialDefenseEv + pokemon.speedEv;
+
+        // Prevent over-adding if already at cap
+        if (amount > 0 && (currentEv >= 252 || totalEv >= 510))
         {
             OnEvChange?.Invoke(false);
-            return ev;
+            return currentEv;
         }
-        var sumOfEvs = pokemon.hpEv + pokemon.attackEv + pokemon.defenseEv + pokemon.specialAttackEv + pokemon.specialDefenseEv + pokemon.speedEv;
-        if (ev + amount >= 252) amount = (ev + amount)-252;
-        if (sumOfEvs < 510)
-        {
-            OnEvChange?.Invoke(true);
-            return ev+amount;
-        }
-        OnEvChange?.Invoke(false);
-        return ev;
+
+        // Calculate clamped new EV
+        float maxAssignable = Math.Min(252 - currentEv, 510 - totalEv);
+        float clampedAmount = Math.Clamp(amount, -currentEv, maxAssignable);
+        bool changed = clampedAmount != 0;
+
+        OnEvChange?.Invoke(changed);
+        
+        return currentEv + clampedAmount;
     }
     private static void GeneratePokemonIVs(Pokemon pokemon)
     {

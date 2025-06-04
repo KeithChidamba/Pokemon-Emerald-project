@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25776
+        "instanceID": 25770
     },
     "hasGender": true,
     "hp": 42.0,
@@ -46,6 +46,7 @@
     "nextLevelExpAmount": 2035.0,
     "expGroup": "Medium Slow",
     "expYield": 65,
+    "friendshipLevel": 0,
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -53,7 +54,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25236
+            "instanceID": 25222
         }
     ],
     "statusEffect": "None",
@@ -76,27 +77,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -9700
+            "instanceID": -3708
         },
         {
-            "instanceID": -9702
+            "instanceID": -3710
         },
         {
-            "instanceID": -9704
+            "instanceID": -3712
         },
         {
-            "instanceID": -9706
+            "instanceID": -3714
         }
     ],
     "ability": {
-        "instanceID": 25498
+        "instanceID": 25488
     },
     "evolutions": [
         {
-            "instanceID": 25760
+            "instanceID": 25752
         },
         {
-            "instanceID": 25616
+            "instanceID": 25606
         }
     ],
     "heldItem": {

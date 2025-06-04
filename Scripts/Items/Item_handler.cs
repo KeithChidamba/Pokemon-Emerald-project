@@ -117,8 +117,9 @@ public class Item_handler : MonoBehaviour
 
     private void GetFriendshipFromItem(string statToDecrease)
     {
-        //if ev > 100, = 100 ; or if below 100 lowers by 10
-        PokemonOperations.CalculateEvForStat(statToDecrease, -10, _selectedPartyPokemon);
+        ref float evRef = ref PokemonOperations.GetEvStatRef(statToDecrease, _selectedPartyPokemon);
+        if (evRef > 100) evRef = 100;
+        else PokemonOperations.CalculateEvForStat(statToDecrease, -10, _selectedPartyPokemon);
         _selectedPartyPokemon.ChangeFriendshipLevel(10);
         DepleteItem();
         ResetItemUsage();

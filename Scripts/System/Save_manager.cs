@@ -225,7 +225,7 @@ public class Save_manager : MonoBehaviour
         var json = File.ReadAllText(filePath);
         var item = ScriptableObject.CreateInstance<Item>();
         JsonUtility.FromJsonOverwrite(json, item);
-        item.LoadImage();
+        item.itemImage = Testing.CheckImage("Pokemon_project_assets/ui/" ,item.itemName);
         return item;
     }
     private Player_data LoadPlayerFromJson(string filePath)

@@ -104,8 +104,8 @@ public class Pokemon : ScriptableObject
     }
     public void LoadUnserializedData()//gives values to attributes that cant be deserialized, using saved values
     {
-        frontPicture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + pokemonName.ToLower());
-        backPicture = Resources.Load<Sprite>("Pokemon_project_assets/pokemon_img/" + pokemonName.ToLower() + "_b");
+        frontPicture = Testing.CheckImage("Pokemon_project_assets/pokemon_img/",pokemonName);
+        backPicture = Testing.CheckImage("Pokemon_project_assets/pokemon_img/",pokemonName + "_b");
         nature = Resources.Load<Nature>("Pokemon_project_assets/Pokemon_obj/Natures/" + natureName.ToLower());
         ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + abilityName.ToLower());
         moveSet.Clear();

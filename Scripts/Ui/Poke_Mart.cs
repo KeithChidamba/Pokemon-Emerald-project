@@ -40,14 +40,15 @@ public class Poke_Mart : MonoBehaviour
     private void InitialiseItems()
     {        
         storeItems.Clear();
-        var martItemNames = Directory.GetFiles("Assets/Resources/Pokemon_project_assets/Player_obj/Bag/");
-        List<Item> itemAssets = new();
-        foreach (var itemName in martItemNames)
+        var itemPaths = Directory.GetFiles("Assets/Resources/Pokemon_project_assets/Player_obj/Bag/");
+        List<Item> itemAssets = new(); 
+        foreach (var itemPath in itemPaths)
         {
-            if(Path.GetFileName(itemName).Contains(".meta"))continue;
+            if(Path.GetFileName(itemPath).Contains(".meta"))continue;
             
-            var rawName = itemName.Split('.')[0];//remove extension
-            var item = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/"+Path.GetFileName(rawName));
+            var rawFilePath = itemPath.Split('.')[0];//remove extension  
+            var itemName = Path.GetFileName(rawFilePath);
+            var item = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/"+itemName);
             itemAssets.Add(item);
         }
         var orderedItems = itemAssets.OrderBy(item => item.price);

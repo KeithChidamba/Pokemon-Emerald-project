@@ -1246,6 +1246,7 @@ MonoBehaviour:
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   canEscape: 1
+  Barrieirs: []
 --- !u!114 &35621318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7183,6 +7184,7 @@ MonoBehaviour:
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   canEscape: 1
+  Barrieirs: []
 --- !u!114 &190973851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29315,6 +29317,7 @@ MonoBehaviour:
   inBattle: 0
   ranAway: 0
   canAttack: 1
+  _usedMove: 0
 --- !u!1 &848811386
 GameObject:
   m_ObjectHideFlags: 0
@@ -73289,6 +73292,7 @@ MonoBehaviour:
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   canEscape: 1
+  Barrieirs: []
 --- !u!114 &1636635381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95855,7 +95859,6 @@ MonoBehaviour:
   - {fileID: 1183214665}
   - {fileID: 1710059117}
   maxCapacity: 50
-  numItems: 0
   selectedItem: 0
   topIndex: 0
   itemUIActions:
@@ -99593,6 +99596,7 @@ MonoBehaviour:
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   canEscape: 1
+  Barrieirs: []
 --- !u!114 &2033618205
 MonoBehaviour:
   m_ObjectHideFlags: 0

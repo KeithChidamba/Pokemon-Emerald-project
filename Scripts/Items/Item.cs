@@ -20,8 +20,4 @@ public class Item : ScriptableObject
     public bool isHeldItem = false;
     [FormerlySerializedAs("CanBeHeld")] public bool canBeHeld = false;
     [FormerlySerializedAs("CanBeSold")] public bool canBeSold = true;
-    public void LoadImage()
-    {
-        itemImage = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + itemName.ToLower());
-    }
 }
