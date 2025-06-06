@@ -122,6 +122,7 @@ public class Options_manager : MonoBehaviour
         var pokemonName = _currentInteraction.resultMessage;
         var pokemon = Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName +"/"+ pokemonName);
         pokemon.ChangeFriendshipLevel(120);
+        pokemon.pokeballName = "Regular Pokeball";
         Pokemon_party.Instance.AddMember(pokemon);
         Dialogue_handler.Instance.EndDialogue();
         Dialogue_handler.Instance.DisplayInfo("You got a " + pokemon.pokemonName, "Details");

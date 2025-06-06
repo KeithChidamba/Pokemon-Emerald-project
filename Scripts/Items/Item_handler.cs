@@ -306,6 +306,7 @@ public class Item_handler : MonoBehaviour
             var rawName = wildPokemon.pokemonName.Replace("Foe ", "");
             wildPokemon.pokemonName = rawName;
             wildPokemon.ChangeFriendshipLevel(70);
+            wildPokemon.pokeballName = _itemInUse.itemName;
             Pokemon_party.Instance.AddMember(wildPokemon);
             yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
             Wild_pkm.Instance.participant.EndWildBattle();

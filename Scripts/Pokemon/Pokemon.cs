@@ -61,10 +61,12 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("Status_effect")] public string statusEffect = "None";
     [FormerlySerializedAs("Buff_Debuffs")] public List<Buff_Debuff> buffAndDebuffs = new();
     [FormerlySerializedAs("evo_line")] public string[] evolutionLineLevels;
+    public string friendshipEvolutionRequirement;
     [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone = false;
     [FormerlySerializedAs("EvolutionStoneName")] public string evolutionStoneName = "None";
     public string[] abilities;
     [FormerlySerializedAs("split_evolution")] public bool splitEvolution = false;
+    public bool requiresFriendshipEvolution = false;
     public string[] learnSet;
     [FormerlySerializedAs("move_set")] public List<Move> moveSet=new();
     public Ability ability;
@@ -73,6 +75,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("HasItem")] public bool hasItem = false;
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
+    public string pokeballName;
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
     //data conversion when json to obj
@@ -150,12 +153,14 @@ public class Pokemon : ScriptableObject
 
     private int ApplyFriendshipModifier(int currentIncrease)
     {
-        if (!hasItem) return currentIncrease;
+        float modifier = 1f;
+        if (pokeballName == "Luxury Ball")
+            modifier *= 1.5f;
         
-        if (heldItem.itemName == "Soothe Bell")
-            return (int)math.ceil(currentIncrease * 1.5f);
-        
-        return currentIncrease;
+        if (hasItem)//will throw error if check item name on null helditem
+            if(heldItem.itemName == "Soothe Bell")
+                modifier *= 1.5f;
+        return (int)math.ceil(currentIncrease * modifier);
     }
 
     public void ChangeFriendshipLevel(int amount)
@@ -197,8 +202,16 @@ public class Pokemon : ScriptableObject
     public void CheckEvolutionRequirements(int evoIndex)
     {
         if (requiresEvolutionStone)
-        { Evolve(evolutions[evoIndex]); return; }
+        {
+            Evolve(evolutions[evoIndex]); return;
+        }
+
+        if (requiresFriendshipEvolution)
+        {
+            CheckFriendshipEvolution(); return;
+        }
         
+        //regular evolution
         for (int i = 0; i < evolutionLineLevels.Length; i++)
         {
             var requiredLevelToEvolve = int.Parse(evolutionLineLevels[i]);
@@ -209,7 +222,17 @@ public class Pokemon : ScriptableObject
             }
         }
     }
-    void DetermineEvolution()
+
+    void CheckFriendshipEvolution()
+    {
+        var evolutionIndex = int.Parse(friendshipEvolutionRequirement.Split("/")[1]);
+        var friendshipRequirement = int.Parse(friendshipEvolutionRequirement.Split("/")[0]);
+        if (friendshipLevel >= friendshipRequirement)
+        {
+            Evolve(evolutions[evolutionIndex]);
+        }
+    }
+    private void DetermineSplitEvolution()
     {
         int evolutionValue = (int)personalityValue % 10;
         if (evolutionValue>=0 & evolutionValue<5)
@@ -255,6 +278,9 @@ public class Pokemon : ScriptableObject
         baseSpecialAttack=evo.baseSpecialAttack;
         baseSpecialDefense=evo.baseSpecialDefense;
         baseSpeed = evo.baseSpeed;
+        requiresFriendshipEvolution = evo.requiresFriendshipEvolution;
+        requiresEvolutionStone = evo.requiresEvolutionStone;
+        friendshipEvolutionRequirement = evo.friendshipEvolutionRequirement;
         Pokemon_party.Instance.RefreshMemberCards();
     }
 
@@ -301,7 +327,7 @@ public class Pokemon : ScriptableObject
         if (!requiresEvolutionStone)
         {
             if(splitEvolution)
-                DetermineEvolution();
+                DetermineSplitEvolution();
             else
                 CheckEvolutionRequirements(0);
         }
