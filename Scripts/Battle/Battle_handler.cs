@@ -286,6 +286,7 @@ public class Battle_handler : MonoBehaviour
         LoadAreaBackground(enemy.pokemonTrainerAI.trainerData.TrainerLocation);
         SetupBattle();
     }
+    
     public void SetParticipant(Battle_Participant participant)
     {
         OnSwitchOut?.Invoke(participant);

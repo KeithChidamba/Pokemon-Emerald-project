@@ -41,6 +41,7 @@ public class Battle_Participant : MonoBehaviour
         statusHandler = GetComponent<Participant_Status>();
         abilityHandler = GetComponent<AbilityHandler>();
         statData = GetComponent<Battle_Data>();
+        Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierState;
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckIfFainted;
         Move_handler.Instance.OnMoveEnd += CheckIfFainted;
         Turn_Based_Combat.Instance.OnMoveExecute += CheckIfFainted;
@@ -198,6 +199,31 @@ public class Battle_Participant : MonoBehaviour
         statData.LoadActualStats();
         statData.ResetBattleState(pokemon,true);
     }
+    public int GetPartnerIndex()
+    {
+        int participantIndex = Array.IndexOf(Battle_handler.Instance.battleParticipants, this);
+        if (participantIndex == -1) return -1; // participant not found
+        return (participantIndex % 2 == 0) ? participantIndex + 1 : participantIndex - 1;
+    }
+    private void CheckBarrierState()
+    {
+        if (Barrieirs.Count == 0) return;
+        
+        foreach (var barrier in Barrieirs)
+            barrier.barrierDuration--;
+
+        Barrieirs.RemoveAll(b => b.barrierDuration < 1);
+        
+        if (Battle_handler.Instance.isDoubleBattle)//share barriers
+        {
+            var partner= Battle_handler.Instance.battleParticipants[GetPartnerIndex()];
+            if (!partner.isActive) return;
+            
+            foreach (var barrier in Barrieirs)
+                if (!Move_handler.Instance.HasDuplicateBarrier(partner, barrier.barrierName,false))
+                    partner.Barrieirs.Add(barrier);
+        }
+    }
     private void UpdateUI()
     {
         var rawName = (isEnemy)? pokemon.pokemonName.Replace("Foe ", "") : pokemon.pokemonName;
@@ -227,8 +253,8 @@ public class Battle_Participant : MonoBehaviour
         else
         {
             statusImage.gameObject.SetActive(true);
-            statusImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/" 
-                                                        + pokemon.statusEffect.Replace(" ","").ToLower());
+            statusImage.sprite = Resources.Load<Sprite>
+            ("Pokemon_project_assets/Pokemon_obj/Status/" + pokemon.statusEffect.Replace(" ","").ToLower());
         }
     }
     private void ActivateUI(GameObject[]arr,bool on)

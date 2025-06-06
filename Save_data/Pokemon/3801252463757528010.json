@@ -1,27 +1,27 @@
 {
     "basePokemonName": "Mudkip",
-    "pokemonName": "Mudkip",
+    "pokemonName": "Marshtomp",
     "pokemonID": 3801252463757528010,
     "personalityValue": 740783158,
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25770
+        "instanceID": 25780
     },
     "hasGender": true,
-    "hp": 42.0,
-    "maxHp": 42.0,
-    "baseHp": 50.0,
-    "baseAttack": 70.0,
-    "baseDefense": 50.0,
-    "baseSpecialAttack": 50.0,
-    "baseSpecialDefense": 50.0,
-    "baseSpeed": 40.0,
-    "attack": 29.0,
-    "defense": 25.0,
-    "specialAttack": 19.0,
-    "specialDefense": 23.0,
-    "speed": 17.0,
+    "hp": 56.0,
+    "maxHp": 56.0,
+    "baseHp": 70.0,
+    "baseAttack": 85.0,
+    "baseDefense": 70.0,
+    "baseSpecialAttack": 60.0,
+    "baseSpecialDefense": 70.0,
+    "baseSpeed": 50.0,
+    "attack": 39.0,
+    "defense": 37.0,
+    "specialAttack": 25.0,
+    "specialDefense": 33.0,
+    "speed": 23.0,
     "hpIv": 16.0,
     "attackIv": 22.0,
     "defenseIv": 21.0,
@@ -35,18 +35,18 @@
     "specialDefenseEv": 0.0,
     "speedEv": 0.0,
     "effortValues": [
-        "Attack1"
+        "Attack2"
     ],
     "accuracy": 100.0,
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 45.0,
-    "currentLevel": 15,
-    "currentExpAmount": 1739,
-    "nextLevelExpAmount": 2035.0,
+    "currentLevel": 18,
+    "currentExpAmount": 3775,
+    "nextLevelExpAmount": 3798.0,
     "expGroup": "Medium Slow",
-    "expYield": 65,
-    "friendshipLevel": 0,
+    "expYield": 143,
+    "friendshipLevel": 11,
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -54,7 +54,10 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25222
+            "instanceID": 25230
+        },
+        {
+            "instanceID": 25162
         }
     ],
     "statusEffect": "None",
@@ -63,41 +66,40 @@
         "16",
         "30"
     ],
+    "friendshipEvolutionRequirement": "",
     "requiresEvolutionStone": false,
     "evolutionStoneName": "None",
     "abilities": [
         "Torrent"
     ],
     "splitEvolution": false,
+    "requiresFriendshipEvolution": false,
     "learnSet": [
-        "normal/tackle01",
-        "water/bubble03",
-        "ground/mud slap05",
-        "water/water gun10"
+        "fighting/brick break16"
     ],
     "moveSet": [
         {
-            "instanceID": -3708
+            "instanceID": -19270
         },
         {
-            "instanceID": -3710
+            "instanceID": -19272
         },
         {
-            "instanceID": -3712
+            "instanceID": -19274
         },
         {
-            "instanceID": -3714
+            "instanceID": -19276
         }
     ],
     "ability": {
-        "instanceID": 25488
+        "instanceID": 25496
     },
     "evolutions": [
         {
-            "instanceID": 25752
+            "instanceID": 25760
         },
         {
-            "instanceID": 25606
+            "instanceID": 25614
         }
     ],
     "heldItem": {
@@ -105,11 +107,12 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32070
+        "instanceID": 32184
     },
     "backPicture": {
-        "instanceID": 32072
+        "instanceID": 32186
     },
+    "pokeballName": "",
     "abilityName": "Torrent",
     "natureName": "Impish",
     "evolutionData": [
@@ -117,16 +120,17 @@
         "Swampert"
     ],
     "typeData": [
-        "Water"
+        "Water",
+        "Ground"
     ],
     "moveData": [
-        "Tackle/Normal",
+        "Brick break/Fighting",
         "Bubble/Water",
         "Mud slap/Ground",
         "Water Gun/Water"
     ],
     "movePpData": [
-        "20/20",
+        "15/15",
         "20/20",
         "15/15",
         "25/25"

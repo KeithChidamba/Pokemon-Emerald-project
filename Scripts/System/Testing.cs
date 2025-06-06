@@ -30,7 +30,7 @@ public class Testing : MonoBehaviour
     }
     public static Sprite CheckImage(string resourcePath, string itemName)
     {
-        Debug.Log("Testing image load for: " + itemName);
+       // Debug.Log("Testing image load for: " + itemName);
         var fullPath = resourcePath + itemName.ToLower();
 
         var itemSprite = Resources.Load<Sprite>(fullPath);

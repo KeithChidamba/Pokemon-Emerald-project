@@ -228,9 +228,7 @@ public class Pokemon : ScriptableObject
         var evolutionIndex = int.Parse(friendshipEvolutionRequirement.Split("/")[1]);
         var friendshipRequirement = int.Parse(friendshipEvolutionRequirement.Split("/")[0]);
         if (friendshipLevel >= friendshipRequirement)
-        {
             Evolve(evolutions[evolutionIndex]);
-        }
     }
     private void DetermineSplitEvolution()
     {

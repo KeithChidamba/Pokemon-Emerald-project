@@ -169,9 +169,8 @@ public class Item_handler : MonoBehaviour
                 Dialogue_handler.Instance.DisplayInfo("Your pokemon are already protected","Details");
                 return;
             }
-            var partnerIndex = (currentTurnIndex > 0) ? 0 : 1;
             var player = Battle_handler.Instance.battleParticipants[currentTurnIndex];
-            var partner = Battle_handler.Instance.battleParticipants[partnerIndex];
+            var partner = Battle_handler.Instance.battleParticipants[player.GetPartnerIndex()];
             var pokemonProtected = (partner.isActive) ? 
                 _selectedPartyPokemon.pokemonName+" and "+ partner.pokemon.pokemonName
                 :_selectedPartyPokemon.pokemonName;
@@ -318,10 +317,14 @@ public class Item_handler : MonoBehaviour
         }
         ResetItemUsage();
     }
-    private void HealStatusEffect(string curableStatus)
+
+    private bool IsValidStatusHeal(string curableStatus)
     {
         if (_selectedPartyPokemon.statusEffect == "None")
-        {Dialogue_handler.Instance.DisplayInfo("Pokemon is already healthy","Feedback");return; }
+        {
+            Dialogue_handler.Instance.DisplayInfo("Pokemon is already healthy","Feedback");
+            return false;
+        }
         if (curableStatus == "full heal") 
         {
             _selectedPartyPokemon.statusEffect = "None";
@@ -332,14 +335,22 @@ public class Item_handler : MonoBehaviour
             if (_selectedPartyPokemon.statusEffect.ToLower() == curableStatus)
             {
                 _selectedPartyPokemon.statusEffect = "None";
-                if (curableStatus == "sleep" | curableStatus == "freeze"| curableStatus == "paralysis")
+                if (curableStatus == "sleep" | curableStatus == "freeze" | curableStatus == "paralysis")
                     _selectedPartyPokemon.canAttack = true;
-                Dialogue_handler.Instance.DisplayInfo("Pokemon has been healed","Feedback");
+                Dialogue_handler.Instance.DisplayInfo("Pokemon has been healed", "Feedback");
                 Battle_handler.Instance.RefreshParticipantUI();
             }
             else
-            {Dialogue_handler.Instance.DisplayInfo("Incorrect heal item","Feedback"); return; }
+            {
+                Dialogue_handler.Instance.DisplayInfo("Incorrect heal item", "Feedback");
+                return false;
+            }
         }
+        return true;
+    }
+    private void HealStatusEffect(string curableStatus)
+    {
+        if (!IsValidStatusHeal(curableStatus)) return;
         ResetItemUsage();
         if (usingHeldItem) { DepleteHeldItem();return;}
         DepleteItem();

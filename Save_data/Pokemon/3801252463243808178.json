@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25940
+        "instanceID": 25950
     },
     "hasGender": true,
     "hp": 52.0,
@@ -55,10 +55,10 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25742
+            "instanceID": 25750
         },
         {
-            "instanceID": 25478
+            "instanceID": 25486
         }
     ],
     "statusEffect": "None",
@@ -67,38 +67,40 @@
         "16",
         "30"
     ],
+    "friendshipEvolutionRequirement": "",
     "requiresEvolutionStone": false,
     "evolutionStoneName": "None",
     "abilities": [
         "Blaze"
     ],
     "splitEvolution": false,
+    "requiresFriendshipEvolution": false,
     "learnSet": [
         "fire/flame thrower18"
     ],
     "moveSet": [
         {
-            "instanceID": -3678
+            "instanceID": -19280
         },
         {
-            "instanceID": -3680
+            "instanceID": -19282
         },
         {
-            "instanceID": -3682
+            "instanceID": -19284
         },
         {
-            "instanceID": -3684
+            "instanceID": -19286
         }
     ],
     "ability": {
-        "instanceID": 24972
+        "instanceID": 24976
     },
     "evolutions": [
         {
-            "instanceID": 26100
+            "instanceID": 26112
         },
         {
-            "instanceID": 24942
+            "instanceID": 24944
         }
     ],
     "heldItem": {
@@ -106,11 +108,12 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32178
+        "instanceID": 32190
     },
     "backPicture": {
-        "instanceID": 32180
+        "instanceID": 32192
     },
+    "pokeballName": "",
     "abilityName": "Blaze",
     "natureName": "Modest",
     "evolutionData": [

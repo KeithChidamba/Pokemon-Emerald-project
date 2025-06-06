@@ -143,6 +143,10 @@ public class Move_handler:MonoBehaviour
     {
         foreach (var barrier in currentVictim.Barrieirs)
         {
+            if (barrier.barrierName == "Reflect" & barrier.barrierName == "Light Screen")
+            {
+                Debug.LogWarning("damage decreased");
+            }
             if (move.isSpecial & barrier.barrierName == "Light Screen")
                 return  damage*barrier.barrierEffect;
             if (!move.isSpecial & barrier.barrierName == "Reflect")
@@ -491,43 +495,35 @@ public class Move_handler:MonoBehaviour
     {
         if (Battle_handler.Instance.isDoubleBattle)
         {
-            var participants = (_currentTurn.attackerIndex < 2) ? new[] { 0, 1 } : new[] { 2, 3 };
-            //in double battle both partner share barriers, so only need to check one of them
-            for (var i = 0; i < 2; i++)
+            var currentParticipant = Battle_handler.Instance.battleParticipants[_currentTurn.attackerIndex];
+            
+            if (!HasDuplicateBarrier(currentParticipant, barrierName, true))
             {
-                var currentParticipant = Battle_handler.Instance.battleParticipants[participants[i]];
+                var newBarrier = new Barrier(barrierName, 0.33f, 5);
                 
-                if(!currentParticipant.isActive)continue;
+                currentParticipant.Barrieirs.Add(newBarrier); 
                 
-                if (HasDuplicateBarrier(currentParticipant, barrierName)) break;
-
-                Barrier newBarrier;
-                newBarrier.barrierName = barrierName;
-                newBarrier.barrierEffect = 0.33f;
+                var partner= Battle_handler.Instance
+                    .battleParticipants[currentParticipant.GetPartnerIndex()];
                 
-                foreach (var index in participants)
-                {
-                    if(!currentParticipant.isActive) continue;
-                    var participant = Battle_handler.Instance.battleParticipants[participants[index]];
-                    participant.Barrieirs.Add(newBarrier);
-                }
-                Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
-                break;
+                if(partner.isActive)
+                    if (!HasDuplicateBarrier(currentParticipant, barrierName, false))
+                        partner.Barrieirs.Add(newBarrier);
+                
             }
+            
+            Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
         }
         else
         {
-            
             var currentParticipant = Battle_handler.Instance.battleParticipants[_currentTurn.attackerIndex];
 
-            if (HasDuplicateBarrier(currentParticipant, barrierName))
+            if (HasDuplicateBarrier(currentParticipant, barrierName,true))
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             else
             {
-                Barrier newBarrier;
-                newBarrier.barrierName = barrierName;
-                newBarrier.barrierEffect = 0.5f;
-                currentParticipant.Barrieirs.Add(newBarrier);
+                currentParticipant.Barrieirs.Add(new(barrierName,0.33f,5));
+                
                 Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
             }
         }
@@ -538,10 +534,12 @@ public class Move_handler:MonoBehaviour
         processingOrder = false;
     }
 
-    bool HasDuplicateBarrier(Battle_Participant currentParticipant,string  barrierName)
+    public bool HasDuplicateBarrier(Battle_Participant currentParticipant,string  barrierName,bool displayMessage)
     {
         var duplicateBarrier = currentParticipant.Barrieirs.Any(b => b.barrierName == barrierName); 
-        if (duplicateBarrier) Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " is already activated");
+        Debug.LogWarning(currentParticipant.name+" has "+duplicateBarrier+" for "+barrierName+" displaymsg: "+displayMessage);
+        if (duplicateBarrier & displayMessage)
+            Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " is already activated");
         return duplicateBarrier;
     }
     void reflect()
