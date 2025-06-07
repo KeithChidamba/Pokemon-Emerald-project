@@ -153,7 +153,7 @@ public class Turn_Based_Combat : MonoBehaviour
 
     bool IsValidParticipant(Turn turn,Battle_Participant participant)
     {
-        return (turn.attackerID == participant.pokemon.pokemonID.ToString() |
+        return (turn.attackerID == participant.pokemon.pokemonID.ToString() ||
                 turn.victimID == participant.pokemon.pokemonID.ToString());
     }
     public void NextTurn()

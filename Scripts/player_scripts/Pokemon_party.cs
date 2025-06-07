@@ -61,7 +61,7 @@ public class Pokemon_party : MonoBehaviour
 
     private bool IsValidSwap(int memberPosition)
     {
-        if ( (memberPosition < 3 & Battle_handler.Instance.isDoubleBattle) | memberPosition == 1)
+        if ( (memberPosition < 3 & Battle_handler.Instance.isDoubleBattle) || memberPosition == 1)
         {
             var swapIn = Battle_handler.Instance.battleParticipants[memberPosition - 1];
             
@@ -120,7 +120,7 @@ public class Pokemon_party : MonoBehaviour
         if (selectedMember.isEmpty) return;
         
         if (Options_manager.Instance.playerInBattle && selectedMember.pokemon.hp <= 0)
-            if (!Item_handler.Instance.usingItem | swapOutNext)
+            if (!Item_handler.Instance.usingItem || swapOutNext)
                 return;
         
         if (swapOutNext)

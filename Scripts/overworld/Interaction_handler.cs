@@ -16,7 +16,7 @@ public class Interaction_handler : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKey(KeyCode.F) | Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Q))
             if(!canCheckForInteraction)
                 StartCoroutine(DelayRayCast());
         if(canCheckForInteraction)

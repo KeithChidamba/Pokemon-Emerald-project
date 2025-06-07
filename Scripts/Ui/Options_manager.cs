@@ -52,7 +52,7 @@ public class Options_manager : MonoBehaviour
     {
         var battleType = _currentInteraction.resultMessage;
         var alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
-        if (alivePokemon.Count < 2 & battleType.ToLower().Contains("double"))
+        if (alivePokemon.Count < 2 && battleType.ToLower().Contains("double"))
         {//if double battle enemy but you don't have enough pokemon alive
             Battle_handler.Instance.SetBattleType(_currentInteraction.additionalInfo,"single");
             return;

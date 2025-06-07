@@ -140,7 +140,7 @@ public class AbilityHandler : MonoBehaviour
         foreach (var enemy in _participant.currentEnemies)
         {
             if(!enemy.canEscape)continue;
-            if(!enemy.pokemon.HasType("Flying") & !enemy.pokemon.HasType("Ghost") & enemy.pokemon.ability.abilityName!="Levitate")
+            if(!enemy.pokemon.HasType("Flying") || !enemy.pokemon.HasType("Ghost") || enemy.pokemon.ability.abilityName!="Levitate")
                 enemy.canEscape = false;
         }
     }
@@ -151,7 +151,7 @@ public class AbilityHandler : MonoBehaviour
         if (Utility.RandomRange(1, 4) < 2)
         {
             _participant.pokemon.statusEffect = "None";
-            if (_participant.pokemon.statusEffect == "sleep" | _participant.pokemon.statusEffect == "freeze"| _participant.pokemon.statusEffect == "paralysis")
+            if (_participant.pokemon.statusEffect == "sleep" || _participant.pokemon.statusEffect == "freeze"| _participant.pokemon.statusEffect == "paralysis")
                 _participant.pokemon.canAttack = true;
             Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
         }
@@ -210,20 +210,20 @@ public class AbilityHandler : MonoBehaviour
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {
-        if (_currentAbility == "swarm" & (_participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f)) & move.type.typeName=="Bug")
+        if (_currentAbility == "swarm" && (_participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f)) & move.type.typeName=="Bug")
             return damage*1.5f;
         if (_currentAbility == "paralysiscombo")
         {
             if (victim.pokemon.statusEffect=="Paralysis")
                 return damage*2;
         }
-        if (_currentAbility == "torrent" & _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
+        if (_currentAbility == "torrent" && _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
             if (move.type.typeName == "Water")
                 return damage*1.5f;
-        if (_currentAbility == "overgrow" & _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
+        if (_currentAbility == "overgrow" && _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
             if (move.type.typeName == "Grass")
                 return damage*1.5f;
-        if (_currentAbility == "blaze" & _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
+        if (_currentAbility == "blaze" && _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
             if (move.type.typeName == "Fire")
                 return damage*1.5f;
         return damage;

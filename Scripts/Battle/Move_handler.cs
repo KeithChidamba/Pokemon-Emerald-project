@@ -54,7 +54,7 @@ public class Move_handler:MonoBehaviour
     private IEnumerator MoveSequence()
     {
         var moveEffectiveness = BattleOperations.GetTypeEffectiveness(victim, _currentTurn.move.type);
-        if (moveEffectiveness == 0 & !_currentTurn.move.isMultiTarget)
+        if (moveEffectiveness == 0 && !_currentTurn.move.isMultiTarget)
             Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" is immune to it!");
         else
         {
@@ -143,13 +143,13 @@ public class Move_handler:MonoBehaviour
     {
         foreach (var barrier in currentVictim.Barrieirs)
         {
-            if (barrier.barrierName == "Reflect" & barrier.barrierName == "Light Screen")
+            if (barrier.barrierName == "Reflect" || barrier.barrierName == "Light Screen")
             {
                 Debug.LogWarning("damage decreased");
             }
-            if (move.isSpecial & barrier.barrierName == "Light Screen")
+            if (move.isSpecial && barrier.barrierName == "Light Screen")
                 return  damage*barrier.barrierEffect;
-            if (!move.isSpecial & barrier.barrierName == "Reflect")
+            if (!move.isSpecial && barrier.barrierName == "Reflect")
                 return  damage*barrier.barrierEffect;
         }
         return damage;
@@ -207,7 +207,7 @@ public class Move_handler:MonoBehaviour
 
     private void CheckVictimVulnerabilityToStatus()
     {
-        if (_currentTurn.move.hasSpecialEffect | !_currentTurn.move.hasStatus)
+        if (_currentTurn.move.hasSpecialEffect || !_currentTurn.move.hasStatus)
         { processingOrder = false; return; }
         if (victim.pokemon.statusEffect != "None")
         { 
@@ -287,10 +287,10 @@ public class Move_handler:MonoBehaviour
         var isIncreasing = (buffDebuffInfo[0] == '+');
         if (!_currentTurn.move.isSelfTargeted)
         {//affecting enemy
-            if ( (_currentTurn.move.isMultiTarget & !Battle_handler.Instance.isDoubleBattle) 
-                | !_currentTurn.move.isMultiTarget)
+            if ( (_currentTurn.move.isMultiTarget && !Battle_handler.Instance.isDoubleBattle) 
+                || !_currentTurn.move.isMultiTarget)
             {
-                if (!victim.pokemon.canBeDamaged | victim.pokemon.immuneToStatReduction)
+                if (!victim.pokemon.canBeDamaged || victim.pokemon.immuneToStatReduction)
                 {
                     Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName + " protected itself");
                 }
@@ -300,7 +300,7 @@ public class Move_handler:MonoBehaviour
                     SelectRelevantBuffOrDebuff(data);
                 }
             } 
-            if(_currentTurn.move.isMultiTarget & Battle_handler.Instance.isDoubleBattle)
+            if(_currentTurn.move.isMultiTarget && Battle_handler.Instance.isDoubleBattle)
                 StartCoroutine(MultiTargetBuff_Debuff(statName, isIncreasing, buffAmount));
         }
         else//affecting attacker
@@ -315,7 +315,7 @@ public class Move_handler:MonoBehaviour
     {
         foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker.currentEnemies) )
         {
-            if (enemy.pokemon.canBeDamaged & !enemy.pokemon.immuneToStatReduction)
+            if (enemy.pokemon.canBeDamaged && !enemy.pokemon.immuneToStatReduction)
             {
                 var data = new BuffDebuffData(enemy, stat, isIncreasing,buffAmount);
                 SelectRelevantBuffOrDebuff(data);
@@ -363,7 +363,7 @@ public class Move_handler:MonoBehaviour
         var buff = BattleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.StatName) 
                    ?? new Buff_Debuff(string.Empty,0,true); // if null return same value
         if (buff.isAtLimit) return null;
-        if (data.StatName == "Accuracy" | data.StatName == "Evasion")
+        if (data.StatName == "Accuracy" || data.StatName == "Evasion")
             return math.trunc(unmodifiedStatValue * _accuracyAndEvasionLevels[buff.stage+6]); 
         if (data.StatName=="Crit")    
             return _critLevels[buff.stage];
@@ -538,7 +538,7 @@ public class Move_handler:MonoBehaviour
     {
         var duplicateBarrier = currentParticipant.Barrieirs.Any(b => b.barrierName == barrierName); 
         Debug.LogWarning(currentParticipant.name+" has "+duplicateBarrier+" for "+barrierName+" displaymsg: "+displayMessage);
-        if (duplicateBarrier & displayMessage)
+        if (duplicateBarrier && displayMessage)
             Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " is already activated");
         return duplicateBarrier;
     }

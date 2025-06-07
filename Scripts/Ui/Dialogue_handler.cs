@@ -141,7 +141,7 @@ public class Dialogue_handler : MonoBehaviour
     public void DisplayInfo(string info,string type)
     {
         if(Options_manager.Instance.playerInBattle){ 
-            if (!overworld_actions.Instance.usingUI & type == "Feedback")
+            if (!overworld_actions.Instance.usingUI && type == "Feedback")
             {
                 DisplayBattleInfo(info);
                 return;

@@ -57,7 +57,7 @@ public static class BattleOperations
     public static float GetCatchRateBonusFromStatus(string statusName)
     {
         if (statusName == "None") return 1;
-        if (statusName == "Sleep" | statusName == "Freeze")
+        if (statusName == "Sleep" || statusName == "Freeze")
             return 2.5f;
         return 1.5f;
     }

@@ -16,7 +16,7 @@ public class Held_Items : MonoBehaviour
     {
         if(!_participant.isActive)return;
         if (!_participant.pokemon.hasItem) return;
-        if (_participant.pokemon.heldItem.quantity == 0 & !_participant.pokemon.heldItem.isHeldItem)
+        if (_participant.pokemon.heldItem.quantity == 0 && !_participant.pokemon.heldItem.isHeldItem)
         {//remove consumable held items that are depleted, not ones that just have special functionality
             _participant.pokemon.RemoveHeldItem(); return; 
         }
