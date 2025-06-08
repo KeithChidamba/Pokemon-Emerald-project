@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "50/50",
     "nature": {
-        "instanceID": 25980
+        "instanceID": 25978
     },
     "hasGender": true,
     "hp": 45.0,
@@ -54,7 +54,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25162
+            "instanceID": 25160
         }
     ],
     "statusEffect": "None",
@@ -79,27 +79,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -19310
+            "instanceID": -9680
         },
         {
-            "instanceID": -19312
+            "instanceID": -9682
         },
         {
-            "instanceID": -19314
+            "instanceID": -9684
         },
         {
-            "instanceID": -19316
+            "instanceID": -9686
         }
     ],
     "ability": {
-        "instanceID": 25476
+        "instanceID": 25474
     },
     "evolutions": [
         {
-            "instanceID": 25152
+            "instanceID": 25150
         },
         {
-            "instanceID": 25958
+            "instanceID": 25956
         }
     ],
     "heldItem": {

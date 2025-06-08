@@ -41,7 +41,8 @@ public class Battle_Participant : MonoBehaviour
         statusHandler = GetComponent<Participant_Status>();
         abilityHandler = GetComponent<AbilityHandler>();
         statData = GetComponent<Battle_Data>();
-        Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierState;
+        Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierSharing;
+        Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckIfFainted;
         Move_handler.Instance.OnMoveEnd += CheckIfFainted;
         Turn_Based_Combat.Instance.OnMoveExecute += CheckIfFainted;
@@ -205,7 +206,8 @@ public class Battle_Participant : MonoBehaviour
         if (participantIndex == -1) return -1; // participant not found
         return (participantIndex % 2 == 0) ? participantIndex + 1 : participantIndex - 1;
     }
-    private void CheckBarrierState()
+
+    private void CheckBarrierDuration()
     {
         if (Barrieirs.Count == 0) return;
         
@@ -213,15 +215,22 @@ public class Battle_Participant : MonoBehaviour
             barrier.barrierDuration--;
 
         Barrieirs.RemoveAll(b => b.barrierDuration < 1);
+    }
+    private void CheckBarrierSharing()
+    {
+        if (Barrieirs.Count == 0) return;
         
-        if (Battle_handler.Instance.isDoubleBattle)//share barriers
+        if (Battle_handler.Instance.isDoubleBattle)
         {
             var partner= Battle_handler.Instance.battleParticipants[GetPartnerIndex()];
             if (!partner.isActive) return;
             
             foreach (var barrier in Barrieirs)
+            {
+                Debug.Log("checking barrier state:");
                 if (!Move_handler.Instance.HasDuplicateBarrier(partner, barrier.barrierName,false))
                     partner.Barrieirs.Add(barrier);
+            }
         }
     }
     private void UpdateUI()

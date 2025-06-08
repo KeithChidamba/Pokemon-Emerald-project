@@ -59,29 +59,31 @@ public class Move_handler:MonoBehaviour
         else
         {
             SetMoveSequence();
-            foreach (var battleEvent in _dialougeOrder)
+            if (_currentTurn.move.hasSpecialEffect)
             {
-                if (_cancelMove)
-                    break;
-                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-
-                if (_currentTurn.move.hasSpecialEffect)
+                processingOrder = true;
+                ExecuteMoveWithSpecialEffect();
+            }
+            else
+            {
+                foreach (var battleEvent in _dialougeOrder)
                 {
-                    processingOrder = true;
-                    ExecuteMoveWithSpecialEffect();
-                }
-                else
-                {
+                    if (_cancelMove)
+                        break;
+                    
+                    yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+                    
                     if (!battleEvent.Condition) continue;
                     processingOrder = true;
                     battleEvent.Execute();
-                }
 
-                yield return new WaitUntil(() => !processingOrder);
-                yield return new WaitUntil(() => !_moveDelay);
-                yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
-                yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
-            } 
+                    yield return new WaitUntil(() => !processingOrder);
+                    yield return new WaitUntil(() => !_moveDelay);
+                    yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
+                    yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
+                } 
+            }
+
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         ResetMoveUsage();
@@ -506,13 +508,11 @@ public class Move_handler:MonoBehaviour
                 var partner= Battle_handler.Instance
                     .battleParticipants[currentParticipant.GetPartnerIndex()];
                 
-                if(partner.isActive)
-                    if (!HasDuplicateBarrier(currentParticipant, barrierName, false))
-                        partner.Barrieirs.Add(newBarrier);
+                if(partner.isActive) partner.Barrieirs.Add(newBarrier);
                 
+                Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
+                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             }
-            
-            Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
         }
         else
         {
@@ -537,9 +537,21 @@ public class Move_handler:MonoBehaviour
     public bool HasDuplicateBarrier(Battle_Participant currentParticipant,string  barrierName,bool displayMessage)
     {
         var duplicateBarrier = currentParticipant.Barrieirs.Any(b => b.barrierName == barrierName); 
-        Debug.LogWarning(currentParticipant.name+" has "+duplicateBarrier+" for "+barrierName+" displaymsg: "+displayMessage);
+
+        if (Battle_handler.Instance.isDoubleBattle)
+        {
+            var partner= Battle_handler.Instance
+                .battleParticipants[currentParticipant.GetPartnerIndex()];
+                
+            if(partner.isActive)
+                if(partner.Barrieirs.Any(b => b.barrierName == barrierName))
+                {
+                    duplicateBarrier = true;
+                }
+        }
         if (duplicateBarrier && displayMessage)
             Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " is already activated");
+        
         return duplicateBarrier;
     }
     void reflect()
