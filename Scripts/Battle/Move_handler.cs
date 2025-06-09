@@ -145,14 +145,9 @@ public class Move_handler:MonoBehaviour
     {
         foreach (var barrier in currentVictim.Barrieirs)
         {
-            if (barrier.barrierName == "Reflect" || barrier.barrierName == "Light Screen")
-            {
-                Debug.LogWarning("damage decreased");
-            }
-            if (move.isSpecial && barrier.barrierName == "Light Screen")
-                return  damage*barrier.barrierEffect;
-            if (!move.isSpecial && barrier.barrierName == "Reflect")
-                return  damage*barrier.barrierEffect;
+            if ((move.isSpecial && barrier.barrierName == "Light Screen")
+                || (!move.isSpecial && barrier.barrierName == "Reflect"))
+                return  damage-(damage*barrier.barrierEffect);
         }
         return damage;
     }
@@ -477,10 +472,16 @@ public class Move_handler:MonoBehaviour
     }
     private IEnumerator ShatterBarriers()
     {
+        var duplicateBarriers = new List<string>();
         foreach (var enemy in attacker.currentEnemies)
         {
+            if(!enemy.isActive)continue;
             foreach (var barrier in enemy.Barrieirs)
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon+" shattered "+barrier.barrierName);
+            {
+                if (duplicateBarriers.Contains(barrier.barrierName)) continue;
+                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" shattered "+barrier.barrierName);
+                duplicateBarriers.Add(barrier.barrierName);
+            }
             enemy.Barrieirs.Clear();
         }
         
@@ -507,8 +508,12 @@ public class Move_handler:MonoBehaviour
                 
                 var partner= Battle_handler.Instance
                     .battleParticipants[currentParticipant.GetPartnerIndex()];
-                
-                if(partner.isActive) partner.Barrieirs.Add(newBarrier);
+
+                if (partner.isActive)
+                {
+                    var barrierCopy = new Barrier(newBarrier.barrierName, newBarrier.barrierEffect, newBarrier.barrierDuration);
+                    partner.Barrieirs.Add(barrierCopy);
+                }
                 
                 Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
@@ -549,6 +554,7 @@ public class Move_handler:MonoBehaviour
                     duplicateBarrier = true;
                 }
         }
+
         if (duplicateBarrier && displayMessage)
             Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " is already activated");
         

@@ -131,7 +131,7 @@ public class Battle_Participant : MonoBehaviour
         }
 
         if (isPlayer)
-            Invoke(nameof(CheckIfLoss),1f);
+            Invoke(nameof(CheckIfLoss),1.2f);
         else
             if (!Battle_handler.Instance.isTrainerBattle)
                 Invoke(nameof(EndWildBattle),1f);
@@ -210,7 +210,7 @@ public class Battle_Participant : MonoBehaviour
     private void CheckBarrierDuration()
     {
         if (Barrieirs.Count == 0) return;
-        
+
         foreach (var barrier in Barrieirs)
             barrier.barrierDuration--;
 
@@ -227,9 +227,11 @@ public class Battle_Participant : MonoBehaviour
             
             foreach (var barrier in Barrieirs)
             {
-                Debug.Log("checking barrier state:");
-                if (!Move_handler.Instance.HasDuplicateBarrier(partner, barrier.barrierName,false))
-                    partner.Barrieirs.Add(barrier);
+                if (!Move_handler.Instance.HasDuplicateBarrier(partner, barrier.barrierName, false))
+                {
+                    var barrierCopy = new Barrier(barrier.barrierName, barrier.barrierEffect, barrier.barrierDuration);
+                    partner.Barrieirs.Add(barrierCopy);
+                }
             }
         }
     }

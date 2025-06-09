@@ -212,14 +212,15 @@ public class Item_handler : MonoBehaviour
             return;
         }
         var buff = BattleOperations.SearchForBuffOrDebuff(_selectedPartyPokemon, statName);
-        if(buff!=null)
-            if (buff.stage > 5)
-            {
-                Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName + "'s " + statName
-                                                      + " cant go any higher", "Details");
-                ResetItemUsage();
-                return;
-            }
+        if (buff is { isAtLimit: true })
+        {
+            Dialogue_handler.Instance.DisplayInfo(
+                $"{_selectedPartyPokemon.pokemonName}'s {statName} can't go any higher",
+                "Details"
+            );
+            ResetItemUsage();
+            return;
+        }
         
         var xBuffData = new BuffDebuffData(currentParticipant, statName, true, 1);
         Move_handler.Instance.SelectRelevantBuffOrDebuff(xBuffData);

@@ -38,7 +38,7 @@ public static class BattleOperations
     {
         if (victim.additionalTypeImmunity!=null)
         {
-            if (victim.additionalTypeImmunity == enemyType)
+            if (victim.additionalTypeImmunity.typeName == enemyType.typeName)
                 _effectiveness = 0;
         }
         else{
