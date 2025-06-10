@@ -66,11 +66,11 @@ public class Move_handler:MonoBehaviour
             }
             else
             {
+                victim.OnPokemonFainted += CancelMoveSequence;//victim faints after damage so the rest of move effect is ignored
                 foreach (var battleEvent in _dialougeOrder)
                 {
                     if (_cancelMove)
                         break;
-                    
                     yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                     
                     if (!battleEvent.Condition) continue;
@@ -88,6 +88,11 @@ public class Move_handler:MonoBehaviour
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         ResetMoveUsage();
     }
+
+    private void CancelMoveSequence()
+    {
+        _cancelMove = true;
+    }
     void ExecuteMoveWithSpecialEffect()
     {
         if (!_currentTurn.move.hasSpecialEffect) return;
@@ -101,8 +106,8 @@ public class Move_handler:MonoBehaviour
     {
         if (currentVictim.pokemon.canBeDamaged || move.moveDamage == 0) return false;
         Dialogue_handler.Instance.DisplayBattleInfo(currentVictim.pokemon.pokemonName+" protected itself");
-        if(!_currentTurn.move.isMultiTarget)
-            _cancelMove = true;
+        
+        if (!_currentTurn.move.isMultiTarget) CancelMoveSequence();
         return true;
     }
     private int CheckIfCrit()
@@ -192,7 +197,7 @@ public class Move_handler:MonoBehaviour
     {
         if (_currentTurn.move.hasSpecialEffect)
         { processingOrder = false; return; }
-        victim.pokemon.hp -= CalculateMoveDamage(_currentTurn.move, victim);
+        victim.pokemon.TakeDamage( CalculateMoveDamage(_currentTurn.move, victim) );
         processingOrder = false;
     } 
     private void ResetMoveUsage()
@@ -388,7 +393,7 @@ public class Move_handler:MonoBehaviour
             if (!Turn_Based_Combat.Instance.MoveSuccessful(_currentTurn)) break; //if miss
             
             Dialogue_handler.Instance.DisplayBattleInfo("Hit "+(i+1)+"!");//remove later if added animations
-            victim.pokemon.hp -= CalculateMoveDamage(_currentTurn.move,victim);
+            victim.pokemon.TakeDamage( CalculateMoveDamage(_currentTurn.move,victim) );
             numHits++;
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
@@ -405,7 +410,7 @@ public class Move_handler:MonoBehaviour
     {
         foreach (var enemy in targets)
         {
-            enemy.pokemon.hp -= CalculateMoveDamage(_currentTurn.move,enemy);
+            enemy.pokemon.TakeDamage( CalculateMoveDamage(_currentTurn.move,enemy) );
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
@@ -424,7 +429,7 @@ public class Move_handler:MonoBehaviour
     {
         var damage = CalculateMoveDamage(_currentTurn.move,victim);
         var healAmount = damage/ 2f;
-        victim.pokemon.hp -= damage;
+        victim.pokemon.TakeDamage(damage);
         attacker.pokemon.hp =( (healAmount+attacker.pokemon.hp) < attacker.pokemon.maxHp)? 
             math.trunc(math.abs(healAmount)) : attacker.pokemon.maxHp;
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
@@ -488,7 +493,7 @@ public class Move_handler:MonoBehaviour
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         
         var damage = CalculateMoveDamage(_currentTurn.move,victim);
-        victim.pokemon.hp -= damage; 
+        victim.pokemon.TakeDamage(damage); 
         
         _moveDelay = false;
         processingOrder = false;

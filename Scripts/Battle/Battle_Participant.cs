@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -35,6 +36,7 @@ public class Battle_Participant : MonoBehaviour
     public List<Pokemon> expReceivers;
     public bool canEscape = true;
     private Action<Pokemon> _resetHandler;
+    public Action OnPokemonFainted;
     public List<Barrier> Barrieirs = new();
     private void Start()
     {
@@ -43,20 +45,12 @@ public class Battle_Participant : MonoBehaviour
         statData = GetComponent<Battle_Data>();
         Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierSharing;
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
-        Turn_Based_Combat.Instance.OnTurnsCompleted += CheckIfFainted;
-        Move_handler.Instance.OnMoveEnd += CheckIfFainted;
-        Turn_Based_Combat.Instance.OnMoveExecute += CheckIfFainted;
         Battle_handler.Instance.OnBattleEnd += DeactivatePokemon;
     }
     private void Update()
     {
         if (!isActive) return;
         UpdateUI();
-    }
-    private void GiveExp(Pokemon enemy)
-    {
-        //let the enemy that knocked you out, calculate exp 
-        DistributeExp(enemy.CalculateExperience(pokemon));
     }
     private void GiveEVs(Battle_Participant enemy)
     {
@@ -110,36 +104,46 @@ public class Battle_Participant : MonoBehaviour
 
         expReceivers.Clear();
     }
-    public void CheckIfFainted()
+    private void CheckIfFainted()
     {
         if (!isActive) return;
         if (fainted) return; 
         fainted = (pokemon.hp <= 0);
         if (pokemon.hp > 0) return;
-        
+        OnPokemonFainted?.Invoke();
         Turn_Based_Combat.Instance.faintEventDelay = true;
         Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName+" fainted!");
         pokemon.statusEffect = "None";
         pokemon.DetermineFriendshipLevelChange(false,"Fainted");
-        
+        StartCoroutine(HandleFaintLogic());
+    }
+
+    private IEnumerator HandleFaintLogic()
+    {
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         if (!isPlayer)
         {
-            GiveExp(Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon);
+            //let the enemy that knocked you out, calculate exp 
+            var enemyResponsible =
+                Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon;
+            
+            DistributeExp(enemyResponsible.CalculateExperience(pokemon));
+            
             foreach (var enemy in currentEnemies)
                 if(enemy.isActive)
                     GiveEVs(enemy);
-        }
-
-        if (isPlayer)
-            Invoke(nameof(CheckIfLoss),1.2f);
-        else
+            
+            yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
             if (!Battle_handler.Instance.isTrainerBattle)
-                Invoke(nameof(EndWildBattle),1f);
+                EndWildBattle();
             else
             {
                 ResetParticipantState();
-                pokemonTrainerAI.Invoke(nameof(pokemonTrainerAI.CheckIfLoss),1f);
+                pokemonTrainerAI.CheckIfLoss();
             }
+        }
+        else
+            CheckIfLoss();
     }
     public void EndWildBattle()
     {
@@ -294,6 +298,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
+        pokemon.OnDamageTaken += CheckIfFainted;
         if (!isPlayer) return;
         _resetHandler = pkm => ResetParticipantStateAfterLevelUp();
         pokemon.OnLevelUp += _resetHandler;
