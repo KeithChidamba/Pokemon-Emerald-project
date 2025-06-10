@@ -38,7 +38,7 @@ public class Participant_Status : MonoBehaviour
     }
     void LooseHp(float percentage)
     {
-        _participant.pokemon.hp -= math.ceil(_participant.pokemon.maxHp * percentage);
+        _participant.pokemon.TakeDamage( math.ceil(_participant.pokemon.maxHp * percentage) );
     }
     private void StatDrop()
     {
@@ -145,13 +145,11 @@ public class Participant_Status : MonoBehaviour
             _statusDuration++;
         }
     }
-    private void GetDamageFromStatus(string msg,float damage)
+    private void GetDamageFromStatus(string message,float damage)
     {
-        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+msg);
-        Debug.Log("damaging:  "+msg+" dur: "+_statusDuration);
+        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+message);
         LooseHp(damage);
         _statusDuration++;
-        _participant.Invoke(nameof(_participant.CheckIfFainted),0.9f);
     }
     public void NotifyHealing()
     {

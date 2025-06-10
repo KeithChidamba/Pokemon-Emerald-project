@@ -78,6 +78,7 @@ public class Pokemon : ScriptableObject
     public string pokeballName;
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
+    public event Action OnDamageTaken;
     //data conversion when json to obj
     public string abilityName;
     public string natureName;
@@ -335,8 +336,15 @@ public class Pokemon : ScriptableObject
         while(currentExpAmount>nextLevelExpAmount)
             LevelUp();
     }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+        OnDamageTaken?.Invoke();
+    }
     private void ClearEvents()
     {
+        OnDamageTaken = null;
         OnLevelUp = null;
         OnNewLevel = null;
     }
