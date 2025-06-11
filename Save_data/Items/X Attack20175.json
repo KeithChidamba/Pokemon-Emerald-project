@@ -1,0 +1,18 @@
+{
+    "itemID": "X Attack20175",
+    "itemName": "X Attack",
+    "itemType": "X Item",
+    "itemEffect": "Attack",
+    "itemDescription": "increases a pokemon's attack during battle",
+    "price": 100,
+    "quantity": 10,
+    "itemImage": {
+        "instanceID": 32104
+    },
+    "forPartyUse": false,
+    "canBeUsedInOverworld": false,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}

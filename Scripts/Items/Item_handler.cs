@@ -117,7 +117,7 @@ public class Item_handler : MonoBehaviour
             Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" leveled up!", "Details",1f);
             yield return new WaitForSeconds(1f);
             _selectedPartyPokemon.ReceiveExperience((exp-_selectedPartyPokemon.currentExpAmount)+1);
-            CompleteItemUsage(false);
+            CompleteItemUsage();
         }
     }
 
@@ -126,7 +126,7 @@ public class Item_handler : MonoBehaviour
         if (_selectedPartyPokemon.evolutionStoneName.ToLower() == evolutionStoneName)
         {
             _selectedPartyPokemon.CheckEvolutionRequirements(0);
-            CompleteItemUsage(false);
+            CompleteItemUsage();
         }
         else
         {
@@ -148,7 +148,7 @@ public class Item_handler : MonoBehaviour
             if (evRef > 100) evRef = 100;
             else PokemonOperations.CalculateEvForStat(statToDecrease, -10, _selectedPartyPokemon);
             _selectedPartyPokemon.ChangeFriendshipLevel(10);
-            CompleteItemUsage(false);
+            CompleteItemUsage();
         }
     }
     private void GetEVsFromItem(string stat) 
@@ -197,34 +197,35 @@ public class Item_handler : MonoBehaviour
                 ResetItemUsage();
                 return;
             }
-            var player = Battle_handler.Instance.battleParticipants[currentTurnIndex];
-            var partner = Battle_handler.Instance.battleParticipants[player.GetPartnerIndex()];
-            var pokemonProtected = (partner.isActive) ? 
-                _selectedPartyPokemon.pokemonName+" and "+ partner.pokemon.pokemonName
-                :_selectedPartyPokemon.pokemonName;
             
-            Move_handler.Instance.ApplyStatDropImmunity(player,5);
-            if(Battle_handler.Instance.isDoubleBattle)
-                Move_handler.Instance.ApplyStatDropImmunity(partner,5);
+            Move_handler.Instance.ApplyStatDropImmunity(currentParticipant,5);
+            var pokemonProtected = _selectedPartyPokemon.pokemonName;
+            
+            if (Battle_handler.Instance.isDoubleBattle)
+            {
+                var partner = Battle_handler.Instance.battleParticipants[currentParticipant.GetPartnerIndex()];
+                if(partner.isActive)
+                {
+                    Move_handler.Instance.ApplyStatDropImmunity(partner, 5);
+                    pokemonProtected = _selectedPartyPokemon.pokemonName + " and " + partner.pokemon.pokemonName;
+                }
+            }
             
             Dialogue_handler.Instance.DisplayBattleInfo("A veil of light covers "+pokemonProtected);
-            CompleteItemUsage(true);
+            CompleteItemUsage();
             return;
         }
         var buff = BattleOperations.SearchForBuffOrDebuff(_selectedPartyPokemon, statName);
         if (buff is { isAtLimit: true })
         {
-            Dialogue_handler.Instance.DisplayInfo(
-                $"{_selectedPartyPokemon.pokemonName}'s {statName} can't go any higher",
-                "Details"
-            );
+            Dialogue_handler.Instance.DisplayBattleInfo($"{_selectedPartyPokemon.pokemonName}'s {statName} can't go any higher");
             ResetItemUsage();
             return;
         }
         
         var xBuffData = new BuffDebuffData(currentParticipant, statName, true, 1);
         Move_handler.Instance.SelectRelevantBuffOrDebuff(xBuffData);
-        CompleteItemUsage(true);
+        CompleteItemUsage();
     }
     private void RevivePokemon(string reviveType)
     {
@@ -238,7 +239,7 @@ public class Item_handler : MonoBehaviour
         OnItemUsageSuccessful?.Invoke(true);
         _selectedPartyPokemon.hp = (reviveType=="max revive")? _selectedPartyPokemon.maxHp : math.trunc(_selectedPartyPokemon.maxHp*0.5f);
         Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" has been revived!", "Details",1f);
-        CompleteItemUsage(true);
+        CompleteItemUsage(1f);
     } 
     private void RestorePowerpoints(int moveIndex)
      {
@@ -262,7 +263,7 @@ public class Item_handler : MonoBehaviour
          currentMove.powerpoints = (sumPoints > currentMove.maxPowerpoints) ? currentMove.maxPowerpoints : sumPoints;
  
          Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp was restored!", "Details",1f);
-         ResetStateAfterDataChange(true);
+         ResetStateAfterDataChange(1f);
      }
     private void IncreasePowerpoints(int moveIndex)
     {
@@ -277,7 +278,7 @@ public class Item_handler : MonoBehaviour
         currentMove.maxPowerpoints += (int)math.floor((0.2*currentMove.basePowerpoints));
         Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was increased!", "Details",1f);
         
-        ResetStateAfterDataChange(false);
+        ResetStateAfterDataChange();
     }
 
     private void MaximisePowerpoints(int moveIndex)
@@ -292,7 +293,7 @@ public class Item_handler : MonoBehaviour
         currentMove.maxPowerpoints = (int)math.floor( currentMove.basePowerpoints * 1.6 );
         
         Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was maxed out!", "Details",1f);
-        ResetStateAfterDataChange(false);
+        ResetStateAfterDataChange();
     }
     private void UsePokeball(Item pokeball)
     {
@@ -403,7 +404,7 @@ public class Item_handler : MonoBehaviour
             ResetItemUsage();
             return;
         }
-        CompleteItemUsage(true);
+        CompleteItemUsage(1f);
         Pokemon_party.Instance.RefreshMemberCards();
         Dialogue_handler.Instance.EndDialogue(1f);
     }
@@ -434,23 +435,31 @@ public class Item_handler : MonoBehaviour
             _selectedPartyPokemon.hp = _selectedPartyPokemon.maxHp;
             Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" gained full health points","Feedback",1f);
         }
-        CompleteItemUsage(true);
+        CompleteItemUsage(1f);
     }
-    private void ResetStateAfterDataChange(bool skipTurn)
+    private void ResetStateAfterDataChange()
     {
         DepleteItem();
         ResetItemUsage();
         Pokemon_Details.Instance.ExitDetails();
-        if(skipTurn) Invoke(nameof(SkipTurn),1.3f);
     }
-    private void CompleteItemUsage(bool skipTurn)
+    private void ResetStateAfterDataChange(float skipDelay)
+    {
+        ResetStateAfterDataChange();
+        Invoke(nameof(SkipTurn),skipDelay);
+    }
+    private void CompleteItemUsage()
     {
         if (usingHeldItem)
             DepleteHeldItem();
         else
             DepleteItem();
         ResetItemUsage();
-        if(skipTurn) Invoke(nameof(SkipTurn),1.3f);
+    }
+    private void CompleteItemUsage(float skipDelay)
+    {
+        CompleteItemUsage();
+        Invoke(nameof(SkipTurn),skipDelay);
     }
     private void SkipTurn()
     {
