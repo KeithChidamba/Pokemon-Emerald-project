@@ -90,7 +90,7 @@ public class Battle_handler : MonoBehaviour
             if (viewingOptions)
             {
                 ResetAi();
-                Dialogue_handler.Instance.DisplayInfo("What will you do?", "Details");
+                Dialogue_handler.Instance.DisplayInfo("What will you do?", "Battle Display Message");
                 optionsUI.SetActive(true);
             }
         }
@@ -105,7 +105,7 @@ public class Battle_handler : MonoBehaviour
                 choosingMove = false;
             }
             else
-                Dialogue_handler.Instance.DisplayInfo("Click on who you will attack", "Details");
+                Dialogue_handler.Instance.DisplayInfo("Click on who you will attack", "Battle Display Message");
         }        
         
     }

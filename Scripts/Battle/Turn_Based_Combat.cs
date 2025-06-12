@@ -35,7 +35,7 @@ public class Turn_Based_Combat : MonoBehaviour
         _turnHistory.Add(turn);
         if( (Battle_handler.Instance.isDoubleBattle && IsLastParticipant())
          || (currentTurnIndex == Battle_handler.Instance.participantCount ))
-            StartCoroutine(ExecuteMoves(Set_priority()));
+            StartCoroutine(ExecuteMoves(SetPriority()));
         else
             NextTurn();
     }
@@ -131,7 +131,7 @@ public class Turn_Based_Combat : MonoBehaviour
         NextTurn();
     }
 
-    void CheckRepeatedMove(Battle_Participant attacker, Move move)
+    private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
         if (string.IsNullOrEmpty(attacker.previousMove))
         {
@@ -144,14 +144,14 @@ public class Turn_Based_Combat : MonoBehaviour
         attacker.previousMove = (previousMoveName == move.moveName)?
              move.moveName +"/"+ (previousMoveRepetitions + 1) : move.moveName + "/0";
     }
-    bool IsValidParticipantState(Battle_Participant participant)
+    private bool IsValidParticipantState(Battle_Participant participant)
     {
         if (!participant.isActive) return false;
         if (participant.fainted) return false;
         return participant.pokemon != null;
     }
 
-    bool IsValidParticipant(Turn turn,Battle_Participant participant)
+    private bool IsValidParticipant(Turn turn,Battle_Participant participant)
     {
         return (turn.attackerID == participant.pokemon.pokemonID.ToString() ||
                 turn.victimID == participant.pokemon.pokemonID.ToString());
@@ -159,13 +159,13 @@ public class Turn_Based_Combat : MonoBehaviour
     public void NextTurn()
     { 
         if ( Battle_handler.Instance.isDoubleBattle)
-            ChangeTurn(4,1);
+            ChangeTurn(3,1);
         else
-            ChangeTurn(3,2);
+            ChangeTurn(2,2);
     }
-    public void ChangeTurn(int participantIndex,int step)
+    public void ChangeTurn(int maxParticipantIndex,int step)
     {
-        if (currentTurnIndex < participantIndex-1)
+        if (currentTurnIndex < maxParticipantIndex)
             currentTurnIndex+=step;
         else
         {
@@ -180,13 +180,13 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     public bool MoveSuccessful(Turn turn)
     {
-        var rand = Utility.RandomRange(1, 100);
+        var random = Utility.RandomRange(1, 100);
         var hitChance = turn.move.moveAccuracy *
                            (Battle_handler.Instance.battleParticipants[turn.attackerIndex].pokemon.accuracy / 
                             Battle_handler.Instance.battleParticipants[turn.victimIndex].pokemon.evasion);
-        return hitChance>rand;
+        return hitChance>random;
     }
-    private List<Turn> Set_priority()
+    private List<Turn> SetPriority()
     {
         var orderBySpeed = _turnHistory.OrderByDescending(p => Battle_handler.Instance.battleParticipants[p.attackerIndex].pokemon.speed).ToList();
         var priorityList = orderBySpeed.OrderByDescending(p => p.move.priority).ToList();

@@ -183,12 +183,12 @@ public class Dialogue_handler : MonoBehaviour
         DisableDialogueExit();
         var newInteraction = NewInteraction(info,"Battle Info","");
         pendingMessages.Add(newInteraction);
-        if(!messagesLoading)
-            StartCoroutine(ProcessQueue(newInteraction));
+        if(!messagesLoading) StartCoroutine(ProcessQueue(newInteraction));
     }
     private IEnumerator ProcessQueue(Interaction interaction)
     {
         messagesLoading = true;
+        //create a duplicate to avoid linking to currentInteraction, because it could delete interaction scrip-object later when nullified
         currentInteraction = NewInteraction(interaction.interactionMessage,"Battle Info","");
         HandleInteraction(currentInteraction);
         pendingMessages.Remove(interaction);
@@ -245,13 +245,14 @@ public class Dialogue_handler : MonoBehaviour
         var numDialoguePages = (float)interaction.interactionMessage.Length / maxCharacterLength;
         var remainder = math.frac(numDialoguePages); 
         dialogueLength = (remainder>0)? (int)math.ceil(numDialoguePages) : (int)numDialoguePages;
-        if (!Options_manager.Instance.playerInBattle || overworld_actions.Instance.usingUI)
+        if (!Options_manager.Instance.playerInBattle || interaction.interactionType != "Battle Info")
         {
             infoDialogueBox.SetActive(true);
             dialougeText.color=Color.black;
             battleDialogueBox.SetActive(false);
         }
-        else if(!overworld_actions.Instance.usingUI && Options_manager.Instance.playerInBattle)
+        if( (interaction.interactionType == "Battle Info" && Options_manager.Instance.playerInBattle)
+            || interaction.interactionType == "Battle Display Message")
         {
             battleDialogueBox.SetActive(true);
             dialougeText.color=Color.white;

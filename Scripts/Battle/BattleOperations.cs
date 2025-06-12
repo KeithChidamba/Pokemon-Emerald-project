@@ -95,8 +95,8 @@ public static class BattleOperations
             data.Receiver.pokemon.buffAndDebuffs.Add(CreateNewBuff(data.StatName));
         }
         var buff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.StatName);//wont ever be null
-        buff.stage = ValidateBuffLimit(data.Receiver.pokemon, buff, data.IsIncreasing, data.EffectAmount);
         CanDisplayDialougue = true;
+        buff.stage = ValidateBuffLimit(data.Receiver.pokemon, buff, data.IsIncreasing, data.EffectAmount);
         RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
     }
 
