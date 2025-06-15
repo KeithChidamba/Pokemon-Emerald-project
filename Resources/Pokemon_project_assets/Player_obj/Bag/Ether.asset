@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Ether
   itemType: Ether
   itemEffect: pp
-  itemDescription: Revives a pokemon with 20% health
+  itemDescription: Restores 10 powerpoints for a move
   price: 45
   quantity: 1
   itemImage: {fileID: 21300000, guid: 2fbb0427b3541fa6f9b61bc7dac669bc, type: 3}

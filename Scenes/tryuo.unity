@@ -4478,7 +4478,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: DisplayMoveDescription
+        m_MethodName: SelectMove
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21901,7 +21901,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: DisplayMoveDescription
+        m_MethodName: SelectMove
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26397,7 +26397,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: DisplayMoveDescription
+        m_MethodName: SelectMove
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26907,7 +26907,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 946544333}
         m_TargetAssemblyTypeName: Pokemon_Details, Assembly-CSharp
-        m_MethodName: DisplayMoveDescription
+        m_MethodName: SelectMove
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

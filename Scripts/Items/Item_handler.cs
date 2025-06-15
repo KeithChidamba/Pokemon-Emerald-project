@@ -177,9 +177,9 @@ public class Item_handler : MonoBehaviour
         Pokemon_Details.Instance.changingMoveData = true;
         if (_itemInUse.itemType.ToLower() == "ether")
             Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
-        if (_itemInUse.itemName.ToLower() == "pp max")
+        else if (_itemInUse.itemName.ToLower() == "pp max")
             Pokemon_Details.Instance.OnMoveSelected += MaximisePowerpoints;
-        if (_itemInUse.itemName.ToLower() == "pp up")
+        else if (_itemInUse.itemName.ToLower() == "pp up")
             Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
         Pokemon_Details.Instance.LoadDetails(_selectedPartyPokemon);
     }
@@ -240,9 +240,20 @@ public class Item_handler : MonoBehaviour
         _selectedPartyPokemon.hp = reviveType=="max revive"? _selectedPartyPokemon.maxHp : math.trunc(_selectedPartyPokemon.maxHp*0.5f);
         Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" has been revived!", "Details",1f);
         CompleteItemUsage(1f);
-    } 
+    }
+
+    private bool MoveAlterationCancelled(Action<int> eventToUnsubscribe, int moveIndex)
+    {
+        if (moveIndex > -1) return false; //-1 means it was cancelled
+        
+        Pokemon_Details.Instance.OnMoveSelected -= eventToUnsubscribe;
+        ResetItemUsage();
+        return true;
+    }
     private void RestorePowerpoints(int moveIndex)
      {
+         if(MoveAlterationCancelled(RestorePowerpoints,moveIndex)) return; //user exited
+              
          var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
          if (currentMove.powerpoints == currentMove.maxPowerpoints)
          {
@@ -268,6 +279,8 @@ public class Item_handler : MonoBehaviour
      }
     private void IncreasePowerpoints(int moveIndex)
     {
+        if(MoveAlterationCancelled(IncreasePowerpoints,moveIndex)) return; //user exited
+        
         var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
         double powerpointRatio = (float) currentMove.maxPowerpoints / currentMove.basePowerpoints;
         if (Math.Round(powerpointRatio, 1) >= 1.6)
@@ -285,6 +298,8 @@ public class Item_handler : MonoBehaviour
 
     private void MaximisePowerpoints(int moveIndex)
     {
+        if(MoveAlterationCancelled(MaximisePowerpoints,moveIndex)) return; //user exited
+        
         var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
         if (currentMove.maxPowerpoints >= (currentMove.basePowerpoints * 1.6))
         {
@@ -305,7 +320,6 @@ public class Item_handler : MonoBehaviour
             ResetItemUsage();
             return;
         }
-
         DepleteItem();
         StartCoroutine(TryToCatchPokemon(pokeball));
     }

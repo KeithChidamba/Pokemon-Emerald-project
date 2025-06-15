@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class Pokemon_Details : MonoBehaviour
 {
+    //too lazy to change this to camelCase because ot would take a lot of editor work
     [SerializeField]private Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID,pkm_nature,Trainer_Name;
     [SerializeField]private Text pkm_atk, pkm_sp_atk, pkm_def, pkm_sp_def, pkm_speed, pkm_hp;
     [SerializeField]private Text move_Description,pkm_HeldItem,pkm_CurrentExp,pkm_NextLvExp;
@@ -61,6 +62,7 @@ public class Pokemon_Details : MonoBehaviour
     public void ExitDetails()
     {
         if (learningMove) return;
+        if(changingMoveData) OnMoveSelected?.Invoke(-1);//cancel move selection
         Game_ui_manager.Instance.ManageScreens(-1);
         changingMoveData = false;
         OverlayUi.SetActive(false);
@@ -85,14 +87,13 @@ public class Pokemon_Details : MonoBehaviour
          LoadPage(_currentPage);
      }
     
-    public void DisplayMoveDescription(int moveIndex)
+    public void SelectMove(int moveIndex)
     {
-        if (learningMove)
+        if (learningMove || changingMoveData)
         {
             OnMoveSelected?.Invoke(moveIndex-1);
             return;
         }
-        if (changingMoveData) return;
         move_Description.text = currentPokemon.moveSet[moveIndex - 1].description;
         move_acc.text = "Accuracy: "+currentPokemon.moveSet[moveIndex - 1].moveAccuracy;
         move_dmg.text = "Damage: " + currentPokemon.moveSet[moveIndex - 1].moveDamage;

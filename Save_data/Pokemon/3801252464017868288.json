@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "50/50",
     "nature": {
-        "instanceID": 25980
+        "instanceID": 25978
     },
     "hasGender": true,
     "hp": 45.0,
@@ -54,7 +54,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25162
+            "instanceID": 25160
         }
     ],
     "statusEffect": "None",
@@ -79,27 +79,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -30488
+            "instanceID": -7694
         },
         {
-            "instanceID": -30490
+            "instanceID": -7696
         },
         {
-            "instanceID": -30492
+            "instanceID": -7698
         },
         {
-            "instanceID": -30494
+            "instanceID": -7700
         }
     ],
     "ability": {
-        "instanceID": 25476
+        "instanceID": 25474
     },
     "evolutions": [
         {
-            "instanceID": 25152
+            "instanceID": 25150
         },
         {
-            "instanceID": 25958
+            "instanceID": 25956
         }
     ],
     "heldItem": {
@@ -107,10 +107,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32466
+        "instanceID": 32462
     },
     "backPicture": {
-        "instanceID": 32450
+        "instanceID": 32446
     },
     "pokeballName": "",
     "abilityName": "Arena Trap",
