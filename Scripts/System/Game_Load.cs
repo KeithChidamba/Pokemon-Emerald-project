@@ -10,6 +10,7 @@ public class Game_Load : MonoBehaviour
 {
     public Button load_btn;
     public Button newGame_btn;
+   public Button uploadButton;
     public GameObject new_player_ui; 
     public GameObject Start_ui;
     public InputField name_input;
@@ -41,6 +42,7 @@ public class Game_Load : MonoBehaviour
 
     private void LoadNewPlayerPage()
     {
+        uploadButton.gameObject.SetActive(false);
         load_btn.gameObject.SetActive(false);
         newGame_btn.gameObject.SetActive(false);
         new_player_ui.SetActive(true);
@@ -49,6 +51,11 @@ public class Game_Load : MonoBehaviour
     {
         load_btn.interactable = false;
         newGame_btn.interactable = true;
+    }
+    public void AllowGameLoad()
+    {
+        load_btn.interactable = true;
+        newGame_btn.interactable = false;
     }
     public void CreateNewPlayer()
     {
@@ -78,7 +85,9 @@ public class Game_Load : MonoBehaviour
     }
     public void NewGame()
     {
-        Save_manager.Instance.EraseSaveData();
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+            Save_manager.Instance.EraseSaveData();
+        
         LoadNewPlayerPage();
     }
     public void StartGame()

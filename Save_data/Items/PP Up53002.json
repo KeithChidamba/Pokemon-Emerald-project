@@ -1,13 +1,13 @@
 {
-    "itemID": "Calcium13537",
-    "itemName": "Calcium",
+    "itemID": "PP Up53002",
+    "itemName": "PP Up",
     "itemType": "Stat Increase",
-    "itemEffect": "Special Attack",
-    "itemDescription": "It increases the Special Attack of a Pokémon",
+    "itemEffect": "pp",
+    "itemDescription": "increases the poweperpoints of a move",
     "price": 2000,
-    "quantity": 11,
+    "quantity": 4,
     "itemImage": {
-        "instanceID": 32420
+        "instanceID": 32054
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

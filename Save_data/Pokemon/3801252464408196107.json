@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25794
+        "instanceID": 25796
     },
     "hasGender": true,
     "hp": 49.0,
@@ -54,7 +54,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25636
+            "instanceID": 25638
         }
     ],
     "statusEffect": "None",
@@ -76,24 +76,24 @@
     ],
     "moveSet": [
         {
-            "instanceID": -7674
+            "instanceID": -46446
         },
         {
-            "instanceID": -7676
+            "instanceID": -46448
         },
         {
-            "instanceID": -7678
+            "instanceID": -46450
         },
         {
-            "instanceID": -7680
+            "instanceID": -46452
         }
     ],
     "ability": {
-        "instanceID": 25880
+        "instanceID": 25882
     },
     "evolutions": [
         {
-            "instanceID": 26052
+            "instanceID": 26054
         },
         {
             "instanceID": 24948
@@ -104,10 +104,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32188
+        "instanceID": 32190
     },
     "backPicture": {
-        "instanceID": 32016
+        "instanceID": 32018
     },
     "pokeballName": "",
     "abilityName": "Overgrow",

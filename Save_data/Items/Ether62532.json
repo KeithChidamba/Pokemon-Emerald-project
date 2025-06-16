@@ -1,0 +1,18 @@
+{
+    "itemID": "Ether62532",
+    "itemName": "Ether",
+    "itemType": "Ether",
+    "itemEffect": "pp",
+    "itemDescription": "Revives a pokemon with 20% health",
+    "price": 45,
+    "quantity": 3,
+    "itemImage": {
+        "instanceID": 32092
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}

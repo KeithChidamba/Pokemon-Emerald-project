@@ -1,13 +1,13 @@
 {
-    "itemID": "Calcium13537",
-    "itemName": "Calcium",
+    "itemID": "PP Max43837",
+    "itemName": "PP Max",
     "itemType": "Stat Increase",
-    "itemEffect": "Special Attack",
-    "itemDescription": "It increases the Special Attack of a Pokémon",
+    "itemEffect": "pp",
+    "itemDescription": "Maximises the poweperpoints of a move",
     "price": 2000,
-    "quantity": 11,
+    "quantity": 3,
     "itemImage": {
-        "instanceID": 32420
+        "instanceID": 32456
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

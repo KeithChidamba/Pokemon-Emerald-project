@@ -1,0 +1,18 @@
+{
+    "itemID": "Max Ether5565",
+    "itemName": "Max Ether",
+    "itemType": "Ether",
+    "itemEffect": "pp",
+    "itemDescription": "Restores all the powerpoints for a move",
+    "price": 45,
+    "quantity": 3,
+    "itemImage": {
+        "instanceID": 32352
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}
