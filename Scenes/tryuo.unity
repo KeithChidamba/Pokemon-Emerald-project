@@ -9571,7 +9571,6 @@ GameObject:
   m_Component:
   - component: {fileID: 277133361}
   - component: {fileID: 277133360}
-  - component: {fileID: 277133362}
   m_Layer: 0
   m_Name: Save_Manager
   m_TagString: Untagged
@@ -9608,18 +9607,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &277133362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 277133359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90adb4edff38432c0b3ec38065922d3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &279946561
 GameObject:
   m_ObjectHideFlags: 0
@@ -99442,8 +99429,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 277133362}
-        m_TargetAssemblyTypeName: ZipUploader, Assembly-CSharp
+      - m_Target: {fileID: 277133360}
+        m_TargetAssemblyTypeName: Save_manager, Assembly-CSharp
         m_MethodName: UploadSaveZip
         m_Mode: 1
         m_Arguments:
