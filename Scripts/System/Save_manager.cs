@@ -11,8 +11,8 @@ using UnityEngine.UI;
 
 public class Save_manager : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern void DownloadZipAndStoreLocally();
+    [DllImport("__Internal")] private static extern void DownloadZipAndStoreLocally();
+    [DllImport("__Internal")] private static extern void CreateDirectories();
     [FormerlySerializedAs("party_IDs")] public List<string> partyIDs;
     public Area_manager area;
     public static Save_manager Instance { get; private set; }
@@ -28,7 +28,6 @@ public class Save_manager : MonoBehaviour
 
         Instance = this;
     }
-
     private void Start()
     {
         _saveDataPath = GetSavePath();
@@ -46,12 +45,23 @@ public class Save_manager : MonoBehaviour
         }
         
     }
-
+    public void CreateDefaultWebglDirectories()
+    {
+        #if UNITY_WEBGL && !UNITY_EDITOR
+                        CreateDirectories();
+        #endif
+    }
+    public void UploadSaveZip()
+    {
+        CreateDefaultWebglDirectories();
+        #if UNITY_WEBGL && !UNITY_EDITOR
+                                UploadZipAndStoreToIDBFS();
+        #endif
+    }
     public void OnIDBFSReady()
     {
         StartCoroutine(SyncFromIndexedDB());
     }
-    
     IEnumerator SyncFromIndexedDB()
     {
         Dialogue_handler.Instance.DisplayInfo("Game Loaded","Details");
@@ -76,7 +86,7 @@ public class Save_manager : MonoBehaviour
             case RuntimePlatform.LinuxPlayer:
             case RuntimePlatform.Android:
             case RuntimePlatform.IPhonePlayer:
-                basePath = Application.persistentDataPath;
+                basePath = Application.persistentDataPath;//test for these later
                 break;
 
             case RuntimePlatform.WindowsEditor:
@@ -183,6 +193,7 @@ public class Save_manager : MonoBehaviour
     }
     private void CreateFolder(string path)
     {
+        if (Application.platform == RuntimePlatform.WebGLPlayer) return;
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
     }
@@ -253,11 +264,9 @@ public class Save_manager : MonoBehaviour
             var path = Path.Combine(_saveDataPath + "/Party_Ids/", "pkm_" + (i + 1) + ".txt");
             File.WriteAllText(path, Pokemon_party.Instance.party[i].pokemonID.ToString());
         }
-#if UNITY_WEBGL && !UNITY_EDITOR
-                        DownloadZipAndStoreLocally();
-#else
-        Debug.Log("This only works in WebGL build.");
-#endif
+        #if UNITY_WEBGL && !UNITY_EDITOR
+                                DownloadZipAndStoreLocally();
+        #endif
         Dialogue_handler.Instance.DisplayInfo("Game saved online but please download your save file", "Details");
         Game_ui_manager.Instance.CloseMenu();
         

@@ -61,6 +61,7 @@ public class Game_Load : MonoBehaviour
     {
         if (name_input.text.Length < _maxNameLength && name_input.text.Length > _minNameLength-1)
         {
+            Save_manager.Instance.CreateDefaultWebglDirectories();
             var playerName = name_input.text;
             var data = ScriptableObject.CreateInstance<Player_data>();
             data.playerName = playerName;
