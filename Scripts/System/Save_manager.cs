@@ -13,6 +13,7 @@ public class Save_manager : MonoBehaviour
 {
     [DllImport("__Internal")] private static extern void DownloadZipAndStoreLocally();
     [DllImport("__Internal")] private static extern void CreateDirectories();
+    [DllImport("__Internal")] private static extern void UploadZipAndStoreToIDBFS();
     [FormerlySerializedAs("party_IDs")] public List<string> partyIDs;
     public Area_manager area;
     public static Save_manager Instance { get; private set; }
