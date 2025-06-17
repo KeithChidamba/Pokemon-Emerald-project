@@ -18,7 +18,7 @@ public class Save_manager : MonoBehaviour
     public Area_manager area;
     public static Save_manager Instance { get; private set; }
     private string _saveDataPath = "Assets/Save_data";
-
+    public event Action OnVirtualFileSystemLoaded;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -59,7 +59,15 @@ public class Save_manager : MonoBehaviour
                                 UploadZipAndStoreToIDBFS();
         #endif
     }
-    public void OnIDBFSReady()
+    public void OnFileStructureCreated()//js notification
+    {
+        OnVirtualFileSystemLoaded?.Invoke();
+    }
+    public void OnDownloadComplete()//js notification
+    {
+        Dialogue_handler.Instance.DisplayInfo("Save data downloaded successfully!", "Details");
+    }
+    public void OnIDBFSReady()//js notification
     {
         StartCoroutine(SyncFromIndexedDB());
     }
@@ -72,7 +80,7 @@ public class Save_manager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Game_Load.Instance.AllowGameLoad();
     }
-    string GetSavePath(string relativePath = "")
+    string GetSavePath()
     {
         string basePath;
 
@@ -81,26 +89,11 @@ public class Save_manager : MonoBehaviour
             case RuntimePlatform.WebGLPlayer:
                 basePath = "/data/Save_data"; // root of virtual FS (in-memory or IDBFS)
                 break;
-
-            case RuntimePlatform.WindowsPlayer:
-            case RuntimePlatform.OSXPlayer:
-            case RuntimePlatform.LinuxPlayer:
-            case RuntimePlatform.Android:
-            case RuntimePlatform.IPhonePlayer:
-                basePath = Application.persistentDataPath;//test for these later
-                break;
-
-            case RuntimePlatform.WindowsEditor:
-            case RuntimePlatform.OSXEditor:
-                basePath = Path.Combine(Application.dataPath, "../Save_data");
-                break;
-
-            default:
-                basePath = Application.persistentDataPath;
+             default:
+                basePath = "Assets/Save_data";
                 break;
         }
-
-        return Path.Combine(basePath, relativePath);
+        return basePath;
     }
 
     private void LoadPlayerData()
@@ -254,10 +247,7 @@ public class Save_manager : MonoBehaviour
             pokemon_storage.Instance.numPartyMembers++;
         }
     }
-    public void OnDownloadComplete()
-    {
-        Dialogue_handler.Instance.DisplayInfo("Save data downloaded successfully!", "Details");
-    }
+
     private void SavePartyPokemonIDs()
     {
         for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)

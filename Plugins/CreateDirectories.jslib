@@ -1,5 +1,21 @@
 mergeInto(LibraryManager.library, {
   CreateDirectories: function () {
+    const dbName = "data";
+
+    const deleteRequest = indexedDB.deleteDatabase(dbName);
+
+    deleteRequest.onsuccess = function () {
+      console.log(`✅ Deleted database "${dbName}" successfully.`);
+    };
+
+    deleteRequest.onerror = function (event) {
+      console.error(`❌ Failed to delete database "${dbName}":`, event);
+    };
+
+    deleteRequest.onblocked = function () {
+      console.warn(`⚠️ Delete blocked. Close other tabs using "${dbName}".`);
+    };
+
     const MOUNT_PATH = '/data';
     const SAVE_PATH = MOUNT_PATH + '/Save_data';
 
@@ -45,6 +61,7 @@ mergeInto(LibraryManager.library, {
           console.error("IDBFS final sync failed:", err);
         } else {
           console.log("Default directory structure created.");
+          unityInstance.SendMessage("Save_Manager", "OnFileStructureCreated", "");
         }
       });
     });

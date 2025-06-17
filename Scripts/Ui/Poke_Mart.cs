@@ -34,11 +34,15 @@ public class Poke_Mart : MonoBehaviour
 
     private void Start()
     {
-        InitialiseItems();
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+            Save_manager.Instance.OnVirtualFileSystemLoaded += InitialiseItems;
+        else
+            InitialiseItems();
     }
 
     private void InitialiseItems()
     {        
+        Save_manager.Instance.OnVirtualFileSystemLoaded -= InitialiseItems;
         storeItems.Clear();
         var itemPaths = Directory.GetFiles("Assets/Resources/Pokemon_project_assets/Player_obj/Bag/");
         List<Item> itemAssets = new(); 
