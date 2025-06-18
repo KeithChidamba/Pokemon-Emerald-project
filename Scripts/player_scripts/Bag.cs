@@ -239,8 +239,8 @@ public class Bag : MonoBehaviour
     void ReloadItemUI()
     {
         bagItemsUI[0].ResetUI();
-        foreach (Item_ui itm in bagItemsUI)
-            itm.LoadItemUI();
+        foreach (var item in bagItemsUI)
+            item.LoadItemUI();
     }
 }
 

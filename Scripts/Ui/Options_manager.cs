@@ -10,6 +10,7 @@ public class Options_manager : MonoBehaviour
     [SerializeField] private Recieve_Pokemon starterPokemonGiftEvent;
     public static Options_manager Instance;
     private readonly Dictionary<string, Action> _interactionMethods = new ();
+    public event Action<Overworld_interactable> OnInteractionTriggered;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -22,7 +23,7 @@ public class Options_manager : MonoBehaviour
 
     private void Start()
     {
-        _interactionMethods.Add("ExitGame",ExitGame);
+        _interactionMethods.Add("CloseApplication",CloseApplication);
         _interactionMethods.Add("Battle",Battle);
         _interactionMethods.Add("LearnMove",LearnMove);
         _interactionMethods.Add("SkipMove",SkipMove);
@@ -38,15 +39,15 @@ public class Options_manager : MonoBehaviour
         _interactionMethods.Add("ReceiveGiftPokemon",ReceiveGiftPokemon);
     }
 
-    void ExitGame()
+    void CloseApplication()
     {
         Dialogue_handler.Instance.EndDialogue();
-        Game_Load.Instance.ExitGame();
+        Application.Quit();
     }
-    public void ExitToMenu()
+    public void ExitGame()
     {
         Dialogue_handler.Instance.DisplayList("Are you sure you want to exit?, you will lose unsaved data!",
-             "Good bye!", new[]{ "ExitGame",""}, new[]{"Yes", "No"});
+             "Good bye!", new[]{ "CloseApplication",""}, new[]{"Yes", "No"});
     }
     void Battle()
     {
@@ -171,5 +172,9 @@ public class Options_manager : MonoBehaviour
         else
             Debug.Log("couldn't find method for interaction: " + methodName);
     }
-
+    public void CompleteInteraction(Overworld_interactable interactable,int option)
+    {
+        OnInteractionTriggered?.Invoke(interactable);
+        CompleteInteraction(interactable.interaction,option);
+    }
 }

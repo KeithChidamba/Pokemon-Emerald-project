@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -41,10 +42,7 @@ public class Area_manager : MonoBehaviour
     }
     private Switch_Area FindArea(string areaName)
     {
-        foreach (Switch_Area a in overworldAreas)
-            if (a.areaName == areaName)
-                return a;
-        return null;
+        return overworldAreas.FirstOrDefault(a=>a.areaName==areaName);
     }
     public void GoToOverworld()
     {
@@ -52,7 +50,7 @@ public class Area_manager : MonoBehaviour
         {//from building to over world
             _areaBuilding.interior.SetActive(false);
             _areaBuilding.insideArea = false;
-            Player_movement.Instance.transform.position = _areaBuilding.doorPosition.localPosition;
+            Player_movement.Instance.transform.position = _areaBuilding.doorPosition.position;
             Player_movement.Instance.canMove = false;
         }
         else //from save point in overworld

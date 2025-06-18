@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Clerk
   m_EditorClassIdentifier: 
-  InteractionMsg: Hello, what can i help you with?
-  InteractionType: Options
-  InteractionOptions:
+  interactionMessage: Hello, what can i help you with?
+  interactionType: Options
+  interactionOptions:
   - View Market Delayed
   - Sell Item
-  ResultMessage: What would you like
-  OptionsUiText:
+  resultMessage: What would you like
+  optionsUiText:
   - Buy
   - Sell
-  AdditionalInfo: []
+  additionalInfo: []

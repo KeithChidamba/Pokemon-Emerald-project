@@ -26,7 +26,6 @@ public class Save_manager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
     }
     private void Start()

@@ -19,9 +19,11 @@ public class Store_Item_ui : MonoBehaviour
         itemDescription.text = item.itemDescription;
         itemImage.sprite = item.itemImage;
     }
-    public void ResetUI()
+    public void ClearUI()
     {
+        item = null;
         itemDescription.text = "";
         itemImage.sprite = null;
+        gameObject.SetActive(false);
     }
 }

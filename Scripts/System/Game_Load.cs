@@ -80,10 +80,6 @@ public class Game_Load : MonoBehaviour
             Dialogue_handler.Instance.DisplayInfo("Name must be between 4 and 14 characters","Details",1.5f);
         }
     }
-    public void ExitGame()
-    {
-        Application.Quit();
-    }
     public void NewGame()
     {
         if (Application.platform != RuntimePlatform.WebGLPlayer)

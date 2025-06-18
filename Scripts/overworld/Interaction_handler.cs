@@ -38,10 +38,7 @@ public class Interaction_handler : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 if (interactableObject.interaction != null)
-                {
-                    Dialogue_handler.Instance.currentInteraction = interactableObject.interaction;
-                    Dialogue_handler.Instance.HandleInteraction(Dialogue_handler.Instance.currentInteraction);
-                }
+                    Dialogue_handler.Instance.StartInteraction(interactableObject);
             }
             if (Input.GetKeyDown(KeyCode.Q) && !overworld_actions.Instance.doingAction)
             {

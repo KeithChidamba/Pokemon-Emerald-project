@@ -12,8 +12,9 @@ public class Game_ui_manager : MonoBehaviour
     public bool menuOff=true;
     public Player_Info_ui profile;
     public static Game_ui_manager Instance;
-    [SerializeField]private int _numUIScreensOpen;
+    [SerializeField]private int numUIScreensOpen;
     public bool canExitParty = true;
+    [SerializeField]private GameObject exitButton;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,6 +28,7 @@ public class Game_ui_manager : MonoBehaviour
     private void Start()
     {
         canExitParty = true;
+        exitButton.SetActive(Application.platform != RuntimePlatform.WebGLPlayer);
     }
 
     private void Update()
@@ -36,10 +38,10 @@ public class Game_ui_manager : MonoBehaviour
     }
     public void ManageScreens(int change)
     {
-        _numUIScreensOpen += change;
-        if (_numUIScreensOpen < 0) _numUIScreensOpen = 0;
-        overworld_actions.Instance.usingUI = _numUIScreensOpen>0;
-        Player_movement.Instance.canMove = _numUIScreensOpen==0;
+        numUIScreensOpen += change;
+        if (numUIScreensOpen < 0) numUIScreensOpen = 0;
+        overworld_actions.Instance.usingUI = numUIScreensOpen>0;
+        Player_movement.Instance.canMove = numUIScreensOpen==0;
         if(Options_manager.Instance.playerInBattle) Player_movement.Instance.canMove = false;
     }
     private void UiInputs()
@@ -117,7 +119,6 @@ public class Game_ui_manager : MonoBehaviour
     {
         ManageScreens(1);
         ActivateUiElement(Poke_Mart.Instance.storeUI);
-        Poke_Mart.Instance.ViewStore();
     }
     public void ViewBag()
     {

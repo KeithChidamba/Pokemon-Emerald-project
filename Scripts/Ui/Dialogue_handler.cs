@@ -10,10 +10,12 @@ using UnityEngine.Serialization;
 public class Dialogue_handler : MonoBehaviour
 {
     public Interaction currentInteraction;
+    public Overworld_interactable currentInteractionObject;
     [SerializeField] private Text dialougeText;
     [SerializeField] GameObject elipsisSymbol;
     [SerializeField] private bool dialogueFinished ;
     public bool canExitDialogue = true;
+    private bool _overworldInteraction = false;
     public bool displaying;
     [SerializeField] private string currentLineContent = "";
    [SerializeField] private int maxCharacterLength = 90;
@@ -104,7 +106,11 @@ public class Dialogue_handler : MonoBehaviour
     public void SelectOption(int optionIndex)
     {
         ActivateOptions(false);
-        Options_manager.Instance.CompleteInteraction(currentInteraction,optionIndex);
+        if(_overworldInteraction)
+            Options_manager.Instance.CompleteInteraction(currentInteractionObject,optionIndex);
+        else
+            Options_manager.Instance.CompleteInteraction(currentInteraction,optionIndex);
+        _overworldInteraction = false;
         DeletePreviousOptions();
     }
     private void ActivateOptions(bool display)
@@ -135,7 +141,7 @@ public class Dialogue_handler : MonoBehaviour
         foreach (string txt in optionsText)
             newInteraction.optionsUiText.Add(txt);
         currentInteraction = newInteraction;
-        HandleInteraction(currentInteraction);
+        HandleInteraction();
     }
     
     public void DisplayInfo(string info,string type)
@@ -150,7 +156,7 @@ public class Dialogue_handler : MonoBehaviour
         messagesLoading = false;
         var newInteraction = NewInteraction(info,type,"");
         currentInteraction = newInteraction;
-        HandleInteraction(currentInteraction);
+        HandleInteraction();
     }
     public void DisplayInfo(string info,string type,float dialogueDuration)
     {
@@ -190,7 +196,7 @@ public class Dialogue_handler : MonoBehaviour
         messagesLoading = true;
         //create a duplicate to avoid linking to currentInteraction, because it could delete interaction scrip-object later when nullified
         currentInteraction = NewInteraction(interaction.interactionMessage,"Battle Info","");
-        HandleInteraction(currentInteraction);
+        HandleInteraction();
         pendingMessages.Remove(interaction);
         yield return new WaitForSeconds(2f);
         ContinueMessageQueue();
@@ -233,7 +239,15 @@ public class Dialogue_handler : MonoBehaviour
         StopAllCoroutines();
         Battle_handler.Instance.displayingInfo = false;
     }
-    public void HandleInteraction(Interaction interaction)
+
+    public void StartInteraction(Overworld_interactable interactable)
+    {
+        currentInteractionObject = interactable;
+        currentInteraction = interactable.interaction;
+        _overworldInteraction = true;
+        HandleInteraction();
+    }
+    private void HandleInteraction()
     {
         if(Player_movement.Instance)
         {
@@ -242,28 +256,28 @@ public class Dialogue_handler : MonoBehaviour
         }
         dialogueFinished = false;
         displaying = true;  
-        var numDialoguePages = (float)interaction.interactionMessage.Length / maxCharacterLength;
+        var numDialoguePages = (float)currentInteraction.interactionMessage.Length / maxCharacterLength;
         var remainder = math.frac(numDialoguePages); 
         dialogueLength = (remainder>0)? (int)math.ceil(numDialoguePages) : (int)numDialoguePages;
-        if (!Options_manager.Instance.playerInBattle || interaction.interactionType != "Battle Info")
+        if (!Options_manager.Instance.playerInBattle || currentInteraction.interactionType != "Battle Info")
         {
             infoDialogueBox.SetActive(true);
             dialougeText.color=Color.black;
             battleDialogueBox.SetActive(false);
         }
-        if( (interaction.interactionType == "Battle Info" && Options_manager.Instance.playerInBattle)
-            || interaction.interactionType == "Battle Display Message")
+        if( (currentInteraction.interactionType == "Battle Info" && Options_manager.Instance.playerInBattle)
+            || currentInteraction.interactionType == "Battle Display Message")
         {
             battleDialogueBox.SetActive(true);
             dialougeText.color=Color.white;
             infoDialogueBox.SetActive(false);
         }
         if(!Options_manager.Instance.playerInBattle) dialogueExitIndicator.SetActive(canExitDialogue);
-        if (interaction.interactionMessage.Length > maxCharacterLength)
+        if (currentInteraction.interactionMessage.Length > maxCharacterLength)
         {
             clickNextIndicator.SetActive(true);
             elipsisSymbol.SetActive(true);
-            currentLineContent = interaction.interactionMessage.Substring(0,maxCharacterLength);
+            currentLineContent = currentInteraction.interactionMessage.Substring(0,maxCharacterLength);
             dialougeText.text = currentLineContent;
             dialogueProgress++;
         }
@@ -271,12 +285,12 @@ public class Dialogue_handler : MonoBehaviour
         {
             if (currentInteraction.interactionType == "Options")
                 CreateDialogueOptions();
-            if (interaction.interactionType == "Event")
+            if (currentInteraction.interactionType == "Event")
                 Options_manager.Instance.CompleteInteraction(currentInteraction,0);
             clickNextIndicator.SetActive(false);
             dialogueLength = 1;
             dialogueProgress = 1;
-            dialougeText.text = interaction.interactionMessage;
+            dialougeText.text = currentInteraction.interactionMessage;
             dialogueFinished = true;
         }
 

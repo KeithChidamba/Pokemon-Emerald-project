@@ -9,7 +9,8 @@ using UnityEngine.UI;
 
 public class Poke_Mart : MonoBehaviour
 {
-    public List<Item> storeItems;
+    public List<Item> currentStoreItems;
+    public List<Item> allItems;
     public bool viewingStore;
     public Store_Item_ui[] storeItemsUI;
     public int numItems = 0;
@@ -21,6 +22,8 @@ public class Poke_Mart : MonoBehaviour
     public GameObject quantityUI;
     public Text quantity;    
     public Text playerMoneyText;
+    public PokeMartData currentMartData;
+    private bool _itemsLoaded;
     public static Poke_Mart Instance;
     private void Awake()
     {
@@ -34,6 +37,7 @@ public class Poke_Mart : MonoBehaviour
 
     private void Start()
     {
+        Options_manager.Instance.OnInteractionTriggered += ViewStore;
         if (Application.platform == RuntimePlatform.WebGLPlayer)
             Save_manager.Instance.OnVirtualFileSystemLoaded += InitialiseItems;
         else
@@ -43,24 +47,30 @@ public class Poke_Mart : MonoBehaviour
     private void InitialiseItems()
     {        
         Save_manager.Instance.OnVirtualFileSystemLoaded -= InitialiseItems;
-        storeItems.Clear();
-        var itemPaths = Directory.GetFiles("Assets/Resources/Pokemon_project_assets/Player_obj/Bag/");
-        List<Item> itemAssets = new(); 
-        foreach (var itemPath in itemPaths)
+        allItems = Resources.LoadAll<Item>("Pokemon_project_assets/Items/Mart_Items").ToList(); 
+    }
+    
+    private IEnumerator SelectItemsForStore()
+    {
+        currentStoreItems.Clear();
+        List<Item> validItems=new();
+        foreach (var item in allItems)
         {
-            if(Path.GetFileName(itemPath).Contains(".meta"))continue;
-            
-            var rawFilePath = itemPath.Split('.')[0];//remove extension  
-            var itemName = Path.GetFileName(rawFilePath);
-            var item = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/"+itemName);
-            itemAssets.Add(item);
+            if(currentMartData.availableItems.Contains(item.itemName.ToLower()))
+                validItems.Add(item);
         }
-        var orderedItems = itemAssets.OrderBy(item => item.price);
+        var orderedItems = validItems.OrderBy(item => item.price);
+        var itemProgress = 0;
         foreach (var group in orderedItems.GroupBy(item => item.itemType).ToList())
         {
             foreach (var item in group)
-                storeItems.Add(item);
+            {
+                currentStoreItems.Add(item);
+                itemProgress++;
+            }
         }
+        yield return new WaitUntil(() => itemProgress == validItems.Count());
+        _itemsLoaded = true;
     }
     private void Update()
     {
@@ -84,7 +94,7 @@ public class Poke_Mart : MonoBehaviour
             {
                 storeItemsUI[i].item = storeItemsUI[i + 1].item;
             }
-            storeItemsUI[6].item = storeItems[topIndex + 7];
+            storeItemsUI[6].item = currentStoreItems[topIndex + 7];
             ReloadItems();
             topIndex++;
         }
@@ -97,14 +107,14 @@ public class Poke_Mart : MonoBehaviour
             {
                 storeItemsUI[i].item = storeItemsUI[i - 1].item;
             }
-            storeItemsUI[0].item = storeItems[topIndex - 1];
+            storeItemsUI[0].item = currentStoreItems[topIndex - 1];
             ReloadItems();
             topIndex--;
         }
     }
     public void BuyItem()
     {
-        var item = Obj_Instance.CreateItem(storeItems[topIndex + selectedItemIndex - 1]);
+        var item = Obj_Instance.CreateItem(currentStoreItems[topIndex + selectedItemIndex - 1]);
         if(Game_Load.Instance.playerData.playerMoney >= item.price)
         {
             item.quantity = selectedItemQuantity;
@@ -126,7 +136,7 @@ public class Poke_Mart : MonoBehaviour
         {
             if (selectedItemQuantity < 99)//below max quantity and affordable by player
             {
-                var priceOfItem = (selectedItemQuantity + 1) * storeItems[topIndex + selectedItemIndex - 1].price;
+                var priceOfItem = (selectedItemQuantity + 1) * currentStoreItems[topIndex + selectedItemIndex - 1].price;
                 if (Game_Load.Instance.playerData.playerMoney >= priceOfItem)
                     selectedItemQuantity += value;
                 else
@@ -136,17 +146,36 @@ public class Poke_Mart : MonoBehaviour
                 selectedItemQuantity = 99;
         }
     }
-    public void ViewStore()
+    private void ViewStore(Overworld_interactable clerkInteractable)
     {
+        if (clerkInteractable.interactionType != "Clerk") return; //Mart Location
+       
+        foreach (var data in Resources.LoadAll<PokeMartData>("Pokemon_project_assets/Overwolrd_obj/Poke_Mart_Data"))
+        {
+            if (data.location == clerkInteractable.location)
+            {
+                currentMartData = data; 
+                StartCoroutine(InitializeStoreData());
+                break;
+            }
+        }
+        
+    }
+
+    private IEnumerator InitializeStoreData()
+    {
+        _itemsLoaded = false;
+        StartCoroutine(SelectItemsForStore());
+        yield return new WaitUntil(()=>_itemsLoaded);
         viewingStore = true;
         playerMoneyText.text = Game_Load.Instance.playerData.playerMoney.ToString();
         topIndex = 0;
-        numItems = storeItems.Count;
+        numItems = currentStoreItems.Count;
         //if less than amount of ui elements, load that number, otherwise just load the first seven
         var numItemsForView = (numItems < 8) ? numItems : 7; 
         for (int i = 0; i < numItemsForView; i++)
         {
-            storeItemsUI[i].item = storeItems[i];
+            storeItemsUI[i].item = currentStoreItems[i];
             storeItemsUI[i].gameObject.SetActive(true);
             storeItemsUI[i].LoadItemUI();
         }
@@ -157,16 +186,14 @@ public class Poke_Mart : MonoBehaviour
         selectedItemIndex = 0;
         purchaseButton.SetActive(false);
         quantityUI.SetActive(false);
-        storeItemsUI[0].ResetUI();
+        foreach (var item in storeItemsUI)
+            item.ClearUI();
         viewingStore = false;
     }
     void ReloadItems()
     {
-        storeItemsUI[0].ResetUI();
         foreach (var item in storeItemsUI)
-        {
             item.LoadItemUI();
-        }
         SelectItem(1);
     }
 }
