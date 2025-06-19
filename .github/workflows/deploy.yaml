@@ -16,7 +16,7 @@ jobs:
           lfs: true  # if you use Git LFS for large files
 
       - name: Setup Unity
-        uses: game-ci/unity-actions/setup@v2
+        uses: game-ci/unity-setup@v2
         with:
           unityVersion: 2022.3.6f1  # corrected version
 
