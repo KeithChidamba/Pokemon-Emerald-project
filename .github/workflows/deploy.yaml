@@ -23,7 +23,7 @@ jobs:
       - name: Build WebGL using GameCI
         uses: game-ci/unity-builder@v4
         with:
-          unityVersion: 2022.3.6f1
+          unityVersion: 2022.3.61f1
           targetPlatform: WebGL
           buildMethod: WebGLBuilder.BuildWebGL
     
@@ -32,8 +32,8 @@ jobs:
     
       - name: Prepare build branch
         run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "GitHub Action"
+          git config --global user.email "kidakwashe14@gmail.com"
+          git config --global user.name "KeithChidamba"
           
           git fetch origin
           git switch -C webgl-build
