@@ -1,0 +1,64 @@
+name: WebGL Build and Deploy
+
+on:
+  push:
+    branches:
+      - refactor_testing  # change this to your working branch
+
+jobs:
+  build-webgl:
+    runs-on: ubuntu-latest
+    name: Build WebGL and Deploy
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          lfs: true  # if you use Git LFS for large files
+
+      - name: Setup Unity
+        uses: game-ci/unity-actions/setup@v2
+        with:
+          unityVersion: 2022.3.6f1  # corrected version
+
+      - name: Run Unity WebGL Build Script
+        run: |
+          unity -batchmode -nographics -quit \
+            -projectPath . \
+            -executeMethod WebGLBuilder.BuildWebGL
+
+      - name: Copy custom index.html before branch switch
+        run: |
+          cp Assets/WebGLTemplate/index.html /tmp/custom_index.html
+
+      - name: Prepare build branch
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "GitHub Action"
+          
+          # Create or switch to webgl-build branch
+          git fetch origin
+          git switch -C webgl-build
+
+          # Clear previous contents
+          rm -rf *
+
+          # Copy the new build
+          cp -r build/WebGL/* .
+
+          # Remove Unity's default index.html
+          rm -f index.html
+
+          # Copy your custom index.html
+          cp /tmp/custom_index.html index.html
+
+          # Commit and push
+          git add .
+          git commit -m "Automated WebGL build with custom index.html"
+          git push --force origin webgl-build
+
+      - name: Check for build output
+        run: |
+          if [ ! -d "build/WebGL" ]; then
+            echo "❌ WebGL build output missing"
+            exit 1
+          fi
