@@ -19,10 +19,6 @@ jobs:
           path: Library
           key: Library-${{ runner.os }}-${{ hashFiles('**/ProjectSettings/ProjectVersion.txt') }}
           restore-keys: Library-${{ runner.os }}-
-      - name: Request Unity Activation
-        uses: game-ci/unity-activation@v1
-        with:
-          unityVersion: 2022.3.61f1
       - name: Build WebGL using GameCI
         uses: game-ci/unity-builder@v4
         with:
