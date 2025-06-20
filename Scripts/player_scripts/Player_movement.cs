@@ -39,6 +39,8 @@ public class Player_movement : MonoBehaviour
     {
         if (canMove)
         {
+            InputStateHandler.Instance.ChangeInputState
+                (new InputState("Movement",InputStateHandler.OmniDirection,null,false));
             _animationManager.animator.SetFloat(_animationManager.idleDirectionParameter, _currentDirection);
             _animationManager.animator.SetFloat(_animationManager.movementDirectionParameter, GetMovementDirection());
             HandleBikeInputs();
@@ -178,9 +180,19 @@ public class Player_movement : MonoBehaviour
         var movementDirection = GetMovementDirection(); 
         var horizontalDirection = (movementDirection > 2) ? 1 : 0;
         var verticalDirection = (movementDirection > 2) ? 0 : 1;
-        xAxisInput = Input.GetAxisRaw("Horizontal");
-        yAxisInput = Input.GetAxisRaw("Vertical");
+        xAxisInput = HandleInput("Horizontal");
+        yAxisInput = HandleInput("Vertical");
         movement = new Vector2(xAxisInput * movementSpeed * horizontalDirection, yAxisInput * movementSpeed * verticalDirection);
         rb.velocity = movement;
+    }
+
+    private float HandleInput(string axisName)
+    { 
+        var inputs = axisName == "Vertical"? new []{KeyCode.DownArrow,KeyCode.UpArrow} : new []{KeyCode.LeftArrow,KeyCode.RightArrow};
+        if (Input.GetKey(inputs[0]))
+            return -1f;
+        if (Input.GetKey(inputs[1]))
+            return 1f;
+        return 0;
     }
 }

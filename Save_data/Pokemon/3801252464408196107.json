@@ -76,16 +76,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -13764
+            "instanceID": -38230
         },
         {
-            "instanceID": -13766
+            "instanceID": -38232
         },
         {
-            "instanceID": -13768
+            "instanceID": -38234
         },
         {
-            "instanceID": -13770
+            "instanceID": -38236
         }
     ],
     "ability": {
@@ -93,10 +93,10 @@
     },
     "evolutions": [
         {
-            "instanceID": 26074
+            "instanceID": 26076
         },
         {
-            "instanceID": 24968
+            "instanceID": 24966
         }
     ],
     "heldItem": {
@@ -104,10 +104,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32228
+        "instanceID": 32332
     },
     "backPicture": {
-        "instanceID": 32056
+        "instanceID": 32216
     },
     "pokeballName": "",
     "abilityName": "Overgrow",

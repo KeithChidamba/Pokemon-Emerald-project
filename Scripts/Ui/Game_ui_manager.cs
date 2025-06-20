@@ -51,24 +51,27 @@ public class Game_ui_manager : MonoBehaviour
             ManageScreens(1);
             viewingMenu = true;
             ActivateUiElement(menuOptions);
+            InputStateHandler.Instance.ChangeInputState(new InputState("Player Menu",InputStateHandler.Vertical, 
+                    new() {ViewPokemonParty,Save_manager.Instance.SaveAllData,ViewBag,ViewProfile}
+                    ,true));
         }
         if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.Instance.doingAction && viewingMenu)
             menuOff = false;
-        if (Input.GetKeyDown(KeyCode.Space) && viewingMenu && !menuOff)
+        if (Input.GetKeyDown(KeyCode.R) && viewingMenu && !menuOff)
             CloseMenu();
         
-        if (Input.GetKeyDown(KeyCode.Escape) && Pokemon_party.Instance.viewingParty && !Pokemon_party.Instance.viewingDetails)
+        if (Input.GetKeyDown(KeyCode.R) && Pokemon_party.Instance.viewingParty && !Pokemon_party.Instance.viewingDetails)
             if(!Pokemon_party.Instance.swapOutNext & canExitParty)
                 CloseParty();
         
-        if (Input.GetKeyDown(KeyCode.Escape) && Bag.Instance.viewingBag)
+        if (Input.GetKeyDown(KeyCode.R) && Bag.Instance.viewingBag)
             CloseBag();
         
-        if (Input.GetKeyDown(KeyCode.Escape) && profile.viewingProfile)
+        if (Input.GetKeyDown(KeyCode.R) && profile.viewingProfile)
         {
             CloseProfile();
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && Poke_Mart.Instance.viewingStore)
+        if (Input.GetKeyDown(KeyCode.R) && Poke_Mart.Instance.viewingStore)
         {
             CloseStore();
             Dialogue_handler.Instance.DisplayList("Would you like anything else?",
@@ -126,7 +129,9 @@ public class Game_ui_manager : MonoBehaviour
         Dialogue_handler.Instance.EndDialogue();
         ActivateUiElement(Bag.Instance.bagUI);
         Bag.Instance.ViewBag();
-        CloseMenu();
+        CloseMenu();        
+        InputStateHandler.Instance.ChangeInputState(new InputState("Player Bag Navigation",
+                                InputStateHandler.Vertical, null,false));
     }
     public void ViewProfile()
     {

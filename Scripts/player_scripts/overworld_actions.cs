@@ -24,6 +24,7 @@ public class overworld_actions : MonoBehaviour
     }
     void Update()
     {
+
         if (usingUI)
         {
             Player_movement.Instance.canMove = false;

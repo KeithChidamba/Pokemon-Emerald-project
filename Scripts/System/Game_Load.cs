@@ -21,6 +21,7 @@ public class Game_Load : MonoBehaviour
     public Player_data playerData;
     [SerializeField]private Player_movement playerMovement;//for initial game load
     public static Game_Load Instance;
+    public event Action OnGameStarted; 
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -96,6 +97,7 @@ public class Game_Load : MonoBehaviour
         world_Map.SetActive(true);
         Area_manager.Instance.loadingPlayerFromSave = true;
         Area_manager.Instance.SwitchToArea(playerData.location,0f);
+        OnGameStarted?.Invoke();
     }
 }
 

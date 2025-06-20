@@ -11,7 +11,6 @@ public class Item_ui : MonoBehaviour
     [FormerlySerializedAs("item_name")] public Text itemName;
     [FormerlySerializedAs("item_description")] public Text itemDescription;
     [FormerlySerializedAs("item_img")] public Image itemImg;
-    public Button Use, Give, Drop;
     public void LoadItemUI()
     {
         itemName.text = item.itemName;
@@ -19,19 +18,7 @@ public class Item_ui : MonoBehaviour
     }
     public void LoadItemDescription()
     {
-        Drop.interactable = !Options_manager.Instance.playerInBattle;
-        if (Options_manager.Instance.playerInBattle)
-        {
-            Use.interactable = item.canBeUsedInBattle;
-            Give.interactable = false;
-        }
-        else
-        {
-            Use.interactable = item.canBeUsedInOverworld;
-            if (item.isHeldItem)
-                Use.interactable = false;
-            Give.interactable = item.canBeHeld;
-        }
+        Bag.Instance.AssignItemOptions(item);
         itemDescription.text = item.itemDescription;
         itemImg.sprite = item.itemImage;
     }

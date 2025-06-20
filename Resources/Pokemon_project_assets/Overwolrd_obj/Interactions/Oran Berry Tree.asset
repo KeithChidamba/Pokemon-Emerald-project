@@ -17,12 +17,8 @@ MonoBehaviour:
   interactionOptions:
   - PickBerryFromTree
   - 
-  - 
-  - 
   resultMessage: Oran berry
   optionsUiText:
-  - Yes, definately ill take a berry
+  - Yes, take a berry
   - No thanks
-  - Maybe
-  - Yessir
   additionalInfo: []
