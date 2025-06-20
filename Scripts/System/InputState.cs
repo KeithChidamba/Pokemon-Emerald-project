@@ -7,16 +7,20 @@ public class InputState
 {
     public string stateName;
     public string[] stateDirectionals;
-    public List<Action> InputEvents;
+    public List<SelectableUI> SelectableUI;
     public int currentSelectionIndex;
     public bool isSelecting;
+    public bool displayingSelector;
+    public GameObject selector;
     public int maxSelectionIndex;
-    public InputState(string stateName, string[] stateDirectionals, List<Action> inputEvents,bool selecting)
+    public InputState(string stateName, string[] stateDirectionals, List<SelectableUI> SelectableUI ,GameObject selector,bool selecting,bool display)
     {
         this.stateName = stateName;
         this.stateDirectionals = stateDirectionals; 
-        InputEvents = inputEvents;
-        currentSelectionIndex = -1;
+        this.SelectableUI = SelectableUI;
+        currentSelectionIndex = 0;
+        this.selector = selector;
         isSelecting = selecting;
+        displayingSelector = display;
     }
 }

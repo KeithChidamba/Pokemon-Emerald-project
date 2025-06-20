@@ -24,7 +24,12 @@ public class Bag : MonoBehaviour
     public Text sellQuantityText;
     public static Bag Instance;
     public GameObject bagUI;
-    private bool _itemDroppable, _itemUsable, _itemGiveable;
+    public bool itemDroppable;
+    public bool itemUsable;
+    public bool itemGiveable;
+    public GameObject itemSelector;
+    public GameObject itemUsageSelector;
+    public List<GameObject> itemUsageUi;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -132,23 +137,35 @@ public class Bag : MonoBehaviour
 
     public void AssignItemOptions(Item item)
     {
-        _itemDroppable = !Options_manager.Instance.playerInBattle;
+        itemDroppable = !Options_manager.Instance.playerInBattle;
         if (Options_manager.Instance.playerInBattle)
         {
-            _itemUsable = item.canBeUsedInBattle;
-            _itemGiveable = false;
+            itemUsable = item.canBeUsedInBattle;
+            itemGiveable = false;
         }
         else
         {
-            _itemUsable = item.canBeUsedInOverworld;
+            itemUsable = item.canBeUsedInOverworld;
             if (item.isHeldItem)
-                _itemUsable = false;
-            _itemGiveable = item.canBeHeld;
+                itemUsable = false;
+            itemGiveable = item.canBeHeld;
         }
+    }
+
+    void ChangeImageVisibility(GameObject imageObj,float newTransparency)
+    {
+        Color color = imageObj.GetComponent<Image>().color;
+        color.a = newTransparency;
+        imageObj.GetComponent<Image>().color = color;
     }
     public void RemoveItem()
     {
-        if (!_itemDroppable) return;
+        if (!itemDroppable)
+        {
+            ChangeImageVisibility(itemUsageUi[2],0);
+            return;
+        }
+        ChangeImageVisibility(itemUsageUi[2],100);
         bagItems.Remove(bagItems[topIndex + selectedItem]);
         foreach (var itemUI in bagItemsUI)
             itemUI.gameObject.SetActive(false);
@@ -179,12 +196,36 @@ public class Bag : MonoBehaviour
     }
     public void GiveItem()
     {
-        if (!_itemGiveable) return;
+        if (!itemGiveable)
+        {
+            ChangeImageVisibility(itemUsageUi[1],0);
+            return;
+        }
+        ChangeImageVisibility(itemUsageUi[1],100);
         Pokemon_party.Instance.givingItem = true;
         Pokemon_party.Instance.ReceiveItem(bagItems[topIndex + selectedItem]);
         Game_ui_manager.Instance.CloseBag();
         Game_ui_manager.Instance.ViewPokemonParty();
-    }
+    } 
+    public void UseItem()
+     {
+         if (!itemUsable)
+         {
+             ChangeImageVisibility(itemUsageUi[0],0);
+             return;
+         }
+         ChangeImageVisibility(itemUsageUi[0],100);
+         var itemToUse = bagItems[topIndex + selectedItem];
+         Item_handler.Instance.usingItem = true;
+         if(itemToUse.forPartyUse)
+         {
+             Pokemon_party.Instance.ReceiveItem(itemToUse);
+             Game_ui_manager.Instance.ViewPokemonParty();
+         }
+         else
+             Item_handler.Instance.UseItem(itemToUse,null);
+         Game_ui_manager.Instance.CloseBag();
+     }
     public void AddItem(Item item)
     {
         if (_numItems < maxCapacity)
@@ -225,20 +266,7 @@ public class Bag : MonoBehaviour
             Dialogue_handler.Instance.DisplayInfo("Bag is full", "Details");
         }                                                                           
     }
-    public void UseItem()
-    {
-        if (!_itemUsable) return;
-        var itemToUse = bagItems[topIndex + selectedItem];
-        Item_handler.Instance.usingItem = true;
-        if(itemToUse.forPartyUse)
-        {
-            Pokemon_party.Instance.ReceiveItem(itemToUse);
-            Game_ui_manager.Instance.ViewPokemonParty();
-        }
-        else
-            Item_handler.Instance.UseItem(itemToUse,null);
-        Game_ui_manager.Instance.CloseBag();
-    }
+
     public void CloseBag()
     {
         selectedItem = 0;

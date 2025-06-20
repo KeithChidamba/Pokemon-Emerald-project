@@ -17,6 +17,7 @@ public class InputStateHandler : MonoBehaviour
     private event Action OnInputRight; 
     private event Action OnInputLeft;
     private bool _readingInputs = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -38,30 +39,37 @@ public class InputStateHandler : MonoBehaviour
         _readingInputs = true;
     }
 
+    public void ResetInputState()
+    {
+        currentState.selector?.SetActive(false);
+        ResetInputEvents();
+        currentState = null;
+    }
     private void Update()
     {
         if (!_readingInputs) return;
         if (currentState == null) return;
         if (currentState.stateName == "Movement") return;
+        
         if (Input.GetKeyDown(KeyCode.F) )
         {
+            currentState.selector?.SetActive(false);
             if(currentState.isSelecting)
-                currentState.InputEvents[currentState.currentSelectionIndex].Invoke();
+                currentState.SelectableUI[currentState.currentSelectionIndex].eventForUi.Invoke();
             else
-                currentState.InputEvents[0].Invoke();
-            
+                currentState.SelectableUI[0].eventForUi.Invoke();
         }
         if (currentState.stateDirectionals.Contains("Horizontal"))
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                currentState.currentSelectionIndex--;
+                ChangeSelection(-1);
                 OnInputLeft?.Invoke();
             }
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                currentState.currentSelectionIndex++;
+                ChangeSelection(1);
                 OnInputRight?.Invoke();
             }
         }
@@ -70,25 +78,30 @@ public class InputStateHandler : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                currentState.currentSelectionIndex--;
+                ChangeSelection(-1);
                 OnInputUp?.Invoke();
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                currentState.currentSelectionIndex++;
+                ChangeSelection(1);
                 OnInputDown?.Invoke();
             }
         }
 
+        if (currentState.displayingSelector)
+            currentState.selector.transform.position = currentState.SelectableUI[currentState.currentSelectionIndex]
+                .uiObject.transform.position;
+        
         if (currentState.isSelecting)
-        {
-            currentState.maxSelectionIndex = currentState.InputEvents.Count-1;
-        }
-        currentState.currentSelectionIndex =
-            Mathf.Clamp(currentState.currentSelectionIndex, 0, currentState.maxSelectionIndex);
+            currentState.maxSelectionIndex = currentState.SelectableUI.Count-1;
     }
 
+    private void ChangeSelection(int change)
+    {
+        currentState.currentSelectionIndex =
+            Mathf.Clamp(currentState.currentSelectionIndex+change, 0, currentState.maxSelectionIndex);
+    }
     public void ChangeInputState(InputState newState)
     {
         ResetInputEvents();
@@ -102,21 +115,32 @@ public class InputStateHandler : MonoBehaviour
     }
     void PlayerMenu()
     {
-        currentState.maxSelectionIndex = currentState.InputEvents.Count-1;
+        currentState.maxSelectionIndex = currentState.SelectableUI.Count-1;
+        currentState.selector.SetActive(true);
     }
     private void PlayerBagNavigation()
     {
         OnInputUp += Bag.Instance.NavigateUp;
         OnInputDown += Bag.Instance.NavigateDown;
-        currentState.InputEvents = new List<Action>();
-        currentState.InputEvents.Add(BagItemUsageSelection);
+        currentState.selector = Bag.Instance.itemSelector;
+        currentState.selector.SetActive(true);
+        currentState.SelectableUI[0].eventForUi = BagItemUsageSelection;
         currentState.maxSelectionIndex = 9;
+        
     }
     void BagItemUsageSelection()
     {
         ResetInputEvents();
-        currentState = new InputState("Player Bag Item Usage", Horizontal,
-            new (){Bag.Instance.UseItem,Bag.Instance.GiveItem,Bag.Instance.RemoveItem},true);
+        var itemUsageSelectables = new List<SelectableUI>
+        {
+            new(Bag.Instance.itemUsageUi[0],Bag.Instance.UseItem,Bag.Instance.itemUsable)
+            ,new(Bag.Instance.itemUsageUi[1],Bag.Instance.GiveItem,Bag.Instance.itemGiveable)
+            ,new(Bag.Instance.itemUsageUi[2],Bag.Instance.RemoveItem,Bag.Instance.itemDroppable)
+        };
+        itemUsageSelectables.RemoveAll(s=>!s.canBeSelected);
+        currentState = new InputState("Player Bag Item Usage", Horizontal, itemUsageSelectables
+            ,Bag.Instance.itemUsageSelector,true,true);
+        currentState.selector.SetActive(true);
     }
     void SetupInputEvents()
     {

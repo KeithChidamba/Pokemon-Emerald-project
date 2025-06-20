@@ -40,7 +40,7 @@ public class Player_movement : MonoBehaviour
         if (canMove)
         {
             InputStateHandler.Instance.ChangeInputState
-                (new InputState("Movement",InputStateHandler.OmniDirection,null,false));
+                (new InputState("Movement",InputStateHandler.OmniDirection,null,null,false,false));
             _animationManager.animator.SetFloat(_animationManager.idleDirectionParameter, _currentDirection);
             _animationManager.animator.SetFloat(_animationManager.movementDirectionParameter, GetMovementDirection());
             HandleBikeInputs();

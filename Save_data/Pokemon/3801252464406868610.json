@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "50/50",
     "nature": {
-        "instanceID": 25800
+        "instanceID": 25808
     },
     "hasGender": true,
     "hp": 73.0,
@@ -54,7 +54,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25512
+            "instanceID": 25520
         }
     ],
     "statusEffect": "None",
@@ -73,24 +73,24 @@
     "learnSet": [],
     "moveSet": [
         {
-            "instanceID": -38210
+            "instanceID": -7320
         },
         {
-            "instanceID": -38212
+            "instanceID": -7322
         },
         {
-            "instanceID": -38214
+            "instanceID": -7324
         },
         {
-            "instanceID": -38216
+            "instanceID": -7326
         }
     ],
     "ability": {
-        "instanceID": 26060
+        "instanceID": 26066
     },
     "evolutions": [
         {
-            "instanceID": 25656
+            "instanceID": 25664
         }
     ],
     "heldItem": {
@@ -98,10 +98,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32804
+        "instanceID": 32818
     },
     "backPicture": {
-        "instanceID": 32684
+        "instanceID": 32698
     },
     "pokeballName": "",
     "abilityName": "Guts",

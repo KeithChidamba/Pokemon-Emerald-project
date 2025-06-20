@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -15,6 +16,9 @@ public class Game_ui_manager : MonoBehaviour
     [SerializeField]private int numUIScreensOpen;
     public bool canExitParty = true;
     [SerializeField]private GameObject exitButton;
+    [SerializeField]private List<GameObject> menuUiOptions = new ();
+    public GameObject menuSelector;
+    public bool usingWebGl = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -28,7 +32,8 @@ public class Game_ui_manager : MonoBehaviour
     private void Start()
     {
         canExitParty = true;
-        exitButton.SetActive(Application.platform != RuntimePlatform.WebGLPlayer);
+        usingWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
+        exitButton.SetActive(!usingWebGl);
     }
 
     private void Update()
@@ -38,6 +43,9 @@ public class Game_ui_manager : MonoBehaviour
     }
     public void ManageScreens(int change)
     {
+        if (change < 0)
+            InputStateHandler.Instance.ResetInputState();
+        
         numUIScreensOpen += change;
         if (numUIScreensOpen < 0) numUIScreensOpen = 0;
         overworld_actions.Instance.usingUI = numUIScreensOpen>0;
@@ -51,9 +59,23 @@ public class Game_ui_manager : MonoBehaviour
             ManageScreens(1);
             viewingMenu = true;
             ActivateUiElement(menuOptions);
+            var menuOptionsMethods = new List<Action>()
+            {
+                ViewPokemonParty,Save_manager.Instance.SaveAllData, ViewBag, ViewProfile,
+                Options_manager.Instance.ExitGame
+            };
+            if (usingWebGl)
+            {
+                menuOptionsMethods.Remove(menuOptionsMethods.Last());
+                menuUiOptions.Remove(menuUiOptions.Last());
+            }
+            var menuSelectables = new List<SelectableUI>();
+            
+            for (var i =0; i<menuOptionsMethods.Count;i++)
+                menuSelectables.Add( new(menuUiOptions[i],menuOptionsMethods[i],true) );
+            
             InputStateHandler.Instance.ChangeInputState(new InputState("Player Menu",InputStateHandler.Vertical, 
-                    new() {ViewPokemonParty,Save_manager.Instance.SaveAllData,ViewBag,ViewProfile}
-                    ,true));
+                menuSelectables,menuSelector,true, true));
         }
         if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.Instance.doingAction && viewingMenu)
             menuOff = false;
@@ -129,9 +151,14 @@ public class Game_ui_manager : MonoBehaviour
         Dialogue_handler.Instance.EndDialogue();
         ActivateUiElement(Bag.Instance.bagUI);
         Bag.Instance.ViewBag();
-        CloseMenu();        
+        CloseMenu(); 
+
+        var bagSelectables = new List<SelectableUI>();
+        for (var i =0; i<Bag.Instance.bagItemsUI.Length;i++)
+            bagSelectables.Add( new(Bag.Instance.bagItemsUI[i].gameObject,null,true) );
+        
         InputStateHandler.Instance.ChangeInputState(new InputState("Player Bag Navigation",
-                                InputStateHandler.Vertical, null,false));
+                                InputStateHandler.Vertical, bagSelectables,null,false,true));
     }
     public void ViewProfile()
     {
