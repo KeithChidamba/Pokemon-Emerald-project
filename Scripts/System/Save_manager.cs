@@ -258,7 +258,6 @@ public class Save_manager : MonoBehaviour
                                 DownloadZipAndStoreLocally();
         #endif
         Dialogue_handler.Instance.DisplayInfo("Game saved online but please download your save file", "Details");
-        Game_ui_manager.Instance.CloseMenu();
         
         if (Application.platform == RuntimePlatform.WebGLPlayer) return;
         

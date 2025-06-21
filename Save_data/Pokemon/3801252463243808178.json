@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25978
+        "instanceID": 25976
     },
     "hasGender": true,
     "hp": 52.0,
@@ -55,10 +55,10 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25778
+            "instanceID": 25776
         },
         {
-            "instanceID": 25514
+            "instanceID": 25512
         }
     ],
     "statusEffect": "None",
@@ -80,27 +80,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -7310
+            "instanceID": -35108
         },
         {
-            "instanceID": -7312
+            "instanceID": -35110
         },
         {
-            "instanceID": -7314
+            "instanceID": -35112
         },
         {
-            "instanceID": -7316
+            "instanceID": -35114
         }
     ],
     "ability": {
-        "instanceID": 25000
+        "instanceID": 24998
     },
     "evolutions": [
         {
-            "instanceID": 26142
+            "instanceID": 26140
         },
         {
-            "instanceID": 24968
+            "instanceID": 24966
         }
     ],
     "heldItem": {
@@ -108,10 +108,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32346
+        "instanceID": 32374
     },
     "backPicture": {
-        "instanceID": 32348
+        "instanceID": 32376
     },
     "pokeballName": "",
     "abilityName": "Blaze",

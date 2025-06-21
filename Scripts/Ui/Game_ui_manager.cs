@@ -43,14 +43,16 @@ public class Game_ui_manager : MonoBehaviour
     }
     public void ManageScreens(int change)
     {
-        if (change < 0)
-            InputStateHandler.Instance.ResetInputState();
-        
         numUIScreensOpen += change;
         if (numUIScreensOpen < 0) numUIScreensOpen = 0;
         overworld_actions.Instance.usingUI = numUIScreensOpen>0;
-        Player_movement.Instance.canMove = numUIScreensOpen==0;
-        if(Options_manager.Instance.playerInBattle) Player_movement.Instance.canMove = false;
+        
+        if(numUIScreensOpen==0)
+            Player_movement.Instance.AllowPlayerMovement();
+        else
+            Player_movement.Instance.RestrictPlayerMovement();
+        
+        if(Options_manager.Instance.playerInBattle) Player_movement.Instance.RestrictPlayerMovement();
     }
     private void UiInputs()
     {
@@ -59,48 +61,51 @@ public class Game_ui_manager : MonoBehaviour
             ManageScreens(1);
             viewingMenu = true;
             ActivateUiElement(menuOptions);
-            var menuOptionsMethods = new List<Action>()
-            {
-                ViewPokemonParty,Save_manager.Instance.SaveAllData, ViewBag, ViewProfile,
-                Options_manager.Instance.ExitGame
-            };
-            if (usingWebGl)
-            {
-                menuOptionsMethods.Remove(menuOptionsMethods.Last());
-                menuUiOptions.Remove(menuUiOptions.Last());
-            }
-            var menuSelectables = new List<SelectableUI>();
-            
-            for (var i =0; i<menuOptionsMethods.Count;i++)
-                menuSelectables.Add( new(menuUiOptions[i],menuOptionsMethods[i],true) );
-            
-            InputStateHandler.Instance.ChangeInputState(new InputState("Player Menu",InputStateHandler.Vertical, 
-                menuSelectables,menuSelector,true, true));
+            ActivateMenuSelection();
         }
         if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.Instance.doingAction && viewingMenu)
             menuOff = false;
-        if (Input.GetKeyDown(KeyCode.R) && viewingMenu && !menuOff)
-            CloseMenu();
+        // if (Input.GetKeyDown(KeyCode.R) && viewingMenu && !menuOff)
+        //     CloseMenu();
         
-        if (Input.GetKeyDown(KeyCode.R) && Pokemon_party.Instance.viewingParty && !Pokemon_party.Instance.viewingDetails)
-            if(!Pokemon_party.Instance.swapOutNext & canExitParty)
-                CloseParty();
+        // if (Input.GetKeyDown(KeyCode.R) && Pokemon_party.Instance.viewingParty && !Pokemon_party.Instance.viewingDetails)
+        //     if(!Pokemon_party.Instance.swapOutNext & canExitParty)
+        //         CloseParty();
         
-        if (Input.GetKeyDown(KeyCode.R) && Bag.Instance.viewingBag)
-            CloseBag();
-        
-        if (Input.GetKeyDown(KeyCode.R) && profile.viewingProfile)
-        {
-            CloseProfile();
-        }
-        if (Input.GetKeyDown(KeyCode.R) && Poke_Mart.Instance.viewingStore)
-        {
-            CloseStore();
-            Dialogue_handler.Instance.DisplayList("Would you like anything else?",
-                 "", new[]{ "BuyMore","LeaveStore" }, new[]{"Yes", "No"});
-        }
+        // if (Input.GetKeyDown(KeyCode.R) && Bag.Instance.viewingBag)
+        //     CloseBag();
+        //
+        // if (Input.GetKeyDown(KeyCode.R) && profile.viewingProfile)
+        // {
+        //     CloseProfile();
+        // }
+        // if (Input.GetKeyDown(KeyCode.R) && Poke_Mart.Instance.viewingStore)
+        // {
+        //     CloseStore();
+        //     Dialogue_handler.Instance.DisplayList("Would you like anything else?",
+        //          "", new[]{ "BuyMore","LeaveStore" }, new[]{"Yes", "No"});
+        // }
     } 
-
+    private void ActivateMenuSelection()
+    {
+        var menuOptionsMethods = new List<Action>()
+        {
+            ViewPokemonParty,Save_manager.Instance.SaveAllData, ViewBag, ViewProfile,
+            Options_manager.Instance.ExitGame
+        };
+        if (usingWebGl)
+        {
+            menuOptionsMethods.Remove(menuOptionsMethods.Last());
+            menuUiOptions.Remove(menuUiOptions.Last());
+        }
+        var menuSelectables = new List<SelectableUI>();
+            
+        for (var i =0; i<menuOptionsMethods.Count;i++)
+            menuSelectables.Add( new(menuUiOptions[i],menuOptionsMethods[i],true) );
+            
+        InputStateHandler.Instance.ChangeInputState(new InputState("Player Menu",InputStateHandler.Vertical, 
+            menuSelectables,menuSelector,true, true,CloseMenu));
+    }
     private void ActivateUiElement(GameObject ui)
     {
         ui.SetActive(true);
@@ -132,7 +137,7 @@ public class Game_ui_manager : MonoBehaviour
         Pokemon_party.Instance.givingItem = false;
     }
 
-    public void CloseMenu()
+    private void CloseMenu()
     {
         if (!viewingMenu) return;
         ManageScreens(-1);
@@ -151,26 +156,25 @@ public class Game_ui_manager : MonoBehaviour
         Dialogue_handler.Instance.EndDialogue();
         ActivateUiElement(Bag.Instance.bagUI);
         Bag.Instance.ViewBag();
-        CloseMenu(); 
 
         var bagSelectables = new List<SelectableUI>();
         for (var i =0; i<Bag.Instance.bagItemsUI.Length;i++)
             bagSelectables.Add( new(Bag.Instance.bagItemsUI[i].gameObject,null,true) );
         
         InputStateHandler.Instance.ChangeInputState(new InputState("Player Bag Navigation",
-                                InputStateHandler.Vertical, bagSelectables,null,false,true));
+                                InputStateHandler.Vertical, bagSelectables,null,false,true,CloseBag));
     }
     public void ViewProfile()
     {
         ManageScreens(1);
         ActivateUiElement(profile.gameObject);
-        CloseMenu();
         profile.LoadProfile(Game_Load.Instance.playerData);
+        InputStateHandler.Instance.ChangeInputState(new InputState("Player Profile",null, 
+            null,null,false, false,CloseProfile));
     }
     public void ViewPokemonParty()
     {
         ManageScreens(1);
-        CloseMenu();
         Dialogue_handler.Instance.EndDialogue();
         ActivateUiElement(Pokemon_party.Instance.partyUI);
         Pokemon_party.Instance.ViewParty();

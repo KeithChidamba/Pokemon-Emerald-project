@@ -51,7 +51,7 @@ public class Area_manager : MonoBehaviour
             _areaBuilding.interior.SetActive(false);
             _areaBuilding.insideArea = false;
             Player_movement.Instance.transform.position = _areaBuilding.doorPosition.position;
-            Player_movement.Instance.canMove = false;
+Player_movement.Instance.RestrictPlayerMovement();
         }
         else //from save point in overworld
             Player_movement.Instance.transform.position = Game_Load.Instance.playerData.playerPosition;
@@ -71,7 +71,7 @@ public class Area_manager : MonoBehaviour
         foreach (var area in overworldAreas)
             area.overworld.SetActive(false);
         overworld_actions.Instance.doingAction = false;
-        Player_movement.Instance.canMove = false;
+        Player_movement.Instance.RestrictPlayerMovement();
         currentArea.insideArea = true;
         currentArea.interior.SetActive(true);
         _areaBuilding = currentArea;
@@ -83,7 +83,7 @@ public class Area_manager : MonoBehaviour
     }
     private void ResetPlayerMovement()
     {
-        Player_movement.Instance.canMove = true;
+        Player_movement.Instance.AllowPlayerMovement();
         loadingPlayerFromSave = false;
     }
 }

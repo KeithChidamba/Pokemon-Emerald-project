@@ -22,7 +22,7 @@ public class Player_movement : MonoBehaviour
     [SerializeField] private Vector2 movement;
     private float _currentDirection = 0;
     private Animation_manager _animationManager;
-    public bool canMove = true;
+    private bool canMove = true;
     [SerializeField] Transform interactionPoint;
     public static Player_movement Instance;
     private void Awake()
@@ -35,12 +35,21 @@ public class Player_movement : MonoBehaviour
         Instance = this;
         _animationManager = GetComponent<Animation_manager>();
     }
+
+    public void AllowPlayerMovement()
+    {
+        canMove = true;
+        // InputStateHandler.Instance.ChangeInputState
+        //     (new InputState("Movement",InputStateHandler.OmniDirection,null,null,false,false,null));
+    }
+    public void RestrictPlayerMovement()
+    {
+        canMove = false;
+    }
     private void Update()
     {
         if (canMove)
         {
-            InputStateHandler.Instance.ChangeInputState
-                (new InputState("Movement",InputStateHandler.OmniDirection,null,null,false,false));
             _animationManager.animator.SetFloat(_animationManager.idleDirectionParameter, _currentDirection);
             _animationManager.animator.SetFloat(_animationManager.movementDirectionParameter, GetMovementDirection());
             HandleBikeInputs();

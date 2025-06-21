@@ -6,22 +6,22 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25824
+        "instanceID": 25822
     },
     "hasGender": true,
-    "hp": 49.0,
-    "maxHp": 49.0,
+    "hp": 51.0,
+    "maxHp": 51.0,
     "baseHp": 50.0,
     "baseAttack": 65.0,
     "baseDefense": 45.0,
     "baseSpecialAttack": 85.0,
     "baseSpecialDefense": 65.0,
     "baseSpeed": 95.0,
-    "attack": 31.0,
-    "defense": 23.0,
-    "specialAttack": 39.0,
-    "specialDefense": 30.0,
-    "speed": 45.0,
+    "attack": 33.0,
+    "defense": 24.0,
+    "specialAttack": 40.0,
+    "specialDefense": 32.0,
+    "speed": 47.0,
     "hpIv": 21.0,
     "attackIv": 18.0,
     "defenseIv": 27.0,
@@ -29,11 +29,11 @@
     "specialDefenseIv": 14.0,
     "speedIv": 10.0,
     "hpEv": 0.0,
-    "attackEv": 0.0,
+    "attackEv": 1.0,
     "defenseEv": 0.0,
     "specialAttackEv": 0.0,
     "specialDefenseEv": 0.0,
-    "speedEv": 0.0,
+    "speedEv": 3.0,
     "effortValues": [
         "Speed2"
     ],
@@ -41,12 +41,12 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 45.0,
-    "currentLevel": 18,
-    "currentExpAmount": 3775,
-    "nextLevelExpAmount": 3798.0,
+    "currentLevel": 19,
+    "currentExpAmount": 3874,
+    "nextLevelExpAmount": 4575.0,
     "expGroup": "Medium Slow",
     "expYield": 141,
-    "friendshipLevel": 0,
+    "friendshipLevel": 4,
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -54,7 +54,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25666
+            "instanceID": 25664
         }
     ],
     "statusEffect": "None",
@@ -76,27 +76,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -7340
+            "instanceID": -35098
         },
         {
-            "instanceID": -7342
+            "instanceID": -35100
         },
         {
-            "instanceID": -7344
+            "instanceID": -35102
         },
         {
-            "instanceID": -7346
+            "instanceID": -35104
         }
     ],
     "ability": {
-        "instanceID": 25910
+        "instanceID": 25908
     },
     "evolutions": [
         {
-            "instanceID": 26082
+            "instanceID": 26080
         },
         {
-            "instanceID": 24974
+            "instanceID": 24972
         }
     ],
     "heldItem": {
@@ -104,10 +104,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32344
+        "instanceID": 32372
     },
     "backPicture": {
-        "instanceID": 32228
+        "instanceID": 32254
     },
     "pokeballName": "",
     "abilityName": "Overgrow",

@@ -27,11 +27,11 @@ public class overworld_actions : MonoBehaviour
 
         if (usingUI)
         {
-            Player_movement.Instance.canMove = false;
+            Player_movement.Instance.RestrictPlayerMovement();
             return;
         }
         if (doingAction)
-            Player_movement.Instance.canMove = false;
+            Player_movement.Instance.RestrictPlayerMovement();
         
         if (pokemonBitingPole & Input.GetKeyDown(KeyCode.F))
         {
@@ -85,6 +85,6 @@ public class overworld_actions : MonoBehaviour
     void ActionReset()
     {
         doingAction = false;
-        Player_movement.Instance.canMove = true;
+        Player_movement.Instance.AllowPlayerMovement();
     }
 }

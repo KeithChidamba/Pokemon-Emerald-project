@@ -232,7 +232,7 @@ public class Dialogue_handler : MonoBehaviour
         dialogueFinished = false;
         dialogueLength = 0;
         dialogueProgress = 0;
-        if(Player_movement.Instance) Player_movement.Instance.canMove = true;
+        if (Player_movement.Instance) Player_movement.Instance.AllowPlayerMovement();
         clickNextIndicator.SetActive(false);
         elipsisSymbol.SetActive(false);
         dialogueExitIndicator.SetActive(false);
@@ -251,7 +251,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         if(Player_movement.Instance)
         {
-            Player_movement.Instance.canMove = false;
+            Player_movement.Instance.RestrictPlayerMovement();
             Player_movement.Instance.movingOnFoot = false;
         }
         dialogueFinished = false;

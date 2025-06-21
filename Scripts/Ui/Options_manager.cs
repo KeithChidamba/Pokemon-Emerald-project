@@ -139,7 +139,7 @@ public class Options_manager : MonoBehaviour
         overworld_actions.Instance.manager.ChangeAnimationState(overworld_actions.Instance.manager.fishingStart);
         Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
     }
-    void SellItem()
+    public void SellItem()
     {
         Dialogue_handler.Instance.EndDialogue();
         Bag.Instance.sellingItems = true;

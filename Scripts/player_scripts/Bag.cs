@@ -51,9 +51,12 @@ public class Bag : MonoBehaviour
         {
             sellQuantity = 1;
             sellingItemUI.SetActive(true);
+            foreach (var obj in itemUIActions)
+                obj.SetActive(false);
         }
         else
         {
+            sellingItemUI.SetActive(false);
             foreach (var obj in itemUIActions)
                 obj.SetActive(true);
         }
@@ -75,8 +78,15 @@ public class Bag : MonoBehaviour
             RemoveItem();
         Dialogue_handler.Instance.DisplayList("You made P"+profit+ ", would you like to sell anything else?",
              "Sure, which item?", new[]{ "SellItem","LeaveStore" }, new[]{"Yes", "No"});
-        Game_ui_manager.Instance.CloseBag();
+        List<InputState> sellingUIStates = new List<InputState>();
+        foreach (var state in InputStateHandler.Instance.stateLayers)
+        {
+            if (state.stateName.ToLower().Contains("bag"))
+                sellingUIStates.Add(state);
+        }
+        StartCoroutine(InputStateHandler.Instance.RemoveInputStates(sellingUIStates));
     }
+
 
     public void CheckItemQuantity(Item item)
     {
@@ -150,22 +160,19 @@ public class Bag : MonoBehaviour
                 itemUsable = false;
             itemGiveable = item.canBeHeld;
         }
+        ChangeImageVisibility(itemUsageUi[0],itemUsable);
+        ChangeImageVisibility(itemUsageUi[1],itemGiveable);
+        ChangeImageVisibility(itemUsageUi[2],itemDroppable);
     }
 
-    void ChangeImageVisibility(GameObject imageObj,float newTransparency)
+    void ChangeImageVisibility(GameObject imageObj, bool makeVisible)
     {
-        Color color = imageObj.GetComponent<Image>().color;
-        color.a = newTransparency;
+        var newTransparency = makeVisible ? 100 : 0;
+        var color =  new Color(255,255,255,newTransparency);
         imageObj.GetComponent<Image>().color = color;
     }
     public void RemoveItem()
     {
-        if (!itemDroppable)
-        {
-            ChangeImageVisibility(itemUsageUi[2],0);
-            return;
-        }
-        ChangeImageVisibility(itemUsageUi[2],100);
         bagItems.Remove(bagItems[topIndex + selectedItem]);
         foreach (var itemUI in bagItemsUI)
             itemUI.gameObject.SetActive(false);
@@ -196,12 +203,6 @@ public class Bag : MonoBehaviour
     }
     public void GiveItem()
     {
-        if (!itemGiveable)
-        {
-            ChangeImageVisibility(itemUsageUi[1],0);
-            return;
-        }
-        ChangeImageVisibility(itemUsageUi[1],100);
         Pokemon_party.Instance.givingItem = true;
         Pokemon_party.Instance.ReceiveItem(bagItems[topIndex + selectedItem]);
         Game_ui_manager.Instance.CloseBag();
@@ -209,12 +210,6 @@ public class Bag : MonoBehaviour
     } 
     public void UseItem()
      {
-         if (!itemUsable)
-         {
-             ChangeImageVisibility(itemUsageUi[0],0);
-             return;
-         }
-         ChangeImageVisibility(itemUsageUi[0],100);
          var itemToUse = bagItems[topIndex + selectedItem];
          Item_handler.Instance.usingItem = true;
          if(itemToUse.forPartyUse)
