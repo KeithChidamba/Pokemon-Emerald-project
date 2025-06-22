@@ -9,25 +9,46 @@ public class Interaction_handler : MonoBehaviour
     [SerializeField] LayerMask interactable;
     [SerializeField] Transform interactionPoint;
     [SerializeField] float detectDistance=0.15f;
-    [SerializeField] private bool canCheckForInteraction;
+    private bool _canCheckForInteraction;
+    private bool _stopInteractions;
+    public static Interaction_handler Instance;
     private void Start()
     {
         interactable = 1 << LayerMask.NameToLayer("Interactable");
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
     void Update()
     {
-        if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Q))
-            if(!canCheckForInteraction)
-                StartCoroutine(DelayRayCast());
-        if(canCheckForInteraction)
+        if(!Dialogue_handler.Instance.displaying && !_stopInteractions)
+        {
+            if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Q))
+                if (!_canCheckForInteraction)
+                    StartCoroutine(DelayRayCast());
+        }
+        if(_canCheckForInteraction)
             RaycastForInteraction();
     }
 
+    public void DisableRaycast()
+    {
+        _stopInteractions = true;
+        Invoke(nameof(AllowInteraction),1f);
+    }
+
+    private void AllowInteraction()
+    {
+        _stopInteractions = false;
+    }
     IEnumerator DelayRayCast()
     {
-        canCheckForInteraction = true;
+        _canCheckForInteraction = true;
         yield return new WaitForSeconds(1f);
-        canCheckForInteraction = false;
+        _canCheckForInteraction = false;
     }
     void RaycastForInteraction()
     {

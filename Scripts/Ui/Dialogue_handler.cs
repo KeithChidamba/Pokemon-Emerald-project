@@ -235,8 +235,8 @@ public class Dialogue_handler : MonoBehaviour
     {
         if (_dialogueOptionsManager.currentOptions.Count > 0)
         {
-            Debug.Log("here");
             DeletePreviousOptions();
+            Interaction_handler.Instance.DisableRaycast();
         }
         canExitDialogue=true;
         currentInteraction = null;

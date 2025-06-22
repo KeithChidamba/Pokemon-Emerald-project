@@ -158,7 +158,7 @@ public class Options_manager : MonoBehaviour
     {
         Dialogue_handler.Instance.EndDialogue();
         var berry = _currentInteraction.resultMessage;
-        var berryAsset = Resources.Load<Item>("Pokemon_project_assets/Items" + berry);
+        var berryAsset = Resources.Load<Item>("Pokemon_project_assets/Items/" + berry);
         Bag.Instance.AddItem(Obj_Instance.CreateItem(berryAsset));
         Dialogue_handler.Instance.DisplayInfo("You picked up a "+berry, "Details",1f);
     }
@@ -166,7 +166,6 @@ public class Options_manager : MonoBehaviour
     {
         var methodName = interaction.interactionOptions[option].Replace(" ", "");
         if (methodName == string.Empty) { Dialogue_handler.Instance.EndDialogue(); return; }
-        
         _currentInteraction = interaction;
         if (_interactionMethods.TryGetValue(methodName,out var method))
             method();
