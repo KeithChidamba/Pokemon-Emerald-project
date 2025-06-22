@@ -158,11 +158,11 @@ public class Game_ui_manager : MonoBehaviour
         Bag.Instance.ViewBag();
 
         var bagSelectables = new List<SelectableUI>();
-        for (var i =0; i<Bag.Instance.bagItemsUI.Length;i++)
-            bagSelectables.Add( new(Bag.Instance.bagItemsUI[i].gameObject,null,true) );
+        
+        foreach(var item in Bag.Instance.bagItemsUI) bagSelectables.Add( new(item.gameObject,null,true) );
         
         InputStateHandler.Instance.ChangeInputState(new InputState("Player Bag Navigation",
-                                InputStateHandler.Vertical, bagSelectables,null,false,true,CloseBag));
+                                InputStateHandler.Vertical, bagSelectables,Bag.Instance.itemSelector,true,true,CloseBag));
     }
     public void ViewProfile()
     {

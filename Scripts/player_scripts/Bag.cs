@@ -78,6 +78,11 @@ public class Bag : MonoBehaviour
             RemoveItem();
         Dialogue_handler.Instance.DisplayList("You made P"+profit+ ", would you like to sell anything else?",
              "Sure, which item?", new[]{ "SellItem","LeaveStore" }, new[]{"Yes", "No"});
+        ResetAllBagUi();
+    }
+
+    private void ResetAllBagUi()
+    {
         List<InputState> sellingUIStates = new List<InputState>();
         foreach (var state in InputStateHandler.Instance.stateLayers)
         {
@@ -86,7 +91,6 @@ public class Bag : MonoBehaviour
         }
         StartCoroutine(InputStateHandler.Instance.RemoveInputStates(sellingUIStates));
     }
-
 
     public void CheckItemQuantity(Item item)
     {
@@ -108,9 +112,6 @@ public class Bag : MonoBehaviour
     }
     public void NavigateDown()
     {
-        selectedItem++;
-        selectedItem = Mathf.Clamp(selectedItem, 0, 9);
-        SelectItem(selectedItem);
         if (topIndex < _numItems - 10 && selectedItem == 9)
         {
             for (int i = 0; i < 9; i++)
@@ -120,12 +121,13 @@ public class Bag : MonoBehaviour
             SelectItem(8);
             topIndex++;
         }
+        selectedItem++;
+        selectedItem = Mathf.Clamp(selectedItem, 0, 9);
+        SelectItem(selectedItem);
+
     }
     public void NavigateUp()
     {
-        selectedItem--;
-        selectedItem = Mathf.Clamp(selectedItem, 0, 9);
-        SelectItem(selectedItem);
         if (topIndex > 0 && selectedItem == 0)
         {
             for (int i = 9; i > 0; i--)
@@ -135,6 +137,9 @@ public class Bag : MonoBehaviour
             SelectItem(1);
             topIndex--;
         }
+        selectedItem--;
+        selectedItem = Mathf.Clamp(selectedItem, 0, 9);
+        SelectItem(selectedItem);
     }
     private Item SearchForItem(string itemName)
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Mathematics;
@@ -32,6 +33,7 @@ public class Dialogue_handler : MonoBehaviour
     private List<GameObject> _currentDialogueOptions = new();
     public bool messagesLoading = false;
     public List<Interaction> pendingMessages = new();
+    public GameObject optionSelector;
     public static Dialogue_handler Instance;
     private void Awake()
     {
@@ -80,8 +82,10 @@ public class Dialogue_handler : MonoBehaviour
             EndDialogue();
     }
 
-    private void DeletePreviousOptions()
+    private void  DeletePreviousOptions()
     {
+        ActivateOptions(false);
+        InputStateHandler.Instance.RemoveTopInputLayer();
         _dialogueOptionsManager.currentOptions.Clear();
         foreach (var option in _currentDialogueOptions)
             Destroy(option);
@@ -90,7 +94,6 @@ public class Dialogue_handler : MonoBehaviour
     private void CreateDialogueOptions()
     {
         dialogueOptionBox.gameObject.SetActive(true);
-        DeletePreviousOptions();
         var numOptions = currentInteraction.interactionOptions.Count;
         for(var i = 0; i < numOptions; i++)
         {
@@ -100,18 +103,27 @@ public class Dialogue_handler : MonoBehaviour
             optionScript.SetupOption(i,numOptions,currentInteraction.optionsUiText[i]);
             _dialogueOptionsManager.currentOptions.Add(optionScript);
         }
+        SetupDialogueOptionsNavigation();
         _dialogueOptionsManager.LoadUiSize();
         ActivateOptions(true);
-    } 
+    }
+
+    void SetupDialogueOptionsNavigation()
+    {
+        var optionSelectables = new List<SelectableUI>();
+         foreach(var option in _dialogueOptionsManager.currentOptions)
+            optionSelectables.Add( new(option.gameObject,()=>SelectOption(option.optionIndex),true) );
+        
+        InputStateHandler.Instance.ChangeInputState(new InputState("Dialogue Options",
+            InputStateHandler.Vertical,optionSelectables,optionSelector,true,true,null));
+    }
     public void SelectOption(int optionIndex)
     {
-        ActivateOptions(false);
         if(_overworldInteraction)
             Options_manager.Instance.CompleteInteraction(currentInteractionObject,optionIndex);
         else
             Options_manager.Instance.CompleteInteraction(currentInteraction,optionIndex);
         _overworldInteraction = false;
-        DeletePreviousOptions();
     }
     private void ActivateOptions(bool display)
      {
@@ -221,8 +233,12 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void EndDialogue()
     {
+        if (_dialogueOptionsManager.currentOptions.Count > 0)
+        {
+            Debug.Log("here");
+            DeletePreviousOptions();
+        }
         canExitDialogue=true;
-        ActivateOptions(false);
         currentInteraction = null;
         infoDialogueBox.SetActive(false);
         battleDialogueBox.SetActive(false);

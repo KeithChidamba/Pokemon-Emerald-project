@@ -17,6 +17,7 @@ public class DialogueOption : MonoBehaviour
         textContent = text;
         optionText.text = textContent;
         var offsetY = numOptions>5? 5:numOptions;
+        //stack options in column
         _rectTransform.localPosition = new Vector3(_rectTransform.localPosition.x
             , _rectTransform.localPosition.y+( (numOptions-1-optionIndex)*25)+offsetY, 0);
     }

@@ -139,7 +139,7 @@ public class Options_manager : MonoBehaviour
         overworld_actions.Instance.manager.ChangeAnimationState(overworld_actions.Instance.manager.fishingStart);
         Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
     }
-    public void SellItem()
+    void SellItem()
     {
         Dialogue_handler.Instance.EndDialogue();
         Bag.Instance.sellingItems = true;
@@ -158,14 +158,15 @@ public class Options_manager : MonoBehaviour
     {
         Dialogue_handler.Instance.EndDialogue();
         var berry = _currentInteraction.resultMessage;
-        var berryAsset = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/" + berry);
+        var berryAsset = Resources.Load<Item>("Pokemon_project_assets/Items" + berry);
         Bag.Instance.AddItem(Obj_Instance.CreateItem(berryAsset));
         Dialogue_handler.Instance.DisplayInfo("You picked up a "+berry, "Details",1f);
     }
     public void CompleteInteraction(Interaction interaction,int option)
     {
         var methodName = interaction.interactionOptions[option].Replace(" ", "");
-        if (methodName == string.Empty){ Dialogue_handler.Instance.EndDialogue(); return; }
+        if (methodName == string.Empty) { Dialogue_handler.Instance.EndDialogue(); return; }
+        
         _currentInteraction = interaction;
         if (_interactionMethods.TryGetValue(methodName,out var method))
             method();

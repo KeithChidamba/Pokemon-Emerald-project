@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 public class InputStateHandler : MonoBehaviour
 {
-    [SerializeField] [CanBeNull] private InputState _currentState;
+    [SerializeField] private InputState _currentState;
     public static readonly string[] OmniDirection = {"Horizontal","Vertical"}; 
     public static readonly string[] Vertical = {"Vertical"}; 
     public static readonly string[] Horizontal = {"Horizontal"};
@@ -53,10 +53,15 @@ public class InputStateHandler : MonoBehaviour
             stateLayers.Remove(state);
             yield return new WaitUntil(() => stateLayers.Count == numLayers - 1);
         }
-        if (_handlingState)
+        if (stateLayers.Count > 0)
             ChangeInputState(stateLayers.Last());
         else
             _currentState =  null;
+    }
+
+    public void RemoveTopInputLayer()
+    {
+        StartCoroutine(RemoveInputStates(new (){stateLayers.Last()} ));
     }
     private void Update()
     {
@@ -66,36 +71,35 @@ public class InputStateHandler : MonoBehaviour
         
         if (_currentState.stateName == "Movement") return;
         if (Input.GetKeyDown(KeyCode.R) && !Dialogue_handler.Instance.displaying)
-        {
-            StartCoroutine(RemoveInputStates(new (){stateLayers.Last()} ));
-        }
+            RemoveTopInputLayer();
+        
         if (Input.GetKeyDown(KeyCode.F) )
         {
-            ExecuteSelectedmethod();
+            InvokeSelectedEvent();
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             OnInputLeft?.Invoke();
-            ChangeSelection(directionSelection[2]);
-            if(CanUpdateSelector("Horizontal")) UpdateSelector();
+            ChangeSelectionIndex(directionSelection[2]);
+            if(CanUpdateSelector("Horizontal")) UpdateSelectorUi();
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             OnInputRight?.Invoke();
-            ChangeSelection(directionSelection[3]);
-            if(CanUpdateSelector("Horizontal")) UpdateSelector();
+            ChangeSelectionIndex(directionSelection[3]);
+            if(CanUpdateSelector("Horizontal")) UpdateSelectorUi();
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             OnInputUp?.Invoke();
-            ChangeSelection(directionSelection[0]);
-            if(CanUpdateSelector("Vertical")) UpdateSelector();
+            ChangeSelectionIndex(directionSelection[0]);
+            if(CanUpdateSelector("Vertical")) UpdateSelectorUi();
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             OnInputDown?.Invoke();
-            ChangeSelection(directionSelection[1]);
-            if(CanUpdateSelector("Vertical")) UpdateSelector();
+            ChangeSelectionIndex(directionSelection[1]);
+            if(CanUpdateSelector("Vertical")) UpdateSelectorUi();
         }
     }
 
@@ -104,19 +108,19 @@ public class InputStateHandler : MonoBehaviour
         return _currentState.displayingSelector &
                _currentState.stateDirectionals.Contains(directional);
     }
-    void ExecuteSelectedmethod()
+    void InvokeSelectedEvent()
     {
         if(_currentState.isSelecting)
             _currentState.selectableUis[_currentState.currentSelectionIndex].eventForUi.Invoke();
         else
             _currentState.selectableUis[0].eventForUi.Invoke();
     }
-    void UpdateSelector()
+    void UpdateSelectorUi()
     {
         _currentState.selector.transform.position = _currentState.selectableUis[_currentState.currentSelectionIndex]
             .uiObject.transform.position;
     }
-    private void ChangeSelection(int change)
+    private void ChangeSelectionIndex(int change)
     {
         _currentState.currentSelectionIndex =
             Mathf.Clamp(_currentState.currentSelectionIndex+change, 0, _currentState.maxSelectionIndex);
@@ -124,60 +128,53 @@ public class InputStateHandler : MonoBehaviour
     public void ChangeInputState(InputState newState)
     {
         if (!stateLayers.Any(s => s.stateName == newState.stateName))
-        {
             stateLayers.Add(newState);
-        }
         ResetInputEvents();
         _currentState = stateLayers.Last();
+        SetDirectionals();
         if (_currentState.isSelecting) _currentState.maxSelectionIndex = _currentState.selectableUis.Count-1;
         if (_currentState.stateName != "Movement") SetupInputEvents();
-        if(_currentState.displayingSelector)UpdateSelector();
+        if (_currentState.displayingSelector)
+        {
+            UpdateSelectorUi();
+            _currentState.selector.SetActive(true);
+        }
     }
 
+    void SetDirectionals()
+    {
+        if (_currentState.stateDirectionals.Contains("Horizontal"))
+            directionSelection = new[] { 0, 0, -1, 1 };
+        
+        if (_currentState.stateDirectionals.Contains("Vertical"))
+            directionSelection = new[] { -1, 1, 0, 0 };
+        
+    }
     void ResetInputEvents()
     {
         OnInputUp = null; OnInputDown = null; OnInputLeft = null; OnInputRight = null;
     }
-    void PlayerMenu()
-    {
-        _currentState.selector.SetActive(true);
-        directionSelection = new[] { -1, 1, 0, 0 };
-    }
     private void PlayerBagNavigation()
     {
-        directionSelection = new[] { -1, 1, 0, 0 };
         OnInputUp += Bag.Instance.NavigateUp;
         OnInputDown += Bag.Instance.NavigateDown;
-        _currentState.selector = Bag.Instance.itemSelector;
-
         if (Bag.Instance.sellingItems)
-            _currentState.selectableUis[0].eventForUi = SellItemSelection;
+            _currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToSell);
         else
-            _currentState.selectableUis[0].eventForUi = BagItemUsageSelection;
-        
-        _currentState.selector.SetActive(true);
-        _currentState.maxSelectionIndex = 9;
+            _currentState.selectableUis.ForEach(s=>s.eventForUi = SelectUsageForItem);
     }
 
-    void SellItemSelection()
+    void SelectItemToSell()
     {
-        Options_manager.Instance.SellItem();
+        Bag.Instance.sellingItems = true;
         var itemSellSelectables = new List<SelectableUI>{new(null,Bag.Instance.SellToMarket,true)};
         ChangeInputState(new InputState("Player Bag Item Sell", Vertical, itemSellSelectables
-            ,null,false,false,StopSellingItems));
-        directionSelection = new[] { -1, 1, 0, 0 };
+            ,null,false,false,()=>Bag.Instance.sellQuantity=1));
         OnInputUp += ()=>Bag.Instance.ChangeQuantity(1);
         OnInputDown += ()=>Bag.Instance.ChangeQuantity(-1);
     }
-    private void StopSellingItems()
+    void SelectUsageForItem()
     {
-        Bag.Instance.sellingItemUI.SetActive(false);
-        Bag.Instance.sellingItems = false;
-        StartCoroutine(RemoveInputStates(new (){stateLayers.Last()} ));
-    }
-    void BagItemUsageSelection()
-    {
-        directionSelection = new[] { 0, 0, -1, 1 };
         var itemUsageSelectables = new List<SelectableUI>
         {
             new(Bag.Instance.itemUsageUi[0],Bag.Instance.UseItem,Bag.Instance.itemUsable)
@@ -189,12 +186,12 @@ public class InputStateHandler : MonoBehaviour
             ,Bag.Instance.itemUsageSelector,true,true,null));
         _currentState.selector.SetActive(true);
     }
+    
     void SetupInputEvents()
     {
         Action stateMethod = _currentState.stateName switch
         {
             "Player Bag Navigation" => PlayerBagNavigation,
-            "Player Menu" => PlayerMenu,
             _ => null
         };
         stateMethod?.Invoke();

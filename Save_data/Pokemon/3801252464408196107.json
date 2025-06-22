@@ -76,16 +76,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -35098
+            "instanceID": -33410
         },
         {
-            "instanceID": -35100
+            "instanceID": -33412
         },
         {
-            "instanceID": -35102
+            "instanceID": -33414
         },
         {
-            "instanceID": -35104
+            "instanceID": -33416
         }
     ],
     "ability": {
@@ -104,10 +104,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32372
+        "instanceID": 32334
     },
     "backPicture": {
-        "instanceID": 32254
+        "instanceID": 32216
     },
     "pokeballName": "",
     "abilityName": "Overgrow",
