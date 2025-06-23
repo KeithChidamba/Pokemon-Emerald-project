@@ -186,7 +186,26 @@ public class InputStateHandler : MonoBehaviour
             ,Bag.Instance.itemUsageSelector,true,true,null));
         _currentState.selector.SetActive(true);
     }
-    
+
+    public void PokemonPartyOptions()
+    {
+        var partyOptionsSelectables = new List<SelectableUI>
+        {
+            new(Pokemon_party.Instance.partyOptions[0]
+                , Pokemon_party.Instance.ViewPokemonDetails, true),
+            new(Pokemon_party.Instance.partyOptions[1]
+                , () => Pokemon_party.Instance.SelectMemberToBeSwapped(Pokemon_party.Instance.selectedMemberIndex)
+                , true),
+            new(Pokemon_party.Instance.partyOptions[2]
+                , () => Bag.Instance.TakeItem(Pokemon_party.Instance.selectedMemberIndex)
+                ,Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberIndex - 1].hasItem)
+        };
+        partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
+        ChangeInputState(new InputState("Party Pokemon Options", Vertical, partyOptionsSelectables
+            ,Pokemon_party.Instance.optionSelector,true,true,Pokemon_party.Instance.ClearSelectionUI));
+        _currentState.selector.SetActive(true);
+    }
+
     void SetupInputEvents()
     {
         Action stateMethod = _currentState.stateName switch

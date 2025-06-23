@@ -178,5 +178,17 @@ public class Game_ui_manager : MonoBehaviour
         Dialogue_handler.Instance.EndDialogue();
         ActivateUiElement(Pokemon_party.Instance.partyUI);
         Pokemon_party.Instance.ViewParty();
+        
+        var partySelectables = new List<SelectableUI>();
+
+        for (var i = 0 ;i< Pokemon_party.Instance.numMembers;i++)
+        {
+            var memberNumber = i + 1;
+            partySelectables.Add( new(Pokemon_party.Instance.memberCards[i].gameObject
+                ,() => Pokemon_party.Instance.SelectMember(memberNumber),true) );
+        }
+        
+        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Party Navigation",
+            InputStateHandler.Vertical, partySelectables, Pokemon_party.Instance.memberSelector, true, true,CloseParty));
     }
 }

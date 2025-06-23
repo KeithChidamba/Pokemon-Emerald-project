@@ -14,16 +14,11 @@ public class Pokemon_party_member : MonoBehaviour
     [FormerlySerializedAs("pkm_hp")] public Slider pokemonHealthBarUI;
     [FormerlySerializedAs("pkm")] public Pokemon pokemon;
     public int partyPosition;
-    [FormerlySerializedAs("Options")] public GameObject options;
     [FormerlySerializedAs("main_ui")] public GameObject[] mainUI;
     [FormerlySerializedAs("empty_ui")] public GameObject emptySlotUI;
     [FormerlySerializedAs("HeldItem_img")] public GameObject heldItemImage;
-    [FormerlySerializedAs("TakeHeldItem_btn")] public Button takeHeldItemButton;
     public bool isEmpty = false;
-    private void Start()
-    {
-        options.SetActive(false);
-    }
+
     public void Levelup()//debugging purposes
     {
         if(pokemon==null)return;
@@ -39,7 +34,6 @@ public class Pokemon_party_member : MonoBehaviour
         isEmpty = false;
         emptySlotUI.SetActive(false);
         heldItemImage.SetActive(pokemon.hasItem);
-        takeHeldItemButton.interactable = pokemon.hasItem;
         if (pokemon.statusEffect == "None")
             statusEffectImage.gameObject.SetActive(false);
         else
