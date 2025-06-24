@@ -16,8 +16,14 @@ public class InputState
     public bool displayingSelector;
     public GameObject selector;
     public int maxSelectionIndex;
-    public InputState(string stateName, string[] stateDirectionals, List<SelectableUI> selectableUis ,GameObject selector,bool selecting,bool display,Action onExit)
+    public GameObject mainViewUI;
+    public bool isParentLayer;
+    public InputState(string stateName, bool isParent,GameObject mainView,string[] stateDirectionals, List<SelectableUI> selectableUis ,GameObject selector,bool selecting,bool display,Action onExit)
     {
+        isParentLayer = isParent;
+        
+        if (isParentLayer) mainViewUI = mainView;
+        
         this.stateName = stateName;
         this.stateDirectionals = stateDirectionals; 
         this.selectableUis = selectableUis;

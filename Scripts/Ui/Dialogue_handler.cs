@@ -85,7 +85,7 @@ public class Dialogue_handler : MonoBehaviour
     private void  DeletePreviousOptions()
     {
         ActivateOptions(false);
-        InputStateHandler.Instance.RemoveTopInputLayer();
+        InputStateHandler.Instance.RemoveTopInputLayer(true);
         _dialogueOptionsManager.currentOptions.Clear();
         foreach (var option in _currentDialogueOptions)
             Destroy(option);
@@ -114,7 +114,7 @@ public class Dialogue_handler : MonoBehaviour
          foreach(var option in _dialogueOptionsManager.currentOptions)
             optionSelectables.Add( new(option.gameObject,()=>SelectOption(option.optionIndex),true) );
         
-        InputStateHandler.Instance.ChangeInputState(new InputState("Dialogue Options",
+        InputStateHandler.Instance.ChangeInputState(new InputState("Dialogue Options",false,null,
             InputStateHandler.Vertical,optionSelectables,optionSelector,true,true,null));
     }
     public void SelectOption(int optionIndex)

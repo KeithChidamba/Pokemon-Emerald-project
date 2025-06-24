@@ -15,9 +15,6 @@ public class Pokemon_party : MonoBehaviour
     public bool moving;
     public bool swappingIn;
     public bool swapOutNext;
-    public bool viewingDetails;
-    public bool viewingOptions;
-    public bool viewingParty;
     public bool givingItem;
     public Pokemon_party_member[] memberCards;
     public GameObject partyUI;
@@ -36,11 +33,6 @@ public class Pokemon_party : MonoBehaviour
         }
         Instance = this;
     }
-    private void Start()
-    {
-        Battle_handler.Instance.OnBattleEnd += CloseParty;
-    }
-
     public List<Pokemon> GetLivingPokemon()
     {
         List<Pokemon> alivePokemon = new();
@@ -50,15 +42,9 @@ public class Pokemon_party : MonoBehaviour
                     alivePokemon.Add(party[i]);
         return alivePokemon;
     }
-    public void ViewParty()
-    {
-         viewingParty = true;
-         RefreshMemberCards();
-    }
     public void ViewPokemonDetails()
     {//view pokemon details from button click
         Pokemon_Details.Instance.LoadDetails(party[selectedMemberIndex-1]);
-        viewingDetails = true;
         ClearSelectionUI();
     }
 
@@ -86,7 +72,6 @@ public class Pokemon_party : MonoBehaviour
     }
     public void SelectMemberToBeSwapped(int memberPosition)
     {
-        var selectedMember = memberCards[memberPosition - 1]; 
         if (Options_manager.Instance.playerInBattle)
         {//cant swap in a member who is already fighting
             var currentParticipant = Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
@@ -105,8 +90,8 @@ public class Pokemon_party : MonoBehaviour
                 Dialogue_handler.Instance.DisplayInfo("Select Pokemon to swap with","Details");
                 moving = true;
                 memberToMove = memberPosition;
-                viewingOptions = false;
                 partyOptionsParent.SetActive(false);
+                InputStateHandler.Instance.RemoveTopInputLayer(false);
             }
             else
                 Dialogue_handler.Instance.DisplayInfo("There must be at least 2 Pokemon to swap","Details",1f);
@@ -151,7 +136,6 @@ public class Pokemon_party : MonoBehaviour
                 else
                 {
                     ClearSelectionUI();
-                    viewingOptions = true;
                     memberSelector.transform.position = selectedMember.transform.position;
                     memberSelector.SetActive(true);
                     partyOptionsParent.SetActive(true);
@@ -162,12 +146,20 @@ public class Pokemon_party : MonoBehaviour
     }
     public void ClearSelectionUI()
     {
-        viewingOptions = false;
         moving = false;
         memberSelector.SetActive(false);
         partyOptionsParent.SetActive(false);
     }
 
+    public void ResetPartyState()
+    {
+        swapOutNext = false;
+        swappingIn = false;
+
+        Item_handler.Instance.usingItem = false;//in case player closes before using item
+        
+        givingItem = false;
+    }
     private void GiveItemToMember(int memberPosition)
     {
         var selectedMember = memberCards[memberPosition - 1];
@@ -177,8 +169,6 @@ public class Pokemon_party : MonoBehaviour
                                                  +" is already holding something","Details",1f);
             givingItem = false;
             _itemToUse = null;
-            Game_ui_manager.Instance.CloseParty();
-            Game_ui_manager.Instance.Invoke(nameof(Game_ui_manager.Instance.ViewBag),1.1f);
             return;
         }
         Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.pokemonName
@@ -204,19 +194,14 @@ public class Pokemon_party : MonoBehaviour
             if(party[selectedMemberIndex-1] != party[partyPosition])
                 SwapMembers(partyPosition);
     }
-private void CloseParty()
-{
-    Game_ui_manager.Instance.CloseParty();
-    swapOutNext = false;
-    swappingIn = false;
-}
+
     void SwitchIn()
     {
         if (swapOutNext)
             Turn_Based_Combat.Instance.faintEventDelay = false;
         if(swappingIn)
             Turn_Based_Combat.Instance.NextTurn();
-        CloseParty();
+        InputStateHandler.Instance.RemoveTopInputLayer(true);
     }
     private void SwapMembers(int partyPosition)
     {

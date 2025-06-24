@@ -470,7 +470,7 @@ public class Item_handler : MonoBehaviour
     private void SkipTurn()
     {
         if (!Options_manager.Instance.playerInBattle) return;
-        Game_ui_manager.Instance.CloseParty();
+        InputStateHandler.Instance.RemoveTopInputLayer(true);
         Turn_Based_Combat.Instance.NextTurn();
     }
     void DepleteHeldItem()
@@ -487,5 +487,6 @@ public class Item_handler : MonoBehaviour
     {
         usingItem = false;
         _selectedPartyPokemon = null;
+        InputStateHandler.Instance.RemoveTopInputLayer(true);
     }
 }

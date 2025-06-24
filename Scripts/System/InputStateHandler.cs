@@ -59,8 +59,9 @@ public class InputStateHandler : MonoBehaviour
             _currentState =  null;
     }
 
-    public void RemoveTopInputLayer()
+    public void RemoveTopInputLayer(bool invokeOnExit)
     {
+        stateLayers.Last().OnExit = invokeOnExit? stateLayers.Last().OnExit:null;
         StartCoroutine(RemoveInputStates(new (){stateLayers.Last()} ));
     }
     private void Update()
@@ -71,7 +72,7 @@ public class InputStateHandler : MonoBehaviour
         
         if (_currentState.stateName == "Movement") return;
         if (Input.GetKeyDown(KeyCode.R) && !Dialogue_handler.Instance.displaying)
-            RemoveTopInputLayer();
+            RemoveTopInputLayer(true);
         
         if (Input.GetKeyDown(KeyCode.F) )
         {
@@ -139,6 +140,18 @@ public class InputStateHandler : MonoBehaviour
             UpdateSelectorUi();
             _currentState.selector.SetActive(true);
         }
+
+        var parentLayers = stateLayers.Where(s => s.isParentLayer).ToList();
+        
+        foreach (var layer in parentLayers)
+        {
+            if (layer == parentLayers.Last())
+            {
+                layer.mainViewUI.SetActive(true);
+                break;
+            }
+            layer.mainViewUI.SetActive(false);
+        }
     }
 
     void SetDirectionals()
@@ -168,7 +181,7 @@ public class InputStateHandler : MonoBehaviour
     {
         Bag.Instance.sellingItems = true;
         var itemSellSelectables = new List<SelectableUI>{new(null,Bag.Instance.SellToMarket,true)};
-        ChangeInputState(new InputState("Player Bag Item Sell", Vertical, itemSellSelectables
+        ChangeInputState(new InputState("Player Bag Item Sell",false,null, Vertical, itemSellSelectables
             ,null,false,false,()=>Bag.Instance.sellQuantity=1));
         OnInputUp += ()=>Bag.Instance.ChangeQuantity(1);
         OnInputDown += ()=>Bag.Instance.ChangeQuantity(-1);
@@ -182,7 +195,7 @@ public class InputStateHandler : MonoBehaviour
             ,new(Bag.Instance.itemUsageUi[2],Bag.Instance.RemoveItem,Bag.Instance.itemDroppable)
         };
         itemUsageSelectables.RemoveAll(s=>!s.canBeSelected);
-        ChangeInputState(new InputState("Player Bag Item Usage", Horizontal, itemUsageSelectables
+        ChangeInputState(new InputState("Player Bag Item Usage",false,null, Horizontal, itemUsageSelectables
             ,Bag.Instance.itemUsageSelector,true,true,null));
         _currentState.selector.SetActive(true);
     }
@@ -201,7 +214,7 @@ public class InputStateHandler : MonoBehaviour
                 ,Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberIndex - 1].hasItem)
         };
         partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
-        ChangeInputState(new InputState("Party Pokemon Options", Vertical, partyOptionsSelectables
+        ChangeInputState(new InputState("Party Pokemon Options",false,null, Vertical, partyOptionsSelectables
             ,Pokemon_party.Instance.optionSelector,true,true,Pokemon_party.Instance.ClearSelectionUI));
         _currentState.selector.SetActive(true);
     }

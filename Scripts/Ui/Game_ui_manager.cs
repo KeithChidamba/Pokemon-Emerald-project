@@ -60,25 +60,11 @@ public class Game_ui_manager : MonoBehaviour
         {
             ManageScreens(1);
             viewingMenu = true;
-            ActivateUiElement(menuOptions);
+            ActivateUiElement(menuOptions,true);
             ActivateMenuSelection();
         }
         if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.Instance.doingAction && viewingMenu)
             menuOff = false;
-        // if (Input.GetKeyDown(KeyCode.R) && viewingMenu && !menuOff)
-        //     CloseMenu();
-        
-        // if (Input.GetKeyDown(KeyCode.R) && Pokemon_party.Instance.viewingParty && !Pokemon_party.Instance.viewingDetails)
-        //     if(!Pokemon_party.Instance.swapOutNext & canExitParty)
-        //         CloseParty();
-        
-        // if (Input.GetKeyDown(KeyCode.R) && Bag.Instance.viewingBag)
-        //     CloseBag();
-        //
-        // if (Input.GetKeyDown(KeyCode.R) && profile.viewingProfile)
-        // {
-        //     CloseProfile();
-        // }
         // if (Input.GetKeyDown(KeyCode.R) && Poke_Mart.Instance.viewingStore)
         // {
         //     CloseStore();
@@ -88,7 +74,7 @@ public class Game_ui_manager : MonoBehaviour
     } 
     private void ActivateMenuSelection()
     {
-        var menuOptionsMethods = new List<Action>()
+        var menuOptionsMethods = new List<Action>
         {
             ViewPokemonParty,Save_manager.Instance.SaveAllData, ViewBag, ViewProfile,
             Options_manager.Instance.ExitGame
@@ -103,81 +89,83 @@ public class Game_ui_manager : MonoBehaviour
         for (var i =0; i<menuOptionsMethods.Count;i++)
             menuSelectables.Add( new(menuUiOptions[i],menuOptionsMethods[i],true) );
             
-        InputStateHandler.Instance.ChangeInputState(new InputState("Player Menu",InputStateHandler.Vertical, 
-            menuSelectables,menuSelector,true, true,CloseMenu));
+        InputStateHandler.Instance.ChangeInputState(new InputState("Player Menu",true,menuOptions,
+            InputStateHandler.Vertical, menuSelectables,menuSelector,true, true,CloseMenu));
     }
-    private void ActivateUiElement(GameObject ui)
+    private void ActivateUiElement(GameObject ui,bool activated)
     {
-        ui.SetActive(true);
+        ui.SetActive(activated);
     }
     private void CloseProfile()
     {
         ManageScreens(-1);
-        profile.gameObject.SetActive(false);
+        ActivateUiElement(profile.gameObject, false);
         profile.viewingProfile = false;
     }
-    public void CloseStore()
+    private void CloseStore()
     {
         ManageScreens(-1);
         Poke_Mart.Instance.ExitStore();
-        Poke_Mart.Instance.storeUI.SetActive(false);
+        ActivateUiElement(Poke_Mart.Instance.storeUI, false);
     }
-    public void CloseBag()
+    private void CloseBag()
     {
         ManageScreens(-1);
         Bag.Instance.CloseBag();
-        Bag.Instance.bagUI.SetActive(false);
+        ActivateUiElement( Bag.Instance.bagUI, false);
     }
-    public void CloseParty()
+    private void CloseParty()
     {
         ManageScreens(-1);
-        Pokemon_party.Instance.partyUI.gameObject.SetActive(false);
-        Pokemon_party.Instance.ClearSelectionUI();
-        Item_handler.Instance.usingItem = false;//in case player closes before using item
-        Pokemon_party.Instance.givingItem = false;
+        ActivateUiElement(Pokemon_party.Instance.partyUI.gameObject, false);
+        Pokemon_party.Instance.ResetPartyState();
     }
 
     private void CloseMenu()
     {
         if (!viewingMenu) return;
         ManageScreens(-1);
-        menuOptions.SetActive(false);
+        ActivateUiElement(menuOptions, false);
         viewingMenu = false;
         menuOff = true;
     }
     public void ViewMarket()
     {
         ManageScreens(1);
-        ActivateUiElement(Poke_Mart.Instance.storeUI);
+        ActivateUiElement(Poke_Mart.Instance.storeUI,true);
     }
     public void ViewBag()
     {
         ManageScreens(1);
         Dialogue_handler.Instance.EndDialogue();
-        ActivateUiElement(Bag.Instance.bagUI);
+        ActivateUiElement(Bag.Instance.bagUI,true);
         Bag.Instance.ViewBag();
 
         var bagSelectables = new List<SelectableUI>();
         
         foreach(var item in Bag.Instance.bagItemsUI) bagSelectables.Add( new(item.gameObject,null,true) );
         
-        InputStateHandler.Instance.ChangeInputState(new InputState("Player Bag Navigation",
-                                InputStateHandler.Vertical, bagSelectables,Bag.Instance.itemSelector,true,true,CloseBag));
+        InputStateHandler.Instance.ChangeInputState(new InputState("Player Bag Navigation",true,
+            Bag.Instance.bagUI, InputStateHandler.Vertical, bagSelectables,
+                    Bag.Instance.itemSelector,true,true,CloseBag));
     }
     public void ViewProfile()
     {
         ManageScreens(1);
-        ActivateUiElement(profile.gameObject);
+        ActivateUiElement(profile.gameObject,true);
         profile.LoadProfile(Game_Load.Instance.playerData);
-        InputStateHandler.Instance.ChangeInputState(new InputState("Player Profile",null, 
-            null,null,false, false,CloseProfile));
+        InputStateHandler.Instance.ChangeInputState(new InputState("Player Profile",true,profile.gameObject
+            ,null, null,null,false, false,CloseProfile));
     }
     public void ViewPokemonParty()
     {
         ManageScreens(1);
         Dialogue_handler.Instance.EndDialogue();
-        ActivateUiElement(Pokemon_party.Instance.partyUI);
-        Pokemon_party.Instance.ViewParty();
+        Pokemon_party.Instance.ClearSelectionUI();
+        ActivateUiElement(Pokemon_party.Instance.partyUI,true);
+        Pokemon_party.Instance.RefreshMemberCards();
+
+        var partyUsageState = Item_handler.Instance.usingItem? "Pokemon Party Item Usage" : "Pokemon Party Navigation";
         
         var partySelectables = new List<SelectableUI>();
 
@@ -188,7 +176,7 @@ public class Game_ui_manager : MonoBehaviour
                 ,() => Pokemon_party.Instance.SelectMember(memberNumber),true) );
         }
         
-        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Party Navigation",
+        InputStateHandler.Instance.ChangeInputState(new InputState(partyUsageState,true,Pokemon_party.Instance.partyUI,
             InputStateHandler.Vertical, partySelectables, Pokemon_party.Instance.memberSelector, true, true,CloseParty));
     }
 }

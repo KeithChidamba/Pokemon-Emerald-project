@@ -70,7 +70,6 @@ public class Pokemon_Details : MonoBehaviour
         Moves_ui.SetActive(false);
         Ability_ui.SetActive(false);
         currentPokemon = null;
-        Pokemon_party.Instance.viewingDetails = false;
     }
     public void NextPage()
     {
@@ -94,9 +93,11 @@ public class Pokemon_Details : MonoBehaviour
             OnMoveSelected?.Invoke(moveIndex-1);
             return;
         }
-        move_Description.text = currentPokemon.moveSet[moveIndex - 1].description;
-        move_acc.text = "Accuracy: "+currentPokemon.moveSet[moveIndex - 1].moveAccuracy;
-        move_dmg.text = "Damage: " + currentPokemon.moveSet[moveIndex - 1].moveDamage;
+        var selectedMove = currentPokemon.moveSet[moveIndex - 1];
+        
+        move_Description.text = selectedMove.description;
+        move_acc.text = "Accuracy: "+ selectedMove.moveAccuracy;
+        move_dmg.text = "Damage: " + selectedMove.moveDamage;
         move_details.SetActive(true);
     }
 

@@ -210,7 +210,6 @@ public class Bag : MonoBehaviour
     {
         Pokemon_party.Instance.givingItem = true;
         Pokemon_party.Instance.ReceiveItem(bagItems[topIndex + selectedItem]);
-        Game_ui_manager.Instance.CloseBag();
         Game_ui_manager.Instance.ViewPokemonParty();
     } 
     public void UseItem()
@@ -224,7 +223,6 @@ public class Bag : MonoBehaviour
          }
          else
              Item_handler.Instance.UseItem(itemToUse,null);
-         Game_ui_manager.Instance.CloseBag();
      }
     public void AddItem(Item item)
     {
@@ -260,11 +258,7 @@ public class Bag : MonoBehaviour
             }
         }
         else
-        {
-            if(Poke_Mart.Instance.viewingStore)
-                Game_ui_manager.Instance.CloseStore();
             Dialogue_handler.Instance.DisplayInfo("Bag is full", "Details");
-        }                                                                           
     }
 
     public void CloseBag()
