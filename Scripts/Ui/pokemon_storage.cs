@@ -42,7 +42,7 @@ public class pokemon_storage : MonoBehaviour
     }
     public void OpenPC()
     {
-        Game_ui_manager.Instance.ManageScreens(1);
+        //Game_ui_manager.Instance.ManageScreens(1);
         usingPC = true;
         ActivatePokemonIcons();
         storageUI.SetActive(true);
@@ -57,7 +57,7 @@ public class pokemon_storage : MonoBehaviour
         hasSelectedPokemon = false;
         storageUI.SetActive(false);
         RemovePokemonIcons();
-        Game_ui_manager.Instance.ManageScreens(-1);
+        //Game_ui_manager.Instance.ManageScreens(-1);
     }
     public void SelectPartyPokemon(PC_party_pkm partyPokemon)
     {
@@ -112,7 +112,7 @@ public class pokemon_storage : MonoBehaviour
     public void ViewNonPartyPokemonDetails()
     {
         if (hasSelectedPokemon && !swapping)
-            Pokemon_Details.Instance.LoadDetails(nonPartyPokemon[SearchForPokemonIndex(selectedPokemonID)]);
+            Game_ui_manager.Instance.ViewPokemonDetails(nonPartyPokemon[SearchForPokemonIndex(selectedPokemonID)]);
     }
     public void SelectNonPartyPokemon(PC_pkm pokemonIcon)
     {

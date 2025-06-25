@@ -13,7 +13,7 @@ public class Pokemon_Details : MonoBehaviour
     [SerializeField]private Text move_Description,pkm_HeldItem,pkm_CurrentExp,pkm_NextLvExp;
     [SerializeField]private GameObject[] moves_btns;
     [SerializeField]private Text[] moves_pp;
-    [SerializeField]private Text[] moves;
+    public Text[] moves;
     [SerializeField]private Image pkm_img;
     [SerializeField]private Image gender_img;
     [SerializeField]private Image type1;
@@ -29,12 +29,14 @@ public class Pokemon_Details : MonoBehaviour
     [SerializeField]private GameObject move_details;
     [SerializeField]private Text move_dmg, move_acc;
     
-    private int _currentPage;
+    [SerializeField]private int _currentPage;
     public Pokemon currentPokemon;
     public Action<int> OnMoveSelected; 
     public bool learningMove;
     public bool changingMoveData;
     private Dictionary<int, Action> _pages = new();
+    public GameObject moveSelector;
+    public GameObject uiParent;
     public static Pokemon_Details Instance;
     private void Awake()
     {
@@ -59,18 +61,22 @@ public class Pokemon_Details : MonoBehaviour
         player_exp.value = ((currentPokemon.currentExpAmount/currentPokemon.nextLevelExpAmount)*100);
     }
 
-    public void ExitDetails()
+    public void ResetDetailsState()
     {
         if (learningMove) Options_manager.Instance.SkipMove();
 
         if(changingMoveData) OnMoveSelected?.Invoke(-1);//cancel move selection
-        Game_ui_manager.Instance.ManageScreens(-1);
+        
+        currentPokemon = null;
+    }
+
+    public void DeactivateDetailsUi()
+    {
         changingMoveData = false;
         OverlayUi.SetActive(false);
         Stats_ui.SetActive(false);
         Moves_ui.SetActive(false);
         Ability_ui.SetActive(false);
-        currentPokemon = null;
     }
     public void NextPage()
     {
@@ -91,10 +97,10 @@ public class Pokemon_Details : MonoBehaviour
     {
         if (learningMove || changingMoveData)
         {
-            OnMoveSelected?.Invoke(moveIndex-1);
+            OnMoveSelected?.Invoke(moveIndex);
             return;
         }
-        var selectedMove = currentPokemon.moveSet[moveIndex - 1];
+        var selectedMove = currentPokemon.moveSet[moveIndex];
         
         move_Description.text = selectedMove.description;
         move_acc.text = "Accuracy: "+ selectedMove.moveAccuracy;
@@ -141,7 +147,8 @@ public class Pokemon_Details : MonoBehaviour
         pkm_NextLvExp.text = currentPokemon.nextLevelExpAmount.ToString();
         pkm_HeldItem.text = (currentPokemon.hasItem)? currentPokemon.heldItem.itemName: "NONE";
         Stats_ui.SetActive(true);
-    }     
+    }
+    
     private void LoadMovesUiPage()
     {
         Ability_ui.SetActive(false);
@@ -164,10 +171,15 @@ public class Pokemon_Details : MonoBehaviour
             moves_btns[i].SetActive(false);
         }
         Moves_ui.SetActive(true);
-    } 
+    }
+
+    public void RemoveMoveDescription()
+    {
+        move_details.SetActive(false);
+        move_Description.text = string.Empty;
+    }
     public void LoadDetails(Pokemon pokemon)
     {
-        Game_ui_manager.Instance.ManageScreens(1);
         OverlayUi.SetActive(true);
         currentPokemon=pokemon;
         pkm_name.text = currentPokemon.pokemonName;

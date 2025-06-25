@@ -51,7 +51,7 @@ public class InputStateHandler : MonoBehaviour
         }
         StartCoroutine(RemoveInputStates(sellingUIStates));
     }
-    public IEnumerator RemoveInputStates(List<InputState> states)
+    private IEnumerator RemoveInputStates(List<InputState> states)
     {
         foreach (var state in states)
         {
@@ -79,14 +79,14 @@ public class InputStateHandler : MonoBehaviour
         _handlingState = stateLayers.Count > 0;
         if (!_handlingState) return;
         
-        if (_currentState.stateName == "Movement") return;
         if (Input.GetKeyDown(KeyCode.R) && !Dialogue_handler.Instance.displaying)
             RemoveTopInputLayer(true);
         
         if (Input.GetKeyDown(KeyCode.F) )
-        {
             InvokeSelectedEvent();
-        }
+
+        if (_currentState.stateDirectionals == null) return;
+        
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             OnInputLeft?.Invoke();
@@ -120,10 +120,11 @@ public class InputStateHandler : MonoBehaviour
     }
     void InvokeSelectedEvent()
     {
+        if (_currentState.selectableUis == null) return;
         if(_currentState.isSelecting)
-            _currentState.selectableUis[_currentState.currentSelectionIndex].eventForUi.Invoke();
+            _currentState.selectableUis[_currentState.currentSelectionIndex]?.eventForUi?.Invoke();
         else
-            _currentState.selectableUis[0].eventForUi.Invoke();
+            _currentState.selectableUis[0]?.eventForUi?.Invoke();
     }
     void UpdateSelectorUi()
     {
@@ -143,7 +144,7 @@ public class InputStateHandler : MonoBehaviour
         _currentState = stateLayers.Last();
         SetDirectionals();
         if (_currentState.isSelecting) _currentState.maxSelectionIndex = _currentState.selectableUis.Count-1;
-        if (_currentState.stateName != "Movement") SetupInputEvents();
+        SetupInputEvents();
         if (_currentState.displayingSelector)
         {
             UpdateSelectorUi();
@@ -165,6 +166,7 @@ public class InputStateHandler : MonoBehaviour
 
     void SetDirectionals()
     {
+        if (_currentState.stateDirectionals == null) return;
         if (_currentState.stateDirectionals.Contains("Horizontal"))
             directionSelection = new[] { 0, 0, -1, 1 };
         
@@ -214,7 +216,8 @@ public class InputStateHandler : MonoBehaviour
         var partyOptionsSelectables = new List<SelectableUI>
         {
             new(Pokemon_party.Instance.partyOptions[0]
-                , Pokemon_party.Instance.ViewPokemonDetails, true),
+                , ()=>Game_ui_manager.Instance.ViewPokemonDetails(
+                    Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberIndex - 1]), true),
             new(Pokemon_party.Instance.partyOptions[1]
                 , () => Pokemon_party.Instance.SelectMemberToBeSwapped(Pokemon_party.Instance.selectedMemberIndex)
                 , true),
@@ -228,11 +231,35 @@ public class InputStateHandler : MonoBehaviour
         _currentState.selector.SetActive(true);
     }
 
+    void SetupPokemonDetails()
+    {
+        OnInputLeft += Pokemon_Details.Instance.PreviousPage;
+        OnInputRight += Pokemon_Details.Instance.NextPage;
+    }
+    public void AllowMoveUiNavigation()
+    {
+        var moveSelectables = new List<SelectableUI>();
+        for (var i =0; i < Pokemon_Details.Instance.currentPokemon.moveSet.Count;i++)
+        {
+            moveSelectables.Add(new(Pokemon_Details.Instance.moves[i].gameObject
+                ,ShowMoveDescription,true));
+        }
+        ChangeInputState(new InputState("Pokemon Details Move Selection",false, null,
+            Vertical,moveSelectables, Pokemon_Details.Instance.moveSelector, true, true,null));
+    }
+
+    void ShowMoveDescription()
+    {
+        Pokemon_Details.Instance.SelectMove(_currentState.currentSelectionIndex);
+        ChangeInputState(new InputState("Pokemon Details Move Data",false, null,
+            null,null, null, false, false,Pokemon_Details.Instance.RemoveMoveDescription));
+    }
     void SetupInputEvents()
     {
         Action stateMethod = _currentState.stateName switch
         {
             "Player Bag Navigation" => PlayerBagNavigation,
+            "Pokemon Details"=>SetupPokemonDetails,
             _ => null
         };
         stateMethod?.Invoke();

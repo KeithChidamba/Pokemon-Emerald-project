@@ -169,7 +169,7 @@ public class Item_handler : MonoBehaviour
             Pokemon_Details.Instance.OnMoveSelected += MaximisePowerpoints;
         else if (_itemInUse.itemName.ToLower() == "pp up")
             Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
-        Pokemon_Details.Instance.LoadDetails(_selectedPartyPokemon);
+        Game_ui_manager.Instance.ViewPokemonDetails(_selectedPartyPokemon);
     }
 
     private void ItemBuffOrDebuff(string statName)
@@ -263,7 +263,7 @@ public class Item_handler : MonoBehaviour
  
          Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp was restored!", "Details",1f);
          StartCoroutine(CompleteItemUsage(2.2f));
-         Pokemon_Details.Instance.ExitDetails();
+         InputStateHandler.Instance.ResetRelevantUi("Pokemon Details");
      }
     private void IncreasePowerpoints(int moveIndex)
     {
@@ -281,7 +281,7 @@ public class Item_handler : MonoBehaviour
         Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was increased!", "Details",1f);
         
         StartCoroutine(CompleteItemUsage(2.2f));
-        Pokemon_Details.Instance.ExitDetails();
+        InputStateHandler.Instance.ResetRelevantUi("Pokemon Details");
     }
 
     private void MaximisePowerpoints(int moveIndex)
@@ -299,7 +299,7 @@ public class Item_handler : MonoBehaviour
         
         Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was maxed out!", "Details",1f);
         StartCoroutine(CompleteItemUsage(2.2f));
-        Pokemon_Details.Instance.ExitDetails();
+        InputStateHandler.Instance.ResetRelevantUi("Pokemon Details");
     }
     private void UsePokeball(Item pokeball)
     {

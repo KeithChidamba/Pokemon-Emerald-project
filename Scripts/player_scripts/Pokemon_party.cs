@@ -42,12 +42,6 @@ public class Pokemon_party : MonoBehaviour
                     alivePokemon.Add(party[i]);
         return alivePokemon;
     }
-    public void ViewPokemonDetails()
-    {//view pokemon details from button click
-        Pokemon_Details.Instance.LoadDetails(party[selectedMemberIndex-1]);
-        ClearSelectionUI();
-    }
-
     private bool IsValidSwap(int memberPosition)
     {
         if ( (memberPosition < 3 & Battle_handler.Instance.isDoubleBattle) || memberPosition == 1)

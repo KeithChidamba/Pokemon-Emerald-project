@@ -39,7 +39,7 @@ public class Game_ui_manager : MonoBehaviour
         if (overworld_actions.Instance == null) return;
         UiInputs();
     }
-    public void ManageScreens(int change)
+    private void ManageScreens(int change)
     {
         numUIScreensOpen += change;
         if (numUIScreensOpen < 0) numUIScreensOpen = 0;
@@ -119,6 +119,13 @@ public class Game_ui_manager : MonoBehaviour
         Pokemon_party.Instance.ResetPartyState();
     }
 
+    private void ClosePokemonDetails()
+    {
+        ManageScreens(-1);
+        ActivateUiElement(Pokemon_Details.Instance.uiParent,false);
+        Pokemon_Details.Instance.ResetDetailsState();
+        Pokemon_Details.Instance.DeactivateDetailsUi();
+    }
     private void CloseMenu()
     {
         if (!viewingMenu) return;
@@ -176,5 +183,19 @@ public class Game_ui_manager : MonoBehaviour
         
         InputStateHandler.Instance.ChangeInputState(new InputState(partyUsageState,true,Pokemon_party.Instance.partyUI,
             InputStateHandler.Vertical, partySelectables, Pokemon_party.Instance.memberSelector, true, true,CloseParty));
+    }
+
+    public void ViewPokemonDetails(Pokemon pokemonToView)
+    {
+        ActivateUiElement(Pokemon_Details.Instance.uiParent,true);
+        var detailsSelectables = new List<SelectableUI>{
+            new(null,null,true)
+            ,new(null,null,true)
+            ,new(null,InputStateHandler.Instance.AllowMoveUiNavigation,true)
+        };
+        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Details",true,Pokemon_Details.Instance.uiParent,
+            InputStateHandler.Horizontal,detailsSelectables, null, true, false,ClosePokemonDetails));
+        Pokemon_Details.Instance.LoadDetails(pokemonToView);
+        ManageScreens(1);
     }
 }

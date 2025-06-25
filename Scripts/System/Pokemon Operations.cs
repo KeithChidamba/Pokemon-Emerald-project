@@ -221,7 +221,7 @@ public static class PokemonOperations
     {
         Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
         Pokemon_Details.Instance.learningMove = false;
-        Pokemon_Details.Instance.ExitDetails();//remove top layer, replace this
+        InputStateHandler.Instance.ResetRelevantUi("Pokemon Details");
         Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName + " forgot " 
             + CurrentPokemon.moveSet[moveIndex].moveName 
             + " and learned " + NewMove.moveName,true);
