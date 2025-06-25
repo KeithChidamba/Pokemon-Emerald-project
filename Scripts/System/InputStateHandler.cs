@@ -41,7 +41,16 @@ public class InputStateHandler : MonoBehaviour
     {
         _readingInputs = true;
     }
-
+    public void ResetRelevantUi(string keyword)
+    {
+        List<InputState> sellingUIStates = new List<InputState>();
+        foreach (var state in stateLayers)
+        {
+            if (state.stateName.ToLower().Contains(keyword))
+                sellingUIStates.Add(state);
+        }
+        StartCoroutine(RemoveInputStates(sellingUIStates));
+    }
     public IEnumerator RemoveInputStates(List<InputState> states)
     {
         foreach (var state in states)

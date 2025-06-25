@@ -29,46 +29,34 @@ public class Item_handler : MonoBehaviour
         _itemInUse = item;
 
         if (item.itemEffect.ToLower() == "pp")
-        {
             ChangePowerpoints();
-            return;
+        else
+        {
+            switch (item.itemType.ToLower())
+            {
+                case "herb": UseHerbs(item.itemName); break;
+                
+                case "heal hp": RestoreHealth(int.Parse(item.itemEffect)); break;
+                
+                case "revive": RevivePokemon(item.itemEffect.ToLower()); break;
+                
+                case "status": HealStatusEffect(item.itemEffect.ToLower()); break;
+                
+                case "stat increase": GetEVsFromItem(_itemInUse.itemEffect); break;
+                
+                case "friendship increase": GetFriendshipFromItem(_itemInUse.itemEffect); break;
+                
+                case "pokeball": UsePokeball(item); break;
+                
+                case "evolution stone": TriggerStoneEvolution(item.itemName.ToLower()); break;
+                
+                case "rare candy": StartCoroutine(LevelUpWithItem()); break;
+                
+                case "x item": ItemBuffOrDebuff(item.itemEffect); break;
+            }
         }
         
-        switch (item.itemType.ToLower())
-        {
-            case "herb":
-                UseHerbs(item.itemName);
-                break;
-            case "heal hp":
-                RestoreHealth(int.Parse(item.itemEffect));
-                break;
-            case "revive":
-                RevivePokemon(item.itemEffect.ToLower());
-                break;
-            case "status":
-                HealStatusEffect(item.itemEffect.ToLower());
-                break;
-            case "stat increase":
-                GetEVsFromItem(_itemInUse.itemEffect);
-                break;
-            case "friendship increase":
-                GetFriendshipFromItem(_itemInUse.itemEffect);
-                break;
-            case "pokeball":
-                UsePokeball(item);
-                break;
-            case "evolution stone":
-                TriggerStoneEvolution(item.itemName.ToLower());
-                break;
-            case "rare candy":
-                StartCoroutine(LevelUpWithItem());
-                break;
-            case "x item":
-                ItemBuffOrDebuff(item.itemEffect);
-                break;
-        }
     }
-
     private void UseHerbs(string herbType)
     {
         OnItemUsageSuccessful += ChangeFriendship;
@@ -112,12 +100,12 @@ public class Item_handler : MonoBehaviour
         }
         else
         {
-            Game_ui_manager.Instance.canExitParty = false;
+            //Game_ui_manager.Instance.canExitParty = false;
             var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup);
             Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" leveled up!", "Details",1f);
             yield return new WaitForSeconds(1f);
             _selectedPartyPokemon.ReceiveExperience((exp-_selectedPartyPokemon.currentExpAmount)+1);
-            CompleteItemUsage(0f);
+            StartCoroutine(CompleteItemUsage(0));
         }
     }
 
@@ -212,7 +200,7 @@ public class Item_handler : MonoBehaviour
             }
             
             Dialogue_handler.Instance.DisplayBattleInfo("A veil of light covers "+pokemonProtected);
-            CompleteItemUsage(0f);
+            StartCoroutine(CompleteItemUsage(0));
             return;
         }
         var buff = BattleOperations.SearchForBuffOrDebuff(_selectedPartyPokemon, statName);
@@ -225,7 +213,7 @@ public class Item_handler : MonoBehaviour
         
         var xBuffData = new BuffDebuffData(currentParticipant, statName, true, 1);
         Move_handler.Instance.SelectRelevantBuffOrDebuff(xBuffData);
-        CompleteItemUsage(0f);
+        StartCoroutine(CompleteItemUsage(0));
     }
     private void RevivePokemon(string reviveType)
     {
@@ -239,7 +227,7 @@ public class Item_handler : MonoBehaviour
         OnItemUsageSuccessful?.Invoke(true);
         _selectedPartyPokemon.hp = reviveType=="max revive"? _selectedPartyPokemon.maxHp : math.trunc(_selectedPartyPokemon.maxHp*0.5f);
         Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" has been revived!", "Details",1f);
-        CompleteItemUsage(1f);
+        StartCoroutine(CompleteItemUsage(2.2f));
     }
 
     private bool MoveAlterationCancelled(Action<int> eventToUnsubscribe, int moveIndex)
@@ -274,7 +262,7 @@ public class Item_handler : MonoBehaviour
          currentMove.powerpoints = (sumPoints > currentMove.maxPowerpoints) ? currentMove.maxPowerpoints : sumPoints;
  
          Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp was restored!", "Details",1f);
-         CompleteItemUsage(1f);
+         StartCoroutine(CompleteItemUsage(2.2f));
          Pokemon_Details.Instance.ExitDetails();
      }
     private void IncreasePowerpoints(int moveIndex)
@@ -292,7 +280,7 @@ public class Item_handler : MonoBehaviour
         currentMove.maxPowerpoints += (int)math.floor(0.2*currentMove.basePowerpoints);
         Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was increased!", "Details",1f);
         
-        CompleteItemUsage();
+        StartCoroutine(CompleteItemUsage(2.2f));
         Pokemon_Details.Instance.ExitDetails();
     }
 
@@ -310,7 +298,7 @@ public class Item_handler : MonoBehaviour
         currentMove.maxPowerpoints = (int)math.floor( currentMove.basePowerpoints * 1.6 );
         
         Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was maxed out!", "Details",1f);
-        CompleteItemUsage();
+        StartCoroutine(CompleteItemUsage(2.2f));
         Pokemon_Details.Instance.ExitDetails();
     }
     private void UsePokeball(Item pokeball)
@@ -421,7 +409,7 @@ public class Item_handler : MonoBehaviour
             ResetItemUsage();
             return;
         }
-        CompleteItemUsage(1f);
+        StartCoroutine(CompleteItemUsage(2.2f));
         Pokemon_party.Instance.RefreshMemberCards();
         Dialogue_handler.Instance.EndDialogue(1f);
     }
@@ -452,9 +440,9 @@ public class Item_handler : MonoBehaviour
             _selectedPartyPokemon.hp = _selectedPartyPokemon.maxHp;
             Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" gained full health points","Feedback",1f);
         }
-        CompleteItemUsage(1f);
+        StartCoroutine(CompleteItemUsage(2.2f));
     }
-    private void CompleteItemUsage()
+    private void CompleteItemUsage()//only call for items used outside of battle
     {
         if (usingHeldItem)
             DepleteHeldItem(); 
@@ -462,15 +450,16 @@ public class Item_handler : MonoBehaviour
             DepleteItem();
         ResetItemUsage();
      }
-    private void CompleteItemUsage(float skipDelay)
+    private IEnumerator CompleteItemUsage(float skipDelay)
     {
         CompleteItemUsage();
-        Invoke(nameof(SkipTurn),skipDelay);
+        yield return new WaitForSeconds(skipDelay);
+        SkipTurn();
     }
     private void SkipTurn()
     {
         if (!Options_manager.Instance.playerInBattle) return;
-        InputStateHandler.Instance.RemoveTopInputLayer(true);
+        InputStateHandler.Instance.ResetRelevantUi("bag");
         Turn_Based_Combat.Instance.NextTurn();
     }
     void DepleteHeldItem()
@@ -487,6 +476,6 @@ public class Item_handler : MonoBehaviour
     {
         usingItem = false;
         _selectedPartyPokemon = null;
-        InputStateHandler.Instance.RemoveTopInputLayer(true);
+        InputStateHandler.Instance.RemoveTopInputLayer(true);//removing party view
     }
 }

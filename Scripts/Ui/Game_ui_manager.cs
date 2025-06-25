@@ -14,7 +14,6 @@ public class Game_ui_manager : MonoBehaviour
     public Player_Info_ui profile;
     public static Game_ui_manager Instance;
     [SerializeField]private int numUIScreensOpen;
-    public bool canExitParty = true;
     [SerializeField]private GameObject exitButton;
     [SerializeField]private List<GameObject> menuUiOptions = new ();
     public GameObject menuSelector;
@@ -31,7 +30,6 @@ public class Game_ui_manager : MonoBehaviour
 
     private void Start()
     {
-        canExitParty = true;
         usingWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
         exitButton.SetActive(!usingWebGl);
     }

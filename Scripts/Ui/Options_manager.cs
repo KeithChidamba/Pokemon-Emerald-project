@@ -68,9 +68,9 @@ public class Options_manager : MonoBehaviour
         Pokemon_Details.Instance.LoadDetails(PokemonOperations.CurrentPokemon);
         Dialogue_handler.Instance.DisplayBattleInfo("Which move will you replace?",false);
     }
-    void SkipMove()
+    public void SkipMove()
     {
-        Game_ui_manager.Instance.canExitParty = true;
+        Pokemon_Details.Instance.OnMoveSelected = null;
         Pokemon_Details.Instance.learningMove = false;
         PokemonOperations.SelectingMoveReplacement = false;
         PokemonOperations.LearningNewMove = false;

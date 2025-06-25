@@ -61,7 +61,8 @@ public class Pokemon_Details : MonoBehaviour
 
     public void ExitDetails()
     {
-        if (learningMove) return;
+        if (learningMove) Options_manager.Instance.SkipMove();
+
         if(changingMoveData) OnMoveSelected?.Invoke(-1);//cancel move selection
         Game_ui_manager.Instance.ManageScreens(-1);
         changingMoveData = false;

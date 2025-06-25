@@ -174,8 +174,8 @@ public static class PokemonOperations
                 var pos = move.IndexOf('/')+1;
                 var moveType = move.Substring(0, pos - 1).ToLower();
                 var moveName = move.Substring(pos, move.Length - 2 - pos).ToLower();
-                if(!inBattle & isPartyPokemon)
-                    Game_ui_manager.Instance.canExitParty = false;
+                //if(!inBattle & isPartyPokemon)
+                   // Game_ui_manager.Instance.canExitParty = false;
                 
                 if (CurrentPokemon.moveSet.Count == 4) 
                 {//leveling up from battle or rare candies
@@ -197,8 +197,8 @@ public static class PokemonOperations
                 {
                     if (isPartyPokemon)
                     {
-                        if(!inBattle)
-                            Game_ui_manager.Instance.canExitParty = true;
+                        //if(!inBattle)
+                            //Game_ui_manager.Instance.canExitParty = true;
                         Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName+" learned "+moveName,true);
                     }
                     var newMove = Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
@@ -212,8 +212,8 @@ public static class PokemonOperations
         }
         if (counter == CurrentPokemon.learnSet.Length)
         {
-            if (isPartyPokemon & !inBattle)
-                Game_ui_manager.Instance.canExitParty = true;
+            //if (isPartyPokemon & !inBattle)
+                //Game_ui_manager.Instance.canExitParty = true;
             LearningNewMove = false;
         }
     }
@@ -221,14 +221,14 @@ public static class PokemonOperations
     {
         Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
         Pokemon_Details.Instance.learningMove = false;
-        Pokemon_Details.Instance.ExitDetails();
+        Pokemon_Details.Instance.ExitDetails();//remove top layer, replace this
         Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName + " forgot " 
             + CurrentPokemon.moveSet[moveIndex].moveName 
             + " and learned " + NewMove.moveName,true);
         CurrentPokemon.moveSet[moveIndex] = Obj_Instance.CreateMove(NewMove);
         SelectingMoveReplacement = false;
         LearningNewMove = false;
-        Game_ui_manager.Instance.canExitParty = true;
+       // Game_ui_manager.Instance.canExitParty = true;
     }
     private static void AssignPokemonGender(Pokemon pokemon)
     {
