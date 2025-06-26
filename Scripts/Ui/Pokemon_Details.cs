@@ -62,8 +62,6 @@ public class Pokemon_Details : MonoBehaviour
 
     public void ResetDetailsState()
     {
-        if (learningMove) Options_manager.Instance.SkipMove();
-        
         currentPokemon = null;
     }
 

@@ -16,10 +16,10 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] GameObject elipsisSymbol;
     [SerializeField] private bool dialogueFinished ;
     public bool canExitDialogue = true;
-    private bool _overworldInteraction = false;
+    [SerializeField]private bool overworldInteraction = false;
     public bool displaying;
     [SerializeField] private string currentLineContent = "";
-   [SerializeField] private int maxCharacterLength = 90;
+    [SerializeField] private int maxCharacterLength = 90;
     [SerializeField] private int dialogueLength;
     [SerializeField] private int dialogueProgress;
     [SerializeField] private GameObject infoDialogueBox;
@@ -119,11 +119,11 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void SelectOption(int optionIndex)
     {
-        if(_overworldInteraction)
+        if(overworldInteraction)
             Options_manager.Instance.CompleteInteraction(currentInteractionObject,optionIndex);
         else
             Options_manager.Instance.CompleteInteraction(currentInteraction,optionIndex);
-        _overworldInteraction = false;
+        overworldInteraction = false;
     }
     private void ActivateOptions(bool display)
      {
@@ -260,7 +260,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         currentInteractionObject = interactable;
         currentInteraction = interactable.interaction;
-        _overworldInteraction = true;
+        overworldInteraction = true;
         HandleInteraction();
     }
     private void HandleInteraction()

@@ -257,12 +257,16 @@ public class InputStateHandler : MonoBehaviour
                 () => Pokemon_Details.Instance.SelectMove(currentState.currentSelectionIndex), true));
         }
 
-        Action onExit = Pokemon_Details.Instance.changingMoveData
-            ? ()=>Pokemon_Details.Instance.OnMoveSelected?.Invoke(-1) : null;
+        Action onExit = null;
+//dont use turnary here,these booleans never are true at same time
+        if (Pokemon_Details.Instance.changingMoveData) 
+            onExit = () => Pokemon_Details.Instance.OnMoveSelected?.Invoke(-1);
         
-    ChangeInputState(new InputState("Pokemon Details Move Selection",false, null,
+        if (Pokemon_Details.Instance.learningMove)
+            onExit = Options_manager.Instance.SkipMove;
+        
+        ChangeInputState(new InputState("Pokemon Details Move Selection",false, null,
             Vertical,moveSelectables, Pokemon_Details.Instance.moveSelector, true, true,onExit,true));
-
     }
     void SetupInputEvents()
     {

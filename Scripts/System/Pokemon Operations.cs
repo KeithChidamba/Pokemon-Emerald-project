@@ -175,8 +175,6 @@ public static class PokemonOperations
                 var pos = move.IndexOf('/')+1;
                 var moveType = move.Substring(0, pos - 1).ToLower();
                 var moveName = move.Substring(pos, move.Length - 2 - pos).ToLower();
-                //if(!inBattle & isPartyPokemon)
-                   // Game_ui_manager.Instance.canExitParty = false;
                 
                 if (CurrentPokemon.moveSet.Count == 4) 
                 {//leveling up from battle or rare candies
@@ -198,8 +196,6 @@ public static class PokemonOperations
                 {
                     if (isPartyPokemon)
                     {
-                        //if(!inBattle)
-                            //Game_ui_manager.Instance.canExitParty = true;
                         Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName+" learned "+moveName,true);
                     }
                     var newMove = Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
@@ -212,11 +208,7 @@ public static class PokemonOperations
             counter++;
         }
         if (counter == CurrentPokemon.learnSet.Length)
-        {
-            //if (isPartyPokemon & !inBattle)
-                //Game_ui_manager.Instance.canExitParty = true;
             LearningNewMove = false;
-        }
     }
     public static void LearnSelectedMove(int moveIndex)
     {
@@ -229,7 +221,6 @@ public static class PokemonOperations
         CurrentPokemon.moveSet[moveIndex] = Obj_Instance.CreateMove(NewMove);
         SelectingMoveReplacement = false;
         LearningNewMove = false;
-       // Game_ui_manager.Instance.canExitParty = true;
     }
     private static void AssignPokemonGender(Pokemon pokemon)
     {

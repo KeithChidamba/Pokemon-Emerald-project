@@ -97,28 +97,24 @@ public class Game_ui_manager : MonoBehaviour
     private void CloseProfile()
     {
         ManageScreens(-1);
-        Debug.Log("closed: profile");
         ActivateUiElement(profile.gameObject, false);
         profile.viewingProfile = false;
     }
     private void CloseStore()
     {
         ManageScreens(-1);
-        Debug.Log("closed: store");
         Poke_Mart.Instance.ExitStore();
         ActivateUiElement(Poke_Mart.Instance.storeUI, false);
     }
     private void CloseBag()
     {
         ManageScreens(-1);
-        Debug.Log("closed: bag");
         Bag.Instance.CloseBag();
         ActivateUiElement( Bag.Instance.bagUI, false);
     }
     private void CloseParty()
     {
         ManageScreens(-1);
-        Debug.Log("closed: party");
         ActivateUiElement(Pokemon_party.Instance.partyUI.gameObject, false);
         Pokemon_party.Instance.ResetPartyState();
     }
@@ -127,7 +123,6 @@ public class Game_ui_manager : MonoBehaviour
     {
         ManageScreens(-1);
         ActivateUiElement(Pokemon_Details.Instance.uiParent,false);
-        Debug.Log("closed: details");
         Pokemon_Details.Instance.ResetDetailsState();
         Pokemon_Details.Instance.DeactivateDetailsUi();
     }

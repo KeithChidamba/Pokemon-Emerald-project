@@ -242,7 +242,7 @@ public class Item_handler : MonoBehaviour
      {
          if(MoveAlterationCancelled(RestorePowerpoints,moveIndex))//user exited
          {
-             ResetItemUsage(new[] {"Pokemon Details"});
+             InputStateHandler.Instance.ResetRelevantUi(new[] {"Pokemon Details"});
              return; 
          }
               
@@ -267,12 +267,13 @@ public class Item_handler : MonoBehaviour
  
          Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp was restored!", "Details",1f);
          StartCoroutine(CompleteItemUsage(2.2f));
+         InputStateHandler.Instance.ResetRelevantUi(new[] {"Pokemon Details" });
      }
     private void IncreasePowerpoints(int moveIndex)
     {
         if(MoveAlterationCancelled(IncreasePowerpoints,moveIndex))         
         {
-            ResetItemUsage(new[] {"Pokemon Details"});
+            InputStateHandler.Instance.ResetRelevantUi(new[] {"Pokemon Details"});
             return; 
         }
         
@@ -295,7 +296,7 @@ public class Item_handler : MonoBehaviour
     {
         if (MoveAlterationCancelled(MaximisePowerpoints, moveIndex))         
         {
-            ResetItemUsage(new[] {"Pokemon Details"});
+            InputStateHandler.Instance.ResetRelevantUi(new[] {"Pokemon Details"});
             return; 
         }
 
@@ -484,16 +485,10 @@ public class Item_handler : MonoBehaviour
         _itemInUse.quantity--;
         Bag.Instance.CheckItemQuantity(_itemInUse);
     }
-    void ResetItemUsage(string[] uiToReset)
-    {
-        usingItem = false;
-        _selectedPartyPokemon = null;
-        InputStateHandler.Instance.ResetRelevantUi(uiToReset);
-    }
     void ResetItemUsage()
     {
         usingItem = false;
         _selectedPartyPokemon = null;
-        InputStateHandler.Instance.ResetRelevantUi(new[] {"pokemon Party" });
+        if(_itemInUse.forPartyUse) InputStateHandler.Instance.ResetRelevantUi(new[] {"pokemon Party" });
     }
 }
