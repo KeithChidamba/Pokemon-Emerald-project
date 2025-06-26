@@ -39,8 +39,6 @@ public class Player_movement : MonoBehaviour
     public void AllowPlayerMovement()
     {
         canMove = true;
-        // InputStateHandler.Instance.ChangeInputState
-        //     (new InputState("Movement",InputStateHandler.OmniDirection,null,null,false,false,null));
     }
     public void RestrictPlayerMovement()
     {

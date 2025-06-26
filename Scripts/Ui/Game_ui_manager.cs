@@ -88,7 +88,7 @@ public class Game_ui_manager : MonoBehaviour
             menuSelectables.Add( new(menuUiOptions[i],menuOptionsMethods[i],true) );
             
         InputStateHandler.Instance.ChangeInputState(new InputState("Player Menu",true,menuOptions,
-            InputStateHandler.Vertical, menuSelectables,menuSelector,true, true,CloseMenu));
+            InputStateHandler.Vertical, menuSelectables,menuSelector,true, true,CloseMenu,true));
     }
     private void ActivateUiElement(GameObject ui,bool activated)
     {
@@ -97,24 +97,28 @@ public class Game_ui_manager : MonoBehaviour
     private void CloseProfile()
     {
         ManageScreens(-1);
+        Debug.Log("closed: profile");
         ActivateUiElement(profile.gameObject, false);
         profile.viewingProfile = false;
     }
     private void CloseStore()
     {
         ManageScreens(-1);
+        Debug.Log("closed: store");
         Poke_Mart.Instance.ExitStore();
         ActivateUiElement(Poke_Mart.Instance.storeUI, false);
     }
     private void CloseBag()
     {
         ManageScreens(-1);
+        Debug.Log("closed: bag");
         Bag.Instance.CloseBag();
         ActivateUiElement( Bag.Instance.bagUI, false);
     }
     private void CloseParty()
     {
         ManageScreens(-1);
+        Debug.Log("closed: party");
         ActivateUiElement(Pokemon_party.Instance.partyUI.gameObject, false);
         Pokemon_party.Instance.ResetPartyState();
     }
@@ -123,6 +127,7 @@ public class Game_ui_manager : MonoBehaviour
     {
         ManageScreens(-1);
         ActivateUiElement(Pokemon_Details.Instance.uiParent,false);
+        Debug.Log("closed: details");
         Pokemon_Details.Instance.ResetDetailsState();
         Pokemon_Details.Instance.DeactivateDetailsUi();
     }
@@ -152,7 +157,7 @@ public class Game_ui_manager : MonoBehaviour
         
         InputStateHandler.Instance.ChangeInputState(new InputState("Player Bag Navigation",true,
             Bag.Instance.bagUI, InputStateHandler.Vertical, bagSelectables,
-                    Bag.Instance.itemSelector,true,true,CloseBag));
+                    Bag.Instance.itemSelector,true,true,CloseBag,true));
     }
     public void ViewProfile()
     {
@@ -160,7 +165,7 @@ public class Game_ui_manager : MonoBehaviour
         ActivateUiElement(profile.gameObject,true);
         profile.LoadProfile(Game_Load.Instance.playerData);
         InputStateHandler.Instance.ChangeInputState(new InputState("Player Profile",true,profile.gameObject
-            ,null, null,null,false, false,CloseProfile));
+            ,null, null,null,false, false,CloseProfile,true));
     }
     public void ViewPokemonParty()
     {
@@ -182,11 +187,12 @@ public class Game_ui_manager : MonoBehaviour
         }
         
         InputStateHandler.Instance.ChangeInputState(new InputState(partyUsageState,true,Pokemon_party.Instance.partyUI,
-            InputStateHandler.Vertical, partySelectables, Pokemon_party.Instance.memberSelector, true, true,CloseParty));
+            InputStateHandler.Vertical, partySelectables, Pokemon_party.Instance.memberSelector, true, true,CloseParty,true));
     }
 
     public void ViewPokemonDetails(Pokemon pokemonToView)
-    {
+    { 
+        ManageScreens(1);
         ActivateUiElement(Pokemon_Details.Instance.uiParent,true);
         var detailsSelectables = new List<SelectableUI>{
             new(null,null,true)
@@ -194,8 +200,8 @@ public class Game_ui_manager : MonoBehaviour
             ,new(null,InputStateHandler.Instance.AllowMoveUiNavigation,true)
         };
         InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Details",true,Pokemon_Details.Instance.uiParent,
-            InputStateHandler.Horizontal,detailsSelectables, null, true, false,ClosePokemonDetails));
+            InputStateHandler.Horizontal,detailsSelectables, null, true, false,ClosePokemonDetails,true));
         Pokemon_Details.Instance.LoadDetails(pokemonToView);
-        ManageScreens(1);
+
     }
 }

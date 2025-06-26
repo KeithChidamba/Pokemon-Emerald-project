@@ -115,7 +115,7 @@ public class Dialogue_handler : MonoBehaviour
             optionSelectables.Add( new(option.gameObject,()=>SelectOption(option.optionIndex),true) );
         
         InputStateHandler.Instance.ChangeInputState(new InputState("Dialogue Options",false,null,
-            InputStateHandler.Vertical,optionSelectables,optionSelector,true,true,null));
+            InputStateHandler.Vertical,optionSelectables,optionSelector,true,true,null,true));
     }
     public void SelectOption(int optionIndex)
     {

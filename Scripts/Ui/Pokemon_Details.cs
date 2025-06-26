@@ -11,7 +11,6 @@ public class Pokemon_Details : MonoBehaviour
     [SerializeField]private Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID,pkm_nature,Trainer_Name;
     [SerializeField]private Text pkm_atk, pkm_sp_atk, pkm_def, pkm_sp_def, pkm_speed, pkm_hp;
     [SerializeField]private Text move_Description,pkm_HeldItem,pkm_CurrentExp,pkm_NextLvExp;
-    [SerializeField]private GameObject[] moves_btns;
     [SerializeField]private Text[] moves_pp;
     public Text[] moves;
     [SerializeField]private Image pkm_img;
@@ -64,8 +63,6 @@ public class Pokemon_Details : MonoBehaviour
     public void ResetDetailsState()
     {
         if (learningMove) Options_manager.Instance.SkipMove();
-
-        if(changingMoveData) OnMoveSelected?.Invoke(-1);//cancel move selection
         
         currentPokemon = null;
     }
@@ -80,14 +77,12 @@ public class Pokemon_Details : MonoBehaviour
     }
     public void NextPage()
     {
-        if (learningMove || changingMoveData) return;
         if (_currentPage < 3)
             _currentPage++;
         LoadPage(_currentPage);
     }
     public void PreviousPage()
     {
-        if (learningMove || changingMoveData) return;
          if (_currentPage > 1)
              _currentPage--;
          LoadPage(_currentPage);
@@ -100,6 +95,9 @@ public class Pokemon_Details : MonoBehaviour
             OnMoveSelected?.Invoke(moveIndex);
             return;
         }
+        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Details Move Data",false, null,
+            null,null, null, false, false,RemoveMoveDescription,true));
+
         var selectedMove = currentPokemon.moveSet[moveIndex];
         
         move_Description.text = selectedMove.description;
@@ -151,6 +149,11 @@ public class Pokemon_Details : MonoBehaviour
     
     private void LoadMovesUiPage()
     {
+        if (learningMove || changingMoveData)
+        {//simulate F click
+            InputStateHandler.Instance.currentState.selectableUis[2]?.eventForUi?.Invoke();
+        }
+
         Ability_ui.SetActive(false);
         Stats_ui.SetActive(false);
         move_details.SetActive(false);
@@ -161,19 +164,17 @@ public class Pokemon_Details : MonoBehaviour
             Move_type[j].sprite = currentPokemon.moveSet[j].type.typeImage;
             Move_type[j].gameObject.SetActive(true);
             moves_pp[j].text = "pp " + currentPokemon.moveSet[j].powerpoints + "/" + currentPokemon.moveSet[j].maxPowerpoints;
-            moves_btns[j].SetActive(true);
         }
         for (var i = currentPokemon.moveSet.Count; i < 4; i++)
         {
             moves[i].text = string.Empty;
             Move_type[i].gameObject.SetActive(false);
             moves_pp[i].text = string.Empty;
-            moves_btns[i].SetActive(false);
         }
         Moves_ui.SetActive(true);
     }
 
-    public void RemoveMoveDescription()
+    private void RemoveMoveDescription()
     {
         move_details.SetActive(false);
         move_Description.text = string.Empty;

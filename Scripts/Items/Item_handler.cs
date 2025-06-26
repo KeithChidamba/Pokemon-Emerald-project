@@ -240,7 +240,11 @@ public class Item_handler : MonoBehaviour
     }
     private void RestorePowerpoints(int moveIndex)
      {
-         if(MoveAlterationCancelled(RestorePowerpoints,moveIndex)) return; //user exited
+         if(MoveAlterationCancelled(RestorePowerpoints,moveIndex))//user exited
+         {
+             ResetItemUsage(new[] {"Pokemon Details"});
+             return; 
+         }
               
          var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
          if (currentMove.powerpoints == currentMove.maxPowerpoints)
@@ -263,11 +267,14 @@ public class Item_handler : MonoBehaviour
  
          Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp was restored!", "Details",1f);
          StartCoroutine(CompleteItemUsage(2.2f));
-         InputStateHandler.Instance.ResetRelevantUi("Pokemon Details");
      }
     private void IncreasePowerpoints(int moveIndex)
     {
-        if(MoveAlterationCancelled(IncreasePowerpoints,moveIndex)) return; //user exited
+        if(MoveAlterationCancelled(IncreasePowerpoints,moveIndex))         
+        {
+            ResetItemUsage(new[] {"Pokemon Details"});
+            return; 
+        }
         
         var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
         double powerpointRatio = (float) currentMove.maxPowerpoints / currentMove.basePowerpoints;
@@ -281,26 +288,31 @@ public class Item_handler : MonoBehaviour
         Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was increased!", "Details",1f);
         
         StartCoroutine(CompleteItemUsage(2.2f));
-        InputStateHandler.Instance.ResetRelevantUi("Pokemon Details");
+        InputStateHandler.Instance.ResetRelevantUi(new[] {"Pokemon Details" });
     }
 
     private void MaximisePowerpoints(int moveIndex)
     {
-        if(MoveAlterationCancelled(MaximisePowerpoints,moveIndex)) return; //user exited
-        
+        if (MoveAlterationCancelled(MaximisePowerpoints, moveIndex))         
+        {
+            ResetItemUsage(new[] {"Pokemon Details"});
+            return; 
+        }
+
         var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
         if (currentMove.maxPowerpoints >= (currentMove.basePowerpoints * 1.6))
         {
-            Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp is already maxed out", "Details",1f);
+            Dialogue_handler.Instance.DisplayInfo(currentMove.moveName + " pp is already maxed out", "Details", 1f);
             return;
         }
+
         Pokemon_Details.Instance.OnMoveSelected -= MaximisePowerpoints;
-        currentMove.maxPowerpoints = (int)math.floor( currentMove.basePowerpoints * 1.6 );
-        
-        Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was maxed out!", "Details",1f);
+        currentMove.maxPowerpoints = (int)math.floor(currentMove.basePowerpoints * 1.6);
+
+        Dialogue_handler.Instance.DisplayInfo(currentMove.moveName + "'s pp was maxed out!", "Details", 1f);
         StartCoroutine(CompleteItemUsage(2.2f));
-        InputStateHandler.Instance.ResetRelevantUi("Pokemon Details");
-    }
+        InputStateHandler.Instance.ResetRelevantUi(new[] {"Pokemon Details" });
+}
     private void UsePokeball(Item pokeball)
     {
         if (!CanUsePokeball()) 
@@ -459,7 +471,7 @@ public class Item_handler : MonoBehaviour
     private void SkipTurn()
     {
         if (!Options_manager.Instance.playerInBattle) return;
-        InputStateHandler.Instance.ResetRelevantUi("bag");
+        InputStateHandler.Instance.ResetRelevantUi(new[] {"Bag" });
         Turn_Based_Combat.Instance.NextTurn();
     }
     void DepleteHeldItem()
@@ -472,10 +484,16 @@ public class Item_handler : MonoBehaviour
         _itemInUse.quantity--;
         Bag.Instance.CheckItemQuantity(_itemInUse);
     }
+    void ResetItemUsage(string[] uiToReset)
+    {
+        usingItem = false;
+        _selectedPartyPokemon = null;
+        InputStateHandler.Instance.ResetRelevantUi(uiToReset);
+    }
     void ResetItemUsage()
     {
         usingItem = false;
         _selectedPartyPokemon = null;
-        InputStateHandler.Instance.RemoveTopInputLayer(true);//removing party view
+        InputStateHandler.Instance.ResetRelevantUi(new[] {"pokemon Party" });
     }
 }

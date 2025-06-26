@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using UnityEngine;
@@ -221,7 +222,7 @@ public static class PokemonOperations
     {
         Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
         Pokemon_Details.Instance.learningMove = false;
-        InputStateHandler.Instance.ResetRelevantUi("Pokemon Details");
+        InputStateHandler.Instance.ResetRelevantUi(new []{"Pokemon Details"});
         Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName + " forgot " 
             + CurrentPokemon.moveSet[moveIndex].moveName 
             + " and learned " + NewMove.moveName,true);

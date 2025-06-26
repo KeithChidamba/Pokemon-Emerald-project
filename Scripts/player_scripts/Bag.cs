@@ -78,7 +78,7 @@ public class Bag : MonoBehaviour
             RemoveItem();
         Dialogue_handler.Instance.DisplayList("You made P"+profit+ ", would you like to sell anything else?",
              "Sure, which item?", new[]{ "SellItem","LeaveStore" }, new[]{"Yes", "No"});
-        InputStateHandler.Instance.ResetRelevantUi("bag");
+        InputStateHandler.Instance.ResetRelevantUi(new[]{"Bag"});
     }
     public void CheckItemQuantity(Item item)
     {
