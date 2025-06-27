@@ -18,6 +18,7 @@ public class InputStateHandler : MonoBehaviour
     private event Action OnInputDown; 
     private event Action OnInputRight; 
     private event Action OnInputLeft;
+    public event Action OnStateRemovalComplete;
     private bool _readingInputs = false;
     private bool _handlingState = false;
     public List<InputState> stateLayers;
@@ -68,7 +69,7 @@ public class InputStateHandler : MonoBehaviour
         {
             state.selector?.SetActive(false);
             Action method = manualExit ? state.OnExit:state.OnClose;
-            method?.Invoke();
+            method?.Invoke();//note: must not have onexit/onclose that also starts this coroutine
             ResetInputEvents();
             var numLayers = stateLayers.Count;
             stateLayers.Remove(state);
@@ -78,6 +79,7 @@ public class InputStateHandler : MonoBehaviour
             ChangeInputState(stateLayers.Last());
         else
             currentState =  null;
+        OnStateRemovalComplete?.Invoke();
     }
 
     public void RemoveTopInputLayer(bool invokeOnExit)
@@ -268,13 +270,20 @@ public class InputStateHandler : MonoBehaviour
 //dont use turnary here,these booleans never are true at same time
         if (Pokemon_Details.Instance.changingMoveData) 
             onExit = () => Pokemon_Details.Instance.OnMoveSelected?.Invoke(-1);
-        
+
         if (Pokemon_Details.Instance.learningMove)
-            onExit = Options_manager.Instance.SkipMove;
+            onExit = ()=> OnStateRemovalComplete += RemoveDetailsInputStates;
         
         ChangeInputState(new InputState("Pokemon Details Move Selection",false, null,
             Vertical,moveSelectables, Pokemon_Details.Instance.moveSelector, true
             , true,null,onExit,true));
+    }
+    void RemoveDetailsInputStates()
+    {
+        OnStateRemovalComplete -= RemoveDetailsInputStates;
+        //started learning but rejected it on move selection screen
+        Options_manager.Instance.SkipMove();
+        ResetRelevantUi(new []{"Pokemon Details"});
     }
     void SetupInputEvents()
     {

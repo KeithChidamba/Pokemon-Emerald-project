@@ -76,13 +76,9 @@ public class Options_manager : MonoBehaviour
         Pokemon_Details.Instance.OnMoveSelected = null;
         PokemonOperations.SelectingMoveReplacement = false;
         PokemonOperations.LearningNewMove = false;
+        Pokemon_Details.Instance.learningMove = false;
         Dialogue_handler.Instance.DisplayBattleInfo(PokemonOperations.CurrentPokemon.pokemonName +
                                                     " did not learn "+PokemonOperations.NewMove.moveName,false);
-        if (Pokemon_Details.Instance.learningMove)
-        {//started learning but rejected it on move selection screen
-            InputStateHandler.Instance.ResetRelevantUi(new []{"Pokemon Details"});
-            Pokemon_Details.Instance.learningMove = false;
-        }
     }
 
     void HealPokemon()
