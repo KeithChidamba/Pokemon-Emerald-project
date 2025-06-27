@@ -16,7 +16,7 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] GameObject elipsisSymbol;
     [SerializeField] private bool dialogueFinished ;
     public bool canExitDialogue = true;
-    [SerializeField]private bool overworldInteraction = false;
+    [SerializeField]private bool isOverworldOptionsInteraction = false;
     public bool displaying;
     [SerializeField] private string currentLineContent = "";
     [SerializeField] private int maxCharacterLength = 90;
@@ -82,7 +82,7 @@ public class Dialogue_handler : MonoBehaviour
             EndDialogue();
     }
 
-    private void  DeletePreviousOptions()
+    public void  DeletePreviousOptions()
     {
         ActivateOptions(false);
         InputStateHandler.Instance.RemoveTopInputLayer(true);
@@ -115,15 +115,17 @@ public class Dialogue_handler : MonoBehaviour
             optionSelectables.Add( new(option.gameObject,()=>SelectOption(option.optionIndex),true) );
         
         InputStateHandler.Instance.ChangeInputState(new InputState("Dialogue Options",false,null,
-            InputStateHandler.Vertical,optionSelectables,optionSelector,true,true,null,true));
+            InputStateHandler.Vertical,optionSelectables,optionSelector,true,true,null,null,true));
     }
     public void SelectOption(int optionIndex)
     {
-        if(overworldInteraction)
+        if (isOverworldOptionsInteraction)
+        {
+            isOverworldOptionsInteraction = false;
             Options_manager.Instance.CompleteInteraction(currentInteractionObject,optionIndex);
+        }
         else
             Options_manager.Instance.CompleteInteraction(currentInteraction,optionIndex);
-        overworldInteraction = false;
     }
     private void ActivateOptions(bool display)
      {
@@ -240,6 +242,7 @@ public class Dialogue_handler : MonoBehaviour
         }
         canExitDialogue=true;
         currentInteraction = null;
+        currentInteractionObject = null;
         infoDialogueBox.SetActive(false);
         battleDialogueBox.SetActive(false);
         currentLineContent = "";
@@ -260,7 +263,6 @@ public class Dialogue_handler : MonoBehaviour
     {
         currentInteractionObject = interactable;
         currentInteraction = interactable.interaction;
-        overworldInteraction = true;
         HandleInteraction();
     }
     private void HandleInteraction()
@@ -300,9 +302,16 @@ public class Dialogue_handler : MonoBehaviour
         else
         {
             if (currentInteraction.interactionType == "Options")
+            {
+                isOverworldOptionsInteraction = currentInteractionObject!=null;
                 CreateDialogueOptions();
+            }
+
             if (currentInteraction.interactionType == "Event")
+            {
                 Options_manager.Instance.CompleteInteraction(currentInteraction,0);
+                return;//trianer battle logic at the moment
+            }
             clickNextIndicator.SetActive(false);
             dialogueLength = 1;
             dialogueProgress = 1;

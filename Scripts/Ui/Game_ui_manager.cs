@@ -88,7 +88,7 @@ public class Game_ui_manager : MonoBehaviour
             menuSelectables.Add( new(menuUiOptions[i],menuOptionsMethods[i],true) );
             
         InputStateHandler.Instance.ChangeInputState(new InputState("Player Menu",true,menuOptions,
-            InputStateHandler.Vertical, menuSelectables,menuSelector,true, true,CloseMenu,true));
+            InputStateHandler.Vertical, menuSelectables,menuSelector,true, true,CloseMenu,CloseMenu,true));
     }
     private void ActivateUiElement(GameObject ui,bool activated)
     {
@@ -152,7 +152,7 @@ public class Game_ui_manager : MonoBehaviour
         
         InputStateHandler.Instance.ChangeInputState(new InputState("Player Bag Navigation",true,
             Bag.Instance.bagUI, InputStateHandler.Vertical, bagSelectables,
-                    Bag.Instance.itemSelector,true,true,CloseBag,true));
+                    Bag.Instance.itemSelector,true,true,CloseBag,CloseBag,true));
     }
     public void ViewProfile()
     {
@@ -160,7 +160,8 @@ public class Game_ui_manager : MonoBehaviour
         ActivateUiElement(profile.gameObject,true);
         profile.LoadProfile(Game_Load.Instance.playerData);
         InputStateHandler.Instance.ChangeInputState(new InputState("Player Profile",true,profile.gameObject
-            ,null, null,null,false, false,CloseProfile,true));
+            ,null, null,
+            null,false, false,CloseProfile,CloseProfile,true));
     }
     public void ViewPokemonParty()
     {
@@ -182,7 +183,8 @@ public class Game_ui_manager : MonoBehaviour
         }
         
         InputStateHandler.Instance.ChangeInputState(new InputState(partyUsageState,true,Pokemon_party.Instance.partyUI,
-            InputStateHandler.Vertical, partySelectables, Pokemon_party.Instance.memberSelector, true, true,CloseParty,true));
+            InputStateHandler.Vertical, partySelectables, Pokemon_party.Instance.memberSelector
+            , true, true,CloseParty,CloseParty,true));
     }
 
     public void ViewPokemonDetails(Pokemon pokemonToView)
@@ -195,7 +197,8 @@ public class Game_ui_manager : MonoBehaviour
             ,new(null,InputStateHandler.Instance.AllowMoveUiNavigation,true)
         };
         InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Details",true,Pokemon_Details.Instance.uiParent,
-            InputStateHandler.Horizontal,detailsSelectables, null, true, false,ClosePokemonDetails,true));
+            InputStateHandler.Horizontal,detailsSelectables, null
+            , true, false,ClosePokemonDetails,ClosePokemonDetails,true));
         Pokemon_Details.Instance.LoadDetails(pokemonToView);
 
     }

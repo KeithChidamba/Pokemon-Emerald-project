@@ -217,7 +217,7 @@ public static class PokemonOperations
         InputStateHandler.Instance.ResetRelevantUi(new []{"Pokemon Details"});
         Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName + " forgot " 
             + CurrentPokemon.moveSet[moveIndex].moveName 
-            + " and learned " + NewMove.moveName,true);
+            + " and learned " + NewMove.moveName,false);
         CurrentPokemon.moveSet[moveIndex] = Obj_Instance.CreateMove(NewMove);
         SelectingMoveReplacement = false;
         LearningNewMove = false;

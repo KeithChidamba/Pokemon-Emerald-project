@@ -51,6 +51,7 @@ public class Options_manager : MonoBehaviour
     }
     void Battle()
     {
+        Dialogue_handler.Instance.EndDialogue();
         var battleType = _currentInteraction.resultMessage;
         var alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
         if (alivePokemon.Count < 2 && battleType.ToLower().Contains("double"))
@@ -63,6 +64,7 @@ public class Options_manager : MonoBehaviour
 
     void LearnMove()
     {        
+        Dialogue_handler.Instance.DeletePreviousOptions();
         Pokemon_Details.Instance.learningMove = true;
         Pokemon_Details.Instance.OnMoveSelected += PokemonOperations.LearnSelectedMove;
         Game_ui_manager.Instance.ViewPokemonDetails(PokemonOperations.CurrentPokemon);
@@ -70,12 +72,17 @@ public class Options_manager : MonoBehaviour
     }
     public void SkipMove()
     {
+        Dialogue_handler.Instance.DeletePreviousOptions();
         Pokemon_Details.Instance.OnMoveSelected = null;
-        Pokemon_Details.Instance.learningMove = false;
         PokemonOperations.SelectingMoveReplacement = false;
         PokemonOperations.LearningNewMove = false;
         Dialogue_handler.Instance.DisplayBattleInfo(PokemonOperations.CurrentPokemon.pokemonName +
-                                                    " did not learn "+PokemonOperations.NewMove.moveName,true);
+                                                    " did not learn "+PokemonOperations.NewMove.moveName,false);
+        if (Pokemon_Details.Instance.learningMove)
+        {//started learning but rejected it on move selection screen
+            InputStateHandler.Instance.ResetRelevantUi(new []{"Pokemon Details"});
+            Pokemon_Details.Instance.learningMove = false;
+        }
     }
 
     void HealPokemon()

@@ -79,16 +79,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -5480
+            "instanceID": -73800
         },
         {
-            "instanceID": -5482
+            "instanceID": -73802
         },
         {
-            "instanceID": -5484
+            "instanceID": -73804
         },
         {
-            "instanceID": -5486
+            "instanceID": -73806
         }
     ],
     "ability": {
@@ -107,10 +107,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32424
+        "instanceID": 32224
     },
     "backPicture": {
-        "instanceID": 32404
+        "instanceID": 32204
     },
     "pokeballName": "",
     "abilityName": "Arena Trap",

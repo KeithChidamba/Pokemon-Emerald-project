@@ -73,16 +73,16 @@
     "learnSet": [],
     "moveSet": [
         {
-            "instanceID": -5460
+            "instanceID": -73780
         },
         {
-            "instanceID": -5462
+            "instanceID": -73782
         },
         {
-            "instanceID": -5464
+            "instanceID": -73784
         },
         {
-            "instanceID": -5466
+            "instanceID": -73786
         }
     ],
     "ability": {
@@ -98,10 +98,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32384
+        "instanceID": 32184
     },
     "backPicture": {
-        "instanceID": 32260
+        "instanceID": 32060
     },
     "pokeballName": "",
     "abilityName": "Guts",

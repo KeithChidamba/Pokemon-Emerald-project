@@ -11,6 +11,7 @@ public class InputState
     public string[] stateDirectionals;
     public List<SelectableUI> selectableUis;
     public Action OnExit;
+    public Action OnClose;
     public int currentSelectionIndex;
     public bool isSelecting;
     public bool displayingSelector;
@@ -19,10 +20,11 @@ public class InputState
     public GameObject mainViewUI;
     public bool isParentLayer;
     public bool canExit;
-    public InputState(string stateName, bool isParent,GameObject mainView,string[] stateDirectionals, List<SelectableUI> selectableUis ,GameObject selector,bool selecting,bool display,Action onExit,bool exitable)
+    public InputState(string stateName, bool isParent,GameObject mainView,string[] stateDirectionals, List<SelectableUI> selectableUis
+        ,GameObject selector,bool selecting,bool display,Action onClose,Action onExit,bool canExit)
     {
         isParentLayer = isParent;
-        canExit = exitable;
+        this.canExit = canExit;
         if (isParentLayer) mainViewUI = mainView;
         
         this.stateName = stateName;
@@ -33,5 +35,6 @@ public class InputState
         isSelecting = selecting;
         displayingSelector = display;
         OnExit = onExit;
+        OnClose = onClose;
     }
 }

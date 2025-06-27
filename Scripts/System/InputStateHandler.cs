@@ -49,7 +49,7 @@ public class InputStateHandler : MonoBehaviour
         {
             inputStates.AddRange(GetRelevantStates(keyword));
         }
-        StartCoroutine(RemoveInputStates(inputStates));
+        StartCoroutine(RemoveInputStates(inputStates,false));
     }
 
     private List<InputState> GetRelevantStates(string keyword)
@@ -62,12 +62,13 @@ public class InputStateHandler : MonoBehaviour
         
         return inputStates;
     }
-    private IEnumerator RemoveInputStates(List<InputState> states)
+    private IEnumerator RemoveInputStates(List<InputState> states,bool manualExit)
     {
         foreach (var state in states)
         {
             state.selector?.SetActive(false);
-            state.OnExit?.Invoke();
+            Action method = manualExit ? state.OnExit:state.OnClose;
+            method?.Invoke();
             ResetInputEvents();
             var numLayers = stateLayers.Count;
             stateLayers.Remove(state);
@@ -82,7 +83,7 @@ public class InputStateHandler : MonoBehaviour
     public void RemoveTopInputLayer(bool invokeOnExit)
     {
         stateLayers.Last().OnExit = invokeOnExit? stateLayers.Last().OnExit:null;
-        StartCoroutine(RemoveInputStates(new (){stateLayers.Last()} ));
+        StartCoroutine(RemoveInputStates(new (){stateLayers.Last()} ,true));
     }
     private void Update()
     {
@@ -90,7 +91,7 @@ public class InputStateHandler : MonoBehaviour
         _handlingState = stateLayers.Count > 0;
         if (!_handlingState) return;
         
-        if (Input.GetKeyDown(KeyCode.R) && !Dialogue_handler.Instance.displaying && currentState.canExit)
+        if (Input.GetKeyDown(KeyCode.R) && stateLayers.Last().stateName!="Dialogue Options" && currentState.canExit)
             RemoveTopInputLayer(true);
         
         if (Input.GetKeyDown(KeyCode.F) )
@@ -202,9 +203,14 @@ public class InputStateHandler : MonoBehaviour
     void SelectItemToSell()
     {
         Bag.Instance.sellingItems = true;
-        var itemSellSelectables = new List<SelectableUI>{new(null,Bag.Instance.SellToMarket,true)};
+        var itemSellSelectables = new List<SelectableUI>{new(Bag.Instance.sellingItemUI,Bag.Instance.SellToMarket,true)};
         ChangeInputState(new InputState("Player Bag Item Sell",false,null, Vertical, itemSellSelectables
-            ,null,false,false,()=>Bag.Instance.sellQuantity=1,true));
+            ,Bag.Instance.sellingIndicator,false,
+            true,null,()=>Bag.Instance.sellQuantity=1,true));
+    }
+
+    void ItemToSellInputs()
+    {
         OnInputUp += ()=>Bag.Instance.ChangeQuantity(1);
         OnInputDown += ()=>Bag.Instance.ChangeQuantity(-1);
     }
@@ -218,7 +224,7 @@ public class InputStateHandler : MonoBehaviour
         };
         itemUsageSelectables.RemoveAll(s=>!s.canBeSelected);
         ChangeInputState(new InputState("Player Bag Item Usage",false,null, Horizontal, itemUsageSelectables
-            ,Bag.Instance.itemUsageSelector,true,true,null,true));
+            ,Bag.Instance.itemUsageSelector,true,true,null,null,true));
         currentState.selector.SetActive(true);
     }
 
@@ -238,7 +244,8 @@ public class InputStateHandler : MonoBehaviour
         };
         partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
         ChangeInputState(new InputState("Pokemon Party Options",false,null, Vertical, partyOptionsSelectables
-            ,Pokemon_party.Instance.optionSelector,true,true,Pokemon_party.Instance.ClearSelectionUI,true));
+            ,Pokemon_party.Instance.optionSelector,true,true
+            ,Pokemon_party.Instance.ClearSelectionUI,Pokemon_party.Instance.ClearSelectionUI,true));
         currentState.selector.SetActive(true);
     }
 
@@ -266,7 +273,8 @@ public class InputStateHandler : MonoBehaviour
             onExit = Options_manager.Instance.SkipMove;
         
         ChangeInputState(new InputState("Pokemon Details Move Selection",false, null,
-            Vertical,moveSelectables, Pokemon_Details.Instance.moveSelector, true, true,onExit,true));
+            Vertical,moveSelectables, Pokemon_Details.Instance.moveSelector, true
+            , true,null,onExit,true));
     }
     void SetupInputEvents()
     {
@@ -274,6 +282,7 @@ public class InputStateHandler : MonoBehaviour
         {
             "Player Bag Navigation" => PlayerBagNavigation,
             "Pokemon Details"=>SetupPokemonDetails,
+            "Player Bag Item Sell"=>ItemToSellInputs,
             _ => null
         };
         stateMethod?.Invoke();

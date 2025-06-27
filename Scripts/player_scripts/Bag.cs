@@ -29,6 +29,7 @@ public class Bag : MonoBehaviour
     public bool itemGiveable;
     public GameObject itemSelector;
     public GameObject itemUsageSelector;
+    public GameObject sellingIndicator;
     public List<GameObject> itemUsageUi;
     private void Awake()
     {
