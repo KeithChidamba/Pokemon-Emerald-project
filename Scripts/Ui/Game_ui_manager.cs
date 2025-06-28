@@ -132,6 +132,13 @@ public class Game_ui_manager : MonoBehaviour
         viewingMenu = false;
         menuOff = true;
     }
+
+    private void ClosePokemonStorage()
+    {
+        ManageScreens(-1);
+        ActivateUiElement(pokemon_storage.Instance.storageUI,false);
+        pokemon_storage.Instance.ClosePC();
+    }
     public void ViewMarket()
     {
         ManageScreens(1);
@@ -199,5 +206,19 @@ public class Game_ui_manager : MonoBehaviour
             , true, false,ClosePokemonDetails,ClosePokemonDetails,true));
         Pokemon_Details.Instance.LoadDetails(pokemonToView);
 
+    }
+
+    public void ViewPokemonStorage()
+    {
+        ManageScreens(1);
+        ActivateUiElement(pokemon_storage.Instance.storageUI,true);
+        var storageSelectables = new List<SelectableUI>{
+            new(pokemon_storage.Instance.initialStorageOptions[0],InputStateHandler.Instance.PokemonStorageBoxNavigation,true)
+            ,new(pokemon_storage.Instance.initialStorageOptions[1],InputStateHandler.Instance.PokemonStoragePartyNavigation,true)
+        };
+        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Storage",true,pokemon_storage.Instance.storageUI,
+            InputStateHandler.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector
+            , true, true,ClosePokemonStorage,ClosePokemonStorage,true));
+        pokemon_storage.Instance.OpenPC();
     }
 }

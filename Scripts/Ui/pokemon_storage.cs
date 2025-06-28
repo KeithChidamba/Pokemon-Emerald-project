@@ -11,6 +11,7 @@ public class pokemon_storage : MonoBehaviour
     public int numNonPartyPokemon;
     public int maxPokemonCapacity = 40;
     public int numPartyMembers;
+    public GameObject[] initialStorageOptions;
     public Button[] storageOptions;
     public GameObject storageUI;
     public string selectedPokemonID;
@@ -22,6 +23,10 @@ public class pokemon_storage : MonoBehaviour
     public Transform storageIconPositionsParent;
     public bool swapping;
     public bool hasSelectedPokemon;
+    public int[] boxCoordinates={0,0};
+    public GameObject initialSelector;
+    public GameObject boxSelector;
+    public GameObject partySelector;
     public static pokemon_storage Instance;
     private void Awake()
     {
@@ -31,6 +36,18 @@ public class pokemon_storage : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    public int GetCurrentBoxPosition()
+    {
+        return ((boxCoordinates[0]-1)*10)+boxCoordinates[1];
+    }
+    public void MoveCoordinates(string direction, int change)
+    {
+        var indexCoordinate = direction == "Vertical" ? 0 : 1;
+        boxCoordinates[indexCoordinate] += change;
+        InputStateHandler.Instance.currentState.currentSelectionIndex 
+            = Mathf.Clamp(InputStateHandler.Instance.currentState.currentSelectionIndex+GetCurrentBoxPosition() - 1,0,nonPartyIcons.Count);
     }
     private int SearchForPokemonIndex(string pokemonID)
     {
@@ -42,11 +59,8 @@ public class pokemon_storage : MonoBehaviour
     }
     public void OpenPC()
     {
-        //Game_ui_manager.Instance.ManageScreens(1);
         usingPC = true;
         ActivatePokemonIcons();
-        storageUI.SetActive(true);
-        Dialogue_handler.Instance.EndDialogue();
         DisableOptions();
     }
     public void ClosePC()
@@ -55,9 +69,7 @@ public class pokemon_storage : MonoBehaviour
             icon.GetComponent<PC_party_pkm>().options.SetActive(false);
         usingPC = false;
         hasSelectedPokemon = false;
-        storageUI.SetActive(false);
         RemovePokemonIcons();
-        //Game_ui_manager.Instance.ManageScreens(-1);
     }
     public void SelectPartyPokemon(PC_party_pkm partyPokemon)
     {

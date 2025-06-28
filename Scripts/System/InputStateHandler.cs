@@ -103,30 +103,30 @@ public class InputStateHandler : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            OnInputLeft?.Invoke();
-            ChangeSelectionIndex(directionSelection[2]);
-            if(CanUpdateSelector("Horizontal")) UpdateSelectorUi();
+            HandleEvents(OnInputLeft, directionSelection[2], "Horizontal");
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            OnInputRight?.Invoke();
-            ChangeSelectionIndex(directionSelection[3]);
-            if(CanUpdateSelector("Horizontal")) UpdateSelectorUi();
+            HandleEvents(OnInputRight, directionSelection[3], "Horizontal");
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            OnInputUp?.Invoke();
-            ChangeSelectionIndex(directionSelection[0]);
-            if(CanUpdateSelector("Vertical")) UpdateSelectorUi();
+            HandleEvents(OnInputUp, directionSelection[0], "Vertical");
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            OnInputDown?.Invoke();
-            ChangeSelectionIndex(directionSelection[1]);
-            if(CanUpdateSelector("Vertical")) UpdateSelectorUi();
+            HandleEvents(OnInputDown, directionSelection[1], "Vertical");
         }
     }
 
+    void HandleEvents(Action onInput,int directionIndex,string direction)
+    {
+        onInput?.Invoke();
+        
+        if (currentState.stateDirectionals != OmniDirection) ChangeSelectionIndex(directionIndex);
+        
+        if(CanUpdateSelector(direction)) UpdateSelectorUi();
+    }
     bool CanUpdateSelector(string directional)
     {
         return currentState.displayingSelector &
@@ -181,6 +181,7 @@ public class InputStateHandler : MonoBehaviour
     void SetDirectionals()
     {
         if (currentState.stateDirectionals == null) return;
+        if (currentState.stateDirectionals == OmniDirection) return;
         if (currentState.stateDirectionals.Contains("Horizontal"))
             directionSelection = new[] { 0, 0, -1, 1 };
         
@@ -284,6 +285,42 @@ public class InputStateHandler : MonoBehaviour
         //started learning but rejected it on move selection screen
         Options_manager.Instance.SkipMove();
         ResetRelevantUi(new []{"Pokemon Details"});
+    }
+    public void PokemonStorageBoxNavigation()
+    {
+        var storageBoxSelectables = new List<SelectableUI>();
+        foreach (var icon in pokemon_storage.Instance.nonPartyIcons)
+        { 
+            var newSelectable = new SelectableUI(icon,
+                ()=>pokemon_storage.Instance.SelectNonPartyPokemon(icon.GetComponent<PC_pkm>())
+                , true);
+            storageBoxSelectables.Add(newSelectable);
+        }
+        
+        ChangeInputState(new InputState("Pokemon Storage Box Navigation",false,null,OmniDirection
+            ,storageBoxSelectables,pokemon_storage.Instance.boxSelector, true, 
+            true,null,null,true));
+        OnInputLeft += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",-1);
+        OnInputRight += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",1);
+        OnInputUp += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",1);
+        OnInputDown += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",-1);
+        var currentBoxPosition = pokemon_storage.Instance.GetCurrentBoxPosition() - 1;
+    }
+    public void PokemonStoragePartyNavigation()
+    {
+        var partySelectables = new List<SelectableUI>();
+
+        for (var i = 0 ;i< Pokemon_party.Instance.numMembers;i++)
+        {
+            var memberNumber = i + 1;
+            var icon = pokemon_storage.Instance.partyPokemonIcons[i];
+            partySelectables.Add( new(icon
+                ,() => pokemon_storage.Instance.SelectPartyPokemon(icon.GetComponent<PC_party_pkm>()),true) );
+        }
+        
+        ChangeInputState(new InputState("Pokemon Storage Party Navigation",false,null,
+           Vertical, partySelectables, pokemon_storage.Instance.partySelector
+            , true, true,null,null,true));
     }
     void SetupInputEvents()
     {

@@ -64,7 +64,6 @@ public class Options_manager : MonoBehaviour
 
     void LearnMove()
     {        
-        Dialogue_handler.Instance.DeletePreviousOptions();
         Pokemon_Details.Instance.learningMove = true;
         Pokemon_Details.Instance.OnMoveSelected += PokemonOperations.LearnSelectedMove;
         Game_ui_manager.Instance.ViewPokemonDetails(PokemonOperations.CurrentPokemon);
@@ -102,8 +101,7 @@ public class Options_manager : MonoBehaviour
     }
     void OpenPokemonStorage()
     {
-        Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
-        pokemon_storage.Instance.OpenPC();
+        Game_ui_manager.Instance.ViewPokemonStorage();
         overworld_actions.Instance.usingUI = true;
     }
     void BuyMore()
@@ -167,6 +165,7 @@ public class Options_manager : MonoBehaviour
     }
     public void CompleteInteraction(Interaction interaction,int option)
     {
+        Dialogue_handler.Instance.DeletePreviousOptions();
         var methodName = interaction.interactionOptions[option].Replace(" ", "");
         if (methodName == string.Empty) { Dialogue_handler.Instance.EndDialogue(); return; }
         _currentInteraction = interaction;
