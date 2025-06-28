@@ -32,6 +32,7 @@ public class Game_ui_manager : MonoBehaviour
     {
         usingWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
         exitButton.SetActive(!usingWebGl);
+        if (usingWebGl) menuUiOptions.Remove(menuUiOptions.Last());//remove exit button
     }
 
     private void Update()
@@ -74,14 +75,11 @@ public class Game_ui_manager : MonoBehaviour
     {
         var menuOptionsMethods = new List<Action>
         {
-            ViewPokemonParty,Save_manager.Instance.SaveAllData, ViewBag, ViewProfile,
-            Options_manager.Instance.ExitGame
+            ViewPokemonParty,Save_manager.Instance.SaveAllData, ViewBag, ViewProfile
         };
-        if (usingWebGl)
-        {
-            menuOptionsMethods.Remove(menuOptionsMethods.Last());
-            menuUiOptions.Remove(menuUiOptions.Last());
-        }
+        
+        if (!usingWebGl) menuOptionsMethods.Add(Options_manager.Instance.ExitGame);
+        
         var menuSelectables = new List<SelectableUI>();
             
         for (var i =0; i<menuOptionsMethods.Count;i++)
