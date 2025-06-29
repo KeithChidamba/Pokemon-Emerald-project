@@ -79,16 +79,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -5658
+            "instanceID": -26788
         },
         {
-            "instanceID": -5660
+            "instanceID": -26790
         },
         {
-            "instanceID": -5662
+            "instanceID": -26792
         },
         {
-            "instanceID": -5664
+            "instanceID": -26794
         }
     ],
     "ability": {
@@ -107,10 +107,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31912
+        "instanceID": 31958
     },
     "backPicture": {
-        "instanceID": 31914
+        "instanceID": 31960
     },
     "pokeballName": "",
     "abilityName": "Torrent",

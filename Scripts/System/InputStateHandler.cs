@@ -92,8 +92,9 @@ public class InputStateHandler : MonoBehaviour
         if (!_readingInputs) return;
         _handlingState = stateLayers.Count > 0;
         if (!_handlingState) return;
-        
-        if (Input.GetKeyDown(KeyCode.R) && stateLayers.Last().stateName!="Dialogue Options" && currentState.canExit)
+        bool viewingExitableDialogue = Dialogue_handler.Instance.canExitDialogue & Dialogue_handler.Instance.displaying; 
+        if (Input.GetKeyDown(KeyCode.R) && stateLayers.Last().stateName!="Dialogue Options"
+                                        && !viewingExitableDialogue && currentState.canExit)
             RemoveTopInputLayer(true);
         
         if (Input.GetKeyDown(KeyCode.F) )
@@ -299,12 +300,11 @@ public class InputStateHandler : MonoBehaviour
         
         ChangeInputState(new InputState("Pokemon Storage Box Navigation",false,null,OmniDirection
             ,storageBoxSelectables,pokemon_storage.Instance.boxSelector, true, 
-            true,null,null,true));
+            true,pokemon_storage.Instance.ResetCoordinates,pokemon_storage.Instance.ResetCoordinates,true));
         OnInputLeft += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",-1);
         OnInputRight += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",1);
-        OnInputUp += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",1);
-        OnInputDown += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",-1);
-        var currentBoxPosition = pokemon_storage.Instance.GetCurrentBoxPosition() - 1;
+        OnInputUp += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",-1);
+        OnInputDown += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",1);
     }
     public void PokemonStoragePartyNavigation()
     {

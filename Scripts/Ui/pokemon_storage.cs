@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine.Serialization;
 
 public class pokemon_storage : MonoBehaviour
@@ -28,6 +29,7 @@ public class pokemon_storage : MonoBehaviour
     public GameObject boxSelector;
     public GameObject partySelector;
     public static pokemon_storage Instance;
+    public int rowRemainder;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -38,16 +40,35 @@ public class pokemon_storage : MonoBehaviour
         Instance = this;
     }
 
-    public int GetCurrentBoxPosition()
+    public void ResetCoordinates()
     {
-        return ((boxCoordinates[0]-1)*10)+boxCoordinates[1];
+        boxCoordinates[0] = 0;
+        boxCoordinates[1] = 0;
+    }
+    void SetRowRemainder()
+    {
+        var currentRowRemainder = nonPartyPokemon.Count - (boxCoordinates[0]*10);
+        rowRemainder =  (currentRowRemainder<10)? currentRowRemainder: 10;
+        boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
+    }
+    private int GetCurrentBoxPosition()
+    {
+        SetRowRemainder();
+        var rowCapacity = (boxCoordinates[0]) * 10;
+        rowCapacity=Mathf.Clamp(rowCapacity, 0, maxPokemonCapacity);
+        return (rowCapacity)+boxCoordinates[1];
     }
     public void MoveCoordinates(string direction, int change)
     {
-        var indexCoordinate = direction == "Vertical" ? 0 : 1;
-        boxCoordinates[indexCoordinate] += change;
+        SetRowRemainder();
+        var coordinateIndex = direction == "Vertical" ? 0 : 1;
+        
+        var maxIndexForCoordinate  = direction == "Vertical" ? (int)math.ceil(nonPartyPokemon.Count/10) : rowRemainder-1;
+        
+        boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
+        
         InputStateHandler.Instance.currentState.currentSelectionIndex 
-            = Mathf.Clamp(InputStateHandler.Instance.currentState.currentSelectionIndex+GetCurrentBoxPosition() - 1,0,nonPartyIcons.Count);
+            = Mathf.Clamp(GetCurrentBoxPosition(),0,nonPartyIcons.Count);
     }
     private int SearchForPokemonIndex(string pokemonID)
     {

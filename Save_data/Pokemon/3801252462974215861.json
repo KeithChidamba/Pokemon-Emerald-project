@@ -1,0 +1,115 @@
+{
+    "basePokemonName": "Pikachu",
+    "pokemonName": "Pikachu",
+    "pokemonID": 3801252462974215861,
+    "personalityValue": 1524095307,
+    "gender": "Male",
+    "genderRatio": "50/50",
+    "nature": {
+        "instanceID": 25974
+    },
+    "hasGender": true,
+    "hp": 11.0,
+    "maxHp": 11.0,
+    "baseHp": 35.0,
+    "baseAttack": 55.0,
+    "baseDefense": 40.0,
+    "baseSpecialAttack": 50.0,
+    "baseSpecialDefense": 50.0,
+    "baseSpeed": 90.0,
+    "attack": 6.0,
+    "defense": 6.0,
+    "specialAttack": 6.0,
+    "specialDefense": 6.0,
+    "speed": 6.0,
+    "hpIv": 16.0,
+    "attackIv": 0.0,
+    "defenseIv": 29.0,
+    "specialAttackIv": 31.0,
+    "specialDefenseIv": 27.0,
+    "speedIv": 13.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        "Speed2"
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 190.0,
+    "currentLevel": 1,
+    "currentExpAmount": 0,
+    "nextLevelExpAmount": 1.0,
+    "expGroup": "Medium Fast",
+    "expYield": 82,
+    "friendshipLevel": 5,
+    "hasTrainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "canBeDamaged": true,
+    "immuneToStatReduction": false,
+    "types": [
+        {
+            "instanceID": 25752
+        }
+    ],
+    "statusEffect": "None",
+    "buffAndDebuffs": [],
+    "evolutionLineLevels": [],
+    "friendshipEvolutionRequirement": "",
+    "requiresEvolutionStone": false,
+    "evolutionStoneName": "None",
+    "abilities": [
+        "Static"
+    ],
+    "splitEvolution": false,
+    "requiresFriendshipEvolution": false,
+    "learnSet": [
+        "electric/thunder shock01",
+        "electric/thunder wave03",
+        "normal/quick attack07",
+        "normal/tail whip09"
+    ],
+    "moveSet": [
+        {
+            "instanceID": -26698
+        }
+    ],
+    "ability": {
+        "instanceID": 25978
+    },
+    "evolutions": [
+        {
+            "instanceID": 25588
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 31866
+    },
+    "backPicture": {
+        "instanceID": 31868
+    },
+    "pokeballName": "",
+    "abilityName": "Static",
+    "natureName": "Relaxed",
+    "evolutionData": [
+        "Raichu"
+    ],
+    "typeData": [
+        "Electric"
+    ],
+    "moveData": [
+        "Thunder shock/Electric"
+    ],
+    "movePpData": [
+        "20/20"
+    ]
+}
