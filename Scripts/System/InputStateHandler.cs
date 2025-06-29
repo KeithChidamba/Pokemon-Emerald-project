@@ -287,6 +287,14 @@ public class InputStateHandler : MonoBehaviour
         Options_manager.Instance.SkipMove();
         ResetRelevantUi(new []{"Pokemon Details"});
     }
+
+    void SetupBoxNavigation()
+    {
+        OnInputLeft += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",-1);
+        OnInputRight += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",1);
+        OnInputUp += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",-1);
+        OnInputDown += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",1);
+    }
     public void PokemonStorageBoxNavigation()
     {
         var storageBoxSelectables = new List<SelectableUI>();
@@ -301,10 +309,7 @@ public class InputStateHandler : MonoBehaviour
         ChangeInputState(new InputState("Pokemon Storage Box Navigation",false,null,OmniDirection
             ,storageBoxSelectables,pokemon_storage.Instance.boxSelector, true, 
             true,pokemon_storage.Instance.ResetCoordinates,pokemon_storage.Instance.ResetCoordinates,true));
-        OnInputLeft += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",-1);
-        OnInputRight += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",1);
-        OnInputUp += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",-1);
-        OnInputDown += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",1);
+
     }
     public void PokemonStoragePartyNavigation()
     {
@@ -329,6 +334,7 @@ public class InputStateHandler : MonoBehaviour
             "Player Bag Navigation" => PlayerBagNavigation,
             "Pokemon Details"=>SetupPokemonDetails,
             "Player Bag Item Sell"=>ItemToSellInputs,
+            "Pokemon Storage Box Navigation"=>SetupBoxNavigation,
             _ => null
         };
         stateMethod?.Invoke();
