@@ -1,33 +1,33 @@
 {
     "basePokemonName": "Torchic",
-    "pokemonName": "Combusken",
-    "pokemonID": 3801252463243808178,
-    "personalityValue": 1254502990,
+    "pokemonName": "Torchic",
+    "pokemonID": 3801252464153976051,
+    "personalityValue": 344335117,
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25976
+        "instanceID": 25950
     },
     "hasGender": true,
-    "hp": 52.0,
-    "maxHp": 52.0,
-    "baseHp": 60.0,
-    "baseAttack": 85.0,
-    "baseDefense": 60.0,
-    "baseSpecialAttack": 85.0,
-    "baseSpecialDefense": 60.0,
-    "baseSpeed": 55.0,
-    "attack": 32.0,
-    "defense": 30.0,
-    "specialAttack": 41.0,
-    "specialDefense": 28.0,
-    "speed": 29.0,
-    "hpIv": 18.0,
-    "attackIv": 3.0,
-    "defenseIv": 21.0,
-    "specialAttackIv": 13.0,
-    "specialDefenseIv": 11.0,
-    "speedIv": 28.0,
+    "hp": 14.0,
+    "maxHp": 14.0,
+    "baseHp": 45.0,
+    "baseAttack": 60.0,
+    "baseDefense": 40.0,
+    "baseSpecialAttack": 70.0,
+    "baseSpecialDefense": 50.0,
+    "baseSpeed": 45.0,
+    "attack": 7.0,
+    "defense": 7.0,
+    "specialAttack": 9.0,
+    "specialDefense": 7.0,
+    "speed": 6.0,
+    "hpIv": 13.0,
+    "attackIv": 25.0,
+    "defenseIv": 23.0,
+    "specialAttackIv": 23.0,
+    "specialDefenseIv": 5.0,
+    "speedIv": 8.0,
     "hpEv": 0.0,
     "attackEv": 0.0,
     "defenseEv": 0.0,
@@ -35,19 +35,18 @@
     "specialDefenseEv": 0.0,
     "speedEv": 0.0,
     "effortValues": [
-        "Speed1",
-        "Attack1"
+        "Speed1"
     ],
     "accuracy": 100.0,
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 45.0,
-    "currentLevel": 18,
-    "currentExpAmount": 3775,
-    "nextLevelExpAmount": 3798.0,
+    "currentLevel": 2,
+    "currentExpAmount": 0,
+    "nextLevelExpAmount": 9.0,
     "expGroup": "Medium Slow",
-    "expYield": 142,
-    "friendshipLevel": 0,
+    "expYield": 65,
+    "friendshipLevel": 7,
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -56,9 +55,6 @@
     "types": [
         {
             "instanceID": 25776
-        },
-        {
-            "instanceID": 25512
         }
     ],
     "statusEffect": "None",
@@ -76,20 +72,14 @@
     "splitEvolution": false,
     "requiresFriendshipEvolution": false,
     "learnSet": [
-        "fire/flame thrower18"
+        "normal/scratch01",
+        "fire/ember03",
+        "fighting/double kick05",
+        "normal/focus energy07"
     ],
     "moveSet": [
         {
-            "instanceID": -22234
-        },
-        {
-            "instanceID": -22236
-        },
-        {
-            "instanceID": -22238
-        },
-        {
-            "instanceID": -22240
+            "instanceID": -22378
         }
     ],
     "ability": {
@@ -108,32 +98,25 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31954
+        "instanceID": 31772
     },
     "backPicture": {
-        "instanceID": 31956
+        "instanceID": 31854
     },
     "pokeballName": "",
     "abilityName": "Blaze",
-    "natureName": "Modest",
+    "natureName": "Quiet",
     "evolutionData": [
         "Combusken",
         "Blaziken"
     ],
     "typeData": [
-        "Fire",
-        "Fighting"
+        "Fire"
     ],
     "moveData": [
-        "Flame thrower/Fire",
-        "Ember/Fire",
-        "Double kick/Fighting",
-        "Focus Energy/Normal"
+        "Scratch/Normal"
     ],
     "movePpData": [
-        "20/20",
-        "20/20",
-        "20/20",
-        "15/15"
+        "25/25"
     ]
 }

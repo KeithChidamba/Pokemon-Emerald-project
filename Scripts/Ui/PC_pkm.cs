@@ -5,11 +5,11 @@ using UnityEngine.UI;
 public class PC_pkm : MonoBehaviour
 {
     public Pokemon pokemon;
-    public Image pokemonSprite;
+    public Image pokemonImage;
     
     public void LoadImage()
     {
-        pokemonSprite = GetComponent<Image>();
-        pokemonSprite.sprite = pokemon.frontPicture;
+        pokemonImage = GetComponent<Image>();
+        pokemonImage.sprite = pokemon.frontPicture;
     }
 }
