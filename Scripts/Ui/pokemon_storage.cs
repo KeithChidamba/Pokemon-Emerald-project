@@ -63,7 +63,7 @@ public class pokemon_storage : MonoBehaviour
         SetRowRemainder();
         var coordinateIndex = direction == "Vertical" ? 0 : 1;
         
-        var maxIndexForCoordinate  = direction == "Vertical" ? (int)math.ceil(nonPartyPokemon.Count/7) : rowRemainder-1;
+        var maxIndexForCoordinate  = direction == "Vertical" ? (int)math.ceil(nonPartyPokemon.Count/7f)-1 : rowRemainder-1;
         
         boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
         
