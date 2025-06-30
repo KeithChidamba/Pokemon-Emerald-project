@@ -290,6 +290,13 @@ public class InputStateHandler : MonoBehaviour
 
     void SetupBoxNavigation()
     {
+        if (pokemon_storage.Instance.numNonPartyPokemon == 0)
+        {
+            RemoveTopInputLayer(true);
+            return;
+        }
+        currentState.currentSelectionIndex = 0;
+        pokemon_storage.Instance.SetRowRemainder();
         OnInputLeft += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",-1);
         OnInputRight += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",1);
         OnInputUp += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",-1);
@@ -297,6 +304,11 @@ public class InputStateHandler : MonoBehaviour
     }
     public void PokemonStorageBoxNavigation()
     {
+        if (pokemon_storage.Instance.numNonPartyPokemon == 0)
+        {
+            Dialogue_handler.Instance.DisplayInfo("There are no pokemon in your storage","Details",1f);
+            return;
+        }
         var storageBoxSelectables = new List<SelectableUI>();
         foreach (var icon in pokemon_storage.Instance.nonPartyIcons)
         { 
@@ -317,7 +329,6 @@ public class InputStateHandler : MonoBehaviour
 
         for (var i = 0 ;i< Pokemon_party.Instance.numMembers;i++)
         {
-            var memberNumber = i + 1;
             var icon = pokemon_storage.Instance.partyPokemonIcons[i];
             partySelectables.Add( new(icon
                 ,() => pokemon_storage.Instance.SelectPartyPokemon(icon.GetComponent<PC_party_pkm>()),true) );
@@ -325,7 +336,8 @@ public class InputStateHandler : MonoBehaviour
         
         ChangeInputState(new InputState("Pokemon Storage Party Navigation",false,null,
            Vertical, partySelectables, pokemon_storage.Instance.partySelector
-            , true, true,null,null,true));
+            , true, true, ()=>pokemon_storage.Instance.swapping = false
+           ,()=>pokemon_storage.Instance.swapping = false,true));
     }
     void SetupInputEvents()
     {

@@ -38,25 +38,17 @@ public class pokemon_storage : MonoBehaviour
         }
         Instance = this;
     }
-
-    private void Start()
-    {
-        for (var i = 0; i < storageIconPositionsParent.childCount; i++)
-        {
-            nonPartyIcons.Add(storageIconPositionsParent.GetChild(i).gameObject);
-            if (i == numNonPartyPokemon-1) break;
-        }
-    }
-
+    
     public void ResetCoordinates()
     {
         boxCoordinates[0] = 0;
         boxCoordinates[1] = 0;
     }
-    void SetRowRemainder()
+    public void SetRowRemainder()
     {
         var currentRowRemainder = nonPartyPokemon.Count - (boxCoordinates[0]*7);
         rowRemainder =  (currentRowRemainder<7)? currentRowRemainder: 7;
+        rowRemainder = Mathf.Clamp(rowRemainder, 0, 7);
         boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
     }
     private int GetCurrentBoxPosition()
@@ -64,7 +56,7 @@ public class pokemon_storage : MonoBehaviour
         SetRowRemainder();
         var rowCapacity = (boxCoordinates[0]) * 7;
         rowCapacity=Mathf.Clamp(rowCapacity, 0, maxPokemonCapacity);
-        return (rowCapacity)+boxCoordinates[1];
+        return (rowCapacity)+Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
     }
     public void MoveCoordinates(string direction, int change)
     {
@@ -106,11 +98,8 @@ public class pokemon_storage : MonoBehaviour
             var swapStore = Pokemon_party.Instance.party[partyPokemon.partyPosition - 1];
             Pokemon_party.Instance.party[partyPokemon.partyPosition - 1] = CreateAndSetupPokemon(nonPartyPokemon[pokemonIndex]);
             nonPartyPokemon[pokemonIndex] = CreateAndSetupPokemon(swapStore);
-            swapping = false;
-            RemovePokemonIcons();
-            ActivatePokemonIcons();
+            RefreshUi();
             doingStorageOperation = false;
-            hasSelectedPokemon = false;
         }
         else
         {
@@ -148,6 +137,7 @@ public class pokemon_storage : MonoBehaviour
        hasSelectedPokemon = false;
        swapping = false;
        InputStateHandler.Instance.RemoveTopInputLayer(true);
+       LoadOptions();
     }
     private void ViewNonPartyPokemonDetails()
     {
@@ -193,6 +183,12 @@ public class pokemon_storage : MonoBehaviour
     }
     private void ActivatePokemonIcons()
     {
+        nonPartyIcons.Clear();
+        for (var i = 0; i < storageIconPositionsParent.childCount; i++)
+        {
+            nonPartyIcons.Add(storageIconPositionsParent.GetChild(i).gameObject);
+            if (i == numNonPartyPokemon-1) break;
+        }
         for (var i = 0;i<nonPartyPokemon.Count;i++)
         {
             if (nonPartyPokemon[i] == null) continue;
@@ -210,7 +206,6 @@ public class pokemon_storage : MonoBehaviour
             doingStorageOperation = true;
         }
         doingStorageOperation = false;
-        storageIconPositionsParent.gameObject.SetActive(true);
     }
     private void RemoveFromParty(PC_party_pkm partyPokemon)
     {
@@ -220,14 +215,15 @@ public class pokemon_storage : MonoBehaviour
             numPartyMembers--;
             numNonPartyPokemon++;
             RefreshUi();
+            InputStateHandler.Instance.ResetRelevantUi(new []{"Pokemon Storage Party"});
         }
         else
-            Dialogue_handler.Instance.DisplayInfo("There must be at least 1 pokemon in your team","Details",1f);
+            Dialogue_handler.Instance.DisplayInfo("There must be at least 1 pokemon in your team","Details",2f);
     }
     private void DeletePokemon()
     {
         var indexToDelete= SearchForPokemonIndex(selectedPokemonID);
-        Dialogue_handler.Instance.DisplayInfo("You released "+ nonPartyPokemon[indexToDelete].pokemonName, "Details",1.5f);
+        Dialogue_handler.Instance.DisplayInfo("You released "+ nonPartyPokemon[indexToDelete].pokemonName, "Details",2f);
         DeleteNonPartyPokemon(indexToDelete);
         RefreshUi();
     }
@@ -239,9 +235,10 @@ public class pokemon_storage : MonoBehaviour
     }
     private void SwapWithPartyPokemon()
     {
-        storageIconPositionsParent.gameObject.SetActive(false);
-        Dialogue_handler.Instance.DisplayInfo("Pick a pokemon in your party to swap with", "Details",1.2f);
+        InputStateHandler.Instance.ResetRelevantUi(new []{"Pokemon Storage Box"});
+        Dialogue_handler.Instance.DisplayInfo("Pick a pokemon in your party to swap with", "Details",2f);
         swapping = true;
+        InputStateHandler.Instance.PokemonStoragePartyNavigation();
     }
 
     public bool MaxPokemonCapacity()
@@ -261,7 +258,7 @@ public class pokemon_storage : MonoBehaviour
             RefreshUi();
         }
         else
-            Dialogue_handler.Instance.DisplayInfo("Party is full, you can still swap out pokemon though", "Details",2f);
+            Dialogue_handler.Instance.DisplayInfo("Party is full, you can still swap out pokemon though", "Details",3f);
         doingStorageOperation = false;
     }
 
