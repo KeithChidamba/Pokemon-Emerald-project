@@ -506,7 +506,7 @@ public class Battle_handler : MonoBehaviour
         var location = (playerWhiteOut)? "Poke Center" : Game_Load.Instance.playerData.location;
         if(playerWhiteOut) Options_manager.Instance.HealPartyPokemon();
         Area_manager.Instance.SwitchToArea(location, 0f);
-        Dialogue_handler.Instance.canExitDialogue = true;
+        Dialogue_handler.Instance.DisplayDialogueExit(true);
         battleWon = false;
         battleOver = false;
     }

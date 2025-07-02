@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 
 public class Interaction_handler : MonoBehaviour
@@ -11,8 +9,9 @@ public class Interaction_handler : MonoBehaviour
     [SerializeField] float detectDistance=0.15f;
     private bool _canCheckForInteraction;
     private bool _stopInteractions;
+    private bool _interactionCooldown;
     public static Interaction_handler Instance;
-    private void Start()
+    private void Awake()
     {
         interactable = 1 << LayerMask.NameToLayer("Interactable");
         if (Instance != null && Instance != this)
@@ -22,41 +21,47 @@ public class Interaction_handler : MonoBehaviour
         }
         Instance = this;
     }
+
+    private void Start()
+    {
+        _stopInteractions = false;
+        _canCheckForInteraction = true;
+    }
     void Update()
     {
         if(!Dialogue_handler.Instance.displaying && !_stopInteractions)
         {
             if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Q))
-                if (!_canCheckForInteraction)
-                    StartCoroutine(DelayRayCast());
+                if(_canCheckForInteraction)
+                    RaycastForInteraction();
         }
-        if(_canCheckForInteraction)
-            RaycastForInteraction();
-    }
 
+        if ((Input.GetKeyUp(KeyCode.F) || Input.GetKeyUp(KeyCode.Q)) && !_canCheckForInteraction)
+        {
+            _canCheckForInteraction = true;
+        }
+    }
     public void DisableInteraction()
     {
         _stopInteractions = true;
     }
     public void AllowInteraction()
     {
-        //prevent this from being called while its waiting, replace with a coroutine
-        Invoke(nameof(SetInteractionAllowed), 1f);
+        if (_interactionCooldown) return;
+        _interactionCooldown = true;
+        StartCoroutine(SetInteractionAllowed());
     }
 
-    private void SetInteractionAllowed()
+    private IEnumerator SetInteractionAllowed()
     {
+        yield return new WaitForSeconds(0.5f);
         _stopInteractions = false;
-    }
-    IEnumerator DelayRayCast()
-    {
-        _canCheckForInteraction = true;
-        yield return new WaitForSeconds(1f);
-        _canCheckForInteraction = false;
+        _interactionCooldown = false;
     }
     void RaycastForInteraction()
     {
-        var hit = Physics2D.Raycast(transform.position, interactionPoint.forward, detectDistance, interactable);
+        _canCheckForInteraction = false;
+        var hit = Physics2D.Raycast(interactionPoint.position, interactionPoint.forward, detectDistance, interactable);
         if (hit.transform && !Dialogue_handler.Instance.displaying && !overworld_actions.Instance.usingUI)
         {
             var interactableObject = hit.transform.GetComponent<Overworld_interactable>();

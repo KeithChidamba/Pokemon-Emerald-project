@@ -19,6 +19,7 @@ public class InputStateHandler : MonoBehaviour
     private event Action OnInputLeft;
     public event Action OnStateRemovalComplete;
     private bool _readingInputs;
+    [SerializeField] private bool _currentStateLoaded;
     private bool _handlingState;
     public List<InputState> stateLayers;
     public enum Directional { None, Horizontal, Vertical, OmniDirection};
@@ -43,6 +44,8 @@ public class InputStateHandler : MonoBehaviour
         Game_Load.Instance.OnGameStarted += () => _readingInputs = true;
         emptyState = new InputState("Empty", false, null, Directional.None, null, null,
             false, false, null, null, true);
+        currentState = emptyState;
+        _currentStateLoaded = false;
     }
 
     public void ResetRelevantUi(string[] keywords)
@@ -84,6 +87,7 @@ public class InputStateHandler : MonoBehaviour
 
     private void StateRemovalCompletion()
     {
+        _currentStateLoaded = false;
         if (stateLayers.Count > 0)
             ChangeInputState(stateLayers.Last());
         else
@@ -105,7 +109,9 @@ public class InputStateHandler : MonoBehaviour
                                         && !viewingExitableDialogue && currentState.canExit)
             RemoveTopInputLayer(true);
         
-        if (Input.GetKeyDown(KeyCode.F) )
+        if (currentState.stateName == "Empty") return;
+        
+        if (Input.GetKeyDown(KeyCode.F) && _currentStateLoaded)
             InvokeSelectedEvent();
 
         if (currentState.stateDirectional == Directional.None) return;
@@ -173,7 +179,7 @@ public class InputStateHandler : MonoBehaviour
             UpdateSelectorUi();
             currentState.selector.SetActive(true);
         }
-        
+        _currentStateLoaded = true;
         var parentLayers = stateLayers.Where(s => s.isParentLayer).ToList();
         if (parentLayers.Count==0) return;
         parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));

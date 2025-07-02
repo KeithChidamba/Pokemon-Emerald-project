@@ -77,7 +77,7 @@ public class Dialogue_handler : MonoBehaviour
         }
         if (overworld_actions.Instance != null)
             if (overworld_actions.Instance.doingAction )
-                DisableDialogueExit();
+                DisplayDialogueExit(false);
         if (displaying && Input.GetKeyDown(KeyCode.R) && canExitDialogue)
             EndDialogue();
     }
@@ -103,13 +103,16 @@ public class Dialogue_handler : MonoBehaviour
             optionScript.SetupOption(i,numOptions,currentInteraction.optionsUiText[i]);
             _dialogueOptionsManager.currentOptions.Add(optionScript);
         }
-        SetupDialogueOptionsNavigation();
-        _dialogueOptionsManager.LoadUiSize();
-        ActivateOptions(true);
+        StartCoroutine(SetupDialogueOptionsNavigation());
     }
 
-    void SetupDialogueOptionsNavigation()
+    private IEnumerator SetupDialogueOptionsNavigation()
     {
+        _dialogueOptionsManager.LoadUiSize();
+        DisplayDialogueExit(false);
+        yield return new WaitForSeconds(0.5f);
+        DisplayDialogueExit(true);
+        ActivateOptions(true);
         var optionSelectables = new List<SelectableUI>();
          foreach(var option in _dialogueOptionsManager.currentOptions)
             optionSelectables.Add( new(option.gameObject,()=>SelectOption(option.optionIndex),true) );
@@ -133,10 +136,10 @@ public class Dialogue_handler : MonoBehaviour
          foreach (var obj in _dialogueOptionsManager.currentOptions)
              obj.gameObject.SetActive(display);
      }
-    private void DisableDialogueExit()
+    public void DisplayDialogueExit(bool display)
     {
-        dialogueExitIndicator.SetActive(false);
-        canExitDialogue = false;
+        dialogueExitIndicator.SetActive(display);
+        canExitDialogue = display;
     }
     Interaction NewInteraction(string info,string type,string result)
     {
@@ -148,7 +151,7 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void DisplayList(string info,string result,string[] options, string[]optionsText)//list info
     {
-        DisableDialogueExit();
+        DisplayDialogueExit(false);
         var newInteraction = NewInteraction(info,"Options",result);
         foreach (string option in options)
             newInteraction.interactionOptions.Add(option);
@@ -189,7 +192,7 @@ public class Dialogue_handler : MonoBehaviour
         if(canExit)
             EndDialogue();
         else
-            DisableDialogueExit();
+            DisplayDialogueExit(false);
         DisplayBattleInfo(info);
     }
     public void DisplayBattleInfo(string info)//display plain text info to player
@@ -200,7 +203,7 @@ public class Dialogue_handler : MonoBehaviour
             return;
         }
         Battle_handler.Instance.displayingInfo = true;
-        DisableDialogueExit();
+        DisplayDialogueExit(false);
         var newInteraction = NewInteraction(info,"Battle Info","");
         pendingMessages.Add(newInteraction);
         if(!messagesLoading) StartCoroutine(ProcessQueue(newInteraction));
@@ -240,7 +243,7 @@ public class Dialogue_handler : MonoBehaviour
             DeletePreviousOptions();
         }
         Interaction_handler.Instance.AllowInteraction();
-        canExitDialogue=true;
+        DisplayDialogueExit(true);
         currentInteraction = null;
         currentInteractionObject = null;
         infoDialogueBox.SetActive(false);
