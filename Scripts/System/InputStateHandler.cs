@@ -24,6 +24,7 @@ public class InputStateHandler : MonoBehaviour
     public enum Directional { None, Horizontal, Vertical, OmniDirection};
     public int[] boxCoordinates={0,0};
     private int _currentBoxCapacity;
+    private int _numBoxColumns;
     private int _currentNumBoxElements;
     public int rowRemainder;
     private void Awake()
@@ -174,6 +175,7 @@ public class InputStateHandler : MonoBehaviour
         }
         
         var parentLayers = stateLayers.Where(s => s.isParentLayer).ToList();
+        if (parentLayers.Count==0) return;
         parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
         parentLayers.Last().mainViewUI.SetActive(true);
     }
@@ -286,7 +288,7 @@ public class InputStateHandler : MonoBehaviour
     void RemoveDetailsInputStates()
     {
         OnStateRemovalComplete -= RemoveDetailsInputStates;
-        //started learning but rejected it on move selection screen
+        //if started learning but rejected it on move selection screen
         Options_manager.Instance.SkipMove();
         ResetRelevantUi(new []{"Pokemon Details"});
     }
@@ -297,9 +299,9 @@ public class InputStateHandler : MonoBehaviour
     }
     private void SetRowRemainder()
     {
-        var currentRowRemainder = _currentNumBoxElements - (boxCoordinates[0]*7);
-        rowRemainder =  (currentRowRemainder<7)? currentRowRemainder: 7;
-        rowRemainder = Mathf.Clamp(rowRemainder, 0, 7);
+        var currentRowRemainder = _currentNumBoxElements - (boxCoordinates[0] * _numBoxColumns);
+        rowRemainder =  (currentRowRemainder < _numBoxColumns)? currentRowRemainder: _numBoxColumns;
+        rowRemainder = Mathf.Clamp(rowRemainder, 0, _numBoxColumns);
         boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
     }
     private int GetCurrentBoxPosition()
@@ -307,7 +309,7 @@ public class InputStateHandler : MonoBehaviour
         SetRowRemainder();
         var currentColumn = boxCoordinates[1];
         var currentRow = boxCoordinates[0];
-        var rowCapacity = currentRow * 7;
+        var rowCapacity = currentRow * _numBoxColumns;
         rowCapacity = Mathf.Clamp(rowCapacity, 0, _currentBoxCapacity);
         return rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
     }
@@ -317,7 +319,7 @@ public class InputStateHandler : MonoBehaviour
         var coordinateIndex = directional == Directional.Vertical ? 0 : 1;
         
         var maxIndexForCoordinate  = directional == Directional.Vertical ?
-            (int)math.ceil(_currentNumBoxElements/7f)-1 : rowRemainder-1;
+            (int)math.ceil((float)_currentNumBoxElements/_numBoxColumns) - 1 : rowRemainder-1;
         
         boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
         
@@ -334,6 +336,7 @@ public class InputStateHandler : MonoBehaviour
         currentState.currentSelectionIndex = 0;
         _currentNumBoxElements = pokemon_storage.Instance.numNonPartyPokemon;
         _currentBoxCapacity = pokemon_storage.Instance.boxCapacity;
+        _numBoxColumns = pokemon_storage.Instance.boxColumns;
         SetRowRemainder();
         OnInputLeft += ()=>MoveCoordinates(Directional.Horizontal,-1);
         OnInputRight += ()=>MoveCoordinates(Directional.Horizontal,1);

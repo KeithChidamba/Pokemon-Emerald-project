@@ -166,9 +166,9 @@ public class Options_manager : MonoBehaviour
     }
     public void CompleteInteraction(Interaction interaction,int option)
     {
-        Dialogue_handler.Instance.DeletePreviousOptions();
         var methodName = interaction.interactionOptions[option].Replace(" ", "");
         if (methodName == string.Empty) { Dialogue_handler.Instance.EndDialogue(); return; }
+        Dialogue_handler.Instance.DeletePreviousOptions();
         _currentInteraction = interaction;
         if (_interactionMethods.TryGetValue(methodName,out var method))
             method();

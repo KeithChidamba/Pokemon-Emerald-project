@@ -34,13 +34,17 @@ public class Interaction_handler : MonoBehaviour
             RaycastForInteraction();
     }
 
-    public void DisableRaycast()
+    public void DisableInteraction()
     {
         _stopInteractions = true;
-        Invoke(nameof(AllowInteraction),1f);
+    }
+    public void AllowInteraction()
+    {
+        //prevent this from being called while its waiting, replace with a coroutine
+        Invoke(nameof(SetInteractionAllowed), 1f);
     }
 
-    private void AllowInteraction()
+    private void SetInteractionAllowed()
     {
         _stopInteractions = false;
     }

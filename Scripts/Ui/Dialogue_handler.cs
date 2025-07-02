@@ -238,8 +238,8 @@ public class Dialogue_handler : MonoBehaviour
         if (_dialogueOptionsManager.currentOptions.Count > 0)
         {
             DeletePreviousOptions();
-            Interaction_handler.Instance.DisableRaycast();
         }
+        Interaction_handler.Instance.AllowInteraction();
         canExitDialogue=true;
         currentInteraction = null;
         currentInteractionObject = null;
@@ -261,6 +261,7 @@ public class Dialogue_handler : MonoBehaviour
 
     public void StartInteraction(Overworld_interactable interactable)
     {
+        Interaction_handler.Instance.DisableInteraction();
         currentInteractionObject = interactable;
         currentInteraction = interactable.interaction;
         HandleInteraction();
@@ -272,6 +273,7 @@ public class Dialogue_handler : MonoBehaviour
             Player_movement.Instance.RestrictPlayerMovement();
             Player_movement.Instance.movingOnFoot = false;
         }
+
         dialogueFinished = false;
         displaying = true;  
         var numDialoguePages = (float)currentInteraction.interactionMessage.Length / maxCharacterLength;

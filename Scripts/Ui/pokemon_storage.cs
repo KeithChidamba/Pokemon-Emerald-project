@@ -7,7 +7,7 @@ using Unity.Mathematics;
 
 public class pokemon_storage : MonoBehaviour
 {
-    public List<Pokemon> nonPartyPokemon;
+    public List<Pokemon> nonPartyPokemon = new();
     public int totalPokemonCount;
     public int numNonPartyPokemon;
     public int maxPokemonCapacity = 21;
@@ -17,7 +17,7 @@ public class pokemon_storage : MonoBehaviour
     public GameObject storageUI;
     public string selectedPokemonID;
     public bool doingStorageOperation;
-    public List<GameObject> nonPartyIcons;
+    public List<GameObject> nonPartyIcons = new();
     public GameObject[] partyPokemonIcons;
     public Transform storageIconPositionsParent;
     public bool swapping;
@@ -27,6 +27,7 @@ public class pokemon_storage : MonoBehaviour
     public GameObject partySelector;
     public GameObject boxOptionsSelector;
     public int boxCapacity = 21;
+    public int boxColumns = 7;
     public static pokemon_storage Instance;
 
     private void Awake()
@@ -150,11 +151,24 @@ public class pokemon_storage : MonoBehaviour
     }
     private void ActivatePokemonIcons()
     {
+        for (var i = 0;i < numPartyMembers;i++)
+        {
+            if (Pokemon_party.Instance.party[i] == null) continue;
+            partyPokemonIcons[i].SetActive(true);
+            partyPokemonIcons[i].GetComponent<PC_party_pkm>().pokemon = Pokemon_party.Instance.party[i] ;
+            partyPokemonIcons[i].GetComponent<PC_party_pkm>().LoadImage();
+            doingStorageOperation = true;
+        }
         nonPartyIcons.Clear();
         for (var i = 0; i < storageIconPositionsParent.childCount; i++)
         {
+            if (i == numNonPartyPokemon) break;
             nonPartyIcons.Add(storageIconPositionsParent.GetChild(i).gameObject);
-            if (i == numNonPartyPokemon-1) break;
+        }
+        if (nonPartyIcons.Count == 0)
+        {
+            doingStorageOperation = false;
+            return;
         }
         for (var i = 0;i<nonPartyPokemon.Count;i++)
         {
@@ -163,14 +177,6 @@ public class pokemon_storage : MonoBehaviour
             pokemonIcon.SetActive(true);
             pokemonIcon.GetComponent<PC_pkm>().pokemon = nonPartyPokemon[i];
             pokemonIcon.GetComponent<PC_pkm>().LoadImage();
-        }
-        for (var i = 0;i < numPartyMembers;i++)
-        {
-            if (Pokemon_party.Instance.party[i] == null) continue;
-            partyPokemonIcons[i].SetActive(true);
-            partyPokemonIcons[i].GetComponent<PC_party_pkm>().pokemon = Pokemon_party.Instance.party[i] ;
-            partyPokemonIcons[i].GetComponent<PC_party_pkm>().LoadImage();
-            doingStorageOperation = true;
         }
         doingStorageOperation = false;
     }
