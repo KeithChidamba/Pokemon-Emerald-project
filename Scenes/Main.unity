@@ -6757,7 +6757,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState:
     stateName: 
-    stateDirectionals: []
+    stateNameLower: 
+    stateDirectional: 3
     selectableUis: []
     currentSelectionIndex: 0
     isSelecting: 0
@@ -6768,6 +6769,8 @@ MonoBehaviour:
     isParentLayer: 0
     canExit: 0
   stateLayers: []
+  boxCoordinates: 0000000000000000
+  rowRemainder: 0
 --- !u!4 &215726036
 Transform:
   m_ObjectHideFlags: 0
@@ -28656,12 +28659,11 @@ MonoBehaviour:
   storageIconPositionsParent: {fileID: 1330329151}
   swapping: 0
   hasSelectedPokemon: 0
-  boxCoordinates: 0000000000000000
   initialSelector: {fileID: 1554805902}
   boxSelector: {fileID: 1211313107}
   partySelector: {fileID: 1261064435}
   boxOptionsSelector: {fileID: 751038379}
-  rowRemainder: 0
+  boxCapacity: 21
 --- !u!1 &939642311
 GameObject:
   m_ObjectHideFlags: 0

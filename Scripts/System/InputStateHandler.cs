@@ -3,15 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class InputStateHandler : MonoBehaviour
 {
-    [FormerlySerializedAs("_currentState")] public InputState currentState;
-    public static readonly string[] OmniDirection = {"Horizontal","Vertical"}; 
-    public static readonly string[] Vertical = {"Vertical"}; 
-    public static readonly string[] Horizontal = {"Horizontal"};
+    public InputState currentState;
+    private InputState emptyState;
     private int[] directionSelection = { 0, 0, 0, 0 };
     public static InputStateHandler Instance;
     private event Action OnInputUp; 
@@ -19,9 +18,14 @@ public class InputStateHandler : MonoBehaviour
     private event Action OnInputRight; 
     private event Action OnInputLeft;
     public event Action OnStateRemovalComplete;
-    private bool _readingInputs = false;
-    private bool _handlingState = false;
+    private bool _readingInputs;
+    private bool _handlingState;
     public List<InputState> stateLayers;
+    public enum Directional { None, Horizontal, Vertical, OmniDirection};
+    public int[] boxCoordinates={0,0};
+    private int _currentBoxCapacity;
+    private int _currentNumBoxElements;
+    public int rowRemainder;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -35,57 +39,60 @@ public class InputStateHandler : MonoBehaviour
 
     private void Start()
     {
-        Game_Load.Instance.OnGameStarted += Inizialize;
+        Game_Load.Instance.OnGameStarted += () => _readingInputs = true;
+        emptyState = new InputState("Empty", false, null, Directional.None, null, null,
+            false, false, null, null, true);
     }
 
-    void Inizialize()
-    {
-        _readingInputs = true;
-    }
     public void ResetRelevantUi(string[] keywords)
     {
         List<InputState> inputStates = new List<InputState>();
         
         foreach (var keyword in keywords)
-        {
-            inputStates.AddRange(GetRelevantStates(keyword));
-        }
-        StartCoroutine(RemoveInputStates(inputStates,false));
+            inputStates.AddRange(GetRelevantStates(keyword.ToLower()));
+        
+        RemoveInputStates(inputStates);
     }
 
     private List<InputState> GetRelevantStates(string keyword)
     {
         List<InputState> inputStates = new List<InputState>();
-        
         foreach (var state in stateLayers)
-            if (state.stateName.ToLower().Contains(keyword.ToLower()))
+            if (state.stateNameLower.Contains(keyword))
                 inputStates.Add(state);
         
         return inputStates;
     }
-    private IEnumerator RemoveInputStates(List<InputState> states,bool manualExit)
+    private void RemoveInputStates(List<InputState> states)
     {
         foreach (var state in states)
-        {
-            state.selector?.SetActive(false);
-            Action method = manualExit ? state.OnExit:state.OnClose;
-            method?.Invoke();//note: must not have onexit/onclose that also starts this coroutine
-            ResetInputEvents();
-            var numLayers = stateLayers.Count;
-            stateLayers.Remove(state);
-            yield return new WaitUntil(() => stateLayers.Count == numLayers - 1);
-        }
+            RemoveInputState(state,false);
+        StateRemovalCompletion();
+    }
+
+    private void RemoveInputState(InputState state,bool manualExit)
+    {
+        state.selector?.SetActive(false);
+        Action method = manualExit ? state.OnExit:state.OnClose;
+        method?.Invoke();//note: must not have onexit/onclose that also starts this coroutine
+        ResetInputEvents();
+        stateLayers.Remove(state);
+        if (!manualExit) return;
+        StateRemovalCompletion();
+    }
+
+    private void StateRemovalCompletion()
+    {
         if (stateLayers.Count > 0)
             ChangeInputState(stateLayers.Last());
         else
-            currentState =  null;
+            currentState =  emptyState;
         OnStateRemovalComplete?.Invoke();
     }
-
     public void RemoveTopInputLayer(bool invokeOnExit)
     {
         stateLayers.Last().OnExit = invokeOnExit? stateLayers.Last().OnExit:null;
-        StartCoroutine(RemoveInputStates(new (){stateLayers.Last()} ,true));
+        RemoveInputState(stateLayers.Last() ,true);
     }
     private void Update()
     {
@@ -100,38 +107,38 @@ public class InputStateHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F) )
             InvokeSelectedEvent();
 
-        if (currentState.stateDirectionals == null) return;
+        if (currentState.stateDirectional == Directional.None) return;
         
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            HandleEvents(OnInputLeft, directionSelection[2], "Horizontal");
+            HandleEvents(OnInputLeft, directionSelection[2], Directional.Horizontal);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            HandleEvents(OnInputRight, directionSelection[3], "Horizontal");
+            HandleEvents(OnInputRight, directionSelection[3], Directional.Horizontal);
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            HandleEvents(OnInputUp, directionSelection[0], "Vertical");
+            HandleEvents(OnInputUp, directionSelection[0], Directional.Vertical);
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            HandleEvents(OnInputDown, directionSelection[1], "Vertical");
+            HandleEvents(OnInputDown, directionSelection[1], Directional.Vertical);
         }
     }
 
-    void HandleEvents(Action onInput,int directionIndex,string direction)
+    void HandleEvents(Action onInput,int directionIndex,Directional direction)
     {
         onInput?.Invoke();
         
-        if (currentState.stateDirectionals != OmniDirection) ChangeSelectionIndex(directionIndex);
+        if (currentState.stateDirectional != Directional.OmniDirection) ChangeSelectionIndex(directionIndex);
         
         if(CanUpdateSelector(direction)) UpdateSelectorUi();
     }
-    bool CanUpdateSelector(string directional)
+    bool CanUpdateSelector(Directional directional)
     {
         return currentState.displayingSelector &
-               currentState.stateDirectionals.Contains(directional);
+               currentState.stateDirectional == directional;
     }
     void InvokeSelectedEvent()
     {
@@ -165,30 +172,26 @@ public class InputStateHandler : MonoBehaviour
             UpdateSelectorUi();
             currentState.selector.SetActive(true);
         }
-
-        var parentLayers = stateLayers.Where(s => s.isParentLayer).ToList();
         
-        foreach (var layer in parentLayers)
-        {
-            if (layer == parentLayers.Last())
-            {
-                layer.mainViewUI.SetActive(true);
-                break;
-            }
-            layer.mainViewUI.SetActive(false);
-        }
+        var parentLayers = stateLayers.Where(s => s.isParentLayer).ToList();
+        parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
+        parentLayers.Last().mainViewUI.SetActive(true);
     }
 
     void SetDirectionals()
     {
-        if (currentState.stateDirectionals == null) return;
-        if (currentState.stateDirectionals == OmniDirection) return;
-        if (currentState.stateDirectionals.Contains("Horizontal"))
-            directionSelection = new[] { 0, 0, -1, 1 };
-        
-        if (currentState.stateDirectionals.Contains("Vertical"))
-            directionSelection = new[] { -1, 1, 0, 0 };
-        
+        switch (currentState.stateDirectional)
+        {
+            case Directional.None: 
+            case Directional.OmniDirection:
+                return;
+            case Directional.Horizontal: 
+                directionSelection = new[] { 0, 0, -1, 1 };
+                break;
+            case Directional.Vertical: 
+                directionSelection = new[] { -1, 1, 0, 0 };
+                break;
+        }
     }
     void ResetInputEvents()
     {
@@ -208,7 +211,7 @@ public class InputStateHandler : MonoBehaviour
     {
         Bag.Instance.sellingItems = true;
         var itemSellSelectables = new List<SelectableUI>{new(Bag.Instance.sellingItemUI,Bag.Instance.SellToMarket,true)};
-        ChangeInputState(new InputState("Player Bag Item Sell",false,null, Vertical, itemSellSelectables
+        ChangeInputState(new InputState("Player Bag Item Sell",false,null, Directional.Vertical, itemSellSelectables
             ,Bag.Instance.sellingIndicator,false,
             true,null,()=>Bag.Instance.sellQuantity=1,true));
     }
@@ -227,7 +230,7 @@ public class InputStateHandler : MonoBehaviour
             ,new(Bag.Instance.itemUsageUi[2],Bag.Instance.RemoveItem,Bag.Instance.itemDroppable)
         };
         itemUsageSelectables.RemoveAll(s=>!s.canBeSelected);
-        ChangeInputState(new InputState("Player Bag Item Usage",false,null, Horizontal, itemUsageSelectables
+        ChangeInputState(new InputState("Player Bag Item Usage",false,null, Directional.Horizontal, itemUsageSelectables
             ,Bag.Instance.itemUsageSelector,true,true,null,null,true));
         currentState.selector.SetActive(true);
     }
@@ -247,7 +250,7 @@ public class InputStateHandler : MonoBehaviour
                 ,Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberIndex - 1].hasItem)
         };
         partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
-        ChangeInputState(new InputState("Pokemon Party Options",false,null, Vertical, partyOptionsSelectables
+        ChangeInputState(new InputState("Pokemon Party Options",false,null, Directional.Vertical, partyOptionsSelectables
             ,Pokemon_party.Instance.optionSelector,true,true
             ,Pokemon_party.Instance.ClearSelectionUI,Pokemon_party.Instance.ClearSelectionUI,true));
         currentState.selector.SetActive(true);
@@ -277,7 +280,7 @@ public class InputStateHandler : MonoBehaviour
             onExit = ()=> OnStateRemovalComplete += RemoveDetailsInputStates;
         
         ChangeInputState(new InputState("Pokemon Details Move Selection",false, null,
-            Vertical,moveSelectables, Pokemon_Details.Instance.moveSelector, true
+            Directional.Vertical,moveSelectables, Pokemon_Details.Instance.moveSelector, true
             , true,null,onExit,true));
     }
     void RemoveDetailsInputStates()
@@ -287,7 +290,40 @@ public class InputStateHandler : MonoBehaviour
         Options_manager.Instance.SkipMove();
         ResetRelevantUi(new []{"Pokemon Details"});
     }
-
+    private void ResetCoordinates()
+    {
+        boxCoordinates[0] = 0;
+        boxCoordinates[1] = 0;
+    }
+    private void SetRowRemainder()
+    {
+        var currentRowRemainder = _currentNumBoxElements - (boxCoordinates[0]*7);
+        rowRemainder =  (currentRowRemainder<7)? currentRowRemainder: 7;
+        rowRemainder = Mathf.Clamp(rowRemainder, 0, 7);
+        boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
+    }
+    private int GetCurrentBoxPosition()
+    {
+        SetRowRemainder();
+        var currentColumn = boxCoordinates[1];
+        var currentRow = boxCoordinates[0];
+        var rowCapacity = currentRow * 7;
+        rowCapacity = Mathf.Clamp(rowCapacity, 0, _currentBoxCapacity);
+        return rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
+    }
+    public void MoveCoordinates(Directional directional, int change)
+    {
+        SetRowRemainder();
+        var coordinateIndex = directional == Directional.Vertical ? 0 : 1;
+        
+        var maxIndexForCoordinate  = directional == Directional.Vertical ?
+            (int)math.ceil(_currentNumBoxElements/7f)-1 : rowRemainder-1;
+        
+        boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
+        
+        currentState.currentSelectionIndex = Mathf.Clamp(GetCurrentBoxPosition(),0,_currentNumBoxElements);
+        UpdateSelectorUi();
+    }
     void SetupBoxNavigation()
     {
         if (pokemon_storage.Instance.numNonPartyPokemon == 0)
@@ -296,11 +332,13 @@ public class InputStateHandler : MonoBehaviour
             return;
         }
         currentState.currentSelectionIndex = 0;
-        pokemon_storage.Instance.SetRowRemainder();
-        OnInputLeft += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",-1);
-        OnInputRight += ()=>pokemon_storage.Instance.MoveCoordinates("Horizontal",1);
-        OnInputUp += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",-1);
-        OnInputDown += ()=>pokemon_storage.Instance.MoveCoordinates("Vertical",1);
+        _currentNumBoxElements = pokemon_storage.Instance.numNonPartyPokemon;
+        _currentBoxCapacity = pokemon_storage.Instance.boxCapacity;
+        SetRowRemainder();
+        OnInputLeft += ()=>MoveCoordinates(Directional.Horizontal,-1);
+        OnInputRight += ()=>MoveCoordinates(Directional.Horizontal,1);
+        OnInputUp += ()=>MoveCoordinates(Directional.Vertical,-1);
+        OnInputDown += ()=>MoveCoordinates(Directional.Vertical,1);
     }
     public void PokemonStorageBoxNavigation()
     {
@@ -318,9 +356,9 @@ public class InputStateHandler : MonoBehaviour
             storageBoxSelectables.Add(newSelectable);
         }
         
-        ChangeInputState(new InputState("Pokemon Storage Box Navigation",false,null,OmniDirection
+        ChangeInputState(new InputState("Pokemon Storage Box Navigation",false,null,Directional.OmniDirection
             ,storageBoxSelectables,pokemon_storage.Instance.boxSelector, true, 
-            true,pokemon_storage.Instance.ResetCoordinates,pokemon_storage.Instance.ResetCoordinates,true));
+            true,ResetCoordinates,ResetCoordinates,true));
 
     }
     public void PokemonStoragePartyNavigation()
@@ -335,7 +373,7 @@ public class InputStateHandler : MonoBehaviour
         }
         
         ChangeInputState(new InputState("Pokemon Storage Party Navigation",false,null,
-           Vertical, partySelectables, pokemon_storage.Instance.partySelector
+            Directional.Vertical, partySelectables, pokemon_storage.Instance.partySelector
             , true, true, ()=>pokemon_storage.Instance.swapping = false
            ,()=>pokemon_storage.Instance.swapping = false,true));
     }

@@ -22,13 +22,13 @@ public class pokemon_storage : MonoBehaviour
     public Transform storageIconPositionsParent;
     public bool swapping;
     public bool hasSelectedPokemon;
-    public int[] boxCoordinates={0,0};
     public GameObject initialSelector;
     public GameObject boxSelector;
     public GameObject partySelector;
     public GameObject boxOptionsSelector;
+    public int boxCapacity = 21;
     public static pokemon_storage Instance;
-    public int rowRemainder;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,38 +37,6 @@ public class pokemon_storage : MonoBehaviour
             return;
         }
         Instance = this;
-    }
-    
-    public void ResetCoordinates()
-    {
-        boxCoordinates[0] = 0;
-        boxCoordinates[1] = 0;
-    }
-    public void SetRowRemainder()
-    {
-        var currentRowRemainder = nonPartyPokemon.Count - (boxCoordinates[0]*7);
-        rowRemainder =  (currentRowRemainder<7)? currentRowRemainder: 7;
-        rowRemainder = Mathf.Clamp(rowRemainder, 0, 7);
-        boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
-    }
-    private int GetCurrentBoxPosition()
-    {
-        SetRowRemainder();
-        var rowCapacity = (boxCoordinates[0]) * 7;
-        rowCapacity=Mathf.Clamp(rowCapacity, 0, maxPokemonCapacity);
-        return (rowCapacity)+Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
-    }
-    public void MoveCoordinates(string direction, int change)
-    {
-        SetRowRemainder();
-        var coordinateIndex = direction == "Vertical" ? 0 : 1;
-        
-        var maxIndexForCoordinate  = direction == "Vertical" ? (int)math.ceil(nonPartyPokemon.Count/7f)-1 : rowRemainder-1;
-        
-        boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
-        
-        InputStateHandler.Instance.currentState.currentSelectionIndex 
-            = Mathf.Clamp(GetCurrentBoxPosition(),0,numNonPartyPokemon);
     }
     private int SearchForPokemonIndex(string pokemonID)
     {
@@ -98,6 +66,7 @@ public class pokemon_storage : MonoBehaviour
             var swapStore = Pokemon_party.Instance.party[partyPokemon.partyPosition - 1];
             Pokemon_party.Instance.party[partyPokemon.partyPosition - 1] = CreateAndSetupPokemon(nonPartyPokemon[pokemonIndex]);
             nonPartyPokemon[pokemonIndex] = CreateAndSetupPokemon(swapStore);
+            ResetBoxIconSprite(nonPartyIcons[pokemonIndex].GetComponent<PC_pkm>());
             RefreshUi();
             doingStorageOperation = false;
         }
@@ -113,16 +82,15 @@ public class pokemon_storage : MonoBehaviour
                 };
                 
                 InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Storage Party Options",false
-                    ,null, null, partySelectable,null,false,
+                    ,null, InputStateHandler.Directional.None, partySelectable,null,false,
                     false,()=>ResetPartyUi(partyPokemon),()=>ResetPartyUi(partyPokemon),true));
                 partyPokemon.options.SetActive(true);
             }
         }
     }
-    void LoadOptions()
+    void ResetBoxIconSprite(PC_pkm icon)
     {
-        for (var i = 0 ; i<nonPartyPokemon.Count; i++)
-            nonPartyIcons[i].GetComponent<PC_pkm>().pokemonImage.color=Color.HSVToRGB(0,0,100);
+        icon.pokemonImage.color=Color.HSVToRGB(0,0,100);
     }
 
     void ResetPartyUi(PC_party_pkm partyPokemon)
@@ -137,7 +105,6 @@ public class pokemon_storage : MonoBehaviour
        hasSelectedPokemon = false;
        swapping = false;
        InputStateHandler.Instance.RemoveTopInputLayer(true);
-       LoadOptions();
     }
     private void ViewNonPartyPokemonDetails()
     {
@@ -153,14 +120,14 @@ public class pokemon_storage : MonoBehaviour
                 new(storageOptions[0], ViewNonPartyPokemonDetails, true),
                 new(storageOptions[1], SwapWithPartyPokemon, true),
                 new(storageOptions[2], AddPokemonToParty,true),
-                new(storageOptions[3], DeletePokemon,true)
+                new(storageOptions[3], ()=>DeletePokemon(pokemonIcon),true)
             };
 
             InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Storage Box Options",false,null
-                , InputStateHandler.Horizontal, boxOptionsSelectables,boxOptionsSelector,true,true
-                ,LoadOptions,LoadOptions,true));
+                , InputStateHandler.Directional.Horizontal, boxOptionsSelectables,boxOptionsSelector,true,true
+                ,()=>ResetBoxIconSprite(pokemonIcon),()=>ResetBoxIconSprite(pokemonIcon),true));
             
-            LoadOptions();
+            ResetBoxIconSprite(pokemonIcon);
             hasSelectedPokemon = true;
             selectedPokemonID = pokemonIcon.pokemon.pokemonID.ToString();
             pokemonIcon.pokemonImage.color=Color.HSVToRGB(17,96,54);
@@ -212,6 +179,7 @@ public class pokemon_storage : MonoBehaviour
         if (numPartyMembers > 1)
         {
             Pokemon_party.Instance.RemoveMember(partyPokemon.partyPosition);
+            ResetPartyUi(partyPokemon);
             numPartyMembers--;
             numNonPartyPokemon++;
             RefreshUi();
@@ -220,8 +188,9 @@ public class pokemon_storage : MonoBehaviour
         else
             Dialogue_handler.Instance.DisplayInfo("There must be at least 1 pokemon in your team","Details",2f);
     }
-    private void DeletePokemon()
+    private void DeletePokemon(PC_pkm pokemonIcon)
     {
+        ResetBoxIconSprite(pokemonIcon);
         var indexToDelete= SearchForPokemonIndex(selectedPokemonID);
         Dialogue_handler.Instance.DisplayInfo("You released "+ nonPartyPokemon[indexToDelete].pokemonName, "Details",2f);
         DeleteNonPartyPokemon(indexToDelete);
@@ -251,6 +220,7 @@ public class pokemon_storage : MonoBehaviour
         {
             doingStorageOperation = true;
             var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
+            ResetBoxIconSprite(nonPartyIcons[pokemonIndex].GetComponent<PC_pkm>());
             Pokemon_party.Instance.party[Pokemon_party.Instance.numMembers] = CreateAndSetupPokemon(nonPartyPokemon[pokemonIndex]);
             DeleteNonPartyPokemon(pokemonIndex);
             Pokemon_party.Instance.numMembers++;

@@ -8,7 +8,8 @@ using UnityEngine.Serialization;
 public class InputState
 {
     public string stateName;
-    public string[] stateDirectionals;
+    public string stateNameLower;
+    public InputStateHandler.Directional stateDirectional;
     public List<SelectableUI> selectableUis;
     public Action OnExit;
     public Action OnClose;
@@ -20,7 +21,7 @@ public class InputState
     public GameObject mainViewUI;
     public bool isParentLayer;
     public bool canExit;
-    public InputState(string stateName, bool isParent,GameObject mainView,string[] stateDirectionals, List<SelectableUI> selectableUis
+    public InputState(string stateName, bool isParent,GameObject mainView,InputStateHandler.Directional stateDirectional, List<SelectableUI> selectableUis
         ,GameObject selector,bool selecting,bool display,Action onClose,Action onExit,bool canExit)
     {
         isParentLayer = isParent;
@@ -28,7 +29,8 @@ public class InputState
         if (isParentLayer) mainViewUI = mainView;
         
         this.stateName = stateName;
-        this.stateDirectionals = stateDirectionals; 
+        stateNameLower = stateName.ToLower();
+        this.stateDirectional = stateDirectional; 
         this.selectableUis = selectableUis;
         currentSelectionIndex = 0;
         this.selector = selector;
