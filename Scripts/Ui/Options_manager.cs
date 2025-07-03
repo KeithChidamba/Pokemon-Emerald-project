@@ -154,7 +154,7 @@ public class Options_manager : MonoBehaviour
     void ViewMarket()
     {
         Dialogue_handler.Instance.EndDialogue();
-        Game_ui_manager.Instance.ViewMarket();
+        Game_ui_manager.Instance.ViewPokeMart();
     }
     void PickBerryFromTree()
     {

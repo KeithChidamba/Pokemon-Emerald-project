@@ -98,7 +98,7 @@ public class Game_ui_manager : MonoBehaviour
         ActivateUiElement(profile.gameObject, false);
         profile.viewingProfile = false;
     }
-    private void CloseStore()
+    private void ClosePokeMart()
     {
         ManageScreens(-1);
         Poke_Mart.Instance.ExitStore();
@@ -138,11 +138,6 @@ public class Game_ui_manager : MonoBehaviour
         ManageScreens(-1);
         ActivateUiElement(pokemon_storage.Instance.storageUI,false);
         pokemon_storage.Instance.ClosePC();
-    }
-    public void ViewMarket()
-    {
-        ManageScreens(1);
-        ActivateUiElement(Poke_Mart.Instance.storeUI,true);
     }
     public void ViewBag()
     {
@@ -191,7 +186,6 @@ public class Game_ui_manager : MonoBehaviour
             InputStateHandler.Directional.Vertical, partySelectables, Pokemon_party.Instance.memberSelector
             , true, true,CloseParty,CloseParty,true));
     }
-
     public void ViewPokemonDetails(Pokemon pokemonToView)
     { 
         ManageScreens(1);
@@ -207,7 +201,6 @@ public class Game_ui_manager : MonoBehaviour
         Pokemon_Details.Instance.LoadDetails(pokemonToView);
 
     }
-
     public void ViewPokemonStorage()
     {
         ManageScreens(1);
@@ -220,5 +213,21 @@ public class Game_ui_manager : MonoBehaviour
             InputStateHandler.Directional.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector
             , true, true,ClosePokemonStorage,ClosePokemonStorage,true));
         pokemon_storage.Instance.OpenPC();
+    }
+
+    public void ViewPokeMart()
+    {
+        ManageScreens(1);
+        ActivateUiElement(Poke_Mart.Instance.storeUI,true);
+        Bag.Instance.ViewBag();
+ 
+        var martSelectables = new List<SelectableUI>();
+        
+        foreach(var item in Poke_Mart.Instance.storeItemsUI) 
+            martSelectables.Add( new(item.gameObject,null,true) );
+        
+        InputStateHandler.Instance.ChangeInputState(new InputState("Mart Item Navigation",true,
+            Poke_Mart.Instance.storeUI, InputStateHandler.Directional.Vertical, martSelectables,
+            Poke_Mart.Instance.itemSelector,true,true,ClosePokeMart,ClosePokeMart,true));
     }
 }

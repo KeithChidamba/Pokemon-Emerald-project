@@ -17,13 +17,14 @@ public class Poke_Mart : MonoBehaviour
     public int selectedItemIndex = 0;
     public int selectedItemQuantity = 0;
     public int topIndex = 0;
-    public GameObject purchaseButton;
     public GameObject storeUI;
     public GameObject quantityUI;
     public Text quantity;    
     public Text playerMoneyText;
     public PokeMartData currentMartData;
     private bool _itemsLoaded;
+    public GameObject itemSelector;
+    public GameObject quantitySelector;
     public static Poke_Mart Instance;
     private void Awake()
     {
@@ -83,34 +84,36 @@ public class Poke_Mart : MonoBehaviour
         selectedItemIndex = itemPos;
         selectedItemQuantity = 1;
         storeItemsUI[selectedItemIndex - 1].LoadItemDescription();
-        purchaseButton.SetActive(true);
-        quantityUI.SetActive(true);
     }
     public void NavigateDown()
     {
-        if (topIndex < numItems - 7)
+        if (topIndex < numItems - 7)// && selectedItemIndex == 7)
         {
             for (int i = 0; i < 6; i++)
-            {
                 storeItemsUI[i].item = storeItemsUI[i + 1].item;
-            }
+            
             storeItemsUI[6].item = currentStoreItems[topIndex + 7];
             ReloadItems();
             topIndex++;
         }
+        // selectedItemIndex++;
+        // selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 7);
+        // SelectItem(selectedItemIndex);
     }
     public void NavigateUp()
     {
-        if (topIndex > 0)
+        if (topIndex > 0 )//&& selectedItemIndex == 0)
         {
             for (int i = 6; i > 0; i--)
-            {
                 storeItemsUI[i].item = storeItemsUI[i - 1].item;
-            }
+            
             storeItemsUI[0].item = currentStoreItems[topIndex - 1];
             ReloadItems();
             topIndex--;
         }
+        // selectedItemIndex--;
+        // selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 7);
+        // SelectItem(selectedItemIndex);
     }
     public void BuyItem()
     {
@@ -184,7 +187,6 @@ public class Poke_Mart : MonoBehaviour
     public void ExitStore()
     {
         selectedItemIndex = 0;
-        purchaseButton.SetActive(false);
         quantityUI.SetActive(false);
         foreach (var item in storeItemsUI)
             item.ClearUI();

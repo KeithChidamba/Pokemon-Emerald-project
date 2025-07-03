@@ -10,7 +10,7 @@ using UnityEngine.Serialization;
 public class InputStateHandler : MonoBehaviour
 {
     public InputState currentState;
-    private InputState emptyState;
+    private InputState _emptyState;
     private int[] directionSelection = { 0, 0, 0, 0 };
     public static InputStateHandler Instance;
     private event Action OnInputUp; 
@@ -42,9 +42,9 @@ public class InputStateHandler : MonoBehaviour
     private void Start()
     {
         Game_Load.Instance.OnGameStarted += () => _readingInputs = true;
-        emptyState = new InputState("Empty", false, null, Directional.None, null, null,
+        _emptyState = new InputState("Empty", false, null, Directional.None, null, null,
             false, false, null, null, true);
-        currentState = emptyState;
+        currentState = _emptyState;
         _currentStateLoaded = false;
     }
 
@@ -91,7 +91,7 @@ public class InputStateHandler : MonoBehaviour
         if (stateLayers.Count > 0)
             ChangeInputState(stateLayers.Last());
         else
-            currentState =  emptyState;
+            currentState =  _emptyState;
         OnStateRemovalComplete?.Invoke();
     }
     public void RemoveTopInputLayer(bool invokeOnExit)
@@ -386,6 +386,28 @@ public class InputStateHandler : MonoBehaviour
             , true, true, ()=>pokemon_storage.Instance.swapping = false
            ,()=>pokemon_storage.Instance.swapping = false,true));
     }
+    private void PokeMartNavigation()
+    {
+        OnInputUp += Poke_Mart.Instance.NavigateUp;
+        OnInputDown += Poke_Mart.Instance.NavigateDown;
+
+        currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToBuy);
+    }
+
+    void SelectItemToBuy()
+    { 
+        Poke_Mart.Instance.quantityUI.SetActive(true);
+        var itemQuantitySelectables = new List<SelectableUI>{new(Poke_Mart.Instance.quantityUI,Poke_Mart.Instance.BuyItem,true)};
+        ChangeInputState(new InputState("Mart Item Purchase",false,null, Directional.Vertical, itemQuantitySelectables
+            ,Poke_Mart.Instance.quantitySelector,false,
+            true,null,()=>Poke_Mart.Instance.selectedItemQuantity=1,true));
+    }
+
+    void ItemToBuyInputs()
+    {
+        OnInputUp += ()=>Poke_Mart.Instance.ChangeItemQuantity(1);
+        OnInputDown += ()=>Poke_Mart.Instance.ChangeItemQuantity(-1);
+    }
     void SetupInputEvents()
     {
         Action stateMethod = currentState.stateName switch
@@ -394,6 +416,8 @@ public class InputStateHandler : MonoBehaviour
             "Pokemon Details"=>SetupPokemonDetails,
             "Player Bag Item Sell"=>ItemToSellInputs,
             "Pokemon Storage Box Navigation"=>SetupBoxNavigation,
+            "Mart Item Navigation"=>PokeMartNavigation,
+            "Mart Item Purchase"=>ItemToBuyInputs,
             _ => null
         };
         stateMethod?.Invoke();
