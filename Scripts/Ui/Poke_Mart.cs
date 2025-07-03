@@ -79,45 +79,48 @@ public class Poke_Mart : MonoBehaviour
         quantity.text = selectedItemQuantity.ToString();
         playerMoneyText.text = Game_Load.Instance.playerData.playerMoney.ToString();
     }
-    public void SelectItem(int itemPos)
+    public void SelectItem()
     {
-        selectedItemIndex = itemPos;
         selectedItemQuantity = 1;
-        storeItemsUI[selectedItemIndex - 1].LoadItemDescription();
+        storeItemsUI[selectedItemIndex].LoadItemDescription();
     }
     public void NavigateDown()
     {
-        if (topIndex < numItems - 7)// && selectedItemIndex == 7)
+        if (topIndex < numItems - 7 && selectedItemIndex == 6)
         {
             for (int i = 0; i < 6; i++)
                 storeItemsUI[i].item = storeItemsUI[i + 1].item;
             
             storeItemsUI[6].item = currentStoreItems[topIndex + 7];
+            selectedItemIndex = 5;
             ReloadItems();
             topIndex++;
         }
-        // selectedItemIndex++;
-        // selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 7);
-        // SelectItem(selectedItemIndex);
+        selectedItemIndex++;
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 6);
+        SelectItem();
     }
     public void NavigateUp()
     {
-        if (topIndex > 0 )//&& selectedItemIndex == 0)
+        if (topIndex > 0 && selectedItemIndex == 0)
         {
             for (int i = 6; i > 0; i--)
                 storeItemsUI[i].item = storeItemsUI[i - 1].item;
             
             storeItemsUI[0].item = currentStoreItems[topIndex - 1];
             ReloadItems();
+            selectedItemIndex = 1;
             topIndex--;
         }
-        // selectedItemIndex--;
-        // selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 7);
-        // SelectItem(selectedItemIndex);
+        selectedItemIndex--;
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 6);
+        SelectItem();
+       // selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 7); 
+        //SelectItem(selectedItemIndex);
     }
     public void BuyItem()
     {
-        var item = Obj_Instance.CreateItem(currentStoreItems[topIndex + selectedItemIndex - 1]);
+        var item = Obj_Instance.CreateItem(currentStoreItems[topIndex + selectedItemIndex]);
         if(Game_Load.Instance.playerData.playerMoney >= item.price)
         {
             item.quantity = selectedItemQuantity;
@@ -139,7 +142,7 @@ public class Poke_Mart : MonoBehaviour
         {
             if (selectedItemQuantity < 99)//below max quantity and affordable by player
             {
-                var priceOfItem = (selectedItemQuantity + 1) * currentStoreItems[topIndex + selectedItemIndex - 1].price;
+                var priceOfItem = (selectedItemQuantity + 1) * currentStoreItems[topIndex + selectedItemIndex].price;
                 if (Game_Load.Instance.playerData.playerMoney >= priceOfItem)
                     selectedItemQuantity += value;
                 else
@@ -182,7 +185,7 @@ public class Poke_Mart : MonoBehaviour
             storeItemsUI[i].gameObject.SetActive(true);
             storeItemsUI[i].LoadItemUI();
         }
-        SelectItem(1);
+        SelectItem();
     }
     public void ExitStore()
     {
@@ -196,6 +199,6 @@ public class Poke_Mart : MonoBehaviour
     {
         foreach (var item in storeItemsUI)
             item.LoadItemUI();
-        SelectItem(1);
+        SelectItem();
     }
 }

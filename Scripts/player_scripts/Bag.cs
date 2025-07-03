@@ -128,6 +128,7 @@ public class Bag : MonoBehaviour
         }
         selectedItem--;
         selectedItem = Mathf.Clamp(selectedItem, 0, 9);
+        
         SelectItem(selectedItem);
     }
     private Item SearchForItem(string itemName)
