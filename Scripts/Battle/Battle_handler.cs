@@ -14,12 +14,12 @@ public class Battle_handler : MonoBehaviour
     public GameObject battleUI;
     public GameObject movesUI;
     public GameObject optionsUI;
+    public GameObject[] battleOptions;
     public Battle_Participant[] battleParticipants = { null, null, null, null };
     public List<Pokemon> levelUpQueue = new();
     public Text movePowerPointsText;
     public Text moveTypeText;
     public Text[] availableMovesText;
-    public GameObject[] moveButtons;
     public bool isTrainerBattle = false;
     public bool isDoubleBattle = false;
     public int participantCount = 0;
@@ -37,6 +37,8 @@ public class Battle_handler : MonoBehaviour
     public bool doingMove = false;
     public Pokemon lastOpponent;
     private Battle_Participant _currentParticipant;
+    public GameObject optionSelector;
+    public GameObject moveSelector;
     public static Battle_handler Instance;
     public event Action OnBattleEnd;
     public event Action OnSwitchIn;
@@ -97,19 +99,18 @@ public class Battle_handler : MonoBehaviour
         if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
         _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
         AutoAim();
-        if (selectedMove && (Input.GetKeyDown(KeyCode.F)))
-        {
-            if (_currentParticipant.enemySelected)
-            {
-                UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant);
-                choosingMove = false;
-            }
-            else
-                Dialogue_handler.Instance.DisplayInfo("Click on who you will attack", "Battle Display Message");
-        }        
-        
     }
 
+    private void PlayerExecuteMove()
+    {
+        if (_currentParticipant.enemySelected)
+        {
+            UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant);
+            choosingMove = false;
+        }
+        else
+            Dialogue_handler.Instance.DisplayInfo("Click on who you will attack", "Battle Display Message");
+    }
     void ResetAi()
     {
         //improve eventually to work as proper strategy AI
@@ -154,6 +155,17 @@ public class Battle_handler : MonoBehaviour
     {
         Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantStates;
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
+        
+        var battleOptionSelectables = new List<SelectableUI>{
+            new(battleOptions[0],DisplayMovesUI,true),
+            new(battleOptions[1],Game_ui_manager.Instance.ViewBag,true),
+            new(battleOptions[2],Game_ui_manager.Instance.ViewPokemonParty,true),
+            new(battleOptions[3],RunAway,true)
+        };        
+        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Battle Options",false,
+            null, InputStateHandler.Directional.OmniDirection, battleOptionSelectables,
+           optionSelector,true,true,null,null,false));
+        
         levelUpQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
         overworld_actions.Instance.doingAction = true;
@@ -336,21 +348,21 @@ public class Battle_handler : MonoBehaviour
             if (participant.pokemon != null)
                 participant.RefreshStatusEffectImage();
     }
-    void LoadTextDataForMoves()
+    void LoadMoveInputAndText()
     {
-        var j = 0;
-        foreach(var move in _currentParticipant.pokemon.moveSet)
-            if (move != null)
-            {
-                availableMovesText[j].text = _currentParticipant.pokemon.moveSet[j].moveName;
-                moveButtons[j].SetActive(true);
-                j++;
-            }
-        for (int i = j; i < 4; i++)//only show available moves
+        var moveSelectables = new List<SelectableUI>();
+        for (var i = 0; i < _currentParticipant.pokemon.moveSet.Count; i++)
         {
-            availableMovesText[i].text = "";
-            moveButtons[i].SetActive(false);
+            availableMovesText[i].text = _currentParticipant.pokemon.moveSet[i].moveName;
+            moveSelectables.Add( new (availableMovesText[i].gameObject,PlayerExecuteMove,true));
         }
+        
+        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Battle Move Selection",false,
+            null, InputStateHandler.Directional.OmniDirection, moveSelectables,
+            moveSelector,true,true,null,null,true));
+        
+        for (var i = _currentParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
+            availableMovesText[i].text = "";
     }
     public void UseMove(Move move,Battle_Participant user)
     {
@@ -369,19 +381,17 @@ public class Battle_handler : MonoBehaviour
     public void ResetMoveUsability()
     {
         selectedMove = false; 
-        moveButtons[_currentMoveIndex].GetComponent<Button>().interactable = true;
         _currentMoveIndex = 0;
     }
-    public void SelectMove(int moveNum)
+    public void SelectMove(int moveIndex)
     {
         ResetMoveUsability();
-        _currentMoveIndex = moveNum-1;
+        _currentMoveIndex = moveIndex;
         var currentMove = _currentParticipant.pokemon.moveSet[_currentMoveIndex];
         movePowerPointsText.text = "PP: " + currentMove.powerpoints+ "/" + currentMove.maxPowerpoints;
         movePowerPointsText.color = (currentMove.powerpoints == 0)? Color.red : Color.black;
         moveTypeText.text = currentMove.type.typeName;
         selectedMove = true;
-        moveButtons[_currentMoveIndex].GetComponent<Button>().interactable = false;
     }
     int MoneyModifier()
     {
@@ -507,6 +517,7 @@ public class Battle_handler : MonoBehaviour
         if(playerWhiteOut) Options_manager.Instance.HealPartyPokemon();
         Area_manager.Instance.SwitchToArea(location, 0f);
         Dialogue_handler.Instance.DisplayDialogueExit(true);
+        InputStateHandler.Instance.ResetRelevantUi(new[]{"Pokemon Battle"});
         battleWon = false;
         battleOver = false;
     }
@@ -551,6 +562,6 @@ void ResetRunLogic()
         viewingOptions = false;
         optionsUI.SetActive(false);
         movesUI.SetActive(true);
-        LoadTextDataForMoves();
+        LoadMoveInputAndText();
     }
 }

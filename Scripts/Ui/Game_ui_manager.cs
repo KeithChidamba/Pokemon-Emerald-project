@@ -103,6 +103,8 @@ public class Game_ui_manager : MonoBehaviour
         ManageScreens(-1);
         Poke_Mart.Instance.ExitStore();
         ActivateUiElement(Poke_Mart.Instance.storeUI, false);
+        Dialogue_handler.Instance.DisplayList("Would you like anything else?", 
+            "", new[]{ "BuyMore","LeaveStore" }, new[]{"Yes", "No"});
     }
     private void CloseBag()
     {

@@ -167,6 +167,7 @@ public class InputStateHandler : MonoBehaviour
     }
     public void ChangeInputState(InputState newState)
     {
+        ResetCoordinates();
         if (!stateLayers.Any(s => s.stateName == newState.stateName))
             stateLayers.Add(newState);
         ResetInputEvents();
@@ -238,6 +239,11 @@ public class InputStateHandler : MonoBehaviour
             ,new(Bag.Instance.itemUsageUi[2],Bag.Instance.RemoveItem,Bag.Instance.itemDroppable)
         };
         itemUsageSelectables.RemoveAll(s=>!s.canBeSelected);
+        if (itemUsageSelectables.Count == 0)
+        {
+            Dialogue_handler.Instance.DisplayInfo("Cant use this item right now","Details",1f);
+            return;
+        }
         ChangeInputState(new InputState("Player Bag Item Usage",false,null, Directional.Horizontal, itemUsageSelectables
             ,Bag.Instance.itemUsageSelector,true,true,null,null,true));
         currentState.selector.SetActive(true);
@@ -367,7 +373,7 @@ public class InputStateHandler : MonoBehaviour
         
         ChangeInputState(new InputState("Pokemon Storage Box Navigation",false,null,Directional.OmniDirection
             ,storageBoxSelectables,pokemon_storage.Instance.boxSelector, true, 
-            true,ResetCoordinates,ResetCoordinates,true));
+            true,null,null,true));
 
     }
     public void PokemonStoragePartyNavigation()
@@ -408,6 +414,37 @@ public class InputStateHandler : MonoBehaviour
         OnInputUp += ()=>Poke_Mart.Instance.ChangeItemQuantity(1);
         OnInputDown += ()=>Poke_Mart.Instance.ChangeItemQuantity(-1);
     }
+    
+    void SetupBattleOptions()
+    {
+        currentState.currentSelectionIndex = 0;
+        _currentNumBoxElements = 4;
+        _currentBoxCapacity = 4;
+        _numBoxColumns = 2;
+        SetRowRemainder();
+        OnInputLeft += ()=>MoveCoordinates(Directional.Horizontal,-1);
+        OnInputRight += ()=>MoveCoordinates(Directional.Horizontal,1);
+        OnInputUp += ()=>MoveCoordinates(Directional.Vertical,-2);
+        OnInputDown += ()=>MoveCoordinates(Directional.Vertical,2);
+    }
+    
+    void SetupMoveSelection()
+    {
+        currentState.currentSelectionIndex = 0;
+        _currentNumBoxElements = 4;
+        _currentBoxCapacity = 4;
+        _numBoxColumns = 2;
+        SetRowRemainder();
+        OnInputLeft += ()=>MoveCoordinates(Directional.Horizontal,-1);
+        OnInputRight += ()=>MoveCoordinates(Directional.Horizontal,1);
+        OnInputUp += ()=>MoveCoordinates(Directional.Vertical,-2);
+        OnInputDown += ()=>MoveCoordinates(Directional.Vertical,2);
+        
+        OnInputLeft += ()=> Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
+        OnInputRight += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
+        OnInputUp += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
+        OnInputDown += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
+    }
     void SetupInputEvents()
     {
         Action stateMethod = currentState.stateName switch
@@ -418,6 +455,8 @@ public class InputStateHandler : MonoBehaviour
             "Pokemon Storage Box Navigation"=>SetupBoxNavigation,
             "Mart Item Navigation"=>PokeMartNavigation,
             "Mart Item Purchase"=>ItemToBuyInputs,
+            "Pokemon Battle Options"=>SetupBattleOptions,
+            "Pokemon Battle Move Selection"=>SetupMoveSelection,
             _ => null
         };
         stateMethod?.Invoke();

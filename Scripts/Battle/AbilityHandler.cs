@@ -159,6 +159,7 @@ public class AbilityHandler : MonoBehaviour
     void GiveItem()
     {
         if (_participant.pokemon.hasItem) return;
+        if (!_participant.pokemon.hasTrainer) return;//wild pokemon dont need to be picking up items when battle ends
         //Check level and 10% pickup chance
         if (_participant.pokemon.currentLevel < 5) return;
         if (Utility.RandomRange(1, 101) > 10) return;

@@ -76,7 +76,7 @@
     ],
     "moveSet": [
         {
-            "instanceID": -4402
+            "instanceID": -9090
         }
     ],
     "ability": {
@@ -92,10 +92,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31846
+        "instanceID": 31812
     },
     "backPicture": {
-        "instanceID": 31848
+        "instanceID": 31814
     },
     "pokeballName": "",
     "abilityName": "Static",

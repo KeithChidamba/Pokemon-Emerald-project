@@ -80,16 +80,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -4362
+            "instanceID": -9050
         },
         {
-            "instanceID": -4364
+            "instanceID": -9052
         },
         {
-            "instanceID": -4366
+            "instanceID": -9054
         },
         {
-            "instanceID": -4368
+            "instanceID": -9056
         }
     ],
     "ability": {
@@ -108,10 +108,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31944
+        "instanceID": 31910
     },
     "backPicture": {
-        "instanceID": 31946
+        "instanceID": 31912
     },
     "pokeballName": "",
     "abilityName": "Blaze",
