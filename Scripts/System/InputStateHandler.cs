@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class InputStateHandler : MonoBehaviour
 {
@@ -445,6 +442,13 @@ public class InputStateHandler : MonoBehaviour
         OnInputUp += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
         OnInputDown += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
     }
+
+    void SetupEnemySelection()
+    {
+        Battle_handler.Instance.SelectEnemy(3);
+        OnInputLeft += ()=> Battle_handler.Instance.SelectEnemy(-1);
+        OnInputRight += () => Battle_handler.Instance.SelectEnemy(1);
+    }
     void SetupInputEvents()
     {
         Action stateMethod = currentState.stateName switch
@@ -457,6 +461,7 @@ public class InputStateHandler : MonoBehaviour
             "Mart Item Purchase"=>ItemToBuyInputs,
             "Pokemon Battle Options"=>SetupBattleOptions,
             "Pokemon Battle Move Selection"=>SetupMoveSelection,
+            "Pokemon Battle Enemy Selection"=>SetupEnemySelection,
             _ => null
         };
         stateMethod?.Invoke();

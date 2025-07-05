@@ -33,11 +33,17 @@ public class Turn_Based_Combat : MonoBehaviour
     public void SaveMove(Turn turn)
     {
         _turnHistory.Add(turn);
-        if( (Battle_handler.Instance.isDoubleBattle && IsLastParticipant())
-         || (currentTurnIndex == Battle_handler.Instance.participantCount ))
+        if ((Battle_handler.Instance.isDoubleBattle && IsLastParticipant())
+            || (currentTurnIndex == Battle_handler.Instance.participantCount))
+        {
+            InputStateHandler.Instance.ResetRelevantUi(new[]{"Pokemon Battle Enemy Selection"});
             StartCoroutine(ExecuteMoves(SetPriority()));
+        }
         else
+        {
+            InputStateHandler.Instance.ResetRelevantUi(new[]{"Pokemon Battle Move Selection","Pokemon Battle Enemy Selection"});
             NextTurn();
+        }
     }
 
     private bool IsLastParticipant()

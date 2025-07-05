@@ -101,15 +101,30 @@ public class Battle_handler : MonoBehaviour
         AutoAim();
     }
 
-    private void PlayerExecuteMove()
+    private void AllowEnemySelection()
     {
-        if (_currentParticipant.enemySelected)
+        if (!isDoubleBattle)
         {
-            UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant);
-            choosingMove = false;
+            PlayerExecuteMove();
+            return;
         }
-        else
-            Dialogue_handler.Instance.DisplayInfo("Click on who you will attack", "Battle Display Message");
+        var enemySelectables = new List<SelectableUI>();
+        for (var i = 2; i < battleParticipants.Length; i++)
+        {
+            enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,PlayerExecuteMove,true));
+        }
+        
+        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Battle Enemy Selection",false,
+            null, InputStateHandler.Directional.Horizontal, enemySelectables,
+            null,true,false,null,null,true));
+
+    }
+    private void PlayerExecuteMove()
+    {//selecting enemy only happens in double battle
+        
+        battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
+        UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant); 
+        choosingMove = false;
     }
     void ResetAi()
     {
@@ -135,20 +150,22 @@ public class Battle_handler : MonoBehaviour
     {
         if (!Options_manager.Instance.playerInBattle) return;
         movesUI.SetActive(false);
-        optionsUI.SetActive(true);
+        optionsUI.SetActive(true); 
     }
 
-    public void SelectEnemy(int choice)
+    public void SelectEnemy(int change)
     {
-        if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return; //not player's turn
-        if (isDoubleBattle & choice < 2)
-        {
-            //cant attack own pokemon
-            _currentParticipant.enemySelected = false;
-            return;
-        }
+        battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
+        
+        var partnerIndex = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].GetPartnerIndex(); 
+        var attackables = new[] {partnerIndex,2,3}; //can attack partner and enemies
+        var currentPos = Array.IndexOf(attackables,currentEnemyIndex);        
+        var choiceIndex = Mathf.Clamp(currentPos+change,0,2);//index of attackables
+        
+        currentEnemyIndex = attackables[choiceIndex];
+        battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(17,96,54);
+
         _currentParticipant.enemySelected = true;
-        currentEnemyIndex = choice;
     }
 
     private void SetupBattle()
@@ -354,7 +371,7 @@ public class Battle_handler : MonoBehaviour
         for (var i = 0; i < _currentParticipant.pokemon.moveSet.Count; i++)
         {
             availableMovesText[i].text = _currentParticipant.pokemon.moveSet[i].moveName;
-            moveSelectables.Add( new (availableMovesText[i].gameObject,PlayerExecuteMove,true));
+            moveSelectables.Add( new (availableMovesText[i].gameObject,AllowEnemySelection,true));
         }
         
         InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Battle Move Selection",false,
@@ -521,8 +538,7 @@ public class Battle_handler : MonoBehaviour
         battleWon = false;
         battleOver = false;
     }
-    public void RunAway()
-    {
+    public void RunAway() {
         runningAway = true;
         displayingInfo = true;
         if(!isTrainerBattle & !_currentParticipant.canEscape)

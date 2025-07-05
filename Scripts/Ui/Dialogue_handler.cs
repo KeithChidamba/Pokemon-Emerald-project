@@ -83,7 +83,8 @@ public class Dialogue_handler : MonoBehaviour
     }
 
     public void  DeletePreviousOptions()
-    {
+    { 
+        if( _dialogueOptionsManager.currentOptions.Count == 0) return;
         ActivateOptions(false);
         InputStateHandler.Instance.RemoveTopInputLayer(true);
         _dialogueOptionsManager.currentOptions.Clear();
