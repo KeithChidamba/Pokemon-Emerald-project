@@ -6431,8 +6431,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState:
-    stateName: 
-    stateNameLower: 
+    stateName: 0
+    stateGroups: 
     stateDirectional: 3
     selectableUis: []
     currentSelectionIndex: 0
@@ -6644,7 +6644,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactable:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   interactionPoint: {fileID: 1418617663}
   detectDistance: 0.15
 --- !u!114 &221403255
@@ -6659,7 +6659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773679aa6efec744a35e94fd60d4789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 1465551227}
+  manager: {fileID: 1606520307}
   fishing: 0
   pokemonBitingPole: 0
   doingAction: 0
@@ -24016,8 +24016,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 36, y: 181.43492}
-  m_SizeDelta: {x: 928.8788, y: 594.2694}
+  m_AnchoredPosition: {x: 33, y: 73}
+  m_SizeDelta: {x: 1000, y: 625}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &794004210
 MonoBehaviour:
@@ -28279,7 +28279,6 @@ MonoBehaviour:
   - {fileID: 1041801303}
   storageIconPositionsParent: {fileID: 1330329151}
   swapping: 0
-  hasSelectedPokemon: 0
   initialSelector: {fileID: 1554805902}
   boxSelector: {fileID: 1211313107}
   partySelector: {fileID: 1261064435}
@@ -62159,7 +62158,6 @@ GameObject:
   - component: {fileID: 1465551224}
   - component: {fileID: 1465551225}
   - component: {fileID: 1465551226}
-  - component: {fileID: 1465551227}
   m_Layer: 7
   m_Name: player
   m_TagString: Player
@@ -62237,29 +62235,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &1465551227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465551221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe70b071fe195a24d95f0d058583ce62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 1606520301}
-  playerWalk: Player_walk
-  playerIdle: Player_idle
-  playerRun: Player_run
-  rideBike: Ride_Bike
-  bikeIdle: Bike_idle
-  fishingStart: Fishing_Start
-  fishingEnd: Fishing_End
-  fishingIdle: Fishing_idle
-  movementDirectionParameter: Movement Direction
-  idleDirectionParameter: Idle Direction
 --- !u!1 &1465891483
 GameObject:
   m_ObjectHideFlags: 0
@@ -66169,6 +66144,7 @@ GameObject:
   - component: {fileID: 1606520300}
   - component: {fileID: 1606520305}
   - component: {fileID: 1606520306}
+  - component: {fileID: 1606520307}
   m_Layer: 7
   m_Name: Character_sprite
   m_TagString: Player
@@ -66357,6 +66333,29 @@ CapsuleCollider2D:
   m_Offset: {x: 0.0019704401, y: -0.0141212195}
   m_Size: {x: 0.10978705, y: 0.16175756}
   m_Direction: 0
+--- !u!114 &1606520307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606520297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe70b071fe195a24d95f0d058583ce62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1606520301}
+  playerWalk: Player_walk
+  playerIdle: Player_idle
+  playerRun: Player_run
+  rideBike: Ride_Bike
+  bikeIdle: Bike_idle
+  fishingStart: Fishing_Start
+  fishingEnd: Fishing_End
+  fishingIdle: Fishing_idle
+  movementDirectionParameter: Movement Direction
+  idleDirectionParameter: Idle Direction
 --- !u!1 &1606878481
 GameObject:
   m_ObjectHideFlags: 0

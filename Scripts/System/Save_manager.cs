@@ -64,7 +64,7 @@ public class Save_manager : MonoBehaviour
     }
     public void OnDownloadComplete()//js notification
     {
-        Dialogue_handler.Instance.DisplayInfo("Save data downloaded successfully!", "Details");
+        Dialogue_handler.Instance.DisplayDetails("Save data downloaded successfully!");
     }
     public void OnIDBFSReady()//js notification
     {
@@ -72,7 +72,7 @@ public class Save_manager : MonoBehaviour
     }
     IEnumerator SyncFromIndexedDB()
     {
-        Dialogue_handler.Instance.DisplayInfo("Game Loaded","Details");
+        Dialogue_handler.Instance.DisplayDetails("Game Loaded");
         LoadPlayerData(); 
         LoadItemData();
         LoadPokemonData();
@@ -104,12 +104,12 @@ public class Save_manager : MonoBehaviour
             Game_Load.Instance.playerData = LoadPlayerFromJson(_saveDataPath+"/Player/" + Path.GetFileName(playerList[0]));
         else if (playerList.Count > 1)
         {
-            Dialogue_handler.Instance.DisplayInfo("Please ensure only one player's data is in the save_data folder!","Details");
+            Dialogue_handler.Instance.DisplayDetails("Please ensure only one player's data is in the save_data folder!");
             Game_Load.Instance.PreventGameLoad();
         }
         else
         {
-            Dialogue_handler.Instance.DisplayInfo("There was no save data found!","Details");
+            Dialogue_handler.Instance.DisplayDetails("There was no save data found!");
             Game_Load.Instance.PreventGameLoad();
         }
     }
@@ -206,7 +206,7 @@ public class Save_manager : MonoBehaviour
 
     public void SaveAllData()
     {
-        Dialogue_handler.Instance.DisplayInfo("Saving...", "Details");
+        Dialogue_handler.Instance.DisplayDetails("Saving...");
         EraseSaveData();
         for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
         {
@@ -257,11 +257,11 @@ public class Save_manager : MonoBehaviour
         #if UNITY_WEBGL && !UNITY_EDITOR
                                 DownloadZipAndStoreLocally();
         #endif
-        Dialogue_handler.Instance.DisplayInfo("Game saved online but please download your save file", "Details");
+        Dialogue_handler.Instance.DisplayDetails("Game saved online but please download your save file");
         
         if (Application.platform == RuntimePlatform.WebGLPlayer) return;
         
-        Dialogue_handler.Instance.DisplayInfo("Game saved", "Details");
+        Dialogue_handler.Instance.DisplayDetails("Game saved");
         Dialogue_handler.Instance.EndDialogue(1f);
     }
 

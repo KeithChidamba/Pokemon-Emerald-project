@@ -21,9 +21,18 @@ public class InputStateHandler : MonoBehaviour
     public List<InputState> stateLayers;
     public enum Directional { None, Horizontal, Vertical, OmniDirection}
 
-    public enum StateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonStorageBox,PokemonStorageParty,PokemonBattle,PokeMart }
-    public enum StateName {Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions
-        ,PokemonStoragePartyOptions ,PokemonStorageBoxOptions , PokemonDetailsMoveData }
+    public enum StateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonStorageBox
+        ,PokemonStorageParty,PokemonBattle,PokeMart }
+    public enum StateName 
+    {
+        Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
+        PokemonStorage,PokemonStoragePartyOptions ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
+        PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
+        PlayerBagItemSell,PlayerBagItemUsage,PlayerBagNavigation,
+        PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
+        MartItemPurchase,MartItemNavigation,
+        PlayerMenu,PlayerProfile
+    }
 
     public int[] boxCoordinates={0,0};
     private int _currentBoxCapacity;
@@ -44,7 +53,7 @@ public class InputStateHandler : MonoBehaviour
     private void Start()
     {
         Game_Load.Instance.OnGameStarted += () => _readingInputs = true;
-        _emptyState = new InputState(StateName.Empty,StateGroup.None, false, null, Directional.None, null, null,
+        _emptyState = new InputState(StateName.Empty,new[]{StateGroup.None}, false, null, Directional.None, null, null,
             false, false, null, null, true);
         currentState = _emptyState;
         _currentStateLoaded = false;
@@ -76,7 +85,7 @@ public class InputStateHandler : MonoBehaviour
     {
         List<InputState> inputStates = new List<InputState>();
         foreach (var state in stateLayers)
-             if (state.stateGroup == keyword)
+             if (state.stateGroups.Contains(keyword))
                 inputStates.Add(state);
         
         return inputStates;
@@ -244,7 +253,9 @@ public class InputStateHandler : MonoBehaviour
     {
         Bag.Instance.sellingItems = true;
         var itemSellSelectables = new List<SelectableUI>{new(Bag.Instance.sellingItemUI,Bag.Instance.SellToMarket,true)};
-        ChangeInputState(new InputState("Player Bag Item Sell",StateGroup.Bag,false,null, 
+        ChangeInputState(new InputState(StateName.PlayerBagItemSell,
+            new[]{StateGroup.Bag}
+            ,false,null, 
             Directional.Vertical, itemSellSelectables
             ,Bag.Instance.sellingIndicator,false,
             true,null,()=>Bag.Instance.sellQuantity=1,true));
@@ -266,10 +277,10 @@ public class InputStateHandler : MonoBehaviour
         itemUsageSelectables.RemoveAll(s=>!s.canBeSelected);
         if (itemUsageSelectables.Count == 0)
         {
-            Dialogue_handler.Instance.DisplayInfo("Cant use this item right now","Details",1f);
+            Dialogue_handler.Instance.DisplayDetails("Cant use this item right now",1f);
             return;
         }
-        ChangeInputState(new InputState("Player Bag Item Usage",StateGroup.Bag,false,null, 
+        ChangeInputState(new InputState(StateName.PlayerBagItemUsage,new[]{StateGroup.Bag},false,null, 
             Directional.Horizontal, itemUsageSelectables
             ,Bag.Instance.itemUsageSelector,true,true,null,null,true));
         
@@ -291,7 +302,8 @@ public class InputStateHandler : MonoBehaviour
                 ,Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberIndex - 1].hasItem)
         };
         partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
-        ChangeInputState(new InputState("Pokemon Party Options",StateGroup.PokemonParty,false,null, Directional.Vertical, partyOptionsSelectables
+        ChangeInputState(new InputState(StateName.PokemonPartyOptions,
+            new[]{StateGroup.PokemonParty},false,null, Directional.Vertical, partyOptionsSelectables
             ,Pokemon_party.Instance.optionSelector,true,true
             ,Pokemon_party.Instance.ClearSelectionUI,Pokemon_party.Instance.ClearSelectionUI,true));
         currentState.selector.SetActive(true);
@@ -313,14 +325,14 @@ public class InputStateHandler : MonoBehaviour
         }
 
         Action onExit = null;
-//dont use turnary here,these booleans never are true at same time
         if (Pokemon_Details.Instance.changingMoveData) 
             onExit = () => Pokemon_Details.Instance.OnMoveSelected?.Invoke(-1);
 
         if (Pokemon_Details.Instance.learningMove)
             onExit = ()=> OnStateRemovalComplete += RemoveDetailsInputStates;
         
-        ChangeInputState(new InputState("Pokemon Details Move Selection",StateGroup.PokemonDetails,false, null,
+        ChangeInputState(new InputState(StateName.PokemonDetailsMoveSelection,new[]{StateGroup.PokemonDetails}
+            ,false, null,
             Directional.Vertical,moveSelectables, Pokemon_Details.Instance.moveSelector, true
             , true,null,onExit,true));
     }
@@ -329,7 +341,7 @@ public class InputStateHandler : MonoBehaviour
         OnStateRemovalComplete -= RemoveDetailsInputStates;
         //if started learning but rejected it on move selection screen
         Options_manager.Instance.SkipMove();
-        ResetRelevantUi(new [] { StateGroup.PokemonDetails });
+        ResetGroupUi(StateGroup.PokemonDetails);
     }
     private void ResetCoordinates()
     {
@@ -386,7 +398,7 @@ public class InputStateHandler : MonoBehaviour
     {
         if (pokemon_storage.Instance.numNonPartyPokemon == 0)
         {
-            Dialogue_handler.Instance.DisplayInfo("There are no pokemon in your storage","Details",1f);
+            Dialogue_handler.Instance.DisplayDetails("There are no pokemon in your storage",1f);
             return;
         }
         var storageBoxSelectables = new List<SelectableUI>();
@@ -398,9 +410,10 @@ public class InputStateHandler : MonoBehaviour
             storageBoxSelectables.Add(newSelectable);
         }
         
-        ChangeInputState(new InputState("Pokemon Storage Box Navigation",StateGroup.PokemonStorage,false,null,Directional.OmniDirection
-            ,storageBoxSelectables,pokemon_storage.Instance.boxSelector, true, 
-            true,null,null,true));
+        ChangeInputState(new InputState(StateName.PokemonStorageBoxNavigation
+            ,new[]{StateGroup.PokemonStorage,StateGroup.PokemonStorageBox},false
+            ,null,Directional.OmniDirection,storageBoxSelectables,pokemon_storage.Instance.boxSelector
+            , true, true,null,null,true));
 
     }
     public void PokemonStoragePartyNavigation()
@@ -414,8 +427,9 @@ public class InputStateHandler : MonoBehaviour
                 ,() => pokemon_storage.Instance.SelectPartyPokemon(icon.GetComponent<PC_party_pkm>()),true) );
         }
         
-        ChangeInputState(new InputState("Pokemon Storage Party Navigation",StateGroup.PokemonStorage,false,null,
-            Directional.Vertical, partySelectables, pokemon_storage.Instance.partySelector
+        ChangeInputState(new InputState(StateName.PokemonStoragePartyNavigation,
+            new[]{StateGroup.PokemonStorage,StateGroup.PokemonStorageParty},false,null
+            , Directional.Vertical, partySelectables, pokemon_storage.Instance.partySelector
             , true, true, ()=>pokemon_storage.Instance.swapping = false
             ,()=>pokemon_storage.Instance.swapping = false,true));
     }
@@ -430,10 +444,14 @@ public class InputStateHandler : MonoBehaviour
     void SelectItemToBuy()
     { 
         Poke_Mart.Instance.quantityUI.SetActive(true);
-        var itemQuantitySelectables = new List<SelectableUI>{new(Poke_Mart.Instance.quantityUI,Poke_Mart.Instance.BuyItem,true)};
-        ChangeInputState(new InputState("Mart Item Purchase",StateGroup.PokeMart,false,null, Directional.Vertical, itemQuantitySelectables
-            ,Poke_Mart.Instance.quantitySelector,false,
-            true,null,()=>Poke_Mart.Instance.selectedItemQuantity=1,true));
+        var itemQuantitySelectables = new List<SelectableUI>
+        {
+            new(Poke_Mart.Instance.quantityUI,Poke_Mart.Instance.BuyItem,true)
+        };
+        ChangeInputState(new InputState(StateName.MartItemPurchase,new[]{StateGroup.PokeMart}
+            ,false,null, Directional.Vertical, itemQuantitySelectables
+            ,Poke_Mart.Instance.quantitySelector,false
+            , true,null,()=>Poke_Mart.Instance.selectedItemQuantity=1,true));
     }
 
     void ItemToBuyInputs()
@@ -445,7 +463,7 @@ public class InputStateHandler : MonoBehaviour
     void SetupBattleOptions()
     {
         Battle_handler.Instance.ResetAi();
-        Dialogue_handler.Instance.DisplayInfo("What will you do?", "Battle Display Message");
+        Dialogue_handler.Instance.DisplayDetails("What will you do?");
         currentState.currentSelectionIndex = 0;
         _currentNumBoxElements = 4;
         _currentBoxCapacity = 4;
@@ -485,15 +503,15 @@ public class InputStateHandler : MonoBehaviour
     {
         Action stateMethod = currentState.stateName switch
         {
-            "Player Bag Navigation" => PlayerBagNavigation,
-            "Pokemon Details"=>SetupPokemonDetails,
-            "Player Bag Item Sell"=>ItemToSellInputs,
-            "Pokemon Storage Box Navigation"=>SetupBoxNavigation,
-            "Mart Item Navigation"=>PokeMartNavigation,
-            "Mart Item Purchase"=>ItemToBuyInputs,
-            "Pokemon Battle Options"=>SetupBattleOptions,
-            "Pokemon Battle Move Selection"=>SetupMoveSelection,
-            "Pokemon Battle Enemy Selection"=>SetupEnemySelection,
+            StateName.PlayerBagNavigation => PlayerBagNavigation,
+            StateName.PokemonDetails => SetupPokemonDetails,
+            StateName.PlayerBagItemSell => ItemToSellInputs,
+            StateName.PokemonStorageBoxNavigation => SetupBoxNavigation,
+            StateName.MartItemNavigation => PokeMartNavigation,
+            StateName.MartItemPurchase => ItemToBuyInputs,
+            StateName.PokemonBattleOptions => SetupBattleOptions,
+            StateName.PokemonBattleMoveSelection => SetupMoveSelection,
+            StateName.PokemonBattleEnemySelection => SetupEnemySelection,
             _ => null
         };
         stateMethod?.Invoke();

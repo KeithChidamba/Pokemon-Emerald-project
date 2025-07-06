@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: PC
   m_EditorClassIdentifier: 
-  InteractionMsg: Would you like to use the PC?
-  InteractionType: Options
-  InteractionOptions:
+  interactionMessage: Would you like to use the PC?
+  interactionType: 1
+  interactionOptions:
   - OpenPokemonStorage
   - 
-  ResultMessage: Booted up PC!
-  OptionsUiText:
+  resultMessage: Booted up PC!
+  optionsUiText:
   - Yes
   - No
-  AdditionalInfo: []
+  additionalInfo: []

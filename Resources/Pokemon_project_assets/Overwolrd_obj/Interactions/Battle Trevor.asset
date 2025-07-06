@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Battle Trevor
   m_EditorClassIdentifier: 
-  InteractionMsg: Hey! Let's double battle
-  InteractionType: Event
-  InteractionOptions:
+  interactionMessage: Hey! Let's double battle
+  interactionType: 2
+  interactionOptions:
   - Battle
-  ResultMessage: single-double
-  OptionsUiText: []
-  AdditionalInfo:
+  resultMessage: single-double
+  optionsUiText: []
+  additionalInfo:
   - Trevor

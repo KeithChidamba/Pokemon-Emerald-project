@@ -90,7 +90,7 @@ public class Battle_handler : MonoBehaviour
         }
         
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleEnemySelection
-            ,InputStateHandler.StateGroup.PokemonBattle,false,
+            ,new[] { InputStateHandler.StateGroup.PokemonBattle },false,
             null, InputStateHandler.Directional.Horizontal, enemySelectables,
             null,true,false,null,null,true));
     }
@@ -138,15 +138,16 @@ public class Battle_handler : MonoBehaviour
     {
         Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantStates;
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
-        
-        var battleOptionSelectables = new List<SelectableUI>{
-            new(battleOptions[0],LoadMoveInputAndText,true),
-            new(battleOptions[1],Game_ui_manager.Instance.ViewBag,true),
-            new(battleOptions[2],Game_ui_manager.Instance.ViewPokemonParty,true),
-            new(battleOptions[3],RunAway,true)
-        };        
+
+        var battleOptionSelectables = new List<SelectableUI>
+        {
+            new(battleOptions[0], LoadMoveInputAndText, true),
+            new(battleOptions[1], Game_ui_manager.Instance.ViewBag, true),
+            new(battleOptions[2], Game_ui_manager.Instance.ViewPokemonParty, true),
+            new(battleOptions[3], RunAway, true)
+        };
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleOptions
-            ,InputStateHandler.StateGroup.PokemonBattle,true,
+            , new[] { InputStateHandler.StateGroup.PokemonBattle }, true,
             optionsUI, InputStateHandler.Directional.OmniDirection, battleOptionSelectables,
            optionSelector,true,true,null,null,false));
         
@@ -342,7 +343,7 @@ public class Battle_handler : MonoBehaviour
         }
         
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleMoveSelection
-            ,InputStateHandler.StateGroup.PokemonBattle,true,
+            ,new[] { InputStateHandler.StateGroup.PokemonBattle },true,
             movesUI, InputStateHandler.Directional.OmniDirection, moveSelectables,
             moveSelector,true,true,ResetMoveUsability,ResetMoveUsability,true));
         
@@ -358,7 +359,6 @@ public class Battle_handler : MonoBehaviour
             ,currentEnemyIndex
             , user.pokemon.pokemonID.ToString()
             ,battleParticipants[currentEnemyIndex].pokemon.pokemonID.ToString());
-        Debug.Log(user.pokemon.pokemonName+"used a move");
         Turn_Based_Combat.Instance.SaveMove(currentTurn);
     }
     private void ResetMoveUsability()

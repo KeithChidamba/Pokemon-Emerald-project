@@ -48,8 +48,8 @@ public class Pokemon_party : MonoBehaviour
         {
             var swapIn = Battle_handler.Instance.battleParticipants[memberPosition - 1];
             
-            Dialogue_handler.Instance.DisplayInfo(swapIn.pokemon.pokemonName +
-                                                  " is already in battle", "Details", 1f);
+            Dialogue_handler.Instance.DisplayDetails(swapIn.pokemon.pokemonName +
+                                                  " is already in battle", 1f);
             return false;
         }
         var participantIndex = (Battle_handler.Instance.isDoubleBattle & swappingIn)
@@ -58,8 +58,8 @@ public class Pokemon_party : MonoBehaviour
         var currentParticipant = Battle_handler.Instance.battleParticipants[participantIndex];
         if (!currentParticipant.canEscape & swappingIn)
         {
-            Dialogue_handler.Instance.DisplayInfo(currentParticipant.pokemon.pokemonName +
-                                                  " is trapped", "Details", 1f);
+            Dialogue_handler.Instance.DisplayDetails(currentParticipant.pokemon.pokemonName +
+                                                  " is trapped", 1f);
             return false;
         }
         return true;
@@ -81,14 +81,14 @@ public class Pokemon_party : MonoBehaviour
         {
             if (numMembers > 1)
             {
-                Dialogue_handler.Instance.DisplayInfo("Select Pokemon to swap with","Details");
+                Dialogue_handler.Instance.DisplayDetails("Select Pokemon to swap with");
                 moving = true;
                 memberToMove = memberPosition;
                 partyOptionsParent.SetActive(false);
                 InputStateHandler.Instance.RemoveTopInputLayer(false);
             }
             else
-                Dialogue_handler.Instance.DisplayInfo("There must be at least 2 Pokemon to swap","Details",1f);
+                Dialogue_handler.Instance.DisplayDetails("There must be at least 2 Pokemon to swap",1f);
         }
     }
 
@@ -159,14 +159,14 @@ public class Pokemon_party : MonoBehaviour
         var selectedMember = memberCards[memberPosition - 1];
         if (selectedMember.pokemon.hasItem)
         {
-            Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.pokemonName
-                                                 +" is already holding something","Details",1f);
+            Dialogue_handler.Instance.DisplayDetails(selectedMember.pokemon.pokemonName
+                                                 +" is already holding something",1f);
             givingItem = false;
             _itemToUse = null;
             return;
         }
-        Dialogue_handler.Instance.DisplayInfo(selectedMember.pokemon.pokemonName
-                                             +" received a "+_itemToUse.itemName,"Details",1.3f);
+        Dialogue_handler.Instance.DisplayDetails(selectedMember.pokemon.pokemonName
+                                             +" received a "+_itemToUse.itemName,1.3f);
         selectedMember.pokemon.GiveItem(Obj_Instance.CreateItem(_itemToUse));
         _itemToUse.quantity--;
         Bag.Instance.CheckItemQuantity(_itemToUse);
@@ -212,7 +212,7 @@ public class Pokemon_party : MonoBehaviour
         memberSelector.SetActive(false);
         ClearSelectionUI();
         if(!swappingIn && !swapOutNext)
-            Dialogue_handler.Instance.DisplayInfo(message,"Details",1f);
+            Dialogue_handler.Instance.DisplayDetails(message,1f);
     }
     public void AddMember(Pokemon pokemon)
     { //add new pokemon after catch or event

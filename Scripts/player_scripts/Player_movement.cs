@@ -33,7 +33,7 @@ public class Player_movement : MonoBehaviour
             return;
         }
         Instance = this;
-        _animationManager = GetComponent<Animation_manager>();
+        _animationManager = GetComponentInChildren<Animation_manager>();
     }
 
     public void AllowPlayerMovement()
@@ -143,7 +143,7 @@ public class Player_movement : MonoBehaviour
             _canSwitchMovement = false;
         }       
         else if (Input.GetKeyDown(KeyCode.E) && !canUseBike)
-            Dialogue_handler.Instance.DisplayInfo("Cant use bike here","Details",1f);
+            Dialogue_handler.Instance.DisplayDetails("Cant use bike here",1f);
         
         if (Input.GetKeyUp(KeyCode.E) && usingBike)
             _canSwitchMovement = true;
@@ -195,11 +195,11 @@ public class Player_movement : MonoBehaviour
 
     private float HandleInput(string axisName)
     { 
-        var inputs = axisName == "Vertical"? new []{KeyCode.DownArrow,KeyCode.UpArrow} : new []{KeyCode.LeftArrow,KeyCode.RightArrow};
-        if (Input.GetKey(inputs[0]))
-            return -1f;
-        if (Input.GetKey(inputs[1]))
-            return 1f;
+        var inputs = axisName == "Vertical"? new []{KeyCode.DownArrow,KeyCode.UpArrow} 
+            : new []{KeyCode.LeftArrow,KeyCode.RightArrow};
+        
+        if (Input.GetKey(inputs[0])) return -1f;
+        if (Input.GetKey(inputs[1])) return 1f;
         return 0;
     }
 }

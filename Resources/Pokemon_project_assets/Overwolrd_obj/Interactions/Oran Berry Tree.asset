@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Oran Berry Tree
   m_EditorClassIdentifier: 
   interactionMessage: It's a berry tree, do you want to pick a bery?
-  interactionType: Options
+  interactionType: 1
   interactionOptions:
   - PickBerryFromTree
   - 

@@ -37,7 +37,7 @@ public class Turn_Based_Combat : MonoBehaviour
             || (currentTurnIndex == Battle_handler.Instance.participantCount))
         {
             InputStateHandler.Instance.AddPlaceHolderState();
-            StartCoroutine(ExecuteMoves(SetPriority()));
+            StartCoroutine(ExecuteMoves(SetPriority()));    
         }
         else
         {

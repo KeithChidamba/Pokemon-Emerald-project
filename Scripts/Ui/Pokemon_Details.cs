@@ -94,7 +94,8 @@ public class Pokemon_Details : MonoBehaviour
             return;
         }
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonDetailsMoveData,
-            InputStateHandler.StateGroup.PokemonDetails,false, null, 
+            new[]{InputStateHandler.StateGroup.PokemonDetails}
+            ,false, null, 
             InputStateHandler.Directional.None, null, null, false
             , false,null,RemoveMoveDescription,true));
 

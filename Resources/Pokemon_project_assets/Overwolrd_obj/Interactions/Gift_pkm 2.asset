@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Gift_pkm 2
   m_EditorClassIdentifier: 
-  InteractionMsg: It's a pokeball with a pokemon inside, take it?
-  InteractionType: Options
-  InteractionOptions:
+  interactionMessage: It's a pokeball with a pokemon inside, take it?
+  interactionType: 1
+  interactionOptions:
   - ReceiveGiftPokemon
   - 
-  ResultMessage: Torchic
-  OptionsUiText:
+  resultMessage: Torchic
+  optionsUiText:
   - Yes
   - No
-  AdditionalInfo: []
+  additionalInfo: []

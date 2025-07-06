@@ -85,7 +85,8 @@ public class Game_ui_manager : MonoBehaviour
         for (var i =0; i<menuOptionsMethods.Count;i++)
             menuSelectables.Add( new(menuUiOptions[i],menuOptionsMethods[i],true) );
             
-        InputStateHandler.Instance.ChangeInputState(new InputState("Player Menu",true,menuOptions,
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerMenu,
+            new[] { InputStateHandler.StateGroup.None},true,menuOptions,
             InputStateHandler.Directional.Vertical, menuSelectables,menuSelector,true, true,CloseMenu,CloseMenu,true));
     }
     private void ActivateUiElement(GameObject ui,bool activated)
@@ -152,7 +153,8 @@ public class Game_ui_manager : MonoBehaviour
         
         foreach(var item in Bag.Instance.bagItemsUI) bagSelectables.Add( new(item.gameObject,null,true) );
         
-        InputStateHandler.Instance.ChangeInputState(new InputState("Player Bag Navigation",true,
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerBagNavigation,
+            new[] { InputStateHandler.StateGroup.Bag},true,
             Bag.Instance.bagUI, InputStateHandler.Directional.Vertical, bagSelectables,
                     Bag.Instance.itemSelector,true,true,CloseBag,CloseBag,true));
     }
@@ -161,30 +163,36 @@ public class Game_ui_manager : MonoBehaviour
         ManageScreens(1);
         ActivateUiElement(profile.gameObject,true);
         profile.LoadProfile(Game_Load.Instance.playerData);
-        InputStateHandler.Instance.ChangeInputState(new InputState("Player Profile",true,profile.gameObject
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerProfile
+            ,new[] { InputStateHandler.StateGroup.None},true
+            ,profile.gameObject
             ,InputStateHandler.Directional.None, null,
             null,false, false,CloseProfile,CloseProfile,true));
     }
+
     public void ViewPokemonParty()
     {
         ManageScreens(1);
         Dialogue_handler.Instance.EndDialogue();
         Pokemon_party.Instance.ClearSelectionUI();
-        ActivateUiElement(Pokemon_party.Instance.partyUI,true);
+        ActivateUiElement(Pokemon_party.Instance.partyUI, true);
         Pokemon_party.Instance.RefreshMemberCards();
 
-        var partyUsageState = Item_handler.Instance.usingItem? "Pokemon Party Item Usage" : "Pokemon Party Navigation";
-        
+        var partyUsageState = Item_handler.Instance.usingItem
+            ? InputStateHandler.StateName.PokemonPartyItemUsage
+            : InputStateHandler.StateName.PokemonPartyNavigation;
+
         var partySelectables = new List<SelectableUI>();
 
-        for (var i = 0 ;i< Pokemon_party.Instance.numMembers;i++)
+        for (var i = 0; i < Pokemon_party.Instance.numMembers; i++)
         {
             var memberNumber = i + 1;
-            partySelectables.Add( new(Pokemon_party.Instance.memberCards[i].gameObject
-                ,() => Pokemon_party.Instance.SelectMember(memberNumber),true) );
+            partySelectables.Add(new(Pokemon_party.Instance.memberCards[i].gameObject
+                , () => Pokemon_party.Instance.SelectMember(memberNumber), true));
         }
-        
-        InputStateHandler.Instance.ChangeInputState(new InputState(partyUsageState,true,Pokemon_party.Instance.partyUI,
+
+        InputStateHandler.Instance.ChangeInputState(new InputState(partyUsageState,
+            new[]{InputStateHandler.StateGroup.PokemonParty }, true,Pokemon_party.Instance.partyUI,
             InputStateHandler.Directional.Vertical, partySelectables, Pokemon_party.Instance.memberSelector
             , true, true,CloseParty,CloseParty,true));
     }
@@ -197,21 +205,27 @@ public class Game_ui_manager : MonoBehaviour
             ,new(null,null,true)
             ,new(null,InputStateHandler.Instance.AllowMoveUiNavigation,true)
         };
-        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Details",true,Pokemon_Details.Instance.uiParent,
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonDetails
+            ,new[] { InputStateHandler.StateGroup.PokemonDetails}, true,Pokemon_Details.Instance.uiParent,
             InputStateHandler.Directional.Horizontal,detailsSelectables, null
             , true, false,ClosePokemonDetails,ClosePokemonDetails,true));
+        
         Pokemon_Details.Instance.LoadDetails(pokemonToView);
-
     }
+
     public void ViewPokemonStorage()
     {
         ManageScreens(1);
-        ActivateUiElement(pokemon_storage.Instance.storageUI,true);
-        var storageSelectables = new List<SelectableUI>{
-            new(pokemon_storage.Instance.initialStorageOptions[0],InputStateHandler.Instance.PokemonStorageBoxNavigation,true)
-            ,new(pokemon_storage.Instance.initialStorageOptions[1],InputStateHandler.Instance.PokemonStoragePartyNavigation,true)
+        ActivateUiElement(pokemon_storage.Instance.storageUI, true);
+        var storageSelectables = new List<SelectableUI>
+        {
+            new(pokemon_storage.Instance.initialStorageOptions[0],
+                InputStateHandler.Instance.PokemonStorageBoxNavigation, true),
+            new(pokemon_storage.Instance.initialStorageOptions[1],
+                InputStateHandler.Instance.PokemonStoragePartyNavigation, true)
         };
-        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Storage",true,pokemon_storage.Instance.storageUI,
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorage,
+            new[] { InputStateHandler.StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
             InputStateHandler.Directional.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector
             , true, true,ClosePokemonStorage,ClosePokemonStorage,true));
         pokemon_storage.Instance.OpenPC();
@@ -228,7 +242,8 @@ public class Game_ui_manager : MonoBehaviour
         foreach(var item in Poke_Mart.Instance.storeItemsUI) 
             martSelectables.Add( new(item.gameObject,null,true) );
         
-        InputStateHandler.Instance.ChangeInputState(new InputState("Mart Item Navigation",true,
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.MartItemNavigation
+            ,new[] { InputStateHandler.StateGroup.PokeMart },true,
             Poke_Mart.Instance.storeUI, InputStateHandler.Directional.Vertical, martSelectables,
             Poke_Mart.Instance.itemSelector,true,true,ClosePokeMart,ClosePokeMart,true));
     }

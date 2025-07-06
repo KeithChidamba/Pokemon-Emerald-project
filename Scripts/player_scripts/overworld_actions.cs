@@ -21,10 +21,10 @@ public class overworld_actions : MonoBehaviour
             return;
         }
         Instance = this;
+        manager.OnFishingStart += StartFishingAction;
     }
     void Update()
     {
-
         if (usingUI)
         {
             Player_movement.Instance.RestrictPlayerMovement();
@@ -55,21 +55,25 @@ public class overworld_actions : MonoBehaviour
         if (random < 5)
         {
             pokemonBitingPole = true;
-            Dialogue_handler.Instance.DisplayInfo("Oh!, a Bite!, Press F","Details");
+            Dialogue_handler.Instance.DisplayDetails("Oh!, a Bite!, Press F");
             yield return new WaitForSeconds( (2 * (random/10f) ) + 1f);
             if (pokemonBitingPole)
             {
-                Dialogue_handler.Instance.DisplayInfo("It got away","Details");
+                Dialogue_handler.Instance.DisplayDetails("It got away");
                 ResetFishingAction();
+                yield return new WaitForSeconds(1);
+                ActionReset();
             }
         }
         else
         {
-            Dialogue_handler.Instance.DisplayInfo("Dang...nothing","Details");
+            Dialogue_handler.Instance.DisplayDetails("Dang...nothing");
             ResetFishingAction();
+            yield return new WaitForSeconds(1);
+            ActionReset();
         }
     }
-    void StartFishingAction()
+    private void StartFishingAction()
     {
         fishing = true;
         StartCoroutine(TryFishing());
@@ -78,9 +82,7 @@ public class overworld_actions : MonoBehaviour
     {
         fishing = false;
         pokemonBitingPole = false;
-        Invoke(nameof(ActionReset), 0.8f);
         manager.ChangeAnimationState(manager.fishingEnd);
-        Dialogue_handler.Instance.EndDialogue();
     }
     void ActionReset()
     {

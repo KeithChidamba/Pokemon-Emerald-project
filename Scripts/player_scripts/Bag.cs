@@ -68,7 +68,7 @@ public class Bag : MonoBehaviour
         var itemToSell = bagItems[topIndex + selectedItem];
         if (!itemToSell.canBeSold)
         {
-            Dialogue_handler.Instance.DisplayInfo("You cant sell that!","Details");
+            Dialogue_handler.Instance.DisplayDetails("You cant sell that!");
             return;
         }
         var price = itemToSell.price;
@@ -180,17 +180,17 @@ public class Bag : MonoBehaviour
     {
         if (Options_manager.Instance.playerInBattle)
         {
-            Dialogue_handler.Instance.DisplayInfo("Can't do that in battle", "Details",1f);
+            Dialogue_handler.Instance.DisplayDetails("Can't do that in battle",1f);
             return;
         }
         if (_numItems >= maxCapacity)
         {
-            Dialogue_handler.Instance.DisplayInfo("Bag is full", "Details");
+            Dialogue_handler.Instance.DisplayDetails("Bag is full");
             return;
         }
         var partyMember = Pokemon_party.Instance.party[memberIndex - 1];
-        Dialogue_handler.Instance.DisplayInfo("You took a " + partyMember.heldItem.itemName +" from "
-                                             + partyMember.pokemonName, "Details");
+        Dialogue_handler.Instance.DisplayDetails("You took a " + partyMember.heldItem.itemName +" from "
+                                             + partyMember.pokemonName);
         AddItem(partyMember.heldItem);
         partyMember.RemoveHeldItem();
         Pokemon_party.Instance.ClearSelectionUI();
@@ -248,7 +248,7 @@ public class Bag : MonoBehaviour
             }
         }
         else
-            Dialogue_handler.Instance.DisplayInfo("Bag is full", "Details");
+            Dialogue_handler.Instance.DisplayDetails("Bag is full");
     }
 
     public void CloseBag()

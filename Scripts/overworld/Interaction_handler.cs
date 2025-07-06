@@ -80,13 +80,13 @@ public class Interaction_handler : MonoBehaviour
                 }
                 else
                 {
-                    Dialogue_handler.Instance.DisplayInfo("Cant fish here", "Info");
+                    Dialogue_handler.Instance.DisplayDetails("Cant fish here");
                 }
             }
         }
         if (Input.GetKeyDown(KeyCode.Q) && !hit.transform)
         {
-            Dialogue_handler.Instance.DisplayInfo("Cant fish here", "Info");
+            Dialogue_handler.Instance.DisplayDetails("Cant fish here");
         }
     }
 }

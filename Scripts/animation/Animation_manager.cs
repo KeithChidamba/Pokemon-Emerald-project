@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Animation_manager : MonoBehaviour
 {
@@ -18,6 +16,12 @@ public class Animation_manager : MonoBehaviour
     public string fishingIdle = "Fishing_idle";
     public string movementDirectionParameter = "Movement Direction";
     public string idleDirectionParameter = "Idle Direction";
+    public event Action OnFishingStart;
+
+    public void StartFishing()
+    {
+        OnFishingStart?.Invoke();
+    }
     public void ChangeAnimationState(string newState)
     {
         if (_currentState == newState) return;

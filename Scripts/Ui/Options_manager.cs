@@ -83,10 +83,10 @@ public class Options_manager : MonoBehaviour
     void HealPokemon()
     {
         overworld_actions.Instance.doingAction = true;
-        Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
+        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage);
         HealPartyPokemon();
         overworld_actions.Instance.doingAction = false;
-        Dialogue_handler.Instance.DisplayInfo("Your pokemon have been healed, you're welcome!", "Details");
+        Dialogue_handler.Instance.DisplayDetails("Your pokemon have been healed, you're welcome!");
     }
     public void HealPartyPokemon()
     {
@@ -101,25 +101,25 @@ public class Options_manager : MonoBehaviour
     }
     void OpenPokemonStorage()
     {
-        Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
+        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage);
         Game_ui_manager.Instance.ViewPokemonStorage();
         overworld_actions.Instance.usingUI = true;
     }
     void BuyMore()
     {
         Dialogue_handler.Instance.EndDialogue();
-        Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
+        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage);
         ViewMarketDelayed();
     }
     void LeaveStore()
     {
-        Dialogue_handler.Instance.DisplayInfo("Have a great day!", "Details",1f);
+        Dialogue_handler.Instance.DisplayDetails("Have a great day!",1f);
     }
     void ReceiveGiftPokemon()
     {
         if(pokemon_storage.Instance.MaxPokemonCapacity())
         {
-            Dialogue_handler.Instance.DisplayInfo("Can no longer obtain more pokemon, free up space in pc!", "Details");
+            Dialogue_handler.Instance.DisplayDetails("Can no longer obtain more pokemon, free up space in pc!");
             return;
         }
         var pokemonName = _currentInteraction.resultMessage;
@@ -128,18 +128,18 @@ public class Options_manager : MonoBehaviour
         pokemon.pokeballName = "Regular Pokeball";
         Pokemon_party.Instance.AddMember(pokemon);
         Dialogue_handler.Instance.EndDialogue();
-        Dialogue_handler.Instance.DisplayInfo("You got a " + pokemon.pokemonName, "Details");
+        Dialogue_handler.Instance.DisplayDetails("You got a " + pokemon.pokemonName);
         starterPokemonGiftEvent.PickGiftPokemon(pokemonName);
     }
     void Interact()
     {
-        Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details",2f);
+        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage,2f);
     }
     void Fish()
     {
         overworld_actions.Instance.doingAction = true;
         overworld_actions.Instance.manager.ChangeAnimationState(overworld_actions.Instance.manager.fishingStart);
-        Dialogue_handler.Instance.DisplayInfo(_currentInteraction.resultMessage, "Details");
+        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage);
     }
     void SellItem()
     {
@@ -162,7 +162,7 @@ public class Options_manager : MonoBehaviour
         var berry = _currentInteraction.resultMessage;
         var berryAsset = Resources.Load<Item>("Pokemon_project_assets/Items/" + berry);
         Bag.Instance.AddItem(Obj_Instance.CreateItem(berryAsset));
-        Dialogue_handler.Instance.DisplayInfo("You picked up a "+berry, "Details",1f);
+        Dialogue_handler.Instance.DisplayDetails("You picked up a "+berry,1f);
     }
     public void CompleteInteraction(Interaction interaction,int option)
     {

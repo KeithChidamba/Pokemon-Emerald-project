@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Nurse
   m_EditorClassIdentifier: 
   interactionMessage: Hello, would you like to heal your pokemon?
-  interactionType: Options
+  interactionType: 1
   interactionOptions:
   - HealPokemon
   - 

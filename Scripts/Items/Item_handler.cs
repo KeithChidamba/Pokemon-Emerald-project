@@ -94,7 +94,7 @@ public class Item_handler : MonoBehaviour
     {
         if (_selectedPartyPokemon.currentLevel == 100)
         {
-            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" is already max level!", "Details",1f);
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" is already max level!", 1f);
             ResetItemUsage();
             yield return null;
         }
@@ -102,7 +102,7 @@ public class Item_handler : MonoBehaviour
         {
             //Game_ui_manager.Instance.canExitParty = false;
             var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup);
-            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" leveled up!", "Details",1f);
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" leveled up!", 1f);
             yield return new WaitForSeconds(1f);
             _selectedPartyPokemon.ReceiveExperience((exp-_selectedPartyPokemon.currentExpAmount)+1);
             StartCoroutine(CompleteItemUsage(0));
@@ -118,7 +118,7 @@ public class Item_handler : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.Instance.DisplayInfo("Cant use that on "+_selectedPartyPokemon.pokemonName, "Details",1f);
+            Dialogue_handler.Instance.DisplayDetails("Cant use that on "+_selectedPartyPokemon.pokemonName, 1f);
             ResetItemUsage();
         }
     }
@@ -127,7 +127,7 @@ public class Item_handler : MonoBehaviour
     {
         if(_selectedPartyPokemon.friendshipLevel>254)
         {
-            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+"'s friendship is already maxed out", "Details",1f);
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+"'s friendship is already maxed out", 1f);
             ResetItemUsage();
         }
         else
@@ -157,7 +157,7 @@ public class Item_handler : MonoBehaviour
             _selectedPartyPokemon.DetermineFriendshipLevelChange(true,"Vitamin");
             DepleteItem();
         }
-        Dialogue_handler.Instance.DisplayInfo(message, "Details", 1f);
+        Dialogue_handler.Instance.DisplayDetails(message,  1f);
         ResetItemUsage();
     }
     private void ChangePowerpoints()
@@ -181,7 +181,7 @@ public class Item_handler : MonoBehaviour
         {
             if (_selectedPartyPokemon.immuneToStatReduction)
             {
-                Dialogue_handler.Instance.DisplayInfo("Your pokemon are already protected","Details");
+                Dialogue_handler.Instance.DisplayDetails("Your pokemon are already protected");
                 ResetItemUsage();
                 return;
             }
@@ -219,14 +219,14 @@ public class Item_handler : MonoBehaviour
     {
         if (_selectedPartyPokemon.hp > 0)
         {
-            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" has not fainted!", "Details",1f); 
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" has not fainted!", 1f); 
             OnItemUsageSuccessful?.Invoke(false);
             ResetItemUsage();
             return;
         }
         OnItemUsageSuccessful?.Invoke(true);
         _selectedPartyPokemon.hp = reviveType=="max revive"? _selectedPartyPokemon.maxHp : math.trunc(_selectedPartyPokemon.maxHp*0.5f);
-        Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" has been revived!", "Details",1f);
+        Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" has been revived!", 1f);
         StartCoroutine(CompleteItemUsage(2.2f));
     }
 
@@ -242,14 +242,14 @@ public class Item_handler : MonoBehaviour
      {
          if(MoveAlterationCancelled(RestorePowerpoints,moveIndex))//user exited
          {
-             InputStateHandler.Instance.ResetGroupUi(new[] {"Pokemon Details"});
+             InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
              return; 
          }
               
          var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
          if (currentMove.powerpoints == currentMove.maxPowerpoints)
          {
-             Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp is already full", "Details",1f);
+             Dialogue_handler.Instance.DisplayDetails( currentMove.moveName+" pp is already full", 1f);
              return;
          }
          Pokemon_Details.Instance.OnMoveSelected -= RestorePowerpoints;
@@ -265,15 +265,15 @@ public class Item_handler : MonoBehaviour
          
          currentMove.powerpoints = (sumPoints > currentMove.maxPowerpoints) ? currentMove.maxPowerpoints : sumPoints;
  
-         Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp was restored!", "Details",1f);
+         Dialogue_handler.Instance.DisplayDetails( currentMove.moveName+" pp was restored!", 1f);
          StartCoroutine(CompleteItemUsage(2.2f));
-         InputStateHandler.Instance.ResetGroupUi(new[] {"Pokemon Details" });
+         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
      }
     private void IncreasePowerpoints(int moveIndex)
     {
-        if(MoveAlterationCancelled(IncreasePowerpoints,moveIndex))         
+        if(MoveAlterationCancelled(IncreasePowerpoints,moveIndex))
         {
-            InputStateHandler.Instance.ResetGroupUi(new[] {"Pokemon Details"});
+            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
             return; 
         }
         
@@ -281,38 +281,38 @@ public class Item_handler : MonoBehaviour
         double powerpointRatio = (float) currentMove.maxPowerpoints / currentMove.basePowerpoints;
         if (Math.Round(powerpointRatio, 1) >= 1.6)
         {
-            Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+" pp is already maxed out", "Details",1f);
+            Dialogue_handler.Instance.DisplayDetails( currentMove.moveName+" pp is already maxed out", 1f);
             return;
         }
         Pokemon_Details.Instance.OnMoveSelected -= IncreasePowerpoints;
         currentMove.maxPowerpoints += (int)math.floor(0.2*currentMove.basePowerpoints);
-        Dialogue_handler.Instance.DisplayInfo( currentMove.moveName+"'s pp was increased!", "Details",1f);
+        Dialogue_handler.Instance.DisplayDetails( currentMove.moveName+"'s pp was increased!", 1f);
         
         StartCoroutine(CompleteItemUsage(2.2f));
-        InputStateHandler.Instance.ResetGroupUi(new[] {"Pokemon Details" });
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
     }
 
     private void MaximisePowerpoints(int moveIndex)
     {
         if (MoveAlterationCancelled(MaximisePowerpoints, moveIndex))         
         {
-            InputStateHandler.Instance.ResetGroupUi(new[] {"Pokemon Details"});
+            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
             return; 
         }
 
         var currentMove = _selectedPartyPokemon.moveSet[moveIndex];
         if (currentMove.maxPowerpoints >= (currentMove.basePowerpoints * 1.6))
         {
-            Dialogue_handler.Instance.DisplayInfo(currentMove.moveName + " pp is already maxed out", "Details", 1f);
+            Dialogue_handler.Instance.DisplayDetails(currentMove.moveName + " pp is already maxed out",  1f);
             return;
         }
 
         Pokemon_Details.Instance.OnMoveSelected -= MaximisePowerpoints;
         currentMove.maxPowerpoints = (int)math.floor(currentMove.basePowerpoints * 1.6);
 
-        Dialogue_handler.Instance.DisplayInfo(currentMove.moveName + "'s pp was maxed out!", "Details", 1f);
+        Dialogue_handler.Instance.DisplayDetails(currentMove.moveName + "'s pp was maxed out!",  1f);
         StartCoroutine(CompleteItemUsage(2.2f));
-        InputStateHandler.Instance.ResetGroupUi(new[] {"Pokemon Details" });
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
 }
     private void UsePokeball(Item pokeball)
     {
@@ -329,20 +329,20 @@ public class Item_handler : MonoBehaviour
     {
         if (!Options_manager.Instance.playerInBattle)
         {
-            Dialogue_handler.Instance.DisplayInfo("Can't use that right now!", "Details");
+            Dialogue_handler.Instance.DisplayDetails("Can't use that right now!");
             return false;
         }
 
         if (Battle_handler.Instance.isTrainerBattle)
         {
             Battle_handler.Instance.displayingInfo = true;
-            Dialogue_handler.Instance.DisplayInfo("Can't catch someone else's Pokemon!", "Details", 1f);
+            Dialogue_handler.Instance.DisplayDetails("Can't catch someone else's Pokemon!",  1f);
             return false;
         }
 
         if (pokemon_storage.Instance.MaxPokemonCapacity())
         {
-            Dialogue_handler.Instance.DisplayInfo("Can no longer catch more Pokémon, free up space in PC!", "Details");
+            Dialogue_handler.Instance.DisplayDetails("Can no longer catch more Pokémon, free up space in PC!");
             return false;
         }
 
@@ -387,13 +387,13 @@ public class Item_handler : MonoBehaviour
     {
         if (_selectedPartyPokemon.statusEffect == "None")
         {
-            Dialogue_handler.Instance.DisplayInfo("Pokemon is already healthy","Feedback");
+            Dialogue_handler.Instance.DisplayFeedBack("Pokemon is already healthy");
             return false;
         }
         if (curableStatus == "full heal") 
         {
             _selectedPartyPokemon.statusEffect = "None";
-            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" has been healed","Feedback");
+            Dialogue_handler.Instance.DisplayFeedBack(_selectedPartyPokemon.pokemonName+" has been healed");
         }
         else
         {
@@ -402,12 +402,12 @@ public class Item_handler : MonoBehaviour
                 _selectedPartyPokemon.statusEffect = "None";
                 if (curableStatus == "sleep" || curableStatus == "freeze" || curableStatus == "paralysis")
                     _selectedPartyPokemon.canAttack = true;
-                Dialogue_handler.Instance.DisplayInfo("Pokemon has been healed", "Feedback");
+                Dialogue_handler.Instance.DisplayFeedBack("Pokemon has been healed");
                 Battle_handler.Instance.RefreshParticipantUI();
             }
             else
             {
-                Dialogue_handler.Instance.DisplayInfo("Incorrect heal item", "Feedback");
+                Dialogue_handler.Instance.DisplayFeedBack("Incorrect heal item");
                 return false;
             }
         }
@@ -430,14 +430,14 @@ public class Item_handler : MonoBehaviour
     {
         if (_selectedPartyPokemon.hp <= 0)
         {
-            Dialogue_handler.Instance.DisplayInfo( "Pokemon has already fainted","Feedback",1f);
+            Dialogue_handler.Instance.DisplayFeedBack( "Pokemon has already fainted",1f);
             ResetItemUsage();
             OnItemUsageSuccessful?.Invoke(false);
             return;
         } 
         if(_selectedPartyPokemon.hp>=_selectedPartyPokemon.maxHp)
         {
-            Dialogue_handler.Instance.DisplayInfo("Pokemon health already is full","Feedback",1f);
+            Dialogue_handler.Instance.DisplayFeedBack("Pokemon health already is full",1f);
             ResetItemUsage();
             OnItemUsageSuccessful?.Invoke(false);
             return;
@@ -446,12 +446,12 @@ public class Item_handler : MonoBehaviour
         if ((_selectedPartyPokemon.hp + healEffect) < _selectedPartyPokemon.maxHp)
         {
             _selectedPartyPokemon.hp += healEffect;
-            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points","Feedback",1f);
+            Dialogue_handler.Instance.DisplayFeedBack(_selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points",1f);
         }
         else if ((_selectedPartyPokemon.hp + healEffect) >= _selectedPartyPokemon.maxHp)
         {
             _selectedPartyPokemon.hp = _selectedPartyPokemon.maxHp;
-            Dialogue_handler.Instance.DisplayInfo(_selectedPartyPokemon.pokemonName+" gained full health points","Feedback",1f);
+            Dialogue_handler.Instance.DisplayFeedBack(_selectedPartyPokemon.pokemonName+" gained full health points",1f);
         }
         StartCoroutine(CompleteItemUsage(2.2f));
     }

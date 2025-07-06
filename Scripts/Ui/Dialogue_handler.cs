@@ -31,7 +31,8 @@ public class Dialogue_handler : MonoBehaviour
     private DialogueOptionsManager _dialogueOptionsManager;
     [SerializeField] private Transform dialogueUiParent;
     private List<GameObject> _currentDialogueOptions = new();
-    public bool messagesLoading = false;
+    public bool messagesLoading;
+    public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage}
     public List<Interaction> pendingMessages = new();
     public GameObject optionSelector;
     public static Dialogue_handler Instance;
@@ -48,6 +49,7 @@ public class Dialogue_handler : MonoBehaviour
     private void Start()
     {
         _dialogueOptionsManager = dialogueOptionBox.GetComponent<DialogueOptionsManager>();
+        Battle_handler.Instance.OnBattleEnd += () => messagesLoading = false;
     }
 
     void Update()
@@ -70,7 +72,7 @@ public class Dialogue_handler : MonoBehaviour
                     currentLineContent = currentInteraction.interactionMessage.Substring(dialogueProgress * maxCharacterLength, currentInteraction.interactionMessage.Length - (dialogueProgress * maxCharacterLength));
                     dialougeText.text = currentLineContent;
                     dialogueFinished = true;
-                    if (currentInteraction.interactionType == "Options")
+                    if (currentInteraction.interactionType == DialogType.Options)
                         CreateDialogueOptions();
                 }
             }
@@ -119,7 +121,7 @@ public class Dialogue_handler : MonoBehaviour
             optionSelectables.Add( new(option.gameObject,()=>SelectOption(option.optionIndex),true) );
         
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.DialogueOptions
-            ,InputStateHandler.StateGroup.None,false,null,
+            ,new[]{InputStateHandler.StateGroup.None},false,null,
             InputStateHandler.Directional.Vertical,optionSelectables,optionSelector,true
             ,true,null,null,true));
     }
@@ -144,7 +146,7 @@ public class Dialogue_handler : MonoBehaviour
         dialogueExitIndicator.SetActive(display);
         canExitDialogue = display;
     }
-    Interaction NewInteraction(string info,string type,string result)
+    Interaction NewInteraction(string info,DialogType type,string result)
     {
         var newInteraction = ScriptableObject.CreateInstance<Interaction>();
         newInteraction.interactionMessage = info;
@@ -155,7 +157,7 @@ public class Dialogue_handler : MonoBehaviour
     public void DisplayList(string info,string result,string[] options, string[]optionsText)//list info
     {
         DisplayDialogueExit(false);
-        var newInteraction = NewInteraction(info,"Options",result);
+        var newInteraction = NewInteraction(info,DialogType.Options,result);
         foreach (string option in options)
             newInteraction.interactionOptions.Add(option);
         foreach (string txt in optionsText)
@@ -164,23 +166,33 @@ public class Dialogue_handler : MonoBehaviour
         HandleInteraction();
     }
     
-    public void DisplayInfo(string info,string type)
+    public void DisplayDetails(string info)
     {
-        if(Options_manager.Instance.playerInBattle){ 
-            if (!overworld_actions.Instance.usingUI && type == "Feedback")
-            {
-                DisplayBattleInfo(info);
-                return;
-            }
-        }
         messagesLoading = false;
-        var newInteraction = NewInteraction(info,type,"");
+        var newInteraction = NewInteraction(info,DialogType.Details,"");
         currentInteraction = newInteraction;
         HandleInteraction();
     }
-    public void DisplayInfo(string info,string type,float dialogueDuration)
+    public void DisplayFeedBack(string info)
     {
-        DisplayInfo(info,type);
+        if(Options_manager.Instance.playerInBattle)
+        { 
+            if (!overworld_actions.Instance.usingUI)
+                DisplayBattleInfo(info);
+        }
+    }
+    public void DisplayFeedBack(string info,float duration)
+    {
+        DisplayFeedBack(info);
+        if (Options_manager.Instance.playerInBattle)
+        {
+            if (overworld_actions.Instance.usingUI)
+                EndDialogue(duration);
+        }else EndDialogue(duration);
+    }
+    public void DisplayDetails(string info,float dialogueDuration)
+    {
+        DisplayDetails(info);
         //dont remove this
         if (Options_manager.Instance.playerInBattle)
         {
@@ -202,12 +214,12 @@ public class Dialogue_handler : MonoBehaviour
     {
         if (!Options_manager.Instance.playerInBattle)
         {//fail-safe
-            DisplayInfo(info,"Details");
+            DisplayDetails(info);
             return;
         }
         Battle_handler.Instance.displayingInfo = true;
         DisplayDialogueExit(false);
-        var newInteraction = NewInteraction(info,"Battle Info","");
+        var newInteraction = NewInteraction(info,DialogType.BattleInfo,"");
         pendingMessages.Add(newInteraction);
         if(!messagesLoading) StartCoroutine(ProcessQueue(newInteraction));
     }
@@ -215,7 +227,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         messagesLoading = true;
         //create a duplicate to avoid linking to currentInteraction, because it could delete interaction scrip-object later when nullified
-        currentInteraction = NewInteraction(interaction.interactionMessage,"Battle Info","");
+        currentInteraction = NewInteraction(interaction.interactionMessage,DialogType.BattleInfo,"");
         HandleInteraction();
         pendingMessages.Remove(interaction);
         yield return new WaitForSeconds(2f);
@@ -285,14 +297,14 @@ public class Dialogue_handler : MonoBehaviour
         var numDialoguePages = (float)currentInteraction.interactionMessage.Length / maxCharacterLength;
         var remainder = math.frac(numDialoguePages); 
         dialogueLength = (remainder>0)? (int)math.ceil(numDialoguePages) : (int)numDialoguePages;
-        if (!Options_manager.Instance.playerInBattle || currentInteraction.interactionType != "Battle Info")
+        if (!Options_manager.Instance.playerInBattle || currentInteraction.interactionType != DialogType.BattleInfo)
         {
             infoDialogueBox.SetActive(true);
             dialougeText.color=Color.black;
             battleDialogueBox.SetActive(false);
         }
-        if( (currentInteraction.interactionType == "Battle Info" && Options_manager.Instance.playerInBattle)
-            || currentInteraction.interactionType == "Battle Display Message")
+        if( (currentInteraction.interactionType == DialogType.BattleInfo && Options_manager.Instance.playerInBattle)
+            || currentInteraction.interactionType == DialogType.BattleDisplayMessage)
         {
             battleDialogueBox.SetActive(true);
             dialougeText.color=Color.white;
@@ -309,16 +321,16 @@ public class Dialogue_handler : MonoBehaviour
         }
         else
         {
-            if (currentInteraction.interactionType == "Options")
+            if (currentInteraction.interactionType == DialogType.Options)
             {
                 isOverworldOptionsInteraction = currentInteractionObject!=null;
                 CreateDialogueOptions();
             }
 
-            if (currentInteraction.interactionType == "Event")
+            if (currentInteraction.interactionType == DialogType.Event)
             {
                 Options_manager.Instance.CompleteInteraction(currentInteraction,0);
-                return;//trianer battle logic at the moment
+                return;//trainer battle logic at the moment
             }
             clickNextIndicator.SetActive(false);
             dialogueLength = 1;

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Clerk
   m_EditorClassIdentifier: 
   interactionMessage: Hello, what can i help you with?
-  interactionType: Options
+  interactionType: 1
   interactionOptions:
   - View Market Delayed
   - Sell Item
