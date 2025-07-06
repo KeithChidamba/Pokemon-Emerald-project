@@ -80,9 +80,8 @@ public class pokemon_storage : MonoBehaviour
             
             InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStoragePartyOptions
                 ,new[]{InputStateHandler.StateGroup.PokemonStorage,InputStateHandler.StateGroup.PokemonStorageParty}
-                ,false,null, 
-                InputStateHandler.Directional.None, partySelectable, null,false,
-                false,()=>ResetPartyUi(partyPokemon),()=>ResetPartyUi(partyPokemon),true));
+                ,stateDirectional:InputStateHandler.Directional.None, selectableUis:partySelectable,
+                onClose:()=>ResetPartyUi(partyPokemon),onExit:()=>ResetPartyUi(partyPokemon)));
             partyPokemon.options.SetActive(true);
         }
     }
@@ -121,9 +120,9 @@ public class pokemon_storage : MonoBehaviour
 
             InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorageBoxOptions,
                 new[]{InputStateHandler.StateGroup.PokemonStorage,InputStateHandler.StateGroup.PokemonStorageBox}
-                ,false,null
-                , InputStateHandler.Directional.Horizontal, boxOptionsSelectables,boxOptionsSelector,true,true
-                ,()=>ResetBoxIconSprite(pokemonIcon),()=>ResetBoxIconSprite(pokemonIcon),true));
+                , stateDirectional:InputStateHandler.Directional.Horizontal,selectableUis: boxOptionsSelectables
+                ,selector:boxOptionsSelector,selecting:true,display:true
+                ,onClose:()=>ResetBoxIconSprite(pokemonIcon),onExit:()=>ResetBoxIconSprite(pokemonIcon)));
             
             ResetBoxIconSprite(pokemonIcon);
             selectedPokemonID = pokemonIcon.pokemon.pokemonID.ToString();

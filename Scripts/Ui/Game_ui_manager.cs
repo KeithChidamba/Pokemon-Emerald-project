@@ -64,12 +64,6 @@ public class Game_ui_manager : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.Instance.doingAction && viewingMenu)
             menuOff = false;
-        // if (Input.GetKeyDown(KeyCode.R) && Poke_Mart.Instance.viewingStore)
-        // {
-        //     CloseStore();
-        //     Dialogue_handler.Instance.DisplayList("Would you like anything else?",
-        //          "", new[]{ "BuyMore","LeaveStore" }, new[]{"Yes", "No"});
-        // }
     } 
     private void ActivateMenuSelection()
     {
@@ -87,7 +81,8 @@ public class Game_ui_manager : MonoBehaviour
             
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerMenu,
             new[] { InputStateHandler.StateGroup.None},true,menuOptions,
-            InputStateHandler.Directional.Vertical, menuSelectables,menuSelector,true, true,CloseMenu,CloseMenu,true));
+            InputStateHandler.Directional.Vertical, menuSelectables,menuSelector,true
+            , true,CloseMenu,CloseMenu));
     }
     private void ActivateUiElement(GameObject ui,bool activated)
     {
@@ -164,10 +159,8 @@ public class Game_ui_manager : MonoBehaviour
         ActivateUiElement(profile.gameObject,true);
         profile.LoadProfile(Game_Load.Instance.playerData);
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerProfile
-            ,new[] { InputStateHandler.StateGroup.None},true
-            ,profile.gameObject
-            ,InputStateHandler.Directional.None, null,
-            null,false, false,CloseProfile,CloseProfile,true));
+            ,new[] { InputStateHandler.StateGroup.None},isParent:true
+            ,profile.gameObject,onClose:CloseProfile,onExit:CloseProfile));
     }
 
     public void ViewPokemonParty()

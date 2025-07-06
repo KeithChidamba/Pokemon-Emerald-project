@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25934
+        "instanceID": 25930
     },
     "hasGender": true,
     "hp": 56.0,
@@ -54,10 +54,10 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25380
+            "instanceID": 25376
         },
         {
-            "instanceID": 25312
+            "instanceID": 25308
         }
     ],
     "statusEffect": "None",
@@ -79,27 +79,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -3994
+            "instanceID": -3192
         },
         {
-            "instanceID": -3996
+            "instanceID": -3194
         },
         {
-            "instanceID": -3998
+            "instanceID": -3196
         },
         {
-            "instanceID": -4000
+            "instanceID": -3198
         }
     ],
     "ability": {
-        "instanceID": 25650
+        "instanceID": 25646
     },
     "evolutions": [
         {
-            "instanceID": 25914
+            "instanceID": 25910
         },
         {
-            "instanceID": 25768
+            "instanceID": 25764
         }
     ],
     "heldItem": {
@@ -107,10 +107,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31998
+        "instanceID": 31994
     },
     "backPicture": {
-        "instanceID": 32000
+        "instanceID": 31996
     },
     "pokeballName": "",
     "abilityName": "Torrent",

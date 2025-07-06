@@ -122,8 +122,7 @@ public class Dialogue_handler : MonoBehaviour
         
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.DialogueOptions
             ,new[]{InputStateHandler.StateGroup.None},false,null,
-            InputStateHandler.Directional.Vertical,optionSelectables,optionSelector,true
-            ,true,null,null,true));
+            InputStateHandler.Directional.Vertical,optionSelectables,optionSelector,true,true));
     }
     public void SelectOption(int optionIndex)
     {
@@ -181,6 +180,14 @@ public class Dialogue_handler : MonoBehaviour
                 DisplayBattleInfo(info);
         }
     }
+
+    public void DisplaySpecific(string info, DialogType type)
+    {
+        messagesLoading = false;
+        var newInteraction = NewInteraction(info,type,"");
+        currentInteraction = newInteraction;
+        HandleInteraction();
+    }
     public void DisplayFeedBack(string info,float duration)
     {
         DisplayFeedBack(info);
@@ -226,7 +233,7 @@ public class Dialogue_handler : MonoBehaviour
     private IEnumerator ProcessQueue(Interaction interaction)
     {
         messagesLoading = true;
-        //create a duplicate to avoid linking to currentInteraction, because it could delete interaction scrip-object later when nullified
+        //creating a duplicate to avoid linking to currentInteraction, because it could delete interaction scrip-object later when nullified
         currentInteraction = NewInteraction(interaction.interactionMessage,DialogType.BattleInfo,"");
         HandleInteraction();
         pendingMessages.Remove(interaction);

@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class InputState
@@ -21,23 +19,34 @@ public class InputState
     public GameObject mainViewUI;
     public bool isParentLayer;
     public bool canExit;
-    public InputState(InputStateHandler.StateName stateName,InputStateHandler.StateGroup[] groups, bool isParent,
-        GameObject mainView,InputStateHandler.Directional stateDirectional, List<SelectableUI> selectableUis
-        ,GameObject selector,bool selecting,bool display,Action onClose,Action onExit,bool canExit)
+
+    public InputState(
+        InputStateHandler.StateName stateName,
+        InputStateHandler.StateGroup[] groups,
+        bool isParent = false,
+        GameObject mainView = null,
+        InputStateHandler.Directional stateDirectional = InputStateHandler.Directional.None,
+        List<SelectableUI> selectableUis = null,
+        GameObject selector = null,
+        bool selecting = false,
+        bool display = false,
+        Action onClose = null,
+        Action onExit = null,
+        bool canExit = true
+    )
     {
-        isParentLayer = isParent;
-        this.canExit = canExit;
-        if (isParentLayer) mainViewUI = mainView;
-        
         this.stateName = stateName;
         stateGroups = groups;
-        this.stateDirectional = stateDirectional; 
+        isParentLayer = isParent;
+        mainViewUI = isParent ? mainView : null;
+        this.stateDirectional = stateDirectional;
         this.selectableUis = selectableUis;
-        currentSelectionIndex = 0;
         this.selector = selector;
         isSelecting = selecting;
         displayingSelector = display;
-        OnExit = onExit;
+        currentSelectionIndex = 0;
         OnClose = onClose;
+        OnExit = onExit;
+        this.canExit = canExit;
     }
 }

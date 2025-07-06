@@ -65,7 +65,6 @@ public class Battle_handler : MonoBehaviour
         {
             optionsUI.SetActive(false);
         }
-
         if (overworld_actions.Instance.usingUI)
         {
             Wild_pkm.Instance.canAttack = false;
@@ -75,7 +74,13 @@ public class Battle_handler : MonoBehaviour
         _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
         AutoAim();
     }
-
+    void DisplayBattleMessage()
+    {
+        if (!Dialogue_handler.Instance.messagesLoading)
+        {
+            Dialogue_handler.Instance.DisplaySpecific("What will you do?",Dialogue_handler.DialogType.BattleDisplayMessage);
+        }
+    }
     private void AllowEnemySelection()
     {
         if (!isDoubleBattle)
@@ -90,9 +95,8 @@ public class Battle_handler : MonoBehaviour
         }
         
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleEnemySelection
-            ,new[] { InputStateHandler.StateGroup.PokemonBattle },false,
-            null, InputStateHandler.Directional.Horizontal, enemySelectables,
-            null,true,false,null,null,true));
+            ,new[] { InputStateHandler.StateGroup.PokemonBattle },
+            stateDirectional:InputStateHandler.Directional.Horizontal, selectableUis:enemySelectables, selecting:true));
     }
     private void PlayerExecuteMove()
     {//selecting enemy only happens in double battle
@@ -149,7 +153,7 @@ public class Battle_handler : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleOptions
             , new[] { InputStateHandler.StateGroup.PokemonBattle }, true,
             optionsUI, InputStateHandler.Directional.OmniDirection, battleOptionSelectables,
-           optionSelector,true,true,null,null,false));
+           optionSelector,true,true,canExit:false));
         
         levelUpQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
@@ -157,7 +161,10 @@ public class Battle_handler : MonoBehaviour
         battleUI.SetActive(true);
         overWorld.SetActive(false);
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
+        DisplayBattleMessage();
+        Turn_Based_Combat.Instance.OnTurnsCompleted += DisplayBattleMessage;
     }
+
 
     private void SetValidParticipants()
     {
@@ -345,7 +352,7 @@ public class Battle_handler : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleMoveSelection
             ,new[] { InputStateHandler.StateGroup.PokemonBattle },true,
             movesUI, InputStateHandler.Directional.OmniDirection, moveSelectables,
-            moveSelector,true,true,ResetMoveUsability,ResetMoveUsability,true));
+            moveSelector,true,true,ResetMoveUsability,ResetMoveUsability));
         
         for (var i = _currentParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
             availableMovesText[i].text = "";

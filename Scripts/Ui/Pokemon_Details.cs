@@ -95,9 +95,7 @@ public class Pokemon_Details : MonoBehaviour
         }
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonDetailsMoveData,
             new[]{InputStateHandler.StateGroup.PokemonDetails}
-            ,false, null, 
-            InputStateHandler.Directional.None, null, null, false
-            , false,null,RemoveMoveDescription,true));
+            ,stateDirectional:InputStateHandler.Directional.None, onExit:RemoveMoveDescription));
 
         var selectedMove = currentPokemon.moveSet[moveIndex];
         

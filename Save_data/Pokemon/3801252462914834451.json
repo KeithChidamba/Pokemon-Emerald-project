@@ -6,7 +6,7 @@
     "gender": "Female",
     "genderRatio": "50/50",
     "nature": {
-        "instanceID": 26078
+        "instanceID": 26074
     },
     "hasGender": true,
     "hp": 11.0,
@@ -54,7 +54,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25880
+            "instanceID": 25876
         }
     ],
     "statusEffect": "None",
@@ -76,15 +76,15 @@
     ],
     "moveSet": [
         {
-            "instanceID": -4030
+            "instanceID": -3228
         }
     ],
     "ability": {
-        "instanceID": 26106
+        "instanceID": 26102
     },
     "evolutions": [
         {
-            "instanceID": 25716
+            "instanceID": 25712
         }
     ],
     "heldItem": {
@@ -92,10 +92,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31910
+        "instanceID": 31906
     },
     "backPicture": {
-        "instanceID": 31912
+        "instanceID": 31908
     },
     "pokeballName": "",
     "abilityName": "Static",
