@@ -28,10 +28,7 @@ public class Battle_handler : MonoBehaviour
     public bool battleWon = false;
     public GameObject overWorld;
     public List<GameObject> backgrounds;
-    public bool viewingOptions = false;
-    public bool choosingMove = false;
-    public bool runningAway = false;
-    public bool selectedMove = false;
+    public bool runningAway; 
     private int _currentMoveIndex = 0;
     public int currentEnemyIndex = 0;
     public bool doingMove = false;
@@ -64,38 +61,16 @@ public class Battle_handler : MonoBehaviour
 
     private void HandlePlayerInput()
     {
-        if (choosingMove && (Input.GetKeyDown(KeyCode.Escape))) //exit move selection
-        {
-            ViewOptions();
-            choosingMove = false;
-            ResetMoveUsability();
-        }
-
         if (displayingInfo || battleOver)
         {
             optionsUI.SetActive(false);
-            viewingOptions = false;
         }
 
         if (overworld_actions.Instance.usingUI)
         {
             Wild_pkm.Instance.canAttack = false;
-            optionsUI.SetActive(false);
-            viewingOptions = false;
         }
-        else
-        {
-            if (!choosingMove && !runningAway && !doingMove && !displayingInfo && !doingMove && !battleOver)
-                viewingOptions = true;
-            else
-                viewingOptions = false;
-            if (viewingOptions)
-            {
-                ResetAi();
-                Dialogue_handler.Instance.DisplayInfo("What will you do?", "Battle Display Message");
-                optionsUI.SetActive(true);
-            }
-        }
+
         if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
         _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
         AutoAim();
@@ -114,19 +89,18 @@ public class Battle_handler : MonoBehaviour
             enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,PlayerExecuteMove,true));
         }
         
-        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Battle Enemy Selection",false,
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleEnemySelection
+            ,InputStateHandler.StateGroup.PokemonBattle,false,
             null, InputStateHandler.Directional.Horizontal, enemySelectables,
             null,true,false,null,null,true));
-
     }
     private void PlayerExecuteMove()
     {//selecting enemy only happens in double battle
         
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
         UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant); 
-        choosingMove = false;
     }
-    void ResetAi()
+    public void ResetAi()
     {
         //improve eventually to work as proper strategy AI
         if (!isTrainerBattle)
@@ -145,14 +119,6 @@ public class Battle_handler : MonoBehaviour
             _currentParticipant.enemySelected = true;
         }
     }
-
-    public void ViewOptions()
-    {
-        if (!Options_manager.Instance.playerInBattle) return;
-        movesUI.SetActive(false);
-        optionsUI.SetActive(true); 
-    }
-
     public void SelectEnemy(int change)
     {
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
@@ -174,13 +140,14 @@ public class Battle_handler : MonoBehaviour
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
         
         var battleOptionSelectables = new List<SelectableUI>{
-            new(battleOptions[0],DisplayMovesUI,true),
+            new(battleOptions[0],LoadMoveInputAndText,true),
             new(battleOptions[1],Game_ui_manager.Instance.ViewBag,true),
             new(battleOptions[2],Game_ui_manager.Instance.ViewPokemonParty,true),
             new(battleOptions[3],RunAway,true)
         };        
-        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Battle Options",false,
-            null, InputStateHandler.Directional.OmniDirection, battleOptionSelectables,
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleOptions
+            ,InputStateHandler.StateGroup.PokemonBattle,true,
+            optionsUI, InputStateHandler.Directional.OmniDirection, battleOptionSelectables,
            optionSelector,true,true,null,null,false));
         
         levelUpQueue.Clear();
@@ -374,9 +341,10 @@ public class Battle_handler : MonoBehaviour
             moveSelectables.Add( new (availableMovesText[i].gameObject,AllowEnemySelection,true));
         }
         
-        InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Battle Move Selection",false,
-            null, InputStateHandler.Directional.OmniDirection, moveSelectables,
-            moveSelector,true,true,null,null,true));
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleMoveSelection
+            ,InputStateHandler.StateGroup.PokemonBattle,true,
+            movesUI, InputStateHandler.Directional.OmniDirection, moveSelectables,
+            moveSelector,true,true,ResetMoveUsability,ResetMoveUsability,true));
         
         for (var i = _currentParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
             availableMovesText[i].text = "";
@@ -386,29 +354,26 @@ public class Battle_handler : MonoBehaviour
         if(move.powerpoints==0)return;
         move.powerpoints--;
         doingMove = true;
-        choosingMove = false;
-        movesUI.SetActive(false);
-        optionsUI.SetActive(false);
         Turn currentTurn = new Turn(move, Array.IndexOf(battleParticipants,user)
             ,currentEnemyIndex
             , user.pokemon.pokemonID.ToString()
             ,battleParticipants[currentEnemyIndex].pokemon.pokemonID.ToString());
+        Debug.Log(user.pokemon.pokemonName+"used a move");
         Turn_Based_Combat.Instance.SaveMove(currentTurn);
     }
-    public void ResetMoveUsability()
+    private void ResetMoveUsability()
     {
-        selectedMove = false; 
         _currentMoveIndex = 0;
+        movesUI.SetActive(false);
     }
     public void SelectMove(int moveIndex)
     {
-        ResetMoveUsability();
+        _currentMoveIndex = 0;
         _currentMoveIndex = moveIndex;
         var currentMove = _currentParticipant.pokemon.moveSet[_currentMoveIndex];
         movePowerPointsText.text = "PP: " + currentMove.powerpoints+ "/" + currentMove.maxPowerpoints;
         movePowerPointsText.color = (currentMove.powerpoints == 0)? Color.red : Color.black;
         moveTypeText.text = currentMove.type.typeName;
-        selectedMove = true;
     }
     int MoneyModifier()
     {
@@ -516,6 +481,7 @@ public class Battle_handler : MonoBehaviour
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
         lastOpponent = null;
+        participantCount = 0;
         foreach (var participant in battleParticipants)
             if(participant.pokemon!=null)
             {
@@ -534,11 +500,11 @@ public class Battle_handler : MonoBehaviour
         if(playerWhiteOut) Options_manager.Instance.HealPartyPokemon();
         Area_manager.Instance.SwitchToArea(location, 0f);
         Dialogue_handler.Instance.DisplayDialogueExit(true);
-        InputStateHandler.Instance.ResetRelevantUi(new[]{"Pokemon Battle"});
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonBattle);
         battleWon = false;
         battleOver = false;
     }
-    public void RunAway() {
+    private void RunAway() {
         runningAway = true;
         displayingInfo = true;
         if(!isTrainerBattle & !_currentParticipant.canEscape)
@@ -567,17 +533,9 @@ public class Battle_handler : MonoBehaviour
         }
         Invoke(nameof(ResetRunLogic),1f);
     }
-void ResetRunLogic()
-{
-    runningAway = false;
-    displayingInfo = false;
-}
-    public void DisplayMovesUI()
+    void ResetRunLogic()
     {
-        choosingMove = true;
-        viewingOptions = false;
-        optionsUI.SetActive(false);
-        movesUI.SetActive(true);
-        LoadMoveInputAndText();
+        runningAway = false;
+        displayingInfo = false;
     }
 }

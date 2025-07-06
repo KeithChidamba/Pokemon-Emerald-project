@@ -118,8 +118,10 @@ public class Dialogue_handler : MonoBehaviour
          foreach(var option in _dialogueOptionsManager.currentOptions)
             optionSelectables.Add( new(option.gameObject,()=>SelectOption(option.optionIndex),true) );
         
-        InputStateHandler.Instance.ChangeInputState(new InputState("Dialogue Options",false,null,
-            InputStateHandler.Directional.Vertical,optionSelectables,optionSelector,true,true,null,null,true));
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.DialogueOptions
+            ,InputStateHandler.StateGroup.None,false,null,
+            InputStateHandler.Directional.Vertical,optionSelectables,optionSelector,true
+            ,true,null,null,true));
     }
     public void SelectOption(int optionIndex)
     {

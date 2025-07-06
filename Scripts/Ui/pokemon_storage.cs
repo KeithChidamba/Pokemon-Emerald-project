@@ -82,8 +82,9 @@ public class pokemon_storage : MonoBehaviour
                     new(partyPokemon.options,()=>RemoveFromParty(partyPokemon),true)
                 };
                 
-                InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Storage Party Options",false
-                    ,null, InputStateHandler.Directional.None, partySelectable,null,false,
+                InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStoragePartyOptions
+                    ,InputStateHandler.StateGroup.PokemonStorage,false,null, 
+                    InputStateHandler.Directional.None, partySelectable, null,false,
                     false,()=>ResetPartyUi(partyPokemon),()=>ResetPartyUi(partyPokemon),true));
                 partyPokemon.options.SetActive(true);
             }
@@ -124,7 +125,8 @@ public class pokemon_storage : MonoBehaviour
                 new(storageOptions[3], ()=>DeletePokemon(pokemonIcon),true)
             };
 
-            InputStateHandler.Instance.ChangeInputState(new InputState("Pokemon Storage Box Options",false,null
+            InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorageBoxOptions,
+                InputStateHandler.StateGroup.PokemonStorageBox,false,null
                 , InputStateHandler.Directional.Horizontal, boxOptionsSelectables,boxOptionsSelector,true,true
                 ,()=>ResetBoxIconSprite(pokemonIcon),()=>ResetBoxIconSprite(pokemonIcon),true));
             
@@ -189,7 +191,7 @@ public class pokemon_storage : MonoBehaviour
             numPartyMembers--;
             numNonPartyPokemon++;
             RefreshUi();
-            InputStateHandler.Instance.ResetRelevantUi(new []{"Pokemon Storage Party"});
+            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonStorageParty);
         }
         else
             Dialogue_handler.Instance.DisplayInfo("There must be at least 1 pokemon in your team","Details",2f);
@@ -210,7 +212,7 @@ public class pokemon_storage : MonoBehaviour
     }
     private void SwapWithPartyPokemon()
     {
-        InputStateHandler.Instance.ResetRelevantUi(new []{"Pokemon Storage Box"});
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonStorageBox);
         Dialogue_handler.Instance.DisplayInfo("Pick a pokemon in your party to swap with", "Details",2f);
         swapping = true;
         InputStateHandler.Instance.PokemonStoragePartyNavigation();

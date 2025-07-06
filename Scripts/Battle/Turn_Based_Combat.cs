@@ -36,12 +36,13 @@ public class Turn_Based_Combat : MonoBehaviour
         if ((Battle_handler.Instance.isDoubleBattle && IsLastParticipant())
             || (currentTurnIndex == Battle_handler.Instance.participantCount))
         {
-            InputStateHandler.Instance.ResetRelevantUi(new[]{"Pokemon Battle Enemy Selection"});
+            InputStateHandler.Instance.AddPlaceHolderState();
             StartCoroutine(ExecuteMoves(SetPriority()));
         }
         else
         {
-            InputStateHandler.Instance.ResetRelevantUi(new[]{"Pokemon Battle Move Selection","Pokemon Battle Enemy Selection"});
+            InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleMoveSelection
+                ,InputStateHandler.StateName.PokemonBattleEnemySelection});
             NextTurn();
         }
     }
@@ -57,12 +58,14 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private void ResetTurnState()
     {
+        currentTurnIndex = 0;
         _turnHistory.Clear();
         OnNewTurn = null;
         OnMoveExecute = null;
         OnTurnsCompleted = null;
         faintEventDelay = false;
         levelEventDelay = false;
+        StopAllCoroutines();
     }
     private bool CanAttack(Turn turn, Battle_Participant attacker,Battle_Participant victim)
     {
@@ -135,8 +138,9 @@ public class Turn_Based_Combat : MonoBehaviour
         _turnHistory.Clear();
         OnTurnsCompleted?.Invoke();
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
-        Battle_handler.Instance.ResetMoveUsability();
         NextTurn();
+        InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
+            InputStateHandler.StateName.Empty});
     }
 
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
@@ -177,14 +181,15 @@ public class Turn_Based_Combat : MonoBehaviour
             currentTurnIndex+=step;
         else
         {
-            Battle_handler.Instance.ViewOptions();
             currentTurnIndex = 0;
             Battle_handler.Instance.battleParticipants[currentTurnIndex].enemySelected = false;//allow player to attack
         }
         OnNewTurn?.Invoke();
         Battle_handler.Instance.doingMove = false;
+        
         if (!Battle_handler.Instance.battleParticipants[currentTurnIndex].isActive & Options_manager.Instance.playerInBattle)
             NextTurn();
+        
     }
     public bool MoveSuccessful(Turn turn)
     {

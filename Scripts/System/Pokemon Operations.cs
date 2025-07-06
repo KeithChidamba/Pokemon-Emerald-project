@@ -214,7 +214,7 @@ public static class PokemonOperations
     {
         Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
         Pokemon_Details.Instance.learningMove = false;
-        InputStateHandler.Instance.ResetRelevantUi(new []{"Pokemon Details"});
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
         Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName + " forgot " 
             + CurrentPokemon.moveSet[moveIndex].moveName 
             + " and learned " + NewMove.moveName,false);
