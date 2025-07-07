@@ -18,6 +18,7 @@ public class Game_ui_manager : MonoBehaviour
     [SerializeField]private List<GameObject> menuUiOptions = new ();
     public GameObject menuSelector;
     public bool usingWebGl = false;
+    public event Action OnUiClose;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -45,9 +46,12 @@ public class Game_ui_manager : MonoBehaviour
         numUIScreensOpen += change;
         if (numUIScreensOpen < 0) numUIScreensOpen = 0;
         overworld_actions.Instance.usingUI = numUIScreensOpen>0;
-        
-        if(numUIScreensOpen==0)
+
+        if (numUIScreensOpen == 0)
+        {
+            OnUiClose?.Invoke();
             Player_movement.Instance.AllowPlayerMovement();
+        }
         else
             Player_movement.Instance.RestrictPlayerMovement();
         
@@ -189,7 +193,7 @@ public class Game_ui_manager : MonoBehaviour
             InputStateHandler.Directional.Vertical, partySelectables, Pokemon_party.Instance.memberSelector
             , true, true,CloseParty,CloseParty,true));
     }
-    public void ViewPokemonDetails(Pokemon pokemonToView)
+    public void ViewOtherPokemonDetails(Pokemon selectedPokemon,List<Pokemon> pokemonToView)
     { 
         ManageScreens(1);
         ActivateUiElement(Pokemon_Details.Instance.uiParent,true);
@@ -203,9 +207,12 @@ public class Game_ui_manager : MonoBehaviour
             InputStateHandler.Directional.Horizontal,detailsSelectables, null
             , true, false,ClosePokemonDetails,ClosePokemonDetails,true));
         
-        Pokemon_Details.Instance.LoadDetails(pokemonToView);
+        Pokemon_Details.Instance.LoadDetails(selectedPokemon,pokemonToView);
     }
-
+    public void ViewPartyPokemonDetails(Pokemon selectedPokemon)
+    { 
+        ViewOtherPokemonDetails(selectedPokemon,Pokemon_party.Instance.party.ToList());
+    }
     public void ViewPokemonStorage()
     {
         ManageScreens(1);

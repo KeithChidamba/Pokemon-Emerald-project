@@ -283,7 +283,6 @@ public class Dialogue_handler : MonoBehaviour
         StopAllCoroutines();
         Battle_handler.Instance.displayingInfo = false;
     }
-
     public void StartInteraction(Overworld_interactable interactable)
     {
         Interaction_handler.Instance.DisableInteraction();

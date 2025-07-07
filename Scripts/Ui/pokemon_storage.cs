@@ -104,7 +104,7 @@ public class pokemon_storage : MonoBehaviour
     }
     private void ViewNonPartyPokemonDetails()
     {
-        Game_ui_manager.Instance.ViewPokemonDetails(nonPartyPokemon[SearchForPokemonIndex(selectedPokemonID)]);
+        Game_ui_manager.Instance.ViewOtherPokemonDetails(nonPartyPokemon[SearchForPokemonIndex(selectedPokemonID)],nonPartyPokemon);
     }
     public void SelectNonPartyPokemon(PC_pkm pokemonIcon)
     {

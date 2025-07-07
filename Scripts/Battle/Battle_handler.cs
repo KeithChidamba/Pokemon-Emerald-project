@@ -65,21 +65,25 @@ public class Battle_handler : MonoBehaviour
         {
             optionsUI.SetActive(false);
         }
+        
         if (overworld_actions.Instance.usingUI)
         {
             Wild_pkm.Instance.canAttack = false;
         }
-
+        
         if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
         _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
         AutoAim();
     }
-    void DisplayBattleMessage()
+
+    void EnableBattleMessage()
     {
-        if (!Dialogue_handler.Instance.messagesLoading)
-        {
-            Dialogue_handler.Instance.DisplaySpecific("What will you do?",Dialogue_handler.DialogType.BattleDisplayMessage);
-        }
+        StartCoroutine(DisplayBattleMessage());
+    }
+    IEnumerator DisplayBattleMessage()
+    {
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        Dialogue_handler.Instance.DisplaySpecific("What will you do?",Dialogue_handler.DialogType.BattleDisplayMessage);
     }
     private void AllowEnemySelection()
     {
@@ -128,9 +132,14 @@ public class Battle_handler : MonoBehaviour
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
         
         var partnerIndex = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].GetPartnerIndex(); 
-        var attackables = new[] {partnerIndex,2,3}; //can attack partner and enemies
+        var expectedAttackables = new [] {partnerIndex,2,3}; //can attack partner and enemies
+         
+        var validAttackables = expectedAttackables.ToList().Where(a => battleParticipants[a].isActive).ToList();
+        
+        var attackables = validAttackables.ToArray();
+        
         var currentPos = Array.IndexOf(attackables,currentEnemyIndex);        
-        var choiceIndex = Mathf.Clamp(currentPos+change,0,2);//index of attackables
+        var choiceIndex = Mathf.Clamp(currentPos+change,0,attackables.Length-1);//index of attackables
         
         currentEnemyIndex = attackables[choiceIndex];
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(17,96,54);
@@ -161,8 +170,10 @@ public class Battle_handler : MonoBehaviour
         battleUI.SetActive(true);
         overWorld.SetActive(false);
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
-        DisplayBattleMessage();
-        Turn_Based_Combat.Instance.OnTurnsCompleted += DisplayBattleMessage;
+        EnableBattleMessage();
+        Turn_Based_Combat.Instance.OnNewTurn += EnableBattleMessage;
+        Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
+        Game_ui_manager.Instance.OnUiClose += EnableBattleMessage;
     }
 
 
@@ -482,6 +493,7 @@ public class Battle_handler : MonoBehaviour
     {
         OnBattleEnd?.Invoke();
         Turn_Based_Combat.Instance.OnNewTurn -= CheckParticipantStates;
+        Game_ui_manager.Instance.OnUiClose -= EnableBattleMessage;
         Dialogue_handler.Instance.EndDialogue();
         Options_manager.Instance.playerInBattle = false;
         overworld_actions.Instance.doingAction = false;

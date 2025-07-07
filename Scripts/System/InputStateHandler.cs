@@ -290,7 +290,7 @@ public class InputStateHandler : MonoBehaviour
         var partyOptionsSelectables = new List<SelectableUI>
         {
             new(Pokemon_party.Instance.partyOptions[0]
-                , ()=>Game_ui_manager.Instance.ViewPokemonDetails(
+                , ()=>Game_ui_manager.Instance.ViewPartyPokemonDetails(
                     Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberIndex - 1]), true),
             new(Pokemon_party.Instance.partyOptions[1]
                 , () => Pokemon_party.Instance.SelectMemberToBeSwapped(Pokemon_party.Instance.selectedMemberIndex)
@@ -311,6 +311,8 @@ public class InputStateHandler : MonoBehaviour
     {
         OnInputLeft += Pokemon_Details.Instance.PreviousPage;
         OnInputRight += Pokemon_Details.Instance.NextPage;
+        OnInputUp += ()=>Pokemon_Details.Instance.ChangePokemon(-1);
+        OnInputDown += ()=>Pokemon_Details.Instance.ChangePokemon(1);
     }
 
     public void AllowMoveUiNavigation()

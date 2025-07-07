@@ -10,7 +10,7 @@ using UnityEngine.Serialization;
 public class Turn_Based_Combat : MonoBehaviour
 {
     public static Turn_Based_Combat Instance; 
-    List<Turn> _turnHistory = new();
+    [SerializeField]List<Turn> _turnHistory = new();
     public event Action OnNewTurn;
     public event Action OnMoveExecute;
     public event Action OnTurnsCompleted;

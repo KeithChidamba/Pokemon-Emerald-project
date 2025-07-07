@@ -169,7 +169,7 @@ public class Item_handler : MonoBehaviour
             Pokemon_Details.Instance.OnMoveSelected += MaximisePowerpoints;
         else if (_itemInUse.itemName.ToLower() == "pp up")
             Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
-        Game_ui_manager.Instance.ViewPokemonDetails(_selectedPartyPokemon);
+        Game_ui_manager.Instance.ViewPartyPokemonDetails(_selectedPartyPokemon);
     }
 
     private void ItemBuffOrDebuff(string statName)

@@ -30,6 +30,8 @@ public class Pokemon_Details : MonoBehaviour
     
     [SerializeField]private int _currentPage;
     public Pokemon currentPokemon;
+    private int _currentPokemonIndex;
+    public List<Pokemon> pokemonToView = new();
     public Action<int> OnMoveSelected; 
     public bool learningMove;
     public bool changingMoveData;
@@ -178,10 +180,16 @@ public class Pokemon_Details : MonoBehaviour
         move_details.SetActive(false);
         move_Description.text = string.Empty;
     }
-    public void LoadDetails(Pokemon pokemon)
+
+    public void ChangePokemon(int indexChange)
     {
-        OverlayUi.SetActive(true);
-        currentPokemon=pokemon;
+        _currentPokemonIndex = Mathf.Clamp(_currentPokemonIndex + indexChange, 0, pokemonToView.Count - 1);
+        currentPokemon = pokemonToView[_currentPokemonIndex];
+        LoadOverlayInfo();
+        LoadPage(_currentPage);
+    }
+    void LoadOverlayInfo()
+    {
         pkm_name.text = currentPokemon.pokemonName;
         pkm_ID.text = "ID: "+currentPokemon.pokemonID;
         pkm_lv.text = "Lv "+currentPokemon.currentLevel;
@@ -191,6 +199,13 @@ public class Pokemon_Details : MonoBehaviour
             gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+currentPokemon.gender.ToLower());
         else
             gender_img.gameObject.SetActive(false);
+    }
+    public void LoadDetails(Pokemon selectedPokemon,List<Pokemon> pokemonList)
+    {
+        OverlayUi.SetActive(true);
+        pokemonToView = pokemonList;
+        currentPokemon = selectedPokemon;
+        LoadOverlayInfo();
         _currentPage = (learningMove || changingMoveData) ? 3 : 1;
         LoadPage(_currentPage);
     }

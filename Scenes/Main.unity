@@ -9878,6 +9878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0f43972d84b42479cf023b35145d7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _turnHistory: []
   currentTurnIndex: 0
   levelEventDelay: 0
   faintEventDelay: 0

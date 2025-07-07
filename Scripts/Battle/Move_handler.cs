@@ -81,6 +81,7 @@ public class Move_handler:MonoBehaviour
                     yield return new WaitUntil(() => !_moveDelay);
                     yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
                     yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
+                    yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                 } 
                 victim.OnPokemonFainted -= CancelMoveSequence;
             }
