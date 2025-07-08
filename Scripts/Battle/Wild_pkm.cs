@@ -24,8 +24,13 @@ public class Wild_pkm : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    private void Start()
+    {
         Turn_Based_Combat.Instance.OnNewTurn += ResetMoveUsage;
     }
+
     public void CanAttack()
     {
         canAttack = true;
@@ -67,8 +72,6 @@ public class Wild_pkm : MonoBehaviour
     }
     private void TargetPlayer(int selectedIndex)
     {
-        //enemy choosing player
-        participant.enemySelected = true;
         Battle_handler.Instance.currentEnemyIndex = selectedIndex;
     }
     private void DetermineMoveChoice()

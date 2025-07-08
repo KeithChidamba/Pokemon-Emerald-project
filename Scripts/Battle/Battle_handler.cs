@@ -31,7 +31,7 @@ public class Battle_handler : MonoBehaviour
     public bool runningAway; 
     private int _currentMoveIndex = 0;
     public int currentEnemyIndex = 0;
-    public bool doingMove = false;
+
     public Pokemon lastOpponent;
     private Battle_Participant _currentParticipant;
     public GameObject optionSelector;
@@ -70,8 +70,13 @@ public class Battle_handler : MonoBehaviour
         {
             Wild_pkm.Instance.canAttack = false;
         }
-        
+
         if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
+        
+        if (isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex == 1)
+        {
+            //if(Input.GetKey(KeyCode.R)) Turn_Based_Combat.Instance.RemoveTurn();
+        }
         _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
         AutoAim();
     }
@@ -117,11 +122,13 @@ public class Battle_handler : MonoBehaviour
     {
         //improve eventually to work as proper strategy AI
         if (!isTrainerBattle)
-            Wild_pkm.Instance.Invoke(nameof(Wild_pkm.Instance.CanAttack), 1f);
+            Wild_pkm.Instance.CanAttack();
         else
-            foreach (var participant in battleParticipants)
-                if (participant.pokemon != null & !participant.isPlayer)
-                    participant.pokemonTrainerAI.Invoke(nameof(participant.pokemonTrainerAI.CanAttack), 1f);
+            for(var i = 2; i < 4;i++)
+                if (battleParticipants[i].pokemon != null & !battleParticipants[i].isPlayer)
+                {
+                    battleParticipants[i].pokemonTrainerAI.CanAttack();
+                }
     }
 
     void AutoAim()
@@ -129,7 +136,6 @@ public class Battle_handler : MonoBehaviour
         if (!isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex == 0) //if single battle, auto aim at enemy
         {
             currentEnemyIndex = 2;
-            _currentParticipant.enemySelected = true;
         }
     }
     public void SelectEnemy(int change)
@@ -148,15 +154,11 @@ public class Battle_handler : MonoBehaviour
         
         currentEnemyIndex = attackables[choiceIndex];
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(17,96,54);
-
-        _currentParticipant.enemySelected = true;
+        
     }
-
-    private void SetupBattle()
+    public void SetupOptionsInput()
     {
-        Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantStates;
-        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
-
+        InputStateHandler.Instance.OnStateRemovalComplete -= SetupOptionsInput;
         var battleOptionSelectables = new List<SelectableUI>
         {
             new(battleOptions[0], LoadMoveInputAndText, true),
@@ -164,11 +166,24 @@ public class Battle_handler : MonoBehaviour
             new(battleOptions[2], Game_ui_manager.Instance.ViewPokemonParty, true),
             new(battleOptions[3], RunAway, true)
         };
+
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleOptions
             , new[] { InputStateHandler.StateGroup.PokemonBattle }, true,
             optionsUI, InputStateHandler.Directional.OmniDirection, battleOptionSelectables,
-           optionSelector,true,true,canExit:false));
+            optionSelector,true,true,canExit: false
+            ,onExit:Turn_Based_Combat.Instance.RemoveTurn, updateExit:ConditionForExit));
+    }
+
+    bool ConditionForExit()
+    {
+        return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0;
+    }
+    private void SetupBattle()
+    {
+        Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantStates;
+        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
         
+        SetupOptionsInput();
         levelUpQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
         overworld_actions.Instance.doingAction = true;
@@ -377,7 +392,7 @@ public class Battle_handler : MonoBehaviour
     {
         if(move.powerpoints==0)return;
         move.powerpoints--;
-        doingMove = true;
+
         Turn currentTurn = new Turn(move, Array.IndexOf(battleParticipants,user)
             ,currentEnemyIndex
             , user.pokemon.pokemonID.ToString()
@@ -499,6 +514,8 @@ public class Battle_handler : MonoBehaviour
         OnBattleEnd?.Invoke();
         Turn_Based_Combat.Instance.OnNewTurn -= CheckParticipantStates;
         Game_ui_manager.Instance.OnUiClose -= EnableBattleMessage;
+        Turn_Based_Combat.Instance.OnNewTurn -= EnableBattleMessage;
+        Turn_Based_Combat.Instance.OnNewTurn -= ResetAi;
         Dialogue_handler.Instance.EndDialogue();
         Options_manager.Instance.playerInBattle = false;
         overworld_actions.Instance.doingAction = false;

@@ -206,7 +206,7 @@ public class Move_handler:MonoBehaviour
         while (displayHp > healthAfterDecrease)
         {
             float newHp = Mathf.MoveTowards(displayHp, healthAfterDecrease,
-                (1.25f/currentVictim.pokemon.healthPhase) * Time.deltaTime);
+                (1f/currentVictim.pokemon.healthPhase) * Time.deltaTime);
             displayHp = Mathf.Floor(newHp);
             currentVictim.pokemon.hp = displayHp;
             

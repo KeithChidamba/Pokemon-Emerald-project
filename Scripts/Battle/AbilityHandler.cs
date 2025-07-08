@@ -6,8 +6,8 @@ public class AbilityHandler : MonoBehaviour
 {
     private Battle_Participant _participant;
     public event Action OnAbilityUsed;
-    private bool _abilityTriggered;
-    private string _currentAbility;
+    [SerializeField]private bool _abilityTriggered;
+    [SerializeField]private string _currentAbility;
     private readonly Dictionary<string, Action> _abilityMethods = new ();
     private void Start()
     {

@@ -11,6 +11,7 @@ public class InputState
     public List<SelectableUI> selectableUis;
     public Action OnExit;
     public Action OnClose;
+    public Func<bool> UpdateExitStatus;
     public int currentSelectionIndex;
     public bool isSelecting;
     public bool displayingSelector;
@@ -32,6 +33,7 @@ public class InputState
         bool display = false,
         Action onClose = null,
         Action onExit = null,
+        Func<bool> updateExit = null,
         bool canExit = true
     )
     {
@@ -48,5 +50,7 @@ public class InputState
         OnClose = onClose;
         OnExit = onExit;
         this.canExit = canExit;
+        UpdateExitStatus = updateExit;
     }
+    
 }

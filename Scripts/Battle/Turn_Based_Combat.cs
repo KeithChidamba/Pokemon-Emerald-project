@@ -60,9 +60,6 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         currentTurnIndex = 0;
         _turnHistory.Clear();
-        OnNewTurn = null;
-        OnMoveExecute = null;
-        OnTurnsCompleted = null;
         faintEventDelay = false;
         levelEventDelay = false;
         StopAllCoroutines();
@@ -175,17 +172,22 @@ public class Turn_Based_Combat : MonoBehaviour
         else
             ChangeTurn(2,2);
     }
+
+    public void RemoveTurn()
+    {//player wants to change their turn usage
+        if (currentTurnIndex < 1) return;
+        _turnHistory.RemoveAt(currentTurnIndex-1);
+        currentTurnIndex --;
+        InputStateHandler.Instance.OnStateRemovalComplete += Battle_handler.Instance.SetupOptionsInput;
+    }
     public void ChangeTurn(int maxParticipantIndex,int step)
     {
         if (currentTurnIndex < maxParticipantIndex)
             currentTurnIndex+=step;
         else
-        {
             currentTurnIndex = 0;
-            Battle_handler.Instance.battleParticipants[currentTurnIndex].enemySelected = false;//allow player to attack
-        }
+
         OnNewTurn?.Invoke();
-        Battle_handler.Instance.doingMove = false;
         
         if (!Battle_handler.Instance.battleParticipants[currentTurnIndex].isActive & Options_manager.Instance.playerInBattle)
             NextTurn();

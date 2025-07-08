@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25930
+        "instanceID": 25918
     },
     "hasGender": true,
     "hp": 56.0,
@@ -54,10 +54,10 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25376
+            "instanceID": 25364
         },
         {
-            "instanceID": 25308
+            "instanceID": 25296
         }
     ],
     "statusEffect": "None",
@@ -79,27 +79,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -3192
+            "instanceID": -21500
         },
         {
-            "instanceID": -3194
+            "instanceID": -21502
         },
         {
-            "instanceID": -3196
+            "instanceID": -21504
         },
         {
-            "instanceID": -3198
+            "instanceID": -21506
         }
     ],
     "ability": {
-        "instanceID": 25646
+        "instanceID": 25634
     },
     "evolutions": [
         {
-            "instanceID": 25910
+            "instanceID": 25898
         },
         {
-            "instanceID": 25764
+            "instanceID": 25752
         }
     ],
     "heldItem": {
@@ -107,12 +107,13 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31994
+        "instanceID": 31982
     },
     "backPicture": {
-        "instanceID": 31996
+        "instanceID": 31984
     },
     "pokeballName": "",
+    "healthPhase": 1,
     "abilityName": "Torrent",
     "natureName": "Impish",
     "evolutionData": [

@@ -155,7 +155,7 @@ public class Game_ui_manager : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerBagNavigation,
             new[] { InputStateHandler.StateGroup.Bag},true,
             Bag.Instance.bagUI, InputStateHandler.Directional.Vertical, bagSelectables,
-                    Bag.Instance.itemSelector,true,true,CloseBag,CloseBag,true));
+                    Bag.Instance.itemSelector,true,true,CloseBag,CloseBag));
     }
     public void ViewProfile()
     {
@@ -191,7 +191,7 @@ public class Game_ui_manager : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new InputState(partyUsageState,
             new[]{InputStateHandler.StateGroup.PokemonParty }, true,Pokemon_party.Instance.partyUI,
             InputStateHandler.Directional.Vertical, partySelectables, Pokemon_party.Instance.memberSelector
-            , true, true,CloseParty,CloseParty,true));
+            , true, true,CloseParty,CloseParty));
     }
     public void ViewOtherPokemonDetails(Pokemon selectedPokemon,List<Pokemon> pokemonToView)
     { 
@@ -205,7 +205,7 @@ public class Game_ui_manager : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonDetails
             ,new[] { InputStateHandler.StateGroup.PokemonDetails}, true,Pokemon_Details.Instance.uiParent,
             InputStateHandler.Directional.Horizontal,detailsSelectables, null
-            , true, false,ClosePokemonDetails,ClosePokemonDetails,true));
+            , true, false,ClosePokemonDetails,ClosePokemonDetails));
         
         Pokemon_Details.Instance.LoadDetails(selectedPokemon,pokemonToView);
     }
@@ -227,7 +227,7 @@ public class Game_ui_manager : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorage,
             new[] { InputStateHandler.StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
             InputStateHandler.Directional.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector
-            , true, true,ClosePokemonStorage,ClosePokemonStorage,true));
+            , true, true,ClosePokemonStorage,ClosePokemonStorage));
         pokemon_storage.Instance.OpenPC();
     }
 
@@ -245,6 +245,6 @@ public class Game_ui_manager : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.MartItemNavigation
             ,new[] { InputStateHandler.StateGroup.PokeMart },true,
             Poke_Mart.Instance.storeUI, InputStateHandler.Directional.Vertical, martSelectables,
-            Poke_Mart.Instance.itemSelector,true,true,ClosePokeMart,ClosePokeMart,true));
+            Poke_Mart.Instance.itemSelector,true,true,ClosePokeMart,ClosePokeMart));
     }
 }

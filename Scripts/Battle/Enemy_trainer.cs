@@ -32,6 +32,8 @@ public class Enemy_trainer : MonoBehaviour
     {
         trainerData = null;
         trainerParty.Clear();
+        canAttack = true;
+        usedMove = false;
     }
     void ResetMoveUsage()
     {
@@ -54,7 +56,8 @@ public class Enemy_trainer : MonoBehaviour
             {//only select the pokemon that werent in battle
                 List<Pokemon> notParticipatingList = new();
                 foreach (Pokemon pokemon in trainerParty)
-                    if(pokemon!=Battle_handler.Instance.battleParticipants[2].pokemon && pokemon!=Battle_handler.Instance.battleParticipants[3].pokemon)
+                    if(pokemon!=Battle_handler.Instance.battleParticipants[2].pokemon
+                       && pokemon!=Battle_handler.Instance.battleParticipants[3].pokemon)//not already participating
                         notParticipatingList.Add(pokemon);
                 notParticipatingList.RemoveAll(p => p.hp <= 0);
                 if (notParticipatingList.Count == 0)
@@ -88,7 +91,7 @@ public class Enemy_trainer : MonoBehaviour
     public void SetupTrainerForBattle(string trainerName, bool isSameTrainer)
     {
         participant = GetComponent<Battle_Participant>();
-        if (isSameTrainer) return;
+        if (isSameTrainer) return;//double battle
         var copyOfTrainerData = Resources.Load<TrainerData>("Pokemon_project_assets/Enemies/Data/" + trainerName +"/"+ trainerName);
         trainerData = Obj_Instance.CreateTrainer(copyOfTrainerData);
         foreach (TrainerPokemonData member in trainerData.PokemonParty)
@@ -106,14 +109,11 @@ public class Enemy_trainer : MonoBehaviour
     }
     void UseMove(Move move)
     {
-        //Debug.Log(Turn_Based_Combat.instance.Current_pkm_turn+" "+Used_move+" move: "+move.Move_name);
         Battle_handler.Instance.UseMove(move,participant);
         usedMove = true;
     }
     private void TargetPlayer(int selectedIndex)
     {
-        //enemy choosing player
-        participant.enemySelected = true;
         Battle_handler.Instance.currentEnemyIndex = selectedIndex;
     }
     private void MakeBattleDecision()

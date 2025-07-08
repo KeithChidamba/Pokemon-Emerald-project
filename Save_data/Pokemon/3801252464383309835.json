@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25930
+        "instanceID": 25918
     },
     "hasGender": true,
     "hp": 13.0,
@@ -54,7 +54,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25900
+            "instanceID": 25888
         }
     ],
     "statusEffect": "None",
@@ -79,18 +79,18 @@
     ],
     "moveSet": [
         {
-            "instanceID": -3264
+            "instanceID": -21572
         }
     ],
     "ability": {
-        "instanceID": 25122
+        "instanceID": 25110
     },
     "evolutions": [
         {
-            "instanceID": 26264
+            "instanceID": 26252
         },
         {
-            "instanceID": 25090
+            "instanceID": 25078
         }
     ],
     "heldItem": {
@@ -98,12 +98,13 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31824
+        "instanceID": 31812
     },
     "backPicture": {
-        "instanceID": 31904
+        "instanceID": 31894
     },
     "pokeballName": "",
+    "healthPhase": 0,
     "abilityName": "Blaze",
     "natureName": "Impish",
     "evolutionData": [

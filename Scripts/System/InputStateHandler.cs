@@ -53,8 +53,7 @@ public class InputStateHandler : MonoBehaviour
     private void Start()
     {
         Game_Load.Instance.OnGameStarted += () => _readingInputs = true;
-        _emptyState = new InputState(StateName.Empty,new[]{StateGroup.None}, false, null, Directional.None, null, null,
-            false, false, null, null, false);
+        _emptyState = new InputState(StateName.Empty,new[]{StateGroup.None}, canExit: false);
         currentState = _emptyState;
         _currentStateLoaded = false;
     }
@@ -205,6 +204,7 @@ public class InputStateHandler : MonoBehaviour
             stateLayers.Add(newState);
         ResetInputEvents();
         currentState = stateLayers.Last();
+        HandleStateExitability();
         SetDirectionals();
         if (currentState.isSelecting) currentState.maxSelectionIndex = currentState.selectableUis.Count-1;
         SetupInputEvents();
@@ -220,6 +220,12 @@ public class InputStateHandler : MonoBehaviour
         parentLayers.Last().mainViewUI.SetActive(true);
     }
 
+    private void HandleStateExitability()
+    {
+        if (!currentState.canExit && currentState.UpdateExitStatus == null) return;
+        
+        currentState.canExit = currentState.UpdateExitStatus?.Invoke() ?? true;
+    }
     void SetDirectionals()
     {
         switch (currentState.stateDirectional)
@@ -468,7 +474,6 @@ public class InputStateHandler : MonoBehaviour
     
     void SetupBattleOptions()
     {
-        Battle_handler.Instance.ResetAi();
         currentState.currentSelectionIndex = 0;
         _currentNumBoxElements = 4;
         _currentBoxCapacity = 4;
@@ -482,6 +487,8 @@ public class InputStateHandler : MonoBehaviour
     
     void SetupMoveSelection()
     {
+        Battle_handler.Instance.battleParticipants[Battle_handler.Instance.currentEnemyIndex]
+            .pokemonImage.color = Color.HSVToRGB(0,0,100);//reset color if cancelled selection
         currentState.currentSelectionIndex = 0;
         _currentNumBoxElements = 4;
         _currentBoxCapacity = 4;
