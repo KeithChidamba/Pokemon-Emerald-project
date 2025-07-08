@@ -76,6 +76,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
     public string pokeballName;
+    public int healthPhase;
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
     public event Action OnDamageTaken;

@@ -26,6 +26,7 @@ public class Battle_Participant : MonoBehaviour
     public bool isActive = false;
     public bool fainted = false;
     public Slider playerHpSlider;
+    [FormerlySerializedAs("hpSliderColor")] public RawImage hpSliderImage;
     public Slider playerExpSlider;
     public GameObject[] singleBattleUI;
     public GameObject[] doubleBattleUI;
@@ -257,10 +258,9 @@ public class Battle_Participant : MonoBehaviour
             pokemonImage.sprite = pokemon.frontPicture;
         playerHpSlider.value = pokemon.hp;
         playerHpSlider.maxValue = pokemon.maxHp;
-        if(pokemon.hp<=0)
-            pokemon.hp = 0;
+        if(pokemon.hp<=0) pokemon.hp = 0;
+        PokemonOperations.UpdateHealthPhase(pokemon,hpSliderImage);
     }
-
     public void RefreshStatusEffectImage()
     {
         if (pokemon.statusEffect == "None")

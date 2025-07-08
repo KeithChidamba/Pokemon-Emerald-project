@@ -23,7 +23,7 @@ MonoBehaviour:
   canCauseFlinch: 0
   isConsecutive: 0
   isMultiTarget: 0
-  isSelfTargeted: 0
+  isSelfTargeted: 1
   priority: 0
   powerpoints: 20
   basePowerpoints: 20

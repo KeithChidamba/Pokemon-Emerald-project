@@ -20,6 +20,7 @@ public class Move_handler:MonoBehaviour
     private bool _moveDelay = false;
     private bool _cancelMove = false;
     public bool processingOrder = false;
+    private bool displayingHealthDecrease;
     public event Action OnMoveEnd;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageDeal;
     public event Action<Battle_Participant,Move> OnMoveHit;
@@ -76,7 +77,7 @@ public class Move_handler:MonoBehaviour
                     if (!battleEvent.Condition) continue;
                     processingOrder = true;
                     battleEvent.Execute();
-
+                    yield return new WaitUntil(() => !displayingHealthDecrease);
                     yield return new WaitUntil(() => !processingOrder);
                     yield return new WaitUntil(() => !_moveDelay);
                     yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
@@ -194,12 +195,34 @@ public class Move_handler:MonoBehaviour
         }
         return atk / def;
     }
-
+    private IEnumerator DamageDisplay(Battle_Participant currentVictim)
+    {
+        displayingHealthDecrease = true;
+        var damage = CalculateMoveDamage(_currentTurn.move, currentVictim);
+        var healthAfterDecrease = Mathf.Clamp(currentVictim.pokemon.hp - damage,0,currentVictim.pokemon.hp);
+        
+        float displayHp = currentVictim.pokemon.hp;
+         
+        while (displayHp > healthAfterDecrease)
+        {
+            float newHp = Mathf.MoveTowards(displayHp, healthAfterDecrease,
+                (1.25f/currentVictim.pokemon.healthPhase) * Time.deltaTime);
+            displayHp = Mathf.Floor(newHp);
+            currentVictim.pokemon.hp = displayHp;
+            
+            yield return null;
+        }
+        
+        currentVictim.pokemon.hp = healthAfterDecrease;
+        yield return new WaitUntil(() =>  currentVictim.pokemon.hp <= 0 || currentVictim.pokemon.hp<=healthAfterDecrease);
+        currentVictim.pokemon.TakeDamage(0);
+        displayingHealthDecrease = false;
+    }
     private void DealDamage()
     {
         if (_currentTurn.move.hasSpecialEffect)
         { processingOrder = false; return; }
-        victim.pokemon.TakeDamage( CalculateMoveDamage(_currentTurn.move, victim) );
+        StartCoroutine(DamageDisplay(victim));
         processingOrder = false;
     } 
     private void ResetMoveUsage()
@@ -395,7 +418,8 @@ public class Move_handler:MonoBehaviour
             if (!Turn_Based_Combat.Instance.MoveSuccessful(_currentTurn)) break; //if miss
             
             Dialogue_handler.Instance.DisplayBattleInfo("Hit "+(i+1)+"!");//remove later if added animations
-            victim.pokemon.TakeDamage( CalculateMoveDamage(_currentTurn.move,victim) );
+            StartCoroutine(DamageDisplay(victim));
+            yield return new WaitUntil(() => !displayingHealthDecrease);
             numHits++;
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
@@ -412,8 +436,9 @@ public class Move_handler:MonoBehaviour
     {
         foreach (var enemy in targets)
         {
-            enemy.pokemon.TakeDamage( CalculateMoveDamage(_currentTurn.move,enemy) );
+            StartCoroutine(DamageDisplay(enemy));
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            yield return new WaitUntil(() => !displayingHealthDecrease);
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         _moveDelay = false;
@@ -431,7 +456,7 @@ public class Move_handler:MonoBehaviour
     {
         var damage = CalculateMoveDamage(_currentTurn.move,victim);
         var healAmount = damage/ 2f;
-        victim.pokemon.TakeDamage(damage);
+        StartCoroutine(DamageDisplay(victim));
         attacker.pokemon.hp =( (healAmount+attacker.pokemon.hp) < attacker.pokemon.maxHp)? 
             math.trunc(math.abs(healAmount)) : attacker.pokemon.maxHp;
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
@@ -494,9 +519,8 @@ public class Move_handler:MonoBehaviour
         
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         
-        var damage = CalculateMoveDamage(_currentTurn.move,victim);
-        victim.pokemon.TakeDamage(damage); 
-        
+        StartCoroutine(DamageDisplay(victim));
+        yield return new WaitUntil(() => !displayingHealthDecrease);
         _moveDelay = false;
         processingOrder = false;
     }

@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: protect
   m_EditorClassIdentifier: 
-  Move_name: Protect
-  Move_damage: 0
-  Move_accuracy: 65
+  moveName: Protect
+  moveDamage: 0
+  moveAccuracy: 65
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
-  Has_status: 0
-  Has_effect: 1
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 1
+  canCauseFlinch: 0
+  isConsecutive: 0
   isMultiTarget: 0
-  isSelfTargeted: 0
-  Priority: 4
-  Powerpoints: 10
-  BasePowerpoints: 10
-  max_Powerpoints: 10
-  Status_effect: None
-  Buff_Debuff: None
-  Status_chance: 0
-  Debuff_chance: 0
-  Description: a move that protects from harm
+  isSelfTargeted: 1
+  priority: 4
+  powerpoints: 10
+  basePowerpoints: 10
+  maxPowerpoints: 10
+  statusEffect: None
+  buffOrDebuffName: None
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: a move that protects from harm

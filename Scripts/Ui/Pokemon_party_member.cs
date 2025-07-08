@@ -12,6 +12,7 @@ public class Pokemon_party_member : MonoBehaviour
     [FormerlySerializedAs("Pkm_front_img")] public Image pokemonFrontImage;
     [FormerlySerializedAs("Status_img")] public Image statusEffectImage;
     [FormerlySerializedAs("pkm_hp")] public Slider pokemonHealthBarUI;
+    public RawImage hpSliderImage;
     [FormerlySerializedAs("pkm")] public Pokemon pokemon;
     public int partyPosition;
     [FormerlySerializedAs("main_ui")] public GameObject[] mainUI;

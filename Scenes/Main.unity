@@ -1148,6 +1148,7 @@ MonoBehaviour:
   isActive: 0
   fainted: 0
   playerHpSlider: {fileID: 274821928}
+  hpSliderImage: {fileID: 1544117819}
   playerExpSlider: {fileID: 0}
   singleBattleUI: []
   doubleBattleUI: []
@@ -3942,6 +3943,7 @@ MonoBehaviour:
   pokemonFrontImage: {fileID: 2019594719}
   statusEffectImage: {fileID: 1489584227}
   pokemonHealthBarUI: {fileID: 80550801}
+  hpSliderImage: {fileID: 1630599149}
   pokemon: {fileID: 0}
   partyPosition: 6
   mainUI:
@@ -5574,7 +5576,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.6, y: -58}
+  m_AnchoredPosition: {x: 17, y: -58}
   m_SizeDelta: {x: 53.9177, y: 25.1909}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &183954982
@@ -6077,6 +6079,7 @@ MonoBehaviour:
   isActive: 0
   fainted: 0
   playerHpSlider: {fileID: 1509615510}
+  hpSliderImage: {fileID: 1598670749}
   playerExpSlider: {fileID: 0}
   singleBattleUI: []
   doubleBattleUI: []
@@ -17520,6 +17523,7 @@ MonoBehaviour:
   pokemonFrontImage: {fileID: 417229423}
   statusEffectImage: {fileID: 1457961434}
   pokemonHealthBarUI: {fileID: 1525119334}
+  hpSliderImage: {fileID: 1188714951}
   pokemon: {fileID: 0}
   partyPosition: 2
   mainUI:
@@ -19053,6 +19057,7 @@ MonoBehaviour:
   pokemonFrontImage: {fileID: 1317746958}
   statusEffectImage: {fileID: 1144923000}
   pokemonHealthBarUI: {fileID: 347697869}
+  hpSliderImage: {fileID: 1860845883}
   pokemon: {fileID: 0}
   partyPosition: 3
   mainUI:
@@ -20661,6 +20666,7 @@ MonoBehaviour:
   pokemonFrontImage: {fileID: 757401343}
   statusEffectImage: {fileID: 1837177799}
   pokemonHealthBarUI: {fileID: 279946563}
+  hpSliderImage: {fileID: 1461788771}
   pokemon: {fileID: 0}
   partyPosition: 5
   mainUI:
@@ -24456,17 +24462,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 807908280}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 178992614}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -20.161606, y: 1.4206}
-  m_SizeDelta: {x: 75, y: 30}
+  m_AnchoredPosition: {x: -43, y: 6}
+  m_SizeDelta: {x: 16, y: 19}
   m_Pivot: {x: 0.2, y: 0.5}
 --- !u!114 &807908282
 MonoBehaviour:
@@ -24488,7 +24494,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 00461ce451f25c9dba8315d6d804fe59, type: 3}
+  m_Texture: {fileID: 2800000, guid: efc46242da0abc54dbf42082739a942c, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -27638,6 +27644,7 @@ MonoBehaviour:
   pokemonFrontImage: {fileID: 1268647952}
   statusEffectImage: {fileID: 939920381}
   pokemonHealthBarUI: {fileID: 782409712}
+  hpSliderImage: {fileID: 912602700}
   pokemon: {fileID: 0}
   partyPosition: 4
   mainUI:
@@ -28591,6 +28598,7 @@ MonoBehaviour:
   move_acc: {fileID: 1200014909}
   _currentPage: 0
   currentPokemon: {fileID: 0}
+  pokemonToView: []
   learningMove: 0
   changingMoveData: 0
   moveSelector: {fileID: 1498993907}
@@ -32587,7 +32595,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.04719, y: -28.4529}
-  m_SizeDelta: {x: 80.188, y: 113.0136}
+  m_SizeDelta: {x: 100, y: 113}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1124305574
 MonoBehaviour:
@@ -34923,6 +34931,7 @@ MonoBehaviour:
   pokemonFrontImage: {fileID: 1920848970}
   statusEffectImage: {fileID: 848811388}
   pokemonHealthBarUI: {fileID: 1761249113}
+  hpSliderImage: {fileID: 2068718551}
   pokemon: {fileID: 0}
   partyPosition: 1
   mainUI:
@@ -59967,7 +59976,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.35381317, y: 11.8399105}
+  m_AnchoredPosition: {x: 17, y: 11.8399105}
   m_SizeDelta: {x: 66.7777, y: 25.1909}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1389499336
@@ -62764,7 +62773,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.3, y: -20}
+  m_AnchoredPosition: {x: 17, y: -20}
   m_SizeDelta: {x: 66.7777, y: 25.1909}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1486384007
@@ -67264,6 +67273,7 @@ MonoBehaviour:
   isActive: 0
   fainted: 0
   playerHpSlider: {fileID: 684725532}
+  hpSliderImage: {fileID: 842742253}
   playerExpSlider: {fileID: 752174744}
   singleBattleUI:
   - {fileID: 752174742}
@@ -92754,6 +92764,7 @@ MonoBehaviour:
   isActive: 0
   fainted: 0
   playerHpSlider: {fileID: 2073673345}
+  hpSliderImage: {fileID: 639943928}
   playerExpSlider: {fileID: 0}
   singleBattleUI: []
   doubleBattleUI: []

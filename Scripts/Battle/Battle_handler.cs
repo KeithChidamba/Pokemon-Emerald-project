@@ -92,12 +92,17 @@ public class Battle_handler : MonoBehaviour
             PlayerExecuteMove();
             return;
         }
+        if (_currentParticipant.pokemon.moveSet[_currentMoveIndex].isSelfTargeted 
+            || _currentParticipant.pokemon.moveSet[_currentMoveIndex].isMultiTarget)
+        {
+            currentEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
+            return;
+        }
         var enemySelectables = new List<SelectableUI>();
         for (var i = 2; i < battleParticipants.Length; i++)
         {
             enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,PlayerExecuteMove,true));
         }
-        
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleEnemySelection
             ,new[] { InputStateHandler.StateGroup.PokemonBattle },
             stateDirectional:InputStateHandler.Directional.Horizontal, selectableUis:enemySelectables, selecting:true));

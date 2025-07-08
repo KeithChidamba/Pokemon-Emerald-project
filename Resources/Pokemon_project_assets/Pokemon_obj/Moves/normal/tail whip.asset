@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: tail whip
   m_EditorClassIdentifier: 
-  Move_name: Tail whip
-  Move_damage: 0
-  Move_accuracy: 90
+  moveName: Tail whip
+  moveDamage: 0
+  moveAccuracy: 90
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 1
-  Has_status: 0
-  Has_effect: 0
-  Can_flinch: 0
-  is_Consecutive: 0
-  isMultiTarget: 1
+  isBuffOrDebuff: 1
+  hasStatus: 0
+  hasSpecialEffect: 0
+  canCauseFlinch: 0
+  isConsecutive: 0
+  isMultiTarget: 0
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 25
-  BasePowerpoints: 25
-  max_Powerpoints: 25
-  Status_effect: None
-  Buff_Debuff: -1Defense
-  Status_chance: 0
-  Debuff_chance: 100
-  Description: lowers enemy defense with a distraction
+  priority: 0
+  powerpoints: 25
+  basePowerpoints: 25
+  maxPowerpoints: 25
+  statusEffect: None
+  buffOrDebuffName: -1Defense
+  statusChance: 0
+  buffOrDebuffChance: 100
+  description: lowers enemy defense with a distraction

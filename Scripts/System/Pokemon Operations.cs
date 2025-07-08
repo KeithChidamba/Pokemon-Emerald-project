@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using UnityEngine;
 using Unity.Mathematics;
+using UnityEngine.UI;
 
 public static class PokemonOperations
 {
@@ -221,6 +222,24 @@ public static class PokemonOperations
         CurrentPokemon.moveSet[moveIndex] = Obj_Instance.CreateMove(NewMove);
         SelectingMoveReplacement = false;
         LearningNewMove = false;
+    }
+    public static void UpdateHealthPhase(Pokemon pokemon,RawImage hpSliderColor)
+    {
+        if (pokemon.hp > pokemon.maxHp * 0.5f)
+        {
+            hpSliderColor.color = Color.green;
+            pokemon.healthPhase =  1;
+        }
+        else if (pokemon.hp > pokemon.maxHp * 0.2f)
+        {
+            hpSliderColor.color = Color.yellow;
+            pokemon.healthPhase =  2;
+        }
+        else
+        {
+            hpSliderColor.color = Color.red;
+            pokemon.healthPhase =  3;
+        }
     }
     private static void AssignPokemonGender(Pokemon pokemon)
     {

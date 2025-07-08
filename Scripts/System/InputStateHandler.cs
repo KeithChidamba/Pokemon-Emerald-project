@@ -284,7 +284,13 @@ public class InputStateHandler : MonoBehaviour
         
         currentState.selector.SetActive(true);
     }
-
+    private void UpdateHealthBarColors()
+    {
+        for (var i = 0;i<Pokemon_party.Instance.numMembers;i++)
+        {
+            PokemonOperations.UpdateHealthPhase(Pokemon_party.Instance.party[i], Pokemon_party.Instance.memberCards[i].hpSliderImage);
+        }
+    }
     public void PokemonPartyOptions()
     {
         var partyOptionsSelectables = new List<SelectableUI>
@@ -498,11 +504,14 @@ public class InputStateHandler : MonoBehaviour
         OnInputLeft += ()=> Battle_handler.Instance.SelectEnemy(-1);
         OnInputRight += () => Battle_handler.Instance.SelectEnemy(1);
     }
+    
     void SetupInputEvents()
     {
         Action stateMethod = currentState.stateName switch
         {
             StateName.PlayerBagNavigation => PlayerBagNavigation,
+            StateName.PokemonPartyItemUsage => UpdateHealthBarColors,
+           StateName.PokemonPartyNavigation => UpdateHealthBarColors,
             StateName.PokemonDetails => SetupPokemonDetails,
             StateName.PlayerBagItemSell => ItemToSellInputs,
             StateName.PokemonStorageBoxNavigation => SetupBoxNavigation,

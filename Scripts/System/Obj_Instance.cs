@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -99,6 +100,8 @@ public static class Obj_Instance
         newPokemon.frontPicture = pkm.frontPicture;
         newPokemon.pokemonName = pkm.pokemonName;
         newPokemon.backPicture = pkm.backPicture;
+        newPokemon.pokeballName = pkm.pokeballName;
+        newPokemon.healthPhase = pkm.healthPhase;
         return newPokemon;
     }
 
