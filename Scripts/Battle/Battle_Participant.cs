@@ -113,7 +113,7 @@ public class Battle_Participant : MonoBehaviour
         OnPokemonFainted?.Invoke();
         Turn_Based_Combat.Instance.faintEventDelay = true;
         Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName+" fainted!");
-        pokemon.statusEffect = "None";
+        pokemon.statusEffect = PokemonOperations.StatusEffect.None;
         pokemon.DetermineFriendshipLevelChange(false,"Fainted");
         StartCoroutine(HandleFaintLogic());
     }
@@ -262,13 +262,13 @@ public class Battle_Participant : MonoBehaviour
     }
     public void RefreshStatusEffectImage()
     {
-        if (pokemon.statusEffect == "None")
+        if (pokemon.statusEffect == PokemonOperations.StatusEffect.None)
             statusImage.gameObject.SetActive(false);
         else
         {
             statusImage.gameObject.SetActive(true);
             statusImage.sprite = Resources.Load<Sprite>
-            ("Pokemon_project_assets/Pokemon_obj/Status/" + pokemon.statusEffect.Replace(" ","").ToLower());
+            ("Pokemon_project_assets/Pokemon_obj/Status/" + pokemon.statusEffect.ToString().ToLower());
         }
     }
     private void ActivateUI(GameObject[]arr,bool on)
@@ -290,8 +290,10 @@ public class Battle_Participant : MonoBehaviour
         isActive = true;
         participantUI.SetActive(true);
         ActivateGenderImage();
-        if (pokemon.statusEffect == "Badly poison")
-            pokemon.statusEffect = "Poison";
+        if (pokemon.statusEffect == PokemonOperations.StatusEffect.BadlyPoison)
+        {
+            pokemon.statusEffect = PokemonOperations.StatusEffect.Poison;
+        }
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
         Turn_Based_Combat.Instance.OnTurnsCompleted += statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;

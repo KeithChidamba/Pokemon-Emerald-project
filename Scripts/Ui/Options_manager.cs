@@ -96,7 +96,7 @@ public class Options_manager : MonoBehaviour
             pokemon.hp = pokemon.maxHp;
             foreach (var move in pokemon.moveSet)
                 move.powerpoints = move.maxPowerpoints;
-            pokemon.statusEffect = "None";
+            pokemon.statusEffect = PokemonOperations.StatusEffect.None;
         }
     }
     void OpenPokemonStorage()

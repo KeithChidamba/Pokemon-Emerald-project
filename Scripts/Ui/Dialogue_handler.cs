@@ -35,6 +35,7 @@ public class Dialogue_handler : MonoBehaviour
     public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage}
     public List<Interaction> pendingMessages = new();
     public GameObject optionSelector;
+    public event Action OnMessagedDone;
     public static Dialogue_handler Instance;
     private void Awake()
     {
@@ -56,7 +57,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         if (displaying && !dialogueFinished)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.Z))
             {
                 if (dialogueProgress < dialogueLength)
                 {
@@ -80,7 +81,7 @@ public class Dialogue_handler : MonoBehaviour
         if (overworld_actions.Instance != null)
             if (overworld_actions.Instance.doingAction )
                 DisplayDialogueExit(false);
-        if (displaying && Input.GetKeyDown(KeyCode.R) && canExitDialogue)
+        if (displaying && Input.GetKeyDown(KeyCode.X) && canExitDialogue)
             EndDialogue();
     }
 
@@ -164,38 +165,19 @@ public class Dialogue_handler : MonoBehaviour
         currentInteraction = newInteraction;
         HandleInteraction();
     }
-    
-    public void DisplayDetails(string info)
-    {
-        messagesLoading = false;
-        var newInteraction = NewInteraction(info,DialogType.Details,"");
-        currentInteraction = newInteraction;
-        HandleInteraction();
-    }
-    public void DisplayFeedBack(string info)
-    {
-        if(Options_manager.Instance.playerInBattle)
-        { 
-            if (!overworld_actions.Instance.usingUI)
-                DisplayBattleInfo(info);
-        }
-    }
-
     public void DisplaySpecific(string info, DialogType type)
     {
         messagesLoading = false;
         var newInteraction = NewInteraction(info,type,"");
         currentInteraction = newInteraction;
         HandleInteraction();
-    }
-    public void DisplayFeedBack(string info,float duration)
+    }    
+    public void DisplayDetails(string info)
     {
-        DisplayFeedBack(info);
-        if (Options_manager.Instance.playerInBattle)
-        {
-            if (overworld_actions.Instance.usingUI)
-                EndDialogue(duration);
-        }else EndDialogue(duration);
+        messagesLoading = false;
+        var newInteraction = NewInteraction(info,DialogType.Details,"");
+        currentInteraction = newInteraction;
+        HandleInteraction();
     }
     public void DisplayDetails(string info,float dialogueDuration)
     {
@@ -249,6 +231,7 @@ public class Dialogue_handler : MonoBehaviour
         }
         else
         {
+            OnMessagedDone?.Invoke();
             messagesLoading = false;
             Battle_handler.Instance.displayingInfo = false;
         }

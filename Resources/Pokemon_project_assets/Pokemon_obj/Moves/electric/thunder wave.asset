@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: thunder wave
   m_EditorClassIdentifier: 
-  Move_name: Thunder wave
-  Move_damage: 0
-  Move_accuracy: 90
+  moveName: Thunder wave
+  moveDamage: 0
+  moveAccuracy: 90
   type: {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
-  Has_status: 1
-  Has_effect: 0
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 0
+  hasStatus: 1
+  hasSpecialEffect: 0
+  canCauseFlinch: 0
+  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 20
-  BasePowerpoints: 20
-  max_Powerpoints: 20
-  Status_effect: Paralysis
-  Buff_Debuff: None
-  Status_chance: 100
-  Debuff_chance: 0
-  Description: a electric shock that paralyses the foe
+  priority: 0
+  powerpoints: 20
+  basePowerpoints: 20
+  maxPowerpoints: 20
+  statusEffect: 1
+  buffOrDebuffName: None
+  statusChance: 100
+  buffOrDebuffChance: 0
+  description: a electric shock that paralyses the foe

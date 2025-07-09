@@ -31,12 +31,12 @@ public class Interaction_handler : MonoBehaviour
     {
         if(!Dialogue_handler.Instance.displaying && !_stopInteractions)
         {
-            if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.C))
                 if(_canCheckForInteraction)
                     RaycastForInteraction();
         }
 
-        if ((Input.GetKeyUp(KeyCode.F) || Input.GetKeyUp(KeyCode.Q)) && !_canCheckForInteraction)
+        if ((Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.C)) && !_canCheckForInteraction)
         {
             _canCheckForInteraction = true;
         }
@@ -65,12 +65,12 @@ public class Interaction_handler : MonoBehaviour
         if (hit.transform && !Dialogue_handler.Instance.displaying && !overworld_actions.Instance.usingUI)
         {
             var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.Z))
             {
                 if (interactableObject.interaction != null)
                     Dialogue_handler.Instance.StartInteraction(interactableObject);
             }
-            if (Input.GetKeyDown(KeyCode.Q) && !overworld_actions.Instance.doingAction)
+            if (Input.GetKeyDown(KeyCode.C) && !overworld_actions.Instance.doingAction)
             {
                 if (hit.transform.gameObject.CompareTag("Water"))
                 { 
@@ -84,7 +84,7 @@ public class Interaction_handler : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.Q) && !hit.transform)
+        if (Input.GetKeyDown(KeyCode.C) && !hit.transform)
         {
             Dialogue_handler.Instance.DisplayDetails("Cant fish here");
         }

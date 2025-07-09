@@ -245,7 +245,6 @@ public class Pokemon_party : MonoBehaviour
             if (party[i] != null)
             {
                 memberCards[numMembers].pokemon = party[i];
-                memberCards[numMembers].partyPosition = numMembers + 1;
                 memberCards[numMembers].ActivateUI();
                 numMembers++;
             }

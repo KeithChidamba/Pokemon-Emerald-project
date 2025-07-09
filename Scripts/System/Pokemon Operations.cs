@@ -13,6 +13,8 @@ public static class PokemonOperations
     public static Pokemon CurrentPokemon;
     public static Move NewMove;
     public static Action<bool> OnEvChange;
+    public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep}
+
     private static long GeneratePokemonID(Pokemon pokemon)//pokemon's unique ID
     {
         int combinedIDs = Game_Load.Instance.playerData.trainerID;

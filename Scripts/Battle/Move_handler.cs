@@ -24,7 +24,7 @@ public class Move_handler:MonoBehaviour
     public event Action OnMoveEnd;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageDeal;
     public event Action<Battle_Participant,Move> OnMoveHit;
-    public event Action<Battle_Participant,string> OnStatusEffectHit;
+    public event Action<Battle_Participant,PokemonOperations.StatusEffect> OnStatusEffectHit;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -236,7 +236,7 @@ public class Move_handler:MonoBehaviour
     {
         if (_currentTurn.move.hasSpecialEffect || !_currentTurn.move.hasStatus)
         { processingOrder = false; return; }
-        if (victim.pokemon.statusEffect != "None")
+        if (victim.pokemon.statusEffect != PokemonOperations.StatusEffect.None)
         { 
             if(_currentTurn.move.statusEffect==victim.pokemon.statusEffect)
                 Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" already has a "+victim.pokemon.statusEffect+" effect!");
@@ -258,12 +258,12 @@ public class Move_handler:MonoBehaviour
             }
         processingOrder = false;
     }
-    bool CheckInvalidStatusEffect(string status,string typeName,Move move)
+    bool CheckInvalidStatusEffect(PokemonOperations.StatusEffect status,string typeName,Move move)
     {
         string[] invalidCombinations = {
             "poisonpoison","badlypoisonpoison", "burnfire", "paralysiselectric", "freezeice" };
         foreach(string s in invalidCombinations)
-            if ((status.Replace(" ", "") + typeName).ToLower() == s)
+            if ((status + typeName).ToLower() == s)
             {
                 if(move.moveDamage==0)//if its only a status causing move
                     Dialogue_handler.Instance.DisplayBattleInfo("It failed");
@@ -280,10 +280,10 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.Instance.DisplayBattleInfo(currentVictim.pokemon.pokemonName+" received a "+move.statusEffect+" effect!");
         ApplyStatusToVictim(currentVictim,move.statusEffect);
     }
-    public void ApplyStatusToVictim(Battle_Participant participant,string status)
+    public void ApplyStatusToVictim(Battle_Participant participant,PokemonOperations.StatusEffect status)
     {
         participant.pokemon.statusEffect = status;
-        var numTurnsOfStatus = (status=="Sleep")? Utility.RandomRange(1, 5) : 0;
+        var numTurnsOfStatus = (status==PokemonOperations.StatusEffect.Sleep)? Utility.RandomRange(1, 5) : 0;
         participant.statusHandler.GetStatusEffect(numTurnsOfStatus);
     }
 

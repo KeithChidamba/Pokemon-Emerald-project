@@ -385,29 +385,29 @@ public class Item_handler : MonoBehaviour
 
     private bool IsValidStatusHeal(string curableStatus)
     {
-        if (_selectedPartyPokemon.statusEffect == "None")
+        if (_selectedPartyPokemon.statusEffect == PokemonOperations.StatusEffect.None)
         {
-            Dialogue_handler.Instance.DisplayFeedBack("Pokemon is already healthy");
+            Dialogue_handler.Instance.DisplayDetails("Pokemon is already healthy");
             return false;
         }
         if (curableStatus == "full heal") 
         {
-            _selectedPartyPokemon.statusEffect = "None";
-            Dialogue_handler.Instance.DisplayFeedBack(_selectedPartyPokemon.pokemonName+" has been healed");
+            _selectedPartyPokemon.statusEffect = PokemonOperations.StatusEffect.None;
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" has been healed");
         }
         else
         {
-            if (_selectedPartyPokemon.statusEffect.ToLower() == curableStatus)
+            if (_selectedPartyPokemon.statusEffect.ToString().ToLower() == curableStatus)
             {
-                _selectedPartyPokemon.statusEffect = "None";
+                _selectedPartyPokemon.statusEffect = PokemonOperations.StatusEffect.None;
                 if (curableStatus == "sleep" || curableStatus == "freeze" || curableStatus == "paralysis")
                     _selectedPartyPokemon.canAttack = true;
-                Dialogue_handler.Instance.DisplayFeedBack("Pokemon has been healed");
+                Dialogue_handler.Instance.DisplayDetails("Pokemon has been healed");
                 Battle_handler.Instance.RefreshParticipantUI();
             }
             else
             {
-                Dialogue_handler.Instance.DisplayFeedBack("Incorrect heal item");
+                Dialogue_handler.Instance.DisplayDetails("Incorrect heal item");
                 return false;
             }
         }
@@ -422,7 +422,7 @@ public class Item_handler : MonoBehaviour
             ResetItemUsage();
             return;
         }
-        StartCoroutine(CompleteItemUsage(2.2f));
+        StartCoroutine(CompleteItemUsage(3f));
         Pokemon_party.Instance.RefreshMemberCards();
         Dialogue_handler.Instance.EndDialogue(1f);
     }
@@ -430,14 +430,14 @@ public class Item_handler : MonoBehaviour
     {
         if (_selectedPartyPokemon.hp <= 0)
         {
-            Dialogue_handler.Instance.DisplayFeedBack( "Pokemon has already fainted",1f);
+            Dialogue_handler.Instance.DisplayDetails( "Pokemon has already fainted",2f);
             ResetItemUsage();
             OnItemUsageSuccessful?.Invoke(false);
             return;
         } 
         if(_selectedPartyPokemon.hp>=_selectedPartyPokemon.maxHp)
         {
-            Dialogue_handler.Instance.DisplayFeedBack("Pokemon health already is full",1f);
+            Dialogue_handler.Instance.DisplayDetails("Pokemon health already is full",2f);
             ResetItemUsage();
             OnItemUsageSuccessful?.Invoke(false);
             return;
@@ -446,14 +446,14 @@ public class Item_handler : MonoBehaviour
         if ((_selectedPartyPokemon.hp + healEffect) < _selectedPartyPokemon.maxHp)
         {
             _selectedPartyPokemon.hp += healEffect;
-            Dialogue_handler.Instance.DisplayFeedBack(_selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points",1f);
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points",2f);
         }
         else if ((_selectedPartyPokemon.hp + healEffect) >= _selectedPartyPokemon.maxHp)
         {
             _selectedPartyPokemon.hp = _selectedPartyPokemon.maxHp;
-            Dialogue_handler.Instance.DisplayFeedBack(_selectedPartyPokemon.pokemonName+" gained full health points",1f);
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" gained full health points",2f);
         }
-        StartCoroutine(CompleteItemUsage(2.2f));
+        StartCoroutine(CompleteItemUsage(3f));
     }
     private void CompleteItemUsage()//only call for items used outside of battle
     {

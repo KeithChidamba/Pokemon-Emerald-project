@@ -33,7 +33,7 @@ public class overworld_actions : MonoBehaviour
         if (doingAction)
             Player_movement.Instance.RestrictPlayerMovement();
         
-        if (pokemonBitingPole & Input.GetKeyDown(KeyCode.F))
+        if (pokemonBitingPole & Input.GetKeyDown(KeyCode.Z))
         {
             pokemonBitingPole = false;
             Encounter_handler.Instance.TriggerEncounter(fishingArea);
@@ -42,7 +42,7 @@ public class overworld_actions : MonoBehaviour
         {
             doingAction = true;
             manager.ChangeAnimationState(manager.fishingIdle);
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.C))
                 ResetFishingAction();
         }
     }

@@ -1153,7 +1153,6 @@ MonoBehaviour:
   singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 1656265309}
-  enemySelected: 0
   previousMove: 
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
@@ -1215,6 +1214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086a8b95aa628cd31ae9abe6b0bb8562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _abilityTriggered: 0
+  _currentAbility: 
 --- !u!1 &39356509
 GameObject:
   m_ObjectHideFlags: 0
@@ -3945,7 +3946,6 @@ MonoBehaviour:
   pokemonHealthBarUI: {fileID: 80550801}
   hpSliderImage: {fileID: 1630599149}
   pokemon: {fileID: 0}
-  partyPosition: 6
   mainUI:
   - {fileID: 685427839}
   - {fileID: 2019594716}
@@ -6084,7 +6084,6 @@ MonoBehaviour:
   singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 1780447230}
-  enemySelected: 0
   previousMove: 
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
@@ -6164,6 +6163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086a8b95aa628cd31ae9abe6b0bb8562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _abilityTriggered: 0
+  _currentAbility: 
 --- !u!1 &192485166
 GameObject:
   m_ObjectHideFlags: 0
@@ -6450,6 +6451,7 @@ MonoBehaviour:
   stateLayers: []
   boxCoordinates: 0000000000000000
   rowRemainder: 0
+  emptyPlaceHolder: {fileID: 1844211758}
 --- !u!4 &215726036
 Transform:
   m_ObjectHideFlags: 0
@@ -6462,7 +6464,8 @@ Transform:
   m_LocalPosition: {x: 659.0017, y: 257.9626, z: -3.4128006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1844211759}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &215878850
@@ -17525,7 +17528,6 @@ MonoBehaviour:
   pokemonHealthBarUI: {fileID: 1525119334}
   hpSliderImage: {fileID: 1188714951}
   pokemon: {fileID: 0}
-  partyPosition: 2
   mainUI:
   - {fileID: 215878850}
   - {fileID: 417229421}
@@ -19059,7 +19061,6 @@ MonoBehaviour:
   pokemonHealthBarUI: {fileID: 347697869}
   hpSliderImage: {fileID: 1860845883}
   pokemon: {fileID: 0}
-  partyPosition: 3
   mainUI:
   - {fileID: 1636204922}
   - {fileID: 1317746955}
@@ -20668,7 +20669,6 @@ MonoBehaviour:
   pokemonHealthBarUI: {fileID: 279946563}
   hpSliderImage: {fileID: 1461788771}
   pokemon: {fileID: 0}
-  partyPosition: 5
   mainUI:
   - {fileID: 394100806}
   - {fileID: 757401340}
@@ -27646,7 +27646,6 @@ MonoBehaviour:
   pokemonHealthBarUI: {fileID: 782409712}
   hpSliderImage: {fileID: 912602700}
   pokemon: {fileID: 0}
-  partyPosition: 4
   mainUI:
   - {fileID: 1816840660}
   - {fileID: 1268647949}
@@ -34933,7 +34932,6 @@ MonoBehaviour:
   pokemonHealthBarUI: {fileID: 1761249113}
   hpSliderImage: {fileID: 2068718551}
   pokemon: {fileID: 0}
-  partyPosition: 1
   mainUI:
   - {fileID: 2024210777}
   - {fileID: 1920848968}
@@ -67282,7 +67280,6 @@ MonoBehaviour:
   doubleBattleUI:
   - {fileID: 1940039930}
   participantUI: {fileID: 443644594}
-  enemySelected: 0
   previousMove: 
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
@@ -67344,6 +67341,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086a8b95aa628cd31ae9abe6b0bb8562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _abilityTriggered: 0
+  _currentAbility: 
 --- !u!1001 &1641952052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -72046,7 +72045,6 @@ MonoBehaviour:
   - {fileID: 794004208}
   runningAway: 0
   currentEnemyIndex: 0
-  doingMove: 0
   lastOpponent: {fileID: 0}
   optionSelector: {fileID: 318233309}
   moveSelector: {fileID: 1331004670}
@@ -72818,6 +72816,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1841323213}
   m_CullTransparentMesh: 1
+--- !u!1 &1844211758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1844211759}
+  m_Layer: 0
+  m_Name: EmptyParentUiPlaceHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1844211759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844211758}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 215726036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1847471059
 GameObject:
   m_ObjectHideFlags: 0
@@ -92769,7 +92798,6 @@ MonoBehaviour:
   singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 173013067}
-  enemySelected: 0
   previousMove: 
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
@@ -92849,6 +92877,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086a8b95aa628cd31ae9abe6b0bb8562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _abilityTriggered: 0
+  _currentAbility: 
 --- !u!1 &2033643100
 GameObject:
   m_ObjectHideFlags: 0

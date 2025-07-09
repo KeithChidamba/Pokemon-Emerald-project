@@ -58,7 +58,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("CanBeDamaged")] public bool canBeDamaged = true;
     public bool immuneToStatReduction = false;
     public List<Type> types;
-    [FormerlySerializedAs("Status_effect")] public string statusEffect = "None";
+    public PokemonOperations.StatusEffect statusEffect;
     [FormerlySerializedAs("Buff_Debuffs")] public List<Buff_Debuff> buffAndDebuffs = new();
     [FormerlySerializedAs("evo_line")] public string[] evolutionLineLevels;
     public string friendshipEvolutionRequirement;

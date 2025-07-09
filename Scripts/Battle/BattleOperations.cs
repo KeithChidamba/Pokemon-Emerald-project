@@ -27,9 +27,9 @@ public static class BattleOperations
             if (PokemonOperations.ContainsType(t.resistances, enemyType))
                 _effectiveness /= 2f;
     }
-    public static bool is_Stab(Pokemon pkm,Type moveType)
+    public static bool is_Stab(Pokemon pokemon,Type moveType)
     {
-        foreach(Type t in pkm.types)
+        foreach(Type t in pokemon.types)
             if (t == moveType)
                 return true;
         return false;
@@ -54,10 +54,10 @@ public static class BattleOperations
         return _effectiveness;
     }
     //Pokeballs
-    public static float GetCatchRateBonusFromStatus(string statusName)
+    public static float GetCatchRateBonusFromStatus(PokemonOperations.StatusEffect statusName)
     {
-        if (statusName == "None") return 1;
-        if (statusName == "Sleep" || statusName == "Freeze")
+        if (statusName == PokemonOperations.StatusEffect.None) return 1;
+        if (statusName == PokemonOperations.StatusEffect.Sleep || statusName == PokemonOperations.StatusEffect.Freeze)
             return 2.5f;
         return 1.5f;
     }

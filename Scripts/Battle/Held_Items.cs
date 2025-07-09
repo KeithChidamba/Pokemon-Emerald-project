@@ -35,14 +35,16 @@ public class Held_Items : MonoBehaviour
 
     void CheckHealCondition()
     {
-        if(_participant.pokemon.hp >= (_participant.pokemon.maxHp/2)) return;        Debug.Log("triggered heal held item");
+        if(_participant.pokemon.hp >= (_participant.pokemon.maxHp/2)) return;        
+        Debug.Log("triggered heal held item");
         Item_handler.Instance.usingHeldItem = true;
         Item_handler.Instance.UseItem(_participant.pokemon.heldItem,_participant.pokemon);
     }
 
     void CheckStatusCondition()
     {
-        if(_participant.pokemon.statusEffect == "None") return;        Debug.Log("triggered status held item");
+        if(_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
+        Debug.Log("triggered status held item");
         Item_handler.Instance.usingHeldItem = true;
         Item_handler.Instance.UseItem(_participant.pokemon.heldItem,_participant.pokemon);
     }

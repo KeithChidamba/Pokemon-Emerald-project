@@ -22,7 +22,7 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("Powerpoints")] public int powerpoints;
     [FormerlySerializedAs("BasePowerpoints")] public int basePowerpoints;
     [FormerlySerializedAs("max_Powerpoints")] public int maxPowerpoints;
-    [FormerlySerializedAs("Status_effect")] public string statusEffect = "None";
+    public PokemonOperations.StatusEffect statusEffect;
     [FormerlySerializedAs("Buff_Debuff")] public string buffOrDebuffName = "None";
     [FormerlySerializedAs("Status_chance")] public float statusChance;
     [FormerlySerializedAs("Debuff_chance")] public float buffOrDebuffChance;

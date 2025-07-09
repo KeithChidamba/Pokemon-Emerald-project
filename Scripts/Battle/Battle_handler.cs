@@ -73,22 +73,17 @@ public class Battle_handler : MonoBehaviour
 
         if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
         
-        if (isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex == 1)
-        {
-            //if(Input.GetKey(KeyCode.R)) Turn_Based_Combat.Instance.RemoveTurn();
-        }
         _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
         AutoAim();
     }
-
-    void EnableBattleMessage()
+    
+    private void EnableBattleMessage()
     {
-        StartCoroutine(DisplayBattleMessage());
-    }
-    IEnumerator DisplayBattleMessage()
-    {
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        Dialogue_handler.Instance.DisplaySpecific("What will you do?",Dialogue_handler.DialogType.BattleDisplayMessage);
+        Dialogue_handler.Instance.OnMessagedDone -= EnableBattleMessage;
+        if (!Dialogue_handler.Instance.messagesLoading)
+            Dialogue_handler.Instance.DisplaySpecific("What will you do?",Dialogue_handler.DialogType.BattleDisplayMessage);
+        else
+            Dialogue_handler.Instance.OnMessagedDone += EnableBattleMessage;
     }
     private void AllowEnemySelection()
     {
@@ -118,9 +113,8 @@ public class Battle_handler : MonoBehaviour
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
         UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant); 
     }
-    public void ResetAi()
+    private void ResetAi()
     {
-        //improve eventually to work as proper strategy AI
         if (!isTrainerBattle)
             Wild_pkm.Instance.CanAttack();
         else
@@ -164,7 +158,7 @@ public class Battle_handler : MonoBehaviour
             new(battleOptions[0], LoadMoveInputAndText, true),
             new(battleOptions[1], Game_ui_manager.Instance.ViewBag, true),
             new(battleOptions[2], Game_ui_manager.Instance.ViewPokemonParty, true),
-            new(battleOptions[3], RunAway, true)
+            new(battleOptions[3], () => StartCoroutine(RunAway()), true)
         };
 
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleOptions
@@ -545,15 +539,19 @@ public class Battle_handler : MonoBehaviour
         battleWon = false;
         battleOver = false;
     }
-    private void RunAway() {
+    private IEnumerator RunAway() {
         runningAway = true;
         displayingInfo = true;
         if(!isTrainerBattle & !_currentParticipant.canEscape)
             Dialogue_handler.Instance.DisplayBattleInfo(_currentParticipant.pokemon.pokemonName +" is trapped");
         else
         {
-            if (isTrainerBattle )
+            if (isTrainerBattle)
+            {
                 Dialogue_handler.Instance.DisplayBattleInfo("Can't run away from trainer battle");
+                yield return new WaitForSeconds(1.5f);
+                Turn_Based_Combat.Instance.NextTurn();
+            }
             else
             { 
                 int random = Utility.RandomRange(1,11);
@@ -568,14 +566,11 @@ public class Battle_handler : MonoBehaviour
                 else
                 {
                     Dialogue_handler.Instance.DisplayBattleInfo("Can't run away");
-                    Turn_Based_Combat.Instance.Invoke(nameof(Turn_Based_Combat.Instance.NextTurn),0.9f);
+                    yield return new WaitForSeconds(1.5f);
+                    Turn_Based_Combat.Instance.NextTurn();
                 }
             }
         }
-        Invoke(nameof(ResetRunLogic),1f);
-    }
-    void ResetRunLogic()
-    {
         runningAway = false;
         displayingInfo = false;
     }

@@ -14,7 +14,6 @@ public class Pokemon_party_member : MonoBehaviour
     [FormerlySerializedAs("pkm_hp")] public Slider pokemonHealthBarUI;
     public RawImage hpSliderImage;
     [FormerlySerializedAs("pkm")] public Pokemon pokemon;
-    public int partyPosition;
     [FormerlySerializedAs("main_ui")] public GameObject[] mainUI;
     [FormerlySerializedAs("empty_ui")] public GameObject emptySlotUI;
     [FormerlySerializedAs("HeldItem_img")] public GameObject heldItemImage;
@@ -35,13 +34,13 @@ public class Pokemon_party_member : MonoBehaviour
         isEmpty = false;
         emptySlotUI.SetActive(false);
         heldItemImage.SetActive(pokemon.hasItem);
-        if (pokemon.statusEffect == "None")
+        if (pokemon.statusEffect == PokemonOperations.StatusEffect.None)
             statusEffectImage.gameObject.SetActive(false);
         else
         {
             statusEffectImage.gameObject.SetActive(true);
             statusEffectImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/"
-                                                       + pokemon.statusEffect.Replace(" ","").ToLower());
+                                                       + pokemon.statusEffect.ToString().ToLower());
         }
     }
     public void ResetUI()

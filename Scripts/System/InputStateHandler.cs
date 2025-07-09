@@ -39,6 +39,7 @@ public class InputStateHandler : MonoBehaviour
     private int _numBoxColumns;
     private int _currentNumBoxElements;
     public int rowRemainder;
+    public GameObject emptyPlaceHolder;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -60,7 +61,8 @@ public class InputStateHandler : MonoBehaviour
 
     public void AddPlaceHolderState()
     {
-        ChangeInputState(_emptyState);
+        ChangeInputState(new InputState(StateName.Empty,new[]{StateGroup.None}, canExit: false
+            , isParent:true,mainView: emptyPlaceHolder));
     }
     public void ResetGroupUi(StateGroup group)
     {
@@ -137,13 +139,13 @@ public class InputStateHandler : MonoBehaviour
         _handlingState = stateLayers.Count > 0;
         if (!_handlingState) return;
         bool viewingExitableDialogue = Dialogue_handler.Instance.canExitDialogue & Dialogue_handler.Instance.displaying; 
-        if (Input.GetKeyDown(KeyCode.R) && stateLayers.Last().stateName!=StateName.DialogueOptions
+        if (Input.GetKeyDown(KeyCode.X) && stateLayers.Last().stateName!=StateName.DialogueOptions
                                         && !viewingExitableDialogue && currentState.canExit)
             RemoveTopInputLayer(true);
         
         if (currentState.stateName == StateName.Empty) return;
         
-        if (Input.GetKeyDown(KeyCode.F) && _currentStateLoaded)
+        if (Input.GetKeyDown(KeyCode.Z) && _currentStateLoaded)
             InvokeSelectedEvent();
 
         if (currentState.stateDirectional == Directional.None) return;
