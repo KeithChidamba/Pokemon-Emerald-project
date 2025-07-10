@@ -36,6 +36,7 @@ public class Battle_handler : MonoBehaviour
     private Battle_Participant _currentParticipant;
     public GameObject optionSelector;
     public GameObject moveSelector;
+    public bool usedTurnForItem;
     public static Battle_handler Instance;
     public event Action OnBattleEnd;
     public event Action OnSwitchIn;
@@ -81,7 +82,10 @@ public class Battle_handler : MonoBehaviour
     {
         Dialogue_handler.Instance.OnMessagedDone -= EnableBattleMessage;
         if (!Dialogue_handler.Instance.messagesLoading)
+        {
             Dialogue_handler.Instance.DisplaySpecific("What will you do?",Dialogue_handler.DialogType.BattleDisplayMessage);
+            optionsUI.SetActive(true);
+        }
         else
             Dialogue_handler.Instance.OnMessagedDone += EnableBattleMessage;
     }
@@ -96,6 +100,7 @@ public class Battle_handler : MonoBehaviour
             || _currentParticipant.pokemon.moveSet[_currentMoveIndex].isMultiTarget)
         {
             currentEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
+            PlayerExecuteMove();
             return;
         }
         var enemySelectables = new List<SelectableUI>();
@@ -170,7 +175,7 @@ public class Battle_handler : MonoBehaviour
 
     bool ConditionForExit()
     {
-        return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0;
+        return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0 && !usedTurnForItem;
     }
     private void SetupBattle()
     {
@@ -185,6 +190,7 @@ public class Battle_handler : MonoBehaviour
         overWorld.SetActive(false);
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
         EnableBattleMessage();
+        Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
         Turn_Based_Combat.Instance.OnNewTurn += EnableBattleMessage;
         Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
         Game_ui_manager.Instance.OnUiClose += EnableBattleMessage;
@@ -462,7 +468,7 @@ public class Battle_handler : MonoBehaviour
                 }
             }
         }
-        yield return new WaitForSeconds(2f);
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         ResetUiAfterBattle(playerWhiteOut);
         if(overworld_actions.Instance.fishing)//battle triggered from fishing
             overworld_actions.Instance.ResetFishingAction();
@@ -499,6 +505,7 @@ public class Battle_handler : MonoBehaviour
     }
     public void EndBattle(bool hasWon)
     {
+        if (battleOver) return;
         battleWon = hasWon;
         battleOver = true;
         StartCoroutine(DelayBattleEnd());
@@ -511,6 +518,7 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn -= EnableBattleMessage;
         Turn_Based_Combat.Instance.OnNewTurn -= ResetAi;
         Dialogue_handler.Instance.EndDialogue();
+        usedTurnForItem = false;
         Options_manager.Instance.playerInBattle = false;
         overworld_actions.Instance.doingAction = false;
         battleUI.SetActive(false);

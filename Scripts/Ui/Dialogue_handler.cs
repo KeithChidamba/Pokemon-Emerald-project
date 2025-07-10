@@ -87,7 +87,7 @@ public class Dialogue_handler : MonoBehaviour
 
     public void  DeletePreviousOptions()
     { 
-        if( _dialogueOptionsManager.currentOptions.Count == 0) return;
+        if( _dialogueOptionsManager.currentOptions.Count == 0) return;  
         ActivateOptions(false);
         InputStateHandler.Instance.RemoveTopInputLayer(true);
         _dialogueOptionsManager.currentOptions.Clear();
@@ -210,33 +210,24 @@ public class Dialogue_handler : MonoBehaviour
         DisplayDialogueExit(false);
         var newInteraction = NewInteraction(info,DialogType.BattleInfo,"");
         pendingMessages.Add(newInteraction);
-        if(!messagesLoading) StartCoroutine(ProcessQueue(newInteraction));
+        if (!messagesLoading) StartCoroutine(ProcessQueue());
     }
-    private IEnumerator ProcessQueue(Interaction interaction)
+    private IEnumerator ProcessQueue()
     {
         messagesLoading = true;
-        //creating a duplicate to avoid linking to currentInteraction, because it could delete interaction scrip-object later when nullified
-        currentInteraction = NewInteraction(interaction.interactionMessage,DialogType.BattleInfo,"");
-        HandleInteraction();
-        pendingMessages.Remove(interaction);
-        yield return new WaitForSeconds(2f);
-        ContinueMessageQueue();
-    }
-    void ContinueMessageQueue()
-    {
-        if (pendingMessages.Count > 0)
+        while (pendingMessages.Count > 0)
         {
-            foreach (var message in new List<Interaction>(pendingMessages))
-                StartCoroutine(ProcessQueue(message));
+            var interaction = pendingMessages[0];
+            currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
+            HandleInteraction();
+            pendingMessages.RemoveAt(0);
+            yield return new WaitForSeconds(2f);
         }
-        else
-        {
-            OnMessagedDone?.Invoke();
-            messagesLoading = false;
-            Battle_handler.Instance.displayingInfo = false;
-        }
-    }
 
+        messagesLoading = false;
+        Battle_handler.Instance.displayingInfo = false;
+        OnMessagedDone?.Invoke();
+    }
     public void EndDialogue(float delay)
     {
         Invoke(nameof(EndDialogue), delay);

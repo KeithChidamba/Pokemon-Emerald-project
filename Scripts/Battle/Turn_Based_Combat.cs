@@ -29,6 +29,7 @@ public class Turn_Based_Combat : MonoBehaviour
     private void Start()
     {
         Battle_handler.Instance.OnBattleEnd += ResetTurnState;
+        OnNewTurn += AllowPlayerInput;
     }
     public void SaveMove(Turn turn)
     {
@@ -96,6 +97,7 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         foreach (var currentTurn in turnOrder )
         {
+            if (Battle_handler.Instance.battleOver) break;
             var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
             var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
             if (!IsValidParticipantState(attacker))
@@ -136,10 +138,14 @@ public class Turn_Based_Combat : MonoBehaviour
         OnTurnsCompleted?.Invoke();
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         NextTurn();
+    }
+
+    void AllowPlayerInput()
+    {
+        if (currentTurnIndex > 1) return;
         InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
             InputStateHandler.StateName.Empty});
     }
-
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
         if (string.IsNullOrEmpty(attacker.previousMove))

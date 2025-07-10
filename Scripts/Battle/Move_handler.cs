@@ -140,8 +140,6 @@ public class Move_handler:MonoBehaviour
                              (attackTypeValue/ move.moveDamage))/attacker.pokemon.currentLevel;
         float damageModifier = critValue*stab*randomFactor*typeEffectiveness;
         damageDealt = math.trunc(damageModifier * baseDamage * attackDefenseRatio);
-        if(!_currentTurn.move.isConsecutive)
-            DisplayEffectiveness(typeEffectiveness,currentVictim);
         
         float damageAfterBuff = OnDamageDeal?.Invoke(attacker,victim,_currentTurn.move,damageDealt) ?? damageDealt; 
         OnMoveHit?.Invoke(attacker,move);
@@ -199,6 +197,7 @@ public class Move_handler:MonoBehaviour
     {
         displayingHealthDecrease = true;
         var damage = CalculateMoveDamage(_currentTurn.move, currentVictim);
+        
         var healthAfterDecrease = Mathf.Clamp(currentVictim.pokemon.hp - damage,0,currentVictim.pokemon.hp);
         
         float displayHp = currentVictim.pokemon.hp;
@@ -215,6 +214,9 @@ public class Move_handler:MonoBehaviour
         
         currentVictim.pokemon.hp = healthAfterDecrease;
         yield return new WaitUntil(() =>  currentVictim.pokemon.hp <= 0 || currentVictim.pokemon.hp<=healthAfterDecrease);
+        var typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, _currentTurn.move.type);
+                                                                                                                                  
+        if(!_currentTurn.move.isConsecutive) DisplayEffectiveness(typeEffectiveness,currentVictim);
         currentVictim.pokemon.TakeDamage(0);
         displayingHealthDecrease = false;
     }
@@ -411,8 +413,8 @@ public class Move_handler:MonoBehaviour
         var numHits = 0;
         for (int i = 0; i < numRepetitions; i++)
         {
-            if (!victim.pokemon.canBeDamaged)
-                break;
+            if (!victim.pokemon.canBeDamaged) break;
+            
             if (victim.pokemon.hp <= 0) break;
             
             if (!Turn_Based_Combat.Instance.MoveSuccessful(_currentTurn)) break; //if miss
@@ -429,11 +431,13 @@ public class Move_handler:MonoBehaviour
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             Dialogue_handler.Instance.DisplayBattleInfo("It hit (x" + numHits + ") times");
         }
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         _moveDelay = false;
         processingOrder = false;
     } 
     IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
     {
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         foreach (var enemy in targets)
         {
             StartCoroutine(DamageDisplay(enemy));

@@ -213,6 +213,7 @@ public class Pokemon_party : MonoBehaviour
         ClearSelectionUI();
         if(!swappingIn && !swapOutNext)
             Dialogue_handler.Instance.DisplayDetails(message,1f);
+        InputStateHandler.Instance.UpdateHealthBarColors();
     }
     public void AddMember(Pokemon pokemon)
     { //add new pokemon after catch or event

@@ -104,18 +104,22 @@ public class Battle_Participant : MonoBehaviour
 
         expReceivers.Clear();
     }
-    private void CheckIfFainted()
+    private IEnumerator CheckIfFainted()
     {
-        if (!isActive) return;
-        if (fainted) return; 
-        fainted = (pokemon.hp <= 0);
-        if (pokemon.hp > 0) return;
-        OnPokemonFainted?.Invoke();
-        Turn_Based_Combat.Instance.faintEventDelay = true;
-        Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName+" fainted!");
-        pokemon.statusEffect = PokemonOperations.StatusEffect.None;
-        pokemon.DetermineFriendshipLevelChange(false,"Fainted");
-        StartCoroutine(HandleFaintLogic());
+        if (!fainted && isActive)
+        {
+            fainted = pokemon.hp <= 0;
+            if (pokemon.hp <= 0)
+            {
+                OnPokemonFainted?.Invoke();
+                Turn_Based_Combat.Instance.faintEventDelay = true;
+                yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);
+                Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName + " fainted!");
+                pokemon.statusEffect = PokemonOperations.StatusEffect.None;
+                pokemon.DetermineFriendshipLevelChange(false, "Fainted");
+                StartCoroutine(HandleFaintLogic());
+            }
+        }
     }
 
     private IEnumerator HandleFaintLogic()
@@ -169,7 +173,7 @@ public class Battle_Participant : MonoBehaviour
                 Pokemon_party.Instance.selectedMemberIndex = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
                 Pokemon_party.Instance.swapOutNext = true;
                 Game_ui_manager.Instance.ViewPokemonParty();
-                Dialogue_handler.Instance.DisplayDetails("Select a Pokemon to switch in",2f);
+                Dialogue_handler.Instance.DisplayDetails("Select a Pokemon to switch in");
                 ResetParticipantState();
             }
             else if (Battle_handler.Instance.isDoubleBattle && alivePokemon.Count == 1)//1 left
@@ -299,7 +303,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
-        pokemon.OnDamageTaken += CheckIfFainted;
+        pokemon.OnDamageTaken += ()=> StartCoroutine(CheckIfFainted());
         if (!isPlayer) return;
         _resetHandler = pkm => ResetParticipantStateAfterLevelUp();
         pokemon.OnLevelUp += _resetHandler;

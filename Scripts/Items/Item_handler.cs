@@ -457,6 +457,7 @@ public class Item_handler : MonoBehaviour
     }
     private void CompleteItemUsage()//only call for items used outside of battle
     {
+        Battle_handler.Instance.usedTurnForItem = true;
         if (usingHeldItem)
             DepleteHeldItem(); 
         else

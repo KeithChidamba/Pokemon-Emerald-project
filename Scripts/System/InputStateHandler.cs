@@ -224,9 +224,9 @@ public class InputStateHandler : MonoBehaviour
 
     private void HandleStateExitability()
     {
-        if (!currentState.canExit && currentState.UpdateExitStatus == null) return;
-        
-        currentState.canExit = currentState.UpdateExitStatus?.Invoke() ?? true;
+        if (currentState.UpdateExitStatus == null) return;
+
+        currentState.canExit = currentState.UpdateExitStatus.Invoke();
     }
     void SetDirectionals()
     {
@@ -292,7 +292,7 @@ public class InputStateHandler : MonoBehaviour
         
         currentState.selector.SetActive(true);
     }
-    private void UpdateHealthBarColors()
+    public void UpdateHealthBarColors()
     {
         for (var i = 0;i<Pokemon_party.Instance.numMembers;i++)
         {
