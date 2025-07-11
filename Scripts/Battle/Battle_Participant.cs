@@ -46,6 +46,8 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierSharing;
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
         Battle_handler.Instance.OnBattleEnd += DeactivatePokemon;
+        Battle_handler.Instance.OnBattleEnd += ()=> OnPokemonFainted = null;
+        OnPokemonFainted += ()=> StartCoroutine(Battle_handler.Instance.FaintSequence());
     }
     private void Update()
     {
@@ -111,18 +113,17 @@ public class Battle_Participant : MonoBehaviour
             fainted = pokemon.hp <= 0;
             if (pokemon.hp <= 0)
             {
-                OnPokemonFainted?.Invoke();
-                Turn_Based_Combat.Instance.faintEventDelay = true;
-                yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);
-                Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName + " fainted!");
+                //yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);
                 pokemon.statusEffect = PokemonOperations.StatusEffect.None;
+                Battle_handler.Instance.faintQueue.Add(this);
                 pokemon.DetermineFriendshipLevelChange(false, "Fainted");
-                StartCoroutine(HandleFaintLogic());
+                if(!Turn_Based_Combat.Instance.faintEventDelay)
+                    OnPokemonFainted?.Invoke();
             }
         }
+        yield return null;
     }
-
-    private IEnumerator HandleFaintLogic()
+    public IEnumerator HandleFaintLogic()
     {
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         if (!isPlayer)
@@ -146,8 +147,7 @@ public class Battle_Participant : MonoBehaviour
                 pokemonTrainerAI.CheckIfLoss();
             }
         }
-        else
-            CheckIfLoss();
+        else CheckIfLoss();
     }
     public void EndWildBattle()
     {

@@ -31,6 +31,7 @@ public class Turn_Based_Combat : MonoBehaviour
         Battle_handler.Instance.OnBattleEnd += ResetTurnState;
         OnNewTurn += AllowPlayerInput;
     }
+
     public void SaveMove(Turn turn)
     {
         _turnHistory.Add(turn);
@@ -119,20 +120,20 @@ public class Turn_Based_Combat : MonoBehaviour
             {
                 yield return new WaitUntil(() => !Item_handler.Instance.usingHeldItem);
                 yield return new WaitUntil(() => !levelEventDelay);
-                yield return new WaitUntil(() => !faintEventDelay);
+                yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0);
                 Move_handler.Instance.doingMove = true;
                 CheckRepeatedMove(attacker,currentTurn.move);
                 Move_handler.Instance.ExecuteMove(currentTurn);
                 yield return new WaitUntil(() => !Move_handler.Instance.doingMove);
                 yield return new WaitUntil(() => !Item_handler.Instance.usingHeldItem);
                 yield return new WaitUntil(() => !levelEventDelay);
-                yield return new WaitUntil(() => !faintEventDelay);
+                yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0);
             }
             else
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
         yield return new WaitUntil(() => !levelEventDelay);
-        yield return new WaitUntil(() => !faintEventDelay);
+        yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         _turnHistory.Clear();
         OnTurnsCompleted?.Invoke();

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -81,7 +82,7 @@ public class Move_handler:MonoBehaviour
                     yield return new WaitUntil(() => !processingOrder);
                     yield return new WaitUntil(() => !_moveDelay);
                     yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
-                    yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
+                    yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0);
                     yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                 } 
                 victim.OnPokemonFainted -= CancelMoveSequence;
@@ -162,9 +163,9 @@ public class Move_handler:MonoBehaviour
         if ((int)math.trunc(typeEffectiveness) == 1) return;
         var message = "";
         if (typeEffectiveness == 0)
-            message=currentVictim.pokemon.pokemonName+" was not affected!";
+            message= "It does'nt affect "+currentVictim.pokemon.pokemonName+"!";
         else
-            message=(typeEffectiveness > 1)?"The move is Super effective!":"The move is not very effective!";
+            message=(typeEffectiveness > 1)?"It's Super effective!":"It's not very effective!";
         Dialogue_handler.Instance.DisplayBattleInfo(message);
     }
     private float SetAtkDefRatio(int crit, bool isSpecial, Battle_Participant currentAttacker, Battle_Participant currentVictim)
@@ -205,7 +206,7 @@ public class Move_handler:MonoBehaviour
         while (displayHp > healthAfterDecrease)
         {
             float newHp = Mathf.MoveTowards(displayHp, healthAfterDecrease,
-                (1f/currentVictim.pokemon.healthPhase) * Time.deltaTime);
+                (0.25f/currentVictim.pokemon.healthPhase) * Time.deltaTime);
             displayHp = Mathf.Floor(newHp);
             currentVictim.pokemon.hp = displayHp;
             
@@ -443,6 +444,7 @@ public class Move_handler:MonoBehaviour
             StartCoroutine(DamageDisplay(enemy));
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             yield return new WaitUntil(() => !displayingHealthDecrease);
+            yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         _moveDelay = false;

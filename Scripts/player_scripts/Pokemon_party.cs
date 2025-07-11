@@ -72,6 +72,8 @@ public class Pokemon_party : MonoBehaviour
            
             swappingIn = true;
             if (!IsValidSwap(memberPosition)) { swappingIn = false; return;}
+
+            Battle_handler.Instance.usedTurnForSwap = true;
             swapOutNext = false;
             selectedMemberIndex = Turn_Based_Combat.Instance.currentTurnIndex+1;
             currentParticipant.ResetParticipantState();
@@ -113,8 +115,6 @@ public class Pokemon_party : MonoBehaviour
         else if (Item_handler.Instance.usingItem)
         {//use item on pokemon
             Item_handler.Instance.UseItem(_itemToUse,selectedMember.pokemon);
-            memberSelector.transform.position = selectedMember.transform.position;
-            memberSelector.SetActive(true);
         }
         else if (givingItem)
             GiveItemToMember(memberPosition);
@@ -130,8 +130,6 @@ public class Pokemon_party : MonoBehaviour
                 else
                 {
                     ClearSelectionUI();
-                    memberSelector.transform.position = selectedMember.transform.position;
-                    memberSelector.SetActive(true);
                     partyOptionsParent.SetActive(true);
                     InputStateHandler.Instance.PokemonPartyOptions();
                 }
@@ -141,7 +139,6 @@ public class Pokemon_party : MonoBehaviour
     public void ClearSelectionUI()
     {
         moving = false;
-        memberSelector.SetActive(false);
         partyOptionsParent.SetActive(false);
     }
 
@@ -170,8 +167,6 @@ public class Pokemon_party : MonoBehaviour
         selectedMember.pokemon.GiveItem(Obj_Instance.CreateItem(_itemToUse));
         _itemToUse.quantity--;
         Bag.Instance.CheckItemQuantity(_itemToUse);
-        memberSelector.transform.position = selectedMember.transform.position;
-        memberSelector.SetActive(true);
         givingItem = false;
         _itemToUse = null;
         RefreshMemberCards();
@@ -195,7 +190,7 @@ public class Pokemon_party : MonoBehaviour
             Turn_Based_Combat.Instance.faintEventDelay = false;
         if(swappingIn)
             Turn_Based_Combat.Instance.NextTurn();
-        InputStateHandler.Instance.RemoveTopInputLayer(true);
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
     }
     private void SwapMembers(int partyPosition)
     {
@@ -209,7 +204,6 @@ public class Pokemon_party : MonoBehaviour
         memberToMove = 0;
         selectedMemberIndex = 0;
         RefreshMemberCards();
-        memberSelector.SetActive(false);
         ClearSelectionUI();
         if(!swappingIn && !swapOutNext)
             Dialogue_handler.Instance.DisplayDetails(message,1f);
@@ -235,7 +229,7 @@ public class Pokemon_party : MonoBehaviour
         {
             for (int i = emptyPosition; i < party.Length - 1; i++)
                 party[i] = party[i + 1];
-            party[party.Length - 1] = null;
+            party[^1] = null;
         }
     }
     public void RefreshMemberCards()

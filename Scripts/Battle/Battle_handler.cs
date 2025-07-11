@@ -17,6 +17,7 @@ public class Battle_handler : MonoBehaviour
     public GameObject[] battleOptions;
     public Battle_Participant[] battleParticipants = { null, null, null, null };
     public List<Pokemon> levelUpQueue = new();
+    public List<Battle_Participant> faintQueue = new();
     public Text movePowerPointsText;
     public Text moveTypeText;
     public Text[] availableMovesText;
@@ -37,6 +38,7 @@ public class Battle_handler : MonoBehaviour
     public GameObject optionSelector;
     public GameObject moveSelector;
     public bool usedTurnForItem;
+    public bool usedTurnForSwap;
     public static Battle_handler Instance;
     public event Action OnBattleEnd;
     public event Action OnSwitchIn;
@@ -175,7 +177,7 @@ public class Battle_handler : MonoBehaviour
 
     bool ConditionForExit()
     {
-        return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0 && !usedTurnForItem;
+        return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0 && !usedTurnForItem && !usedTurnForSwap;
     }
     private void SetupBattle()
     {
@@ -191,6 +193,7 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
         EnableBattleMessage();
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
+        Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForSwap = false;
         Turn_Based_Combat.Instance.OnNewTurn += EnableBattleMessage;
         Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
         Game_ui_manager.Instance.OnUiClose += EnableBattleMessage;
@@ -423,6 +426,18 @@ public class Battle_handler : MonoBehaviour
                     return 2;
         return 1;
     }
+    public IEnumerator FaintSequence()
+    {
+        while (faintQueue.Count > 0)
+        {
+            Turn_Based_Combat.Instance.faintEventDelay = true;
+            Dialogue_handler.Instance.DisplayBattleInfo(faintQueue[0].pokemon.pokemonName + " fainted!");
+            yield return new WaitForSeconds(2f);
+            StartCoroutine(faintQueue[0].HandleFaintLogic());
+            yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
+            faintQueue.RemoveAt(0);
+        }
+    }
     IEnumerator DelayBattleEnd()
     {
         var playerWhiteOut = false;
@@ -519,6 +534,7 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn -= ResetAi;
         Dialogue_handler.Instance.EndDialogue();
         usedTurnForItem = false;
+        usedTurnForSwap = false;
         Options_manager.Instance.playerInBattle = false;
         overworld_actions.Instance.doingAction = false;
         battleUI.SetActive(false);
