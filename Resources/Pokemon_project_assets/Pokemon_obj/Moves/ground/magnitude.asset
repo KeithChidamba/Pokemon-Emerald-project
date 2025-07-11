@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Magnitude
   moveDamage: 40
-  moveAccuracy: 100
+  moveAccuracy: 55
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
   isConsecutive: 0
   isMultiTarget: 1
   isSelfTargeted: 0
-  priority: 5
+  priority: 0
   powerpoints: 15
   basePowerpoints: 15
   maxPowerpoints: 15

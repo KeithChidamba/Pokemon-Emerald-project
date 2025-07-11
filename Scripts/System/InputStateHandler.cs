@@ -15,6 +15,7 @@ public class InputStateHandler : MonoBehaviour
     private event Action OnInputRight; 
     private event Action OnInputLeft;
     public event Action OnStateRemovalComplete;
+    public event Action<InputState> OnStateChanged;
     private bool _readingInputs;
     [SerializeField] private bool _currentStateLoaded;
     private bool _handlingState;
@@ -206,6 +207,7 @@ public class InputStateHandler : MonoBehaviour
             stateLayers.Add(newState);
         ResetInputEvents();
         currentState = stateLayers.Last();
+        OnStateChanged?.Invoke(currentState);
         HandleStateExitability();
         SetDirectionals();
         if (currentState.isSelecting) currentState.maxSelectionIndex = currentState.selectableUis.Count-1;

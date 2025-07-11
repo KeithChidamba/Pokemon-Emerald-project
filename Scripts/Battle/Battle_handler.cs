@@ -80,16 +80,13 @@ public class Battle_handler : MonoBehaviour
         AutoAim();
     }
     
-    private void EnableBattleMessage()
+    private void EnableBattleMessage(InputState currentState)
     {
-        Dialogue_handler.Instance.OnMessagedDone -= EnableBattleMessage;
-        if (!Dialogue_handler.Instance.messagesLoading)
+        if (currentState.stateName == InputStateHandler.StateName.PokemonBattleOptions)
         {
             Dialogue_handler.Instance.DisplaySpecific("What will you do?",Dialogue_handler.DialogType.BattleDisplayMessage);
             optionsUI.SetActive(true);
         }
-        else
-            Dialogue_handler.Instance.OnMessagedDone += EnableBattleMessage;
     }
     private void AllowEnemySelection()
     {
@@ -167,7 +164,7 @@ public class Battle_handler : MonoBehaviour
             new(battleOptions[2], Game_ui_manager.Instance.ViewPokemonParty, true),
             new(battleOptions[3], () => StartCoroutine(RunAway()), true)
         };
-
+        
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleOptions
             , new[] { InputStateHandler.StateGroup.PokemonBattle }, true,
             optionsUI, InputStateHandler.Directional.OmniDirection, battleOptionSelectables,
@@ -183,7 +180,7 @@ public class Battle_handler : MonoBehaviour
     {
         Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantStates;
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
-        
+        InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
         SetupOptionsInput();
         levelUpQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
@@ -191,12 +188,11 @@ public class Battle_handler : MonoBehaviour
         battleUI.SetActive(true);
         overWorld.SetActive(false);
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
-        EnableBattleMessage();
+        
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForSwap = false;
-        Turn_Based_Combat.Instance.OnNewTurn += EnableBattleMessage;
         Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
-        Game_ui_manager.Instance.OnUiClose += EnableBattleMessage;
+
     }
 
 
@@ -532,8 +528,6 @@ public class Battle_handler : MonoBehaviour
     {
         OnBattleEnd?.Invoke();
         Turn_Based_Combat.Instance.OnNewTurn -= CheckParticipantStates;
-        Game_ui_manager.Instance.OnUiClose -= EnableBattleMessage;
-        Turn_Based_Combat.Instance.OnNewTurn -= EnableBattleMessage;
         Turn_Based_Combat.Instance.OnNewTurn -= ResetAi;
         Dialogue_handler.Instance.EndDialogue();
         usedTurnForItem = false;

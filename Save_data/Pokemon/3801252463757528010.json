@@ -6,7 +6,7 @@
     "gender": "Male",
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 26076
+        "instanceID": 25918
     },
     "hasGender": true,
     "hp": 56.0,
@@ -54,10 +54,10 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25522
+            "instanceID": 25364
         },
         {
-            "instanceID": 25454
+            "instanceID": 25296
         }
     ],
     "statusEffect": 0,
@@ -79,27 +79,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -11582
+            "instanceID": -2668
         },
         {
-            "instanceID": -11584
+            "instanceID": -2670
         },
         {
-            "instanceID": -11586
+            "instanceID": -2672
         },
         {
-            "instanceID": -11588
+            "instanceID": -2674
         }
     ],
     "ability": {
-        "instanceID": 25792
+        "instanceID": 25634
     },
     "evolutions": [
         {
-            "instanceID": 26056
+            "instanceID": 25898
         },
         {
-            "instanceID": 25910
+            "instanceID": 25752
         }
     ],
     "heldItem": {
@@ -107,10 +107,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32144
+        "instanceID": 31986
     },
     "backPicture": {
-        "instanceID": 32146
+        "instanceID": 31988
     },
     "pokeballName": "",
     "healthPhase": 1,

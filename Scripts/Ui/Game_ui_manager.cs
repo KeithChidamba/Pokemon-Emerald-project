@@ -18,7 +18,6 @@ public class Game_ui_manager : MonoBehaviour
     [SerializeField]private List<GameObject> menuUiOptions = new ();
     public GameObject menuSelector;
     public bool usingWebGl = false;
-    public event Action OnUiClose;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -48,10 +47,7 @@ public class Game_ui_manager : MonoBehaviour
         overworld_actions.Instance.usingUI = numUIScreensOpen>0;
 
         if (numUIScreensOpen == 0)
-        {
-            OnUiClose?.Invoke();
             Player_movement.Instance.AllowPlayerMovement();
-        }
         else
             Player_movement.Instance.RestrictPlayerMovement();
         
