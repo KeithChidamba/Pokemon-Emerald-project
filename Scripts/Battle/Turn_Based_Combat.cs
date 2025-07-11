@@ -99,6 +99,7 @@ public class Turn_Based_Combat : MonoBehaviour
         foreach (var currentTurn in turnOrder )
         {
             if (Battle_handler.Instance.battleOver) break;
+
             var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
             var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
             if (!IsValidParticipantState(attacker))
@@ -120,20 +121,21 @@ public class Turn_Based_Combat : MonoBehaviour
             {
                 yield return new WaitUntil(() => !Item_handler.Instance.usingHeldItem);
                 yield return new WaitUntil(() => !levelEventDelay);
-                yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0);
+                yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
                 Move_handler.Instance.doingMove = true;
                 CheckRepeatedMove(attacker,currentTurn.move);
                 Move_handler.Instance.ExecuteMove(currentTurn);
+                
                 yield return new WaitUntil(() => !Move_handler.Instance.doingMove);
                 yield return new WaitUntil(() => !Item_handler.Instance.usingHeldItem);
                 yield return new WaitUntil(() => !levelEventDelay);
-                yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0);
+                yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
             }
             else
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
         yield return new WaitUntil(() => !levelEventDelay);
-        yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0);
+        yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         _turnHistory.Clear();
         OnTurnsCompleted?.Invoke();

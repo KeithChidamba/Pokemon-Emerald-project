@@ -426,13 +426,16 @@ public class Battle_handler : MonoBehaviour
                     return 2;
         return 1;
     }
-    public IEnumerator FaintSequence()
+    public void FaintEvent()
+    {
+        StartCoroutine(FaintSequence());
+    } 
+    private IEnumerator FaintSequence()
     {
         while (faintQueue.Count > 0)
         {
             Turn_Based_Combat.Instance.faintEventDelay = true;
             Dialogue_handler.Instance.DisplayBattleInfo(faintQueue[0].pokemon.pokemonName + " fainted!");
-            yield return new WaitForSeconds(2f);
             StartCoroutine(faintQueue[0].HandleFaintLogic());
             yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
             faintQueue.RemoveAt(0);

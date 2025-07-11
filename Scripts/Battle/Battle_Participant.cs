@@ -46,8 +46,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierSharing;
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
         Battle_handler.Instance.OnBattleEnd += DeactivatePokemon;
-        Battle_handler.Instance.OnBattleEnd += ()=> OnPokemonFainted = null;
-        OnPokemonFainted += ()=> StartCoroutine(Battle_handler.Instance.FaintSequence());
+        OnPokemonFainted += Battle_handler.Instance.FaintEvent;
     }
     private void Update()
     {
@@ -113,9 +112,9 @@ public class Battle_Participant : MonoBehaviour
             fainted = pokemon.hp <= 0;
             if (pokemon.hp <= 0)
             {
-                //yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);
                 pokemon.statusEffect = PokemonOperations.StatusEffect.None;
                 Battle_handler.Instance.faintQueue.Add(this);
+                yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);
                 pokemon.DetermineFriendshipLevelChange(false, "Fainted");
                 if(!Turn_Based_Combat.Instance.faintEventDelay)
                     OnPokemonFainted?.Invoke();
@@ -173,6 +172,7 @@ public class Battle_Participant : MonoBehaviour
                 Pokemon_party.Instance.selectedMemberIndex = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
                 Pokemon_party.Instance.swapOutNext = true;
                 Game_ui_manager.Instance.ViewPokemonParty();
+                Dialogue_handler.Instance.EndDialogue();
                 Dialogue_handler.Instance.DisplayDetails("Select a Pokemon to switch in");
                 ResetParticipantState();
             }

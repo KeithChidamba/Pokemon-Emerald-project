@@ -63,7 +63,6 @@ public class Move_handler:MonoBehaviour
             SetMoveSequence();
             if (_currentTurn.move.hasSpecialEffect)
             {
-                processingOrder = true;
                 ExecuteMoveWithSpecialEffect();
             }
             else
@@ -80,15 +79,13 @@ public class Move_handler:MonoBehaviour
                     battleEvent.Execute();
                     yield return new WaitUntil(() => !displayingHealthDecrease);
                     yield return new WaitUntil(() => !processingOrder);
-                    yield return new WaitUntil(() => !_moveDelay);
                     yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
-                    yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0);
                     yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                 } 
                 victim.OnPokemonFainted -= CancelMoveSequence;
             }
-
         }
+        yield return new WaitUntil(() => !_moveDelay);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         ResetMoveUsage();
     }
@@ -429,12 +426,10 @@ public class Move_handler:MonoBehaviour
         if (numHits>0)
         {
             DisplayEffectiveness(BattleOperations.GetTypeEffectiveness(victim, _currentTurn.move.type), victim);
-            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             Dialogue_handler.Instance.DisplayBattleInfo("It hit (x" + numHits + ") times");
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         _moveDelay = false;
-        processingOrder = false;
     } 
     IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
     {
@@ -442,13 +437,14 @@ public class Move_handler:MonoBehaviour
         foreach (var enemy in targets)
         {
             StartCoroutine(DamageDisplay(enemy));
-            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             yield return new WaitUntil(() => !displayingHealthDecrease);
-            yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
+            yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay && Battle_handler.Instance.faintQueue.Count == 0);
+            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
+        yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !Turn_Based_Combat.Instance.faintEventDelay);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         _moveDelay = false;
-        processingOrder = false;
+
     }
     void surf()
     {
@@ -467,7 +463,6 @@ public class Move_handler:MonoBehaviour
             math.trunc(math.abs(healAmount)) : attacker.pokemon.maxHp;
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
         _moveDelay = false;
-        processingOrder = false;
     }
     void magnitude()
     {
@@ -502,7 +497,6 @@ public class Move_handler:MonoBehaviour
         else//success
             attacker.pokemon.canBeDamaged = false;
         _moveDelay = false;
-        processingOrder = false;
     }
     void brickbreak()
     {
@@ -528,7 +522,6 @@ public class Move_handler:MonoBehaviour
         StartCoroutine(DamageDisplay(victim));
         yield return new WaitUntil(() => !displayingHealthDecrease);
         _moveDelay = false;
-        processingOrder = false;
     }
 
     private IEnumerator CreateBarriers(string barrierName)
@@ -573,7 +566,6 @@ public class Move_handler:MonoBehaviour
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         
         _moveDelay = false;
-        processingOrder = false;
     }
 
     public bool HasDuplicateBarrier(Battle_Participant currentParticipant,string  barrierName,bool displayMessage)

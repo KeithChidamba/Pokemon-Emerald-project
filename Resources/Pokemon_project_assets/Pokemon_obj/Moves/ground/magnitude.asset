@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: magnitude
   m_EditorClassIdentifier: 
-  Move_name: Magnitude
-  Move_damage: 40
-  Move_accuracy: 55
+  moveName: Magnitude
+  moveDamage: 40
+  moveAccuracy: 100
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
-  Has_status: 0
-  Has_effect: 1
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 1
+  canCauseFlinch: 0
+  isConsecutive: 0
   isMultiTarget: 1
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 15
-  BasePowerpoints: 15
-  max_Powerpoints: 15
-  Status_effect: None
-  Buff_Debuff: None
-  Status_chance: 0
-  Debuff_chance: 0
-  Description: 'cause an earthquake of various intensity '
+  priority: 5
+  powerpoints: 15
+  basePowerpoints: 15
+  maxPowerpoints: 15
+  statusEffect: 0
+  buffOrDebuffName: None
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: 'cause an earthquake of various intensity '
