@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AbilityHandler : MonoBehaviour
@@ -215,22 +216,31 @@ public class AbilityHandler : MonoBehaviour
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {
-        if (_currentAbility == "swarm" && (_participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f)) & move.type.typeName=="Bug")
-            return damage*1.5f;
         if (_currentAbility == "paralysiscombo")
         {
             if (victim.pokemon.statusEffect == PokemonOperations.StatusEffect.Paralysis)
                 return damage*2;
         }
-        if (_currentAbility == "torrent" && _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
-            if (move.type.typeName == "Water")
-                return damage*1.5f;
-        if (_currentAbility == "overgrow" && _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
-            if (move.type.typeName == "Grass")
-                return damage*1.5f;
-        if (_currentAbility == "blaze" && _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
-            if (move.type.typeName == "Fire")
-                return damage*1.5f;
+        var damageBuffCombinations = new List<(string abilityName, string typeName)>
+        {
+            new ("blaze","Fire"),new("torrent","Water"),new("overgrow","Grass"),new("swarm","Bug")
+        };
+        foreach (var combo in damageBuffCombinations)
+        {
+            var buff = GetAbilityDamageBuff(move, combo.abilityName, combo.typeName);
+            if (buff > 1 || buff< 1)
+            {
+                return damage * buff;
+            }
+        }
         return damage;
+    }
+
+    private float GetAbilityDamageBuff(Move move, string abilityName, string typeName)
+    {
+        if (_currentAbility == abilityName && _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
+            if (move.type.typeName == typeName)
+                return 1.5f;
+        return 1;
     }
 }

@@ -25,7 +25,6 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] private GameObject infoDialogueBox;
     [SerializeField] private GameObject battleDialogueBox;
     [SerializeField] private GameObject clickNextIndicator;
-    [SerializeField] private GameObject dialogueExitIndicator;
     [SerializeField] private GameObject dialogueOptionPrefab;
     [SerializeField] private GameObject dialogueOptionBox;
     private DialogueOptionsManager _dialogueOptionsManager;
@@ -143,7 +142,6 @@ public class Dialogue_handler : MonoBehaviour
      }
     public void DisplayDialogueExit(bool display)
     {
-        dialogueExitIndicator.SetActive(display);
         canExitDialogue = display;
     }
     Interaction NewInteraction(string info,DialogType type,string result)
@@ -253,7 +251,6 @@ public class Dialogue_handler : MonoBehaviour
         if (Player_movement.Instance) Player_movement.Instance.AllowPlayerMovement();
         clickNextIndicator.SetActive(false);
         elipsisSymbol.SetActive(false);
-        dialogueExitIndicator.SetActive(false);
         StopAllCoroutines();
         Battle_handler.Instance.displayingInfo = false;
     }
@@ -290,7 +287,6 @@ public class Dialogue_handler : MonoBehaviour
             dialougeText.color=Color.white;
             infoDialogueBox.SetActive(false);
         }
-        if(!Options_manager.Instance.playerInBattle) dialogueExitIndicator.SetActive(canExitDialogue);
         if (currentInteraction.interactionMessage.Length > maxCharacterLength)
         {
             clickNextIndicator.SetActive(true);
