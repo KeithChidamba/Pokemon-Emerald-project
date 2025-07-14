@@ -1,0 +1,18 @@
+{
+    "itemID": "Oran berry58246",
+    "itemName": "Oran berry",
+    "itemType": "Heal HP",
+    "itemEffect": "5",
+    "itemDescription": "Heals 5hp",
+    "price": 5,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 32490
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": true,
+    "canBeSold": true
+}

@@ -94,6 +94,7 @@ public class Game_Load : MonoBehaviour
         Start_ui.SetActive(false);
         playerMovement.gameObject.SetActive(true);
         playerMovement.transform.position = playerData.playerPosition;
+        overworld_actions.Instance.EquipItem(Bag.Instance.SearchForItem(playerData.equippedItemName));
         world_Map.SetActive(true);
         Area_manager.Instance.loadingPlayerFromSave = true;
         Area_manager.Instance.SwitchToArea(playerData.location,0f);

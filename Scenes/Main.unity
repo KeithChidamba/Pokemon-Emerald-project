@@ -6671,6 +6671,7 @@ MonoBehaviour:
   doingAction: 0
   usingUI: 0
   fishingArea: {fileID: 0}
+  equippedSpecialItem: {fileID: 0}
 --- !u!4 &221403256
 Transform:
   m_ObjectHideFlags: 0
@@ -29214,7 +29215,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Use
+  m_text: Equip
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -29241,8 +29242,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -62206,7 +62207,6 @@ MonoBehaviour:
   walkSpeed: 0.8
   runSpeed: 1.5
   runningInput: 0
-  walking: 0
   movingOnFoot: 0
   usingBike: 0
   canUseBike: 1
@@ -62214,6 +62214,7 @@ MonoBehaviour:
   yAxisInput: 0
   rb: {fileID: 1465551226}
   movement: {x: 0, y: 0}
+  canMove: 1
   interactionPoint: {fileID: 1418617663}
 --- !u!50 &1465551226
 Rigidbody2D:
@@ -89023,7 +89024,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bagItems: []
-  viewingBag: 0
   bagItemsUI:
   - {fileID: 280447244}
   - {fileID: 901040788}
@@ -89046,6 +89046,7 @@ MonoBehaviour:
   sellingItems: 0
   sellingItemUI: {fileID: 1671983471}
   sellQuantityText: {fileID: 171129104}
+  itemUsageText: {fileID: 975248541}
   bagUI: {fileID: 2081052296}
   itemDroppable: 0
   itemUsable: 0

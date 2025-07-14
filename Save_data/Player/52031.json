@@ -5,9 +5,10 @@
     "playerMoney": 19038,
     "numBadges": 0,
     "playerPosition": {
-        "x": 10.699983596801758,
-        "y": 3.4262430667877199,
+        "x": 10.079947471618653,
+        "y": 1.9053810834884644,
         "z": 0.0
     },
-    "location": "Overworld"
+    "location": "Overworld",
+    "equippedItemName": "Bike"
 }

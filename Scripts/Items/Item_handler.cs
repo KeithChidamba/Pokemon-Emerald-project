@@ -27,7 +27,16 @@ public class Item_handler : MonoBehaviour
     {
         _selectedPartyPokemon = selectedPokemon;
         _itemInUse = item;
-
+        if (_itemInUse.itemType == "Special")
+        {
+            if (overworld_actions.Instance.IsEquipped(_itemInUse.itemName))
+            {
+                Dialogue_handler.Instance.DisplayDetails("Item is already equipped");
+                return;
+            }
+            overworld_actions.Instance.EquipItem(_itemInUse);
+            return;
+        }
         if (item.itemEffect.ToLower() == "pp")
             ChangePowerpoints();
         else
@@ -94,7 +103,7 @@ public class Item_handler : MonoBehaviour
     {
         if (_selectedPartyPokemon.currentLevel == 100)
         {
-            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" is already max level!", 1f);
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" is already max level!", 2f);
             ResetItemUsage();
             yield return null;
         }
@@ -102,7 +111,7 @@ public class Item_handler : MonoBehaviour
         {
             //Game_ui_manager.Instance.canExitParty = false;
             var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup);
-            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" leveled up!", 1f);
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" leveled up!", 2f);
             yield return new WaitForSeconds(1f);
             _selectedPartyPokemon.ReceiveExperience((exp-_selectedPartyPokemon.currentExpAmount)+1);
             StartCoroutine(CompleteItemUsage(0));
@@ -118,7 +127,7 @@ public class Item_handler : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.Instance.DisplayDetails("Cant use that on "+_selectedPartyPokemon.pokemonName, 1f);
+            Dialogue_handler.Instance.DisplayDetails("Cant use that on "+_selectedPartyPokemon.pokemonName, 2f);
             ResetItemUsage();
         }
     }

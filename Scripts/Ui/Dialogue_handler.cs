@@ -81,7 +81,10 @@ public class Dialogue_handler : MonoBehaviour
             if (overworld_actions.Instance.doingAction )
                 DisplayDialogueExit(false);
         if (displaying && Input.GetKeyDown(KeyCode.X) && canExitDialogue)
+        {
+            StartCoroutine(Player_movement.Instance.AllowPlayerMovement(0.25f));
             EndDialogue();
+        }
     }
 
     public void  DeletePreviousOptions()
@@ -251,7 +254,7 @@ public class Dialogue_handler : MonoBehaviour
         if (Player_movement.Instance) Player_movement.Instance.AllowPlayerMovement();
         clickNextIndicator.SetActive(false);
         elipsisSymbol.SetActive(false);
-        StopAllCoroutines();
+        StopCoroutine(ProcessQueue());
         Battle_handler.Instance.displayingInfo = false;
     }
     public void StartInteraction(Overworld_interactable interactable)

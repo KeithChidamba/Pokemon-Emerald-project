@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Linq;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -11,7 +12,6 @@ using UnityEngine.UI;
 public class Bag : MonoBehaviour
 {
     public List<Item> bagItems;
-    public bool viewingBag;
     public Item_ui[] bagItemsUI;
     public int maxCapacity = 50;
     private int _numItems;
@@ -22,6 +22,7 @@ public class Bag : MonoBehaviour
     public bool sellingItems;
     public GameObject sellingItemUI;
     public Text sellQuantityText;
+    public TextMeshProUGUI itemUsageText;
     public static Bag Instance;
     public GameObject bagUI;
     public bool itemDroppable;
@@ -45,9 +46,11 @@ public class Bag : MonoBehaviour
         if (sellingItems)
             sellQuantityText.text = "X" + sellQuantity;
     }
-    public void SelectItem(int itemPosition)
+    private void SelectItem()
     {
         bagItemsUI[selectedItem].LoadItemDescription();
+        itemUsageText.text = bagItemsUI[selectedItem].item.itemType=="Special" ? "Equip" : "Use";
+        itemUsageText.fontSize = bagItemsUI[selectedItem].item.itemType=="Special" ? 20 : 24;
         if (sellingItems)
         {
             sellQuantity = 1;
@@ -107,12 +110,12 @@ public class Bag : MonoBehaviour
                 bagItemsUI[i].item = bagItemsUI[i + 1].item;
             bagItemsUI[9].item = bagItems[topIndex + 10];
             ReloadItemUI();
-            SelectItem(8);
+            selectedItem = 8;
             topIndex++;
         }
         selectedItem++;
         selectedItem = Mathf.Clamp(selectedItem, 0, 9);
-        SelectItem(selectedItem);
+        SelectItem();
 
     }
     public void NavigateUp()
@@ -123,15 +126,15 @@ public class Bag : MonoBehaviour
                 bagItemsUI[i].item = bagItemsUI[i-1].item;
             bagItemsUI[0].item = bagItems[topIndex - 1];
             ReloadItemUI();
-            SelectItem(1);
+            selectedItem = 1;
             topIndex--;
         }
         selectedItem--;
         selectedItem = Mathf.Clamp(selectedItem, 0, 9);
         
-        SelectItem(selectedItem);
+        SelectItem();
     }
-    private Item SearchForItem(string itemName)
+    public Item SearchForItem(string itemName)
     {
         return bagItems.FirstOrDefault(item => item.itemName == itemName & item.quantity < 99);
     }
@@ -142,7 +145,7 @@ public class Bag : MonoBehaviour
 
     public void AssignItemOptions(Item item)
     {
-        itemDroppable = !Options_manager.Instance.playerInBattle;
+        itemDroppable = !Options_manager.Instance.playerInBattle && item.itemType!="Special";
         if (Options_manager.Instance.playerInBattle)
         {
             itemUsable = item.canBeUsedInBattle;
@@ -265,7 +268,6 @@ public class Bag : MonoBehaviour
     public void ViewBag()
     {
         _numItems = 0; 
-        viewingBag = true; 
         _numItems = bagItems.Count;
         var numItemsForView = (_numItems < 11) ? _numItems : 10; 
         for (int i = 0; i < numItemsForView; i++)
@@ -274,7 +276,8 @@ public class Bag : MonoBehaviour
             bagItemsUI[i].gameObject.SetActive(true);
             bagItemsUI[i].LoadItemUI();
         }
-        SelectItem(0);
+        selectedItem = 0;
+        SelectItem();
     }
     void ReloadItemUI()
     {

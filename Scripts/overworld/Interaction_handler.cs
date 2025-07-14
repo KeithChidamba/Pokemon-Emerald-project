@@ -70,7 +70,8 @@ public class Interaction_handler : MonoBehaviour
                 if (interactableObject.interaction != null)
                     Dialogue_handler.Instance.StartInteraction(interactableObject);
             }
-            if (Input.GetKeyDown(KeyCode.C) && !overworld_actions.Instance.doingAction)
+            if (Input.GetKeyDown(KeyCode.C) 
+                && overworld_actions.Instance.IsEquipped("rod"))
             {
                 if (hit.transform.gameObject.CompareTag("Water"))
                 { 
@@ -84,7 +85,7 @@ public class Interaction_handler : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.C) && !hit.transform)
+        if (Input.GetKeyDown(KeyCode.C) && !hit.transform && overworld_actions.Instance.IsEquipped("rod"))
         {
             Dialogue_handler.Instance.DisplayDetails("Cant fish here");
         }

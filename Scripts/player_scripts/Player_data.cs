@@ -13,4 +13,5 @@ public class Player_data : ScriptableObject
     [FormerlySerializedAs("NumBadges")] public int numBadges = 0;
     [FormerlySerializedAs("player_Position")] public Vector3 playerPosition;
     [FormerlySerializedAs("Location")] public string location;
+    public string equippedItemName;
 }

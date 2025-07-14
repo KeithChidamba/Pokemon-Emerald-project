@@ -11,7 +11,6 @@ public class Player_movement : MonoBehaviour
     [SerializeField] float runSpeed = 1.5f;
     private const float BikeSpeed = 2f; 
     public bool runningInput;
-    public bool walking;
     public bool movingOnFoot;
     public bool usingBike = false;
     public bool canUseBike = true;
@@ -22,8 +21,9 @@ public class Player_movement : MonoBehaviour
     [SerializeField] private Vector2 movement;
     private float _currentDirection = 0;
     private Animation_manager _animationManager;
-    private bool canMove = true;
+    [SerializeField]private bool canMove = true;
     [SerializeField] Transform interactionPoint;
+    private bool delayingMovement;
     public static Player_movement Instance;
     private void Awake()
     {
@@ -38,6 +38,14 @@ public class Player_movement : MonoBehaviour
 
     public void AllowPlayerMovement()
     {
+        if (delayingMovement) return;
+        canMove = true;
+    }
+    public IEnumerator AllowPlayerMovement(float delay)
+    {
+        delayingMovement = true;
+        yield return new WaitForSeconds(delay);
+        delayingMovement = false;
         canMove = true;
     }
     public void RestrictPlayerMovement()
@@ -63,7 +71,6 @@ public class Player_movement : MonoBehaviour
     private void DisablePlayerMovement()
     {
         rb.velocity = Vector2.zero;
-        walking = false;
         movingOnFoot = false;
         if (overworld_actions.Instance.usingUI)
             _animationManager.ChangeAnimationState(_animationManager.playerIdle);
@@ -76,7 +83,6 @@ public class Player_movement : MonoBehaviour
         usingBike = false;
         runningInput = false;
         _canSwitchMovement = false;
-        walking = true;
     }
     private float GetMovementDirection()
     {
@@ -118,15 +124,13 @@ public class Player_movement : MonoBehaviour
     private void HandleRunInputs()
     {
         if (usingBike) return;
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !runningInput)
-        {
+        if (Input.GetKeyDown(KeyCode.X) && !runningInput)
             runningInput = true;
-            walking = false;
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift) && runningInput)
+        
+        if (Input.GetKeyUp(KeyCode.X) && runningInput)
             _canSwitchMovement = true;
         
-        if (Input.GetKeyDown(KeyCode.LeftShift) && runningInput && _canSwitchMovement)
+        if (Input.GetKeyDown(KeyCode.X) && runningInput && _canSwitchMovement)
         {
             runningInput = false;
             _canSwitchMovement = false;
@@ -134,21 +138,21 @@ public class Player_movement : MonoBehaviour
     }
     private void HandleBikeInputs()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !usingBike &&canUseBike)
+        if (!overworld_actions.Instance.IsEquipped("bike")) return;
+        if (Input.GetKeyDown(KeyCode.C) && !usingBike &&canUseBike)
         {
             usingBike = true;
             movingOnFoot = false;
             runningInput = false;
-            walking = false;
             _canSwitchMovement = false;
         }       
-        else if (Input.GetKeyDown(KeyCode.E) && !canUseBike)
+        else if (Input.GetKeyDown(KeyCode.C) && !canUseBike)
             Dialogue_handler.Instance.DisplayDetails("Cant use bike here",1f);
         
-        if (Input.GetKeyUp(KeyCode.E) && usingBike)
+        if (Input.GetKeyUp(KeyCode.C) && usingBike)
             _canSwitchMovement = true;
         
-        if (Input.GetKeyDown(KeyCode.E) && usingBike && _canSwitchMovement)
+        if (Input.GetKeyDown(KeyCode.C) && usingBike && _canSwitchMovement)
         {
             usingBike = false;
             _canSwitchMovement = false;
@@ -168,11 +172,8 @@ public class Player_movement : MonoBehaviour
         }
         if (movingOnFoot && !runningInput && !_canSwitchMovement)
         {
-            walking = true; 
             _animationManager.ChangeAnimationState(_animationManager.playerWalk);
         }
-        else
-            walking = false;
     }
     private void MovementWithBikeLogic() 
     {
