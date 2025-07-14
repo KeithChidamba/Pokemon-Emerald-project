@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Old Rod
   itemType: Special
-  itemEffect: 0
+  itemEffect: 5/10
   itemDescription: An old fishing rod that only catch weak pokemon
   price: 0
   quantity: 1

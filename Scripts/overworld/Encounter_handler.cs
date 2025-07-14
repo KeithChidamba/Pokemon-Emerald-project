@@ -28,17 +28,43 @@ public class Encounter_handler : MonoBehaviour
         encounterChance = 2;
         for (int i = 0; i < currentArea.availablePokemon.Length; i++)
         {
-            var random = Utility.RandomRange(1,101);
-            var chance = int.Parse(currentArea.availablePokemon[i].Substring(currentArea.availablePokemon[i].Length - 3, 3));
-            if ( (i == currentArea.availablePokemon.Length - 1) /*pick last option if none in range*/ 
-                 || (random < chance) )//pick option within chance range
-            {
-                var pokemonName = currentArea.availablePokemon[i].Substring(0, currentArea.availablePokemon[i].Length - 3);
-                CreateWildPokemon(pokemonName);
-                break;
-            }
+            if (EncounteredPokemon(i)) break;
         }
-        
+    }
+    bool EncounteredPokemon(int currentIndex)
+    {
+        var random = Utility.RandomRange(1,101);
+        var chance = int.Parse(currentArea.availablePokemon[currentIndex].Split('/')[1]);
+
+        if ( currentIndex == currentArea.availablePokemon.Length - 1 /*pick last option if none in range*/ 
+             || random < chance )//pick option within chance range
+        {
+            var pokemonName = currentArea.availablePokemon[currentIndex].Split('/')[0];
+            CreateWildPokemon(pokemonName);
+            return true;
+        }
+        return false;
+    }
+    public void TriggerFishingEncounter(Encounter_Area area,Item fishingRod)
+    {
+        currentArea = area;
+        encounterTriggered = true;
+        encounterChance = 2;
+        area.minimumLevelOfPokemon = int.Parse(fishingRod.itemEffect.Split('/')[0]);
+        area.maximumLevelOfPokemon = int.Parse(fishingRod.itemEffect.Split('/')[1]);
+        //the type of rod determines available pokemon from pool
+        var rodTypeIndex = fishingRod.itemName switch 
+        {
+            "Old Rod"=>0,
+            "Good Rod"=>1,
+            "Super Rod"=>2,
+            _=>0
+        } ;
+        int availablePokemonForRod = area.pokemonIndexForRodType[rodTypeIndex];
+        for (int i = 0; i < availablePokemonForRod+1; i++)
+        {
+            if (EncounteredPokemon(i)) break;
+        }
     }
     void CreateWildPokemon(string pokemonName)
     {

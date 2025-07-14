@@ -64,7 +64,7 @@ public class overworld_actions : MonoBehaviour
         if (pokemonBitingPole & Input.GetKeyDown(KeyCode.Z))
         {
             pokemonBitingPole = false;
-            Encounter_handler.Instance.TriggerEncounter(fishingArea);
+            Encounter_handler.Instance.TriggerFishingEncounter(fishingArea,equippedSpecialItem);
         }
         if (fishing)
         {
@@ -87,7 +87,7 @@ public class overworld_actions : MonoBehaviour
             yield return new WaitForSeconds( (2 * (random/10f) ) + 1f);
             if (pokemonBitingPole)
             {
-                Dialogue_handler.Instance.DisplayDetails("It got away");
+                Dialogue_handler.Instance.DisplayDetails("It got away",1.5f);
                 ResetFishingAction();
                 yield return new WaitForSeconds(1);
                 ActionReset();
@@ -95,7 +95,7 @@ public class overworld_actions : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.Instance.DisplayDetails("Dang...nothing");
+            Dialogue_handler.Instance.DisplayDetails("Dang...nothing",1.5f);
             ResetFishingAction();
             yield return new WaitForSeconds(1);
             ActionReset();

@@ -47,7 +47,7 @@ public class Game_ui_manager : MonoBehaviour
         overworld_actions.Instance.usingUI = numUIScreensOpen>0;
 
         if (numUIScreensOpen == 0)
-            Player_movement.Instance.AllowPlayerMovement();
+            StartCoroutine(Player_movement.Instance.AllowPlayerMovement(0.25f));
         else
             Player_movement.Instance.RestrictPlayerMovement();
         

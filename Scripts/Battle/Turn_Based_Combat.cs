@@ -147,7 +147,7 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         if (currentTurnIndex > 1) return;
         InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
-            InputStateHandler.StateName.Empty});
+            InputStateHandler.StateName.PlaceHolder});
     }
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {

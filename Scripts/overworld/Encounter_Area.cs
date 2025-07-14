@@ -11,4 +11,6 @@ public class Encounter_Area : ScriptableObject
     [FormerlySerializedAs("Pokemon")] public string[] availablePokemon;
     [FormerlySerializedAs("min_lv")] public int minimumLevelOfPokemon = 0;
     [FormerlySerializedAs("max_lv")] public int maximumLevelOfPokemon = 0;
+    //only for bodies of water
+    public int[] pokemonIndexForRodType;
 }
