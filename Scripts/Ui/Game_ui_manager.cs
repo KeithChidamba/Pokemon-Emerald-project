@@ -10,7 +10,7 @@ public class Game_ui_manager : MonoBehaviour
 
     public GameObject menuOptions;
     public bool viewingMenu;
-    public bool menuOff=true;
+    public bool canUseUi=true;
     public Player_Info_ui profile;
     public static Game_ui_manager Instance;
     [SerializeField]private int numUIScreensOpen;
@@ -18,6 +18,7 @@ public class Game_ui_manager : MonoBehaviour
     [SerializeField]private List<GameObject> menuUiOptions = new ();
     public GameObject menuSelector;
     public bool usingWebGl = false;
+    private List<float> _movementDelaysAfterExit = new();
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -33,11 +34,14 @@ public class Game_ui_manager : MonoBehaviour
         usingWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
         exitButton.SetActive(!usingWebGl);
         if (usingWebGl) menuUiOptions.Remove(menuUiOptions.Last());//remove exit button
+        canUseUi = false;
+        Game_Load.Instance.OnGameStarted += () => canUseUi = true;
     }
 
     private void Update()
     {
         if (overworld_actions.Instance == null) return;
+        if (!canUseUi) return;
         UiInputs();
     }
     private void ManageScreens(int change)
@@ -47,23 +51,33 @@ public class Game_ui_manager : MonoBehaviour
         overworld_actions.Instance.usingUI = numUIScreensOpen>0;
 
         if (numUIScreensOpen == 0)
-            StartCoroutine(Player_movement.Instance.AllowPlayerMovement(0.25f));
+        {
+            if (_movementDelaysAfterExit.Last() > 0)
+            {
+                StartCoroutine(Player_movement.Instance.AllowPlayerMovement(_movementDelaysAfterExit.Last()));
+            }
+        }
         else
             Player_movement.Instance.RestrictPlayerMovement();
-        
-        if(Options_manager.Instance.playerInBattle) Player_movement.Instance.RestrictPlayerMovement();
+        if (change < 0)
+        {
+            _movementDelaysAfterExit.Remove(_movementDelaysAfterExit.Last());
+        }
+        if (Options_manager.Instance.playerInBattle)
+        {
+            Player_movement.Instance.RestrictPlayerMovement();
+        }
     }
     private void UiInputs()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !overworld_actions.Instance.usingUI && !overworld_actions.Instance.doingAction &&!viewingMenu)
         {
+            _movementDelaysAfterExit.Add(0.25f);
             ManageScreens(1);
             viewingMenu = true;
             ActivateUiElement(menuOptions,true);
             ActivateMenuSelection();
         }
-        if (Input.GetKeyUp(KeyCode.Space) && !overworld_actions.Instance.doingAction && viewingMenu)
-            menuOff = false;
     } 
     private void ActivateMenuSelection()
     {
@@ -128,7 +142,6 @@ public class Game_ui_manager : MonoBehaviour
         ManageScreens(-1);
         ActivateUiElement(menuOptions, false);
         viewingMenu = false;
-        menuOff = true;
     }
 
     private void ClosePokemonStorage()
@@ -139,23 +152,38 @@ public class Game_ui_manager : MonoBehaviour
     }
     public void ViewBag()
     {
+        if (Bag.Instance.sellingItems)
+        {
+            var sellableItems = Bag.Instance.bagItems.Count(item => item.canBeSold);
+            if (Bag.Instance.numItems == 0 || sellableItems==0)
+            {
+                Bag.Instance.sellingItems = false;
+                Dialogue_handler.Instance.DisplayDetails("You have no items to sell", 2f);
+                return;
+            }
+        }
         ManageScreens(1);
+        _movementDelaysAfterExit.Add(0.25f);
         Dialogue_handler.Instance.EndDialogue();
         ActivateUiElement(Bag.Instance.bagUI,true);
         Bag.Instance.ViewBag();
-
+        
+        var bagInputStateDirectional = Bag.Instance.numItems == 0
+            ? InputStateHandler.Directional.None
+            : InputStateHandler.Directional.Vertical;
         var bagSelectables = new List<SelectableUI>();
         
         foreach(var item in Bag.Instance.bagItemsUI) bagSelectables.Add( new(item.gameObject,null,true) );
         
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerBagNavigation,
             new[] { InputStateHandler.StateGroup.Bag},true,
-            Bag.Instance.bagUI, InputStateHandler.Directional.Vertical, bagSelectables,
-                    Bag.Instance.itemSelector,true,true,CloseBag,CloseBag));
+            Bag.Instance.bagUI, bagInputStateDirectional, bagSelectables,
+                    Bag.Instance.itemSelector,true,Bag.Instance.numItems > 0,CloseBag,CloseBag));
     }
     public void ViewProfile()
     {
         ManageScreens(1);
+        _movementDelaysAfterExit.Add(0.25f);
         ActivateUiElement(profile.gameObject,true);
         profile.LoadProfile(Game_Load.Instance.playerData);
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerProfile
@@ -166,6 +194,7 @@ public class Game_ui_manager : MonoBehaviour
     public void ViewPokemonParty()
     {
         ManageScreens(1);
+        _movementDelaysAfterExit.Add(0.25f);
         Dialogue_handler.Instance.EndDialogue();
         Pokemon_party.Instance.ClearSelectionUI();
         ActivateUiElement(Pokemon_party.Instance.partyUI, true);
@@ -192,6 +221,7 @@ public class Game_ui_manager : MonoBehaviour
     public void ViewOtherPokemonDetails(Pokemon selectedPokemon,List<Pokemon> pokemonToView)
     { 
         ManageScreens(1);
+        _movementDelaysAfterExit.Add(0.25f);
         ActivateUiElement(Pokemon_Details.Instance.uiParent,true);
         var detailsSelectables = new List<SelectableUI>{
             new(null,null,true)
@@ -212,6 +242,7 @@ public class Game_ui_manager : MonoBehaviour
     public void ViewPokemonStorage()
     {
         ManageScreens(1);
+        _movementDelaysAfterExit.Add(0.25f);
         ActivateUiElement(pokemon_storage.Instance.storageUI, true);
         var storageSelectables = new List<SelectableUI>
         {
@@ -230,8 +261,8 @@ public class Game_ui_manager : MonoBehaviour
     public void ViewPokeMart()
     {
         ManageScreens(1);
+        _movementDelaysAfterExit.Add(-1f);
         ActivateUiElement(Poke_Mart.Instance.storeUI,true);
-        Bag.Instance.ViewBag();
  
         var martSelectables = new List<SelectableUI>();
         

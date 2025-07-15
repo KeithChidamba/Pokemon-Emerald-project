@@ -20,12 +20,13 @@ public class Player_movement : MonoBehaviour
     public Rigidbody2D rb;
     [SerializeField] private Vector2 movement;
     private float _currentDirection = 0;
-    private Animation_manager _animationManager;
+    [SerializeField]private Animation_manager _animationManager;
     [SerializeField]private bool canMove = true;
     [SerializeField] Transform interactionPoint;
     private bool delayingMovement;
+    public GameObject playerObject;
     public static Player_movement Instance;
-    private void Awake()
+    private void Start()
     {
         if (Instance != null && Instance != this)
         {
@@ -33,7 +34,6 @@ public class Player_movement : MonoBehaviour
             return;
         }
         Instance = this;
-        _animationManager = GetComponentInChildren<Animation_manager>();
     }
 
     public void AllowPlayerMovement()
@@ -54,6 +54,7 @@ public class Player_movement : MonoBehaviour
     }
     private void Update()
     {
+        if (!playerObject.activeSelf) return;
         if (canMove)
         {
             _animationManager.animator.SetFloat(_animationManager.idleDirectionParameter, _currentDirection);

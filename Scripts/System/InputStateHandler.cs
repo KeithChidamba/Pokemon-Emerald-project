@@ -251,6 +251,7 @@ public class InputStateHandler : MonoBehaviour
     }
     private void PlayerBagNavigation()
     {
+        if (Bag.Instance.numItems == 0) return;
         OnInputUp += Bag.Instance.NavigateUp;
         OnInputDown += Bag.Instance.NavigateDown;
         if (Bag.Instance.sellingItems)

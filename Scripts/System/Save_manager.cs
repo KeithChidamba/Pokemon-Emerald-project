@@ -110,6 +110,7 @@ public class Save_manager : MonoBehaviour
         else
         {
             Dialogue_handler.Instance.DisplayDetails("There was no save data found!");
+            Dialogue_handler.Instance.canExitDialogue = false;;
             Game_Load.Instance.PreventGameLoad();
         }
     }
@@ -224,7 +225,7 @@ public class Save_manager : MonoBehaviour
         }
         foreach(var item in Bag.Instance.bagItems)
             SaveItemDataAsJson(item, item.itemID);
-        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
+        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
         Game_Load.Instance.playerData.location = (Game_Load.Instance.playerData.location==string.Empty) ? 
             "Overworld" 
             : area.currentArea.areaName;

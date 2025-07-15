@@ -1,5 +1,5 @@
 {
-    "itemID": "Bike37815",
+    "itemID": "Bike7935",
     "itemName": "Bike",
     "itemType": 0,
     "itemEffect": "0",
@@ -7,7 +7,7 @@
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32404
+        "instanceID": 32406
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,

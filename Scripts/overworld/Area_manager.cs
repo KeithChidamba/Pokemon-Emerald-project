@@ -50,11 +50,11 @@ public class Area_manager : MonoBehaviour
         {//from building to over world
             _areaBuilding.interior.SetActive(false);
             _areaBuilding.insideArea = false;
-            Player_movement.Instance.transform.position = _areaBuilding.doorPosition.position;
-Player_movement.Instance.RestrictPlayerMovement();
+            Player_movement.Instance.playerObject.transform.position = _areaBuilding.doorPosition.position;
+            Player_movement.Instance.RestrictPlayerMovement();
         }
         else //from save point in overworld
-            Player_movement.Instance.transform.position = Game_Load.Instance.playerData.playerPosition;
+            Player_movement.Instance.playerObject.transform.position = Game_Load.Instance.playerData.playerPosition;
         foreach (var area in overworldAreas)
             area.overworld.SetActive(true);
         if (_areaBuilding != null)
@@ -76,7 +76,7 @@ Player_movement.Instance.RestrictPlayerMovement();
         currentArea.interior.SetActive(true);
         _areaBuilding = currentArea;
         if(!loadingPlayerFromSave)
-            Player_movement.Instance.transform.position = currentArea.doormatPosition.position;
+            Player_movement.Instance.playerObject.transform.position = currentArea.doormatPosition.position;
         Player_movement.Instance.ForceWalkMovement();
         Invoke(nameof(ResetPlayerMovement), 1f);
         Game_Load.Instance.playerData.location = currentArea.areaName;

@@ -14,7 +14,7 @@ public class Bag : MonoBehaviour
     public List<Item> bagItems;
     public Item_ui[] bagItemsUI;
     public int maxCapacity = 50;
-    private int _numItems;
+    public int numItems;
     public int selectedItemIndex;
     public int topIndex;//keeps track of visible bag items
     public GameObject[] itemUIActions;
@@ -52,19 +52,7 @@ public class Bag : MonoBehaviour
         var selectedItem = bagItemsUI[selectedItemIndex].item;
         itemUsageText.text = selectedItem.itemType==Item_handler.ItemType.Special ? "Equip" : "Use";
         itemUsageText.fontSize = selectedItem.itemType==Item_handler.ItemType.Special ? 20 : 24;
-        if (sellingItems)
-        {
-            sellQuantity = 1;
-            sellingItemUI.SetActive(true);
-            foreach (var obj in itemUIActions)
-                obj.SetActive(false);
-        }
-        else
-        {
-            sellingItemUI.SetActive(false);
-            foreach (var obj in itemUIActions)
-                obj.SetActive(true);
-        }
+        if (sellingItems) sellQuantity = 1;
     }
     
     public void SellToMarket()
@@ -89,7 +77,7 @@ public class Bag : MonoBehaviour
     {
         if (item.quantity > 0) return;
         bagItems.Remove(item);
-        _numItems--;
+        numItems--;
     }
     public void ChangeQuantity(int value)
     {
@@ -105,7 +93,7 @@ public class Bag : MonoBehaviour
     }
     public void NavigateDown()
     {
-        if (topIndex < _numItems - 10 && selectedItemIndex == 9)
+        if (topIndex < numItems - 10 && selectedItemIndex == 9)
         {
             for (int i = 0; i < 9; i++)
                 bagItemsUI[i].item = bagItemsUI[i + 1].item;
@@ -176,8 +164,7 @@ public class Bag : MonoBehaviour
         foreach (var itemUI in bagItemsUI)
             itemUI.gameObject.SetActive(false);
         bagItemsUI[0].ResetUI();
-        foreach (GameObject i in itemUIActions)
-            i.SetActive(false);
+        DisplayItemAction(false);
         ViewBag();
     }
     public void TakeItem(int memberIndex)
@@ -187,7 +174,7 @@ public class Bag : MonoBehaviour
             Dialogue_handler.Instance.DisplayDetails("Can't do that in battle",1f);
             return;
         }
-        if (_numItems >= maxCapacity)
+        if (numItems >= maxCapacity)
         {
             Dialogue_handler.Instance.DisplayDetails("Bag is full");
             return;
@@ -220,7 +207,7 @@ public class Bag : MonoBehaviour
      }
     public void AddItem(Item item)
     {
-        if (_numItems < maxCapacity)
+        if (numItems < maxCapacity)
         {
             if (BagContainsItem(item.itemName))
             {
@@ -236,19 +223,19 @@ public class Bag : MonoBehaviour
                         var overflow = Obj_Instance.CreateItem(item);
                         overflow.quantity = item.quantity - quantityGap;
                         bagItems.Add(overflow);
-                        _numItems++;
+                        numItems++;
                     }
                 }
                 else
                 {
                     bagItems.Add(Obj_Instance.CreateItem(item));
-                    _numItems++;
+                    numItems++;
                 }
             }
             else
             {
                 bagItems.Add(Obj_Instance.CreateItem(item));
-                _numItems++;
+                numItems++;
             }
         }
         else
@@ -260,17 +247,22 @@ public class Bag : MonoBehaviour
         selectedItemIndex = 0;
         sellingItemUI.SetActive(false);
         sellingItems = false;
-        foreach (var obj in itemUIActions)
-            obj.SetActive(false);
         for (int i = 0; i < 10; i++)
             bagItemsUI[i].gameObject.SetActive(false);
         bagItemsUI[0].ResetUI();
     }
     public void ViewBag()
     {
-        _numItems = 0; 
-        _numItems = bagItems.Count;
-        var numItemsForView = (_numItems < 11) ? _numItems : 10; 
+        numItems = 0; 
+        numItems = bagItems.Count;
+        sellingItemUI.SetActive(sellingItems);
+        DisplayItemAction(!sellingItems);
+        if (numItems == 0)
+        {
+            DisplayItemAction(false);
+            return;
+        }
+        var numItemsForView = (numItems < 11) ? numItems : 10; 
         for (int i = 0; i < numItemsForView; i++)
         {
             bagItemsUI[i].item = bagItems[i];
@@ -279,6 +271,11 @@ public class Bag : MonoBehaviour
         }
         selectedItemIndex = 0;
         SelectItem();
+    }
+    void DisplayItemAction(bool dislpay)
+    {
+        foreach (var obj in itemUIActions)
+            obj.SetActive(dislpay);
     }
     void ReloadItemUI()
     {

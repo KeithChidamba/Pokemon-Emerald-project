@@ -19,7 +19,6 @@ public class Game_Load : MonoBehaviour
     public Transform Start_house_pos;
     public GameObject world_Map;
     public Player_data playerData;
-    [SerializeField]private Player_movement playerMovement;//for initial game load
     public static Game_Load Instance;
     public event Action OnGameStarted; 
     private void Awake()
@@ -36,7 +35,7 @@ public class Game_Load : MonoBehaviour
     {
         Start_ui.SetActive(true);
         world_Map.SetActive(false);
-        playerMovement.gameObject.SetActive(false);
+        Player_movement.Instance.playerObject.SetActive(false);
         load_btn.gameObject.SetActive(true);
         newGame_btn.gameObject.SetActive(true);
     }
@@ -73,7 +72,6 @@ public class Game_Load : MonoBehaviour
             data.playerPosition = Start_house_pos.position;
             data.location = "Player House";
             playerData = data;
-            Dialogue_handler.Instance.DisplayDetails("Welcome "+playerName,1f);
             StartGame();
         }
         else
@@ -85,15 +83,16 @@ public class Game_Load : MonoBehaviour
     {
         if (Application.platform != RuntimePlatform.WebGLPlayer)
             Save_manager.Instance.EraseSaveData();
-        
+        Dialogue_handler.Instance.EndDialogue();
         LoadNewPlayerPage();
     }
     public void StartGame()
     {
+        Dialogue_handler.Instance.EndDialogue();
         new_player_ui.SetActive(false);
         Start_ui.SetActive(false);
-        playerMovement.gameObject.SetActive(true);
-        playerMovement.transform.position = playerData.playerPosition;
+        Player_movement.Instance.playerObject.SetActive(true);
+        Player_movement.Instance.playerObject.transform.position = playerData.playerPosition;
         overworld_actions.Instance.EquipItem(Bag.Instance.SearchForItem(playerData.equippedItemName));
         world_Map.SetActive(true);
         Area_manager.Instance.loadingPlayerFromSave = true;

@@ -9518,7 +9518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuOptions: {fileID: 1316003124}
   viewingMenu: 0
-  menuOff: 1
+  canUseUi: 1
   profile: {fileID: 690814249}
   numUIScreensOpen: 0
   exitButton: {fileID: 51419307}
@@ -56254,6 +56254,65 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.4175901, y: 0.3287964}
   m_EdgeRadius: 0
+--- !u!1 &1267862426
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1267862428}
+  - component: {fileID: 1267862427}
+  m_Layer: 0
+  m_Name: Player_Movement_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1267862427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267862426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b00c22eb7fc294da1ea8ba2894d537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 0
+  walkSpeed: 0.8
+  runSpeed: 1.5
+  runningInput: 0
+  movingOnFoot: 0
+  usingBike: 0
+  canUseBike: 1
+  xAxisInput: 0
+  yAxisInput: 0
+  rb: {fileID: 1465551226}
+  movement: {x: 0, y: 0}
+  _animationManager: {fileID: 1606520307}
+  canMove: 1
+  interactionPoint: {fileID: 1418617663}
+  playerObject: {fileID: 1465551221}
+--- !u!4 &1267862428
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267862426}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 609.58984, y: 293.5427, z: -2.8053312}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1268647949
 GameObject:
   m_ObjectHideFlags: 0
@@ -62164,7 +62223,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1465551224}
-  - component: {fileID: 1465551225}
   - component: {fileID: 1465551226}
   m_Layer: 7
   m_Name: player
@@ -62191,31 +62249,6 @@ Transform:
   - {fileID: 1418617663}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1465551225
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465551221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5b00c22eb7fc294da1ea8ba2894d537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementSpeed: 0
-  walkSpeed: 0.8
-  runSpeed: 1.5
-  runningInput: 0
-  movingOnFoot: 0
-  usingBike: 0
-  canUseBike: 1
-  xAxisInput: 0
-  yAxisInput: 0
-  rb: {fileID: 1465551226}
-  movement: {x: 0, y: 0}
-  canMove: 1
-  interactionPoint: {fileID: 1418617663}
 --- !u!50 &1465551226
 Rigidbody2D:
   serializedVersion: 4
@@ -89036,7 +89069,8 @@ MonoBehaviour:
   - {fileID: 1183214665}
   - {fileID: 1710059117}
   maxCapacity: 50
-  selectedItem: 0
+  numItems: 0
+  selectedItemIndex: 0
   topIndex: 0
   itemUIActions:
   - {fileID: 1079621028}
@@ -94856,7 +94890,6 @@ MonoBehaviour:
   Start_house_pos: {fileID: 1324613723}
   world_Map: {fileID: 523264673}
   playerData: {fileID: 0}
-  playerMovement: {fileID: 1465551225}
 --- !u!1 &2106019437
 GameObject:
   m_ObjectHideFlags: 0
@@ -96155,3 +96188,4 @@ SceneRoots:
   - {fileID: 447712584}
   - {fileID: 221403256}
   - {fileID: 215726036}
+  - {fileID: 1267862428}

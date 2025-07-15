@@ -6,6 +6,7 @@ using UnityEngine;
 public class Options_manager : MonoBehaviour
 {
     private Interaction _currentInteraction;
+    private Overworld_interactable _currentInteractable;
     public bool playerInBattle;
     [SerializeField] private Recieve_Pokemon starterPokemonGiftEvent;
     public static Options_manager Instance;
@@ -107,9 +108,7 @@ public class Options_manager : MonoBehaviour
     }
     void BuyMore()
     {
-        Dialogue_handler.Instance.EndDialogue();
-        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage);
-        ViewMarketDelayed();
+        CompleteInteraction(_currentInteractable, 0);//open store to continue buying
     }
     void LeaveStore()
     {
@@ -162,7 +161,7 @@ public class Options_manager : MonoBehaviour
         var berry = _currentInteraction.resultMessage;
         var berryAsset = Resources.Load<Item>("Pokemon_project_assets/Items/" + berry);
         Bag.Instance.AddItem(Obj_Instance.CreateItem(berryAsset));
-        Dialogue_handler.Instance.DisplayDetails("You picked up a "+berry,1f);
+        Dialogue_handler.Instance.DisplayDetails("You picked up a "+berry,2f);
     }
     public void CompleteInteraction(Interaction interaction,int option)
     {
@@ -177,7 +176,8 @@ public class Options_manager : MonoBehaviour
     }
     public void CompleteInteraction(Overworld_interactable interactable,int option)
     {
+        _currentInteractable = interactable;
         OnInteractionTriggered?.Invoke(interactable);
-        CompleteInteraction(interactable.interaction,option);
+        CompleteInteraction(_currentInteractable.interaction,option);
     }
 }

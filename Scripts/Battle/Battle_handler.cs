@@ -179,7 +179,7 @@ public class Battle_handler : MonoBehaviour
     private void SetupBattle()
     {
         Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantStates;
-        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.transform.position;
+        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
         InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
         SetupOptionsInput();
         levelUpQueue.Clear();
@@ -556,7 +556,7 @@ public class Battle_handler : MonoBehaviour
         var location = (playerWhiteOut)? "Poke Center" : Game_Load.Instance.playerData.location;
         if(playerWhiteOut) Options_manager.Instance.HealPartyPokemon();
         Area_manager.Instance.SwitchToArea(location, 0f);
-        Dialogue_handler.Instance.DisplayDialogueExit(true);
+        Dialogue_handler.Instance.canExitDialogue = true;
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonBattle);
         battleWon = false;
         battleOver = false;

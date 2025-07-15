@@ -1,5 +1,5 @@
 {
-    "itemID": "Old Rod25470",
+    "itemID": "Old Rod33758",
     "itemName": "Old Rod",
     "itemType": 0,
     "itemEffect": "5/10",
@@ -7,7 +7,7 @@
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32380
+        "instanceID": 32382
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,

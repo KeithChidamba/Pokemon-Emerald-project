@@ -14,7 +14,7 @@ public class overworld_actions : MonoBehaviour
     public Encounter_Area fishingArea;
     public Item equippedSpecialItem;
     public static overworld_actions Instance;
-    
+    private bool canUseEquippedItem;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -26,18 +26,24 @@ public class overworld_actions : MonoBehaviour
         manager.OnFishingStart += StartFishingAction;
     }
 
+    private void Start()
+    {
+        canUseEquippedItem = false;
+        Game_Load.Instance.OnGameStarted += () => canUseEquippedItem = true;
+    }
+
     public void EquipItem(Item item)
     {
         if (item == null) return;//there was no item equipped in save data
         equippedSpecialItem = item;
         if(usingUI)
-            Dialogue_handler.Instance.DisplayDetails("equipped " + equippedSpecialItem.itemName, 1f);
+            Dialogue_handler.Instance.DisplayDetails("Equipped " + equippedSpecialItem.itemName, 1f);
         Game_Load.Instance.playerData.equippedItemName = equippedSpecialItem.itemName;
     }
     public bool IsEquipped(string keyword)
     {
-        if (!ItemEquipped())
-        {//prevent null check
+        if (!canUseEquippedItem || !ItemEquipped())
+        {
             return false;
         }
         return equippedSpecialItem.itemName.ToLower().Contains(keyword.ToLower());
@@ -51,6 +57,7 @@ public class overworld_actions : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C) && !ItemEquipped() && !usingUI)
         {
+            if (!canUseEquippedItem) return;
             Dialogue_handler.Instance.DisplayDetails("No item has been equipped", 2f);
         }  
         if (usingUI)
