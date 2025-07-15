@@ -1,13 +1,13 @@
 {
     "itemID": "Calcium13537",
     "itemName": "Calcium",
-    "itemType": "Stat Increase",
+    "itemType": 0,
     "itemEffect": "Special Attack",
     "itemDescription": "It increases the Special Attack of a Pokémon",
     "price": 2000,
     "quantity": 11,
     "itemImage": {
-        "instanceID": 32432
+        "instanceID": 32424
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

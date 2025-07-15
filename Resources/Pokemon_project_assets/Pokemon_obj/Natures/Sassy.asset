@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Sassy
   m_EditorClassIdentifier: 
   natureName: Sassy
-  StatIncrease: Special Defense
-  StatDecrease: Speed
-  PValue: 22
+  statToIncrease: 4
+  statToDecrease: 5
+  requiredNatureValue: 22

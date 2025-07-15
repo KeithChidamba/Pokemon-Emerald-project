@@ -12,22 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b08819e8a6e5a46838808e39c37bb1, type: 3}
   m_Name: Blaziken
   m_EditorClassIdentifier: 
-  Evo_name: Blaziken
+  evolutionName: Blaziken
   types:
   - {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
   - {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
-  EXPGroup: Medium Slow
-  exp_yield: 209
-  CatchRate: 45
+  expGroup: 3
+  expYield: 209
+  catchRate: 45
   learnSet: []
-  front_picture: {fileID: 21300000, guid: 2953767c4b6a1fd4e91dbf1385b441d8, type: 3}
-  back_picture: {fileID: 21300000, guid: 5ece2024af04caa458ea223d84f7cc91, type: 3}
-  BaseHP: 80
-  BaseAttack: 120
-  BaseDefense: 70
-  BaseSP_ATK: 110
-  BaseSP_DEF: 70
-  Basespeed: 80
-  EVs:
+  frontPicture: {fileID: 21300000, guid: 2953767c4b6a1fd4e91dbf1385b441d8, type: 3}
+  backPicture: {fileID: 21300000, guid: 5ece2024af04caa458ea223d84f7cc91, type: 3}
+  baseHp: 80
+  baseAttack: 120
+  baseDefense: 70
+  baseSpecialAttack: 110
+  baseSpecialDefense: 70
+  baseSpeed: 80
+  effortValues:
   - Attack3
+  requiresFriendshipEvolution: 0
+  requiresEvolutionStone: 0
+  friendshipEvolutionRequirement: 

@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Full Heal
   m_EditorClassIdentifier: 
-  Item_ID: 
-  Item_name: Full Heal
-  Item_type: Status
-  Item_effect: Full Heal
-  Item_desc: Heals any status effect
+  itemID: 
+  itemName: Full Heal
+  itemType: 3
+  itemEffect: Full Heal
+  itemDescription: Heals any status effect
   price: 50
   quantity: 1
-  Item_img: {fileID: 21300000, guid: 4c14cef273360044f8359190e206c4aa, type: 3}
-  ForPartyUse: 1
-  CanBeUsedInOverworld: 1
-  CanBeUsedInBattle: 1
+  itemImage: {fileID: 21300000, guid: 4c14cef273360044f8359190e206c4aa, type: 3}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 1
   isHeldItem: 0
-  CanBeHeld: 1
-  CanBeSold: 1
+  canBeHeld: 1
+  canBeSold: 1

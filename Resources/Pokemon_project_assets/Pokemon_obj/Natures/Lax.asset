@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Lax
   m_EditorClassIdentifier: 
   natureName: Lax
-  StatIncrease: Defense
-  StatDecrease: Special Defense
-  PValue: 9
+  statToIncrease: 2
+  statToDecrease: 4
+  requiredNatureValue: 9

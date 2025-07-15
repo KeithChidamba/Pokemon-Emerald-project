@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Great ball
   m_EditorClassIdentifier: 
-  Item_ID: 
-  Item_name: Great ball
-  Item_type: Pokeball
-  Item_effect: 1,5
-  Item_desc: 50% higher chance to catch compared to pokeball
+  itemID: 
+  itemName: Great ball
+  itemType: 9
+  itemEffect: 1,5
+  itemDescription: 50% higher chance to catch compared to pokeball
   price: 30
   quantity: 1
-  Item_img: {fileID: 21300000, guid: 08dc3317621433d4da311c90ec140508, type: 3}
-  ForPartyUse: 0
-  CanBeUsedInOverworld: 0
-  CanBeUsedInBattle: 1
+  itemImage: {fileID: 21300000, guid: 08dc3317621433d4da311c90ec140508, type: 3}
+  forPartyUse: 0
+  canBeUsedInOverworld: 0
+  canBeUsedInBattle: 1
   isHeldItem: 0
-  CanBeHeld: 0
-  CanBeSold: 1
+  canBeHeld: 0
+  canBeSold: 1

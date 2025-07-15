@@ -1,13 +1,13 @@
 {
     "itemID": "Guard Spec39866",
     "itemName": "Guard Spec",
-    "itemType": "X Item",
+    "itemType": 0,
     "itemEffect": "Stat Reduction",
     "itemDescription": "temporarily prevents stat reduction",
     "price": 100,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32312
+        "instanceID": 32304
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": false,

@@ -1,13 +1,13 @@
 {
     "itemID": "Pomeg berry23188",
     "itemName": "Pomeg berry",
-    "itemType": "Friendship Increase",
+    "itemType": 0,
     "itemEffect": "HP",
     "itemDescription": "Increases a pokemon's friendship but lowers hp",
     "price": 5,
     "quantity": 4,
     "itemImage": {
-        "instanceID": 32308
+        "instanceID": 32300
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

@@ -1,13 +1,13 @@
 {
     "itemID": "Revival Herb13393",
     "itemName": "Revival Herb",
-    "itemType": "Herb",
+    "itemType": 0,
     "itemEffect": "1",
     "itemDescription": "A bitter herb that revives a pokemon ith full Hp",
     "price": 18,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32364
+        "instanceID": 32356
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

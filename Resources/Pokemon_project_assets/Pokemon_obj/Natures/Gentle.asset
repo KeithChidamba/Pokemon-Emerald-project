@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Gentle
   m_EditorClassIdentifier: 
   natureName: Gentle
-  StatIncrease: Special Defense
-  StatDecrease: Defense
-  PValue: 21
+  statToIncrease: 4
+  statToDecrease: 2
+  requiredNatureValue: 21

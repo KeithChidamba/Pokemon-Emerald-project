@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Qualot berry
-  itemType: Friendship Increase
+  itemType: 8
   itemEffect: Defense
   itemDescription: Increases a pokemon's friendship but lowers defense
   price: 5

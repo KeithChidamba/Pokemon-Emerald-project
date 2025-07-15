@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Thunder Stone
   m_EditorClassIdentifier: 
-  Item_ID: 
-  Item_name: Thunder Stone
-  Item_type: evolution stone
-  Item_effect: 1
-  Item_desc: Evolve certain electric pokemon
+  itemID: 
+  itemName: Thunder Stone
+  itemType: 10
+  itemEffect: 1
+  itemDescription: Evolve certain electric pokemon
   price: 0
   quantity: 1
-  Item_img: {fileID: 21300000, guid: 8ae3e48c7d7c5b84592e485224dc351d, type: 3}
-  ForPartyUse: 1
-  CanBeUsedInOverworld: 1
-  CanBeUsedInBattle: 0
+  itemImage: {fileID: 21300000, guid: 8ae3e48c7d7c5b84592e485224dc351d, type: 3}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 0
   isHeldItem: 0
-  CanBeHeld: 0
-  CanBeSold: 1
+  canBeHeld: 0
+  canBeSold: 1

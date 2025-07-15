@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Zinc
-  itemType: Stat Increase
+  itemType: 7
   itemEffect: Special Defense
   itemDescription: "It increases the Special Defense of a Pok\xE9mon"
   price: 2000

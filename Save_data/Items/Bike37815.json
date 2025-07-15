@@ -1,13 +1,13 @@
 {
     "itemID": "Bike37815",
     "itemName": "Bike",
-    "itemType": "Special",
+    "itemType": 0,
     "itemEffect": "0",
     "itemDescription": "A fast bicycle that realiable",
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32412
+        "instanceID": 32404
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,

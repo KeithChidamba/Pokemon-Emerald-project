@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Bold
   m_EditorClassIdentifier: 
   natureName: Bold
-  StatIncrease: Defense
-  StatDecrease: Attack
-  PValue: 5
+  statToIncrease: 2
+  statToDecrease: 1
+  requiredNatureValue: 5

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: X Attack
-  itemType: X Item
+  itemType: 12
   itemEffect: Attack
   itemDescription: increases a pokemon's attack during battle
   price: 100

@@ -12,7 +12,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("Pokemon_name")] public string pokemonName;
     [FormerlySerializedAs("Pokemon_ID")] public long pokemonID = 0;
     [FormerlySerializedAs("Personality_value")] public uint personalityValue;
-    [FormerlySerializedAs("Gender")] public string gender = "None";
+    public PokemonOperations.Gender gender;
     [FormerlySerializedAs("GenderRatio")] public string genderRatio = "50/50";
     public Nature nature;
     [FormerlySerializedAs("has_gender")] public bool hasGender = true;
@@ -49,7 +49,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("Current_level")] public int currentLevel = 1;
     [FormerlySerializedAs("CurrentExpAmount")] public int currentExpAmount = 0;
     [FormerlySerializedAs("NextLevelExpAmount")] public float nextLevelExpAmount = 0;
-    [FormerlySerializedAs("EXPGroup")] public string expGroup = "";
+    [FormerlySerializedAs("EXPGroup")] public PokemonOperations.ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
     public int friendshipLevel = 0;
     [FormerlySerializedAs("has_trainer")] public bool hasTrainer=false;
@@ -60,7 +60,7 @@ public class Pokemon : ScriptableObject
     public List<Type> types;
     public PokemonOperations.StatusEffect statusEffect;
     [FormerlySerializedAs("Buff_Debuffs")] public List<Buff_Debuff> buffAndDebuffs = new();
-    [FormerlySerializedAs("evo_line")] public string[] evolutionLineLevels;
+    [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
     public string friendshipEvolutionRequirement;
     [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone = false;
     [FormerlySerializedAs("EvolutionStoneName")] public string evolutionStoneName = "None";
@@ -216,7 +216,7 @@ public class Pokemon : ScriptableObject
         //regular evolution
         for (int i = 0; i < evolutionLineLevels.Length; i++)
         {
-            var requiredLevelToEvolve = int.Parse(evolutionLineLevels[i]);
+            var requiredLevelToEvolve = evolutionLineLevels[i];
             if (currentLevel == requiredLevelToEvolve)
             {
                 Evolve(evolutions[i+evoIndex]);
@@ -254,7 +254,7 @@ public class Pokemon : ScriptableObject
         var baseExp = (enemy.expYield*enemy.currentLevel) / 7f;
         var expItemBonus = 1f;
         if (hasItem)
-            if (heldItem.itemType == "Exp Gain")//lucky egg
+            if (heldItem.itemType == Item_handler.ItemType.GainExp)//lucky egg
                 expItemBonus = float.Parse(heldItem.itemEffect);
         if (enemy.hasTrainer)
             trainerBonus = 1.5f;
@@ -286,24 +286,24 @@ public class Pokemon : ScriptableObject
 
     void IncreaseStats()
     {
-        attack = DetermineStatIncrease(baseAttack,attackIv,attackEv,"Attack");
-        defense = DetermineStatIncrease(baseDefense,defenseIv,defenseEv,"Defense");
-        speed = DetermineStatIncrease(baseSpeed,speedIv,speedEv,"Speed");
-        specialAttack = DetermineStatIncrease(baseSpecialAttack,specialAttackIv,specialAttackEv,"Special Attack");
-        specialDefense = DetermineStatIncrease(baseSpecialDefense,specialDefenseIv,specialDefenseEv,"Special Defense");
+        attack = DetermineStatIncrease(baseAttack,attackIv,attackEv,PokemonOperations.Stat.Attack);
+        defense = DetermineStatIncrease(baseDefense,defenseIv,defenseEv,PokemonOperations.Stat.Defense);
+        speed = DetermineStatIncrease(baseSpeed,speedIv,speedEv,PokemonOperations.Stat.Speed);
+        specialAttack = DetermineStatIncrease(baseSpecialAttack,specialAttackIv,specialAttackEv,PokemonOperations.Stat.SpecialAttack);
+        specialDefense = DetermineStatIncrease(baseSpecialDefense,specialDefenseIv,specialDefenseEv,PokemonOperations.Stat.SpecialDefense);
         maxHp = DetermineHealthIncrease();
         if (currentLevel == 1)
             hp = maxHp;
     }
-    float GetNatureModifier(string stat)
+    float GetNatureModifier(PokemonOperations.Stat stat)
      {
-         if (nature.statIncrease == stat)
+         if (nature.statToIncrease == stat)
              return 1.1f;
-         if (nature.statDecrease == stat)
+         if (nature.statToDecrease == stat)
              return 0.9f;
          return 1;
      }
-    float DetermineStatIncrease(float baseStat,float IV,float EV,string stat)
+    float DetermineStatIncrease(float baseStat,float IV,float EV,PokemonOperations.Stat stat)
     {
         float brackets1 = (2*baseStat) + IV + (EV / 4);
         float bracket2 = brackets1 * (currentLevel / 100f);

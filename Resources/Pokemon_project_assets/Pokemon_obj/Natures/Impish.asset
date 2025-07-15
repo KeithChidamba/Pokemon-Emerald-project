@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Impish
   m_EditorClassIdentifier: 
   natureName: Impish
-  StatIncrease: Defense
-  StatDecrease: Special Attack
-  PValue: 8
+  statToIncrease: 2
+  statToDecrease: 3
+  requiredNatureValue: 8

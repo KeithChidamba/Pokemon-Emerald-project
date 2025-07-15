@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Naughty
   m_EditorClassIdentifier: 
   natureName: Naughty
-  StatIncrease: Attack
-  StatDecrease: Special Defense
-  PValue: 4
+  statToIncrease: 1
+  statToDecrease: 4
+  requiredNatureValue: 4

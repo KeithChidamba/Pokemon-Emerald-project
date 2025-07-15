@@ -12,83 +12,87 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
   m_Name: Treecko
   m_EditorClassIdentifier: 
-  Base_Pokemon_name: Treecko
-  Pokemon_name: Treecko
-  Pokemon_ID: 0
-  Personality_value: 0
-  Gender: 
-  GenderRatio: 87,5/12,5
+  basePokemonName: Treecko
+  pokemonName: Treecko
+  pokemonID: 0
+  personalityValue: 0
+  gender: 0
+  genderRatio: 87,5/12,5
   nature: {fileID: 0}
-  has_gender: 1
-  HP: 0
-  max_HP: 0
-  BaseHP: 40
-  BaseAttack: 45
-  BaseDefense: 35
-  BaseSP_ATK: 65
-  BaseSP_DEF: 55
-  Basespeed: 70
-  Attack: 0
-  Defense: 0
-  SP_ATK: 0
-  SP_DEF: 0
+  hasGender: 1
+  hp: 0
+  maxHp: 0
+  baseHp: 40
+  baseAttack: 45
+  baseDefense: 35
+  baseSpecialAttack: 65
+  baseSpecialDefense: 55
+  baseSpeed: 70
+  attack: 0
+  defense: 0
+  specialAttack: 0
+  specialDefense: 0
   speed: 0
-  HP_IV: 0
-  Attack_IV: 0
-  Defense_IV: 0
-  SP_ATK_IV: 0
-  SP_DEF_IV: 0
-  speed_IV: 0
-  HP_EV: 0
-  Attack_EV: 0
-  Defense_EV: 0
-  SP_ATK_EV: 0
-  SP_DEF_EV: 0
-  speed_EV: 0
-  EVs:
+  hpIv: 0
+  attackIv: 0
+  defenseIv: 0
+  specialAttackIv: 0
+  specialDefenseIv: 0
+  speedIv: 0
+  hpEv: 0
+  attackEv: 0
+  defenseEv: 0
+  specialAttackEv: 0
+  specialDefenseEv: 0
+  speedEv: 0
+  effortValues:
   - Speed1
-  Accuracy: 100
-  Evasion: 100
-  crit_chance: 6.25
-  CatchRate: 45
-  Current_level: 0
-  CurrentExpAmount: 0
-  NextLvExpAmount: 0
-  EXPGroup: Medium Slow
-  exp_yield: 65
-  has_trainer: 0
+  accuracy: 100
+  evasion: 100
+  critChance: 6.25
+  catchRate: 45
+  currentLevel: 0
+  currentExpAmount: 0
+  nextLevelExpAmount: 0
+  expGroup: 3
+  expYield: 65
+  friendshipLevel: 0
+  hasTrainer: 0
   canAttack: 1
   isFlinched: 0
-  CanBeDamaged: 1
+  canBeDamaged: 1
+  immuneToStatReduction: 0
   types:
   - {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
-  Status_effect: None
-  Buff_Debuffs: []
-  evo_line:
-  - 16
-  - 30
+  statusEffect: 0
+  buffAndDebuffs: []
+  evolutionLineLevels: 100000001e000000
+  friendshipEvolutionRequirement: 
+  requiresEvolutionStone: 0
+  evolutionStoneName: None
   abilities:
   - Overgrow
-  split_evolution: 0
+  splitEvolution: 0
+  requiresFriendshipEvolution: 0
   learnSet:
   - normal/pound01
   - grass/absorb03
   - normal/quick attack04
   - grass/bullet seed07
-  move_set: []
+  moveSet: []
   ability: {fileID: 11400000, guid: 3a050f274b7d49d49aec9bd3ce16bbf1, type: 2}
   evolutions:
   - {fileID: 11400000, guid: bda93132d14286e4eae38e247c963eae, type: 2}
   - {fileID: 11400000, guid: bde858374be6c77449ea632c3a1d18ab, type: 2}
-  HeldItem: {fileID: 0}
-  HasItem: 0
-  front_picture: {fileID: 21300000, guid: 6ab83c745c1ddb2429fde5affee84619, type: 3}
-  back_picture: {fileID: 21300000, guid: 0d8b2c661f58f204c90e608b4d5edd48, type: 3}
-  ability_name: 
+  heldItem: {fileID: 0}
+  hasItem: 0
+  frontPicture: {fileID: 21300000, guid: 6ab83c745c1ddb2429fde5affee84619, type: 3}
+  backPicture: {fileID: 21300000, guid: 0d8b2c661f58f204c90e608b4d5edd48, type: 3}
+  pokeballName: 
+  healthPhase: 0
+  abilityName: 
   natureName: 
-  evo_data:
-  - Grovyle
-  - Sceptile
-  type_data: []
-  move_data: []
-  move_pp_data: 
+  evolutionData: []
+  typeData: []
+  moveData: []
+  movePpData: []

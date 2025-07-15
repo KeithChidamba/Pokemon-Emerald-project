@@ -3,10 +3,10 @@
     "pokemonName": "Grovyle",
     "pokemonID": 3801252464408196107,
     "personalityValue": 90115061,
-    "gender": "Male",
+    "gender": 0,
     "genderRatio": "87,5/12,5",
     "nature": {
-        "instanceID": 25934
+        "instanceID": 25928
     },
     "hasGender": true,
     "hp": 51.0,
@@ -54,7 +54,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25776
+            "instanceID": 25770
         }
     ],
     "statusEffect": 0,
@@ -76,27 +76,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -10346
+            "instanceID": -4298
         },
         {
-            "instanceID": -10348
+            "instanceID": -4300
         },
         {
-            "instanceID": -10350
+            "instanceID": -4302
         },
         {
-            "instanceID": -10352
+            "instanceID": -4304
         }
     ],
     "ability": {
-        "instanceID": 26020
+        "instanceID": 26014
     },
     "evolutions": [
         {
-            "instanceID": 26192
+            "instanceID": 26186
         },
         {
-            "instanceID": 25080
+            "instanceID": 25074
         }
     ],
     "heldItem": {
@@ -104,10 +104,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31982
+        "instanceID": 31976
     },
     "backPicture": {
-        "instanceID": 31872
+        "instanceID": 31866
     },
     "pokeballName": "",
     "healthPhase": 1,

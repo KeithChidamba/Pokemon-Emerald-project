@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Calm
   m_EditorClassIdentifier: 
   natureName: Calm
-  StatIncrease: Special Defense
-  StatDecrease: Attack
-  PValue: 20
+  statToIncrease: 4
+  statToDecrease: 1
+  requiredNatureValue: 20

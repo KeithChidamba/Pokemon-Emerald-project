@@ -13,14 +13,7 @@ MonoBehaviour:
   m_Name: Flying
   m_EditorClassIdentifier: 
   typeName: Flying
-  weaknesses:
-  - Rock
-  - Electric
-  - Ice
-  resistances:
-  - Grass
-  - Bug
-  - Fighting
-  immunities:
-  - Ground
+  weaknesses: 03000000050000000c000000
+  resistances: 04000000060000000b000000
+  immunities: 08000000
   typeImage: {fileID: 1965910921, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

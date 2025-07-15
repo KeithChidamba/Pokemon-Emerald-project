@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Tamato berry
-  itemType: Friendship Increase
+  itemType: 8
   itemEffect: Speed
   itemDescription: Increases a pokemon's friendship but lowers speed
   price: 5

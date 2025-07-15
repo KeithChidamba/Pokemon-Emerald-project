@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Antidote
-  itemType: Status
+  itemType: 3
   itemEffect: poison
   itemDescription: Heals poison
   price: 20

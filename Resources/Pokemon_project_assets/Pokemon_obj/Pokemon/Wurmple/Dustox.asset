@@ -12,23 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b08819e8a6e5a46838808e39c37bb1, type: 3}
   m_Name: Dustox
   m_EditorClassIdentifier: 
-  Evo_name: Dustox
+  evolutionName: Dustox
   types:
   - {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
   - {fileID: 11400000, guid: 3185f3c7151af7d48b86d9e6f6b6c269, type: 2}
   ability: {fileID: 11400000, guid: 1399590b90613f74581252f98f7d9e0c, type: 2}
-  EXPGroup: Fast
-  exp_yield: 160
-  CatchRate: 45
+  expGroup: 1
+  expYield: 160
+  catchRate: 45
   learnSet:
   - poison/toxic14
-  front_picture: {fileID: 21300000, guid: 8879d5784dc1e0d45bce22cfdee1331b, type: 3}
-  back_picture: {fileID: 21300000, guid: a6e4f962de9cc0848a355b6246a8ccb0, type: 3}
-  BaseHP: 60
-  BaseAttack: 50
-  BaseDefense: 70
-  BaseSP_ATK: 50
-  BaseSP_DEF: 90
-  Basespeed: 65
-  EVs:
+  frontPicture: {fileID: 21300000, guid: 8879d5784dc1e0d45bce22cfdee1331b, type: 3}
+  backPicture: {fileID: 21300000, guid: a6e4f962de9cc0848a355b6246a8ccb0, type: 3}
+  baseHp: 60
+  baseAttack: 50
+  baseDefense: 70
+  baseSpecialAttack: 50
+  baseSpecialDefense: 90
+  baseSpeed: 65
+  effortValues:
   - Special Defense3
+  requiresFriendshipEvolution: 0
+  requiresEvolutionStone: 0
+  friendshipEvolutionRequirement: 

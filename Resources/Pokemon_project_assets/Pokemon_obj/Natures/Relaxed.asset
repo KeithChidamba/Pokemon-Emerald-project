@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Relaxed
   m_EditorClassIdentifier: 
   natureName: Relaxed
-  StatIncrease: Defense
-  StatDecrease: Speed
-  PValue: 7
+  statToIncrease: 2
+  statToDecrease: 5
+  requiredNatureValue: 7

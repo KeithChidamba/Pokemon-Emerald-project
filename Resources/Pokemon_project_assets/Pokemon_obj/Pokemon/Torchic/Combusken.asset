@@ -12,24 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b08819e8a6e5a46838808e39c37bb1, type: 3}
   m_Name: Combusken
   m_EditorClassIdentifier: 
-  Evo_name: Combusken
+  evolutionName: Combusken
   types:
   - {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
   - {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
-  EXPGroup: Medium Slow
-  exp_yield: 142
-  CatchRate: 45
+  expGroup: 3
+  expYield: 142
+  catchRate: 45
   learnSet:
   - fire/flame thrower18
-  front_picture: {fileID: 21300000, guid: 481c8555e71c7f44eab6eb29249befe3, type: 3}
-  back_picture: {fileID: 21300000, guid: 234fb8644e5380d40b3475228962c5ea, type: 3}
-  BaseHP: 60
-  BaseAttack: 85
-  BaseDefense: 60
-  BaseSP_ATK: 85
-  BaseSP_DEF: 60
-  Basespeed: 55
-  EVs:
+  frontPicture: {fileID: 21300000, guid: 481c8555e71c7f44eab6eb29249befe3, type: 3}
+  backPicture: {fileID: 21300000, guid: 234fb8644e5380d40b3475228962c5ea, type: 3}
+  baseHp: 60
+  baseAttack: 85
+  baseDefense: 60
+  baseSpecialAttack: 85
+  baseSpecialDefense: 60
+  baseSpeed: 55
+  effortValues:
   - Speed1
   - Attack1
+  requiresFriendshipEvolution: 0
+  requiresEvolutionStone: 0
+  friendshipEvolutionRequirement: 

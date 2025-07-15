@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Hyper Potion
   m_EditorClassIdentifier: 
-  Item_ID: 
-  Item_name: Hyper Potion
-  Item_type: Heal HP
-  Item_effect: 30
-  Item_desc: Heals 30hp
+  itemID: 
+  itemName: Hyper Potion
+  itemType: 2
+  itemEffect: 30
+  itemDescription: Heals 30hp
   price: 50
   quantity: 1
-  Item_img: {fileID: 21300000, guid: fa3ec98f1d77e014a9c254b6e226201e, type: 3}
-  ForPartyUse: 1
-  CanBeUsedInOverworld: 1
-  CanBeUsedInBattle: 1
+  itemImage: {fileID: 21300000, guid: fa3ec98f1d77e014a9c254b6e226201e, type: 3}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 1
   isHeldItem: 0
-  CanBeHeld: 0
-  CanBeSold: 1
+  canBeHeld: 0
+  canBeSold: 1

@@ -12,81 +12,86 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
   m_Name: Pikachu
   m_EditorClassIdentifier: 
-  Base_Pokemon_name: Pikachu
-  Pokemon_name: Pikachu
-  Pokemon_ID: 0
-  Personality_value: 0
-  Gender: 
-  GenderRatio: 50/50
+  basePokemonName: Pikachu
+  pokemonName: Pikachu
+  pokemonID: 0
+  personalityValue: 0
+  gender: 0
+  genderRatio: 50/50
   nature: {fileID: 0}
-  has_gender: 1
-  HP: 0
-  max_HP: 0
-  BaseHP: 35
-  BaseAttack: 55
-  BaseDefense: 40
-  BaseSP_ATK: 50
-  BaseSP_DEF: 50
-  Basespeed: 90
-  Attack: 0
-  Defense: 0
-  SP_ATK: 0
-  SP_DEF: 0
+  hasGender: 1
+  hp: 0
+  maxHp: 0
+  baseHp: 35
+  baseAttack: 55
+  baseDefense: 40
+  baseSpecialAttack: 50
+  baseSpecialDefense: 50
+  baseSpeed: 90
+  attack: 0
+  defense: 0
+  specialAttack: 0
+  specialDefense: 0
   speed: 0
-  HP_IV: 0
-  Attack_IV: 0
-  Defense_IV: 0
-  SP_ATK_IV: 0
-  SP_DEF_IV: 0
-  speed_IV: 0
-  HP_EV: 0
-  Attack_EV: 0
-  Defense_EV: 0
-  SP_ATK_EV: 0
-  SP_DEF_EV: 0
-  speed_EV: 0
-  EVs:
+  hpIv: 0
+  attackIv: 0
+  defenseIv: 0
+  specialAttackIv: 0
+  specialDefenseIv: 0
+  speedIv: 0
+  hpEv: 0
+  attackEv: 0
+  defenseEv: 0
+  specialAttackEv: 0
+  specialDefenseEv: 0
+  speedEv: 0
+  effortValues:
   - Speed2
-  Accuracy: 100
-  Evasion: 100
-  crit_chance: 6.25
-  CatchRate: 190
-  Current_level: 0
-  CurrentExpAmount: 0
-  NextLevelExpAmount: 0
-  EXPGroup: Medium Fast
-  exp_yield: 82
-  has_trainer: 0
+  accuracy: 100
+  evasion: 100
+  critChance: 6.25
+  catchRate: 190
+  currentLevel: 0
+  currentExpAmount: 0
+  nextLevelExpAmount: 0
+  expGroup: 2
+  expYield: 82
+  friendshipLevel: 0
+  hasTrainer: 0
   canAttack: 1
   isFlinched: 0
-  CanBeDamaged: 1
+  canBeDamaged: 1
+  immuneToStatReduction: 0
   types:
   - {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
-  Status_effect: None
-  Buff_Debuffs: []
-  evo_line: []
-  RequiresEvolutionStone: 1
-  EvolutionStoneName: Thunder Stone
+  statusEffect: 0
+  buffAndDebuffs: []
+  evolutionLineLevels: 
+  friendshipEvolutionRequirement: 
+  requiresEvolutionStone: 1
+  evolutionStoneName: Thunder Stone
   abilities:
   - Static
-  split_evolution: 0
+  splitEvolution: 0
+  requiresFriendshipEvolution: 0
   learnSet:
   - electric/thunder shock01
   - electric/thunder wave03
   - normal/quick attack07
   - normal/tail whip09
-  move_set: []
+  moveSet: []
   ability: {fileID: 11400000, guid: e14cc0f589869f74585dfab11c944e42, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 84257e89eafc79747b735d1c1052913e, type: 2}
-  HeldItem: {fileID: 0}
-  HasItem: 0
-  front_picture: {fileID: 21300000, guid: c28e38aca92a874439086156a371957d, type: 3}
-  back_picture: {fileID: 21300000, guid: 4332c8302d541854ba01d58331af25b0, type: 3}
-  ability_name: 
+  heldItem: {fileID: 0}
+  hasItem: 0
+  frontPicture: {fileID: 21300000, guid: c28e38aca92a874439086156a371957d, type: 3}
+  backPicture: {fileID: 21300000, guid: 4332c8302d541854ba01d58331af25b0, type: 3}
+  pokeballName: 
+  healthPhase: 0
+  abilityName: 
   natureName: 
-  evo_data:
-  - Raichu
-  type_data: []
-  move_data: []
-  move_pp_data: []
+  evolutionData: []
+  typeData: []
+  moveData: []
+  movePpData: []

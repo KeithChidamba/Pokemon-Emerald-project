@@ -13,13 +13,7 @@ MonoBehaviour:
   m_Name: Ground
   m_EditorClassIdentifier: 
   typeName: Ground
-  weaknesses:
-  - Grass
-  - Water
-  - Ice
-  resistances:
-  - Poison
-  - Rock
-  immunities:
-  - Electric
+  weaknesses: 020000000400000005000000
+  resistances: 070000000c000000
+  immunities: 03000000
   typeImage: {fileID: -853871665, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

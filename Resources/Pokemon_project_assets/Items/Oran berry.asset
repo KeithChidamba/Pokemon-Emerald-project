@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Oran berry
   m_EditorClassIdentifier: 
-  Item_ID: 
-  Item_name: Oran berry
-  Item_type: Heal HP
-  Item_effect: 5
-  Item_desc: Heals 5hp
+  itemID: 
+  itemName: Oran berry
+  itemType: 2
+  itemEffect: 5
+  itemDescription: Heals 5hp
   price: 5
   quantity: 1
-  Item_img: {fileID: 21300000, guid: b16bbfec99ee5b54ab691eacfb469d7b, type: 3}
-  ForPartyUse: 1
-  CanBeUsedInOverworld: 1
-  CanBeUsedInBattle: 1
+  itemImage: {fileID: 21300000, guid: b16bbfec99ee5b54ab691eacfb469d7b, type: 3}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 1
   isHeldItem: 0
-  CanBeHeld: 1
-  CanBeSold: 1
+  canBeHeld: 1
+  canBeSold: 1

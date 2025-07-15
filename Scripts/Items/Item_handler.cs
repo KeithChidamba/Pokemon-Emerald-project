@@ -14,6 +14,12 @@ public class Item_handler : MonoBehaviour
     private Item _itemInUse;
     public static Item_handler Instance;
     private event Action<bool> OnItemUsageSuccessful;
+
+    public enum ItemType
+    {
+        Special,GainExp,HealHp,Status,Ether,Herb,Revive,StatIncrease,FriendshipIncrease,Pokeball
+        ,EvolutionStone,RareCandy,XItem,GainMoney
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,7 +33,7 @@ public class Item_handler : MonoBehaviour
     {
         _selectedPartyPokemon = selectedPokemon;
         _itemInUse = item;
-        if (_itemInUse.itemType == "Special")
+        if (_itemInUse.itemType == ItemType.Special)
         {
             if (overworld_actions.Instance.IsEquipped(_itemInUse.itemName))
             {
@@ -41,27 +47,27 @@ public class Item_handler : MonoBehaviour
             ChangePowerpoints();
         else
         {
-            switch (item.itemType.ToLower())
+            switch (item.itemType)
             {
-                case "herb": UseHerbs(item.itemName); break;
+                case ItemType.Herb: UseHerbs(item.itemName); break;
                 
-                case "heal hp": RestoreHealth(int.Parse(item.itemEffect)); break;
+                case ItemType.HealHp: RestoreHealth(int.Parse(item.itemEffect)); break;
                 
-                case "revive": RevivePokemon(item.itemEffect.ToLower()); break;
+                case ItemType.Revive: RevivePokemon(item.itemEffect.ToLower()); break;
                 
-                case "status": HealStatusEffect(item.itemEffect.ToLower()); break;
+                case ItemType.Status: HealStatusEffect(item.itemEffect.ToLower()); break;
                 
-                case "stat increase": GetEVsFromItem(_itemInUse.itemEffect); break;
+                case ItemType.StatIncrease: GetEVsFromItem(_itemInUse.itemEffect); break;
                 
-                case "friendship increase": GetFriendshipFromItem(_itemInUse.itemEffect); break;
+                case ItemType.FriendshipIncrease: GetFriendshipFromItem(_itemInUse.itemEffect); break;
                 
-                case "pokeball": UsePokeball(item); break;
+                case ItemType.Pokeball: UsePokeball(item); break;
                 
-                case "evolution stone": TriggerStoneEvolution(item.itemName.ToLower()); break;
+                case ItemType.EvolutionStone: TriggerStoneEvolution(item.itemName.ToLower()); break;
                 
-                case "rare candy": StartCoroutine(LevelUpWithItem()); break;
+                case ItemType.RareCandy: StartCoroutine(LevelUpWithItem()); break;
                 
-                case "x item": ItemBuffOrDebuff(item.itemEffect); break;
+                case ItemType.XItem: ItemBuffOrDebuff(item.itemEffect); break;
             }
         }
         
@@ -172,7 +178,7 @@ public class Item_handler : MonoBehaviour
     private void ChangePowerpoints()
     {
         Pokemon_Details.Instance.changingMoveData = true;
-        if (_itemInUse.itemType.ToLower() == "ether")
+        if (_itemInUse.itemType == ItemType.Ether)
             Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
         else if (_itemInUse.itemName.ToLower() == "pp max")
             Pokemon_Details.Instance.OnMoveSelected += MaximisePowerpoints;

@@ -8,7 +8,7 @@ public class Item : ScriptableObject
 {
     [FormerlySerializedAs("Item_ID")] public string itemID = "";
     [FormerlySerializedAs("Item_name")] public string itemName = "";
-    [FormerlySerializedAs("Item_type")] public string itemType = "";
+    public Item_handler.ItemType itemType;
     [FormerlySerializedAs("Item_effect")] public string itemEffect = "";
     [FormerlySerializedAs("Item_desc")] public string itemDescription = "";
     public int price = 0;

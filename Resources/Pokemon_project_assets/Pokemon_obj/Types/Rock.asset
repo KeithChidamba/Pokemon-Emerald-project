@@ -13,17 +13,7 @@ MonoBehaviour:
   m_Name: Rock
   m_EditorClassIdentifier: 
   typeName: Rock
-  weaknesses:
-  - Grass
-  - Water
-  - Fighting
-  - Steel
-  - Ground
-  resistances:
-  - Flying
-  - Fire
-  - Normal
-  - Poison
-  immunities:
-  - None
+  weaknesses: 0200000004000000060000000800000010000000
+  resistances: 00000000010000000700000009000000
+  immunities: 
   typeImage: {fileID: -1931007855, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

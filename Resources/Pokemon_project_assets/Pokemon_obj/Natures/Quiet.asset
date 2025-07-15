@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Quiet
   m_EditorClassIdentifier: 
   natureName: Quiet
-  StatIncrease: Special Attack
-  StatDecrease: Speed
-  PValue: 17
+  statToIncrease: 3
+  statToDecrease: 5
+  requiredNatureValue: 17

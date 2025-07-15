@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Mild
   m_EditorClassIdentifier: 
   natureName: Mild
-  StatIncrease: Special Attack
-  StatDecrease: Defense
-  PValue: 16
+  statToIncrease: 3
+  statToDecrease: 2
+  requiredNatureValue: 16

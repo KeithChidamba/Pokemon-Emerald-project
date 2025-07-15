@@ -12,83 +12,87 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
   m_Name: Torchic
   m_EditorClassIdentifier: 
-  Base_Pokemon_name: Torchic
-  Pokemon_name: Torchic
-  Pokemon_ID: 0
-  Personality_value: 0
-  Gender: 
-  GenderRatio: 87,5/12,5
+  basePokemonName: Torchic
+  pokemonName: Torchic
+  pokemonID: 0
+  personalityValue: 0
+  gender: 0
+  genderRatio: 87,5/12,5
   nature: {fileID: 0}
-  has_gender: 1
-  HP: 0
-  max_HP: 0
-  BaseHP: 45
-  BaseAttack: 60
-  BaseDefense: 40
-  BaseSP_ATK: 70
-  BaseSP_DEF: 50
-  Basespeed: 45
-  Attack: 0
-  Defense: 0
-  SP_ATK: 0
-  SP_DEF: 0
+  hasGender: 1
+  hp: 0
+  maxHp: 0
+  baseHp: 45
+  baseAttack: 60
+  baseDefense: 40
+  baseSpecialAttack: 70
+  baseSpecialDefense: 50
+  baseSpeed: 45
+  attack: 0
+  defense: 0
+  specialAttack: 0
+  specialDefense: 0
   speed: 0
-  HP_IV: 0
-  Attack_IV: 0
-  Defense_IV: 0
-  SP_ATK_IV: 0
-  SP_DEF_IV: 0
-  speed_IV: 0
-  HP_EV: 0
-  Attack_EV: 0
-  Defense_EV: 0
-  SP_ATK_EV: 0
-  SP_DEF_EV: 0
-  speed_EV: 0
-  EVs:
+  hpIv: 0
+  attackIv: 0
+  defenseIv: 0
+  specialAttackIv: 0
+  specialDefenseIv: 0
+  speedIv: 0
+  hpEv: 0
+  attackEv: 0
+  defenseEv: 0
+  specialAttackEv: 0
+  specialDefenseEv: 0
+  speedEv: 0
+  effortValues:
   - Speed1
-  Accuracy: 100
-  Evasion: 100
-  crit_chance: 6.25
-  CatchRate: 45
-  Current_level: 0
-  CurrentExpAmount: 0
-  NextLvExpAmount: 0
-  EXPGroup: Medium Slow
-  exp_yield: 65
-  has_trainer: 0
+  accuracy: 100
+  evasion: 100
+  critChance: 6.25
+  catchRate: 45
+  currentLevel: 0
+  currentExpAmount: 0
+  nextLevelExpAmount: 0
+  expGroup: 3
+  expYield: 65
+  friendshipLevel: 0
+  hasTrainer: 0
   canAttack: 1
   isFlinched: 0
-  CanBeDamaged: 1
+  canBeDamaged: 1
+  immuneToStatReduction: 0
   types:
   - {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
-  Status_effect: None
-  Buff_Debuffs: []
-  evo_line:
-  - 16
-  - 30
+  statusEffect: 0
+  buffAndDebuffs: []
+  evolutionLineLevels: 100000001e000000
+  friendshipEvolutionRequirement: 
+  requiresEvolutionStone: 0
+  evolutionStoneName: None
   abilities:
   - Blaze
-  split_evolution: 0
+  splitEvolution: 0
+  requiresFriendshipEvolution: 0
   learnSet:
   - normal/scratch01
   - fire/ember03
   - fighting/double kick05
   - normal/focus energy07
-  move_set: []
+  moveSet: []
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
   evolutions:
   - {fileID: 11400000, guid: f49a231fd601fd84fb5426e0f3771111, type: 2}
   - {fileID: 11400000, guid: fbaeb98064185304bbf6b6fffb76ece1, type: 2}
-  HeldItem: {fileID: 0}
-  HasItem: 0
-  front_picture: {fileID: 21300000, guid: 0f8036093f73bd94e8ce6120dbdf5bdd, type: 3}
-  back_picture: {fileID: 21300000, guid: 704c9966ce2589749963a045076d0db4, type: 3}
-  ability_name: 
+  heldItem: {fileID: 0}
+  hasItem: 0
+  frontPicture: {fileID: 21300000, guid: 0f8036093f73bd94e8ce6120dbdf5bdd, type: 3}
+  backPicture: {fileID: 21300000, guid: 704c9966ce2589749963a045076d0db4, type: 3}
+  pokeballName: 
+  healthPhase: 0
+  abilityName: 
   natureName: 
-  evo_data:
-  - Combusken
-  - Blaziken
-  type_data: []
-  move_data: []
-  move_pp_data: []
+  evolutionData: []
+  typeData: []
+  moveData: []
+  movePpData: []

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Modest
   m_EditorClassIdentifier: 
   natureName: Modest
-  StatIncrease: Special Attack
-  StatDecrease: Attack
-  PValue: 15
+  statToIncrease: 3
+  statToDecrease: 1
+  requiredNatureValue: 15

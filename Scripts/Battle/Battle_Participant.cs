@@ -315,7 +315,7 @@ public class Battle_Participant : MonoBehaviour
     {
         pokemonGenderImage.gameObject.SetActive(true);
         if(pokemon.hasGender)
-            pokemonGenderImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+pokemon.gender.ToLower());
+            pokemonGenderImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+pokemon.gender.ToString().ToLower());
         else
             pokemonGenderImage.gameObject.SetActive(false);
     }

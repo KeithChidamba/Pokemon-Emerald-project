@@ -13,14 +13,7 @@ MonoBehaviour:
   m_Name: Poison
   m_EditorClassIdentifier: 
   typeName: Poison
-  weaknesses:
-  - Psychic
-  - Ground
-  resistances:
-  - Grass
-  - Fighting
-  - Bug
-  - Poison
-  immunities:
-  - None
+  weaknesses: 080000000a000000
+  resistances: 0400000006000000070000000b000000
+  immunities: 
   typeImage: {fileID: -1862244052, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

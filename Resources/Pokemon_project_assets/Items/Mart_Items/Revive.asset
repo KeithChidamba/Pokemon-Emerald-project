@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Revive
-  itemType: Revive
+  itemType: 6
   itemEffect: Revive
   itemDescription: Revives a pokemon with 20% health
   price: 45

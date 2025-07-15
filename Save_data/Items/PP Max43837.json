@@ -1,13 +1,13 @@
 {
     "itemID": "PP Max43837",
     "itemName": "PP Max",
-    "itemType": "Stat Increase",
+    "itemType": 0,
     "itemEffect": "pp",
     "itemDescription": "Maximises the poweperpoints of a move",
     "price": 2000,
     "quantity": 3,
     "itemImage": {
-        "instanceID": 32500
+        "instanceID": 32492
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

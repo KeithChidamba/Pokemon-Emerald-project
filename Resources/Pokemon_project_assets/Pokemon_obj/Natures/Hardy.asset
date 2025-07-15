@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Hardy
   m_EditorClassIdentifier: 
   natureName: Hardy
-  StatIncrease: None
-  StatDecrease: None
-  PValue: 0
+  statToIncrease: 0
+  statToDecrease: 0
+  requiredNatureValue: 0

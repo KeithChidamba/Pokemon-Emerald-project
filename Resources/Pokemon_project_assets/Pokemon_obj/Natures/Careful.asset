@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Careful
   m_EditorClassIdentifier: 
   natureName: Careful
-  StatIncrease: Special Defense
-  StatDecrease: Special Attack
-  PValue: 23
+  statToIncrease: 4
+  statToDecrease: 3
+  requiredNatureValue: 23

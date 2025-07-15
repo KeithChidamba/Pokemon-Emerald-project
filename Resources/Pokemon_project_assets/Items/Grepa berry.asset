@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Grepa berry
-  itemType: Friendship Increase
+  itemType: 8
   itemEffect: Special Defense
   itemDescription: Increases a pokemon's friendship but lowers Special defense
   price: 5

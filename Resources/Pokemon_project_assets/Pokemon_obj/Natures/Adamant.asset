@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Adamant
   m_EditorClassIdentifier: 
   natureName: Adamant
-  StatIncrease: Attack
-  StatDecrease: Special Attack
-  PValue: 3
+  statToIncrease: 1
+  statToDecrease: 3
+  requiredNatureValue: 3

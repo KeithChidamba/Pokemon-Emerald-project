@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Serious
   m_EditorClassIdentifier: 
   natureName: Serious
-  StatIncrease: None
-  StatDecrease: None
-  PValue: 12
+  statToIncrease: 0
+  statToDecrease: 0
+  requiredNatureValue: 12

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: PP Up
-  itemType: Stat Increase
+  itemType: 7
   itemEffect: pp
   itemDescription: increases the poweperpoints of a move
   price: 2000

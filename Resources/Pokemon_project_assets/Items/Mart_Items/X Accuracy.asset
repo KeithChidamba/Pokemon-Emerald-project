@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: X Accuracy
-  itemType: X Item
+  itemType: 12
   itemEffect: Accuracy
   itemDescription: increases a pokemon's accuracy during battle
   price: 100

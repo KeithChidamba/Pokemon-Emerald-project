@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Energy Powder
-  itemType: Herb
+  itemType: 5
   itemEffect: 50
   itemDescription: A bitter herb that restores 50 Hp
   price: 18

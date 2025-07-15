@@ -1,13 +1,13 @@
 {
     "itemID": "Energy Root11391",
     "itemName": "Energy Root",
-    "itemType": "Herb",
+    "itemType": 0,
     "itemEffect": "200",
     "itemDescription": "A bitter herb that restores 200 Hp",
     "price": 18,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32536
+        "instanceID": 32528
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

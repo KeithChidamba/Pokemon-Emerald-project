@@ -13,16 +13,7 @@ MonoBehaviour:
   m_Name: Fire
   m_EditorClassIdentifier: 
   typeName: Fire
-  weaknesses:
-  - Water
-  - Rock
-  - Ground
-  resistances:
-  - Fire
-  - Ice
-  - Bug
-  - Grass
-  - Steel
-  immunities:
-  - None
+  weaknesses: 02000000080000000c000000
+  resistances: 0100000004000000050000000b00000010000000
+  immunities: 
   typeImage: {fileID: 1610715179, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

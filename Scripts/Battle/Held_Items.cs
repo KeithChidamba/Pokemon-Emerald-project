@@ -21,12 +21,12 @@ public class Held_Items : MonoBehaviour
             _participant.pokemon.RemoveHeldItem(); return; 
         }
         if (!_participant.pokemon.heldItem.canBeUsedInBattle) return;
-        switch (_participant.pokemon.heldItem.itemType.ToLower())
+        switch (_participant.pokemon.heldItem.itemType)
         {
-            case "heal hp":
+            case Item_handler.ItemType.HealHp:
                 CheckHealCondition();
                 break;
-            case "status":
+            case Item_handler.ItemType.Status:
                 CheckStatusCondition();
                 break;
             //in the future, if there's need to add special held items like focus sash, create new type of item and add it to this switch

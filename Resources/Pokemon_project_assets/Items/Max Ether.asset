@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Max Ether
-  itemType: Ether
+  itemType: 4
   itemEffect: pp
   itemDescription: Restores all the powerpoints for a move
   price: 45

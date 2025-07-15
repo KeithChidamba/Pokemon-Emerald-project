@@ -12,83 +12,87 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
   m_Name: Trapinch
   m_EditorClassIdentifier: 
-  Base_Pokemon_name: Trapinch
-  Pokemon_name: Trapinch
-  Pokemon_ID: 0
-  Personality_value: 0
-  Gender: 
-  GenderRatio: 50/50
+  basePokemonName: Trapinch
+  pokemonName: Trapinch
+  pokemonID: 0
+  personalityValue: 0
+  gender: 0
+  genderRatio: 50/50
   nature: {fileID: 0}
-  has_gender: 1
-  HP: 0
-  max_HP: 0
-  BaseHP: 45
-  BaseAttack: 100
-  BaseDefense: 45
-  BaseSP_ATK: 45
-  BaseSP_DEF: 45
-  Basespeed: 10
-  Attack: 0
-  Defense: 0
-  SP_ATK: 0
-  SP_DEF: 0
+  hasGender: 1
+  hp: 0
+  maxHp: 0
+  baseHp: 45
+  baseAttack: 100
+  baseDefense: 45
+  baseSpecialAttack: 45
+  baseSpecialDefense: 45
+  baseSpeed: 10
+  attack: 0
+  defense: 0
+  specialAttack: 0
+  specialDefense: 0
   speed: 0
-  HP_IV: 0
-  Attack_IV: 0
-  Defense_IV: 0
-  SP_ATK_IV: 0
-  SP_DEF_IV: 0
-  speed_IV: 0
-  HP_EV: 0
-  Attack_EV: 0
-  Defense_EV: 0
-  SP_ATK_EV: 0
-  SP_DEF_EV: 0
-  speed_EV: 0
-  EVs:
+  hpIv: 0
+  attackIv: 0
+  defenseIv: 0
+  specialAttackIv: 0
+  specialDefenseIv: 0
+  speedIv: 0
+  hpEv: 0
+  attackEv: 0
+  defenseEv: 0
+  specialAttackEv: 0
+  specialDefenseEv: 0
+  speedEv: 0
+  effortValues:
   - Attack1
-  Accuracy: 100
-  Evasion: 100
-  crit_chance: 6.25
-  CatchRate: 255
-  Current_level: 0
-  CurrentExpAmount: 0
-  NextLvExpAmount: 0
-  EXPGroup: Medium Slow
-  exp_yield: 73
-  has_trainer: 0
+  accuracy: 100
+  evasion: 100
+  critChance: 6.25
+  catchRate: 255
+  currentLevel: 0
+  currentExpAmount: 0
+  nextLevelExpAmount: 0
+  expGroup: 3
+  expYield: 73
+  friendshipLevel: 0
+  hasTrainer: 0
   canAttack: 1
   isFlinched: 0
-  CanBeDamaged: 1
+  canBeDamaged: 1
+  immuneToStatReduction: 0
   types:
   - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
-  Status_effect: None
-  Buff_Debuffs: []
-  evo_line:
-  - 20
-  - 35
+  statusEffect: 0
+  buffAndDebuffs: []
+  evolutionLineLevels: 1400000023000000
+  friendshipEvolutionRequirement: 
+  requiresEvolutionStone: 0
+  evolutionStoneName: None
   abilities:
   - Arena Trap
-  split_evolution: 0
+  splitEvolution: 0
+  requiresFriendshipEvolution: 0
   learnSet:
   - dark/bite01
   - dark/crunch05
   - normal/tackle06
   - ground/magnitude07
-  move_set: []
+  moveSet: []
   ability: {fileID: 11400000, guid: 6e3a5205ac780de4499e796e8ba8dce9, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 41c4f5dd85b85854084dc026be20084f, type: 2}
   - {fileID: 11400000, guid: 36607a7c2c84636428574d7b94219d2e, type: 2}
-  HeldItem: {fileID: 0}
-  HasItem: 0
-  front_picture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
-  back_picture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
-  ability_name: 
+  heldItem: {fileID: 0}
+  hasItem: 0
+  frontPicture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
+  backPicture: {fileID: 21300000, guid: 5b879690b03283443b0a61c5f3a41e9b, type: 3}
+  pokeballName: 
+  healthPhase: 0
+  abilityName: 
   natureName: 
-  evo_data:
-  - Vibrava
-  - Flygon
-  type_data: []
-  move_data: []
-  move_pp_data: []
+  evolutionData: []
+  typeData: []
+  moveData: []
+  movePpData: []

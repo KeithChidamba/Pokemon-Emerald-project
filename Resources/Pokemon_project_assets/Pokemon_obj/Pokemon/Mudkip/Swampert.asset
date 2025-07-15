@@ -12,22 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b08819e8a6e5a46838808e39c37bb1, type: 3}
   m_Name: Swampert
   m_EditorClassIdentifier: 
-  Evo_name: Swampert
+  evolutionName: Swampert
   types:
   - {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
   - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   ability: {fileID: 11400000, guid: 2d3aa5da1ed7a734cb1c25d192217a25, type: 2}
-  EXPGroup: Medium Slow
-  exp_yield: 210
-  CatchRate: 45
+  expGroup: 3
+  expYield: 210
+  catchRate: 45
   learnSet: []
-  front_picture: {fileID: 21300000, guid: b0076467b6bc5c34ca5fc05929d30891, type: 3}
-  back_picture: {fileID: 21300000, guid: 62038c4452eac334ebe7e2d837e8b022, type: 3}
-  BaseHP: 100
-  BaseAttack: 110
-  BaseDefense: 90
-  BaseSP_ATK: 85
-  BaseSP_DEF: 90
-  Basespeed: 60
-  EVs:
+  frontPicture: {fileID: 21300000, guid: b0076467b6bc5c34ca5fc05929d30891, type: 3}
+  backPicture: {fileID: 21300000, guid: 62038c4452eac334ebe7e2d837e8b022, type: 3}
+  baseHp: 100
+  baseAttack: 110
+  baseDefense: 90
+  baseSpecialAttack: 85
+  baseSpecialDefense: 90
+  baseSpeed: 60
+  effortValues:
   - Attack3
+  requiresFriendshipEvolution: 0
+  requiresEvolutionStone: 0
+  friendshipEvolutionRequirement: 

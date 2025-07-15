@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Amulet Coin
   m_EditorClassIdentifier: 
-  Item_ID: 
-  Item_name: Amulet Coin
-  Item_type: Amulet Coin
-  Item_effect: 5
-  Item_desc: Gives the player some money after the battle if the pokemon participates
+  itemID: 
+  itemName: Amulet Coin
+  itemType: 13
+  itemEffect: 5
+  itemDescription: Gives the player some money after the battle if the pokemon participates
   price: 0
   quantity: 1
-  Item_img: {fileID: 21300000, guid: 0068182fae9351d4581f346316c327d4, type: 3}
-  ForPartyUse: 0
-  CanBeUsedInOverworld: 0
-  CanBeUsedInBattle: 0
+  itemImage: {fileID: 21300000, guid: 0068182fae9351d4581f346316c327d4, type: 3}
+  forPartyUse: 0
+  canBeUsedInOverworld: 0
+  canBeUsedInBattle: 0
   isHeldItem: 1
-  CanBeHeld: 1
-  CanBeSold: 0
+  canBeHeld: 1
+  canBeSold: 0

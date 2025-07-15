@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Naive
   m_EditorClassIdentifier: 
   natureName: Naive
-  StatIncrease: Speed
-  StatDecrease: Special Defense
-  PValue: 14
+  statToIncrease: 5
+  statToDecrease: 4
+  requiredNatureValue: 14

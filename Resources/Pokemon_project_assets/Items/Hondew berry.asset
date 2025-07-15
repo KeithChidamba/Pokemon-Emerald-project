@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Hondew berry
-  itemType: Friendship Increase
+  itemType: 8
   itemEffect: Special Attack
   itemDescription: Increases a pokemon's friendship but lowers special attack
   price: 5

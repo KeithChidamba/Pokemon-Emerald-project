@@ -13,16 +13,7 @@ MonoBehaviour:
   m_Name: Bug
   m_EditorClassIdentifier: 
   typeName: Bug
-  weaknesses:
-  - Fire
-  - Electric
-  - Ice
-  - Flying
-  - Rock
-  resistances:
-  - Grass
-  - Poison
-  - Ground
-  immunities:
-  - None
+  weaknesses: 01000000090000000c000000
+  resistances: 040000000600000008000000
+  immunities: 
   typeImage: {fileID: -311070529, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

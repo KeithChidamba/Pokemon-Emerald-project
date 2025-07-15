@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Calcium
-  itemType: Stat Increase
+  itemType: 7
   itemEffect: Special Attack
   itemDescription: "It increases the Special Attack of a Pok\xE9mon"
   price: 2000

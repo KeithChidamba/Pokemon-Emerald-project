@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Lonely
   m_EditorClassIdentifier: 
   natureName: Lonely
-  StatIncrease: Attack
-  StatDecrease: Defense
-  PValue: 1
+  statToIncrease: 1
+  statToDecrease: 2
+  requiredNatureValue: 1

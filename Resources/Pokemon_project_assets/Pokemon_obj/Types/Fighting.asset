@@ -13,13 +13,7 @@ MonoBehaviour:
   m_Name: Fighting
   m_EditorClassIdentifier: 
   typeName: Fighting
-  weaknesses:
-  - Flying
-  - Psychic
-  resistances:
-  - Rock
-  - Bug
-  - Dark
-  immunities:
-  - None
+  weaknesses: 090000000a000000
+  resistances: 0b0000000c0000000f000000
+  immunities: 
   typeImage: {fileID: -1651166971, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

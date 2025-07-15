@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 public class Nature : ScriptableObject
 {
     public string natureName;
-    [FormerlySerializedAs("StatIncrease")] public string statIncrease;
-    [FormerlySerializedAs("StatDecrease")] public string statDecrease;
+    public PokemonOperations.Stat statToIncrease;
+    public PokemonOperations.Stat statToDecrease;
     [FormerlySerializedAs("PValue")] public int requiredNatureValue;
 }

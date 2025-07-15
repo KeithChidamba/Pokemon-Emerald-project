@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Rash
   m_EditorClassIdentifier: 
   natureName: Rash
-  StatIncrease: Special Attack
-  StatDecrease: Special Defense
-  PValue: 19
+  statToIncrease: 3
+  statToDecrease: 4
+  requiredNatureValue: 19

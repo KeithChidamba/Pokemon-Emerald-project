@@ -15,7 +15,7 @@ public class Bag : MonoBehaviour
     public Item_ui[] bagItemsUI;
     public int maxCapacity = 50;
     private int _numItems;
-    public int selectedItem;
+    public int selectedItemIndex;
     public int topIndex;//keeps track of visible bag items
     public GameObject[] itemUIActions;
     public int sellQuantity = 1;
@@ -48,9 +48,10 @@ public class Bag : MonoBehaviour
     }
     private void SelectItem()
     {
-        bagItemsUI[selectedItem].LoadItemDescription();
-        itemUsageText.text = bagItemsUI[selectedItem].item.itemType=="Special" ? "Equip" : "Use";
-        itemUsageText.fontSize = bagItemsUI[selectedItem].item.itemType=="Special" ? 20 : 24;
+        bagItemsUI[selectedItemIndex].LoadItemDescription();
+        var selectedItem = bagItemsUI[selectedItemIndex].item;
+        itemUsageText.text = selectedItem.itemType==Item_handler.ItemType.Special ? "Equip" : "Use";
+        itemUsageText.fontSize = selectedItem.itemType==Item_handler.ItemType.Special ? 20 : 24;
         if (sellingItems)
         {
             sellQuantity = 1;
@@ -68,7 +69,7 @@ public class Bag : MonoBehaviour
     
     public void SellToMarket()
     {
-        var itemToSell = bagItems[topIndex + selectedItem];
+        var itemToSell = bagItems[topIndex + selectedItemIndex];
         if (!itemToSell.canBeSold)
         {
             Dialogue_handler.Instance.DisplayDetails("You cant sell that!");
@@ -98,39 +99,39 @@ public class Bag : MonoBehaviour
         }
         else if(value > 0)//increase quantity
         {
-            var currentItem = bagItems[topIndex + selectedItem];
+            var currentItem = bagItems[topIndex + selectedItemIndex];
             sellQuantity = (sellQuantity < currentItem.quantity) ? sellQuantity + value : currentItem.quantity;
         }
     }
     public void NavigateDown()
     {
-        if (topIndex < _numItems - 10 && selectedItem == 9)
+        if (topIndex < _numItems - 10 && selectedItemIndex == 9)
         {
             for (int i = 0; i < 9; i++)
                 bagItemsUI[i].item = bagItemsUI[i + 1].item;
             bagItemsUI[9].item = bagItems[topIndex + 10];
             ReloadItemUI();
-            selectedItem = 8;
+            selectedItemIndex = 8;
             topIndex++;
         }
-        selectedItem++;
-        selectedItem = Mathf.Clamp(selectedItem, 0, 9);
+        selectedItemIndex++;
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 9);
         SelectItem();
 
     }
     public void NavigateUp()
     {
-        if (topIndex > 0 && selectedItem == 0)
+        if (topIndex > 0 && selectedItemIndex == 0)
         {
             for (int i = 9; i > 0; i--)
                 bagItemsUI[i].item = bagItemsUI[i-1].item;
             bagItemsUI[0].item = bagItems[topIndex - 1];
             ReloadItemUI();
-            selectedItem = 1;
+            selectedItemIndex = 1;
             topIndex--;
         }
-        selectedItem--;
-        selectedItem = Mathf.Clamp(selectedItem, 0, 9);
+        selectedItemIndex--;
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 9);
         
         SelectItem();
     }
@@ -145,7 +146,7 @@ public class Bag : MonoBehaviour
 
     public void AssignItemOptions(Item item)
     {
-        itemDroppable = !Options_manager.Instance.playerInBattle && item.itemType!="Special";
+        itemDroppable = !Options_manager.Instance.playerInBattle && item.itemType!=Item_handler.ItemType.Special;
         if (Options_manager.Instance.playerInBattle)
         {
             itemUsable = item.canBeUsedInBattle;
@@ -171,7 +172,7 @@ public class Bag : MonoBehaviour
     }
     public void RemoveItem()
     {
-        bagItems.Remove(bagItems[topIndex + selectedItem]);
+        bagItems.Remove(bagItems[topIndex + selectedItemIndex]);
         foreach (var itemUI in bagItemsUI)
             itemUI.gameObject.SetActive(false);
         bagItemsUI[0].ResetUI();
@@ -202,12 +203,12 @@ public class Bag : MonoBehaviour
     public void GiveItem()
     {
         Pokemon_party.Instance.givingItem = true;
-        Pokemon_party.Instance.ReceiveItem(bagItems[topIndex + selectedItem]);
+        Pokemon_party.Instance.ReceiveItem(bagItems[topIndex + selectedItemIndex]);
         Game_ui_manager.Instance.ViewPokemonParty();
     } 
     public void UseItem()
      {
-         var itemToUse = bagItems[topIndex + selectedItem];
+         var itemToUse = bagItems[topIndex + selectedItemIndex];
          Item_handler.Instance.usingItem = true;
          if(itemToUse.forPartyUse)
          {
@@ -256,7 +257,7 @@ public class Bag : MonoBehaviour
 
     public void CloseBag()
     {
-        selectedItem = 0;
+        selectedItemIndex = 0;
         sellingItemUI.SetActive(false);
         sellingItems = false;
         foreach (var obj in itemUIActions)
@@ -276,7 +277,7 @@ public class Bag : MonoBehaviour
             bagItemsUI[i].gameObject.SetActive(true);
             bagItemsUI[i].LoadItemUI();
         }
-        selectedItem = 0;
+        selectedItemIndex = 0;
         SelectItem();
     }
     void ReloadItemUI()

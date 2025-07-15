@@ -13,12 +13,7 @@ MonoBehaviour:
   m_Name: Electric
   m_EditorClassIdentifier: 
   typeName: Electric
-  weaknesses:
-  - Ground
-  resistances:
-  - Flying
-  - Electric
-  - Steel
-  immunities:
-  - None
+  weaknesses: 08000000
+  resistances: 030000000900000010000000
+  immunities: 
   typeImage: {fileID: 1920608075, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

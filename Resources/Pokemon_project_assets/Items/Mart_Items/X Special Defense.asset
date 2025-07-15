@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: X Special Defense
-  itemType: X Item
+  itemType: 12
   itemEffect: Special Defense
   itemDescription: increases a pokemon's special defense during battle
   price: 100

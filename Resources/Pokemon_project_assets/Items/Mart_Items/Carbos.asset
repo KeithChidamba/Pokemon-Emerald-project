@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Carbos
-  itemType: Stat Increase
+  itemType: 7
   itemEffect: Speed
   itemDescription: "It increases the Speed of a Pok\xE9mon"
   price: 2000

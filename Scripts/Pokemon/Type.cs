@@ -6,9 +6,9 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "Pkm_types", menuName = "p_types")]
 public class Type : ScriptableObject 
 {
-    [FormerlySerializedAs("Type_name")] public string typeName;
-    public string[] weaknesses;
-    [FormerlySerializedAs("Resistances")] public string[] resistances; 
-    public string[] immunities;
-    [FormerlySerializedAs("type_img")] public Sprite typeImage;
+    public string typeName;
+    public PokemonOperations.Types[] weaknesses;
+    public PokemonOperations.Types[] resistances; 
+    public PokemonOperations.Types[] immunities;
+    public Sprite typeImage;
 }

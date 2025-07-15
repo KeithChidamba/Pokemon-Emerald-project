@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Heal Powder
-  itemType: Herb
+  itemType: 5
   itemEffect: 1
   itemDescription: A bitter herb that heals all status effects
   price: 18

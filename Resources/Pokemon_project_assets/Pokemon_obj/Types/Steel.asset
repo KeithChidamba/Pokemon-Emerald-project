@@ -13,21 +13,7 @@ MonoBehaviour:
   m_Name: Steel
   m_EditorClassIdentifier: 
   typeName: Steel
-  weaknesses:
-  - Fire
-  - Ground
-  - Fighting
-  resistances:
-  - Normal
-  - Grass
-  - Ice
-  - Flying
-  - Rock
-  - Psychic
-  - Bug
-  - Dragon
-  - Steel
-  - Steel
-  immunities:
-  - Poison
+  weaknesses: 010000000600000008000000
+  resistances: 000000000400000005000000090000000a0000000b0000000c0000000e00000010000000
+  immunities: 07000000
   typeImage: {fileID: -990815047, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

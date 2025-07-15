@@ -196,7 +196,7 @@ public class Pokemon_Details : MonoBehaviour
         pkm_img.sprite = currentPokemon.frontPicture;
         gender_img.gameObject.SetActive(true);
         if(currentPokemon.hasGender)
-            gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+currentPokemon.gender.ToLower());
+            gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+currentPokemon.gender.ToString().ToLower());
         else
             gender_img.gameObject.SetActive(false);
     }

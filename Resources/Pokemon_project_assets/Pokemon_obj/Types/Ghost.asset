@@ -13,13 +13,7 @@ MonoBehaviour:
   m_Name: Ghost
   m_EditorClassIdentifier: 
   typeName: Ghost
-  weaknesses:
-  - Ghost
-  - Dark
-  resistances:
-  - Bug
-  - Poison
-  immunities:
-  - Normal
-  - Fighting
+  weaknesses: 0d0000000f000000
+  resistances: 070000000b000000
+  immunities: 0000000006000000
   typeImage: {fileID: -1515030263, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}

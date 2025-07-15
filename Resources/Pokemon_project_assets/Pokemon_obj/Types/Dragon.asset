@@ -13,14 +13,7 @@ MonoBehaviour:
   m_Name: Dragon
   m_EditorClassIdentifier: 
   typeName: Dragon
-  weaknesses:
-  - Dragon
-  - Ice
-  resistances:
-  - Fire
-  - Water
-  - Grass
-  - Electric
-  immunities:
-  - None
+  weaknesses: 050000000e000000
+  resistances: 01000000020000000300000004000000
+  immunities: 
   typeImage: {fileID: 21300000, guid: 64aad44408ac10c4d93daa003a1575d5, type: 2}

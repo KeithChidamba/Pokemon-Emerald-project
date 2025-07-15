@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Brave
   m_EditorClassIdentifier: 
   natureName: Brave
-  StatIncrease: Attack
-  StatDecrease: Speed
-  PValue: 2
+  statToIncrease: 1
+  statToDecrease: 5
+  requiredNatureValue: 2

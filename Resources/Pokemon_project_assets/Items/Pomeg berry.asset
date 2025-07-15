@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Pomeg berry
-  itemType: Friendship Increase
+  itemType: 8
   itemEffect: HP
   itemDescription: Increases a pokemon's friendship but lowers hp
   price: 5

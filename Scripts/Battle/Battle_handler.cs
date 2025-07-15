@@ -420,6 +420,7 @@ public class Battle_handler : MonoBehaviour
             if (participant.pokemon.hasItem)
                 if(participant.pokemon.heldItem.itemName == "Amulet Coin")
                     return 2;
+        //in future can add another condition for abilities that increase/give money
         return 1;
     }
     public void FaintEvent()

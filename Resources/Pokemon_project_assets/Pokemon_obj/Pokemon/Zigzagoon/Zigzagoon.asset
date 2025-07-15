@@ -12,82 +12,87 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
   m_Name: Zigzagoon
   m_EditorClassIdentifier: 
-  Base_Pokemon_name: Zigzagoon
-  Pokemon_name: Zigzagoon
-  Pokemon_ID: 0
-  Personality_value: 0
-  Gender: 
-  GenderRatio: 50/50
+  basePokemonName: Zigzagoon
+  pokemonName: Zigzagoon
+  pokemonID: 0
+  personalityValue: 0
+  gender: 0
+  genderRatio: 50/50
   nature: {fileID: 0}
-  has_gender: 1
-  HP: 0
-  max_HP: 0
-  BaseHP: 38
-  BaseAttack: 30
-  BaseDefense: 41
-  BaseSP_ATK: 30
-  BaseSP_DEF: 41
-  Basespeed: 60
-  Attack: 0
-  Defense: 0
-  SP_ATK: 0
-  SP_DEF: 0
+  hasGender: 1
+  hp: 0
+  maxHp: 0
+  baseHp: 38
+  baseAttack: 30
+  baseDefense: 41
+  baseSpecialAttack: 30
+  baseSpecialDefense: 41
+  baseSpeed: 60
+  attack: 0
+  defense: 0
+  specialAttack: 0
+  specialDefense: 0
   speed: 0
-  HP_IV: 0
-  Attack_IV: 0
-  Defense_IV: 0
-  SP_ATK_IV: 0
-  SP_DEF_IV: 0
-  speed_IV: 0
-  HP_EV: 0
-  Attack_EV: 0
-  Defense_EV: 0
-  SP_ATK_EV: 0
-  SP_DEF_EV: 0
-  speed_EV: 0
-  EVs:
+  hpIv: 0
+  attackIv: 0
+  defenseIv: 0
+  specialAttackIv: 0
+  specialDefenseIv: 0
+  speedIv: 0
+  hpEv: 0
+  attackEv: 0
+  defenseEv: 0
+  specialAttackEv: 0
+  specialDefenseEv: 0
+  speedEv: 0
+  effortValues:
   - Speed1
-  Accuracy: 100
-  Evasion: 100
-  crit_chance: 6.25
-  CatchRate: 255
-  Current_level: 0
-  CurrentExpAmount: 0
-  NextLvExpAmount: 0
-  EXPGroup: Medium Fast
-  exp_yield: 60
-  has_trainer: 0
+  accuracy: 100
+  evasion: 100
+  critChance: 6.25
+  catchRate: 255
+  currentLevel: 0
+  currentExpAmount: 0
+  nextLevelExpAmount: 0
+  expGroup: 2
+  expYield: 60
+  friendshipLevel: 0
+  hasTrainer: 0
   canAttack: 1
   isFlinched: 0
-  CanBeDamaged: 1
+  canBeDamaged: 1
+  immuneToStatReduction: 0
   types:
   - {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
-  Status_effect: None
-  Buff_Debuffs: []
-  type_Immunity: None
-  evo_line:
-  - 20
+  statusEffect: 0
+  buffAndDebuffs: []
+  evolutionLineLevels: 14000000
+  friendshipEvolutionRequirement: 
+  requiresEvolutionStone: 0
+  evolutionStoneName: None
   abilities:
   - Pickup
-  split_evolution: 0
+  splitEvolution: 0
+  requiresFriendshipEvolution: 0
   learnSet:
   - normal/headbutt01
   - normal/tail whip02
   - normal/tackle04
   - water/surf05
   - normal/protect19
-  move_set: []
+  moveSet: []
   ability: {fileID: 11400000, guid: ed27e4020d5e6e94f93577121b591bf1, type: 2}
   evolutions:
   - {fileID: 11400000, guid: 58a19d74a4fb9b440ab943d87b46a132, type: 2}
-  HeldItem: {fileID: 0}
-  HasItem: 0
-  front_picture: {fileID: 21300000, guid: 7e01c2bc69a90a64ab6089cf5e57e7e8, type: 3}
-  back_picture: {fileID: 21300000, guid: 90944854e7514ae4eab9ce6b7eb80726, type: 3}
-  ability_name: 
+  heldItem: {fileID: 0}
+  hasItem: 0
+  frontPicture: {fileID: 21300000, guid: 7e01c2bc69a90a64ab6089cf5e57e7e8, type: 3}
+  backPicture: {fileID: 21300000, guid: 90944854e7514ae4eab9ce6b7eb80726, type: 3}
+  pokeballName: 
+  healthPhase: 0
+  abilityName: 
   natureName: 
-  evo_data:
-  - Linoone
-  type_data: []
-  move_data: []
-  move_pp_data: 
+  evolutionData: []
+  typeData: []
+  moveData: []
+  movePpData: []

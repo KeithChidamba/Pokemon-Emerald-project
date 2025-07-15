@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Soothe Bell
-  itemType: Friendship
+  itemType: 8
   itemEffect: 5
   itemDescription: Increases the frinedship
   price: 0

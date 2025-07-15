@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Iron
-  itemType: Stat Increase
+  itemType: 7
   itemEffect: Defense
   itemDescription: "It increases the Defense of a Pok\xE9mon"
   price: 2000

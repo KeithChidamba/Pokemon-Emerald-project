@@ -9,7 +9,7 @@ public class Evolution : ScriptableObject
     [FormerlySerializedAs("Evo_name")] public string evolutionName;
     public List<Type> types;
     public Ability ability;
-    [FormerlySerializedAs("EXPGroup")] public string expGroup = "";
+    public PokemonOperations.ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
     [FormerlySerializedAs("CatchRate")] public float catchRate = 0;
     public string[] learnSet;

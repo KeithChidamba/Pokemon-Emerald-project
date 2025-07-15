@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Guard Spec
-  itemType: X Item
+  itemType: 12
   itemEffect: Stat Reduction
   itemDescription: temporarily prevents stat reduction
   price: 100

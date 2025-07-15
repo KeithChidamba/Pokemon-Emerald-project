@@ -14,7 +14,15 @@ public static class PokemonOperations
     public static Move NewMove;
     public static Action<bool> OnEvChange;
     public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep}
-
+    public enum Gender{None,Male,Female}
+    public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
+    public enum Stat{None,Attack,Defense,SpecialAttack,SpecialDefense,Speed}
+    public enum Types
+    {
+        Normal, Fire, Water, Electric, Grass, Ice,
+        Fighting, Poison, Ground, Flying, Psychic,
+        Bug, Rock, Ghost, Dragon, Dark, Steel
+    }
     private static long GeneratePokemonID(Pokemon pokemon)//pokemon's unique ID
     {
         int combinedIDs = Game_Load.Instance.playerData.trainerID;
@@ -38,10 +46,10 @@ public static class PokemonOperations
             :pokemon.abilities[0];
         pokemon.ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + pokemon.abilityName.ToLower());
     }
-    public static bool ContainsType(string[]typesList ,Type typeToCheck)
+    public static bool ContainsType(Types[]typesList ,Type typesToCheck)
     {
-        foreach (string type in typesList)
-            if (type == typeToCheck.typeName)
+        foreach (var type in typesList)
+            if (type.ToString() == typesToCheck.typeName)
                 return true;
         return false;
     }
@@ -66,26 +74,29 @@ public static class PokemonOperations
             break;
         }
     }
-    public static int CalculateExpForNextLevel(int currentLevel, string expGroup)
+    public static int CalculateExpForNextLevel(int currentLevel, ExpGroup expGroup)
     {
         if (currentLevel == 0) return 0;
         var cube = Utility.Cube(currentLevel);
         var square = Utility.Square(currentLevel);
         switch (expGroup)
         {
-            case "Erratic": 
+            case ExpGroup.Erratic: 
                 return CalculateErratic(currentLevel);
-            case "Fast": 
+            case ExpGroup.Fast: 
                 return (int)math.trunc((4 * cube ) / 5f );
-            case "Medium Fast": 
+            case ExpGroup.MediumFast: 
                 return cube;
-            case "Medium Slow":
+            case ExpGroup.MediumSlow:
                 return (int)math.trunc( ( (6 * cube ) / 5f) - (15 * square ) + (100 * currentLevel) - 140 );
-            case "Slow":
+            case ExpGroup.Slow:
                 return (int)math.trunc((5 * cube ) / 4f);
-            case "Fluctuating":
+            case ExpGroup.Fluctuating:
                 return CalculateFluctuating(currentLevel);
-        }Debug.Log("pokemon has no exp group");
+            default:
+                Debug.Log("pokemon has no exp group");
+                break;
+        }
         return 0;
     }
     private static int CalculateErratic(int level)
@@ -252,14 +263,17 @@ public static class PokemonOperations
         var ratio = pokemon.genderRatio.Substring(pos + 1, pokemon.genderRatio.Length - pos - 1);
         var ratioFemale = float.Parse(ratio);
         var genderThreshold = math.abs((int)math.trunc(((ratioFemale / 100) * 256)));
-        pokemon.gender = (genderValue < genderThreshold)? "Male" : "Female";
+        pokemon.gender = (genderValue < genderThreshold)? Gender.Male : Gender.Female;
     }
     public static void SetPokemonTraits(Pokemon newPokemon)
     {
         newPokemon.personalityValue = GeneratePersonalityValue();
         newPokemon.pokemonID = GeneratePokemonID(newPokemon);
-        if(newPokemon.hasGender)
+        if (newPokemon.hasGender)
             AssignPokemonGender(newPokemon);
+        else
+            newPokemon.gender = Gender.None;
+        
         AssignPokemonAbility(newPokemon);
         AssignPokemonNature(newPokemon);
         GeneratePokemonIVs(newPokemon);
