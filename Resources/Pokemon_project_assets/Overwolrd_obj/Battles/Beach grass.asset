@@ -15,7 +15,8 @@ MonoBehaviour:
   biomeName: Beach
   location: Overworld
   availablePokemon:
-  - zigzagoon/100
+  - pokemonName: Zigzagoon
+    encounterChance: 100
   minimumLevelOfPokemon: 3
   maximumLevelOfPokemon: 20
   pokemonIndexForRodType: 

@@ -12,23 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b08819e8a6e5a46838808e39c37bb1, type: 3}
   m_Name: Flygon
   m_EditorClassIdentifier: 
-  Evo_name: Flygon
+  evolutionName: Flygon
   types:
   - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   - {fileID: 11400000, guid: 5a2d633edb7f86b40a3fe578c4fdb328, type: 2}
   ability: {fileID: 11400000, guid: 6a6ced4c7ce8402418c42c9ee668dfb5, type: 2}
-  EXPGroup: Erratic
-  exp_yield: 197
-  CatchRate: 45
+  expGroup: 0
+  expYield: 197
+  catchRate: 45
   learnSet: []
-  front_picture: {fileID: 21300000, guid: 3e77031fa439df841b65f3cd73781c52, type: 3}
-  back_picture: {fileID: 21300000, guid: fe67e7577199bf24bb89246a1415932d, type: 3}
-  BaseHP: 80
-  BaseAttack: 100
-  BaseDefense: 80
-  BaseSP_ATK: 80
-  BaseSP_DEF: 80
-  Basespeed: 100
-  EVs:
-  - Attack1
-  - Speed2
+  frontPicture: {fileID: 21300000, guid: 3e77031fa439df841b65f3cd73781c52, type: 3}
+  backPicture: {fileID: 21300000, guid: fe67e7577199bf24bb89246a1415932d, type: 3}
+  baseHp: 80
+  baseAttack: 100
+  baseDefense: 80
+  baseSpecialAttack: 80
+  baseSpecialDefense: 80
+  baseSpeed: 100
+  effortValues:
+  - stat: 1
+    eVAmount: 1
+  - stat: 5
+    eVAmount: 2
+  requiresFriendshipEvolution: 0
+  requiresEvolutionStone: 0
+  friendshipEvolutionRequirement: 

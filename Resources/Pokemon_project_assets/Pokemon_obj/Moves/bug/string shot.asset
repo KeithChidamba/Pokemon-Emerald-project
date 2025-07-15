@@ -12,24 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: string shot
   m_EditorClassIdentifier: 
-  Move_name: String shot
-  Move_damage: 0
-  Move_accuracy: 90
+  moveName: String shot
+  moveDamage: 0
+  moveAccuracy: 90
   type: {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 1
-  Has_status: 0
-  Has_effect: 0
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 1
+  hasStatus: 0
+  hasSpecialEffect: 0
+  canCauseFlinch: 0
+  isConsecutive: 0
   isMultiTarget: 1
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 25
-  BasePowerpoints: 25
-  max_Powerpoints: 25
-  Status_effect: None
-  Buff_Debuff: -1Speed
-  Status_chance: 0
-  Debuff_chance: 100
-  Description: traps the enemy with strings to lower speed
+  priority: 0
+  powerpoints: 25
+  basePowerpoints: 25
+  maxPowerpoints: 25
+  statusEffect: 0
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 5
+    amount: 1
+  statusChance: 0
+  buffOrDebuffChance: 100
+  description: traps the enemy with strings to lower speed

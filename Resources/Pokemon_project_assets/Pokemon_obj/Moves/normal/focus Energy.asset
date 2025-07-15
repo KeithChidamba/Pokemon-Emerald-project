@@ -28,8 +28,11 @@ MonoBehaviour:
   powerpoints: 15
   basePowerpoints: 15
   maxPowerpoints: 15
-  statusEffect: None
-  buffOrDebuffName: +2Crit
+  statusEffect: 0
+  buffOrDebuffData:
+    isIncreasing: 1
+    stat: 7
+    amount: 2
   statusChance: 0
   buffOrDebuffChance: 100
   description: Raises pokemon's focus to increase crit chance

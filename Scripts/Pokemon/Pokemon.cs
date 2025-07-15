@@ -41,7 +41,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("SP_ATK_EV")] public float specialAttackEv=0;
     [FormerlySerializedAs("SP_DEF_EV")] public float specialDefenseEv=0;
     [FormerlySerializedAs("speed_EV")] public float speedEv=0;
-    [FormerlySerializedAs("EVs")] public List<string> effortValues=new();
+    [FormerlySerializedAs("EVs")] public List<EvYield> effortValues=new();
     [FormerlySerializedAs("Accuracy")] public float accuracy = 100;
     [FormerlySerializedAs("Evasion")] public float evasion = 100;
     [FormerlySerializedAs("crit_chance")] public float critChance = 6.25f;

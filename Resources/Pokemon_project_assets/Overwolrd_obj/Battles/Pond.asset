@@ -15,7 +15,8 @@ MonoBehaviour:
   biomeName: Forest
   location: Overworld
   availablePokemon:
-  - mudkip/100
+  - pokemonName: Mudkip
+    encounterChance: 100
   minimumLevelOfPokemon: 5
   maximumLevelOfPokemon: 10
   pokemonIndexForRodType: 000000000000000000000000

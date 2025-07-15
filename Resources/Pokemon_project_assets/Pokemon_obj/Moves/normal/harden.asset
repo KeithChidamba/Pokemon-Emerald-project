@@ -12,24 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: harden
   m_EditorClassIdentifier: 
-  Move_name: Harden
-  Move_damage: 0
-  Move_accuracy: 90
+  moveName: Harden
+  moveDamage: 0
+  moveAccuracy: 90
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 1
-  Has_status: 0
-  Has_effect: 0
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 1
+  hasStatus: 0
+  hasSpecialEffect: 0
+  canCauseFlinch: 0
+  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 1
-  Priority: 0
-  Powerpoints: 20
-  BasePowerpoints: 20
-  max_Powerpoints: 20
-  Status_effect: None
-  Buff_Debuff: +1Defense
-  Status_chance: 0
-  Debuff_chance: 100
-  Description: Harden's shell, to raise defense
+  priority: 0
+  powerpoints: 20
+  basePowerpoints: 20
+  maxPowerpoints: 20
+  statusEffect: 0
+  buffOrDebuffData:
+    isIncreasing: 1
+    stat: 2
+    amount: 1
+  statusChance: 0
+  buffOrDebuffChance: 100
+  description: Harden's shell, to raise defense

@@ -46,7 +46,8 @@ MonoBehaviour:
   specialDefenseEv: 0
   speedEv: 0
   effortValues:
-  - HP1
+  - stat: 6
+    eVAmount: 1
   accuracy: 100
   evasion: 100
   critChance: 6.25

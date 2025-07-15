@@ -21,7 +21,7 @@ public class Evolution : ScriptableObject
     [FormerlySerializedAs("BaseSP_ATK")] public float baseSpecialAttack;
     [FormerlySerializedAs("BaseSP_DEF")] public float baseSpecialDefense;
     [FormerlySerializedAs("Basespeed")] public float baseSpeed;
-    [FormerlySerializedAs("EVs")] public List<string> effortValues=new();
+    [FormerlySerializedAs("EVs")] public List<EvYield> effortValues=new();
     public bool requiresFriendshipEvolution;
     public bool requiresEvolutionStone;
     public string friendshipEvolutionRequirement;

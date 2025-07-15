@@ -16,7 +16,7 @@ public static class PokemonOperations
     public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep}
     public enum Gender{None,Male,Female}
     public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
-    public enum Stat{None,Attack,Defense,SpecialAttack,SpecialDefense,Speed}
+    public enum Stat{None,Attack,Defense,SpecialAttack,SpecialDefense,Speed,Hp,Crit,Accuracy,Evasion}
     public enum Types
     {
         Normal, Fire, Water, Electric, Grass, Ice,
@@ -124,21 +124,21 @@ public static class PokemonOperations
         return 0;
     }
 
-    public static ref float GetEvStatRef(string stat, Pokemon pkm)
+    public static ref float GetEvStatRef(Stat stat, Pokemon pkm)
     {
-        switch (stat.ToLower())
+        switch (stat)
         {
-            case "hp": return ref pkm.hpEv;
-            case "attack": return ref pkm.attackEv;
-            case "defense": return ref pkm.defenseEv;
-            case "special attack": return ref pkm.specialAttackEv;
-            case "special defense": return ref pkm.specialDefenseEv;
-            case "speed": return ref pkm.speedEv;
+            case Stat.Hp: return ref pkm.hpEv;
+            case Stat.Attack: return ref pkm.attackEv;
+            case Stat.Defense: return ref pkm.defenseEv;
+            case Stat.SpecialAttack: return ref pkm.specialAttackEv;
+            case Stat.SpecialDefense: return ref pkm.specialDefenseEv;
+            case Stat.Speed: return ref pkm.speedEv;
             default:
-                throw new ArgumentException($"Invalid stat name: {stat}");
+                throw new ArgumentException($"Invalid stat parsed: {stat}");
         }
     }
-    public static void CalculateEvForStat(string stat,float evAmount,Pokemon pkm)
+    public static void CalculateEvForStat(Stat stat,float evAmount,Pokemon pkm)
     {
         ref float evRef = ref GetEvStatRef(stat, pkm);
         evRef = CheckEvLimit(evRef,evAmount,pkm);

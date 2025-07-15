@@ -26,7 +26,7 @@ public static class Obj_Instance
         newMove.powerpoints = m.powerpoints;
         newMove.basePowerpoints = m.basePowerpoints;
         newMove.maxPowerpoints = m.maxPowerpoints;
-        newMove.buffOrDebuffName = m.buffOrDebuffName;
+        newMove.buffOrDebuffData = m.buffOrDebuffData;
         newMove.statusChance = m.statusChance;
         newMove.buffOrDebuffChance = m.buffOrDebuffChance;
         newMove.description = m.description;

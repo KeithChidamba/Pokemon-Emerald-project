@@ -147,17 +147,19 @@ public class Item_handler : MonoBehaviour
         }
         else
         {
-            ref float evRef = ref PokemonOperations.GetEvStatRef(statToDecrease, _selectedPartyPokemon);
+            var evStat = (PokemonOperations.Stat)Enum.Parse(typeof(PokemonOperations.Stat),statToDecrease.Replace(" ", ""));
+            ref float evRef = ref PokemonOperations.GetEvStatRef(evStat, _selectedPartyPokemon);
             if (evRef > 100) evRef = 100;
-            else PokemonOperations.CalculateEvForStat(statToDecrease, -10, _selectedPartyPokemon);
+            else PokemonOperations.CalculateEvForStat(evStat, -10, _selectedPartyPokemon);
             _selectedPartyPokemon.ChangeFriendshipLevel(10);
             CompleteItemUsage();
         }
     }
-    private void GetEVsFromItem(string stat) 
+    private void GetEVsFromItem(string evStatName) 
     {
         PokemonOperations.OnEvChange += CheckEvChange;
-        PokemonOperations.CalculateEvForStat(stat, 10, _selectedPartyPokemon);
+        var evStat = (PokemonOperations.Stat)Enum.Parse(typeof(PokemonOperations.Stat),evStatName.Replace(" ", ""));
+        PokemonOperations.CalculateEvForStat(evStat, 10, _selectedPartyPokemon);
     }
 
     private void CheckEvChange(bool hasChanged)
@@ -218,7 +220,8 @@ public class Item_handler : MonoBehaviour
             StartCoroutine(CompleteItemUsage(0));
             return;
         }
-        var buff = BattleOperations.SearchForBuffOrDebuff(_selectedPartyPokemon, statName);
+        var stat = (PokemonOperations.Stat)Enum.Parse(typeof(PokemonOperations.Stat),statName.Replace(" ", ""));
+        var buff = BattleOperations.SearchForBuffOrDebuff(_selectedPartyPokemon, stat);
         if (buff is { isAtLimit: true })
         {
             Dialogue_handler.Instance.DisplayBattleInfo($"{_selectedPartyPokemon.pokemonName}'s {statName} can't go any higher");
@@ -226,7 +229,7 @@ public class Item_handler : MonoBehaviour
             return;
         }
         
-        var xBuffData = new BuffDebuffData(currentParticipant, statName, true, 1);
+        var xBuffData = new BuffDebuffData(currentParticipant, stat, true, 1);
         Move_handler.Instance.SelectRelevantBuffOrDebuff(xBuffData);
         StartCoroutine(CompleteItemUsage(0));
     }

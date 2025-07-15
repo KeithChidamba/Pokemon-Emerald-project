@@ -151,16 +151,19 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
-        if (string.IsNullOrEmpty(attacker.previousMove))
+        if (attacker.previousMove==null)
         {
-            attacker.previousMove = move.moveName + "/0";
+            var newData = new PreviousMove(move,0);
+            attacker.previousMove = newData;
             return;
         }
-        var previousMoveName = attacker.previousMove.Split('/')[0];
-        var previousMoveRepetitions = int.Parse(attacker.previousMove.Split('/')[1]);
-        
-        attacker.previousMove = (previousMoveName == move.moveName)?
-             move.moveName +"/"+ (previousMoveRepetitions + 1) : move.moveName + "/0";
+        if (attacker.previousMove.move.moveName == move.moveName)
+            attacker.previousMove.numRepetitions++;
+        else
+        {
+            var newData = new PreviousMove(move,0);
+            attacker.previousMove = newData;
+        }
     }
     private bool IsValidParticipantState(Battle_Participant participant)
     {

@@ -30,7 +30,8 @@ MonoBehaviour:
   baseSpecialDefense: 80
   baseSpeed: 110
   effortValues:
-  - Speed3
+  - stat: 5
+    eVAmount: 3
   requiresFriendshipEvolution: 0
   requiresEvolutionStone: 0
   friendshipEvolutionRequirement: 

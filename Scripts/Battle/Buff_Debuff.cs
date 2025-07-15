@@ -7,12 +7,19 @@ using UnityEngine.Serialization;
 public class Buff_Debuff
 {
     [SerializeField]public bool isAtLimit;
-    [SerializeField]public string stat;
+    [SerializeField]public string statName;
+    public PokemonOperations.Stat stat;
     [SerializeField]public int stage;
 
-    public Buff_Debuff(string statName, int stage, bool isAtLimit)
+    public Buff_Debuff(PokemonOperations.Stat stat, int stage, bool isAtLimit)
     {
-        stat = statName;
+        statName = stat switch
+        {
+            PokemonOperations.Stat.SpecialAttack => "Special Attack",
+            PokemonOperations.Stat.SpecialDefense => "Special Defense",
+            _ => stat.ToString()
+        };
+        this.stat = stat;
         this.stage = stage;
         this.isAtLimit = isAtLimit;
     }

@@ -308,10 +308,7 @@ public class Move_handler:MonoBehaviour
         if (!_currentTurn.move.isBuffOrDebuff) { processingOrder = false;return;}
         if (Utility.RandomRange(1, 101) > _currentTurn.move.buffOrDebuffChance)
         { processingOrder = false; return;}
-        var buffDebuffInfo = _currentTurn.move.buffOrDebuffName;
-        var buffAmount = int.Parse(buffDebuffInfo[1].ToString());
-        var statName = buffDebuffInfo.Substring(2, buffDebuffInfo.Length - 2);
-        var isIncreasing = (buffDebuffInfo[0] == '+');
+        var buffData = _currentTurn.move.buffOrDebuffData;
         if (!_currentTurn.move.isSelfTargeted)
         {//affecting enemy
             if ( (_currentTurn.move.isMultiTarget && !Battle_handler.Instance.isDoubleBattle) 
@@ -323,22 +320,22 @@ public class Move_handler:MonoBehaviour
                 }
                 else
                 {
-                    var data = new BuffDebuffData(victim, statName, isIncreasing, buffAmount);
+                    var data = new BuffDebuffData(victim, buffData.stat, buffData.isIncreasing, buffData.amount);
                     SelectRelevantBuffOrDebuff(data);
                 }
             } 
             if(_currentTurn.move.isMultiTarget && Battle_handler.Instance.isDoubleBattle)
-                StartCoroutine(MultiTargetBuff_Debuff(statName, isIncreasing, buffAmount));
+                StartCoroutine(MultiTargetBuff_Debuff(buffData.stat, buffData.isIncreasing, buffData.amount));
         }
         else//affecting attacker
         {
-            var data = new BuffDebuffData(attacker, statName, isIncreasing, buffAmount);
+            var data = new BuffDebuffData(attacker, buffData.stat, buffData.isIncreasing, buffData.amount);
             SelectRelevantBuffOrDebuff(data);
         }
         processingOrder = false;
     }
 
-    IEnumerator MultiTargetBuff_Debuff(string stat, bool isIncreasing,int buffAmount)
+    IEnumerator MultiTargetBuff_Debuff(PokemonOperations.Stat stat, bool isIncreasing,int buffAmount)
     {
         foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker.currentEnemies) )
         {
@@ -356,30 +353,30 @@ public class Move_handler:MonoBehaviour
     {
         var unModifiedStats = data.Receiver.statData;
         var affectedPokemon = data.Receiver.pokemon;
-        switch (data.StatName)
+        switch (data.Stat)
         {
-            case"Defense":
+            case PokemonOperations.Stat.Defense:
                 affectedPokemon.defense = GetUpdatedStat(unModifiedStats.defense,data) ?? affectedPokemon.defense;
                 break;
-            case"Attack":
+            case PokemonOperations.Stat.Attack:
                 affectedPokemon.attack = GetUpdatedStat(unModifiedStats.attack,data) ?? affectedPokemon.attack;
                 break;
-            case"Special Defense":
+            case PokemonOperations.Stat.SpecialDefense:
                 affectedPokemon.specialDefense = GetUpdatedStat(unModifiedStats.spDef,data) ?? affectedPokemon.specialDefense;
                 break;
-            case"Special Attack":
+            case PokemonOperations.Stat.SpecialAttack:
                 affectedPokemon.specialAttack = GetUpdatedStat(unModifiedStats.spAtk,data) ?? affectedPokemon.specialAttack;
                 break;
-            case"Speed":
+            case PokemonOperations.Stat.Speed:
                 affectedPokemon.speed = GetUpdatedStat(unModifiedStats.speed,data) ?? affectedPokemon.speed;
                 break;
-            case"Accuracy":
+            case PokemonOperations.Stat.Accuracy:
                 affectedPokemon.accuracy = GetUpdatedStat(unModifiedStats.accuracy,data) ?? affectedPokemon.accuracy;
                 break;
-            case"Evasion":
+            case PokemonOperations.Stat.Evasion:
                 affectedPokemon.evasion = GetUpdatedStat(unModifiedStats.evasion,data) ?? affectedPokemon.evasion;
                 break;
-            case"Crit":
+            case PokemonOperations.Stat.Crit:
                 affectedPokemon.critChance = GetUpdatedStat(unModifiedStats.crit,data)?? affectedPokemon.critChance;
                 break; 
         }
@@ -387,14 +384,19 @@ public class Move_handler:MonoBehaviour
     private float? GetUpdatedStat(float unmodifiedStatValue, BuffDebuffData data)
     {
         BattleOperations.ChangeOrCreateBuffOrDebuff(data);
-        var buff = BattleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.StatName) 
-                   ?? new Buff_Debuff(string.Empty,0,true); // if null return same value
+        var buff = BattleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat) 
+                   ?? new Buff_Debuff(PokemonOperations.Stat.None,0,true); // if null return same value
         if (buff.isAtLimit) return null;
-        if (data.StatName == "Accuracy" || data.StatName == "Evasion")
-            return math.trunc(unmodifiedStatValue * _accuracyAndEvasionLevels[buff.stage+6]); 
-        if (data.StatName=="Crit")    
-            return _critLevels[buff.stage];
-        return math.trunc(unmodifiedStatValue * _statLevels[buff.stage+6]); 
+        switch (data.Stat)
+        {
+            case PokemonOperations.Stat.Accuracy:
+            case PokemonOperations.Stat.Evasion:
+                return math.trunc(unmodifiedStatValue * _accuracyAndEvasionLevels[buff.stage+6]);
+            case PokemonOperations.Stat.Crit:
+                return _critLevels[buff.stage];
+            default:
+                return math.trunc(unmodifiedStatValue * _statLevels[buff.stage+6]); 
+        }
     }
 
     List<Battle_Participant> TargetAllExceptSelf()
@@ -480,11 +482,10 @@ public class Move_handler:MonoBehaviour
     }
     void protect()
     {
-        if(attacker.previousMove.Split('/')[0] == "Protect")
+        if(attacker.previousMove.move.moveName == "Protect")
         {
-            int numUses = int.Parse(attacker.previousMove.Split('/')[1]);
             int chance = 100;
-            for (int i = 0; i < numUses; i++)
+            for (int i = 0; i < attacker.previousMove.numRepetitions; i++)
                 chance /= 2;
             if (Utility.RandomRange(1, 101) <= chance) //success
                 attacker.pokemon.canBeDamaged = false;

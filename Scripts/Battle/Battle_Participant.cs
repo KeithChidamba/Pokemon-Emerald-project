@@ -31,7 +31,7 @@ public class Battle_Participant : MonoBehaviour
     public GameObject[] singleBattleUI;
     public GameObject[] doubleBattleUI;
     public GameObject participantUI;
-    public string previousMove="";
+    public PreviousMove previousMove;
     public Type additionalTypeImmunity;
     public List<Pokemon> expReceivers;
     public bool canEscape = true;
@@ -55,11 +55,9 @@ public class Battle_Participant : MonoBehaviour
     }
     private void GiveEVs(Battle_Participant enemy)
     {
-        foreach (string ev in pokemon.effortValues)
+        foreach (var ev in pokemon.effortValues)
         {
-            var evAmount = float.Parse(ev.Substring(ev.Length - 1, 1));
-            var evStat = ev.Substring(0 ,ev.Length - 1);
-            PokemonOperations.CalculateEvForStat(evStat,evAmount,enemy.pokemon);
+            PokemonOperations.CalculateEvForStat(ev.stat,ev.eVAmount,enemy.pokemon);
         }
     }
     public  void AddToExpList(Pokemon pkm)

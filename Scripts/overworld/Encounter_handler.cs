@@ -34,13 +34,12 @@ public class Encounter_handler : MonoBehaviour
     bool EncounteredPokemon(int currentIndex)
     {
         var random = Utility.RandomRange(1,101);
-        var chance = int.Parse(currentArea.availablePokemon[currentIndex].Split('/')[1]);
+        var chance = currentArea.availablePokemon[currentIndex].encounterChance;
 
         if ( currentIndex == currentArea.availablePokemon.Length - 1 /*pick last option if none in range*/ 
              || random < chance )//pick option within chance range
         {
-            var pokemonName = currentArea.availablePokemon[currentIndex].Split('/')[0];
-            CreateWildPokemon(pokemonName);
+            CreateWildPokemon(currentArea.availablePokemon[currentIndex].pokemonName);
             return true;
         }
         return false;

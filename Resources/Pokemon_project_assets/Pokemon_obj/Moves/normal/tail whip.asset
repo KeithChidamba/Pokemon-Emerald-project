@@ -28,8 +28,11 @@ MonoBehaviour:
   powerpoints: 25
   basePowerpoints: 25
   maxPowerpoints: 25
-  statusEffect: None
-  buffOrDebuffName: -1Defense
+  statusEffect: 0
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 2
+    amount: 1
   statusChance: 0
   buffOrDebuffChance: 100
   description: lowers enemy defense with a distraction

@@ -84,17 +84,17 @@ public static class BattleOperations
         return false;
     }
 //Buffs
-    private static bool HasBuffOrDebuff(Pokemon pokemon,string statName)
+    private static bool HasBuffOrDebuff(Pokemon pokemon, PokemonOperations.Stat stat)
     {
-        return pokemon.buffAndDebuffs.Any(b=>b.stat==statName);
+        return pokemon.buffAndDebuffs.Any(b=>b.stat==stat);
     }
     public static void ChangeOrCreateBuffOrDebuff(BuffDebuffData data)
     {
-        if (!HasBuffOrDebuff(data.Receiver.pokemon, data.StatName))
+        if (!HasBuffOrDebuff(data.Receiver.pokemon, data.Stat))
         {
-            data.Receiver.pokemon.buffAndDebuffs.Add(CreateNewBuff(data.StatName));
+            data.Receiver.pokemon.buffAndDebuffs.Add(CreateNewBuff(data.Stat));
         }
-        var buff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.StatName);//wont ever be null
+        var buff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);//wont ever be null
         CanDisplayDialougue = true;
         buff.stage = ValidateBuffLimit(data.Receiver.pokemon, buff, data.IsIncreasing, data.EffectAmount);
         RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
@@ -104,31 +104,31 @@ public static class BattleOperations
     {
         var change = 0;
         var message="";
-        var indexLimitHigh = (buff.stat == "Crit") ? 2 : 5;
-        var indexLimitLow = (buff.stat == "Crit") ? 1 : -5;
+        var indexLimitHigh = (buff.stat == PokemonOperations.Stat.Crit) ? 2 : 5;
+        var indexLimitLow = (buff.stat ==  PokemonOperations.Stat.Crit) ? 1 : -5;
         if (buff.stage > indexLimitHigh && increased)
         {
             buff.isAtLimit = true;
             if(CanDisplayDialougue)
-                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.stat+" cant go any higher");
+                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.statName+" cant go any higher");
             return buff.stage;
         }
         if (buff.stage < indexLimitLow && !increased)
         {
             buff.isAtLimit = true;
             if(CanDisplayDialougue)
-                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.stat+" cant go any lower");
+                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.statName+" cant go any lower");
             return buff.stage;;
         }
         if (increased)
         {
             change = buff.stage+changeValue;
-            message = pkm.pokemonName+"'s "+buff.stat+" Increased!";
+            message = pkm.pokemonName+"'s "+buff.statName+" Increased!";
         }
         else
         {
             change = buff.stage-changeValue;
-            message = pkm.pokemonName+"'s "+buff.stat+" Decreased!";
+            message = pkm.pokemonName+"'s "+buff.statName+" Decreased!";
         }
         if(CanDisplayDialougue)
             Dialogue_handler.Instance.DisplayBattleInfo(message);
@@ -138,13 +138,13 @@ public static class BattleOperations
             return indexLimitLow - 1; 
         return change;
     }
-    private static Buff_Debuff CreateNewBuff(string statName)
+    private static Buff_Debuff CreateNewBuff( PokemonOperations.Stat statName)
     {
         return new Buff_Debuff(statName,0,false);
     }
-    public static Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon,string statName)
+    public static Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon, PokemonOperations.Stat stat)
     {
-        return pokemon.buffAndDebuffs.FirstOrDefault(b=>b.stat==statName);
+        return pokemon.buffAndDebuffs.FirstOrDefault(b=>b.stat==stat);
     }
     private static void RemoveInvalidBuffsOrDebuffs(Pokemon pokemon)
     {
