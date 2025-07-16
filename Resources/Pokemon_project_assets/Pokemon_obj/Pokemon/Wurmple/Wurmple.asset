@@ -79,13 +79,16 @@ MonoBehaviour:
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 0
-    moveName: Tackle
+    _moveName: Tackle
+    moveName: 0
     requiredLevel: 1
   - moveType: 11
-    moveName: String Shot
+    _moveName: String Shot
+    moveName: 10
     requiredLevel: 2
   - moveType: 7
-    moveName: Poison Sting
+    _moveName: Poison Sting
+    moveName: 26
     requiredLevel: 3
   moveSet: []
   ability: {fileID: 11400000, guid: 2753225943009a84284482e1ea9aae6b, type: 2}

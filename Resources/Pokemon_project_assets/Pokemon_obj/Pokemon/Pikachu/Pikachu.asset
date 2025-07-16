@@ -79,16 +79,20 @@ MonoBehaviour:
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 3
-    moveName: Thunder Shock
+    _moveName: Thunder Shock
+    moveName: 13
     requiredLevel: 1
   - moveType: 3
-    moveName: Thunder Wave
+    _moveName: Thunder Wave
+    moveName: 14
     requiredLevel: 3
   - moveType: 0
-    moveName: Quick Attack
+    _moveName: Quick Attack
+    moveName: 7
     requiredLevel: 7
   - moveType: 0
-    moveName: Tail Whip
+    _moveName: Tail Whip
+    moveName: 3
     requiredLevel: 9
   moveSet: []
   ability: {fileID: 11400000, guid: e14cc0f589869f74585dfab11c944e42, type: 2}

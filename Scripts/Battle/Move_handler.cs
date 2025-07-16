@@ -276,9 +276,23 @@ public class Move_handler:MonoBehaviour
         foreach (var type in currentVictim.pokemon.types)
             if(CheckInvalidStatusEffect(move.statusEffect, type.typeName,move))return;
         OnStatusEffectHit?.Invoke(currentVictim,move.statusEffect);
-        if(displayMessage)
-            Dialogue_handler.Instance.DisplayBattleInfo(currentVictim.pokemon.pokemonName+" received a "+move.statusEffect+" effect!");
+        if (displayMessage)
+            Dialogue_handler.Instance.DisplayBattleInfo($"{currentVictim.pokemon.pokemonName} {GetStatusMessage(move.statusEffect)}");
         ApplyStatusToVictim(currentVictim,move.statusEffect);
+    }
+    private string GetStatusMessage(PokemonOperations.StatusEffect status)
+    {
+         var displayMessage = status switch
+            {
+                PokemonOperations.StatusEffect.Paralysis=>"was paralyzed",
+                PokemonOperations.StatusEffect.Burn=>"was burned",
+                PokemonOperations.StatusEffect.BadlyPoison=>"was badly poisoned",
+                PokemonOperations.StatusEffect.Poison=>"was poisoned",
+                PokemonOperations.StatusEffect.Sleep=>"fell fast asleep",
+                PokemonOperations.StatusEffect.Freeze=>"was frozen",
+                _=>""
+            };
+        return displayMessage;
     }
     public void ApplyStatusToVictim(Battle_Participant participant,PokemonOperations.StatusEffect status)
     {

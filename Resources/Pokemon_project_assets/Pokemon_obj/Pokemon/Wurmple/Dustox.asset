@@ -22,7 +22,8 @@ MonoBehaviour:
   catchRate: 45
   learnSet:
   - moveType: 7
-    moveName: Toxic
+    _moveName: Toxic
+    moveName: 27
     requiredLevel: 14
   frontPicture: {fileID: 21300000, guid: 8879d5784dc1e0d45bce22cfdee1331b, type: 3}
   backPicture: {fileID: 21300000, guid: a6e4f962de9cc0848a355b6246a8ccb0, type: 3}

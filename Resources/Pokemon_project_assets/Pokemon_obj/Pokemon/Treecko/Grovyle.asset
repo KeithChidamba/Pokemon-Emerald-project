@@ -21,7 +21,8 @@ MonoBehaviour:
   catchRate: 45
   learnSet:
   - moveType: 9
-    moveName: Arial Ace
+    _moveName: Arial Ace
+    moveName: 20
     requiredLevel: 16
   frontPicture: {fileID: 21300000, guid: 1bfc7ad03ccc0ff458c00eaf849697d4, type: 3}
   backPicture: {fileID: 21300000, guid: 64745b973a6a09143973551013f8690b, type: 3}

@@ -48,7 +48,7 @@ public class Poke_Mart : MonoBehaviour
     private void InitialiseItems()
     {        
         Save_manager.Instance.OnVirtualFileSystemLoaded -= InitialiseItems;
-        allItems = Resources.LoadAll<Item>("Pokemon_project_assets/Items/Mart_Items").ToList(); 
+        allItems = Resources.LoadAll<Item>("Pokemon_project_assets/Items/Mart_Items").ToList();
     }
     
     private IEnumerator SelectItemsForStore()
@@ -57,7 +57,7 @@ public class Poke_Mart : MonoBehaviour
         List<Item> validItems=new();
         foreach (var item in allItems)
         {
-            if(currentMartData.availableItems.Contains(item.itemName.ToLower()))
+            if (currentMartData.availableItems.Contains(item.itemName))
                 validItems.Add(item);
         }
         var orderedItems = validItems.OrderBy(item => item.price);
@@ -79,7 +79,7 @@ public class Poke_Mart : MonoBehaviour
         quantity.text = selectedItemQuantity.ToString();
         playerMoneyText.text = Game_Load.Instance.playerData.playerMoney.ToString();
     }
-    public void SelectItem()
+    private void SelectItem()
     {
         selectedItemQuantity = 1;
         storeItemsUI[selectedItemIndex].LoadItemDescription();
@@ -115,8 +115,6 @@ public class Poke_Mart : MonoBehaviour
         selectedItemIndex--;
         selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 6);
         SelectItem();
-       // selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 7); 
-        //SelectItem(selectedItemIndex);
     }
     public void BuyItem()
     {
@@ -160,16 +158,16 @@ public class Poke_Mart : MonoBehaviour
         {
             if (data.location == clerkInteractable.location)
             {
-                currentMartData = data; 
+                currentMartData = data;
                 StartCoroutine(InitializeStoreData());
                 break;
             }
         }
-        
     }
-
     private IEnumerator InitializeStoreData()
     {
+        currentMartData.SetDataValues();
+        yield return new WaitUntil(()=>currentMartData.itemList.Count == currentMartData.availableItems.Count);
         _itemsLoaded = false;
         StartCoroutine(SelectItemsForStore());
         yield return new WaitUntil(()=>_itemsLoaded);

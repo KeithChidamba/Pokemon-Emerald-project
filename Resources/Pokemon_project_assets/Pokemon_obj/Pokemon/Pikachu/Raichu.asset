@@ -21,7 +21,8 @@ MonoBehaviour:
   catchRate: 75
   learnSet:
   - moveType: 3
-    moveName: Thunderbolt
+    _moveName: Thunderbolt
+    moveName: 15
     requiredLevel: 18
   frontPicture: {fileID: 21300000, guid: e5cdf74d34ef0f24292e47fbc2147c8c, type: 3}
   backPicture: {fileID: 21300000, guid: 885a6b7c05edf16439864348e339a23e, type: 3}

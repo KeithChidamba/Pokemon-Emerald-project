@@ -79,16 +79,20 @@ MonoBehaviour:
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 15
-    moveName: Bite
+    _moveName: Bite
+    moveName: 11
     requiredLevel: 1
   - moveType: 15
-    moveName: Crunch
+    _moveName: Crunch
+    moveName: 12
     requiredLevel: 5
   - moveType: 0
-    moveName: Tackle
+    _moveName: Tackle
+    moveName: 0
     requiredLevel: 6
   - moveType: 8
-    moveName: Magnitude
+    _moveName: Magnitude
+    moveName: 24
     requiredLevel: 7
   moveSet: []
   ability: {fileID: 11400000, guid: 6e3a5205ac780de4499e796e8ba8dce9, type: 2}

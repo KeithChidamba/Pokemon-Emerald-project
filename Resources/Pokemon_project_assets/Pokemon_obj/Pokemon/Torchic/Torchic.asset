@@ -79,16 +79,20 @@ MonoBehaviour:
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 0
-    moveName: Scratch
+    _moveName: Scratch
+    moveName: 8
     requiredLevel: 1
   - moveType: 1
-    moveName: Ember
+    _moveName: Ember
+    moveName: 18
     requiredLevel: 3
   - moveType: 6
-    moveName: Double Kick
+    _moveName: Double Kick
+    moveName: 17
     requiredLevel: 5
   - moveType: 0
-    moveName: Focus Energy
+    _moveName: Focus Energy
+    moveName: 2
     requiredLevel: 7
   moveSet: []
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}

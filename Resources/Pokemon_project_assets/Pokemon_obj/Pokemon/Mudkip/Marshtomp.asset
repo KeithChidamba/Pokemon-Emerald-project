@@ -22,7 +22,8 @@ MonoBehaviour:
   catchRate: 45
   learnSet:
   - moveType: 6
-    moveName: Brick Break
+    _moveName: Brick Break
+    moveName: 16
     requiredLevel: 16
   frontPicture: {fileID: 21300000, guid: 68d5d916696bf4847a62a5e9f301130a, type: 3}
   backPicture: {fileID: 21300000, guid: 46f8d9b349517904085fbd4a20c04abc, type: 3}

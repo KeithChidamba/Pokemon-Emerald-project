@@ -185,8 +185,9 @@ public static class PokemonOperations
         {
             if (CurrentPokemon.currentLevel == move.requiredLevel)
             {
+                var moveName = move.GetName();
                 var moveFromAsset = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/"
-                                                         + move.GetMoveType() + "/" + move.moveName.ToLower());
+                                                         + move.GetMoveType() + "/" + moveName.ToLower());
                 if (CurrentPokemon.moveSet.Count == 4) 
                 {//leveling up from battle or rare candies
                     if (inBattle || isPartyPokemon)
@@ -194,8 +195,8 @@ public static class PokemonOperations
                         SelectingMoveReplacement = true;
                         Battle_handler.Instance.displayingInfo = inBattle;
                         Dialogue_handler.Instance.DisplayList(
-                            $"{CurrentPokemon.pokemonName} is trying to learn {move.moveName} ,do you want it to learn" +
-                            $" {move.moveName}?", "", new[] { "LearnMove", "SkipMove" },
+                            $"{CurrentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn" +
+                            $" {moveName}?", "", new[] { "LearnMove", "SkipMove" },
                             new[] { "Yes", "No" });
                         NewMove = moveFromAsset;
                     }
@@ -210,8 +211,8 @@ public static class PokemonOperations
                 {
                     if (isPartyPokemon)
                     {
-                        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName+" learned "
-                            + move.moveName,true);
+                        Dialogue_handler.Instance.DisplayBattleInfo(
+                            $"{CurrentPokemon.pokemonName} learned {moveName}",true);
                     }
                     var newMove = Obj_Instance.CreateMove(moveFromAsset);
                     if (!CurrentPokemon.moveSet.Contains(newMove))

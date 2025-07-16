@@ -13,13 +13,4 @@ MonoBehaviour:
   m_Name: Coastal City Items
   m_EditorClassIdentifier: 
   location: Costal City
-  availableItems:
-  - pokeball
-  - great ball
-  - ice heal
-  - antidote
-  - burn heal
-  - paralyz heal
-  - awakening
-  - full heal
-  - revive
+  itemList: 0000000001000000020000000e0000001100000008000000130000000900000018000000

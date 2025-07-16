@@ -22,7 +22,8 @@ MonoBehaviour:
   catchRate: 120
   learnSet:
   - moveType: 8
-    moveName: Earthquake
+    _moveName: Earthquake
+    moveName: 25
     requiredLevel: 21
   frontPicture: {fileID: 21300000, guid: 23ea38cbab759384ba6f3508f1386800, type: 3}
   backPicture: {fileID: 21300000, guid: 4c5e70ad8f695ef4b99a4c4b4421a94f, type: 3}

@@ -13,8 +13,4 @@ MonoBehaviour:
   m_Name: Forest Items
   m_EditorClassIdentifier: 
   location: Forest
-  availableItems:
-  - heal powder
-  - energy root
-  - revival herb
-  - energy powder
+  itemList: 06000000070000000b0000001700000003000000

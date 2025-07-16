@@ -26,7 +26,7 @@ public class Player_movement : MonoBehaviour
     private bool delayingMovement;
     public GameObject playerObject;
     public static Player_movement Instance;
-    private void Start()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {

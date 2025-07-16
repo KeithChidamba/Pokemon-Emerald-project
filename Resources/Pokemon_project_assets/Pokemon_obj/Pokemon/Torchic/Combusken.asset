@@ -22,7 +22,8 @@ MonoBehaviour:
   catchRate: 45
   learnSet:
   - moveType: 1
-    moveName: Flame Thrower
+    _moveName: Flame Thrower
+    moveName: 19
     requiredLevel: 18
   frontPicture: {fileID: 21300000, guid: 481c8555e71c7f44eab6eb29249befe3, type: 3}
   backPicture: {fileID: 21300000, guid: 234fb8644e5380d40b3475228962c5ea, type: 3}

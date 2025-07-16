@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: flame thrower
+  m_Name: flamethrower
   m_EditorClassIdentifier: 
-  moveName: Flame thrower
+  moveName: Flamethrower
   moveDamage: 95
   moveAccuracy: 90
   type: {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
@@ -29,7 +29,10 @@ MonoBehaviour:
   basePowerpoints: 20
   maxPowerpoints: 20
   statusEffect: 2
-  buffOrDebuffName: None
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 0
+    amount: 0
   statusChance: 15
   buffOrDebuffChance: 0
   description: A powerful fire attack that may inflict a burn

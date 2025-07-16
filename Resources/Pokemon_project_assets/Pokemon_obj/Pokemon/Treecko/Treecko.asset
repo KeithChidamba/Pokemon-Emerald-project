@@ -79,16 +79,20 @@ MonoBehaviour:
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 0
-    moveName: Pound
+    _moveName: Pound
+    moveName: 1
     requiredLevel: 1
   - moveType: 4
-    moveName: Absorb
+    _moveName: Absorb
+    moveName: 21
     requiredLevel: 3
   - moveType: 0
-    moveName: Quick Attack
+    _moveName: Quick Attack
+    moveName: 7
     requiredLevel: 5
   - moveType: 4
-    moveName: Bullet Seed
+    _moveName: Bullet Seed
+    moveName: 22
     requiredLevel: 7
   moveSet: []
   ability: {fileID: 11400000, guid: 3a050f274b7d49d49aec9bd3ce16bbf1, type: 2}

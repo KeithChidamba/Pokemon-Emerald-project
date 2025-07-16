@@ -22,7 +22,8 @@ MonoBehaviour:
   catchRate: 45
   learnSet:
   - moveType: 11
-    moveName: Bug Bite
+    _moveName: Bug Bite
+    moveName: 9
     requiredLevel: 14
   frontPicture: {fileID: 21300000, guid: 9d48f881fcb6b7f4c8d4cd650a117a66, type: 3}
   backPicture: {fileID: 21300000, guid: f3648bbb33e47f1469b260ea8a3cee13, type: 3}

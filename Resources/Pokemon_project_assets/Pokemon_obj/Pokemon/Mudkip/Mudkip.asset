@@ -79,16 +79,20 @@ MonoBehaviour:
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 0
-    moveName: Tackle
+    _moveName: Tackle
+    moveName: 0
     requiredLevel: 1
   - moveType: 2
-    moveName: Bubble
+    _moveName: Bubble
+    moveName: 30
     requiredLevel: 3
   - moveType: 8
-    moveName: Mud Slap
+    _moveName: Mud Slap
+    moveName: 23
     requiredLevel: 5
   - moveType: 2
-    moveName: Water Gun
+    _moveName: Water Gun
+    moveName: 31
     requiredLevel: 10
   moveSet: []
   ability: {fileID: 11400000, guid: 2d3aa5da1ed7a734cb1c25d192217a25, type: 2}

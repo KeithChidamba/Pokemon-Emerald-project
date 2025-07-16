@@ -1,0 +1,14 @@
+{
+    "playerName": "kevlar",
+    "trainerID": 2393,
+    "secretID": 43765,
+    "playerMoney": 300000,
+    "numBadges": 0,
+    "playerPosition": {
+        "x": 16.3799991607666,
+        "y": 0.5789999961853027,
+        "z": 0.0
+    },
+    "location": "Poke Mart Forest",
+    "equippedItemName": "Bike"
+}
