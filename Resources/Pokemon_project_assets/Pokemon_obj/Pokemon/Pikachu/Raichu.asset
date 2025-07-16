@@ -20,7 +20,9 @@ MonoBehaviour:
   expYield: 122
   catchRate: 75
   learnSet:
-  - electric/thunderbolt18
+  - moveType: 3
+    moveName: Thunderbolt
+    requiredLevel: 18
   frontPicture: {fileID: 21300000, guid: e5cdf74d34ef0f24292e47fbc2147c8c, type: 3}
   backPicture: {fileID: 21300000, guid: 885a6b7c05edf16439864348e339a23e, type: 3}
   baseHp: 60
@@ -34,4 +36,6 @@ MonoBehaviour:
     eVAmount: 3
   requiresFriendshipEvolution: 0
   requiresEvolutionStone: 0
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0

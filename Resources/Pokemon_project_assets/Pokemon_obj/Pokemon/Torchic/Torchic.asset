@@ -17,7 +17,7 @@ MonoBehaviour:
   pokemonID: 0
   personalityValue: 0
   gender: 0
-  genderRatio: 87,5/12,5
+  ratioFemale: 0
   nature: {fileID: 0}
   hasGender: 1
   hp: 0
@@ -68,7 +68,9 @@ MonoBehaviour:
   statusEffect: 0
   buffAndDebuffs: []
   evolutionLineLevels: 100000001e000000
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0
   requiresEvolutionStone: 0
   evolutionStoneName: None
   abilities:
@@ -76,10 +78,18 @@ MonoBehaviour:
   splitEvolution: 0
   requiresFriendshipEvolution: 0
   learnSet:
-  - normal/scratch01
-  - fire/ember03
-  - fighting/double kick05
-  - normal/focus energy07
+  - moveType: 0
+    moveName: Scratch
+    requiredLevel: 1
+  - moveType: 1
+    moveName: Ember
+    requiredLevel: 3
+  - moveType: 6
+    moveName: Double Kick
+    requiredLevel: 5
+  - moveType: 0
+    moveName: Focus Energy
+    requiredLevel: 7
   moveSet: []
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
   evolutions:
@@ -93,7 +103,6 @@ MonoBehaviour:
   healthPhase: 0
   abilityName: 
   natureName: 
-  evolutionData: []
-  typeData: []
+  evolutionNames: []
+  typeNames: []
   moveData: []
-  movePpData: []

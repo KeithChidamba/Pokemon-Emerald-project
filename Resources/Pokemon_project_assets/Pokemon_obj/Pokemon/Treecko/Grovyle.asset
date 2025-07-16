@@ -20,7 +20,9 @@ MonoBehaviour:
   expYield: 141
   catchRate: 45
   learnSet:
-  - flying/arial ace16
+  - moveType: 9
+    moveName: Arial Ace
+    requiredLevel: 16
   frontPicture: {fileID: 21300000, guid: 1bfc7ad03ccc0ff458c00eaf849697d4, type: 3}
   backPicture: {fileID: 21300000, guid: 64745b973a6a09143973551013f8690b, type: 3}
   baseHp: 50
@@ -34,4 +36,6 @@ MonoBehaviour:
     eVAmount: 2
   requiresFriendshipEvolution: 0
   requiresEvolutionStone: 0
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0

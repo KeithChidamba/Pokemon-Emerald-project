@@ -21,7 +21,9 @@ MonoBehaviour:
   expYield: 143
   catchRate: 45
   learnSet:
-  - fighting/brick break16
+  - moveType: 6
+    moveName: Brick Break
+    requiredLevel: 16
   frontPicture: {fileID: 21300000, guid: 68d5d916696bf4847a62a5e9f301130a, type: 3}
   backPicture: {fileID: 21300000, guid: 46f8d9b349517904085fbd4a20c04abc, type: 3}
   baseHp: 70
@@ -35,4 +37,6 @@ MonoBehaviour:
     eVAmount: 2
   requiresFriendshipEvolution: 0
   requiresEvolutionStone: 0
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0

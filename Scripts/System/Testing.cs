@@ -37,7 +37,7 @@ public class Testing : MonoBehaviour
 
         if (itemSprite == null)
         {
-            Debug.LogWarning("Bag item image not found for: " + itemName);
+            Debug.LogWarning("image not found for: " + fullPath+itemName);
             return null;
         }
 

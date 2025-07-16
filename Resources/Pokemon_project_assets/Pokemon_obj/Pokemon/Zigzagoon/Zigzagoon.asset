@@ -17,7 +17,7 @@ MonoBehaviour:
   pokemonID: 0
   personalityValue: 0
   gender: 0
-  genderRatio: 50/50
+  ratioFemale: 50
   nature: {fileID: 0}
   hasGender: 1
   hp: 0
@@ -68,7 +68,9 @@ MonoBehaviour:
   statusEffect: 0
   buffAndDebuffs: []
   evolutionLineLevels: 14000000
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0
   requiresEvolutionStone: 0
   evolutionStoneName: None
   abilities:
@@ -76,11 +78,21 @@ MonoBehaviour:
   splitEvolution: 0
   requiresFriendshipEvolution: 0
   learnSet:
-  - normal/headbutt01
-  - normal/tail whip02
-  - normal/tackle04
-  - water/surf05
-  - normal/protect19
+  - moveType: 0
+    moveName: Headbutt
+    requiredLevel: 1
+  - moveType: 0
+    moveName: Tail Whip
+    requiredLevel: 2
+  - moveType: 0
+    moveName: Tackle
+    requiredLevel: 4
+  - moveType: 2
+    moveName: Surf
+    requiredLevel: 5
+  - moveType: 0
+    moveName: Protect
+    requiredLevel: 19
   moveSet: []
   ability: {fileID: 11400000, guid: ed27e4020d5e6e94f93577121b591bf1, type: 2}
   evolutions:
@@ -93,7 +105,6 @@ MonoBehaviour:
   healthPhase: 0
   abilityName: 
   natureName: 
-  evolutionData: []
-  typeData: []
+  evolutionNames: []
+  typeNames: []
   moveData: []
-  movePpData: []

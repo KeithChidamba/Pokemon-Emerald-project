@@ -20,7 +20,9 @@ MonoBehaviour:
   expYield: 72
   catchRate: 120
   learnSet:
-  - normal/harden05
+  - moveType: 0
+    moveName: Harden
+    requiredLevel: 5
   frontPicture: {fileID: 21300000, guid: 3b0b679170e5a89488a43d5f5515c777, type: 3}
   backPicture: {fileID: 21300000, guid: 66e09a87a862bf445a54a85be5447369, type: 3}
   baseHp: 50
@@ -34,4 +36,6 @@ MonoBehaviour:
     eVAmount: 2
   requiresFriendshipEvolution: 0
   requiresEvolutionStone: 0
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0

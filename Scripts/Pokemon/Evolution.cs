@@ -12,7 +12,7 @@ public class Evolution : ScriptableObject
     public PokemonOperations.ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
     [FormerlySerializedAs("CatchRate")] public float catchRate = 0;
-    public string[] learnSet;
+    public LearnSetMove[] learnSet;
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
     [FormerlySerializedAs("BaseHP")] public float baseHp;
@@ -24,5 +24,5 @@ public class Evolution : ScriptableObject
     [FormerlySerializedAs("EVs")] public List<EvYield> effortValues=new();
     public bool requiresFriendshipEvolution;
     public bool requiresEvolutionStone;
-    public string friendshipEvolutionRequirement;
+    public FriendShipEvolutionData friendshipEvolutionRequirement;
 }

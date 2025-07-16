@@ -183,36 +183,37 @@ public static class PokemonOperations
         var inBattle = Options_manager.Instance.playerInBattle;
         foreach (var move in CurrentPokemon.learnSet)
         {
-            var requiredLevel = int.Parse(move.Substring(move.Length - 2, 2));
-            if (CurrentPokemon.currentLevel == requiredLevel)
+            if (CurrentPokemon.currentLevel == move.requiredLevel)
             {
-                var pos = move.IndexOf('/')+1;
-                var moveType = move.Substring(0, pos - 1).ToLower();
-                var moveName = move.Substring(pos, move.Length - 2 - pos).ToLower();
-                
+                var moveFromAsset = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/"
+                                                         + move.GetMoveType() + "/" + move.moveName.ToLower());
                 if (CurrentPokemon.moveSet.Count == 4) 
                 {//leveling up from battle or rare candies
-                    if(inBattle || isPartyPokemon)
+                    if (inBattle || isPartyPokemon)
                     {
                         SelectingMoveReplacement = true;
                         Battle_handler.Instance.displayingInfo = inBattle;
                         Dialogue_handler.Instance.DisplayList(
-                            $"{CurrentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn {moveName}?",
-                            "", new[]{ "LearnMove","SkipMove" }, new[]{"Yes", "No"});
-                        NewMove = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName);
+                            $"{CurrentPokemon.pokemonName} is trying to learn {move.moveName} ,do you want it to learn" +
+                            $" {move.moveName}?", "", new[] { "LearnMove", "SkipMove" },
+                            new[] { "Yes", "No" });
+                        NewMove = moveFromAsset;
                     }
                     //wild pokemon get generated with somewhat random moveset choices
                     else
-                        CurrentPokemon.moveSet[Utility.RandomRange(0,4)] = Obj_Instance.CreateMove(
-                            Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
+                    {
+                        CurrentPokemon.moveSet[Utility.RandomRange(0, 4)]
+                            = Obj_Instance.CreateMove(moveFromAsset);
+                    }
                 }
                 else
                 {
                     if (isPartyPokemon)
                     {
-                        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName+" learned "+moveName,true);
+                        Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName+" learned "
+                            + move.moveName,true);
                     }
-                    var newMove = Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
+                    var newMove = Obj_Instance.CreateMove(moveFromAsset);
                     if (!CurrentPokemon.moveSet.Contains(newMove))
                         CurrentPokemon.moveSet.Add(newMove);
                     LearningNewMove = false;
@@ -259,10 +260,7 @@ public static class PokemonOperations
         uint genderValue = 0;
         if(pokemon.personalityValue>0)
             genderValue = pokemon.personalityValue % 256;
-        var pos = pokemon.genderRatio.IndexOf('/');
-        var ratio = pokemon.genderRatio.Substring(pos + 1, pokemon.genderRatio.Length - pos - 1);
-        var ratioFemale = float.Parse(ratio);
-        var genderThreshold = math.abs((int)math.trunc(((ratioFemale / 100) * 256)));
+        var genderThreshold = math.abs((int)math.trunc(((pokemon.ratioFemale / 100) * 256)));
         pokemon.gender = (genderValue < genderThreshold)? Gender.Male : Gender.Female;
     }
     public static void SetPokemonTraits(Pokemon newPokemon)

@@ -13,7 +13,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("Pokemon_ID")] public long pokemonID = 0;
     [FormerlySerializedAs("Personality_value")] public uint personalityValue;
     public PokemonOperations.Gender gender;
-    [FormerlySerializedAs("GenderRatio")] public string genderRatio = "50/50";
+    public float ratioFemale = 0;
     public Nature nature;
     [FormerlySerializedAs("has_gender")] public bool hasGender = true;
     [FormerlySerializedAs("HP")] public float hp;
@@ -61,13 +61,13 @@ public class Pokemon : ScriptableObject
     public PokemonOperations.StatusEffect statusEffect;
     [FormerlySerializedAs("Buff_Debuffs")] public List<Buff_Debuff> buffAndDebuffs = new();
     [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
-    public string friendshipEvolutionRequirement;
+    public FriendShipEvolutionData friendshipEvolutionRequirement;
     [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone = false;
     [FormerlySerializedAs("EvolutionStoneName")] public string evolutionStoneName = "None";
     public string[] abilities;
     [FormerlySerializedAs("split_evolution")] public bool splitEvolution = false;
     public bool requiresFriendshipEvolution = false;
-    public string[] learnSet;
+    public LearnSetMove[] learnSet;
     [FormerlySerializedAs("move_set")] public List<Move> moveSet=new();
     public Ability ability;
     public List<Evolution> evolutions;
@@ -83,10 +83,9 @@ public class Pokemon : ScriptableObject
     //data conversion when json to obj
     public string abilityName;
     public string natureName;
-    public List<string> evolutionData=new();
-    public List<string> typeData=new();
-    public List<string> moveData=new();
-    public List<string> movePpData=new();
+    public List<string> evolutionNames=new();
+    public List<string> typeNames = new();
+    public List<MoveSaveData> moveData=new();
     
     public void SaveUnserializableData()
     {
@@ -94,18 +93,17 @@ public class Pokemon : ScriptableObject
         natureName = nature.natureName;
         hasItem = (heldItem != null);
         moveData.Clear();
-        typeData.Clear();
-        movePpData.Clear();
-        evolutionData.Clear();
+        typeNames.Clear();
+        evolutionNames.Clear();
+
         foreach (var move in moveSet)
         {
-            moveData.Add(move.moveName + "/" + move.type.typeName);
-            movePpData.Add(move.powerpoints+"/"+move.maxPowerpoints);
+            moveData.Add(new MoveSaveData(move.moveName, move.type.typeName.ToLower()
+                , move.powerpoints, move.maxPowerpoints));
         }
-        foreach (Type t in types)
-            typeData.Add(t.typeName);
-        foreach (Evolution e in evolutions)
-            evolutionData.Add(e.evolutionName);
+        foreach (var type in types) typeNames.Add(type.typeName.ToLower());
+        
+        foreach (var evo in evolutions) evolutionNames.Add(evo.evolutionName);
     }
     public void LoadUnserializedData()//gives values to attributes that cant be deserialized, using saved values
     {
@@ -118,21 +116,25 @@ public class Pokemon : ScriptableObject
         evolutions.Clear();
         for (int i = 0; i < moveData.Count; i++)
         {
-            var splitPos1 = moveData[i].IndexOf('/')+1;
-            var moveName = moveData[i].Substring(0, splitPos1 - 1).ToLower();
-            var moveType = moveData[i].Substring(splitPos1,moveData[i].Length - splitPos1).ToLower();
-            var moveCopy = Obj_Instance.CreateMove(Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveType + "/" + moveName));
-            var splitPos2 = movePpData[i].IndexOf('/')+1;
-            moveCopy.powerpoints = int.Parse(movePpData[i].Substring(0, splitPos2-1));
-            moveCopy.maxPowerpoints = int.Parse(movePpData[i].Substring(splitPos2, movePpData[i].Length - splitPos2));
+            var moveCopy = Obj_Instance.CreateMove(Resources.Load<Move>(
+                $"Pokemon_project_assets/Pokemon_obj/Moves/{moveData[i].moveType}/{moveData[i].moveName}"));
+            moveCopy.powerpoints = moveData[i].powerPoints;
+            moveCopy.maxPowerpoints = moveData[i].maxPowerPoints;
             moveSet.Add(moveCopy);
         }
-        foreach (String t in typeData)
-            types.Add(Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/" + t.ToLower()));
-        foreach (String e in evolutionData)
-             evolutions.Add(Resources.Load<Evolution>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + basePokemonName + "/" +e));
-        for(int i =0; i < types.Count; i++)
-            types[i].typeImage = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + typeData[i].ToLower());
+        foreach (var typeName in typeNames)
+        {
+            types.Add(Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/" + typeName));
+        }
+        foreach (var evolutionName in evolutionNames)
+        {
+            evolutions.Add(Resources.Load<Evolution>(
+                $"Pokemon_project_assets/Pokemon_obj/Pokemon/{basePokemonName}/{evolutionName}"));
+        }
+        for (int i = 0; i < types.Count; i++)
+        {
+            types[i].typeImage = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + typeNames[i]);
+        }
         Battle_handler.Instance.OnBattleEnd += ClearEvents;
     }
 
@@ -227,10 +229,10 @@ public class Pokemon : ScriptableObject
 
     void CheckFriendshipEvolution()
     {
-        var evolutionIndex = int.Parse(friendshipEvolutionRequirement.Split("/")[1]);
-        var friendshipRequirement = int.Parse(friendshipEvolutionRequirement.Split("/")[0]);
-        if (friendshipLevel >= friendshipRequirement)
-            Evolve(evolutions[evolutionIndex]);
+        if (friendshipLevel >= friendshipEvolutionRequirement.friendshipRequirement)
+        {
+            Evolve(evolutions[friendshipEvolutionRequirement.evolutionIndex]);
+        }
     }
     private void DetermineSplitEvolution()
     {

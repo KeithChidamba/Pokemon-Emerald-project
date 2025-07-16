@@ -17,7 +17,7 @@ MonoBehaviour:
   pokemonID: 0
   personalityValue: 0
   gender: 0
-  genderRatio: 50/50
+  ratioFemale: 50
   nature: {fileID: 0}
   hasGender: 1
   hp: 0
@@ -68,7 +68,9 @@ MonoBehaviour:
   statusEffect: 0
   buffAndDebuffs: []
   evolutionLineLevels: 1400000023000000
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0
   requiresEvolutionStone: 0
   evolutionStoneName: None
   abilities:
@@ -76,10 +78,18 @@ MonoBehaviour:
   splitEvolution: 0
   requiresFriendshipEvolution: 0
   learnSet:
-  - dark/bite01
-  - dark/crunch05
-  - normal/tackle06
-  - ground/magnitude07
+  - moveType: 15
+    moveName: Bite
+    requiredLevel: 1
+  - moveType: 15
+    moveName: Crunch
+    requiredLevel: 5
+  - moveType: 0
+    moveName: Tackle
+    requiredLevel: 6
+  - moveType: 8
+    moveName: Magnitude
+    requiredLevel: 7
   moveSet: []
   ability: {fileID: 11400000, guid: 6e3a5205ac780de4499e796e8ba8dce9, type: 2}
   evolutions:
@@ -93,7 +103,6 @@ MonoBehaviour:
   healthPhase: 0
   abilityName: 
   natureName: 
-  evolutionData: []
-  typeData: []
+  evolutionNames: []
+  typeNames: []
   moveData: []
-  movePpData: []

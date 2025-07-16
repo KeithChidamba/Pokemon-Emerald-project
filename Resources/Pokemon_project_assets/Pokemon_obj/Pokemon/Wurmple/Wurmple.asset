@@ -17,7 +17,7 @@ MonoBehaviour:
   pokemonID: 0
   personalityValue: 0
   gender: 0
-  genderRatio: 50/50
+  ratioFemale: 50
   nature: {fileID: 0}
   hasGender: 1
   hp: 0
@@ -68,7 +68,9 @@ MonoBehaviour:
   statusEffect: 0
   buffAndDebuffs: []
   evolutionLineLevels: 050000000d000000
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0
   requiresEvolutionStone: 0
   evolutionStoneName: None
   abilities:
@@ -76,9 +78,15 @@ MonoBehaviour:
   splitEvolution: 1
   requiresFriendshipEvolution: 0
   learnSet:
-  - normal/tackle01
-  - bug/string shot02
-  - poison/poison sting03
+  - moveType: 0
+    moveName: Tackle
+    requiredLevel: 1
+  - moveType: 11
+    moveName: String Shot
+    requiredLevel: 2
+  - moveType: 7
+    moveName: Poison Sting
+    requiredLevel: 3
   moveSet: []
   ability: {fileID: 11400000, guid: 2753225943009a84284482e1ea9aae6b, type: 2}
   evolutions:
@@ -94,7 +102,6 @@ MonoBehaviour:
   healthPhase: 0
   abilityName: 
   natureName: 
-  evolutionData: []
-  typeData: []
+  evolutionNames: []
+  typeNames: []
   moveData: []
-  movePpData: []

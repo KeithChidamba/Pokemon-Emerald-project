@@ -17,7 +17,7 @@ MonoBehaviour:
   pokemonID: 0
   personalityValue: 0
   gender: 0
-  genderRatio: 50/50
+  ratioFemale: 50
   nature: {fileID: 0}
   hasGender: 1
   hp: 0
@@ -68,7 +68,9 @@ MonoBehaviour:
   statusEffect: 0
   buffAndDebuffs: []
   evolutionLineLevels: 
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0
   requiresEvolutionStone: 1
   evolutionStoneName: Thunder Stone
   abilities:
@@ -76,10 +78,18 @@ MonoBehaviour:
   splitEvolution: 0
   requiresFriendshipEvolution: 0
   learnSet:
-  - electric/thunder shock01
-  - electric/thunder wave03
-  - normal/quick attack07
-  - normal/tail whip09
+  - moveType: 3
+    moveName: Thunder Shock
+    requiredLevel: 1
+  - moveType: 3
+    moveName: Thunder Wave
+    requiredLevel: 3
+  - moveType: 0
+    moveName: Quick Attack
+    requiredLevel: 7
+  - moveType: 0
+    moveName: Tail Whip
+    requiredLevel: 9
   moveSet: []
   ability: {fileID: 11400000, guid: e14cc0f589869f74585dfab11c944e42, type: 2}
   evolutions:
@@ -92,7 +102,6 @@ MonoBehaviour:
   healthPhase: 0
   abilityName: 
   natureName: 
-  evolutionData: []
-  typeData: []
+  evolutionNames: []
+  typeNames: []
   moveData: []
-  movePpData: []

@@ -21,7 +21,9 @@ MonoBehaviour:
   expYield: 160
   catchRate: 45
   learnSet:
-  - poison/toxic14
+  - moveType: 7
+    moveName: Toxic
+    requiredLevel: 14
   frontPicture: {fileID: 21300000, guid: 8879d5784dc1e0d45bce22cfdee1331b, type: 3}
   backPicture: {fileID: 21300000, guid: a6e4f962de9cc0848a355b6246a8ccb0, type: 3}
   baseHp: 60
@@ -35,4 +37,6 @@ MonoBehaviour:
     eVAmount: 3
   requiresFriendshipEvolution: 0
   requiresEvolutionStone: 0
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0

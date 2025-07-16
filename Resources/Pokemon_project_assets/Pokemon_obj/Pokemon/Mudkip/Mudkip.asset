@@ -17,7 +17,7 @@ MonoBehaviour:
   pokemonID: 0
   personalityValue: 0
   gender: 0
-  genderRatio: 87,5/12,5
+  ratioFemale: 12.5
   nature: {fileID: 0}
   hasGender: 1
   hp: 0
@@ -68,7 +68,9 @@ MonoBehaviour:
   statusEffect: 0
   buffAndDebuffs: []
   evolutionLineLevels: 100000001e000000
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0
   requiresEvolutionStone: 0
   evolutionStoneName: None
   abilities:
@@ -76,10 +78,18 @@ MonoBehaviour:
   splitEvolution: 0
   requiresFriendshipEvolution: 0
   learnSet:
-  - normal/tackle01
-  - water/bubble03
-  - ground/mud slap05
-  - water/water gun10
+  - moveType: 0
+    moveName: Tackle
+    requiredLevel: 1
+  - moveType: 2
+    moveName: Bubble
+    requiredLevel: 3
+  - moveType: 8
+    moveName: Mud Slap
+    requiredLevel: 5
+  - moveType: 2
+    moveName: Water Gun
+    requiredLevel: 10
   moveSet: []
   ability: {fileID: 11400000, guid: 2d3aa5da1ed7a734cb1c25d192217a25, type: 2}
   evolutions:
@@ -93,7 +103,6 @@ MonoBehaviour:
   healthPhase: 0
   abilityName: 
   natureName: 
-  evolutionData: []
-  typeData: []
+  evolutionNames: []
+  typeNames: []
   moveData: []
-  movePpData: []

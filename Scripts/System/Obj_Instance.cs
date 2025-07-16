@@ -40,7 +40,7 @@ public static class Obj_Instance
         newPokemon.pokemonID  = pkm.pokemonID ;
         newPokemon.personalityValue = pkm.personalityValue;
         newPokemon.gender = pkm.gender;
-        newPokemon.genderRatio = pkm.genderRatio;
+        newPokemon.ratioFemale = pkm.ratioFemale;
         newPokemon.nature = pkm.nature;
         newPokemon.hasGender = pkm.hasGender;
         newPokemon.hp = pkm.hp;
@@ -88,6 +88,9 @@ public static class Obj_Instance
         newPokemon.statusEffect = pkm.statusEffect;
         newPokemon.buffAndDebuffs = pkm.buffAndDebuffs;
         newPokemon.evolutionLineLevels = pkm.evolutionLineLevels;
+        newPokemon.friendshipEvolutionRequirement = pkm.friendshipEvolutionRequirement;
+        newPokemon.requiresEvolutionStone = pkm.requiresEvolutionStone;
+        newPokemon.evolutionStoneName = pkm.evolutionStoneName;
         newPokemon.abilities = pkm.abilities;
         newPokemon.splitEvolution = pkm.splitEvolution;
         newPokemon.learnSet = pkm.learnSet;
