@@ -26,7 +26,7 @@ public class Encounter_handler : MonoBehaviour
         currentArea = area;
         encounterTriggered = true;
         encounterChance = 2;
-        for (int i = 0; i < currentArea.availablePokemon.Length; i++)
+        for (int i = 0; i < currentArea.availableEncounters.Length; i++)
         {
             if (EncounteredPokemon(i)) break;
         }
@@ -34,12 +34,12 @@ public class Encounter_handler : MonoBehaviour
     bool EncounteredPokemon(int currentIndex)
     {
         var random = Utility.RandomRange(1,101);
-        var chance = currentArea.availablePokemon[currentIndex].encounterChance;
+        var chance = currentArea.availableEncounters[currentIndex].encounterChance;
 
-        if ( currentIndex == currentArea.availablePokemon.Length - 1 /*pick last option if none in range*/ 
+        if ( currentIndex == currentArea.availableEncounters.Length - 1 /*pick last option if none in range*/ 
              || random < chance )//pick option within chance range
         {
-            CreateWildPokemon(currentArea.availablePokemon[currentIndex].pokemonName);
+            CreateWildPokemon(currentArea.availableEncounters[currentIndex].pokemon);
             return true;
         }
         return false;
@@ -65,20 +65,15 @@ public class Encounter_handler : MonoBehaviour
             if (EncounteredPokemon(i)) break;
         }
     }
-    void CreateWildPokemon(string pokemonName)
-    {
-        wildPokemon = Obj_Instance.CreatePokemon(Resources.Load<Pokemon>("Pokemon_project_assets/Pokemon_obj/Pokemon/" + pokemonName.ToLower()+"/"+ pokemonName.ToLower()));
-        if (wildPokemon != null)
-        {
-            PokemonOperations.SetPokemonTraits(wildPokemon);
-            var randomLevel = Utility.RandomRange(currentArea.minimumLevelOfPokemon, currentArea.maximumLevelOfPokemon+1);
-            var expForRequiredLevel = PokemonOperations.CalculateExpForNextLevel(randomLevel - 1, wildPokemon.expGroup)+1;
-            wildPokemon.ReceiveExperience(expForRequiredLevel);
-            wildPokemon.hp=wildPokemon.maxHp;
-           Battle_handler.Instance.StartWildBattle(wildPokemon);
-        }
-        else
-            Debug.Log("tried encounter but didnt find "+pokemonName);
+    void CreateWildPokemon(Pokemon pokemonCopy)
+    { 
+        wildPokemon = Obj_Instance.CreatePokemon(pokemonCopy);
+        PokemonOperations.SetPokemonTraits(wildPokemon);
+        var randomLevel = Utility.RandomRange(currentArea.minimumLevelOfPokemon, currentArea.maximumLevelOfPokemon+1);
+        var expForRequiredLevel = PokemonOperations.CalculateExpForNextLevel(randomLevel - 1, wildPokemon.expGroup)+1;
+        wildPokemon.ReceiveExperience(expForRequiredLevel); 
+        wildPokemon.hp=wildPokemon.maxHp;
+       Battle_handler.Instance.StartWildBattle(wildPokemon);
     }
     void TurnOffTrigger()
     {

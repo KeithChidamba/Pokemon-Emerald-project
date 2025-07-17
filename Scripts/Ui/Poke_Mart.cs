@@ -10,10 +10,10 @@ using UnityEngine.UI;
 public class Poke_Mart : MonoBehaviour
 {
     public List<Item> currentStoreItems;
-    public List<Item> allItems;
     public bool viewingStore;
     public Store_Item_ui[] storeItemsUI;
     public int numItems = 0;
+    public int numItemsForView;
     public int selectedItemIndex = 0;
     public int selectedItemQuantity = 0;
     public int topIndex = 0;
@@ -39,28 +39,15 @@ public class Poke_Mart : MonoBehaviour
     private void Start()
     {
         Options_manager.Instance.OnInteractionTriggered += ViewStore;
-        if (Application.platform == RuntimePlatform.WebGLPlayer)
-            Save_manager.Instance.OnVirtualFileSystemLoaded += InitialiseItems;
-        else
-            InitialiseItems();
+        // if (Application.platform == RuntimePlatform.WebGLPlayer)
+        //     Save_manager.Instance.OnVirtualFileSystemLoaded += InitialiseItems;
+        // else
+        //     InitialiseItems();
     }
-
-    private void InitialiseItems()
-    {        
-        Save_manager.Instance.OnVirtualFileSystemLoaded -= InitialiseItems;
-        allItems = Resources.LoadAll<Item>("Pokemon_project_assets/Items/Mart_Items").ToList();
-    }
-    
     private IEnumerator SelectItemsForStore()
     {
         currentStoreItems.Clear();
-        List<Item> validItems=new();
-        foreach (var item in allItems)
-        {
-            if (currentMartData.availableItems.Contains(item.itemName))
-                validItems.Add(item);
-        }
-        var orderedItems = validItems.OrderBy(item => item.price);
+        var orderedItems = currentMartData.availableItems.OrderBy(item => item.price);
         var itemProgress = 0;
         foreach (var group in orderedItems.GroupBy(item => item.itemType).ToList())
         {
@@ -70,7 +57,7 @@ public class Poke_Mart : MonoBehaviour
                 itemProgress++;
             }
         }
-        yield return new WaitUntil(() => itemProgress == validItems.Count());
+        yield return new WaitUntil(() => itemProgress == currentMartData.availableItems.Count());
         _itemsLoaded = true;
     }
     private void Update()
@@ -96,6 +83,10 @@ public class Poke_Mart : MonoBehaviour
             ReloadItems();
             topIndex++;
         }
+
+        if (numItems == numItemsForView && selectedItemIndex == numItems-1)
+            return;
+        
         selectedItemIndex++;
         selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 6);
         SelectItem();
@@ -172,8 +163,6 @@ public class Poke_Mart : MonoBehaviour
     }
     private IEnumerator InitializeStoreData()
     {
-        currentMartData.SetDataValues();
-        yield return new WaitUntil(()=>currentMartData.itemList.Count == currentMartData.availableItems.Count);
         _itemsLoaded = false;
         StartCoroutine(SelectItemsForStore());
         yield return new WaitUntil(()=>_itemsLoaded);
@@ -186,7 +175,7 @@ public class Poke_Mart : MonoBehaviour
         topIndex = 0;
         numItems = currentStoreItems.Count;
         //if less than amount of ui elements, load that number, otherwise just load the first seven
-        var numItemsForView = (numItems < 8) ? numItems : 7; 
+        numItemsForView = (numItems < 8) ? numItems : 7; 
         for (int i = 0; i < numItemsForView; i++)
         {
             storeItemsUI[i].item = currentStoreItems[i];

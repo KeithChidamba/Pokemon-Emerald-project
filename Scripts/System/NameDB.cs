@@ -1,42 +1,6 @@
 using System.Collections.Generic;
 public static class NameDB
 {
-    public enum ItemName
-    {
-        Antidote,
-        Awakening,
-        BurnHeal,
-        Calcium,
-        Carbos,
-        DireHit,
-        EnergyPowder,
-        EnergyRoot,
-        FullHeal,
-        GreatBall,
-        GuardSpec,
-        HealPowder,
-        HpUp,
-        HyperPotion,
-        IceHeal,
-        Iron,
-        MaxRevive,
-        ParalyzHeal,
-        Pokeball,
-        Potion,
-        PpMax,
-        PpUp,
-        Protein,
-        RevivalHerb,
-        Revive,
-        SuperPotion,
-        XAccuracy,
-        XAttack,
-        XDefense,
-        XSpecialAttack,
-        XSpecialDefense,
-        XSpeed,
-        Zinc
-    }
     public enum MoveName
     {
         Tackle,
@@ -77,48 +41,6 @@ public static class NameDB
     {
         return _moveNames[name];
     }
-
-
-    public static string GetItemName(ItemName name)
-    {
-        return _itemNames[name];
-    }
-    public static Dictionary<ItemName, string> _itemNames = new()
-    {
-        { ItemName.Antidote, "Antidote" },
-        { ItemName.Awakening, "Awakening" },
-        { ItemName.BurnHeal, "Burn Heal" },
-        { ItemName.Calcium, "Calcium" },
-        { ItemName.Carbos, "Carbos" },
-        { ItemName.DireHit, "Dire Hit" },
-        { ItemName.EnergyPowder, "Energy Powder" },
-        { ItemName.EnergyRoot, "Energy Root" },
-        { ItemName.FullHeal, "Full Heal" },
-        { ItemName.GreatBall, "Great Ball" },
-        { ItemName.GuardSpec, "Guard Spec" },
-        { ItemName.HealPowder, "Heal Powder" },
-        { ItemName.HpUp, "HP Up" },
-        { ItemName.HyperPotion, "Hyper Potion" },
-        { ItemName.IceHeal, "Ice Heal" },
-        { ItemName.Iron, "Iron" },
-        { ItemName.MaxRevive, "Max Revive" },
-        { ItemName.ParalyzHeal, "Paralyz Heal" },
-        { ItemName.Pokeball, "Pokeball" },
-        { ItemName.Potion, "Potion" },
-        { ItemName.PpMax, "PP Max" },
-        { ItemName.PpUp, "PP Up" },
-        { ItemName.Protein, "Protein" },
-        { ItemName.RevivalHerb, "Revival Herb" },
-        { ItemName.Revive, "Revive" },
-        { ItemName.SuperPotion, "Super Potion" },
-        { ItemName.XAccuracy, "X Accuracy" },
-        { ItemName.XAttack, "X Attack" },
-        { ItemName.XDefense, "X Defense" },
-        { ItemName.XSpecialAttack, "X Special Attack" },
-        { ItemName.XSpecialDefense, "X Special Defense" },
-        { ItemName.XSpeed, "X Speed" },
-        { ItemName.Zinc, "Zinc" }
-    };
     public static Dictionary<MoveName, string> _moveNames = new()
     {
         { MoveName.Tackle, "Tackle" },

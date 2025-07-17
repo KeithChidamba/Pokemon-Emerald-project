@@ -322,6 +322,8 @@ public class Move_handler:MonoBehaviour
         if (!_currentTurn.move.isBuffOrDebuff) { processingOrder = false;return;}
         if (Utility.RandomRange(1, 101) > _currentTurn.move.buffOrDebuffChance)
         { processingOrder = false; return;}
+        //allows the display of buff message, must be here in case silent buff happened
+        BattleOperations.CanDisplayDialougue = true; 
         var buffData = _currentTurn.move.buffOrDebuffData;
         if (!_currentTurn.move.isSelfTargeted)
         {//affecting enemy

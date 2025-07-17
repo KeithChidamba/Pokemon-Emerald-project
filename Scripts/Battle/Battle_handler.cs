@@ -444,7 +444,10 @@ public class Battle_handler : MonoBehaviour
         yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         if (runningAway)
+        {
+            runningAway = false;
             Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " ran away");
+        }
         else
         {
             var baseMoneyPayout = 0;
@@ -572,6 +575,7 @@ public class Battle_handler : MonoBehaviour
             {
                 Dialogue_handler.Instance.DisplayBattleInfo("Can't run away from trainer battle");
                 yield return new WaitForSeconds(1.5f);
+                runningAway = false;
                 Turn_Based_Combat.Instance.NextTurn();
             }
             else
@@ -589,11 +593,11 @@ public class Battle_handler : MonoBehaviour
                 {
                     Dialogue_handler.Instance.DisplayBattleInfo("Can't run away");
                     yield return new WaitForSeconds(1.5f);
+                    runningAway = false;
                     Turn_Based_Combat.Instance.NextTurn();
                 }
             }
         }
-        runningAway = false;
         displayingInfo = false;
     }
 }

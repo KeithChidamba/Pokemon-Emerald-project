@@ -455,7 +455,10 @@ public class InputStateHandler : MonoBehaviour
     {
         OnInputUp += Poke_Mart.Instance.NavigateUp;
         OnInputDown += Poke_Mart.Instance.NavigateDown;
-
+        if(Poke_Mart.Instance.numItemsForView==Poke_Mart.Instance.numItems)
+        {//prevent selecting null item selectables
+            currentState.maxSelectionIndex = Poke_Mart.Instance.numItems-1;
+        }
         currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToBuy);
     }
 

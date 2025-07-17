@@ -81,6 +81,8 @@ public class Bag : MonoBehaviour
             return;
         }
         InputStateHandler.Instance.ResetRelevantUi(new[] { InputStateHandler.StateName.PlayerBagItemUsage });
+        selectedItemIndex = 0;
+        SelectItem();
         RemoveItem(item);
     }
     public void ChangeQuantity(int value)

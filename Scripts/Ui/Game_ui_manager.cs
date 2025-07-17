@@ -257,18 +257,14 @@ public class Game_ui_manager : MonoBehaviour
             , true, true,ClosePokemonStorage,ClosePokemonStorage));
         pokemon_storage.Instance.OpenPC();
     }
-
     public void ViewPokeMart()
     {
         ManageScreens(1);
         _movementDelaysAfterExit.Add(-1f);
         ActivateUiElement(Poke_Mart.Instance.storeUI,true);
- 
         var martSelectables = new List<SelectableUI>();
-        
         foreach(var item in Poke_Mart.Instance.storeItemsUI) 
             martSelectables.Add( new(item.gameObject,null,true) );
-        
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.MartItemNavigation
             ,new[] { InputStateHandler.StateGroup.PokeMart },true,
             Poke_Mart.Instance.storeUI, InputStateHandler.Directional.Vertical, martSelectables,

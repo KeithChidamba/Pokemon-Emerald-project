@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: Forest Items
   m_EditorClassIdentifier: 
   location: Forest
+  availableItems:
+  - {fileID: 11400000, guid: 1b316d4fb5fa016ff98dcf899f6f943d, type: 2}
+  - {fileID: 11400000, guid: 36789e0736a832f86899315df2104325, type: 2}
+  - {fileID: 11400000, guid: 463bf6744281013bca00b4224ce60637, type: 2}
+  - {fileID: 11400000, guid: 9a9afdabef3eff9c4b3323a87873fc70, type: 2}
   itemList: 06000000070000000b0000001700000003000000

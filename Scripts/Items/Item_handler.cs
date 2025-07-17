@@ -369,6 +369,7 @@ public class Item_handler : MonoBehaviour
     
     IEnumerator TryToCatchPokemon(Item pokeball)
     {
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
         var isCaught = false;
         var wildPokemon = Wild_pkm.Instance.participant.pokemon;//pokemon only caught in wild
         Dialogue_handler.Instance.DisplayBattleInfo("Trying to catch "+wildPokemon.pokemonName+" .....");
@@ -395,7 +396,7 @@ public class Item_handler : MonoBehaviour
         }else
         {
             Dialogue_handler.Instance.DisplayBattleInfo(wildPokemon.pokemonName+" escaped the pokeball");
-            yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
+            yield return new WaitForSeconds(1.5f);
             SkipTurn();
         }
         ResetItemUsage();

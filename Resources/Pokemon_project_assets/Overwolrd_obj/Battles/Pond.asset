@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   biomeName: Forest
   location: Overworld
-  availablePokemon:
-  - pokemonName: Mudkip
+  availableEncounters:
+  - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
     encounterChance: 100
   minimumLevelOfPokemon: 5
   maximumLevelOfPokemon: 10

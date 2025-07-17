@@ -4,6 +4,6 @@ using UnityEngine;
 [System.Serializable]
 public struct EncounterPokemonData
 {
-    public string pokemonName;
+    public Pokemon pokemon;
     public int encounterChance;
 }
