@@ -35,12 +35,17 @@ public class Pokemon_party : MonoBehaviour
     }
     public List<Pokemon> GetLivingPokemon()
     {
-        List<Pokemon> alivePokemon = new();
+        List<Pokemon> alivePokemon = new(GetValidPokemon());
+        alivePokemon.RemoveAll(p => p.hp <= 0);
+        return alivePokemon;
+    }
+    public  List<Pokemon> GetValidPokemon()
+    {
+        List<Pokemon> validPokemon = new();
         for (int i = 0; i < 6; i++)
             if (party[i] != null)
-                if(party[i].hp > 0)
-                    alivePokemon.Add(party[i]);
-        return alivePokemon;
+                validPokemon.Add(party[i]);
+        return validPokemon;
     }
     private bool IsValidSwap(int memberPosition)
     {

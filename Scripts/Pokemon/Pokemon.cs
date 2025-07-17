@@ -98,7 +98,7 @@ public class Pokemon : ScriptableObject
 
         foreach (var move in moveSet)
         {
-            moveData.Add(new MoveSaveData(move.moveName, move.type.typeName.ToLower()
+            moveData.Add(new MoveSaveData(move.moveName.ToLower(), move.type.typeName.ToLower()
                 , move.powerpoints, move.maxPowerpoints));
         }
         foreach (var type in types) typeNames.Add(type.typeName.ToLower());

@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 0.0,
     "nature": {
-        "instanceID": 25948
+        "instanceID": 25992
     },
     "hasGender": true,
     "hp": 21.0,
@@ -57,7 +57,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25902
+            "instanceID": 25946
         }
     ],
     "statusEffect": 0,
@@ -101,24 +101,24 @@
     ],
     "moveSet": [
         {
-            "instanceID": -13626
+            "instanceID": -13136
         },
         {
-            "instanceID": -13628
+            "instanceID": -13138
         },
         {
-            "instanceID": -13630
+            "instanceID": -13140
         }
     ],
     "ability": {
-        "instanceID": 25120
+        "instanceID": 25164
     },
     "evolutions": [
         {
-            "instanceID": 26266
+            "instanceID": 26310
         },
         {
-            "instanceID": 25088
+            "instanceID": 25132
         }
     ],
     "heldItem": {
@@ -126,10 +126,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31826
+        "instanceID": 31870
     },
     "backPicture": {
-        "instanceID": 31908
+        "instanceID": 31952
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,
@@ -144,19 +144,19 @@
     ],
     "moveData": [
         {
-            "moveName": "Scratch",
+            "moveName": "scratch",
             "powerPoints": 25,
             "maxPowerPoints": 25,
             "moveType": "normal"
         },
         {
-            "moveName": "Ember",
+            "moveName": "ember",
             "powerPoints": 20,
             "maxPowerPoints": 20,
             "moveType": "fire"
         },
         {
-            "moveName": "Double kick",
+            "moveName": "double kick",
             "powerPoints": 17,
             "maxPowerPoints": 20,
             "moveType": "fighting"

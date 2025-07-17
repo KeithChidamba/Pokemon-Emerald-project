@@ -10,6 +10,13 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField]private bool _abilityTriggered;
     [SerializeField]private string _currentAbility;
     private readonly Dictionary<string, Action> _abilityMethods = new ();
+    private readonly Dictionary<string,string> _damageBuffCombinations = new()
+    {
+        {"blaze", "Fire"},
+        {"torrent", "Water"},
+        {"overgrow", "Grass"},
+        {"swarm", "Bug"}
+    };
     private void Start()
     {
         _participant =  GetComponent<Battle_Participant>();
@@ -221,26 +228,20 @@ public class AbilityHandler : MonoBehaviour
             if (victim.pokemon.statusEffect == PokemonOperations.StatusEffect.Paralysis)
                 return damage*2;
         }
-        var damageBuffCombinations = new List<(string abilityName, string typeName)>
+
+        if (_damageBuffCombinations.TryGetValue(_currentAbility, out var typeName))
         {
-            new ("blaze","Fire"),new("torrent","Water"),new("overgrow","Grass"),new("swarm","Bug")
-        };
-        foreach (var combo in damageBuffCombinations)
-        {
-            var buff = GetAbilityDamageBuff(move, combo.abilityName, combo.typeName);
-            if (buff > 1 || buff< 1)
-            {
-                return damage * buff;
-            }
+            var buff = GetAbilityDamageBuff(move, typeName);
+            if (buff != 1f) return damage * buff;
         }
         return damage;
     }
 
-    private float GetAbilityDamageBuff(Move move, string abilityName, string typeName)
+    private float GetAbilityDamageBuff(Move move, string typeName)
     {
-        if (_currentAbility == abilityName && _participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
+        if (_participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
             if (move.type.typeName == typeName)
                 return 1.5f;
-        return 1;
+        return 1f;
     }
 }

@@ -236,8 +236,8 @@ public class Game_ui_manager : MonoBehaviour
         Pokemon_Details.Instance.LoadDetails(selectedPokemon,pokemonToView);
     }
     public void ViewPartyPokemonDetails(Pokemon selectedPokemon)
-    { 
-        ViewOtherPokemonDetails(selectedPokemon,Pokemon_party.Instance.party.ToList());
+    {
+        ViewOtherPokemonDetails(selectedPokemon,Pokemon_party.Instance.GetValidPokemon());
     }
     public void ViewPokemonStorage()
     {

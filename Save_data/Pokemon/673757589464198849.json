@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 26264
+        "instanceID": 26308
     },
     "hasGender": true,
     "hp": 13.0,
@@ -57,7 +57,7 @@
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25790
+            "instanceID": 25834
         }
     ],
     "statusEffect": 0,
@@ -101,18 +101,18 @@
     ],
     "moveSet": [
         {
-            "instanceID": -13634
+            "instanceID": -13144
         }
     ],
     "ability": {
-        "instanceID": 26034
+        "instanceID": 26078
     },
     "evolutions": [
         {
-            "instanceID": 26206
+            "instanceID": 26250
         },
         {
-            "instanceID": 25094
+            "instanceID": 25138
         }
     ],
     "heldItem": {
@@ -120,10 +120,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31906
+        "instanceID": 31950
     },
     "backPicture": {
-        "instanceID": 31916
+        "instanceID": 31960
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,
@@ -138,7 +138,7 @@
     ],
     "moveData": [
         {
-            "moveName": "Pound",
+            "moveName": "pound",
             "powerPoints": 25,
             "maxPowerPoints": 25,
             "moveType": "normal"

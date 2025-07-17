@@ -496,7 +496,7 @@ public class InputStateHandler : MonoBehaviour
         Battle_handler.Instance.battleParticipants[Battle_handler.Instance.currentEnemyIndex]
             .pokemonImage.color = Color.HSVToRGB(0,0,100);//reset color if cancelled selection
         currentState.currentSelectionIndex = 0;
-        _currentNumBoxElements = 4;
+        _currentNumBoxElements = currentState.maxSelectionIndex+1;
         _currentBoxCapacity = 4;
         _numBoxColumns = 2;
         SetRowRemainder();

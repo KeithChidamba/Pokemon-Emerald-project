@@ -83,7 +83,7 @@ public static class NameDB
     {
         return _itemNames[name];
     }
-    private static Dictionary<ItemName, string> _itemNames = new()
+    public static Dictionary<ItemName, string> _itemNames = new()
     {
         { ItemName.Antidote, "Antidote" },
         { ItemName.Awakening, "Awakening" },
@@ -119,7 +119,7 @@ public static class NameDB
         { ItemName.XSpeed, "X Speed" },
         { ItemName.Zinc, "Zinc" }
     };
-    private static Dictionary<MoveName, string> _moveNames = new()
+    public static Dictionary<MoveName, string> _moveNames = new()
     {
         { MoveName.Tackle, "Tackle" },
         { MoveName.Pound, "Pound" },

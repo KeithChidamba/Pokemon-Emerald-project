@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: thunder Shock
+  m_Name: thundershock
   m_EditorClassIdentifier: 
-  moveName: Thunder shock
+  moveName: Thundershock
   moveDamage: 30
   moveAccuracy: 95
   type: {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
@@ -29,7 +29,10 @@ MonoBehaviour:
   basePowerpoints: 20
   maxPowerpoints: 20
   statusEffect: 1
-  buffOrDebuffName: None
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 0
+    amount: 0
   statusChance: 15
   buffOrDebuffChance: 0
   description: a weak electric shock that may paralyse the foe

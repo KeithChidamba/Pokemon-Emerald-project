@@ -1153,7 +1153,6 @@ MonoBehaviour:
   singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 1656265309}
-  previousMove: 
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   canEscape: 1
@@ -6084,7 +6083,6 @@ MonoBehaviour:
   singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 1780447230}
-  previousMove: 
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   canEscape: 1
@@ -67234,7 +67232,6 @@ MonoBehaviour:
   doubleBattleUI:
   - {fileID: 1940039930}
   participantUI: {fileID: 443644594}
-  previousMove: 
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   canEscape: 1
@@ -92755,7 +92752,6 @@ MonoBehaviour:
   singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 173013067}
-  previousMove: 
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   canEscape: 1
