@@ -2,13 +2,13 @@
     "playerName": "kevlar",
     "trainerID": 2393,
     "secretID": 43765,
-    "playerMoney": 300000,
+    "playerMoney": 296000,
     "numBadges": 0,
     "playerPosition": {
-        "x": 16.3799991607666,
-        "y": 0.5789999961853027,
+        "x": -1.888000249862671,
+        "y": -0.08467540889978409,
         "z": 0.0
     },
-    "location": "Poke Mart Forest",
+    "location": "Overworld",
     "equippedItemName": "Bike"
 }

@@ -75,9 +75,13 @@ public class Bag : MonoBehaviour
     }
     public void CheckItemQuantity(Item item)
     {
-        if (item.quantity > 0) return;
-        bagItems.Remove(item);
-        numItems--;
+        if (item.quantity > 0)
+        {
+            bagItemsUI[bagItems.IndexOf(item)].LoadItemUI();
+            return;
+        }
+        InputStateHandler.Instance.ResetRelevantUi(new[] { InputStateHandler.StateName.PlayerBagItemUsage });
+        RemoveItem(item);
     }
     public void ChangeQuantity(int value)
     {
@@ -160,11 +164,12 @@ public class Bag : MonoBehaviour
     }
     public void RemoveItem()
     {
-        bagItems.Remove(bagItems[topIndex + selectedItemIndex]);
-        foreach (var itemUI in bagItemsUI)
-            itemUI.gameObject.SetActive(false);
-        bagItemsUI[0].ResetUI();
-        DisplayItemAction(false);
+        RemoveItem(bagItems[topIndex + selectedItemIndex]);
+    }
+    private void RemoveItem(Item item)
+    {
+        bagItems.Remove(item);
+        ClearBagUI();
         ViewBag();
     }
     public void TakeItem(int memberIndex)
@@ -242,14 +247,19 @@ public class Bag : MonoBehaviour
             Dialogue_handler.Instance.DisplayDetails("Bag is full");
     }
 
+    void ClearBagUI()
+    {
+        foreach (var itemUI in bagItemsUI)
+            itemUI.gameObject.SetActive(false);
+        bagItemsUI[0].ResetUI();
+        DisplayItemAction(false);
+    }
     public void CloseBag()
     {
         selectedItemIndex = 0;
         sellingItemUI.SetActive(false);
         sellingItems = false;
-        for (int i = 0; i < 10; i++)
-            bagItemsUI[i].gameObject.SetActive(false);
-        bagItemsUI[0].ResetUI();
+        ClearBagUI();
     }
     public void ViewBag()
     {
@@ -272,10 +282,10 @@ public class Bag : MonoBehaviour
         selectedItemIndex = 0;
         SelectItem();
     }
-    void DisplayItemAction(bool dislpay)
+    void DisplayItemAction(bool display)
     {
         foreach (var obj in itemUIActions)
-            obj.SetActive(dislpay);
+            obj.SetActive(display);
     }
     void ReloadItemUI()
     {

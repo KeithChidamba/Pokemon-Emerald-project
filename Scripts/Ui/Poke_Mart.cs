@@ -152,8 +152,14 @@ public class Poke_Mart : MonoBehaviour
     }
     private void ViewStore(Overworld_interactable clerkInteractable)
     {
-        if (clerkInteractable.interactionType != "Clerk") return; //Mart Location
-       
+        if (clerkInteractable.interactionType != "Clerk") return;
+        if(currentMartData!=null){
+            if (currentMartData.location == clerkInteractable.location)
+            {//basically caching
+                SetUpItemView();
+                return;
+            }
+        }
         foreach (var data in Resources.LoadAll<PokeMartData>("Pokemon_project_assets/Overwolrd_obj/Poke_Mart_Data"))
         {
             if (data.location == clerkInteractable.location)
@@ -171,6 +177,10 @@ public class Poke_Mart : MonoBehaviour
         _itemsLoaded = false;
         StartCoroutine(SelectItemsForStore());
         yield return new WaitUntil(()=>_itemsLoaded);
+        SetUpItemView();
+    }
+    private void SetUpItemView()
+    {
         viewingStore = true;
         playerMoneyText.text = Game_Load.Instance.playerData.playerMoney.ToString();
         topIndex = 0;

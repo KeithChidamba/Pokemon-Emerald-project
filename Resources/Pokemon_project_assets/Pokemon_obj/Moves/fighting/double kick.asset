@@ -21,15 +21,18 @@ MonoBehaviour:
   hasStatus: 0
   hasSpecialEffect: 1
   canCauseFlinch: 0
-  isConsecutive: 1
+  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
   priority: 0
   powerpoints: 20
   basePowerpoints: 20
   maxPowerpoints: 20
-  statusEffect: None
-  buffOrDebuffName: None
+  statusEffect: 0
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 0
+    amount: 0
   statusChance: 0
   buffOrDebuffChance: 0
   description: A strong succession of kicks

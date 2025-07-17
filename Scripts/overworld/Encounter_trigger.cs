@@ -19,12 +19,11 @@ public class Encounter_trigger : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.gameObject.CompareTag("Player") || _triggeredEncounter) return;
-        var player = collision.GetComponentInParent<Player_movement>();
-        if (player.usingBike)
+        if (Player_movement.Instance.usingBike)
             _triggerCheckCollider.isTrigger = false;
         else
         {
-            if (player.runningInput)
+            if (Player_movement.Instance.runningInput)
                 handler.encounterChance = 5;
             var randomNumber = Random.Range(1, 11);
             if (randomNumber < handler.encounterChance & !handler.encounterTriggered)
@@ -46,8 +45,7 @@ public class Encounter_trigger : MonoBehaviour
     private void CheckCollision(Collision2D collision)
     {
         if (!collision.gameObject.CompareTag("Player")) return;
-        var player = collision.transform.GetComponentInParent<Player_movement>();
-        if (!player.usingBike)
+        if (!Player_movement.Instance.usingBike)
             gameObject.GetComponent<Collider2D>().isTrigger = true;
     }
     private void OnCollisionExit2D(Collision2D collision)

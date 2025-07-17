@@ -389,8 +389,9 @@ public class InputStateHandler : MonoBehaviour
             (int)math.ceil((float)_currentNumBoxElements/_numBoxColumns) - 1 : rowRemainder-1;
         
         boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
-        
-        currentState.currentSelectionIndex = Mathf.Clamp(GetCurrentBoxPosition(),0,_currentNumBoxElements);
+        currentState.currentSelectionIndex = _currentNumBoxElements > currentState.maxSelectionIndex?
+            Mathf.Clamp(GetCurrentBoxPosition(),0,currentState.maxSelectionIndex) 
+            :Mathf.Clamp(GetCurrentBoxPosition(),0,_currentNumBoxElements);
         UpdateSelectorUi();
     }
     void SetupBoxNavigation()

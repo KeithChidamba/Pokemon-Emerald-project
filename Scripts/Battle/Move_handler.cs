@@ -98,10 +98,10 @@ public class Move_handler:MonoBehaviour
     {
         if (!_currentTurn.move.hasSpecialEffect) return;
         _moveDelay = true;
-        if(!_currentTurn.move.isConsecutive)
+        if (!_currentTurn.move.isConsecutive)
             Invoke(_currentTurn.move.moveName.Replace(" ", "").ToLower(), 0f);
         else
-            StartCoroutine(ExecuteConsecutiveMove());
+            ExecuteRandomConsecutiveMove();
     }
     private bool IsInvincible(Move move,Battle_Participant currentVictim)
     {
@@ -412,7 +412,6 @@ public class Move_handler:MonoBehaviour
                 return math.trunc(unmodifiedStatValue * _statLevels[buff.stage+6]); 
         }
     }
-
     List<Battle_Participant> TargetAllExceptSelf()
     {
         var allParticipants = Battle_handler.Instance.battleParticipants.ToList();
@@ -420,10 +419,8 @@ public class Move_handler:MonoBehaviour
         allParticipants.RemoveAll(p => p.pokemon.pokemonID == attacker.pokemon.pokemonID);
         return allParticipants;
     }
-
-    IEnumerator ExecuteConsecutiveMove()
+    IEnumerator ExecuteConsecutiveMove(int numRepetitions,bool displayMessage)
     {
-        var numRepetitions = Utility.RandomRange(1, 6);
         var numHits = 0;
         for (int i = 0; i < numRepetitions; i++)
         {
@@ -439,13 +436,18 @@ public class Move_handler:MonoBehaviour
             numHits++;
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
-        if (numHits>0)
+        if (numHits>0 && displayMessage)
         {
             DisplayEffectiveness(BattleOperations.GetTypeEffectiveness(victim, _currentTurn.move.type), victim);
             Dialogue_handler.Instance.DisplayBattleInfo("It hit (x" + numHits + ") times");
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         _moveDelay = false;
+    } 
+    private void ExecuteRandomConsecutiveMove()
+    {
+        var numRepetitions = Utility.RandomRange(1, 6);
+        StartCoroutine(ExecuteConsecutiveMove(numRepetitions,true));
     } 
     IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
     {
@@ -461,6 +463,10 @@ public class Move_handler:MonoBehaviour
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         _moveDelay = false;
 
+    }
+    void doublekick()
+    {
+        StartCoroutine(ExecuteConsecutiveMove(2,false));
     }
     void surf()
     {
