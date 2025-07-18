@@ -20,7 +20,6 @@ public class InputState
     public GameObject mainViewUI;
     public bool isParentLayer;
     public bool canExit;
-
     public InputState(
         InputStateHandler.StateName stateName,
         InputStateHandler.StateGroup[] groups,

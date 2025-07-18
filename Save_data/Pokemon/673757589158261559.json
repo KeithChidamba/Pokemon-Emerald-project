@@ -1,6 +1,6 @@
 {
     "basePokemonName": "Torchic",
-    "pokemonName": "Torchic",
+    "pokemonName": "Combusken",
     "pokemonID": 673757589158261559,
     "personalityValue": 645952311,
     "gender": 2,
@@ -9,19 +9,19 @@
         "instanceID": 25948
     },
     "hasGender": true,
-    "hp": 21.0,
-    "maxHp": 25.0,
-    "baseHp": 45.0,
-    "baseAttack": 60.0,
-    "baseDefense": 40.0,
-    "baseSpecialAttack": 70.0,
-    "baseSpecialDefense": 50.0,
-    "baseSpeed": 45.0,
-    "attack": 15.0,
-    "defense": 10.0,
-    "specialAttack": 17.0,
-    "specialDefense": 14.0,
-    "speed": 15.0,
+    "hp": 47.0,
+    "maxHp": 47.0,
+    "baseHp": 60.0,
+    "baseAttack": 85.0,
+    "baseDefense": 60.0,
+    "baseSpecialAttack": 85.0,
+    "baseSpecialDefense": 60.0,
+    "baseSpeed": 55.0,
+    "attack": 36.0,
+    "defense": 23.0,
+    "specialAttack": 36.0,
+    "specialDefense": 27.0,
+    "speed": 30.0,
     "hpIv": 0.0,
     "attackIv": 14.0,
     "defenseIv": 6.0,
@@ -33,10 +33,14 @@
     "defenseEv": 0.0,
     "specialAttackEv": 0.0,
     "specialDefenseEv": 0.0,
-    "speedEv": 1.0,
+    "speedEv": 2.0,
     "effortValues": [
         {
-            "stat": 5,
+            "stat": 1,
+            "eVAmount": 1
+        },
+        {
+            "stat": 3,
             "eVAmount": 1
         }
     ],
@@ -44,12 +48,12 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 45.0,
-    "currentLevel": 8,
-    "currentExpAmount": 242,
-    "nextLevelExpAmount": 314.0,
+    "currentLevel": 17,
+    "currentExpAmount": 2934,
+    "nextLevelExpAmount": 3120.0,
     "expGroup": 3,
-    "expYield": 65,
-    "friendshipLevel": 152,
+    "expYield": 142,
+    "friendshipLevel": 190,
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -58,6 +62,9 @@
     "types": [
         {
             "instanceID": 25902
+        },
+        {
+            "instanceID": 25638
         }
     ],
     "statusEffect": 0,
@@ -79,35 +86,20 @@
     "requiresFriendshipEvolution": false,
     "learnSet": [
         {
-            "moveType": 0,
-            "moveName": 8,
-            "requiredLevel": 1
-        },
-        {
             "moveType": 1,
-            "moveName": 18,
-            "requiredLevel": 3
-        },
-        {
-            "moveType": 6,
-            "moveName": 17,
-            "requiredLevel": 5
-        },
-        {
-            "moveType": 0,
-            "moveName": 2,
-            "requiredLevel": 7
+            "moveName": 19,
+            "requiredLevel": 18
         }
     ],
     "moveSet": [
         {
-            "instanceID": -5440
+            "instanceID": -21918
         },
         {
-            "instanceID": -5442
+            "instanceID": -21920
         },
         {
-            "instanceID": -5444
+            "instanceID": -21922
         }
     ],
     "ability": {
@@ -126,10 +118,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31826
+        "instanceID": 32006
     },
     "backPicture": {
-        "instanceID": 31908
+        "instanceID": 32008
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,
@@ -140,7 +132,8 @@
         "Blaziken"
     ],
     "typeNames": [
-        "fire"
+        "fire",
+        "fighting"
     ],
     "moveData": [
         {
@@ -157,7 +150,7 @@
         },
         {
             "moveName": "double kick",
-            "powerPoints": 17,
+            "powerPoints": 20,
             "maxPowerPoints": 20,
             "moveType": "fighting"
         }

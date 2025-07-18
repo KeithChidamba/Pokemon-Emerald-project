@@ -20,6 +20,7 @@ public class AbilityHandler : MonoBehaviour
     private void Start()
     {
         _participant =  GetComponent<Battle_Participant>();
+        Battle_handler.Instance.OnBattleEnd += ResetState;
         Turn_Based_Combat.Instance.OnNewTurn += CheckAbilityUsability;
         _abilityMethods.Add("pickup",PickUp);
         _abilityMethods.Add("blaze",Blaze);
@@ -57,7 +58,7 @@ public class AbilityHandler : MonoBehaviour
         Move_handler.Instance.OnMoveHit -= GiveStatic;
         Battle_handler.Instance.OnBattleEnd -= GiveItem;
         Move_handler.Instance.OnDamageDeal -= IncreaseDamage;
-        Move_handler.Instance.OnStatusEffectHit -= HealStatusEffect;
+        _participant.statusHandler.OnStatusCheck -= HealStatusEffect;
     }
     void PickUp()
     {
@@ -91,7 +92,6 @@ public class AbilityHandler : MonoBehaviour
     void Levitate()
     {
         if (_abilityTriggered) return;
-        Debug.Log("activated levitate");
         _participant.additionalTypeImmunity = Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/Ground");
         _abilityTriggered = true;
     }
@@ -107,12 +107,10 @@ public class AbilityHandler : MonoBehaviour
         Move_handler.Instance.OnDamageDeal += IncreaseDamage;
         _abilityTriggered = true;
     }
-
     void ShedSkin()
     {
-        HealStatusEffect(_participant,_participant.pokemon.statusEffect);//incase you already had status when entering battle
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnStatusEffectHit += HealStatusEffect;
+        _participant.statusHandler.OnStatusCheck += HealStatusEffect;
         _abilityTriggered = true;
     }
     void Static()
@@ -152,9 +150,8 @@ public class AbilityHandler : MonoBehaviour
                 enemy.canEscape = false;
         }
     }
-    void HealStatusEffect(Battle_Participant victim,PokemonOperations.StatusEffect status)
+    void HealStatusEffect()
     {
-        if (victim != _participant) return;
         if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
         if (Utility.RandomRange(1, 4) < 2)
         {
@@ -166,6 +163,7 @@ public class AbilityHandler : MonoBehaviour
             }
             _participant.pokemon.statusEffect = PokemonOperations.StatusEffect.None;
             Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
+            _participant.RefreshStatusEffectImage();
         }
     }
     void GiveItem()
@@ -223,12 +221,12 @@ public class AbilityHandler : MonoBehaviour
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {
+        if (attacker != _participant) return damage;
         if (_currentAbility == "paralysiscombo")
         {
             if (victim.pokemon.statusEffect == PokemonOperations.StatusEffect.Paralysis)
                 return damage*2;
         }
-
         if (_damageBuffCombinations.TryGetValue(_currentAbility, out var typeName))
         {
             var buff = GetAbilityDamageBuff(move, typeName);

@@ -60,11 +60,7 @@ public class Wild_pkm : MonoBehaviour
 
     private void RunAway()
     {
-        if(!participant.canEscape)
-        {
-            Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName +" is trapped");
-            return;
-        }
+        if(!participant.canEscape) return;
         Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
         Battle_handler.Instance.EndBattle(false);
         inBattle = false;

@@ -12,6 +12,7 @@ public class Participant_Status : MonoBehaviour
     private bool _healed = false;
     private int _statDropImmunityDuration = 0;
     private readonly Dictionary<PokemonOperations.StatusEffect, Action> _statusEffectMethods = new ();
+    public event Action OnStatusCheck;
     void Start()
     {
         _participant = GetComponent<Battle_Participant>();
@@ -54,6 +55,7 @@ public class Participant_Status : MonoBehaviour
     }
     public void CheckStatus()
     {
+        OnStatusCheck?.Invoke();
         if (overworld_actions.Instance.usingUI) return; 
         if (!_participant.isActive) return;
         if(_participant.pokemon.hp<=0 )return;

@@ -57,7 +57,7 @@ public class Move_handler:MonoBehaviour
     {
         var moveEffectiveness = BattleOperations.GetTypeEffectiveness(victim, _currentTurn.move.type);
         if (moveEffectiveness == 0 && !_currentTurn.move.isMultiTarget)
-            Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" is immune to it!");
+            Dialogue_handler.Instance.DisplayBattleInfo("It doesn't affect "+victim.pokemon.pokemonName);
         else
         {
             SetMoveSequence();
@@ -138,7 +138,7 @@ public class Move_handler:MonoBehaviour
                              (attackTypeValue/ move.moveDamage))/attacker.pokemon.currentLevel;
         float damageModifier = critValue*stab*randomFactor*typeEffectiveness;
         damageDealt = math.trunc(damageModifier * baseDamage * attackDefenseRatio);
-        
+
         float damageAfterBuff = OnDamageDeal?.Invoke(attacker,victim,_currentTurn.move,damageDealt) ?? damageDealt; 
         OnMoveHit?.Invoke(attacker,move);
         damageAfterBuff = AccountForVictimsBarriers(move,currentVictim,damageAfterBuff);
@@ -280,7 +280,7 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.Instance.DisplayBattleInfo($"{currentVictim.pokemon.pokemonName} {GetStatusMessage(move.statusEffect)}");
         ApplyStatusToVictim(currentVictim,move.statusEffect);
     }
-    private string GetStatusMessage(PokemonOperations.StatusEffect status)
+    public static string GetStatusMessage(PokemonOperations.StatusEffect status)
     {
          var displayMessage = status switch
             {

@@ -201,6 +201,7 @@ public class Dialogue_handler : MonoBehaviour
         if (!Options_manager.Instance.playerInBattle)
         {//fail-safe
             DisplayDetails(info);
+            canExitDialogue = true;
             return;
         }
         canExitDialogue = false;

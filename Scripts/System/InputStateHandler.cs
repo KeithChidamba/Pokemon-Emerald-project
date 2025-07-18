@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InputStateHandler : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class InputStateHandler : MonoBehaviour
     [SerializeField] private bool _currentStateLoaded;
     private bool _handlingState;
     public List<InputState> stateLayers;
+    
     public enum Directional { None, Horizontal, Vertical, OmniDirection}
 
     public enum StateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonStorageBox

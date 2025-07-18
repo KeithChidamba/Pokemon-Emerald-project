@@ -79,23 +79,18 @@ MonoBehaviour:
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 0
-    _moveName: Headbutt
     moveName: 5
     requiredLevel: 1
   - moveType: 0
-    _moveName: Tail Whip
     moveName: 3
     requiredLevel: 2
   - moveType: 0
-    _moveName: Tackle
     moveName: 0
     requiredLevel: 4
   - moveType: 2
-    _moveName: Surf
     moveName: 32
     requiredLevel: 5
   - moveType: 0
-    _moveName: Protect
     moveName: 6
     requiredLevel: 19
   moveSet: []

@@ -9,19 +9,19 @@
         "instanceID": 25932
     },
     "hasGender": true,
-    "hp": 11.0,
-    "maxHp": 11.0,
+    "hp": 34.0,
+    "maxHp": 34.0,
     "baseHp": 35.0,
     "baseAttack": 55.0,
     "baseDefense": 40.0,
     "baseSpecialAttack": 50.0,
     "baseSpecialDefense": 50.0,
     "baseSpeed": 90.0,
-    "attack": 6.0,
-    "defense": 6.0,
-    "specialAttack": 5.0,
-    "specialDefense": 6.0,
-    "speed": 6.0,
+    "attack": 20.0,
+    "defense": 18.0,
+    "specialAttack": 18.0,
+    "specialDefense": 21.0,
+    "speed": 30.0,
     "hpIv": 8.0,
     "attackIv": 0.0,
     "defenseIv": 6.0,
@@ -44,12 +44,12 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 190.0,
-    "currentLevel": 1,
-    "currentExpAmount": 0,
-    "nextLevelExpAmount": 1.0,
+    "currentLevel": 14,
+    "currentExpAmount": 2636,
+    "nextLevelExpAmount": 2744.0,
     "expGroup": 2,
     "expYield": 82,
-    "friendshipLevel": 4,
+    "friendshipLevel": 49,
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -98,7 +98,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -5456
+            "instanceID": -21930
+        },
+        {
+            "instanceID": -21932
+        },
+        {
+            "instanceID": -21934
+        },
+        {
+            "instanceID": -21936
         }
     ],
     "ability": {
@@ -135,6 +144,24 @@
             "powerPoints": 20,
             "maxPowerPoints": 20,
             "moveType": "electric"
+        },
+        {
+            "moveName": "thunder wave",
+            "powerPoints": 20,
+            "maxPowerPoints": 20,
+            "moveType": "electric"
+        },
+        {
+            "moveName": "quick attack",
+            "powerPoints": 25,
+            "maxPowerPoints": 25,
+            "moveType": "normal"
+        },
+        {
+            "moveName": "tail whip",
+            "powerPoints": 25,
+            "maxPowerPoints": 25,
+            "moveType": "normal"
         }
     ]
 }

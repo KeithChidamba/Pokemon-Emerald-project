@@ -1,6 +1,6 @@
 {
     "basePokemonName": "Trapinch",
-    "pokemonName": "Trapinch",
+    "pokemonName": "Vibrava",
     "pokemonID": 673757589116259256,
     "personalityValue": 603950008,
     "gender": 2,
@@ -9,19 +9,19 @@
         "instanceID": 25932
     },
     "hasGender": true,
-    "hp": 14.0,
-    "maxHp": 14.0,
-    "baseHp": 45.0,
-    "baseAttack": 100.0,
-    "baseDefense": 45.0,
-    "baseSpecialAttack": 45.0,
-    "baseSpecialDefense": 45.0,
-    "baseSpeed": 10.0,
-    "attack": 9.0,
-    "defense": 7.0,
-    "specialAttack": 6.0,
-    "specialDefense": 7.0,
-    "speed": 5.0,
+    "hp": 57.0,
+    "maxHp": 57.0,
+    "baseHp": 50.0,
+    "baseAttack": 70.0,
+    "baseDefense": 50.0,
+    "baseSpecialAttack": 50.0,
+    "baseSpecialDefense": 50.0,
+    "baseSpeed": 70.0,
+    "attack": 40.0,
+    "defense": 33.0,
+    "specialAttack": 24.0,
+    "specialDefense": 28.0,
+    "speed": 35.0,
     "hpIv": 28.0,
     "attackIv": 29.0,
     "defenseIv": 22.0,
@@ -38,18 +38,22 @@
         {
             "stat": 1,
             "eVAmount": 1
+        },
+        {
+            "stat": 5,
+            "eVAmount": 1
         }
     ],
     "accuracy": 100.0,
     "evasion": 100.0,
     "critChance": 6.25,
-    "catchRate": 255.0,
-    "currentLevel": 2,
-    "currentExpAmount": 0,
-    "nextLevelExpAmount": 9.0,
-    "expGroup": 3,
-    "expYield": 73,
-    "friendshipLevel": 10,
+    "catchRate": 120.0,
+    "currentLevel": 21,
+    "currentExpAmount": 7574,
+    "nextLevelExpAmount": 14632.0,
+    "expGroup": 0,
+    "expYield": 126,
+    "friendshipLevel": 88,
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -58,6 +62,9 @@
     "types": [
         {
             "instanceID": 25306
+        },
+        {
+            "instanceID": 26138
         }
     ],
     "statusEffect": 0,
@@ -79,33 +86,27 @@
     "requiresFriendshipEvolution": false,
     "learnSet": [
         {
-            "moveType": 15,
-            "moveName": 11,
-            "requiredLevel": 1
-        },
-        {
-            "moveType": 15,
-            "moveName": 12,
-            "requiredLevel": 5
-        },
-        {
-            "moveType": 0,
-            "moveName": 0,
-            "requiredLevel": 6
-        },
-        {
             "moveType": 8,
-            "moveName": 24,
-            "requiredLevel": 7
+            "moveName": 25,
+            "requiredLevel": 21
         }
     ],
     "moveSet": [
         {
-            "instanceID": -5460
+            "instanceID": -21926
+        },
+        {
+            "instanceID": -22072
+        },
+        {
+            "instanceID": -22128
+        },
+        {
+            "instanceID": -22080
         }
     ],
     "ability": {
-        "instanceID": 25628
+        "instanceID": 25708
     },
     "evolutions": [
         {
@@ -120,21 +121,22 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32532
+        "instanceID": 32424
     },
     "backPicture": {
-        "instanceID": 32512
+        "instanceID": 32576
     },
     "pokeballName": "",
     "healthPhase": 1,
-    "abilityName": "Arena Trap",
+    "abilityName": "Levitate",
     "natureName": "Impish",
     "evolutionNames": [
         "Vibrava",
         "Flygon"
     ],
     "typeNames": [
-        "ground"
+        "ground",
+        "dragon"
     ],
     "moveData": [
         {
@@ -142,6 +144,24 @@
             "powerPoints": 20,
             "maxPowerPoints": 20,
             "moveType": "dark"
+        },
+        {
+            "moveName": "crunch",
+            "powerPoints": 20,
+            "maxPowerPoints": 20,
+            "moveType": "dark"
+        },
+        {
+            "moveName": "earthquake",
+            "powerPoints": 15,
+            "maxPowerPoints": 15,
+            "moveType": "ground"
+        },
+        {
+            "moveName": "magnitude",
+            "powerPoints": 15,
+            "maxPowerPoints": 15,
+            "moveType": "ground"
         }
     ]
 }
