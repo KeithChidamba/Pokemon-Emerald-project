@@ -113,7 +113,8 @@ public class Battle_Participant : MonoBehaviour
                 pokemon.statusEffect = PokemonOperations.StatusEffect.None;
                 Battle_handler.Instance.faintQueue.Add(this);
                 yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);
-                pokemon.DetermineFriendshipLevelChange(false, "Fainted");
+                pokemon.DetermineFriendshipLevelChange(
+                    false, PokemonOperations.FriendshipModifier.Fainted);
                 if(!Turn_Based_Combat.Instance.faintEventDelay)
                     OnPokemonFainted?.Invoke();
             }

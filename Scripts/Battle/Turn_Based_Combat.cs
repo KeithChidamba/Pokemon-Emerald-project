@@ -146,6 +146,7 @@ public class Turn_Based_Combat : MonoBehaviour
     void AllowPlayerInput()
     {
         if (currentTurnIndex > 1) return;
+        InputStateHandler.Instance.ResetRelevantUi(new[]{ InputStateHandler.StateName.DialoguePlaceHolder});
         InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
             InputStateHandler.StateName.PlaceHolder});
     }

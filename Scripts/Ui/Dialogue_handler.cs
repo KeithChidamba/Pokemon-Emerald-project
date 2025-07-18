@@ -203,7 +203,6 @@ public class Dialogue_handler : MonoBehaviour
             DisplayDetails(info);
             return;
         }
-        Battle_handler.Instance.displayingInfo = true;
         canExitDialogue = false;
         var newInteraction = NewInteraction(info,DialogType.BattleInfo,"");
         pendingMessages.Add(newInteraction);
@@ -212,6 +211,7 @@ public class Dialogue_handler : MonoBehaviour
     private IEnumerator ProcessQueue()
     {
         messagesLoading = true;
+        InputStateHandler.Instance.AddDialoguePlaceHolderState();
         while (pendingMessages.Count > 0)
         {
             var interaction = pendingMessages[0];
@@ -220,9 +220,7 @@ public class Dialogue_handler : MonoBehaviour
             pendingMessages.RemoveAt(0);
             yield return new WaitForSeconds(2f);
         }
-
         messagesLoading = false;
-        Battle_handler.Instance.displayingInfo = false;
         OnMessagedDone?.Invoke();
     }
     public void EndDialogue(float delay)
@@ -251,7 +249,6 @@ public class Dialogue_handler : MonoBehaviour
         clickNextIndicator.SetActive(false);
         elipsisSymbol.SetActive(false);
         StopCoroutine(ProcessQueue());
-        Battle_handler.Instance.displayingInfo = false;
     }
     public void StartInteraction(Overworld_interactable interactable)
     {

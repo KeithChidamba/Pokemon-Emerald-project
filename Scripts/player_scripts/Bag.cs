@@ -15,6 +15,7 @@ public class Bag : MonoBehaviour
     public Item_ui[] bagItemsUI;
     public int maxCapacity = 50;
     public int numItems;
+    public int numItemsForView;
     public int selectedItemIndex;
     public int topIndex;//keeps track of visible bag items
     public GameObject[] itemUIActions;
@@ -80,9 +81,12 @@ public class Bag : MonoBehaviour
             bagItemsUI[bagItems.IndexOf(item)].LoadItemUI();
             return;
         }
-        InputStateHandler.Instance.ResetRelevantUi(new[] { InputStateHandler.StateName.PlayerBagItemUsage });
-        selectedItemIndex = 0;
-        SelectItem();
+
+        if (!Options_manager.Instance.playerInBattle)
+        {
+            InputStateHandler.Instance.ResetRelevantUi(new[] { InputStateHandler.StateName.PlayerBagItemUsage });
+            InputStateHandler.Instance.OnStateChanged += state => state.currentSelectionIndex = 0;
+        }
         RemoveItem(item);
     }
     public void ChangeQuantity(int value)
@@ -108,6 +112,8 @@ public class Bag : MonoBehaviour
             selectedItemIndex = 8;
             topIndex++;
         }
+        if (numItems == numItemsForView && selectedItemIndex == numItems-1)
+            return;
         selectedItemIndex++;
         selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 9);
         SelectItem();
@@ -274,7 +280,7 @@ public class Bag : MonoBehaviour
             DisplayItemAction(false);
             return;
         }
-        var numItemsForView = (numItems < 11) ? numItems : 10; 
+        numItemsForView = (numItems < 11) ? numItems : 10; 
         for (int i = 0; i < numItemsForView; i++)
         {
             bagItemsUI[i].item = bagItems[i];

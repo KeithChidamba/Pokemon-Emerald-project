@@ -26,7 +26,7 @@ public class InputStateHandler : MonoBehaviour
         ,PokemonStorageParty,PokemonBattle,PokeMart }
     public enum StateName 
     {
-        PlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
+        PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
         PokemonStorage,PokemonStoragePartyOptions ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
         PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
         PlayerBagItemSell,PlayerBagItemUsage,PlayerBagNavigation,
@@ -63,6 +63,11 @@ public class InputStateHandler : MonoBehaviour
     public void AddPlaceHolderState()
     {
         ChangeInputState(new InputState(StateName.PlaceHolder,new[]{StateGroup.None}, canExit: false
+            , isParent:true,mainView: emptyPlaceHolder));
+    }
+    public void AddDialoguePlaceHolderState()
+    {
+        ChangeInputState(new InputState(StateName.DialoguePlaceHolder,new[]{StateGroup.None}, canExit: false
             , isParent:true,mainView: emptyPlaceHolder));
     }
     public void ResetGroupUi(StateGroup group)
@@ -254,6 +259,10 @@ public class InputStateHandler : MonoBehaviour
         if (Bag.Instance.numItems == 0) return;
         OnInputUp += Bag.Instance.NavigateUp;
         OnInputDown += Bag.Instance.NavigateDown;
+        if(Bag.Instance.numItems==Bag.Instance.numItemsForView)
+        {//prevent selecting null item selectables
+            currentState.maxSelectionIndex = Bag.Instance.numItems-1;
+        }
         if (Bag.Instance.sellingItems)
             currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToSell);
         else

@@ -13,6 +13,7 @@ public static class PokemonOperations
     public static Pokemon CurrentPokemon;
     public static Move NewMove;
     public static Action<bool> OnEvChange;
+    public enum FriendshipModifier{Fainted,LevelUp,Vitamin,EvBerry}
     public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep}
     public enum Gender{None,Male,Female}
     public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
@@ -193,7 +194,6 @@ public static class PokemonOperations
                     if (inBattle || isPartyPokemon)
                     {
                         SelectingMoveReplacement = true;
-                        Battle_handler.Instance.displayingInfo = inBattle;
                         Dialogue_handler.Instance.DisplayList(
                             $"{CurrentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn" +
                             $" {moveName}?", "", new[] { "LearnMove", "SkipMove" },

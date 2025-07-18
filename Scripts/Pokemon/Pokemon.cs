@@ -171,15 +171,18 @@ public class Pokemon : ScriptableObject
     {
         friendshipLevel = Math.Clamp(friendshipLevel + amount, 0, 255);
     }
-    public void DetermineFriendshipLevelChange(bool isIncreasing, string action)
+    public void DetermineFriendshipLevelChange(bool isIncreasing, PokemonOperations.FriendshipModifier action)
     {
         if (friendshipLevel > 254 && isIncreasing) return;
         
         var isHighFriendship = friendshipLevel > 219;
+
+        if (action == PokemonOperations.FriendshipModifier.Fainted)
+        {
+            ChangeFriendshipLevel( friendshipLevel>99? -1 : -5 );
+        }
         
-        if (action == "Fainted") ChangeFriendshipLevel( friendshipLevel>99? -1 : -5 );
-        
-        if (action == "Level Up")
+        if (action == PokemonOperations.FriendshipModifier.LevelUp)
         {
             var increaseLimitLow = (isHighFriendship)? 1 : 3;
             var increaseLimitHigh = (isHighFriendship)? 3 : 6;
@@ -188,7 +191,7 @@ public class Pokemon : ScriptableObject
             ChangeFriendshipLevel( isIncreasing?  amount : -amount );
         }
         
-        if (action == "Vitamin")
+        if (action == PokemonOperations.FriendshipModifier.Vitamin)
         {
             var increaseAmount = friendshipLevel switch
             {
@@ -200,8 +203,11 @@ public class Pokemon : ScriptableObject
             var amount = ApplyFriendshipModifier(increaseAmount);
             ChangeFriendshipLevel(isIncreasing?  amount: -amount );
         }
-        
-        if (action == "EV Berry") ChangeFriendshipLevel(ApplyFriendshipModifier(10) );
+
+        if (action == PokemonOperations.FriendshipModifier.EvBerry)
+        {
+            ChangeFriendshipLevel(ApplyFriendshipModifier(10) );
+        }
     }
     public void CheckEvolutionRequirements(int evoIndex)
     {
@@ -322,7 +328,7 @@ public class Pokemon : ScriptableObject
     public void LevelUp()
     {
         OnLevelUp?.Invoke(this);
-        DetermineFriendshipLevelChange(true, "Level Up");
+        DetermineFriendshipLevelChange(true, PokemonOperations.FriendshipModifier.LevelUp);
         currentLevel++;
         nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel,expGroup);
         IncreaseStats();

@@ -8089,7 +8089,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentStoreItems: []
-  allItems: []
   viewingStore: 0
   storeItemsUI:
   - {fileID: 811032170}
@@ -8100,6 +8099,7 @@ MonoBehaviour:
   - {fileID: 2097081414}
   - {fileID: 2006514070}
   numItems: 0
+  numItemsForView: 0
   selectedItemIndex: 0
   selectedItemQuantity: 0
   topIndex: 0
@@ -14418,7 +14418,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -21031,7 +21031,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -71986,7 +71986,6 @@ MonoBehaviour:
   isTrainerBattle: 0
   isDoubleBattle: 0
   participantCount: 0
-  displayingInfo: 0
   battleOver: 0
   battleWon: 0
   overWorld: {fileID: 523264673}
@@ -89067,6 +89066,7 @@ MonoBehaviour:
   - {fileID: 1710059117}
   maxCapacity: 50
   numItems: 0
+  numItemsForView: 0
   selectedItemIndex: 0
   topIndex: 0
   itemUIActions:

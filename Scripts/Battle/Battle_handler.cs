@@ -24,7 +24,6 @@ public class Battle_handler : MonoBehaviour
     public bool isTrainerBattle = false;
     public bool isDoubleBattle = false;
     public int participantCount = 0;
-    public bool displayingInfo = false;
     public bool battleOver = false;
     public bool battleWon = false;
     public GameObject overWorld;
@@ -51,35 +50,17 @@ public class Battle_handler : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
     }
 
     void Update()
     {
         if (!Options_manager.Instance.playerInBattle) return;
-
-        HandlePlayerInput();
-    }
-
-    private void HandlePlayerInput()
-    {
-        if (displayingInfo || battleOver)
-        {
-            optionsUI.SetActive(false);
-        }
-        
-        if (overworld_actions.Instance.usingUI)
-        {
-            Wild_pkm.Instance.canAttack = false;
-        }
-
         if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
         
         _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
         AutoAim();
     }
-    
     private void EnableBattleMessage(InputState currentState)
     {
         if (currentState.stateName == InputStateHandler.StateName.PokemonBattleOptions)
@@ -566,7 +547,6 @@ public class Battle_handler : MonoBehaviour
     }
     private IEnumerator RunAway() {
         runningAway = true;
-        displayingInfo = true;
         if(!isTrainerBattle & !_currentParticipant.canEscape)
             Dialogue_handler.Instance.DisplayBattleInfo(_currentParticipant.pokemon.pokemonName +" is trapped");
         else
@@ -597,7 +577,6 @@ public class Battle_handler : MonoBehaviour
                     Turn_Based_Combat.Instance.NextTurn();
                 }
             }
-        }
-        displayingInfo = false;
+        } 
     }
 }

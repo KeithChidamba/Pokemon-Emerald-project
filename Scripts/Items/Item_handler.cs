@@ -31,6 +31,9 @@ public class Item_handler : MonoBehaviour
     }
     public void UseItem(Item item,[CanBeNull] Pokemon selectedPokemon)
     {
+        if(Options_manager.Instance.playerInBattle)
+            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
+        
         _selectedPartyPokemon = selectedPokemon;
         _itemInUse = item;
         if (_itemInUse.itemType == ItemType.Special)
@@ -115,7 +118,6 @@ public class Item_handler : MonoBehaviour
         }
         else
         {
-            //Game_ui_manager.Instance.canExitParty = false;
             var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup);
             Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" leveled up!", 2f);
             yield return new WaitForSeconds(1f);
@@ -170,8 +172,9 @@ public class Item_handler : MonoBehaviour
         message += (hasChanged)? " was increased" : " can't get any higher";
 
         if (hasChanged)
-        {
-            _selectedPartyPokemon.DetermineFriendshipLevelChange(true,"Vitamin");
+        {//CHANGE THIS TO WORK WITH BERRIES ONCE BERRIES ARE DONE
+            _selectedPartyPokemon.DetermineFriendshipLevelChange(
+                true,PokemonOperations.FriendshipModifier.Vitamin);
             DepleteItem();
         }
         Dialogue_handler.Instance.DisplayDetails(message,  1f);
@@ -353,7 +356,6 @@ public class Item_handler : MonoBehaviour
 
         if (Battle_handler.Instance.isTrainerBattle)
         {
-            Battle_handler.Instance.displayingInfo = true;
             Dialogue_handler.Instance.DisplayDetails("Can't catch someone else's Pokemon!",  1f);
             return false;
         }
@@ -396,7 +398,7 @@ public class Item_handler : MonoBehaviour
         }else
         {
             Dialogue_handler.Instance.DisplayBattleInfo(wildPokemon.pokemonName+" escaped the pokeball");
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
             SkipTurn();
         }
         ResetItemUsage();
@@ -487,12 +489,12 @@ public class Item_handler : MonoBehaviour
     {
         CompleteItemUsage();
         yield return new WaitForSeconds(skipDelay);
+        if(_itemInUse.forPartyUse) InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
         SkipTurn();
     }
     private void SkipTurn()
     {
         if (!Options_manager.Instance.playerInBattle) return;
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
         Turn_Based_Combat.Instance.NextTurn();
     }
     void DepleteHeldItem()
@@ -509,6 +511,5 @@ public class Item_handler : MonoBehaviour
     {
         usingItem = false;
         _selectedPartyPokemon = null;
-        if(_itemInUse.forPartyUse) InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
     }
 }

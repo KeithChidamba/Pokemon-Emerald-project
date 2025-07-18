@@ -1,12 +1,12 @@
 {
     "basePokemonName": "Pikachu",
     "pokemonName": "Pikachu",
-    "pokemonID": 673757588553585849,
-    "personalityValue": 41276601,
+    "pokemonID": 673757589324925056,
+    "personalityValue": 812615808,
     "gender": 2,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26264
+        "instanceID": 25932
     },
     "hasGender": true,
     "hp": 11.0,
@@ -18,16 +18,16 @@
     "baseSpecialDefense": 50.0,
     "baseSpeed": 90.0,
     "attack": 6.0,
-    "defense": 5.0,
-    "specialAttack": 6.0,
+    "defense": 6.0,
+    "specialAttack": 5.0,
     "specialDefense": 6.0,
-    "speed": 7.0,
-    "hpIv": 3.0,
-    "attackIv": 9.0,
-    "defenseIv": 19.0,
-    "specialAttackIv": 20.0,
-    "specialDefenseIv": 17.0,
-    "speedIv": 22.0,
+    "speed": 6.0,
+    "hpIv": 8.0,
+    "attackIv": 0.0,
+    "defenseIv": 6.0,
+    "specialAttackIv": 8.0,
+    "specialDefenseIv": 18.0,
+    "speedIv": 2.0,
     "hpEv": 0.0,
     "attackEv": 0.0,
     "defenseEv": 0.0,
@@ -49,7 +49,7 @@
     "nextLevelExpAmount": 1.0,
     "expGroup": 2,
     "expYield": 82,
-    "friendshipLevel": 5,
+    "friendshipLevel": 4,
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
@@ -98,7 +98,7 @@
     ],
     "moveSet": [
         {
-            "instanceID": -5468
+            "instanceID": -5456
         }
     ],
     "ability": {
@@ -120,9 +120,9 @@
         "instanceID": 31912
     },
     "pokeballName": "",
-    "healthPhase": 0,
+    "healthPhase": 1,
     "abilityName": "Static",
-    "natureName": "Lonely",
+    "natureName": "Impish",
     "evolutionNames": [
         "Raichu"
     ],
