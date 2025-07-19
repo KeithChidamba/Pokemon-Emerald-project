@@ -20,6 +20,11 @@ public class Area_manager : MonoBehaviour
         }
         Instance = this;
     }
+
+    public void EscapeArea()
+    {
+        GoToOverworld();
+    }
     public void SwitchToArea(Switch_Area area,float loadTime)
     {
         if (area.hasDoorAnimation)

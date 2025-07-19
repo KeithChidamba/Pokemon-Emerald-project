@@ -103,8 +103,8 @@ public class Enemy_trainer : MonoBehaviour
             member.pokemon.moveSet.Clear();
             foreach (Move move in member.moveSet)
                 member.pokemon.moveSet.Add(Obj_Instance.CreateMove(move));
-            if (member.hasItem)
-                member.pokemon.heldItem = Obj_Instance.CreateItem(member.heldItem);
+            
+            if (member.hasItem) member.pokemon.GiveItem(Obj_Instance.CreateItem(member.heldItem));
         }
     }
     void UseMove(Move move)

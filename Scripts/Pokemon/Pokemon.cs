@@ -146,9 +146,10 @@ public class Pokemon : ScriptableObject
 
     public void GiveItem(Item itemToGive)
     {
+        hasItem = true;
         heldItem = Obj_Instance.CreateItem(itemToGive);
         heldItem.quantity = 1;
-        hasItem = true;
+        Debug.Log("Has item");
     }
     public bool HasType(string typeName)
     {

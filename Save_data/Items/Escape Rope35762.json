@@ -1,0 +1,18 @@
+{
+    "itemID": "Escape Rope35762",
+    "itemName": "Escape Rope",
+    "itemType": 14,
+    "itemEffect": "0",
+    "itemDescription": "Allows player to escape certain areas",
+    "price": 400,
+    "quantity": 2,
+    "itemImage": {
+        "instanceID": 114144
+    },
+    "forPartyUse": false,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true
+}

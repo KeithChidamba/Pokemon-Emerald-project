@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
-  m_Name: Paralyz Heal
+  m_Name: Escape Rope
   m_EditorClassIdentifier: 
   itemID: 
-  itemName: Paralyz Heal
-  itemType: 3
-  itemEffect: paralysis
-  itemDescription: Heals paralysis
-  price: 20
+  itemName: Escape Rope
+  itemType: 14
+  itemEffect: 0
+  itemDescription: Allows player to escape certain areas
+  price: 400
   quantity: 1
-  itemImage: {fileID: 21300000, guid: dd60c0c3195e0495b8e9102e88bda2c5, type: 3}
-  forPartyUse: 1
+  itemImage: {fileID: 21300000, guid: 6d17793a393f8071581ac9e3b5e228e5, type: 3}
+  forPartyUse: 0
   canBeUsedInOverworld: 1
-  canBeUsedInBattle: 1
+  canBeUsedInBattle: 0
   isHeldItem: 0
-  canBeHeld: 1
+  canBeHeld: 0
   canBeSold: 1

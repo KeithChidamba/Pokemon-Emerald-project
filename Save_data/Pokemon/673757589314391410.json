@@ -1,0 +1,174 @@
+{
+    "basePokemonName": "Zigzagoon",
+    "pokemonName": "Zigzagoon",
+    "pokemonID": 673757589314391410,
+    "personalityValue": 802082162,
+    "gender": 1,
+    "ratioFemale": 50.0,
+    "nature": {
+        "instanceID": 26104
+    },
+    "hasGender": true,
+    "hp": 20.0,
+    "maxHp": 20.0,
+    "baseHp": 38.0,
+    "baseAttack": 30.0,
+    "baseDefense": 41.0,
+    "baseSpecialAttack": 30.0,
+    "baseSpecialDefense": 41.0,
+    "baseSpeed": 60.0,
+    "attack": 8.0,
+    "defense": 9.0,
+    "specialAttack": 8.0,
+    "specialDefense": 10.0,
+    "speed": 11.0,
+    "hpIv": 15.0,
+    "attackIv": 1.0,
+    "defenseIv": 0.0,
+    "specialAttackIv": 28.0,
+    "specialDefenseIv": 16.0,
+    "speedIv": 30.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        {
+            "stat": 5,
+            "eVAmount": 1
+        }
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 255.0,
+    "currentLevel": 5,
+    "currentExpAmount": 65,
+    "nextLevelExpAmount": 125.0,
+    "expGroup": 2,
+    "expYield": 60,
+    "friendshipLevel": 90,
+    "hasTrainer": true,
+    "canAttack": true,
+    "isFlinched": false,
+    "canBeDamaged": true,
+    "immuneToStatReduction": false,
+    "types": [
+        {
+            "instanceID": 25650
+        }
+    ],
+    "statusEffect": 0,
+    "buffAndDebuffs": [],
+    "evolutionLineLevels": [
+        20
+    ],
+    "friendshipEvolutionRequirement": {
+        "friendshipRequirement": 0,
+        "evolutionIndex": 0
+    },
+    "requiresEvolutionStone": false,
+    "evolutionStoneName": "None",
+    "abilities": [
+        "Pickup"
+    ],
+    "splitEvolution": false,
+    "requiresFriendshipEvolution": false,
+    "learnSet": [
+        {
+            "moveType": 0,
+            "moveName": 5,
+            "requiredLevel": 1
+        },
+        {
+            "moveType": 0,
+            "moveName": 3,
+            "requiredLevel": 2
+        },
+        {
+            "moveType": 0,
+            "moveName": 0,
+            "requiredLevel": 4
+        },
+        {
+            "moveType": 2,
+            "moveName": 32,
+            "requiredLevel": 5
+        },
+        {
+            "moveType": 0,
+            "moveName": 6,
+            "requiredLevel": 19
+        }
+    ],
+    "moveSet": [
+        {
+            "instanceID": -16702
+        },
+        {
+            "instanceID": -16704
+        },
+        {
+            "instanceID": -16706
+        },
+        {
+            "instanceID": -16708
+        }
+    ],
+    "ability": {
+        "instanceID": 25808
+    },
+    "evolutions": [
+        {
+            "instanceID": 25794
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 31996
+    },
+    "backPicture": {
+        "instanceID": 31998
+    },
+    "pokeballName": "Great Ball",
+    "healthPhase": 1,
+    "abilityName": "Pickup",
+    "natureName": "Serious",
+    "evolutionNames": [
+        "Linoone"
+    ],
+    "typeNames": [
+        "normal"
+    ],
+    "moveData": [
+        {
+            "moveName": "headbutt",
+            "powerPoints": 25,
+            "maxPowerPoints": 25,
+            "moveType": "normal"
+        },
+        {
+            "moveName": "tail whip",
+            "powerPoints": 25,
+            "maxPowerPoints": 25,
+            "moveType": "normal"
+        },
+        {
+            "moveName": "tackle",
+            "powerPoints": 20,
+            "maxPowerPoints": 20,
+            "moveType": "normal"
+        },
+        {
+            "moveName": "surf",
+            "powerPoints": 25,
+            "maxPowerPoints": 25,
+            "moveType": "water"
+        }
+    ]
+}

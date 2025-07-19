@@ -182,7 +182,9 @@ public class Save_manager : MonoBehaviour
             var heldItemID = heldItemList
                 .FirstOrDefault(id => RemoveFileExtension(Path.GetFileName(id)) 
                                       == pokemon.pokemonID.ToString());
-            pokemon.heldItem = (string.IsNullOrEmpty(heldItemID))? null : LoadItemFromJson(heldItemID);
+            
+            var heldItem = (string.IsNullOrEmpty(heldItemID)) ? null : LoadItemFromJson(heldItemID);
+            pokemon.GiveItem(heldItem);
         }
     }
     private void CreateFolder(string path)

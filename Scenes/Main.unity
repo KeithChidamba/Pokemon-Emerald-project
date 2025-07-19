@@ -904,6 +904,7 @@ MonoBehaviour:
   exitingArea: 0
   insideArea: 0
   hasDoorAnimation: 1
+  escapable: 0
   doorAnimation: {fileID: 30296274}
   doormatPosition: {fileID: 1324613723}
   doorPosition: {fileID: 1658256452}
@@ -1380,6 +1381,7 @@ MonoBehaviour:
   exitingArea: 1
   insideArea: 0
   hasDoorAnimation: 0
+  escapable: 0
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -6445,8 +6447,6 @@ MonoBehaviour:
     mainViewUI: {fileID: 0}
     isParentLayer: 0
     canExit: 0
-    hasTransition: 0
-  blackScreen: {fileID: 0}
   _currentStateLoaded: 0
   stateLayers: []
   boxCoordinates: 0000000000000000
@@ -9368,6 +9368,7 @@ MonoBehaviour:
   exitingArea: 0
   insideArea: 0
   hasDoorAnimation: 1
+  escapable: 0
   doorAnimation: {fileID: 301858639}
   doormatPosition: {fileID: 2048362484}
   doorPosition: {fileID: 573038577}
@@ -10572,6 +10573,7 @@ MonoBehaviour:
   exitingArea: 0
   insideArea: 0
   hasDoorAnimation: 0
+  escapable: 1
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 204117124}
   doorPosition: {fileID: 434876550}
@@ -16106,6 +16108,7 @@ MonoBehaviour:
   exitingArea: 0
   insideArea: 0
   hasDoorAnimation: 1
+  escapable: 0
   doorAnimation: {fileID: 559372697}
   doormatPosition: {fileID: 489173252}
   doorPosition: {fileID: 1523077771}
@@ -17699,6 +17702,7 @@ MonoBehaviour:
   exitingArea: 1
   insideArea: 0
   hasDoorAnimation: 0
+  escapable: 0
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -19262,6 +19266,7 @@ MonoBehaviour:
   exitingArea: 1
   insideArea: 0
   hasDoorAnimation: 0
+  escapable: 0
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -24117,6 +24122,7 @@ MonoBehaviour:
   exitingArea: 1
   insideArea: 0
   hasDoorAnimation: 0
+  escapable: 0
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -29041,6 +29047,7 @@ MonoBehaviour:
   exitingArea: 0
   insideArea: 0
   hasDoorAnimation: 1
+  escapable: 0
   doorAnimation: {fileID: 973009938}
   doormatPosition: {fileID: 566230134}
   doorPosition: {fileID: 66646258}
@@ -63047,6 +63054,7 @@ MonoBehaviour:
   exitingArea: 1
   insideArea: 0
   hasDoorAnimation: 0
+  escapable: 0
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -71815,6 +71823,7 @@ MonoBehaviour:
   exitingArea: 0
   insideArea: 0
   hasDoorAnimation: 0
+  escapable: 0
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -89688,6 +89697,7 @@ MonoBehaviour:
   exitingArea: 1
   insideArea: 0
   hasDoorAnimation: 0
+  escapable: 0
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}

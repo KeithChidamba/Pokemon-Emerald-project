@@ -173,6 +173,7 @@ public class AbilityHandler : MonoBehaviour
         //Check level and 10% pickup chance
         if (_participant.pokemon.currentLevel < 5) return;
         if (Utility.RandomRange(1, 101) > 10) return;
+        //only happens at end of battle so no need to cahce list
         List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
         {
             (5, 9, new[] { "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
@@ -184,6 +185,7 @@ public class AbilityHandler : MonoBehaviour
             (60, 69, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "Escape Rope" }),
             (70, 100, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "PP Up" })
         };
+        
         string[] possibleItems = null;
         foreach (var pool in itemPools)
         {
@@ -194,11 +196,18 @@ public class AbilityHandler : MonoBehaviour
             }
         }
         if (possibleItems == null) return;
-        
+        string[] nonMartItems = { "Rare Candy", "Ether" };
         var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
-        var itemWon = Resources.Load<Item>("Pokemon_project_assets/Player_obj/Bag/" + possibleItems[itemWonIndex]);
+
+        var assetDirectory = nonMartItems.Contains(possibleItems[itemWonIndex])?
+            "Pokemon_project_assets/Items/" + possibleItems[itemWonIndex]
+            :"Pokemon_project_assets/Items/Mart_Items/" + possibleItems[itemWonIndex];
+        
+        var itemWon = Resources.Load<Item>(assetDirectory);
         if (Utility.RandomRange(1, 101) < _participant.pokemon.currentLevel)
-            _participant.pokemon.heldItem = Obj_Instance.CreateItem(itemWon);
+        {
+            _participant.pokemon.GiveItem(Obj_Instance.CreateItem(itemWon));
+        }
     }
     void GiveStatic(Battle_Participant attacker,Move moveUsed)
     {
@@ -228,10 +237,8 @@ public class AbilityHandler : MonoBehaviour
                 return damage*2;
         }
         if (_damageBuffCombinations.TryGetValue(_currentAbility, out var typeName))
-        {
-            var buff = GetAbilityDamageBuff(move, typeName);
-            if (buff != 1f) return damage * buff;
-        }
+            return damage * GetAbilityDamageBuff(move, typeName);
+        
         return damage;
     }
 

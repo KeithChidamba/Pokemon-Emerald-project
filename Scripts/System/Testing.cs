@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System.Linq;
@@ -41,6 +42,42 @@ public class Testing : MonoBehaviour
                 if (!File.Exists(newPath))  // Prevent overwrite
                 {
                     File.Move(filePath, newPath);
+                }
+            }
+        }
+    }
+
+    public static void checkitems()
+    {
+        List<string[]> itemPools = new()
+        {
+            new[] { "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" },
+            new[] { "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" },
+             new[] { "Hyper Potion", "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" },
+             new[] { "Ether", "Full Heal", "Hyper Potion", "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" },
+             new[] { "Rare Candy", "Full Heal", "Ether", "Hyper Potion", "Super Potion", "Escape Rope", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" },
+            new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion", "Escape Rope", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" },
+             new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "Escape Rope" },
+             new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "PP Up" }
+        };
+        var dups = new List<string>();
+        foreach (var list in itemPools)
+        {
+            foreach (var item in list)
+            {
+                if (!dups.Contains(item))
+                {
+                    dups.Add(item);
+                }
+                else
+                {
+                    continue;
+                }
+                var itemAsset = Resources.Load<Item>("Pokemon_project_assets/Items/Mart_Items/" + item);
+                
+                if (itemAsset == null)
+                {
+                    Debug.LogWarning("item not found for: " + item);
                 }
             }
         }

@@ -18,7 +18,7 @@ public class Item_handler : MonoBehaviour
     public enum ItemType
     {
         Special,GainExp,HealHp,Status,Ether,Herb,Revive,StatIncrease,FriendshipIncrease,Pokeball
-        ,EvolutionStone,RareCandy,XItem,GainMoney
+        ,EvolutionStone,RareCandy,XItem,GainMoney,Overworld
     }
     private void Awake()
     {
@@ -36,6 +36,11 @@ public class Item_handler : MonoBehaviour
         
         _selectedPartyPokemon = selectedPokemon;
         _itemInUse = item;
+        if (_itemInUse.itemType == ItemType.Overworld)
+        {
+            UseOverworldItem();
+            return;
+        }
         if (_itemInUse.itemType == ItemType.Special)
         {
             if (overworld_actions.Instance.IsEquipped(_itemInUse.itemName))
@@ -93,6 +98,24 @@ public class Item_handler : MonoBehaviour
         }
     }
 
+    private void UseOverworldItem()
+    {
+        if (_itemInUse.itemName == "Escape Rope")
+        {
+            if (Area_manager.Instance.currentArea.escapable)
+            {
+                CompleteItemUsage();
+                Area_manager.Instance.EscapeArea();
+                InputStateHandler.Instance.ResetRelevantUi(new[] {InputStateHandler.StateName.PlayerMenu
+                        ,InputStateHandler.StateName.PlayerBagItemUsage,InputStateHandler.StateName.PlayerBagNavigation});
+            }
+            else
+            {
+                Dialogue_handler.Instance.DisplayDetails("Can't use that here!", 2f);
+                ResetItemUsage();
+            }
+        }
+    }
     private void ChangeFriendship(bool itemUsed)
     {
         OnItemUsageSuccessful -= ChangeFriendship;
@@ -478,7 +501,7 @@ public class Item_handler : MonoBehaviour
     }
     private void CompleteItemUsage()//only call for items used outside of battle
     {
-        Battle_handler.Instance.usedTurnForItem = true;
+        Battle_handler.Instance.usedTurnForItem = Options_manager.Instance.playerInBattle;
         if (usingHeldItem)
             DepleteHeldItem(); 
         else
