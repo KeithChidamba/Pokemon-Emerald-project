@@ -61,6 +61,7 @@ MonoBehaviour:
   hasTrainer: 0
   canAttack: 1
   isFlinched: 0
+  canBeFlinched: 1
   canBeDamaged: 1
   immuneToStatReduction: 0
   types:
@@ -72,9 +73,8 @@ MonoBehaviour:
     friendshipRequirement: 0
     evolutionIndex: 0
   requiresEvolutionStone: 0
-  evolutionStoneName: None
-  abilities:
-  - Pickup
+  evolutionStone: 0
+  abilities: 01000000
   splitEvolution: 0
   requiresFriendshipEvolution: 0
   learnSet:

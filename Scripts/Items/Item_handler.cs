@@ -151,7 +151,8 @@ public class Item_handler : MonoBehaviour
 
     void TriggerStoneEvolution(string evolutionStoneName)
     {
-        if (_selectedPartyPokemon.evolutionStoneName.ToLower() == evolutionStoneName)
+        var stone = (NameDB.EvolutionStone)Enum.Parse(typeof(NameDB.EvolutionStone),evolutionStoneName.Replace(" ", ""));
+        if (_selectedPartyPokemon.evolutionStone == stone)
         {
             _selectedPartyPokemon.CheckEvolutionRequirements(0);
             CompleteItemUsage();

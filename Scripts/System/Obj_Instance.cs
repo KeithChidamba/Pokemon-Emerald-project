@@ -81,6 +81,7 @@ public static class Obj_Instance
         newPokemon.friendshipLevel = pkm.friendshipLevel;
         newPokemon.hasTrainer = pkm.hasTrainer;
         newPokemon.canAttack = pkm.canAttack;
+        newPokemon.canBeFlinched = pkm.canBeFlinched;
         newPokemon.isFlinched = pkm.isFlinched;
         newPokemon.canBeDamaged = pkm.canBeDamaged;
         newPokemon.immuneToStatReduction = pkm.immuneToStatReduction;
@@ -90,7 +91,7 @@ public static class Obj_Instance
         newPokemon.evolutionLineLevels = pkm.evolutionLineLevels;
         newPokemon.friendshipEvolutionRequirement = pkm.friendshipEvolutionRequirement;
         newPokemon.requiresEvolutionStone = pkm.requiresEvolutionStone;
-        newPokemon.evolutionStoneName = pkm.evolutionStoneName;
+        newPokemon.evolutionStone = pkm.evolutionStone;
         newPokemon.abilities = pkm.abilities;
         newPokemon.splitEvolution = pkm.splitEvolution;
         newPokemon.learnSet = pkm.learnSet;

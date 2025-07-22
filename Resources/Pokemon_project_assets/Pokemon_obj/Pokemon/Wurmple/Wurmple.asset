@@ -61,6 +61,7 @@ MonoBehaviour:
   hasTrainer: 0
   canAttack: 1
   isFlinched: 0
+  canBeFlinched: 1
   canBeDamaged: 1
   immuneToStatReduction: 0
   types:
@@ -72,22 +73,18 @@ MonoBehaviour:
     friendshipRequirement: 0
     evolutionIndex: 0
   requiresEvolutionStone: 0
-  evolutionStoneName: None
-  abilities:
-  - Paralysis Combo
+  evolutionStone: 0
+  abilities: 06000000
   splitEvolution: 1
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 0
-    _moveName: Tackle
     moveName: 0
     requiredLevel: 1
   - moveType: 11
-    _moveName: String Shot
     moveName: 10
     requiredLevel: 2
   - moveType: 7
-    _moveName: Poison Sting
     moveName: 26
     requiredLevel: 3
   moveSet: []

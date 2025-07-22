@@ -61,6 +61,7 @@ MonoBehaviour:
   hasTrainer: 0
   canAttack: 1
   isFlinched: 0
+  canBeFlinched: 1
   canBeDamaged: 1
   immuneToStatReduction: 0
   types:
@@ -72,26 +73,21 @@ MonoBehaviour:
     friendshipRequirement: 0
     evolutionIndex: 0
   requiresEvolutionStone: 0
-  evolutionStoneName: None
-  abilities:
-  - Arena Trap
+  evolutionStone: 0
+  abilities: 07000000
   splitEvolution: 0
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 15
-    _moveName: Bite
     moveName: 11
     requiredLevel: 1
   - moveType: 15
-    _moveName: Crunch
     moveName: 12
     requiredLevel: 5
   - moveType: 0
-    _moveName: Tackle
     moveName: 0
     requiredLevel: 6
   - moveType: 8
-    _moveName: Magnitude
     moveName: 24
     requiredLevel: 7
   moveSet: []

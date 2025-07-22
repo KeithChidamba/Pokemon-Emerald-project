@@ -1,8 +1,13 @@
 using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.NCalc;
+
 public static class NameDB
 {
+
     public enum MoveName
     {
+        Supersonic,
+        MeanLook,
         Tackle,
         Pound,
         FocusEnergy,
@@ -12,6 +17,7 @@ public static class NameDB
         Protect,
         QuickAttack,
         Scratch,
+        LeechLife,
         BugBite,
         StringShot,
         Bite,
@@ -24,6 +30,8 @@ public static class NameDB
         Ember,
         Flamethrower,
         ArialAce,
+        WingAttack,
+        AirCutter,
         Absorb,
         BulletSeed,
         MudSlap,
@@ -31,11 +39,15 @@ public static class NameDB
         Earthquake,
         PoisonSting,
         Toxic,
+        PoisonFang,
         LightScreen,
         Reflect,
         Bubble,
         WaterGun,
-        Surf
+        Surf,
+        Astonish,
+        ConfuseRay,
+        Haze
     }
     public static string GetMoveName(MoveName name)
     {
@@ -78,4 +90,43 @@ public static class NameDB
         { MoveName.Surf, "Surf" }
     };
 
+    private static Dictionary<Ability, string> _abilityNames = new()
+    {
+        { Ability.Guts, "Guts" },
+        { Ability.PickUp, "Pickup" },
+        { Ability.Blaze, "Blaze" },
+        { Ability.Levitate, "Levitate" },
+        { Ability.Overgrow, "Overgrow" },
+        { Ability.Torrent, "Torrent" },
+        { Ability.ParalysisCombo, "Paralysis combo" },
+        { Ability.ArenaTrap, "Arena Trap" },
+        { Ability.Static, "Static" },
+        { Ability.ShedSkin, "Shed skin" },
+        { Ability.Swarm, "Swarm" },
+        { Ability.InnerFocus, "Inner Focus" },
+    };
+    public enum Ability
+    {
+        Guts,PickUp,Blaze,Levitate,Overgrow,Torrent,ParalysisCombo,ArenaTrap
+        ,Static,ShedSkin,Swarm,InnerFocus
+    }
+    public static string GetAbility(Ability ability)
+    {
+        return _abilityNames[ability];
+    }
+    public enum EvolutionStone
+    {
+        None,ThunderStone,FireStone,WaterStone,LeafStone
+    }
+    private static Dictionary<EvolutionStone, string> _stoneNames = new()
+    {
+        { EvolutionStone.ThunderStone, "Thunder Stone" },
+        { EvolutionStone.FireStone, "Fire Stone" },
+        { EvolutionStone.WaterStone, "Water Stone" },
+        { EvolutionStone.LeafStone, "Leaf Stone" },
+    };
+    public static string GetStoneName(EvolutionStone stone)
+    {
+        return _stoneNames[stone];
+    }
 }

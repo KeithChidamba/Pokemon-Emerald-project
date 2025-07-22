@@ -61,6 +61,7 @@ MonoBehaviour:
   hasTrainer: 0
   canAttack: 1
   isFlinched: 0
+  canBeFlinched: 1
   canBeDamaged: 1
   immuneToStatReduction: 0
   types:
@@ -72,26 +73,21 @@ MonoBehaviour:
     friendshipRequirement: 0
     evolutionIndex: 0
   requiresEvolutionStone: 0
-  evolutionStoneName: None
-  abilities:
-  - Torrent
+  evolutionStone: 0
+  abilities: 05000000
   splitEvolution: 0
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 0
-    _moveName: Tackle
     moveName: 0
     requiredLevel: 1
   - moveType: 2
-    _moveName: Bubble
     moveName: 30
     requiredLevel: 3
   - moveType: 8
-    _moveName: Mud Slap
     moveName: 23
     requiredLevel: 5
   - moveType: 2
-    _moveName: Water Gun
     moveName: 31
     requiredLevel: 10
   moveSet: []

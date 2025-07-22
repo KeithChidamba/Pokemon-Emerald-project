@@ -61,6 +61,7 @@ MonoBehaviour:
   hasTrainer: 0
   canAttack: 1
   isFlinched: 0
+  canBeFlinched: 1
   canBeDamaged: 1
   immuneToStatReduction: 0
   types:
@@ -72,26 +73,21 @@ MonoBehaviour:
     friendshipRequirement: 0
     evolutionIndex: 0
   requiresEvolutionStone: 1
-  evolutionStoneName: Thunder Stone
-  abilities:
-  - Static
+  evolutionStone: 1
+  abilities: 08000000
   splitEvolution: 0
   requiresFriendshipEvolution: 0
   learnSet:
   - moveType: 3
-    _moveName: Thunder Shock
     moveName: 13
     requiredLevel: 1
   - moveType: 3
-    _moveName: Thunder Wave
     moveName: 14
     requiredLevel: 3
   - moveType: 0
-    _moveName: Quick Attack
     moveName: 7
     requiredLevel: 7
   - moveType: 0
-    _moveName: Tail Whip
     moveName: 3
     requiredLevel: 9
   moveSet: []

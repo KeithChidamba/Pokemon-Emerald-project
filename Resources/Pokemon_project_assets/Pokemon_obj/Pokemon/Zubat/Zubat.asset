@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc87682edb237054093c2b38617f74c9, type: 3}
-  m_Name: Torchic
+  m_Name: Zubat
   m_EditorClassIdentifier: 
-  basePokemonName: Torchic
-  pokemonName: Torchic
+  basePokemonName: Zubat
+  pokemonName: Zubat
   pokemonID: 0
   personalityValue: 0
   gender: 0
-  ratioFemale: 0
+  ratioFemale: 50
   nature: {fileID: 0}
   hasGender: 1
   hp: 0
   maxHp: 0
-  baseHp: 45
-  baseAttack: 60
-  baseDefense: 40
-  baseSpecialAttack: 70
-  baseSpecialDefense: 50
-  baseSpeed: 45
+  baseHp: 40
+  baseAttack: 45
+  baseDefense: 35
+  baseSpecialAttack: 30
+  baseSpecialDefense: 40
+  baseSpeed: 55
   attack: 0
   defense: 0
   specialAttack: 0
@@ -51,12 +51,12 @@ MonoBehaviour:
   accuracy: 100
   evasion: 100
   critChance: 6.25
-  catchRate: 45
+  catchRate: 225
   currentLevel: 0
   currentExpAmount: 0
   nextLevelExpAmount: 0
-  expGroup: 3
-  expYield: 65
+  expGroup: 2
+  expYield: 54
   friendshipLevel: 0
   hasTrainer: 0
   canAttack: 1
@@ -65,40 +65,29 @@ MonoBehaviour:
   canBeDamaged: 1
   immuneToStatReduction: 0
   types:
-  - {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
+  - {fileID: 11400000, guid: 3185f3c7151af7d48b86d9e6f6b6c269, type: 2}
+  - {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
   statusEffect: 0
   buffAndDebuffs: []
-  evolutionLineLevels: 100000001e000000
+  evolutionLineLevels: 16000000
   friendshipEvolutionRequirement:
     friendshipRequirement: 0
     evolutionIndex: 0
   requiresEvolutionStone: 0
   evolutionStone: 0
-  abilities: 02000000
+  abilities: 0b000000
   splitEvolution: 0
   requiresFriendshipEvolution: 0
-  learnSet:
-  - moveType: 0
-    moveName: 8
-    requiredLevel: 1
-  - moveType: 1
-    moveName: 18
-    requiredLevel: 3
-  - moveType: 6
-    moveName: 17
-    requiredLevel: 5
-  - moveType: 0
-    moveName: 2
-    requiredLevel: 7
+  learnSet: []
   moveSet: []
-  ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
+  ability: {fileID: 11400000, guid: fff028b013d1cd93aa0054f0072675bd, type: 2}
   evolutions:
-  - {fileID: 11400000, guid: f49a231fd601fd84fb5426e0f3771111, type: 2}
-  - {fileID: 11400000, guid: fbaeb98064185304bbf6b6fffb76ece1, type: 2}
+  - {fileID: 11400000, guid: 1949cedbc8f655d46a6400427e405a98, type: 2}
+  - {fileID: 11400000, guid: 0777abab7aae2c96aaefe990b46a2a28, type: 2}
   heldItem: {fileID: 0}
   hasItem: 0
-  frontPicture: {fileID: 21300000, guid: 0f8036093f73bd94e8ce6120dbdf5bdd, type: 3}
-  backPicture: {fileID: 21300000, guid: 704c9966ce2589749963a045076d0db4, type: 3}
+  frontPicture: {fileID: 21300000, guid: 616099e7ab18708f98183d479b257661, type: 3}
+  backPicture: {fileID: 21300000, guid: 5df4870a13006b467ac178c84956950a, type: 3}
   pokeballName: 
   healthPhase: 0
   abilityName: 

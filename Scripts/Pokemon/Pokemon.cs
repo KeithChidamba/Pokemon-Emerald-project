@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -54,7 +55,8 @@ public class Pokemon : ScriptableObject
     public int friendshipLevel = 0;
     [FormerlySerializedAs("has_trainer")] public bool hasTrainer=false;
     public bool canAttack = true;
-    public bool isFlinched = false;
+    public bool isFlinched;
+    public bool canBeFlinched = true;
     [FormerlySerializedAs("CanBeDamaged")] public bool canBeDamaged = true;
     public bool immuneToStatReduction = false;
     public List<Type> types;
@@ -63,8 +65,8 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
     public FriendShipEvolutionData friendshipEvolutionRequirement;
     [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone = false;
-    [FormerlySerializedAs("EvolutionStoneName")] public string evolutionStoneName = "None";
-    public string[] abilities;
+    [FormerlySerializedAs("EvolutionStoneName")] public NameDB.EvolutionStone evolutionStone;
+    public NameDB.Ability[] abilities;//for pokemon with different attainable abilities
     [FormerlySerializedAs("split_evolution")] public bool splitEvolution = false;
     public bool requiresFriendshipEvolution = false;
     public LearnSetMove[] learnSet;
@@ -149,7 +151,6 @@ public class Pokemon : ScriptableObject
         hasItem = true;
         heldItem = Obj_Instance.CreateItem(itemToGive);
         heldItem.quantity = 1;
-        Debug.Log("Has item");
     }
     public bool HasType(string typeName)
     {

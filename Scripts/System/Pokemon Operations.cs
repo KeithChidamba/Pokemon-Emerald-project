@@ -40,11 +40,11 @@ public static class PokemonOperations
         return (uint)math.abs((part1 << 16) | part2);
     }
     private static void AssignPokemonAbility(Pokemon pokemon)
-    {
+    { 
         pokemon.ability = null;
-        pokemon.abilityName = (pokemon.abilities.Length > 1)? 
-             pokemon.abilities[pokemon.personalityValue % 2]
-            :pokemon.abilities[0];
+        var abilityEnum = (pokemon.abilities.Length > 1)? 
+             pokemon.abilities[pokemon.personalityValue % 2] : pokemon.abilities[0];
+        pokemon.abilityName = NameDB.GetAbility(abilityEnum);
         pokemon.ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + pokemon.abilityName.ToLower());
     }
     public static bool ContainsType(Types[]typesList ,Type typesToCheck)

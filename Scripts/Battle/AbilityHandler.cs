@@ -22,6 +22,7 @@ public class AbilityHandler : MonoBehaviour
         _participant =  GetComponent<Battle_Participant>();
         Battle_handler.Instance.OnBattleEnd += ResetState;
         Turn_Based_Combat.Instance.OnNewTurn += CheckAbilityUsability;
+        _abilityMethods.Add("innerfocus",InnerFocus);
         _abilityMethods.Add("pickup",PickUp);
         _abilityMethods.Add("blaze",Blaze);
         _abilityMethods.Add("guts",Guts);
@@ -59,6 +60,13 @@ public class AbilityHandler : MonoBehaviour
         Battle_handler.Instance.OnBattleEnd -= GiveItem;
         Move_handler.Instance.OnDamageDeal -= IncreaseDamage;
         _participant.statusHandler.OnStatusCheck -= HealStatusEffect;
+    }
+
+    void InnerFocus()
+    {
+        if (_abilityTriggered) return;
+        _participant.pokemon.canBeFlinched = false;
+        _abilityTriggered = true;
     }
     void PickUp()
     {
