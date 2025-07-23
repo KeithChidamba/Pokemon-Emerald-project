@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 25128
+        "instanceID": 25124
     },
     "hasGender": true,
     "hp": 44.0,
@@ -53,14 +53,15 @@
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
+    "canBeFlinched": true,
     "canBeDamaged": true,
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 26136
+            "instanceID": 26142
         },
         {
-            "instanceID": 26044
+            "instanceID": 26048
         }
     ],
     "statusEffect": 0,
@@ -74,9 +75,9 @@
         "evolutionIndex": 0
     },
     "requiresEvolutionStone": false,
-    "evolutionStoneName": "None",
+    "evolutionStone": 0,
     "abilities": [
-        "Paralysis Combo"
+        0
     ],
     "splitEvolution": true,
     "requiresFriendshipEvolution": false,
@@ -89,33 +90,33 @@
     ],
     "moveSet": [
         {
-            "instanceID": -16724
+            "instanceID": -3198
         },
         {
-            "instanceID": -16726
+            "instanceID": -3200
         },
         {
-            "instanceID": -16728
+            "instanceID": -3202
         },
         {
-            "instanceID": -16730
+            "instanceID": -3204
         }
     ],
     "ability": {
-        "instanceID": 25842
+        "instanceID": 25846
     },
     "evolutions": [
         {
-            "instanceID": 25332
+            "instanceID": 25330
         },
         {
-            "instanceID": 25522
+            "instanceID": 25524
         },
         {
-            "instanceID": 25198
+            "instanceID": 25194
         },
         {
-            "instanceID": 25528
+            "instanceID": 25530
         }
     ],
     "heldItem": {
@@ -123,10 +124,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32466
+        "instanceID": 32484
     },
     "backPicture": {
-        "instanceID": 32570
+        "instanceID": 32604
     },
     "pokeballName": "",
     "healthPhase": 1,

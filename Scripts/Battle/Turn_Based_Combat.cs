@@ -12,7 +12,7 @@ public class Turn_Based_Combat : MonoBehaviour
     public static Turn_Based_Combat Instance; 
     [SerializeField]List<Turn> _turnHistory = new();
     public event Action OnNewTurn;
-    public event Action OnMoveExecute;
+    public event Action<Battle_Participant> OnMoveExecute;
     public event Action OnTurnsCompleted;
     public int currentTurnIndex = 0;
     public bool levelEventDelay = false;
@@ -71,6 +71,16 @@ public class Turn_Based_Combat : MonoBehaviour
         if(attacker.pokemon.hp<=0) return false;
         if (attacker.pokemon.canAttack)
         {
+            if (attacker.pokemon.isConfused)
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is confused");
+                if (Utility.RandomRange(0, 2) < 1)
+                {
+                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" hurt itself in its confusion");
+                    Move_handler.Instance.ConfusionDamage(attacker);
+                    return false;
+                }
+            }
             if (turn.move.moveAccuracy < 100)//not a sure-hit move
             {
                 if (!MoveSuccessful(turn))
@@ -115,9 +125,9 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
                 continue;
             }
-            OnMoveExecute?.Invoke();
+            OnMoveExecute?.Invoke(attacker);
             yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
-            if (CanAttack(currentTurn,attacker,victim))
+            if (CanAttack(currentTurn,attacker,victim))//test if confusion damage is waited for
             {
                 yield return new WaitUntil(() => !Item_handler.Instance.usingHeldItem);
                 yield return new WaitUntil(() => !levelEventDelay);
@@ -175,8 +185,8 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private bool IsValidParticipant(Turn turn,Battle_Participant participant)
     {
-        return (turn.attackerID == participant.pokemon.pokemonID.ToString() ||
-                turn.victimID == participant.pokemon.pokemonID.ToString());
+        return turn.attackerID == participant.pokemon.pokemonID||
+                turn.victimID == participant.pokemon.pokemonID;
     }
     public void NextTurn()
     { 

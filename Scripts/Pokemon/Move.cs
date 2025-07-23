@@ -9,12 +9,14 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("Move_name")] public string moveName;
     [FormerlySerializedAs("Move_damage")] public float moveDamage;
     [FormerlySerializedAs("Move_accuracy")] public float moveAccuracy;
+    public int critModifierIndex;
     public Type type;
     public bool isSpecial;
     [FormerlySerializedAs("is_Buff_Debuff")] public bool isBuffOrDebuff;
     [FormerlySerializedAs("Has_status")] public bool hasStatus;
     [FormerlySerializedAs("Has_effect")] public bool hasSpecialEffect;
     [FormerlySerializedAs("Can_flinch")] public bool canCauseFlinch;
+    public bool canCauseConfusion;
     [FormerlySerializedAs("is_Consecutive")] public bool isConsecutive;
     public bool isMultiTarget;
     public bool isSelfTargeted;

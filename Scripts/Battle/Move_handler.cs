@@ -17,7 +17,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _statLevels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
     private readonly float[] _accuracyAndEvasionLevels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
-    private Battle_event[] _dialougeOrder={null,null,null,null};
+    private Battle_event[] _dialougeOrder={null,null,null,null,null};
     private bool _moveDelay = false;
     private bool _cancelMove = false;
     public bool processingOrder = false;
@@ -52,6 +52,7 @@ public class Move_handler:MonoBehaviour
         _dialougeOrder[1] = new Battle_event(CheckVictimVulnerabilityToStatus, _currentTurn.move.hasStatus);
         _dialougeOrder[2] = new Battle_event(CheckBuffOrDebuffApplicability, _currentTurn.move.isBuffOrDebuff);
         _dialougeOrder[3] = new Battle_event(FlinchEnemy, _currentTurn.move.canCauseFlinch);
+        _dialougeOrder[4] = new Battle_event(ConfuseEnemy,_currentTurn.move.canCauseConfusion);
     }
     private IEnumerator MoveSequence()
     {
@@ -103,6 +104,18 @@ public class Move_handler:MonoBehaviour
         else
             ExecuteRandomConsecutiveMove();
     }
+
+    public void ConfusionDamage(Battle_Participant confusionVictim)
+    {
+        var simulatedMove = ScriptableObject.CreateInstance<Move>();
+        simulatedMove.isSpecial = false;
+        simulatedMove.moveDamage = 40;
+        simulatedMove.description = "Confusion";
+        _currentTurn = new(simulatedMove, 0, 0, 0, 0);
+        attacker = confusionVictim;
+        victim = confusionVictim;
+        StartCoroutine(DamageDisplay(confusionVictim,false));
+    }
     private bool IsInvincible(Move move,Battle_Participant currentVictim)
     {
         if (currentVictim.pokemon.canBeDamaged || move.moveDamage == 0) return false;
@@ -113,33 +126,36 @@ public class Move_handler:MonoBehaviour
     }
     private int CheckIfCrit()
     {
-        float critChance = attacker.pokemon.critChance;
+        var buffedCritRateIndex = Array.IndexOf(_critLevels, attacker.pokemon.critChance)
+                                  + _currentTurn.move.critModifierIndex;
+        float critChance = _critLevels[buffedCritRateIndex];
         if (UnityEngine.Random.Range(0f, 100f) >= critChance) return 1;
-        Dialogue_handler.Instance.DisplayBattleInfo("Critical Hit!");
         return 2;
     }
 
     private float CalculateMoveDamage(Move move,Battle_Participant currentVictim)
-    {
+    { 
+        var isConfusionDamage = move.description == "Confusion"; //this is a cop out,but easiest option
         if (IsInvincible(move, currentVictim)) return 0;
         var critValue = CheckIfCrit();
+        if(critValue>1 && !isConfusionDamage) Dialogue_handler.Instance.DisplayBattleInfo("Critical Hit!");
         float damageDealt = 0;
         var levelFactor = ((attacker.pokemon.currentLevel * 2) / 5f) + 2;
         var stab = 1f;
         float attackTypeValue = 0;
         float attackDefenseRatio = 0;
         var randomFactor = (float)Utility.RandomRange(85, 101) / 100;
-        var typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, _currentTurn.move.type);
-        attackTypeValue = _currentTurn.move.isSpecial? attacker.pokemon.specialAttack : attacker.pokemon.attack;
-        attackDefenseRatio = SetAtkDefRatio(critValue,_currentTurn.move.isSpecial,attacker,currentVictim);
-        if (BattleOperations.is_Stab(attacker.pokemon, _currentTurn.move.type))
+        var typeEffectiveness = isConfusionDamage? 1: BattleOperations.GetTypeEffectiveness(currentVictim, move.type);
+        attackTypeValue = move.isSpecial? attacker.pokemon.specialAttack : attacker.pokemon.attack;
+        attackDefenseRatio = SetAtkDefRatio(critValue,move.isSpecial,attacker,currentVictim);
+        if (BattleOperations.is_Stab(attacker.pokemon, move.type))
             stab = 1.5f;
         float baseDamage = (levelFactor * move.moveDamage *
                              (attackTypeValue/ move.moveDamage))/attacker.pokemon.currentLevel;
         float damageModifier = critValue*stab*randomFactor*typeEffectiveness;
         damageDealt = math.trunc(damageModifier * baseDamage * attackDefenseRatio);
-
-        float damageAfterBuff = OnDamageDeal?.Invoke(attacker,victim,_currentTurn.move,damageDealt) ?? damageDealt; 
+        if (isConfusionDamage) return damageDealt;
+        float damageAfterBuff = OnDamageDeal?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt; 
         OnMoveHit?.Invoke(attacker,move);
         damageAfterBuff = AccountForVictimsBarriers(move,currentVictim,damageAfterBuff);
         return damageAfterBuff;
@@ -191,7 +207,7 @@ public class Move_handler:MonoBehaviour
         }
         return atk / def;
     }
-    private IEnumerator DamageDisplay(Battle_Participant currentVictim)
+    private IEnumerator DamageDisplay(Battle_Participant currentVictim,bool displayEffectiveness = true)
     {
         displayingHealthDecrease = true;
         var damage = CalculateMoveDamage(_currentTurn.move, currentVictim);
@@ -213,8 +229,11 @@ public class Move_handler:MonoBehaviour
         currentVictim.pokemon.hp = healthAfterDecrease;
         yield return new WaitUntil(() =>  currentVictim.pokemon.hp <= 0 || currentVictim.pokemon.hp<=healthAfterDecrease);
         var typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, _currentTurn.move.type);
-                                                                                                                                  
-        if(!_currentTurn.move.isConsecutive) DisplayEffectiveness(typeEffectiveness,currentVictim);
+
+        if (!_currentTurn.move.isConsecutive && displayEffectiveness)
+        {
+            DisplayEffectiveness(typeEffectiveness,currentVictim);
+        }
         currentVictim.pokemon.TakeDamage(0);
         displayingHealthDecrease = false;
     }
@@ -306,14 +325,32 @@ public class Move_handler:MonoBehaviour
         if (!participant.isActive) return;
         participant.statusHandler.GetStatDropImmunity(numTurns);
     }
+
+    void ConfuseEnemy()
+    {
+        if (!victim.pokemon.canBeDamaged)
+        {
+            processingOrder = false;
+            return;
+        }
+        if (Utility.RandomRange(1, 101) < _currentTurn.move.statusChance)
+        {
+            var randomNum = Utility.RandomRange(1, 6);
+            victim.statusHandler.GetConfusion(randomNum);
+        }
+        processingOrder = false;
+    }
     void FlinchEnemy()
     {
-        if (!_currentTurn.move.canCauseFlinch) {processingOrder = false;return;}
-        if (!victim.pokemon.canBeDamaged) {processingOrder = false;return;}
+        if (!victim.pokemon.canBeDamaged || !victim.pokemon.canBeFlinched)
+        {
+            processingOrder = false;
+            return;
+        }
         if (Utility.RandomRange(1, 101) < _currentTurn.move.statusChance)
         {
             victim.pokemon.canAttack = false;
-            victim.pokemon.isFlinched=true;
+            victim.pokemon.isFlinched = true;
         }
         processingOrder = false;
     }
@@ -421,7 +458,7 @@ public class Move_handler:MonoBehaviour
         allParticipants.RemoveAll(p => p.pokemon.pokemonID == attacker.pokemon.pokemonID);
         return allParticipants;
     }
-    IEnumerator ExecuteConsecutiveMove(int numRepetitions,bool displayMessage)
+    IEnumerator ExecuteConsecutiveMove(int numRepetitions,bool displayMessage = true)
     {
         var numHits = 0;
         for (int i = 0; i < numRepetitions; i++)
@@ -449,7 +486,7 @@ public class Move_handler:MonoBehaviour
     private void ExecuteRandomConsecutiveMove()
     {
         var numRepetitions = Utility.RandomRange(1, 6);
-        StartCoroutine(ExecuteConsecutiveMove(numRepetitions,true));
+        StartCoroutine(ExecuteConsecutiveMove(numRepetitions));
     } 
     IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
     {

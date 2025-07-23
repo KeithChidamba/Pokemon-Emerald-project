@@ -190,6 +190,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnTurnsCompleted -= statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
+        Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.ConfusionCheck;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.NotifyHealing;
     }
     public void ResetParticipantState()
@@ -299,6 +300,7 @@ public class Battle_Participant : MonoBehaviour
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
         Turn_Based_Combat.Instance.OnTurnsCompleted += statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
+        Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.ConfusionCheck;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
         pokemon.OnDamageTaken += ()=> StartCoroutine(CheckIfFainted());

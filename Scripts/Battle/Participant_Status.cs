@@ -11,6 +11,7 @@ public class Participant_Status : MonoBehaviour
     private int _statusDurationInTurns = 0;
     private bool _healed = false;
     private int _statDropImmunityDuration = 0;
+    private int _confusionDuration;
     private readonly Dictionary<PokemonOperations.StatusEffect, Action> _statusEffectMethods = new ();
     public event Action OnStatusCheck;
     void Start()
@@ -19,6 +20,7 @@ public class Participant_Status : MonoBehaviour
         _statusEffectMethods.Add(PokemonOperations.StatusEffect.Freeze,FreezeCheck);
         _statusEffectMethods.Add(PokemonOperations.StatusEffect.Sleep,SleepCheck);
         _statusEffectMethods.Add(PokemonOperations.StatusEffect.Paralysis,ParalysisCheck);
+        Battle_handler.Instance.OnBattleEnd += ()=> Move_handler.Instance.OnMoveHit -= RemoveFreezeStatusWithFire;
     }
     public void GetStatusEffect(int numTurns)
     {
@@ -31,7 +33,11 @@ public class Participant_Status : MonoBehaviour
         _statusDurationInTurns = numTurns;
         StatDrop();
     }
-
+    public void GetConfusion(int numTurns)
+    {
+        _confusionDuration = numTurns;
+        _participant.pokemon.isConfused = true;
+    }
     public void GetStatDropImmunity(int numTurns)
     {
         _statDropImmunityDuration = numTurns;
@@ -97,7 +103,15 @@ public class Participant_Status : MonoBehaviour
                 break;
         }
     }
-    
+    public void ConfusionCheck(Battle_Participant participant)
+    {
+        if (_participant != participant) return;
+        if (!_participant.isActive) return;
+        if (!_participant.pokemon.isConfused) return;
+        _participant.pokemon.isConfused = _confusionDuration > 0;
+        
+        if (_confusionDuration > 0) _confusionDuration--;
+    }
     public void CheckStatDropImmunity()
     {
         if (!_participant.isActive) return;
@@ -153,8 +167,9 @@ public class Participant_Status : MonoBehaviour
         LooseHp(damage);
         _statusDuration++;
     }
-    public void NotifyHealing()
+    public void NotifyHealing(Battle_Participant participant)
     {
+        if (participant != _participant) return;
         if (!_healed) return;
         switch (_participant.pokemon.statusEffect)
         {

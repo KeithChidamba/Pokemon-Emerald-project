@@ -50,7 +50,7 @@ public class Battle_Data:MonoBehaviour
         pokemon.immuneToStatReduction = false;
         pokemon.canBeDamaged = true;
         pokemon.isFlinched = false;
-
+        pokemon.isConfused = false;
         var rawName = pokemon.pokemonName.Replace("Foe ", "");
         pokemon.pokemonName = rawName;
     }

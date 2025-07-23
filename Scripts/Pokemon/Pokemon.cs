@@ -57,6 +57,7 @@ public class Pokemon : ScriptableObject
     public bool canAttack = true;
     public bool isFlinched;
     public bool canBeFlinched = true;
+    public bool isConfused;
     [FormerlySerializedAs("CanBeDamaged")] public bool canBeDamaged = true;
     public bool immuneToStatReduction = false;
     public List<Type> types;

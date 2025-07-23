@@ -160,14 +160,16 @@ public class AbilityHandler : MonoBehaviour
     }
     void HealStatusEffect()
     {
-        if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
+        var currentStatus = _participant.pokemon.statusEffect;
+        if (currentStatus == PokemonOperations.StatusEffect.None) return;
         if (Utility.RandomRange(1, 4) < 2)
         {
-            if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Sleep
-                || _participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Freeze
-                || _participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Paralysis)
+            if (currentStatus == PokemonOperations.StatusEffect.Sleep
+                || currentStatus == PokemonOperations.StatusEffect.Freeze
+                || currentStatus == PokemonOperations.StatusEffect.Paralysis)
             {
-                _participant.pokemon.canAttack = true;
+                if(!_participant.pokemon.isFlinched)
+                    _participant.pokemon.canAttack = true;
             }
             _participant.pokemon.statusEffect = PokemonOperations.StatusEffect.None;
             Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");

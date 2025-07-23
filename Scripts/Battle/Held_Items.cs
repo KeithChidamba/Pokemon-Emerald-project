@@ -12,8 +12,9 @@ public class Held_Items : MonoBehaviour
         Turn_Based_Combat.Instance.OnMoveExecute += CheckForUsableItem;
     }
 
-    void CheckForUsableItem()
+    void CheckForUsableItem(Battle_Participant participant)
     {
+        if (participant != _participant) return;
         if(!_participant.isActive)return;
         if (!_participant.pokemon.hasItem) return;
         if (_participant.pokemon.heldItem.quantity == 0 && !_participant.pokemon.heldItem.isHeldItem)

@@ -438,6 +438,7 @@ public class Item_handler : MonoBehaviour
         if (curableStatus == "full heal") 
         {
             _selectedPartyPokemon.statusEffect = PokemonOperations.StatusEffect.None;
+            _selectedPartyPokemon.isConfused = false;
             Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" has been healed");
         }
         else

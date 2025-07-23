@@ -13,11 +13,13 @@ public static class Obj_Instance
         newMove.moveName = m.moveName;
         newMove.moveDamage = m.moveDamage;
         newMove.moveAccuracy = m.moveAccuracy;
+        newMove.critModifierIndex = m.critModifierIndex;
         newMove.type = m.type;
         newMove.isSpecial = m.isSpecial;
         newMove.hasStatus = m.hasStatus;
         newMove.hasSpecialEffect = m.hasSpecialEffect;
         newMove.canCauseFlinch = m.canCauseFlinch;
+        newMove.canCauseConfusion = m.canCauseConfusion;
         newMove.isBuffOrDebuff = m.isBuffOrDebuff;
         newMove.isConsecutive = m.isConsecutive;
         newMove.isSelfTargeted = m.isSelfTargeted;
@@ -81,8 +83,9 @@ public static class Obj_Instance
         newPokemon.friendshipLevel = pkm.friendshipLevel;
         newPokemon.hasTrainer = pkm.hasTrainer;
         newPokemon.canAttack = pkm.canAttack;
-        newPokemon.canBeFlinched = pkm.canBeFlinched;
         newPokemon.isFlinched = pkm.isFlinched;
+        newPokemon.canBeFlinched = pkm.canBeFlinched;
+        newPokemon.isConfused = pkm.isConfused;
         newPokemon.canBeDamaged = pkm.canBeDamaged;
         newPokemon.immuneToStatReduction = pkm.immuneToStatReduction;
         newPokemon.types = pkm.types;

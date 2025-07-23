@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 25938
+        "instanceID": 25942
     },
     "hasGender": true,
     "hp": 57.0,
@@ -57,14 +57,15 @@
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
+    "canBeFlinched": true,
     "canBeDamaged": true,
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25312
+            "instanceID": 25310
         },
         {
-            "instanceID": 26144
+            "instanceID": 26150
         }
     ],
     "statusEffect": 0,
@@ -78,9 +79,9 @@
         "evolutionIndex": 0
     },
     "requiresEvolutionStone": false,
-    "evolutionStoneName": "None",
+    "evolutionStone": 0,
     "abilities": [
-        "Arena Trap"
+        0
     ],
     "splitEvolution": false,
     "requiresFriendshipEvolution": false,
@@ -93,27 +94,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -16744
+            "instanceID": -3218
         },
         {
-            "instanceID": -16746
+            "instanceID": -3220
         },
         {
-            "instanceID": -16748
+            "instanceID": -3222
         },
         {
-            "instanceID": -16750
+            "instanceID": -3224
         }
     ],
     "ability": {
-        "instanceID": 25714
+        "instanceID": 25718
     },
     "evolutions": [
         {
-            "instanceID": 25302
+            "instanceID": 25300
         },
         {
-            "instanceID": 26116
+            "instanceID": 26122
         }
     ],
     "heldItem": {
@@ -121,10 +122,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32438
+        "instanceID": 32452
     },
     "backPicture": {
-        "instanceID": 32590
+        "instanceID": 32624
     },
     "pokeballName": "",
     "healthPhase": 1,

@@ -8,11 +8,11 @@ public class Turn
 {
      [SerializeField]public int attackerIndex;
      [SerializeField]public int victimIndex;
-     [SerializeField]public string victimID;
-     [SerializeField]public string attackerID;
+     [SerializeField]public long victimID;
+     [SerializeField]public long attackerID;
      [SerializeField]public Move move;
      
-     public Turn(Move move,int attacker,int victim, string attackerID,string victimID)
+     public Turn(Move move,int attacker,int victim, long attackerID,long victimID)
      {
           this.move = move;
           attackerIndex = attacker;

@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26106
+        "instanceID": 26112
     },
     "hasGender": true,
     "hp": 11.0,
@@ -53,11 +53,12 @@
     "hasTrainer": true,
     "canAttack": true,
     "isFlinched": false,
+    "canBeFlinched": true,
     "canBeDamaged": true,
     "immuneToStatReduction": false,
     "types": [
         {
-            "instanceID": 25884
+            "instanceID": 25888
         }
     ],
     "statusEffect": 0,
@@ -68,9 +69,9 @@
         "evolutionIndex": 0
     },
     "requiresEvolutionStone": true,
-    "evolutionStoneName": "Thunder Stone",
+    "evolutionStone": 0,
     "abilities": [
-        "Static"
+        0
     ],
     "splitEvolution": false,
     "requiresFriendshipEvolution": false,
@@ -98,15 +99,15 @@
     ],
     "moveSet": [
         {
-            "instanceID": -16766
+            "instanceID": -3240
         }
     ],
     "ability": {
-        "instanceID": 26110
+        "instanceID": 26116
     },
     "evolutions": [
         {
-            "instanceID": 25720
+            "instanceID": 25724
         }
     ],
     "heldItem": {
@@ -114,10 +115,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31924
+        "instanceID": 31930
     },
     "backPicture": {
-        "instanceID": 31926
+        "instanceID": 31932
     },
     "pokeballName": "",
     "healthPhase": 0,

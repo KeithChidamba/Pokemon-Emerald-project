@@ -55,6 +55,8 @@ public static class NameDB
     }
     public static Dictionary<MoveName, string> _moveNames = new()
     {
+        { MoveName.Supersonic, "Supersonic" },
+        { MoveName.MeanLook, "Mean Look" },
         { MoveName.Tackle, "Tackle" },
         { MoveName.Pound, "Pound" },
         { MoveName.FocusEnergy, "Focus Energy" },
@@ -64,6 +66,7 @@ public static class NameDB
         { MoveName.Protect, "Protect" },
         { MoveName.QuickAttack, "Quick Attack" },
         { MoveName.Scratch, "Scratch" },
+        { MoveName.LeechLife, "Leech Life" },
         { MoveName.BugBite, "Bug Bite" },
         { MoveName.StringShot, "String Shot" },
         { MoveName.Bite, "Bite" },
@@ -75,6 +78,8 @@ public static class NameDB
         { MoveName.DoubleKick, "Double Kick" },
         { MoveName.Ember, "Ember" },
         { MoveName.Flamethrower, "Flamethrower" },
+        { MoveName.WingAttack, "Wing Attack" },
+        { MoveName.AirCutter, "Air Cutter" },
         { MoveName.ArialAce, "Arial Ace" },
         { MoveName.Absorb, "Absorb" },
         { MoveName.BulletSeed, "Bullet Seed" },
@@ -83,11 +88,14 @@ public static class NameDB
         { MoveName.Earthquake, "Earthquake" },
         { MoveName.PoisonSting, "Poison Sting" },
         { MoveName.Toxic, "Toxic" },
+        { MoveName.PoisonFang, "Poison Fang" },
         { MoveName.LightScreen, "Light Screen" },
         { MoveName.Reflect, "Reflect" },
         { MoveName.Bubble, "Bubble" },
         { MoveName.WaterGun, "Water Gun" },
-        { MoveName.Surf, "Surf" }
+        { MoveName.Astonish, "Astonish" },
+        { MoveName.ConfuseRay, "Confuse Ray" },
+        { MoveName.Haze, "Haze" },
     };
 
     private static Dictionary<Ability, string> _abilityNames = new()

@@ -375,8 +375,8 @@ public class Battle_handler : MonoBehaviour
 
         Turn currentTurn = new Turn(move, Array.IndexOf(battleParticipants,user)
             ,currentEnemyIndex
-            , user.pokemon.pokemonID.ToString()
-            ,battleParticipants[currentEnemyIndex].pokemon.pokemonID.ToString());
+            , user.pokemon.pokemonID
+            ,battleParticipants[currentEnemyIndex].pokemon.pokemonID);
         Turn_Based_Combat.Instance.SaveMove(currentTurn);
     }
     private void ResetMoveUsability()
