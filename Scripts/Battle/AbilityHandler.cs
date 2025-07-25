@@ -152,11 +152,7 @@ public class AbilityHandler : MonoBehaviour
     private void TrapEnemy()
     {
         foreach (var enemy in _participant.currentEnemies)
-        {
-            if(!enemy.canEscape)continue;
-            if(!enemy.pokemon.HasType("Flying") || !enemy.pokemon.HasType("Ghost") || enemy.pokemon.ability.abilityName!="Levitate")
-                enemy.canEscape = false;
-        }
+            Move_handler.Instance.TrapEnemy(enemy);
     }
     void HealStatusEffect()
     {
@@ -168,8 +164,8 @@ public class AbilityHandler : MonoBehaviour
                 || currentStatus == PokemonOperations.StatusEffect.Freeze
                 || currentStatus == PokemonOperations.StatusEffect.Paralysis)
             {
-                if(!_participant.pokemon.isFlinched)
-                    _participant.pokemon.canAttack = true;
+                if(!_participant.isFlinched)
+                    _participant.canAttack = true;
             }
             _participant.pokemon.statusEffect = PokemonOperations.StatusEffect.None;
             Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
@@ -223,7 +219,7 @@ public class AbilityHandler : MonoBehaviour
     {
         if (attacker.pokemon.statusEffect != PokemonOperations.StatusEffect.None) return;
         if (attacker == _participant) return;
-        if (!attacker.pokemon.canBeDamaged)
+        if (!attacker.canBeDamaged)
             return;
         if(moveUsed.isSpecial)return; 
         //simulate a pokemon's attack

@@ -58,8 +58,13 @@ public class Battle_handler : MonoBehaviour
         if (!Options_manager.Instance.playerInBattle) return;
         if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
         
-        _currentParticipant = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
+        _currentParticipant = GetCurrentParticipant();
         AutoAim();
+    }
+
+    public Battle_Participant GetCurrentParticipant()
+    {
+        return battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
     }
     private void EnableBattleMessage(InputState currentState)
     {
@@ -121,7 +126,7 @@ public class Battle_handler : MonoBehaviour
     {
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
         
-        var partnerIndex = battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].GetPartnerIndex(); 
+        var partnerIndex = GetCurrentParticipant().GetPartnerIndex(); 
         var expectedAttackables = new [] {partnerIndex,2,3}; //can attack partner and enemies
          
         var validAttackables = expectedAttackables.ToList().Where(a => battleParticipants[a].isActive).ToList();
@@ -179,9 +184,7 @@ public class Battle_handler : MonoBehaviour
 
     private void SetValidParticipants()
     {
-        foreach (var participant in battleParticipants)
-            if (participant.pokemon != null)
-                SetParticipant(participant);
+        GetValidParticipants().ForEach(SetParticipant);
     }
     void LoadAreaBackground(Encounter_Area area)
     {
@@ -333,6 +336,10 @@ public class Battle_handler : MonoBehaviour
         OnSwitchIn?.Invoke();
     }
 
+    public List<Battle_Participant> GetValidParticipants()
+    {
+        return battleParticipants.ToList().Where(p => !p.isActive && p.pokemon != null).ToList();
+    }
     public void CheckParticipantStates()
     {
         participantCount = 0;
@@ -347,9 +354,8 @@ public class Battle_handler : MonoBehaviour
     }
     public void RefreshParticipantUI()
     {
-        foreach(var participant in battleParticipants)
-            if (participant.pokemon != null)
-                participant.RefreshStatusEffectImage();
+        var validParticipants = GetValidParticipants();
+        validParticipants.ForEach(p=>p.RefreshStatusEffectImage());
     }
     void LoadMoveInputAndText()
     {
@@ -528,7 +534,7 @@ public class Battle_handler : MonoBehaviour
             {
                 participant.Barrieirs.Clear();
                 participant.statData.LoadActualStats();
-                participant.statData.ResetBattleState(participant.pokemon,false);
+                participant.statData.ResetBattleState(participant.pokemon);
                 participant.pokemon = null;
                 participant.additionalTypeImmunity = null;
                 participant.previousMove = null;

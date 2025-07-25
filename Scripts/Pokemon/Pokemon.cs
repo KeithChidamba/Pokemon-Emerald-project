@@ -11,8 +11,8 @@ public class Pokemon : ScriptableObject
 {
     [FormerlySerializedAs("Base_Pokemon_name")] public string basePokemonName;
     [FormerlySerializedAs("Pokemon_name")] public string pokemonName;
-    [FormerlySerializedAs("Pokemon_ID")] public long pokemonID = 0;
-    [FormerlySerializedAs("Personality_value")] public uint personalityValue;
+    public long pokemonID = 0;
+    public uint personalityValue;
     public PokemonOperations.Gender gender;
     public float ratioFemale = 0;
     public Nature nature;
@@ -25,57 +25,52 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("BaseSP_ATK")] public float baseSpecialAttack;
     [FormerlySerializedAs("BaseSP_DEF")] public float baseSpecialDefense;
     [FormerlySerializedAs("Basespeed")] public float baseSpeed;
-    [FormerlySerializedAs("Attack")] public float attack;
-    [FormerlySerializedAs("Defense")] public float defense;
-    [FormerlySerializedAs("SP_ATK")] public float specialAttack;
-    [FormerlySerializedAs("SP_DEF")] public float specialDefense;
+    public float attack;
+    public float defense;
+    public float specialAttack;
+    public float specialDefense;
     public float speed;
-    [FormerlySerializedAs("HP_IV")] public float hpIv;
-    [FormerlySerializedAs("Attack_IV")] public float attackIv;
-    [FormerlySerializedAs("Defense_IV")] public float defenseIv;
-    [FormerlySerializedAs("SP_ATK_IV")] public float specialAttackIv;
-    [FormerlySerializedAs("SP_DEF_IV")] public float specialDefenseIv;
-    [FormerlySerializedAs("speed_IV")] public float speedIv;
-    [FormerlySerializedAs("HP_EV")] public float hpEv=0;
-    [FormerlySerializedAs("Attack_EV")] public float attackEv=0;
-    [FormerlySerializedAs("Defense_EV")] public float defenseEv=0;
-    [FormerlySerializedAs("SP_ATK_EV")] public float specialAttackEv=0;
-    [FormerlySerializedAs("SP_DEF_EV")] public float specialDefenseEv=0;
-    [FormerlySerializedAs("speed_EV")] public float speedEv=0;
+    public float hpIv;
+    public float attackIv;
+    public float defenseIv;
+    public float specialAttackIv;
+    public float specialDefenseIv;
+    public float speedIv;
+    public float hpEv=0;
+    public float attackEv=0;
+    public float defenseEv=0;
+    public float specialAttackEv=0;
+    public float specialDefenseEv=0;
+    public float speedEv=0;
     [FormerlySerializedAs("EVs")] public List<EvYield> effortValues=new();
-    [FormerlySerializedAs("Accuracy")] public float accuracy = 100;
-    [FormerlySerializedAs("Evasion")] public float evasion = 100;
-    [FormerlySerializedAs("crit_chance")] public float critChance = 6.25f;
+    public float accuracy = 100;
+    public float evasion = 100;
+    public float critChance = 6.25f;
     [FormerlySerializedAs("CatchRate")] public float catchRate = 0;
-    [FormerlySerializedAs("Current_level")] public int currentLevel = 1;
-    [FormerlySerializedAs("CurrentExpAmount")] public int currentExpAmount = 0;
-    [FormerlySerializedAs("NextLevelExpAmount")] public float nextLevelExpAmount = 0;
+    public int currentLevel = 1;
+    public int currentExpAmount = 0;
+    public float nextLevelExpAmount = 0;
     [FormerlySerializedAs("EXPGroup")] public PokemonOperations.ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
-    public int friendshipLevel = 0;
-    [FormerlySerializedAs("has_trainer")] public bool hasTrainer=false;
-    public bool canAttack = true;
-    public bool isFlinched;
+    public int friendshipLevel;
+    public bool hasTrainer=false;
     public bool canBeFlinched = true;
-    public bool isConfused;
-    [FormerlySerializedAs("CanBeDamaged")] public bool canBeDamaged = true;
-    public bool immuneToStatReduction = false;
     public List<Type> types;
     public PokemonOperations.StatusEffect statusEffect;
-    [FormerlySerializedAs("Buff_Debuffs")] public List<Buff_Debuff> buffAndDebuffs = new();
+    public List<Buff_Debuff> buffAndDebuffs = new();
     [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
     public FriendShipEvolutionData friendshipEvolutionRequirement;
     [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone = false;
     [FormerlySerializedAs("EvolutionStoneName")] public NameDB.EvolutionStone evolutionStone;
-    public NameDB.Ability[] abilities;//for pokemon with different attainable abilities
+    public NameDB.Ability[] abilities;
     [FormerlySerializedAs("split_evolution")] public bool splitEvolution = false;
     public bool requiresFriendshipEvolution = false;
     public LearnSetMove[] learnSet;
-    [FormerlySerializedAs("move_set")] public List<Move> moveSet=new();
+    public List<Move> moveSet=new();
     public Ability ability;
     public List<Evolution> evolutions;
-    [FormerlySerializedAs("HeldItem")] public Item heldItem;
-    [FormerlySerializedAs("HasItem")] public bool hasItem = false;
+    public Item heldItem;
+    public bool hasItem = false;
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
     public string pokeballName;
@@ -153,9 +148,9 @@ public class Pokemon : ScriptableObject
         heldItem = Obj_Instance.CreateItem(itemToGive);
         heldItem.quantity = 1;
     }
-    public bool HasType(string typeName)
+    public bool HasType(PokemonOperations.Types typeName)
     {
-        return types.Any(type => type.typeName == typeName);
+        return types.Any(type=>type.typeName==typeName.ToString());
     }
 
     private int ApplyFriendshipModifier(int currentIncrease)

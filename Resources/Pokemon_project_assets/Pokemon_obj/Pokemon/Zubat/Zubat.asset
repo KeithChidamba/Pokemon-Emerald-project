@@ -59,11 +59,7 @@ MonoBehaviour:
   expYield: 54
   friendshipLevel: 0
   hasTrainer: 0
-  canAttack: 1
-  isFlinched: 0
   canBeFlinched: 1
-  canBeDamaged: 1
-  immuneToStatReduction: 0
   types:
   - {fileID: 11400000, guid: 3185f3c7151af7d48b86d9e6f6b6c269, type: 2}
   - {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}

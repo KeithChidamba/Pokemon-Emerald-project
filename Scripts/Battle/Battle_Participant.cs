@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -25,6 +24,13 @@ public class Battle_Participant : MonoBehaviour
     public bool isEnemy;
     public bool isActive;
     public bool fainted;
+    public bool canAttack = true;
+    public bool isFlinched;
+    public bool isConfused;
+    public bool canBeDamaged = true;
+    public bool canEscape = true;
+    
+    public List<StatChangeData> statChangeEffects = new();//list of class
     public Slider playerHpSlider;
     [FormerlySerializedAs("hpSliderColor")] public RawImage hpSliderImage;
     public Slider playerExpSlider;
@@ -34,7 +40,6 @@ public class Battle_Participant : MonoBehaviour
     public PreviousMove previousMove;
     public Type additionalTypeImmunity;
     public List<Pokemon> expReceivers;
-    public bool canEscape = true;
     private Action<Pokemon> _resetHandler;
     public Action OnPokemonFainted;
     public List<Barrier> Barrieirs = new();
@@ -149,7 +154,7 @@ public class Battle_Participant : MonoBehaviour
     }
     public void EndWildBattle()
     {
-        statData.ResetBattleState(pokemon,false);
+        statData.ResetBattleState(pokemon);
         Wild_pkm.Instance.inBattle = false;
         Turn_Based_Combat.Instance.faintEventDelay = false;
         Battle_handler.Instance.EndBattle(true);
@@ -187,6 +192,7 @@ public class Battle_Participant : MonoBehaviour
     {
         isActive = false;
         currentEnemies.Clear();
+        statChangeEffects.Clear();
         Turn_Based_Combat.Instance.OnTurnsCompleted -= statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
@@ -196,7 +202,7 @@ public class Battle_Participant : MonoBehaviour
     public void ResetParticipantState()
     {
         statData.LoadActualStats();
-        statData.ResetBattleState(pokemon,false);
+        statData.ResetBattleState(pokemon);
         abilityHandler.ResetState();
         canEscape = true;
         additionalTypeImmunity = null;
@@ -214,6 +220,12 @@ public class Battle_Participant : MonoBehaviour
         return (participantIndex % 2 == 0) ? participantIndex + 1 : participantIndex - 1;
     }
 
+    public bool ProtectedFromStatChange(bool isIncrease)
+    {
+        var protection = isIncrease? StatChangeData.StatChangeability.ImmuneToIncrease
+            :StatChangeData.StatChangeability.ImmuneToDecrease;
+        return statChangeEffects.Any(s => s.Changeability == protection);
+    }
     private void CheckBarrierDuration()
     {
         if (Barrieirs.Count == 0) return;

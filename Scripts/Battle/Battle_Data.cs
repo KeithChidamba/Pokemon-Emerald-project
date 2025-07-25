@@ -39,18 +39,17 @@ public class Battle_Data:MonoBehaviour
         _participant.pokemon.specialDefense=spDef;
         _participant.pokemon.speed=speed;
     }
-    public void ResetBattleState(Pokemon pokemon,bool justLeveledUp)
+    public void ResetBattleState(Pokemon pokemon,bool justLeveledUp = false)
     {
         pokemon.accuracy = 100;
         pokemon.evasion = 100;
         pokemon.critChance = 6.25f;
         pokemon.buffAndDebuffs.Clear();
         if (justLeveledUp) return;
-        pokemon.canAttack = true;
-        pokemon.immuneToStatReduction = false;
-        pokemon.canBeDamaged = true;
-        pokemon.isFlinched = false;
-        pokemon.isConfused = false;
+        _participant.canAttack = true;
+        _participant.canBeDamaged = true;
+        _participant.isFlinched = false;
+        _participant.isConfused = false;
         var rawName = pokemon.pokemonName.Replace("Foe ", "");
         pokemon.pokemonName = rawName;
     }

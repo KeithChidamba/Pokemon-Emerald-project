@@ -16,6 +16,7 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("Has_status")] public bool hasStatus;
     [FormerlySerializedAs("Has_effect")] public bool hasSpecialEffect;
     [FormerlySerializedAs("Can_flinch")] public bool canCauseFlinch;
+    public bool canTrap;
     public bool canCauseConfusion;
     [FormerlySerializedAs("is_Consecutive")] public bool isConsecutive;
     public bool isMultiTarget;

@@ -69,9 +69,9 @@ public class Turn_Based_Combat : MonoBehaviour
     private bool CanAttack(Turn turn, Battle_Participant attacker,Battle_Participant victim)
     {
         if(attacker.pokemon.hp<=0) return false;
-        if (attacker.pokemon.canAttack)
+        if (attacker.canAttack)
         {
-            if (attacker.pokemon.isConfused)
+            if (attacker.isConfused)
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is confused");
                 if (Utility.RandomRange(0, 2) < 1)
@@ -97,7 +97,7 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         else
         {
-            if (attacker.pokemon.isFlinched)
+            if (attacker.isFlinched)
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" flinched!");
             else if(attacker.pokemon.statusEffect!=PokemonOperations.StatusEffect.None)
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" is affected by "+ attacker.pokemon.statusEffect);

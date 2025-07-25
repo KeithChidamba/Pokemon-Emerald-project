@@ -82,12 +82,7 @@ public static class Obj_Instance
         newPokemon.expYield = pkm.expYield;
         newPokemon.friendshipLevel = pkm.friendshipLevel;
         newPokemon.hasTrainer = pkm.hasTrainer;
-        newPokemon.canAttack = pkm.canAttack;
-        newPokemon.isFlinched = pkm.isFlinched;
         newPokemon.canBeFlinched = pkm.canBeFlinched;
-        newPokemon.isConfused = pkm.isConfused;
-        newPokemon.canBeDamaged = pkm.canBeDamaged;
-        newPokemon.immuneToStatReduction = pkm.immuneToStatReduction;
         newPokemon.types = pkm.types;
         newPokemon.statusEffect = pkm.statusEffect;
         newPokemon.buffAndDebuffs = pkm.buffAndDebuffs;

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using System;
-
+using System.Linq;
 
 public class Participant_Status : MonoBehaviour
 {
@@ -10,7 +10,6 @@ public class Participant_Status : MonoBehaviour
     private int _statusDuration = 0;
     private int _statusDurationInTurns = 0;
     private bool _healed = false;
-    private int _statDropImmunityDuration = 0;
     private int _confusionDuration;
     private readonly Dictionary<PokemonOperations.StatusEffect, Action> _statusEffectMethods = new ();
     public event Action OnStatusCheck;
@@ -36,12 +35,15 @@ public class Participant_Status : MonoBehaviour
     public void GetConfusion(int numTurns)
     {
         _confusionDuration = numTurns;
-        _participant.pokemon.isConfused = true;
+        _participant.isConfused = true;
     }
-    public void GetStatDropImmunity(int numTurns)
+    public void GetStatChangeImmunity(StatChangeData.StatChangeability changeability,int numTurns)
     {
-        _statDropImmunityDuration = numTurns;
-        _participant.pokemon.immuneToStatReduction = true;
+        if (_participant.statChangeEffects.Any(s => s.Changeability == changeability))
+        {
+            Debug.Log("added duplicate stat change effect");
+        };
+        _participant.statChangeEffects.Add(new(changeability,numTurns));
     }
     void LooseHp(float percentage)
     {
@@ -66,13 +68,13 @@ public class Participant_Status : MonoBehaviour
         if (!_participant.isActive) return;
         if(_participant.pokemon.hp<=0 )return;
         if(Battle_handler.Instance.battleOver)return;
-        if (_participant.pokemon.isFlinched)
+        if (_participant.isFlinched)
         {
-            _participant.pokemon.isFlinched = false;
-            _participant.pokemon.canAttack = true;
+            _participant.isFlinched = false;
+            _participant.canAttack = true;
         }
-        if (!_participant.pokemon.canBeDamaged)
-            _participant.pokemon.canBeDamaged = true;
+        if (!_participant.canBeDamaged)
+            _participant.canBeDamaged = true;
         if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
         _participant.RefreshStatusEffectImage();
         AssignStatusDamage();
@@ -107,25 +109,26 @@ public class Participant_Status : MonoBehaviour
     {
         if (_participant != participant) return;
         if (!_participant.isActive) return;
-        if (!_participant.pokemon.isConfused) return;
-        _participant.pokemon.isConfused = _confusionDuration > 0;
+        if (!_participant.isConfused) return;
+        _participant.isConfused = _confusionDuration > 0;
         
         if (_confusionDuration > 0) _confusionDuration--;
     }
     public void CheckStatDropImmunity()
     {
         if (!_participant.isActive) return;
-        if (!_participant.pokemon.immuneToStatReduction) return;
-        _participant.pokemon.immuneToStatReduction = _statDropImmunityDuration > 0;
-        if (_statDropImmunityDuration > 0)
-            _statDropImmunityDuration--;
+        if (_participant.statChangeEffects.Count==0) return;
+        
+        _participant.statChangeEffects.ForEach(s=>s.EffectDuration--);
+        _participant.statChangeEffects.RemoveAll(s => s.EffectDuration == 0);
+        
     }
     void FreezeCheck()
     {
         if (Utility.RandomRange(1, 101) < 10) //10% chance
             SetHeal();
         else
-            _participant.pokemon.canAttack = false;
+            _participant.canAttack = false;
     }
 
     void RemoveFreezeStatusWithFire(Battle_Participant attacker, Move moveUsed)
@@ -137,15 +140,15 @@ public class Participant_Status : MonoBehaviour
     }
     void ParalysisCheck()
     {
-        if (_participant.pokemon.isFlinched) return;
+        if (_participant.isFlinched) return;
         //75% chance
-        _participant.pokemon.canAttack = Utility.RandomRange(1, 101) < 75;
+        _participant.canAttack = Utility.RandomRange(1, 101) < 75;
     }
     void SleepCheck()
     {
         if (_statusDuration < 1)//at least sleep for 1 turn
         {
-            _participant.pokemon.canAttack = false;
+            _participant.canAttack = false;
             _statusDuration++;
             return;
         }
@@ -157,7 +160,7 @@ public class Participant_Status : MonoBehaviour
             if (Utility.RandomRange(1, 101) < chances[_statusDuration-1])
                 SetHeal();
             else
-                _participant.pokemon.canAttack = false;
+                _participant.canAttack = false;
             _statusDuration++;
         }
     }
@@ -190,7 +193,7 @@ public class Participant_Status : MonoBehaviour
     void RemoveStatusEffect()
     {
         _participant.pokemon.statusEffect = PokemonOperations.StatusEffect.None;
-        _participant.pokemon.canAttack = true;
+        _participant.canAttack = true;
         _participant.RefreshStatusEffectImage();
     }
 }

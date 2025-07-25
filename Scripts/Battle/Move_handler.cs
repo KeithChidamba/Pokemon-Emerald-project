@@ -17,7 +17,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _statLevels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
     private readonly float[] _accuracyAndEvasionLevels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
-    private Battle_event[] _dialougeOrder={null,null,null,null,null};
+    private Battle_event[] _dialougeOrder={null,null,null,null,null,null};
     private bool _moveDelay = false;
     private bool _cancelMove = false;
     public bool processingOrder = false;
@@ -53,6 +53,7 @@ public class Move_handler:MonoBehaviour
         _dialougeOrder[2] = new Battle_event(CheckBuffOrDebuffApplicability, _currentTurn.move.isBuffOrDebuff);
         _dialougeOrder[3] = new Battle_event(FlinchEnemy, _currentTurn.move.canCauseFlinch);
         _dialougeOrder[4] = new Battle_event(ConfuseEnemy,_currentTurn.move.canCauseConfusion);
+        _dialougeOrder[5] = new Battle_event(()=>TrapEnemy(victim),_currentTurn.move.canTrap);
     }
     private IEnumerator MoveSequence()
     {
@@ -118,7 +119,7 @@ public class Move_handler:MonoBehaviour
     }
     private bool IsInvincible(Move move,Battle_Participant currentVictim)
     {
-        if (currentVictim.pokemon.canBeDamaged || move.moveDamage == 0) return false;
+        if (currentVictim.canBeDamaged || move.moveDamage == 0) return false;
         Dialogue_handler.Instance.DisplayBattleInfo(currentVictim.pokemon.pokemonName+" protected itself");
         
         if (!_currentTurn.move.isMultiTarget) CancelMoveSequence();
@@ -263,7 +264,7 @@ public class Move_handler:MonoBehaviour
             return;
         }
         if (victim.pokemon.hp <= 0){processingOrder = false; return;}
-        if (!victim.pokemon.canBeDamaged)
+        if (!victim.canBeDamaged)
         {
             Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" protected itself");
             processingOrder = false;return;
@@ -320,15 +321,21 @@ public class Move_handler:MonoBehaviour
         participant.statusHandler.GetStatusEffect(numTurnsOfStatus);
     }
 
-    public void ApplyStatDropImmunity(Battle_Participant participant,int numTurns)
+    public void ApplyStatChangeImmunity(Battle_Participant participant,StatChangeData.StatChangeability changeability,int numTurns)
     {
         if (!participant.isActive) return;
-        participant.statusHandler.GetStatDropImmunity(numTurns);
+        participant.statusHandler.GetStatChangeImmunity(changeability,numTurns);
     }
-
+    public void TrapEnemy(Battle_Participant enemy)
+    {
+        if(!enemy.canEscape) return;
+        if(!enemy.pokemon.HasType(PokemonOperations.Types.Flying) || !enemy.pokemon.HasType(PokemonOperations.Types.Ghost) 
+            || enemy.pokemon.ability.abilityName!="Levitate")
+            enemy.canEscape = false;
+    }
     void ConfuseEnemy()
     {
-        if (!victim.pokemon.canBeDamaged)
+        if (!victim.canBeDamaged)
         {
             processingOrder = false;
             return;
@@ -342,15 +349,15 @@ public class Move_handler:MonoBehaviour
     }
     void FlinchEnemy()
     {
-        if (!victim.pokemon.canBeDamaged || !victim.pokemon.canBeFlinched)
+        if (!victim.canBeDamaged || !victim.pokemon.canBeFlinched)
         {
             processingOrder = false;
             return;
         }
         if (Utility.RandomRange(1, 101) < _currentTurn.move.statusChance)
         {
-            victim.pokemon.canAttack = false;
-            victim.pokemon.isFlinched = true;
+            victim.canAttack = false;
+            victim.isFlinched = true;
         }
         processingOrder = false;
     }
@@ -367,7 +374,7 @@ public class Move_handler:MonoBehaviour
             if ( (_currentTurn.move.isMultiTarget && !Battle_handler.Instance.isDoubleBattle) 
                 || !_currentTurn.move.isMultiTarget)
             {
-                if (!victim.pokemon.canBeDamaged || victim.pokemon.immuneToStatReduction)
+                if (!victim.canBeDamaged || victim.ProtectedFromStatChange(buffData.isIncreasing))
                 {
                     Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName + " protected itself");
                 }
@@ -392,7 +399,7 @@ public class Move_handler:MonoBehaviour
     {
         foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker.currentEnemies) )
         {
-            if (enemy.pokemon.canBeDamaged && !enemy.pokemon.immuneToStatReduction)
+            if (enemy.canBeDamaged && !victim.ProtectedFromStatChange(isIncreasing))
             {
                 var data = new BuffDebuffData(enemy, stat, isIncreasing,buffAmount);
                 SelectRelevantBuffOrDebuff(data);
@@ -463,7 +470,7 @@ public class Move_handler:MonoBehaviour
         var numHits = 0;
         for (int i = 0; i < numRepetitions; i++)
         {
-            if (!victim.pokemon.canBeDamaged) break;
+            if (!victim.canBeDamaged) break;
             
             if (victim.pokemon.hp <= 0) break;
             
@@ -547,15 +554,15 @@ public class Move_handler:MonoBehaviour
             for (int i = 0; i < attacker.previousMove.numRepetitions; i++)
                 chance /= 2;
             if (Utility.RandomRange(1, 101) <= chance) //success
-                attacker.pokemon.canBeDamaged = false;
+                attacker.canBeDamaged = false;
             else
             {
-                attacker.pokemon.canBeDamaged = true;
+                attacker.canBeDamaged = true;
                 Dialogue_handler.Instance.DisplayBattleInfo("It failed!");
             }
         }
         else//success
-            attacker.pokemon.canBeDamaged = false;
+            attacker.canBeDamaged = false;
         _moveDelay = false;
     }
     void brickbreak()
@@ -657,5 +664,15 @@ public class Move_handler:MonoBehaviour
     void lightscreen()
     {
         StartCoroutine(CreateBarriers("Light Screen"));
+    }
+    void haze()
+    {
+        var validParticipants = Battle_handler.Instance.GetValidParticipants();
+        foreach (var participant in validParticipants)
+        {
+            participant.pokemon.buffAndDebuffs.Clear();
+            participant.statData.LoadActualStats();
+        }
+        _moveDelay = false;
     }
 }

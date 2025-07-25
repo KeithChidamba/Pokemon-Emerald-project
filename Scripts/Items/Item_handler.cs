@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class Item_handler : MonoBehaviour
     public bool usingItem = false;
     public bool usingHeldItem = false;
     private Item _itemInUse;
+    private Battle_Participant currentParticipant;
     public static Item_handler Instance;
     private event Action<bool> OnItemUsageSuccessful;
 
@@ -31,8 +33,12 @@ public class Item_handler : MonoBehaviour
     }
     public void UseItem(Item item,[CanBeNull] Pokemon selectedPokemon)
     {
-        if(Options_manager.Instance.playerInBattle)
+
+        if (Options_manager.Instance.playerInBattle)
+        {
+            currentParticipant = Battle_handler.Instance.GetCurrentParticipant();
             InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
+        }
         
         _selectedPartyPokemon = selectedPokemon;
         _itemInUse = item;
@@ -218,27 +224,26 @@ public class Item_handler : MonoBehaviour
 
     private void ItemBuffOrDebuff(string statName)
     {
-        var currentTurnIndex = Turn_Based_Combat.Instance.currentTurnIndex;
-        var currentParticipant = Battle_handler.Instance.battleParticipants[currentTurnIndex];
-        _selectedPartyPokemon = currentParticipant.pokemon;
         if (statName == "Stat Reduction")//Guard Spec applies all user's participant
         {
-            if (_selectedPartyPokemon.immuneToStatReduction)
+            if (currentParticipant.ProtectedFromStatChange(false))
             {
                 Dialogue_handler.Instance.DisplayDetails("Your pokemon are already protected");
                 ResetItemUsage();
                 return;
             }
+            Move_handler.Instance.ApplyStatChangeImmunity(currentParticipant,
+                StatChangeData.StatChangeability.ImmuneToDecrease,5);
             
-            Move_handler.Instance.ApplyStatDropImmunity(currentParticipant,5);
-            var pokemonProtected = _selectedPartyPokemon.pokemonName;
+            string pokemonProtected = _selectedPartyPokemon.pokemonName;
             
             if (Battle_handler.Instance.isDoubleBattle)
             {
                 var partner = Battle_handler.Instance.battleParticipants[currentParticipant.GetPartnerIndex()];
                 if(partner.isActive)
                 {
-                    Move_handler.Instance.ApplyStatDropImmunity(partner, 5);
+                    Move_handler.Instance.ApplyStatChangeImmunity(partner,
+                        StatChangeData.StatChangeability.ImmuneToDecrease, 5);
                     pokemonProtected = _selectedPartyPokemon.pokemonName + " and " + partner.pokemon.pokemonName;
                 }
             }
@@ -438,7 +443,7 @@ public class Item_handler : MonoBehaviour
         if (curableStatus == "full heal") 
         {
             _selectedPartyPokemon.statusEffect = PokemonOperations.StatusEffect.None;
-            _selectedPartyPokemon.isConfused = false;
+            if(Options_manager.Instance.playerInBattle) currentParticipant.isConfused = false;
             Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" has been healed");
         }
         else
@@ -447,7 +452,10 @@ public class Item_handler : MonoBehaviour
             {
                 _selectedPartyPokemon.statusEffect = PokemonOperations.StatusEffect.None;
                 if (curableStatus == "sleep" || curableStatus == "freeze" || curableStatus == "paralysis")
-                    _selectedPartyPokemon.canAttack = true;
+                {
+                    if(Options_manager.Instance.playerInBattle)
+                        currentParticipant.canAttack = true;
+                }
                 Dialogue_handler.Instance.DisplayDetails("Pokemon has been healed");
                 Battle_handler.Instance.RefreshParticipantUI();
             }
