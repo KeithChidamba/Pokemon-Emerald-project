@@ -23,8 +23,7 @@ public class Testing : MonoBehaviour
         {
             Debug.Log("Pokemon_project_assets/Pokemon_obj/Moves/"
                       + types[counter].ToLower() + "/" + move.Value.ToLower());
-            var movesTest= Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/"
-                                       + types[counter].ToLower() + "/" + move.Value.ToLower());
+            var movesTest= Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + move.Value.ToLower());
             counter++;
         }
     }

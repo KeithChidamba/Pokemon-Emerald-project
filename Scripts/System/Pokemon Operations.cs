@@ -187,8 +187,7 @@ public static class PokemonOperations
             if (CurrentPokemon.currentLevel == move.requiredLevel)
             {
                 var moveName = move.GetName();
-                var moveFromAsset = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/"
-                                                         + move.GetMoveType() + "/" + moveName.ToLower());
+                var moveFromAsset = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveName.ToLower());
                 if (CurrentPokemon.moveSet.Count == 4) 
                 {//leveling up from battle or rare candies
                     if (inBattle || isPartyPokemon)

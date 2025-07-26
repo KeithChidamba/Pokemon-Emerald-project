@@ -115,7 +115,7 @@ public class Pokemon : ScriptableObject
         for (int i = 0; i < moveData.Count; i++)
         {
             var moveCopy = Obj_Instance.CreateMove(Resources.Load<Move>(
-                $"Pokemon_project_assets/Pokemon_obj/Moves/{moveData[i].moveType}/{moveData[i].moveName}"));
+                $"Pokemon_project_assets/Pokemon_obj/Moves/{moveData[i].moveName}"));
             moveCopy.powerpoints = moveData[i].powerPoints;
             moveCopy.maxPowerpoints = moveData[i].maxPowerPoints;
             moveSet.Add(moveCopy);

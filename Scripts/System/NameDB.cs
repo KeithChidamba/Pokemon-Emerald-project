@@ -3,51 +3,103 @@ using Unity.VisualScripting.Dependencies.NCalc;
 
 public static class NameDB
 {
-
     public enum MoveName
     {
-        Supersonic,
-        MeanLook,
-        Tackle,
-        Pound,
-        FocusEnergy,
-        TailWhip,
-        Harden,
-        Headbutt,
-        Protect,
-        QuickAttack,
-        Scratch,
-        LeechLife,
+        // 🐞 Bug-type
         BugBite,
+        LeechLife,
+        SilverWind,
         StringShot,
-        Bite,
-        Crunch,
+
+        // 🐉 Dragon-type
+        DragonBreath,
+
+        // ⚡ Electric-type
         Thundershock,
         ThunderWave,
         Thunderbolt,
+
+        // 🥋 Fighting-type
         BrickBreak,
         DoubleKick,
+
+        // 🔥 Fire-type
         Ember,
         Flamethrower,
-        ArialAce,
-        WingAttack,
+
+        // 🛫 Flying-type
         AirCutter,
+        ArialAce,
+        Gust,
+        WingAttack,
+
+        // 🌿 Grass-type
         Absorb,
         BulletSeed,
-        MudSlap,
-        Magnitude,
+
+        // 🌍 Ground-type
         Earthquake,
+        Fissure,         // Flygon
+        Magnitude,
+        MudSlap,
+        SandAttack,      // Trapinch
+        SandTomb,        // Trapinch/Vibrava/Flygon
+
+        // 💜 Normal-type
+        Assist,
+        Harden,
+        Attract,         // Beautifly
+        BellyDrum,       // Zigzagoon
+        Bide,            // Silcoon/Cascoon
+        Covet,           // Linoone
+        DoubleTeam,
+        Flail,           // Trapinch
+        FocusEnergy,
+        FurySwipes,
+        Growl,
+        Headbutt,
+        HyperBeam,
+        Leer,
+        OdorSleuth,
+        Pound,
+        Protect,
+        QuickAttack,
+        Rest,
+        Roar,            // Linoone
+        Scratch,
+        Screech,
+        Slam,            // Dustox
+        Slash,           // Flygon
+        Supersonic,
+        TailWhip,
+        Tackle,
+        Uproar,          // Beautifly, Linoone
+
+        // 💀 Poison-type
+        PoisonFang,      // Dustox
         PoisonSting,
         Toxic,
-        PoisonFang,
+
+        // 🔮 Psychic-type
+        Confusion,
         LightScreen,
         Reflect,
+
+        // 🌊 Water-type
         Bubble,
-        WaterGun,
         Surf,
+        WaterGun,
+
+        // 👻 Ghost-type
         Astonish,
         ConfuseRay,
-        Haze
+        Haze,
+
+        // 🌑 Dark-type
+        Bite,
+        Crunch,
+        FaintAttack,
+        MeanLook         // Zubat
     }
     public static string GetMoveName(MoveName name)
     {
