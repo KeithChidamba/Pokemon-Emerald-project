@@ -30,6 +30,7 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         Battle_handler.Instance.OnBattleEnd += ResetTurnState;
         OnNewTurn += AllowPlayerInput;
+        OnNewTurn += CheckParticipantCoolDown;
     }
 
     public void SaveMove(Turn turn)
@@ -112,6 +113,14 @@ public class Turn_Based_Combat : MonoBehaviour
 
             var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
             var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
+            if (ParticipantCoolingDown(attacker))
+            {
+                if (attacker.currentCoolDown.DisplayMessage)
+                {
+                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+attacker.currentCoolDown.Message);
+                }
+                continue;
+            }
             if (!IsValidParticipantState(attacker))
                 continue;
             
@@ -160,20 +169,34 @@ public class Turn_Based_Combat : MonoBehaviour
         InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
             InputStateHandler.StateName.PlaceHolder});
     }
+
+    private bool ParticipantCoolingDown(Battle_Participant participant)
+    {
+        return participant.currentCoolDown.NumTurns > 0;
+    }
+    private void CheckParticipantCoolDown()
+    {
+        var participant = Battle_handler.Instance.GetCurrentParticipant();
+        if (participant.currentCoolDown == null) return;
+        participant.currentCoolDown.NumTurns--;
+        _turnHistory.Add(new(participant.currentCoolDown.MoveToExecute
+            ,currentTurnIndex,participant.currentCoolDown.VictimIndex,0,0));
+        NextTurn();
+    }
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
-        if (attacker.previousMove==null)
+        if (attacker.PreviousMove==null)
         {
             var newData = new PreviousMove(move,0);
-            attacker.previousMove = newData;
+            attacker.PreviousMove = newData;
             return;
         }
-        if (attacker.previousMove.move.moveName == move.moveName)
-            attacker.previousMove.numRepetitions++;
+        if (attacker.PreviousMove.move.moveName == move.moveName)
+            attacker.PreviousMove.numRepetitions++;
         else
         {
             var newData = new PreviousMove(move,0);
-            attacker.previousMove = newData;
+            attacker.PreviousMove = newData;
         }
     }
     private bool IsValidParticipantState(Battle_Participant participant)

@@ -58,7 +58,7 @@ public class AbilityHandler : MonoBehaviour
         _abilityTriggered = false;
         Move_handler.Instance.OnMoveHit -= GiveStatic;
         Battle_handler.Instance.OnBattleEnd -= GiveItem;
-        Move_handler.Instance.OnDamageDeal -= IncreaseDamage;
+        Move_handler.Instance.OnDamageCalc -= IncreaseDamage;
         _participant.statusHandler.OnStatusCheck -= HealStatusEffect;
     }
 
@@ -85,7 +85,7 @@ public class AbilityHandler : MonoBehaviour
     void Blaze()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
     void Guts()
@@ -106,13 +106,13 @@ public class AbilityHandler : MonoBehaviour
     void Overgrow()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
     void ParalysisCombo()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
     void ShedSkin()
@@ -131,13 +131,13 @@ public class AbilityHandler : MonoBehaviour
     void Swarm()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
     void Torrent()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageDeal += IncreaseDamage;
+        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
 

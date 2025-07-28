@@ -23,7 +23,8 @@ public class Move_handler:MonoBehaviour
     public bool processingOrder = false;
     private bool displayingHealthDecrease;
     public event Action OnMoveEnd;
-    public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageDeal;
+    public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageCalc;
+    public event Action<float> OnDamageDeal;
     public event Action<Battle_Participant,Move> OnMoveHit;
     public event Action<Battle_Participant,PokemonOperations.StatusEffect> OnStatusEffectHit;
     private void Awake()
@@ -156,7 +157,8 @@ public class Move_handler:MonoBehaviour
         float damageModifier = critValue*stab*randomFactor*typeEffectiveness;
         damageDealt = math.trunc(damageModifier * baseDamage * attackDefenseRatio);
         if (isConfusionDamage) return damageDealt;
-        float damageAfterBuff = OnDamageDeal?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt; 
+        float damageAfterBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt; 
+        OnDamageDeal?.Invoke(damageAfterBuff);
         OnMoveHit?.Invoke(attacker,move);
         damageAfterBuff = AccountForVictimsBarriers(move,currentVictim,damageAfterBuff);
         return damageAfterBuff;
@@ -548,10 +550,10 @@ public class Move_handler:MonoBehaviour
     }
     void protect()
     {
-        if(attacker.previousMove.move.moveName == "Protect")
+        if(attacker.PreviousMove.move.moveName == "Protect")
         {
             int chance = 100;
-            for (int i = 0; i < attacker.previousMove.numRepetitions; i++)
+            for (int i = 0; i < attacker.PreviousMove.numRepetitions; i++)
                 chance /= 2;
             if (Utility.RandomRange(1, 101) <= chance) //success
                 attacker.canBeDamaged = false;
@@ -672,6 +674,49 @@ public class Move_handler:MonoBehaviour
         {
             participant.pokemon.buffAndDebuffs.Clear();
             participant.statData.LoadActualStats();
+        }
+        _moveDelay = false;
+    }
+
+    void hyperbeam()
+    {
+        if (attacker.currentCoolDown != null)
+        {
+            attacker.currentCoolDown = null;
+            StartCoroutine(DamageDisplay(victim));
+        }
+        else
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokeballName + " is charging");
+            attacker.currentCoolDown = new TurnCoolDown(_currentTurn.move,
+                0,_currentTurn.victimIndex, "",false);
+        }
+        _moveDelay = false;
+    }
+
+    void bide()
+    {
+        if (attacker.currentCoolDown != null)
+        {
+            if (attacker.currentCoolDown.NumTurns > 0)
+            {
+                attacker.currentCoolDown.NumTurns--;
+                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokeballName + " is storing power");
+                OnDamageDeal += attacker.currentCoolDown.StoreDamage;
+            }
+            else
+            {
+                OnDamageDeal -= attacker.currentCoolDown.StoreDamage;
+                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokeballName + " unleashed the power");
+                _currentTurn.move.moveDamage = attacker.currentCoolDown.MoveToExecute.moveDamage;
+                StartCoroutine(DamageDisplay(victim));
+            }
+        }
+        else
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokeballName + " is storing power");
+            attacker.currentCoolDown = new TurnCoolDown(_currentTurn.move,
+                1,_currentTurn.victimIndex, " is storing power",false);
         }
         _moveDelay = false;
     }

@@ -30,14 +30,15 @@ public class Battle_Participant : MonoBehaviour
     public bool canBeDamaged = true;
     public bool canEscape = true;
     
-    public List<StatChangeData> statChangeEffects = new();//list of class
+    public List<StatChangeData> StatChangeEffects = new();//list of class
     public Slider playerHpSlider;
     [FormerlySerializedAs("hpSliderColor")] public RawImage hpSliderImage;
     public Slider playerExpSlider;
     public GameObject[] singleBattleUI;
     public GameObject[] doubleBattleUI;
     public GameObject participantUI;
-    public PreviousMove previousMove;
+    public PreviousMove PreviousMove;
+    public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
     public List<Pokemon> expReceivers;
     private Action<Pokemon> _resetHandler;
@@ -192,7 +193,7 @@ public class Battle_Participant : MonoBehaviour
     {
         isActive = false;
         currentEnemies.Clear();
-        statChangeEffects.Clear();
+        StatChangeEffects.Clear();
         Turn_Based_Combat.Instance.OnTurnsCompleted -= statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
@@ -224,7 +225,7 @@ public class Battle_Participant : MonoBehaviour
     {
         var protection = isIncrease? StatChangeData.StatChangeability.ImmuneToIncrease
             :StatChangeData.StatChangeability.ImmuneToDecrease;
-        return statChangeEffects.Any(s => s.Changeability == protection);
+        return StatChangeEffects.Any(s => s.Changeability == protection);
     }
     private void CheckBarrierDuration()
     {

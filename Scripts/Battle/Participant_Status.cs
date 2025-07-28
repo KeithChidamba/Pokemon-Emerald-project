@@ -39,11 +39,11 @@ public class Participant_Status : MonoBehaviour
     }
     public void GetStatChangeImmunity(StatChangeData.StatChangeability changeability,int numTurns)
     {
-        if (_participant.statChangeEffects.Any(s => s.Changeability == changeability))
+        if (_participant.StatChangeEffects.Any(s => s.Changeability == changeability))
         {
             Debug.Log("added duplicate stat change effect");
         };
-        _participant.statChangeEffects.Add(new(changeability,numTurns));
+        _participant.StatChangeEffects.Add(new(changeability,numTurns));
     }
     void LooseHp(float percentage)
     {
@@ -117,10 +117,10 @@ public class Participant_Status : MonoBehaviour
     public void CheckStatDropImmunity()
     {
         if (!_participant.isActive) return;
-        if (_participant.statChangeEffects.Count==0) return;
+        if (_participant.StatChangeEffects.Count==0) return;
         
-        _participant.statChangeEffects.ForEach(s=>s.EffectDuration--);
-        _participant.statChangeEffects.RemoveAll(s => s.EffectDuration == 0);
+        _participant.StatChangeEffects.ForEach(s=>s.EffectDuration--);
+        _participant.StatChangeEffects.RemoveAll(s => s.EffectDuration == 0);
         
     }
     void FreezeCheck()

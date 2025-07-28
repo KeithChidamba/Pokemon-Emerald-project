@@ -537,7 +537,7 @@ public class Battle_handler : MonoBehaviour
                 participant.statData.ResetBattleState(participant.pokemon);
                 participant.pokemon = null;
                 participant.additionalTypeImmunity = null;
-                participant.previousMove = null;
+                participant.PreviousMove = null;
                 participant.DeactivateUI();
                 if (participant.pokemonTrainerAI != null)
                     participant.pokemonTrainerAI.inBattle = false;
