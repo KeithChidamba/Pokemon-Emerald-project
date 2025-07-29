@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: arial ace
+  m_Name: screech
   m_EditorClassIdentifier: 
-  moveName: Arial Ace
-  moveDamage: 60
-  moveAccuracy: 100
+  moveName: Screech
+  moveDamage: 0
+  moveAccuracy: 85
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
+  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
-  isBuffOrDebuff: 0
+  isBuffOrDebuff: 1
   hasStatus: 0
   hasSpecialEffect: 0
   canCauseFlinch: 0
@@ -27,16 +27,15 @@ MonoBehaviour:
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  isSureHit: 1
   priority: 0
-  powerpoints: 20
-  basePowerpoints: 20
-  maxPowerpoints: 20
+  powerpoints: 40
+  basePowerpoints: 40
+  maxPowerpoints: 40
   statusEffect: 0
   buffOrDebuffData:
     isIncreasing: 0
-    stat: 0
-    amount: 0
+    stat: 2
+    amount: 2
   statusChance: 0
-  buffOrDebuffChance: 0
-  description: a blindingly fast attack that always hits
+  buffOrDebuffChance: 100
+  description: sharply lowers the enemies defense with a loud screech

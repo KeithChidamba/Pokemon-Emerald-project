@@ -194,6 +194,7 @@ public class Battle_Participant : MonoBehaviour
         isActive = false;
         currentEnemies.Clear();
         StatChangeEffects.Clear();
+        Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.CheckTrapDuration;
         Turn_Based_Combat.Instance.OnTurnsCompleted -= statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
@@ -312,6 +313,7 @@ public class Battle_Participant : MonoBehaviour
         }
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
         Turn_Based_Combat.Instance.OnTurnsCompleted += statusHandler.CheckStatus;
+        Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.CheckTrapDuration;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.ConfusionCheck;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;

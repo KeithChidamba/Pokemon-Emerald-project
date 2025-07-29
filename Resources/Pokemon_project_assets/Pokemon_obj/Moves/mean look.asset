@@ -27,6 +27,7 @@ MonoBehaviour:
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
   powerpoints: 5
   basePowerpoints: 5
@@ -37,5 +38,5 @@ MonoBehaviour:
     stat: 0
     amount: 0
   statusChance: 0
-  buffOrDebuffChance: 100
+  buffOrDebuffChance: 0
   description: prevents the foe from switching

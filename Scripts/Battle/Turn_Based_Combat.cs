@@ -82,7 +82,7 @@ public class Turn_Based_Combat : MonoBehaviour
                     return false;
                 }
             }
-            if (turn.move.moveAccuracy < 100)//not a sure-hit move
+            if (!turn.move.isSureHit)
             {
                 if (!MoveSuccessful(turn))
                 {

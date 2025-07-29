@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: arial ace
+  m_Name: dragon breath
   m_EditorClassIdentifier: 
-  moveName: Arial Ace
+  moveName: Dragon Breath
   moveDamage: 60
   moveAccuracy: 100
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
-  isSpecial: 0
+  type: {fileID: 11400000, guid: 5a2d633edb7f86b40a3fe578c4fdb328, type: 2}
+  isSpecial: 1
   isBuffOrDebuff: 0
-  hasStatus: 0
+  hasStatus: 1
   hasSpecialEffect: 0
   canCauseFlinch: 0
   canTrap: 0
@@ -27,16 +27,15 @@ MonoBehaviour:
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  isSureHit: 1
   priority: 0
   powerpoints: 20
   basePowerpoints: 20
   maxPowerpoints: 20
-  statusEffect: 0
+  statusEffect: 1
   buffOrDebuffData:
     isIncreasing: 0
     stat: 0
     amount: 0
-  statusChance: 0
+  statusChance: 30
   buffOrDebuffChance: 0
-  description: a blindingly fast attack that always hits
+  description: a strong breath attack with a chance to paralyze the foe

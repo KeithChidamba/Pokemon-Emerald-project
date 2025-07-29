@@ -47,6 +47,7 @@ public static class NameDB
 
         // 💜 Normal-type
         Assist,
+        SonicBoom,
         Harden,
         Attract,         // Beautifly
         BellyDrum,       // Zigzagoon
@@ -158,6 +159,7 @@ public static Dictionary<MoveName, string> _moveNames = new()
     { MoveName.FocusEnergy, "Focus Energy" },
     { MoveName.FurySwipes, "Fury Swipes" },
     { MoveName.Growl, "Growl" },
+    { MoveName.Harden, "Harden" },
     { MoveName.Headbutt, "Headbutt" },
     { MoveName.HyperBeam, "Hyper Beam" },
     { MoveName.Leer, "Leer" },
@@ -172,6 +174,7 @@ public static Dictionary<MoveName, string> _moveNames = new()
     { MoveName.Slam, "Slam" },
     { MoveName.Slash, "Slash" },
     { MoveName.Supersonic, "Supersonic" },
+    { MoveName.SonicBoom, "Sonic Boom" },
     { MoveName.TailWhip, "Tail Whip" },
     { MoveName.Tackle, "Tackle" },
     { MoveName.Uproar, "Uproar" },

@@ -152,7 +152,11 @@ public class AbilityHandler : MonoBehaviour
     private void TrapEnemy()
     {
         foreach (var enemy in _participant.currentEnemies)
-            Move_handler.Instance.TrapEnemy(enemy);
+        {
+            if (enemy.pokemon.HasType(PokemonOperations.Types.Flying) || enemy.pokemon.HasType(PokemonOperations.Types.Ghost))
+                continue;
+            Move_handler.Instance.TrapEnemy(enemy,false);
+        }
     }
     void HealStatusEffect()
     {

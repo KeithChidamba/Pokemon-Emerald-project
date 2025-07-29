@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: Leech Life
+  m_Name: sand-attack
   m_EditorClassIdentifier: 
-  moveName: Leech Life
-  moveDamage: 20
+  moveName: Sand-Attack
+  moveDamage: 0
   moveAccuracy: 100
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
+  type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   isSpecial: 0
-  isBuffOrDebuff: 0
+  isBuffOrDebuff: 1
   hasStatus: 0
-  hasSpecialEffect: 1
+  hasSpecialEffect: 0
   canCauseFlinch: 0
+  canTrap: 0
   canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
@@ -33,8 +34,8 @@ MonoBehaviour:
   statusEffect: 0
   buffOrDebuffData:
     isIncreasing: 0
-    stat: 0
-    amount: 0
+    stat: 8
+    amount: 1
   statusChance: 0
-  buffOrDebuffChance: 0
-  description: Saps life from the foe
+  buffOrDebuffChance: 100
+  description: throws sand at the foe to lower their accuracy

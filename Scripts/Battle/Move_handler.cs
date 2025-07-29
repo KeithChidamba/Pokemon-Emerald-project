@@ -210,10 +210,11 @@ public class Move_handler:MonoBehaviour
         }
         return atk / def;
     }
-    private IEnumerator DamageDisplay(Battle_Participant currentVictim,bool displayEffectiveness = true)
+    private IEnumerator DamageDisplay(Battle_Participant currentVictim, bool displayEffectiveness = true,
+        bool isSpecificDamage = false,float predefinedDamage = 0)
     {
         displayingHealthDecrease = true;
-        var damage = CalculateMoveDamage(_currentTurn.move, currentVictim);
+        var damage = isSpecificDamage? predefinedDamage : CalculateMoveDamage(_currentTurn.move, currentVictim);
         
         var healthAfterDecrease = Mathf.Clamp(currentVictim.pokemon.hp - damage,0,currentVictim.pokemon.hp);
         
@@ -328,12 +329,22 @@ public class Move_handler:MonoBehaviour
         if (!participant.isActive) return;
         participant.statusHandler.GetStatChangeImmunity(changeability,numTurns);
     }
-    public void TrapEnemy(Battle_Participant enemy)
+
+    public void TrapEnemy(Battle_Participant enemy, bool isMoveEffect = true)
     {
-        if(!enemy.canEscape) return;
-        if(!enemy.pokemon.HasType(PokemonOperations.Types.Flying) || !enemy.pokemon.HasType(PokemonOperations.Types.Ghost) 
-            || enemy.pokemon.ability.abilityName!="Levitate")
+        if (!enemy.canEscape || enemy.pokemon.ability.abilityName == "Levitate")
+        {
+            if(isMoveEffect)
+                Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
+            return;
+        }
+        if (!isMoveEffect || _currentTurn.move.statusChance == 0)
+        {
             enemy.canEscape = false;
+            return;
+        }
+        var numTurnsOfTrap = Utility.RandomRange(2, (int)_currentTurn.move.statusChance+1);
+        enemy.statusHandler.SetupTrapDuration(numTurnsOfTrap);
     }
     void ConfuseEnemy()
     {
@@ -719,5 +730,11 @@ public class Move_handler:MonoBehaviour
                 1,_currentTurn.victimIndex, " is storing power",false);
         }
         _moveDelay = false;
+    }
+
+    void sonicboom()
+    {
+        var sonicBoomDamage = 20f;
+        StartCoroutine(DamageDisplay(victim,isSpecificDamage:true,predefinedDamage:sonicBoomDamage));
     }
 }

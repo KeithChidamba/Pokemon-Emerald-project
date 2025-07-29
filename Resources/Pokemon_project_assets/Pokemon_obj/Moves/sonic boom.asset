@@ -10,24 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: arial ace
+  m_Name: sonic boom
   m_EditorClassIdentifier: 
-  moveName: Arial Ace
-  moveDamage: 60
-  moveAccuracy: 100
+  moveName: Sonic Boom
+  moveDamage: 20
+  moveAccuracy: 90
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
-  isSpecial: 0
+  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  isSpecial: 1
   isBuffOrDebuff: 0
   hasStatus: 0
-  hasSpecialEffect: 0
+  hasSpecialEffect: 1
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  isSureHit: 1
   priority: 0
   powerpoints: 20
   basePowerpoints: 20
@@ -39,4 +38,4 @@ MonoBehaviour:
     amount: 0
   statusChance: 0
   buffOrDebuffChance: 0
-  description: a blindingly fast attack that always hits
+  description: An air attack that always deals 20 damage

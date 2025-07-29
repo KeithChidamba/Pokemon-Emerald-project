@@ -21,6 +21,7 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("is_Consecutive")] public bool isConsecutive;
     public bool isMultiTarget;
     public bool isSelfTargeted;
+    public bool isSureHit;
     [FormerlySerializedAs("Priority")] public int priority;
     [FormerlySerializedAs("Powerpoints")] public int powerpoints;
     [FormerlySerializedAs("BasePowerpoints")] public int basePowerpoints;
