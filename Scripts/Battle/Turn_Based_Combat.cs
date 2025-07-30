@@ -11,6 +11,7 @@ public class Turn_Based_Combat : MonoBehaviour
 {
     public static Turn_Based_Combat Instance; 
     [SerializeField]List<Turn> _turnHistory = new();
+    [SerializeField] private List<SwitchOutData> switchOutQueue = new();
     public event Action OnNewTurn;
     public event Action<Battle_Participant> OnMoveExecute;
     public event Action OnTurnsCompleted;
@@ -107,6 +108,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private IEnumerator ExecuteMoves(List<Turn> turnOrder)
     {
+        StartCoroutine(HandleSwaps());
         foreach (var currentTurn in turnOrder )
         {
             if (Battle_handler.Instance.battleOver) break;
@@ -162,6 +164,39 @@ public class Turn_Based_Combat : MonoBehaviour
         NextTurn();
     }
 
+    private IEnumerator HandleSwaps()
+    {
+        foreach (var swap in switchOutQueue)
+        {
+            //check if move used was pursuit
+            var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => turn.move.moveName.ToLower() == "pursuit");
+            if (pursuitUsersTurn!=null)
+            {//hit enemy with pursuit double damage effect
+                var attacker=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.attackerIndex];
+                var victim=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.victimIndex];
+                Move_handler.Instance.Pursuit(attacker,victim,pursuitUsersTurn.move);
+                yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
+                yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthDecrease);
+            }
+            if (swap.IsPlayer)
+            {
+                swap.Participant.ResetParticipantState();
+                Pokemon_party.Instance.SwitchInMemberSwap(swap);
+                NextTurn();
+                InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+            }
+            else
+            {
+                //write enemy ai logic first so it can choose to switch-in
+            }
+            switchOutQueue.Remove(swap);
+        }
+        yield return new WaitUntil(() => switchOutQueue.Count==0);
+    }
+    public void AddToSwitchQueue(SwitchOutData data)
+    {
+        switchOutQueue.Add(data);
+    }
     void AllowPlayerInput()
     {
         if (currentTurnIndex > 1) return;

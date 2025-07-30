@@ -21,7 +21,7 @@ public class Move_handler:MonoBehaviour
     private bool _moveDelay = false;
     private bool _cancelMove = false;
     public bool processingOrder = false;
-    private bool displayingHealthDecrease;
+    public bool displayingHealthDecrease;
     public event Action OnMoveEnd;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageCalc;
     public event Action<float> OnDamageDeal;
@@ -736,5 +736,13 @@ public class Move_handler:MonoBehaviour
     {
         var sonicBoomDamage = 20f;
         StartCoroutine(DamageDisplay(victim,isSpecificDamage:true,predefinedDamage:sonicBoomDamage));
+    }
+
+    public void Pursuit(Battle_Participant pursuitUser,Battle_Participant switchOutVictim,Move pursuit)
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo(pursuitUser.pokemon.pokemonName+" used "+pursuit.moveName
+                                                    +" on "+switchOutVictim.pokemon.pokemonName+"!");
+        var pursuitDamage = CalculateMoveDamage(pursuit, switchOutVictim) * 2;
+        StartCoroutine(DamageDisplay(switchOutVictim,isSpecificDamage:true,predefinedDamage:pursuitDamage));
     }
 }

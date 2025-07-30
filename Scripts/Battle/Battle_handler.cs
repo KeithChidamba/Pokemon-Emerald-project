@@ -178,13 +178,10 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForSwap = false;
         Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
-
     }
-
-
     private void SetValidParticipants()
     {
-        GetValidParticipants().ForEach(SetParticipant);
+        GetValidParticipants().ForEach(p=> SetParticipant(p,initialCall:true));
     }
     void LoadAreaBackground(Encounter_Area area)
     {
@@ -304,17 +301,16 @@ public class Battle_handler : MonoBehaviour
         LoadAreaBackground(enemy.pokemonTrainerAI.trainerData.TrainerLocation);
         SetupBattle();
     }
-    
-    public void SetParticipant(Battle_Participant participant)
+
+    public void SetParticipant(Battle_Participant participant, bool initialCall = false)
     {
         OnSwitchOut?.Invoke(participant);
         participant.isEnemy = Array.IndexOf(battleParticipants, participant) > 1 ;
         if (participant.isPlayer)
         { //for switch-ins
-            if (Pokemon_party.Instance.swappingIn || Pokemon_party.Instance.swapOutNext)
+            if (!initialCall)
             { 
-
-                var alivePokemon=Pokemon_party.Instance.GetLivingPokemon();
+                var alivePokemon= Pokemon_party.Instance.GetLivingPokemon();
                 participant.pokemon = alivePokemon[Pokemon_party.Instance.selectedMemberIndex - 1];
                 foreach (var enemyParticipant  in participant.currentEnemies)
                     enemyParticipant.AddToExpList(participant.pokemon);

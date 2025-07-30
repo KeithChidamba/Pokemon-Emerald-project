@@ -12,9 +12,9 @@ public class Pokemon_party : MonoBehaviour
     public int numMembers;
     public int selectedMemberIndex;
     public int memberToMove;
-    public bool moving;
-    public bool swappingIn;
+    private bool _swappingIn;
     public bool swapOutNext;
+    public bool moving;
     public bool givingItem;
     public Pokemon_party_member[] memberCards;
     public GameObject partyUI;
@@ -57,11 +57,11 @@ public class Pokemon_party : MonoBehaviour
                                                   " is already in battle", 1f);
             return false;
         }
-        var participantIndex = (Battle_handler.Instance.isDoubleBattle & swappingIn)
+        var participantIndex = (Battle_handler.Instance.isDoubleBattle & _swappingIn)
             ?Turn_Based_Combat.Instance.currentTurnIndex :0;
         
         var currentParticipant = Battle_handler.Instance.battleParticipants[participantIndex];
-        if (!currentParticipant.canEscape & swappingIn)
+        if (!currentParticipant.canEscape & _swappingIn)
         {
             Dialogue_handler.Instance.DisplayDetails(currentParticipant.pokemon.pokemonName +
                                                   " is trapped", 1f);
@@ -73,16 +73,19 @@ public class Pokemon_party : MonoBehaviour
     {
         if (Options_manager.Instance.playerInBattle)
         {//cant swap in a member who is already fighting
-            var currentParticipant = Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex];
-           
-            swappingIn = true;
-            if (!IsValidSwap(memberPosition)) { swappingIn = false; return;}
-
+            var currentParticipant = Battle_handler.Instance.GetCurrentParticipant();
+            _swappingIn = true;
+            if (!IsValidSwap(memberPosition))
+            {
+                _swappingIn = false; return;
+            }
             Battle_handler.Instance.usedTurnForSwap = true;
-            swapOutNext = false;
-            selectedMemberIndex = Turn_Based_Combat.Instance.currentTurnIndex+1;
-            currentParticipant.ResetParticipantState();
-            MoveMember(memberPosition);
+
+            var switchData = new SwitchOutData(Turn_Based_Combat.Instance.currentTurnIndex
+                ,memberPosition - 1,currentParticipant);
+            Turn_Based_Combat.Instance.AddToSwitchQueue(switchData);
+            
+            _swappingIn = false;
         }
         else
         {
@@ -150,7 +153,6 @@ public class Pokemon_party : MonoBehaviour
     public void ResetPartyState()
     {
         swapOutNext = false;
-        swappingIn = false;
 
         Item_handler.Instance.usingItem = false;//in case player closes before using item
         
@@ -179,40 +181,48 @@ public class Pokemon_party : MonoBehaviour
     private void MoveMember(int partyPosition)
     {
         partyPosition--;
-        if (swapOutNext || swappingIn)
+        if (swapOutNext)
         {
             SwapMembers(partyPosition);
-            Invoke(nameof(SwitchIn),1f);
+            Invoke(nameof(ResetSwitchInState),1f);
         }
         else
             if(party[selectedMemberIndex-1] != party[partyPosition])
                 SwapMembers(partyPosition);
     }
 
-    void SwitchIn()
+    void ResetSwitchInState()
     {
-        if (swapOutNext)
-            Turn_Based_Combat.Instance.faintEventDelay = false;
-        if(swappingIn)
-            Turn_Based_Combat.Instance.NextTurn();
+        Turn_Based_Combat.Instance.faintEventDelay = false;
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
     }
-    private void SwapMembers(int partyPosition)
+    public void SwitchInMemberSwap(SwitchOutData data)
+    {
+        (party[data.PartyPosition], party[data.MemberToSwapWith]) = 
+        (party[data.MemberToSwapWith], party[data.PartyPosition]);
+        Battle_handler.Instance.SetParticipant(data.Participant);
+        EndSwap();
+    }
+    void EndSwap()
+    {
+        RefreshMemberCards();
+        ClearSelectionUI();
+        InputStateHandler.Instance.UpdateHealthBarColors();
+    }
+    private void SwapMembers(int partyIndex)
     {
         var swapStore = party[selectedMemberIndex-1];
-        var message = $"You swapped {party[partyPosition].pokemonName} with {swapStore.pokemonName}";
-        party[selectedMemberIndex-1] = party[partyPosition];
-        party[partyPosition] = swapStore;
+        var message = $"You swapped {party[partyIndex].pokemonName} with {swapStore.pokemonName}";
+        party[selectedMemberIndex-1] = party[partyIndex];
+        party[partyIndex] = swapStore;
         moving = false;
         if (Options_manager.Instance.playerInBattle)
             Battle_handler.Instance.SetParticipant(Battle_handler.Instance.battleParticipants[selectedMemberIndex-1]);
+        else
+            Dialogue_handler.Instance.DisplayDetails(message,1f);
         memberToMove = 0;
         selectedMemberIndex = 0;
-        RefreshMemberCards();
-        ClearSelectionUI();
-        if(!swappingIn && !swapOutNext)
-            Dialogue_handler.Instance.DisplayDetails(message,1f);
-        InputStateHandler.Instance.UpdateHealthBarColors();
+        EndSwap();
     }
     public void AddMember(Pokemon pokemon)
     { //add new pokemon after catch or event

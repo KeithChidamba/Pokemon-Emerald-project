@@ -77,8 +77,8 @@ public class AbilityHandler : MonoBehaviour
     void ArenaTrap()
     {
         if (_abilityTriggered) return;
-        TrapEnemy();//first entry in battle doesnt count as switch in, so leave this here
-        Battle_handler.Instance.OnSwitchIn += TrapEnemy;
+        TrapEnemies();//first entry in battle doesnt count as switch in, so leave this here
+        Battle_handler.Instance.OnSwitchIn += TrapEnemies;
         Battle_handler.Instance.OnSwitchOut += RemoveTrap;
         _abilityTriggered = true;
     }
@@ -146,10 +146,10 @@ public class AbilityHandler : MonoBehaviour
         if (participant != _participant) return;
         foreach (var enemy in _participant.currentEnemies)
             enemy.canEscape = true;
-        Battle_handler.Instance.OnSwitchIn -= TrapEnemy;
+        Battle_handler.Instance.OnSwitchIn -= TrapEnemies;
         Battle_handler.Instance.OnSwitchOut -= RemoveTrap;
     }
-    private void TrapEnemy()
+    private void TrapEnemies()
     {
         foreach (var enemy in _participant.currentEnemies)
         {

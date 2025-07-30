@@ -41,7 +41,6 @@ public class Battle_Participant : MonoBehaviour
     public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
     public List<Pokemon> expReceivers;
-    private Action<Pokemon> _resetHandler;
     public Action OnPokemonFainted;
     public List<Barrier> Barrieirs = new();
     private void Start()
@@ -208,12 +207,13 @@ public class Battle_Participant : MonoBehaviour
         abilityHandler.ResetState();
         canEscape = true;
         additionalTypeImmunity = null;
-        if (isPlayer) pokemon.OnLevelUp -= _resetHandler;
+        if (isPlayer) pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
     }
-    private void ResetParticipantStateAfterLevelUp()
+    private void ResetParticipantStateAfterLevelUp(Pokemon pokemonAfterLevelUp)
     {
         statData.LoadActualStats();
-        statData.ResetBattleState(pokemon,true);
+        //same pokemon as the one in this class
+        statData.ResetBattleState(pokemonAfterLevelUp,true);
     }
     public int GetPartnerIndex()
     {
@@ -320,8 +320,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
         pokemon.OnDamageTaken += ()=> StartCoroutine(CheckIfFainted());
         if (!isPlayer) return;
-        _resetHandler = pkm => ResetParticipantStateAfterLevelUp();
-        pokemon.OnLevelUp += _resetHandler;
+        pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
         pokemon.OnLevelUp += Battle_handler.Instance.LevelUpEvent;
         pokemon.OnNewLevel += statData.SaveActualStats;
         ActivateUI(doubleBattleUI, Battle_handler.Instance.isDoubleBattle);
