@@ -14,22 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Poison sting
   moveDamage: 15
-  moveAccuracy: 90
+  moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 3185f3c7151af7d48b86d9e6f6b6c269, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 0
   hasStatus: 1
   hasSpecialEffect: 0
   canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
-  powerpoints: 30
-  basePowerpoints: 30
-  maxPowerpoints: 30
+  powerpoints: 35
+  basePowerpoints: 35
+  maxPowerpoints: 35
   statusEffect: 3
-  buffOrDebuffName: None
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 0
+    amount: 0
   statusChance: 40
   buffOrDebuffChance: 0
   description: a weak sting that may poison

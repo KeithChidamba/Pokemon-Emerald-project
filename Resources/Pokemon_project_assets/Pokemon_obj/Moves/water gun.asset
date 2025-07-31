@@ -12,24 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: water gun
   m_EditorClassIdentifier: 
-  Move_name: Water Gun
-  Move_damage: 40
-  Move_accuracy: 90
+  moveName: Water Gun
+  moveDamage: 40
+  moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
   isSpecial: 1
-  is_Buff_Debuff: 0
-  Has_status: 0
-  Has_effect: 0
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 0
+  canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
+  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 25
-  BasePowerpoints: 25
-  max_Powerpoints: 25
-  Status_effect: None
-  Buff_Debuff: None
-  Status_chance: 0
-  Debuff_chance: 0
-  Description: Sprays a jet of water at the foe
+  isSureHit: 0
+  priority: 0
+  powerpoints: 25
+  basePowerpoints: 25
+  maxPowerpoints: 25
+  statusEffect: 0
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 0
+    amount: 0
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: Sprays a jet of water at the foe

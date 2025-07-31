@@ -10,33 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: absorb
+  m_Name: agility
   m_EditorClassIdentifier: 
-  moveName: Absorb
-  moveDamage: 20
+  moveName: Agility
+  moveDamage: 0
   moveAccuracy: 100
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
-  isSpecial: 1
-  isBuffOrDebuff: 0
+  type: {fileID: 11400000, guid: 881a56a504d3f190bb63579cc6776b0b, type: 2}
+  isSpecial: 0
+  isBuffOrDebuff: 1
   hasStatus: 0
-  hasSpecialEffect: 1
+  hasSpecialEffect: 0
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
-  isSelfTargeted: 0
-  isSureHit: 0
+  isSelfTargeted: 1
+  isSureHit: 1
   priority: 0
-  powerpoints: 25
-  basePowerpoints: 25
-  maxPowerpoints: 25
+  powerpoints: 30
+  basePowerpoints: 30
+  maxPowerpoints: 30
   statusEffect: 0
   buffOrDebuffData:
-    isIncreasing: 0
-    stat: 0
-    amount: 0
+    isIncreasing: 1
+    stat: 5
+    amount: 2
   statusChance: 0
-  buffOrDebuffChance: 0
-  description: saps life from the foe
+  buffOrDebuffChance: 100
+  description: sharply increases the user's speed

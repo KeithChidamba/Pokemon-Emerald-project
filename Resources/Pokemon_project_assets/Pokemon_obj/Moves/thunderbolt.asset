@@ -13,23 +13,30 @@ MonoBehaviour:
   m_Name: thunderbolt
   m_EditorClassIdentifier: 
   moveName: Thunderbolt
-  moveDamage: 95
-  moveAccuracy: 95
+  moveDamage: 90
+  moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
   isSpecial: 1
   isBuffOrDebuff: 0
   hasStatus: 1
   hasSpecialEffect: 0
   canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
   powerpoints: 15
   basePowerpoints: 15
   maxPowerpoints: 15
   statusEffect: 1
-  buffOrDebuffName: None
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 0
+    amount: 0
   statusChance: 20
   buffOrDebuffChance: 0
   description: a strong electric attack that may paralyse the foe

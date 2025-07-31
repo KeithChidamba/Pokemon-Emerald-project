@@ -13,21 +13,25 @@ MonoBehaviour:
   m_Name: mud slap
   m_EditorClassIdentifier: 
   moveName: Mud slap
-  moveDamage: 15
-  moveAccuracy: 85
+  moveDamage: 20
+  moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 1
   hasStatus: 0
   hasSpecialEffect: 0
   canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
-  powerpoints: 15
-  basePowerpoints: 15
-  maxPowerpoints: 15
+  powerpoints: 10
+  basePowerpoints: 10
+  maxPowerpoints: 10
   statusEffect: 0
   buffOrDebuffData:
     isIncreasing: 0

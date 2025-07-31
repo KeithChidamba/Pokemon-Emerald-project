@@ -15,19 +15,23 @@ MonoBehaviour:
   moveName: Focus Energy
   moveDamage: 0
   moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 1
   hasStatus: 0
   hasSpecialEffect: 0
   canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 1
+  isSureHit: 1
   priority: 0
-  powerpoints: 15
-  basePowerpoints: 15
-  maxPowerpoints: 15
+  powerpoints: 30
+  basePowerpoints: 30
+  maxPowerpoints: 30
   statusEffect: 0
   buffOrDebuffData:
     isIncreasing: 1

@@ -535,15 +535,34 @@ public class Move_handler:MonoBehaviour
     {
         StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
     }
-    void absorb()
+
+    void DrainHealth(float fractionOfDamage)
     {
         var damage = CalculateMoveDamage(_currentTurn.move,victim);
-        var healAmount = damage/ 2f;
+        var healAmount = victim.pokemon.hp-damage<0 ? victim.pokemon.hp : damage;
+        healAmount /= fractionOfDamage;
         StartCoroutine(DamageDisplay(victim));
-        attacker.pokemon.hp =( (healAmount+attacker.pokemon.hp) < attacker.pokemon.maxHp)? 
-            math.trunc(math.abs(healAmount)) : attacker.pokemon.maxHp;
+        attacker.pokemon.hp = healAmount + attacker.pokemon.hp < attacker.pokemon.maxHp? 
+            math.trunc(healAmount) : attacker.pokemon.maxHp;
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
         _moveDelay = false;
+    }
+
+    private void leechlife()
+    {
+        DrainHealth(2f);
+    }
+    void absorb()
+    {
+        DrainHealth(2f);
+    }
+    void megadrain()
+    {
+        DrainHealth(2f);
+    }
+    void gigadrain()
+    {
+        DrainHealth(2f);
     }
     void magnitude()
     {

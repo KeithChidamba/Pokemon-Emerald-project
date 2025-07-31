@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: absorb
+  m_Name: mega drain
   m_EditorClassIdentifier: 
-  moveName: Absorb
-  moveDamage: 20
+  moveName: Mega Drain
+  moveDamage: 40
   moveAccuracy: 100
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
@@ -29,9 +29,9 @@ MonoBehaviour:
   isSelfTargeted: 0
   isSureHit: 0
   priority: 0
-  powerpoints: 25
-  basePowerpoints: 25
-  maxPowerpoints: 25
+  powerpoints: 10
+  basePowerpoints: 10
+  maxPowerpoints: 10
   statusEffect: 0
   buffOrDebuffData:
     isIncreasing: 0
@@ -39,4 +39,4 @@ MonoBehaviour:
     amount: 0
   statusChance: 0
   buffOrDebuffChance: 0
-  description: saps life from the foe
+  description: saps a bunch of life from the foe

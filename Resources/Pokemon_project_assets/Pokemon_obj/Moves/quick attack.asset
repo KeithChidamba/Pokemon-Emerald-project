@@ -12,24 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: quick attack
   m_EditorClassIdentifier: 
-  Move_name: Quick attack
-  Move_damage: 40
-  Move_accuracy: 95
+  moveName: Quick attack
+  moveDamage: 40
+  moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
-  Has_status: 0
-  Has_effect: 0
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 0
+  canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
+  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  Priority: 1
-  Powerpoints: 25
-  BasePowerpoints: 25
-  max_Powerpoints: 25
-  Status_effect: None
-  Buff_Debuff: None
-  Status_chance: 0
-  Debuff_chance: 0
-  Description: a fast move that always hits first
+  isSureHit: 0
+  priority: 1
+  powerpoints: 30
+  basePowerpoints: 30
+  maxPowerpoints: 30
+  statusEffect: 0
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 0
+    amount: 0
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: a fast move that always hits first

@@ -13,23 +13,30 @@ MonoBehaviour:
   m_Name: ember
   m_EditorClassIdentifier: 
   moveName: Ember
-  moveDamage: 20
-  moveAccuracy: 90
+  moveDamage: 40
+  moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
   isSpecial: 1
   isBuffOrDebuff: 0
   hasStatus: 1
   hasSpecialEffect: 0
   canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
-  powerpoints: 20
-  basePowerpoints: 20
-  maxPowerpoints: 20
+  powerpoints: 25
+  basePowerpoints: 25
+  maxPowerpoints: 25
   statusEffect: 2
-  buffOrDebuffName: None
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 0
+    amount: 0
   statusChance: 10
   buffOrDebuffChance: 0
   description: fires small embers at the foe

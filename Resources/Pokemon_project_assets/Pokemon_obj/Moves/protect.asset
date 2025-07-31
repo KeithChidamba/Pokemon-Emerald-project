@@ -14,22 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Protect
   moveDamage: 0
-  moveAccuracy: 65
+  moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1
   canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 1
+  isSureHit: 1
   priority: 4
   powerpoints: 10
   basePowerpoints: 10
   maxPowerpoints: 10
-  statusEffect: None
-  buffOrDebuffName: None
+  statusEffect: 0
+  buffOrDebuffData:
+    isIncreasing: 0
+    stat: 0
+    amount: 0
   statusChance: 0
   buffOrDebuffChance: 0
   description: a move that protects from harm

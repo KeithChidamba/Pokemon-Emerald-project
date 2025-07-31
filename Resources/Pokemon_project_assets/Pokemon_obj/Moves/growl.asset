@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: absorb
+  m_Name: growl
   m_EditorClassIdentifier: 
-  moveName: Absorb
-  moveDamage: 20
+  moveName: Growl
+  moveDamage: 0
   moveAccuracy: 100
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
-  isSpecial: 1
-  isBuffOrDebuff: 0
+  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  isSpecial: 0
+  isBuffOrDebuff: 1
   hasStatus: 0
-  hasSpecialEffect: 1
+  hasSpecialEffect: 0
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
@@ -29,14 +29,14 @@ MonoBehaviour:
   isSelfTargeted: 0
   isSureHit: 0
   priority: 0
-  powerpoints: 25
-  basePowerpoints: 25
-  maxPowerpoints: 25
+  powerpoints: 40
+  basePowerpoints: 40
+  maxPowerpoints: 40
   statusEffect: 0
   buffOrDebuffData:
     isIncreasing: 0
-    stat: 0
-    amount: 0
+    stat: 1
+    amount: 1
   statusChance: 0
-  buffOrDebuffChance: 0
-  description: saps life from the foe
+  buffOrDebuffChance: 100
+  description: lowers enemy attack by growling at them

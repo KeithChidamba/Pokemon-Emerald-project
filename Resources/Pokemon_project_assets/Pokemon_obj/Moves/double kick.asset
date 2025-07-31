@@ -13,21 +13,25 @@ MonoBehaviour:
   m_Name: double kick
   m_EditorClassIdentifier: 
   moveName: Double kick
-  moveDamage: 45
-  moveAccuracy: 90
+  moveDamage: 30
+  moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1
   canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
-  powerpoints: 20
-  basePowerpoints: 20
-  maxPowerpoints: 20
+  powerpoints: 30
+  basePowerpoints: 30
+  maxPowerpoints: 30
   statusEffect: 0
   buffOrDebuffData:
     isIncreasing: 0
