@@ -15,21 +15,25 @@ MonoBehaviour:
   moveName: Brick break
   moveDamage: 60
   moveAccuracy: 85
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1
   canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
   powerpoints: 15
   basePowerpoints: 15
   maxPowerpoints: 15
-  statusEffect: None
-  buffOrDebuffName: None
+  statusEffect: 0
+  buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
   description: a violent attack that can break defensive barriers

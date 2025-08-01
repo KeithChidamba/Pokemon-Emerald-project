@@ -33,10 +33,7 @@ MonoBehaviour:
   basePowerpoints: 25
   maxPowerpoints: 25
   statusEffect: 0
-  buffOrDebuffData:
-    isIncreasing: 0
-    stat: 0
-    amount: 0
+  buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
   description: saps life from the foe

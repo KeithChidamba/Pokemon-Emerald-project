@@ -27,13 +27,14 @@ MonoBehaviour:
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
   powerpoints: 40
   basePowerpoints: 40
   maxPowerpoints: 40
   statusEffect: 0
   buffOrDebuffData:
-    isIncreasing: 0
+  - isIncreasing: 0
     stat: 2
     amount: 2
   statusChance: 0

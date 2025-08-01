@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: pound
+  m_Name: thunder
   m_EditorClassIdentifier: 
-  moveName: Pound
-  moveDamage: 40
-  moveAccuracy: 100
+  moveName: Thunder
+  moveDamage: 120
+  moveAccuracy: 70
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
-  isSpecial: 0
+  type: {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
+  isSpecial: 1
   isBuffOrDebuff: 0
-  hasStatus: 0
+  hasStatus: 1
   hasSpecialEffect: 0
   canCauseFlinch: 0
   canTrap: 0
@@ -29,11 +29,11 @@ MonoBehaviour:
   isSelfTargeted: 0
   isSureHit: 0
   priority: 0
-  powerpoints: 35
-  basePowerpoints: 35
-  maxPowerpoints: 35
-  statusEffect: 0
+  powerpoints: 10
+  basePowerpoints: 10
+  maxPowerpoints: 10
+  statusEffect: 1
   buffOrDebuffData: []
-  statusChance: 0
+  statusChance: 30
   buffOrDebuffChance: 0
-  description: Violently strikes the foe
+  description: a strong electric like thunder, that may paralyse the foe

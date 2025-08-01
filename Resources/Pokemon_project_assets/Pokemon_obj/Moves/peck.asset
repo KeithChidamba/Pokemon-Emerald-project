@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: pound
+  m_Name: peck
   m_EditorClassIdentifier: 
-  moveName: Pound
-  moveDamage: 40
+  moveName: Peck
+  moveDamage: 35
   moveAccuracy: 100
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  type: {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 0
   hasStatus: 0
@@ -36,4 +36,4 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: Violently strikes the foe
+  description: a strong attack with a beak

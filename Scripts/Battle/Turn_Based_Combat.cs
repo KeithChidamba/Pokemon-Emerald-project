@@ -87,6 +87,7 @@ public class Turn_Based_Combat : MonoBehaviour
             {
                 if (!MoveSuccessful(turn))
                 {
+                    //semi-invincibility logic, comes here
                     if(attacker.pokemon.accuracy >= victim.pokemon.evasion)
                         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
                     else

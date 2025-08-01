@@ -15,21 +15,25 @@ MonoBehaviour:
   moveName: Toxic
   moveDamage: 0
   moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 3185f3c7151af7d48b86d9e6f6b6c269, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 0
   hasStatus: 1
   hasSpecialEffect: 0
   canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
   powerpoints: 10
   basePowerpoints: 10
   maxPowerpoints: 10
   statusEffect: 4
-  buffOrDebuffName: None
+  buffOrDebuffData: []
   statusChance: 100
   buffOrDebuffChance: 0
   description: A dangerous move that badly poisons the target

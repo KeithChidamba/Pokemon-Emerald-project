@@ -12,24 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: bullet seed
   m_EditorClassIdentifier: 
-  Move_name: Bullet seed
-  Move_damage: 15
-  Move_accuracy: 90
+  moveName: Bullet seed
+  moveDamage: 15
+  moveAccuracy: 90
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
-  Has_status: 0
-  Has_effect: 1
-  Can_flinch: 0
-  is_Consecutive: 1
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 1
+  canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
+  isConsecutive: 1
   isMultiTarget: 0
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 20
-  BasePowerpoints: 20
-  max_Powerpoints: 20
-  Status_effect: None
-  Buff_Debuff: 
-  Status_chance: 0
-  Debuff_chance: 0
-  Description: A precise attack of pellets that raises crit chance
+  isSureHit: 0
+  priority: 0
+  powerpoints: 20
+  basePowerpoints: 20
+  maxPowerpoints: 20
+  statusEffect: 0
+  buffOrDebuffData: []
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: A precise attack of pellets that raises crit chance

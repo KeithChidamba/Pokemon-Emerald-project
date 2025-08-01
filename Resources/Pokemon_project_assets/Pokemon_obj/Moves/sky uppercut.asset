@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: pound
+  m_Name: sky uppercut
   m_EditorClassIdentifier: 
-  moveName: Pound
-  moveDamage: 40
-  moveAccuracy: 100
+  moveName: Sky Uppercut
+  moveDamage: 85
+  moveAccuracy: 90
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 0
   hasStatus: 0
@@ -29,11 +29,11 @@ MonoBehaviour:
   isSelfTargeted: 0
   isSureHit: 0
   priority: 0
-  powerpoints: 35
-  basePowerpoints: 35
-  maxPowerpoints: 35
+  powerpoints: 15
+  basePowerpoints: 15
+  maxPowerpoints: 15
   statusEffect: 0
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: Violently strikes the foe
+  description: a strong uppercut that can hit flying foes

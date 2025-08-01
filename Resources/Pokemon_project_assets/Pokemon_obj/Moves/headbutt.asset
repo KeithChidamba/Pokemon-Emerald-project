@@ -12,24 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: headbutt
   m_EditorClassIdentifier: 
-  Move_name: Headbutt
-  Move_damage: 70
-  Move_accuracy: 70
+  moveName: Headbutt
+  moveDamage: 70
+  moveAccuracy: 70
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
-  Has_status: 0
-  Has_effect: 0
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 0
+  canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
+  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 25
-  BasePowerpoints: 25
-  max_Powerpoints: 25
-  Status_effect: None
-  Buff_Debuff: None
-  Status_chance: 0
-  Debuff_chance: 0
-  Description: Attack the foe with a Headbutt
+  isSureHit: 0
+  priority: 0
+  powerpoints: 25
+  basePowerpoints: 25
+  maxPowerpoints: 25
+  statusEffect: 0
+  buffOrDebuffData: []
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: Attack the foe with a Headbutt

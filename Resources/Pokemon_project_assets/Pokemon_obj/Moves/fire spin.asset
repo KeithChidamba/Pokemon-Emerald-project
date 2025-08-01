@@ -10,30 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: pound
+  m_Name: fire spin
   m_EditorClassIdentifier: 
-  moveName: Pound
-  moveDamage: 40
-  moveAccuracy: 100
+  moveName: Fire spin
+  moveDamage: 15
+  moveAccuracy: 70
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  type: {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
   isSpecial: 0
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 0
   canCauseFlinch: 0
-  canTrap: 0
+  canTrap: 1
   canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 0
   priority: 0
-  powerpoints: 35
-  basePowerpoints: 35
-  maxPowerpoints: 35
+  powerpoints: 15
+  basePowerpoints: 15
+  maxPowerpoints: 15
   statusEffect: 0
   buffOrDebuffData: []
-  statusChance: 0
+  statusChance: 5
   buffOrDebuffChance: 0
-  description: Violently strikes the foe
+  description: traps the foe in a fire

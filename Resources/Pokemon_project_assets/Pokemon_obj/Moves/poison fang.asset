@@ -27,15 +27,13 @@ MonoBehaviour:
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
+  isSureHit: 0
   priority: 0
   powerpoints: 15
   basePowerpoints: 15
   maxPowerpoints: 15
   statusEffect: 4
-  buffOrDebuffData:
-    isIncreasing: 0
-    stat: 0
-    amount: 0
+  buffOrDebuffData: []
   statusChance: 30
   buffOrDebuffChance: 0
   description: a strong bite with fangs that may poison the foe

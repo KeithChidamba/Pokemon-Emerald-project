@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: pound
+  m_Name: bulk up
   m_EditorClassIdentifier: 
-  moveName: Pound
-  moveDamage: 40
+  moveName: Bulk Up
+  moveDamage: 0
   moveAccuracy: 100
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
-  isBuffOrDebuff: 0
+  isBuffOrDebuff: 1
   hasStatus: 0
   hasSpecialEffect: 0
   canCauseFlinch: 0
@@ -26,14 +26,20 @@ MonoBehaviour:
   canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
-  isSelfTargeted: 0
-  isSureHit: 0
+  isSelfTargeted: 1
+  isSureHit: 1
   priority: 0
-  powerpoints: 35
-  basePowerpoints: 35
-  maxPowerpoints: 35
+  powerpoints: 30
+  basePowerpoints: 30
+  maxPowerpoints: 30
   statusEffect: 0
-  buffOrDebuffData: []
+  buffOrDebuffData:
+  - isIncreasing: 1
+    stat: 1
+    amount: 1
+  - isIncreasing: 1
+    stat: 2
+    amount: 1
   statusChance: 0
-  buffOrDebuffChance: 0
-  description: Violently strikes the foe
+  buffOrDebuffChance: 100
+  description: lowers enemy defense with a distraction

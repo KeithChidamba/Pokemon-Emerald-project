@@ -33,10 +33,7 @@ MonoBehaviour:
   basePowerpoints: 15
   maxPowerpoints: 15
   statusEffect: 0
-  buffOrDebuffData:
-    isIncreasing: 0
-    stat: 0
-    amount: 0
+  buffOrDebuffData: []
   statusChance: 5
   buffOrDebuffChance: 0
   description: traps the foe in a sand tomb

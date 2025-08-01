@@ -34,7 +34,7 @@ MonoBehaviour:
   maxPowerpoints: 40
   statusEffect: 0
   buffOrDebuffData:
-    isIncreasing: 0
+  - isIncreasing: 0
     stat: 1
     amount: 1
   statusChance: 0

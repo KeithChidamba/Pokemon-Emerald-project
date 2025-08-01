@@ -332,13 +332,22 @@ public class Move_handler:MonoBehaviour
 
     public void TrapEnemy(Battle_Participant enemy, bool isMoveEffect = true)
     {
-        if (!enemy.canEscape || enemy.pokemon.ability.abilityName == "Levitate")
+        if(isMoveEffect)
         {
-            if(isMoveEffect)
+            if (enemy.pokemon.HasType(PokemonOperations.Types.Ghost)
+                && !attacker.pokemon.HasType(PokemonOperations.Types.Ghost))
+            {//only ghost can trap ghost with moves
                 Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
+            }
+            
+            if (enemy.pokemon.ability.abilityName == "Levitate")
+                Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
+            
+            if (!enemy.canEscape)
+                Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName + " is already trapped");
             return;
         }
-        if (!isMoveEffect || _currentTurn.move.statusChance == 0)
+        if (_currentTurn.move.statusChance == 0)
         {
             enemy.canEscape = false;
             return;
@@ -381,29 +390,32 @@ public class Move_handler:MonoBehaviour
         { processingOrder = false; return;}
         //allows the display of buff message, must be here in case silent buff happened
         BattleOperations.CanDisplayDialougue = true; 
-        var buffData = _currentTurn.move.buffOrDebuffData;
-        if (!_currentTurn.move.isSelfTargeted)
-        {//affecting enemy
-            if ( (_currentTurn.move.isMultiTarget && !Battle_handler.Instance.isDoubleBattle) 
-                || !_currentTurn.move.isMultiTarget)
-            {
-                if (!victim.canBeDamaged || victim.ProtectedFromStatChange(buffData.isIncreasing))
-                {
-                    Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName + " protected itself");
-                }
-                else
-                {
-                    var data = new BuffDebuffData(victim, buffData.stat, buffData.isIncreasing, buffData.amount);
-                    SelectRelevantBuffOrDebuff(data);
-                }
-            } 
-            if(_currentTurn.move.isMultiTarget && Battle_handler.Instance.isDoubleBattle)
-                StartCoroutine(MultiTargetBuff_Debuff(buffData.stat, buffData.isIncreasing, buffData.amount));
-        }
-        else//affecting attacker
+        
+        foreach (var buffData in _currentTurn.move.buffOrDebuffData)
         {
-            var data = new BuffDebuffData(attacker, buffData.stat, buffData.isIncreasing, buffData.amount);
-            SelectRelevantBuffOrDebuff(data);
+            if (!_currentTurn.move.isSelfTargeted)
+            {//affecting enemy
+                if ( (_currentTurn.move.isMultiTarget && !Battle_handler.Instance.isDoubleBattle) 
+                     || !_currentTurn.move.isMultiTarget)
+                {
+                    if (!victim.canBeDamaged || victim.ProtectedFromStatChange(buffData.isIncreasing))
+                    {
+                        Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName + " protected itself");
+                    }
+                    else
+                    {
+                        var data = new BuffDebuffData(victim, buffData.stat, buffData.isIncreasing, buffData.amount);
+                        SelectRelevantBuffOrDebuff(data);
+                    }
+                } 
+                if(_currentTurn.move.isMultiTarget && Battle_handler.Instance.isDoubleBattle)
+                    StartCoroutine(MultiTargetBuff_Debuff(buffData.stat, buffData.isIncreasing, buffData.amount));
+            }
+            else//affecting attacker
+            {
+                var data = new BuffDebuffData(attacker, buffData.stat, buffData.isIncreasing, buffData.amount);
+                SelectRelevantBuffOrDebuff(data);
+            }
         }
         processingOrder = false;
     }

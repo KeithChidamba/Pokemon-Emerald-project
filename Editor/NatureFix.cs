@@ -31,7 +31,35 @@ public class NatureEVFixer : EditorWindow
         AssetDatabase.Refresh();
         Debug.Log("Nature updates complete.");
     }
+    [MenuItem("Tools/Fix Move Buff")]
+    public static void FixMoves()
+    {
+        string folderPath = "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Moves/";
 
+        string[] guids = AssetDatabase.FindAssets("t:Move", new[] { folderPath });
+
+        foreach (string guid in guids)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            Move move = AssetDatabase.LoadAssetAtPath<Move>(assetPath);
+ 
+            if (move != null)
+            {
+                ClearBuffs(move);
+                EditorUtility.SetDirty(move); // Mark as dirty for saving
+                Debug.Log($"Updated: {move.name}");
+            }
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log("Nature updates complete.");
+    }
+
+    static void ClearBuffs(Move move)
+    {
+        move.buffOrDebuffData.Clear();
+    }
     private static void ApplyStatChanges(Nature nature)
     {
         switch (nature.natureName.ToLower())

@@ -12,24 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: bug bite
   m_EditorClassIdentifier: 
-  Move_name: Bug bite
-  Move_damage: 65
-  Move_accuracy: 100
+  moveName: Bug bite
+  moveDamage: 65
+  moveAccuracy: 100
+  critModifierIndex: 0
   type: {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
   isSpecial: 0
-  is_Buff_Debuff: 0
-  Has_status: 0
-  Has_effect: 0
-  Can_flinch: 0
-  is_Consecutive: 0
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 0
+  canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
+  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  Priority: 0
-  Powerpoints: 25
-  BasePowerpoints: 25
-  max_Powerpoints: 25
-  Status_effect: None
-  Buff_Debuff: None
-  Status_chance: 0
-  Debuff_chance: 0
-  Description: a powerful bite to hurt the foe
+  isSureHit: 0
+  priority: 0
+  powerpoints: 25
+  basePowerpoints: 25
+  maxPowerpoints: 25
+  statusEffect: 0
+  buffOrDebuffData: []
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: a powerful bite to hurt the foe

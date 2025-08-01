@@ -33,10 +33,7 @@ MonoBehaviour:
   basePowerpoints: 20
   maxPowerpoints: 20
   statusEffect: 1
-  buffOrDebuffData:
-    isIncreasing: 0
-    stat: 0
-    amount: 0
+  buffOrDebuffData: []
   statusChance: 100
   buffOrDebuffChance: 0
   description: a electric shock that paralyses the foe
