@@ -18,11 +18,11 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _accuracyAndEvasionLevels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
     private Battle_event[] _dialougeOrder={null,null,null,null,null,null};
+    private List<OnFieldDamageModifier> _onFieldDamageModifiers;
     private bool _moveDelay = false;
     private bool _cancelMove = false;
     public bool processingOrder = false;
     public bool displayingHealthDecrease;
-    public event Action OnMoveEnd;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageCalc;
     public event Action<float> OnDamageDeal;
     public event Action<Battle_Participant,Move> OnMoveHit;
@@ -152,18 +152,29 @@ public class Move_handler:MonoBehaviour
         attackDefenseRatio = SetAtkDefRatio(critValue,move.isSpecial,attacker,currentVictim);
         if (BattleOperations.is_Stab(attacker.pokemon, move.type))
             stab = 1.5f;
-        float baseDamage = (levelFactor * move.moveDamage *
-                             (attackTypeValue/ move.moveDamage))/attacker.pokemon.currentLevel;
+        float baseDamage = levelFactor * move.moveDamage *
+                             (attackTypeValue / move.moveDamage) /attacker.pokemon.currentLevel;
         float damageModifier = critValue*stab*randomFactor*typeEffectiveness;
         damageDealt = math.trunc(damageModifier * baseDamage * attackDefenseRatio);
         if (isConfusionDamage) return damageDealt;
-        float damageAfterBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt; 
-        OnDamageDeal?.Invoke(damageAfterBuff);
+        
+        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
+        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type);
+        float finalDamage = AccountForVictimsBarriers(move,currentVictim,damageAfterFieldModifiers);
+        
+        OnDamageDeal?.Invoke(finalDamage);
         OnMoveHit?.Invoke(attacker,move);
-        damageAfterBuff = AccountForVictimsBarriers(move,currentVictim,damageAfterBuff);
-        return damageAfterBuff;
+        return finalDamage;
     }
-
+    private float ApplyFieldDamageModifiers(float currentDamage, Type moveType)
+    {
+        foreach (var modifier in _onFieldDamageModifiers)
+        {
+            if (modifier.typeAffected.ToString() == moveType.typeName)
+                return currentDamage * modifier.damageModifier;
+        }
+        return currentDamage;
+    }
     private float AccountForVictimsBarriers(Move move,Battle_Participant currentVictim,float damage)
     {
         foreach (var barrier in currentVictim.Barrieirs)
@@ -179,7 +190,7 @@ public class Move_handler:MonoBehaviour
         if ((int)math.trunc(typeEffectiveness) == 1) return;
         var message = "";
         if (typeEffectiveness == 0)
-            message= "It does'nt affect "+currentVictim.pokemon.pokemonName+"!";
+            message= "It doesn't affect "+currentVictim.pokemon.pokemonName+"!";
         else
             message=(typeEffectiveness > 1)?"It's Super effective!":"It's not very effective!";
         Dialogue_handler.Instance.DisplayBattleInfo(message);
@@ -250,7 +261,6 @@ public class Move_handler:MonoBehaviour
     } 
     private void ResetMoveUsage()
     {
-        OnMoveEnd?.Invoke();
         doingMove = false;
         _cancelMove = false;
     }
@@ -332,28 +342,36 @@ public class Move_handler:MonoBehaviour
 
     public void TrapEnemy(Battle_Participant enemy, bool isMoveEffect = true)
     {
+        if (enemy.pokemon.ability.abilityName == "Levitate")
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
+            return;
+        }
         if(isMoveEffect)
         {
             if (enemy.pokemon.HasType(PokemonOperations.Types.Ghost)
                 && !attacker.pokemon.HasType(PokemonOperations.Types.Ghost))
             {//only ghost can trap ghost with moves
                 Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
+                return;
+            }
+
+            if (!enemy.canEscape)
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName + " is already trapped");
+                return;
             }
             
-            if (enemy.pokemon.ability.abilityName == "Levitate")
-                Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
-            
-            if (!enemy.canEscape)
-                Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName + " is already trapped");
+            if (_currentTurn.move.statusChance == 0)
+                enemy.canEscape = false;
+            else
+            {
+                var numTurnsOfTrap = Utility.RandomRange(2, (int)_currentTurn.move.statusChance+1);
+                enemy.statusHandler.SetupTrapDuration(numTurnsOfTrap);
+            }
             return;
         }
-        if (_currentTurn.move.statusChance == 0)
-        {
-            enemy.canEscape = false;
-            return;
-        }
-        var numTurnsOfTrap = Utility.RandomRange(2, (int)_currentTurn.move.statusChance+1);
-        enemy.statusHandler.SetupTrapDuration(numTurnsOfTrap);
+        enemy.canEscape = false;
     }
     void ConfuseEnemy()
     {
@@ -775,5 +793,23 @@ public class Move_handler:MonoBehaviour
                                                     +" on "+switchOutVictim.pokemon.pokemonName+"!");
         var pursuitDamage = CalculateMoveDamage(pursuit, switchOutVictim) * 2;
         StartCoroutine(DamageDisplay(switchOutVictim,isSpecificDamage:true,predefinedDamage:pursuitDamage));
+    }
+    private void AddFieldDamageModifier(OnFieldDamageModifier newModifier)
+    {
+        _onFieldDamageModifiers.Add(newModifier);
+    }
+    public void RemoveFieldDamageModifier(PokemonOperations.Types modifierTypeAffected)
+    {
+        _onFieldDamageModifiers.RemoveAll(m=>m.typeAffected==modifierTypeAffected);
+    }
+
+    void mudsport()
+    {
+        var mudSportModifier = new OnFieldDamageModifier(0.5f, PokemonOperations.Types.Electric,attacker);
+        Dialogue_handler.Instance.DisplayBattleInfo("The power of electric type moves was weakened");
+        attacker.OnPokemonFainted += ()=> mudSportModifier.RemoveOnSwitchOut(attacker);
+        Battle_handler.Instance.OnSwitchOut += mudSportModifier.RemoveOnSwitchOut;
+        AddFieldDamageModifier(mudSportModifier);
+        _moveDelay = false;
     }
 }

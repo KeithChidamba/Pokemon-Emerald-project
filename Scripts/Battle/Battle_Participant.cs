@@ -207,6 +207,7 @@ public class Battle_Participant : MonoBehaviour
         abilityHandler.ResetState();
         canEscape = true;
         additionalTypeImmunity = null;
+        OnPokemonFainted = null;
         if (isPlayer) pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
     }
     private void ResetParticipantStateAfterLevelUp(Pokemon pokemonAfterLevelUp)
