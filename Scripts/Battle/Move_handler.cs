@@ -849,16 +849,24 @@ public class Move_handler:MonoBehaviour
 
     void foresight()
     {
-        if (victim.additionalTypeImmunityNegation.Contains(PokemonOperations.Types.Fighting)
-            || victim.additionalTypeImmunityNegation.Contains(PokemonOperations.Types.Normal))
+        if (victim.ImmunityNegations.Any(n=> 
+                n.moveName==TypeImmunityNegation.ImmunityNegationMove.Foresight))
         {
             Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
             _moveDelay = false;
             return;
         }
         Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName +" was identified!");
-        victim.additionalTypeImmunityNegation.Add(PokemonOperations.Types.Fighting);
-        victim.additionalTypeImmunityNegation.Add(PokemonOperations.Types.Normal);
+
+        var newImmunityNegation = new TypeImmunityNegation(TypeImmunityNegation.ImmunityNegationMove.Foresight
+            ,attacker,victim);
+        
+        newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Fighting);
+        newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Normal);
+        attacker.OnPokemonFainted += ()=> newImmunityNegation.RemoveNegationOnSwitchOut(attacker);
+        Battle_handler.Instance.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
+        victim.ImmunityNegations.Add(newImmunityNegation);
+        
         victim.pokemon.buffAndDebuffs
             .RemoveAll(b => b.stat == PokemonOperations.Stat.Evasion);
         victim.pokemon.evasion = 100;
