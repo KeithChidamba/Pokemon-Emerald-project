@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
+  m_Name: take down
+  m_EditorClassIdentifier: 
+  moveName: Take Down
+  moveDamage: 90
+  moveAccuracy: 85
+  critModifierIndex: 0
+  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  isSpecial: 0
+  isBuffOrDebuff: 0
+  hasStatus: 0
+  hasSpecialEffect: 1
+  canCauseFlinch: 0
+  canTrap: 0
+  canCauseConfusion: 0
+  isConsecutive: 0
+  isMultiTarget: 0
+  isSelfTargeted: 0
+  isSureHit: 0
+  priority: 0
+  powerpoints: 20
+  basePowerpoints: 20
+  maxPowerpoints: 20
+  statusEffect: 0
+  buffOrDebuffData: []
+  statusChance: 0
+  buffOrDebuffChance: 0
+  description: A strong attack that deals damage and causes recoil damage to the
+    user

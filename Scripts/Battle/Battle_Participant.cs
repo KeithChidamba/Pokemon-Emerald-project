@@ -40,6 +40,7 @@ public class Battle_Participant : MonoBehaviour
     public PreviousMove PreviousMove;
     public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
+    public List<PokemonOperations.Types> additionalTypeImmunityNegation;
     public List<Pokemon> expReceivers;
     public Action OnPokemonFainted;
     public List<Barrier> Barrieirs = new();
@@ -208,6 +209,7 @@ public class Battle_Participant : MonoBehaviour
         canEscape = true;
         additionalTypeImmunity = null;
         OnPokemonFainted = null;
+        additionalTypeImmunityNegation.Clear();
         if (isPlayer) pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
     }
     private void ResetParticipantStateAfterLevelUp(Pokemon pokemonAfterLevelUp)
