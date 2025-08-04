@@ -12,6 +12,7 @@ public class Move : ScriptableObject
     public int critModifierIndex;
     public Type type;
     public bool isSpecial;
+    public bool isContact;
     [FormerlySerializedAs("is_Buff_Debuff")] public bool isBuffOrDebuff;
     [FormerlySerializedAs("Has_status")] public bool hasStatus;
     [FormerlySerializedAs("Has_effect")] public bool hasSpecialEffect;

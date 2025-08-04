@@ -11,7 +11,8 @@ public class Participant_Status : MonoBehaviour
     private int _statusDurationInTurns = 0;
     private bool _healed = false;
     private int _confusionDuration;
-    private int trapDuration;
+    private int _trapDuration;
+    private TrapData _currentTrap;
     private readonly Dictionary<PokemonOperations.StatusEffect, Action> _statusEffectMethods = new ();
     public event Action OnStatusCheck;
     void Start()
@@ -38,9 +39,11 @@ public class Participant_Status : MonoBehaviour
         _confusionDuration = numTurns;
         _participant.isConfused = true;
     }
-    public void SetupTrapDuration(int numTurns)
+    public void SetupTrapDuration(int numTurns,Move move)
     {
-        trapDuration = numTurns;
+        _trapDuration = numTurns;
+        _currentTrap = new TrapData(move);
+        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName + _currentTrap.OnTrapMessage);
         _participant.canEscape = false;
     }
     public void GetStatChangeImmunity(StatChangeData.StatChangeability changeability,int numTurns)
@@ -119,13 +122,14 @@ public class Participant_Status : MonoBehaviour
         if (_participant != participant) return;
         if (!_participant.isActive) return;
         if (_participant.canEscape) return;
-        _participant.canEscape = trapDuration < 1;
-
-        if (trapDuration > 0)
+        if (_trapDuration <= 0)
         {
-            GetDamageFromStatus(" is hurt by Sand Tomb!", 1 / 16f);
-            trapDuration--;
+            Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+_currentTrap.OnFreeMessage);
+            _participant.canEscape = true;
+            return;
         }
+        GetDamageFromStatus(_currentTrap.OnHitMessage, 1 / 16f);
+        _trapDuration--;
     }
     public void ConfusionCheck(Battle_Participant participant)
     {

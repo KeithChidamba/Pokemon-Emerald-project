@@ -4,36 +4,57 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using System.Linq;
 
 public class NatureEVFixer : EditorWindow
 {
-    [MenuItem("Tools/Fix Pokemon Natures")]
-    public static void FixNatures()
+    // [MenuItem("Tools/Fix Pokemon Natures")]
+    // public static void FixNatures()
+    // {
+    //     string folderPath = "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Natures/";
+    //
+    //     string[] guids = AssetDatabase.FindAssets("t:Nature", new[] { folderPath });
+    //
+    //     foreach (string guid in guids)
+    //     {
+    //         string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+    //         Nature nature = AssetDatabase.LoadAssetAtPath<Nature>(assetPath);
+    //
+    //         if (nature != null)
+    //         {
+    //             ApplyStatChanges(nature);
+    //             EditorUtility.SetDirty(nature); // Mark as dirty for saving
+    //             Debug.Log($"Updated: {nature.name}");
+    //         }
+    //     }
+    //
+    //     AssetDatabase.SaveAssets();
+    //     AssetDatabase.Refresh();
+    //     Debug.Log("Nature updates complete.");
+    // }
+    [MenuItem("Tools/Fix Move Contact")]
+    public static void FixMoveConact()
     {
-        string folderPath = "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Natures/";
-
-        string[] guids = AssetDatabase.FindAssets("t:Nature", new[] { folderPath });
-
-        foreach (string guid in guids)
+        string[] contactMoves = new string[]
         {
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            Nature nature = AssetDatabase.LoadAssetAtPath<Nature>(assetPath);
-
-            if (nature != null)
-            {
-                ApplyStatChanges(nature);
-                EditorUtility.SetDirty(nature); // Mark as dirty for saving
-                Debug.Log($"Updated: {nature.name}");
-            }
-        }
-
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        Debug.Log("Nature updates complete.");
-    }
-    [MenuItem("Tools/Fix Move Buff")]
-    public static void FixMoves()
-    {
+            "LeechLife",
+            "DoubleKick",
+            "QuickAttack",
+            "Scratch",
+            "Slam",
+            "Slash",
+            "Tackle",
+            "Pound",
+            "FurySwipes",
+            "Covet",
+            "Headbutt",
+            "Flail",
+            "PoisonFang",
+            "PoisonSting",
+            "Astonish",
+            "Bite",
+            "Crunch"
+        };
         string folderPath = "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Moves/";
 
         string[] guids = AssetDatabase.FindAssets("t:Move", new[] { folderPath });
@@ -45,7 +66,64 @@ public class NatureEVFixer : EditorWindow
  
             if (move != null)
             {
-                ClearBuffs(move);
+                if (contactMoves.Contains(move.moveName))
+                {
+                    move.isContact = true;
+                }
+                else
+                {
+                    move.isContact = false;
+                    Debug.Log($"is not contact: {move.name}");
+                }
+                EditorUtility.SetDirty(move); // Mark as dirty for saving
+                
+            }
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log("Nature updates complete.");
+    }
+    [MenuItem("Tools/Fix Move Special")]
+    public static void FixMoveSpecial()
+    {
+        string[] specialMoves = new string[]
+        {
+            "SilverWind",
+            "DragonBreath",
+            "Thundershock",
+            "ThunderWave",
+            "Thunderbolt",
+            "Ember",
+            "Flamethrower",
+            "AirCutter",
+            "Gust",
+            "Magnitude",
+            "Fissure",
+            "SandTomb",
+            "SonicBoom",
+            "HyperBeam",
+            "Confusion",
+            "Bubble",
+            "Surf",
+            "WaterGun"
+        };
+        string folderPath = "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Moves/";
+
+        string[] guids = AssetDatabase.FindAssets("t:Move", new[] { folderPath });
+
+        foreach (string guid in guids)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            Move move = AssetDatabase.LoadAssetAtPath<Move>(assetPath);
+ 
+            if (move != null)
+            {
+                move.isSpecial = false;
+                if (specialMoves.Contains(move.moveName))
+                {
+                    move.isSpecial = true;
+                }
                 EditorUtility.SetDirty(move); // Mark as dirty for saving
                 Debug.Log($"Updated: {move.name}");
             }
@@ -56,120 +134,145 @@ public class NatureEVFixer : EditorWindow
         Debug.Log("Nature updates complete.");
     }
 
+    // [MenuItem("Tools/Fix Move Buff")]
+    // public static void FixMoves()
+    // {
+    //     string folderPath = "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Moves/";
+    //
+    //     string[] guids = AssetDatabase.FindAssets("t:Move", new[] { folderPath });
+    //
+    //     foreach (string guid in guids)
+    //     {
+    //         string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+    //         Move move = AssetDatabase.LoadAssetAtPath<Move>(assetPath);
+    //
+    //         if (move != null)
+    //         {
+    //             ClearBuffs(move);
+    //             EditorUtility.SetDirty(move); // Mark as dirty for saving
+    //             Debug.Log($"Updated: {move.name}");
+    //         }
+    //     }
+    //
+    //     AssetDatabase.SaveAssets();
+    //     AssetDatabase.Refresh();
+    //     Debug.Log("Nature updates complete.");
+    // }
+
     static void ClearBuffs(Move move)
     {
         move.buffOrDebuffData.Clear();
     }
-    private static void ApplyStatChanges(Nature nature)
-    {
-        switch (nature.natureName.ToLower())
-        {
-        case "adamant":
-            nature.statToIncrease = PokemonOperations.Stat.Attack;
-            nature.statToDecrease = PokemonOperations.Stat.SpecialAttack;
-            break;
-        case "bashful":
-            nature.statToIncrease = PokemonOperations.Stat.None;
-            nature.statToDecrease = PokemonOperations.Stat.None;
-            break;
-        case "bold":
-            nature.statToIncrease = PokemonOperations.Stat.Defense;
-            nature.statToDecrease = PokemonOperations.Stat.Attack;
-            break;
-        case "brave":
-            nature.statToIncrease = PokemonOperations.Stat.Attack;
-            nature.statToDecrease = PokemonOperations.Stat.Speed;
-            break;
-        case "calm":
-            nature.statToIncrease = PokemonOperations.Stat.SpecialDefense;
-            nature.statToDecrease = PokemonOperations.Stat.Attack;
-            break;
-        case "careful":
-            nature.statToIncrease = PokemonOperations.Stat.SpecialDefense;
-            nature.statToDecrease = PokemonOperations.Stat.SpecialAttack;
-            break;
-        case "docile":
-            nature.statToIncrease = PokemonOperations.Stat.None;
-            nature.statToDecrease = PokemonOperations.Stat.None;
-            break;
-        case "gentle":
-            nature.statToIncrease = PokemonOperations.Stat.SpecialDefense;
-            nature.statToDecrease = PokemonOperations.Stat.Defense;
-            break;
-        case "hardy":
-            nature.statToIncrease = PokemonOperations.Stat.None;
-            nature.statToDecrease = PokemonOperations.Stat.None;
-            break;
-        case "hasty":
-            nature.statToIncrease = PokemonOperations.Stat.Speed;
-            nature.statToDecrease = PokemonOperations.Stat.Defense;
-            break;
-        case "impish":
-            nature.statToIncrease = PokemonOperations.Stat.Defense;
-            nature.statToDecrease = PokemonOperations.Stat.SpecialAttack;
-            break;
-        case "jolly":
-            nature.statToIncrease = PokemonOperations.Stat.Speed;
-            nature.statToDecrease = PokemonOperations.Stat.SpecialAttack;
-            break;
-        case "lax":
-            nature.statToIncrease = PokemonOperations.Stat.Defense;
-            nature.statToDecrease = PokemonOperations.Stat.SpecialDefense;
-            break;
-        case "lonely":
-            nature.statToIncrease = PokemonOperations.Stat.Attack;
-            nature.statToDecrease = PokemonOperations.Stat.Defense;
-            break;
-        case "mild":
-            nature.statToIncrease = PokemonOperations.Stat.SpecialAttack;
-            nature.statToDecrease = PokemonOperations.Stat.Defense;
-            break;
-        case "modest":
-            nature.statToIncrease = PokemonOperations.Stat.SpecialAttack;
-            nature.statToDecrease = PokemonOperations.Stat.Attack;
-            break;
-        case "naive":
-            nature.statToIncrease = PokemonOperations.Stat.Speed;
-            nature.statToDecrease = PokemonOperations.Stat.SpecialDefense;
-            break;
-        case "naughty":
-            nature.statToIncrease = PokemonOperations.Stat.Attack;
-            nature.statToDecrease = PokemonOperations.Stat.SpecialDefense;
-            break;
-        case "quiet":
-            nature.statToIncrease = PokemonOperations.Stat.SpecialAttack;
-            nature.statToDecrease = PokemonOperations.Stat.Speed;
-            break;
-        case "quirky":
-            nature.statToIncrease = PokemonOperations.Stat.None;
-            nature.statToDecrease = PokemonOperations.Stat.None;
-            break;
-        case "rash":
-            nature.statToIncrease = PokemonOperations.Stat.SpecialAttack;
-            nature.statToDecrease = PokemonOperations.Stat.SpecialDefense;
-            break;
-        case "relaxed":
-            nature.statToIncrease = PokemonOperations.Stat.Defense;
-            nature.statToDecrease = PokemonOperations.Stat.Speed;
-            break;
-        case "sassy":
-            nature.statToIncrease = PokemonOperations.Stat.SpecialDefense;
-            nature.statToDecrease = PokemonOperations.Stat.Speed;
-            break;
-        case "serious":
-            nature.statToIncrease = PokemonOperations.Stat.None;
-            nature.statToDecrease = PokemonOperations.Stat.None;
-            break;
-        case "timid":
-            nature.statToIncrease = PokemonOperations.Stat.Speed;
-            nature.statToDecrease = PokemonOperations.Stat.Attack;
-            break;
-        default:
-            nature.statToIncrease = PokemonOperations.Stat.None;
-            nature.statToDecrease = PokemonOperations.Stat.None;
-            Debug.LogWarning($"Nature not matched: {nature.natureName}");
-            break;
-        }
-    }
+    // private static void ApplyStatChanges(Nature nature)
+    // {
+    //     switch (nature.natureName.ToLower())
+    //     {
+    //     case "adamant":
+    //         nature.statToIncrease = PokemonOperations.Stat.Attack;
+    //         nature.statToDecrease = PokemonOperations.Stat.SpecialAttack;
+    //         break;
+    //     case "bashful":
+    //         nature.statToIncrease = PokemonOperations.Stat.None;
+    //         nature.statToDecrease = PokemonOperations.Stat.None;
+    //         break;
+    //     case "bold":
+    //         nature.statToIncrease = PokemonOperations.Stat.Defense;
+    //         nature.statToDecrease = PokemonOperations.Stat.Attack;
+    //         break;
+    //     case "brave":
+    //         nature.statToIncrease = PokemonOperations.Stat.Attack;
+    //         nature.statToDecrease = PokemonOperations.Stat.Speed;
+    //         break;
+    //     case "calm":
+    //         nature.statToIncrease = PokemonOperations.Stat.SpecialDefense;
+    //         nature.statToDecrease = PokemonOperations.Stat.Attack;
+    //         break;
+    //     case "careful":
+    //         nature.statToIncrease = PokemonOperations.Stat.SpecialDefense;
+    //         nature.statToDecrease = PokemonOperations.Stat.SpecialAttack;
+    //         break;
+    //     case "docile":
+    //         nature.statToIncrease = PokemonOperations.Stat.None;
+    //         nature.statToDecrease = PokemonOperations.Stat.None;
+    //         break;
+    //     case "gentle":
+    //         nature.statToIncrease = PokemonOperations.Stat.SpecialDefense;
+    //         nature.statToDecrease = PokemonOperations.Stat.Defense;
+    //         break;
+    //     case "hardy":
+    //         nature.statToIncrease = PokemonOperations.Stat.None;
+    //         nature.statToDecrease = PokemonOperations.Stat.None;
+    //         break;
+    //     case "hasty":
+    //         nature.statToIncrease = PokemonOperations.Stat.Speed;
+    //         nature.statToDecrease = PokemonOperations.Stat.Defense;
+    //         break;
+    //     case "impish":
+    //         nature.statToIncrease = PokemonOperations.Stat.Defense;
+    //         nature.statToDecrease = PokemonOperations.Stat.SpecialAttack;
+    //         break;
+    //     case "jolly":
+    //         nature.statToIncrease = PokemonOperations.Stat.Speed;
+    //         nature.statToDecrease = PokemonOperations.Stat.SpecialAttack;
+    //         break;
+    //     case "lax":
+    //         nature.statToIncrease = PokemonOperations.Stat.Defense;
+    //         nature.statToDecrease = PokemonOperations.Stat.SpecialDefense;
+    //         break;
+    //     case "lonely":
+    //         nature.statToIncrease = PokemonOperations.Stat.Attack;
+    //         nature.statToDecrease = PokemonOperations.Stat.Defense;
+    //         break;
+    //     case "mild":
+    //         nature.statToIncrease = PokemonOperations.Stat.SpecialAttack;
+    //         nature.statToDecrease = PokemonOperations.Stat.Defense;
+    //         break;
+    //     case "modest":
+    //         nature.statToIncrease = PokemonOperations.Stat.SpecialAttack;
+    //         nature.statToDecrease = PokemonOperations.Stat.Attack;
+    //         break;
+    //     case "naive":
+    //         nature.statToIncrease = PokemonOperations.Stat.Speed;
+    //         nature.statToDecrease = PokemonOperations.Stat.SpecialDefense;
+    //         break;
+    //     case "naughty":
+    //         nature.statToIncrease = PokemonOperations.Stat.Attack;
+    //         nature.statToDecrease = PokemonOperations.Stat.SpecialDefense;
+    //         break;
+    //     case "quiet":
+    //         nature.statToIncrease = PokemonOperations.Stat.SpecialAttack;
+    //         nature.statToDecrease = PokemonOperations.Stat.Speed;
+    //         break;
+    //     case "quirky":
+    //         nature.statToIncrease = PokemonOperations.Stat.None;
+    //         nature.statToDecrease = PokemonOperations.Stat.None;
+    //         break;
+    //     case "rash":
+    //         nature.statToIncrease = PokemonOperations.Stat.SpecialAttack;
+    //         nature.statToDecrease = PokemonOperations.Stat.SpecialDefense;
+    //         break;
+    //     case "relaxed":
+    //         nature.statToIncrease = PokemonOperations.Stat.Defense;
+    //         nature.statToDecrease = PokemonOperations.Stat.Speed;
+    //         break;
+    //     case "sassy":
+    //         nature.statToIncrease = PokemonOperations.Stat.SpecialDefense;
+    //         nature.statToDecrease = PokemonOperations.Stat.Speed;
+    //         break;
+    //     case "serious":
+    //         nature.statToIncrease = PokemonOperations.Stat.None;
+    //         nature.statToDecrease = PokemonOperations.Stat.None;
+    //         break;
+    //     case "timid":
+    //         nature.statToIncrease = PokemonOperations.Stat.Speed;
+    //         nature.statToDecrease = PokemonOperations.Stat.Attack;
+    //         break;
+    //     default:
+    //         nature.statToIncrease = PokemonOperations.Stat.None;
+    //         nature.statToDecrease = PokemonOperations.Stat.None;
+    //         Debug.LogWarning($"Nature not matched: {nature.natureName}");
+    //         break;
+    //     }
+    // }
 }
 

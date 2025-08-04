@@ -365,17 +365,19 @@ public class Move_handler:MonoBehaviour
 
             if (!enemy.canEscape)
             {
+                
                 Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName + " is already trapped");
                 return;
             }
             
             if (_currentTurn.move.statusChance == 0)
-                enemy.canEscape = false;
+                enemy.canEscape = false;//moves that guarantee trap for indefinite turn count
             else
             {
                 var numTurnsOfTrap = Utility.RandomRange(2, (int)_currentTurn.move.statusChance+1);
-                enemy.statusHandler.SetupTrapDuration(numTurnsOfTrap);
+                enemy.statusHandler.SetupTrapDuration(numTurnsOfTrap,_currentTurn.move);
             }
+            
             return;
         }
         enemy.canEscape = false;
@@ -870,5 +872,17 @@ public class Move_handler:MonoBehaviour
         victim.pokemon.buffAndDebuffs
             .RemoveAll(b => b.stat == PokemonOperations.Stat.Evasion);
         victim.pokemon.evasion = 100;
+    }
+
+    void endeavor()
+    {
+        if (victim.pokemon.hp > attacker.pokemon.hp)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
+            return;
+        }
+        var damage = victim.pokemon.hp - attacker.pokemon.hp;
+        StartCoroutine(DamageDisplay(victim,isSpecificDamage:true,predefinedDamage:damage));
+        _moveDelay = false;
     }
 }

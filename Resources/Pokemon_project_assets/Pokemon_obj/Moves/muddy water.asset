@@ -10,31 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: wing attack
+  m_Name: muddy water
   m_EditorClassIdentifier: 
-  moveName: Wing Attack
-  moveDamage: 60
-  moveAccuracy: 100
+  moveName: Muddy Water
+  moveDamage: 95
+  moveAccuracy: 85
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
-  isSpecial: 0
+  type: {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
+  isSpecial: 1
   isContact: 0
-  isBuffOrDebuff: 0
+  isBuffOrDebuff: 1
   hasStatus: 0
   hasSpecialEffect: 0
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   isConsecutive: 0
-  isMultiTarget: 0
+  isMultiTarget: 1
   isSelfTargeted: 0
   isSureHit: 0
   priority: 0
-  powerpoints: 35
-  basePowerpoints: 35
-  maxPowerpoints: 35
+  powerpoints: 10
+  basePowerpoints: 10
+  maxPowerpoints: 10
   statusEffect: 0
-  buffOrDebuffData: []
+  buffOrDebuffData:
+  - isIncreasing: 0
+    stat: 8
+    amount: 1
   statusChance: 0
-  buffOrDebuffChance: 0
-  description: a strong attack with wide wings
+  buffOrDebuffChance: 20
+  description: Attacks with muddy water. May lower accuracy.
