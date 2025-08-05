@@ -1,16 +1,14 @@
 using System.Collections.Generic;
-using Unity.VisualScripting.Dependencies.NCalc;
-
 public static class NameDB
 {
     public enum MoveName
     {
         // 🐞 Bug-type
-        BugBite,
+        FuryCutter,// needs making
         LeechLife,
-        SilverWind,
+        SilverWind,// needs making
         StringShot,
-
+        
         // 🐉 Dragon-type
         DragonBreath,
 
@@ -18,193 +16,253 @@ public static class NameDB
         Thundershock,
         ThunderWave,
         Thunderbolt,
-
+        Thunder,
+        
         // 🥋 Fighting-type
-        BrickBreak,
+        BrickBreak,//TM
+        BulkUp,
+        Detect,// needs making
         DoubleKick,
-
+        SkyUppercut,
+        
         // 🔥 Fire-type
+        BlazeKick,
         Ember,
+        FirePunch,// needs making
+        FireSpin,
         Flamethrower,
-
+        
         // 🛫 Flying-type
         AirCutter,
-        ArialAce,
-        Gust,
+        ArialAce,//TM
+        Gust,// needs making
+        MirrorMove,// needs making
+        Peck,
         WingAttack,
 
         // 🌿 Grass-type
         Absorb,
-        BulletSeed,
-
+        BulletSeed,//TM
+        GigaDrain,
+        LeafBlade,
+        MegaDrain,
+        StunSpore,// needs making
+        
         // 🌍 Ground-type
+        Dig,// needs making
         Earthquake,
-        Fissure,         // Flygon
         Magnitude,
         MudSlap,
-        SandAttack,      // Trapinch
-        SandTomb,        // Trapinch/Vibrava/Flygon
-
+        MudShot,
+        MudSport,
+        SandAttack,
+        SandTomb,
+        
+        //Rock
+        SandStorm,// needs making
+        
         // 💜 Normal-type
-        Assist,
+        Attract,// needs making
         SonicBoom,
         Harden,
-        Attract,         // Beautifly
-        BellyDrum,       // Zigzagoon
-        Bide,            // Silcoon/Cascoon
-        Covet,           // Linoone
+        BellyDrum,// needs making
+        Bide,
+        Covet,// needs making
         DoubleTeam,
-        Flail,           // Trapinch
+        Endeavor,
         FocusEnergy,
-        FurySwipes,
+        Foresight,
+        FalseSwipe,// needs making
+        Flail,// needs making
+        FurySwipes,// needs making
         Growl,
         Headbutt,
         HyperBeam,
-        Leer,
-        OdorSleuth,
+        Leer, 
+        MeanLook,
+        MorningSun,// needs making
+        MoonLight,// needs making       
+        OdorSleuth,// needs making
         Pound,
         Protect,
         QuickAttack,
-        Rest,
-        Roar,            // Linoone
         Scratch,
         Screech,
-        Slam,            // Dustox
-        Slash,           // Flygon
+        Slam,
+        Slash,
         Supersonic,
         TailWhip,
         Tackle,
-        Uproar,          // Beautifly, Linoone
-
+        TakeDown,
+        Whirlwind, //needs making
+        
         // 💀 Poison-type
-        PoisonFang,      // Dustox
+        PoisonFang,
         PoisonSting,
         Toxic,
 
         // 🔮 Psychic-type
-        Confusion,
+        Agility,
+        Confusion,// needs making
         LightScreen,
+        Psybeam,// needs making
         Reflect,
-
+        Rest,
+        
         // 🌊 Water-type
-        Bubble,
-        Surf,
+        HydroPump,
+        MuddyWater,
+        Surf,//HM
         WaterGun,
-
+        Whirlpool,
+        
         // 👻 Ghost-type
         Astonish,
         ConfuseRay,
+        
+        //Ice-type
         Haze,
 
         // 🌑 Dark-type
         Bite,
         Crunch,
         FaintAttack,
-        MeanLook         // Zubat
+        Pursuit
     }
     public static string GetMoveName(MoveName name)
     {
         return _moveNames[name];
     }
-public static Dictionary<MoveName, string> _moveNames = new()
-{
-    // Bug-type
-    { MoveName.BugBite, "Bug Bite" },
-    { MoveName.LeechLife, "Leech Life" },
-    { MoveName.SilverWind, "Silver Wind" },
-    { MoveName.StringShot, "String Shot" },
 
-    // Dragon-type
-    { MoveName.DragonBreath, "DragonBreath" },
+    public static Dictionary<MoveName, string> _moveNames = new()
+    {
+        // 🐞 Bug-type
+        { MoveName.FuryCutter, "Fury Cutter" },
+        { MoveName.LeechLife, "Leech Life" },
+        { MoveName.SilverWind, "Silver Wind" },
+        { MoveName.StringShot, "String Shot" },
 
-    // Electric-type
-    { MoveName.Thundershock, "ThunderShock" },
-    { MoveName.ThunderWave, "Thunder Wave" },
-    { MoveName.Thunderbolt, "Thunderbolt" },
+        // 🐉 Dragon-type
+        { MoveName.DragonBreath, "Dragon Breath" },
 
-    // Fighting-type
-    { MoveName.BrickBreak, "Brick Break" },
-    { MoveName.DoubleKick, "Double Kick" },
+        // ⚡ Electric-type
+        { MoveName.Thundershock, "Thundershock" },
+        { MoveName.ThunderWave, "Thunder Wave" },
+        { MoveName.Thunderbolt, "Thunderbolt" },
+        { MoveName.Thunder, "Thunder" },
 
-    // Fire-type
-    { MoveName.Ember, "Ember" },
-    { MoveName.Flamethrower, "Flamethrower" },
+        // 🥋 Fighting-type
+        { MoveName.BrickBreak, "Brick Break" },
+        { MoveName.BulkUp, "Bulk Up" },
+        { MoveName.Detect, "Detect" },
+        { MoveName.DoubleKick, "Double Kick" },
+        { MoveName.SkyUppercut, "Sky Uppercut" },
 
-    // Flying-type
-    { MoveName.AirCutter, "Air Cutter" },
-    { MoveName.ArialAce, "Aerial Ace" },
-    { MoveName.Gust, "Gust" },
-    { MoveName.WingAttack, "Wing Attack" },
+        // 🔥 Fire-type
+        { MoveName.BlazeKick, "Blaze Kick" },
+        { MoveName.Ember, "Ember" },
+        { MoveName.FirePunch, "Fire Punch" },
+        { MoveName.FireSpin, "Fire Spin" },
+        { MoveName.Flamethrower, "Flamethrower" },
 
-    // Grass-type
-    { MoveName.Absorb, "Absorb" },
-    { MoveName.BulletSeed, "Bullet Seed" },
+        // 🛫 Flying-type
+        { MoveName.AirCutter, "Air Cutter" },
+        { MoveName.ArialAce, "Aerial Ace" },
+        { MoveName.Gust, "Gust" },
+        { MoveName.MirrorMove, "Mirror Move" },
+        { MoveName.Peck, "Peck" },
+        { MoveName.WingAttack, "Wing Attack" },
 
-    // Ground-type
-    { MoveName.Earthquake, "Earthquake" },
-    { MoveName.Fissure, "Fissure" },
-    { MoveName.Magnitude, "Magnitude" },
-    { MoveName.MudSlap, "Mud-Slap" },
-    { MoveName.SandAttack, "Sand-Attack" },
-    { MoveName.SandTomb, "Sand Tomb" },
+        // 🌿 Grass-type
+        { MoveName.Absorb, "Absorb" },
+        { MoveName.BulletSeed, "Bullet Seed" },
+        { MoveName.GigaDrain, "Giga Drain" },
+        { MoveName.LeafBlade, "Leaf Blade" },
+        { MoveName.MegaDrain, "Mega Drain" },
+        { MoveName.StunSpore, "Stun Spore" },
 
-    // Normal-type
-    { MoveName.Assist, "Assist" },
-    { MoveName.Attract, "Attract" },
-    { MoveName.BellyDrum, "Belly Drum" },
-    { MoveName.Bide, "Bide" },
-    { MoveName.Covet, "Covet" },
-    { MoveName.DoubleTeam, "Double Team" },
-    { MoveName.Flail, "Flail" },
-    { MoveName.FocusEnergy, "Focus Energy" },
-    { MoveName.FurySwipes, "Fury Swipes" },
-    { MoveName.Growl, "Growl" },
-    { MoveName.Harden, "Harden" },
-    { MoveName.Headbutt, "Headbutt" },
-    { MoveName.HyperBeam, "Hyper Beam" },
-    { MoveName.Leer, "Leer" },
-    { MoveName.OdorSleuth, "Odor Sleuth" },
-    { MoveName.Pound, "Pound" },
-    { MoveName.Protect, "Protect" },
-    { MoveName.QuickAttack, "Quick Attack" },
-    { MoveName.Rest, "Rest" },
-    { MoveName.Roar, "Roar" },
-    { MoveName.Scratch, "Scratch" },
-    { MoveName.Screech, "Screech" },
-    { MoveName.Slam, "Slam" },
-    { MoveName.Slash, "Slash" },
-    { MoveName.Supersonic, "Supersonic" },
-    { MoveName.SonicBoom, "Sonic Boom" },
-    { MoveName.TailWhip, "Tail Whip" },
-    { MoveName.Tackle, "Tackle" },
-    { MoveName.Uproar, "Uproar" },
+        // 🌍 Ground-type
+        { MoveName.Dig, "Dig" },
+        { MoveName.Earthquake, "Earthquake" },
+        { MoveName.Magnitude, "Magnitude" },
+        { MoveName.MudSlap, "Mud-Slap" },
+        { MoveName.MudShot, "Mud Shot" },
+        { MoveName.MudSport, "Mud Sport" },
+        { MoveName.SandAttack, "Sand-Attack" },
+        { MoveName.SandTomb, "Sand Tomb" },
 
-    // Poison-type
-    { MoveName.PoisonFang, "Poison Fang" },
-    { MoveName.PoisonSting, "Poison Sting" },
-    { MoveName.Toxic, "Toxic" },
+        // 🪨 Rock-type
+        { MoveName.SandStorm, "Sandstorm" },
 
-    // Psychic-type
-    { MoveName.Confusion, "Confusion" },
-    { MoveName.LightScreen, "Light Screen" },
-    { MoveName.Reflect, "Reflect" },
+        // 💜 Normal-type
+        { MoveName.Attract, "Attract" },
+        { MoveName.SonicBoom, "Sonic Boom" },
+        { MoveName.Harden, "Harden" },
+        { MoveName.BellyDrum, "Belly Drum" },
+        { MoveName.Bide, "Bide" },
+        { MoveName.Covet, "Covet" },
+        { MoveName.DoubleTeam, "Double Team" },
+        { MoveName.Endeavor, "Endeavor" },
+        { MoveName.Foresight, "Foresight" },
+        { MoveName.FocusEnergy, "Focus Energy" },
+        { MoveName.FalseSwipe, "False Swipe" },
+        { MoveName.Flail, "Flail" },
+        { MoveName.FurySwipes, "Fury Swipes" },
+        { MoveName.Growl, "Growl" },
+        { MoveName.Headbutt, "Headbutt" },
+        { MoveName.HyperBeam, "Hyper Beam" },
+        { MoveName.Leer, "Leer" },
+        { MoveName.MeanLook, "Mean Look" },
+        { MoveName.MorningSun, "Morning Sun" },
+        { MoveName.MoonLight, "Moonlight" },
+        { MoveName.OdorSleuth, "Odor Sleuth" },
+        { MoveName.Pound, "Pound" },
+        { MoveName.Protect, "Protect" },
+        { MoveName.QuickAttack, "Quick Attack" },
+        { MoveName.Scratch, "Scratch" },
+        { MoveName.Screech, "Screech" },
+        { MoveName.Slam, "Slam" },
+        { MoveName.Slash, "Slash" },
+        { MoveName.Supersonic, "Supersonic" },
+        { MoveName.TailWhip, "Tail Whip" },
+        { MoveName.Tackle, "Tackle" },
+        { MoveName.TakeDown, "Take Down" },
+        { MoveName.Whirlwind, "Whirlwind" },
 
-    // Water-type
-    { MoveName.Bubble, "Bubble" },
-    { MoveName.Surf, "Surf" },
-    { MoveName.WaterGun, "Water Gun" },
+        // 💀 Poison-type
+        { MoveName.PoisonFang, "Poison Fang" },
+        { MoveName.PoisonSting, "Poison Sting" },
+        { MoveName.Toxic, "Toxic" },
 
-    // Ghost-type
-    { MoveName.Astonish, "Astonish" },
-    { MoveName.ConfuseRay, "Confuse Ray" },
-    { MoveName.Haze, "Haze" },
+        // 🔮 Psychic-type
+        { MoveName.Agility, "Agility" },
+        { MoveName.Confusion, "Confusion" },
+        { MoveName.LightScreen, "Light Screen" },
+        { MoveName.Psybeam, "Psybeam" },
+        { MoveName.Reflect, "Reflect" },
+        { MoveName.Rest, "Rest" },
 
-    // Dark-type
-    { MoveName.Bite, "Bite" },
-    { MoveName.Crunch, "Crunch" },
-    { MoveName.FaintAttack, "Faint Attack" },
-    { MoveName.MeanLook, "Mean Look" }
-};
+        // 🌊 Water-type
+        { MoveName.HydroPump, "Hydro Pump" },
+        { MoveName.MuddyWater, "Muddy Water" },
+        { MoveName.Surf, "Surf" },
+        { MoveName.WaterGun, "Water Gun" },
+        { MoveName.Whirlpool, "Whirlpool" },
+
+        // 👻 Ghost-type
+        { MoveName.Astonish, "Astonish" },
+        { MoveName.ConfuseRay, "Confuse Ray" },
+
+        // ❄️ Ice-type
+        { MoveName.Haze, "Haze" },
+
+        // 🌑 Dark-type
+        { MoveName.Bite, "Bite" },
+        { MoveName.Crunch, "Crunch" },
+        { MoveName.FaintAttack, "Faint Attack" },
+        { MoveName.Pursuit, "Pursuit" }
+    };
+
 
     private static Dictionary<Ability, string> _abilityNames = new()
     {

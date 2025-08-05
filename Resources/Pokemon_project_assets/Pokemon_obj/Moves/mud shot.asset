@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: mud shot
   m_EditorClassIdentifier: 
-  moveName: Mud shot
+  moveName: Mud Shot
   moveDamage: 55
   moveAccuracy: 95
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
-  isSpecial: 1
+  isSpecial: 0
   isContact: 0
   isBuffOrDebuff: 1
   hasStatus: 0

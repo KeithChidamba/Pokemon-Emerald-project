@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: quick attack
   m_EditorClassIdentifier: 
-  moveName: Quick attack
+  moveName: Quick Attack
   moveDamage: 40
   moveAccuracy: 100
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
-  isContact: 0
+  isContact: 1
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 0

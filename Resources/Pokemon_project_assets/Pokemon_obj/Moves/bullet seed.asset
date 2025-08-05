@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: bullet seed
   m_EditorClassIdentifier: 
-  moveName: Bullet seed
+  moveName: Bullet Seed
   moveDamage: 15
   moveAccuracy: 90
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
-  isSpecial: 0
+  isSpecial: 1
   isContact: 0
   isBuffOrDebuff: 0
   hasStatus: 0

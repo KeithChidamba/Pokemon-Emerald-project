@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: astonish
   m_EditorClassIdentifier: 
-  moveName: Tail whip
+  moveName: Astonish
   moveDamage: 30
   moveAccuracy: 100
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 03437ca3b5b0b29d3bfbb4db12548a9a, type: 2}
   isSpecial: 0
-  isContact: 0
+  isContact: 1
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 0

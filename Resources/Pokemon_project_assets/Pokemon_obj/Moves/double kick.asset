@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: double kick
   m_EditorClassIdentifier: 
-  moveName: Double kick
+  moveName: Double Kick
   moveDamage: 30
   moveAccuracy: 100
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
-  isContact: 0
+  isContact: 1
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1

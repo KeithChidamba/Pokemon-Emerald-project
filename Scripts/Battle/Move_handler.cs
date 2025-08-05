@@ -627,7 +627,7 @@ public class Move_handler:MonoBehaviour
     }
     void protect()
     {
-        if(attacker.PreviousMove.move.moveName == "Protect")
+        if(attacker.PreviousMove.move.moveName == "Protect")//add to name db
         {
             int chance = 100;
             for (int i = 0; i < attacker.PreviousMove.numRepetitions; i++)
@@ -736,7 +736,7 @@ public class Move_handler:MonoBehaviour
         return duplicateBarrier;
     }
     void reflect()
-    {
+    {//add to name db
         StartCoroutine(CreateBarriers("Reflect"));
     }
 
@@ -872,6 +872,7 @@ public class Move_handler:MonoBehaviour
         victim.pokemon.buffAndDebuffs
             .RemoveAll(b => b.stat == PokemonOperations.Stat.Evasion);
         victim.pokemon.evasion = 100;
+        _moveDelay = false;
     }
 
     void endeavor()

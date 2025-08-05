@@ -17,8 +17,8 @@ MonoBehaviour:
   moveAccuracy: 90
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
-  isSpecial: 1
-  isContact: 0
+  isSpecial: 0
+  isContact: 1
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: thunder wave
   m_EditorClassIdentifier: 
-  moveName: Thunder wave
+  moveName: Thunder Wave
   moveDamage: 0
   moveAccuracy: 100
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 67f83b8bd8804b347b2e10c817789a86, type: 2}
-  isSpecial: 0
+  isSpecial: 1
   isContact: 0
   isBuffOrDebuff: 0
   hasStatus: 1

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: poison sting
   m_EditorClassIdentifier: 
-  moveName: Poison sting
+  moveName: Poison Sting
   moveDamage: 15
   moveAccuracy: 100
   critModifierIndex: 0
