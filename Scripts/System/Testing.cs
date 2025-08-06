@@ -19,7 +19,7 @@ public class Testing : MonoBehaviour
             "Psychic","Psychic","Water","Water","Water"
         };
         var counter = 0;
-        foreach(var move in NameDB._moveNames)
+        foreach(var move in NameDB.learnSetMoveNames)
         {
             Debug.Log("Pokemon_project_assets/Pokemon_obj/Moves/"
                       + types[counter].ToLower() + "/" + move.Value.ToLower());

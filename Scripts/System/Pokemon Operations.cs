@@ -179,9 +179,13 @@ public static class PokemonOperations
     {
         LearningNewMove = true;
         CurrentPokemon = pokemon;
+        if (CurrentPokemon.currentLevel > CurrentPokemon.learnSet[^1].requiredLevel)
+        {//No more moves to learn
+            LearningNewMove = false;
+            return;
+        }
         var counter = 0;
         var isPartyPokemon = Pokemon_party.Instance.party.Contains(CurrentPokemon);
-        var inBattle = Options_manager.Instance.playerInBattle;
         foreach (var move in CurrentPokemon.learnSet)
         {
             if (CurrentPokemon.currentLevel == move.requiredLevel)
@@ -190,32 +194,11 @@ public static class PokemonOperations
                 var moveFromAsset = Resources.Load<Move>("Pokemon_project_assets/Pokemon_obj/Moves/" + moveName.ToLower());
                 if (CurrentPokemon.moveSet.Count == 4) 
                 {//leveling up from battle or rare candies
-                    if (inBattle || isPartyPokemon)
-                    {
-                        SelectingMoveReplacement = true;
-                        Dialogue_handler.Instance.DisplayList(
-                            $"{CurrentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn" +
-                            $" {moveName}?", "", new[] { "LearnMove", "SkipMove" },
-                            new[] { "Yes", "No" });
-                        NewMove = moveFromAsset;
-                    }
-                    //wild pokemon get generated with somewhat random moveset choices
-                    else
-                    {
-                        CurrentPokemon.moveSet[Utility.RandomRange(0, 4)]
-                            = Obj_Instance.CreateMove(moveFromAsset);
-                    }
+                    ReplaceMove(moveName, moveFromAsset,isPartyPokemon);
                 }
                 else
                 {
-                    if (isPartyPokemon)
-                    {
-                        Dialogue_handler.Instance.DisplayBattleInfo(
-                            $"{CurrentPokemon.pokemonName} learned {moveName}",true);
-                    }
-                    var newMove = Obj_Instance.CreateMove(moveFromAsset);
-                    if (!CurrentPokemon.moveSet.Contains(newMove))
-                        CurrentPokemon.moveSet.Add(newMove);
+                    AddedMoveInEmptySlot(moveName, moveFromAsset, isPartyPokemon);
                     LearningNewMove = false;
                 }
                 break;
@@ -224,6 +207,68 @@ public static class PokemonOperations
         }
         if (counter == CurrentPokemon.learnSet.Length)
             LearningNewMove = false;
+    }
+
+    public static void LearnTMorHM(IAdditionalItemInfo itemInfo, Pokemon pokemon)
+    {
+        CurrentPokemon = pokemon;
+        switch (itemInfo)
+        {
+            case TM:
+                var newTM = (TM)Activator.CreateInstance(itemInfo.GetType())!;
+                if (CurrentPokemon.learnableTMs.Contains(newTM.TmName))
+                {
+                    //learn tm
+                }
+                break;
+            case HM:
+                var newHM = (HM)Activator.CreateInstance(itemInfo.GetType())!;
+                if (CurrentPokemon.learnableHMs.Contains(newHM.HmName))
+                {
+                    //learn hm
+                }
+                break;
+        }
+    }
+
+    private static void AddedMoveInEmptySlot( string moveName,Move moveFromAsset,bool isPartyPokemon = false)
+    {
+        var newMove = Obj_Instance.CreateMove(moveFromAsset);
+        if (CurrentPokemon.moveSet.Contains(newMove))
+        {
+            if (isPartyPokemon)
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo(
+                    $"{CurrentPokemon.pokemonName} already knows {moveName}", true);
+            }
+            return;
+        }
+        if (isPartyPokemon)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(
+                $"{CurrentPokemon.pokemonName} learned {moveName}",true);
+        }
+        CurrentPokemon.moveSet.Add(newMove);
+    }
+
+    private static void ReplaceMove( string moveName,Move moveFromAsset,bool isPartyPokemon = false)
+    {
+        if (isPartyPokemon)
+        {
+            SelectingMoveReplacement = true;
+            Dialogue_handler.Instance.DisplayList(
+                $"{CurrentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn" +
+                $" {moveName}?", "", new[] { "LearnMove", "SkipMove" },
+                new[] { "Yes", "No" });
+            NewMove = moveFromAsset;
+        }
+        //wild pokemon get generated with somewhat random moveset choices
+        else
+        {
+            CurrentPokemon.moveSet[Utility.RandomRange(0, 4)]
+                = Obj_Instance.CreateMove(moveFromAsset);
+            LearningNewMove = false;
+        }
     }
     public static void LearnSelectedMove(int moveIndex)
     {

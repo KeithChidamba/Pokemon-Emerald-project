@@ -66,6 +66,8 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("split_evolution")] public bool splitEvolution = false;
     public bool requiresFriendshipEvolution = false;
     public LearnSetMove[] learnSet;
+    public List<NameDB.TM> learnableTMs;
+    public List<NameDB.HM> learnableHMs;
     public List<Move> moveSet=new();
     public Ability ability;
     public List<Evolution> evolutions;

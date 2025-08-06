@@ -20,7 +20,7 @@ public class Item_handler : MonoBehaviour
     public enum ItemType
     {
         Special,GainExp,HealHp,Status,Ether,Herb,Revive,StatIncrease,FriendshipIncrease,Pokeball
-        ,EvolutionStone,RareCandy,XItem,GainMoney,Overworld
+        ,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove
     }
     private void Awake()
     {
@@ -33,7 +33,6 @@ public class Item_handler : MonoBehaviour
     }
     public void UseItem(Item item,[CanBeNull] Pokemon selectedPokemon)
     {
-
         if (Options_manager.Instance.playerInBattle)
         {
             currentParticipant = Battle_handler.Instance.GetCurrentParticipant();
@@ -42,6 +41,11 @@ public class Item_handler : MonoBehaviour
         
         _selectedPartyPokemon = selectedPokemon;
         _itemInUse = item;
+        if (_itemInUse.itemType == ItemType.LearnableMove)
+        {
+            PokemonOperations.LearnTMorHM(_itemInUse.additionalItemInfo,selectedPokemon);
+            return;
+        }
         if (_itemInUse.itemType == ItemType.Overworld)
         {
             UseOverworldItem();

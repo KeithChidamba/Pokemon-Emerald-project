@@ -93,6 +93,8 @@ public static class Obj_Instance
         newPokemon.abilities = pkm.abilities;
         newPokemon.splitEvolution = pkm.splitEvolution;
         newPokemon.learnSet = pkm.learnSet;
+        newPokemon.learnableTMs = pkm.learnableTMs;
+        newPokemon.learnableHMs = pkm.learnableHMs;
         foreach (var move in pkm.moveSet)
             newPokemon.moveSet.Add(CreateMove(move));
         newPokemon.ability = pkm.ability;
