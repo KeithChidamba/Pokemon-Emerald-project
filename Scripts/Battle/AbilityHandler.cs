@@ -100,7 +100,7 @@ public class AbilityHandler : MonoBehaviour
     void Levitate()
     {
         if (_abilityTriggered) return;
-        _participant.additionalTypeImmunity = Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/Ground");
+        _participant.additionalTypeImmunity = Resources.Load<Type>(Save_manager.AssetDirectory.Types+"Ground");
         _abilityTriggered = true;
     }
     void Overgrow()
@@ -210,8 +210,8 @@ public class AbilityHandler : MonoBehaviour
         var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
 
         var assetDirectory = nonMartItems.Contains(possibleItems[itemWonIndex])?
-            "Pokemon_project_assets/Items/" + possibleItems[itemWonIndex]
-            :"Pokemon_project_assets/Items/Mart_Items/" + possibleItems[itemWonIndex];
+            Save_manager.GetDirectory(Save_manager.AssetDirectory.NonMartItems) + possibleItems[itemWonIndex]
+            : Save_manager.GetDirectory(Save_manager.AssetDirectory.MartItems) + possibleItems[itemWonIndex];
         
         var itemWon = Resources.Load<Item>(assetDirectory);
         if (Utility.RandomRange(1, 101) < _participant.pokemon.currentLevel)

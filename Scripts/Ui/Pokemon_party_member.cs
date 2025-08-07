@@ -39,8 +39,9 @@ public class Pokemon_party_member : MonoBehaviour
         else
         {
             statusEffectImage.gameObject.SetActive(true);
-            statusEffectImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/Pokemon_obj/Status/"
-                                                       + pokemon.statusEffect.ToString().ToLower());
+            statusEffectImage.sprite = Resources.Load<Sprite>(
+                Save_manager.GetDirectory(Save_manager.AssetDirectory.Status)
+                + pokemon.statusEffect.ToString().ToLower());
         }
     }
     public void ResetUI()

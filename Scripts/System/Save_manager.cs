@@ -18,7 +18,29 @@ public class Save_manager : MonoBehaviour
     public Area_manager area;
     public static Save_manager Instance { get; private set; }
     private string _saveDataPath = "Assets/Save_data";
-    public event Action OnVirtualFileSystemLoaded;
+
+    public enum AssetDirectory
+    { 
+        Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
+    };
+    private static Dictionary<AssetDirectory, string> _directories = new()
+    {
+        {AssetDirectory.Moves,"Pokemon_project_assets/Pokemon_obj/Moves/" },
+        {AssetDirectory.Status,"Pokemon_project_assets/Pokemon_obj/Status/" },
+        {AssetDirectory.Pokemon,"Pokemon_project_assets/Pokemon_obj/Pokemon/" },
+        {AssetDirectory.PokemonImage,"Pokemon_project_assets/pokemon_img/" },
+        {AssetDirectory.Abilities,"Pokemon_project_assets/Pokemon_obj/Abilities/" },
+        {AssetDirectory.Types,"Pokemon_project_assets/Pokemon_obj/Types/" },
+        {AssetDirectory.Natures,"Pokemon_project_assets/Pokemon_obj/Natures/" },
+        {AssetDirectory.UI,"Pokemon_project_assets/Pokemon_obj/UI/" },
+        {AssetDirectory.NonMartItems,"Pokemon_project_assets/Items/NonMartItems/" },
+        {AssetDirectory.MartItems,"Pokemon_project_assets/Items/Mart_Items/" },
+        {AssetDirectory.Items,"Pokemon_project_assets/Items/" },//make berry directory
+    };
+    public static string GetDirectory(AssetDirectory directory)
+    {
+        return _directories[directory];
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -60,7 +82,7 @@ public class Save_manager : MonoBehaviour
     }
     public void OnFileStructureCreated()//js notification
     {
-        OnVirtualFileSystemLoaded?.Invoke();
+        //do something if want, in future
     }
     public void OnDownloadComplete()//js notification
     {

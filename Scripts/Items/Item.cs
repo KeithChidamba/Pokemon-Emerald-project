@@ -20,5 +20,5 @@ public class Item : ScriptableObject
     public bool isHeldItem = false;
     [FormerlySerializedAs("CanBeHeld")] public bool canBeHeld = false;
     [FormerlySerializedAs("CanBeSold")] public bool canBeSold = true;
-    public IAdditionalItemInfo additionalItemInfo;
+    public AdditionalItemInfo additionalItemInfo;
 }

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public class TM : IAdditionalItemInfo
+[CreateAssetMenu(fileName = "TM", menuName = "tmMove")]
+public class TM : AdditionalItemInfo
 {
     public int TmNumber;
     public NameDB.TM TmName;

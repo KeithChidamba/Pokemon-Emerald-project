@@ -107,33 +107,41 @@ public class Pokemon : ScriptableObject
     }
     public void LoadUnserializedData()//gives values to attributes that cant be deserialized, using saved values
     {
-        frontPicture = Testing.CheckImage("Pokemon_project_assets/pokemon_img/",pokemonName);
-        backPicture = Testing.CheckImage("Pokemon_project_assets/pokemon_img/",pokemonName + "_b");
-        nature = Resources.Load<Nature>("Pokemon_project_assets/Pokemon_obj/Natures/" + natureName.ToLower());
-        ability = Resources.Load<Ability>("Pokemon_project_assets/Pokemon_obj/Abilities/" + abilityName.ToLower());
+        frontPicture = Testing.CheckImage( Save_manager.GetDirectory
+            (Save_manager.AssetDirectory.PokemonImage),pokemonName);
+        backPicture =Testing.CheckImage( Save_manager.GetDirectory
+            (Save_manager.AssetDirectory.PokemonImage),pokemonName+"_b");
+        nature = Resources.Load<Nature>(Save_manager.GetDirectory
+            (Save_manager.AssetDirectory.Natures) + natureName.ToLower());
+        ability = Resources.Load<Ability>(Save_manager.GetDirectory
+            (Save_manager.AssetDirectory.Abilities) + abilityName.ToLower());
         moveSet.Clear();
         types.Clear();
         evolutions.Clear();
         for (int i = 0; i < moveData.Count; i++)
         {
             var moveCopy = Obj_Instance.CreateMove(Resources.Load<Move>(
-                $"Pokemon_project_assets/Pokemon_obj/Moves/{moveData[i].moveName}"));
+                Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + moveData[i].moveName));
+            
             moveCopy.powerpoints = moveData[i].powerPoints;
             moveCopy.maxPowerpoints = moveData[i].maxPowerPoints;
             moveSet.Add(moveCopy);
         }
         foreach (var typeName in typeNames)
         {
-            types.Add(Resources.Load<Type>("Pokemon_project_assets/Pokemon_obj/Types/" + typeName));
+            types.Add(Resources.Load<Type>(Save_manager.GetDirectory
+                (Save_manager.AssetDirectory.Types) + typeName));
         }
         foreach (var evolutionName in evolutionNames)
         {
-            evolutions.Add(Resources.Load<Evolution>(
-                $"Pokemon_project_assets/Pokemon_obj/Pokemon/{basePokemonName}/{evolutionName}"));
+            var pokemonDirectory = Save_manager.GetDirectory
+                (Save_manager.AssetDirectory.Pokemon);
+            evolutions.Add(Resources.Load<Evolution>($"{pokemonDirectory}/{basePokemonName}/{evolutionName}"));
         }
         for (int i = 0; i < types.Count; i++)
         {
-            types[i].typeImage = Resources.Load<Sprite>("Pokemon_project_assets/ui/" + typeNames[i]);
+            types[i].typeImage = Resources.Load<Sprite>(Save_manager.GetDirectory
+                (Save_manager.AssetDirectory.UI) + typeNames[i]);
         }
         Battle_handler.Instance.OnBattleEnd += ClearEvents;
     }

@@ -287,8 +287,9 @@ public class Battle_Participant : MonoBehaviour
         else
         {
             statusImage.gameObject.SetActive(true);
-            statusImage.sprite = Resources.Load<Sprite>
-            ("Pokemon_project_assets/Pokemon_obj/Status/" + pokemon.statusEffect.ToString().ToLower());
+            statusImage.sprite = Resources.Load<Sprite>(
+                Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) 
+             + pokemon.statusEffect.ToString().ToLower());
         }
     }
     private void ActivateUI(GameObject[]arr,bool on)

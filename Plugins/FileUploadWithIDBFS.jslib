@@ -1,7 +1,6 @@
 mergeInto(LibraryManager.library, {
   UploadZipAndStoreToIDBFS: function () {
     const MOUNT_PATH = '/data';
-
     // Ensure IDBFS is mounted once only (e.g. in Start or Awake in Unity)
     if (!FS.analyzePath(MOUNT_PATH).exists) {
       FS.mkdir(MOUNT_PATH);
