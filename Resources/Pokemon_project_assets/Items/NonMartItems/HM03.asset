@@ -19,11 +19,11 @@ MonoBehaviour:
   itemDescription: Teaches a valid pokemon, surf
   price: 0
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 65ed27a53e4b7fdb19be08509db46f2e, type: 3}
+  itemImage: {fileID: 21300000, guid: 793bf201d341fd6259d43c67ff0eda04, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
-  canBeSold: 1
+  canBeSold: 0
   additionalItemInfo: {fileID: 11400000, guid: a50c9819f40ea990dbe0082d84843d2e, type: 2}

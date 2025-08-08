@@ -43,7 +43,7 @@ public class Item_handler : MonoBehaviour
         _itemInUse = item;
         if (_itemInUse.itemType == ItemType.LearnableMove)
         {
-            PokemonOperations.LearnTMorHM(_itemInUse.additionalItemInfo,selectedPokemon);
+            PokemonOperations.LearnTmOrHm(_itemInUse.additionalItemInfo,selectedPokemon);
             return;
         }
         if (_itemInUse.itemType == ItemType.Overworld)

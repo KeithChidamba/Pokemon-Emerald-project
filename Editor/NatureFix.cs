@@ -8,6 +8,8 @@ using System.Linq;
 
 public class NatureEVFixer : EditorWindow
 {
+    
+    
     // [MenuItem("Tools/Fix Pokemon Natures")]
     // public static void FixNatures()
     // {

@@ -209,7 +209,7 @@ public static class PokemonOperations
         var assetPath = Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + moveName;
         var moveFromAsset = Resources.Load<Move>(assetPath);
         if (CurrentPokemon.moveSet.Count == 4) 
-        {//leveling up from battle or rare candies
+        {
             if (isPartyPokemon)
             {
                 SelectingMoveReplacement = true;
@@ -249,7 +249,7 @@ public static class PokemonOperations
             LearningNewMove = false;
         }
     }
-    public static void LearnTMorHM(AdditionalItemInfo itemInfo, Pokemon pokemon)
+    public static void LearnTmOrHm(AdditionalItemInfo itemInfo, Pokemon pokemon)
     {
         CurrentPokemon = pokemon;
         switch (itemInfo)

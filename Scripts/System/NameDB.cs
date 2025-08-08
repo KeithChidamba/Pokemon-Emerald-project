@@ -137,19 +137,16 @@ public static class NameDB
         BulletSeed,
         BrickBreak,
         BulkUp,
-        ArialAce,
+        AerialAce,
         Thunderbolt,
         Thunder,
         Flamethrower,
         GigaDrain,
-        MegaDrain,
         Dig,
         Earthquake,
-        SandStorm,
+        Sandstorm,
         HyperBeam,
         Toxic,
-        Bite,
-        FaintAttack,
     }
     public static string GetMoveName(LearnSetMove moveName)
     {
@@ -170,12 +167,20 @@ public static class NameDB
     };
     private static Dictionary<TM, string> _tmMoveNames = new()
     {
-        // 🥋 Fighting-type
+        { TM.BulletSeed, "Bullet Seed" },
         { TM.BrickBreak, "Brick Break" },
-        // 🛫 Flying-type
-        { TM.ArialAce, "Aerial Ace" },
-        // 🌿 Grass-type
-        { TM.BulletSeed, "Bullet Seed" }
+        { TM.BulkUp, "Bulk Up" },
+        { TM.AerialAce, "Aerial Ace" },
+        { TM.Thunderbolt, "Thunderbolt" },
+        { TM.Thunder, "Thunder" },
+        { TM.Flamethrower, "Flamethrower" },
+        { TM.GigaDrain, "Giga Drain" },
+        { TM.Dig, "Dig" },
+        { TM.Earthquake, "Earthquake" },
+        { TM.Sandstorm, "Sandstorm" },
+        { TM.HyperBeam, "Hyper Beam" },
+        { TM.Toxic, "Toxic" }
+        
     };
     public static Dictionary<LearnSetMove, string> learnSetMoveNames = new()
     {
