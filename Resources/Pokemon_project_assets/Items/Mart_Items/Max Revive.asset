@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Max Revive
-  itemType: 6
-  itemEffect: Max Revive
+  itemType: 7
+  itemEffect: 
   itemDescription: Revives a pokemon with 100% health
   price: 200
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 0}

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Energy Powder
   itemType: 5
-  itemEffect: 50
+  itemEffect: 
   itemDescription: A bitter herb that restores 50 Hp
   price: 18
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: e97d9152dca25d728814ed4c755b22ab, type: 2}

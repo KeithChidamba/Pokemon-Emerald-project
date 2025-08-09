@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Antidote
   itemType: 3
-  itemEffect: poison
+  itemEffect: 
   itemDescription: Heals poison
   price: 20
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 1
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: fba0beea3bc905bbbb51e74f8995c4e3, type: 2}

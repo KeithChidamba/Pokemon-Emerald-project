@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Pokeball
-  itemType: 9
+  itemType: 10
   itemEffect: 1
   itemDescription: Basic pokeball
   price: 15
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 0}

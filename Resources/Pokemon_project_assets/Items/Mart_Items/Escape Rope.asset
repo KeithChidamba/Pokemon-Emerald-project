@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Escape Rope
-  itemType: 14
+  itemType: 15
   itemEffect: 0
   itemDescription: Allows player to escape certain areas
   price: 400
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 0}

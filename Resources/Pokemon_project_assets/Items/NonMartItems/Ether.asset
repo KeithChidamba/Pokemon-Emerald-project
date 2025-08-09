@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Ether
   itemType: 4
-  itemEffect: pp
+  itemEffect: 
   itemDescription: Restores 10 powerpoints for a move
   price: 45
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: 240bcc6ff0e167142ad6bd8b994f8934, type: 2}

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Revival Herb
   itemType: 5
-  itemEffect: 1
+  itemEffect: 
   itemDescription: A bitter herb that revives a pokemon ith full Hp
   price: 18
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: 090a2400acb69b790b36e762b955245d, type: 2}

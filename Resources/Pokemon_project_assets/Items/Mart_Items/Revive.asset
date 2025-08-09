@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Revive
   itemType: 6
-  itemEffect: Revive
+  itemEffect: 
   itemDescription: Revives a pokemon with 20% health
   price: 45
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 0}

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Protein
-  itemType: 7
-  itemEffect: Attack
+  itemType: 8
+  itemEffect: 
   itemDescription: "It increases the Attack of a Pok\xE9mon"
   price: 2000
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: 54b120f6e726b241d83f09ff4ec2c098, type: 2}

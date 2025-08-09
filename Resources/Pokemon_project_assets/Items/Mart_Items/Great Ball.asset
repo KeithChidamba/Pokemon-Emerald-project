@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Great Ball
-  itemType: 9
+  itemType: 10
   itemEffect: 1,5
   itemDescription: 50% higher chance to catch compared to pokeball
   price: 30
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 0}

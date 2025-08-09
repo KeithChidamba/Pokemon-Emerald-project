@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: PP Up
-  itemType: 7
-  itemEffect: pp
+  itemType: 4
+  itemEffect: 
   itemDescription: increases the poweperpoints of a move
   price: 2000
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: de40e13a7f0536f2fa21a62de0a4b2e2, type: 2}

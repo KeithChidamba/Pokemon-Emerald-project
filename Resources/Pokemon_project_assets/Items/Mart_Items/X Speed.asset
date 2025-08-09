@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: X Speed
-  itemType: 12
-  itemEffect: Speed
+  itemType: 13
+  itemEffect: 
   itemDescription: increases a pokemon's speed during battle
   price: 100
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: affbb68d647fff5959e2f916f65f2278, type: 2}

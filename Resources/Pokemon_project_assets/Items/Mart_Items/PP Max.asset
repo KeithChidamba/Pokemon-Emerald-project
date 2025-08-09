@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: PP Max
-  itemType: 7
-  itemEffect: pp
+  itemType: 4
+  itemEffect: 
   itemDescription: Maximises the poweperpoints of a move
   price: 2000
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: eaf91a8810bf03f3c8425a1b3d87f445, type: 2}

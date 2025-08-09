@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Awakening
   itemType: 3
-  itemEffect: sleep
+  itemEffect: 
   itemDescription: Wakes up a sleeping pokemon
   price: 20
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 1
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: 3bffeffa0e04651219bd1cd3e1132b88, type: 2}

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Ice Heal
   itemType: 3
-  itemEffect: freeze
+  itemEffect: 
   itemDescription: Heals frozen pokemon
   price: 20
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 1
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: 6198dfa1deeb1ac50a40be63b7057215, type: 2}

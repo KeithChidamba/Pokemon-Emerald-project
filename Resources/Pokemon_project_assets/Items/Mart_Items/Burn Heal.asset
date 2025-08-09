@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Burn Heal
   itemType: 3
-  itemEffect: burn
+  itemEffect: 
   itemDescription: Heals burns
   price: 20
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 1
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: 35c85c2c3f33f8b37906bcbbd63be3d2, type: 2}

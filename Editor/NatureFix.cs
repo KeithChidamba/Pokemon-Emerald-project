@@ -8,7 +8,32 @@ using System.Linq;
 
 public class NatureEVFixer : EditorWindow
 {
-[MenuItem("Tools/Add Tm's items")]
+    [MenuItem("Tools/Add stat info modules")]
+    public static void CreateStats()
+    {
+        var statList = new[]
+        {
+            PokemonOperations.Stat.Attack,PokemonOperations.Stat.Defense,
+            PokemonOperations.Stat.SpecialAttack,PokemonOperations.Stat.SpecialDefense,
+            PokemonOperations.Stat.Speed,PokemonOperations.Stat.Hp,
+            PokemonOperations.Stat.Crit,PokemonOperations.Stat.Accuracy,PokemonOperations.Stat.Evasion
+        };
+        foreach (var stat in statList)
+        {
+            SaveScriptableObject<StatInfo>(
+                Save_manager.AssetDirectory.AdditionalInfo,
+                stat.ToString(),
+                statAsset =>
+                {
+                    statAsset.statName = stat;
+                    
+                }
+            );
+        }
+    }
+
+
+    [MenuItem("Tools/Add Tm's items")]
     public static void CreateTms()
     {
         string[] tmDescriptions = new string[]
@@ -57,6 +82,7 @@ public class NatureEVFixer : EditorWindow
         { Save_manager.AssetDirectory.Items, "Assets/Resources/Pokemon_project_assets/Items/" },
         { Save_manager.AssetDirectory.Tms, "Assets/Resources/Pokemon_project_assets/Items/Tms/" },
         { Save_manager.AssetDirectory.Hms, "Assets/Resources/Pokemon_project_assets/Items/Hms/" },
+        { Save_manager.AssetDirectory.AdditionalInfo,"Assets/Resources/Pokemon_project_assets/Items/AdditionalInfo/" }
     };
 
     public static void SaveScriptableObject<T>(Save_manager.AssetDirectory directory,

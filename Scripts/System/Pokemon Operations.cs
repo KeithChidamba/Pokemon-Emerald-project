@@ -14,7 +14,7 @@ public static class PokemonOperations
     public static Move NewMove;
     public static Action<bool> OnEvChange;
     public enum FriendshipModifier{Fainted,LevelUp,Vitamin,EvBerry}
-    public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep}
+    public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep,FullHeal}
     public enum Gender{None,Male,Female}
     public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
     public enum Stat{None,Attack,Defense,SpecialAttack,SpecialDefense,Speed,Hp,Crit,Accuracy,Evasion}

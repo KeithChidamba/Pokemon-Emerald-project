@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Dire Hit
-  itemType: 12
-  itemEffect: Crit
+  itemType: 13
+  itemEffect: 
   itemDescription: increases a pokemon's crit rate during battle
   price: 100
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: a2f5e73373450da5da70a8f26b1491b8, type: 2}

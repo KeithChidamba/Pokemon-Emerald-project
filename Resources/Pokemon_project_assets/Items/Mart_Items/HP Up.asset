@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: HP Up
-  itemType: 7
-  itemEffect: HP
+  itemType: 8
+  itemEffect: 
   itemDescription: "It increases the HP of a Pok\xE9mon"
   price: 2000
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: 85ff1bedad9a8b983a614dd053861dc7, type: 2}

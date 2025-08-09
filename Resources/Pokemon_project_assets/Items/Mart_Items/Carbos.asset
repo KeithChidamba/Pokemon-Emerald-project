@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Carbos
-  itemType: 7
-  itemEffect: Speed
+  itemType: 8
+  itemEffect: 
   itemDescription: "It increases the Speed of a Pok\xE9mon"
   price: 2000
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: affbb68d647fff5959e2f916f65f2278, type: 2}

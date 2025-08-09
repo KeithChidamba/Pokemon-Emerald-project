@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Zinc
-  itemType: 7
-  itemEffect: Special Defense
+  itemType: 8
+  itemEffect: 
   itemDescription: "It increases the Special Defense of a Pok\xE9mon"
   price: 2000
   quantity: 1
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 11400000, guid: b42e1bd1728a5a6c299dbfab6f90fc40, type: 2}
