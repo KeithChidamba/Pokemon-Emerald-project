@@ -136,7 +136,7 @@ public class Pokemon : ScriptableObject
         {
             var pokemonDirectory = Save_manager.GetDirectory
                 (Save_manager.AssetDirectory.Pokemon);
-            evolutions.Add(Resources.Load<Evolution>($"{pokemonDirectory}/{basePokemonName}/{evolutionName}"));
+            evolutions.Add(Resources.Load<Evolution>($"{pokemonDirectory}{basePokemonName}/{evolutionName}"));
         }
         for (int i = 0; i < types.Count; i++)
         {

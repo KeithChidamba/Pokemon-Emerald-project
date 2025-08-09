@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
-  m_Name: TM35
+  m_Name: TM26
   m_EditorClassIdentifier: 
   itemID: 
-  itemName: Flamethrower
+  itemName: Earthquake
   itemType: 15
   itemEffect: 
-  itemDescription: Scorches with intense flames.
+  itemDescription: Powerful quake that hits all.
   price: 0
   quantity: 0
-  itemImage: {fileID: 21300000, guid: e6c009463ceeb9591abe1237826d60bb, type: 2}
+  itemImage: {fileID: 21300000, guid: 8916578fd0d209af8a6af68fff5e1016, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: 667ac9fccdca7c2f7b9adaabd7e38b95, type: 2}
+  additionalItemInfo: {fileID: 11400000, guid: 9713682419725f7508a7ffeed0ede2e7, type: 2}

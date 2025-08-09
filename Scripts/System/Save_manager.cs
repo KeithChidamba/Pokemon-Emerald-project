@@ -22,8 +22,9 @@ public class Save_manager : MonoBehaviour
     public enum AssetDirectory
     { 
         Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
+        ,Tms,Hms
     };
-    private static Dictionary<AssetDirectory, string> _directories = new()
+    public static Dictionary<AssetDirectory, string> _directories = new()
     {
         {AssetDirectory.Moves,"Pokemon_project_assets/Pokemon_obj/Moves/" },
         {AssetDirectory.Status,"Pokemon_project_assets/Pokemon_obj/Status/" },
@@ -36,6 +37,8 @@ public class Save_manager : MonoBehaviour
         {AssetDirectory.NonMartItems,"Pokemon_project_assets/Items/NonMartItems/" },
         {AssetDirectory.MartItems,"Pokemon_project_assets/Items/Mart_Items/" },
         {AssetDirectory.Items,"Pokemon_project_assets/Items/" },//make berry directory
+        {AssetDirectory.Tms,"Pokemon_project_assets/Items/Tms/" },
+        {AssetDirectory.Hms,"Pokemon_project_assets/Items/Hms/" },
     };
     public static string GetDirectory(AssetDirectory directory)
     {

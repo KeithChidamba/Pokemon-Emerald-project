@@ -8,8 +8,92 @@ using System.Linq;
 
 public class NatureEVFixer : EditorWindow
 {
-    
-    
+[MenuItem("Tools/Add Tm's items")]
+    public static void CreateTms()
+    {
+        string[] tmDescriptions = new string[]
+        {
+            //create the description of the tms you want to add
+        };
+
+        var directory = Save_manager.GetDirectory(Save_manager.AssetDirectory.Tms);
+        var tmList = Resources.LoadAll<TM>(directory.TrimEnd('/'));
+        int count = 0;
+
+        foreach (var tmData in tmList)
+        {
+            var tmName = NameDB.GetTmName(tmData.TmName);
+
+            SaveScriptableObject<Item>(
+                Save_manager.AssetDirectory.NonMartItems,
+                tmData.name,
+                tm =>
+                {
+                    tm.itemName = tmName;
+                    tm.itemDescription = tmDescriptions[count];
+                    tm.additionalItemInfo = tmData;
+                    tm.canBeSold = true;
+                    tm.forPartyUse = true;
+                    tm.canBeUsedInOverworld = true;
+                    tm.canBeUsedInBattle = false;
+                }
+            );
+            count++;
+        }
+    }
+
+    private static Dictionary<Save_manager.AssetDirectory, string> _directories = new()
+    {
+        { Save_manager.AssetDirectory.Moves, "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Moves/" },
+        { Save_manager.AssetDirectory.Status, "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Status/" },
+        { Save_manager.AssetDirectory.Pokemon, "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Pokemon/" },
+        { Save_manager.AssetDirectory.PokemonImage, "Assets/Resources/Pokemon_project_assets/pokemon_img/" },
+        { Save_manager.AssetDirectory.Abilities, "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Abilities/" },
+        { Save_manager.AssetDirectory.Types, "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Types/" },
+        { Save_manager.AssetDirectory.Natures, "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Natures/" },
+        { Save_manager.AssetDirectory.UI, "Assets/Resources/Pokemon_project_assets/Pokemon_obj/UI/" },
+        { Save_manager.AssetDirectory.NonMartItems, "Assets/Resources/Pokemon_project_assets/Items/NonMartItems/" },
+        { Save_manager.AssetDirectory.MartItems, "Assets/Resources/Pokemon_project_assets/Items/Mart_Items/" },
+        { Save_manager.AssetDirectory.Items, "Assets/Resources/Pokemon_project_assets/Items/" },
+        { Save_manager.AssetDirectory.Tms, "Assets/Resources/Pokemon_project_assets/Items/Tms/" },
+        { Save_manager.AssetDirectory.Hms, "Assets/Resources/Pokemon_project_assets/Items/Hms/" },
+    };
+
+    public static void SaveScriptableObject<T>(Save_manager.AssetDirectory directory,
+        string assetName, System.Action<T> onSetup) where T : ScriptableObject
+    {
+        if (!_directories.TryGetValue(directory, out string folderPath))
+        {
+            Debug.LogError($"Directory mapping for {directory} not found.");
+            return;
+        }
+
+        // Ensure the folder path exists (recursive creation)
+        if (!Directory.Exists(folderPath))
+        {
+            Debug.Log("dir not found : "+folderPath);
+            Directory.CreateDirectory(folderPath);
+            AssetDatabase.Refresh();
+        }
+
+        string assetPath = $"{folderPath}{assetName}.asset";
+        T existingAsset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+
+        if (existingAsset == null)
+        {
+            T asset = ScriptableObject.CreateInstance<T>();
+            onSetup?.Invoke(asset);
+            AssetDatabase.CreateAsset(asset, assetPath);
+            EditorUtility.SetDirty(asset);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log($"✅ Created new asset at: {assetPath}");
+        }
+        else
+        {
+            Debug.LogWarning($"⚠ Asset already exists at {assetPath}");
+        }
+    }
     // [MenuItem("Tools/Fix Pokemon Natures")]
     // public static void FixNatures()
     // {
