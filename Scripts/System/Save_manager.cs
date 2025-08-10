@@ -22,7 +22,7 @@ public class Save_manager : MonoBehaviour
     public enum AssetDirectory
     { 
         Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
-        ,Tms,Hms,AdditionalInfo,Berries
+        ,AdditionalInfo,Berries
     };
     public static Dictionary<AssetDirectory, string> _directories = new()
     {
@@ -33,13 +33,11 @@ public class Save_manager : MonoBehaviour
         {AssetDirectory.Abilities,"Pokemon_project_assets/Pokemon_obj/Abilities/" },
         {AssetDirectory.Types,"Pokemon_project_assets/Pokemon_obj/Types/" },
         {AssetDirectory.Natures,"Pokemon_project_assets/Pokemon_obj/Natures/" },
-        {AssetDirectory.UI,"Pokemon_project_assets/Pokemon_obj/UI/" },
+        {AssetDirectory.UI,"Pokemon_project_assets/UI/" },
         {AssetDirectory.NonMartItems,"Pokemon_project_assets/Items/NonMartItems/" },
         {AssetDirectory.MartItems,"Pokemon_project_assets/Items/Mart_Items/" },
         {AssetDirectory.Items,"Pokemon_project_assets/Items/" },
         {AssetDirectory.Berries,"Pokemon_project_assets/Items/Berries/" },
-        {AssetDirectory.Tms,"Pokemon_project_assets/Items/AdditionalInfo/Tms/" },
-        {AssetDirectory.Hms,"Pokemon_project_assets/Items/AdditionalInfo/Hms/" },
         {AssetDirectory.AdditionalInfo,"Pokemon_project_assets/Items/AdditionalInfo/" }
     };
     public static string GetDirectory(AssetDirectory directory)
@@ -295,6 +293,23 @@ public class Save_manager : MonoBehaviour
         Dialogue_handler.Instance.EndDialogue(1f);
     }
 
+    private string DetermineImageDirectory(Item item)
+    {
+        Debug.Log(item.itemName);
+        switch (item.additionalItemInfo)
+        {
+            case TM:
+                var newTm = (TM)Activator.CreateInstance(item.additionalItemInfo.GetType())!;
+                var tm = ScriptableObject.CreateInstance<TM>();
+                tm.move = newTm.move;
+                Debug.Log(tm.move.type.typeName);
+                return tm.move.type.typeName.ToLower()+" tm";
+            case HM:
+                var newHm = (HM)Activator.CreateInstance(item.additionalItemInfo.GetType())!;
+                return newHm.move.type.typeName.ToLower()+" tm";
+        }
+        return item.itemName;
+    }
     private void SaveHeldItem(Item itm, string fileName)
     {
         var directory = Path.Combine(_saveDataPath+"/Items/Held_Items", fileName + ".json");
@@ -316,6 +331,8 @@ public class Save_manager : MonoBehaviour
     private void SaveItemDataAsJson(Item itm, string fileName)
     {
         var directory = Path.Combine(_saveDataPath+"/Items", fileName + ".json");
+        itm.infoAssetName = itm.additionalItemInfo.name;
+        itm.imageDirectory = DetermineImageDirectory(itm);
         var json = JsonUtility.ToJson(itm, true);
         File.WriteAllText(directory, json);
     }
@@ -334,7 +351,9 @@ public class Save_manager : MonoBehaviour
         var json = File.ReadAllText(filePath);
         var item = ScriptableObject.CreateInstance<Item>();
         JsonUtility.FromJsonOverwrite(json, item);
-        item.itemImage = Testing.CheckImage("Pokemon_project_assets/ui/" ,item.itemName);
+        var additionalInfo = Resources.Load<AdditionalItemInfo>(GetDirectory(AssetDirectory.AdditionalInfo)+item.infoAssetName);
+        item.additionalItemInfo = additionalInfo;
+        item.itemImage = Testing.CheckImage(GetDirectory(AssetDirectory.UI),item.imageDirectory);
         return item;
     }
     private Player_data LoadPlayerFromJson(string filePath)

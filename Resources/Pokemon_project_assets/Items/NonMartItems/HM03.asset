@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: HM03
-  itemType: 15
+  itemType: 16
   itemEffect: 
   itemDescription: Teaches a valid pokemon, surf
   price: 0

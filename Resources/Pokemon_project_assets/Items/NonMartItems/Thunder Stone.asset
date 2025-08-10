@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Thunder Stone
-  itemType: 10
+  itemType: 11
   itemEffect: 1
   itemDescription: Evolve certain electric pokemon
   price: 0

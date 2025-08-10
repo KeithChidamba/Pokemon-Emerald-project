@@ -16,4 +16,4 @@ MonoBehaviour:
   weaknesses: 06000000
   resistances: 
   immunities: 0d000000
-  typeImage: {fileID: 2127767298, guid: 3c6500e2b85c8094792e89b583e96e4f, type: 3}
+  typeImage: {fileID: 21300000, guid: 83c6698ffc596eb429cf4c9ef2dec266, type: 2}

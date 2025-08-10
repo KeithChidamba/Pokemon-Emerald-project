@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Rare Candy
-  itemType: 11
+  itemType: 12
   itemEffect: 1
   itemDescription: Levels up a pokemon
   price: 0
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  additionalItemInfo: {fileID: 0}

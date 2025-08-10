@@ -152,10 +152,6 @@ public static class NameDB
     {
         return learnSetMoveNames[moveName];
     }
-    public static string GetTmName(TM TmName)
-    {
-        return _tmMoveNames[TmName];
-    }
     public static string GetHmName(HM HmName)
     {
         return _hmMoveNames[HmName];
@@ -164,23 +160,6 @@ public static class NameDB
     {
         { HM.Surf, "Surf" },
         {HM.Fly, "Fly" },
-    };
-    private static Dictionary<TM, string> _tmMoveNames = new()
-    {
-        { TM.BulletSeed, "Bullet Seed" },
-        { TM.BrickBreak, "Brick Break" },
-        { TM.BulkUp, "Bulk Up" },
-        { TM.AerialAce, "Aerial Ace" },
-        { TM.Thunderbolt, "Thunderbolt" },
-        { TM.Thunder, "Thunder" },
-        { TM.Flamethrower, "Flamethrower" },
-        { TM.GigaDrain, "Giga Drain" },
-        { TM.Dig, "Dig" },
-        { TM.Earthquake, "Earthquake" },
-        { TM.Sandstorm, "Sandstorm" },
-        { TM.HyperBeam, "Hyper Beam" },
-        { TM.Toxic, "Toxic" }
-        
     };
     public static Dictionary<LearnSetMove, string> learnSetMoveNames = new()
     {

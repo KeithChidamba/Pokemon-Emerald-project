@@ -122,7 +122,7 @@ public class Options_manager : MonoBehaviour
             return;
         }
         var pokemonName = _currentInteraction.resultMessage;
-        var pokemon = Resources.Load<Pokemon>(Save_manager.AssetDirectory.Pokemon
+        var pokemon = Resources.Load<Pokemon>(Save_manager.GetDirectory(Save_manager.AssetDirectory.Pokemon)
                                               + pokemonName +"/"+ pokemonName);
         pokemon.ChangeFriendshipLevel(120);
         pokemon.pokeballName = "Regular Pokeball";
@@ -160,7 +160,8 @@ public class Options_manager : MonoBehaviour
     {
         Dialogue_handler.Instance.EndDialogue();
         var berry = _currentInteraction.resultMessage;
-        var berryAsset = Resources.Load<Item>(Save_manager.AssetDirectory.Berries + berry);
+        var berryAsset = Resources.Load<Item>(Save_manager.GetDirectory
+            (Save_manager.AssetDirectory.Berries) + berry);
         Bag.Instance.AddItem(Obj_Instance.CreateItem(berryAsset));
         Dialogue_handler.Instance.DisplayDetails("You picked up a "+berry,2f);
     }

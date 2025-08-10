@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Sandstorm
-  itemType: 15
+  itemType: 16
   itemEffect: 
   itemDescription: Causes damage each turn.
   price: 0

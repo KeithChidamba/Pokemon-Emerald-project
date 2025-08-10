@@ -149,6 +149,9 @@ public static class Obj_Instance
         newItem.isHeldItem = item.isHeldItem;
         newItem.canBeSold = item.canBeSold;
         newItem.canBeHeld = item.canBeHeld;
+        newItem.additionalItemInfo = item.additionalItemInfo;
+        newItem.infoAssetName = item.infoAssetName;
+        newItem.imageDirectory = item.imageDirectory;
         return newItem;
     }
 }

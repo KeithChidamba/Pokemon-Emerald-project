@@ -21,4 +21,6 @@ public class Item : ScriptableObject
     [FormerlySerializedAs("CanBeHeld")] public bool canBeHeld = false;
     [FormerlySerializedAs("CanBeSold")] public bool canBeSold = true;
     public AdditionalItemInfo additionalItemInfo;
+    public string infoAssetName;//only gets modified and used in code
+    public string imageDirectory;//only gets modified and used in code
 }

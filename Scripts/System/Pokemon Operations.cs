@@ -207,7 +207,9 @@ public static class PokemonOperations
     private static void LearnMove(string moveName,bool isPartyPokemon = false)
     {
         var assetPath = Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + moveName;
+        
         var moveFromAsset = Resources.Load<Move>(assetPath);
+
         if (CurrentPokemon.moveSet.Count == 4) 
         {
             if (isPartyPokemon)
@@ -258,16 +260,14 @@ public static class PokemonOperations
                 var newTm = (TM)Activator.CreateInstance(itemInfo.GetType())!;
                 if (CurrentPokemon.learnableTMs.Contains(newTm.TmName))
                 {
-                    var moveName = NameDB.GetTmName(newTm.TmName);
-                    LearnMove(moveName, true);
+                    LearnMove(newTm.move.moveName, true);
                 }
                 break;
             case HM:
                 var newHm = (HM)Activator.CreateInstance(itemInfo.GetType())!;
                 if (CurrentPokemon.learnableHMs.Contains(newHm.HmName))
                 {
-                    var moveName = NameDB.GetHmName(newHm.HmName);
-                    LearnMove(moveName, true);
+                    LearnMove(newHm.move.moveName, true);
                 }
                 break;
         }

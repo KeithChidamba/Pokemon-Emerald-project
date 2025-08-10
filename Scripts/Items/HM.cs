@@ -7,5 +7,5 @@ public class HM : AdditionalItemInfo
 {
     public int HmNumber;
     public NameDB.HM HmName;
-    
+    public Move move;
 }

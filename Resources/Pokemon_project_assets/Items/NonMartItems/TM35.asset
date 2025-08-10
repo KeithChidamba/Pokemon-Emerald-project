@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Flamethrower
-  itemType: 15
+  itemType: 16
   itemEffect: 
   itemDescription: Scorches with intense flames.
   price: 0

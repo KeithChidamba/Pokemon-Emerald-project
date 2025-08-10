@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Thunder
-  itemType: 15
+  itemType: 16
   itemEffect: 
   itemDescription: A powerful but inaccurate jolt.
   price: 0

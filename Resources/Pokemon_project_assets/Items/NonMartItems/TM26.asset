@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Earthquake
-  itemType: 15
+  itemType: 16
   itemEffect: 
   itemDescription: Powerful quake that hits all.
   price: 0

@@ -193,6 +193,11 @@ public class Game_ui_manager : MonoBehaviour
 
     public void ViewPokemonParty()
     {
+        if (Pokemon_party.Instance.numMembers < 1)
+        {
+            Dialogue_handler.Instance.DisplayDetails("There a no pokemon in your party");
+            return;
+        }
         ManageScreens(1);
         _movementDelaysAfterExit.Add(0.25f);
         Dialogue_handler.Instance.EndDialogue();

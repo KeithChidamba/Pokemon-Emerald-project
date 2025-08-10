@@ -41,20 +41,18 @@ public class NatureEVFixer : EditorWindow
             //create the description of the tms you want to add
         };
 
-        var directory = Save_manager.GetDirectory(Save_manager.AssetDirectory.Tms);
+        var directory = Save_manager.GetDirectory(Save_manager.AssetDirectory.AdditionalInfo);
         var tmList = Resources.LoadAll<TM>(directory.TrimEnd('/'));
         int count = 0;
 
         foreach (var tmData in tmList)
         {
-            var tmName = NameDB.GetTmName(tmData.TmName);
-
             SaveScriptableObject<Item>(
                 Save_manager.AssetDirectory.NonMartItems,
                 tmData.name,
                 tm =>
                 {
-                    tm.itemName = tmName;
+                    tm.itemName = tmData.move.moveName;
                     tm.itemDescription = tmDescriptions[count];
                     tm.additionalItemInfo = tmData;
                     tm.canBeSold = true;
@@ -80,8 +78,6 @@ public class NatureEVFixer : EditorWindow
         { Save_manager.AssetDirectory.NonMartItems, "Assets/Resources/Pokemon_project_assets/Items/NonMartItems/" },
         { Save_manager.AssetDirectory.MartItems, "Assets/Resources/Pokemon_project_assets/Items/Mart_Items/" },
         { Save_manager.AssetDirectory.Items, "Assets/Resources/Pokemon_project_assets/Items/" },
-        { Save_manager.AssetDirectory.Tms, "Assets/Resources/Pokemon_project_assets/Items/Tms/" },
-        { Save_manager.AssetDirectory.Hms, "Assets/Resources/Pokemon_project_assets/Items/Hms/" },
         { Save_manager.AssetDirectory.AdditionalInfo,"Assets/Resources/Pokemon_project_assets/Items/AdditionalInfo/" }
     };
 

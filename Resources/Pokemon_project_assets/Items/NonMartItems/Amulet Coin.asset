@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Amulet Coin
-  itemType: 13
+  itemType: 14
   itemEffect: 5
   itemDescription: Gives the player some money after the battle if the pokemon participates
   price: 0
@@ -26,3 +26,4 @@ MonoBehaviour:
   isHeldItem: 1
   canBeHeld: 1
   canBeSold: 0
+  additionalItemInfo: {fileID: 0}

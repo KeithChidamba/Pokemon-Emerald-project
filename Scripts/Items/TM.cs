@@ -7,4 +7,5 @@ public class TM : AdditionalItemInfo
 {
     public int TmNumber;
     public NameDB.TM TmName;
+    public Move move;
 }

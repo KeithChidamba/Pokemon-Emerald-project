@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Brick Break
-  itemType: 15
+  itemType: 16
   itemEffect: 
   itemDescription: Breaks barriers like Light Screen.
   price: 0

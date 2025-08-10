@@ -1,0 +1,147 @@
+{
+    "basePokemonName": "Torchic",
+    "pokemonName": "Torchic",
+    "pokemonID": 3218706018953145808,
+    "personalityValue": 538783184,
+    "gender": 2,
+    "ratioFemale": 0.0,
+    "nature": {
+        "instanceID": 25934
+    },
+    "hasGender": true,
+    "hp": 14.0,
+    "maxHp": 14.0,
+    "baseHp": 45.0,
+    "baseAttack": 60.0,
+    "baseDefense": 40.0,
+    "baseSpecialAttack": 70.0,
+    "baseSpecialDefense": 50.0,
+    "baseSpeed": 45.0,
+    "attack": 7.0,
+    "defense": 7.0,
+    "specialAttack": 8.0,
+    "specialDefense": 6.0,
+    "speed": 7.0,
+    "hpIv": 17.0,
+    "attackIv": 5.0,
+    "defenseIv": 0.0,
+    "specialAttackIv": 18.0,
+    "specialDefenseIv": 15.0,
+    "speedIv": 20.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        {
+            "stat": 5,
+            "eVAmount": 1
+        }
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 45.0,
+    "currentLevel": 2,
+    "currentExpAmount": 0,
+    "nextLevelExpAmount": 9.0,
+    "expGroup": 3,
+    "expYield": 65,
+    "friendshipLevel": 255,
+    "hasTrainer": true,
+    "canBeFlinched": true,
+    "types": [
+        {
+            "instanceID": 26308
+        }
+    ],
+    "statusEffect": 0,
+    "buffAndDebuffs": [],
+    "evolutionLineLevels": [
+        16,
+        30
+    ],
+    "friendshipEvolutionRequirement": {
+        "friendshipRequirement": 0,
+        "evolutionIndex": 0
+    },
+    "requiresEvolutionStone": false,
+    "evolutionStone": 0,
+    "abilities": [
+        2
+    ],
+    "splitEvolution": false,
+    "requiresFriendshipEvolution": false,
+    "learnSet": [
+        {
+            "learnSetMove": 61,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 50,
+            "requiredLevel": 2
+        },
+        {
+            "learnSetMove": 14,
+            "requiredLevel": 5
+        }
+    ],
+    "learnableTMs": [],
+    "learnableHMs": [],
+    "moveSet": [
+        {
+            "instanceID": -17932
+        },
+        {
+            "instanceID": -17934
+        }
+    ],
+    "ability": {
+        "instanceID": 25826
+    },
+    "evolutions": [
+        {
+            "instanceID": 26546
+        },
+        {
+            "instanceID": 25796
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 32096
+    },
+    "backPicture": {
+        "instanceID": 32186
+    },
+    "pokeballName": "Regular Pokeball",
+    "healthPhase": 0,
+    "abilityName": "Blaze",
+    "natureName": "Lax",
+    "evolutionNames": [
+        "Combusken",
+        "Blaziken"
+    ],
+    "typeNames": [
+        "fire"
+    ],
+    "moveData": [
+        {
+            "moveName": "scratch",
+            "powerPoints": 35,
+            "maxPowerPoints": 35,
+            "moveType": "normal"
+        },
+        {
+            "moveName": "growl",
+            "powerPoints": 40,
+            "maxPowerPoints": 40,
+            "moveType": "normal"
+        }
+    ]
+}

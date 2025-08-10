@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Aerial Ace
-  itemType: 15
+  itemType: 16
   itemEffect: 
   itemDescription: An attack that never misses.
   price: 0

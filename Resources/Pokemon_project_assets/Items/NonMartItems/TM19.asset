@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Giga Drain
-  itemType: 15
+  itemType: 16
   itemEffect: Absorbs half the damage inflicted.
   itemDescription: 
   price: 0

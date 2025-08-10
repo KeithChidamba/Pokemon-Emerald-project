@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
-  m_Name: Fighting
+  m_Script: {fileID: 11500000, guid: 3f3d39238c97aad2b91299ef9d45695c, type: 3}
+  m_Name: HM03
   m_EditorClassIdentifier: 
-  typeName: Fighting
-  weaknesses: 090000000a000000
-  resistances: 0b0000000c0000000f000000
-  immunities: 
-  typeImage: {fileID: 21300000, guid: 8fee0e6987cc835409c586df82fb9e1b, type: 2}
+  HmNumber: 3
+  HmName: 0
+  move: {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
