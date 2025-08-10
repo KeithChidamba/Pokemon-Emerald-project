@@ -4,9 +4,9 @@ public static class NameDB
     public enum LearnSetMove
     {
         // 🐞 Bug-type
-        FuryCutter,// needs making
+        FuryCutter,
         LeechLife,
-        SilverWind,// needs making
+        SilverWind,
         StringShot,
         
         // 🐉 Dragon-type
@@ -20,21 +20,21 @@ public static class NameDB
         
         // 🥋 Fighting-type
         BulkUp,
-        Detect,// needs making
+        Detect,
         DoubleKick,
         SkyUppercut,
         
         // 🔥 Fire-type
         BlazeKick,
         Ember,
-        FirePunch,// needs making
+        FirePunch,
         FireSpin,
         Flamethrower,
         
         // 🛫 Flying-type
         AirCutter,
-        Gust,// needs making
-        MirrorMove,// needs making
+        Gust,
+        MirrorMove,
         Peck,
         WingAttack,
 
@@ -43,10 +43,10 @@ public static class NameDB
         GigaDrain,
         LeafBlade,
         MegaDrain,
-        StunSpore,// needs making
+        StunSpore,
         
         // 🌍 Ground-type
-        Dig,// needs making
+        Dig,                // needs making
         Earthquake,
         Magnitude,
         MudSlap,
@@ -56,30 +56,30 @@ public static class NameDB
         SandTomb,
         
         //Rock
-        SandStorm,// needs making
+        SandStorm,              // needs making with weather
         
         // 💜 Normal-type
-        Attract,// needs making
+        Attract,                // needs making after affection system
         SonicBoom,
         Harden,
-        BellyDrum,// needs making
+        BellyDrum,
         Bide,
-        Covet,// needs making
+        Covet,
         DoubleTeam,
         Endeavor,
         FocusEnergy,
         Foresight,
-        FalseSwipe,// needs making
-        Flail,// needs making
-        FurySwipes,// needs making
+        FalseSwipe,
+        Flail,
+        FurySwipes,
         Growl,
         Headbutt,
         HyperBeam,
         Leer, 
         MeanLook,
-        MorningSun,// needs making
-        MoonLight,// needs making       
-        OdorSleuth,// needs making
+        MorningSun, // needs making after weather
+        MoonLight,// needs making after weather    
+        OdorSleuth,
         Pound,
         Protect,
         QuickAttack,
@@ -91,7 +91,7 @@ public static class NameDB
         TailWhip,
         Tackle,
         TakeDown,
-        Whirlwind, //needs making
+        Whirlwind,              //needs making
         
         // 💀 Poison-type
         PoisonFang,
@@ -100,9 +100,9 @@ public static class NameDB
 
         // 🔮 Psychic-type
         Agility,
-        Confusion,// needs making
+        Confusion,
         LightScreen,
-        Psybeam,// needs making
+        Psybeam,
         Reflect,
         Rest,
         
@@ -152,15 +152,6 @@ public static class NameDB
     {
         return learnSetMoveNames[moveName];
     }
-    public static string GetHmName(HM HmName)
-    {
-        return _hmMoveNames[HmName];
-    }
-    private static Dictionary<HM, string> _hmMoveNames = new()
-    {
-        { HM.Surf, "Surf" },
-        {HM.Fly, "Fly" },
-    };
     public static Dictionary<LearnSetMove, string> learnSetMoveNames = new()
     {
         // 🐞 Bug-type

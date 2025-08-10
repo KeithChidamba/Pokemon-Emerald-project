@@ -19,8 +19,8 @@ public class Item_handler : MonoBehaviour
 
     public enum ItemType
     {
-        Special,GainExp,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,StatIncrease,FriendshipIncrease,Pokeball
-        ,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove
+        Special,GainExp,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,StatIncrease,
+        FriendshipIncrease,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove
     }
     private void Awake()
     {

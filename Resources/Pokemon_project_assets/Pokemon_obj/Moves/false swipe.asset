@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: foresight
+  m_Name: false swipe
   m_EditorClassIdentifier: 
-  moveName: Foresight
-  moveDamage: 0
+  moveName: False Swipe
+  moveDamage: 40
   moveAccuracy: 100
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   isSpecial: 0
-  isContact: 0
+  isContact: 1
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1
@@ -28,7 +28,7 @@ MonoBehaviour:
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  isSureHit: 1
+  isSureHit: 0
   priority: 0
   powerpoints: 40
   basePowerpoints: 40
@@ -37,4 +37,4 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: Negates the foe's efforts to heighten evasiveness
+  description: An attack that leaves the foe with at least 1 HP

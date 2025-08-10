@@ -19,6 +19,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
     private Battle_event[] _dialougeOrder={null,null,null,null,null,null};
     private List<OnFieldDamageModifier> _onFieldDamageModifiers;
+    private bool repeatingMoveCycle;
     private bool _moveDelay = false;
     private bool _cancelMove = false;
     public bool processingOrder = false;
@@ -27,6 +28,7 @@ public class Move_handler:MonoBehaviour
     public event Action<float> OnDamageDeal;
     public event Action<Battle_Participant,Move> OnMoveHit;
     public event Action<Battle_Participant,PokemonOperations.StatusEffect> OnStatusEffectHit;
+    private event Action OnMoveComplete;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -43,6 +45,7 @@ public class Move_handler:MonoBehaviour
     }
     public void ExecuteMove(Turn turn)
     {
+        OnMoveComplete = null;
         _currentTurn = turn;
         attacker = Battle_handler.Instance.battleParticipants[turn.attackerIndex];
         victim = Battle_handler.Instance.battleParticipants[turn.victimIndex];
@@ -268,6 +271,12 @@ public class Move_handler:MonoBehaviour
     } 
     private void ResetMoveUsage()
     {
+        OnMoveComplete?.Invoke();
+        if (repeatingMoveCycle)
+        {
+            repeatingMoveCycle = false;
+            return;
+        }
         doingMove = false;
         _cancelMove = false;
     }
@@ -625,14 +634,15 @@ public class Move_handler:MonoBehaviour
         _currentTurn.move.moveDamage = baseDamage;
         StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
     }
-    void protect()
+
+    void ApplyDamageProtection()
     {
-        if(attacker.PreviousMove.move.moveName == "Protect")//add to name db
+        if(attacker.PreviousMove.move.moveName == _currentTurn.move.moveName)
         {
             int chance = 100;
             for (int i = 0; i < attacker.PreviousMove.numRepetitions; i++)
                 chance /= 2;
-            if (Utility.RandomRange(1, 101) <= chance) //success
+            if (Utility.RandomRange(1, 101) <= chance)
                 attacker.canBeDamaged = false;
             else
             {
@@ -640,9 +650,18 @@ public class Move_handler:MonoBehaviour
                 Dialogue_handler.Instance.DisplayBattleInfo("It failed!");
             }
         }
-        else//success
+        else
             attacker.canBeDamaged = false;
         _moveDelay = false;
+    }
+    void protect()
+    {
+        ApplyDamageProtection();
+    }
+
+    void detect()
+    {
+        ApplyDamageProtection();
     }
     void brickbreak()
     {
@@ -849,7 +868,7 @@ public class Move_handler:MonoBehaviour
         _moveDelay = false;
     }
 
-    void foresight()
+    private void IndentifyTarget()
     {
         if (victim.ImmunityNegations.Any(n=> 
                 n.moveName==TypeImmunityNegation.ImmunityNegationMove.Foresight))
@@ -859,22 +878,30 @@ public class Move_handler:MonoBehaviour
             return;
         }
         Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName +" was identified!");
-
-        var newImmunityNegation = new TypeImmunityNegation(TypeImmunityNegation.ImmunityNegationMove.Foresight
-            ,attacker,victim);
-        
-        newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Fighting);
-        newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Normal);
-        attacker.OnPokemonFainted += ()=> newImmunityNegation.RemoveNegationOnSwitchOut(attacker);
-        Battle_handler.Instance.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
-        victim.ImmunityNegations.Add(newImmunityNegation);
-        
         victim.pokemon.buffAndDebuffs
             .RemoveAll(b => b.stat == PokemonOperations.Stat.Evasion);
         victim.pokemon.evasion = 100;
+        if(victim.pokemon.HasType(PokemonOperations.Types.Ghost))
+        {
+            var newImmunityNegation = new TypeImmunityNegation(TypeImmunityNegation.ImmunityNegationMove.Foresight
+                , attacker, victim);
+
+            newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Fighting);
+            newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Normal);
+            attacker.OnPokemonFainted += () => newImmunityNegation.RemoveNegationOnSwitchOut(attacker);
+            Battle_handler.Instance.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
+            victim.ImmunityNegations.Add(newImmunityNegation);
+        }
         _moveDelay = false;
     }
-
+    void foresight()
+    {
+        IndentifyTarget();
+    }
+    void odorsleuth()
+    {
+        IndentifyTarget();
+    }
     void endeavor()
     {
         if (victim.pokemon.hp > attacker.pokemon.hp)
@@ -885,5 +912,121 @@ public class Move_handler:MonoBehaviour
         var damage = victim.pokemon.hp - attacker.pokemon.hp;
         StartCoroutine(DamageDisplay(victim,isSpecificDamage:true,predefinedDamage:damage));
         _moveDelay = false;
+    }
+
+    void furycutter()
+    {
+        var damageLevel = new[] { 10f, 20f, 40f, 80f, 160f };
+        if (attacker.PreviousMove.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.FuryCutter))
+        {
+            _currentTurn.move.moveDamage = attacker.PreviousMove.numRepetitions > 4?
+                damageLevel[^1] : damageLevel[attacker.PreviousMove.numRepetitions];
+        }
+        else
+            _currentTurn.move.moveDamage = damageLevel[0];
+        StartCoroutine(DamageDisplay(victim));
+        _moveDelay = false;
+    }
+
+    private IEnumerator ConsecutiveBuffs()
+    {
+        yield return new WaitUntil(() => !displayingHealthDecrease);
+        var allBuffs = new[]
+        {
+            PokemonOperations.Stat.Attack, PokemonOperations.Stat.Defense,
+            PokemonOperations.Stat.SpecialAttack, PokemonOperations.Stat.SpecialDefense,
+            PokemonOperations.Stat.Speed
+        };
+        foreach (var buff in allBuffs)
+        {
+            var buffData = new BuffDebuffData(attacker, buff, true, 1);
+            SelectRelevantBuffOrDebuff(buffData);
+            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        }
+        _moveDelay = false;
+    }
+    void silverwind()
+    {
+        var damage = CalculateMoveDamage(_currentTurn.move, victim);
+        StartCoroutine(DamageDisplay(victim,isSpecificDamage:true,predefinedDamage:damage));
+        if (Utility.RandomRange(0, 101) < 10)
+            StartCoroutine(ConsecutiveBuffs());
+        else
+            _moveDelay = false;
+    }
+
+    void flail()
+    {
+        List<(int hpLevel, float damage)> damagePerLevel = new()
+        {
+            (32, 200f), (16, 150f), (8, 100f), (4, 80f), (2, 40f)
+        };
+
+        var currentHpRatio = attacker.pokemon.hp / attacker.pokemon.maxHp;
+
+        foreach (var phase in damagePerLevel)
+        {
+            if (currentHpRatio <= 1f / phase.hpLevel)
+            {
+                _currentTurn.move.moveDamage = phase.damage;
+                break;
+            }
+        }
+        StartCoroutine(DamageDisplay(victim));
+        _moveDelay = false;
+    }
+
+    void falseswipe()
+    {
+        var damage = CalculateMoveDamage(_currentTurn.move, victim);
+        if (victim.pokemon.hp - damage <= 0)
+        {
+            damage = victim.pokemon.hp - 1;
+        }
+        StartCoroutine(DamageDisplay(victim,isSpecificDamage:true,predefinedDamage:damage));
+        _moveDelay = false;
+    }
+
+    void bellydrum()
+    {
+        if (attacker.pokemon.hp < 2)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo("But it failed!");
+            _moveDelay = false;
+            return;
+        }
+        
+        var selfDamage = math.floor(attacker.pokemon.hp / 2f);
+        StartCoroutine(DamageDisplay(attacker,displayEffectiveness:false,
+            isSpecificDamage:true,predefinedDamage:selfDamage));
+        
+        var buffData = new BuffDebuffData(attacker, PokemonOperations.Stat.Attack, true, 6);
+        SelectRelevantBuffOrDebuff(buffData);
+    }
+
+    void covet()
+    {
+        StartCoroutine(DamageDisplay(victim));
+        if (victim.pokemon.hasItem)
+        {
+            //take berry
+        }
+        _moveDelay = false;
+    }
+
+    void mirrormove()
+    {
+        if (victim.PreviousMove!=null)
+        {
+            repeatingMoveCycle = true;
+            _currentTurn.move = victim.PreviousMove.move;
+            _moveDelay = false;
+            OnMoveComplete += ()=> ExecuteMove(_currentTurn);
+        }
+        else
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo("But it failed!");
+            _moveDelay = false;
+        }
     }
 }

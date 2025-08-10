@@ -207,6 +207,7 @@ public class Battle_Participant : MonoBehaviour
         statData.ResetBattleState(pokemon);
         abilityHandler.ResetState();
         canEscape = true;
+        PreviousMove = null;
         additionalTypeImmunity = null;
         OnPokemonFainted = null;
         ImmunityNegations.Clear();

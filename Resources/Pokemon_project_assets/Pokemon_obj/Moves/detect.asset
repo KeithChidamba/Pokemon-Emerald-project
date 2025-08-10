@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: foresight
+  m_Name: detect
   m_EditorClassIdentifier: 
-  moveName: Foresight
+  moveName: Detect
   moveDamage: 0
   moveAccuracy: 100
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  type: {fileID: 11400000, guid: 02bf1eb7d0f86ea49b8fcd463dd1aed5, type: 2}
   isSpecial: 0
   isContact: 0
   isBuffOrDebuff: 0
@@ -27,14 +27,14 @@ MonoBehaviour:
   canCauseConfusion: 0
   isConsecutive: 0
   isMultiTarget: 0
-  isSelfTargeted: 0
+  isSelfTargeted: 1
   isSureHit: 1
-  priority: 0
-  powerpoints: 40
-  basePowerpoints: 40
-  maxPowerpoints: 40
+  priority: 4
+  powerpoints: 5
+  basePowerpoints: 5
+  maxPowerpoints: 5
   statusEffect: 0
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: Negates the foe's efforts to heighten evasiveness
+  description: a move that protects from harm
