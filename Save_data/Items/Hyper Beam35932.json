@@ -1,0 +1,23 @@
+{
+    "itemID": "Hyper Beam35932",
+    "itemName": "Hyper Beam",
+    "itemType": 16,
+    "itemEffect": "",
+    "itemDescription": "Powerful attack that requires recharge.",
+    "price": 0,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 26042
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true,
+    "additionalItemInfo": {
+        "instanceID": 26378
+    },
+    "infoAssetName": "TM15",
+    "imageDirectory": "normal tm"
+}

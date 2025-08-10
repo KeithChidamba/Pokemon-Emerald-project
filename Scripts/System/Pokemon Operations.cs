@@ -204,7 +204,7 @@ public static class PokemonOperations
             LearningNewMove = false;
     }
 
-    private static void LearnMove(string moveName,bool isPartyPokemon = false)
+    private static void LearnMove(string moveName,bool isPartyPokemon = true)
     {
         var assetPath = Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + moveName;
         
@@ -256,19 +256,13 @@ public static class PokemonOperations
         CurrentPokemon = pokemon;
         switch (itemInfo)
         {
-            case TM:
-                var newTm = (TM)Activator.CreateInstance(itemInfo.GetType())!;
-                if (CurrentPokemon.learnableTMs.Contains(newTm.TmName))
-                {
-                    LearnMove(newTm.move.moveName, true);
-                }
+            case TM tm:
+                if (CurrentPokemon.learnableTms.Contains(tm.TmName))
+                    LearnMove(tm.move.moveName);
                 break;
-            case HM:
-                var newHm = (HM)Activator.CreateInstance(itemInfo.GetType())!;
-                if (CurrentPokemon.learnableHMs.Contains(newHm.HmName))
-                {
-                    LearnMove(newHm.move.moveName, true);
-                }
+            case HM hm:
+                if (CurrentPokemon.learnableHms.Contains(hm.HmName))
+                    LearnMove(hm.move.moveName);
                 break;
         }
     }

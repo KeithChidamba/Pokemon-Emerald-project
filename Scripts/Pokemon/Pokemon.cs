@@ -66,8 +66,8 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("split_evolution")] public bool splitEvolution = false;
     public bool requiresFriendshipEvolution = false;
     public LearnSetMove[] learnSet;
-    public List<NameDB.TM> learnableTMs;
-    public List<NameDB.HM> learnableHMs;
+    public List<NameDB.TM> learnableTms;
+    public List<NameDB.HM> learnableHms;
     public List<Move> moveSet=new();
     public Ability ability;
     public List<Evolution> evolutions;
@@ -226,7 +226,11 @@ public class Pokemon : ScriptableObject
 
         if (requiresFriendshipEvolution)
         {
-            CheckFriendshipEvolution(); return;
+            if (friendshipLevel >= friendshipEvolutionRequirement.friendshipRequirement)
+            {
+                Evolve(evolutions[friendshipEvolutionRequirement.evolutionIndex]);
+            } 
+            return;
         }
         
         //regular evolution
@@ -238,14 +242,6 @@ public class Pokemon : ScriptableObject
                 Evolve(evolutions[i+evoIndex]);
                 break;
             }
-        }
-    }
-
-    void CheckFriendshipEvolution()
-    {
-        if (friendshipLevel >= friendshipEvolutionRequirement.friendshipRequirement)
-        {
-            Evolve(evolutions[friendshipEvolutionRequirement.evolutionIndex]);
         }
     }
     private void DetermineSplitEvolution()
@@ -282,6 +278,8 @@ public class Pokemon : ScriptableObject
         effortValues=evo.effortValues;
         types = evo.types;
         ability = evo.ability;
+        learnableTms = evo.learnableTms;
+        learnableHms = evo.learnableHms;
         learnSet = evo.learnSet;
         frontPicture = evo.frontPicture;
         backPicture = evo.backPicture;

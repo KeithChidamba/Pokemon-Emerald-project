@@ -13,6 +13,8 @@ public class Evolution : ScriptableObject
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
     [FormerlySerializedAs("CatchRate")] public float catchRate = 0;
     public LearnSetMove[] learnSet;
+    public List<NameDB.TM> learnableTms;
+    public List<NameDB.HM> learnableHms;
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
     [FormerlySerializedAs("BaseHP")] public float baseHp;

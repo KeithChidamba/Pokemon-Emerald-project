@@ -295,20 +295,15 @@ public class Save_manager : MonoBehaviour
 
     private string DetermineImageDirectory(Item item)
     {
-        Debug.Log(item.itemName);
         switch (item.additionalItemInfo)
         {
-            case TM:
-                var newTm = (TM)Activator.CreateInstance(item.additionalItemInfo.GetType())!;
-                var tm = ScriptableObject.CreateInstance<TM>();
-                tm.move = newTm.move;
-                Debug.Log(tm.move.type.typeName);
-                return tm.move.type.typeName.ToLower()+" tm";
-            case HM:
-                var newHm = (HM)Activator.CreateInstance(item.additionalItemInfo.GetType())!;
-                return newHm.move.type.typeName.ToLower()+" tm";
+            case TM tm:
+                return tm.move.type.typeName.ToLower() + " tm";
+            case HM hm:
+                return hm.move.type.typeName.ToLower() + " hm"; 
+            default:
+            return item.itemName;
         }
-        return item.itemName;
     }
     private void SaveHeldItem(Item itm, string fileName)
     {

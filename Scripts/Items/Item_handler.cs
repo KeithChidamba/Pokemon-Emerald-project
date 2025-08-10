@@ -89,7 +89,7 @@ public class Item_handler : MonoBehaviour
     private void UseHerbs()
     {
         OnItemUsageSuccessful += ChangeFriendship;
-        var newHerb = (HerbInfo)Activator.CreateInstance(_itemInUse.additionalItemInfo.GetType())!;
+        var newHerb = (HerbInfo)_itemInUse.additionalItemInfo;
         var usageIndex = newHerb.GetHerbUsage(_itemInUse);
         var herbUsages = new List<Action>
         {
@@ -153,7 +153,7 @@ public class Item_handler : MonoBehaviour
 
     void TriggerStoneEvolution()
     { 
-       var stoneInfo = (EvolutionStoneInfo)Activator.CreateInstance(_itemInUse.additionalItemInfo.GetType())!;
+       var stoneInfo = (EvolutionStoneInfo)_itemInUse.additionalItemInfo;
        if (_selectedPartyPokemon.evolutionStone == stoneInfo.stoneName)
        {
             _selectedPartyPokemon.CheckEvolutionRequirements(0);
@@ -168,7 +168,7 @@ public class Item_handler : MonoBehaviour
 
     private void GetFriendshipFromItem()
     {
-        var statToDecrease = (StatInfo)Activator.CreateInstance(_itemInUse.additionalItemInfo.GetType())!;
+        var statToDecrease = (StatInfo)_itemInUse.additionalItemInfo;
         if(_selectedPartyPokemon.friendshipLevel>254)
         {
             Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+"'s friendship is already maxed out", 1f);
@@ -185,7 +185,7 @@ public class Item_handler : MonoBehaviour
     }
     private void GetEVsFromItem() 
     {
-        var statInfo = (StatInfo)Activator.CreateInstance(_itemInUse.additionalItemInfo.GetType())!;
+        var statInfo = (StatInfo)_itemInUse.additionalItemInfo;
         PokemonOperations.OnEvChange += CheckEvChange;
         PokemonOperations.CalculateEvForStat(statInfo.statName, 10, _selectedPartyPokemon);
     }
@@ -209,7 +209,7 @@ public class Item_handler : MonoBehaviour
     private void ChangePowerpoints()
     {
         Pokemon_Details.Instance.changingMoveData = true;
-        var modifierInfo = (PowerpointModifeir)Activator.CreateInstance(_itemInUse.additionalItemInfo.GetType())!;
+        var modifierInfo = (PowerpointModifeir)_itemInUse.additionalItemInfo;
         
         if (modifierInfo.modiferType == PowerpointModifeir.ModiferType.RestorePp)
             Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
@@ -222,7 +222,7 @@ public class Item_handler : MonoBehaviour
 
     private void ItemBuffOrDebuff()
     {
-        var statInfo = (StatInfo)Activator.CreateInstance(_itemInUse.additionalItemInfo.GetType())!;
+        var statInfo = (StatInfo)_itemInUse.additionalItemInfo;
         if (statInfo.statName == PokemonOperations.Stat.None)
         {//guard spec doesn't buff stat but remove stat reduction
             if (currentParticipant.ProtectedFromStatChange(false))
@@ -304,7 +304,7 @@ public class Item_handler : MonoBehaviour
              return;
          }
          Pokemon_Details.Instance.OnMoveSelected -= RestorePowerpoints;
-         var modifierInfo = (PowerpointModifeir)Activator.CreateInstance(_itemInUse.additionalItemInfo.GetType())!;
+         var modifierInfo = (PowerpointModifeir)_itemInUse.additionalItemInfo;
          var pointsToAdd = 0;
          
          if (modifierInfo.itemType == PowerpointModifeir.ModiferItemType.Ether)
@@ -481,7 +481,7 @@ public class Item_handler : MonoBehaviour
     {
         if (curableStatus == PokemonOperations.StatusEffect.None)
         {
-            var statusInfo = (StatusHealInfo)Activator.CreateInstance(_itemInUse.additionalItemInfo.GetType())!;
+            var statusInfo = (StatusHealInfo)_itemInUse.additionalItemInfo;
             curableStatus = statusInfo.statusEffect;
         }
         if (!IsValidStatusHeal(curableStatus))

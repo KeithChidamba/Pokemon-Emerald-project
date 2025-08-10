@@ -1,0 +1,23 @@
+{
+    "itemID": "Flamethrower47320",
+    "itemName": "Flamethrower",
+    "itemType": 16,
+    "itemEffect": "",
+    "itemDescription": "Scorches with intense flames.",
+    "price": 0,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 25970
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true,
+    "additionalItemInfo": {
+        "instanceID": 26232
+    },
+    "infoAssetName": "TM35",
+    "imageDirectory": "fire tm"
+}
