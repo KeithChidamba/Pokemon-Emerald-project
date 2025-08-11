@@ -19,11 +19,9 @@ MonoBehaviour:
   expGroup: 1
   expYield: 72
   catchRate: 120
-  learnSet:
-  - moveType: 0
-    _moveName: Harden
-    moveName: 4
-    requiredLevel: 5
+  learnSet: []
+  learnableTms: 
+  learnableHms: 
   frontPicture: {fileID: 21300000, guid: 3b0b679170e5a89488a43d5f5515c777, type: 3}
   backPicture: {fileID: 21300000, guid: 66e09a87a862bf445a54a85be5447369, type: 3}
   baseHp: 50

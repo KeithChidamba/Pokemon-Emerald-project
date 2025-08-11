@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Oran berry
-  itemType: 2
+  itemType: 9
   itemEffect: 5
   itemDescription: Heals 5hp
   price: 5
@@ -26,3 +26,9 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 1
   canBeSold: 1
+  isMultiModular: 0
+  additionalItemInfo: {fileID: 11400000, guid: 7fbd9d0abd32224e4ae7a06219c2ade1, type: 2}
+  additionalInfoModules:
+  - {fileID: 11400000, guid: 7fbd9d0abd32224e4ae7a06219c2ade1, type: 2}
+  infoModuleAssetNames: []
+  imageDirectory: 

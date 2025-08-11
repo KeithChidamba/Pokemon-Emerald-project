@@ -46,7 +46,7 @@ public static class NameDB
         StunSpore,
         
         // 🌍 Ground-type
-        Dig,                // needs making
+        Dig,                // needs making and add to tm slot
         Earthquake,
         Magnitude,
         MudSlap,
@@ -56,7 +56,7 @@ public static class NameDB
         SandTomb,
         
         //Rock
-        SandStorm,              // needs making with weather
+        SandStorm,              // needs making with weather needs making and add to tm slot
         
         // 💜 Normal-type
         Attract,                // needs making after affection system
@@ -316,5 +316,13 @@ public static class NameDB
     public static string GetStoneName(EvolutionStone stone)
     {
         return _stoneNames[stone];
+    }
+    public static string GetStatName(PokemonOperations.Stat stat)
+    {
+        if (stat == PokemonOperations.Stat.SpecialAttack)
+            return "Special Attack";
+        if (stat == PokemonOperations.Stat.SpecialDefense)
+            return "Special Defense";
+        return stat.ToString();
     }
 }

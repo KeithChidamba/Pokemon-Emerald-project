@@ -26,3 +26,9 @@ MonoBehaviour:
   isHeldItem: 1
   canBeHeld: 1
   canBeSold: 0
+  additionalItemInfo: {fileID: 0}
+  additionalInfoModules:
+  - {fileID: 0}
+  infoModuleAssetNames: []
+  infoAssetName: 
+  imageDirectory: 

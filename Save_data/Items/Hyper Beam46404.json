@@ -1,5 +1,5 @@
 {
-    "itemID": "Hyper Beam35932",
+    "itemID": "Hyper Beam46404",
     "itemName": "Hyper Beam",
     "itemType": 16,
     "itemEffect": "",
@@ -7,7 +7,7 @@
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 26042
+        "instanceID": 26064
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -15,9 +15,17 @@
     "isHeldItem": false,
     "canBeHeld": false,
     "canBeSold": true,
+    "isMultiModular": false,
     "additionalItemInfo": {
-        "instanceID": 26378
+        "instanceID": 26406
     },
-    "infoAssetName": "TM15",
+    "additionalInfoModules": [
+        {
+            "instanceID": 26406
+        }
+    ],
+    "infoModuleAssetNames": [
+        "TM15"
+    ],
     "imageDirectory": "normal tm"
 }

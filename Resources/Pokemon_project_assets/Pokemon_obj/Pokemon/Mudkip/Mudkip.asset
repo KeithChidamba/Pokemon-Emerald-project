@@ -59,11 +59,7 @@ MonoBehaviour:
   expYield: 65
   friendshipLevel: 0
   hasTrainer: 0
-  canAttack: 1
-  isFlinched: 0
   canBeFlinched: 1
-  canBeDamaged: 1
-  immuneToStatReduction: 0
   types:
   - {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
   statusEffect: 0
@@ -77,19 +73,9 @@ MonoBehaviour:
   abilities: 05000000
   splitEvolution: 0
   requiresFriendshipEvolution: 0
-  learnSet:
-  - moveType: 0
-    moveName: 0
-    requiredLevel: 1
-  - moveType: 2
-    moveName: 30
-    requiredLevel: 3
-  - moveType: 8
-    moveName: 23
-    requiredLevel: 5
-  - moveType: 2
-    moveName: 31
-    requiredLevel: 10
+  learnSet: []
+  learnableTms: 
+  learnableHms: 
   moveSet: []
   ability: {fileID: 11400000, guid: 2d3aa5da1ed7a734cb1c25d192217a25, type: 2}
   evolutions:

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Kelpsy berry
-  itemType: 8
+  itemType: 9
   itemEffect: 
   itemDescription: Increases a pokemon's friendship but lowers attack
   price: 5
@@ -26,4 +26,10 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
+  isMultiModular: 1
   additionalItemInfo: {fileID: 11400000, guid: 54b120f6e726b241d83f09ff4ec2c098, type: 2}
+  additionalInfoModules:
+  - {fileID: 11400000, guid: 54b120f6e726b241d83f09ff4ec2c098, type: 2}
+  - {fileID: 11400000, guid: 078fca6fe33c43e3c946fee7c2f71f69, type: 2}
+  infoModuleAssetNames: []
+  imageDirectory: 

@@ -1,5 +1,5 @@
 {
-    "itemID": "Flamethrower47320",
+    "itemID": "Flamethrower25557",
     "itemName": "Flamethrower",
     "itemType": 16,
     "itemEffect": "",
@@ -7,7 +7,7 @@
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 25970
+        "instanceID": 25992
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -15,9 +15,17 @@
     "isHeldItem": false,
     "canBeHeld": false,
     "canBeSold": true,
+    "isMultiModular": false,
     "additionalItemInfo": {
-        "instanceID": 26232
+        "instanceID": 26256
     },
-    "infoAssetName": "TM35",
+    "additionalInfoModules": [
+        {
+            "instanceID": 26256
+        }
+    ],
+    "infoModuleAssetNames": [
+        "TM35"
+    ],
     "imageDirectory": "fire tm"
 }

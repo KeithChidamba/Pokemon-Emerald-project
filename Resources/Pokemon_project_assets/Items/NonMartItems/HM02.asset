@@ -27,3 +27,8 @@ MonoBehaviour:
   canBeHeld: 0
   canBeSold: 0
   additionalItemInfo: {fileID: 11400000, guid: f3df67d35a5b0ade6a556ec9b9b7db14, type: 2}
+  additionalInfoModules:
+  - {fileID: 11400000, guid: f3df67d35a5b0ade6a556ec9b9b7db14, type: 2}
+  infoModuleAssetNames: []
+  infoAssetName: 
+  imageDirectory: 

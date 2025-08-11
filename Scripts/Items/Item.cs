@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -20,7 +21,17 @@ public class Item : ScriptableObject
     public bool isHeldItem = false;
     [FormerlySerializedAs("CanBeHeld")] public bool canBeHeld = false;
     [FormerlySerializedAs("CanBeSold")] public bool canBeSold = true;
+    public bool isMultiModular;
     public AdditionalItemInfo additionalItemInfo;
-    public string infoAssetName;//only gets modified and used in code
+    public List<AdditionalItemInfo> additionalInfoModules;
+    public List<string> infoModuleAssetNames; //only gets modified and used in code
     public string imageDirectory;//only gets modified and used in code
+    public T GetModule<T>() where T : AdditionalItemInfo
+    {
+        if (isMultiModular)
+        {
+            return additionalInfoModules.FirstOrDefault(m => m is T) as T;
+        }
+        return additionalItemInfo as T;
+    }
 }

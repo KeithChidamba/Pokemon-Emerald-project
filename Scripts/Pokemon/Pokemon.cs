@@ -212,7 +212,7 @@ public class Pokemon : ScriptableObject
             ChangeFriendshipLevel(isIncreasing?  amount: -amount );
         }
 
-        if (action == PokemonOperations.FriendshipModifier.EvBerry)
+        if (action == PokemonOperations.FriendshipModifier.Berry)
         {
             ChangeFriendshipLevel(ApplyFriendshipModifier(10) );
         }

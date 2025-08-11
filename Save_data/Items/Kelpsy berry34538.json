@@ -1,0 +1,35 @@
+{
+    "itemID": "Kelpsy berry34538",
+    "itemName": "Kelpsy berry",
+    "itemType": 9,
+    "itemEffect": "",
+    "itemDescription": "Increases a pokemon's friendship but lowers attack",
+    "price": 5,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 32860
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true,
+    "isMultiModular": true,
+    "additionalItemInfo": {
+        "instanceID": 25144
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 25144
+        },
+        {
+            "instanceID": -8848
+        }
+    ],
+    "infoModuleAssetNames": [
+        "Attack",
+        "Friendship berry"
+    ],
+    "imageDirectory": "Kelpsy berry"
+}

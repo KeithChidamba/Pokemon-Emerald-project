@@ -57,7 +57,7 @@ MonoBehaviour:
   nextLevelExpAmount: 0
   expGroup: 3
   expYield: 65
-  friendshipLevel: 240
+  friendshipLevel: 0
   hasTrainer: 0
   canBeFlinched: 1
   types:
@@ -73,15 +73,9 @@ MonoBehaviour:
   abilities: 02000000
   splitEvolution: 0
   requiresFriendshipEvolution: 0
-  learnSet:
-  - learnSetMove: 61
-    requiredLevel: 1
-  - learnSetMove: 50
-    requiredLevel: 2
-  - learnSetMove: 14
-    requiredLevel: 5
-  learnableTMs: 
-  learnableHMs: 
+  learnSet: []
+  learnableTms: 
+  learnableHms: 
   moveSet: []
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
   evolutions:

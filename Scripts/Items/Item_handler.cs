@@ -19,8 +19,8 @@ public class Item_handler : MonoBehaviour
 
     public enum ItemType
     {
-        Special,GainExp,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,StatIncrease,
-        FriendshipIncrease,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove
+        Special,GainExp,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,Vitamin,
+        Berry,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove
     }
     private void Awake()
     {
@@ -41,16 +41,7 @@ public class Item_handler : MonoBehaviour
         
         _selectedPartyPokemon = selectedPokemon;
         _itemInUse = item;
-        if (_itemInUse.itemType == ItemType.LearnableMove)
-        {
-            PokemonOperations.LearnTmOrHm(_itemInUse.additionalItemInfo,selectedPokemon);
-            return;
-        }
-        if (_itemInUse.itemType == ItemType.Overworld)
-        {
-            UseOverworldItem();
-            return;
-        }
+
         if (_itemInUse.itemType == ItemType.Special)
         {
             if (overworld_actions.Instance.IsEquipped(_itemInUse.itemName))
@@ -61,11 +52,18 @@ public class Item_handler : MonoBehaviour
             overworld_actions.Instance.EquipItem(_itemInUse);
             return;
         }
+        
         switch (item.itemType)
         {
+            case ItemType.LearnableMove: PokemonOperations.LearnTmOrHm(_itemInUse.additionalItemInfo,selectedPokemon); break;
+            
+            case ItemType.Overworld : UseOverworldItem(); break;
+            
             case ItemType.PowerPointModifier: ChangePowerpoints(); break;
             
             case ItemType.Herb: UseHerbs(); break;
+            
+            case ItemType.Berry: UseBerries(); break;
             
             case ItemType.HealHp: RestoreHealth(int.Parse(item.itemEffect)); break;
             
@@ -73,9 +71,7 @@ public class Item_handler : MonoBehaviour
             
             case ItemType.Status: HealStatusEffect(); break;
             
-            case ItemType.StatIncrease: GetEVsFromItem(); break;
-            
-            case ItemType.FriendshipIncrease: GetFriendshipFromItem(); break;
+            case ItemType.Vitamin: GetEVsFromItem(); break;
             
             case ItemType.Pokeball: UsePokeball(item); break;
             
@@ -89,17 +85,29 @@ public class Item_handler : MonoBehaviour
     private void UseHerbs()
     {
         OnItemUsageSuccessful += ChangeFriendship;
-        var newHerb = (HerbInfo)_itemInUse.additionalItemInfo;
-        var usageIndex = newHerb.GetHerbUsage(_itemInUse);
+        var herbInfo = _itemInUse.GetModule<HerbInfo>(); 
+        var usageIndex = herbInfo.GetHerbUsage(_itemInUse);
         var herbUsages = new List<Action>
         {
             () => RestoreHealth(int.Parse(_itemInUse.itemEffect)),
-            () => HealStatusEffect(newHerb.statusEffect),
-            () => RevivePokemon(newHerb.itemType)
+            () => HealStatusEffect(herbInfo.statusEffect),
+            () => RevivePokemon(herbInfo.itemType)
         };
         herbUsages[usageIndex].Invoke();
     }
 
+    private void UseBerries()
+    {
+        var berryInfo = _itemInUse.GetModule<BerryInfo>();
+        var usageIndex = berryInfo.GetBerryUsage();
+        var berryUsages = new List<Action> 
+        {
+            GetFriendshipFromBerry,
+            () => RestoreHealth(int.Parse(_itemInUse.itemEffect)),
+            () => HealStatusEffect(berryInfo.statusEffect)
+        };
+        berryUsages[usageIndex].Invoke();
+    }
     private void UseOverworldItem()
     {
         if (_itemInUse.itemName == "Escape Rope")
@@ -121,13 +129,13 @@ public class Item_handler : MonoBehaviour
     private void ChangeFriendship(bool itemUsed)
     {
         OnItemUsageSuccessful -= ChangeFriendship;
-        
-        var friendshipLoss = _itemInUse.itemName switch
+        var herbInfo = _itemInUse.GetModule<HerbInfo>();
+        var friendshipLoss = herbInfo.herbType switch
         {
-            "Energy Powder" => -5,
-            "Energy Root" => -10,
-            "Heal Powder" => -5,
-            "Revival Herb" => -15,
+            HerbInfo.Herb.EnergyPowder => -5,
+            HerbInfo.Herb.EnergyRoot => -10,
+            HerbInfo.Herb.HealPowder => -5,
+            HerbInfo.Herb.RevivalHerb => -15,
             _ => 0
         };
         if(itemUsed && friendshipLoss!=0)
@@ -153,7 +161,7 @@ public class Item_handler : MonoBehaviour
 
     void TriggerStoneEvolution()
     { 
-       var stoneInfo = (EvolutionStoneInfo)_itemInUse.additionalItemInfo;
+       var stoneInfo =_itemInUse.GetModule<EvolutionStoneInfo>();
        if (_selectedPartyPokemon.evolutionStone == stoneInfo.stoneName)
        {
             _selectedPartyPokemon.CheckEvolutionRequirements(0);
@@ -166,9 +174,9 @@ public class Item_handler : MonoBehaviour
        }
     }
 
-    private void GetFriendshipFromItem()
+    private void GetFriendshipFromBerry()
     {
-        var statToDecrease = (StatInfo)_itemInUse.additionalItemInfo;
+        var statToDecrease = _itemInUse.GetModule<StatInfo>();
         if(_selectedPartyPokemon.friendshipLevel>254)
         {
             Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+"'s friendship is already maxed out", 1f);
@@ -176,31 +184,33 @@ public class Item_handler : MonoBehaviour
         }
         else
         {
+            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+"'s friendship was increased", 1f);
             ref float evRef = ref PokemonOperations.GetEvStatRef(statToDecrease.statName, _selectedPartyPokemon);
             if (evRef > 100) evRef = 100;
             else PokemonOperations.CalculateEvForStat(statToDecrease.statName, -10, _selectedPartyPokemon);
-            _selectedPartyPokemon.ChangeFriendshipLevel(10);
+            _selectedPartyPokemon.DetermineFriendshipLevelChange(true,PokemonOperations.FriendshipModifier.Berry);
             CompleteItemUsage();
         }
     }
     private void GetEVsFromItem() 
     {
-        var statInfo = (StatInfo)_itemInUse.additionalItemInfo;
+        var statToIncrease = _itemInUse.GetModule<StatInfo>();
         PokemonOperations.OnEvChange += CheckEvChange;
-        PokemonOperations.CalculateEvForStat(statInfo.statName, 10, _selectedPartyPokemon);
+        PokemonOperations.CalculateEvForStat(statToIncrease.statName, 10, _selectedPartyPokemon);
     }
 
     private void CheckEvChange(bool hasChanged)
     {
         PokemonOperations.OnEvChange -= CheckEvChange;
-        var message = _selectedPartyPokemon.pokemonName + "'s " + _itemInUse.itemEffect;
+        var statToIncrease = _itemInUse.GetModule<StatInfo>();
+        var message = _selectedPartyPokemon.pokemonName + "'s " + NameDB.GetStatName(statToIncrease.statName);
         
         message += (hasChanged)? " was increased" : " can't get any higher";
 
         if (hasChanged)
-        {//CHANGE THIS TO WORK WITH BERRIES ONCE BERRIES ARE DONE
-            _selectedPartyPokemon.DetermineFriendshipLevelChange(
-                true,PokemonOperations.FriendshipModifier.Vitamin);
+        {
+            _selectedPartyPokemon.DetermineFriendshipLevelChange(false,
+                PokemonOperations.FriendshipModifier.Vitamin);
             DepleteItem();
         }
         Dialogue_handler.Instance.DisplayDetails(message,  1f);
@@ -209,7 +219,7 @@ public class Item_handler : MonoBehaviour
     private void ChangePowerpoints()
     {
         Pokemon_Details.Instance.changingMoveData = true;
-        var modifierInfo = (PowerpointModifeir)_itemInUse.additionalItemInfo;
+        var modifierInfo = _itemInUse.GetModule<PowerpointModifeir>();;
         
         if (modifierInfo.modiferType == PowerpointModifeir.ModiferType.RestorePp)
             Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
@@ -222,7 +232,7 @@ public class Item_handler : MonoBehaviour
 
     private void ItemBuffOrDebuff()
     {
-        var statInfo = (StatInfo)_itemInUse.additionalItemInfo;
+        var statInfo = _itemInUse.GetModule<StatInfo>();
         if (statInfo.statName == PokemonOperations.Stat.None)
         {//guard spec doesn't buff stat but remove stat reduction
             if (currentParticipant.ProtectedFromStatChange(false))
@@ -304,7 +314,7 @@ public class Item_handler : MonoBehaviour
              return;
          }
          Pokemon_Details.Instance.OnMoveSelected -= RestorePowerpoints;
-         var modifierInfo = (PowerpointModifeir)_itemInUse.additionalItemInfo;
+         var modifierInfo = _itemInUse.GetModule<PowerpointModifeir>();
          var pointsToAdd = 0;
          
          if (modifierInfo.itemType == PowerpointModifeir.ModiferItemType.Ether)
@@ -481,7 +491,7 @@ public class Item_handler : MonoBehaviour
     {
         if (curableStatus == PokemonOperations.StatusEffect.None)
         {
-            var statusInfo = (StatusHealInfo)_itemInUse.additionalItemInfo;
+            var statusInfo = _itemInUse.GetModule<StatusHealInfo>();
             curableStatus = statusInfo.statusEffect;
         }
         if (!IsValidStatusHeal(curableStatus))

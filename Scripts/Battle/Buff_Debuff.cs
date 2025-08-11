@@ -13,12 +13,7 @@ public class Buff_Debuff
 
     public Buff_Debuff(PokemonOperations.Stat stat, int stage, bool isAtLimit)
     {
-        statName = stat switch
-        {
-            PokemonOperations.Stat.SpecialAttack => "Special Attack",
-            PokemonOperations.Stat.SpecialDefense => "Special Defense",
-            _ => stat.ToString()
-        };
+        statName = NameDB.GetStatName(stat);
         this.stat = stat;
         this.stage = stage;
         this.isAtLimit = isAtLimit;

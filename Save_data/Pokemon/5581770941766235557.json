@@ -1,16 +1,16 @@
 {
     "basePokemonName": "Torchic",
     "pokemonName": "Torchic",
-    "pokemonID": 7237722042832737386,
-    "personalityValue": 770747286,
+    "pokemonID": 5581770941766235557,
+    "personalityValue": 429061541,
     "gender": 2,
     "ratioFemale": 0.0,
     "nature": {
-        "instanceID": 26332
+        "instanceID": 26544
     },
     "hasGender": true,
-    "hp": 13.0,
-    "maxHp": 13.0,
+    "hp": 14.0,
+    "maxHp": 14.0,
     "baseHp": 45.0,
     "baseAttack": 60.0,
     "baseDefense": 40.0,
@@ -18,20 +18,20 @@
     "baseSpecialDefense": 50.0,
     "baseSpeed": 45.0,
     "attack": 7.0,
-    "defense": 6.0,
-    "specialAttack": 7.0,
+    "defense": 5.0,
+    "specialAttack": 8.0,
     "specialDefense": 7.0,
     "speed": 7.0,
-    "hpIv": 4.0,
-    "attackIv": 24.0,
-    "defenseIv": 21.0,
-    "specialAttackIv": 9.0,
-    "specialDefenseIv": 9.0,
-    "speedIv": 9.0,
+    "hpIv": 16.0,
+    "attackIv": 28.0,
+    "defenseIv": 3.0,
+    "specialAttackIv": 15.0,
+    "specialDefenseIv": 7.0,
+    "speedIv": 12.0,
     "hpEv": 0.0,
     "attackEv": 0.0,
     "defenseEv": 0.0,
-    "specialAttackEv": 0.0,
+    "specialAttackEv": 10.0,
     "specialDefenseEv": 0.0,
     "speedEv": 0.0,
     "effortValues": [
@@ -54,7 +54,7 @@
     "canBeFlinched": true,
     "types": [
         {
-            "instanceID": 26308
+            "instanceID": 26332
         }
     ],
     "statusEffect": 0,
@@ -88,25 +88,25 @@
             "requiredLevel": 5
         }
     ],
-    "learnableTMs": [],
-    "learnableHMs": [],
+    "learnableTms": [],
+    "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -2034
+            "instanceID": -20452
         },
         {
-            "instanceID": -2036
+            "instanceID": -20454
         }
     ],
     "ability": {
-        "instanceID": 25826
+        "instanceID": 25846
     },
     "evolutions": [
         {
-            "instanceID": 26546
+            "instanceID": 26574
         },
         {
-            "instanceID": 25796
+            "instanceID": 25816
         }
     ],
     "heldItem": {
@@ -114,15 +114,15 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32096
+        "instanceID": 32124
     },
     "backPicture": {
-        "instanceID": 32186
+        "instanceID": 32214
     },
     "pokeballName": "Regular Pokeball",
-    "healthPhase": 0,
+    "healthPhase": 1,
     "abilityName": "Blaze",
-    "natureName": "Hasty",
+    "natureName": "Mild",
     "evolutionNames": [
         "Combusken",
         "Blaziken"

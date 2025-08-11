@@ -1007,9 +1007,14 @@ public class Move_handler:MonoBehaviour
     void covet()
     {
         StartCoroutine(DamageDisplay(victim));
-        if (victim.pokemon.hasItem)
+
+        if (victim.pokemon.hasItem && !attacker.pokemon.hasItem)
         {
-            //take berry
+            if (victim.pokemon.heldItem.itemType == Item_handler.ItemType.Berry)
+            {
+                attacker.pokemon.GiveItem(Obj_Instance.CreateItem(victim.pokemon.heldItem));
+                victim.pokemon.RemoveHeldItem();
+            }
         }
         _moveDelay = false;
     }
