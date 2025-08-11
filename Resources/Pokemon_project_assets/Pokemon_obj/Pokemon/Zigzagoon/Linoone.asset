@@ -20,6 +20,8 @@ MonoBehaviour:
   expYield: 128
   catchRate: 90
   learnSet: []
+  learnableTms: 
+  learnableHms: 
   frontPicture: {fileID: 21300000, guid: 5b9b4b1479928574c8ddc4d8fd16d664, type: 3}
   backPicture: {fileID: 21300000, guid: 23bf789980deb9244a5bc103152b08d2, type: 3}
   baseHp: 78
@@ -33,4 +35,6 @@ MonoBehaviour:
     eVAmount: 2
   requiresFriendshipEvolution: 0
   requiresEvolutionStone: 0
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0

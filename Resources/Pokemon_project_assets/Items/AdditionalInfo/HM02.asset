@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HmNumber: 2
   HmName: 1
+  move: {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}

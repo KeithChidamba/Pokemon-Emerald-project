@@ -1034,4 +1034,46 @@ public class Move_handler:MonoBehaviour
             _moveDelay = false;
         }
     }
+
+    void dig()
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        _moveDelay = false;
+    }
+
+    void fly()
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        _moveDelay = false;
+    }
+
+    void sandstorm()
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        _moveDelay = false;
+    }
+
+    void attract()
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        _moveDelay = false;
+    }
+
+    void morningsun()
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        _moveDelay = false;
+    }
+
+    void moonlight()
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        _moveDelay = false;
+    }
+
+    void whirlwind()
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        _moveDelay = false;
+    }
 }

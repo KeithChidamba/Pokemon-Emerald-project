@@ -20,7 +20,33 @@ MonoBehaviour:
   expGroup: 3
   expYield: 210
   catchRate: 45
-  learnSet: []
+  learnSet:
+  - learnSetMove: 50
+    requiredLevel: 1
+  - learnSetMove: 67
+    requiredLevel: 1
+  - learnSetMove: 31
+    requiredLevel: 6
+  - learnSetMove: 81
+    requiredLevel: 10
+  - learnSetMove: 41
+    requiredLevel: 15
+  - learnSetMove: 46
+    requiredLevel: 19
+  - learnSetMove: 33
+    requiredLevel: 24
+  - learnSetMove: 68
+    requiredLevel: 28
+  - learnSetMove: 82
+    requiredLevel: 33
+  - learnSetMove: 59
+    requiredLevel: 37
+  - learnSetMove: 79
+    requiredLevel: 42
+  - learnSetMove: 44
+    requiredLevel: 46
+  learnableTms: 010000000300000008000000090000000b000000
+  learnableHms: 00000000
   frontPicture: {fileID: 21300000, guid: b0076467b6bc5c34ca5fc05929d30891, type: 3}
   backPicture: {fileID: 21300000, guid: 62038c4452eac334ebe7e2d837e8b022, type: 3}
   baseHp: 100
@@ -34,4 +60,6 @@ MonoBehaviour:
     eVAmount: 3
   requiresFriendshipEvolution: 0
   requiresEvolutionStone: 0
-  friendshipEvolutionRequirement: 
+  friendshipEvolutionRequirement:
+    friendshipRequirement: 0
+    evolutionIndex: 0

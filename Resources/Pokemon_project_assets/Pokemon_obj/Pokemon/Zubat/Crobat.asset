@@ -21,6 +21,8 @@ MonoBehaviour:
   expYield: 204
   catchRate: 90
   learnSet: []
+  learnableTms: 
+  learnableHms: 
   frontPicture: {fileID: 21300000, guid: ebe222c65f58aa21c944df1326d5d58e, type: 3}
   backPicture: {fileID: 21300000, guid: 909c7759f7374b3d1b614b8084ce00a0, type: 3}
   baseHp: 85
