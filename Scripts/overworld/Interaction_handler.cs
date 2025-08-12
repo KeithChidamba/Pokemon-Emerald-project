@@ -71,7 +71,7 @@ public class Interaction_handler : MonoBehaviour
                     Dialogue_handler.Instance.StartInteraction(interactableObject);
             }
             if (Input.GetKeyDown(KeyCode.C) 
-                && overworld_actions.Instance.IsEquipped("rod"))
+                && overworld_actions.Instance.IsEquipped(EquipableItemInfo.Equipable.FishingRod))
             {
                 if (hit.transform.gameObject.CompareTag("Water"))
                 { 
@@ -85,7 +85,8 @@ public class Interaction_handler : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.C) && !hit.transform && overworld_actions.Instance.IsEquipped("rod"))
+        if (Input.GetKeyDown(KeyCode.C) && !hit.transform 
+                                        && overworld_actions.Instance.IsEquipped(EquipableItemInfo.Equipable.FishingRod))
         {
             Dialogue_handler.Instance.DisplayDetails("Cant fish here");
         }

@@ -51,8 +51,18 @@ public class Bag : MonoBehaviour
     {
         bagItemsUI[selectedItemIndex].LoadItemDescription();
         var selectedItem = bagItemsUI[selectedItemIndex].item;
-        itemUsageText.text = selectedItem.itemType==Item_handler.ItemType.Special ? "Equip" : "Use";
-        itemUsageText.fontSize = selectedItem.itemType==Item_handler.ItemType.Special ? 20 : 24;
+        if (selectedItem.itemType == Item_handler.ItemType.Special)
+        {
+            var equipDisplayText = overworld_actions.Instance.IsEquipped(item:selectedItem)? "Unequip":"Equip";
+            itemUsageText.text = equipDisplayText;
+            itemUsageText.fontSize = 18;
+        }
+        else
+        {
+            itemUsageText.text = "Use";
+            itemUsageText.fontSize = 24;
+        }
+
         if (sellingItems) sellQuantity = 1;
     }
     

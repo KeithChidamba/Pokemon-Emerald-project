@@ -139,7 +139,7 @@ public class Player_movement : MonoBehaviour
     }
     private void HandleBikeInputs()
     {
-        if (!overworld_actions.Instance.IsEquipped("bike")) return;
+        if (!overworld_actions.Instance.IsEquipped(EquipableItemInfo.Equipable.Bike)) return;
         if (Input.GetKeyDown(KeyCode.C) && !usingBike &&canUseBike)
         {
             usingBike = true;

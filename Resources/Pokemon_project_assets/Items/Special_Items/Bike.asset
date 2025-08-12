@@ -27,8 +27,8 @@ MonoBehaviour:
   canBeHeld: 0
   canBeSold: 0
   isMultiModular: 0
-  hasModules: 0
-  additionalItemInfo: {fileID: 0}
+  hasModules: 1
+  additionalItemInfo: {fileID: 11400000, guid: 687d7c0e7f06a30b3a97c82d168010ae, type: 2}
   additionalInfoModules: []
   infoModuleAssetNames: []
   imageDirectory: 

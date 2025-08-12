@@ -44,9 +44,9 @@ public class Item_handler : MonoBehaviour
 
         if (_itemInUse.itemType == ItemType.Special)
         {
-            if (overworld_actions.Instance.IsEquipped(_itemInUse.itemName))
+            if (overworld_actions.Instance.IsEquipped(item:_itemInUse))
             {
-                Dialogue_handler.Instance.DisplayDetails("Item is already equipped");
+                overworld_actions.Instance.UnequipItem(_itemInUse);
                 usingItem = false;
                 return;
             }

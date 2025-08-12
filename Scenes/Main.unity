@@ -1148,6 +1148,11 @@ MonoBehaviour:
   isEnemy: 0
   isActive: 0
   fainted: 0
+  canAttack: 1
+  isFlinched: 0
+  isConfused: 0
+  canBeDamaged: 1
+  canEscape: 1
   playerHpSlider: {fileID: 274821928}
   hpSliderImage: {fileID: 1544117819}
   playerExpSlider: {fileID: 0}
@@ -1156,7 +1161,6 @@ MonoBehaviour:
   participantUI: {fileID: 1656265309}
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
-  canEscape: 1
   Barrieirs: []
 --- !u!114 &35621318
 MonoBehaviour:
@@ -3445,9 +3449,8 @@ MonoBehaviour:
   numMembers: 0
   selectedMemberIndex: 0
   memberToMove: 0
-  moving: 0
-  swappingIn: 0
   swapOutNext: 0
+  moving: 0
   givingItem: 0
   memberCards:
   - {fileID: 1216270925}
@@ -6079,6 +6082,11 @@ MonoBehaviour:
   isEnemy: 0
   isActive: 0
   fainted: 0
+  canAttack: 1
+  isFlinched: 0
+  isConfused: 0
+  canBeDamaged: 1
+  canEscape: 1
   playerHpSlider: {fileID: 1509615510}
   hpSliderImage: {fileID: 1598670749}
   playerExpSlider: {fileID: 0}
@@ -6087,7 +6095,6 @@ MonoBehaviour:
   participantUI: {fileID: 1780447230}
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
-  canEscape: 1
   Barrieirs: []
 --- !u!114 &190973851
 MonoBehaviour:
@@ -9887,6 +9894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _turnHistory: []
+  switchOutQueue: []
   currentTurnIndex: 0
   levelEventDelay: 0
   faintEventDelay: 0
@@ -31691,8 +31699,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -208.4, y: -48.1}
-  m_SizeDelta: {x: 55.1609, y: 30}
+  m_AnchoredPosition: {x: -204.36319, y: -48.1}
+  m_SizeDelta: {x: 65, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1079621031
 MonoBehaviour:
@@ -32442,8 +32450,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -62, y: -50}
-  m_SizeDelta: {x: 55.1609, y: 30}
+  m_AnchoredPosition: {x: -45.5, y: -50}
+  m_SizeDelta: {x: 65, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1100212452
 MonoBehaviour:
@@ -32984,6 +32992,7 @@ MonoBehaviour:
   attacker: {fileID: 0}
   victim: {fileID: 0}
   processingOrder: 0
+  displayingHealthDecrease: 0
 --- !u!4 &1148144462
 Transform:
   m_ObjectHideFlags: 0
@@ -33865,7 +33874,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -136.6, y: 5.1652145}
+  m_AnchoredPosition: {x: -139.6, y: -8.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1183214663
@@ -67308,6 +67317,11 @@ MonoBehaviour:
   isEnemy: 0
   isActive: 0
   fainted: 0
+  canAttack: 1
+  isFlinched: 0
+  isConfused: 0
+  canBeDamaged: 1
+  canEscape: 1
   playerHpSlider: {fileID: 684725532}
   hpSliderImage: {fileID: 842742253}
   playerExpSlider: {fileID: 752174744}
@@ -67320,7 +67334,6 @@ MonoBehaviour:
   participantUI: {fileID: 443644594}
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
-  canEscape: 1
   Barrieirs: []
 --- !u!114 &1636635381
 MonoBehaviour:
@@ -74899,8 +74912,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -136.8, y: -49}
-  m_SizeDelta: {x: 55.1609, y: 30}
+  m_AnchoredPosition: {x: -124.5, y: -49}
+  m_SizeDelta: {x: 65, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1905874450
 MonoBehaviour:
@@ -92573,8 +92586,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 67.0345, y: 31.9141}
+  m_AnchoredPosition: {x: 6.2, y: 6.4}
+  m_SizeDelta: {x: 78.6269, y: 41.6586}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2028305997
 MonoBehaviour:
@@ -92834,6 +92847,11 @@ MonoBehaviour:
   isEnemy: 0
   isActive: 0
   fainted: 0
+  canAttack: 1
+  isFlinched: 0
+  isConfused: 0
+  canBeDamaged: 1
+  canEscape: 1
   playerHpSlider: {fileID: 2073673345}
   hpSliderImage: {fileID: 639943928}
   playerExpSlider: {fileID: 0}
@@ -92842,7 +92860,6 @@ MonoBehaviour:
   participantUI: {fileID: 173013067}
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
-  canEscape: 1
   Barrieirs: []
 --- !u!114 &2033618205
 MonoBehaviour:
