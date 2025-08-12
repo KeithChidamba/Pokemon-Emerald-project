@@ -73,8 +73,14 @@ MonoBehaviour:
   abilities: 06000000
   splitEvolution: 1
   requiresFriendshipEvolution: 0
-  learnSet: []
-  learnableTms: 
+  learnSet:
+  - learnSetMove: 3
+    requiredLevel: 1
+  - learnSetMove: 67
+    requiredLevel: 1
+  - learnSetMove: 71
+    requiredLevel: 5
+  learnableTms: 0c00000008000000
   learnableHms: 
   moveSet: []
   ability: {fileID: 11400000, guid: 2753225943009a84284482e1ea9aae6b, type: 2}

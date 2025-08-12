@@ -278,9 +278,9 @@ public class Pokemon : ScriptableObject
         effortValues=evo.effortValues;
         types = evo.types;
         ability = evo.ability;
-        learnableTms = evo.learnableTms;
-        learnableHms = evo.learnableHms;
-        learnSet = evo.learnSet;
+        learnableTms = new List<NameDB.TM>(evo.learnableTms);
+        learnableHms = new List<NameDB.HM>(evo.learnableHms);
+        learnSet = (LearnSetMove[])evo.learnSet.Clone();
         frontPicture = evo.frontPicture;
         backPicture = evo.backPicture;
         expGroup = evo.expGroup;

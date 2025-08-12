@@ -20,9 +20,29 @@ MonoBehaviour:
   expGroup: 1
   expYield: 160
   catchRate: 45
-  learnSet: []
-  learnableTms: 
-  learnableHms: 
+  learnSet:
+  - learnSetMove: 74
+    requiredLevel: 1
+  - learnSetMove: 74
+    requiredLevel: 10
+  - learnSetMove: 19
+    requiredLevel: 13
+  - learnSetMove: 59
+    requiredLevel: 17
+  - learnSetMove: 56
+    requiredLevel: 20
+  - learnSetMove: 76
+    requiredLevel: 24
+  - learnSetMove: 69
+    requiredLevel: 27
+  - learnSetMove: 75
+    requiredLevel: 31
+  - learnSetMove: 2
+    requiredLevel: 34
+  - learnSetMove: 72
+    requiredLevel: 38
+  learnableTms: 0c000000090000000b000000
+  learnableHms: 01000000
   frontPicture: {fileID: 21300000, guid: 8879d5784dc1e0d45bce22cfdee1331b, type: 3}
   backPicture: {fileID: 21300000, guid: a6e4f962de9cc0848a355b6246a8ccb0, type: 3}
   baseHp: 60

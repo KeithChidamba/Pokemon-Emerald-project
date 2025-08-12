@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Bike
-  itemType: Special
+  itemType: 0
   itemEffect: 0
   itemDescription: A fast bicycle that realiable
   price: 0
@@ -26,3 +26,9 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 0
+  isMultiModular: 0
+  hasModules: 0
+  additionalItemInfo: {fileID: 0}
+  additionalInfoModules: []
+  infoModuleAssetNames: []
+  imageDirectory: 

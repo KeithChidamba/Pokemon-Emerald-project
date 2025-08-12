@@ -1076,4 +1076,9 @@ public class Move_handler:MonoBehaviour
         Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
         _moveDelay = false;
     }
+    void rest()
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        _moveDelay = false;
+    }
 }

@@ -149,6 +149,7 @@ public static class Obj_Instance
         newItem.isHeldItem = item.isHeldItem;
         newItem.canBeSold = item.canBeSold;
         newItem.canBeHeld = item.canBeHeld;
+        newItem.hasModules = item.hasModules;
         newItem.isMultiModular = item.isMultiModular;
         newItem.additionalItemInfo = item.additionalItemInfo;
         newItem.additionalInfoModules = item.additionalInfoModules;

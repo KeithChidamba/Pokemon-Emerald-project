@@ -9,40 +9,40 @@ using System.Linq;
 public class NatureEVFixer : EditorWindow
 {
         
-    [MenuItem("Tools/Add learnsset duplicates")]
-    public static void AddInfoModules()
-    {
-        //add other item dir
-        var pokemonList = new[] { "Mudkip", "Pikachu", "Trapinch", "Torchic", 
-            "Treecko","Wurmple","Zigzagoon","Zubat" };
-        foreach (var pokemonName in pokemonList)
-        {
-            string folderPath = "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Pokemon/"+pokemonName;
-            string[] guids = AssetDatabase.FindAssets("t:Pokemon", new[] { folderPath });
-        
-            foreach (string guid in guids)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                Pokemon pokemon = AssetDatabase.LoadAssetAtPath<Pokemon>(assetPath);
-        
-                if (pokemon != null)
-                {
-                    foreach (var evo in pokemon.evolutions)
-                    {
-                        evo.learnableHms = pokemon.learnableHms;
-                        evo.learnSet = pokemon.learnSet;
-                        evo.learnableTms = pokemon.learnableTms;
-                        EditorUtility.SetDirty(evo);
-                        Debug.Log($"Updated learnset: {evo.name}");
-                    }
-                }
-            }
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            Debug.Log("learnset updates complete.");
-        }
-
-    }
+    // [MenuItem("Tools/Add learnsset duplicates")]
+    // public static void AddInfoModules()
+    // {
+    //     //add other item dir
+    //     var pokemonList = new[] { "Mudkip", "Pikachu", "Trapinch", "Torchic", 
+    //         "Treecko","Wurmple","Zigzagoon","Zubat" };
+    //     foreach (var pokemonName in pokemonList)
+    //     {
+    //         string folderPath = "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Pokemon/"+pokemonName;
+    //         string[] guids = AssetDatabase.FindAssets("t:Pokemon", new[] { folderPath });
+    //     
+    //         foreach (string guid in guids)
+    //         {
+    //             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+    //             Pokemon pokemon = AssetDatabase.LoadAssetAtPath<Pokemon>(assetPath);
+    //     
+    //             if (pokemon != null)
+    //             {
+    //                 foreach (var evo in pokemon.evolutions)
+    //                 {
+    //                     evo.learnableHms.Clear();
+    //                     evo.learnSet = null;
+    //                     evo.learnableTms.Clear();
+    //                     EditorUtility.SetDirty(evo);
+    //                     Debug.Log($"Updated learnset: {evo.name}");
+    //                 }
+    //             }
+    //         }
+    //         AssetDatabase.SaveAssets();
+    //         AssetDatabase.Refresh();
+    //         Debug.Log("learnset updates complete.");
+    //     }
+    //
+    // }
     // [MenuItem("Tools/Add list info modules")]
     // public static void AddInfoModules()
     // {

@@ -1,13 +1,13 @@
 {
-    "itemID": "Flamethrower25557",
-    "itemName": "Flamethrower",
+    "itemID": "Aerial Ace55653",
+    "itemName": "Aerial Ace",
     "itemType": 16,
     "itemEffect": "",
-    "itemDescription": "Scorches with intense flames.",
+    "itemDescription": "An attack that never misses.",
     "price": 0,
-    "quantity": 3,
+    "quantity": 1,
     "itemImage": {
-        "instanceID": 26020
+        "instanceID": 26464
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,15 +18,15 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": 26284
+        "instanceID": 25114
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26284
+            "instanceID": 25114
         }
     ],
     "infoModuleAssetNames": [
-        "TM35"
+        "TM40"
     ],
-    "imageDirectory": "fire tm"
+    "imageDirectory": "flying tm"
 }

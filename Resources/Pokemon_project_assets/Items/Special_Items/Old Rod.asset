@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Old Rod
-  itemType: Special
+  itemType: 0
   itemEffect: 5/10
   itemDescription: An old fishing rod that only catch weak pokemon
   price: 0
@@ -26,3 +26,9 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 0
+  isMultiModular: 0
+  hasModules: 0
+  additionalItemInfo: {fileID: 0}
+  additionalInfoModules: []
+  infoModuleAssetNames: []
+  imageDirectory: 

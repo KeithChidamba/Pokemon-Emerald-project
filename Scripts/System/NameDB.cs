@@ -123,7 +123,9 @@ public static class NameDB
         Bite,
         Crunch,
         FaintAttack,
-        Pursuit
+        Pursuit,
+        //forgot
+        PinMissile
     }
 
     public enum HM
@@ -159,7 +161,7 @@ public static class NameDB
         { LearnSetMove.LeechLife, "Leech Life" },
         { LearnSetMove.SilverWind, "Silver Wind" },
         { LearnSetMove.StringShot, "String Shot" },
-
+        { LearnSetMove.PinMissile, "Pin Missile" },
         // 🐉 Dragon-type
         { LearnSetMove.DragonBreath, "Dragon Breath" },
 

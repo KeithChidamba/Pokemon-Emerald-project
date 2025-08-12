@@ -22,6 +22,7 @@ public class Item : ScriptableObject
     [FormerlySerializedAs("CanBeHeld")] public bool canBeHeld = false;
     [FormerlySerializedAs("CanBeSold")] public bool canBeSold = true;
     public bool isMultiModular;
+    public bool hasModules = true;
     public AdditionalItemInfo additionalItemInfo;
     public List<AdditionalItemInfo> additionalInfoModules;
     public List<string> infoModuleAssetNames; //only gets modified and used in code

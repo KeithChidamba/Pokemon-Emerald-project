@@ -328,14 +328,18 @@ public class Save_manager : MonoBehaviour
     private void SaveItemDataAsJson(Item itm, string fileName)
     {
         var directory = Path.Combine(_saveDataPath+"/Items", fileName + ".json");
-        itm.infoModuleAssetNames.Clear();
-        if (itm.additionalInfoModules.Count == 0 && !itm.isMultiModular)
-        {//just in-case
-            itm.additionalInfoModules.Add(itm.additionalItemInfo);
-        }
-        foreach (var module in itm.additionalInfoModules)
+        if(itm.hasModules)
         {
-            itm.infoModuleAssetNames.Add(module.name);
+            itm.infoModuleAssetNames.Clear();
+            if (itm.additionalInfoModules.Count == 0 && !itm.isMultiModular)
+            {
+                //just in-case
+                itm.additionalInfoModules.Add(itm.additionalItemInfo);
+            }
+            foreach (var module in itm.additionalInfoModules)
+            {
+                itm.infoModuleAssetNames.Add(module.name);
+            }
         }
         itm.imageDirectory = DetermineImageDirectory(itm);
         var json = JsonUtility.ToJson(itm, true);
@@ -356,13 +360,16 @@ public class Save_manager : MonoBehaviour
         var json = File.ReadAllText(filePath);
         var item = ScriptableObject.CreateInstance<Item>();
         JsonUtility.FromJsonOverwrite(json, item);
-        item.additionalInfoModules.Clear();
-        foreach (var assetName in item.infoModuleAssetNames)
+        if (item.hasModules)
         {
-            var additionalInfo = Resources.Load<AdditionalItemInfo>(GetDirectory(AssetDirectory.AdditionalInfo)+assetName);
-            item.additionalInfoModules.Add(additionalInfo);
+            item.additionalInfoModules.Clear();
+            foreach (var assetName in item.infoModuleAssetNames)
+            {
+                var additionalInfo = Resources.Load<AdditionalItemInfo>(GetDirectory(AssetDirectory.AdditionalInfo)+assetName);
+                item.additionalInfoModules.Add(additionalInfo);
+            }
+            item.additionalItemInfo = item.additionalInfoModules.First();
         }
-        item.additionalItemInfo = item.additionalInfoModules.First();
         item.itemImage = Testing.CheckImage(GetDirectory(AssetDirectory.UI),item.imageDirectory);
         return item;
     }
