@@ -224,28 +224,27 @@ public class Pokemon_party : MonoBehaviour
         selectedMemberIndex = 0;
         EndSwap();
     }
-    public void AddMember(Pokemon pokemon)
-    { //add new pokemon after catch or event
+    public void AddMember(Pokemon pokemon, string pokeballType, bool isGiftPokemon)
+    {
+        var newPokemon = Obj_Instance.CreatePokemon(pokemon); 
+        newPokemon.pokeballName = pokeballType; 
+        newPokemon.hasTrainer = true; 
+        if (isGiftPokemon)
+        {
+            PokemonOperations.SetPokemonTraits(newPokemon);
+            newPokemon.ChangeFriendshipLevel(120);
+            if (newPokemon.currentLevel == 0)
+                newPokemon.LevelUp();
+            newPokemon.hp = newPokemon.maxHp;
+        }
         if (numMembers<6)
         {
-            party[numMembers] = pokemon_storage.Instance.CreateAndSetupPokemon(pokemon);
+            party[numMembers] = newPokemon;
             numMembers++;
+            pokemon_storage.Instance.numPartyMembers++;
         }
         else
-        {
-            pokemon_storage.Instance.doingStorageOperation = false;
-            pokemon_storage.Instance.nonPartyPokemon.Add(pokemon_storage.Instance.CreateAndSetupPokemon(pokemon));
-            pokemon_storage.Instance.numNonPartyPokemon++;
-        }
-    }
-    void SortMembers(int emptyPosition)
-    {
-        if(emptyPosition < party.Length-1)
-        {
-            for (int i = emptyPosition; i < party.Length - 1; i++)
-                party[i] = party[i + 1];
-            party[^1] = null;
-        }
+            pokemon_storage.Instance.AddPokemonToStorage(pokemon);
     }
     public void RefreshMemberCards()
     {
@@ -262,14 +261,20 @@ public class Pokemon_party : MonoBehaviour
                 memberCards[i].ResetUI();
         }
     }
-    public void RemoveMember(int Party_position)
+    public void RemoveMember(int partyPosition)
     {
         //pc operation remove from party
-        Party_position--;
-        var member = party[Party_position];
-        party[Party_position] = null;
+        partyPosition--;
+        var member = party[partyPosition];
+        party[partyPosition] = null;
         numMembers--;
         pokemon_storage.Instance.nonPartyPokemon.Add(member);
-        SortMembers(Party_position);
+        //sort
+        if(partyPosition < party.Length-1)
+        {
+            for (int i = partyPosition; i < party.Length - 1; i++)
+                party[i] = party[i + 1];
+            party[^1] = null;
+        }
     }
 }

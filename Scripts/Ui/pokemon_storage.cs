@@ -63,8 +63,8 @@ public class pokemon_storage : MonoBehaviour
             doingStorageOperation = true;
             var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
             var swapStore = Pokemon_party.Instance.party[partyPokemon.partyPosition - 1];
-            Pokemon_party.Instance.party[partyPokemon.partyPosition - 1] = CreateAndSetupPokemon(nonPartyPokemon[pokemonIndex]);
-            nonPartyPokemon[pokemonIndex] = CreateAndSetupPokemon(swapStore);
+            Pokemon_party.Instance.party[partyPokemon.partyPosition - 1] = Obj_Instance.CreatePokemon(nonPartyPokemon[pokemonIndex]);
+            nonPartyPokemon[pokemonIndex] = Obj_Instance.CreatePokemon(swapStore);
             ResetBoxIconSprite(nonPartyIcons[pokemonIndex].GetComponent<PC_pkm>());
             RefreshUi();
             doingStorageOperation = false;
@@ -222,7 +222,7 @@ public class pokemon_storage : MonoBehaviour
             doingStorageOperation = true;
             var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
             ResetBoxIconSprite(nonPartyIcons[pokemonIndex].GetComponent<PC_pkm>());
-            Pokemon_party.Instance.party[Pokemon_party.Instance.numMembers] = CreateAndSetupPokemon(nonPartyPokemon[pokemonIndex]);
+            Pokemon_party.Instance.party[Pokemon_party.Instance.numMembers] = Obj_Instance.CreatePokemon(nonPartyPokemon[pokemonIndex]);
             DeleteNonPartyPokemon(pokemonIndex);
             Pokemon_party.Instance.numMembers++;
             numPartyMembers++;
@@ -233,22 +233,10 @@ public class pokemon_storage : MonoBehaviour
         doingStorageOperation = false;
     }
 
-    public Pokemon CreateAndSetupPokemon(Pokemon template)
+    public void AddPokemonToStorage(Pokemon newPokemon)
     {
-        var newPokemon = Obj_Instance.CreatePokemon(template);
-        newPokemon.hasTrainer = true; 
-        if (!doingStorageOperation)
-        {
-            totalPokemonCount++;
-            if (numPartyMembers < 6)
-                numPartyMembers++;
-            PokemonOperations.SetPokemonTraits(newPokemon);
-            if (newPokemon.currentLevel == 0)
-                newPokemon.LevelUp();
-            newPokemon.hp = newPokemon.maxHp;
-        }
-        return newPokemon;
+       nonPartyPokemon.Add(newPokemon);
+       numNonPartyPokemon++;
+       totalPokemonCount++;
     }
-
-
 }

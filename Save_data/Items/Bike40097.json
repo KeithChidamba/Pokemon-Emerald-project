@@ -7,7 +7,7 @@
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32772
+        "instanceID": 32778
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
@@ -16,11 +16,17 @@
     "canBeHeld": false,
     "canBeSold": false,
     "isMultiModular": false,
-    "hasModules": false,
+    "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": -2616
+        "instanceID": 25594
     },
-    "additionalInfoModules": [],
-    "infoModuleAssetNames": [],
+    "additionalInfoModules": [
+        {
+            "instanceID": 25594
+        }
+    ],
+    "infoModuleAssetNames": [
+        "Bike"
+    ],
     "imageDirectory": "Bike"
 }

@@ -1,32 +1,32 @@
 {
-    "itemID": "Heal Powder60607",
-    "itemName": "Heal Powder",
-    "itemType": 5,
-    "itemEffect": "",
-    "itemDescription": "A bitter herb that heals all status effects",
-    "price": 18,
+    "itemID": "Oran berry46961",
+    "itemName": "Oran berry",
+    "itemType": 9,
+    "itemEffect": "5",
+    "itemDescription": "Heals 5hp",
+    "price": 5,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32922
+        "instanceID": 32874
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": true,
     "isHeldItem": false,
-    "canBeHeld": false,
+    "canBeHeld": true,
     "canBeSold": true,
     "isMultiModular": false,
     "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": 26492
+        "instanceID": 25770
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26492
+            "instanceID": 25770
         }
     ],
     "infoModuleAssetNames": [
-        "Heal Powder"
+        "HP berry"
     ],
-    "imageDirectory": "Heal Powder"
+    "imageDirectory": "Oran berry"
 }

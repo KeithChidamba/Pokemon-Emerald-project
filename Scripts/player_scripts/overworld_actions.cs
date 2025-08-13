@@ -14,8 +14,8 @@ public class overworld_actions : MonoBehaviour
     public Encounter_Area fishingArea;
     public Item equippedSpecialItem;
     public static overworld_actions Instance;
-    private bool canUseEquippedItem;
-
+    private bool _canUseEquippedItem;
+    private EquipableItemInfo.Equipable _currentEquippedItem;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -29,14 +29,15 @@ public class overworld_actions : MonoBehaviour
 
     private void Start()
     {
-        canUseEquippedItem = false;
-        Game_Load.Instance.OnGameStarted += () => canUseEquippedItem = true;
+        _canUseEquippedItem = false;
+        Game_Load.Instance.OnGameStarted += () => _canUseEquippedItem = true;
     }
 
     public void EquipItem(Item item)
     {
         if (item == null) return;//there was no item equipped in save data
         equippedSpecialItem = item;
+        _currentEquippedItem = equippedSpecialItem.GetModule<EquipableItemInfo>().equipableItem;
         if(usingUI)
             Dialogue_handler.Instance.DisplayDetails("Equipped " + equippedSpecialItem.itemName, 1f);
         Game_Load.Instance.playerData.equippedItemName = equippedSpecialItem.itemName;
@@ -44,13 +45,12 @@ public class overworld_actions : MonoBehaviour
     public bool IsEquipped(EquipableItemInfo.Equipable equipable = EquipableItemInfo.Equipable.None
         , Item item = null)
     {
-        if (!canUseEquippedItem || !ItemEquipped())
+        if (!_canUseEquippedItem || !ItemEquipped())
         {
             return false;
         }
-        var currentEquippedItem = equippedSpecialItem.GetModule<EquipableItemInfo>().equipableItem;
-        return item == null ? currentEquippedItem == equipable 
-            : currentEquippedItem == item.GetModule<EquipableItemInfo>().equipableItem;
+        return item == null ? _currentEquippedItem == equipable 
+            : _currentEquippedItem == item.GetModule<EquipableItemInfo>().equipableItem;
     }
     public void UnequipItem(Item item)
     {
@@ -67,7 +67,7 @@ public class overworld_actions : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.C) && !ItemEquipped() && !usingUI)
         {
-            if (!canUseEquippedItem) return;
+            if (!_canUseEquippedItem) return;
             Dialogue_handler.Instance.DisplayDetails("No item has been equipped", 2f);
         }  
         if (usingUI)

@@ -7,7 +7,7 @@
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32740
+        "instanceID": 32746
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
@@ -16,11 +16,17 @@
     "canBeHeld": false,
     "canBeSold": false,
     "isMultiModular": false,
-    "hasModules": false,
+    "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": 33190
+        "instanceID": 26488
     },
-    "additionalInfoModules": [],
-    "infoModuleAssetNames": [],
+    "additionalInfoModules": [
+        {
+            "instanceID": 26488
+        }
+    ],
+    "infoModuleAssetNames": [
+        "Old Rod"
+    ],
     "imageDirectory": "Old Rod"
 }
