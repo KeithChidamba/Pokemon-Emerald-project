@@ -272,7 +272,7 @@ public class Pokemon : ScriptableObject
             trainerBonus = 1.5f;
         return (int)math.trunc(baseExp * trainerBonus * expItemBonus);
     }
-    void Evolve(Evolution evo)
+    public void Evolve(Evolution evo)
     {
         pokemonName = evo.evolutionName;
         effortValues=evo.effortValues;
@@ -295,7 +295,7 @@ public class Pokemon : ScriptableObject
         requiresFriendshipEvolution = evo.requiresFriendshipEvolution;
         requiresEvolutionStone = evo.requiresEvolutionStone;
         friendshipEvolutionRequirement = evo.friendshipEvolutionRequirement;
-        Pokemon_party.Instance.RefreshMemberCards();
+       // Pokemon_party.Instance.RefreshMemberCards();
     }
 
     void IncreaseStats()

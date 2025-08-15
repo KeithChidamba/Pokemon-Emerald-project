@@ -78,7 +78,7 @@ public class Options_manager : MonoBehaviour
         PokemonOperations.LearningNewMove = false;
         Pokemon_Details.Instance.learningMove = false;
         Dialogue_handler.Instance.DisplayBattleInfo(PokemonOperations.CurrentPokemon.pokemonName +
-                                                    " did not learn "+PokemonOperations.NewMove.moveName,false);
+                                                    " did not learn "+PokemonOperations.NewMoveAsset.moveName,false);
     }
 
     void HealPokemon()

@@ -49,7 +49,7 @@
     "nextLevelExpAmount": 3798.0,
     "expGroup": 3,
     "expYield": 141,
-    "friendshipLevel": 255,
+    "friendshipLevel": 180,
     "hasTrainer": true,
     "canBeFlinched": true,
     "types": [
@@ -141,16 +141,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -4152
+            "instanceID": -2216
         },
         {
-            "instanceID": -4154
+            "instanceID": -2218
         },
         {
-            "instanceID": -4156
+            "instanceID": -2220
         },
         {
-            "instanceID": -4158
+            "instanceID": -2222
         }
     ],
     "ability": {

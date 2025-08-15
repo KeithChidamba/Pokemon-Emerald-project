@@ -10,7 +10,7 @@ public class Encounter_handler : MonoBehaviour
     public Encounter_Area currentArea;
     public bool encounterTriggered = false;
     public Pokemon wildPokemon;
-    public int encounterChance = 2;
+    public int overworldEncounterChance = 2;
     public static Encounter_handler Instance;
     private void Awake()
     {
@@ -25,30 +25,17 @@ public class Encounter_handler : MonoBehaviour
     {
         currentArea = area;
         encounterTriggered = true;
-        encounterChance = 2;
+        overworldEncounterChance = 2;
         for (int i = 0; i < currentArea.availableEncounters.Length; i++)
         {
             if (EncounteredPokemon(i)) break;
         }
     }
-    bool EncounteredPokemon(int currentIndex)
-    {
-        var random = Utility.RandomRange(1,101);
-        var chance = currentArea.availableEncounters[currentIndex].encounterChance;
-
-        if ( currentIndex == currentArea.availableEncounters.Length - 1 /*pick last option if none in range*/ 
-             || random < chance )//pick option within chance range
-        {
-            CreateWildPokemon(currentArea.availableEncounters[currentIndex].pokemon);
-            return true;
-        }
-        return false;
-    }
     public void TriggerFishingEncounter(Encounter_Area area,Item fishingRod)
     {
         currentArea = area;
         encounterTriggered = true;
-        encounterChance = 2;
+        overworldEncounterChance = 2;
         area.minimumLevelOfPokemon = int.Parse(fishingRod.itemEffect.Split('/')[0]);
         area.maximumLevelOfPokemon = int.Parse(fishingRod.itemEffect.Split('/')[1]);
         //the type of rod determines available pokemon from pool
@@ -65,12 +52,33 @@ public class Encounter_handler : MonoBehaviour
             if (EncounteredPokemon(i)) break;
         }
     }
-    void CreateWildPokemon(Pokemon pokemonCopy)
-    { 
-        wildPokemon = Obj_Instance.CreatePokemon(pokemonCopy);
+    bool EncounteredPokemon(int currentIndex)
+    {
+        var random = Utility.RandomRange(1,101);
+        var chance = currentArea.availableEncounters[currentIndex].encounterChance;
+
+        if ( currentIndex == currentArea.availableEncounters.Length - 1 /*pick last option if none in range*/ 
+             || random < chance )//pick option within chance range
+        {
+            CreateWildPokemon(currentArea.availableEncounters[currentIndex]);
+            return true;
+        }
+        return false;
+    }
+
+    void CreateWildPokemon(EncounterPokemonData pokemonData)
+    {
+        wildPokemon = Obj_Instance.CreatePokemon(pokemonData.pokemon);
         PokemonOperations.SetPokemonTraits(wildPokemon);
-        var randomLevel = Utility.RandomRange(currentArea.minimumLevelOfPokemon, currentArea.maximumLevelOfPokemon+1);
-        var expForRequiredLevel = PokemonOperations.CalculateExpForNextLevel(randomLevel - 1, wildPokemon.expGroup)+1;
+        if (pokemonData.evolutionFormNumber > 0)
+        {
+            if (pokemonData.evolutionFormNumber > wildPokemon.evolutions.Count)
+                Debug.LogError("Evolution number in encounter data is out of range of available evolutions");
+            else
+                wildPokemon.Evolve(wildPokemon.evolutions[pokemonData.evolutionFormNumber - 1]);
+        }
+        var randomLevel = Utility.RandomRange(currentArea.minimumLevelOfPokemon, currentArea.maximumLevelOfPokemon);
+        var expForRequiredLevel = PokemonOperations.CalculateExpForNextLevel(randomLevel, wildPokemon.expGroup)+1;
         wildPokemon.ReceiveExperience(expForRequiredLevel); 
         wildPokemon.hp=wildPokemon.maxHp;
        Battle_handler.Instance.StartWildBattle(wildPokemon);

@@ -24,9 +24,9 @@ public class Encounter_trigger : MonoBehaviour
         else
         {
             if (Player_movement.Instance.runningInput)
-                handler.encounterChance = 5;
+                handler.overworldEncounterChance = 5;
             var randomNumber = Random.Range(1, 11);
-            if (randomNumber < handler.encounterChance & !handler.encounterTriggered)
+            if (randomNumber < handler.overworldEncounterChance & !handler.encounterTriggered)
                 handler.TriggerEncounter(area);
             _triggeredEncounter = true;
         }
