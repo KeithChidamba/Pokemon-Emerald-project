@@ -225,7 +225,7 @@ public class AbilityHandler : MonoBehaviour
         if (attacker == _participant) return;
         if (!attacker.canBeDamaged)
             return;
-        if(moveUsed.isContact)return; 
+        if(!moveUsed.isContact)return; 
         //simulate a pokemon's attack
         Move_handler.Instance.OnStatusEffectHit+=NotifyStaticHit; 
         var placeholderMove = ScriptableObject.CreateInstance<Move>();

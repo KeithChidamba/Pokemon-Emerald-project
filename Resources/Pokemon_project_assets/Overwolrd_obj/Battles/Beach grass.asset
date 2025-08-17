@@ -15,9 +15,9 @@ MonoBehaviour:
   biomeName: Beach
   location: Overworld
   availableEncounters:
-  - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+  - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
     encounterChance: 100
-    evolutionFormNumber: 1
-  minimumLevelOfPokemon: 3
-  maximumLevelOfPokemon: 5
+    evolutionFormNumber: 2
+  minimumLevelOfPokemon: 23
+  maximumLevelOfPokemon: 25
   pokemonIndexForRodType: 

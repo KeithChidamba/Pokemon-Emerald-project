@@ -1,0 +1,211 @@
+{
+    "basePokemonName": "Wurmple",
+    "pokemonName": "Dustox",
+    "pokemonID": 210174625927972866,
+    "personalityValue": 1866254338,
+    "gender": 1,
+    "ratioFemale": 50.0,
+    "nature": {
+        "instanceID": 26212
+    },
+    "hasGender": true,
+    "hp": 81.0,
+    "maxHp": 81.0,
+    "baseHp": 60.0,
+    "baseAttack": 50.0,
+    "baseDefense": 70.0,
+    "baseSpecialAttack": 50.0,
+    "baseSpecialDefense": 90.0,
+    "baseSpeed": 65.0,
+    "attack": 39.0,
+    "defense": 47.0,
+    "specialAttack": 34.0,
+    "specialDefense": 68.0,
+    "speed": 49.0,
+    "hpIv": 19.0,
+    "attackIv": 15.0,
+    "defenseIv": 1.0,
+    "specialAttackIv": 11.0,
+    "specialDefenseIv": 30.0,
+    "speedIv": 3.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        {
+            "stat": 4,
+            "eVAmount": 3
+        }
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 45.0,
+    "currentLevel": 30,
+    "currentExpAmount": 20794,
+    "nextLevelExpAmount": 21600.0,
+    "expGroup": 1,
+    "expYield": 160,
+    "friendshipLevel": 187,
+    "hasTrainer": true,
+    "canBeFlinched": true,
+    "types": [
+        {
+            "instanceID": 26534
+        },
+        {
+            "instanceID": 26466
+        }
+    ],
+    "statusEffect": 0,
+    "buffAndDebuffs": [],
+    "evolutionLineLevels": [
+        5,
+        13
+    ],
+    "friendshipEvolutionRequirement": {
+        "friendshipRequirement": 0,
+        "evolutionIndex": 0
+    },
+    "requiresEvolutionStone": false,
+    "evolutionStone": 0,
+    "abilities": [
+        6
+    ],
+    "splitEvolution": true,
+    "requiresFriendshipEvolution": false,
+    "learnSet": [
+        {
+            "learnSetMove": 74,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 74,
+            "requiredLevel": 10
+        },
+        {
+            "learnSetMove": 19,
+            "requiredLevel": 13
+        },
+        {
+            "learnSetMove": 59,
+            "requiredLevel": 17
+        },
+        {
+            "learnSetMove": 56,
+            "requiredLevel": 20
+        },
+        {
+            "learnSetMove": 76,
+            "requiredLevel": 24
+        },
+        {
+            "learnSetMove": 69,
+            "requiredLevel": 27
+        },
+        {
+            "learnSetMove": 75,
+            "requiredLevel": 31
+        },
+        {
+            "learnSetMove": 2,
+            "requiredLevel": 34
+        },
+        {
+            "learnSetMove": 72,
+            "requiredLevel": 38
+        }
+    ],
+    "learnableTms": [
+        12,
+        9,
+        11
+    ],
+    "learnableHms": [
+        1
+    ],
+    "moveSet": [
+        {
+            "instanceID": -4894
+        },
+        {
+            "instanceID": -4896
+        },
+        {
+            "instanceID": -5038
+        },
+        {
+            "instanceID": -4900
+        }
+    ],
+    "ability": {
+        "instanceID": 25534
+    },
+    "evolutions": [
+        {
+            "instanceID": 26004
+        },
+        {
+            "instanceID": 26134
+        },
+        {
+            "instanceID": 25912
+        },
+        {
+            "instanceID": 26138
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 32796
+    },
+    "backPicture": {
+        "instanceID": 32916
+    },
+    "pokeballName": "Great Ball",
+    "healthPhase": 1,
+    "abilityName": "Swarm",
+    "natureName": "Jolly",
+    "evolutionNames": [
+        "Silcoon",
+        "Beautifly",
+        "Cascoon",
+        "Dustox"
+    ],
+    "typeNames": [
+        "bug",
+        "poison"
+    ],
+    "moveData": [
+        {
+            "moveName": "psybeam",
+            "powerPoints": 20,
+            "maxPowerPoints": 20,
+            "moveType": "psychic"
+        },
+        {
+            "moveName": "moonlight",
+            "powerPoints": 5,
+            "maxPowerPoints": 5,
+            "moveType": "psychic"
+        },
+        {
+            "moveName": "whirlwind",
+            "powerPoints": 30,
+            "maxPowerPoints": 30,
+            "moveType": "normal"
+        },
+        {
+            "moveName": "protect",
+            "powerPoints": 10,
+            "maxPowerPoints": 10,
+            "moveType": "normal"
+        }
+    ]
+}

@@ -116,14 +116,14 @@ public class Turn_Based_Combat : MonoBehaviour
 
             var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
             var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
-            if (ParticipantCoolingDown(attacker))
-            {
-                if (attacker.currentCoolDown.DisplayMessage)
-                {
-                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+attacker.currentCoolDown.Message);
-                }
-                continue;
-            }
+            // if (ParticipantCoolingDown(attacker))
+            // {
+            //     if (attacker.currentCoolDown.DisplayMessage)
+            //     {
+            //         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+attacker.currentCoolDown.Message);
+            //     }
+            //     continue;
+            // }
             if (!IsValidParticipantState(attacker))
                 continue;
             
@@ -170,7 +170,8 @@ public class Turn_Based_Combat : MonoBehaviour
         foreach (var swap in switchOutQueue)
         {
             //check if move used was pursuit
-            var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => turn.move.moveName.ToLower() == "pursuit");
+            var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
+                turn.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.Pursuit));
             if (pursuitUsersTurn!=null)
             {//hit enemy with pursuit double damage effect
                 var attacker=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.attackerIndex];
@@ -189,6 +190,8 @@ public class Turn_Based_Combat : MonoBehaviour
             else
             {
                 //write enemy ai logic first so it can choose to switch-in
+                swap.Participant.pokemon = swap.Participant.pokemonTrainerAI.trainerParty[swap.MemberToSwapWith];
+                Battle_handler.Instance.SetParticipant(swap.Participant);
             }
             switchOutQueue.Remove(swap);
         }

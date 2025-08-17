@@ -295,7 +295,8 @@ public class Pokemon : ScriptableObject
         requiresFriendshipEvolution = evo.requiresFriendshipEvolution;
         requiresEvolutionStone = evo.requiresEvolutionStone;
         friendshipEvolutionRequirement = evo.friendshipEvolutionRequirement;
-       // Pokemon_party.Instance.RefreshMemberCards();
+        if (Pokemon_party.Instance.party.Contains(this))
+            Pokemon_party.Instance.RefreshMemberCards();
     }
 
     void IncreaseStats()

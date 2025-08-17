@@ -174,7 +174,7 @@ public class Battle_Participant : MonoBehaviour
             if ( (Battle_handler.Instance.isDoubleBattle && alivePokemon.Count > 1) || 
             (!Battle_handler.Instance.isDoubleBattle && alivePokemon.Count > 0) )
             {
-                Pokemon_party.Instance.selectedMemberIndex = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
+                Pokemon_party.Instance.selectedMemberNumber = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
                 Pokemon_party.Instance.swapOutNext = true;
                 Game_ui_manager.Instance.ViewPokemonParty();
                 Dialogue_handler.Instance.DisplayDetails("Select a Pokemon to switch in");

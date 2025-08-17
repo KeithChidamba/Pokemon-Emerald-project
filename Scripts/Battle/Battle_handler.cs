@@ -311,7 +311,7 @@ public class Battle_handler : MonoBehaviour
             if (!initialCall)
             { 
                 var alivePokemon= Pokemon_party.Instance.GetLivingPokemon();
-                participant.pokemon = alivePokemon[Pokemon_party.Instance.selectedMemberIndex - 1];
+                participant.pokemon = alivePokemon[Pokemon_party.Instance.selectedMemberNumber - 1];
                 foreach (var enemyParticipant  in participant.currentEnemies)
                     enemyParticipant.AddToExpList(participant.pokemon);
             }

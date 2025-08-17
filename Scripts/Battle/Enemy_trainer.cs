@@ -40,11 +40,15 @@ public class Enemy_trainer : MonoBehaviour
         if (!inBattle) return;
         usedMove = false;
     }
-
+    public List<Pokemon> GetLivingPokemon()
+    {
+        List<Pokemon> alivePokemon = new(trainerParty);
+        alivePokemon.RemoveAll(p => p.hp <= 0);
+        return alivePokemon;
+    }
     public void CheckIfLoss()
     {
-        var numAlive = trainerParty.ToList();
-        numAlive.RemoveAll(p => p.hp <= 0);
+        var numAlive = GetLivingPokemon();
         if (numAlive.Count == 0)
         {
             Battle_handler.Instance.lastOpponent = participant.pokemon;

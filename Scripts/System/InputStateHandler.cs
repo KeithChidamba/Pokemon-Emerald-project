@@ -319,13 +319,13 @@ public class InputStateHandler : MonoBehaviour
         {
             new(Pokemon_party.Instance.partyOptions[0]
                 , ()=>Game_ui_manager.Instance.ViewPartyPokemonDetails(
-                    Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberIndex - 1]), true),
+                    Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber - 1]), true),
             new(Pokemon_party.Instance.partyOptions[1]
-                , () => Pokemon_party.Instance.SelectMemberToBeSwapped(Pokemon_party.Instance.selectedMemberIndex)
+                , () => Pokemon_party.Instance.SelectMemberToBeSwapped(Pokemon_party.Instance.selectedMemberNumber)
                 , true),
             new(Pokemon_party.Instance.partyOptions[2]
-                , () => Bag.Instance.TakeItem(Pokemon_party.Instance.selectedMemberIndex)
-                ,Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberIndex - 1].hasItem)
+                , () => Bag.Instance.TakeItem(Pokemon_party.Instance.selectedMemberNumber)
+                ,Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber - 1].hasItem)
         };
         partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
         ChangeInputState(new InputState(StateName.PokemonPartyOptions,

@@ -10,7 +10,7 @@ public class Pokemon_party : MonoBehaviour
 {
     public Pokemon[] party;
     public int numMembers;
-    public int selectedMemberIndex;
+    public int selectedMemberNumber;
     public int memberToMove;
     private bool _swappingIn;
     public bool swapOutNext;
@@ -132,7 +132,7 @@ public class Pokemon_party : MonoBehaviour
                 ClearSelectionUI();
             else
             {
-                selectedMemberIndex = memberPosition;
+                selectedMemberNumber = memberPosition;
                 if (moving)
                     MoveMember(memberToMove);
                 else
@@ -187,7 +187,7 @@ public class Pokemon_party : MonoBehaviour
             Invoke(nameof(ResetSwitchInState),1f);
         }
         else
-            if(party[selectedMemberIndex-1] != party[partyPosition])
+            if(party[selectedMemberNumber-1] != party[partyPosition])
                 SwapMembers(partyPosition);
     }
 
@@ -211,17 +211,17 @@ public class Pokemon_party : MonoBehaviour
     }
     private void SwapMembers(int partyIndex)
     {
-        var swapStore = party[selectedMemberIndex-1];
+        var swapStore = party[selectedMemberNumber-1];
         var message = $"You swapped {party[partyIndex].pokemonName} with {swapStore.pokemonName}";
-        party[selectedMemberIndex-1] = party[partyIndex];
+        party[selectedMemberNumber-1] = party[partyIndex];
         party[partyIndex] = swapStore;
         moving = false;
         if (Options_manager.Instance.playerInBattle)
-            Battle_handler.Instance.SetParticipant(Battle_handler.Instance.battleParticipants[selectedMemberIndex-1]);
+            Battle_handler.Instance.SetParticipant(Battle_handler.Instance.battleParticipants[selectedMemberNumber-1]);
         else
             Dialogue_handler.Instance.DisplayDetails(message,1f);
         memberToMove = 0;
-        selectedMemberIndex = 0;
+        selectedMemberNumber = 0;
         EndSwap();
     }
     public void AddMember(Pokemon pokemon, string pokeballType, bool isGiftPokemon)

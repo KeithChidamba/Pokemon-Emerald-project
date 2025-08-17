@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
-  m_Name: Great Ball
+  m_Name: TM13
   m_EditorClassIdentifier: 
   itemID: 
-  itemName: Great Ball
-  itemType: 10
-  itemEffect: 1,5
-  itemDescription: 50% higher chance to catch compared to pokeball
-  price: 30
-  quantity: 1
-  itemImage: {fileID: 21300000, guid: 08dc3317621433d4da311c90ec140508, type: 3}
-  forPartyUse: 0
-  canBeUsedInOverworld: 0
-  canBeUsedInBattle: 1
+  itemName: Ice Beam
+  itemType: 16
+  itemEffect: 
+  itemDescription: A powerful ice attack that may freeze the foe
+  price: 0
+  quantity: 0
+  itemImage: {fileID: 21300000, guid: 37461fe6fc00d6a38be37a806b4d65bd, type: 2}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
   isMultiModular: 0
-  hasModules: 0
-  additionalItemInfo: {fileID: 0}
+  hasModules: 1
+  additionalItemInfo: {fileID: 11400000, guid: 6c9f29538aab0401994aea6b7931743c, type: 2}
   additionalInfoModules:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 6c9f29538aab0401994aea6b7931743c, type: 2}
   infoModuleAssetNames: []
   imageDirectory: 

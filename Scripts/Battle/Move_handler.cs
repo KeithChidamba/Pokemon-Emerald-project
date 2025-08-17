@@ -1073,7 +1073,39 @@ public class Move_handler:MonoBehaviour
 
     void whirlwind()
     {
-        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        if (victim.isPlayer)
+        {
+            var living = Pokemon_party.Instance.GetLivingPokemon();
+            if (living.Count < 2)
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
+                _moveDelay = false;
+                return;
+            }
+
+            var randomIndexOfLiving = Utility.RandomRange(0, living.Count,_currentTurn.victimIndex);
+            var pokemonAtIndex = Array.IndexOf(Pokemon_party.Instance.party,living[randomIndexOfLiving]);
+            var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,victim);
+            victim.ResetParticipantState();
+            Pokemon_party.Instance.SwitchInMemberSwap(switchData);
+        }
+        else
+        {
+            var enemyTrainer = victim.pokemonTrainerAI;
+            var living = enemyTrainer.GetLivingPokemon();
+            if (living.Count < 2)
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
+                _moveDelay = false;
+                return;
+            }
+             
+            var randomIndexOfLiving = Utility.RandomRange(0, living.Count,_currentTurn.victimIndex-2);
+            var pokemonAtIndex = enemyTrainer.trainerParty.IndexOf(living[randomIndexOfLiving]);
+
+            victim.pokemon = enemyTrainer.trainerParty[pokemonAtIndex];
+            Battle_handler.Instance.SetParticipant(victim);
+        }
         _moveDelay = false;
     }
     void rest()
