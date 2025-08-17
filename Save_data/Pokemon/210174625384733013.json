@@ -54,7 +54,7 @@
     "canBeFlinched": true,
     "types": [
         {
-            "instanceID": 26036
+            "instanceID": 26040
         }
     ],
     "statusEffect": 0,
@@ -136,10 +136,10 @@
     ],
     "moveSet": [
         {
-            "instanceID": -3762
+            "instanceID": -3698
         },
         {
-            "instanceID": -3764
+            "instanceID": -3700
         }
     ],
     "ability": {
@@ -147,7 +147,7 @@
     },
     "evolutions": [
         {
-            "instanceID": 25574
+            "instanceID": 25576
         },
         {
             "instanceID": 25494
@@ -158,10 +158,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32260
+        "instanceID": 32266
     },
     "backPicture": {
-        "instanceID": 32262
+        "instanceID": 32268
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,

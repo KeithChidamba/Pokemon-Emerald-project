@@ -19,7 +19,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
     private Battle_event[] _dialougeOrder={null,null,null,null,null,null};
     private List<OnFieldDamageModifier> _onFieldDamageModifiers = new();
-    private bool repeatingMoveCycle;
+    private bool _repeatingMoveCycle = false;
     private bool _moveDelay = false;
     private bool _cancelMove = false;
     public bool processingOrder = false;
@@ -253,10 +253,10 @@ public class Move_handler:MonoBehaviour
         currentVictim.pokemon.hp = healthAfterDecrease;
         yield return new WaitUntil(() =>  currentVictim.pokemon.hp <= 0 ||
                                           currentVictim.pokemon.hp<=healthAfterDecrease);
-        var typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, _currentTurn.move.type);
-
+        
         if (!_currentTurn.move.isConsecutive && displayEffectiveness)
         {
+            var typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, _currentTurn.move.type);
             DisplayEffectiveness(typeEffectiveness,currentVictim);
         }
         currentVictim.pokemon.TakeDamage(0);
@@ -272,9 +272,9 @@ public class Move_handler:MonoBehaviour
     private void ResetMoveUsage()
     {
         OnMoveComplete?.Invoke();
-        if (repeatingMoveCycle)
+        if (_repeatingMoveCycle)
         {
-            repeatingMoveCycle = false;
+            _repeatingMoveCycle = false;
             return;
         }
         doingMove = false;
@@ -599,7 +599,7 @@ public class Move_handler:MonoBehaviour
         healAmount /= fractionOfDamage;
         StartCoroutine(DamageDisplay(victim,isSpecificDamage:true,predefinedDamage:damage));
         attacker.pokemon.hp = healAmount + attacker.pokemon.hp < attacker.pokemon.maxHp? 
-            math.trunc(healAmount) : attacker.pokemon.maxHp;
+            math.trunc(healAmount + attacker.pokemon.hp) : attacker.pokemon.maxHp;
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
         _moveDelay = false;
     }
@@ -868,7 +868,7 @@ public class Move_handler:MonoBehaviour
         _moveDelay = false;
     }
 
-    private void IndentifyTarget()
+    private void IdentifyTarget()
     {
         if (victim.ImmunityNegations.Any(n=> 
                 n.moveName==TypeImmunityNegation.ImmunityNegationMove.Foresight))
@@ -896,11 +896,11 @@ public class Move_handler:MonoBehaviour
     }
     void foresight()
     {
-        IndentifyTarget();
+        IdentifyTarget();
     }
     void odorsleuth()
     {
-        IndentifyTarget();
+        IdentifyTarget();
     }
     void endeavor()
     {
@@ -1023,7 +1023,7 @@ public class Move_handler:MonoBehaviour
     {
         if (victim.PreviousMove!=null)
         {
-            repeatingMoveCycle = true;
+            _repeatingMoveCycle = true;
             _currentTurn.move = victim.PreviousMove.move;
             _moveDelay = false;
             OnMoveComplete += ()=> ExecuteMove(_currentTurn);
@@ -1073,6 +1073,14 @@ public class Move_handler:MonoBehaviour
 
     void whirlwind()
     {
+        if (!Battle_handler.Instance.isTrainerBattle)
+        {
+            _moveDelay = false;
+            Wild_pkm.Instance.inBattle = false;
+            Battle_handler.Instance.EndBattle(false,true);
+            doingMove = false;
+            return;
+        }
         if (victim.isPlayer)
         {
             var living = Pokemon_party.Instance.GetLivingPokemon();
@@ -1102,9 +1110,8 @@ public class Move_handler:MonoBehaviour
              
             var randomIndexOfLiving = Utility.RandomRange(0, living.Count,_currentTurn.victimIndex-2);
             var pokemonAtIndex = enemyTrainer.trainerParty.IndexOf(living[randomIndexOfLiving]);
-
-            victim.pokemon = enemyTrainer.trainerParty[pokemonAtIndex];
-            Battle_handler.Instance.SetParticipant(victim);
+            
+            Battle_handler.Instance.SetParticipant(victim,newPokemon:enemyTrainer.trainerParty[pokemonAtIndex]);
         }
         _moveDelay = false;
     }

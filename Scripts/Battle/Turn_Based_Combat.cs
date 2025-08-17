@@ -167,7 +167,7 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private IEnumerator HandleSwaps()
     {
-        foreach (var swap in switchOutQueue)
+        foreach (var swap in new List<SwitchOutData>(switchOutQueue))
         {
             //check if move used was pursuit
             var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
@@ -184,14 +184,13 @@ public class Turn_Based_Combat : MonoBehaviour
             {
                 swap.Participant.ResetParticipantState();
                 Pokemon_party.Instance.SwitchInMemberSwap(swap);
-                NextTurn();
                 InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
             }
             else
             {
                 //write enemy ai logic first so it can choose to switch-in
-                swap.Participant.pokemon = swap.Participant.pokemonTrainerAI.trainerParty[swap.MemberToSwapWith];
-                Battle_handler.Instance.SetParticipant(swap.Participant);
+                Battle_handler.Instance.SetParticipant(swap.Participant
+                    ,newPokemon:swap.Participant.pokemonTrainerAI.trainerParty[swap.MemberToSwapWith]);
             }
             switchOutQueue.Remove(swap);
         }

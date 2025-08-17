@@ -86,6 +86,7 @@ public class Pokemon_party : MonoBehaviour
             Turn_Based_Combat.Instance.AddToSwitchQueue(switchData);
             
             _swappingIn = false;
+            Turn_Based_Combat.Instance.NextTurn();
         }
         else
         {
@@ -200,7 +201,7 @@ public class Pokemon_party : MonoBehaviour
     {
         (party[data.PartyPosition], party[data.MemberToSwapWith]) = 
         (party[data.MemberToSwapWith], party[data.PartyPosition]);
-        Battle_handler.Instance.SetParticipant(data.Participant);
+        Battle_handler.Instance.SetParticipant(data.Participant,newPokemon:party[data.PartyPosition]);
         EndSwap();
     }
     void EndSwap()
@@ -217,7 +218,11 @@ public class Pokemon_party : MonoBehaviour
         party[partyIndex] = swapStore;
         moving = false;
         if (Options_manager.Instance.playerInBattle)
-            Battle_handler.Instance.SetParticipant(Battle_handler.Instance.battleParticipants[selectedMemberNumber-1]);
+        {
+            var participant = Battle_handler.Instance.battleParticipants[selectedMemberNumber - 1];
+            var alivePokemon= GetLivingPokemon();
+            Battle_handler.Instance.SetParticipant(participant,newPokemon:alivePokemon[selectedMemberNumber - 1]);
+        }
         else
             Dialogue_handler.Instance.DisplayDetails(message,1f);
         memberToMove = 0;

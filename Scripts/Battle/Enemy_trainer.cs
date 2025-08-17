@@ -79,15 +79,14 @@ public class Enemy_trainer : MonoBehaviour
                 else
                 {
                     var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count - 1);
-                    participant.pokemon = notParticipatingList[randomLeftOver];
-                    Battle_handler.Instance.SetParticipant(participant);
+                    Battle_handler.Instance.SetParticipant(participant,newPokemon:notParticipatingList[randomLeftOver]);
                 }
             }
             else
             {
                 var randomMember = Utility.RandomRange(0, numAlive.Count - 1);
-                participant.pokemon = numAlive[randomMember];
-                Battle_handler.Instance.SetParticipant(participant);
+                Battle_handler.Instance.SetParticipant(participant,newPokemon:numAlive[randomMember]);
+
             }
         }
         Turn_Based_Combat.Instance.faintEventDelay = false;

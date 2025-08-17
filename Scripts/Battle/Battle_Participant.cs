@@ -30,7 +30,7 @@ public class Battle_Participant : MonoBehaviour
     public bool canBeDamaged = true;
     public bool canEscape = true;
     
-    public List<StatChangeData> StatChangeEffects = new();//list of class
+    public List<StatChangeData> StatChangeEffects = new();
     public Slider playerHpSlider;
     [FormerlySerializedAs("hpSliderColor")] public RawImage hpSliderImage;
     public Slider playerExpSlider;
@@ -40,7 +40,7 @@ public class Battle_Participant : MonoBehaviour
     public PreviousMove PreviousMove;
     public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
-    public List<TypeImmunityNegation> ImmunityNegations;
+    public List<TypeImmunityNegation> ImmunityNegations = new();
     public List<Pokemon> expReceivers;
     public Action OnPokemonFainted;
     public List<Barrier> Barrieirs = new();
@@ -289,7 +289,7 @@ public class Battle_Participant : MonoBehaviour
         {
             statusImage.gameObject.SetActive(true);
             statusImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) 
+                Save_manager.GetDirectory(Save_manager.AssetDirectory.Status) 
              + pokemon.statusEffect.ToString().ToLower());
         }
     }

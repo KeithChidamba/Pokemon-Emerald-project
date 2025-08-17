@@ -28,7 +28,8 @@ public class Battle_handler : MonoBehaviour
     public bool battleWon = false;
     public GameObject overWorld;
     public List<GameObject> backgrounds;
-    public bool runningAway; 
+    public bool runningAway;
+    private bool battleTerminated;
     private int _currentMoveIndex = 0;
     public int currentEnemyIndex = 0;
 
@@ -302,7 +303,7 @@ public class Battle_handler : MonoBehaviour
         SetupBattle();
     }
 
-    public void SetParticipant(Battle_Participant participant, bool initialCall = false)
+    public void SetParticipant(Battle_Participant participant, bool initialCall = false, Pokemon newPokemon = null)
     {
         OnSwitchOut?.Invoke(participant);
         participant.isEnemy = Array.IndexOf(battleParticipants, participant) > 1 ;
@@ -310,14 +311,14 @@ public class Battle_handler : MonoBehaviour
         { //for switch-ins
             if (!initialCall)
             { 
-                var alivePokemon= Pokemon_party.Instance.GetLivingPokemon();
-                participant.pokemon = alivePokemon[Pokemon_party.Instance.selectedMemberNumber - 1];
+                participant.pokemon = newPokemon ??  participant.pokemon;
                 foreach (var enemyParticipant  in participant.currentEnemies)
                     enemyParticipant.AddToExpList(participant.pokemon);
             }
         } 
         else
         {//add player participants to get exp from switched in enemy
+            participant.pokemon = newPokemon ??  participant.pokemon;
             foreach (var playerParticipant  in participant.currentEnemies)
                 participant.AddToExpList(playerParticipant.pokemon);
             
@@ -426,7 +427,13 @@ public class Battle_handler : MonoBehaviour
         var playerWhiteOut = false;
         yield return new WaitUntil(() => levelUpQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        if (runningAway)
+        if (battleTerminated)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo("the battle ended");
+            yield return new WaitForSeconds(1f);
+            battleTerminated = false;
+        }
+        else if (runningAway)
         {
             runningAway = false;
             Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " ran away");
@@ -504,11 +511,12 @@ public class Battle_handler : MonoBehaviour
         if(battleOver & levelUpQueue.Count==0)
             EndBattle(battleWon);
     }
-    public void EndBattle(bool hasWon)
+    public void EndBattle(bool hasWon,bool battleCancelled=false)
     {
         if (battleOver) return;
         battleWon = hasWon;
         battleOver = true;
+        battleTerminated = battleCancelled;
         StartCoroutine(DelayBattleEnd());
     }
     void ResetUiAfterBattle(bool playerWhiteOut)
