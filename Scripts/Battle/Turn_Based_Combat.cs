@@ -178,7 +178,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 var victim=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.victimIndex];
                 Move_handler.Instance.Pursuit(attacker,victim,pursuitUsersTurn.move);
                 yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
-                yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthDecrease);
+                yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthChange);
             }
             if (swap.IsPlayer)
             {

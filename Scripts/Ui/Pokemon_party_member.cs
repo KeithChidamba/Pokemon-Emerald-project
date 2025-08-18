@@ -19,11 +19,12 @@ public class Pokemon_party_member : MonoBehaviour
     [FormerlySerializedAs("HeldItem_img")] public GameObject heldItemImage;
     public bool isEmpty = false;
 
-    public void Levelup()//debugging purposes
+    public void Levelup()//testing purposes
     {
         if(pokemon==null)return;
-        var exp = PokemonOperations.CalculateExpForNextLevel(pokemon.currentLevel, pokemon.expGroup)+1;
-        pokemon.ReceiveExperience(exp);
+        var exp = 
+           PokemonOperations.CalculateExpForNextLevel(pokemon.currentLevel, pokemon.expGroup)-pokemon.currentLevel;
+        pokemon.ReceiveExperience(exp+1);
         pokemon.hp=pokemon.maxHp;
     }
     public void ActivateUI()

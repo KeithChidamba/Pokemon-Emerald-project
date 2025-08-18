@@ -160,7 +160,7 @@ public static class NameDB
         // 🐞 Bug-type
         { LearnSetMove.FuryCutter, "Fury Cutter" },
         { LearnSetMove.LeechLife, "Leech Life" },
-        { LearnSetMove.SilverWind, "Silver Wind" },
+        { LearnSetMove.SilverWind, "Silverwind" },
         { LearnSetMove.StringShot, "String Shot" },
         { LearnSetMove.PinMissile, "Pin Missile" },
         // 🐉 Dragon-type

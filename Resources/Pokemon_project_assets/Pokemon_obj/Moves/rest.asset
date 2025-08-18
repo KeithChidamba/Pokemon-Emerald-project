@@ -30,9 +30,9 @@ MonoBehaviour:
   isSelfTargeted: 1
   isSureHit: 1
   priority: 0
-  powerpoints: 30
-  basePowerpoints: 30
-  maxPowerpoints: 30
+  powerpoints: 10
+  basePowerpoints: 10
+  maxPowerpoints: 10
   statusEffect: 0
   buffOrDebuffData: []
   statusChance: 0

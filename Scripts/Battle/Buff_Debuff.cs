@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 [System.Serializable]
 public class Buff_Debuff
 {
+    
     [SerializeField]public bool isAtLimit;
     [SerializeField]public string statName;
     public PokemonOperations.Stat stat;

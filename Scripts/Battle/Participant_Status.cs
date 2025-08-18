@@ -25,6 +25,7 @@ public class Participant_Status : MonoBehaviour
     }
     public void GetStatusEffect(int numTurns)
     {
+        //clear prev state
         _participant.RefreshStatusEffectImage();
         if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
         if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Freeze)
@@ -62,11 +63,16 @@ public class Participant_Status : MonoBehaviour
     {
         switch (_participant.pokemon.statusEffect)
         {
+            //add proper stat drop
             case PokemonOperations.StatusEffect.Burn:
-                _participant.pokemon.attack *= 0.5f;
+                var atkDrop = new BuffDebuffData(_participant, PokemonOperations.Stat.Attack, true, -2);
+                BattleOperations.CanDisplayDialougue = false; 
+                Move_handler.Instance.SelectRelevantBuffOrDebuff(atkDrop);
                 break;
             case PokemonOperations.StatusEffect.Paralysis:
-                _participant.pokemon.speed *= 0.25f;
+                var speedDrop = new BuffDebuffData(_participant, PokemonOperations.Stat.Speed, true, -6);
+                BattleOperations.CanDisplayDialougue = false; 
+                Move_handler.Instance.SelectRelevantBuffOrDebuff(speedDrop);
                 break;
         }
     }

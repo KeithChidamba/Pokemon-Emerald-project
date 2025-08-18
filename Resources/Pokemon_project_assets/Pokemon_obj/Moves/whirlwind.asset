@@ -28,11 +28,11 @@ MonoBehaviour:
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  isSureHit: 0
-  priority: 0
-  powerpoints: 30
-  basePowerpoints: 30
-  maxPowerpoints: 30
+  isSureHit: 1
+  priority: -6
+  powerpoints: 20
+  basePowerpoints: 20
+  maxPowerpoints: 20
   statusEffect: 0
   buffOrDebuffData: []
   statusChance: 0

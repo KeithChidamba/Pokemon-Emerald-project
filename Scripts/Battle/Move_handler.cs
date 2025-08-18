@@ -23,7 +23,7 @@ public class Move_handler:MonoBehaviour
     private bool _moveDelay = false;
     private bool _cancelMove = false;
     public bool processingOrder = false;
-    public bool displayingHealthDecrease;
+    public bool displayingHealthChange;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageCalc;
     public event Action<float> OnDamageDeal;
     public event Action<Battle_Participant,Move> OnMoveHit;
@@ -88,7 +88,7 @@ public class Move_handler:MonoBehaviour
                     if (!battleEvent.Condition) continue;
                     processingOrder = true;
                     battleEvent.Execute();
-                    yield return new WaitUntil(() => !displayingHealthDecrease);
+                    yield return new WaitUntil(() => !displayingHealthChange);
                     yield return new WaitUntil(() => !processingOrder);
                     yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
                     yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
@@ -229,30 +229,31 @@ public class Move_handler:MonoBehaviour
         }
         return atk / def;
     }
+
     private IEnumerator DamageDisplay(Battle_Participant currentVictim, bool displayEffectiveness = true,
-        bool isSpecificDamage = false,float predefinedDamage = 0)
+        bool isSpecificDamage = false, float predefinedDamage = 0, bool isDamaging = true)
     {
-        displayingHealthDecrease = true;
-        var damage = isSpecificDamage? predefinedDamage : CalculateMoveDamage(_currentTurn.move, currentVictim);
-        
-        var healthAfterDecrease = Mathf.Clamp(currentVictim.pokemon.hp - damage,0
-            ,currentVictim.pokemon.hp);
+        displayingHealthChange = true; 
+        var healthChange = isSpecificDamage? predefinedDamage : CalculateMoveDamage(_currentTurn.move, currentVictim);
+        healthChange = isDamaging ? -healthChange : healthChange; 
+        var healthAfterChange = Mathf.Clamp(currentVictim.pokemon.hp + healthChange,0
+            ,currentVictim.pokemon.maxHp);
         
         float displayHp = currentVictim.pokemon.hp;
-         
-        while (displayHp > healthAfterDecrease)
+        var conditionForDisplay = isDamaging ? displayHp > healthAfterChange : displayHp < healthAfterChange;
+        while (conditionForDisplay)
         {
-            float newHp = Mathf.MoveTowards(displayHp, healthAfterDecrease,
+            float newHp = Mathf.MoveTowards(displayHp, healthAfterChange,
                 (0.25f/currentVictim.pokemon.healthPhase) * Time.deltaTime);
             displayHp = Mathf.Floor(newHp);
             currentVictim.pokemon.hp = displayHp;
-            
+            conditionForDisplay = isDamaging ? displayHp > healthAfterChange : displayHp < healthAfterChange;
             yield return null;
         }
         
-        currentVictim.pokemon.hp = healthAfterDecrease;
-        yield return new WaitUntil(() =>  currentVictim.pokemon.hp <= 0 ||
-                                          currentVictim.pokemon.hp<=healthAfterDecrease);
+        currentVictim.pokemon.hp = healthAfterChange;
+        // yield return new WaitUntil(() =>  currentVictim.pokemon.hp <= 0 ||
+        //                                   currentVictim.pokemon.hp<=healthAfterChange);
         
         if (!_currentTurn.move.isConsecutive && displayEffectiveness)
         {
@@ -260,7 +261,7 @@ public class Move_handler:MonoBehaviour
             DisplayEffectiveness(typeEffectiveness,currentVictim);
         }
         currentVictim.pokemon.TakeDamage(0);
-        displayingHealthDecrease = false;
+        displayingHealthChange = false;
     }
     private void DealDamage()
     {
@@ -343,10 +344,17 @@ public class Move_handler:MonoBehaviour
             };
         return displayMessage;
     }
-    public void ApplyStatusToVictim(Battle_Participant participant,PokemonOperations.StatusEffect status)
+    public void ApplyStatusToVictim(Battle_Participant participant,PokemonOperations.StatusEffect status, int numTurns=0)
     {
         participant.pokemon.statusEffect = status;
-        var numTurnsOfStatus = (status==PokemonOperations.StatusEffect.Sleep)? Utility.RandomRange(1, 5) : 0;
+        var numTurnsOfStatus = 0;
+        if (numTurns != 0)
+            participant.statusHandler.GetStatusEffect(numTurns);
+        else
+        {
+            if(status==PokemonOperations.StatusEffect.Sleep)
+                numTurnsOfStatus = Utility.RandomRange(1, 5);
+        }
         participant.statusHandler.GetStatusEffect(numTurnsOfStatus);
     }
 
@@ -547,7 +555,7 @@ public class Move_handler:MonoBehaviour
             
             Dialogue_handler.Instance.DisplayBattleInfo("Hit "+(i+1)+"!");//remove later if added animations
             StartCoroutine(DamageDisplay(victim));
-            yield return new WaitUntil(() => !displayingHealthDecrease);
+            yield return new WaitUntil(() => !displayingHealthChange);
             numHits++;
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
@@ -570,7 +578,7 @@ public class Move_handler:MonoBehaviour
         foreach (var enemy in targets)
         {
             StartCoroutine(DamageDisplay(enemy));
-            yield return new WaitUntil(() => !displayingHealthDecrease);
+            yield return new WaitUntil(() => !displayingHealthChange);
             yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay && Battle_handler.Instance.faintQueue.Count == 0);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
@@ -685,7 +693,7 @@ public class Move_handler:MonoBehaviour
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         
         StartCoroutine(DamageDisplay(victim));
-        yield return new WaitUntil(() => !displayingHealthDecrease);
+        yield return new WaitUntil(() => !displayingHealthChange);
         _moveDelay = false;
     }
 
@@ -859,12 +867,12 @@ public class Move_handler:MonoBehaviour
     }
     private IEnumerator RecoilDelay(float recoilDamage)
     {
-        yield return new WaitUntil(() => displayingHealthDecrease);
-        yield return new WaitUntil(() => !displayingHealthDecrease);
+        yield return new WaitUntil(() => displayingHealthChange);
+        yield return new WaitUntil(() => !displayingHealthChange);
         StartCoroutine(DamageDisplay(attacker,isSpecificDamage:true,predefinedDamage:recoilDamage
         ,displayEffectiveness: false));
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +" was hurt by the recoil");
-        yield return new WaitUntil(() => !displayingHealthDecrease);
+        yield return new WaitUntil(() => !displayingHealthChange);
         _moveDelay = false;
     }
 
@@ -930,7 +938,7 @@ public class Move_handler:MonoBehaviour
 
     private IEnumerator ConsecutiveBuffs()
     {
-        yield return new WaitUntil(() => !displayingHealthDecrease);
+        yield return new WaitUntil(() => !displayingHealthChange);
         var allBuffs = new[]
         {
             PokemonOperations.Stat.Attack, PokemonOperations.Stat.Defense,
@@ -1073,6 +1081,12 @@ public class Move_handler:MonoBehaviour
 
     void whirlwind()
     {
+        if (attacker.pokemon.currentLevel<victim.pokemon.currentLevel)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
+            _moveDelay = false;
+            return;
+        }
         if (!Battle_handler.Instance.isTrainerBattle)
         {
             _moveDelay = false;
@@ -1117,7 +1131,10 @@ public class Move_handler:MonoBehaviour
     }
     void rest()
     {
-        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        var healthGain = attacker.pokemon.maxHp - attacker.pokemon.hp;
+        StartCoroutine(DamageDisplay(attacker,predefinedDamage:healthGain,isSpecificDamage:true,isDamaging:false));
+        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" fell asleep!");
+        ApplyStatusToVictim(attacker, PokemonOperations.StatusEffect.Sleep, 2);
         _moveDelay = false;
     }
 }
