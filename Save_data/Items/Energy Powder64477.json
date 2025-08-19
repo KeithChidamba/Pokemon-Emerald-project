@@ -1,32 +1,32 @@
 {
-    "itemID": "Oran berry46961",
-    "itemName": "Oran berry",
-    "itemType": 9,
-    "itemEffect": "5",
-    "itemDescription": "Heals 5hp",
-    "price": 5,
+    "itemID": "Energy Powder64477",
+    "itemName": "Energy Powder",
+    "itemType": 5,
+    "itemEffect": "",
+    "itemDescription": "A bitter herb that restores 50 Hp",
+    "price": 18,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32876
+        "instanceID": 32808
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": true,
     "isHeldItem": false,
-    "canBeHeld": true,
+    "canBeHeld": false,
     "canBeSold": true,
     "isMultiModular": false,
     "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": 25774
+        "instanceID": 26554
     },
     "additionalInfoModules": [
         {
-            "instanceID": 25774
+            "instanceID": 26554
         }
     ],
     "infoModuleAssetNames": [
-        "HP berry"
+        "Energy Powder"
     ],
-    "imageDirectory": "Oran berry"
+    "imageDirectory": "Energy Powder"
 }

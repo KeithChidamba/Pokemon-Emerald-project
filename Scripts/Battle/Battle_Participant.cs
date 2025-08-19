@@ -10,6 +10,7 @@ public class Battle_Participant : MonoBehaviour
 {
     public AbilityHandler abilityHandler;
     public Participant_Status statusHandler;
+    public Held_Items heldItemHandler;
     public Enemy_trainer pokemonTrainerAI;
     public Battle_Data statData;
     public Pokemon pokemon;
@@ -46,6 +47,7 @@ public class Battle_Participant : MonoBehaviour
     public List<Barrier> Barrieirs = new();
     private void Start()
     {
+        heldItemHandler = GetComponent<Held_Items>();
         statusHandler = GetComponent<Participant_Status>();
         abilityHandler = GetComponent<AbilityHandler>();
         statData = GetComponent<Battle_Data>();
@@ -111,21 +113,17 @@ public class Battle_Participant : MonoBehaviour
     }
     private IEnumerator CheckIfFainted()
     {
-        if (!fainted && isActive)
-        {
-            fainted = pokemon.hp <= 0;
-            if (pokemon.hp <= 0)
-            {
-                pokemon.statusEffect = PokemonOperations.StatusEffect.None;
-                Battle_handler.Instance.faintQueue.Add(this);
-                yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);
-                pokemon.DetermineFriendshipLevelChange(
-                    false, PokemonOperations.FriendshipModifier.Fainted);
-                if(!Turn_Based_Combat.Instance.faintEventDelay)
-                    OnPokemonFainted?.Invoke();
-            }
-        }
-        yield return null;
+        if (!isActive) yield break;
+        fainted = pokemon.hp <= 0;
+        if (!fainted) yield break;
+
+        pokemon.statusEffect = PokemonOperations.StatusEffect.None;
+        Battle_handler.Instance.faintQueue.Add(this);
+        yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);
+        pokemon.DetermineFriendshipLevelChange(
+            false, PokemonOperations.FriendshipModifier.Fainted);
+        if(!Turn_Based_Combat.Instance.faintEventDelay)
+            OnPokemonFainted?.Invoke();
     }
     public IEnumerator HandleFaintLogic()
     {

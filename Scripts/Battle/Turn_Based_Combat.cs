@@ -138,7 +138,17 @@ public class Turn_Based_Combat : MonoBehaviour
                 continue;
             }
             OnMoveExecute?.Invoke(attacker);
+            //processing held item effect
+            var heldItemEffects = Battle_handler.Instance.battleParticipants.Count(p =>
+                p.heldItemHandler.processingItemEffect);
+            while (heldItemEffects>0)
+            {
+                heldItemEffects = Battle_handler.Instance.battleParticipants.Count(p =>
+                    p.heldItemHandler.processingItemEffect);
+                yield return null;
+            }
             yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+            
             if (CanAttack(currentTurn,attacker,victim))//test if confusion damage is waited for
             {
                 yield return new WaitUntil(() => !Item_handler.Instance.usingHeldItem);

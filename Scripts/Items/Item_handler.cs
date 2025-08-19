@@ -515,16 +515,8 @@ public class Item_handler : MonoBehaviour
             return;
         }
         OnItemUsageSuccessful?.Invoke(true);
-        if ((_selectedPartyPokemon.hp + healEffect) < _selectedPartyPokemon.maxHp)
-        {
-            _selectedPartyPokemon.hp += healEffect;
-            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points",2f);
-        }
-        else if ((_selectedPartyPokemon.hp + healEffect) >= _selectedPartyPokemon.maxHp)
-        {
-            _selectedPartyPokemon.hp = _selectedPartyPokemon.maxHp;
-            Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" gained full health points",2f);
-        }
+        Move_handler.Instance.HealthGainDisplay(healEffect,affectedPokemon:_selectedPartyPokemon);
+        Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points",2f);
         StartCoroutine(CompleteItemUsage(3f));
     }
     private void CompleteItemUsage()//only call for items used outside of battle

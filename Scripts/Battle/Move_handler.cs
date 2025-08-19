@@ -232,9 +232,10 @@ public class Move_handler:MonoBehaviour
         }
         return atk / def;
     }
-    private void HealthGainDisplay(Battle_Participant healthGainer, float healthGained)
+    public void HealthGainDisplay(float healthGained,Pokemon affectedPokemon = null,Battle_Participant healthGainer = null)
     {
-        DamageDisplayData data = new DamageDisplayData(healthGainer,predefinedHealthChange:healthGained);
+        DamageDisplayData data = new DamageDisplayData
+            (healthGainer,predefinedHealthChange:healthGained,affectedPokemon:affectedPokemon);
         healhGainQueue.Add(data);
         if (!displayingHealthGain) StartCoroutine(ProcessHealthGainDisplay());
     }
@@ -251,18 +252,19 @@ public class Move_handler:MonoBehaviour
         while (healhGainQueue.Count > 0)
         {
             var data = healhGainQueue[0];
-            var healthAfterChange = Mathf.Clamp(data.affectedParticipant.pokemon.hp 
-                  + data.predefinedHealthChange,0,data.affectedParticipant.pokemon.maxHp);
-            float displayHp = data.affectedParticipant.pokemon.hp;
+            var healthAfterChange = Mathf.Clamp(data.affectedPokemon.hp 
+                  + data.predefinedHealthChange,0,data.affectedPokemon.maxHp);
+            float displayHp = data.affectedPokemon.hp;
             while (displayHp < healthAfterChange)
             {
+                data.affectedPokemon.TakeDamage();
                 float newHp = Mathf.MoveTowards(displayHp, healthAfterChange
-                    ,data.affectedParticipant.pokemon.healthPhase  * 10f *Time.deltaTime);
+                    ,data.affectedPokemon.healthPhase  * 10f *Time.deltaTime);
                 displayHp = newHp;
-                data.affectedParticipant.pokemon.hp =  Mathf.Floor(displayHp);
+                data.affectedPokemon.hp =  Mathf.Floor(displayHp);
                 yield return null;
             }
-            data.affectedParticipant.pokemon.hp = Mathf.Floor(healthAfterChange);
+            data.affectedPokemon.hp = Mathf.Floor(healthAfterChange);
             healhGainQueue.RemoveAt(0);
         }
         displayingHealthGain = false;
@@ -276,25 +278,25 @@ public class Move_handler:MonoBehaviour
             var damage = data.isSpecificDamage? data.predefinedHealthChange 
                 : CalculateMoveDamage(_currentTurn.move, data.affectedParticipant);
             var healthAfterChange = Mathf
-                .Clamp(data.affectedParticipant.pokemon.hp - damage,0,data.affectedParticipant.pokemon.maxHp);
-            float displayHp = data.affectedParticipant.pokemon.hp;
+                .Clamp(data.affectedPokemon.hp - damage,0,data.affectedPokemon.maxHp);
+            float displayHp = data.affectedPokemon.hp;
             while (displayHp > healthAfterChange)
             {
                 float newHp = Mathf.MoveTowards(displayHp, healthAfterChange,
-                    (20f/data.affectedParticipant.pokemon.healthPhase) * Time.deltaTime);
+                    (20f/data.affectedPokemon.healthPhase) * Time.deltaTime);
                 displayHp = newHp;
-                data.affectedParticipant.pokemon.hp =  Mathf.Floor(displayHp);
+                data.affectedPokemon.hp =  Mathf.Floor(displayHp);
                 yield return null;
             }
             
-            data.affectedParticipant.pokemon.hp = healthAfterChange;
+            data.affectedPokemon.hp = healthAfterChange;
             if (!_currentTurn.move.isConsecutive && data.displayEffectiveness)
             {
                 var typeEffectiveness = BattleOperations
                     .GetTypeEffectiveness(data.affectedParticipant, _currentTurn.move.type);
                 DisplayEffectiveness(typeEffectiveness,data.affectedParticipant);
             }
-            data.affectedParticipant.pokemon.TakeDamage();
+            data.affectedPokemon.TakeDamage();
             damageDisplayQueue.RemoveAt(0);
         }
         displayingDamage = false;
@@ -651,7 +653,7 @@ public class Move_handler:MonoBehaviour
         healAmount /= fractionOfDamage;
         DisplayDamage(victim,isSpecificDamage:true,predefinedDamage:damage);
         yield return new WaitUntil(() => !displayingDamage);
-        HealthGainDisplay(attacker,healAmount);
+        HealthGainDisplay(healAmount,healthGainer:attacker);
         yield return new WaitUntil(() => !displayingHealthGain);
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
@@ -1184,7 +1186,7 @@ public class Move_handler:MonoBehaviour
         var healthGain = attacker.pokemon.maxHp - attacker.pokemon.hp;
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" fell asleep!");
         yield return new WaitForSeconds(1f);
-        HealthGainDisplay(attacker, healthGain);
+        HealthGainDisplay(healthGain,healthGainer:attacker);
         yield return new WaitUntil(() => !displayingHealthGain);
         attacker.statusHandler.RemoveStatusEffect(true);
         yield return new WaitUntil(()=>attacker.pokemon.statusEffect == PokemonOperations.StatusEffect.None);

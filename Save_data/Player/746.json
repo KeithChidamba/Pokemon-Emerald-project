@@ -2,11 +2,11 @@
     "playerName": "keith",
     "trainerID": 746,
     "secretID": 45237,
-    "playerMoney": 66,
+    "playerMoney": 48,
     "numBadges": 0,
     "playerPosition": {
-        "x": 10.727993965148926,
-        "y": 3.27099871635437,
+        "x": 13.513668060302735,
+        "y": 0.9239585995674133,
         "z": 0.0
     },
     "location": "Overworld",

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -17,8 +18,9 @@ public class Pokemon_party_member : MonoBehaviour
     [FormerlySerializedAs("main_ui")] public GameObject[] mainUI;
     [FormerlySerializedAs("empty_ui")] public GameObject emptySlotUI;
     [FormerlySerializedAs("HeldItem_img")] public GameObject heldItemImage;
+    private Action _healthPhaseUpdateEvent;
     public bool isEmpty = false;
-
+    private bool _isViewingCard;
     public void Levelup()//testing purposes
     {
         if(pokemon==null)return;
@@ -27,8 +29,15 @@ public class Pokemon_party_member : MonoBehaviour
         pokemon.ReceiveExperience(exp+1);
         pokemon.hp=pokemon.maxHp;
     }
+
+    private void Start()
+    {
+        InputStateHandler.Instance.OnStateChanged += CheckIfViewing;
+    }
+
     public void ActivateUI()
     {
+        _isViewingCard = true;
         pokemonFrontImage.sprite = pokemon.frontPicture;
         foreach (var ui in mainUI)
             ui.SetActive(true);
@@ -55,9 +64,25 @@ public class Pokemon_party_member : MonoBehaviour
         statusEffectImage.gameObject.SetActive(false);
         emptySlotUI.SetActive(true);
     }
-    private void Update()
+
+    void CheckIfViewing(InputState currentState)
     {
         if (isEmpty) return;
+        if (currentState.stateGroups.Contains(InputStateHandler.StateGroup.PokemonParty))
+        {
+            _healthPhaseUpdateEvent = () => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
+            pokemon.OnDamageTaken += _healthPhaseUpdateEvent;
+            _isViewingCard = true;
+        }
+        else
+        {
+            pokemon.OnDamageTaken -= _healthPhaseUpdateEvent;
+            _isViewingCard = false;
+        }
+    }
+    private void Update()
+    {
+        if (isEmpty || !_isViewingCard) return;
         pokemonHealthBarUI.value = pokemon.hp;
         pokemonHealthBarUI.maxValue = pokemon.maxHp;
         pokemonHealthBarUI.minValue = 0;
