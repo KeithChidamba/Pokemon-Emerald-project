@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Linq;
 
 public class Participant_Status : MonoBehaviour
@@ -15,6 +16,7 @@ public class Participant_Status : MonoBehaviour
     private TrapData _currentTrap;
     private readonly Dictionary<PokemonOperations.StatusEffect, Action> _statusEffectMethods = new ();
     public event Action OnStatusCheck;
+    public bool dealingStatusDamage;
     void Start()
     {
         _participant = GetComponent<Battle_Participant>();
@@ -54,10 +56,6 @@ public class Participant_Status : MonoBehaviour
         };
         _participant.StatChangeEffects.Add(new(changeability,numTurns));
     }
-    void LooseHp(float percentage)
-    {
-        _participant.pokemon.TakeDamage( math.ceil(_participant.pokemon.maxHp * percentage) );
-    }
     private void StatDrop()
     {
         switch (_participant.pokemon.statusEffect)
@@ -93,16 +91,19 @@ public class Participant_Status : MonoBehaviour
         _participant.RefreshStatusEffectImage();
         AssignStatusDamage();
     }
-    public void StunCheck()
+    private void GetDamageFromStatus(string message,float damage)
     {
-        if (!_participant.isActive) return;
-        if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon !=
-            _participant.pokemon) return;
-        if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
-        
-        if (_statusEffectMethods.TryGetValue(_participant.pokemon.statusEffect,out Action method))
-            method();
-
+        dealingStatusDamage = true;
+        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+message);
+        StartCoroutine(LooseHp(damage));
+    }
+    private IEnumerator LooseHp(float percentage)
+    {
+        Move_handler.Instance.DisplayDamage(_participant,displayEffectiveness:false
+            ,isSpecificDamage:true,math.ceil(_participant.pokemon.maxHp * percentage));
+        yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
+        dealingStatusDamage = false;
+        _participant.pokemon.TakeDamage();  
     }
     private void AssignStatusDamage()
     {
@@ -118,8 +119,17 @@ public class Participant_Status : MonoBehaviour
             case PokemonOperations.StatusEffect.BadlyPoison:
                 GetDamageFromStatus(" is badly poisoned", (_statusDuration) / 16f );
                 break;
-            
         }
+    }
+    public void StunCheck()
+    {
+        if (!_participant.isActive) return;
+        if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon !=
+            _participant.pokemon) return;
+        if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
+        
+        if (_statusEffectMethods.TryGetValue(_participant.pokemon.statusEffect,out Action method))
+            method();
     }
     public void CheckTrapDuration(Battle_Participant participant)
     {
@@ -195,11 +205,7 @@ public class Participant_Status : MonoBehaviour
             _statusDuration++;
         }
     }
-    private void GetDamageFromStatus(string message,float damage)
-    {
-        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+message);
-        LooseHp(damage);
-    }
+
     public void NotifyHealing(Battle_Participant participant)
     {//only for freeze and sleep
         if (participant != _participant) return;

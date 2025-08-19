@@ -161,6 +161,16 @@ public class Turn_Based_Combat : MonoBehaviour
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         _turnHistory.Clear();
         OnTurnsCompleted?.Invoke();
+        //damage from status effect
+        var damageProcessing = Battle_handler.Instance.battleParticipants.Count(p =>
+                p.statusHandler.dealingStatusDamage);
+        while (damageProcessing>0)
+        {
+            damageProcessing = Battle_handler.Instance.battleParticipants.Count(p =>
+                    p.statusHandler.dealingStatusDamage);
+            yield return null;
+        }
+        yield return new WaitUntil(()=> damageProcessing == 0);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         NextTurn();
     }
@@ -176,9 +186,7 @@ public class Turn_Based_Combat : MonoBehaviour
             {//hit enemy with pursuit double damage effect
                 var attacker=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.attackerIndex];
                 var victim=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.victimIndex];
-                Move_handler.Instance.Pursuit(attacker,victim,pursuitUsersTurn.move);
-                yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
-                yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthChange);
+                yield return StartCoroutine(Move_handler.Instance.Pursuit(attacker,victim,pursuitUsersTurn.move));
             }
             if (swap.IsPlayer)
             {

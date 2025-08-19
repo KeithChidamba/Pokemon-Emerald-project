@@ -297,14 +297,15 @@ public class Save_manager : MonoBehaviour
     {
         if (item.additionalInfoModules.Any(m => m is TM))
         {
-            var tm = (TM)item.additionalInfoModules.First(m => m is TM);
+            var tm =  item.GetModule<TM>();
             return tm.move.type.typeName.ToLower() + " tm"; 
         }
         if (item.additionalInfoModules.Any(m => m is HM))
         {
-            var hm = (HM)item.additionalInfoModules.First(m => m is HM);
-            return hm.move.type.typeName.ToLower() + " hm"; 
+            var hm = item.GetModule<HM>();
+            return hm.move.type.typeName.ToLower() + " tm";     
         }
+        
         return item.itemName;
     }
     private void SaveHeldItem(Item itm, string fileName)

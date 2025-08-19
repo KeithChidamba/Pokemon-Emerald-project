@@ -18,6 +18,5 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   moveSet:
   - {fileID: 11400000, guid: bec17202b9e1e5d429f6d064467dc625, type: 2}
-  - {fileID: 11400000, guid: 60cffafaf669f5348b85921e94bfe643, type: 2}
   - {fileID: 11400000, guid: e94a4909f96225e48b0b4d18cb1fca9c, type: 2}
   - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}

@@ -353,9 +353,8 @@ public class Pokemon : ScriptableObject
             LevelUp();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage()
     {
-        hp -= damage;
         OnDamageTaken?.Invoke();
     }
     private void ClearEvents()

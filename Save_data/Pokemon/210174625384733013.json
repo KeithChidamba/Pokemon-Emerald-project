@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 25198
+        "instanceID": 25192
     },
     "hasGender": true,
     "hp": 14.0,
@@ -54,7 +54,7 @@
     "canBeFlinched": true,
     "types": [
         {
-            "instanceID": 26050
+            "instanceID": 26036
         }
     ],
     "statusEffect": 0,
@@ -136,21 +136,24 @@
     ],
     "moveSet": [
         {
-            "instanceID": -7806
+            "instanceID": -20464
         },
         {
-            "instanceID": -7808
+            "instanceID": -20466
+        },
+        {
+            "instanceID": -20564
         }
     ],
     "ability": {
-        "instanceID": 25426
+        "instanceID": 25420
     },
     "evolutions": [
         {
-            "instanceID": 25586
+            "instanceID": 25580
         },
         {
-            "instanceID": 25504
+            "instanceID": 25498
         }
     ],
     "heldItem": {
@@ -158,10 +161,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32276
+        "instanceID": 32260
     },
     "backPicture": {
-        "instanceID": 32278
+        "instanceID": 32262
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,
@@ -186,6 +189,12 @@
             "powerPoints": 35,
             "maxPowerPoints": 35,
             "moveType": "normal"
+        },
+        {
+            "moveName": "surf",
+            "powerPoints": 25,
+            "maxPowerPoints": 25,
+            "moveType": "water"
         }
     ]
 }

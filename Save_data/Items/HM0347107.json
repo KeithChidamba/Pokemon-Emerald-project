@@ -1,32 +1,32 @@
 {
-    "itemID": "Hyper Beam46404",
-    "itemName": "Hyper Beam",
+    "itemID": "HM0347107",
+    "itemName": "HM03",
     "itemType": 16,
     "itemEffect": "",
-    "itemDescription": "Powerful attack that requires recharge.",
+    "itemDescription": "Teaches a valid pokemon, surf",
     "price": 0,
-    "quantity": 5,
+    "quantity": 1,
     "itemImage": {
-        "instanceID": 26098
+        "instanceID": 25480
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": false,
     "isHeldItem": false,
     "canBeHeld": false,
-    "canBeSold": true,
+    "canBeSold": false,
     "isMultiModular": false,
     "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": 26444
+        "instanceID": 25418
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26444
+            "instanceID": 25418
         }
     ],
     "infoModuleAssetNames": [
-        "TM15"
+        "HM03"
     ],
-    "imageDirectory": "normal tm"
+    "imageDirectory": "water tm"
 }

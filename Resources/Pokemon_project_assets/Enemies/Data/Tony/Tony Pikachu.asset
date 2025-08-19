@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff1b1c629dc4d92448879b10db63290f, type: 3}
   m_Name: Tony Pikachu
   m_EditorClassIdentifier: 
-  pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
-  pokemonLevel: 5
+  pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+  pokemonLevel: 33
   hasItem: 0
   heldItem: {fileID: 0}
   moveSet:
-  - {fileID: 11400000, guid: b777dec5f205a61448873e7760324510, type: 2}
+  - {fileID: 11400000, guid: 027b3d737071f4c69aab08f80a2abf48, type: 2}

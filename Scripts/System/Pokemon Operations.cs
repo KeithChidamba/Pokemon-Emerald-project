@@ -204,6 +204,7 @@ public static class PokemonOperations
 
     private static void LearnMove(string moveName,bool isPartyPokemon = true, bool isLevelUpMove = true)
     {
+        Item_handler.Instance.usingItem = false;
         var assetPath = Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + moveName;
         
         var moveFromAsset = Resources.Load<Move>(assetPath);
