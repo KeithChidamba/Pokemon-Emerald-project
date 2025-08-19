@@ -150,9 +150,14 @@ public static class BattleOperations
     {
         return pokemon.buffAndDebuffs.FirstOrDefault(b=>b.stat==stat);
     }
-    private static void RemoveInvalidBuffsOrDebuffs(Pokemon pokemon)
+    public static void RemoveInvalidBuffsOrDebuffs(Pokemon pokemon)
     {
         pokemon.buffAndDebuffs.RemoveAll(b=>b.stage==0);
         Move_handler.Instance.processingOrder = false;
+    }
+
+    public static void ModifyBuff(Buff_Debuff buff, int limitHigh, int change)
+    {
+        buff.stage = math.clamp(buff.stage + change, buff.stage, limitHigh);
     }
 }

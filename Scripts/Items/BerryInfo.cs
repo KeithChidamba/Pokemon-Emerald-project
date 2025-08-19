@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 [CreateAssetMenu(fileName = "Berry", menuName = "berry")]
 public class BerryInfo : AdditionalItemInfo
 {
@@ -8,13 +10,13 @@ public class BerryInfo : AdditionalItemInfo
     {
         FriendshipIncrease, HpHeal, StatusHeal
     }
-    public Berry herbType;
+    [FormerlySerializedAs("herbType")] public Berry berryType;
     public PokemonOperations.StatusEffect statusEffect;
 
     public int GetBerryUsage()
     {
         var usageIndex = 0;
-        switch (herbType)
+        switch (berryType)
         {
             case Berry.FriendshipIncrease:
                 usageIndex = 0;

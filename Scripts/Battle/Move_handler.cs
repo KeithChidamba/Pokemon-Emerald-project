@@ -229,32 +229,44 @@ public class Move_handler:MonoBehaviour
         }
         return atk / def;
     }
-
-    private IEnumerator DamageDisplay(Battle_Participant currentVictim, bool displayEffectiveness = true,
-        bool isSpecificDamage = false, float predefinedDamage = 0, bool isDamaging = true)
+    private IEnumerator HealthGainDisplay(Battle_Participant healthGainer, float healthGained)
     {
         displayingHealthChange = true; 
-        var healthChange = isSpecificDamage? predefinedDamage : CalculateMoveDamage(_currentTurn.move, currentVictim);
-        healthChange = isDamaging ? -healthChange : healthChange; 
-        var healthAfterChange = Mathf.Clamp(currentVictim.pokemon.hp + healthChange,0
-            ,currentVictim.pokemon.maxHp);
+       
+        var healthAfterChange = Mathf.Clamp(healthGainer.pokemon.hp + healthGained,0
+            ,healthGainer.pokemon.maxHp);
+        
+        float displayHp = healthGainer.pokemon.hp;
+        Debug.Log("Display: " + displayHp + " : after: " + healthAfterChange);
+        while (displayHp < healthAfterChange)
+        {
+            float newHp = Mathf.MoveTowards(displayHp, healthAfterChange,
+                (0.25f/healthGainer.pokemon.healthPhase) * Time.deltaTime);
+            displayHp = Mathf.Floor(newHp);
+            healthGainer.pokemon.hp = displayHp;
+            yield return null;
+        }
+        yield return new WaitUntil(()=>healthGainer.pokemon.hp>=healthAfterChange);
+        healthGainer.pokemon.hp = math.trunc(healthAfterChange);
+        displayingHealthChange = false;
+    }
+    private IEnumerator DamageDisplay(Battle_Participant currentVictim, bool displayEffectiveness = true,
+        bool isSpecificDamage = false, float predefinedDamage = 0)
+    {
+        displayingHealthChange = true; 
+        var damage = isSpecificDamage? predefinedDamage : CalculateMoveDamage(_currentTurn.move, currentVictim);
+        var healthAfterChange = Mathf.Clamp(currentVictim.pokemon.hp - damage,0,currentVictim.pokemon.maxHp);
         
         float displayHp = currentVictim.pokemon.hp;
-        var conditionForDisplay = isDamaging ? displayHp > healthAfterChange : displayHp < healthAfterChange;
-        while (conditionForDisplay)
+         while (displayHp > healthAfterChange)
         {
             float newHp = Mathf.MoveTowards(displayHp, healthAfterChange,
                 (0.25f/currentVictim.pokemon.healthPhase) * Time.deltaTime);
             displayHp = Mathf.Floor(newHp);
             currentVictim.pokemon.hp = displayHp;
-            conditionForDisplay = isDamaging ? displayHp > healthAfterChange : displayHp < healthAfterChange;
             yield return null;
         }
-        
         currentVictim.pokemon.hp = healthAfterChange;
-        // yield return new WaitUntil(() =>  currentVictim.pokemon.hp <= 0 ||
-        //                                   currentVictim.pokemon.hp<=healthAfterChange);
-        
         if (!_currentTurn.move.isConsecutive && displayEffectiveness)
         {
             var typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, _currentTurn.move.type);
@@ -330,7 +342,7 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.Instance.DisplayBattleInfo($"{currentVictim.pokemon.pokemonName} {GetStatusMessage(move.statusEffect)}");
         ApplyStatusToVictim(currentVictim,move.statusEffect);
     }
-    public static string GetStatusMessage(PokemonOperations.StatusEffect status)
+    private static string GetStatusMessage(PokemonOperations.StatusEffect status)
     {
          var displayMessage = status switch
             {
@@ -521,18 +533,23 @@ public class Move_handler:MonoBehaviour
     private float? GetUpdatedStat(float unmodifiedStatValue, BuffDebuffData data)
     {
         BattleOperations.ChangeOrCreateBuffOrDebuff(data);
-        var buff = BattleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat) 
-                   ?? new Buff_Debuff(PokemonOperations.Stat.None,0,true); // if null return same value
+        var buff = BattleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat)
+                   ?? new Buff_Debuff(PokemonOperations.Stat.None, 0, true); // if null return same value
         if (buff.isAtLimit) return null;
-        switch (data.Stat)
+        return ModifyStatValue(data.Stat, unmodifiedStatValue, buff.stage);
+    }
+
+    public float ModifyStatValue(PokemonOperations.Stat stat, float unmodifiedStatValue ,int buffStage)
+    {
+        switch (stat)
         {
             case PokemonOperations.Stat.Accuracy:
             case PokemonOperations.Stat.Evasion:
-                return math.trunc(unmodifiedStatValue * _accuracyAndEvasionLevels[buff.stage+6]);
+                return math.trunc(unmodifiedStatValue * _accuracyAndEvasionLevels[buffStage+6]);
             case PokemonOperations.Stat.Crit:
-                return _critLevels[buff.stage];
+                return _critLevels[buffStage];
             default:
-                return math.trunc(unmodifiedStatValue * _statLevels[buff.stage+6]); 
+                return math.trunc(unmodifiedStatValue * _statLevels[buffStage+6]); 
         }
     }
     List<Battle_Participant> TargetAllExceptSelf()
@@ -600,33 +617,35 @@ public class Move_handler:MonoBehaviour
         StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
     }
 
-    void DrainHealth(float fractionOfDamage)
+    IEnumerator DrainHealth(float fractionOfDamage)
     {
         var damage = CalculateMoveDamage(_currentTurn.move,victim);
+        StartCoroutine(DamageDisplay(victim,isSpecificDamage:true,predefinedDamage:damage));
+        yield return new WaitUntil(() => !displayingHealthChange);
         var healAmount = victim.pokemon.hp-damage<0 ? victim.pokemon.hp : damage;
         healAmount /= fractionOfDamage;
-        StartCoroutine(DamageDisplay(victim,isSpecificDamage:true,predefinedDamage:damage));
-        attacker.pokemon.hp = healAmount + attacker.pokemon.hp < attacker.pokemon.maxHp? 
-            math.trunc(healAmount + attacker.pokemon.hp) : attacker.pokemon.maxHp;
+        
+        StartCoroutine(HealthGainDisplay(attacker,healAmount));
+        yield return new WaitUntil(() => !displayingHealthChange);
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
         _moveDelay = false;
     }
 
     private void leechlife()
     {
-        DrainHealth(2f);
+        StartCoroutine(DrainHealth(2f));
     }
     void absorb()
     {
-        DrainHealth(2f);
+        StartCoroutine(DrainHealth(2f));
     }
     void megadrain()
     {
-        DrainHealth(2f);
+        StartCoroutine(DrainHealth(2f));
     }
     void gigadrain()
     {
-        DrainHealth(2f);
+        StartCoroutine(DrainHealth(2f));
     }
     void magnitude()
     {
@@ -1131,9 +1150,18 @@ public class Move_handler:MonoBehaviour
     }
     void rest()
     {
+        StartCoroutine(HandleRest());
+    }
+
+    IEnumerator HandleRest()
+    {
         var healthGain = attacker.pokemon.maxHp - attacker.pokemon.hp;
-        StartCoroutine(DamageDisplay(attacker,predefinedDamage:healthGain,isSpecificDamage:true,isDamaging:false));
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" fell asleep!");
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(HealthGainDisplay(attacker,healthGain));
+        yield return new WaitUntil(()=>!displayingHealthChange);
+        attacker.statusHandler.RemoveStatusEffect(true);
+        yield return new WaitUntil(()=>attacker.pokemon.statusEffect == PokemonOperations.StatusEffect.None);
         ApplyStatusToVictim(attacker, PokemonOperations.StatusEffect.Sleep, 2);
         _moveDelay = false;
     }

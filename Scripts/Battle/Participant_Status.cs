@@ -25,7 +25,6 @@ public class Participant_Status : MonoBehaviour
     }
     public void GetStatusEffect(int numTurns)
     {
-        //clear prev state
         _participant.RefreshStatusEffectImage();
         if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
         if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Freeze)
@@ -63,14 +62,13 @@ public class Participant_Status : MonoBehaviour
     {
         switch (_participant.pokemon.statusEffect)
         {
-            //add proper stat drop
             case PokemonOperations.StatusEffect.Burn:
-                var atkDrop = new BuffDebuffData(_participant, PokemonOperations.Stat.Attack, true, -2);
+                var atkDrop = new BuffDebuffData(_participant, PokemonOperations.Stat.Attack, false, 2);
                 BattleOperations.CanDisplayDialougue = false; 
                 Move_handler.Instance.SelectRelevantBuffOrDebuff(atkDrop);
                 break;
             case PokemonOperations.StatusEffect.Paralysis:
-                var speedDrop = new BuffDebuffData(_participant, PokemonOperations.Stat.Speed, true, -6);
+                var speedDrop = new BuffDebuffData(_participant, PokemonOperations.Stat.Speed, false, 6);
                 BattleOperations.CanDisplayDialougue = false; 
                 Move_handler.Instance.SelectRelevantBuffOrDebuff(speedDrop);
                 break;
@@ -158,16 +156,17 @@ public class Participant_Status : MonoBehaviour
     void FreezeCheck()
     {
         if (Utility.RandomRange(1, 101) < 10) //10% chance
-            SetHeal();
+            _healed = true;
         else
             _participant.canAttack = false;
     }
 
     void RemoveFreezeStatusWithFire(Battle_Participant attacker, Move moveUsed)
     {
-        if (moveUsed.type.typeName != "Fire") return;
-        RemoveStatusEffect(); //didnt use SetHeal() because i want to only show the message below
+        if (moveUsed.type.typeName != nameof(PokemonOperations.Types.Fire) ) return;
+        RemoveStatusEffect();
         Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+" was thawed out!");
+        _healed = true;
         Move_handler.Instance.OnMoveHit -= RemoveFreezeStatusWithFire;
     }
     void ParalysisCheck()
@@ -185,12 +184,12 @@ public class Participant_Status : MonoBehaviour
             return;
         }
         if (_statusDurationInTurns == _statusDuration)//after 4 turns wake up
-            SetHeal();
+            _healed = true;
         else //wake up early if lucky
         {
             int[] chances = { 25, 33, 50, 100 };
             if (Utility.RandomRange(1, 101) < chances[_statusDuration-1])
-                SetHeal();
+                _healed = true;
             else
                 _participant.canAttack = false;
             _statusDuration++;
@@ -202,9 +201,9 @@ public class Participant_Status : MonoBehaviour
         LooseHp(damage);
     }
     public void NotifyHealing(Battle_Participant participant)
-    {
+    {//only for freeze and sleep
         if (participant != _participant) return;
-        if (!_healed) return;
+        if (!_healed || _participant.pokemon.statusEffect==PokemonOperations.StatusEffect.None) return;
         switch (_participant.pokemon.statusEffect)
         {
             case PokemonOperations.StatusEffect.Sleep:
@@ -217,14 +216,44 @@ public class Participant_Status : MonoBehaviour
         RemoveStatusEffect();
         _healed = false;
     }
-    void SetHeal()
+    public void RemoveStatusEffect(bool healAllEffects = false)
     {
-        _healed = true;
-    }
-    void RemoveStatusEffect()
-    {
-        _participant.pokemon.statusEffect = PokemonOperations.StatusEffect.None;
-        _participant.canAttack = true;
+        if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Sleep
+            || _participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Paralysis)
+        {
+                _participant.canAttack = true;
+        }
+        if(_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Freeze)
+        {
+            Move_handler.Instance.OnMoveHit -= RemoveFreezeStatusWithFire;
+            _participant.canAttack = true;
+        }
+        if (healAllEffects)
+        {
+            _participant.isConfused = false;
+        }
+        //Remove stat drops caused by status
+        switch (_participant.pokemon.statusEffect)
+        {
+            case PokemonOperations.StatusEffect.Burn:
+                var currentAtkBuff =
+                    BattleOperations.SearchForBuffOrDebuff(_participant.pokemon, PokemonOperations.Stat.Attack);
+                if (currentAtkBuff == null) return;
+                BattleOperations.ModifyBuff(currentAtkBuff,0,2);
+                _participant.pokemon.attack = Move_handler.Instance.ModifyStatValue
+                (PokemonOperations.Stat.Attack, _participant.statData.attack, currentAtkBuff.stage);
+                break;
+            case PokemonOperations.StatusEffect.Paralysis:
+                var currenSpdBuff =
+                    BattleOperations.SearchForBuffOrDebuff(_participant.pokemon, PokemonOperations.Stat.Speed);
+                if (currenSpdBuff == null) return;
+                BattleOperations.ModifyBuff(currenSpdBuff,0,6);
+                _participant.pokemon.speed = Move_handler.Instance.ModifyStatValue
+                    (PokemonOperations.Stat.Speed, _participant.statData.speed, currenSpdBuff.stage);
+                break;
+        }
+        BattleOperations.RemoveInvalidBuffsOrDebuffs(_participant.pokemon);
+        _participant.pokemon.statusEffect = PokemonOperations.StatusEffect.None; 
         _participant.RefreshStatusEffectImage();
     }
 }

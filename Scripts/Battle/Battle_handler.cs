@@ -349,7 +349,7 @@ public class Battle_handler : MonoBehaviour
                 participant.ActivateParticipant();
         }
     }
-    public void RefreshParticipantUI()
+    public void RefreshStatusEffectUI()
     {
         var validParticipants = GetValidParticipants();
         validParticipants.ForEach(p=>p.RefreshStatusEffectImage());
