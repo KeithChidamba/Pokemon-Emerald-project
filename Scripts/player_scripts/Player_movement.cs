@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -34,6 +35,14 @@ public class Player_movement : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    private void Start()
+    {
+        overworld_actions.Instance.OnItemEquipped += 
+            (item)=> StopBikeUsage(item!=EquipableItemInfo.Equipable.Bike);
+        overworld_actions.Instance.OnItemUnequipped += 
+            (item)=> StopBikeUsage(item==EquipableItemInfo.Equipable.Bike);
     }
 
     public void AllowPlayerMovement()
@@ -137,9 +146,16 @@ public class Player_movement : MonoBehaviour
             _canSwitchMovement = false;
         }
     }
+    private void StopBikeUsage(bool canStopBikeUsage)
+    {
+        if (!canStopBikeUsage) return;
+        usingBike = false;
+        _canSwitchMovement = false;
+    }
     private void HandleBikeInputs()
     {
         if (!overworld_actions.Instance.IsEquipped(EquipableItemInfo.Equipable.Bike)) return;
+        
         if (Input.GetKeyDown(KeyCode.C) && !usingBike &&canUseBike)
         {
             usingBike = true;
@@ -168,7 +184,7 @@ public class Player_movement : MonoBehaviour
         
         if(runningInput)
         {
-            var animationName = (movingOnFoot) ? _animationManager.playerRun : _animationManager.playerIdle;
+            var animationName = movingOnFoot ? _animationManager.playerRun : _animationManager.playerIdle;
             _animationManager.ChangeAnimationState(animationName);
         }
         if (movingOnFoot && !runningInput && !_canSwitchMovement)

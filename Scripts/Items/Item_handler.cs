@@ -11,7 +11,6 @@ public class Item_handler : MonoBehaviour
 {
     private Pokemon _selectedPartyPokemon;
     public bool usingItem = false;
-    public bool usingHeldItem = false;
     private Item _itemInUse;
     private Battle_Participant currentParticipant;
     public static Item_handler Instance;
@@ -522,9 +521,6 @@ public class Item_handler : MonoBehaviour
     private void CompleteItemUsage()//only call for items used outside of battle
     {
         Battle_handler.Instance.usedTurnForItem = Options_manager.Instance.playerInBattle;
-        if (usingHeldItem)
-            DepleteHeldItem(); 
-        else
             DepleteItem();
         ResetItemUsage();
      }
@@ -540,11 +536,7 @@ public class Item_handler : MonoBehaviour
         if (!Options_manager.Instance.playerInBattle) return;
         Turn_Based_Combat.Instance.NextTurn();
     }
-    void DepleteHeldItem()
-    {
-        usingHeldItem = false; 
-        _itemInUse.quantity = (_itemInUse.isHeldItem)? 1 : _itemInUse.quantity-1; 
-    }
+
     void DepleteItem()
     {
         _itemInUse.quantity--;

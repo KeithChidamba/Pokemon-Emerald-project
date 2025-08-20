@@ -14,7 +14,10 @@ public class Held_Items : MonoBehaviour
         _participant =  GetComponent<Battle_Participant>();
         Turn_Based_Combat.Instance.OnMoveExecute += CheckForUsableItem;
     }
-
+    void DepleteHeldItem()
+    {
+        _heldItem.quantity = _heldItem.isHeldItem? 1 : _heldItem.quantity-1; 
+    }
     void CheckForUsableItem(Battle_Participant participant)
     {
         if (participant != _participant) return;
@@ -58,19 +61,21 @@ public class Held_Items : MonoBehaviour
     {
         if(_participant.pokemon.hp >= (_participant.pokemon.maxHp/2)) return;
         processingItemEffect = true;
+        DepleteHeldItem();
         StartCoroutine(GetHealing());
     }    
     void CheckStatusCondition()
     {
         if(_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
         processingItemEffect = true;
+        DepleteHeldItem();
         StartCoroutine(GetStatusHealing());
     }
     private IEnumerator GetHealing()
     { 
+        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
         Move_handler.Instance.HealthGainDisplay(int.Parse(_heldItem.itemEffect),healthGainer:_participant);
         yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthGain);
-        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         processingItemEffect = false;
     }

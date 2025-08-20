@@ -597,8 +597,6 @@ public class Move_handler:MonoBehaviour
             }
             if (victim.pokemon.hp <= 0) break;
             
-            if (!Turn_Based_Combat.Instance.MoveSuccessful(_currentTurn)) break; //if miss
-            
             Dialogue_handler.Instance.DisplayBattleInfo("Hit "+(i+1)+"!");//remove later if added animations
             DisplayDamage(victim);
             yield return new WaitUntil(() => !displayingDamage);

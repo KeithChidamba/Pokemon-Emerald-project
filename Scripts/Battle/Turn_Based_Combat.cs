@@ -116,6 +116,12 @@ public class Turn_Based_Combat : MonoBehaviour
 
             var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
             var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
+
+            if (!IsValidParticipantState(attacker))
+                continue;
+            
+            if (!IsValidParticipant(currentTurn,attacker))
+                continue;
             // if (ParticipantCoolingDown(attacker))
             // {
             //     if (attacker.currentCoolDown.DisplayMessage)
@@ -124,12 +130,6 @@ public class Turn_Based_Combat : MonoBehaviour
             //     }
             //     continue;
             // }
-            if (!IsValidParticipantState(attacker))
-                continue;
-            
-            if (!IsValidParticipant(currentTurn,attacker))
-                continue;
-            
             if (!IsValidParticipantState(victim))
             {//if attack was directed at a pokemon that just fainted
                
@@ -137,6 +137,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
                 continue;
             }
+            
             OnMoveExecute?.Invoke(attacker);
             //processing held item effect
             var heldItemEffects = Battle_handler.Instance.battleParticipants.Count(p =>
@@ -151,7 +152,6 @@ public class Turn_Based_Combat : MonoBehaviour
             
             if (CanAttack(currentTurn,attacker,victim))//test if confusion damage is waited for
             {
-                yield return new WaitUntil(() => !Item_handler.Instance.usingHeldItem);
                 yield return new WaitUntil(() => !levelEventDelay);
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
                 Move_handler.Instance.doingMove = true;
@@ -159,7 +159,6 @@ public class Turn_Based_Combat : MonoBehaviour
                 Move_handler.Instance.ExecuteMove(currentTurn);
                 
                 yield return new WaitUntil(() => !Move_handler.Instance.doingMove);
-                yield return new WaitUntil(() => !Item_handler.Instance.usingHeldItem);
                 yield return new WaitUntil(() => !levelEventDelay);
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
             }
@@ -295,7 +294,7 @@ public class Turn_Based_Combat : MonoBehaviour
             NextTurn();
         
     }
-    public bool MoveSuccessful(Turn turn)
+    private bool MoveSuccessful(Turn turn)
     {
         var random = Utility.RandomRange(1, 100);
         var hitChance = turn.move.moveAccuracy *
