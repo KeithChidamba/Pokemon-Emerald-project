@@ -19,8 +19,8 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
     private Battle_event[] _dialougeOrder={null,null,null,null,null,null,null};
     private List<OnFieldDamageModifier> _onFieldDamageModifiers = new();
-    public List<DamageDisplayData> damageDisplayQueue = new();
-    public List<DamageDisplayData> healhGainQueue = new();
+    private List<DamageDisplayData> _damageDisplayQueue = new();
+    private List<DamageDisplayData> _healhGainQueue = new();
     private bool _repeatingMoveCycle = false;
     private bool _moveDelay = false;
     private bool _cancelMove = false;
@@ -233,22 +233,22 @@ public class Move_handler:MonoBehaviour
     {
         DamageDisplayData data = new DamageDisplayData
             (healthGainer,predefinedHealthChange:healthGained,affectedPokemon:affectedPokemon);
-        healhGainQueue.Add(data);
+        _healhGainQueue.Add(data);
         if (!displayingHealthGain) StartCoroutine(ProcessHealthGainDisplay());
     }
     public void DisplayDamage(Battle_Participant currentVictim, bool displayEffectiveness = true,
         bool isSpecificDamage = false, float predefinedDamage = 0)
     {
         DamageDisplayData data = new DamageDisplayData(currentVictim,displayEffectiveness, isSpecificDamage, predefinedDamage);
-        damageDisplayQueue.Add(data);
+        _damageDisplayQueue.Add(data);
         if (!displayingDamage) StartCoroutine(ProcessDamageDisplay());
     }
     IEnumerator ProcessHealthGainDisplay()
     {
         displayingHealthGain = true; 
-        while (healhGainQueue.Count > 0)
+        while (_healhGainQueue.Count > 0)
         {
-            var data = healhGainQueue[0];
+            var data = _healhGainQueue[0];
             var healthAfterChange = Mathf.Clamp(data.affectedPokemon.hp 
                   + data.predefinedHealthChange,0,data.affectedPokemon.maxHp);
             float displayHp = data.affectedPokemon.hp;
@@ -262,16 +262,16 @@ public class Move_handler:MonoBehaviour
                 yield return null;
             }
             data.affectedPokemon.hp = Mathf.Floor(healthAfterChange);
-            healhGainQueue.RemoveAt(0);
+            _healhGainQueue.RemoveAt(0);
         }
         displayingHealthGain = false;
     }
     IEnumerator ProcessDamageDisplay()
     {
         displayingDamage = true; 
-        while (damageDisplayQueue.Count > 0)
+        while (_damageDisplayQueue.Count > 0)
         {
-            var data = damageDisplayQueue[0];
+            var data = _damageDisplayQueue[0];
             var damage = data.isSpecificDamage? data.predefinedHealthChange 
                 : CalculateMoveDamage(_currentTurn.move, data.affectedParticipant);
             var healthAfterChange = Mathf
@@ -294,7 +294,7 @@ public class Move_handler:MonoBehaviour
                 DisplayEffectiveness(typeEffectiveness,data.affectedParticipant);
             }
             data.affectedPokemon.TakeDamage();
-            damageDisplayQueue.RemoveAt(0);
+            _damageDisplayQueue.RemoveAt(0);
         }
         displayingDamage = false;
     }
@@ -1117,7 +1117,8 @@ public class Move_handler:MonoBehaviour
 
     void sandstorm()
     {
-        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        var sandstorm = new WeatherCondition(WeatherCondition.Weather.Sandstorm);
+        Turn_Based_Combat.Instance.ChangeWeather(sandstorm);
         _moveDelay = false;
     }
 

@@ -18,6 +18,8 @@ public class Turn_Based_Combat : MonoBehaviour
     public int currentTurnIndex = 0;
     public bool levelEventDelay = false;
     public bool faintEventDelay = false;
+    private WeatherCondition _currentWeather;
+    private event Action OnWeatherEffect;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -32,6 +34,7 @@ public class Turn_Based_Combat : MonoBehaviour
         Battle_handler.Instance.OnBattleEnd += ResetTurnState;
         OnNewTurn += AllowPlayerInput;
         OnNewTurn += CheckParticipantCoolDown;
+        Battle_handler.Instance.OnSwitchOut += RemoveWeatherBuffReceiver;
     }
 
     public void SaveMove(Turn turn)
@@ -63,6 +66,7 @@ public class Turn_Based_Combat : MonoBehaviour
     private void ResetTurnState()
     {
         currentTurnIndex = 0;
+        _currentWeather = null;
         _turnHistory.Clear();
         faintEventDelay = false;
         levelEventDelay = false;
@@ -198,6 +202,8 @@ public class Turn_Based_Combat : MonoBehaviour
             yield return null;
         }
         yield return new WaitUntil(()=> damageProcessing == 0);
+        ReduceWeatherDuration();
+        ExecuteWeatherEffect();
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         NextTurn();
     }
@@ -325,5 +331,121 @@ public class Turn_Based_Combat : MonoBehaviour
         var orderBySpeed = _turnHistory.OrderByDescending(p => Battle_handler.Instance.battleParticipants[p.attackerIndex].pokemon.speed).ToList();
         var priorityList = orderBySpeed.OrderByDescending(p => p.move.priority).ToList();
         return priorityList;
+    }
+
+    public void ChangeWeather(WeatherCondition newWeather)
+    {
+        OnWeatherEffect -= _currentWeather.weatherEffect;
+        switch (newWeather.weather)
+        {
+            case WeatherCondition.Weather.Sandstorm:
+                newWeather.weatherEffect = SandStormEffect;
+                newWeather.weatherBegunMessage = "A sandstorm brewed!";
+                newWeather.weatherTurnEndMessage = "The sandstorm rages.";
+                newWeather.weatherDamageMessage = " is buffeted by the sandstorm!";
+                newWeather.weatherEndMessage = "The sandstorm subsided.";
+                newWeather.isInfinite = true;
+                break;
+            case WeatherCondition.Weather.Rain:
+                newWeather.weatherEffect = RainEffect;
+                newWeather.weatherBegunMessage = "It started to rain!";
+                newWeather.weatherTurnEndMessage = "Rain continues to fall.";
+                newWeather.weatherEndMessage = "The rain stopped.";
+                newWeather.turnDuration = 5;
+                break;
+            case WeatherCondition.Weather.Hail:
+                newWeather.weatherEffect = HailEffect;
+                newWeather.weatherBegunMessage = "It started to hail!";
+                newWeather.weatherTurnEndMessage = "Hail continues to fall.";
+                newWeather.weatherDamageMessage = " is pelted by hail!";
+                newWeather.weatherEndMessage = "The hail stopped.";
+                newWeather.isInfinite = true;
+                break;
+            case WeatherCondition.Weather.Sunlight:
+                newWeather.weatherEffect = SunEffect;
+                newWeather.weatherBegunMessage = "The sunlight got bright!";
+                newWeather.weatherTurnEndMessage = "The sunlight is strong.";
+                newWeather.weatherEndMessage = "The sunlight faded.";
+                newWeather.turnDuration = 5;
+                break;
+        }
+        Dialogue_handler.Instance.DisplayBattleInfo(newWeather.weatherBegunMessage);
+        OnWeatherEffect += newWeather.weatherEffect;
+        _currentWeather = newWeather;
+    }
+
+    private void ReduceWeatherDuration()
+    {
+        if (_currentWeather == null) return;
+        if (_currentWeather.isInfinite) return;
+        if (_currentWeather.turnDuration == 0)
+        {
+            OnWeatherEffect -= _currentWeather.weatherEffect;
+            Dialogue_handler.Instance.DisplayBattleInfo(_currentWeather.weatherEndMessage);
+            _currentWeather = null;
+            return;
+        }
+        _currentWeather.turnDuration--;
+    }
+
+    private void ExecuteWeatherEffect()
+    {
+        if (_currentWeather == null) return;
+        Dialogue_handler.Instance.DisplayBattleInfo(_currentWeather.weatherTurnEndMessage);
+        OnWeatherEffect?.Invoke();
+    }
+
+    private void RemoveWeatherBuffReceiver(Battle_Participant participant)
+    {
+        if (_currentWeather == null) return;
+        _currentWeather.buffedParticipants.Remove(participant);
+    }
+    private void SandStormEffect()
+    {
+        var protectedTypes = new[]{
+            PokemonOperations.Types.Rock, PokemonOperations.Types.Ground, PokemonOperations.Types.Steel
+        };
+        var validParticipants = Battle_handler.Instance.GetValidParticipants();
+        foreach (var participant in validParticipants)
+        {
+            var isProtected = false;
+            foreach (var protectedType in protectedTypes)
+            {
+                if (participant.pokemon.HasType(protectedType))
+                {
+                    isProtected = true;
+                    if(!_currentWeather.buffedParticipants.Contains(participant))
+                    {
+                        if (protectedType == PokemonOperations.Types.Rock)
+                        {
+                            //buff rock types
+                            var spDefBuff = new BuffDebuffData(participant,
+                                PokemonOperations.Stat.SpecialDefense, true, 1);
+                            BattleOperations.CanDisplayDialougue = false;
+                            Move_handler.Instance.SelectRelevantBuffOrDebuff(spDefBuff);
+                            _currentWeather.buffedParticipants.Add(participant);
+                        }
+                    }
+                    break;
+                }
+            }
+            if (isProtected) continue;
+            Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName + _currentWeather.weatherDamageMessage);
+            var weatherDamage = participant.pokemon.maxHp * (1 / 16f);
+            Move_handler.Instance.DisplayDamage(participant,isSpecificDamage:true,
+                predefinedDamage:weatherDamage,displayEffectiveness:false);
+        }
+    }
+    private void RainEffect()
+    {
+        
+    }
+    private void SunEffect()
+    {
+        
+    }
+    private void HailEffect()
+    {
+        
     }
 }
