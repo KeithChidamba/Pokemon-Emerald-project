@@ -20,6 +20,7 @@ public static class Obj_Instance
         newMove.hasSpecialEffect = m.hasSpecialEffect;
         newMove.canCauseFlinch = m.canCauseFlinch;
         newMove.canCauseConfusion = m.canCauseConfusion;
+        newMove.canInfatuate = m.canInfatuate;
         newMove.isBuffOrDebuff = m.isBuffOrDebuff;
         newMove.isConsecutive = m.isConsecutive;
         newMove.isSelfTargeted = m.isSelfTargeted;
@@ -83,6 +84,7 @@ public static class Obj_Instance
         newPokemon.friendshipLevel = pkm.friendshipLevel;
         newPokemon.hasTrainer = pkm.hasTrainer;
         newPokemon.canBeFlinched = pkm.canBeFlinched;
+        newPokemon.canBeInfatuated = pkm.canBeInfatuated;
         newPokemon.types = pkm.types;
         newPokemon.statusEffect = pkm.statusEffect;
         newPokemon.buffAndDebuffs = pkm.buffAndDebuffs;

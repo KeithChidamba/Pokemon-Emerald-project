@@ -28,6 +28,7 @@ public class Battle_Participant : MonoBehaviour
     public bool canAttack = true;
     public bool isFlinched;
     public bool isConfused;
+    public bool isInfatuated;
     public bool canBeDamaged = true;
     public bool canEscape = true;
     

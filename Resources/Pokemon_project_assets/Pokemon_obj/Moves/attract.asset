@@ -21,10 +21,11 @@ MonoBehaviour:
   isContact: 0
   isBuffOrDebuff: 0
   hasStatus: 0
-  hasSpecialEffect: 1
+  hasSpecialEffect: 0
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
+  canInfatuate: 1
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0

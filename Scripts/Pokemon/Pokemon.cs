@@ -55,6 +55,7 @@ public class Pokemon : ScriptableObject
     public int friendshipLevel;
     public bool hasTrainer=false;
     public bool canBeFlinched = true;
+    public bool canBeInfatuated = true;
     public List<Type> types;
     public PokemonOperations.StatusEffect statusEffect;
     public List<Buff_Debuff> buffAndDebuffs = new();

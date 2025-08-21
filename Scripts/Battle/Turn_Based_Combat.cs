@@ -68,6 +68,7 @@ public class Turn_Based_Combat : MonoBehaviour
         levelEventDelay = false;
         StopAllCoroutines();
     }
+    
     private bool CanAttack(Turn turn, Battle_Participant attacker,Battle_Participant victim)
     {
         if(attacker.pokemon.hp<=0) return false;
@@ -83,6 +84,23 @@ public class Turn_Based_Combat : MonoBehaviour
                     return false;
                 }
             }
+            if (attacker.isInfatuated)
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is in love ");
+                if (Utility.RandomRange(0, 2) < 1)
+                {
+                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" can’t move because of love");
+                    return false;
+                }
+            }
+                        
+            if (turn.move.isMultiTarget || turn.move.isSelfTargeted)
+                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName
+                                                            +" used "+turn.move.moveName+"!");
+            else
+                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +" used "
+                    +turn.move.moveName+" on "+victim.pokemon.pokemonName+"!");
+            
             if (!turn.move.isSureHit)
             {
                 if (!MoveSuccessful(turn))
@@ -149,7 +167,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return null;
             }
             yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
-            
+
             if (CanAttack(currentTurn,attacker,victim))//test if confusion damage is waited for
             {
                 yield return new WaitUntil(() => !levelEventDelay);

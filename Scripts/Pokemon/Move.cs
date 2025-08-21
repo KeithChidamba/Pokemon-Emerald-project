@@ -19,6 +19,7 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("Can_flinch")] public bool canCauseFlinch;
     public bool canTrap;
     public bool canCauseConfusion;
+    public bool canInfatuate;
     [FormerlySerializedAs("is_Consecutive")] public bool isConsecutive;
     public bool isMultiTarget;
     public bool isSelfTargeted;

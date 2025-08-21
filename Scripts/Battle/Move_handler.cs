@@ -17,7 +17,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _statLevels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
     private readonly float[] _accuracyAndEvasionLevels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
-    private Battle_event[] _dialougeOrder={null,null,null,null,null,null};
+    private Battle_event[] _dialougeOrder={null,null,null,null,null,null,null};
     private List<OnFieldDamageModifier> _onFieldDamageModifiers = new();
     public List<DamageDisplayData> damageDisplayQueue = new();
     public List<DamageDisplayData> healhGainQueue = new();
@@ -52,10 +52,6 @@ public class Move_handler:MonoBehaviour
         _currentTurn = turn;
         attacker = Battle_handler.Instance.battleParticipants[turn.attackerIndex];
         victim = Battle_handler.Instance.battleParticipants[turn.victimIndex];
-        if (_currentTurn.move.isMultiTarget || _currentTurn.move.isSelfTargeted)
-            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" used "+_currentTurn.move.moveName+"!");
-        else
-            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" used "+_currentTurn.move.moveName+" on "+victim.pokemon.pokemonName+"!");
         StartCoroutine(MoveSequence());
     }
     void SetMoveSequence()
@@ -66,6 +62,7 @@ public class Move_handler:MonoBehaviour
         _dialougeOrder[3] = new Battle_event(FlinchEnemy, _currentTurn.move.canCauseFlinch);
         _dialougeOrder[4] = new Battle_event(ConfuseEnemy,_currentTurn.move.canCauseConfusion);
         _dialougeOrder[5] = new Battle_event(()=>TrapEnemy(victim),_currentTurn.move.canTrap);
+        _dialougeOrder[6] = new Battle_event(InfatuateEnemy,_currentTurn.move.canInfatuate);
     }
     private IEnumerator MoveSequence()
     {
@@ -472,6 +469,24 @@ public class Move_handler:MonoBehaviour
             victim.isFlinched = true;
         }
         processingOrder = false;
+    }
+
+    void InfatuateEnemy()
+    {
+        if (!victim.canBeDamaged || !victim.pokemon.canBeInfatuated)
+        {
+            processingOrder = false;
+            return;
+        }
+        if (victim.pokemon.gender == PokemonOperations.Gender.None 
+            || attacker.pokemon.gender == PokemonOperations.Gender.None
+            || attacker.pokemon.gender == victim.pokemon.gender)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
+            processingOrder = false;
+            return;
+        }
+        victim.isInfatuated = true;
     }
     void CheckBuffOrDebuffApplicability()
     {
@@ -1101,12 +1116,6 @@ public class Move_handler:MonoBehaviour
     }
 
     void sandstorm()
-    {
-        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
-        _moveDelay = false;
-    }
-
-    void attract()
     {
         Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
         _moveDelay = false;
