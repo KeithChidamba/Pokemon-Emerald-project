@@ -158,7 +158,7 @@ public class Move_handler:MonoBehaviour
         var typeEffectiveness = isConfusionDamage? 1: BattleOperations.GetTypeEffectiveness(currentVictim, move.type);
         attackTypeValue = move.isSpecial? attacker.pokemon.specialAttack : attacker.pokemon.attack;
         attackDefenseRatio = SetAtkDefRatio(critValue,move.isSpecial,attacker,currentVictim);
-        if (BattleOperations.is_Stab(attacker.pokemon, move.type))
+        if (BattleOperations.IsStab(attacker.pokemon, move.type))
             stab = 1.5f;
         float baseDamage = levelFactor * move.moveDamage *
                              (attackTypeValue / move.moveDamage) /attacker.pokemon.currentLevel;
@@ -901,7 +901,7 @@ public class Move_handler:MonoBehaviour
         yield return new WaitUntil(() => !displayingDamage);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);      
     }
-    private void AddFieldDamageModifier(OnFieldDamageModifier newModifier)
+    public void AddFieldDamageModifier(OnFieldDamageModifier newModifier)
     {
         _onFieldDamageModifiers.Add(newModifier);
     }
@@ -1133,7 +1133,6 @@ public class Move_handler:MonoBehaviour
         Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
         _moveDelay = false;
     }
-
     void whirlwind()
     {
         if (attacker.pokemon.currentLevel<victim.pokemon.currentLevel)

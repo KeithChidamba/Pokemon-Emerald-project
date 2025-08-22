@@ -27,7 +27,7 @@ public static class BattleOperations
             if (PokemonOperations.ContainsType(t.resistances, enemyType))
                 _effectiveness /= 2f;
     }
-    public static bool is_Stab(Pokemon pokemon,Type moveType)
+    public static bool IsStab(Pokemon pokemon,Type moveType)
     {
         foreach(Type t in pokemon.types)
             if (t == moveType)

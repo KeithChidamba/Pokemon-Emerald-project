@@ -18,8 +18,9 @@ public class Turn_Based_Combat : MonoBehaviour
     public int currentTurnIndex = 0;
     public bool levelEventDelay = false;
     public bool faintEventDelay = false;
-    private WeatherCondition _currentWeather;
+    public WeatherCondition currentWeather;
     private event Action OnWeatherEffect;
+    public event Action OnWeatherEnd;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -66,13 +67,23 @@ public class Turn_Based_Combat : MonoBehaviour
     private void ResetTurnState()
     {
         currentTurnIndex = 0;
-        _currentWeather = null;
+        currentWeather = null;
         _turnHistory.Clear();
         faintEventDelay = false;
         levelEventDelay = false;
         StopAllCoroutines();
     }
-    
+
+    private void ModifyMoveAccuracy(Turn turn)
+    {
+        if (turn.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.Thunder))
+        {
+            if (currentWeather.weather == WeatherCondition.Weather.Rain)
+                turn.move.isSureHit = true;
+            if (currentWeather.weather == WeatherCondition.Weather.Sunlight)
+                turn.move.moveAccuracy = 50f;
+        }
+    }
     private bool CanAttack(Turn turn, Battle_Participant attacker,Battle_Participant victim)
     {
         if(attacker.pokemon.hp<=0) return false;
@@ -104,6 +115,8 @@ public class Turn_Based_Combat : MonoBehaviour
             else
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +" used "
                     +turn.move.moveName+" on "+victim.pokemon.pokemonName+"!");
+
+            ModifyMoveAccuracy(turn);
             
             if (!turn.move.isSureHit)
             {
@@ -335,7 +348,7 @@ public class Turn_Based_Combat : MonoBehaviour
 
     public void ChangeWeather(WeatherCondition newWeather)
     {
-        OnWeatherEffect -= _currentWeather.weatherEffect;
+        OnWeatherEffect -= currentWeather.weatherEffect;
         switch (newWeather.weather)
         {
             case WeatherCondition.Weather.Sandstorm:
@@ -371,34 +384,35 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         Dialogue_handler.Instance.DisplayBattleInfo(newWeather.weatherBegunMessage);
         OnWeatherEffect += newWeather.weatherEffect;
-        _currentWeather = newWeather;
+        currentWeather = newWeather;
     }
 
     private void ReduceWeatherDuration()
     {
-        if (_currentWeather == null) return;
-        if (_currentWeather.isInfinite) return;
-        if (_currentWeather.turnDuration == 0)
+        if (currentWeather == null) return;
+        if (currentWeather.isInfinite) return;
+        if (currentWeather.turnDuration == 0)
         {
-            OnWeatherEffect -= _currentWeather.weatherEffect;
-            Dialogue_handler.Instance.DisplayBattleInfo(_currentWeather.weatherEndMessage);
-            _currentWeather = null;
+            OnWeatherEnd?.Invoke();
+            OnWeatherEffect -= currentWeather.weatherEffect;
+            Dialogue_handler.Instance.DisplayBattleInfo(currentWeather.weatherEndMessage);
+            currentWeather = null;
             return;
         }
-        _currentWeather.turnDuration--;
+        currentWeather.turnDuration--;
     }
 
     private void ExecuteWeatherEffect()
     {
-        if (_currentWeather == null) return;
-        Dialogue_handler.Instance.DisplayBattleInfo(_currentWeather.weatherTurnEndMessage);
+        if (currentWeather == null) return;
+        Dialogue_handler.Instance.DisplayBattleInfo(currentWeather.weatherTurnEndMessage);
         OnWeatherEffect?.Invoke();
     }
 
     private void RemoveWeatherBuffReceiver(Battle_Participant participant)
     {
-        if (_currentWeather == null) return;
-        _currentWeather.buffedParticipants.Remove(participant);
+        if (currentWeather == null) return;
+        currentWeather.buffedParticipants.Remove(participant);
     }
     private void SandStormEffect()
     {
@@ -414,7 +428,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 if (participant.pokemon.HasType(protectedType))
                 {
                     isProtected = true;
-                    if(!_currentWeather.buffedParticipants.Contains(participant))
+                    if(!currentWeather.buffedParticipants.Contains(participant))
                     {
                         if (protectedType == PokemonOperations.Types.Rock)
                         {
@@ -423,29 +437,47 @@ public class Turn_Based_Combat : MonoBehaviour
                                 PokemonOperations.Stat.SpecialDefense, true, 1);
                             BattleOperations.CanDisplayDialougue = false;
                             Move_handler.Instance.SelectRelevantBuffOrDebuff(spDefBuff);
-                            _currentWeather.buffedParticipants.Add(participant);
+                            currentWeather.buffedParticipants.Add(participant);
                         }
                     }
                     break;
                 }
             }
             if (isProtected) continue;
-            Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName + _currentWeather.weatherDamageMessage);
-            var weatherDamage = participant.pokemon.maxHp * (1 / 16f);
-            Move_handler.Instance.DisplayDamage(participant,isSpecificDamage:true,
-                predefinedDamage:weatherDamage,displayEffectiveness:false);
+            DealWeatherDamage(participant);
         }
     }
     private void RainEffect()
     {
-        
+        DamageModifierForWeather( PokemonOperations.Types.Fire,0.5f);
+        DamageModifierForWeather( PokemonOperations.Types.Water,1.5f);
     }
     private void SunEffect()
     {
-        
+        DamageModifierForWeather( PokemonOperations.Types.Fire,1.5f);
+        DamageModifierForWeather( PokemonOperations.Types.Water,0.5f);
     }
     private void HailEffect()
     {
-        
+        var validParticipants = Battle_handler.Instance.GetValidParticipants();
+        foreach (var participant in validParticipants)
+        {
+            if (participant.pokemon.HasType(PokemonOperations.Types.Ice)) continue;
+            DealWeatherDamage(participant);
+        }
+    }
+
+    private void DamageModifierForWeather(PokemonOperations.Types type,float damageModifier)
+    {
+        var modifier = new OnFieldDamageModifier(damageModifier, type,removeOnSwitch:false);
+        OnWeatherEnd += modifier.RemoveAfterWeather;
+        Move_handler.Instance.AddFieldDamageModifier(modifier);
+    }
+    private void DealWeatherDamage(Battle_Participant victim)
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName + currentWeather.weatherDamageMessage);
+        var weatherDamage = victim.pokemon.maxHp * (1 / 16f);
+        Move_handler.Instance.DisplayDamage(victim,isSpecificDamage:true,
+            predefinedDamage:weatherDamage,displayEffectiveness:false);
     }
 }
