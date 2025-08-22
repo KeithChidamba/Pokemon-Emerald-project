@@ -1,13 +1,13 @@
 {
-    "itemID": "Flamethrower25557",
-    "itemName": "Flamethrower",
+    "itemID": "Sandstorm23198",
+    "itemName": "Sandstorm",
     "itemType": 16,
     "itemEffect": "",
-    "itemDescription": "Scorches with intense flames.",
+    "itemDescription": "Causes damage each turn.",
     "price": 0,
-    "quantity": 3,
+    "quantity": 1,
     "itemImage": {
-        "instanceID": 26024
+        "instanceID": 25744
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,15 +18,15 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": 26290
+        "instanceID": 25696
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26290
+            "instanceID": 25696
         }
     ],
     "infoModuleAssetNames": [
-        "TM35"
+        "TM37"
     ],
-    "imageDirectory": "fire tm"
+    "imageDirectory": "rock tm"
 }

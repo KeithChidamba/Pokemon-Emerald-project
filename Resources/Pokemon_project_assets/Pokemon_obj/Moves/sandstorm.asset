@@ -25,16 +25,17 @@ MonoBehaviour:
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
+  canInfatuate: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 0
   priority: 0
-  powerpoints: 0
-  basePowerpoints: 0
-  maxPowerpoints: 0
+  powerpoints: 10
+  basePowerpoints: 10
+  maxPowerpoints: 10
   statusEffect: 0
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: 
+  description: The user creates a strong storm that hurts everyone

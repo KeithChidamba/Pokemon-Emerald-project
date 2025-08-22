@@ -335,7 +335,8 @@ public class Battle_handler : MonoBehaviour
 
     public List<Battle_Participant> GetValidParticipants()
     {
-        return battleParticipants.ToList().Where(p => !p.isActive && p.pokemon != null).ToList();
+        return battleParticipants.ToList().Where(p => 
+            p.isActive && p.pokemon != null && p.pokemon.hp>0).ToList();
     }
     public void CheckParticipantStates()
     {

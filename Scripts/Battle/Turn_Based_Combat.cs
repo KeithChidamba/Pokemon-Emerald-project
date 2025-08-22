@@ -19,7 +19,7 @@ public class Turn_Based_Combat : MonoBehaviour
     public bool levelEventDelay = false;
     public bool faintEventDelay = false;
     public WeatherCondition currentWeather;
-    private event Action OnWeatherEffect;
+    private event Func<IEnumerator> OnWeatherEffect;
     public event Action OnWeatherEnd;
     private void Awake()
     {
@@ -204,7 +204,9 @@ public class Turn_Based_Combat : MonoBehaviour
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         _turnHistory.Clear();
+        
         OnTurnsCompleted?.Invoke();
+        
         //damage from status effect
         var damageProcessing = Battle_handler.Instance.battleParticipants.Count(p =>
                 p.statusHandler.dealingStatusDamage);
@@ -215,8 +217,11 @@ public class Turn_Based_Combat : MonoBehaviour
             yield return null;
         }
         yield return new WaitUntil(()=> damageProcessing == 0);
+        yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
+        
         ReduceWeatherDuration();
-        ExecuteWeatherEffect();
+        yield return ExecuteWeatherEffect();
+        yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         NextTurn();
     }
@@ -402,11 +407,11 @@ public class Turn_Based_Combat : MonoBehaviour
         currentWeather.turnDuration--;
     }
 
-    private void ExecuteWeatherEffect()
+    private IEnumerator ExecuteWeatherEffect()
     {
-        if (currentWeather == null) return;
+        if (currentWeather == null) yield break;
         Dialogue_handler.Instance.DisplayBattleInfo(currentWeather.weatherTurnEndMessage);
-        OnWeatherEffect?.Invoke();
+        yield return OnWeatherEffect?.Invoke();
     }
 
     private void RemoveWeatherBuffReceiver(Battle_Participant participant)
@@ -414,14 +419,16 @@ public class Turn_Based_Combat : MonoBehaviour
         if (currentWeather == null) return;
         currentWeather.buffedParticipants.Remove(participant);
     }
-    private void SandStormEffect()
+    private IEnumerator SandStormEffect()
     {
+        Debug.Log("here");
         var protectedTypes = new[]{
             PokemonOperations.Types.Rock, PokemonOperations.Types.Ground, PokemonOperations.Types.Steel
         };
         var validParticipants = Battle_handler.Instance.GetValidParticipants();
         foreach (var participant in validParticipants)
         {
+            Debug.Log("valid");
             var isProtected = false;
             foreach (var protectedType in protectedTypes)
             {
@@ -444,26 +451,29 @@ public class Turn_Based_Combat : MonoBehaviour
                 }
             }
             if (isProtected) continue;
-            DealWeatherDamage(participant);
+            Debug.Log("damagin");
+            yield return DealWeatherDamage(participant);
         }
     }
-    private void RainEffect()
+    private IEnumerator RainEffect()
     {
         DamageModifierForWeather( PokemonOperations.Types.Fire,0.5f);
         DamageModifierForWeather( PokemonOperations.Types.Water,1.5f);
+        yield return null;
     }
-    private void SunEffect()
+    private IEnumerator SunEffect()
     {
         DamageModifierForWeather( PokemonOperations.Types.Fire,1.5f);
         DamageModifierForWeather( PokemonOperations.Types.Water,0.5f);
+        yield return null;
     }
-    private void HailEffect()
+    private IEnumerator HailEffect()
     {
         var validParticipants = Battle_handler.Instance.GetValidParticipants();
         foreach (var participant in validParticipants)
         {
             if (participant.pokemon.HasType(PokemonOperations.Types.Ice)) continue;
-            DealWeatherDamage(participant);
+            yield return DealWeatherDamage(participant);
         }
     }
 
@@ -473,11 +483,12 @@ public class Turn_Based_Combat : MonoBehaviour
         OnWeatherEnd += modifier.RemoveAfterWeather;
         Move_handler.Instance.AddFieldDamageModifier(modifier);
     }
-    private void DealWeatherDamage(Battle_Participant victim)
+    private IEnumerator DealWeatherDamage(Battle_Participant victim)
     {
         Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName + currentWeather.weatherDamageMessage);
         var weatherDamage = victim.pokemon.maxHp * (1 / 16f);
         Move_handler.Instance.DisplayDamage(victim,isSpecificDamage:true,
             predefinedDamage:weatherDamage,displayEffectiveness:false);
+        yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
     }
 }

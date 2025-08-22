@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 [Serializable]
@@ -9,12 +10,12 @@ public class WeatherCondition
     public enum Weather{Rain,Sunlight,Hail,Sandstorm}
 
     public Weather weather;
-    public Action weatherEffect;
+    public Func<IEnumerator> weatherEffect;
     public string weatherBegunMessage;
     public string weatherTurnEndMessage;
     public string weatherDamageMessage;
     public string weatherEndMessage;
-    public List<Battle_Participant> buffedParticipants;
+    public List<Battle_Participant> buffedParticipants = new();
     public WeatherCondition(Weather weather)
     {
         this.weather = weather;
