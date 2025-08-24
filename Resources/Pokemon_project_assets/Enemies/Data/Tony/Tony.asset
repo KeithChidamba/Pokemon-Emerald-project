@@ -17,6 +17,6 @@ MonoBehaviour:
   BaseMoneyPayout: 250
   TrainerLocation: {fileID: 11400000, guid: 2206c03da47f83049b5ab5374e8c8856, type: 2}
   PokemonParty:
-  - {fileID: 11400000, guid: fb07b1a4a357c4047a43831e45981ac1, type: 2}
   - {fileID: 11400000, guid: be1e1b248869be149b6e64afe90e73b4, type: 2}
+  - {fileID: 11400000, guid: fb07b1a4a357c4047a43831e45981ac1, type: 2}
   - {fileID: 11400000, guid: 77b1ba36c17122c4e8506c57e727b5f9, type: 2}

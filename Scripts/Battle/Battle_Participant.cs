@@ -117,7 +117,7 @@ public class Battle_Participant : MonoBehaviour
         if (!isActive) yield break;
         fainted = pokemon.hp <= 0;
         if (!fainted) yield break;
-
+        if (Battle_handler.Instance.faintQueue.Contains(this)) yield break;
         pokemon.statusEffect = PokemonOperations.StatusEffect.None;
         Battle_handler.Instance.faintQueue.Add(this);
         yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);

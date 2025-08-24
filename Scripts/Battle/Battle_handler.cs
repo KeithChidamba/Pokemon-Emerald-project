@@ -182,7 +182,14 @@ public class Battle_handler : MonoBehaviour
     }
     private void SetValidParticipants()
     {
-        GetValidParticipants().ForEach(p=> SetParticipant(p,initialCall:true));
+        foreach (var participant in battleParticipants)
+        {
+            if (participant.pokemon != null)
+                if (participant.pokemon.hp > 0)
+                {
+                    SetParticipant(participant, participant.pokemon, initialCall: true);
+                }
+        }
     }
     void LoadAreaBackground(Encounter_Area area)
     {
@@ -303,27 +310,29 @@ public class Battle_handler : MonoBehaviour
         SetupBattle();
     }
 
-    public void SetParticipant(Battle_Participant participant, bool initialCall = false, Pokemon newPokemon = null)
+    public void SetParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)
     {
         OnSwitchOut?.Invoke(participant);
         participant.isEnemy = Array.IndexOf(battleParticipants, participant) > 1 ;
-        if (participant.isPlayer)
-        { //for switch-ins
-            if (!initialCall)
-            { 
-                participant.pokemon = newPokemon ??  participant.pokemon;
-                foreach (var enemyParticipant  in participant.currentEnemies)
+        if(!initialCall)
+        {
+            participant.pokemon = newPokemon;
+            if (participant.isPlayer)
+            {
+                //add enemies to exp list of new player pokemon
+                foreach (var enemyParticipant in participant.currentEnemies)
                     enemyParticipant.AddToExpList(participant.pokemon);
             }
-        } 
-        else
-        {//add player participants to get exp from switched in enemy
-            participant.pokemon = newPokemon ??  participant.pokemon;
-            foreach (var playerParticipant  in participant.currentEnemies)
-                participant.AddToExpList(playerParticipant.pokemon);
-            
-            participant.pokemon.pokemonName = (participant.isEnemy)? 
-                "Foe " + participant.pokemon.pokemonName : participant.pokemon.pokemonName;
+            else
+            {
+                //add player participants to get exp from switched in enemy
+                foreach (var playerParticipant in participant.currentEnemies)
+                    participant.AddToExpList(playerParticipant.pokemon);
+                
+                participant.pokemon.pokemonName = (participant.isEnemy)
+                    ? "Foe " + participant.pokemon.pokemonName
+                    : participant.pokemon.pokemonName;
+            }
         }
         //setup participant for battle
         participant.statData.SaveActualStats();
@@ -335,8 +344,33 @@ public class Battle_handler : MonoBehaviour
 
     public List<Battle_Participant> GetValidParticipants()
     {
-        return battleParticipants.ToList().Where(p => 
-            p.isActive && p.pokemon != null && p.pokemon.hp>0).ToList();
+        var validList = new List<Battle_Participant>();
+        foreach (var participant in battleParticipants)
+        {
+            if (participant.isActive)
+            {
+                if (participant.pokemon!=null)
+                {
+                    if (participant.pokemon.hp>0)
+                    {
+                        validList.Add(participant);
+                    }
+                    else
+                    {
+                        Debug.Log(participant.name+"pokemon dead");
+                    }
+                }
+                else
+                {
+                    Debug.Log(participant.name+"pokemon null");
+                }
+            }
+            else
+            {
+                Debug.Log(participant.name+"inactive");
+            }
+        }
+        return validList;
     }
     public void CheckParticipantStates()
     {

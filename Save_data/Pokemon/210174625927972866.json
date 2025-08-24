@@ -6,7 +6,7 @@
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26210
+        "instanceID": 26212
     },
     "hasGender": true,
     "hp": 75.0,
@@ -55,10 +55,10 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26530
+            "instanceID": 26532
         },
         {
-            "instanceID": 26462
+            "instanceID": 26464
         }
     ],
     "statusEffect": 0,
@@ -130,33 +130,33 @@
     ],
     "moveSet": [
         {
-            "instanceID": -3482
+            "instanceID": -9420
         },
         {
-            "instanceID": -3484
+            "instanceID": -9422
         },
         {
-            "instanceID": -3486
+            "instanceID": -9424
         },
         {
-            "instanceID": -3488
+            "instanceID": -9426
         }
     ],
     "ability": {
-        "instanceID": 25536
+        "instanceID": 25538
     },
     "evolutions": [
         {
-            "instanceID": 26004
+            "instanceID": 26006
         },
         {
-            "instanceID": 26132
+            "instanceID": 26134
         },
         {
-            "instanceID": 25914
+            "instanceID": 25916
         },
         {
-            "instanceID": 26136
+            "instanceID": 26138
         }
     ],
     "heldItem": {

@@ -18,14 +18,14 @@
     "isMultiModular": true,
     "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": 25152
+        "instanceID": 25154
     },
     "additionalInfoModules": [
         {
-            "instanceID": 25152
+            "instanceID": 25154
         },
         {
-            "instanceID": 25910
+            "instanceID": 25912
         }
     ],
     "infoModuleAssetNames": [

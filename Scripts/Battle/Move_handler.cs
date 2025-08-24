@@ -19,8 +19,8 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
     private Battle_event[] _dialougeOrder={null,null,null,null,null,null,null};
     private List<OnFieldDamageModifier> _onFieldDamageModifiers = new();
-    private List<DamageDisplayData> _damageDisplayQueue = new();
-    private List<DamageDisplayData> _healhGainQueue = new();
+    [SerializeField]private List<DamageDisplayData> _damageDisplayQueue = new();
+    [SerializeField]private List<DamageDisplayData> _healhGainQueue = new();
     private bool _repeatingMoveCycle = false;
     private bool _moveDelay = false;
     private bool _cancelMove = false;
@@ -96,6 +96,8 @@ public class Move_handler:MonoBehaviour
                 victim.OnPokemonFainted -= CancelMoveSequence;
             }
         }
+        yield return new WaitUntil(()=> !displayingDamage);
+        yield return new WaitUntil(()=> !displayingHealthGain);
         yield return new WaitUntil(() => !_moveDelay);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         ResetMoveUsage();
@@ -169,7 +171,6 @@ public class Move_handler:MonoBehaviour
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type);
         float finalDamage = AccountForVictimsBarriers(move,currentVictim,damageAfterFieldModifiers);
-        
         OnDamageDeal?.Invoke(finalDamage);
         OnMoveHit?.Invoke(attacker,move);
         return finalDamage;
@@ -261,6 +262,7 @@ public class Move_handler:MonoBehaviour
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
                 yield return null;
             }
+            yield return new WaitUntil(() => data.affectedPokemon.hp >= healthAfterChange);
             data.affectedPokemon.hp = Mathf.Floor(healthAfterChange);
             _healhGainQueue.RemoveAt(0);
         }
@@ -276,6 +278,8 @@ public class Move_handler:MonoBehaviour
                 : CalculateMoveDamage(_currentTurn.move, data.affectedParticipant);
             var healthAfterChange = Mathf
                 .Clamp(data.affectedPokemon.hp - damage,0,data.affectedPokemon.maxHp);
+            Debug.Log(data.affectedPokemon.hp);
+            Debug.Log(data.affectedParticipant.pokemon.hp);
             float displayHp = data.affectedPokemon.hp;
             while (displayHp > healthAfterChange)
             {
@@ -285,7 +289,6 @@ public class Move_handler:MonoBehaviour
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
                 yield return null;
             }
-            
             data.affectedPokemon.hp = healthAfterChange;
             if (!_currentTurn.move.isConsecutive && data.displayEffectiveness)
             {
