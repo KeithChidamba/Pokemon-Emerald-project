@@ -103,7 +103,7 @@ public class Participant_Status : MonoBehaviour
             ,isSpecificDamage:true,math.ceil(_participant.pokemon.maxHp * percentage));
         yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
         dealingStatusDamage = false;
-        _participant.pokemon.TakeDamage();  
+        _participant.pokemon.ChangeHealth();  
     }
     private void AssignStatusDamage()
     {

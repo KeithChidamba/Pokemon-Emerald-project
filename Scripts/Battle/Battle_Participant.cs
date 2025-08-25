@@ -24,7 +24,6 @@ public class Battle_Participant : MonoBehaviour
     public bool isPlayer;
     public bool isEnemy;
     public bool isActive;
-    public bool fainted;
     public bool canAttack = true;
     public bool isFlinched;
     public bool isConfused;
@@ -45,6 +44,7 @@ public class Battle_Participant : MonoBehaviour
     public List<TypeImmunityNegation> ImmunityNegations = new();
     public List<Pokemon> expReceivers;
     public Action OnPokemonFainted;
+    private Action OnFaintCheck;
     public List<Barrier> Barrieirs = new();
     private void Start()
     {
@@ -55,7 +55,6 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierSharing;
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
         Battle_handler.Instance.OnBattleEnd += DeactivatePokemon;
-        OnPokemonFainted += Battle_handler.Instance.FaintEvent;
     }
     private void Update()
     {
@@ -112,19 +111,17 @@ public class Battle_Participant : MonoBehaviour
 
         expReceivers.Clear();
     }
-    private IEnumerator CheckIfFainted()
+    private void CheckIfFainted()
     {
-        if (!isActive) yield break;
-        fainted = pokemon.hp <= 0;
-        if (!fainted) yield break;
-        if (Battle_handler.Instance.faintQueue.Contains(this)) yield break;
+        if (!isActive) return;
+        if (pokemon.hp > 0) return;
         pokemon.statusEffect = PokemonOperations.StatusEffect.None;
         Battle_handler.Instance.faintQueue.Add(this);
-        yield return new WaitUntil(() => !Move_handler.Instance.processingOrder);
         pokemon.DetermineFriendshipLevelChange(
             false, PokemonOperations.FriendshipModifier.Fainted);
-        if(!Turn_Based_Combat.Instance.faintEventDelay)
-            OnPokemonFainted?.Invoke();
+        OnPokemonFainted?.Invoke();
+        if (!Turn_Based_Combat.Instance.faintEventDelay)
+            Battle_handler.Instance.StartFaintEvent();
     }
     public IEnumerator HandleFaintLogic()
     {
@@ -199,6 +196,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.ConfusionCheck;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.NotifyHealing;
+        pokemon.OnHealthChanged -= CheckIfFainted;
     }
     public void ResetParticipantState()
     {
@@ -294,7 +292,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private void ActivateUI(GameObject[]arr,bool on)
     {
-        foreach (GameObject obj in arr)
+        foreach (var obj in arr)
             obj.SetActive(on);
     }
     private void SetExpBarValue()
@@ -307,7 +305,6 @@ public class Battle_Participant : MonoBehaviour
     {
         RefreshStatusEffectImage();
         playerHpSlider.minValue = 0;
-        fainted = false;
         isActive = true;
         participantUI.SetActive(true);
         ActivateGenderImage();
@@ -322,7 +319,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.ConfusionCheck;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
-        pokemon.OnDamageTaken += ()=> StartCoroutine(CheckIfFainted());
+        pokemon.OnHealthChanged += CheckIfFainted;
         if (!isPlayer) return;
         pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
         pokemon.OnLevelUp += Battle_handler.Instance.LevelUpEvent;
@@ -334,7 +331,9 @@ public class Battle_Participant : MonoBehaviour
     {
         pokemonGenderImage.gameObject.SetActive(true);
         if(pokemon.hasGender)
-            pokemonGenderImage.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+pokemon.gender.ToString().ToLower());
+            pokemonGenderImage.sprite = Resources.Load<Sprite>(
+                Save_manager.GetDirectory(Save_manager.AssetDirectory.UI) 
+                + pokemon.gender.ToString().ToLower());
         else
             pokemonGenderImage.gameObject.SetActive(false);
     }

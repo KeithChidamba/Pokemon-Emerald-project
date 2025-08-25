@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 26020
+        "instanceID": 26018
     },
     "hasGender": true,
     "hp": 15.0,
@@ -55,7 +55,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26306
+            "instanceID": 26304
         }
     ],
     "statusEffect": 0,
@@ -137,44 +137,43 @@
         1,
         3,
         11,
-        12,
-        10
+        12
     ],
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -9394
+            "instanceID": -19406
         },
         {
-            "instanceID": -9396
+            "instanceID": -19408
         },
         {
-            "instanceID": -9398
+            "instanceID": -19410
         },
         {
-            "instanceID": -9400
+            "instanceID": -19412
         }
     ],
     "ability": {
-        "instanceID": 25652
+        "instanceID": 25650
     },
     "evolutions": [
         {
-            "instanceID": 26584
+            "instanceID": 26582
         },
         {
-            "instanceID": 25104
+            "instanceID": 25102
         }
     ],
     "heldItem": {
-        "instanceID": -9404
+        "instanceID": -19416
     },
     "hasItem": true,
     "frontPicture": {
-        "instanceID": 32338
+        "instanceID": 32336
     },
     "backPicture": {
-        "instanceID": 32230
+        "instanceID": 32228
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 2,
@@ -201,10 +200,10 @@
             "moveType": "grass"
         },
         {
-            "moveName": "sandstorm",
-            "powerPoints": 10,
-            "maxPowerPoints": 10,
-            "moveType": "rock"
+            "moveName": "quick attack",
+            "powerPoints": 29,
+            "maxPowerPoints": 30,
+            "moveType": "normal"
         },
         {
             "moveName": "fury cutter",

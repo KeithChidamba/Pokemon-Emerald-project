@@ -80,7 +80,7 @@ public class Pokemon : ScriptableObject
     public int healthPhase;
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
-    public event Action OnDamageTaken;
+    public event Action OnHealthChanged;
     //data conversion when json to obj
     public string abilityName;
     public string natureName;
@@ -354,13 +354,12 @@ public class Pokemon : ScriptableObject
             LevelUp();
     }
 
-    public void TakeDamage()
+    public void ChangeHealth()
     {
-        OnDamageTaken?.Invoke();
+        OnHealthChanged?.Invoke();
     }
     private void ClearEvents()
     {
-        OnDamageTaken = null;
         OnLevelUp = null;
         OnNewLevel = null;
     }

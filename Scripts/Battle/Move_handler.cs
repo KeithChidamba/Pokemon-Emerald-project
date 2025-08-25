@@ -96,10 +96,10 @@ public class Move_handler:MonoBehaviour
                 victim.OnPokemonFainted -= CancelMoveSequence;
             }
         }
-        yield return new WaitUntil(()=> !displayingDamage);
         yield return new WaitUntil(()=> !displayingHealthGain);
         yield return new WaitUntil(() => !_moveDelay);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(()=> !displayingDamage);
         ResetMoveUsage();
     }
 
@@ -255,11 +255,11 @@ public class Move_handler:MonoBehaviour
             float displayHp = data.affectedPokemon.hp;
             while (displayHp < healthAfterChange)
             {
-                data.affectedPokemon.TakeDamage();
                 float newHp = Mathf.MoveTowards(displayHp, healthAfterChange
                     ,data.affectedPokemon.healthPhase  * 10f *Time.deltaTime);
                 displayHp = newHp;
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
+                data.affectedPokemon.ChangeHealth();  
                 yield return null;
             }
             yield return new WaitUntil(() => data.affectedPokemon.hp >= healthAfterChange);
@@ -278,8 +278,6 @@ public class Move_handler:MonoBehaviour
                 : CalculateMoveDamage(_currentTurn.move, data.affectedParticipant);
             var healthAfterChange = Mathf
                 .Clamp(data.affectedPokemon.hp - damage,0,data.affectedPokemon.maxHp);
-            Debug.Log(data.affectedPokemon.hp);
-            Debug.Log(data.affectedParticipant.pokemon.hp);
             float displayHp = data.affectedPokemon.hp;
             while (displayHp > healthAfterChange)
             {
@@ -289,15 +287,17 @@ public class Move_handler:MonoBehaviour
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
                 yield return null;
             }
-            data.affectedPokemon.hp = healthAfterChange;
+            yield return new WaitUntil(() => data.affectedPokemon.hp <= healthAfterChange);
+            data.affectedPokemon.hp =  Mathf.Floor(healthAfterChange);
             if (!_currentTurn.move.isConsecutive && data.displayEffectiveness)
             {
                 var typeEffectiveness = BattleOperations
                     .GetTypeEffectiveness(data.affectedParticipant, _currentTurn.move.type);
                 DisplayEffectiveness(typeEffectiveness,data.affectedParticipant);
             }
-            data.affectedPokemon.TakeDamage();
+            data.affectedPokemon.ChangeHealth();  
             _damageDisplayQueue.RemoveAt(0);
+            yield return null;
         }
         displayingDamage = false;
     }

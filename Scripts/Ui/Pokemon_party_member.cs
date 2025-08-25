@@ -71,12 +71,12 @@ public class Pokemon_party_member : MonoBehaviour
         if (currentState.stateGroups.Contains(InputStateHandler.StateGroup.PokemonParty))
         {
             _healthPhaseUpdateEvent = () => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
-            pokemon.OnDamageTaken += _healthPhaseUpdateEvent;
+            pokemon.OnHealthChanged += _healthPhaseUpdateEvent;
             _isViewingCard = true;
         }
         else
         {
-            pokemon.OnDamageTaken -= _healthPhaseUpdateEvent;
+            pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
             _isViewingCard = false;
         }
     }

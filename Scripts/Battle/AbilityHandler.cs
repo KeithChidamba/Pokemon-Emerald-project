@@ -38,7 +38,8 @@ public class AbilityHandler : MonoBehaviour
 
     void CheckAbilityUsability()
     {
-        if(!_participant.fainted)
+        if (!_participant.isActive) return;
+        if(_participant.pokemon.hp>0)
             OnAbilityUsed?.Invoke();
     }
 

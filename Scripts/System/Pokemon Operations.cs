@@ -256,10 +256,14 @@ public static class PokemonOperations
             case TM tm:
                 if (CurrentPokemon.learnableTms.Contains(tm.TmName))
                     LearnMove(tm.move.moveName,isLevelUpMove:false);
+                else
+                    Dialogue_handler.Instance.DisplayDetails(pokemon.pokemonName+" cant learn that!");
                 break;
             case HM hm:
                 if (CurrentPokemon.learnableHms.Contains(hm.HmName))
-                    LearnMove(hm.move.moveName,isLevelUpMove:false);
+                    LearnMove(hm.move.moveName,isLevelUpMove:false);      
+                else
+                    Dialogue_handler.Instance.DisplayDetails(pokemon.pokemonName+" cant learn that!");
                 break;
         }
     }

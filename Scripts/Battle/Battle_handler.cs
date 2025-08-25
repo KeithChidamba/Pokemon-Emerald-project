@@ -43,6 +43,7 @@ public class Battle_handler : MonoBehaviour
     public event Action OnBattleEnd;
     public event Action OnSwitchIn;
     public event Action<Battle_Participant> OnSwitchOut;
+    private Action CheckParticipantsEachTurn;
     
     private void Awake()
     {
@@ -165,7 +166,8 @@ public class Battle_handler : MonoBehaviour
     }
     private void SetupBattle()
     {
-        Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantStates;
+        CheckParticipantsEachTurn = ()=> CheckParticipantStates();
+        Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantsEachTurn;
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
         InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
         SetupOptionsInput();
@@ -338,7 +340,7 @@ public class Battle_handler : MonoBehaviour
         participant.statData.SaveActualStats();
         participant.ActivateParticipant();
         participant.abilityHandler.SetAbilityMethod();
-        CheckParticipantStates();
+        CheckParticipantStates(initialCall);
         OnSwitchIn?.Invoke();
     }
 
@@ -372,7 +374,7 @@ public class Battle_handler : MonoBehaviour
         }
         return validList;
     }
-    public void CheckParticipantStates()
+    public void CheckParticipantStates(bool initialCall=false)
     {
         participantCount = 0;
         foreach (var participant in battleParticipants)
@@ -380,6 +382,7 @@ public class Battle_handler : MonoBehaviour
             if (participant.pokemon == null) continue;
             participantCount++;
             //if revived during double battle for example
+            if(initialCall)continue;
             if (participant.pokemon.hp > 0 & !participant.isActive)
                 participant.ActivateParticipant();
         }
@@ -442,7 +445,7 @@ public class Battle_handler : MonoBehaviour
         //in future can add another condition for abilities that increase/give money
         return 1;
     }
-    public void FaintEvent()
+    public void StartFaintEvent()
     {
         StartCoroutine(FaintSequence());
     } 
@@ -455,6 +458,7 @@ public class Battle_handler : MonoBehaviour
             StartCoroutine(faintQueue[0].HandleFaintLogic());
             yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
             faintQueue.RemoveAt(0);
+            yield return null;
         }
     }
     IEnumerator DelayBattleEnd()
@@ -557,7 +561,7 @@ public class Battle_handler : MonoBehaviour
     void ResetUiAfterBattle(bool playerWhiteOut)
     {
         OnBattleEnd?.Invoke();
-        Turn_Based_Combat.Instance.OnNewTurn -= CheckParticipantStates;
+        Turn_Based_Combat.Instance.OnNewTurn -= CheckParticipantsEachTurn;;
         Turn_Based_Combat.Instance.OnNewTurn -= ResetAi;
         Dialogue_handler.Instance.EndDialogue();
         usedTurnForItem = false;
