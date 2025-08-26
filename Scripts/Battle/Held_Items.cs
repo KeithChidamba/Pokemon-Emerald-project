@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -9,6 +10,7 @@ public class Held_Items : MonoBehaviour
     private Battle_Participant _participant;
     private Item _heldItem;
     public bool processingItemEffect;
+    public event Action<Held_Items> OnHeldItemUsage;
     void Start()
     {
         _participant =  GetComponent<Battle_Participant>();
@@ -29,7 +31,7 @@ public class Held_Items : MonoBehaviour
             _participant.pokemon.RemoveHeldItem(); return; 
         }
         if (!_heldItem.canBeUsedInBattle) return;
-
+        
         switch (_heldItem.itemType)
         {
             case Item_handler.ItemType.Berry:
@@ -61,6 +63,7 @@ public class Held_Items : MonoBehaviour
     {
         if(_participant.pokemon.hp >= (_participant.pokemon.maxHp/2)) return;
         processingItemEffect = true;
+        OnHeldItemUsage?.Invoke(this);
         DepleteHeldItem();
         StartCoroutine(GetHealing());
     }    
@@ -68,6 +71,7 @@ public class Held_Items : MonoBehaviour
     {
         if(_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
         processingItemEffect = true;
+        OnHeldItemUsage?.Invoke(this);
         DepleteHeldItem();
         StartCoroutine(GetStatusHealing());
     }

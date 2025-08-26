@@ -146,7 +146,7 @@ public class AbilityHandler : MonoBehaviour
     {
         if (participant != _participant) return;
         foreach (var enemy in _participant.currentEnemies)
-            enemy.canEscape = true;
+            enemy.statusHandler.RemoveTrap();
         Battle_handler.Instance.OnSwitchIn -= TrapEnemies;
         Battle_handler.Instance.OnSwitchOut -= RemoveTrap;
     }
@@ -159,10 +159,10 @@ public class AbilityHandler : MonoBehaviour
             Move_handler.Instance.TrapEnemy(enemy,false);
         }
     }
-    void HealStatusEffect()
+    void HealStatusEffect(Battle_Participant participant)
     {
         var currentStatus = _participant.pokemon.statusEffect;
-        if (currentStatus == PokemonOperations.StatusEffect.None) return;
+        
         if (Utility.RandomRange(1, 4) < 2)
         {
             if (currentStatus == PokemonOperations.StatusEffect.Sleep

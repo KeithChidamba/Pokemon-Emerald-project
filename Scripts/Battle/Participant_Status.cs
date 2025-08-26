@@ -15,7 +15,7 @@ public class Participant_Status : MonoBehaviour
     private int _trapDuration;
     private TrapData _currentTrap;
     private readonly Dictionary<PokemonOperations.StatusEffect, Action> _statusEffectMethods = new ();
-    public event Action OnStatusCheck;
+    public event Action<Battle_Participant> OnStatusCheck;
     public bool dealingStatusDamage;
     void Start()
     {
@@ -41,10 +41,16 @@ public class Participant_Status : MonoBehaviour
         _confusionDuration = numTurns;
         _participant.isConfused = true;
     }
-    public void SetupTrapDuration(int numTurns,Move move)
+    public void SetupTrapDuration(int numTurns = 0,Move move = null,bool hasDuration = true)
     {
+        if (!hasDuration)
+        {
+            _currentTrap = new TrapData(null,false);
+            _participant.canEscape = false;
+            return;
+        }
         _trapDuration = numTurns;
-        _currentTrap = new TrapData(move);
+        _currentTrap = new TrapData(move,true);
         Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName + _currentTrap.OnTrapMessage);
         _participant.canEscape = false;
     }
@@ -74,11 +80,11 @@ public class Participant_Status : MonoBehaviour
     }
     public void CheckStatus()
     {
-        OnStatusCheck?.Invoke();
         if (overworld_actions.Instance.usingUI) return; 
         if (!_participant.isActive) return;
         if(_participant.pokemon.hp<=0 )return;
         if(Battle_handler.Instance.battleOver)return;
+        
         if (_participant.isFlinched)
         {
             _participant.isFlinched = false;
@@ -88,6 +94,8 @@ public class Participant_Status : MonoBehaviour
             _participant.canBeDamaged = true;
         
         if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
+        
+        OnStatusCheck?.Invoke(_participant);
         _participant.RefreshStatusEffectImage();
         AssignStatusDamage();
     }
@@ -136,10 +144,12 @@ public class Participant_Status : MonoBehaviour
         if (_participant != participant) return;
         if (!_participant.isActive) return;
         if (_participant.canEscape) return;
+        if (_currentTrap == null) return;
+        if (!_currentTrap.hasDuration) return;
         if (_trapDuration <= 0)
         {
             Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+_currentTrap.OnFreeMessage);
-            _participant.canEscape = true;
+            RemoveTrap();
             return;
         }
         GetDamageFromStatus(_currentTrap.OnHitMessage, 1 / 16f);
@@ -206,6 +216,11 @@ public class Participant_Status : MonoBehaviour
         }
     }
 
+    public void RemoveTrap()
+    {
+        _participant.canEscape = true;
+        _currentTrap = null;
+    }
     public void NotifyHealing(Battle_Participant participant)
     {//only for freeze and sleep
         if (participant != _participant) return;

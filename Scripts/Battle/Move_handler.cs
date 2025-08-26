@@ -96,10 +96,11 @@ public class Move_handler:MonoBehaviour
                 victim.OnPokemonFainted -= CancelMoveSequence;
             }
         }
-        yield return new WaitUntil(()=> !displayingHealthGain);
+
         yield return new WaitUntil(() => !_moveDelay);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         yield return new WaitUntil(()=> !displayingDamage);
+        yield return new WaitUntil(()=> !displayingHealthGain);
         ResetMoveUsage();
     }
 
@@ -259,11 +260,16 @@ public class Move_handler:MonoBehaviour
                     ,data.affectedPokemon.healthPhase  * 10f *Time.deltaTime);
                 displayHp = newHp;
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
-                data.affectedPokemon.ChangeHealth();  
+                
+                if(InputStateHandler.Instance.currentState.stateGroups
+                   .Contains(InputStateHandler.StateGroup.PokemonParty))
+                {//update party health ui
+                    data.affectedPokemon.ChangeHealth();
+                }  
+                
                 yield return null;
             }
-            yield return new WaitUntil(() => data.affectedPokemon.hp >= healthAfterChange);
-            data.affectedPokemon.hp = Mathf.Floor(healthAfterChange);
+            yield return new WaitUntil(() => data.affectedPokemon.hp >= Mathf.Floor(healthAfterChange));
             _healhGainQueue.RemoveAt(0);
         }
         displayingHealthGain = false;
@@ -426,7 +432,7 @@ public class Move_handler:MonoBehaviour
             }
             
             if (_currentTurn.move.statusChance == 0)
-                enemy.canEscape = false;//moves that guarantee trap for indefinite turn count
+                enemy.statusHandler.SetupTrapDuration(hasDuration:false);
             else
             {
                 var numTurnsOfTrap = Utility.RandomRange(2, (int)_currentTurn.move.statusChance+1);
@@ -435,7 +441,7 @@ public class Move_handler:MonoBehaviour
             
             return;
         }
-        enemy.canEscape = false;
+        enemy.statusHandler.SetupTrapDuration(hasDuration:false);
     }
     void ConfuseEnemy()
     {
@@ -616,7 +622,7 @@ public class Move_handler:MonoBehaviour
             if (victim.pokemon.hp <= 0) break;
             
             Dialogue_handler.Instance.DisplayBattleInfo("Hit "+(i+1)+"!");//remove later if added animations
-            DisplayDamage(victim);
+            DisplayDamage(victim,false);
             yield return new WaitUntil(() => !displayingDamage);
             numHits++;
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
@@ -670,9 +676,10 @@ public class Move_handler:MonoBehaviour
         DisplayDamage(victim,isSpecificDamage:true,predefinedDamage:damage);
         yield return new WaitUntil(() => !displayingDamage);
         HealthGainDisplay(healAmount,healthGainer:attacker);
-        yield return new WaitUntil(() => !displayingHealthGain);
+        
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(() => !displayingHealthGain);
         _moveDelay = false;
     }
 

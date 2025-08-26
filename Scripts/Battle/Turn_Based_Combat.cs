@@ -19,8 +19,11 @@ public class Turn_Based_Combat : MonoBehaviour
     public bool levelEventDelay = false;
     public bool faintEventDelay = false;
     public WeatherCondition currentWeather;
+    public WeatherCondition clearWeather;
     private event Func<IEnumerator> OnWeatherEffect;
     public event Action OnWeatherEnd;
+    private List<Battle_Participant> _statusCheckQueue = new();
+    private List<Held_Items> _heldItemUsageQueue = new();
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -36,8 +39,21 @@ public class Turn_Based_Combat : MonoBehaviour
         OnNewTurn += AllowPlayerInput;
         OnNewTurn += CheckParticipantCoolDown;
         Battle_handler.Instance.OnSwitchOut += RemoveWeatherBuffReceiver;
+        Battle_handler.Instance.OnBattleStart += AddParticipantQueues;
+        clearWeather = new WeatherCondition(WeatherCondition.Weather.Clear);
+        currentWeather = clearWeather;
     }
 
+    private void AddParticipantQueues()
+    {
+        Battle_handler.Instance.OnBattleStart -= AddParticipantQueues;
+        foreach(var participant in Battle_handler.Instance.battleParticipants)
+        {
+            participant.statusHandler.OnStatusCheck += p => _statusCheckQueue.Add(p);
+            participant.heldItemHandler.OnHeldItemUsage +=
+                heldItemHandler=>_heldItemUsageQueue.Add(heldItemHandler);
+        }
+    }
     public void SaveMove(Turn turn)
     {
         _turnHistory.Add(turn);
@@ -67,7 +83,7 @@ public class Turn_Based_Combat : MonoBehaviour
     private void ResetTurnState()
     {
         currentTurnIndex = 0;
-        currentWeather = null;
+        currentWeather.weather = WeatherCondition.Weather.Clear;
         _turnHistory.Clear();
         faintEventDelay = false;
         levelEventDelay = false;
@@ -144,14 +160,16 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private IEnumerator ExecuteMoves(List<Turn> turnOrder)
     {
-        StartCoroutine(HandleSwaps());
+        yield return StartCoroutine(HandleSwaps());
+        
         foreach (var currentTurn in turnOrder )
         {
             if (Battle_handler.Instance.battleOver) break;
 
             var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
             var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
-
+            
+            //check on participants
             if (!IsValidParticipantState(attacker))
                 continue;
             
@@ -166,29 +184,29 @@ public class Turn_Based_Combat : MonoBehaviour
             //     continue;
             // }
             if (!IsValidParticipantState(victim))
-            {//if attack was directed at a pokemon that just fainted
-               
+            {
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
                 yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
                 continue;
             }
             
             OnMoveExecute?.Invoke(attacker);
+            
             //processing held item effect
-            var heldItemEffects = Battle_handler.Instance.battleParticipants.Count(p =>
-                p.heldItemHandler.processingItemEffect);
-            while (heldItemEffects>0)
+            while (_heldItemUsageQueue.Count > 0)
             {
-                heldItemEffects = Battle_handler.Instance.battleParticipants.Count(p =>
-                    p.heldItemHandler.processingItemEffect);
+                yield return new WaitUntil( ()=> !_heldItemUsageQueue[0].processingItemEffect);
+                _heldItemUsageQueue.RemoveAt(0);
                 yield return null;
             }
             yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
 
-            if (CanAttack(currentTurn,attacker,victim))//test if confusion damage is waited for
+            if (CanAttack(currentTurn,attacker,victim))
             {
                 yield return new WaitUntil(() => !levelEventDelay);
+                yield return new WaitUntil(()=> !Move_handler.Instance.displayingDamage);//confusion damage
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
+                
                 Move_handler.Instance.doingMove = true;
                 CheckRepeatedMove(attacker,currentTurn.move);
                 Move_handler.Instance.ExecuteMove(currentTurn);
@@ -208,28 +226,29 @@ public class Turn_Based_Combat : MonoBehaviour
         OnTurnsCompleted?.Invoke();
         
         //damage from status effect
-        var damageProcessing = Battle_handler.Instance.battleParticipants.Count(p =>
-                p.statusHandler.dealingStatusDamage);
-        while (damageProcessing>0)
+        while (_statusCheckQueue.Count > 0)
         {
-            damageProcessing = Battle_handler.Instance.battleParticipants.Count(p =>
-                    p.statusHandler.dealingStatusDamage);
+            yield return new WaitUntil( ()=> !_statusCheckQueue[0].statusHandler.dealingStatusDamage);
+            _statusCheckQueue.RemoveAt(0);
             yield return null;
         }
-        yield return new WaitUntil(()=> damageProcessing == 0);
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         
-        ReduceWeatherDuration();
-        yield return ExecuteWeatherEffect();
+        //damage from weather
+        if (currentWeather.weather != WeatherCondition.Weather.Clear)
+        {
+            ReduceWeatherDuration();
+            yield return ExecuteWeatherEffect();
+        }
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         NextTurn();
     }
-
     private IEnumerator HandleSwaps()
     {
-        foreach (var swap in new List<SwitchOutData>(switchOutQueue))
+        while ( switchOutQueue.Count > 0)
         {
+            var swap = switchOutQueue[0];
             //check if move used was pursuit
             var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
                 turn.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.Pursuit));
@@ -251,9 +270,9 @@ public class Turn_Based_Combat : MonoBehaviour
                 Battle_handler.Instance.SetParticipant(swap.Participant
                     ,newPokemon:swap.Participant.pokemonTrainerAI.trainerParty[swap.MemberToSwapWith]);
             }
-            switchOutQueue.Remove(swap);
+            switchOutQueue.RemoveAt(0);
+            yield return null;
         }
-        yield return new WaitUntil(() => switchOutQueue.Count==0);
     }
     public void AddToSwitchQueue(SwitchOutData data)
     {
@@ -394,14 +413,13 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private void ReduceWeatherDuration()
     {
-        if (currentWeather == null) return;
         if (currentWeather.isInfinite) return;
         if (currentWeather.turnDuration == 0)
         {
             OnWeatherEnd?.Invoke();
             OnWeatherEffect -= currentWeather.weatherEffect;
             Dialogue_handler.Instance.DisplayBattleInfo(currentWeather.weatherEndMessage);
-            currentWeather = null;
+            currentWeather = clearWeather;
             return;
         }
         currentWeather.turnDuration--;
@@ -409,14 +427,14 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private IEnumerator ExecuteWeatherEffect()
     {
-        if (currentWeather == null) yield break;
         Dialogue_handler.Instance.DisplayBattleInfo(currentWeather.weatherTurnEndMessage);
         yield return OnWeatherEffect?.Invoke();
     }
 
     private void RemoveWeatherBuffReceiver(Battle_Participant participant)
     {
-        if (currentWeather == null) return;
+        if (currentWeather.weather == WeatherCondition.Weather.Clear) return;
+        if (!currentWeather.buffedParticipants.Contains(participant)) return;
         currentWeather.buffedParticipants.Remove(participant);
     }
     private IEnumerator SandStormEffect()

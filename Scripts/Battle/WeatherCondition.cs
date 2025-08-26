@@ -7,7 +7,7 @@ public class WeatherCondition
 {
     public int turnDuration;
     public bool isInfinite;
-    public enum Weather{Rain,Sunlight,Hail,Sandstorm}
+    public enum Weather{Rain,Sunlight,Hail,Sandstorm, Clear}
 
     public Weather weather;
     public Func<IEnumerator> weatherEffect;

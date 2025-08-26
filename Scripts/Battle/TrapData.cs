@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,16 @@ using UnityEngine;
 public class TrapData
 {
     private Move _trapMove;
+    public bool hasDuration;
     public string OnTrapMessage;
     public string OnHitMessage;
     public string OnFreeMessage;
-    public TrapData(Move move)
+    public TrapData(Move move, bool hasDuration)
     {
         _trapMove = move;
-        GetTrapMessage();
+        this.hasDuration = hasDuration;
+        if(hasDuration)
+            GetTrapMessage();
     }
 
     void GetTrapMessage()

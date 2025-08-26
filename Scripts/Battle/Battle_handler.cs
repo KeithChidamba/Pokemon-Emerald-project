@@ -41,9 +41,10 @@ public class Battle_handler : MonoBehaviour
     public bool usedTurnForSwap;
     public static Battle_handler Instance;
     public event Action OnBattleEnd;
+    public event Action OnBattleStart;
     public event Action OnSwitchIn;
     public event Action<Battle_Participant> OnSwitchOut;
-    private Action CheckParticipantsEachTurn;
+    private Action _checkParticipantsEachTurn;
     
     private void Awake()
     {
@@ -166,8 +167,8 @@ public class Battle_handler : MonoBehaviour
     }
     private void SetupBattle()
     {
-        CheckParticipantsEachTurn = ()=> CheckParticipantStates();
-        Turn_Based_Combat.Instance.OnNewTurn += CheckParticipantsEachTurn;
+        _checkParticipantsEachTurn = ()=> CheckParticipantStates();
+        Turn_Based_Combat.Instance.OnNewTurn += _checkParticipantsEachTurn;
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
         InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
         SetupOptionsInput();
@@ -181,6 +182,7 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForSwap = false;
         Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
+        OnBattleStart?.Invoke();
     }
     private void SetValidParticipants()
     {
@@ -561,7 +563,7 @@ public class Battle_handler : MonoBehaviour
     void ResetUiAfterBattle(bool playerWhiteOut)
     {
         OnBattleEnd?.Invoke();
-        Turn_Based_Combat.Instance.OnNewTurn -= CheckParticipantsEachTurn;;
+        Turn_Based_Combat.Instance.OnNewTurn -= _checkParticipantsEachTurn;;
         Turn_Based_Combat.Instance.OnNewTurn -= ResetAi;
         Dialogue_handler.Instance.EndDialogue();
         usedTurnForItem = false;
