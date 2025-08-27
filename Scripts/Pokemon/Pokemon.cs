@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
@@ -49,7 +50,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("CatchRate")] public float catchRate = 0;
     public int currentLevel = 1;
     public int currentExpAmount = 0;
-    public float nextLevelExpAmount = 0;
+    public int nextLevelExpAmount = 0;
     [FormerlySerializedAs("EXPGroup")] public PokemonOperations.ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
     public int friendshipLevel;
@@ -261,6 +262,42 @@ public class Pokemon : ScriptableObject
         if(currentExpAmount>nextLevelExpAmount)
             LevelUp();
     }
+    public IEnumerator ReceiveExperienceAndDisplay(int amount)
+    {
+        if (currentLevel >= 100) yield break;
+        Debug.Log("here");
+        int remainingExp = amount;
+
+        while (remainingExp > 0 && currentLevel < 100)
+        {
+            Debug.Log("here");
+            int expToNextLevel = nextLevelExpAmount - currentExpAmount;
+
+            // How much EXP should we add this loop? Either all remaining or just enough to hit the next level.
+            int expThisLoop = Mathf.Min(remainingExp, expToNextLevel);
+
+            float displayExp = currentExpAmount;
+
+            // Animate EXP bar filling
+            while (displayExp < currentExpAmount + expThisLoop)
+            {
+                displayExp = Mathf.MoveTowards(displayExp, currentExpAmount + expThisLoop, 30f * Time.deltaTime);
+                currentExpAmount = (int)Mathf.Floor(displayExp);
+                yield return null;
+            }
+
+            // Deduct what we just gave
+            remainingExp -= expThisLoop;
+
+            // If we reached or passed the next level threshold → level up
+            if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
+            {
+                LevelUp();
+                nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel, expGroup);
+            }
+        }
+    }
+
     public int CalculateExperience(Pokemon enemy)
     {
         var trainerBonus = 1f;

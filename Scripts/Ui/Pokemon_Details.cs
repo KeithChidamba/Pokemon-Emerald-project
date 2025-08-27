@@ -59,7 +59,7 @@ public class Pokemon_Details : MonoBehaviour
     private void Update()
     {
         if(currentPokemon == null)return;
-        player_exp.value = ((currentPokemon.currentExpAmount/currentPokemon.nextLevelExpAmount)*100);
+        player_exp.value = (float)currentPokemon.currentExpAmount/currentPokemon.nextLevelExpAmount * 100;
     }
 
     public void ResetDetailsState()

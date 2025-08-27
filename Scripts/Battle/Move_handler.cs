@@ -331,9 +331,12 @@ public class Move_handler:MonoBehaviour
         if (_currentTurn.move.hasSpecialEffect || !_currentTurn.move.hasStatus)
         { processingOrder = false; return; }
         if (victim.pokemon.statusEffect != PokemonOperations.StatusEffect.None)
-        { 
-            if(_currentTurn.move.statusEffect==victim.pokemon.statusEffect)
+        {
+            if (_currentTurn.move.statusEffect == victim.pokemon.statusEffect) 
                 Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" already has a "+victim.pokemon.statusEffect+" effect!");
+            else
+                Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
+            
             processingOrder = false;
             return;
         }

@@ -46,6 +46,7 @@ public class Battle_Participant : MonoBehaviour
     public Action OnPokemonFainted;
     private Action OnFaintCheck;
     public List<Barrier> Barrieirs = new();
+
     private void Start()
     {
         heldItemHandler = GetComponent<Held_Items>();
@@ -73,12 +74,13 @@ public class Battle_Participant : MonoBehaviour
         if(!expReceivers.Contains(pkm))
             expReceivers.Add(pkm);
     }
-    private void DistributeExp(int expFromEnemy)
+    private IEnumerator DistributeExp(int expFromEnemy)
     {
         // Remove fainted or invalid Pokémon
         expReceivers.RemoveAll(p => p.hp <= 0);
-        expReceivers.RemoveAll(p => !Pokemon_party.Instance.party.Contains(p));//only player pokemon receive exp
-        if (expReceivers.Count < 1) return;
+        //only player pokemon receive exp
+        expReceivers.RemoveAll(p => !Pokemon_party.Instance.party.Contains(p));
+        if (expReceivers.Count < 1) yield break;
 
         // Separate holders and participants
         var expShareHolders = expReceivers
@@ -96,8 +98,12 @@ public class Battle_Participant : MonoBehaviour
         if (expShareHolders.Count > 0)
         {
             var shareExpPerHolder = expShareTotal / expShareHolders.Count;
-            foreach (var p in expShareHolders)
-                p.ReceiveExperience(shareExpPerHolder);
+            while (expShareHolders.Count > 0)
+            {
+                var holder = expShareHolders[0];
+                yield return holder.ReceiveExperienceAndDisplay(shareExpPerHolder);
+                expShareHolders.RemoveAt(0);
+            }
         }
 
         // Distribute remaining 50% among participants
@@ -105,11 +111,15 @@ public class Battle_Participant : MonoBehaviour
         if (participants.Count > 0)
         {
             var shareExpPerParticipant = participantTotalExp / participants.Count;
-            foreach (var p in participants)
-                p.ReceiveExperience(shareExpPerParticipant);
+            while (expShareHolders.Count > 0)
+            {
+                var participant = expShareHolders[0];
+                yield return participant.ReceiveExperienceAndDisplay(shareExpPerParticipant);
+                expShareHolders.RemoveAt(0);
+            }
         }
-
         expReceivers.Clear();
+        
     }
     private void CheckIfFainted()
     {
@@ -132,7 +142,7 @@ public class Battle_Participant : MonoBehaviour
             var enemyResponsible =
                 Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon;
             
-            DistributeExp(enemyResponsible.CalculateExperience(pokemon));
+            yield return DistributeExp(enemyResponsible.CalculateExperience(pokemon));
             
             foreach (var enemy in currentEnemies)
                 if(enemy.isActive)
@@ -297,7 +307,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private void SetExpBarValue()
     {
-        playerExpSlider.value = ((pokemon.currentExpAmount/pokemon.nextLevelExpAmount)*100);
+        playerExpSlider.value = (float)pokemon.currentExpAmount / pokemon.nextLevelExpAmount * 100;
         playerExpSlider.maxValue = 100;
         playerExpSlider.minValue = 0;
     }
