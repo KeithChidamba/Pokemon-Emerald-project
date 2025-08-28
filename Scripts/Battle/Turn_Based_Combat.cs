@@ -16,7 +16,7 @@ public class Turn_Based_Combat : MonoBehaviour
     public event Action<Battle_Participant> OnMoveExecute;
     public event Action OnTurnsCompleted;
     public int currentTurnIndex = 0;
-    public bool levelEventDelay = false;
+    public bool expEventDelay = false;
     public bool faintEventDelay = false;
     public WeatherCondition currentWeather;
     public WeatherCondition clearWeather;
@@ -86,7 +86,7 @@ public class Turn_Based_Combat : MonoBehaviour
         currentWeather.weather = WeatherCondition.Weather.Clear;
         _turnHistory.Clear();
         faintEventDelay = false;
-        levelEventDelay = false;
+        expEventDelay = false;
         StopAllCoroutines();
     }
 
@@ -203,7 +203,6 @@ public class Turn_Based_Combat : MonoBehaviour
 
             if (CanAttack(currentTurn,attacker,victim))
             {
-                yield return new WaitUntil(() => !levelEventDelay);
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
                 
                 Move_handler.Instance.doingMove = true;
@@ -211,7 +210,6 @@ public class Turn_Based_Combat : MonoBehaviour
                 Move_handler.Instance.ExecuteMove(currentTurn);
                 
                 yield return new WaitUntil(() => !Move_handler.Instance.doingMove);
-                yield return new WaitUntil(() => !levelEventDelay);
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
             }
             else
@@ -220,7 +218,6 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             }
         }
-        yield return new WaitUntil(() => !levelEventDelay);
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         _turnHistory.Clear();

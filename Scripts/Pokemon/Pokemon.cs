@@ -81,6 +81,7 @@ public class Pokemon : ScriptableObject
     public int healthPhase;
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
+    public event Action<Pokemon> OnExpGainComplete;
     public event Action OnHealthChanged;
     //data conversion when json to obj
     public string abilityName;
@@ -265,12 +266,13 @@ public class Pokemon : ScriptableObject
     public IEnumerator ReceiveExperienceAndDisplay(int amount)
     {
         if (currentLevel >= 100) yield break;
+        
         Debug.Log("here");
         int remainingExp = amount;
-
+        Battle_handler.Instance.StartExpEvent(this);
         while (remainingExp > 0 && currentLevel < 100)
         {
-            Debug.Log("here");
+            Debug.Log("here loop exp");
             int expToNextLevel = nextLevelExpAmount - currentExpAmount;
 
             // How much EXP should we add this loop? Either all remaining or just enough to hit the next level.
@@ -293,9 +295,27 @@ public class Pokemon : ScriptableObject
             if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
             {
                 LevelUp();
+                Dialogue_handler.Instance.DisplayBattleInfo("Wow!");
+                Dialogue_handler.Instance.DisplayBattleInfo(pokemonName+" leveled up!");
+                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+                PokemonOperations.CheckForNewMove(this);
+            
+                if (PokemonOperations.LearningNewMove)
+                {
+                    if (moveSet.Count == 4)
+                    {
+                        yield return new WaitUntil(() => PokemonOperations.SelectingMoveReplacement);
+                        yield return new WaitUntil(() => !PokemonOperations.SelectingMoveReplacement);
+                    }
+                    yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+                }
+                yield return new WaitUntil(() => !PokemonOperations.LearningNewMove);
+                
                 nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel, expGroup);
             }
         }
+        
+        OnExpGainComplete?.Invoke(this);
     }
 
     public int CalculateExperience(Pokemon enemy)

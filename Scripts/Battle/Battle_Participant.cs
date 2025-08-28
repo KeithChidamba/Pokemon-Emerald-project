@@ -76,6 +76,8 @@ public class Battle_Participant : MonoBehaviour
     }
     private IEnumerator DistributeExp(int expFromEnemy)
     {
+        Turn_Based_Combat.Instance.expEventDelay = true;
+        
         // Remove fainted or invalid Pokémon
         expReceivers.RemoveAll(p => p.hp <= 0);
         //only player pokemon receive exp
@@ -118,6 +120,8 @@ public class Battle_Participant : MonoBehaviour
                 expShareHolders.RemoveAt(0);
             }
         }
+
+        Turn_Based_Combat.Instance.expEventDelay = false;
         expReceivers.Clear();
         
     }
@@ -144,11 +148,12 @@ public class Battle_Participant : MonoBehaviour
             
             yield return DistributeExp(enemyResponsible.CalculateExperience(pokemon));
             
+            yield return new WaitUntil(() => !Turn_Based_Combat.Instance.expEventDelay);
+            
             foreach (var enemy in currentEnemies)
                 if(enemy.isActive)
                     GiveEVs(enemy);
             
-            yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
             if (!Battle_handler.Instance.isTrainerBattle)
                 EndWildBattle();
             else
@@ -332,7 +337,6 @@ public class Battle_Participant : MonoBehaviour
         pokemon.OnHealthChanged += CheckIfFainted;
         if (!isPlayer) return;
         pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
-        pokemon.OnLevelUp += Battle_handler.Instance.LevelUpEvent;
         pokemon.OnNewLevel += statData.SaveActualStats;
         ActivateUI(doubleBattleUI, Battle_handler.Instance.isDoubleBattle);
         ActivateUI(singleBattleUI, !Battle_handler.Instance.isDoubleBattle);

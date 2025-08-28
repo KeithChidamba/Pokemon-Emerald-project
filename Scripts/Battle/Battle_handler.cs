@@ -16,7 +16,7 @@ public class Battle_handler : MonoBehaviour
     public GameObject optionsUI;
     public GameObject[] battleOptions;
     public Battle_Participant[] battleParticipants = { null, null, null, null };
-    public List<Pokemon> levelUpQueue = new();
+    public List<Pokemon> expGainQueue = new();
     public List<Battle_Participant> faintQueue = new();
     public Text movePowerPointsText;
     public Text moveTypeText;
@@ -172,7 +172,7 @@ public class Battle_handler : MonoBehaviour
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
         InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
         SetupOptionsInput();
-        levelUpQueue.Clear();
+        expGainQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
         overworld_actions.Instance.doingAction = true;
         battleUI.SetActive(true);
@@ -466,7 +466,7 @@ public class Battle_handler : MonoBehaviour
     IEnumerator DelayBattleEnd()
     {
         var playerWhiteOut = false;
-        yield return new WaitUntil(() => levelUpQueue.Count==0);
+        yield return new WaitUntil(() => expGainQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         if (battleTerminated)
         {
@@ -522,34 +522,20 @@ public class Battle_handler : MonoBehaviour
         if(overworld_actions.Instance.fishing)//battle triggered from fishing
             overworld_actions.Instance.ResetFishingAction();
     }
-    public void LevelUpEvent(Pokemon pokemon)
+    public void StartExpEvent(Pokemon pokemon)
     {
-        levelUpQueue.Add(pokemon);
-        StartCoroutine(LevelUpSequence(pokemon));
+        StartCoroutine(ExpGainSequence(pokemon));
     } 
-    private IEnumerator LevelUpSequence(Pokemon pokemonToLevelUp)
+    private IEnumerator ExpGainSequence(Pokemon pokemonGainExp)
     {
-        yield return new WaitUntil(() => !Turn_Based_Combat.Instance.levelEventDelay);
-        Turn_Based_Combat.Instance.levelEventDelay = true;
+        bool awaitingEventCompletion = true; 
+        Action<Pokemon> awaitEvent = (pokemon)=> awaitingEventCompletion = false;
+        pokemonGainExp.OnExpGainComplete += awaitEvent;
+        yield return new WaitUntil(() => !awaitingEventCompletion);
+        pokemonGainExp.OnExpGainComplete -= awaitEvent;
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        Dialogue_handler.Instance.DisplayBattleInfo("Wow!");
-        Dialogue_handler.Instance.DisplayBattleInfo(pokemonToLevelUp.pokemonName+" leveled up!");
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        PokemonOperations.CheckForNewMove(pokemonToLevelUp);
-        if (PokemonOperations.LearningNewMove)
-        {
-            if (pokemonToLevelUp.moveSet.Count == 4)
-            {
-                yield return new WaitUntil(() => PokemonOperations.SelectingMoveReplacement);
-                yield return new WaitUntil(() => !PokemonOperations.SelectingMoveReplacement);
-            }
-            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        }
-        yield return new WaitUntil(() => !PokemonOperations.LearningNewMove);
-        levelUpQueue.Remove(pokemonToLevelUp);
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        Turn_Based_Combat.Instance.levelEventDelay = false;
-        if(battleOver & levelUpQueue.Count==0)
+
+        if(battleOver & expGainQueue.Count==0)//check this importance
             EndBattle(battleWon);
     }
     public void EndBattle(bool hasWon,bool battleCancelled=false)
