@@ -50,6 +50,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("CatchRate")] public float catchRate = 0;
     public int currentLevel = 1;
     public int currentExpAmount = 0;
+    public int currentLevelExpAmount;
     public int nextLevelExpAmount = 0;
     [FormerlySerializedAs("EXPGroup")] public PokemonOperations.ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
@@ -267,23 +268,24 @@ public class Pokemon : ScriptableObject
     {
         if (currentLevel >= 100) yield break;
         
-        Debug.Log("here");
         int remainingExp = amount;
         Battle_handler.Instance.StartExpEvent(this);
+        
         while (remainingExp > 0 && currentLevel < 100)
         {
-            Debug.Log("here loop exp");
             int expToNextLevel = nextLevelExpAmount - currentExpAmount;
-
+            
             // How much EXP should we add this loop? Either all remaining or just enough to hit the next level.
             int expThisLoop = Mathf.Min(remainingExp, expToNextLevel);
-
             float displayExp = currentExpAmount;
-
+            var expAfterChange = currentExpAmount + expThisLoop;
+            
             // Animate EXP bar filling
-            while (displayExp < currentExpAmount + expThisLoop)
+            var increaseDeltaMultiplier = expThisLoop / 100f > 3? expThisLoop / 100f: 3;
+            while (displayExp < expAfterChange)
             {
-                displayExp = Mathf.MoveTowards(displayExp, currentExpAmount + expThisLoop, 30f * Time.deltaTime);
+                displayExp = Mathf.MoveTowards(displayExp,expAfterChange , 
+                    30f * increaseDeltaMultiplier * Time.deltaTime);
                 currentExpAmount = (int)Mathf.Floor(displayExp);
                 yield return null;
             }
@@ -291,12 +293,13 @@ public class Pokemon : ScriptableObject
             // Deduct what we just gave
             remainingExp -= expThisLoop;
 
-            // If we reached or passed the next level threshold → level up
+            // If we reached or passed the next level threshold > level up
             if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
             {
                 LevelUp();
                 Dialogue_handler.Instance.DisplayBattleInfo("Wow!");
                 Dialogue_handler.Instance.DisplayBattleInfo(pokemonName+" leveled up!");
+                currentLevelExpAmount = currentExpAmount;
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                 PokemonOperations.CheckForNewMove(this);
             

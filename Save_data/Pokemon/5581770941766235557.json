@@ -46,7 +46,8 @@
     "catchRate": 45.0,
     "currentLevel": 2,
     "currentExpAmount": 0,
-    "nextLevelExpAmount": 9.0,
+    "currentLevelExpAmount": 0,
+    "nextLevelExpAmount": 9,
     "expGroup": 3,
     "expYield": 65,
     "friendshipLevel": 255,
@@ -93,10 +94,10 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -19442
+            "instanceID": -11256
         },
         {
-            "instanceID": -19444
+            "instanceID": -11258
         }
     ],
     "ability": {

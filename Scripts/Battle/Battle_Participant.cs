@@ -113,11 +113,11 @@ public class Battle_Participant : MonoBehaviour
         if (participants.Count > 0)
         {
             var shareExpPerParticipant = participantTotalExp / participants.Count;
-            while (expShareHolders.Count > 0)
+            while (participants.Count > 0)
             {
-                var participant = expShareHolders[0];
+                var participant = participants[0];
                 yield return participant.ReceiveExperienceAndDisplay(shareExpPerParticipant);
-                expShareHolders.RemoveAt(0);
+                participants.RemoveAt(0);
             }
         }
 
@@ -283,7 +283,9 @@ public class Battle_Participant : MonoBehaviour
             if (!Battle_handler.Instance.isDoubleBattle)
             {
                 pokemonHealthText.text = pokemon.hp + "/" + pokemon.maxHp;
-                SetExpBarValue();
+                playerExpSlider.value = pokemon.currentExpAmount;
+                playerExpSlider.maxValue = pokemon.nextLevelExpAmount;
+                playerExpSlider.minValue = pokemon.currentLevelExpAmount;
             }
         }
         else
@@ -309,12 +311,6 @@ public class Battle_Participant : MonoBehaviour
     {
         foreach (var obj in arr)
             obj.SetActive(on);
-    }
-    private void SetExpBarValue()
-    {
-        playerExpSlider.value = (float)pokemon.currentExpAmount / pokemon.nextLevelExpAmount * 100;
-        playerExpSlider.maxValue = 100;
-        playerExpSlider.minValue = 0;
     }
     public void ActivateParticipant()
     {

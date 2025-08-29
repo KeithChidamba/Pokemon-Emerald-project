@@ -46,7 +46,8 @@
     "catchRate": 45.0,
     "currentLevel": 30,
     "currentExpAmount": 20794,
-    "nextLevelExpAmount": 21600.0,
+    "currentLevelExpAmount": 0,
+    "nextLevelExpAmount": 21600,
     "expGroup": 1,
     "expYield": 160,
     "friendshipLevel": 187,
@@ -130,16 +131,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -19432
+            "instanceID": -11246
         },
         {
-            "instanceID": -19434
+            "instanceID": -11248
         },
         {
-            "instanceID": -19436
+            "instanceID": -11250
         },
         {
-            "instanceID": -19438
+            "instanceID": -11252
         }
     ],
     "ability": {

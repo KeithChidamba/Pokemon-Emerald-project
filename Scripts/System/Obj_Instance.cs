@@ -77,6 +77,7 @@ public static class Obj_Instance
         newPokemon.critChance = pkm.critChance;
         newPokemon.catchRate = pkm.catchRate;
         newPokemon.currentLevel = pkm.currentLevel;
+        newPokemon.currentLevelExpAmount = pkm.currentLevelExpAmount;
         newPokemon.currentExpAmount = pkm.currentExpAmount;
         newPokemon.nextLevelExpAmount = pkm.nextLevelExpAmount;
         newPokemon.expGroup = pkm.expGroup;

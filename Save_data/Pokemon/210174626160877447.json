@@ -45,8 +45,9 @@
     "critChance": 6.25,
     "catchRate": 45.0,
     "currentLevel": 18,
-    "currentExpAmount": 3775,
-    "nextLevelExpAmount": 3798.0,
+    "currentExpAmount": 3000,
+    "currentLevelExpAmount": 3000,
+    "nextLevelExpAmount": 3798,
     "expGroup": 3,
     "expYield": 141,
     "friendshipLevel": 180,
@@ -142,16 +143,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -19406
+            "instanceID": -11220
         },
         {
-            "instanceID": -19408
+            "instanceID": -11222
         },
         {
-            "instanceID": -19410
+            "instanceID": -11224
         },
         {
-            "instanceID": -19412
+            "instanceID": -11226
         }
     ],
     "ability": {
@@ -166,7 +167,7 @@
         }
     ],
     "heldItem": {
-        "instanceID": -19416
+        "instanceID": -11230
     },
     "hasItem": true,
     "frontPicture": {
