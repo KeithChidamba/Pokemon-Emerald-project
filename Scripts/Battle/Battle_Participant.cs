@@ -38,14 +38,15 @@ public class Battle_Participant : MonoBehaviour
     public GameObject[] singleBattleUI;
     public GameObject[] doubleBattleUI;
     public GameObject participantUI;
-    public PreviousMove PreviousMove;
+    public PreviousMove previousMove;
     public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
-    public List<TypeImmunityNegation> ImmunityNegations = new();
+    public List<TypeImmunityNegation> immunityNegations = new();
     public List<Pokemon> expReceivers;
+    private bool _expEventDelay = false;
     public Action OnPokemonFainted;
     private Action OnFaintCheck;
-    public List<Barrier> Barrieirs = new();
+    public List<Barrier> barriers = new();
 
     private void Start()
     {
@@ -76,7 +77,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private IEnumerator DistributeExp(int expFromEnemy)
     {
-        Turn_Based_Combat.Instance.expEventDelay = true;
+        _expEventDelay = true;
         
         // Remove fainted or invalid Pokémon
         expReceivers.RemoveAll(p => p.hp <= 0);
@@ -121,7 +122,7 @@ public class Battle_Participant : MonoBehaviour
             }
         }
 
-        Turn_Based_Combat.Instance.expEventDelay = false;
+        _expEventDelay = false;
         expReceivers.Clear();
         
     }
@@ -148,7 +149,7 @@ public class Battle_Participant : MonoBehaviour
             
             yield return DistributeExp(enemyResponsible.CalculateExperience(pokemon));
             
-            yield return new WaitUntil(() => !Turn_Based_Combat.Instance.expEventDelay);
+            yield return new WaitUntil(() => !_expEventDelay);
             
             foreach (var enemy in currentEnemies)
                 if(enemy.isActive)
@@ -219,10 +220,10 @@ public class Battle_Participant : MonoBehaviour
         statData.ResetBattleState(pokemon);
         abilityHandler.ResetState();
         canEscape = true;
-        PreviousMove = null;
+        previousMove = null;
         additionalTypeImmunity = null;
         OnPokemonFainted = null;
-        ImmunityNegations.Clear();
+        immunityNegations.Clear();
         if (isPlayer) pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
     }
     private void ResetParticipantStateAfterLevelUp(Pokemon pokemonAfterLevelUp)
@@ -246,28 +247,28 @@ public class Battle_Participant : MonoBehaviour
     }
     private void CheckBarrierDuration()
     {
-        if (Barrieirs.Count == 0) return;
+        if (barriers.Count == 0) return;
 
-        foreach (var barrier in Barrieirs)
+        foreach (var barrier in barriers)
             barrier.barrierDuration--;
 
-        Barrieirs.RemoveAll(b => b.barrierDuration < 1);
+        barriers.RemoveAll(b => b.barrierDuration < 1);
     }
     private void CheckBarrierSharing()
     {
-        if (Barrieirs.Count == 0) return;
+        if (barriers.Count == 0) return;
         
         if (Battle_handler.Instance.isDoubleBattle)
         {
             var partner= Battle_handler.Instance.battleParticipants[GetPartnerIndex()];
             if (!partner.isActive) return;
             
-            foreach (var barrier in Barrieirs)
+            foreach (var barrier in barriers)
             {
                 if (!Move_handler.Instance.HasDuplicateBarrier(partner, barrier.barrierName, false))
                 {
                     var barrierCopy = new Barrier(barrier.barrierName, barrier.barrierEffect, barrier.barrierDuration);
-                    partner.Barrieirs.Add(barrierCopy);
+                    partner.barriers.Add(barrierCopy);
                 }
             }
         }

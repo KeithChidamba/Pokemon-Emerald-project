@@ -117,16 +117,16 @@ public class Move_handler:MonoBehaviour
             ExecuteRandomConsecutiveMove();
     }
 
-    public void ConfusionDamage(Battle_Participant confusionVictim)
+    public IEnumerator DealConfusionDamage(Battle_Participant confusionVictim)
     {
         var simulatedMove = ScriptableObject.CreateInstance<Move>();
-        simulatedMove.isSpecial = false;
         simulatedMove.moveDamage = 40;
         simulatedMove.description = "Confusion";
         _currentTurn = new(simulatedMove, 0, 0, 0, 0);
         attacker = confusionVictim;
         victim = confusionVictim;
         DisplayDamage(confusionVictim,false);
+        yield return new WaitUntil(()=> !displayingDamage);
     }
     private bool IsInvincible(Move move,Battle_Participant currentVictim)
     {
@@ -145,19 +145,32 @@ public class Move_handler:MonoBehaviour
         return 2;
     }
 
+    float CalculateConfusionDamage(Move move,Battle_Participant confusionVictim)
+    {
+        var critValue = CheckIfCrit();
+        var levelFactor = ((confusionVictim.pokemon.currentLevel * 2) / 5f) + 2;
+        var randomFactor = (float)Utility.RandomRange(85, 101) / 100;
+        
+        float baseDamage = levelFactor * move.moveDamage *
+            (confusionVictim.pokemon.attack / move.moveDamage) /confusionVictim.pokemon.currentLevel;
+    
+        return math.trunc(critValue * randomFactor * baseDamage);
+    }
     private float CalculateMoveDamage(Move move,Battle_Participant currentVictim)
     { 
         var isConfusionDamage = move.description == "Confusion"; //this is a cop out,but easiest option
+        if (isConfusionDamage) return CalculateConfusionDamage(move,currentVictim);
+        
         if (IsInvincible(move, currentVictim)) return 0;
         var critValue = CheckIfCrit();
-        if(critValue>1 && !isConfusionDamage) Dialogue_handler.Instance.DisplayBattleInfo("Critical Hit!");
+        if(critValue>1) Dialogue_handler.Instance.DisplayBattleInfo("Critical Hit!");
         float damageDealt = 0;
         var levelFactor = ((attacker.pokemon.currentLevel * 2) / 5f) + 2;
         var stab = 1f;
         float attackTypeValue = 0;
         float attackDefenseRatio = 0;
         var randomFactor = (float)Utility.RandomRange(85, 101) / 100;
-        var typeEffectiveness = isConfusionDamage? 1: BattleOperations.GetTypeEffectiveness(currentVictim, move.type);
+        var typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, move.type);
         attackTypeValue = move.isSpecial? attacker.pokemon.specialAttack : attacker.pokemon.attack;
         attackDefenseRatio = SetAtkDefRatio(critValue,move.isSpecial,attacker,currentVictim);
         if (BattleOperations.IsStab(attacker.pokemon, move.type))
@@ -166,7 +179,6 @@ public class Move_handler:MonoBehaviour
                              (attackTypeValue / move.moveDamage) /attacker.pokemon.currentLevel;
         float damageModifier = critValue*stab*randomFactor*typeEffectiveness;
         damageDealt = math.trunc(damageModifier * baseDamage * attackDefenseRatio);
-        if (isConfusionDamage) return damageDealt;
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type);
@@ -186,7 +198,7 @@ public class Move_handler:MonoBehaviour
     }
     private float AccountForVictimsBarriers(Move move,Battle_Participant currentVictim,float damage)
     {
-        foreach (var barrier in currentVictim.Barrieirs)
+        foreach (var barrier in currentVictim.barriers)
         {
             if ((move.isSpecial && barrier.barrierName == "Light Screen")
                 || (!move.isSpecial && barrier.barrierName == "Reflect"))
@@ -415,6 +427,7 @@ public class Move_handler:MonoBehaviour
         if (enemy.pokemon.ability.abilityName == "Levitate")
         {
             Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
+            processingOrder = false;
             return;
         }
         if(isMoveEffect)
@@ -423,12 +436,13 @@ public class Move_handler:MonoBehaviour
                 && !attacker.pokemon.HasType(PokemonOperations.Types.Ghost))
             {//only ghost can trap ghost with moves
                 Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
+                processingOrder = false;
                 return;
             }
 
             if (!enemy.canEscape)
             {
-                
+                processingOrder = false;
                 Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName + " is already trapped");
                 return;
             }
@@ -440,13 +454,18 @@ public class Move_handler:MonoBehaviour
                 var numTurnsOfTrap = Utility.RandomRange(2, (int)_currentTurn.move.statusChance+1);
                 enemy.statusHandler.SetupTrapDuration(numTurnsOfTrap,_currentTurn.move);
             }
-            
+            processingOrder = false;
             return;
         }
         enemy.statusHandler.SetupTrapDuration(hasDuration:false);
     }
     void ConfuseEnemy()
     {
+        if (victim.isConfused)
+        {
+            processingOrder = false;
+            return;
+        }
         if (_currentTurn.move.isSelfTargeted)
             ApplyConfusion(attacker);
         else
@@ -461,9 +480,11 @@ public class Move_handler:MonoBehaviour
 
     void ApplyConfusion(Battle_Participant victimOfConfusion)
     {
-        if (Utility.RandomRange(1, 101) < _currentTurn.move.statusChance)
+        if (Utility.RandomRange(1, 101) <= _currentTurn.move.statusChance)
         {
             var randomNumTurns = Utility.RandomRange(1, 6);
+            Dialogue_handler.Instance.DisplayBattleInfo(victimOfConfusion.pokemon.pokemonName
+                                                        + " was confused");
             victimOfConfusion.statusHandler.GetConfusion(randomNumTurns);
         }
     }
@@ -484,6 +505,12 @@ public class Move_handler:MonoBehaviour
 
     void InfatuateEnemy()
     {
+        if (victim.isInfatuated)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" is already in love!");
+            processingOrder = false;
+            return;
+        }
         if (!victim.canBeDamaged || !victim.pokemon.canBeInfatuated)
         {
             processingOrder = false;
@@ -718,10 +745,10 @@ public class Move_handler:MonoBehaviour
 
     void ApplyDamageProtection()
     {
-        if(attacker.PreviousMove.move.moveName == _currentTurn.move.moveName)
+        if(attacker.previousMove.move.moveName == _currentTurn.move.moveName)
         {
             int chance = 100;
-            for (int i = 0; i < attacker.PreviousMove.numRepetitions; i++)
+            for (int i = 0; i < attacker.previousMove.numRepetitions; i++)
                 chance /= 2;
             if (Utility.RandomRange(1, 101) <= chance)
                 attacker.canBeDamaged = false;
@@ -754,13 +781,13 @@ public class Move_handler:MonoBehaviour
         foreach (var enemy in attacker.currentEnemies)
         {
             if(!enemy.isActive)continue;
-            foreach (var barrier in enemy.Barrieirs)
+            foreach (var barrier in enemy.barriers)
             {
                 if (duplicateBarriers.Contains(barrier.barrierName)) continue;
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" shattered "+barrier.barrierName);
                 duplicateBarriers.Add(barrier.barrierName);
             }
-            enemy.Barrieirs.Clear();
+            enemy.barriers.Clear();
         }
         
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
@@ -779,7 +806,7 @@ public class Move_handler:MonoBehaviour
             {
                 var newBarrier = new Barrier(barrierName, 0.33f, 5);
                 
-                currentParticipant.Barrieirs.Add(newBarrier); 
+                currentParticipant.barriers.Add(newBarrier); 
                 
                 var partner= Battle_handler.Instance
                     .battleParticipants[currentParticipant.GetPartnerIndex()];
@@ -787,7 +814,7 @@ public class Move_handler:MonoBehaviour
                 if (partner.isActive)
                 {
                     var barrierCopy = new Barrier(newBarrier.barrierName, newBarrier.barrierEffect, newBarrier.barrierDuration);
-                    partner.Barrieirs.Add(barrierCopy);
+                    partner.barriers.Add(barrierCopy);
                 }
                 
                 Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
@@ -802,7 +829,7 @@ public class Move_handler:MonoBehaviour
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             else
             {
-                currentParticipant.Barrieirs.Add(new(barrierName,0.33f,5));
+                currentParticipant.barriers.Add(new(barrierName,0.33f,5));
                 
                 Dialogue_handler.Instance.DisplayBattleInfo(barrierName + " has been activated");
             }
@@ -815,7 +842,7 @@ public class Move_handler:MonoBehaviour
 
     public bool HasDuplicateBarrier(Battle_Participant currentParticipant,string  barrierName,bool displayMessage)
     {
-        var duplicateBarrier = currentParticipant.Barrieirs.Any(b => b.barrierName == barrierName); 
+        var duplicateBarrier = currentParticipant.barriers.Any(b => b.barrierName == barrierName); 
 
         if (Battle_handler.Instance.isDoubleBattle)
         {
@@ -823,7 +850,7 @@ public class Move_handler:MonoBehaviour
                 .battleParticipants[currentParticipant.GetPartnerIndex()];
                 
             if(partner.isActive)
-                if(partner.Barrieirs.Any(b => b.barrierName == barrierName))
+                if(partner.barriers.Any(b => b.barrierName == barrierName))
                 {
                     duplicateBarrier = true;
                 }
@@ -950,7 +977,7 @@ public class Move_handler:MonoBehaviour
 
     private void IdentifyTarget()
     {
-        if (victim.ImmunityNegations.Any(n=> 
+        if (victim.immunityNegations.Any(n=> 
                 n.moveName==TypeImmunityNegation.ImmunityNegationMove.Foresight))
         {
             Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
@@ -970,7 +997,7 @@ public class Move_handler:MonoBehaviour
             newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Normal);
             attacker.OnPokemonFainted += () => newImmunityNegation.RemoveNegationOnSwitchOut(attacker);
             Battle_handler.Instance.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
-            victim.ImmunityNegations.Add(newImmunityNegation);
+            victim.immunityNegations.Add(newImmunityNegation);
         }
         _moveDelay = false;
     }
@@ -997,10 +1024,10 @@ public class Move_handler:MonoBehaviour
     void furycutter()
     {
         var damageLevel = new[] { 10f, 20f, 40f, 80f, 160f };
-        if (attacker.PreviousMove.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.FuryCutter))
+        if (attacker.previousMove.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.FuryCutter))
         {
-            _currentTurn.move.moveDamage = attacker.PreviousMove.numRepetitions > 4?
-                damageLevel[^1] : damageLevel[attacker.PreviousMove.numRepetitions];
+            _currentTurn.move.moveDamage = attacker.previousMove.numRepetitions > 4?
+                damageLevel[^1] : damageLevel[attacker.previousMove.numRepetitions];
         }
         else
             _currentTurn.move.moveDamage = damageLevel[0];
@@ -1101,10 +1128,10 @@ public class Move_handler:MonoBehaviour
 
     void mirrormove()
     {
-        if (victim.PreviousMove!=null)
+        if (victim.previousMove!=null)
         {
             _repeatingMoveCycle = true;
-            _currentTurn.move = victim.PreviousMove.move;
+            _currentTurn.move = victim.previousMove.move;
             _moveDelay = false;
             OnMoveComplete += ()=> ExecuteMove(_currentTurn);
         }

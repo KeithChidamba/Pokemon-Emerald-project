@@ -20,6 +20,6 @@ public class TypeImmunityNegation
     {
         if (participant != _participant) return;
         Battle_handler.Instance.OnSwitchOut -= RemoveNegationOnSwitchOut;
-        _victimOfimmunityNegation.ImmunityNegations.RemoveAll(n => n.moveName == moveName);
+        _victimOfimmunityNegation.immunityNegations.RemoveAll(n => n.moveName == moveName);
     }
 }

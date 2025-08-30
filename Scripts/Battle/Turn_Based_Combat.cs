@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -16,7 +15,7 @@ public class Turn_Based_Combat : MonoBehaviour
     public event Action<Battle_Participant> OnMoveExecute;
     public event Action OnTurnsCompleted;
     public int currentTurnIndex = 0;
-    public bool expEventDelay = false;
+
     public bool faintEventDelay = false;
     public WeatherCondition currentWeather;
     public WeatherCondition clearWeather;
@@ -24,6 +23,7 @@ public class Turn_Based_Combat : MonoBehaviour
     public event Action OnWeatherEnd;
     private List<Battle_Participant> _statusCheckQueue = new();
     private List<Held_Items> _heldItemUsageQueue = new();
+    private event Action<bool> OnAttackAttempted;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -86,7 +86,6 @@ public class Turn_Based_Combat : MonoBehaviour
         currentWeather.weather = WeatherCondition.Weather.Clear;
         _turnHistory.Clear();
         faintEventDelay = false;
-        expEventDelay = false;
         StopAllCoroutines();
     }
 
@@ -100,9 +99,13 @@ public class Turn_Based_Combat : MonoBehaviour
                 turn.move.moveAccuracy = 50f;
         }
     }
-    private bool CanAttack(Turn turn, Battle_Participant attacker,Battle_Participant victim)
+    private IEnumerator CheckAttackSuccess(Turn turn, Battle_Participant attacker,Battle_Participant victim)
     {
-        if(attacker.pokemon.hp<=0) return false;
+        if(attacker.pokemon.hp<=0)
+        {
+            OnAttackAttempted?.Invoke(false);
+            yield break;
+        }
         if (attacker.canAttack)
         {
             if (attacker.isConfused)
@@ -111,8 +114,9 @@ public class Turn_Based_Combat : MonoBehaviour
                 if (Utility.RandomRange(0, 2) < 1)
                 {
                     Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" hurt itself in its confusion");
-                    Move_handler.Instance.ConfusionDamage(attacker);
-                    return false;
+                    yield return Move_handler.Instance.DealConfusionDamage(attacker);
+                    OnAttackAttempted?.Invoke(false);
+                    yield break;
                 }
             }
             if (attacker.isInfatuated)
@@ -121,7 +125,8 @@ public class Turn_Based_Combat : MonoBehaviour
                 if (Utility.RandomRange(0, 2) < 1)
                 {
                     Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" can’t move because of love");
-                    return false;
+                    OnAttackAttempted?.Invoke(false);
+                    yield break;
                 }
             }
                         
@@ -145,9 +150,15 @@ public class Turn_Based_Combat : MonoBehaviour
                         Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" dodged the attack");
                 }
                 else
-                    return true;
+                {
+                    OnAttackAttempted?.Invoke(true);
+                    yield break;
+                }
             }else
-                return true;
+            {
+                OnAttackAttempted?.Invoke(true);
+                yield break;
+            }
         }
         else
         {
@@ -156,8 +167,9 @@ public class Turn_Based_Combat : MonoBehaviour
             else if(attacker.pokemon.statusEffect!=PokemonOperations.StatusEffect.None)
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" is affected by "+ attacker.pokemon.statusEffect);
         }
-        return false;
+        OnAttackAttempted?.Invoke(false);
     }
+    
     private IEnumerator ExecuteMoves(List<Turn> turnOrder)
     {
         yield return StartCoroutine(HandleSwaps());
@@ -200,8 +212,13 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return null;
             }
             yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
-
-            if (CanAttack(currentTurn,attacker,victim))
+            
+            var successfulAttack = false;
+            
+            OnAttackAttempted += (result)=> successfulAttack = result;
+            yield return StartCoroutine(CheckAttackSuccess(currentTurn,attacker,victim));
+            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            if (successfulAttack)
             {
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
                 
@@ -212,11 +229,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(() => !Move_handler.Instance.doingMove);
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
             }
-            else
-            {
-                yield return new WaitUntil(()=> !Move_handler.Instance.displayingDamage);//confusion damage
-                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-            }
+            OnAttackAttempted = null;
         }
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
@@ -300,18 +313,18 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
-        if (attacker.PreviousMove==null)
+        if (attacker.previousMove==null)
         {
             var newData = new PreviousMove(move,0);
-            attacker.PreviousMove = newData;
+            attacker.previousMove = newData;
             return;
         }
-        if (attacker.PreviousMove.move.moveName == move.moveName)
-            attacker.PreviousMove.numRepetitions++;
+        if (attacker.previousMove.move.moveName == move.moveName)
+            attacker.previousMove.numRepetitions++;
         else
         {
             var newData = new PreviousMove(move,0);
-            attacker.PreviousMove = newData;
+            attacker.previousMove = newData;
         }
     }
     private bool IsValidParticipantState(Battle_Participant participant)

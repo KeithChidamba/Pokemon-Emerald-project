@@ -563,12 +563,12 @@ public class Battle_handler : MonoBehaviour
         foreach (var participant in battleParticipants)
             if(participant.pokemon!=null)
             {
-                participant.Barrieirs.Clear();
+                participant.barriers.Clear();
                 participant.statData.LoadActualStats();
                 participant.statData.ResetBattleState(participant.pokemon);
                 participant.pokemon = null;
                 participant.additionalTypeImmunity = null;
-                participant.PreviousMove = null;
+                participant.previousMove = null;
                 participant.DeactivateUI();
                 if (participant.pokemonTrainerAI != null)
                     participant.pokemonTrainerAI.inBattle = false;

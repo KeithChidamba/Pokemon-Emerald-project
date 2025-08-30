@@ -45,7 +45,7 @@ public static class BattleOperations
             if (CheckImmunity(victim.pokemon, enemyType)) 
             {
                 //if victim had their immunity altered by moves, like foresight
-                _effectiveness = victim.ImmunityNegations
+                _effectiveness = victim.immunityNegations
                     .Any(negation => negation.ImmunityNegationTypes
                         .Any(type=>type.ToString() == enemyType.typeName)) ? 1 : 0;
             }
