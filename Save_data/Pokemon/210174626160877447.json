@@ -138,21 +138,22 @@
         1,
         3,
         11,
-        12
+        12,
+        10
     ],
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -8620
+            "instanceID": -2004
         },
         {
-            "instanceID": -8622
+            "instanceID": -2006
         },
         {
-            "instanceID": -8624
+            "instanceID": -2008
         },
         {
-            "instanceID": -8626
+            "instanceID": -2256
         }
     ],
     "ability": {
@@ -167,7 +168,7 @@
         }
     ],
     "heldItem": {
-        "instanceID": -8630
+        "instanceID": -2014
     },
     "hasItem": true,
     "frontPicture": {
@@ -207,10 +208,10 @@
             "moveType": "normal"
         },
         {
-            "moveName": "fury cutter",
-            "powerPoints": 20,
-            "maxPowerPoints": 20,
-            "moveType": "bug"
+            "moveName": "sandstorm",
+            "powerPoints": 10,
+            "maxPowerPoints": 10,
+            "moveType": "rock"
         }
     ]
 }

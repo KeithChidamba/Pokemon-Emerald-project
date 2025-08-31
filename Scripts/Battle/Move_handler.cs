@@ -119,13 +119,11 @@ public class Move_handler:MonoBehaviour
 
     public IEnumerator DealConfusionDamage(Battle_Participant confusionVictim)
     {
-        var simulatedMove = ScriptableObject.CreateInstance<Move>();
-        simulatedMove.moveDamage = 40;
-        simulatedMove.description = "Confusion";
-        _currentTurn = new(simulatedMove, 0, 0, 0, 0);
-        attacker = confusionVictim;
-        victim = confusionVictim;
-        DisplayDamage(confusionVictim,false);
+        var confusionDamage = CalculateConfusionDamage(confusionVictim);
+        
+        DisplayDamage(confusionVictim,displayEffectiveness:false,isSpecificDamage:true
+            ,predefinedDamage:confusionDamage);
+        
         yield return new WaitUntil(()=> !displayingDamage);
     }
     private bool IsInvincible(Move move,Battle_Participant currentVictim)
@@ -145,40 +143,52 @@ public class Move_handler:MonoBehaviour
         return 2;
     }
 
-    float CalculateConfusionDamage(Move move,Battle_Participant confusionVictim)
+    float CalculateConfusionDamage(Battle_Participant confusionVictim)
     {
-        var critValue = CheckIfCrit();
-        var levelFactor = ((confusionVictim.pokemon.currentLevel * 2) / 5f) + 2;
-        var randomFactor = (float)Utility.RandomRange(85, 101) / 100;
+        int level = confusionVictim.pokemon.currentLevel;
+        float levelFactor = ((level * 2f) / 5f) + 2f;
+        int power = 40;
+        float attackDefenseRatio = confusionVictim.pokemon.attack 
+                                   / Mathf.Max(1, confusionVictim.pokemon.defense);
+
+        float randomFactor = Utility.RandomRange(217, 256) / 255f;
         
-        float baseDamage = levelFactor * move.moveDamage *
-            (confusionVictim.pokemon.attack / move.moveDamage) /confusionVictim.pokemon.currentLevel;
-    
-        return math.trunc(critValue * randomFactor * baseDamage);
+        float baseDamage = ((levelFactor * power * attackDefenseRatio) / 50f) + 2f;
+
+        int damage = Mathf.FloorToInt(baseDamage * randomFactor);
+
+        if (damage < 1) damage = 1;
+
+        return damage;
     }
     private float CalculateMoveDamage(Move move,Battle_Participant currentVictim)
     { 
-        var isConfusionDamage = move.description == "Confusion"; //this is a cop out,but easiest option
-        if (isConfusionDamage) return CalculateConfusionDamage(move,currentVictim);
-        
         if (IsInvincible(move, currentVictim)) return 0;
+        
         var critValue = CheckIfCrit();
-        if(critValue>1) Dialogue_handler.Instance.DisplayBattleInfo("Critical Hit!");
-        float damageDealt = 0;
-        var levelFactor = ((attacker.pokemon.currentLevel * 2) / 5f) + 2;
-        var stab = 1f;
-        float attackTypeValue = 0;
-        float attackDefenseRatio = 0;
-        var randomFactor = (float)Utility.RandomRange(85, 101) / 100;
-        var typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, move.type);
-        attackTypeValue = move.isSpecial? attacker.pokemon.specialAttack : attacker.pokemon.attack;
-        attackDefenseRatio = SetAtkDefRatio(critValue,move.isSpecial,attacker,currentVictim);
-        if (BattleOperations.IsStab(attacker.pokemon, move.type))
-            stab = 1.5f;
-        float baseDamage = levelFactor * move.moveDamage *
-                             (attackTypeValue / move.moveDamage) /attacker.pokemon.currentLevel;
-        float damageModifier = critValue*stab*randomFactor*typeEffectiveness;
-        damageDealt = math.trunc(damageModifier * baseDamage * attackDefenseRatio);
+        
+        if (critValue > 1f) Dialogue_handler.Instance.DisplayBattleInfo("Critical Hit!");
+        
+        float levelFactor = ((attacker.pokemon.currentLevel * 2f) / 5f) + 2f;
+        
+        float attackDefenseRatio = SetAtkDefRatio(critValue, move.isSpecial, attacker, currentVictim);
+
+        float stab = BattleOperations.IsStab(attacker.pokemon, move.type) ? 1.5f : 1f;
+        
+        float typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, move.type);
+        
+        float randomFactor = Utility.RandomRange(217, 256) / 255f;
+
+        float baseDamage = ((levelFactor * move.moveDamage * attackDefenseRatio) / 50f) + 2f;
+
+        // --- Modifiers product ---
+        float damageModifier = critValue * stab * typeEffectiveness * randomFactor;
+
+        // --- Final damage ---
+        int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
+
+        // Minimum damage rule if the target is not immune
+        if (damageDealt < 1) damageDealt = 1;
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type);
@@ -314,6 +324,7 @@ public class Move_handler:MonoBehaviour
             }
             data.affectedPokemon.ChangeHealth();  
             _damageDisplayQueue.RemoveAt(0);
+            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             yield return null;
         }
         displayingDamage = false;
@@ -1161,6 +1172,12 @@ public class Move_handler:MonoBehaviour
         _moveDelay = false;
     }
 
+    void rainddance()
+    {
+        var rainDance = new WeatherCondition(WeatherCondition.Weather.Rain);
+        Turn_Based_Combat.Instance.ChangeWeather(rainDance);
+        _moveDelay = false;
+    }
     void morningsun()
     {
         Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");

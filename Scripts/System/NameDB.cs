@@ -149,7 +149,8 @@ public static class NameDB
         Sandstorm,
         HyperBeam,
         Toxic,
-        IceBeam
+        IceBeam,
+        RainDance
     }
     public static string GetMoveName(LearnSetMove moveName)
     {

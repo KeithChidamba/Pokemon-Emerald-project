@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
-  m_Name: TM08
+  m_Name: TM18
   m_EditorClassIdentifier: 
   itemID: 
-  itemName: Bulk Up
+  itemName: Rain Dance
   itemType: 16
   itemEffect: 
-  itemDescription: Boosts Attack and Defense.
+  itemDescription: Creates rain during battle
   price: 0
   quantity: 0
-  itemImage: {fileID: 21300000, guid: 9467722f03cdbaa11b744498a2c8e66c, type: 2}
+  itemImage: {fileID: 21300000, guid: 793bf201d341fd6259d43c67ff0eda04, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
@@ -28,8 +28,8 @@ MonoBehaviour:
   canBeSold: 1
   isMultiModular: 0
   hasModules: 1
-  additionalItemInfo: {fileID: 11400000, guid: 6bc725559c3a2647cb6f9788a95aa8d0, type: 2}
+  additionalItemInfo: {fileID: 11400000, guid: 50d05c1dda75694cb8c04a2d085545e0, type: 2}
   additionalInfoModules:
-  - {fileID: 11400000, guid: 6bc725559c3a2647cb6f9788a95aa8d0, type: 2}
+  - {fileID: 11400000, guid: 50d05c1dda75694cb8c04a2d085545e0, type: 2}
   infoModuleAssetNames: []
   imageDirectory: 

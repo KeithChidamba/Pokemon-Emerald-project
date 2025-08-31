@@ -382,9 +382,15 @@ public class Turn_Based_Combat : MonoBehaviour
         return priorityList;
     }
 
-    public void ChangeWeather(WeatherCondition newWeather)
+    public void ChangeWeather(WeatherCondition newWeather,bool fromAbility=false)
     {
         OnWeatherEffect -= currentWeather.weatherEffect;
+        
+        if (fromAbility)
+            newWeather.isInfinite = true;
+        else
+            newWeather.turnDuration = 5;
+        
         switch (newWeather.weather)
         {
             case WeatherCondition.Weather.Sandstorm:
@@ -393,14 +399,12 @@ public class Turn_Based_Combat : MonoBehaviour
                 newWeather.weatherTurnEndMessage = "The sandstorm rages.";
                 newWeather.weatherDamageMessage = " is buffeted by the sandstorm!";
                 newWeather.weatherEndMessage = "The sandstorm subsided.";
-                newWeather.isInfinite = true;
                 break;
             case WeatherCondition.Weather.Rain:
                 newWeather.weatherEffect = RainEffect;
                 newWeather.weatherBegunMessage = "It started to rain!";
                 newWeather.weatherTurnEndMessage = "Rain continues to fall.";
                 newWeather.weatherEndMessage = "The rain stopped.";
-                newWeather.turnDuration = 5;
                 break;
             case WeatherCondition.Weather.Hail:
                 newWeather.weatherEffect = HailEffect;
@@ -408,14 +412,12 @@ public class Turn_Based_Combat : MonoBehaviour
                 newWeather.weatherTurnEndMessage = "Hail continues to fall.";
                 newWeather.weatherDamageMessage = " is pelted by hail!";
                 newWeather.weatherEndMessage = "The hail stopped.";
-                newWeather.isInfinite = true;
                 break;
             case WeatherCondition.Weather.Sunlight:
                 newWeather.weatherEffect = SunEffect;
                 newWeather.weatherBegunMessage = "The sunlight got bright!";
                 newWeather.weatherTurnEndMessage = "The sunlight is strong.";
                 newWeather.weatherEndMessage = "The sunlight faded.";
-                newWeather.turnDuration = 5;
                 break;
         }
         Dialogue_handler.Instance.DisplayBattleInfo(newWeather.weatherBegunMessage);
@@ -451,14 +453,12 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private IEnumerator SandStormEffect()
     {
-        Debug.Log("here");
         var protectedTypes = new[]{
             PokemonOperations.Types.Rock, PokemonOperations.Types.Ground, PokemonOperations.Types.Steel
         };
         var validParticipants = Battle_handler.Instance.GetValidParticipants();
         foreach (var participant in validParticipants)
         {
-            Debug.Log("valid");
             var isProtected = false;
             foreach (var protectedType in protectedTypes)
             {
@@ -481,7 +481,6 @@ public class Turn_Based_Combat : MonoBehaviour
                 }
             }
             if (isProtected) continue;
-            Debug.Log("damagin");
             yield return DealWeatherDamage(participant);
         }
     }
