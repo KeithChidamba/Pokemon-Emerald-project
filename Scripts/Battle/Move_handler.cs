@@ -18,7 +18,7 @@ public class Move_handler:MonoBehaviour
     private readonly float[] _accuracyAndEvasionLevels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
     private Battle_event[] _dialougeOrder={null,null,null,null,null,null,null};
-    private List<OnFieldDamageModifier> _onFieldDamageModifiers = new();
+    [SerializeField]private List<OnFieldDamageModifier> _onFieldDamageModifiers = new();
     [SerializeField]private List<DamageDisplayData> _damageDisplayQueue = new();
     [SerializeField]private List<DamageDisplayData> _healhGainQueue = new();
     private bool _repeatingMoveCycle = false;
@@ -180,14 +180,11 @@ public class Move_handler:MonoBehaviour
         float randomFactor = Utility.RandomRange(217, 256) / 255f;
 
         float baseDamage = ((levelFactor * move.moveDamage * attackDefenseRatio) / 50f) + 2f;
-
-        // --- Modifiers product ---
+        
         float damageModifier = critValue * stab * typeEffectiveness * randomFactor;
-
-        // --- Final damage ---
+        
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
-
-        // Minimum damage rule if the target is not immune
+        
         if (damageDealt < 1) damageDealt = 1;
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
@@ -1172,7 +1169,7 @@ public class Move_handler:MonoBehaviour
         _moveDelay = false;
     }
 
-    void rainddance()
+    void raindance()
     {
         var rainDance = new WeatherCondition(WeatherCondition.Weather.Rain);
         Turn_Based_Combat.Instance.ChangeWeather(rainDance);

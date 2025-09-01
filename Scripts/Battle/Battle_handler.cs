@@ -16,7 +16,6 @@ public class Battle_handler : MonoBehaviour
     public GameObject optionsUI;
     public GameObject[] battleOptions;
     public Battle_Participant[] battleParticipants = { null, null, null, null };
-    public List<Pokemon> expGainQueue = new();
     public List<Battle_Participant> faintQueue = new();
     public Text movePowerPointsText;
     public Text moveTypeText;
@@ -172,7 +171,6 @@ public class Battle_handler : MonoBehaviour
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
         InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
         SetupOptionsInput();
-        expGainQueue.Clear();
         Options_manager.Instance.playerInBattle = true;
         overworld_actions.Instance.doingAction = true;
         battleUI.SetActive(true);
@@ -466,7 +464,6 @@ public class Battle_handler : MonoBehaviour
     IEnumerator DelayBattleEnd()
     {
         var playerWhiteOut = false;
-        yield return new WaitUntil(() => expGainQueue.Count==0);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         if (battleTerminated)
         {
@@ -482,8 +479,11 @@ public class Battle_handler : MonoBehaviour
         else
         {
             var baseMoneyPayout = 0;
-            if(isTrainerBattle)
-                baseMoneyPayout = battleParticipants[0].currentEnemies[0].pokemonTrainerAI.trainerData.BaseMoneyPayout;
+            if (isTrainerBattle)
+            {
+                var anyEnemy = battleParticipants[0].currentEnemies[0];
+                baseMoneyPayout = anyEnemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
+            }
             if (battleWon)
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " won the battle");
@@ -518,9 +518,9 @@ public class Battle_handler : MonoBehaviour
             }
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        ResetUiAfterBattle(playerWhiteOut);
-        if(overworld_actions.Instance.fishing)//battle triggered from fishing
-            overworld_actions.Instance.ResetFishingAction();
+        yield return ResetUiAfterBattle(playerWhiteOut);
+        //battle triggered from fishing
+        if(overworld_actions.Instance.fishing) overworld_actions.Instance.ResetFishingAction();
     }
     public void StartExpEvent(Pokemon pokemon)
     {
@@ -534,9 +534,6 @@ public class Battle_handler : MonoBehaviour
         yield return new WaitUntil(() => !awaitingEventCompletion);
         pokemonGainExp.OnExpGainComplete -= awaitEvent;
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-
-        if(battleOver & expGainQueue.Count==0)//check this importance
-            EndBattle(battleWon);
     }
     public void EndBattle(bool hasWon,bool battleCancelled=false)
     {
@@ -546,7 +543,7 @@ public class Battle_handler : MonoBehaviour
         battleTerminated = battleCancelled;
         StartCoroutine(DelayBattleEnd());
     }
-    void ResetUiAfterBattle(bool playerWhiteOut)
+    private IEnumerator ResetUiAfterBattle(bool playerWhiteOut)
     {
         OnBattleEnd?.Invoke();
         Turn_Based_Combat.Instance.OnNewTurn -= _checkParticipantsEachTurn;;
@@ -582,6 +579,7 @@ public class Battle_handler : MonoBehaviour
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonBattle);
         battleWon = false;
         battleOver = false;
+        yield return new WaitForSeconds(1f);
     }
     private IEnumerator RunAway() {
         runningAway = true;

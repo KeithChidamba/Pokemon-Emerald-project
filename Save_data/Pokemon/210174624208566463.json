@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 0.0,
     "nature": {
-        "instanceID": 25194
+        "instanceID": 25192
     },
     "hasGender": true,
     "hp": 14.0,
@@ -56,7 +56,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26372
+            "instanceID": 26374
         }
     ],
     "statusEffect": 0,
@@ -131,7 +131,7 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -2026
+            "instanceID": -12290
         }
     ],
     "ability": {
@@ -139,7 +139,7 @@
     },
     "evolutions": [
         {
-            "instanceID": 26618
+            "instanceID": 26620
         },
         {
             "instanceID": 25850
@@ -150,10 +150,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32168
+        "instanceID": 32170
     },
     "backPicture": {
-        "instanceID": 32258
+        "instanceID": 32260
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,
@@ -170,8 +170,7 @@
         {
             "moveName": "growl",
             "powerPoints": 40,
-            "maxPowerPoints": 40,
-            "moveType": "normal"
+            "maxPowerpoints": 40
         }
     ]
 }

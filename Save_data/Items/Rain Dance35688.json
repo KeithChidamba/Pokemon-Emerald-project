@@ -1,13 +1,13 @@
 {
-    "itemID": "Hyper Beam46404",
-    "itemName": "Hyper Beam",
+    "itemID": "Rain Dance35688",
+    "itemName": "Rain Dance",
     "itemType": 16,
     "itemEffect": "",
-    "itemDescription": "Powerful attack that requires recharge.",
+    "itemDescription": "Creates rain during battle",
     "price": 0,
-    "quantity": 5,
+    "quantity": 1,
     "itemImage": {
-        "instanceID": 26102
+        "instanceID": 25480
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,15 +18,15 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": 26448
+        "instanceID": 25940
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26448
+            "instanceID": 25940
         }
     ],
     "infoModuleAssetNames": [
-        "TM15"
+        "TM18"
     ],
-    "imageDirectory": "normal tm"
+    "imageDirectory": "water tm"
 }

@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 25194
+        "instanceID": 25192
     },
     "hasGender": true,
     "hp": 14.0,
@@ -56,7 +56,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26038
+            "instanceID": 26040
         }
     ],
     "statusEffect": 0,
@@ -131,31 +131,36 @@
         3,
         8,
         9,
-        11
+        11,
+        14,
+        13
     ],
     "learnableHms": [
         0
     ],
     "moveSet": [
         {
-            "instanceID": -2018
+            "instanceID": -12280
         },
         {
-            "instanceID": -2020
+            "instanceID": -12282
         },
         {
-            "instanceID": -2022
+            "instanceID": -12284
+        },
+        {
+            "instanceID": -12286
         }
     ],
     "ability": {
-        "instanceID": 25422
+        "instanceID": 25420
     },
     "evolutions": [
         {
-            "instanceID": 25582
+            "instanceID": 25580
         },
         {
-            "instanceID": 25500
+            "instanceID": 25498
         }
     ],
     "heldItem": {
@@ -163,10 +168,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32262
+        "instanceID": 32264
     },
     "backPicture": {
-        "instanceID": 32264
+        "instanceID": 32266
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,
@@ -183,20 +188,22 @@
         {
             "moveName": "growl",
             "powerPoints": 40,
-            "maxPowerPoints": 40,
-            "moveType": "normal"
+            "maxPowerpoints": 40
         },
         {
             "moveName": "tackle",
             "powerPoints": 35,
-            "maxPowerPoints": 35,
-            "moveType": "normal"
+            "maxPowerpoints": 35
         },
         {
             "moveName": "surf",
             "powerPoints": 25,
-            "maxPowerPoints": 25,
-            "moveType": "water"
+            "maxPowerpoints": 25
+        },
+        {
+            "moveName": "rain dance",
+            "powerPoints": 10,
+            "maxPowerpoints": 10
         }
     ]
 }

@@ -102,8 +102,7 @@ public class Pokemon : ScriptableObject
 
         foreach (var move in moveSet)
         {
-            moveData.Add(new MoveSaveData(move.moveName.ToLower(), move.type.typeName.ToLower()
-                , move.powerpoints, move.maxPowerpoints));
+            moveData.Add(new MoveSaveData(move.moveName.ToLower(), move.powerpoints, move.maxPowerpoints));
         }
         foreach (var type in types) typeNames.Add(type.typeName.ToLower());
         
@@ -119,18 +118,11 @@ public class Pokemon : ScriptableObject
             (Save_manager.AssetDirectory.Natures) + natureName.ToLower());
         ability = Resources.Load<Ability>(Save_manager.GetDirectory
             (Save_manager.AssetDirectory.Abilities) + abilityName.ToLower());
-        moveSet.Clear();
         types.Clear();
         evolutions.Clear();
-        for (int i = 0; i < moveData.Count; i++)
-        {
-            var moveCopy = Obj_Instance.CreateMove(Resources.Load<Move>(
-                Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + moveData[i].moveName));
-            
-            moveCopy.powerpoints = moveData[i].powerPoints;
-            moveCopy.maxPowerpoints = moveData[i].maxPowerPoints;
-            moveSet.Add(moveCopy);
-        }
+        
+        LoadMovesFromSource(moveData);
+        
         foreach (var typeName in typeNames)
         {
             types.Add(Resources.Load<Type>(Save_manager.GetDirectory
@@ -149,7 +141,27 @@ public class Pokemon : ScriptableObject
         }
         Battle_handler.Instance.OnBattleEnd += ClearEvents;
     }
-
+    public void ResetMoveData()
+    {
+        List<MoveSaveData> uniqueMoveData = new ();
+        moveSet.ForEach(move=>uniqueMoveData.Add(
+            new (move.moveName,move.powerpoints,move.maxPowerpoints)
+            ));
+        LoadMovesFromSource(uniqueMoveData);
+    }
+    private void LoadMovesFromSource(List<MoveSaveData> movesetTemplate)
+    {
+        moveSet.Clear();
+        foreach (var move in movesetTemplate)
+        {
+            var moveCopy = Obj_Instance.CreateMove(Resources.Load<Move>(
+                Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + move.moveName));
+            
+            moveCopy.powerpoints = move.powerPoints;
+            moveCopy.maxPowerpoints = move.maxPowerpoints;
+            moveSet.Add(moveCopy);
+        }
+    }
     public void RemoveHeldItem()
     {
         heldItem = null;

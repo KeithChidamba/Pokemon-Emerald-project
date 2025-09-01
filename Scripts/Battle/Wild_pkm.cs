@@ -51,7 +51,7 @@ public class Wild_pkm : MonoBehaviour
         if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon
             != participant.pokemon || _usedMove || !canAttack)
             return;
-        TargetPlayer(0);//attack player, since its single battle
+        Battle_handler.Instance.currentEnemyIndex = 0;//attack player, since its single battle
         if(Utility.RandomRange(1,11)>3)//70% chance
             DetermineMoveChoice();
         else
@@ -62,13 +62,9 @@ public class Wild_pkm : MonoBehaviour
     {
         if(!participant.canEscape) return;
         Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
-        Battle_handler.Instance.EndBattle(false);
         inBattle = false;
         ranAway = true;
-    }
-    private void TargetPlayer(int selectedIndex)
-    {
-        Battle_handler.Instance.currentEnemyIndex = selectedIndex;
+        Battle_handler.Instance.EndBattle(false);
     }
     private void DetermineMoveChoice()
     {

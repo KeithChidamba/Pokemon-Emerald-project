@@ -6,7 +6,7 @@
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26214
+        "instanceID": 26216
     },
     "hasGender": true,
     "hp": 75.0,
@@ -56,10 +56,10 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26534
+            "instanceID": 26536
         },
         {
-            "instanceID": 26466
+            "instanceID": 26468
         }
     ],
     "statusEffect": 0,
@@ -131,33 +131,33 @@
     ],
     "moveSet": [
         {
-            "instanceID": -2030
+            "instanceID": -12294
         },
         {
-            "instanceID": -2032
+            "instanceID": -12296
         },
         {
-            "instanceID": -2034
+            "instanceID": -12298
         },
         {
-            "instanceID": -2036
+            "instanceID": -12300
         }
     ],
     "ability": {
-        "instanceID": 25540
+        "instanceID": 25538
     },
     "evolutions": [
         {
-            "instanceID": 26008
+            "instanceID": 26010
         },
         {
-            "instanceID": 26136
+            "instanceID": 26138
         },
         {
             "instanceID": 25918
         },
         {
-            "instanceID": 26140
+            "instanceID": 26142
         }
     ],
     "heldItem": {
@@ -165,10 +165,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32802
+        "instanceID": 32804
     },
     "backPicture": {
-        "instanceID": 32922
+        "instanceID": 32924
     },
     "pokeballName": "Great Ball",
     "healthPhase": 1,
@@ -188,26 +188,22 @@
         {
             "moveName": "psybeam",
             "powerPoints": 20,
-            "maxPowerPoints": 20,
-            "moveType": "psychic"
+            "maxPowerpoints": 20
         },
         {
             "moveName": "moonlight",
             "powerPoints": 5,
-            "maxPowerPoints": 5,
-            "moveType": "psychic"
+            "maxPowerpoints": 5
         },
         {
             "moveName": "whirlwind",
             "powerPoints": 30,
-            "maxPowerPoints": 30,
-            "moveType": "normal"
+            "maxPowerpoints": 20
         },
         {
             "moveName": "protect",
             "powerPoints": 10,
-            "maxPowerPoints": 10,
-            "moveType": "normal"
+            "maxPowerpoints": 10
         }
     ]
 }

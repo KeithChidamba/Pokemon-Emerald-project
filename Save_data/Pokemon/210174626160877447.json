@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 26022
+        "instanceID": 26024
     },
     "hasGender": true,
     "hp": 15.0,
@@ -56,7 +56,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26308
+            "instanceID": 26310
         }
     ],
     "statusEffect": 0,
@@ -144,16 +144,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -2004
+            "instanceID": -12266
         },
         {
-            "instanceID": -2006
+            "instanceID": -12268
         },
         {
-            "instanceID": -2008
+            "instanceID": -12270
         },
         {
-            "instanceID": -2256
+            "instanceID": -12272
         }
     ],
     "ability": {
@@ -161,21 +161,21 @@
     },
     "evolutions": [
         {
-            "instanceID": 26586
+            "instanceID": 26588
         },
         {
-            "instanceID": 25106
+            "instanceID": 25102
         }
     ],
     "heldItem": {
-        "instanceID": -2014
+        "instanceID": -12276
     },
     "hasItem": true,
     "frontPicture": {
-        "instanceID": 32340
+        "instanceID": 32342
     },
     "backPicture": {
-        "instanceID": 32232
+        "instanceID": 32234
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 2,
@@ -192,26 +192,22 @@
         {
             "moveName": "pursuit",
             "powerPoints": 20,
-            "maxPowerPoints": 20,
-            "moveType": "dark"
+            "maxPowerpoints": 20
         },
         {
             "moveName": "absorb",
             "powerPoints": 25,
-            "maxPowerPoints": 25,
-            "moveType": "grass"
+            "maxPowerpoints": 25
         },
         {
             "moveName": "quick attack",
             "powerPoints": 29,
-            "maxPowerPoints": 30,
-            "moveType": "normal"
+            "maxPowerpoints": 30
         },
         {
             "moveName": "sandstorm",
             "powerPoints": 10,
-            "maxPowerPoints": 10,
-            "moveType": "rock"
+            "maxPowerpoints": 10
         }
     ]
 }

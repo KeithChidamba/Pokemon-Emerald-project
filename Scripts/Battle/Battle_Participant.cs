@@ -43,7 +43,7 @@ public class Battle_Participant : MonoBehaviour
     public Type additionalTypeImmunity;
     public List<TypeImmunityNegation> immunityNegations = new();
     public List<Pokemon> expReceivers;
-    private bool _expEventDelay = false;
+    private bool _expEventDelay;
     public Action OnPokemonFainted;
     private Action OnFaintCheck;
     public List<Barrier> barriers = new();
@@ -56,7 +56,6 @@ public class Battle_Participant : MonoBehaviour
         statData = GetComponent<Battle_Data>();
         Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierSharing;
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
-        Battle_handler.Instance.OnBattleEnd += DeactivatePokemon;
     }
     private void Update()
     {
@@ -212,7 +211,10 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.ConfusionCheck;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.NotifyHealing;
+        Battle_handler.Instance.OnBattleEnd -= DeactivatePokemon;
         pokemon.OnHealthChanged -= CheckIfFainted;
+        //reset move data in case of in-battle modification
+        pokemon.ResetMoveData();
     }
     public void ResetParticipantState()
     {
@@ -325,6 +327,7 @@ public class Battle_Participant : MonoBehaviour
             pokemon.statusEffect = PokemonOperations.StatusEffect.Poison;
         }
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
+        Battle_handler.Instance.OnBattleEnd += DeactivatePokemon;
         Turn_Based_Combat.Instance.OnTurnsCompleted += statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.CheckTrapDuration;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;

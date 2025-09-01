@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 26588
+        "instanceID": 26590
     },
     "hasGender": true,
     "hp": 13.0,
@@ -56,7 +56,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26308
+            "instanceID": 26310
         }
     ],
     "statusEffect": 0,
@@ -131,7 +131,7 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -2046
+            "instanceID": -12310
         }
     ],
     "ability": {
@@ -139,10 +139,10 @@
     },
     "evolutions": [
         {
-            "instanceID": 26586
+            "instanceID": 26588
         },
         {
-            "instanceID": 25106
+            "instanceID": 25102
         }
     ],
     "heldItem": {
@@ -150,10 +150,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32248
+        "instanceID": 32250
     },
     "backPicture": {
-        "instanceID": 32256
+        "instanceID": 32258
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 0,
@@ -170,8 +170,7 @@
         {
             "moveName": "leer",
             "powerPoints": 30,
-            "maxPowerPoints": 30,
-            "moveType": "normal"
+            "maxPowerpoints": 30
         }
     ]
 }

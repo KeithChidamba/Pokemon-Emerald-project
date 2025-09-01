@@ -218,6 +218,7 @@ public class Turn_Based_Combat : MonoBehaviour
             OnAttackAttempted += (result)=> successfulAttack = result;
             yield return StartCoroutine(CheckAttackSuccess(currentTurn,attacker,victim));
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            
             if (successfulAttack)
             {
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
@@ -233,8 +234,8 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
-        _turnHistory.Clear();
         
+        _turnHistory.Clear();
         OnTurnsCompleted?.Invoke();
         
         //damage from status effect
@@ -253,6 +254,7 @@ public class Turn_Based_Combat : MonoBehaviour
             yield return ExecuteWeatherEffect();
         }
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
+        
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         NextTurn();
     }
