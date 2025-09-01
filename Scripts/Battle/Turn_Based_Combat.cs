@@ -138,27 +138,41 @@ public class Turn_Based_Combat : MonoBehaviour
                     +turn.move.moveName+" on "+victim.pokemon.pokemonName+"!");
 
             ModifyMoveAccuracy(turn);
-            
+            if (victim.isSemiInvulnerable)
+            {
+                if (victim.semiInvulnerabilityData.IsInvulnerableTo(turn.move))
+                {
+                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +
+                                                                victim.semiInvulnerabilityData.displayMessage);
+                    OnAttackAttempted?.Invoke(false);
+                    yield break;
+                }
+            }
+
             if (!turn.move.isSureHit)
             {
                 if (!MoveSuccessful(turn))
                 {
-                    //semi-invincibility logic, comes here
-                    if(attacker.pokemon.accuracy >= victim.pokemon.evasion)
-                        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
+
+                    if (attacker.pokemon.accuracy >= victim.pokemon.evasion)
+                        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +
+                                                                    " missed the attack");
                     else
-                        Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" dodged the attack");
+                        Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName +
+                                                                    " dodged the attack");
                 }
                 else
                 {
                     OnAttackAttempted?.Invoke(true);
                     yield break;
                 }
-            }else
+            }
+            else
             {
                 OnAttackAttempted?.Invoke(true);
                 yield break;
             }
+            
         }
         else
         {
@@ -256,6 +270,14 @@ public class Turn_Based_Combat : MonoBehaviour
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
+        
+        //semi-invulnerability turn logic
+        var validList = Battle_handler.Instance.GetValidParticipants();
+        foreach(var participant in validList)
+        {
+            if(!participant.isSemiInvulnerable)continue;
+            SaveMove(new Turn(participant.semiInvulnerabilityData.turnData));
+        }
         NextTurn();
     }
     private IEnumerator HandleSwaps()
@@ -267,7 +289,7 @@ public class Turn_Based_Combat : MonoBehaviour
             var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
                 turn.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.Pursuit));
             if (pursuitUsersTurn!=null)
-            {//hit enemy with pursuit double damage effect
+            {
                 var attacker=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.attackerIndex];
                 var victim=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.victimIndex];
                 yield return StartCoroutine(Move_handler.Instance.Pursuit(attacker,victim,pursuitUsersTurn.move));
@@ -342,11 +364,14 @@ public class Turn_Based_Combat : MonoBehaviour
                 turn.victimID == participant.pokemon.pokemonID;
     }
     public void NextTurn()
-    { 
-        if ( Battle_handler.Instance.isDoubleBattle)
-            ChangeTurn(3,1);
+    {
+        if (Battle_handler.Instance.isDoubleBattle)
+            ChangeTurn(3, 1);
         else
-            ChangeTurn(2,2);
+            ChangeTurn(2, 2);
+        
+        if (Battle_handler.Instance.GetCurrentParticipant().isSemiInvulnerable)
+            NextTurn();
     }
 
     public void RemoveTurn()

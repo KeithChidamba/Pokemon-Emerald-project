@@ -29,8 +29,9 @@ public class Battle_Participant : MonoBehaviour
     public bool isConfused;
     public bool isInfatuated;
     public bool canBeDamaged = true;
+    public SemiInvulnerabilityData semiInvulnerabilityData = new();
+    public bool isSemiInvulnerable;
     public bool canEscape = true;
-    
     public List<StatChangeData> StatChangeEffects = new();
     public Slider playerHpSlider;
     [FormerlySerializedAs("hpSliderColor")] public RawImage hpSliderImage;

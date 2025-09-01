@@ -46,7 +46,7 @@ public static class NameDB
         StunSpore,
         
         // 🌍 Ground-type
-        Dig,                // needs making and add to tm slot
+        Dig,
         Earthquake,
         Magnitude,
         MudSlap,
@@ -56,10 +56,10 @@ public static class NameDB
         SandTomb,
         
         //Rock
-        SandStorm,              // needs making with weather needs making and add to tm slot
+        SandStorm,
         
         // 💜 Normal-type
-        Attract,                // needs making after affection system
+        Attract,
         SonicBoom,
         Harden,
         BellyDrum,
@@ -91,7 +91,7 @@ public static class NameDB
         TailWhip,
         Tackle,
         TakeDown,
-        Whirlwind,              //needs making
+        Whirlwind,
         
         // 💀 Poison-type
         PoisonFang,
@@ -131,7 +131,7 @@ public static class NameDB
     public enum HM
     {
         Surf,
-        Fly//needs making
+        Fly
     }
 
     public enum TM

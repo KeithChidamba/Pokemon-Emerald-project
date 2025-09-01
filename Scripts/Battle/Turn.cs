@@ -20,4 +20,12 @@ public class Turn
           this.attackerID= attackerID;
           this.victimID = victimID;
      }
+     public Turn(Turn copyRequest)
+     {
+          move = copyRequest.move;
+          attackerIndex = copyRequest.attackerIndex;
+          victimIndex = copyRequest.victimIndex;
+          attackerID= copyRequest.attackerID;
+          victimID = copyRequest.victimID;
+     }
 }

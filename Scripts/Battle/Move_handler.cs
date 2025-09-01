@@ -180,6 +180,13 @@ public class Move_handler:MonoBehaviour
         float randomFactor = Utility.RandomRange(217, 256) / 255f;
 
         float baseDamage = ((levelFactor * move.moveDamage * attackDefenseRatio) / 50f) + 2f;
+                
+        if(currentVictim.isSemiInvulnerable)
+        { 
+            var semiInvulnerability = currentVictim.semiInvulnerabilityData
+                .semiInvulnerabilities.FirstOrDefault(s => s.moveName == move.moveName);
+            baseDamage *= semiInvulnerability?.damageMultiplier ?? 1f;
+        }
         
         float damageModifier = critValue * stab * typeEffectiveness * randomFactor;
         
@@ -1048,8 +1055,7 @@ public class Move_handler:MonoBehaviour
     }
     private IEnumerator HandleSilverwind()
     {
-        var damage = CalculateMoveDamage(_currentTurn.move, victim);
-        DisplayDamage(victim,isSpecificDamage:true,predefinedDamage:damage);
+        DisplayDamage(victim);
         yield return new WaitUntil(() => !displayingDamage);
         if (Utility.RandomRange(0, 101) > 10)
         {
@@ -1152,13 +1158,49 @@ public class Move_handler:MonoBehaviour
 
     void dig()
     {
-        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        if (attacker.isSemiInvulnerable)
+        {
+            DisplayDamage(victim);
+            attacker.isSemiInvulnerable = false;
+            attacker.semiInvulnerabilityData.ResetState();
+        }
+        else
+        {
+             attacker.semiInvulnerabilityData.displayMessage = " is underground";
+             attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
+            
+             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Magnitude),2f));
+             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Earthquake),2f));
+
+            attacker.isSemiInvulnerable = true;
+        }
         _moveDelay = false;
     }
 
     void fly()
     {
-        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        if (attacker.isSemiInvulnerable)
+        {
+            DisplayDamage(victim);
+            attacker.isSemiInvulnerable = false;
+            attacker.semiInvulnerabilityData.ResetState();
+        }
+        else
+        {
+             attacker.semiInvulnerabilityData.displayMessage = " is in the air";
+             attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
+            
+             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Gust),2f));
+             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Thunder)));
+             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.SkyUppercut)));
+             
+            attacker.isSemiInvulnerable = true;
+        }
         _moveDelay = false;
     }
 
