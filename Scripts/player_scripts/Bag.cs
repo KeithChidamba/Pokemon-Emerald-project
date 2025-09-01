@@ -281,7 +281,8 @@ public class Bag : MonoBehaviour
     }
     public void ViewBag()
     {
-        numItems = 0; 
+        numItems = 0;
+        topIndex = 0;
         numItems = bagItems.Count;
         sellingItemUI.SetActive(sellingItems);
         DisplayItemAction(!sellingItems);
