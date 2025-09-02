@@ -1160,6 +1160,8 @@ public class Move_handler:MonoBehaviour
     {
         if (attacker.isSemiInvulnerable)
         {
+            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon
+                                                        + attacker.semiInvulnerabilityData.onHitMessage);
             DisplayDamage(victim);
             attacker.isSemiInvulnerable = false;
             attacker.semiInvulnerabilityData.ResetState();
@@ -1167,6 +1169,7 @@ public class Move_handler:MonoBehaviour
         else
         {
              attacker.semiInvulnerabilityData.displayMessage = " is underground";
+             attacker.semiInvulnerabilityData.onHitMessage = " dug back up!";
              attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
             
              attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
@@ -1176,6 +1179,7 @@ public class Move_handler:MonoBehaviour
 
             attacker.isSemiInvulnerable = true;
         }
+        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon+" dug underground!");
         _moveDelay = false;
     }
 
@@ -1183,6 +1187,8 @@ public class Move_handler:MonoBehaviour
     {
         if (attacker.isSemiInvulnerable)
         {
+            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon
+                                                        + attacker.semiInvulnerabilityData.onHitMessage);
             DisplayDamage(victim);
             attacker.isSemiInvulnerable = false;
             attacker.semiInvulnerabilityData.ResetState();
@@ -1190,6 +1196,7 @@ public class Move_handler:MonoBehaviour
         else
         {
              attacker.semiInvulnerabilityData.displayMessage = " is in the air";
+             attacker.semiInvulnerabilityData.onHitMessage = " flew down";
              attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
             
              attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
@@ -1201,6 +1208,7 @@ public class Move_handler:MonoBehaviour
              
             attacker.isSemiInvulnerable = true;
         }
+        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon+" flew up high!");
         _moveDelay = false;
     }
 
@@ -1219,13 +1227,39 @@ public class Move_handler:MonoBehaviour
     }
     void morningsun()
     {
-        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
-        _moveDelay = false;
+        StartCoroutine(HealFromWeather());
     }
-
     void moonlight()
     {
-        Dialogue_handler.Instance.DisplayBattleInfo("Placeholder, move not created yet!");
+        StartCoroutine(HealFromWeather());
+    }
+    private IEnumerator HealFromWeather()
+    {
+        float fraction;
+        var currentWeather = Turn_Based_Combat.Instance.currentWeather.weather;
+        
+        switch (currentWeather)
+        {
+            case WeatherCondition.Weather.Sunlight:
+                fraction = 2f / 3f;  
+                break;
+            case WeatherCondition.Weather.Rain:
+            case WeatherCondition.Weather.Hail:
+            case WeatherCondition.Weather.Sandstorm:
+                fraction = 1f / 4f;          
+                break;
+            default: 
+                fraction = 1f / 2f; 
+                break;
+        }
+        int healthGain = Mathf.FloorToInt(attacker.pokemon.maxHp * fraction);
+        
+        if (healthGain < 1 && attacker.pokemon.hp < attacker.pokemon.maxHp) healthGain = 1;
+        
+        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" restored it's health!");
+
+        HealthGainDisplay(healthGain,healthGainer:attacker);
+        yield return new WaitUntil(() => !displayingHealthGain);
         _moveDelay = false;
     }
     void whirlwind()

@@ -129,15 +129,19 @@ public class Turn_Based_Combat : MonoBehaviour
                     yield break;
                 }
             }
-                        
-            if (turn.move.isMultiTarget || turn.move.isSelfTargeted)
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName
-                                                            +" used "+turn.move.moveName+"!");
-            else
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +" used "
-                    +turn.move.moveName+" on "+victim.pokemon.pokemonName+"!");
+            
+            if(!attacker.isSemiInvulnerable)
+            {
+                if (turn.move.isMultiTarget || turn.move.isSelfTargeted)
+                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName
+                                                                + " used " + turn.move.moveName + "!");
+                else
+                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " used "
+                        + turn.move.moveName + " on " + victim.pokemon.pokemonName + "!");
+            }
 
             ModifyMoveAccuracy(turn);
+            
             if (victim.isSemiInvulnerable)
             {
                 if (victim.semiInvulnerabilityData.IsInvulnerableTo(turn.move))

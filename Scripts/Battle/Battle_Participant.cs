@@ -201,10 +201,11 @@ public class Battle_Participant : MonoBehaviour
             }
         }
     }
-    public void DeactivatePokemon()
+    public void DeactivateParticipant()
     {
         isActive = false;
-        currentEnemies.Clear();
+        currentEnemies.Clear();       
+        barriers.Clear();
         StatChangeEffects.Clear();
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.CheckTrapDuration;
         Turn_Based_Combat.Instance.OnTurnsCompleted -= statusHandler.CheckStatus;
@@ -212,7 +213,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.ConfusionCheck;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.NotifyHealing;
-        Battle_handler.Instance.OnBattleEnd -= DeactivatePokemon;
+        Battle_handler.Instance.OnBattleEnd -= DeactivateParticipant;
         pokemon.OnHealthChanged -= CheckIfFainted;
         //reset move data in case of in-battle modification
         pokemon.ResetMoveData();
@@ -222,6 +223,7 @@ public class Battle_Participant : MonoBehaviour
         statData.LoadActualStats();
         statData.ResetBattleState(pokemon);
         abilityHandler.ResetState();
+        isSemiInvulnerable = false;
         canEscape = true;
         previousMove = null;
         additionalTypeImmunity = null;
@@ -328,7 +330,7 @@ public class Battle_Participant : MonoBehaviour
             pokemon.statusEffect = PokemonOperations.StatusEffect.Poison;
         }
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
-        Battle_handler.Instance.OnBattleEnd += DeactivatePokemon;
+        Battle_handler.Instance.OnBattleEnd += DeactivateParticipant;
         Turn_Based_Combat.Instance.OnTurnsCompleted += statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.CheckTrapDuration;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;

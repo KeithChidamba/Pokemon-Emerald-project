@@ -68,7 +68,7 @@ public class Enemy_trainer : MonoBehaviour
                 {//1 left
                     if(participant.pokemon.hp<=0)
                     {
-                        participant.DeactivatePokemon();
+                        participant.DeactivateParticipant();
                         participant.pokemon = null;
                         participant.isActive = false;
                         inBattle = false;

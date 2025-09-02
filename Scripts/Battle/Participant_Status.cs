@@ -159,7 +159,11 @@ public class Participant_Status : MonoBehaviour
     {
         if (_participant != participant) return;
         if (!_participant.isActive) return;
-        if (!_participant.isConfused) return;
+        if (!_participant.isConfused)
+        {
+            _confusionDuration = 0;
+            return;
+        }
         _participant.isConfused = _confusionDuration > 0;
         
         if (_confusionDuration > 0) _confusionDuration--;
