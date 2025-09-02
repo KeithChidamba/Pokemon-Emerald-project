@@ -447,6 +447,23 @@ public class Item_handler : MonoBehaviour
 
     private bool IsValidStatusHeal(PokemonOperations.StatusEffect curableStatus)
     {
+        if (_selectedPartyPokemon.statusEffect == PokemonOperations.StatusEffect.None)
+        {
+            if (Options_manager.Instance.playerInBattle)
+            {
+                if (!currentParticipant.isConfused)
+                {
+                    Dialogue_handler.Instance.DisplayDetails("Pokemon is already healthy");
+                    return false;
+                }
+            }
+            else
+            {
+                Dialogue_handler.Instance.DisplayDetails("Pokemon is already healthy");
+                return false;
+            }
+        }
+        
         //antidote heals all poison
         if (curableStatus == PokemonOperations.StatusEffect.Poison &&
             _selectedPartyPokemon.statusEffect == PokemonOperations.StatusEffect.BadlyPoison)
@@ -456,29 +473,14 @@ public class Item_handler : MonoBehaviour
         
         bool isValidHeal = _selectedPartyPokemon.statusEffect == curableStatus
                                    || curableStatus == PokemonOperations.StatusEffect.FullHeal;
-
-        if (Options_manager.Instance.playerInBattle)
-        {
-            if (!currentParticipant.isConfused
-                && _selectedPartyPokemon.statusEffect == PokemonOperations.StatusEffect.None)
-            {
-                Dialogue_handler.Instance.DisplayDetails("Pokemon is already healthy");
-                return false;
-            }
-        }
         
-        if (_selectedPartyPokemon.statusEffect == PokemonOperations.StatusEffect.None)
-        {
-            Dialogue_handler.Instance.DisplayDetails("Pokemon is already healthy");
-            return false;
-        }
-
         if (!isValidHeal)
         {
             Dialogue_handler.Instance.DisplayDetails("Incorrect heal item");
             return false;
         }
         
+        //healing
         if (Options_manager.Instance.playerInBattle)
         {
             var healAll = curableStatus == PokemonOperations.StatusEffect.FullHeal;
