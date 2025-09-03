@@ -25,8 +25,8 @@ public class Pokemon_party_member : MonoBehaviour
     {
         if(pokemon==null)return;
         var exp = 
-           PokemonOperations.CalculateExpForNextLevel(pokemon.currentLevel, pokemon.expGroup)-pokemon.currentLevel;
-        pokemon.ReceiveExperience(exp+1);
+           PokemonOperations.CalculateExpForNextLevel(pokemon.currentLevel, pokemon.expGroup)-pokemon.currentExpAmount;
+        pokemon.ReceiveExperience(exp);
         pokemon.hp=pokemon.maxHp;
     }
 

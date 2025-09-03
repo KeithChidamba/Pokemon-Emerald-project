@@ -147,14 +147,13 @@ public class Item_handler : MonoBehaviour
         {
             Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" is already max level!", 2f);
             ResetItemUsage();
-            yield return null;
         }
         else
         {
             var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup);
             Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" leveled up!", 2f);
             yield return new WaitForSeconds(1f);
-            _selectedPartyPokemon.ReceiveExperience((exp-_selectedPartyPokemon.currentExpAmount)+1);
+            _selectedPartyPokemon.ReceiveExperience(exp-_selectedPartyPokemon.currentExpAmount);
             StartCoroutine(CompleteItemUsage(0));
         }
     }
@@ -433,7 +432,7 @@ public class Item_handler : MonoBehaviour
             wildPokemon.pokemonName = rawName;
             wildPokemon.ChangeFriendshipLevel(70);
             wildPokemon.pokeballName = _itemInUse.itemName;
-            Pokemon_party.Instance.AddMember(wildPokemon,_itemInUse.itemName,false);
+            Pokemon_party.Instance.AddMember(wildPokemon,_itemInUse.itemName);
             yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
             Wild_pkm.Instance.participant.EndWildBattle();
         }else

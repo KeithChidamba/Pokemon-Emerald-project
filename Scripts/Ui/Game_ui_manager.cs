@@ -83,7 +83,7 @@ public class Game_ui_manager : MonoBehaviour
     {
         var menuOptionsMethods = new List<Action>
         {
-            ViewPokemonParty,Save_manager.Instance.SaveAllData, ViewBag, ViewProfile
+            ViewPokemonParty,()=>StartCoroutine(Save_manager.Instance.SaveAllData()), ViewBag, ViewProfile
         };
         
         if (!usingWebGl) menuOptionsMethods.Add(Options_manager.Instance.ExitGame);

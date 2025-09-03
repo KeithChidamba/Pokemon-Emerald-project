@@ -1134,6 +1134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityHandler: {fileID: 0}
   statusHandler: {fileID: 0}
+  heldItemHandler: {fileID: 0}
   pokemonTrainerAI: {fileID: 0}
   statData: {fileID: 0}
   pokemon: {fileID: 0}
@@ -1147,11 +1148,12 @@ MonoBehaviour:
   isPlayer: 1
   isEnemy: 0
   isActive: 0
-  fainted: 0
   canAttack: 1
   isFlinched: 0
   isConfused: 0
+  isInfatuated: 0
   canBeDamaged: 1
+  isSemiInvulnerable: 0
   canEscape: 1
   playerHpSlider: {fileID: 274821928}
   hpSliderImage: {fileID: 1544117819}
@@ -1161,7 +1163,7 @@ MonoBehaviour:
   participantUI: {fileID: 1656265309}
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
-  Barrieirs: []
+  barriers: []
 --- !u!114 &35621318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1174,6 +1176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dealingStatusDamage: 0
 --- !u!114 &35621319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1206,6 +1209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  processingItemEffect: 0
 --- !u!114 &35621321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3447,7 +3451,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   numMembers: 0
-  selectedMemberIndex: 0
+  selectedMemberNumber: 0
   memberToMove: 0
   swapOutNext: 0
   moving: 0
@@ -6068,6 +6072,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityHandler: {fileID: 0}
   statusHandler: {fileID: 0}
+  heldItemHandler: {fileID: 0}
   pokemonTrainerAI: {fileID: 0}
   statData: {fileID: 0}
   pokemon: {fileID: 0}
@@ -6081,11 +6086,12 @@ MonoBehaviour:
   isPlayer: 0
   isEnemy: 0
   isActive: 0
-  fainted: 0
   canAttack: 1
   isFlinched: 0
   isConfused: 0
+  isInfatuated: 0
   canBeDamaged: 1
+  isSemiInvulnerable: 0
   canEscape: 1
   playerHpSlider: {fileID: 1509615510}
   hpSliderImage: {fileID: 1598670749}
@@ -6095,7 +6101,7 @@ MonoBehaviour:
   participantUI: {fileID: 1780447230}
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
-  Barrieirs: []
+  barriers: []
 --- !u!114 &190973851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6108,6 +6114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dealingStatusDamage: 0
 --- !u!114 &190973852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6158,6 +6165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  processingItemEffect: 0
 --- !u!114 &190973855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9896,8 +9904,25 @@ MonoBehaviour:
   _turnHistory: []
   switchOutQueue: []
   currentTurnIndex: 0
-  levelEventDelay: 0
   faintEventDelay: 0
+  currentWeather:
+    turnDuration: 0
+    isInfinite: 0
+    weather: 0
+    weatherBegunMessage: 
+    weatherTurnEndMessage: 
+    weatherDamageMessage: 
+    weatherEndMessage: 
+    buffedParticipants: []
+  clearWeather:
+    turnDuration: 0
+    isInfinite: 0
+    weather: 0
+    weatherBegunMessage: 
+    weatherTurnEndMessage: 
+    weatherDamageMessage: 
+    weatherEndMessage: 
+    buffedParticipants: []
 --- !u!4 &326276941
 Transform:
   m_ObjectHideFlags: 0
@@ -12666,10 +12691,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 100100230}
         m_TargetAssemblyTypeName: Pokemon_party, Assembly-CSharp
-        m_MethodName: AddMember
+        m_MethodName: AddMemberForTesting
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+          m_ObjectArgument: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
           m_ObjectArgumentAssemblyTypeName: Pokemon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -13700,7 +13725,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usingItem: 0
-  usingHeldItem: 0
 --- !u!1 &503198948
 GameObject:
   m_ObjectHideFlags: 0
@@ -32991,8 +33015,12 @@ MonoBehaviour:
   doingMove: 0
   attacker: {fileID: 0}
   victim: {fileID: 0}
+  _onFieldDamageModifiers: []
+  _damageDisplayQueue: []
+  _healhGainQueue: []
   processingOrder: 0
-  displayingHealthDecrease: 0
+  displayingDamage: 0
+  displayingHealthGain: 0
 --- !u!4 &1148144462
 Transform:
   m_ObjectHideFlags: 0
@@ -67303,6 +67331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityHandler: {fileID: 0}
   statusHandler: {fileID: 0}
+  heldItemHandler: {fileID: 0}
   pokemonTrainerAI: {fileID: 0}
   statData: {fileID: 0}
   pokemon: {fileID: 0}
@@ -67316,11 +67345,12 @@ MonoBehaviour:
   isPlayer: 1
   isEnemy: 0
   isActive: 0
-  fainted: 0
   canAttack: 1
   isFlinched: 0
   isConfused: 0
+  isInfatuated: 0
   canBeDamaged: 1
+  isSemiInvulnerable: 0
   canEscape: 1
   playerHpSlider: {fileID: 684725532}
   hpSliderImage: {fileID: 842742253}
@@ -67334,7 +67364,7 @@ MonoBehaviour:
   participantUI: {fileID: 443644594}
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
-  Barrieirs: []
+  barriers: []
 --- !u!114 &1636635381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67347,6 +67377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dealingStatusDamage: 0
 --- !u!114 &1636635382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67379,6 +67410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  processingItemEffect: 0
 --- !u!114 &1636635384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70152,7 +70184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1756327573
 RectTransform:
   m_ObjectHideFlags: 0
@@ -72074,7 +72106,6 @@ MonoBehaviour:
   - {fileID: 35621317}
   - {fileID: 190973850}
   - {fileID: 2033618204}
-  levelUpQueue: []
   faintQueue: []
   movePowerPointsText: {fileID: 1446964400}
   moveTypeText: {fileID: 717278676}
@@ -92833,6 +92864,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityHandler: {fileID: 0}
   statusHandler: {fileID: 0}
+  heldItemHandler: {fileID: 0}
   pokemonTrainerAI: {fileID: 0}
   statData: {fileID: 0}
   pokemon: {fileID: 0}
@@ -92846,11 +92878,12 @@ MonoBehaviour:
   isPlayer: 0
   isEnemy: 0
   isActive: 0
-  fainted: 0
   canAttack: 1
   isFlinched: 0
   isConfused: 0
+  isInfatuated: 0
   canBeDamaged: 1
+  isSemiInvulnerable: 0
   canEscape: 1
   playerHpSlider: {fileID: 2073673345}
   hpSliderImage: {fileID: 639943928}
@@ -92860,7 +92893,7 @@ MonoBehaviour:
   participantUI: {fileID: 173013067}
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
-  Barrieirs: []
+  barriers: []
 --- !u!114 &2033618205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92873,6 +92906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dealingStatusDamage: 0
 --- !u!114 &2033618206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92923,6 +92957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284b8b3b6723f4042ac28d850b7a17b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  processingItemEffect: 0
 --- !u!114 &2033618209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93689,7 +93724,7 @@ MonoBehaviour:
   currentArea: {fileID: 0}
   encounterTriggered: 0
   wildPokemon: {fileID: 0}
-  encounterChance: 2
+  overworldEncounterChance: 2
 --- !u!1 &2056020629
 GameObject:
   m_ObjectHideFlags: 0

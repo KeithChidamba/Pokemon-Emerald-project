@@ -229,7 +229,12 @@ public class Pokemon_party : MonoBehaviour
         selectedMemberNumber = 0;
         EndSwap();
     }
-    public void AddMember(Pokemon pokemon, string pokeballType, bool isGiftPokemon)
+
+    public void AddMemberForTesting(Pokemon pokemon)
+    {
+        AddMember(pokemon,isGiftPokemon:true);
+    }
+    public void AddMember(Pokemon pokemon, string pokeballType="Pokeball", bool isGiftPokemon=false)
     {
         var newPokemon = Obj_Instance.CreatePokemon(pokemon); 
         newPokemon.pokeballName = pokeballType; 

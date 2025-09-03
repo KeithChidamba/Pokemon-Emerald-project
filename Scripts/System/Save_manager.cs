@@ -242,7 +242,7 @@ public class Save_manager : MonoBehaviour
         foreach (var file in files)
             File.Delete(file);
     }
-    private void CopyCorrectSaveData(string sourceDir, string destinationDir, bool recursive)
+    private IEnumerator CopyCorrectSaveData(string sourceDir, string destinationDir, bool recursive)
     {
         // Ensure source exists
         if (!Directory.Exists(sourceDir))
@@ -266,10 +266,10 @@ public class Save_manager : MonoBehaviour
             {
                 string dirName = Path.GetFileName(directory);
                 string destSubDir = Path.Combine(destinationDir, dirName);
-                CopyCorrectSaveData(directory, destSubDir, true);
+                yield return CopyCorrectSaveData(directory, destSubDir, true);
             }
         }
-        EraseTemporarySaveData();
+
     }
 
     public void EraseSaveData()
@@ -301,7 +301,7 @@ public class Save_manager : MonoBehaviour
         Dialogue_handler.Instance.DisplayDetails("Error occured while saving please restart the game!");
         Dialogue_handler.Instance.EndDialogue(2f);
     }
-    public void SaveAllData()
+    public IEnumerator SaveAllData()
     {
         Dialogue_handler.Instance.DisplayDetails("Saving...");
         
@@ -314,7 +314,7 @@ public class Save_manager : MonoBehaviour
             catch (Exception e)
             {
                 OnSaveDataFail?.Invoke("Error occured with SaveAllPokemonData, exception: ",e);
-                return;
+                yield break;
             }
         }
         for (int i = 0; i < pokemon_storage.Instance.numNonPartyPokemon; i++)
@@ -326,7 +326,7 @@ public class Save_manager : MonoBehaviour
             catch (Exception e)
             {
                 OnSaveDataFail?.Invoke("Error occured with SaveNonPartyPokemonData, exception: ",e);
-                return;
+                yield break;
             }
         }
 
@@ -337,7 +337,7 @@ public class Save_manager : MonoBehaviour
         catch (Exception e)
         {
             OnSaveDataFail?.Invoke("Error occured with SavePartyPokemonIDs, exception: ",e);
-            return;
+            yield break;
         }
         
         foreach (var item in Bag.Instance.bagItems)
@@ -349,7 +349,7 @@ public class Save_manager : MonoBehaviour
             catch (Exception e)
             {
                 OnSaveDataFail?.Invoke("Error occured with SaveItemDataAsJson, exception: ",e);
-                return;
+                yield break;
             }
         }
         
@@ -366,7 +366,7 @@ public class Save_manager : MonoBehaviour
         catch (Exception e)
         {
             OnSaveDataFail?.Invoke("Error occured with SavePlayerDataAsJson, exception: ",e);
-            return;
+            yield break;
         }
         
         if (Application.platform == RuntimePlatform.WebGLPlayer)
@@ -378,12 +378,14 @@ public class Save_manager : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.Instance.DisplayDetails("Game saved");
-        
-            Dialogue_handler.Instance.EndDialogue(1f);
-        
             EraseSaveData();//empty old save data
-            CopyCorrectSaveData(_tempSaveDataPath,_saveDataPath,recursive: true);//copy new save data
+            yield return new WaitForSeconds(1f);
+            //copy new save data
+            yield return StartCoroutine(CopyCorrectSaveData(_tempSaveDataPath
+                            ,_saveDataPath,recursive: true));
+            EraseTemporarySaveData();
+            Dialogue_handler.Instance.DisplayDetails("Game saved");
+            Dialogue_handler.Instance.EndDialogue(1f);
         }
     }
 

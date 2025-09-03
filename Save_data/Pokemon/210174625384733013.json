@@ -1,0 +1,209 @@
+{
+    "basePokemonName": "Mudkip",
+    "pokemonName": "Mudkip",
+    "pokemonID": 210174625384733013,
+    "personalityValue": 1323014485,
+    "gender": 2,
+    "ratioFemale": 12.5,
+    "nature": {
+        "instanceID": 25196
+    },
+    "hasGender": true,
+    "hp": 14.0,
+    "maxHp": 14.0,
+    "baseHp": 50.0,
+    "baseAttack": 70.0,
+    "baseDefense": 50.0,
+    "baseSpecialAttack": 50.0,
+    "baseSpecialDefense": 50.0,
+    "baseSpeed": 40.0,
+    "attack": 7.0,
+    "defense": 7.0,
+    "specialAttack": 7.0,
+    "specialDefense": 7.0,
+    "speed": 7.0,
+    "hpIv": 10.0,
+    "attackIv": 8.0,
+    "defenseIv": 17.0,
+    "specialAttackIv": 20.0,
+    "specialDefenseIv": 10.0,
+    "speedIv": 27.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        {
+            "stat": 1,
+            "eVAmount": 1
+        }
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 45.0,
+    "currentLevel": 2,
+    "currentExpAmount": 0,
+    "currentLevelExpAmount": 0,
+    "nextLevelExpAmount": 9,
+    "expGroup": 3,
+    "expYield": 65,
+    "friendshipLevel": 129,
+    "hasTrainer": true,
+    "canBeFlinched": true,
+    "canBeInfatuated": true,
+    "types": [
+        {
+            "instanceID": 26044
+        }
+    ],
+    "statusEffect": 0,
+    "buffAndDebuffs": [],
+    "evolutionLineLevels": [
+        16,
+        30
+    ],
+    "friendshipEvolutionRequirement": {
+        "friendshipRequirement": 0,
+        "evolutionIndex": 0
+    },
+    "requiresEvolutionStone": false,
+    "evolutionStone": 0,
+    "abilities": [
+        5
+    ],
+    "splitEvolution": false,
+    "requiresFriendshipEvolution": false,
+    "learnSet": [
+        {
+            "learnSetMove": 50,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 67,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 31,
+            "requiredLevel": 6
+        },
+        {
+            "learnSetMove": 81,
+            "requiredLevel": 10
+        },
+        {
+            "learnSetMove": 41,
+            "requiredLevel": 15
+        },
+        {
+            "learnSetMove": 46,
+            "requiredLevel": 19
+        },
+        {
+            "learnSetMove": 33,
+            "requiredLevel": 24
+        },
+        {
+            "learnSetMove": 68,
+            "requiredLevel": 28
+        },
+        {
+            "learnSetMove": 82,
+            "requiredLevel": 33
+        },
+        {
+            "learnSetMove": 59,
+            "requiredLevel": 37
+        },
+        {
+            "learnSetMove": 79,
+            "requiredLevel": 42
+        },
+        {
+            "learnSetMove": 44,
+            "requiredLevel": 46
+        }
+    ],
+    "learnableTms": [
+        1,
+        3,
+        8,
+        9,
+        11,
+        14,
+        13
+    ],
+    "learnableHms": [
+        0
+    ],
+    "moveSet": [
+        {
+            "instanceID": -16292
+        },
+        {
+            "instanceID": -16294
+        },
+        {
+            "instanceID": -16296
+        },
+        {
+            "instanceID": -16298
+        }
+    ],
+    "ability": {
+        "instanceID": 25424
+    },
+    "evolutions": [
+        {
+            "instanceID": 25584
+        },
+        {
+            "instanceID": 25502
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 32268
+    },
+    "backPicture": {
+        "instanceID": 32270
+    },
+    "pokeballName": "Pokeball",
+    "healthPhase": 1,
+    "abilityName": "Torrent",
+    "natureName": "Timid",
+    "evolutionNames": [
+        "Marshtomp",
+        "Swampert"
+    ],
+    "typeNames": [
+        "water"
+    ],
+    "moveData": [
+        {
+            "moveName": "growl",
+            "powerPoints": 40,
+            "maxPowerpoints": 40
+        },
+        {
+            "moveName": "tackle",
+            "powerPoints": 35,
+            "maxPowerpoints": 35
+        },
+        {
+            "moveName": "surf",
+            "powerPoints": 25,
+            "maxPowerpoints": 25
+        },
+        {
+            "moveName": "rain dance",
+            "powerPoints": 10,
+            "maxPowerpoints": 10
+        }
+    ]
+}

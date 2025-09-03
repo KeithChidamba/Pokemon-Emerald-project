@@ -1,0 +1,188 @@
+{
+    "basePokemonName": "Zigzagoon",
+    "pokemonName": "Zigzagoon",
+    "pokemonID": 210174624533141532,
+    "personalityValue": 471423004,
+    "gender": 1,
+    "ratioFemale": 50.0,
+    "nature": {
+        "instanceID": 25546
+    },
+    "hasGender": true,
+    "hp": 11.0,
+    "maxHp": 11.0,
+    "baseHp": 38.0,
+    "baseAttack": 30.0,
+    "baseDefense": 41.0,
+    "baseSpecialAttack": 30.0,
+    "baseSpecialDefense": 41.0,
+    "baseSpeed": 60.0,
+    "attack": 6.0,
+    "defense": 5.0,
+    "specialAttack": 5.0,
+    "specialDefense": 5.0,
+    "speed": 6.0,
+    "hpIv": 3.0,
+    "attackIv": 0.0,
+    "defenseIv": 17.0,
+    "specialAttackIv": 13.0,
+    "specialDefenseIv": 28.0,
+    "speedIv": 14.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        {
+            "stat": 5,
+            "eVAmount": 1
+        }
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 255.0,
+    "currentLevel": 1,
+    "currentExpAmount": 0,
+    "currentLevelExpAmount": 0,
+    "nextLevelExpAmount": 1,
+    "expGroup": 2,
+    "expYield": 60,
+    "friendshipLevel": 124,
+    "hasTrainer": true,
+    "canBeFlinched": true,
+    "canBeInfatuated": true,
+    "types": [
+        {
+            "instanceID": 26224
+        }
+    ],
+    "statusEffect": 0,
+    "buffAndDebuffs": [],
+    "evolutionLineLevels": [
+        20
+    ],
+    "friendshipEvolutionRequirement": {
+        "friendshipRequirement": 0,
+        "evolutionIndex": 0
+    },
+    "requiresEvolutionStone": false,
+    "evolutionStone": 0,
+    "abilities": [
+        1
+    ],
+    "splitEvolution": false,
+    "requiresFriendshipEvolution": false,
+    "learnSet": [
+        {
+            "learnSetMove": 50,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 67,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 66,
+            "requiredLevel": 5
+        },
+        {
+            "learnSetMove": 51,
+            "requiredLevel": 9
+        },
+        {
+            "learnSetMove": 34,
+            "requiredLevel": 13
+        },
+        {
+            "learnSetMove": 57,
+            "requiredLevel": 17
+        },
+        {
+            "learnSetMove": 33,
+            "requiredLevel": 21
+        },
+        {
+            "learnSetMove": 90,
+            "requiredLevel": 25
+        },
+        {
+            "learnSetMove": 42,
+            "requiredLevel": 29
+        },
+        {
+            "learnSetMove": 48,
+            "requiredLevel": 33
+        },
+        {
+            "learnSetMove": 78,
+            "requiredLevel": 37
+        },
+        {
+            "learnSetMove": 40,
+            "requiredLevel": 41
+        }
+    ],
+    "learnableTms": [
+        3,
+        4,
+        5,
+        8,
+        11,
+        9,
+        12
+    ],
+    "learnableHms": [
+        0
+    ],
+    "moveSet": [
+        {
+            "instanceID": -16316
+        },
+        {
+            "instanceID": -16318
+        }
+    ],
+    "ability": {
+        "instanceID": 25522
+    },
+    "evolutions": [
+        {
+            "instanceID": 25514
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 32340
+    },
+    "backPicture": {
+        "instanceID": 32342
+    },
+    "pokeballName": "Pokeball",
+    "healthPhase": 1,
+    "abilityName": "Pickup",
+    "natureName": "Naughty",
+    "evolutionNames": [
+        "Linoone"
+    ],
+    "typeNames": [
+        "normal"
+    ],
+    "moveData": [
+        {
+            "moveName": "growl",
+            "powerPoints": 40,
+            "maxPowerpoints": 40
+        },
+        {
+            "moveName": "tackle",
+            "powerPoints": 35,
+            "maxPowerpoints": 35
+        }
+    ]
+}
