@@ -5,7 +5,7 @@
     "itemEffect": "",
     "itemDescription": "Creates rain during battle",
     "price": 0,
-    "quantity": 1,
+    "quantity": 2,
     "itemImage": {
         "instanceID": 25484
     },

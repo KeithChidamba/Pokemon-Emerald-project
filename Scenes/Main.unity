@@ -58230,7 +58230,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1216270925}
         m_TargetAssemblyTypeName: Pokemon_party_member, Assembly-CSharp
-        m_MethodName: Levelup
+        m_MethodName: LevelupForTesting
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

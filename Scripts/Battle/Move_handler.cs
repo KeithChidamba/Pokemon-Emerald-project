@@ -1158,57 +1158,57 @@ public class Move_handler:MonoBehaviour
 
     void dig()
     {
-        if (attacker.isSemiInvulnerable)
+        if (attacker.semiInvulnerabilityData.executionTurn)
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon
+            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName
                                                         + attacker.semiInvulnerabilityData.onHitMessage);
             DisplayDamage(victim);
-            attacker.isSemiInvulnerable = false;
-            attacker.semiInvulnerabilityData.ResetState();
+            attacker.semiInvulnerabilityData.executionTurn = false;
+            _moveDelay = false;
+            return;
         }
-        else
-        {
-             attacker.semiInvulnerabilityData.displayMessage = " is underground";
-             attacker.semiInvulnerabilityData.onHitMessage = " dug back up!";
-             attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
-            
-             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Magnitude),2f));
-             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Earthquake),2f));
 
-            attacker.isSemiInvulnerable = true;
-        }
-        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon+" dug underground!");
+        attacker.semiInvulnerabilityData.displayMessage = " is underground";
+        attacker.semiInvulnerabilityData.onHitMessage = " dug back up!";
+        attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
+        
+        attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Magnitude),2f));
+        attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Earthquake),2f));
+
+        attacker.isSemiInvulnerable = true;
+        attacker.semiInvulnerabilityData.executionTurn = true;
+        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" dug underground!");
         _moveDelay = false;
     }
 
     void fly()
     {
-        if (attacker.isSemiInvulnerable)
+        if (attacker.semiInvulnerabilityData.executionTurn)
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon
+            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName
                                                         + attacker.semiInvulnerabilityData.onHitMessage);
             DisplayDamage(victim);
-            attacker.isSemiInvulnerable = false;
-            attacker.semiInvulnerabilityData.ResetState();
+            attacker.semiInvulnerabilityData.executionTurn = false;
+            _moveDelay = false;
+            return;
         }
-        else
-        {
-             attacker.semiInvulnerabilityData.displayMessage = " is in the air";
-             attacker.semiInvulnerabilityData.onHitMessage = " flew down";
-             attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
-            
-             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Gust),2f));
-             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Thunder)));
-             attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-                new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.SkyUppercut)));
-             
-            attacker.isSemiInvulnerable = true;
-        }
-        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon+" flew up high!");
+
+        attacker.semiInvulnerabilityData.displayMessage = " is in the air";
+        attacker.semiInvulnerabilityData.onHitMessage = " flew down";
+        attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
+        
+        attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Gust),2f));
+        attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Thunder)));
+        attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
+            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.SkyUppercut)));
+         
+        attacker.isSemiInvulnerable = true;
+        attacker.semiInvulnerabilityData.executionTurn = true;
+        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" flew up high!");
         _moveDelay = false;
     }
 

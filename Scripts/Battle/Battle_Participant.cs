@@ -224,6 +224,7 @@ public class Battle_Participant : MonoBehaviour
         statData.ResetBattleState(pokemon);
         abilityHandler.ResetState();
         isSemiInvulnerable = false;
+        semiInvulnerabilityData.ResetState();
         canEscape = true;
         previousMove = null;
         additionalTypeImmunity = null;

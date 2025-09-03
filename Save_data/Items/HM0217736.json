@@ -1,15 +1,15 @@
 {
-    "itemID": "Bike40097",
-    "itemName": "Bike",
-    "itemType": 0,
-    "itemEffect": "0",
-    "itemDescription": "A fast bicycle that realiable",
+    "itemID": "HM0217736",
+    "itemName": "HM02",
+    "itemType": 16,
+    "itemEffect": "",
+    "itemDescription": "Teaches a valid pokemon, fly",
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32576
+        "instanceID": 26478
     },
-    "forPartyUse": false,
+    "forPartyUse": true,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": false,
     "isHeldItem": false,
@@ -18,15 +18,15 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalItemInfo": {
-        "instanceID": 25604
+        "instanceID": 25326
     },
     "additionalInfoModules": [
         {
-            "instanceID": 25604
+            "instanceID": 25326
         }
     ],
     "infoModuleAssetNames": [
-        "Bike"
+        "HM02"
     ],
-    "imageDirectory": "Bike"
+    "imageDirectory": "flying tm"
 }

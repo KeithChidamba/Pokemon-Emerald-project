@@ -130,7 +130,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 }
             }
             
-            if(!attacker.isSemiInvulnerable)
+            if(!attacker.semiInvulnerabilityData.executionTurn)
             {
                 if (turn.move.isMultiTarget || turn.move.isSelfTargeted)
                     Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName
@@ -146,7 +146,7 @@ public class Turn_Based_Combat : MonoBehaviour
             {
                 if (victim.semiInvulnerabilityData.IsInvulnerableTo(turn.move))
                 {
-                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +
+                    Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName +
                                                                 victim.semiInvulnerabilityData.displayMessage);
                     OnAttackAttempted?.Invoke(false);
                     yield break;
@@ -198,6 +198,8 @@ public class Turn_Based_Combat : MonoBehaviour
 
             var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
             var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
+            
+            attacker.isSemiInvulnerable = false;
             
             //check on participants
             if (!IsValidParticipantState(attacker))
@@ -280,7 +282,7 @@ public class Turn_Based_Combat : MonoBehaviour
         foreach(var participant in validList)
         {
             if(!participant.isSemiInvulnerable)continue;
-            SaveMove(new Turn(participant.semiInvulnerabilityData.turnData));
+            _turnHistory.Add((new Turn(participant.semiInvulnerabilityData.turnData)));
         }
         NextTurn();
     }
@@ -318,9 +320,11 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         switchOutQueue.Add(data);
     }
-    void AllowPlayerInput()
+    private void AllowPlayerInput()
     {
         if (currentTurnIndex > 1) return;
+        if (Battle_handler.Instance.GetCurrentParticipant().isSemiInvulnerable) return;
+        
         InputStateHandler.Instance.ResetRelevantUi(new[]{ InputStateHandler.StateName.DialoguePlaceHolder});
         InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
             InputStateHandler.StateName.PlaceHolder});
@@ -373,7 +377,7 @@ public class Turn_Based_Combat : MonoBehaviour
             ChangeTurn(3, 1);
         else
             ChangeTurn(2, 2);
-        
+
         if (Battle_handler.Instance.GetCurrentParticipant().isSemiInvulnerable)
             NextTurn();
     }

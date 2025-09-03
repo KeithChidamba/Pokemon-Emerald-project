@@ -18,6 +18,6 @@ MonoBehaviour:
   - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
     encounterChance: 100
     evolutionFormNumber: 0
-  minimumLevelOfPokemon: 32
-  maximumLevelOfPokemon: 33
+  minimumLevelOfPokemon: 1
+  maximumLevelOfPokemon: 3
   pokemonIndexForRodType: 

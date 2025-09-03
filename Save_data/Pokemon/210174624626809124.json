@@ -21,7 +21,7 @@
     "defense": 5.0,
     "specialAttack": 5.0,
     "specialDefense": 6.0,
-    "speed": 6.0,
+    "speed": 40.0,
     "hpIv": 19.0,
     "attackIv": 27.0,
     "defenseIv": 15.0,
@@ -130,7 +130,10 @@
     ],
     "moveSet": [
         {
-            "instanceID": -16322
+            "instanceID": -4958
+        },
+        {
+            "instanceID": -4960
         }
     ],
     "ability": {
@@ -149,10 +152,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32772
+        "instanceID": 32556
     },
     "backPicture": {
-        "instanceID": 32908
+        "instanceID": 32700
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,
@@ -171,6 +174,11 @@
             "moveName": "leech life",
             "powerPoints": 15,
             "maxPowerpoints": 15
+        },
+        {
+            "moveName": "fly",
+            "powerPoints": 35,
+            "maxPowerpoints": 35
         }
     ]
 }

@@ -21,7 +21,7 @@ public class Pokemon_party_member : MonoBehaviour
     private Action _healthPhaseUpdateEvent;
     public bool isEmpty = false;
     private bool _isViewingCard;
-    public void Levelup()//testing purposes
+    public void LevelupForTesting()//testing purposes
     {
         if(pokemon==null)return;
         var exp = 

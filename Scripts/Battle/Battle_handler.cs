@@ -359,17 +359,17 @@ public class Battle_handler : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log(participant.name+"pokemon dead");
+                        //Debug.Log(participant.name+"pokemon dead");
                     }
                 }
                 else
                 {
-                    Debug.Log(participant.name+"pokemon null");
+                    //Debug.Log(participant.name+"pokemon null");
                 }
             }
             else
             {
-                Debug.Log(participant.name+"inactive");
+                //Debug.Log(participant.name+"inactive");
             }
         }
         return validList;
