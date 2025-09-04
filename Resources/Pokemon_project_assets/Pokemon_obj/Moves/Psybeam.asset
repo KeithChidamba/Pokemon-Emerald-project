@@ -30,6 +30,7 @@ MonoBehaviour:
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 0
+  displayTargetMessage: 1
   priority: 0
   powerpoints: 20
   basePowerpoints: 20

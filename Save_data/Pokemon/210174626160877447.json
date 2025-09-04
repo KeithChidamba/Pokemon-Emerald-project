@@ -9,7 +9,7 @@
         "instanceID": 26028
     },
     "hasGender": true,
-    "hp": 15.0,
+    "hp": 48.0,
     "maxHp": 48.0,
     "baseHp": 50.0,
     "baseAttack": 65.0,
@@ -144,16 +144,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -4994
+            "instanceID": -19216
         },
         {
-            "instanceID": -4996
+            "instanceID": -19218
         },
         {
-            "instanceID": -4998
+            "instanceID": -19220
         },
         {
-            "instanceID": -5000
+            "instanceID": -19222
         }
     ],
     "ability": {
@@ -168,7 +168,7 @@
         }
     ],
     "heldItem": {
-        "instanceID": -5004
+        "instanceID": -19226
     },
     "hasItem": true,
     "frontPicture": {
@@ -178,7 +178,7 @@
         "instanceID": 32238
     },
     "pokeballName": "Regular Pokeball",
-    "healthPhase": 2,
+    "healthPhase": 1,
     "abilityName": "Overgrow",
     "natureName": "Rash",
     "evolutionNames": [
@@ -201,7 +201,7 @@
         },
         {
             "moveName": "quick attack",
-            "powerPoints": 29,
+            "powerPoints": 30,
             "maxPowerpoints": 30
         },
         {

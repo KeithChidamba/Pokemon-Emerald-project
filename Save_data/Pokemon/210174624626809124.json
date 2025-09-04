@@ -17,7 +17,7 @@
     "baseSpecialAttack": 30.0,
     "baseSpecialDefense": 40.0,
     "baseSpeed": 55.0,
-    "attack": 6.0,
+    "attack": 20.0,
     "defense": 5.0,
     "specialAttack": 5.0,
     "specialDefense": 6.0,
@@ -50,7 +50,7 @@
     "nextLevelExpAmount": 1,
     "expGroup": 2,
     "expYield": 54,
-    "friendshipLevel": 125,
+    "friendshipLevel": 124,
     "hasTrainer": true,
     "canBeFlinched": true,
     "canBeInfatuated": true,
@@ -130,10 +130,10 @@
     ],
     "moveSet": [
         {
-            "instanceID": -4958
+            "instanceID": -19190
         },
         {
-            "instanceID": -4960
+            "instanceID": -19192
         }
     ],
     "ability": {

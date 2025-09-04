@@ -1059,34 +1059,46 @@ public class Move_handler:MonoBehaviour
     }
     private IEnumerator HandleSilverwind()
     {
+        bool battleEnded = false;
+        
+        void CancelOnBattleEnd()
+        {
+            if(!Battle_handler.Instance.isTrainerBattle)
+                battleEnded = true;
+        }
+        victim.OnPokemonFainted += CancelOnBattleEnd;
+        
         DisplayDamage(victim);
         yield return new WaitUntil(() => !displayingDamage);
-        if (Utility.RandomRange(0, 101) > 100)//revert
+        
+        if(battleEnded) yield break;
+        if (Utility.RandomRange(0, 101) > 10)
         {
             _moveDelay = false;
             yield break;
         }
-    
-        Debug.Log("buffing");
+        
         //get buffs
         var allBuffs = new[]
         {
-            PokemonOperations.Stat.Attack, PokemonOperations.Stat.Defense,
+            PokemonOperations.Stat.Attack, PokemonOperations.Stat.Defense, 
             PokemonOperations.Stat.SpecialAttack, PokemonOperations.Stat.SpecialDefense,
             PokemonOperations.Stat.Speed
         };
+        
         var waiting = true;
         void AwaitBuffAddition()
         {
             BattleOperations.OnBuffApplied -= AwaitBuffAddition;
             waiting = false;
         } 
+        
         foreach (var buff in allBuffs)
         {
             waiting = true;
+            BattleOperations.OnBuffApplied += AwaitBuffAddition;
             var buffData = new BuffDebuffData(attacker, buff, true, 1);
             SelectRelevantBuffOrDebuff(buffData);
-            BattleOperations.OnBuffApplied += AwaitBuffAddition;
             yield return new WaitUntil(() => !waiting);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }

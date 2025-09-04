@@ -25,10 +25,12 @@ MonoBehaviour:
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
+  canInfatuate: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 1
+  displayTargetMessage: 1
   priority: 0
   powerpoints: 40
   basePowerpoints: 40

@@ -313,7 +313,7 @@ public class Pokemon : ScriptableObject
                 Dialogue_handler.Instance.DisplayBattleInfo(pokemonName+" leveled up!");
                 currentLevelExpAmount = currentExpAmount;
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-                PokemonOperations.CheckForNewMove(this);
+                yield return PokemonOperations.Instance.WaitForNewMoveCheck(this);
             
                 if (PokemonOperations.LearningNewMove)
                 {
@@ -420,7 +420,7 @@ public class Pokemon : ScriptableObject
                 CheckEvolutionRequirements(0);
         }
         if (!Options_manager.Instance.playerInBattle)//artificial level up
-            PokemonOperations.CheckForNewMove(this);
+            PokemonOperations.Instance.CheckForNewMove(this);
         OnNewLevel?.Invoke();
         while(currentExpAmount>nextLevelExpAmount)
             LevelUp();

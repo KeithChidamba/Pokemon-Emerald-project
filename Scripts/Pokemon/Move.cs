@@ -24,6 +24,7 @@ public class Move : ScriptableObject
     public bool isMultiTarget;
     public bool isSelfTargeted;
     public bool isSureHit;
+    public bool displayTargetMessage;
     [FormerlySerializedAs("Priority")] public int priority;
     [FormerlySerializedAs("Powerpoints")] public int powerpoints;
     [FormerlySerializedAs("BasePowerpoints")] public int basePowerpoints;

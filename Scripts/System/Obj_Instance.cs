@@ -27,6 +27,7 @@ public static class Obj_Instance
         newMove.isSelfTargeted = m.isSelfTargeted;
         newMove.isMultiTarget = m.isMultiTarget;
         newMove.isSureHit = m.isSureHit;
+        newMove.displayTargetMessage = m.displayTargetMessage;
         newMove.priority = m.priority;
         newMove.powerpoints = m.powerpoints;
         newMove.basePowerpoints = m.basePowerpoints;

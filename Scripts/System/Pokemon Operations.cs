@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -6,7 +7,7 @@ using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.UI;
 
-public static class PokemonOperations
+public class PokemonOperations : MonoBehaviour
 {
     public static bool LearningNewMove;
     public static bool SelectingMoveReplacement;
@@ -23,6 +24,16 @@ public static class PokemonOperations
         Normal, Fire, Water, Electric, Grass, Ice,
         Fighting, Poison, Ground, Flying, Psychic,
         Bug, Rock, Ghost, Dragon, Dark, Steel
+    }
+    public static PokemonOperations Instance;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
     private static long GeneratePokemonID(Pokemon pokemon)//pokemon's unique ID
     {
@@ -179,7 +190,7 @@ public static class PokemonOperations
         pokemon.speedIv =  Utility.RandomRange(0,32);
     }
 
-    public static void CheckForNewMove(Pokemon pokemon)
+    public void CheckForNewMove(Pokemon pokemon)
     {
         LearningNewMove = true;
         CurrentPokemon = pokemon;
@@ -188,6 +199,21 @@ public static class PokemonOperations
             LearningNewMove = false;
             return;
         }
+        StartCoroutine(HandleMoveLearning());
+    }
+    public IEnumerator WaitForNewMoveCheck(Pokemon pokemon)
+    {
+        LearningNewMove = true;
+        CurrentPokemon = pokemon;
+        if (CurrentPokemon.currentLevel > CurrentPokemon.learnSet[^1].requiredLevel)
+        {//No more moves to learn
+            LearningNewMove = false;
+            yield break;
+        }
+        yield return HandleMoveLearning();
+    }
+    private IEnumerator HandleMoveLearning()
+    {
         var isPartyPokemon = Pokemon_party.Instance.party.Contains(CurrentPokemon);
         foreach (var move in CurrentPokemon.learnSet)
         {
@@ -195,14 +221,14 @@ public static class PokemonOperations
                 break;
             if (CurrentPokemon.currentLevel > move.requiredLevel)
                 continue;
+            LearningNewMove = true;
             var moveName = move.GetName().ToLower();
-            LearnMove(moveName, isPartyPokemon);
+            yield return LearnMove(moveName, isPartyPokemon);
         }
         if(!SelectingMoveReplacement)
             LearningNewMove = false;
     }
-
-    private static void LearnMove(string moveName,bool isPartyPokemon = true, bool isLevelUpMove = true)
+    private static IEnumerator LearnMove(string moveName,bool isPartyPokemon = true, bool isLevelUpMove = true)
     {
         Item_handler.Instance.usingItem = false;
         var assetPath = Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + moveName;
@@ -218,7 +244,8 @@ public static class PokemonOperations
                 Dialogue_handler.Instance.DisplayBattleInfo(
                     $"{CurrentPokemon.pokemonName} already knows {moveName}", true);
             }
-            return;
+            yield return new WaitForSeconds(2f);
+            yield break;
         }
         
         if (CurrentPokemon.moveSet.Count == 4) 
@@ -231,6 +258,8 @@ public static class PokemonOperations
                     $" {moveName}?", "", new[] { "LearnMove", "SkipMove" },
                     new[] { "Yes", "No" });
                 NewMoveAsset = moveFromAsset;
+                yield return new WaitUntil(()=>!LearningNewMove);
+                yield return new WaitForSeconds(2f);
             }
             else
             {//wild pokemon get generated with somewhat random moveset choices
@@ -244,24 +273,25 @@ public static class PokemonOperations
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(
                     $"{CurrentPokemon.pokemonName} learned {moveName}",true);
+                yield return new WaitForSeconds(2f);
             }
             CurrentPokemon.moveSet.Add(newMove);
         }
     }
-    public static void LearnTmOrHm(AdditionalItemInfo itemInfo, Pokemon pokemon)
+    public static IEnumerator LearnTmOrHm(AdditionalItemInfo itemInfo, Pokemon pokemon)
     {
         CurrentPokemon = pokemon;
         switch (itemInfo)
         {
             case TM tm:
                 if (CurrentPokemon.learnableTms.Contains(tm.TmName))
-                    LearnMove(tm.move.moveName,isLevelUpMove:false);
+                    yield return LearnMove(tm.move.moveName,isLevelUpMove:false);
                 else
                     Dialogue_handler.Instance.DisplayDetails(pokemon.pokemonName+" cant learn that!");
                 break;
             case HM hm:
                 if (CurrentPokemon.learnableHms.Contains(hm.HmName))
-                    LearnMove(hm.move.moveName,isLevelUpMove:false);      
+                    yield return LearnMove(hm.move.moveName,isLevelUpMove:false);      
                 else
                     Dialogue_handler.Instance.DisplayDetails(pokemon.pokemonName+" cant learn that!");
                 break;

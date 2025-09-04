@@ -81,6 +81,7 @@ public class Game_Load : MonoBehaviour
     }
     public void NewGame()
     {
+        return;
         if (Application.platform != RuntimePlatform.WebGLPlayer)
             Save_manager.Instance.EraseSaveData();
         Dialogue_handler.Instance.EndDialogue();

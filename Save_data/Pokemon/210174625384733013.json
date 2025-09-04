@@ -1,6 +1,6 @@
 {
     "basePokemonName": "Mudkip",
-    "pokemonName": "Mudkip",
+    "pokemonName": "Marshtomp",
     "pokemonID": 210174625384733013,
     "personalityValue": 1323014485,
     "gender": 2,
@@ -9,19 +9,19 @@
         "instanceID": 25196
     },
     "hasGender": true,
-    "hp": 14.0,
-    "maxHp": 14.0,
-    "baseHp": 50.0,
-    "baseAttack": 70.0,
-    "baseDefense": 50.0,
-    "baseSpecialAttack": 50.0,
-    "baseSpecialDefense": 50.0,
-    "baseSpeed": 40.0,
-    "attack": 7.0,
-    "defense": 7.0,
-    "specialAttack": 7.0,
-    "specialDefense": 7.0,
-    "speed": 7.0,
+    "hp": 75.0,
+    "maxHp": 75.0,
+    "baseHp": 70.0,
+    "baseAttack": 85.0,
+    "baseDefense": 70.0,
+    "baseSpecialAttack": 60.0,
+    "baseSpecialDefense": 70.0,
+    "baseSpeed": 50.0,
+    "attack": 46.0,
+    "defense": 45.0,
+    "specialAttack": 41.0,
+    "specialDefense": 44.0,
+    "speed": 10.0,
     "hpIv": 10.0,
     "attackIv": 8.0,
     "defenseIv": 17.0,
@@ -29,34 +29,37 @@
     "specialDefenseIv": 10.0,
     "speedIv": 27.0,
     "hpEv": 0.0,
-    "attackEv": 0.0,
+    "attackEv": 1.0,
     "defenseEv": 0.0,
     "specialAttackEv": 0.0,
     "specialDefenseEv": 0.0,
-    "speedEv": 0.0,
+    "speedEv": 3.0,
     "effortValues": [
         {
             "stat": 1,
-            "eVAmount": 1
+            "eVAmount": 2
         }
     ],
     "accuracy": 100.0,
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 45.0,
-    "currentLevel": 2,
-    "currentExpAmount": 0,
+    "currentLevel": 26,
+    "currentExpAmount": 11826,
     "currentLevelExpAmount": 0,
-    "nextLevelExpAmount": 9,
+    "nextLevelExpAmount": 13411,
     "expGroup": 3,
-    "expYield": 65,
-    "friendshipLevel": 129,
+    "expYield": 143,
+    "friendshipLevel": 222,
     "hasTrainer": true,
     "canBeFlinched": true,
     "canBeInfatuated": true,
     "types": [
         {
             "instanceID": 26044
+        },
+        {
+            "instanceID": 25238
         }
     ],
     "statusEffect": 0,
@@ -82,7 +85,15 @@
             "requiredLevel": 1
         },
         {
+            "learnSetMove": 31,
+            "requiredLevel": 1
+        },
+        {
             "learnSetMove": 67,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 81,
             "requiredLevel": 1
         },
         {
@@ -98,32 +109,36 @@
             "requiredLevel": 15
         },
         {
+            "learnSetMove": 32,
+            "requiredLevel": 16
+        },
+        {
             "learnSetMove": 46,
-            "requiredLevel": 19
+            "requiredLevel": 20
         },
         {
             "learnSetMove": 33,
-            "requiredLevel": 24
+            "requiredLevel": 25
         },
         {
             "learnSetMove": 68,
-            "requiredLevel": 28
+            "requiredLevel": 25
         },
         {
-            "learnSetMove": 82,
-            "requiredLevel": 33
-        },
-        {
-            "learnSetMove": 59,
+            "learnSetMove": 80,
             "requiredLevel": 37
         },
         {
-            "learnSetMove": 79,
+            "learnSetMove": 59,
             "requiredLevel": 42
         },
         {
-            "learnSetMove": 44,
+            "learnSetMove": 29,
             "requiredLevel": 46
+        },
+        {
+            "learnSetMove": 44,
+            "requiredLevel": 53
         }
     ],
     "learnableTms": [
@@ -132,24 +147,24 @@
         8,
         9,
         11,
-        14,
-        13
+        13,
+        14
     ],
     "learnableHms": [
         0
     ],
     "moveSet": [
         {
-            "instanceID": -4964
+            "instanceID": -19180
         },
         {
-            "instanceID": -4966
+            "instanceID": -19182
         },
         {
-            "instanceID": -4968
+            "instanceID": -19184
         },
         {
-            "instanceID": -4970
+            "instanceID": -19186
         }
     ],
     "ability": {
@@ -168,10 +183,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32268
+        "instanceID": 32332
     },
     "backPicture": {
-        "instanceID": 32270
+        "instanceID": 32334
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,
@@ -182,18 +197,19 @@
         "Swampert"
     ],
     "typeNames": [
-        "water"
+        "water",
+        "ground"
     ],
     "moveData": [
         {
-            "moveName": "growl",
-            "powerPoints": 40,
-            "maxPowerpoints": 40
+            "moveName": "bide",
+            "powerPoints": 10,
+            "maxPowerpoints": 10
         },
         {
-            "moveName": "tackle",
-            "powerPoints": 35,
-            "maxPowerpoints": 35
+            "moveName": "foresight",
+            "powerPoints": 40,
+            "maxPowerpoints": 40
         },
         {
             "moveName": "surf",
@@ -201,9 +217,9 @@
             "maxPowerpoints": 25
         },
         {
-            "moveName": "rain dance",
-            "powerPoints": 10,
-            "maxPowerpoints": 10
+            "moveName": "take down",
+            "powerPoints": 20,
+            "maxPowerpoints": 20
         }
     ]
 }

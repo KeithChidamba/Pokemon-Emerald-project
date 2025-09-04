@@ -191,7 +191,7 @@ public class Turn_Based_Combat : MonoBehaviour
              OnAttackAttempted -= GetAttackResult;
              successfulAttack = result;
         } 
-        yield return StartCoroutine(HandleSwaps());
+        yield return HandleSwaps();
         
         foreach (var currentTurn in turnOrder )
         {
@@ -208,6 +208,7 @@ public class Turn_Based_Combat : MonoBehaviour
             
             if (!IsValidParticipant(currentTurn,attacker))
                 continue;
+            
             // if (ParticipantCoolingDown(attacker))
             // {
             //     if (attacker.currentCoolDown.DisplayMessage)
@@ -216,6 +217,7 @@ public class Turn_Based_Combat : MonoBehaviour
             //     }
             //     continue;
             // }
+            
             if (!IsValidParticipantState(victim))
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
@@ -237,7 +239,7 @@ public class Turn_Based_Combat : MonoBehaviour
             successfulAttack = false;
             OnAttackAttempted += GetAttackResult;
             
-            yield return StartCoroutine(CheckAttackSuccess(currentTurn,attacker,victim));
+            yield return CheckAttackSuccess(currentTurn,attacker,victim);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             
             if (successfulAttack)
@@ -301,7 +303,7 @@ public class Turn_Based_Combat : MonoBehaviour
             {
                 var attacker=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.attackerIndex];
                 var victim=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.victimIndex];
-                yield return StartCoroutine(Move_handler.Instance.Pursuit(attacker,victim,pursuitUsersTurn.move));
+                yield return Move_handler.Instance.Pursuit(attacker,victim,pursuitUsersTurn.move);
             }
             if (swap.IsPlayer)
             {
@@ -332,14 +334,13 @@ public class Turn_Based_Combat : MonoBehaviour
         InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
             InputStateHandler.StateName.PlaceHolder});
     }
-public string GetMoveUsageText(Move move, Battle_Participant attacker,Battle_Participant victim)
-{
-    if (move.isMultiTarget || move.isSelfTargeted)
+    public string GetMoveUsageText(Move move, Battle_Participant attacker,Battle_Participant victim)
+    {
+        if (move.displayTargetMessage)
+            return attacker.pokemon.pokemonName + " used " 
+                                                + move.moveName + " on " + victim.pokemon.pokemonName + "!";
         return attacker.pokemon.pokemonName + " used " + move.moveName + "!";
-    
-        return attacker.pokemon.pokemonName + " used " 
-                                            + move.moveName + " on " + victim.pokemon.pokemonName + "!";
-}
+    }
     private bool ParticipantCoolingDown(Battle_Participant participant)
     {
         return participant.currentCoolDown.NumTurns > 0;

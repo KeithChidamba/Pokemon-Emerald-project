@@ -9,19 +9,19 @@
         "instanceID": 26220
     },
     "hasGender": true,
-    "hp": 75.0,
-    "maxHp": 81.0,
+    "hp": 91.0,
+    "maxHp": 91.0,
     "baseHp": 60.0,
     "baseAttack": 50.0,
     "baseDefense": 70.0,
     "baseSpecialAttack": 50.0,
     "baseSpecialDefense": 90.0,
     "baseSpeed": 65.0,
-    "attack": 39.0,
-    "defense": 47.0,
-    "specialAttack": 34.0,
-    "specialDefense": 68.0,
-    "speed": 49.0,
+    "attack": 44.0,
+    "defense": 52.0,
+    "specialAttack": 38.0,
+    "specialDefense": 76.0,
+    "speed": 55.0,
     "hpIv": 19.0,
     "attackIv": 15.0,
     "defenseIv": 1.0,
@@ -44,13 +44,13 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 45.0,
-    "currentLevel": 30,
-    "currentExpAmount": 20794,
+    "currentLevel": 34,
+    "currentExpAmount": 28750,
     "currentLevelExpAmount": 0,
-    "nextLevelExpAmount": 21600,
+    "nextLevelExpAmount": 31443,
     "expGroup": 1,
     "expYield": 160,
-    "friendshipLevel": 187,
+    "friendshipLevel": 201,
     "hasTrainer": true,
     "canBeFlinched": true,
     "canBeInfatuated": true,
@@ -131,16 +131,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -4978
+            "instanceID": -19196
         },
         {
-            "instanceID": -4980
+            "instanceID": -19198
         },
         {
-            "instanceID": -4982
+            "instanceID": -19200
         },
         {
-            "instanceID": -4984
+            "instanceID": -19202
         }
     ],
     "ability": {
@@ -186,9 +186,9 @@
     ],
     "moveData": [
         {
-            "moveName": "psybeam",
-            "powerPoints": 20,
-            "maxPowerpoints": 20
+            "moveName": "silverwind",
+            "powerPoints": 5,
+            "maxPowerpoints": 5
         },
         {
             "moveName": "moonlight",
@@ -197,7 +197,7 @@
         },
         {
             "moveName": "whirlwind",
-            "powerPoints": 30,
+            "powerPoints": 20,
             "maxPowerpoints": 20
         },
         {
