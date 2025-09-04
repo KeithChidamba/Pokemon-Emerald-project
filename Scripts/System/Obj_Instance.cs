@@ -17,6 +17,7 @@ public static class Obj_Instance
         newMove.type = m.type;
         newMove.isSpecial = m.isSpecial;
         newMove.hasStatus = m.hasStatus;
+        newMove.isContact = m.isContact;
         newMove.hasSpecialEffect = m.hasSpecialEffect;
         newMove.canCauseFlinch = m.canCauseFlinch;
         newMove.canCauseConfusion = m.canCauseConfusion;
@@ -25,6 +26,7 @@ public static class Obj_Instance
         newMove.isConsecutive = m.isConsecutive;
         newMove.isSelfTargeted = m.isSelfTargeted;
         newMove.isMultiTarget = m.isMultiTarget;
+        newMove.isSureHit = m.isSureHit;
         newMove.priority = m.priority;
         newMove.powerpoints = m.powerpoints;
         newMove.basePowerpoints = m.basePowerpoints;

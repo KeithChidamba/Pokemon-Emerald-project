@@ -8,6 +8,7 @@ public static class BattleOperations
 {
     private static float _effectiveness = 0;
     public static bool CanDisplayDialougue = true;
+    public static event Action OnBuffApplied;
     public static bool CheckImmunity(Pokemon victim,Type enemyType)
     {
         foreach(var type in victim.types)
@@ -102,6 +103,7 @@ public static class BattleOperations
         var buff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);//wont ever be null
         buff.stage = ValidateBuffLimit(data.Receiver.pokemon, buff, data.IsIncreasing, data.EffectAmount);
         RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
+        OnBuffApplied?.Invoke();
     }
 
     private static int ValidateBuffLimit(Pokemon pkm,Buff_Debuff buff,bool increased,int changeValue)

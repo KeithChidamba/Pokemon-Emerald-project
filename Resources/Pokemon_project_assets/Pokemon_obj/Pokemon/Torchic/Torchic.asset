@@ -54,17 +54,19 @@ MonoBehaviour:
   catchRate: 45
   currentLevel: 0
   currentExpAmount: 0
+  currentLevelExpAmount: 0
   nextLevelExpAmount: 0
   expGroup: 3
   expYield: 65
   friendshipLevel: 0
   hasTrainer: 0
   canBeFlinched: 1
+  canBeInfatuated: 1
   types:
   - {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
   statusEffect: 0
   buffAndDebuffs: []
-  evolutionLineLevels: 100000001e000000
+  evolutionLineLevels: 1000000024000000
   friendshipEvolutionRequirement:
     friendshipRequirement: 0
     evolutionIndex: 0

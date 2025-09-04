@@ -59,6 +59,7 @@ public class Save_manager : MonoBehaviour
     {
         OnSaveDataFail += HandleSaveError;
         _saveDataPath = GetSavePath();
+        CreateTemporaryDirectory();
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
             Game_Load.Instance.uploadButton.interactable = false;
@@ -72,6 +73,14 @@ public class Save_manager : MonoBehaviour
             Game_Load.Instance.PreventGameLoad();
         }
         
+    }
+    private void CreateTemporaryDirectory()
+    {
+        CreateFolder(_tempSaveDataPath + "/Player");
+        CreateFolder(_tempSaveDataPath+"/Items");
+        CreateFolder(_tempSaveDataPath+"/Items/Held_Items");
+        CreateFolder(_tempSaveDataPath+"/Pokemon");
+        CreateFolder(_tempSaveDataPath+"/Party_Ids");
     }
     public void CreateDefaultWebglDirectories()
     {
@@ -138,7 +147,7 @@ public class Save_manager : MonoBehaviour
         else
         {
             Dialogue_handler.Instance.DisplayDetails("There was no save data found!");
-            Dialogue_handler.Instance.canExitDialogue = false;;
+            Dialogue_handler.Instance.canExitDialogue = false;
             Game_Load.Instance.PreventGameLoad();
         }
     }

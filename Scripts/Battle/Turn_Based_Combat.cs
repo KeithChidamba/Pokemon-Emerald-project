@@ -132,12 +132,7 @@ public class Turn_Based_Combat : MonoBehaviour
             
             if(!attacker.semiInvulnerabilityData.executionTurn)
             {
-                if (turn.move.isMultiTarget || turn.move.isSelfTargeted)
-                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName
-                                                                + " used " + turn.move.moveName + "!");
-                else
-                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " used "
-                        + turn.move.moveName + " on " + victim.pokemon.pokemonName + "!");
+                Dialogue_handler.Instance.DisplayBattleInfo(GetMoveUsageText(turn.move,attacker, victim));
             }
 
             ModifyMoveAccuracy(turn);
@@ -189,7 +184,13 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     
     private IEnumerator ExecuteMoves(List<Turn> turnOrder)
-    {
+    {            
+        bool successfulAttack = false;
+        void GetAttackResult(bool result)
+        {
+             OnAttackAttempted -= GetAttackResult;
+             successfulAttack = result;
+        } 
         yield return StartCoroutine(HandleSwaps());
         
         foreach (var currentTurn in turnOrder )
@@ -233,9 +234,9 @@ public class Turn_Based_Combat : MonoBehaviour
             }
             yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
             
-            var successfulAttack = false;
+            successfulAttack = false;
+            OnAttackAttempted += GetAttackResult;
             
-            OnAttackAttempted += (result)=> successfulAttack = result;
             yield return StartCoroutine(CheckAttackSuccess(currentTurn,attacker,victim));
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             
@@ -250,7 +251,8 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(() => !Move_handler.Instance.doingMove);
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
             }
-            OnAttackAttempted = null;
+            else
+                attacker.semiInvulnerabilityData.ResetState();
         }
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
@@ -281,6 +283,7 @@ public class Turn_Based_Combat : MonoBehaviour
         var validList = Battle_handler.Instance.GetValidParticipants();
         foreach(var participant in validList)
         {
+            participant.pokemon.ResetMoveData();
             if(!participant.isSemiInvulnerable)continue;
             _turnHistory.Add((new Turn(participant.semiInvulnerabilityData.turnData)));
         }
@@ -329,7 +332,14 @@ public class Turn_Based_Combat : MonoBehaviour
         InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
             InputStateHandler.StateName.PlaceHolder});
     }
-
+public string GetMoveUsageText(Move move, Battle_Participant attacker,Battle_Participant victim)
+{
+    if (move.isMultiTarget || move.isSelfTargeted)
+        return attacker.pokemon.pokemonName + " used " + move.moveName + "!";
+    
+        return attacker.pokemon.pokemonName + " used " 
+                                            + move.moveName + " on " + victim.pokemon.pokemonName + "!";
+}
     private bool ParticipantCoolingDown(Battle_Participant participant)
     {
         return participant.currentCoolDown.NumTurns > 0;

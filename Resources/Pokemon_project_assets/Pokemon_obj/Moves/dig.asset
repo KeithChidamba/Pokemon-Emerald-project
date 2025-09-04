@@ -18,17 +18,18 @@ MonoBehaviour:
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   isSpecial: 0
-  isContact: 0
+  isContact: 1
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
+  canInfatuate: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  isSureHit: 0
+  isSureHit: 1
   priority: 0
   powerpoints: 10
   basePowerpoints: 10

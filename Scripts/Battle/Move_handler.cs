@@ -355,7 +355,10 @@ public class Move_handler:MonoBehaviour
     private void CheckVictimVulnerabilityToStatus()
     {
         if (_currentTurn.move.hasSpecialEffect || !_currentTurn.move.hasStatus)
-        { processingOrder = false; return; }
+        {
+            processingOrder = false; 
+            return;
+        }
         if (victim.pokemon.statusEffect != PokemonOperations.StatusEffect.None)
         {
             if (_currentTurn.move.statusEffect == victim.pokemon.statusEffect) 
@@ -983,10 +986,11 @@ public class Move_handler:MonoBehaviour
         var damage = CalculateMoveDamage(_currentTurn.move, victim);
         var recoilDamage = math.floor(damage / 4f);
         DisplayDamage(victim,isSpecificDamage:true,predefinedDamage:damage);
+        yield return new WaitUntil(() => !displayingDamage);
+        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +" was hurt by the recoil");
         DisplayDamage(attacker,isSpecificDamage:true
             ,predefinedDamage:recoilDamage,displayEffectiveness: false);
         yield return new WaitUntil(() => !displayingDamage);
-        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +" was hurt by the recoil");
         _moveDelay = false;
     }
 
@@ -1057,11 +1061,13 @@ public class Move_handler:MonoBehaviour
     {
         DisplayDamage(victim);
         yield return new WaitUntil(() => !displayingDamage);
-        if (Utility.RandomRange(0, 101) > 10)
+        if (Utility.RandomRange(0, 101) > 100)//revert
         {
             _moveDelay = false;
             yield break;
         }
+    
+        Debug.Log("buffing");
         //get buffs
         var allBuffs = new[]
         {
@@ -1069,10 +1075,19 @@ public class Move_handler:MonoBehaviour
             PokemonOperations.Stat.SpecialAttack, PokemonOperations.Stat.SpecialDefense,
             PokemonOperations.Stat.Speed
         };
+        var waiting = true;
+        void AwaitBuffAddition()
+        {
+            BattleOperations.OnBuffApplied -= AwaitBuffAddition;
+            waiting = false;
+        } 
         foreach (var buff in allBuffs)
         {
+            waiting = true;
             var buffData = new BuffDebuffData(attacker, buff, true, 1);
             SelectRelevantBuffOrDebuff(buffData);
+            BattleOperations.OnBuffApplied += AwaitBuffAddition;
+            yield return new WaitUntil(() => !waiting);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
         _moveDelay = false;
@@ -1147,6 +1162,8 @@ public class Move_handler:MonoBehaviour
             _repeatingMoveCycle = true;
             _currentTurn.move = victim.previousMove.move;
             _moveDelay = false;
+            Dialogue_handler.Instance.DisplayBattleInfo(
+                Turn_Based_Combat.Instance.GetMoveUsageText(_currentTurn.move,attacker, victim));
             OnMoveComplete += ()=> ExecuteMove(_currentTurn);
         }
         else
@@ -1178,6 +1195,7 @@ public class Move_handler:MonoBehaviour
             new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Earthquake),2f));
 
         attacker.isSemiInvulnerable = true;
+        _currentTurn.move.isSureHit = false;
         attacker.semiInvulnerabilityData.executionTurn = true;
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" dug underground!");
         _moveDelay = false;
@@ -1205,8 +1223,9 @@ public class Move_handler:MonoBehaviour
             new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Thunder)));
         attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
             new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.SkyUppercut)));
-         
+            
         attacker.isSemiInvulnerable = true;
+        _currentTurn.move.isSureHit = false;
         attacker.semiInvulnerabilityData.executionTurn = true;
         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" flew up high!");
         _moveDelay = false;
