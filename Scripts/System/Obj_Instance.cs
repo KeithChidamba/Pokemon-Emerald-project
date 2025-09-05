@@ -21,6 +21,7 @@ public static class Obj_Instance
         newMove.hasSpecialEffect = m.hasSpecialEffect;
         newMove.canCauseFlinch = m.canCauseFlinch;
         newMove.canCauseConfusion = m.canCauseConfusion;
+        newMove.canTrap = m.canTrap;
         newMove.canInfatuate = m.canInfatuate;
         newMove.isBuffOrDebuff = m.isBuffOrDebuff;
         newMove.isConsecutive = m.isConsecutive;
@@ -98,6 +99,7 @@ public static class Obj_Instance
         newPokemon.evolutionStone = pkm.evolutionStone;
         newPokemon.abilities = pkm.abilities;
         newPokemon.splitEvolution = pkm.splitEvolution;
+        newPokemon.requiresFriendshipEvolution = pkm.requiresFriendshipEvolution;
         newPokemon.learnSet = pkm.learnSet;
         newPokemon.learnableTms = pkm.learnableTms;
         newPokemon.learnableHms = pkm.learnableHms;

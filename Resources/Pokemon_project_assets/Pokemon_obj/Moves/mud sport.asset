@@ -21,14 +21,16 @@ MonoBehaviour:
   isContact: 0
   isBuffOrDebuff: 0
   hasStatus: 1
-  hasSpecialEffect: 0
+  hasSpecialEffect: 1
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
+  canInfatuate: 0
   isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 1
+  displayTargetMessage: 0
   priority: 0
   powerpoints: 15
   basePowerpoints: 15

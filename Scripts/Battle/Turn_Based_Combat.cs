@@ -191,7 +191,7 @@ public class Turn_Based_Combat : MonoBehaviour
              OnAttackAttempted -= GetAttackResult;
              successfulAttack = result;
         } 
-        yield return HandleSwaps();
+        
         
         foreach (var currentTurn in turnOrder )
         {
@@ -289,6 +289,8 @@ public class Turn_Based_Combat : MonoBehaviour
             if(!participant.isSemiInvulnerable)continue;
             _turnHistory.Add((new Turn(participant.semiInvulnerabilityData.turnData)));
         }
+        
+        yield return HandleSwaps();
         NextTurn();
     }
     private IEnumerator HandleSwaps()

@@ -13,7 +13,7 @@ public class Participant_Status : MonoBehaviour
     private bool _healed = false;
     private int _confusionDuration;
     private int _trapDuration;
-    private TrapData _currentTrap;
+    [SerializeField]private TrapData _currentTrap;
     private readonly Dictionary<PokemonOperations.StatusEffect, Action> _statusEffectMethods = new ();
     public event Action<Battle_Participant> OnStatusCheck;
     public bool dealingStatusDamage;

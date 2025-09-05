@@ -1,6 +1,6 @@
 {
     "basePokemonName": "Torchic",
-    "pokemonName": "Torchic",
+    "pokemonName": "Combusken",
     "pokemonID": 210174624208566463,
     "personalityValue": 146847935,
     "gender": 2,
@@ -9,19 +9,19 @@
         "instanceID": 25196
     },
     "hasGender": true,
-    "hp": 16.0,
-    "maxHp": 16.0,
-    "baseHp": 45.0,
-    "baseAttack": 60.0,
-    "baseDefense": 40.0,
-    "baseSpecialAttack": 70.0,
-    "baseSpecialDefense": 50.0,
-    "baseSpeed": 45.0,
-    "attack": 8.0,
-    "defense": 8.0,
-    "specialAttack": 9.0,
-    "specialDefense": 8.0,
-    "speed": 9.0,
+    "hp": 79.0,
+    "maxHp": 79.0,
+    "baseHp": 60.0,
+    "baseAttack": 85.0,
+    "baseDefense": 60.0,
+    "baseSpecialAttack": 85.0,
+    "baseSpecialDefense": 60.0,
+    "baseSpeed": 55.0,
+    "attack": 51.0,
+    "defense": 47.0,
+    "specialAttack": 54.0,
+    "specialDefense": 39.0,
+    "speed": 45.0,
     "hpIv": 27.0,
     "attackIv": 16.0,
     "defenseIv": 30.0,
@@ -36,7 +36,11 @@
     "speedEv": 0.0,
     "effortValues": [
         {
-            "stat": 5,
+            "stat": 1,
+            "eVAmount": 1
+        },
+        {
+            "stat": 3,
             "eVAmount": 1
         }
     ],
@@ -44,19 +48,22 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 45.0,
-    "currentLevel": 3,
-    "currentExpAmount": 26,
+    "currentLevel": 28,
+    "currentExpAmount": 15245,
     "currentLevelExpAmount": 9,
-    "nextLevelExpAmount": 57,
+    "nextLevelExpAmount": 17242,
     "expGroup": 3,
-    "expYield": 65,
-    "friendshipLevel": 131,
+    "expYield": 142,
+    "friendshipLevel": 223,
     "hasTrainer": true,
     "canBeFlinched": true,
     "canBeInfatuated": true,
     "types": [
         {
             "instanceID": 26378
+        },
+        {
+            "instanceID": 26216
         }
     ],
     "statusEffect": 0,
@@ -78,6 +85,14 @@
     "requiresFriendshipEvolution": false,
     "learnSet": [
         {
+            "learnSetMove": 14,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 45,
+            "requiredLevel": 1
+        },
+        {
             "learnSetMove": 50,
             "requiredLevel": 1
         },
@@ -91,47 +106,62 @@
         },
         {
             "learnSetMove": 14,
-            "requiredLevel": 10
+            "requiredLevel": 13
         },
         {
-            "learnSetMove": 21,
+            "learnSetMove": 11,
             "requiredLevel": 16
         },
         {
+            "learnSetMove": 21,
+            "requiredLevel": 17
+        },
+        {
             "learnSetMove": 34,
-            "requiredLevel": 19
+            "requiredLevel": 21
         },
         {
-            "learnSetMove": 16,
-            "requiredLevel": 25
-        },
-        {
-            "learnSetMove": 60,
+            "learnSetMove": 9,
             "requiredLevel": 28
         },
         {
+            "learnSetMove": 60,
+            "requiredLevel": 32
+        },
+        {
             "learnSetMove": 64,
-            "requiredLevel": 34
+            "requiredLevel": 39
         },
         {
             "learnSetMove": 20,
-            "requiredLevel": 37
+            "requiredLevel": 43
         },
         {
-            "learnSetMove": 17,
-            "requiredLevel": 43
+            "learnSetMove": 12,
+            "requiredLevel": 50
         }
     ],
     "learnableTms": [
         3,
         6,
         8,
-        11
+        11,
+        2,
+        1
     ],
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -19206
+            "instanceID": -8326
+        },
+        {
+            "instanceID": -8328
+        },
+        {
+            "instanceID": -8330
+        },
+        {
+            "instanceID": -8332
         }
     ],
     "ability": {
@@ -150,10 +180,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32174
+        "instanceID": 32350
     },
     "backPicture": {
-        "instanceID": 32260
+        "instanceID": 32352
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,
@@ -164,13 +194,29 @@
         "Blaziken"
     ],
     "typeNames": [
-        "fire"
+        "fire",
+        "fighting"
     ],
     "moveData": [
         {
-            "moveName": "growl",
-            "powerPoints": 40,
-            "maxPowerpoints": 40
+            "moveName": "fire spin",
+            "powerPoints": 15,
+            "maxPowerpoints": 15
+        },
+        {
+            "moveName": "focus energy",
+            "powerPoints": 30,
+            "maxPowerpoints": 30
+        },
+        {
+            "moveName": "ember",
+            "powerPoints": 25,
+            "maxPowerpoints": 25
+        },
+        {
+            "moveName": "double kick",
+            "powerPoints": 30,
+            "maxPowerpoints": 30
         }
     ]
 }

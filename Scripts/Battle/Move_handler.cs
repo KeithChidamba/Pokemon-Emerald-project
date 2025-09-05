@@ -61,7 +61,7 @@ public class Move_handler:MonoBehaviour
         _dialougeOrder[2] = new Battle_event(CheckBuffOrDebuffApplicability, _currentTurn.move.isBuffOrDebuff);
         _dialougeOrder[3] = new Battle_event(FlinchEnemy, _currentTurn.move.canCauseFlinch);
         _dialougeOrder[4] = new Battle_event(ConfuseEnemy,_currentTurn.move.canCauseConfusion);
-        _dialougeOrder[5] = new Battle_event(()=>TrapEnemy(victim),_currentTurn.move.canTrap);
+        _dialougeOrder[5] = new Battle_event(TrapEnemy,_currentTurn.move.canTrap);
         _dialougeOrder[6] = new Battle_event(InfatuateEnemy,_currentTurn.move.canInfatuate);
     }
     private IEnumerator MoveSequence()
@@ -439,8 +439,11 @@ public class Move_handler:MonoBehaviour
         if (!participant.isActive) return;
         participant.statusHandler.GetStatChangeImmunity(changeability,numTurns);
     }
-
-    public void TrapEnemy(Battle_Participant enemy, bool isMoveEffect = true)
+    private void TrapEnemy()
+    {
+        ApplyTrap(victim, true);
+    }
+    public void ApplyTrap(Battle_Participant enemy, bool isMoveEffect)
     {
         if (enemy.pokemon.ability.abilityName == "Levitate")
         {
@@ -448,6 +451,7 @@ public class Move_handler:MonoBehaviour
             processingOrder = false;
             return;
         }
+       
         if(isMoveEffect)
         {
             if (enemy.pokemon.HasType(PokemonOperations.Types.Ghost)
@@ -464,7 +468,7 @@ public class Move_handler:MonoBehaviour
                 Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName + " is already trapped");
                 return;
             }
-            
+           
             if (_currentTurn.move.statusChance == 0)
                 enemy.statusHandler.SetupTrapDuration(hasDuration:false);
             else
@@ -969,8 +973,14 @@ public class Move_handler:MonoBehaviour
 
     void mudsport()
     {
-        var mudSportModifier = new OnFieldDamageModifier(0.5f, PokemonOperations.Types.Electric,attacker);
         Dialogue_handler.Instance.DisplayBattleInfo("The power of electric type moves was weakened");
+        if (_onFieldDamageModifiers.Any(m => 
+                m.typeAffected == PokemonOperations.Types.Electric))
+        {
+            _moveDelay = false;
+            return;
+        }
+        var mudSportModifier = new OnFieldDamageModifier(0.5f, PokemonOperations.Types.Electric,attacker);
         attacker.OnPokemonFainted += ()=> mudSportModifier.RemoveOnSwitchOut(attacker);
         Battle_handler.Instance.OnSwitchOut += mudSportModifier.RemoveOnSwitchOut;
         AddFieldDamageModifier(mudSportModifier);
@@ -1338,8 +1348,9 @@ public class Move_handler:MonoBehaviour
              
             var randomIndexOfLiving = Utility.RandomRange(0, living.Count,_currentTurn.victimIndex-2);
             var pokemonAtIndex = enemyTrainer.trainerParty.IndexOf(living[randomIndexOfLiving]);
-            
+            Debug.Log("whirl victm" + enemyTrainer.trainerParty[pokemonAtIndex].pokemonName);
             Battle_handler.Instance.SetParticipant(victim,newPokemon:enemyTrainer.trainerParty[pokemonAtIndex]);
+            
         }
         _moveDelay = false;
     }

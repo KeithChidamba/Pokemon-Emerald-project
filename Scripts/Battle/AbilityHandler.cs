@@ -156,7 +156,7 @@ public class AbilityHandler : MonoBehaviour
         {
             if (enemy.pokemon.HasType(PokemonOperations.Types.Flying) || enemy.pokemon.HasType(PokemonOperations.Types.Ghost))
                 continue;
-            Move_handler.Instance.TrapEnemy(enemy,false);
+            Move_handler.Instance.ApplyTrap(enemy,false);
         }
     }
     void HealStatusEffect(Battle_Participant participant)
