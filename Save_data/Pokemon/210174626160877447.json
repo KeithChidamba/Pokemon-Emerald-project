@@ -144,16 +144,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -8368
+            "instanceID": -5666
         },
         {
-            "instanceID": -8370
+            "instanceID": -5668
         },
         {
-            "instanceID": -8372
+            "instanceID": -5670
         },
         {
-            "instanceID": -8374
+            "instanceID": -5672
         }
     ],
     "ability": {
@@ -168,7 +168,7 @@
         }
     ],
     "heldItem": {
-        "instanceID": -8378
+        "instanceID": -5676
     },
     "hasItem": true,
     "frontPicture": {

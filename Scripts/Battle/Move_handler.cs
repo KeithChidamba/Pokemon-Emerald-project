@@ -1303,13 +1303,19 @@ public class Move_handler:MonoBehaviour
         yield return new WaitUntil(() => !displayingHealthGain);
         _moveDelay = false;
     }
+
     void whirlwind()
+    {
+        StartCoroutine(HandleWhirlwind());
+    }
+
+    private IEnumerator HandleWhirlwind()
     {
         if (attacker.pokemon.currentLevel<victim.pokemon.currentLevel)
         {
             Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
             _moveDelay = false;
-            return;
+            yield break;
         }
         if (!Battle_handler.Instance.isTrainerBattle)
         {
@@ -1317,7 +1323,7 @@ public class Move_handler:MonoBehaviour
             Wild_pkm.Instance.inBattle = false;
             Battle_handler.Instance.EndBattle(false,true);
             doingMove = false;
-            return;
+            yield break;
         }
         if (victim.isPlayer)
         {
@@ -1326,14 +1332,22 @@ public class Move_handler:MonoBehaviour
             {
                 Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
                 _moveDelay = false;
-                return;
+                yield break;
             }
+            
+            //exclude current participants
+            var excludedIndexes = 1;
 
-            var randomIndexOfLiving = Utility.RandomRange(0, living.Count,_currentTurn.victimIndex);
+            if (Battle_handler.Instance.isDoubleBattle)
+                excludedIndexes++;
+            
+            var randomIndexOfLiving = Utility
+                .RandomRange(excludedIndexes, living.Count);
+            
             var pokemonAtIndex = Array.IndexOf(Pokemon_party.Instance.party,living[randomIndexOfLiving]);
             var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,victim);
-            victim.ResetParticipantState();
-            Pokemon_party.Instance.SwitchInMemberSwap(switchData);
+            
+            yield return Turn_Based_Combat.Instance.HandleSwap(switchData);
         }
         else
         {
@@ -1343,14 +1357,22 @@ public class Move_handler:MonoBehaviour
             {
                 Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
                 _moveDelay = false;
-                return;
+                yield break;
             }
-             
-            var randomIndexOfLiving = Utility.RandomRange(0, living.Count,_currentTurn.victimIndex-2);
-            var pokemonAtIndex = enemyTrainer.trainerParty.IndexOf(living[randomIndexOfLiving]);
-            Debug.Log("whirl victm" + enemyTrainer.trainerParty[pokemonAtIndex].pokemonName);
-            Battle_handler.Instance.SetParticipant(victim,newPokemon:enemyTrainer.trainerParty[pokemonAtIndex]);
             
+            //exclude current participants
+            var excludedIndexes = 1;
+
+            if (Battle_handler.Instance.isDoubleBattle)
+                excludedIndexes++;
+            
+            var randomIndexOfLiving = Utility
+                .RandomRange(excludedIndexes, living.Count);
+            
+            var pokemonAtIndex = enemyTrainer.trainerParty.IndexOf(living[randomIndexOfLiving]);
+            
+            var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,victim);
+            yield return Turn_Based_Combat.Instance.HandleSwap(switchData);
         }
         _moveDelay = false;
     }

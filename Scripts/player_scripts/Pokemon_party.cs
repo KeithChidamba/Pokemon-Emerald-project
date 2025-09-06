@@ -83,10 +83,18 @@ public class Pokemon_party : MonoBehaviour
 
             var switchData = new SwitchOutData(Turn_Based_Combat.Instance.currentTurnIndex
                 ,memberPosition - 1,currentParticipant);
-            Turn_Based_Combat.Instance.AddToSwitchQueue(switchData);
+
+            var fakeMove = ScriptableObject.CreateInstance<Move>();
+            fakeMove.priority = 0;
+            
+            var switchTurn = new Turn(Turn.TurnUsage.SwitchOut,
+                attacker: Turn_Based_Combat.Instance.currentTurnIndex,move:fakeMove);
+            
+            switchTurn.switchData = switchData;
+            
+            Turn_Based_Combat.Instance.SaveTurn(switchTurn);
             
             _swappingIn = false;
-            Turn_Based_Combat.Instance.NextTurn();
         }
         else
         {

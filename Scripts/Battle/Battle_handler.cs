@@ -330,12 +330,11 @@ public class Battle_handler : MonoBehaviour
                 //add player participants to get exp from switched in enemy
                 foreach (var playerParticipant in participant.currentEnemies)
                     participant.AddToExpList(playerParticipant.pokemon);
-                
-                participant.pokemon.pokemonName = (participant.isEnemy)
-                    ? "Foe " + participant.pokemon.pokemonName
-                    : participant.pokemon.pokemonName;
             }
         }
+        if (participant.isEnemy)
+            participant.pokemon.pokemonName = "Foe " + participant.pokemon.pokemonName;
+        
         //setup participant for battle
         participant.statData.SaveActualStats();
         participant.ActivateParticipant();
@@ -414,11 +413,11 @@ public class Battle_handler : MonoBehaviour
         if(move.powerpoints==0)return;
         move.powerpoints--;
 
-        Turn currentTurn = new Turn(move, Array.IndexOf(battleParticipants,user)
+        Turn currentTurn = new Turn(Turn.TurnUsage.Attack,move, Array.IndexOf(battleParticipants,user)
             ,currentEnemyIndex
             , user.pokemon.pokemonID
             ,battleParticipants[currentEnemyIndex].pokemon.pokemonID);
-        Turn_Based_Combat.Instance.SaveMove(currentTurn);
+        Turn_Based_Combat.Instance.SaveTurn(currentTurn);
     }
     private void ResetMoveUsability()
     {
