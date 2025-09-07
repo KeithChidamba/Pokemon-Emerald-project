@@ -11,6 +11,7 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("Move_accuracy")] public float moveAccuracy;
     public int critModifierIndex;
     public Type type;
+    public bool hasTypelessEffect;
     public bool isSpecial;
     public bool isContact;
     [FormerlySerializedAs("is_Buff_Debuff")] public bool isBuffOrDebuff;

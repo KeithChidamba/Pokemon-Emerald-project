@@ -15,6 +15,7 @@ public static class Obj_Instance
         newMove.moveAccuracy = m.moveAccuracy;
         newMove.critModifierIndex = m.critModifierIndex;
         newMove.type = m.type;
+        newMove.hasTypelessEffect = m.hasTypelessEffect;
         newMove.isSpecial = m.isSpecial;
         newMove.hasStatus = m.hasStatus;
         newMove.isContact = m.isContact;

@@ -40,7 +40,7 @@ public class Battle_Participant : MonoBehaviour
     public GameObject[] doubleBattleUI;
     public GameObject participantUI;
     public PreviousMove previousMove;
-    public TurnCoolDown currentCoolDown;
+    public TurnCoolDown currentCoolDown = new ();
     public Type additionalTypeImmunity;
     public List<TypeImmunityNegation> immunityNegations = new();
     public List<Pokemon> expReceivers;
@@ -57,6 +57,8 @@ public class Battle_Participant : MonoBehaviour
         statData = GetComponent<Battle_Data>();
         Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierSharing;
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
+        currentCoolDown.UpdateCoolDown(null, 0,0, "",false,false);
+        currentCoolDown.participant = this;
     }
     private void Update()
     {

@@ -129,8 +129,9 @@ public class Turn_Based_Combat : MonoBehaviour
                     yield break;
                 }
             }
-            
-            if(!attacker.semiInvulnerabilityData.executionTurn)
+
+            Debug.Log("is cool for "+attacker.name+" : " +attacker.currentCoolDown.isCoolingDown);
+            if(!attacker.semiInvulnerabilityData.executionTurn && !attacker.currentCoolDown.isCoolingDown)
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(GetMoveUsageText(turn.move,attacker, victim));
             }
@@ -228,22 +229,13 @@ public class Turn_Based_Combat : MonoBehaviour
             if (!IsValidParticipant(currentTurn,attacker))
                 continue;
             
-            // if (ParticipantCoolingDown(attacker))
-            // {
-            //     if (attacker.currentCoolDown.DisplayMessage)
-            //     {
-            //         Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+attacker.currentCoolDown.Message);
-            //     }
-            //     continue;
-            // }
-            
             if (!IsValidParticipantState(victim))
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
                 yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
                 continue;
             }
-            
+            Debug.Log("valid turn "+attacker.name);
             OnMoveExecute?.Invoke(attacker);
             
             //processing held item effect
@@ -392,8 +384,9 @@ public class Turn_Based_Combat : MonoBehaviour
     private void AllowPlayerInput()
     {
         if (currentTurnIndex > 1) return;
-        if (Battle_handler.Instance.GetCurrentParticipant().isSemiInvulnerable) return;
-        
+        var currentParticipant = Battle_handler.Instance.GetCurrentParticipant();
+        if (currentParticipant.isSemiInvulnerable) return;
+        if (currentParticipant.currentCoolDown.isCoolingDown) return;
         InputStateHandler.Instance.ResetRelevantUi(new[]{ InputStateHandler.StateName.DialoguePlaceHolder});
         InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
             InputStateHandler.StateName.PlaceHolder});
@@ -405,18 +398,30 @@ public class Turn_Based_Combat : MonoBehaviour
                                                 + move.moveName + " on " + victim.pokemon.pokemonName + "!";
         return attacker.pokemon.pokemonName + " used " + move.moveName + "!";
     }
-    private bool ParticipantCoolingDown(Battle_Participant participant)
-    {
-        return participant.currentCoolDown.NumTurns > 0;
-    }
+
     private void CheckParticipantCoolDown()
     {
         var participant = Battle_handler.Instance.GetCurrentParticipant();
-        if (participant.currentCoolDown == null) return;
-        participant.currentCoolDown.NumTurns--;
-        _turnHistory.Add(new(Turn.TurnUsage.Attack,participant.currentCoolDown.MoveToExecute
-            ,currentTurnIndex,participant.currentCoolDown.VictimIndex,0,0));
-        NextTurn();
+        if (!participant.currentCoolDown.isCoolingDown) return;
+        
+        if (participant.currentCoolDown.NumTurns == 0)
+        {
+            participant.currentCoolDown.isCoolingDown = false; 
+            participant.currentCoolDown.ExecuteTurn = true;
+            Debug.Log(_turnHistory.Count);
+            SaveTurn(new(Turn.TurnUsage.Attack,participant.currentCoolDown.MoveToExecute
+                ,currentTurnIndex,participant.currentCoolDown.VictimIndex));
+        }
+        else
+        {
+            if (participant.currentCoolDown.DisplayMessage)
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName
+                                                            +participant.currentCoolDown.Message);
+            }
+            participant.currentCoolDown.NumTurns--;
+            NextTurn();
+        } 
     }
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {

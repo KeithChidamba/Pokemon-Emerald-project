@@ -28,7 +28,7 @@ public class Move_handler:MonoBehaviour
     public bool displayingDamage;
     public bool displayingHealthGain;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageCalc;
-    public event Action<float> OnDamageDeal;
+    public event Action<float,Battle_Participant> OnDamageDeal;
     public event Action<Battle_Participant,Move> OnMoveHit;
     public event Action<Battle_Participant,PokemonOperations.StatusEffect> OnStatusEffectHit;
     private event Action OnMoveComplete;
@@ -67,7 +67,7 @@ public class Move_handler:MonoBehaviour
     private IEnumerator MoveSequence()
     {
         var moveEffectiveness = BattleOperations.GetTypeEffectiveness(victim, _currentTurn.move.type);
-        if (moveEffectiveness == 0 && !_currentTurn.move.isMultiTarget)
+        if (moveEffectiveness == 0 && !_currentTurn.move.isMultiTarget && !_currentTurn.move.hasTypelessEffect)
             Dialogue_handler.Instance.DisplayBattleInfo("It doesn't affect "+victim.pokemon.pokemonName);
         else
         {
@@ -153,7 +153,7 @@ public class Move_handler:MonoBehaviour
 
         return damage;
     }
-    private float CalculateMoveDamage(Move move,Battle_Participant currentVictim)
+    private float CalculateMoveDamage(Move move,Battle_Participant currentVictim,bool isTypeless=false)
     { 
         if (IsInvincible(move, currentVictim)) return 0;
         
@@ -173,7 +173,8 @@ public class Move_handler:MonoBehaviour
 
         float stab = BattleOperations.IsStab(attacker.pokemon, move.type) ? 1.5f : 1f;
         
-        float typeEffectiveness = BattleOperations.GetTypeEffectiveness(currentVictim, move.type);
+        float typeEffectiveness = isTypeless? 1f 
+            :BattleOperations.GetTypeEffectiveness(currentVictim, move.type);
         
         float randomFactor = Utility.RandomRange(217, 256) / 255f;
 
@@ -195,7 +196,7 @@ public class Move_handler:MonoBehaviour
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type);
         float finalDamage = AccountForVictimsBarriers(move,currentVictim,damageAfterFieldModifiers);
-        OnDamageDeal?.Invoke(finalDamage);
+        OnDamageDeal?.Invoke(finalDamage,currentVictim);
         OnMoveHit?.Invoke(attacker,move);
         return finalDamage;
     }
@@ -906,43 +907,41 @@ public class Move_handler:MonoBehaviour
 
     void hyperbeam()
     {
-        if (attacker.currentCoolDown != null)
+        if (attacker.currentCoolDown.ExecuteTurn)
         {
-            attacker.currentCoolDown = null;
             DisplayDamage(victim);
+            attacker.currentCoolDown.ResetState();
         }
         else
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokeballName + " is charging");
-            attacker.currentCoolDown = new TurnCoolDown(_currentTurn.move,
-                0,_currentTurn.victimIndex, "",false);
+            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is charging");
+            attacker.currentCoolDown.UpdateCoolDown(_currentTurn.move, 0,_currentTurn.victimIndex,display:false);
         }
         _moveDelay = false;
     }
 
     void bide()
     {
-        if (attacker.currentCoolDown != null)
+        if (attacker.currentCoolDown.ExecuteTurn)
         {
-            if (attacker.currentCoolDown.NumTurns > 0)
+            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" unleashed the power");
+            if (attacker.currentCoolDown.MoveToExecute.moveDamage > 0)
             {
-                attacker.currentCoolDown.NumTurns--;
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokeballName + " is storing power");
-                OnDamageDeal += attacker.currentCoolDown.StoreDamage;
-            }
-            else
-            {
-                OnDamageDeal -= attacker.currentCoolDown.StoreDamage;
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokeballName + " unleashed the power");
                 _currentTurn.move.moveDamage = attacker.currentCoolDown.MoveToExecute.moveDamage;
-                DisplayDamage(victim);
+                var typelessDamage = CalculateMoveDamage(_currentTurn.move, victim, true);
+                DisplayDamage(victim,displayEffectiveness:false,isSpecificDamage:true
+                    ,predefinedDamage:typelessDamage);
             }
+            OnDamageDeal -= attacker.currentCoolDown.StoreDamage;
+            attacker.currentCoolDown.ResetState();
         }
         else
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokeballName + " is storing power");
-            attacker.currentCoolDown = new TurnCoolDown(_currentTurn.move,
-                1,_currentTurn.victimIndex, " is storing power",false);
+            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is storing power");
+            var numTurns = Utility.RandomRange(2, 3);
+            attacker.currentCoolDown.UpdateCoolDown(_currentTurn.move,numTurns
+                ,_currentTurn.victimIndex, " is storing power");
+            OnDamageDeal += attacker.currentCoolDown.StoreDamage;
         }
         _moveDelay = false;
     }
@@ -1044,7 +1043,7 @@ public class Move_handler:MonoBehaviour
     }
     void endeavor()
     {
-        if (victim.pokemon.hp > attacker.pokemon.hp)
+        if (victim.pokemon.hp < attacker.pokemon.hp)
         {
             Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
             return;
