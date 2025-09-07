@@ -117,7 +117,6 @@ public class Dialogue_handler : MonoBehaviour
         _dialogueOptionsManager.LoadUiSize();
         canExitDialogue = false;
         yield return new WaitForSeconds(0.5f);
-        canExitDialogue = true;
         ActivateOptions(true);
         var optionSelectables = new List<SelectableUI>();
          foreach(var option in _dialogueOptionsManager.currentOptions)

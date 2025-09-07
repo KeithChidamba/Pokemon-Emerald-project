@@ -321,12 +321,18 @@ public class Battle_handler : MonoBehaviour
             participant.pokemon = newPokemon;
             if (participant.isPlayer)
             {
+                Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName
+                                                            +" sent out "+participant.pokemon.pokemonName);
+                
                 //add enemies to exp list of new player pokemon
                 foreach (var enemyParticipant in participant.currentEnemies)
                     enemyParticipant.AddToExpList(participant.pokemon);
             }
             else
             {
+                Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemonTrainerAI.trainerData.TrainerName
+                                                            +" sent out "+participant.pokemon.pokemonName);
+                
                 //add player participants to get exp from switched in enemy
                 foreach (var playerParticipant in participant.currentEnemies)
                     participant.AddToExpList(playerParticipant.pokemon);

@@ -49,12 +49,18 @@ public class Pokemon_party : MonoBehaviour
     }
     private bool IsValidSwap(int memberPosition)
     {
+        if (Turn_Based_Combat.Instance.ContainsSwitch(memberPosition-1))
+        {
+            Dialogue_handler.Instance.DisplayDetails(party[memberPosition-1].pokemonName +
+                                                     " is already going to be sent out", 3f);
+            return false;
+        }
         if ( (memberPosition < 3 & Battle_handler.Instance.isDoubleBattle) || memberPosition == 1)
         {
             var swapIn = Battle_handler.Instance.battleParticipants[memberPosition - 1];
             
             Dialogue_handler.Instance.DisplayDetails(swapIn.pokemon.pokemonName +
-                                                  " is already in battle", 1f);
+                                                  " is already in battle", 2f);
             return false;
         }
         var participantIndex = (Battle_handler.Instance.isDoubleBattle & _swappingIn)
@@ -64,7 +70,7 @@ public class Pokemon_party : MonoBehaviour
         if (!currentParticipant.canEscape & _swappingIn)
         {
             Dialogue_handler.Instance.DisplayDetails(currentParticipant.pokemon.pokemonName +
-                                                  " is trapped", 1f);
+                                                  " is trapped", 1.5f);
             return false;
         }
         return true;
@@ -94,6 +100,7 @@ public class Pokemon_party : MonoBehaviour
             
             Turn_Based_Combat.Instance.SaveTurn(switchTurn);
             
+            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
             _swappingIn = false;
         }
         else

@@ -201,6 +201,7 @@ public class Turn_Based_Combat : MonoBehaviour
             {
                 switchTurns.Add(i);
                 yield return HandleSwap(_turnHistory[i].switchData);
+                yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
             }
         }
         
@@ -310,8 +311,29 @@ public class Turn_Based_Combat : MonoBehaviour
         
         NextTurn();
     }
-    public IEnumerator HandleSwap(SwitchOutData swap)
+    public IEnumerator HandleSwap(SwitchOutData swap, bool forcedSwap=false)
     {
+        if (forcedSwap)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(swap.Participant.pokemon.pokemonName
+                                                        + " was blown out");
+        }
+        else
+        {
+            if (swap.IsPlayer)
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName
+                                                            + " withdrew " + swap.Participant.pokemon.pokemonName);
+            }
+            else
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo(swap.Participant.pokemonTrainerAI.trainerData.TrainerName
+                                                            +" withdrew "+swap.Participant.pokemon.pokemonName);
+            }
+        }
+
+        yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+
         //check if move used was pursuit
         var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
             turn.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.Pursuit));
@@ -339,6 +361,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 if (pokemonFainted) yield break;
             }
         }
+        
         if (swap.IsPlayer)
         {
             swap.Participant.ResetParticipantState();
@@ -347,12 +370,25 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         else
         {
-            //write enemy ai logic first so it can choose to switch-in
             Battle_handler.Instance.SetParticipant(swap.Participant
                 ,newPokemon:swap.Participant.pokemonTrainerAI.trainerParty[swap.MemberToSwapWith]);
         }
     }
 
+    public bool ContainsSwitch(int memberPosition)
+    {
+        foreach (var turn in _turnHistory)
+        {
+            if (turn.turnUsage==Turn.TurnUsage.SwitchOut)//must check this first to avoid null ref
+            {
+                if (turn.switchData.MemberToSwapWith==memberPosition)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     private void AllowPlayerInput()
     {
         if (currentTurnIndex > 1) return;

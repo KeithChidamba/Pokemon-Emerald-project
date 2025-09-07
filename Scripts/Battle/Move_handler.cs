@@ -134,14 +134,6 @@ public class Move_handler:MonoBehaviour
         if (!_currentTurn.move.isMultiTarget) CancelMoveSequence();
         return true;
     }
-    private int CheckIfCrit()
-    {
-        var buffedCritRateIndex = Array.IndexOf(_critLevels, attacker.pokemon.critChance)
-                                  + _currentTurn.move.critModifierIndex;
-        float critChance = _critLevels[buffedCritRateIndex];
-        if (UnityEngine.Random.Range(0f, 100f) >= critChance) return 1;
-        return 2;
-    }
 
     float CalculateConfusionDamage(Battle_Participant confusionVictim)
     {
@@ -165,7 +157,13 @@ public class Move_handler:MonoBehaviour
     { 
         if (IsInvincible(move, currentVictim)) return 0;
         
-        var critValue = CheckIfCrit();
+        //calc crit
+        var critValue = 1;
+        var buffedCritRateIndex = Array.IndexOf(_critLevels, attacker.pokemon.critChance)
+                                  + move.critModifierIndex;
+        float critChance = _critLevels[buffedCritRateIndex];
+        if (UnityEngine.Random.Range(0f, 100f) < critChance)
+            critValue =  2;
         
         if (critValue > 1f) Dialogue_handler.Instance.DisplayBattleInfo("Critical Hit!");
         
@@ -320,11 +318,14 @@ public class Move_handler:MonoBehaviour
             }
             yield return new WaitUntil(() => data.affectedPokemon.hp <= healthAfterChange);
             data.affectedPokemon.hp =  Mathf.Floor(healthAfterChange);
-            if (!_currentTurn.move.isConsecutive && data.displayEffectiveness)
+            if (data.displayEffectiveness)
             {
-                var typeEffectiveness = BattleOperations
-                    .GetTypeEffectiveness(data.affectedParticipant, _currentTurn.move.type);
-                DisplayEffectiveness(typeEffectiveness,data.affectedParticipant);
+                if (!_currentTurn.move.isConsecutive)
+                {
+                    var typeEffectiveness = BattleOperations
+                        .GetTypeEffectiveness(data.affectedParticipant, _currentTurn.move.type);
+                    DisplayEffectiveness(typeEffectiveness,data.affectedParticipant);
+                }
             }
             data.affectedPokemon.ChangeHealth();  
             _damageDisplayQueue.RemoveAt(0);
@@ -957,8 +958,11 @@ public class Move_handler:MonoBehaviour
     {
         Dialogue_handler.Instance.DisplayBattleInfo(pursuitUser.pokemon.pokemonName+" used "+pursuit.moveName
                                                     +" on "+switchOutVictim.pokemon.pokemonName+"!");
+        attacker = pursuitUser;
         var pursuitDamage = CalculateMoveDamage(pursuit, switchOutVictim) * 2;
-        DisplayDamage(switchOutVictim,isSpecificDamage:true,predefinedDamage:pursuitDamage);
+        
+        DisplayDamage(switchOutVictim,displayEffectiveness:false,
+            isSpecificDamage:true,predefinedDamage:pursuitDamage);
         yield return new WaitUntil(() => !displayingDamage);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);      
     }
@@ -1347,7 +1351,7 @@ public class Move_handler:MonoBehaviour
             var pokemonAtIndex = Array.IndexOf(Pokemon_party.Instance.party,living[randomIndexOfLiving]);
             var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,victim);
             
-            yield return Turn_Based_Combat.Instance.HandleSwap(switchData);
+            yield return Turn_Based_Combat.Instance.HandleSwap(switchData,true);
         }
         else
         {
@@ -1372,7 +1376,7 @@ public class Move_handler:MonoBehaviour
             var pokemonAtIndex = enemyTrainer.trainerParty.IndexOf(living[randomIndexOfLiving]);
             
             var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,victim);
-            yield return Turn_Based_Combat.Instance.HandleSwap(switchData);
+            yield return Turn_Based_Combat.Instance.HandleSwap(switchData,true);
         }
         _moveDelay = false;
     }
