@@ -111,7 +111,7 @@ public class Participant_Status : MonoBehaviour
             ,isSpecificDamage:true,math.ceil(_participant.pokemon.maxHp * percentage));
         yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
         dealingStatusDamage = false;
-        _participant.pokemon.ChangeHealth();  
+        _participant.pokemon.ChangeHealth(null);  
     }
     private void AssignStatusDamage()
     {
@@ -228,6 +228,7 @@ public class Participant_Status : MonoBehaviour
     public void NotifyHealing(Battle_Participant participant)
     {//only for freeze and sleep
         if (participant != _participant) return;
+        if (!_participant.isActive) return;
         if (!_healed || _participant.pokemon.statusEffect==PokemonOperations.StatusEffect.None) return;
         switch (_participant.pokemon.statusEffect)
         {

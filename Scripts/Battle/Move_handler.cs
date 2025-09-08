@@ -288,7 +288,7 @@ public class Move_handler:MonoBehaviour
                 if(InputStateHandler.Instance.currentState.stateGroups
                    .Contains(InputStateHandler.StateGroup.PokemonParty))
                 {//update party health ui
-                    data.affectedPokemon.ChangeHealth();
+                    data.affectedPokemon.ChangeHealth(null);
                 }  
                 
                 yield return null;
@@ -306,6 +306,14 @@ public class Move_handler:MonoBehaviour
             var data = _damageDisplayQueue[0];
             var damage = data.isSpecificDamage? data.predefinedHealthChange 
                 : CalculateMoveDamage(_currentTurn.move, data.affectedParticipant);
+            
+            if (damage == 0)
+            {//protected enemy
+                {
+                    _damageDisplayQueue.RemoveAt(0);
+                    continue;
+                }
+            }
             var healthAfterChange = Mathf
                 .Clamp(data.affectedPokemon.hp - damage,0,data.affectedPokemon.maxHp);
             float displayHp = data.affectedPokemon.hp;
@@ -328,7 +336,7 @@ public class Move_handler:MonoBehaviour
                     DisplayEffectiveness(typeEffectiveness,data.affectedParticipant);
                 }
             }
-            data.affectedPokemon.ChangeHealth();  
+            data.affectedPokemon.ChangeHealth(attacker);  
             _damageDisplayQueue.RemoveAt(0);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             yield return null;
@@ -698,6 +706,7 @@ public class Move_handler:MonoBehaviour
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         foreach (var enemy in targets)
         {
+            if (!enemy.isActive) continue;
             DisplayDamage(enemy);
             yield return new WaitUntil(() => !displayingDamage);
             yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay && Battle_handler.Instance.faintQueue.Count == 0);
@@ -907,16 +916,10 @@ public class Move_handler:MonoBehaviour
 
     void hyperbeam()
     {
-        if (attacker.currentCoolDown.ExecuteTurn)
-        {
-            DisplayDamage(victim);
-            attacker.currentCoolDown.ResetState();
-        }
-        else
-        {
-            Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is charging");
-            attacker.currentCoolDown.UpdateCoolDown(_currentTurn.move, 0,_currentTurn.victimIndex,display:false);
-        }
+        DisplayDamage(victim);
+        var cancelledTurn = new Turn(_currentTurn);
+        cancelledTurn.isCancelled = true;
+        attacker.currentCoolDown.UpdateCoolDown( 1,cancelledTurn,message: " must recharge!");
         _moveDelay = false;
     }
 
@@ -925,9 +928,9 @@ public class Move_handler:MonoBehaviour
         if (attacker.currentCoolDown.ExecuteTurn)
         {
             Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" unleashed the power");
-            if (attacker.currentCoolDown.MoveToExecute.moveDamage > 0)
+            if (attacker.currentCoolDown.turnData.move.moveDamage > 0)
             {
-                _currentTurn.move.moveDamage = attacker.currentCoolDown.MoveToExecute.moveDamage;
+                _currentTurn.move.moveDamage = attacker.currentCoolDown.turnData.move.moveDamage;
                 var typelessDamage = CalculateMoveDamage(_currentTurn.move, victim, true);
                 DisplayDamage(victim,displayEffectiveness:false,isSpecificDamage:true
                     ,predefinedDamage:typelessDamage);
@@ -939,8 +942,7 @@ public class Move_handler:MonoBehaviour
         {
             Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is storing power");
             var numTurns = Utility.RandomRange(2, 3);
-            attacker.currentCoolDown.UpdateCoolDown(_currentTurn.move,numTurns
-                ,_currentTurn.victimIndex, " is storing power");
+            attacker.currentCoolDown.UpdateCoolDown(numTurns,_currentTurn, " is storing power");
             OnDamageDeal += attacker.currentCoolDown.StoreDamage;
         }
         _moveDelay = false;

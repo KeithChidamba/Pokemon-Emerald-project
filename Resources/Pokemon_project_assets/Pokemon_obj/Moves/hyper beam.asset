@@ -17,6 +17,7 @@ MonoBehaviour:
   moveAccuracy: 90
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  hasTypelessEffect: 0
   isSpecial: 0
   isContact: 1
   isBuffOrDebuff: 0
@@ -30,7 +31,7 @@ MonoBehaviour:
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 0
-  displayTargetMessage: 1
+  displayTargetMessage: 0
   priority: 0
   powerpoints: 5
   basePowerpoints: 5

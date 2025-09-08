@@ -83,7 +83,7 @@ public class Pokemon : ScriptableObject
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
     public event Action<Pokemon> OnExpGainComplete;
-    public event Action OnHealthChanged;
+    public event Action<Battle_Participant> OnHealthChanged;
     //data conversion when json to obj
     public string abilityName;
     public string natureName;
@@ -426,9 +426,9 @@ public class Pokemon : ScriptableObject
             LevelUp();
     }
 
-    public void ChangeHealth()
+    public void ChangeHealth(Battle_Participant attacker)
     {
-        OnHealthChanged?.Invoke();
+        OnHealthChanged?.Invoke(attacker);
     }
     private void ClearEvents()
     {

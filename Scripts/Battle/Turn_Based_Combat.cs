@@ -36,7 +36,7 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         Battle_handler.Instance.OnBattleEnd += ResetTurnState;
         OnNewTurn += AllowPlayerInput;
-        OnNewTurn += CheckParticipantCoolDown;
+        OnNewTurn += ()=> StartCoroutine(CheckParticipantCoolDown());
         Battle_handler.Instance.OnSwitchOut += RemoveWeatherBuffReceiver;
         Battle_handler.Instance.OnBattleStart += AddParticipantQueues;
         clearWeather = new WeatherCondition(WeatherCondition.Weather.Clear);
@@ -129,8 +129,7 @@ public class Turn_Based_Combat : MonoBehaviour
                     yield break;
                 }
             }
-
-            Debug.Log("is cool for "+attacker.name+" : " +attacker.currentCoolDown.isCoolingDown);
+            
             if(!attacker.semiInvulnerabilityData.executionTurn && !attacker.currentCoolDown.isCoolingDown)
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(GetMoveUsageText(turn.move,attacker, victim));
@@ -235,7 +234,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
                 continue;
             }
-            Debug.Log("valid turn "+attacker.name);
+           
             OnMoveExecute?.Invoke(attacker);
             
             //processing held item effect
@@ -292,12 +291,31 @@ public class Turn_Based_Combat : MonoBehaviour
         
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         
-        //semi-invulnerability turn logic
+        //semi-invulnerability turn logic and cooldown check
         var validList = Battle_handler.Instance.GetValidParticipants();
         foreach(var participant in validList)
         {
+            if (participant.currentCoolDown.isCoolingDown)
+            {
+                if (participant.currentCoolDown.NumTurns == 0)
+                {
+                    if (participant.currentCoolDown.turnData.isCancelled)
+                    {
+                        participant.currentCoolDown.ResetState();
+                    }
+                    else
+                    {
+                        participant.currentCoolDown.ExecuteTurn = true;
+                        _turnHistory.Add(new(participant.currentCoolDown.turnData));
+                        NextTurn();
+                    }
+                }
+            }
+            
             participant.pokemon.ResetMoveData();
+            
             if(!participant.isSemiInvulnerable)continue;
+            
             _turnHistory.Add((new Turn(participant.semiInvulnerabilityData.turnData)));
         }
         
@@ -399,29 +417,21 @@ public class Turn_Based_Combat : MonoBehaviour
         return attacker.pokemon.pokemonName + " used " + move.moveName + "!";
     }
 
-    private void CheckParticipantCoolDown()
+    private IEnumerator CheckParticipantCoolDown()
     {
         var participant = Battle_handler.Instance.GetCurrentParticipant();
-        if (!participant.currentCoolDown.isCoolingDown) return;
+        if (!participant.currentCoolDown.isCoolingDown) yield break;
+        if (participant.currentCoolDown.ExecuteTurn) yield break;
         
-        if (participant.currentCoolDown.NumTurns == 0)
+        if (participant.currentCoolDown.DisplayMessage)
         {
-            participant.currentCoolDown.isCoolingDown = false; 
-            participant.currentCoolDown.ExecuteTurn = true;
-            Debug.Log(_turnHistory.Count);
-            SaveTurn(new(Turn.TurnUsage.Attack,participant.currentCoolDown.MoveToExecute
-                ,currentTurnIndex,participant.currentCoolDown.VictimIndex));
+            Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName
+                                                        +participant.currentCoolDown.Message);
+            yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
         }
-        else
-        {
-            if (participant.currentCoolDown.DisplayMessage)
-            {
-                Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName
-                                                            +participant.currentCoolDown.Message);
-            }
-            participant.currentCoolDown.NumTurns--;
-            NextTurn();
-        } 
+        participant.currentCoolDown.NumTurns--;
+        NextTurn();
+        
     }
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
@@ -463,8 +473,8 @@ public class Turn_Based_Combat : MonoBehaviour
     }
 
     public void RemoveTurn()
-    {//player wants to change their turn usage
-        if (currentTurnIndex < 1) return;
+    {
+        //player wants to change their turn usage
         _turnHistory.RemoveAt(currentTurnIndex-1);
         currentTurnIndex --;
         InputStateHandler.Instance.OnStateRemovalComplete += Battle_handler.Instance.SetupOptionsInput;

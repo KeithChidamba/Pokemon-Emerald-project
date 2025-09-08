@@ -48,7 +48,7 @@ public class Battle_Participant : MonoBehaviour
     public Action OnPokemonFainted;
     private Action OnFaintCheck;
     public List<Barrier> barriers = new();
-
+    [SerializeField]private Battle_Participant recentAttacker;
     private void Start()
     {
         heldItemHandler = GetComponent<Held_Items>();
@@ -57,7 +57,7 @@ public class Battle_Participant : MonoBehaviour
         statData = GetComponent<Battle_Data>();
         Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierSharing;
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
-        currentCoolDown.UpdateCoolDown(null, 0,0, "",false,false);
+        currentCoolDown.UpdateCoolDown(0,null, "",false,false);
         currentCoolDown.participant = this;
     }
     private void Update()
@@ -128,8 +128,9 @@ public class Battle_Participant : MonoBehaviour
         expReceivers.Clear();
         
     }
-    private void CheckIfFainted()
+    private void CheckIfFainted(Battle_Participant attacker)
     {
+        recentAttacker = attacker ?? recentAttacker;
         if (!isActive) return;
         if (pokemon.hp > 0) return;
         pokemon.statusEffect = PokemonOperations.StatusEffect.None;
@@ -146,8 +147,7 @@ public class Battle_Participant : MonoBehaviour
         if (!isPlayer)
         {
             //let the enemy that knocked you out, calculate exp 
-            var enemyResponsible =
-                Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon;
+            var enemyResponsible = recentAttacker.pokemon;
             
             yield return DistributeExp(enemyResponsible.CalculateExperience(pokemon));
             
@@ -205,6 +205,7 @@ public class Battle_Participant : MonoBehaviour
     }
     public void DeactivateParticipant()
     {
+        if (!isActive) return;
         isActive = false;
         currentEnemies.Clear();       
         barriers.Clear();
@@ -231,6 +232,7 @@ public class Battle_Participant : MonoBehaviour
         previousMove = null;
         additionalTypeImmunity = null;
         OnPokemonFainted = null;
+        recentAttacker = null;
         immunityNegations.Clear();
         if (isPlayer) pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
     }

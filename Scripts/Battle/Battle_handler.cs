@@ -162,7 +162,11 @@ public class Battle_handler : MonoBehaviour
 
     bool ConditionForExit()
     {
-        return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0 && !usedTurnForItem && !usedTurnForSwap;
+        return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0
+                              && !usedTurnForItem && !usedTurnForSwap
+                              //if partner is cooling down, cant remove turn;
+                              && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
+                                  .currentCoolDown.isCoolingDown;
     }
     private void SetupBattle()
     {
@@ -569,6 +573,7 @@ public class Battle_handler : MonoBehaviour
                 participant.DeactivateUI();
                 if (participant.pokemonTrainerAI != null)
                     participant.pokemonTrainerAI.inBattle = false;
+                participant.pokemon = null;
             }
         Encounter_handler.Instance.ResetTrigger();
         overWorld.SetActive(true);

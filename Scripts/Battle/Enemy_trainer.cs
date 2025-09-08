@@ -70,7 +70,6 @@ public class Enemy_trainer : MonoBehaviour
                     {
                         participant.DeactivateParticipant();
                         participant.pokemon = null;
-                        participant.isActive = false;
                         inBattle = false;
                         participant.DeactivateUI();
                         Battle_handler.Instance.CheckParticipantStates();

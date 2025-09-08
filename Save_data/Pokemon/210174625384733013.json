@@ -155,16 +155,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -7244
+            "instanceID": -5992
         },
         {
-            "instanceID": -7246
+            "instanceID": -6190
         },
         {
-            "instanceID": -7248
+            "instanceID": -5996
         },
         {
-            "instanceID": -7250
+            "instanceID": -5998
         }
     ],
     "ability": {
@@ -207,9 +207,9 @@
             "maxPowerpoints": 10
         },
         {
-            "moveName": "foresight",
-            "powerPoints": 40,
-            "maxPowerpoints": 40
+            "moveName": "hyper beam",
+            "powerPoints": 5,
+            "maxPowerpoints": 5
         },
         {
             "moveName": "surf",

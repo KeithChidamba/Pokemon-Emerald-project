@@ -18,7 +18,7 @@ public class Pokemon_party_member : MonoBehaviour
     [FormerlySerializedAs("main_ui")] public GameObject[] mainUI;
     [FormerlySerializedAs("empty_ui")] public GameObject emptySlotUI;
     [FormerlySerializedAs("HeldItem_img")] public GameObject heldItemImage;
-    private Action _healthPhaseUpdateEvent;
+    private Action<Battle_Participant> _healthPhaseUpdateEvent;
     public bool isEmpty = false;
     private bool _isViewingCard;
     public void LevelupForTesting()//testing purposes
@@ -70,7 +70,8 @@ public class Pokemon_party_member : MonoBehaviour
         if (isEmpty) return;
         if (currentState.stateGroups.Contains(InputStateHandler.StateGroup.PokemonParty))
         {
-            _healthPhaseUpdateEvent = () => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
+            _healthPhaseUpdateEvent = 
+                (attacker) => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
             pokemon.OnHealthChanged += _healthPhaseUpdateEvent;
             _isViewingCard = true;
         }
