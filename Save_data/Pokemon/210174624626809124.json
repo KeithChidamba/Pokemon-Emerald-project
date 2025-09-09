@@ -9,19 +9,19 @@
         "instanceID": 26254
     },
     "hasGender": true,
-    "hp": 11.0,
-    "maxHp": 11.0,
+    "hp": 21.0,
+    "maxHp": 21.0,
     "baseHp": 40.0,
     "baseAttack": 45.0,
     "baseDefense": 35.0,
     "baseSpecialAttack": 30.0,
     "baseSpecialDefense": 40.0,
     "baseSpeed": 55.0,
-    "attack": 20.0,
-    "defense": 5.0,
-    "specialAttack": 5.0,
-    "specialDefense": 6.0,
-    "speed": 40.0,
+    "attack": 12.0,
+    "defense": 9.0,
+    "specialAttack": 9.0,
+    "specialDefense": 11.0,
+    "speed": 12.0,
     "hpIv": 19.0,
     "attackIv": 27.0,
     "defenseIv": 15.0,
@@ -44,13 +44,13 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 225.0,
-    "currentLevel": 1,
-    "currentExpAmount": 0,
+    "currentLevel": 6,
+    "currentExpAmount": 126,
     "currentLevelExpAmount": 0,
-    "nextLevelExpAmount": 1,
+    "nextLevelExpAmount": 216,
     "expGroup": 2,
     "expYield": 54,
-    "friendshipLevel": 124,
+    "friendshipLevel": 147,
     "hasTrainer": true,
     "canBeFlinched": true,
     "canBeInfatuated": true,
@@ -130,10 +130,13 @@
     ],
     "moveSet": [
         {
-            "instanceID": -6026
+            "instanceID": -1974
         },
         {
-            "instanceID": -6028
+            "instanceID": -1976
+        },
+        {
+            "instanceID": -2090
         }
     ],
     "ability": {
@@ -179,6 +182,11 @@
             "moveName": "fly",
             "powerPoints": 35,
             "maxPowerpoints": 35
+        },
+        {
+            "moveName": "supersonic",
+            "powerPoints": 20,
+            "maxPowerpoints": 20
         }
     ]
 }

@@ -157,13 +157,15 @@ public class Battle_handler : MonoBehaviour
             , new[] { InputStateHandler.StateGroup.PokemonBattle }, true,
             optionsUI, InputStateHandler.Directional.OmniDirection, battleOptionSelectables,
             optionSelector,true,true,canExit: false
-            ,onExit:Turn_Based_Combat.Instance.RemoveTurn, updateExit:ConditionForExit));
+            ,onExit:Turn_Based_Combat.Instance.RemoveTurn, updateExit:ConditionsForExit));
     }
 
-    bool ConditionForExit()
+    private bool ConditionsForExit()
     {
         return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0
                               && !usedTurnForItem && !usedTurnForSwap
+                              && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
+                                  .isSemiInvulnerable
                               //if partner is cooling down, cant remove turn;
                               && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
                                   .currentCoolDown.isCoolingDown;
