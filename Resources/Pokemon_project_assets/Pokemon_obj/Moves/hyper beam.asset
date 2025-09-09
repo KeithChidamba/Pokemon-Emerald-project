@@ -23,6 +23,7 @@ MonoBehaviour:
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1
+  effectType: 1
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0

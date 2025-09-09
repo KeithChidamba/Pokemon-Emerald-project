@@ -1162,6 +1162,14 @@ MonoBehaviour:
       victimID: 0
       attackerID: 0
       move: {fileID: 0}
+      turnUsage: 0
+      switchData:
+        PartyPosition: 0
+        MemberToSwapWith: 0
+        Participant: {fileID: 0}
+        IsPlayer: 0
+      isCancelled: 0
+      turnExecuted: 0
     executionTurn: 0
   isSemiInvulnerable: 0
   canEscape: 1
@@ -1171,9 +1179,31 @@ MonoBehaviour:
   singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 1656265309}
+  currentCoolDown:
+    NumTurns: 0
+    turnData:
+      attackerIndex: 0
+      victimIndex: 0
+      victimID: 0
+      attackerID: 0
+      move: {fileID: 0}
+      turnUsage: 0
+      switchData:
+        PartyPosition: 0
+        MemberToSwapWith: 0
+        Participant: {fileID: 0}
+        IsPlayer: 0
+      isCancelled: 0
+      turnExecuted: 0
+    Message: 
+    DisplayMessage: 0
+    participant: {fileID: 0}
+    isCoolingDown: 0
+    ExecuteTurn: 0
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   barriers: []
+  recentAttacker: {fileID: 0}
 --- !u!114 &35621318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1186,6 +1216,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentTrap:
+    hasDuration: 0
+    OnTrapMessage: 
+    OnHitMessage: 
+    OnFreeMessage: 
   dealingStatusDamage: 0
 --- !u!114 &35621319
 MonoBehaviour:
@@ -6110,6 +6145,14 @@ MonoBehaviour:
       victimID: 0
       attackerID: 0
       move: {fileID: 0}
+      turnUsage: 0
+      switchData:
+        PartyPosition: 0
+        MemberToSwapWith: 0
+        Participant: {fileID: 0}
+        IsPlayer: 0
+      isCancelled: 0
+      turnExecuted: 0
     executionTurn: 0
   isSemiInvulnerable: 0
   canEscape: 1
@@ -6119,9 +6162,31 @@ MonoBehaviour:
   singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 1780447230}
+  currentCoolDown:
+    NumTurns: 0
+    turnData:
+      attackerIndex: 0
+      victimIndex: 0
+      victimID: 0
+      attackerID: 0
+      move: {fileID: 0}
+      turnUsage: 0
+      switchData:
+        PartyPosition: 0
+        MemberToSwapWith: 0
+        Participant: {fileID: 0}
+        IsPlayer: 0
+      isCancelled: 0
+      turnExecuted: 0
+    Message: 
+    DisplayMessage: 0
+    participant: {fileID: 0}
+    isCoolingDown: 0
+    ExecuteTurn: 0
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   barriers: []
+  recentAttacker: {fileID: 0}
 --- !u!114 &190973851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6134,6 +6199,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentTrap:
+    hasDuration: 0
+    OnTrapMessage: 
+    OnHitMessage: 
+    OnFreeMessage: 
   dealingStatusDamage: 0
 --- !u!114 &190973852
 MonoBehaviour:
@@ -9922,7 +9992,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _turnHistory: []
-  switchOutQueue: []
   currentTurnIndex: 0
   faintEventDelay: 0
   currentWeather:
@@ -28335,7 +28404,6 @@ MonoBehaviour:
   - {fileID: 1147526101}
   storageUI: {fileID: 733500843}
   selectedPokemonID: 
-  doingStorageOperation: 0
   nonPartyIcons: []
   partyPokemonIcons:
   - {fileID: 591072019}
@@ -29442,6 +29510,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemon: {fileID: 0}
   pokemonImage: {fileID: 0}
+--- !u!1 &991027250
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 991027252}
+  - component: {fileID: 991027251}
+  m_Layer: 0
+  m_Name: Move_Logic_Handler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &991027251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991027250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cc979b2b6b211033b7ab714b2dd69be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &991027252
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991027250}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 386.33978, y: 296.56393, z: -5.5089555}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &992255649
 GameObject:
   m_ObjectHideFlags: 0
@@ -67423,6 +67535,14 @@ MonoBehaviour:
       victimID: 0
       attackerID: 0
       move: {fileID: 0}
+      turnUsage: 0
+      switchData:
+        PartyPosition: 0
+        MemberToSwapWith: 0
+        Participant: {fileID: 0}
+        IsPlayer: 0
+      isCancelled: 0
+      turnExecuted: 0
     executionTurn: 0
   isSemiInvulnerable: 0
   canEscape: 1
@@ -67436,9 +67556,31 @@ MonoBehaviour:
   doubleBattleUI:
   - {fileID: 1940039930}
   participantUI: {fileID: 443644594}
+  currentCoolDown:
+    NumTurns: 0
+    turnData:
+      attackerIndex: 0
+      victimIndex: 0
+      victimID: 0
+      attackerID: 0
+      move: {fileID: 0}
+      turnUsage: 0
+      switchData:
+        PartyPosition: 0
+        MemberToSwapWith: 0
+        Participant: {fileID: 0}
+        IsPlayer: 0
+      isCancelled: 0
+      turnExecuted: 0
+    Message: 
+    DisplayMessage: 0
+    participant: {fileID: 0}
+    isCoolingDown: 0
+    ExecuteTurn: 0
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   barriers: []
+  recentAttacker: {fileID: 0}
 --- !u!114 &1636635381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67451,6 +67593,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentTrap:
+    hasDuration: 0
+    OnTrapMessage: 
+    OnHitMessage: 
+    OnFreeMessage: 
   dealingStatusDamage: 0
 --- !u!114 &1636635382
 MonoBehaviour:
@@ -92966,6 +93113,14 @@ MonoBehaviour:
       victimID: 0
       attackerID: 0
       move: {fileID: 0}
+      turnUsage: 0
+      switchData:
+        PartyPosition: 0
+        MemberToSwapWith: 0
+        Participant: {fileID: 0}
+        IsPlayer: 0
+      isCancelled: 0
+      turnExecuted: 0
     executionTurn: 0
   isSemiInvulnerable: 0
   canEscape: 1
@@ -92975,9 +93130,31 @@ MonoBehaviour:
   singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 173013067}
+  currentCoolDown:
+    NumTurns: 0
+    turnData:
+      attackerIndex: 0
+      victimIndex: 0
+      victimID: 0
+      attackerID: 0
+      move: {fileID: 0}
+      turnUsage: 0
+      switchData:
+        PartyPosition: 0
+        MemberToSwapWith: 0
+        Participant: {fileID: 0}
+        IsPlayer: 0
+      isCancelled: 0
+      turnExecuted: 0
+    Message: 
+    DisplayMessage: 0
+    participant: {fileID: 0}
+    isCoolingDown: 0
+    ExecuteTurn: 0
   additionalTypeImmunity: {fileID: 0}
   expReceivers: []
   barriers: []
+  recentAttacker: {fileID: 0}
 --- !u!114 &2033618205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92990,6 +93167,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b19310764a2d248b4f1a0e60692791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentTrap:
+    hasDuration: 0
+    OnTrapMessage: 
+    OnHitMessage: 
+    OnFreeMessage: 
   dealingStatusDamage: 0
 --- !u!114 &2033618206
 MonoBehaviour:
@@ -96394,6 +96576,7 @@ SceneRoots:
   - {fileID: 1097391160}
   - {fileID: 326276941}
   - {fileID: 1148144462}
+  - {fileID: 991027252}
   - {fileID: 1295631325}
   - {fileID: 316697656}
   - {fileID: 1926750169}

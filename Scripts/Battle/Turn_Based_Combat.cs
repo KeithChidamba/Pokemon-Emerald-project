@@ -367,7 +367,7 @@ public class Turn_Based_Combat : MonoBehaviour
 
                 victim.OnPokemonFainted += CancelOnFaint;
 
-                yield return Move_handler.Instance.Pursuit(attacker, victim, pursuitUsersTurn.move);
+                yield return MoveLogicHandler.Instance.Pursuit(attacker, victim, pursuitUsersTurn.move);
                 if (pokemonFainted) yield break;
             }
         }

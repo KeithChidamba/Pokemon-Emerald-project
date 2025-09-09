@@ -21,6 +21,7 @@ public static class Obj_Instance
         newMove.isContact = m.isContact;
         newMove.hasSpecialEffect = m.hasSpecialEffect;
         newMove.canCauseFlinch = m.canCauseFlinch;
+        newMove.effectType = m.effectType;
         newMove.canCauseConfusion = m.canCauseConfusion;
         newMove.canTrap = m.canTrap;
         newMove.canInfatuate = m.canInfatuate;

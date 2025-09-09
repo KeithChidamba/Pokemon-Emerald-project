@@ -17,11 +17,13 @@ MonoBehaviour:
   moveAccuracy: 55
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
+  hasTypelessEffect: 0
   isSpecial: 0
   isContact: 0
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1
+  effectType: 1
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0

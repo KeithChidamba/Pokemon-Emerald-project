@@ -17,6 +17,12 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("is_Buff_Debuff")] public bool isBuffOrDebuff;
     [FormerlySerializedAs("Has_status")] public bool hasStatus;
     [FormerlySerializedAs("Has_effect")] public bool hasSpecialEffect;
+    public enum EffectType
+    {
+        PipeLine,UniqueLogic,MultiTargetDamage,Consecutive,HealthDrain,WeatherHealthGain,WeatherChange
+        ,IdentifyTarget, BarrierCreation,DamageProtection
+    };
+    public EffectType effectType;
     [FormerlySerializedAs("Can_flinch")] public bool canCauseFlinch;
     public bool canTrap;
     public bool canCauseConfusion;
