@@ -16,13 +16,13 @@ public class Move : ScriptableObject
     public bool isContact;
     [FormerlySerializedAs("is_Buff_Debuff")] public bool isBuffOrDebuff;
     [FormerlySerializedAs("Has_status")] public bool hasStatus;
-    [FormerlySerializedAs("Has_effect")] public bool hasSpecialEffect;
     public enum EffectType
     {
         PipeLine,UniqueLogic,MultiTargetDamage,Consecutive,HealthDrain,WeatherHealthGain,WeatherChange
-        ,IdentifyTarget, BarrierCreation,DamageProtection
+        ,IdentifyTarget, BarrierCreation,DamageProtection,OnFieldDamageModifier,SemiInvulnerable
     };
     public EffectType effectType;
+    public AdditionalInfoModule effectInfoModule;
     [FormerlySerializedAs("Can_flinch")] public bool canCauseFlinch;
     public bool canTrap;
     public bool canCauseConfusion;
@@ -41,4 +41,8 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("Status_chance")] public float statusChance;
     [FormerlySerializedAs("Debuff_chance")] public float buffOrDebuffChance;
     [FormerlySerializedAs("Description")] public string description;
+    public T GetModule<T>() where T : AdditionalInfoModule
+    {
+        return effectInfoModule as T;
+    }
 }

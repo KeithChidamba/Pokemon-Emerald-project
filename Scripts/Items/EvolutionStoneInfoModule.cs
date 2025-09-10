@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EvoStone", menuName = "evoStone")]
-public class EvolutionStoneInfo : AdditionalItemInfo
+public class EvolutionStoneInfoModule : AdditionalInfoModule
 {
     public NameDB.EvolutionStone stoneName;
 }

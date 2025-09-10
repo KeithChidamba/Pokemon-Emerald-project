@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "stat", menuName = "statInfo")]
 
-public class StatInfo : AdditionalItemInfo
+public class StatInfoModule : AdditionalInfoModule
 {
     public PokemonOperations.Stat statName;
 }

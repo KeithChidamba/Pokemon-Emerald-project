@@ -15,9 +15,9 @@ public class overworld_actions : MonoBehaviour
     public Item equippedSpecialItem;
     public static overworld_actions Instance;
     private bool _canUseEquippedItem;
-    private EquipableItemInfo.Equipable _currentEquippedItem;
-    public event Action<EquipableItemInfo.Equipable> OnItemEquipped;
-    public event Action<EquipableItemInfo.Equipable> OnItemUnequipped;
+    private EquipableInfoModule.Equipable _currentEquippedItem;
+    public event Action<EquipableInfoModule.Equipable> OnItemEquipped;
+    public event Action<EquipableInfoModule.Equipable> OnItemUnequipped;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -39,13 +39,13 @@ public class overworld_actions : MonoBehaviour
     {
         if (item == null) return;//there was no item equipped in save data
         equippedSpecialItem = item;
-        _currentEquippedItem = equippedSpecialItem.GetModule<EquipableItemInfo>().equipableItem;
+        _currentEquippedItem = equippedSpecialItem.GetModule<EquipableInfoModule>().equipableItem;
         OnItemEquipped?.Invoke(_currentEquippedItem);
         if(usingUI)
             Dialogue_handler.Instance.DisplayDetails("Equipped " + equippedSpecialItem.itemName, 1f);
         Game_Load.Instance.playerData.equippedItemName = equippedSpecialItem.itemName;
     }
-    public bool IsEquipped(EquipableItemInfo.Equipable equipable = EquipableItemInfo.Equipable.None
+    public bool IsEquipped(EquipableInfoModule.Equipable equipable = EquipableInfoModule.Equipable.None
         , Item item = null)
     {
         if (!_canUseEquippedItem || !ItemEquipped())
@@ -53,12 +53,12 @@ public class overworld_actions : MonoBehaviour
             return false;
         }
         return item == null ? _currentEquippedItem == equipable 
-            : _currentEquippedItem == item.GetModule<EquipableItemInfo>().equipableItem;
+            : _currentEquippedItem == item.GetModule<EquipableInfoModule>().equipableItem;
     }
     public void UnequipItem(Item item)
     {
         OnItemUnequipped?.Invoke(_currentEquippedItem);
-        _currentEquippedItem = EquipableItemInfo.Equipable.None;
+        _currentEquippedItem = EquipableInfoModule.Equipable.None;
         equippedSpecialItem = null;
         if(usingUI)
             Dialogue_handler.Instance.DisplayDetails("Unequipped " + item.itemName, 1f);

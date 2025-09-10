@@ -69,7 +69,7 @@ public class Move_handler:MonoBehaviour
         else
         {
             SetMoveSequence();
-            if (_currentTurn.move.hasSpecialEffect)
+            if (_currentTurn.move.effectType != Move.EffectType.PipeLine)
             {
                 yield return MoveLogicHandler.Instance.DetermineMoveLogic(attacker,victim,_currentTurn);
             }
@@ -170,7 +170,7 @@ public class Move_handler:MonoBehaviour
         if(currentVictim.isSemiInvulnerable)
         { 
             var semiInvulnerability = currentVictim.semiInvulnerabilityData
-                .semiInvulnerabilities.FirstOrDefault(s => s.moveName == move.moveName);
+                .semiInvulnerabilities.FirstOrDefault(s => s.GetName() == move.moveName);
             baseDamage *= semiInvulnerability?.damageMultiplier ?? 1f;
         }
         
@@ -191,8 +191,8 @@ public class Move_handler:MonoBehaviour
     {
         foreach (var modifier in _onFieldDamageModifiers)
         {
-            if (modifier.typeAffected.ToString() == moveType.typeName)
-                return currentDamage * modifier.damageModifier;
+            if (modifier.modifierInfo.typeAffected.ToString() == moveType.typeName)
+                return currentDamage * modifier.modifierInfo.damageModifier;
         }
         return currentDamage;
     }
@@ -332,8 +332,6 @@ public class Move_handler:MonoBehaviour
     }
     private void DealDamage()
     {
-        if (_currentTurn.move.hasSpecialEffect)
-        { processingOrder = false; return; }
         DisplayDamage(victim);
         processingOrder = false;
     } 
@@ -351,11 +349,6 @@ public class Move_handler:MonoBehaviour
 
     private void CheckVictimVulnerabilityToStatus()
     {
-        if (_currentTurn.move.hasSpecialEffect || !_currentTurn.move.hasStatus)
-        {
-            processingOrder = false; 
-            return;
-        }
         if (victim.pokemon.statusEffect != PokemonOperations.StatusEffect.None)
         {
             if (_currentTurn.move.statusEffect == victim.pokemon.statusEffect) 
@@ -547,7 +540,6 @@ public class Move_handler:MonoBehaviour
     }
     void CheckBuffOrDebuffApplicability()
     {
-        if (!_currentTurn.move.isBuffOrDebuff) { processingOrder = false;return;}
         if (Utility.RandomRange(1, 101) > _currentTurn.move.buffOrDebuffChance)
         { processingOrder = false; return;}
         //allows the display of buff message, must be here in case silent buff happened
@@ -677,10 +669,10 @@ public class Move_handler:MonoBehaviour
     }
     public void RemoveFieldDamageModifier(PokemonOperations.Types modifierTypeAffected)
     {
-        _onFieldDamageModifiers.RemoveAll(m=>m.typeAffected==modifierTypeAffected);
+        _onFieldDamageModifiers.RemoveAll(m=>m.modifierInfo.typeAffected==modifierTypeAffected);
     }
     public bool DamageModifierPresent(PokemonOperations.Types type)
     {
-        return _onFieldDamageModifiers.Any(m => m.typeAffected == type);
+        return _onFieldDamageModifiers.Any(m => m.modifierInfo.typeAffected == type);
     }
 }

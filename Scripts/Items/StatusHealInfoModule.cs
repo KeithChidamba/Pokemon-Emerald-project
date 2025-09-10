@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "StatusHeal", menuName = "statusHeal")]
-public class StatusHealInfo : AdditionalItemInfo
+public class StatusHealInfoModule : AdditionalInfoModule
 {
     public PokemonOperations.StatusEffect statusEffect;
 }

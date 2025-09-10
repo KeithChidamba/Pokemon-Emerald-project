@@ -19,9 +19,9 @@ public static class Obj_Instance
         newMove.isSpecial = m.isSpecial;
         newMove.hasStatus = m.hasStatus;
         newMove.isContact = m.isContact;
-        newMove.hasSpecialEffect = m.hasSpecialEffect;
         newMove.canCauseFlinch = m.canCauseFlinch;
         newMove.effectType = m.effectType;
+        newMove.effectInfoModule = m.effectInfoModule;
         newMove.canCauseConfusion = m.canCauseConfusion;
         newMove.canTrap = m.canTrap;
         newMove.canInfatuate = m.canInfatuate;
@@ -161,7 +161,7 @@ public static class Obj_Instance
         newItem.canBeHeld = item.canBeHeld;
         newItem.hasModules = item.hasModules;
         newItem.isMultiModular = item.isMultiModular;
-        newItem.additionalItemInfo = item.additionalItemInfo;
+        newItem.additionalInfoModule = item.additionalInfoModule;
         newItem.additionalInfoModules = item.additionalInfoModules;
         newItem.infoModuleAssetNames = item.infoModuleAssetNames;
         newItem.imageDirectory = item.imageDirectory;

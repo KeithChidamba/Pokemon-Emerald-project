@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
 [CreateAssetMenu(fileName = "Herb", menuName = "herb")]
-public class HerbInfo : AdditionalItemInfo
+public class HerbInfoModule : AdditionalInfoModule
 {
     public enum Herb
     {

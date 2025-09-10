@@ -19,7 +19,6 @@ public class MoveLogicHandler : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
     }
 
@@ -28,13 +27,48 @@ public class MoveLogicHandler : MonoBehaviour
         _attacker = attacker;
         _victim = victim;
         _currentTurn = currentTurn;
-        //do logic
         switch (currentTurn.move.effectType)
         {
             case Move.EffectType.MultiTargetDamage:
-               // yield return ApplyMultiTargetDamage();
+               yield return HandleMultiTargetDamage(); 
+               break;
+            case Move.EffectType.Consecutive:
+                yield return ExecuteConsecutiveMove(); 
+                break;
+            case Move.EffectType.HealthDrain:
+                yield return DrainHealth(); 
+                break;
+            case Move.EffectType.DamageProtection:
+                yield return ApplyDamageProtection(); 
+                break;
+            case Move.EffectType.WeatherHealthGain:
+                yield return HealFromWeather(); 
+                break;
+            case Move.EffectType.IdentifyTarget:
+                yield return IdentifyTarget(); 
+                break;
+            case Move.EffectType.BarrierCreation:
+                yield return CreateBarriers(); 
+                break;
+            case Move.EffectType.OnFieldDamageModifier:
+                yield return OnFieldDamageModLogic(); 
+                break;
+            case Move.EffectType.SemiInvulnerable:
+                yield return ExecuteSemiInvulnerableMove(); 
+                break;
+            case Move.EffectType.WeatherChange:
+                yield return ChangeWeather(); 
+                break;
+            case Move.EffectType.UniqueLogic:
+                yield return HandleUniqueLogic(); 
                 break;
         }
+        yield return new WaitUntil(() => !moveDelay);
+    }
+
+    private IEnumerator HandleUniqueLogic()
+    {
+        Invoke(_currentTurn.move.moveName.Replace(" ","").ToLower(),0);
         yield return new WaitUntil(() => !moveDelay);
     }
     List<Battle_Participant> TargetAllExceptSelf()
@@ -44,10 +78,16 @@ public class MoveLogicHandler : MonoBehaviour
         allParticipants.RemoveAll(p => p.pokemon.pokemonID == _attacker.pokemon.pokemonID);
         return allParticipants;
     }
-    IEnumerator ExecuteConsecutiveMove(int numRepetitions,bool displayMessage = true)
+    IEnumerator ExecuteConsecutiveMove()
     {
+        var consecutiveMoveInfo = _currentTurn.move.GetModule<ConsecutiveMoveInfo>();
+        if (consecutiveMoveInfo.isRandomHitCount)
+        {
+            consecutiveMoveInfo.numHits = Utility.RandomRange(1, 6);
+        }
+        
         var numHits = 0;
-        for (int i = 0; i < numRepetitions; i++)
+        for (int i = 0; i < consecutiveMoveInfo.numHits; i++)
         {
             if (!_victim.canBeDamaged)
             {
@@ -62,7 +102,7 @@ public class MoveLogicHandler : MonoBehaviour
             numHits++;
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
-        if (numHits>0 && displayMessage && _victim.pokemon.hp > 0)
+        if (numHits>0 && consecutiveMoveInfo.displayHitCount && _victim.pokemon.hp > 0)
         {
             Move_handler.Instance.DisplayEffectiveness
                 (BattleOperations.GetTypeEffectiveness(_victim, _currentTurn.move.type), _victim);
@@ -70,11 +110,6 @@ public class MoveLogicHandler : MonoBehaviour
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         moveDelay = false;
-    } 
-    private void ExecuteRandomConsecutiveMove()
-    {
-        var numRepetitions = Utility.RandomRange(1, 6);
-        StartCoroutine(ExecuteConsecutiveMove(numRepetitions));
     } 
     IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
     {
@@ -90,26 +125,30 @@ public class MoveLogicHandler : MonoBehaviour
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !Turn_Based_Combat.Instance.faintEventDelay);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         moveDelay = false;
+    }
+    IEnumerator HandleMultiTargetDamage()
+    {
+        var multiTargetInfo = _currentTurn.move.GetModule<MultiTargetDamageInfo>();
+        var targets = new List<Battle_Participant>();
+        switch (multiTargetInfo.target)
+        {
+            case MultiTargetDamageInfo.Target.AllEnemies :
+                targets = _attacker.currentEnemies;
+                break;
+            case MultiTargetDamageInfo.Target.AllExceptSelf :
+                targets = TargetAllExceptSelf();
+                break;
+        }
+        yield return ApplyMultiTargetDamage(targets);
+    }
 
-    }
-    void doublekick()
+    IEnumerator DrainHealth()
     {
-        StartCoroutine(ExecuteConsecutiveMove(2,false));
-    }
-    void surf()
-    {
-        StartCoroutine(ApplyMultiTargetDamage(_attacker.currentEnemies));
-    }
-    void earthquake()
-    {
-        StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
-    }
-
-    IEnumerator DrainHealth(float fractionOfDamage)
-    {
+        var healthDrainInfo = _currentTurn.move.GetModule<HealthDrainMoveInfo>();
         var damage = Move_handler.Instance.CalculateMoveDamage(_currentTurn.move,_victim);
-        var healAmount = _victim.pokemon.hp-damage<0 ? _victim.pokemon.hp : damage; 
-        healAmount /= fractionOfDamage;
+        var healAmount = _victim.pokemon.hp-damage<=0 ? _victim.pokemon.hp : damage; 
+        healAmount *= healthDrainInfo.percentageOfDamage/100f;
+        
         Move_handler.Instance.DisplayDamage(_victim,isSpecificDamage:true,predefinedDamage:damage);
         yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
         Move_handler.Instance.HealthGainDisplay(healAmount,healthGainer:_attacker);
@@ -120,38 +159,7 @@ public class MoveLogicHandler : MonoBehaviour
         moveDelay = false;
     }
 
-    private void leechlife()
-    {
-        StartCoroutine(DrainHealth(2f));
-    }
-    void absorb()
-    {
-        StartCoroutine(DrainHealth(2f));
-    }
-    void megadrain()
-    {
-        StartCoroutine(DrainHealth(2f));
-    }
-    void gigadrain()
-    {
-        StartCoroutine(DrainHealth(2f));
-    }
-    void magnitude()
-    {
-        var magnitudeStrength = Utility.RandomRange(4, 11);
-        var baseDamage = 10f;
-        var damageIncrease = 0f;
-        if(magnitudeStrength > 4)
-            damageIncrease = 20f;
-        baseDamage += damageIncrease * (magnitudeStrength - 4);
-        if (magnitudeStrength == 10)
-            baseDamage += 20f;
-        Dialogue_handler.Instance.DisplayBattleInfo("Magnitude level "+magnitudeStrength);
-        _currentTurn.move.moveDamage = baseDamage;
-        StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
-    }
-
-    void ApplyDamageProtection()
+    private IEnumerator ApplyDamageProtection()
     {
         if(_attacker.previousMove.move.moveName == _currentTurn.move.moveName)
         {
@@ -168,44 +176,13 @@ public class MoveLogicHandler : MonoBehaviour
         }
         else
             _attacker.canBeDamaged = false;
-        moveDelay = false;
-    }
-    void protect()
-    {
-        ApplyDamageProtection();
-    }
-
-    void detect()
-    {
-        ApplyDamageProtection();
-    }
-    void brickbreak()
-    {
-        StartCoroutine(ShatterBarriers());
-    }
-    private IEnumerator ShatterBarriers()
-    {
-        var duplicateBarriers = new List<string>();
-        foreach (var enemy in _attacker.currentEnemies)
-        {
-            if(!enemy.isActive)continue;
-            foreach (var barrier in enemy.barriers)
-            {
-                if (duplicateBarriers.Contains(barrier.barrierName)) continue;
-                Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+" shattered "+barrier.barrierName);
-                duplicateBarriers.Add(barrier.barrierName);
-            }
-            enemy.barriers.Clear();
-        }
-        
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-        Move_handler.Instance.DisplayDamage(_victim);
-        yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
+        yield return null;
         moveDelay = false;
     }
 
-    private IEnumerator CreateBarriers(string barrierName)
+    private IEnumerator CreateBarriers()
     {
+        var barrierName = _currentTurn.move.moveName;
         if (Battle_handler.Instance.isDoubleBattle)
         {
             var currentParticipant = Battle_handler.Instance.battleParticipants[_currentTurn.attackerIndex];
@@ -247,17 +224,139 @@ public class MoveLogicHandler : MonoBehaviour
         
         moveDelay = false;
     }
-
-
-    void reflect()
-    {//add to name db
-        StartCoroutine(CreateBarriers(_currentTurn.move.moveName));
-    }
-
-    void lightscreen()
+    
+    private IEnumerator OnFieldDamageModLogic()
     {
-        StartCoroutine(CreateBarriers(_currentTurn.move.moveName));
+        var damageModifierInfo = _currentTurn.move.GetModule<DamageModifierInfo>();
+        Dialogue_handler.Instance.DisplayBattleInfo(damageModifierInfo.damageChangeMessage);
+        if (Move_handler.Instance.DamageModifierPresent(damageModifierInfo.typeAffected))
+        {
+            moveDelay = false;
+            yield break;
+        } 
+        var damageModifier = new OnFieldDamageModifier(damageModifierInfo,_attacker);
+        _attacker.OnPokemonFainted += ()=> damageModifier.RemoveOnSwitchOut(_attacker);
+        Battle_handler.Instance.OnSwitchOut += damageModifier.RemoveOnSwitchOut;
+        Move_handler.Instance.AddFieldDamageModifier(damageModifier);
+        moveDelay = false;
     }
+    private IEnumerator IdentifyTarget()
+    {
+        if (_victim.immunityNegations.Any(n=> 
+                n.moveName==TypeImmunityNegation.ImmunityNegationMove.Foresight))
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
+            moveDelay = false;
+            yield break;
+        }
+        Dialogue_handler.Instance.DisplayBattleInfo(_victim.pokemon.pokemonName +" was identified!");
+        _victim.pokemon.buffAndDebuffs
+            .RemoveAll(b => b.stat == PokemonOperations.Stat.Evasion);
+        _victim.pokemon.evasion = 100;
+        if(_victim.pokemon.HasType(PokemonOperations.Types.Ghost))
+        {
+            var newImmunityNegation = new TypeImmunityNegation(TypeImmunityNegation.ImmunityNegationMove.Foresight
+                , _attacker, _victim);
+
+            newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Fighting);
+            newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Normal);
+            _attacker.OnPokemonFainted += () => newImmunityNegation.RemoveNegationOnSwitchOut(_attacker);
+            Battle_handler.Instance.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
+            _victim.immunityNegations.Add(newImmunityNegation);
+        }
+        moveDelay = false;
+    }
+    private IEnumerator ExecuteSemiInvulnerableMove()
+    {
+        if (_attacker.semiInvulnerabilityData.executionTurn)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName
+                                                        + _attacker.semiInvulnerabilityData.onHitMessage);
+            Move_handler.Instance.DisplayDamage(_victim);
+            _attacker.semiInvulnerabilityData.executionTurn = false;
+            moveDelay = false;
+            yield break;
+        }
+
+        var semiInvulnerableData = _currentTurn.move.GetModule<SemiInvulnerabilityInfo>();
+        
+        _attacker.semiInvulnerabilityData.displayMessage = semiInvulnerableData.displayMessage;
+        _attacker.semiInvulnerabilityData.onHitMessage = semiInvulnerableData.onHitMessage;
+        _attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
+
+        _attacker.semiInvulnerabilityData.semiInvulnerabilities
+            .AddRange(semiInvulnerableData.semiInvulnerabilities);
+
+        _attacker.isSemiInvulnerable = true;
+        _currentTurn.move.isSureHit = false;
+        _attacker.semiInvulnerabilityData.executionTurn = true;
+        Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+semiInvulnerableData.executionMessage);
+        moveDelay = false;
+    }
+    
+    IEnumerator ChangeWeather()
+    {
+        var weatherInfo =_currentTurn.move.GetModule<ChangeWeatherInfo>();;
+        var newWeather = new WeatherCondition(weatherInfo.newWeatherCondition);
+        Turn_Based_Combat.Instance.ChangeWeather(newWeather);
+        yield return null;
+        moveDelay = false;
+    }
+    private IEnumerator HealFromWeather()
+    {
+        float fraction;
+        var currentWeather = Turn_Based_Combat.Instance.currentWeather.weather;
+        
+        switch (currentWeather)
+        {
+            case WeatherCondition.Weather.Sunlight:
+                fraction = 2f / 3f;  
+                break;
+            case WeatherCondition.Weather.Rain:
+            case WeatherCondition.Weather.Hail:
+            case WeatherCondition.Weather.Sandstorm:
+                fraction = 1f / 4f;          
+                break;
+            default: 
+                fraction = 1f / 2f; 
+                break;
+        }
+        int healthGain = Mathf.FloorToInt(_attacker.pokemon.maxHp * fraction);
+        
+        if (healthGain < 1 && _attacker.pokemon.hp < _attacker.pokemon.maxHp) healthGain = 1;
+        
+        Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+" restored it's health!");
+
+        Move_handler.Instance.HealthGainDisplay(healthGain,healthGainer:_attacker);
+        yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthGain);
+        moveDelay = false;
+    }
+    
+    void brickbreak()
+    {
+        StartCoroutine(ShatterBarriers());
+    }
+    private IEnumerator ShatterBarriers()
+    {
+        var duplicateBarriers = new List<string>();
+        foreach (var enemy in _attacker.currentEnemies)
+        {
+            if(!enemy.isActive)continue;
+            foreach (var barrier in enemy.barriers)
+            {
+                if (duplicateBarriers.Contains(barrier.barrierName)) continue;
+                Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+" shattered "+barrier.barrierName);
+                duplicateBarriers.Add(barrier.barrierName);
+            }
+            enemy.barriers.Clear();
+        }
+        
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        Move_handler.Instance.DisplayDamage(_victim);
+        yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
+        moveDelay = false;
+    }
+    
     void haze()
     {
         var validParticipants = Battle_handler.Instance.GetValidParticipants();
@@ -322,22 +421,6 @@ public class MoveLogicHandler : MonoBehaviour
         yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);      
     }
-    
-    void mudsport()
-    {
-        Dialogue_handler.Instance.DisplayBattleInfo("The power of electric type moves was weakened");
-        if (Move_handler.Instance.DamageModifierPresent(PokemonOperations.Types.Electric))
-        {
-            moveDelay = false;
-            return;
-        }
-        var mudSportModifier = new OnFieldDamageModifier(0.5f, PokemonOperations.Types.Electric,_attacker);
-        _attacker.OnPokemonFainted += ()=> mudSportModifier.RemoveOnSwitchOut(_attacker);
-        Battle_handler.Instance.OnSwitchOut += mudSportModifier.RemoveOnSwitchOut;
-        Move_handler.Instance.AddFieldDamageModifier(mudSportModifier);
-        moveDelay = false;
-    }
-
     void takedown()
     {
         StartCoroutine(RecoilDamageHandle());
@@ -355,40 +438,21 @@ public class MoveLogicHandler : MonoBehaviour
         moveDelay = false;
     }
 
-    private void IdentifyTarget()
+    void magnitude()
     {
-        if (_victim.immunityNegations.Any(n=> 
-                n.moveName==TypeImmunityNegation.ImmunityNegationMove.Foresight))
-        {
-            Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
-            moveDelay = false;
-            return;
-        }
-        Dialogue_handler.Instance.DisplayBattleInfo(_victim.pokemon.pokemonName +" was identified!");
-        _victim.pokemon.buffAndDebuffs
-            .RemoveAll(b => b.stat == PokemonOperations.Stat.Evasion);
-        _victim.pokemon.evasion = 100;
-        if(_victim.pokemon.HasType(PokemonOperations.Types.Ghost))
-        {
-            var newImmunityNegation = new TypeImmunityNegation(TypeImmunityNegation.ImmunityNegationMove.Foresight
-                , _attacker, _victim);
+        var magnitudeStrength = Utility.RandomRange(4, 11);
+        var baseDamage = 10f;
+        var damageIncrease = 0f;
+        if(magnitudeStrength > 4)
+            damageIncrease = 20f;
+        baseDamage += damageIncrease * (magnitudeStrength - 4);
+        if (magnitudeStrength == 10)
+            baseDamage += 20f;
+        Dialogue_handler.Instance.DisplayBattleInfo("Magnitude level "+magnitudeStrength);
+        _currentTurn.move.moveDamage = baseDamage;
+        StartCoroutine(ApplyMultiTargetDamage(TargetAllExceptSelf()));
+    }
 
-            newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Fighting);
-            newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Normal);
-            _attacker.OnPokemonFainted += () => newImmunityNegation.RemoveNegationOnSwitchOut(_attacker);
-            Battle_handler.Instance.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
-            _victim.immunityNegations.Add(newImmunityNegation);
-        }
-        moveDelay = false;
-    }
-    void foresight()
-    {
-        IdentifyTarget();
-    }
-    void odorsleuth()
-    {
-        IdentifyTarget();
-    }
     void endeavor()
     {
         if (_victim.pokemon.hp < _attacker.pokemon.hp)
@@ -544,115 +608,6 @@ public class MoveLogicHandler : MonoBehaviour
             Dialogue_handler.Instance.DisplayBattleInfo("But it failed!");
             moveDelay = false;
         }
-    }
-
-    void dig()
-    {
-        if (_attacker.semiInvulnerabilityData.executionTurn)
-        {
-            Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName
-                                                        + _attacker.semiInvulnerabilityData.onHitMessage);
-            Move_handler.Instance.DisplayDamage(_victim);
-            _attacker.semiInvulnerabilityData.executionTurn = false;
-            moveDelay = false;
-            return;
-        }
-
-        _attacker.semiInvulnerabilityData.displayMessage = " is underground";
-        _attacker.semiInvulnerabilityData.onHitMessage = " dug back up!";
-        _attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
-        
-        _attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Magnitude),2f));
-        _attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Earthquake),2f));
-
-        _attacker.isSemiInvulnerable = true;
-        _currentTurn.move.isSureHit = false;
-        _attacker.semiInvulnerabilityData.executionTurn = true;
-        Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+" dug underground!");
-        moveDelay = false;
-    }
-
-    void fly()
-    {
-        if (_attacker.semiInvulnerabilityData.executionTurn)
-        {
-            Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName
-                                                        + _attacker.semiInvulnerabilityData.onHitMessage);
-            Move_handler.Instance.DisplayDamage(_victim);
-            _attacker.semiInvulnerabilityData.executionTurn = false;
-            moveDelay = false;
-            return;
-        }
-
-        _attacker.semiInvulnerabilityData.displayMessage = " is in the air";
-        _attacker.semiInvulnerabilityData.onHitMessage = " flew down";
-        _attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
-        
-        _attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Gust),2f));
-        _attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.Thunder)));
-        _attacker.semiInvulnerabilityData.semiInvulnerabilities.Add(
-            new SemiInvulnerability(NameDB.GetMoveName(NameDB.LearnSetMove.SkyUppercut)));
-            
-        _attacker.isSemiInvulnerable = true;
-        _currentTurn.move.isSureHit = false;
-        _attacker.semiInvulnerabilityData.executionTurn = true;
-        Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+" flew up high!");
-        moveDelay = false;
-    }
-
-    void sandstorm()
-    {
-        var sandstorm = new WeatherCondition(WeatherCondition.Weather.Sandstorm);
-        Turn_Based_Combat.Instance.ChangeWeather(sandstorm);
-        moveDelay = false;
-    }
-
-    void raindance()
-    {
-        var rainDance = new WeatherCondition(WeatherCondition.Weather.Rain);
-        Turn_Based_Combat.Instance.ChangeWeather(rainDance);
-        moveDelay = false;
-    }
-    void morningsun()
-    {
-        StartCoroutine(HealFromWeather());
-    }
-    void moonlight()
-    {
-        StartCoroutine(HealFromWeather());
-    }
-    private IEnumerator HealFromWeather()
-    {
-        float fraction;
-        var currentWeather = Turn_Based_Combat.Instance.currentWeather.weather;
-        
-        switch (currentWeather)
-        {
-            case WeatherCondition.Weather.Sunlight:
-                fraction = 2f / 3f;  
-                break;
-            case WeatherCondition.Weather.Rain:
-            case WeatherCondition.Weather.Hail:
-            case WeatherCondition.Weather.Sandstorm:
-                fraction = 1f / 4f;          
-                break;
-            default: 
-                fraction = 1f / 2f; 
-                break;
-        }
-        int healthGain = Mathf.FloorToInt(_attacker.pokemon.maxHp * fraction);
-        
-        if (healthGain < 1 && _attacker.pokemon.hp < _attacker.pokemon.maxHp) healthGain = 1;
-        
-        Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+" restored it's health!");
-
-        Move_handler.Instance.HealthGainDisplay(healthGain,healthGainer:_attacker);
-        yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthGain);
-        moveDelay = false;
     }
 
     void whirlwind()

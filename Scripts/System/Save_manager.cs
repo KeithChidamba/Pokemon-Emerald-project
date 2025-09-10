@@ -459,7 +459,7 @@ public class Save_manager : MonoBehaviour
             if (item.additionalInfoModules.Count == 0 && !item.isMultiModular)
             {
                 //just in-case
-                item.additionalInfoModules.Add(item.additionalItemInfo);
+                item.additionalInfoModules.Add(item.additionalInfoModule);
             }
             foreach (var module in item.additionalInfoModules)
             {
@@ -490,10 +490,10 @@ public class Save_manager : MonoBehaviour
             item.additionalInfoModules.Clear();
             foreach (var assetName in item.infoModuleAssetNames)
             {
-                var additionalInfo = Resources.Load<AdditionalItemInfo>(GetDirectory(AssetDirectory.AdditionalInfo)+assetName);
+                var additionalInfo = Resources.Load<AdditionalInfoModule>(GetDirectory(AssetDirectory.AdditionalInfo)+assetName);
                 item.additionalInfoModules.Add(additionalInfo);
             }
-            item.additionalItemInfo = item.additionalInfoModules.First();
+            item.additionalInfoModule = item.additionalInfoModules.First();
         }
         item.itemImage = Testing.CheckImage(GetDirectory(AssetDirectory.UI),item.imageDirectory);
         return item;

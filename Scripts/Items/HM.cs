@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "HM", menuName = "hmMove")]
-public class HM : AdditionalItemInfo
+public class HM : AdditionalInfoModule
 {
     public int HmNumber;
     public NameDB.HM HmName;

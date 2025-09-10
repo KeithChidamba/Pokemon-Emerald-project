@@ -48,13 +48,13 @@ public class Held_Items : MonoBehaviour
     }
     private void DetermineBerryEffect()
     {
-        var berryInfo = _heldItem.GetModule<BerryInfo>();
+        var berryInfo = _heldItem.GetModule<BerryInfoModule>();
         switch (berryInfo.berryType)
         {
-            case  BerryInfo.Berry.HpHeal:
+            case  BerryInfoModule.Berry.HpHeal:
                 CheckHealCondition();
                 break;
-            case  BerryInfo.Berry.StatusHeal:
+            case  BerryInfoModule.Berry.StatusHeal:
                 CheckStatusCondition();
                 break;
         }
@@ -86,7 +86,7 @@ public class Held_Items : MonoBehaviour
     private IEnumerator GetStatusHealing()
     { 
         Debug.Log("triggered status held item");
-        var statusInfo = _heldItem.GetModule<StatusHealInfo>();
+        var statusInfo = _heldItem.GetModule<StatusHealInfoModule>();
         var curableStatus = statusInfo.statusEffect;
         
         if (curableStatus == PokemonOperations.StatusEffect.Poison &&

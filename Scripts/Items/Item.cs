@@ -23,16 +23,16 @@ public class Item : ScriptableObject
     [FormerlySerializedAs("CanBeSold")] public bool canBeSold = true;
     public bool isMultiModular;
     public bool hasModules = true;
-    public AdditionalItemInfo additionalItemInfo;
-    public List<AdditionalItemInfo> additionalInfoModules;
+    [FormerlySerializedAs("additionalItemInfo")] public AdditionalInfoModule additionalInfoModule;
+    public List<AdditionalInfoModule> additionalInfoModules;
     public List<string> infoModuleAssetNames; //only gets modified and used in code
     public string imageDirectory;//only gets modified and used in code
-    public T GetModule<T>() where T : AdditionalItemInfo
+    public T GetModule<T>() where T : AdditionalInfoModule
     {
         if (isMultiModular)
         {
             return additionalInfoModules.FirstOrDefault(m => m is T) as T;
         }
-        return additionalItemInfo as T;
+        return additionalInfoModule as T;
     }
 }

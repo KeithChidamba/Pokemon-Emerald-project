@@ -55,7 +55,7 @@ public class Item_handler : MonoBehaviour
         
         switch (item.itemType)
         {
-            case ItemType.LearnableMove: StartCoroutine(PokemonOperations.LearnTmOrHm(_itemInUse.additionalItemInfo,selectedPokemon)); break;
+            case ItemType.LearnableMove: StartCoroutine(PokemonOperations.LearnTmOrHm(_itemInUse.additionalInfoModule,selectedPokemon)); break;
             
             case ItemType.Overworld : UseOverworldItem(); break;
             
@@ -85,7 +85,7 @@ public class Item_handler : MonoBehaviour
     private void UseHerbs()
     {
         OnItemUsageSuccessful += ChangeFriendship;
-        var herbInfo = _itemInUse.GetModule<HerbInfo>(); 
+        var herbInfo = _itemInUse.GetModule<HerbInfoModule>(); 
         var usageIndex = herbInfo.GetHerbUsage(_itemInUse);
         var herbUsages = new List<Action>
         {
@@ -98,7 +98,7 @@ public class Item_handler : MonoBehaviour
 
     private void UseBerries()
     {
-        var berryInfo = _itemInUse.GetModule<BerryInfo>();
+        var berryInfo = _itemInUse.GetModule<BerryInfoModule>();
         var usageIndex = berryInfo.GetBerryUsage();
         var berryUsages = new List<Action> 
         {
@@ -129,13 +129,13 @@ public class Item_handler : MonoBehaviour
     private void ChangeFriendship(bool itemUsed)
     {
         OnItemUsageSuccessful -= ChangeFriendship;
-        var herbInfo = _itemInUse.GetModule<HerbInfo>();
+        var herbInfo = _itemInUse.GetModule<HerbInfoModule>();
         var friendshipLoss = herbInfo.herbType switch
         {
-            HerbInfo.Herb.EnergyPowder => -5,
-            HerbInfo.Herb.EnergyRoot => -10,
-            HerbInfo.Herb.HealPowder => -5,
-            HerbInfo.Herb.RevivalHerb => -15,
+            HerbInfoModule.Herb.EnergyPowder => -5,
+            HerbInfoModule.Herb.EnergyRoot => -10,
+            HerbInfoModule.Herb.HealPowder => -5,
+            HerbInfoModule.Herb.RevivalHerb => -15,
             _ => 0
         };
         if(itemUsed && friendshipLoss!=0)
@@ -160,7 +160,7 @@ public class Item_handler : MonoBehaviour
 
     void TriggerStoneEvolution()
     { 
-       var stoneInfo =_itemInUse.GetModule<EvolutionStoneInfo>();
+       var stoneInfo =_itemInUse.GetModule<EvolutionStoneInfoModule>();
        if (_selectedPartyPokemon.evolutionStone == stoneInfo.stoneName)
        {
             _selectedPartyPokemon.CheckEvolutionRequirements(0);
@@ -175,7 +175,7 @@ public class Item_handler : MonoBehaviour
 
     private void GetFriendshipFromBerry()
     {
-        var statToDecrease = _itemInUse.GetModule<StatInfo>();
+        var statToDecrease = _itemInUse.GetModule<StatInfoModule>();
         if(_selectedPartyPokemon.friendshipLevel>254)
         {
             Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+"'s friendship is already maxed out", 1f);
@@ -193,7 +193,7 @@ public class Item_handler : MonoBehaviour
     }
     private void GetEVsFromItem() 
     {
-        var statToIncrease = _itemInUse.GetModule<StatInfo>();
+        var statToIncrease = _itemInUse.GetModule<StatInfoModule>();
         PokemonOperations.OnEvChange += CheckEvChange;
         PokemonOperations.CalculateEvForStat(statToIncrease.statName, 10, _selectedPartyPokemon);
     }
@@ -201,7 +201,7 @@ public class Item_handler : MonoBehaviour
     private void CheckEvChange(bool hasChanged)
     {
         PokemonOperations.OnEvChange -= CheckEvChange;
-        var statToIncrease = _itemInUse.GetModule<StatInfo>();
+        var statToIncrease = _itemInUse.GetModule<StatInfoModule>();
         var message = _selectedPartyPokemon.pokemonName + "'s " + NameDB.GetStatName(statToIncrease.statName);
         
         message += (hasChanged)? " was increased" : " can't get any higher";
@@ -231,7 +231,7 @@ public class Item_handler : MonoBehaviour
 
     private void ItemBuffOrDebuff()
     {
-        var statInfo = _itemInUse.GetModule<StatInfo>();
+        var statInfo = _itemInUse.GetModule<StatInfoModule>();
         if (statInfo.statName == PokemonOperations.Stat.None)
         {//guard spec doesn't buff stat but remove stat reduction
             if (currentParticipant.ProtectedFromStatChange(false))
@@ -497,7 +497,7 @@ public class Item_handler : MonoBehaviour
     {
         if (curableStatus == PokemonOperations.StatusEffect.None)
         {
-            var statusInfo = _itemInUse.GetModule<StatusHealInfo>();
+            var statusInfo = _itemInUse.GetModule<StatusHealInfoModule>();
             curableStatus = statusInfo.statusEffect;
         }
         if (!IsValidStatusHeal(curableStatus))

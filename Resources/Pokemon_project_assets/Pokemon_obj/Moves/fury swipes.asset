@@ -24,6 +24,7 @@ MonoBehaviour:
   hasStatus: 0
   hasSpecialEffect: 1
   effectType: 3
+  effectInfoModule: {fileID: 11400000, guid: b4de3f94c11da2bd0a3cf729390d10a5, type: 2}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0

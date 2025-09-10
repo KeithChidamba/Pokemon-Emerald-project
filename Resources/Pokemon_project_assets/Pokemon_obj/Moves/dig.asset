@@ -23,7 +23,8 @@ MonoBehaviour:
   isBuffOrDebuff: 0
   hasStatus: 0
   hasSpecialEffect: 1
-  effectType: 1
+  effectType: 11
+  effectInfoModule: {fileID: 11400000, guid: ecdc4feb391c2574e9fac51832a6d210, type: 2}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0

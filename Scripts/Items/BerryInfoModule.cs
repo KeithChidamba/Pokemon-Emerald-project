@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Berry", menuName = "berry")]
-public class BerryInfo : AdditionalItemInfo
+public class BerryInfoModule : AdditionalInfoModule
 {
     public enum Berry
     {

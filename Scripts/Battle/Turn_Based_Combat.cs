@@ -633,8 +633,11 @@ public class Turn_Based_Combat : MonoBehaviour
     }
 
     private void DamageModifierForWeather(PokemonOperations.Types type,float damageModifier)
-    {
-        var modifier = new OnFieldDamageModifier(damageModifier, type,removeOnSwitch:false);
+    { 
+        var damageModifierInfo = ScriptableObject.CreateInstance<DamageModifierInfo>();
+        damageModifierInfo.typeAffected = type;
+        damageModifierInfo.damageModifier = damageModifier;
+        var modifier = new OnFieldDamageModifier(damageModifierInfo,removeOnSwitch:false);
         OnWeatherEnd += modifier.RemoveAfterWeather;
         Move_handler.Instance.AddFieldDamageModifier(modifier);
     }

@@ -278,10 +278,10 @@ public class PokemonOperations : MonoBehaviour
             CurrentPokemon.moveSet.Add(newMove);
         }
     }
-    public static IEnumerator LearnTmOrHm(AdditionalItemInfo itemInfo, Pokemon pokemon)
+    public static IEnumerator LearnTmOrHm(AdditionalInfoModule infoModule, Pokemon pokemon)
     {
         CurrentPokemon = pokemon;
-        switch (itemInfo)
+        switch (infoModule)
         {
             case TM tm:
                 if (CurrentPokemon.learnableTms.Contains(tm.TmName))
