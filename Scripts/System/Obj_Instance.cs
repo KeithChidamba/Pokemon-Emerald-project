@@ -95,6 +95,7 @@ public static class Obj_Instance
         newPokemon.types = pkm.types;
         newPokemon.statusEffect = pkm.statusEffect;
         newPokemon.buffAndDebuffs = pkm.buffAndDebuffs;
+        newPokemon.currentEvolutionLineIndex = pkm.currentEvolutionLineIndex;
         newPokemon.evolutionLineLevels = pkm.evolutionLineLevels;
         newPokemon.friendshipEvolutionRequirement = pkm.friendshipEvolutionRequirement;
         newPokemon.requiresEvolutionStone = pkm.requiresEvolutionStone;

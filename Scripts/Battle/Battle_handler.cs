@@ -34,6 +34,7 @@ public class Battle_handler : MonoBehaviour
 
     public Pokemon lastOpponent;
     private Battle_Participant _currentParticipant;
+    public List<EvolutionInBattleData> evolutionQueue;
     public GameObject optionSelector;
     public GameObject moveSelector;
     public bool usedTurnForItem;
@@ -472,7 +473,7 @@ public class Battle_handler : MonoBehaviour
             yield return null;
         }
     }
-    IEnumerator DelayBattleEnd()
+    private IEnumerator ProcessBattleEnd()
     {
         var playerWhiteOut = false;
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
@@ -497,6 +498,20 @@ public class Battle_handler : MonoBehaviour
             }
             if (battleWon)
             {
+                foreach (var evolution in evolutionQueue)
+                {
+                    if (evolution.participantToEvolve.isActive)
+                    {
+                        var pokemon = evolution.participantToEvolve.pokemon;
+                        Dialogue_handler.Instance.DisplayBattleInfo("What? "+pokemon.pokemonName+" is evolving!");
+                        var previousName = pokemon.pokemonName;
+                        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+                        pokemon.Evolve(pokemon.evolutions[evolution.evolutionIndex]);
+                        Dialogue_handler.Instance.DisplayBattleInfo(previousName+" evolved into "+pokemon.pokemonName);
+                        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+                    }
+                }
+                evolutionQueue.Clear();
                 Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " won the battle");
                 if (isTrainerBattle)
                 {
@@ -552,7 +567,7 @@ public class Battle_handler : MonoBehaviour
         battleWon = hasWon;
         battleOver = true;
         battleTerminated = battleCancelled;
-        StartCoroutine(DelayBattleEnd());
+        StartCoroutine(ProcessBattleEnd());
     }
     private IEnumerator ResetUiAfterBattle(bool playerWhiteOut)
     {

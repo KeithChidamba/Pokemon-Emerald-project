@@ -200,8 +200,8 @@ public class Move_handler:MonoBehaviour
     {
         foreach (var barrier in currentVictim.barriers)
         {
-            if ((move.isSpecial && barrier.barrierName == nameof(NameDB.LearnSetMove.LightScreen))
-                || (!move.isSpecial && barrier.barrierName == nameof(NameDB.LearnSetMove.Reflect)))
+            if ((move.isSpecial && barrier.barrierName == NameDB.GetMoveName(NameDB.LearnSetMove.LightScreen))
+                || (!move.isSpecial && barrier.barrierName == NameDB.GetMoveName(NameDB.LearnSetMove.Reflect)))
                 return  damage-(damage*barrier.barrierEffect);
         }
         return damage;
@@ -351,7 +351,7 @@ public class Move_handler:MonoBehaviour
     {
         if (victim.pokemon.statusEffect != PokemonOperations.StatusEffect.None)
         {
-            if (_currentTurn.move.statusEffect == victim.pokemon.statusEffect) 
+            if (_currentTurn.move.statusEffect == victim.pokemon.statusEffect && _currentTurn.move.moveDamage==0) 
                 Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" already has a "+victim.pokemon.statusEffect+" effect!");
             else
                 Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");

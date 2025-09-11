@@ -234,7 +234,12 @@ public class Battle_Participant : MonoBehaviour
         OnPokemonFainted = null;
         recentAttacker = null;
         immunityNegations.Clear();
-        if (isPlayer) pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
+        if (isPlayer)
+        {
+            pokemon.OnEvolutionSuccessful -= AddToEvolutionQueue;
+            pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
+        }
+        
     }
     private void ResetParticipantStateAfterLevelUp(Pokemon pokemonAfterLevelUp)
     {
@@ -323,6 +328,13 @@ public class Battle_Participant : MonoBehaviour
         foreach (var obj in arr)
             obj.SetActive(on);
     }
+    private void AddToEvolutionQueue(int evolutionIndex)
+    {
+        var evoData = new EvolutionInBattleData();
+        evoData.participantToEvolve = this;
+        evoData.evolutionIndex = evolutionIndex;
+        Battle_handler.Instance.evolutionQueue.Add(evoData);
+    }
     public void ActivateParticipant()
     {
         RefreshStatusEffectImage();
@@ -344,6 +356,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
         pokemon.OnHealthChanged += CheckIfFainted;
         if (!isPlayer) return;
+        pokemon.OnEvolutionSuccessful += AddToEvolutionQueue;
         pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
         pokemon.OnNewLevel += statData.SaveActualStats;
         ActivateUI(doubleBattleUI, Battle_handler.Instance.isDoubleBattle);

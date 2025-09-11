@@ -1154,6 +1154,7 @@ MonoBehaviour:
   isInfatuated: 0
   canBeDamaged: 1
   semiInvulnerabilityData:
+    semiInvulnerabilities: []
     displayMessage: 
     onHitMessage: 
     turnData:
@@ -6137,6 +6138,7 @@ MonoBehaviour:
   isInfatuated: 0
   canBeDamaged: 1
   semiInvulnerabilityData:
+    semiInvulnerabilities: []
     displayMessage: 
     onHitMessage: 
     turnData:
@@ -8044,8 +8046,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 92.44261, y: -179.12}
-  m_SizeDelta: {x: 115.5252, y: 26.67}
+  m_AnchoredPosition: {x: 198.37604, y: -179.12}
+  m_SizeDelta: {x: 327.392, y: 26.67}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &254012783
 MonoBehaviour:
@@ -29539,6 +29541,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc979b2b6b211033b7ab714b2dd69be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attacker: {fileID: 0}
+  _victim: {fileID: 0}
+  moveDelay: 0
 --- !u!4 &991027252
 Transform:
   m_ObjectHideFlags: 0
@@ -33150,6 +33155,7 @@ MonoBehaviour:
   _onFieldDamageModifiers: []
   _damageDisplayQueue: []
   _healhGainQueue: []
+  repeatingMoveCycle: 0
   processingOrder: 0
   displayingDamage: 0
   displayingHealthGain: 0
@@ -67527,6 +67533,7 @@ MonoBehaviour:
   isInfatuated: 0
   canBeDamaged: 1
   semiInvulnerabilityData:
+    semiInvulnerabilities: []
     displayMessage: 
     onHitMessage: 
     turnData:
@@ -70405,7 +70412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1756327573
 RectTransform:
   m_ObjectHideFlags: 0
@@ -72348,6 +72355,7 @@ MonoBehaviour:
   runningAway: 0
   currentEnemyIndex: 0
   lastOpponent: {fileID: 0}
+  evolutionQueue: []
   optionSelector: {fileID: 318233309}
   moveSelector: {fileID: 1331004670}
   usedTurnForItem: 0
@@ -93105,6 +93113,7 @@ MonoBehaviour:
   isInfatuated: 0
   canBeDamaged: 1
   semiInvulnerabilityData:
+    semiInvulnerabilities: []
     displayMessage: 
     onHitMessage: 
     turnData:

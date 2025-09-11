@@ -62,6 +62,7 @@ public class Pokemon : ScriptableObject
     public PokemonOperations.StatusEffect statusEffect;
     public List<Buff_Debuff> buffAndDebuffs = new();
     [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
+    public int currentEvolutionLineIndex;
     public FriendShipEvolutionData friendshipEvolutionRequirement;
     [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone = false;
     [FormerlySerializedAs("EvolutionStoneName")] public NameDB.EvolutionStone evolutionStone;
@@ -84,6 +85,7 @@ public class Pokemon : ScriptableObject
     public event Action<Pokemon> OnLevelUp;
     public event Action<Pokemon> OnExpGainComplete;
     public event Action<Battle_Participant> OnHealthChanged;
+    public event Action<int> OnEvolutionSuccessful;
     //data conversion when json to obj
     public string abilityName;
     public string natureName;
@@ -233,6 +235,8 @@ public class Pokemon : ScriptableObject
             ChangeFriendshipLevel(ApplyFriendshipModifier(10) );
         }
     }
+
+
     public void CheckEvolutionRequirements(int evoIndex)
     {
         if (requiresEvolutionStone)
@@ -240,23 +244,39 @@ public class Pokemon : ScriptableObject
             Evolve(evolutions[evoIndex]); return;
         }
 
+        var isPlayerPokemon = Pokemon_party.Instance.party.Contains(this);
+        
         if (requiresFriendshipEvolution)
         {
             if (friendshipLevel >= friendshipEvolutionRequirement.friendshipRequirement)
             {
-                Evolve(evolutions[friendshipEvolutionRequirement.evolutionIndex]);
+                if (isPlayerPokemon && Options_manager.Instance.playerInBattle)
+                {
+                    OnEvolutionSuccessful?.Invoke(friendshipEvolutionRequirement.evolutionIndex);
+                }
+                else
+                {
+                    Evolve(evolutions[friendshipEvolutionRequirement.evolutionIndex]);
+                }
             } 
             return;
+        } 
+        
+//regular evolution
+        if (currentEvolutionLineIndex >= evolutionLineLevels.Length)
+        {
+            return;//max evolution
         }
         
-        //regular evolution
-        for (int i = 0; i < evolutionLineLevels.Length; i++)
+        if (currentLevel>=evolutionLineLevels[currentEvolutionLineIndex])
         {
-            var requiredLevelToEvolve = evolutionLineLevels[i];
-            if (currentLevel == requiredLevelToEvolve)
+            if (isPlayerPokemon && Options_manager.Instance.playerInBattle)
             {
-                Evolve(evolutions[i+evoIndex]);
-                break;
+                OnEvolutionSuccessful?.Invoke(currentEvolutionLineIndex+evoIndex);
+            }
+            else
+            {
+                Evolve(evolutions[currentEvolutionLineIndex+evoIndex]);
             }
         }
     }
@@ -368,6 +388,7 @@ public class Pokemon : ScriptableObject
         requiresFriendshipEvolution = evo.requiresFriendshipEvolution;
         requiresEvolutionStone = evo.requiresEvolutionStone;
         friendshipEvolutionRequirement = evo.friendshipEvolutionRequirement;
+        currentEvolutionLineIndex++;
         if (Pokemon_party.Instance.party.Contains(this))
             Pokemon_party.Instance.RefreshMemberCards();
     }
@@ -434,5 +455,6 @@ public class Pokemon : ScriptableObject
     {
         OnLevelUp = null;
         OnNewLevel = null;
+        OnEvolutionSuccessful = null;
     }
 }

@@ -6,22 +6,22 @@
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26254
+        "instanceID": 26450
     },
     "hasGender": true,
-    "hp": 21.0,
-    "maxHp": 21.0,
+    "hp": 51.0,
+    "maxHp": 51.0,
     "baseHp": 40.0,
     "baseAttack": 45.0,
     "baseDefense": 35.0,
     "baseSpecialAttack": 30.0,
     "baseSpecialDefense": 40.0,
     "baseSpeed": 55.0,
-    "attack": 12.0,
-    "defense": 9.0,
-    "specialAttack": 9.0,
-    "specialDefense": 11.0,
-    "speed": 12.0,
+    "attack": 29.0,
+    "defense": 20.0,
+    "specialAttack": 22.0,
+    "specialDefense": 27.0,
+    "speed": 31.0,
     "hpIv": 19.0,
     "attackIv": 27.0,
     "defenseIv": 15.0,
@@ -44,22 +44,22 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 225.0,
-    "currentLevel": 6,
-    "currentExpAmount": 126,
+    "currentLevel": 21,
+    "currentExpAmount": 8001,
     "currentLevelExpAmount": 0,
-    "nextLevelExpAmount": 216,
+    "nextLevelExpAmount": 9261,
     "expGroup": 2,
     "expYield": 54,
-    "friendshipLevel": 147,
+    "friendshipLevel": 210,
     "hasTrainer": true,
     "canBeFlinched": true,
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26472
+            "instanceID": 26666
         },
         {
-            "instanceID": 25480
+            "instanceID": 10118
         }
     ],
     "statusEffect": 0,
@@ -67,6 +67,7 @@
     "evolutionLineLevels": [
         22
     ],
+    "currentEvolutionLineIndex": 0,
     "friendshipEvolutionRequirement": {
         "friendshipRequirement": 0,
         "evolutionIndex": 0
@@ -130,24 +131,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -1974
+            "instanceID": -7484
         },
         {
-            "instanceID": -1976
+            "instanceID": -7250
         },
         {
-            "instanceID": -2090
+            "instanceID": -7252
+        },
+        {
+            "instanceID": -7432
         }
     ],
     "ability": {
-        "instanceID": 25204
+        "instanceID": 25448
     },
     "evolutions": [
         {
-            "instanceID": 26094
+            "instanceID": 26302
         },
         {
-            "instanceID": 25284
+            "instanceID": 25520
         }
     ],
     "heldItem": {
@@ -155,10 +159,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32562
+        "instanceID": 32752
     },
     "backPicture": {
-        "instanceID": 32706
+        "instanceID": 32896
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,
@@ -174,9 +178,9 @@
     ],
     "moveData": [
         {
-            "moveName": "leech life",
-            "powerPoints": 15,
-            "maxPowerpoints": 15
+            "moveName": "bite",
+            "powerPoints": 25,
+            "maxPowerpoints": 25
         },
         {
             "moveName": "fly",
@@ -187,6 +191,11 @@
             "moveName": "supersonic",
             "powerPoints": 20,
             "maxPowerpoints": 20
+        },
+        {
+            "moveName": "astonish",
+            "powerPoints": 15,
+            "maxPowerpoints": 15
         }
     ]
 }
