@@ -594,8 +594,16 @@ public class MoveLogicHandler : MonoBehaviour
 
     void mirrormove()
     {
-        if (_victim.previousMove!=null)
+        if (_victim.previousMove is {failedAttempt:false})
         {
+            var nonCopyableMoves = new[] {"Detect","Protect","Haze"};
+            if (_victim.previousMove.move.isSelfTargeted
+                || nonCopyableMoves.Contains(_victim.previousMove.move.moveName))
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo("But it failed!");
+                moveDelay = false;
+                return;
+            }
             Move_handler.Instance.repeatingMoveCycle = true;
             _currentTurn.move = _victim.previousMove.move;
             moveDelay = false;

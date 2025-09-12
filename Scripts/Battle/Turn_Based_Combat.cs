@@ -252,19 +252,21 @@ public class Turn_Based_Combat : MonoBehaviour
             yield return CheckAttackSuccess(currentTurn,attacker,victim);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             
+            yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
+            CheckRepeatedMove(attacker,currentTurn.move);
             if (successfulAttack)
             {
-                yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
-                
                 Move_handler.Instance.doingMove = true;
-                CheckRepeatedMove(attacker,currentTurn.move);
                 Move_handler.Instance.ExecuteMove(currentTurn);
                 
                 yield return new WaitUntil(() => !Move_handler.Instance.doingMove);
                 yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
             }
             else
+            {
+                attacker.previousMove.failedAttempt = true;
                 attacker.semiInvulnerabilityData.ResetState();
+            }
         }
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
@@ -441,8 +443,12 @@ public class Turn_Based_Combat : MonoBehaviour
             attacker.previousMove = newData;
             return;
         }
+
         if (attacker.previousMove.move.moveName == move.moveName)
+        {
             attacker.previousMove.numRepetitions++;
+            attacker.previousMove.failedAttempt = false;
+        }
         else
         {
             var newData = new PreviousMove(move,0);

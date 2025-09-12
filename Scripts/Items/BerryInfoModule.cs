@@ -8,7 +8,7 @@ public class BerryInfoModule : AdditionalInfoModule
 {
     public enum Berry
     {
-        FriendshipIncrease, HpHeal, StatusHeal
+        FriendshipIncrease, HpHeal, StatusHeal, PpRestore, ConfusionHeal
     }
     [FormerlySerializedAs("herbType")] public Berry berryType;
     public PokemonOperations.StatusEffect statusEffect;
@@ -26,6 +26,12 @@ public class BerryInfoModule : AdditionalInfoModule
                 break;
             case Berry.StatusHeal:
                 usageIndex = 2;
+                break;
+            case Berry.PpRestore:
+                usageIndex = 3;
+                break;
+            case Berry.ConfusionHeal:
+                usageIndex = 4;
                 break;
         }
         return usageIndex;

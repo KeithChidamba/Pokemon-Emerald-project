@@ -269,6 +269,7 @@ public class Participant_Status : MonoBehaviour
                 _participant.pokemon.attack = Move_handler.Instance.ModifyStatValue
                 (PokemonOperations.Stat.Attack, _participant.statData.attack, currentAtkBuff.stage);
                 break;
+            
             case PokemonOperations.StatusEffect.Paralysis:
                 var currenSpdBuff =
                     BattleOperations.SearchForBuffOrDebuff(_participant.pokemon, PokemonOperations.Stat.Speed);

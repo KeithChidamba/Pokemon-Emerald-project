@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
+  m_Name: Leppa berry
+  m_EditorClassIdentifier: 
+  itemID: 
+  itemName: Leppa berry
+  itemType: 9
+  itemEffect: 
+  itemDescription: Restores 10pp to a selected move
+  price: 5
+  quantity: 1
+  itemImage: {fileID: 21300000, guid: 065a184371da344b694f04fe01508da8, type: 2}
+  forPartyUse: 1
+  canBeUsedInOverworld: 1
+  canBeUsedInBattle: 0
+  isHeldItem: 0
+  canBeHeld: 0
+  canBeSold: 1
+  isMultiModular: 1
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: 138a97ba805a6f9c895f81f5c42f0c89, type: 2}
+  additionalInfoModules:
+  - {fileID: 11400000, guid: 240bcc6ff0e167142ad6bd8b994f8934, type: 2}
+  - {fileID: 11400000, guid: 138a97ba805a6f9c895f81f5c42f0c89, type: 2}
+  infoModuleAssetNames: []
+  imageDirectory: 

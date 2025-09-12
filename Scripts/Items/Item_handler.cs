@@ -104,7 +104,9 @@ public class Item_handler : MonoBehaviour
         {
             GetFriendshipFromBerry,
             () => RestoreHealth(int.Parse(_itemInUse.itemEffect)),
-            () => HealStatusEffect(berryInfo.statusEffect)
+            () => HealStatusEffect(berryInfo.statusEffect),
+            ChangePowerpoints,
+            CureConfusion
         };
         berryUsages[usageIndex].Invoke();
     }
@@ -218,7 +220,7 @@ public class Item_handler : MonoBehaviour
     private void ChangePowerpoints()
     {
         Pokemon_Details.Instance.changingMoveData = true;
-        var modifierInfo = _itemInUse.GetModule<PowerpointModifeir>();;
+        var modifierInfo = _itemInUse.GetModule<PowerpointModifeir>();
         
         if (modifierInfo.modiferType == PowerpointModifeir.ModiferType.RestorePp)
             Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
@@ -444,6 +446,18 @@ public class Item_handler : MonoBehaviour
         ResetItemUsage();
     }
 
+    private void CureConfusion()
+    {
+        if (!Options_manager.Instance.playerInBattle)
+        {
+            Dialogue_handler.Instance.DisplayDetails("cant use that outside battle!");
+            return;
+        }
+        if(!currentParticipant.isConfused)
+            Dialogue_handler.Instance.DisplayDetails("Pokemon is already healthy");
+        else
+            currentParticipant.isConfused = false;
+    }
     private bool IsValidStatusHeal(PokemonOperations.StatusEffect curableStatus)
     {
         if (_selectedPartyPokemon.statusEffect == PokemonOperations.StatusEffect.None)

@@ -57,6 +57,9 @@ public class Held_Items : MonoBehaviour
             case  BerryInfoModule.Berry.StatusHeal:
                 CheckStatusCondition();
                 break;
+            case  BerryInfoModule.Berry.ConfusionHeal:
+                CheckIfConfused();
+                break;
         }
     }
     void CheckHealCondition()
@@ -74,6 +77,14 @@ public class Held_Items : MonoBehaviour
         OnHeldItemUsage?.Invoke(this);
         DepleteHeldItem();
         StartCoroutine(GetStatusHealing());
+    }
+    void CheckIfConfused()
+    {
+        if(!_participant.isConfused) return;
+        processingItemEffect = true;
+        Dialogue_handler.Instance.DisplayDetails(_participant.pokemon.pokemonName+"'s Persim berry healed its confusion");
+        _participant.isConfused = false;
+        processingItemEffect = false;
     }
     private IEnumerator GetHealing()
     { 
