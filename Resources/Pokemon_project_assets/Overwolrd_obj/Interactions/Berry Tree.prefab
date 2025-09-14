@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8908808911302921482}
   - component: {fileID: 4641104906229684179}
   - component: {fileID: -739900410870240834}
+  - component: {fileID: 1510495507358654107}
   m_Layer: 6
   m_Name: Berry Tree
   m_TagString: Untagged
@@ -137,3 +138,17 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.33, y: 0.48}
   m_Direction: 0
+--- !u!114 &1510495507358654107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128412336089757397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 962eac96263e8deb2b9be1ec2f70f046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primaryInteraction: {fileID: 0}
+  stateInfo: {fileID: 0}

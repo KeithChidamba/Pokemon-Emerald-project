@@ -39,10 +39,6 @@ public class Poke_Mart : MonoBehaviour
     private void Start()
     {
         Options_manager.Instance.OnInteractionTriggered += ViewStore;
-        // if (Application.platform == RuntimePlatform.WebGLPlayer)
-        //     Save_manager.Instance.OnVirtualFileSystemLoaded += InitialiseItems;
-        // else
-        //     InitialiseItems();
     }
     private IEnumerator SelectItemsForStore()
     {

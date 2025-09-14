@@ -36,7 +36,6 @@ public class Options_manager : MonoBehaviour
         _interactionMethods.Add("LeaveStore",LeaveStore);
         _interactionMethods.Add("HealPokemon",HealPokemon);
         _interactionMethods.Add("OpenPokemonStorage",OpenPokemonStorage);
-        _interactionMethods.Add("PickBerryFromTree",PickBerryFromTree);
         _interactionMethods.Add("ReceiveGiftPokemon",ReceiveGiftPokemon);
     }
 
@@ -153,15 +152,7 @@ public class Options_manager : MonoBehaviour
         Dialogue_handler.Instance.EndDialogue();
         Game_ui_manager.Instance.ViewPokeMart();
     }
-    void PickBerryFromTree()
-    {
-        Dialogue_handler.Instance.EndDialogue();
-        var berry = _currentInteraction.resultMessage;
-        var berryAsset = Resources.Load<Item>(Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.Berries) + berry);
-        Bag.Instance.AddItem(Obj_Instance.CreateItem(berryAsset));
-        Dialogue_handler.Instance.DisplayDetails("You picked up a "+berry,2f);
-    }
+
     public void CompleteInteraction(Interaction interaction,int option)
     {
         var methodName = interaction.interactionOptions[option].Replace(" ", "");
