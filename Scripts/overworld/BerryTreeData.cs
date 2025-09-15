@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu(fileName = "berryTree", menuName = "berryTree")]
 public class BerryTreeData : ScriptableObject
 {
      public int minYield;

@@ -2218,7 +2218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: beab14a628481414491e850bca6aafc9, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!61 &64607984
 BoxCollider2D:
@@ -3806,7 +3806,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 2a9ae13e99aacc8468b5be2037e26cea, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!1 &113451625
 GameObject:
@@ -4122,7 +4122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: be1e113f31b41fe4da01cb2c1aabebd3, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!61 &126172890
 BoxCollider2D:
@@ -4314,7 +4314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 65a60809e4e9bad41a00ea111b3d83d0, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!1 &133303393
 GameObject:
@@ -5855,7 +5855,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 0}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 11400000, guid: 25dfde04bada2414b8fb3eaf4a8c5ac7, type: 2}
 --- !u!1 &185005865
 GameObject:
@@ -14040,7 +14040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ddb85caf72dea1e4882d8b00cb2adbd6, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!1 &505938596
 GameObject:
@@ -21418,7 +21418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: a94a485dbbee55446b72284e516a203e, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!61 &728870498
 BoxCollider2D:
@@ -28469,7 +28469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 05fc0e8d883123c46bf889ad4846eba3, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!61 &939642314
 BoxCollider2D:
@@ -30327,7 +30327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 3bf20e04547411a40aa0002e84bea92c, type: 2}
   location: Costal City
-  interactionType: Clerk
+  interactionType: 1
   area: {fileID: 0}
 --- !u!1 &1015821576
 GameObject:
@@ -33378,7 +33378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ef9aa58b859709c4d811a0e382bdcd0f, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!61 &1159495006
 BoxCollider2D:
@@ -56102,7 +56102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ef9aa58b859709c4d811a0e382bdcd0f, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!61 &1233443738
 BoxCollider2D:
@@ -70086,7 +70086,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: e8890c71d41487449ae48531dba81e2b, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!1 &1748359812
 GameObject:
@@ -72173,7 +72173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ef9aa58b859709c4d811a0e382bdcd0f, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!61 &1819659362
 BoxCollider2D:
@@ -73296,7 +73296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 05fc0e8d883123c46bf889ad4846eba3, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!61 &1848598228
 BoxCollider2D:
@@ -93455,7 +93455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 930c0390d8f681b4eae75711793319fe, type: 2}
   location: 
-  interactionType: 
+  interactionType: 0
   area: {fileID: 0}
 --- !u!61 &2037761306
 BoxCollider2D:
@@ -95394,7 +95394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 3bf20e04547411a40aa0002e84bea92c, type: 2}
   location: Forest
-  interactionType: Clerk
+  interactionType: 1
   area: {fileID: 0}
 --- !u!1 &2108408982
 GameObject:

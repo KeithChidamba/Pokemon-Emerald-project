@@ -139,7 +139,7 @@ public class Poke_Mart : MonoBehaviour
     }
     private void ViewStore(Overworld_interactable clerkInteractable)
     {
-        if (clerkInteractable.interactionType != "Clerk") return;
+        if (clerkInteractable.interactionType != Overworld_interactable.InteractionType.Clerk) return;
         if(currentMartData!=null){
             if (currentMartData.location == clerkInteractable.location)
             {//basically caching

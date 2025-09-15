@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
-  m_Name: Oran Berry Tree
+  m_Name: Water Tree
   m_EditorClassIdentifier: 
-  interactionMessage: It's a berry tree, do you want to pick a bery?
+  interactionMessage: Would you like to water this sapling
   interactionType: 1
   interactionOptions:
-  - PickBerryFromTree
   - 
-  resultMessage: Oran berry
+  - 
+  resultMessage: 
   optionsUiText:
-  - Yes, take a berry
+  - Yes
   - No thanks
   additionalInfo: []

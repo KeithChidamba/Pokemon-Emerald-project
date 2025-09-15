@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 223af72d94c0b484684575e564e3f015, type: 2}
   location: 
-  interactionType: 
+  interactionType: 3
   area: {fileID: 0}
 --- !u!212 &4641104906229684179
 SpriteRenderer:
@@ -150,5 +150,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 962eac96263e8deb2b9be1ec2f70f046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  primaryInteraction: {fileID: 0}
-  stateInfo: {fileID: 0}
+  primaryInteractable: {fileID: 0}
+  harvestInteraction: {fileID: 11400000, guid: 223af72d94c0b484684575e564e3f015, type: 2}
+  plantInteraction: {fileID: 11400000, guid: 518b7ac0f955c2629916440737d821f4, type: 2}
+  waterInteraction: {fileID: 11400000, guid: 609ac12ecd3358181bbb22be5d26a1c8, type: 2}
+  idleInteraction: {fileID: 11400000, guid: fa2b7b86c6c2769fea5830444690481a, type: 2}
+  treeData: {fileID: 11400000, guid: 28301d94c39b308f3b1e16101fee2f59, type: 2}
+  numStagesWatered: 0
+  isPlanted: 1
