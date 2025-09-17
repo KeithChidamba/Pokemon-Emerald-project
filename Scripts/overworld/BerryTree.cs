@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BerryTree : MonoBehaviour
 {
@@ -13,7 +15,7 @@ public class BerryTree : MonoBehaviour
     public BerryTreeData treeData;
     public int numStagesWatered;
     public bool isPlanted;
-    
+    public SpriteRenderer treeSpriteRenderer;
     private void Awake()
     {
         primaryInteractable = GetComponent<Overworld_interactable>();
@@ -21,7 +23,7 @@ public class BerryTree : MonoBehaviour
         Options_manager.Instance.OnInteractionTriggered += WaterTree;
         Options_manager.Instance.OnInteractionTriggered += ChooseBerryToPlant;
         Save_manager.Instance.OnOverworldDataLoaded += LoadedDefaultAsset;
-        
+        treeSpriteRenderer = GetComponent<SpriteRenderer>();
         if (isPlanted) return;
         
         primaryInteractable.interaction = plantInteraction;
@@ -42,6 +44,7 @@ public class BerryTree : MonoBehaviour
     public void LoadTreeData(BerryTreeData tree)
     {
         treeData = tree;
+        treeSpriteRenderer.sprite = treeData.GetTreeSprite();
     }
     private void Update()
     {

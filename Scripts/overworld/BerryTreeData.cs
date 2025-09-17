@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 [CreateAssetMenu(fileName = "berryTree", menuName = "berryTree")]
 public class BerryTreeData : ScriptableObject
@@ -16,4 +17,10 @@ public class BerryTreeData : ScriptableObject
      public int treeIndex;
      public int minutesPerStage;
      public bool loadedFromJson;
+     public List<BerrySpriteData> spriteData = new();
+
+     public Sprite GetTreeSprite()
+     {
+          return spriteData.First(s => s.growthStageNumber == currentStageProgress).growthStageSprite;
+     }
 }

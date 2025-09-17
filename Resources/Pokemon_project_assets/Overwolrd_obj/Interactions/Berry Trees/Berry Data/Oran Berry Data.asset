@@ -22,3 +22,12 @@ MonoBehaviour:
   treeIndex: 0
   minutesPerStage: 180
   loadedFromJson: 0
+  spriteData:
+  - growthStageSprite: {fileID: 0}
+    growthStageNumber: 0
+  - growthStageSprite: {fileID: 0}
+    growthStageNumber: 0
+  - growthStageSprite: {fileID: 0}
+    growthStageNumber: 0
+  - growthStageSprite: {fileID: 0}
+    growthStageNumber: 0
