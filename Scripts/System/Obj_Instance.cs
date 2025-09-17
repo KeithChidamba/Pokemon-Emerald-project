@@ -131,7 +131,22 @@ public static class Obj_Instance
             trainerCopy.PokemonParty.Add(CreateTrainerPokemonData(member));
         return trainerCopy;
     }
-
+    public static BerryTreeData CreateTreeData(BerryTreeData data)
+    {
+        var treeData = ScriptableObject.CreateInstance<BerryTreeData>();
+        treeData.minYield = data.minYield;
+        treeData.maxYield = data.maxYield;
+        treeData.currentStageNeedsWater = data.currentStageNeedsWater;
+        treeData.currentStageProgress = data.currentStageProgress;
+        treeData.minutesSinceLastStage = data.minutesSinceLastStage;
+        treeData.timeOfLastLogin = data.timeOfLastLogin;
+        treeData.itemAssetName = data.itemAssetName;
+        treeData.treeIndex = data.treeIndex;
+        treeData.minutesPerStage = data.minutesPerStage;
+        treeData.berryItem = data.berryItem;
+        treeData.loadedFromJson = data.loadedFromJson;
+        return treeData;
+    }
     private static TrainerPokemonData CreateTrainerPokemonData(TrainerPokemonData data)
     {
         var dataCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();

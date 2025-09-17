@@ -20,6 +20,8 @@ public class Save_manager : MonoBehaviour
     private string _saveDataPath = "Assets/Save_data";
     private string _tempSaveDataPath = "Assets/Temp_Save_data";
     private event Action<string,Exception> OnSaveDataFail;
+    public event Func<IEnumerator> OnPlayerDataSaved;
+    public event Action OnOverworldDataLoaded;
     public enum AssetDirectory
     { 
         Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
@@ -66,6 +68,7 @@ public class Save_manager : MonoBehaviour
             LoadPlayerData(); 
             LoadItemData();
             LoadPokemonData();
+            LoadOverworldData();
         }
         else
         {
@@ -76,7 +79,7 @@ public class Save_manager : MonoBehaviour
     }
     private void CreateTemporaryDirectory()
     {
-        CreateFolder(_tempSaveDataPath + "/Player");
+        CreateFolder(_tempSaveDataPath+"/Player");
         CreateFolder(_tempSaveDataPath+"/Items");
         CreateFolder(_tempSaveDataPath+"/Items/Held_Items");
         CreateFolder(_tempSaveDataPath+"/Pokemon");
@@ -113,6 +116,7 @@ public class Save_manager : MonoBehaviour
         LoadPlayerData(); 
         LoadItemData();
         LoadPokemonData();
+        LoadOverworldData();
         yield return new WaitForSeconds(1f);
         Game_Load.Instance.AllowGameLoad();
     }
@@ -132,6 +136,27 @@ public class Save_manager : MonoBehaviour
         return basePath;
     }
 
+    private void LoadOverworldData()
+    {
+        CreateFolder(_saveDataPath + "/Overworld");
+        CreateFolder(_saveDataPath + "/Overworld/Berry_Trees");
+        var overworldTrees = GetJsonFilesFromPath(_saveDataPath + "/Overworld/Berry_Trees");
+        foreach (var treeFilename in overworldTrees)
+        {
+            var jsonFilePath = _saveDataPath + "/Overworld/Berry_Trees/" + Path.GetFileName(treeFilename);
+            if (!File.Exists(jsonFilePath)) continue;
+            
+            var json = File.ReadAllText(jsonFilePath);
+            var treeData = ScriptableObject.CreateInstance<BerryTreeData>();
+            JsonUtility.FromJsonOverwrite(json, treeData);
+            treeData.loadedFromJson = true;
+            treeData.berryItem = Resources.Load<Item>(GetDirectory(AssetDirectory.Berries)
+                                                      + treeData.itemAssetName);
+            OverworldState.Instance.LoadBerryTreeData(treeData);
+        }
+
+        OnOverworldDataLoaded?.Invoke();
+    }
     private void LoadPlayerData()
     {
         CreateFolder(_saveDataPath + "/Player");
@@ -377,6 +402,8 @@ public class Save_manager : MonoBehaviour
             OnSaveDataFail?.Invoke("Error occured with SavePlayerDataAsJson, exception: ",e);
             yield break;
         }
+        //save overworld Data
+        yield return OnPlayerDataSaved?.Invoke();
         
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
@@ -468,6 +495,13 @@ public class Save_manager : MonoBehaviour
         }
         item.imageDirectory = DetermineImageDirectory(item);
         var json = JsonUtility.ToJson(item, true);
+        File.WriteAllText(directory, json);
+    }
+    public void SaveBerryTreeDataAsJson(BerryTreeData tree, string fileName)
+    {
+        var directory = Path.Combine(_saveDataPath+"/Overworld/Berry_Trees", fileName + ".json");
+        tree.itemAssetName = tree.berryItem.itemName;
+        var json = JsonUtility.ToJson(tree, true);
         File.WriteAllText(directory, json);
     }
     private Pokemon LoadPokemonFromJson(string filePath)

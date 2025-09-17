@@ -6,7 +6,7 @@
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 25440
+        "instanceID": 25216
     },
     "hasGender": true,
     "hp": 75.0,
@@ -56,10 +56,10 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 10108
+            "instanceID": 26112
         },
         {
-            "instanceID": 10172
+            "instanceID": 25260
         }
     ],
     "statusEffect": 0,
@@ -156,27 +156,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -7256
+            "instanceID": -22792
         },
         {
-            "instanceID": -7258
+            "instanceID": -22794
         },
         {
-            "instanceID": -7260
+            "instanceID": -22796
         },
         {
-            "instanceID": -7262
+            "instanceID": -22798
         }
     ],
     "ability": {
-        "instanceID": 25658
+        "instanceID": 25458
     },
     "evolutions": [
         {
-            "instanceID": 25812
+            "instanceID": 25624
         },
         {
-            "instanceID": 25732
+            "instanceID": 25540
         }
     ],
     "heldItem": {
@@ -184,10 +184,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32530
+        "instanceID": 32440
     },
     "backPicture": {
-        "instanceID": 32532
+        "instanceID": 32442
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,

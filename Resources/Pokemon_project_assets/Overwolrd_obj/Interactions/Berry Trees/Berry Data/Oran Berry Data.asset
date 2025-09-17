@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minYield: 2
   maxYield: 5
-  currentStageNeedsWater: 0
+  currentStageNeedsWater: 1
   currentStageProgress: 0
   minutesSinceLastStage: 0
   itemAssetName: 
   berryItem: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}
+  treeIndex: 0
   minutesPerStage: 180
+  loadedFromJson: 0

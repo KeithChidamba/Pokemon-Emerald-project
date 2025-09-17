@@ -13,19 +13,36 @@ public class BerryTree : MonoBehaviour
     public BerryTreeData treeData;
     public int numStagesWatered;
     public bool isPlanted;
-
+    
     private void Awake()
     {
         primaryInteractable = GetComponent<Overworld_interactable>();
         Options_manager.Instance.OnInteractionTriggered += HarvestBerries;
         Options_manager.Instance.OnInteractionTriggered += WaterTree;
         Options_manager.Instance.OnInteractionTriggered += ChooseBerryToPlant;
+        Save_manager.Instance.OnOverworldDataLoaded += LoadedDefaultAsset;
+        
         if (isPlanted) return;
         
         primaryInteractable.interaction = plantInteraction;
         primaryInteractable.interactionType = Overworld_interactable.InteractionType.PlantBerry;
     }
 
+    void LoadedDefaultAsset()
+    {
+        //loads default Asset if there's no save data, only happen when a new tree is made during dev
+        if (treeData is { loadedFromJson: false })
+        {
+            var copy = Obj_Instance.CreateTreeData(treeData);
+            treeData = null;
+            treeData = copy;
+            treeData.treeIndex = OverworldState.Instance.GetTreeIndex(this);
+        }
+    }
+    public void LoadTreeData(BerryTreeData tree)
+    {
+        treeData = tree;
+    }
     private void Update()
     {
         if (!isPlanted) return;

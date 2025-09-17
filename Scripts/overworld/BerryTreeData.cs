@@ -13,5 +13,7 @@ public class BerryTreeData : ScriptableObject
      public TimeSpan timeOfLastLogin;
      public string itemAssetName;
      public Item berryItem;
+     public int treeIndex;
      public int minutesPerStage;
+     public bool loadedFromJson;
 }
