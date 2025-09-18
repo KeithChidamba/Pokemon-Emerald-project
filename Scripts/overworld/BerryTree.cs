@@ -16,6 +16,7 @@ public class BerryTree : MonoBehaviour
     public int numStagesWatered;
     public bool isPlanted;
     public SpriteRenderer treeSpriteRenderer;
+    public event Action OnTreeAwake;
     private void Awake()
     {
         primaryInteractable = GetComponent<Overworld_interactable>();
@@ -24,6 +25,7 @@ public class BerryTree : MonoBehaviour
         Options_manager.Instance.OnInteractionTriggered += ChooseBerryToPlant;
         Save_manager.Instance.OnOverworldDataLoaded += LoadedDefaultAsset;
         treeSpriteRenderer = GetComponent<SpriteRenderer>();
+        OnTreeAwake?.Invoke();
         if (isPlanted) return;
         
         primaryInteractable.interaction = plantInteraction;
@@ -45,6 +47,7 @@ public class BerryTree : MonoBehaviour
     {
         treeData = tree;
         treeSpriteRenderer.sprite = treeData.GetTreeSprite();
+        OnTreeAwake = null;
     }
     private void Update()
     {
@@ -57,6 +60,8 @@ public class BerryTree : MonoBehaviour
             //new stage
             treeData.minutesSinceLastStage = 0;
             treeData.currentStageProgress++;
+            
+            treeSpriteRenderer.sprite = treeData.GetTreeSprite();
             
             if (treeData.currentStageProgress == 4)
             {
@@ -125,6 +130,7 @@ public class BerryTree : MonoBehaviour
         Bag.Instance.AddItem(berries);
         Dialogue_handler.Instance.DisplayDetails($"You picked up {berries.quantity}" +
                                                  $" {berries.itemName}'s",2f);
+        treeSpriteRenderer.sprite = null;
     }
 }
 

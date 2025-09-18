@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minYield: 2
   maxYield: 5
-  currentStageNeedsWater: 1
-  currentStageProgress: 0
+  currentStageNeedsWater: 0
+  currentStageProgress: 4
   minutesSinceLastStage: 0
   itemAssetName: 
   berryItem: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}
@@ -27,7 +27,9 @@ MonoBehaviour:
     growthStageNumber: 0
   - growthStageSprite: {fileID: 21300000, guid: 828fb9439a0451d9c84c605a450e6380, type: 3}
     growthStageNumber: 1
-  - growthStageSprite: {fileID: 0}
+  - growthStageSprite: {fileID: 21300000, guid: 5dcd14f76fa5f83b3a313b4a0634cde9, type: 3}
     growthStageNumber: 2
-  - growthStageSprite: {fileID: 0}
+  - growthStageSprite: {fileID: 21300000, guid: a138a0fe7ec2b962c9b0f8a1e2c84366, type: 3}
     growthStageNumber: 3
+  - growthStageSprite: {fileID: 21300000, guid: 1a1cd9dd1e23e922588092042d9aeb28, type: 3}
+    growthStageNumber: 4

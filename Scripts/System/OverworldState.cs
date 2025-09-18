@@ -26,9 +26,10 @@ public class OverworldState : MonoBehaviour
     {
         return overworldBerryTrees.IndexOf(tree);
     }
-    public void LoadBerryTreeData(BerryTreeData tree)
+    public void LoadBerryTreeData(BerryTreeData treeData)
     {
-        overworldBerryTrees[tree.treeIndex].LoadTreeData(tree);
+        var currentTree = overworldBerryTrees[treeData.treeIndex];
+        currentTree.OnTreeAwake += () => currentTree.LoadTreeData(treeData);
     }
     private IEnumerator SaveOverworldData()
     {
