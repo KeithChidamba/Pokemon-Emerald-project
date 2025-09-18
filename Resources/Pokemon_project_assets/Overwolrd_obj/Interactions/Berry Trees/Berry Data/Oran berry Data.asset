@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 612de1a428d002f8798709f5458d7511, type: 3}
-  m_Name: Oran Berry Data
+  m_Name: Oran berry Data
   m_EditorClassIdentifier: 
   minYield: 2
   maxYield: 5
@@ -23,11 +23,11 @@ MonoBehaviour:
   minutesPerStage: 180
   loadedFromJson: 0
   spriteData:
-  - growthStageSprite: {fileID: 0}
+  - growthStageSprite: {fileID: 21300000, guid: ae0d6a45a837c54d7ba9e48c00f8f92a, type: 3}
     growthStageNumber: 0
+  - growthStageSprite: {fileID: 21300000, guid: 828fb9439a0451d9c84c605a450e6380, type: 3}
+    growthStageNumber: 1
   - growthStageSprite: {fileID: 0}
-    growthStageNumber: 0
+    growthStageNumber: 2
   - growthStageSprite: {fileID: 0}
-    growthStageNumber: 0
-  - growthStageSprite: {fileID: 0}
-    growthStageNumber: 0
+    growthStageNumber: 3
