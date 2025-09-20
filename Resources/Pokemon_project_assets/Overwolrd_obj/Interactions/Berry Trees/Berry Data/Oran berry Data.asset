@@ -23,13 +23,13 @@ MonoBehaviour:
   minutesPerStage: 180
   loadedFromJson: 0
   spriteData:
-  - growthStageSprite: {fileID: 21300000, guid: ae0d6a45a837c54d7ba9e48c00f8f92a, type: 3}
+  - growthStageSprite: {fileID: 885487333, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 0
-  - growthStageSprite: {fileID: 21300000, guid: 828fb9439a0451d9c84c605a450e6380, type: 3}
+  - growthStageSprite: {fileID: -1502050077, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 1
-  - growthStageSprite: {fileID: 21300000, guid: 5dcd14f76fa5f83b3a313b4a0634cde9, type: 3}
+  - growthStageSprite: {fileID: -1843962540, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 2
-  - growthStageSprite: {fileID: 21300000, guid: a138a0fe7ec2b962c9b0f8a1e2c84366, type: 3}
+  - growthStageSprite: {fileID: -892228783, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 3
-  - growthStageSprite: {fileID: 21300000, guid: 1a1cd9dd1e23e922588092042d9aeb28, type: 3}
+  - growthStageSprite: {fileID: -841642357, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 4

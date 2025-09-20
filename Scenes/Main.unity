@@ -19203,6 +19203,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soil Bed
       objectReference: {fileID: 0}
+    - target: {fileID: 8311802281219589920, guid: bf1c441c28b34bbec93fb6b810de0dd5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
