@@ -3,6 +3,6 @@ using UnityEngine;
 [Serializable]
 public struct BerrySpriteData
 {
-    public Sprite growthStageSprite;
+    public Sprite[] growthStageSprites;
     public int growthStageNumber;
 }

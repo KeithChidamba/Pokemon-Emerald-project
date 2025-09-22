@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 4641104906229684179}
   - component: {fileID: -739900410870240834}
   - component: {fileID: 1510495507358654107}
+  - component: {fileID: -968395720497001184}
+  - component: {fileID: 7079715573799032998}
   m_Layer: 6
   m_Name: Berry Tree
   m_TagString: Untagged
@@ -159,3 +161,40 @@ MonoBehaviour:
   numStagesWatered: 0
   isPlanted: 1
   treeSpriteRenderer: {fileID: 0}
+--- !u!95 &-968395720497001184
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128412336089757397}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8e96bfc2d494351d7a4a2d0336309469, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!111 &7079715573799032998
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128412336089757397}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: 28bfb75849d770515b75667dccd8b3ec, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0

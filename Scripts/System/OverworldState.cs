@@ -35,6 +35,8 @@ public class OverworldState : MonoBehaviour
     {
         foreach (var tree in overworldBerryTrees)
         {
+            tree.treeData.lastLogin = DateTime.Now.ToString("o");
+            
             Save_manager.Instance
                 .SaveBerryTreeDataAsJson(tree.treeData,"BerryTree: "+ tree.treeData.treeIndex);
         }

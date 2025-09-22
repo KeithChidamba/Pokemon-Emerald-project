@@ -139,7 +139,7 @@ public static class Obj_Instance
         treeData.currentStageNeedsWater = data.currentStageNeedsWater;
         treeData.currentStageProgress = data.currentStageProgress;
         treeData.minutesSinceLastStage = data.minutesSinceLastStage;
-        treeData.timeOfLastLogin = data.timeOfLastLogin;
+        treeData.lastLogin = data.lastLogin;
         treeData.itemAssetName = data.itemAssetName;
         treeData.treeIndex = data.treeIndex;
         treeData.minutesPerStage = data.minutesPerStage;

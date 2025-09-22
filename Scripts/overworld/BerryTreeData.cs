@@ -11,7 +11,7 @@ public class BerryTreeData : ScriptableObject
      public bool currentStageNeedsWater;
      public int currentStageProgress;
      public float minutesSinceLastStage;
-     public TimeSpan timeOfLastLogin;
+     
      public string itemAssetName;
      public Item berryItem;
      public int treeIndex;
@@ -19,8 +19,20 @@ public class BerryTreeData : ScriptableObject
      public bool loadedFromJson;
      public List<BerrySpriteData> spriteData = new();
 
-     public Sprite GetTreeSprite()
+     public string lastLogin;
+    
+     public DateTime GetLastLogin()
      {
-          return spriteData.First(s => s.growthStageNumber == currentStageProgress).growthStageSprite;
+          return DateTime.Parse(lastLogin, null, System.Globalization.DateTimeStyles.RoundtripKind);
+     }
+
+     public void SetLastLogin(DateTime dt)
+     {
+          lastLogin = dt.ToString("o"); // "o" = ISO 8601
+     }
+     
+     public Sprite[] GetTreeSprite()
+     {
+          return spriteData.First(s => s.growthStageNumber == currentStageProgress).growthStageSprites;
      }
 }

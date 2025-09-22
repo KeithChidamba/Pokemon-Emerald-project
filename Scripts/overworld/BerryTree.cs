@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,6 +17,7 @@ public class BerryTree : MonoBehaviour
     public int numStagesWatered;
     public bool isPlanted;
     public SpriteRenderer treeSpriteRenderer;
+    private int _currentSpriteIndex;
     public event Action OnTreeAwake;
     private void Awake()
     {
@@ -46,7 +48,18 @@ public class BerryTree : MonoBehaviour
     public void LoadTreeData(BerryTreeData tree)
     {
         treeData = tree;
-        treeSpriteRenderer.sprite = treeData.GetTreeSprite();
+        treeSpriteRenderer.sprite = treeData.GetTreeSprite()[0];
+
+        var lastLoginTime = treeData.GetLastLogin();
+        
+        TimeSpan timeDifference = DateTime.Now - lastLoginTime;
+        
+        int minutesPassed = (int)timeDifference.TotalMinutes;
+        int stagesPassed = (int)math.trunc(minutesPassed / treeData.minutesPerStage);
+        var leftOverMinutes = (treeData.currentStageProgress * treeData.minutesPerStage) - stagesPassed;
+        treeData.currentStageProgress += stagesPassed;
+        treeData.minutesSinceLastStage += leftOverMinutes;
+        
         OnTreeAwake = null;
     }
     private void Update()
@@ -61,7 +74,7 @@ public class BerryTree : MonoBehaviour
             treeData.minutesSinceLastStage = 0;
             treeData.currentStageProgress++;
             
-            treeSpriteRenderer.sprite = treeData.GetTreeSprite();
+            treeSpriteRenderer.sprite = treeData.GetTreeSprite()[0];
             
             if (treeData.currentStageProgress == 4)
             {
@@ -131,6 +144,11 @@ public class BerryTree : MonoBehaviour
         Dialogue_handler.Instance.DisplayDetails($"You picked up {berries.quantity}" +
                                                  $" {berries.itemName}'s",2f);
         treeSpriteRenderer.sprite = null;
+    }
+    public void ChangeSprite()
+    {
+        _currentSpriteIndex = _currentSpriteIndex==1? 0 : _currentSpriteIndex+1;
+        treeSpriteRenderer.sprite = treeData.GetTreeSprite()[_currentSpriteIndex];
     }
 }
 
