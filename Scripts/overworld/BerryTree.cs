@@ -14,11 +14,12 @@ public class BerryTree : MonoBehaviour
     public Interaction waterInteraction;
     public Interaction idleInteraction;
     public BerryTreeData treeData;
-    public int numStagesWatered;
+
     public bool isPlanted;
     public SpriteRenderer treeSpriteRenderer;
     private int _currentSpriteIndex;
     public event Action OnTreeAwake;
+    [SerializeField]float secondsCounter;
     private void Awake()
     {
         primaryInteractable = GetComponent<Overworld_interactable>();
@@ -53,12 +54,20 @@ public class BerryTree : MonoBehaviour
         var lastLoginTime = treeData.GetLastLogin();
         
         TimeSpan timeDifference = DateTime.Now - lastLoginTime;
-        
+
         int minutesPassed = (int)timeDifference.TotalMinutes;
-        int stagesPassed = (int)math.trunc(minutesPassed / treeData.minutesPerStage);
-        var leftOverMinutes = (treeData.currentStageProgress * treeData.minutesPerStage) - stagesPassed;
+        int stagesPassed = minutesPassed / treeData.minutesPerStage;
+        int leftOverMinutes = minutesPassed % treeData.minutesPerStage;
+
+// Update growth
         treeData.currentStageProgress += stagesPassed;
-        treeData.minutesSinceLastStage += leftOverMinutes;
+        treeData.currentStageProgress = Math.Clamp(treeData.currentStageProgress, 0, 4);
+
+// Only track leftover minutes if not max stage
+        if (treeData.currentStageProgress < 4)
+            treeData.minutesSinceLastStage += leftOverMinutes;
+        else
+            treeData.minutesSinceLastStage = 0;
         
         OnTreeAwake = null;
     }
@@ -66,8 +75,15 @@ public class BerryTree : MonoBehaviour
     {
         if (!isPlanted) return;
         if (treeData.currentStageProgress > 3) return;
-
-        treeData.minutesSinceLastStage += Time.deltaTime;
+        
+        secondsCounter += Time.deltaTime; 
+        if (secondsCounter >= 60f)
+        {
+            int minutesPassed = (int)(secondsCounter / 60f);
+            treeData.minutesSinceLastStage += minutesPassed;
+            secondsCounter -= minutesPassed * 60f;
+        }
+        
         if (treeData.minutesSinceLastStage >= treeData.minutesPerStage)
         {
             //new stage
@@ -100,7 +116,7 @@ public class BerryTree : MonoBehaviour
             return;
         }
         
-        numStagesWatered++;
+        treeData.numStagesWatered++;
         treeData.currentStageNeedsWater = false;
         primaryInteractable.interaction = idleInteraction;
         primaryInteractable.interactionType = Overworld_interactable.InteractionType.None;
@@ -122,13 +138,13 @@ public class BerryTree : MonoBehaviour
         //get the berry being planted
         //set tree data by resource load, from item name
         isPlanted = true;
-        numStagesWatered = 0;
+        treeData.numStagesWatered = 0;
         primaryInteractable.interactionType = Overworld_interactable.InteractionType.PlantBerry;
     }
     private int GetBerryYield()
     {
         var bracket1= (treeData.maxYield - treeData.minYield) / 4;
-        var bracket2= bracket1 * numStagesWatered;
+        var bracket2= bracket1 * treeData.numStagesWatered;
         return treeData.minYield + bracket2 + Utility.RandomRange(0,bracket1);
     }
     private void HarvestBerries(Overworld_interactable interactable)

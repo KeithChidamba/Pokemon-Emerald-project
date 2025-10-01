@@ -11,6 +11,7 @@ public class BerryTreeData : ScriptableObject
      public bool currentStageNeedsWater;
      public int currentStageProgress;
      public float minutesSinceLastStage;
+     public int numStagesWatered;
      
      public string itemAssetName;
      public Item berryItem;
