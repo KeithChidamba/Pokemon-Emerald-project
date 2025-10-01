@@ -1,11 +1,11 @@
 {
-    "itemID": "Oran berry50119",
+    "itemID": "Oran berry26377",
     "itemName": "Oran berry",
     "itemType": 9,
     "itemEffect": "5",
     "itemDescription": "Heals 5hp",
     "price": 5,
-    "quantity": 1,
+    "quantity": 8,
     "itemImage": {
         "instanceID": 32496
     },
