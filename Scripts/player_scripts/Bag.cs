@@ -20,7 +20,8 @@ public class Bag : MonoBehaviour
     public int topIndex;//keeps track of visible bag items
     public GameObject[] itemUIActions;
     public int sellQuantity = 1;
-    public bool sellingItems;
+    public enum BagUsage{NormalView,SellingView,SelectionOnly}
+    public BagUsage currentBagUsage;
     public GameObject sellingItemUI;
     public Text sellQuantityText;
     public TextMeshProUGUI itemUsageText;
@@ -33,6 +34,7 @@ public class Bag : MonoBehaviour
     public GameObject itemUsageSelector;
     public GameObject sellingIndicator;
     public List<GameObject> itemUsageUi;
+    public Action<Item> OnItemSelected;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -44,8 +46,13 @@ public class Bag : MonoBehaviour
     }
     private void Update()
     {
-        if (sellingItems)
+        if (currentBagUsage==BagUsage.SellingView)
             sellQuantityText.text = "X" + sellQuantity;
+    }
+
+    public void SelectItemForEvent()
+    {
+        OnItemSelected?.Invoke(bagItems[selectedItemIndex]);
     }
     private void SelectItem()
     {
@@ -63,7 +70,7 @@ public class Bag : MonoBehaviour
             itemUsageText.fontSize = 24;
         }
 
-        if (sellingItems) sellQuantity = 1;
+        if (currentBagUsage==BagUsage.SellingView) sellQuantity = 1;
     }
     
     public void SellToMarket()
@@ -276,7 +283,7 @@ public class Bag : MonoBehaviour
     {
         selectedItemIndex = 0;
         sellingItemUI.SetActive(false);
-        sellingItems = false;
+        currentBagUsage = BagUsage.NormalView;
         ClearBagUI();
     }
     public void ViewBag()
@@ -284,8 +291,8 @@ public class Bag : MonoBehaviour
         numItems = 0;
         topIndex = 0;
         numItems = bagItems.Count;
-        sellingItemUI.SetActive(sellingItems);
-        DisplayItemAction(!sellingItems);
+        sellingItemUI.SetActive(currentBagUsage == BagUsage.SellingView);
+        DisplayItemAction(currentBagUsage == BagUsage.NormalView);
         if (numItems == 0)
         {
             DisplayItemAction(false);

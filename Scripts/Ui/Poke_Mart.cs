@@ -137,9 +137,14 @@ public class Poke_Mart : MonoBehaviour
                 selectedItemQuantity = 99;
         }
     }
-    private void ViewStore(Overworld_interactable clerkInteractable)
+    private void ViewStore(Overworld_interactable clerkInteractable, int optionChosen)
     {
         if (clerkInteractable.interactionType != Overworld_interactable.InteractionType.Clerk) return;
+        if (optionChosen > 0)
+        {
+            Dialogue_handler.Instance.EndDialogue(); 
+            return;
+        }
         if(currentMartData!=null){
             if (currentMartData.location == clerkInteractable.location)
             {//basically caching

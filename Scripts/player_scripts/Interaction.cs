@@ -12,4 +12,5 @@ public class Interaction : ScriptableObject
     [FormerlySerializedAs("ResultMessage")] public string resultMessage = "";
     [FormerlySerializedAs("OptionsUiText")] public List<string> optionsUiText= new();
     [FormerlySerializedAs("AdditionalInfo")] public List<string> additionalInfo = new();
+    public bool hasSeparateLogicHandler;
 }

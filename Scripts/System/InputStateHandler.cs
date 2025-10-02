@@ -265,15 +265,24 @@ public class InputStateHandler : MonoBehaviour
         {//prevent selecting null item selectables
             currentState.maxSelectionIndex = Bag.Instance.numItems-1;
         }
-        if (Bag.Instance.sellingItems)
-            currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToSell);
-        else
-            currentState.selectableUis.ForEach(s=>s.eventForUi = SelectUsageForItem);
+
+        switch (Bag.Instance.currentBagUsage)
+        {
+            case Bag.BagUsage.SellingView:
+                currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToSell);
+                break;
+            case Bag.BagUsage.NormalView:
+                currentState.selectableUis.ForEach(s=>s.eventForUi = SelectUsageOfItem);
+                break;
+            case Bag.BagUsage.SelectionOnly:
+                currentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.SelectItemForEvent);
+                break;
+        }
     }
 
     void SelectItemToSell()
     {
-        Bag.Instance.sellingItems = true;
+        Bag.Instance.currentBagUsage = Bag.BagUsage.SellingView;
         var itemSellSelectables = new List<SelectableUI>{new(Bag.Instance.sellingItemUI,Bag.Instance.SellToMarket,true)};
         ChangeInputState(new InputState(StateName.PlayerBagItemSell,
             new[]{StateGroup.Bag}, stateDirectional:Directional.Vertical, selectableUis:itemSellSelectables
@@ -286,7 +295,7 @@ public class InputStateHandler : MonoBehaviour
         OnInputUp += ()=>Bag.Instance.ChangeQuantity(1);
         OnInputDown += ()=>Bag.Instance.ChangeQuantity(-1);
     }
-    void SelectUsageForItem()
+    void SelectUsageOfItem()
     {
         var itemUsageSelectables = new List<SelectableUI>
         {

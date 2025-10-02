@@ -11,7 +11,7 @@ public class Options_manager : MonoBehaviour
     [SerializeField] private Recieve_Pokemon starterPokemonGiftEvent;
     public static Options_manager Instance;
     private readonly Dictionary<string, Action> _interactionMethods = new ();
-    public event Action<Overworld_interactable> OnInteractionTriggered;
+    public event Action<Overworld_interactable,int> OnInteractionTriggered;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -140,7 +140,7 @@ public class Options_manager : MonoBehaviour
     void SellItem()
     {
         Dialogue_handler.Instance.EndDialogue();
-        Bag.Instance.sellingItems = true;
+        Bag.Instance.currentBagUsage = Bag.BagUsage.SellingView;
         Game_ui_manager.Instance.ViewBag();
     }
     void ViewMarketDelayed()//used in interaction as well
@@ -153,10 +153,15 @@ public class Options_manager : MonoBehaviour
         Game_ui_manager.Instance.ViewPokeMart();
     }
 
-    public void CompleteInteraction(Interaction interaction,int option)
+    public void CompleteInteraction(Interaction interaction,int optionIndex)
     {
-        var methodName = interaction.interactionOptions[option].Replace(" ", "");
-        if (methodName == string.Empty) { Dialogue_handler.Instance.EndDialogue(); return; }
+        var methodName = interaction.interactionOptions[optionIndex].Replace(" ", "");
+        if (methodName == string.Empty)
+        {
+            Dialogue_handler.Instance.EndDialogue(); 
+            return;
+        }
+        
         Dialogue_handler.Instance.DeletePreviousOptions();
         _currentInteraction = interaction;
         if (_interactionMethods.TryGetValue(methodName,out var method))
@@ -164,10 +169,17 @@ public class Options_manager : MonoBehaviour
         else
             Debug.Log("couldn't find method for interaction: " + methodName);
     }
-    public void CompleteInteraction(Overworld_interactable interactable,int option)
+    public void CompleteInteraction(Overworld_interactable interactable,int optionIndex)
     {
         _currentInteractable = interactable;
-        OnInteractionTriggered?.Invoke(interactable);
-        CompleteInteraction(_currentInteractable.interaction,option);
+        OnInteractionTriggered?.Invoke(interactable,optionIndex);
+
+        if (_currentInteractable.interaction.hasSeparateLogicHandler
+            || _currentInteractable.interaction.interactionType != Dialogue_handler.DialogType.Options)
+        {
+            return;
+        }
+
+        CompleteInteraction(_currentInteractable.interaction,optionIndex);
     }
 }

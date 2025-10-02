@@ -152,12 +152,12 @@ public class Game_ui_manager : MonoBehaviour
     }
     public void ViewBag()
     {
-        if (Bag.Instance.sellingItems)
+        if (Bag.Instance.currentBagUsage == Bag.BagUsage.SellingView)
         {
             var sellableItems = Bag.Instance.bagItems.Count(item => item.canBeSold);
             if (Bag.Instance.numItems == 0 || sellableItems==0)
             {
-                Bag.Instance.sellingItems = false;
+                Bag.Instance.currentBagUsage = Bag.BagUsage.NormalView;
                 Dialogue_handler.Instance.DisplayDetails("You have no items to sell", 2f);
                 return;
             }
