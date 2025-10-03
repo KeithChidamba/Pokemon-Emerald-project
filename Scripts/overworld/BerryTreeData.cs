@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "berryTree", menuName = "berryTree")]
 public class BerryTreeData : ScriptableObject
 {
+     public bool isPlanted;
      public int minYield;
      public int maxYield;
      public bool currentStageNeedsWater;

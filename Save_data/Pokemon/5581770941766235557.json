@@ -95,10 +95,10 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -4004
+            "instanceID": -16234
         },
         {
-            "instanceID": -4006
+            "instanceID": -16236
         }
     ],
     "ability": {
@@ -117,10 +117,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 32230
+        "instanceID": 32228
     },
     "backPicture": {
-        "instanceID": 32340
+        "instanceID": 32338
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,

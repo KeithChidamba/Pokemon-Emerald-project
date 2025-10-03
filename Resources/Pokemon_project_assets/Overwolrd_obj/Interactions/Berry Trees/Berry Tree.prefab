@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 6164762090088097862}
   - component: {fileID: 8908808911302921482}
   - component: {fileID: 4641104906229684179}
-  - component: {fileID: -739900410870240834}
   - component: {fileID: 1510495507358654107}
   - component: {fileID: -968395720497001184}
   - component: {fileID: 7079715573799032998}
+  - component: {fileID: 1598687195738832500}
   m_Layer: 6
   m_Name: Berry Tree
   m_TagString: Untagged
@@ -105,41 +105,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &-739900410870240834
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 128412336089757397}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.33, y: 0.48}
-  m_Direction: 0
 --- !u!114 &1510495507358654107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,9 +123,8 @@ MonoBehaviour:
   waterInteraction: {fileID: 11400000, guid: 609ac12ecd3358181bbb22be5d26a1c8, type: 2}
   idleInteraction: {fileID: 11400000, guid: fa2b7b86c6c2769fea5830444690481a, type: 2}
   treeData: {fileID: 11400000, guid: 28301d94c39b308f3b1e16101fee2f59, type: 2}
-  numStagesWatered: 0
-  isPlanted: 1
   treeSpriteRenderer: {fileID: 0}
+  secondsCounter: 0
 --- !u!95 &-968395720497001184
 Animator:
   serializedVersion: 5
@@ -198,3 +162,48 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!61 &1598687195738832500
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128412336089757397}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.11}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.2, y: 0.2}
+  m_EdgeRadius: 0

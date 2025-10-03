@@ -35,7 +35,7 @@ public class OverworldState : MonoBehaviour
     {
         foreach (var tree in overworldBerryTrees)
         {
-            if (!tree.isPlanted) continue;
+            if (!tree.treeData.isPlanted) continue;
             
             tree.treeData.SetLastLogin(DateTime.Now);
             Save_manager.Instance

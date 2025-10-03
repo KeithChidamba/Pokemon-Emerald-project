@@ -21,7 +21,6 @@ public class InputStateHandler : MonoBehaviour
     [SerializeField] private bool _currentStateLoaded;
     private bool _handlingState;
     public List<InputState> stateLayers;
-    private bool _canCheckForClick;
     public enum Directional { None, Horizontal, Vertical, OmniDirection}
 
     public enum StateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonStorageBox
@@ -60,7 +59,6 @@ public class InputStateHandler : MonoBehaviour
         _emptyState = new InputState(StateName.Empty,new[]{StateGroup.None}, canExit: false);
         currentState = _emptyState;
         _currentStateLoaded = false;
-        _canCheckForClick = true;
     }
 
     public void AddPlaceHolderState()
@@ -147,7 +145,6 @@ public class InputStateHandler : MonoBehaviour
         if (!_readingInputs) return;
         _handlingState = stateLayers.Count > 0;
         if (!_handlingState) return;
-        var method = System.Reflection.MethodBase.GetCurrentMethod();
         
         bool viewingExitableDialogue = Dialogue_handler.Instance.canExitDialogue & Dialogue_handler.Instance.displaying; 
         
@@ -159,7 +156,6 @@ public class InputStateHandler : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z) && _currentStateLoaded)
         {
-            Debug.Log($"Update called at frame {Time.frameCount} | InstanceID: {GetInstanceID()}", this);
             InvokeSelectedEvent();
         }
         

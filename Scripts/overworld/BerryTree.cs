@@ -14,8 +14,7 @@ public class BerryTree : MonoBehaviour
     public Interaction waterInteraction;
     public Interaction idleInteraction;
     public BerryTreeData treeData;
-
-    public bool isPlanted;
+    
     public SpriteRenderer treeSpriteRenderer;
     private int _currentSpriteIndex;
     public event Action OnTreeAwake;
@@ -29,14 +28,13 @@ public class BerryTree : MonoBehaviour
         Save_manager.Instance.OnOverworldDataLoaded += LoadDefaultAsset;
         treeSpriteRenderer = GetComponent<SpriteRenderer>();
         OnTreeAwake?.Invoke();
-        if (isPlanted) return;
+        if (treeData.isPlanted) return;
         
         SetInteraction(Overworld_interactable.InteractionType.PlantBerry);
     }
 
     private void SetInteraction(Overworld_interactable.InteractionType type)
     {
-        Debug.Log("changed interaction");
         primaryInteractable.interaction = type switch
         {
             Overworld_interactable.InteractionType.PlantBerry => plantInteraction,
@@ -60,8 +58,7 @@ public class BerryTree : MonoBehaviour
     public void LoadTreeData(BerryTreeData tree)
     {
         treeData = tree;
-        treeSpriteRenderer.sprite = treeData.GetTreeSprite()[0];
-
+        treeSpriteRenderer.sprite = treeData.isPlanted? treeData.GetTreeSprite()[0] : null;
         var lastLoginTime = treeData.GetLastLogin();
         
         TimeSpan timeDifference = DateTime.Now - lastLoginTime;
@@ -97,7 +94,7 @@ public class BerryTree : MonoBehaviour
     }
     private void Update()
     {
-        if (!isPlanted) return;
+        if (!treeData.isPlanted) return;
         if (treeData.currentStageProgress > 3) return;
         
         secondsCounter += Time.deltaTime; 
@@ -113,8 +110,6 @@ public class BerryTree : MonoBehaviour
             //new stage
             treeData.minutesSinceLastStage = 0;
             treeData.currentStageProgress++;
-            
-            treeSpriteRenderer.sprite = treeData.GetTreeSprite()[0];
             
             if (treeData.currentStageProgress == 4)
             {
@@ -150,7 +145,7 @@ public class BerryTree : MonoBehaviour
             Dialogue_handler.Instance.DisplayDetails("You have already watered this plant",2f);
             return;
         }
-        
+        Dialogue_handler.Instance.DisplayDetails("The tree was watered",2f);
         treeData.numStagesWatered++;
         treeData.currentStageNeedsWater = false;
         SetInteraction(Overworld_interactable.InteractionType.None);
@@ -158,10 +153,9 @@ public class BerryTree : MonoBehaviour
 
     private void ChooseBerryToPlant(Overworld_interactable interactable,int optionChosen)
     {
-        if (isPlanted) return;
+        if (treeData.isPlanted) return;
         if (interactable != primaryInteractable) return;
         if (interactable.interactionType != Overworld_interactable.InteractionType.PlantBerry) return;
-        Debug.Log(interactable.interaction.name);
         
         if (optionChosen > 0)
         {
@@ -181,8 +175,7 @@ public class BerryTree : MonoBehaviour
             return;
         }
         Bag.Instance.OnItemSelected -= PlantBerry;
-        Dialogue_handler.Instance.DisplayDetails($"You planted a {berryToPlant.itemName}",2f);
-
+        
         treeData.numStagesWatered = 0;
         SetInteraction(Overworld_interactable.InteractionType.WaterBerryTree);
         var treeDataAsset = Resources.Load<BerryTreeData>(
@@ -190,8 +183,10 @@ public class BerryTree : MonoBehaviour
                                                           + berryToPlant.itemName+" Data");
         treeData = Obj_Instance.CreateTreeData(treeDataAsset);
         treeData.treeIndex = OverworldState.Instance.GetTreeIndex(this);
-        isPlanted = true;
-        Game_ui_manager.Instance.CloseBag();
+        treeData.isPlanted = true;
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
+        
+        Dialogue_handler.Instance.DisplayDetails($"You planted a {berryToPlant.itemName}",2f);
     }
     private int GetBerryYield()
     {
@@ -203,7 +198,7 @@ public class BerryTree : MonoBehaviour
     {
         if (interactable != primaryInteractable) return;
         if (interactable.interactionType != Overworld_interactable.InteractionType.PickBerry) return;
-        Debug.Log(interactable.interaction.name);
+
         if (optionChosen > 0)
         {
             Dialogue_handler.Instance.EndDialogue(); 
@@ -218,12 +213,12 @@ public class BerryTree : MonoBehaviour
                                                  $" {berries.itemName}'s",2f);
         
         treeSpriteRenderer.sprite = null;
-        isPlanted = false;
+        treeData.isPlanted = false;
         SetInteraction(Overworld_interactable.InteractionType.PlantBerry);
     }
     public void ChangeSprite()
     {
-        if (!isPlanted) return;
+        if (!treeData.isPlanted) return;
         
         _currentSpriteIndex = _currentSpriteIndex==1? 0 : _currentSpriteIndex+1;
         treeSpriteRenderer.sprite = treeData.GetTreeSprite()[_currentSpriteIndex];

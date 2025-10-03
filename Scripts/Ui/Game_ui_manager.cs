@@ -180,7 +180,7 @@ public class Game_ui_manager : MonoBehaviour
             Bag.Instance.bagUI, bagInputStateDirectional, bagSelectables,
                     Bag.Instance.itemSelector,true,Bag.Instance.numItems > 0,CloseBag,CloseBag));
     }
-    public void ViewProfile()
+    private void ViewProfile()
     {
         ManageScreens(1);
         _movementDelaysAfterExit.Add(0.25f);

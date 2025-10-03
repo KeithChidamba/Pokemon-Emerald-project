@@ -5,9 +5,9 @@
     "itemEffect": "5",
     "itemDescription": "Heals 5hp",
     "price": 5,
-    "quantity": 8,
+    "quantity": 12,
     "itemImage": {
-        "instanceID": 32496
+        "instanceID": 32502
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

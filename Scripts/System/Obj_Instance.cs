@@ -134,6 +134,7 @@ public static class Obj_Instance
     public static BerryTreeData CreateTreeData(BerryTreeData data)
     {
         var treeData = ScriptableObject.CreateInstance<BerryTreeData>();
+        treeData.isPlanted = data.isPlanted;
         treeData.minYield = data.minYield;
         treeData.maxYield = data.maxYield;
         treeData.currentStageNeedsWater = data.currentStageNeedsWater;
