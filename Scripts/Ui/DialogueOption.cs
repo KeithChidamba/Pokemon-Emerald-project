@@ -22,11 +22,6 @@ public class DialogueOption : MonoBehaviour
             , _rectTransform.localPosition.y+( (numOptions-1-optionIndex)*25)+offsetY, 0);
     }
 
-    public void SelectThisOption()
-    {
-        Dialogue_handler.Instance.SelectOption(optionIndex);
-    }
-
     public void SetWidth(int width)
     {
         _rectTransform.sizeDelta = new Vector2(width*0.8f, _rectTransform.rect.height);

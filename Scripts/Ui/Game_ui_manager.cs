@@ -116,7 +116,7 @@ public class Game_ui_manager : MonoBehaviour
         Dialogue_handler.Instance.DisplayList("Would you like anything else?", 
             "", new[]{ "BuyMore","LeaveStore" }, new[]{"Yes", "No"});
     }
-    private void CloseBag()
+    public void CloseBag()
     {
         ManageScreens(-1);
         Bag.Instance.CloseBag();

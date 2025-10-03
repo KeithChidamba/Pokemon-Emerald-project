@@ -11,7 +11,7 @@ public class InputStateHandler : MonoBehaviour
     private InputState _emptyState;
     private int[] directionSelection = { 0, 0, 0, 0 };
     public static InputStateHandler Instance;
-    private event Action OnInputUp; 
+    private event Action OnInputUp;
     private event Action OnInputDown; 
     private event Action OnInputRight; 
     private event Action OnInputLeft;
@@ -21,7 +21,7 @@ public class InputStateHandler : MonoBehaviour
     [SerializeField] private bool _currentStateLoaded;
     private bool _handlingState;
     public List<InputState> stateLayers;
-    
+    private bool _canCheckForClick;
     public enum Directional { None, Horizontal, Vertical, OmniDirection}
 
     public enum StateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonStorageBox
@@ -60,6 +60,7 @@ public class InputStateHandler : MonoBehaviour
         _emptyState = new InputState(StateName.Empty,new[]{StateGroup.None}, canExit: false);
         currentState = _emptyState;
         _currentStateLoaded = false;
+        _canCheckForClick = true;
     }
 
     public void AddPlaceHolderState()
@@ -146,16 +147,22 @@ public class InputStateHandler : MonoBehaviour
         if (!_readingInputs) return;
         _handlingState = stateLayers.Count > 0;
         if (!_handlingState) return;
+        var method = System.Reflection.MethodBase.GetCurrentMethod();
+        
         bool viewingExitableDialogue = Dialogue_handler.Instance.canExitDialogue & Dialogue_handler.Instance.displaying; 
+        
         if (Input.GetKeyDown(KeyCode.X) && stateLayers.Last().stateName!=StateName.DialogueOptions
                                         && !viewingExitableDialogue && currentState.canExit)
             RemoveTopInputLayer(true);
         
         if (currentState.stateName == StateName.Empty) return;
-        
-        if (Input.GetKeyDown(KeyCode.Z) && _currentStateLoaded)
-            InvokeSelectedEvent();
 
+        if (Input.GetKeyDown(KeyCode.Z) && _currentStateLoaded)
+        {
+            Debug.Log($"Update called at frame {Time.frameCount} | InstanceID: {GetInstanceID()}", this);
+            InvokeSelectedEvent();
+        }
+        
         if (currentState.stateDirectional == Directional.None) return;
         
         if (Input.GetKeyDown(KeyCode.LeftArrow))

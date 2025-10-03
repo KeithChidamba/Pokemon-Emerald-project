@@ -126,7 +126,7 @@ public class Dialogue_handler : MonoBehaviour
             ,new[]{InputStateHandler.StateGroup.None},false,null,
             InputStateHandler.Directional.Vertical,optionSelectables,optionSelector,true,true));
     }
-    public void SelectOption(int optionIndex)
+    private void SelectOption(int optionIndex)
     {
         if (isOverworldOptionsInteraction)
         {

@@ -36,4 +36,5 @@ public class BerryTreeData : ScriptableObject
      {
           return spriteData.First(s => s.growthStageNumber == currentStageProgress).growthStageSprites;
      }
+     
 }

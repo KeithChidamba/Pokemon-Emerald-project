@@ -36,7 +36,8 @@ public class Interaction_handler : MonoBehaviour
                     RaycastForInteraction();
         }
 
-        if ((Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.C)) && !_canCheckForInteraction)
+        if ((Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.C)) 
+            && !_canCheckForInteraction)
         {
             _canCheckForInteraction = true;
         }

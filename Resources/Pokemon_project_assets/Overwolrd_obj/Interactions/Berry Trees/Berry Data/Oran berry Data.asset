@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minYield: 2
   maxYield: 5
-  currentStageNeedsWater: 0
-  currentStageProgress: 4
+  currentStageNeedsWater: 1
+  currentStageProgress: 0
   minutesSinceLastStage: 0
+  numStagesWatered: 0
   itemAssetName: 
   berryItem: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}
   treeIndex: 0
@@ -43,3 +44,4 @@ MonoBehaviour:
     - {fileID: 1229062710, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     - {fileID: 760329705, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 4
+  lastLogin: 

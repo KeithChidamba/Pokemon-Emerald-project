@@ -34,7 +34,7 @@ public class Bag : MonoBehaviour
     public GameObject itemUsageSelector;
     public GameObject sellingIndicator;
     public List<GameObject> itemUsageUi;
-    public Action<Item> OnItemSelected;
+    public event Action<Item> OnItemSelected;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -52,7 +52,7 @@ public class Bag : MonoBehaviour
 
     public void SelectItemForEvent()
     {
-        OnItemSelected?.Invoke(bagItems[selectedItemIndex]);
+        OnItemSelected?.Invoke(bagItems[topIndex + selectedItemIndex]);
     }
     private void SelectItem()
     {
@@ -285,6 +285,7 @@ public class Bag : MonoBehaviour
         sellingItemUI.SetActive(false);
         currentBagUsage = BagUsage.NormalView;
         ClearBagUI();
+        OnItemSelected = null;
     }
     public void ViewBag()
     {

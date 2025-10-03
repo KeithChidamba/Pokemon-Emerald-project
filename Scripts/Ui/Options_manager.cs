@@ -173,7 +173,7 @@ public class Options_manager : MonoBehaviour
     {
         _currentInteractable = interactable;
         OnInteractionTriggered?.Invoke(interactable,optionIndex);
-
+        
         if (_currentInteractable.interaction.hasSeparateLogicHandler
             || _currentInteractable.interaction.interactionType != Dialogue_handler.DialogType.Options)
         {
