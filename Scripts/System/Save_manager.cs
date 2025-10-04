@@ -188,9 +188,9 @@ public class Save_manager : MonoBehaviour
         CreateFolder(_saveDataPath+"/Items");
         CreateFolder(_saveDataPath+"/Items/Held_Items");
         var itemList = GetJsonFilesFromPath(_saveDataPath+"/Items");
-        Bag.Instance.bagItems.Clear();
+        Bag.Instance.allItems.Clear();
         foreach(var item in itemList)
-            Bag.Instance.bagItems.Add(LoadItemFromJson(_saveDataPath+"/Items/" + Path.GetFileName(item)));
+            Bag.Instance.allItems.Add(LoadItemFromJson(_saveDataPath+"/Items/" + Path.GetFileName(item)));
     }
     private List<string> GetJsonFilesFromPath(string path)
     {
@@ -381,7 +381,7 @@ public class Save_manager : MonoBehaviour
             yield break;
         }
         
-        foreach (var item in Bag.Instance.bagItems)
+        foreach (var item in Bag.Instance.allItems)
         {
             try
             {

@@ -262,10 +262,18 @@ public class InputStateHandler : MonoBehaviour
     private void PlayerBagNavigation()
     {
         if (Bag.Instance.numItems == 0) return;
+        
+        OnInputLeft += Bag.Instance.ChangeCategoryLeft;
+        OnInputRight += Bag.Instance.ChangeCategoryRight;
+        
         OnInputUp += Bag.Instance.NavigateUp;
         OnInputDown += Bag.Instance.NavigateDown;
+        
         if(Bag.Instance.numItems==Bag.Instance.numItemsForView)
-        {//prevent selecting null item selectables
+        {
+            //prevent selecting null item selectables
+            currentState.maxSelectionIndex = Bag.Instance.numItems-1;
+            Bag.Instance.OnBagOpened += ()=>
             currentState.maxSelectionIndex = Bag.Instance.numItems-1;
         }
 

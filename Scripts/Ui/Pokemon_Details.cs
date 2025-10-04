@@ -80,15 +80,20 @@ public class Pokemon_Details : MonoBehaviour
     public void NextPage()
     {
         if (_currentPage < 3)
+        {
             _currentPage++;
-        LoadPage(_currentPage);
+            LoadPage(_currentPage);
+        }
+
     }
     public void PreviousPage()
     {
-         if (_currentPage > 1)
-             _currentPage--;
-         LoadPage(_currentPage);
-     }
+        if (_currentPage > 1)
+        {
+            _currentPage--;
+            LoadPage(_currentPage);
+        }
+    }
     
     public void SelectMove(int moveIndex)
     {
