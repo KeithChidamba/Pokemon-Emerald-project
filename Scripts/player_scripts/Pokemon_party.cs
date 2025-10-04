@@ -15,7 +15,6 @@ public class Pokemon_party : MonoBehaviour
     private bool _swappingIn;
     public bool swapOutNext;
     public bool moving;
-    public bool givingItem;
     public Pokemon_party_member[] memberCards;
     public GameObject partyUI;
     public GameObject memberSelector;
@@ -140,8 +139,6 @@ public class Pokemon_party : MonoBehaviour
         {//use item on pokemon
             Item_handler.Instance.UseItem(_itemToUse,selectedMember.pokemon);
         }
-        else if (givingItem)
-            GiveItemToMember(memberPosition);
         else
         {//move around members in party
             if (selectedMember.isEmpty)
@@ -172,28 +169,8 @@ public class Pokemon_party : MonoBehaviour
 
         Item_handler.Instance.usingItem = false;//in case player closes before using item
         
-        givingItem = false;
     }
-    private void GiveItemToMember(int memberPosition)
-    {
-        var selectedMember = memberCards[memberPosition - 1];
-        if (selectedMember.pokemon.hasItem)
-        {
-            Dialogue_handler.Instance.DisplayDetails(selectedMember.pokemon.pokemonName
-                                                 +" is already holding something",1f);
-            givingItem = false;
-            _itemToUse = null;
-            return;
-        }
-        Dialogue_handler.Instance.DisplayDetails(selectedMember.pokemon.pokemonName
-                                             +" received a "+_itemToUse.itemName,1.3f);
-        selectedMember.pokemon.GiveItem(Obj_Instance.CreateItem(_itemToUse));
-        _itemToUse.quantity--;
-        Bag.Instance.CheckItemQuantity(_itemToUse);
-        givingItem = false;
-        _itemToUse = null;
-        RefreshMemberCards();
-    }
+    
     private void MoveMember(int partyPosition)
     {
         partyPosition--;

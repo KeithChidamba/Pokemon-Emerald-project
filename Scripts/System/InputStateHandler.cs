@@ -283,7 +283,7 @@ public class InputStateHandler : MonoBehaviour
                 currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToSell);
                 break;
             case Bag.BagUsage.NormalView:
-                currentState.selectableUis.ForEach(s=>s.eventForUi = SelectUsageOfItem);
+                currentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.UseItem);
                 break;
             case Bag.BagUsage.SelectionOnly:
                 currentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.SelectItemForEvent);
@@ -301,36 +301,17 @@ public class InputStateHandler : MonoBehaviour
             display:true,onExit:()=>Bag.Instance.sellQuantity=1));
     }
 
-    void ItemToSellInputs()
+    private void ItemToSellInputs()
     {
         OnInputUp += ()=>Bag.Instance.ChangeQuantity(1);
         OnInputDown += ()=>Bag.Instance.ChangeQuantity(-1);
-    }
-    void SelectUsageOfItem()
-    {
-        var itemUsageSelectables = new List<SelectableUI>
-        {
-            new(Bag.Instance.itemUsageUi[0],Bag.Instance.UseItem,Bag.Instance.itemUsable)
-            ,new(Bag.Instance.itemUsageUi[1],Bag.Instance.GiveItem,Bag.Instance.itemGiveable)
-            ,new(Bag.Instance.itemUsageUi[2],Bag.Instance.RemoveItem,Bag.Instance.itemDroppable)
-        };
-        itemUsageSelectables.RemoveAll(s=>!s.canBeSelected);
-        if (itemUsageSelectables.Count == 0)
-        {
-            Dialogue_handler.Instance.DisplayDetails("Cant use this item right now",1f);
-            return;
-        }
-        ChangeInputState(new InputState(StateName.PlayerBagItemUsage,new[]{StateGroup.Bag},
-            stateDirectional:Directional.Horizontal, selectableUis:itemUsageSelectables
-            ,selector:Bag.Instance.itemUsageSelector,selecting:true,display:true));
-        
-        currentState.selector.SetActive(true);
     }
     public void UpdateHealthBarColors()
     {
         for (var i = 0;i<Pokemon_party.Instance.numMembers;i++)
         {
-            PokemonOperations.UpdateHealthPhase(Pokemon_party.Instance.party[i], Pokemon_party.Instance.memberCards[i].hpSliderImage);
+            PokemonOperations.UpdateHealthPhase(Pokemon_party.Instance.party[i], 
+                    Pokemon_party.Instance.memberCards[i].hpSliderImage);
         }
     }
     public void PokemonPartyOptions()
@@ -344,6 +325,9 @@ public class InputStateHandler : MonoBehaviour
                 , () => Pokemon_party.Instance.SelectMemberToBeSwapped(Pokemon_party.Instance.selectedMemberNumber)
                 , true),
             new(Pokemon_party.Instance.partyOptions[2]
+            , Bag.Instance.OpenBagToGiveItem
+            ,!Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber - 1].hasItem),
+            new(Pokemon_party.Instance.partyOptions[3]
                 , () => Bag.Instance.TakeItem(Pokemon_party.Instance.selectedMemberNumber)
                 ,Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber - 1].hasItem)
         };

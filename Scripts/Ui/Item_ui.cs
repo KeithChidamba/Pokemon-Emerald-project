@@ -18,7 +18,6 @@ public class Item_ui : MonoBehaviour
     }
     public void LoadItemDescription()
     {
-        Bag.Instance.AssignItemOptions(item);
         itemDescription.text = item.itemDescription;
         itemImg.sprite = item.itemImage;
     }

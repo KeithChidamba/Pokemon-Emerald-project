@@ -26,22 +26,15 @@ public class Bag : MonoBehaviour
     public int numItemsForView;
     public int selectedItemIndex;
     public int topIndex;//keeps track of visible bag items
-    public GameObject[] itemUIActions;
     public int sellQuantity = 1;
     public enum BagUsage{NormalView,SellingView,SelectionOnly}
     public BagUsage currentBagUsage;
     public GameObject sellingItemUI;
     public Text sellQuantityText;
-    public TextMeshProUGUI itemUsageText;
     public static Bag Instance;
     public GameObject bagUI;
-    public bool itemDroppable;
-    public bool itemUsable;
-    public bool itemGiveable;
     public GameObject itemSelector;
-    public GameObject itemUsageSelector;
     public GameObject sellingIndicator;
-    public List<GameObject> itemUsageUi;
     public event Action<Item> OnItemSelected;
     public event Action OnBagOpened;
     private void Awake()
@@ -73,19 +66,6 @@ public class Bag : MonoBehaviour
     private void SelectItem()
     {
         bagItemsUI[selectedItemIndex].LoadItemDescription();
-        var selectedItem = bagItemsUI[selectedItemIndex].item;
-        if (selectedItem.itemType == Item_handler.ItemType.Special)
-        {
-            var equipDisplayText = overworld_actions.Instance.IsEquipped(item:selectedItem)? "Unequip":"Equip";
-            itemUsageText.text = equipDisplayText;
-            itemUsageText.fontSize = 18;
-        }
-        else
-        {
-            itemUsageText.text = "Use";
-            itemUsageText.fontSize = 24;
-        }
-
         if (currentBagUsage==BagUsage.SellingView) sellQuantity = 1;
     }
     
@@ -191,34 +171,8 @@ public class Bag : MonoBehaviour
     {
         return allItems.FirstOrDefault(item => item.itemName == itemName & item.quantity < 99);
     }
-
-    public void AssignItemOptions(Item item)
-    {
-        itemDroppable = !Options_manager.Instance.playerInBattle && item.itemType!=Item_handler.ItemType.Special;
-        if (Options_manager.Instance.playerInBattle)
-        {
-            itemUsable = item.canBeUsedInBattle;
-            itemGiveable = false;
-        }
-        else
-        {
-            itemUsable = item.canBeUsedInOverworld;
-            if (item.isHeldItem)
-                itemUsable = false;
-            itemGiveable = item.canBeHeld;
-        }
-        ChangeImageVisibility(itemUsageUi[0],itemUsable);
-        ChangeImageVisibility(itemUsageUi[1],itemGiveable);
-        ChangeImageVisibility(itemUsageUi[2],itemDroppable);
-    }
-
-    void ChangeImageVisibility(GameObject imageObj, bool makeVisible)
-    {
-        var newTransparency = makeVisible ? 100 : 0;
-        var color =  new Color(255,255,255,newTransparency);
-        imageObj.GetComponent<Image>().color = color;
-    }
-    public void RemoveItem()
+    
+    private void RemoveItem()
     {
         RemoveItem(allItems[topIndex + selectedItemIndex]);
     }
@@ -248,12 +202,37 @@ public class Bag : MonoBehaviour
         Pokemon_party.Instance.ClearSelectionUI();
         Pokemon_party.Instance.RefreshMemberCards();
     }
-    public void GiveItem()
+    public void OpenBagToGiveItem()
     {
-        Pokemon_party.Instance.givingItem = true;
-        Pokemon_party.Instance.ReceiveItem(currentCategoryOfItems[topIndex + selectedItemIndex]);
-        Game_ui_manager.Instance.ViewPokemonParty();
-    } 
+        if (Options_manager.Instance.playerInBattle)
+        {
+            Dialogue_handler.Instance.DisplayDetails("Can't do that in battle",1f);
+            return;
+        }
+        currentBagUsage = BagUsage.SelectionOnly;
+        OnItemSelected += GiveItem;
+        Game_ui_manager.Instance.ViewBag();
+    }
+
+    private void GiveItem(Item itemToBeGiven)
+    {
+        if (!itemToBeGiven.canBeHeld)
+        {
+            Dialogue_handler.Instance.DisplayDetails("Pokemon can't hold that item",1f);
+            return;
+        }
+        var partyMember = Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber-1];
+        InputStateHandler.Instance.ResetRelevantUi(new[] { InputStateHandler.StateName.PokemonPartyOptions });
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
+        
+        Dialogue_handler.Instance.DisplayDetails(partyMember.pokemonName
+                                                 +" received a "+itemToBeGiven.itemName,1.3f);
+        
+        partyMember.GiveItem(Obj_Instance.CreateItem(itemToBeGiven));
+        itemToBeGiven.quantity--;
+        CheckItemQuantity(itemToBeGiven);
+        Pokemon_party.Instance.RefreshMemberCards();
+    }
     public void UseItem()
      {
          var itemToUse = currentCategoryOfItems[topIndex + selectedItemIndex];
@@ -308,7 +287,6 @@ public class Bag : MonoBehaviour
         foreach (var itemUI in bagItemsUI)
             itemUI.gameObject.SetActive(false);
         bagItemsUI[0].ResetUI();
-        DisplayItemAction(false);
     }
     public void CloseBag()
     {
@@ -346,10 +324,9 @@ public class Bag : MonoBehaviour
         numItems = currentCategoryOfItems.Count;
         
         sellingItemUI.SetActive(currentBagUsage == BagUsage.SellingView);
-        DisplayItemAction(currentBagUsage == BagUsage.NormalView);
+        
         if (numItems == 0)
         {
-            DisplayItemAction(false);
             return;
         }
         numItemsForView = (numItems < 11) ? numItems : 10; 
@@ -363,11 +340,7 @@ public class Bag : MonoBehaviour
         SelectItem();
         OnBagOpened?.Invoke();
     }
-    void DisplayItemAction(bool display)
-    {
-        foreach (var obj in itemUIActions)
-            obj.SetActive(display);
-    }
+
     void ReloadItemUI()
     {
         bagItemsUI[0].ResetUI();
