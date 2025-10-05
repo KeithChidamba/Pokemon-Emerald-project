@@ -5,9 +5,9 @@
     "itemEffect": "5",
     "itemDescription": "Heals 5hp",
     "price": 5,
-    "quantity": 12,
+    "quantity": 20,
     "itemImage": {
-        "instanceID": 32472
+        "instanceID": 32370
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 25836
+        "instanceID": 25838
     },
     "additionalInfoModules": [
         {
-            "instanceID": 25836
+            "instanceID": 25838
         }
     ],
     "infoModuleAssetNames": [

@@ -76,7 +76,10 @@ public class BerryTree : MonoBehaviour
         if (treeData.currentStageProgress < 4)
             treeData.minutesSinceLastStage += leftOverMinutes;
         else
+        {
             treeData.minutesSinceLastStage = 0;
+            treeData.currentStageNeedsWater = false;
+        }
         
         if (treeData.currentStageNeedsWater)
         {
@@ -214,6 +217,7 @@ public class BerryTree : MonoBehaviour
         
         treeSpriteRenderer.sprite = null;
         treeData.isPlanted = false;
+        treeData.currentStageProgress = 0;
         SetInteraction(Overworld_interactable.InteractionType.PlantBerry);
     }
     public void ChangeSprite()

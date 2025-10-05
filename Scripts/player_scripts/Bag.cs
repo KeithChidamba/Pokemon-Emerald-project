@@ -32,6 +32,7 @@ public class Bag : MonoBehaviour
     public BagUsage currentBagUsage;
     public GameObject sellingItemUI;
     public Text sellQuantityText;
+    public Text sellingAmountText;
     public Text currentItemDescription;
     public Image currentItemImage;
     public Sprite[] bagCategoryImages;
@@ -42,12 +43,12 @@ public class Bag : MonoBehaviour
     public static Bag Instance;
     public GameObject bagUI;
     public GameObject itemSelector;
-    public GameObject sellingIndicator;
     public LoopingUiAnimation[] redArrows;
     private LoopingUiAnimation _rightArrow;
     private LoopingUiAnimation _upArrow;
     private LoopingUiAnimation _downArrow;
     private LoopingUiAnimation _leftArrow;
+    private int _totalSellingAmount;
     public event Action<Item> OnItemSelected;
     public event Action OnBagOpened;
     private void Awake()
@@ -72,8 +73,12 @@ public class Bag : MonoBehaviour
 
     private void Update()
     {
-        if (currentBagUsage==BagUsage.SellingView)
+        if (currentBagUsage == BagUsage.SellingView)
+        {
+            _totalSellingAmount = sellQuantity * currentCategoryOfItems[topIndex + selectedItemIndex].price;
             sellQuantityText.text = "X" + sellQuantity;
+            sellingAmountText.text = _totalSellingAmount.ToString();
+        }
     }
 
     public void SelectItemForEvent()

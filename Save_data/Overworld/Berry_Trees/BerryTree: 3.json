@@ -2,13 +2,13 @@
     "isPlanted": true,
     "minYield": 2,
     "maxYield": 5,
-    "currentStageNeedsWater": true,
+    "currentStageNeedsWater": false,
     "currentStageProgress": 4,
     "minutesSinceLastStage": 0.0,
     "numStagesWatered": 0,
     "itemAssetName": "Oran berry",
     "berryItem": {
-        "instanceID": 25860
+        "instanceID": 25862
     },
     "treeIndex": 3,
     "minutesPerStage": 180,
@@ -17,10 +17,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32454
+                    "instanceID": 32352
                 },
                 {
-                    "instanceID": 32454
+                    "instanceID": 32352
                 }
             ],
             "growthStageNumber": 0
@@ -28,10 +28,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32456
+                    "instanceID": 32354
                 },
                 {
-                    "instanceID": 32458
+                    "instanceID": 32356
                 }
             ],
             "growthStageNumber": 1
@@ -39,10 +39,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32460
+                    "instanceID": 32358
                 },
                 {
-                    "instanceID": 32462
+                    "instanceID": 32360
                 }
             ],
             "growthStageNumber": 2
@@ -50,10 +50,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32464
+                    "instanceID": 32362
                 },
                 {
-                    "instanceID": 32466
+                    "instanceID": 32364
                 }
             ],
             "growthStageNumber": 3
@@ -61,14 +61,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32468
+                    "instanceID": 32366
                 },
                 {
-                    "instanceID": 32470
+                    "instanceID": 32368
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-10-05T13:13:18.1027180+02:00"
+    "lastLogin": "2025-10-05T16:33:07.7489880+02:00"
 }

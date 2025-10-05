@@ -275,7 +275,9 @@ public class InputStateHandler : MonoBehaviour
             currentState.maxSelectionIndex = Bag.Instance.numItems-1;
             Bag.Instance.OnBagOpened += ()=>
                 currentState.maxSelectionIndex = Bag.Instance.numItems-1;
-            Bag.Instance.OnBagOpened += UpdateSelectorUi;
+            
+            if(Bag.Instance.currentBagUsage!=Bag.BagUsage.SellingView)
+                Bag.Instance.OnBagOpened += UpdateSelectorUi;
         }
 
         switch (Bag.Instance.currentBagUsage)
@@ -294,12 +296,10 @@ public class InputStateHandler : MonoBehaviour
 
     void SelectItemToSell()
     {
-        Bag.Instance.currentBagUsage = Bag.BagUsage.SellingView;
         var itemSellSelectables = new List<SelectableUI>{new(Bag.Instance.sellingItemUI,Bag.Instance.SellToMarket,true)};
         ChangeInputState(new InputState(StateName.PlayerBagItemSell,
             new[]{StateGroup.Bag}, stateDirectional:Directional.Vertical, selectableUis:itemSellSelectables
-            ,selector:Bag.Instance.sellingIndicator,selecting:false,
-            display:true,onExit:()=>Bag.Instance.sellQuantity=1));
+            ,selecting:false,onExit:()=>Bag.Instance.sellQuantity=1));
     }
 
     private void ItemToSellInputs()
