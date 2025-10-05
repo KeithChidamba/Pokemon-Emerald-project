@@ -132,16 +132,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -16208
+            "instanceID": -51080
         },
         {
-            "instanceID": -16210
+            "instanceID": -51082
         },
         {
-            "instanceID": -16212
+            "instanceID": -51084
         },
         {
-            "instanceID": -16214
+            "instanceID": -51086
         }
     ],
     "ability": {
@@ -166,10 +166,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 33258
+        "instanceID": 33228
     },
     "backPicture": {
-        "instanceID": 33386
+        "instanceID": 33356
     },
     "pokeballName": "Great Ball",
     "healthPhase": 1,

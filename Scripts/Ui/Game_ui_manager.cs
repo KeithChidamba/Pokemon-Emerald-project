@@ -172,8 +172,11 @@ public class Game_ui_manager : MonoBehaviour
             ? InputStateHandler.Directional.None
             : InputStateHandler.Directional.Vertical;
         var bagSelectables = new List<SelectableUI>();
-        
-        foreach(var item in Bag.Instance.bagItemsUI) bagSelectables.Add( new(item.gameObject,null,true) );
+
+        foreach (var item in Bag.Instance.bagItemsUI)
+        {
+            bagSelectables.Add( new(item.gameObject,null,true) );
+        }
         
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerBagNavigation,
             new[] { InputStateHandler.StateGroup.Bag},true,

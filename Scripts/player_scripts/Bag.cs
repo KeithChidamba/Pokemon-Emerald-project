@@ -21,20 +21,33 @@ public class Bag : MonoBehaviour
     public int currentCategoryIndex;
     private BagCategory[] _categories;
     public Item_ui[] bagItemsUI;
-    public int maxCapacity = 50;
     public int numItems;
     public int numItemsForView;
     public int selectedItemIndex;
     public int topIndex;//keeps track of visible bag items
     public int sellQuantity = 1;
+    public int maxNumItemsForView = 9;
+    public int maxItemCapacity = 99;
     public enum BagUsage{NormalView,SellingView,SelectionOnly}
     public BagUsage currentBagUsage;
     public GameObject sellingItemUI;
     public Text sellQuantityText;
+    public Text currentItemDescription;
+    public Image currentItemImage;
+    public Sprite[] bagCategoryImages;
+    public Image currentBagImage;
+    public Sprite[] bagCategoryTitles;
+    public Image currentCategoryTitle;
+    public GameObject[] bagCategoryIndicators;
     public static Bag Instance;
     public GameObject bagUI;
     public GameObject itemSelector;
     public GameObject sellingIndicator;
+    public LoopingUiAnimation[] redArrows;
+    private LoopingUiAnimation _rightArrow;
+    private LoopingUiAnimation _upArrow;
+    private LoopingUiAnimation _downArrow;
+    private LoopingUiAnimation _leftArrow;
     public event Action<Item> OnItemSelected;
     public event Action OnBagOpened;
     private void Awake()
@@ -51,6 +64,10 @@ public class Bag : MonoBehaviour
     private void Start()
     {
         _categories = (BagCategory[])Enum.GetValues(typeof(BagCategory));
+        _rightArrow=redArrows[0];
+        _leftArrow=redArrows[1];
+        _upArrow=redArrows[2];
+        _downArrow=redArrows[3];
     }
 
     private void Update()
@@ -116,19 +133,24 @@ public class Bag : MonoBehaviour
     }
     public void NavigateDown()
     {
-        if (topIndex < numItems - 10 && selectedItemIndex == 9)
+        if (topIndex < numItems - maxNumItemsForView && selectedItemIndex == maxNumItemsForView-1)
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < maxNumItemsForView-1; i++)
                 bagItemsUI[i].item = bagItemsUI[i + 1].item;
-            bagItemsUI[9].item = currentCategoryOfItems[topIndex + 10];
+            bagItemsUI[maxNumItemsForView-1].item = currentCategoryOfItems[topIndex + maxNumItemsForView];
             ReloadItemUI();
-            selectedItemIndex = 8;
+            selectedItemIndex = maxNumItemsForView-2;
             topIndex++;
         }
-        if (numItems == numItemsForView && selectedItemIndex == numItems-1)
+        _upArrow.gameObject.SetActive(true);
+        _downArrow.gameObject.SetActive(selectedItemIndex != numItems - 2);
+        
+        if (numItems == numItemsForView && selectedItemIndex == numItems - 1)
+        {
             return;
+        }
         selectedItemIndex++;
-        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 9);
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, maxNumItemsForView-1);
         SelectItem();
 
     }
@@ -136,7 +158,7 @@ public class Bag : MonoBehaviour
     {
         if (topIndex > 0 && selectedItemIndex == 0)
         {
-            for (int i = 9; i > 0; i--)
+            for (int i = maxNumItemsForView-1; i > 0; i--)
                 bagItemsUI[i].item = bagItemsUI[i-1].item;
             bagItemsUI[0].item = currentCategoryOfItems[topIndex - 1];
             ReloadItemUI();
@@ -144,7 +166,9 @@ public class Bag : MonoBehaviour
             topIndex--;
         }
         selectedItemIndex--;
-        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 9);
+        _downArrow.gameObject.SetActive(true);
+        _upArrow.gameObject.SetActive(selectedItemIndex>0);
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, maxNumItemsForView-1);
         
         SelectItem();
     }
@@ -153,19 +177,31 @@ public class Bag : MonoBehaviour
     {
         if (currentCategoryIndex > 0)
         {
+            bagCategoryIndicators[currentCategoryIndex].SetActive(false);
             currentCategoryIndex--;
+            bagCategoryIndicators[currentCategoryIndex].SetActive(true);
+            currentCategoryTitle.sprite = bagCategoryTitles[currentCategoryIndex];
+            currentBagImage.sprite = bagCategoryImages[currentCategoryIndex];
             ClearBagUI();
             ViewBag();
         }
+        _rightArrow.gameObject.SetActive(true);
+        _leftArrow.gameObject.SetActive(currentCategoryIndex>0);
     }
     public void ChangeCategoryRight()
     {
         if (currentCategoryIndex < _categories.Length-1)
         {
+            bagCategoryIndicators[currentCategoryIndex].SetActive(false);
             currentCategoryIndex++;
+            bagCategoryIndicators[currentCategoryIndex].SetActive(true);
+            currentCategoryTitle.sprite = bagCategoryTitles[currentCategoryIndex];
+            currentBagImage.sprite = bagCategoryImages[currentCategoryIndex];
             ClearBagUI();
             ViewBag();
-        }
+        }        
+        _leftArrow.gameObject.SetActive(true);
+        _rightArrow.gameObject.SetActive(currentCategoryIndex!=_categories.Length-1);
     }
     public Item SearchForItem(string itemName)
     {
@@ -187,11 +223,6 @@ public class Bag : MonoBehaviour
         if (Options_manager.Instance.playerInBattle)
         {
             Dialogue_handler.Instance.DisplayDetails("Can't do that in battle",1f);
-            return;
-        }
-        if (numItems >= maxCapacity)
-        {
-            Dialogue_handler.Instance.DisplayDetails("Bag is full");
             return;
         }
         var partyMember = Pokemon_party.Instance.party[memberIndex - 1];
@@ -247,28 +278,20 @@ public class Bag : MonoBehaviour
      }
     public void AddItem(Item item)
     {
-        if (numItems < maxCapacity)
+        if (allItems.Any(i=> i.itemName == item.itemName))
         {
-            if (allItems.Any(i=> i.itemName == item.itemName))
+            var itemFound = SearchForItem(item.itemName);
+            if (itemFound != null)
             {
-                var itemFound = SearchForItem(item.itemName);
-                if (itemFound != null)
-                {
-                    if ( item.quantity < (99 - itemFound.quantity))
-                        itemFound.quantity += item.quantity;
-                    else
-                    {
-                        var quantityGap = (99 - itemFound.quantity);
-                        itemFound.quantity += quantityGap;
-                        var overflow = Obj_Instance.CreateItem(item);
-                        overflow.quantity = item.quantity - quantityGap;
-                        allItems.Add(overflow);
-                        numItems++;
-                    }
-                }
+                if ( item.quantity < (maxItemCapacity - itemFound.quantity))
+                    itemFound.quantity += item.quantity;
                 else
                 {
-                    allItems.Add(Obj_Instance.CreateItem(item));
+                    var quantityGap = (maxItemCapacity - itemFound.quantity);
+                    itemFound.quantity += quantityGap;
+                    var overflow = Obj_Instance.CreateItem(item);
+                    overflow.quantity = item.quantity - quantityGap;
+                    allItems.Add(overflow);
                     numItems++;
                 }
             }
@@ -279,7 +302,10 @@ public class Bag : MonoBehaviour
             }
         }
         else
-            Dialogue_handler.Instance.DisplayDetails("Bag is full");
+        {
+            allItems.Add(Obj_Instance.CreateItem(item));
+            numItems++;
+        }
     }
 
     void ClearBagUI()
@@ -294,6 +320,11 @@ public class Bag : MonoBehaviour
         sellingItemUI.SetActive(false);
         currentBagUsage = BagUsage.NormalView;
         ClearBagUI();
+        foreach (var loopingUiAnimation in redArrows)
+        {
+            loopingUiAnimation.viewingUI = false;
+            loopingUiAnimation.gameObject.SetActive(true);
+        }
         OnItemSelected = null;
         OnBagOpened = null;
     }
@@ -323,13 +354,19 @@ public class Bag : MonoBehaviour
         
         numItems = currentCategoryOfItems.Count;
         
+        InputStateHandler.Instance.currentState.currentSelectionIndex = 0;
+        
         sellingItemUI.SetActive(currentBagUsage == BagUsage.SellingView);
         
         if (numItems == 0)
         {
+            foreach (var loopingUiAnimation in redArrows)
+            {
+                loopingUiAnimation.gameObject.SetActive(false);
+            }
             return;
         }
-        numItemsForView = (numItems < 11) ? numItems : 10; 
+        numItemsForView = (numItems < maxNumItemsForView+1) ? numItems : maxNumItemsForView; 
         for (int i = 0; i < numItemsForView; i++)
         {
             bagItemsUI[i].item = currentCategoryOfItems[i];
@@ -339,6 +376,15 @@ public class Bag : MonoBehaviour
         selectedItemIndex = 0;
         SelectItem();
         OnBagOpened?.Invoke();
+        
+        //default visuals
+        _upArrow.gameObject.SetActive(false);
+        _downArrow.gameObject.SetActive(numItems>1);
+        _leftArrow.gameObject.SetActive(false);
+        foreach (var loopingUiAnimation in redArrows)
+        {
+            loopingUiAnimation.viewingUI = true;
+        }
     }
 
     void ReloadItemUI()

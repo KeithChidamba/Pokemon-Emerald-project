@@ -8,9 +8,8 @@ public class Item_ui : MonoBehaviour
 {
     public Item item;
     public Text quantity;
-    [FormerlySerializedAs("item_name")] public Text itemName;
-    [FormerlySerializedAs("item_description")] public Text itemDescription;
-    [FormerlySerializedAs("item_img")] public Image itemImg;
+    public Text itemName;
+
     public void LoadItemUI()
     {
         itemName.text = item.itemName;
@@ -18,12 +17,12 @@ public class Item_ui : MonoBehaviour
     }
     public void LoadItemDescription()
     {
-        itemDescription.text = item.itemDescription;
-        itemImg.sprite = item.itemImage;
+        Bag.Instance.currentItemDescription.text = item.itemDescription;
+        Bag.Instance.currentItemImage.sprite = item.itemImage;
     }
     public void ResetUI()
     {
-        itemDescription.text = "";
-        itemImg.sprite = null;
+        Bag.Instance.currentItemDescription.text = "";
+        Bag.Instance.currentItemImage.sprite = null;
     }
 }

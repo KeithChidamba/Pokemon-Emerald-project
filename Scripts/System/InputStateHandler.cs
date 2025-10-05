@@ -274,7 +274,8 @@ public class InputStateHandler : MonoBehaviour
             //prevent selecting null item selectables
             currentState.maxSelectionIndex = Bag.Instance.numItems-1;
             Bag.Instance.OnBagOpened += ()=>
-            currentState.maxSelectionIndex = Bag.Instance.numItems-1;
+                currentState.maxSelectionIndex = Bag.Instance.numItems-1;
+            Bag.Instance.OnBagOpened += UpdateSelectorUi;
         }
 
         switch (Bag.Instance.currentBagUsage)
