@@ -30,7 +30,7 @@ public class InputStateHandler : MonoBehaviour
         PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
         PokemonStorage,PokemonStoragePartyOptions ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
         PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
-        PlayerBagItemSell,PlayerBagItemUsage,PlayerBagNavigation,
+        PlayerBagItemSell,PlayerBagNavigation,
         PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
         MartItemPurchase,MartItemNavigation,
         PlayerMenu,PlayerProfile
@@ -202,6 +202,7 @@ public class InputStateHandler : MonoBehaviour
     }
     void UpdateSelectorUi()
     {
+        if (!currentState.isSelecting) return;
         currentState.selector.transform.position = currentState.selectableUis[currentState.currentSelectionIndex]
             .uiObject.transform.position;
     }
@@ -276,14 +277,13 @@ public class InputStateHandler : MonoBehaviour
             Bag.Instance.OnBagOpened += ()=>
                 currentState.maxSelectionIndex = Bag.Instance.numItems-1;
             
-            if(Bag.Instance.currentBagUsage!=Bag.BagUsage.SellingView)
-                Bag.Instance.OnBagOpened += UpdateSelectorUi;
+            Bag.Instance.OnBagOpened += UpdateSelectorUi;
         }
 
         switch (Bag.Instance.currentBagUsage)
         {
             case Bag.BagUsage.SellingView:
-                currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToSell);
+                currentState.selectableUis.ForEach(s=>s.eventForUi = CreateSellingItemState);
                 break;
             case Bag.BagUsage.NormalView:
                 currentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.UseItem);
@@ -294,12 +294,13 @@ public class InputStateHandler : MonoBehaviour
         }
     }
 
-    void SelectItemToSell()
+    void CreateSellingItemState()
     {
         var itemSellSelectables = new List<SelectableUI>{new(Bag.Instance.sellingItemUI,Bag.Instance.SellToMarket,true)};
         ChangeInputState(new InputState(StateName.PlayerBagItemSell,
             new[]{StateGroup.Bag}, stateDirectional:Directional.Vertical, selectableUis:itemSellSelectables
-            ,selecting:false,onExit:()=>Bag.Instance.sellQuantity=1));
+            ,selecting:false,onExit:Bag.Instance.ResetItemSellingUi));
+        Bag.Instance.ChangeQuantity(0);//initial set for visuals
     }
 
     private void ItemToSellInputs()
@@ -396,7 +397,7 @@ public class InputStateHandler : MonoBehaviour
         rowCapacity = Mathf.Clamp(rowCapacity, 0, _currentBoxCapacity);
         return rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
     }
-    public void MoveCoordinates(Directional directional, int change)
+    private void MoveCoordinates(Directional directional, int change)
     {
         SetRowRemainder();
         var coordinateIndex = directional == Directional.Vertical ? 0 : 1;

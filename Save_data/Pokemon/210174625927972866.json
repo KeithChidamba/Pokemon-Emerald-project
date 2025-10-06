@@ -6,7 +6,7 @@
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26300
+        "instanceID": 26460
     },
     "hasGender": true,
     "hp": 91.0,
@@ -56,10 +56,10 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26640
+            "instanceID": 26800
         },
         {
-            "instanceID": 26568
+            "instanceID": 26728
         }
     ],
     "statusEffect": 0,
@@ -132,33 +132,33 @@
     ],
     "moveSet": [
         {
-            "instanceID": -15004
+            "instanceID": -4132
         },
         {
-            "instanceID": -15006
+            "instanceID": -4134
         },
         {
-            "instanceID": -15008
+            "instanceID": -4136
         },
         {
-            "instanceID": -15010
+            "instanceID": -4138
         }
     ],
     "ability": {
-        "instanceID": 25586
+        "instanceID": 25746
     },
     "evolutions": [
         {
-            "instanceID": 26088
+            "instanceID": 26248
         },
         {
-            "instanceID": 26204
+            "instanceID": 26364
         },
         {
-            "instanceID": 25986
+            "instanceID": 26146
         },
         {
-            "instanceID": 26224
+            "instanceID": 26384
         }
     ],
     "heldItem": {
@@ -166,10 +166,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 33144
+        "instanceID": 33306
     },
     "backPicture": {
-        "instanceID": 33272
+        "instanceID": 33434
     },
     "pokeballName": "Great Ball",
     "healthPhase": 1,

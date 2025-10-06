@@ -71,16 +71,6 @@ public class Bag : MonoBehaviour
         _downArrow=redArrows[3];
     }
 
-    private void Update()
-    {
-        if (currentBagUsage == BagUsage.SellingView)
-        {
-            _totalSellingAmount = sellQuantity * currentCategoryOfItems[topIndex + selectedItemIndex].price;
-            sellQuantityText.text = "X" + sellQuantity;
-            sellingAmountText.text = _totalSellingAmount.ToString();
-        }
-    }
-
     public void SelectItemForEvent()
     {
         OnItemSelected?.Invoke(currentCategoryOfItems[topIndex + selectedItemIndex]);
@@ -99,13 +89,12 @@ public class Bag : MonoBehaviour
             Dialogue_handler.Instance.DisplayDetails("You cant sell that!");
             return;
         }
-        var price = itemToSell.price;
-        var profit = (int)math.trunc((sellQuantity * price)/2f);
-        Game_Load.Instance.playerData.playerMoney += profit;
+        
+        Game_Load.Instance.playerData.playerMoney += _totalSellingAmount;
         itemToSell.quantity -= sellQuantity;
         if (itemToSell.quantity == 0)
             RemoveItem();
-        Dialogue_handler.Instance.DisplayList("You made P"+profit+ ", would you like to sell anything else?",
+        Dialogue_handler.Instance.DisplayList("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
              "Sure, which item?", new[]{ "SellItem","LeaveStore" }, new[]{"Yes", "No"});
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
     }
@@ -119,10 +108,16 @@ public class Bag : MonoBehaviour
 
         if (!Options_manager.Instance.playerInBattle)
         {
-            InputStateHandler.Instance.ResetRelevantUi(new[] { InputStateHandler.StateName.PlayerBagItemUsage });
             InputStateHandler.Instance.OnStateChanged += state => state.currentSelectionIndex = 0;
         }
         RemoveItem(item);
+    }
+
+    public void ResetItemSellingUi()
+    {
+        sellQuantity = 1;
+        sellQuantityText.text = "X0";
+        sellingAmountText.text = "0";
     }
     public void ChangeQuantity(int value)
     {
@@ -135,6 +130,10 @@ public class Bag : MonoBehaviour
             var currentItem = currentCategoryOfItems[topIndex + selectedItemIndex];
             sellQuantity = (sellQuantity < currentItem.quantity) ? sellQuantity + value : currentItem.quantity;
         }
+        _totalSellingAmount = (int)math.trunc((sellQuantity 
+                                               * currentCategoryOfItems[topIndex + selectedItemIndex].price)/ 2f);
+        sellQuantityText.text = "X" + sellQuantity;
+        sellingAmountText.text = _totalSellingAmount.ToString();
     }
     public void NavigateDown()
     {

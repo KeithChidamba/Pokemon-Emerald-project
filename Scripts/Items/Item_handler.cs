@@ -119,7 +119,7 @@ public class Item_handler : MonoBehaviour
                 CompleteItemUsage();
                 Area_manager.Instance.EscapeArea();
                 InputStateHandler.Instance.ResetRelevantUi(new[] {InputStateHandler.StateName.PlayerMenu
-                        ,InputStateHandler.StateName.PlayerBagItemUsage,InputStateHandler.StateName.PlayerBagNavigation});
+                        ,InputStateHandler.StateName.PlayerBagNavigation});
             }
             else
             {
