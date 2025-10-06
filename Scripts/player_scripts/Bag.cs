@@ -26,8 +26,8 @@ public class Bag : MonoBehaviour
     public int selectedItemIndex;
     public int topIndex;//keeps track of visible bag items
     public int sellQuantity = 1;
-    public int maxNumItemsForView = 9;
-    public int maxItemCapacity = 99;
+    public int maxNumItemsForView;
+    public int maxItemCapacity;
     public enum BagUsage{NormalView,SellingView,SelectionOnly}
     public BagUsage currentBagUsage;
     public GameObject sellingItemUI;
