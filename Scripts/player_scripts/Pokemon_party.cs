@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Pokemon_party : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class Pokemon_party : MonoBehaviour
     public GameObject partyUI;
     public GameObject memberSelector;
     public GameObject optionSelector;
+    public Image cancelButton;
     private Item _itemToUse;
     public GameObject[] partyOptions;
     public GameObject partyOptionsParent;
@@ -31,6 +33,12 @@ public class Pokemon_party : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    public void UpdateCancelButton(int currentIndex)
+    {
+        cancelButton.sprite = currentIndex < numMembers? memberCards[0].pokeballClosedImage.sprite
+                :memberCards[0].pokeballOpenImage.sprite;
     }
     public List<Pokemon> GetLivingPokemon()
     {
@@ -166,9 +174,9 @@ public class Pokemon_party : MonoBehaviour
     public void ResetPartyState()
     {
         swapOutNext = false;
-
+        InputStateHandler.Instance.OnSelectionIndexChanged -= UpdateCancelButton;
+        cancelButton.sprite = memberCards[0].pokeballClosedImage.sprite;
         Item_handler.Instance.usingItem = false;//in case player closes before using item
-        
     }
     
     private void MoveMember(int partyPosition)

@@ -220,7 +220,14 @@ public class Game_ui_manager : MonoBehaviour
             partySelectables.Add(new(Pokemon_party.Instance.memberCards[i].gameObject
                 , () => Pokemon_party.Instance.SelectMember(memberNumber), true));
         }
-
+        
+        //closes the party
+        partySelectables.Add(new(Pokemon_party.Instance.cancelButton.gameObject,
+            ()=>InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty)
+            , true));
+        InputStateHandler.Instance.OnSelectionIndexChanged += Pokemon_party.Instance.UpdateCancelButton;
+        Pokemon_party.Instance.memberCards[0].ChangeVisibility(true);//initial visual set
+        
         InputStateHandler.Instance.ChangeInputState(new InputState(partyUsageState,
             new[]{InputStateHandler.StateGroup.PokemonParty }, true,Pokemon_party.Instance.partyUI,
             InputStateHandler.Directional.Vertical, partySelectables, Pokemon_party.Instance.memberSelector

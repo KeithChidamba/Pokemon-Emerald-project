@@ -17,6 +17,7 @@ public class InputStateHandler : MonoBehaviour
     private event Action OnInputLeft;
     public event Action OnStateRemovalComplete;
     public event Action<InputState> OnStateChanged;
+    public event Action<int> OnSelectionIndexChanged;
     private bool _readingInputs;
     [SerializeField] private bool _currentStateLoaded;
     private bool _handlingState;
@@ -210,6 +211,7 @@ public class InputStateHandler : MonoBehaviour
     {
         currentState.currentSelectionIndex =
             Mathf.Clamp(currentState.currentSelectionIndex+change, 0, currentState.maxSelectionIndex);
+        OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
     }
     public void ChangeInputState(InputState newState)
     {
@@ -544,7 +546,7 @@ public class InputStateHandler : MonoBehaviour
         {
             StateName.PlayerBagNavigation => PlayerBagNavigation,
             StateName.PokemonPartyItemUsage => UpdateHealthBarColors,
-           StateName.PokemonPartyNavigation => UpdateHealthBarColors,
+            StateName.PokemonPartyNavigation => UpdateHealthBarColors,
             StateName.PokemonDetails => SetupPokemonDetails,
             StateName.PlayerBagItemSell => ItemToSellInputs,
             StateName.PokemonStorageBoxNavigation => SetupBoxNavigation,

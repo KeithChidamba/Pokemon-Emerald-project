@@ -6,10 +6,10 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: sleep
+  m_Name: fainted
   m_Rect:
     serializedVersion: 2
-    x: 110
+    x: 14
     y: 240
     width: 20
     height: 8
@@ -22,7 +22,7 @@ Sprite:
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    733b571a40774a3b99e80280894068b9: 1108724793
+    733b571a40774a3b99e80280894068b9: -1811793660
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:
@@ -107,14 +107,14 @@ Sprite:
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 110
+      x: 14
       y: 240
       width: 20
       height: 8
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 100, y: 120, z: 100, w: 244}
+    uvTransform: {x: 100, y: 24, z: 100, w: 244}
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 3
@@ -198,14 +198,14 @@ Sprite:
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 110
+      x: 14
       y: 240
       width: 20
       height: 8
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 100, y: 120, z: 100, w: 244}
+    uvTransform: {x: 100, y: 24, z: 100, w: 244}
     downscaleMultiplier: 1
   m_PhysicsShape:
   - - {x: -0.099999994, y: 0.04}
@@ -213,4 +213,4 @@ Sprite:
     - {x: 0.099999994, y: -0.04}
     - {x: 0.099999994, y: 0.04}
   m_Bones: []
-  m_SpriteID: c0a7075190bae8cad95c11ef5209f765
+  m_SpriteID: 80c7e45d70856a09799f27d7021dcb2f

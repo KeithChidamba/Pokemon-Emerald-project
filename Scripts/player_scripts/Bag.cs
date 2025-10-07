@@ -70,7 +70,6 @@ public class Bag : MonoBehaviour
         _upArrow=redArrows[2];
         _downArrow=redArrows[3];
     }
-
     public void SelectItemForEvent()
     {
         OnItemSelected?.Invoke(currentCategoryOfItems[topIndex + selectedItemIndex]);
@@ -137,29 +136,32 @@ public class Bag : MonoBehaviour
     }
     public void NavigateDown()
     {
-        if (topIndex < numItems - maxNumItemsForView && selectedItemIndex == maxNumItemsForView-1)
+        if (numItemsForView == 1) return;
+        if (topIndex < numItems - maxNumItemsForView && selectedItemIndex == maxNumItemsForView - 1)
         {
-            for (int i = 0; i < maxNumItemsForView-1; i++)
+            for (int i = 0; i < maxNumItemsForView - 1; i++)
                 bagItemsUI[i].item = bagItemsUI[i + 1].item;
-            bagItemsUI[maxNumItemsForView-1].item = currentCategoryOfItems[topIndex + maxNumItemsForView];
+
+            bagItemsUI[maxNumItemsForView - 1].item = currentCategoryOfItems[topIndex + maxNumItemsForView];
             ReloadItemUI();
-            selectedItemIndex = maxNumItemsForView-2;
+            selectedItemIndex = maxNumItemsForView - 2;
             topIndex++;
         }
-        _upArrow.gameObject.SetActive(true);
-        _downArrow.gameObject.SetActive(selectedItemIndex != numItems - 2);
         
         if (numItems == numItemsForView && selectedItemIndex == numItems - 1)
-        {
             return;
-        }
-        selectedItemIndex++;
-        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, maxNumItemsForView-1);
-        SelectItem();
 
+        selectedItemIndex++;
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, maxNumItemsForView - 1);
+
+        _upArrow.gameObject.SetActive(selectedItemIndex > 0);
+        _downArrow.gameObject.SetActive(selectedItemIndex < numItems - 1);
+
+        SelectItem();
     }
     public void NavigateUp()
     {
+        if (numItemsForView == 1) return;
         if (topIndex > 0 && selectedItemIndex == 0)
         {
             for (int i = maxNumItemsForView-1; i > 0; i--)

@@ -1,0 +1,1843 @@
+fileFormatVersion: 2
+guid: 733b571a40774a3b99e80280894068b9
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 296
+        width: 240
+        height: 159
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cd596d4b63523a2eb20bf73013f4053
+      internalID: -1632343549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_1
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 255
+        width: 144
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f44e81d677e136bdab283d36aea8c19b
+      internalID: 154077868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 405
+        width: 78
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1b3c831abf0fd0d98186ef258510f27
+      internalID: 980021064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_3
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 404
+        width: 80
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a24a6d00559dc582e99fba3331e9501c
+      internalID: 619165570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_4
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 464
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de58744714c6f1ab5971616d20efe0b3
+      internalID: 1314744347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_5
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 464
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36c7e23732b62123b8a7cd45c706e681
+      internalID: 1779249071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_6
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 464
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67ac3a81231f949b2b8c2fe001424f56
+      internalID: 1748349446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_7
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 464
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a2a203619f04359d96ff1d0a478f09c
+      internalID: -2043954624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_8
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 464
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7b3e6fb083e31a81814c48751caccdc
+      internalID: -1047177313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_9
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 464
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 433e7b3012f0da61cb407fc03bda3f4a
+      internalID: 1383354346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_10
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 464
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5451e810648b4661bab922d2bb0e8be
+      internalID: -1523590515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_11
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 464
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d11dfd9f2c22d83c0b2f8ec5441b0a7c
+      internalID: 634267719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_12
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 464
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 497c0f0ca7671ca60a675a17143cd43b
+      internalID: 1306553039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_13
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 464
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bde77c5ffb4b4d493b0ce9ecaa544131
+      internalID: 1368632029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_14
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 464
+        width: 5
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b0dbeddbf6fbace58a2a04dbfc12856
+      internalID: -858307360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_15
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 464
+        width: 8
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6860f66ee9820c551ac7910ddd7c905a
+      internalID: -1927878496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_16
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 464
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccebccb33f5ec1f658269f478e4752f9
+      internalID: 984234054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_17
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 464
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e138141c8b5daf9488b78a6f143de924
+      internalID: -1918386281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_18
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 464
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f71fa0f8332a2c01899e505a26225b11
+      internalID: 1218244378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_19
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 464
+        width: 5
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 228ace9c6185a3cc0a72ff64f6bb1eef
+      internalID: 1437575939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_20
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 464
+        width: 5
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 921b0e25b89a40c4c874b73ff00a2b00
+      internalID: 546506637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_21
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 464
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c03c8752438dae3cb6e1c7135e86e28
+      internalID: 1869431448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_22
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 464
+        width: 4
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebcead4b4fedf36e98635def6dba7f84
+      internalID: -2001895919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_23
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 464
+        width: 4
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a610b2b2582bbf33d8dabc4699317919
+      internalID: -1851479641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_24
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 464
+        width: 7
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09074c2e7d9954c0798f9d53eae2bfc1
+      internalID: -1524381198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_25
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 464
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15d9a7dd80c21ddf5a8603703b8bb72c
+      internalID: -1059828585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_26
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 464
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b522ebc0a1e72fb1a3c6db384a57742
+      internalID: -288312787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_27
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 464
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b94726ef610a8ce75afae83f68e05bd6
+      internalID: -541745194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_28
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 464
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7096e908211ad6bbd92c81d364a3c18f
+      internalID: 1506847566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_29
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 464
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 312a9bb8747ea0d519ccbf6a20c1c2fb
+      internalID: 516605679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_30
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 464
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec893c9fe6869f3f48dae1b89ac7d045
+      internalID: -471676891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_31
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 456
+        width: 156
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0b9de1b54f2f6981a3c167f05106b8c
+      internalID: 1138621358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_32
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 312
+        width: 240
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a6ce551a46dbb5e7997a3c11474ef46
+      internalID: 192156775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_33
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 312
+        width: 160
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3aef6778181644cbf9549737eb0cb25e
+      internalID: 792344803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_34
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 349
+        width: 78
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e59b895d5028f4a4ea161a3f4d164384
+      internalID: 986738529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_35
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 349
+        width: 78
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c37678546d8f1e68993f469440de9d7
+      internalID: -958347359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_36
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 309
+        width: 22
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96c6d969377ab740d9dd71beb4c20806
+      internalID: 776657820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_37
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 309
+        width: 22
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61af30d1af68a94c180543198d4d7b0f
+      internalID: 124808009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_38
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 309
+        width: 22
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2935662f276bbd2e0b04a51d75f550f9
+      internalID: 1828595135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_39
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 309
+        width: 22
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e57f3f5550386068a3a4336ef7be76d
+      internalID: 2012683477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_40
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 280
+        width: 142
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2987a42761401835da0ca6599b45886b
+      internalID: 1637670484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_41
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 160
+        width: 160
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 214272794532ddcca8df17f010d48abf
+      internalID: -1450542531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_42
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 160
+        width: 81
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d1e10555afa3e07e939cf0f58805894
+      internalID: -1635388100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_43
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 288
+        width: 64
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61f70d31e44632e77ba655a68d685fb0
+      internalID: -988430557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_44
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 266
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f706d4b9c46692efcafacef3f0d28889
+      internalID: 334893724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_45
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 264
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f8e63865b8f89dd5abb557851e1c6e5
+      internalID: 1812380644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_46
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 280
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10442c18cd9558b9a915721bd1d658f8
+      internalID: -597835834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_47
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 281
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a2d4fc1b532e0da1ac1e262cb077628
+      internalID: 196143418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_48
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 256
+        width: 56
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 283dcb8353b3474ee8afbe2bf3e90bb0
+      internalID: -1890529866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_49
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 240
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80c7e45d70856a09799f27d7021dcb2f
+      internalID: -1811793660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_50
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 240
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34d54b452b15076faa2b62c1f9557080
+      internalID: -1387045600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_51
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 240
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99f4faeff3c662a83be2eb3a63c37219
+      internalID: -602235077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_52
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 240
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0a7075190bae8cad95c11ef5209f765
+      internalID: 1108724793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_53
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 240
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf02940cf1d064917881d096bf35953c
+      internalID: 397374731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_54
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 240
+        width: 20
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca5ce9a451719936184f7526b35b89b6
+      internalID: 514492095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_55
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 240
+        width: 22
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14ea797d91a2d1c77ae2731a71668af0
+      internalID: -412012144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_56
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 232
+        width: 142
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50427256a578ff0f4bbc3a8e9e09774a
+      internalID: -1311717498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_57
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 225
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6f8c28f66205e4f5ad89e209c5a10a1
+      internalID: 1692376280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_58
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 225
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81e0ac6859ad0ea5980fa24186032130
+      internalID: -1513304408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_59
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 225
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd44e75d4981619878d19fac085eaf85
+      internalID: -1708838573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_60
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 225
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e2158f7b377e66449d4b744ef6722bc
+      internalID: -241314438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_61
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 225
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 757576c9f4c3589a687d8073f12c54fe
+      internalID: 951383989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_62
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 225
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4dee394367c9d9c9bd8c18bf15f8897
+      internalID: 2050940826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_63
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 225
+        width: 7
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fb3267c4ae1780c8863eac9f4800b2a
+      internalID: 1662095847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_64
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 208
+        width: 142
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67a3bd47778715c838704a1684984734
+      internalID: 248155446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_65
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 64
+        width: 240
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad301dee7bc4449e380db98a152324f4
+      internalID: 344147371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_66
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 184
+        width: 142
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b72be92ec7f102e58e3a6493e644eac
+      internalID: -795992028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_67
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 160
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ae224ab9a1001758938b429c2c107a7
+      internalID: 755050909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_68
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 160
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4aa4ce1d974062606a21db8c166e6d23
+      internalID: -1259487934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_69
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 160
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f33cd18b7aefe7b282f3e791fbe3821
+      internalID: -1412048527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_70
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 160
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc130a272d1b4dab8a33b223f3a8aff3
+      internalID: 202258062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_71
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 160
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64ae7ac412892e356855d383c8b8d73d
+      internalID: 1271541933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_72
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 98
+        width: 103
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7ebbf0a1d91f97e183fed53d5f30ca0
+      internalID: 1248807970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_73
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 8
+        width: 160
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3075b77a8ebbf86faa0b7aaa22fa41a
+      internalID: 2035277895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_74
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 1
+        width: 247
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa242ad7f7ca818c1abe64ab1258b6c4
+      internalID: 1981078984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_75
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 264
+        width: 64
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e3ffd29af008620e836e613e2042147
+      internalID: 230850127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_76
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 240
+        width: 64
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b5ff391bb9421b548726291ef703dff
+      internalID: -467635329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_77
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 216
+        width: 64
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ffc7a919e20130dca70108f5230a8f9
+      internalID: -1497246725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_0: -1632343549
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_1: 154077868
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_10: -1523590515
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_11: 634267719
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_12: 1306553039
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_13: 1368632029
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_14: -858307360
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_15: -1927878496
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_16: 984234054
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_17: -1918386281
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_18: 1218244378
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_19: 1437575939
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_2: 980021064
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_20: 546506637
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_21: 1869431448
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_22: -2001895919
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_23: -1851479641
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_24: -1524381198
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_25: -1059828585
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_26: -288312787
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_27: -541745194
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_28: 1506847566
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_29: 516605679
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_3: 619165570
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_30: -471676891
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_31: 1138621358
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_32: 192156775
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_33: 792344803
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_34: 986738529
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_35: -958347359
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_36: 776657820
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_37: 124808009
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_38: 1828595135
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_39: 2012683477
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_4: 1314744347
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_40: 1637670484
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_41: -1450542531
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_42: -1635388100
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_43: -988430557
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_44: 334893724
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_45: 1812380644
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_46: -597835834
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_47: 196143418
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_48: -1890529866
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_49: -1811793660
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_5: 1779249071
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_50: -1387045600
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_51: -602235077
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_52: 1108724793
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_53: 397374731
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_54: 514492095
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_55: -412012144
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_56: -1311717498
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_57: 1692376280
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_58: -1513304408
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_59: -1708838573
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_6: 1748349446
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_60: -241314438
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_61: 951383989
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_62: 2050940826
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_63: 1662095847
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_64: 248155446
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_65: 344147371
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_66: -795992028
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_67: 755050909
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_68: -1259487934
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_69: -1412048527
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_7: -2043954624
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_70: 202258062
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_71: 1271541933
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_72: 1248807970
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_73: 2035277895
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_74: 1981078984
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_75: 230850127
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_76: -467635329
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_77: -1497246725
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_8: -1047177313
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Pokemon Menu_9: 1383354346
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

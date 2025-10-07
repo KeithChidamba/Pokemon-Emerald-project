@@ -8,16 +8,20 @@ using UnityEngine.UI;
 
 public class Pokemon_party_member : MonoBehaviour
 {
-    [FormerlySerializedAs("Pkm_name")] public Text pokemonNameText;
-    [FormerlySerializedAs("Pkm_Lv")] public Text pokemonLevelText;
-    [FormerlySerializedAs("Pkm_front_img")] public Image pokemonFrontImage;
-    [FormerlySerializedAs("Status_img")] public Image statusEffectImage;
-    [FormerlySerializedAs("pkm_hp")] public Slider pokemonHealthBarUI;
+    public Text pokemonNameText;
+    public Text pokemonLevelText;
+    public Image pokemonFrontImage;
+    public Image pokeballClosedImage;
+    public Image pokeballOpenImage;
+    public Image statusEffectImage;
+    public Slider pokemonHealthBarUI;
     public RawImage hpSliderImage;
-    [FormerlySerializedAs("pkm")] public Pokemon pokemon;
-    [FormerlySerializedAs("main_ui")] public GameObject[] mainUI;
-    [FormerlySerializedAs("empty_ui")] public GameObject emptySlotUI;
-    [FormerlySerializedAs("HeldItem_img")] public GameObject heldItemImage;
+    public Pokemon pokemon;
+    public GameObject[] mainUI;
+    public GameObject memberSelectedImage;
+    public GameObject memberNotSelectedImage;
+    public GameObject emptySlotUI;
+    public GameObject heldItemImage;
     private Action<Battle_Participant> _healthPhaseUpdateEvent;
     public bool isEmpty = false;
     private bool _isViewingCard;
@@ -33,6 +37,7 @@ public class Pokemon_party_member : MonoBehaviour
     private void Start()
     {
         InputStateHandler.Instance.OnStateChanged += CheckIfViewing;
+        InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;
     }
 
     public void ActivateUI()
@@ -64,7 +69,6 @@ public class Pokemon_party_member : MonoBehaviour
         statusEffectImage.gameObject.SetActive(false);
         emptySlotUI.SetActive(true);
     }
-
     void CheckIfViewing(InputState currentState)
     {
         if (isEmpty) return;
@@ -73,24 +77,51 @@ public class Pokemon_party_member : MonoBehaviour
             _healthPhaseUpdateEvent = 
                 (attacker) => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
             pokemon.OnHealthChanged += _healthPhaseUpdateEvent;
-            _isViewingCard = true;
+            
         }
         else
         {
             pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
-            _isViewingCard = false;
         }
+        _isViewingCard = currentState.stateName == InputStateHandler.StateName.PokemonPartyNavigation;
+    }
+
+    public void ChangeVisibility(bool isSelected)
+    {
+        pokeballClosedImage.gameObject.SetActive(!isSelected);
+        pokeballOpenImage.gameObject.SetActive(isSelected);
+        memberSelectedImage.SetActive(isSelected);
+        memberNotSelectedImage.SetActive(!isSelected);
+    }
+    private void UpdateUi(int currentIndex)
+    {
+        if (isEmpty || !_isViewingCard) return;
+        
+        if (currentIndex == Pokemon_party.Instance.numMembers)
+        {
+            ChangeVisibility(false);
+            return;
+        }
+        ChangeVisibility(Pokemon_party.Instance.party[currentIndex] == pokemon);
     }
     private void Update()
     {
         if (isEmpty || !_isViewingCard) return;
+        
         pokemonHealthBarUI.value = pokemon.hp;
         pokemonHealthBarUI.maxValue = pokemon.maxHp;
         pokemonHealthBarUI.minValue = 0;
-        pokemonLevelText.text = "Lv: " + pokemon.currentLevel;
+        pokemonLevelText.text = "Lv" + pokemon.currentLevel;
         pokemonNameText.text = pokemon.pokemonName;
         pokemonFrontImage.color = ((pokemon.hp <= 0))? 
-             Color.HSVToRGB(17, 96, 54)
+            Color.HSVToRGB(17, 96, 54)
             :Color.HSVToRGB(0,0,100);
+        if (pokemon.hp <= 0)
+        {
+            statusEffectImage.gameObject.SetActive(true);
+            statusEffectImage.sprite = Resources.Load<Sprite>(
+                Save_manager.GetDirectory(Save_manager.AssetDirectory.Status)
+                + "fainted");
+        }
     }
 }
