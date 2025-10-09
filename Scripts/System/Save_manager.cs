@@ -150,7 +150,6 @@ public class Save_manager : MonoBehaviour
             var json = File.ReadAllText(jsonFilePath);
             var treeData = ScriptableObject.CreateInstance<BerryTreeData>();
             JsonUtility.FromJsonOverwrite(json, treeData);
-            treeData.loadedFromJson = true;
             
             var treeSprites = Resources.Load<BerryTreeData>(
                 $"Pokemon_project_assets/Overwolrd_obj/Interactions/Berry Trees/Berry Data/" +
@@ -159,9 +158,9 @@ public class Save_manager : MonoBehaviour
             treeData.spriteData = treeSprites;
             treeData.berryItem = Resources.Load<Item>(GetDirectory(AssetDirectory.Berries)
                                                       + treeData.itemAssetName);
-            OverworldState.Instance.LoadBerryTreeData(treeData);
+            
+            OverworldState.Instance.StoreBerryTreeData(treeData);
         }
-
         OnOverworldDataLoaded?.Invoke();
     }
     private void LoadPlayerData()

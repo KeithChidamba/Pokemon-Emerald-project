@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Awakens a pokemon
   price: 5
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 09cb674dfc77fcab6895ed6c2f6378f7, type: 2}
+  itemImage: {fileID: 21300000, guid: a293cd10ca6dbfe62aca5c6cff19e7af, type: 3}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1

@@ -14,23 +14,24 @@ public class BerryTree : MonoBehaviour
     public Interaction waterInteraction;
     public Interaction idleInteraction;
     public BerryTreeData treeData;
-    
+
     public SpriteRenderer treeSpriteRenderer;
     private int _currentSpriteIndex;
-    public event Action OnTreeAwake;
-    [SerializeField]float secondsCounter;
+    public bool loadedFromJson;
+   
+    [SerializeField] float secondsCounter;
+
     private void Awake()
     {
         primaryInteractable = GetComponent<Overworld_interactable>();
+        treeSpriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void Start()
+    {
         Options_manager.Instance.OnInteractionTriggered += ChooseBerryToPlant;
         Options_manager.Instance.OnInteractionTriggered += HarvestBerries;
         Options_manager.Instance.OnInteractionTriggered += WaterTree;
-        Save_manager.Instance.OnOverworldDataLoaded += LoadDefaultAsset;
-        treeSpriteRenderer = GetComponent<SpriteRenderer>();
-        OnTreeAwake?.Invoke();
-        if (treeData.isPlanted) return;
-        
-        SetInteraction(Overworld_interactable.InteractionType.PlantBerry);
     }
 
     private void SetInteraction(Overworld_interactable.InteractionType type)
@@ -44,17 +45,24 @@ public class BerryTree : MonoBehaviour
         };
         primaryInteractable.interactionType = type;
     }
-    private void LoadDefaultAsset()
+
+    public void LoadDefaultAsset()
     {
         //loads default Asset if there's no save data, only happen when a new tree is made during dev
-        if (treeData is { loadedFromJson: false })
+        if (treeData != null)
         {
             var copy = Obj_Instance.CreateTreeData(treeData);
             treeData = null;
             treeData = copy;
+            treeData.isPlanted = true;
             treeData.treeIndex = OverworldState.Instance.GetTreeIndex(this);
         }
+        else
+        {
+            SetInteraction(Overworld_interactable.InteractionType.PlantBerry);
+        }
     }
+
     public void LoadTreeData(BerryTreeData tree)
     {
         treeData = tree;
@@ -92,12 +100,11 @@ public class BerryTree : MonoBehaviour
                 : Overworld_interactable.InteractionType.None;
             SetInteraction(interactionType);
         }
-        
-        OnTreeAwake = null;
     }
     private void Update()
     {
-        if (!treeData.isPlanted) return;
+        if (treeData is not { isPlanted: true }) return;
+        
         if (treeData.currentStageProgress > 3) return;
         
         secondsCounter += Time.deltaTime; 
@@ -222,7 +229,7 @@ public class BerryTree : MonoBehaviour
     }
     public void ChangeSprite()
     {
-        if (!treeData.isPlanted) return;
+        if (treeData is not { isPlanted: true }) return;
         
         _currentSpriteIndex = _currentSpriteIndex==1? 0 : _currentSpriteIndex+1;
         treeSpriteRenderer.sprite = treeData.GetTreeSprite()[_currentSpriteIndex];

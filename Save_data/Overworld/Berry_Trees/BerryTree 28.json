@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": true,
+    "currentStageProgress": 0,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Cherri berry",
+    "berryItem": {
+        "instanceID": 26030
+    },
+    "treeIndex": 28,
+    "minutesPerStage": 45,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32004
+                },
+                {
+                    "instanceID": 32004
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32006
+                },
+                {
+                    "instanceID": 32008
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32010
+                },
+                {
+                    "instanceID": 32012
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32014
+                },
+                {
+                    "instanceID": 32016
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32018
+                },
+                {
+                    "instanceID": 32020
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "lastLogin": "2025-10-09T14:36:57.9014470+02:00"
+}

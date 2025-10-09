@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 612de1a428d002f8798709f5458d7511, type: 3}
+  m_Name: Persim berry Data
+  m_EditorClassIdentifier: 
+  isPlanted: 0
+  minYield: 2
+  maxYield: 5
+  currentStageNeedsWater: 1
+  currentStageProgress: 0
+  minutesSinceLastStage: 0
+  numStagesWatered: 0
+  itemAssetName: 
+  berryItem: {fileID: 11400000, guid: 7b37371d9d839b5888e3f44ead53396a, type: 2}
+  treeIndex: 0
+  minutesPerStage: 60
+  loadedFromJson: 0
+  spriteData:
+  - growthStageSprites:
+    - {fileID: 2025034487, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: 2025034487, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    growthStageNumber: 0
+  - growthStageSprites:
+    - {fileID: -1971141741, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: 832152745, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    growthStageNumber: 1
+  - growthStageSprites:
+    - {fileID: -854055826, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: -1043120984, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    growthStageNumber: 2
+  - growthStageSprites:
+    - {fileID: 93537455, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: 619008703, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    growthStageNumber: 3
+  - growthStageSprites:
+    - {fileID: 1229062710, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: 760329705, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    growthStageNumber: 4
+  lastLogin: 

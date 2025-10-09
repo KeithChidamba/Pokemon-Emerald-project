@@ -145,7 +145,6 @@ public static class Obj_Instance
         treeData.treeIndex = data.treeIndex;
         treeData.minutesPerStage = data.minutesPerStage;
         treeData.berryItem = data.berryItem;
-        treeData.loadedFromJson = data.loadedFromJson;
         treeData.spriteData = data.spriteData;
         return treeData;
     }

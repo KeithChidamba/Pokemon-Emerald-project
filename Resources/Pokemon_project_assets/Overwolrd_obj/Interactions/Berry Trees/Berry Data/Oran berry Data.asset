@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 612de1a428d002f8798709f5458d7511, type: 3}
   m_Name: Oran berry Data
   m_EditorClassIdentifier: 
+  isPlanted: 0
   minYield: 2
   maxYield: 5
   currentStageNeedsWater: 1
@@ -21,7 +22,7 @@ MonoBehaviour:
   itemAssetName: 
   berryItem: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}
   treeIndex: 0
-  minutesPerStage: 180
+  minutesPerStage: 60
   loadedFromJson: 0
   spriteData:
   - growthStageSprites:

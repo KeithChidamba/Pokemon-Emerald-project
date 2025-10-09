@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Thaws out a pokemon
   price: 5
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 2cd988412b732efd18aac517ee85b589, type: 2}
+  itemImage: {fileID: 21300000, guid: 6b10e09fa1770fce0b16f93572a96588, type: 3}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1

@@ -18,7 +18,6 @@ public class BerryTreeData : ScriptableObject
      public Item berryItem;
      public int treeIndex;
      public int minutesPerStage;
-     public bool loadedFromJson;
      public List<BerrySpriteData> spriteData = new();
 
      public string lastLogin;
