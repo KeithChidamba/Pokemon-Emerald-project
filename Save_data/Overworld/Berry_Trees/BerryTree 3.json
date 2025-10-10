@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Aspear berry",
+    "berryItem": {
+        "instanceID": 26502
+    },
+    "treeIndex": 3,
+    "minutesPerStage": 45,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32166
+                },
+                {
+                    "instanceID": 32166
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32168
+                },
+                {
+                    "instanceID": 32170
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33570
+                },
+                {
+                    "instanceID": 33572
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33574
+                },
+                {
+                    "instanceID": 33828
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33830
+                },
+                {
+                    "instanceID": 33832
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "lastLogin": "2025-10-10T13:21:15.4174450+02:00"
+}

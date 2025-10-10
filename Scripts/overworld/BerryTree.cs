@@ -88,6 +88,12 @@ public class BerryTree : MonoBehaviour
             treeData.minutesSinceLastStage = 0;
             treeData.currentStageNeedsWater = false;
         }
+
+        if (!treeData.isPlanted)
+        {
+            SetInteraction(Overworld_interactable.InteractionType.PlantBerry);
+            return;
+        }
         
         if (treeData.currentStageNeedsWater)
         {
@@ -155,7 +161,7 @@ public class BerryTree : MonoBehaviour
             Dialogue_handler.Instance.DisplayDetails("You have already watered this plant",2f);
             return;
         }
-        Dialogue_handler.Instance.DisplayDetails("The tree was watered",2f);
+        StartCoroutine(overworld_actions.Instance.WaterTrees());
         treeData.numStagesWatered++;
         treeData.currentStageNeedsWater = false;
         SetInteraction(Overworld_interactable.InteractionType.None);

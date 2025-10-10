@@ -150,11 +150,15 @@ public class Save_manager : MonoBehaviour
             var json = File.ReadAllText(jsonFilePath);
             var treeData = ScriptableObject.CreateInstance<BerryTreeData>();
             JsonUtility.FromJsonOverwrite(json, treeData);
-            
+            treeData.spriteData.Clear();
             var treeSprites = Resources.Load<BerryTreeData>(
                 $"Pokemon_project_assets/Overwolrd_obj/Interactions/Berry Trees/Berry Data/" +
                 $"{treeData.itemAssetName } Data").spriteData;
-            
+            if (treeSprites == null)
+            {
+                Debug.Log($"Pokemon_project_assets/Overwolrd_obj/Interactions/Berry Trees/Berry Data/" +
+                          $"{treeData.itemAssetName} Data");
+            }
             treeData.spriteData = treeSprites;
             treeData.berryItem = Resources.Load<Item>(GetDirectory(AssetDirectory.Berries)
                                                       + treeData.itemAssetName);

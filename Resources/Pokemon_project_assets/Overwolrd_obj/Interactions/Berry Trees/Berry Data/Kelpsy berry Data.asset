@@ -23,7 +23,6 @@ MonoBehaviour:
   berryItem: {fileID: 11400000, guid: e3c0178b98b30173393da9415886cffa, type: 2}
   treeIndex: 0
   minutesPerStage: 180
-  loadedFromJson: 0
   spriteData:
   - growthStageSprites:
     - {fileID: 2025034487, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
@@ -34,15 +33,15 @@ MonoBehaviour:
     - {fileID: 832152745, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 1
   - growthStageSprites:
-    - {fileID: -854055826, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
-    - {fileID: -1043120984, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: -922736653, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: 44149232, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 2
   - growthStageSprites:
-    - {fileID: 93537455, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
-    - {fileID: 619008703, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: -283997855, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: -1605144081, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 3
   - growthStageSprites:
-    - {fileID: 1229062710, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
-    - {fileID: 760329705, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: 353218033, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
+    - {fileID: -1444587588, guid: cc0ae39024b4d76b7ad6b6241e5c7803, type: 3}
     growthStageNumber: 4
   lastLogin: 

@@ -2,24 +2,24 @@
     "isPlanted": true,
     "minYield": 2,
     "maxYield": 5,
-    "currentStageNeedsWater": true,
-    "currentStageProgress": 0,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
     "minutesSinceLastStage": 0.0,
     "numStagesWatered": 0,
-    "itemAssetName": "Aspear berry",
+    "itemAssetName": "Persim berry",
     "berryItem": {
-        "instanceID": 26428
+        "instanceID": 26838
     },
     "treeIndex": 29,
-    "minutesPerStage": 45,
+    "minutesPerStage": 60,
     "spriteData": [
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32004
+                    "instanceID": 32166
                 },
                 {
-                    "instanceID": 32004
+                    "instanceID": 32166
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32006
+                    "instanceID": 32168
                 },
                 {
-                    "instanceID": 32008
+                    "instanceID": 32170
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32010
+                    "instanceID": 33582
                 },
                 {
-                    "instanceID": 32012
+                    "instanceID": 33584
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32014
+                    "instanceID": 33586
                 },
                 {
-                    "instanceID": 32016
+                    "instanceID": 33840
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32018
+                    "instanceID": 33842
                 },
                 {
-                    "instanceID": 32020
+                    "instanceID": 33844
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-10-09T14:36:57.9018340+02:00"
+    "lastLogin": "2025-10-10T13:21:15.4295710+02:00"
 }

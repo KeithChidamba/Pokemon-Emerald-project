@@ -1,0 +1,32 @@
+{
+    "itemID": "Lum berry13078",
+    "itemName": "Lum berry",
+    "itemType": 9,
+    "itemEffect": "0",
+    "itemDescription": "Heals any status effect",
+    "price": 5,
+    "quantity": 2,
+    "itemImage": {
+        "instanceID": 32336
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": true,
+    "canBeSold": true,
+    "isMultiModular": false,
+    "hasModules": true,
+    "additionalInfoModule": {
+        "instanceID": 26676
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 26676
+        }
+    ],
+    "infoModuleAssetNames": [
+        "Full heal berry"
+    ],
+    "imageDirectory": "Lum berry"
+}

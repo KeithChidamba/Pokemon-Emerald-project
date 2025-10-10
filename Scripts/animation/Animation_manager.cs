@@ -14,6 +14,7 @@ public class Animation_manager : MonoBehaviour
     public string fishingStart = "Fishing_Start";
     public string fishingEnd = "Fishing_End";
     public string fishingIdle = "Fishing_idle";
+    public string watering = "Watering";
     public string movementDirectionParameter = "Movement Direction";
     public string idleDirectionParameter = "Idle Direction";
     public event Action OnFishingStart;

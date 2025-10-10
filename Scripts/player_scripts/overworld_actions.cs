@@ -134,6 +134,14 @@ public class overworld_actions : MonoBehaviour
         pokemonBitingPole = false;
         manager.ChangeAnimationState(manager.fishingEnd);
     }
+
+    public IEnumerator WaterTrees()
+    {
+        manager.ChangeAnimationState(manager.watering);
+        Dialogue_handler.Instance.DisplayDetails("The tree is being watered",2f);
+        yield return new WaitForSeconds(2f);
+        manager.ChangeAnimationState(manager.playerWalk);
+    }
     void ActionReset()
     {
         doingAction = false;

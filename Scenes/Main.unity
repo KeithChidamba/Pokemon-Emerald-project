@@ -801,7 +801,7 @@ PrefabInstance:
     - target: {fileID: 1510495507358654107, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: treeData
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: b9127919df8d5c9c7b9ec196f2239bff, type: 2}
     - target: {fileID: 4641104906229684179, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: m_Size.x
       value: 0.16
@@ -4824,7 +4824,7 @@ PrefabInstance:
     - target: {fileID: 1510495507358654107, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: treeData
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: b9127919df8d5c9c7b9ec196f2239bff, type: 2}
     - target: {fileID: 4641104906229684179, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: m_Size.x
       value: 0.3
@@ -20481,7 +20481,7 @@ PrefabInstance:
     - target: {fileID: 1510495507358654107, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: treeData
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: b9127919df8d5c9c7b9ec196f2239bff, type: 2}
     - target: {fileID: 4641104906229684179, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: m_Size.x
       value: 0.17
@@ -65597,6 +65597,10 @@ Animation:
   - {fileID: 7400000, guid: 25b4a60a517aac344a2e0a4abcf1af39, type: 2}
   - {fileID: 7400000, guid: 70356a0ef8619b64bba76fe22fdabfeb, type: 2}
   - {fileID: 7400000, guid: f1e6838916d845e4cbe4dbc597947f35, type: 2}
+  - {fileID: 7400000, guid: 96a0fab04fc0406a89758cafb918d4f0, type: 2}
+  - {fileID: 7400000, guid: 2bec8c02a13ab5ba798a5563c0073078, type: 2}
+  - {fileID: 7400000, guid: 3a4fddb0456de8a11acc2e624d9de181, type: 2}
+  - {fileID: 7400000, guid: 662b6b0b30c683823bf62afcb1778478, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
@@ -65693,6 +65697,7 @@ MonoBehaviour:
   fishingStart: Fishing_Start
   fishingEnd: Fishing_End
   fishingIdle: Fishing_idle
+  watering: Watering
   movementDirectionParameter: Movement Direction
   idleDirectionParameter: Idle Direction
 --- !u!1 &1606878481
@@ -68246,7 +68251,7 @@ PrefabInstance:
     - target: {fileID: 1510495507358654107, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: treeData
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: b9127919df8d5c9c7b9ec196f2239bff, type: 2}
     - target: {fileID: 1598687195738832500, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: m_Size.x
       value: 0.2

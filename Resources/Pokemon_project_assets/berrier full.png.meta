@@ -787,7 +787,7 @@ TextureImporter:
         serializedVersion: 2
         x: 833
         y: 193
-        width: 30
+        width: 15
         height: 29
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -3826,6 +3826,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: berrier full_177
+      rect:
+        serializedVersion: 2
+        x: 848
+        y: 193
+        width: 16
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 496876cff77545803b1559da952f7f54
+      internalID: -1832881339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -3924,6 +3945,7 @@ TextureImporter:
       berrier full_174: -1605144081
       berrier full_175: 353218033
       berrier full_176: -1444587588
+      berrier full_177: -1832881339
       berrier full_18: -1187686057
       berrier full_19: -1849768956
       berrier full_2: -1703884665
