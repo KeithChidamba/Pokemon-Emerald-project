@@ -8,6 +8,8 @@ public class DialogueOption : MonoBehaviour
     public Text optionText;
     public int optionIndex;
     public string textContent;
+    private const int VerticalOffset = 35;
+
     private RectTransform _rectTransform;
     public void SetupOption(int index,int numOptions, string text)
     {
@@ -16,14 +18,16 @@ public class DialogueOption : MonoBehaviour
         optionText = GetComponentInChildren<Text>();
         textContent = text;
         optionText.text = textContent;
-        var offsetY = numOptions>5? 5:numOptions;
+        //pad out height when there's a lot of options
+        var heightPadding = numOptions>5? 5:numOptions;
         //stack options in column
         _rectTransform.localPosition = new Vector3(_rectTransform.localPosition.x
-            , _rectTransform.localPosition.y+( (numOptions-1-optionIndex)*25)+offsetY, 0);
+            , _rectTransform.localPosition.y+( (numOptions-1-optionIndex) * VerticalOffset) + (heightPadding*5), 0);
     }
 
     public void SetWidth(int width)
     {
-        _rectTransform.sizeDelta = new Vector2(width*0.8f, _rectTransform.rect.height);
+        var shrinkFactor = 0.8f;//makes the options ui a little smaller than it's set size
+        _rectTransform.sizeDelta = new Vector2( width*shrinkFactor, _rectTransform.rect.height);
     }
 }

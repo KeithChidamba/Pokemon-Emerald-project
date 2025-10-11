@@ -116,15 +116,19 @@ public class Dialogue_handler : MonoBehaviour
     {
         _dialogueOptionsManager.LoadUiSize();
         canExitDialogue = false;
-        yield return new WaitForSeconds(0.5f);
         ActivateOptions(true);
         var optionSelectables = new List<SelectableUI>();
-         foreach(var option in _dialogueOptionsManager.currentOptions)
-            optionSelectables.Add( new(option.gameObject,()=>SelectOption(option.optionIndex),true) );
+        
+        foreach (var option in _dialogueOptionsManager.currentOptions)
+        {
+            SelectableUI newOption = new (option.gameObject, () => SelectOption(option.optionIndex), true);
+            optionSelectables.Add( newOption);
+        }
         
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.DialogueOptions
             ,new[]{InputStateHandler.StateGroup.None},false,null,
             InputStateHandler.Directional.Vertical,optionSelectables,optionSelector,true,true));
+        yield return null;
     }
     private void SelectOption(int optionIndex)
     {

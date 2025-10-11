@@ -1,13 +1,13 @@
 {
-    "itemID": "Kelpsy berry34538",
-    "itemName": "Kelpsy berry",
+    "itemID": "Qualot berry750",
+    "itemName": "Qualot berry",
     "itemType": 9,
     "itemEffect": "",
-    "itemDescription": "Increases a pokemon's friendship but lowers attack",
+    "itemDescription": "Increases a pokemon's friendship but lowers defense",
     "price": 5,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32226
+        "instanceID": 32242
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,19 +18,19 @@
     "isMultiModular": true,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 25192
+        "instanceID": 26574
     },
     "additionalInfoModules": [
         {
-            "instanceID": 25192
+            "instanceID": 26574
         },
         {
             "instanceID": 26002
         }
     ],
     "infoModuleAssetNames": [
-        "Attack",
+        "Defense",
         "Friendship berry"
     ],
-    "imageDirectory": "Kelpsy berry"
+    "imageDirectory": "Qualot berry"
 }
