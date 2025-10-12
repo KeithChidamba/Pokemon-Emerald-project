@@ -18,7 +18,7 @@ public class Game_ui_manager : MonoBehaviour
     [SerializeField]private List<GameObject> menuUiOptions = new ();
     public GameObject menuSelector;
     public bool usingWebGl = false;
-    private List<float> _movementDelaysAfterExit = new();
+    [SerializeField]private List<float> _movementDelaysAfterExit = new();
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -111,12 +111,11 @@ public class Game_ui_manager : MonoBehaviour
     private void ClosePokeMart()
     {
         ManageScreens(-1);
-        Poke_Mart.Instance.ExitStore();
         ActivateUiElement(Poke_Mart.Instance.storeUI, false);
-        Dialogue_handler.Instance.DisplayList("Would you like anything else?", 
-            "", new[]{ "BuyMore","LeaveStore" }, new[]{"Yes", "No"});
+        Poke_Mart.Instance.ExitStore();
+        Dialogue_handler.Instance.DisplayDetails("Have a great day!",1f);
     }
-    public void CloseBag()
+    private void CloseBag()
     {
         ManageScreens(-1);
         Bag.Instance.CloseBag();
@@ -275,7 +274,7 @@ public class Game_ui_manager : MonoBehaviour
     public void ViewPokeMart()
     {
         ManageScreens(1);
-        _movementDelaysAfterExit.Add(-1f);
+        _movementDelaysAfterExit.Add(0.25f);
         ActivateUiElement(Poke_Mart.Instance.storeUI,true);
         var martSelectables = new List<SelectableUI>();
         foreach(var item in Poke_Mart.Instance.storeItemsUI) 

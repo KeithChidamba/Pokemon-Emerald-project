@@ -75,6 +75,11 @@ public class overworld_actions : MonoBehaviour
             if (!_canUseEquippedItem) return;
             Dialogue_handler.Instance.DisplayDetails("No item has been equipped", 2f);
         }  
+        if (Dialogue_handler.Instance.displaying)
+        {
+            Player_movement.Instance.RestrictPlayerMovement();
+            return;
+        }
         if (usingUI)
         {
             Player_movement.Instance.RestrictPlayerMovement();

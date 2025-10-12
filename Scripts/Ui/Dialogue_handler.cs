@@ -154,11 +154,12 @@ public class Dialogue_handler : MonoBehaviour
         newInteraction.resultMessage = result;
         return newInteraction;
     }
-    public void DisplayList(string info,string result,string[] options, string[]optionsText)//list info
+    public void DisplayList(string info,string result,Options_manager.InteractionOptions[] options
+        , string[]optionsText)//list info
     {
         canExitDialogue = false;
         var newInteraction = NewInteraction(info,DialogType.Options,result);
-        foreach (string option in options)
+        foreach (var option in options)
             newInteraction.interactionOptions.Add(option);
         foreach (string txt in optionsText)
             newInteraction.optionsUiText.Add(txt);

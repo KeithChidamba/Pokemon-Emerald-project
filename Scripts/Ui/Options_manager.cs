@@ -10,8 +10,14 @@ public class Options_manager : MonoBehaviour
     public bool playerInBattle;
     [SerializeField] private Recieve_Pokemon starterPokemonGiftEvent;
     public static Options_manager Instance;
-    private readonly Dictionary<string, Action> _interactionMethods = new ();
+    private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
     public event Action<Overworld_interactable,int> OnInteractionTriggered;
+
+    public enum InteractionOptions
+    {
+        None,CloseApplication,Battle,LearnMove,SkipMove,
+        Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,ReceiveGiftPokemon,LeaveStore
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -24,19 +30,17 @@ public class Options_manager : MonoBehaviour
 
     private void Start()
     {
-        _interactionMethods.Add("CloseApplication",CloseApplication);
-        _interactionMethods.Add("Battle",Battle);
-        _interactionMethods.Add("LearnMove",LearnMove);
-        _interactionMethods.Add("SkipMove",SkipMove);
-        _interactionMethods.Add("Fish",Fish);
-        _interactionMethods.Add("Interact",Interact);
-        _interactionMethods.Add("ViewMarketDelayed",ViewMarketDelayed);
-        _interactionMethods.Add("SellItem",SellItem);
-        _interactionMethods.Add("BuyMore",BuyMore);
-        _interactionMethods.Add("LeaveStore",LeaveStore);
-        _interactionMethods.Add("HealPokemon",HealPokemon);
-        _interactionMethods.Add("OpenPokemonStorage",OpenPokemonStorage);
-        _interactionMethods.Add("ReceiveGiftPokemon",ReceiveGiftPokemon);
+        _interactionMethods.Add(InteractionOptions.CloseApplication,CloseApplication);
+        _interactionMethods.Add(InteractionOptions.Battle,Battle);
+        _interactionMethods.Add(InteractionOptions.LearnMove,LearnMove);
+        _interactionMethods.Add(InteractionOptions.SkipMove,SkipMove);
+        _interactionMethods.Add(InteractionOptions.Fish,Fish);
+        _interactionMethods.Add(InteractionOptions.Interact,Interact);
+        _interactionMethods.Add(InteractionOptions.SellItem,SellItem);
+        _interactionMethods.Add(InteractionOptions.LeaveStore,LeaveStore);
+        _interactionMethods.Add(InteractionOptions.HealPokemon,HealPokemon);
+        _interactionMethods.Add(InteractionOptions.OpenPokemonStorage,OpenPokemonStorage);
+        _interactionMethods.Add(InteractionOptions.ReceiveGiftPokemon,ReceiveGiftPokemon);
     }
 
     void CloseApplication()
@@ -47,7 +51,9 @@ public class Options_manager : MonoBehaviour
     public void ExitGame()
     {
         Dialogue_handler.Instance.DisplayList("Are you sure you want to exit?, you will lose unsaved data!",
-             "Good bye!", new[]{ "CloseApplication",""}, new[]{"Yes", "No"});
+             "Good bye!", 
+             new[]{ InteractionOptions.CloseApplication,InteractionOptions.None}
+             , new[]{"Yes", "No"});
     }
     void Battle()
     {
@@ -104,14 +110,6 @@ public class Options_manager : MonoBehaviour
         Game_ui_manager.Instance.ViewPokemonStorage();
         overworld_actions.Instance.usingUI = true;
     }
-    void BuyMore()
-    {
-        CompleteInteraction(_currentInteractable, 0);//open store to continue buying
-    }
-    void LeaveStore()
-    {
-        Dialogue_handler.Instance.DisplayDetails("Have a great day!",1f);
-    }
     void ReceiveGiftPokemon()
     {
         if(pokemon_storage.Instance.MaxPokemonCapacity())
@@ -139,24 +137,18 @@ public class Options_manager : MonoBehaviour
     }
     void SellItem()
     {
-        Dialogue_handler.Instance.EndDialogue();
         Bag.Instance.currentBagUsage = Bag.BagUsage.SellingView;
         Game_ui_manager.Instance.ViewBag();
     }
-    void ViewMarketDelayed()//used in interaction as well
-    {
-        Invoke(nameof(ViewMarket),0.4f);
-    }
-    void ViewMarket()
-    {
-        Dialogue_handler.Instance.EndDialogue();
-        Game_ui_manager.Instance.ViewPokeMart();
-    }
 
+    void LeaveStore()
+    {
+        Dialogue_handler.Instance.DisplayDetails("Have a great day!",1f);
+    }
     public void CompleteInteraction(Interaction interaction,int optionIndex)
     {
-        var methodName = interaction.interactionOptions[optionIndex].Replace(" ", "");
-        if (methodName == string.Empty)
+        var interactionOption = interaction.interactionOptions[optionIndex];
+        if (interactionOption == InteractionOptions.None)
         {
             Dialogue_handler.Instance.EndDialogue(); 
             return;
@@ -164,10 +156,10 @@ public class Options_manager : MonoBehaviour
         
         Dialogue_handler.Instance.DeletePreviousOptions();
         _currentInteraction = interaction;
-        if (_interactionMethods.TryGetValue(methodName,out var method))
+        if (_interactionMethods.TryGetValue(interactionOption,out var method))
             method();
         else
-            Debug.Log("couldn't find method for interaction: " + methodName);
+            Debug.Log("couldn't find method for interaction: " + interactionOption);
     }
     public void CompleteInteraction(Overworld_interactable interactable,int optionIndex)
     {

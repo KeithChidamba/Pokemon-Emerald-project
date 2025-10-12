@@ -25,7 +25,7 @@ public class Save_manager : MonoBehaviour
     public enum AssetDirectory
     { 
         Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
-        ,AdditionalInfo,Berries,BerryTreeData
+        ,AdditionalInfo,Berries,BerryTreeData,PokeMartData
     };
     
     private static readonly Dictionary<AssetDirectory, string> Directories = new()
@@ -43,7 +43,8 @@ public class Save_manager : MonoBehaviour
         {AssetDirectory.Items,"Pokemon_project_assets/Items/" },
         {AssetDirectory.Berries,"Pokemon_project_assets/Items/Berries/" },
         {AssetDirectory.AdditionalInfo,"Pokemon_project_assets/Items/AdditionalInfo/" },
-        {AssetDirectory.BerryTreeData,"Pokemon_project_assets/Overwolrd_obj/Interactions/Berry Trees/Berry Data/"}
+        {AssetDirectory.BerryTreeData,"Pokemon_project_assets/Overwolrd_obj/Interactions/Berry Trees/Berry Data/"},
+        {AssetDirectory.PokeMartData,"Pokemon_project_assets/Overwolrd_obj/Poke_Mart_Data"}
     };
     public static string GetDirectory(AssetDirectory directory)
     {
@@ -151,14 +152,9 @@ public class Save_manager : MonoBehaviour
             var treeData = ScriptableObject.CreateInstance<BerryTreeData>();
             JsonUtility.FromJsonOverwrite(json, treeData);
             treeData.spriteData.Clear();
+            
             var treeSprites = Resources.Load<BerryTreeData>(
-                $"Pokemon_project_assets/Overwolrd_obj/Interactions/Berry Trees/Berry Data/" +
-                $"{treeData.itemAssetName } Data").spriteData;
-            if (treeSprites == null)
-            {
-                Debug.Log($"Pokemon_project_assets/Overwolrd_obj/Interactions/Berry Trees/Berry Data/" +
-                          $"{treeData.itemAssetName} Data");
-            }
+                GetDirectory(AssetDirectory.BerryTreeData) + $"{treeData.itemAssetName } Data").spriteData;
             treeData.spriteData = treeSprites;
             treeData.berryItem = Resources.Load<Item>(GetDirectory(AssetDirectory.Berries)
                                                       + treeData.itemAssetName);

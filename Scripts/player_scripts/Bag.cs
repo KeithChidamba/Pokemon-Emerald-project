@@ -94,7 +94,9 @@ public class Bag : MonoBehaviour
         if (itemToSell.quantity == 0)
             RemoveItem();
         Dialogue_handler.Instance.DisplayList("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
-             "Sure, which item?", new[]{ "SellItem","LeaveStore" }, new[]{"Yes", "No"});
+             "Sure, which item?", 
+             new[]{ Options_manager.InteractionOptions.SellItem
+                 ,Options_manager.InteractionOptions.LeaveStore }, new[]{"Yes", "No"});
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
     }
     public void CheckItemQuantity(Item item)

@@ -255,8 +255,10 @@ public class PokemonOperations : MonoBehaviour
                 SelectingMoveReplacement = true;
                 Dialogue_handler.Instance.DisplayList(
                     $"{CurrentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn" +
-                    $" {moveName}?", "", new[] { "LearnMove", "SkipMove" },
+                    $" {moveName}?", "", new[] { Options_manager.InteractionOptions.LearnMove
+                        , Options_manager.InteractionOptions.SkipMove},
                     new[] { "Yes", "No" });
+                
                 NewMoveAsset = moveFromAsset;
                 yield return new WaitUntil(()=>!LearningNewMove);
                 yield return new WaitForSeconds(2f);

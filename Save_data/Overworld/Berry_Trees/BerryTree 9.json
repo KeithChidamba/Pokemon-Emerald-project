@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Chesto berry",
     "berryItem": {
-        "instanceID": 26098
+        "instanceID": 26094
     },
     "treeIndex": 9,
     "minutesPerStage": 45,
@@ -16,24 +16,13 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32098
-                },
-                {
-                    "instanceID": 32098
-                }
-            ],
-            "growthStageNumber": 0
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32100
+                    "instanceID": 32102
                 },
                 {
                     "instanceID": 32102
                 }
             ],
-            "growthStageNumber": 1
+            "growthStageNumber": 0
         },
         {
             "growthStageSprites": [
@@ -44,7 +33,7 @@
                     "instanceID": 32106
                 }
             ],
-            "growthStageNumber": 2
+            "growthStageNumber": 1
         },
         {
             "growthStageSprites": [
@@ -55,7 +44,7 @@
                     "instanceID": 32110
                 }
             ],
-            "growthStageNumber": 3
+            "growthStageNumber": 2
         },
         {
             "growthStageSprites": [
@@ -66,8 +55,19 @@
                     "instanceID": 32114
                 }
             ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32116
+                },
+                {
+                    "instanceID": 32118
+                }
+            ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-10-11T14:09:26.7499350+02:00"
+    "lastLogin": "2025-10-12T14:07:36.6830610+02:00"
 }

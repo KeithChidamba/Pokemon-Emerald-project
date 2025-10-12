@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: Hello, would you like to heal your pokemon?
   interactionType: 1
-  interactionOptions:
+  _interactionOptions:
   - HealPokemon
   - 
+  interactionOptions: 0800000000000000
   resultMessage: Please wait a moment...
   optionsUiText:
   - Yes
   - No
   additionalInfo: []
+  hasSeparateLogicHandler: 0

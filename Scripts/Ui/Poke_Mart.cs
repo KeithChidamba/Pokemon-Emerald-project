@@ -16,6 +16,7 @@ public class Poke_Mart : MonoBehaviour
     public int numItemsForView;
     public int selectedItemIndex = 0;
     public int selectedItemQuantity = 0;
+    public int numDisplayableItems=7;
     public int topIndex = 0;
     public GameObject storeUI;
     public GameObject quantityUI;
@@ -25,6 +26,7 @@ public class Poke_Mart : MonoBehaviour
     private bool _itemsLoaded;
     public GameObject itemSelector;
     public GameObject quantitySelector;
+    public Text itemDescription;
     public static Poke_Mart Instance;
     private void Awake()
     {
@@ -53,7 +55,7 @@ public class Poke_Mart : MonoBehaviour
                 itemProgress++;
             }
         }
-        yield return new WaitUntil(() => itemProgress == currentMartData.availableItems.Count());
+        yield return new WaitUntil(() => itemProgress == currentMartData.availableItems.Count);
         _itemsLoaded = true;
     }
     private void Update()
@@ -69,13 +71,13 @@ public class Poke_Mart : MonoBehaviour
     }
     public void NavigateDown()
     {
-        if (topIndex < numItems - 7 && selectedItemIndex == 6)
+        if (topIndex < numItems - numDisplayableItems && selectedItemIndex == numDisplayableItems-1)
         {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < numDisplayableItems-1; i++)
                 storeItemsUI[i].item = storeItemsUI[i + 1].item;
             
-            storeItemsUI[6].item = currentStoreItems[topIndex + 7];
-            selectedItemIndex = 5;
+            storeItemsUI[numDisplayableItems-1].item = currentStoreItems[topIndex + numDisplayableItems];
+            selectedItemIndex = numDisplayableItems-2;
             ReloadItems();
             topIndex++;
         }
@@ -84,14 +86,14 @@ public class Poke_Mart : MonoBehaviour
             return;
         
         selectedItemIndex++;
-        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 6);
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, numDisplayableItems-1);
         SelectItem();
     }
     public void NavigateUp()
     {
         if (topIndex > 0 && selectedItemIndex == 0)
         {
-            for (int i = 6; i > 0; i--)
+            for (int i = numDisplayableItems-1; i > 0; i--)
                 storeItemsUI[i].item = storeItemsUI[i - 1].item;
             
             storeItemsUI[0].item = currentStoreItems[topIndex - 1];
@@ -100,7 +102,7 @@ public class Poke_Mart : MonoBehaviour
             topIndex--;
         }
         selectedItemIndex--;
-        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, 6);
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, numDisplayableItems-1);
         SelectItem();
     }
     public void BuyItem()
@@ -140,11 +142,10 @@ public class Poke_Mart : MonoBehaviour
     private void ViewStore(Overworld_interactable clerkInteractable, int optionChosen)
     {
         if (clerkInteractable.interactionType != Overworld_interactable.InteractionType.Clerk) return;
-        if (optionChosen > 0)
-        {
-            Dialogue_handler.Instance.EndDialogue(); 
-            return;
-        }
+        Dialogue_handler.Instance.EndDialogue();
+        
+        if (optionChosen > 0) return;
+        
         if(currentMartData!=null){
             if (currentMartData.location == clerkInteractable.location)
             {//basically caching
@@ -152,7 +153,11 @@ public class Poke_Mart : MonoBehaviour
                 return;
             }
         }
-        foreach (var data in Resources.LoadAll<PokeMartData>("Pokemon_project_assets/Overwolrd_obj/Poke_Mart_Data"))
+        
+        var allData = Resources.LoadAll<PokeMartData>(
+            Save_manager.GetDirectory(Save_manager.AssetDirectory.PokeMartData));
+        
+        foreach (var data in allData)
         {
             if (data.location == clerkInteractable.location)
             {
@@ -176,7 +181,7 @@ public class Poke_Mart : MonoBehaviour
         topIndex = 0;
         numItems = currentStoreItems.Count;
         //if less than amount of ui elements, load that number, otherwise just load the first seven
-        numItemsForView = (numItems < 8) ? numItems : 7; 
+        numItemsForView = (numItems < numDisplayableItems+1) ? numItems : numDisplayableItems; 
         for (int i = 0; i < numItemsForView; i++)
         {
             storeItemsUI[i].item = currentStoreItems[i];
@@ -184,6 +189,7 @@ public class Poke_Mart : MonoBehaviour
             storeItemsUI[i].LoadItemUI();
         }
         SelectItem();
+        Game_ui_manager.Instance.ViewPokeMart();
     }
     public void ExitStore()
     {

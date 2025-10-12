@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: It's a pokeball with a pokemon inside, take it?
   interactionType: 1
-  interactionOptions:
+  _interactionOptions:
   - ReceiveGiftPokemon
   - 
+  interactionOptions: 0a00000000000000
   resultMessage: Torchic
   optionsUiText:
   - Yes
   - No
   additionalInfo: []
+  hasSeparateLogicHandler: 0

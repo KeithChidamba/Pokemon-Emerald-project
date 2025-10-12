@@ -78,7 +78,12 @@ public class Interaction_handler : MonoBehaviour
                 { 
                    overworld_actions.Instance.fishingArea = interactableObject.area;
                    Dialogue_handler.Instance.DisplayList("Would you like to fish for pokemon"
-                       , "fishing...", new[]{ "Fish","" }, new[]{"Yes", "No"});
+                       , "fishing...", 
+                       new[]
+                       {
+                           Options_manager.InteractionOptions.Fish,Options_manager.InteractionOptions.None
+                       }
+                       , new[]{"Yes", "No"});
                 }
                 else
                 {

@@ -5,10 +5,9 @@ using UnityEngine.UI;
 public class Store_Item_ui : MonoBehaviour
 {
     public Item item;
-    [FormerlySerializedAs("Price")] public Text price;
-    [FormerlySerializedAs("item_name")] public Text itemName;
-    [FormerlySerializedAs("item_description")] public Text itemDescription;
-    [FormerlySerializedAs("item_img")] public Image itemImage;
+    public Text price;
+    public Text itemName;
+    public Image itemImage;
     public void LoadItemUI()
     {
         itemName.text = item.itemName;
@@ -16,13 +15,13 @@ public class Store_Item_ui : MonoBehaviour
     }
     public void LoadItemDescription()
     {
-        itemDescription.text = item.itemDescription;
+        Poke_Mart.Instance.itemDescription.text = item.itemDescription;
         itemImage.sprite = item.itemImage;
     }
     public void ClearUI()
     {
         item = null;
-        itemDescription.text = "";
+        Poke_Mart.Instance.itemDescription.text = "";
         itemImage.sprite = null;
         gameObject.SetActive(false);
     }

@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: Hello, what can i help you with?
   interactionType: 1
-  interactionOptions:
-  - View Market Delayed
+  _interactionOptions:
+  - 
   - Sell Item
+  interactionOptions: 0000000007000000
   resultMessage: What would you like
   optionsUiText:
   - Buy
   - Sell
   additionalInfo: []
+  hasSeparateLogicHandler: 0
