@@ -90,11 +90,9 @@ public class Enemy_trainer : MonoBehaviour
         }
         Turn_Based_Combat.Instance.faintEventDelay = false;
     }
-    public void SetupTrainerForBattle(string trainerName, bool isSameTrainer)
+    public void SetupTrainerForBattle(TrainerData copyOfTrainerData)
     {
         participant = GetComponent<Battle_Participant>();
-        if (isSameTrainer) return;//double battle
-        var copyOfTrainerData = Resources.Load<TrainerData>("Pokemon_project_assets/Enemies/Data/" + trainerName +"/"+ trainerName);
         trainerData = Obj_Instance.CreateTrainer(copyOfTrainerData);
         foreach (TrainerPokemonData member in trainerData.PokemonParty)
         {

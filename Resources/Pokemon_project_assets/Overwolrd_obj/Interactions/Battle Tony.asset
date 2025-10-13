@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: Hey! Let's single battle
   interactionType: 2
-  _interactionOptions:
-  - Battle
   interactionOptions: 02000000
-  resultMessage: single
+  resultMessage: 
   optionsUiText: []
   additionalInfo:
   - Tony

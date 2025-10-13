@@ -9,4 +9,6 @@ public class TrainerData : ScriptableObject
     public int BaseMoneyPayout = 0;
     public Encounter_Area TrainerLocation;
     public List<TrainerPokemonData> PokemonParty = new();
+    public enum BattleType{Single,SingleDouble,Double}
+    public BattleType battleType;
 }

@@ -58,14 +58,7 @@ public class Options_manager : MonoBehaviour
     void Battle()
     {
         Dialogue_handler.Instance.EndDialogue();
-        var battleType = _currentInteraction.resultMessage;
-        var alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
-        if (alivePokemon.Count < 2 && battleType.ToLower().Contains("double"))
-        {//if double battle enemy but you don't have enough pokemon alive
-            Battle_handler.Instance.SetBattleType(_currentInteraction.additionalInfo,"single");
-            return;
-        }
-        Battle_handler.Instance.SetBattleType(_currentInteraction.additionalInfo,battleType);
+        Battle_handler.Instance.SetBattleType(_currentInteraction.additionalInfo);
     }
 
     void LearnMove()

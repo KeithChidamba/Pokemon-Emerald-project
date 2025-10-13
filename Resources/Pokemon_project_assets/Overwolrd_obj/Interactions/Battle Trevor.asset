@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: Hey! Let's double battle
   interactionType: 2
-  _interactionOptions:
-  - Battle
   interactionOptions: 02000000
-  resultMessage: single-double
+  resultMessage: 
   optionsUiText: []
   additionalInfo:
   - Trevor

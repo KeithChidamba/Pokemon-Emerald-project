@@ -20,3 +20,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bb66aba008e4eca4587156e14fe1a2c5, type: 2}
   - {fileID: 11400000, guid: 9eb0e87105e0d414fa4bc876b40a71de, type: 2}
   - {fileID: 11400000, guid: 44f4d19d1ebcebc43a88a29a12fef294, type: 2}
+  battleType: 1

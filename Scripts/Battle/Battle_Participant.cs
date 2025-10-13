@@ -190,7 +190,9 @@ public class Battle_Participant : MonoBehaviour
             {
                 Pokemon_party.Instance.selectedMemberNumber = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
                 Pokemon_party.Instance.swapOutNext = true;
+                InputStateHandler.Instance.OnStateChanged += LockPartyExit;
                 Game_ui_manager.Instance.ViewPokemonParty();
+                
                 Dialogue_handler.Instance.DisplayDetails("Select a Pokemon to switch in");
                 ResetParticipantState();
             }
@@ -202,6 +204,13 @@ public class Battle_Participant : MonoBehaviour
                 Turn_Based_Combat.Instance.faintEventDelay = false;
             }
         }
+    }
+
+    private void LockPartyExit(InputState currentState)
+    {
+        if (!currentState.stateGroups.Contains(InputStateHandler.StateGroup.PokemonParty)) return;
+        InputStateHandler.Instance.OnStateChanged -= LockPartyExit;
+        currentState.UpdateExitStatus = () => false;
     }
     public void DeactivateParticipant()
     {

@@ -173,6 +173,7 @@ public class Battle_handler : MonoBehaviour
     }
     private void SetupBattle()
     {
+        //battle intro visuals
         _checkParticipantsEachTurn = ()=> CheckParticipantStates();
         Turn_Based_Combat.Instance.OnNewTurn += _checkParticipantsEachTurn;
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
@@ -206,18 +207,19 @@ public class Battle_handler : MonoBehaviour
             background.SetActive(background.name == area.biomeName.ToLower());
     }
 
-    public void SetBattleType(List<string> trainerNames, string battleType)
+    public void SetBattleType(List<string> trainerNames)
     {
-        switch (battleType)
+        var copyOfTrainerData = Resources.Load<TrainerData>(
+            Save_manager.GetDirectory(Save_manager.AssetDirectory.TrainerData)
+            + $"{trainerNames[0]}/{trainerNames[0]}");
+        
+        switch (copyOfTrainerData.battleType)
         {
-            case "single":
-                StartSingleBattle(trainerNames[0]);
+            case TrainerData.BattleType.Single:
+                StartSingleBattle(copyOfTrainerData);
                 break;
-            case "single-double":
-                StartSingleDoubleBattle(trainerNames[0]);
-                break;
-            case "double":
-                //StartDoubleBattle(trainerNames);
+            case TrainerData.BattleType.SingleDouble:
+                StartSingleDoubleBattle(copyOfTrainerData);
                 break;
         }
     }
@@ -244,7 +246,7 @@ public class Battle_handler : MonoBehaviour
         SetupBattle();
         Encounter_handler.Instance.currentArea = null;
     }
-    private void StartSingleBattle(string trainerName) //single trainer battle
+    private void StartSingleBattle(TrainerData trainerData) //single trainer battle
     {
         battleOver = false;
         isTrainerBattle = true;
@@ -257,7 +259,7 @@ public class Battle_handler : MonoBehaviour
         //setup enemy AI
         enemy.currentEnemies.Add(player);
         enemy.pokemonTrainerAI = enemy.GetComponent<Enemy_trainer>();
-        enemy.pokemonTrainerAI.SetupTrainerForBattle(trainerName, false);
+        enemy.pokemonTrainerAI.SetupTrainerForBattle(trainerData);
         enemy.pokemon = enemy.pokemonTrainerAI.trainerParty[0];
         enemy.AddToExpList(player.pokemon);
         enemy.pokemonTrainerAI.inBattle = true;
@@ -267,7 +269,7 @@ public class Battle_handler : MonoBehaviour
         SetupBattle();
     }
 
-    private void StartSingleDoubleBattle(string trainerName) //1v1 trainer double battle
+    private void StartSingleDoubleBattle(TrainerData trainerData) //1v1 trainer double battle
     {
         battleOver = false;
         isTrainerBattle = true;
@@ -285,7 +287,7 @@ public class Battle_handler : MonoBehaviour
         {
             var currentEnemy = battleParticipants[i];
             currentEnemy.pokemonTrainerAI = currentEnemy.GetComponent<Enemy_trainer>();
-            currentEnemy.pokemonTrainerAI.SetupTrainerForBattle(trainerName, false);
+            currentEnemy.pokemonTrainerAI.SetupTrainerForBattle(trainerData);
         }
         //copy over team data to enemy partner
         enemyPartner.pokemonTrainerAI.trainerData = enemy.pokemonTrainerAI.trainerData;
