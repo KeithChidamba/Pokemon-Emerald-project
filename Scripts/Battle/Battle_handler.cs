@@ -26,7 +26,6 @@ public class Battle_handler : MonoBehaviour
     public bool battleOver = false;
     public bool battleWon = false;
     public GameObject overWorld;
-    public List<GameObject> backgrounds;
     public bool runningAway;
     private bool battleTerminated;
     private int _currentMoveIndex = 0;
@@ -181,8 +180,6 @@ public class Battle_handler : MonoBehaviour
         SetupOptionsInput();
         Options_manager.Instance.playerInBattle = true;
         overworld_actions.Instance.doingAction = true;
-        battleUI.SetActive(true);
-        overWorld.SetActive(false);
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
         
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
@@ -201,10 +198,14 @@ public class Battle_handler : MonoBehaviour
                 }
         }
     }
-    void LoadAreaBackground(Encounter_Area area)
+    IEnumerator LoadAreaBackground(Encounter_Area area)
     {
-        foreach (var background in backgrounds)
-            background.SetActive(background.name == area.biomeName.ToLower());
+        //load visuals based on area
+        battleUI.SetActive(true);
+        overWorld.SetActive(false);
+        
+        yield return BattleIntro.Instance.PlayIntroSequence();
+        SetupBattle();
     }
 
     public void SetBattleType(List<string> trainerNames)
@@ -242,8 +243,7 @@ public class Battle_handler : MonoBehaviour
         Wild_pkm.Instance.inBattle = true;
         //setup battle
         SetValidParticipants();
-        LoadAreaBackground(Encounter_handler.Instance.currentArea);
-        SetupBattle();
+        StartCoroutine(LoadAreaBackground(Encounter_handler.Instance.currentArea));
         Encounter_handler.Instance.currentArea = null;
     }
     private void StartSingleBattle(TrainerData trainerData) //single trainer battle
@@ -264,9 +264,8 @@ public class Battle_handler : MonoBehaviour
         enemy.AddToExpList(player.pokemon);
         enemy.pokemonTrainerAI.inBattle = true;
         //setup battle
-        LoadAreaBackground(enemy.pokemonTrainerAI.trainerData.TrainerLocation);
         SetValidParticipants();
-        SetupBattle();
+        StartCoroutine(LoadAreaBackground(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
     }
 
     private void StartSingleDoubleBattle(TrainerData trainerData) //1v1 trainer double battle
@@ -317,8 +316,7 @@ public class Battle_handler : MonoBehaviour
         SetValidParticipants();
         enemy.pokemonTrainerAI.inBattle = true;
         enemyPartner.pokemonTrainerAI.inBattle = true;
-        LoadAreaBackground(enemy.pokemonTrainerAI.trainerData.TrainerLocation);
-        SetupBattle();
+        StartCoroutine(LoadAreaBackground(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
     }
 
     public void SetParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)

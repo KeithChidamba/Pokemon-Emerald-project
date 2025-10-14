@@ -156,16 +156,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -12376
+            "instanceID": -18342
         },
         {
-            "instanceID": -12378
+            "instanceID": -18344
         },
         {
-            "instanceID": -12380
+            "instanceID": -18346
         },
         {
-            "instanceID": -12382
+            "instanceID": -18348
         }
     ],
     "ability": {
@@ -184,10 +184,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31838
+        "instanceID": 31828
     },
     "backPicture": {
-        "instanceID": 31840
+        "instanceID": 31830
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,
