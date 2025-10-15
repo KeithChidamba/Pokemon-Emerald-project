@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 35374287238ae3b4ba5a32c1d7304a64
+guid: bc4a5097626cca6d6a8a5f68b5c8b077
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,85 +110,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: battlr ui 2_0
+      name: exp bar_0
       rect:
         serializedVersion: 2
-        x: 571
-        y: 274
-        width: 461
-        height: 113
+        x: 9
+        y: 4
+        width: 467
+        height: 21
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fbd73b74250f9bf41a04dbf750a03403
-      internalID: -1315063463
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: battlr ui 2_1
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1080
-        height: 215
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c921bee84f1e1164287b6e23dc898fc8
-      internalID: 1002690751
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: battlr ui 2_2
-      rect:
-        serializedVersion: 2
-        x: 573
-        y: 222
-        width: 460
-        height: 42
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f1e99509d2f7ba04fabf3b99cddaba55
-      internalID: -1888499799
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: battlr ui 2_3
-      rect:
-        serializedVersion: 2
-        x: 553
-        y: 221
-        width: 483
-        height: 172
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fef1b74b032a78243ba1fee0ef5e3ba5
-      internalID: 1079457930
+      spriteID: 48e82e7b1de6c273a9ba723c7aa2951b
+      internalID: -1844651816
       vertices: []
       indices: 
       edges: []
@@ -204,10 +141,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      battlr ui 2_0: -1315063463
-      battlr ui 2_1: 1002690751
-      battlr ui 2_2: -1888499799
-      battlr ui 2_3: 1079457930
+      exp bar_0: -1844651816
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
