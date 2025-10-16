@@ -108,7 +108,994 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 304
+        width: 256
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbfe434e4943894be8235664502a4460
+      internalID: 278982971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_1
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 343
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e74ee4547d447003b97ff9f57a228ec7
+      internalID: -164435959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_2
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 343
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05457be4da08c944a868d14e4fd7dd9d
+      internalID: 1485936387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_3
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 343
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b47ac3d29a3d50d859f36258890c627b
+      internalID: -1511547161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_4
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 333
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cf28ef770323dcdf9179b8609e5a19e
+      internalID: -1377742372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_5
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 336
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41ab2b7def07c329faadea1345ceb7a0
+      internalID: 1489642157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_6
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 335
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5159b584067a1993f9d79ae7217256ba
+      internalID: -1621889624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_7
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 332
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65cf20f3176fc1b88852e6eb028d1bc3
+      internalID: -237433905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_8
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 335
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca379741c20aab8769e8137b80033f50
+      internalID: -288072442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_9
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 327
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 907c8cadcb7aed77fa6d4ac438cdb40d
+      internalID: 945960017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_10
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 325
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c09b72c4374164ecab4bb34aabbca1a2
+      internalID: 949732479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_11
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 328
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c28f48b53aa9f95ae827e7cd02535c02
+      internalID: 1211277273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_12
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 327
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8cecfc523f2fe50383ce2a23df9b432
+      internalID: 1564910466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_13
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 320
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abf88689a35b284e2b04ce8bb35e627c
+      internalID: 2016228457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_14
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 319
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a37bfeb181af53aecbcd4003a78ebf0c
+      internalID: 1711334844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_15
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 316
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 831cbc6a3ca0b63eeadca95ff135d3ae
+      internalID: -249309918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_16
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 317
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16d870210f0a189a39df75a8d62e2fa8
+      internalID: -2086417521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_17
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 52
+        width: 150
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7da10b4a198a29005b67c15313b10e82
+      internalID: -995984918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_18
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 305
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85ad2ac0d7d21e99aaf489f4bbce9876
+      internalID: 1527378516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_19
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 310
+        width: 19
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80a83ed7c0ac9fde68f23906bdbf7584
+      internalID: 745798065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_20
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 305
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31b8589258d8f0a0d9a7f13f60ec1640
+      internalID: -377987731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_21
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 302
+        width: 19
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8009b10d96cca777a19f6f727174757
+      internalID: -658486570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_22
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 296
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 602900cb533398daa8b6e6ea41067487
+      internalID: 1320420133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_23
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 301
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bd5f60cb1ecb9429b5c279f30d567ab
+      internalID: 874380997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_24
+      rect:
+        serializedVersion: 2
+        x: 493
+        y: 297
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8655e400c68af5af397ed65983e2bfd9
+      internalID: 548366883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_25
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 249
+        width: 256
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afdcc6fe3b40778e1953ed21c9350165
+      internalID: -1038670608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_26
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 295
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b74a9fd562989f8ab84d0c649a7558b
+      internalID: 303630438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_27
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 293
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a54ff5b8c2efbefdb925f8fded676be
+      internalID: 366165684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_28
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 293
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c27aaf4a9d8b255af85dbb4f076c3642
+      internalID: 445069990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_29
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 295
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 716c1d554082575688a9c4f47d586257
+      internalID: 1984489400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_30
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 280
+        width: 13
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a141c1ea5dc35e26b9672594b9a4b180
+      internalID: -1447240101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_31
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 278
+        width: 19
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64339e64adca1ad0b93eb97d16426050
+      internalID: -274201678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_32
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 284
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4845a7a0d6eedba0a935232019a53263
+      internalID: 30051202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_33
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 249
+        width: 256
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a6f52eea83ae0b02bf803b97d9bbe7b
+      internalID: 1769414126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_34
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 159
+        width: 261
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 151eab67ffe06d8088f56871e29794df
+      internalID: 442527204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_35
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 163
+        width: 256
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbfb85c5d33e144e2ae9a11c6af0c277
+      internalID: -1910507102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_36
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 232
+        width: 13
+        height: 1
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb3e01eef4da3a5079cc9501540af170
+      internalID: -825509634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_37
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 9
+        width: 8
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6269b7e63778aa67582cb48a1c24ca25
+      internalID: 132151309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_38
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 89
+        width: 256
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41424d0e266b762c18f1ac433d9e0440
+      internalID: -805280080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_39
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 53
+        width: 12
+        height: 8
+      alignment: 9
+      pivot: {x: 0.17933273, y: -3.7730694}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc995f541b3eedabcb7de8edf43b38dd
+      internalID: -2130978467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_40
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 45
+        width: 30
+        height: 1
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f2515435acffd97593f041d93b39911
+      internalID: -1609559260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_41
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 9
+        width: 56
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50501efa88efd592dac775ffd40dfc72
+      internalID: 1483240181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_42
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 86
+        width: 260
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9031a08eb73ec64e9f9e320caa6a2b5
+      internalID: -664134776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_43
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 20
+        width: 66
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5849682dcaa32c5e5af82f31db8f58b1
+      internalID: -1627069311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_44
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 12
+        width: 24
+        height: 23
+      alignment: 9
+      pivot: {x: -0.103782654, y: -0.45031124}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f5614dfaa732a90c981cae842958dab
+      internalID: 455125190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_45
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 14
+        width: 69
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e45e04c4b04974457a807cab2277ea2c
+      internalID: -1139271228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_46
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 277
+        width: 259
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca09f898a5aa001eda00403684c72a2d
+      internalID: -1809845009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +1106,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_0: 278982971
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_1: -164435959
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_10: 949732479
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_11: 1211277273
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_12: 1564910466
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_13: 2016228457
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_14: 1711334844
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_15: -249309918
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_16: -2086417521
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_17: -995984918
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_18: 1527378516
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_19: 745798065
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_2: 1485936387
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_20: -377987731
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_21: -658486570
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_22: 1320420133
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_23: 874380997
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_24: 548366883
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_25: -1038670608
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_26: 303630438
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_27: 366165684
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_28: 445069990
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_29: 1984489400
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_3: -1511547161
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_30: -1447240101
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_31: -274201678
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_32: 30051202
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_33: 1769414126
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_34: 442527204
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_35: -1910507102
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_36: -825509634
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_37: 132151309
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_38: -805280080
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_39: -2130978467
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_4: -1377742372
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_40: -1609559260
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_41: 1483240181
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_42: -664134776
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_43: -1627069311
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_44: 455125190
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_45: -1139271228
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_46: -1809845009
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_5: 1489642157
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_6: -1621889624
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_7: -237433905
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_8: -288072442
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Battle Introductions_9: 945960017
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

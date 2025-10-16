@@ -6,8 +6,11 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "Encounter", menuName = "enc")]
 public class Encounter_Area : ScriptableObject
 {
-    [FormerlySerializedAs("Biome_name")] public string biomeName;
-    [FormerlySerializedAs("Location")] public string location;
+    public enum Biome
+    {
+        Ocean,UnderWater,OpenField,TallGrass,Mountain,Desert
+    };
+    public Biome biome;
     public EncounterPokemonData[] availableEncounters;
     public int minimumLevelOfPokemon = 0;
     public int maximumLevelOfPokemon = 0;

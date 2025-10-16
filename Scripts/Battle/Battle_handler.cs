@@ -198,13 +198,13 @@ public class Battle_handler : MonoBehaviour
                 }
         }
     }
-    IEnumerator LoadAreaBackground(Encounter_Area area)
+    private IEnumerator LoadAreaBackground(Encounter_Area areaOfBattle)
     {
         //load visuals based on area
         battleUI.SetActive(true);
         overWorld.SetActive(false);
         
-        yield return BattleIntro.Instance.PlayIntroSequence();
+        yield return BattleIntro.Instance.PlayIntroSequence(areaOfBattle,isTrainerBattle);
         SetupBattle();
     }
 

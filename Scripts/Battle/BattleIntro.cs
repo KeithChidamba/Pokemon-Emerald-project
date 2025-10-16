@@ -1,6 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.WSA;
 
 public class BattleIntro : MonoBehaviour
 {
@@ -11,18 +15,20 @@ public class BattleIntro : MonoBehaviour
     public RectTransform parallaxObject;
     public RectTransform leftPlatform;
     public RectTransform rightPlatform;
-
+    [SerializeField]private Encounter_Area.Biome[] introTerrainBiomes;
+    public Sprite[] introTerrains;
+    public Image terrainParallaxImage;
+    
     [Header("Animation Settings")]
-    public float blackPanelsSpeed = 800f;
-    public float redBoxSlideSpeed = 400f;
-    public float parallaxDistance = 300f;
-    public float parallaxDuration = 1.5f;
+    public float blackPanelsSpeed = 300f;
+    public float parallaxDistance = 700f;
+    public float parallaxDuration = 5f;
     public float platformSlideSpeed = 700f;
 
     private Vector2 topBlackStart, bottomBlackStart;
     private Vector2 topBlackTarget, bottomBlackTarget;
-    private Vector2 redBoxStart, redBoxTarget;
-    private Vector2 leftPlatformStart, rightPlatformStart, platformTarget;
+    private Vector2 redBoxStart, redBoxTarget, leftPlatformTarget,rightPlatformTarget;
+    private Vector2 leftPlatformStart, rightPlatformStart;
     public static BattleIntro Instance;
     
     private void Awake()
@@ -36,21 +42,29 @@ public class BattleIntro : MonoBehaviour
     }
     private void Start()
     {
+        introTerrainBiomes = new[]
+        {
+            Encounter_Area.Biome.Desert, Encounter_Area.Biome.Ocean,Encounter_Area.Biome.UnderWater,
+            Encounter_Area.Biome.OpenField,Encounter_Area.Biome.TallGrass,Encounter_Area.Biome.Mountain
+        };
+        
         // Store initial positions
         topBlackStart = GetAnchoredFromWorld(topBlackPanel);
         bottomBlackStart = GetAnchoredFromWorld(bottomBlackPanel);
-        redBoxStart = redBox.anchoredPosition; 
-        redBox.anchoredPosition = new Vector2(redBoxStart.x,redBoxStart.y-redBox.rect.height);
-        redBoxStart = redBox.anchoredPosition;
+        
+        leftPlatformStart = leftPlatform.anchoredPosition; 
+        leftPlatform.anchoredPosition = new Vector2(leftPlatformStart.x-leftPlatform.rect.width,leftPlatformStart.y);
         leftPlatformStart = leftPlatform.anchoredPosition;
+        
+        rightPlatformStart = rightPlatform.anchoredPosition; 
+        rightPlatform.anchoredPosition = new Vector2(rightPlatformStart.x+rightPlatform.rect.width,rightPlatformStart.y);
         rightPlatformStart = rightPlatform.anchoredPosition;
 
-        // Targets (these assume centered layout)
         topBlackTarget = topBlackStart + Vector2.up * topBlackPanel.rect.height;
         bottomBlackTarget = bottomBlackStart + Vector2.down * bottomBlackPanel.rect.height;
         
-        redBoxTarget = redBoxStart + Vector2.up * redBox.rect.height;
-        platformTarget = Vector2.zero;
+        rightPlatformTarget = rightPlatformStart + Vector2.left * rightPlatform.rect.width;
+        leftPlatformTarget = leftPlatformStart + Vector2.right * leftPlatform.rect.width;
     }
 
     private Vector2 GetAnchoredFromWorld(RectTransform rect)
@@ -68,34 +82,56 @@ public class BattleIntro : MonoBehaviour
 
         return localPoint;
     }
-    public IEnumerator PlayIntroSequence()
+    public IEnumerator PlayIntroSequence(Encounter_Area battleArea,bool isTrainerBattle)
     {
         // 1️⃣ Black panels separate to reveal UI
-        yield return StartCoroutine(MovePanelsApart());
+        
+        StartCoroutine(MovePanelsApart());
 
         // 3️⃣ Red box slides upward
         redBox.gameObject.SetActive(true);
-        yield return StartCoroutine(SlideRect(redBox, redBoxStart, redBoxTarget, redBoxSlideSpeed));
+        //yield return StartCoroutine(SlideRect(redBox, redBoxStart, redBoxTarget, redBoxSlideSpeed));
+        
+        if(isTrainerBattle)
+        {
+            IEnumerator DropParallax(float delay)
+            {
+                yield return new WaitForSeconds(delay);
+                var droppedPosition = parallaxObject.anchoredPosition + Vector2.down * parallaxObject.rect.height;
+                StartCoroutine(SlideRect(parallaxObject,parallaxObject.anchoredPosition, droppedPosition,parallaxDuration));
+                parallaxObject.gameObject.SetActive(false);
+            }
+            
+            terrainParallaxImage.sprite = 
+                introTerrains[Array.IndexOf(introTerrainBiomes,battleArea.biome)];
+            
+            parallaxObject.gameObject.SetActive(true);
 
-        parallaxObject.gameObject.SetActive(true);
-        // 4️⃣ Parallax object moves left for 1.5 seconds
-        yield return StartCoroutine(ParallaxMove(parallaxObject, parallaxDistance, parallaxDuration));
-
+            StartCoroutine(ParallaxMove(parallaxObject, parallaxDistance, parallaxDuration));
+            
+            StartCoroutine(DropParallax(parallaxDuration));
+        }
+        
+        
         leftPlatform.gameObject.SetActive(true);
         rightPlatform.gameObject.SetActive(true);
         // 5️⃣ Platforms slide from opposite sides to center
-        yield return StartCoroutine(SlideRect(leftPlatform, leftPlatformStart, platformTarget, platformSlideSpeed));
-        yield return StartCoroutine(SlideRect(rightPlatform, rightPlatformStart, platformTarget, platformSlideSpeed));
+        StartCoroutine(SlideRect(leftPlatform, leftPlatformStart, leftPlatformTarget, platformSlideSpeed));
+        yield return StartCoroutine(SlideRect(rightPlatform, rightPlatformStart, rightPlatformTarget, platformSlideSpeed*0.96f));
     }
 
     private IEnumerator MovePanelsApart()
     {
+        topBlackPanel.gameObject.SetActive(true);
+        bottomBlackPanel.gameObject.SetActive(true);
         while (Vector2.Distance(topBlackPanel.anchoredPosition, topBlackTarget) > 0.5f)
         {
             topBlackPanel.anchoredPosition = Vector2.MoveTowards(topBlackPanel.anchoredPosition, topBlackTarget, blackPanelsSpeed * Time.deltaTime);
             bottomBlackPanel.anchoredPosition = Vector2.MoveTowards(bottomBlackPanel.anchoredPosition, bottomBlackTarget, blackPanelsSpeed * Time.deltaTime);
             yield return null;
         }
+        bottomBlackPanel.gameObject.SetActive(false);
+        topBlackPanel.gameObject.SetActive(false);
     }
     private IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)
     {
