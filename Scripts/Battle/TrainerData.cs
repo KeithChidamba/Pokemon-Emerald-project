@@ -11,4 +11,5 @@ public class TrainerData : ScriptableObject
     public List<TrainerPokemonData> PokemonParty = new();
     public enum BattleType{Single,SingleDouble,Double}
     public BattleType battleType;
+    public Sprite battleIntroSprite;
 }

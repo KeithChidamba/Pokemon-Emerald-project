@@ -18,6 +18,8 @@ public class BattleIntro : MonoBehaviour
     [SerializeField]private Encounter_Area.Biome[] introTerrainBiomes;
     public Sprite[] introTerrains;
     public Image terrainParallaxImage;
+    public Image[] participantIntroImages;
+    public Sprite playerSprite;
     
     [Header("Animation Settings")]
     public float blackPanelsSpeed = 300f;
@@ -84,13 +86,48 @@ public class BattleIntro : MonoBehaviour
     }
     public IEnumerator PlayIntroSequence(Encounter_Area battleArea,bool isTrainerBattle)
     {
-        // 1️⃣ Black panels separate to reveal UI
+        string message = "";
+        var challengers = new List<string>();
+        var participants = Battle_handler.Instance.battleParticipants;
+
+        for (var i=0;i<4;i++)
+        {
+            if (!participants[i].isActive)
+            {
+                participantIntroImages[i].gameObject.SetActive(false);
+                continue;
+            }
+            
+            participantIntroImages[i].gameObject.SetActive(true);
+            if (participants[i].isEnemy)
+            {
+                if (Battle_handler.Instance.isTrainerBattle)
+                {
+                    participantIntroImages[i].sprite = participants[i].pokemonTrainerAI.trainerData.battleIntroSprite;
+                    challengers.Add(participants[i].pokemonTrainerAI.trainerData.TrainerName);
+                }
+                else
+                    participantIntroImages[i].sprite = participants[i].pokemon.frontPicture;
+            }
+            else
+                participantIntroImages[i].sprite = playerSprite;
+        }
+        
+        if (!Battle_handler.Instance.isTrainerBattle)
+        {
+            message = $"A wild {Wild_pkm.Instance.participant.pokemon.pokemonName} has appeared";
+        }
+        else
+        {
+            message = challengers.Count > 1? 
+                $"{challengers[0]} and {challengers[1]} challenge you to a battle"
+                :    $"{challengers[0]} challenges you to a battle";
+        }
+        Dialogue_handler.Instance.DisplayBattleInfo(message);
         
         StartCoroutine(MovePanelsApart());
-
-        // 3️⃣ Red box slides upward
+        
         redBox.gameObject.SetActive(true);
-        //yield return StartCoroutine(SlideRect(redBox, redBoxStart, redBoxTarget, redBoxSlideSpeed));
         
         if(isTrainerBattle)
         {
@@ -98,7 +135,7 @@ public class BattleIntro : MonoBehaviour
             {
                 yield return new WaitForSeconds(delay);
                 var droppedPosition = parallaxObject.anchoredPosition + Vector2.down * parallaxObject.rect.height;
-                StartCoroutine(SlideRect(parallaxObject,parallaxObject.anchoredPosition, droppedPosition,parallaxDuration));
+                StartCoroutine(SlideRect(parallaxObject,parallaxObject.anchoredPosition, droppedPosition,2f));
                 parallaxObject.gameObject.SetActive(false);
             }
             
@@ -118,6 +155,16 @@ public class BattleIntro : MonoBehaviour
         // 5️⃣ Platforms slide from opposite sides to center
         StartCoroutine(SlideRect(leftPlatform, leftPlatformStart, leftPlatformTarget, platformSlideSpeed));
         yield return StartCoroutine(SlideRect(rightPlatform, rightPlatformStart, rightPlatformTarget, platformSlideSpeed*0.96f));
+        
+        for (var i=0;i<4;i++)
+        {
+            if (!participants[i].isActive)
+            {
+                continue;
+            }
+            participantIntroImages[i].gameObject.SetActive(false);
+            participants[i].participantUI.SetActive(true);
+        }
     }
 
     private IEnumerator MovePanelsApart()

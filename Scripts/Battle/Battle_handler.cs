@@ -172,7 +172,7 @@ public class Battle_handler : MonoBehaviour
     }
     private void SetupBattle()
     {
-        //battle intro visuals
+
         _checkParticipantsEachTurn = ()=> CheckParticipantStates();
         Turn_Based_Combat.Instance.OnNewTurn += _checkParticipantsEachTurn;
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
@@ -201,10 +201,10 @@ public class Battle_handler : MonoBehaviour
     private IEnumerator LoadAreaBackground(Encounter_Area areaOfBattle)
     {
         //load visuals based on area
-        battleUI.SetActive(true);
         overWorld.SetActive(false);
+        battleUI.SetActive(true);
+        yield return StartCoroutine(BattleIntro.Instance.PlayIntroSequence(areaOfBattle,isTrainerBattle));
         
-        yield return BattleIntro.Instance.PlayIntroSequence(areaOfBattle,isTrainerBattle);
         SetupBattle();
     }
 

@@ -75,23 +75,15 @@ public class overworld_actions : MonoBehaviour
             if (!_canUseEquippedItem) return;
             Dialogue_handler.Instance.DisplayDetails("No item has been equipped", 2f);
         }  
-        if (Dialogue_handler.Instance.displaying)
+        if (Dialogue_handler.Instance.displaying || usingUI || doingAction)
         {
             Player_movement.Instance.RestrictPlayerMovement();
-            return;
         }
-        if (usingUI)
-        {
-            Player_movement.Instance.RestrictPlayerMovement();
-            return;
-        }
-        if (doingAction)
-            Player_movement.Instance.RestrictPlayerMovement();
-        
         if (pokemonBitingPole & Input.GetKeyDown(KeyCode.Z))
         {
             pokemonBitingPole = false;
             Encounter_handler.Instance.TriggerFishingEncounter(fishingArea,equippedSpecialItem);
+            
         }
         if (fishing)
         {
@@ -137,6 +129,7 @@ public class overworld_actions : MonoBehaviour
     {
         fishing = false;
         pokemonBitingPole = false;
+        ActionReset();
         manager.ChangeAnimationState(manager.fishingEnd);
     }
 

@@ -318,7 +318,7 @@ public class Battle_Participant : MonoBehaviour
         playerHpSlider.value = pokemon.hp;
         playerHpSlider.maxValue = pokemon.maxHp;
         if(pokemon.hp<=0) pokemon.hp = 0;
-        PokemonOperations.UpdateHealthPhase(pokemon,hpSliderImage);
+        PokemonOperations.UpdateHealthPhase(pokemon,hpSliderImage); 
     }
     public void RefreshStatusEffectImage()
     {
@@ -349,7 +349,7 @@ public class Battle_Participant : MonoBehaviour
         RefreshStatusEffectImage();
         playerHpSlider.minValue = 0;
         isActive = true;
-        participantUI.SetActive(true);
+       
         ActivateGenderImage();
         if (pokemon.statusEffect == PokemonOperations.StatusEffect.BadlyPoison)
         {
