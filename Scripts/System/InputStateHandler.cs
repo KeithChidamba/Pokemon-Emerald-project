@@ -120,7 +120,7 @@ public class InputStateHandler : MonoBehaviour
     {
         state.selector?.SetActive(false);
         Action method = manualExit ? state.OnExit:state.OnClose;
-        method?.Invoke();//note: must not have onexit/onclose that also starts this coroutine
+        method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine
         ResetInputEvents();
         stateLayers.Remove(state);
         if (!manualExit) return;

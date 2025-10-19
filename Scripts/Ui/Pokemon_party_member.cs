@@ -83,7 +83,9 @@ public class Pokemon_party_member : MonoBehaviour
         {
             pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
         }
-        _isViewingCard = currentState.stateName == InputStateHandler.StateName.PokemonPartyNavigation;
+
+        _isViewingCard = currentState.stateName == InputStateHandler.StateName.PokemonPartyNavigation
+                         || currentState.stateName == InputStateHandler.StateName.PokemonPartyItemUsage;
     }
 
     public void ChangeVisibility(bool isSelected)

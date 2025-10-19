@@ -170,23 +170,6 @@ public class Battle_handler : MonoBehaviour
                               && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
                                   .currentCoolDown.isCoolingDown;
     }
-    private void SetupBattle()
-    {
-
-        _checkParticipantsEachTurn = ()=> CheckParticipantStates();
-        Turn_Based_Combat.Instance.OnNewTurn += _checkParticipantsEachTurn;
-        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
-        InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
-        SetupOptionsInput();
-        Options_manager.Instance.playerInBattle = true;
-        overworld_actions.Instance.doingAction = true;
-        Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
-        
-        Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
-        Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForSwap = false;
-        Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
-        OnBattleStart?.Invoke();
-    }
     private void SetValidParticipants()
     {
         foreach (var participant in battleParticipants)
@@ -198,14 +181,31 @@ public class Battle_handler : MonoBehaviour
                 }
         }
     }
-    private IEnumerator LoadAreaBackground(Encounter_Area areaOfBattle)
+    private IEnumerator SetupBattleSequence(Encounter_Area areaOfBattle)
     {
         //load visuals based on area
         overWorld.SetActive(false);
         battleUI.SetActive(true);
-        yield return StartCoroutine(BattleIntro.Instance.PlayIntroSequence(areaOfBattle,isTrainerBattle));
+        Options_manager.Instance.playerInBattle = true;
+        if(isTrainerBattle)
+            yield return StartCoroutine(BattleIntro.Instance.PlayTrainerIntroSequence(areaOfBattle));
+        else
+            yield return StartCoroutine(BattleIntro.Instance.PlayWildIntroSequence(areaOfBattle));
         
-        SetupBattle();
+        //Setup battle events
+        _checkParticipantsEachTurn = ()=> CheckParticipantStates();
+        Turn_Based_Combat.Instance.OnNewTurn += _checkParticipantsEachTurn;
+        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
+        InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
+        SetupOptionsInput();
+        
+        overworld_actions.Instance.doingAction = true;
+        Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
+        
+        Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
+        Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForSwap = false;
+        Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
+        OnBattleStart?.Invoke();
     }
 
     public void SetBattleType(List<string> trainerNames)
@@ -243,7 +243,7 @@ public class Battle_handler : MonoBehaviour
         Wild_pkm.Instance.inBattle = true;
         //setup battle
         SetValidParticipants();
-        StartCoroutine(LoadAreaBackground(Encounter_handler.Instance.currentArea));
+        StartCoroutine(SetupBattleSequence(Encounter_handler.Instance.currentArea));
         Encounter_handler.Instance.currentArea = null;
     }
     private void StartSingleBattle(TrainerData trainerData) //single trainer battle
@@ -265,7 +265,7 @@ public class Battle_handler : MonoBehaviour
         enemy.pokemonTrainerAI.inBattle = true;
         //setup battle
         SetValidParticipants();
-        StartCoroutine(LoadAreaBackground(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
+        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
     }
 
     private void StartSingleDoubleBattle(TrainerData trainerData) //1v1 trainer double battle
@@ -316,7 +316,7 @@ public class Battle_handler : MonoBehaviour
         SetValidParticipants();
         enemy.pokemonTrainerAI.inBattle = true;
         enemyPartner.pokemonTrainerAI.inBattle = true;
-        StartCoroutine(LoadAreaBackground(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
+        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
     }
 
     public void SetParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)

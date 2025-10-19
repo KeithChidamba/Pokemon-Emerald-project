@@ -275,6 +275,22 @@ public class Bag : MonoBehaviour
     public void UseItem()
      {
          var itemToUse = currentCategoryOfItems[topIndex + selectedItemIndex];
+         if (Options_manager.Instance.playerInBattle)
+         {
+             if (!itemToUse.canBeUsedInBattle)
+             {
+                 Dialogue_handler.Instance.DisplayDetails("Can't use that in battle",1f);
+                 return;
+             }
+         }
+         else 
+         {
+             if (!itemToUse.canBeUsedInOverworld) 
+             {
+                 Dialogue_handler.Instance.DisplayDetails("Can't use that in battle",1f);
+                 return;//special items for events
+             }
+         }
          Item_handler.Instance.usingItem = true;
          if(itemToUse.forPartyUse)
          {

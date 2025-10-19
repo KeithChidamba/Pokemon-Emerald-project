@@ -11,7 +11,7 @@ public class BattleIntro : MonoBehaviour
     [Header("UI References")]
     public RectTransform topBlackPanel;
     public RectTransform bottomBlackPanel;
-    public RectTransform redBox;
+    public RectTransform dialogueBox;
     public RectTransform parallaxObject;
     public RectTransform leftPlatform;
     public RectTransform rightPlatform;
@@ -31,6 +31,7 @@ public class BattleIntro : MonoBehaviour
     private Vector2 topBlackTarget, bottomBlackTarget;
     private Vector2 redBoxStart, redBoxTarget, leftPlatformTarget,rightPlatformTarget;
     private Vector2 leftPlatformStart, rightPlatformStart;
+    public Animator playerAnimator;
     public static BattleIntro Instance;
     
     private void Awake()
@@ -84,7 +85,71 @@ public class BattleIntro : MonoBehaviour
 
         return localPoint;
     }
-    public IEnumerator PlayIntroSequence(Encounter_Area battleArea,bool isTrainerBattle)
+
+    private void SlideOutOfView(RectTransform rectTransform)
+    {
+        var startPos = rectTransform.anchoredPosition;
+        var target = new Vector2(rectTransform.anchoredPosition.x + 2000f, rectTransform.anchoredPosition.y);
+        StartCoroutine(SlideRect(rectTransform,
+            startPos, target , platformSlideSpeed*5));
+    }
+    private IEnumerator MainIntroSequence(Encounter_Area battleArea)
+    {
+        StartCoroutine(MovePanelsApart());
+        dialogueBox.gameObject.SetActive(true);
+        
+        if(!Battle_handler.Instance.isTrainerBattle)
+        {
+            IEnumerator DropParallax(float delay)
+            {
+                yield return new WaitForSeconds(delay);
+                var droppedPosition = parallaxObject.anchoredPosition + Vector2.down * parallaxObject.rect.height;
+                StartCoroutine(SlideRect(parallaxObject, parallaxObject.anchoredPosition, droppedPosition, 2f));
+                parallaxObject.gameObject.SetActive(false);
+            }
+
+            terrainParallaxImage.sprite =
+                introTerrains[Array.IndexOf(introTerrainBiomes, battleArea.biome)];
+
+            parallaxObject.gameObject.SetActive(true);
+
+            StartCoroutine(ParallaxMove(parallaxObject, parallaxDistance, parallaxDuration));
+
+            StartCoroutine(DropParallax(parallaxDuration));
+        }
+        
+        leftPlatform.gameObject.SetActive(true);
+        rightPlatform.gameObject.SetActive(true);
+        // 5️⃣ Platforms slide from opposite sides to center
+        StartCoroutine(SlideRect(leftPlatform, leftPlatformStart, leftPlatformTarget, platformSlideSpeed));
+        yield return StartCoroutine(SlideRect(rightPlatform, rightPlatformStart, rightPlatformTarget, platformSlideSpeed*0.96f));
+    }
+    public IEnumerator PlayWildIntroSequence(Encounter_Area battleArea)
+    {
+        Dialogue_handler.Instance.DisplayBattleInfo("");
+        var participants = Battle_handler.Instance.battleParticipants;
+
+        for (var i=0;i<4;i++)
+        {
+            if (!participants[i].isActive)
+            {
+                participantIntroImages[i].gameObject.SetActive(false);
+                continue;
+            }
+            participantIntroImages[i].gameObject.SetActive(true);
+            participantIntroImages[i].sprite = participants[i].isEnemy?
+                participants[i].pokemon.frontPicture: playerSprite;
+        }
+
+        yield return MainIntroSequence(battleArea);
+        
+        Dialogue_handler.Instance.DisplayBattleInfo(
+            $"A wild {Wild_pkm.Instance.participant.pokemon.pokemonName} has appeared");
+        //go pokemon
+        //pokeball throw
+        //show ui
+    }
+    public IEnumerator PlayTrainerIntroSequence(Encounter_Area battleArea)
     {
         string message = "";
         var challengers = new List<string>();
@@ -101,70 +166,51 @@ public class BattleIntro : MonoBehaviour
             participantIntroImages[i].gameObject.SetActive(true);
             if (participants[i].isEnemy)
             {
-                if (Battle_handler.Instance.isTrainerBattle)
-                {
-                    participantIntroImages[i].sprite = participants[i].pokemonTrainerAI.trainerData.battleIntroSprite;
-                    challengers.Add(participants[i].pokemonTrainerAI.trainerData.TrainerName);
-                }
-                else
-                    participantIntroImages[i].sprite = participants[i].pokemon.frontPicture;
+                participantIntroImages[i].sprite = participants[i].pokemonTrainerAI.trainerData.battleIntroSprite;
+                challengers.Add(participants[i].pokemonTrainerAI.trainerData.TrainerName);
             }
             else
                 participantIntroImages[i].sprite = playerSprite;
         }
-        
-        if (!Battle_handler.Instance.isTrainerBattle)
-        {
-            message = $"A wild {Wild_pkm.Instance.participant.pokemon.pokemonName} has appeared";
-        }
-        else
-        {
-            message = challengers.Count > 1? 
+
+        message = challengers.Count > 1? 
                 $"{challengers[0]} and {challengers[1]} challenge you to a battle"
                 :    $"{challengers[0]} challenges you to a battle";
-        }
+        
+        yield return MainIntroSequence(battleArea);
+        
         Dialogue_handler.Instance.DisplayBattleInfo(message);
-        
-        StartCoroutine(MovePanelsApart());
-        
-        redBox.gameObject.SetActive(true);
-        
-        if(isTrainerBattle)
+        yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+        //show pokeballs
+        for (var i=0;i<challengers.Count;i++)
         {
-            IEnumerator DropParallax(float delay)
-            {
-                yield return new WaitForSeconds(delay);
-                var droppedPosition = parallaxObject.anchoredPosition + Vector2.down * parallaxObject.rect.height;
-                StartCoroutine(SlideRect(parallaxObject,parallaxObject.anchoredPosition, droppedPosition,2f));
-                parallaxObject.gameObject.SetActive(false);
-            }
-            
-            terrainParallaxImage.sprite = 
-                introTerrains[Array.IndexOf(introTerrainBiomes,battleArea.biome)];
-            
-            parallaxObject.gameObject.SetActive(true);
-
-            StartCoroutine(ParallaxMove(parallaxObject, parallaxDistance, parallaxDuration));
-            
-            StartCoroutine(DropParallax(parallaxDuration));
+            Dialogue_handler.Instance.DisplayBattleInfo($"{challengers[i]} sent out {participants[i+2].pokemon.pokemonName}!");
+            participants[i+2].participantUI.SetActive(true);
+            yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+            SlideOutOfView(participantIntroImages[i+2].rectTransform);
         }
+        //display trainer sent out pokemon, slide away trainer's image, while pokeballs dissaper
+        //pokeball throw, while pokeballs dissaper
+        message = Battle_handler.Instance.isDoubleBattle
+            ? $"{Game_Load.Instance.playerData.playerName} sent out {participants[0].pokemon.pokemonName}!" +
+              $" and {participants[1].pokemon.pokemonName}!"
+            : $"{Game_Load.Instance.playerData.playerName} sent out {participants[0].pokemon.pokemonName}!";
         
-        
-        leftPlatform.gameObject.SetActive(true);
-        rightPlatform.gameObject.SetActive(true);
-        // 5️⃣ Platforms slide from opposite sides to center
-        StartCoroutine(SlideRect(leftPlatform, leftPlatformStart, leftPlatformTarget, platformSlideSpeed));
-        yield return StartCoroutine(SlideRect(rightPlatform, rightPlatformStart, rightPlatformTarget, platformSlideSpeed*0.96f));
-        
-        for (var i=0;i<4;i++)
+        Dialogue_handler.Instance.DisplayBattleInfo(message);
+        playerAnimator.Play("pokeball throw");
+        yield return new WaitForSeconds(2f);
+        for (var i=0;i<2;i++)
         {
-            if (!participants[i].isActive)
-            {
-                continue;
-            }
-            participantIntroImages[i].gameObject.SetActive(false);
+            if (!participants[i].isActive) continue;
             participants[i].participantUI.SetActive(true);
         }
+        yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+       
+        for (var i = 0; i < 4; i++)
+        {
+            participantIntroImages[i].gameObject.SetActive(false);
+        }
+        
     }
 
     private IEnumerator MovePanelsApart()

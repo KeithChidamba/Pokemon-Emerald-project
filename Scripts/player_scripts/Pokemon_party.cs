@@ -35,6 +35,11 @@ public class Pokemon_party : MonoBehaviour
         Instance = this;
     }
 
+    public static void ExitParty()
+    {
+        if (!InputStateHandler.Instance.currentState.canExit) return;
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+    }
     public void UpdateCancelButton(int currentIndex)
     {
         cancelButton.sprite = currentIndex < numMembers? memberCards[0].pokeballClosedImage.sprite
