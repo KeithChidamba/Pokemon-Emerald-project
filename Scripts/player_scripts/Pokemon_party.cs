@@ -24,6 +24,7 @@ public class Pokemon_party : MonoBehaviour
     private Item _itemToUse;
     public GameObject[] partyOptions;
     public GameObject partyOptionsParent;
+    public Text partyUsageText;
     public static Pokemon_party Instance;
     private void Awake()
     {
@@ -35,9 +36,13 @@ public class Pokemon_party : MonoBehaviour
         Instance = this;
     }
 
-    public static void ExitParty()
+    public void UpdatePartyUsageMessage(string message)
     {
-        if (!InputStateHandler.Instance.currentState.canExit) return;
+        partyUsageText.text = message;
+    }
+    public void ExitParty()
+    {
+        if (swapOutNext) return;
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
     }
     public void UpdateCancelButton(int currentIndex)

@@ -206,11 +206,20 @@ public class Game_ui_manager : MonoBehaviour
         Pokemon_party.Instance.ClearSelectionUI();
         ActivateUiElement(Pokemon_party.Instance.partyUI, true);
         Pokemon_party.Instance.RefreshMemberCards();
-
-        var partyUsageState = Item_handler.Instance.usingItem
-            ? InputStateHandler.StateName.PokemonPartyItemUsage
-            : InputStateHandler.StateName.PokemonPartyNavigation;
-
+        InputStateHandler.StateName partyUsageState;
+        if (Item_handler.Instance.usingItem)
+        {
+             partyUsageState = InputStateHandler.StateName.PokemonPartyItemUsage;
+            Pokemon_party.Instance.UpdatePartyUsageMessage("Use on who?");
+        }
+        else
+        {
+            partyUsageState = InputStateHandler.StateName.PokemonPartyNavigation;
+            Pokemon_party.Instance.UpdatePartyUsageMessage(Pokemon_party.Instance.swapOutNext?
+                "Select a Pokemon to switch"
+                :"Choose a pokemon");
+        }
+       
         var partySelectables = new List<SelectableUI>();
 
         for (var i = 0; i < Pokemon_party.Instance.numMembers; i++)
@@ -222,7 +231,7 @@ public class Game_ui_manager : MonoBehaviour
         
         //closes the party
         partySelectables.Add(new(Pokemon_party.Instance.cancelButton.gameObject,
-            Pokemon_party.ExitParty
+            Pokemon_party.Instance.ExitParty
             , true));
         InputStateHandler.Instance.OnSelectionIndexChanged += Pokemon_party.Instance.UpdateCancelButton;
         Pokemon_party.Instance.memberCards[0].ChangeVisibility(true);//initial visual set
@@ -231,6 +240,8 @@ public class Game_ui_manager : MonoBehaviour
             new[]{InputStateHandler.StateGroup.PokemonParty }, true,Pokemon_party.Instance.partyUI,
             InputStateHandler.Directional.Vertical, partySelectables, Pokemon_party.Instance.memberSelector
             , true, true,CloseParty,CloseParty,canExit:false));
+        
+       
     }
     public void ViewOtherPokemonDetails(Pokemon selectedPokemon,List<Pokemon> pokemonToView)
     { 
