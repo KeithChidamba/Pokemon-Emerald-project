@@ -30,7 +30,8 @@ public class Battle_handler : MonoBehaviour
     private bool battleTerminated;
     private int _currentMoveIndex = 0;
     public int currentEnemyIndex = 0;
-
+    public TrainerData.BattleType currentBattleType;
+    
     public Pokemon lastOpponent;
     private Battle_Participant _currentParticipant;
     public List<EvolutionInBattleData> evolutionQueue;
@@ -213,7 +214,7 @@ public class Battle_handler : MonoBehaviour
         var copyOfTrainerData = Resources.Load<TrainerData>(
             Save_manager.GetDirectory(Save_manager.AssetDirectory.TrainerData)
             + $"{trainerNames[0]}/{trainerNames[0]}");
-        
+         currentBattleType = copyOfTrainerData.battleType;
         switch (copyOfTrainerData.battleType)
         {
             case TrainerData.BattleType.Single:
@@ -223,6 +224,7 @@ public class Battle_handler : MonoBehaviour
                 StartSingleDoubleBattle(copyOfTrainerData);
                 break;
         }
+       
     }
     public void StartWildBattle(Pokemon enemy) //only ever be for wild battles
     {

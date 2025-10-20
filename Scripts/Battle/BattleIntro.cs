@@ -32,6 +32,9 @@ public class BattleIntro : MonoBehaviour
     private Vector2 redBoxStart, redBoxTarget, leftPlatformTarget,rightPlatformTarget;
     private Vector2 leftPlatformStart, rightPlatformStart;
     public Animator playerAnimator;
+    public PokeballRolloutUI enemyPokeballs;
+    public PokeballRolloutUI playerPokeballs;
+    
     public static BattleIntro Instance;
     
     private void Awake()
@@ -86,10 +89,10 @@ public class BattleIntro : MonoBehaviour
         return localPoint;
     }
 
-    private void SlideOutOfView(RectTransform rectTransform)
+    public void SlideOutOfView(RectTransform rectTransform,float distance)
     {
         var startPos = rectTransform.anchoredPosition;
-        var target = new Vector2(rectTransform.anchoredPosition.x + 2000f, rectTransform.anchoredPosition.y);
+        var target = new Vector2(rectTransform.anchoredPosition.x + distance, rectTransform.anchoredPosition.y);
         StartCoroutine(SlideRect(rectTransform,
             startPos, target , platformSlideSpeed*5));
     }
@@ -182,15 +185,21 @@ public class BattleIntro : MonoBehaviour
         Dialogue_handler.Instance.DisplayBattleInfo(message);
         yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
         //show pokeballs
+        enemyPokeballs.gameObject.SetActive(true);
+        playerPokeballs.gameObject.SetActive(true);
+        
+        StartCoroutine(enemyPokeballs.LoadPokeballs());
+        yield return playerPokeballs.LoadPokeballs();
+        
+        StartCoroutine(enemyPokeballs.HidePokeballs());
         for (var i=0;i<challengers.Count;i++)
         {
             Dialogue_handler.Instance.DisplayBattleInfo($"{challengers[i]} sent out {participants[i+2].pokemon.pokemonName}!");
             participants[i+2].participantUI.SetActive(true);
             yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
-            SlideOutOfView(participantIntroImages[i+2].rectTransform);
+            SlideOutOfView(participantIntroImages[i+2].rectTransform,2000f);
         }
-        //display trainer sent out pokemon, slide away trainer's image, while pokeballs dissaper
-        //pokeball throw, while pokeballs dissaper
+        
         message = Battle_handler.Instance.isDoubleBattle
             ? $"{Game_Load.Instance.playerData.playerName} sent out {participants[0].pokemon.pokemonName}!" +
               $" and {participants[1].pokemon.pokemonName}!"
@@ -198,6 +207,7 @@ public class BattleIntro : MonoBehaviour
         
         Dialogue_handler.Instance.DisplayBattleInfo(message);
         playerAnimator.Play("pokeball throw");
+        StartCoroutine(playerPokeballs.HidePokeballs());
         yield return new WaitForSeconds(2f);
         for (var i=0;i<2;i++)
         {
@@ -226,7 +236,7 @@ public class BattleIntro : MonoBehaviour
         bottomBlackPanel.gameObject.SetActive(false);
         topBlackPanel.gameObject.SetActive(false);
     }
-    private IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)
+    public IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)
     {
         rect.anchoredPosition = start;
         while (Vector2.Distance(rect.anchoredPosition, target) > 0.5f)
