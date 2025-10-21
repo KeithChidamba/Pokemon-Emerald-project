@@ -16,6 +16,9 @@ public class BattleIntro : MonoBehaviour
     public RectTransform leftPlatform;
     public RectTransform rightPlatform;
     [SerializeField]private Encounter_Area.Biome[] introTerrainBiomes;
+    public Sprite[] terrainForPlatforms;
+    public Image playerPlatform;
+    public Image enemyPlatform;
     public Sprite[] introTerrains;
     public Image terrainParallaxImage;
     public Image[] participantIntroImages;
@@ -34,7 +37,7 @@ public class BattleIntro : MonoBehaviour
     public Animator playerAnimator;
     public PokeballRolloutUI enemyPokeballs;
     public PokeballRolloutUI playerPokeballs;
-    
+    public List<Animator> pokeballAnimators;
     public static BattleIntro Instance;
     
     private void Awake()
@@ -73,6 +76,11 @@ public class BattleIntro : MonoBehaviour
         leftPlatformTarget = leftPlatformStart + Vector2.right * leftPlatform.rect.width;
     }
 
+    public void SetPlatformSprite(Encounter_Area battleArea)
+    {
+        playerPlatform.sprite = terrainForPlatforms[Array.IndexOf(introTerrainBiomes, battleArea.biome)];
+        enemyPlatform.sprite = terrainForPlatforms[Array.IndexOf(introTerrainBiomes, battleArea.biome)];
+    }
     private Vector2 GetAnchoredFromWorld(RectTransform rect)
     {
         RectTransform parent = rect.parent as RectTransform;
@@ -139,6 +147,7 @@ public class BattleIntro : MonoBehaviour
                 participantIntroImages[i].gameObject.SetActive(false);
                 continue;
             }
+            
             participantIntroImages[i].gameObject.SetActive(true);
             participantIntroImages[i].sprite = participants[i].isEnemy?
                 participants[i].pokemon.frontPicture: playerSprite;
@@ -158,24 +167,35 @@ public class BattleIntro : MonoBehaviour
         var challengers = new List<string>();
         var participants = Battle_handler.Instance.battleParticipants;
 
-        for (var i=0;i<4;i++)
+        if (Battle_handler.Instance.currentBattleType == TrainerData.BattleType.SingleDouble)
         {
-            if (!participants[i].isActive)
-            {
-                participantIntroImages[i].gameObject.SetActive(false);
-                continue;
-            }
-            
-            participantIntroImages[i].gameObject.SetActive(true);
-            if (participants[i].isEnemy)
-            {
-                participantIntroImages[i].sprite = participants[i].pokemonTrainerAI.trainerData.battleIntroSprite;
-                challengers.Add(participants[i].pokemonTrainerAI.trainerData.TrainerName);
-            }
-            else
-                participantIntroImages[i].sprite = playerSprite;
+            participantIntroImages[2].sprite = participants[2].pokemonTrainerAI.trainerData.battleIntroSprite; 
+            participantIntroImages[2].gameObject.SetActive(true);
+            challengers.Add(participants[2].pokemonTrainerAI.trainerData.TrainerName);
+            participantIntroImages[0].sprite = playerSprite;
+            participantIntroImages[0].gameObject.SetActive(true);
         }
-
+        else
+        {
+            for (var i=0;i<4;i++)
+            {
+                participantIntroImages[i].gameObject.SetActive(true);
+                if (participants[i].isEnemy)
+                {
+                    participantIntroImages[i].sprite = participants[i].pokemonTrainerAI.trainerData.battleIntroSprite;
+                    challengers.Add(participants[i].pokemonTrainerAI.trainerData.TrainerName);
+                }
+                else
+                {
+                    participantIntroImages[i].sprite = playerSprite; 
+                }
+            }
+        }
+        for (var i = 0; i < 4; i++)
+        {
+            if (!participants[i].isActive) participantIntroImages[i].gameObject.SetActive(false);
+        }
+        
         message = challengers.Count > 1? 
                 $"{challengers[0]} and {challengers[1]} challenge you to a battle"
                 :    $"{challengers[0]} challenges you to a battle";
@@ -192,12 +212,36 @@ public class BattleIntro : MonoBehaviour
         yield return playerPokeballs.LoadPokeballs();
         
         StartCoroutine(enemyPokeballs.HidePokeballs());
-        for (var i=0;i<challengers.Count;i++)
+        if (Battle_handler.Instance.currentBattleType != TrainerData.BattleType.SingleDouble)
         {
-            Dialogue_handler.Instance.DisplayBattleInfo($"{challengers[i]} sent out {participants[i+2].pokemon.pokemonName}!");
-            participants[i+2].participantUI.SetActive(true);
-            yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
-            SlideOutOfView(participantIntroImages[i+2].rectTransform,2000f);
+            for (var i = 0; i < challengers.Count; i++)
+            {
+                Dialogue_handler.Instance.DisplayBattleInfo(
+                    $"{challengers[i]} sent out {participants[i + 2].pokemon.pokemonName}!");
+                pokeballAnimators[i + 1].gameObject.SetActive(true);
+                pokeballAnimators[i + 1].Play("enemy pokeball drop");
+                yield return new WaitForSeconds(1f);
+                pokeballAnimators[i + 1].gameObject.SetActive(false);
+                participants[i + 2].participantUI.SetActive(true);
+                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+                SlideOutOfView(participantIntroImages[i + 2].rectTransform, 2000f);
+            }
+        }
+        else
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(
+                $"{challengers[0]} sent out {participants[2].pokemon.pokemonName} and {participants[3].pokemon.pokemonName}!");
+            pokeballAnimators[1].gameObject.SetActive(true);
+            pokeballAnimators[1].Play("enemy pokeball drop");
+            pokeballAnimators[2].gameObject.SetActive(true);
+            pokeballAnimators[2].Play("enemy pokeball drop");
+            yield return new WaitForSeconds(1f);
+            pokeballAnimators[1].gameObject.SetActive(false);
+            participants[2].participantUI.SetActive(true);
+            pokeballAnimators[2].gameObject.SetActive(false);
+            participants[3].participantUI.SetActive(true);
+            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            SlideOutOfView(participantIntroImages[2].rectTransform, 2000f);
         }
         
         message = Battle_handler.Instance.isDoubleBattle
@@ -207,8 +251,15 @@ public class BattleIntro : MonoBehaviour
         
         Dialogue_handler.Instance.DisplayBattleInfo(message);
         playerAnimator.Play("pokeball throw");
+        if (Battle_handler.Instance.isDoubleBattle)
+        {
+            yield return new WaitForSeconds(0.5f);
+            pokeballAnimators[0].gameObject.SetActive(true);
+            pokeballAnimators[0].Play("player partner pokeball drop");
+        }
         StartCoroutine(playerPokeballs.HidePokeballs());
         yield return new WaitForSeconds(2f);
+        pokeballAnimators[0].gameObject.SetActive(false);
         for (var i=0;i<2;i++)
         {
             if (!participants[i].isActive) continue;

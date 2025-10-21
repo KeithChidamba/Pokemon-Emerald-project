@@ -31,7 +31,6 @@ public class Battle_handler : MonoBehaviour
     private int _currentMoveIndex = 0;
     public int currentEnemyIndex = 0;
     public TrainerData.BattleType currentBattleType;
-    
     public Pokemon lastOpponent;
     private Battle_Participant _currentParticipant;
     public List<EvolutionInBattleData> evolutionQueue;
@@ -184,6 +183,7 @@ public class Battle_handler : MonoBehaviour
     }
     private IEnumerator SetupBattleSequence(Encounter_Area areaOfBattle)
     {
+        BattleIntro.Instance.SetPlatformSprite(areaOfBattle);
         //load visuals based on area
         overWorld.SetActive(false);
         battleUI.SetActive(true);
