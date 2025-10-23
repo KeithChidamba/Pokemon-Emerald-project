@@ -43,8 +43,10 @@ MonoBehaviour:
     requiredLevel: 38
   learnableTms: 0c000000090000000b000000
   learnableHms: 01000000
-  frontPicture: {fileID: 21300000, guid: 8879d5784dc1e0d45bce22cfdee1331b, type: 3}
-  backPicture: {fileID: 21300000, guid: a6e4f962de9cc0848a355b6246a8ccb0, type: 3}
+  frontPicture: {fileID: 21300000, guid: bffc3ea3fc60391b1a0d947dad9ef275, type: 2}
+  backPicture: {fileID: 21300000, guid: 3d86793701dbb1a5aa4a843c064e10be, type: 2}
+  partyFrame1: {fileID: 21300000, guid: bf3b19bf3eb63b45aa12972f1e939f06, type: 2}
+  partyFrame2: {fileID: 21300000, guid: e490c65aa326832b7a51fecbd36be038, type: 2}
   baseHp: 60
   baseAttack: 50
   baseDefense: 70

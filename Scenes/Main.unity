@@ -1591,6 +1591,7 @@ MonoBehaviour:
   pokemonNameText: {fileID: 831252460}
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 261349422}
+  positionOffset: 150
   isPlayer: 1
   isEnemy: 0
   isActive: 0
@@ -6420,6 +6421,7 @@ MonoBehaviour:
   pokemonNameText: {fileID: 734226165}
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 2086359299}
+  positionOffset: 150
   isPlayer: 0
   isEnemy: 0
   isActive: 0
@@ -18867,7 +18869,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -58
+      value: -46
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -77
       objectReference: {fileID: 0}
     - target: {fileID: 4067306908211224593, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_SizeDelta.x
@@ -19033,6 +19039,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 1079457930, guid: 35374287238ae3b4ba5a32c1d7304a64, type: 3}
+    - target: {fileID: 8178648007056163667, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 52b8cb23548eb383cbd15e08ed1f0044, type: 2}
     - target: {fileID: 8834158998670447440, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -85.4
@@ -22620,7 +22630,7 @@ GameObject:
   - component: {fileID: 794004211}
   - component: {fileID: 794004210}
   m_Layer: 5
-  m_Name: forest
+  m_Name: battle bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22665,7 +22675,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 92e05c860de03664fa5795152cc55747, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dfd153a4ec1af7bc09d633bbfb64e6a5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -28009,8 +28019,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1517456053}
-  - {fileID: 1362177397}
   - {fileID: 794004209}
   - {fileID: 1660854728}
   - {fileID: 1284502079}
@@ -54822,7 +54830,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 702271055, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -57747,81 +57755,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1359430976}
-  m_CullTransparentMesh: 1
---- !u!1 &1362177396
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1362177397}
-  - component: {fileID: 1362177399}
-  - component: {fileID: 1362177398}
-  m_Layer: 5
-  m_Name: warehouse
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1362177397
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362177396}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1009929160}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 33.010002, y: 73.40465}
-  m_SizeDelta: {x: 928.8788, y: 601.1393}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1362177398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362177396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e4c74a11075e3ba4abea6f53e611c6a8, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1362177399
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362177396}
   m_CullTransparentMesh: 1
 --- !u!1 &1366889599
 GameObject:
@@ -61612,81 +61545,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemon: {fileID: 0}
   pokemonImage: {fileID: 0}
---- !u!1 &1517456052
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1517456053}
-  - component: {fileID: 1517456055}
-  - component: {fileID: 1517456054}
-  m_Layer: 5
-  m_Name: beach
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1517456053
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517456052}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1009929160}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 33.010002, y: 73.40465}
-  m_SizeDelta: {x: 928.8788, y: 601.1393}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1517456054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517456052}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0e011ba7c097bc2419bec385828a38f2, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1517456055
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517456052}
-  m_CullTransparentMesh: 1
 --- !u!1 &1517790617
 GameObject:
   m_ObjectHideFlags: 0
@@ -64964,6 +64822,7 @@ MonoBehaviour:
   pokemonNameText: {fileID: 1802125968}
   pokemonHealthText: {fileID: 152226813}
   pokemonLevelText: {fileID: 6231183}
+  positionOffset: 150
   isPlayer: 1
   isEnemy: 0
   isActive: 0
@@ -65837,7 +65696,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 702271055, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -66499,12 +66358,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 713
+      value: 712.4
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -164
+      value: -174.3
       objectReference: {fileID: 0}
     - target: {fileID: 4242367386400591325, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchorMax.x
@@ -71403,11 +71270,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -286
+      value: -337
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -213
+      value: -206
       objectReference: {fileID: 0}
     - target: {fileID: 4067306908211224593, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -71503,11 +71370,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6337516055097524045, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 15
+      value: 71
       objectReference: {fileID: 0}
     - target: {fileID: 6337516055097524045, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 217.4
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 6337516055097524045, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -71557,6 +71424,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 1079457930, guid: 35374287238ae3b4ba5a32c1d7304a64, type: 3}
+    - target: {fileID: 8178648007056163667, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 52b8cb23548eb383cbd15e08ed1f0044, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -100308,12 +100179,12 @@ MonoBehaviour:
   rightPlatform: {fileID: 1284502079}
   introTerrainBiomes: 
   terrainForPlatforms:
-  - {fileID: -1081294237, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
-  - {fileID: -1699867844, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
-  - {fileID: -278171832, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
-  - {fileID: -141128708, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
-  - {fileID: 561970470, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
-  - {fileID: -1741001427, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: -874010096, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: -1777833594, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: 702271055, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: -1437694016, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: -1806613335, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: 137755491, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
   playerPlatform: {fileID: 1284502080}
   enemyPlatform: {fileID: 1660854729}
   introTerrains:
@@ -100946,6 +100817,7 @@ MonoBehaviour:
   pokemonNameText: {fileID: 831252460}
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 1175943805}
+  positionOffset: 150
   isPlayer: 0
   isEnemy: 0
   isActive: 0
@@ -104546,12 +104418,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 888
+      value: 878.9
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -242
+      value: -248.8
       objectReference: {fileID: 0}
     - target: {fileID: 4242367386400591325, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchorMax.x

@@ -17,6 +17,8 @@ public class Evolution : ScriptableObject
     public List<NameDB.HM> learnableHms;
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
+    public Sprite partyFrame1;
+    public Sprite partyFrame2;
     [FormerlySerializedAs("BaseHP")] public float baseHp;
     [FormerlySerializedAs("BaseAttack")] public float baseAttack;
     [FormerlySerializedAs("BaseDefense")] public float baseDefense;

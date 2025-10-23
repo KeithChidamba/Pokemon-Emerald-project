@@ -113,8 +113,9 @@ public static class Obj_Instance
         newPokemon.heldItem = pkm.heldItem;
         newPokemon.hasItem = pkm.hasItem;
         newPokemon.frontPicture = pkm.frontPicture;
-        newPokemon.pokemonName = pkm.pokemonName;
         newPokemon.backPicture = pkm.backPicture;
+        newPokemon.partyFrame1 = pkm.partyFrame1;
+        newPokemon.partyFrame2 = pkm.partyFrame2;
         newPokemon.pokeballName = pkm.pokeballName;
         newPokemon.healthPhase = pkm.healthPhase;
         return newPokemon;

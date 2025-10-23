@@ -79,6 +79,8 @@ public class Pokemon : ScriptableObject
     public bool hasItem = false;
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
+    public Sprite partyFrame1;
+    public Sprite partyFrame2;
     public string pokeballName;
     public int healthPhase;
     public event Action OnNewLevel;
@@ -113,9 +115,14 @@ public class Pokemon : ScriptableObject
     public void LoadUnserializedData()//gives values to attributes that cant be deserialized, using saved values
     {
         frontPicture = Testing.CheckImage( Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.PokemonImage),pokemonName);
+            (Save_manager.AssetDirectory.PokemonImage),pokemonName+"_f");
         backPicture =Testing.CheckImage( Save_manager.GetDirectory
             (Save_manager.AssetDirectory.PokemonImage),pokemonName+"_b");
+        partyFrame1=Testing.CheckImage( Save_manager.GetDirectory
+            (Save_manager.AssetDirectory.PokemonPartyImage),pokemonName+"_1");
+        partyFrame2=Testing.CheckImage( Save_manager.GetDirectory
+            (Save_manager.AssetDirectory.PokemonPartyImage),pokemonName+"_2");
+        
         nature = Resources.Load<Nature>(Save_manager.GetDirectory
             (Save_manager.AssetDirectory.Natures) + natureName.ToLower());
         ability = Resources.Load<Ability>(Save_manager.GetDirectory
@@ -376,6 +383,8 @@ public class Pokemon : ScriptableObject
         learnSet = (LearnSetMove[])evo.learnSet.Clone();
         frontPicture = evo.frontPicture;
         backPicture = evo.backPicture;
+        partyFrame1 = evo.partyFrame1;
+        partyFrame2 = evo.partyFrame2;
         expGroup = evo.expGroup;
         expYield = evo.expYield;
         catchRate = evo.catchRate;

@@ -67,6 +67,7 @@ MonoBehaviour:
   statusEffect: 0
   buffAndDebuffs: []
   evolutionLineLevels: 1000000024000000
+  currentEvolutionLineIndex: 0
   friendshipEvolutionRequirement:
     friendshipRequirement: 0
     evolutionIndex: 0
@@ -107,8 +108,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fbaeb98064185304bbf6b6fffb76ece1, type: 2}
   heldItem: {fileID: 0}
   hasItem: 0
-  frontPicture: {fileID: 21300000, guid: 0f8036093f73bd94e8ce6120dbdf5bdd, type: 3}
-  backPicture: {fileID: 21300000, guid: 704c9966ce2589749963a045076d0db4, type: 3}
+  frontPicture: {fileID: 21300000, guid: 3b0e07faccb30156f8e84bed6d1f7e94, type: 2}
+  backPicture: {fileID: 21300000, guid: 1c8c6068422f038e18819feb8494ebb5, type: 2}
+  partyFrame1: {fileID: 21300000, guid: 579c67b7ab3dd673696c349d88843070, type: 2}
+  partyFrame2: {fileID: 21300000, guid: dabf4e7f2247b3cc78690f0a7fa73304, type: 2}
   pokeballName: Regular Pokeball
   healthPhase: 0
   abilityName: 

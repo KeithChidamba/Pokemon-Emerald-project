@@ -43,7 +43,8 @@ public class Pokemon_party_member : MonoBehaviour
     public void ActivateUI()
     {
         _isViewingCard = true;
-        pokemonFrontImage.sprite = pokemon.frontPicture;
+        //add animation
+        pokemonFrontImage.sprite = pokemon.partyFrame1;
         foreach (var ui in mainUI)
             ui.SetActive(true);
         isEmpty = false;

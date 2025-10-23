@@ -56,7 +56,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26148
+            "instanceID": 26154
         },
         {
             "instanceID": 25278
@@ -156,16 +156,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -23852
+            "instanceID": -38442
         },
         {
-            "instanceID": -23854
+            "instanceID": -38444
         },
         {
-            "instanceID": -23856
+            "instanceID": -38446
         },
         {
-            "instanceID": -23858
+            "instanceID": -38448
         }
     ],
     "ability": {
@@ -173,7 +173,7 @@
     },
     "evolutions": [
         {
-            "instanceID": 25654
+            "instanceID": 25656
         },
         {
             "instanceID": 25564
@@ -184,10 +184,16 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 31770
+        "instanceID": -7614
     },
     "backPicture": {
-        "instanceID": 31772
+        "instanceID": -7642
+    },
+    "partyFrame1": {
+        "instanceID": -9578
+    },
+    "partyFrame2": {
+        "instanceID": -9732
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,

@@ -188,6 +188,7 @@ public class Battle_handler : MonoBehaviour
         overWorld.SetActive(false);
         battleUI.SetActive(true);
         Options_manager.Instance.playerInBattle = true;
+        
         if(isTrainerBattle)
             yield return StartCoroutine(BattleIntro.Instance.PlayTrainerIntroSequence(areaOfBattle));
         else

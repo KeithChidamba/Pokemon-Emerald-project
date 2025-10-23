@@ -54,18 +54,21 @@ MonoBehaviour:
   catchRate: 225
   currentLevel: 0
   currentExpAmount: 0
+  currentLevelExpAmount: 0
   nextLevelExpAmount: 0
   expGroup: 2
   expYield: 54
   friendshipLevel: 0
   hasTrainer: 0
   canBeFlinched: 1
+  canBeInfatuated: 1
   types:
   - {fileID: 11400000, guid: 3185f3c7151af7d48b86d9e6f6b6c269, type: 2}
   - {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
   statusEffect: 0
   buffAndDebuffs: []
   evolutionLineLevels: 16000000
+  currentEvolutionLineIndex: 0
   friendshipEvolutionRequirement:
     friendshipRequirement: 0
     evolutionIndex: 0
@@ -104,8 +107,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0777abab7aae2c96aaefe990b46a2a28, type: 2}
   heldItem: {fileID: 0}
   hasItem: 0
-  frontPicture: {fileID: 21300000, guid: 616099e7ab18708f98183d479b257661, type: 3}
-  backPicture: {fileID: 21300000, guid: 5df4870a13006b467ac178c84956950a, type: 3}
+  frontPicture: {fileID: 21300000, guid: 5da1d3cf1d90111acbd18ca441108c8d, type: 2}
+  backPicture: {fileID: 21300000, guid: a63473cccb48145e5924c6fed4e34377, type: 2}
+  partyFrame1: {fileID: 21300000, guid: 99535bede790c7b26a2b8e02173c503a, type: 2}
+  partyFrame2: {fileID: 21300000, guid: df98a41398531ddf7b55759041e8f2ae, type: 2}
   pokeballName: 
   healthPhase: 0
   abilityName: 
