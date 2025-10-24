@@ -61,7 +61,7 @@ AnimationClip:
   - time: 0.16666667
     functionName: ChangeSprite
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 128412336089757397, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

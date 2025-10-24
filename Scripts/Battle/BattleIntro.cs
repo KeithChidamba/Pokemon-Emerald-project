@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.WSA;
 
 public class BattleIntro : MonoBehaviour
 {
@@ -221,10 +220,10 @@ public class BattleIntro : MonoBehaviour
                 pokeballAnimators[i + 1].gameObject.SetActive(true);
                 pokeballAnimators[i + 1].Play("enemy pokeball drop");
                 yield return new WaitForSeconds(1f);
+                SlideOutOfView(participantIntroImages[i + 2].rectTransform, 2000f);
                 pokeballAnimators[i + 1].gameObject.SetActive(false);
                 participants[i + 2].participantUI.SetActive(true);
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-                SlideOutOfView(participantIntroImages[i + 2].rectTransform, 2000f);
             }
         }
         else
@@ -235,13 +234,13 @@ public class BattleIntro : MonoBehaviour
             pokeballAnimators[1].Play("enemy pokeball drop");
             pokeballAnimators[2].gameObject.SetActive(true);
             pokeballAnimators[2].Play("enemy pokeball drop");
+            SlideOutOfView(participantIntroImages[2].rectTransform, 2000f);
             yield return new WaitForSeconds(1f);
             pokeballAnimators[1].gameObject.SetActive(false);
             participants[2].participantUI.SetActive(true);
             pokeballAnimators[2].gameObject.SetActive(false);
             participants[3].participantUI.SetActive(true);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-            SlideOutOfView(participantIntroImages[2].rectTransform, 2000f);
         }
         
         message = Battle_handler.Instance.isDoubleBattle

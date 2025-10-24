@@ -25,6 +25,9 @@ public class Pokemon_party_member : MonoBehaviour
     private Action<Battle_Participant> _healthPhaseUpdateEvent;
     public bool isEmpty = false;
     private bool _isViewingCard;
+    private Vector2 _startPos;
+    private Vector2 _targetPos;
+    private bool _movingToTarget = true;
     public void LevelupForTesting()//testing purposes
     {
         if(pokemon==null)return;
@@ -38,8 +41,35 @@ public class Pokemon_party_member : MonoBehaviour
     {
         InputStateHandler.Instance.OnStateChanged += CheckIfViewing;
         InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;
+        
+        _startPos = pokemonFrontImage.rectTransform.anchoredPosition;
+        _targetPos = _startPos +Vector2.up * 10f;
     }
+    private void MoveInLoop()
+    {
+        Vector2 target;
+        if (_movingToTarget)
+        {
+            pokemonFrontImage.sprite = pokemon.partyFrame1;
+            target = _targetPos;
+        }
+        else
+        {
+            pokemonFrontImage.sprite = pokemon.partyFrame2;
+            target = _startPos;
+        }
+        pokemonFrontImage.rectTransform.anchoredPosition = Vector2.MoveTowards(
+            pokemonFrontImage.rectTransform.anchoredPosition,
+            target,
+            40f * Time.deltaTime
+        );
 
+        if (Vector2.Distance(pokemonFrontImage.rectTransform.anchoredPosition, target) < 0.01f)
+        {
+            _movingToTarget = !_movingToTarget;
+        }
+        
+    }
     public void ActivateUI()
     {
         _isViewingCard = true;
@@ -110,7 +140,7 @@ public class Pokemon_party_member : MonoBehaviour
     private void Update()
     {
         if (isEmpty || !_isViewingCard) return;
-        
+        MoveInLoop();
         pokemonHealthBarUI.value = pokemon.hp;
         pokemonHealthBarUI.maxValue = pokemon.maxHp;
         pokemonHealthBarUI.minValue = 0;
