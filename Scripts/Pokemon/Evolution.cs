@@ -19,6 +19,7 @@ public class Evolution : ScriptableObject
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
     public Sprite partyFrame1;
     public Sprite partyFrame2;
+    public Sprite battleIntroFrame;
     [FormerlySerializedAs("BaseHP")] public float baseHp;
     [FormerlySerializedAs("BaseAttack")] public float baseAttack;
     [FormerlySerializedAs("BaseDefense")] public float baseDefense;

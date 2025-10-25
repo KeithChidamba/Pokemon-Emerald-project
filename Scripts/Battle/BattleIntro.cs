@@ -223,6 +223,8 @@ public class BattleIntro : MonoBehaviour
                 SlideOutOfView(participantIntroImages[i + 2].rectTransform, 2000f);
                 pokeballAnimators[i + 1].gameObject.SetActive(false);
                 participants[i + 2].participantUI.SetActive(true);
+                StartCoroutine(PokemonIntroAnimation(participants[i + 2]));
+                yield return new WaitForSeconds(3f);
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             }
         }
@@ -236,10 +238,13 @@ public class BattleIntro : MonoBehaviour
             pokeballAnimators[2].Play("enemy pokeball drop");
             SlideOutOfView(participantIntroImages[2].rectTransform, 2000f);
             yield return new WaitForSeconds(1f);
+            StartCoroutine(PokemonIntroAnimation(participants[2]));
+            StartCoroutine(PokemonIntroAnimation(participants[3]));
             pokeballAnimators[1].gameObject.SetActive(false);
             participants[2].participantUI.SetActive(true);
             pokeballAnimators[2].gameObject.SetActive(false);
             participants[3].participantUI.SetActive(true);
+            yield return new WaitForSeconds(3f);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         }
         
@@ -273,6 +278,17 @@ public class BattleIntro : MonoBehaviour
         
     }
 
+    private IEnumerator PokemonIntroAnimation(Battle_Participant participant)
+    {
+        yield return new WaitForSeconds(0.2f);
+        participant.pokemonImage.sprite = participant.pokemon.battleIntroFrame;
+        yield return new WaitForSeconds(0.45f);
+        participant.pokemonImage.sprite = participant.pokemon.frontPicture;
+        yield return new WaitForSeconds(0.45f);
+        participant.pokemonImage.sprite = participant.pokemon.battleIntroFrame;
+        yield return new WaitForSeconds(0.45f);
+        participant.pokemonImage.sprite = participant.pokemon.frontPicture;
+    }
     private IEnumerator MovePanelsApart()
     {
         topBlackPanel.gameObject.SetActive(true);
@@ -285,6 +301,8 @@ public class BattleIntro : MonoBehaviour
         }
         bottomBlackPanel.gameObject.SetActive(false);
         topBlackPanel.gameObject.SetActive(false);
+        dialogueBox.gameObject.SetActive(false);
+        Dialogue_handler.Instance.battleDialogueBox.gameObject.SetActive(true);
     }
     public IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)
     {

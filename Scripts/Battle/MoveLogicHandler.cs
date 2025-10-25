@@ -413,7 +413,7 @@ public class MoveLogicHandler : MonoBehaviour
     {
         Dialogue_handler.Instance.DisplayBattleInfo(pursuitUser.pokemon.pokemonName+" used "+pursuit.moveName
                                                     +" on "+switchOutVictim.pokemon.pokemonName+"!");
-        _attacker = pursuitUser;
+        Move_handler.Instance.attacker = pursuitUser;
         var pursuitDamage = Move_handler.Instance.CalculateMoveDamage(pursuit, switchOutVictim) * 2;
         
         Move_handler.Instance.DisplayDamage(switchOutVictim,displayEffectiveness:false,

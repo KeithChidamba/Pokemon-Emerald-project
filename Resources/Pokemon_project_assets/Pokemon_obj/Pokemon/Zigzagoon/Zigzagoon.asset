@@ -113,6 +113,7 @@ MonoBehaviour:
   backPicture: {fileID: 21300000, guid: 101bc2ec274016c8a8006fa685fa0556, type: 2}
   partyFrame1: {fileID: 21300000, guid: d8edb1f68ffb0a47493a627967c4d5b2, type: 2}
   partyFrame2: {fileID: 21300000, guid: 5a2669fa1788e12d2a13607269d6c377, type: 2}
+  battleIntroFrame: {fileID: 21300000, guid: b2fe421a80b6e4716a2dfbd65b4e0ce6, type: 2}
   pokeballName: 
   healthPhase: 0
   abilityName: 

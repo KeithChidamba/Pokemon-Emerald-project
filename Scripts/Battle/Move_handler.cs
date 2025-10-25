@@ -10,8 +10,8 @@ public class Move_handler:MonoBehaviour
     public bool doingMove = false;
     public static Move_handler Instance;
     private Turn _currentTurn;
-    [SerializeField]private Battle_Participant attacker;
-    [SerializeField]private Battle_Participant victim;
+    public Battle_Participant attacker;
+    public Battle_Participant victim;
     private readonly float[] _statLevels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
     private readonly float[] _accuracyAndEvasionLevels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};

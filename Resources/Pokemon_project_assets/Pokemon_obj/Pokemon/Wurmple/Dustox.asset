@@ -47,6 +47,7 @@ MonoBehaviour:
   backPicture: {fileID: 21300000, guid: 3d86793701dbb1a5aa4a843c064e10be, type: 2}
   partyFrame1: {fileID: 21300000, guid: bf3b19bf3eb63b45aa12972f1e939f06, type: 2}
   partyFrame2: {fileID: 21300000, guid: e490c65aa326832b7a51fecbd36be038, type: 2}
+  battleIntroFrame: {fileID: 21300000, guid: 46942b937b8e16109b25641fc0945574, type: 2}
   baseHp: 60
   baseAttack: 50
   baseDefense: 70

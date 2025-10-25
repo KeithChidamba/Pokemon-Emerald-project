@@ -293,19 +293,13 @@ public class Battle_Participant : MonoBehaviour
         var rawName = (isEnemy)? pokemon.pokemonName.Replace("Foe ", "") : pokemon.pokemonName;
         pokemonNameText.text = rawName;
         pokemonLevelText.text = "Lv: " + pokemon.currentLevel;
-        if (isPlayer)
+        if (isPlayer && !Battle_handler.Instance.isDoubleBattle)
         {
-            pokemonImage.sprite = pokemon.backPicture;
-            if (!Battle_handler.Instance.isDoubleBattle)
-            {
-                pokemonHealthText.text = pokemon.hp + "/" + pokemon.maxHp;
-                playerExpSlider.value = pokemon.currentExpAmount;
-                playerExpSlider.maxValue = pokemon.nextLevelExpAmount;
-                playerExpSlider.minValue = pokemon.currentLevelExpAmount;
-            }
+            pokemonHealthText.text = pokemon.hp + "/" + pokemon.maxHp;
+            playerExpSlider.value = pokemon.currentExpAmount;
+            playerExpSlider.maxValue = pokemon.nextLevelExpAmount;
+            playerExpSlider.minValue = pokemon.currentLevelExpAmount;
         }
-        else
-            pokemonImage.sprite = pokemon.frontPicture;
         playerHpSlider.value = pokemon.hp;
         playerHpSlider.maxValue = pokemon.maxHp;
         if(pokemon.hp<=0) pokemon.hp = 0;
@@ -340,7 +334,7 @@ public class Battle_Participant : MonoBehaviour
         RefreshStatusEffectImage();
         playerHpSlider.minValue = 0;
         isActive = true;
-       
+        pokemonImage.sprite = isPlayer?pokemon.backPicture : pokemon.frontPicture;
         ActivateGenderImage();
         if (pokemon.statusEffect == PokemonOperations.StatusEffect.BadlyPoison)
         {

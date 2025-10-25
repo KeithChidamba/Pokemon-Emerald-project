@@ -80,7 +80,7 @@ public static class BattleOperations
 
     public static bool PassedPokeballShakeTest(float catchvalue)
     {
-        float shakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchvalue)  );
+        float shakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchvalue));
         for (int i = 0; i < 3; i++)
         {
             int rand = Utility.Random16Bit();

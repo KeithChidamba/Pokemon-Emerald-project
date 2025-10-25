@@ -204,8 +204,8 @@ public class Turn_Based_Combat : MonoBehaviour
                 yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
             }
         }
-        
-        switchTurns.ForEach(index => _turnHistory.RemoveAt(index));
+        var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();//prevent index out of range when removing turns
+        orderTurns.ForEach(index => _turnHistory.RemoveAt(index));
         
 //handle all attacks
         foreach (var currentTurn in _turnHistory )

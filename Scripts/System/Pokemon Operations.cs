@@ -334,10 +334,24 @@ public class PokemonOperations : MonoBehaviour
         var genderThreshold = math.abs((int)math.trunc(((pokemon.ratioFemale / 100) * 256)));
         pokemon.gender = (genderValue < genderThreshold)? Gender.Male : Gender.Female;
     }
+
+    static bool IsShiny(uint pv)
+    {
+        ushort tid = Game_Load.Instance.playerData.trainerID;
+        ushort sid = Game_Load.Instance.playerData.secretID;
+        
+        ushort pvLow = (ushort)(pv & 0xFFFF);
+        ushort pvHigh = (ushort)(pv >> 16);
+
+        int shinyValue = tid ^ sid ^ pvLow ^ pvHigh;
+
+        return shinyValue < 8;
+    }
     public static void SetPokemonTraits(Pokemon newPokemon)
     {
         newPokemon.personalityValue = GeneratePersonalityValue();
         newPokemon.pokemonID = GeneratePokemonID(newPokemon);
+        newPokemon.isShiny = IsShiny(newPokemon.personalityValue); 
         if (newPokemon.hasGender)
             AssignPokemonGender(newPokemon);
         else

@@ -23,7 +23,7 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] private int dialogueLength;
     [SerializeField] private int dialogueProgress;
     [SerializeField] private GameObject infoDialogueBox;
-    [SerializeField] private GameObject battleDialogueBox;
+    public GameObject battleDialogueBox;
     [SerializeField] private GameObject clickNextIndicator;
     [SerializeField] private GameObject dialogueOptionPrefab;
     [SerializeField] private GameObject dialogueOptionBox;

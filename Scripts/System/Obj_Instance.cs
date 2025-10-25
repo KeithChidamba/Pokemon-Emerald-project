@@ -48,6 +48,7 @@ public static class Obj_Instance
 	    newPokemon.pokemonName = pkm.pokemonName;
         newPokemon.pokemonID  = pkm.pokemonID ;
         newPokemon.personalityValue = pkm.personalityValue;
+        newPokemon.isShiny = pkm.isShiny;
         newPokemon.gender = pkm.gender;
         newPokemon.ratioFemale = pkm.ratioFemale;
         newPokemon.nature = pkm.nature;
@@ -116,6 +117,7 @@ public static class Obj_Instance
         newPokemon.backPicture = pkm.backPicture;
         newPokemon.partyFrame1 = pkm.partyFrame1;
         newPokemon.partyFrame2 = pkm.partyFrame2;
+        newPokemon.battleIntroFrame = pkm.battleIntroFrame;
         newPokemon.pokeballName = pkm.pokeballName;
         newPokemon.healthPhase = pkm.healthPhase;
         return newPokemon;

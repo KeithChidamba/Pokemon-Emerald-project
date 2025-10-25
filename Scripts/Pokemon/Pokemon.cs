@@ -14,6 +14,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("Pokemon_name")] public string pokemonName;
     public long pokemonID = 0;
     public uint personalityValue;
+    public bool isShiny;
     public PokemonOperations.Gender gender;
     public float ratioFemale = 0;
     public Nature nature;
@@ -81,6 +82,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
     public Sprite partyFrame1;
     public Sprite partyFrame2;
+    public Sprite battleIntroFrame;
     public string pokeballName;
     public int healthPhase;
     public event Action OnNewLevel;
@@ -115,13 +117,15 @@ public class Pokemon : ScriptableObject
     public void LoadUnserializedData()//gives values to attributes that cant be deserialized, using saved values
     {
         frontPicture = Testing.CheckImage( Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.PokemonImage),pokemonName+"_f");
+            (Save_manager.AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
         backPicture =Testing.CheckImage( Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.PokemonImage),pokemonName+"_b");
+            (Save_manager.AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_sb":"_b"));
         partyFrame1=Testing.CheckImage( Save_manager.GetDirectory
             (Save_manager.AssetDirectory.PokemonPartyImage),pokemonName+"_1");
         partyFrame2=Testing.CheckImage( Save_manager.GetDirectory
             (Save_manager.AssetDirectory.PokemonPartyImage),pokemonName+"_2");
+        battleIntroFrame=Testing.CheckImage( Save_manager.GetDirectory
+            (Save_manager.AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_s_intro":"_intro"));
         
         nature = Resources.Load<Nature>(Save_manager.GetDirectory
             (Save_manager.AssetDirectory.Natures) + natureName.ToLower());
@@ -385,6 +389,7 @@ public class Pokemon : ScriptableObject
         backPicture = evo.backPicture;
         partyFrame1 = evo.partyFrame1;
         partyFrame2 = evo.partyFrame2;
+        battleIntroFrame = evo.battleIntroFrame;
         expGroup = evo.expGroup;
         expYield = evo.expYield;
         catchRate = evo.catchRate;
