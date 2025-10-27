@@ -3,10 +3,11 @@
     "pokemonName": "Dustox",
     "pokemonID": 210174625927972866,
     "personalityValue": 1866254338,
+    "isShiny": false,
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26338
+        "instanceID": 26626
     },
     "hasGender": true,
     "hp": 91.0,
@@ -56,10 +57,10 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26682
+            "instanceID": 27040
         },
         {
-            "instanceID": 26610
+            "instanceID": 26946
         }
     ],
     "statusEffect": 0,
@@ -132,33 +133,33 @@
     ],
     "moveSet": [
         {
-            "instanceID": -38466
+            "instanceID": -5772
         },
         {
-            "instanceID": -38468
+            "instanceID": -5774
         },
         {
-            "instanceID": -38470
+            "instanceID": -5776
         },
         {
-            "instanceID": -38472
+            "instanceID": -5778
         }
     ],
     "ability": {
-        "instanceID": 25606
+        "instanceID": 25740
     },
     "evolutions": [
         {
-            "instanceID": 26122
+            "instanceID": 26374
         },
         {
-            "instanceID": 26238
+            "instanceID": 26508
         },
         {
-            "instanceID": 26016
+            "instanceID": 26240
         },
         {
-            "instanceID": 26258
+            "instanceID": 26532
         }
     ],
     "heldItem": {
@@ -166,16 +167,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 39568
+        "instanceID": 27168
     },
     "backPicture": {
-        "instanceID": 39544
+        "instanceID": 25474
     },
     "partyFrame1": {
-        "instanceID": -9214
+        "instanceID": 25546
     },
     "partyFrame2": {
-        "instanceID": -9396
+        "instanceID": 26160
+    },
+    "battleIntroFrame": {
+        "instanceID": 25272
     },
     "pokeballName": "Great Ball",
     "healthPhase": 1,

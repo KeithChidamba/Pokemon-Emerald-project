@@ -3,10 +3,11 @@
     "pokemonName": "Treecko",
     "pokemonID": 7887074061546032046,
     "personalityValue": 1269173166,
+    "isShiny": false,
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 26744
+        "instanceID": 27122
     },
     "hasGender": true,
     "hp": 13.0,
@@ -56,7 +57,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26442
+            "instanceID": 26746
         }
     ],
     "statusEffect": 0,
@@ -132,18 +133,18 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -38498
+            "instanceID": -5804
         }
     ],
     "ability": {
-        "instanceID": 25734
+        "instanceID": 25900
     },
     "evolutions": [
         {
-            "instanceID": 26742
+            "instanceID": 27114
         },
         {
-            "instanceID": 25136
+            "instanceID": 25140
         }
     ],
     "heldItem": {
@@ -151,16 +152,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": -7110
+        "instanceID": 26458
     },
     "backPicture": {
-        "instanceID": -7138
+        "instanceID": 26052
     },
     "partyFrame1": {
-        "instanceID": -9130
+        "instanceID": 26296
     },
     "partyFrame2": {
-        "instanceID": -9312
+        "instanceID": 25324
+    },
+    "battleIntroFrame": {
+        "instanceID": 26264
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 0,

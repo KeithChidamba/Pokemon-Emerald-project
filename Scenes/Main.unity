@@ -1591,7 +1591,7 @@ MonoBehaviour:
   pokemonNameText: {fileID: 831252460}
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 261349422}
-  positionOffset: 150
+  positionOffset: 100
   isPlayer: 1
   isEnemy: 0
   isActive: 0
@@ -4360,7 +4360,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1152413679}
   m_Father: {fileID: 639456344}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -6421,7 +6422,7 @@ MonoBehaviour:
   pokemonNameText: {fileID: 734226165}
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 2086359299}
-  positionOffset: 150
+  positionOffset: 100
   isPlayer: 0
   isEnemy: 0
   isActive: 0
@@ -18869,7 +18870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -46
+      value: -101
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -24241,11 +24242,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 741242120693868478, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
   m_PrefabInstance: {fileID: 843791783}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &843791785 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 4115558250348173683, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
-  m_PrefabInstance: {fileID: 843791783}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &844638479
 GameObject:
   m_ObjectHideFlags: 0
@@ -27106,6 +27102,38 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6797984175921971653, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+      propertyPath: _particleSystem
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655679808969093620, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655679808969093620, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.83018756
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655679808969093620, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.98301876
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655679808969093620, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655679808969093620, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655679808969093620, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.g
+      value: 0.5171318
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655679808969093620, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.r
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27114,11 +27142,6 @@ PrefabInstance:
 --- !u!224 &970823701 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 741242120693868478, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
-  m_PrefabInstance: {fileID: 970823700}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &970823702 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 4115558250348173683, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
   m_PrefabInstance: {fileID: 970823700}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &973009936
@@ -31113,6 +31136,92 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1151274543 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6797984175921971653, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+  m_PrefabInstance: {fileID: 843791783}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8c3dd3fbc515cfca394c915e39029b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1152413678
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1152413679}
+  - component: {fileID: 1152413681}
+  - component: {fileID: 1152413680}
+  m_Layer: 5
+  m_Name: Spark
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1152413679
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152413678}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 122411116}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1152413680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152413678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1152413681
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152413678}
+  m_CullTransparentMesh: 1
 --- !u!1 &1152838887
 GameObject:
   m_ObjectHideFlags: 0
@@ -53521,11 +53630,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 741242120693868478, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
   m_PrefabInstance: {fileID: 4771739161746955762}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1232702237 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 4115558250348173683, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
-  m_PrefabInstance: {fileID: 4771739161746955762}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1233443735
 GameObject:
   m_ObjectHideFlags: 0
@@ -54809,7 +54913,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -181, y: -87}
-  m_SizeDelta: {x: 560, y: 110}
+  m_SizeDelta: {x: 450, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1284502080
 MonoBehaviour:
@@ -64898,7 +65002,7 @@ MonoBehaviour:
   pokemonNameText: {fileID: 1802125968}
   pokemonHealthText: {fileID: 152226813}
   pokemonLevelText: {fileID: 6231183}
-  positionOffset: 150
+  positionOffset: 100
   isPlayer: 1
   isEnemy: 0
   isActive: 0
@@ -65750,7 +65854,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 270.38867, y: 264.2185}
-  m_SizeDelta: {x: 560, y: 110}
+  m_SizeDelta: {x: 450, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1660854729
 MonoBehaviour:
@@ -71346,7 +71450,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -337
+      value: -356
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -97594,6 +97698,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635662e11e6d86e4d8ae64a2b3f6d808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1934575626 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6797984175921971653, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+  m_PrefabInstance: {fileID: 4771739161746955762}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8c3dd3fbc515cfca394c915e39029b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1939792952
 GameObject:
   m_ObjectHideFlags: 0
@@ -100284,10 +100399,10 @@ MonoBehaviour:
   playerAnimator: {fileID: 639456347}
   enemyPokeballs: {fileID: 5396154}
   playerPokeballs: {fileID: 3156225191923326846}
-  pokeballAnimators:
-  - {fileID: 970823702}
-  - {fileID: 1232702237}
-  - {fileID: 843791785}
+  thrownPokeballs:
+  - {fileID: 2092547760}
+  - {fileID: 1934575626}
+  - {fileID: 1151274543}
 --- !u!4 &2019548706
 Transform:
   m_ObjectHideFlags: 0
@@ -100893,7 +101008,7 @@ MonoBehaviour:
   pokemonNameText: {fileID: 831252460}
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 1175943805}
-  positionOffset: 150
+  positionOffset: 100
   isPlayer: 0
   isEnemy: 0
   isActive: 0
@@ -102913,6 +103028,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2091636248}
   m_CullTransparentMesh: 1
+--- !u!114 &2092547760 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6797984175921971653, guid: a150dc1a54a2286e4a26aafc2df6ed4d, type: 3}
+  m_PrefabInstance: {fileID: 970823700}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8c3dd3fbc515cfca394c915e39029b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2099830501
 GameObject:
   m_ObjectHideFlags: 0

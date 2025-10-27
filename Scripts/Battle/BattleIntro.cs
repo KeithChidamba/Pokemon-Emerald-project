@@ -36,7 +36,7 @@ public class BattleIntro : MonoBehaviour
     public Animator playerAnimator;
     public PokeballRolloutUI enemyPokeballs;
     public PokeballRolloutUI playerPokeballs;
-    public List<Animator> pokeballAnimators;
+    public List<BattlePokeball> thrownPokeballs;
     public static BattleIntro Instance;
     
     private void Awake()
@@ -217,13 +217,12 @@ public class BattleIntro : MonoBehaviour
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(
                     $"{challengers[i]} sent out {participants[i + 2].pokemon.pokemonName}!");
-                pokeballAnimators[i + 1].gameObject.SetActive(true);
-                pokeballAnimators[i + 1].Play("enemy pokeball drop");
+                StartCoroutine(thrownPokeballs[i + 1].ThrowPokeball(true));
                 yield return new WaitForSeconds(1f);
                 SlideOutOfView(participantIntroImages[i + 2].rectTransform, 2000f);
-                pokeballAnimators[i + 1].gameObject.SetActive(false);
                 participants[i + 2].participantUI.SetActive(true);
                 StartCoroutine(PokemonIntroAnimation(participants[i + 2]));
+                StartCoroutine(PokemonIntroAnimationMovement(participants[i + 2]));
                 yield return new WaitForSeconds(3f);
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             }
@@ -232,17 +231,16 @@ public class BattleIntro : MonoBehaviour
         {
             Dialogue_handler.Instance.DisplayBattleInfo(
                 $"{challengers[0]} sent out {participants[2].pokemon.pokemonName} and {participants[3].pokemon.pokemonName}!");
-            pokeballAnimators[1].gameObject.SetActive(true);
-            pokeballAnimators[1].Play("enemy pokeball drop");
-            pokeballAnimators[2].gameObject.SetActive(true);
-            pokeballAnimators[2].Play("enemy pokeball drop");
+
+            StartCoroutine(thrownPokeballs[1].ThrowPokeball(true));
+            StartCoroutine(thrownPokeballs[2].ThrowPokeball(true));
             SlideOutOfView(participantIntroImages[2].rectTransform, 2000f);
             yield return new WaitForSeconds(1f);
             StartCoroutine(PokemonIntroAnimation(participants[2]));
+            StartCoroutine(PokemonIntroAnimationMovement(participants[2]));
             StartCoroutine(PokemonIntroAnimation(participants[3]));
-            pokeballAnimators[1].gameObject.SetActive(false);
+            StartCoroutine(PokemonIntroAnimationMovement(participants[3]));
             participants[2].participantUI.SetActive(true);
-            pokeballAnimators[2].gameObject.SetActive(false);
             participants[3].participantUI.SetActive(true);
             yield return new WaitForSeconds(3f);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
@@ -258,15 +256,14 @@ public class BattleIntro : MonoBehaviour
         if (Battle_handler.Instance.isDoubleBattle)
         {
             yield return new WaitForSeconds(0.5f);
-            pokeballAnimators[0].gameObject.SetActive(true);
-            pokeballAnimators[0].Play("player partner pokeball drop");
+            StartCoroutine(thrownPokeballs[0].ThrowPokeball(false));
         }
         StartCoroutine(playerPokeballs.HidePokeballs());
         yield return new WaitForSeconds(2f);
-        pokeballAnimators[0].gameObject.SetActive(false);
         for (var i=0;i<2;i++)
         {
             if (!participants[i].isActive) continue;
+            StartCoroutine(PokemonIntroAnimationMovement(participants[i]));
             participants[i].participantUI.SetActive(true);
         }
         yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
@@ -278,6 +275,19 @@ public class BattleIntro : MonoBehaviour
         
     }
 
+    private IEnumerator PokemonIntroAnimationMovement(Battle_Participant participant)
+    {
+        var rect = participant.pokemonImage.rectTransform;
+        var movementSpeed = platformSlideSpeed * 0.4f;
+        var startPos = rect.anchoredPosition;
+        var target = new Vector2(rect.anchoredPosition.x + 10f, rect.anchoredPosition.y);
+        yield return StartCoroutine(SlideRect(rect,
+            startPos, target , movementSpeed));
+        target = new Vector2(startPos.x - 20f, rect.anchoredPosition.y);
+        yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition,target , movementSpeed));
+        target = new Vector2(startPos.x, rect.anchoredPosition.y);
+        yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition,target , movementSpeed));
+    }
     private IEnumerator PokemonIntroAnimation(Battle_Participant participant)
     {
         yield return new WaitForSeconds(0.2f);

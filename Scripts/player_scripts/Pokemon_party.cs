@@ -124,7 +124,7 @@ public class Pokemon_party : MonoBehaviour
         {
             if (numMembers > 1)
             {
-                Dialogue_handler.Instance.DisplayDetails("Select Pokemon to swap with");
+                UpdatePartyUsageMessage("Select Pokemon to swap with");
                 moving = true;
                 memberToMove = memberPosition;
                 partyOptionsParent.SetActive(false);
@@ -235,6 +235,7 @@ public class Pokemon_party : MonoBehaviour
         }
         else
             Dialogue_handler.Instance.DisplayDetails(message,1f);
+        UpdatePartyUsageMessage("Choose a pokemon");
         memberToMove = 0;
         selectedMemberNumber = 0;
         EndSwap();

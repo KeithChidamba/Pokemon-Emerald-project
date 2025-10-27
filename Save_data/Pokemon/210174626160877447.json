@@ -3,10 +3,11 @@
     "pokemonName": "Grovyle",
     "pokemonID": 210174626160877447,
     "personalityValue": 2099158919,
+    "isShiny": false,
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 26138
+        "instanceID": 26398
     },
     "hasGender": true,
     "hp": 48.0,
@@ -56,7 +57,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26442
+            "instanceID": 26746
         }
     ],
     "statusEffect": 0,
@@ -145,44 +146,47 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -38452
+            "instanceID": -5758
         },
         {
-            "instanceID": -38454
+            "instanceID": -5760
         },
         {
-            "instanceID": -38456
+            "instanceID": -5762
         },
         {
-            "instanceID": -38458
+            "instanceID": -5764
         }
     ],
     "ability": {
-        "instanceID": 25734
+        "instanceID": 25900
     },
     "evolutions": [
         {
-            "instanceID": 26742
+            "instanceID": 27114
         },
         {
-            "instanceID": 25136
+            "instanceID": 25140
         }
     ],
     "heldItem": {
-        "instanceID": -38462
+        "instanceID": -5768
     },
     "hasItem": true,
     "frontPicture": {
-        "instanceID": -7166
+        "instanceID": 26940
     },
     "backPicture": {
-        "instanceID": -7194
+        "instanceID": 26190
     },
     "partyFrame1": {
-        "instanceID": -9158
+        "instanceID": 25484
     },
     "partyFrame2": {
-        "instanceID": -9340
+        "instanceID": 26448
+    },
+    "battleIntroFrame": {
+        "instanceID": 26284
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,

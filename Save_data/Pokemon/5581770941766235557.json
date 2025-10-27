@@ -3,10 +3,11 @@
     "pokemonName": "Torchic",
     "pokemonID": 5581770941766235557,
     "personalityValue": 429061541,
+    "isShiny": false,
     "gender": 2,
     "ratioFemale": 0.0,
     "nature": {
-        "instanceID": 26744
+        "instanceID": 27122
     },
     "hasGender": true,
     "hp": 14.0,
@@ -56,7 +57,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26516
+            "instanceID": 26836
         }
     ],
     "statusEffect": 0,
@@ -95,21 +96,21 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -38492
+            "instanceID": -5798
         },
         {
-            "instanceID": -38494
+            "instanceID": -5800
         }
     ],
     "ability": {
-        "instanceID": 25970
+        "instanceID": 26180
     },
     "evolutions": [
         {
-            "instanceID": 26774
+            "instanceID": 27156
         },
         {
-            "instanceID": 25940
+            "instanceID": 26144
         }
     ],
     "heldItem": {
@@ -117,16 +118,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": -7334
+        "instanceID": 25362
     },
     "backPicture": {
-        "instanceID": -7362
+        "instanceID": 25254
     },
     "partyFrame1": {
-        "instanceID": -9494
+        "instanceID": 26184
     },
     "partyFrame2": {
-        "instanceID": -9648
+        "instanceID": 25888
+    },
+    "battleIntroFrame": {
+        "instanceID": 25578
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,

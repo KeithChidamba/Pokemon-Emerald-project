@@ -3,10 +3,11 @@
     "pokemonName": "Zigzagoon",
     "pokemonID": 210174624533141532,
     "personalityValue": 471423004,
+    "isShiny": false,
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 25610
+        "instanceID": 25744
     },
     "hasGender": true,
     "hp": 11.0,
@@ -56,7 +57,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26344
+            "instanceID": 26634
         }
     ],
     "statusEffect": 0,
@@ -140,18 +141,18 @@
     ],
     "moveSet": [
         {
-            "instanceID": -38476
+            "instanceID": -5782
         },
         {
-            "instanceID": -38478
+            "instanceID": -5784
         }
     ],
     "ability": {
-        "instanceID": 25584
+        "instanceID": 25708
     },
     "evolutions": [
         {
-            "instanceID": 25576
+            "instanceID": 25698
         }
     ],
     "heldItem": {
@@ -159,16 +160,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 39668
+        "instanceID": 25892
     },
     "backPicture": {
-        "instanceID": 39636
+        "instanceID": 26640
     },
     "partyFrame1": {
-        "instanceID": -9242
+        "instanceID": 25196
     },
     "partyFrame2": {
-        "instanceID": -9424
+        "instanceID": 25524
+    },
+    "battleIntroFrame": {
+        "instanceID": 25722
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,

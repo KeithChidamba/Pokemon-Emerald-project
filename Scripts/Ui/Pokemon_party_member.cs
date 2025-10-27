@@ -25,6 +25,7 @@ public class Pokemon_party_member : MonoBehaviour
     private Action<Battle_Participant> _healthPhaseUpdateEvent;
     public bool isEmpty = false;
     private bool _isViewingCard;
+    private bool _viewingParty;
     private Vector2 _startPos;
     private Vector2 _targetPos;
     private bool _movingToTarget = true;
@@ -73,7 +74,7 @@ public class Pokemon_party_member : MonoBehaviour
     public void ActivateUI()
     {
         _isViewingCard = true;
-        //add animation
+        _viewingParty = true;
         pokemonFrontImage.sprite = pokemon.partyFrame1;
         foreach (var ui in mainUI)
             ui.SetActive(true);
@@ -105,16 +106,23 @@ public class Pokemon_party_member : MonoBehaviour
         if (isEmpty) return;
         if (currentState.stateGroups.Contains(InputStateHandler.StateGroup.PokemonParty))
         {
+            _viewingParty = true;
             _healthPhaseUpdateEvent = 
                 (attacker) => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
             pokemon.OnHealthChanged += _healthPhaseUpdateEvent;
-            
+            if(pokemon.hp<=0)
+            {
+                statusEffectImage.gameObject.SetActive(true);
+                statusEffectImage.sprite = Resources.Load<Sprite>(
+                    Save_manager.GetDirectory(Save_manager.AssetDirectory.Status)
+                    + "fainted");
+            }
         }
         else
         {
+            _viewingParty = false;
             pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
         }
-
         _isViewingCard = currentState.stateName == InputStateHandler.StateName.PokemonPartyNavigation
                          || currentState.stateName == InputStateHandler.StateName.PokemonPartyItemUsage;
     }
@@ -139,8 +147,10 @@ public class Pokemon_party_member : MonoBehaviour
     }
     private void Update()
     {
-        if (isEmpty || !_isViewingCard) return;
-        MoveInLoop();
+        if (isEmpty) return;
+        if (_viewingParty) MoveInLoop();
+        
+        if (!_isViewingCard) return;
         pokemonHealthBarUI.value = pokemon.hp;
         pokemonHealthBarUI.maxValue = pokemon.maxHp;
         pokemonHealthBarUI.minValue = 0;
@@ -149,12 +159,5 @@ public class Pokemon_party_member : MonoBehaviour
         pokemonFrontImage.color = ((pokemon.hp <= 0))? 
             Color.HSVToRGB(17, 96, 54)
             :Color.HSVToRGB(0,0,100);
-        if (pokemon.hp <= 0)
-        {
-            statusEffectImage.gameObject.SetActive(true);
-            statusEffectImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(Save_manager.AssetDirectory.Status)
-                + "fainted");
-        }
     }
 }

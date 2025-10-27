@@ -3,10 +3,11 @@
     "pokemonName": "Combusken",
     "pokemonID": 210174624208566463,
     "personalityValue": 146847935,
+    "isShiny": true,
     "gender": 2,
     "ratioFemale": 0.0,
     "nature": {
-        "instanceID": 25232
+        "instanceID": 25266
     },
     "hasGender": true,
     "hp": 79.0,
@@ -60,10 +61,10 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26516
+            "instanceID": 26836
         },
         {
-            "instanceID": 26336
+            "instanceID": 26622
         }
     ],
     "statusEffect": 0,
@@ -153,27 +154,27 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -38482
+            "instanceID": -5788
         },
         {
-            "instanceID": -38484
+            "instanceID": -5790
         },
         {
-            "instanceID": -38486
+            "instanceID": -5792
         },
         {
-            "instanceID": -38488
+            "instanceID": -5794
         }
     ],
     "ability": {
-        "instanceID": 25970
+        "instanceID": 26180
     },
     "evolutions": [
         {
-            "instanceID": 26774
+            "instanceID": 27156
         },
         {
-            "instanceID": 25940
+            "instanceID": 26144
         }
     ],
     "heldItem": {
@@ -181,16 +182,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": -7390
+        "instanceID": 26382
     },
     "backPicture": {
-        "instanceID": -7418
+        "instanceID": 27000
     },
     "partyFrame1": {
-        "instanceID": -9522
+        "instanceID": 26558
     },
     "partyFrame2": {
-        "instanceID": -9676
+        "instanceID": 25800
+    },
+    "battleIntroFrame": {
+        "instanceID": 27092
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,
