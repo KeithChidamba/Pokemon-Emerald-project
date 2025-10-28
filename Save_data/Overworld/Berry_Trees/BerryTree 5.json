@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Pecha berry",
     "berryItem": {
-        "instanceID": 25336
+        "instanceID": 25338
     },
     "treeIndex": 5,
     "minutesPerStage": 45,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32176
+                    "instanceID": 32188
                 },
                 {
-                    "instanceID": 32176
+                    "instanceID": 32188
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32178
+                    "instanceID": 32190
                 },
                 {
-                    "instanceID": 32180
+                    "instanceID": 32192
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32610
+                    "instanceID": 32652
                 },
                 {
-                    "instanceID": 32612
+                    "instanceID": 32654
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32614
+                    "instanceID": 32656
                 },
                 {
-                    "instanceID": 32616
+                    "instanceID": 32658
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32618
+                    "instanceID": 32660
                 },
                 {
-                    "instanceID": 32620
+                    "instanceID": 32662
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-10-27T15:15:15.4259010+02:00"
+    "lastLogin": "2025-10-28T19:12:25.0555070+02:00"
 }

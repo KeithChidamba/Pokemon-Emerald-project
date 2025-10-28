@@ -348,8 +348,11 @@ public class Battle_handler : MonoBehaviour
                     participant.AddToExpList(playerParticipant.pokemon);
             }
         }
+
         if (participant.isEnemy)
+        {
             participant.pokemon.pokemonName = "Foe " + participant.pokemon.pokemonName;
+        }
         
         //setup participant for battle
         participant.statData.SaveActualStats();

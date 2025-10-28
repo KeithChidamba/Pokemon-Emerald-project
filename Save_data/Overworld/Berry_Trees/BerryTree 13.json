@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Qualot berry",
     "berryItem": {
-        "instanceID": 27036
+        "instanceID": 27038
     },
     "treeIndex": 13,
     "minutesPerStage": 180,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32176
+                    "instanceID": 32188
                 },
                 {
-                    "instanceID": 32176
+                    "instanceID": 32188
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32178
+                    "instanceID": 32190
                 },
                 {
-                    "instanceID": 32180
+                    "instanceID": 32192
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32552
+                    "instanceID": 32614
                 },
                 {
-                    "instanceID": 32554
+                    "instanceID": 32616
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32556
+                    "instanceID": 32618
                 },
                 {
-                    "instanceID": 32558
+                    "instanceID": 32620
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32560
+                    "instanceID": 32622
                 },
                 {
-                    "instanceID": 32562
+                    "instanceID": 32624
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-10-27T15:15:15.4278630+02:00"
+    "lastLogin": "2025-10-28T19:12:25.0575260+02:00"
 }

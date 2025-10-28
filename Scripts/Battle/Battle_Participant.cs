@@ -14,6 +14,7 @@ public class Battle_Participant : MonoBehaviour
     public Enemy_trainer pokemonTrainerAI;
     public Battle_Data statData;
     public Pokemon pokemon;
+    public string rawName;
     public List<Battle_Participant> currentEnemies;
     public Image pokemonImage;
     public Image statusImage;
@@ -290,7 +291,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private void UpdateUI()
     {
-        var rawName = (isEnemy)? pokemon.pokemonName.Replace("Foe ", "") : pokemon.pokemonName;
+        
         pokemonNameText.text = rawName;
         pokemonLevelText.text = "Lv: " + pokemon.currentLevel;
         if (isPlayer && !Battle_handler.Instance.isDoubleBattle)
@@ -335,6 +336,7 @@ public class Battle_Participant : MonoBehaviour
         playerHpSlider.minValue = 0;
         isActive = true;
         pokemonImage.sprite = isPlayer?pokemon.backPicture : pokemon.frontPicture;
+        rawName = (isEnemy)? pokemon.pokemonName.Replace("Foe ", "") : pokemon.pokemonName;
         ActivateGenderImage();
         if (pokemon.statusEffect == PokemonOperations.StatusEffect.BadlyPoison)
         {

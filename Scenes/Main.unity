@@ -1584,6 +1584,7 @@ MonoBehaviour:
   pokemonTrainerAI: {fileID: 0}
   statData: {fileID: 0}
   pokemon: {fileID: 0}
+  rawName: 
   currentEnemies: []
   pokemonImage: {fileID: 1180108332}
   statusImage: {fileID: 191196048}
@@ -6415,6 +6416,7 @@ MonoBehaviour:
   pokemonTrainerAI: {fileID: 0}
   statData: {fileID: 0}
   pokemon: {fileID: 0}
+  rawName: 
   currentEnemies: []
   pokemonImage: {fileID: 1197631754}
   statusImage: {fileID: 1432050726}
@@ -18874,11 +18876,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -77
+      value: -82
       objectReference: {fileID: 0}
     - target: {fileID: 4067306908211224593, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 174.2519
+      value: 171.68
       objectReference: {fileID: 0}
     - target: {fileID: 4067306908211224593, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_SizeDelta.y
@@ -18886,7 +18888,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4067306908211224593, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -49.7
+      value: -47.287
       objectReference: {fileID: 0}
     - target: {fileID: 4067306908211224593, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -18906,11 +18908,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4242367386400591325, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -48.3
+      value: -47.1
       objectReference: {fileID: 0}
     - target: {fileID: 4242367386400591325, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -6.9783
+      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: 5560776755989514386, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_Value
@@ -64995,6 +64997,7 @@ MonoBehaviour:
   pokemonTrainerAI: {fileID: 0}
   statData: {fileID: 0}
   pokemon: {fileID: 0}
+  rawName: 
   currentEnemies: []
   pokemonImage: {fileID: 63458739}
   statusImage: {fileID: 1650755637}
@@ -71454,7 +71457,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -206
+      value: -214
       objectReference: {fileID: 0}
     - target: {fileID: 4067306908211224593, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -101001,6 +101004,7 @@ MonoBehaviour:
   pokemonTrainerAI: {fileID: 0}
   statData: {fileID: 0}
   pokemon: {fileID: 0}
+  rawName: 
   currentEnemies: []
   pokemonImage: {fileID: 1900733081}
   statusImage: {fileID: 249051072}

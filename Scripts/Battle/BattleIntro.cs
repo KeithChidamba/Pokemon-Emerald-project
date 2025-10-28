@@ -154,11 +154,35 @@ public class BattleIntro : MonoBehaviour
 
         yield return MainIntroSequence(battleArea);
         
+        var wildParticipant = Wild_pkm.Instance.participant;
         Dialogue_handler.Instance.DisplayBattleInfo(
-            $"A wild {Wild_pkm.Instance.participant.pokemon.pokemonName} has appeared");
-        //go pokemon
-        //pokeball throw
-        //show ui
+            $"A wild {wildParticipant.rawName} has appeared");
+        
+        wildParticipant.pokemonImage.gameObject.SetActive(false);
+        var wildPokemonRect = wildParticipant.participantUI.GetComponent<RectTransform>();
+        wildParticipant.participantUI.SetActive(true);//change to slide
+        var start = new Vector2(wildPokemonRect.anchoredPosition.x - 500, wildPokemonRect.anchoredPosition.y);
+        yield return StartCoroutine(SlideRect(wildPokemonRect, start, wildPokemonRect.anchoredPosition, platformSlideSpeed*5));
+        
+        wildParticipant.pokemonImage.gameObject.SetActive(true);
+        participantIntroImages[2].gameObject.SetActive(false); 
+        
+        StartCoroutine(PokemonIntroAnimation(wildParticipant));
+        StartCoroutine(PokemonIntroAnimationMovement(wildParticipant));
+        yield return new WaitForSeconds(3f);
+        
+        Dialogue_handler.Instance.DisplayBattleInfo( $"Go! {participants[0].pokemon.pokemonName}");
+        playerAnimator.Play("pokeball throw");
+        yield return new WaitForSeconds(2f);
+        
+        for (var i=0;i<2;i++)
+        {
+            if (!participants[i].isActive) continue;
+            StartCoroutine(PokemonIntroAnimationMovement(participants[i]));
+            participants[i].participantUI.SetActive(true);//change to slide
+        }
+        participantIntroImages[0].gameObject.SetActive(false);
+        
     }
     public IEnumerator PlayTrainerIntroSequence(Encounter_Area battleArea)
     {
@@ -247,9 +271,9 @@ public class BattleIntro : MonoBehaviour
         }
         
         message = Battle_handler.Instance.isDoubleBattle
-            ? $"{Game_Load.Instance.playerData.playerName} sent out {participants[0].pokemon.pokemonName}!" +
+            ? $"Go! {participants[0].pokemon.pokemonName}" +
               $" and {participants[1].pokemon.pokemonName}!"
-            : $"{Game_Load.Instance.playerData.playerName} sent out {participants[0].pokemon.pokemonName}!";
+            : $"Go! {participants[0].pokemon.pokemonName}!";
         
         Dialogue_handler.Instance.DisplayBattleInfo(message);
         playerAnimator.Play("pokeball throw");
@@ -280,13 +304,35 @@ public class BattleIntro : MonoBehaviour
         var rect = participant.pokemonImage.rectTransform;
         var movementSpeed = platformSlideSpeed * 0.4f;
         var startPos = rect.anchoredPosition;
-        var target = new Vector2(rect.anchoredPosition.x + 10f, rect.anchoredPosition.y);
-        yield return StartCoroutine(SlideRect(rect,
-            startPos, target , movementSpeed));
-        target = new Vector2(startPos.x - 20f, rect.anchoredPosition.y);
-        yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition,target , movementSpeed));
-        target = new Vector2(startPos.x, rect.anchoredPosition.y);
-        yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition,target , movementSpeed));
+        if(participant.isEnemy)
+        {//LEFT AND RIGHT SLIDE
+            var target = new Vector2(rect.anchoredPosition.x + 10f, rect.anchoredPosition.y);
+            yield return StartCoroutine(SlideRect(rect,
+                startPos, target, movementSpeed));
+            target = new Vector2(startPos.x - 20f, rect.anchoredPosition.y);
+            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            target = new Vector2(startPos.x, rect.anchoredPosition.y);
+            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+        }
+        else
+        {
+            var xOffset = 12f; 
+            var yOffset = 6f;
+            //LEFT AND RIGHT BOUNCE
+            var target = new Vector2(startPos.x - xOffset, startPos.y + yOffset);
+            yield return StartCoroutine(SlideRect(rect, startPos, target, movementSpeed));
+            
+            target = new Vector2(startPos.x - xOffset*2, startPos.y - yOffset);
+            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+
+            target = new Vector2(startPos.x + xOffset, startPos.y + yOffset);
+            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+    
+            target = new Vector2(startPos.x + xOffset*2, startPos.y - yOffset);
+            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            //RETURN TO POSITION    
+            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, startPos, movementSpeed));
+        }
     }
     private IEnumerator PokemonIntroAnimation(Battle_Participant participant)
     {
