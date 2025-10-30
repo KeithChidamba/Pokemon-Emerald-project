@@ -30,6 +30,8 @@ public class Battle_handler : MonoBehaviour
     private bool battleTerminated;
     private int _currentMoveIndex = 0;
     public int currentEnemyIndex = 0;
+    public float participantPositionOffset = 100;
+    private List<Vector2> _defaultPokemonImagePositions = new ();
     public TrainerData.BattleType currentBattleType;
     public Pokemon lastOpponent;
     private Battle_Participant _currentParticipant;
@@ -183,6 +185,15 @@ public class Battle_handler : MonoBehaviour
     }
     private IEnumerator SetupBattleSequence(Encounter_Area areaOfBattle)
     {
+        foreach (var participant in battleParticipants)
+        {
+            var pos = participant.pokemonImage.rectTransform.anchoredPosition;
+            _defaultPokemonImagePositions.Add(pos);
+            var horizontalShift = participant.isPlayer
+                ? pos.x - (isDoubleBattle ? 0 : participantPositionOffset)
+                : pos.x + (isDoubleBattle ? 0 : participantPositionOffset);
+            participant.pokemonImage.rectTransform.anchoredPosition = new Vector2(horizontalShift, pos.y);
+        }
         BattleIntro.Instance.SetPlatformSprite(areaOfBattle);
         //load visuals based on area
         overWorld.SetActive(false);
@@ -473,8 +484,27 @@ public class Battle_handler : MonoBehaviour
         {
             Turn_Based_Combat.Instance.faintEventDelay = true;
             Dialogue_handler.Instance.DisplayBattleInfo(faintQueue[0].pokemon.pokemonName + " fainted!");
+            var rect = faintQueue[0].pokemonImage.rectTransform;
+            var target = new Vector2(rect.anchoredPosition.x, rect.anchoredPosition.y-rect.rect.height);
+            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            if (faintQueue[0].isEnemy)
+            {
+                StartCoroutine(BattleIntro.Instance.SlideRect(rect, rect.anchoredPosition, target, 300f));
+                yield return new WaitForSeconds(0.45f);
+                faintQueue[0].pokemonImage.color = new Color(0, 0, 0, 0);
+            }
+            else
+            {
+                yield return StartCoroutine(BattleIntro.Instance.SlideRect(rect, rect.anchoredPosition, target, 300f));
+            }
             StartCoroutine(faintQueue[0].HandleFaintLogic());
             yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
+            if(!battleOver)
+            {
+                rect.anchoredPosition =
+                    new Vector2(rect.anchoredPosition.x, rect.anchoredPosition.y + rect.rect.height);
+                if (faintQueue[0].isEnemy) faintQueue[0].pokemonImage.color = Color.white;
+            }
             faintQueue.RemoveAt(0);
             yield return null;
         }
@@ -496,12 +526,7 @@ public class Battle_handler : MonoBehaviour
         }
         else
         {
-            var baseMoneyPayout = 0;
-            if (isTrainerBattle)
-            {
-                var anyEnemy = battleParticipants[0].currentEnemies[0];
-                baseMoneyPayout = anyEnemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
-            }
+            
             if (battleWon)
             {
                 foreach (var evolution in evolutionQueue)
@@ -518,18 +543,34 @@ public class Battle_handler : MonoBehaviour
                     }
                 }
                 evolutionQueue.Clear();
-                Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " won the battle");
+                
                 if (isTrainerBattle)
                 {
+                    var anyEnemy = battleParticipants[0].currentEnemies[0];
+                    var baseMoneyPayout = anyEnemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
+                    
+                    Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " defeated "
+                        +anyEnemy.pokemonTrainerAI.trainerData.TrainerName);
+                    
+                    yield return  BattleIntro.Instance.ShowEnemiesAfterBattle();
+                    yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+                    Dialogue_handler.Instance.DisplayBattleInfo(anyEnemy.pokemonTrainerAI.trainerData.battleLossMessage);
+                    
                     var moneyGained = baseMoneyPayout * lastOpponent.currentLevel * MoneyModifier();
                     Game_Load.Instance.playerData.playerMoney += moneyGained;
                     Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " recieved P" + moneyGained);
+                }
+                else
+                {
+                    Dialogue_handler.Instance.DisplayBattleInfo($"Wild {Wild_pkm.Instance.participant.rawName} fainted!");
                 }
             }
             else
             {
                 if (isTrainerBattle)
                 {//last participant is always not null in this situation
+                    var anyEnemy = battleParticipants[0].currentEnemies[0];
+                    var baseMoneyPayout = anyEnemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
                     var playerLastParticipant = battleParticipants.ToList()
                         .Where(p => p.isActive & p.isPlayer).ToList()[0];
                     lastOpponent = playerLastParticipant.currentEnemies
@@ -550,6 +591,7 @@ public class Battle_handler : MonoBehaviour
             }
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        yield return BattleIntro.Instance.BlackFade();
         yield return ResetUiAfterBattle(playerWhiteOut);
         //battle triggered from fishing
         if(overworld_actions.Instance.fishing) overworld_actions.Instance.ResetFishingAction();
@@ -589,15 +631,20 @@ public class Battle_handler : MonoBehaviour
         optionsUI.SetActive(false);
         lastOpponent = null;
         participantCount = 0;
-        foreach (var participant in battleParticipants)
-            if(participant.pokemon!=null)
+        for (var i=0;i<battleParticipants.Length;i++)
+        {
+            battleParticipants[i].pokemonImage.rectTransform.anchoredPosition = _defaultPokemonImagePositions[i];
+            battleParticipants[i].pokemonImage.color = Color.white;
+            if(battleParticipants[i].pokemon!=null)
             {
-                participant.ResetParticipantState();
-                participant.DeactivateUI();
-                if (participant.pokemonTrainerAI != null)
-                    participant.pokemonTrainerAI.inBattle = false;
-                participant.pokemon = null;
+                battleParticipants[i].ResetParticipantState();
+                battleParticipants[i].DeactivateUI();
+                if (battleParticipants[i].pokemonTrainerAI != null)
+                    battleParticipants[i].pokemonTrainerAI.inBattle = false;
+                battleParticipants[i].pokemon = null;
             }
+        }
+        _defaultPokemonImagePositions.Clear();
         Encounter_handler.Instance.ResetTrigger();
         overWorld.SetActive(true);
         var location = (playerWhiteOut)? "Poke Center" : Game_Load.Instance.playerData.location;

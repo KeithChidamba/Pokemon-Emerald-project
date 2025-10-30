@@ -12,4 +12,5 @@ public class TrainerData : ScriptableObject
     public enum BattleType{Single,SingleDouble,Double}
     public BattleType battleType;
     public Sprite battleIntroSprite;
+    public string battleLossMessage;
 }

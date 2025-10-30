@@ -16,46 +16,13 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32188
-                },
-                {
-                    "instanceID": 32188
-                }
-            ],
-            "growthStageNumber": 0
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32190
-                },
-                {
-                    "instanceID": 32192
-                }
-            ],
-            "growthStageNumber": 1
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32194
-                },
-                {
-                    "instanceID": 32196
-                }
-            ],
-            "growthStageNumber": 2
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32198
+                    "instanceID": 32200
                 },
                 {
                     "instanceID": 32200
                 }
             ],
-            "growthStageNumber": 3
+            "growthStageNumber": 0
         },
         {
             "growthStageSprites": [
@@ -66,8 +33,41 @@
                     "instanceID": 32204
                 }
             ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32206
+                },
+                {
+                    "instanceID": 32208
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32210
+                },
+                {
+                    "instanceID": 32212
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32214
+                },
+                {
+                    "instanceID": 32216
+                }
+            ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-10-28T19:12:25.0565310+02:00"
+    "lastLogin": "2025-10-30T10:40:42.3771780+02:00"
 }

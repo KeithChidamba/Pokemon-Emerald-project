@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
+using Vector2 = UnityEngine.Vector2;
 
 public class PokeballRolloutUI : MonoBehaviour
 {
@@ -22,11 +24,12 @@ public class PokeballRolloutUI : MonoBehaviour
 
     public IEnumerator LoadPokeballs()
     {
+        gameObject.SetActive(true);
+
         _finishedDisplaying = false;
-        //hide not used pokeballs
-        for(var i = 0; i < pokeballs.Count;i++)
+        for (var i = 0; i < pokeballs.Count; i++)
         {
-            if(isPlayerPokeballs)
+            if (isPlayerPokeballs)
             {
                 pokeballs[i].GetComponent<Image>().sprite =
                     i < Pokemon_party.Instance.numMembers ? fullPokeballSlot : emptyPokeballSlot;
@@ -40,13 +43,17 @@ public class PokeballRolloutUI : MonoBehaviour
                 else
                 {
                     var partyCount = Battle_handler.Instance.battleParticipants[2].pokemonTrainerAI.trainerParty.Count;
-                    pokeballs[i].GetComponent<Image>().sprite =  i < partyCount ? fullPokeballSlot : emptyPokeballSlot;
+                    pokeballs[i].GetComponent<Image>().sprite = i < partyCount ? fullPokeballSlot : emptyPokeballSlot;
                 }
             }
 
-            pokeballs[i].anchoredPosition =  new Vector2(startPos.anchoredPosition.x + (i*pokeballDistanceApart*0.75f), startPos.anchoredPosition.y);
-            var pokeballPos = new Vector2(startPos.anchoredPosition.x+(i*pokeballDistanceApart), startPos.anchoredPosition.y);
-            yield return BattleIntro.Instance.SlideRect(pokeballs[i],pokeballs[i].anchoredPosition,pokeballPos,pokeballMoveSpeed);
+            pokeballs[i].anchoredPosition =
+                new Vector2(startPos.anchoredPosition.x + (i * pokeballDistanceApart * 0.75f),
+                    startPos.anchoredPosition.y);
+            var pokeballPos = new Vector2(startPos.anchoredPosition.x + (i * pokeballDistanceApart),
+                startPos.anchoredPosition.y);
+            yield return BattleIntro.Instance.SlideRect(pokeballs[i], pokeballs[i].anchoredPosition, pokeballPos,
+                pokeballMoveSpeed);
         }
 
         _finishedDisplaying = true;
@@ -56,7 +63,14 @@ public class PokeballRolloutUI : MonoBehaviour
 
     public IEnumerator HidePokeballs()
     {
-       yield return new WaitUntil(() => _finishedDisplaying); 
-       BattleIntro.Instance.SlideOutOfView(_rectTransform,isPlayerPokeballs?500f:-500f);
+        yield return new WaitUntil(() => _finishedDisplaying);
+        BattleIntro.Instance.SlideOutOfView(_rectTransform, isPlayerPokeballs ? 500f : -500f);
+        yield return new WaitForSeconds(3f);
+        gameObject.SetActive(false);
+        BattleIntro.Instance.SlideOutOfView(_rectTransform, isPlayerPokeballs ? -500f : 500f);
+        for (var i = 0; i < pokeballs.Count; i++)
+        {
+            pokeballs[i].anchoredPosition = startPos.anchoredPosition;
+        }
     }
 }

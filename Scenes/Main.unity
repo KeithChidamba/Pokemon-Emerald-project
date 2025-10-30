@@ -1592,7 +1592,6 @@ MonoBehaviour:
   pokemonNameText: {fileID: 831252460}
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 261349422}
-  positionOffset: 100
   isPlayer: 1
   isEnemy: 0
   isActive: 0
@@ -1623,7 +1622,7 @@ MonoBehaviour:
   isSemiInvulnerable: 0
   canEscape: 1
   playerHpSlider: {fileID: 1011505838}
-  hpSliderImage: {fileID: 1544117819}
+  hpSliderImage: {fileID: 112600289}
   playerExpSlider: {fileID: 0}
   singleBattleUI: []
   doubleBattleUI: []
@@ -4248,6 +4247,17 @@ MonoBehaviour:
   location: 
   interactionType: 0
   area: {fileID: 0}
+--- !u!114 &112600289 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7691909353621470370, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+  m_PrefabInstance: {fileID: 1906379548}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &113451625
 GameObject:
   m_ObjectHideFlags: 0
@@ -6424,7 +6434,6 @@ MonoBehaviour:
   pokemonNameText: {fileID: 734226165}
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 2086359299}
-  positionOffset: 100
   isPlayer: 0
   isEnemy: 0
   isActive: 0
@@ -65005,7 +65014,6 @@ MonoBehaviour:
   pokemonNameText: {fileID: 1802125968}
   pokemonHealthText: {fileID: 152226813}
   pokemonLevelText: {fileID: 6231183}
-  positionOffset: 100
   isPlayer: 1
   isEnemy: 0
   isActive: 0
@@ -69237,6 +69245,7 @@ MonoBehaviour:
   overWorld: {fileID: 523264673}
   runningAway: 0
   currentEnemyIndex: 0
+  participantPositionOffset: 100
   currentBattleType: 0
   lastOpponent: {fileID: 0}
   evolutionQueue: []
@@ -101012,7 +101021,6 @@ MonoBehaviour:
   pokemonNameText: {fileID: 831252460}
   pokemonHealthText: {fileID: 0}
   pokemonLevelText: {fileID: 1175943805}
-  positionOffset: 100
   isPlayer: 0
   isEnemy: 0
   isActive: 0

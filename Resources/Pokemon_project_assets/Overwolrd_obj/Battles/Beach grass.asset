@@ -15,7 +15,16 @@ MonoBehaviour:
   biome: 5
   availableEncounters:
   - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
-    encounterChance: 100
+    encounterChance: 20
+    evolutionFormNumber: 0
+  - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+    encounterChance: 15
+    evolutionFormNumber: 0
+  - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+    encounterChance: 20
+    evolutionFormNumber: 0
+  - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+    encounterChance: 45
     evolutionFormNumber: 0
   minimumLevelOfPokemon: 20
   maximumLevelOfPokemon: 30

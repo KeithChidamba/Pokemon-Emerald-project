@@ -27,6 +27,12 @@ public class Player_movement : MonoBehaviour
     private bool delayingMovement;
     public GameObject playerObject;
     public static Player_movement Instance;
+
+    private enum InputAxis
+    {
+        Vertical,
+        Horizontal
+    };
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -197,7 +203,7 @@ public class Player_movement : MonoBehaviour
         if(!usingBike)return; 
         movementSpeed = BikeSpeed;
         var idleWithBike = yAxisInput == 0 && xAxisInput == 0;
-        var animationName = (idleWithBike)? _animationManager.bikeIdle : _animationManager.rideBike;
+        var animationName = idleWithBike? _animationManager.bikeIdle : _animationManager.rideBike;
         _animationManager.ChangeAnimationState(animationName);
     }
     private void HandlePlayerPhysicsMovement()
@@ -205,15 +211,15 @@ public class Player_movement : MonoBehaviour
         var movementDirection = GetMovementDirection(); 
         var horizontalDirection = (movementDirection > 2) ? 1 : 0;
         var verticalDirection = (movementDirection > 2) ? 0 : 1;
-        xAxisInput = HandleInput("Horizontal");
-        yAxisInput = HandleInput("Vertical");
+        xAxisInput = HandleInput(InputAxis.Horizontal);
+        yAxisInput = HandleInput(InputAxis.Vertical);
         movement = new Vector2(xAxisInput * movementSpeed * horizontalDirection, yAxisInput * movementSpeed * verticalDirection);
         rb.velocity = movement;
     }
 
-    private float HandleInput(string axisName)
+    private float HandleInput(InputAxis axisName)
     { 
-        var inputs = axisName == "Vertical"? new []{KeyCode.DownArrow,KeyCode.UpArrow} 
+        var inputs = axisName == InputAxis.Vertical? new []{KeyCode.DownArrow,KeyCode.UpArrow} 
             : new []{KeyCode.LeftArrow,KeyCode.RightArrow};
         
         if (Input.GetKey(inputs[0])) return -1f;

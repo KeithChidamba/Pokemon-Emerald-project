@@ -304,6 +304,11 @@ public class MoveLogicHandler : MonoBehaviour
     }
     private IEnumerator HealFromWeather()
     {
+        if (_attacker.pokemon.hp >= _attacker.pokemon.maxHp)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+"'s health is already full!");
+            yield break;
+        }
         float fraction;
         var currentWeather = Turn_Based_Combat.Instance.currentWeather.weather;
         

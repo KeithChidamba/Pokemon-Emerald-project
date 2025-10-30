@@ -22,7 +22,6 @@ public class Battle_Participant : MonoBehaviour
     public Text pokemonNameText;
     public Text pokemonHealthText;
     public Text pokemonLevelText;
-    public float positionOffset;
     public bool isPlayer;
     public bool isEnemy;
     public bool isActive;
@@ -291,7 +290,7 @@ public class Battle_Participant : MonoBehaviour
     }
     private void UpdateUI()
     {
-        
+        PokemonOperations.UpdateHealthPhase(pokemon,hpSliderImage); 
         pokemonNameText.text = rawName;
         pokemonLevelText.text = "Lv: " + pokemon.currentLevel;
         if (isPlayer && !Battle_handler.Instance.isDoubleBattle)
@@ -304,7 +303,6 @@ public class Battle_Participant : MonoBehaviour
         playerHpSlider.value = pokemon.hp;
         playerHpSlider.maxValue = pokemon.maxHp;
         if(pokemon.hp<=0) pokemon.hp = 0;
-        PokemonOperations.UpdateHealthPhase(pokemon,hpSliderImage); 
     }
     public void RefreshStatusEffectImage()
     {
@@ -351,13 +349,6 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
         pokemon.OnHealthChanged += CheckIfFainted;
-        var pos =pokemonImage.rectTransform.anchoredPosition;
-        if (!isPlayer)
-        {
-            pokemonImage.rectTransform.anchoredPosition = new Vector2(pos.x + (Battle_handler.Instance.isDoubleBattle ? 0 : positionOffset), pos.y);
-            return;
-        }
-        pokemonImage.rectTransform.anchoredPosition = new Vector2(pos.x - (Battle_handler.Instance.isDoubleBattle ? 0 : positionOffset), pos.y);
         pokemon.OnEvolutionSuccessful += AddToEvolutionQueue;
         pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
         pokemon.OnNewLevel += statData.SaveActualStats;

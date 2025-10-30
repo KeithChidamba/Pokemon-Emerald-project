@@ -53,7 +53,7 @@
     "expYield": 54,
     "friendshipLevel": 210,
     "hasTrainer": true,
-    "canBeFlinched": true,
+    "canBeFlinched": false,
     "canBeInfatuated": true,
     "types": [
         {
@@ -132,16 +132,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -9204
+            "instanceID": -26976
         },
         {
-            "instanceID": -9206
+            "instanceID": -26978
         },
         {
-            "instanceID": -9208
+            "instanceID": -26980
         },
         {
-            "instanceID": -9210
+            "instanceID": -26982
         }
     ],
     "ability": {
@@ -194,7 +194,7 @@
         },
         {
             "moveName": "fly",
-            "powerPoints": 35,
+            "powerPoints": 34,
             "maxPowerpoints": 35
         },
         {

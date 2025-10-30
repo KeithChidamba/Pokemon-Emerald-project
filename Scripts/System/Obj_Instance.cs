@@ -131,6 +131,7 @@ public static class Obj_Instance
         trainerCopy.BaseMoneyPayout = data.BaseMoneyPayout;
         trainerCopy.TrainerLocation = data.TrainerLocation;
         trainerCopy.battleIntroSprite = data.battleIntroSprite;
+        trainerCopy.battleLossMessage = data.battleLossMessage;
         foreach (var member in data.PokemonParty)
             trainerCopy.PokemonParty.Add(CreateTrainerPokemonData(member));
         return trainerCopy;

@@ -351,11 +351,13 @@ public class Move_handler:MonoBehaviour
     {
         if (victim.pokemon.statusEffect != PokemonOperations.StatusEffect.None)
         {
-            if (_currentTurn.move.statusEffect == victim.pokemon.statusEffect && _currentTurn.move.moveDamage==0) 
-                Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" already has a "+victim.pokemon.statusEffect+" effect!");
-            else
-                Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
-            
+            if (_currentTurn.move.moveDamage == 0)
+            {//only display message for status-condition-only moves
+                var statusRejectionMessage = _currentTurn.move.statusEffect == victim.pokemon.statusEffect?
+                    victim.pokemon.pokemonName+" already has a "+victim.pokemon.statusEffect+" effect!"
+                    :"but it failed!";
+                Dialogue_handler.Instance.DisplayBattleInfo(statusRejectionMessage);
+            }
             processingOrder = false;
             return;
         }
