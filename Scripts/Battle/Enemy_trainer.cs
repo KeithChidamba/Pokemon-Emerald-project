@@ -46,7 +46,7 @@ public class Enemy_trainer : MonoBehaviour
         alivePokemon.RemoveAll(p => p.hp <= 0);
         return alivePokemon;
     }
-    public void CheckIfLoss()
+    public IEnumerator CheckIfLoss()
     {
         var numAlive = GetLivingPokemon();
         if (numAlive.Count == 0)
@@ -78,14 +78,13 @@ public class Enemy_trainer : MonoBehaviour
                 else
                 {
                     var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count - 1);
-                    Battle_handler.Instance.SetParticipant(participant,newPokemon:notParticipatingList[randomLeftOver]);
+                    yield return BattleIntro.Instance.SwitchInPokemon(participant,notParticipatingList[randomLeftOver]);
                 }
             }
             else
             {
                 var randomMember = Utility.RandomRange(0, numAlive.Count - 1);
-                Battle_handler.Instance.SetParticipant(participant,newPokemon:numAlive[randomMember]);
-
+                yield return BattleIntro.Instance.SwitchInPokemon(participant,newPokemon:numAlive[randomMember]);
             }
         }
         Turn_Based_Combat.Instance.faintEventDelay = false;

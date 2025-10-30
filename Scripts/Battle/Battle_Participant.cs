@@ -163,7 +163,7 @@ public class Battle_Participant : MonoBehaviour
             else
             {
                 ResetParticipantState();
-                pokemonTrainerAI.CheckIfLoss();
+                yield return pokemonTrainerAI.CheckIfLoss();
             }
         }
         else CheckIfLoss();
@@ -191,6 +191,7 @@ public class Battle_Participant : MonoBehaviour
             {
                 Pokemon_party.Instance.selectedMemberNumber = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
                 Pokemon_party.Instance.swapOutNext = true;
+                Pokemon_party.Instance.OnMemberSelected += StartPokemonPartySwap; 
                 Game_ui_manager.Instance.ViewPokemonParty();
                 ResetParticipantState();
             }
@@ -202,6 +203,12 @@ public class Battle_Participant : MonoBehaviour
                 Turn_Based_Combat.Instance.faintEventDelay = false;
             }
         }
+    }
+
+    private void StartPokemonPartySwap(int memberPosition)
+    {
+        Pokemon_party.Instance.OnMemberSelected -= StartPokemonPartySwap; 
+        StartCoroutine(Pokemon_party.Instance.SwapMemberInBattle(memberPosition));
     }
     public void DeactivateParticipant()
     {

@@ -480,31 +480,39 @@ public class Battle_handler : MonoBehaviour
     } 
     private IEnumerator FaintSequence()
     {
-        while (faintQueue.Count > 0)
+        while (faintQueue.Count > 0) 
         {
             Turn_Based_Combat.Instance.faintEventDelay = true;
             Dialogue_handler.Instance.DisplayBattleInfo(faintQueue[0].pokemon.pokemonName + " fainted!");
-            var rect = faintQueue[0].pokemonImage.rectTransform;
-            var target = new Vector2(rect.anchoredPosition.x, rect.anchoredPosition.y-rect.rect.height);
+            var pkmImageRect = faintQueue[0].pokemonImage.rectTransform;
+            var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-pkmImageRect.rect.height);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            
+            StartCoroutine(BattleIntro.Instance.SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
+            
+            var participantUIRect = faintQueue[0].participantUI.GetComponent<RectTransform>(); 
+            var targetForUI = new Vector2(participantUIRect.anchoredPosition.x, participantUIRect.anchoredPosition.y-400f);
+            yield return StartCoroutine(BattleIntro.Instance.SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f));
+            
             if (faintQueue[0].isEnemy)
             {
-                StartCoroutine(BattleIntro.Instance.SlideRect(rect, rect.anchoredPosition, target, 300f));
-                yield return new WaitForSeconds(0.45f);
+                yield return new WaitForSeconds(0.05f);
+                faintQueue[0].participantUI.SetActive(false);
+                yield return new WaitForSeconds(0.25f);
                 faintQueue[0].pokemonImage.color = new Color(0, 0, 0, 0);
             }
-            else
-            {
-                yield return StartCoroutine(BattleIntro.Instance.SlideRect(rect, rect.anchoredPosition, target, 300f));
-            }
+            
             StartCoroutine(faintQueue[0].HandleFaintLogic());
             yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
             if(!battleOver)
             {
-                rect.anchoredPosition =
-                    new Vector2(rect.anchoredPosition.x, rect.anchoredPosition.y + rect.rect.height);
+                faintQueue[0].participantUI.SetActive(true);
+                pkmImageRect.anchoredPosition =
+                    new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y + pkmImageRect.rect.height);
                 if (faintQueue[0].isEnemy) faintQueue[0].pokemonImage.color = Color.white;
             }
+            participantUIRect.anchoredPosition = new Vector2(participantUIRect.anchoredPosition.x,
+                participantUIRect.anchoredPosition.y + 400f);
             faintQueue.RemoveAt(0);
             yield return null;
         }

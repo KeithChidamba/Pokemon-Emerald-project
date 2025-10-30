@@ -25,6 +25,7 @@ public class Pokemon_party : MonoBehaviour
     public GameObject[] partyOptions;
     public GameObject partyOptionsParent;
     public Text partyUsageText;
+    public event Action<int> OnMemberSelected;
     public static Pokemon_party Instance;
     private void Awake()
     {
@@ -118,6 +119,7 @@ public class Pokemon_party : MonoBehaviour
             Turn_Based_Combat.Instance.SaveTurn(switchTurn);
             
             InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+            selectedMemberNumber = 0;
             _swappingIn = false;
         }
         else
@@ -151,7 +153,7 @@ public class Pokemon_party : MonoBehaviour
         if (swapOutNext)
         {//selecting a swap in
             if (!IsValidSwap(memberPosition)) return;
-            MoveMember(memberPosition);
+            OnMemberSelected?.Invoke(memberPosition);
         }
         else if (Item_handler.Instance.usingItem)
         {//use item on pokemon
@@ -165,7 +167,11 @@ public class Pokemon_party : MonoBehaviour
             {
                 selectedMemberNumber = memberPosition;
                 if (moving)
-                    MoveMember(memberToMove);
+                {
+                    memberToMove--;
+                    if(party[selectedMemberNumber-1] != party[memberToMove])
+                        SwapMembers(memberToMove);
+                }
                 else
                 {
                     ClearSelectionUI();
@@ -188,33 +194,24 @@ public class Pokemon_party : MonoBehaviour
         cancelButton.sprite = memberCards[0].pokeballClosedImage.sprite;
         Item_handler.Instance.usingItem = false;//in case player closes before using item
     }
-    
-    private void MoveMember(int partyPosition)
+    public IEnumerator SwapMemberInBattle(int partyPosition)
     {
         partyPosition--;
-        if (swapOutNext)
-        {
-            SwapMembers(partyPosition);
-            Invoke(nameof(ResetSwitchInState),1f);
-        }
-        else
-            if(party[selectedMemberNumber-1] != party[partyPosition])
-                SwapMembers(partyPosition);
-    }
+        (party[selectedMemberNumber-1], party[partyPosition]) = 
+            (party[partyPosition], party[selectedMemberNumber-1]);
 
-    void ResetSwitchInState()
-    {
-        Turn_Based_Combat.Instance.faintEventDelay = false;
+        var participant = Battle_handler.Instance.battleParticipants[selectedMemberNumber - 1];
+        var alivePokemon= GetLivingPokemon();
+        
+        
+        UpdateUIAfterSwap();
+        
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+        yield return BattleIntro.Instance.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1]);
+        selectedMemberNumber = 0;
+        Turn_Based_Combat.Instance.faintEventDelay = false;
     }
-    public void SwitchInMemberSwap(SwitchOutData data)
-    {
-        (party[data.PartyPosition], party[data.MemberToSwapWith]) = 
-        (party[data.MemberToSwapWith], party[data.PartyPosition]);
-        Battle_handler.Instance.SetParticipant(data.Participant,newPokemon:party[data.PartyPosition]);
-        EndSwap();
-    }
-    void EndSwap()
+    public void UpdateUIAfterSwap()
     {
         RefreshMemberCards();
         ClearSelectionUI();
@@ -231,14 +228,14 @@ public class Pokemon_party : MonoBehaviour
         {
             var participant = Battle_handler.Instance.battleParticipants[selectedMemberNumber - 1];
             var alivePokemon= GetLivingPokemon();
-            Battle_handler.Instance.SetParticipant(participant,newPokemon:alivePokemon[selectedMemberNumber - 1]);
+            StartCoroutine(BattleIntro.Instance.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1]));
         }
         else
             Dialogue_handler.Instance.DisplayDetails(message,1f);
         UpdatePartyUsageMessage("Choose a pokemon");
         memberToMove = 0;
         selectedMemberNumber = 0;
-        EndSwap();
+        UpdateUIAfterSwap();
     }
 
     public void AddMemberForTesting(Pokemon pokemon)

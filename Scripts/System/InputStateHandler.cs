@@ -16,6 +16,7 @@ public class InputStateHandler : MonoBehaviour
     private event Action OnInputRight; 
     private event Action OnInputLeft;
     public event Action OnStateRemovalComplete;
+    public event Action<InputState> OnStateRemoved;
     public event Action<InputState> OnStateChanged;
     public event Action<int> OnSelectionIndexChanged;
     private bool _readingInputs;
@@ -215,6 +216,7 @@ public class InputStateHandler : MonoBehaviour
     }
     public void ChangeInputState(InputState newState)
     {
+        OnStateRemoved?.Invoke(currentState);
         ResetCoordinates();
         if (!stateLayers.Any(s => s.stateName == newState.stateName))
             stateLayers.Add(newState);

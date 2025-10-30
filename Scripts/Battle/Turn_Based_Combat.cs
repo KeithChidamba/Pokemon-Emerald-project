@@ -377,13 +377,16 @@ public class Turn_Based_Combat : MonoBehaviour
         if (swap.IsPlayer)
         {
             swap.Participant.ResetParticipantState();
-            Pokemon_party.Instance.SwitchInMemberSwap(swap);
+            var party = Pokemon_party.Instance.party;
+            (party[swap.PartyPosition], party[swap.MemberToSwapWith]) = (party[swap.MemberToSwapWith], party[swap.PartyPosition]);
+            Pokemon_party.Instance.UpdateUIAfterSwap();
+            
             InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+            yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,party[swap.PartyPosition]);
         }
         else
         {
-            Battle_handler.Instance.SetParticipant(swap.Participant
-                ,newPokemon:swap.Participant.pokemonTrainerAI.trainerParty[swap.MemberToSwapWith]);
+            yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,swap.Participant.pokemonTrainerAI.trainerParty[swap.MemberToSwapWith]);
         }
     }
 

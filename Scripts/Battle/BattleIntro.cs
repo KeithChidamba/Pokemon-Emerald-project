@@ -320,6 +320,20 @@ public class BattleIntro : MonoBehaviour
             yield return SlideRect(participantIntroImages[i + 2].rectTransform, startPos, target , platformSlideSpeed*5);
         }
     }
+
+    public IEnumerator SwitchInPokemon(Battle_Participant swapParticipant, Pokemon newPokemon)
+    {
+        if(!swapParticipant.isPlayer)
+        {
+            yield return enemyPokeballs.ShowPokeballs();
+            yield return new WaitForSeconds(0.5f);
+            yield return enemyPokeballs.HidePokeballs();
+        }
+        // //show pokeball drop
+        // //play pokemon intro animation
+        Battle_handler.Instance.SetParticipant(swapParticipant,newPokemon:newPokemon);
+        yield return null;
+    }
     private IEnumerator PokemonIntroAnimationMovement(Battle_Participant participant)
     {
         var rect = participant.pokemonImage.rectTransform;
