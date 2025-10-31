@@ -50,6 +50,7 @@ public class Battle_Participant : MonoBehaviour
     private Action OnFaintCheck;
     public List<Barrier> barriers = new();
     [SerializeField]private Battle_Participant recentAttacker;
+    public Animator statusEffectAnimator;
     private void Start()
     {
         heldItemHandler = GetComponent<Held_Items>();

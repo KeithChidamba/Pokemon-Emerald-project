@@ -416,17 +416,34 @@ public class Item_handler : MonoBehaviour
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
         var isCaught = false;
         var wildPokemon = Wild_pkm.Instance.participant.pokemon;//pokemon only caught in wild
-        Dialogue_handler.Instance.DisplayBattleInfo("Trying to catch "+wildPokemon.pokemonName+" .....");
-        yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
+        yield return StartCoroutine(BattleVisuals.Instance.DisplayPokemonThrow());
         var ballRate = float.Parse(pokeball.itemEffect);
         var bracket1 = (3 * wildPokemon.maxHp - 2 * wildPokemon.hp) / (3 * wildPokemon.maxHp);
         var catchValue = math.trunc(bracket1 * wildPokemon.catchRate * ballRate * 
                                       BattleOperations.GetCatchRateBonusFromStatus(wildPokemon.statusEffect));
-        
-        if (BattleOperations.IsImmediateCatch(catchValue) 
-            || BattleOperations.PassedPokeballShakeTest(catchValue))
+
+        if (BattleOperations.IsImmediateCatch(catchValue))
+        {
+            yield return StartCoroutine(BattleVisuals.Instance.DisplayPokemonCatch());
             isCaught = true;
-  
+        }
+        else
+        {
+            float shakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchValue));
+            for (int i = 0; i < 3; i++)
+            {
+                yield return StartCoroutine(BattleVisuals.Instance.DisplayPokeballShake());
+                int rand = Utility.Random16Bit();
+                if (rand < (shakeProbability * (i + 1)))
+                {
+                    yield return StartCoroutine(BattleVisuals.Instance.DisplayPokemonCatch());
+                    isCaught = true;
+                    break;
+                }
+            }
+        }
+
+        //isCaught = true;
         if (isCaught)
         {
             Dialogue_handler.Instance.DisplayBattleInfo("Well done "+wildPokemon.pokemonName+" has been caught");
@@ -439,6 +456,7 @@ public class Item_handler : MonoBehaviour
             Wild_pkm.Instance.participant.EndWildBattle();
         }else
         {
+            yield return StartCoroutine(BattleVisuals.Instance.DisplayPokeballEscape());
             Dialogue_handler.Instance.DisplayBattleInfo(wildPokemon.pokemonName+" escaped the pokeball");
             yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
             SkipTurn();

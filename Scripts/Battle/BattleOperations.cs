@@ -77,18 +77,7 @@ public static class BattleOperations
         }
         return true;
     }
-
-    public static bool PassedPokeballShakeTest(float catchvalue)
-    {
-        float shakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchvalue));
-        for (int i = 0; i < 3; i++)
-        {
-            int rand = Utility.Random16Bit();
-            if (rand < (shakeProbability * (i+1)) )
-                return true;
-        }
-        return false;
-    }
+    
 //Buffs
     private static bool HasBuffOrDebuff(Pokemon pokemon, PokemonOperations.Stat stat)
     {

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleVisuals : MonoBehaviour
 {
     public static BattleVisuals Instance;
-    public Animator statusEffectAnimator;
+    public Animator playerBattleAnimator;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -18,12 +19,46 @@ public class BattleVisuals : MonoBehaviour
 
     public IEnumerator DisplayStatusEffectVisuals(Battle_Participant participant)
     {
-        statusEffectAnimator.gameObject.SetActive(true);
-        var rect = statusEffectAnimator.GetComponent<RectTransform>();
-        rect.anchoredPosition = participant.pokemonImage.rectTransform.anchoredPosition;
-        statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
-        yield return new WaitForSeconds(1.75f);
-        statusEffectAnimator.gameObject.SetActive(false);
+        participant.statusEffectAnimator.gameObject.SetActive(true);
+        var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
+        
+        if (participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Sleep)
+        {
+            var start = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x
+                , participant.pokemonImage.rectTransform.anchoredPosition.y+80f);
+            var target = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x -
+                                     (participant.pokemonImage.rectTransform.rect.width*0.25f)
+                , participant.pokemonImage.rectTransform.anchoredPosition.y+200f);
+            
+            participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
+            yield return SlideRect(rect,start,target,165f);
+            yield return SlideRect(rect,start,target,165f);
+        }
+        else 
+        if (participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Paralysis)
+        {
+            var imageRect = participant.pokemonImage.rectTransform;
+            rect.anchoredPosition = imageRect.anchoredPosition;
+            var movementSpeed = 200f;
+            var startPos = imageRect.anchoredPosition;
+            var target = new Vector2(imageRect.anchoredPosition.x + 10f, imageRect.anchoredPosition.y);
+            
+            participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
+            
+            yield return SlideRect(imageRect, startPos, target, movementSpeed);
+            target = new Vector2(startPos.x - 20f, imageRect.anchoredPosition.y);
+            yield return SlideRect(imageRect, imageRect.anchoredPosition, target, movementSpeed);
+            target = new Vector2(startPos.x, imageRect.anchoredPosition.y);
+            yield return SlideRect(imageRect, imageRect.anchoredPosition, target, movementSpeed);
+            yield return new WaitForSeconds(0.25f);
+        }
+        else
+        {
+            rect.anchoredPosition = participant.pokemonImage.rectTransform.anchoredPosition;
+            participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
+            yield return new WaitForSeconds(1.75f);
+        }
+        participant.statusEffectAnimator.gameObject.SetActive(false);
         yield return null;
     }
     public IEnumerator DisplayDamageTakenVisual(Battle_Participant participant,Move_handler.DamageSource damageSource)
@@ -64,8 +99,8 @@ public class BattleVisuals : MonoBehaviour
         }
         if (damageSource == Move_handler.DamageSource.Burn)
         {
-            statusEffectAnimator.gameObject.SetActive(true);
-            var rect = statusEffectAnimator.GetComponent<RectTransform>();
+            participant.statusEffectAnimator.gameObject.SetActive(true);
+            var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
             var start = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x -
                                     (participant.pokemonImage.rectTransform.rect.width*0.5f)
                 , participant.pokemonImage.rectTransform.anchoredPosition.y+20f);
@@ -73,9 +108,9 @@ public class BattleVisuals : MonoBehaviour
                                      (participant.pokemonImage.rectTransform.rect.width*0.5f)
                 , participant.pokemonImage.rectTransform.anchoredPosition.y+20f);
             
-            statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
+            participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
             yield return StartCoroutine(SlideRect(rect,start,target,165f));
-            statusEffectAnimator.gameObject.SetActive(false);
+            participant.statusEffectAnimator.gameObject.SetActive(false);
         }
     }
     public IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)
@@ -86,5 +121,40 @@ public class BattleVisuals : MonoBehaviour
             rect.anchoredPosition = Vector2.MoveTowards(rect.anchoredPosition, target, speed * Time.deltaTime);
             yield return null;
         }
+    }
+    public IEnumerator DisplayPokemonThrow()
+    {//wild battle is always single
+        playerBattleAnimator.gameObject.SetActive(true);
+        var pkmImageRect = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform;
+        var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-pkmImageRect.rect.height);
+        yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
+        playerBattleAnimator.Play("pokemon catch");
+        yield return new WaitForSeconds(1.6f);
+        Wild_pkm.Instance.participant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
+        yield return new WaitForSeconds(0.5f);
+       // playerBattleAnimator.gameObject.SetActive(false);
+    }
+    public IEnumerator DisplayPokemonCatch()
+    {
+        playerBattleAnimator.gameObject.SetActive(true);
+        playerBattleAnimator.Play("pokeball successful");
+        yield return new WaitForSeconds(1f);
+    }
+    public IEnumerator DisplayPokeballEscape()
+    {
+        playerBattleAnimator.gameObject.SetActive(true);
+        playerBattleAnimator.Play("pokeball escape");
+        yield return new WaitForSeconds(0.75f);
+        Wild_pkm.Instance.participant.pokemonImage.rectTransform.sizeDelta = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
+        playerBattleAnimator.gameObject.SetActive(false);
+        var pkmImageRect = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform;
+        var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y+pkmImageRect.rect.height);
+        yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
+    }
+    public IEnumerator DisplayPokeballShake()
+    {
+        playerBattleAnimator.gameObject.SetActive(true);
+        playerBattleAnimator.Play("pokeball shake");
+        yield return new WaitForSeconds(1f);
     }
 }

@@ -178,7 +178,7 @@ public class BattleIntro : MonoBehaviour
         yield return new WaitForSeconds(3f);
         
         Dialogue_handler.Instance.DisplayBattleInfo( $"Go! {participants[0].pokemon.pokemonName}");
-        playerAnimator.Play("pokeball throw");
+        playerAnimator.Play("pokemon release");
         yield return new WaitForSeconds(1.5f);
         
         for (var i=0;i<2;i++)
@@ -282,7 +282,7 @@ public class BattleIntro : MonoBehaviour
             : $"Go! {participants[0].pokemon.pokemonName}!";
         
         Dialogue_handler.Instance.DisplayBattleInfo(message);
-        playerAnimator.Play("pokeball throw");
+        playerAnimator.Play("pokemon release");
         if (Battle_handler.Instance.isDoubleBattle)
         {
             yield return new WaitForSeconds(0.5f);
@@ -338,6 +338,10 @@ public class BattleIntro : MonoBehaviour
 
     private IEnumerator PokemonIntroAnimationMovement(Battle_Participant participant)
     {
+        if (participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Sleep)
+        {
+            yield break;
+        }
         var rect = participant.pokemonImage.rectTransform;
         var movementSpeed = platformSlideSpeed * 0.4f;
         var startPos = rect.anchoredPosition;
@@ -373,6 +377,10 @@ public class BattleIntro : MonoBehaviour
     }
     private IEnumerator PokemonIntroAnimation(Battle_Participant participant)
     {
+        if (participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Sleep)
+        {
+            yield break;
+        }
         yield return new WaitForSeconds(0.2f);
         participant.pokemonImage.sprite = participant.pokemon.battleIntroFrame;
         yield return new WaitForSeconds(0.45f);

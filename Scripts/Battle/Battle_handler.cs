@@ -568,7 +568,7 @@ public class Battle_handler : MonoBehaviour
                     Game_Load.Instance.playerData.playerMoney += moneyGained;
                     Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " recieved P" + moneyGained);
                 }
-                else
+                else if(Wild_pkm.Instance.participant.pokemon.hp<=0)
                 {
                     Dialogue_handler.Instance.DisplayBattleInfo($"Wild {Wild_pkm.Instance.participant.rawName} fainted!");
                 }

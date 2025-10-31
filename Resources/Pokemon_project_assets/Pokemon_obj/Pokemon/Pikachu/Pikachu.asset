@@ -16,6 +16,7 @@ MonoBehaviour:
   pokemonName: Pikachu
   pokemonID: 0
   personalityValue: 0
+  isShiny: 0
   gender: 0
   ratioFemale: 50
   nature: {fileID: 0}
