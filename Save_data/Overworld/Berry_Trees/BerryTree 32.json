@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32194
+                    "instanceID": 32228
                 },
                 {
-                    "instanceID": 32194
+                    "instanceID": 32228
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32196
+                    "instanceID": 32230
                 },
                 {
-                    "instanceID": 32198
+                    "instanceID": 32232
                 }
             ],
             "growthStageNumber": 1
@@ -69,5 +69,5 @@
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-10-30T15:25:06.8798660+02:00"
+    "lastLogin": "2025-10-31T07:29:07.7083010+02:00"
 }

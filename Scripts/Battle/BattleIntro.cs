@@ -101,7 +101,7 @@ public class BattleIntro : MonoBehaviour
     {
         var startPos = rectTransform.anchoredPosition;
         var target = new Vector2(rectTransform.anchoredPosition.x + distance, rectTransform.anchoredPosition.y);
-         StartCoroutine(SlideRect(rectTransform, startPos, target , platformSlideSpeed*5));
+         StartCoroutine(BattleVisuals.Instance.SlideRect(rectTransform, startPos, target , platformSlideSpeed*5));
     }
     private IEnumerator MainIntroSequence(Encounter_Area battleArea)
     {
@@ -120,7 +120,7 @@ public class BattleIntro : MonoBehaviour
             {
                 yield return new WaitForSeconds(delay);
                 var droppedPosition = parallaxObject.anchoredPosition + Vector2.down * parallaxObject.rect.height;
-                StartCoroutine(SlideRect(parallaxObject, parallaxObject.anchoredPosition, droppedPosition, 2f));
+                StartCoroutine(BattleVisuals.Instance.SlideRect(parallaxObject, parallaxObject.anchoredPosition, droppedPosition, 2f));
                 parallaxObject.gameObject.SetActive(false);
             }
 
@@ -137,8 +137,8 @@ public class BattleIntro : MonoBehaviour
         leftPlatform.gameObject.SetActive(true);
         rightPlatform.gameObject.SetActive(true);
         // 5️⃣ Platforms slide from opposite sides to center
-        StartCoroutine(SlideRect(leftPlatform, leftPlatformStart, leftPlatformTarget, platformSlideSpeed));
-        yield return StartCoroutine(SlideRect(rightPlatform, rightPlatformStart, rightPlatformTarget, platformSlideSpeed*0.96f));
+        StartCoroutine(BattleVisuals.Instance.SlideRect(leftPlatform, leftPlatformStart, leftPlatformTarget, platformSlideSpeed));
+        yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rightPlatform, rightPlatformStart, rightPlatformTarget, platformSlideSpeed*0.96f));
     }
     public IEnumerator PlayWildIntroSequence(Encounter_Area battleArea)
     {
@@ -168,7 +168,7 @@ public class BattleIntro : MonoBehaviour
         var wildPokemonRect = wildParticipant.participantUI.GetComponent<RectTransform>();
         wildParticipant.participantUI.SetActive(true);
         var start = new Vector2(wildPokemonRect.anchoredPosition.x - 500, wildPokemonRect.anchoredPosition.y);
-        yield return StartCoroutine(SlideRect(wildPokemonRect, start, wildPokemonRect.anchoredPosition, platformSlideSpeed*5));
+        yield return StartCoroutine(BattleVisuals.Instance.SlideRect(wildPokemonRect, start, wildPokemonRect.anchoredPosition, platformSlideSpeed*5));
         
         wildParticipant.pokemonImage.gameObject.SetActive(true);
         participantIntroImages[2].gameObject.SetActive(false); 
@@ -317,7 +317,7 @@ public class BattleIntro : MonoBehaviour
                 participantIntroImages[i + 2].rectTransform.anchoredPosition.y);
             var target = participantIntroImages[i + 2].rectTransform.anchoredPosition;
             
-            yield return SlideRect(participantIntroImages[i + 2].rectTransform, startPos, target , platformSlideSpeed*5);
+            yield return BattleVisuals.Instance.SlideRect(participantIntroImages[i + 2].rectTransform, startPos, target , platformSlideSpeed*5);
         }
     }
 
@@ -334,6 +334,8 @@ public class BattleIntro : MonoBehaviour
         Battle_handler.Instance.SetParticipant(swapParticipant,newPokemon:newPokemon);
         yield return null;
     }
+
+
     private IEnumerator PokemonIntroAnimationMovement(Battle_Participant participant)
     {
         var rect = participant.pokemonImage.rectTransform;
@@ -342,12 +344,12 @@ public class BattleIntro : MonoBehaviour
         if(participant.isEnemy)
         {//LEFT AND RIGHT SLIDE
             var target = new Vector2(rect.anchoredPosition.x + 10f, rect.anchoredPosition.y);
-            yield return StartCoroutine(SlideRect(rect,
+            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect,
                 startPos, target, movementSpeed));
             target = new Vector2(startPos.x - 20f, rect.anchoredPosition.y);
-            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
             target = new Vector2(startPos.x, rect.anchoredPosition.y);
-            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
         }
         else
         {
@@ -355,18 +357,18 @@ public class BattleIntro : MonoBehaviour
             var yOffset = 6f;
             //LEFT AND RIGHT BOUNCE
             var target = new Vector2(startPos.x - xOffset, startPos.y + yOffset);
-            yield return StartCoroutine(SlideRect(rect, startPos, target, movementSpeed));
+            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, startPos, target, movementSpeed));
             
             target = new Vector2(startPos.x - xOffset*2, startPos.y - yOffset);
-            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
 
             target = new Vector2(startPos.x + xOffset, startPos.y + yOffset);
-            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
     
             target = new Vector2(startPos.x + xOffset*2, startPos.y - yOffset);
-            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
             //RETURN TO POSITION    
-            yield return StartCoroutine(SlideRect(rect, rect.anchoredPosition, startPos, movementSpeed));
+            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, startPos, movementSpeed));
         }
     }
     private IEnumerator PokemonIntroAnimation(Battle_Participant participant)
@@ -414,15 +416,7 @@ public class BattleIntro : MonoBehaviour
             yield return null;
         }
     }
-    public IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)
-    {
-        rect.anchoredPosition = start;
-        while (Vector2.Distance(rect.anchoredPosition, target) > 0.5f)
-        {
-            rect.anchoredPosition = Vector2.MoveTowards(rect.anchoredPosition, target, speed * Time.deltaTime);
-            yield return null;
-        }
-    }
+
 
     private IEnumerator ParallaxMove(RectTransform rect, float distance, float duration)
     {

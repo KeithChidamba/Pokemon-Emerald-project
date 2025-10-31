@@ -38,7 +38,7 @@ public class PokeballRolloutUI : MonoBehaviour
         }
         var distance = isPlayerPokeballs ? -500f : 500f;
         var target = new Vector2(_rectTransform.anchoredPosition.x + distance, _rectTransform.anchoredPosition.y);
-        yield return BattleIntro.Instance.SlideRect(_rectTransform, _rectTransform.anchoredPosition, target , 600f);
+        yield return BattleVisuals.Instance.SlideRect(_rectTransform, _rectTransform.anchoredPosition, target , 600f);
     }
     public IEnumerator LoadPokeballs()
     {
@@ -55,7 +55,7 @@ public class PokeballRolloutUI : MonoBehaviour
                     startPos.anchoredPosition.y);
             var pokeballPos = new Vector2(startPos.anchoredPosition.x + (i * pokeballDistanceApart),
                 startPos.anchoredPosition.y);
-            yield return BattleIntro.Instance.SlideRect(pokeballs[i], pokeballs[i].anchoredPosition, pokeballPos,
+            yield return BattleVisuals.Instance.SlideRect(pokeballs[i], pokeballs[i].anchoredPosition, pokeballPos,
                 pokeballMoveSpeed);
         }
 

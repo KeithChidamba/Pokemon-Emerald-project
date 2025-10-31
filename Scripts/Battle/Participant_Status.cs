@@ -107,8 +107,21 @@ public class Participant_Status : MonoBehaviour
     }
     private IEnumerator LooseHp(float percentage)
     {
+        var damageSource = Move_handler.DamageSource.Normal;
+        switch (_participant.pokemon.statusEffect)
+        {
+            case PokemonOperations.StatusEffect.Poison:
+            case PokemonOperations.StatusEffect.BadlyPoison:
+                damageSource = Move_handler.DamageSource.Poison;
+                break;
+            case PokemonOperations.StatusEffect.Burn:
+                damageSource = Move_handler.DamageSource.Burn;
+                break;
+        }
+       
         Move_handler.Instance.DisplayDamage(_participant,displayEffectiveness:false
-            ,isSpecificDamage:true,math.ceil(_participant.pokemon.maxHp * percentage));
+            ,isSpecificDamage:true,math.ceil(_participant.pokemon.maxHp * percentage),damageSource);
+        
         yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
         dealingStatusDamage = false;
         _participant.pokemon.ChangeHealth(null);  

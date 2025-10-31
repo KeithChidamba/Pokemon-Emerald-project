@@ -60,7 +60,7 @@
             "instanceID": 26748
         }
     ],
-    "statusEffect": 0,
+    "statusEffect": 2,
     "buffAndDebuffs": [],
     "evolutionLineLevels": [
         16,
@@ -146,16 +146,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -15040
+            "instanceID": -11376
         },
         {
-            "instanceID": -15042
+            "instanceID": -11378
         },
         {
-            "instanceID": -15044
+            "instanceID": -11380
         },
         {
-            "instanceID": -15046
+            "instanceID": -11382
         }
     ],
     "ability": {
@@ -170,7 +170,7 @@
         }
     ],
     "heldItem": {
-        "instanceID": -15050
+        "instanceID": -11386
     },
     "hasItem": true,
     "frontPicture": {

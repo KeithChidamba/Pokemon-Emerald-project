@@ -177,8 +177,11 @@ public class Turn_Based_Combat : MonoBehaviour
         {
             if (attacker.isFlinched)
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" flinched!");
-            else if(attacker.pokemon.statusEffect!=PokemonOperations.StatusEffect.None)
+            else if (attacker.pokemon.statusEffect != PokemonOperations.StatusEffect.None)
+            {
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" is affected by "+ attacker.pokemon.statusEffect);
+                yield return BattleVisuals.Instance.DisplayStatusEffectVisuals(attacker);
+            }
         }
         OnAttackAttempted?.Invoke(false);
     }

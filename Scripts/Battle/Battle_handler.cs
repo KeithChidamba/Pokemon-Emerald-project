@@ -488,11 +488,11 @@ public class Battle_handler : MonoBehaviour
             var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-pkmImageRect.rect.height);
             yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
             
-            StartCoroutine(BattleIntro.Instance.SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
+            StartCoroutine(BattleVisuals.Instance.SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
             
             var participantUIRect = faintQueue[0].participantUI.GetComponent<RectTransform>(); 
             var targetForUI = new Vector2(participantUIRect.anchoredPosition.x, participantUIRect.anchoredPosition.y-400f);
-            yield return StartCoroutine(BattleIntro.Instance.SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f));
+            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f));
             
             if (faintQueue[0].isEnemy)
             {

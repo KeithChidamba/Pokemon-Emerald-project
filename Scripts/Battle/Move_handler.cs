@@ -29,6 +29,7 @@ public class Move_handler:MonoBehaviour
     public event Action<Battle_Participant,Move> OnMoveHit;
     public event Action<Battle_Participant,PokemonOperations.StatusEffect> OnStatusEffectHit;
     public event Action OnMoveComplete;
+    public enum DamageSource{Normal,Burn,Poison,Special}
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -250,11 +251,11 @@ public class Move_handler:MonoBehaviour
         if (!displayingHealthGain) StartCoroutine(ProcessHealthGainDisplay());
     }
     public void DisplayDamage(Battle_Participant currentVictim, bool displayEffectiveness = true,
-        bool isSpecificDamage = false, float predefinedDamage = 0)
+        bool isSpecificDamage = false, float predefinedDamage = 0,DamageSource damageSource=DamageSource.Normal) 
     {
         DamageDisplayData data = new DamageDisplayData(currentVictim,displayEffectiveness, isSpecificDamage, predefinedDamage);
         _damageDisplayQueue.Add(data);
-        if (!displayingDamage) StartCoroutine(ProcessDamageDisplay());
+        if (!displayingDamage) StartCoroutine(ProcessDamageDisplay(damageSource));
     }
     IEnumerator ProcessHealthGainDisplay()
     {
@@ -285,12 +286,16 @@ public class Move_handler:MonoBehaviour
         }
         displayingHealthGain = false;
     }
-    IEnumerator ProcessDamageDisplay()
+    IEnumerator ProcessDamageDisplay(DamageSource damageSource)
     {
+       
         displayingDamage = true; 
         while (_damageDisplayQueue.Count > 0)
         {
             var data = _damageDisplayQueue[0];
+            StartCoroutine(BattleVisuals.Instance.DisplayDamageTakenVisual(data.affectedParticipant,damageSource));
+            yield return new WaitForSeconds(0.5f);
+            
             var damage = data.isSpecificDamage? data.predefinedHealthChange 
                 : CalculateMoveDamage(_currentTurn.move, data.affectedParticipant);
             
