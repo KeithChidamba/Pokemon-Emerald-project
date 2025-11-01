@@ -442,8 +442,6 @@ public class Item_handler : MonoBehaviour
                 }
             }
         }
-
-        //isCaught = true;
         if (isCaught)
         {
             Dialogue_handler.Instance.DisplayBattleInfo("Well done "+wildPokemon.pokemonName+" has been caught");

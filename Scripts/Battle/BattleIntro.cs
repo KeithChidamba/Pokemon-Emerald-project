@@ -33,7 +33,7 @@ public class BattleIntro : MonoBehaviour
     private Vector2 topBlackTarget, bottomBlackTarget;
     private Vector2 redBoxStart, redBoxTarget, leftPlatformTarget,rightPlatformTarget;
     private Vector2 leftPlatformStart, rightPlatformStart;
-    public Animator playerAnimator;
+
     public PokeballRolloutUI enemyPokeballs;
     public PokeballRolloutUI playerPokeballs;
     public List<BattlePokeball> thrownPokeballs;
@@ -178,7 +178,7 @@ public class BattleIntro : MonoBehaviour
         yield return new WaitForSeconds(3f);
         
         Dialogue_handler.Instance.DisplayBattleInfo( $"Go! {participants[0].pokemon.pokemonName}");
-        playerAnimator.Play("pokemon release");
+        StartCoroutine(BattleVisuals.Instance.DisplayPokemonRelease());
         yield return new WaitForSeconds(1.5f);
         
         for (var i=0;i<2;i++)
@@ -282,7 +282,8 @@ public class BattleIntro : MonoBehaviour
             : $"Go! {participants[0].pokemon.pokemonName}!";
         
         Dialogue_handler.Instance.DisplayBattleInfo(message);
-        playerAnimator.Play("pokemon release");
+
+        StartCoroutine(BattleVisuals.Instance.DisplayPokemonRelease());
         if (Battle_handler.Instance.isDoubleBattle)
         {
             yield return new WaitForSeconds(0.5f);

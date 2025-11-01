@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class BattleVisuals : MonoBehaviour
 {
     public static BattleVisuals Instance;
     public Animator playerBattleAnimator;
+    public GameObject pokeballImage;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -15,6 +17,11 @@ public class BattleVisuals : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    private void Start()
+    {
+        Battle_handler.Instance.OnBattleEnd += ResetAfterBattle;
     }
 
     public IEnumerator DisplayStatusEffectVisuals(Battle_Participant participant)
@@ -125,6 +132,7 @@ public class BattleVisuals : MonoBehaviour
     public IEnumerator DisplayPokemonThrow()
     {//wild battle is always single
         playerBattleAnimator.gameObject.SetActive(true);
+        pokeballImage.SetActive(true);
         var pkmImageRect = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform;
         var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-pkmImageRect.rect.height);
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
@@ -132,29 +140,43 @@ public class BattleVisuals : MonoBehaviour
         yield return new WaitForSeconds(1.6f);
         Wild_pkm.Instance.participant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
         yield return new WaitForSeconds(0.5f);
-       // playerBattleAnimator.gameObject.SetActive(false);
     }
     public IEnumerator DisplayPokemonCatch()
     {
         playerBattleAnimator.gameObject.SetActive(true);
+        pokeballImage.SetActive(true);
         playerBattleAnimator.Play("pokeball successful");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.2f);
+        pokeballImage.SetActive(false);
     }
     public IEnumerator DisplayPokeballEscape()
     {
-        playerBattleAnimator.gameObject.SetActive(true);
         playerBattleAnimator.Play("pokeball escape");
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(1f);
         Wild_pkm.Instance.participant.pokemonImage.rectTransform.sizeDelta = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
-        playerBattleAnimator.gameObject.SetActive(false);
         var pkmImageRect = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform;
         var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y+pkmImageRect.rect.height);
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
+        pokeballImage.SetActive(false);
     }
     public IEnumerator DisplayPokeballShake()
     {
-        playerBattleAnimator.gameObject.SetActive(true);
         playerBattleAnimator.Play("pokeball shake");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
+    }
+    public IEnumerator DisplayPokemonRelease()
+    {
+        pokeballImage.SetActive(true);
+        playerBattleAnimator.gameObject.SetActive(true);
+        playerBattleAnimator.Play("pokemon release");
+        yield return new WaitForSeconds(1.5f);
+        pokeballImage.SetActive(false);
+    }
+
+    private void ResetAfterBattle()
+    {
+        pokeballImage.SetActive(false);
+        Battle_handler.Instance.battleParticipants[2].pokemonImage.rectTransform.sizeDelta 
+            = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;//After wild battle, reset image size in-case of pokeball interaction
     }
 }
