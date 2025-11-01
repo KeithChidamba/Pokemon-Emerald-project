@@ -264,6 +264,31 @@ public class Pokemon_party : MonoBehaviour
         else
             pokemon_storage.Instance.AddPokemonToStorage(pokemon);
     }
+
+    public void SortByFainted()
+    {
+        for (int i = 0; i < numMembers - 1; i++)
+        {
+            bool swapped = false;
+
+            for (int j = 0; j < numMembers - i - 1; j++)
+            {
+                var current = party[j];
+                var next = party[j + 1];
+
+                // Swap only if current is fainted and next is not fainted
+                if (current.hp <= 0 && next.hp > 0)
+                {
+                    (party[j], party[j + 1]) = (next, current);
+                    swapped = true;
+                }
+            }
+
+            // Stop early if no swaps occurred
+            if (!swapped)
+                break;
+        }
+    }
     public void RefreshMemberCards()
     {
         numMembers = 0;

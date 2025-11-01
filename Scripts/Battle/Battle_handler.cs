@@ -168,7 +168,7 @@ public class Battle_handler : MonoBehaviour
                               && !usedTurnForItem && !usedTurnForSwap
                               && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
                                   .isSemiInvulnerable
-                              //if partner is cooling down, cant remove turn;
+                              //if partner is cooling down, cant remove turn
                               && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
                                   .currentCoolDown.isCoolingDown;
     }
@@ -223,6 +223,7 @@ public class Battle_handler : MonoBehaviour
 
     public void SetBattleType(List<string> trainerNames)
     {
+        Pokemon_party.Instance.SortByFainted();
         var copyOfTrainerData = Resources.Load<TrainerData>(
             Save_manager.GetDirectory(Save_manager.AssetDirectory.TrainerData)
             + $"{trainerNames[0]}/{trainerNames[0]}");
@@ -240,6 +241,7 @@ public class Battle_handler : MonoBehaviour
     }
     public void StartWildBattle(Pokemon enemy) //only ever be for wild battles
     {
+        Pokemon_party.Instance.SortByFainted();
         battleOver = false;
         isTrainerBattle = false;
         isDoubleBattle = false;

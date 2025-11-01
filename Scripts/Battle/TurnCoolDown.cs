@@ -24,6 +24,7 @@ public class TurnCoolDown
 
     public void ResetState()
     {
+        Move_handler.Instance.OnDamageDeal -= StoreDamage;
         NumTurns = 0;
         Message = string.Empty;
         turnData = null;

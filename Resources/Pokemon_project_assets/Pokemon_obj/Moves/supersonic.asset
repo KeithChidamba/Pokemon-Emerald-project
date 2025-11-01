@@ -17,11 +17,13 @@ MonoBehaviour:
   moveAccuracy: 55
   critModifierIndex: 0
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  hasTypelessEffect: 0
   isSpecial: 0
   isContact: 0
   isBuffOrDebuff: 0
   hasStatus: 0
-  hasSpecialEffect: 0
+  effectType: 0
+  effectInfoModule: {fileID: 0}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 1
@@ -37,6 +39,6 @@ MonoBehaviour:
   maxPowerpoints: 20
   statusEffect: 0
   buffOrDebuffData: []
-  statusChance: 0
-  buffOrDebuffChance: 100
+  statusChance: 100
+  buffOrDebuffChance: 0
   description: uses sound to confuse the foe

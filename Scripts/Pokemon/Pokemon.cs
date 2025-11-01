@@ -340,8 +340,8 @@ public class Pokemon : ScriptableObject
             if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
             {
                 LevelUp();
-                Dialogue_handler.Instance.DisplayBattleInfo("Wow!");
-                Dialogue_handler.Instance.DisplayBattleInfo(pokemonName+" leveled up!");
+
+                Dialogue_handler.Instance.DisplayBattleInfo(pokemonName+" grew to lv"+currentLevel);
                 currentLevelExpAmount = currentExpAmount;
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                 yield return PokemonOperations.Instance.WaitForNewMoveCheck(this);

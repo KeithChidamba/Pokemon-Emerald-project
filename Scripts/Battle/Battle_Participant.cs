@@ -241,6 +241,7 @@ public class Battle_Participant : MonoBehaviour
         additionalTypeImmunity = null;
         OnPokemonFainted = null;
         recentAttacker = null;
+        currentCoolDown.ResetState();
         immunityNegations.Clear();
         if (isPlayer)
         {
