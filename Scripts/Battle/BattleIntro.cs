@@ -33,6 +33,7 @@ public class BattleIntro : MonoBehaviour
     private Vector2 topBlackTarget, bottomBlackTarget;
     private Vector2 redBoxStart, redBoxTarget, leftPlatformTarget,rightPlatformTarget;
     private Vector2 leftPlatformStart, rightPlatformStart;
+    private Vector2 terrainParallaxStart;
 
     public PokeballRolloutUI enemyPokeballs;
     public PokeballRolloutUI playerPokeballs;
@@ -74,6 +75,7 @@ public class BattleIntro : MonoBehaviour
         
         rightPlatformTarget = rightPlatformStart + Vector2.left * rightPlatform.rect.width;
         leftPlatformTarget = leftPlatformStart + Vector2.right * leftPlatform.rect.width;
+        terrainParallaxStart = terrainParallaxImage.rectTransform.anchoredPosition;
     }
 
     public void SetPlatformSprite(Encounter_Area battleArea)
@@ -119,13 +121,13 @@ public class BattleIntro : MonoBehaviour
             IEnumerator DropParallax(float delay)
             {
                 yield return new WaitForSeconds(delay);
-                var droppedPosition = parallaxObject.anchoredPosition + Vector2.down * parallaxObject.rect.height;
-                StartCoroutine(BattleVisuals.Instance.SlideRect(parallaxObject, parallaxObject.anchoredPosition, droppedPosition, 2f));
+                var droppedPosition = new Vector2(parallaxObject.anchoredPosition.x + 100f,parallaxObject.anchoredPosition.y-parallaxObject.rect.height);
+                yield return BattleVisuals.Instance.SlideRect(parallaxObject, parallaxObject.anchoredPosition, droppedPosition, 200f);
                 parallaxObject.gameObject.SetActive(false);
             }
-
-            terrainParallaxImage.sprite =
-                introTerrains[Array.IndexOf(introTerrainBiomes, battleArea.biome)];
+            terrainParallaxImage.rectTransform.anchoredPosition = terrainParallaxStart;
+            
+            terrainParallaxImage.sprite = introTerrains[Array.IndexOf(introTerrainBiomes, battleArea.biome)];
 
             parallaxObject.gameObject.SetActive(true);
 
@@ -290,7 +292,7 @@ public class BattleIntro : MonoBehaviour
             StartCoroutine(thrownPokeballs[0].ThrowPokeball(false));
         }
         StartCoroutine(playerPokeballs.HidePokeballs());
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.3f);
         for (var i=0;i<2;i++)
         {
             if (!participants[i].isActive) continue;
@@ -330,10 +332,17 @@ public class BattleIntro : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             yield return enemyPokeballs.HidePokeballs();
         }
-        // //show pokeball drop
-        // //play pokemon intro animation
+        
+        swapParticipant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
         Battle_handler.Instance.SetParticipant(swapParticipant,newPokemon:newPokemon);
-        yield return null;
+
+        if (swapParticipant.isEnemy)
+        {
+            yield return BattleVisuals.Instance.SendOutEnemyPokemon(swapParticipant);
+            StartCoroutine(PokemonIntroAnimation(swapParticipant));
+        }
+        else
+            yield return BattleVisuals.Instance.SendOutPlayerPokemon(swapParticipant);
     }
 
 

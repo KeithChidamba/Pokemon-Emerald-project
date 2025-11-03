@@ -8,7 +8,10 @@ public class BattleVisuals : MonoBehaviour
 {
     public static BattleVisuals Instance;
     public Animator playerBattleAnimator;
+    public Animator swapOutAnimator;
     public GameObject pokeballImage;
+    private Vector2 _defaultParticipantImageSize;
+    private int[] _enemyPokeballXPositions={155,250,330};
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -22,6 +25,8 @@ public class BattleVisuals : MonoBehaviour
     private void Start()
     {
         Battle_handler.Instance.OnBattleEnd += ResetAfterBattle;
+        _defaultParticipantImageSize =
+            Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
     }
 
     public IEnumerator DisplayStatusEffectVisuals(Battle_Participant participant)
@@ -130,7 +135,7 @@ public class BattleVisuals : MonoBehaviour
         }
     }
     public IEnumerator DisplayPokemonThrow()
-    {//wild battle is always single
+    {//wild battle is always single battle
         playerBattleAnimator.gameObject.SetActive(true);
         pokeballImage.SetActive(true);
         var pkmImageRect = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform;
@@ -153,7 +158,8 @@ public class BattleVisuals : MonoBehaviour
     {
         playerBattleAnimator.Play("pokeball escape");
         yield return new WaitForSeconds(1f);
-        Wild_pkm.Instance.participant.pokemonImage.rectTransform.sizeDelta = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
+        Wild_pkm.Instance.participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+        
         var pkmImageRect = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform;
         var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y+pkmImageRect.rect.height);
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
@@ -169,14 +175,40 @@ public class BattleVisuals : MonoBehaviour
         pokeballImage.SetActive(true);
         playerBattleAnimator.gameObject.SetActive(true);
         playerBattleAnimator.Play("pokemon release");
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.6f);
         pokeballImage.SetActive(false);
     }
-
+    public IEnumerator SendOutEnemyPokemon(Battle_Participant participant)
+    {
+        int positionIndex;
+        int verticalPokeballPos = 300;
+        if (Battle_handler.Instance.isDoubleBattle)
+        {//magic numbers, im sorry.
+            positionIndex = participant.GetPartnerIndex() > 2? 0:2;
+        }
+        else
+        {
+            positionIndex = 1;
+        }
+        swapOutAnimator.GetComponent<RectTransform>().anchoredPosition = new Vector2(_enemyPokeballXPositions[positionIndex],verticalPokeballPos);
+        swapOutAnimator.Play("pokemon swap");
+        yield return new WaitForSeconds(1f);
+        participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+    }
+    public IEnumerator SendOutPlayerPokemon(Battle_Participant participant)
+    {
+        playerBattleAnimator.gameObject.SetActive(true);
+        pokeballImage.SetActive(true);
+        playerBattleAnimator.Play("pokemon release");
+        yield return new WaitForSeconds(1.3f);
+        participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+        yield return new WaitForSeconds(0.2f);
+        playerBattleAnimator.gameObject.SetActive(false);
+    }
     private void ResetAfterBattle()
     {
         pokeballImage.SetActive(false);
-        Battle_handler.Instance.battleParticipants[2].pokemonImage.rectTransform.sizeDelta 
-            = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;//After wild battle, reset image size in-case of pokeball interaction
+        //After wild battle, reset image size in-case of pokeball interaction
+        Battle_handler.Instance.battleParticipants[2].pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
     }
 }

@@ -506,7 +506,7 @@ public class Battle_handler : MonoBehaviour
             
             StartCoroutine(faintQueue[0].HandleFaintLogic());
             yield return new WaitUntil(() => !Turn_Based_Combat.Instance.faintEventDelay);
-            if(!battleOver)
+            if(!battleOver && faintQueue[0].isActive)
             {
                 faintQueue[0].participantUI.SetActive(true);
                 pkmImageRect.anchoredPosition =

@@ -65,7 +65,7 @@ public class Move_handler:MonoBehaviour
     private IEnumerator MoveSequence()
     {
         var moveEffectiveness = BattleOperations.GetTypeEffectiveness(victim, _currentTurn.move.type);
-        if (moveEffectiveness == 0 && !_currentTurn.move.isMultiTarget && !_currentTurn.move.hasTypelessEffect)
+        if (moveEffectiveness == 0 && !_currentTurn.move.isMultiTarget && !_currentTurn.move.hasTypelessEffect && !_currentTurn.move.isSelfTargeted)
             Dialogue_handler.Instance.DisplayBattleInfo("It doesn't affect "+victim.pokemon.pokemonName);
         else
         {

@@ -7,7 +7,7 @@
     "price": 5,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32696
+        "instanceID": 32662
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,14 +18,14 @@
     "isMultiModular": true,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 25216
+        "instanceID": 25218
     },
     "additionalInfoModules": [
         {
-            "instanceID": 25216
+            "instanceID": 25218
         },
         {
-            "instanceID": 26242
+            "instanceID": 26248
         }
     ],
     "infoModuleAssetNames": [

@@ -51,6 +51,7 @@ public class Battle_Participant : MonoBehaviour
     public List<Barrier> barriers = new();
     [SerializeField]private Battle_Participant recentAttacker;
     public Animator statusEffectAnimator;
+    private Vector2 _defaultImagePosition;
     private void Start()
     {
         heldItemHandler = GetComponent<Held_Items>();
@@ -61,6 +62,7 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
         currentCoolDown.UpdateCoolDown(0,null, "",false,false);
         currentCoolDown.participant = this;
+        _defaultImagePosition = pokemonImage.rectTransform.anchoredPosition;
     }
     private void Update()
     {
@@ -218,6 +220,10 @@ public class Battle_Participant : MonoBehaviour
         currentEnemies.Clear();       
         barriers.Clear();
         StatChangeEffects.Clear();
+        
+        pokemonImage.rectTransform.anchoredPosition = _defaultImagePosition;
+        pokemonImage.color = Color.white;
+        
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.CheckTrapDuration;
         Turn_Based_Combat.Instance.OnTurnsCompleted -= statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;

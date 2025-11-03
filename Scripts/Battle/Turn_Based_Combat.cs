@@ -139,6 +139,11 @@ public class Turn_Based_Combat : MonoBehaviour
             
             if (victim.isSemiInvulnerable)
             {
+                if (turn.move.isSelfTargeted)
+                {
+                    OnAttackAttempted?.Invoke(true);
+                    yield break;
+                }
                 if (victim.semiInvulnerabilityData.IsInvulnerableTo(turn.move))
                 {
                     Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName +

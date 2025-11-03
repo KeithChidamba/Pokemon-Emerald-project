@@ -151,8 +151,14 @@ public class MoveLogicHandler : MonoBehaviour
         
         Move_handler.Instance.DisplayDamage(_victim,isSpecificDamage:true,predefinedDamage:damage);
         yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
-        Move_handler.Instance.HealthGainDisplay(healAmount,healthGainer:_attacker);
+
+        if (_attacker.pokemon.hp >= _attacker.pokemon.maxHp)
+        {
+            moveDelay = false;
+            yield break;
+        }
         
+        Move_handler.Instance.HealthGainDisplay(healAmount,healthGainer:_attacker);
         Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+" gained health");
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthGain);
@@ -307,6 +313,7 @@ public class MoveLogicHandler : MonoBehaviour
         if (_attacker.pokemon.hp >= _attacker.pokemon.maxHp)
         {
             Dialogue_handler.Instance.DisplayBattleInfo(_attacker.pokemon.pokemonName+"'s health is already full!");
+            moveDelay = false;
             yield break;
         }
         float fraction;

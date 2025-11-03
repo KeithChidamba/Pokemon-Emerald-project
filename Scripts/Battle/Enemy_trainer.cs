@@ -31,7 +31,6 @@ public class Enemy_trainer : MonoBehaviour
     void ResetAfterBattle()
     {
         trainerData = null;
-        trainerParty.Clear();
         canAttack = true;
         usedMove = false;
     }
@@ -93,6 +92,7 @@ public class Enemy_trainer : MonoBehaviour
     {
         participant = GetComponent<Battle_Participant>();
         trainerData = Obj_Instance.CreateTrainer(copyOfTrainerData);
+        trainerParty.Clear();
         foreach (TrainerPokemonData member in trainerData.PokemonParty)
         {
             trainerParty.Add(member.pokemon);
