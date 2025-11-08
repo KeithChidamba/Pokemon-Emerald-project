@@ -4,11 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public static class BattleOperations
+public class BattleOperations
 {
     private static float _effectiveness = 0;
-    public static bool CanDisplayDialougue = true;
+    public static bool CanDisplayChange = true;
     public static event Action OnBuffApplied;
+
     public static bool CheckImmunity(Pokemon victim,Type enemyType)
     {
         foreach(var type in victim.types)
@@ -90,12 +91,25 @@ public static class BattleOperations
             data.Receiver.pokemon.buffAndDebuffs.Add(CreateNewBuff(data.Stat));
         }
         var buff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);//wont ever be null
-        buff.stage = ValidateBuffLimit(data.Receiver.pokemon, buff, data.IsIncreasing, data.EffectAmount);
+        buff.stage = ValidateBuffLimit(data.Receiver, buff, data.IsIncreasing, data.EffectAmount);
         RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
         OnBuffApplied?.Invoke();
     }
-
-    private static int ValidateBuffLimit(Pokemon pkm,Buff_Debuff buff,bool increased,int changeValue)
+    public static void DisplayMultiBuff(bool isIncreasing,Pokemon pokemon,PokemonOperations.Stat[] buffs)
+    {
+        string buffNames="";
+        for (int i = 0; i < buffs.Length; i++)
+        {
+            buffNames += buffs[i] + (i>buffs.Length-2?"":", ");
+        }
+        if(isIncreasing)
+            Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName+"'s "+buffNames+" rose");
+        else
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName+"'s "+buffNames+" fell");
+        }
+    }
+    private static int ValidateBuffLimit(Battle_Participant participant,Buff_Debuff buff,bool increased,int changeValue)
     {
         var change = 0;
         var message="";
@@ -104,29 +118,33 @@ public static class BattleOperations
         if (buff.stage > indexLimitHigh && increased)
         {
             buff.isAtLimit = true;
-            if(CanDisplayDialougue)
-                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.statName+" cant go any higher");
+            if(CanDisplayChange)
+                Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+buff.statName+" cant go any higher");
             return buff.stage;
         }
         if (buff.stage < indexLimitLow && !increased)
         {
             buff.isAtLimit = true;
-            if(CanDisplayDialougue)
-                Dialogue_handler.Instance.DisplayBattleInfo(pkm.pokemonName+"'s "+buff.statName+" cant go any lower");
-            return buff.stage;;
+            if(CanDisplayChange)
+                Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+buff.statName+" cant go any lower");
+            return buff.stage;
         }
         if (increased)
         {
             change = buff.stage+changeValue;
-            message = pkm.pokemonName+"'s "+buff.statName+" Increased!";
+            message = participant.pokemon.pokemonName+"'s "+buff.statName+" rose!";
         }
         else
         {
             change = buff.stage-changeValue;
-            message = pkm.pokemonName+"'s "+buff.statName+" Decreased!";
+            message = participant.pokemon.pokemonName+"'s "+buff.statName+" fell!";
         }
-        if(CanDisplayDialougue)
+
+        if (CanDisplayChange)
+        {
             Dialogue_handler.Instance.DisplayBattleInfo(message);
+            BattleVisuals.Instance.SelectStatChangeVisuals(buff.stat,participant);
+        }
         if(change>indexLimitHigh)
             return indexLimitHigh + 1;
         if(change<indexLimitLow)

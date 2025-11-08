@@ -68,12 +68,12 @@ public class Participant_Status : MonoBehaviour
         {
             case PokemonOperations.StatusEffect.Burn:
                 var atkDrop = new BuffDebuffData(_participant, PokemonOperations.Stat.Attack, false, 2);
-                BattleOperations.CanDisplayDialougue = false; 
+                BattleOperations.CanDisplayChange = false; 
                 Move_handler.Instance.SelectRelevantBuffOrDebuff(atkDrop);
                 break;
             case PokemonOperations.StatusEffect.Paralysis:
                 var speedDrop = new BuffDebuffData(_participant, PokemonOperations.Stat.Speed, false, 6);
-                BattleOperations.CanDisplayDialougue = false; 
+                BattleOperations.CanDisplayChange = false; 
                 Move_handler.Instance.SelectRelevantBuffOrDebuff(speedDrop);
                 break;
         }

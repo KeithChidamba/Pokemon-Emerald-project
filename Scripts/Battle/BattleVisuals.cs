@@ -12,6 +12,10 @@ public class BattleVisuals : MonoBehaviour
     public GameObject pokeballImage;
     private Vector2 _defaultParticipantImageSize;
     private int[] _enemyPokeballXPositions={155,250,330};
+    private List<Image> _statChangeImages;
+    public Sprite[] statChangeSprites;
+    private Dictionary<PokemonOperations.Stat, Sprite> statChangeVisuals = new();
+    public event Action OnStatVisualDisplayed;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,8 +31,39 @@ public class BattleVisuals : MonoBehaviour
         Battle_handler.Instance.OnBattleEnd += ResetAfterBattle;
         _defaultParticipantImageSize =
             Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
+        statChangeVisuals.Add(PokemonOperations.Stat.Attack,statChangeSprites[0]);
+        statChangeVisuals.Add(PokemonOperations.Stat.Defense,statChangeSprites[1]);
+        statChangeVisuals.Add(PokemonOperations.Stat.Speed,statChangeSprites[2]);
+        statChangeVisuals.Add(PokemonOperations.Stat.SpecialAttack,statChangeSprites[3]);
+        statChangeVisuals.Add(PokemonOperations.Stat.SpecialDefense,statChangeSprites[4]);
+        statChangeVisuals.Add(PokemonOperations.Stat.Accuracy,statChangeSprites[5]);
+        statChangeVisuals.Add(PokemonOperations.Stat.Evasion,statChangeSprites[6]);
+        statChangeVisuals.Add(PokemonOperations.Stat.Multi,statChangeSprites[7]);
     }
 
+    public void SelectStatChangeVisuals(PokemonOperations.Stat statChanged,Battle_Participant participant)
+    {
+        _statChangeImages.Clear();
+        for(int i =0; i < 3;i++)
+        {
+            _statChangeImages.Add(participant.pokemonImage.transform.GetChild(i).GetComponent<Image>());
+            _statChangeImages[i].sprite = statChangeVisuals[statChanged];
+            _statChangeImages[i].gameObject.SetActive(true);
+        }
+        StartCoroutine(DisplayStatChangeVisuals());
+    }
+
+    private IEnumerator DisplayStatChangeVisuals()
+    {
+        //animate the visuals
+        yield return new WaitForSeconds(1.75f);
+        foreach (var image in _statChangeImages)
+        {
+            image.gameObject.SetActive(false);
+        }
+        yield return null;
+        OnStatVisualDisplayed?.Invoke();
+    }
     public IEnumerator DisplayStatusEffectVisuals(Battle_Participant participant)
     {
         participant.statusEffectAnimator.gameObject.SetActive(true);

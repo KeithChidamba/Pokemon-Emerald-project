@@ -18901,6 +18901,14 @@ PrefabInstance:
       value: -85
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -101
       objectReference: {fileID: 0}
@@ -71592,6 +71600,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565539604499697748, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -356
       objectReference: {fileID: 0}
@@ -71806,6 +71822,15 @@ MonoBehaviour:
   playerBattleAnimator: {fileID: 639456347}
   swapOutAnimator: {fileID: 1888812022}
   pokeballImage: {fileID: 122411115}
+  statChangeSprites:
+  - {fileID: -161812878, guid: 4de02f2f063a10abab59a06c743d1088, type: 3}
+  - {fileID: 1717816027, guid: 4de02f2f063a10abab59a06c743d1088, type: 3}
+  - {fileID: 174807873, guid: 4de02f2f063a10abab59a06c743d1088, type: 3}
+  - {fileID: -1778237925, guid: 4de02f2f063a10abab59a06c743d1088, type: 3}
+  - {fileID: 975791598, guid: 4de02f2f063a10abab59a06c743d1088, type: 3}
+  - {fileID: 195789646, guid: 4de02f2f063a10abab59a06c743d1088, type: 3}
+  - {fileID: 1705599017, guid: 4de02f2f063a10abab59a06c743d1088, type: 3}
+  - {fileID: 1593833092, guid: 4de02f2f063a10abab59a06c743d1088, type: 3}
 --- !u!4 &1908212501
 Transform:
   m_ObjectHideFlags: 0

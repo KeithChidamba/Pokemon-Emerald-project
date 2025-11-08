@@ -18,7 +18,7 @@ public class PokemonOperations : MonoBehaviour
     public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep,FullHeal}
     public enum Gender{None,Male,Female}
     public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
-    public enum Stat{None,Attack,Defense,SpecialAttack,SpecialDefense,Speed,Hp,Crit,Accuracy,Evasion}
+    public enum Stat{None,Attack,Defense,SpecialAttack,SpecialDefense,Speed,Hp,Crit,Accuracy,Evasion,Multi}
     public enum Types
     {
         Normal, Fire, Water, Electric, Grass, Ice,

@@ -550,8 +550,8 @@ public class Move_handler:MonoBehaviour
         if (Utility.RandomRange(1, 101) > _currentTurn.move.buffOrDebuffChance)
         { processingOrder = false; return;}
         //allows the display of buff message, must be here in case silent buff happened
-        BattleOperations.CanDisplayDialougue = true; 
-        
+        BattleOperations.CanDisplayChange = true;
+        BattleVisuals.Instance.OnStatVisualDisplayed += NotifyBuffVisualCompletion;
         foreach (var buffData in _currentTurn.move.buffOrDebuffData)
         {
             if (!_currentTurn.move.isSelfTargeted)
@@ -578,9 +578,12 @@ public class Move_handler:MonoBehaviour
                 SelectRelevantBuffOrDebuff(data);
             }
         }
+    }
+    private void NotifyBuffVisualCompletion()
+    {
+        BattleVisuals.Instance.OnStatVisualDisplayed-=NotifyBuffVisualCompletion;
         processingOrder = false;
     }
-
     IEnumerator MultiTargetBuff_Debuff(PokemonOperations.Stat stat, bool isIncreasing,int buffAmount)
     {
         foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker.currentEnemies) )

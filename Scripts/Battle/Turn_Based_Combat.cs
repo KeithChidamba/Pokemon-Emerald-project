@@ -615,7 +615,7 @@ public class Turn_Based_Combat : MonoBehaviour
                             //buff rock types
                             var spDefBuff = new BuffDebuffData(participant,
                                 PokemonOperations.Stat.SpecialDefense, true, 1);
-                            BattleOperations.CanDisplayDialougue = false;
+                            BattleOperations.CanDisplayChange = false;
                             Move_handler.Instance.SelectRelevantBuffOrDebuff(spDefBuff);
                             currentWeather.buffedParticipants.Add(participant);
                         }
