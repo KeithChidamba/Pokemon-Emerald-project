@@ -96,21 +96,21 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -36956
+            "instanceID": -4460
         },
         {
-            "instanceID": -36958
+            "instanceID": -4462
         }
     ],
     "ability": {
-        "instanceID": 26196
+        "instanceID": 26194
     },
     "evolutions": [
         {
-            "instanceID": 27180
+            "instanceID": 27182
         },
         {
-            "instanceID": 26160
+            "instanceID": 26158
         }
     ],
     "heldItem": {
@@ -118,19 +118,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 25372
+        "instanceID": 25370
     },
     "backPicture": {
-        "instanceID": 25262
+        "instanceID": 25260
     },
     "partyFrame1": {
-        "instanceID": 26200
+        "instanceID": 26198
     },
     "partyFrame2": {
-        "instanceID": 25902
+        "instanceID": 25900
     },
     "battleIntroFrame": {
-        "instanceID": 25592
+        "instanceID": 25590
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,

@@ -21,7 +21,7 @@ public class Move_handler:MonoBehaviour
     [SerializeField]private List<DamageDisplayData> _healhGainQueue = new();
     public bool repeatingMoveCycle;
     private bool _cancelMove;
-    public bool processingOrder;
+    private bool _processingOrder;
     public bool displayingDamage;
     public bool displayingHealthGain;
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageCalc;
@@ -84,9 +84,9 @@ public class Move_handler:MonoBehaviour
                     yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                     
                     if (!battleEvent.Condition) continue;
-                    processingOrder = true;
+                    _processingOrder = true;
                     battleEvent.Execute();
-                    yield return new WaitUntil(() => !processingOrder);
+                    yield return new WaitUntil(() => !_processingOrder);
                     yield return new WaitUntil(()=> !displayingDamage);
                     yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                 } 
@@ -338,7 +338,7 @@ public class Move_handler:MonoBehaviour
     private void DealDamage()
     {
         DisplayDamage(victim);
-        processingOrder = false;
+        _processingOrder = false;
     } 
     private void ResetMoveUsage()
     {
@@ -363,14 +363,14 @@ public class Move_handler:MonoBehaviour
                     :"but it failed!";
                 Dialogue_handler.Instance.DisplayBattleInfo(statusRejectionMessage);
             }
-            processingOrder = false;
+            _processingOrder = false;
             return;
         }
-        if (victim.pokemon.hp <= 0){processingOrder = false; return;}
+        if (victim.pokemon.hp <= 0){_processingOrder = false; return;}
         if (!victim.canBeDamaged)
         {
             Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" protected itself");
-            processingOrder = false;return;
+            _processingOrder = false;return;
         }
         if (Utility.RandomRange(1, 101) < _currentTurn.move.statusChance)
             if(_currentTurn.move.isMultiTarget)
@@ -379,7 +379,7 @@ public class Move_handler:MonoBehaviour
             else{
                 HandleStatusApplication(victim,_currentTurn.move,true);
             }
-        processingOrder = false;
+        _processingOrder = false;
     }
     bool CheckInvalidStatusEffect(PokemonOperations.StatusEffect status,string typeName,Move move)
     {
@@ -445,7 +445,7 @@ public class Move_handler:MonoBehaviour
         if (enemy.pokemon.ability.abilityName == "Levitate")
         {
             Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
-            processingOrder = false;
+            _processingOrder = false;
             return;
         }
        
@@ -455,13 +455,13 @@ public class Move_handler:MonoBehaviour
                 && !attacker.pokemon.HasType(PokemonOperations.Types.Ghost))
             {//only ghost can trap ghost with moves
                 Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
-                processingOrder = false;
+                _processingOrder = false;
                 return;
             }
 
             if (!enemy.canEscape)
             {
-                processingOrder = false;
+                _processingOrder = false;
                 Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName + " is already trapped");
                 return;
             }
@@ -473,7 +473,7 @@ public class Move_handler:MonoBehaviour
                 var numTurnsOfTrap = Utility.RandomRange(2, (int)_currentTurn.move.statusChance+1);
                 enemy.statusHandler.SetupTrapDuration(numTurnsOfTrap,_currentTurn.move);
             }
-            processingOrder = false;
+            _processingOrder = false;
             return;
         }
         enemy.statusHandler.SetupTrapDuration(hasDuration:false);
@@ -482,7 +482,7 @@ public class Move_handler:MonoBehaviour
     {
         if (victim.isConfused)
         {
-            processingOrder = false;
+            _processingOrder = false;
             return;
         }
         if (_currentTurn.move.isSelfTargeted)
@@ -494,7 +494,7 @@ public class Move_handler:MonoBehaviour
             else
                 Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName + " protected itself");
         }
-        processingOrder = false;
+        _processingOrder = false;
     }
 
     void ApplyConfusion(Battle_Participant victimOfConfusion)
@@ -511,7 +511,7 @@ public class Move_handler:MonoBehaviour
     {
         if (!victim.canBeDamaged || !victim.pokemon.canBeFlinched)
         {
-            processingOrder = false;
+            _processingOrder = false;
             return;
         }
         if (Utility.RandomRange(1, 101) < _currentTurn.move.statusChance)
@@ -519,7 +519,7 @@ public class Move_handler:MonoBehaviour
             victim.canAttack = false;
             victim.isFlinched = true;
         }
-        processingOrder = false;
+        _processingOrder = false;
     }
 
     void InfatuateEnemy()
@@ -527,12 +527,12 @@ public class Move_handler:MonoBehaviour
         if (victim.isInfatuated)
         {
             Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName+" is already in love!");
-            processingOrder = false;
+            _processingOrder = false;
             return;
         }
         if (!victim.canBeDamaged || !victim.pokemon.canBeInfatuated)
         {
-            processingOrder = false;
+            _processingOrder = false;
             return;
         }
         if (victim.pokemon.gender == PokemonOperations.Gender.None 
@@ -540,7 +540,7 @@ public class Move_handler:MonoBehaviour
             || attacker.pokemon.gender == victim.pokemon.gender)
         {
             Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
-            processingOrder = false;
+            _processingOrder = false;
             return;
         }
         victim.isInfatuated = true;
@@ -548,7 +548,7 @@ public class Move_handler:MonoBehaviour
     void CheckBuffOrDebuffApplicability()
     {
         if (Utility.RandomRange(1, 101) > _currentTurn.move.buffOrDebuffChance)
-        { processingOrder = false; return;}
+        { _processingOrder = false; return;}
         //allows the display of buff message, must be here in case silent buff happened
         BattleOperations.CanDisplayChange = true;
         BattleVisuals.Instance.OnStatVisualDisplayed += NotifyBuffVisualCompletion;
@@ -582,7 +582,7 @@ public class Move_handler:MonoBehaviour
     private void NotifyBuffVisualCompletion()
     {
         BattleVisuals.Instance.OnStatVisualDisplayed-=NotifyBuffVisualCompletion;
-        processingOrder = false;
+        _processingOrder = false;
     }
     IEnumerator MultiTargetBuff_Debuff(PokemonOperations.Stat stat, bool isIncreasing,int buffAmount)
     {

@@ -529,13 +529,14 @@ public class MoveLogicHandler : MonoBehaviour
             BattleOperations.OnBuffApplied -= AwaitBuffAddition;
             waiting = false;
         }
-        void DisplayMultiMessage()
+        void AwaitBuffVisual()
         {
-            BattleOperations.OnBuffApplied -= DisplayMultiMessage;
-            BattleOperations.DisplayMultiBuff(true,_attacker.pokemon,allBuffs);
+            BattleVisuals.Instance.OnStatVisualDisplayed -= AwaitBuffVisual;
+            waiting = false;
         }
+
+        var statChangeMessage = "";
         BattleOperations.CanDisplayChange = false;
-        BattleOperations.OnBuffApplied += DisplayMultiMessage;
         foreach (var buff in allBuffs)
         {
             waiting = true;
@@ -544,8 +545,12 @@ public class MoveLogicHandler : MonoBehaviour
             Move_handler.Instance.SelectRelevantBuffOrDebuff(buffData);
             yield return new WaitUntil(() => !waiting);
         }
-        BattleVisuals.Instance.SelectStatChangeVisuals(PokemonOperations.Stat.Multi,_attacker);
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        
+        statChangeMessage = BattleOperations.GetBuffResultMessage(true,_attacker.pokemon,allBuffs);
+        BattleVisuals.Instance.OnStatVisualDisplayed += AwaitBuffVisual;
+        waiting = true;
+        BattleVisuals.Instance.SelectStatChangeVisuals(PokemonOperations.Stat.Multi,_attacker,statChangeMessage);
+        yield return new WaitUntil(() => !waiting);
         moveDelay = false;
     }
     void flail()

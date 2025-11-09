@@ -95,19 +95,16 @@ public class BattleOperations
         RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
         OnBuffApplied?.Invoke();
     }
-    public static void DisplayMultiBuff(bool isIncreasing,Pokemon pokemon,PokemonOperations.Stat[] buffs)
+    public static string GetBuffResultMessage(bool isIncreasing,Pokemon pokemon,PokemonOperations.Stat[] buffs)
     {
         string buffNames="";
         for (int i = 0; i < buffs.Length; i++)
         {
             buffNames += buffs[i] + (i>buffs.Length-2?"":", ");
         }
-        if(isIncreasing)
-            Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName+"'s "+buffNames+" rose");
-        else
-        {
-            Dialogue_handler.Instance.DisplayBattleInfo(pokemon.pokemonName+"'s "+buffNames+" fell");
-        }
+        if(isIncreasing) return pokemon.pokemonName+"'s "+buffNames+" rose";
+        
+        return pokemon.pokemonName+"'s "+buffNames+" fell";
     }
     private static int ValidateBuffLimit(Battle_Participant participant,Buff_Debuff buff,bool increased,int changeValue)
     {
@@ -142,8 +139,7 @@ public class BattleOperations
 
         if (CanDisplayChange)
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(message);
-            BattleVisuals.Instance.SelectStatChangeVisuals(buff.stat,participant);
+            BattleVisuals.Instance.SelectStatChangeVisuals(buff.stat,participant,message);
         }
         if(change>indexLimitHigh)
             return indexLimitHigh + 1;
@@ -162,7 +158,6 @@ public class BattleOperations
     public static void RemoveInvalidBuffsOrDebuffs(Pokemon pokemon)
     {
         pokemon.buffAndDebuffs.RemoveAll(b=>b.stage==0);
-        Move_handler.Instance.processingOrder = false;
     }
 
     public static void ModifyBuff(Buff_Debuff buff, int limitHigh, int change)

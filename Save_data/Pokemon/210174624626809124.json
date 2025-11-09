@@ -7,7 +7,7 @@
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26704
+        "instanceID": 26702
     },
     "hasGender": true,
     "hp": 51.0,
@@ -60,7 +60,7 @@
             "instanceID": 26968
         },
         {
-            "instanceID": 25666
+            "instanceID": 25664
         }
     ],
     "statusEffect": 0,
@@ -132,27 +132,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -36906
+            "instanceID": -4410
         },
         {
-            "instanceID": -36908
+            "instanceID": -4412
         },
         {
-            "instanceID": -36910
+            "instanceID": -4414
         },
         {
-            "instanceID": -36912
+            "instanceID": -4416
         }
     ],
     "ability": {
-        "instanceID": 25286
+        "instanceID": 25284
     },
     "evolutions": [
         {
-            "instanceID": 26498
+            "instanceID": 26496
         },
         {
-            "instanceID": 25396
+            "instanceID": 25394
         }
     ],
     "heldItem": {
@@ -160,16 +160,16 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 26100
+        "instanceID": 26098
     },
     "backPicture": {
-        "instanceID": 25762
+        "instanceID": 25760
     },
     "partyFrame1": {
-        "instanceID": 26476
+        "instanceID": 26474
     },
     "partyFrame2": {
-        "instanceID": 25678
+        "instanceID": 25676
     },
     "battleIntroFrame": {
         "instanceID": 26990

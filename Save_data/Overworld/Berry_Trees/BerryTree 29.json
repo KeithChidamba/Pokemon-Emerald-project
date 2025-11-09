@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Persim berry",
     "berryItem": {
-        "instanceID": 27184
+        "instanceID": 27186
     },
     "treeIndex": 29,
     "minutesPerStage": 60,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32300
+                    "instanceID": 32306
                 },
                 {
-                    "instanceID": 32300
+                    "instanceID": 32306
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32302
+                    "instanceID": 32308
                 },
                 {
-                    "instanceID": 32304
+                    "instanceID": 32310
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32666
+                    "instanceID": 32820
                 },
                 {
-                    "instanceID": 32668
+                    "instanceID": 32822
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32670
+                    "instanceID": 32824
                 },
                 {
-                    "instanceID": 32672
+                    "instanceID": 32826
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32674
+                    "instanceID": 32828
                 },
                 {
-                    "instanceID": 32676
+                    "instanceID": 32830
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-11-03T13:21:46.2842560+02:00"
+    "lastLogin": "2025-11-09T10:47:07.2499740+02:00"
 }

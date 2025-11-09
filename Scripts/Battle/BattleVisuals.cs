@@ -12,9 +12,10 @@ public class BattleVisuals : MonoBehaviour
     public GameObject pokeballImage;
     private Vector2 _defaultParticipantImageSize;
     private int[] _enemyPokeballXPositions={155,250,330};
-    private List<Image> _statChangeImages;
+    private List<(Image img,Vector2 pos)> _statChangeImages=new();
     public Sprite[] statChangeSprites;
     private Dictionary<PokemonOperations.Stat, Sprite> statChangeVisuals = new();
+    private string _statChangeMessage;
     public event Action OnStatVisualDisplayed;
     private void Awake()
     {
@@ -41,27 +42,51 @@ public class BattleVisuals : MonoBehaviour
         statChangeVisuals.Add(PokemonOperations.Stat.Multi,statChangeSprites[7]);
     }
 
-    public void SelectStatChangeVisuals(PokemonOperations.Stat statChanged,Battle_Participant participant)
+    public void SelectStatChangeVisuals(PokemonOperations.Stat statChanged,Battle_Participant participant,string message)
     {
+        _statChangeMessage = message;
+        if (statChanged == PokemonOperations.Stat.Crit)
+        {
+            Dialogue_handler.Instance.DisplayBattleInfo(_statChangeMessage);
+            OnStatVisualDisplayed?.Invoke();
+            return;
+        }
         _statChangeImages.Clear();
         for(int i =0; i < 3;i++)
         {
-            _statChangeImages.Add(participant.pokemonImage.transform.GetChild(i).GetComponent<Image>());
-            _statChangeImages[i].sprite = statChangeVisuals[statChanged];
-            _statChangeImages[i].gameObject.SetActive(true);
+            var visualImages = participant.pokemonImage.transform.GetChild(i).GetComponent<Image>();
+            _statChangeImages.Add(new(visualImages,visualImages.rectTransform.anchoredPosition));
+            _statChangeImages[i].img.sprite = statChangeVisuals[statChanged];
+            _statChangeImages[i].img.gameObject.SetActive(true);
         }
         StartCoroutine(DisplayStatChangeVisuals());
     }
-
+    
     private IEnumerator DisplayStatChangeVisuals()
     {
-        //animate the visuals
-        yield return new WaitForSeconds(1.75f);
+        float speed = 300f;
+        Vector2 topPos = _statChangeImages[0].pos + Vector2.up * (0.5f * _statChangeImages[0].img.rectTransform.rect.height);
+        var target = _statChangeImages[0].pos + Vector2.down * (0.5f * _statChangeImages[0].img.rectTransform.rect.height);
+        
+        for(int i =0; i < _statChangeImages.Count;i++)
+        {
+            RectTransform rect = _statChangeImages[i].img.rectTransform;
+                
+            StartCoroutine(SlideRect(rect,topPos,target,speed));
+                
+            if ((i+1) % 2 == 0) yield return new WaitForSeconds(0.33f);
+        }
+        yield return new WaitForSeconds(0.5f);
+        Dialogue_handler.Instance.DisplayBattleInfo(_statChangeMessage);
+        
+        
         foreach (var image in _statChangeImages)
         {
-            image.gameObject.SetActive(false);
+            image.img.gameObject.SetActive(false);
+            image.img.rectTransform.anchoredPosition = image.pos;
         }
         yield return null;
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         OnStatVisualDisplayed?.Invoke();
     }
     public IEnumerator DisplayStatusEffectVisuals(Battle_Participant participant)
