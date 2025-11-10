@@ -17,6 +17,7 @@ public class BattleVisuals : MonoBehaviour
     private Dictionary<PokemonOperations.Stat, Sprite> statChangeVisuals = new();
     private string _statChangeMessage;
     public event Action OnStatVisualDisplayed;
+    private List<Coroutine> _activeSlideCoroutines = new();
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -65,21 +66,26 @@ public class BattleVisuals : MonoBehaviour
     private IEnumerator DisplayStatChangeVisuals()
     {
         float speed = 300f;
-        Vector2 topPos = _statChangeImages[0].pos + Vector2.up * (0.5f * _statChangeImages[0].img.rectTransform.rect.height);
-        var target = _statChangeImages[0].pos + Vector2.down * (0.5f * _statChangeImages[0].img.rectTransform.rect.height);
-        
-        for(int i =0; i < _statChangeImages.Count;i++)
+        for (int i = 0; i < _statChangeImages.Count; i++)
         {
             RectTransform rect = _statChangeImages[i].img.rectTransform;
-                
-            StartCoroutine(SlideRect(rect,topPos,target,speed));
-                
+            Vector2 basePos = _statChangeImages[i].pos;
+
+            Vector2 topPos = basePos + Vector2.up * (0.5f * rect.rect.height);
+            Vector2 target = basePos + Vector2.down * (0.5f * rect.rect.height);
+            var c = StartCoroutine(SlideRect(rect, topPos, target, speed));
+            _activeSlideCoroutines.Add(c);
+
             if ((i+1) % 2 == 0) yield return new WaitForSeconds(0.33f);
         }
+
         yield return new WaitForSeconds(0.5f);
         Dialogue_handler.Instance.DisplayBattleInfo(_statChangeMessage);
         
+        foreach (var c in _activeSlideCoroutines)
+            if (c != null) StopCoroutine(c);
         
+        _activeSlideCoroutines.Clear();
         foreach (var image in _statChangeImages)
         {
             image.img.gameObject.SetActive(false);
@@ -89,6 +95,33 @@ public class BattleVisuals : MonoBehaviour
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
         OnStatVisualDisplayed?.Invoke();
     }
+
+    public IEnumerator DisplayConfusionVisuals(Battle_Participant participant)
+    {
+        participant.statusEffectAnimator.gameObject.SetActive(true);
+        var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
+        participant.pokemonImage.GetComponent<Canvas>().overrideSorting = true;
+        
+        var start = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x - (participant.pokemonImage.rectTransform.rect.width*0.5f)
+            , participant.pokemonImage.rectTransform.anchoredPosition.y+30f);
+        participant.statusEffectAnimator.Play("Confusion"); 
+        for (int i = 0; i < 2; i++)
+        {
+            var target = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x + (participant.pokemonImage.rectTransform.rect.width*0.5f)
+                , participant.pokemonImage.rectTransform.anchoredPosition.y+30f);
+           if (i > 0)
+           {
+               yield return SlideRect(rect,target,start,200f);
+           }
+           else
+           {
+               yield return SlideRect(rect,start,target,200f);
+           }
+        }
+        participant.pokemonImage.GetComponent<Canvas>().overrideSorting = false;
+        participant.statusEffectAnimator.gameObject.SetActive(false);
+    }
+
     public IEnumerator DisplayStatusEffectVisuals(Battle_Participant participant)
     {
         participant.statusEffectAnimator.gameObject.SetActive(true);

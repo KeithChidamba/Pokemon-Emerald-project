@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 1182682699247909228}
   - component: {fileID: 8178648007056163667}
   - component: {fileID: 9088554518707764083}
+  - component: {fileID: 1710248118493271279}
   m_Layer: 5
   m_Name: participant image
   m_TagString: Untagged
@@ -209,6 +210,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!223 &1710248118493271279
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2847458210763170015}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &4228443781792343696
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,6 +1056,7 @@ GameObject:
   - component: {fileID: 1404889995606883165}
   - component: {fileID: 2473437138662651454}
   - component: {fileID: 7119008057650822155}
+  - component: {fileID: 8956439556943761578}
   m_Layer: 5
   m_Name: status effect animator player
   m_TagString: Untagged
@@ -1055,7 +1080,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -342, y: -170}
+  m_AnchoredPosition: {x: -342, y: -87}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &6188201630238852289
@@ -1094,6 +1119,7 @@ Animation:
   - {fileID: 7400000, guid: bd27795d29625cb41828277d3f8f020e, type: 2}
   - {fileID: 7400000, guid: f7a843055d0d686fc9a0e6b879f0d3d6, type: 2}
   - {fileID: 7400000, guid: a50483e46b362ae0ba8f057413da3819, type: 2}
+  - {fileID: 7400000, guid: 1d33f6f56d9e8c941b85627561505161, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
@@ -1136,3 +1162,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!223 &8956439556943761578
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9135022957463202487}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0

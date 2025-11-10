@@ -98,6 +98,7 @@ public class Turn_Based_Combat : MonoBehaviour
             if (currentWeather.weather == WeatherCondition.Weather.Sunlight)
                 turn.move.moveAccuracy = 50f;
         }
+        //add more when more moves need it
     }
     private IEnumerator CheckAttackSuccess(Turn turn, Battle_Participant attacker,Battle_Participant victim)
     {
@@ -111,6 +112,7 @@ public class Turn_Based_Combat : MonoBehaviour
             if (attacker.isConfused)
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is confused");
+                yield return BattleVisuals.Instance.DisplayConfusionVisuals(attacker);
                 if (Utility.RandomRange(0, 2) < 1)
                 {
                     Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" hurt itself in its confusion");

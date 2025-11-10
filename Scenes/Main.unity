@@ -31254,7 +31254,6 @@ MonoBehaviour:
   _damageDisplayQueue: []
   _healhGainQueue: []
   repeatingMoveCycle: 0
-  processingOrder: 0
   displayingDamage: 0
   displayingHealthGain: 0
 --- !u!4 &1148144462
