@@ -712,6 +712,7 @@ public class MoveLogicHandler : MonoBehaviour
             var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,_victim);
             yield return Turn_Based_Combat.Instance.HandleSwap(switchData,true);
         }
+        Turn_Based_Combat.Instance.NextTurn();
         moveDelay = false;
     }
     void rest()

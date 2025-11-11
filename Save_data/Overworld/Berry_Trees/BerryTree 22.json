@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Chesto berry",
     "berryItem": {
-        "instanceID": 26378
+        "instanceID": 26386
     },
     "treeIndex": 22,
     "minutesPerStage": 45,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32290
+                    "instanceID": 32372
                 },
                 {
-                    "instanceID": 32290
+                    "instanceID": 32372
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32292
+                    "instanceID": 32374
                 },
                 {
-                    "instanceID": 32294
+                    "instanceID": 32376
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32296
+                    "instanceID": 32378
                 },
                 {
-                    "instanceID": 32298
+                    "instanceID": 32380
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32300
+                    "instanceID": 32382
                 },
                 {
-                    "instanceID": 32302
+                    "instanceID": 32384
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32304
+                    "instanceID": 32386
                 },
                 {
-                    "instanceID": 32306
+                    "instanceID": 32388
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-11-10T16:36:13.6946700+02:00"
+    "lastLogin": "2025-11-11T10:46:09.9631080+02:00"
 }

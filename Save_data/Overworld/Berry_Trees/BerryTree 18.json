@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Tamato berry",
     "berryItem": {
-        "instanceID": 26734
+        "instanceID": 26742
     },
     "treeIndex": 18,
     "minutesPerStage": 180,
@@ -16,24 +16,13 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32290
+                    "instanceID": 32372
                 },
                 {
-                    "instanceID": 32290
+                    "instanceID": 32372
                 }
             ],
             "growthStageNumber": 0
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32292
-                },
-                {
-                    "instanceID": 32294
-                }
-            ],
-            "growthStageNumber": 1
         },
         {
             "growthStageSprites": [
@@ -44,15 +33,26 @@
                     "instanceID": 32376
                 }
             ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32532
+                },
+                {
+                    "instanceID": 32534
+                }
+            ],
             "growthStageNumber": 2
         },
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32378
+                    "instanceID": 32536
                 },
                 {
-                    "instanceID": 32380
+                    "instanceID": 32538
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32382
+                    "instanceID": 32540
                 },
                 {
-                    "instanceID": 32384
+                    "instanceID": 32542
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-11-10T16:36:13.6929800+02:00"
+    "lastLogin": "2025-11-11T10:46:09.9622080+02:00"
 }

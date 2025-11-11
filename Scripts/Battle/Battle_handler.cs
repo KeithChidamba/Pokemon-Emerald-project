@@ -172,14 +172,14 @@ public class Battle_handler : MonoBehaviour
                               && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
                                   .currentCoolDown.isCoolingDown;
     }
-    private void SetValidParticipants()
+    private IEnumerator SetValidParticipants()
     {
         foreach (var participant in battleParticipants)
         {
             if (participant.pokemon != null)
                 if (participant.pokemon.hp > 0)
                 {
-                    SetParticipant(participant, participant.pokemon, initialCall: true);
+                    yield return SetParticipant(participant, participant.pokemon, initialCall: true);
                 }
         }
     }
@@ -231,15 +231,15 @@ public class Battle_handler : MonoBehaviour
         switch (copyOfTrainerData.battleType)
         {
             case TrainerData.BattleType.Single:
-                StartSingleBattle(copyOfTrainerData);
+                StartCoroutine(StartSingleBattle(copyOfTrainerData));
                 break;
             case TrainerData.BattleType.SingleDouble:
-                StartSingleDoubleBattle(copyOfTrainerData);
+                StartCoroutine(StartSingleDoubleBattle(copyOfTrainerData));
                 break;
         }
        
     }
-    public void StartWildBattle(Pokemon enemy) //only ever be for wild battles
+    public IEnumerator StartWildBattle(Pokemon enemy) //only ever be for wild battles
     {
         Pokemon_party.Instance.SortByFainted();
         battleOver = false;
@@ -258,11 +258,11 @@ public class Battle_handler : MonoBehaviour
         wildPokemon.AddToExpList(player.pokemon);
         Wild_pkm.Instance.inBattle = true;
         //setup battle
-        SetValidParticipants();
+        yield return SetValidParticipants();
         StartCoroutine(SetupBattleSequence(Encounter_handler.Instance.currentArea));
         Encounter_handler.Instance.currentArea = null;
     }
-    private void StartSingleBattle(TrainerData trainerData) //single trainer battle
+    private IEnumerator StartSingleBattle(TrainerData trainerData) //single trainer battle
     {
         battleOver = false;
         isTrainerBattle = true;
@@ -280,11 +280,11 @@ public class Battle_handler : MonoBehaviour
         enemy.AddToExpList(player.pokemon);
         enemy.pokemonTrainerAI.inBattle = true;
         //setup battle
-        SetValidParticipants();
+        yield return SetValidParticipants();
         StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
     }
 
-    private void StartSingleDoubleBattle(TrainerData trainerData) //1v1 trainer double battle
+    private IEnumerator StartSingleDoubleBattle(TrainerData trainerData) //1v1 trainer double battle
     {
         battleOver = false;
         isTrainerBattle = true;
@@ -329,13 +329,13 @@ public class Battle_handler : MonoBehaviour
             enemyParticipant.AddToExpList(playerPartner.pokemon);
         }
         //setup battle
-        SetValidParticipants();
+        yield return SetValidParticipants();
         enemy.pokemonTrainerAI.inBattle = true;
         enemyPartner.pokemonTrainerAI.inBattle = true;
         StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
     }
 
-    public void SetParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)
+    public IEnumerator SetParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)
     {
         OnSwitchOut?.Invoke(participant);
         participant.isEnemy = Array.IndexOf(battleParticipants, participant) > 1 ;
@@ -345,7 +345,7 @@ public class Battle_handler : MonoBehaviour
             if (participant.isPlayer)
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName
-                                                            +" sent out "+participant.pokemon.pokemonName);
+                                                            +" sent out "+participant.pokemon.pokemonName,3.5f);
                 
                 //add enemies to exp list of new player pokemon
                 foreach (var enemyParticipant in participant.currentEnemies)
@@ -354,7 +354,7 @@ public class Battle_handler : MonoBehaviour
             else
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemonTrainerAI.trainerData.TrainerName
-                                                            +" sent out "+participant.pokemon.pokemonName);
+                                                            +" sent out "+participant.pokemon.pokemonName,3.5f);
                 
                 //add player participants to get exp from switched in enemy
                 foreach (var playerParticipant in participant.currentEnemies)
@@ -366,7 +366,7 @@ public class Battle_handler : MonoBehaviour
         {
             participant.pokemon.pokemonName = "Foe " + participant.pokemon.pokemonName;
         }
-        
+        yield return null;
         //setup participant for battle
         participant.statData.SaveActualStats();
         participant.ActivateParticipant();

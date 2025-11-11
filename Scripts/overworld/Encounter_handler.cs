@@ -81,7 +81,7 @@ public class Encounter_handler : MonoBehaviour
         var expForRequiredLevel = PokemonOperations.CalculateExpForNextLevel(randomLevel, wildPokemon.expGroup)+1;
         wildPokemon.ReceiveExperience(expForRequiredLevel); 
         wildPokemon.hp=wildPokemon.maxHp;
-       Battle_handler.Instance.StartWildBattle(wildPokemon);
+        StartCoroutine(Battle_handler.Instance.StartWildBattle(wildPokemon));
     }
     void TurnOffTrigger()
     {

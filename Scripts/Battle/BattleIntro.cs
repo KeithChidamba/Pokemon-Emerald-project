@@ -334,12 +334,15 @@ public class BattleIntro : MonoBehaviour
         }
         
         swapParticipant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
-        Battle_handler.Instance.SetParticipant(swapParticipant,newPokemon:newPokemon);
-
+        
+        yield return Battle_handler.Instance.SetParticipant(swapParticipant,newPokemon:newPokemon);
+        
+        yield return BattleVisuals.Instance.RevealPokemon(swapParticipant);
+        
         if (swapParticipant.isEnemy)
         {
             yield return BattleVisuals.Instance.SendOutEnemyPokemon(swapParticipant);
-            StartCoroutine(PokemonIntroAnimation(swapParticipant));
+            yield return PokemonIntroAnimation(swapParticipant);
         }
         else
             yield return BattleVisuals.Instance.SendOutPlayerPokemon(swapParticipant);

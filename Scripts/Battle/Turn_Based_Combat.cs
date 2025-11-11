@@ -23,6 +23,7 @@ public class Turn_Based_Combat : MonoBehaviour
     private List<Battle_Participant> _statusCheckQueue = new();
     private List<Held_Items> _heldItemUsageQueue = new();
     private event Action<bool> OnAttackAttempted;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -338,7 +339,7 @@ public class Turn_Based_Combat : MonoBehaviour
         if (forcedSwap)
         {
             Dialogue_handler.Instance.DisplayBattleInfo(swap.Participant.pokemon.pokemonName
-                                                        + " was blown out");
+                                                        + " was blown out",3.5f);
         }
         else
         {
@@ -353,9 +354,11 @@ public class Turn_Based_Combat : MonoBehaviour
                                                             +" withdrew "+swap.Participant.pokemon.pokemonName);
             }
         }
-
-        yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
-
+        
+        if (swap.IsPlayer || forcedSwap)
+        {
+            yield return BattleVisuals.Instance.WithdrawPokemon(swap.Participant);
+        }
         //check if move used was pursuit
         var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
             turn.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.Pursuit));
@@ -420,9 +423,11 @@ public class Turn_Based_Combat : MonoBehaviour
         var currentParticipant = Battle_handler.Instance.GetCurrentParticipant();
         if (currentParticipant.isSemiInvulnerable) return;
         if (currentParticipant.currentCoolDown.isCoolingDown) return;
-        InputStateHandler.Instance.ResetRelevantUi(new[]{ InputStateHandler.StateName.DialoguePlaceHolder});
-        InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleEnemySelection,
-            InputStateHandler.StateName.PlaceHolder});
+        InputStateHandler.Instance.ResetRelevantUi(new[]
+        {
+            InputStateHandler.StateName.PokemonBattleEnemySelection,
+            InputStateHandler.StateName.PlaceHolder,InputStateHandler.StateName.DialoguePlaceHolder
+        });
     }
     public string GetMoveUsageText(Move move, Battle_Participant attacker,Battle_Participant victim)
     {
@@ -504,12 +509,11 @@ public class Turn_Based_Combat : MonoBehaviour
             currentTurnIndex+=step;
         else
             currentTurnIndex = 0;
-
-        OnNewTurn?.Invoke();
         
         if (!Battle_handler.Instance.battleParticipants[currentTurnIndex].isActive & Options_manager.Instance.playerInBattle)
             NextTurn();
         
+        OnNewTurn?.Invoke();
     }
     private bool MoveSuccessful(Turn turn)
     {

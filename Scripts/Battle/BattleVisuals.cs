@@ -16,6 +16,7 @@ public class BattleVisuals : MonoBehaviour
     public Sprite[] statChangeSprites;
     private Dictionary<PokemonOperations.Stat, Sprite> statChangeVisuals = new();
     private string _statChangeMessage;
+    public float outOfViewDitance = 400f;
     public event Action OnStatVisualDisplayed;
     private List<Coroutine> _activeSlideCoroutines = new();
     private void Awake()
@@ -287,6 +288,35 @@ public class BattleVisuals : MonoBehaviour
         swapOutAnimator.Play("pokemon swap");
         yield return new WaitForSeconds(1f);
         participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+    }
+
+    public IEnumerator RevealPokemon(Battle_Participant participant)
+    {
+        var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
+        participant.participantUI.SetActive(true);
+        
+        if (participant.isEnemy) participant.pokemonImage.color = Color.white;
+        var direction = participant.isEnemy?outOfViewDitance:-outOfViewDitance;
+        participantUIRect.anchoredPosition = new Vector2(participantUIRect.anchoredPosition.x+direction,
+            participantUIRect.anchoredPosition.y);
+        yield return null;
+    }
+
+    public IEnumerator WithdrawPokemon(Battle_Participant participant)
+    {
+        var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
+        var direction = participant.isEnemy?-outOfViewDitance:outOfViewDitance;
+        var targetForUI = new Vector2(participantUIRect.anchoredPosition.x+direction, participantUIRect.anchoredPosition.y);
+        
+        yield return SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f);
+   
+        if (participant.isEnemy)
+        {
+            yield return new WaitForSeconds(0.05f);
+            participant.participantUI.SetActive(false);
+            yield return new WaitForSeconds(0.25f);
+            participant.pokemonImage.color = new Color(0, 0, 0, 0);
+        }
     }
     public IEnumerator SendOutPlayerPokemon(Battle_Participant participant)
     {

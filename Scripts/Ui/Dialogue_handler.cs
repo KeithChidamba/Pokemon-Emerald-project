@@ -200,7 +200,7 @@ public class Dialogue_handler : MonoBehaviour
             canExitDialogue = false;
         DisplayBattleInfo(info);
     }
-    public void DisplayBattleInfo(string info)//display plain text info to player
+    public void DisplayBattleInfo(string info,float dialogueDuration = 2f)//display plain text info to player
     {
         if (!Options_manager.Instance.playerInBattle)
         {//fail-safe
@@ -211,9 +211,9 @@ public class Dialogue_handler : MonoBehaviour
         canExitDialogue = false;
         var newInteraction = NewInteraction(info,DialogType.BattleInfo,"");
         pendingMessages.Add(newInteraction);
-        if (!messagesLoading) StartCoroutine(ProcessQueue());
+        if (!messagesLoading) StartCoroutine(ProcessQueue(dialogueDuration));
     }
-    private IEnumerator ProcessQueue()
+    private IEnumerator ProcessQueue(float dialogueDuration)
     {
         messagesLoading = true;
         InputStateHandler.Instance.AddDialoguePlaceHolderState();
@@ -223,7 +223,7 @@ public class Dialogue_handler : MonoBehaviour
             currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
             HandleInteraction();
             pendingMessages.RemoveAt(0);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(dialogueDuration);
         }
         messagesLoading = false;
         OnMessagedDone?.Invoke();
@@ -253,7 +253,7 @@ public class Dialogue_handler : MonoBehaviour
         Player_movement.Instance.AllowPlayerMovement();
         clickNextIndicator.SetActive(false);
         elipsisSymbol.SetActive(false);
-        StopCoroutine(ProcessQueue());
+        StopCoroutine(ProcessQueue(0));
     }
     public void StartInteraction(Overworld_interactable interactable)
     {
