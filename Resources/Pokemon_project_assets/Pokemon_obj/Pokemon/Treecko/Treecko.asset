@@ -16,6 +16,7 @@ MonoBehaviour:
   pokemonName: Treecko
   pokemonID: 0
   personalityValue: 0
+  isShiny: 0
   gender: 0
   ratioFemale: 12.5
   nature: {fileID: 0}

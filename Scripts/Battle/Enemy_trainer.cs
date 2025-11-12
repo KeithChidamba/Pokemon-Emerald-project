@@ -77,13 +77,13 @@ public class Enemy_trainer : MonoBehaviour
                 else
                 {
                     var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count - 1);
-                    yield return BattleIntro.Instance.SwitchInPokemon(participant,notParticipatingList[randomLeftOver]);
+                    yield return BattleIntro.Instance.SwitchInPokemon(participant,notParticipatingList[randomLeftOver],true);
                 }
             }
             else
             {
                 var randomMember = Utility.RandomRange(0, numAlive.Count - 1);
-                yield return BattleIntro.Instance.SwitchInPokemon(participant,newPokemon:numAlive[randomMember]);
+                yield return BattleIntro.Instance.SwitchInPokemon(participant,newPokemon:numAlive[randomMember],true);
             }
         }
         Turn_Based_Combat.Instance.faintEventDelay = false;
@@ -95,15 +95,16 @@ public class Enemy_trainer : MonoBehaviour
         trainerParty.Clear();
         foreach (TrainerPokemonData member in trainerData.PokemonParty)
         {
-            trainerParty.Add(member.pokemon);
-            var expForNextLevel = PokemonOperations.CalculateExpForNextLevel(member.pokemonLevel, member.pokemon.expGroup)+1;
-            member.pokemon.ReceiveExperience(expForNextLevel);
-            member.pokemon.hp = member.pokemon.maxHp;
-            member.pokemon.moveSet.Clear();
+            var pokemonCopy = Obj_Instance.CreatePokemon(member.pokemon);
+            trainerParty.Add(pokemonCopy);
+            var expForNextLevel = PokemonOperations.CalculateExpForNextLevel(member.pokemonLevel, pokemonCopy.expGroup)+1;
+            pokemonCopy.ReceiveExperience(expForNextLevel);
+            pokemonCopy.hp = pokemonCopy.maxHp;
+            pokemonCopy.moveSet.Clear();
             foreach (Move move in member.moveSet)
-                member.pokemon.moveSet.Add(Obj_Instance.CreateMove(move));
+                pokemonCopy.moveSet.Add(Obj_Instance.CreateMove(move));
             
-            if (member.hasItem) member.pokemon.GiveItem(Obj_Instance.CreateItem(member.heldItem));
+            if (member.hasItem) pokemonCopy.GiveItem(Obj_Instance.CreateItem(member.heldItem));
         }
     }
     void UseMove(Move move)

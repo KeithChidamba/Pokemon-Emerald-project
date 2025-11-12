@@ -95,7 +95,14 @@ public static class Obj_Instance
         newPokemon.canBeInfatuated = pkm.canBeInfatuated;
         newPokemon.types = pkm.types;
         newPokemon.statusEffect = pkm.statusEffect;
-        newPokemon.buffAndDebuffs = pkm.buffAndDebuffs;
+        
+        foreach (var buff in pkm.buffAndDebuffs)
+        {
+            newPokemon.buffAndDebuffs.Clear();
+            var copyBuff = new Buff_Debuff(buff.stat, buff.stage, buff.isAtLimit);
+            newPokemon.buffAndDebuffs.Add(copyBuff);
+        }
+        
         newPokemon.currentEvolutionLineIndex = pkm.currentEvolutionLineIndex;
         newPokemon.evolutionLineLevels = pkm.evolutionLineLevels;
         newPokemon.friendshipEvolutionRequirement = pkm.friendshipEvolutionRequirement;

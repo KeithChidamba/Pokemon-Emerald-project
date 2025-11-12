@@ -100,7 +100,12 @@ public class BattleOperations
         string buffNames="";
         for (int i = 0; i < buffs.Length; i++)
         {
-            buffNames += buffs[i] + (i>buffs.Length-2?"":", ");
+            if (i == buffs.Length - 1)
+                buffNames += buffs[i];
+            else if(i == buffs.Length - 2)
+                buffNames += buffs[i] + " and ";
+            else
+                buffNames += buffs[i] + ", ";
         }
         if(isIncreasing) return pokemon.pokemonName+"'s "+buffNames+" rose";
         
@@ -117,6 +122,7 @@ public class BattleOperations
             buff.isAtLimit = true;
             if(CanDisplayChange)
                 Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+buff.statName+" cant go any higher");
+            BattleVisuals.Instance.CancelBuffVisual();
             return buff.stage;
         }
         if (buff.stage < indexLimitLow && !increased)
@@ -124,6 +130,7 @@ public class BattleOperations
             buff.isAtLimit = true;
             if(CanDisplayChange)
                 Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+buff.statName+" cant go any lower");
+            BattleVisuals.Instance.CancelBuffVisual();
             return buff.stage;
         }
         if (increased)

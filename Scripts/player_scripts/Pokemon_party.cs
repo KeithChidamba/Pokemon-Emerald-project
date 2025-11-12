@@ -207,7 +207,7 @@ public class Pokemon_party : MonoBehaviour
         UpdateUIAfterSwap();
         
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
-        yield return BattleIntro.Instance.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1]);
+        yield return BattleIntro.Instance.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1],true);
         selectedMemberNumber = 0;
         Turn_Based_Combat.Instance.faintEventDelay = false;
     }

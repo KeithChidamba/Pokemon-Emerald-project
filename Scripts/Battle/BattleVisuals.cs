@@ -44,13 +44,16 @@ public class BattleVisuals : MonoBehaviour
         statChangeVisuals.Add(PokemonOperations.Stat.Multi,statChangeSprites[7]);
     }
 
+    public void CancelBuffVisual()
+    {
+        OnStatVisualDisplayed?.Invoke();
+    }
     public void SelectStatChangeVisuals(PokemonOperations.Stat statChanged,Battle_Participant participant,string message)
     {
         _statChangeMessage = message;
         if (statChanged == PokemonOperations.Stat.Crit)
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(_statChangeMessage);
-            OnStatVisualDisplayed?.Invoke();
+            CancelBuffVisual();
             return;
         }
         _statChangeImages.Clear();

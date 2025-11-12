@@ -16,7 +16,6 @@ public class Participant_Status : MonoBehaviour
     [SerializeField]private TrapData _currentTrap;
     private readonly Dictionary<PokemonOperations.StatusEffect, Action> _statusEffectMethods = new ();
     public event Action<Battle_Participant> OnStatusCheck;
-    public bool dealingStatusDamage;
     void Start()
     {
         _participant = GetComponent<Battle_Participant>();
@@ -78,12 +77,12 @@ public class Participant_Status : MonoBehaviour
                 break;
         }
     }
-    public void CheckStatus()
+    public IEnumerator CheckStatus()
     {
-        if (overworld_actions.Instance.usingUI) return; 
-        if (!_participant.isActive) return;
-        if(_participant.pokemon.hp<=0 )return;
-        if(Battle_handler.Instance.battleOver)return;
+        if (overworld_actions.Instance.usingUI) yield break; 
+        if (!_participant.isActive) yield break;
+        if(_participant.pokemon.hp<=0 )yield break;
+        if(Battle_handler.Instance.battleOver)yield break;
         
         if (_participant.isFlinched)
         {
@@ -93,20 +92,40 @@ public class Participant_Status : MonoBehaviour
         if (!_participant.canBeDamaged)
             _participant.canBeDamaged = true;
         
-        if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
+        if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) yield break;
         
         OnStatusCheck?.Invoke(_participant);
+        
         _participant.RefreshStatusEffectImage();
-        AssignStatusDamage();
+        yield return AssignStatusDamage();
     }
-    private void GetDamageFromStatus(string message,float damage)
+    private IEnumerator AssignStatusDamage()
     {
-        dealingStatusDamage = true;
+        _statusDuration++;
+        string message = "";
+        float damagePercent = 0;
+        switch (_participant.pokemon.statusEffect)
+        {
+            case PokemonOperations.StatusEffect.Burn:
+                message=" is hurt by the burn";
+                damagePercent = 0.125f;
+                break;
+            case PokemonOperations.StatusEffect.Poison:
+                message=" is poisoned";
+                damagePercent = 0.125f;
+                break;
+            case PokemonOperations.StatusEffect.BadlyPoison:
+                message = " is badly poisoned";
+                damagePercent = _statusDuration / 16f ;
+                break;
+        }
+        yield return GetDamageFromStatus(damagePercent, message);
+    }
+
+    private IEnumerator GetDamageFromStatus(float damagePercent,string message)
+    {        
         Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+message);
-        StartCoroutine(LooseHp(damage));
-    }
-    private IEnumerator LooseHp(float percentage)
-    {
+        
         var damageSource = Move_handler.DamageSource.Normal;
         switch (_participant.pokemon.statusEffect)
         {
@@ -118,29 +137,14 @@ public class Participant_Status : MonoBehaviour
                 damageSource = Move_handler.DamageSource.Burn;
                 break;
         }
-       
-        Move_handler.Instance.DisplayDamage(_participant,displayEffectiveness:false
-            ,isSpecificDamage:true,math.ceil(_participant.pokemon.maxHp * percentage),damageSource);
+        var healthLost = math.ceil(_participant.pokemon.maxHp * damagePercent);
+        
+        Move_handler.Instance.DisplayDamage(_participant,displayEffectiveness:false,isSpecificDamage:true,healthLost,damageSource);
         
         yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
-        dealingStatusDamage = false;
+       
         _participant.pokemon.ChangeHealth(null);  
-    }
-    private void AssignStatusDamage()
-    {
-        _statusDuration++;
-        switch (_participant.pokemon.statusEffect)
-        {
-            case PokemonOperations.StatusEffect.Burn:
-                GetDamageFromStatus(" is hurt by the burn",0.125f);
-                break;
-            case PokemonOperations.StatusEffect.Poison:
-                GetDamageFromStatus(" is poisoned", 0.125f);
-                break;
-            case PokemonOperations.StatusEffect.BadlyPoison:
-                GetDamageFromStatus(" is badly poisoned", (_statusDuration) / 16f );
-                break;
-        }
+        
     }
     public void StunCheck()
     {
@@ -152,30 +156,30 @@ public class Participant_Status : MonoBehaviour
         if (_statusEffectMethods.TryGetValue(_participant.pokemon.statusEffect,out Action method))
             method();
     }
-    public void CheckTrapDuration(Battle_Participant participant)
+    public IEnumerator CheckTrapDuration(Battle_Participant participant)
     {
-        if (_participant != participant) return;
-        if (!_participant.isActive) return;
-        if (_participant.canEscape) return;
-        if (_currentTrap == null) return;
-        if (!_currentTrap.hasDuration) return;
+        if (_participant != participant) yield break;
+        if (!_participant.isActive) yield break;
+        if (_participant.canEscape) yield break;
+        if (_currentTrap == null) yield break;
+        if (!_currentTrap.hasDuration) yield break;
         if (_trapDuration <= 0)
         {
             Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+_currentTrap.OnFreeMessage);
             RemoveTrap();
-            return;
+            yield break;
         }
-        GetDamageFromStatus(_currentTrap.OnHitMessage, 1 / 16f);
+        yield return GetDamageFromStatus( 1 / 16f,_currentTrap.OnHitMessage);
         _trapDuration--;
     }
-    public void ConfusionCheck(Battle_Participant participant)
+    public IEnumerator ConfusionCheck(Battle_Participant participant)
     {
-        if (_participant != participant) return;
-        if (!_participant.isActive) return;
+        if (_participant != participant) yield break;
+        if (!_participant.isActive) yield break;
         if (!_participant.isConfused)
         {
             _confusionDuration = 0;
-            return;
+            yield break;
         }
         _participant.isConfused = _confusionDuration > 0;
         
@@ -238,11 +242,11 @@ public class Participant_Status : MonoBehaviour
         _participant.canEscape = true;
         _currentTrap = null;
     }
-    public void NotifyHealing(Battle_Participant participant)
+    public IEnumerator NotifyHealing(Battle_Participant participant)
     {//only for freeze and sleep
-        if (participant != _participant) return;
-        if (!_participant.isActive) return;
-        if (!_healed || _participant.pokemon.statusEffect==PokemonOperations.StatusEffect.None) return;
+        if (participant != _participant) yield break;
+        if (!_participant.isActive) yield break;
+        if (!_healed || _participant.pokemon.statusEffect==PokemonOperations.StatusEffect.None) yield break;
         switch (_participant.pokemon.statusEffect)
         {
             case PokemonOperations.StatusEffect.Sleep:
@@ -254,6 +258,7 @@ public class Participant_Status : MonoBehaviour
         }
         RemoveStatusEffect();
         _healed = false;
+        yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
     }
     public void RemoveStatusEffect(bool healAllEffects = false)
     {

@@ -22,15 +22,15 @@ MonoBehaviour:
   isContact: 0
   isBuffOrDebuff: 0
   hasStatus: 0
-  hasSpecialEffect: 1
   effectType: 5
+  effectInfoModule: {fileID: 0}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   canInfatuate: 0
   isConsecutive: 0
   isMultiTarget: 0
-  isSelfTargeted: 0
+  isSelfTargeted: 1
   isSureHit: 1
   displayTargetMessage: 0
   priority: 0

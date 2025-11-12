@@ -172,7 +172,7 @@ public class Battle_handler : MonoBehaviour
                               && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
                                   .currentCoolDown.isCoolingDown;
     }
-    public void AllowPlayerInput()
+    private void AllowPlayerInput()
     {
         if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
         var currentParticipant = GetCurrentParticipant();
@@ -227,13 +227,16 @@ public class Battle_handler : MonoBehaviour
         overworld_actions.Instance.doingAction = true;
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
         
-        Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
-        Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForSwap = false;
+        Turn_Based_Combat.Instance.OnTurnsCompleted += ResetPlayersTurnUsage;
         Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
         Turn_Based_Combat.Instance.OnNewTurn += AllowPlayerInput;
         OnBattleStart?.Invoke();
     }
-
+    private void ResetPlayersTurnUsage()
+    {
+        usedTurnForItem = false;
+        usedTurnForSwap = false;
+    }
     public void SetBattleType(List<string> trainerNames)
     {
         Pokemon_party.Instance.SortByFainted();
@@ -647,6 +650,7 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn -= _checkParticipantsEachTurn;;
         Turn_Based_Combat.Instance.OnNewTurn -= ResetAi;
         Turn_Based_Combat.Instance.OnNewTurn -= AllowPlayerInput;
+        Turn_Based_Combat.Instance.OnTurnsCompleted -= ResetPlayersTurnUsage;
         Dialogue_handler.Instance.EndDialogue();
         usedTurnForItem = false;
         usedTurnForSwap = false;

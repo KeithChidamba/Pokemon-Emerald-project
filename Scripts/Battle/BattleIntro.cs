@@ -40,7 +40,6 @@ public class BattleIntro : MonoBehaviour
     public List<BattlePokeball> thrownPokeballs;
     private List<string> challengers = new ();
     public static BattleIntro Instance;
-    public event Action OnSwitchAnimationPlayed;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -324,7 +323,7 @@ public class BattleIntro : MonoBehaviour
         }
     }
 
-    public IEnumerator SwitchInPokemon(Battle_Participant swapParticipant, Pokemon newPokemon,bool forcedSwitch=false)
+    public IEnumerator SwitchInPokemon(Battle_Participant swapParticipant, Pokemon newPokemon,bool faintSwitch=false)
     {
         if(!swapParticipant.isPlayer)
         {
@@ -337,7 +336,7 @@ public class BattleIntro : MonoBehaviour
         
         yield return Battle_handler.Instance.SetParticipant(swapParticipant,newPokemon:newPokemon);
         
-        if(forcedSwitch) yield return BattleVisuals.Instance.RevealPokemon(swapParticipant);
+        if(!faintSwitch) yield return BattleVisuals.Instance.RevealPokemon(swapParticipant);
         
         if (swapParticipant.isEnemy)
         {
@@ -346,7 +345,6 @@ public class BattleIntro : MonoBehaviour
         }
         else
             yield return BattleVisuals.Instance.SendOutPlayerPokemon(swapParticipant);
-        OnSwitchAnimationPlayed?.Invoke();
     }
 
 

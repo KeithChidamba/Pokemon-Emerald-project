@@ -225,7 +225,6 @@ public class Battle_Participant : MonoBehaviour
         pokemonImage.color = Color.white;
         
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.CheckTrapDuration;
-        Turn_Based_Combat.Instance.OnTurnsCompleted -= statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.ConfusionCheck;
@@ -357,7 +356,6 @@ public class Battle_Participant : MonoBehaviour
         }
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
         Battle_handler.Instance.OnBattleEnd += DeactivateParticipant;
-        Turn_Based_Combat.Instance.OnTurnsCompleted += statusHandler.CheckStatus;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.CheckTrapDuration;
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.ConfusionCheck;

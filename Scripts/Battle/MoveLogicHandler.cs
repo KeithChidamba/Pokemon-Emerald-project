@@ -27,6 +27,7 @@ public class MoveLogicHandler : MonoBehaviour
         _attacker = attacker;
         _victim = victim;
         _currentTurn = currentTurn;
+        moveDelay = true;
         switch (currentTurn.move.effectType)
         {
             case Move.EffectType.MultiTargetDamage:
@@ -500,8 +501,7 @@ public class MoveLogicHandler : MonoBehaviour
         
         void CancelOnBattleEnd()
         {
-            if(!Battle_handler.Instance.isTrainerBattle)
-                battleEnded = true;
+            battleEnded = !Battle_handler.Instance.isTrainerBattle || Battle_handler.Instance.battleOver;
         }
         _victim.OnPokemonFainted += CancelOnBattleEnd;
         
@@ -672,9 +672,7 @@ public class MoveLogicHandler : MonoBehaviour
                 moveDelay = false;
                 yield break;
             }
-            Turn_Based_Combat.Instance.OnNewTurn -= Battle_handler.Instance.AllowPlayerInput;
-            Battle_handler.Instance.OnSwitchIn += SkipTurnAfterWhirlwind;
-            BattleIntro.Instance.OnSwitchAnimationPlayed += AllowPlayerInputAfterWhirlwind;
+            
             //exclude current participants
             var excludedIndexes = 1;
 
@@ -699,9 +697,7 @@ public class MoveLogicHandler : MonoBehaviour
                 moveDelay = false;
                 yield break;
             }
-            Turn_Based_Combat.Instance.OnNewTurn -= Battle_handler.Instance.AllowPlayerInput;
-            Battle_handler.Instance.OnSwitchIn += SkipTurnAfterWhirlwind;
-            BattleIntro.Instance.OnSwitchAnimationPlayed += AllowPlayerInputAfterWhirlwind;
+
             //exclude current participants
             var excludedIndexes = 1;
 
@@ -719,17 +715,6 @@ public class MoveLogicHandler : MonoBehaviour
         }
         
         moveDelay = false;
-    }
-
-    void SkipTurnAfterWhirlwind()
-    {
-        Turn_Based_Combat.Instance.NextTurn();
-        Battle_handler.Instance.OnSwitchIn -= SkipTurnAfterWhirlwind;
-    }    
-    void AllowPlayerInputAfterWhirlwind()
-    {
-        BattleIntro.Instance.OnSwitchAnimationPlayed -= AllowPlayerInputAfterWhirlwind;
-        Turn_Based_Combat.Instance.OnNewTurn += Battle_handler.Instance.AllowPlayerInput;
     }
     void rest()
     {
