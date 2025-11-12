@@ -672,7 +672,9 @@ public class MoveLogicHandler : MonoBehaviour
                 moveDelay = false;
                 yield break;
             }
-            
+            Turn_Based_Combat.Instance.OnNewTurn -= Battle_handler.Instance.AllowPlayerInput;
+            Battle_handler.Instance.OnSwitchIn += SkipTurnAfterWhirlwind;
+            BattleIntro.Instance.OnSwitchAnimationPlayed += AllowPlayerInputAfterWhirlwind;
             //exclude current participants
             var excludedIndexes = 1;
 
@@ -697,7 +699,9 @@ public class MoveLogicHandler : MonoBehaviour
                 moveDelay = false;
                 yield break;
             }
-            
+            Turn_Based_Combat.Instance.OnNewTurn -= Battle_handler.Instance.AllowPlayerInput;
+            Battle_handler.Instance.OnSwitchIn += SkipTurnAfterWhirlwind;
+            BattleIntro.Instance.OnSwitchAnimationPlayed += AllowPlayerInputAfterWhirlwind;
             //exclude current participants
             var excludedIndexes = 1;
 
@@ -710,10 +714,22 @@ public class MoveLogicHandler : MonoBehaviour
             var pokemonAtIndex = enemyTrainer.trainerParty.IndexOf(living[randomIndexOfLiving]);
             
             var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,_victim);
+
             yield return Turn_Based_Combat.Instance.HandleSwap(switchData,true);
         }
-        Turn_Based_Combat.Instance.NextTurn();
+        
         moveDelay = false;
+    }
+
+    void SkipTurnAfterWhirlwind()
+    {
+        Turn_Based_Combat.Instance.NextTurn();
+        Battle_handler.Instance.OnSwitchIn -= SkipTurnAfterWhirlwind;
+    }    
+    void AllowPlayerInputAfterWhirlwind()
+    {
+        BattleIntro.Instance.OnSwitchAnimationPlayed -= AllowPlayerInputAfterWhirlwind;
+        Turn_Based_Combat.Instance.OnNewTurn += Battle_handler.Instance.AllowPlayerInput;
     }
     void rest()
     {

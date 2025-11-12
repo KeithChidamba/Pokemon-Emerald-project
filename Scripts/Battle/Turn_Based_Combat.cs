@@ -36,7 +36,7 @@ public class Turn_Based_Combat : MonoBehaviour
     private void Start()
     {
         Battle_handler.Instance.OnBattleEnd += ResetTurnState;
-        OnNewTurn += AllowPlayerInput;
+        
         OnNewTurn += ()=> StartCoroutine(CheckParticipantCoolDown());
         Battle_handler.Instance.OnSwitchOut += RemoveWeatherBuffReceiver;
         Battle_handler.Instance.OnBattleStart += AddParticipantQueues;
@@ -395,11 +395,13 @@ public class Turn_Based_Combat : MonoBehaviour
             Pokemon_party.Instance.UpdateUIAfterSwap();
             
             InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
-            yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,party[swap.PartyPosition]);
+            yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,party[swap.PartyPosition],forcedSwap);
         }
         else
         {
-            yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,swap.Participant.pokemonTrainerAI.trainerParty[swap.MemberToSwapWith]);
+            var party = swap.Participant.pokemonTrainerAI.trainerParty;
+            (party[swap.PartyPosition], party[swap.MemberToSwapWith]) = (party[swap.MemberToSwapWith], party[swap.PartyPosition]);
+            yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,party[swap.MemberToSwapWith],forcedSwap);
         }
     }
 
@@ -416,18 +418,6 @@ public class Turn_Based_Combat : MonoBehaviour
             }
         }
         return false;
-    }
-    private void AllowPlayerInput()
-    {
-        if (currentTurnIndex > 1) return;
-        var currentParticipant = Battle_handler.Instance.GetCurrentParticipant();
-        if (currentParticipant.isSemiInvulnerable) return;
-        if (currentParticipant.currentCoolDown.isCoolingDown) return;
-        InputStateHandler.Instance.ResetRelevantUi(new[]
-        {
-            InputStateHandler.StateName.PokemonBattleEnemySelection,
-            InputStateHandler.StateName.PlaceHolder,InputStateHandler.StateName.DialoguePlaceHolder
-        });
     }
     public string GetMoveUsageText(Move move, Battle_Participant attacker,Battle_Participant victim)
     {

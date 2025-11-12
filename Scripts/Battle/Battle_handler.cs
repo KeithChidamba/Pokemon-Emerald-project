@@ -172,6 +172,18 @@ public class Battle_handler : MonoBehaviour
                               && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
                                   .currentCoolDown.isCoolingDown;
     }
+    public void AllowPlayerInput()
+    {
+        if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
+        var currentParticipant = GetCurrentParticipant();
+        if (currentParticipant.isSemiInvulnerable) return;
+        if (currentParticipant.currentCoolDown.isCoolingDown) return;
+        InputStateHandler.Instance.ResetRelevantUi(new[]
+        {
+            InputStateHandler.StateName.PokemonBattleEnemySelection,
+            InputStateHandler.StateName.PlaceHolder,InputStateHandler.StateName.DialoguePlaceHolder
+        });
+    }
     private IEnumerator SetValidParticipants()
     {
         foreach (var participant in battleParticipants)
@@ -218,6 +230,7 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForItem = false;
         Turn_Based_Combat.Instance.OnTurnsCompleted += ()=> usedTurnForSwap = false;
         Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
+        Turn_Based_Combat.Instance.OnNewTurn += AllowPlayerInput;
         OnBattleStart?.Invoke();
     }
 
@@ -366,13 +379,14 @@ public class Battle_handler : MonoBehaviour
         {
             participant.pokemon.pokemonName = "Foe " + participant.pokemon.pokemonName;
         }
-        yield return null;
+
         //setup participant for battle
         participant.statData.SaveActualStats();
         participant.ActivateParticipant();
         participant.abilityHandler.SetAbilityMethod();
         CheckParticipantStates(initialCall);
         OnSwitchIn?.Invoke();
+        yield return null;
     }
 
     public List<Battle_Participant> GetValidParticipants()
@@ -632,6 +646,7 @@ public class Battle_handler : MonoBehaviour
         OnBattleEnd?.Invoke();
         Turn_Based_Combat.Instance.OnNewTurn -= _checkParticipantsEachTurn;;
         Turn_Based_Combat.Instance.OnNewTurn -= ResetAi;
+        Turn_Based_Combat.Instance.OnNewTurn -= AllowPlayerInput;
         Dialogue_handler.Instance.EndDialogue();
         usedTurnForItem = false;
         usedTurnForSwap = false;
