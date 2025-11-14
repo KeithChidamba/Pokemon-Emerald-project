@@ -11,13 +11,13 @@ public class Pokemon_Details : MonoBehaviour
     [SerializeField]private Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID,pkm_nature,Trainer_Name;
     [SerializeField]private Text pkm_atk, pkm_sp_atk, pkm_def, pkm_sp_def, pkm_speed, pkm_hp;
     [SerializeField]private Text move_Description,pkm_HeldItem,pkm_CurrentExp,pkm_NextLvExp;
-    [SerializeField]private Text[] moves_pp;
-    public Text[] moves;
+    [FormerlySerializedAs("moves_pp")] [SerializeField]private Text[] movesPpText;
+    [FormerlySerializedAs("moves")] public Text[] moveNamesText;
     [SerializeField]private Image pkm_img;
     [SerializeField]private Image gender_img;
     [SerializeField]private Image type1;
     [SerializeField]private Image type2;
-    [SerializeField]private Image[] Move_type;
+    [FormerlySerializedAs("Move_type")] [SerializeField]private Image[] moveTypeImages;
     [SerializeField]private Slider player_exp;
     
     [SerializeField]private GameObject Ability_ui;
@@ -168,16 +168,16 @@ public class Pokemon_Details : MonoBehaviour
         move_Description.text = string.Empty;
         for (var j = 0; j < currentPokemon.moveSet.Count; j++)
         {
-            moves[j].text = currentPokemon.moveSet[j].moveName;
-            Move_type[j].sprite = currentPokemon.moveSet[j].type.typeImage;
-            Move_type[j].gameObject.SetActive(true);
-            moves_pp[j].text = "pp " + currentPokemon.moveSet[j].powerpoints + "/" + currentPokemon.moveSet[j].maxPowerpoints;
+            moveNamesText[j].text = currentPokemon.moveSet[j].moveName;
+            moveTypeImages[j].sprite = currentPokemon.moveSet[j].type.typeImage;
+            moveTypeImages[j].gameObject.SetActive(true);
+            movesPpText[j].text = "pp " + currentPokemon.moveSet[j].powerpoints + "/" + currentPokemon.moveSet[j].maxPowerpoints;
         }
         for (var i = currentPokemon.moveSet.Count; i < 4; i++)
         {
-            moves[i].text = string.Empty;
-            Move_type[i].gameObject.SetActive(false);
-            moves_pp[i].text = string.Empty;
+            moveNamesText[i].text = string.Empty;
+            moveTypeImages[i].gameObject.SetActive(false);
+            movesPpText[i].text = string.Empty;
         }
         Moves_ui.SetActive(true);
     }

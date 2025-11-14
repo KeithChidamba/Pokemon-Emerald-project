@@ -358,7 +358,7 @@ public class InputStateHandler : MonoBehaviour
         var moveSelectables = new List<SelectableUI>();
         for (var i = 0; i < Pokemon_Details.Instance.currentPokemon.moveSet.Count; i++)
         {
-            moveSelectables.Add(new(Pokemon_Details.Instance.moves[i].gameObject,
+            moveSelectables.Add(new(Pokemon_Details.Instance.moveNamesText[i].gameObject,
                 () => Pokemon_Details.Instance.SelectMove(currentState.currentSelectionIndex), true));
         }
 
