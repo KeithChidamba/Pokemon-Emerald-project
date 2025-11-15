@@ -4,13 +4,14 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
+using UnityEngine.UI;
 
 public class pokemon_storage : MonoBehaviour
 {
     public List<Pokemon> nonPartyPokemon = new();
     public int totalPokemonCount;
     public int numNonPartyPokemon;
-    public int maxPokemonCapacity = 21;
+    public int maxPokemonCapacity = 30*14;
     public int numPartyMembers;
     public GameObject[] initialStorageOptions;
     public GameObject[] storageOptions;
@@ -25,8 +26,13 @@ public class pokemon_storage : MonoBehaviour
     public GameObject boxSelector;
     public GameObject partySelector;
     public GameObject boxOptionsSelector;
-    public int boxCapacity = 21;
-    public int boxColumns = 7;
+    public int boxCapacity = 30;
+    public int boxColumns = 6;
+    public int numBoxes = 14;
+    public int currentBoxIndex;
+    public PokemonStorageBox[] storageBoxes;
+    public Image boxVisualImage;
+    //List Boxes
     public static pokemon_storage Instance;
 
     private void Awake()
