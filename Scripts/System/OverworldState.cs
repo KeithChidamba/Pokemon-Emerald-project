@@ -46,7 +46,7 @@ public class OverworldState : MonoBehaviour
         yield return new WaitUntil(() => treesLoaded);
         foreach (var treeData in treeDataQueue)
         {
-            var jsonBerryTree = overworldBerryTrees[treeData.treeIndex];
+            var jsonBerryTree = overworldBerryTrees.First(tree=>tree.treeIndex==treeData.treeIndex);
             jsonBerryTree.loadedFromJson = true;
             jsonBerryTree.LoadTreeData(treeData);
         }

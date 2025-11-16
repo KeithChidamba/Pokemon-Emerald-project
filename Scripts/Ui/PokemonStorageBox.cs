@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu(fileName = "Storage box", menuName = "storage box")]
 public class PokemonStorageBox : ScriptableObject
 {
-    private int boxNumber;
+    public int boxNumber;
     public List<StorageBoxPokemon> boxPokemon;
-    private int currentNumPokemon;
+    public int currentNumPokemon;
+    public Sprite boxTopVisual;
     public Sprite boxVisual;
 }

@@ -7,4 +7,6 @@ public class StorageBoxPokemon : ScriptableObject
     public int boxNumber;
     public long pokemonID;
     public int positionInBox;
+    public bool containsPokemon;
+    public PC_pkm pokemonData;
 }

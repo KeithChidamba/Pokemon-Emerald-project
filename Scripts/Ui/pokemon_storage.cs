@@ -18,9 +18,9 @@ public class pokemon_storage : MonoBehaviour
     public GameObject storageUI;
     public string selectedPokemonID;
 
-    public List<GameObject> nonPartyIcons = new();
+    public List<PC_pkm> nonPartyIcons = new();
     public GameObject[] partyPokemonIcons;
-    public Transform storageIconPositionsParent;
+    public Transform boxIconsParent;
     public bool swapping;
     public GameObject initialSelector;
     public GameObject boxSelector;
@@ -31,8 +31,11 @@ public class pokemon_storage : MonoBehaviour
     public int numBoxes = 14;
     public int currentBoxIndex;
     public PokemonStorageBox[] storageBoxes;
+    
+    public Image boxTopVisualImage;
     public Image boxVisualImage;
-    //List Boxes
+
+    public LoopingUiAnimation[] greyArrows;
     public static pokemon_storage Instance;
 
     private void Awake()
@@ -44,6 +47,34 @@ public class pokemon_storage : MonoBehaviour
         }
         Instance = this;
     }
+
+    public void SwitchPkmDataAnimationSprite()
+    {
+        //event in animation
+    }
+
+    public void ChangeBox(int change)
+    {
+        currentBoxIndex = Mathf.Clamp(currentBoxIndex + change, 0, numBoxes);
+        boxVisualImage.sprite = storageBoxes[currentBoxIndex].boxVisual;
+        boxTopVisualImage.sprite = storageBoxes[currentBoxIndex].boxTopVisual;
+    }
+    private void CreateBoxSlots()
+    {//remove after first use
+        for (int i = 0; i < numBoxes; i++)
+        {
+            storageBoxes[i].boxPokemon.Clear();
+            for (int j = 0; j < boxCapacity; j++)
+            {
+                var newBox = ScriptableObject.CreateInstance<StorageBoxPokemon>();
+                storageBoxes[i].boxPokemon[j].boxNumber = i + 1;
+                storageBoxes[i].boxPokemon[j].positionInBox = j;
+                storageBoxes[i].boxPokemon[j].containsPokemon = false;
+                storageBoxes[i].boxPokemon.Add(newBox);
+            }
+        }
+    }
+
     private int SearchForPokemonIndex(string pokemonID)
     {
         return nonPartyPokemon.FindIndex(p => p.pokemonID.ToString() == pokemonID);
@@ -54,13 +85,23 @@ public class pokemon_storage : MonoBehaviour
     }
     public void OpenPC()
     {
+        CreateBoxSlots();
         ActivatePokemonIcons();
+        
+        foreach (var arrow in greyArrows)
+        {
+            arrow.viewingUI = true;
+        }
     }
     public void ClosePC()
     {
         foreach (var icon in partyPokemonIcons)
             icon.GetComponent<PC_party_pkm>().options.SetActive(false);
         RemovePokemonIcons();
+        foreach (var arrow in greyArrows)
+        {
+            arrow.viewingUI = false;
+        }
     }
     public void SelectPartyPokemon(PC_party_pkm partyPokemon)
     {
@@ -70,7 +111,7 @@ public class pokemon_storage : MonoBehaviour
             var swapStore = Pokemon_party.Instance.party[partyPokemon.partyPosition - 1];
             Pokemon_party.Instance.party[partyPokemon.partyPosition - 1] = Obj_Instance.CreatePokemon(nonPartyPokemon[pokemonIndex]);
             nonPartyPokemon[pokemonIndex] = Obj_Instance.CreatePokemon(swapStore);
-            ResetBoxIconSprite(nonPartyIcons[pokemonIndex].GetComponent<PC_pkm>());
+            ResetBoxIconSprite(nonPartyIcons[pokemonIndex]);
             RefreshUi();
         }
         else
@@ -137,10 +178,9 @@ public class pokemon_storage : MonoBehaviour
     {
         foreach (var icon in nonPartyIcons)
         {
-            var pokemonScript = icon.GetComponent<PC_pkm>();
-            pokemonScript.pokemon = null;
-            pokemonScript.pokemonImage.sprite = null;
-            icon.SetActive(false);
+            icon.pokemon = null;
+            icon.pokemonImage.sprite = null;
+            icon.gameObject.SetActive(false);
         }
         foreach (var icon in partyPokemonIcons)
         {
@@ -150,30 +190,32 @@ public class pokemon_storage : MonoBehaviour
     }
     private void ActivatePokemonIcons()
     {
-        for (var i = 0;i < numPartyMembers;i++)
-        {
-            if (Pokemon_party.Instance.party[i] == null) continue;
-            partyPokemonIcons[i].SetActive(true);
-            partyPokemonIcons[i].GetComponent<PC_party_pkm>().pokemon = Pokemon_party.Instance.party[i] ;
-            partyPokemonIcons[i].GetComponent<PC_party_pkm>().LoadImage();
-;
-        }
+//         for (var i = 0;i < numPartyMembers;i++)
+//         {
+//             if (Pokemon_party.Instance.party[i] == null) continue;
+//             partyPokemonIcons[i].SetActive(true);
+//             partyPokemonIcons[i].GetComponent<PC_party_pkm>().pokemon = Pokemon_party.Instance.party[i] ;
+//             partyPokemonIcons[i].GetComponent<PC_party_pkm>().LoadImage();
+// ;
+//         }
         nonPartyIcons.Clear();
-        for (var i = 0; i < storageIconPositionsParent.childCount; i++)
+        for (var i = 0; i < boxIconsParent.childCount; i++)
         {
             if (i == numNonPartyPokemon) break;
-            nonPartyIcons.Add(storageIconPositionsParent.GetChild(i).gameObject);
+            var pokemonIcon = boxIconsParent.GetChild(i).gameObject.GetComponent<PC_pkm>();
+            
+            nonPartyIcons.Add(pokemonIcon);
         }
-        
+
         if (nonPartyIcons.Count == 0) return;
         
         for (var i = 0;i<nonPartyPokemon.Count;i++)
         {
             if (nonPartyPokemon[i] == null) continue;
             var pokemonIcon = nonPartyIcons[i];
-            pokemonIcon.SetActive(true);
-            pokemonIcon.GetComponent<PC_pkm>().pokemon = nonPartyPokemon[i];
-            pokemonIcon.GetComponent<PC_pkm>().LoadImage();
+            pokemonIcon.gameObject.SetActive(true);
+            pokemonIcon.pokemon = nonPartyPokemon[i];
+            pokemonIcon.LoadImage();
         }
     }
     private void RemoveFromParty(PC_party_pkm partyPokemon)
@@ -221,7 +263,7 @@ public class pokemon_storage : MonoBehaviour
         if (Pokemon_party.Instance.numMembers < 6)
         {
             var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
-            ResetBoxIconSprite(nonPartyIcons[pokemonIndex].GetComponent<PC_pkm>());
+            ResetBoxIconSprite(nonPartyIcons[pokemonIndex]);
             Pokemon_party.Instance.party[Pokemon_party.Instance.numMembers] = Obj_Instance.CreatePokemon(nonPartyPokemon[pokemonIndex]);
             DeleteNonPartyPokemon(pokemonIndex);
             Pokemon_party.Instance.numMembers++;

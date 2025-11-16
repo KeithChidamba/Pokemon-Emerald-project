@@ -18,7 +18,7 @@ public class BerryTree : MonoBehaviour
     public SpriteRenderer treeSpriteRenderer;
     private int _currentSpriteIndex;
     public bool loadedFromJson;
-   
+    public int treeIndex;
     [SerializeField] float secondsCounter;
 
     private void Awake()

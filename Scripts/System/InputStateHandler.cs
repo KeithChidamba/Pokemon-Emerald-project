@@ -442,7 +442,7 @@ public class InputStateHandler : MonoBehaviour
         var storageBoxSelectables = new List<SelectableUI>();
         foreach (var icon in pokemon_storage.Instance.nonPartyIcons)
         { 
-            var newSelectable = new SelectableUI(icon,
+            var newSelectable = new SelectableUI(icon.gameObject,
                 ()=>pokemon_storage.Instance.SelectNonPartyPokemon(icon.GetComponent<PC_pkm>())
                 , true);
             storageBoxSelectables.Add(newSelectable);
