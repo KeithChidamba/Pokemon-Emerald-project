@@ -26,12 +26,13 @@ public class pokemon_storage : MonoBehaviour
     public GameObject boxSelector;
     public GameObject partySelector;
     public GameObject boxOptionsSelector;
-    public int boxCapacity = 30;
+    public const int BoxCapacity = 30;
     public int boxColumns = 6;
-    public int numBoxes = 14;
+    public const int NumBoxes = 14;
     public int currentBoxIndex;
-    public PokemonStorageBox[] storageBoxes;
-    
+    public List<PokemonStorageBox> storageBoxes = new();
+    public Sprite[] boxTopVisualSprites;
+    public Sprite[] boxVisualSprites;
     public Image boxTopVisualImage;
     public Image boxVisualImage;
 
@@ -48,6 +49,44 @@ public class pokemon_storage : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+     
+        for (var i = 0;i<NumBoxes;i++)
+        {
+            var newBox = ScriptableObject.CreateInstance<PokemonStorageBox>();
+            newBox.boxNumber = i + 1;
+            newBox.boxVisual = boxVisualSprites[i];
+            newBox.boxTopVisual = boxTopVisualSprites[i];
+            for (var j = 0;j < BoxCapacity;j++)
+            {
+                var newBoxPokemon = new StorageBoxPokemon
+                {
+                    pokemonID = 0L
+                    ,containsPokemon = false
+                };
+                newBox.boxPokemon.Add(newBoxPokemon);
+            }
+            storageBoxes.Add(newBox);
+        }
+        Save_manager.Instance.LoadPokemonStorageData();
+        nonPartyIcons.Clear();
+        for (var i = 0; i < boxIconsParent.childCount; i++)
+        {
+            var pokemonIcon = boxIconsParent.GetChild(i).gameObject.GetComponent<PC_pkm>();
+            pokemonIcon.SetImage();
+            nonPartyIcons.Add(pokemonIcon);
+        }
+    }
+
+    public IEnumerator SaveStorageData()
+    {
+        foreach (var box in storageBoxes)
+        {
+            Save_manager.Instance.SaveStorageDataAsJson(box,"Box "+ box.boxNumber);
+        }
+        yield return null;
+    }
     public void SwitchPkmDataAnimationSprite()
     {
         //event in animation
@@ -55,24 +94,15 @@ public class pokemon_storage : MonoBehaviour
 
     public void ChangeBox(int change)
     {
-        currentBoxIndex = Mathf.Clamp(currentBoxIndex + change, 0, numBoxes);
+        currentBoxIndex = Mathf.Clamp(currentBoxIndex + change, 0, NumBoxes);
         boxVisualImage.sprite = storageBoxes[currentBoxIndex].boxVisual;
         boxTopVisualImage.sprite = storageBoxes[currentBoxIndex].boxTopVisual;
     }
-    private void CreateBoxSlots()
-    {//remove after first use
-        for (int i = 0; i < numBoxes; i++)
-        {
-            storageBoxes[i].boxPokemon.Clear();
-            for (int j = 0; j < boxCapacity; j++)
-            {
-                var newBox = ScriptableObject.CreateInstance<StorageBoxPokemon>();
-                storageBoxes[i].boxPokemon[j].boxNumber = i + 1;
-                storageBoxes[i].boxPokemon[j].positionInBox = j;
-                storageBoxes[i].boxPokemon[j].containsPokemon = false;
-                storageBoxes[i].boxPokemon.Add(newBox);
-            }
-        }
+
+    public void SetBoxData(int indexOfBox,PokemonStorageBox box)
+    {
+        storageBoxes[indexOfBox].boxPokemon = box.boxPokemon;
+        storageBoxes[indexOfBox].currentNumPokemon = box.currentNumPokemon;
     }
 
     private int SearchForPokemonIndex(string pokemonID)
@@ -85,9 +115,8 @@ public class pokemon_storage : MonoBehaviour
     }
     public void OpenPC()
     {
-        CreateBoxSlots();
+        ChangeBox(0);
         ActivatePokemonIcons();
-        
         foreach (var arrow in greyArrows)
         {
             arrow.viewingUI = true;
@@ -198,23 +227,29 @@ public class pokemon_storage : MonoBehaviour
 //             partyPokemonIcons[i].GetComponent<PC_party_pkm>().LoadImage();
 // ;
 //         }
-        nonPartyIcons.Clear();
-        for (var i = 0; i < boxIconsParent.childCount; i++)
-        {
-            if (i == numNonPartyPokemon) break;
-            var pokemonIcon = boxIconsParent.GetChild(i).gameObject.GetComponent<PC_pkm>();
-            
-            nonPartyIcons.Add(pokemonIcon);
-        }
 
-        if (nonPartyIcons.Count == 0) return;
-        
-        for (var i = 0;i<nonPartyPokemon.Count;i++)
+        storageBoxes[currentBoxIndex].currentNumPokemon = 0;
+        for (var i = 0;i<BoxCapacity;i++)
         {
-            if (nonPartyPokemon[i] == null) continue;
+            //this search will always find one
+            if (!storageBoxes[currentBoxIndex].boxPokemon[i].containsPokemon)
+            {
+                continue;
+            }
+            // var newBoxPokemon = new StorageBoxPokemon
+            // {
+            //     pokemonID = nonPartyPokemon[i].pokemonID
+            //     ,containsPokemon = false
+            // };
+            // storageBoxes[currentBoxIndex].boxPokemon[i] = newBoxPokemon;
+           
+            var pokemonForBox = nonPartyPokemon.First(pokemon =>
+                pokemon.pokemonID == storageBoxes[currentBoxIndex].boxPokemon[i].pokemonID);
+      
+            storageBoxes[currentBoxIndex].currentNumPokemon++;
             var pokemonIcon = nonPartyIcons[i];
             pokemonIcon.gameObject.SetActive(true);
-            pokemonIcon.pokemon = nonPartyPokemon[i];
+            pokemonIcon.pokemon = pokemonForBox;
             pokemonIcon.LoadImage();
         }
     }

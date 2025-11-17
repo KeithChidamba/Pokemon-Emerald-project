@@ -5,7 +5,7 @@ using UnityEngine;
 public class PokemonStorageBox : ScriptableObject
 {
     public int boxNumber;
-    public List<StorageBoxPokemon> boxPokemon;
+    public List<StorageBoxPokemon> boxPokemon = new();
     public int currentNumPokemon;
     public Sprite boxTopVisual;
     public Sprite boxVisual;

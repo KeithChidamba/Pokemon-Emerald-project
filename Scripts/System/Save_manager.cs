@@ -20,7 +20,6 @@ public class Save_manager : MonoBehaviour
     private string _saveDataPath = "Assets/Save_data";
     private string _tempSaveDataPath = "Assets/Temp_Save_data";
     private event Action<string,Exception> OnSaveDataFail;
-    public event Func<IEnumerator> OnPlayerDataSaved;
     public event Action OnOverworldDataLoaded;
     public enum AssetDirectory
     { 
@@ -88,6 +87,7 @@ public class Save_manager : MonoBehaviour
         CreateFolder(_tempSaveDataPath+"/Items/Held_Items");
         CreateFolder(_tempSaveDataPath+"/Pokemon");
         CreateFolder(_tempSaveDataPath+"/Party_Ids");
+        CreateFolder(_tempSaveDataPath + "/PC_Storage");
     }
     public void CreateDefaultWebglDirectories()
     {
@@ -139,7 +139,21 @@ public class Save_manager : MonoBehaviour
         }
         return basePath;
     }
-
+    public void LoadPokemonStorageData()
+    {
+        CreateFolder(_saveDataPath + "/PC_Storage");
+        var storageBoxes = GetJsonFilesFromPath(_saveDataPath + "/PC_Storage");
+        for (var i=0;i<storageBoxes.Count;i++)
+        {
+            var jsonFilePath = _saveDataPath + "/PC_Storage/" + Path.GetFileName(storageBoxes[i]);
+            if (!File.Exists(jsonFilePath)) continue;
+            
+            var json = File.ReadAllText(jsonFilePath);
+            var boxData = ScriptableObject.CreateInstance<PokemonStorageBox>();
+            JsonUtility.FromJsonOverwrite(json, boxData);
+            pokemon_storage.Instance.SetBoxData(i,boxData);
+        }
+    }
     private void LoadOverworldData()
     {
         CreateFolder(_saveDataPath + "/Overworld");
@@ -410,8 +424,9 @@ public class Save_manager : MonoBehaviour
             OnSaveDataFail?.Invoke("Error occured with SavePlayerDataAsJson, exception: ",e);
             yield break;
         }
-        //save overworld Data
-        yield return OnPlayerDataSaved?.Invoke();
+
+        yield return OverworldState.Instance.SaveOverworldData();
+        yield return pokemon_storage.Instance.SaveStorageData();
         
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
@@ -511,6 +526,16 @@ public class Save_manager : MonoBehaviour
         tree.itemAssetName = tree.berryItem.itemName;
         var json = JsonUtility.ToJson(tree, true);
         File.WriteAllText(directory, json);
+    }
+    public void SaveStorageDataAsJson(PokemonStorageBox box, string fileName)
+    {
+        Debug.Log("sdaving");
+        var directory = Path.Combine(_saveDataPath+"/PC_Storage", fileName + ".json");
+        var json = JsonUtility.ToJson(box, true);
+        Debug.Log(json);
+        File.WriteAllText(directory, json);
+        if (!File.Exists(directory)) Debug.LogError("file blank");
+        Debug.Log(directory);
     }
     private Pokemon LoadPokemonFromJson(string filePath)
     {

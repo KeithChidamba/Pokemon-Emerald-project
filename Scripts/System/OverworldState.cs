@@ -31,7 +31,6 @@ public class OverworldState : MonoBehaviour
             overworldBerryTrees.Add(tree);
         }
         treesLoaded = true;
-        Save_manager.Instance.OnPlayerDataSaved += SaveOverworldData;
     }
     public int GetTreeIndex(BerryTree tree)
     {
@@ -56,7 +55,7 @@ public class OverworldState : MonoBehaviour
             tree.LoadDefaultAsset();
         }
     }
-    private IEnumerator SaveOverworldData()
+    public IEnumerator SaveOverworldData()
     {
         foreach (var tree in overworldBerryTrees)
         {

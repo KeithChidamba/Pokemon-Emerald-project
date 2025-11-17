@@ -423,8 +423,9 @@ public class InputStateHandler : MonoBehaviour
             return;
         }
         currentState.currentSelectionIndex = 0;
+        //change this to box capacity per box
         _currentNumBoxElements = pokemon_storage.Instance.numNonPartyPokemon;
-        _currentBoxCapacity = pokemon_storage.Instance.boxCapacity;
+        _currentBoxCapacity = pokemon_storage.BoxCapacity;
         _numBoxColumns = pokemon_storage.Instance.boxColumns;
         SetRowRemainder();
         OnInputLeft += ()=>MoveCoordinates(Directional.Horizontal,-1);

@@ -718,6 +718,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3438,6 +3446,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4053,6 +4069,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5071,6 +5095,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6412,6 +6444,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1862767971}
     m_Modifications:
+    - target: {fileID: 968860125720818560, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     - target: {fileID: 5488867153779509661, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6495,6 +6531,10 @@ PrefabInstance:
     - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Name
       value: Pokemon Box UI (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7292,6 +7332,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (26)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9782,6 +9830,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1862767971}
     m_Modifications:
+    - target: {fileID: 968860125720818560, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     - target: {fileID: 5488867153779509661, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -9865,6 +9917,10 @@ PrefabInstance:
     - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Name
       value: Pokemon Box UI (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10382,6 +10438,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6679082588001922580, guid: c569ec3a3cb9e13d8a2923841020ecae, type: 3}
   m_PrefabInstance: {fileID: 305282133}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &305282135 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6727763219496688674, guid: c569ec3a3cb9e13d8a2923841020ecae, type: 3}
+  m_PrefabInstance: {fileID: 305282133}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f5bfdbbd8ea655b9de21620f369816, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &316697655
 GameObject:
   m_ObjectHideFlags: 0
@@ -12468,6 +12535,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (09)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13415,6 +13490,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17409,6 +17492,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (29)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18227,6 +18318,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (31)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18704,6 +18803,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (33)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21722,7 +21829,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &733500844
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26183,6 +26290,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27800,28 +27915,44 @@ MonoBehaviour:
   boxSelector: {fileID: 1211313107}
   partySelector: {fileID: 1261064435}
   boxOptionsSelector: {fileID: 751038379}
-  boxCapacity: 21
   boxColumns: 7
-  numBoxes: 14
   currentBoxIndex: 0
-  storageBoxes:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  storageBoxes: []
+  boxTopVisualSprites:
+  - {fileID: 1913707553, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -1287063914, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -462258650, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -850322193, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 248023349, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 914900614, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 374191718, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -232937273, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 1572734255, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -53966353, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -170142272, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 1207214536, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -2053477128, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 30926542, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  boxVisualSprites:
+  - {fileID: -1329023108, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 741541988, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 555590373, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 1623982215, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 1896276346, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 1282681534, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -963383814, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -1731242320, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 1023450552, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -1563135100, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 192765023, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 1289771099, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -1168510508, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -306458569, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
   boxTopVisualImage: {fileID: 438194561}
   boxVisualImage: {fileID: 858717802}
-  greyArrows: []
+  greyArrows:
+  - {fileID: 2134856277}
+  - {fileID: 305282135}
 --- !u!114 &938515349 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7691909353621470370, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
@@ -29762,6 +29893,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1862767971}
     m_Modifications:
+    - target: {fileID: 968860125720818560, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     - target: {fileID: 5488867153779509661, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -29845,6 +29980,10 @@ PrefabInstance:
     - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Name
       value: Pokemon Box UI (28)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -30023,6 +30162,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (30)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -30125,6 +30272,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (08)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -31470,6 +31625,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (32)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -31779,6 +31942,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1862767971}
     m_Modifications:
+    - target: {fileID: 968860125720818560, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     - target: {fileID: 5488867153779509661, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -31862,6 +32029,10 @@ PrefabInstance:
     - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Name
       value: Pokemon Box UI (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -55241,6 +55412,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -55847,6 +56026,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (27)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -59695,6 +59882,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1862767971}
     m_Modifications:
+    - target: {fileID: 968860125720818560, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     - target: {fileID: 5488867153779509661, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -59778,6 +59969,10 @@ PrefabInstance:
     - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Name
       value: Pokemon Box UI (22)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -62949,6 +63144,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -63770,6 +63973,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -65106,6 +65317,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -66833,6 +67052,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -68125,6 +68352,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -69624,6 +69859,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -73196,6 +73439,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (25)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -105165,6 +105416,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pokemon Box UI (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 1605175555010708870, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160379485886528877, guid: 33c84b60be5805b069dbb7bc1b712109, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -105699,6 +105958,10 @@ PrefabInstance:
       propertyPath: moveDistance
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 6727763219496688674, guid: c569ec3a3cb9e13d8a2923841020ecae, type: 3}
+      propertyPath: moveDirection
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -105709,6 +105972,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6679082588001922580, guid: c569ec3a3cb9e13d8a2923841020ecae, type: 3}
   m_PrefabInstance: {fileID: 2134856275}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2134856277 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6727763219496688674, guid: c569ec3a3cb9e13d8a2923841020ecae, type: 3}
+  m_PrefabInstance: {fileID: 2134856275}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f5bfdbbd8ea655b9de21620f369816, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2136991399
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -106470,6 +106744,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1862767971}
     m_Modifications:
+    - target: {fileID: 968860125720818560, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: pokemonImage
+      value: 
+      objectReference: {fileID: 5809304065353290470}
     - target: {fileID: 5488867153779509661, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -106553,6 +106831,10 @@ PrefabInstance:
     - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
       propertyPath: m_Name
       value: Pokemon Box UI (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756579425996943199, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -106811,6 +107093,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5488867153779509661, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
   m_PrefabInstance: {fileID: 4904369915351398897}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5809304065353290470 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8640491452254855548, guid: a176d5e83b2a6436b8453107d4e075d8, type: 3}
+  m_PrefabInstance: {fileID: 4904369915351398897}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7483636651540601595
 PrefabInstance:
   m_ObjectHideFlags: 0

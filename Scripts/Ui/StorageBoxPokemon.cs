@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-[CreateAssetMenu(fileName = "box pokemon", menuName = "box pkm")]
-public class StorageBoxPokemon : ScriptableObject
+using System;
+[Serializable]
+public struct StorageBoxPokemon
 {
-    public int boxNumber;
     public long pokemonID;
-    public int positionInBox;
     public bool containsPokemon;
-    public PC_pkm pokemonData;
 }
