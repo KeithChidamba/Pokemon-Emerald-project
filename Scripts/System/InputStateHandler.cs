@@ -30,7 +30,7 @@ public class InputStateHandler : MonoBehaviour
     public enum StateName 
     {
         PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
-        PokemonStorage,PokemonStoragePartyOptions ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
+        PokemonStorageboxChange,PokemonStoragePartyOptions ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
         PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
         PlayerBagItemSell,PlayerBagNavigation,
         PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
@@ -433,12 +433,20 @@ public class InputStateHandler : MonoBehaviour
         OnInputUp += ()=>MoveCoordinates(Directional.Vertical,-1);
         OnInputDown += ()=>MoveCoordinates(Directional.Vertical,1);
     }
+    public void PokemonStorageBoxChange()
+    {
+        OnInputDown += PokemonStorageBoxNavigation;
+        if(currentState.stateName==StateName.PokemonStorageBoxNavigation)
+            RemoveTopInputLayer(false);
+        OnSelectionIndexChanged += pokemon_storage.Instance.ChangeBox;
+    }
     public void PokemonStorageBoxNavigation()
     {
-        if (pokemon_storage.Instance.numNonPartyPokemon == 0)
+        if (currentState.stateName == StateName.PokemonStorageboxChange)
         {
-            Dialogue_handler.Instance.DisplayDetails("There are no pokemon in your storage",1f);
-            return;
+            OnInputDown -= PokemonStorageBoxNavigation;
+            OnSelectionIndexChanged -= pokemon_storage.Instance.ChangeBox;
+            OnInputUp += PokemonStorageBoxChange;
         }
         var storageBoxSelectables = new List<SelectableUI>();
         foreach (var icon in pokemon_storage.Instance.nonPartyIcons)

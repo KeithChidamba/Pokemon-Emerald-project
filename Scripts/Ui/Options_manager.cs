@@ -100,6 +100,7 @@ public class Options_manager : MonoBehaviour
     }
     void OpenPokemonStorage()
     {
+        Dialogue_handler.Instance.EndDialogue(); 
         Game_ui_manager.Instance.ViewPokemonStorage();
         overworld_actions.Instance.usingUI = true;
     }

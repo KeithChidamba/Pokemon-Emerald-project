@@ -35,7 +35,6 @@ public class pokemon_storage : MonoBehaviour
     public Sprite[] boxVisualSprites;
     public Image boxTopVisualImage;
     public Image boxVisualImage;
-
     public LoopingUiAnimation[] greyArrows;
     public static pokemon_storage Instance;
 
@@ -92,9 +91,10 @@ public class pokemon_storage : MonoBehaviour
         //event in animation
     }
 
-    public void ChangeBox(int change)
+    public void ChangeBox(int newIndex)
     {
-        currentBoxIndex = Mathf.Clamp(currentBoxIndex + change, 0, NumBoxes);
+        Debug.Log("here");
+        currentBoxIndex = newIndex;//Mathf.Clamp(currentBoxIndex + change, 0, NumBoxes);
         boxVisualImage.sprite = storageBoxes[currentBoxIndex].boxVisual;
         boxTopVisualImage.sprite = storageBoxes[currentBoxIndex].boxTopVisual;
     }
