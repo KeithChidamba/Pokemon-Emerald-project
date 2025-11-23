@@ -30,7 +30,7 @@ public class InputStateHandler : MonoBehaviour
     public enum StateName 
     {
         PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
-        PokemonStorageboxChange,PokemonStoragePartyOptions ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
+        PokemonStorageBoxChange,PokemonStorageExit,PokemonStoragePartyOptions ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
         PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
         PlayerBagItemSell,PlayerBagNavigation,
         PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
@@ -141,6 +141,10 @@ public class InputStateHandler : MonoBehaviour
     {
         stateLayers.Last().OnExit = invokeOnExit? stateLayers.Last().OnExit:null;
         RemoveInputState(stateLayers.Last() ,true);
+    }
+    private void ForceRemoveOnExit()
+    {
+        RemoveTopInputLayer(false);
     }
     private void Update()
     {
@@ -263,6 +267,7 @@ public class InputStateHandler : MonoBehaviour
     void ResetInputEvents()
     {
         OnInputUp = null; OnInputDown = null; OnInputLeft = null; OnInputRight = null;
+        OnSelectionIndexChanged = null;
     }
     private void PlayerBagNavigation()
     {
@@ -433,21 +438,37 @@ public class InputStateHandler : MonoBehaviour
         OnInputUp += ()=>MoveCoordinates(Directional.Vertical,-1);
         OnInputDown += ()=>MoveCoordinates(Directional.Vertical,1);
     }
+
+    public void SetupPokemonStorageState()
+    {
+        var storageSelectables = new List<SelectableUI>();
+        storageSelectables.Add(new(pokemon_storage.Instance.storageBoxExit,Game_ui_manager.Instance.ClosePokemonStorage, true));
+        
+        ChangeInputState(new InputState(StateName.PokemonStorageExit,
+            new[] {StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
+            Directional.Vertical,storageSelectables,pokemon_storage.Instance.initialSelector, true,display:true));
+        OnInputDown += PokemonStorageBoxChange;
+    }
+
     public void PokemonStorageBoxChange()
     {
+        var storageSelectables = new List<SelectableUI>();
+        for (int i = 0; i < pokemon_storage.NumBoxes; i++)
+        {
+            storageSelectables.Add(new(null,null, true));
+        }
+        
+        ChangeInputState(new InputState(StateName.PokemonStorageBoxChange,
+            new[] {StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
+            Directional.Horizontal,storageSelectables, selecting:true));
+
+        OnInputUp += SetupPokemonStorageState;
         OnInputDown += PokemonStorageBoxNavigation;
-        if(currentState.stateName==StateName.PokemonStorageBoxNavigation)
-            RemoveTopInputLayer(false);
-        OnSelectionIndexChanged += pokemon_storage.Instance.ChangeBox;
+        OnInputLeft += () => pokemon_storage.Instance.ChangeBox(-1);
+        OnInputRight += () => pokemon_storage.Instance.ChangeBox(1);
     }
     public void PokemonStorageBoxNavigation()
     {
-        if (currentState.stateName == StateName.PokemonStorageboxChange)
-        {
-            OnInputDown -= PokemonStorageBoxNavigation;
-            OnSelectionIndexChanged -= pokemon_storage.Instance.ChangeBox;
-            OnInputUp += PokemonStorageBoxChange;
-        }
         var storageBoxSelectables = new List<SelectableUI>();
         foreach (var icon in pokemon_storage.Instance.nonPartyIcons)
         { 
@@ -461,6 +482,16 @@ public class InputStateHandler : MonoBehaviour
             ,new[]{StateGroup.PokemonStorage,StateGroup.PokemonStorageBox}
             ,stateDirectional:Directional.OmniDirection,selectableUis:storageBoxSelectables,
             selector:pokemon_storage.Instance.boxSelector, selecting:true,display: true));
+        OnInputUp += SwitchOnTopRow;
+    }
+
+    private void SwitchOnTopRow()
+    {
+        if (boxCoordinates[0]==0)//if top row
+        {
+            Debug.Log("Checking top row");
+            PokemonStorageBoxChange();
+        }
     }
     public void PokemonStoragePartyNavigation()
     {

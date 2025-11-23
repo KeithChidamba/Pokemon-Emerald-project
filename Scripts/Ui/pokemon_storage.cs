@@ -15,6 +15,7 @@ public class pokemon_storage : MonoBehaviour
     public int numPartyMembers;
     public GameObject[] initialStorageOptions;
     public GameObject[] storageOptions;
+    public GameObject storageBoxExit;
     public GameObject storageUI;
     public string selectedPokemonID;
 
@@ -91,10 +92,17 @@ public class pokemon_storage : MonoBehaviour
         //event in animation
     }
 
-    public void ChangeBox(int newIndex)
+    public void ChangeBox(int change)
     {
-        Debug.Log("here");
-        currentBoxIndex = newIndex;//Mathf.Clamp(currentBoxIndex + change, 0, NumBoxes);
+        currentBoxIndex += change;
+        if (currentBoxIndex > NumBoxes)
+        {
+            currentBoxIndex = 0;
+        }
+        if (currentBoxIndex < 0)
+        {
+            currentBoxIndex = NumBoxes-1;
+        }
         boxVisualImage.sprite = storageBoxes[currentBoxIndex].boxVisual;
         boxTopVisualImage.sprite = storageBoxes[currentBoxIndex].boxTopVisual;
     }

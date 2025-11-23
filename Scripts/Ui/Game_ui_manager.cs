@@ -143,7 +143,7 @@ public class Game_ui_manager : MonoBehaviour
         viewingMenu = false;
     }
 
-    private void ClosePokemonStorage()
+    public void ClosePokemonStorage()
     {
         ManageScreens(-1);
         ActivateUiElement(pokemon_storage.Instance.storageUI,false);
@@ -269,29 +269,7 @@ public class Game_ui_manager : MonoBehaviour
         ManageScreens(1);
         _movementDelaysAfterExit.Add(0.25f);
         ActivateUiElement(pokemon_storage.Instance.storageUI, true);
-       
-        var storageSelectables = new List<SelectableUI>();
-        for (int i = 0; i < pokemon_storage.NumBoxes; i++)
-        {
-            storageSelectables.Add(new(null,null, true));
-        }
-        
-        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorageboxChange,
-            new[] { InputStateHandler.StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-            InputStateHandler.Directional.Horizontal,storageSelectables,null
-            , true, false,ClosePokemonStorage,ClosePokemonStorage));
-        
-        // var storageSelectables = new List<SelectableUI>
-        // {
-        //     new(pokemon_storage.Instance.initialStorageOptions[0],
-        //         InputStateHandler.Instance.PokemonStorageBoxNavigation, true),
-        //     new(pokemon_storage.Instance.initialStorageOptions[1],
-        //         InputStateHandler.Instance.PokemonStoragePartyNavigation, true)
-        // };
-        // InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorage,
-        //     new[] { InputStateHandler.StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-        //     InputStateHandler.Directional.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector
-        //     , true, true,ClosePokemonStorage,ClosePokemonStorage));
+        InputStateHandler.Instance.SetupPokemonStorageState();
         pokemon_storage.Instance.OpenPC();
     }
     public void ViewPokeMart()
