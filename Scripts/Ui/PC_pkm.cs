@@ -7,7 +7,7 @@ public class PC_pkm : MonoBehaviour
 {
     public Pokemon pokemon;
     public Image pokemonImage;
-
+    public bool isEmpty;
     public void SetImage()
     {
         pokemonImage = GetComponent<Image>();

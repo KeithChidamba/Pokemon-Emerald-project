@@ -23,7 +23,7 @@ public class Pokemon_party_member : MonoBehaviour
     public GameObject emptySlotUI;
     public GameObject heldItemImage;
     private Action<Battle_Participant> _healthPhaseUpdateEvent;
-    public bool isEmpty = false;
+    public bool isEmpty;
     private bool _isViewingCard;
     private bool _viewingParty;
     private bool _exitedPartyState;
@@ -43,7 +43,6 @@ public class Pokemon_party_member : MonoBehaviour
     {
         InputStateHandler.Instance.OnStateChanged += CheckIfViewing;
         InputStateHandler.Instance.OnStateRemoved += ResetSelectionVisual;
-        InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;
         
         _startPos = pokemonFrontImage.rectTransform.anchoredPosition;
         _targetPos = _startPos +Vector2.up * 10f;
@@ -77,6 +76,7 @@ public class Pokemon_party_member : MonoBehaviour
     {
         _isViewingCard = true;
         _viewingParty = true;
+        
         pokemonFrontImage.sprite = pokemon.partyFrame1;
         foreach (var ui in mainUI)
             ui.SetActive(true);
@@ -92,6 +92,7 @@ public class Pokemon_party_member : MonoBehaviour
                 Save_manager.GetDirectory(Save_manager.AssetDirectory.Status)
                 + pokemon.statusEffect.ToString().ToLower());
         }
+        InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;
     }
     public void ResetUI()
     {
@@ -106,7 +107,7 @@ public class Pokemon_party_member : MonoBehaviour
     void CheckIfViewing(InputState currentState)
     {
         if (isEmpty) return;
-        
+
         if (currentState.stateGroups.Contains(InputStateHandler.StateGroup.PokemonParty))
         {
             _viewingParty = true;
@@ -125,19 +126,19 @@ public class Pokemon_party_member : MonoBehaviour
         {
             _viewingParty = false;
             pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
-            if (_exitedPartyState)
-            {
-                _exitedPartyState = false;
-                ChangeVisibility(false);
-            }
+            ChangeVisibility(false);
         }
         _isViewingCard = currentState.stateName == InputStateHandler.StateName.PokemonPartyNavigation
                          || currentState.stateName == InputStateHandler.StateName.PokemonPartyItemUsage;
+        if (_isViewingCard)
+        {
+            InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;
+            UpdateUi(InputStateHandler.Instance.currentState.currentSelectionIndex);
+        }
     }
     private void ResetSelectionVisual(InputState previousState)
     {
-        if (!_isViewingCard) return;
-        _exitedPartyState = true;
+        ChangeVisibility(false);
     }
     public void ChangeVisibility(bool isSelected)
     {
@@ -149,7 +150,6 @@ public class Pokemon_party_member : MonoBehaviour
     private void UpdateUi(int currentIndex)
     {
         if (isEmpty || !_isViewingCard) return;
-        
         if (currentIndex == Pokemon_party.Instance.numMembers)
         {
             ChangeVisibility(false);

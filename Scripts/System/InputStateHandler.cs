@@ -153,7 +153,7 @@ public class InputStateHandler : MonoBehaviour
         bool viewingExitableDialogue = Dialogue_handler.Instance.canExitDialogue & Dialogue_handler.Instance.displaying; 
         
         if (Input.GetKeyDown(KeyCode.X) && stateLayers.Last().stateName!=StateName.DialogueOptions
-                                        && !viewingExitableDialogue && currentState.canExit)
+                                        && !viewingExitableDialogue && currentState.canManualExit)
             RemoveTopInputLayer(true);
         
         if (currentState.stateName == StateName.Empty) return;
@@ -388,102 +388,93 @@ public class InputStateHandler : MonoBehaviour
         boxCoordinates[0] = 0;
         boxCoordinates[1] = 0;
     }
-    private void SetRowRemainder()
+    
+    private int GetCurrentFullBoxPosition()
     {
-        rowRemainder = _numBoxColumns-1;
-        boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, _numBoxColumns - 1);
-    }
-
-// Convert boxCoordinates → selectionIndex safely
-    private int GetCurrentBoxPosition()
-    {
-        int row = Mathf.Clamp(boxCoordinates[0], 0, _numBoxRows - 1);
-        int col = Mathf.Clamp(boxCoordinates[1], 0, _numBoxColumns - 1)-1;
+        int row = Mathf.Clamp(boxCoordinates[0], 0, _numBoxRows);
+        int col = Mathf.Clamp(boxCoordinates[1], 0, _numBoxColumns)-row;
 
         int pos = row * _numBoxColumns + col;
 
-        // This is the ONLY clamp we actually care about:
         return Mathf.Clamp(pos, 0, _currentNumBoxElements);
     }
 
-    private void MoveCoordinates(Directional directional, int change)
+    private void MoveCoordinatesFullBox(Directional directional, int change)
     {
         bool vertical = directional == Directional.Vertical;
 
         if (vertical)
         {
-            // Free movement in row-space
             boxCoordinates[0] = Mathf.Clamp(
                 boxCoordinates[0] + change,
                 0,
-                _numBoxRows - 1
+                _numBoxRows
             );
         }
         else
         {
-            // Free movement in column-space
             boxCoordinates[1] = Mathf.Clamp(
                 boxCoordinates[1] + change,
                 0,
-                _numBoxColumns - 1
+                _numBoxColumns
             );
         }
 
-        int newIndex = GetCurrentBoxPosition();
-        Debug.Log(newIndex);
+        int newIndex = GetCurrentFullBoxPosition();
         currentState.currentSelectionIndex =
             Mathf.Clamp(newIndex, 0, currentState.maxSelectionIndex);
 
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
         UpdateSelectorUi();
     }
-    // private void ResetCoordinates()
-    // {
-    //     boxCoordinates[0] = 0;
-    //     boxCoordinates[1] = 0;
-    // }
-    // private void SetRowRemainder()
-    // {
-    //     var currentRowRemainder = _currentNumBoxElements - (boxCoordinates[0] * _numBoxColumns);
-    //     rowRemainder =  (currentRowRemainder < _numBoxColumns)? currentRowRemainder: _numBoxColumns;
-    //     rowRemainder = Mathf.Clamp(rowRemainder, 0, _numBoxColumns);
-    //     boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
-    // }
-    // private int GetCurrentBoxPosition()
-    // {
-    //     SetRowRemainder();
-    //     var currentColumn = boxCoordinates[1];
-    //     var currentRow = boxCoordinates[0];
-    //     var rowCapacity = currentRow * _numBoxColumns;
-    //     rowCapacity = Mathf.Clamp(rowCapacity, 0, _currentBoxCapacity);
-    //     return rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
-    // }
-    // private void MoveCoordinates(Directional directional, int change)
-    // {
-    //     SetRowRemainder();
-    //     var coordinateIndex = directional == Directional.Vertical ? 0 : 1;
-    //     
-    //     var maxIndexForCoordinate  = directional == Directional.Vertical ?
-    //         (int)math.ceil((float)_currentNumBoxElements/_numBoxColumns) - 1 : rowRemainder-1;
-    //     
-    //     boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
-    //     currentState.currentSelectionIndex = _currentNumBoxElements > currentState.maxSelectionIndex?
-    //         Mathf.Clamp(GetCurrentBoxPosition(),0,currentState.maxSelectionIndex) 
-    //         :Mathf.Clamp(GetCurrentBoxPosition(),0,_currentNumBoxElements);
-    //     OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
-    //     UpdateSelectorUi();
-    // }
-    void SetupBoxNavigation()
+
+    private void SetRowRemainder()
     {
-        currentState.currentSelectionIndex = 0;
+        var currentRowRemainder = _currentNumBoxElements - (boxCoordinates[0] * _numBoxColumns);
+        rowRemainder =  (currentRowRemainder < _numBoxColumns)? currentRowRemainder: _numBoxColumns;
+        rowRemainder = Mathf.Clamp(rowRemainder, 0, _numBoxColumns);
+        boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
+    }
+    private int GetCurrentBoxPositionDynamic()
+    {
+        SetRowRemainder();
+        var currentColumn = boxCoordinates[1];
+        var currentRow = boxCoordinates[0];
+        var rowCapacity = currentRow * _numBoxColumns;
+        rowCapacity = Mathf.Clamp(rowCapacity, 0, _currentBoxCapacity);
+        return rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
+    }
+    private void MoveCoordinatesDynamic(Directional directional, int change)
+    {
+        SetRowRemainder();
+        var coordinateIndex = directional == Directional.Vertical ? 0 : 1;
+        
+        var maxIndexForCoordinate  = directional == Directional.Vertical ?
+            (int)math.ceil((float)_currentNumBoxElements/_numBoxColumns) - 1 : rowRemainder-1;
+        
+        boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
+        currentState.currentSelectionIndex = _currentNumBoxElements > currentState.maxSelectionIndex?
+            Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentState.maxSelectionIndex) 
+            :Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,_currentNumBoxElements);
+        OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
+        UpdateSelectorUi();
+    }
+    
+    void StorageFullBoxNavigation()
+    {
         _currentNumBoxElements = pokemon_storage.BoxCapacity;
         _currentBoxCapacity = pokemon_storage.BoxCapacity;
         _numBoxColumns = pokemon_storage.Instance.boxColumns;
         _numBoxRows = pokemon_storage.BoxCapacity / _numBoxColumns;
-        OnInputLeft += ()=>MoveCoordinates(Directional.Horizontal,-1);
-        OnInputRight += ()=>MoveCoordinates(Directional.Horizontal,1);
-        OnInputUp += ()=>MoveCoordinates(Directional.Vertical,-1);
-        OnInputDown += ()=>MoveCoordinates(Directional.Vertical,1);
+        OnInputLeft += ()=> MoveCoordinatesFullBox(Directional.Horizontal,-1);
+        OnInputRight += ()=> MoveCoordinatesFullBox(Directional.Horizontal,1);
+        OnInputUp += ()=> MoveCoordinatesFullBox(Directional.Vertical,-1);
+        OnInputDown += ()=> MoveCoordinatesFullBox(Directional.Vertical,1);
+        
+        currentState.canExit = false;
+        OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
+        OnSelectionIndexChanged += CheckIfTopRow;
+        ChangeSelectionIndex(0);
     }
 
     public void SetupPokemonStorageState()
@@ -493,7 +484,8 @@ public class InputStateHandler : MonoBehaviour
         
         ChangeInputState(new InputState(StateName.PokemonStorageExit,
             new[] {StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-            Directional.Vertical,storageSelectables,pokemon_storage.Instance.initialSelector, true,display:true,canExit:false));
+            Directional.Vertical,storageSelectables,pokemon_storage.Instance.initialSelector, true,display:true,canManualExit:false
+            ));
         pokemon_storage.Instance.initialSelector.transform.rotation = Quaternion.Euler(0, 180, 180);
         
         OnInputDown += PokemonStorageBoxChange;
@@ -509,7 +501,7 @@ public class InputStateHandler : MonoBehaviour
         pokemon_storage.Instance.initialSelector.transform.rotation = Quaternion.Euler(0, 0, 0);
         ChangeInputState(new InputState(StateName.PokemonStorageBoxChange,
             new[] {StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-            Directional.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector, selecting:true,display:true));
+            Directional.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector, selecting:true,display:true,canManualExit:false));
 
         OnInputUp += SwitchToExit;
         OnInputDown += PokemonStorageBoxNavigation;
@@ -530,24 +522,35 @@ public class InputStateHandler : MonoBehaviour
         ChangeInputState(new InputState(StateName.PokemonStorageBoxNavigation
             ,new[]{StateGroup.PokemonStorage,StateGroup.PokemonStorageBox}
             ,stateDirectional:Directional.OmniDirection,selectableUis:storageBoxSelectables,
-            selector:pokemon_storage.Instance.initialSelector, selecting:true,display: true));
-        OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
+            selector:pokemon_storage.Instance.initialSelector, selecting:true,display: true,canManualExit:false,canExit:false));
         ChangeSelectionIndex(0);
-        OnInputUp += SwitchOnTopRow;
     }
     private void SwitchToExit()
     {
         RemoveTopInputLayer(false);
         SetupPokemonStorageState();
     }
-    private void SwitchOnTopRow()
+
+    private void CheckIfTopRow(int index)
     {
         if (boxCoordinates[0]==0)//if top row
         {
-            RemoveTopInputLayer(false);
-            pokemon_storage.Instance.ClearPokemonData();
-            PokemonStorageBoxChange();
+            if (currentState.canExit) return;
+            currentState.canExit = true;
+            OnInputUp += ExitTopRow;
         }
+        else
+        {
+            OnInputUp -= ExitTopRow;
+            currentState.canExit = false;
+        }
+    }
+
+    private void ExitTopRow()
+    {
+        RemoveTopInputLayer(false);
+        pokemon_storage.Instance.ClearPokemonData();
+        PokemonStorageBoxChange();
     }
     public void PokemonStoragePartyNavigation()
     {
@@ -605,10 +608,10 @@ public class InputStateHandler : MonoBehaviour
         _currentBoxCapacity = 4;
         _numBoxColumns = 2;
         SetRowRemainder();
-        OnInputLeft += ()=>MoveCoordinates(Directional.Horizontal,-1);
-        OnInputRight += ()=>MoveCoordinates(Directional.Horizontal,1);
-        OnInputUp += ()=>MoveCoordinates(Directional.Vertical,-2);
-        OnInputDown += ()=>MoveCoordinates(Directional.Vertical,2);
+        OnInputLeft += ()=>MoveCoordinatesDynamic(Directional.Horizontal,-1);
+        OnInputRight += ()=>MoveCoordinatesDynamic(Directional.Horizontal,1);
+        OnInputUp += ()=>MoveCoordinatesDynamic(Directional.Vertical,-2);
+        OnInputDown += ()=>MoveCoordinatesDynamic(Directional.Vertical,2);
     }
     
     void SetupMoveSelection()
@@ -620,10 +623,10 @@ public class InputStateHandler : MonoBehaviour
         _currentBoxCapacity = 4;
         _numBoxColumns = 2;
         SetRowRemainder();
-        OnInputLeft += ()=>MoveCoordinates(Directional.Horizontal,-1);
-        OnInputRight += ()=>MoveCoordinates(Directional.Horizontal,1);
-        OnInputUp += ()=>MoveCoordinates(Directional.Vertical,-2);
-        OnInputDown += ()=>MoveCoordinates(Directional.Vertical,2);
+        OnInputLeft += ()=>MoveCoordinatesDynamic(Directional.Horizontal,-1);
+        OnInputRight += ()=>MoveCoordinatesDynamic(Directional.Horizontal,1);
+        OnInputUp += ()=>MoveCoordinatesDynamic(Directional.Vertical,-2);
+        OnInputDown += ()=>MoveCoordinatesDynamic(Directional.Vertical,2);
         
         OnInputLeft += ()=> Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
         OnInputRight += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
@@ -647,7 +650,7 @@ public class InputStateHandler : MonoBehaviour
             StateName.PokemonPartyNavigation => UpdateHealthBarColors,
             StateName.PokemonDetails => SetupPokemonDetails,
             StateName.PlayerBagItemSell => ItemToSellInputs,
-            StateName.PokemonStorageBoxNavigation => SetupBoxNavigation,
+            StateName.PokemonStorageBoxNavigation => StorageFullBoxNavigation,
             StateName.MartItemNavigation => PokeMartNavigation,
             StateName.MartItemPurchase => ItemToBuyInputs,
             StateName.PokemonBattleOptions => SetupBattleOptions,

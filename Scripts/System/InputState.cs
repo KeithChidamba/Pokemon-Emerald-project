@@ -20,6 +20,7 @@ public class InputState
     public GameObject mainViewUI;
     public bool isParentLayer;
     public bool canExit;
+    public bool canManualExit;
     public InputState(
         InputStateHandler.StateName stateName,
         InputStateHandler.StateGroup[] groups,
@@ -33,7 +34,8 @@ public class InputState
         Action onClose = null,
         Action onExit = null,
         Func<bool> updateExit = null,
-        bool canExit = true
+        bool canExit = true,
+        bool canManualExit = true
     )
     {
         this.stateName = stateName;
@@ -48,7 +50,16 @@ public class InputState
         currentSelectionIndex = 0;
         OnClose = onClose;
         OnExit = onExit;
+        
+        this.canManualExit = canManualExit;
+        
+        if (!canExit)
+        {
+            this.canManualExit = false;
+        }
+        
         this.canExit = canExit;
+       
         UpdateExitStatus = updateExit;
     }
     

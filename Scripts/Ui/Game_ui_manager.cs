@@ -205,7 +205,7 @@ public class Game_ui_manager : MonoBehaviour
         Dialogue_handler.Instance.EndDialogue();
         Pokemon_party.Instance.ClearSelectionUI();
         ActivateUiElement(Pokemon_party.Instance.partyUI, true);
-        Pokemon_party.Instance.RefreshMemberCards();
+        
         InputStateHandler.StateName partyUsageState;
         if (Item_handler.Instance.usingItem)
         {
@@ -233,14 +233,15 @@ public class Game_ui_manager : MonoBehaviour
         partySelectables.Add(new(Pokemon_party.Instance.cancelButton.gameObject,
             Pokemon_party.Instance.ExitParty
             , true));
-        InputStateHandler.Instance.OnSelectionIndexChanged += Pokemon_party.Instance.UpdateCancelButton;
+        InputStateHandler.Instance.OnStateChanged += Pokemon_party.Instance.CheckStateUpdate;
         Pokemon_party.Instance.memberCards[0].ChangeVisibility(true);//initial visual set
         
         InputStateHandler.Instance.ChangeInputState(new InputState(partyUsageState,
             new[]{InputStateHandler.StateGroup.PokemonParty }, true,Pokemon_party.Instance.partyUI,
             InputStateHandler.Directional.Vertical, partySelectables, Pokemon_party.Instance.memberSelector
-            , true, true,CloseParty,CloseParty,canExit:false));
+            , true, true,CloseParty,CloseParty,canManualExit:false,canExit:true));
         
+        Pokemon_party.Instance.RefreshMemberCards();
        
     }
     public void ViewOtherPokemonDetails(Pokemon selectedPokemon,List<Pokemon> pokemonToView)

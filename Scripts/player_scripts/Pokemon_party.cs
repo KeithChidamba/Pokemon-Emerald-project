@@ -46,7 +46,14 @@ public class Pokemon_party : MonoBehaviour
         if (swapOutNext) return;
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
     }
-    public void UpdateCancelButton(int currentIndex)
+
+    public void CheckStateUpdate(InputState currentState)
+    {
+        if (currentState.stateName != InputStateHandler.StateName.PokemonPartyNavigation)
+            return;
+        InputStateHandler.Instance.OnSelectionIndexChanged += UpdateCancelButton;
+    }
+    private void UpdateCancelButton(int currentIndex)
     {
         cancelButton.sprite = currentIndex < numMembers? memberCards[0].pokeballClosedImage.sprite
                 :memberCards[0].pokeballOpenImage.sprite;
