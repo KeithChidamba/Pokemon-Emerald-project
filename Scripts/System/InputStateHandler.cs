@@ -40,6 +40,7 @@ public class InputStateHandler : MonoBehaviour
 
     public int[] boxCoordinates={0,0};
     private int _currentBoxCapacity;
+    private int _numBoxRows;
     private int _numBoxColumns;
     private int _currentNumBoxElements;
     public int rowRemainder;
@@ -142,10 +143,7 @@ public class InputStateHandler : MonoBehaviour
         stateLayers.Last().OnExit = invokeOnExit? stateLayers.Last().OnExit:null;
         RemoveInputState(stateLayers.Last() ,true);
     }
-    private void ForceRemoveOnExit()
-    {
-        RemoveTopInputLayer(false);
-    }
+
     private void Update()
     {
         if (!_readingInputs) return;
@@ -392,47 +390,96 @@ public class InputStateHandler : MonoBehaviour
     }
     private void SetRowRemainder()
     {
-        var currentRowRemainder = _currentNumBoxElements - (boxCoordinates[0] * _numBoxColumns);
-        rowRemainder =  (currentRowRemainder < _numBoxColumns)? currentRowRemainder: _numBoxColumns;
-        rowRemainder = Mathf.Clamp(rowRemainder, 0, _numBoxColumns);
-        boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
+        rowRemainder = _numBoxColumns-1;
+        boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, _numBoxColumns - 1);
     }
+
+// Convert boxCoordinates → selectionIndex safely
     private int GetCurrentBoxPosition()
     {
-        SetRowRemainder();
-        var currentColumn = boxCoordinates[1];
-        var currentRow = boxCoordinates[0];
-        var rowCapacity = currentRow * _numBoxColumns;
-        rowCapacity = Mathf.Clamp(rowCapacity, 0, _currentBoxCapacity);
-        return rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
+        int row = Mathf.Clamp(boxCoordinates[0], 0, _numBoxRows - 1);
+        int col = Mathf.Clamp(boxCoordinates[1], 0, _numBoxColumns - 1)-1;
+
+        int pos = row * _numBoxColumns + col;
+
+        // This is the ONLY clamp we actually care about:
+        return Mathf.Clamp(pos, 0, _currentNumBoxElements);
     }
+
     private void MoveCoordinates(Directional directional, int change)
     {
-        SetRowRemainder();
-        var coordinateIndex = directional == Directional.Vertical ? 0 : 1;
-        
-        var maxIndexForCoordinate  = directional == Directional.Vertical ?
-            (int)math.ceil((float)_currentNumBoxElements/_numBoxColumns) - 1 : rowRemainder-1;
-        
-        boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
-        currentState.currentSelectionIndex = _currentNumBoxElements > currentState.maxSelectionIndex?
-            Mathf.Clamp(GetCurrentBoxPosition(),0,currentState.maxSelectionIndex) 
-            :Mathf.Clamp(GetCurrentBoxPosition(),0,_currentNumBoxElements);
+        bool vertical = directional == Directional.Vertical;
+
+        if (vertical)
+        {
+            // Free movement in row-space
+            boxCoordinates[0] = Mathf.Clamp(
+                boxCoordinates[0] + change,
+                0,
+                _numBoxRows - 1
+            );
+        }
+        else
+        {
+            // Free movement in column-space
+            boxCoordinates[1] = Mathf.Clamp(
+                boxCoordinates[1] + change,
+                0,
+                _numBoxColumns - 1
+            );
+        }
+
+        int newIndex = GetCurrentBoxPosition();
+        Debug.Log(newIndex);
+        currentState.currentSelectionIndex =
+            Mathf.Clamp(newIndex, 0, currentState.maxSelectionIndex);
+
+        OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
         UpdateSelectorUi();
     }
+    // private void ResetCoordinates()
+    // {
+    //     boxCoordinates[0] = 0;
+    //     boxCoordinates[1] = 0;
+    // }
+    // private void SetRowRemainder()
+    // {
+    //     var currentRowRemainder = _currentNumBoxElements - (boxCoordinates[0] * _numBoxColumns);
+    //     rowRemainder =  (currentRowRemainder < _numBoxColumns)? currentRowRemainder: _numBoxColumns;
+    //     rowRemainder = Mathf.Clamp(rowRemainder, 0, _numBoxColumns);
+    //     boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
+    // }
+    // private int GetCurrentBoxPosition()
+    // {
+    //     SetRowRemainder();
+    //     var currentColumn = boxCoordinates[1];
+    //     var currentRow = boxCoordinates[0];
+    //     var rowCapacity = currentRow * _numBoxColumns;
+    //     rowCapacity = Mathf.Clamp(rowCapacity, 0, _currentBoxCapacity);
+    //     return rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
+    // }
+    // private void MoveCoordinates(Directional directional, int change)
+    // {
+    //     SetRowRemainder();
+    //     var coordinateIndex = directional == Directional.Vertical ? 0 : 1;
+    //     
+    //     var maxIndexForCoordinate  = directional == Directional.Vertical ?
+    //         (int)math.ceil((float)_currentNumBoxElements/_numBoxColumns) - 1 : rowRemainder-1;
+    //     
+    //     boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
+    //     currentState.currentSelectionIndex = _currentNumBoxElements > currentState.maxSelectionIndex?
+    //         Mathf.Clamp(GetCurrentBoxPosition(),0,currentState.maxSelectionIndex) 
+    //         :Mathf.Clamp(GetCurrentBoxPosition(),0,_currentNumBoxElements);
+    //     OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
+    //     UpdateSelectorUi();
+    // }
     void SetupBoxNavigation()
     {
-        if (pokemon_storage.Instance.numNonPartyPokemon == 0)
-        {
-            RemoveTopInputLayer(true);
-            return;
-        }
         currentState.currentSelectionIndex = 0;
-        //change this to box capacity per box
-        _currentNumBoxElements = pokemon_storage.Instance.numNonPartyPokemon;
+        _currentNumBoxElements = pokemon_storage.BoxCapacity;
         _currentBoxCapacity = pokemon_storage.BoxCapacity;
         _numBoxColumns = pokemon_storage.Instance.boxColumns;
-        SetRowRemainder();
+        _numBoxRows = pokemon_storage.BoxCapacity / _numBoxColumns;
         OnInputLeft += ()=>MoveCoordinates(Directional.Horizontal,-1);
         OnInputRight += ()=>MoveCoordinates(Directional.Horizontal,1);
         OnInputUp += ()=>MoveCoordinates(Directional.Vertical,-1);
@@ -442,11 +489,13 @@ public class InputStateHandler : MonoBehaviour
     public void SetupPokemonStorageState()
     {
         var storageSelectables = new List<SelectableUI>();
-        storageSelectables.Add(new(pokemon_storage.Instance.storageBoxExit,Game_ui_manager.Instance.ClosePokemonStorage, true));
+        storageSelectables.Add(new(pokemon_storage.Instance.storageBoxExit.gameObject,Game_ui_manager.Instance.ClosePokemonStorage, true));
         
         ChangeInputState(new InputState(StateName.PokemonStorageExit,
             new[] {StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-            Directional.Vertical,storageSelectables,pokemon_storage.Instance.initialSelector, true,display:true));
+            Directional.Vertical,storageSelectables,pokemon_storage.Instance.initialSelector, true,display:true,canExit:false));
+        pokemon_storage.Instance.initialSelector.transform.rotation = Quaternion.Euler(0, 180, 180);
+        
         OnInputDown += PokemonStorageBoxChange;
     }
 
@@ -455,14 +504,14 @@ public class InputStateHandler : MonoBehaviour
         var storageSelectables = new List<SelectableUI>();
         for (int i = 0; i < pokemon_storage.NumBoxes; i++)
         {
-            storageSelectables.Add(new(null,null, true));
+            storageSelectables.Add(new(pokemon_storage.Instance.boxTopVisualImage.gameObject,null, true));
         }
-        
+        pokemon_storage.Instance.initialSelector.transform.rotation = Quaternion.Euler(0, 0, 0);
         ChangeInputState(new InputState(StateName.PokemonStorageBoxChange,
             new[] {StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-            Directional.Horizontal,storageSelectables, selecting:true));
+            Directional.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector, selecting:true,display:true));
 
-        OnInputUp += SetupPokemonStorageState;
+        OnInputUp += SwitchToExit;
         OnInputDown += PokemonStorageBoxNavigation;
         OnInputLeft += () => pokemon_storage.Instance.ChangeBox(-1);
         OnInputRight += () => pokemon_storage.Instance.ChangeBox(1);
@@ -477,19 +526,26 @@ public class InputStateHandler : MonoBehaviour
                 , true);
             storageBoxSelectables.Add(newSelectable);
         }
-        
+
         ChangeInputState(new InputState(StateName.PokemonStorageBoxNavigation
             ,new[]{StateGroup.PokemonStorage,StateGroup.PokemonStorageBox}
             ,stateDirectional:Directional.OmniDirection,selectableUis:storageBoxSelectables,
-            selector:pokemon_storage.Instance.boxSelector, selecting:true,display: true));
+            selector:pokemon_storage.Instance.initialSelector, selecting:true,display: true));
+        OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
+        ChangeSelectionIndex(0);
         OnInputUp += SwitchOnTopRow;
     }
-
+    private void SwitchToExit()
+    {
+        RemoveTopInputLayer(false);
+        SetupPokemonStorageState();
+    }
     private void SwitchOnTopRow()
     {
         if (boxCoordinates[0]==0)//if top row
         {
-            Debug.Log("Checking top row");
+            RemoveTopInputLayer(false);
+            pokemon_storage.Instance.ClearPokemonData();
             PokemonStorageBoxChange();
         }
     }

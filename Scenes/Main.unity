@@ -21846,10 +21846,10 @@ RectTransform:
   - {fileID: 1211313108}
   - {fileID: 711287879}
   - {fileID: 587495901}
-  - {fileID: 1554805903}
   - {fileID: 751038380}
   - {fileID: 194008757}
   - {fileID: 870930635}
+  - {fileID: 1554805903}
   m_Father: {fileID: 704029578}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -27975,7 +27975,10 @@ MonoBehaviour:
   - {fileID: 1465486952}
   - {fileID: 1945079468}
   - {fileID: 1147526101}
-  storageBoxExit: {fileID: 194008756}
+  storageBoxExit: {fileID: 870930636}
+  storageBoxExitSprites:
+  - {fileID: 743590618, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -1146131298, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
   storageUI: {fileID: 733500843}
   selectedPokemonID: 
   nonPartyIcons: []
@@ -27989,7 +27992,7 @@ MonoBehaviour:
   boxIconsParent: {fileID: 1862767971}
   swapping: 0
   initialSelector: {fileID: 1554805902}
-  boxSelector: {fileID: 1211313107}
+  boxSelectorImage: {fileID: 1395578963}
   partySelector: {fileID: 1261064435}
   boxOptionsSelector: {fileID: 751038379}
   boxColumns: 7
@@ -28025,11 +28028,24 @@ MonoBehaviour:
   - {fileID: 1289771099, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
   - {fileID: -1168510508, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
   - {fileID: -306458569, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  boxSelectorSprites:
+  - {fileID: -1819860700, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -856815840, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
   boxTopVisualImage: {fileID: 438194561}
   boxVisualImage: {fileID: 858717802}
+  boxName: {fileID: 564830756}
   greyArrows:
   - {fileID: 2134856277}
   - {fileID: 305282135}
+  pokemonDataName: {fileID: 1649588729}
+  pokemonLevel: {fileID: 114189916}
+  genderImage: {fileID: 1447130971}
+  pokemonImage: {fileID: 1321770491}
+  pokemonDataVisual: {fileID: 1320988646}
+  pokemonDataVisualSprites:
+  - {fileID: 1965198981, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: 856926852, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  - {fileID: -1229065178, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
 --- !u!114 &938515349 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7691909353621470370, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
@@ -61161,7 +61177,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1395578960}
   - component: {fileID: 1395578962}
-  - component: {fileID: 1395578961}
+  - component: {fileID: 1395578963}
   m_Layer: 5
   m_Name: initial sotrage option selector ui
   m_TagString: Untagged
@@ -61185,10 +61201,18 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.6, y: 0.4}
-  m_SizeDelta: {x: 162, y: 30}
+  m_AnchoredPosition: {x: 12, y: 50}
+  m_SizeDelta: {x: 65, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1395578961
+--- !u!222 &1395578962
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395578959}
+  m_CullTransparentMesh: 1
+--- !u!114 &1395578963
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -61197,7 +61221,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1395578959}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -61208,21 +61232,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 00461ce451f25c9dba8315d6d804fe59, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
---- !u!222 &1395578962
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1395578959}
-  m_CullTransparentMesh: 1
+  m_Sprite: {fileID: -1819860700, guid: 2d25a97817e2097db810513f00d8ad6b, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1396632750
 GameObject:
   m_ObjectHideFlags: 0

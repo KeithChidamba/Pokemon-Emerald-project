@@ -15,7 +15,8 @@ public class pokemon_storage : MonoBehaviour
     public int numPartyMembers;
     public GameObject[] initialStorageOptions;
     public GameObject[] storageOptions;
-    public GameObject storageBoxExit;
+    public Image storageBoxExit;
+    public Sprite[] storageBoxExitSprites;
     public GameObject storageUI;
     public string selectedPokemonID;
 
@@ -24,7 +25,7 @@ public class pokemon_storage : MonoBehaviour
     public Transform boxIconsParent;
     public bool swapping;
     public GameObject initialSelector;
-    public GameObject boxSelector;
+    public Image boxSelectorImage;
     public GameObject partySelector;
     public GameObject boxOptionsSelector;
     public const int BoxCapacity = 30;
@@ -34,11 +35,26 @@ public class pokemon_storage : MonoBehaviour
     public List<PokemonStorageBox> storageBoxes = new();
     public Sprite[] boxTopVisualSprites;
     public Sprite[] boxVisualSprites;
+    public Sprite[] boxSelectorSprites;
+    private int _pkmDataSpriteIndex;
     public Image boxTopVisualImage;
     public Image boxVisualImage;
+    public Text boxName;
     public LoopingUiAnimation[] greyArrows;
     public static pokemon_storage Instance;
+    private bool _viewingPC;
 
+    private enum PCNavState
+    {
+        ViewingPokemonData,ExitingPC,ViewingBoxChange
+    }
+    private PCNavState _currentPCState;
+    public Text pokemonDataName;
+    public Text pokemonLevel;
+    public Image genderImage;
+    public Image pokemonImage;
+    public Image pokemonDataVisual;
+    public Sprite[] pokemonDataVisualSprites;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -51,7 +67,7 @@ public class pokemon_storage : MonoBehaviour
 
     private void Start()
     {
-     
+        InputStateHandler.Instance.OnStateChanged += CheckState;
         for (var i = 0;i<NumBoxes;i++)
         {
             var newBox = ScriptableObject.CreateInstance<PokemonStorageBox>();
@@ -78,7 +94,6 @@ public class pokemon_storage : MonoBehaviour
             nonPartyIcons.Add(pokemonIcon);
         }
     }
-
     public IEnumerator SaveStorageData()
     {
         foreach (var box in storageBoxes)
@@ -87,15 +102,125 @@ public class pokemon_storage : MonoBehaviour
         }
         yield return null;
     }
-    public void SwitchPkmDataAnimationSprite()
+    private void CheckState(InputState currentState)
     {
-        //event in animation
+        _viewingPC = currentState.stateGroups.Contains(InputStateHandler.StateGroup.PokemonStorage);
+        switch (currentState.stateName)
+        {
+            case InputStateHandler.StateName.PokemonStorageExit:
+                _currentPCState = PCNavState.ExitingPC;
+                break;
+            case InputStateHandler.StateName.PokemonStorageBoxNavigation:
+                _currentPCState = PCNavState.ViewingPokemonData;
+                break;
+            case InputStateHandler.StateName.PokemonStorageBoxChange:
+                _currentPCState = PCNavState.ViewingBoxChange;
+                break;
+        }
+        ActivateCloseBoxAnimation();
+        ActivatePkmDataAnimation();
+        ActivateArrowAnimation();
     }
 
+    private void ActivateCloseBoxAnimation()
+    {
+        if (!_viewingPC || _currentPCState != PCNavState.ExitingPC)
+        {
+            return;
+        }
+        StartCoroutine(SwitchCloseBoxSprite());
+    }
+    private IEnumerator SwitchCloseBoxSprite()
+    {
+        while (_currentPCState==PCNavState.ExitingPC)
+        {
+            storageBoxExit.sprite = storageBoxExitSprites[0];
+            yield return new WaitForSeconds(0.5f);
+            storageBoxExit.sprite = storageBoxExitSprites[1];
+            yield return new WaitForSeconds(0.5f);
+        }
+        storageBoxExit.sprite = storageBoxExitSprites[0];
+    }
+    private void ActivatePkmDataAnimation()
+    {
+        if (!_viewingPC || _currentPCState != PCNavState.ViewingPokemonData)
+        {
+            return;
+        }
+        StartCoroutine(SwitchPkmDataAnimationSprite());
+    }
+    private void ActivateArrowAnimation()
+    {
+        if (!_viewingPC) return;
+        foreach (var arrow in greyArrows)
+        {
+            arrow.viewingUI = _currentPCState == PCNavState.ViewingBoxChange;
+        }
+    }
+    private IEnumerator SwitchPkmDataAnimationSprite()
+    {
+        while (_currentPCState==PCNavState.ViewingPokemonData)
+        {
+            pokemonDataVisual.sprite = pokemonDataVisualSprites[_pkmDataSpriteIndex];
+            yield return new WaitForSeconds(0.5f);
+            _pkmDataSpriteIndex = _pkmDataSpriteIndex+1>2? 0 : _pkmDataSpriteIndex+1;
+        }
+        pokemonDataVisual.sprite = pokemonDataVisualSprites[1];
+    } 
+    private IEnumerator ActivateSelectorAnimation()
+    {
+         var startPos = boxSelectorImage.rectTransform.anchoredPosition;
+         var targetPos = startPos + Vector2.up * 5;
+         bool movingToTarget = true;
+         while(_viewingPC)
+         {
+             Vector2 target = movingToTarget ? targetPos : startPos;
+             boxSelectorImage.sprite = boxSelectorSprites[movingToTarget? 0:1];
+ 
+             boxSelectorImage.rectTransform.anchoredPosition = Vector2.MoveTowards(
+                 boxSelectorImage.rectTransform.anchoredPosition,
+                 target, 500 * Time.deltaTime
+             );
+             
+             if (Vector2.Distance(boxSelectorImage.rectTransform.anchoredPosition, target) < 0.01f)
+                 movingToTarget = !movingToTarget;
+             
+             yield return new WaitForSeconds(0.25f);
+         }
+    }
+
+    public void ClearPokemonData()
+    {
+        pokemonDataName.text = string.Empty;
+        pokemonLevel.text = string.Empty;
+        pokemonImage.gameObject.SetActive(false);
+        genderImage.gameObject.SetActive(false);
+    }
+    public void LoadPokemonData(int currentPokemonIndex)
+    {
+        if (currentPokemonIndex+1 > storageBoxes[currentBoxIndex].currentNumPokemon)
+        {
+            ClearPokemonData();
+            return;
+        }
+        var pokemon = nonPartyIcons[currentPokemonIndex].pokemon;
+        pokemonDataName.text = pokemon.pokemonName +"\n /"+pokemon.pokemonName;
+        genderImage.gameObject.SetActive(true);
+        if(pokemon.hasGender)
+            genderImage.sprite = Resources.Load<Sprite>(
+                Save_manager.GetDirectory(Save_manager.AssetDirectory.UI) 
+                + pokemon.gender.ToString().ToLower());
+        else
+            genderImage.gameObject.SetActive(false);
+        pokemonImage.sprite = pokemon.frontPicture;
+        pokemonImage.gameObject.SetActive(true);
+        pokemonLevel.text = "Lv: "+pokemon.currentLevel;
+    }
     public void ChangeBox(int change)
     {
+        RemovePokemonIcons();
         currentBoxIndex += change;
-        if (currentBoxIndex > NumBoxes)
+        if (currentBoxIndex >= NumBoxes)
         {
             currentBoxIndex = 0;
         }
@@ -105,6 +230,8 @@ public class pokemon_storage : MonoBehaviour
         }
         boxVisualImage.sprite = storageBoxes[currentBoxIndex].boxVisual;
         boxTopVisualImage.sprite = storageBoxes[currentBoxIndex].boxTopVisual;
+        boxName.text = $"Box {currentBoxIndex + 1}";
+        ActivatePokemonIcons();
     }
 
     public void SetBoxData(int indexOfBox,PokemonStorageBox box)
@@ -123,22 +250,16 @@ public class pokemon_storage : MonoBehaviour
     }
     public void OpenPC()
     {
+        ClearPokemonData();
+        StartCoroutine(ActivateSelectorAnimation());
         ChangeBox(0);
-        ActivatePokemonIcons();
-        foreach (var arrow in greyArrows)
-        {
-            arrow.viewingUI = true;
-        }
     }
+
     public void ClosePC()
     {
         foreach (var icon in partyPokemonIcons)
             icon.GetComponent<PC_party_pkm>().options.SetActive(false);
         RemovePokemonIcons();
-        foreach (var arrow in greyArrows)
-        {
-            arrow.viewingUI = false;
-        }
     }
     public void SelectPartyPokemon(PC_party_pkm partyPokemon)
     {
@@ -250,7 +371,7 @@ public class pokemon_storage : MonoBehaviour
             //     ,containsPokemon = false
             // };
             // storageBoxes[currentBoxIndex].boxPokemon[i] = newBoxPokemon;
-           
+            
             var pokemonForBox = nonPartyPokemon.First(pokemon =>
                 pokemon.pokemonID == storageBoxes[currentBoxIndex].boxPokemon[i].pokemonID);
       
