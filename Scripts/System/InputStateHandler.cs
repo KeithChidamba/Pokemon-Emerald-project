@@ -30,7 +30,7 @@ public class InputStateHandler : MonoBehaviour
     public enum StateName 
     {
         PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
-        PokemonStorageBoxChange,PokemonStorageExit,PokemonStoragePartyOptions ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
+        PokemonStorageBoxChange,PokemonStorageExit ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
         PokemonStorageUsage,ItemStorageUsage,
         PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
         PlayerBagItemSell,PlayerBagNavigation,
@@ -200,8 +200,11 @@ public class InputStateHandler : MonoBehaviour
     void InvokeSelectedEvent()
     {
         if (currentState.selectableUis == null) return;
-        if(currentState.isSelecting)
+        if (currentState.isSelecting)
+        {
+            if (!currentState.selectableUis[currentState.currentSelectionIndex].canBeSelected) return;
             currentState.selectableUis[currentState.currentSelectionIndex]?.eventForUi?.Invoke();
+        }
         else
             currentState.selectableUis[0]?.eventForUi?.Invoke();
     }
@@ -553,25 +556,7 @@ public class InputStateHandler : MonoBehaviour
         pokemon_storage.Instance.ClearPokemonData();
         PokemonStorageBoxChange();
     }
-    public void PokemonStoragePartyNavigation()
-    {
-        var partySelectables = new List<SelectableUI>();
 
-        for (var i = 0 ;i< Pokemon_party.Instance.numMembers;i++)
-        {
-            var icon = pokemon_storage.Instance.partyPokemonIcons[i];
-            partySelectables.Add( new(icon
-                ,() => pokemon_storage.Instance.SelectPartyPokemon(icon.GetComponent<PC_party_pkm>()),true) );
-        }
-        
-        ChangeInputState(new InputState(StateName.PokemonStoragePartyNavigation,
-            new[]{StateGroup.PokemonStorage,StateGroup.PokemonStorageParty}
-            , stateDirectional:Directional.Vertical, selectableUis:partySelectables
-            ,selector: pokemon_storage.Instance.partySelector
-            ,selecting:true,display:true
-            ,onClose:()=>pokemon_storage.Instance.swapping = false
-            ,onExit:()=>pokemon_storage.Instance.swapping = false));
-    }
     private void PokeMartNavigation()
     {
         OnInputUp += Poke_Mart.Instance.NavigateUp;

@@ -314,7 +314,6 @@ public class Game_ui_manager : MonoBehaviour
         ManageScreens(1);
         _movementDelaysAfterExit.Add(0.25f);
         ActivateUiElement(pokemon_storage.Instance.storageUI, true);
-        InputStateHandler.Instance.SetupPokemonStorageState();
         pokemon_storage.Instance.OpenPC(currentUsageState);
     }
     public void ViewPokeMart()

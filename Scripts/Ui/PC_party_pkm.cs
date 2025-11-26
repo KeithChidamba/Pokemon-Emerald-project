@@ -8,12 +8,12 @@ public class PC_party_pkm : MonoBehaviour
 {
     public int partyPosition;
     public Image pokemonSprite;
+    public Image pokemonSpriteBg;
     public Pokemon pokemon;
-    public GameObject options;
 
     public void LoadImage()
     {
-        pokemonSprite = GetComponent<Image>();
-        pokemonSprite.sprite = pokemon.frontPicture;
+        pokemonSprite.sprite = pokemon.partyFrame2;
+        pokemonSpriteBg.gameObject.SetActive(true);
     }
 }
