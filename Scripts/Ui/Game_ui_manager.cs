@@ -17,6 +17,11 @@ public class Game_ui_manager : MonoBehaviour
     [SerializeField]private GameObject exitButton;
     [SerializeField]private List<GameObject> menuUiOptions = new ();
     public GameObject menuSelector;
+    public GameObject pcOptionSelector;
+    public GameObject[] pcPokemonOptions;
+    public GameObject[] pcItemOptions;
+    public GameObject pcPokemonOptionsUI;
+    public GameObject pcItemOptionsUI;
     public bool usingWebGl = false;
     [SerializeField]private List<float> _movementDelaysAfterExit = new();
     private void Awake()
@@ -52,9 +57,16 @@ public class Game_ui_manager : MonoBehaviour
 
         if (numUIScreensOpen == 0)
         {
-            if (_movementDelaysAfterExit.Last() > 0)
+            if ( _movementDelaysAfterExit.Count>0)
             {
-                StartCoroutine(Player_movement.Instance.AllowPlayerMovement(_movementDelaysAfterExit.Last()));
+                if (_movementDelaysAfterExit.Last() > 0)
+                {
+                    StartCoroutine(Player_movement.Instance.AllowPlayerMovement(_movementDelaysAfterExit.Last()));
+                }
+            }
+            else
+            {
+                StartCoroutine(Player_movement.Instance.AllowPlayerMovement(0));
             }
         }
         else
@@ -96,8 +108,7 @@ public class Game_ui_manager : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerMenu,
             new[] { InputStateHandler.StateGroup.None},true,menuOptions,
             InputStateHandler.Directional.Vertical, menuSelectables,menuSelector,true
-            , true,CloseMenu,CloseMenu));
-    }
+            , true,CloseMenu,CloseMenu)); }
     private void ActivateUiElement(GameObject ui,bool activated)
     {
         ui.SetActive(activated);
@@ -265,13 +276,46 @@ public class Game_ui_manager : MonoBehaviour
     {
         ViewOtherPokemonDetails(selectedPokemon,Pokemon_party.Instance.GetValidPokemon());
     }
+
+    public void ViewItemStorage()
+    {
+        //add this soon
+    }
     public void ViewPokemonStorage()
     {
+        var pcUsageActions = new List<Action>
+        {
+            ()=>SetPcUsage(pokemon_storage.PCUsageState.Withdraw),
+            ()=>SetPcUsage(pokemon_storage.PCUsageState.Deposit),
+            ()=>SetPcUsage(pokemon_storage.PCUsageState.Move),
+            ClosePCOptions
+        };
+        
+        var pcUsageSelectables = new List<SelectableUI>();
+        
+        for (var i =0; i<pcUsageActions.Count;i++)
+            pcUsageSelectables.Add( new(pcPokemonOptions[i],pcUsageActions[i],true) );
+        
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorageUsage,
+            new[] { InputStateHandler.StateGroup.PokemonStorage},false,pcPokemonOptionsUI,
+            InputStateHandler.Directional.Vertical, pcUsageSelectables,pcOptionSelector,true, true,canManualExit:false));
+        pcPokemonOptionsUI.SetActive(true);
+    }
+
+    private void ClosePCOptions()
+    {
+        InputStateHandler.Instance.RemoveTopInputLayer(false);
+        pcPokemonOptionsUI.SetActive(false);
+        ManageScreens(0);
+    }
+    private void SetPcUsage(pokemon_storage.PCUsageState currentUsageState)
+    {
+        pcPokemonOptionsUI.SetActive(false);
         ManageScreens(1);
         _movementDelaysAfterExit.Add(0.25f);
         ActivateUiElement(pokemon_storage.Instance.storageUI, true);
         InputStateHandler.Instance.SetupPokemonStorageState();
-        pokemon_storage.Instance.OpenPC();
+        pokemon_storage.Instance.OpenPC(currentUsageState);
     }
     public void ViewPokeMart()
     {

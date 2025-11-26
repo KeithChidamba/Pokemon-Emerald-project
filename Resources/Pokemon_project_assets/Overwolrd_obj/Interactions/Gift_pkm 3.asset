@@ -14,10 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: It's a pokeball with a pokemon inside, take it?
   interactionType: 1
-  _interactionOptions:
-  - ReceiveGiftPokemon
-  - 
-  interactionOptions: 0a00000000000000
+  interactionOptions: 0b00000000000000
   resultMessage: Mudkip
   optionsUiText:
   - Yes

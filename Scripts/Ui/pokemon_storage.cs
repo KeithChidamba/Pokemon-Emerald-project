@@ -49,7 +49,14 @@ public class pokemon_storage : MonoBehaviour
     {
         ViewingPokemonData,ExitingPC,ViewingBoxChange
     }
-    private PCNavState _currentPCState;
+    private PCNavState _currentNavState;
+
+    public enum PCUsageState
+    {
+        Withdraw,Deposit,Move
+    };
+
+    public PCUsageState currentUsageState;
     public Text pokemonDataName;
     public Text pokemonLevel;
     public Image genderImage;
@@ -109,13 +116,13 @@ public class pokemon_storage : MonoBehaviour
         switch (currentState.stateName)
         {
             case InputStateHandler.StateName.PokemonStorageExit:
-                _currentPCState = PCNavState.ExitingPC;
+                _currentNavState = PCNavState.ExitingPC;
                 break;
             case InputStateHandler.StateName.PokemonStorageBoxNavigation:
-                _currentPCState = PCNavState.ViewingPokemonData;
+                _currentNavState = PCNavState.ViewingPokemonData;
                 break;
             case InputStateHandler.StateName.PokemonStorageBoxChange:
-                _currentPCState = PCNavState.ViewingBoxChange;
+                _currentNavState = PCNavState.ViewingBoxChange;
                 break;
         }
         ActivateCloseBoxAnimation();
@@ -125,7 +132,7 @@ public class pokemon_storage : MonoBehaviour
 
     private void ActivateCloseBoxAnimation()
     {
-        if (!_viewingPC || _currentPCState != PCNavState.ExitingPC)
+        if (!_viewingPC || _currentNavState != PCNavState.ExitingPC)
         {
             return;
         }
@@ -133,7 +140,7 @@ public class pokemon_storage : MonoBehaviour
     }
     private IEnumerator SwitchCloseBoxSprite()
     {
-        while (_currentPCState==PCNavState.ExitingPC)
+        while (_currentNavState==PCNavState.ExitingPC)
         {
             storageBoxExit.sprite = storageBoxExitSprites[0];
             yield return new WaitForSeconds(0.5f);
@@ -144,7 +151,7 @@ public class pokemon_storage : MonoBehaviour
     }
     private void ActivatePkmDataAnimation()
     {
-        if (!_viewingPC || _currentPCState != PCNavState.ViewingPokemonData)
+        if (!_viewingPC || _currentNavState != PCNavState.ViewingPokemonData)
         {
             return;
         }
@@ -155,12 +162,12 @@ public class pokemon_storage : MonoBehaviour
         if (!_viewingPC) return;
         foreach (var arrow in greyArrows)
         {
-            arrow.viewingUI = _currentPCState == PCNavState.ViewingBoxChange;
+            arrow.viewingUI = _currentNavState == PCNavState.ViewingBoxChange;
         }
     }
     private IEnumerator SwitchPkmDataAnimationSprite()
     {
-        while (_currentPCState==PCNavState.ViewingPokemonData)
+        while (_currentNavState==PCNavState.ViewingPokemonData)
         {
             pokemonDataVisual.sprite = pokemonDataVisualSprites[_pkmDataSpriteIndex];
             yield return new WaitForSeconds(0.5f);
@@ -249,11 +256,18 @@ public class pokemon_storage : MonoBehaviour
     {
         return Save_manager.Instance.partyIDs.Any(id => id == pokemonID);
     }
-    public void OpenPC()
+    public void OpenPC(PCUsageState newState)
     {
-        ClearPokemonData();
-        StartCoroutine(ActivateSelectorAnimation());
-        ChangeBox(0);
+        if(newState==PCUsageState.Withdraw)
+        {
+            ClearPokemonData();
+            StartCoroutine(ActivateSelectorAnimation());
+            ChangeBox(0);
+        }
+        else
+        {
+            //create other options later
+        }
     }
 
     public void ClosePC()
@@ -261,7 +275,7 @@ public class pokemon_storage : MonoBehaviour
         foreach (var icon in partyPokemonIcons)
             icon.GetComponent<PC_party_pkm>().options.SetActive(false);
         RemovePokemonIcons();
-        InputStateHandler.Instance.RemoveTopInputLayer(false);
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonStorage);
         StopAllCoroutines();
     }
     public void SelectPartyPokemon(PC_party_pkm partyPokemon)

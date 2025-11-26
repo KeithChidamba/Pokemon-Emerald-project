@@ -16,7 +16,7 @@ public class Options_manager : MonoBehaviour
     public enum InteractionOptions
     {
         None,CloseApplication,Battle,LearnMove,SkipMove,
-        Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,ReceiveGiftPokemon,LeaveStore
+        Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,ReceiveGiftPokemon,LeaveStore
     }
     private void Awake()
     {
@@ -40,6 +40,7 @@ public class Options_manager : MonoBehaviour
         _interactionMethods.Add(InteractionOptions.LeaveStore,LeaveStore);
         _interactionMethods.Add(InteractionOptions.HealPokemon,HealPokemon);
         _interactionMethods.Add(InteractionOptions.OpenPokemonStorage,OpenPokemonStorage);
+        _interactionMethods.Add(InteractionOptions.OpenItemStorage,OpenItemStorage);
         _interactionMethods.Add(InteractionOptions.ReceiveGiftPokemon,ReceiveGiftPokemon);
     }
 
@@ -102,6 +103,13 @@ public class Options_manager : MonoBehaviour
     {
         Dialogue_handler.Instance.EndDialogue(); 
         Game_ui_manager.Instance.ViewPokemonStorage();
+        overworld_actions.Instance.usingUI = true;
+    }
+
+    void OpenItemStorage()
+    {
+        Dialogue_handler.Instance.EndDialogue(); 
+        Game_ui_manager.Instance.ViewItemStorage();
         overworld_actions.Instance.usingUI = true;
     }
     void ReceiveGiftPokemon()

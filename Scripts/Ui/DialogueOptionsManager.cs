@@ -13,8 +13,8 @@ public class DialogueOptionsManager : MonoBehaviour
     public List<DialogueOption> currentOptions;
     [SerializeField]private int widthMultiplier = 19;
     [SerializeField]private int heightMultiplier = 50;
-    [SerializeField]private int minWidth = 150;
-    [SerializeField] private float selectorPositionMultiplier = -0.8f;
+    [SerializeField]private int minWidth = 100;
+    [SerializeField] private float selectorPositionMultiplier = -0.9f;
     private RectTransform _rectTransform;
     private int _selectorWidth = 40;
     private void OnEnable()
@@ -35,7 +35,7 @@ public class DialogueOptionsManager : MonoBehaviour
         var selectorImage = Dialogue_handler.Instance.optionSelector.transform.GetChild(0);
         var selectorRect = selectorImage.GetComponentInChildren<RectTransform>();
         var yPos = selectorRect.anchoredPosition.y;
-        _rectTransform.sizeDelta = new Vector2(width, height - currentOptions.Count);
+        _rectTransform.sizeDelta = new Vector2(width + _selectorWidth*0.5f, height - currentOptions.Count);
         
         selectorRect.anchoredPosition = new Vector2(selectorPositionMultiplier*width,yPos);
     }
