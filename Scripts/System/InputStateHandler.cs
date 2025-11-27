@@ -31,7 +31,7 @@ public class InputStateHandler : MonoBehaviour
     {
         PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
         PokemonStorageBoxChange,PokemonStorageExit ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
-        PokemonStorageUsage,ItemStorageUsage,
+        PokemonStorageUsage,ItemStorageUsage,PokemonStoragePartyOptions,
         PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
         PlayerBagItemSell,PlayerBagNavigation,
         PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
@@ -626,7 +626,11 @@ public class InputStateHandler : MonoBehaviour
         OnInputLeft += ()=> Battle_handler.Instance.SelectEnemy(-1);
         OnInputRight += () => Battle_handler.Instance.SelectEnemy(1);
     }
-    
+
+    void LoadStoragePokemonData()
+    {
+        OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
+    }
     void SetupInputEvents()
     {
         Action stateMethod = currentState.stateName switch
@@ -642,6 +646,7 @@ public class InputStateHandler : MonoBehaviour
             StateName.PokemonBattleOptions => SetupBattleOptions,
             StateName.PokemonBattleMoveSelection => SetupMoveSelection,
             StateName.PokemonBattleEnemySelection => SetupEnemySelection,
+            StateName.PokemonStoragePartyNavigation=>LoadStoragePokemonData,
             _ => null
         };
         stateMethod?.Invoke();

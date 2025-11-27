@@ -12,8 +12,10 @@ public class pokemon_storage : MonoBehaviour
     public int totalPokemonCount;
     public int numNonPartyPokemon;
     public int numPartyMembers;
-    public int maxPokemonCapacity = 30*14;
+    public int maxPokemonCapacity;
     public GameObject[] storageOptions;
+    public GameObject[] storagePartyOptions;
+    public GameObject storagePartyOptionsParent;
     public GameObject storageOptionsParent;
     public Text storageOptionsText;
     public Image storageBoxExit;
@@ -78,6 +80,7 @@ public class pokemon_storage : MonoBehaviour
 
     private void Start()
     {
+        maxPokemonCapacity = BoxCapacity * NumBoxes;
         InputStateHandler.Instance.OnStateChanged += CheckState;
         for (var i = 0;i<NumBoxes;i++)
         {
@@ -243,7 +246,7 @@ public class pokemon_storage : MonoBehaviour
     }
     public void ChangeBox(int change)
     {
-        RemovePokemonIcons();
+        RemovePokemonIcons(false);
         currentBoxIndex += change;
         if (currentBoxIndex >= NumBoxes)
         {
@@ -256,7 +259,7 @@ public class pokemon_storage : MonoBehaviour
         boxVisualImage.sprite = storageBoxes[currentBoxIndex].boxVisual;
         boxTopVisualImage.sprite = storageBoxes[currentBoxIndex].boxTopVisual;
         boxName.text = $"Box {currentBoxIndex + 1}";
-        ActivatePokemonIcons();
+        ActivatePokemonIcons(false);
     }
 
     public void SetBoxData(int indexOfBox,PokemonStorageBox box)
@@ -275,13 +278,14 @@ public class pokemon_storage : MonoBehaviour
     }
     public void OpenPC(PCUsageState newState)
     {
+        ClearPokemonData();
         currentUsageState = newState;
         if(currentUsageState == PCUsageState.Withdraw)
         {
             if (Pokemon_party.Instance.numMembers==6)
             {
                 Dialogue_handler.Instance.DisplayDetails("Party is full",3f);
-                ClosePC();
+                Game_ui_manager.Instance.ClosePokemonStorage();
                 return;
             }
             InputStateHandler.Instance.SetupPokemonStorageState();
@@ -292,7 +296,7 @@ public class pokemon_storage : MonoBehaviour
             if (Pokemon_party.Instance.numMembers==1)
             {
                 Dialogue_handler.Instance.DisplayDetails("There must be at least 1 pokemon in your team",2f);
-                ClosePC();
+                Game_ui_manager.Instance.ClosePokemonStorage();
                 return;
             }
             partyUI.SetActive(true);
@@ -302,7 +306,7 @@ public class pokemon_storage : MonoBehaviour
             {
                 var icon = partyPokemonIcons[i];
                 partySelectables.Add( new(icon.gameObject,
-                    i<Pokemon_party.Instance.numMembers?() => RemoveFromParty(icon):null, 
+                    i<Pokemon_party.Instance.numMembers?() => SelectPartyPokemon(icon):null, 
                     i<Pokemon_party.Instance.numMembers));
             }
             partySelectables.Add( new(exitParty,Game_ui_manager.Instance.ClosePokemonStorage,true) );
@@ -312,7 +316,60 @@ public class pokemon_storage : MonoBehaviour
                 , stateDirectional:InputStateHandler.Directional.Vertical, selectableUis:partySelectables
                 ,selector: initialSelector
                 ,selecting:true,display:true));
-            
+
+            ActivatePokemonIcons(true);
+            LoadPokemonData(0);
+        }
+        //add moving around logic
+        StartCoroutine(ActivateSelectorAnimation());
+        ChangeBox(0);
+    }
+
+    public void ClosePC()
+    {
+        RemovePokemonIcons(true);
+        RemovePokemonIcons(false);
+        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonStorage);
+        StopAllCoroutines();
+    }
+
+    void ResetOptions()
+    {
+        storageOptionsText.transform.parent.gameObject.SetActive(false);
+        storageOptionsParent.SetActive(false);
+        storagePartyOptionsParent.SetActive(false);
+    }
+
+    private void RefreshStorageUi(bool isPartyIcons)
+    { 
+       RemovePokemonIcons(isPartyIcons);
+       ActivatePokemonIcons(isPartyIcons); 
+       InputStateHandler.Instance.RemoveTopInputLayer(true);
+    }
+    private void RemovePokemonIcons(bool isPartyIcons)
+    {
+        if (isPartyIcons)
+        {
+            foreach (var icon in partyPokemonIcons)
+            {
+                icon.pokemonSpriteBg.gameObject.SetActive(false);
+                icon.gameObject.SetActive(false);
+                icon.pokemon = null;
+            }
+            return;
+        }
+
+        foreach (var icon in nonPartyIcons)
+        {
+            icon.pokemon = null;
+            icon.pokemonImage.sprite = null;
+            icon.gameObject.SetActive(false);
+        }
+    }
+    private void ActivatePokemonIcons(bool isPartyIcons)
+    {
+        if (isPartyIcons)
+        {
             for (var i = 0;i < 6;i++)
             {
                 if (Pokemon_party.Instance.party[i] == null)
@@ -324,77 +381,9 @@ public class pokemon_storage : MonoBehaviour
                 partyPokemonIcons[i].pokemon = Pokemon_party.Instance.party[i] ;
                 partyPokemonIcons[i].LoadImage();
             }
-            InputStateHandler.Instance.OnSelectionIndexChanged += LoadPokemonData;
+            return;
         }
-        //add moving around logic
-        ClearPokemonData();
-        StartCoroutine(ActivateSelectorAnimation());
-        ChangeBox(0);
-    }
 
-    public void ClosePC()
-    {
-        RemovePokemonIcons();
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonStorage);
-        StopAllCoroutines();
-        foreach (var icon in partyPokemonIcons)
-        {
-            icon.pokemonSpriteBg.gameObject.SetActive(false);
-            icon.gameObject.SetActive(false);
-            icon.pokemon = null;
-        }
-    }
-
-    void ResetBoxIconSprite(PC_pkm icon)
-    {
-        storageOptionsParent.SetActive(false);
-        icon.pokemonImage.color=Color.HSVToRGB(0,0,100);
-    }
-    
-    private void RefreshUi()
-    { 
-       RemovePokemonIcons();
-       ActivatePokemonIcons(); 
-       InputStateHandler.Instance.RemoveTopInputLayer(true);
-    }
-    private void ViewNonPartyPokemonDetails()
-    {
-        Game_ui_manager.Instance.ViewOtherPokemonDetails(nonPartyPokemon[SearchForPokemonIndex(selectedPokemonID)],nonPartyPokemon);
-    }
-    public void SelectNonPartyPokemon(PC_pkm pokemonIcon)
-    {
-        if (pokemonIcon.isEmpty) return;
-       
-        var boxOptionsSelectables = new List<SelectableUI>
-        {
-            new(storageOptions[1], AddPokemonToParty,true),
-            new(storageOptions[0], ViewNonPartyPokemonDetails, true),
-            new(storageOptions[2], ()=>DeletePokemon(pokemonIcon),true)
-        };
-
-        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorageBoxOptions,
-            new[]{InputStateHandler.StateGroup.PokemonStorage,InputStateHandler.StateGroup.PokemonStorageBox}
-            , stateDirectional:InputStateHandler.Directional.Vertical,selectableUis: boxOptionsSelectables
-            ,selector:boxOptionsSelector,selecting:true,display:true
-            ,onClose:()=>ResetBoxIconSprite(pokemonIcon),onExit:()=>ResetBoxIconSprite(pokemonIcon)));
-        
-        ResetBoxIconSprite(pokemonIcon);
-        selectedPokemonID = pokemonIcon.pokemon.pokemonID.ToString();
-        pokemonIcon.pokemonImage.color=Color.HSVToRGB(17,96,54);
-        storageOptionsText.text = pokemonIcon.pokemon.pokemonName + " is selected.";
-        storageOptionsParent.SetActive(true);
-    }
-    private void RemovePokemonIcons()
-    {
-        foreach (var icon in nonPartyIcons)
-        {
-            icon.pokemon = null;
-            icon.pokemonImage.sprite = null;
-            icon.gameObject.SetActive(false);
-        }
-    }
-    private void ActivatePokemonIcons()
-    {
         storageBoxes[currentBoxIndex].currentNumPokemon = 0;
         for (var i = 0;i<BoxCapacity;i++)
         {
@@ -415,27 +404,88 @@ public class pokemon_storage : MonoBehaviour
             pokemonIcon.LoadImage();
         }
     }
+    
+    private void ViewNonPartyPokemonDetails()
+    {
+        Game_ui_manager.Instance.ViewOtherPokemonDetails(nonPartyPokemon[SearchForPokemonIndex(selectedPokemonID)],nonPartyPokemon);
+    }
+    private void SelectPartyPokemon(PC_party_pkm icon)
+    {
+        //display options state
+        var partyOptionsSelectables = new List<SelectableUI>
+        {
+            new(storagePartyOptions[0], ()=>RemoveFromParty(icon),true),
+            new(storagePartyOptions[1], ()=>Game_ui_manager.Instance.ViewPartyPokemonDetails(icon.pokemon), true),
+            new(storagePartyOptions[2], ()=>DeletePokemon(true,icon.partyPosition),true)
+        };
+
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStoragePartyOptions,
+            new[]{InputStateHandler.StateGroup.PokemonStorage}
+            , stateDirectional:InputStateHandler.Directional.Vertical,selectableUis: partyOptionsSelectables
+            ,selector:boxOptionsSelector,selecting:true,display:true
+            ,onClose:ResetOptions,onExit:ResetOptions));
+        
+        selectedPokemonID = icon.pokemon.pokemonID.ToString();
+        storageOptionsText.transform.parent.gameObject.SetActive(true);
+        storagePartyOptionsParent.SetActive(true);
+        storageOptionsText.text = icon.pokemon.pokemonName + " is selected.";
+    }
+    public void SelectNonPartyPokemon(PC_pkm pokemonIcon)
+    {
+        if (pokemonIcon.isEmpty) return;
+       
+        var boxOptionsSelectables = new List<SelectableUI>
+        {
+            new(storageOptions[0], AddPokemonToParty,true),
+            new(storageOptions[1], ViewNonPartyPokemonDetails, true),
+            new(storageOptions[2], ()=>DeletePokemon(false),true)
+        };
+
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorageBoxOptions,
+            new[]{InputStateHandler.StateGroup.PokemonStorage,InputStateHandler.StateGroup.PokemonStorageBox}
+            , stateDirectional:InputStateHandler.Directional.Vertical,selectableUis: boxOptionsSelectables
+            ,selector:boxOptionsSelector,selecting:true,display:true
+            ,onClose:ResetOptions,onExit:ResetOptions));
+        
+        selectedPokemonID = pokemonIcon.pokemon.pokemonID.ToString();
+        storageOptionsText.transform.parent.gameObject.SetActive(true);
+        storageOptionsText.text = pokemonIcon.pokemon.pokemonName + " is selected.";
+        storageOptionsParent.SetActive(true);
+    }
     private void RemoveFromParty(PC_party_pkm partyPokemon)
     {
         if (Pokemon_party.Instance.numMembers > 1)
         {
-            //ui state for selecting box
             Pokemon_party.Instance.RemoveMember(partyPokemon.partyPosition);
-            Pokemon_party.Instance.numMembers--;
+            numPartyMembers--;
             numNonPartyPokemon++;
-            RefreshUi();
-            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonStorageParty);
+            RefreshStorageUi(true);
+            LoadPokemonData(partyPokemon.partyPosition-1);
         }
         else
             Dialogue_handler.Instance.DisplayDetails("There must be at least 1 pokemon in your team",2f);
     }
-    private void DeletePokemon(PC_pkm pokemonIcon)
+    private void DeletePokemon(bool isPartyPokemon,int partyPosition=0)
     {
-        ResetBoxIconSprite(pokemonIcon);
-        var indexToDelete= SearchForPokemonIndex(selectedPokemonID);
-        Dialogue_handler.Instance.DisplayDetails("You released "+ nonPartyPokemon[indexToDelete].pokemonName,2f);
-        DeleteNonPartyPokemon(indexToDelete);
-        RefreshUi();
+        ResetOptions();
+        if (isPartyPokemon)
+        {
+            Dialogue_handler.Instance.DisplayDetails("You released "+ Pokemon_party.Instance.party[partyPosition-1].pokemonName,2f);
+            Pokemon_party.Instance.RemoveMember(partyPosition,false);
+            numPartyMembers--;
+            totalPokemonCount--;
+            RefreshStorageUi(true);
+            LoadPokemonData(partyPosition-1);
+        }
+        else
+        {
+            var indexToDelete= SearchForPokemonIndex(selectedPokemonID);
+            Dialogue_handler.Instance.DisplayDetails("You released "+ nonPartyPokemon[indexToDelete].pokemonName,2f);
+            DeleteNonPartyPokemon(indexToDelete);
+            RefreshStorageUi(false);
+            ClearPokemonData();
+        }
+        
     }
     private void DeleteNonPartyPokemon(int index)
     {
@@ -453,12 +503,11 @@ public class pokemon_storage : MonoBehaviour
         if (Pokemon_party.Instance.numMembers < 6)
         {
             var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
-            ResetBoxIconSprite(nonPartyIcons[pokemonIndex]);
             Pokemon_party.Instance.party[Pokemon_party.Instance.numMembers] = Obj_Instance.CreatePokemon(nonPartyPokemon[pokemonIndex]);
             DeleteNonPartyPokemon(pokemonIndex);
             Pokemon_party.Instance.numMembers++;
             Pokemon_party.Instance.numMembers++;
-            RefreshUi();
+            RefreshStorageUi(false);
         }
         else
             Dialogue_handler.Instance.DisplayDetails("Party is full",3f);

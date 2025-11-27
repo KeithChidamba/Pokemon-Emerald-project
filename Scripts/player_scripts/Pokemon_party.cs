@@ -311,14 +311,14 @@ public class Pokemon_party : MonoBehaviour
                 memberCards[i].ResetUI();
         }
     }
-    public void RemoveMember(int partyPosition)
+    public void RemoveMember(int partyPosition,bool movingToStorage=true)
     {
         //pc operation remove from party
         partyPosition--;
         var member = party[partyPosition];
         party[partyPosition] = null;
         numMembers--;
-        pokemon_storage.Instance.nonPartyPokemon.Add(member);
+        if(movingToStorage) pokemon_storage.Instance.nonPartyPokemon.Add(member);
         //sort
         if(partyPosition < party.Length-1)
         {
