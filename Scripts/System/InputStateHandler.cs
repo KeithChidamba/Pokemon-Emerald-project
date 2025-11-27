@@ -25,13 +25,12 @@ public class InputStateHandler : MonoBehaviour
     public List<InputState> stateLayers;
     public enum Directional { None, Horizontal, Vertical, OmniDirection}
 
-    public enum StateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonStorageBox
-        ,PokemonStorageParty,PokemonBattle,PokeMart }
+    public enum StateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart }
     public enum StateName 
     {
         PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
         PokemonStorageBoxChange,PokemonStorageExit ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
-        PokemonStorageUsage,ItemStorageUsage,PokemonStoragePartyOptions,
+        PokemonStorageUsage,ItemStorageUsage,PokemonStoragePartyOptions,PokemonStorageDepositSelection,
         PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
         PlayerBagItemSell,PlayerBagNavigation,
         PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
@@ -523,8 +522,7 @@ public class InputStateHandler : MonoBehaviour
             storageBoxSelectables.Add(newSelectable);
         }
 
-        ChangeInputState(new InputState(StateName.PokemonStorageBoxNavigation
-            ,new[]{StateGroup.PokemonStorage,StateGroup.PokemonStorageBox}
+        ChangeInputState(new InputState(StateName.PokemonStorageBoxNavigation,new[]{StateGroup.PokemonStorage}
             ,stateDirectional:Directional.OmniDirection,selectableUis:storageBoxSelectables,
             selector:pokemon_storage.Instance.initialSelector, selecting:true,display: true,canManualExit:false,canExit:false));
         ChangeSelectionIndex(0);
@@ -631,6 +629,10 @@ public class InputStateHandler : MonoBehaviour
     {
         OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
     }
+    void ShowStorageBoxCapacityData()
+    {
+        OnSelectionIndexChanged += pokemon_storage.Instance.DisplayBoxCapacity;
+    }
     void SetupInputEvents()
     {
         Action stateMethod = currentState.stateName switch
@@ -647,6 +649,7 @@ public class InputStateHandler : MonoBehaviour
             StateName.PokemonBattleMoveSelection => SetupMoveSelection,
             StateName.PokemonBattleEnemySelection => SetupEnemySelection,
             StateName.PokemonStoragePartyNavigation=>LoadStoragePokemonData,
+            StateName.PokemonStorageDepositSelection=>ShowStorageBoxCapacityData,
             _ => null
         };
         stateMethod?.Invoke();

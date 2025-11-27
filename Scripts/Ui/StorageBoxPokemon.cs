@@ -2,6 +2,6 @@ using System;
 [Serializable]
 public struct StorageBoxPokemon
 {
-    public long pokemonID;
+    public string pokemonID;
     public bool containsPokemon;
 }
