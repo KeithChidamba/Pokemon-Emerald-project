@@ -529,13 +529,11 @@ public class Save_manager : MonoBehaviour
     }
     public void SaveStorageDataAsJson(PokemonStorageBox box, string fileName)
     {
-        Debug.Log("sdaving");
         var directory = Path.Combine(_saveDataPath+"/PC_Storage", fileName + ".json");
         var json = JsonUtility.ToJson(box, true);
-        Debug.Log(json);
+        
         File.WriteAllText(directory, json);
         if (!File.Exists(directory)) Debug.LogError("file blank");
-        Debug.Log(directory);
     }
     private Pokemon LoadPokemonFromJson(string filePath)
     {

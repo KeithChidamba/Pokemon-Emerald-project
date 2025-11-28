@@ -2,131 +2,131 @@
     "boxNumber": 13,
     "boxPokemon": [
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         }
     ],
     "currentNumPokemon": 0,
     "boxTopVisual": {
-        "instanceID": 61666
+        "instanceID": 32104
     },
     "boxVisual": {
-        "instanceID": 61674
+        "instanceID": 32130
     }
 }

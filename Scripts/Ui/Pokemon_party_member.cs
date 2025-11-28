@@ -17,7 +17,7 @@ public class Pokemon_party_member : MonoBehaviour
     public Slider pokemonHealthBarUI;
     public RawImage hpSliderImage;
     public Pokemon pokemon;
-    public GameObject[] mainUI;
+    public List<GameObject> mainUI;
     public GameObject memberSelectedImage;
     public GameObject memberNotSelectedImage;
     public GameObject emptySlotUI;

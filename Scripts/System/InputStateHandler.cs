@@ -121,6 +121,9 @@ public class InputStateHandler : MonoBehaviour
     private void RemoveInputState(InputState state,bool manualExit)
     {
         state.selector?.SetActive(false);
+        
+        if(state.stateDirectional==Directional.OmniDirection) ResetCoordinates();
+        
         Action method = manualExit ? state.OnExit:state.OnClose;
         method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine
         ResetInputEvents();
@@ -222,7 +225,7 @@ public class InputStateHandler : MonoBehaviour
     public void ChangeInputState(InputState newState)
     {
         OnStateRemoved?.Invoke(currentState);
-        ResetCoordinates();
+        
         if (!stateLayers.Any(s => s.stateName == newState.stateName))
             stateLayers.Add(newState);
         ResetInputEvents();
@@ -476,8 +479,8 @@ public class InputStateHandler : MonoBehaviour
         
         currentState.canExit = false;
         OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
+        OnSelectionIndexChanged += pokemon_storage.Instance.UpdateBoxPosition;
         OnSelectionIndexChanged += CheckIfTopRow;
-        ChangeSelectionIndex(0);
     }
 
     public void SetupPokemonStorageState()
@@ -525,7 +528,6 @@ public class InputStateHandler : MonoBehaviour
         ChangeInputState(new InputState(StateName.PokemonStorageBoxNavigation,new[]{StateGroup.PokemonStorage}
             ,stateDirectional:Directional.OmniDirection,selectableUis:storageBoxSelectables,
             selector:pokemon_storage.Instance.initialSelector, selecting:true,display: true,canManualExit:false,canExit:false));
-        ChangeSelectionIndex(0);
     }
     private void SwitchToExit()
     {

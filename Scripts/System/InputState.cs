@@ -21,6 +21,7 @@ public class InputState
     public bool isParentLayer;
     public bool canExit;
     public bool canManualExit;
+
     public InputState(
         InputStateHandler.StateName stateName,
         InputStateHandler.StateGroup[] groups,

@@ -2,131 +2,131 @@
     "boxNumber": 1,
     "boxPokemon": [
         {
-            "pokemonID": 5581770941766235557,
+            "pokemonID": "5581770941766235557",
             "containsPokemon": true
         },
         {
-            "pokemonID": 7887074061546032046,
+            "pokemonID": "7887074061546032046",
             "containsPokemon": true
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "210174626160877447",
+            "containsPokemon": true
+        },
+        {
+            "pokemonID": "210174624208566463",
+            "containsPokemon": true
+        },
+        {
+            "pokemonID": "210174624533141532",
+            "containsPokemon": true
+        },
+        {
+            "pokemonID": "210174624626809124",
+            "containsPokemon": true
+        },
+        {
+            "pokemonID": "210174625384733013",
+            "containsPokemon": true
+        },
+        {
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         },
         {
-            "pokemonID": 0,
-            "containsPokemon": false
-        },
-        {
-            "pokemonID": 0,
-            "containsPokemon": false
-        },
-        {
-            "pokemonID": 0,
-            "containsPokemon": false
-        },
-        {
-            "pokemonID": 0,
-            "containsPokemon": false
-        },
-        {
-            "pokemonID": 0,
-            "containsPokemon": false
-        },
-        {
-            "pokemonID": 0,
+            "pokemonID": "0",
             "containsPokemon": false
         }
     ],
-    "currentNumPokemon": 2,
+    "currentNumPokemon": 7,
     "boxTopVisual": {
-        "instanceID": 31968
+        "instanceID": 31990
     },
     "boxVisual": {
-        "instanceID": 32040
+        "instanceID": 32068
     }
 }
