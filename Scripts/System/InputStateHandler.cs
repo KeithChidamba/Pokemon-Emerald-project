@@ -19,6 +19,7 @@ public class InputStateHandler : MonoBehaviour
     public event Action<InputState> OnStateRemoved;
     public event Action<InputState> OnStateChanged;
     public event Action<int> OnSelectionIndexChanged;
+    
     private bool _readingInputs;
     [SerializeField] private bool _currentStateLoaded;
     private bool _handlingState;
@@ -409,6 +410,11 @@ public class InputStateHandler : MonoBehaviour
     {
         bool vertical = directional == Directional.Vertical;
 
+        if (boxCoordinates[0]==0 && change<0 && vertical)
+        {
+            OnSelectionIndexChanged += ExitTopRow;
+        }
+        
         if (vertical)
         {
             boxCoordinates[0] = Mathf.Clamp(
@@ -425,8 +431,9 @@ public class InputStateHandler : MonoBehaviour
                 _numBoxColumns
             );
         }
-
+        
         int newIndex = GetCurrentFullBoxPosition();
+
         currentState.currentSelectionIndex =
             Mathf.Clamp(newIndex, 0, currentState.maxSelectionIndex);
 
@@ -480,7 +487,7 @@ public class InputStateHandler : MonoBehaviour
         currentState.canExit = false;
         OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
         OnSelectionIndexChanged += pokemon_storage.Instance.UpdateBoxPosition;
-        OnSelectionIndexChanged += CheckIfTopRow;
+        
     }
 
     public void SetupPokemonStorageState()
@@ -528,29 +535,15 @@ public class InputStateHandler : MonoBehaviour
         ChangeInputState(new InputState(StateName.PokemonStorageBoxNavigation,new[]{StateGroup.PokemonStorage}
             ,stateDirectional:Directional.OmniDirection,selectableUis:storageBoxSelectables,
             selector:pokemon_storage.Instance.initialSelector, selecting:true,display: true,canManualExit:false,canExit:false));
+        ChangeSelectionIndex(0);
     }
     private void SwitchToExit()
     {
+        if (pokemon_storage.Instance.movingPokemon) return;
         RemoveTopInputLayer(false);
         SetupPokemonStorageState();
     }
-
-    private void CheckIfTopRow(int index)
-    {
-        if (boxCoordinates[0]==0)//if top row
-        {
-            if (currentState.canExit) return;
-            currentState.canExit = true;
-            OnInputUp += ExitTopRow;
-        }
-        else
-        {
-            OnInputUp -= ExitTopRow;
-            currentState.canExit = false;
-        }
-    }
-
-    private void ExitTopRow()
+    private void ExitTopRow(int index)
     {
         RemoveTopInputLayer(false);
         pokemon_storage.Instance.ClearPokemonData();
