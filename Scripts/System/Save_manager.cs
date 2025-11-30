@@ -143,15 +143,15 @@ public class Save_manager : MonoBehaviour
     {
         CreateFolder(_saveDataPath + "/PC_Storage");
         var storageBoxes = GetJsonFilesFromPath(_saveDataPath + "/PC_Storage");
-        for (var i=0;i<storageBoxes.Count;i++)
+        foreach (var boxJson in storageBoxes)
         {
-            var jsonFilePath = _saveDataPath + "/PC_Storage/" + Path.GetFileName(storageBoxes[i]);
+            var jsonFilePath = _saveDataPath + "/PC_Storage/" + Path.GetFileName(boxJson);
             if (!File.Exists(jsonFilePath)) continue;
             
             var json = File.ReadAllText(jsonFilePath);
             var boxData = ScriptableObject.CreateInstance<PokemonStorageBox>();
             JsonUtility.FromJsonOverwrite(json, boxData);
-            pokemon_storage.Instance.SetBoxData(i,boxData);
+            pokemon_storage.Instance.SetBoxData(boxData.boxNumber-1,boxData);
         }
     }
     private void LoadOverworldData()

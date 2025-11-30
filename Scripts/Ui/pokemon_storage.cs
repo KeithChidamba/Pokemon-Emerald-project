@@ -347,12 +347,10 @@ public class pokemon_storage : MonoBehaviour
             ActivatePokemonIcons(true);
             LoadPokemonData(0);
         }
-
         if (currentUsageState == PCUsageState.Move)
         {
             InputStateHandler.Instance.SetupPokemonStorageState();
         }
-        //add moving around logic
         StartCoroutine(ActivateSelectorAnimation());
         ChangeBox(0);
     }
@@ -474,28 +472,47 @@ public class pokemon_storage : MonoBehaviour
         storagePartyOptionsParent.SetActive(true);
         storageOptionsText.text = icon.pokemon.pokemonName + " is selected.";
     }
+    
     public void SelectNonPartyPokemon(PC_pkm pokemonIcon)
     {
         if (movingPokemon)
         {
-            
             if (pokemonIcon.isEmpty)
             {
                 movingPokemon = false;
                 selectedPokemonImage.gameObject.SetActive(false);
-                
-                Debug.Log("clean add");
+                storageBoxes[movingOperationData.previousBoxIndex].boxPokemon[movingOperationData.previousBoxPosition] = new StorageBoxPokemon
+                {
+                    pokemonID = string.Empty
+                    ,containsPokemon = false
+                };
+                storageBoxes[currentBoxIndex].boxPokemon[currentIndexOfBox] = new StorageBoxPokemon
+                {
+                    pokemonID = movingOperationData.pokemonID
+                    ,containsPokemon = true
+                };
+                ClearPokemonData();
+                RemovePokemonIcons(false);
+                ActivatePokemonIcons(false); 
             }
             else
             {
+                storageBoxes[currentBoxIndex].boxPokemon[currentIndexOfBox] = new StorageBoxPokemon
+                {
+                    pokemonID = movingOperationData.pokemonID
+                    ,containsPokemon = true
+                };
+                
                 selectedPokemonID = pokemonIcon.pokemon.pokemonID.ToString();
-                Debug.Log("swap");
+                movingOperationData = new StorageBoxMovingData();
+                movingOperationData.pokemonID = selectedPokemonID;
+                movingOperationData.previousBoxIndex = currentBoxIndex;
+                movingOperationData.previousBoxPosition = currentIndexOfBox;
+                selectedPokemonImage.sprite = pokemonIcon.pokemon.partyFrame1;
+                ClearPokemonData();
+                RemovePokemonIcons(false);
+                ActivatePokemonIcons(false);
             }
-            // storageBoxes[currentBoxIndex].boxPokemon[currentIndexOfBox] = new StorageBoxPokemon
-            // {
-            //     pokemonID = string.Empty
-            //     ,containsPokemon = false
-            // };
         }
         else
         {
@@ -588,6 +605,12 @@ public class pokemon_storage : MonoBehaviour
     
     private void StartMovingOperation()
     {
+        storageBoxes[currentBoxIndex].boxPokemon[currentIndexOfBox] = new StorageBoxPokemon
+        {
+            pokemonID = string.Empty
+            ,containsPokemon = false
+        };
+        nonPartyIcons[currentIndexOfBox].pokemonImage.color = new Color(0,0,0,0);
         var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
         selectedPokemonImage.sprite = nonPartyPokemon[pokemonIndex].partyFrame1;
         selectedPokemonImage.gameObject.SetActive(true);

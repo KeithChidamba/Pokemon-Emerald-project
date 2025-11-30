@@ -15,6 +15,7 @@ public class PC_pkm : MonoBehaviour
 
     public void LoadImage()
     {
+        pokemonImage.color = Color.white;
         pokemonImage.sprite = pokemon.partyFrame1;
     }
 }

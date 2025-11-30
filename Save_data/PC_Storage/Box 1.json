@@ -2,20 +2,20 @@
     "boxNumber": 1,
     "boxPokemon": [
         {
-            "pokemonID": "5581770941766235557",
-            "containsPokemon": true
+            "pokemonID": "",
+            "containsPokemon": false
         },
         {
-            "pokemonID": "7887074061546032046",
-            "containsPokemon": true
+            "pokemonID": "",
+            "containsPokemon": false
         },
         {
-            "pokemonID": "210174626160877447",
-            "containsPokemon": true
+            "pokemonID": "",
+            "containsPokemon": false
         },
         {
-            "pokemonID": "210174624208566463",
-            "containsPokemon": true
+            "pokemonID": "",
+            "containsPokemon": false
         },
         {
             "pokemonID": "210174624533141532",
@@ -122,11 +122,11 @@
             "containsPokemon": false
         }
     ],
-    "currentNumPokemon": 7,
+    "currentNumPokemon": 4,
     "boxTopVisual": {
-        "instanceID": 31990
+        "instanceID": 32118
     },
     "boxVisual": {
-        "instanceID": 32068
+        "instanceID": 32194
     }
 }
