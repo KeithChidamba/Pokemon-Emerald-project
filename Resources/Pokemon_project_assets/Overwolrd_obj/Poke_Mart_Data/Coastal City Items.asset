@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f7fac36ad80352aabd94c96a07251be, type: 3}
   m_Name: Coastal City Items
   m_EditorClassIdentifier: 
-  location: Costal City
+  location: 3
   availableItems:
   - {fileID: 11400000, guid: 74de7d2c2ec6cf04a94d924a69fb7677, type: 2}
   - {fileID: 11400000, guid: 298b4b511499bc5bab4e6536cc5e2db0, type: 2}

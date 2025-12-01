@@ -17,7 +17,7 @@ public class Collider_checks : MonoBehaviour
     private void Update()
     {
         if (area.currentArea == null) return;
-        if(area.currentArea.insideArea)
+        if(area.currentArea.areaData.insideArea)
             Player_movement.Instance.canUseBike = false;
     }
 
@@ -44,7 +44,7 @@ public class Collider_checks : MonoBehaviour
         var hit = Physics2D.Raycast(transform.position, interactionPoint.forward, detectionDistance, _door);
         if (!hit.transform) return; 
             var areaEntryPoint = collision.transform.GetComponent<Switch_Area>();
-            if (areaEntryPoint.exitingArea)
+            if (areaEntryPoint.areaData.exitingArea)
                 area.GoToOverworld();
             else
                 area.SwitchToArea(areaEntryPoint,1f);

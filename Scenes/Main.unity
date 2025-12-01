@@ -1742,11 +1742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 492393978}
   interior: {fileID: 2040100123}
-  areaName: Player House
-  exitingArea: 0
-  insideArea: 0
-  hasDoorAnimation: 1
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 3b6b5df5f7279d3b8814a182abbbcdc3, type: 2}
   doorAnimation: {fileID: 30296274}
   doormatPosition: {fileID: 1324613723}
   doorPosition: {fileID: 1658256452}
@@ -2158,11 +2154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  areaName: 
-  exitingArea: 1
-  insideArea: 0
-  hasDoorAnimation: 0
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 5c3bff6ab3f0d82a8b0644e12aa327d4, type: 2}
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -2707,7 +2699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: beab14a628481414491e850bca6aafc9, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!61 &64607984
@@ -4663,7 +4655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 2a9ae13e99aacc8468b5be2037e26cea, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!114 &112600289 stripped
@@ -5098,7 +5090,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: be1e113f31b41fe4da01cb2c1aabebd3, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!61 &126172890
@@ -5290,7 +5282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 65a60809e4e9bad41a00ea111b3d83d0, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!1001 &131756837
@@ -6909,7 +6901,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 0}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 11400000, guid: 25dfde04bada2414b8fb3eaf4a8c5ac7, type: 2}
 --- !u!1 &185005865
@@ -10195,11 +10187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 780263340}
   interior: {fileID: 660524007}
-  areaName: Poke Mart Coastal
-  exitingArea: 0
-  insideArea: 0
-  hasDoorAnimation: 1
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 4b01fe18a8d2c72fea77342f8f08ec69, type: 2}
   doorAnimation: {fileID: 301858639}
   doormatPosition: {fileID: 2048362484}
   doorPosition: {fileID: 573038577}
@@ -11381,11 +11369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 5159739}
   interior: {fileID: 1375233029}
-  areaName: Museum
-  exitingArea: 0
-  insideArea: 0
-  hasDoorAnimation: 0
-  escapable: 1
+  areaData: {fileID: 11400000, guid: 9e03bc4d48e03b4008fda666d4fbbf0c, type: 2}
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 204117124}
   doorPosition: {fileID: 434876550}
@@ -14815,7 +14799,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ddb85caf72dea1e4882d8b00cb2adbd6, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!1 &505938596
@@ -16312,11 +16296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 133303393}
   interior: {fileID: 1423924570}
-  areaName: Poke Center
-  exitingArea: 0
-  insideArea: 0
-  hasDoorAnimation: 1
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 97c39d2e23b35addd9620d0c1d7ddf5e, type: 2}
   doorAnimation: {fileID: 559372697}
   doormatPosition: {fileID: 489173252}
   doorPosition: {fileID: 1523077771}
@@ -17953,11 +17933,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  areaName: 
-  exitingArea: 1
-  insideArea: 0
-  hasDoorAnimation: 0
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 5c3bff6ab3f0d82a8b0644e12aa327d4, type: 2}
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -20123,11 +20099,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  areaName: 
-  exitingArea: 1
-  insideArea: 0
-  hasDoorAnimation: 0
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 5c3bff6ab3f0d82a8b0644e12aa327d4, type: 2}
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -22092,7 +22064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: a94a485dbbee55446b72284e516a203e, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!61 &728870498
@@ -24427,11 +24399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  areaName: 
-  exitingArea: 1
-  insideArea: 0
-  hasDoorAnimation: 0
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 5c3bff6ab3f0d82a8b0644e12aa327d4, type: 2}
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -28863,7 +28831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 05fc0e8d883123c46bf889ad4846eba3, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!61 &939642314
@@ -29849,11 +29817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 1838507498}
   interior: {fileID: 760545934}
-  areaName: Poke Mart Forest
-  exitingArea: 0
-  insideArea: 0
-  hasDoorAnimation: 1
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 9a59ccb3b5db67d119ae8172bb1ba6cd, type: 2}
   doorAnimation: {fileID: 973009938}
   doormatPosition: {fileID: 566230134}
   doorPosition: {fileID: 66646258}
@@ -30769,7 +30733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 3bf20e04547411a40aa0002e84bea92c, type: 2}
-  location: Costal City
+  location: 3
   interactionType: 1
   area: {fileID: 0}
 --- !u!1 &1015821576
@@ -34349,7 +34313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ef9aa58b859709c4d811a0e382bdcd0f, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!61 &1159495006
@@ -34555,7 +34519,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e0bfe12d6fc7981fbbc18683018d0f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treesLoaded: 0
   overworldBerryTrees: []
   treeDataQueue: []
 --- !u!4 &1163787316
@@ -56567,7 +56530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ef9aa58b859709c4d811a0e382bdcd0f, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!61 &1233443738
@@ -64902,11 +64865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  areaName: 
-  exitingArea: 1
-  insideArea: 0
-  hasDoorAnimation: 0
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 5c3bff6ab3f0d82a8b0644e12aa327d4, type: 2}
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -70826,7 +70785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: e8890c71d41487449ae48531dba81e2b, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!1001 &1749442652
@@ -72492,11 +72451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 1819593988}
   interior: {fileID: 0}
-  areaName: Overworld
-  exitingArea: 0
-  insideArea: 0
-  hasDoorAnimation: 0
-  escapable: 0
+  areaData: {fileID: 11400000, guid: e1d810602235be70b83f1813c3984046, type: 2}
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -72580,7 +72535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ef9aa58b859709c4d811a0e382bdcd0f, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!61 &1819659362
@@ -73533,7 +73488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 05fc0e8d883123c46bf889ad4846eba3, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!61 &1848598228
@@ -101430,11 +101385,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworld: {fileID: 0}
   interior: {fileID: 0}
-  areaName: 
-  exitingArea: 1
-  insideArea: 0
-  hasDoorAnimation: 0
-  escapable: 0
+  areaData: {fileID: 11400000, guid: 5c3bff6ab3f0d82a8b0644e12aa327d4, type: 2}
   doorAnimation: {fileID: 0}
   doormatPosition: {fileID: 0}
   doorPosition: {fileID: 0}
@@ -104565,7 +104516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 930c0390d8f681b4eae75711793319fe, type: 2}
-  location: 
+  location: 0
   interactionType: 0
   area: {fileID: 0}
 --- !u!61 &2037761306
@@ -106465,7 +106416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 3bf20e04547411a40aa0002e84bea92c, type: 2}
-  location: Forest
+  location: 2
   interactionType: 1
   area: {fileID: 0}
 --- !u!1 &2108408982

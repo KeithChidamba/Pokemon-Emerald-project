@@ -487,7 +487,6 @@ public class InputStateHandler : MonoBehaviour
         currentState.canExit = false;
         OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
         OnSelectionIndexChanged += pokemon_storage.Instance.UpdateBoxPosition;
-        
     }
 
     public void SetupPokemonStorageState()

@@ -7,7 +7,7 @@
     "gender": 2,
     "ratioFemale": 0.0,
     "nature": {
-        "instanceID": 27154
+        "instanceID": 27158
     },
     "hasGender": true,
     "hp": 14.0,
@@ -57,7 +57,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26864
+            "instanceID": 26868
         }
     ],
     "statusEffect": 0,
@@ -96,21 +96,21 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -10388
+            "instanceID": -5510
         },
         {
-            "instanceID": -10390
+            "instanceID": -5512
         }
     ],
     "ability": {
-        "instanceID": 26202
+        "instanceID": 26206
     },
     "evolutions": [
         {
-            "instanceID": 27190
+            "instanceID": 27194
         },
         {
-            "instanceID": 26164
+            "instanceID": 26168
         }
     ],
     "heldItem": {
@@ -118,19 +118,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 25376
+        "instanceID": 25380
     },
     "backPicture": {
-        "instanceID": 25266
+        "instanceID": 25270
     },
     "partyFrame1": {
-        "instanceID": 26206
+        "instanceID": 26210
     },
     "partyFrame2": {
-        "instanceID": 25906
+        "instanceID": 25910
     },
     "battleIntroFrame": {
-        "instanceID": 25596
+        "instanceID": 25600
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,

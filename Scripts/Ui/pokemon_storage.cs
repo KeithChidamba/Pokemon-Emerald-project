@@ -289,12 +289,6 @@ public class pokemon_storage : MonoBehaviour
         ActivatePokemonIcons(false);
     }
 
-    public void SetBoxData(int indexOfBox,PokemonStorageBox box)
-    {
-        storageBoxes[indexOfBox].boxPokemon = box.boxPokemon;
-        storageBoxes[indexOfBox].currentNumPokemon = box.currentNumPokemon;
-    }
-
     private int SearchForPokemonIndex(string pokemonID)
     {
         return nonPartyPokemon.FindIndex(p => p.pokemonID.ToString() == pokemonID);
@@ -334,7 +328,7 @@ public class pokemon_storage : MonoBehaviour
                 var icon = partyPokemonIcons[i];
                 partySelectables.Add( new(icon.gameObject,
                     i<Pokemon_party.Instance.numMembers?() => SelectPartyPokemon(icon):null, 
-                    i<Pokemon_party.Instance.numMembers));
+                    i<Pokemon_party.Instance.numMembers)); 
             }
             partySelectables.Add( new(exitParty,Game_ui_manager.Instance.ClosePokemonStorage,true) );
             

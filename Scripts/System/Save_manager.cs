@@ -20,7 +20,6 @@ public class Save_manager : MonoBehaviour
     private string _saveDataPath = "Assets/Save_data";
     private string _tempSaveDataPath = "Assets/Temp_Save_data";
     private event Action<string,Exception> OnSaveDataFail;
-    public event Action OnOverworldDataLoaded;
     public enum AssetDirectory
     { 
         Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
@@ -71,7 +70,6 @@ public class Save_manager : MonoBehaviour
             LoadPlayerData(); 
             LoadItemData();
             LoadPokemonData();
-            LoadOverworldData();
         }
         else
         {
@@ -120,7 +118,6 @@ public class Save_manager : MonoBehaviour
         LoadPlayerData(); 
         LoadItemData();
         LoadPokemonData();
-        LoadOverworldData();
         yield return new WaitForSeconds(1f);
         Game_Load.Instance.AllowGameLoad();
     }
@@ -151,10 +148,11 @@ public class Save_manager : MonoBehaviour
             var json = File.ReadAllText(jsonFilePath);
             var boxData = ScriptableObject.CreateInstance<PokemonStorageBox>();
             JsonUtility.FromJsonOverwrite(json, boxData);
-            pokemon_storage.Instance.SetBoxData(boxData.boxNumber-1,boxData);
+            pokemon_storage.Instance.storageBoxes[boxData.boxNumber-1].boxPokemon = boxData.boxPokemon;
+            pokemon_storage.Instance.storageBoxes[boxData.boxNumber-1].currentNumPokemon = boxData.currentNumPokemon;
         }
     }
-    private void LoadOverworldData()
+    public void LoadOverworldData()
     {
         CreateFolder(_saveDataPath + "/Overworld");
         CreateFolder(_saveDataPath + "/Overworld/Berry_Trees");
@@ -177,7 +175,6 @@ public class Save_manager : MonoBehaviour
             
             OverworldState.Instance.StoreBerryTreeData(treeData);
         }
-        OnOverworldDataLoaded?.Invoke();
     }
     private void LoadPlayerData()
     {
@@ -410,10 +407,7 @@ public class Save_manager : MonoBehaviour
         }
         
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
-        
-        Game_Load.Instance.playerData.location = Game_Load.Instance.playerData.location==string.Empty? 
-            "Overworld" 
-            : area.currentArea.areaName;
+        Game_Load.Instance.playerData.location = area.currentArea.areaData.areaName;
         
         try
         {

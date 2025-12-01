@@ -676,7 +676,7 @@ public class Battle_handler : MonoBehaviour
         _defaultPokemonImagePositions.Clear();
         Encounter_handler.Instance.ResetTrigger();
         overWorld.SetActive(true);
-        var location = (playerWhiteOut)? "Poke Center" : Game_Load.Instance.playerData.location;
+        var location = (playerWhiteOut)? AreaData.AreaName.PokeCenter : Game_Load.Instance.playerData.location;
         if(playerWhiteOut) Options_manager.Instance.HealPartyPokemon();
         Area_manager.Instance.SwitchToArea(location, 0f);
         Dialogue_handler.Instance.canExitDialogue = true;

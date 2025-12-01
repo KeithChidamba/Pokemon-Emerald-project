@@ -12,6 +12,6 @@ public class Player_data : ScriptableObject
     public int playerMoney;
     public int numBadges = 0;
     public Vector3 playerPosition;
-    public string location;
+    public AreaData.AreaName location;
     public string equippedItemName;
 }

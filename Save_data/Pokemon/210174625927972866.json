@@ -7,7 +7,7 @@
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26652
+        "instanceID": 26656
     },
     "hasGender": true,
     "hp": 91.0,
@@ -57,10 +57,10 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 27070
+            "instanceID": 27074
         },
         {
-            "instanceID": 26976
+            "instanceID": 26980
         }
     ],
     "statusEffect": 0,
@@ -133,33 +133,33 @@
     ],
     "moveSet": [
         {
-            "instanceID": -10354
+            "instanceID": -5476
         },
         {
-            "instanceID": -10356
+            "instanceID": -5478
         },
         {
-            "instanceID": -10358
+            "instanceID": -5480
         },
         {
-            "instanceID": -10360
+            "instanceID": -5482
         }
     ],
     "ability": {
-        "instanceID": 25758
+        "instanceID": 25762
     },
     "evolutions": [
         {
-            "instanceID": 26400
+            "instanceID": 26404
         },
         {
-            "instanceID": 26534
+            "instanceID": 26538
         },
         {
-            "instanceID": 26262
+            "instanceID": 26266
         },
         {
-            "instanceID": 26558
+            "instanceID": 26562
         }
     ],
     "heldItem": {
@@ -167,19 +167,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 27202
+        "instanceID": 27206
     },
     "backPicture": {
-        "instanceID": 25492
+        "instanceID": 25496
     },
     "partyFrame1": {
-        "instanceID": 25564
+        "instanceID": 25568
     },
     "partyFrame2": {
-        "instanceID": 26180
+        "instanceID": 26184
     },
     "battleIntroFrame": {
-        "instanceID": 25284
+        "instanceID": 25288
     },
     "pokeballName": "Great Ball",
     "healthPhase": 1,

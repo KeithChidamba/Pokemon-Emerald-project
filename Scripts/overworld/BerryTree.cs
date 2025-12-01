@@ -233,7 +233,7 @@ public class BerryTree : MonoBehaviour
         treeData.currentStageProgress = 0;
         SetInteraction(Overworld_interactable.InteractionType.PlantBerry);
     }
-    public void ChangeSprite()
+    public void ChangeSprite()//animation Event
     {
         if (treeData is not { isPlanted: true }) return;
         

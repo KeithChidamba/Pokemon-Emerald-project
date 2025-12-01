@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class OverworldState : MonoBehaviour
 {    
-    [SerializeField]private bool treesLoaded;
     [SerializeField]private List<BerryTree> overworldBerryTrees = new();
     [SerializeField]private List<BerryTreeData> treeDataQueue = new();
     public static OverworldState Instance;
@@ -19,8 +18,6 @@ public class OverworldState : MonoBehaviour
             return;
         }
         Instance = this;
-        treesLoaded = false;
-        Save_manager.Instance.OnOverworldDataLoaded += ()=> StartCoroutine(LoadAllTreeData());
     }
     private void Start()
     {
@@ -30,19 +27,7 @@ public class OverworldState : MonoBehaviour
         {
             overworldBerryTrees.Add(tree);
         }
-        treesLoaded = true;
-    }
-    public int GetTreeIndex(BerryTree tree)
-    {
-        return overworldBerryTrees.IndexOf(tree);
-    }
-    public void StoreBerryTreeData(BerryTreeData treeData)
-    {
-        treeDataQueue.Add(treeData);
-    }
-    private IEnumerator LoadAllTreeData()
-    {
-        yield return new WaitUntil(() => treesLoaded);
+        Save_manager.Instance.LoadOverworldData();
         foreach (var treeData in treeDataQueue)
         {
             var jsonBerryTree = overworldBerryTrees.First(tree=>tree.treeIndex==treeData.treeIndex);
@@ -54,6 +39,14 @@ public class OverworldState : MonoBehaviour
             if(tree.loadedFromJson)continue;
             tree.LoadDefaultAsset();
         }
+    }
+    public int GetTreeIndex(BerryTree tree)
+    {
+        return overworldBerryTrees.IndexOf(tree);
+    }
+    public void StoreBerryTreeData(BerryTreeData treeData)
+    {
+        treeDataQueue.Add(treeData);
     }
     public IEnumerator SaveOverworldData()
     {
