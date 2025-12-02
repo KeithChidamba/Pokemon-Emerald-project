@@ -279,7 +279,18 @@ public class Game_ui_manager : MonoBehaviour
 
     public void ViewItemStorage()
     {
-        //add this soon
+         var pcUsageSelectables = new List<SelectableUI>
+        {
+            new(pcItemOptions[0], ItemStorageHandler.Instance.ViewItemsToWithdraw, true),
+            new(pcItemOptions[1], ItemStorageHandler.Instance.OpenBagToDepositItem, true),
+            new(pcItemOptions[2], ItemStorageHandler.Instance.OpenBagToTossItem, true),
+            new(pcItemOptions[3], ()=>ClosePCOptions(pcItemOptionsUI), true),
+        };
+        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.ItemStorageUsage,
+            new[] { InputStateHandler.StateGroup.Bag},true,pcItemOptionsUI,
+            InputStateHandler.Directional.Vertical, pcUsageSelectables,pcOptionSelector,true, true));
+        
+        pcItemOptionsUI.SetActive(true);
     }
     public void ViewPokemonStorage()
     {
@@ -288,7 +299,7 @@ public class Game_ui_manager : MonoBehaviour
             ()=>SetPcUsage(pokemon_storage.PCUsageState.Withdraw),
             ()=>SetPcUsage(pokemon_storage.PCUsageState.Deposit),
             ()=>SetPcUsage(pokemon_storage.PCUsageState.Move),
-            ClosePCOptions
+            ()=>ClosePCOptions(pcPokemonOptionsUI)
         };
         
         var pcUsageSelectables = new List<SelectableUI>();
@@ -302,10 +313,10 @@ public class Game_ui_manager : MonoBehaviour
         pcPokemonOptionsUI.SetActive(true);
     }
 
-    private void ClosePCOptions()
+    private void ClosePCOptions(GameObject ui)
     {
         InputStateHandler.Instance.RemoveTopInputLayer(false);
-        pcPokemonOptionsUI.SetActive(false);
+        ui.SetActive(false);
         ManageScreens(0);
     }
     private void SetPcUsage(pokemon_storage.PCUsageState currentUsageState)
