@@ -13,7 +13,7 @@ public class Bag : MonoBehaviour
 {
     public List<Item> allItems;
     public List<Item> currentCategoryOfItems;
-
+    public List<Item> storageItems;
     public enum BagCategory
     {
         General,Pokeballs,HmsTms,Berries,KeyItems
@@ -28,7 +28,16 @@ public class Bag : MonoBehaviour
     public int sellQuantity = 1;
     public int maxNumItemsForView;
     public int maxItemCapacity;
-    public enum BagUsage{NormalView,SellingView,SelectionOnly}
+
+    public enum BagUsage
+    {
+        NormalView,
+        SellingView,
+        SelectionOnly
+    }
+
+    public bool storageView;
+    
     public BagUsage currentBagUsage;
     public GameObject sellingItemUI;
     public Text sellQuantityText;
@@ -42,6 +51,8 @@ public class Bag : MonoBehaviour
     public GameObject[] bagCategoryIndicators;
     public static Bag Instance;
     public GameObject bagUI;
+    public GameObject bagOverlayUI;
+    public GameObject storageOverlayUI;
     public GameObject itemSelector;
     public LoopingUiAnimation[] redArrows;
     private LoopingUiAnimation _rightArrow;
@@ -92,7 +103,7 @@ public class Bag : MonoBehaviour
         Game_Load.Instance.playerData.playerMoney += _totalSellingAmount;
         itemToSell.quantity -= sellQuantity;
         if (itemToSell.quantity == 0)
-            RemoveItem();
+            RemoveItem(itemToSell);
         Dialogue_handler.Instance.DisplayList("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
              "Sure, which item?", 
              new[]{ Options_manager.InteractionOptions.SellItem
@@ -183,6 +194,7 @@ public class Bag : MonoBehaviour
 
     public void ChangeCategoryLeft()
     {
+        if (storageView) return;
         if (currentCategoryIndex > 0)
         {
             bagCategoryIndicators[currentCategoryIndex].SetActive(false);
@@ -198,6 +210,7 @@ public class Bag : MonoBehaviour
     }
     public void ChangeCategoryRight()
     {
+        if (storageView) return;
         if (currentCategoryIndex < _categories.Length-1)
         {
             bagCategoryIndicators[currentCategoryIndex].SetActive(false);
@@ -216,11 +229,7 @@ public class Bag : MonoBehaviour
         return allItems.FirstOrDefault(item => item.itemName == itemName & item.quantity < 99);
     }
     
-    private void RemoveItem()
-    {
-        RemoveItem(allItems[topIndex + selectedItemIndex]);
-    }
-    private void RemoveItem(Item item)
+    public void RemoveItem(Item item)
     {
         allItems.Remove(item);
         ClearBagUI();
@@ -300,6 +309,20 @@ public class Bag : MonoBehaviour
          else
              Item_handler.Instance.UseItem(itemToUse,null);
      }
+
+    public void WithDrawFromStorage(Item itemToWithdraw)
+    {
+        Dialogue_handler.Instance.DisplayDetails("withdrew "+itemToWithdraw.itemName);
+        AddItem(itemToWithdraw);
+        storageItems.Remove(itemToWithdraw);
+        ClearBagUI();
+        ViewBag();
+    }
+    public void DepositToStorage(Item itemToDeposit)
+    {
+        storageItems.Add(itemToDeposit);
+        RemoveItem(itemToDeposit);
+    }
     public void AddItem(Item item)
     {
         if (allItems.Any(i=> i.itemName == item.itemName))
@@ -340,15 +363,22 @@ public class Bag : MonoBehaviour
     }
     public void CloseBag()
     {
+        storageView = false;
         selectedItemIndex = 0;
+        bagCategoryIndicators[currentCategoryIndex].SetActive(false);
+        currentCategoryIndex = 0;
+        currentCategoryTitle.sprite = bagCategoryTitles[currentCategoryIndex];
+        currentBagImage.sprite = bagCategoryImages[currentCategoryIndex];
         sellingItemUI.SetActive(false);
         currentBagUsage = BagUsage.NormalView;
+        ItemStorageHandler.Instance.currentUsage = ItemStorageHandler.ItemUsage.None;
         ClearBagUI();
         foreach (var loopingUiAnimation in redArrows)
         {
             loopingUiAnimation.viewingUI = false;
             loopingUiAnimation.gameObject.SetActive(true);
         }
+        InputStateHandler.Instance.ResetRelevantUi(InputStateHandler.StateName.ItemStorageUsage);
         OnItemSelected = null;
         OnBagOpened = null;
     }
@@ -367,7 +397,8 @@ public class Bag : MonoBehaviour
             Item_handler.ItemType.LearnableMove
         };
         
-        currentCategoryOfItems = _categories[currentCategoryIndex] switch
+        currentCategoryOfItems = storageView? storageItems 
+            : _categories[currentCategoryIndex] switch
         {
             BagCategory.Pokeballs=>GetItems(specialCategories[0]),
             BagCategory.KeyItems=>GetItems(specialCategories[1]),
@@ -377,19 +408,25 @@ public class Bag : MonoBehaviour
         };
         
         numItems = currentCategoryOfItems.Count;
-        
-        InputStateHandler.Instance.currentState.currentSelectionIndex = 0;
-        
-        sellingItemUI.SetActive(currentBagUsage == BagUsage.SellingView);
-        
         if (numItems == 0)
         {
-            foreach (var loopingUiAnimation in redArrows)
+            if(ItemStorageHandler.Instance.currentUsage == ItemStorageHandler.ItemUsage.Deposit)
             {
-                loopingUiAnimation.gameObject.SetActive(false);
+                OnBagOpened = null;
+                Dialogue_handler.Instance.DisplayDetails("You have no items to deposit", 2f);
+                InputStateHandler.Instance.RemoveTopInputLayer(true);
+                return;
             }
-            return;
+            if (storageView)
+            {
+                OnBagOpened = null;
+                Dialogue_handler.Instance.DisplayDetails("You have no items to withdraw", 2f);
+                InputStateHandler.Instance.RemoveTopInputLayer(true);
+                return;
+            }
         }
+        itemSelector.SetActive(numItems > 0);
+        sellingItemUI.SetActive(currentBagUsage == BagUsage.SellingView);
         numItemsForView = (numItems < maxNumItemsForView+1) ? numItems : maxNumItemsForView; 
         for (int i = 0; i < numItemsForView; i++)
         {
@@ -398,7 +435,9 @@ public class Bag : MonoBehaviour
             bagItemsUI[i].LoadItemUI();
         }
         selectedItemIndex = 0;
-        SelectItem();
+        
+        if (numItems > 0) SelectItem();
+        
         OnBagOpened?.Invoke();
         
         //default visuals

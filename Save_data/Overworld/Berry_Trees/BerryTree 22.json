@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Chesto berry",
     "berryItem": {
-        "instanceID": 26396
+        "instanceID": 26398
     },
     "treeIndex": 22,
     "minutesPerStage": 45,
@@ -16,35 +16,13 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32608
-                },
-                {
-                    "instanceID": 32608
-                }
-            ],
-            "growthStageNumber": 0
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32610
-                },
-                {
-                    "instanceID": 32612
-                }
-            ],
-            "growthStageNumber": 1
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32614
+                    "instanceID": 32616
                 },
                 {
                     "instanceID": 32616
                 }
             ],
-            "growthStageNumber": 2
+            "growthStageNumber": 0
         },
         {
             "growthStageSprites": [
@@ -55,7 +33,7 @@
                     "instanceID": 32620
                 }
             ],
-            "growthStageNumber": 3
+            "growthStageNumber": 1
         },
         {
             "growthStageSprites": [
@@ -66,8 +44,30 @@
                     "instanceID": 32624
                 }
             ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32626
+                },
+                {
+                    "instanceID": 32628
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32630
+                },
+                {
+                    "instanceID": 32632
+                }
+            ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-12-02T11:59:47.0226060+02:00"
+    "lastLogin": "2025-12-03T17:00:55.9040530+02:00"
 }

@@ -31,7 +31,7 @@ public class InputStateHandler : MonoBehaviour
     {
         PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
         PokemonStorageBoxChange,PokemonStorageExit ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
-        PokemonStorageUsage,ItemStorageUsage,ItemStorageNavigation,PokemonStoragePartyOptions,PokemonStorageDepositSelection,
+        PokemonStorageUsage,ItemStorageUsage,PokemonStoragePartyOptions,PokemonStorageDepositSelection,
         PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
         PlayerBagItemSell,PlayerBagNavigation,
         PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
@@ -92,7 +92,12 @@ public class InputStateHandler : MonoBehaviour
         
         RemoveInputStates(inputStates);
     }
-
+    public void ResetRelevantUi(StateName stateName)
+    {
+        var state = stateLayers.FirstOrDefault(state => state.stateName == stateName);
+        if (state == null) return;
+        RemoveInputState(state,false);
+    }
     private List<InputState> GetRelevantStates(StateGroup group)
     {
         List<InputState> inputStates = new List<InputState>();
@@ -276,14 +281,12 @@ public class InputStateHandler : MonoBehaviour
     }
     private void PlayerBagNavigation()
     {
-        if (Bag.Instance.numItems == 0) return;
-        
-        OnInputLeft += Bag.Instance.ChangeCategoryLeft;
-        OnInputRight += Bag.Instance.ChangeCategoryRight;
-        
-        OnInputUp += Bag.Instance.NavigateUp;
-        OnInputDown += Bag.Instance.NavigateDown;
-        
+        currentState.currentSelectionIndex = 0;
+        if(ItemStorageHandler.Instance.currentUsage != ItemStorageHandler.ItemUsage.Deposit)
+        {
+            OnInputLeft += Bag.Instance.ChangeCategoryLeft;
+            OnInputRight += Bag.Instance.ChangeCategoryRight;
+        }
         if(Bag.Instance.numItems==Bag.Instance.numItemsForView)
         {
             //prevent selecting null item selectables
@@ -293,7 +296,10 @@ public class InputStateHandler : MonoBehaviour
             
             Bag.Instance.OnBagOpened += UpdateSelectorUi;
         }
-
+        if (Bag.Instance.numItems == 0) return;
+        
+        OnInputUp += Bag.Instance.NavigateUp;
+        OnInputDown += Bag.Instance.NavigateDown;
         switch (Bag.Instance.currentBagUsage)
         {
             case Bag.BagUsage.SellingView:

@@ -83,6 +83,7 @@ public class Save_manager : MonoBehaviour
         CreateFolder(_tempSaveDataPath+"/Player");
         CreateFolder(_tempSaveDataPath+"/Items");
         CreateFolder(_tempSaveDataPath+"/Items/Held_Items");
+        CreateFolder(_tempSaveDataPath+"/Items/Storage_Items");
         CreateFolder(_tempSaveDataPath+"/Pokemon");
         CreateFolder(_tempSaveDataPath+"/Party_Ids");
         CreateFolder(_tempSaveDataPath + "/PC_Storage");
@@ -199,10 +200,19 @@ public class Save_manager : MonoBehaviour
     {
         CreateFolder(_saveDataPath+"/Items");
         CreateFolder(_saveDataPath+"/Items/Held_Items");
+        CreateFolder(_saveDataPath+"/Items/Storage_Items");
+        
         var itemList = GetJsonFilesFromPath(_saveDataPath+"/Items");
+        var storagteitemList = GetJsonFilesFromPath(_saveDataPath+"/Items/Storage_Items");
         Bag.Instance.allItems.Clear();
-        foreach(var item in itemList)
+        foreach (var item in itemList)
+        {
             Bag.Instance.allItems.Add(LoadItemFromJson(_saveDataPath+"/Items/" + Path.GetFileName(item)));
+        }
+        foreach (var item in storagteitemList)
+        {
+            Bag.Instance.storageItems.Add(LoadItemFromJson(_saveDataPath+"/Items/Storage_Items/" + Path.GetFileName(item)));
+        }
     }
     private List<string> GetJsonFilesFromPath(string path)
     {
@@ -253,7 +263,6 @@ public class Save_manager : MonoBehaviour
             pokemon_storage.Instance.totalPokemonCount++;
         }
     }
-
     private void LoadHeldItems(Pokemon pokemon)
     {
         if (!pokemon.hasItem) return;
@@ -405,7 +414,18 @@ public class Save_manager : MonoBehaviour
                 yield break;
             }
         }
-        
+        foreach (var item in Bag.Instance.storageItems)
+        {
+            try
+            {
+                SaveStorageItem(item, item.itemID);
+            }
+            catch (Exception e)
+            {
+                OnSaveDataFail?.Invoke("Error occured with SaveStorageItem, exception: ",e);
+                yield break;
+            }
+        }
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
         Game_Load.Instance.playerData.location = area.currentArea.areaData.areaName;
         
@@ -473,6 +493,14 @@ public class Save_manager : MonoBehaviour
         if(item==null) throw new Exception("Item is null! "+fileName); 
         
         var directory = Path.Combine(_tempSaveDataPath+"/Items/Held_Items", fileName + ".json");
+        var json = JsonUtility.ToJson(item, true);
+        File.WriteAllText(directory, json);
+    }
+    private void SaveStorageItem(Item item, string fileName)
+    {
+        if(item==null) throw new Exception("Item is null! "+fileName); 
+        
+        var directory = Path.Combine(_tempSaveDataPath+"/Items/Storage_Items", fileName + ".json");
         var json = JsonUtility.ToJson(item, true);
         File.WriteAllText(directory, json);
     }
