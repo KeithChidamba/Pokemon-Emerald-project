@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -108,7 +108,721 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 284
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8de6579260515c85493724145f0889dc
+      internalID: 1449156927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_1
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 284
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 034391f40f5740f379b7c8d6bb1ca146
+      internalID: -1636751344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_2
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 284
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb1c422edf3839efbbd0fc0f08d1a624
+      internalID: -1923005618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_3
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 284
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05d1786861ae964e5b5874c606313de7
+      internalID: -793814689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_4
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 284
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77ce000cb37929b619bdeab3717800dd
+      internalID: 706884986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_5
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 244
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49ba4aa14bcc075e895fb48a977eaa17
+      internalID: 395957681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_6
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 244
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3da1d6e46ca6b1d288bbd0adf1e1abcf
+      internalID: 488850222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_7
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 244
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d8372ad1043c9c21af1efb97e0a897b
+      internalID: -1757332618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_8
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 244
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d37aa94539dab69988ca502f7f5b8e08
+      internalID: -1840097419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_9
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 244
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8994ac1070b7905c28ce5ba1e25a73fd
+      internalID: 633594963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_10
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 204
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d1b2ec81023db208af19d7b822c5a5d
+      internalID: -2127099580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_11
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 204
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3dc05c4d83d697a888b9c8dbb596832
+      internalID: -2009878790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_12
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 204
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad58579e2c92e68ffb7c2fd677caeca7
+      internalID: -499305580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_13
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 204
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ada0df30a3b976bfa1594d45a1ebe24
+      internalID: 955035243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_14
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 164
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf1fce8f2f9b3738a9246b4802d7d499
+      internalID: -766882132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_15
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 164
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ec11b609e9831813a8b58e2e2463dcd
+      internalID: 1949499932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_16
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 164
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c651b02550283d6dc987095d45485229
+      internalID: 1123659057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_17
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 164
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9034f8897b93602d3bde604834edfba3
+      internalID: 1626832150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_18
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 124
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6154ac8d93412eb338d0a38810793bc4
+      internalID: 266474905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_19
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 124
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4798bd6ca4e03bdeaa05db5b342d6656
+      internalID: 1704869135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_20
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 124
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b76cef7b57f85a0ab8c935545cfe960
+      internalID: 1965246767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_21
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 124
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cad35a1cf41c77d1bc6d9c4ae5401db
+      internalID: 1486177977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_22
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 84
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04d11193a653dfe00ae24a9abe114a69
+      internalID: -1073893263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_23
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 84
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 265eee72092df50c5913208473a5f9ef
+      internalID: 1135382588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_24
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 84
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3757a0ea079fff093acf829c399426dc
+      internalID: 703861099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_25
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 84
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ac1e303fa7556f54837021d2a691de0
+      internalID: -583840348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_26
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 44
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc85acec496b76bbfac4b096a63adebe
+      internalID: 530000276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_27
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 44
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae28d7777894821f9bb0372ce2613044
+      internalID: 626248982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_28
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 44
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 696a2ffde98a52c60aa435632a89dba6
+      internalID: -1064751998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_29
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 44
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 575413025b871116dbc3fbdc065d14b4
+      internalID: 1597924181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_30
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 4
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09b21f1ebc33fcb0b9eb3af3ad68c0a7
+      internalID: -233669586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_31
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 4
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0af89c21957bae069ba8f92466eebbc5
+      internalID: 1953106442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_32
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 4
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eded15202b1f4373faf70498f387b0a0
+      internalID: -252588816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_33
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 4
+        width: 96
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e80f0268998390610b08e3c98c9d5adc
+      internalID: 1087539199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +833,41 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_0: 1449156927
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_1: -1636751344
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_10: -2127099580
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_11: -2009878790
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_12: -499305580
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_13: 955035243
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_14: -766882132
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_15: 1949499932
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_16: 1123659057
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_17: 1626832150
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_18: 266474905
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_19: 1704869135
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_2: -1923005618
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_20: 1965246767
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_21: 1486177977
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_22: -1073893263
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_23: 1135382588
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_24: 703861099
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_25: -583840348
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_26: 530000276
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_27: 626248982
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_28: -1064751998
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_29: 1597924181
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_3: -793814689
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_30: -233669586
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_31: 1953106442
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_32: -252588816
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_33: 1087539199
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_4: 706884986
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_5: 395957681
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_6: 488850222
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_7: -1757332618
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_8: -1840097419
+      Game Boy Advance - Pokemon Emerald - Miscellaneous - Route Icons_9: 633594963
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

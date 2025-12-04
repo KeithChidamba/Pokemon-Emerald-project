@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Area_manager : MonoBehaviour
 {
@@ -10,6 +11,11 @@ public class Area_manager : MonoBehaviour
     [FormerlySerializedAs("Areas")] public Switch_Area[] overworldAreas;
     [FormerlySerializedAs("loadingPLayerFromSave")] public bool loadingPlayerFromSave;
     private Switch_Area _areaBuilding;
+    public Sprite[] areaBoards;
+    public int currentAreaIndex;
+    public Image routeDisplayBoard;
+    public Image cityDisplayBoard;
+    public Text cityDisplayName;
     public static Area_manager Instance;
     private void Awake()
     {
