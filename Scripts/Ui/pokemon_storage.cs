@@ -336,7 +336,7 @@ public class pokemon_storage : MonoBehaviour
                 new[]{InputStateHandler.StateGroup.PokemonStorage}
                 , stateDirectional:InputStateHandler.Directional.Vertical, selectableUis:partySelectables
                 ,selector: initialSelector
-                ,selecting:true,display:true));
+                ,selecting:true,display:true, canManualExit:false));
 
             ActivatePokemonIcons(true);
             LoadPokemonData(0);
