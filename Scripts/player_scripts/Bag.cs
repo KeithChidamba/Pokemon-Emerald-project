@@ -149,6 +149,7 @@ public class Bag : MonoBehaviour
     }
     public void NavigateDown()
     {
+        if (numItems == 0) return;
         if (numItemsForView == 1) return;
         if (topIndex < numItems - maxNumItemsForView && selectedItemIndex == maxNumItemsForView - 1)
         {
@@ -174,6 +175,7 @@ public class Bag : MonoBehaviour
     }
     public void NavigateUp()
     {
+        if (numItems == 0) return;
         if (numItemsForView == 1) return;
         if (topIndex > 0 && selectedItemIndex == 0)
         {
@@ -425,7 +427,6 @@ public class Bag : MonoBehaviour
                 return;
             }
         }
-        itemSelector.SetActive(numItems > 0);
         sellingItemUI.SetActive(currentBagUsage == BagUsage.SellingView);
         numItemsForView = (numItems < maxNumItemsForView+1) ? numItems : maxNumItemsForView; 
         for (int i = 0; i < numItemsForView; i++)
@@ -437,7 +438,10 @@ public class Bag : MonoBehaviour
         selectedItemIndex = 0;
         
         if (numItems > 0) SelectItem();
-        
+        if (InputStateHandler.Instance.currentState.stateGroups.Contains(InputStateHandler.StateGroup.Bag))
+        {
+            InputStateHandler.Instance.PlayerBagNavigationRestrictions();
+        }
         OnBagOpened?.Invoke();
         
         //default visuals

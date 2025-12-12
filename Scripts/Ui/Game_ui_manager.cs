@@ -178,7 +178,7 @@ public class Game_ui_manager : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PlayerBagNavigation,
             new[] { InputStateHandler.StateGroup.Bag},true,
             Bag.Instance.bagUI, InputStateHandler.Directional.Vertical, bagSelectables,
-            Bag.Instance.itemSelector,true,true,CloseBag,CloseBag));
+            Bag.Instance.itemSelector,true,false,CloseBag,CloseBag));
         
         Bag.Instance.bagOverlayUI.SetActive(!Bag.Instance.storageView);
         Bag.Instance.storageOverlayUI.SetActive(Bag.Instance.storageView);

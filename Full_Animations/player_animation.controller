@@ -92,7 +92,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Movement Direction
+  m_BlendParameter: moveDirection
   m_BlendParameterY: Blend
   m_MinThreshold: 1
   m_MaxThreshold: 4
@@ -191,7 +191,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Idle Direction
+  m_BlendParameter: idleDirection
   m_BlendParameterY: Blend
   m_MinThreshold: 1
   m_MaxThreshold: 4
@@ -235,19 +235,19 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -7983774147930673964}
-    m_Position: {x: 240, y: 180, z: 0}
+    m_Position: {x: 250, y: 180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1278669996135876801}
-    m_Position: {x: 260, y: -110, z: 0}
+    m_Position: {x: 240, y: 10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2330690378124567014}
     m_Position: {x: 240, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6444071182844613204}
-    m_Position: {x: 550, y: -50, z: 0}
+    m_Position: {x: 550, y: -60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2660220224145468053}
-    m_Position: {x: 550, y: 0, z: 0}
+    m_Position: {x: 550, y: 20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3768139890135577912}
     m_Position: {x: 550, y: 110, z: 0}
@@ -279,25 +279,13 @@ AnimatorController:
   m_Name: player_animation
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: Movement Direction
+  - m_Name: moveDirection
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: running
-    m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: walking
-    m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Idle Direction
+  - m_Name: idleDirection
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -356,7 +344,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Idle Direction
+  m_BlendParameter: idleDirection
   m_BlendParameterY: Blend
   m_MinThreshold: 1
   m_MaxThreshold: 4
@@ -455,7 +443,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Idle Direction
+  m_BlendParameter: idleDirection
   m_BlendParameterY: Blend
   m_MinThreshold: 1
   m_MaxThreshold: 4
@@ -528,7 +516,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Idle Direction
+  m_BlendParameter: idleDirection
   m_BlendParameterY: Blend
   m_MinThreshold: 1
   m_MaxThreshold: 4
@@ -601,7 +589,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Idle Direction
+  m_BlendParameter: idleDirection
   m_BlendParameterY: Blend
   m_MinThreshold: 1
   m_MaxThreshold: 4
@@ -648,7 +636,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Idle Direction
+  m_BlendParameter: idleDirection
   m_BlendParameterY: Blend
   m_MinThreshold: 1
   m_MaxThreshold: 4
@@ -695,7 +683,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Movement Direction
+  m_BlendParameter: moveDirection
   m_BlendParameterY: Blend
   m_MinThreshold: 1
   m_MaxThreshold: 4
@@ -742,7 +730,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Movement Direction
+  m_BlendParameter: moveDirection
   m_BlendParameterY: Blend
   m_MinThreshold: 1
   m_MaxThreshold: 4

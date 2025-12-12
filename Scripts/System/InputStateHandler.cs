@@ -279,27 +279,18 @@ public class InputStateHandler : MonoBehaviour
         OnInputUp = null; OnInputDown = null; OnInputLeft = null; OnInputRight = null;
         OnSelectionIndexChanged = null;
     }
-    private void PlayerBagNavigation()
+
+    public void PlayerBagNavigationRestrictions()
     {
         currentState.currentSelectionIndex = 0;
-        if(ItemStorageHandler.Instance.currentUsage != ItemStorageHandler.ItemUsage.Deposit)
-        {
-            OnInputLeft += Bag.Instance.ChangeCategoryLeft;
-            OnInputRight += Bag.Instance.ChangeCategoryRight;
-        }
         if(Bag.Instance.numItems==Bag.Instance.numItemsForView)
         {
             //prevent selecting null item selectables
             currentState.maxSelectionIndex = Bag.Instance.numItems-1;
-            Bag.Instance.OnBagOpened += ()=>
-                currentState.maxSelectionIndex = Bag.Instance.numItems-1;
-            
-            Bag.Instance.OnBagOpened += UpdateSelectorUi;
+            UpdateSelectorUi();
         }
-        if (Bag.Instance.numItems == 0) return;
-        
-        OnInputUp += Bag.Instance.NavigateUp;
-        OnInputDown += Bag.Instance.NavigateDown;
+        currentState.displayingSelector = Bag.Instance.numItems > 0;
+        Bag.Instance.itemSelector.SetActive(Bag.Instance.numItems > 0);
         switch (Bag.Instance.currentBagUsage)
         {
             case Bag.BagUsage.SellingView:
@@ -312,6 +303,18 @@ public class InputStateHandler : MonoBehaviour
                 currentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.SelectItemForEvent);
                 break;
         }
+    }
+
+    public void PlayerBagNavigation()
+    {
+        if(ItemStorageHandler.Instance.currentUsage != ItemStorageHandler.ItemUsage.Deposit)
+        {
+            OnInputLeft += Bag.Instance.ChangeCategoryLeft;
+            OnInputRight += Bag.Instance.ChangeCategoryRight;
+        }
+        OnInputUp += Bag.Instance.NavigateUp;
+        OnInputDown += Bag.Instance.NavigateDown;
+        PlayerBagNavigationRestrictions();
     }
 
     void CreateSellingItemState()
