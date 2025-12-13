@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+
 
 public class Collider_checks : MonoBehaviour
 {
@@ -20,24 +17,7 @@ public class Collider_checks : MonoBehaviour
         if(area.currentArea.areaData.insideArea)
             Player_movement.Instance.canUseBike = false;
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Encounter") && !Player_movement.Instance.usingBike)
-            Player_movement.Instance.canUseBike = false;
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Encounter") && !Player_movement.Instance.usingBike)
-            Player_movement.Instance.canUseBike = true;
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Encounter"))
-            Player_movement.Instance.canUseBike = false;
-    }
+    
     private void OnCollisionStay2D(Collision2D collision)
     { 
         if (!collision.gameObject.CompareTag("Switch_Area")) return;
@@ -47,7 +27,7 @@ public class Collider_checks : MonoBehaviour
             if (areaEntryPoint.areaData.exitingArea)
                 area.GoToOverworld();
             else
-                area.SwitchToArea(areaEntryPoint,1f);
+                area.EnterBuilding(areaEntryPoint,1f);
         
     }
 }

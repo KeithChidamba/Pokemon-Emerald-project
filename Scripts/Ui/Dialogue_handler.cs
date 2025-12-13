@@ -265,7 +265,6 @@ public class Dialogue_handler : MonoBehaviour
     private void HandleInteraction()
     {
         Player_movement.Instance.RestrictPlayerMovement();
-        Player_movement.Instance.movingOnFoot = false;
 
         dialogueFinished = false;
         displaying = true;  

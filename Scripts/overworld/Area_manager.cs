@@ -29,24 +29,22 @@ public class Area_manager : MonoBehaviour
 
     public void EscapeArea()
     {
+        //inside this method in-case there extra stuff that needs to happen when escaping
         GoToOverworld();
     }
-    public void SwitchToArea(Switch_Area area,float loadTime)
+    public void EnterBuilding(Switch_Area area,float loadTime=0f)
     {
         if (area.areaData.hasDoorAnimation)
             area.doorAnimation.Play("Open");
         currentArea = area;
         Invoke(nameof(LoadBuilding),loadTime);
     }
-    public void SwitchToArea(AreaData.AreaName areaName,float loadTime)
+    public void SwitchToArea(AreaData.AreaName areaName,float loadTime=0f)
     {
         if (areaName!=AreaData.AreaName.OverWorld)
         {
             var area = FindArea(areaName);
-            if (area.areaData.hasDoorAnimation)
-                area.doorAnimation.Play("Open");
-            currentArea = area;
-            Invoke(nameof(LoadBuilding), loadTime);
+            EnterBuilding(area, loadTime);
         }
         else
             GoToOverworld();

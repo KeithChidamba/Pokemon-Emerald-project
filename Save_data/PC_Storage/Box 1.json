@@ -26,8 +26,8 @@
             "containsPokemon": true
         },
         {
-            "pokemonID": "210174625384733013",
-            "containsPokemon": true
+            "pokemonID": "",
+            "containsPokemon": false
         },
         {
             "pokemonID": "0",
@@ -122,11 +122,11 @@
             "containsPokemon": false
         }
     ],
-    "currentNumPokemon": 4,
+    "currentNumPokemon": 2,
     "boxTopVisual": {
-        "instanceID": 32226
+        "instanceID": 32252
     },
     "boxVisual": {
-        "instanceID": 32324
+        "instanceID": 32350
     }
 }

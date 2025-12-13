@@ -1,9 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Player_movement : MonoBehaviour
 {
@@ -12,11 +9,8 @@ public class Player_movement : MonoBehaviour
     [SerializeField] float runSpeed = 1.5f;
     private const float BikeSpeed = 2f; 
     public bool runningInput;
-    public bool movingOnFoot;
     public bool usingBike = false;
     public bool canUseBike = true;
-    // private enum MovementState{OnBike,RidingBike,Walking,Running,Idle}
-    // private MovementState _currentState;
     private bool _canSwitchMovement; 
     [SerializeField] private int xAxisInput;
     [SerializeField] private int yAxisInput;
@@ -59,6 +53,7 @@ public class Player_movement : MonoBehaviour
     {
         if (delayingMovement) return;
         canMove = true;
+        SelectAnimation();
     }
     public IEnumerator AllowPlayerMovement(float delay)
     {
@@ -108,7 +103,6 @@ public class Player_movement : MonoBehaviour
     private void DisablePlayerMovement()
     {
         rb.velocity = Vector2.zero;
-        movingOnFoot = false;
         if (overworld_actions.Instance.usingUI)
             _animationManager.ChangeAnimationState(_animationManager.playerIdle);
         if (!overworld_actions.Instance.doingAction && !overworld_actions.Instance.usingUI) //dont want to interrupt fishing animation
@@ -133,7 +127,6 @@ public class Player_movement : MonoBehaviour
             if(!usingBike && !overworld_actions.Instance.doingAction)
             {
                 direction = 0;
-                movingOnFoot = false;
             }
         }
         else
@@ -162,7 +155,7 @@ public class Player_movement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X) && !runningInput)
         {
             runningInput = true;
-            movingOnFoot = rb.velocity != Vector2.zero;
+            _animationManager.ChangeAnimationState(_animationManager.playerRun);
         }
         
         if (Input.GetKeyUp(KeyCode.X) && runningInput)
@@ -172,6 +165,7 @@ public class Player_movement : MonoBehaviour
         {
             runningInput = false;
             _canSwitchMovement = false;
+            _animationManager.ChangeAnimationState(_animationManager.playerWalk);
         }
         movementSpeed = runningInput? runSpeed : walkSpeed;
     }
@@ -188,7 +182,6 @@ public class Player_movement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C) && !usingBike &&canUseBike)
         {
             usingBike = true;
-            movingOnFoot = false;
             runningInput = false;
             _canSwitchMovement = false;
             movementSpeed = BikeSpeed;

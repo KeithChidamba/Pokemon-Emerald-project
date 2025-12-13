@@ -23,6 +23,7 @@ public class Encounter_trigger : MonoBehaviour
             _triggerCheckCollider.isTrigger = false;
         else
         {
+            Player_movement.Instance.canUseBike = false;
             if (Player_movement.Instance.runningInput)
                 handler.overworldEncounterChance = 5;
             var randomNumber = Random.Range(1, 11);
@@ -35,29 +36,14 @@ public class Encounter_trigger : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
+        {
+            Player_movement.Instance.canUseBike = true;
             Invoke(nameof(ResetTrigger),2f);
+        }
     }
 
     void ResetTrigger()
     {
         _triggeredEncounter = false;
-    }
-    private void CheckCollision(Collision2D collision)
-    {
-        if (!collision.gameObject.CompareTag("Player")) return;
-        if (!Player_movement.Instance.usingBike)
-            gameObject.GetComponent<Collider2D>().isTrigger = true;
-    }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        CheckCollision(collision);
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        CheckCollision(collision);
-    }
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        CheckCollision(collision);
     }
 }

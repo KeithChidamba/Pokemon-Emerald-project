@@ -678,7 +678,7 @@ public class Battle_handler : MonoBehaviour
         overWorld.SetActive(true);
         var location = (playerWhiteOut)? AreaData.AreaName.PokeCenter : Game_Load.Instance.playerData.location;
         if(playerWhiteOut) Options_manager.Instance.HealPartyPokemon();
-        Area_manager.Instance.SwitchToArea(location, 0f);
+        Area_manager.Instance.SwitchToArea(location);
         Dialogue_handler.Instance.canExitDialogue = true;
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonBattle);
         battleWon = false;

@@ -96,7 +96,7 @@ public class Game_Load : MonoBehaviour
         overworld_actions.Instance.EquipItem(Bag.Instance.SearchForItem(playerData.equippedItemName));
         world_Map.SetActive(true);
         Area_manager.Instance.loadingPlayerFromSave = true;
-        Area_manager.Instance.SwitchToArea(playerData.location,0f);
+        Area_manager.Instance.SwitchToArea(playerData.location);
         OnGameStarted?.Invoke();
     }
 }
