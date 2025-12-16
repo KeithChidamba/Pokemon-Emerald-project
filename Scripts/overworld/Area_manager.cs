@@ -7,15 +7,10 @@ using UnityEngine.UI;
 
 public class Area_manager : MonoBehaviour
 {
-    [FormerlySerializedAs("current_area")] public Switch_Area currentArea;
+    public Switch_Area currentArea;
     [FormerlySerializedAs("Areas")] public Switch_Area[] overworldAreas;
-    [FormerlySerializedAs("loadingPLayerFromSave")] public bool loadingPlayerFromSave;
+    public bool loadingPlayerFromSave;
     private Switch_Area _areaBuilding;
-    public Sprite[] areaBoards;
-    public int currentAreaIndex;
-    public Image routeDisplayBoard;
-    public Image cityDisplayBoard;
-    public Text cityDisplayName;
     public static Area_manager Instance;
     private void Awake()
     {
@@ -81,6 +76,7 @@ public class Area_manager : MonoBehaviour
             area.overworld.SetActive(false);
         overworld_actions.Instance.doingAction = false;
         Player_movement.Instance.RestrictPlayerMovement();
+        Player_movement.Instance.canUseBike = false;
         currentArea.areaData.insideArea = true;
         currentArea.interior.SetActive(true);
         _areaBuilding = currentArea;

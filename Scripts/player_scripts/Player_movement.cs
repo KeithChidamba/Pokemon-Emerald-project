@@ -22,7 +22,6 @@ public class Player_movement : MonoBehaviour
     [SerializeField] Transform interactionPoint;
     private bool delayingMovement;
     public GameObject playerObject;
-    private event Action OnMovementDirection;
     public static Player_movement Instance;
 
     private enum InputAxis
@@ -46,14 +45,13 @@ public class Player_movement : MonoBehaviour
             (item)=> StopBikeUsage(item!=EquipableInfoModule.Equipable.Bike);
         overworld_actions.Instance.OnItemUnequipped += 
             (item)=> StopBikeUsage(item==EquipableInfoModule.Equipable.Bike);
-        OnMovementDirection += SelectAnimation;
     }
 
     public void AllowPlayerMovement()
     {
         if (delayingMovement) return;
         canMove = true;
-        SelectAnimation();
+        SetCurrentAnimation();
     }
     public IEnumerator AllowPlayerMovement(float delay)
     {
@@ -81,7 +79,7 @@ public class Player_movement : MonoBehaviour
             DisablePlayerMovement();
     }
 
-    private void SelectAnimation()
+    private void SetCurrentAnimation()
     {
         var idle = yAxisInput == 0 && xAxisInput == 0;
         if(usingBike)
@@ -185,7 +183,7 @@ public class Player_movement : MonoBehaviour
             runningInput = false;
             _canSwitchMovement = false;
             movementSpeed = BikeSpeed;
-            SelectAnimation();
+            SetCurrentAnimation();
         }       
         else if (Input.GetKeyDown(KeyCode.C) && !canUseBike)
             Dialogue_handler.Instance.DisplayDetails("Cant use bike here",1f);
@@ -197,7 +195,7 @@ public class Player_movement : MonoBehaviour
         {
             usingBike = false;
             _canSwitchMovement = false;
-            SelectAnimation();
+            SetCurrentAnimation();
         }
     }
     private void HandlePlayerPhysicsMovement()
@@ -209,7 +207,7 @@ public class Player_movement : MonoBehaviour
         {
             xAxisInput = newXInput;
             yAxisInput = newYInput;
-            OnMovementDirection?.Invoke();
+            SetCurrentAnimation();
         }
         
         var movementDirection = GetMovementDirection();

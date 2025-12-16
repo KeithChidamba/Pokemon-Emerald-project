@@ -11,13 +11,6 @@ public class Collider_checks : MonoBehaviour
     {
         _door = 1 << LayerMask.NameToLayer("Door");
     }
-    private void Update()
-    {
-        if (area.currentArea == null) return;
-        if(area.currentArea.areaData.insideArea)
-            Player_movement.Instance.canUseBike = false;
-    }
-    
     private void OnCollisionStay2D(Collision2D collision)
     { 
         if (!collision.gameObject.CompareTag("Switch_Area")) return;
