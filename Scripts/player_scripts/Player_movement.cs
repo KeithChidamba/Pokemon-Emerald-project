@@ -186,7 +186,7 @@ public class Player_movement : MonoBehaviour
             SetCurrentAnimation();
         }       
         else if (Input.GetKeyDown(KeyCode.C) && !canUseBike)
-            Dialogue_handler.Instance.DisplayDetails("Cant use bike here",1f);
+            Dialogue_handler.Instance.DisplayDetails("Cant use bike here");
         
         if (Input.GetKeyUp(KeyCode.C) && usingBike)
             _canSwitchMovement = true;

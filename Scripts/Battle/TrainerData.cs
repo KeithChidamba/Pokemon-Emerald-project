@@ -4,13 +4,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Trainer Data", menuName = "trainer data")]
 public class TrainerData : ScriptableObject
 {
-    public string TrainerName = "";
-    public string TrainerType = "";
-    public int BaseMoneyPayout = 0;
+    public string TrainerName;
+    public string TrainerType ;
+    public int BaseMoneyPayout;
     public Encounter_Area TrainerLocation;
     public List<TrainerPokemonData> PokemonParty = new();
     public enum BattleType{Single,SingleDouble,Double}
     public BattleType battleType;
     public Sprite battleIntroSprite;
     public string battleLossMessage;
+    public string battleIntroMessage;
 }

@@ -78,7 +78,7 @@ public class Pokemon_party : MonoBehaviour
         if (Turn_Based_Combat.Instance.ContainsSwitch(memberPosition-1))
         {
             Dialogue_handler.Instance.DisplayDetails(party[memberPosition-1].pokemonName +
-                                                     " is already going to be sent out", 3f);
+                                                     " is already going to be sent out");
             return false;
         }
         if ( (memberPosition < 3 & Battle_handler.Instance.isDoubleBattle) || memberPosition == 1)
@@ -86,7 +86,7 @@ public class Pokemon_party : MonoBehaviour
             var swapIn = Battle_handler.Instance.battleParticipants[memberPosition - 1];
             
             Dialogue_handler.Instance.DisplayDetails(swapIn.pokemon.pokemonName +
-                                                  " is already in battle", 2f);
+                                                     " is already in battle");
             return false;
         }
         var participantIndex = (Battle_handler.Instance.isDoubleBattle & _swappingIn)
@@ -96,7 +96,7 @@ public class Pokemon_party : MonoBehaviour
         if (!currentParticipant.canEscape & _swappingIn)
         {
             Dialogue_handler.Instance.DisplayDetails(currentParticipant.pokemon.pokemonName +
-                                                  " is trapped", 1.5f);
+                                                     " is trapped");
             return false;
         }
         return true;
@@ -141,7 +141,7 @@ public class Pokemon_party : MonoBehaviour
                 InputStateHandler.Instance.RemoveTopInputLayer(false);
             }
             else
-                Dialogue_handler.Instance.DisplayDetails("There must be at least 2 Pokemon to swap",1f);
+                Dialogue_handler.Instance.DisplayDetails("There must be at least 2 Pokemon to swap");
         }
     }
 
@@ -239,7 +239,7 @@ public class Pokemon_party : MonoBehaviour
             StartCoroutine(BattleIntro.Instance.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1]));
         }
         else
-            Dialogue_handler.Instance.DisplayDetails(message,1f);
+            Dialogue_handler.Instance.DisplayDetails(message);
         UpdatePartyUsageMessage("Choose a pokemon");
         memberToMove = 0;
         selectedMemberNumber = 0;

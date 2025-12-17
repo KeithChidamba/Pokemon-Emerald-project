@@ -241,7 +241,7 @@ public class Bag : MonoBehaviour
     {
         if (Options_manager.Instance.playerInBattle)
         {
-            Dialogue_handler.Instance.DisplayDetails("Can't do that in battle",1f);
+            Dialogue_handler.Instance.DisplayDetails("Can't do that in battle");
             return;
         }
         var partyMember = Pokemon_party.Instance.party[memberIndex - 1];
@@ -256,7 +256,7 @@ public class Bag : MonoBehaviour
     {
         if (Options_manager.Instance.playerInBattle)
         {
-            Dialogue_handler.Instance.DisplayDetails("Can't do that in battle",1f);
+            Dialogue_handler.Instance.DisplayDetails("Can't do that in battle");
             return;
         }
         currentBagUsage = BagUsage.SelectionOnly;
@@ -268,7 +268,7 @@ public class Bag : MonoBehaviour
     {
         if (!itemToBeGiven.canBeHeld)
         {
-            Dialogue_handler.Instance.DisplayDetails("Pokemon can't hold that item",1f);
+            Dialogue_handler.Instance.DisplayDetails("Pokemon can't hold that item");
             return;
         }
         var partyMember = Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber-1];
@@ -276,7 +276,7 @@ public class Bag : MonoBehaviour
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
         
         Dialogue_handler.Instance.DisplayDetails(partyMember.pokemonName
-                                                 +" received a "+itemToBeGiven.itemName,1.3f);
+                                                 +" received a "+itemToBeGiven.itemName);
         
         partyMember.GiveItem(Obj_Instance.CreateItem(itemToBeGiven));
         itemToBeGiven.quantity--;
@@ -290,7 +290,7 @@ public class Bag : MonoBehaviour
          {
              if (!itemToUse.canBeUsedInBattle)
              {
-                 Dialogue_handler.Instance.DisplayDetails("Can't use that in battle",1f);
+                 Dialogue_handler.Instance.DisplayDetails("Can't use that in battle");
                  return;
              }
          }
@@ -298,7 +298,7 @@ public class Bag : MonoBehaviour
          {
              if (!itemToUse.canBeUsedInOverworld) 
              {
-                 Dialogue_handler.Instance.DisplayDetails("Can't use that in battle",1f);
+                 Dialogue_handler.Instance.DisplayDetails("Can't use that in battle");
                  return;//special items for events
              }
          }
@@ -415,14 +415,14 @@ public class Bag : MonoBehaviour
             if(ItemStorageHandler.Instance.currentUsage == ItemStorageHandler.ItemUsage.Deposit)
             {
                 OnBagOpened = null;
-                Dialogue_handler.Instance.DisplayDetails("You have no items to deposit", 2f);
+                Dialogue_handler.Instance.DisplayDetails("You have no items to deposit");
                 InputStateHandler.Instance.RemoveTopInputLayer(true);
                 return;
             }
             if (storageView)
             {
                 OnBagOpened = null;
-                Dialogue_handler.Instance.DisplayDetails("You have no items to withdraw", 2f);
+                Dialogue_handler.Instance.DisplayDetails("You have no items to withdraw");
                 InputStateHandler.Instance.RemoveTopInputLayer(true);
                 return;
             }

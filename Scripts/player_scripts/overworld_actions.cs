@@ -42,7 +42,7 @@ public class overworld_actions : MonoBehaviour
         _currentEquippedItem = equippedSpecialItem.GetModule<EquipableInfoModule>().equipableItem;
         OnItemEquipped?.Invoke(_currentEquippedItem);
         if(usingUI)
-            Dialogue_handler.Instance.DisplayDetails("Equipped " + equippedSpecialItem.itemName, 1f);
+            Dialogue_handler.Instance.DisplayDetails("Equipped " + equippedSpecialItem.itemName);
         Game_Load.Instance.playerData.equippedItemName = equippedSpecialItem.itemName;
     }
     public bool IsEquipped(EquipableInfoModule.Equipable equipable = EquipableInfoModule.Equipable.None
@@ -61,7 +61,7 @@ public class overworld_actions : MonoBehaviour
         _currentEquippedItem = EquipableInfoModule.Equipable.None;
         equippedSpecialItem = null;
         if(usingUI)
-            Dialogue_handler.Instance.DisplayDetails("Unequipped " + item.itemName, 1f);
+            Dialogue_handler.Instance.DisplayDetails("Unequipped " + item.itemName);
         Game_Load.Instance.playerData.equippedItemName = string.Empty;
     }
     private bool ItemEquipped()
@@ -73,7 +73,7 @@ public class overworld_actions : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C) && !ItemEquipped() && !usingUI)
         {
             if (!_canUseEquippedItem) return;
-            Dialogue_handler.Instance.DisplayDetails("No item has been equipped", 2f);
+            Dialogue_handler.Instance.DisplayDetails("No item has been equipped");
         }  
         if (Dialogue_handler.Instance.displaying || usingUI || doingAction)
         {
@@ -106,7 +106,7 @@ public class overworld_actions : MonoBehaviour
             yield return new WaitForSeconds( (2 * (random/10f) ) + 1f);
             if (pokemonBitingPole)
             {
-                Dialogue_handler.Instance.DisplayDetails("It got away",1.5f);
+                Dialogue_handler.Instance.DisplayDetails("It got away");
                 ResetFishingAction();
                 yield return new WaitForSeconds(1);
                 ActionReset();
@@ -114,7 +114,7 @@ public class overworld_actions : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.Instance.DisplayDetails("Dang...nothing",1.5f);
+            Dialogue_handler.Instance.DisplayDetails("Dang...nothing");
             ResetFishingAction();
             yield return new WaitForSeconds(1);
             ActionReset();
@@ -136,7 +136,7 @@ public class overworld_actions : MonoBehaviour
     public IEnumerator WaterTrees()
     {
         manager.ChangeAnimationState(manager.watering);
-        Dialogue_handler.Instance.DisplayDetails("The tree is being watered",2f);
+        Dialogue_handler.Instance.DisplayDetails("The tree is being watered");
         yield return new WaitForSeconds(2f);
         manager.ChangeAnimationState(manager.playerWalk);
     }

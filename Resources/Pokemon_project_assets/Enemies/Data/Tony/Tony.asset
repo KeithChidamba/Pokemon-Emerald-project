@@ -23,3 +23,7 @@ MonoBehaviour:
   battleType: 0
   battleIntroSprite: {fileID: 21300000, guid: cf4f92409070fd246be7256f4478c66a, type: 3}
   battleLossMessage: Drat, you got lucky this time kid!
+  battleIntroMessage: "Hey! where do you think you're goingIn Unity, a typewriter
+    / typing-out effect is usually done by revealing characters over time. The cleanest
+    approach depends on whether you\u2019re using TextMeshPro (recommended) or the
+    old UI Text."

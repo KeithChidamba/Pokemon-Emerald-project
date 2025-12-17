@@ -87,7 +87,7 @@ public class Interaction_handler : MonoBehaviour
                 }
                 else
                 {
-                    Dialogue_handler.Instance.DisplayDetails("Cant fish here",1.5f);
+                    Dialogue_handler.Instance.DisplayDetails("Cant fish here");
                 }
             }
         }

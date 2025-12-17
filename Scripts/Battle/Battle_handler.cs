@@ -224,7 +224,6 @@ public class Battle_handler : MonoBehaviour
         InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
         SetupOptionsInput();
         
-        overworld_actions.Instance.doingAction = true;
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
         
         Turn_Based_Combat.Instance.OnTurnsCompleted += ResetPlayersTurnUsage;
@@ -239,6 +238,7 @@ public class Battle_handler : MonoBehaviour
     }
     public void SetBattleType(List<string> trainerNames)
     {
+        overworld_actions.Instance.doingAction = true;
         Pokemon_party.Instance.SortByFainted();
         var copyOfTrainerData = Resources.Load<TrainerData>(
             Save_manager.GetDirectory(Save_manager.AssetDirectory.TrainerData)
@@ -253,7 +253,13 @@ public class Battle_handler : MonoBehaviour
                 StartCoroutine(StartSingleDoubleBattle(copyOfTrainerData));
                 break;
         }
-       
+    }
+
+    private IEnumerator DisplayTrainerMessage(string message)
+    {
+        Dialogue_handler.Instance.DisplayDetails(message);
+        yield return new WaitUntil(()=>Dialogue_handler.Instance.dialogueFinished);
+        Dialogue_handler.Instance.EndDialogue();
     }
     public IEnumerator StartWildBattle(Pokemon enemy) //only ever be for wild battles
     {
@@ -280,6 +286,7 @@ public class Battle_handler : MonoBehaviour
     }
     private IEnumerator StartSingleBattle(TrainerData trainerData) //single trainer battle
     {
+        yield return DisplayTrainerMessage(trainerData.battleIntroMessage);
         battleOver = false;
         isTrainerBattle = true;
         isDoubleBattle = false; 
@@ -300,8 +307,9 @@ public class Battle_handler : MonoBehaviour
         StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
     }
 
-    private IEnumerator StartSingleDoubleBattle(TrainerData trainerData) //1v1 trainer double battle
+    private IEnumerator StartSingleDoubleBattle(TrainerData trainerData) //1v1 double battle
     {
+        yield return DisplayTrainerMessage(trainerData.battleIntroMessage);
         battleOver = false;
         isTrainerBattle = true;
         isDoubleBattle = true; 
@@ -361,7 +369,7 @@ public class Battle_handler : MonoBehaviour
             if (participant.isPlayer)
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName
-                                                            +" sent out "+participant.pokemon.pokemonName,3.5f);
+                                                            +" sent out "+participant.pokemon.pokemonName);
                 
                 //add enemies to exp list of new player pokemon
                 foreach (var enemyParticipant in participant.currentEnemies)
@@ -370,7 +378,7 @@ public class Battle_handler : MonoBehaviour
             else
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemonTrainerAI.trainerData.TrainerName
-                                                            +" sent out "+participant.pokemon.pokemonName,3.5f);
+                                                            +" sent out "+participant.pokemon.pokemonName);
                 
                 //add player participants to get exp from switched in enemy
                 foreach (var playerParticipant in participant.currentEnemies)

@@ -58,7 +58,7 @@ public class Options_manager : MonoBehaviour
     }
     void Battle()
     {
-        Dialogue_handler.Instance.EndDialogue();
+        Dialogue_handler.Instance.EndDialogue(); 
         Battle_handler.Instance.SetBattleType(_currentInteraction.additionalInfo);
     }
 
@@ -103,14 +103,12 @@ public class Options_manager : MonoBehaviour
     {
         Dialogue_handler.Instance.EndDialogue(); 
         Game_ui_manager.Instance.ViewPokemonStorage();
-        overworld_actions.Instance.usingUI = true;
     }
 
     void OpenItemStorage()
     {
         Dialogue_handler.Instance.EndDialogue(); 
         Game_ui_manager.Instance.ViewItemStorage();
-        overworld_actions.Instance.usingUI = true;
     }
     void ReceiveGiftPokemon()
     {
@@ -122,14 +120,14 @@ public class Options_manager : MonoBehaviour
         var pokemonName = _currentInteraction.resultMessage;
         var pokemon = Resources.Load<Pokemon>(Save_manager.GetDirectory(Save_manager.AssetDirectory.Pokemon)
                                               + pokemonName +"/"+ pokemonName);
-        Pokemon_party.Instance.AddMember(pokemon,"Pokeball",true);
+        Pokemon_party.Instance.AddMember(pokemon,isGiftPokemon:true);
         Dialogue_handler.Instance.EndDialogue();
         Dialogue_handler.Instance.DisplayDetails("You got a " + pokemon.pokemonName);
         starterPokemonGiftEvent.PickGiftPokemon(pokemonName);
     }
     void Interact()
     {
-        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage,2f);
+        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage);
     }
     void Fish()
     {
@@ -145,7 +143,13 @@ public class Options_manager : MonoBehaviour
 
     void LeaveStore()
     {
-        Dialogue_handler.Instance.DisplayDetails("Have a great day!",1f);
+        Dialogue_handler.Instance.DisplayDetails("Have a great day!");
+    }
+    public void CompleteEventInteraction(Interaction interaction)
+    {
+        var interactionOption = interaction.interactionOptions[0];
+        _currentInteraction = interaction;
+        if (_interactionMethods.TryGetValue(interactionOption,out var method)) method();
     }
     public void CompleteInteraction(Interaction interaction,int optionIndex)
     {

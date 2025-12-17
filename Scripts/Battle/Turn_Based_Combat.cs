@@ -320,7 +320,7 @@ public class Turn_Based_Combat : MonoBehaviour
         if (forcedSwap)
         {
             Dialogue_handler.Instance.DisplayBattleInfo(swap.Participant.pokemon.pokemonName
-                                                        + " was blown out",3.5f);
+                                                        + " was blown out");
         }
         else
         {

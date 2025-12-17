@@ -109,7 +109,7 @@ public class Game_ui_manager : MonoBehaviour
         ManageScreens(-1);
         ActivateUiElement(Poke_Mart.Instance.storeUI, false);
         Poke_Mart.Instance.ExitStore();
-        Dialogue_handler.Instance.DisplayDetails("Have a great day!",1f);
+        Dialogue_handler.Instance.DisplayDetails("Have a great day!");
     }
     private void CloseBag()
     {
@@ -154,7 +154,7 @@ public class Game_ui_manager : MonoBehaviour
             if (Bag.Instance.allItems.Count == 0 || sellableItems==0)
             {
                 Bag.Instance.currentBagUsage = Bag.BagUsage.NormalView;
-                Dialogue_handler.Instance.DisplayDetails("You have no items to sell", 2f);
+                Dialogue_handler.Instance.DisplayDetails("You have no items to sell");
                 return;
             }
         }
@@ -266,6 +266,7 @@ public class Game_ui_manager : MonoBehaviour
 
     public void ViewItemStorage()
     {
+        overworld_actions.Instance.usingUI = true;
          var pcUsageSelectables = new List<SelectableUI>
         {
             new(pcItemOptions[0], ItemStorageHandler.Instance.ViewItemsToWithdraw, true),
@@ -288,6 +289,7 @@ public class Game_ui_manager : MonoBehaviour
     }
     public void ViewPokemonStorage()
     {
+        overworld_actions.Instance.usingUI = true;
         var pcUsageActions = new List<Action>
         {
             ()=>SetPcUsage(pokemon_storage.PCUsageState.Withdraw),

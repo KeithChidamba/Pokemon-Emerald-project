@@ -113,11 +113,11 @@ public class Poke_Mart : MonoBehaviour
             item.quantity = selectedItemQuantity;
             Bag.Instance.AddItem(item);
             Game_Load.Instance.playerData.playerMoney -= selectedItemQuantity * item.price;
-            Dialogue_handler.Instance.DisplayDetails("You bought "+ item.quantity+ " "+item.itemName+"'s",1.2f);
+            Dialogue_handler.Instance.DisplayDetails("You bought "+ item.quantity+ " "+item.itemName+"'s");
             selectedItemQuantity = 1;
         }
         else
-            Dialogue_handler.Instance.DisplayDetails("You dont have enough money for that!",1.5f);
+            Dialogue_handler.Instance.DisplayDetails("You dont have enough money for that!");
     }
     public void ChangeItemQuantity(int value)
     {
@@ -133,7 +133,7 @@ public class Poke_Mart : MonoBehaviour
                 if (Game_Load.Instance.playerData.playerMoney >= priceOfItem)
                     selectedItemQuantity += value;
                 else
-                    Dialogue_handler.Instance.DisplayDetails("Not enough money to buy that much!",1.5f);
+                    Dialogue_handler.Instance.DisplayDetails("Not enough money to buy that much!");
             }
             else
                 selectedItemQuantity = 99;

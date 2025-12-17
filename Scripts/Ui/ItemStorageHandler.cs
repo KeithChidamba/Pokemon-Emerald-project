@@ -22,7 +22,7 @@ public class ItemStorageHandler : MonoBehaviour
     {
         if (Bag.Instance.storageItems.Count==0)
         {
-            Dialogue_handler.Instance.DisplayDetails("You have no items to withdraw", 2f);
+            Dialogue_handler.Instance.DisplayDetails("You have no items to withdraw");
             return;
         }
         currentUsage = ItemUsage.Withdraw;

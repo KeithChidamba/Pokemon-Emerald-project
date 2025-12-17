@@ -76,7 +76,7 @@ public class Game_Load : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.Instance.DisplayDetails("Name must be between 4 and 14 characters",1.5f);
+            Dialogue_handler.Instance.DisplayDetails("Name must be between 4 and 14 characters");
         }
     }
     public void NewGame()

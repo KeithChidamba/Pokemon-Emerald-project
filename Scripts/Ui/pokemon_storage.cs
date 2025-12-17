@@ -305,7 +305,7 @@ public class pokemon_storage : MonoBehaviour
         {
             if (Pokemon_party.Instance.numMembers==6)
             {
-                Dialogue_handler.Instance.DisplayDetails("Party is full",3f);
+                Dialogue_handler.Instance.DisplayDetails("Party is full");
                 Game_ui_manager.Instance.ClosePokemonStorage();
                 return;
             }
@@ -315,7 +315,7 @@ public class pokemon_storage : MonoBehaviour
         {
             if (Pokemon_party.Instance.numMembers==1)
             {
-                Dialogue_handler.Instance.DisplayDetails("There must be at least 1 pokemon in your team",2f);
+                Dialogue_handler.Instance.DisplayDetails("There must be at least 1 pokemon in your team");
                 Game_ui_manager.Instance.ClosePokemonStorage();
                 return;
             }
@@ -561,7 +561,7 @@ public class pokemon_storage : MonoBehaviour
             DisplayBoxCapacity(0);
         }
         else
-            Dialogue_handler.Instance.DisplayDetails("There must be at least 1 pokemon in your team",2f);
+            Dialogue_handler.Instance.DisplayDetails("There must be at least 1 pokemon in your team");
     }
 
     private void RemoveDeposit()
@@ -621,7 +621,7 @@ public class pokemon_storage : MonoBehaviour
         ResetOptions();
         if (isPartyPokemon)
         {
-            Dialogue_handler.Instance.DisplayDetails("You released "+ Pokemon_party.Instance.party[partyPosition-1].pokemonName,2f);
+            Dialogue_handler.Instance.DisplayDetails("You released "+ Pokemon_party.Instance.party[partyPosition-1].pokemonName);
             Pokemon_party.Instance.RemoveMember(partyPosition);
             numPartyMembers--;
             totalPokemonCount--;
@@ -631,7 +631,7 @@ public class pokemon_storage : MonoBehaviour
         else
         {
             var indexToDelete= SearchForPokemonIndex(selectedPokemonID);
-            Dialogue_handler.Instance.DisplayDetails("You released "+ nonPartyPokemon[indexToDelete].pokemonName,2f);
+            Dialogue_handler.Instance.DisplayDetails("You released "+ nonPartyPokemon[indexToDelete].pokemonName);
             DeleteNonPartyPokemon(indexToDelete);
             RefreshStorageUi(false);
             ClearPokemonData();
@@ -668,7 +668,7 @@ public class pokemon_storage : MonoBehaviour
             RefreshStorageUi(false);
         }
         else
-            Dialogue_handler.Instance.DisplayDetails("Party is full",3f);
+            Dialogue_handler.Instance.DisplayDetails("Party is full");
     }
 
     public void AddPokemonToStorage(Pokemon newPokemon)

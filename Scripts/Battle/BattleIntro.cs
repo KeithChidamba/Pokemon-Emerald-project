@@ -143,7 +143,6 @@ public class BattleIntro : MonoBehaviour
     }
     public IEnumerator PlayWildIntroSequence(Encounter_Area battleArea)
     {
-        Dialogue_handler.Instance.DisplayBattleInfo("");
         var participants = Battle_handler.Instance.battleParticipants;
 
         for (var i=0;i<4;i++)
@@ -194,7 +193,6 @@ public class BattleIntro : MonoBehaviour
     }
     public IEnumerator PlayTrainerIntroSequence(Encounter_Area battleArea)
     {
-        Dialogue_handler.Instance.DisplayBattleInfo("");
         string message = "";
         challengers.Clear();
         var participants = Battle_handler.Instance.battleParticipants;

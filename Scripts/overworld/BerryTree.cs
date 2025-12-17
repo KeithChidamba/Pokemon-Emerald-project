@@ -153,12 +153,12 @@ public class BerryTree : MonoBehaviour
         
         if (!Bag.Instance.SearchForItem("Wailmer Pail"))
         {
-            Dialogue_handler.Instance.DisplayDetails("You need the correct item for this",2f);
+            Dialogue_handler.Instance.DisplayDetails("You need the correct item for this");
             return;
         }
         if (!treeData.currentStageNeedsWater)
         {
-            Dialogue_handler.Instance.DisplayDetails("You have already watered this plant",2f);
+            Dialogue_handler.Instance.DisplayDetails("You have already watered this plant");
             return;
         }
         StartCoroutine(overworld_actions.Instance.WaterTrees());
@@ -187,7 +187,7 @@ public class BerryTree : MonoBehaviour
     {
         if (berryToPlant.itemType != Item_handler.ItemType.Berry)
         {
-            Dialogue_handler.Instance.DisplayDetails("Only berries can be planted",2f);
+            Dialogue_handler.Instance.DisplayDetails("Only berries can be planted");
             return;
         }
         Bag.Instance.OnItemSelected -= PlantBerry;
@@ -202,7 +202,7 @@ public class BerryTree : MonoBehaviour
         treeData.isPlanted = true;
         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
         
-        Dialogue_handler.Instance.DisplayDetails($"You planted a {berryToPlant.itemName}",2f);
+        Dialogue_handler.Instance.DisplayDetails($"You planted a {berryToPlant.itemName}");
     }
     private int GetBerryYield()
     {
@@ -226,7 +226,7 @@ public class BerryTree : MonoBehaviour
         berries.quantity = GetBerryYield();
         Bag.Instance.AddItem(berries);
         Dialogue_handler.Instance.DisplayDetails($"You picked up {berries.quantity}" +
-                                                 $" {berries.itemName}'s",2f);
+                                                 $" {berries.itemName}'s");
         
         treeSpriteRenderer.sprite = null;
         treeData.isPlanted = false;
