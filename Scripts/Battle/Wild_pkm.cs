@@ -90,7 +90,7 @@ public class Wild_pkm : MonoBehaviour
         List<Move> validMoves = new();
         foreach (var move in participant.pokemon.moveSet)
         {//look for all non-immune moves
-            if (!BattleOperations.CheckImmunity(currentEnemyParticipant.pokemon, move.type)) 
+            if (!BattleOperations.HasImmunity(currentEnemyParticipant.pokemon, move.type)) 
                 validMoves.Add(move);
         }
         if (validMoves.Count > 0)

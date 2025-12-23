@@ -60,6 +60,17 @@ public class Turn_Based_Combat : MonoBehaviour
         }
     }
 
+    public void SaveSwitchTurn(SwitchOutData data)
+    {
+        var fakeMove = ScriptableObject.CreateInstance<Move>();
+        fakeMove.priority = 0;
+            
+        var switchTurn = new Turn(Turn.TurnUsage.SwitchOut,
+            attacker: currentTurnIndex,move:fakeMove);
+            
+        switchTurn.switchData = data;
+        SaveTurn(switchTurn);
+    }
     private bool IsLastParticipant()
     {
         var livingParticipants = Battle_handler.Instance.battleParticipants.ToList();

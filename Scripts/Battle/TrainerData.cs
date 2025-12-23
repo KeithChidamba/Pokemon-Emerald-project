@@ -11,6 +11,8 @@ public class TrainerData : ScriptableObject
     public List<TrainerPokemonData> PokemonParty = new();
     public enum BattleType{Single,SingleDouble,Double}
     public BattleType battleType;
+    public enum AiFlags{CheckBadMove,CheckViability,CheckStatus,CheckSetup,CheckSwitching,CheckPriority}
+    public List<AiFlags> trainerAiFlags;
     public Sprite battleIntroSprite;
     public string battleLossMessage;
     public string battleIntroMessage;

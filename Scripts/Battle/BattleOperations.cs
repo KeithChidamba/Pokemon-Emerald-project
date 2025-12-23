@@ -10,7 +10,7 @@ public class BattleOperations
     public static bool CanDisplayChange = true;
     public static event Action OnBuffApplied;
 
-    public static bool CheckImmunity(Pokemon victim,Type enemyType)
+    public static bool HasImmunity(Pokemon victim,Type enemyType)
     {
         foreach(var type in victim.types)
             if (PokemonOperations.ContainsType(type.immunities,enemyType))
@@ -44,7 +44,7 @@ public class BattleOperations
                 _effectiveness = 0;
         }
         else{
-            if (CheckImmunity(victim.pokemon, enemyType)) 
+            if (HasImmunity(victim.pokemon, enemyType)) 
             {
                 //if victim had their immunity altered by moves, like foresight
                 _effectiveness = victim.immunityNegations
@@ -59,6 +59,15 @@ public class BattleOperations
             }
         }
         return _effectiveness;
+    }
+
+    public static bool HardCountered(Battle_Participant victim,Battle_Participant enemy)
+    {
+        foreach (var type in victim.pokemon.types)
+        {
+            return HasImmunity(enemy.pokemon, type);
+        }
+        return false;
     }
     //Pokeballs
     public static float GetCatchRateBonusFromStatus(PokemonOperations.StatusEffect statusName)
