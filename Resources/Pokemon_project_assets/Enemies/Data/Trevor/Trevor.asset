@@ -21,6 +21,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9eb0e87105e0d414fa4bc876b40a71de, type: 2}
   - {fileID: 11400000, guid: 44f4d19d1ebcebc43a88a29a12fef294, type: 2}
   battleType: 1
+  trainerAiFlags: 000000000100000002000000030000000500000004000000
   battleIntroSprite: {fileID: 21300000, guid: cf4f92409070fd246be7256f4478c66a, type: 3}
   battleLossMessage: Hahahaha, next time i'll go all out
   battleIntroMessage: Let's see what you got kid

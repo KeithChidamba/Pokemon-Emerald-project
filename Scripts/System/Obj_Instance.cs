@@ -139,6 +139,9 @@ public static class Obj_Instance
         trainerCopy.TrainerLocation = data.TrainerLocation;
         trainerCopy.battleIntroSprite = data.battleIntroSprite;
         trainerCopy.battleLossMessage = data.battleLossMessage;
+        trainerCopy.trainerAiFlags = data.trainerAiFlags;
+        trainerCopy.battleType = data.battleType;
+        trainerCopy.battleIntroMessage = data.battleIntroMessage;
         foreach (var member in data.PokemonParty)
             trainerCopy.PokemonParty.Add(CreateTrainerPokemonData(member));
         return trainerCopy;

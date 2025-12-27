@@ -21,9 +21,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fb07b1a4a357c4047a43831e45981ac1, type: 2}
   - {fileID: 11400000, guid: 77b1ba36c17122c4e8506c57e727b5f9, type: 2}
   battleType: 0
+  trainerAiFlags: 0000000001000000
   battleIntroSprite: {fileID: 21300000, guid: cf4f92409070fd246be7256f4478c66a, type: 3}
   battleLossMessage: Drat, you got lucky this time kid!
-  battleIntroMessage: "Hey! where do you think you're goingIn Unity, a typewriter
-    / typing-out effect is usually done by revealing characters over time. The cleanest
-    approach depends on whether you\u2019re using TextMeshPro (recommended) or the
-    old UI Text."
+  battleIntroMessage: Hey! where do you think you're going?

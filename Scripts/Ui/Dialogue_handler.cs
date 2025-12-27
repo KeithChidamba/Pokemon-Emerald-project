@@ -145,7 +145,7 @@ public class Dialogue_handler : MonoBehaviour
         messagesLoading = false;
         var newInteraction = NewInteraction(info,type,"");
         currentInteraction = newInteraction;
-        HandleInteraction();
+        HandleInteraction(false);
     }    
     public void DisplayDetails(string info)
     {
@@ -182,10 +182,11 @@ public class Dialogue_handler : MonoBehaviour
         InputStateHandler.Instance.AddDialoguePlaceHolderState();
         while (pendingMessages.Count > 0)
         {
-            dialogueFinished = false;
             var interaction = pendingMessages[0];
             currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
-            HandleInteraction();
+            SetBattleTextBox();
+            yield return TypeText(currentInteraction.interactionMessage);
+            yield return new WaitForSeconds(1f);
             pendingMessages.RemoveAt(0);
             yield return new WaitUntil(()=>dialogueFinished);
         }
@@ -235,6 +236,9 @@ public class Dialogue_handler : MonoBehaviour
 
     private IEnumerator TypeText(string message)
     {
+        dialogueFinished = false;
+        displaying = true; 
+        dialougeText.maxVisibleCharacters = 0;
         dialougeText.text = message;
         ResetText();
 
@@ -269,11 +273,23 @@ public class Dialogue_handler : MonoBehaviour
         CompleteDialogueInteraction();
     }
 
-    private void HandleInteraction()
+    private void HandleInteraction(bool typeOut=true)
     {
         Player_movement.Instance.RestrictPlayerMovement();
-        dialogueFinished = false;
-        displaying = true;  
+        SetBattleTextBox();
+        if(typeOut)
+        {
+            StartCoroutine(TypeText(currentInteraction.interactionMessage));
+        }
+        else
+        {
+            dialougeText.text = currentInteraction.interactionMessage;
+            dialougeText.maxVisibleCharacters = dialougeText.text.Length;
+        }
+    }
+
+    private void SetBattleTextBox()
+    {
         if (!Options_manager.Instance.playerInBattle || currentInteraction.interactionType != DialogType.BattleInfo)
         {
             infoDialogueBox.SetActive(true);
@@ -287,9 +303,7 @@ public class Dialogue_handler : MonoBehaviour
             dialougeText.color=Color.white;
             infoDialogueBox.SetActive(false);
         }
-        StartCoroutine(TypeText(currentInteraction.interactionMessage));
     }
-
     private void CompleteDialogueInteraction()
     {
         dialogueFinished = true;

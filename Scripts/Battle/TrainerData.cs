@@ -12,7 +12,7 @@ public class TrainerData : ScriptableObject
     public enum BattleType{Single,SingleDouble,Double}
     public BattleType battleType;
     public enum AiFlags{CheckBadMove,CheckViability,CheckStatus,CheckSetup,CheckSwitching,CheckPriority}
-    public List<AiFlags> trainerAiFlags;
+    public List<AiFlags> trainerAiFlags = new();
     public Sprite battleIntroSprite;
     public string battleLossMessage;
     public string battleIntroMessage;

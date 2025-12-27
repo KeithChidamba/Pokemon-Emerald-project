@@ -276,7 +276,6 @@ public class Battle_handler : MonoBehaviour
         wildPokemon.pokemon = enemy;
         wildPokemon.currentEnemies.Add(player);
         Wild_pkm.Instance.participant = wildPokemon;
-        Wild_pkm.Instance.currentEnemyParticipant = player;
         wildPokemon.AddToExpList(player.pokemon);
         Wild_pkm.Instance.inBattle = true;
         //setup battle

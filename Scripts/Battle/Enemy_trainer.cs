@@ -145,7 +145,7 @@ public class Enemy_trainer : MonoBehaviour
     }
     private void AiCheckSwitching()
     {
-        if (!participant.canEscape || BattleOperations.HardCountered(participant,_currentEnemy))
+        if (participant.canEscape || BattleOperations.HardCountered(participant,_currentEnemy))
         {
             for (int i=0; i<trainerParty.Count;i++)
             {
@@ -169,6 +169,7 @@ public class Enemy_trainer : MonoBehaviour
     {
         var switchData = new SwitchOutData(Turn_Based_Combat.Instance.currentTurnIndex
             ,partyIndex,participant);
+        Debug.Log("party index: "+partyIndex);
         Turn_Based_Combat.Instance.SaveSwitchTurn(switchData);
     }
     private int GetSelectedMoveIndex()
@@ -184,7 +185,9 @@ public class Enemy_trainer : MonoBehaviour
         }
         
         var orderList = moveScores.OrderByDescending(move=>move.moveScore).ToList();
-        return orderList[0].moveIndex;
+        var topScore = orderList[0].moveScore;
+        var bestMoves = orderList.Where(m => m.moveScore == topScore).ToList();
+        return bestMoves[Utility.RandomRange(0, bestMoves.Count)].moveIndex;
     }
 
     private int GetMoveScore()
@@ -194,6 +197,7 @@ public class Enemy_trainer : MonoBehaviour
         {
             currentScore += AiLogicCalculators[flag].Invoke();
         }
+        currentScore += Utility.RandomRange(-3, 4);//variable difference
         return currentScore;
     }
 
@@ -202,7 +206,7 @@ public class Enemy_trainer : MonoBehaviour
         int scoreDifference = 0;
         if (BattleOperations.HasImmunity(_currentEnemy.pokemon, _currentMoveCheck.type))
         {
-            scoreDifference-=100;
+            scoreDifference-=120;
         }
         if ( _currentMoveCheck.effectType==Move.EffectType.WeatherHealthGain && participant.pokemon.hp>=participant.pokemon.maxHp)
         {
@@ -215,18 +219,26 @@ public class Enemy_trainer : MonoBehaviour
         int scoreDifference = 0;
         if (BattleOperations.IsStab(participant.pokemon, _currentMoveCheck.type))
         {
-            scoreDifference+=10;
+            scoreDifference+=12;
         }
-        scoreDifference += (int)(BattleOperations.GetTypeEffectiveness(_currentEnemy, _currentMoveCheck.type)*10);
+        scoreDifference += (int)(BattleOperations.GetTypeEffectiveness(_currentEnemy, _currentMoveCheck.type)*15);
         
         return scoreDifference;
     }
     private int AiCheckStatus()
     {
         int scoreDifference = 0;
-        if (_currentEnemy.pokemon.statusEffect!=PokemonOperations.StatusEffect.None && _currentMoveCheck.hasStatus && _currentMoveCheck.moveDamage==0)
+        if (_currentMoveCheck.hasStatus && _currentMoveCheck.moveDamage==0)
         {
-            scoreDifference -= 30;
+            if (_currentEnemy.pokemon.statusEffect==PokemonOperations.StatusEffect.Sleep ||
+                _currentEnemy.pokemon.statusEffect==PokemonOperations.StatusEffect.Paralysis)
+            {
+                scoreDifference = 18;
+            }
+            if (_currentEnemy.pokemon.statusEffect==PokemonOperations.StatusEffect.None)
+            {
+                scoreDifference = -35;
+            }
         }
         return scoreDifference;
     }
@@ -237,7 +249,7 @@ public class Enemy_trainer : MonoBehaviour
         {
             if (_currentMoveCheck.isBuffOrDebuff && _currentMoveCheck.isSelfTargeted)
             {
-                scoreDifference += 45;
+                scoreDifference = 40;
             }
         }
         return scoreDifference;
@@ -245,11 +257,15 @@ public class Enemy_trainer : MonoBehaviour
     private int AiCheckPriority()
     {
         int scoreDifference = 0;
-        if ( (participant.pokemon.hp <= participant.pokemon.maxHp*0.33f) || _currentEnemy.pokemon.hp<=_currentMoveCheck.moveDamage)
+        if (_currentMoveCheck.priority>0)
         {
-            if (_currentMoveCheck.priority>1)
+            if (_currentEnemy.pokemon.hp<=_currentMoveCheck.moveDamage)
             {
-                scoreDifference += 65;
+                scoreDifference += 70;
+            }
+            else if ( (participant.pokemon.hp <= participant.pokemon.maxHp*0.33f))
+            {
+                scoreDifference += 45;
             }
         }
         return scoreDifference;

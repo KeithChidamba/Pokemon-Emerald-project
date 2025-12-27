@@ -10,12 +10,11 @@ using UnityEngine.Serialization;
 public class Wild_pkm : MonoBehaviour
 {
     public Battle_Participant participant;
-    public Battle_Participant currentEnemyParticipant;
-    public bool inBattle = false;
-    public bool ranAway = false;
+    public bool inBattle;
+    public bool ranAway;
     public bool canAttack = true;
     public static Wild_pkm Instance;
-    [SerializeField]private bool _usedMove = false;
+    [SerializeField]private bool _usedMove;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -52,76 +51,19 @@ public class Wild_pkm : MonoBehaviour
             != participant.pokemon || _usedMove || !canAttack)
             return;
         Battle_handler.Instance.currentEnemyIndex = 0;//attack player, since its single battle
-        if(Utility.RandomRange(1,11)>3)//70% chance
-            DetermineMoveChoice();
-        else
-            RunAway();
-    }
-
-    private void RunAway()
-    {
-        if(!participant.canEscape) return;
-        Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
-        inBattle = false;
-        ranAway = true;
-        Battle_handler.Instance.EndBattle(false);
-    }
-    private void DetermineMoveChoice()
-    {
-        if(Utility.RandomRange(1,11)<5)//40% chance
-            UseRandom();
+        if (Utility.RandomRange(1, 11) > 3) //70% chance
+        {
+            var randMove = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
+            Battle_handler.Instance.UseMove(participant.pokemon.moveSet[randMove],participant);
+            _usedMove = true;
+        }
         else
         {
-            if (Utility.RandomRange(1, 11) < 8)
-            {
-                var effectiveMove = GetEffectiveMove();
-                if (effectiveMove == null)
-                    UseStrongestMove();
-                else
-                    UseMove(effectiveMove);
-            }
-            else
-                UseStrongestMove();
+            if(!participant.canEscape) return;
+            Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
+            inBattle = false;
+            ranAway = true;
+            Battle_handler.Instance.EndBattle(false);
         }
-    }
-    
-    private void UseStrongestMove()
-    {
-        List<Move> validMoves = new();
-        foreach (var move in participant.pokemon.moveSet)
-        {//look for all non-immune moves
-            if (!BattleOperations.HasImmunity(currentEnemyParticipant.pokemon, move.type)) 
-                validMoves.Add(move);
-        }
-        if (validMoves.Count > 0)
-        {
-            var strongestMove = validMoves.OrderByDescending(p => p.moveDamage).ToList();
-            UseMove(strongestMove[0]);
-        }
-        else
-            UseRandom();
-    }
-
-    private void UseRandom()
-    {
-        var randMove = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
-        UseMove(participant.pokemon.moveSet[randMove]);
-    }
-
-    private void UseMove(Move move)
-    {
-        Battle_handler.Instance.UseMove(move,participant);
-        _usedMove = true;
-    }
-
-    private Move GetEffectiveMove()
-    {
-        foreach (var move in participant.pokemon.moveSet)
-        {//look for super effective attacking move
-            var effectiveness = BattleOperations.GetTypeEffectiveness(currentEnemyParticipant, move.type);
-            if ( effectiveness < 2 || move.isBuffOrDebuff) continue;
-            return move;
-        }
-        return null;
     }
 }

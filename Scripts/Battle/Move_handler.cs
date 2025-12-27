@@ -293,9 +293,6 @@ public class Move_handler:MonoBehaviour
         while (_damageDisplayQueue.Count > 0)
         {
             var data = _damageDisplayQueue[0];
-            StartCoroutine(BattleVisuals.Instance.DisplayDamageTakenVisual(data.affectedParticipant,damageSource));
-            yield return new WaitForSeconds(0.5f);
-            
             var damage = data.isSpecificDamage? data.predefinedHealthChange 
                 : CalculateMoveDamage(_currentTurn.move, data.affectedParticipant);
             
@@ -306,6 +303,10 @@ public class Move_handler:MonoBehaviour
                     continue;
                 }
             }
+            
+            StartCoroutine(BattleVisuals.Instance.DisplayDamageTakenVisual(data.affectedParticipant,damageSource));
+            yield return new WaitForSeconds(0.5f);
+            
             var healthAfterChange = Mathf
                 .Clamp(data.affectedPokemon.hp - damage,0,data.affectedPokemon.maxHp);
             float displayHp = data.affectedPokemon.hp;
