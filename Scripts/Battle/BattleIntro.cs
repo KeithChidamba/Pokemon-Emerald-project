@@ -334,7 +334,7 @@ public class BattleIntro : MonoBehaviour
         
         yield return Battle_handler.Instance.SetParticipant(swapParticipant,newPokemon:newPokemon);
         
-        if(!faintSwitch) yield return BattleVisuals.Instance.RevealPokemon(swapParticipant);
+        if(!faintSwitch) yield return BattleVisuals.Instance.RevealPokemon(swapParticipant,true);
         
         if (swapParticipant.isEnemy)
         {

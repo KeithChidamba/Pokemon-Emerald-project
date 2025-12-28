@@ -293,13 +293,17 @@ public class BattleVisuals : MonoBehaviour
         participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
     }
 
-    public IEnumerator RevealPokemon(Battle_Participant participant)
+    public IEnumerator RevealPokemon(Battle_Participant participant,bool withdraw=false)
     {
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
         participant.participantUI.SetActive(true);
         
         if (participant.isEnemy) participant.pokemonImage.color = Color.white;
         var direction = participant.isEnemy?outOfViewDitance:-outOfViewDitance;
+        if (withdraw && participant.isEnemy)
+        {
+            direction = 0;
+        }
         participantUIRect.anchoredPosition = new Vector2(participantUIRect.anchoredPosition.x+direction,
             participantUIRect.anchoredPosition.y);
         yield return null;

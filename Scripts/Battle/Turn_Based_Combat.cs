@@ -391,6 +391,7 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         else
         {
+            swap.Participant.ResetParticipantState();
             var enemyParty = swap.Participant.pokemonTrainerAI.trainerParty;
             (enemyParty[swap.PartyPosition], enemyParty[swap.MemberToSwapWith]) = (enemyParty[swap.MemberToSwapWith], enemyParty[swap.PartyPosition]);
             yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,enemyParty[swap.MemberToSwapWith]);

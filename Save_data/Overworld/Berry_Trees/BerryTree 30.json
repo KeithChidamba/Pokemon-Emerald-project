@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Grepa berry",
     "berryItem": {
-        "instanceID": 27016
+        "instanceID": 26358
     },
     "treeIndex": 30,
     "minutesPerStage": 180,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 34704
+                    "instanceID": 32634
                 },
                 {
-                    "instanceID": 34704
+                    "instanceID": 32634
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 34706
+                    "instanceID": 32636
                 },
                 {
-                    "instanceID": 34708
+                    "instanceID": 32638
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 34588
+                    "instanceID": 33014
                 },
                 {
-                    "instanceID": 34590
+                    "instanceID": 33016
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 34592
+                    "instanceID": 33018
                 },
                 {
-                    "instanceID": 34594
+                    "instanceID": 33020
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 34596
+                    "instanceID": 33022
                 },
                 {
-                    "instanceID": 34598
+                    "instanceID": 33024
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2025-12-17T19:15:57.6290980+02:00"
+    "lastLogin": "2025-12-28T15:11:39.9140070+02:00"
 }

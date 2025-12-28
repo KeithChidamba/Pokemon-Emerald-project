@@ -61,11 +61,11 @@ public class BattleOperations
         return _effectiveness;
     }
 
-    public static bool HardCountered(Battle_Participant victim,Battle_Participant enemy)
+    public static bool HardCountered(Pokemon victim,Pokemon enemy)
     {
-        foreach (var type in victim.pokemon.types)
+        foreach (var type in victim.types)
         {
-            return HasImmunity(enemy.pokemon, type);
+            return HasImmunity(enemy, type);
         }
         return false;
     }
