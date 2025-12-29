@@ -92,8 +92,8 @@ public class AbilityHandler : MonoBehaviour
     void Guts()
     {
         if (_abilityTriggered) return;
-        if (_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) return;
-        var attackBuffData = new BuffDebuffData(_participant, PokemonOperations.Stat.Attack, true, 1);
+        if (_participant.pokemon.statusEffect == StatusEffect.None) return;
+        var attackBuffData = new BuffDebuffData(_participant, Stat.Attack, true, 1);
         BattleOperations.CanDisplayChange = false; 
         Move_handler.Instance.SelectRelevantBuffOrDebuff(attackBuffData);
         _abilityTriggered = true;
@@ -101,7 +101,7 @@ public class AbilityHandler : MonoBehaviour
     void Levitate()
     {
         if (_abilityTriggered) return;
-        _participant.additionalTypeImmunity = Resources.Load<Type>(Save_manager.AssetDirectory.Types+"Ground");
+        _participant.additionalTypeImmunity = Resources.Load<Type>(AssetDirectory.Types+"Ground");
         _abilityTriggered = true;
     }
     void Overgrow()
@@ -154,7 +154,7 @@ public class AbilityHandler : MonoBehaviour
     {
         foreach (var enemy in _participant.currentEnemies)
         {
-            if (enemy.pokemon.HasType(PokemonOperations.Types.Flying) || enemy.pokemon.HasType(PokemonOperations.Types.Ghost))
+            if (enemy.pokemon.HasType(Types.Flying) || enemy.pokemon.HasType(Types.Ghost))
                 continue;
             Move_handler.Instance.ApplyTrap(enemy,false);
         }
@@ -165,14 +165,14 @@ public class AbilityHandler : MonoBehaviour
         
         if (Utility.RandomRange(1, 4) < 2)
         {
-            if (currentStatus == PokemonOperations.StatusEffect.Sleep
-                || currentStatus == PokemonOperations.StatusEffect.Freeze
-                || currentStatus == PokemonOperations.StatusEffect.Paralysis)
+            if (currentStatus == StatusEffect.Sleep
+                || currentStatus == StatusEffect.Freeze
+                || currentStatus == StatusEffect.Paralysis)
             {
                 if(!_participant.isFlinched)
                     _participant.canAttack = true;
             }
-            _participant.pokemon.statusEffect = PokemonOperations.StatusEffect.None;
+            _participant.pokemon.statusEffect = StatusEffect.None;
             Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
             _participant.RefreshStatusEffectImage();
         }
@@ -211,8 +211,8 @@ public class AbilityHandler : MonoBehaviour
         var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
 
         var assetDirectory = nonMartItems.Contains(possibleItems[itemWonIndex])?
-            Save_manager.GetDirectory(Save_manager.AssetDirectory.NonMartItems) + possibleItems[itemWonIndex]
-            : Save_manager.GetDirectory(Save_manager.AssetDirectory.MartItems) + possibleItems[itemWonIndex];
+            Save_manager.GetDirectory(AssetDirectory.NonMartItems) + possibleItems[itemWonIndex]
+            : Save_manager.GetDirectory(AssetDirectory.MartItems) + possibleItems[itemWonIndex];
         
         var itemWon = Resources.Load<Item>(assetDirectory);
         if (Utility.RandomRange(1, 101) < _participant.pokemon.currentLevel)
@@ -222,7 +222,7 @@ public class AbilityHandler : MonoBehaviour
     }
     void GiveStatic(Battle_Participant attacker,Move moveUsed)
     {
-        if (attacker.pokemon.statusEffect != PokemonOperations.StatusEffect.None) return;
+        if (attacker.pokemon.statusEffect != StatusEffect.None) return;
         if (attacker == _participant) return;
         if (!attacker.canBeDamaged)
             return;
@@ -230,11 +230,11 @@ public class AbilityHandler : MonoBehaviour
         //simulate a pokemon's attack
         Move_handler.Instance.OnStatusEffectHit+=NotifyStaticHit; 
         var placeholderMove = ScriptableObject.CreateInstance<Move>();
-        placeholderMove.statusEffect = PokemonOperations.StatusEffect.Paralysis;
+        placeholderMove.statusEffect = StatusEffect.Paralysis;
         Move_handler.Instance.HandleStatusApplication(attacker, placeholderMove,false);
     }
 
-    private void NotifyStaticHit(Battle_Participant attacker,PokemonOperations.StatusEffect status)//status is unused here but is required for method signature
+    private void NotifyStaticHit(Battle_Participant attacker,StatusEffect status)//status is unused here but is required for method signature
     {
         Move_handler.Instance.OnStatusEffectHit-=NotifyStaticHit; 
         Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s static paralysed "+attacker.pokemon.pokemonName);
@@ -244,7 +244,7 @@ public class AbilityHandler : MonoBehaviour
         if (attacker != _participant) return damage;
         if (_currentAbility == "paralysiscombo")
         {
-            if (victim.pokemon.statusEffect == PokemonOperations.StatusEffect.Paralysis)
+            if (victim.pokemon.statusEffect == StatusEffect.Paralysis)
                 return damage*2;
         }
         if (_damageBuffCombinations.TryGetValue(_currentAbility, out var typeName))

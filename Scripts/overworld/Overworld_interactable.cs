@@ -6,8 +6,9 @@ using UnityEngine;
 public class Overworld_interactable : MonoBehaviour
 {
     public Interaction interaction;
-    public AreaData.AreaName location;
-    public enum InteractionType{None,Clerk,PlantBerry,PickBerry,WaterBerryTree}
+    public AreaName location;
     public InteractionType interactionType;
     public Encounter_Area area;
 }
+
+public enum InteractionType{None,Clerk,PlantBerry,PickBerry,WaterBerryTree}

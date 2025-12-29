@@ -16,11 +16,6 @@ public class Item_handler : MonoBehaviour
     public static Item_handler Instance;
     private event Action<bool> OnItemUsageSuccessful;
 
-    public enum ItemType
-    {
-        Special,GainExp,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,Vitamin,
-        Berry,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove
-    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -35,7 +30,7 @@ public class Item_handler : MonoBehaviour
         if (Options_manager.Instance.playerInBattle)
         {
             currentParticipant = Battle_handler.Instance.GetCurrentParticipant();
-            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
+            InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
         }
         
         _selectedPartyPokemon = selectedPokemon;
@@ -118,8 +113,8 @@ public class Item_handler : MonoBehaviour
             {
                 CompleteItemUsage();
                 Area_manager.Instance.EscapeArea();
-                InputStateHandler.Instance.ResetRelevantUi(new[] {InputStateHandler.StateName.PlayerMenu
-                        ,InputStateHandler.StateName.PlayerBagNavigation});
+                InputStateHandler.Instance.ResetRelevantUi(new[] {InputStateName.PlayerMenu
+                        ,InputStateName.PlayerBagNavigation});
             }
             else
             {
@@ -134,10 +129,10 @@ public class Item_handler : MonoBehaviour
         var herbInfo = _itemInUse.GetModule<HerbInfoModule>();
         var friendshipLoss = herbInfo.herbType switch
         {
-            HerbInfoModule.Herb.EnergyPowder => -5,
-            HerbInfoModule.Herb.EnergyRoot => -10,
-            HerbInfoModule.Herb.HealPowder => -5,
-            HerbInfoModule.Herb.RevivalHerb => -15,
+            Herb.EnergyPowder => -5,
+            Herb.EnergyRoot => -10,
+            Herb.HealPowder => -5,
+            Herb.RevivalHerb => -15,
             _ => 0
         };
         if(itemUsed && friendshipLoss!=0)
@@ -189,7 +184,7 @@ public class Item_handler : MonoBehaviour
             ref float evRef = ref PokemonOperations.GetEvStatRef(statToDecrease.statName, _selectedPartyPokemon);
             if (evRef > 100) evRef = 100;
             else PokemonOperations.CalculateEvForStat(statToDecrease.statName, -10, _selectedPartyPokemon);
-            _selectedPartyPokemon.DetermineFriendshipLevelChange(true,PokemonOperations.FriendshipModifier.Berry);
+            _selectedPartyPokemon.DetermineFriendshipLevelChange(true,FriendshipModifier.Berry);
             CompleteItemUsage();
         }
     }
@@ -211,7 +206,7 @@ public class Item_handler : MonoBehaviour
         if (hasChanged)
         {
             _selectedPartyPokemon.DetermineFriendshipLevelChange(false,
-                PokemonOperations.FriendshipModifier.Vitamin);
+                FriendshipModifier.Vitamin);
             DepleteItem();
         }
         Dialogue_handler.Instance.DisplayDetails(message);
@@ -222,11 +217,11 @@ public class Item_handler : MonoBehaviour
         Pokemon_Details.Instance.changingMoveData = true;
         var modifierInfo = _itemInUse.GetModule<PowerpointModifeir>();
         
-        if (modifierInfo.modiferType == PowerpointModifeir.ModiferType.RestorePp)
+        if (modifierInfo.modiferType == ModiferType.RestorePp)
             Pokemon_Details.Instance.OnMoveSelected += RestorePowerpoints;
-        else if (modifierInfo.modiferType == PowerpointModifeir.ModiferType.MaximisePp)
+        else if (modifierInfo.modiferType == ModiferType.MaximisePp)
             Pokemon_Details.Instance.OnMoveSelected += MaximisePowerpoints;
-        else if (modifierInfo.modiferType == PowerpointModifeir.ModiferType.IncreasePp)
+        else if (modifierInfo.modiferType == ModiferType.IncreasePp)
             Pokemon_Details.Instance.OnMoveSelected += IncreasePowerpoints;
         Game_ui_manager.Instance.ViewPartyPokemonDetails(_selectedPartyPokemon);
     }
@@ -234,7 +229,7 @@ public class Item_handler : MonoBehaviour
     private void ItemBuffOrDebuff()
     {
         var statInfo = _itemInUse.GetModule<StatInfoModule>();
-        if (statInfo.statName == PokemonOperations.Stat.None)
+        if (statInfo.statName == Stat.None)
         {//guard spec doesn't buff stat but remove stat reduction
             if (currentParticipant.ProtectedFromStatChange(false))
             {
@@ -243,7 +238,7 @@ public class Item_handler : MonoBehaviour
                 return;
             }
             Move_handler.Instance.ApplyStatChangeImmunity(currentParticipant,
-                StatChangeData.StatChangeability.ImmuneToDecrease,5);
+                StatChangeability.ImmuneToDecrease,5);
             
             string pokemonProtected = _selectedPartyPokemon.pokemonName;
             
@@ -253,7 +248,7 @@ public class Item_handler : MonoBehaviour
                 if(partner.isActive)
                 {
                     Move_handler.Instance.ApplyStatChangeImmunity(partner,
-                        StatChangeData.StatChangeability.ImmuneToDecrease, 5);
+                        StatChangeability.ImmuneToDecrease, 5);
                     pokemonProtected = _selectedPartyPokemon.pokemonName + " and " + partner.pokemon.pokemonName;
                 }
             }
@@ -304,7 +299,7 @@ public class Item_handler : MonoBehaviour
      {
          if(MoveAlterationCancelled(RestorePowerpoints,moveIndex))//user exited
          {
-             InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
+             InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonDetails);
              return; 
          }
               
@@ -318,10 +313,10 @@ public class Item_handler : MonoBehaviour
          var modifierInfo = _itemInUse.GetModule<PowerpointModifeir>();
          var pointsToAdd = 0;
          
-         if (modifierInfo.itemType == PowerpointModifeir.ModiferItemType.Ether)
+         if (modifierInfo.itemType == ModiferItemType.Ether)
              pointsToAdd = 10;
          
-         if (modifierInfo.itemType == PowerpointModifeir.ModiferItemType.MaxEther)
+         if (modifierInfo.itemType == ModiferItemType.MaxEther)
              pointsToAdd = currentMove.maxPowerpoints;
          
          var sumPoints = currentMove.powerpoints + pointsToAdd;
@@ -330,13 +325,13 @@ public class Item_handler : MonoBehaviour
  
          Dialogue_handler.Instance.DisplayDetails( currentMove.moveName+" pp was restored!");
          StartCoroutine(CompleteItemUsage(2.2f));
-         InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
+         InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonDetails);
      }
     private void IncreasePowerpoints(int moveIndex)
     {
         if(MoveAlterationCancelled(IncreasePowerpoints,moveIndex))
         {
-            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
+            InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonDetails);
             return; 
         }
         
@@ -352,14 +347,14 @@ public class Item_handler : MonoBehaviour
         Dialogue_handler.Instance.DisplayDetails( currentMove.moveName+"'s pp was increased!");
         
         StartCoroutine(CompleteItemUsage(2.2f));
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonDetails);
     }
 
     private void MaximisePowerpoints(int moveIndex)
     {
         if (MoveAlterationCancelled(MaximisePowerpoints, moveIndex))         
         {
-            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
+            InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonDetails);
             return; 
         }
 
@@ -375,7 +370,7 @@ public class Item_handler : MonoBehaviour
 
         Dialogue_handler.Instance.DisplayDetails(currentMove.moveName + "'s pp was maxed out!");
         StartCoroutine(CompleteItemUsage(2.2f));
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonDetails);
 }
     private void UsePokeball(Item pokeball)
     {
@@ -413,7 +408,7 @@ public class Item_handler : MonoBehaviour
     
     IEnumerator TryToCatchPokemon(Item pokeball)
     {
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
         var isCaught = false;
         var wildPokemon = Wild_pkm.Instance.participant.pokemon;//pokemon only caught in wild
         yield return StartCoroutine(BattleVisuals.Instance.DisplayPokemonThrow());
@@ -474,9 +469,9 @@ public class Item_handler : MonoBehaviour
         else
             currentParticipant.isConfused = false;
     }
-    private bool IsValidStatusHeal(PokemonOperations.StatusEffect curableStatus)
+    private bool IsValidStatusHeal(StatusEffect curableStatus)
     {
-        if (_selectedPartyPokemon.statusEffect == PokemonOperations.StatusEffect.None)
+        if (_selectedPartyPokemon.statusEffect == StatusEffect.None)
         {
             if (Options_manager.Instance.playerInBattle)
             {
@@ -494,14 +489,14 @@ public class Item_handler : MonoBehaviour
         }
         
         //antidote heals all poison
-        if (curableStatus == PokemonOperations.StatusEffect.Poison &&
-            _selectedPartyPokemon.statusEffect == PokemonOperations.StatusEffect.BadlyPoison)
+        if (curableStatus == StatusEffect.Poison &&
+            _selectedPartyPokemon.statusEffect == StatusEffect.BadlyPoison)
         {
-            curableStatus = PokemonOperations.StatusEffect.BadlyPoison;
+            curableStatus = StatusEffect.BadlyPoison;
         }
         
         bool isValidHeal = _selectedPartyPokemon.statusEffect == curableStatus
-                                   || curableStatus == PokemonOperations.StatusEffect.FullHeal;
+                                   || curableStatus == StatusEffect.FullHeal;
         
         if (!isValidHeal)
         {
@@ -512,20 +507,20 @@ public class Item_handler : MonoBehaviour
         //healing
         if (Options_manager.Instance.playerInBattle)
         {
-            var healAll = curableStatus == PokemonOperations.StatusEffect.FullHeal;
+            var healAll = curableStatus == StatusEffect.FullHeal;
             currentParticipant.statusHandler.RemoveStatusEffect(healAll);
             Battle_handler.Instance.RefreshStatusEffectUI();
         }
         else
-            _selectedPartyPokemon.statusEffect = PokemonOperations.StatusEffect.None;
+            _selectedPartyPokemon.statusEffect = StatusEffect.None;
         
         Dialogue_handler.Instance.DisplayDetails(_selectedPartyPokemon.pokemonName+" has been healed");
         OnItemUsageSuccessful?.Invoke(true);
         return true;
     }
-    private void HealStatusEffect(PokemonOperations.StatusEffect curableStatus = PokemonOperations.StatusEffect.None)
+    private void HealStatusEffect(StatusEffect curableStatus = StatusEffect.None)
     {
-        if (curableStatus == PokemonOperations.StatusEffect.None)
+        if (curableStatus == StatusEffect.None)
         {
             var statusInfo = _itemInUse.GetModule<StatusHealInfoModule>();
             curableStatus = statusInfo.statusEffect;
@@ -571,7 +566,7 @@ public class Item_handler : MonoBehaviour
     {
         CompleteItemUsage();
         yield return new WaitForSeconds(skipDelay);
-        if(_itemInUse.forPartyUse) InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+        if(_itemInUse.forPartyUse) InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonParty);
         SkipTurn();
     }
     private void SkipTurn()
@@ -590,4 +585,10 @@ public class Item_handler : MonoBehaviour
         usingItem = false;
         _selectedPartyPokemon = null;
     }
+}
+
+public enum ItemType
+{
+    Special,GainExp,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,Vitamin,
+    Berry,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove
 }

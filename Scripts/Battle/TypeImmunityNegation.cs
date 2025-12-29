@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class TypeImmunityNegation
 {
-    public enum ImmunityNegationMove{Foresight}
     public ImmunityNegationMove moveName;
-    public List<PokemonOperations.Types> ImmunityNegationTypes = new ();
+    public List<Types> ImmunityNegationTypes = new ();
     private Battle_Participant _participant;
     private Battle_Participant _victimOfimmunityNegation;
     public TypeImmunityNegation(ImmunityNegationMove moveNameEnum,Battle_Participant participant
@@ -23,3 +22,5 @@ public class TypeImmunityNegation
         _victimOfimmunityNegation.immunityNegations.RemoveAll(n => n.moveName == moveName);
     }
 }
+
+public enum ImmunityNegationMove{Foresight}

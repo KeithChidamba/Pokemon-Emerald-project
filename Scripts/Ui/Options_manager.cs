@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public enum InteractionOptions
+{
+    None,CloseApplication,Battle,LearnMove,SkipMove,
+    Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,ReceiveGiftPokemon,LeaveStore
+}
 public class Options_manager : MonoBehaviour
 {
     private Interaction _currentInteraction;
@@ -13,11 +18,6 @@ public class Options_manager : MonoBehaviour
     private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
     public event Action<Overworld_interactable,int> OnInteractionTriggered;
 
-    public enum InteractionOptions
-    {
-        None,CloseApplication,Battle,LearnMove,SkipMove,
-        Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,ReceiveGiftPokemon,LeaveStore
-    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -96,7 +96,7 @@ public class Options_manager : MonoBehaviour
             pokemon.hp = pokemon.maxHp;
             foreach (var move in pokemon.moveSet)
                 move.powerpoints = move.maxPowerpoints;
-            pokemon.statusEffect = PokemonOperations.StatusEffect.None;
+            pokemon.statusEffect = StatusEffect.None;
         }
     }
     void OpenPokemonStorage()
@@ -118,7 +118,7 @@ public class Options_manager : MonoBehaviour
             return;
         }
         var pokemonName = _currentInteraction.resultMessage;
-        var pokemon = Resources.Load<Pokemon>(Save_manager.GetDirectory(Save_manager.AssetDirectory.Pokemon)
+        var pokemon = Resources.Load<Pokemon>(Save_manager.GetDirectory(AssetDirectory.Pokemon)
                                               + pokemonName +"/"+ pokemonName);
         Pokemon_party.Instance.AddMember(pokemon,isGiftPokemon:true);
         Dialogue_handler.Instance.EndDialogue();
@@ -137,7 +137,7 @@ public class Options_manager : MonoBehaviour
     }
     void SellItem()
     {
-        Bag.Instance.currentBagUsage = Bag.BagUsage.SellingView;
+        Bag.Instance.currentBagUsage = BagUsage.SellingView;
         Game_ui_manager.Instance.ViewBag();
     }
 
@@ -173,7 +173,7 @@ public class Options_manager : MonoBehaviour
         OnInteractionTriggered?.Invoke(interactable,optionIndex);
         
         if (_currentInteractable.interaction.hasSeparateLogicHandler
-            || _currentInteractable.interaction.interactionType != Dialogue_handler.DialogType.Options)
+            || _currentInteractable.interaction.interactionType != DialogType.Options)
         {
             return;
         }
@@ -181,3 +181,4 @@ public class Options_manager : MonoBehaviour
         CompleteInteraction(_currentInteractable.interaction,optionIndex);
     }
 }
+

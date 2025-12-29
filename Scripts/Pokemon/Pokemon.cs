@@ -15,7 +15,7 @@ public class Pokemon : ScriptableObject
     public long pokemonID = 0;
     public uint personalityValue;
     public bool isShiny;
-    public PokemonOperations.Gender gender;
+    public Gender gender;
     public float ratioFemale = 0;
     public Nature nature;
     [FormerlySerializedAs("has_gender")] public bool hasGender = true;
@@ -53,26 +53,26 @@ public class Pokemon : ScriptableObject
     public int currentExpAmount = 0;
     public int currentLevelExpAmount;
     public int nextLevelExpAmount = 0;
-    [FormerlySerializedAs("EXPGroup")] public PokemonOperations.ExpGroup expGroup;
+    [FormerlySerializedAs("EXPGroup")] public ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
     public int friendshipLevel;
     public bool hasTrainer=false;
     public bool canBeFlinched = true;
     public bool canBeInfatuated = true;
     public List<Type> types;
-    public PokemonOperations.StatusEffect statusEffect;
+    public StatusEffect statusEffect;
     public List<Buff_Debuff> buffAndDebuffs = new();
     [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
     public int currentEvolutionLineIndex;
     public FriendShipEvolutionData friendshipEvolutionRequirement;
     [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone = false;
-    [FormerlySerializedAs("EvolutionStoneName")] public NameDB.EvolutionStone evolutionStone;
-    public NameDB.Ability[] abilities;
+    [FormerlySerializedAs("EvolutionStoneName")] public EvolutionStone evolutionStone;
+    public AbilityName[] abilities;
     [FormerlySerializedAs("split_evolution")] public bool splitEvolution = false;
     public bool requiresFriendshipEvolution = false;
     public LearnSetMove[] learnSet;
-    public List<NameDB.TM> learnableTms;
-    public List<NameDB.HM> learnableHms;
+    public List<TM_Name> learnableTms;
+    public List<HM_Name> learnableHms;
     public List<Move> moveSet=new();
     public Ability ability;
     public List<Evolution> evolutions;
@@ -117,20 +117,20 @@ public class Pokemon : ScriptableObject
     public void LoadUnserializedData()//gives values to attributes that cant be deserialized, using saved values
     {
         frontPicture = Testing.CheckImage( Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
+            (AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
         backPicture =Testing.CheckImage( Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_sb":"_b"));
+            (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_sb":"_b"));
         partyFrame1=Testing.CheckImage( Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.PokemonPartyImage),pokemonName+"_1");
+            (AssetDirectory.PokemonPartyImage),pokemonName+"_1");
         partyFrame2=Testing.CheckImage( Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.PokemonPartyImage),pokemonName+"_2");
+            (AssetDirectory.PokemonPartyImage),pokemonName+"_2");
         battleIntroFrame=Testing.CheckImage( Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_s_intro":"_intro"));
+            (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_s_intro":"_intro"));
         
         nature = Resources.Load<Nature>(Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.Natures) + natureName.ToLower());
+            (AssetDirectory.Natures) + natureName.ToLower());
         ability = Resources.Load<Ability>(Save_manager.GetDirectory
-            (Save_manager.AssetDirectory.Abilities) + abilityName.ToLower());
+            (AssetDirectory.Abilities) + abilityName.ToLower());
         types.Clear();
         evolutions.Clear();
         
@@ -139,18 +139,18 @@ public class Pokemon : ScriptableObject
         foreach (var typeName in typeNames)
         {
             types.Add(Resources.Load<Type>(Save_manager.GetDirectory
-                (Save_manager.AssetDirectory.Types) + typeName));
+                (AssetDirectory.Types) + typeName));
         }
         foreach (var evolutionName in evolutionNames)
         {
             var pokemonDirectory = Save_manager.GetDirectory
-                (Save_manager.AssetDirectory.Pokemon);
+                (AssetDirectory.Pokemon);
             evolutions.Add(Resources.Load<Evolution>($"{pokemonDirectory}{basePokemonName}/{evolutionName}"));
         }
         for (int i = 0; i < types.Count; i++)
         {
             types[i].typeImage = Resources.Load<Sprite>(Save_manager.GetDirectory
-                (Save_manager.AssetDirectory.UI) + typeNames[i]);
+                (AssetDirectory.UI) + typeNames[i]);
         }
         Battle_handler.Instance.OnBattleEnd += ClearEvents;
     }
@@ -168,7 +168,7 @@ public class Pokemon : ScriptableObject
         foreach (var move in movesetTemplate)
         {
             var moveCopy = Obj_Instance.CreateMove(Resources.Load<Move>(
-                Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + move.moveName));
+                Save_manager.GetDirectory(AssetDirectory.Moves) + move.moveName));
             
             moveCopy.powerpoints = move.powerPoints;
             moveCopy.maxPowerpoints = move.maxPowerpoints;
@@ -187,7 +187,7 @@ public class Pokemon : ScriptableObject
         heldItem = Obj_Instance.CreateItem(itemToGive);
         heldItem.quantity = 1;
     }
-    public bool HasType(PokemonOperations.Types typeName)
+    public bool HasType(Types typeName)
     {
         return types.Any(type=>type.typeName==typeName.ToString());
     }
@@ -208,18 +208,18 @@ public class Pokemon : ScriptableObject
     {
         friendshipLevel = Math.Clamp(friendshipLevel + amount, 0, 255);
     }
-    public void DetermineFriendshipLevelChange(bool isIncreasing, PokemonOperations.FriendshipModifier action)
+    public void DetermineFriendshipLevelChange(bool isIncreasing, FriendshipModifier action)
     {
         if (friendshipLevel > 254 && isIncreasing) return;
         
         var isHighFriendship = friendshipLevel > 219;
 
-        if (action == PokemonOperations.FriendshipModifier.Fainted)
+        if (action == FriendshipModifier.Fainted)
         {
             ChangeFriendshipLevel( friendshipLevel>99? -1 : -5 );
         }
         
-        if (action == PokemonOperations.FriendshipModifier.LevelUp)
+        if (action == FriendshipModifier.LevelUp)
         {
             var increaseLimitLow = (isHighFriendship)? 1 : 3;
             var increaseLimitHigh = (isHighFriendship)? 3 : 6;
@@ -228,7 +228,7 @@ public class Pokemon : ScriptableObject
             ChangeFriendshipLevel( isIncreasing?  amount : -amount );
         }
         
-        if (action == PokemonOperations.FriendshipModifier.Vitamin)
+        if (action == FriendshipModifier.Vitamin)
         {
             var increaseAmount = friendshipLevel switch
             {
@@ -241,7 +241,7 @@ public class Pokemon : ScriptableObject
             ChangeFriendshipLevel(isIncreasing?  amount: -amount );
         }
 
-        if (action == PokemonOperations.FriendshipModifier.Berry)
+        if (action == FriendshipModifier.Berry)
         {
             ChangeFriendshipLevel(ApplyFriendshipModifier(10) );
         }
@@ -370,7 +370,7 @@ public class Pokemon : ScriptableObject
         var baseExp = (enemy.expYield*enemy.currentLevel) / 7f;
         var expItemBonus = 1f;
         if (hasItem)
-            if (heldItem.itemType == Item_handler.ItemType.GainExp)//lucky egg
+            if (heldItem.itemType == ItemType.GainExp)//lucky egg
                 expItemBonus = float.Parse(heldItem.itemEffect);
         if (enemy.hasTrainer)
             trainerBonus = 1.5f;
@@ -382,8 +382,8 @@ public class Pokemon : ScriptableObject
         effortValues=evo.effortValues;
         types = evo.types;
         ability = evo.ability;
-        learnableTms = new List<NameDB.TM>(evo.learnableTms);
-        learnableHms = new List<NameDB.HM>(evo.learnableHms);
+        learnableTms = new List<TM_Name>(evo.learnableTms);
+        learnableHms = new List<HM_Name>(evo.learnableHms);
         learnSet = (LearnSetMove[])evo.learnSet.Clone();
         frontPicture = evo.frontPicture;
         backPicture = evo.backPicture;
@@ -409,16 +409,16 @@ public class Pokemon : ScriptableObject
 
     void IncreaseStats()
     {
-        attack = DetermineStatIncrease(baseAttack,attackIv,attackEv,PokemonOperations.Stat.Attack);
-        defense = DetermineStatIncrease(baseDefense,defenseIv,defenseEv,PokemonOperations.Stat.Defense);
-        speed = DetermineStatIncrease(baseSpeed,speedIv,speedEv,PokemonOperations.Stat.Speed);
-        specialAttack = DetermineStatIncrease(baseSpecialAttack,specialAttackIv,specialAttackEv,PokemonOperations.Stat.SpecialAttack);
-        specialDefense = DetermineStatIncrease(baseSpecialDefense,specialDefenseIv,specialDefenseEv,PokemonOperations.Stat.SpecialDefense);
+        attack = DetermineStatIncrease(baseAttack,attackIv,attackEv,Stat.Attack);
+        defense = DetermineStatIncrease(baseDefense,defenseIv,defenseEv,Stat.Defense);
+        speed = DetermineStatIncrease(baseSpeed,speedIv,speedEv,Stat.Speed);
+        specialAttack = DetermineStatIncrease(baseSpecialAttack,specialAttackIv,specialAttackEv,Stat.SpecialAttack);
+        specialDefense = DetermineStatIncrease(baseSpecialDefense,specialDefenseIv,specialDefenseEv,Stat.SpecialDefense);
         maxHp = DetermineHealthIncrease();
         if (currentLevel == 1)
             hp = maxHp;
     }
-    float GetNatureModifier(PokemonOperations.Stat stat)
+    float GetNatureModifier(Stat stat)
      {
          if (nature.statToIncrease == stat)
              return 1.1f;
@@ -426,7 +426,7 @@ public class Pokemon : ScriptableObject
              return 0.9f;
          return 1;
      }
-    float DetermineStatIncrease(float baseStat,float IV,float EV,PokemonOperations.Stat stat)
+    float DetermineStatIncrease(float baseStat,float IV,float EV,Stat stat)
     {
         float brackets1 = (2*baseStat) + IV + (EV / 4);
         float bracket2 = brackets1 * (currentLevel / 100f);
@@ -443,7 +443,7 @@ public class Pokemon : ScriptableObject
     public void LevelUp()
     {
         OnLevelUp?.Invoke(this);
-        DetermineFriendshipLevelChange(true, PokemonOperations.FriendshipModifier.LevelUp);
+        DetermineFriendshipLevelChange(true, FriendshipModifier.LevelUp);
         currentLevel++;
         nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel,expGroup);
         IncreaseStats();

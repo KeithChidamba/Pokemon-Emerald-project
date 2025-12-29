@@ -28,13 +28,13 @@ public class Held_Items : MonoBehaviour
         
         switch (_heldItem.itemType)
         {
-            case Item_handler.ItemType.Berry:
+            case ItemType.Berry:
                 yield return DetermineBerryEffect();
                 break;
-            case Item_handler.ItemType.HealHp:
+            case ItemType.HealHp:
                 yield return CheckHealCondition();
                 break;
-            case Item_handler.ItemType.Status:
+            case ItemType.Status:
                 yield return CheckStatusCondition();
                 break;
             //in the future, if there's need to add special held items like focus sash, create new type of item and add it to this switch
@@ -46,13 +46,13 @@ public class Held_Items : MonoBehaviour
         var berryInfo = _heldItem.GetModule<BerryInfoModule>();
         switch (berryInfo.berryType)
         {
-            case  BerryInfoModule.Berry.HpHeal:
+            case  Berry.HpHeal:
                 yield return CheckHealCondition();
                 break;
-            case  BerryInfoModule.Berry.StatusHeal:
+            case  Berry.StatusHeal:
                 yield return CheckStatusCondition();
                 break;
-            case  BerryInfoModule.Berry.ConfusionHeal:
+            case  Berry.ConfusionHeal:
                 yield return CheckIfConfused();
                 break;
         }
@@ -66,7 +66,7 @@ public class Held_Items : MonoBehaviour
     }    
     private IEnumerator CheckStatusCondition()
     {
-        if(_participant.pokemon.statusEffect == PokemonOperations.StatusEffect.None) yield break;
+        if(_participant.pokemon.statusEffect == StatusEffect.None) yield break;
 
         DepleteHeldItem();
        yield return GetStatusHealing();
@@ -91,12 +91,12 @@ public class Held_Items : MonoBehaviour
         var statusInfo = _heldItem.GetModule<StatusHealInfoModule>();
         var curableStatus = statusInfo.statusEffect;
         
-        if (curableStatus == PokemonOperations.StatusEffect.Poison &&
-            _participant.pokemon.statusEffect == PokemonOperations.StatusEffect.BadlyPoison)
+        if (curableStatus == StatusEffect.Poison &&
+            _participant.pokemon.statusEffect == StatusEffect.BadlyPoison)
         {//antidote heals all poison
-            curableStatus = PokemonOperations.StatusEffect.BadlyPoison;
+            curableStatus = StatusEffect.BadlyPoison;
         }
-        if (curableStatus != PokemonOperations.StatusEffect.FullHeal && 
+        if (curableStatus != StatusEffect.FullHeal && 
             _participant.pokemon.statusEffect != curableStatus)
         { 
             yield break;

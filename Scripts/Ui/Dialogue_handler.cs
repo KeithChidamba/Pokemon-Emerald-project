@@ -8,6 +8,7 @@ using Unity.Mathematics;
 using TMPro;
 using UnityEngine.Serialization;
 
+public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage}
 public class Dialogue_handler : MonoBehaviour
 {
     public Interaction currentInteraction;
@@ -26,7 +27,6 @@ public class Dialogue_handler : MonoBehaviour
     [SerializeField] private Transform dialogueUiParent;
     private List<GameObject> _currentDialogueOptions = new();
     public bool messagesLoading;
-    public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage}
     public List<Interaction> pendingMessages = new();
     public GameObject optionSelector;
     public event Action OnMessagedDone;
@@ -99,9 +99,9 @@ public class Dialogue_handler : MonoBehaviour
             optionSelectables.Add( newOption);
         }
         
-        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.DialogueOptions
-            ,new[]{InputStateHandler.StateGroup.None},false,null,
-            InputStateHandler.Directional.Vertical,optionSelectables,optionSelector,true,true));
+        InputStateHandler.Instance.ChangeInputState(new (InputStateName.DialogueOptions
+            ,new[]{InputStateGroup.None},false,null,
+            InputDirection.Vertical,optionSelectables,optionSelector,true,true));
         yield return null;
     }
     private void SelectOption(int optionIndex)
@@ -128,7 +128,7 @@ public class Dialogue_handler : MonoBehaviour
         newInteraction.resultMessage = result;
         return newInteraction;
     }
-    public void DisplayList(string info,string result,Options_manager.InteractionOptions[] options
+    public void DisplayList(string info,string result,InteractionOptions[] options
         , string[]optionsText)//list info
     {
         canExitDialogue = false;
@@ -314,3 +314,5 @@ public class Dialogue_handler : MonoBehaviour
         }
     }
 }
+
+

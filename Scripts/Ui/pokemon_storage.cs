@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine.UI;
-
+public enum PCUsageState
+{
+    Withdraw,Deposit,Move
+};
 public class pokemon_storage : MonoBehaviour
 {
     public List<Pokemon> nonPartyPokemon = new();
@@ -51,7 +54,7 @@ public class pokemon_storage : MonoBehaviour
     public LoopingUiAnimation[] depositGreyArrows;
     public static pokemon_storage Instance;
     private bool _viewingPC;
-    public StorageBoxMovingData movingOperationData;
+    private StorageBoxMovingData movingOperationData;
     public GameObject movePokemonUIOption;
     public Image selectedPokemonImage;
     public bool movingPokemon;
@@ -60,11 +63,6 @@ public class pokemon_storage : MonoBehaviour
         ViewingPokemonData,ExitingPC,ViewingBoxChange,SelectingBoxDeposit,ViewingParty
     }
     private PCNavState _currentNavState;
-
-    public enum PCUsageState
-    {
-        Withdraw,Deposit,Move
-    };
 
     public PCUsageState currentUsageState;
     public Text pokemonDataName;
@@ -126,22 +124,22 @@ public class pokemon_storage : MonoBehaviour
     }
     private void CheckState(InputState currentState)
     {
-        _viewingPC = currentState.stateGroups.Contains(InputStateHandler.StateGroup.PokemonStorage);
+        _viewingPC = currentState.stateGroups.Contains(InputStateGroup.PokemonStorage);
         switch (currentState.stateName)
         {
-            case InputStateHandler.StateName.PokemonStorageExit:
+            case InputStateName.PokemonStorageExit:
                 _currentNavState = PCNavState.ExitingPC;
                 break;
-            case InputStateHandler.StateName.PokemonStorageBoxNavigation:
+            case InputStateName.PokemonStorageBoxNavigation:
                 _currentNavState = PCNavState.ViewingPokemonData;
                 break;
-            case InputStateHandler.StateName.PokemonStorageDepositSelection:
+            case InputStateName.PokemonStorageDepositSelection:
                 _currentNavState = PCNavState.SelectingBoxDeposit;
                 break;
-            case InputStateHandler.StateName.PokemonStorageBoxChange:
+            case InputStateName.PokemonStorageBoxChange:
                 _currentNavState = PCNavState.ViewingBoxChange;
                 break;
-            case InputStateHandler.StateName.PokemonStoragePartyNavigation:
+            case InputStateName.PokemonStoragePartyNavigation:
                 _currentNavState = PCNavState.ViewingParty;
                 break;
         }
@@ -263,7 +261,7 @@ public class pokemon_storage : MonoBehaviour
         genderImage.gameObject.SetActive(true);
         if(pokemon.hasGender)
             genderImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(Save_manager.AssetDirectory.UI) 
+                Save_manager.GetDirectory(AssetDirectory.UI) 
                 + pokemon.gender.ToString().ToLower());
         else
             genderImage.gameObject.SetActive(false);
@@ -332,9 +330,9 @@ public class pokemon_storage : MonoBehaviour
             }
             partySelectables.Add( new(exitParty,Game_ui_manager.Instance.ClosePokemonStorage,true) );
             
-            InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStoragePartyNavigation,
-                new[]{InputStateHandler.StateGroup.PokemonStorage}
-                , stateDirectional:InputStateHandler.Directional.Vertical, selectableUis:partySelectables
+            InputStateHandler.Instance.ChangeInputState(new  (InputStateName.PokemonStoragePartyNavigation,
+                new[]{InputStateGroup.PokemonStorage}
+                , stateDirection:InputDirection.Vertical, selectableUis:partySelectables
                 ,selector: initialSelector
                 ,selecting:true,display:true, canManualExit:false));
 
@@ -354,7 +352,7 @@ public class pokemon_storage : MonoBehaviour
         RemovePokemonIcons(true);
         RemovePokemonIcons(false);
         partyUI.SetActive(false);
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonStorage);
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonStorage);
         StopAllCoroutines();
         currentIndexOfBox = 0;
     }
@@ -455,9 +453,9 @@ public class pokemon_storage : MonoBehaviour
             new(storagePartyOptions[2], ()=>DeletePokemon(true,icon.partyPosition),true)
         };
 
-        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStoragePartyOptions,
-            new[]{InputStateHandler.StateGroup.PokemonStorage}
-            , stateDirectional:InputStateHandler.Directional.Vertical,selectableUis: partyOptionsSelectables
+        InputStateHandler.Instance.ChangeInputState(new  (InputStateName.PokemonStoragePartyOptions,
+            new[]{InputStateGroup.PokemonStorage}
+            , stateDirection:InputDirection.Vertical,selectableUis: partyOptionsSelectables
             ,selector:boxOptionsSelector,selecting:true,display:true
             ,onClose:ResetOptions,onExit:ResetOptions));
         
@@ -522,9 +520,9 @@ public class pokemon_storage : MonoBehaviour
             boxOptionsSelectables.Add(new(storageOptions[2], () => DeletePokemon(false), true));
 
 
-            InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorageBoxOptions,
-                new[]{InputStateHandler.StateGroup.PokemonStorage}
-                , stateDirectional:InputStateHandler.Directional.Vertical,selectableUis: boxOptionsSelectables
+            InputStateHandler.Instance.ChangeInputState(new  (InputStateName.PokemonStorageBoxOptions,
+                new[]{InputStateGroup.PokemonStorage}
+                , stateDirection:InputDirection.Vertical,selectableUis: boxOptionsSelectables
                 ,selector:boxOptionsSelector,selecting:true,display:true
                 ,onClose:ResetOptions,onExit:ResetOptions));
         
@@ -554,9 +552,9 @@ public class pokemon_storage : MonoBehaviour
                 var boxNumber = i + 1;
                 boxSelection.Add(new(null,()=>SendToPC(boxNumber,partyPokemon),true));
             }
-            InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonStorageDepositSelection,
-                new[]{InputStateHandler.StateGroup.PokemonStorage}
-                , stateDirectional:InputStateHandler.Directional.Horizontal,selectableUis: boxSelection,selecting:true,onExit:RemoveDeposit));
+            InputStateHandler.Instance.ChangeInputState(new  (InputStateName.PokemonStorageDepositSelection,
+                new[]{InputStateGroup.PokemonStorage}
+                , stateDirection:InputDirection.Horizontal,selectableUis: boxSelection,selecting:true,onExit:RemoveDeposit));
             boxDepositUI.SetActive(true);
             DisplayBoxCapacity(0);
         }
@@ -678,3 +676,5 @@ public class pokemon_storage : MonoBehaviour
        totalPokemonCount++;
     }
 }
+
+

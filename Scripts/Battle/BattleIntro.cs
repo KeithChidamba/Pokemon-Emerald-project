@@ -197,7 +197,7 @@ public class BattleIntro : MonoBehaviour
         challengers.Clear();
         var participants = Battle_handler.Instance.battleParticipants;
 
-        if (Battle_handler.Instance.currentBattleType == TrainerData.BattleType.SingleDouble)
+        if (Battle_handler.Instance.currentBattleType == BattleType.SingleDouble)
         {
             participantIntroImages[2].sprite = participants[2].pokemonTrainerAI.trainerData.battleIntroSprite; 
             participantIntroImages[2].gameObject.SetActive(true);
@@ -240,7 +240,7 @@ public class BattleIntro : MonoBehaviour
         yield return playerPokeballs.LoadPokeballs();
         
         StartCoroutine(enemyPokeballs.HidePokeballs());
-        if (Battle_handler.Instance.currentBattleType != TrainerData.BattleType.SingleDouble)
+        if (Battle_handler.Instance.currentBattleType != BattleType.SingleDouble)
         {
             for (var i = 0; i < challengers.Count; i++)
             {
@@ -348,7 +348,7 @@ public class BattleIntro : MonoBehaviour
 
     private IEnumerator PokemonIntroAnimationMovement(Battle_Participant participant)
     {
-        if (participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Sleep)
+        if (participant.pokemon.statusEffect == StatusEffect.Sleep)
         {
             yield break;
         }
@@ -387,7 +387,7 @@ public class BattleIntro : MonoBehaviour
     }
     private IEnumerator PokemonIntroAnimation(Battle_Participant participant)
     {
-        if (participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Sleep)
+        if (participant.pokemon.statusEffect == StatusEffect.Sleep)
         {
             yield break;
         }

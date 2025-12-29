@@ -6,6 +6,6 @@ using UnityEngine;
 public class DamageModifierInfo : AdditionalInfoModule
 {
     public string damageChangeMessage;
-    public PokemonOperations.Types typeAffected;
+    public Types typeAffected;
     public float damageModifier;
 }

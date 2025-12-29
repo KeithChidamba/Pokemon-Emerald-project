@@ -70,7 +70,7 @@ public class Game_Load : MonoBehaviour
             data.trainerID = Utility.Random16Bit();
             data.secretID = Utility.Random16Bit();
             data.playerPosition = Start_house_pos.position;
-            data.location = AreaData.AreaName.PlayerHouse;
+            data.location = AreaName.PlayerHouse;
             playerData = data;
             StartGame();
         }

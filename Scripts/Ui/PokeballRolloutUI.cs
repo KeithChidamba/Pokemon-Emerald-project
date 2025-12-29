@@ -80,7 +80,7 @@ public class PokeballRolloutUI : MonoBehaviour
         }
         else
         {
-            if (Battle_handler.Instance.currentBattleType == TrainerData.BattleType.Double)
+            if (Battle_handler.Instance.currentBattleType == BattleType.Double)
             {
                 //cross this bridge when we get there
             }

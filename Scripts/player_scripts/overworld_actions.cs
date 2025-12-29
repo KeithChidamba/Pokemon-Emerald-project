@@ -15,9 +15,9 @@ public class overworld_actions : MonoBehaviour
     public Item equippedSpecialItem;
     public static overworld_actions Instance;
     private bool _canUseEquippedItem;
-    private EquipableInfoModule.Equipable _currentEquippedItem;
-    public event Action<EquipableInfoModule.Equipable> OnItemEquipped;
-    public event Action<EquipableInfoModule.Equipable> OnItemUnequipped;
+    private Equipable _currentEquippedItem;
+    public event Action<Equipable> OnItemEquipped;
+    public event Action<Equipable> OnItemUnequipped;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -45,7 +45,7 @@ public class overworld_actions : MonoBehaviour
             Dialogue_handler.Instance.DisplayDetails("Equipped " + equippedSpecialItem.itemName);
         Game_Load.Instance.playerData.equippedItemName = equippedSpecialItem.itemName;
     }
-    public bool IsEquipped(EquipableInfoModule.Equipable equipable = EquipableInfoModule.Equipable.None
+    public bool IsEquipped(Equipable equipable = Equipable.None
         , Item item = null)
     {
         if (!_canUseEquippedItem || !ItemEquipped())
@@ -58,7 +58,7 @@ public class overworld_actions : MonoBehaviour
     public void UnequipItem(Item item)
     {
         OnItemUnequipped?.Invoke(_currentEquippedItem);
-        _currentEquippedItem = EquipableInfoModule.Equipable.None;
+        _currentEquippedItem = Equipable.None;
         equippedSpecialItem = null;
         if(usingUI)
             Dialogue_handler.Instance.DisplayDetails("Unequipped " + item.itemName);

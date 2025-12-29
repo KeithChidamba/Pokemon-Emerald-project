@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class StatChangeData
 {
-    public enum StatChangeability{ImmuneToIncrease,ImmuneToDecrease}
     public StatChangeability Changeability;
     public int EffectDuration;
 
@@ -14,3 +13,5 @@ public class StatChangeData
         EffectDuration = effectDuration;
     }
 }
+
+public enum StatChangeability{ImmuneToIncrease,ImmuneToDecrease}

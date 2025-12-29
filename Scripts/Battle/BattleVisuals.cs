@@ -14,7 +14,7 @@ public class BattleVisuals : MonoBehaviour
     private int[] _enemyPokeballXPositions={155,250,330};
     private List<(Image img,Vector2 pos)> _statChangeImages=new();
     public Sprite[] statChangeSprites;
-    private Dictionary<PokemonOperations.Stat, Sprite> statChangeVisuals = new();
+    private Dictionary<Stat, Sprite> statChangeVisuals = new();
     private string _statChangeMessage;
     public float outOfViewDitance = 400f;
     public event Action OnStatVisualDisplayed;
@@ -34,24 +34,24 @@ public class BattleVisuals : MonoBehaviour
         Battle_handler.Instance.OnBattleEnd += ResetAfterBattle;
         _defaultParticipantImageSize =
             Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
-        statChangeVisuals.Add(PokemonOperations.Stat.Attack,statChangeSprites[0]);
-        statChangeVisuals.Add(PokemonOperations.Stat.Defense,statChangeSprites[1]);
-        statChangeVisuals.Add(PokemonOperations.Stat.Speed,statChangeSprites[2]);
-        statChangeVisuals.Add(PokemonOperations.Stat.SpecialAttack,statChangeSprites[3]);
-        statChangeVisuals.Add(PokemonOperations.Stat.SpecialDefense,statChangeSprites[4]);
-        statChangeVisuals.Add(PokemonOperations.Stat.Accuracy,statChangeSprites[5]);
-        statChangeVisuals.Add(PokemonOperations.Stat.Evasion,statChangeSprites[6]);
-        statChangeVisuals.Add(PokemonOperations.Stat.Multi,statChangeSprites[7]);
+        statChangeVisuals.Add(Stat.Attack,statChangeSprites[0]);
+        statChangeVisuals.Add(Stat.Defense,statChangeSprites[1]);
+        statChangeVisuals.Add(Stat.Speed,statChangeSprites[2]);
+        statChangeVisuals.Add(Stat.SpecialAttack,statChangeSprites[3]);
+        statChangeVisuals.Add(Stat.SpecialDefense,statChangeSprites[4]);
+        statChangeVisuals.Add(Stat.Accuracy,statChangeSprites[5]);
+        statChangeVisuals.Add(Stat.Evasion,statChangeSprites[6]);
+        statChangeVisuals.Add(Stat.Multi,statChangeSprites[7]);
     }
 
     public void CancelBuffVisual()
     {
         OnStatVisualDisplayed?.Invoke();
     }
-    public void SelectStatChangeVisuals(PokemonOperations.Stat statChanged,Battle_Participant participant,string message)
+    public void SelectStatChangeVisuals(Stat statChanged,Battle_Participant participant,string message)
     {
         _statChangeMessage = message;
-        if (statChanged == PokemonOperations.Stat.Crit)
+        if (statChanged == Stat.Crit)
         {
             CancelBuffVisual();
             return;
@@ -131,7 +131,7 @@ public class BattleVisuals : MonoBehaviour
         participant.statusEffectAnimator.gameObject.SetActive(true);
         var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
         
-        if (participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Sleep)
+        if (participant.pokemon.statusEffect == StatusEffect.Sleep)
         {
             var start = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x
                 , participant.pokemonImage.rectTransform.anchoredPosition.y+80f);
@@ -144,7 +144,7 @@ public class BattleVisuals : MonoBehaviour
             yield return SlideRect(rect,start,target,165f);
         }
         else 
-        if (participant.pokemon.statusEffect == PokemonOperations.StatusEffect.Paralysis)
+        if (participant.pokemon.statusEffect == StatusEffect.Paralysis)
         {
             var imageRect = participant.pokemonImage.rectTransform;
             rect.anchoredPosition = imageRect.anchoredPosition;
@@ -170,9 +170,9 @@ public class BattleVisuals : MonoBehaviour
         participant.statusEffectAnimator.gameObject.SetActive(false);
         yield return null;
     }
-    public IEnumerator DisplayDamageTakenVisual(Battle_Participant participant,Move_handler.DamageSource damageSource)
+    public IEnumerator DisplayDamageTakenVisual(Battle_Participant participant,DamageSource damageSource)
     {
-        if(damageSource == Move_handler.DamageSource.Normal)
+        if(damageSource == DamageSource.Normal)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -182,7 +182,7 @@ public class BattleVisuals : MonoBehaviour
                 participant.pokemonImage.color = Color.white;
             }
         }
-        if (damageSource == Move_handler.DamageSource.Poison)
+        if (damageSource == DamageSource.Poison)
         {
             Color startColor = Color.white;
             Color endColor = new Color(0.29f, 0f, 0.51f);
@@ -206,7 +206,7 @@ public class BattleVisuals : MonoBehaviour
             participant.pokemonImage.color = startColor;
             yield return new WaitForSeconds(0.5f);
         }
-        if (damageSource == Move_handler.DamageSource.Burn)
+        if (damageSource == DamageSource.Burn)
         {
             participant.statusEffectAnimator.gameObject.SetActive(true);
             var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();

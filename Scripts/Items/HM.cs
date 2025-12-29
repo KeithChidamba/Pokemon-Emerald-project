@@ -6,6 +6,6 @@ using UnityEngine;
 public class HM : AdditionalInfoModule
 {
     public int HmNumber;
-    public NameDB.HM HmName;
+    public HM_Name HmName;
     public Move move;
 }

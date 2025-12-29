@@ -6,5 +6,5 @@ using UnityEngine;
 
 public class StatInfoModule : AdditionalInfoModule
 {
-    public PokemonOperations.Stat statName;
+    public Stat statName;
 }

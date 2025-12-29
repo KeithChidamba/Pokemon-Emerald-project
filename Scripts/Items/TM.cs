@@ -6,6 +6,6 @@ using UnityEngine;
 public class TM : AdditionalInfoModule
 {
     public int TmNumber;
-    public NameDB.TM TmName;
+    public TM_Name TmName;
     public Move move;
 }

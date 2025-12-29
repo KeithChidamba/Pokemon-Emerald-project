@@ -34,9 +34,9 @@ public class Area_manager : MonoBehaviour
         currentArea = area;
         Invoke(nameof(LoadBuilding),loadTime);
     }
-    public void SwitchToArea(AreaData.AreaName areaName,float loadTime=0f)
+    public void SwitchToArea(AreaName areaName,float loadTime=0f)
     {
-        if (areaName!=AreaData.AreaName.OverWorld)
+        if (areaName!=AreaName.OverWorld)
         {
             var area = FindArea(areaName);
             EnterBuilding(area, loadTime);
@@ -44,7 +44,7 @@ public class Area_manager : MonoBehaviour
         else
             GoToOverworld();
     }
-    private Switch_Area FindArea(AreaData.AreaName areaName)
+    private Switch_Area FindArea(AreaName areaName)
     {
         return overworldAreas.FirstOrDefault(a=>a.areaData.areaName==areaName);
     }
@@ -65,7 +65,7 @@ public class Area_manager : MonoBehaviour
             if (_areaBuilding.areaData.hasDoorAnimation)
                 _areaBuilding.doorAnimation.Play("Close");
         Invoke(nameof(ResetPlayerMovement), 1f);
-        currentArea = FindArea(AreaData.AreaName.OverWorld);
+        currentArea = FindArea(AreaName.OverWorld);
         Player_movement.Instance.canUseBike = true;
         Game_Load.Instance.playerData.location = currentArea.areaData.areaName;
         _areaBuilding = null;

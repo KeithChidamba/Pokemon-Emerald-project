@@ -27,9 +27,9 @@ public class Move_handler:MonoBehaviour
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageCalc;
     public event Action<float,Battle_Participant> OnDamageDeal;
     public event Action<Battle_Participant,Move> OnMoveHit;
-    public event Action<Battle_Participant,PokemonOperations.StatusEffect> OnStatusEffectHit;
+    public event Action<Battle_Participant,StatusEffect> OnStatusEffectHit;
     public event Action OnMoveComplete;
-    public enum DamageSource{Normal,Burn,Poison,Special}
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -70,7 +70,7 @@ public class Move_handler:MonoBehaviour
         else
         {
             SetMoveSequence();
-            if (_currentTurn.move.effectType != Move.EffectType.PipeLine)
+            if (_currentTurn.move.effectType != EffectType.PipeLine)
             {
                 yield return MoveLogicHandler.Instance.DetermineMoveLogic(attacker,victim,_currentTurn);
             }
@@ -201,8 +201,8 @@ public class Move_handler:MonoBehaviour
     {
         foreach (var barrier in currentVictim.barriers)
         {
-            if ((move.isSpecial && barrier.barrierName == NameDB.GetMoveName(NameDB.LearnSetMove.LightScreen))
-                || (!move.isSpecial && barrier.barrierName == NameDB.GetMoveName(NameDB.LearnSetMove.Reflect)))
+            if ((move.isSpecial && barrier.barrierName == NameDB.GetMoveName(LearnSetMoveName.LightScreen))
+                || (!move.isSpecial && barrier.barrierName == NameDB.GetMoveName(LearnSetMoveName.Reflect)))
                 return  damage-(damage*barrier.barrierEffect);
         }
         return damage;
@@ -274,7 +274,7 @@ public class Move_handler:MonoBehaviour
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
                 
                 if(InputStateHandler.Instance.currentState.stateGroups
-                   .Contains(InputStateHandler.StateGroup.PokemonParty))
+                   .Contains(InputStateGroup.PokemonParty))
                 {//update party health ui
                     data.affectedPokemon.ChangeHealth(null);
                 }  
@@ -355,7 +355,7 @@ public class Move_handler:MonoBehaviour
 
     private void CheckVictimVulnerabilityToStatus()
     {
-        if (victim.pokemon.statusEffect != PokemonOperations.StatusEffect.None)
+        if (victim.pokemon.statusEffect != StatusEffect.None)
         {
             if (_currentTurn.move.moveDamage == 0)
             {//only display message for status-condition-only moves
@@ -382,7 +382,7 @@ public class Move_handler:MonoBehaviour
             }
         _processingOrder = false;
     }
-    bool CheckInvalidStatusEffect(PokemonOperations.StatusEffect status,string typeName,Move move)
+    bool CheckInvalidStatusEffect(StatusEffect status,string typeName,Move move)
     {
         string[] invalidCombinations = {
             "poisonpoison","badlypoisonpoison", "burnfire", "paralysiselectric", "freezeice" };
@@ -404,21 +404,21 @@ public class Move_handler:MonoBehaviour
             Dialogue_handler.Instance.DisplayBattleInfo($"{currentVictim.pokemon.pokemonName} {GetStatusMessage(move.statusEffect)}");
         ApplyStatusToVictim(currentVictim,move.statusEffect);
     }
-    private static string GetStatusMessage(PokemonOperations.StatusEffect status)
+    private static string GetStatusMessage(StatusEffect status)
     {
          var displayMessage = status switch
             {
-                PokemonOperations.StatusEffect.Paralysis=>"was paralyzed",
-                PokemonOperations.StatusEffect.Burn=>"was burned",
-                PokemonOperations.StatusEffect.BadlyPoison=>"was badly poisoned",
-                PokemonOperations.StatusEffect.Poison=>"was poisoned",
-                PokemonOperations.StatusEffect.Sleep=>"fell fast asleep",
-                PokemonOperations.StatusEffect.Freeze=>"was frozen",
+                StatusEffect.Paralysis=>"was paralyzed",
+                StatusEffect.Burn=>"was burned",
+                StatusEffect.BadlyPoison=>"was badly poisoned",
+                StatusEffect.Poison=>"was poisoned",
+                StatusEffect.Sleep=>"fell fast asleep",
+                StatusEffect.Freeze=>"was frozen",
                 _=>""
             };
         return displayMessage;
     }
-    public void ApplyStatusToVictim(Battle_Participant participant,PokemonOperations.StatusEffect status, int numTurns=0)
+    public void ApplyStatusToVictim(Battle_Participant participant,StatusEffect status, int numTurns=0)
     {
         participant.pokemon.statusEffect = status;
         var numTurnsOfStatus = 0;
@@ -426,13 +426,13 @@ public class Move_handler:MonoBehaviour
             participant.statusHandler.GetStatusEffect(numTurns);
         else
         {
-            if(status==PokemonOperations.StatusEffect.Sleep)
+            if(status==StatusEffect.Sleep)
                 numTurnsOfStatus = Utility.RandomRange(1, 5);
         }
         participant.statusHandler.GetStatusEffect(numTurnsOfStatus);
     }
 
-    public void ApplyStatChangeImmunity(Battle_Participant participant,StatChangeData.StatChangeability changeability,int numTurns)
+    public void ApplyStatChangeImmunity(Battle_Participant participant,StatChangeability changeability,int numTurns)
     {
         if (!participant.isActive) return;
         participant.statusHandler.GetStatChangeImmunity(changeability,numTurns);
@@ -452,8 +452,8 @@ public class Move_handler:MonoBehaviour
        
         if(isMoveEffect)
         {
-            if (enemy.pokemon.HasType(PokemonOperations.Types.Ghost)
-                && !attacker.pokemon.HasType(PokemonOperations.Types.Ghost))
+            if (enemy.pokemon.HasType(Types.Ghost)
+                && !attacker.pokemon.HasType(Types.Ghost))
             {//only ghost can trap ghost with moves
                 Dialogue_handler.Instance.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
                 _processingOrder = false;
@@ -536,8 +536,8 @@ public class Move_handler:MonoBehaviour
             _processingOrder = false;
             return;
         }
-        if (victim.pokemon.gender == PokemonOperations.Gender.None 
-            || attacker.pokemon.gender == PokemonOperations.Gender.None
+        if (victim.pokemon.gender == Gender.None 
+            || attacker.pokemon.gender == Gender.None
             || attacker.pokemon.gender == victim.pokemon.gender)
         {
             Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
@@ -585,7 +585,7 @@ public class Move_handler:MonoBehaviour
         BattleVisuals.Instance.OnStatVisualDisplayed-=NotifyBuffVisualCompletion;
         _processingOrder = false;
     }
-    IEnumerator MultiTargetBuff_Debuff(PokemonOperations.Stat stat, bool isIncreasing,int buffAmount)
+    IEnumerator MultiTargetBuff_Debuff(Stat stat, bool isIncreasing,int buffAmount)
     {
         foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker.currentEnemies) )
         {
@@ -605,28 +605,28 @@ public class Move_handler:MonoBehaviour
         var affectedPokemon = data.Receiver.pokemon;
         switch (data.Stat)
         {
-            case PokemonOperations.Stat.Defense:
+            case Stat.Defense:
                 affectedPokemon.defense = GetUpdatedStat(unModifiedStats.defense,data) ?? affectedPokemon.defense;
                 break;
-            case PokemonOperations.Stat.Attack:
+            case Stat.Attack:
                 affectedPokemon.attack = GetUpdatedStat(unModifiedStats.attack,data) ?? affectedPokemon.attack;
                 break;
-            case PokemonOperations.Stat.SpecialDefense:
+            case Stat.SpecialDefense:
                 affectedPokemon.specialDefense = GetUpdatedStat(unModifiedStats.spDef,data) ?? affectedPokemon.specialDefense;
                 break;
-            case PokemonOperations.Stat.SpecialAttack:
+            case Stat.SpecialAttack:
                 affectedPokemon.specialAttack = GetUpdatedStat(unModifiedStats.spAtk,data) ?? affectedPokemon.specialAttack;
                 break;
-            case PokemonOperations.Stat.Speed:
+            case Stat.Speed:
                 affectedPokemon.speed = GetUpdatedStat(unModifiedStats.speed,data) ?? affectedPokemon.speed;
                 break;
-            case PokemonOperations.Stat.Accuracy:
+            case Stat.Accuracy:
                 affectedPokemon.accuracy = GetUpdatedStat(unModifiedStats.accuracy,data) ?? affectedPokemon.accuracy;
                 break;
-            case PokemonOperations.Stat.Evasion:
+            case Stat.Evasion:
                 affectedPokemon.evasion = GetUpdatedStat(unModifiedStats.evasion,data) ?? affectedPokemon.evasion;
                 break;
-            case PokemonOperations.Stat.Crit:
+            case Stat.Crit:
                 affectedPokemon.critChance = GetUpdatedStat(unModifiedStats.crit,data)?? affectedPokemon.critChance;
                 break; 
         }
@@ -635,19 +635,19 @@ public class Move_handler:MonoBehaviour
     {
         BattleOperations.ChangeOrCreateBuffOrDebuff(data);
         var buff = BattleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat)
-                   ?? new Buff_Debuff(PokemonOperations.Stat.None, 0, true); // if null return same value
+                   ?? new Buff_Debuff(Stat.None, 0, true); // if null return same value
         if (buff.isAtLimit) return null;
         return ModifyStatValue(data.Stat, unmodifiedStatValue, buff.stage);
     }
 
-    public float ModifyStatValue(PokemonOperations.Stat stat, float unmodifiedStatValue ,int buffStage)
+    public float ModifyStatValue(Stat stat, float unmodifiedStatValue ,int buffStage)
     {
         switch (stat)
         {
-            case PokemonOperations.Stat.Accuracy:
-            case PokemonOperations.Stat.Evasion:
+            case Stat.Accuracy:
+            case Stat.Evasion:
                 return math.trunc(unmodifiedStatValue * _accuracyAndEvasionLevels[buffStage+6]);
-            case PokemonOperations.Stat.Crit:
+            case Stat.Crit:
                 return _critLevels[buffStage];
             default:
                 return math.trunc(unmodifiedStatValue * _statLevels[buffStage+6]); 
@@ -678,12 +678,14 @@ public class Move_handler:MonoBehaviour
     {
         _onFieldDamageModifiers.Add(newModifier);
     }
-    public void RemoveFieldDamageModifier(PokemonOperations.Types modifierTypeAffected)
+    public void RemoveFieldDamageModifier(Types modifierTypeAffected)
     {
         _onFieldDamageModifiers.RemoveAll(m=>m.modifierInfo.typeAffected==modifierTypeAffected);
     }
-    public bool DamageModifierPresent(PokemonOperations.Types type)
+    public bool DamageModifierPresent(Types type)
     {
         return _onFieldDamageModifiers.Any(m => m.modifierInfo.typeAffected == type);
     }
 }
+
+public enum DamageSource{Normal,Burn,Poison,Special}

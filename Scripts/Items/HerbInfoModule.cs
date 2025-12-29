@@ -5,13 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Herb", menuName = "herb")]
 public class HerbInfoModule : AdditionalInfoModule
 {
-    public enum Herb
-    {
-        EnergyPowder, EnergyRoot, HealPowder, RevivalHerb
-    }
     public Herb herbType;
-    public PokemonOperations.StatusEffect statusEffect;
-    public Item_handler.ItemType itemType;
+    public StatusEffect statusEffect;
+    public ItemType itemType;
     public int GetHerbUsage(Item parentItem)
     {
         var usageIndex = 0;
@@ -26,14 +22,19 @@ public class HerbInfoModule : AdditionalInfoModule
                 usageIndex = 0;
                 break;
             case Herb.HealPowder:
-                statusEffect = PokemonOperations.StatusEffect.FullHeal;
+                statusEffect = StatusEffect.FullHeal;
                 usageIndex = 1;
                 break;
             case Herb.RevivalHerb:
-                itemType = Item_handler.ItemType.MaxRevive;
+                itemType = ItemType.MaxRevive;
                 usageIndex = 2;
                 break;
         }
         return usageIndex;
     }
+}
+
+public enum Herb
+{
+    EnergyPowder, EnergyRoot, HealPowder, RevivalHerb
 }

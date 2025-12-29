@@ -13,7 +13,7 @@ public class Enemy_trainer : MonoBehaviour
     public bool inBattle;
     public bool canAttack = true;
     [SerializeField]private bool usedMove;
-    private Dictionary<TrainerData.AiFlags, Func<int>> AiLogicCalculators = new();
+    private Dictionary<AiFlags, Func<int>> AiLogicCalculators = new();
     private Move _currentMoveCheck;
     private Battle_Participant _currentEnemy;
     private void Update()
@@ -25,11 +25,11 @@ public class Enemy_trainer : MonoBehaviour
     {
         Turn_Based_Combat.Instance.OnNewTurn += ResetMoveUsage;
         Battle_handler.Instance.OnBattleEnd += ResetAfterBattle;
-        AiLogicCalculators.Add(TrainerData.AiFlags.CheckBadMove ,AiCheckBadMove);
-        AiLogicCalculators.Add(TrainerData.AiFlags.CheckViability ,AiCheckViability);
-        AiLogicCalculators.Add(TrainerData.AiFlags.CheckStatus ,AiCheckStatus);
-        AiLogicCalculators.Add(TrainerData.AiFlags.CheckSetup ,AiCheckSetup);
-        AiLogicCalculators.Add(TrainerData.AiFlags.CheckPriority ,AiCheckPriority);
+        AiLogicCalculators.Add(AiFlags.CheckBadMove ,AiCheckBadMove);
+        AiLogicCalculators.Add(AiFlags.CheckViability ,AiCheckViability);
+        AiLogicCalculators.Add(AiFlags.CheckStatus ,AiCheckStatus);
+        AiLogicCalculators.Add(AiFlags.CheckSetup ,AiCheckSetup);
+        AiLogicCalculators.Add(AiFlags.CheckPriority ,AiCheckPriority);
     }
     public void CanAttack()
     {
@@ -131,7 +131,7 @@ public class Enemy_trainer : MonoBehaviour
         Battle_handler.Instance.currentEnemyIndex = randomEnemy;
         _currentEnemy = Battle_handler.Instance.battleParticipants[randomEnemy];
         
-       if(trainerData.trainerAiFlags.Contains(TrainerData.AiFlags.CheckSwitching))
+       if(trainerData.trainerAiFlags.Contains(AiFlags.CheckSwitching))
        {
            AiCheckSwitching();
        }
@@ -230,7 +230,7 @@ public class Enemy_trainer : MonoBehaviour
         {
             scoreDifference-=120;
         }
-        if ( _currentMoveCheck.effectType==Move.EffectType.WeatherHealthGain && participant.pokemon.hp>=participant.pokemon.maxHp)
+        if ( _currentMoveCheck.effectType==EffectType.WeatherHealthGain && participant.pokemon.hp>=participant.pokemon.maxHp)
         {
             scoreDifference-=100;
         }
@@ -252,12 +252,12 @@ public class Enemy_trainer : MonoBehaviour
         int scoreDifference = 0;
         if (_currentMoveCheck.hasStatus && _currentMoveCheck.moveDamage==0)
         {
-            if (_currentEnemy.pokemon.statusEffect==PokemonOperations.StatusEffect.Sleep ||
-                _currentEnemy.pokemon.statusEffect==PokemonOperations.StatusEffect.Paralysis)
+            if (_currentEnemy.pokemon.statusEffect==StatusEffect.Sleep ||
+                _currentEnemy.pokemon.statusEffect==StatusEffect.Paralysis)
             {
                 scoreDifference = 18;
             }
-            if (_currentEnemy.pokemon.statusEffect==PokemonOperations.StatusEffect.None)
+            if (_currentEnemy.pokemon.statusEffect==StatusEffect.None)
             {
                 scoreDifference = -35;
             }

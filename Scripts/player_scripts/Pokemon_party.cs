@@ -44,13 +44,13 @@ public class Pokemon_party : MonoBehaviour
     public void ExitParty()
     {
         if (swapOutNext) return;
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonParty);
     }
 
     public void CheckStateUpdate(InputState currentState)
     {
-        if (currentState.stateName != InputStateHandler.StateName.PokemonPartyNavigation 
-            && currentState.stateName != InputStateHandler.StateName.PokemonPartyItemUsage)
+        if (currentState.stateName != InputStateName.PokemonPartyNavigation 
+            && currentState.stateName != InputStateName.PokemonPartyItemUsage)
             return;
         InputStateHandler.Instance.OnSelectionIndexChanged += UpdateCancelButton;
     }
@@ -117,7 +117,7 @@ public class Pokemon_party : MonoBehaviour
                 ,memberPosition - 1,currentParticipant);
             Turn_Based_Combat.Instance.SaveSwitchTurn(switchData);
             
-            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+            InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonParty);
             selectedMemberNumber = 0;
             _swappingIn = false;
         }
@@ -205,7 +205,7 @@ public class Pokemon_party : MonoBehaviour
         
         UpdateUIAfterSwap();
         
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonParty);
         yield return BattleIntro.Instance.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1],true);
         selectedMemberNumber = 0;
         Turn_Based_Combat.Instance.faintEventDelay = false;

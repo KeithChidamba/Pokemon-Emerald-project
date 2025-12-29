@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemUsage{Withdraw,Deposit,Toss,None}
 public class ItemStorageHandler : MonoBehaviour
 {
     public static ItemStorageHandler Instance;
-    public enum ItemUsage{Withdraw,Deposit,Toss,None}
-
     public ItemUsage currentUsage;
     private void Awake()
     {
@@ -27,7 +26,7 @@ public class ItemStorageHandler : MonoBehaviour
         }
         currentUsage = ItemUsage.Withdraw;
         Bag.Instance.OnItemSelected += Bag.Instance.WithDrawFromStorage;
-        Bag.Instance.currentBagUsage = Bag.BagUsage.SelectionOnly;
+        Bag.Instance.currentBagUsage = BagUsage.SelectionOnly;
         Bag.Instance.storageView = true;
         Game_ui_manager.Instance.ViewBag();
     }
@@ -35,14 +34,14 @@ public class ItemStorageHandler : MonoBehaviour
     {
         currentUsage = ItemUsage.Deposit;
         Bag.Instance.OnItemSelected += DepositItem;
-        Bag.Instance.currentBagUsage = Bag.BagUsage.SelectionOnly;
+        Bag.Instance.currentBagUsage = BagUsage.SelectionOnly;
         Game_ui_manager.Instance.ViewBag();
     }
     public void OpenBagToTossItem()
     {
         currentUsage = ItemUsage.Toss;
         Bag.Instance.OnItemSelected += TossItem;
-        Bag.Instance.currentBagUsage = Bag.BagUsage.SelectionOnly;
+        Bag.Instance.currentBagUsage = BagUsage.SelectionOnly;
         Game_ui_manager.Instance.ViewBag();
     }
     private void DepositItem(Item item)
@@ -56,3 +55,4 @@ public class ItemStorageHandler : MonoBehaviour
         Bag.Instance.RemoveItem(item);
     }
 }
+

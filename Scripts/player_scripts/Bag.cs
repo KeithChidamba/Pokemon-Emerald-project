@@ -8,13 +8,18 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-
+public enum BagUsage
+{
+    NormalView,
+    SellingView,
+    SelectionOnly
+}
 public class Bag : MonoBehaviour
 {
     public List<Item> allItems;
     public List<Item> currentCategoryOfItems;
     public List<Item> storageItems;
-    public enum BagCategory
+    private enum BagCategory
     {
         General,Pokeballs,HmsTms,Berries,KeyItems
     };
@@ -28,13 +33,6 @@ public class Bag : MonoBehaviour
     public int sellQuantity = 1;
     public int maxNumItemsForView;
     public int maxItemCapacity;
-
-    public enum BagUsage
-    {
-        NormalView,
-        SellingView,
-        SelectionOnly
-    }
 
     public bool storageView;
     
@@ -106,9 +104,9 @@ public class Bag : MonoBehaviour
             RemoveItem(itemToSell);
         Dialogue_handler.Instance.DisplayList("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
              "Sure, which item?", 
-             new[]{ Options_manager.InteractionOptions.SellItem
-                 ,Options_manager.InteractionOptions.LeaveStore }, new[]{"Yes", "No"});
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
+             new[]{ InteractionOptions.SellItem
+                 ,InteractionOptions.LeaveStore }, new[]{"Yes", "No"});
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
     }
     public void CheckItemQuantity(Item item)
     {
@@ -272,8 +270,8 @@ public class Bag : MonoBehaviour
             return;
         }
         var partyMember = Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber-1];
-        InputStateHandler.Instance.ResetRelevantUi(new[] { InputStateHandler.StateName.PokemonPartyOptions });
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.Bag);
+        InputStateHandler.Instance.ResetRelevantUi(new[] { InputStateName.PokemonPartyOptions });
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
         
         Dialogue_handler.Instance.DisplayDetails(partyMember.pokemonName
                                                  +" received a "+itemToBeGiven.itemName);
@@ -373,18 +371,18 @@ public class Bag : MonoBehaviour
         currentBagImage.sprite = bagCategoryImages[currentCategoryIndex];
         sellingItemUI.SetActive(false);
         currentBagUsage = BagUsage.NormalView;
-        ItemStorageHandler.Instance.currentUsage = ItemStorageHandler.ItemUsage.None;
+        ItemStorageHandler.Instance.currentUsage = ItemUsage.None;
         ClearBagUI();
         foreach (var loopingUiAnimation in redArrows)
         {
             loopingUiAnimation.viewingUI = false;
             loopingUiAnimation.gameObject.SetActive(true);
         }
-        InputStateHandler.Instance.ResetRelevantUi(InputStateHandler.StateName.ItemStorageUsage);
+        InputStateHandler.Instance.ResetRelevantUi(InputStateName.ItemStorageUsage);
         OnItemSelected = null;
         OnBagOpened = null;
     }
-    private List<Item> GetItems(Item_handler.ItemType itemType)
+    private List<Item> GetItems(ItemType itemType)
     {
         return allItems.Where(item => item.itemType == itemType).ToList();
     }
@@ -395,8 +393,8 @@ public class Bag : MonoBehaviour
         
         var specialCategories = new[]
         {
-            Item_handler.ItemType.Pokeball, Item_handler.ItemType.Special, Item_handler.ItemType.Berry,
-            Item_handler.ItemType.LearnableMove
+            ItemType.Pokeball, ItemType.Special, ItemType.Berry,
+            ItemType.LearnableMove
         };
         
         currentCategoryOfItems = storageView? storageItems 
@@ -412,7 +410,7 @@ public class Bag : MonoBehaviour
         numItems = currentCategoryOfItems.Count;
         if (numItems == 0)
         {
-            if(ItemStorageHandler.Instance.currentUsage == ItemStorageHandler.ItemUsage.Deposit)
+            if(ItemStorageHandler.Instance.currentUsage == ItemUsage.Deposit)
             {
                 OnBagOpened = null;
                 Dialogue_handler.Instance.DisplayDetails("You have no items to deposit");
@@ -438,7 +436,7 @@ public class Bag : MonoBehaviour
         selectedItemIndex = 0;
         
         if (numItems > 0) SelectItem();
-        if (InputStateHandler.Instance.currentState.stateGroups.Contains(InputStateHandler.StateGroup.Bag))
+        if (InputStateHandler.Instance.currentState.stateGroups.Contains(InputStateGroup.Bag))
         {
             InputStateHandler.Instance.PlayerBagNavigationRestrictions();
         }
@@ -461,4 +459,6 @@ public class Bag : MonoBehaviour
             item.LoadItemUI();
     }
 }
+
+
 

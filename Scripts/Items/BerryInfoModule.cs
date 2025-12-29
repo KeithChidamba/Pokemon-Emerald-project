@@ -6,12 +6,8 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "Berry", menuName = "berry")]
 public class BerryInfoModule : AdditionalInfoModule
 {
-    public enum Berry
-    {
-        FriendshipIncrease, HpHeal, StatusHeal, PpRestore, ConfusionHeal
-    }
     [FormerlySerializedAs("herbType")] public Berry berryType;
-    public PokemonOperations.StatusEffect statusEffect;
+    public StatusEffect statusEffect;
 
     public int GetBerryUsage()
     {
@@ -36,4 +32,9 @@ public class BerryInfoModule : AdditionalInfoModule
         }
         return usageIndex;
     }
+}
+
+public enum Berry
+{
+    FriendshipIncrease, HpHeal, StatusHeal, PpRestore, ConfusionHeal
 }

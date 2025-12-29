@@ -5,6 +5,6 @@ using UnityEngine;
 public struct MoveBuffData
 {
     [SerializeField]public bool isIncreasing;
-    public PokemonOperations.Stat stat;
+    public Stat stat;
     [SerializeField]public int amount;
 }

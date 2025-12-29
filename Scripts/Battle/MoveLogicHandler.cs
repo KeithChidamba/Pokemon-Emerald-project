@@ -30,37 +30,37 @@ public class MoveLogicHandler : MonoBehaviour
         moveDelay = true;
         switch (currentTurn.move.effectType)
         {
-            case Move.EffectType.MultiTargetDamage:
+            case EffectType.MultiTargetDamage:
                yield return HandleMultiTargetDamage(); 
                break;
-            case Move.EffectType.Consecutive:
+            case EffectType.Consecutive:
                 yield return ExecuteConsecutiveMove(); 
                 break;
-            case Move.EffectType.HealthDrain:
+            case EffectType.HealthDrain:
                 yield return DrainHealth(); 
                 break;
-            case Move.EffectType.DamageProtection:
+            case EffectType.DamageProtection:
                 yield return ApplyDamageProtection(); 
                 break;
-            case Move.EffectType.WeatherHealthGain:
+            case EffectType.WeatherHealthGain:
                 yield return HealFromWeather(); 
                 break;
-            case Move.EffectType.IdentifyTarget:
+            case EffectType.IdentifyTarget:
                 yield return IdentifyTarget(); 
                 break;
-            case Move.EffectType.BarrierCreation:
+            case EffectType.BarrierCreation:
                 yield return CreateBarriers(); 
                 break;
-            case Move.EffectType.OnFieldDamageModifier:
+            case EffectType.OnFieldDamageModifier:
                 yield return OnFieldDamageModLogic(); 
                 break;
-            case Move.EffectType.SemiInvulnerable:
+            case EffectType.SemiInvulnerable:
                 yield return ExecuteSemiInvulnerableMove(); 
                 break;
-            case Move.EffectType.WeatherChange:
+            case EffectType.WeatherChange:
                 yield return ChangeWeather(); 
                 break;
-            case Move.EffectType.UniqueLogic:
+            case EffectType.UniqueLogic:
                 yield return HandleUniqueLogic(); 
                 break;
         }
@@ -133,10 +133,10 @@ public class MoveLogicHandler : MonoBehaviour
         var targets = new List<Battle_Participant>();
         switch (multiTargetInfo.target)
         {
-            case MultiTargetDamageInfo.Target.AllEnemies :
+            case Target.AllEnemies :
                 targets = _attacker.currentEnemies;
                 break;
-            case MultiTargetDamageInfo.Target.AllExceptSelf :
+            case Target.AllExceptSelf :
                 targets = TargetAllExceptSelf();
                 break;
         }
@@ -250,7 +250,7 @@ public class MoveLogicHandler : MonoBehaviour
     private IEnumerator IdentifyTarget()
     {
         if (_victim.immunityNegations.Any(n=> 
-                n.moveName==TypeImmunityNegation.ImmunityNegationMove.Foresight))
+                n.moveName==ImmunityNegationMove.Foresight))
         {
             Dialogue_handler.Instance.DisplayBattleInfo("but it failed!");
             moveDelay = false;
@@ -258,15 +258,15 @@ public class MoveLogicHandler : MonoBehaviour
         }
         Dialogue_handler.Instance.DisplayBattleInfo(_victim.pokemon.pokemonName +" was identified!");
         _victim.pokemon.buffAndDebuffs
-            .RemoveAll(b => b.stat == PokemonOperations.Stat.Evasion);
+            .RemoveAll(b => b.stat == Stat.Evasion);
         _victim.pokemon.evasion = 100;
-        if(_victim.pokemon.HasType(PokemonOperations.Types.Ghost))
+        if(_victim.pokemon.HasType(Types.Ghost))
         {
-            var newImmunityNegation = new TypeImmunityNegation(TypeImmunityNegation.ImmunityNegationMove.Foresight
+            var newImmunityNegation = new TypeImmunityNegation(ImmunityNegationMove.Foresight
                 , _attacker, _victim);
 
-            newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Fighting);
-            newImmunityNegation.ImmunityNegationTypes.Add(PokemonOperations.Types.Normal);
+            newImmunityNegation.ImmunityNegationTypes.Add(Types.Fighting);
+            newImmunityNegation.ImmunityNegationTypes.Add(Types.Normal);
             _attacker.OnPokemonFainted += () => newImmunityNegation.RemoveNegationOnSwitchOut(_attacker);
             Battle_handler.Instance.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
             _victim.immunityNegations.Add(newImmunityNegation);
@@ -322,12 +322,12 @@ public class MoveLogicHandler : MonoBehaviour
         
         switch (currentWeather)
         {
-            case WeatherCondition.Weather.Sunlight:
+            case Weather.Sunlight:
                 fraction = 2f / 3f;  
                 break;
-            case WeatherCondition.Weather.Rain:
-            case WeatherCondition.Weather.Hail:
-            case WeatherCondition.Weather.Sandstorm:
+            case Weather.Rain:
+            case Weather.Hail:
+            case Weather.Sandstorm:
                 fraction = 1f / 4f;          
                 break;
             default: 
@@ -481,7 +481,7 @@ public class MoveLogicHandler : MonoBehaviour
     void furycutter()
     {
         var damageLevel = new[] { 10f, 20f, 40f, 80f, 160f };
-        if (_attacker.previousMove.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.FuryCutter))
+        if (_attacker.previousMove.move.moveName == NameDB.GetMoveName(LearnSetMoveName.FuryCutter))
         {
             _currentTurn.move.moveDamage = _attacker.previousMove.numRepetitions > 4?
                 damageLevel[^1] : damageLevel[_attacker.previousMove.numRepetitions];
@@ -518,9 +518,9 @@ public class MoveLogicHandler : MonoBehaviour
         //get buffs
         var allBuffs = new[]
         {
-            PokemonOperations.Stat.Attack, PokemonOperations.Stat.Defense, 
-            PokemonOperations.Stat.SpecialAttack, PokemonOperations.Stat.SpecialDefense,
-            PokemonOperations.Stat.Speed
+            Stat.Attack, Stat.Defense, 
+            Stat.SpecialAttack, Stat.SpecialDefense,
+            Stat.Speed
         };
         
         var waiting = true;
@@ -549,7 +549,7 @@ public class MoveLogicHandler : MonoBehaviour
         statChangeMessage = BattleOperations.GetBuffResultMessage(true,_attacker.pokemon,allBuffs);
         BattleVisuals.Instance.OnStatVisualDisplayed += AwaitBuffVisual;
         waiting = true;
-        BattleVisuals.Instance.SelectStatChangeVisuals(PokemonOperations.Stat.Multi,_attacker,statChangeMessage);
+        BattleVisuals.Instance.SelectStatChangeVisuals(Stat.Multi,_attacker,statChangeMessage);
         yield return new WaitUntil(() => !waiting);
         moveDelay = false;
     }
@@ -598,7 +598,7 @@ public class MoveLogicHandler : MonoBehaviour
         Move_handler.Instance.DisplayDamage(_attacker,displayEffectiveness:false,
             isSpecificDamage:true,predefinedDamage:selfDamage);
         
-        var buffData = new BuffDebuffData(_attacker, PokemonOperations.Stat.Attack, true, 6);
+        var buffData = new BuffDebuffData(_attacker, Stat.Attack, true, 6);
         Move_handler.Instance.SelectRelevantBuffOrDebuff(buffData);
     }
 
@@ -607,7 +607,7 @@ public class MoveLogicHandler : MonoBehaviour
         Move_handler.Instance.DisplayDamage(_victim);
         if (_victim.pokemon.hasItem && !_attacker.pokemon.hasItem)
         {
-            if (_victim.pokemon.heldItem.itemType == Item_handler.ItemType.Berry)
+            if (_victim.pokemon.heldItem.itemType == ItemType.Berry)
             {
                 _attacker.pokemon.GiveItem(Obj_Instance.CreateItem(_victim.pokemon.heldItem));
                 _victim.pokemon.RemoveHeldItem();
@@ -729,8 +729,8 @@ public class MoveLogicHandler : MonoBehaviour
         Move_handler.Instance.HealthGainDisplay(healthGain,healthGainer:_attacker);
         yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthGain);
         _attacker.statusHandler.RemoveStatusEffect(true);
-        yield return new WaitUntil(()=>_attacker.pokemon.statusEffect == PokemonOperations.StatusEffect.None);
-        Move_handler.Instance.ApplyStatusToVictim(_attacker, PokemonOperations.StatusEffect.Sleep, 2);
+        yield return new WaitUntil(()=>_attacker.pokemon.statusEffect == StatusEffect.None);
+        Move_handler.Instance.ApplyStatusToVictim(_attacker, StatusEffect.Sleep, 2);
         yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
         moveDelay = false;
     }

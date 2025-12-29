@@ -70,10 +70,10 @@ public class BattleOperations
         return false;
     }
     //Pokeballs
-    public static float GetCatchRateBonusFromStatus(PokemonOperations.StatusEffect statusName)
+    public static float GetCatchRateBonusFromStatus(StatusEffect statusName)
     {
-        if (statusName == PokemonOperations.StatusEffect.None) return 1;
-        if (statusName == PokemonOperations.StatusEffect.Sleep || statusName == PokemonOperations.StatusEffect.Freeze)
+        if (statusName == StatusEffect.None) return 1;
+        if (statusName == StatusEffect.Sleep || statusName == StatusEffect.Freeze)
             return 2.5f;
         return 1.5f;
     }
@@ -89,7 +89,7 @@ public class BattleOperations
     }
     
 //Buffs
-    private static bool HasBuffOrDebuff(Pokemon pokemon, PokemonOperations.Stat stat)
+    private static bool HasBuffOrDebuff(Pokemon pokemon, Stat stat)
     {
         return pokemon.buffAndDebuffs.Any(b=>b.stat==stat);
     }
@@ -104,7 +104,7 @@ public class BattleOperations
         RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
         OnBuffApplied?.Invoke();
     }
-    public static string GetBuffResultMessage(bool isIncreasing,Pokemon pokemon,PokemonOperations.Stat[] buffs)
+    public static string GetBuffResultMessage(bool isIncreasing,Pokemon pokemon,Stat[] buffs)
     {
         string buffNames="";
         for (int i = 0; i < buffs.Length; i++)
@@ -124,8 +124,8 @@ public class BattleOperations
     {
         var change = 0;
         var message="";
-        var indexLimitHigh = (buff.stat == PokemonOperations.Stat.Crit) ? 2 : 5;
-        var indexLimitLow = (buff.stat ==  PokemonOperations.Stat.Crit) ? 1 : -5;
+        var indexLimitHigh = (buff.stat == Stat.Crit) ? 2 : 5;
+        var indexLimitLow = (buff.stat ==  Stat.Crit) ? 1 : -5;
         if (buff.stage > indexLimitHigh && increased)
         {
             buff.isAtLimit = true;
@@ -163,11 +163,11 @@ public class BattleOperations
             return indexLimitLow - 1; 
         return change;
     }
-    private static Buff_Debuff CreateNewBuff( PokemonOperations.Stat statName)
+    private static Buff_Debuff CreateNewBuff( Stat statName)
     {
         return new Buff_Debuff(statName,0,false);
     }
-    public static Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon, PokemonOperations.Stat stat)
+    public static Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon, Stat stat)
     {
         return pokemon.buffAndDebuffs.FirstOrDefault(b=>b.stat==stat);
     }

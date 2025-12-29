@@ -3,8 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UI;
 
+public enum InputDirection { None, Horizontal, Vertical, OmniDirection}
+public enum InputStateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart }
+public enum InputStateName 
+{
+    PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
+    PokemonStorageBoxChange,PokemonStorageExit ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
+    PokemonStorageUsage,ItemStorageUsage,PokemonStoragePartyOptions,PokemonStorageDepositSelection,
+    PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
+    PlayerBagItemSell,PlayerBagNavigation,
+    PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
+    MartItemPurchase,MartItemNavigation,
+    PlayerMenu,PlayerProfile
+}
 public class InputStateHandler : MonoBehaviour
 {
     public InputState currentState;
@@ -24,20 +36,6 @@ public class InputStateHandler : MonoBehaviour
     [SerializeField] private bool _currentStateLoaded;
     private bool _handlingState;
     public List<InputState> stateLayers;
-    public enum Directional { None, Horizontal, Vertical, OmniDirection}
-
-    public enum StateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart }
-    public enum StateName 
-    {
-        PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
-        PokemonStorageBoxChange,PokemonStorageExit ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
-        PokemonStorageUsage,ItemStorageUsage,PokemonStoragePartyOptions,PokemonStorageDepositSelection,
-        PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
-        PlayerBagItemSell,PlayerBagNavigation,
-        PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
-        MartItemPurchase,MartItemNavigation,
-        PlayerMenu,PlayerProfile
-    }
 
     public int[] boxCoordinates={0,0};
     private int _currentBoxCapacity;
@@ -60,22 +58,22 @@ public class InputStateHandler : MonoBehaviour
     private void Start()
     {
         Game_Load.Instance.OnGameStarted += () => _readingInputs = true;
-        _emptyState = new InputState(StateName.Empty,new[]{StateGroup.None}, canExit: false);
+        _emptyState = new InputState(InputStateName.Empty,new[]{InputStateGroup.None}, canExit: false);
         currentState = _emptyState;
         _currentStateLoaded = false;
     }
 
     public void AddPlaceHolderState()
     {
-        ChangeInputState(new InputState(StateName.PlaceHolder,new[]{StateGroup.None}, canExit: false
+        ChangeInputState(new (InputStateName.PlaceHolder,new[]{InputStateGroup.None}, canExit: false
             , isParent:true,mainView: emptyPlaceHolder));
     }
     public void AddDialoguePlaceHolderState()
     {
-        ChangeInputState(new InputState(StateName.DialoguePlaceHolder,new[]{StateGroup.None}, canExit: false
+        ChangeInputState(new (InputStateName.DialoguePlaceHolder,new[]{InputStateGroup.None}, canExit: false
             , isParent:true,mainView: emptyPlaceHolder));
     }
-    public void ResetGroupUi(StateGroup group)
+    public void ResetGroupUi(InputStateGroup group)
     {
         List<InputState> inputStates = new List<InputState>();
         
@@ -83,7 +81,7 @@ public class InputStateHandler : MonoBehaviour
         
         RemoveInputStates(inputStates);
     }
-    public void ResetRelevantUi(StateName[] stateNames)
+    public void ResetRelevantUi(InputStateName[] stateNames)
     {
         List<InputState> inputStates = new List<InputState>();
         
@@ -92,13 +90,13 @@ public class InputStateHandler : MonoBehaviour
         
         RemoveInputStates(inputStates);
     }
-    public void ResetRelevantUi(StateName stateName)
+    public void ResetRelevantUi(InputStateName stateName)
     {
         var state = stateLayers.FirstOrDefault(state => state.stateName == stateName);
         if (state == null) return;
         RemoveInputState(state,false);
     }
-    private List<InputState> GetRelevantStates(StateGroup group)
+    private List<InputState> GetRelevantStates(InputStateGroup group)
     {
         List<InputState> inputStates = new List<InputState>();
         foreach (var state in stateLayers)
@@ -108,7 +106,7 @@ public class InputStateHandler : MonoBehaviour
         return inputStates;
     }
     
-    private List<InputState> GetRelevantStates(StateName stateName)
+    private List<InputState> GetRelevantStates(InputStateName stateName)
     {
         List<InputState> inputStates = new List<InputState>();
         foreach (var state in stateLayers)
@@ -128,7 +126,7 @@ public class InputStateHandler : MonoBehaviour
     {
         state.selector?.SetActive(false);
         
-        if(state.stateDirectional==Directional.OmniDirection) ResetCoordinates();
+        if(state.stateDirection==InputDirection.OmniDirection) ResetCoordinates();
         
         Action method = manualExit ? state.OnExit:state.OnClose;
         method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine
@@ -161,49 +159,49 @@ public class InputStateHandler : MonoBehaviour
         
         bool viewingExitableDialogue = Dialogue_handler.Instance.canExitDialogue & Dialogue_handler.Instance.displaying; 
         
-        if (Input.GetKeyDown(KeyCode.X) && stateLayers.Last().stateName!=StateName.DialogueOptions
+        if (Input.GetKeyDown(KeyCode.X) && stateLayers.Last().stateName!=InputStateName.DialogueOptions
                                         && !viewingExitableDialogue && currentState.canManualExit)
             RemoveTopInputLayer(true);
         
-        if (currentState.stateName == StateName.Empty) return;
+        if (currentState.stateName == InputStateName.Empty) return;
 
         if (Input.GetKeyDown(KeyCode.Z) && _currentStateLoaded)
         {
             InvokeSelectedEvent();
         }
         
-        if (currentState.stateDirectional == Directional.None) return;
+        if (currentState.stateDirection == InputDirection.None) return;
         
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            HandleEvents(OnInputLeft, directionSelection[2], Directional.Horizontal);
+            HandleEvents(OnInputLeft, directionSelection[2], InputDirection.Horizontal);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            HandleEvents(OnInputRight, directionSelection[3], Directional.Horizontal);
+            HandleEvents(OnInputRight, directionSelection[3], InputDirection.Horizontal);
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            HandleEvents(OnInputUp, directionSelection[0], Directional.Vertical);
+            HandleEvents(OnInputUp, directionSelection[0], InputDirection.Vertical);
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            HandleEvents(OnInputDown, directionSelection[1], Directional.Vertical);
+            HandleEvents(OnInputDown, directionSelection[1], InputDirection.Vertical);
         }
     }
 
-    void HandleEvents(Action onInput,int directionIndex,Directional direction)
+    void HandleEvents(Action onInput,int directionIndex,InputDirection direction)
     {
         onInput?.Invoke();
         
-        if (currentState.stateDirectional != Directional.OmniDirection) ChangeSelectionIndex(directionIndex);
+        if (currentState.stateDirection != InputDirection.OmniDirection) ChangeSelectionIndex(directionIndex);
         
         if(CanUpdateSelector(direction)) UpdateSelectorUi();
     }
-    bool CanUpdateSelector(Directional directional)
+    bool CanUpdateSelector(InputDirection direction)
     {
         return currentState.displayingSelector &
-               currentState.stateDirectional == directional;
+               currentState.stateDirection == direction;
     }
     void InvokeSelectedEvent()
     {
@@ -261,15 +259,15 @@ public class InputStateHandler : MonoBehaviour
     }
     void SetDirectionals()
     {
-        switch (currentState.stateDirectional)
+        switch (currentState.stateDirection)
         {
-            case Directional.None: 
-            case Directional.OmniDirection:
+            case InputDirection.None: 
+            case InputDirection.OmniDirection:
                 return;
-            case Directional.Horizontal: 
+            case InputDirection.Horizontal: 
                 directionSelection = new[] { 0, 0, -1, 1 };
                 break;
-            case Directional.Vertical: 
+            case InputDirection.Vertical: 
                 directionSelection = new[] { -1, 1, 0, 0 };
                 break;
         }
@@ -293,13 +291,13 @@ public class InputStateHandler : MonoBehaviour
         Bag.Instance.itemSelector.SetActive(Bag.Instance.numItems > 0);
         switch (Bag.Instance.currentBagUsage)
         {
-            case Bag.BagUsage.SellingView:
+            case BagUsage.SellingView:
                 currentState.selectableUis.ForEach(s=>s.eventForUi = CreateSellingItemState);
                 break;
-            case Bag.BagUsage.NormalView:
+            case BagUsage.NormalView:
                 currentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.UseItem);
                 break;
-            case Bag.BagUsage.SelectionOnly:
+            case BagUsage.SelectionOnly:
                 currentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.SelectItemForEvent);
                 break;
         }
@@ -307,7 +305,7 @@ public class InputStateHandler : MonoBehaviour
 
     public void PlayerBagNavigation()
     {
-        if(ItemStorageHandler.Instance.currentUsage != ItemStorageHandler.ItemUsage.Deposit)
+        if(ItemStorageHandler.Instance.currentUsage != ItemUsage.Deposit)
         {
             OnInputLeft += Bag.Instance.ChangeCategoryLeft;
             OnInputRight += Bag.Instance.ChangeCategoryRight;
@@ -320,8 +318,8 @@ public class InputStateHandler : MonoBehaviour
     void CreateSellingItemState()
     {
         var itemSellSelectables = new List<SelectableUI>{new(Bag.Instance.sellingItemUI,Bag.Instance.SellToMarket,true)};
-        ChangeInputState(new InputState(StateName.PlayerBagItemSell,
-            new[]{StateGroup.Bag}, stateDirectional:Directional.Vertical, selectableUis:itemSellSelectables
+        ChangeInputState(new (InputStateName.PlayerBagItemSell,
+            new[]{InputStateGroup.Bag}, stateDirection:InputDirection.Vertical, selectableUis:itemSellSelectables
             ,selecting:false,onExit:Bag.Instance.ResetItemSellingUi));
         Bag.Instance.ChangeQuantity(0);//initial set for visuals
     }
@@ -357,8 +355,8 @@ public class InputStateHandler : MonoBehaviour
                 ,Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber - 1].hasItem)
         };
         partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
-        ChangeInputState(new InputState(StateName.PokemonPartyOptions,
-            new[]{StateGroup.PokemonParty}, stateDirectional:Directional.Vertical, selectableUis:partyOptionsSelectables
+        ChangeInputState(new (InputStateName.PokemonPartyOptions,
+            new[]{InputStateGroup.PokemonParty}, stateDirection:InputDirection.Vertical, selectableUis:partyOptionsSelectables
             ,selector:Pokemon_party.Instance.optionSelector,selecting:true,display:true
             ,onClose:Pokemon_party.Instance.ClearSelectionUI,onExit:Pokemon_party.Instance.ClearSelectionUI));
         currentState.selector.SetActive(true);
@@ -388,8 +386,8 @@ public class InputStateHandler : MonoBehaviour
         if (Pokemon_Details.Instance.learningMove)
             onExit = ()=> OnStateRemovalComplete += RemoveDetailsInputStates;
         
-        ChangeInputState(new InputState(StateName.PokemonDetailsMoveSelection,new[]{StateGroup.PokemonDetails},
-            stateDirectional:Directional.Vertical,selectableUis:moveSelectables, 
+        ChangeInputState(new (InputStateName.PokemonDetailsMoveSelection,new[]{InputStateGroup.PokemonDetails},
+            stateDirection:InputDirection.Vertical,selectableUis:moveSelectables, 
             selector:Pokemon_Details.Instance.moveSelector, selecting:true, display:true,onExit:onExit));
     }
     void RemoveDetailsInputStates()
@@ -397,7 +395,7 @@ public class InputStateHandler : MonoBehaviour
         OnStateRemovalComplete -= RemoveDetailsInputStates;
         //if started learning but rejected it on move selection screen
         Options_manager.Instance.SkipMove();
-        ResetGroupUi(StateGroup.PokemonDetails);
+        ResetGroupUi(InputStateGroup.PokemonDetails);
     }
     private void ResetCoordinates()
     {
@@ -415,9 +413,9 @@ public class InputStateHandler : MonoBehaviour
         return Mathf.Clamp(pos, 0, _currentNumBoxElements);
     }
 
-    private void MoveCoordinatesFullBox(Directional directional, int change)
+    private void MoveCoordinatesFullBox(InputDirection direction, int change)
     {
-        bool vertical = directional == Directional.Vertical;
+        bool vertical = direction == InputDirection.Vertical;
 
         if (boxCoordinates[0]==0 && change<0 && vertical)
         {
@@ -466,12 +464,12 @@ public class InputStateHandler : MonoBehaviour
         rowCapacity = Mathf.Clamp(rowCapacity, 0, _currentBoxCapacity);
         return rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
     }
-    private void MoveCoordinatesDynamic(Directional directional, int change)
+    private void MoveCoordinatesDynamic(InputDirection direction, int change)
     {
         SetRowRemainder();
-        var coordinateIndex = directional == Directional.Vertical ? 0 : 1;
+        var coordinateIndex = direction == InputDirection.Vertical ? 0 : 1;
         
-        var maxIndexForCoordinate  = directional == Directional.Vertical ?
+        var maxIndexForCoordinate  = direction == InputDirection.Vertical ?
             (int)math.ceil((float)_currentNumBoxElements/_numBoxColumns) - 1 : rowRemainder-1;
         
         boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
@@ -488,10 +486,10 @@ public class InputStateHandler : MonoBehaviour
         _currentBoxCapacity = pokemon_storage.BoxCapacity;
         _numBoxColumns = pokemon_storage.Instance.boxColumns;
         _numBoxRows = pokemon_storage.BoxCapacity / _numBoxColumns;
-        OnInputLeft += ()=> MoveCoordinatesFullBox(Directional.Horizontal,-1);
-        OnInputRight += ()=> MoveCoordinatesFullBox(Directional.Horizontal,1);
-        OnInputUp += ()=> MoveCoordinatesFullBox(Directional.Vertical,-1);
-        OnInputDown += ()=> MoveCoordinatesFullBox(Directional.Vertical,1);
+        OnInputLeft += ()=> MoveCoordinatesFullBox(InputDirection.Horizontal,-1);
+        OnInputRight += ()=> MoveCoordinatesFullBox(InputDirection.Horizontal,1);
+        OnInputUp += ()=> MoveCoordinatesFullBox(InputDirection.Vertical,-1);
+        OnInputDown += ()=> MoveCoordinatesFullBox(InputDirection.Vertical,1);
         
         currentState.canExit = false;
         OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
@@ -503,9 +501,9 @@ public class InputStateHandler : MonoBehaviour
         var storageSelectables = new List<SelectableUI>();
         storageSelectables.Add(new(pokemon_storage.Instance.storageBoxExit.gameObject,Game_ui_manager.Instance.ClosePokemonStorage, true));
         
-        ChangeInputState(new InputState(StateName.PokemonStorageExit,
-            new[] {StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-            Directional.Vertical,storageSelectables,pokemon_storage.Instance.initialSelector, true,display:true,canManualExit:false
+        ChangeInputState(new (InputStateName.PokemonStorageExit,
+            new[] {InputStateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
+            InputDirection.Vertical,storageSelectables,pokemon_storage.Instance.initialSelector, true,display:true,canManualExit:false
             ));
         pokemon_storage.Instance.initialSelector.transform.rotation = Quaternion.Euler(0, 180, 180);
         
@@ -520,9 +518,9 @@ public class InputStateHandler : MonoBehaviour
             storageSelectables.Add(new(pokemon_storage.Instance.boxTopVisualImage.gameObject,null, true));
         }
         pokemon_storage.Instance.initialSelector.transform.rotation = Quaternion.Euler(0, 0, 0);
-        ChangeInputState(new InputState(StateName.PokemonStorageBoxChange,
-            new[] {StateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-            Directional.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector, selecting:true,display:true,canManualExit:false));
+        ChangeInputState(new (InputStateName.PokemonStorageBoxChange,
+            new[] {InputStateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
+            InputDirection.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector, selecting:true,display:true,canManualExit:false));
 
         OnInputUp += SwitchToExit;
         OnInputDown += PokemonStorageBoxNavigation;
@@ -540,8 +538,8 @@ public class InputStateHandler : MonoBehaviour
             storageBoxSelectables.Add(newSelectable);
         }
 
-        ChangeInputState(new InputState(StateName.PokemonStorageBoxNavigation,new[]{StateGroup.PokemonStorage}
-            ,stateDirectional:Directional.OmniDirection,selectableUis:storageBoxSelectables,
+        ChangeInputState(new (InputStateName.PokemonStorageBoxNavigation,new[]{InputStateGroup.PokemonStorage}
+            ,stateDirection:InputDirection.OmniDirection,selectableUis:storageBoxSelectables,
             selector:pokemon_storage.Instance.initialSelector, selecting:true,display: true,canManualExit:false,canExit:false));
         ChangeSelectionIndex(0);
     }
@@ -576,8 +574,8 @@ public class InputStateHandler : MonoBehaviour
         {
             new(Poke_Mart.Instance.quantityUI,Poke_Mart.Instance.BuyItem,true)
         };
-        ChangeInputState(new InputState(StateName.MartItemPurchase,new[]{StateGroup.PokeMart}
-            , stateDirectional:Directional.Vertical, selectableUis:itemQuantitySelectables
+        ChangeInputState(new (InputStateName.MartItemPurchase,new[]{InputStateGroup.PokeMart}
+            , stateDirection:InputDirection.Vertical, selectableUis:itemQuantitySelectables
             ,selector:Poke_Mart.Instance.quantitySelector,display: true
             ,onExit: ()=>Poke_Mart.Instance.selectedItemQuantity=1));
     }
@@ -595,10 +593,10 @@ public class InputStateHandler : MonoBehaviour
         _currentBoxCapacity = 4;
         _numBoxColumns = 2;
         SetRowRemainder();
-        OnInputLeft += ()=>MoveCoordinatesDynamic(Directional.Horizontal,-1);
-        OnInputRight += ()=>MoveCoordinatesDynamic(Directional.Horizontal,1);
-        OnInputUp += ()=>MoveCoordinatesDynamic(Directional.Vertical,-2);
-        OnInputDown += ()=>MoveCoordinatesDynamic(Directional.Vertical,2);
+        OnInputLeft += ()=>MoveCoordinatesDynamic(InputDirection.Horizontal,-1);
+        OnInputRight += ()=>MoveCoordinatesDynamic(InputDirection.Horizontal,1);
+        OnInputUp += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,-2);
+        OnInputDown += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,2);
     }
     
     void SetupMoveSelection()
@@ -610,10 +608,10 @@ public class InputStateHandler : MonoBehaviour
         _currentBoxCapacity = 4;
         _numBoxColumns = 2;
         SetRowRemainder();
-        OnInputLeft += ()=>MoveCoordinatesDynamic(Directional.Horizontal,-1);
-        OnInputRight += ()=>MoveCoordinatesDynamic(Directional.Horizontal,1);
-        OnInputUp += ()=>MoveCoordinatesDynamic(Directional.Vertical,-2);
-        OnInputDown += ()=>MoveCoordinatesDynamic(Directional.Vertical,2);
+        OnInputLeft += ()=>MoveCoordinatesDynamic(InputDirection.Horizontal,-1);
+        OnInputRight += ()=>MoveCoordinatesDynamic(InputDirection.Horizontal,1);
+        OnInputUp += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,-2);
+        OnInputDown += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,2);
         
         OnInputLeft += ()=> Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
         OnInputRight += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
@@ -640,22 +638,27 @@ public class InputStateHandler : MonoBehaviour
     {
         Action stateMethod = currentState.stateName switch
         {
-            StateName.PlayerBagNavigation => PlayerBagNavigation,
-            StateName.PokemonPartyItemUsage => UpdateHealthBarColors,
-            StateName.PokemonPartyNavigation => UpdateHealthBarColors,
-            StateName.PokemonDetails => SetupPokemonDetails,
-            StateName.PlayerBagItemSell => ItemToSellInputs,
-            StateName.PokemonStorageBoxNavigation => StorageFullBoxNavigation,
-            StateName.MartItemNavigation => PokeMartNavigation,
-            StateName.MartItemPurchase => ItemToBuyInputs,
-            StateName.PokemonBattleOptions => SetupBattleOptions,
-            StateName.PokemonBattleMoveSelection => SetupMoveSelection,
-            StateName.PokemonBattleEnemySelection => SetupEnemySelection,
-            StateName.PokemonStoragePartyNavigation=>LoadStoragePokemonData,
-            StateName.PokemonStorageDepositSelection=>ShowStorageBoxCapacityData,
+            InputStateName.PlayerBagNavigation => PlayerBagNavigation,
+            InputStateName.PokemonPartyItemUsage => UpdateHealthBarColors,
+            InputStateName.PokemonPartyNavigation => UpdateHealthBarColors,
+            InputStateName.PokemonDetails => SetupPokemonDetails,
+            InputStateName.PlayerBagItemSell => ItemToSellInputs,
+            InputStateName.PokemonStorageBoxNavigation => StorageFullBoxNavigation,
+            InputStateName.MartItemNavigation => PokeMartNavigation,
+            InputStateName.MartItemPurchase => ItemToBuyInputs,
+            InputStateName.PokemonBattleOptions => SetupBattleOptions,
+            InputStateName.PokemonBattleMoveSelection => SetupMoveSelection,
+            InputStateName.PokemonBattleEnemySelection => SetupEnemySelection,
+            InputStateName.PokemonStoragePartyNavigation=>LoadStoragePokemonData,
+            InputStateName.PokemonStorageDepositSelection=>ShowStorageBoxCapacityData,
             _ => null
         };
         stateMethod?.Invoke();
     }
 
 }
+
+
+
+
+

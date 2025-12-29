@@ -141,7 +141,7 @@ public class Poke_Mart : MonoBehaviour
     }
     private void ViewStore(Overworld_interactable clerkInteractable, int optionChosen)
     {
-        if (clerkInteractable.interactionType != Overworld_interactable.InteractionType.Clerk) return;
+        if (clerkInteractable.interactionType != InteractionType.Clerk) return;
         Dialogue_handler.Instance.EndDialogue();
         
         if (optionChosen > 0) return;
@@ -155,7 +155,7 @@ public class Poke_Mart : MonoBehaviour
         }
         
         var allData = Resources.LoadAll<PokeMartData>(
-            Save_manager.GetDirectory(Save_manager.AssetDirectory.PokeMartData));
+            Save_manager.GetDirectory(AssetDirectory.PokeMartData));
         
         foreach (var data in allData)
         {

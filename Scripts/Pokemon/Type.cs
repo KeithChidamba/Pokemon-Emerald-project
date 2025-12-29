@@ -7,8 +7,8 @@ using UnityEngine.Serialization;
 public class Type : ScriptableObject 
 {
     public string typeName;
-    public PokemonOperations.Types[] weaknesses;
-    public PokemonOperations.Types[] resistances; 
-    public PokemonOperations.Types[] immunities;
+    public Types[] weaknesses;
+    public Types[] resistances; 
+    public Types[] immunities;
     public Sprite typeImage;
 }

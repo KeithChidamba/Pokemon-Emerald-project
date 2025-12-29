@@ -5,9 +5,9 @@ using UnityEngine;
 [Serializable]
 public class InputState
 {
-    public InputStateHandler.StateName stateName;
-    public InputStateHandler.StateGroup[] stateGroups;
-    public InputStateHandler.Directional stateDirectional;
+    public InputStateName stateName;
+    public InputStateGroup[] stateGroups;
+    public InputDirection stateDirection;
     public List<SelectableUI> selectableUis;
     public Action OnExit;
     public Action OnClose;
@@ -23,11 +23,11 @@ public class InputState
     public bool canManualExit;
 
     public InputState(
-        InputStateHandler.StateName stateName,
-        InputStateHandler.StateGroup[] groups,
+        InputStateName stateName,
+        InputStateGroup[] groups,
         bool isParent = false,
         GameObject mainView = null,
-        InputStateHandler.Directional stateDirectional = InputStateHandler.Directional.None,
+        InputDirection stateDirection = InputDirection.None,
         List<SelectableUI> selectableUis = null,
         GameObject selector = null,
         bool selecting = false,
@@ -43,7 +43,7 @@ public class InputState
         stateGroups = groups;
         isParentLayer = isParent;
         mainViewUI = isParent ? mainView : null;
-        this.stateDirectional = stateDirectional;
+        this.stateDirection = stateDirection;
         this.selectableUis = selectableUis;
         this.selector = selector;
         isSelecting = selecting;

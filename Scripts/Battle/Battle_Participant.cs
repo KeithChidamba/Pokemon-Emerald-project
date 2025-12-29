@@ -137,10 +137,10 @@ public class Battle_Participant : MonoBehaviour
         recentAttacker = attacker ?? recentAttacker;
         if (!isActive) return;
         if (pokemon.hp > 0) return;
-        pokemon.statusEffect = PokemonOperations.StatusEffect.None;
+        pokemon.statusEffect = StatusEffect.None;
         Battle_handler.Instance.faintQueue.Add(this);
         pokemon.DetermineFriendshipLevelChange(
-            false, PokemonOperations.FriendshipModifier.Fainted);
+            false, FriendshipModifier.Fainted);
         OnPokemonFainted?.Invoke();
         if (!Turn_Based_Combat.Instance.faintEventDelay)
             Battle_handler.Instance.StartFaintEvent();
@@ -270,8 +270,8 @@ public class Battle_Participant : MonoBehaviour
 
     public bool ProtectedFromStatChange(bool isIncrease)
     {
-        var protection = isIncrease? StatChangeData.StatChangeability.ImmuneToIncrease
-            :StatChangeData.StatChangeability.ImmuneToDecrease;
+        var protection = isIncrease? StatChangeability.ImmuneToIncrease
+            :StatChangeability.ImmuneToDecrease;
         return StatChangeEffects.Any(s => s.Changeability == protection);
     }
     private void CheckBarrierDuration()
@@ -320,13 +320,13 @@ public class Battle_Participant : MonoBehaviour
     }
     public void RefreshStatusEffectImage()
     {
-        if (pokemon.statusEffect == PokemonOperations.StatusEffect.None)
+        if (pokemon.statusEffect == StatusEffect.None)
             statusImage.gameObject.SetActive(false);
         else
         {
             statusImage.gameObject.SetActive(true);
             statusImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(Save_manager.AssetDirectory.Status) 
+                Save_manager.GetDirectory(AssetDirectory.Status) 
              + pokemon.statusEffect.ToString().ToLower());
         }
     }
@@ -350,9 +350,9 @@ public class Battle_Participant : MonoBehaviour
         pokemonImage.sprite = isPlayer?pokemon.backPicture : pokemon.frontPicture;
         rawName = (isEnemy)? pokemon.pokemonName.Replace("Foe ", "") : pokemon.pokemonName;
         ActivateGenderImage();
-        if (pokemon.statusEffect == PokemonOperations.StatusEffect.BadlyPoison)
+        if (pokemon.statusEffect == StatusEffect.BadlyPoison)
         {
-            pokemon.statusEffect = PokemonOperations.StatusEffect.Poison;
+            pokemon.statusEffect = StatusEffect.Poison;
         }
         Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
         Battle_handler.Instance.OnBattleEnd += DeactivateParticipant;
@@ -373,7 +373,7 @@ public class Battle_Participant : MonoBehaviour
         pokemonGenderImage.gameObject.SetActive(true);
         if(pokemon.hasGender)
             pokemonGenderImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(Save_manager.AssetDirectory.UI) 
+                Save_manager.GetDirectory(AssetDirectory.UI) 
                 + pokemon.gender.ToString().ToLower());
         else
             pokemonGenderImage.gameObject.SetActive(false);

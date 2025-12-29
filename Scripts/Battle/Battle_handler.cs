@@ -32,7 +32,7 @@ public class Battle_handler : MonoBehaviour
     public int currentEnemyIndex = 0;
     public float participantPositionOffset = 100;
     private List<Vector2> _defaultPokemonImagePositions = new ();
-    public TrainerData.BattleType currentBattleType;
+    public BattleType currentBattleType;
     public Pokemon lastOpponent;
     private Battle_Participant _currentParticipant;
     public List<EvolutionInBattleData> evolutionQueue;
@@ -72,9 +72,9 @@ public class Battle_handler : MonoBehaviour
     }
     private void EnableBattleMessage(InputState currentState)
     {
-        if (currentState.stateName == InputStateHandler.StateName.PokemonBattleOptions)
+        if (currentState.stateName == InputStateName.PokemonBattleOptions)
         {
-            Dialogue_handler.Instance.DisplaySpecific("What will you do?",Dialogue_handler.DialogType.BattleDisplayMessage);
+            Dialogue_handler.Instance.DisplaySpecific("What will you do?",DialogType.BattleDisplayMessage);
             optionsUI.SetActive(true);
         }
     }
@@ -97,9 +97,9 @@ public class Battle_handler : MonoBehaviour
         {
             enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,PlayerExecuteMove,true));
         }
-        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleEnemySelection
-            ,new[] { InputStateHandler.StateGroup.PokemonBattle },
-            stateDirectional:InputStateHandler.Directional.Horizontal, selectableUis:enemySelectables, selecting:true));
+        InputStateHandler.Instance.ChangeInputState(new (InputStateName.PokemonBattleEnemySelection
+            ,new[] { InputStateGroup.PokemonBattle },
+            stateDirection:InputDirection.Horizontal, selectableUis:enemySelectables, selecting:true));
     }
     private void PlayerExecuteMove()
     {//selecting enemy only happens in double battle
@@ -155,9 +155,9 @@ public class Battle_handler : MonoBehaviour
             new(battleOptions[3], () => StartCoroutine(RunAway()), true)
         };
         
-        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleOptions
-            , new[] { InputStateHandler.StateGroup.PokemonBattle }, true,
-            optionsUI, InputStateHandler.Directional.OmniDirection, battleOptionSelectables,
+        InputStateHandler.Instance.ChangeInputState(new (InputStateName.PokemonBattleOptions
+            , new[] { InputStateGroup.PokemonBattle }, true,
+            optionsUI, InputDirection.OmniDirection, battleOptionSelectables,
             optionSelector,true,true,canExit: false
             ,onExit:Turn_Based_Combat.Instance.RemoveTurn, updateExit:ConditionsForExit));
     }
@@ -180,8 +180,8 @@ public class Battle_handler : MonoBehaviour
         if (currentParticipant.currentCoolDown.isCoolingDown) return;
         InputStateHandler.Instance.ResetRelevantUi(new[]
         {
-            InputStateHandler.StateName.PokemonBattleEnemySelection,
-            InputStateHandler.StateName.PlaceHolder,InputStateHandler.StateName.DialoguePlaceHolder
+            InputStateName.PokemonBattleEnemySelection,
+            InputStateName.PlaceHolder,InputStateName.DialoguePlaceHolder
         });
     }
     private IEnumerator SetValidParticipants()
@@ -241,15 +241,15 @@ public class Battle_handler : MonoBehaviour
         overworld_actions.Instance.doingAction = true;
         Pokemon_party.Instance.SortByFainted();
         var copyOfTrainerData = Resources.Load<TrainerData>(
-            Save_manager.GetDirectory(Save_manager.AssetDirectory.TrainerData)
+            Save_manager.GetDirectory(AssetDirectory.TrainerData)
             + $"{trainerNames[0]}/{trainerNames[0]}");
          currentBattleType = copyOfTrainerData.battleType;
         switch (copyOfTrainerData.battleType)
         {
-            case TrainerData.BattleType.Single:
+            case BattleType.Single:
                 StartCoroutine(StartSingleBattle(copyOfTrainerData));
                 break;
-            case TrainerData.BattleType.SingleDouble:
+            case BattleType.SingleDouble:
                 StartCoroutine(StartSingleDoubleBattle(copyOfTrainerData));
                 break;
         }
@@ -456,9 +456,9 @@ public class Battle_handler : MonoBehaviour
             moveSelectables.Add( new (availableMovesText[i].gameObject,AllowEnemySelection,true));
         }
         
-        InputStateHandler.Instance.ChangeInputState(new InputState(InputStateHandler.StateName.PokemonBattleMoveSelection
-            ,new[] { InputStateHandler.StateGroup.PokemonBattle },true,
-            movesUI, InputStateHandler.Directional.OmniDirection, moveSelectables,
+        InputStateHandler.Instance.ChangeInputState(new (InputStateName.PokemonBattleMoveSelection
+            ,new[] { InputStateGroup.PokemonBattle },true,
+            movesUI, InputDirection.OmniDirection, moveSelectables,
             moveSelector,true,true,ResetMoveUsability,ResetMoveUsability));
         
         for (var i = _currentParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
@@ -469,7 +469,7 @@ public class Battle_handler : MonoBehaviour
         if(move.powerpoints==0)return;
         move.powerpoints--;
 
-        Turn currentTurn = new Turn(Turn.TurnUsage.Attack,move, Array.IndexOf(battleParticipants,user)
+        Turn currentTurn = new Turn(TurnUsage.Attack,move, Array.IndexOf(battleParticipants,user)
             ,currentEnemyIndex
             , user.pokemon.pokemonID
             ,battleParticipants[currentEnemyIndex].pokemon.pokemonID);
@@ -683,11 +683,11 @@ public class Battle_handler : MonoBehaviour
         _defaultPokemonImagePositions.Clear();
         Encounter_handler.Instance.ResetTrigger();
         overWorld.SetActive(true);
-        var location = (playerWhiteOut)? AreaData.AreaName.PokeCenter : Game_Load.Instance.playerData.location;
+        var location = (playerWhiteOut)? AreaName.PokeCenter : Game_Load.Instance.playerData.location;
         if(playerWhiteOut) Options_manager.Instance.HealPartyPokemon();
         Area_manager.Instance.SwitchToArea(location);
         Dialogue_handler.Instance.canExitDialogue = true;
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonBattle);
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonBattle);
         battleWon = false;
         battleOver = false;
         yield return new WaitForSeconds(1f);

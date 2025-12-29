@@ -32,105 +32,105 @@ public class TypeDataFiller : EditorWindow
 
     private static void ApplyTypeData(Type typeSO)
     {
-        List<PokemonOperations.Types> weaknesses = new();
-        List<PokemonOperations.Types> resistances = new();
-        List<PokemonOperations.Types> immunities = new();
+        List<Types> weaknesses = new();
+        List<Types> resistances = new();
+        List<Types> immunities = new();
 
         switch (typeSO.typeName.ToLower())
         {
             case "normal":
-                weaknesses.Add(PokemonOperations.Types.Fighting);
-                immunities.Add(PokemonOperations.Types.Ghost);
+                weaknesses.Add(Types.Fighting);
+                immunities.Add(Types.Ghost);
                 break;
 
             case "fire":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Water, PokemonOperations.Types.Ground, PokemonOperations.Types.Rock });
-                resistances.AddRange(new[] { PokemonOperations.Types.Fire, PokemonOperations.Types.Grass, PokemonOperations.Types.Ice, PokemonOperations.Types.Bug, PokemonOperations.Types.Steel });
+                weaknesses.AddRange(new[] { Types.Water, Types.Ground, Types.Rock });
+                resistances.AddRange(new[] { Types.Fire, Types.Grass, Types.Ice, Types.Bug, Types.Steel });
                 break;
 
             case "water":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Electric, PokemonOperations.Types.Grass });
-                resistances.AddRange(new[] { PokemonOperations.Types.Fire, PokemonOperations.Types.Water, PokemonOperations.Types.Ice, PokemonOperations.Types.Steel });
+                weaknesses.AddRange(new[] { Types.Electric, Types.Grass });
+                resistances.AddRange(new[] { Types.Fire, Types.Water, Types.Ice, Types.Steel });
                 break;
 
             case "electric":
-                weaknesses.Add(PokemonOperations.Types.Ground);
-                resistances.AddRange(new[] { PokemonOperations.Types.Electric, PokemonOperations.Types.Flying, PokemonOperations.Types.Steel });
+                weaknesses.Add(Types.Ground);
+                resistances.AddRange(new[] { Types.Electric, Types.Flying, Types.Steel });
                 break;
 
             case "grass":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Fire, PokemonOperations.Types.Ice, PokemonOperations.Types.Poison, PokemonOperations.Types.Flying, PokemonOperations.Types.Bug });
-                resistances.AddRange(new[] { PokemonOperations.Types.Water, PokemonOperations.Types.Electric, PokemonOperations.Types.Grass, PokemonOperations.Types.Ground });
+                weaknesses.AddRange(new[] { Types.Fire, Types.Ice, Types.Poison, Types.Flying, Types.Bug });
+                resistances.AddRange(new[] { Types.Water, Types.Electric, Types.Grass, Types.Ground });
                 break;
 
             case "ice":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Fire, PokemonOperations.Types.Fighting, PokemonOperations.Types.Rock, PokemonOperations.Types.Steel });
-                resistances.Add(PokemonOperations.Types.Ice);
+                weaknesses.AddRange(new[] { Types.Fire, Types.Fighting, Types.Rock, Types.Steel });
+                resistances.Add(Types.Ice);
                 break;
 
             case "fighting":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Flying, PokemonOperations.Types.Psychic });
-                resistances.AddRange(new[] { PokemonOperations.Types.Bug, PokemonOperations.Types.Rock, PokemonOperations.Types.Dark });
+                weaknesses.AddRange(new[] { Types.Flying, Types.Psychic });
+                resistances.AddRange(new[] { Types.Bug, Types.Rock, Types.Dark });
                 break;
 
             case "poison":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Ground, PokemonOperations.Types.Psychic });
-                resistances.AddRange(new[] { PokemonOperations.Types.Grass, PokemonOperations.Types.Fighting, PokemonOperations.Types.Poison, PokemonOperations.Types.Bug });
+                weaknesses.AddRange(new[] { Types.Ground, Types.Psychic });
+                resistances.AddRange(new[] { Types.Grass, Types.Fighting, Types.Poison, Types.Bug });
                 break;
 
             case "ground":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Water, PokemonOperations.Types.Grass, PokemonOperations.Types.Ice });
-                resistances.AddRange(new[] { PokemonOperations.Types.Poison, PokemonOperations.Types.Rock });
-                immunities.Add(PokemonOperations.Types.Electric);
+                weaknesses.AddRange(new[] { Types.Water, Types.Grass, Types.Ice });
+                resistances.AddRange(new[] { Types.Poison, Types.Rock });
+                immunities.Add(Types.Electric);
                 break;
 
             case "flying":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Electric, PokemonOperations.Types.Ice, PokemonOperations.Types.Rock });
-                resistances.AddRange(new[] { PokemonOperations.Types.Grass, PokemonOperations.Types.Fighting, PokemonOperations.Types.Bug });
-                immunities.Add(PokemonOperations.Types.Ground);
+                weaknesses.AddRange(new[] { Types.Electric, Types.Ice, Types.Rock });
+                resistances.AddRange(new[] { Types.Grass, Types.Fighting, Types.Bug });
+                immunities.Add(Types.Ground);
                 break;
 
             case "psychic":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Bug, PokemonOperations.Types.Ghost, PokemonOperations.Types.Dark });
-                resistances.AddRange(new[] { PokemonOperations.Types.Fighting, PokemonOperations.Types.Psychic });
+                weaknesses.AddRange(new[] { Types.Bug, Types.Ghost, Types.Dark });
+                resistances.AddRange(new[] { Types.Fighting, Types.Psychic });
                 break;
 
             case "bug":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Fire, PokemonOperations.Types.Flying, PokemonOperations.Types.Rock });
-                resistances.AddRange(new[] { PokemonOperations.Types.Grass, PokemonOperations.Types.Fighting, PokemonOperations.Types.Ground });
+                weaknesses.AddRange(new[] { Types.Fire, Types.Flying, Types.Rock });
+                resistances.AddRange(new[] { Types.Grass, Types.Fighting, Types.Ground });
                 break;
 
             case "rock":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Water, PokemonOperations.Types.Grass, PokemonOperations.Types.Fighting, PokemonOperations.Types.Ground, PokemonOperations.Types.Steel });
-                resistances.AddRange(new[] { PokemonOperations.Types.Normal, PokemonOperations.Types.Fire, PokemonOperations.Types.Poison, PokemonOperations.Types.Flying });
+                weaknesses.AddRange(new[] { Types.Water, Types.Grass, Types.Fighting, Types.Ground, Types.Steel });
+                resistances.AddRange(new[] { Types.Normal, Types.Fire, Types.Poison, Types.Flying });
                 break;
 
             case "ghost":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Ghost, PokemonOperations.Types.Dark });
-                resistances.AddRange(new[] { PokemonOperations.Types.Poison, PokemonOperations.Types.Bug });
-                immunities.Add(PokemonOperations.Types.Normal);
-                immunities.Add(PokemonOperations.Types.Fighting);
+                weaknesses.AddRange(new[] { Types.Ghost, Types.Dark });
+                resistances.AddRange(new[] { Types.Poison, Types.Bug });
+                immunities.Add(Types.Normal);
+                immunities.Add(Types.Fighting);
                 break;
 
             case "dragon":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Ice, PokemonOperations.Types.Dragon });
-                resistances.AddRange(new[] { PokemonOperations.Types.Fire, PokemonOperations.Types.Water, PokemonOperations.Types.Electric, PokemonOperations.Types.Grass });
+                weaknesses.AddRange(new[] { Types.Ice, Types.Dragon });
+                resistances.AddRange(new[] { Types.Fire, Types.Water, Types.Electric, Types.Grass });
                 break;
 
             case "dark":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Fighting, PokemonOperations.Types.Bug });
-                resistances.AddRange(new[] { PokemonOperations.Types.Ghost, PokemonOperations.Types.Dark });
-                immunities.Add(PokemonOperations.Types.Psychic);
+                weaknesses.AddRange(new[] { Types.Fighting, Types.Bug });
+                resistances.AddRange(new[] { Types.Ghost, Types.Dark });
+                immunities.Add(Types.Psychic);
                 break;
 
             case "steel":
-                weaknesses.AddRange(new[] { PokemonOperations.Types.Fire, PokemonOperations.Types.Fighting, PokemonOperations.Types.Ground });
+                weaknesses.AddRange(new[] { Types.Fire, Types.Fighting, Types.Ground });
                 resistances.AddRange(new[] {
-                    PokemonOperations.Types.Normal, PokemonOperations.Types.Grass, PokemonOperations.Types.Ice,
-                    PokemonOperations.Types.Flying, PokemonOperations.Types.Psychic, PokemonOperations.Types.Bug,
-                    PokemonOperations.Types.Rock, PokemonOperations.Types.Dragon, PokemonOperations.Types.Steel
+                    Types.Normal, Types.Grass, Types.Ice,
+                    Types.Flying, Types.Psychic, Types.Bug,
+                    Types.Rock, Types.Dragon, Types.Steel
                 });
-                immunities.Add(PokemonOperations.Types.Poison);
+                immunities.Add(Types.Poison);
                 break;
 
             default:

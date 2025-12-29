@@ -7,8 +7,8 @@ using UnityEngine.Serialization;
 public class Interaction : ScriptableObject
 {
     [FormerlySerializedAs("InteractionMsg")] public string interactionMessage = "";
-    public Dialogue_handler.DialogType interactionType;
-    public List<Options_manager.InteractionOptions> interactionOptions = new();
+    public DialogType interactionType;
+    public List<InteractionOptions> interactionOptions = new();
     [FormerlySerializedAs("ResultMessage")] public string resultMessage = "";
     [FormerlySerializedAs("OptionsUiText")] public List<string> optionsUiText= new();
     [FormerlySerializedAs("AdditionalInfo")] public List<string> additionalInfo = new();

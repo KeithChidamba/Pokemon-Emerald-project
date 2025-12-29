@@ -39,7 +39,7 @@ public class Turn_Based_Combat : MonoBehaviour
         OnNewTurn += ()=> StartCoroutine(CheckParticipantCoolDown());
         Battle_handler.Instance.OnSwitchOut += RemoveWeatherBuffReceiver;
 
-        clearWeather = new WeatherCondition(WeatherCondition.Weather.Clear);
+        clearWeather = new WeatherCondition(Weather.Clear);
         currentWeather = clearWeather;
     }
     public void SaveTurn(Turn turn)
@@ -54,8 +54,8 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         else
         {
-            InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateHandler.StateName.PokemonBattleMoveSelection
-                ,InputStateHandler.StateName.PokemonBattleEnemySelection});
+            InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateName.PokemonBattleMoveSelection
+                ,InputStateName.PokemonBattleEnemySelection});
             NextTurn();
         }
     }
@@ -65,7 +65,7 @@ public class Turn_Based_Combat : MonoBehaviour
         var fakeMove = ScriptableObject.CreateInstance<Move>();
         fakeMove.priority = 0;
             
-        var switchTurn = new Turn(Turn.TurnUsage.SwitchOut,
+        var switchTurn = new Turn(TurnUsage.SwitchOut,
             attacker: currentTurnIndex,move:fakeMove);
             
         switchTurn.switchData = data;
@@ -83,7 +83,7 @@ public class Turn_Based_Combat : MonoBehaviour
     private void ResetTurnState()
     {
         currentTurnIndex = 0;
-        currentWeather.weather = WeatherCondition.Weather.Clear;
+        currentWeather.weather = Weather.Clear;
         _turnHistory.Clear();
         faintEventDelay = false;
         StopAllCoroutines();
@@ -91,11 +91,11 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private void ModifyMoveAccuracy(Turn turn)
     {
-        if (turn.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.Thunder))
+        if (turn.move.moveName == NameDB.GetMoveName(LearnSetMoveName.Thunder))
         {
-            if (currentWeather.weather == WeatherCondition.Weather.Rain)
+            if (currentWeather.weather == Weather.Rain)
                 turn.move.isSureHit = true;
-            if (currentWeather.weather == WeatherCondition.Weather.Sunlight)
+            if (currentWeather.weather == Weather.Sunlight)
                 turn.move.moveAccuracy = 50f;
         }
         //add more when more moves need it
@@ -184,7 +184,7 @@ public class Turn_Based_Combat : MonoBehaviour
         {
             if (attacker.isFlinched)
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" flinched!");
-            else if (attacker.pokemon.statusEffect != PokemonOperations.StatusEffect.None)
+            else if (attacker.pokemon.statusEffect != StatusEffect.None)
             {
                 Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" is affected by "+ attacker.pokemon.statusEffect);
                 yield return BattleVisuals.Instance.DisplayStatusEffectVisuals(attacker);
@@ -207,7 +207,7 @@ public class Turn_Based_Combat : MonoBehaviour
         
         for(var i = 0;i < _turnHistory.Count;i++)
         { 
-            if (_turnHistory[i].turnUsage == Turn.TurnUsage.SwitchOut)
+            if (_turnHistory[i].turnUsage == TurnUsage.SwitchOut)
             {
                 switchTurns.Add(i);
                 yield return HandleSwap(_turnHistory[i].switchData);
@@ -288,7 +288,7 @@ public class Turn_Based_Combat : MonoBehaviour
         yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
         
         //damage from weather
-        if (currentWeather.weather != WeatherCondition.Weather.Clear)
+        if (currentWeather.weather != Weather.Clear)
         {
             ReduceWeatherDuration();
             yield return ExecuteWeatherEffect();
@@ -353,7 +353,7 @@ public class Turn_Based_Combat : MonoBehaviour
         }
         //check if move used was pursuit
         var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
-            turn.move.moveName == NameDB.GetMoveName(NameDB.LearnSetMove.Pursuit));
+            turn.move.moveName == NameDB.GetMoveName(LearnSetMoveName.Pursuit));
         
         if(pursuitUsersTurn is { turnExecuted: false })
         {
@@ -386,7 +386,7 @@ public class Turn_Based_Combat : MonoBehaviour
             (party[swap.PartyPosition], party[swap.MemberToSwapWith]) = (party[swap.MemberToSwapWith], party[swap.PartyPosition]);
             Pokemon_party.Instance.UpdateUIAfterSwap();
             
-            InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonParty);
+            InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonParty);
             yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,party[swap.PartyPosition]);
         }
         else
@@ -402,7 +402,7 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         foreach (var turn in _turnHistory)
         {
-            if (turn.turnUsage==Turn.TurnUsage.SwitchOut)//must check this first to avoid null ref
+            if (turn.turnUsage==TurnUsage.SwitchOut)//must check this first to avoid null ref
             {
                 if (turn.switchData.MemberToSwapWith==memberPosition)
                 {
@@ -525,27 +525,27 @@ public class Turn_Based_Combat : MonoBehaviour
         
         switch (newWeather.weather)
         {
-            case WeatherCondition.Weather.Sandstorm:
+            case Weather.Sandstorm:
                 newWeather.weatherEffect = SandStormEffect;
                 newWeather.weatherBegunMessage = "A sandstorm brewed!";
                 newWeather.weatherTurnEndMessage = "The sandstorm rages.";
                 newWeather.weatherDamageMessage = " is buffeted by the sandstorm!";
                 newWeather.weatherEndMessage = "The sandstorm subsided.";
                 break;
-            case WeatherCondition.Weather.Rain:
+            case Weather.Rain:
                 newWeather.weatherEffect = RainEffect;
                 newWeather.weatherBegunMessage = "It started to rain!";
                 newWeather.weatherTurnEndMessage = "Rain continues to fall.";
                 newWeather.weatherEndMessage = "The rain stopped.";
                 break;
-            case WeatherCondition.Weather.Hail:
+            case Weather.Hail:
                 newWeather.weatherEffect = HailEffect;
                 newWeather.weatherBegunMessage = "It started to hail!";
                 newWeather.weatherTurnEndMessage = "Hail continues to fall.";
                 newWeather.weatherDamageMessage = " is pelted by hail!";
                 newWeather.weatherEndMessage = "The hail stopped.";
                 break;
-            case WeatherCondition.Weather.Sunlight:
+            case Weather.Sunlight:
                 newWeather.weatherEffect = SunEffect;
                 newWeather.weatherBegunMessage = "The sunlight got bright!";
                 newWeather.weatherTurnEndMessage = "The sunlight is strong.";
@@ -579,14 +579,14 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private void RemoveWeatherBuffReceiver(Battle_Participant participant)
     {
-        if (currentWeather.weather == WeatherCondition.Weather.Clear) return;
+        if (currentWeather.weather == Weather.Clear) return;
         if (!currentWeather.buffedParticipants.Contains(participant)) return;
         currentWeather.buffedParticipants.Remove(participant);
     }
     private IEnumerator SandStormEffect()
     {
         var protectedTypes = new[]{
-            PokemonOperations.Types.Rock, PokemonOperations.Types.Ground, PokemonOperations.Types.Steel
+            Types.Rock, Types.Ground, Types.Steel
         };
         var validParticipants = Battle_handler.Instance.GetValidParticipants();
         foreach (var participant in validParticipants)
@@ -599,11 +599,11 @@ public class Turn_Based_Combat : MonoBehaviour
                     isProtected = true;
                     if(!currentWeather.buffedParticipants.Contains(participant))
                     {
-                        if (protectedType == PokemonOperations.Types.Rock)
+                        if (protectedType == Types.Rock)
                         {
                             //buff rock types
                             var spDefBuff = new BuffDebuffData(participant,
-                                PokemonOperations.Stat.SpecialDefense, true, 1);
+                                Stat.SpecialDefense, true, 1);
                             BattleOperations.CanDisplayChange = false;
                             Move_handler.Instance.SelectRelevantBuffOrDebuff(spDefBuff);
                             currentWeather.buffedParticipants.Add(participant);
@@ -618,14 +618,14 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private IEnumerator RainEffect()
     {
-        DamageModifierForWeather( PokemonOperations.Types.Fire,0.5f);
-        DamageModifierForWeather( PokemonOperations.Types.Water,1.5f);
+        DamageModifierForWeather( Types.Fire,0.5f);
+        DamageModifierForWeather( Types.Water,1.5f);
         yield return null;
     }
     private IEnumerator SunEffect()
     {
-        DamageModifierForWeather( PokemonOperations.Types.Fire,1.5f);
-        DamageModifierForWeather( PokemonOperations.Types.Water,0.5f);
+        DamageModifierForWeather( Types.Fire,1.5f);
+        DamageModifierForWeather( Types.Water,0.5f);
         yield return null;
     }
     private IEnumerator HailEffect()
@@ -633,12 +633,12 @@ public class Turn_Based_Combat : MonoBehaviour
         var validParticipants = Battle_handler.Instance.GetValidParticipants();
         foreach (var participant in validParticipants)
         {
-            if (participant.pokemon.HasType(PokemonOperations.Types.Ice)) continue;
+            if (participant.pokemon.HasType(Types.Ice)) continue;
             yield return DealWeatherDamage(participant);
         }
     }
 
-    private void DamageModifierForWeather(PokemonOperations.Types type,float damageModifier)
+    private void DamageModifierForWeather(Types type,float damageModifier)
     { 
         var damageModifierInfo = ScriptableObject.CreateInstance<DamageModifierInfo>();
         damageModifierInfo.typeAffected = type;

@@ -42,9 +42,9 @@ public class Player_movement : MonoBehaviour
     private void Start()
     {
         overworld_actions.Instance.OnItemEquipped += 
-            (item)=> StopBikeUsage(item!=EquipableInfoModule.Equipable.Bike);
+            (item)=> StopBikeUsage(item!=Equipable.Bike);
         overworld_actions.Instance.OnItemUnequipped += 
-            (item)=> StopBikeUsage(item==EquipableInfoModule.Equipable.Bike);
+            (item)=> StopBikeUsage(item==Equipable.Bike);
     }
 
     public void AllowPlayerMovement()
@@ -175,7 +175,7 @@ public class Player_movement : MonoBehaviour
     }
     private void HandleBikeInputs()
     {
-        if (!overworld_actions.Instance.IsEquipped(EquipableInfoModule.Equipable.Bike)) return;
+        if (!overworld_actions.Instance.IsEquipped(Equipable.Bike)) return;
         
         if (Input.GetKeyDown(KeyCode.C) && !usingBike &&canUseBike)
         {

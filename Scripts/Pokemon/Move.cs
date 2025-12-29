@@ -16,11 +16,6 @@ public class Move : ScriptableObject
     public bool isContact;
     [FormerlySerializedAs("is_Buff_Debuff")] public bool isBuffOrDebuff;
     [FormerlySerializedAs("Has_status")] public bool hasStatus;
-    public enum EffectType
-    {
-        PipeLine,UniqueLogic,MultiTargetDamage,Consecutive,HealthDrain,WeatherHealthGain,WeatherChange
-        ,IdentifyTarget, BarrierCreation,DamageProtection,OnFieldDamageModifier,SemiInvulnerable
-    };
     public EffectType effectType;
     public AdditionalInfoModule effectInfoModule;
     [FormerlySerializedAs("Can_flinch")] public bool canCauseFlinch;
@@ -36,7 +31,7 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("Powerpoints")] public int powerpoints;
     [FormerlySerializedAs("BasePowerpoints")] public int basePowerpoints;
     [FormerlySerializedAs("max_Powerpoints")] public int maxPowerpoints;
-    public PokemonOperations.StatusEffect statusEffect;
+    public StatusEffect statusEffect;
     public List<MoveBuffData> buffOrDebuffData = new();
     [FormerlySerializedAs("Status_chance")] public float statusChance;
     [FormerlySerializedAs("Debuff_chance")] public float buffOrDebuffChance;
@@ -46,3 +41,9 @@ public class Move : ScriptableObject
         return effectInfoModule as T;
     }
 }
+
+public enum EffectType
+{
+    PipeLine,UniqueLogic,MultiTargetDamage,Consecutive,HealthDrain,WeatherHealthGain,WeatherChange
+    ,IdentifyTarget, BarrierCreation,DamageProtection,OnFieldDamageModifier,SemiInvulnerable
+};

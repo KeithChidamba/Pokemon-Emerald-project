@@ -83,13 +83,13 @@ public class Pokemon_party_member : MonoBehaviour
         isEmpty = false;
         emptySlotUI.SetActive(false);
         heldItemImage.SetActive(pokemon.hasItem);
-        if (pokemon.statusEffect == PokemonOperations.StatusEffect.None)
+        if (pokemon.statusEffect == StatusEffect.None)
             statusEffectImage.gameObject.SetActive(false);
         else
         {
             statusEffectImage.gameObject.SetActive(true);
             statusEffectImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(Save_manager.AssetDirectory.Status)
+                Save_manager.GetDirectory(AssetDirectory.Status)
                 + pokemon.statusEffect.ToString().ToLower());
         }
         InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;
@@ -108,7 +108,7 @@ public class Pokemon_party_member : MonoBehaviour
     {
         if (isEmpty) return;
 
-        if (currentState.stateGroups.Contains(InputStateHandler.StateGroup.PokemonParty))
+        if (currentState.stateGroups.Contains(InputStateGroup.PokemonParty))
         {
             _viewingParty = true;
             _healthPhaseUpdateEvent = 
@@ -118,7 +118,7 @@ public class Pokemon_party_member : MonoBehaviour
             {
                 statusEffectImage.gameObject.SetActive(true);
                 statusEffectImage.sprite = Resources.Load<Sprite>(
-                    Save_manager.GetDirectory(Save_manager.AssetDirectory.Status)
+                    Save_manager.GetDirectory(AssetDirectory.Status)
                     + "fainted");
             }
         }
@@ -128,8 +128,8 @@ public class Pokemon_party_member : MonoBehaviour
             pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
             ChangeVisibility(false);
         }
-        _isViewingCard = currentState.stateName == InputStateHandler.StateName.PokemonPartyNavigation
-                         || currentState.stateName == InputStateHandler.StateName.PokemonPartyItemUsage;
+        _isViewingCard = currentState.stateName == InputStateName.PokemonPartyNavigation
+                         || currentState.stateName == InputStateName.PokemonPartyItemUsage;
         if (_isViewingCard)
         {
             InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;

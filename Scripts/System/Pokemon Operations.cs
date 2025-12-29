@@ -6,6 +6,17 @@ using System.Linq;
 using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.UI;
+public enum FriendshipModifier{Fainted,LevelUp,Vitamin,Berry} 
+public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep,FullHeal}
+public enum Gender{None,Male,Female}
+public enum Types
+{
+    Normal, Fire, Water, Electric, Grass, Ice,
+    Fighting, Poison, Ground, Flying, Psychic,
+    Bug, Rock, Ghost, Dragon, Dark, Steel
+}
+public enum Stat{None,Attack,Defense,SpecialAttack,SpecialDefense,Speed,Hp,Crit,Accuracy,Evasion,Multi}
+public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
 
 public class PokemonOperations : MonoBehaviour
 {
@@ -14,17 +25,6 @@ public class PokemonOperations : MonoBehaviour
     public static Pokemon CurrentPokemon;
     public static Move NewMoveAsset;
     public static Action<bool> OnEvChange;
-    public enum FriendshipModifier{Fainted,LevelUp,Vitamin,Berry}
-    public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep,FullHeal}
-    public enum Gender{None,Male,Female}
-    public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
-    public enum Stat{None,Attack,Defense,SpecialAttack,SpecialDefense,Speed,Hp,Crit,Accuracy,Evasion,Multi}
-    public enum Types
-    {
-        Normal, Fire, Water, Electric, Grass, Ice,
-        Fighting, Poison, Ground, Flying, Psychic,
-        Bug, Rock, Ghost, Dragon, Dark, Steel
-    }
     public static PokemonOperations Instance;
     private void Awake()
     {
@@ -57,7 +57,7 @@ public class PokemonOperations : MonoBehaviour
              pokemon.abilities[pokemon.personalityValue % 2] : pokemon.abilities[0];
         pokemon.abilityName = NameDB.GetAbility(abilityEnum);
         pokemon.ability = Resources.Load<Ability>(
-            Save_manager.GetDirectory(Save_manager.AssetDirectory.Abilities)
+            Save_manager.GetDirectory(AssetDirectory.Abilities)
             + pokemon.abilityName.ToLower());
     }
     public static bool ContainsType(Types[]typesList ,Type typesToCheck)
@@ -83,7 +83,7 @@ public class PokemonOperations : MonoBehaviour
         foreach (var nature in natures)
         {
             var assignedNature = Resources.Load<Nature>(
-                Save_manager.GetDirectory(Save_manager.AssetDirectory.Natures)
+                Save_manager.GetDirectory(AssetDirectory.Natures)
                 + nature);
             if (assignedNature.requiredNatureValue != natureValue) continue;
             pokemon.nature = assignedNature;
@@ -231,7 +231,7 @@ public class PokemonOperations : MonoBehaviour
     private static IEnumerator LearnMove(string moveName,bool isPartyPokemon = true, bool isLevelUpMove = true)
     {
         Item_handler.Instance.usingItem = false;
-        var assetPath = Save_manager.GetDirectory(Save_manager.AssetDirectory.Moves) + moveName;
+        var assetPath = Save_manager.GetDirectory(AssetDirectory.Moves) + moveName;
         
         var moveFromAsset = Resources.Load<Move>(assetPath);
         
@@ -255,8 +255,8 @@ public class PokemonOperations : MonoBehaviour
                 SelectingMoveReplacement = true;
                 Dialogue_handler.Instance.DisplayList(
                     $"{CurrentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn" +
-                    $" {moveName}?", "", new[] { Options_manager.InteractionOptions.LearnMove
-                        , Options_manager.InteractionOptions.SkipMove},
+                    $" {moveName}?", "", new[] { InteractionOptions.LearnMove
+                        , InteractionOptions.SkipMove},
                     new[] { "Yes", "No" });
                 
                 NewMoveAsset = moveFromAsset;
@@ -303,7 +303,7 @@ public class PokemonOperations : MonoBehaviour
     {
         Pokemon_Details.Instance.OnMoveSelected -= LearnSelectedMove;
         Pokemon_Details.Instance.learningMove = false;
-        InputStateHandler.Instance.ResetGroupUi(InputStateHandler.StateGroup.PokemonDetails);
+        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonDetails);
         Dialogue_handler.Instance.DisplayBattleInfo(CurrentPokemon.pokemonName + " forgot " 
             + CurrentPokemon.moveSet[moveIndex].moveName 
             + " and learned " + NewMoveAsset.moveName,false);
@@ -362,3 +362,10 @@ public class PokemonOperations : MonoBehaviour
         GeneratePokemonIVs(newPokemon);
     }
 }
+
+
+
+
+
+
+

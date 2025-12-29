@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class ChangeWeatherInfo : AdditionalInfoModule
 {
-    public WeatherCondition.Weather newWeatherCondition;
+    public Weather newWeatherCondition;
 }

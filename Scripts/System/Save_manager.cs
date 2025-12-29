@@ -8,7 +8,11 @@ using System.Runtime.InteropServices;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-
+public enum AssetDirectory
+{ 
+    Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
+    ,AdditionalInfo,Berries,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage
+};
 public class Save_manager : MonoBehaviour
 {
     [DllImport("__Internal")] private static extern void DownloadZipAndStoreLocally();
@@ -20,12 +24,7 @@ public class Save_manager : MonoBehaviour
     private string _saveDataPath = "Assets/Save_data";
     private string _tempSaveDataPath = "Assets/Temp_Save_data";
     private event Action<string,Exception> OnSaveDataFail;
-    public enum AssetDirectory
-    { 
-        Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
-        ,AdditionalInfo,Berries,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage
-    };
-    
+
     private static readonly Dictionary<AssetDirectory, string> Directories = new()
     {
         {AssetDirectory.Moves,"Pokemon_project_assets/Pokemon_obj/Moves/" },
@@ -594,3 +593,5 @@ public class Save_manager : MonoBehaviour
         return player;
     }
 }
+
+

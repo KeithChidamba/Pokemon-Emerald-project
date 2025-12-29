@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MultiTargetDMG", menuName = "MultiTargetDMG")]
 public class MultiTargetDamageInfo : AdditionalInfoModule
 {
-public enum Target{AllExceptSelf,AllEnemies}
-
-public Target target;
+    public Target target;
 }
+
+public enum Target{AllExceptSelf,AllEnemies}

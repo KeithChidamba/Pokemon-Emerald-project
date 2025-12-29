@@ -11,7 +11,6 @@ public class Turn
      public long victimID;
      public long attackerID;
      public Move move;
-     public enum TurnUsage{Attack,SwitchOut}
      public TurnUsage turnUsage;
      public SwitchOutData switchData;
      public bool isCancelled;
@@ -35,3 +34,5 @@ public class Turn
           victimID = copyRequest.victimID;
      }
 }
+
+public enum TurnUsage{Attack,SwitchOut}
