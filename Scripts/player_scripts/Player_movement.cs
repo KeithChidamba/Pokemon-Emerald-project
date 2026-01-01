@@ -150,10 +150,11 @@ public class Player_movement : MonoBehaviour
     private void HandleRunInputs()
     {
         if (usingBike) return;
+        var idle = yAxisInput == 0 && xAxisInput == 0;
         if (Input.GetKeyDown(KeyCode.X) && !runningInput)
         {
             runningInput = true;
-            _animationManager.ChangeAnimationState(_animationManager.playerRun);
+            if(!idle) _animationManager.ChangeAnimationState(_animationManager.playerRun);
         }
         
         if (Input.GetKeyUp(KeyCode.X) && runningInput)
@@ -163,7 +164,7 @@ public class Player_movement : MonoBehaviour
         {
             runningInput = false;
             _canSwitchMovement = false;
-            _animationManager.ChangeAnimationState(_animationManager.playerWalk);
+            if(!idle) _animationManager.ChangeAnimationState(_animationManager.playerWalk);
         }
         movementSpeed = runningInput? runSpeed : walkSpeed;
     }

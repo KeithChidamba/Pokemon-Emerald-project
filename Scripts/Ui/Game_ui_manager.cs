@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Game_ui_manager : MonoBehaviour
 {
@@ -23,7 +24,8 @@ public class Game_ui_manager : MonoBehaviour
     public GameObject[] pcItemOptions;
     public GameObject pcPokemonOptionsUI;
     public GameObject pcItemOptionsUI;
-    public bool usingWebGl = false;
+    public bool usingWebGl;
+    public Image destinationPointerUI;
     private void Awake()
     {
         if (Instance != null && Instance != this)

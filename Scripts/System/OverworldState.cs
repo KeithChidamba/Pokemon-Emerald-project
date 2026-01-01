@@ -9,6 +9,7 @@ public class OverworldState : MonoBehaviour
     [SerializeField]private List<BerryTree> overworldBerryTrees = new();
     [SerializeField]private List<BerryTreeData> treeDataQueue = new();
     public static OverworldState Instance;
+    public List<StoryObjective> currentStoryObjectives = new();
 
     private void Awake()
     {
@@ -39,6 +40,16 @@ public class OverworldState : MonoBehaviour
             if(tree.loadedFromJson)continue;
             tree.LoadDefaultAsset();
         }
+
+        if (currentStoryObjectives.Count > 0)
+        {
+            Game_Load.Instance.OnGameStarted += LoadStory;
+        }
+    }
+
+    void LoadStory()
+    {
+        currentStoryObjectives[0].LoadObjective();
     }
     public int GetTreeIndex(BerryTree tree)
     {
