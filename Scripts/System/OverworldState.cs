@@ -9,8 +9,9 @@ public class OverworldState : MonoBehaviour
     [SerializeField]private List<BerryTree> overworldBerryTrees = new();
     [SerializeField]private List<BerryTreeData> treeDataQueue = new();
     public static OverworldState Instance;
+    public List<StoryObjective> allStoryObjectives = new();
     public List<StoryObjective> currentStoryObjectives = new();
-
+    public StoryProgressObjective storyProgressObjective;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -23,12 +24,15 @@ public class OverworldState : MonoBehaviour
     private void Start()
     {
         overworldBerryTrees.Clear();
+        currentStoryObjectives.Clear();
+        
         var trees = FindObjectsOfType<BerryTree>();
         foreach(var tree in trees)
         {
             overworldBerryTrees.Add(tree);
         }
         Save_manager.Instance.LoadOverworldData();
+        
         foreach (var treeData in treeDataQueue)
         {
             var jsonBerryTree = overworldBerryTrees.First(tree=>tree.treeIndex==treeData.treeIndex);
@@ -40,16 +44,29 @@ public class OverworldState : MonoBehaviour
             if(tree.loadedFromJson)continue;
             tree.LoadDefaultAsset();
         }
-
-        if (currentStoryObjectives.Count > 0)
+        
+        if (storyProgressObjective == null)
         {
-            Game_Load.Instance.OnGameStarted += LoadStory;
+            storyProgressObjective = Resources.Load<StoryProgressObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
+            currentStoryObjectives.AddRange(allStoryObjectives);
+            storyProgressObjective.totalObjectiveAmount = allStoryObjectives.Count;
+            storyProgressObjective.numCompleted = 0;
+        }
+        if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
+        {
+            Game_Load.Instance.OnGameStarted += ()=>currentStoryObjectives[0].FindMainAsset();
+            
         }
     }
 
-    void LoadStory()
+    public void ClearAndLoadNextObjective()
     {
-        currentStoryObjectives[0].LoadObjective();
+        currentStoryObjectives.RemoveAt(0);
+        storyProgressObjective.numCompleted++;
+        if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
+        {
+           currentStoryObjectives[0].LoadObjective();
+        }
     }
     public int GetTreeIndex(BerryTree tree)
     {
@@ -67,6 +84,13 @@ public class OverworldState : MonoBehaviour
             Save_manager.Instance
                 .SaveBerryTreeDataAsJson(tree.treeData,"BerryTree "+ tree.treeData.treeIndex);
         }
+        foreach (var objective in currentStoryObjectives)
+        {
+            objective.mainAssetName = objective.mainAssetName==string.Empty? objective.name:objective.mainAssetName;
+            Save_manager.Instance.SaveStoryDataAsJson(objective,objective.objectiveHeading);
+        }
+        storyProgressObjective.mainAssetName = storyProgressObjective.mainAssetName==string.Empty? storyProgressObjective.name:storyProgressObjective.mainAssetName;
+        Save_manager.Instance.SaveStoryDataAsJson(storyProgressObjective,"Story Progress");
         yield return null;
     }
 }

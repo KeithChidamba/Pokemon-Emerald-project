@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Cherri berry",
     "berryItem": {
-        "instanceID": 26328
+        "instanceID": 26668
     },
     "treeIndex": 10,
     "minutesPerStage": 45,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32634
+                    "instanceID": 32998
                 },
                 {
-                    "instanceID": 32634
+                    "instanceID": 32998
                 }
             ],
             "growthStageNumber": 0
@@ -27,13 +27,24 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32636
+                    "instanceID": 33000
                 },
                 {
-                    "instanceID": 32638
+                    "instanceID": 33002
                 }
             ],
             "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33258
+                },
+                {
+                    "instanceID": 33260
+                }
+            ],
+            "growthStageNumber": 2
         },
         {
             "growthStageSprites": [
@@ -44,7 +55,7 @@
                     "instanceID": 33264
                 }
             ],
-            "growthStageNumber": 2
+            "growthStageNumber": 3
         },
         {
             "growthStageSprites": [
@@ -55,19 +66,8 @@
                     "instanceID": 33268
                 }
             ],
-            "growthStageNumber": 3
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 33270
-                },
-                {
-                    "instanceID": 33272
-                }
-            ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-01-01T15:35:28.2796810+02:00"
+    "lastLogin": "2026-01-02T14:10:50.4416640+02:00"
 }

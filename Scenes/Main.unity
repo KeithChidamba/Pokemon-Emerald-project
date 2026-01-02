@@ -35969,8 +35969,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overworldBerryTrees: []
   treeDataQueue: []
-  currentStoryObjectives:
+  allStoryObjectives:
   - {fileID: 11400000, guid: 0eb906317603235d799635703f836df2, type: 2}
+  currentStoryObjectives: []
+  storyProgressObjective: {fileID: 0}
 --- !u!4 &1163787316
 Transform:
   m_ObjectHideFlags: 0
@@ -110532,6 +110534,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2231660645942151004, guid: db98842f34af24f97a1ddb584d99d278, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2540189778668648446, guid: db98842f34af24f97a1ddb584d99d278, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6635192765644074818, guid: db98842f34af24f97a1ddb584d99d278, type: 3}
@@ -110544,7 +110550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6635192765644074818, guid: db98842f34af24f97a1ddb584d99d278, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.347119
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6635192765644074818, guid: db98842f34af24f97a1ddb584d99d278, type: 3}
       propertyPath: m_LocalRotation.w

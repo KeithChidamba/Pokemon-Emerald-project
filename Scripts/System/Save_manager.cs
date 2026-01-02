@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public enum AssetDirectory
 { 
     Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
-    ,AdditionalInfo,Berries,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage
+    ,AdditionalInfo,Berries,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData
 };
 public class Save_manager : MonoBehaviour
 {
@@ -42,6 +42,7 @@ public class Save_manager : MonoBehaviour
         {AssetDirectory.Berries,"Pokemon_project_assets/Items/Berries/" },
         {AssetDirectory.AdditionalInfo,"Pokemon_project_assets/Items/AdditionalInfo/" },
         {AssetDirectory.BerryTreeData,"Pokemon_project_assets/Overwolrd_obj/Interactions/Berry Trees/Berry Data/"},
+        {AssetDirectory.StoryObjectiveData,"Pokemon_project_assets/Overwolrd_obj/Story Objectives/"},
         {AssetDirectory.PokeMartData,"Pokemon_project_assets/Overwolrd_obj/Poke_Mart_Data"},
         {AssetDirectory.TrainerData,"Pokemon_project_assets/Enemies/Data/"}
     };
@@ -174,6 +175,26 @@ public class Save_manager : MonoBehaviour
                                                       + treeData.itemAssetName);
             
             OverworldState.Instance.StoreBerryTreeData(treeData);
+        }
+        CreateFolder(_saveDataPath + "/Overworld/Story_Objectives");
+        var storyObjectives = GetJsonFilesFromPath(_saveDataPath + "/Overworld/Story_Objectives");
+        foreach (var objective in storyObjectives)
+        {
+            var jsonFilePath = _saveDataPath + "/Overworld/Story_Objectives/" + Path.GetFileName(objective);
+            if (!File.Exists(jsonFilePath)) continue;
+
+            var json = File.ReadAllText(jsonFilePath);
+            var wrapper = JsonUtility.FromJson<ObjectiveTypeWrapper>(json);
+            var objectiveData = StoryObjective.GetObjectiveType(wrapper.objectiveType);
+            JsonUtility.FromJsonOverwrite(json, objectiveData);
+            if (objectiveData is StoryProgressObjective storyData)
+            {
+                OverworldState.Instance.storyProgressObjective = storyData;
+            }
+            else
+            {
+                OverworldState.Instance.currentStoryObjectives.Add(objectiveData);
+            }
         }
     }
     private void LoadPlayerData()
@@ -546,6 +567,12 @@ public class Save_manager : MonoBehaviour
         var directory = Path.Combine(_saveDataPath+"/Overworld/Berry_Trees", fileName + ".json");
         tree.itemAssetName = tree.berryItem.itemName;
         var json = JsonUtility.ToJson(tree, true);
+        File.WriteAllText(directory, json);
+    }
+    public void SaveStoryDataAsJson(StoryObjective objective, string fileName)
+    {
+        var directory = Path.Combine(_saveDataPath+"/Overworld/Story_Objectives", fileName + ".json");
+        var json = JsonUtility.ToJson(objective, true);
         File.WriteAllText(directory, json);
     }
     public void SaveStorageDataAsJson(PokemonStorageBox box, string fileName)

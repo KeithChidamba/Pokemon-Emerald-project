@@ -19,6 +19,11 @@ public class Collider_checks : MonoBehaviour
         OnCollision?.Invoke(other.transform);
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        OnCollision?.Invoke(other.transform);
+    }
+
     private void OnCollisionStay2D(Collision2D collision)
     { 
         if (!collision.gameObject.CompareTag("Switch_Area")) return;
