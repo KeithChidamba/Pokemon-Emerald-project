@@ -55,7 +55,6 @@ public class OverworldState : MonoBehaviour
         if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
         {
             Game_Load.Instance.OnGameStarted += ()=>currentStoryObjectives[0].FindMainAsset();
-            
         }
     }
 

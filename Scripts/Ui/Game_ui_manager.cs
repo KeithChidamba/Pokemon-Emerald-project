@@ -26,6 +26,7 @@ public class Game_ui_manager : MonoBehaviour
     public GameObject pcItemOptionsUI;
     public bool usingWebGl;
     public Image destinationPointerUI;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

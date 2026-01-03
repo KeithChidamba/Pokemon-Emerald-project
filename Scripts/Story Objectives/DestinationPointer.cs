@@ -6,8 +6,7 @@ public class DestinationPointer : MonoBehaviour
 {
     private Image pointerUIImage;
     [SerializeField] float edgePadding = 20f;
-
-    private Transform player;
+    
     private Camera cam;
     private RectTransform canvasRect;
     public DestinationObjective objectiveData;
@@ -22,13 +21,12 @@ public class DestinationPointer : MonoBehaviour
     private void LoadPointer()
     {
         displaying = true;
-        player = Player_movement.Instance.playerObject.transform;
         cam = Camera.main; 
         pointerUIImage = Game_ui_manager.Instance.destinationPointerUI;
         canvasRect = pointerUIImage.canvas.GetComponent<RectTransform>();
         Collider_checks.OnCollision += ConfirmDestination;
         overworldObject.SetActive(true);
-        //call game ui to display objective data
+        
     }
 
     private void ConfirmDestination(Transform currentCollision)
@@ -45,29 +43,40 @@ public class DestinationPointer : MonoBehaviour
     void Update()
     {
         if(!displaying)return;
-        float deltaY = transform.position.y - player.position.y;
-        float absY = Mathf.Abs(deltaY);
+        Vector3 viewportPos = cam.WorldToViewportPoint(transform.position);
 
-        float camHalfHeight = cam.orthographicSize;
+// Hide if inside view
+        bool isInsideView =
+            viewportPos.x >= 0f && viewportPos.x <= 1f &&
+            viewportPos.y >= 0f && viewportPos.y <= 1f &&
+            viewportPos.z > 0f;
 
-        // Hide when within view
-        if (absY <= camHalfHeight)
+        if (isInsideView)
         {
             pointerUIImage.gameObject.SetActive(false);
             return;
         }
-
         pointerUIImage.gameObject.SetActive(true);
 
-        bool isAbove = deltaY > 0f;
+// Clamp viewport position to screen edge
+        float margin = 0.05f;
 
-        float canvasHalfHeight = canvasRect.rect.height / 2f;
+        float clampedX = Mathf.Clamp(viewportPos.x, margin, 1f - margin);
+        float clampedY = Mathf.Clamp(viewportPos.y, margin, 1f - margin);
 
-        float yPos = isAbove
-            ? canvasHalfHeight - edgePadding
-            : -canvasHalfHeight + edgePadding;
+// Convert viewport → canvas space
+        float canvasWidth  = canvasRect.rect.width;
+        float canvasHeight = canvasRect.rect.height;
 
-        var rt = pointerUIImage.rectTransform;
-        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, yPos);
+        float xPos = (clampedX - 0.5f) * canvasWidth;
+        float yPos = (clampedY - 0.5f) * canvasHeight;
+
+// Apply padding toward center
+        Vector2 dir = new Vector2(xPos, yPos).normalized;
+        Vector2 paddedPos = new Vector2(xPos, yPos) - dir * edgePadding;
+
+        pointerUIImage.rectTransform.anchoredPosition = paddedPos;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        pointerUIImage.rectTransform.rotation = Quaternion.Euler(0, 0, angle);
     }
 }

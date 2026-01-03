@@ -9,7 +9,7 @@ public abstract class StoryObjective : ScriptableObject
     public virtual void LoadSaveData(StoryObjective objectiveData){ }
     public void FindMainAsset()
     {
-        var mainAsset = Resources.Load<StoryProgressObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+mainAssetName);
+        var mainAsset = Resources.Load<StoryObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+mainAssetName);
         mainAsset.LoadSaveData(this);
         mainAsset.LoadObjective();
     }

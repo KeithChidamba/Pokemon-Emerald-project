@@ -23,6 +23,8 @@ public class Dialogue_handler : MonoBehaviour
     public GameObject battleDialogueBox;
     [SerializeField] private GameObject dialogueOptionPrefab;
     [SerializeField] private GameObject dialogueOptionBox;
+    [SerializeField] private GameObject objectiveDialogueBox;
+    [SerializeField] private TMP_Text objectiveDialougeText;
     private DialogueOptionsManager _dialogueOptionsManager;
     [SerializeField] private Transform dialogueUiParent;
     private List<GameObject> _currentDialogueOptions = new();
@@ -234,6 +236,16 @@ public class Dialogue_handler : MonoBehaviour
         dialougeText.maxVisibleCharacters = 0;
     }
 
+    public void DisplayObjectiveText(string message)
+    {
+        objectiveDialogueBox.SetActive(true);
+        objectiveDialougeText.text = message;
+    }
+
+    public void RemoveObjectiveText()
+    {
+        objectiveDialogueBox.SetActive(false);
+    }
     private IEnumerator TypeText(string message)
     {
         dialogueFinished = false;
