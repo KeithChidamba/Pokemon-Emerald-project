@@ -1,0 +1,11 @@
+{
+    "mainAssetName": "Equip Rod",
+    "objectiveHeading": "Equip the fishing rod in bag",
+    "objectiveDescription": "",
+    "objectiveProgress": "",
+    "objectiveType": 3,
+    "uiUsage": 0,
+    "itemForObjective": {
+        "instanceID": 0
+    }
+}

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
 public abstract class StoryObjective : ScriptableObject
@@ -13,6 +14,7 @@ public abstract class StoryObjective : ScriptableObject
         mainAsset.LoadSaveData(this);
         mainAsset.LoadObjective();
     }
+    
     public string mainAssetName;
     public string objectiveHeading;
     public string objectiveDescription;
@@ -24,6 +26,7 @@ public abstract class StoryObjective : ScriptableObject
         {
             StoryObjectiveType.Destination => CreateInstance<DestinationObjective>(),
             StoryObjectiveType.StoryProgress => CreateInstance<StoryProgressObjective>(),
+            StoryObjectiveType.UiUsage =>CreateInstance<UiActionObjective>(),
             _ => null
         };
     }

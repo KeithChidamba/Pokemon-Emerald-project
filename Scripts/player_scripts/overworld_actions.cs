@@ -64,7 +64,7 @@ public class overworld_actions : MonoBehaviour
             Dialogue_handler.Instance.DisplayDetails("Unequipped " + item.itemName);
         Game_Load.Instance.playerData.equippedItemName = string.Empty;
     }
-    private bool ItemEquipped()
+    public bool ItemEquipped()
     {
         return equippedSpecialItem != null;
     }

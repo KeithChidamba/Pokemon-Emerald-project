@@ -58,8 +58,10 @@ public class Bag : MonoBehaviour
     private LoopingUiAnimation _downArrow;
     private LoopingUiAnimation _leftArrow;
     private int _totalSellingAmount;
-    public event Action<Item> OnItemSelected;
+    public event Action<Item> OnItemSelected;//bag managed
+    public event Action<Item> OnItemUsed;//self-managed
     public event Action OnBagOpened;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -284,6 +286,7 @@ public class Bag : MonoBehaviour
     public void UseItem()
      {
          var itemToUse = currentCategoryOfItems[topIndex + selectedItemIndex];
+         OnItemUsed?.Invoke(itemToUse);
          if (Options_manager.Instance.playerInBattle)
          {
              if (!itemToUse.canBeUsedInBattle)
@@ -381,6 +384,7 @@ public class Bag : MonoBehaviour
         InputStateHandler.Instance.ResetRelevantUi(InputStateName.ItemStorageUsage);
         OnItemSelected = null;
         OnBagOpened = null;
+        
     }
     private List<Item> GetItems(ItemType itemType)
     {
@@ -440,6 +444,7 @@ public class Bag : MonoBehaviour
         {
             InputStateHandler.Instance.PlayerBagNavigationRestrictions();
         }
+
         OnBagOpened?.Invoke();
         
         //default visuals

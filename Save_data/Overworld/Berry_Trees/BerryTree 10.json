@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Cherri berry",
     "berryItem": {
-        "instanceID": 26668
+        "instanceID": 26340
     },
     "treeIndex": 10,
     "minutesPerStage": 45,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32998
+                    "instanceID": 32770
                 },
                 {
-                    "instanceID": 32998
+                    "instanceID": 32770
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33000
+                    "instanceID": 32772
                 },
                 {
-                    "instanceID": 33002
+                    "instanceID": 32774
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33258
+                    "instanceID": 33370
                 },
                 {
-                    "instanceID": 33260
+                    "instanceID": 33372
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33262
+                    "instanceID": 33374
                 },
                 {
-                    "instanceID": 33264
+                    "instanceID": 33376
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33266
+                    "instanceID": 33378
                 },
                 {
-                    "instanceID": 33268
+                    "instanceID": 33380
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-01-02T14:10:50.4416640+02:00"
+    "lastLogin": "2026-01-04T14:07:48.1445120+02:00"
 }
