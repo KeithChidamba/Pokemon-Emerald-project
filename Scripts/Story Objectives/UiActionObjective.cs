@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 [CreateAssetMenu(fileName = "ui obj", menuName = "ui objective")]
 public class UiActionObjective : StoryObjective
 {
@@ -16,7 +17,11 @@ public class UiActionObjective : StoryObjective
            case UiObjectiveType.UseItem: SetupItemUsageObjective(); break;
        }
     }
-
+    public override void ClearObjective()
+    {
+        Dialogue_handler.Instance.RemoveObjectiveText();
+        OverworldState.Instance.ClearAndLoadNextObjective();
+    }
     private void SetupItemEquipObjective()
     {
         if (overworld_actions.Instance.ItemEquipped())
@@ -28,36 +33,26 @@ public class UiActionObjective : StoryObjective
                 return;
             }
         } 
-        Bag.Instance.OnItemUsed += CheckEquipped;
+        Bag.Instance.OnItemUsed += CheckForObjectiveClear;
     }
     private void SetupItemUsageObjective()
     {
         Item_handler.Instance.OnItemUsageSuccessful += CheckIfItemUsed;
     }
-    private void CheckEquipped(Item selectedItem)
-    {
-        if (itemForObjective.itemName == selectedItem.itemName)
-        {
-            InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
-            InputStateHandler.Instance.ResetRelevantUi(InputStateName.PlayerMenu);
-            ClearObjective();
-        }
-    }
     private void CheckIfItemUsed(bool successful)
     {
         var itemUsed = Item_handler.Instance.itemInUse;
-        if (itemForObjective.itemName == itemUsed.itemName)
+        CheckForObjectiveClear(itemUsed);
+    }
+
+    private void CheckForObjectiveClear(Item item)
+    {
+        if (itemForObjective.itemName == item.itemName)
         {
-            InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
-            InputStateHandler.Instance.ResetRelevantUi(InputStateName.PlayerMenu);
             ClearObjective();
         }
     }
-    public override void ClearObjective()
-    {
-        Dialogue_handler.Instance.RemoveObjectiveText();
-        OverworldState.Instance.ClearAndLoadNextObjective();
-    }
+
 }
 
 public enum UiObjectiveType
