@@ -15,11 +15,15 @@ public class UiActionObjective : StoryObjective
            case UiObjectiveType.EquipItem: SetupItemEquipObjective(); break;
            
            case UiObjectiveType.UseItem: SetupItemUsageObjective(); break;
+           
+           case UiObjectiveType.SellItem: SetupItemSellObjective(); break;
+           
+           case UiObjectiveType.BuyItem: SetupItemBuyObjective(); break;
+           
        }
     }
     public override void ClearObjective()
     {
-        Dialogue_handler.Instance.RemoveObjectiveText();
         OverworldState.Instance.ClearAndLoadNextObjective();
     }
     private void SetupItemEquipObjective()
@@ -53,6 +57,15 @@ public class UiActionObjective : StoryObjective
         }
     }
 
+    private void SetupItemSellObjective()
+    {
+        Bag.Instance.OnItemSold += CheckForObjectiveClear;
+    }
+
+    private void SetupItemBuyObjective()
+    {
+        Poke_Mart.Instance.OnItemBought += CheckForObjectiveClear;
+    }
 }
 
 public enum UiObjectiveType

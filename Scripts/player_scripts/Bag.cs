@@ -61,6 +61,8 @@ public class Bag : MonoBehaviour
     public event Action<Item> OnItemSelected;//bag managed
     public event Action<Item> OnItemUsed;//self-managed
     public event Action OnBagOpened;
+    
+    public event Action<Item> OnItemSold;
 
     private void Awake()
     {
@@ -108,6 +110,7 @@ public class Bag : MonoBehaviour
              "Sure, which item?", 
              new[]{ InteractionOptions.SellItem
                  ,InteractionOptions.LeaveStore }, new[]{"Yes", "No"});
+        OnItemSold?.Invoke(itemToSell);
         InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
     }
     public void CheckItemQuantity(Item item)

@@ -190,6 +190,7 @@ public class Save_manager : MonoBehaviour
             if (objectiveData is StoryProgressObjective storyData)
             {
                 OverworldState.Instance.storyProgressObjective = storyData;
+                OverworldState.Instance.storyProgressObjective.FindMainAsset();
             }
             else
             {
@@ -360,6 +361,7 @@ public class Save_manager : MonoBehaviour
         ClearDirectory(_saveDataPath+"/Items");
         ClearDirectory(_saveDataPath+"/Player");
         ClearDirectory(_saveDataPath+"/Party_Ids");
+        ClearDirectory(_saveDataPath + "/Overworld/Story_Objectives");
     }
     private void EraseTemporarySaveData()
     {
@@ -367,6 +369,7 @@ public class Save_manager : MonoBehaviour
         ClearDirectory(_tempSaveDataPath+"/Items");
         ClearDirectory(_tempSaveDataPath+"/Player");
         ClearDirectory(_tempSaveDataPath+"/Party_Ids");
+        ClearDirectory(_saveDataPath + "/Overworld/Story_Objectives");
     }
     void SaveAllPokemonData(Pokemon pokemon)
     {

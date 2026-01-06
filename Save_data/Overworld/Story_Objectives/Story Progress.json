@@ -1,9 +1,9 @@
 {
     "mainAssetName": "Story Progress",
-    "objectiveHeading": "Story Progress",
+    "objectiveHeading": "",
     "objectiveDescription": "",
     "objectiveProgress": "",
     "objectiveType": 4,
-    "totalObjectiveAmount": 2,
-    "numCompleted": 0
+    "totalObjectiveAmount": 6,
+    "numCompleted": 1
 }

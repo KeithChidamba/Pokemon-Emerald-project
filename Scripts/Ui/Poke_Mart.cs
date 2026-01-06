@@ -28,6 +28,7 @@ public class Poke_Mart : MonoBehaviour
     public GameObject quantitySelector;
     public Text itemDescription;
     public static Poke_Mart Instance;
+    public event Action<Item> OnItemBought;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -115,6 +116,7 @@ public class Poke_Mart : MonoBehaviour
             Game_Load.Instance.playerData.playerMoney -= selectedItemQuantity * item.price;
             Dialogue_handler.Instance.DisplayDetails("You bought "+ item.quantity+ " "+item.itemName+"'s");
             selectedItemQuantity = 1;
+            OnItemBought?.Invoke(item);
         }
         else
             Dialogue_handler.Instance.DisplayDetails("You dont have enough money for that!");

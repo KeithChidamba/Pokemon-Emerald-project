@@ -11,6 +11,11 @@ public abstract class StoryObjective : ScriptableObject
     public void FindMainAsset()
     {
         var mainAsset = Resources.Load<StoryObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+mainAssetName);
+        if (mainAsset == null)
+        {
+            Debug.LogWarning("Story objective Asset: "+mainAssetName+" not found");
+            return;
+        }
         mainAsset.LoadSaveData(this);
         mainAsset.LoadObjective();
     }
@@ -27,6 +32,7 @@ public abstract class StoryObjective : ScriptableObject
             StoryObjectiveType.Destination => CreateInstance<DestinationObjective>(),
             StoryObjectiveType.StoryProgress => CreateInstance<StoryProgressObjective>(),
             StoryObjectiveType.UiUsage => CreateInstance<UiActionObjective>(),
+            StoryObjectiveType.Interaction => CreateInstance<InteractionObjective>(),
             _ => null
         };
     }

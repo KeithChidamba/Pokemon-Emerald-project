@@ -15,6 +15,5 @@ public class DestinationObjective : StoryObjective
     public override void ClearObjective()
     {
         OverworldState.Instance.ClearAndLoadNextObjective();
-        Dialogue_handler.Instance.RemoveObjectiveText();
     }
 }

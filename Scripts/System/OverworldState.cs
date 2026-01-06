@@ -47,8 +47,11 @@ public class OverworldState : MonoBehaviour
         
         if (storyProgressObjective == null)
         {
+            currentStoryObjectives.AddRange(allStoryObjectives); 
+            currentStoryObjectives.ForEach(o=>o.mainAssetName=o.name);
+            
             storyProgressObjective = Resources.Load<StoryProgressObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
-            currentStoryObjectives.AddRange(allStoryObjectives);
+            storyProgressObjective.mainAssetName = storyProgressObjective.name;
             storyProgressObjective.totalObjectiveAmount = allStoryObjectives.Count;
             storyProgressObjective.numCompleted = 0;
         }
@@ -65,6 +68,10 @@ public class OverworldState : MonoBehaviour
         if (currentStoryObjectives.Count > 0)
         {
             currentStoryObjectives[0].FindMainAsset();
+        }
+        else
+        {
+            Dialogue_handler.Instance.RemoveObjectiveText();
         }
     }
     public int GetTreeIndex(BerryTree tree)

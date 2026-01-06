@@ -15347,6 +15347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usingItem: 0
+  itemInUse: {fileID: 0}
 --- !u!1 &505212004
 GameObject:
   m_ObjectHideFlags: 0
@@ -23489,7 +23490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: a94a485dbbee55446b72284e516a203e, type: 2}
   location: 0
-  interactionType: 0
+  interactionType: 5
   area: {fileID: 0}
 --- !u!61 &728870498
 BoxCollider2D:
@@ -36412,7 +36413,12 @@ MonoBehaviour:
   overworldBerryTrees: []
   treeDataQueue: []
   allStoryObjectives:
+  - {fileID: 11400000, guid: b50c2d7a9c2e9a06bb16a5007d8826a1, type: 2}
   - {fileID: 11400000, guid: 0eb906317603235d799635703f836df2, type: 2}
+  - {fileID: 11400000, guid: 43cfb6a78638b208b841329011398f0f, type: 2}
+  - {fileID: 11400000, guid: 2d7753e9efc706007a3370714ccdef96, type: 2}
+  - {fileID: 11400000, guid: 996efb0e51a573de4b18d99aa262e881, type: 2}
+  - {fileID: 11400000, guid: 18c19b78303569b478fa7294d22539bf, type: 2}
   currentStoryObjectives: []
   storyProgressObjective: {fileID: 0}
 --- !u!4 &1163787316

@@ -1,0 +1,11 @@
+{
+    "mainAssetName": "Sell Super Potion",
+    "objectiveHeading": "Sell the super potion in your bag",
+    "objectiveDescription": "",
+    "objectiveProgress": "",
+    "objectiveType": 3,
+    "uiUsage": 2,
+    "itemForObjective": {
+        "instanceID": 25204
+    }
+}
