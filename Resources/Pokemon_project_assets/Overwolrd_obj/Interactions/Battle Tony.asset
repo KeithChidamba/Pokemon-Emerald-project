@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Battle Tony
   m_EditorClassIdentifier: 
   interactionMessage: Hey! Let's single battle
-  interactionType: 2
+  dialogueType: 2
   interactionOptions: 02000000
   resultMessage: 
   optionsUiText: []

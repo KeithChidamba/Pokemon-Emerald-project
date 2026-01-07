@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: Water Tree
   m_EditorClassIdentifier: 
   interactionMessage: Would you like to water this sapling
-  interactionType: 1
-  interactionOptions:
-  - 
-  - 
+  dialogueType: 1
+  interactionOptions: 0000000000000000
   resultMessage: 
   optionsUiText:
   - Yes

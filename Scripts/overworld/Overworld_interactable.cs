@@ -7,11 +7,11 @@ public class Overworld_interactable : MonoBehaviour
 {
     public Interaction interaction;
     public AreaName location;
-    public InteractionType interactionType;
+    public OverworldInteractionType overworldInteractionType;
     public Encounter_Area area;
 }
 
-public enum InteractionType
+public enum OverworldInteractionType
 {
-    None,Clerk,PlantBerry,PickBerry,WaterBerryTree,PokemonCenter
+    None,Clerk,PlantBerry,PickBerry,WaterBerryTree,PokemonCenter,Battle
 }

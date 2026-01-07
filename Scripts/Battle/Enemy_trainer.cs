@@ -58,9 +58,23 @@ public class Enemy_trainer : MonoBehaviour
     {
         List<Pokemon> notParticipatingList = new();
         foreach (Pokemon pokemon in trainerParty)
-            if(pokemon!=Battle_handler.Instance.battleParticipants[2].pokemon
-               && pokemon!=Battle_handler.Instance.battleParticipants[3].pokemon)//not already participating
-                notParticipatingList.Add(pokemon);
+        {
+            //not already participating
+            if (pokemon != Battle_handler.Instance.battleParticipants[2].pokemon)
+            {
+                if (Battle_handler.Instance.isDoubleBattle)
+                {
+                    if (pokemon != Battle_handler.Instance.battleParticipants[3].pokemon)
+                    {
+                        notParticipatingList.Add(pokemon);
+                    }
+                }
+                else
+                {
+                    notParticipatingList.Add(pokemon);
+                }
+            }
+        }
         notParticipatingList.RemoveAll(p => p.hp <= 0);
         return notParticipatingList;
     }
@@ -131,14 +145,17 @@ public class Enemy_trainer : MonoBehaviour
         Battle_handler.Instance.currentEnemyIndex = randomEnemy;
         _currentEnemy = Battle_handler.Instance.battleParticipants[randomEnemy];
         
-       if(trainerData.trainerAiFlags.Contains(AiFlags.CheckSwitching))
-       {
-           AiCheckSwitching();
-       }
-       else
-       {
-           UseSelectedMove();
-       }
+        var participatingIndex = Battle_handler.Instance.isDoubleBattle? 2:1;
+        if (GetLivingPokemon().Count > participatingIndex)
+        {
+            if(trainerData.trainerAiFlags.Contains(AiFlags.CheckSwitching))
+            {
+                AiCheckSwitching();
+            }
+            else UseSelectedMove();
+        }
+        else UseSelectedMove();
+
     }
     void UseSelectedMove()
     {
@@ -151,15 +168,22 @@ public class Enemy_trainer : MonoBehaviour
     {
         if (participant.canEscape && BattleOperations.HardCountered(participant.pokemon,_currentEnemy.pokemon))
         {
-            List<int> nonCounteredPokemon = new();
+            List<int> unwantedPokemon = new(); 
             var participatingIndex = Battle_handler.Instance.isDoubleBattle? 2:1;//skip participating
             for (int i=participatingIndex; i<trainerParty.Count;i++)
             {
-                if (BattleOperations.HardCountered(trainerParty[i], _currentEnemy.pokemon))
+                if (trainerParty[i].hp<=0)                
                 {
+                    Debug.Log(trainerParty[i].pokemonName + " is dead: "+i);
                     continue;
                 }
-                nonCounteredPokemon.Add(i);
+
+                if (BattleOperations.HardCountered(trainerParty[i], _currentEnemy.pokemon))
+                {
+                    Debug.Log(trainerParty[i].pokemonName + " is countered");
+                    continue;
+                }
+                
                 float typeEffectiveness = 0;
                 foreach (var type in trainerParty[i].types)
                 {
@@ -167,29 +191,48 @@ public class Enemy_trainer : MonoBehaviour
                 }
                 if (typeEffectiveness < 2)
                 {
+                    Debug.Log("wanted switch");
                     canAttack = false;
                     SwitchPokemon(i);
                     return;
                 }
+                Debug.Log(trainerParty[i].pokemonName + " is unwanted: "+i);
+                unwantedPokemon.Add(i);
             }
-            if (nonCounteredPokemon.Count == 0)
+            if (unwantedPokemon.Count==0)
             {
+                Debug.Log("ignore switch");
                 UseSelectedMove();
                 return;
             }
             canAttack = false;
-            var randomLeftOver = Utility.RandomRange(0, nonCounteredPokemon.Count - 1);
-            SwitchPokemon(randomLeftOver);
+            for (int i = 0; i < unwantedPokemon.Count; i++)
+            {
+                Debug.Log("index: "+unwantedPokemon[i]);
+            }
+            Debug.Log("num unwaNTED: "+unwantedPokemon.Count);
+            var randomLeftOver = Utility.RandomRange(0, unwantedPokemon.Count - 1);
+            Debug.Log(unwantedPokemon[randomLeftOver] + " is index");
+            Debug.Log(trainerParty[unwantedPokemon[randomLeftOver]].pokemonName + " is chosen");
+            SwitchPokemon(unwantedPokemon[randomLeftOver]);
         }
         else
         {
+            Debug.Log("regular attack");
             UseSelectedMove();
         }
     }
 
     private void SwitchPokemon(int partyIndex)
     {
-        var switchData = new SwitchOutData(Turn_Based_Combat.Instance.currentTurnIndex
+        int partyPosition = 0;
+        
+        if (Battle_handler.Instance.isDoubleBattle)
+        {
+            partyPosition = Turn_Based_Combat.Instance.currentTurnIndex == 2 ? 0 : 1;
+        }
+       
+        var switchData = new SwitchOutData(partyPosition
             ,partyIndex,participant);
         Turn_Based_Combat.Instance.SaveSwitchTurn(switchData);
     }

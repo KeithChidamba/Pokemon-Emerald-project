@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gift_pkm 2
   m_EditorClassIdentifier: 
   interactionMessage: It's a pokeball with a pokemon inside, take it?
-  interactionType: 1
+  dialogueType: 1
   interactionOptions: 0b00000000000000
   resultMessage: Torchic
   optionsUiText:

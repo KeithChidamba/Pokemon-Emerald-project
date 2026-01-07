@@ -174,7 +174,7 @@ public class Options_manager : MonoBehaviour
         OnInteractionTriggered?.Invoke(interactable,optionIndex);
         
         if (_currentInteractable.interaction.hasSeparateLogicHandler
-            || _currentInteractable.interaction.interactionType != DialogType.Options)
+            || _currentInteractable.interaction.dialogueType != DialogType.Options)
         {
             return;
         }

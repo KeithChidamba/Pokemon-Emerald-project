@@ -13,10 +13,7 @@ MonoBehaviour:
   m_Name: Clerk
   m_EditorClassIdentifier: 
   interactionMessage: Hello, what can i help you with?
-  interactionType: 1
-  _interactionOptions:
-  - 
-  - Sell Item
+  dialogueType: 1
   interactionOptions: 0000000007000000
   resultMessage: What would you like
   optionsUiText:

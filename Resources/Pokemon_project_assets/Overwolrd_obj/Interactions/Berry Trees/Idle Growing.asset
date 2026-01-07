@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Idle Growing
   m_EditorClassIdentifier: 
   interactionMessage: Its a growing berry tree
-  interactionType: 0
-  interactionOptions: []
+  dialogueType: 0
+  interactionOptions: 
   resultMessage: 
   optionsUiText: []
   additionalInfo: []

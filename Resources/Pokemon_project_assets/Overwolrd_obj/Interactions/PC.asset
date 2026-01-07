@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PC
   m_EditorClassIdentifier: 
   interactionMessage: How would you like to use the PC?
-  interactionType: 1
+  dialogueType: 1
   interactionOptions: 090000000a00000000000000
   resultMessage: Booted up PC!
   optionsUiText:

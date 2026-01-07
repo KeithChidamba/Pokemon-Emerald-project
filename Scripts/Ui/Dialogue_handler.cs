@@ -126,7 +126,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         var newInteraction = ScriptableObject.CreateInstance<Interaction>();
         newInteraction.interactionMessage = info;
-        newInteraction.interactionType = type;
+        newInteraction.dialogueType = type;
         newInteraction.resultMessage = result;
         return newInteraction;
     }
@@ -222,7 +222,7 @@ public class Dialogue_handler : MonoBehaviour
         Interaction_handler.Instance.DisableInteraction();
         currentInteractionObject = interactable;
         currentInteraction = interactable.interaction;
-        if (currentInteraction.interactionType == DialogType.Event)
+        if (currentInteraction.dialogueType == DialogType.Event)
         {
             Options_manager.Instance.CompleteEventInteraction(currentInteraction);
             return;
@@ -302,14 +302,14 @@ public class Dialogue_handler : MonoBehaviour
 
     private void SetBattleTextBox()
     {
-        if (!Options_manager.Instance.playerInBattle || currentInteraction.interactionType != DialogType.BattleInfo)
+        if (!Options_manager.Instance.playerInBattle || currentInteraction.dialogueType != DialogType.BattleInfo)
         {
             infoDialogueBox.SetActive(true);
             dialougeText.color=Color.black;
             battleDialogueBox.SetActive(false);
         }
-        if( (currentInteraction.interactionType == DialogType.BattleInfo && Options_manager.Instance.playerInBattle)
-            || currentInteraction.interactionType == DialogType.BattleDisplayMessage)
+        if( (currentInteraction.dialogueType == DialogType.BattleInfo && Options_manager.Instance.playerInBattle)
+            || currentInteraction.dialogueType == DialogType.BattleDisplayMessage)
         {
             battleDialogueBox.SetActive(true);
             dialougeText.color=Color.white;
@@ -319,7 +319,7 @@ public class Dialogue_handler : MonoBehaviour
     private void CompleteDialogueInteraction()
     {
         dialogueFinished = true;
-        if (currentInteraction.interactionType == DialogType.Options)
+        if (currentInteraction.dialogueType == DialogType.Options)
         {
             isOverworldOptionsInteraction = currentInteractionObject != null;
             CreateDialogueOptions();

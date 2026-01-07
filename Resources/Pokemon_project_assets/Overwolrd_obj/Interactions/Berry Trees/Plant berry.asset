@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: Plant berry
   m_EditorClassIdentifier: 
   interactionMessage: It's empty soil, would you like to plant something?
-  interactionType: 1
-  interactionOptions:
-  - 
-  - 
+  dialogueType: 1
+  interactionOptions: 0000000000000000
   resultMessage: 
   optionsUiText:
   - Yes

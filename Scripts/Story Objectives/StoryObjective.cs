@@ -33,6 +33,7 @@ public abstract class StoryObjective : ScriptableObject
             StoryObjectiveType.StoryProgress => CreateInstance<StoryProgressObjective>(),
             StoryObjectiveType.UiUsage => CreateInstance<UiActionObjective>(),
             StoryObjectiveType.Interaction => CreateInstance<InteractionObjective>(),
+            StoryObjectiveType.Battle => CreateInstance<BattleObjective>(),
             _ => null
         };
     }

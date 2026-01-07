@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
+public enum BattleSource
+{
+    None,Fishing,TallGrass
+}
 public class Encounter_handler : MonoBehaviour
 {
     public Encounter_Area currentArea;
@@ -12,6 +16,8 @@ public class Encounter_handler : MonoBehaviour
     public Pokemon wildPokemon;
     public int overworldEncounterChance = 2;
     public static Encounter_handler Instance;
+    public event Action<BattleSource> OnEncounterTriggered;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -23,12 +29,17 @@ public class Encounter_handler : MonoBehaviour
     }
     public void TriggerEncounter(Encounter_Area area)
     {
+        
         currentArea = area;
         encounterTriggered = true;
         overworldEncounterChance = 2;
         for (int i = 0; i < currentArea.availableEncounters.Length; i++)
         {
-            if (EncounteredPokemon(i)) break;
+            if (EncounteredPokemon(i))
+            {
+                OnEncounterTriggered?.Invoke(BattleSource.TallGrass);
+                break;
+            }
         }
     }
     public void TriggerFishingEncounter(Encounter_Area area,Item fishingRod)
@@ -49,7 +60,11 @@ public class Encounter_handler : MonoBehaviour
         int availablePokemonForRod = area.pokemonIndexForRodType[rodTypeIndex];
         for (int i = 0; i < availablePokemonForRod+1; i++)
         {
-            if (EncounteredPokemon(i)) break;
+            if (EncounteredPokemon(i))
+            {
+                OnEncounterTriggered?.Invoke(BattleSource.Fishing);
+                break;
+            }
         }
     }
     bool EncounteredPokemon(int currentIndex)

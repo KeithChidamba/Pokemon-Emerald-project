@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: Harvest berries
   m_EditorClassIdentifier: 
   interactionMessage: It's a berry tree, do you want to pick a bery?
-  interactionType: 1
-  interactionOptions:
-  - 
-  - 
+  dialogueType: 1
+  interactionOptions: 0000000000000000
   resultMessage: 
   optionsUiText:
   - Yes

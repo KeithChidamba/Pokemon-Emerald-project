@@ -42,7 +42,7 @@ public class Battle_handler : MonoBehaviour
     public bool usedTurnForSwap;
     public static Battle_handler Instance;
     public event Action OnBattleEnd;
-    public event Action OnBattleStart;
+    public event Action<bool> OnBattleResult;
     public event Action OnSwitchIn;
     public event Action<Battle_Participant> OnSwitchOut;
     private Action _checkParticipantsEachTurn;
@@ -229,7 +229,7 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnTurnsCompleted += ResetPlayersTurnUsage;
         Turn_Based_Combat.Instance.OnNewTurn += ResetAi;
         Turn_Based_Combat.Instance.OnNewTurn += AllowPlayerInput;
-        OnBattleStart?.Invoke();
+        
     }
     private void ResetPlayersTurnUsage()
     {
@@ -680,6 +680,7 @@ public class Battle_handler : MonoBehaviour
                 battleParticipants[i].pokemon = null;
             }
         }
+        OnBattleResult?.Invoke(battleWon);
         _defaultPokemonImagePositions.Clear();
         Encounter_handler.Instance.ResetTrigger();
         overWorld.SetActive(true);
