@@ -1,0 +1,9 @@
+{
+    "mainAssetName": "Heal Pokemon",
+    "objectiveHeading": "Heal your pokemon at the centre",
+    "objectiveDescription": "",
+    "objectiveProgress": "",
+    "hasProgression": false,
+    "objectiveType": 1,
+    "overworldInteractionForObjective": 0
+}

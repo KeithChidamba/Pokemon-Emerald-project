@@ -16,7 +16,7 @@ public abstract class StoryObjective : ScriptableObject
             Debug.LogWarning("Story objective Asset: "+mainAssetName+" not found");
             return;
         }
-        mainAsset.LoadSaveData(this);
+        if(hasProgression) mainAsset.LoadSaveData(this);
         mainAsset.LoadObjective();
     }
     
@@ -24,6 +24,7 @@ public abstract class StoryObjective : ScriptableObject
     public string objectiveHeading;
     public string objectiveDescription;
     public string objectiveProgress;
+    public bool hasProgression;
     public StoryObjectiveType objectiveType;
     public static StoryObjective GetObjectiveType(StoryObjectiveType type)
     {

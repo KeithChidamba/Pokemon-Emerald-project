@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc4a3a6b6075e16a8f845e421213eaa, type: 3}
   m_Name: Story Progress
   m_EditorClassIdentifier: 
+  mainAssetName: 
   objectiveHeading: 
   objectiveDescription: 
   objectiveProgress: 
+  hasProgression: 1
   objectiveType: 4
   totalObjectiveAmount: 0
   numCompleted: 0

@@ -87,6 +87,7 @@ public class Save_manager : MonoBehaviour
         CreateFolder(_tempSaveDataPath+"/Pokemon");
         CreateFolder(_tempSaveDataPath+"/Party_Ids");
         CreateFolder(_tempSaveDataPath + "/PC_Storage");
+        CreateFolder(_tempSaveDataPath + "/Overworld/Story_Objectives");
     }
     public void CreateDefaultWebglDirectories()
     {
@@ -369,7 +370,7 @@ public class Save_manager : MonoBehaviour
         ClearDirectory(_tempSaveDataPath+"/Items");
         ClearDirectory(_tempSaveDataPath+"/Player");
         ClearDirectory(_tempSaveDataPath+"/Party_Ids");
-        ClearDirectory(_saveDataPath + "/Overworld/Story_Objectives");
+        ClearDirectory(_tempSaveDataPath + "/Overworld/Story_Objectives");
     }
     void SaveAllPokemonData(Pokemon pokemon)
     {
@@ -474,12 +475,11 @@ public class Save_manager : MonoBehaviour
         }
         else
         {
-            EraseSaveData();//empty old save data
+            //EraseSaveData();//empty old save data
             yield return new WaitForSeconds(1f);
             //copy new save data
-            yield return StartCoroutine(CopyCorrectSaveData(_tempSaveDataPath
-                            ,_saveDataPath,recursive: true));
-            EraseTemporarySaveData();
+            yield return CopyCorrectSaveData(_tempSaveDataPath,_saveDataPath,recursive: true);
+            //EraseTemporarySaveData();
             Dialogue_handler.Instance.DisplayDetails("Game saved");
             Dialogue_handler.Instance.EndDialogue(1f);
         }

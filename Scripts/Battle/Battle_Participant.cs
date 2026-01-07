@@ -253,7 +253,7 @@ public class Battle_Participant : MonoBehaviour
             pokemon.OnEvolutionSuccessful -= AddToEvolutionQueue;
             pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
         }
-        
+        pokemon.OnHealthChanged -= CheckIfFainted;
     }
     private void ResetParticipantStateAfterLevelUp(Pokemon pokemonAfterLevelUp)
     {

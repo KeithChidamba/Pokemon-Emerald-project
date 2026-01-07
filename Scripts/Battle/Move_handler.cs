@@ -64,7 +64,7 @@ public class Move_handler:MonoBehaviour
     }
     private IEnumerator MoveSequence()
     {
-        var moveEffectiveness = BattleOperations.GetTypeEffectiveness(victim, _currentTurn.move.type);
+        var moveEffectiveness = BattleOperations.CheckTypeEffectiveness(victim, _currentTurn.move.type);
         if (moveEffectiveness == 0 && !_currentTurn.move.isMultiTarget && !_currentTurn.move.hasTypelessEffect && !_currentTurn.move.isSelfTargeted)
             Dialogue_handler.Instance.DisplayBattleInfo("It doesn't affect "+victim.pokemon.pokemonName);
         else
@@ -162,7 +162,7 @@ public class Move_handler:MonoBehaviour
         float stab = BattleOperations.IsStab(attacker.pokemon, move.type) ? 1.5f : 1f;
         
         float typeEffectiveness = isTypeless? 1f 
-            :BattleOperations.GetTypeEffectiveness(currentVictim, move.type);
+            :BattleOperations.CheckTypeEffectiveness(currentVictim, move.type);
         
         float randomFactor = Utility.RandomRange(217, 256) / 255f;
 
@@ -325,7 +325,7 @@ public class Move_handler:MonoBehaviour
                 if (!_currentTurn.move.isConsecutive)
                 {
                     var typeEffectiveness = BattleOperations
-                        .GetTypeEffectiveness(data.affectedParticipant, _currentTurn.move.type);
+                        .CheckTypeEffectiveness(data.affectedParticipant, _currentTurn.move.type);
                     DisplayEffectiveness(typeEffectiveness,data.affectedParticipant);
                 }
             }

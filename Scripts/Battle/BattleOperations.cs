@@ -6,7 +6,7 @@ using System.Linq;
 
 public class BattleOperations
 {
-    private static float _effectiveness = 0;
+
     public static bool CanDisplayChange = true;
     public static event Action OnBuffApplied;
 
@@ -17,18 +17,7 @@ public class BattleOperations
                 return true;
         return false;
     } 
-    private static void IsWeakTo(Pokemon victim,Type enemyType)
-    {
-        foreach(Type t in victim.types)
-            if (PokemonOperations.ContainsType(t.weaknesses, enemyType))
-                _effectiveness *= 2f;
-    }
-    private static void IsResistantTo(Pokemon victim,Type enemyType)
-    {
-        foreach(Type t in victim.types)
-            if (PokemonOperations.ContainsType(t.resistances, enemyType))
-                _effectiveness /= 2f;
-    }
+    
     public static bool IsStab(Pokemon pokemon,Type moveType)
     {
         foreach(Type t in pokemon.types)
@@ -36,31 +25,43 @@ public class BattleOperations
                 return true;
         return false;
     }
-    public static float GetTypeEffectiveness(Battle_Participant victim,Type enemyType)
+    public static float CheckTypeEffectiveness(Battle_Participant victim,Type enemyType)
     {
+        float effectiveness = 1;
         if (victim.additionalTypeImmunity!=null)
         {
             if (victim.additionalTypeImmunity.typeName == enemyType.typeName)
-                _effectiveness = 0;
+                effectiveness = 0;
         }
         else{
             if (HasImmunity(victim.pokemon, enemyType)) 
             {
                 //if victim had their immunity altered by moves, like foresight
-                _effectiveness = victim.immunityNegations
+                effectiveness = victim.immunityNegations
                     .Any(negation => negation.ImmunityNegationTypes
                         .Any(type=>type.ToString() == enemyType.typeName)) ? 1 : 0;
             }
             else
             {
-                _effectiveness = 1;
-                IsWeakTo(victim.pokemon, enemyType);
-                IsResistantTo(victim.pokemon, enemyType);
+                effectiveness = GetTypeEffectiveness(victim.pokemon, enemyType);
             }
         }
-        return _effectiveness;
+        return effectiveness;
     }
-
+    public static float GetTypeEffectiveness(Pokemon victim,Type enemyType)
+    {
+        float effectiveness = 1;
+        //Weakness
+        foreach(Type t in victim.types)
+            if (PokemonOperations.ContainsType(t.weaknesses, enemyType))
+                effectiveness *= 2f;
+        //Resistance
+        foreach(Type t in victim.types)
+            if (PokemonOperations.ContainsType(t.resistances, enemyType))
+                effectiveness /= 2f;
+        
+        return effectiveness;
+    }
     public static bool HardCountered(Pokemon victim,Pokemon enemy)
     {
         foreach (var type in victim.types)

@@ -106,7 +106,7 @@ public class MoveLogicHandler : MonoBehaviour
         if (numHits>0 && consecutiveMoveInfo.displayHitCount && _victim.pokemon.hp > 0)
         {
             Move_handler.Instance.DisplayEffectiveness
-                (BattleOperations.GetTypeEffectiveness(_victim, _currentTurn.move.type), _victim);
+                (BattleOperations.CheckTypeEffectiveness(_victim, _currentTurn.move.type), _victim);
             Dialogue_handler.Instance.DisplayBattleInfo("It hit (x" + numHits + ") times");
         }
         yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);

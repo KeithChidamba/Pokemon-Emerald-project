@@ -1,0 +1,13 @@
+{
+    "mainAssetName": "Beat Tony",
+    "objectiveHeading": "Go and fight tony, and win",
+    "objectiveDescription": "",
+    "objectiveProgress": "",
+    "hasProgression": false,
+    "objectiveType": 2,
+    "isTrainerBattle": true,
+    "trainer": {
+        "instanceID": 25214
+    },
+    "battleSourceForObjective": 0
+}
