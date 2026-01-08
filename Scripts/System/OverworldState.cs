@@ -90,12 +90,13 @@ public class OverworldState : MonoBehaviour
             Save_manager.Instance
                 .SaveBerryTreeDataAsJson(tree.treeData,"BerryTree "+ tree.treeData.treeIndex);
         }
+        yield return new WaitForSeconds(1f);
         foreach (var objective in currentStoryObjectives)
         {
             objective.mainAssetName = objective.mainAssetName==string.Empty? objective.name:objective.mainAssetName;
             Save_manager.Instance.SaveStoryDataAsJson(objective,objective.objectiveHeading);
+            yield return new WaitForSeconds(0.025f);
         }
-        
         storyProgressObjective.mainAssetName = storyProgressObjective.mainAssetName==string.Empty? storyProgressObjective.name:storyProgressObjective.mainAssetName;
         Save_manager.Instance.SaveStoryDataAsJson(storyProgressObjective,"Story Progress");
         yield return null;

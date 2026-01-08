@@ -382,9 +382,9 @@ public class Save_manager : MonoBehaviour
 
     void HandleSaveError(string errorMessage, Exception exception)
     {
-        EraseTemporarySaveData();
         Debug.LogError(errorMessage+exception);
         Dialogue_handler.Instance.DisplayDetails("Error occured while saving please restart the game!");
+        EraseTemporarySaveData();
         Dialogue_handler.Instance.EndDialogue(2f);
     }
     public IEnumerator SaveAllData()
@@ -464,6 +464,7 @@ public class Save_manager : MonoBehaviour
         }
 
         yield return OverworldState.Instance.SaveOverworldData();
+        
         yield return pokemon_storage.Instance.SaveStorageData();
         
         if (Application.platform == RuntimePlatform.WebGLPlayer)
@@ -475,11 +476,12 @@ public class Save_manager : MonoBehaviour
         }
         else
         {
-            //EraseSaveData();//empty old save data
+            EraseSaveData();//empty old save data
             yield return new WaitForSeconds(1f);
             //copy new save data
             yield return CopyCorrectSaveData(_tempSaveDataPath,_saveDataPath,recursive: true);
-            //EraseTemporarySaveData();
+            yield return new WaitForSeconds(1f);
+            EraseTemporarySaveData();
             Dialogue_handler.Instance.DisplayDetails("Game saved");
             Dialogue_handler.Instance.EndDialogue(1f);
         }
@@ -574,7 +576,7 @@ public class Save_manager : MonoBehaviour
     }
     public void SaveStoryDataAsJson(StoryObjective objective, string fileName)
     {
-        var directory = Path.Combine(_saveDataPath+"/Overworld/Story_Objectives", fileName + ".json");
+        var directory = Path.Combine(_tempSaveDataPath+"/Overworld/Story_Objectives", fileName + ".json");
         var json = JsonUtility.ToJson(objective, true);
         File.WriteAllText(directory, json);
     }

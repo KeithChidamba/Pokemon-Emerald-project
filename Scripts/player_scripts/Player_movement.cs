@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class Player_movement : MonoBehaviour
 {
-    public float movementSpeed = 0f;
+    public float movementSpeed;
     [SerializeField] float walkSpeed = 0.8f;
     [SerializeField] float runSpeed = 1.5f;
     private const float BikeSpeed = 2f; 
     public bool runningInput;
-    public bool usingBike = false;
+    public bool usingBike;
     public bool canUseBike = true;
     private bool _canSwitchMovement; 
     [SerializeField] private int xAxisInput;
     [SerializeField] private int yAxisInput;
     public Rigidbody2D rb;
     [SerializeField] private Vector2 movement;
-    private float _currentDirection = 0;
+    private float _currentDirection;
     [SerializeField]private Animation_manager _animationManager;
     [SerializeField]private bool canMove = true;
     [SerializeField] Transform interactionPoint;
@@ -50,6 +50,7 @@ public class Player_movement : MonoBehaviour
     public void AllowPlayerMovement()
     {
         if (delayingMovement) return;
+        if(!usingBike)ForceWalkMovement();
         canMove = true;
         SetCurrentAnimation();
     }
@@ -58,11 +59,12 @@ public class Player_movement : MonoBehaviour
         delayingMovement = true;
         yield return new WaitForSeconds(delay);
         delayingMovement = false;
-        canMove = true;
+        AllowPlayerMovement();
     }
     public void RestrictPlayerMovement()
     {
         canMove = false;
+        DisablePlayerMovement();
     }
     private void Update()
     {
@@ -75,8 +77,6 @@ public class Player_movement : MonoBehaviour
             HandleRunInputs();
             HandlePlayerPhysicsMovement();
         }
-        else
-            DisablePlayerMovement();
     }
 
     private void SetCurrentAnimation()

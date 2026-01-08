@@ -134,7 +134,7 @@ public static class Obj_Instance
     {
         var trainerCopy = ScriptableObject.CreateInstance<TrainerData>();
         trainerCopy.TrainerName = data.TrainerName;
-        trainerCopy.TrainerType = data.TrainerType;        
+        trainerCopy.trainerType = data.trainerType;        
         trainerCopy.BaseMoneyPayout = data.BaseMoneyPayout;
         trainerCopy.TrainerLocation = data.TrainerLocation;
         trainerCopy.battleIntroSprite = data.battleIntroSprite;

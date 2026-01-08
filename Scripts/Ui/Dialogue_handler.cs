@@ -224,7 +224,7 @@ public class Dialogue_handler : MonoBehaviour
         currentInteraction = interactable.interaction;
         if (currentInteraction.dialogueType == DialogType.Event)
         {
-            Options_manager.Instance.CompleteEventInteraction(currentInteraction);
+            Options_manager.Instance.CompleteEventInteraction(currentInteractionObject);
             return;
         }
         HandleInteraction();

@@ -11,7 +11,6 @@ public class BattleObjective : StoryObjective
         Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
         if (isTrainerBattle)
         {
-            Debug.Log("started interaction check");
             Options_manager.Instance.OnInteractionTriggered += CheckBattleInteraction;
         }
         else
@@ -29,12 +28,10 @@ public class BattleObjective : StoryObjective
     }
     private void CheckBattleInteraction(Overworld_interactable interactable, int optionChosen)
     {
-        Debug.Log("checked interaction");
         if (interactable.overworldInteractionType == OverworldInteractionType.Battle)
         {
             if (trainer.TrainerName == interactable.interaction.additionalInfo[0])
             {
-                Debug.Log("checked trainer name");
                 Battle_handler.Instance.OnBattleResult += CheckIfWin;
             }
         }
@@ -42,7 +39,6 @@ public class BattleObjective : StoryObjective
 
     private void CheckIfWin(bool hasWon)
     {
-        Debug.Log("checked win");
         if (!hasWon) return;
         if (isTrainerBattle)
         {

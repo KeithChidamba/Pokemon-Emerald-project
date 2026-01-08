@@ -146,10 +146,11 @@ public class Options_manager : MonoBehaviour
     {
         Dialogue_handler.Instance.DisplayDetails("Have a great day!");
     }
-    public void CompleteEventInteraction(Interaction interaction)
+    public void CompleteEventInteraction(Overworld_interactable interactable)
     {
-        var interactionOption = interaction.interactionOptions[0];
-        _currentInteraction = interaction;
+        var interactionOption = interactable.interaction.interactionOptions[0];
+        _currentInteraction = interactable.interaction;
+        OnInteractionTriggered?.Invoke(interactable,0);
         if (_interactionMethods.TryGetValue(interactionOption,out var method)) method();
     }
     public void CompleteInteraction(Interaction interaction,int optionIndex)
@@ -172,7 +173,6 @@ public class Options_manager : MonoBehaviour
     {
         _currentInteractable = interactable;
         OnInteractionTriggered?.Invoke(interactable,optionIndex);
-        
         if (_currentInteractable.interaction.hasSeparateLogicHandler
             || _currentInteractable.interaction.dialogueType != DialogType.Options)
         {

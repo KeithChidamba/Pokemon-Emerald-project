@@ -34,7 +34,7 @@
     "defenseEv": 0.0,
     "specialAttackEv": 0.0,
     "specialDefenseEv": 0.0,
-    "speedEv": 3.0,
+    "speedEv": 7.0,
     "effortValues": [
         {
             "stat": 1,
@@ -46,7 +46,7 @@
     "critChance": 6.25,
     "catchRate": 45.0,
     "currentLevel": 26,
-    "currentExpAmount": 11826,
+    "currentExpAmount": 11932,
     "currentLevelExpAmount": 0,
     "nextLevelExpAmount": 13411,
     "expGroup": 3,
@@ -157,16 +157,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -23258
+            "instanceID": -12924
         },
         {
-            "instanceID": -23260
+            "instanceID": -12926
         },
         {
-            "instanceID": -23262
+            "instanceID": -12928
         },
         {
-            "instanceID": -23264
+            "instanceID": -12930
         }
     ],
     "ability": {
@@ -224,7 +224,7 @@
         },
         {
             "moveName": "surf",
-            "powerPoints": 25,
+            "powerPoints": 23,
             "maxPowerpoints": 25
         },
         {

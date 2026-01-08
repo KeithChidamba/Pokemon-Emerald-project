@@ -6,7 +6,7 @@ using UnityEngine;
 public class TrainerData : ScriptableObject
 {
     public string TrainerName;
-    public string TrainerType ;
+    public TrainerType trainerType;
     public int BaseMoneyPayout;
     public Encounter_Area TrainerLocation;
     public List<TrainerPokemonData> PokemonParty = new();
@@ -17,6 +17,17 @@ public class TrainerData : ScriptableObject
     public string battleIntroMessage;
 }
 
-public enum BattleType{Single,SingleDouble,Double}
+public enum BattleType
+{
+    Single,SingleDouble,Double
+}
 
-public enum AiFlags{CheckBadMove,CheckViability,CheckStatus,CheckSetup,CheckSwitching,CheckPriority}
+public enum AiFlags
+{
+    CheckBadMove,CheckViability,CheckStatus,CheckSetup,CheckSwitching,CheckPriority
+}
+
+public enum TrainerType
+{
+    MagmaGrunt
+}
