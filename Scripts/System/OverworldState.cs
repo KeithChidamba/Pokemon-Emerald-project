@@ -55,6 +55,13 @@ public class OverworldState : MonoBehaviour
             storyProgressObjective.totalObjectiveAmount = allStoryObjectives.Count;
             storyProgressObjective.numCompleted = 0;
         }
+        else
+        {
+            var orderList = currentStoryObjectives.OrderBy(obj => obj.indexInList).ToList();
+            currentStoryObjectives.Clear();
+            currentStoryObjectives.AddRange(orderList);
+        }
+        
         if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
         {
             Game_Load.Instance.OnGameStarted += ()=>currentStoryObjectives[0].FindMainAsset();
@@ -91,9 +98,12 @@ public class OverworldState : MonoBehaviour
                 .SaveBerryTreeDataAsJson(tree.treeData,"BerryTree "+ tree.treeData.treeIndex);
         }
         yield return new WaitForSeconds(1f);
+        int objectiveIndex=0;
         foreach (var objective in currentStoryObjectives)
         {
             objective.mainAssetName = objective.mainAssetName==string.Empty? objective.name:objective.mainAssetName;
+            objective.indexInList = objectiveIndex;
+            objectiveIndex++;
             Save_manager.Instance.SaveStoryDataAsJson(objective,objective.objectiveHeading);
             yield return new WaitForSeconds(0.025f);
         }

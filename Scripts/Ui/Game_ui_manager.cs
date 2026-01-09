@@ -193,7 +193,7 @@ public class Game_ui_manager : MonoBehaviour
         profile.LoadProfile(Game_Load.Instance.playerData);
         InputStateHandler.Instance.ChangeInputState(new (InputStateName.PlayerProfile
             ,new[] { InputStateGroup.None},isParent:true
-            ,profile.gameObject,onClose:CloseProfile,onExit:CloseProfile));
+            ,profile.gameObject,onExit:CloseProfile,onClose:CloseProfile));
     }
 
     public void ViewPokemonParty()

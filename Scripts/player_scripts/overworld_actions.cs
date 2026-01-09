@@ -102,7 +102,7 @@ public class overworld_actions : MonoBehaviour
         if (random < 5)
         {
             pokemonBitingPole = true;
-            Dialogue_handler.Instance.DisplayDetails("Oh!, a Bite!, Press F");
+            Dialogue_handler.Instance.DisplayDetails("Oh!, a Bite!, Press Z");
             yield return new WaitForSeconds( (2 * (random/10f) ) + 1f);
             if (pokemonBitingPole)
             {

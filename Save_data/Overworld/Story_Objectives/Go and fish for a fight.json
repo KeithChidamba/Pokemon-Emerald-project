@@ -1,0 +1,14 @@
+{
+    "mainAssetName": "Beat Water pokemon",
+    "objectiveHeading": "Go and fish for a fight",
+    "objectiveDescription": "",
+    "objectiveProgress": "",
+    "hasProgression": false,
+    "indexInList": 0,
+    "objectiveType": 2,
+    "isTrainerBattle": false,
+    "trainer": {
+        "instanceID": 0
+    },
+    "battleSourceForObjective": 1
+}

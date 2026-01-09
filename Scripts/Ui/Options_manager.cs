@@ -87,7 +87,6 @@ public class Options_manager : MonoBehaviour
         HealPartyPokemon();
         overworld_actions.Instance.doingAction = false;
         Dialogue_handler.Instance.DisplayDetails("Your pokemon have been healed, you're welcome!");
-        Dialogue_handler.Instance.canExitDialogue = true;
     }
     public void HealPartyPokemon()
     {
@@ -163,6 +162,8 @@ public class Options_manager : MonoBehaviour
         }
         
         Dialogue_handler.Instance.DeletePreviousOptions();
+        Dialogue_handler.Instance.canExitDialogue = true;
+        
         _currentInteraction = interaction;
         if (_interactionMethods.TryGetValue(interactionOption,out var method))
             method();

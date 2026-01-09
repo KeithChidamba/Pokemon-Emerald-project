@@ -101,16 +101,16 @@ public class Bag : MonoBehaviour
             Dialogue_handler.Instance.DisplayDetails("You cant sell that!");
             return;
         }
-        
+        OnItemSold?.Invoke(itemToSell);
         Game_Load.Instance.playerData.playerMoney += _totalSellingAmount;
         itemToSell.quantity -= sellQuantity;
-        if (itemToSell.quantity == 0)
-            RemoveItem(itemToSell);
+        if (itemToSell.quantity == 0) RemoveItem(itemToSell);
+        
         Dialogue_handler.Instance.DisplayList("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
              "Sure, which item?", 
              new[]{ InteractionOptions.SellItem
                  ,InteractionOptions.LeaveStore }, new[]{"Yes", "No"});
-        OnItemSold?.Invoke(itemToSell);
+        
         InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
     }
     public void CheckItemQuantity(Item item)

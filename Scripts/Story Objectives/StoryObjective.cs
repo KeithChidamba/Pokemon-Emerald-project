@@ -25,6 +25,7 @@ public abstract class StoryObjective : ScriptableObject
     public string objectiveDescription;
     public string objectiveProgress;
     public bool hasProgression;
+    public int indexInList;
     public StoryObjectiveType objectiveType;
     public static StoryObjective GetObjectiveType(StoryObjectiveType type)
     {

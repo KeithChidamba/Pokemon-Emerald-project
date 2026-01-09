@@ -53,9 +53,6 @@ public class Dialogue_handler : MonoBehaviour
 
     void Update()
     {
-        if (overworld_actions.Instance != null)
-            if (overworld_actions.Instance.doingAction)
-                canExitDialogue = false;
         if (displaying && Input.GetKeyDown(KeyCode.X) && canExitDialogue)
         {
             StartCoroutine(Player_movement.Instance.AllowPlayerMovement(0.25f));
@@ -91,7 +88,6 @@ public class Dialogue_handler : MonoBehaviour
     private IEnumerator SetupDialogueOptionsNavigation()
     {
         _dialogueOptionsManager.LoadUiSize();
-        canExitDialogue = false;
         ActivateOptions(true);
         var optionSelectables = new List<SelectableUI>();
         
@@ -287,8 +283,13 @@ public class Dialogue_handler : MonoBehaviour
 
     private void HandleInteraction(bool typeOut=true)
     {
+        if (currentInteraction.dialogueType == DialogType.Options)
+        {
+            canExitDialogue = false;
+        }
         Player_movement.Instance.RestrictPlayerMovement();
         SetBattleTextBox();
+        
         if(typeOut)
         {
             StartCoroutine(TypeText(currentInteraction.interactionMessage));
@@ -319,6 +320,7 @@ public class Dialogue_handler : MonoBehaviour
     private void CompleteDialogueInteraction()
     {
         dialogueFinished = true;
+        if (currentInteraction == null) return;
         if (currentInteraction.dialogueType == DialogType.Options)
         {
             isOverworldOptionsInteraction = currentInteractionObject != null;

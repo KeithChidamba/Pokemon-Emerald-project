@@ -320,7 +320,7 @@ public class InputStateHandler : MonoBehaviour
         var itemSellSelectables = new List<SelectableUI>{new(Bag.Instance.sellingItemUI,Bag.Instance.SellToMarket,true)};
         ChangeInputState(new (InputStateName.PlayerBagItemSell,
             new[]{InputStateGroup.Bag}, stateDirection:InputDirection.Vertical, selectableUis:itemSellSelectables
-            ,selecting:false,onExit:Bag.Instance.ResetItemSellingUi));
+            ,selecting:false,onExit:Bag.Instance.ResetItemSellingUi,onClose:Bag.Instance.ResetItemSellingUi));
         Bag.Instance.ChangeQuantity(0);//initial set for visuals
     }
 
