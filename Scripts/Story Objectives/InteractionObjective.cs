@@ -4,6 +4,8 @@ using UnityEngine;
 public class InteractionObjective : StoryObjective
 {
    public OverworldInteractionType overworldInteractionForObjective;
+   public bool requiresSuccess;
+   
    public override void LoadObjective()
    {
       Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
@@ -18,11 +20,30 @@ public class InteractionObjective : StoryObjective
          return;
       }
 
-      if (overworldInteractionForObjective == interactable.overworldInteractionType)
+      if (requiresSuccess)
       {
-         ClearObjective();
+         switch(overworldInteractionForObjective)
+         {
+            case OverworldInteractionType.PickBerry:
+            case OverworldInteractionType.PlantBerry:
+            case OverworldInteractionType.WaterBerryTree:
+            {
+               var berryTree = interactable.GetComponent<BerryTree>();
+               berryTree.OnInteractionSuccessful += CheckRequirement;
+               break;
+            }
+         }
       }
-      
+      else
+      {
+         CheckRequirement(interactable.overworldInteractionType);
+      }
+   }
+   
+   private void CheckRequirement(OverworldInteractionType interactionType)
+   {
+      if (overworldInteractionForObjective != interactionType) return;
+      ClearObjective();
    }
    public override void ClearObjective()
    {

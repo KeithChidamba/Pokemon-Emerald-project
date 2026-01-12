@@ -543,6 +543,19 @@ public class Battle_handler : MonoBehaviour
             yield return null;
         }
     }
+    public void StartExpEvent(Pokemon pokemon)
+    {
+        StartCoroutine(ExpGainSequence(pokemon));
+    } 
+    private IEnumerator ExpGainSequence(Pokemon pokemonGainExp)
+    {
+        bool awaitingEventCompletion = true; 
+        Action<Pokemon> awaitEvent = (pokemon)=> awaitingEventCompletion = false;
+        pokemonGainExp.OnExpGainComplete += awaitEvent;
+        yield return new WaitUntil(() => !awaitingEventCompletion);
+        pokemonGainExp.OnExpGainComplete -= awaitEvent;
+        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+    }
     private IEnumerator ProcessBattleEnd()
     {
         var playerWhiteOut = false;
@@ -594,10 +607,6 @@ public class Battle_handler : MonoBehaviour
                     Game_Load.Instance.playerData.playerMoney += moneyGained;
                     Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName + " recieved P" + moneyGained);
                 }
-                else if(Wild_pkm.Instance.participant.pokemon.hp<=0)
-                {
-                    Dialogue_handler.Instance.DisplayBattleInfo($"Wild {Wild_pkm.Instance.participant.rawName} fainted!");
-                }
             }
             else
             {
@@ -630,19 +639,7 @@ public class Battle_handler : MonoBehaviour
         //battle triggered from fishing
         if(overworld_actions.Instance.fishing) overworld_actions.Instance.ResetFishingAction();
     }
-    public void StartExpEvent(Pokemon pokemon)
-    {
-        StartCoroutine(ExpGainSequence(pokemon));
-    } 
-    private IEnumerator ExpGainSequence(Pokemon pokemonGainExp)
-    {
-        bool awaitingEventCompletion = true; 
-        Action<Pokemon> awaitEvent = (pokemon)=> awaitingEventCompletion = false;
-        pokemonGainExp.OnExpGainComplete += awaitEvent;
-        yield return new WaitUntil(() => !awaitingEventCompletion);
-        pokemonGainExp.OnExpGainComplete -= awaitEvent;
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-    }
+
     public void EndBattle(bool hasWon,bool battleCancelled=false)
     {
         if (battleOver) return;

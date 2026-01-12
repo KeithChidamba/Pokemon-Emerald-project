@@ -420,6 +420,7 @@ public class BattleIntro : MonoBehaviour
     public IEnumerator BlackFade()
     {
         Dialogue_handler.Instance.DisplayBattleInfo("");
+        yield return new WaitForSeconds(0.5f);
         bottomBlackPanel.gameObject.SetActive(true);
         topBlackPanel.gameObject.SetActive(true);
         dialogueBox.gameObject.SetActive(true);

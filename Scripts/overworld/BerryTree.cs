@@ -21,6 +21,7 @@ public class BerryTree : MonoBehaviour
     public int treeIndex;
     [SerializeField] float secondsCounter;
 
+    public Action<OverworldInteractionType> OnInteractionSuccessful;
     private void Awake()
     {
         primaryInteractable = GetComponent<Overworld_interactable>();
@@ -36,6 +37,7 @@ public class BerryTree : MonoBehaviour
 
     private void SetInteraction(OverworldInteractionType type)
     {
+        OnInteractionSuccessful = null;
         primaryInteractable.interaction = type switch
         {
             OverworldInteractionType.PlantBerry => plantInteraction,
@@ -164,6 +166,7 @@ public class BerryTree : MonoBehaviour
         StartCoroutine(overworld_actions.Instance.WaterTrees());
         treeData.numStagesWatered++;
         treeData.currentStageNeedsWater = false;
+        OnInteractionSuccessful?.Invoke(OverworldInteractionType.PickBerry);
         SetInteraction(OverworldInteractionType.None);
     }
 
@@ -193,6 +196,8 @@ public class BerryTree : MonoBehaviour
         Bag.Instance.OnItemSelected -= PlantBerry;
         
         treeData.numStagesWatered = 0;
+        OnInteractionSuccessful?.Invoke(OverworldInteractionType.PickBerry);
+        
         SetInteraction(OverworldInteractionType.WaterBerryTree);
         var treeDataAsset = Resources.Load<BerryTreeData>(
             Save_manager.GetDirectory(AssetDirectory.BerryTreeData)
@@ -231,6 +236,7 @@ public class BerryTree : MonoBehaviour
         treeSpriteRenderer.sprite = null;
         treeData.isPlanted = false;
         treeData.currentStageProgress = 0;
+        OnInteractionSuccessful?.Invoke(OverworldInteractionType.PickBerry);
         SetInteraction(OverworldInteractionType.PlantBerry);
     }
     public void ChangeSprite()//animation Event

@@ -51,7 +51,7 @@ public class Wild_pkm : MonoBehaviour
             != participant.pokemon || _usedMove || !canAttack)
             return;
         Battle_handler.Instance.currentEnemyIndex = 0;//attack player, since its single battle
-        if (Utility.RandomRange(1, 11) > 3) //70% chance
+        if (Utility.RandomRange(1, 11) > 3)
         {
             var randMove = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
             Battle_handler.Instance.UseMove(participant.pokemon.moveSet[randMove],participant);
