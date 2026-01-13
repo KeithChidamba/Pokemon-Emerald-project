@@ -1,0 +1,14 @@
+{
+    "mainAssetName": "Pick pecha berry",
+    "objectiveHeading": "Go pick a pecha berry",
+    "objectiveDescription": "",
+    "objectiveProgress": "",
+    "hasProgression": false,
+    "indexInList": 0,
+    "objectiveType": 1,
+    "overworldInteractionForObjective": 3,
+    "requiresSuccess": true,
+    "itemForObjective": {
+        "instanceID": 25374
+    }
+}

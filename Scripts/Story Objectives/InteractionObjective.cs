@@ -1,11 +1,15 @@
-
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
+using System;
+
 [CreateAssetMenu(fileName = "interaction obj", menuName = "interaction objective")]
 public class InteractionObjective : StoryObjective
 {
    public OverworldInteractionType overworldInteractionForObjective;
    public bool requiresSuccess;
-   
+   public Item itemForObjective;
    public override void LoadObjective()
    {
       Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
@@ -20,7 +24,7 @@ public class InteractionObjective : StoryObjective
          return;
       }
 
-      if (requiresSuccess)
+      if (requiresSuccess )
       {
          switch(overworldInteractionForObjective)
          {
@@ -29,18 +33,25 @@ public class InteractionObjective : StoryObjective
             case OverworldInteractionType.WaterBerryTree:
             {
                var berryTree = interactable.GetComponent<BerryTree>();
-               berryTree.OnInteractionSuccessful += CheckRequirement;
+               berryTree.OnInteractionComplete += (type,success)=> CheckEventMatch(type,success,berryTree.treeData.berryItem.itemName);
                break;
             }
          }
       }
       else
       {
-         CheckRequirement(interactable.overworldInteractionType);
+         CheckEventMatch(interactable.overworldInteractionType);
       }
    }
    
-   private void CheckRequirement(OverworldInteractionType interactionType)
+   private void CheckEventMatch(OverworldInteractionType interactionType,bool successfull,string nameCheck)
+   {
+      if (overworldInteractionForObjective != interactionType) return;
+      if (!successfull) return;
+      if(itemForObjective.itemName!=nameCheck) return;
+      ClearObjective();
+   }
+   private void CheckEventMatch(OverworldInteractionType interactionType)
    {
       if (overworldInteractionForObjective != interactionType) return;
       ClearObjective();

@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-[System.Serializable]
+[Serializable]
 public abstract class StoryObjective : ScriptableObject
 {
     public virtual void LoadObjective() { }
@@ -27,6 +27,7 @@ public abstract class StoryObjective : ScriptableObject
     public bool hasProgression;
     public int indexInList;
     public StoryObjectiveType objectiveType;
+
     public static StoryObjective GetObjectiveType(StoryObjectiveType type)
     {
         return type switch

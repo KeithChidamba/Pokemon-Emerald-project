@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Persim berry",
     "berryItem": {
-        "instanceID": 27242
+        "instanceID": 27246
     },
     "treeIndex": 29,
     "minutesPerStage": 60,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32930
+                    "instanceID": 32824
                 },
                 {
-                    "instanceID": 32930
+                    "instanceID": 32824
                 }
             ],
             "growthStageNumber": 0
@@ -27,24 +27,13 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32932
+                    "instanceID": 32826
                 },
                 {
-                    "instanceID": 32934
+                    "instanceID": 32828
                 }
             ],
             "growthStageNumber": 1
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 33394
-                },
-                {
-                    "instanceID": 33396
-                }
-            ],
-            "growthStageNumber": 2
         },
         {
             "growthStageSprites": [
@@ -55,7 +44,7 @@
                     "instanceID": 33400
                 }
             ],
-            "growthStageNumber": 3
+            "growthStageNumber": 2
         },
         {
             "growthStageSprites": [
@@ -66,8 +55,19 @@
                     "instanceID": 33404
                 }
             ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33406
+                },
+                {
+                    "instanceID": 33408
+                }
+            ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-01-09T12:44:33.6282870+02:00"
+    "lastLogin": "2026-01-13T11:58:18.8755790+02:00"
 }

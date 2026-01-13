@@ -4,7 +4,11 @@
     "objectiveDescription": "",
     "objectiveProgress": "",
     "hasProgression": false,
-    "indexInList": 5,
+    "indexInList": 6,
     "objectiveType": 1,
-    "overworldInteractionForObjective": 0
+    "overworldInteractionForObjective": 0,
+    "requiresSuccess": false,
+    "itemForObjective": {
+        "instanceID": 0
+    }
 }

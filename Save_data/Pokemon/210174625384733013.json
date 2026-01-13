@@ -57,7 +57,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26476
+            "instanceID": 26478
         },
         {
             "instanceID": 25366
@@ -157,16 +157,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -23696
+            "instanceID": -5558
         },
         {
-            "instanceID": -23698
+            "instanceID": -5560
         },
         {
-            "instanceID": -23700
+            "instanceID": -5562
         },
         {
-            "instanceID": -23702
+            "instanceID": -5564
         }
     ],
     "ability": {
@@ -194,7 +194,7 @@
         "instanceID": 26312
     },
     "partyFrame2": {
-        "instanceID": 26650
+        "instanceID": 26652
     },
     "battleIntroFrame": {
         "instanceID": 26242

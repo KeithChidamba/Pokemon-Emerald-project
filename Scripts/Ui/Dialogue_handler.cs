@@ -147,6 +147,7 @@ public class Dialogue_handler : MonoBehaviour
     }    
     public void DisplayDetails(string info)
     {
+        canExitDialogue = true;
         messagesLoading = false;
         var newInteraction = NewInteraction(info,DialogType.Details,"");
         currentInteraction = newInteraction;
@@ -166,7 +167,6 @@ public class Dialogue_handler : MonoBehaviour
         if (!Options_manager.Instance.playerInBattle)
         {//fail-safe
             DisplayDetails(info);
-            canExitDialogue = true;
             return;
         }
         canExitDialogue = false;

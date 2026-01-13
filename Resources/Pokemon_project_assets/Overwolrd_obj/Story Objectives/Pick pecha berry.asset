@@ -21,3 +21,4 @@ MonoBehaviour:
   objectiveType: 1
   overworldInteractionForObjective: 3
   requiresSuccess: 1
+  itemForObjective: {fileID: 11400000, guid: 81f7337dab7f44d7da958c56b94ff8cb, type: 2}

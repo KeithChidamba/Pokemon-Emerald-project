@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Pomeg berry",
     "berryItem": {
-        "instanceID": 26924
+        "instanceID": 26926
     },
     "treeIndex": 27,
     "minutesPerStage": 180,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32930
+                    "instanceID": 32824
                 },
                 {
-                    "instanceID": 32930
+                    "instanceID": 32824
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32932
+                    "instanceID": 32826
                 },
                 {
-                    "instanceID": 32934
+                    "instanceID": 32828
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33258
+                    "instanceID": 33012
                 },
                 {
-                    "instanceID": 33260
+                    "instanceID": 33014
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33262
+                    "instanceID": 33016
                 },
                 {
-                    "instanceID": 33264
+                    "instanceID": 33018
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33266
+                    "instanceID": 33020
                 },
                 {
-                    "instanceID": 33268
+                    "instanceID": 33022
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-01-09T12:44:33.6267400+02:00"
+    "lastLogin": "2026-01-13T11:58:18.8698520+02:00"
 }

@@ -16,5 +16,9 @@ MonoBehaviour:
   objectiveHeading: Heal your pokemon at the centre
   objectiveDescription: 
   objectiveProgress: 
+  hasProgression: 0
+  indexInList: 0
   objectiveType: 1
-  interactionForObjective: 5
+  overworldInteractionForObjective: 5
+  requiresSuccess: 0
+  itemForObjective: {fileID: 0}
