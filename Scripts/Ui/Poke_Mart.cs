@@ -41,7 +41,7 @@ public class Poke_Mart : MonoBehaviour
 
     private void Start()
     {
-        Options_manager.Instance.OnInteractionTriggered += ViewStore;
+        Options_manager.Instance.OnInteractionOptionChosen += ViewStore;
     }
     private IEnumerator SelectItemsForStore()
     {

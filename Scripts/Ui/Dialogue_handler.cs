@@ -1,12 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using Unity.Mathematics;
 using TMPro;
-using UnityEngine.Serialization;
 
 public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage}
 public class Dialogue_handler : MonoBehaviour
@@ -31,7 +27,7 @@ public class Dialogue_handler : MonoBehaviour
     public bool messagesLoading;
     public List<Interaction> pendingMessages = new();
     public GameObject optionSelector;
-    public event Action OnMessagedDone;
+    public event Action<Overworld_interactable> OnOptionsDisplayed;
     public static Dialogue_handler Instance;
     private void Awake()
     {
@@ -72,6 +68,7 @@ public class Dialogue_handler : MonoBehaviour
     }
     private void CreateDialogueOptions()
     {
+        OnOptionsDisplayed?.Invoke(currentInteractionObject);
         dialogueOptionBox.gameObject.SetActive(true);
         var numOptions = currentInteraction.interactionOptions.Count;
         for(var i = 0; i < numOptions; i++)
@@ -189,7 +186,7 @@ public class Dialogue_handler : MonoBehaviour
             yield return new WaitUntil(()=>dialogueFinished);
         }
         messagesLoading = false;
-        OnMessagedDone?.Invoke();
+        
     }
     public void EndDialogue(float delay)
     {

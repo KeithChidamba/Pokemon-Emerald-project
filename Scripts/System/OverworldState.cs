@@ -36,6 +36,7 @@ public class OverworldState : MonoBehaviour
         foreach (var treeData in treeDataQueue)
         {
             var jsonBerryTree = overworldBerryTrees.First(tree=>tree.treeIndex==treeData.treeIndex);
+            jsonBerryTree.name = treeData.itemAssetName + " Tree";
             jsonBerryTree.loadedFromJson = true;
             jsonBerryTree.LoadTreeData(treeData);
         }

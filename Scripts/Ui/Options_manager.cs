@@ -16,7 +16,7 @@ public class Options_manager : MonoBehaviour
     [SerializeField] private Recieve_Pokemon starterPokemonGiftEvent;
     public static Options_manager Instance;
     private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
-    public event Action<Overworld_interactable,int> OnInteractionTriggered;
+    public event Action<Overworld_interactable,int> OnInteractionOptionChosen;
 
     private void Awake()
     {
@@ -149,7 +149,7 @@ public class Options_manager : MonoBehaviour
     {
         var interactionOption = interactable.interaction.interactionOptions[0];
         _currentInteraction = interactable.interaction;
-        OnInteractionTriggered?.Invoke(interactable,0);
+        OnInteractionOptionChosen?.Invoke(interactable,0);
         if (_interactionMethods.TryGetValue(interactionOption,out var method)) method();
     }
     public void CompleteInteraction(Interaction interaction,int optionIndex)
@@ -173,7 +173,7 @@ public class Options_manager : MonoBehaviour
     public void CompleteInteraction(Overworld_interactable interactable,int optionIndex)
     {
         _currentInteractable = interactable;
-        OnInteractionTriggered?.Invoke(interactable,optionIndex);
+        OnInteractionOptionChosen?.Invoke(interactable,optionIndex);
         if (_currentInteractable.interaction.hasSeparateLogicHandler
             || _currentInteractable.interaction.dialogueType != DialogType.Options)
         {

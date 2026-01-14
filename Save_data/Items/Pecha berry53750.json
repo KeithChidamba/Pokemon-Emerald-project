@@ -1,13 +1,13 @@
 {
-    "itemID": "Lum berry13078",
-    "itemName": "Lum berry",
+    "itemID": "Pecha berry53750",
+    "itemName": "Pecha berry",
     "itemType": 9,
     "itemEffect": "0",
-    "itemDescription": "Heals any status effect",
+    "itemDescription": "Heals poison",
     "price": 5,
     "quantity": 2,
     "itemImage": {
-        "instanceID": 33396
+        "instanceID": 33428
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,15 +18,15 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 27030
+        "instanceID": 25872
     },
     "additionalInfoModules": [
         {
-            "instanceID": 27030
+            "instanceID": 25872
         }
     ],
     "infoModuleAssetNames": [
-        "Full heal berry"
+        "Poison berry"
     ],
-    "imageDirectory": "Lum berry"
+    "imageDirectory": "Pecha berry"
 }

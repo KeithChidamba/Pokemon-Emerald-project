@@ -222,16 +222,16 @@ public class Save_manager : MonoBehaviour
     {
         CreateFolder(_saveDataPath+"/Items");
         CreateFolder(_saveDataPath+"/Items/Held_Items");
-        CreateFolder(_saveDataPath+"/Items/Storage_Items");
+        CreateFolder(_saveDataPath+"/Items/Storage_Items");  
         
         var itemList = GetJsonFilesFromPath(_saveDataPath+"/Items");
-        var storagteitemList = GetJsonFilesFromPath(_saveDataPath+"/Items/Storage_Items");
+        var storageItemList = GetJsonFilesFromPath(_saveDataPath+"/Items/Storage_Items");
         Bag.Instance.allItems.Clear();
         foreach (var item in itemList)
         {
             Bag.Instance.allItems.Add(LoadItemFromJson(_saveDataPath+"/Items/" + Path.GetFileName(item)));
         }
-        foreach (var item in storagteitemList)
+        foreach (var item in storageItemList)
         {
             Bag.Instance.storageItems.Add(LoadItemFromJson(_saveDataPath+"/Items/Storage_Items/" + Path.GetFileName(item)));
         }

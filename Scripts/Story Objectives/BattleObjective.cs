@@ -11,7 +11,7 @@ public class BattleObjective : StoryObjective
         Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
         if (isTrainerBattle)
         {
-            Options_manager.Instance.OnInteractionTriggered += CheckBattleInteraction;
+            Options_manager.Instance.OnInteractionOptionChosen += CheckBattleInteraction;
         }
         else
         {
@@ -42,7 +42,7 @@ public class BattleObjective : StoryObjective
         if (!hasWon) return;
         if (isTrainerBattle)
         {
-            Options_manager.Instance.OnInteractionTriggered -= CheckBattleInteraction;
+            Options_manager.Instance.OnInteractionOptionChosen -= CheckBattleInteraction;
         }
         else
         {
