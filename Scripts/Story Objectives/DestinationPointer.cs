@@ -31,7 +31,7 @@ public class DestinationPointer : MonoBehaviour
 
     private void ConfirmDestination(Transform currentCollision)
     {
-        if (currentCollision.gameObject.CompareTag(objectiveData.destination))
+        if (currentCollision.gameObject.CompareTag(objectiveData.destinationTag))
         {
             Collider_checks.OnCollision -= ConfirmDestination;
             objectiveData.ClearObjective();

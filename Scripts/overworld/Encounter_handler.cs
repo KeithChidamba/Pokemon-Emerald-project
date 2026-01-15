@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public enum BattleSource
+public enum BattleEncounterSource
 {
     None,Fishing,TallGrass
 }
@@ -16,7 +16,7 @@ public class Encounter_handler : MonoBehaviour
     public Pokemon wildPokemon;
     public int overworldEncounterChance = 2;
     public static Encounter_handler Instance;
-    public event Action<BattleSource> OnEncounterTriggered;
+    public event Action<BattleEncounterSource> OnEncounterTriggered;
 
     private void Awake()
     {
@@ -37,7 +37,7 @@ public class Encounter_handler : MonoBehaviour
         {
             if (EncounteredPokemon(i))
             {
-                OnEncounterTriggered?.Invoke(BattleSource.TallGrass);
+                OnEncounterTriggered?.Invoke(BattleEncounterSource.TallGrass);
                 break;
             }
         }
@@ -62,7 +62,7 @@ public class Encounter_handler : MonoBehaviour
         {
             if (EncounteredPokemon(i))
             {
-                OnEncounterTriggered?.Invoke(BattleSource.Fishing);
+                OnEncounterTriggered?.Invoke(BattleEncounterSource.Fishing);
                 break;
             }
         }

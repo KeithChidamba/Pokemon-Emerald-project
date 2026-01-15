@@ -133,20 +133,20 @@
     ],
     "moveSet": [
         {
-            "instanceID": -15012
+            "instanceID": -7870
         },
         {
-            "instanceID": -15014
+            "instanceID": -7872
         },
         {
-            "instanceID": -15016
+            "instanceID": -7874
         },
         {
-            "instanceID": -15018
+            "instanceID": -7876
         }
     ],
     "ability": {
-        "instanceID": 25784
+        "instanceID": 25782
     },
     "evolutions": [
         {
@@ -170,16 +170,16 @@
         "instanceID": 27256
     },
     "backPicture": {
-        "instanceID": 25518
+        "instanceID": 25516
     },
     "partyFrame1": {
-        "instanceID": 25590
+        "instanceID": 25588
     },
     "partyFrame2": {
         "instanceID": 26214
     },
     "battleIntroFrame": {
-        "instanceID": 25308
+        "instanceID": 25306
     },
     "pokeballName": "Great Ball",
     "healthPhase": 1,

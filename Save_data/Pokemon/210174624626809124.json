@@ -60,7 +60,7 @@
             "instanceID": 27020
         },
         {
-            "instanceID": 25696
+            "instanceID": 25694
         }
     ],
     "statusEffect": 0,
@@ -132,27 +132,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -15028
+            "instanceID": -7886
         },
         {
-            "instanceID": -15030
+            "instanceID": -7888
         },
         {
-            "instanceID": -15032
+            "instanceID": -7890
         },
         {
-            "instanceID": -15034
+            "instanceID": -7892
         }
     ],
     "ability": {
-        "instanceID": 25316
+        "instanceID": 25314
     },
     "evolutions": [
         {
             "instanceID": 26544
         },
         {
-            "instanceID": 25426
+            "instanceID": 25424
         }
     ],
     "heldItem": {
@@ -163,13 +163,13 @@
         "instanceID": 26138
     },
     "backPicture": {
-        "instanceID": 25792
+        "instanceID": 25790
     },
     "partyFrame1": {
         "instanceID": 26522
     },
     "partyFrame2": {
-        "instanceID": 25708
+        "instanceID": 25706
     },
     "battleIntroFrame": {
         "instanceID": 27046

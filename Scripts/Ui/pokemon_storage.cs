@@ -58,6 +58,8 @@ public class pokemon_storage : MonoBehaviour
     public GameObject movePokemonUIOption;
     public Image selectedPokemonImage;
     public bool movingPokemon;
+    public event Action<Pokemon> OnPokemonWithdraw;
+    public event Action<Pokemon> OnPokemonDeposit;
     private enum PCNavState
     {
         ViewingPokemonData,ExitingPC,ViewingBoxChange,SelectingBoxDeposit,ViewingParty
@@ -577,6 +579,7 @@ public class pokemon_storage : MonoBehaviour
         var selectedBox = storageBoxes[boxNumber-1];
         if (selectedBox.currentNumPokemon < BoxCapacity)
         {
+            OnPokemonDeposit?.Invoke(partyPokemon.pokemon);
             RemoveDeposit();
             storagePartyOptionsParent.SetActive(false);
             nonPartyPokemon.Add(partyPokemon.pokemon);
@@ -652,6 +655,7 @@ public class pokemon_storage : MonoBehaviour
         if (Pokemon_party.Instance.numMembers < 6)
         {
             var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
+            OnPokemonWithdraw?.Invoke(nonPartyPokemon[pokemonIndex]);
             Pokemon_party.Instance.party[Pokemon_party.Instance.numMembers] = Obj_Instance.CreatePokemon(nonPartyPokemon[pokemonIndex]);
             DeleteNonPartyPokemon(pokemonIndex);
             Pokemon_party.Instance.numMembers++;

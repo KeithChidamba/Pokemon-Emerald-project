@@ -1,0 +1,16 @@
+{
+    "mainAssetName": "Withdraw pikachu",
+    "objectiveHeading": "Withdraw pikachu from pc",
+    "objectiveDescription": "",
+    "objectiveProgress": "",
+    "hasProgression": false,
+    "indexInList": 0,
+    "objectiveType": 3,
+    "uiUsage": 5,
+    "itemForObjective": {
+        "instanceID": 0
+    },
+    "pokemonForObjective": {
+        "instanceID": 25206
+    }
+}

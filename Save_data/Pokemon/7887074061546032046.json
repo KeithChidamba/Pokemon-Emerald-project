@@ -133,18 +133,18 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -15038
+            "instanceID": -7896
         }
     ],
     "ability": {
-        "instanceID": 25946
+        "instanceID": 25944
     },
     "evolutions": [
         {
             "instanceID": 27198
         },
         {
-            "instanceID": 25170
+            "instanceID": 25168
         }
     ],
     "heldItem": {
@@ -161,7 +161,7 @@
         "instanceID": 26356
     },
     "partyFrame2": {
-        "instanceID": 25364
+        "instanceID": 25362
     },
     "battleIntroFrame": {
         "instanceID": 26322

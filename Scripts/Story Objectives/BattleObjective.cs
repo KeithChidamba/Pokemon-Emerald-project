@@ -2,26 +2,42 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "battle obj", menuName = "battle objective")]
 public class BattleObjective : StoryObjective
 {
-    public bool isTrainerBattle;
+    public enum BattleObjectiveOutline
+    {
+        BeatTrainer,BeatWildPokemon,CatchWildPokemon
+    }
+    public BattleObjectiveOutline objectiveOutline;
     public TrainerData trainer;
-    public BattleSource battleSourceForObjective;
-
+    public BattleEncounterSource encounterSourceForObjective;
+    
     public override void LoadObjective()
     {
         Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
-        if (isTrainerBattle)
+        if (objectiveOutline == BattleObjectiveOutline.BeatTrainer)
         {
             Options_manager.Instance.OnInteractionOptionChosen += CheckBattleInteraction;
         }
-        else
+        if (objectiveOutline == BattleObjectiveOutline.BeatWildPokemon)
         {
             Encounter_handler.Instance.OnEncounterTriggered += CheckEncounter;
         }
+        if (objectiveOutline == BattleObjectiveOutline.CatchWildPokemon)
+        {
+            PokemonOperations.Instance.OnPokeballUsed += CheckIfPokemonCaught;
+        }
     }
-
-    private void CheckEncounter(BattleSource battleSource)
+    private void CheckIfPokemonCaught(Pokemon pokemon,bool isCaught)
     {
-        if (battleSource == battleSourceForObjective)
+        if (!isCaught)
+        {
+            return;
+        }
+        PokemonOperations.Instance.OnPokeballUsed -= CheckIfPokemonCaught;
+        ClearObjective();
+    }
+    private void CheckEncounter(BattleEncounterSource battleEncounterSource)
+    {
+        if (battleEncounterSource == encounterSourceForObjective)
         {
             Battle_handler.Instance.OnBattleResult += CheckIfWin;
         }
@@ -40,7 +56,7 @@ public class BattleObjective : StoryObjective
     private void CheckIfWin(bool hasWon)
     {
         if (!hasWon) return;
-        if (isTrainerBattle)
+        if (objectiveOutline == BattleObjectiveOutline.BeatTrainer)
         {
             Options_manager.Instance.OnInteractionOptionChosen -= CheckBattleInteraction;
         }

@@ -1,0 +1,16 @@
+{
+    "mainAssetName": "Deposit trapinch",
+    "objectiveHeading": "Withdraw pikachu into pc",
+    "objectiveDescription": "",
+    "objectiveProgress": "",
+    "hasProgression": false,
+    "indexInList": 1,
+    "objectiveType": 3,
+    "uiUsage": 6,
+    "itemForObjective": {
+        "instanceID": 0
+    },
+    "pokemonForObjective": {
+        "instanceID": 26202
+    }
+}

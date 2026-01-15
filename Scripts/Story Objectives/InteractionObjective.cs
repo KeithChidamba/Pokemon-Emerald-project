@@ -23,6 +23,7 @@ public class InteractionObjective : StoryObjective
 
    private void CheckForInteractionTrigger(Overworld_interactable interactable)
    {
+      if (overworldInteractionForObjective != interactable.overworldInteractionType) return;
       switch(overworldInteractionForObjective)
       {
          case OverworldInteractionType.PickBerry:
@@ -31,17 +32,17 @@ public class InteractionObjective : StoryObjective
          {
             var berryTree = interactable.GetComponent<BerryTree>(); 
 
-            Action<OverworldInteractionType,bool> checkEventMatchBerry = 
-               (interactionType,success)=> CheckEventMatch(interactionType,success,berryTree.treeData.berryItem.itemName);
-            
-            berryTree.OnInteractionComplete += checkEventMatchBerry;
+            Action<OverworldInteractionType,bool> checkEventSuccessBerry = 
+               (interactionType,success)=> CheckEventSuccess(success,berryTree.treeData.berryItem.itemName);
+             
+            berryTree.OnInteractionComplete += checkEventSuccessBerry;
             _onObjectiveComplete += RemoveSubscription;
             
             break;
            
             void RemoveSubscription()
             {
-               berryTree.OnInteractionComplete -= checkEventMatchBerry;
+               berryTree.OnInteractionComplete -= checkEventSuccessBerry;
                _onObjectiveComplete -= RemoveSubscription;
             } 
          }
@@ -56,10 +57,9 @@ public class InteractionObjective : StoryObjective
       }
       CheckEventMatch(interactable.overworldInteractionType);
    }
-   private void CheckEventMatch(OverworldInteractionType interactionType,bool successfull,string nameCheck)
+   private void CheckEventSuccess(bool successful,string nameCheck)
    {
-      if (overworldInteractionForObjective != interactionType) return;
-      if (!successfull) return;
+      if (!successful) return;
       if(itemForObjective.itemName!=nameCheck) return;
       
       _onObjectiveComplete?.Invoke();

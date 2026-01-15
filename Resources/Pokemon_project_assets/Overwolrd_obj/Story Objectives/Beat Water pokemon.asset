@@ -19,6 +19,6 @@ MonoBehaviour:
   hasProgression: 0
   indexInList: 0
   objectiveType: 2
-  isTrainerBattle: 0
+  objectiveOutline: 1
   trainer: {fileID: 0}
-  battleSourceForObjective: 1
+  encounterSourceForObjective: 1

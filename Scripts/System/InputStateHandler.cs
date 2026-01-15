@@ -510,7 +510,7 @@ public class InputStateHandler : MonoBehaviour
         OnInputDown += PokemonStorageBoxChange;
     }
 
-    public void PokemonStorageBoxChange()
+    private void PokemonStorageBoxChange()
     {
         var storageSelectables = new List<SelectableUI>();
         for (int i = 0; i < pokemon_storage.NumBoxes; i++)
@@ -527,7 +527,7 @@ public class InputStateHandler : MonoBehaviour
         OnInputLeft += () => pokemon_storage.Instance.ChangeBox(-1);
         OnInputRight += () => pokemon_storage.Instance.ChangeBox(1);
     }
-    public void PokemonStorageBoxNavigation()
+    private void PokemonStorageBoxNavigation()
     {
         var storageBoxSelectables = new List<SelectableUI>();
         foreach (var icon in pokemon_storage.Instance.nonPartyIcons)

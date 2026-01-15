@@ -400,7 +400,9 @@ public class Item_handler : MonoBehaviour
             return;
         }
         DepleteItem();
-        StartCoroutine(TryToCatchPokemon(pokeball));
+
+        PokemonOperations.Instance.OnPokeballUsed += PokemonCaughtCheck;
+        StartCoroutine(PokemonOperations.Instance.TryToCatchPokemon(pokeball));
     }
 
     private bool CanUsePokeball()
@@ -425,58 +427,18 @@ public class Item_handler : MonoBehaviour
 
         return true;
     }
-    
-    IEnumerator TryToCatchPokemon(Item pokeball)
-    {
-        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
-        var isCaught = false;
-        var wildPokemon = Wild_pkm.Instance.participant.pokemon;//pokemon only caught in wild
-        yield return StartCoroutine(BattleVisuals.Instance.DisplayPokemonThrow());
-        var ballRate = float.Parse(pokeball.itemEffect);
-        var bracket1 = (3 * wildPokemon.maxHp - 2 * wildPokemon.hp) / (3 * wildPokemon.maxHp);
-        var catchValue = math.trunc(bracket1 * wildPokemon.catchRate * ballRate * 
-                                      BattleOperations.GetCatchRateBonusFromStatus(wildPokemon.statusEffect));
 
-        if (BattleOperations.IsImmediateCatch(catchValue))
+    private void PokemonCaughtCheck(Pokemon pokemon,bool isCaught)
+    {
+        PokemonOperations.Instance.OnPokeballUsed -= PokemonCaughtCheck;
+        if (!isCaught)
         {
-            yield return StartCoroutine(BattleVisuals.Instance.DisplayPokemonCatch());
-            isCaught = true;
-        }
-        else
-        {
-            float shakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchValue));
-            for (int i = 0; i < 3; i++)
-            {
-                yield return StartCoroutine(BattleVisuals.Instance.DisplayPokeballShake());
-                int rand = Utility.Random16Bit();
-                if (rand < (shakeProbability * (i + 1)))
-                {
-                    yield return StartCoroutine(BattleVisuals.Instance.DisplayPokemonCatch());
-                    isCaught = true;
-                    break;
-                }
-            }
-        }
-        if (isCaught)
-        {
-            Dialogue_handler.Instance.DisplayBattleInfo("Well done "+wildPokemon.pokemonName+" has been caught");
-            var rawName = wildPokemon.pokemonName.Replace("Foe ", "");
-            wildPokemon.pokemonName = rawName;
-            wildPokemon.ChangeFriendshipLevel(70);
-            wildPokemon.pokeballName = itemInUse.itemName;
-            Pokemon_party.Instance.AddMember(wildPokemon,itemInUse.itemName);
-            yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
-            Wild_pkm.Instance.participant.EndWildBattle();
-        }else
-        {
-            yield return StartCoroutine(BattleVisuals.Instance.DisplayPokeballEscape());
-            Dialogue_handler.Instance.DisplayBattleInfo(wildPokemon.pokemonName+" escaped the pokeball");
-            yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
             SkipTurn();
         }
         OnItemUsageSuccessful?.Invoke(true);
         ResetItemUsage();
     }
+    
 
     private void CureConfusion()
     {

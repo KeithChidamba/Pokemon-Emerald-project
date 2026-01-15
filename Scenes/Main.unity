@@ -36413,6 +36413,8 @@ MonoBehaviour:
   overworldBerryTrees: []
   treeDataQueue: []
   allStoryObjectives:
+  - {fileID: 11400000, guid: b8cf9fa4c32265ca7ae6643ec545de74, type: 2}
+  - {fileID: 11400000, guid: 5e340bc633e939095abe92cef4ff6f2d, type: 2}
   - {fileID: 11400000, guid: 066bcb3dcb6f39ab7b4b046faf37c5e3, type: 2}
   - {fileID: 11400000, guid: f1f20090a028841e6bd910b923a00c51, type: 2}
   - {fileID: 11400000, guid: 82dc9f501c937bb6d9badcb3602217a0, type: 2}

@@ -4,9 +4,9 @@
     "objectiveDescription": "",
     "objectiveProgress": "",
     "hasProgression": false,
-    "indexInList": 6,
+    "indexInList": 8,
     "objectiveType": 1,
-    "overworldInteractionForObjective": 0,
+    "overworldInteractionForObjective": 5,
     "requiresSuccess": false,
     "itemForObjective": {
         "instanceID": 0

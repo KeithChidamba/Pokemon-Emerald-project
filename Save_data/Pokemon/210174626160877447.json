@@ -146,31 +146,31 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -14992
+            "instanceID": -7850
         },
         {
-            "instanceID": -14994
+            "instanceID": -7852
         },
         {
-            "instanceID": -14996
+            "instanceID": -7854
         },
         {
-            "instanceID": -14998
+            "instanceID": -7856
         }
     ],
     "ability": {
-        "instanceID": 25946
+        "instanceID": 25944
     },
     "evolutions": [
         {
             "instanceID": 27198
         },
         {
-            "instanceID": 25170
+            "instanceID": 25168
         }
     ],
     "heldItem": {
-        "instanceID": -15002
+        "instanceID": -7860
     },
     "hasItem": true,
     "frontPicture": {
@@ -180,7 +180,7 @@
         "instanceID": 26246
     },
     "partyFrame1": {
-        "instanceID": 25528
+        "instanceID": 25526
     },
     "partyFrame2": {
         "instanceID": 26514

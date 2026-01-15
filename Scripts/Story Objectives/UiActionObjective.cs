@@ -7,6 +7,7 @@ public class UiActionObjective : StoryObjective
 {
     public UiObjectiveType uiUsage;
     public Item itemForObjective;
+    public Pokemon pokemonForObjective;
     public override void LoadObjective()
     { 
        Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
@@ -20,6 +21,9 @@ public class UiActionObjective : StoryObjective
            
            case UiObjectiveType.BuyItem: SetupItemBuyObjective(); break;
            
+           case UiObjectiveType.WithdrawPokemonFromPC: WithdrawObjective(); break;
+           
+           case UiObjectiveType.DepositPokemonIntoPC: DepositObjective(); break;
        }
     }
     public override void ClearObjective()
@@ -37,7 +41,7 @@ public class UiActionObjective : StoryObjective
                 return;
             }
         } 
-        Bag.Instance.OnItemUsed += CheckForObjectiveClear;
+        Bag.Instance.OnItemUsed += CheckForItemObjectiveClear;
     }
     private void SetupItemUsageObjective()
     {
@@ -46,10 +50,10 @@ public class UiActionObjective : StoryObjective
     private void CheckIfItemUsed(bool successful)
     {
         var itemUsed = Item_handler.Instance.itemInUse;
-        CheckForObjectiveClear(itemUsed);
+        CheckForItemObjectiveClear(itemUsed);
     }
 
-    private void CheckForObjectiveClear(Item item)
+    private void CheckForItemObjectiveClear(Item item)
     {
         if (itemForObjective.itemName == item.itemName)
         {
@@ -59,17 +63,35 @@ public class UiActionObjective : StoryObjective
 
     private void SetupItemSellObjective()
     {
-        Bag.Instance.OnItemSold += CheckForObjectiveClear;
+        Bag.Instance.OnItemSold += CheckForItemObjectiveClear;
     }
 
     private void SetupItemBuyObjective()
     {
-        Poke_Mart.Instance.OnItemBought += CheckForObjectiveClear;
+        Poke_Mart.Instance.OnItemBought += CheckForItemObjectiveClear;
+    }
+
+    private void WithdrawObjective()
+    {
+        pokemon_storage.Instance.OnPokemonWithdraw += CheckForStorageObjectiveClear;
+    }
+    private void DepositObjective()
+    {
+        pokemon_storage.Instance.OnPokemonDeposit += CheckForStorageObjectiveClear;
+    }
+    private void CheckForStorageObjectiveClear(Pokemon pokemon)
+    {
+        if (pokemon.pokemonName == pokemonForObjective.pokemonName)
+        {
+            if(uiUsage == UiObjectiveType.WithdrawPokemonFromPC)
+                pokemon_storage.Instance.OnPokemonWithdraw -= CheckForStorageObjectiveClear;
+            else pokemon_storage.Instance.OnPokemonDeposit -= CheckForStorageObjectiveClear;
+            ClearObjective();
+        }
     }
 }
 
 public enum UiObjectiveType
 {
-    EquipItem,UseItem,SellItem,BuyItem,
-    SwapPokemon,WithdrawPokemonFromPC,DepositPokemonIntoPC
+    EquipItem,UseItem,SellItem,BuyItem,WithdrawPokemonFromPC,DepositPokemonIntoPC
 }
