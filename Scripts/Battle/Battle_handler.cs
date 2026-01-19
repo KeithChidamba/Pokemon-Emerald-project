@@ -63,7 +63,11 @@ public class Battle_handler : MonoBehaviour
         if (Turn_Based_Combat.Instance.currentTurnIndex > 1) return;
         
         _currentParticipant = GetCurrentParticipant();
-        AutoAim();
+        //if single battle, auto aim at enemy
+        if (!isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex == 0)
+        {
+            currentEnemyIndex = 2;
+        }
     }
 
     public Battle_Participant GetCurrentParticipant()
@@ -75,7 +79,6 @@ public class Battle_handler : MonoBehaviour
         if (currentState.stateName == InputStateName.PokemonBattleOptions)
         {
             Dialogue_handler.Instance.DisplaySpecific("What will you do?",DialogType.BattleDisplayMessage);
-            optionsUI.SetActive(true);
         }
     }
     private void AllowEnemySelection()
@@ -109,23 +112,14 @@ public class Battle_handler : MonoBehaviour
     }
     private void ResetAi()
     {
-        if (!isTrainerBattle)
-            Wild_pkm.Instance.CanAttack();
-        else
-            for(var i = 2; i < 4;i++)
-                if (battleParticipants[i].pokemon != null & !battleParticipants[i].isPlayer)
-                {
-                    battleParticipants[i].pokemonTrainerAI.CanAttack();
-                }
+        if(!isTrainerBattle)return;
+        for(var i = 2; i < 4;i++)
+            if (battleParticipants[i].pokemon != null & !battleParticipants[i].isPlayer)
+            {
+                battleParticipants[i].pokemonTrainerAI.CanAttack();
+            }
     }
 
-    void AutoAim()
-    {
-        if (!isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex == 0) //if single battle, auto aim at enemy
-        {
-            currentEnemyIndex = 2;
-        }
-    }
     public void SelectEnemy(int change)
     {
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
@@ -278,6 +272,7 @@ public class Battle_handler : MonoBehaviour
         Wild_pkm.Instance.participant = wildPokemon;
         wildPokemon.AddToExpList(player.pokemon);
         Wild_pkm.Instance.inBattle = true;
+        Wild_pkm.Instance.ranAway = false;
         //setup battle
         yield return SetValidParticipants();
         StartCoroutine(SetupBattleSequence(Encounter_handler.Instance.currentArea));
@@ -412,19 +407,7 @@ public class Battle_handler : MonoBehaviour
                     {
                         validList.Add(participant);
                     }
-                    else
-                    {
-                        //Debug.Log(participant.name+"pokemon dead");
-                    }
                 }
-                else
-                {
-                    //Debug.Log(participant.name+"pokemon null");
-                }
-            }
-            else
-            {
-                //Debug.Log(participant.name+"inactive");
             }
         }
         return validList;
@@ -633,7 +616,8 @@ public class Battle_handler : MonoBehaviour
                 }
             }
         }
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(() => Dialogue_handler.Instance.dialogueFinished);
+        Dialogue_handler.Instance.EndDialogue();
         yield return BattleIntro.Instance.BlackFade();
         yield return ResetUiAfterBattle(playerWhiteOut);
         //battle triggered from fishing
@@ -655,6 +639,7 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn -= ResetAi;
         Turn_Based_Combat.Instance.OnNewTurn -= AllowPlayerInput;
         Turn_Based_Combat.Instance.OnTurnsCompleted -= ResetPlayersTurnUsage;
+        InputStateHandler.Instance.OnStateChanged -= EnableBattleMessage;
         Dialogue_handler.Instance.EndDialogue();
         usedTurnForItem = false;
         usedTurnForSwap = false;

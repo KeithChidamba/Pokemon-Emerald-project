@@ -4,11 +4,11 @@
     "objectiveDescription": "",
     "objectiveProgress": "",
     "hasProgression": false,
-    "indexInList": 4,
+    "indexInList": 0,
     "objectiveType": 2,
-    "isTrainerBattle": false,
+    "objectiveOutline": 1,
     "trainer": {
         "instanceID": 0
     },
-    "battleSourceForObjective": 1
+    "encounterSourceForObjective": 1
 }

@@ -16,6 +16,7 @@ MonoBehaviour:
   pokemonName: Mudkip
   pokemonID: 0
   personalityValue: 0
+  isShiny: 0
   gender: 0
   ratioFemale: 12.5
   nature: {fileID: 0}
@@ -58,6 +59,7 @@ MonoBehaviour:
   nextLevelExpAmount: 0
   expGroup: 3
   expYield: 65
+  canEvolve: 1
   friendshipLevel: 0
   hasTrainer: 0
   canBeFlinched: 1

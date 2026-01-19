@@ -174,16 +174,16 @@ public class Dialogue_handler : MonoBehaviour
     private IEnumerator ProcessQueue()
     {
         messagesLoading = true;
-        InputStateHandler.Instance.AddDialoguePlaceHolderState();
         while (pendingMessages.Count > 0)
         {
+            InputStateHandler.Instance.AddDialoguePlaceHolderState();
             var interaction = pendingMessages[0];
             currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
             SetBattleTextBox();
             yield return TypeText(currentInteraction.interactionMessage);
+            yield return new WaitUntil(()=>dialogueFinished);
             yield return new WaitForSeconds(1f);
             pendingMessages.RemoveAt(0);
-            yield return new WaitUntil(()=>dialogueFinished);
         }
         messagesLoading = false;
         
@@ -225,6 +225,7 @@ public class Dialogue_handler : MonoBehaviour
     
     void ResetText()
     {
+        dialougeText.text = string.Empty;
         dialougeText.ForceMeshUpdate();
         dialougeText.maxVisibleCharacters = 0;
     }
@@ -241,12 +242,12 @@ public class Dialogue_handler : MonoBehaviour
     }
     private IEnumerator TypeText(string message)
     {
+        ResetText();
         dialogueFinished = false;
         displaying = true; 
-        dialougeText.maxVisibleCharacters = 0;
         dialougeText.text = message;
-        ResetText();
-
+        dialougeText.ForceMeshUpdate();
+        
         int totalPages = dialougeText.textInfo.pageCount;
 
         for (int page = 1; page <= totalPages; page++)
@@ -274,7 +275,7 @@ public class Dialogue_handler : MonoBehaviour
             // Wait for input before next page
             if(totalPages>1) yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Z));
         }
-
+        dialogueFinished = true;
         CompleteDialogueInteraction();
     }
 
@@ -316,7 +317,6 @@ public class Dialogue_handler : MonoBehaviour
     }
     private void CompleteDialogueInteraction()
     {
-        dialogueFinished = true;
         if (currentInteraction == null) return;
         if (currentInteraction.dialogueType == DialogType.Options)
         {

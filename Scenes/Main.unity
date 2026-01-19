@@ -36413,12 +36413,14 @@ MonoBehaviour:
   overworldBerryTrees: []
   treeDataQueue: []
   allStoryObjectives:
+  - {fileID: 11400000, guid: 9d9a5a9aa568a806d93f91c5d0fd018f, type: 2}
+  - {fileID: 11400000, guid: 82dc9f501c937bb6d9badcb3602217a0, type: 2}
+  - {fileID: 11400000, guid: 181ac78c67342a00b88f1f50e6104180, type: 2}
+  - {fileID: 11400000, guid: 7373522c9da4291a093066aa291b9484, type: 2}
   - {fileID: 11400000, guid: b8cf9fa4c32265ca7ae6643ec545de74, type: 2}
   - {fileID: 11400000, guid: 5e340bc633e939095abe92cef4ff6f2d, type: 2}
   - {fileID: 11400000, guid: 066bcb3dcb6f39ab7b4b046faf37c5e3, type: 2}
   - {fileID: 11400000, guid: f1f20090a028841e6bd910b923a00c51, type: 2}
-  - {fileID: 11400000, guid: 82dc9f501c937bb6d9badcb3602217a0, type: 2}
-  - {fileID: 11400000, guid: 7373522c9da4291a093066aa291b9484, type: 2}
   - {fileID: 11400000, guid: b50c2d7a9c2e9a06bb16a5007d8826a1, type: 2}
   - {fileID: 11400000, guid: 0eb906317603235d799635703f836df2, type: 2}
   - {fileID: 11400000, guid: 43cfb6a78638b208b841329011398f0f, type: 2}

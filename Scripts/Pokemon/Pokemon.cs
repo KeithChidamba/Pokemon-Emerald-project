@@ -12,11 +12,11 @@ public class Pokemon : ScriptableObject
 {
     [FormerlySerializedAs("Base_Pokemon_name")] public string basePokemonName;
     [FormerlySerializedAs("Pokemon_name")] public string pokemonName;
-    public long pokemonID = 0;
+    public long pokemonID;
     public uint personalityValue;
     public bool isShiny;
     public Gender gender;
-    public float ratioFemale = 0;
+    public float ratioFemale;
     public Nature nature;
     [FormerlySerializedAs("has_gender")] public bool hasGender = true;
     [FormerlySerializedAs("HP")] public float hp;
@@ -38,25 +38,26 @@ public class Pokemon : ScriptableObject
     public float specialAttackIv;
     public float specialDefenseIv;
     public float speedIv;
-    public float hpEv=0;
-    public float attackEv=0;
-    public float defenseEv=0;
-    public float specialAttackEv=0;
-    public float specialDefenseEv=0;
-    public float speedEv=0;
+    public float hpEv;
+    public float attackEv;
+    public float defenseEv;
+    public float specialAttackEv;
+    public float specialDefenseEv;
+    public float speedEv;
     [FormerlySerializedAs("EVs")] public List<EvYield> effortValues=new();
     public float accuracy = 100;
     public float evasion = 100;
     public float critChance = 6.25f;
     [FormerlySerializedAs("CatchRate")] public float catchRate = 0;
     public int currentLevel = 1;
-    public int currentExpAmount = 0;
+    public int currentExpAmount;
     public int currentLevelExpAmount;
-    public int nextLevelExpAmount = 0;
+    public int nextLevelExpAmount;
     [FormerlySerializedAs("EXPGroup")] public ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield=0;
+    public bool canEvolve = true;
     public int friendshipLevel;
-    public bool hasTrainer=false;
+    public bool hasTrainer;
     public bool canBeFlinched = true;
     public bool canBeInfatuated = true;
     public List<Type> types;
@@ -447,12 +448,16 @@ public class Pokemon : ScriptableObject
         currentLevel++;
         nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel,expGroup);
         IncreaseStats();
+        
         if (!requiresEvolutionStone)
         {
-            if(splitEvolution)
-                DetermineSplitEvolution();
-            else
-                CheckEvolutionRequirements(0);
+            if (canEvolve)
+            {
+                if(splitEvolution)
+                    DetermineSplitEvolution();
+                else
+                    CheckEvolutionRequirements(0);
+            }
         }
         if (!Options_manager.Instance.playerInBattle)//artificial level up
             PokemonOperations.Instance.CheckForNewMove(this);

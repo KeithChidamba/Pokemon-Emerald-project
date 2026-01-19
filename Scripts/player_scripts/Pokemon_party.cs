@@ -189,6 +189,7 @@ public class Pokemon_party : MonoBehaviour
     public void ResetPartyState()
     {
         swapOutNext = false;
+        InputStateHandler.Instance.OnStateChanged -= CheckStateUpdate;
         InputStateHandler.Instance.OnSelectionIndexChanged -= UpdateCancelButton;
         cancelButton.sprite = memberCards[0].pokeballClosedImage.sprite;
         Item_handler.Instance.usingItem = false;//in case player closes before using item

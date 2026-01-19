@@ -120,12 +120,20 @@ public class Bag : MonoBehaviour
             bagItemsUI[currentCategoryOfItems.IndexOf(item)].LoadItemUI();
             return;
         }
-
         if (!Options_manager.Instance.playerInBattle)
         {
-            InputStateHandler.Instance.OnStateChanged += state => state.currentSelectionIndex = 0;
+            InputStateHandler.Instance.OnStateChanged += ResetQuantity;
+        }
+        else
+        {
+            InputStateHandler.Instance.OnStateChanged -= ResetQuantity;
         }
         RemoveItem(item);
+        return;
+        void ResetQuantity(InputState state)
+        {
+            state.currentSelectionIndex = 0;
+        }
     }
 
     public void ResetItemSellingUi()

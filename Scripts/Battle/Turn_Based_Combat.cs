@@ -321,9 +321,10 @@ public class Turn_Based_Combat : MonoBehaviour
             
             if(!participant.isSemiInvulnerable)continue;
             
-            _turnHistory.Add((new Turn(participant.semiInvulnerabilityData.turnData)));
+            _turnHistory.Add(new Turn(participant.semiInvulnerabilityData.turnData));
         }
         
+        yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
         NextTurn();
     }
     public IEnumerator HandleSwap(SwitchOutData swap, bool forcedSwap=false)
@@ -422,6 +423,7 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private IEnumerator CheckParticipantCoolDown()
     {
+        if (Battle_handler.Instance.battleOver) yield break;
         var participant = Battle_handler.Instance.GetCurrentParticipant();
         if (!participant.currentCoolDown.isCoolingDown) yield break;
         if (participant.currentCoolDown.ExecuteTurn) yield break;

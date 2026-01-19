@@ -4,11 +4,11 @@
     "objectiveDescription": "",
     "objectiveProgress": "",
     "hasProgression": false,
-    "indexInList": 2,
+    "indexInList": 5,
     "objectiveType": 1,
     "overworldInteractionForObjective": 3,
     "requiresSuccess": true,
     "itemForObjective": {
-        "instanceID": 25374
+        "instanceID": 25382
     }
 }

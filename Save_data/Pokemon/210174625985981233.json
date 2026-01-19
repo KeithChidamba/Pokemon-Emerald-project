@@ -1,0 +1,170 @@
+{
+    "basePokemonName": "Wurmple",
+    "pokemonName": "Wurmple",
+    "pokemonID": 210174625985981233,
+    "personalityValue": 1924262705,
+    "isShiny": false,
+    "gender": 1,
+    "ratioFemale": 50.0,
+    "nature": {
+        "instanceID": 26042
+    },
+    "hasGender": true,
+    "hp": 26.0,
+    "maxHp": 59.0,
+    "baseHp": 45.0,
+    "baseAttack": 45.0,
+    "baseDefense": 35.0,
+    "baseSpecialAttack": 20.0,
+    "baseSpecialDefense": 30.0,
+    "baseSpeed": 20.0,
+    "attack": 28.0,
+    "defense": 29.0,
+    "specialAttack": 22.0,
+    "specialDefense": 26.0,
+    "speed": 18.0,
+    "hpIv": 8.0,
+    "attackIv": 18.0,
+    "defenseIv": 17.0,
+    "specialAttackIv": 29.0,
+    "specialDefenseIv": 27.0,
+    "speedIv": 15.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        {
+            "stat": 6,
+            "eVAmount": 1
+        }
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 255.0,
+    "currentLevel": 25,
+    "currentExpAmount": 11060,
+    "currentLevelExpAmount": 0,
+    "nextLevelExpAmount": 12500,
+    "expGroup": 1,
+    "expYield": 54,
+    "canEvolve": false,
+    "friendshipLevel": 167,
+    "hasTrainer": true,
+    "canBeFlinched": true,
+    "canBeInfatuated": true,
+    "types": [
+        {
+            "instanceID": 27132
+        }
+    ],
+    "statusEffect": 0,
+    "buffAndDebuffs": [],
+    "evolutionLineLevels": [
+        5,
+        13
+    ],
+    "currentEvolutionLineIndex": 0,
+    "friendshipEvolutionRequirement": {
+        "friendshipRequirement": 0,
+        "evolutionIndex": 0
+    },
+    "requiresEvolutionStone": false,
+    "evolutionStone": 0,
+    "abilities": [
+        6
+    ],
+    "splitEvolution": true,
+    "requiresFriendshipEvolution": false,
+    "learnSet": [
+        {
+            "learnSetMove": 3,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 67,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 71,
+            "requiredLevel": 5
+        }
+    ],
+    "learnableTms": [
+        12,
+        8
+    ],
+    "learnableHms": [],
+    "moveSet": [
+        {
+            "instanceID": -57620
+        },
+        {
+            "instanceID": -57622
+        }
+    ],
+    "ability": {
+        "instanceID": 27068
+    },
+    "evolutions": [
+        {
+            "instanceID": 26452
+        },
+        {
+            "instanceID": 26588
+        },
+        {
+            "instanceID": 26308
+        },
+        {
+            "instanceID": 26614
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 26532
+    },
+    "backPicture": {
+        "instanceID": 26462
+    },
+    "partyFrame1": {
+        "instanceID": 25962
+    },
+    "partyFrame2": {
+        "instanceID": 25336
+    },
+    "battleIntroFrame": {
+        "instanceID": 25168
+    },
+    "pokeballName": "Great Ball",
+    "healthPhase": 2,
+    "abilityName": "Paralysis Combo",
+    "natureName": "Bold",
+    "evolutionNames": [
+        "Silcoon",
+        "Beautifly",
+        "Cascoon",
+        "Dustox"
+    ],
+    "typeNames": [
+        "bug"
+    ],
+    "moveData": [
+        {
+            "moveName": "string shot",
+            "powerPoints": 40,
+            "maxPowerpoints": 40
+        },
+        {
+            "moveName": "poison sting",
+            "powerPoints": 34,
+            "maxPowerpoints": 35
+        }
+    ]
+}

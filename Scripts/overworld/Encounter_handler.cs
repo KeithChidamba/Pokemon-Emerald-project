@@ -94,6 +94,7 @@ public class Encounter_handler : MonoBehaviour
         }
         var randomLevel = Utility.RandomRange(currentArea.minimumLevelOfPokemon, currentArea.maximumLevelOfPokemon);
         var expForRequiredLevel = PokemonOperations.CalculateExpForNextLevel(randomLevel, wildPokemon.expGroup)+1;
+        wildPokemon.canEvolve = false;//prevent evolution from exp
         wildPokemon.ReceiveExperience(expForRequiredLevel); 
         wildPokemon.hp=wildPokemon.maxHp;
         StartCoroutine(Battle_handler.Instance.StartWildBattle(wildPokemon));

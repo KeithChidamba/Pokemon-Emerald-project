@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e765e9baaf079740b08612d33df91c6, type: 3}
   m_Name: Catch wurmple
   m_EditorClassIdentifier: 
-  mainAssetName: 
-  objectiveHeading: 
+  mainAssetName: Catch wurmple
+  objectiveHeading: Go catch a wurmple
   objectiveDescription: 
   objectiveProgress: 
   hasProgression: 0

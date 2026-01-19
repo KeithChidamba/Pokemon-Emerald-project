@@ -1,0 +1,14 @@
+{
+    "mainAssetName": "Beat Grass pokemon",
+    "objectiveHeading": "Go and beat pokemon in grass",
+    "objectiveDescription": "",
+    "objectiveProgress": "",
+    "hasProgression": false,
+    "indexInList": 1,
+    "objectiveType": 2,
+    "objectiveOutline": 1,
+    "trainer": {
+        "instanceID": 0
+    },
+    "encounterSourceForObjective": 2
+}

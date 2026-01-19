@@ -89,6 +89,7 @@ public static class Obj_Instance
         newPokemon.nextLevelExpAmount = pkm.nextLevelExpAmount;
         newPokemon.expGroup = pkm.expGroup;
         newPokemon.expYield = pkm.expYield;
+        newPokemon.canEvolve = pkm.canEvolve;
         newPokemon.friendshipLevel = pkm.friendshipLevel;
         newPokemon.hasTrainer = pkm.hasTrainer;
         newPokemon.canBeFlinched = pkm.canBeFlinched;

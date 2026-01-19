@@ -5,9 +5,9 @@
     "itemEffect": "1,5",
     "itemDescription": "50% higher chance to catch compared to pokeball",
     "price": 30,
-    "quantity": 5,
+    "quantity": 4,
     "itemImage": {
-        "instanceID": 34086
+        "instanceID": 34100
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": false,

@@ -84,7 +84,7 @@ public class InputStateHandler : MonoBehaviour
     public void ResetRelevantUi(InputStateName[] stateNames)
     {
         List<InputState> inputStates = new List<InputState>();
-        
+
         foreach (var stateName in stateNames)
             inputStates.AddRange(GetRelevantStates(stateName));
         
@@ -228,12 +228,14 @@ public class InputStateHandler : MonoBehaviour
     }
     public void ChangeInputState(InputState newState)
     {
+        if (currentState.stateName == newState.stateName) return;
+       
         OnStateRemoved?.Invoke(currentState);
-        
-        if (!stateLayers.Any(s => s.stateName == newState.stateName))
-            stateLayers.Add(newState);
+
+        stateLayers.RemoveAll(s => s.stateName == newState.stateName);
+        stateLayers.Add(newState);
         ResetInputEvents();
-        currentState = stateLayers.Last();
+        currentState = newState;
         OnStateChanged?.Invoke(currentState);
         HandleStateExitability();
         SetDirectionals();

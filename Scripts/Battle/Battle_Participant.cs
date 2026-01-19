@@ -174,9 +174,7 @@ public class Battle_Participant : MonoBehaviour
     public void EndWildBattle()
     {
         statData.ResetBattleState(pokemon);
-        Wild_pkm.Instance.inBattle = false;
-        Turn_Based_Combat.Instance.faintEventDelay = false;
-        Battle_handler.Instance.EndBattle(true);
+        Wild_pkm.Instance.EndWildBattle();
     }
     private void CheckIfLoss()
     {

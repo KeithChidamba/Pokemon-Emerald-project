@@ -261,6 +261,7 @@ public class BattleVisuals : MonoBehaviour
         var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y+pkmImageRect.rect.height);
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
         pokeballImage.SetActive(false);
+        playerBattleAnimator.gameObject.SetActive(false);
     }
     public IEnumerator DisplayPokeballShake()
     {
