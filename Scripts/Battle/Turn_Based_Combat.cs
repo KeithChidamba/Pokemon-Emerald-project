@@ -486,7 +486,7 @@ public class Turn_Based_Combat : MonoBehaviour
         //player wants to change their turn usage
         _turnHistory.RemoveAt(currentTurnIndex-1);
         currentTurnIndex --;
-        InputStateHandler.Instance.OnStateRemovalComplete += Battle_handler.Instance.SetupOptionsInput;
+        InputStateHandler.Instance.OnStateRemoved += Battle_handler.Instance.SetupOptionsInput;
     }
     public void ChangeTurn(int maxParticipantIndex,int step)
     {

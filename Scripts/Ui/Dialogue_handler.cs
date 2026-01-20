@@ -142,9 +142,9 @@ public class Dialogue_handler : MonoBehaviour
         currentInteraction = newInteraction;
         HandleInteraction(false);
     }    
-    public void DisplayDetails(string info)
+    public void DisplayDetails(string info,bool canExit=true)
     {
-        canExitDialogue = true;
+        canExitDialogue = canExit;
         messagesLoading = false;
         var newInteraction = NewInteraction(info,DialogType.Details,"");
         currentInteraction = newInteraction;

@@ -21,7 +21,8 @@ public class InputState
     public bool isParentLayer;
     public bool canExit;
     public bool canManualExit;
-
+    public bool persistOnExit;
+    
     public InputState(
         InputStateName stateName,
         InputStateGroup[] groups,

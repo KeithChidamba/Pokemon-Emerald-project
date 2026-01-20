@@ -25,6 +25,7 @@ public class Game_ui_manager : MonoBehaviour
     public GameObject pcPokemonOptionsUI;
     public GameObject pcItemOptionsUI;
     public bool usingWebGl;
+    [SerializeField]private bool _canOpenMenu;
     public Image destinationPointerUI;
 
     private void Awake()
@@ -43,14 +44,26 @@ public class Game_ui_manager : MonoBehaviour
         exitButton.SetActive(!usingWebGl);
         if (usingWebGl) menuUiOptions.Remove(menuUiOptions.Last());//remove exit button
         canUseUi = false;
+        _canOpenMenu = true;
         Game_Load.Instance.OnGameStarted += () => canUseUi = true;
+        InputStateHandler.Instance.OnStateChanged += AllowMenuUsage;
     }
 
+    private void AllowMenuUsage( InputState previousState)
+    {
+        _canOpenMenu = previousState.stateName == InputStateName.Empty;
+    }
     private void Update()
     {
         if (overworld_actions.Instance == null) return;
         if (!canUseUi) return;
-        UiInputs();
+        if (Input.GetKeyDown(KeyCode.Space) && _canOpenMenu &&!viewingMenu)
+        {
+            ManageScreens(1);
+            viewingMenu = true;
+            ActivateUiElement(menuOptions,true);
+            ActivateMenuSelection();
+        }
     }
     private void ManageScreens(int change)
     {
@@ -69,16 +82,7 @@ public class Game_ui_manager : MonoBehaviour
             Player_movement.Instance.RestrictPlayerMovement();
         }
     }
-    private void UiInputs()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && !overworld_actions.Instance.usingUI && !overworld_actions.Instance.doingAction &&!viewingMenu)
-        {
-            ManageScreens(1);
-            viewingMenu = true;
-            ActivateUiElement(menuOptions,true);
-            ActivateMenuSelection();
-        }
-    } 
+
     private void ActivateMenuSelection()
     {
         var menuOptionsMethods = new List<Action>

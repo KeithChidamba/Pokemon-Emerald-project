@@ -138,6 +138,8 @@ public class Pokemon_party_member : MonoBehaviour
     }
     private void ResetSelectionVisual(InputState previousState)
     {
+        if (!_viewingParty) return;
+        if (isEmpty) return;
         ChangeVisibility(false);
     }
     public void ChangeVisibility(bool isSelected)

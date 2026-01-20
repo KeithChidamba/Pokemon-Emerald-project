@@ -27,7 +27,6 @@ public class InputStateHandler : MonoBehaviour
     private event Action OnInputDown; 
     private event Action OnInputRight; 
     private event Action OnInputLeft;
-    public event Action OnStateRemovalComplete;
     public event Action<InputState> OnStateRemoved;
     public event Action<InputState> OnStateChanged;
     public event Action<int> OnSelectionIndexChanged;
@@ -90,11 +89,11 @@ public class InputStateHandler : MonoBehaviour
         
         RemoveInputStates(inputStates);
     }
-    public void ResetRelevantUi(InputStateName stateName)
+    public void ResetRelevantUi(InputStateName stateName,bool manualExit=false)
     {
         var state = stateLayers.FirstOrDefault(state => state.stateName == stateName);
         if (state == null) return;
-        RemoveInputState(state,false);
+        RemoveInputState(state,manualExit);
     }
     private List<InputState> GetRelevantStates(InputStateGroup group)
     {
@@ -119,7 +118,7 @@ public class InputStateHandler : MonoBehaviour
     {
         foreach (var state in states)
             RemoveInputState(state,false);
-        StateRemovalCompletion();
+        LoadNextState();
     }
 
     private void RemoveInputState(InputState state,bool manualExit)
@@ -130,24 +129,19 @@ public class InputStateHandler : MonoBehaviour
         
         Action method = manualExit ? state.OnExit:state.OnClose;
         method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine
-        ResetInputEvents();
         stateLayers.Remove(state);
+        OnStateRemoved?.Invoke(state);
         if (!manualExit) return;
-        StateRemovalCompletion();
+        LoadNextState();
     }
 
-    private void StateRemovalCompletion()
+    private void LoadNextState()
     {
-        _currentStateLoaded = false;
-        if (stateLayers.Count > 0)
-            ChangeInputState(stateLayers.Last());
-        else
-            currentState =  _emptyState;
-        OnStateRemovalComplete?.Invoke();
+        ChangeInputState(stateLayers.Count > 0? stateLayers.Last() : _emptyState);
     }
     public void RemoveTopInputLayer(bool invokeOnExit)
     {
-        stateLayers.Last().OnExit = invokeOnExit? stateLayers.Last().OnExit:null;
+        currentState.OnExit = invokeOnExit? currentState.OnExit:null;
         RemoveInputState(stateLayers.Last() ,true);
     }
 
@@ -157,11 +151,22 @@ public class InputStateHandler : MonoBehaviour
         _handlingState = stateLayers.Count > 0;
         if (!_handlingState) return;
         
-        bool viewingExitableDialogue = Dialogue_handler.Instance.canExitDialogue & Dialogue_handler.Instance.displaying; 
-        
-        if (Input.GetKeyDown(KeyCode.X) && stateLayers.Last().stateName!=InputStateName.DialogueOptions
-                                        && !viewingExitableDialogue && currentState.canManualExit)
-            RemoveTopInputLayer(true);
+        bool viewingExitableDialogue = Dialogue_handler.Instance.canExitDialogue & Dialogue_handler.Instance.displaying;
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            if(currentState.stateName != InputStateName.DialogueOptions && !viewingExitableDialogue)
+            {
+                if(currentState.canExit)
+                {
+                    if (currentState.persistOnExit)
+                        currentState.OnExit.Invoke();
+                    
+                    else if(currentState.canManualExit)
+                        RemoveTopInputLayer(true);
+                }
+            }
+        }
         
         if (currentState.stateName == InputStateName.Empty) return;
 
@@ -229,9 +234,8 @@ public class InputStateHandler : MonoBehaviour
     public void ChangeInputState(InputState newState)
     {
         if (currentState.stateName == newState.stateName) return;
-       
-        OnStateRemoved?.Invoke(currentState);
-
+        _currentStateLoaded = false;
+        
         stateLayers.RemoveAll(s => s.stateName == newState.stateName);
         stateLayers.Add(newState);
         ResetInputEvents();
@@ -246,6 +250,7 @@ public class InputStateHandler : MonoBehaviour
             UpdateSelectorUi();
             currentState.selector.SetActive(true);
         }
+        
         _currentStateLoaded = true;
         var parentLayers = stateLayers.Where(s => s.isParentLayer).ToList();
         if (parentLayers.Count==0) return;
@@ -256,7 +261,6 @@ public class InputStateHandler : MonoBehaviour
     private void HandleStateExitability()
     {
         if (currentState.UpdateExitStatus == null) return;
-
         currentState.canExit = currentState.UpdateExitStatus.Invoke();
     }
     void SetDirectionals()
@@ -386,15 +390,16 @@ public class InputStateHandler : MonoBehaviour
             onExit = () => Pokemon_Details.Instance.OnMoveSelected?.Invoke(-1);
 
         if (Pokemon_Details.Instance.learningMove)
-            onExit = ()=> OnStateRemovalComplete += RemoveDetailsInputStates;
+            onExit = ()=> OnStateRemoved += RemoveDetailsInputStates;
         
         ChangeInputState(new (InputStateName.PokemonDetailsMoveSelection,new[]{InputStateGroup.PokemonDetails},
             stateDirection:InputDirection.Vertical,selectableUis:moveSelectables, 
             selector:Pokemon_Details.Instance.moveSelector, selecting:true, display:true,onExit:onExit));
     }
-    void RemoveDetailsInputStates()
+    void RemoveDetailsInputStates(InputState state)
     {
-        OnStateRemovalComplete -= RemoveDetailsInputStates;
+        if (state.stateName != InputStateName.PokemonDetailsMoveSelection) return;
+        OnStateRemoved -= RemoveDetailsInputStates;
         //if started learning but rejected it on move selection screen
         Options_manager.Instance.SkipMove();
         ResetGroupUi(InputStateGroup.PokemonDetails);
@@ -590,6 +595,7 @@ public class InputStateHandler : MonoBehaviour
     
     void SetupBattleOptions()
     {
+        currentState.persistOnExit = true;
         currentState.currentSelectionIndex = 0;
         _currentNumBoxElements = 4;
         _currentBoxCapacity = 4;

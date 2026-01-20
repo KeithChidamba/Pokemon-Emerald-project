@@ -385,12 +385,13 @@ public class Save_manager : MonoBehaviour
         Debug.LogError(errorMessage+exception);
         Dialogue_handler.Instance.DisplayDetails("Error occured while saving please restart the game!");
         EraseTemporarySaveData();
-        Dialogue_handler.Instance.EndDialogue(2f);
+        InputStateHandler.Instance.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
     }
     public IEnumerator SaveAllData()
     {
-        Dialogue_handler.Instance.DisplayDetails("Saving...");
-        
+        InputStateHandler.Instance.ResetRelevantUi(InputStateName.PlayerMenu);
+        InputStateHandler.Instance.AddDialoguePlaceHolderState();
+        Dialogue_handler.Instance.DisplayDetails("Saving...",false); 
         for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
         {
             try
@@ -482,9 +483,11 @@ public class Save_manager : MonoBehaviour
             yield return CopyCorrectSaveData(_tempSaveDataPath,_saveDataPath,recursive: true);
             yield return new WaitForSeconds(1f);
             EraseTemporarySaveData();
-            Dialogue_handler.Instance.DisplayDetails("Game saved");
-            Dialogue_handler.Instance.EndDialogue(1f);
+            Dialogue_handler.Instance.DisplayDetails("Game saved",false);
         }
+        Dialogue_handler.Instance.EndDialogue(1.5f);
+        yield return new WaitForSeconds(1.4f);
+        InputStateHandler.Instance.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
     }
 
     private void SavePartyPokemonIDs()

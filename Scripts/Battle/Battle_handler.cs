@@ -138,9 +138,14 @@ public class Battle_handler : MonoBehaviour
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(17,96,54);
         
     }
-    public void SetupOptionsInput()
+    public void SetupOptionsInput(InputState currentState)
     {
-        InputStateHandler.Instance.OnStateRemovalComplete -= SetupOptionsInput;
+        if (currentState.stateName != InputStateName.PokemonBattleOptions) return;
+        InputStateHandler.Instance.OnStateRemoved -= SetupOptionsInput;
+        SetupOptionsInput();
+    }
+    private void SetupOptionsInput()
+    {
         var battleOptionSelectables = new List<SelectableUI>
         {
             new(battleOptions[0], LoadMoveInputAndText, true),
@@ -152,10 +157,9 @@ public class Battle_handler : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new (InputStateName.PokemonBattleOptions
             , new[] { InputStateGroup.PokemonBattle }, true,
             optionsUI, InputDirection.OmniDirection, battleOptionSelectables,
-            optionSelector,true,true,canExit: false
+            optionSelector,true,true
             ,onExit:Turn_Based_Combat.Instance.RemoveTurn, updateExit:ConditionsForExit));
     }
-
     private bool ConditionsForExit()
     {
         return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0
@@ -216,6 +220,7 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn += _checkParticipantsEachTurn;
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
         InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
+        
         SetupOptionsInput();
         
         Turn_Based_Combat.Instance.ChangeTurn(-1, 0);
@@ -251,7 +256,7 @@ public class Battle_handler : MonoBehaviour
 
     private IEnumerator DisplayTrainerMessage(string message)
     {
-        Dialogue_handler.Instance.DisplayDetails(message);
+        Dialogue_handler.Instance.DisplayDetails(message,false);
         yield return new WaitUntil(()=>Dialogue_handler.Instance.dialogueFinished);
         Dialogue_handler.Instance.EndDialogue();
     }

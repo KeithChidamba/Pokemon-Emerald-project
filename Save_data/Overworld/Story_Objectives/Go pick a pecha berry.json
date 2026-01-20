@@ -9,6 +9,6 @@
     "overworldInteractionForObjective": 3,
     "requiresSuccess": true,
     "itemForObjective": {
-        "instanceID": 25382
+        "instanceID": 0
     }
 }
