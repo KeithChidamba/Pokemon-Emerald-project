@@ -67,7 +67,7 @@
         16,
         30
     ],
-    "currentEvolutionLineIndex": 0,
+    "currentEvolutionLineIndex": 1,
     "friendshipEvolutionRequirement": {
         "friendshipRequirement": 0,
         "evolutionIndex": 0
@@ -147,16 +147,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -19610
+            "instanceID": -11278
         },
         {
-            "instanceID": -19612
+            "instanceID": -11280
         },
         {
-            "instanceID": -19614
+            "instanceID": -11282
         },
         {
-            "instanceID": -19616
+            "instanceID": -11284
         }
     ],
     "ability": {
@@ -171,7 +171,7 @@
         }
     ],
     "heldItem": {
-        "instanceID": -19620
+        "instanceID": -11288
     },
     "hasItem": true,
     "frontPicture": {

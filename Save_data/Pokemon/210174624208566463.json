@@ -49,8 +49,8 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 45.0,
-    "currentLevel": 28,
-    "currentExpAmount": 15245,
+    "currentLevel": 27,
+    "currentExpAmount": 17240,
     "currentLevelExpAmount": 9,
     "nextLevelExpAmount": 17242,
     "expGroup": 3,
@@ -74,7 +74,7 @@
         16,
         30
     ],
-    "currentEvolutionLineIndex": 0,
+    "currentEvolutionLineIndex": 1,
     "friendshipEvolutionRequirement": {
         "friendshipRequirement": 0,
         "evolutionIndex": 0
@@ -155,16 +155,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -19640
+            "instanceID": -11258
         },
         {
-            "instanceID": -19642
+            "instanceID": -11260
         },
         {
-            "instanceID": -19644
+            "instanceID": -11262
         },
         {
-            "instanceID": -19646
+            "instanceID": -11264
         }
     ],
     "ability": {

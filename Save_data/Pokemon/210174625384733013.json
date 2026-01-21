@@ -70,7 +70,7 @@
         16,
         30
     ],
-    "currentEvolutionLineIndex": 0,
+    "currentEvolutionLineIndex": 1,
     "friendshipEvolutionRequirement": {
         "friendshipRequirement": 0,
         "evolutionIndex": 0
@@ -158,16 +158,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -19600
+            "instanceID": -11268
         },
         {
-            "instanceID": -19602
+            "instanceID": -11270
         },
         {
-            "instanceID": -19604
+            "instanceID": -11272
         },
         {
-            "instanceID": -19606
+            "instanceID": -11274
         }
     ],
     "ability": {

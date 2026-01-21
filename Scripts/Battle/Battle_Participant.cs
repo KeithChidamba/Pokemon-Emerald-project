@@ -249,6 +249,7 @@ public class Battle_Participant : MonoBehaviour
         if (isPlayer)
         {
             pokemon.OnEvolutionSuccessful -= AddToEvolutionQueue;
+            pokemon.OnNewLevel -= statData.SaveActualStats;
             pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
         }
         pokemon.OnHealthChanged -= CheckIfFainted;
@@ -335,6 +336,10 @@ public class Battle_Participant : MonoBehaviour
     }
     private void AddToEvolutionQueue(int evolutionIndex)
     {
+        if (Battle_handler.Instance.evolutionQueue.Any(evo=> evo.participantToEvolve==this))
+        {//in-case of instant multi-level up
+            return;
+        }
         var evoData = new EvolutionInBattleData();
         evoData.participantToEvolve = this;
         evoData.evolutionIndex = evolutionIndex;
@@ -360,11 +365,12 @@ public class Battle_Participant : MonoBehaviour
         Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
         Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
         pokemon.OnHealthChanged += CheckIfFainted;
+        ActivateUI(doubleBattleUI, Battle_handler.Instance.isDoubleBattle);
+        ActivateUI(singleBattleUI, !Battle_handler.Instance.isDoubleBattle);
+        if (!isPlayer) return;
         pokemon.OnEvolutionSuccessful += AddToEvolutionQueue;
         pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
         pokemon.OnNewLevel += statData.SaveActualStats;
-        ActivateUI(doubleBattleUI, Battle_handler.Instance.isDoubleBattle);
-        ActivateUI(singleBattleUI, !Battle_handler.Instance.isDoubleBattle);
     }
     private void ActivateGenderImage()
     {

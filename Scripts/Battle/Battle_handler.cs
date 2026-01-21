@@ -646,6 +646,10 @@ public class Battle_handler : MonoBehaviour
         Turn_Based_Combat.Instance.OnTurnsCompleted -= ResetPlayersTurnUsage;
         InputStateHandler.Instance.OnStateChanged -= EnableBattleMessage;
         Dialogue_handler.Instance.EndDialogue();
+        InputStateHandler.Instance.ResetRelevantUi(new[]
+        {
+            InputStateName.PlaceHolder,InputStateName.DialoguePlaceHolder
+        });
         usedTurnForItem = false;
         usedTurnForSwap = false;
         Options_manager.Instance.playerInBattle = false;
