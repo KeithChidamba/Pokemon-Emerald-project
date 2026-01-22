@@ -1,12 +1,12 @@
 {
-    "mainAssetName": "Beat Grass pokemon",
-    "objectiveHeading": "Go and beat pokemon in grass",
+    "mainAssetName": "Catch wurmple",
+    "objectiveHeading": "Go catch a wurmple",
     "objectiveDescription": "",
     "objectiveProgress": "",
     "hasProgression": false,
-    "indexInList": 3,
+    "indexInList": 1,
     "objectiveType": 2,
-    "objectiveOutline": 1,
+    "objectiveOutline": 2,
     "trainer": {
         "instanceID": 0
     },

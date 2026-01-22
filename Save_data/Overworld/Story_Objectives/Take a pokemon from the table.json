@@ -1,12 +1,12 @@
 {
-    "mainAssetName": "Heal Pokemon",
-    "objectiveHeading": "Heal your pokemon at the centre",
+    "mainAssetName": "Take a gift pokemon",
+    "objectiveHeading": "Take a pokemon from the table",
     "objectiveDescription": "",
     "objectiveProgress": "",
     "hasProgression": false,
-    "indexInList": 11,
+    "indexInList": 0,
     "objectiveType": 1,
-    "overworldInteractionForObjective": 5,
+    "overworldInteractionForObjective": 7,
     "requiresSuccess": false,
     "itemForObjective": {
         "instanceID": 0

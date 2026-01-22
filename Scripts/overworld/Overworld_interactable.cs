@@ -13,5 +13,5 @@ public class Overworld_interactable : MonoBehaviour
 
 public enum OverworldInteractionType
 {
-    None,Clerk,PlantBerry,PickBerry,WaterBerryTree,PokemonCenter,Battle
+    None,Clerk,PlantBerry,PickBerry,WaterBerryTree,PokemonCenter,Battle,ReceiveGiftPokemon
 }

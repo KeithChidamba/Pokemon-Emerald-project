@@ -4656,7 +4656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 2a9ae13e99aacc8468b5be2037e26cea, type: 2}
   location: 0
-  overworldInteractionType: 0
+  overworldInteractionType: 7
   area: {fileID: 0}
 --- !u!114 &112600289 stripped
 MonoBehaviour:
@@ -5283,7 +5283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 65a60809e4e9bad41a00ea111b3d83d0, type: 2}
   location: 0
-  overworldInteractionType: 0
+  overworldInteractionType: 7
   area: {fileID: 0}
 --- !u!1001 &131756837
 PrefabInstance:
@@ -7894,6 +7894,7 @@ MonoBehaviour:
     isParentLayer: 0
     canExit: 0
     canManualExit: 0
+    persistOnExit: 0
   _currentStateLoaded: 0
   stateLayers: []
   boxCoordinates: 0000000000000000
@@ -10653,6 +10654,7 @@ MonoBehaviour:
   pcPokemonOptionsUI: {fileID: 1132791953}
   pcItemOptionsUI: {fileID: 1405977144}
   usingWebGl: 0
+  _canOpenMenu: 0
   destinationPointerUI: {fileID: 926873893}
 --- !u!1 &318233309
 GameObject:
@@ -27690,8 +27692,6 @@ MonoBehaviour:
   participant: {fileID: 0}
   inBattle: 0
   ranAway: 0
-  canAttack: 1
-  _usedMove: 0
 --- !u!1 &854301614
 GameObject:
   m_ObjectHideFlags: 0
@@ -36413,6 +36413,7 @@ MonoBehaviour:
   overworldBerryTrees: []
   treeDataQueue: []
   allStoryObjectives:
+  - {fileID: 11400000, guid: c24f9d21e8ed5eaedadd1a074cf282b2, type: 2}
   - {fileID: 11400000, guid: 9d9a5a9aa568a806d93f91c5d0fd018f, type: 2}
   - {fileID: 11400000, guid: 82dc9f501c937bb6d9badcb3602217a0, type: 2}
   - {fileID: 11400000, guid: 181ac78c67342a00b88f1f50e6104180, type: 2}
@@ -72973,7 +72974,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: e8890c71d41487449ae48531dba81e2b, type: 2}
   location: 0
-  overworldInteractionType: 0
+  overworldInteractionType: 7
   area: {fileID: 0}
 --- !u!1001 &1749442652
 PrefabInstance:

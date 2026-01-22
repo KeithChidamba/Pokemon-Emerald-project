@@ -4,11 +4,11 @@
     "objectiveDescription": "",
     "objectiveProgress": "",
     "hasProgression": false,
-    "indexInList": 10,
+    "indexInList": 12,
     "objectiveType": 3,
     "uiUsage": 2,
     "itemForObjective": {
-        "instanceID": 0
+        "instanceID": 25208
     },
     "pokemonForObjective": {
         "instanceID": 0
