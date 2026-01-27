@@ -15,7 +15,7 @@ public class Battle_handler : MonoBehaviour
     public GameObject movesUI;
     public GameObject optionsUI;
     public GameObject[] battleOptions;
-    public Battle_Participant[] battleParticipants = { null, null, null, null };
+    public Battle_Participant[] battleParticipants;
     public List<Battle_Participant> faintQueue = new();
     public Text movePowerPointsText;
     public Text moveTypeText;
@@ -406,12 +406,9 @@ public class Battle_handler : MonoBehaviour
         {
             if (participant.isActive)
             {
-                if (participant.pokemon!=null)
+                if (participant.pokemon is{ hp:>0})
                 {
-                    if (participant.pokemon.hp>0)
-                    {
-                        validList.Add(participant);
-                    }
+                    validList.Add(participant);
                 }
             }
         }

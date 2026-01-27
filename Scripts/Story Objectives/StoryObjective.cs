@@ -3,11 +3,21 @@ using UnityEngine;
 [Serializable]
 public abstract class StoryObjective : ScriptableObject
 {
-    public virtual void LoadObjective() { }
+    private void LoadObjective()
+    {
+        OnLoad?.Invoke();
+        OnObjectiveLoaded();
+    }
 
-    public virtual void ClearObjective() { }
+    protected virtual void OnObjectiveLoaded() { }
+    
+    public virtual void ClearObjective()
+    {
+        OnClear?.Invoke();
+    }
 
-    public virtual void LoadSaveData(StoryObjective objectiveData){ }
+    protected virtual void LoadSaveData(StoryObjective objectiveData){ }
+    
     public void FindMainAsset()
     {
         var mainAsset = Resources.Load<StoryObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+mainAssetName);
@@ -19,7 +29,8 @@ public abstract class StoryObjective : ScriptableObject
         if(hasProgression) mainAsset.LoadSaveData(this);
         mainAsset.LoadObjective();
     }
-    
+    public event Action OnLoad;
+    public event Action OnClear;
     public string mainAssetName;
     public string objectiveHeading;
     public string objectiveDescription;
@@ -42,7 +53,7 @@ public abstract class StoryObjective : ScriptableObject
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class ObjectiveTypeWrapper
 {
     public StoryObjectiveType objectiveType;

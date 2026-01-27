@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Aspear berry",
     "berryItem": {
-        "instanceID": 26846
+        "instanceID": 26852
     },
     "treeIndex": 3,
     "minutesPerStage": 45,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32890
+                    "instanceID": 32794
                 },
                 {
-                    "instanceID": 32890
+                    "instanceID": 32794
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32892
+                    "instanceID": 32796
                 },
                 {
-                    "instanceID": 32894
+                    "instanceID": 32798
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33220
+                    "instanceID": 33336
                 },
                 {
-                    "instanceID": 33222
+                    "instanceID": 33338
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33224
+                    "instanceID": 33340
                 },
                 {
-                    "instanceID": 33226
+                    "instanceID": 33342
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33228
+                    "instanceID": 33344
                 },
                 {
-                    "instanceID": 33230
+                    "instanceID": 33346
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-01-22T20:27:53.5514960+02:00"
+    "lastLogin": "2026-01-27T17:43:38.6538080+02:00"
 }

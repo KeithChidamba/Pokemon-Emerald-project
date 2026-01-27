@@ -262,7 +262,7 @@ public class Pokemon_party : MonoBehaviour
             pokemon_storage.Instance.numPartyMembers++;
         }
         else
-            pokemon_storage.Instance.AddPokemonToStorage(pokemon);
+            pokemon_storage.Instance.AddPokemonToStorage(newPokemon);
     }
 
     public void SortByFainted()

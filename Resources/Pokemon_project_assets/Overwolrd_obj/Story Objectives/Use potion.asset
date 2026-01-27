@@ -9,13 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f71006a98bcd6a44db954878fe2dd788, type: 3}
-  m_Name: Use Potion
+  m_Script: {fileID: 11500000, guid: a891a9719695664808c411655ee5efc2, type: 3}
+  m_Name: Use potion
   m_EditorClassIdentifier: 
-  mainAssetName: Use Potion
-  objectiveHeading: Use a potion
+  mainAssetName: 
+  objectiveHeading: 
   objectiveDescription: 
   objectiveProgress: 
+  hasProgression: 0
+  indexInList: 0
   objectiveType: 3
-  uiUsage: 1
   itemForObjective: {fileID: 11400000, guid: 2971f0d1ef85ba44a874a6e765631d6b, type: 2}
+  itemObjectiveType: 1

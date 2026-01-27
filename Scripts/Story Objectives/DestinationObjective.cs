@@ -4,11 +4,10 @@ using UnityEngine;
 public class DestinationObjective : StoryObjective
 {
     public readonly string destinationTag = "Destination";
-    public event Action OnLoad;
 
-    public override void LoadObjective()
+
+    protected override void OnObjectiveLoaded()
     {
-        OnLoad?.Invoke();
         Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
     }
 

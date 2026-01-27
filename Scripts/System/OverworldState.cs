@@ -12,6 +12,7 @@ public class OverworldState : MonoBehaviour
     public List<StoryObjective> allStoryObjectives = new();
     public List<StoryObjective> currentStoryObjectives = new();
     public StoryProgressObjective storyProgressObjective;
+    public event Action OnObjectivesLoaded;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -62,13 +63,17 @@ public class OverworldState : MonoBehaviour
             currentStoryObjectives.Clear();
             currentStoryObjectives.AddRange(orderList);
         }
-        
+        OnObjectivesLoaded?.Invoke();
         if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
         {
             Game_Load.Instance.OnGameStarted += ()=>currentStoryObjectives[0].FindMainAsset();
         }
     }
 
+    public bool HasObjective(string objectiveName)
+    {
+        return currentStoryObjectives.Any(obj=>obj.mainAssetName == objectiveName);
+    }
     public void ClearAndLoadNextObjective()
     {
         currentStoryObjectives.RemoveAt(0);

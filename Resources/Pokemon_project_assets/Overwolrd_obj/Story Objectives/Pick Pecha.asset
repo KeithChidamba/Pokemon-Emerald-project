@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f71006a98bcd6a44db954878fe2dd788, type: 3}
-  m_Name: Withdraw pikachu
+  m_Script: {fileID: 11500000, guid: c27a711ced1182a77a61e79e3d82f4cb, type: 3}
+  m_Name: Pick Pecha
   m_EditorClassIdentifier: 
-  mainAssetName: Withdraw pikachu
-  objectiveHeading: Withdraw pikachu from pc
+  mainAssetName: 
+  objectiveHeading: Go pick a pecha berry
   objectiveDescription: 
   objectiveProgress: 
   hasProgression: 0
   indexInList: 0
-  objectiveType: 3
-  uiUsage: 4
-  itemForObjective: {fileID: 0}
-  pokemonForObjective: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+  objectiveType: 1
+  overworldInteractionForObjective: 3
+  hasSpecialLogic: 1
+  berryForObjective: {fileID: 11400000, guid: 81f7337dab7f44d7da958c56b94ff8cb, type: 2}

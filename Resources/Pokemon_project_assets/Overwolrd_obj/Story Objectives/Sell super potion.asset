@@ -9,16 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 982d236647bb05c069146cf47d639ff1, type: 3}
-  m_Name: Pick pecha berry
+  m_Script: {fileID: 11500000, guid: c94b6633adc97ef929f385a1db57e01d, type: 3}
+  m_Name: Sell super potion
   m_EditorClassIdentifier: 
   mainAssetName: 
-  objectiveHeading: Go pick a pecha berry
+  objectiveHeading: 
   objectiveDescription: 
   objectiveProgress: 
   hasProgression: 0
   indexInList: 0
-  objectiveType: 1
-  overworldInteractionForObjective: 3
-  requiresSuccess: 1
-  itemForObjective: {fileID: 11400000, guid: 81f7337dab7f44d7da958c56b94ff8cb, type: 2}
+  objectiveType: 3
+  itemForObjective: {fileID: 11400000, guid: ed582cc298cf1af429facd2f75ef230f, type: 2}
+  marketObjectiveType: 0

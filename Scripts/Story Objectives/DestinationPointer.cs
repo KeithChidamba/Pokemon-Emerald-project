@@ -26,7 +26,6 @@ public class DestinationPointer : MonoBehaviour
         canvasRect = pointerUIImage.canvas.GetComponent<RectTransform>();
         Collider_checks.OnCollision += ConfirmDestination;
         overworldObject.SetActive(true);
-        
     }
 
     private void ConfirmDestination(Transform currentCollision)

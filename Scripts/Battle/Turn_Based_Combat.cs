@@ -461,8 +461,7 @@ public class Turn_Based_Combat : MonoBehaviour
     private bool IsValidParticipantState(Battle_Participant participant)
     {
         if (!participant.isActive) return false;
-        if (participant.pokemon.hp<=0) return false;
-        return participant.pokemon != null;
+        return participant.pokemon is { hp: >= 0 };
     }
 
     private bool IsValidParticipant(Turn turn,Battle_Participant participant)

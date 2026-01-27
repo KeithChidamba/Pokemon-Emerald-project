@@ -9,8 +9,8 @@ public class BattleObjective : StoryObjective
     public BattleObjectiveOutline objectiveOutline;
     public TrainerData trainer;
     public BattleEncounterSource encounterSourceForObjective;
-    
-    public override void LoadObjective()
+
+    protected override void OnObjectiveLoaded()
     {
         Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
         if (objectiveOutline == BattleObjectiveOutline.BeatTrainer)
