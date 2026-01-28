@@ -1,4 +1,4 @@
-public abstract class UiActionObjective : StoryObjective
+public class UiActionObjective : StoryObjective
 {
     protected override void OnObjectiveLoaded()
     {

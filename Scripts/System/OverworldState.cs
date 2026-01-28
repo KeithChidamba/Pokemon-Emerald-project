@@ -22,7 +22,8 @@ public class OverworldState : MonoBehaviour
         }
         Instance = this;
     }
-    private void Start()
+
+    private IEnumerator LoadOverworldState()
     {
         overworldBerryTrees.Clear();
         currentStoryObjectives.Clear();
@@ -56,18 +57,26 @@ public class OverworldState : MonoBehaviour
             storyProgressObjective.mainAssetName = storyProgressObjective.name;
             storyProgressObjective.totalObjectiveAmount = allStoryObjectives.Count;
             storyProgressObjective.numCompleted = 0;
+            yield return new WaitUntil(() => currentStoryObjectives.Count==allStoryObjectives.Count);
         }
         else
         {
-            var orderList = currentStoryObjectives.OrderBy(obj => obj.indexInList).ToList();
+            var orderList = currentStoryObjectives.OrderBy(obj => obj.GetIndex()).ToList();
             currentStoryObjectives.Clear();
             currentStoryObjectives.AddRange(orderList);
+            yield return new WaitUntil(() => currentStoryObjectives.Count==orderList.Count);
         }
+        yield return null;
         OnObjectivesLoaded?.Invoke();
         if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
         {
             Game_Load.Instance.OnGameStarted += ()=>currentStoryObjectives[0].FindMainAsset();
         }
+        yield return null;
+    }
+    private void Start()
+    {
+        StartCoroutine(LoadOverworldState());
     }
 
     public bool HasObjective(string objectiveName)
@@ -108,7 +117,7 @@ public class OverworldState : MonoBehaviour
         foreach (var objective in currentStoryObjectives)
         {
             objective.mainAssetName = objective.mainAssetName==string.Empty? objective.name:objective.mainAssetName;
-            objective.indexInList = objectiveIndex;
+            objective.SetIndex(objectiveIndex);
             objectiveIndex++;
             Save_manager.Instance.SaveStoryDataAsJson(objective,objective.objectiveHeading);
             yield return new WaitForSeconds(0.025f);

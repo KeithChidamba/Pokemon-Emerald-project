@@ -9,16 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e765e9baaf079740b08612d33df91c6, type: 3}
-  m_Name: Beat Grass pokemon
+  m_Script: {fileID: 11500000, guid: 2c1c4ae4dc57cc27f9db49f6981bebaf, type: 3}
+  m_Name: beat water pokemon
   m_EditorClassIdentifier: 
-  mainAssetName: Beat Grass pokemon
-  objectiveHeading: Go and beat pokemon in grass
-  objectiveDescription: 
-  objectiveProgress: 
+  mainAssetName: 
+  objectiveHeading: 
   hasProgression: 0
-  indexInList: 0
   objectiveType: 2
-  objectiveOutline: 1
-  trainer: {fileID: 0}
-  encounterSourceForObjective: 2
+  objectiveOutline: 0
+  encounterSourceForObjective: 1
+  pokemonForObjective: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}

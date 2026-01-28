@@ -18,6 +18,6 @@ MonoBehaviour:
   objectiveProgress: 
   hasProgression: 0
   indexInList: 0
-  objectiveType: 3
+  objectiveType: 7
   storageObjectiveType: 0
   pokemonForObjective: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}

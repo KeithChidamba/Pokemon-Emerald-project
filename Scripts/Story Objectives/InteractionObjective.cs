@@ -5,39 +5,28 @@ using UnityEngine;
 public class InteractionObjective : StoryObjective
 {
    public OverworldInteractionType overworldInteractionForObjective;
-   public bool hasSpecialLogic;
-   
    protected Action onObjectiveComplete;
    
    protected override void OnObjectiveLoaded()
    {
       Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
-      if(hasSpecialLogic)
-         Dialogue_handler.Instance.OnOptionsDisplayed += InteractionResult;
-      else Options_manager.Instance.OnInteractionOptionChosen += CheckInteraction;
+      Options_manager.Instance.OnInteractionOptionChosen += CheckInteractionOption;
    }
    
-
-   protected virtual void InteractionResult(Overworld_interactable interactable) { }
-   
-   private void CheckInteraction(Overworld_interactable interactable, int optionChosen)
+   private void CheckInteractionOption(Overworld_interactable interactable, int optionChosen)
    {
       if (optionChosen>0)
       {
          Dialogue_handler.Instance.EndDialogue(); 
          return;
       }
-      CheckEventMatch(interactable.overworldInteractionType);
-   }
-  
-   private void CheckEventMatch(OverworldInteractionType interactionType)
-   {
-      if (overworldInteractionForObjective != interactionType) return;
+      if (overworldInteractionForObjective != interactable.overworldInteractionType) return;
       ClearObjective();
    }
+
    public override void ClearObjective()
    {
-      Options_manager.Instance.OnInteractionOptionChosen -= CheckInteraction;
+      Options_manager.Instance.OnInteractionOptionChosen -= CheckInteractionOption;
       OverworldState.Instance.ClearAndLoadNextObjective();
    }
 }

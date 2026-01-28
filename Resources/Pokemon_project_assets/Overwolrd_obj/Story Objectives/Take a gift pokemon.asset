@@ -18,7 +18,6 @@ MonoBehaviour:
   objectiveProgress: 
   hasProgression: 0
   indexInList: 0
-  objectiveType: 1
+  objectiveType: 7
   overworldInteractionForObjective: 7
-  requiresSuccess: 0
-  itemForObjective: {fileID: 0}
+  hasSpecialLogic: 0

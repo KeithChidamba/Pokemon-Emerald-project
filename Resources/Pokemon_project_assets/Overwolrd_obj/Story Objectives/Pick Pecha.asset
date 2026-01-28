@@ -18,7 +18,7 @@ MonoBehaviour:
   objectiveProgress: 
   hasProgression: 0
   indexInList: 0
-  objectiveType: 1
+  objectiveType: 6
   overworldInteractionForObjective: 3
   hasSpecialLogic: 1
   berryForObjective: {fileID: 11400000, guid: 81f7337dab7f44d7da958c56b94ff8cb, type: 2}

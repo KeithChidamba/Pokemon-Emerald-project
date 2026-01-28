@@ -16,7 +16,7 @@ public class Encounter_handler : MonoBehaviour
     public Pokemon wildPokemon;
     public int overworldEncounterChance = 2;
     public static Encounter_handler Instance;
-    public event Action<BattleEncounterSource> OnEncounterTriggered;
+    public event Action<Pokemon,BattleEncounterSource> OnEncounterTriggered;
 
     private void Awake()
     {
@@ -37,7 +37,7 @@ public class Encounter_handler : MonoBehaviour
         {
             if (EncounteredPokemon(i))
             {
-                OnEncounterTriggered?.Invoke(BattleEncounterSource.TallGrass);
+                OnEncounterTriggered?.Invoke(wildPokemon,BattleEncounterSource.TallGrass);
                 break;
             }
         }
@@ -62,7 +62,7 @@ public class Encounter_handler : MonoBehaviour
         {
             if (EncounteredPokemon(i))
             {
-                OnEncounterTriggered?.Invoke(BattleEncounterSource.Fishing);
+                OnEncounterTriggered?.Invoke(wildPokemon,BattleEncounterSource.Fishing);
                 break;
             }
         }

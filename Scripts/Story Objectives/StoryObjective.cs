@@ -33,10 +33,8 @@ public abstract class StoryObjective : ScriptableObject
     public event Action OnClear;
     public string mainAssetName;
     public string objectiveHeading;
-    public string objectiveDescription;
-    public string objectiveProgress;
     public bool hasProgression;
-    public int indexInList;
+    private int _indexInList;
     public StoryObjectiveType objectiveType;
 
     public static StoryObjective GetObjectiveType(StoryObjectiveType type)
@@ -45,12 +43,20 @@ public abstract class StoryObjective : ScriptableObject
         {
             StoryObjectiveType.Destination => CreateInstance<DestinationObjective>(),
             StoryObjectiveType.StoryProgress => CreateInstance<StoryProgressObjective>(),
-            StoryObjectiveType.UiUsage => CreateInstance<UiActionObjective>(),
+            StoryObjectiveType.MarketUiUsage => CreateInstance<MarketUiObjective>(),
+            StoryObjectiveType.GeneralItemUiUsage => CreateInstance<GeneralItemUiObjective>(),
+            StoryObjectiveType.PokemonStorageUiUsage => CreateInstance<PokemonStorageObjective>(),
             StoryObjectiveType.Interaction => CreateInstance<InteractionObjective>(),
-            StoryObjectiveType.Battle => CreateInstance<BattleObjective>(),
+            StoryObjectiveType.BerryInteraction => CreateInstance<BerryInteractionObjective>(),
+            StoryObjectiveType.WildBattle => CreateInstance<WildBattleObjective>(),
+            StoryObjectiveType.TrainerBattle => CreateInstance<TrainerBattleObjective>(),
             _ => null
         };
     }
+
+    public int GetIndex() => _indexInList;
+
+    public void SetIndex(int newIndex) { _indexInList = newIndex; }
 }
 
 [Serializable]
@@ -60,5 +66,6 @@ public class ObjectiveTypeWrapper
 }
 public enum StoryObjectiveType
 {
-    Destination,Interaction,Battle,UiUsage,StoryProgress
+    Destination,Interaction,WildBattle,GeneralItemUiUsage,StoryProgress
+    ,MarketUiUsage,BerryInteraction,PokemonStorageUiUsage,TrainerBattle
 }

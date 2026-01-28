@@ -18,6 +18,6 @@ MonoBehaviour:
   objectiveProgress: 
   hasProgression: 0
   indexInList: 0
-  objectiveType: 3
+  objectiveType: 5
   itemForObjective: {fileID: 11400000, guid: 1b316d4fb5fa016ff98dcf899f6f943d, type: 2}
   marketObjectiveType: 1

@@ -6,30 +6,35 @@ using UnityEngine;
 public class BerryInteractionObjective : InteractionObjective
 {
     public Item berryForObjective;
-    protected override void InteractionResult(Overworld_interactable interactable)
+    private string _berryTreeName;
+    protected override void OnObjectiveLoaded()
+    {
+       Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
+       Dialogue_handler.Instance.OnOptionsDisplayed += CheckInteractionTriggered;
+    }
+    
+    private void CheckInteractionTriggered(Overworld_interactable interactable)
     {
         if (overworldInteractionForObjective != interactable.overworldInteractionType) return;
         
-        var berryTree = interactable.GetComponent<BerryTree>(); 
-        
-        Action<OverworldInteractionType,bool> checkEventSuccessBerry = 
-            (interactionType,success)=> CheckEventSuccess(success,berryTree.treeData.berryItem.itemName);
+        var berryTree = interactable.GetComponent<BerryTree>();
+        _berryTreeName = berryTree.treeData.berryItem.itemName;
      
-        berryTree.OnInteractionComplete += checkEventSuccessBerry;
+        berryTree.OnInteractionComplete += CheckEventSuccess;
         onObjectiveComplete += RemoveSubscription;
         return;
         void RemoveSubscription()
         {
-            berryTree.OnInteractionComplete -= checkEventSuccessBerry;
+            berryTree.OnInteractionComplete -= CheckEventSuccess;
             onObjectiveComplete -= RemoveSubscription;
         } 
-    }
-    private void CheckEventSuccess(bool successful,string nameCheck)
-    {
-        if (!successful) return;
-        if(berryForObjective.itemName!=nameCheck) return;
+        void CheckEventSuccess(bool successful)
+        {
+            if (!successful) return;
+            if(berryForObjective.itemName!=_berryTreeName) return;
       
-        onObjectiveComplete?.Invoke();
-        ClearObjective();
+            onObjectiveComplete?.Invoke();
+            ClearObjective();
+        }
     }
 }

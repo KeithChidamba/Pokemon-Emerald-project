@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,8 @@ public class ObjectiveObjectHandler : MonoBehaviour
   public StoryObjective objective;
   public List<GameObject> propsForObjective;
   public bool removeOnObjectiveClear;
-    void Start()
+
+  void Start()
     {
         OverworldState.Instance.OnObjectivesLoaded += CheckForRequiredObjective;
     }

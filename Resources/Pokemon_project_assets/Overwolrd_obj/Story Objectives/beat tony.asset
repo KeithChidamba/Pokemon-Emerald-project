@@ -9,16 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e765e9baaf079740b08612d33df91c6, type: 3}
-  m_Name: Beat Water pokemon
+  m_Script: {fileID: 11500000, guid: f8471c47d2e02d6fab4eceba3aced4ae, type: 3}
+  m_Name: beat tony
   m_EditorClassIdentifier: 
   mainAssetName: 
-  objectiveHeading: Go and fish for a fight
-  objectiveDescription: 
-  objectiveProgress: 
+  objectiveHeading: 
   hasProgression: 0
-  indexInList: 0
-  objectiveType: 2
-  objectiveOutline: 1
-  trainer: {fileID: 0}
-  encounterSourceForObjective: 1
+  objectiveType: 8
+  trainer: {fileID: 11400000, guid: 63da23a9266e2d243a58eb44a0930844, type: 2}
