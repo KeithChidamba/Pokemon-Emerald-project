@@ -13,11 +13,8 @@ MonoBehaviour:
   m_Name: Sell super potion
   m_EditorClassIdentifier: 
   mainAssetName: 
-  objectiveHeading: 
-  objectiveDescription: 
-  objectiveProgress: 
+  objectiveHeading: sell super potion
   hasProgression: 0
-  indexInList: 0
   objectiveType: 5
   itemForObjective: {fileID: 11400000, guid: ed582cc298cf1af429facd2f75ef230f, type: 2}
   marketObjectiveType: 0

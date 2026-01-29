@@ -34,7 +34,7 @@ public abstract class StoryObjective : ScriptableObject
     public string mainAssetName;
     public string objectiveHeading;
     public bool hasProgression;
-    private int _indexInList;
+    public int indexInList;
     public StoryObjectiveType objectiveType;
 
     public static StoryObjective GetObjectiveType(StoryObjectiveType type)
@@ -53,10 +53,7 @@ public abstract class StoryObjective : ScriptableObject
             _ => null
         };
     }
-
-    public int GetIndex() => _indexInList;
-
-    public void SetIndex(int newIndex) { _indexInList = newIndex; }
+    
 }
 
 [Serializable]

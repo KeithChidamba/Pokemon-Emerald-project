@@ -1,0 +1,11 @@
+{
+    "mainAssetName": "Plant Oran",
+    "objectiveHeading": "plant oran berry",
+    "hasProgression": false,
+    "indexInList": 7,
+    "objectiveType": 6,
+    "overworldInteractionForObjective": 2,
+    "berryForObjective": {
+        "instanceID": 26172
+    }
+}

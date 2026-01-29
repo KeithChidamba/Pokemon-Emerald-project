@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: beat grass pokemon
   m_EditorClassIdentifier: 
   mainAssetName: 
-  objectiveHeading: 
+  objectiveHeading: Beat grass pokemon
   hasProgression: 0
   objectiveType: 2
   objectiveOutline: 0

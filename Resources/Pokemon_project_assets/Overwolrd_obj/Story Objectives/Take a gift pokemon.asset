@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 982d236647bb05c069146cf47d639ff1, type: 3}
   m_Name: Take a gift pokemon
   m_EditorClassIdentifier: 
-  mainAssetName: 
+  mainAssetName: Take a gift pokemon
   objectiveHeading: Take a pokemon from the table
-  objectiveDescription: 
-  objectiveProgress: 
   hasProgression: 0
-  indexInList: 0
-  objectiveType: 7
+  objectiveType: 1
   overworldInteractionForObjective: 7
-  hasSpecialLogic: 0

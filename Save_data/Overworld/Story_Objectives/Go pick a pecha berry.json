@@ -2,9 +2,10 @@
     "mainAssetName": "Pick Pecha",
     "objectiveHeading": "Go pick a pecha berry",
     "hasProgression": false,
+    "indexInList": 6,
     "objectiveType": 6,
     "overworldInteractionForObjective": 3,
     "berryForObjective": {
-        "instanceID": 25386
+        "instanceID": 25398
     }
 }

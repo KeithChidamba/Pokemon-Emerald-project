@@ -13,11 +13,8 @@ MonoBehaviour:
   m_Name: Equip Rod
   m_EditorClassIdentifier: 
   mainAssetName: 
-  objectiveHeading: 
-  objectiveDescription: 
-  objectiveProgress: 
+  objectiveHeading: equip old rod
   hasProgression: 0
-  indexInList: 0
   objectiveType: 3
   itemForObjective: {fileID: 11400000, guid: 024640736495ea6488988d378acc6fa0, type: 2}
   itemObjectiveType: 0

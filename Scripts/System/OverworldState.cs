@@ -61,7 +61,7 @@ public class OverworldState : MonoBehaviour
         }
         else
         {
-            var orderList = currentStoryObjectives.OrderBy(obj => obj.GetIndex()).ToList();
+            var orderList = currentStoryObjectives.OrderBy(obj => obj.indexInList).ToList();
             currentStoryObjectives.Clear();
             currentStoryObjectives.AddRange(orderList);
             yield return new WaitUntil(() => currentStoryObjectives.Count==orderList.Count);
@@ -117,7 +117,7 @@ public class OverworldState : MonoBehaviour
         foreach (var objective in currentStoryObjectives)
         {
             objective.mainAssetName = objective.mainAssetName==string.Empty? objective.name:objective.mainAssetName;
-            objective.SetIndex(objectiveIndex);
+            objective.indexInList = objectiveIndex;
             objectiveIndex++;
             Save_manager.Instance.SaveStoryDataAsJson(objective,objective.objectiveHeading);
             yield return new WaitForSeconds(0.025f);

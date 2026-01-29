@@ -13,11 +13,8 @@ MonoBehaviour:
   m_Name: Buy Energy Root
   m_EditorClassIdentifier: 
   mainAssetName: 
-  objectiveHeading: 
-  objectiveDescription: 
-  objectiveProgress: 
+  objectiveHeading: buy energy root
   hasProgression: 0
-  indexInList: 0
   objectiveType: 5
   itemForObjective: {fileID: 11400000, guid: 1b316d4fb5fa016ff98dcf899f6f943d, type: 2}
   marketObjectiveType: 1

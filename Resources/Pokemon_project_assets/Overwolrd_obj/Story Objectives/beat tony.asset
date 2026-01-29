@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: beat tony
   m_EditorClassIdentifier: 
   mainAssetName: 
-  objectiveHeading: 
+  objectiveHeading: Beat grass tony
   hasProgression: 0
   objectiveType: 8
   trainer: {fileID: 11400000, guid: 63da23a9266e2d243a58eb44a0930844, type: 2}

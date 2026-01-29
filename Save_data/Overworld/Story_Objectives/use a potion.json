@@ -1,10 +1,11 @@
 {
     "mainAssetName": "Use potion",
-    "objectiveHeading": "",
+    "objectiveHeading": "use a potion",
     "hasProgression": false,
+    "indexInList": 11,
     "objectiveType": 3,
     "itemForObjective": {
-        "instanceID": 25342
+        "instanceID": 25354
     },
     "itemObjectiveType": 1
 }

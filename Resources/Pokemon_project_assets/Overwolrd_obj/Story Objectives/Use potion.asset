@@ -13,11 +13,8 @@ MonoBehaviour:
   m_Name: Use potion
   m_EditorClassIdentifier: 
   mainAssetName: 
-  objectiveHeading: 
-  objectiveDescription: 
-  objectiveProgress: 
+  objectiveHeading: use a potion
   hasProgression: 0
-  indexInList: 0
   objectiveType: 3
   itemForObjective: {fileID: 11400000, guid: 2971f0d1ef85ba44a874a6e765631d6b, type: 2}
   itemObjectiveType: 1

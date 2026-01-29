@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: beat water pokemon
   m_EditorClassIdentifier: 
   mainAssetName: 
-  objectiveHeading: 
+  objectiveHeading: Beat water pokemon
   hasProgression: 0
   objectiveType: 2
   objectiveOutline: 0

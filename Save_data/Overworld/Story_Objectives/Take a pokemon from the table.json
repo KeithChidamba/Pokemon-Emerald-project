@@ -2,6 +2,7 @@
     "mainAssetName": "Take a gift pokemon",
     "objectiveHeading": "Take a pokemon from the table",
     "hasProgression": false,
-    "objectiveType": 7,
+    "indexInList": 0,
+    "objectiveType": 1,
     "overworldInteractionForObjective": 7
 }
