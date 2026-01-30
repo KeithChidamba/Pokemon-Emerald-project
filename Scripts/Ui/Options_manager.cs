@@ -6,7 +6,7 @@ using UnityEngine;
 public enum InteractionOptions
 {
     None,CloseApplication,Battle,LearnMove,SkipMove,
-    Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,ReceiveGiftPokemon,LeaveStore
+    Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,ReceiveGiftPokemon,LeaveStore,ViewControls
 }
 public class Options_manager : MonoBehaviour
 {
@@ -42,6 +42,7 @@ public class Options_manager : MonoBehaviour
         _interactionMethods.Add(InteractionOptions.OpenPokemonStorage,OpenPokemonStorage);
         _interactionMethods.Add(InteractionOptions.OpenItemStorage,OpenItemStorage);
         _interactionMethods.Add(InteractionOptions.ReceiveGiftPokemon,ReceiveGiftPokemon);
+        _interactionMethods.Add(InteractionOptions.ViewControls,ViewControls);
     }
 
     void CloseApplication()
@@ -55,6 +56,12 @@ public class Options_manager : MonoBehaviour
              "Good bye!", 
              new[]{ InteractionOptions.CloseApplication,InteractionOptions.None}
              , new[]{"Yes", "No"});
+    }
+
+    void ViewControls()
+    {
+        Dialogue_handler.Instance.EndDialogue(); 
+        Game_ui_manager.Instance.ViewKeyBinds();
     }
     void Battle()
     {

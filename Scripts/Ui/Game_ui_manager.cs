@@ -24,6 +24,7 @@ public class Game_ui_manager : MonoBehaviour
     public GameObject[] pcItemOptions;
     public GameObject pcPokemonOptionsUI;
     public GameObject pcItemOptionsUI;
+    public GameObject keyBindsUI;
     public bool usingWebGl;
     [SerializeField]private bool _canOpenMenu;
     public Image destinationPointerUI;
@@ -110,6 +111,11 @@ public class Game_ui_manager : MonoBehaviour
         ManageScreens(-1);
         ActivateUiElement(profile.gameObject, false);
         profile.viewingProfile = false;
+    }
+    private void CloseKeyBinds()
+    {
+        ManageScreens(-1);
+        ActivateUiElement(keyBindsUI, false);
     }
     private void ClosePokeMart()
     {
@@ -198,6 +204,14 @@ public class Game_ui_manager : MonoBehaviour
         InputStateHandler.Instance.ChangeInputState(new (InputStateName.PlayerProfile
             ,new[] { InputStateGroup.None},isParent:true
             ,profile.gameObject,onExit:CloseProfile,onClose:CloseProfile));
+    }
+    public void ViewKeyBinds()
+    {
+        ManageScreens(1);
+        ActivateUiElement(keyBindsUI,true);
+        InputStateHandler.Instance.ChangeInputState(new (InputStateName.KeyBinds
+            ,new[] { InputStateGroup.None},isParent:true
+            ,keyBindsUI,onExit:CloseKeyBinds,onClose:CloseProfile));
     }
 
     public void ViewPokemonParty()
