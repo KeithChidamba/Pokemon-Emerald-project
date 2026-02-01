@@ -14,11 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainAssetName: 
   objectiveHeading: Heal your pokemon at the centre
-  objectiveDescription: 
-  objectiveProgress: 
   hasProgression: 0
   indexInList: 0
   objectiveType: 1
-  overworldInteractionForObjective: 5
-  requiresSuccess: 0
-  itemForObjective: {fileID: 0}
+  interactionForObjective: {fileID: 11400000, guid: a94a485dbbee55446b72284e516a203e, type: 2}

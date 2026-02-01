@@ -181,12 +181,6 @@ public class Options_manager : MonoBehaviour
     {
         _currentInteractable = interactable;
         OnInteractionOptionChosen?.Invoke(interactable,optionIndex);
-        if (_currentInteractable.interaction.hasSeparateLogicHandler
-            || _currentInteractable.interaction.dialogueType != DialogType.Options)
-        {
-            return;
-        }
-
         CompleteInteraction(_currentInteractable.interaction,optionIndex);
     }
 }

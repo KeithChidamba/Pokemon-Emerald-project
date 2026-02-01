@@ -8,13 +8,14 @@ public abstract class StoryObjective : ScriptableObject
         OnLoad?.Invoke();
         OnObjectiveLoaded();
     }
-
-    protected virtual void OnObjectiveLoaded() { }
-    
-    public virtual void ClearObjective()
+    public void ClearObjective()
     {
         OnClear?.Invoke();
+        OnObjectiveCleared();
     }
+    
+    protected virtual void OnObjectiveCleared() { }
+    protected virtual void OnObjectiveLoaded() { }
 
     protected virtual void LoadSaveData(StoryObjective objectiveData){ }
     

@@ -19,4 +19,4 @@ MonoBehaviour:
   optionsUiText: []
   additionalInfo:
   - Tony
-  hasSeparateLogicHandler: 0
+  overworldInteraction: 6

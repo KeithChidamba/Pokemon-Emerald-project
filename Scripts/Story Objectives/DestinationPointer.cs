@@ -15,12 +15,16 @@ public class DestinationPointer : MonoBehaviour
     private void Start()
     {
         overworldObject.SetActive(false);
+        OverworldState.Instance.OnObjectivesLoaded += CheckForRequiredObjective;
+        
+    }
+    private void CheckForRequiredObjective()
+    {
         if (OverworldState.Instance.HasObjective(objectiveData.name))
         {
             objectiveData.OnLoad += LoadPointer;
         }
     }
-
     private void LoadPointer()
     {
         displaying = true;

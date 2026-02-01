@@ -21,10 +21,6 @@ public class ObjectiveObjectHandler : MonoBehaviour
             objective.OnLoad += LoadObjects;
             if(removeOnObjectiveClear) objective.OnClear += UnLoadObjects;
         }
-        else
-        {
-            UnLoadObjects();
-        }
     }
     private void LoadObjects()
     {
@@ -34,6 +30,6 @@ public class ObjectiveObjectHandler : MonoBehaviour
     {
         propsForObjective.ForEach(prop=>prop.SetActive(false));
         objective.OnLoad -= LoadObjects;
-        objective.OnClear -= UnLoadObjects;
+        if(removeOnObjectiveClear)objective.OnClear -= UnLoadObjects;
     }
 }

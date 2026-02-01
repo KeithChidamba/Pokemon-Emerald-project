@@ -2700,7 +2700,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: beab14a628481414491e850bca6aafc9, type: 2}
   location: 0
-  overworldInteractionType: 6
   area: {fileID: 0}
 --- !u!61 &64607984
 BoxCollider2D:
@@ -4656,7 +4655,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 2a9ae13e99aacc8468b5be2037e26cea, type: 2}
   location: 0
-  overworldInteractionType: 7
   area: {fileID: 0}
 --- !u!114 &112600289 stripped
 MonoBehaviour:
@@ -5091,7 +5089,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: be1e113f31b41fe4da01cb2c1aabebd3, type: 2}
   location: 0
-  overworldInteractionType: 0
   area: {fileID: 0}
 --- !u!61 &126172890
 BoxCollider2D:
@@ -5283,7 +5280,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 65a60809e4e9bad41a00ea111b3d83d0, type: 2}
   location: 0
-  overworldInteractionType: 7
   area: {fileID: 0}
 --- !u!1001 &131756837
 PrefabInstance:
@@ -6903,7 +6899,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 0}
   location: 0
-  overworldInteractionType: 0
   area: {fileID: 11400000, guid: 25dfde04bada2414b8fb3eaf4a8c5ac7, type: 2}
 --- !u!1 &185005865
 GameObject:
@@ -8269,7 +8264,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 04fb3a96572b20499aea4f95cfc6d65d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a39387a742d38603d83f706b740c319e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15220,7 +15215,7 @@ GameObject:
   - component: {fileID: 492393981}
   - component: {fileID: 492393980}
   m_Layer: 0
-  m_Name: house
+  m_Name: house overworld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15734,7 +15729,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ddb85caf72dea1e4882d8b00cb2adbd6, type: 2}
   location: 0
-  overworldInteractionType: 6
   area: {fileID: 0}
 --- !u!1 &505938596
 GameObject:
@@ -23732,7 +23726,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: a94a485dbbee55446b72284e516a203e, type: 2}
   location: 0
-  overworldInteractionType: 5
   area: {fileID: 0}
 --- !u!61 &728870498
 BoxCollider2D:
@@ -29865,7 +29858,7 @@ GameObject:
   - component: {fileID: 920115137}
   m_Layer: 6
   m_Name: Key maps sign
-  m_TagString: Untagged
+  m_TagString: Destination
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29879,12 +29872,12 @@ Transform:
   m_GameObject: {fileID: 920115132}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.3520002, y: 2.435, z: -6.3599944}
+  m_LocalPosition: {x: 7.202, y: 0.40499997, z: -6.3599944}
   m_LocalScale: {x: 0.1025, y: 0.0778, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 257487615}
-  m_Father: {fileID: 2040100124}
+  m_Father: {fileID: 1404068853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &920115134
 BoxCollider2D:
@@ -29945,7 +29938,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 52690b5fb93c2c59cbc30be98a582c61, type: 2}
   location: 1
-  overworldInteractionType: 0
   area: {fileID: 0}
 --- !u!212 &920115136
 SpriteRenderer:
@@ -30775,7 +30767,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 05fc0e8d883123c46bf889ad4846eba3, type: 2}
   location: 0
-  overworldInteractionType: 0
   area: {fileID: 0}
 --- !u!61 &939642314
 BoxCollider2D:
@@ -32804,7 +32795,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 3bf20e04547411a40aa0002e84bea92c, type: 2}
   location: 3
-  overworldInteractionType: 1
   area: {fileID: 0}
 --- !u!1 &1015821576
 GameObject:
@@ -36610,7 +36600,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ef9aa58b859709c4d811a0e382bdcd0f, type: 2}
   location: 0
-  overworldInteractionType: 0
   area: {fileID: 0}
 --- !u!61 &1159495006
 BoxCollider2D:
@@ -36819,6 +36808,7 @@ MonoBehaviour:
   treeDataQueue: []
   allStoryObjectives:
   - {fileID: 11400000, guid: 5f8ff240e119a85f08ce524f99d34e73, type: 2}
+  - {fileID: 11400000, guid: 2f322acebeb7a5019b09931b29e9a30d, type: 2}
   - {fileID: 11400000, guid: c24f9d21e8ed5eaedadd1a074cf282b2, type: 2}
   - {fileID: 11400000, guid: 0c11ba833cf0977f0be9f526d4cd655b, type: 2}
   - {fileID: 11400000, guid: cff0a6fe7293ba95eb43017c7edbbd22, type: 2}
@@ -58920,7 +58910,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ef9aa58b859709c4d811a0e382bdcd0f, type: 2}
   location: 0
-  overworldInteractionType: 0
   area: {fileID: 0}
 --- !u!61 &1233443738
 BoxCollider2D:
@@ -64903,6 +64892,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 920115133}
   - {fileID: 2040100124}
   - {fileID: 492393979}
   m_Father: {fileID: 523264675}
@@ -73399,7 +73389,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: e8890c71d41487449ae48531dba81e2b, type: 2}
   location: 0
-  overworldInteractionType: 7
   area: {fileID: 0}
 --- !u!1001 &1749442652
 PrefabInstance:
@@ -75332,7 +75321,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: ef9aa58b859709c4d811a0e382bdcd0f, type: 2}
   location: 0
-  overworldInteractionType: 0
   area: {fileID: 0}
 --- !u!61 &1819659362
 BoxCollider2D:
@@ -76285,7 +76273,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 05fc0e8d883123c46bf889ad4846eba3, type: 2}
   location: 0
-  overworldInteractionType: 0
   area: {fileID: 0}
 --- !u!61 &1848598228
 BoxCollider2D:
@@ -107462,7 +107449,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 930c0390d8f681b4eae75711793319fe, type: 2}
   location: 0
-  overworldInteractionType: 0
   area: {fileID: 0}
 --- !u!61 &2037761306
 BoxCollider2D:
@@ -107658,7 +107644,7 @@ GameObject:
   - component: {fileID: 2040100124}
   - component: {fileID: 2040100125}
   m_Layer: 0
-  m_Name: Select pokemon
+  m_Name: House UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107684,7 +107670,6 @@ Transform:
   - {fileID: 1957045979}
   - {fileID: 1528551262}
   - {fileID: 1324613723}
-  - {fileID: 920115133}
   m_Father: {fileID: 1404068853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2040100125
@@ -109359,7 +109344,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 3bf20e04547411a40aa0002e84bea92c, type: 2}
   location: 2
-  overworldInteractionType: 1
   area: {fileID: 0}
 --- !u!1 &2108408982
 GameObject:

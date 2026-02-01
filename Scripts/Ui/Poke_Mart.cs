@@ -143,7 +143,7 @@ public class Poke_Mart : MonoBehaviour
     }
     private void ViewStore(Overworld_interactable clerkInteractable, int optionChosen)
     {
-        if (clerkInteractable.overworldInteractionType != OverworldInteractionType.Clerk) return;
+        if (clerkInteractable.interaction.overworldInteraction != OverworldInteractionType.Clerk) return;
         Dialogue_handler.Instance.EndDialogue();
         
         if (optionChosen > 0) return;

@@ -49,7 +49,7 @@ public class WildBattleObjective : StoryObjective
         Battle_handler.Instance.OnBattleResult -= CheckIfWin;
         ClearObjective();
     }
-    public override void ClearObjective()
+    protected override void OnObjectiveCleared()
     {
         OverworldState.Instance.ClearAndLoadNextObjective();
     }

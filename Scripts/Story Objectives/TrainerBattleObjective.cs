@@ -11,7 +11,7 @@ public class TrainerBattleObjective : StoryObjective
     }
     private void CheckBattleInteraction(Overworld_interactable interactable, int optionChosen)
     {
-        if (interactable.overworldInteractionType == OverworldInteractionType.Battle)
+        if (interactable.interaction.overworldInteraction == OverworldInteractionType.Battle)
         {
             if (trainer.TrainerName == interactable.interaction.additionalInfo[0])
             {
@@ -28,7 +28,7 @@ public class TrainerBattleObjective : StoryObjective
         Battle_handler.Instance.OnBattleResult -= CheckIfWin;
         ClearObjective();
     }
-    public override void ClearObjective()
+    protected override void OnObjectiveCleared()
     {
         OverworldState.Instance.ClearAndLoadNextObjective();
     }

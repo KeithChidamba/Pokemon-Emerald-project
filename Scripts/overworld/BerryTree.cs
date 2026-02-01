@@ -44,7 +44,7 @@ public class BerryTree : MonoBehaviour
             OverworldInteractionType.WaterBerryTree => waterInteraction,
             _ => idleInteraction
         };
-        primaryInteractable.overworldInteractionType = type;
+        primaryInteractable.interaction.overworldInteraction = type;
     }
 
     public void LoadDefaultAsset()
@@ -143,7 +143,7 @@ public class BerryTree : MonoBehaviour
     private void WaterTree(Overworld_interactable interactable,int optionChosen)
     {
         if (interactable != primaryInteractable) return;
-        if (interactable.overworldInteractionType != OverworldInteractionType.WaterBerryTree) return;
+        if (interactable.interaction.overworldInteraction != OverworldInteractionType.WaterBerryTree) return;
         
         if (optionChosen > 0)
         {
@@ -176,7 +176,7 @@ public class BerryTree : MonoBehaviour
     {
         if (treeData.isPlanted) return;
         if (interactable != primaryInteractable) return;
-        if (interactable.overworldInteractionType != OverworldInteractionType.PlantBerry) return;
+        if (interactable.interaction.overworldInteraction != OverworldInteractionType.PlantBerry) return;
         
         if (optionChosen > 0)
         {
@@ -223,7 +223,7 @@ public class BerryTree : MonoBehaviour
     private void HarvestBerries(Overworld_interactable interactable, int optionChosen)
     {
         if (interactable != primaryInteractable) return;
-        if (interactable.overworldInteractionType != OverworldInteractionType.PickBerry) return;
+        if (interactable.interaction.overworldInteraction != OverworldInteractionType.PickBerry) return;
 
         if (optionChosen > 0)
         {

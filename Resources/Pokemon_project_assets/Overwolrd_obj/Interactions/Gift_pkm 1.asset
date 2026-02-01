@@ -20,4 +20,4 @@ MonoBehaviour:
   - Yes
   - No
   additionalInfo: []
-  hasSeparateLogicHandler: 0
+  overworldInteraction: 7

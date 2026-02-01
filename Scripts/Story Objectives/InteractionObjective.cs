@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "interaction obj", menuName = "interaction objective")]
 public class InteractionObjective : StoryObjective
 {
-   public OverworldInteractionType overworldInteractionForObjective;
+   public Interaction interactionForObjective;
    protected Action onObjectiveComplete;
    
    protected override void OnObjectiveLoaded()
@@ -20,11 +20,11 @@ public class InteractionObjective : StoryObjective
          Dialogue_handler.Instance.EndDialogue(); 
          return;
       }
-      if (overworldInteractionForObjective != interactable.overworldInteractionType) return;
+      if (interactionForObjective.overworldInteraction != interactable.interaction.overworldInteraction) return;
       ClearObjective();
    }
-
-   public override void ClearObjective()
+   
+   protected override void OnObjectiveCleared()
    {
       Options_manager.Instance.OnInteractionOptionChosen -= CheckInteractionOption;
       OverworldState.Instance.ClearAndLoadNextObjective();

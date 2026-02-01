@@ -7,7 +7,6 @@ public class Overworld_interactable : MonoBehaviour
 {
     public Interaction interaction;
     public AreaName location;
-    public OverworldInteractionType overworldInteractionType;
     public Encounter_Area area;
 }
 

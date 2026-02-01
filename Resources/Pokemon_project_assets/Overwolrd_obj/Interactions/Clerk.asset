@@ -20,4 +20,4 @@ MonoBehaviour:
   - Buy
   - Sell
   additionalInfo: []
-  hasSeparateLogicHandler: 0
+  overworldInteraction: 1

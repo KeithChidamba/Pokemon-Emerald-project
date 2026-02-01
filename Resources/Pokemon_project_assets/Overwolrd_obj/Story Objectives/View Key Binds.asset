@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 982d236647bb05c069146cf47d639ff1, type: 3}
-  m_Name: Take a gift pokemon
+  m_Name: View Key Binds
   m_EditorClassIdentifier: 
-  mainAssetName: Take a gift pokemon
-  objectiveHeading: Take a pokemon from the table
+  mainAssetName: View Key Binds
+  objectiveHeading: View the controls
   hasProgression: 0
   indexInList: 0
   objectiveType: 1
-  interactionForObjective: {fileID: 11400000, guid: 2a9ae13e99aacc8468b5be2037e26cea, type: 2}
+  interactionForObjective: {fileID: 11400000, guid: 52690b5fb93c2c59cbc30be98a582c61, type: 2}
