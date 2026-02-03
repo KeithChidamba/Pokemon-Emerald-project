@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "wild battle obj", menuName = "wild battle objective")]
+[CreateAssetMenu(fileName = "wild battle obj", menuName = "Objectives/wild battle objective")]
 public class WildBattleObjective : StoryObjective
 {
     public enum BattleObjectiveOutline

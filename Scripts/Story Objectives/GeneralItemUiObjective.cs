@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "general ui obj", menuName = "general ui objective")]
+[CreateAssetMenu(fileName = "general ui obj", menuName = "Objectives/general ui objective")]
 public class GeneralItemUiObjective : ItemUiObjective
 {
     private enum ItemObjectiveType

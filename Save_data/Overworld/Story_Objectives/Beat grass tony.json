@@ -1,0 +1,10 @@
+{
+    "mainAssetName": "beat tony",
+    "objectiveHeading": "Beat grass tony",
+    "hasProgression": false,
+    "indexInList": 4,
+    "objectiveType": 8,
+    "trainer": {
+        "instanceID": 25228
+    }
+}

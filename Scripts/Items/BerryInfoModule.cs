@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Berry", menuName = "berry")]
+[CreateAssetMenu(fileName = "Berry", menuName = "Item Info Modules/berry")]
 public class BerryInfoModule : AdditionalInfoModule
 {
     [FormerlySerializedAs("herbType")] public Berry berryType;

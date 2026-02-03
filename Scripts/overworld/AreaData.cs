@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "area", menuName = "areaData")]
+[CreateAssetMenu(fileName = "area", menuName = "Overworld/areaData")]
 public class AreaData : ScriptableObject
 {
     public AreaName areaName;

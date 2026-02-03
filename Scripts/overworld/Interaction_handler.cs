@@ -6,7 +6,7 @@ public class Interaction_handler : MonoBehaviour
 {
     [SerializeField] LayerMask interactable;
     [SerializeField] Transform interactionPoint;
-    [SerializeField] float detectDistance=0.15f;
+    [SerializeField] float detectDistance=0.3f;
     private bool _canCheckForInteraction;
     private bool _stopInteractions;
     private bool _interactionCooldown;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "PokeMartData", menuName = "pmd")]
+[CreateAssetMenu(fileName = "PokeMartData", menuName = "PokeMart/Mart data")]
 public class PokeMartData : ScriptableObject
 {
     public AreaName location;

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "market ui obj", menuName = "market ui objective")]
+[CreateAssetMenu(fileName = "market ui obj", menuName = "Objectives/market ui objective")]
 public class MarketUiObjective : ItemUiObjective
 {
     private enum MarketObjectiveType

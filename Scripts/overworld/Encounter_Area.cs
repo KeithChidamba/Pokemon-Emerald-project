@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Encounter", menuName = "enc")]
+[CreateAssetMenu(fileName = "Encounter", menuName = "Overworld/Encounter Area")]
 public class Encounter_Area : ScriptableObject
 {
     public enum Biome

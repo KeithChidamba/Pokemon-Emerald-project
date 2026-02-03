@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "interaction obj", menuName = "interaction objective")]
+[CreateAssetMenu(fileName = "interaction obj", menuName = "Objectives/interaction objective")]
 public class InteractionObjective : StoryObjective
 {
    public Interaction interactionForObjective;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Move", menuName = "p_Move")]
+[CreateAssetMenu(fileName = "Move", menuName = "Pokemon/Move")]
 public class Move : ScriptableObject
 {
     [FormerlySerializedAs("Move_name")] public string moveName;

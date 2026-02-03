@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "storage ui obj", menuName = "storage ui objective")]
+[CreateAssetMenu(fileName = "storage ui obj", menuName = "Objectives/storage ui objective")]
 public class PokemonStorageObjective : UiActionObjective
 {
     private enum StorageObjectiveType

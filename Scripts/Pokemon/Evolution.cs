@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Evolution", menuName = "pkm_evo")]
+[CreateAssetMenu(fileName = "Evolution", menuName = "Pokemon/Evolution")]
 public class Evolution : ScriptableObject
 {
     [FormerlySerializedAs("Evo_name")] public string evolutionName;

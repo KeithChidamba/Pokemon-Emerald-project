@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-[CreateAssetMenu(fileName = "Herb", menuName = "herb")]
+[CreateAssetMenu(fileName = "Herb", menuName = "Item Info Modules/herb")]
 public class HerbInfoModule : AdditionalInfoModule
 {
     public Herb herbType;

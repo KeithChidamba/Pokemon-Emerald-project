@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-[CreateAssetMenu(fileName = "berryTree", menuName = "berryTree")]
+[CreateAssetMenu(fileName = "berryTree", menuName = "Overworld/ Berry tree")]
 public class BerryTreeData : ScriptableObject
 {
      public bool isPlanted;

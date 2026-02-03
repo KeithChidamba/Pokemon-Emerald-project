@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Nature", menuName = "ntr")]
+[CreateAssetMenu(fileName = "Nature", menuName = "Pokemon/Nature")]
 public class Nature : ScriptableObject
 {
     public string natureName;

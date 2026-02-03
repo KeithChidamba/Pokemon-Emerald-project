@@ -1,0 +1,12 @@
+{
+    "mainAssetName": "beat grass pokemon",
+    "objectiveHeading": "Beat grass pokemon",
+    "hasProgression": false,
+    "indexInList": 3,
+    "objectiveType": 2,
+    "objectiveOutline": 0,
+    "encounterSourceForObjective": 2,
+    "pokemonForObjective": {
+        "instanceID": 26500
+    }
+}

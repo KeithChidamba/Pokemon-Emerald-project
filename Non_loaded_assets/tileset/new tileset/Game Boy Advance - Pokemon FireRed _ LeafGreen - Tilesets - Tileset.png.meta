@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -108,7 +108,6181 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 431
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 014e1c1bc766476a99c2cfe93ac0a92d
+      internalID: -1424026174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_1
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 431
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48395cc66ef57896baa24661053c9941
+      internalID: 475289181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_2
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 431
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fb20845de63ba7018179a03747b0fae
+      internalID: 1332522787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_3
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 431
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66efa7fba3ba831e5ade06a91ab3545f
+      internalID: -1213618420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_4
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 431
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a264ad945b61e9b880b574249f1138f
+      internalID: 91165149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_5
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 431
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95bde364103a734ffbcbf4d7d71c2fd0
+      internalID: -583714062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_6
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 431
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98736adb794a0c4f4b65864fd689a0f6
+      internalID: -640690661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_7
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 431
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a70fc93e2841982119d32e4a090101f9
+      internalID: 1760489213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_8
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 431
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82c3b0b9fc60c71c485a7c47c5fac4b6
+      internalID: 718556751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_9
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 430
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1643469acf51f088cb86fa1ca99079fc
+      internalID: -274019081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_10
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 430
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53be8d747c6b887b282c8dd0af1c47a7
+      internalID: -1398535882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_11
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 410
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cc057af5c3a9b80288bab3ce9acd1f1
+      internalID: -2091314877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_12
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 410
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a6cc5d4643ee388ba0225e95804aef6
+      internalID: -432809237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_13
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 411
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50af824c515137bb8af2924b08fbaf98
+      internalID: 437709308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_14
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 411
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 864818a0093e97928bfd2d4dd9c78888
+      internalID: -763795747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_15
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 410
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02b0c2e861c1fa864a526ca2578d161e
+      internalID: 671231399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_16
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 372
+        width: 32
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27abaff073855af12a1b1540d636c1be
+      internalID: 1971844946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_17
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 415
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65d7fe13cbffeb408a089ed83bd96e58
+      internalID: -506902247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_18
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 415
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49549afc2c0091c39ad223df9fc388c4
+      internalID: 713407362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_19
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 414
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9155889caf3436d3a9c72515dfde03c5
+      internalID: -1233417880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_20
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 406
+        width: 7
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffb5b97d56ea0c0fb88a6b235a4f239e
+      internalID: -1575142988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_21
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 409
+        width: 6
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fde0b74e3b72d311fa32c469fda75a8e
+      internalID: 934336348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_22
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 412
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ec9494dc793c6c25803ccbd1eadc781
+      internalID: -808808402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_23
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 391
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0862f786a2555952583056f9a9960316
+      internalID: 483667681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_24
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 391
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a180ae0f82f295f7da47198cc98af0a2
+      internalID: -1547173361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_25
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 391
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1fd50a8811839c3bbea4ef7312a8f82
+      internalID: -668894665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_26
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 391
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43d71ac89f6ba9c27a0555674cc805b9
+      internalID: -962805566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_27
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 391
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74a0f9c135a5b45e5baf34935f76a662
+      internalID: -577176564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_28
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 392
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4c9342c49fd56d7f9415db5f9585fe2
+      internalID: -1713326447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_29
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 392
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f5da80f20d2043a996a0c053a80b92d
+      internalID: -1069487892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_30
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 392
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d12281471a93296d48fb533819161e98
+      internalID: -432702627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_31
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 392
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a72bc5c316bd44b729485a55e1a8ac7d
+      internalID: -1256649857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_32
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 392
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffd3cde06907e1353bde4ea2b080df9a
+      internalID: 395684961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_33
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 376
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0be1264c99bb16e99d5b9be13da76aa
+      internalID: 842977742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_34
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 370
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ea5753e748cbb8dc9539f9e7f3006e7
+      internalID: -1469041244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_35
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 370
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c699b7298b964128ad113102c9d03f7
+      internalID: -860279402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_36
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 370
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33704d493fc5b518dadce08072bf901f
+      internalID: -1738196670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_37
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 370
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa790d5c727f73e99a62e20e889204e5
+      internalID: -654043840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_38
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 378
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d288c6f182ac3ce37bebf4faffecc10f
+      internalID: -1870598547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_39
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 378
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13d1a4b8af418fba4bfb2997f8defef6
+      internalID: 593387692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_40
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 383
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d6d794ba7b53afd5a636233b9625b32
+      internalID: 3964198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_41
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 383
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d556e992f93932ce0a100bee3536bb46
+      internalID: 2131513893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_42
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 383
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41655deba359a9e48822b4029ac755f9
+      internalID: 788984703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_43
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 383
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1acf42b8abb9d8111a0afa869692b2c5
+      internalID: 1394241003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_44
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 374
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b71640f0421b6d84a306d896b113bd9
+      internalID: 1267070391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_45
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 374
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 666288d5586c4a8869f3740a904bc75a
+      internalID: -1819527444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_46
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 374
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dd0bd9b68465e713a653ce8ec76f5ec
+      internalID: 98004561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_47
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 374
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e667b8fad46f6739e8ed69705a8a2c23
+      internalID: -1635312136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_48
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 374
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5909e06c782dee2eab20d3358bf0d947
+      internalID: 1111705964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_49
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 353
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 683b5a6cf3b3b425e99cad9e21bf6a57
+      internalID: -274986411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_50
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 354
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3af447e919d0de59b86b24aaa76be78e
+      internalID: 1423366443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_51
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 348
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 185fb44dc1be7392f90f8769c4948ab8
+      internalID: 377952662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_52
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 356
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54244c00a462d369a90c097cd831bbe0
+      internalID: 235494108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_53
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 365
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57eaf4c20c2df335da85ee216060f14c
+      internalID: 169984918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_54
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 365
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f422759a4d467839915d385ee34e246
+      internalID: -902650761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_55
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 365
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90e8f70615389eaec84b8e85c8dbfce4
+      internalID: -510694028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_56
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 365
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9d7c52db8f9904729f0e5968ecfe4a5
+      internalID: 1378480067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_57
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 366
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69aefcb63a5d2035e8269bacdce6d37e
+      internalID: -392956826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_58
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 366
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e3b2b3feffc856b9a466f7bcdf31bbb
+      internalID: -1907577543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_59
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 366
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc68afdd1b58dada18d6879ade8e50b9
+      internalID: 446004834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_60
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 366
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb9c0c2985651835c8f2df93edaeb0d8
+      internalID: -696588682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_61
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 366
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aef52191609f8704a8f39209b0a66a24
+      internalID: -1829864819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_62
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 358
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab080c9cd40e7fe46b159f790f78e76e
+      internalID: 1042853937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_63
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 358
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5de067b2e76727ad7acff578bfaac059
+      internalID: -521834097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_64
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 358
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92e179e03085f17438c2fdf31b2047fc
+      internalID: 1959040840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_65
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 356
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02b24a9775bb6c4c8be29b20455c7bd6
+      internalID: 54182083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_66
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 356
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ee12153f170ff4c6993cff0890c2bcd
+      internalID: -229250596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_67
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 356
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b862f97f6f59054198e1dba3fb4d21e
+      internalID: 140192076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_68
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 356
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 780007b01a4dd8401852830266081cba
+      internalID: 648625265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_69
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 357
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a9de302bd92c7a48bf1f8baf587aec0
+      internalID: -100242735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_70
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 357
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2bb5fcad1c386517c8225f2ad4e928df
+      internalID: 201740714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_71
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 357
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 488503d58609db891b225539026bcca7
+      internalID: 67617881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_72
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 357
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58537e5a18fcda1dfad35dbe30be7b4f
+      internalID: -1047336160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_73
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 349
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d03a0686748be07dc8dd6759253d2ded
+      internalID: 1495987968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_74
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 349
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4b77c3b1f129a115b00412362d041a7
+      internalID: 1825816496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_75
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 349
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1241182f9250f7aabbfaaf83fb8ed52e
+      internalID: -1793755012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_76
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 347
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c8c7881db0d38a41a929e7a3753cfaa
+      internalID: -1100951354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_77
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 347
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5616b1c836e4948daa4d70634782b1d7
+      internalID: 2103348420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_78
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 347
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfe7c5a258714f8b5b02850b286e4a41
+      internalID: -446663143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_79
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 347
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b49e6cdd9458695c68e4cb4b5ee3f178
+      internalID: -246457395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_80
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 347
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf3197d67df64bc19bede2a4f8928b43
+      internalID: -1813565791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_81
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 338
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71a3bf198253e8e2699fd62154e5c67e
+      internalID: 2109678136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_82
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 347
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3bef0fa18ca770f09859ad8691a2b80
+      internalID: -66590946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_83
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 347
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb5f438dd995a6598baf4c2572f57efc
+      internalID: 1799437500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_84
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 348
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06ad100bc4bd06772acf60202658de7f
+      internalID: -1612004124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_85
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 348
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 523918942eb9a4835a59a9d0127c7c69
+      internalID: 1859201979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_86
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 348
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7667a93dd72736fb989eb866674dddec
+      internalID: 225792045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_87
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 348
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48aa4fecdb9d0aa6184b8535874a6037
+      internalID: 1066240924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_88
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 348
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6108dc8138fdcc477a592a2efe8c1c4a
+      internalID: 1849398697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_89
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 339
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1512870da1cca52cb9673a430964f8e9
+      internalID: -641542064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_90
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 339
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9be8cef8249b2cb9f851cf4b60e73a05
+      internalID: -349190174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_91
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 339
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deba1dbbc7d175534b421516615394a2
+      internalID: 1657801751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_92
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 340
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17d71fc1e6f30c196abda597e10b8da1
+      internalID: 1554569795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_93
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 340
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cc555d8a493efd18b656d2bcb8515d6
+      internalID: -751448261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_94
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 340
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 382b5ca48f6ed16a5970e76aedf3d014
+      internalID: -850671536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_95
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 338
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dccb362fc4c85f6e90284936ab13911
+      internalID: 1593385153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_96
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 342
+        width: 16
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e383639eb67e1e049b375d83ea11211b
+      internalID: -547703234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_97
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 338
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a783db9e9904826ae93a7f53fab59441
+      internalID: -965841710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_98
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 338
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bfc73413296ff0f1bdce987e2574562
+      internalID: 684791116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_99
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 338
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3454bc8bf289078ea424790beddc0c8
+      internalID: -744316251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_100
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 339
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f57732ae1522e9689f2911c5d1501b2
+      internalID: -1493838354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_101
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 339
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f171923a68632a499bee424c34897be
+      internalID: 346059708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_102
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 339
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94e6ed2504c3fe3078b0ec636c131b11
+      internalID: 2083389880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_103
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 339
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f99bcb0b4fe9bcac990291c8d9f0eb41
+      internalID: 2119088935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_104
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 339
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dc3b914d263137dabbdb629dcced467
+      internalID: 405349998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_105
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 322
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4308aeeae0c670b5996e0c7dd9cc356
+      internalID: 1472768370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_106
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 330
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 554102bcb4ce75dc5b27e12ca893fe14
+      internalID: -466666703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_107
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 330
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5f06aa85ff91e8f685df59cec68441f
+      internalID: 899983635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_108
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 330
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74bb22b41eb98cfbbbe980882cb0fad5
+      internalID: -567629001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_109
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 322
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bb790300aff5e8f18956d43245b2011
+      internalID: -280115456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_110
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 331
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2308e995e5c615e848239c80a3e356c0
+      internalID: -1111244678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_111
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 331
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 490b751ac7b0164a6a25f75ed543ec0c
+      internalID: 2061553787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_112
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 331
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0cfe10cd7d527907187a66f6cea1bbed
+      internalID: -887157042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_113
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 329
+        width: 4
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 411971d0cf4b764ce99576e940c5d089
+      internalID: 1899764298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_114
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 331
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 021e3292ca07a10d89e631472a1fc068
+      internalID: 571925910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_115
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 331
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2aa2010bc13bc83bb9a620c5851026db
+      internalID: 2075780649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_116
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 329
+        width: 4
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c69661c81af34da5290ddc512fb7808b
+      internalID: 1001566301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_117
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 329
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6983a678de638bc78a23887000e04acf
+      internalID: 1754246003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_118
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 329
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a873cda22636e67959c1731dd3cdf3d0
+      internalID: -1787354292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_119
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 329
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77ad496c4b4c5022593abbb4b204698b
+      internalID: -1409081659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_120
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 329
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2271b8daed2d94d7ad9aa2414a17384
+      internalID: 1964827876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_121
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 329
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 971244b168dab86259f4ed03d9ebbc0c
+      internalID: 1588323127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_122
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 330
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4100ebaf85562218e8230434de352eed
+      internalID: -191484585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_123
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 330
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5865654d2f1ecc647a97c540a7f3de8c
+      internalID: 1070504458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_124
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 330
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9ab96ea2dd1b8f8588d9f86fcc2e49c
+      internalID: 1839115784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_125
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 330
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 022d01a2d3f32adfcbbef3b50cc9fa3e
+      internalID: -96652991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_126
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 321
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 743d28f4d565533ac8f27f70eaaf1289
+      internalID: 1825080756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_127
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 321
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60a1061c9cb3ee8c792efd678629cb1e
+      internalID: 1322344756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_128
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 321
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3741dc020d3544995b1d6001f8e2c251
+      internalID: -407857511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_129
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 322
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5deca0d577ccb66e6b622c0c7303ee4b
+      internalID: -847542193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_130
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 322
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91c399fb9e759270ca43d06d219c7a31
+      internalID: 1855272258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_131
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 322
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8648a568c3c3782ebc3267995890aab
+      internalID: -1727674440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_132
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 316
+        width: 4
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89d0b1d9070f0cb2abcb3cdab8b9f131
+      internalID: -2027455519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_133
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 318
+        width: 16
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db32d26587a124a76ab50dac4724cf52
+      internalID: -1032618053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_134
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 316
+        width: 4
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbdb3fa1145f8007d8b9b4832d1936ff
+      internalID: -342145501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_135
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 312
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d5caf875759f6f46aefa9b26871498c
+      internalID: 1398871027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_136
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 284
+        width: 16
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73faee662aa591559a5fe89a97feec1c
+      internalID: -796243019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_137
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 309
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0677a42d1cbe91d46be76e3941ef5e52
+      internalID: -265176245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_138
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 321
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbc7594af0cc0562db117e68baa48fc8
+      internalID: -218682154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_139
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 321
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0fa78384cb371322a8a7cd93640423d
+      internalID: 1683899462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_140
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 321
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd6356d6ca9e637f09bc2175d0ad6e4a
+      internalID: 132766858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_141
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 321
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 083d170ebad3a40a9bc25c16ef4a163f
+      internalID: -896934688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_142
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 321
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c482ed93b554bc68ba1a54299c02ead
+      internalID: -1163435425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_143
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 313
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88f5fa35381887d9e87c30963388f43a
+      internalID: 309671006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_144
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 313
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc0d53a819c2813db88b654a2a2b78b7
+      internalID: -59489195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_145
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 313
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a6b01f50756e7d44ba19fc5ba1adaa1
+      internalID: -1500334892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_146
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 312
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d982d0c851293e719cb58ae318f25d9
+      internalID: 1460160989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_147
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 312
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f564a99c5dd8e1e73b3dcb9b7763423b
+      internalID: -216461394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_148
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 312
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f63798a0167d6225ac171d7e7a021fe
+      internalID: -1874140875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_149
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 312
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c1932efae5a7b7bd81748279d4cabd0
+      internalID: -273571534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_150
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 312
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 779b5ffe699c765eea0ca34bc764d7f6
+      internalID: -484364137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_151
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 294
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e4710d2aa321f6faa6b8a495ac43611
+      internalID: 2130788036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_152
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 294
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 034b3e7351d2078479ddeb991eca3b29
+      internalID: -866011809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_153
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 294
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b8cbd8b8324a017baf733e18ec08e11
+      internalID: -302513216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_154
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 294
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 630c0177e67582457a2b561df2b6bb08
+      internalID: 720953956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_155
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 296
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7a1b517c10aed76a86d2db9c843b60c
+      internalID: 1926513108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_156
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 295
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51e4a49606dd60bfc802f66f955a93f6
+      internalID: 1312094884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_157
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 295
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d447834577e481998907af613bc0b44b
+      internalID: 1548500277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_158
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 295
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6c96432285067874a2cbcdbaff69015
+      internalID: -1696612173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_159
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 295
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4740bb64433492e87b8621d609cae777
+      internalID: -127824149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_160
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 290
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fae9879e7505c8d2184d323d998fbb15
+      internalID: 2047312632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_161
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 290
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e99b1c7bd07a533dab261ef64b77e07
+      internalID: -16965201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_162
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 303
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c100390dd7e6fa036846faf7efd19d43
+      internalID: 1920686945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_163
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 303
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 998620c72ed35973280ee13323d34dfc
+      internalID: -139034473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_164
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 303
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f2cdf0a121891e309a61caf795e2949
+      internalID: -453178149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_165
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 303
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb7563ad055d4d820b9a6b9dc015b0ad
+      internalID: -1659738502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_166
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 294
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45668e2bc0b581c369c8d805a743e80d
+      internalID: -1520648612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_167
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 294
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f235a12afdcb9fd3a50843e490d4c24
+      internalID: -1414487004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_168
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 294
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc01efa4770fb0b48a78bc8e59aafec8
+      internalID: 1222138441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_169
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 294
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fabad26355d61b22cae55f695e5ffb76
+      internalID: -888690161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_170
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 294
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6a549c3c6346e5928f6ad9a147b2513
+      internalID: 1954527281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_171
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 222
+        width: 80
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2cdb8fa19711d806b9cb0279009746d
+      internalID: -603113915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_172
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 278
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a444cd72fb2b137a6999b5b8c2796716
+      internalID: -1787235921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_173
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 286
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c517d44a02b83ce87842309dcb7091c0
+      internalID: -2025419037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_174
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 286
+        width: 16
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f05113cb395911538e68f1972fb8155
+      internalID: -1877722495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_175
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 286
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b3e7cc1491bc87809d5455da5125254
+      internalID: 539422416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_176
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 277
+        width: 16
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b10acd6654dbe348f8ec7f3fa9e04bf9
+      internalID: -212831581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_177
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 285
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f09bbec124bfe4d6295c680264fd97f1
+      internalID: 1447570005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_178
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 285
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76e3b1e5d0a45944899bd22543fdf738
+      internalID: -241513894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_179
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 285
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3120140796cb3ae1b147e5d682ac18a
+      internalID: 419640150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_180
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 285
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4f508d271b2bb9189d08b6fb598dfbb
+      internalID: 272808746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_181
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 285
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54bc8a49459ab84509ab96267d059853
+      internalID: -2034076646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_182
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 277
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c749a7e863916eee8903f1cf06f38eb
+      internalID: -32915135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_183
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 277
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85139b3149a11a1f796c348ae5e61d90
+      internalID: 546561457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_184
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 277
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcda833d48874ba2bb6777c9538565e1
+      internalID: 516251967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_185
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 277
+        width: 16
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f8c6180921efe1818b9c06a5c8e73a0
+      internalID: 1879279802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_186
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 277
+        width: 16
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 408c8d4bf1190ca4599d0d88a09741d3
+      internalID: 2134207736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_187
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 272
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44e0eff4dc628f1069f4eef084bbca19
+      internalID: -1419201249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_188
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 268
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71b0f9e274e819eecbefe7390216cf76
+      internalID: -1354342560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_189
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 272
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b791de1b7ba5c63d8b7d187b98550f33
+      internalID: 490112281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_190
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 261
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d44bf0ae952f70b5696d682e2db8b635
+      internalID: 211849852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_191
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 260
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e20f154c7c740a0a3a3024472e3287b7
+      internalID: 352016772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_192
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 260
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32c73e0378b9fd294adc4e6f967893c4
+      internalID: -619944579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_193
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 260
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a8e0176f644d7909872229db41f0a95
+      internalID: 729622708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_194
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 266
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67f0519b70a78aa54b20c729953980cc
+      internalID: -1829593980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_195
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 259
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11b577ddafa7614ceabaf06bde4751e3
+      internalID: -1428772548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_196
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 259
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: def0dd9568f6b6e2eb7e6f5e1f551d07
+      internalID: -1683126616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_197
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 259
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16e92c1c08ec0a4bdb40936e65bbdbc1
+      internalID: -8883470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_198
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 259
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63f1959c35c1f3b75a3ed0559958b94a
+      internalID: 810818469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_199
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 259
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39e9a35a3e3d466218a084c1cd3f7846
+      internalID: 1264082589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_200
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 244
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d73835165503c51da91389429a11c21
+      internalID: 361637952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_201
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 243
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce16396cdd5277bcfa50e6a9af981608
+      internalID: -1558046368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_202
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 243
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1400addfbb8b8fac90a2254b9fd089c
+      internalID: 848410071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_203
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 243
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6a9dd41b3d38f7e8974e87b57a2d387
+      internalID: -885619118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_204
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 238
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e1dbc083253cf6a3a01f8365e0f072f
+      internalID: 1807164333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_205
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 238
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebb5aec2d2628fb69bf2fe0791e0d650
+      internalID: -103440729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_206
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 245
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a2942b76aa1741d09178d8d491b8a5b
+      internalID: 2011439111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_207
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 238
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1c864aeed92d33089a8478139cb0a8e
+      internalID: -1014650841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_208
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 238
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cbd8563d0771ccd78209506b7e60fd8
+      internalID: -1516243744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_209
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 238
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7da268d7573482aad832fc20956124c0
+      internalID: 535449686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_210
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 221
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4955ed041158508a79a0fa3d56e334fc
+      internalID: 1284967851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_211
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 226
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce0a38d704f8a29f089da725c757c148
+      internalID: 1496437728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_212
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 226
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d128f4e382e5094ab2813dc579b1eaa
+      internalID: 827914611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_213
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 226
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 343e23f8cd91549ec967428acf859af0
+      internalID: 1832577275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_214
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 226
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ba8997176af3d6d7b6e8cd5a4b33e81
+      internalID: -1002479509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_215
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 226
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e6f4f3ce3c2dba808e9a509aaed2619
+      internalID: -2033983395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_216
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 226
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db15545f7ff4af696bd6012d05e60055
+      internalID: 786623856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_217
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 226
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f5171a86b676dec78bceff96c44ad9c
+      internalID: 338481679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_218
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 226
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb0505bf6aaee468b9ba58fe95e3264f
+      internalID: 1029052860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_219
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 226
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d54ecd8c15942c70b43b3eb8954e4b5
+      internalID: 205687145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_220
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 226
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a32154a64ec58cf299fe7b90ed0532b
+      internalID: -203353035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_221
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 226
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80c545f9a56417d4f849fa127d7cfeb3
+      internalID: 1309066518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_222
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 203
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb866660ebdb2e1c1a640bc9f5bf429d
+      internalID: -55393254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_223
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 203
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5b523ce82409e83a9ec47628873478d
+      internalID: 1665513491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_224
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 203
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86772e6a8dfea56d79feed6533a5f6f2
+      internalID: -1955195992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_225
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 140
+        width: 112
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 181338a962926ab929bc1aa37b0ba4f6
+      internalID: -1740046546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_226
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 217
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6eb86cce1406386489ace427e230bb84
+      internalID: 2141069649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_227
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 217
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4682af09253d62dc4a8da39ce5018095
+      internalID: -1553586820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_228
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 217
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31aa0f81c1657b3e6b9435cf28c30c5e
+      internalID: 189275527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_229
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 217
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b12bdf87eac03a1259febd7408feb13a
+      internalID: 1050231304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_230
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 217
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29cf3e63c904c1f0da3a12796693a3be
+      internalID: -1214345647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_231
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 217
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fff4412c18fe1ef2b9f1545bc91fe8f8
+      internalID: 326693505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_232
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 217
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52c358fe3bb583fc88a3a12560320eaa
+      internalID: 1764807356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_233
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 217
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b66424c639d6aa16497d5e2ed5026b94
+      internalID: 72534949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_234
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 208
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1649b73f837d4505895cd9cbec30913
+      internalID: 1279188571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_235
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 208
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17504ecc966cb52a695b66985b7b1a93
+      internalID: -1387527905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_236
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 208
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d72f285da2e0699ab80d4e51d11dcc12
+      internalID: -224251215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_237
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 208
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34edf13e45b71eafb8886b9c99ce5be8
+      internalID: 400754421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_238
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 208
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac6d5439d242f8267aa000f1a7cf0fe3
+      internalID: -791380530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_239
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 208
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ee8eb38efc7b089aac054784532fee3
+      internalID: 261806160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_240
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 208
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa3215947fa4e7a8e8523f5276751426
+      internalID: 1930274021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_241
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 208
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdc4dc2a7838c9adf861bf6685f896e0
+      internalID: 1277208979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_242
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 137
+        width: 64
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad1ba06c72294b8f09ca5464f08f4140
+      internalID: 2143390882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_243
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 198
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63d13079b508a7bc8869230a146d5430
+      internalID: -651670188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_244
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 198
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b1902c8530a7439380e7f7a22ddd2a8
+      internalID: -2057892526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_245
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 198
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d0680208ae20ecaf863d04b1e92d205
+      internalID: 786757174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_246
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 198
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fde2611a141a5cb094fe3167bbb5685
+      internalID: -1162758723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_247
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 189
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 620de6e5535e8f23e8b02f4a464af31d
+      internalID: 1621694265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_248
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 189
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 581b8f9f2c23cdc0ca0e048348f70741
+      internalID: -2033494005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_249
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 189
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 610983821fdff95cea623eaf92ae8fd6
+      internalID: -2052497152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_250
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 189
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0af7ca1811a66ebb59df3d8540df0d2f
+      internalID: -1027571892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_251
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 180
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18dc3601e7b9d5895b2e5af589c08ea2
+      internalID: -605482782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_252
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 180
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 183c9e4290a2b1055badbd02abe9d3a4
+      internalID: 1791451063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_253
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 180
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b9a2a028c48069a3afe29755636cf1f
+      internalID: 653181521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_254
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 180
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf38624c4791dc9699a04e9abc3b11bb
+      internalID: 1065470342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_255
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 171
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63ef8db40884fda408134e3cc9d4d55f
+      internalID: 955969778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_256
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 171
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4438f978b8e3d9c3baab5b292335743
+      internalID: -1457348491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_257
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 171
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a3279c86ac875addada9ac2a6f38d1b
+      internalID: 1474841681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_258
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 171
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f0a764806e3332ee832693893f75c3f
+      internalID: -799173295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_259
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 162
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a11c1a4ab6e7a1339f39130e74bdfbd
+      internalID: -522699848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_260
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 162
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8716c17b3dba5f74a0f575b07cfd138
+      internalID: -1922640260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_261
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 162
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f9f622c9e73f386a9817d27c84954e1
+      internalID: -1761877760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_262
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 162
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6df195beb2df84a70bb2390ba1820428
+      internalID: 485364183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_263
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 153
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2034c1ad90285c9d8059b5b89eba363
+      internalID: -1170080957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_264
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 153
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c159ff6b6971efbec9d0eb49d6fa3977
+      internalID: 433870139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_265
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 153
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f38e8d367167d62d9e55624bb97768a
+      internalID: -2065380534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_266
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 153
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27ecfb1e2efdefc7691f1041c08f8378
+      internalID: -482498806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_267
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 122
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ca7be897f7a0621ca966f906c80e494
+      internalID: -1818184874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_268
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 122
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6e70ba84df28fd9e888ff72f0cbece1
+      internalID: -419406849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_269
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 122
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 292d4871939de5b44a79a30986f6f7bf
+      internalID: 1540506655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_270
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 126
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d22e5ac4bdb477798387b3387ea3b33
+      internalID: 900046314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_271
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 127
+        width: 16
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34a70c802fffb8ad1a289a5528627cbf
+      internalID: -1960148750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_272
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 127
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd94ed0fd5c4f2573907e8c6678bfbea
+      internalID: -526829245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_273
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 117
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: becad2ca7905f63a180ac7cb0b3c35fe
+      internalID: -1465893515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_274
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 118
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54068de21e66ae7f5beadceafd6b2ffd
+      internalID: -1977025906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_275
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 118
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2f35c23bfa8cb69f9425c556f42bcf1
+      internalID: 869318594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_276
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 20
+        width: 112
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c744ce4084df576758ccaea0ab5b04c4
+      internalID: 2121083079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_277
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 104
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae7d9ea2240ffa3f6948d7fa66919d6e
+      internalID: 1247791704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_278
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 104
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d4dbe28f290a4e0483665d41615a636
+      internalID: -577187158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_279
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 106
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8844bffb92126a1ea94321f100f82ce2
+      internalID: 817985643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_280
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 79
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 451587b4b7e970b95addd351d0aedbf2
+      internalID: -1653583085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_281
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 79
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5ce6c6aaba4591089b6abaf08b179a3
+      internalID: 351621481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_282
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 79
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99ca2abadc3e9c007a8a0092c9df9cba
+      internalID: 552172319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_283
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 80
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81a41b518e4192a5a9ec4467358f5829
+      internalID: -1305705775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_284
+      rect:
+        serializedVersion: 2
+        x: 189
+        y: 80
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1918bfd029a576f1ab3730f49ad59f2f
+      internalID: 1061047244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_285
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 62
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6dbfd32d40c9460d9bf58251b0f9aa6
+      internalID: 930439339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_286
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 62
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7440344ba21f04cfca2a2618906eb64a
+      internalID: -2014610540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_287
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 62
+        width: 6
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fffa6a80066c493fcbf6577657695dc9
+      internalID: 1938909882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_288
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 62
+        width: 6
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74b0131a7ce73c4fca3e30837acb5580
+      internalID: 1038902567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_289
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 63
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d5e7112a729dcecc8416f9e1dd33ec4
+      internalID: 1499030690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_290
+      rect:
+        serializedVersion: 2
+        x: 189
+        y: 63
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b02442d9c628b076ac01b92431b9ec7
+      internalID: -1025724442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_291
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 45
+        width: 6
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f71b5f84b6e46e32af071f95ed664ea
+      internalID: -1934834973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_292
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 45
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20b45f9fec34db0e4ae24f7caba504a5
+      internalID: 1548974426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_293
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 45
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba7aeb90166371309abb2f56768af3d3
+      internalID: 470798388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +6293,301 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_0: -1424026174
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_1: 475289181
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_10: -1398535882
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_100: -1493838354
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_101: 346059708
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_102: 2083389880
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_103: 2119088935
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_104: 405349998
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_105: 1472768370
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_106: -466666703
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_107: 899983635
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_108: -567629001
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_109: -280115456
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_11: -2091314877
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_110: -1111244678
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_111: 2061553787
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_112: -887157042
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_113: 1899764298
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_114: 571925910
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_115: 2075780649
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_116: 1001566301
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_117: 1754246003
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_118: -1787354292
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_119: -1409081659
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_12: -432809237
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_120: 1964827876
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_121: 1588323127
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_122: -191484585
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_123: 1070504458
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_124: 1839115784
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_125: -96652991
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_126: 1825080756
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_127: 1322344756
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_128: -407857511
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_129: -847542193
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_13: 437709308
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_130: 1855272258
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_131: -1727674440
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_132: -2027455519
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_133: -1032618053
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_134: -342145501
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_135: 1398871027
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_136: -796243019
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_137: -265176245
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_138: -218682154
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_139: 1683899462
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_14: -763795747
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_140: 132766858
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_141: -896934688
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_142: -1163435425
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_143: 309671006
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_144: -59489195
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_145: -1500334892
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_146: 1460160989
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_147: -216461394
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_148: -1874140875
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_149: -273571534
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_15: 671231399
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_150: -484364137
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_151: 2130788036
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_152: -866011809
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_153: -302513216
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_154: 720953956
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_155: 1926513108
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_156: 1312094884
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_157: 1548500277
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_158: -1696612173
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_159: -127824149
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_16: 1971844946
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_160: 2047312632
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_161: -16965201
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_162: 1920686945
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_163: -139034473
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_164: -453178149
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_165: -1659738502
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_166: -1520648612
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_167: -1414487004
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_168: 1222138441
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_169: -888690161
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_17: -506902247
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_170: 1954527281
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_171: -603113915
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_172: -1787235921
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_173: -2025419037
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_174: -1877722495
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_175: 539422416
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_176: -212831581
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_177: 1447570005
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_178: -241513894
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_179: 419640150
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_18: 713407362
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_180: 272808746
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_181: -2034076646
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_182: -32915135
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_183: 546561457
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_184: 516251967
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_185: 1879279802
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_186: 2134207736
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_187: -1419201249
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_188: -1354342560
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_189: 490112281
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_19: -1233417880
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_190: 211849852
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_191: 352016772
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_192: -619944579
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_193: 729622708
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_194: -1829593980
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_195: -1428772548
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_196: -1683126616
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_197: -8883470
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_198: 810818469
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_199: 1264082589
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_2: 1332522787
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_20: -1575142988
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_200: 361637952
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_201: -1558046368
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_202: 848410071
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_203: -885619118
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_204: 1807164333
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_205: -103440729
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_206: 2011439111
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_207: -1014650841
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_208: -1516243744
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_209: 535449686
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_21: 934336348
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_210: 1284967851
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_211: 1496437728
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_212: 827914611
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_213: 1832577275
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_214: -1002479509
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_215: -2033983395
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_216: 786623856
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_217: 338481679
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_218: 1029052860
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_219: 205687145
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_22: -808808402
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_220: -203353035
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_221: 1309066518
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_222: -55393254
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_223: 1665513491
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_224: -1955195992
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_225: -1740046546
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_226: 2141069649
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_227: -1553586820
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_228: 189275527
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_229: 1050231304
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_23: 483667681
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_230: -1214345647
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_231: 326693505
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_232: 1764807356
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_233: 72534949
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_234: 1279188571
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_235: -1387527905
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_236: -224251215
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_237: 400754421
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_238: -791380530
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_239: 261806160
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_24: -1547173361
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_240: 1930274021
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_241: 1277208979
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_242: 2143390882
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_243: -651670188
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_244: -2057892526
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_245: 786757174
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_246: -1162758723
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_247: 1621694265
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_248: -2033494005
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_249: -2052497152
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_25: -668894665
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_250: -1027571892
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_251: -605482782
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_252: 1791451063
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_253: 653181521
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_254: 1065470342
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_255: 955969778
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_256: -1457348491
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_257: 1474841681
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_258: -799173295
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_259: -522699848
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_26: -962805566
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_260: -1922640260
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_261: -1761877760
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_262: 485364183
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_263: -1170080957
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_264: 433870139
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_265: -2065380534
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_266: -482498806
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_267: -1818184874
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_268: -419406849
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_269: 1540506655
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_27: -577176564
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_270: 900046314
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_271: -1960148750
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_272: -526829245
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_273: -1465893515
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_274: -1977025906
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_275: 869318594
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_276: 2121083079
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_277: 1247791704
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_278: -577187158
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_279: 817985643
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_28: -1713326447
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_280: -1653583085
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_281: 351621481
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_282: 552172319
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_283: -1305705775
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_284: 1061047244
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_285: 930439339
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_286: -2014610540
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_287: 1938909882
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_288: 1038902567
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_289: 1499030690
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_29: -1069487892
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_290: -1025724442
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_291: -1934834973
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_292: 1548974426
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_293: 470798388
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_3: -1213618420
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_30: -432702627
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_31: -1256649857
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_32: 395684961
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_33: 842977742
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_34: -1469041244
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_35: -860279402
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_36: -1738196670
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_37: -654043840
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_38: -1870598547
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_39: 593387692
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_4: 91165149
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_40: 3964198
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_41: 2131513893
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_42: 788984703
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_43: 1394241003
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_44: 1267070391
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_45: -1819527444
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_46: 98004561
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_47: -1635312136
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_48: 1111705964
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_49: -274986411
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_5: -583714062
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_50: 1423366443
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_51: 377952662
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_52: 235494108
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_53: 169984918
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_54: -902650761
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_55: -510694028
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_56: 1378480067
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_57: -392956826
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_58: -1907577543
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_59: 446004834
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_6: -640690661
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_60: -696588682
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_61: -1829864819
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_62: 1042853937
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_63: -521834097
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_64: 1959040840
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_65: 54182083
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_66: -229250596
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_67: 140192076
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_68: 648625265
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_69: -100242735
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_7: 1760489213
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_70: 201740714
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_71: 67617881
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_72: -1047336160
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_73: 1495987968
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_74: 1825816496
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_75: -1793755012
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_76: -1100951354
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_77: 2103348420
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_78: -446663143
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_79: -246457395
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_8: 718556751
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_80: -1813565791
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_81: 2109678136
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_82: -66590946
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_83: 1799437500
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_84: -1612004124
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_85: 1859201979
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_86: 225792045
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_87: 1066240924
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_88: 1849398697
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_89: -641542064
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_9: -274019081
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_90: -349190174
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_91: 1657801751
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_92: 1554569795
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_93: -751448261
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_94: -850671536
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_95: 1593385153
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_96: -547703234
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_97: -965841710
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_98: 684791116
+      Game Boy Advance - Pokemon FireRed _ LeafGreen - Tilesets - Tileset_99: -744316251
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Item", menuName = "itm")]
+[CreateAssetMenu(fileName = "Item", menuName = "PokeMart/Item")]
 public class Item : ScriptableObject
 {
     [FormerlySerializedAs("Item_ID")] public string itemID = "";

@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-[CreateAssetMenu(fileName = "objective", menuName = "Progress objective")]
+[CreateAssetMenu(fileName = "objective", menuName = "Objectives/Progress objective")]
 [Serializable]
 public class StoryProgressObjective : StoryObjective
 {

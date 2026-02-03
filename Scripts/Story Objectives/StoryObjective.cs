@@ -35,7 +35,7 @@ public abstract class StoryObjective : ScriptableObject
     public string mainAssetName;
     public string objectiveHeading;
     public bool hasProgression;
-    public int indexInList;
+    [HideInInspector]public int indexInList;
     public StoryObjectiveType objectiveType;
 
     public static StoryObjective GetObjectiveType(StoryObjectiveType type)

@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-[CreateAssetMenu(fileName = "des", menuName = "destination objective")]
+[CreateAssetMenu(fileName = "des", menuName = "Objectives/destination objective")]
 public class DestinationObjective : StoryObjective
 {
     public readonly string destinationTag = "Destination";

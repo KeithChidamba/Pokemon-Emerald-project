@@ -1,6 +1,6 @@
 
 using UnityEngine;
-[CreateAssetMenu(fileName = "trainer battle obj", menuName = "trainer battle objective")]
+[CreateAssetMenu(fileName = "trainer battle obj", menuName = "Objectives/trainer battle objective")]
 public class TrainerBattleObjective : StoryObjective
 {
     public TrainerData trainer;

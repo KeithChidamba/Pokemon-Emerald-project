@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Pokemon", menuName = "pkm")]
+[CreateAssetMenu(fileName = "Pokemon", menuName = "Pokemon/Pokemon")]
 public class Pokemon : ScriptableObject
 {
     [FormerlySerializedAs("Base_Pokemon_name")] public string basePokemonName;

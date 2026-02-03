@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "Storage box", menuName = "storage box")]
+[CreateAssetMenu(fileName = "Storage box", menuName = "Pokemon Storage/storage box")]
 public class PokemonStorageBox : ScriptableObject
 {
     public int boxNumber;

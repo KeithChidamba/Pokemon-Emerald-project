@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "dmgModInfo", menuName = "dmgModInfo")]
+[CreateAssetMenu(fileName = "dmgModInfo", menuName = "Move Info Modules/dmgModInfo")]
 
 public class DamageModifierInfo : AdditionalInfoModule
 {

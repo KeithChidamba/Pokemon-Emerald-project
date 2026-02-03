@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Pkm_types", menuName = "p_types")]
+[CreateAssetMenu(fileName = "Pkm_types", menuName = "Pokemon/Type")]
 public class Type : ScriptableObject 
 {
     public string typeName;

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "berry obj", menuName = "berry interaction objective")]
+[CreateAssetMenu(fileName = "berry obj", menuName = "Objectives/berry interaction objective")]
 public class BerryInteractionObjective : InteractionObjective
 {
     public Item berryForObjective;
