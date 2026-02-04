@@ -218,7 +218,7 @@ public class Battle_handler : MonoBehaviour
         //Setup battle events
         _checkParticipantsEachTurn = ()=> CheckParticipantStates();
         Turn_Based_Combat.Instance.OnNewTurn += _checkParticipantsEachTurn;
-        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
+        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.GetPlayerPosition();
         InputStateHandler.Instance.OnStateChanged += EnableBattleMessage;
         
         SetupOptionsInput();

@@ -16,13 +16,28 @@ public class Collider_checks : MonoBehaviour
     {
         _door = 1 << LayerMask.NameToLayer("Door");
         Player_movement.Instance.OnNewTile += CheckGrass;
+        Player_movement.Instance.OnNewTile += CheckDoor;
     }
 
-    private void CheckGrass()
+    private void CheckDoor()
+    {
+        var tile = FindTileAtPosition<DoorTile>();
+        if (tile == null) return;
+        
+        var areaEntryPoint = tile.areaTransitionData;
+        if (areaEntryPoint.areaData.isExitPoint)
+            area.GoToOverworld();
+        else
+            area.EnterBuilding(areaEntryPoint,1f);
+    }
+    private T FindTileAtPosition<T>() where T : Tile
     {
         var cellPos = tilemap.WorldToCell(transform.position + Vector3.down * 0.2f);
-        var tile = tilemap.GetTile<EncounterTile>(cellPos);
-
+        return tilemap.GetTile<T>(cellPos);
+    }
+    private void CheckGrass()
+    {
+        var tile = FindTileAtPosition<EncounterTile>();
         if (tile == null) return;
         
         if (Player_movement.Instance.runningInput) Encounter_handler.Instance.overworldEncounterChance = 5;
@@ -53,11 +68,7 @@ public class Collider_checks : MonoBehaviour
         
         var hit = Physics2D.Raycast(transform.position, interactionPoint.forward, detectionDistance, _door);
         if (!hit.transform) return; 
-        var areaEntryPoint = collision.transform.GetComponent<Switch_Area>();
-        if (areaEntryPoint.areaData.exitingArea)
-            area.GoToOverworld();
-        else
-            area.EnterBuilding(areaEntryPoint,1f);
+        
     }
 
 }

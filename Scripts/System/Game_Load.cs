@@ -35,7 +35,6 @@ public class Game_Load : MonoBehaviour
     {
         Start_ui.SetActive(true);
         world_Map.SetActive(false);
-        Player_movement.Instance.playerObject.SetActive(false);
         load_btn.gameObject.SetActive(true);
         newGame_btn.gameObject.SetActive(true);
     }
@@ -91,9 +90,8 @@ public class Game_Load : MonoBehaviour
         Dialogue_handler.Instance.EndDialogue();
         new_player_ui.SetActive(false);
         Start_ui.SetActive(false);
-        Player_movement.Instance.playerObject.SetActive(true);
         
-        Player_movement.Instance.SetSavePosition(playerData.playerPosition);
+        Player_movement.Instance.ActivatePlayerFromSave(playerData.playerPosition);
         overworld_actions.Instance.EquipItem(Bag.Instance.SearchForItem(playerData.equippedItemName));
         world_Map.SetActive(true);
         Area_manager.Instance.loadingPlayerFromSave = true;

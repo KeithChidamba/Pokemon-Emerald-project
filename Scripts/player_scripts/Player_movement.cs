@@ -20,7 +20,7 @@ public class Player_movement : MonoBehaviour
     [SerializeField] private Transform interactionPoint;
     [SerializeField] private Transform movePoint;
     private bool _delayingMovement;
-    public GameObject playerObject;
+    [SerializeField] private GameObject playerObject;
     public event Action OnNewTile;
     [SerializeField]private LayerMask movementBlockers;
     public static Player_movement Instance;
@@ -264,9 +264,18 @@ public class Player_movement : MonoBehaviour
         }
     }
 
-    public void SetSavePosition(Vector3 position)
+    public void ActivatePlayerFromSave(Vector3 position)
+    {
+        SetPlayerPosition(position);
+        playerObject.SetActive(true);
+    }
+    public void SetPlayerPosition(Vector3 position)
     {
         movePoint.position = position;
         playerObject.transform.position = position;
+    }
+    public Vector3 GetPlayerPosition()
+    {
+        return playerObject.transform.position;
     }
 }

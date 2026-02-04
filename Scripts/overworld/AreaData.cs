@@ -5,9 +5,7 @@ using UnityEngine;
 public class AreaData : ScriptableObject
 {
     public AreaName areaName;
-    public bool exitingArea;
-    public bool insideArea;
-    public bool hasDoorAnimation;
+    public bool isExitPoint;
     public bool escapable;
 }
 

@@ -451,7 +451,7 @@ public class Save_manager : MonoBehaviour
                 yield break;
             }
         }
-        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.playerObject.transform.position;
+        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.GetPlayerPosition();
         Game_Load.Instance.playerData.location = area.currentArea.areaData.areaName;
         
         try

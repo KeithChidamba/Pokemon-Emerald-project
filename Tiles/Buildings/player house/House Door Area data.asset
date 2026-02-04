@@ -10,10 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5347c1d10a308e2eb84fb2be4a855d94, type: 3}
-  m_Name: Player House
+  m_Name: House Door Area data
   m_EditorClassIdentifier: 
   areaName: 1
-  exitingArea: 0
-  insideArea: 0
-  hasDoorAnimation: 1
+  isExitPoint: 0
   escapable: 0
