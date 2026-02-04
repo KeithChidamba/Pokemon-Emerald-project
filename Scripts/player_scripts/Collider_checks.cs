@@ -10,73 +10,31 @@ public class Collider_checks : MonoBehaviour
     [SerializeField] private Transform interactionPoint;
     [SerializeField] private float detectionDistance = 0.5f;
     public static event Action<Transform> OnCollision;
-    private Collider2D _collider2D;
-    private bool _canTriggeredEncounter;
     public Tilemap tilemap;
     
     private void Start()
     {
-        _collider2D = GetComponent<Collider2D>();
         _door = 1 << LayerMask.NameToLayer("Door");
-        _canTriggeredEncounter = true;
-        OnCollision += CheckGrass;
+        Player_movement.Instance.OnNewTile += CheckGrass;
     }
 
-    private void CheckGrass(Transform collisionTransform)
+    private void CheckGrass()
     {
-        if (!collisionTransform.CompareTag("Encounter") || !_canTriggeredEncounter) return;
-        
-        Debug.Log("coll: "+collisionTransform.tag);
-       
         var cellPos = tilemap.WorldToCell(transform.position + Vector3.down * 0.2f);
-
-        Vector3 cellWorldCenter = tilemap.GetCellCenterWorld(cellPos);
-        Debug.DrawLine(transform.position, cellWorldCenter, Color.red);
-        
-        Debug.Log("exists: "+tilemap.HasTile(cellPos));
-        
-        TileBase baseTile = tilemap.GetTile(cellPos);
-        if (baseTile == null)
-        {
-            Debug.Log("Base tile: NULL");
-            return;
-        }
-
-        Debug.Log("Base tile: " + baseTile.name);
-
-        EncounterTile behaviorTile = baseTile as EncounterTile;
-        if (behaviorTile == null)
-        {
-            Debug.Log("Base tile: NULL");
-            return;
-        }
-
-        Debug.Log("Base tile: " + behaviorTile.name);
-
-        return;
-        
         var tile = tilemap.GetTile<EncounterTile>(cellPos);
 
-        if (tile == null)
-        {
-            Debug.Log("no tile ");
-            return;
-        }
+        if (tile == null) return;
         
-        _collider2D.isTrigger = true;
+        if (Player_movement.Instance.runningInput) Encounter_handler.Instance.overworldEncounterChance = 5;
         
-        if (Player_movement.Instance.usingBike)
-            _collider2D.isTrigger = false;
-        else
+        var randomNumber = Random.Range(1, 11);
+        
+        if (randomNumber < Encounter_handler.Instance.overworldEncounterChance &
+            !Encounter_handler.Instance.encounterTriggered)
         {
-            Player_movement.Instance.canUseBike = false;
-            if (Player_movement.Instance.runningInput)
-                Encounter_handler.Instance.overworldEncounterChance = 5;
-            var randomNumber = Random.Range(1, 11);
-            if (randomNumber <  Encounter_handler.Instance.overworldEncounterChance & ! Encounter_handler.Instance.encounterTriggered)
-                Encounter_handler.Instance.TriggerEncounter( tile.area);
-            _canTriggeredEncounter = false;
+            Encounter_handler.Instance.TriggerEncounter(tile.area);
         }
+
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -86,14 +44,7 @@ public class Collider_checks : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("trig ");
         OnCollision?.Invoke(other.transform);
-    }
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (!other.gameObject.CompareTag("Encounter")) return;
-        _canTriggeredEncounter = true;
-        Player_movement.Instance.canUseBike = true;
     }
 
     private void CheckDoor(Collider2D collision)

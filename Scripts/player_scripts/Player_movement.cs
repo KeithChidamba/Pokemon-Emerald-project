@@ -243,24 +243,24 @@ public class Player_movement : MonoBehaviour
             if (Math.Abs(yAxisInput) == 1)
             {
                 var positionModifierY = new Vector3(0, yAxisInput, 0);
-                if (!Physics2D.OverlapCircle(movePoint.position + positionModifierY,.2f,movementBlockers))
+                if (!Physics2D.OverlapCircle(movePoint.position + positionModifierY,.12f,movementBlockers))
                 {//check blockers
                     movePoint.position += positionModifierY;
+                    OnNewTile?.Invoke();
                 }  
             }
             
             if (Math.Abs(xAxisInput) == 1)
             {
                 var positionModifierX = new Vector3(xAxisInput, 0, 0);
-                if (!Physics2D.OverlapCircle(movePoint.position + positionModifierX,.2f,movementBlockers))
+                if (!Physics2D.OverlapCircle(movePoint.position + positionModifierX,.12f,movementBlockers))
                 {//check blockers
                     movePoint.position += positionModifierX;
+                    OnNewTile?.Invoke();
                 }  
             }
 
             SetCurrentAnimation();
-            
-            OnNewTile?.Invoke();
         }
     }
 
