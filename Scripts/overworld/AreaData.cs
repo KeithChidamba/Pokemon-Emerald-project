@@ -5,7 +5,7 @@ using UnityEngine;
 public class AreaData : ScriptableObject
 {
     public AreaName areaName;
-    public bool isExitPoint;
+    public bool insideArea;
     public bool escapable;
 }
 

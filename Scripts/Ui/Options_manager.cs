@@ -13,7 +13,6 @@ public class Options_manager : MonoBehaviour
     private Interaction _currentInteraction;
     private Overworld_interactable _currentInteractable;
     public bool playerInBattle;
-    [SerializeField] private Recieve_Pokemon starterPokemonGiftEvent;
     public static Options_manager Instance;
     private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
     public event Action<Overworld_interactable,int> OnInteractionOptionChosen;
@@ -130,7 +129,7 @@ public class Options_manager : MonoBehaviour
         Pokemon_party.Instance.AddMember(pokemon,isGiftPokemon:true);
         Dialogue_handler.Instance.EndDialogue();
         Dialogue_handler.Instance.DisplayDetails("You got a " + pokemon.pokemonName);
-        starterPokemonGiftEvent.PickGiftPokemon(pokemonName);
+        _currentInteractable.gameObject.SetActive(false);
     }
     void Interact()
     {

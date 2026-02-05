@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: House Door Area data
   m_EditorClassIdentifier: 
   areaName: 1
-  isExitPoint: 0
+  insideArea: 0
   escapable: 0

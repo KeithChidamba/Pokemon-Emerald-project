@@ -1,5 +1,5 @@
 {
-    "itemID": "Oran berry35259",
+    "itemID": "Oran berry2128",
     "itemName": "Oran berry",
     "itemType": 9,
     "itemEffect": "5",
@@ -7,7 +7,7 @@
     "price": 5,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32778
+        "instanceID": 30872
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 26144
+        "instanceID": 25872
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26144
+            "instanceID": 25872
         }
     ],
     "infoModuleAssetNames": [

@@ -12,9 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a848611f2809f51b3ae63e394f264e3a, type: 3}
   m_Name: House Door Data
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 0}
-  overworld: {fileID: 2729222728370111260, guid: 5fec5ed44f472810da56b701f7bea1db, type: 3}
-  interior: {fileID: 3714706206366773481, guid: 965f9813ffcbb9a5d8888dcbedb2993b, type: 3}
   areaData: {fileID: 11400000, guid: 70a6ba81de86d3ebca316dbe753b2a17, type: 2}
-  doormatCell: {x: 34, y: 6, z: 0}
-  doorCell: {x: -8, y: -23, z: 0}
+  doormatCell: {x: 36, y: 6, z: 0}
+  doorCell: {x: -8, y: -24, z: 0}

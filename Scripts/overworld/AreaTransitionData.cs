@@ -6,21 +6,14 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "Overworld/Area Transition Data")]
 public class AreaTransitionData : ScriptableObject
 {
-    public Tilemap tilemap;
-    public GameObject overworld;
-    public GameObject interior;
     public AreaData areaData;
 
     public Vector3Int doormatCell;
     public Vector3Int doorCell;
 
-    public Vector3 GetDoormatWorldPosition()
+    public Vector3 GetTeleportWorldPosition(Tilemap doorTileMap)
     {
-        return tilemap.GetCellCenterWorld(doormatCell);
+        return doorTileMap.GetCellCenterWorld(areaData.insideArea?doorCell:doormatCell);
     }
 
-    public Vector3 GetDoorWorldPosition()
-    {
-        return tilemap.GetCellCenterWorld(doorCell);
-    }
 }

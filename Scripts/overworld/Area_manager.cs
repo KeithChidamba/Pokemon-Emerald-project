@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
+using UnityEngine.Tilemaps;
+
 
 public class Area_manager : MonoBehaviour
 {
     public AreaTransitionData currentArea;
-    [FormerlySerializedAs("Areas")] public AreaTransitionData[] overworldAreas;
+    public AreaTransitionData[] overworldAreas;
     public bool loadingPlayerFromSave;
-    private AreaTransitionData _areaBuilding;
     public static Area_manager Instance;
+    public Tilemap doorTileMap;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -29,7 +30,6 @@ public class Area_manager : MonoBehaviour
     }
     public void EnterBuilding(AreaTransitionData area,float loadTime=0f)
     {
-        
         currentArea = area;
         Invoke(nameof(LoadBuilding),loadTime);
     }
@@ -49,40 +49,34 @@ public class Area_manager : MonoBehaviour
     }
     public void GoToOverworld()
     {
-        if (_areaBuilding != null)
+        if (currentArea != null)
         {//from building to over world
-            _areaBuilding.interior.SetActive(false);
-            Vector3 doorPos = _areaBuilding.GetDoorWorldPosition();
+            Vector3 doorPos = currentArea.GetTeleportWorldPosition(doorTileMap);
             Player_movement.Instance.SetPlayerPosition(doorPos);
             Player_movement.Instance.RestrictPlayerMovement();
+            currentArea.areaData.insideArea = false;
         }
         else //from save point in overworld
             Player_movement.Instance.SetPlayerPosition(Game_Load.Instance.playerData.playerPosition);
-        foreach (var area in overworldAreas)
-            area.overworld.SetActive(true);
            
         Invoke(nameof(ResetPlayerMovement), 1f);
-        currentArea = FindArea(AreaName.OverWorld);
         Player_movement.Instance.canUseBike = true;
-        Game_Load.Instance.playerData.location = currentArea.areaData.areaName;
-        _areaBuilding = null;
+        Game_Load.Instance.playerData.location = AreaName.OverWorld;
     }
-    public void EnterArea(AreaTransitionData transition)
-    {
-        Vector3 spawnPos = transition.GetDoormatWorldPosition();
-        Player_movement.Instance.SetPlayerPosition(spawnPos);
-    }
+    
     private void LoadBuilding()
     {
-        foreach (var area in overworldAreas)
-            area.overworld.SetActive(false);
         overworld_actions.Instance.doingAction = false;
         Player_movement.Instance.RestrictPlayerMovement();
         Player_movement.Instance.canUseBike = false;
-        currentArea.interior.SetActive(true);
-        _areaBuilding = currentArea;
+        
         if(!loadingPlayerFromSave)
-            Player_movement.Instance.SetPlayerPosition(_areaBuilding.GetDoormatWorldPosition());
+        {
+            Vector3 spawnPos = currentArea.GetTeleportWorldPosition(doorTileMap);
+            Player_movement.Instance.SetPlayerPosition(spawnPos);
+            currentArea.areaData.insideArea = true;
+        }
+        
         Player_movement.Instance.ForceWalkMovement();
         Invoke(nameof(ResetPlayerMovement), 1f);
         Game_Load.Instance.playerData.location = currentArea.areaData.areaName;

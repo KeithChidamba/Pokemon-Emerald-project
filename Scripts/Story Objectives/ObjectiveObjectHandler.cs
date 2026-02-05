@@ -8,7 +8,8 @@ public class ObjectiveObjectHandler : MonoBehaviour
   public StoryObjective objective;
   public List<GameObject> propsForObjective;
   public bool removeOnObjectiveClear;
-
+  public bool changeLayer;
+  public LayerMask newLayer;
   void Start()
     {
         OverworldState.Instance.OnObjectivesLoaded += CheckForRequiredObjective;
@@ -19,7 +20,7 @@ public class ObjectiveObjectHandler : MonoBehaviour
         if (OverworldState.Instance.HasObjective(objective.name))
         {
             objective.OnLoad += LoadObjects;
-            if(removeOnObjectiveClear) objective.OnClear += UnLoadObjects;
+            objective.OnClear += UnLoadObjects;
         }
     }
     private void LoadObjects()
@@ -28,8 +29,17 @@ public class ObjectiveObjectHandler : MonoBehaviour
     }
     private void UnLoadObjects()
     {
-        propsForObjective.ForEach(prop=>prop.SetActive(false));
+        if (changeLayer)
+        {
+            Debug.Log("changed");
+            propsForObjective.ForEach(prop=>prop.layer=newLayer);
+        }
+        if(removeOnObjectiveClear)
+        {
+            propsForObjective.ForEach(prop=>prop.SetActive(false));
+        }
+       
         objective.OnLoad -= LoadObjects;
-        if(removeOnObjectiveClear)objective.OnClear -= UnLoadObjects;
+        objective.OnClear -= UnLoadObjects;
     }
 }

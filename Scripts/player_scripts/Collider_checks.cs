@@ -5,39 +5,35 @@ using Random = UnityEngine.Random;
 
 public class Collider_checks : MonoBehaviour
 {
-    public Area_manager area;
-    private LayerMask _door;
     [SerializeField] private Transform interactionPoint;
-    [SerializeField] private float detectionDistance = 0.5f;
     public static event Action<Transform> OnCollision;
-    public Tilemap tilemap;
-    
+    public Tilemap encounterTilemap;
+    public Tilemap doorTileMap;
     private void Start()
     {
-        _door = 1 << LayerMask.NameToLayer("Door");
         Player_movement.Instance.OnNewTile += CheckGrass;
         Player_movement.Instance.OnNewTile += CheckDoor;
     }
 
     private void CheckDoor()
     {
-        var tile = FindTileAtPosition<DoorTile>();
+        var tile = FindTileAtPosition<DoorTile>(doorTileMap);
         if (tile == null) return;
         
         var areaEntryPoint = tile.areaTransitionData;
-        if (areaEntryPoint.areaData.isExitPoint)
-            area.GoToOverworld();
+        if (areaEntryPoint.areaData.insideArea)
+            Area_manager.Instance.GoToOverworld();
         else
-            area.EnterBuilding(areaEntryPoint,1f);
+            Area_manager.Instance.EnterBuilding(areaEntryPoint,1f);
     }
-    private T FindTileAtPosition<T>() where T : Tile
+    private T FindTileAtPosition<T>(Tilemap tilemap) where T : Tile
     {
         var cellPos = tilemap.WorldToCell(transform.position + Vector3.down * 0.2f);
         return tilemap.GetTile<T>(cellPos);
     }
     private void CheckGrass()
     {
-        var tile = FindTileAtPosition<EncounterTile>();
+        var tile = FindTileAtPosition<EncounterTile>(encounterTilemap);
         if (tile == null) return;
         
         if (Player_movement.Instance.runningInput) Encounter_handler.Instance.overworldEncounterChance = 5;
@@ -54,21 +50,11 @@ public class Collider_checks : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         OnCollision?.Invoke(other.transform);
-        CheckDoor(other.collider);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         OnCollision?.Invoke(other.transform);
-    }
-
-    private void CheckDoor(Collider2D collision)
-    {
-        if (!collision.gameObject.CompareTag("Switch_Area")) return;
-        
-        var hit = Physics2D.Raycast(transform.position, interactionPoint.forward, detectionDistance, _door);
-        if (!hit.transform) return; 
-        
     }
 
 }
