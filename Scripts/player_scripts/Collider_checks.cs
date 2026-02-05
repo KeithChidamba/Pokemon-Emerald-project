@@ -28,7 +28,8 @@ public class Collider_checks : MonoBehaviour
     }
     private T FindTileAtPosition<T>(Tilemap tilemap) where T : Tile
     {
-        var cellPos = tilemap.WorldToCell(transform.position + Vector3.down * 0.2f);
+        var worldPos = Vector3Int.RoundToInt(transform.position + Vector3.down * 0.3f);
+        var cellPos = tilemap.WorldToCell(worldPos);
         return tilemap.GetTile<T>(cellPos);
     }
     private void CheckGrass()

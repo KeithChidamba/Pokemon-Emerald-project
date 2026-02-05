@@ -13,7 +13,10 @@ public class AreaTransitionData : ScriptableObject
 
     public Vector3 GetTeleportWorldPosition(Tilemap doorTileMap)
     {
-        return doorTileMap.GetCellCenterWorld(areaData.insideArea?doorCell:doormatCell);
+        Vector3 pos = doorTileMap.GetCellCenterWorld(
+            areaData.insideArea ? doorCell : doormatCell
+        );
+        return Vector3Int.RoundToInt(pos);
     }
 
 }

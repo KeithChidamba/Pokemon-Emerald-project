@@ -23,6 +23,7 @@ public class Player_movement : MonoBehaviour
     [SerializeField] private GameObject playerObject;
     public event Action OnNewTile;
     [SerializeField]private LayerMask movementBlockers;
+    [SerializeField]private bool standingOnTile;
     public static Player_movement Instance;
 
 
@@ -222,7 +223,11 @@ public class Player_movement : MonoBehaviour
         if (Vector3.Distance(playerObject.transform.position, movePoint.position) <= inputSwitchRange)
         {
             playerObject.transform.position = movePoint.position;
-            
+            if (!standingOnTile)
+            {
+                OnNewTile?.Invoke();
+                standingOnTile = true;
+            }
             yAxisInput = (int)Input.GetAxisRaw("Vertical");
             xAxisInput = (int)Input.GetAxisRaw("Horizontal");
             
@@ -246,7 +251,7 @@ public class Player_movement : MonoBehaviour
                 if (!Physics2D.OverlapCircle(movePoint.position + positionModifierY,.12f,movementBlockers))
                 {//check blockers
                     movePoint.position += positionModifierY;
-                    OnNewTile?.Invoke();
+                    standingOnTile = false;
                 }  
             }
             
@@ -256,7 +261,7 @@ public class Player_movement : MonoBehaviour
                 if (!Physics2D.OverlapCircle(movePoint.position + positionModifierX,.12f,movementBlockers))
                 {//check blockers
                     movePoint.position += positionModifierX;
-                    OnNewTile?.Invoke();
+                    standingOnTile = false;
                 }  
             }
 

@@ -1,0 +1,10 @@
+{
+    "mainAssetName": "Take a gift pokemon",
+    "objectiveHeading": "Take a pokemon from the table",
+    "hasProgression": false,
+    "indexInList": 0,
+    "objectiveType": 1,
+    "interactionForObjective": {
+        "instanceID": 26604
+    }
+}

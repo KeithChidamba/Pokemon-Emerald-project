@@ -1,0 +1,11 @@
+{
+    "mainAssetName": "Sell super potion",
+    "objectiveHeading": "sell super potion",
+    "hasProgression": false,
+    "indexInList": 10,
+    "objectiveType": 5,
+    "itemForObjective": {
+        "instanceID": 25208
+    },
+    "marketObjectiveType": 0
+}

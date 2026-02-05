@@ -1,0 +1,12 @@
+{
+    "mainAssetName": "cath wurmple",
+    "objectiveHeading": "catch wurmple",
+    "hasProgression": false,
+    "indexInList": 6,
+    "objectiveType": 2,
+    "objectiveOutline": 1,
+    "encounterSourceForObjective": 2,
+    "pokemonForObjective": {
+        "instanceID": 26082
+    }
+}

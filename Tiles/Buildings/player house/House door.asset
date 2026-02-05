@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e04be4d4f56fa3ea9ac2170e12d4f77, type: 3}
   m_Name: House door
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 827914611, guid: dc578bc134785464896d5924b71d5e12, type: 3}
+  m_Sprite: {fileID: -1354342560, guid: dc578bc134785464896d5924b71d5e12, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

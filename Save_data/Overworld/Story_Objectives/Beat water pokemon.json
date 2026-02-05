@@ -1,0 +1,12 @@
+{
+    "mainAssetName": "beat water pokemon",
+    "objectiveHeading": "Beat water pokemon",
+    "hasProgression": false,
+    "indexInList": 5,
+    "objectiveType": 2,
+    "objectiveOutline": 0,
+    "encounterSourceForObjective": 1,
+    "pokemonForObjective": {
+        "instanceID": 26446
+    }
+}

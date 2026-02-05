@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Sitrus berry",
     "berryItem": {
-        "instanceID": 25766
+        "instanceID": 25764
     },
     "treeIndex": 33,
     "minutesPerStage": 90,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 31082
+                    "instanceID": 31060
                 },
                 {
-                    "instanceID": 31082
+                    "instanceID": 31060
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 31084
+                    "instanceID": 31062
                 },
                 {
-                    "instanceID": 31086
+                    "instanceID": 31064
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 31146
+                    "instanceID": 31208
                 },
                 {
-                    "instanceID": 31148
+                    "instanceID": 31210
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 31150
+                    "instanceID": 31212
                 },
                 {
-                    "instanceID": 31152
+                    "instanceID": 31214
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 31154
+                    "instanceID": 31216
                 },
                 {
-                    "instanceID": 31156
+                    "instanceID": 31218
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-02-05T10:50:59.8964520+02:00"
+    "lastLogin": "2026-02-05T15:10:12.4070930+02:00"
 }
