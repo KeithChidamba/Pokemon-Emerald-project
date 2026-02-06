@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 873f9f38578185f278f3db93159cb182, type: 3}
   m_Name: Encounter grass
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -274986411, guid: 34783d1b7bf894967878f4bfe7192734, type: 3}
+  m_Sprite: {fileID: -274986411, guid: dc578bc134785464896d5924b71d5e12, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

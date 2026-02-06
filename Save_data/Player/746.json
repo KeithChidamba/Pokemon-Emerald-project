@@ -5,10 +5,10 @@
     "playerMoney": 6298,
     "numBadges": 0,
     "playerPosition": {
-        "x": 37.0,
-        "y": 36.0,
+        "x": 11.0,
+        "y": 11.0,
         "z": 0.0
     },
-    "location": 1,
-    "equippedItemName": "Bike"
+    "location": 0,
+    "equippedItemName": "Old Rod"
 }

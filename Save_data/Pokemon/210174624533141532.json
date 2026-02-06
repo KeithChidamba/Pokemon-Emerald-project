@@ -58,7 +58,7 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26288
+            "instanceID": 26292
         }
     ],
     "statusEffect": 0,
@@ -142,10 +142,10 @@
     ],
     "moveSet": [
         {
-            "instanceID": -18666
+            "instanceID": -56078
         },
         {
-            "instanceID": -18668
+            "instanceID": -56080
         }
     ],
     "ability": {
@@ -161,10 +161,10 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 25732
+        "instanceID": 25734
     },
     "backPicture": {
-        "instanceID": 26294
+        "instanceID": 26298
     },
     "partyFrame1": {
         "instanceID": 25216

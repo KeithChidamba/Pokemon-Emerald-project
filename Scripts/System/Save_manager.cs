@@ -19,7 +19,6 @@ public class Save_manager : MonoBehaviour
     [DllImport("__Internal")] private static extern void CreateDirectories();
     [DllImport("__Internal")] private static extern void UploadZipAndStoreToIDBFS();
     [FormerlySerializedAs("party_IDs")] public List<string> partyIDs;
-    public Area_manager area;
     public static Save_manager Instance { get; private set; }
     private string _saveDataPath = "Assets/Save_data";
     private string _tempSaveDataPath = "Assets/Temp_Save_data";
@@ -452,7 +451,7 @@ public class Save_manager : MonoBehaviour
             }
         }
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.GetPlayerPosition();
-        Game_Load.Instance.playerData.location = area.currentArea.areaData.areaName;
+        Game_Load.Instance.playerData.location = Area_manager.Instance.currentArea.areaData.areaName;
         
         try
         {

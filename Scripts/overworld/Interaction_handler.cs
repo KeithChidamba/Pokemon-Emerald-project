@@ -63,6 +63,7 @@ public class Interaction_handler : MonoBehaviour
     {
         _canCheckForInteraction = false;
         var hit = Physics2D.Raycast(interactionPoint.position, interactionPoint.forward, detectDistance, interactable);
+        Debug.Log(hit.transform.name);
         if (hit.transform && !Dialogue_handler.Instance.displaying && !overworld_actions.Instance.usingUI)
         {
             var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
@@ -74,6 +75,7 @@ public class Interaction_handler : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.C) 
                 && overworld_actions.Instance.IsEquipped(Equipable.FishingRod))
             {
+                Debug.Log("hit: "+hit.transform.name);
                 if (hit.transform.gameObject.CompareTag("Water"))
                 { 
                    overworld_actions.Instance.fishingArea = interactableObject.area;

@@ -8,24 +8,11 @@ public class Collider_checks : MonoBehaviour
     [SerializeField] private Transform interactionPoint;
     public static event Action<Transform> OnCollision;
     public Tilemap encounterTilemap;
-    public Tilemap doorTileMap;
     private void Start()
     {
         Player_movement.Instance.OnNewTile += CheckGrass;
-        Player_movement.Instance.OnNewTile += CheckDoor;
     }
-
-    private void CheckDoor()
-    {
-        var tile = FindTileAtPosition<DoorTile>(doorTileMap);
-        if (tile == null) return;
-        
-        var areaEntryPoint = tile.areaTransitionData;
-        if (areaEntryPoint.areaData.insideArea)
-            Area_manager.Instance.GoToOverworld();
-        else
-            Area_manager.Instance.EnterBuilding(areaEntryPoint,1f);
-    }
+    
     private T FindTileAtPosition<T>(Tilemap tilemap) where T : Tile
     {
         var worldPos = Vector3Int.RoundToInt(transform.position + Vector3.down * 0.3f);
