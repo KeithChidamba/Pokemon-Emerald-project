@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13b75c95f34a00d4e8c04f76b73312e6, type: 3}
-  m_Name: Water animation
+  m_Script: {fileID: 11500000, guid: 071ef4dd9e1f396ee950a210e4027e8b, type: 3}
+  m_Name: Water Tile
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
   - {fileID: -1424026174, guid: dc578bc134785464896d5924b71d5e12, type: 3}
@@ -25,5 +25,6 @@ MonoBehaviour:
   m_MaxSpeed: 1
   m_AnimationStartTime: 0
   m_AnimationStartFrame: 0
-  m_TileColliderType: 0
+  m_TileColliderType: 1
   m_TileAnimationFlags: 0
+  area: {fileID: 11400000, guid: 25dfde04bada2414b8fb3eaf4a8c5ac7, type: 2}

@@ -14,7 +14,7 @@ public class Player_movement : MonoBehaviour
     private bool _canSwitchMovement;
     [SerializeField] private int xAxisInput;
     [SerializeField] private int yAxisInput;
-    [SerializeField] private float _currentDirection;
+    public float currentDirection;
     [SerializeField] private Animation_manager _animationManager;
     [SerializeField] private bool canMove = true;
     [SerializeField] private Transform interactionPoint;
@@ -74,7 +74,7 @@ public class Player_movement : MonoBehaviour
         if (!playerObject.activeSelf) return;
         if (canMove)
         {
-            _animationManager.animator.SetFloat(_animationManager.idleParam, _currentDirection);
+            _animationManager.animator.SetFloat(_animationManager.idleParam, currentDirection);
             _animationManager.animator.SetFloat(_animationManager.moveParam, GetMovementDirection());
             HandleBikeInputs();
             HandleRunInputs();
@@ -132,7 +132,7 @@ public class Player_movement : MonoBehaviour
         {
             if (!overworld_actions.Instance.doingAction)
             {
-                return _currentDirection;
+                return currentDirection;
             }
         }
         else
@@ -152,7 +152,7 @@ public class Player_movement : MonoBehaviour
             }
         }
 
-        _currentDirection = direction;
+        currentDirection = direction;
 
         return direction;
     }

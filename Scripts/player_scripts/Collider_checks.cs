@@ -13,15 +13,9 @@ public class Collider_checks : MonoBehaviour
         Player_movement.Instance.OnNewTile += CheckGrass;
     }
     
-    private T FindTileAtPosition<T>(Tilemap tilemap) where T : Tile
-    {
-        var worldPos = Vector3Int.RoundToInt(transform.position + Vector3.down * 0.3f);
-        var cellPos = tilemap.WorldToCell(worldPos);
-        return tilemap.GetTile<T>(cellPos);
-    }
     private void CheckGrass()
     {
-        var tile = FindTileAtPosition<EncounterTile>(encounterTilemap);
+        var tile = FindTileAtPosition<EncounterTile>(encounterTilemap,transform.position,Vector3.down);
         if (tile == null) return;
         
         if (Player_movement.Instance.runningInput) Encounter_handler.Instance.overworldEncounterChance = 5;
@@ -33,7 +27,6 @@ public class Collider_checks : MonoBehaviour
         {
             Encounter_handler.Instance.TriggerEncounter(tile.area);
         }
-
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -44,5 +37,11 @@ public class Collider_checks : MonoBehaviour
     {
         OnCollision?.Invoke(other.transform);
     }
-
+    public static T FindTileAtPosition<T>(Tilemap tilemap,Vector3 triggerPos,Vector3 offset) where T : TileBase
+    {
+        var worldPos = Vector3Int.RoundToInt(triggerPos + offset * 0.01f);
+        var cellPos = tilemap.WorldToCell(worldPos);
+        return tilemap.GetTile<T>(cellPos);
+    }
 }
+
