@@ -28,17 +28,21 @@ public class Area_manager : MonoBehaviour
         //inside this method in-case there extra stuff that needs to happen when escaping
         GoToOverworld();
     }
-    public void EnterBuilding(AreaTransitionData area,float loadTime=0f)
-    {
-        currentArea = area;
-        Invoke(nameof(LoadBuilding),loadTime);
-    }
+
     public void SwitchToArea(AreaName areaName,float loadTime=0f)
     {
         if (areaName!=AreaName.OverWorld)
         {
             var area = FindArea(areaName);
-            EnterBuilding(area, loadTime);
+            currentArea = area;
+            if(!loadingPlayerFromSave)
+            {
+                Vector3 spawnPos = currentArea.GetTeleportWorldPosition(doorTileMap);
+                Player_movement.Instance.SetPlayerPosition(spawnPos);
+            }
+            Player_movement.Instance.ForceWalkMovement();
+            Invoke(nameof(ResetPlayerMovement), 1f);
+            Game_Load.Instance.playerData.location = currentArea.areaData.areaName;
         }
         else
             GoToOverworld();
@@ -49,31 +53,12 @@ public class Area_manager : MonoBehaviour
     }
     public void GoToOverworld()
     {
-        if (currentArea != null)
-        {//from building to over world
-            Vector3 doorPos = currentArea.GetTeleportWorldPosition(doorTileMap);
-            Player_movement.Instance.SetPlayerPosition(doorPos);
-            Player_movement.Instance.RestrictPlayerMovement();
-        }
-        else //from save point in overworld
-            Player_movement.Instance.SetPlayerPosition(Game_Load.Instance.playerData.playerPosition);
-
+         Player_movement.Instance.SetPlayerPosition(Game_Load.Instance.playerData.playerPosition);
         currentArea = FindArea(AreaName.OverWorld);
         Invoke(nameof(ResetPlayerMovement), 1f);
         Game_Load.Instance.playerData.location = AreaName.OverWorld;
     }
-    
-    private void LoadBuilding()
-    {
-        if(!loadingPlayerFromSave)
-        {
-            Vector3 spawnPos = currentArea.GetTeleportWorldPosition(doorTileMap);
-            Player_movement.Instance.SetPlayerPosition(spawnPos);
-        }
-        Player_movement.Instance.ForceWalkMovement();
-        Invoke(nameof(ResetPlayerMovement), 1f);
-        Game_Load.Instance.playerData.location = currentArea.areaData.areaName;
-    }
+
     private void ResetPlayerMovement()
     {
         Player_movement.Instance.AllowPlayerMovement();

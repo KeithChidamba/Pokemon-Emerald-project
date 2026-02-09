@@ -34,15 +34,17 @@ public class Interaction_handler : MonoBehaviour
         if(!Dialogue_handler.Instance.displaying && !_stopInteractions)
         {
             if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.C))
-                if(_canCheckForInteraction)
+            {
+                if (_canCheckForInteraction)
                     RaycastForInteraction();
+            }
+            
+            if (Input.GetKeyUp(KeyCode.C) || Input.GetKeyUp(KeyCode.Z))
+            {
+                _canCheckForInteraction = true;
+            }
         }
 
-        if ((Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.C)) 
-            && !_canCheckForInteraction)
-        {
-            _canCheckForInteraction = true;
-        }
     }
     public void DisableInteraction()
     {
@@ -57,7 +59,7 @@ public class Interaction_handler : MonoBehaviour
 
     private IEnumerator SetInteractionAllowed()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         _stopInteractions = false;
         _interactionCooldown = false;
     }
