@@ -94,9 +94,19 @@ public class Interaction_handler : MonoBehaviour
                 && overworld_actions.Instance.IsEquipped(Equipable.FishingRod))
             {
                 if (hit.transform.gameObject.CompareTag("Water"))
-                { 
-                    var tile = Collider_checks.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point,Vector3.down);
-                    overworld_actions.Instance.fishingArea = tile.area;
+                {
+                    Encounter_Area areaOfEncounter;
+                    var animatedWaterTile = Collider_checks.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point,Vector3.down);
+                    if (animatedWaterTile == null)
+                    {
+                        var stillWaterTile = Collider_checks.FindTileAtPosition<EncounterTile>(waterTilemap,hit.point,Vector3.down);
+                        areaOfEncounter = stillWaterTile.area;
+                    }
+                    else
+                    {
+                        areaOfEncounter = animatedWaterTile.area;
+                    }
+                    overworld_actions.Instance.fishingArea = areaOfEncounter;
                     Dialogue_handler.Instance.DisplayList("Would you like to fish for pokemon"
                        , "fishing...", 
                        new[]
