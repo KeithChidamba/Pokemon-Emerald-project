@@ -62,10 +62,10 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26524
+            "instanceID": 26568
         },
         {
-            "instanceID": 26354
+            "instanceID": 26396
         }
     ],
     "statusEffect": 0,
@@ -155,27 +155,27 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -28604
+            "instanceID": -36168
         },
         {
-            "instanceID": -28606
+            "instanceID": -36170
         },
         {
-            "instanceID": -28608
+            "instanceID": -36172
         },
         {
-            "instanceID": -28610
+            "instanceID": -36174
         }
     ],
     "ability": {
-        "instanceID": 26000
+        "instanceID": 26028
     },
     "evolutions": [
         {
-            "instanceID": 26788
+            "instanceID": 26842
         },
         {
-            "instanceID": 25970
+            "instanceID": 25998
         }
     ],
     "heldItem": {
@@ -183,19 +183,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 26154
+        "instanceID": 26190
     },
     "backPicture": {
-        "instanceID": 26656
+        "instanceID": 26704
     },
     "partyFrame1": {
-        "instanceID": 26308
+        "instanceID": 26348
     },
     "partyFrame2": {
-        "instanceID": 25698
+        "instanceID": 25714
     },
     "battleIntroFrame": {
-        "instanceID": 26728
+        "instanceID": 26778
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,
