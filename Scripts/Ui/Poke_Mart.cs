@@ -141,15 +141,15 @@ public class Poke_Mart : MonoBehaviour
                 selectedItemQuantity = 99;
         }
     }
-    private void ViewStore(Overworld_interactable clerkInteractable, int optionChosen)
+    private void ViewStore(Interaction clerkInteraction, int optionChosen)
     {
-        if (clerkInteractable.interaction.overworldInteraction != OverworldInteractionType.Clerk) return;
+        if (clerkInteraction.overworldInteraction != OverworldInteractionType.Clerk) return;
         Dialogue_handler.Instance.EndDialogue();
         
         if (optionChosen > 0) return;
         
         if(currentMartData!=null){
-            if (currentMartData.location == clerkInteractable.location)
+            if (currentMartData.location == clerkInteraction.location)
             {//basically caching
                 SetUpItemView();
                 return;
@@ -161,7 +161,7 @@ public class Poke_Mart : MonoBehaviour
         
         foreach (var data in allData)
         {
-            if (data.location == clerkInteractable.location)
+            if (data.location == clerkInteraction.location)
             {
                 currentMartData = data;
                 StartCoroutine(InitializeStoreData());

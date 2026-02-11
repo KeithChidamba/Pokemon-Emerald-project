@@ -13,14 +13,14 @@ public class InteractionObjective : StoryObjective
       Options_manager.Instance.OnInteractionOptionChosen += CheckInteractionOption;
    }
    
-   private void CheckInteractionOption(Overworld_interactable interactable, int optionChosen)
+   private void CheckInteractionOption(Interaction interaction, int optionChosen)
    {
       if (optionChosen>0)
       {
          Dialogue_handler.Instance.EndDialogue(); 
          return;
       }
-      if (interactionForObjective.overworldInteraction != interactable.interaction.overworldInteraction) return;
+      if (interactionForObjective.overworldInteraction != interaction.overworldInteraction) return;
       ClearObjective();
    }
    

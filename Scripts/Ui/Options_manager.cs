@@ -11,12 +11,11 @@ public enum InteractionOptions
 public class Options_manager : MonoBehaviour
 {
     private Interaction _currentInteraction;
-    private Overworld_interactable _currentInteractable;
     public bool playerInBattle;
     public static Options_manager Instance;
     private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
-    public event Action<Overworld_interactable,int> OnInteractionOptionChosen;
-
+    public event Action<Interaction,int> OnInteractionOptionChosen;
+    public event Action<Overworld_interactable,int> OnOverworldInteractionOptionChosen;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -129,7 +128,6 @@ public class Options_manager : MonoBehaviour
         Pokemon_party.Instance.AddMember(pokemon,isGiftPokemon:true);
         Dialogue_handler.Instance.EndDialogue();
         Dialogue_handler.Instance.DisplayDetails("You got a " + pokemon.pokemonName);
-        _currentInteractable.gameObject.SetActive(false);
     }
     void Interact()
     {
@@ -151,15 +149,22 @@ public class Options_manager : MonoBehaviour
     {
         Dialogue_handler.Instance.DisplayDetails("Have a great day!");
     }
-    public void CompleteEventInteraction(Overworld_interactable interactable)
+
+    public void AlertOverworldInteraction(Overworld_interactable interactable,int optionIndex)
     {
-        var interactionOption = interactable.interaction.interactionOptions[0];
-        _currentInteraction = interactable.interaction;
-        OnInteractionOptionChosen?.Invoke(interactable,0);
+        OnOverworldInteractionOptionChosen?.Invoke(interactable,optionIndex);
+        CompleteInteraction(interactable.interaction,optionIndex);
+    }
+    public void CompleteEventInteraction(Interaction interaction)
+    {
+        var interactionOption = interaction.interactionOptions[0];
+        _currentInteraction = interaction;
+        OnInteractionOptionChosen?.Invoke(interaction,0);
         if (_interactionMethods.TryGetValue(interactionOption,out var method)) method();
     }
     public void CompleteInteraction(Interaction interaction,int optionIndex)
     {
+        OnInteractionOptionChosen?.Invoke(interaction,optionIndex);
         var interactionOption = interaction.interactionOptions[optionIndex];
         if (interactionOption == InteractionOptions.None)
         {
@@ -175,12 +180,6 @@ public class Options_manager : MonoBehaviour
             method();
         else
             Debug.Log("couldn't find method for interaction: " + interactionOption);
-    }
-    public void CompleteInteraction(Overworld_interactable interactable,int optionIndex)
-    {
-        _currentInteractable = interactable;
-        OnInteractionOptionChosen?.Invoke(interactable,optionIndex);
-        CompleteInteraction(_currentInteractable.interaction,optionIndex);
     }
 }
 

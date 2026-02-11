@@ -8,12 +8,11 @@ public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage}
 public class Dialogue_handler : MonoBehaviour
 {
     public Interaction currentInteraction;
-    public Overworld_interactable currentInteractionObject;
+    public Overworld_interactable currentInteractable;
     [SerializeField] private TMP_Text dialougeText;
     public float typingSpeed = 0.04f;
     public bool dialogueFinished;
     public bool canExitDialogue = true;
-    [SerializeField]private bool isOverworldOptionsInteraction = false;
     public bool displaying;
     [SerializeField] private GameObject infoDialogueBox;
     public GameObject battleDialogueBox;
@@ -68,7 +67,7 @@ public class Dialogue_handler : MonoBehaviour
     }
     private void CreateDialogueOptions()
     {
-        OnOptionsDisplayed?.Invoke(currentInteractionObject);
+        OnOptionsDisplayed?.Invoke(currentInteractable);
         dialogueOptionBox.gameObject.SetActive(true);
         var numOptions = currentInteraction.interactionOptions.Count;
         for(var i = 0; i < numOptions; i++)
@@ -101,13 +100,14 @@ public class Dialogue_handler : MonoBehaviour
     }
     private void SelectOption(int optionIndex)
     {
-        if (isOverworldOptionsInteraction)
+        if (currentInteractable!=null)
         {
-            isOverworldOptionsInteraction = false;
-            Options_manager.Instance.CompleteInteraction(currentInteractionObject,optionIndex);
-        }
-        else
+            Options_manager.Instance.AlertOverworldInteraction(currentInteractable,optionIndex);
+        }else
+        {
             Options_manager.Instance.CompleteInteraction(currentInteraction,optionIndex);
+        }
+        
     }
     private void ActivateOptions(bool display)
      {
@@ -201,7 +201,7 @@ public class Dialogue_handler : MonoBehaviour
         Interaction_handler.Instance.AllowInteraction();
         canExitDialogue = true;
         currentInteraction = null;
-        currentInteractionObject = null;
+        currentInteractable = null;
         infoDialogueBox.SetActive(false);
         battleDialogueBox.SetActive(false);
         ResetText();
@@ -210,19 +210,22 @@ public class Dialogue_handler : MonoBehaviour
         Player_movement.Instance.AllowPlayerMovement();
         StopCoroutine(ProcessQueue());
     }
-    public void StartInteraction(Overworld_interactable interactable)
+    public void StartInteraction(Interaction interaction)
     {
         Interaction_handler.Instance.DisableInteraction();
-        currentInteractionObject = interactable;
-        currentInteraction = interactable.interaction;
+        currentInteraction = interaction;
         if (currentInteraction.dialogueType == DialogType.Event)
         {
-            Options_manager.Instance.CompleteEventInteraction(currentInteractionObject);
+            Options_manager.Instance.CompleteEventInteraction(currentInteraction);
             return;
         }
         HandleInteraction();
     }
-    
+    public void StartInteraction(Overworld_interactable interactable)
+    {
+        currentInteractable = interactable;
+        StartInteraction(interactable.interaction);
+    }
     void ResetText()
     {
         dialougeText.text = string.Empty;
@@ -320,7 +323,6 @@ public class Dialogue_handler : MonoBehaviour
         if (currentInteraction == null) return;
         if (currentInteraction.dialogueType == DialogType.Options)
         {
-            isOverworldOptionsInteraction = currentInteractionObject != null;
             CreateDialogueOptions();
         }
     }

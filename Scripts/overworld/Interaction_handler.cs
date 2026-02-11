@@ -13,6 +13,7 @@ public class Interaction_handler : MonoBehaviour
     private bool _stopInteractions;
     private bool _interactionCooldown;
     public Tilemap waterTilemap;
+    public Tilemap interactionTilemap;
     public static Interaction_handler Instance;
     private void Awake()
     {
@@ -86,9 +87,18 @@ public class Interaction_handler : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
-                if (interactableObject.interaction != null)
-                    Dialogue_handler.Instance.StartInteraction(interactableObject);
+                var interactableTile = Collider_checks.FindTileAtPosition<InteractionTile>(interactionTilemap,hit.point,Vector3.down);
+                if (interactableTile != null)
+                {
+                    Dialogue_handler.Instance.StartInteraction(interactableTile.interaction);
+                }
+                else
+                {
+                    var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
+                    if (interactableObject.interaction != null)
+                        Dialogue_handler.Instance.StartInteraction(interactableObject);
+                }
+               
             }
             if (Input.GetKeyDown(KeyCode.C) 
                 && overworld_actions.Instance.IsEquipped(Equipable.FishingRod))

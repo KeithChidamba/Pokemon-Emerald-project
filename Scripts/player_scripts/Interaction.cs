@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,4 +14,16 @@ public class Interaction : ScriptableObject
     [FormerlySerializedAs("OptionsUiText")] public List<string> optionsUiText= new();
     [FormerlySerializedAs("AdditionalInfo")] public List<string> additionalInfo = new();
     public OverworldInteractionType overworldInteraction;
+    public AreaName location;
+}
+public enum OverworldInteractionType
+{
+    None,
+    Clerk,
+    PlantBerry,
+    PickBerry,
+    WaterBerryTree,
+    PokemonCenter,
+    Battle,
+    ReceiveGiftPokemon
 }

@@ -21,4 +21,5 @@ MonoBehaviour:
   - Item Storage
   - Cancel
   additionalInfo: []
-  hasSeparateLogicHandler: 0
+  overworldInteraction: 0
+  location: 3

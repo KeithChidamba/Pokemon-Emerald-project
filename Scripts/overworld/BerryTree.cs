@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BerryTree : MonoBehaviour
 {
@@ -30,9 +25,9 @@ public class BerryTree : MonoBehaviour
 
     private void Start()
     {
-        Options_manager.Instance.OnInteractionOptionChosen += ChooseBerryToPlant;
-        Options_manager.Instance.OnInteractionOptionChosen += HarvestBerries;
-        Options_manager.Instance.OnInteractionOptionChosen += WaterTree;
+        Options_manager.Instance.OnOverworldInteractionOptionChosen += ChooseBerryToPlant;
+        Options_manager.Instance.OnOverworldInteractionOptionChosen += HarvestBerries;
+        Options_manager.Instance.OnOverworldInteractionOptionChosen += WaterTree;
     }
 
     private void SetInteraction(OverworldInteractionType type)

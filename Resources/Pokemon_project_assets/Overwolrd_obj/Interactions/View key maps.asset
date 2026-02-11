@@ -20,4 +20,5 @@ MonoBehaviour:
   - Yes
   - No
   additionalInfo: []
-  hasSeparateLogicHandler: 0
+  overworldInteraction: 0
+  location: 1

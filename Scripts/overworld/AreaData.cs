@@ -10,5 +10,5 @@ public class AreaData : ScriptableObject
 
 public enum AreaName
 {
-    OverWorld,PlayerHouse,PokeMartForest,PokeMartCoastal,PokeCenter,Museum
+    OverWorld,PlayerGarden,PokeMartCoastal,PokeCenter
 }

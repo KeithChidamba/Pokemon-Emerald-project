@@ -1,4 +1,3 @@
-
 using UnityEngine;
 [CreateAssetMenu(fileName = "trainer battle obj", menuName = "Objectives/trainer battle objective")]
 public class TrainerBattleObjective : StoryObjective
@@ -9,11 +8,11 @@ public class TrainerBattleObjective : StoryObjective
         Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
         Options_manager.Instance.OnInteractionOptionChosen += CheckBattleInteraction;
     }
-    private void CheckBattleInteraction(Overworld_interactable interactable, int optionChosen)
+    private void CheckBattleInteraction(Interaction interaction, int optionChosen)
     {
-        if (interactable.interaction.overworldInteraction == OverworldInteractionType.Battle)
+        if (interaction.overworldInteraction == OverworldInteractionType.Battle)
         {
-            if (trainer.TrainerName == interactable.interaction.additionalInfo[0])
+            if (trainer.TrainerName == interaction.additionalInfo[0])
             {
                 Battle_handler.Instance.OnBattleResult += CheckIfWin;
             }
