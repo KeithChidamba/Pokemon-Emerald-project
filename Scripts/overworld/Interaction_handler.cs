@@ -87,7 +87,8 @@ public class Interaction_handler : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                var interactableTile = Collider_checks.FindTileAtPosition<InteractionTile>(interactionTilemap,hit.point,Vector3.down);
+                
+                var interactableTile = Collider_checks.FindTileAtPositionRadius<InteractionTile>(interactionTilemap,hit.point,Vector3.down);
                 if (interactableTile != null)
                 {
                     Dialogue_handler.Instance.StartInteraction(interactableTile.interaction);
@@ -95,7 +96,7 @@ public class Interaction_handler : MonoBehaviour
                 else
                 {
                     var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
-                    if (interactableObject.interaction != null)
+                    if (interactableObject != null)
                         Dialogue_handler.Instance.StartInteraction(interactableObject);
                 }
                
