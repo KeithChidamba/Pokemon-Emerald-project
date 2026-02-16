@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Pecha berry",
     "berryItem": {
-        "instanceID": 25478
+        "instanceID": 25318
     },
     "treeIndex": 5,
     "minutesPerStage": 45,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32370
+                    "instanceID": 32272
                 },
                 {
-                    "instanceID": 32370
+                    "instanceID": 32272
                 }
             ],
             "growthStageNumber": 0
@@ -27,13 +27,24 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32372
+                    "instanceID": 32274
                 },
                 {
-                    "instanceID": 32374
+                    "instanceID": 32276
                 }
             ],
             "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32932
+                },
+                {
+                    "instanceID": 32934
+                }
+            ],
+            "growthStageNumber": 2
         },
         {
             "growthStageSprites": [
@@ -44,7 +55,7 @@
                     "instanceID": 32938
                 }
             ],
-            "growthStageNumber": 2
+            "growthStageNumber": 3
         },
         {
             "growthStageSprites": [
@@ -55,19 +66,8 @@
                     "instanceID": 32942
                 }
             ],
-            "growthStageNumber": 3
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32944
-                },
-                {
-                    "instanceID": 32946
-                }
-            ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-02-13T14:00:46.5429760+02:00"
+    "lastLogin": "2026-02-16T11:04:42.8869790+02:00"
 }

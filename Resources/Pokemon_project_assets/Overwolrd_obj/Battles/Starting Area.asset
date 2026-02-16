@@ -10,17 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d872027b11d9f844b42bbad3ec18772, type: 3}
-  m_Name: Beach grass
+  m_Name: Starting Area
   m_EditorClassIdentifier: 
-  biome: 5
+  biome: 3
   availableEncounters:
   - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
     encounterChance: 5
     evolutionFormNumber: 0
   - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
-    encounterChance: 5
-    evolutionFormNumber: 0
-  - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
     encounterChance: 5
     evolutionFormNumber: 0
   - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}

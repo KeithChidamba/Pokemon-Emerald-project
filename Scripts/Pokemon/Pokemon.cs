@@ -361,7 +361,7 @@ public class Pokemon : ScriptableObject
                 nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel, expGroup);
             }
         }
-        
+        Dialogue_handler.Instance.DisplayBattleInfo($"{pokemonName} gained {amount} EXP points");
         OnExpGainComplete?.Invoke(this);
     }
 

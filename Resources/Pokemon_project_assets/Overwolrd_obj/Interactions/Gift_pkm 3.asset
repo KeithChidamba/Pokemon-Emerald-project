@@ -15,7 +15,7 @@ MonoBehaviour:
   interactionMessage: It's a pokeball with a pokemon inside, take it?
   dialogueType: 1
   interactionOptions: 0b00000000000000
-  resultMessage: Mudkip
+  resultMessage: Trapinch
   optionsUiText:
   - Yes
   - No
