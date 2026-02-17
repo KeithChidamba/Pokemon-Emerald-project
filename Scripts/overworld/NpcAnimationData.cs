@@ -16,10 +16,10 @@ public class NpcAnimationData : ScriptableObject
         {
             case NpcAnimationDirection.Down:
             case NpcAnimationDirection.Left:
-                return -1 * data.numTilesTraveled;
+                return -1 * data.numTilesTOTravel;
             case NpcAnimationDirection.Up:
             case NpcAnimationDirection.Right:
-                return 1 * data.numTilesTraveled;
+                return 1 * data.numTilesTOTravel;
         }
         return 0;
     }

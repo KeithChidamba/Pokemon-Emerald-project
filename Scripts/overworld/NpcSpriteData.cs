@@ -7,5 +7,5 @@ public struct NpcSpriteData
 {
     public Sprite[] spritesForDirection;
     public NpcAnimationDirection direction;
-    public int numTilesTraveled;
+    public int numTilesTOTravel;
 }

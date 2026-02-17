@@ -19,11 +19,11 @@ MonoBehaviour:
     - {fileID: -1047052172, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
     - {fileID: -538534923, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
     direction: 0
-    numTilesTraveled: 3
+    numTilesTOTravel: 3
   - spritesForDirection:
     - {fileID: -865392173, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
     - {fileID: -1266766389, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
     - {fileID: -865392173, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
     - {fileID: 794053219, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
     direction: 1
-    numTilesTraveled: 3
+    numTilesTOTravel: 3

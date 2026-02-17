@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -11,23 +12,29 @@ public class NpcMovement : MonoBehaviour
     private NpcSpriteData _currentAnimation;
     [SerializeField]private SpriteRenderer spriteRenderer;
     private int _currentSpriteIndex;
-
-    private bool moving;
-
+    [SerializeField]private int currentStepCount;
+    [SerializeField]private bool moving;
+    [SerializeField]private bool canMove;
     private Coroutine movementRoutine;
     private Coroutine animationRoutine;
 
-    private static readonly WaitForSeconds movePause = new (1f);
-    private static readonly WaitForSeconds animDelay = new (0.25f);
+    private WaitForSeconds movePause = new (1f);
+    private WaitForSeconds animDelay = new (0.25f);
     
     private void Start()
     {
         movementBlockers = 1 << LayerMask.NameToLayer("Movement blockers");
     }
 
-
-private void Awake()
+private void OnDisable()
 {
+    canMove = false;
+    StopAllCoroutines();
+}
+
+private void OnEnable()
+{
+    canMove = true;
     SwitchMove();
     movementRoutine = StartCoroutine(MovementLoop());
 }
@@ -51,7 +58,7 @@ private void ChangeSprite()
 
 private IEnumerator MovementLoop()
 {
-    while (true)
+    while (canMove)
     {
         // Try to set next move
         if (!TrySetNextMove())
@@ -101,31 +108,34 @@ private IEnumerator MovementLoop()
 
 private bool TrySetNextMove()
 {
-    Vector3 direction;
+    bool isVertical = animationData.IsVerticalMovement(_currentAnimation);
+    int totalTiles = Mathf.Abs(_currentAnimation.numTilesTOTravel);
+    var sign = Mathf.Sign(animationData.GetDirectionAsMagnitude(_currentAnimation));
 
-    if (animationData.IsVerticalMovement(_currentAnimation))
+    Vector3 step = isVertical
+        ? new Vector3(0, sign, 0)
+        : new Vector3(sign, 0, 0);
+
+    Vector3 lastValidPos = movePoint.position;
+
+    for (int i = 1; i <= totalTiles; i++)
     {
-        direction = new Vector3(
-            0,
-            animationData.GetDirectionAsMagnitude(_currentAnimation),
-            0
-        );
+        Vector3 checkPos = movePoint.position + step * i;
+
+        if (Physics2D.OverlapCircle(checkPos, 0.12f, movementBlockers))
+            break;
+
+        lastValidPos = checkPos;
     }
-    else
+
+    // No movement possible at all
+    if (lastValidPos == movePoint.position)
     {
-        direction = new Vector3(
-            animationData.GetDirectionAsMagnitude(_currentAnimation),
-            0,
-            0
-        );
-    }
-
-    Vector3 targetPos = movePoint.position + direction;
-
-    if (Physics2D.OverlapCircle(targetPos, 0.12f, movementBlockers))
+        Debug.Log("no move");
         return false;
+    }
 
-    movePoint.position = targetPos;
+    movePoint.position = lastValidPos;
     return true;
 }
 
