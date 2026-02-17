@@ -109,7 +109,7 @@ public class Item_handler : MonoBehaviour
     {
         if (itemInUse.itemName == "Escape Rope")
         {
-            if (Area_manager.Instance.currentArea.areaData.escapable)
+            if (Area_manager.Instance.currentArea.data.escapable)
             {
                 OnItemUsageSuccessful?.Invoke(true);
                 CompleteItemUsage();

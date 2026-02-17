@@ -16,7 +16,6 @@ public class Game_Load : MonoBehaviour
     public InputField name_input;
     private readonly int _maxNameLength = 14;
     private readonly int _minNameLength = 4;
-    public Transform Start_house_pos;
     public GameObject world_Map;
     public Player_data playerData;
     public static Game_Load Instance;
@@ -68,7 +67,6 @@ public class Game_Load : MonoBehaviour
             data.numBadges = 0;
             data.trainerID = Utility.Random16Bit();
             data.secretID = Utility.Random16Bit();
-            data.playerPosition = Start_house_pos.position;
             data.location = AreaName.PlayerGarden;
             playerData = data;
             StartGame();

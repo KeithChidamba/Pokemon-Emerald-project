@@ -3,23 +3,24 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Overworld/Npc Animation Data")]
 public class NpcAnimationData : ScriptableObject
 {
-    public List<NpcSpriteData> spriteData = new ();
+    public SpriteDataForNpc spriteData;
+    public List<NpcMovementDirection> movementDirections = new ();
     
-    public bool IsVerticalMovement(NpcSpriteData data)
+    public bool IsVerticalMovement(NpcAnimationDirection direction)
     {
-        return (int)data.direction > 1;
+        return (int)direction > 1;
     }
     
-    public int GetDirectionAsMagnitude(NpcSpriteData data)
+    public int GetDirectionAsMagnitude(NpcMovementDirection data)
     {
         switch (data.direction)
         {
             case NpcAnimationDirection.Down:
             case NpcAnimationDirection.Left:
-                return -1 * data.numTilesTOTravel;
+                return -1 * data.numTilesToTravel;
             case NpcAnimationDirection.Up:
             case NpcAnimationDirection.Right:
-                return 1 * data.numTilesTOTravel;
+                return 1 * data.numTilesToTravel;
         }
         return 0;
     }

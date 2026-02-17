@@ -163,7 +163,7 @@ MonoBehaviour:
   movementSpeed: 2
   movementBlockers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   currentAnimationIndex: 0
   spriteRenderer: {fileID: 6020069832060144769}
   currentStepCount: 0

@@ -8,11 +8,11 @@ using UnityEngine.Tilemaps;
 
 public class Area_manager : MonoBehaviour
 {
-    public AreaTransitionData currentArea;
-    public AreaTransitionData[] overworldAreas;
+    public AreaData currentArea;
+    public AreaData[] overworldAreas;
     public bool loadingPlayerFromSave;
     public static Area_manager Instance;
-    public Tilemap doorTileMap;
+    public Tilemap groundTileMap;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -26,42 +26,25 @@ public class Area_manager : MonoBehaviour
     public void EscapeArea()
     {
         //inside this method in-case there extra stuff that needs to happen when escaping
-        GoToOverworld();
     }
 
-    public void SwitchToArea(AreaName areaName,float loadTime=0f)
+    public void SwitchToArea(AreaName areaName)
     {
-        if (areaName!=AreaName.OverWorld)
+        if(loadingPlayerFromSave)
         {
-            var area = FindArea(areaName);
-            currentArea = area;
-            if(!loadingPlayerFromSave)
-            {
-                Vector3 spawnPos = currentArea.GetTeleportWorldPosition(doorTileMap);
-                Player_movement.Instance.SetPlayerPosition(spawnPos);
-            }
-            Player_movement.Instance.ForceWalkMovement();
-            Invoke(nameof(ResetPlayerMovement), 1f);
-            Game_Load.Instance.playerData.location = currentArea.areaData.areaName;
+            var saveArea = overworldAreas.First(a=>a.data.areaName == areaName);
+            currentArea = saveArea;
+            loadingPlayerFromSave = false;
         }
-        else
-            GoToOverworld();
-    }
-    private AreaTransitionData FindArea(AreaName areaName)
-    {
-        return overworldAreas.FirstOrDefault(a=>a.areaData.areaName==areaName);
-    }
-    public void GoToOverworld()
-    {
-         Player_movement.Instance.SetPlayerPosition(Game_Load.Instance.playerData.playerPosition);
-        currentArea = FindArea(AreaName.OverWorld);
-        Invoke(nameof(ResetPlayerMovement), 1f);
-        Game_Load.Instance.playerData.location = AreaName.OverWorld;
-    }
 
-    private void ResetPlayerMovement()
-    {
-        Player_movement.Instance.AllowPlayerMovement();
-        loadingPlayerFromSave = false;
+        if (areaName == currentArea.data.areaName) return;
+
+        currentArea.LoadNpcObjects(false);
+        var area = overworldAreas.First(a=>a.data.areaName == areaName);
+        area.LoadNpcObjects(true);
+        currentArea = area;
+        Game_Load.Instance.playerData.location = currentArea.data.areaName;
     }
+       
+    
 }

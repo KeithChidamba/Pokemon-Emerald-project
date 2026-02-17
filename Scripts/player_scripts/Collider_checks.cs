@@ -9,11 +9,19 @@ public class Collider_checks : MonoBehaviour
     [SerializeField] private Transform interactionPoint;
     public static event Action<Transform> OnCollision;
     public Tilemap encounterTilemap;
+    public Tilemap areaSwitchTilemap;
     private void Start()
     {
         Player_movement.Instance.OnNewTile += CheckGrass;
+        Player_movement.Instance.OnNewTile += SwitchArea;
     }
-    
+
+    private void SwitchArea()
+    {
+        var tile = FindTileAtPosition<AreaSwitchTile>(areaSwitchTilemap,transform.position,Vector3.down);
+        if (tile == null) return;
+        Area_manager.Instance.SwitchToArea(tile.areaTransitionData.areaName);
+    }
     private void CheckGrass()
     {
         var tile = FindTileAtPosition<EncounterTile>(encounterTilemap,transform.position,Vector3.down);

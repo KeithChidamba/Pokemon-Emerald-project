@@ -451,7 +451,7 @@ public class Save_manager : MonoBehaviour
             }
         }
         Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.GetPlayerPosition();
-        Game_Load.Instance.playerData.location = Area_manager.Instance.currentArea.areaData.areaName;
+        Game_Load.Instance.playerData.location = Area_manager.Instance.currentArea.data.areaName;
         
         try
         {

@@ -1,14 +1,15 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "area", menuName = "Overworld/areaData")]
-public class AreaData : ScriptableObject
-{
-    public AreaName areaName;
-    public bool escapable;
-}
 
-public enum AreaName
+[Serializable]
+public class AreaData
 {
-    OverWorld,PlayerGarden,PokeMartCoastal,PokeCenter
+    public AreaTransitionData data;
+    public List<GameObject> npcList;
+    
+    public void LoadNpcObjects(bool enabled)
+    {
+        if(npcList.Count > 0) npcList.ForEach(obj=>obj.SetActive(enabled));   
+    }
 }

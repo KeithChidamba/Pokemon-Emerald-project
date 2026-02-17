@@ -9,13 +9,13 @@ public class NpcMovement : MonoBehaviour
     public float movementSpeed;
     [SerializeField] private LayerMask movementBlockers;
     [SerializeField] private int currentAnimationIndex;
-    private NpcSpriteData _currentAnimation;
+    private NpcMovementDirection _currentMovement;
+    private NpcSpriteData _currentSpriteData;
     [SerializeField]private SpriteRenderer spriteRenderer;
     private int _currentSpriteIndex;
     [SerializeField]private int currentStepCount;
     [SerializeField]private bool moving;
     [SerializeField]private bool canMove;
-    private Coroutine movementRoutine;
     private Coroutine animationRoutine;
 
     private WaitForSeconds movePause = new (1f);
@@ -29,6 +29,7 @@ public class NpcMovement : MonoBehaviour
 private void OnDisable()
 {
     canMove = false;
+    moving = false;
     StopAllCoroutines();
 }
 
@@ -36,7 +37,7 @@ private void OnEnable()
 {
     canMove = true;
     SwitchMove();
-    movementRoutine = StartCoroutine(MovementLoop());
+    StartCoroutine(MovementLoop());
 }
 
 private IEnumerator Animate()
@@ -51,9 +52,9 @@ private IEnumerator Animate()
 private void ChangeSprite()
 {
     _currentSpriteIndex++;
-    if (_currentSpriteIndex >= _currentAnimation.spritesForDirection.Length)
+    if (_currentSpriteIndex >= _currentSpriteData.spritesForDirection.Length)
         _currentSpriteIndex = 0;
-    spriteRenderer.sprite = _currentAnimation.spritesForDirection[_currentSpriteIndex];
+    spriteRenderer.sprite = _currentSpriteData.spritesForDirection[_currentSpriteIndex];
 }
 
 private IEnumerator MovementLoop()
@@ -96,7 +97,7 @@ private IEnumerator MovementLoop()
         }
 
         // Reset sprite
-        spriteRenderer.sprite = _currentAnimation.spritesForDirection[0];
+        spriteRenderer.sprite = _currentSpriteData.idleSprite;
 
         // Pause before next move
         yield return movePause;
@@ -108,9 +109,9 @@ private IEnumerator MovementLoop()
 
 private bool TrySetNextMove()
 {
-    bool isVertical = animationData.IsVerticalMovement(_currentAnimation);
-    int totalTiles = Mathf.Abs(_currentAnimation.numTilesTOTravel);
-    var sign = Mathf.Sign(animationData.GetDirectionAsMagnitude(_currentAnimation));
+    bool isVertical = animationData.IsVerticalMovement(_currentMovement.direction);
+    int totalTiles = Mathf.Abs(_currentMovement.numTilesToTravel);
+    var sign = Mathf.Sign(animationData.GetDirectionAsMagnitude(_currentMovement));
 
     Vector3 step = isVertical
         ? new Vector3(0, sign, 0)
@@ -130,11 +131,8 @@ private bool TrySetNextMove()
 
     // No movement possible at all
     if (lastValidPos == movePoint.position)
-    {
-        Debug.Log("no move");
         return false;
-    }
-
+    
     movePoint.position = lastValidPos;
     return true;
 }
@@ -143,10 +141,11 @@ private void SwitchMove()
 {
     currentAnimationIndex++;
 
-    if (currentAnimationIndex >= animationData.spriteData.Count)
+    if (currentAnimationIndex >= animationData.movementDirections.Count)
         currentAnimationIndex = 0;
 
-    _currentAnimation = animationData.spriteData[currentAnimationIndex];
+    _currentMovement = animationData.movementDirections[currentAnimationIndex];
+    _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);
 }
 
 }

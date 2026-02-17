@@ -12,18 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60a482ff7bff6829be7b3088dd3e89c, type: 3}
   m_Name: Tony
   m_EditorClassIdentifier: 
-  spriteData:
-  - spritesForDirection:
-    - {fileID: -1047052172, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
-    - {fileID: -1039488751, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
-    - {fileID: -1047052172, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
-    - {fileID: -538534923, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
-    direction: 0
-    numTilesTOTravel: 3
-  - spritesForDirection:
-    - {fileID: -865392173, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
-    - {fileID: -1266766389, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
-    - {fileID: -865392173, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
-    - {fileID: 794053219, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
-    direction: 1
-    numTilesTOTravel: 3
+  spriteData: {fileID: 11400000, guid: f7d1263152928bb618a7a923040f3045, type: 2}
+  movementDirections:
+  - direction: 0
+    numTilesToTravel: 3
+  - direction: 2
+    numTilesToTravel: 3
+  - direction: 3
+    numTilesToTravel: 3
+  - direction: 1
+    numTilesToTravel: 3
