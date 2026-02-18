@@ -193,7 +193,7 @@ public class Battle_handler : MonoBehaviour
                 }
         }
     }
-    private IEnumerator SetupBattleSequence(Encounter_Area areaOfBattle)
+    private IEnumerator SetupBattleSequence(Biome biome)
     {
         foreach (var participant in battleParticipants)
         {
@@ -204,16 +204,18 @@ public class Battle_handler : MonoBehaviour
                 : pos.x + (isDoubleBattle ? 0 : participantPositionOffset);
             participant.pokemonImage.rectTransform.anchoredPosition = new Vector2(horizontalShift, pos.y);
         }
-        BattleIntro.Instance.SetPlatformSprite(areaOfBattle);
+
+        BattleIntro.Instance.currentBiome = biome;
+        BattleIntro.Instance.SetPlatformSprite();
         //load visuals based on area
         overWorld.SetActive(false);
         battleUI.SetActive(true);
         Options_manager.Instance.playerInBattle = true;
         
         if(isTrainerBattle)
-            yield return StartCoroutine(BattleIntro.Instance.PlayTrainerIntroSequence(areaOfBattle));
+            yield return StartCoroutine(BattleIntro.Instance.PlayTrainerIntroSequence());
         else
-            yield return StartCoroutine(BattleIntro.Instance.PlayWildIntroSequence(areaOfBattle));
+            yield return StartCoroutine(BattleIntro.Instance.PlayWildIntroSequence());
         
         //Setup battle events
         _checkParticipantsEachTurn = ()=> CheckParticipantStates();
@@ -280,7 +282,7 @@ public class Battle_handler : MonoBehaviour
         Wild_pkm.Instance.ranAway = false;
         //setup battle
         yield return SetValidParticipants();
-        StartCoroutine(SetupBattleSequence(Encounter_handler.Instance.currentArea));
+        StartCoroutine(SetupBattleSequence(Encounter_handler.Instance.currentArea.biome));
         Encounter_handler.Instance.currentArea = null;
     }
     private IEnumerator StartSingleBattle(TrainerData trainerData) //single trainer battle
@@ -303,7 +305,7 @@ public class Battle_handler : MonoBehaviour
         enemy.pokemonTrainerAI.inBattle = true;
         //setup battle
         yield return SetValidParticipants();
-        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
+        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocationData.biome));
     }
 
     private IEnumerator StartSingleDoubleBattle(TrainerData trainerData) //1v1 double battle
@@ -355,7 +357,7 @@ public class Battle_handler : MonoBehaviour
         yield return SetValidParticipants();
         enemy.pokemonTrainerAI.inBattle = true;
         enemyPartner.pokemonTrainerAI.inBattle = true;
-        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocation));
+        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocationData.biome));
     }
 
     public IEnumerator SetParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)

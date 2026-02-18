@@ -8,7 +8,7 @@ public class TrainerData : ScriptableObject
     public string TrainerName;
     public TrainerType trainerType;
     public int BaseMoneyPayout;
-    public Encounter_Area TrainerLocation;
+    public AreaTransitionData TrainerLocationData;
     public List<TrainerPokemonData> PokemonParty = new();
     public BattleType battleType;
     public List<AiFlags> trainerAiFlags = new();
@@ -29,5 +29,5 @@ public enum AiFlags
 
 public enum TrainerType
 {
-    MagmaGrunt
+    RocketGrunt
 }

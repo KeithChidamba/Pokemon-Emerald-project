@@ -6,10 +6,6 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "Encounter", menuName = "Overworld/Encounter Area")]
 public class Encounter_Area : ScriptableObject
 {
-    public enum Biome
-    {
-        Ocean,UnderWater,OpenField,TallGrass,Mountain,Desert
-    };
     public Biome biome;
     public EncounterPokemonData[] availableEncounters;
     public int minimumLevelOfPokemon;
@@ -17,3 +13,8 @@ public class Encounter_Area : ScriptableObject
     //only for bodies of water
     public int[] pokemonIndexForRodType;
 }
+
+public enum Biome
+{
+    Ocean,UnderWater,OpenField,TallGrass,Mountain,Desert,Beach,InDoors
+};

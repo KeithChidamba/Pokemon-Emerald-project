@@ -15,3 +15,4 @@ MonoBehaviour:
   areaName: 2
   escapable: 0
   entranceCell: {x: 70, y: -14, z: 0}
+  biome: 7

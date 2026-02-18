@@ -137,7 +137,7 @@ public static class Obj_Instance
         trainerCopy.TrainerName = data.TrainerName;
         trainerCopy.trainerType = data.trainerType;        
         trainerCopy.BaseMoneyPayout = data.BaseMoneyPayout;
-        trainerCopy.TrainerLocation = data.TrainerLocation;
+        trainerCopy.TrainerLocationData = data.TrainerLocationData;
         trainerCopy.battleIntroSprite = data.battleIntroSprite;
         trainerCopy.battleLossMessage = data.battleLossMessage;
         trainerCopy.trainerAiFlags = data.trainerAiFlags;

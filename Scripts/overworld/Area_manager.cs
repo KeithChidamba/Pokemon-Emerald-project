@@ -36,9 +36,11 @@ public class Area_manager : MonoBehaviour
             currentArea = saveArea;
             loadingPlayerFromSave = false;
         }
-
-        if (areaName == currentArea.data.areaName) return;
-
+        else
+        {
+            if (areaName == currentArea.data.areaName) return;
+        }
+        
         currentArea.LoadNpcObjects(false);
         var area = overworldAreas.First(a=>a.data.areaName == areaName);
         area.LoadNpcObjects(true);

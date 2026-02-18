@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NpcMovement : MonoBehaviour
@@ -20,25 +21,48 @@ public class NpcMovement : MonoBehaviour
 
     private WaitForSeconds movePause = new (1f);
     private WaitForSeconds animDelay = new (0.25f);
-    
+
     private void Start()
     {
-        movementBlockers = 1 << LayerMask.NameToLayer("Movement blockers");
+        Options_manager.Instance.OnInteractionOptionChosen += PauseForBattle;
     }
 
-private void OnDisable()
-{
-    canMove = false;
-    moving = false;
-    StopAllCoroutines();
-}
+    private void PauseForBattle(Interaction interaction,int optionChosen)
+    {
+        if(interaction.overworldInteraction!=OverworldInteractionType.Battle)return;
+        StopMovement();
+        
+        var playerDirectionIndex = (int)Player_movement.Instance.currentDirection-1;//1-down:   2-up:   3-left: 4-right
+        
+        var directionConversions = new []{NpcAnimationDirection.Up,NpcAnimationDirection.Down
+            ,NpcAnimationDirection.Right,NpcAnimationDirection.Left};
 
-private void OnEnable()
-{
-    canMove = true;
-    SwitchMove();
-    StartCoroutine(MovementLoop());
-}
+        var oppositeDirection = directionConversions[playerDirectionIndex];
+        
+        _currentSpriteData = animationData.spriteData.GetSpriteData(oppositeDirection);
+        
+        spriteRenderer.sprite = _currentSpriteData.idleSprite;
+    }
+
+    public void StopMovement()
+    {
+        StopAllCoroutines();
+        canMove = false;
+        moving = false;
+        movePoint.position = transform.position;
+    }
+    private void OnDisable()
+    {
+        StopMovement();
+        spriteRenderer.sprite = _currentSpriteData.idleSprite;
+    }
+
+    private void OnEnable()
+    {
+        canMove = true;
+        SwitchMove();
+        StartCoroutine(MovementLoop());
+    }
 
 private IEnumerator Animate()
 {

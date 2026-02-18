@@ -9,7 +9,7 @@ public class AreaTransitionData : ScriptableObject
     public AreaName areaName;
     public bool escapable;
     public Vector3Int entranceCell;
-
+    public Biome biome;
 //deprecated until further notice
     // public Vector3 GetTeleportWorldPosition(Tilemap doorTileMap)
     // {

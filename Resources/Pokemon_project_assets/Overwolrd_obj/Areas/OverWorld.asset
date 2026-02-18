@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a848611f2809f51b3ae63e394f264e3a, type: 3}
   m_Name: OverWorld
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 0}
-  overworld: {fileID: 0}
-  interior: {fileID: 0}
-  areaData: {fileID: 11400000, guid: 7809d6ed6040c3a1a9976035bdebeaf6, type: 2}
-  doormatCell: {x: 0, y: 0, z: 0}
-  doorCell: {x: 0, y: 0, z: 0}
+  areaName: 0
+  escapable: 0
+  entranceCell: {x: 0, y: 0, z: 0}
+  biome: 2

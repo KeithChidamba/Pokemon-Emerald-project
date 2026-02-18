@@ -14,7 +14,7 @@ public class BattleIntro : MonoBehaviour
     public RectTransform parallaxObject;
     public RectTransform leftPlatform;
     public RectTransform rightPlatform;
-    [SerializeField]private Encounter_Area.Biome[] introTerrainBiomes;
+    [SerializeField]private Biome[] introTerrainBiomes;
     public Sprite[] terrainForPlatforms;
     public Image playerPlatform;
     public Image enemyPlatform;
@@ -22,7 +22,8 @@ public class BattleIntro : MonoBehaviour
     public Image terrainParallaxImage;
     public Image[] participantIntroImages;
     public Sprite playerSprite;
-    
+    public Biome currentBiome;
+        
     [Header("Animation Settings")]
     public float blackPanelsSpeed = 300f;
     public float parallaxDistance = 700f;
@@ -51,12 +52,6 @@ public class BattleIntro : MonoBehaviour
     }
     private void Start()
     {
-        introTerrainBiomes = new[]
-        {
-            Encounter_Area.Biome.Desert, Encounter_Area.Biome.Ocean,Encounter_Area.Biome.UnderWater,
-            Encounter_Area.Biome.OpenField,Encounter_Area.Biome.TallGrass,Encounter_Area.Biome.Mountain
-        };
-        
         // Store initial positions
         topBlackStart = GetAnchoredFromWorld(topBlackPanel);
         bottomBlackStart = GetAnchoredFromWorld(bottomBlackPanel);
@@ -77,10 +72,10 @@ public class BattleIntro : MonoBehaviour
         terrainParallaxStart = terrainParallaxImage.rectTransform.anchoredPosition;
     }
 
-    public void SetPlatformSprite(Encounter_Area battleArea)
+    public void SetPlatformSprite()
     {
-        playerPlatform.sprite = terrainForPlatforms[Array.IndexOf(introTerrainBiomes, battleArea.biome)];
-        enemyPlatform.sprite = terrainForPlatforms[Array.IndexOf(introTerrainBiomes, battleArea.biome)];
+        playerPlatform.sprite = terrainForPlatforms[Array.IndexOf(introTerrainBiomes, currentBiome)];
+        enemyPlatform.sprite = terrainForPlatforms[Array.IndexOf(introTerrainBiomes, currentBiome)];
     }
     private Vector2 GetAnchoredFromWorld(RectTransform rect)
     {
@@ -104,7 +99,7 @@ public class BattleIntro : MonoBehaviour
         var target = new Vector2(rectTransform.anchoredPosition.x + distance, rectTransform.anchoredPosition.y);
          StartCoroutine(BattleVisuals.Instance.SlideRect(rectTransform, startPos, target , platformSlideSpeed*5));
     }
-    private IEnumerator MainIntroSequence(Encounter_Area battleArea)
+    private IEnumerator MainIntroSequence()
     {
         _defaultParticipantImagePositions.Clear();
         for (var i=0;i<4;i++)
@@ -126,7 +121,7 @@ public class BattleIntro : MonoBehaviour
             }
             terrainParallaxImage.rectTransform.anchoredPosition = terrainParallaxStart;
             
-            terrainParallaxImage.sprite = introTerrains[Array.IndexOf(introTerrainBiomes, battleArea.biome)];
+            terrainParallaxImage.sprite = introTerrains[Array.IndexOf(introTerrainBiomes, currentBiome)];
 
             parallaxObject.gameObject.SetActive(true);
 
@@ -141,7 +136,7 @@ public class BattleIntro : MonoBehaviour
         StartCoroutine(BattleVisuals.Instance.SlideRect(leftPlatform, leftPlatformStart, leftPlatformTarget, platformSlideSpeed));
         yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rightPlatform, rightPlatformStart, rightPlatformTarget, platformSlideSpeed*0.96f));
     }
-    public IEnumerator PlayWildIntroSequence(Encounter_Area battleArea)
+    public IEnumerator PlayWildIntroSequence()
     {
         var participants = Battle_handler.Instance.battleParticipants;
 
@@ -158,7 +153,7 @@ public class BattleIntro : MonoBehaviour
                 participants[i].pokemon.frontPicture: playerSprite;
         }
 
-        yield return MainIntroSequence(battleArea);
+        yield return MainIntroSequence();
         
         var wildParticipant = Wild_pkm.Instance.participant;
         Dialogue_handler.Instance.DisplayBattleInfo(
@@ -191,7 +186,7 @@ public class BattleIntro : MonoBehaviour
         participantIntroImages[0].sprite = playerSprite;
         participantIntroImages[0].rectTransform.anchoredPosition = _defaultParticipantImagePositions[0];
     }
-    public IEnumerator PlayTrainerIntroSequence(Encounter_Area battleArea)
+    public IEnumerator PlayTrainerIntroSequence()
     {
         string message = "";
         challengers.Clear();
@@ -231,7 +226,7 @@ public class BattleIntro : MonoBehaviour
                 $"{challengers[0]} and {challengers[1]} challenge you to a battle"
                 :    $"{challengers[0]} challenges you to a battle";
         
-        yield return MainIntroSequence(battleArea);
+        yield return MainIntroSequence();
         
         Dialogue_handler.Instance.DisplayBattleInfo(message);
         yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);

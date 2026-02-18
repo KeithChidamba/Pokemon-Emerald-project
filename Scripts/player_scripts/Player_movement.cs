@@ -66,7 +66,15 @@ public class Player_movement : MonoBehaviour
     public void RestrictPlayerMovement()
     {
         canMove = false;
-        DisablePlayerMovement();
+        playerObject.transform.position = movePoint.position;
+        standingOnTile = true;
+        
+        if (overworld_actions.Instance.doingAction && overworld_actions.Instance.fishing)
+        {
+            //dont want to interrupt fishing animation
+            return; 
+        }
+        _animationManager.ChangeAnimationState(_animationManager.playerIdle);
     }
 
     private void Update()
@@ -104,16 +112,6 @@ public class Player_movement : MonoBehaviour
                 : _animationManager.playerWalk);
         }
     }
-
-    private void DisablePlayerMovement()
-    {
-        if (overworld_actions.Instance.usingUI)
-            _animationManager.ChangeAnimationState(_animationManager.playerIdle);
-        if (!overworld_actions.Instance.doingAction &&
-            !overworld_actions.Instance.usingUI) //dont want to interrupt fishing animation
-            _animationManager.ChangeAnimationState(_animationManager.playerIdle);
-    }
-
     public void ForceWalkMovement()
     {
         usingBike = false;

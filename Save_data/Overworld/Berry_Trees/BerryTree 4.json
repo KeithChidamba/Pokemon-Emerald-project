@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Kelpsy berry",
     "berryItem": {
-        "instanceID": 26678
+        "instanceID": 26690
     },
     "treeIndex": 4,
     "minutesPerStage": 180,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32346
+                    "instanceID": 32312
                 },
                 {
-                    "instanceID": 32346
+                    "instanceID": 32312
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32348
+                    "instanceID": 32314
                 },
                 {
-                    "instanceID": 32350
+                    "instanceID": 32316
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32936
+                    "instanceID": 32660
                 },
                 {
-                    "instanceID": 32938
+                    "instanceID": 32662
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32940
+                    "instanceID": 32664
                 },
                 {
-                    "instanceID": 32942
+                    "instanceID": 32666
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32944
+                    "instanceID": 32668
                 },
                 {
-                    "instanceID": 32946
+                    "instanceID": 32670
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-02-17T16:26:16.6375910+02:00"
+    "lastLogin": "2026-02-18T09:46:51.2882700+02:00"
 }
