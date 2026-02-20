@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class NpcMovement : MonoBehaviour
 {
-    public NpcAnimationData animationData;
+public NpcAnimationData animationData;
     [SerializeField] private Transform movePoint;
     public float movementSpeed;
     [SerializeField] private LayerMask movementBlockers;
@@ -21,6 +22,7 @@ public class NpcMovement : MonoBehaviour
 
     private WaitForSeconds movePause = new (1f);
     private WaitForSeconds animDelay = new (0.25f);
+    
 
     private void Start()
     {
@@ -43,13 +45,26 @@ public class NpcMovement : MonoBehaviour
         
         spriteRenderer.sprite = _currentSpriteData.idleSprite;
     }
-
+    private Vector3 SnapToGrid(Vector3 pos)
+    {
+        return new Vector3(
+            Mathf.Round(pos.x),
+            Mathf.Round(pos.y),
+            0f
+        );
+    }
     public void StopMovement()
     {
         StopAllCoroutines();
         canMove = false;
         moving = false;
-        movePoint.position = transform.position;
+        
+        Vector3 snapped = Vector3.Distance(transform.position, movePoint.position) < 0.05f
+            ? movePoint.position
+            : SnapToGrid(transform.position);
+        
+        movePoint.position = snapped;
+        transform.position = snapped;
     }
     private void OnDisable()
     {
@@ -64,113 +79,137 @@ public class NpcMovement : MonoBehaviour
         StartCoroutine(MovementLoop());
     }
 
-private IEnumerator Animate()
-{
-    while (moving)
+    private IEnumerator Animate()
     {
-        ChangeSprite();
-        yield return animDelay;
-    }
-}
-
-private void ChangeSprite()
-{
-    _currentSpriteIndex++;
-    if (_currentSpriteIndex >= _currentSpriteData.spritesForDirection.Length)
-        _currentSpriteIndex = 0;
-    spriteRenderer.sprite = _currentSpriteData.spritesForDirection[_currentSpriteIndex];
-}
-
-private IEnumerator MovementLoop()
-{
-    while (canMove)
-    {
-        // Try to set next move
-        if (!TrySetNextMove())
+        while (moving)
         {
+            ChangeSprite();
+            yield return animDelay;
+        }
+    }
+
+    private void ChangeSprite()
+    {
+        _currentSpriteIndex++;
+        if (_currentSpriteIndex >= _currentSpriteData.spritesForDirection.Length)
+            _currentSpriteIndex = 0;
+        spriteRenderer.sprite = _currentSpriteData.spritesForDirection[_currentSpriteIndex];
+    }
+
+    private IEnumerator MovementLoop()
+    {
+        while (canMove)
+        {
+            // Try to set next move
+            if (!TrySetNextMove())
+            {
+                yield return movePause;
+                continue;
+            }
+
+            moving = true;
+
+            _currentSpriteIndex = 0;
+
+            animationRoutine = StartCoroutine(Animate());
+
+            // Move to target tile
+            while (Vector3.Distance(transform.position, movePoint.position) > 0.05f)
+            {
+                transform.position = Vector3.MoveTowards(
+                    transform.position,
+                    movePoint.position,
+                    movementSpeed * Time.deltaTime
+                );
+                yield return null;
+            }
+
+            // Snap to grid
+            transform.position = movePoint.position;
+
+            moving = false;
+
+            if (animationRoutine != null)
+            {
+                StopCoroutine(animationRoutine);
+                animationRoutine = null;
+            }
+
+            // Reset sprite
+            spriteRenderer.sprite = _currentSpriteData.idleSprite;
+
+            // Pause before next move
             yield return movePause;
-            continue;
+
+            // Switch animation direction
+            SwitchMove();
         }
-
-        moving = true;
-
-        _currentSpriteIndex = 0;
-
-        animationRoutine = StartCoroutine(Animate());
-
-        // Move to target tile
-        while (Vector3.Distance(transform.position, movePoint.position) > 0.05f)
-        {
-            transform.position = Vector3.MoveTowards(
-                transform.position,
-                movePoint.position,
-                movementSpeed * Time.deltaTime
-            );
-            yield return null;
-        }
-
-        // Snap to grid
-        transform.position = movePoint.position;
-
-        moving = false;
-
-        if (animationRoutine != null)
-        {
-            StopCoroutine(animationRoutine);
-            animationRoutine = null;
-        }
-
-        // Reset sprite
-        spriteRenderer.sprite = _currentSpriteData.idleSprite;
-
-        // Pause before next move
-        yield return movePause;
-
-        // Switch animation direction
-        SwitchMove();
     }
-}
 
-private bool TrySetNextMove()
-{
-    bool isVertical = animationData.IsVerticalMovement(_currentMovement.direction);
-    int totalTiles = Mathf.Abs(_currentMovement.numTilesToTravel);
-    var sign = Mathf.Sign(animationData.GetDirectionAsMagnitude(_currentMovement));
-
-    Vector3 step = isVertical
-        ? new Vector3(0, sign, 0)
-        : new Vector3(sign, 0, 0);
-
-    Vector3 lastValidPos = movePoint.position;
-
-    for (int i = 1; i <= totalTiles; i++)
+    private Vector2 GetDirectionAsVector()
     {
-        Vector3 checkPos = movePoint.position + step * i;
+        switch (_currentMovement.direction)
+        {
+            case NpcAnimationDirection.Up:
+                return Vector2.up;
+            case NpcAnimationDirection.Down:
+                return Vector2.down;
+            case NpcAnimationDirection.Left:
+                return Vector2.left;
+        }
+        return Vector2.right;
+    }
+    private bool TrySetNextMove()
+    {
+        bool isVertical = animationData.IsVerticalMovement(_currentMovement.direction);
+        int totalTiles = Mathf.Abs(_currentMovement.numTilesToTravel);
+        var sign = Mathf.Sign(animationData.GetDirectionAsMagnitude(_currentMovement));
 
-        if (Physics2D.OverlapCircle(checkPos, 0.12f, movementBlockers))
-            break;
+        Vector3 step = isVertical
+            ? new Vector3(0, sign, 0)
+            : new Vector3(sign, 0, 0);
+        
+        Vector3 lastValidPos = movePoint.position;
 
-        lastValidPos = checkPos;
+        for (int i = 1; i <= totalTiles; i++)
+        {
+            Vector3 checkPos = movePoint.position + step * i;
+            
+            var hit = Physics2D.Raycast(
+                checkPos,
+                GetDirectionAsVector(),
+                0.5f,movementBlockers
+            );
+            
+            if (hit.transform)
+            {
+               // Debug.Log(hit.transform.name);
+                break;
+            }
+            
+            lastValidPos = SnapToGrid(checkPos);
+        }
+        
+        // No movement possible at all
+        if (lastValidPos == movePoint.position)
+            return false;
+        
+        movePoint.position = lastValidPos;
+        return true;
     }
 
-    // No movement possible at all
-    if (lastValidPos == movePoint.position)
-        return false;
-    
-    movePoint.position = lastValidPos;
-    return true;
-}
+    private void SwitchMove()
+    {
+        currentAnimationIndex++;
 
-private void SwitchMove()
-{
-    currentAnimationIndex++;
+        if (currentAnimationIndex >= animationData.movementDirections.Count)
+            currentAnimationIndex = 0;
 
-    if (currentAnimationIndex >= animationData.movementDirections.Count)
-        currentAnimationIndex = 0;
+        _currentMovement = animationData.movementDirections[currentAnimationIndex];
+        _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);
+    }
 
-    _currentMovement = animationData.movementDirections[currentAnimationIndex];
-    _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);
-}
+
 
 }
 
