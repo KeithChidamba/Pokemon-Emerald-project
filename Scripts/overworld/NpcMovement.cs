@@ -23,15 +23,34 @@ public NpcAnimationData animationData;
     private WaitForSeconds movePause = new (1f);
     private WaitForSeconds animDelay = new (0.25f);
     
-
+    [SerializeField]private Overworld_interactable interactable;
+    [SerializeField]private BoxCollider2D interactionCollider;
+    
     private void Start()
     {
         Options_manager.Instance.OnInteractionOptionChosen += PauseForBattle;
     }
 
+    private void AdjustColliderSize()
+    {
+        var size = interactionCollider.size;
+        var vertSize = new Vector2(.75f, size.y);
+        var horSize = new Vector2(.5f, size.y);
+        switch (_currentMovement.direction)
+        {
+            case NpcAnimationDirection.Down:
+            case NpcAnimationDirection.Up:
+                interactionCollider.size=vertSize; break;
+            case NpcAnimationDirection.Left:
+            case NpcAnimationDirection.Right:
+                interactionCollider.size=horSize; break;
+        }
+    }
     private void PauseForBattle(Interaction interaction,int optionChosen)
     {
         if(interaction.overworldInteraction!=OverworldInteractionType.Battle)return;
+        if(interaction!=interactable.interaction)return;
+        
         StopMovement();
         
         var playerDirectionIndex = (int)Player_movement.Instance.currentDirection-1;//1-down:   2-up:   3-left: 4-right
@@ -161,6 +180,7 @@ public NpcAnimationData animationData;
     }
     private bool TrySetNextMove()
     {
+        AdjustColliderSize();
         bool isVertical = animationData.IsVerticalMovement(_currentMovement.direction);
         int totalTiles = Mathf.Abs(_currentMovement.numTilesToTravel);
         var sign = Mathf.Sign(animationData.GetDirectionAsMagnitude(_currentMovement));

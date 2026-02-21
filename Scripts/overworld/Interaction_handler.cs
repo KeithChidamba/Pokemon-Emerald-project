@@ -64,25 +64,31 @@ public class Interaction_handler : MonoBehaviour
         _stopInteractions = false;
         _interactionCooldown = false;
     }
+    
     void RaycastForInteraction()
     {
         _canCheckForInteraction = false;
         
         var currentDirectionIndex = (int)Player_movement.Instance.currentDirection-1;
         
-        //1-down:   2-up:   3-left: 4-right
-        List<Vector2> directionConversions = new (){ new(0, -1), new(0, 1), new(-1, 0), new(1, 0) };
+       // 1-down:   2-up:   3-left: 4-right
+         List<Vector2> directionConversions = new (){ new(0, -1), new(0, 1), new(-1, 0), new(1, 0) };
         
-        Vector2 directionVector = directionConversions[currentDirectionIndex]; 
+         Vector2 directionVector = directionConversions[currentDirectionIndex]; 
         
-        Vector2 origin = (Vector2)interactionPoint.position + directionVector * 0.1f;
-
-        var hit = Physics2D.Raycast(
-            origin,
-            directionVector,
-            detectDistance + 0.1f,interactable
-        );
-
+         Vector2 origin = (Vector2)interactionPoint.position + directionVector * 0.1f;
+         
+       Debug.DrawRay(origin,
+           directionVector,Color.red,
+           detectDistance);
+       
+         var hit = Physics2D.Raycast(
+             origin,
+             directionVector,
+             detectDistance,interactable
+         );
+        
+        
         if (hit.transform && !Dialogue_handler.Instance.displaying && !overworld_actions.Instance.usingUI)
         {
             if (Input.GetKeyDown(KeyCode.Z))
