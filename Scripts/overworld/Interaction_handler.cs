@@ -68,19 +68,11 @@ public class Interaction_handler : MonoBehaviour
     void RaycastForInteraction()
     {
         _canCheckForInteraction = false;
-        
-        var currentDirectionIndex = (int)Player_movement.Instance.currentDirection-1;
-        
-       // 1-down:   2-up:   3-left: 4-right
-         List<Vector2> directionConversions = new (){ new(0, -1), new(0, 1), new(-1, 0), new(1, 0) };
-        
-         Vector2 directionVector = directionConversions[currentDirectionIndex]; 
+
+        var directionVector = Player_movement.Instance.GetDirectionAsVector2();
         
          Vector2 origin = (Vector2)interactionPoint.position + directionVector * 0.1f;
-         
-       Debug.DrawRay(origin,
-           directionVector,Color.red,
-           detectDistance);
+        
        
          var hit = Physics2D.Raycast(
              origin,

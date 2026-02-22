@@ -155,16 +155,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -15052
+            "instanceID": -141532
         },
         {
-            "instanceID": -15054
+            "instanceID": -141534
         },
         {
-            "instanceID": -15056
+            "instanceID": -141536
         },
         {
-            "instanceID": -15058
+            "instanceID": -141538
         }
     ],
     "ability": {
@@ -172,7 +172,7 @@
     },
     "evolutions": [
         {
-            "instanceID": 27942
+            "instanceID": 27940
         },
         {
             "instanceID": 25902
@@ -186,7 +186,7 @@
         "instanceID": 27398
     },
     "backPicture": {
-        "instanceID": 27826
+        "instanceID": 27824
     },
     "partyFrame1": {
         "instanceID": 26166

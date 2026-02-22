@@ -14,11 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteData: {fileID: 11400000, guid: f7d1263152928bb618a7a923040f3045, type: 2}
   movementDirections:
-  - direction: 0
-    numTilesToTravel: 3
-  - direction: 2
-    numTilesToTravel: 3
-  - direction: 3
-    numTilesToTravel: 3
+  - direction: 4
+    numTilesToTravel: 1
+  - direction: 4
+    numTilesToTravel: 1
+  - direction: 4
+    numTilesToTravel: 1
   - direction: 1
-    numTilesToTravel: 3
+    numTilesToTravel: 1
+  - direction: 1
+    numTilesToTravel: 1
+  - direction: 1
+    numTilesToTravel: 1
+  - direction: 2
+    numTilesToTravel: 1
+  - direction: 2
+    numTilesToTravel: 1
+  - direction: 2
+    numTilesToTravel: 1
+  - direction: 3
+    numTilesToTravel: 1
+  - direction: 3
+    numTilesToTravel: 1
+  - direction: 3
+    numTilesToTravel: 1
+  isIdle: 1

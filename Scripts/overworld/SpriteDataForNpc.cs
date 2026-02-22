@@ -6,7 +6,7 @@ public class SpriteDataForNpc : ScriptableObject
 {
     public List<NpcSpriteData> spriteDataList = new ();
 
-    public NpcSpriteData GetSpriteData(NpcAnimationDirection direction)
+    public NpcSpriteData GetSpriteData(MovementDirection direction)
     {
         return  spriteDataList.First(spriteData => spriteData.direction == direction);
     }

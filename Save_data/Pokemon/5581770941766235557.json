@@ -7,7 +7,7 @@
     "gender": 2,
     "ratioFemale": 0.0,
     "nature": {
-        "instanceID": 27912
+        "instanceID": 27910
     },
     "hasGender": true,
     "hp": 14.0,
@@ -97,10 +97,10 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -15086
+            "instanceID": -141566
         },
         {
-            "instanceID": -15088
+            "instanceID": -141568
         }
     ],
     "ability": {
@@ -108,7 +108,7 @@
     },
     "evolutions": [
         {
-            "instanceID": 27942
+            "instanceID": 27940
         },
         {
             "instanceID": 25902

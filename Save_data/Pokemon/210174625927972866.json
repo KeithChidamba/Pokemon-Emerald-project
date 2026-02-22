@@ -134,16 +134,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -15092
+            "instanceID": -141572
         },
         {
-            "instanceID": -15094
+            "instanceID": -141574
         },
         {
-            "instanceID": -15096
+            "instanceID": -141576
         },
         {
-            "instanceID": -15098
+            "instanceID": -141578
         }
     ],
     "ability": {
@@ -168,7 +168,7 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 27952
+        "instanceID": 27950
     },
     "backPicture": {
         "instanceID": 25424

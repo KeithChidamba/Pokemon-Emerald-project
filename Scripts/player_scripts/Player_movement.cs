@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_movement : MonoBehaviour
@@ -14,7 +15,7 @@ public class Player_movement : MonoBehaviour
     private bool _canSwitchMovement;
     [SerializeField] private int xAxisInput;
     [SerializeField] private int yAxisInput;
-    public float currentDirection;
+    public MovementDirection currentDirection;
     [SerializeField] private Animation_manager _animationManager;
     [SerializeField] private bool canMove = true;
     [SerializeField] private Transform interactionPoint;
@@ -47,6 +48,28 @@ public class Player_movement : MonoBehaviour
             (item) => StopBikeUsage(item == Equipable.Bike);
     }
 
+    public void FaceOppositeDirection(MovementDirection direction)
+    {
+        canMove = false;
+        var pos = NpcMovement.SnapToGrid(playerObject.transform.position);
+        playerObject.transform.position = pos;
+        standingOnTile = true;
+        
+        currentDirection = direction switch
+        {
+            MovementDirection.Down => MovementDirection.Up,
+            MovementDirection.Up => MovementDirection.Down,
+            MovementDirection.Left => MovementDirection.Right,
+            _ => MovementDirection.Left
+        };
+        var directionAsAnimatorParameter = (int)currentDirection;
+        
+        _animationManager.animator.SetFloat(_animationManager.idleParam, directionAsAnimatorParameter);
+        _animationManager.animator.SetFloat(_animationManager.moveParam, directionAsAnimatorParameter);
+
+        _animationManager.ChangeAnimationState(_animationManager.playerIdle);
+    }
+    
     public void AllowPlayerMovement()
     {
         if (_delayingMovement) return;
@@ -82,8 +105,8 @@ public class Player_movement : MonoBehaviour
         if (!playerObject.activeSelf) return;
         if (canMove)
         {
-            _animationManager.animator.SetFloat(_animationManager.idleParam, currentDirection);
-            _animationManager.animator.SetFloat(_animationManager.moveParam, GetMovementDirection());
+            _animationManager.animator.SetFloat(_animationManager.idleParam, (int)currentDirection);
+            _animationManager.animator.SetFloat(_animationManager.moveParam, (int)GetMovementDirection());
             HandleBikeInputs();
             HandleRunInputs();
             HandlePlayerMovement();
@@ -119,9 +142,9 @@ public class Player_movement : MonoBehaviour
         _canSwitchMovement = false;
     }
 
-    private float GetMovementDirection()
+    private MovementDirection GetMovementDirection()
     {
-        float direction = 0;
+        MovementDirection direction = 0;
         yAxisInput = (xAxisInput != 0) ? 0 : yAxisInput;
         xAxisInput = (yAxisInput != 0) ? 0 : xAxisInput;
         var idle = yAxisInput == 0 && xAxisInput == 0;
@@ -138,14 +161,14 @@ public class Player_movement : MonoBehaviour
             if (yAxisInput != 0)
             {
                 var verticalRotation = (yAxisInput > 0) ? -90 : 90;
-                direction = (yAxisInput > 0) ? 2 : 1; //aligning with animator tree values
+                direction = (yAxisInput > 0) ? MovementDirection.Up : MovementDirection.Down;
                 interactionPoint.rotation = Quaternion.Euler(verticalRotation, 0, 0);
             }
 
             if (xAxisInput != 0)
             {
                 var horizontalRotation = (xAxisInput > 0) ? 90 : -90;
-                direction = (xAxisInput > 0) ? 4 : 3; //aligning with animator tree values
+                direction = (xAxisInput > 0) ? MovementDirection.Right : MovementDirection.Left ;
                 interactionPoint.rotation = Quaternion.Euler(0, horizontalRotation, 0);
             }
         }
@@ -211,6 +234,15 @@ public class Player_movement : MonoBehaviour
         }
     }
 
+    public Vector2 GetDirectionAsVector2()
+    {
+        var currentDirectionIndex = (int)currentDirection;
+        
+        // 1-down:   2-up:   3-left: 4-right
+        List<Vector2> directionConversions = new (){ new(0, -1), new(0, 1), new(-1, 0), new(1, 0) };
+        
+        return directionConversions[currentDirectionIndex]; 
+    }
     private void HandlePlayerMovement()
     {
         playerObject.transform.position = Vector3.MoveTowards(playerObject.transform.position, movePoint.position,
@@ -246,7 +278,12 @@ public class Player_movement : MonoBehaviour
             if (Math.Abs(yAxisInput) == 1)
             {
                 var positionModifierY = new Vector3(0, yAxisInput, 0);
-                if (!Physics2D.OverlapCircle(movePoint.position + positionModifierY, .12f, movementBlockers))
+                var hit = Physics2D.Raycast(
+                    interactionPoint.transform.position,
+                    positionModifierY,
+                    1f,movementBlockers
+                );
+                if (!hit)
                 {//check blockers
                     movePoint.position += positionModifierY;
                     standingOnTile = false;
@@ -256,7 +293,12 @@ public class Player_movement : MonoBehaviour
             if (Math.Abs(xAxisInput) == 1)
             {
                 var positionModifierX = new Vector3(xAxisInput, 0, 0);
-                if (!Physics2D.OverlapCircle(movePoint.position + positionModifierX, .12f, movementBlockers))
+                var hit = Physics2D.Raycast(
+                    interactionPoint.transform.position,
+                    positionModifierX,
+                    1f,movementBlockers
+                );
+                if (!hit)
                 {//check blockers
                     movePoint.position += positionModifierX;
                     standingOnTile = false;
