@@ -17,10 +17,10 @@ public class NpcAnimationData : ScriptableObject
         {
             case MovementDirection.Down:
             case MovementDirection.Left:
-                return 1 * data.numTilesToTravel;
+                return -1 * data.numTilesToTravel;
             case MovementDirection.Up:
             case MovementDirection.Right:
-                return -1 * data.numTilesToTravel;
+                return 1 * data.numTilesToTravel;
         }
         return 0;
     }
@@ -30,5 +30,5 @@ public class NpcAnimationData : ScriptableObject
 public enum MovementDirection
 {
     //aligned with animator tree values
-    Down=1,Up=2,Left=3,Right=4
+    None=0,Down=1,Up=2,Left=3,Right=4
 }

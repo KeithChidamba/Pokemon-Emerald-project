@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class NpcMovement : MonoBehaviour
 {
     public NpcAnimationData animationData;
-    [SerializeField] private NpcLogic logicHandler;
+    [SerializeField] private Transform rayCastPoint;
     [SerializeField] private Transform movePoint;
     public float movementSpeed;
     [SerializeField] private LayerMask movementBlockers;
@@ -25,8 +25,9 @@ public class NpcMovement : MonoBehaviour
     private WaitForSeconds animDelay = new (0.25f);
     
     [SerializeField]private BoxCollider2D interactionCollider;
-    public event Action<Vector2> OnMovementPaused;
-
+    public event Action OnMovementPaused;
+    public event Action OnMovementStarted;
+    public event Action OnMovementEnded;
     private void AdjustColliderSize()
     {
         var size = interactionCollider.size;
@@ -76,11 +77,12 @@ public class NpcMovement : MonoBehaviour
             0f
         );
     }
-    public void StopMovement()
+    public void StopMovement(bool snapPosition=true)
     {
         StopAllCoroutines();
         canMove = false;
         moving = false;
+        if (!snapPosition) return;
         
         Vector3 snapped = Vector3.Distance(transform.position, movePoint.position) < 0.05f
             ? movePoint.position
@@ -130,7 +132,20 @@ public class NpcMovement : MonoBehaviour
         SetSprites(_currentSpriteData.spritesForDirection[_currentSpriteIndex]);
     }
 
-    private IEnumerator MovementLoop()
+    public IEnumerator MoveToSpecific(MovementDirection direction,int numTiles)
+    {
+        StopMovement();
+        
+        canMove = true;
+        _currentMovement = new NpcMovementDirection(direction,numTiles);
+        _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);
+        
+        yield return MovementLoop(true);
+        
+        StopMovement(false);
+        OnMovementEnded?.Invoke();
+    }
+    private IEnumerator MovementLoop(bool specificMovement=false)
     {
         while (canMove)
         {
@@ -140,7 +155,7 @@ public class NpcMovement : MonoBehaviour
                 yield return movePause;
                 continue;
             }
-
+              
             moving = true;
 
             _currentSpriteIndex = 0;
@@ -157,7 +172,7 @@ public class NpcMovement : MonoBehaviour
                 );
                 yield return null;
             }
-
+            
             // Snap to grid
             transform.position = movePoint.position;
 
@@ -171,13 +186,19 @@ public class NpcMovement : MonoBehaviour
 
             // Reset sprite
             SetSprites(_currentSpriteData.idleSprite);
-            
-            OnMovementPaused?.Invoke(GetDirectionAsVector());    
-        
 
+            if (specificMovement)
+            {
+                yield return movePause;
+                canMove = false;
+                yield break;
+            }
+            
+            OnMovementPaused?.Invoke();
             // Pause before next move
             yield return movePause;
-
+            
+            OnMovementStarted?.Invoke();  
             // Switch animation direction
             SwitchMove();
         }
@@ -200,11 +221,12 @@ public class NpcMovement : MonoBehaviour
     {
         AdjustColliderSize();
         bool isVertical = animationData.IsVerticalMovement(_currentMovement.direction);
-        int totalTiles = Mathf.Abs(_currentMovement.numTilesToTravel);
+        int totalTiles = _currentMovement.numTilesToTravel;
+
         var sign = Mathf.Sign(animationData.GetDirectionAsMagnitude(_currentMovement));
         
-        Vector3 step = isVertical
-            ? new Vector3(0, sign, 0)
+        Vector3 step = isVertical? 
+            new Vector3(0, sign, 0)
             : new Vector3(sign, 0, 0);
         
         Vector3 lastValidPos = movePoint.position;
@@ -213,21 +235,14 @@ public class NpcMovement : MonoBehaviour
         { 
             Vector3 checkPos = movePoint.position + step * i;
             
-            Debug.Log(_currentMovement.direction);
             var hit = Physics2D.Raycast(
-                logicHandler.rayCastPoint.position,GetDirectionAsVector(),
+                rayCastPoint.position,GetDirectionAsVector(),
                 1f,movementBlockers
-            );
-            
-            Debug.DrawRay(
-                logicHandler.rayCastPoint.position,
-                GetDirectionAsVector() * 1f,
-                Color.red
             );
             
             if (hit.transform)
             {
-               Debug.Log(hit.transform.name);
+                SwitchMove();
                 break;
             }
             
@@ -252,8 +267,5 @@ public class NpcMovement : MonoBehaviour
         _currentMovement = animationData.movementDirections[currentAnimationIndex];
         _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);
     }
-
-
-
 }
 

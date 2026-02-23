@@ -41,7 +41,6 @@ public class Player_movement : MonoBehaviour
 
     private void Start()
     {
-        movementBlockers = 1 << LayerMask.NameToLayer("Movement blockers");
         overworld_actions.Instance.OnItemEquipped +=
             (item) => StopBikeUsage(item != Equipable.Bike);
         overworld_actions.Instance.OnItemUnequipped +=
@@ -65,9 +64,9 @@ public class Player_movement : MonoBehaviour
         var directionAsAnimatorParameter = (int)currentDirection;
         
         _animationManager.animator.SetFloat(_animationManager.idleParam, directionAsAnimatorParameter);
-        _animationManager.animator.SetFloat(_animationManager.moveParam, directionAsAnimatorParameter);
-
         _animationManager.ChangeAnimationState(_animationManager.playerIdle);
+        _animationManager.animator.SetFloat(_animationManager.moveParam, directionAsAnimatorParameter);
+        
     }
     
     public void AllowPlayerMovement()
@@ -110,6 +109,11 @@ public class Player_movement : MonoBehaviour
             HandleBikeInputs();
             HandleRunInputs();
             HandlePlayerMovement();
+        }
+        else
+        {
+            yAxisInput = 0;
+            xAxisInput = 0;
         }
     }
 
@@ -241,7 +245,7 @@ public class Player_movement : MonoBehaviour
         // 1-down:   2-up:   3-left: 4-right
         List<Vector2> directionConversions = new (){ new(0, -1), new(0, 1), new(-1, 0), new(1, 0) };
         
-        return directionConversions[currentDirectionIndex]; 
+        return directionConversions[currentDirectionIndex-1]; 
     }
     private void HandlePlayerMovement()
     {
