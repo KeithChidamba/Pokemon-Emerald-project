@@ -162,8 +162,11 @@ public class Battle_handler : MonoBehaviour
     }
     private bool ConditionsForExit()
     {
+        //Check if player can reset their move selection
         return isDoubleBattle && Turn_Based_Combat.Instance.currentTurnIndex > 0
+                              //irreversible turn usage occured, cant remove turn
                               && !usedTurnForItem && !usedTurnForSwap
+                              //if partner is semi-invulnerable, cant remove turn
                               && !battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex - 1]
                                   .isSemiInvulnerable
                               //if partner is cooling down, cant remove turn

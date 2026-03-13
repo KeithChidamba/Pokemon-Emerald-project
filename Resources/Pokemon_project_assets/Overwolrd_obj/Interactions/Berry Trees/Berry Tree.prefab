@@ -50,9 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction: {fileID: 11400000, guid: 223af72d94c0b484684575e564e3f015, type: 2}
-  location: 
-  interactionType: 3
-  area: {fileID: 0}
+  location: 0
 --- !u!212 &4641104906229684179
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -93,7 +91,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -124,6 +122,8 @@ MonoBehaviour:
   idleInteraction: {fileID: 11400000, guid: fa2b7b86c6c2769fea5830444690481a, type: 2}
   treeData: {fileID: 11400000, guid: 28301d94c39b308f3b1e16101fee2f59, type: 2}
   treeSpriteRenderer: {fileID: 0}
+  loadedFromJson: 0
+  treeIndex: 0
   secondsCounter: 0
 --- !u!95 &-968395720497001184
 Animator:
