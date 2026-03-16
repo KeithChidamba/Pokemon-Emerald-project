@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class OverworldState : MonoBehaviour
+public class OverworldState : MonoBehaviour,IInjectable
 {    
     [SerializeField]private List<BerryTree> overworldBerryTrees = new();
     [SerializeField]private List<BerryTreeData> treeDataQueue = new();
@@ -13,6 +13,15 @@ public class OverworldState : MonoBehaviour
     public List<StoryObjective> currentStoryObjectives = new();
     public StoryProgressObjective storyProgressObjective;
     public event Action OnObjectivesLoaded;
+    private Save_manager _saveHandler;
+    private Dialogue_handler _dialogueHandler;
+    
+    public void Inject(Container container)
+    {
+        _saveHandler = container.Resolve<Save_manager>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        gameObject.SetActive(true);
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -33,7 +42,7 @@ public class OverworldState : MonoBehaviour
         {
             overworldBerryTrees.Add(tree);
         }
-        Save_manager.Instance.LoadOverworldData();
+        _saveHandler.LoadOverworldData();
         
         foreach (var treeData in treeDataQueue)
         {
@@ -93,7 +102,7 @@ public class OverworldState : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.Instance.RemoveObjectiveText();
+            _dialogueHandler.RemoveObjectiveText();
         }
     }
     public int GetTreeIndex(BerryTree tree)
@@ -109,8 +118,7 @@ public class OverworldState : MonoBehaviour
         foreach (var tree in overworldBerryTrees)
         {
             tree.treeData.SetLastLogin(DateTime.Now);
-            Save_manager.Instance
-                .SaveBerryTreeDataAsJson(tree.treeData,"BerryTree "+ tree.treeData.treeIndex);
+            _saveHandler.SaveBerryTreeDataAsJson(tree.treeData,"BerryTree "+ tree.treeData.treeIndex);
         }
         yield return new WaitForSeconds(1f);
         int objectiveIndex=0;
@@ -119,11 +127,11 @@ public class OverworldState : MonoBehaviour
             objective.mainAssetName = objective.mainAssetName==string.Empty? objective.name:objective.mainAssetName;
             objective.indexInList = objectiveIndex;
             objectiveIndex++;
-            Save_manager.Instance.SaveStoryDataAsJson(objective,objective.objectiveHeading);
+            _saveHandler.SaveStoryDataAsJson(objective,objective.objectiveHeading);
             yield return new WaitForSeconds(0.025f);
         }
         storyProgressObjective.mainAssetName = storyProgressObjective.mainAssetName==string.Empty? storyProgressObjective.name:storyProgressObjective.mainAssetName;
-        Save_manager.Instance.SaveStoryDataAsJson(storyProgressObjective,"Story Progress");
+        _saveHandler.SaveStoryDataAsJson(storyProgressObjective,"Story Progress");
         yield return null;
     }
 }

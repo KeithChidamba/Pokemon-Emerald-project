@@ -6,14 +6,13 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public enum AssetDirectory
 { 
     Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
     ,AdditionalInfo,Berries,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData
 };
-public class Save_manager : MonoBehaviour
+public class Save_manager : MonoBehaviour,IInjectable
 {
     [DllImport("__Internal")] private static extern void DownloadZipAndStoreLocally();
     [DllImport("__Internal")] private static extern void CreateDirectories();
@@ -23,7 +22,17 @@ public class Save_manager : MonoBehaviour
     private string _saveDataPath = "Assets/Save_data";
     private string _tempSaveDataPath = "Assets/Temp_Save_data";
     private event Action<string,Exception> OnSaveDataFail;
-
+    
+    private Dialogue_handler _dialogueHandler;
+    private InputStateHandler _inputStateHandler;
+    private Area_manager  _areaHandler;
+    private pokemon_storage _pokemonStorageHandler;
+    private Game_Load _gameLoadingHandler;
+    private Pokemon_party _pokemonPartyHandler;
+    private Player_movement _playerMovementHandler;
+    private OverworldState _overworldStateHandler;
+    private Bag _playerBagHandler;
+    
     private static readonly Dictionary<AssetDirectory, string> Directories = new()
     {
         {AssetDirectory.Moves,"Pokemon_project_assets/Pokemon_obj/Moves/" },
@@ -45,9 +54,24 @@ public class Save_manager : MonoBehaviour
         {AssetDirectory.PokeMartData,"Pokemon_project_assets/Overwolrd_obj/Poke_Mart_Data"},
         {AssetDirectory.TrainerData,"Pokemon_project_assets/Enemies/Data/"}
     };
+    
     public static string GetDirectory(AssetDirectory directory)
     {
         return Directories[directory];
+    }
+
+    public void Inject(Container container)
+    {
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _pokemonStorageHandler = container.Resolve<pokemon_storage>();
+        _playerMovementHandler = container.Resolve<Player_movement>();
+        _areaHandler = container.Resolve<Area_manager>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        _overworldStateHandler = container.Resolve<OverworldState>();
+        _playerBagHandler = container.Resolve<Bag>();
     }
     private void Awake()
     {
@@ -65,15 +89,15 @@ public class Save_manager : MonoBehaviour
         CreateTemporaryDirectory();
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
-            Game_Load.Instance.uploadButton.interactable = false;
+            _gameLoadingHandler.uploadButton.interactable = false;
             LoadPlayerData(); 
             LoadItemData();
             LoadPokemonData();
         }
         else
         {
-            Game_Load.Instance.uploadButton.interactable = true;
-            Game_Load.Instance.PreventGameLoad();
+            _gameLoadingHandler.uploadButton.interactable = true;
+            _gameLoadingHandler.PreventGameLoad();
         }
         
     }
@@ -107,7 +131,7 @@ public class Save_manager : MonoBehaviour
     }
     public void OnDownloadComplete()//js notification
     {
-        Dialogue_handler.Instance.DisplayDetails("Save data downloaded successfully!");
+        _dialogueHandler.DisplayDetails("Save data downloaded successfully!");
     }
     public void OnIDBFSReady()//js notification
     {
@@ -115,12 +139,12 @@ public class Save_manager : MonoBehaviour
     }
     private IEnumerator SyncFromIndexedDB()
     {
-        Dialogue_handler.Instance.DisplayDetails("Game Loaded");
+        _dialogueHandler.DisplayDetails("Game Loaded");
         LoadPlayerData(); 
         LoadItemData();
         LoadPokemonData();
         yield return new WaitForSeconds(1f);
-        Game_Load.Instance.AllowGameLoad();
+        _gameLoadingHandler.AllowGameLoad();
     }
     string GetSavePath()
     {
@@ -149,8 +173,8 @@ public class Save_manager : MonoBehaviour
             var json = File.ReadAllText(jsonFilePath);
             var boxData = ScriptableObject.CreateInstance<PokemonStorageBox>();
             JsonUtility.FromJsonOverwrite(json, boxData);
-            pokemon_storage.Instance.storageBoxes[boxData.boxNumber-1].boxPokemon = boxData.boxPokemon;
-            pokemon_storage.Instance.storageBoxes[boxData.boxNumber-1].currentNumPokemon = boxData.currentNumPokemon;
+            _pokemonStorageHandler.storageBoxes[boxData.boxNumber-1].boxPokemon = boxData.boxPokemon;
+            _pokemonStorageHandler.storageBoxes[boxData.boxNumber-1].currentNumPokemon = boxData.currentNumPokemon;
         }
     }
     public void LoadOverworldData()
@@ -174,7 +198,7 @@ public class Save_manager : MonoBehaviour
             treeData.berryItem = Resources.Load<Item>(GetDirectory(AssetDirectory.Berries)
                                                       + treeData.itemAssetName);
             
-            OverworldState.Instance.StoreBerryTreeData(treeData);
+            _overworldStateHandler.StoreBerryTreeData(treeData);
         }
         CreateFolder(_saveDataPath + "/Overworld/Story_Objectives");
         var storyObjectives = GetJsonFilesFromPath(_saveDataPath + "/Overworld/Story_Objectives");
@@ -189,32 +213,32 @@ public class Save_manager : MonoBehaviour
             JsonUtility.FromJsonOverwrite(json, objectiveData);
             if (objectiveData is StoryProgressObjective storyData)
             {
-                OverworldState.Instance.storyProgressObjective = storyData;
-                OverworldState.Instance.storyProgressObjective.FindMainAsset();
+                _overworldStateHandler.storyProgressObjective = storyData;
+                _overworldStateHandler.storyProgressObjective.FindMainAsset();
             }
             else
             {
-                OverworldState.Instance.currentStoryObjectives.Add(objectiveData);
+                _overworldStateHandler.currentStoryObjectives.Add(objectiveData);
             }
         }
     }
     private void LoadPlayerData()
     {
         CreateFolder(_saveDataPath + "/Player");
-        Game_Load.Instance.playerData = null;
+        _gameLoadingHandler.playerData = null;
         var playerList = GetJsonFilesFromPath(_saveDataPath + "/Player");
         if(playerList.Count==1)
-            Game_Load.Instance.playerData = LoadPlayerFromJson(_saveDataPath+"/Player/" + Path.GetFileName(playerList[0]));
+            _gameLoadingHandler.playerData = LoadPlayerFromJson(_saveDataPath+"/Player/" + Path.GetFileName(playerList[0]));
         else if (playerList.Count > 1)
         {
-            Dialogue_handler.Instance.DisplayDetails("Please ensure only one player's data is in the save_data folder!");
-            Game_Load.Instance.PreventGameLoad();
+            _dialogueHandler.DisplayDetails("Please ensure only one player's data is in the save_data folder!");
+            _gameLoadingHandler.PreventGameLoad();
         }
         else
         {
-            Dialogue_handler.Instance.DisplayDetails("There was no save data found!");
-            Dialogue_handler.Instance.canExitDialogue = false;
-            Game_Load.Instance.PreventGameLoad();
+            _dialogueHandler.DisplayDetails("There was no save data found!");
+            _dialogueHandler.canExitDialogue = false;
+            _gameLoadingHandler.PreventGameLoad();
         }
     }
     private void LoadItemData()
@@ -225,14 +249,14 @@ public class Save_manager : MonoBehaviour
         
         var itemList = GetJsonFilesFromPath(_saveDataPath+"/Items");
         var storageItemList = GetJsonFilesFromPath(_saveDataPath+"/Items/Storage_Items");
-        Bag.Instance.allItems.Clear();
+        _playerBagHandler.allItems.Clear();
         foreach (var item in itemList)
         {
-            Bag.Instance.allItems.Add(LoadItemFromJson(_saveDataPath+"/Items/" + Path.GetFileName(item)));
+            _playerBagHandler.allItems.Add(LoadItemFromJson(_saveDataPath+"/Items/" + Path.GetFileName(item)));
         }
         foreach (var item in storageItemList)
         {
-            Bag.Instance.storageItems.Add(LoadItemFromJson(_saveDataPath+"/Items/Storage_Items/" + Path.GetFileName(item)));
+            _playerBagHandler.storageItems.Add(LoadItemFromJson(_saveDataPath+"/Items/Storage_Items/" + Path.GetFileName(item)));
         }
     }
     private List<string> GetJsonFilesFromPath(string path)
@@ -259,29 +283,29 @@ public class Save_manager : MonoBehaviour
         CreateFolder(_saveDataPath+"/Party_Ids");
         partyIDs.Clear();
         GetPartyPokemonIDs();
-        pokemon_storage.Instance.numNonPartyPokemon = 0;
-        pokemon_storage.Instance.totalPokemonCount = 0;
-        Pokemon_party.Instance.numMembers = 0;
-        for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
+        _pokemonStorageHandler.numNonPartyPokemon = 0;
+        _pokemonStorageHandler.totalPokemonCount = 0;
+        _pokemonPartyHandler.numMembers = 0;
+        for (int i = 0; i < _pokemonStorageHandler.numPartyMembers; i++)
         {
             var pokemon = LoadPokemonFromJson(_saveDataPath+"/Pokemon/" + partyIDs[i] + ".json");
             LoadHeldItems(pokemon);
-            Pokemon_party.Instance.party[i] = pokemon;
-            Pokemon_party.Instance.numMembers++;
+            _pokemonPartyHandler.party[i] = pokemon;
+            _pokemonPartyHandler.numMembers++;
         }
-        pokemon_storage.Instance.nonPartyPokemon.Clear();
+        _pokemonStorageHandler.nonPartyPokemon.Clear();
         var pokemonList = GetJsonFilesFromPath(_saveDataPath+"/Pokemon/");
         foreach(var file in pokemonList)
         {
             var fileName = Path.GetFileName(file);//filename is the pokemon id
-            if (!pokemon_storage.Instance.IsPartyPokemon(RemoveFileExtension(fileName)))
+            if (!_pokemonStorageHandler.IsPartyPokemon(RemoveFileExtension(fileName)))
             {
                 var nonPartyPokemon = LoadPokemonFromJson(_saveDataPath+"/Pokemon/" + fileName);
                 LoadHeldItems(nonPartyPokemon);
-                pokemon_storage.Instance.nonPartyPokemon.Add(nonPartyPokemon);
-                pokemon_storage.Instance.numNonPartyPokemon++;
+                _pokemonStorageHandler.nonPartyPokemon.Add(nonPartyPokemon);
+                _pokemonStorageHandler.numNonPartyPokemon++;
             }
-            pokemon_storage.Instance.totalPokemonCount++;
+            _pokemonStorageHandler.totalPokemonCount++;
         }
     }
     private void LoadHeldItems(Pokemon pokemon)
@@ -300,7 +324,7 @@ public class Save_manager : MonoBehaviour
     }
     private void GetPartyPokemonIDs()
     {
-        pokemon_storage.Instance.numPartyMembers = 0;
+        _pokemonStorageHandler.numPartyMembers = 0;
         var numIds = 0;
         var files = Directory.GetFiles(_saveDataPath+"/Party_Ids/");
         foreach(var file in files)
@@ -310,7 +334,7 @@ public class Save_manager : MonoBehaviour
         {
             var currentID = File.ReadAllText(_saveDataPath+"/Party_Ids/" + "pkm_" + (i + 1) + ".txt");
             partyIDs.Add(currentID);
-            pokemon_storage.Instance.numPartyMembers++;
+            _pokemonStorageHandler.numPartyMembers++;
         }
     }
     private void CreateFolder(string path)
@@ -382,20 +406,20 @@ public class Save_manager : MonoBehaviour
     void HandleSaveError(string errorMessage, Exception exception)
     {
         Debug.LogError(errorMessage+exception);
-        Dialogue_handler.Instance.DisplayDetails("Error occured while saving please restart the game!");
+        _dialogueHandler.DisplayDetails("Error occured while saving please restart the game!");
         EraseTemporarySaveData();
-        InputStateHandler.Instance.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
+        _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
     }
     public IEnumerator SaveAllData()
     {
-        InputStateHandler.Instance.ResetRelevantUi(InputStateName.PlayerMenu);
-        InputStateHandler.Instance.AddDialoguePlaceHolderState();
-        Dialogue_handler.Instance.DisplayDetails("Saving...",false); 
-        for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
+        _inputStateHandler.ResetRelevantUi(InputStateName.PlayerMenu);
+        _inputStateHandler.AddDialoguePlaceHolderState();
+        _dialogueHandler.DisplayDetails("Saving...",false); 
+        for (int i = 0; i < _pokemonStorageHandler.numPartyMembers; i++)
         {
             try
             {
-                SaveAllPokemonData(Pokemon_party.Instance.party[i]);
+                SaveAllPokemonData(_pokemonPartyHandler.party[i]);
             }
             catch (Exception e)
             {
@@ -403,11 +427,11 @@ public class Save_manager : MonoBehaviour
                 yield break;
             }
         }
-        for (int i = 0; i < pokemon_storage.Instance.numNonPartyPokemon; i++)
+        for (int i = 0; i < _pokemonStorageHandler.numNonPartyPokemon; i++)
         {
             try
             {
-                SaveAllPokemonData(pokemon_storage.Instance.nonPartyPokemon[i]);
+                SaveAllPokemonData(_pokemonStorageHandler.nonPartyPokemon[i]);
             }
             catch (Exception e)
             {
@@ -426,7 +450,7 @@ public class Save_manager : MonoBehaviour
             yield break;
         }
         
-        foreach (var item in Bag.Instance.allItems)
+        foreach (var item in _playerBagHandler.allItems)
         {
             try
             {
@@ -438,7 +462,7 @@ public class Save_manager : MonoBehaviour
                 yield break;
             }
         }
-        foreach (var item in Bag.Instance.storageItems)
+        foreach (var item in _playerBagHandler.storageItems)
         {
             try
             {
@@ -450,12 +474,12 @@ public class Save_manager : MonoBehaviour
                 yield break;
             }
         }
-        Game_Load.Instance.playerData.playerPosition = Player_movement.Instance.GetPlayerPosition();
-        Game_Load.Instance.playerData.location = Area_manager.Instance.currentArea.data.areaName;
+        _gameLoadingHandler.playerData.playerPosition = _playerMovementHandler.GetPlayerPosition();
+        _gameLoadingHandler.playerData.location = _areaHandler.currentArea.data.areaName;
         
         try
         {
-            SavePlayerDataAsJson(Game_Load.Instance.playerData,Game_Load.Instance.playerData.trainerID.ToString());
+            SavePlayerDataAsJson(_gameLoadingHandler.playerData,_gameLoadingHandler.playerData.trainerID.ToString());
         }
         catch (Exception e)
         {
@@ -463,16 +487,16 @@ public class Save_manager : MonoBehaviour
             yield break;
         }
 
-        yield return OverworldState.Instance.SaveOverworldData();
+        yield return _overworldStateHandler.SaveOverworldData();
         
-        yield return pokemon_storage.Instance.SaveStorageData();
+        yield return _pokemonStorageHandler.SaveStorageData();
         
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             DownloadZipAndStoreLocally();
 #endif
-            Dialogue_handler.Instance.DisplayDetails("Game saved online but please download your save file");
+            _dialogueHandler.DisplayDetails("Game saved online but please download your save file");
         }
         else
         {
@@ -482,21 +506,21 @@ public class Save_manager : MonoBehaviour
             yield return CopyCorrectSaveData(_tempSaveDataPath,_saveDataPath,recursive: true);
             yield return new WaitForSeconds(1f);
             EraseTemporarySaveData();
-            Dialogue_handler.Instance.DisplayDetails("Game saved",false);
+            _dialogueHandler.DisplayDetails("Game saved",false);
         }
-        Dialogue_handler.Instance.EndDialogue(1.5f);
+        _dialogueHandler.EndDialogue(1.5f);
         yield return new WaitForSeconds(1.4f);
-        InputStateHandler.Instance.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
+        _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
     }
 
     private void SavePartyPokemonIDs()
     {
-        for (int i = 0; i < pokemon_storage.Instance.numPartyMembers; i++)
+        for (int i = 0; i < _pokemonStorageHandler.numPartyMembers; i++)
         {
-            if (Pokemon_party.Instance.party[i]==null) throw new Exception("party member is null! ");
+            if (_pokemonPartyHandler.party[i]==null) throw new Exception("party member is null! ");
             
             var path = Path.Combine(_tempSaveDataPath + "/Party_Ids/", "pkm_" + (i + 1) + ".txt");
-            File.WriteAllText(path, Pokemon_party.Instance.party[i].pokemonID.ToString());
+            File.WriteAllText(path, _pokemonPartyHandler.party[i].pokemonID.ToString());
         }
     }
 

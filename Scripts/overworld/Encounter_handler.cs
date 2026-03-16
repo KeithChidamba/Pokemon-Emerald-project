@@ -84,7 +84,7 @@ public class Encounter_handler : MonoBehaviour
     void CreateWildPokemon(EncounterPokemonData pokemonData)
     {
         wildPokemon = Obj_Instance.CreatePokemon(pokemonData.pokemon);
-        PokemonOperations.SetPokemonTraits(wildPokemon);
+        PokemonOperations.Instance.SetPokemonTraits(wildPokemon);
         if (pokemonData.evolutionFormNumber > 0)
         {
             if (pokemonData.evolutionFormNumber > wildPokemon.evolutions.Count)

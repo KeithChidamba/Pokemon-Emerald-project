@@ -346,17 +346,8 @@ public class Pokemon : ScriptableObject
                 currentLevelExpAmount = currentExpAmount;
                 yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
                 yield return PokemonOperations.Instance.WaitForNewMoveCheck(this);
-            
-                if (PokemonOperations.LearningNewMove)
-                {
-                    if (moveSet.Count == 4)
-                    {
-                        yield return new WaitUntil(() => PokemonOperations.SelectingMoveReplacement);
-                        yield return new WaitUntil(() => !PokemonOperations.SelectingMoveReplacement);
-                    }
-                    yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-                }
-                yield return new WaitUntil(() => !PokemonOperations.LearningNewMove);
+
+                yield return PokemonOperations.Instance.AwaitMoveOperation(moveSet.Count == 4);
                 
                 nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel, expGroup);
             }

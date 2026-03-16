@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public enum InteractionOptions
 {
     None,CloseApplication,Battle,LearnMove,SkipMove,
     Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,ReceiveGiftPokemon,LeaveStore,ViewControls
 }
-public class Options_manager : MonoBehaviour
+public class Options_manager : MonoBehaviour,IInjectable
 {
     private Interaction _currentInteraction;
     public bool playerInBattle;
@@ -16,6 +15,31 @@ public class Options_manager : MonoBehaviour
     private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
     public event Action<Interaction,int> OnInteractionOptionChosen;
     public event Action<Overworld_interactable,int> OnOverworldInteractionOptionChosen;
+    
+    private Dialogue_handler _dialogueHandler;
+    private Pokemon_party _playerParty;
+    private PokemonOperations _pokemonOperations;
+    private Pokemon_Details _pokemonDetailsHandler;
+    private Game_ui_manager _gameUIManager;
+    private overworld_actions _overworldActionsHandler;
+    private Bag _playerBag;
+    private pokemon_storage _pokemonStorage;
+    private Battle_handler _battleHandler;
+    
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _playerParty = container.Resolve<Pokemon_party>();
+        _gameUIManager = container.Resolve<Game_ui_manager>();
+        _pokemonOperations = container.Resolve<PokemonOperations>();
+        _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
+        _overworldActionsHandler = container.Resolve<overworld_actions>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _pokemonStorage = container.Resolve<pokemon_storage>();
+        _playerBag = container.Resolve<Bag>();
+        
+        gameObject.SetActive(true);
+    } 
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -45,12 +69,12 @@ public class Options_manager : MonoBehaviour
 
     void CloseApplication()
     {
-        Dialogue_handler.Instance.EndDialogue();
+        _dialogueHandler.EndDialogue();
         Application.Quit();
     }
     public void ExitGame()
     {
-        Dialogue_handler.Instance.DisplayList("Are you sure you want to exit?, you will lose unsaved data!",
+        _dialogueHandler.DisplayList("Are you sure you want to exit?, you will lose unsaved data!",
              "Good bye!", 
              new[]{ InteractionOptions.CloseApplication,InteractionOptions.None}
              , new[]{"Yes", "No"});
@@ -58,46 +82,46 @@ public class Options_manager : MonoBehaviour
 
     void ViewControls()
     {
-        Dialogue_handler.Instance.EndDialogue(); 
-        Game_ui_manager.Instance.ViewKeyBinds();
+        _dialogueHandler.EndDialogue(); 
+        _gameUIManager.ViewKeyBinds();
     }
     void Battle()
     {
-        Dialogue_handler.Instance.EndDialogue(); 
-        Battle_handler.Instance.SetBattleType(_currentInteraction.additionalInfo);
+        _dialogueHandler.EndDialogue(); 
+        _battleHandler.SetBattleType(_currentInteraction.additionalInfo);
     }
 
     void LearnMove()
     {        
-        Pokemon_Details.Instance.learningMove = true;
-        Pokemon_Details.Instance.OnMoveSelected += PokemonOperations.LearnSelectedMove;
-        Dialogue_handler.Instance.DisplayBattleInfo("Which move will you replace?",false);
-        Game_ui_manager.Instance.ViewPartyPokemonDetails(PokemonOperations.CurrentPokemon);
+        _pokemonDetailsHandler.learningMove = true;
+        _pokemonDetailsHandler.OnMoveSelected += _pokemonOperations.LearnSelectedMove;
+        _dialogueHandler.DisplayBattleInfo("Which move will you replace?",false);
+        _gameUIManager.ViewPartyPokemonDetails(_pokemonOperations.currentPokemon);
     }
     public void SkipMove()
     {
-        Dialogue_handler.Instance.DeletePreviousOptions();
-        Pokemon_Details.Instance.OnMoveSelected = null;
-        PokemonOperations.SelectingMoveReplacement = false;
-        PokemonOperations.LearningNewMove = false;
-        Pokemon_Details.Instance.learningMove = false;
-        Dialogue_handler.Instance.DisplayBattleInfo(PokemonOperations.CurrentPokemon.pokemonName +
-                                                    " did not learn "+PokemonOperations.NewMoveAsset.moveName,false);
+        _dialogueHandler.DeletePreviousOptions();
+        _pokemonDetailsHandler.OnMoveSelected = null;
+        _pokemonOperations.SelectingMoveReplacement = false;
+        _pokemonOperations.LearningNewMove = false;
+        _pokemonDetailsHandler.learningMove = false;
+        _dialogueHandler.DisplayBattleInfo(_pokemonOperations.currentPokemon.pokemonName +
+                                                    " did not learn "+_pokemonOperations.NewMoveAsset.moveName,false);
     }
 
     void HealPokemon()
     {
-        overworld_actions.Instance.doingAction = true;
-        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage);
+        _overworldActionsHandler.doingAction = true;
+        _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
         HealPartyPokemon();
-        overworld_actions.Instance.doingAction = false;
-        Dialogue_handler.Instance.DisplayDetails("Your pokemon have been healed, you're welcome!");
+        _overworldActionsHandler.doingAction = false;
+        _dialogueHandler.DisplayDetails("Your pokemon have been healed, you're welcome!");
     }
     public void HealPartyPokemon()
     {
-        for (int i = 0; i < Pokemon_party.Instance.numMembers; i++)
+        for (int i = 0; i < _playerParty.numMembers; i++)
         {
-            var pokemon = Pokemon_party.Instance.party[i];
+            var pokemon = _playerParty.party[i];
             pokemon.hp = pokemon.maxHp;
             foreach (var move in pokemon.moveSet)
                 move.powerpoints = move.maxPowerpoints;
@@ -106,48 +130,48 @@ public class Options_manager : MonoBehaviour
     }
     void OpenPokemonStorage()
     {
-        Dialogue_handler.Instance.EndDialogue(); 
-        Game_ui_manager.Instance.ViewPokemonStorage();
+        _dialogueHandler.EndDialogue(); 
+        _gameUIManager.ViewPokemonStorage();
     }
 
     void OpenItemStorage()
     {
-        Dialogue_handler.Instance.EndDialogue(); 
-        Game_ui_manager.Instance.ViewItemStorage();
+        _dialogueHandler.EndDialogue(); 
+        _gameUIManager.ViewItemStorage();
     }
     void ReceiveGiftPokemon()
     {
-        if(pokemon_storage.Instance.MaxPokemonCapacity())
+        if(_pokemonStorage.MaxPokemonCapacity())
         {
-            Dialogue_handler.Instance.DisplayDetails("Can no longer obtain more pokemon, free up space in pc!");
+            _dialogueHandler.DisplayDetails("Can no longer obtain more pokemon, free up space in pc!");
             return;
         }
         var pokemonName = _currentInteraction.resultMessage;
         var pokemon = Resources.Load<Pokemon>(Save_manager.GetDirectory(AssetDirectory.Pokemon)
                                               + pokemonName +"/"+ pokemonName);
-        Pokemon_party.Instance.AddMember(pokemon,isGiftPokemon:true);
-        Dialogue_handler.Instance.EndDialogue();
-        Dialogue_handler.Instance.DisplayDetails("You got a " + pokemon.pokemonName);
+        _playerParty.AddMember(pokemon,isGiftPokemon:true);
+        _dialogueHandler.EndDialogue();
+        _dialogueHandler.DisplayDetails("You got a " + pokemon.pokemonName);
     }
     void Interact()
     {
-        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage);
+        _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
     }
     void Fish()
     {
-        overworld_actions.Instance.doingAction = true;
-        overworld_actions.Instance.manager.ChangeAnimationState(overworld_actions.Instance.manager.fishingStart);
-        Dialogue_handler.Instance.DisplayDetails(_currentInteraction.resultMessage);
+        _overworldActionsHandler.doingAction = true;
+        _overworldActionsHandler.manager.ChangeAnimationState(_overworldActionsHandler.manager.fishingStart);
+        _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
     }
     void SellItem()
     {
-        Bag.Instance.currentBagUsage = BagUsage.SellingView;
-        Game_ui_manager.Instance.ViewBag();
+        _playerBag.currentBagUsage = BagUsage.SellingView;
+        _gameUIManager.ViewBag();
     }
 
     void LeaveStore()
     {
-        Dialogue_handler.Instance.DisplayDetails("Have a great day!");
+        _dialogueHandler.DisplayDetails("Have a great day!");
     }
 
     public void AlertOverworldInteraction(Overworld_interactable interactable,int optionIndex)
@@ -168,12 +192,12 @@ public class Options_manager : MonoBehaviour
         var interactionOption = interaction.interactionOptions[optionIndex];
         if (interactionOption == InteractionOptions.None)
         {
-            Dialogue_handler.Instance.EndDialogue(); 
+            _dialogueHandler.EndDialogue(); 
             return;
         }
         
-        Dialogue_handler.Instance.DeletePreviousOptions();
-        Dialogue_handler.Instance.canExitDialogue = true;
+        _dialogueHandler.DeletePreviousOptions();
+        _dialogueHandler.canExitDialogue = true;
         
         _currentInteraction = interaction;
         if (_interactionMethods.TryGetValue(interactionOption,out var method))

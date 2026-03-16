@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-public class Game_Load : MonoBehaviour
+public class Game_Load : MonoBehaviour,IInjectable
 {
     public Button load_btn;
     public Button newGame_btn;
@@ -19,17 +19,31 @@ public class Game_Load : MonoBehaviour
     public GameObject world_Map;
     public Player_data playerData;
     public static Game_Load Instance;
-    public event Action OnGameStarted; 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
+    public event Action OnGameStarted;
+    private Save_manager _saveHandler;
+    private Dialogue_handler _dialogueHandler;
+    private Area_manager _areaHandler;
+    private Player_movement _playerMovement;
+    private overworld_actions _overworldActions;
 
+    public void Inject(Container container)
+    {
+        _saveHandler = container.Resolve<Save_manager>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _areaHandler = container.Resolve<Area_manager>();
+        _playerMovement = container.Resolve<Player_movement>();
+        _overworldActions = container.Resolve<overworld_actions>();
+        gameObject.SetActive(true);
+    }
+    private void Awake()
+         {
+             if (Instance != null && Instance != this)
+             {
+                 Destroy(gameObject);
+                 return;
+             }
+             Instance = this;
+         }
     private void Start()
     {
         Start_ui.SetActive(true);
@@ -59,7 +73,7 @@ public class Game_Load : MonoBehaviour
     {
         if (name_input.text.Length < _maxNameLength && name_input.text.Length > _minNameLength-1)
         {
-            Save_manager.Instance.CreateDefaultWebglDirectories();
+            _saveHandler.CreateDefaultWebglDirectories();
             var playerName = name_input.text;
             var data = ScriptableObject.CreateInstance<Player_data>();
             data.playerName = playerName;
@@ -73,27 +87,27 @@ public class Game_Load : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.Instance.DisplayDetails("Name must be between 4 and 14 characters");
+            _dialogueHandler.DisplayDetails("Name must be between 4 and 14 characters");
         }
     }
     public void NewGame()
     {
         if (Application.platform != RuntimePlatform.WebGLPlayer)
-            Save_manager.Instance.EraseSaveData();
-        Dialogue_handler.Instance.EndDialogue();
+            _saveHandler.EraseSaveData();
+        _dialogueHandler.EndDialogue();
         LoadNewPlayerPage();
     }
     public void StartGame()
     {
-        Dialogue_handler.Instance.EndDialogue();
+        _dialogueHandler.EndDialogue();
         new_player_ui.SetActive(false);
         Start_ui.SetActive(false);
         
-        Player_movement.Instance.ActivatePlayerFromSave(playerData.playerPosition);
-        overworld_actions.Instance.EquipItem(Bag.Instance.SearchForItem(playerData.equippedItemName));
+        _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
+        _overworldActions.EquipItem(Bag.Instance.SearchForItem(playerData.equippedItemName));
         world_Map.SetActive(true);
-        Area_manager.Instance.loadingPlayerFromSave = true;
-        Area_manager.Instance.SwitchToArea(playerData.location);
+        _areaHandler.loadingPlayerFromSave = true;
+        _areaHandler.SwitchToArea(playerData.location);
         OnGameStarted?.Invoke();
     }
 }

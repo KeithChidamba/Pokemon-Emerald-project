@@ -50,7 +50,7 @@ public class Item_handler : MonoBehaviour
 
         switch (item.itemType)
         {
-            case ItemType.LearnableMove: StartCoroutine(PokemonOperations.LearnTmOrHm(itemInUse.additionalInfoModule,selectedPokemon)); break;
+            case ItemType.LearnableMove: StartCoroutine(PokemonOperations.Instance.LearnTmOrHm(itemInUse.additionalInfoModule,selectedPokemon)); break;
             
             case ItemType.Overworld : UseOverworldItem(); break;
             

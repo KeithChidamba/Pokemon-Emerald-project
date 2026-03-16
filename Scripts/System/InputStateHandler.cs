@@ -17,7 +17,7 @@ public enum InputStateName
     MartItemPurchase,MartItemNavigation,
     PlayerMenu,PlayerProfile,KeyBinds
 }
-public class InputStateHandler : MonoBehaviour
+public class InputStateHandler : MonoBehaviour,IInjectable
 {
     public InputState CurrentState { get; private set; }
     private InputState _emptyState { get; set; }
@@ -43,7 +43,7 @@ public class InputStateHandler : MonoBehaviour
     private int _currentNumBoxElements;
     public int rowRemainder;
     public GameObject emptyPlaceHolder;
-
+    private Dialogue_handler _dialogueHandler;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -56,6 +56,11 @@ public class InputStateHandler : MonoBehaviour
         emptyPlaceHolder=new GameObject();
     }
 
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        gameObject.SetActive(true);
+    }
     private void Start()
     {
         Game_Load.Instance.OnGameStarted += () => _readingInputs = true;
@@ -153,7 +158,7 @@ public class InputStateHandler : MonoBehaviour
         _handlingState = stateLayers.Count > 0;
         if (!_handlingState) return;
         
-        bool viewingExitableDialogue = Dialogue_handler.Instance.canExitDialogue & Dialogue_handler.Instance.displaying;
+        bool viewingExitableDialogue = _dialogueHandler.canExitDialogue & _dialogueHandler.displaying;
 
         if (Input.GetKeyDown(KeyCode.X))
         {
