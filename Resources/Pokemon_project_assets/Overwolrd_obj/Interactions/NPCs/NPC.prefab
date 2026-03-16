@@ -272,7 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationData: {fileID: 0}
-  logicHandler: {fileID: 2572521372086561507}
+  rayCastPoint: {fileID: 1812086111840112092}
   movePoint: {fileID: 7003710654981526514}
   movementSpeed: 2
   movementBlockers:
@@ -305,6 +305,8 @@ MonoBehaviour:
     m_Bits: 256
   npcInteraction: {fileID: 0}
   rayCastPoint: {fileID: 1812086111840112092}
+  constantScan: 0
+  playerDetected: 0
 --- !u!1 &5433307879789985436
 GameObject:
   m_ObjectHideFlags: 0

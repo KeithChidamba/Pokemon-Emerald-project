@@ -451,7 +451,7 @@ public class Bag : MonoBehaviour
         selectedItemIndex = 0;
         
         if (numItems > 0) SelectItem();
-        if (InputStateHandler.Instance.currentState.stateGroups.Contains(InputStateGroup.Bag))
+        if (InputStateHandler.Instance.CurrentState.stateGroups.Contains(InputStateGroup.Bag))
         {
             InputStateHandler.Instance.PlayerBagNavigationRestrictions();
         }

@@ -14,6 +14,7 @@ public class Pokemon_party_member : MonoBehaviour
     public Image pokeballClosedImage;
     public Image pokeballOpenImage;
     public Image statusEffectImage;
+    public Image genderImage;
     public Slider pokemonHealthBarUI;
     public RawImage hpSliderImage;
     public Pokemon pokemon;
@@ -83,6 +84,11 @@ public class Pokemon_party_member : MonoBehaviour
         isEmpty = false;
         emptySlotUI.SetActive(false);
         heldItemImage.SetActive(pokemon.hasItem);
+        
+        genderImage.sprite = Resources.Load<Sprite>(
+            Save_manager.GetDirectory(AssetDirectory.UI) 
+            + pokemon.gender.ToString().ToLower());
+        
         if (pokemon.statusEffect == StatusEffect.None)
             statusEffectImage.gameObject.SetActive(false);
         else
@@ -133,7 +139,7 @@ public class Pokemon_party_member : MonoBehaviour
         if (_isViewingCard)
         {
             InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;
-            UpdateUi(InputStateHandler.Instance.currentState.currentSelectionIndex);
+            UpdateUi(InputStateHandler.Instance.CurrentState.currentSelectionIndex);
         }
     }
     private void ResetSelectionVisual(InputState previousState)

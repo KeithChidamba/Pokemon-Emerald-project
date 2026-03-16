@@ -159,7 +159,7 @@ public class Pokemon_Details : MonoBehaviour
     {
         if (learningMove || changingMoveData)
         {//simulate F click
-            InputStateHandler.Instance.currentState.selectableUis[2]?.eventForUi?.Invoke();
+            InputStateHandler.Instance.CurrentState.selectableUis[2]?.eventForUi?.Invoke();
         }
 
         Ability_ui.SetActive(false);

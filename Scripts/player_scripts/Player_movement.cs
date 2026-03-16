@@ -245,7 +245,7 @@ public class Player_movement : MonoBehaviour
         // 1-down:   2-up:   3-left: 4-right
         List<Vector2> directionConversions = new (){ new(0, -1), new(0, 1), new(-1, 0), new(1, 0) };
         
-        return directionConversions[currentDirectionIndex-1]; 
+        return directionConversions[currentDirectionIndex==0? 0 : currentDirectionIndex-1]; 
     }
     private void HandlePlayerMovement()
     {

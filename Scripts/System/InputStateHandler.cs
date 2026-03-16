@@ -19,8 +19,8 @@ public enum InputStateName
 }
 public class InputStateHandler : MonoBehaviour
 {
-    public InputState currentState;
-    private InputState _emptyState;
+    public InputState CurrentState { get; private set; }
+    private InputState _emptyState { get; set; }
     private int[] directionSelection = { 0, 0, 0, 0 };
     public static InputStateHandler Instance;
     private event Action OnInputUp;
@@ -32,7 +32,7 @@ public class InputStateHandler : MonoBehaviour
     public event Action<int> OnSelectionIndexChanged;
     
     private bool _readingInputs;
-    [SerializeField] private bool _currentStateLoaded;
+    private bool _currentStateLoaded;
     private bool _handlingState;
     public List<InputState> stateLayers;
 
@@ -43,6 +43,7 @@ public class InputStateHandler : MonoBehaviour
     private int _currentNumBoxElements;
     public int rowRemainder;
     public GameObject emptyPlaceHolder;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -52,13 +53,14 @@ public class InputStateHandler : MonoBehaviour
         }
         Instance = this;
         _readingInputs = false;
+        emptyPlaceHolder=new GameObject();
     }
 
     private void Start()
     {
         Game_Load.Instance.OnGameStarted += () => _readingInputs = true;
         _emptyState = new InputState(InputStateName.Empty,new[]{InputStateGroup.None}, canExit: false);
-        currentState = _emptyState;
+        CurrentState = _emptyState;
         _currentStateLoaded = false;
     }
 
@@ -141,7 +143,7 @@ public class InputStateHandler : MonoBehaviour
     }
     public void RemoveTopInputLayer(bool invokeOnExit)
     {
-        currentState.OnExit = invokeOnExit? currentState.OnExit:null;
+        CurrentState.OnExit = invokeOnExit? CurrentState.OnExit:null;
         RemoveInputState(stateLayers.Last() ,true);
     }
 
@@ -155,27 +157,27 @@ public class InputStateHandler : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if(currentState.stateName != InputStateName.DialogueOptions && !viewingExitableDialogue)
+            if(CurrentState.stateName != InputStateName.DialogueOptions && !viewingExitableDialogue)
             {
-                if(currentState.canExit)
+                if(CurrentState.canExit)
                 {
-                    if (currentState.persistOnExit)
-                        currentState.OnExit.Invoke();
+                    if (CurrentState.persistOnExit)
+                        CurrentState.OnExit.Invoke();
                     
-                    else if(currentState.canManualExit)
+                    else if(CurrentState.canManualExit)
                         RemoveTopInputLayer(true);
                 }
             }
         }
         
-        if (currentState.stateName == InputStateName.Empty) return;
+        if (CurrentState.stateName == InputStateName.Empty) return;
 
         if (Input.GetKeyDown(KeyCode.Z) && _currentStateLoaded)
         {
             InvokeSelectedEvent();
         }
         
-        if (currentState.stateDirection == InputDirection.None) return;
+        if (CurrentState.stateDirection == InputDirection.None) return;
         
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -199,56 +201,56 @@ public class InputStateHandler : MonoBehaviour
     {
         onInput?.Invoke();
         
-        if (currentState.stateDirection != InputDirection.OmniDirection) ChangeSelectionIndex(directionIndex);
+        if (CurrentState.stateDirection != InputDirection.OmniDirection) ChangeSelectionIndex(directionIndex);
         
         if(CanUpdateSelector(direction)) UpdateSelectorUi();
     }
     bool CanUpdateSelector(InputDirection direction)
     {
-        return currentState.displayingSelector &
-               currentState.stateDirection == direction;
+        return CurrentState.displayingSelector &
+               CurrentState.stateDirection == direction;
     }
     void InvokeSelectedEvent()
     {
-        if (currentState.selectableUis == null) return;
-        if (currentState.isSelecting)
+        if (CurrentState.selectableUis == null) return;
+        if (CurrentState.isSelecting)
         {
-            if (!currentState.selectableUis[currentState.currentSelectionIndex].canBeSelected) return;
-            currentState.selectableUis[currentState.currentSelectionIndex]?.eventForUi?.Invoke();
+            if (!CurrentState.selectableUis[CurrentState.currentSelectionIndex].canBeSelected) return;
+            CurrentState.selectableUis[CurrentState.currentSelectionIndex]?.eventForUi?.Invoke();
         }
         else
-            currentState.selectableUis[0]?.eventForUi?.Invoke();
+            CurrentState.selectableUis[0]?.eventForUi?.Invoke();
     }
     void UpdateSelectorUi()
     {
-        if (!currentState.isSelecting) return;
-        currentState.selector.transform.position = currentState.selectableUis[currentState.currentSelectionIndex]
+        if (!CurrentState.isSelecting) return;
+        CurrentState.selector.transform.position = CurrentState.selectableUis[CurrentState.currentSelectionIndex]
             .uiObject.transform.position;
     }
     private void ChangeSelectionIndex(int change)
     {
-        currentState.currentSelectionIndex =
-            Mathf.Clamp(currentState.currentSelectionIndex+change, 0, currentState.maxSelectionIndex);
-        OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
+        CurrentState.currentSelectionIndex =
+            Mathf.Clamp(CurrentState.currentSelectionIndex+change, 0, CurrentState.maxSelectionIndex);
+        OnSelectionIndexChanged?.Invoke(CurrentState.currentSelectionIndex);
     }
     public void ChangeInputState(InputState newState)
     {
-        if (currentState.stateName == newState.stateName) return;
+        if (CurrentState.stateName == newState.stateName) return;
         _currentStateLoaded = false;
         
         stateLayers.RemoveAll(s => s.stateName == newState.stateName);
         stateLayers.Add(newState);
         ResetInputEvents();
-        currentState = newState;
-        OnStateChanged?.Invoke(currentState);
+        CurrentState = newState;
+        OnStateChanged?.Invoke(CurrentState);
         HandleStateExitability();
         SetDirectionals();
-        if (currentState.isSelecting) currentState.maxSelectionIndex = currentState.selectableUis.Count-1;
+        if (CurrentState.isSelecting) CurrentState.maxSelectionIndex = CurrentState.selectableUis.Count-1;
         SetupInputEvents();
-        if (currentState.displayingSelector)
+        if (CurrentState.displayingSelector)
         {
             UpdateSelectorUi();
-            currentState.selector.SetActive(true);
+            CurrentState.selector.SetActive(true);
         }
         
         _currentStateLoaded = true;
@@ -260,12 +262,12 @@ public class InputStateHandler : MonoBehaviour
 
     private void HandleStateExitability()
     {
-        if (currentState.UpdateExitStatus == null) return;
-        currentState.canExit = currentState.UpdateExitStatus.Invoke();
+        if (CurrentState.UpdateExitStatus == null) return;
+        CurrentState.canExit = CurrentState.UpdateExitStatus.Invoke();
     }
     void SetDirectionals()
     {
-        switch (currentState.stateDirection)
+        switch (CurrentState.stateDirection)
         {
             case InputDirection.None: 
             case InputDirection.OmniDirection:
@@ -286,25 +288,25 @@ public class InputStateHandler : MonoBehaviour
 
     public void PlayerBagNavigationRestrictions()
     {
-        currentState.currentSelectionIndex = 0;
+        CurrentState.currentSelectionIndex = 0;
         if(Bag.Instance.numItems==Bag.Instance.numItemsForView)
         {
             //prevent selecting null item selectables
-            currentState.maxSelectionIndex = Bag.Instance.numItems-1;
+            CurrentState.maxSelectionIndex = Bag.Instance.numItems-1;
             UpdateSelectorUi();
         }
-        currentState.displayingSelector = Bag.Instance.numItems > 0;
+        CurrentState.displayingSelector = Bag.Instance.numItems > 0;
         Bag.Instance.itemSelector.SetActive(Bag.Instance.numItems > 0);
         switch (Bag.Instance.currentBagUsage)
         {
             case BagUsage.SellingView:
-                currentState.selectableUis.ForEach(s=>s.eventForUi = CreateSellingItemState);
+                CurrentState.selectableUis.ForEach(s=>s.eventForUi = CreateSellingItemState);
                 break;
             case BagUsage.NormalView:
-                currentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.UseItem);
+                CurrentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.UseItem);
                 break;
             case BagUsage.SelectionOnly:
-                currentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.SelectItemForEvent);
+                CurrentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.SelectItemForEvent);
                 break;
         }
     }
@@ -365,7 +367,7 @@ public class InputStateHandler : MonoBehaviour
             new[]{InputStateGroup.PokemonParty}, stateDirection:InputDirection.Vertical, selectableUis:partyOptionsSelectables
             ,selector:Pokemon_party.Instance.optionSelector,selecting:true,display:true
             ,onClose:Pokemon_party.Instance.ClearSelectionUI,onExit:Pokemon_party.Instance.ClearSelectionUI));
-        currentState.selector.SetActive(true);
+        CurrentState.selector.SetActive(true);
     }
 
     void SetupPokemonDetails()
@@ -382,7 +384,7 @@ public class InputStateHandler : MonoBehaviour
         for (var i = 0; i < Pokemon_Details.Instance.currentPokemon.moveSet.Count; i++)
         {
             moveSelectables.Add(new(Pokemon_Details.Instance.moveNamesText[i].gameObject,
-                () => Pokemon_Details.Instance.SelectMove(currentState.currentSelectionIndex), true));
+                () => Pokemon_Details.Instance.SelectMove(CurrentState.currentSelectionIndex), true));
         }
 
         Action onExit = null;
@@ -448,10 +450,10 @@ public class InputStateHandler : MonoBehaviour
         
         int newIndex = GetCurrentFullBoxPosition();
 
-        currentState.currentSelectionIndex =
-            Mathf.Clamp(newIndex, 0, currentState.maxSelectionIndex);
+        CurrentState.currentSelectionIndex =
+            Mathf.Clamp(newIndex, 0, CurrentState.maxSelectionIndex);
 
-        OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
+        OnSelectionIndexChanged?.Invoke(CurrentState.currentSelectionIndex);
         UpdateSelectorUi();
     }
 
@@ -480,10 +482,10 @@ public class InputStateHandler : MonoBehaviour
             (int)math.ceil((float)_currentNumBoxElements/_numBoxColumns) - 1 : rowRemainder-1;
         
         boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
-        currentState.currentSelectionIndex = _currentNumBoxElements > currentState.maxSelectionIndex?
-            Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentState.maxSelectionIndex) 
+        CurrentState.currentSelectionIndex = _currentNumBoxElements > CurrentState.maxSelectionIndex?
+            Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,CurrentState.maxSelectionIndex) 
             :Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,_currentNumBoxElements);
-        OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
+        OnSelectionIndexChanged?.Invoke(CurrentState.currentSelectionIndex);
         UpdateSelectorUi();
     }
     
@@ -498,7 +500,7 @@ public class InputStateHandler : MonoBehaviour
         OnInputUp += ()=> MoveCoordinatesFullBox(InputDirection.Vertical,-1);
         OnInputDown += ()=> MoveCoordinatesFullBox(InputDirection.Vertical,1);
         
-        currentState.canExit = false;
+        CurrentState.canExit = false;
         OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
         OnSelectionIndexChanged += pokemon_storage.Instance.UpdateBoxPosition;
     }
@@ -569,9 +571,9 @@ public class InputStateHandler : MonoBehaviour
         OnInputDown += Poke_Mart.Instance.NavigateDown;
         if(Poke_Mart.Instance.numItemsForView==Poke_Mart.Instance.numItems)
         {//prevent selecting null item selectables
-            currentState.maxSelectionIndex = Poke_Mart.Instance.numItems-1;
+            CurrentState.maxSelectionIndex = Poke_Mart.Instance.numItems-1;
         }
-        currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToBuy);
+        CurrentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToBuy);
     }
 
     void SelectItemToBuy()
@@ -595,8 +597,8 @@ public class InputStateHandler : MonoBehaviour
     
     void SetupBattleOptions()
     {
-        currentState.persistOnExit = true;
-        currentState.currentSelectionIndex = 0;
+        CurrentState.persistOnExit = true;
+        CurrentState.currentSelectionIndex = 0;
         _currentNumBoxElements = 4;
         _currentBoxCapacity = 4;
         _numBoxColumns = 2;
@@ -611,8 +613,8 @@ public class InputStateHandler : MonoBehaviour
     {
         Battle_handler.Instance.battleParticipants[Battle_handler.Instance.currentEnemyIndex]
             .pokemonImage.color = Color.HSVToRGB(0,0,100);//reset color if cancelled selection
-        currentState.currentSelectionIndex = 0;
-        _currentNumBoxElements = currentState.maxSelectionIndex+1;
+        CurrentState.currentSelectionIndex = 0;
+        _currentNumBoxElements = CurrentState.maxSelectionIndex+1;
         _currentBoxCapacity = 4;
         _numBoxColumns = 2;
         SetRowRemainder();
@@ -621,10 +623,10 @@ public class InputStateHandler : MonoBehaviour
         OnInputUp += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,-2);
         OnInputDown += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,2);
         
-        OnInputLeft += ()=> Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
-        OnInputRight += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
-        OnInputUp += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
-        OnInputDown += () => Battle_handler.Instance.SelectMove(currentState.currentSelectionIndex);
+        OnInputLeft += ()=> Battle_handler.Instance.SelectMove(CurrentState.currentSelectionIndex);
+        OnInputRight += () => Battle_handler.Instance.SelectMove(CurrentState.currentSelectionIndex);
+        OnInputUp += () => Battle_handler.Instance.SelectMove(CurrentState.currentSelectionIndex);
+        OnInputDown += () => Battle_handler.Instance.SelectMove(CurrentState.currentSelectionIndex);
     }
 
     void SetupEnemySelection()
@@ -644,7 +646,7 @@ public class InputStateHandler : MonoBehaviour
     }
     void SetupInputEvents()
     {
-        Action stateMethod = currentState.stateName switch
+        Action stateMethod = CurrentState.stateName switch
         {
             InputStateName.PlayerBagNavigation => PlayerBagNavigation,
             InputStateName.PokemonPartyItemUsage => UpdateHealthBarColors,

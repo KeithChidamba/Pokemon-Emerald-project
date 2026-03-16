@@ -345,7 +345,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -34.1, y: -93.4}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 15, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7864891551716319382
 CanvasRenderer:
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b98e87997b6722c498a5ae317b1e7eb2, type: 2}
+  m_Sprite: {fileID: 21300000, guid: f702a42cdf72e08be950b0d5d63c8816, type: 2}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -698,6 +698,7 @@ MonoBehaviour:
   pokeballClosedImage: {fileID: 6008391767793555402}
   pokeballOpenImage: {fileID: 4294690603422513079}
   statusEffectImage: {fileID: 7725790414489424711}
+  genderImage: {fileID: 969666660955156220}
   pokemonHealthBarUI: {fileID: 5609401904108442160}
   hpSliderImage: {fileID: 439286623187538214}
   pokemon: {fileID: 0}
