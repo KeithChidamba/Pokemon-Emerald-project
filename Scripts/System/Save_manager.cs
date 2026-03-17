@@ -32,6 +32,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     private Player_movement _playerMovementHandler;
     private OverworldState _overworldStateHandler;
     private Bag _playerBagHandler;
+    private Container _container;
     
     private static readonly Dictionary<AssetDirectory, string> Directories = new()
     {
@@ -69,9 +70,10 @@ public class Save_manager : MonoBehaviour,IInjectable
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         _areaHandler = container.Resolve<Area_manager>();
-        _gameLoadingHandler = container.Resolve<Game_Load>();
         _overworldStateHandler = container.Resolve<OverworldState>();
         _playerBagHandler = container.Resolve<Bag>();
+        _container = container;
+        gameObject.SetActive(true);
     }
     private void Awake()
     {
@@ -213,8 +215,7 @@ public class Save_manager : MonoBehaviour,IInjectable
             JsonUtility.FromJsonOverwrite(json, objectiveData);
             if (objectiveData is StoryProgressObjective storyData)
             {
-                _overworldStateHandler.storyProgressObjective = storyData;
-                _overworldStateHandler.storyProgressObjective.FindMainAsset();
+                _overworldStateHandler.LoadStoryProgress(storyData);
             }
             else
             {
@@ -620,7 +621,7 @@ public class Save_manager : MonoBehaviour,IInjectable
         var json = File.ReadAllText(filePath);
         var pokemon = ScriptableObject.CreateInstance<Pokemon>();
         JsonUtility.FromJsonOverwrite(json, pokemon);
-        pokemon.LoadUnserializedData();
+        pokemon.LoadDataAndDependencies(_container);
         return pokemon;
     }
     private Item LoadItemFromJson(string filePath)

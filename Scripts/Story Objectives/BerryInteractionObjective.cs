@@ -9,8 +9,9 @@ public class BerryInteractionObjective : InteractionObjective
     private string _berryTreeName;
     protected override void OnObjectiveLoaded()
     {
-       Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
-       Dialogue_handler.Instance.OnOptionsDisplayed += CheckInteractionTriggered;
+        var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        dialogueHandler.DisplayObjectiveText(objectiveHeading);
+        dialogueHandler.OnOptionsDisplayed += CheckInteractionTriggered;
     }
     
     private void CheckInteractionTriggered(Overworld_interactable interactable)

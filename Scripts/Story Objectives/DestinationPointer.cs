@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DestinationPointer : MonoBehaviour
+public class DestinationPointer : MonoBehaviour,IInjectable
 {
     private Image pointerUIImage;
     [SerializeField] float edgePadding = 20f;
@@ -12,15 +12,25 @@ public class DestinationPointer : MonoBehaviour
     public DestinationObjective objectiveData;
     public GameObject overworldObject;
     public bool displaying;
+
+    private OverworldState _overworldStateHandler;
+    private Game_ui_manager _gameUIHandler;
+    
+    public void Inject(Container container)
+    {
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _overworldStateHandler = container.Resolve<OverworldState>(); 
+        gameObject.SetActive(true);
+    }
     private void Start()
     {
         overworldObject.SetActive(false);
-        OverworldState.Instance.OnObjectivesLoaded += CheckForRequiredObjective;
+        _overworldStateHandler.OnObjectivesLoaded += CheckForRequiredObjective;
         
     }
     private void CheckForRequiredObjective()
     {
-        if (OverworldState.Instance.HasObjective(objectiveData.name))
+        if (_overworldStateHandler.HasObjective(objectiveData.name))
         {
             objectiveData.OnLoad += LoadPointer;
         }
@@ -29,7 +39,7 @@ public class DestinationPointer : MonoBehaviour
     {
         displaying = true;
         cam = Camera.main; 
-        pointerUIImage = Game_ui_manager.Instance.destinationPointerUI;
+        pointerUIImage = _gameUIHandler.destinationPointerUI;
         canvasRect = pointerUIImage.canvas.GetComponent<RectTransform>();
         Collider_checks.OnCollision += ConfirmDestination;
         overworldObject.SetActive(true);

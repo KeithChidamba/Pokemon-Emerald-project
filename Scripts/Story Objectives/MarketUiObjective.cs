@@ -19,12 +19,14 @@ public class MarketUiObjective : ItemUiObjective
     }
     private void SetupItemSellObjective()
     {
-        Bag.Instance.OnItemSold += CheckForItemObjectiveClear;
+        var playerBag = serviceContainer.Resolve<Bag>(); 
+        playerBag.OnItemSold += CheckForItemObjectiveClear;
     }
 
     private void SetupItemBuyObjective()
     {
-        Poke_Mart.Instance.OnItemBought += CheckForItemObjectiveClear;
+        var pokeMartHandler = serviceContainer.Resolve<Poke_Mart>(); 
+       pokeMartHandler.OnItemBought += CheckForItemObjectiveClear;
     }
   
 }

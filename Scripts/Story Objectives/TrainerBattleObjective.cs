@@ -3,10 +3,17 @@ using UnityEngine;
 public class TrainerBattleObjective : StoryObjective
 {
     public TrainerData trainer;
+    private Dialogue_handler _dialogueHandler;
+    private Options_manager _dialogueOptionsHandler;
+    private Battle_handler _battleHandler;
+    
     protected override void OnObjectiveLoaded()
     {
-        Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
-        Options_manager.Instance.OnInteractionOptionChosen += CheckBattleInteraction;
+        _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        _dialogueOptionsHandler = serviceContainer.Resolve<Options_manager>(); 
+        _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
+        _dialogueHandler.DisplayObjectiveText(objectiveHeading);
+        _dialogueOptionsHandler.OnInteractionOptionChosen += CheckBattleInteraction;
     }
     private void CheckBattleInteraction(Interaction interaction, int optionChosen)
     {
@@ -14,7 +21,7 @@ public class TrainerBattleObjective : StoryObjective
         {
             if (trainer.TrainerName == interaction.additionalInfo[0])
             {
-                Battle_handler.Instance.OnBattleResult += CheckIfWin;
+                _battleHandler.OnBattleResult += CheckIfWin;
             }
         }
     }
@@ -22,13 +29,14 @@ public class TrainerBattleObjective : StoryObjective
     private void CheckIfWin(bool hasWon)
     {
         if (!hasWon) return;
-        Options_manager.Instance.OnInteractionOptionChosen -= CheckBattleInteraction;
+        _dialogueOptionsHandler.OnInteractionOptionChosen -= CheckBattleInteraction;
        
-        Battle_handler.Instance.OnBattleResult -= CheckIfWin;
+        _battleHandler.OnBattleResult -= CheckIfWin;
         ClearObjective();
     }
     protected override void OnObjectiveCleared()
     {
-        OverworldState.Instance.ClearAndLoadNextObjective();
+        var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+        overworldStateHandler.ClearAndLoadNextObjective();
     }
 }

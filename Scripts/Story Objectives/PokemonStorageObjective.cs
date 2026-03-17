@@ -10,8 +10,11 @@ public class PokemonStorageObjective : UiActionObjective
     }
     [SerializeField] private StorageObjectiveType storageObjectiveType;
     public Pokemon pokemonForObjective;
+    private pokemon_storage _pokemonStorageHandler;
+    
     protected override void OnObjectiveLoaded()
     {
+        _pokemonStorageHandler = serviceContainer.Resolve<pokemon_storage>(); 
         switch(storageObjectiveType)
         {
             case StorageObjectiveType.WithdrawPokemonFromPC: WithdrawObjective(); break;
@@ -20,19 +23,19 @@ public class PokemonStorageObjective : UiActionObjective
     }
     private void WithdrawObjective()
     {
-        pokemon_storage.Instance.OnPokemonWithdraw += CheckForStorageObjectiveClear;
+        _pokemonStorageHandler.OnPokemonWithdraw += CheckForStorageObjectiveClear;
     }
     private void DepositObjective()
     {
-        pokemon_storage.Instance.OnPokemonDeposit += CheckForStorageObjectiveClear;
+        _pokemonStorageHandler.OnPokemonDeposit += CheckForStorageObjectiveClear;
     }
     private void CheckForStorageObjectiveClear(Pokemon pokemon)
     {
         if (pokemon.pokemonName == pokemonForObjective.pokemonName)
         {
             if(storageObjectiveType == StorageObjectiveType.WithdrawPokemonFromPC)
-                pokemon_storage.Instance.OnPokemonWithdraw -= CheckForStorageObjectiveClear;
-            else pokemon_storage.Instance.OnPokemonDeposit -= CheckForStorageObjectiveClear;
+                _pokemonStorageHandler.OnPokemonWithdraw -= CheckForStorageObjectiveClear;
+            else _pokemonStorageHandler.OnPokemonDeposit -= CheckForStorageObjectiveClear;
             ClearObjective();
         }
     }

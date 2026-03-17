@@ -9,16 +9,26 @@ public class WildBattleObjective : StoryObjective
     public BattleObjectiveOutline objectiveOutline;
     public BattleEncounterSource encounterSourceForObjective;
     public Pokemon pokemonForObjective;
+    private Battle_handler _battleHandler;
+    private Encounter_handler  _encounterHandler;
+    private PokemonOperations _pokemonOperationsHandler;
+    
     protected override void OnObjectiveLoaded()
     {
-        Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
+        var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        _encounterHandler = serviceContainer.Resolve<Encounter_handler>(); 
+        _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
+        _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>(); 
+        
+        dialogueHandler.DisplayObjectiveText(objectiveHeading);
+        
         if (objectiveOutline == BattleObjectiveOutline.BeatWildPokemon)
         {
-            Encounter_handler.Instance.OnEncounterTriggered += CheckEncounter;
+            _encounterHandler.OnEncounterTriggered += CheckEncounter;
         }
         if (objectiveOutline == BattleObjectiveOutline.CatchWildPokemon)
         {
-            PokemonOperations.Instance.OnPokeballUsed += CheckIfPokemonCaught;
+            _pokemonOperationsHandler.OnPokeballUsed += CheckIfPokemonCaught;
         }
     }
     private void CheckIfPokemonCaught(Pokemon pokemon,bool isCaught)
@@ -27,7 +37,7 @@ public class WildBattleObjective : StoryObjective
         {
             return;
         }
-        PokemonOperations.Instance.OnPokeballUsed -= CheckIfPokemonCaught;
+        _pokemonOperationsHandler.OnPokeballUsed -= CheckIfPokemonCaught;
         ClearObjective();
     }
     private void CheckEncounter(Pokemon wildPokemon,BattleEncounterSource battleEncounterSource)
@@ -38,19 +48,20 @@ public class WildBattleObjective : StoryObjective
         }
         if (battleEncounterSource == encounterSourceForObjective)
         {
-            Battle_handler.Instance.OnBattleResult += CheckIfWin;
+            _battleHandler.OnBattleResult += CheckIfWin;
         }
     }
 
     private void CheckIfWin(bool hasWon)
     {
         if (!hasWon) return;
-        Encounter_handler.Instance.OnEncounterTriggered -= CheckEncounter;
-        Battle_handler.Instance.OnBattleResult -= CheckIfWin;
+        _encounterHandler.OnEncounterTriggered -= CheckEncounter;
+        _battleHandler.OnBattleResult -= CheckIfWin;
         ClearObjective();
     }
     protected override void OnObjectiveCleared()
     {
-        OverworldState.Instance.ClearAndLoadNextObjective();
+        var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+        overworldStateHandler.ClearAndLoadNextObjective();
     }
 }

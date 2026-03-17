@@ -98,6 +98,12 @@ public class Pokemon : ScriptableObject
     public List<string> typeNames = new();
     public List<MoveSaveData> moveData=new();
     
+    //dependencies
+    private Dialogue_handler _dialogueHandler;
+    private Options_manager _dialogueOptionsHandler;
+    private Battle_handler _battleHandler;
+    private Pokemon_party _pokemonPartyHandler;
+    private PokemonOperations _pokemonOperationsHandler;
     public void SaveUnserializableData()
     {
         abilityName = ability.abilityName;
@@ -115,8 +121,8 @@ public class Pokemon : ScriptableObject
         
         foreach (var evo in evolutions) evolutionNames.Add(evo.evolutionName);
     }
-    public void LoadUnserializedData()//gives values to attributes that cant be deserialized, using saved values
-    {
+    public void LoadDataAndDependencies(Container serviceContainer)
+    {//gives values to attributes that cant be deserialized, using saved values
         frontPicture = Testing.CheckImage( Save_manager.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
         backPicture =Testing.CheckImage( Save_manager.GetDirectory
@@ -153,7 +159,14 @@ public class Pokemon : ScriptableObject
             types[i].typeImage = Resources.Load<Sprite>(Save_manager.GetDirectory
                 (AssetDirectory.UI) + typeNames[i]);
         }
-        Battle_handler.Instance.OnBattleEnd += ClearEvents;
+        
+        _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        _dialogueOptionsHandler = serviceContainer.Resolve<Options_manager>(); 
+        _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
+        _pokemonPartyHandler = serviceContainer.Resolve<Pokemon_party>();
+        _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
+        
+        _battleHandler.OnBattleEnd += ClearEvents;
     }
     public void ResetMoveData()
     {
@@ -256,13 +269,13 @@ public class Pokemon : ScriptableObject
             Evolve(evolutions[evoIndex]); return;
         }
 
-        var isPlayerPokemon = Pokemon_party.Instance.party.Contains(this);
+        var isPlayerPokemon = _pokemonPartyHandler.party.Contains(this);
         
         if (requiresFriendshipEvolution)
         {
             if (friendshipLevel >= friendshipEvolutionRequirement.friendshipRequirement)
             {
-                if (isPlayerPokemon && Options_manager.Instance.playerInBattle)
+                if (isPlayerPokemon && _dialogueOptionsHandler.playerInBattle)
                 {
                     OnEvolutionSuccessful?.Invoke(friendshipEvolutionRequirement.evolutionIndex);
                 }
@@ -282,7 +295,7 @@ public class Pokemon : ScriptableObject
         
         if (currentLevel>=evolutionLineLevels[currentEvolutionLineIndex])
         {
-            if (isPlayerPokemon && Options_manager.Instance.playerInBattle)
+            if (isPlayerPokemon && _dialogueOptionsHandler.playerInBattle)
             {
                 OnEvolutionSuccessful?.Invoke(currentEvolutionLineIndex+evoIndex);
             }
@@ -313,7 +326,7 @@ public class Pokemon : ScriptableObject
         if (currentLevel >= 100) yield break;
         
         int remainingExp = amount;
-        Battle_handler.Instance.StartExpEvent(this);
+        _battleHandler.StartExpEvent(this);
         
         while (remainingExp > 0 && currentLevel < 100)
         {
@@ -342,17 +355,17 @@ public class Pokemon : ScriptableObject
             {
                 LevelUp();
 
-                Dialogue_handler.Instance.DisplayBattleInfo(pokemonName+" grew to lv"+currentLevel);
+                _dialogueHandler.DisplayBattleInfo(pokemonName+" grew to lv"+currentLevel);
                 currentLevelExpAmount = currentExpAmount;
-                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
-                yield return PokemonOperations.Instance.WaitForNewMoveCheck(this);
+                yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+                yield return _pokemonOperationsHandler.WaitForNewMoveCheck(this);
 
-                yield return PokemonOperations.Instance.AwaitMoveOperation(moveSet.Count == 4);
+                yield return _pokemonOperationsHandler.AwaitMoveOperation(moveSet.Count == 4);
                 
                 nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel, expGroup);
             }
         }
-        Dialogue_handler.Instance.DisplayBattleInfo($"{pokemonName} gained {amount} EXP points");
+        _dialogueHandler.DisplayBattleInfo($"{pokemonName} gained {amount} EXP points");
         OnExpGainComplete?.Invoke(this);
     }
 
@@ -395,8 +408,8 @@ public class Pokemon : ScriptableObject
         requiresEvolutionStone = evo.requiresEvolutionStone;
         friendshipEvolutionRequirement = evo.friendshipEvolutionRequirement;
         currentEvolutionLineIndex++;
-        if (Pokemon_party.Instance.party.Contains(this))
-            Pokemon_party.Instance.RefreshMemberCards();
+        if (_pokemonPartyHandler.party.Contains(this))
+            _pokemonPartyHandler.RefreshMemberCards();
     }
 
     void IncreaseStats()
@@ -450,8 +463,8 @@ public class Pokemon : ScriptableObject
                     CheckEvolutionRequirements(0);
             }
         }
-        if (!Options_manager.Instance.playerInBattle)//artificial level up
-            PokemonOperations.Instance.CheckForNewMove(this);
+        if (!_dialogueOptionsHandler.playerInBattle)//artificial level up
+            _pokemonOperationsHandler.CheckForNewMove(this);
         OnNewLevel?.Invoke();
         while(currentExpAmount>nextLevelExpAmount)
             LevelUp();

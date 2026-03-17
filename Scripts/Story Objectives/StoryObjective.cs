@@ -19,7 +19,7 @@ public abstract class StoryObjective : ScriptableObject
 
     protected virtual void LoadSaveData(StoryObjective objectiveData){ }
     
-    public void FindMainAsset()
+    public void FindMainAsset(Container container)
     {
         var mainAsset = Resources.Load<StoryObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+mainAssetName);
         if (mainAsset == null)
@@ -27,6 +27,8 @@ public abstract class StoryObjective : ScriptableObject
             Debug.LogWarning("Story objective Asset: "+mainAssetName+" not found");
             return;
         }
+
+        serviceContainer = container;
         if(hasProgression) mainAsset.LoadSaveData(this);
         mainAsset.LoadObjective();
     }
@@ -37,7 +39,7 @@ public abstract class StoryObjective : ScriptableObject
     public bool hasProgression;
     [HideInInspector]public int indexInList;
     public StoryObjectiveType objectiveType;
-
+    protected Container serviceContainer;
     public static StoryObjective GetObjectiveType(StoryObjectiveType type)
     {
         return type switch

@@ -6,18 +6,22 @@ public class InteractionObjective : StoryObjective
 {
    public Interaction interactionForObjective;
    protected Action onObjectiveComplete;
+   private Dialogue_handler _dialogueHandler;
+   private Options_manager _dialogueOptionsHandler;
    
    protected override void OnObjectiveLoaded()
    {
-      Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
-      Options_manager.Instance.OnInteractionOptionChosen += CheckInteractionOption;
+      _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+      _dialogueOptionsHandler = serviceContainer.Resolve<Options_manager>(); 
+      _dialogueHandler.DisplayObjectiveText(objectiveHeading);
+      _dialogueOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
    }
    
    private void CheckInteractionOption(Interaction interaction, int optionChosen)
    {
       if (optionChosen>0)
       {
-         Dialogue_handler.Instance.EndDialogue(); 
+         _dialogueHandler.EndDialogue(); 
          return;
       }
       if (interactionForObjective.overworldInteraction != interaction.overworldInteraction) return;
@@ -26,7 +30,8 @@ public class InteractionObjective : StoryObjective
    
    protected override void OnObjectiveCleared()
    {
-      Options_manager.Instance.OnInteractionOptionChosen -= CheckInteractionOption;
-      OverworldState.Instance.ClearAndLoadNextObjective();
+      var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+      _dialogueOptionsHandler.OnInteractionOptionChosen -= CheckInteractionOption;
+      overworldStateHandler.ClearAndLoadNextObjective();
    }
 }

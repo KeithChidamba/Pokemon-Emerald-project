@@ -4,15 +4,17 @@ using UnityEngine;
 public class DestinationObjective : StoryObjective
 {
     public readonly string destinationTag = "Destination";
-
+    private OverworldState _overworldStateHandler;
 
     protected override void OnObjectiveLoaded()
     {
-        Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
+        var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        _overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+        dialogueHandler.DisplayObjectiveText(objectiveHeading);
     }
 
     protected override void OnObjectiveCleared()
     {
-        OverworldState.Instance.ClearAndLoadNextObjective();
+        _overworldStateHandler.ClearAndLoadNextObjective();
     }
 }

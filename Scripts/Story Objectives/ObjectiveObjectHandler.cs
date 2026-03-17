@@ -3,21 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectiveObjectHandler : MonoBehaviour
+public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
 {
   public StoryObjective objective;
   public List<GameObject> propsForObjective;
   public bool removeOnObjectiveClear;
   public bool changeLayer;
   public LayerMask newLayer;
+  private OverworldState _overworldStateHandler;
+  public void Inject(Container container)
+  {
+      _overworldStateHandler = container.Resolve<OverworldState>();
+      gameObject.SetActive(true);
+  }
   void Start()
     {
-        OverworldState.Instance.OnObjectivesLoaded += CheckForRequiredObjective;
+        _overworldStateHandler.OnObjectivesLoaded += CheckForRequiredObjective;
     }
 
     private void CheckForRequiredObjective()
     {
-        if (OverworldState.Instance.HasObjective(objective.name))
+        if (_overworldStateHandler.HasObjective(objective.name))
         {
             objective.OnLoad += LoadObjects;
             objective.OnClear += UnLoadObjects;

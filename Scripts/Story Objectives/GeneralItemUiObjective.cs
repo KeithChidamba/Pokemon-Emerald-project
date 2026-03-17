@@ -8,7 +8,9 @@ public class GeneralItemUiObjective : ItemUiObjective
     {
         EquipItem,UseItem
     }
+    private Item_handler _itemHandler;
     [SerializeField] private ItemObjectiveType itemObjectiveType;
+    
     protected override void OnObjectiveLoaded()
     {
         switch(itemObjectiveType)
@@ -19,24 +21,28 @@ public class GeneralItemUiObjective : ItemUiObjective
     }
     private void SetupItemEquipObjective()
     {
-        if (overworld_actions.Instance.ItemEquipped())
+        var overworldActions = serviceContainer.Resolve<overworld_actions>();
+        var playerBag = serviceContainer.Resolve<Bag>();
+        var inputStateHandler = serviceContainer.Resolve<InputStateHandler>();
+        if (overworldActions.ItemEquipped())
         {
-            if (itemForObjective.itemName == overworld_actions.Instance.equippedSpecialItem.itemName)
+            if (itemForObjective.itemName == overworldActions.equippedSpecialItem.itemName)
             {
-                InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
+                inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
                 ClearObjective();
                 return;
             }
         } 
-        Bag.Instance.OnItemUsed += CheckForItemObjectiveClear;
+        playerBag.OnItemUsed += CheckForItemObjectiveClear;
     }
     private void SetupItemUsageObjective()
     {
-        Item_handler.Instance.OnItemUsageSuccessful += CheckIfItemUsed;
+        _itemHandler = serviceContainer.Resolve<Item_handler>();
+        _itemHandler.OnItemUsageSuccessful += CheckIfItemUsed;
     }
     private void CheckIfItemUsed(bool successful)
     {
-        var itemUsed = Item_handler.Instance.itemInUse;
+        var itemUsed = _itemHandler.itemInUse;
         CheckForItemObjectiveClear(itemUsed);
     }
 }

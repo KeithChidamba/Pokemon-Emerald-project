@@ -8,29 +8,25 @@ public class OverworldState : MonoBehaviour,IInjectable
 {    
     [SerializeField]private List<BerryTree> overworldBerryTrees = new();
     [SerializeField]private List<BerryTreeData> treeDataQueue = new();
-    public static OverworldState Instance;
+
     public List<StoryObjective> allStoryObjectives = new();
     public List<StoryObjective> currentStoryObjectives = new();
     public StoryProgressObjective storyProgressObjective;
     public event Action OnObjectivesLoaded;
     private Save_manager _saveHandler;
     private Dialogue_handler _dialogueHandler;
+    private Game_Load _gameLoadHandler;
+    private Container _container;
     
     public void Inject(Container container)
     {
+        _container = container;
         _saveHandler = container.Resolve<Save_manager>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _gameLoadHandler = container.Resolve<Game_Load>();
         gameObject.SetActive(true);
     }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
+
 
     private IEnumerator LoadOverworldState()
     {
@@ -79,7 +75,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         OnObjectivesLoaded?.Invoke();
         if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
         {
-            Game_Load.Instance.OnGameStarted += ()=>currentStoryObjectives[0].FindMainAsset();
+            _gameLoadHandler.OnGameStarted += ()=>currentStoryObjectives[0].FindMainAsset(_container);
         }
         yield return null;
     }
@@ -92,13 +88,19 @@ public class OverworldState : MonoBehaviour,IInjectable
     {
         return currentStoryObjectives.Any(obj=>obj.mainAssetName == objectiveName);
     }
+
+    public void LoadStoryProgress(StoryProgressObjective storyData)
+    {
+        storyProgressObjective = storyData;
+        storyProgressObjective.FindMainAsset(_container);
+    }
     public void ClearAndLoadNextObjective()
     {
         currentStoryObjectives.RemoveAt(0);
         storyProgressObjective.numCompleted++;
         if (currentStoryObjectives.Count > 0)
         {
-            currentStoryObjectives[0].FindMainAsset();
+            currentStoryObjectives[0].FindMainAsset(_container);
         }
         else
         {

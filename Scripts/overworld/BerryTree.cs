@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BerryTree : MonoBehaviour
+public class BerryTree : MonoBehaviour,IInjectable
 {
     public Overworld_interactable primaryInteractable;
     public Interaction harvestInteraction;
@@ -17,6 +17,24 @@ public class BerryTree : MonoBehaviour
     [SerializeField] float secondsCounter;
 
     public event Action<bool> OnInteractionComplete;
+
+    private Dialogue_handler _dialogueHandler;
+    private OverworldState _overworldStateHandler;
+    private Options_manager _gameLoadHandler;
+    private Bag _playerBag;
+    private Game_ui_manager _gameUIHandler;
+    private InputStateHandler _inputStateHandler;
+    
+    public void Inject(Container container)
+    {
+        _playerBag = container.Resolve<Bag>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _overworldStateHandler = container.Resolve<OverworldState>();
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        gameObject.SetActive(true);
+    }
+    
     private void Awake()
     {
         primaryInteractable = GetComponent<Overworld_interactable>();
@@ -51,7 +69,7 @@ public class BerryTree : MonoBehaviour
             treeData = null;
             treeData = copy;
             treeData.isPlanted = true;
-            treeData.treeIndex = OverworldState.Instance.GetTreeIndex(this);
+            treeData.treeIndex = _overworldStateHandler.GetTreeIndex(this);
         }
         else
         {
@@ -142,22 +160,22 @@ public class BerryTree : MonoBehaviour
         
         if (optionChosen > 0)
         {
-            Dialogue_handler.Instance.EndDialogue(); 
+            _dialogueHandler.EndDialogue(); 
                 OnInteractionComplete?.Invoke(false);
             return;
         }
-        Dialogue_handler.Instance.DeletePreviousOptions();
+        _dialogueHandler.DeletePreviousOptions();
         
-        if (!Bag.Instance.SearchForItem("Wailmer Pail"))
+        if (!_playerBag.SearchForItem("Wailmer Pail"))
         {
             OnInteractionComplete?.Invoke(false);
-            Dialogue_handler.Instance.DisplayDetails("You need the correct item for this");
+            _dialogueHandler.DisplayDetails("You need the correct item for this");
             return;
         }
         if (!treeData.currentStageNeedsWater)
         {
             OnInteractionComplete?.Invoke(false);
-            Dialogue_handler.Instance.DisplayDetails("You have already watered this plant");
+            _dialogueHandler.DisplayDetails("You have already watered this plant");
             return;
         }
         StartCoroutine(overworld_actions.Instance.WaterTrees());
@@ -176,23 +194,23 @@ public class BerryTree : MonoBehaviour
         if (optionChosen > 0)
         {
             OnInteractionComplete?.Invoke(false);
-            Dialogue_handler.Instance.EndDialogue(); 
+            _dialogueHandler.EndDialogue(); 
             return;
         }
-        Dialogue_handler.Instance.DeletePreviousOptions();
-        Bag.Instance.OnItemSelected += PlantBerry;
-        Bag.Instance.currentBagUsage = BagUsage.SelectionOnly;
-        Game_ui_manager.Instance.ViewBag();
+        _dialogueHandler.DeletePreviousOptions();
+        _playerBag.OnItemSelected += PlantBerry;
+        _playerBag.currentBagUsage = BagUsage.SelectionOnly;
+        _gameUIHandler.ViewBag();
     }
     private void PlantBerry(Item berryToPlant)
     {
         if (berryToPlant.itemType != ItemType.Berry)
         {
             OnInteractionComplete?.Invoke(false);
-            Dialogue_handler.Instance.DisplayDetails("Only berries can be planted");
+            _dialogueHandler.DisplayDetails("Only berries can be planted");
             return;
         }
-        Bag.Instance.OnItemSelected -= PlantBerry;
+        _playerBag.OnItemSelected -= PlantBerry;
         
         treeData.numStagesWatered = 0;
         
@@ -202,11 +220,11 @@ public class BerryTree : MonoBehaviour
             Save_manager.GetDirectory(AssetDirectory.BerryTreeData)
                                                           + berryToPlant.itemName+" Data");
         treeData = Obj_Instance.CreateTreeData(treeDataAsset);
-        treeData.treeIndex = OverworldState.Instance.GetTreeIndex(this);
+        treeData.treeIndex = _overworldStateHandler.GetTreeIndex(this);
         treeData.isPlanted = true;
-        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
+        _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
         
-        Dialogue_handler.Instance.DisplayDetails($"You planted a {berryToPlant.itemName}");
+        _dialogueHandler.DisplayDetails($"You planted a {berryToPlant.itemName}");
         OnInteractionComplete?.Invoke(true);
     }
     private int GetBerryYield()
@@ -223,15 +241,15 @@ public class BerryTree : MonoBehaviour
         if (optionChosen > 0)
         {
             OnInteractionComplete?.Invoke(false);
-            Dialogue_handler.Instance.EndDialogue(); 
+            _dialogueHandler.EndDialogue(); 
             return;
         }
-        Dialogue_handler.Instance.DeletePreviousOptions();
+        _dialogueHandler.DeletePreviousOptions();
         
         var berries = Obj_Instance.CreateItem(treeData.berryItem);
         berries.quantity = GetBerryYield();
-        Bag.Instance.AddItem(berries);
-        Dialogue_handler.Instance.DisplayDetails($"You picked up {berries.quantity}" +
+        _playerBag.AddItem(berries);
+        _dialogueHandler.DisplayDetails($"You picked up {berries.quantity}" +
                                                  $" {berries.itemName}'s");
         
         treeSpriteRenderer.sprite = null;

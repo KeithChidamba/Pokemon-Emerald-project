@@ -2,10 +2,12 @@ public class UiActionObjective : StoryObjective
 {
     protected override void OnObjectiveLoaded()
     {
-        Dialogue_handler.Instance.DisplayObjectiveText(objectiveHeading);
+        var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        dialogueHandler.DisplayObjectiveText(objectiveHeading);
     }
     protected override void OnObjectiveCleared()
     {
-        OverworldState.Instance.ClearAndLoadNextObjective();
+        var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+        overworldStateHandler.ClearAndLoadNextObjective();
     }
 }
