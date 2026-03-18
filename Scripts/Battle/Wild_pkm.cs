@@ -7,60 +7,64 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Wild_pkm : MonoBehaviour
+public class Wild_pkm : MonoBehaviour,IInjectable
 {
     public Battle_Participant participant;
     public bool inBattle;
     public bool ranAway;
-    public static Wild_pkm Instance;
-    private void Awake()
+    
+    private Dialogue_handler _dialogueHandler;
+    private Turn_Based_Combat _turnBasedCombatHandler;
+    private Battle_handler _battleHandler;
+    private Game_Load _gameLoadingHandler;
+    
+    public void Inject(Container container)
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        gameObject.SetActive(true);
+        OnInject(); 
     }
 
-    private void Start()
+    private void OnInject()
     {
-        Turn_Based_Combat.Instance.OnNewTurn += MakeBattleDecision;
+        _turnBasedCombatHandler.OnNewTurn += MakeBattleDecision;
     }
     
     private void MakeBattleDecision()
     {
         if (!inBattle) return;
         //check if its pokemon's turn
-        if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon.pokemonID
+        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon.pokemonID
             != participant.pokemon.pokemonID)
         {
             return;
         }
        
         //attack player, since its single battle
-        Battle_handler.Instance.currentEnemyIndex = 0;
+        _battleHandler.currentEnemyIndex = 0;
         
         if (Utility.RandomRange(1, 11) > 3 || !participant.canEscape)
         {
             var randMove = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
-            Battle_handler.Instance.UseMove(participant.pokemon.moveSet[randMove],participant);
+            _battleHandler.UseMove(participant.pokemon.moveSet[randMove],participant);
         }
         else
         {
             inBattle = false;
             ranAway = true;
-            Battle_handler.Instance.EndBattle(false);
-            Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
+            _battleHandler.EndBattle(false);
+            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
         }
     }
     public void EndWildBattle()
     {
         inBattle = false;
-        Turn_Based_Combat.Instance.faintEventDelay = false;
-        Battle_handler.Instance.EndBattle(true);
-        Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName +
-                                                    " defeated " +participant.pokemon.pokemonName);
+        _turnBasedCombatHandler.faintEventDelay = false;
+        _battleHandler.EndBattle(true);
+        _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName + " defeated " +participant.pokemon.pokemonName);
     }
     
     

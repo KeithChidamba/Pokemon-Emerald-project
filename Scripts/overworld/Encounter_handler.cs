@@ -15,7 +15,6 @@ public class Encounter_handler : MonoBehaviour,IInjectable
     public bool encounterTriggered = false;
     public Pokemon wildPokemon;
     public int overworldEncounterChance = 2;
-    public static Encounter_handler Instance;
     public event Action<Pokemon,BattleEncounterSource> OnEncounterTriggered;
 
     private PokemonOperations _pokemonOperationsHandler;
@@ -27,15 +26,6 @@ public class Encounter_handler : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }
     
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
     public void TriggerEncounter(Encounter_Area area)
     {
         

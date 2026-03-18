@@ -38,7 +38,6 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     private Dictionary<int, Action> _pages = new();
     public GameObject moveSelector;
     public GameObject uiParent;
-    public static Pokemon_Details Instance;
     
     private InputStateHandler _inputStateHandler;
     private Game_Load _gameLoadingHandler;
@@ -49,29 +48,12 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         _inputStateHandler = container.Resolve<InputStateHandler>();
         gameObject.SetActive(true);
     }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     private void Start()
     {
         _pages.Add(1,LoadAbilityUiPage);
         _pages.Add(2,LoadStatsUiPage);
         _pages.Add(3,LoadMovesUiPage);
-    }
-
-    private void Update()
-    {
-        if(currentPokemon == null)return;
-        player_exp.value = currentPokemon.currentExpAmount;
-        player_exp.maxValue = currentPokemon.nextLevelExpAmount;
-        player_exp.minValue = currentPokemon.currentLevelExpAmount;
     }
 
     public void ResetDetailsState()
@@ -162,6 +144,9 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         pkm_CurrentExp.text = currentPokemon.currentExpAmount.ToString();
         pkm_NextLvExp.text = currentPokemon.nextLevelExpAmount.ToString();
         pkm_HeldItem.text = (currentPokemon.hasItem)? currentPokemon.heldItem.itemName: "NONE";
+        player_exp.value = currentPokemon.currentExpAmount;
+        player_exp.maxValue = currentPokemon.nextLevelExpAmount;
+        player_exp.minValue = currentPokemon.currentLevelExpAmount;
         Stats_ui.SetActive(true);
     }
     

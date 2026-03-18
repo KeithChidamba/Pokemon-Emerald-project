@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Battle_Participant : MonoBehaviour
+public class Battle_Participant : MonoBehaviour,IInjectable
 {
     public AbilityHandler abilityHandler;
     public Participant_Status statusHandler;
@@ -52,15 +52,35 @@ public class Battle_Participant : MonoBehaviour
     [SerializeField]private Battle_Participant recentAttacker;
     public Animator statusEffectAnimator;
     private Vector2 _defaultImagePosition;
-    private void Start()
+    
+    private Battle_handler _battleHandler;
+    private Turn_Based_Combat _turnBasedCombatHandler;
+    private Game_ui_manager _gameUIHandler;
+    private Pokemon_party _pokemonPartyHandler;
+    private Wild_pkm _wildPokemonHandler;
+    private Move_handler _moveUsageHandler;
+    private Dialogue_handler _dialogueHandler;
+    
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _wildPokemonHandler = container.Resolve<Wild_pkm>();
+        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _moveUsageHandler = container.Resolve<Move_handler>();
+        OnInject();
+    }
+    private void OnInject()
     {
         heldItemHandler = GetComponent<Held_Items>();
         statusHandler = GetComponent<Participant_Status>();
         abilityHandler = GetComponent<AbilityHandler>();
         statData = GetComponent<Battle_Data>();
-        Turn_Based_Combat.Instance.OnNewTurn += CheckBarrierSharing;
-        Turn_Based_Combat.Instance.OnTurnsCompleted += CheckBarrierDuration;
-        currentCoolDown.UpdateCoolDown(0,null, "",false,false);
+        _turnBasedCombatHandler.OnNewTurn += CheckBarrierSharing;
+        _turnBasedCombatHandler.OnTurnsCompleted += CheckBarrierDuration;
+        currentCoolDown.UpdateCoolDown(0, null, _moveUsageHandler,"",false, false);
         currentCoolDown.participant = this;
         _defaultImagePosition = pokemonImage.rectTransform.anchoredPosition;
     }
@@ -88,7 +108,7 @@ public class Battle_Participant : MonoBehaviour
         // Remove fainted or invalid Pokémon
         expReceivers.RemoveAll(p => p.hp <= 0);
         //only player pokemon receive exp
-        expReceivers.RemoveAll(p => !Pokemon_party.Instance.party.Contains(p));
+        expReceivers.RemoveAll(p => !_pokemonPartyHandler.party.Contains(p));
         if (expReceivers.Count < 1) yield break;
 
         // Separate holders and participants
@@ -138,16 +158,16 @@ public class Battle_Participant : MonoBehaviour
         if (!isActive) return;
         if (pokemon.hp > 0) return;
         pokemon.statusEffect = StatusEffect.None;
-        Battle_handler.Instance.faintQueue.Add(this);
+        _battleHandler.faintQueue.Add(this);
         pokemon.DetermineFriendshipLevelChange(
             false, FriendshipModifier.Fainted);
         OnPokemonFainted?.Invoke();
-        if (!Turn_Based_Combat.Instance.faintEventDelay)
-            Battle_handler.Instance.StartFaintEvent();
+        if (!_turnBasedCombatHandler.faintEventDelay)
+            _battleHandler.StartFaintEvent();
     }
     public IEnumerator HandleFaintLogic()
     {
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         if (!isPlayer)
         {
             //let the enemy that knocked you out, calculate exp 
@@ -161,7 +181,7 @@ public class Battle_Participant : MonoBehaviour
                 if(enemy.isActive)
                     GiveEVs(enemy);
             
-            if (!Battle_handler.Instance.isTrainerBattle)
+            if (!_battleHandler.isTrainerBattle)
                 EndWildBattle();
             else
             {
@@ -174,42 +194,42 @@ public class Battle_Participant : MonoBehaviour
     public void EndWildBattle()
     {
         statData.ResetBattleState(pokemon);
-        Wild_pkm.Instance.EndWildBattle();
+        _wildPokemonHandler.EndWildBattle();
     }
     private void CheckIfLoss()
     {
-        var alivePokemon = Pokemon_party.Instance.GetLivingPokemon();
+        var alivePokemon = _pokemonPartyHandler.GetLivingPokemon();
         if (alivePokemon.Count==0)
         {
-            Battle_handler.Instance.EndBattle(false);
-            if(!Battle_handler.Instance.isTrainerBattle)
-                Wild_pkm.Instance.inBattle = false;
+            _battleHandler.EndBattle(false);
+            if(!_battleHandler.isTrainerBattle)
+                _wildPokemonHandler.inBattle = false;
         }
         else
         {//select next pokemon to switch in
-            if ( (Battle_handler.Instance.isDoubleBattle && alivePokemon.Count > 1) || 
-            (!Battle_handler.Instance.isDoubleBattle && alivePokemon.Count > 0) )
+            if ( (_battleHandler.isDoubleBattle && alivePokemon.Count > 1) || 
+            (!_battleHandler.isDoubleBattle && alivePokemon.Count > 0) )
             {
-                Pokemon_party.Instance.selectedMemberNumber = Array.IndexOf(Battle_handler.Instance.battleParticipants, this)+1;
-                Pokemon_party.Instance.swapOutNext = true;
-                Pokemon_party.Instance.OnMemberSelected += StartPokemonPartySwap; 
-                Game_ui_manager.Instance.ViewPokemonParty();
+                _pokemonPartyHandler.selectedMemberNumber = Array.IndexOf(_battleHandler.battleParticipants, this)+1;
+                _pokemonPartyHandler.swapOutNext = true;
+                _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
+                _gameUIHandler.ViewPokemonParty();
                 ResetParticipantState();
             }
-            else if (Battle_handler.Instance.isDoubleBattle && alivePokemon.Count == 1)//1 left
+            else if (_battleHandler.isDoubleBattle && alivePokemon.Count == 1)//1 left
             {
                 isActive = false;
                 DeactivateUI();
-                Battle_handler.Instance.CheckParticipantStates();
-                Turn_Based_Combat.Instance.faintEventDelay = false;
+                _battleHandler.CheckParticipantStates();
+                _turnBasedCombatHandler.faintEventDelay = false;
             }
         }
     }
 
     private void StartPokemonPartySwap(int memberPosition)
     {
-        Pokemon_party.Instance.OnMemberSelected -= StartPokemonPartySwap; 
-        StartCoroutine(Pokemon_party.Instance.SwapMemberInBattle(memberPosition));
+        _pokemonPartyHandler.OnMemberSelected -= StartPokemonPartySwap; 
+        StartCoroutine(_pokemonPartyHandler.SwapMemberInBattle(memberPosition));
     }
     public void DeactivateParticipant()
     {
@@ -222,12 +242,12 @@ public class Battle_Participant : MonoBehaviour
         pokemonImage.rectTransform.anchoredPosition = _defaultImagePosition;
         pokemonImage.color = Color.white;
         
-        Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.CheckTrapDuration;
-        Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.StunCheck;
-        Turn_Based_Combat.Instance.OnNewTurn -= statusHandler.CheckStatDropImmunity;
-        Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.ConfusionCheck;
-        Turn_Based_Combat.Instance.OnMoveExecute -= statusHandler.NotifyHealing;
-        Battle_handler.Instance.OnBattleEnd -= DeactivateParticipant;
+        _turnBasedCombatHandler.OnMoveExecute -= statusHandler.CheckTrapDuration;
+        _turnBasedCombatHandler.OnNewTurn -= statusHandler.StunCheck;
+        _turnBasedCombatHandler.OnNewTurn -= statusHandler.CheckStatDropImmunity;
+        _turnBasedCombatHandler.OnMoveExecute -= statusHandler.ConfusionCheck;
+        _turnBasedCombatHandler.OnMoveExecute -= statusHandler.NotifyHealing;
+        _battleHandler.OnBattleEnd -= DeactivateParticipant;
         pokemon.OnHealthChanged -= CheckIfFainted;
         //reset move data in case of in-battle modification
         pokemon.ResetMoveData();
@@ -262,7 +282,7 @@ public class Battle_Participant : MonoBehaviour
     }
     public int GetPartnerIndex()
     {
-        int participantIndex = Array.IndexOf(Battle_handler.Instance.battleParticipants, this);
+        int participantIndex = Array.IndexOf(_battleHandler.battleParticipants, this);
         if (participantIndex == -1) return -1; // participant not found
         return (participantIndex % 2 == 0) ? participantIndex + 1 : participantIndex - 1;
     }
@@ -286,14 +306,14 @@ public class Battle_Participant : MonoBehaviour
     {
         if (barriers.Count == 0) return;
         
-        if (Battle_handler.Instance.isDoubleBattle)
+        if (_battleHandler.isDoubleBattle)
         {
-            var partner= Battle_handler.Instance.battleParticipants[GetPartnerIndex()];
+            var partner= _battleHandler.battleParticipants[GetPartnerIndex()];
             if (!partner.isActive) return;
             
             foreach (var barrier in barriers)
             {
-                if (!Move_handler.Instance.HasDuplicateBarrier(partner, barrier.barrierName, false))
+                if (!_moveUsageHandler.HasDuplicateBarrier(partner, barrier.barrierName, false))
                 {
                     var barrierCopy = new Barrier(barrier.barrierName, barrier.barrierEffect, barrier.barrierDuration);
                     partner.barriers.Add(barrierCopy);
@@ -306,7 +326,7 @@ public class Battle_Participant : MonoBehaviour
         PokemonOperations.UpdateHealthPhase(pokemon,hpSliderImage); 
         pokemonNameText.text = rawName;
         pokemonLevelText.text = "Lv: " + pokemon.currentLevel;
-        if (isPlayer && !Battle_handler.Instance.isDoubleBattle)
+        if (isPlayer && !_battleHandler.isDoubleBattle)
         {
             pokemonHealthText.text = pokemon.hp + "/" + pokemon.maxHp;
             playerExpSlider.value = pokemon.currentExpAmount;
@@ -336,14 +356,14 @@ public class Battle_Participant : MonoBehaviour
     }
     private void AddToEvolutionQueue(int evolutionIndex)
     {
-        if (Battle_handler.Instance.evolutionQueue.Any(evo=> evo.participantToEvolve==this))
+        if (_battleHandler.evolutionQueue.Any(evo=> evo.participantToEvolve==this))
         {//in-case of instant multi-level up
             return;
         }
         var evoData = new EvolutionInBattleData();
         evoData.participantToEvolve = this;
         evoData.evolutionIndex = evolutionIndex;
-        Battle_handler.Instance.evolutionQueue.Add(evoData);
+        _battleHandler.evolutionQueue.Add(evoData);
     }
     public void ActivateParticipant()
     {
@@ -357,16 +377,16 @@ public class Battle_Participant : MonoBehaviour
         {
             pokemon.statusEffect = StatusEffect.Poison;
         }
-        Move_handler.Instance.ApplyStatusToVictim(this, pokemon.statusEffect);
-        Battle_handler.Instance.OnBattleEnd += DeactivateParticipant;
-        Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.CheckTrapDuration;
-        Turn_Based_Combat.Instance.OnNewTurn += statusHandler.CheckStatDropImmunity;
-        Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.ConfusionCheck;
-        Turn_Based_Combat.Instance.OnNewTurn += statusHandler.StunCheck;
-        Turn_Based_Combat.Instance.OnMoveExecute += statusHandler.NotifyHealing;
+        _moveUsageHandler.ApplyStatusToVictim(this, pokemon.statusEffect);
+        _battleHandler.OnBattleEnd += DeactivateParticipant;
+        _turnBasedCombatHandler.OnMoveExecute += statusHandler.CheckTrapDuration;
+        _turnBasedCombatHandler.OnNewTurn += statusHandler.CheckStatDropImmunity;
+        _turnBasedCombatHandler.OnMoveExecute += statusHandler.ConfusionCheck;
+        _turnBasedCombatHandler.OnNewTurn += statusHandler.StunCheck;
+        _turnBasedCombatHandler.OnMoveExecute += statusHandler.NotifyHealing;
         pokemon.OnHealthChanged += CheckIfFainted;
-        ActivateUI(doubleBattleUI, Battle_handler.Instance.isDoubleBattle);
-        ActivateUI(singleBattleUI, !Battle_handler.Instance.isDoubleBattle);
+        ActivateUI(doubleBattleUI, _battleHandler.isDoubleBattle);
+        ActivateUI(singleBattleUI, !_battleHandler.isDoubleBattle);
         if (!isPlayer) return;
         pokemon.OnEvolutionSuccessful += AddToEvolutionQueue;
         pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;

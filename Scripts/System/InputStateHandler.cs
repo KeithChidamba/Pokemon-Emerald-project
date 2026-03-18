@@ -20,9 +20,9 @@ public enum InputStateName
 public class InputStateHandler : MonoBehaviour,IInjectable
 {
     public InputState CurrentState { get; private set; }
-    private InputState _emptyState { get; set; }
+    private InputState _emptyState;
     private int[] directionSelection = { 0, 0, 0, 0 };
-    public static InputStateHandler Instance;
+
     private event Action OnInputUp;
     private event Action OnInputDown; 
     private event Action OnInputRight; 
@@ -43,27 +43,39 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private int _currentNumBoxElements;
     public int rowRemainder;
     public GameObject emptyPlaceHolder;
+    
     private Dialogue_handler _dialogueHandler;
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        _readingInputs = false;
-        emptyPlaceHolder=new GameObject();
-    }
-
+    private Battle_handler _battleHandler;
+    private Options_manager _dialogueOptionsHandler;
+    private Bag _playerBagHandler;
+    private Pokemon_Details _pokemonDetailsHandler;
+    private Game_ui_manager _gameUIHandler;
+    private Poke_Mart _pokeMartHandler;
+    private Pokemon_party _pokemonPartyHandler;
+    private pokemon_storage _pokemonStorageHandler;
+    private ItemStorageHandler _itemStorageHandler;
+    private Game_Load _gameLoadingHandler;
+    
     public void Inject(Container container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _playerBagHandler = container.Resolve<Bag>();
+        _pokeMartHandler = container.Resolve<Poke_Mart>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _pokemonStorageHandler = container.Resolve<pokemon_storage>();
+        _itemStorageHandler = container.Resolve<ItemStorageHandler>();
+        _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
         gameObject.SetActive(true);
+        OnInject();
     }
-    private void Start()
+    
+    private void OnInject()
     {
-        Game_Load.Instance.OnGameStarted += () => _readingInputs = true;
+        _gameLoadingHandler.OnGameStarted += () => _readingInputs = true;
         _emptyState = new InputState(InputStateName.Empty,new[]{InputStateGroup.None}, canExit: false);
         CurrentState = _emptyState;
         _currentStateLoaded = false;
@@ -294,121 +306,121 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     public void PlayerBagNavigationRestrictions()
     {
         CurrentState.currentSelectionIndex = 0;
-        if(Bag.Instance.numItems==Bag.Instance.numItemsForView)
+        if(_playerBagHandler.numItems==_playerBagHandler.numItemsForView)
         {
             //prevent selecting null item selectables
-            CurrentState.maxSelectionIndex = Bag.Instance.numItems-1;
+            CurrentState.maxSelectionIndex = _playerBagHandler.numItems-1;
             UpdateSelectorUi();
         }
-        CurrentState.displayingSelector = Bag.Instance.numItems > 0;
-        Bag.Instance.itemSelector.SetActive(Bag.Instance.numItems > 0);
-        switch (Bag.Instance.currentBagUsage)
+        CurrentState.displayingSelector = _playerBagHandler.numItems > 0;
+        _playerBagHandler.itemSelector.SetActive(_playerBagHandler.numItems > 0);
+        switch (_playerBagHandler.currentBagUsage)
         {
             case BagUsage.SellingView:
                 CurrentState.selectableUis.ForEach(s=>s.eventForUi = CreateSellingItemState);
                 break;
             case BagUsage.NormalView:
-                CurrentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.UseItem);
+                CurrentState.selectableUis.ForEach(s=>s.eventForUi = _playerBagHandler.UseItem);
                 break;
             case BagUsage.SelectionOnly:
-                CurrentState.selectableUis.ForEach(s=>s.eventForUi = Bag.Instance.SelectItemForEvent);
+                CurrentState.selectableUis.ForEach(s=>s.eventForUi = _playerBagHandler.SelectItemForEvent);
                 break;
         }
     }
 
     public void PlayerBagNavigation()
     {
-        if(ItemStorageHandler.Instance.currentUsage != ItemUsage.Deposit)
+        if(_itemStorageHandler.currentUsage != ItemUsage.Deposit)
         {
-            OnInputLeft += Bag.Instance.ChangeCategoryLeft;
-            OnInputRight += Bag.Instance.ChangeCategoryRight;
+            OnInputLeft += _playerBagHandler.ChangeCategoryLeft;
+            OnInputRight += _playerBagHandler.ChangeCategoryRight;
         }
-        OnInputUp += Bag.Instance.NavigateUp;
-        OnInputDown += Bag.Instance.NavigateDown;
+        OnInputUp += _playerBagHandler.NavigateUp;
+        OnInputDown += _playerBagHandler.NavigateDown;
         PlayerBagNavigationRestrictions();
     }
 
     void CreateSellingItemState()
     {
-        var itemSellSelectables = new List<SelectableUI>{new(Bag.Instance.sellingItemUI,Bag.Instance.SellToMarket,true)};
+        var itemSellSelectables = new List<SelectableUI>{new(_playerBagHandler.sellingItemUI,_playerBagHandler.SellToMarket,true)};
         ChangeInputState(new (InputStateName.PlayerBagItemSell,
             new[]{InputStateGroup.Bag}, stateDirection:InputDirection.Vertical, selectableUis:itemSellSelectables
-            ,selecting:false,onExit:Bag.Instance.ResetItemSellingUi,onClose:Bag.Instance.ResetItemSellingUi));
-        Bag.Instance.ChangeQuantity(0);//initial set for visuals
+            ,selecting:false,onExit:_playerBagHandler.ResetItemSellingUi,onClose:_playerBagHandler.ResetItemSellingUi));
+        _playerBagHandler.ChangeQuantity(0);//initial set for visuals
     }
 
     private void ItemToSellInputs()
     {
-        OnInputUp += ()=>Bag.Instance.ChangeQuantity(1);
-        OnInputDown += ()=>Bag.Instance.ChangeQuantity(-1);
+        OnInputUp += ()=>_playerBagHandler.ChangeQuantity(1);
+        OnInputDown += ()=>_playerBagHandler.ChangeQuantity(-1);
     }
     public void UpdateHealthBarColors()
     {
-        for (var i = 0;i<Pokemon_party.Instance.numMembers;i++)
+        for (var i = 0;i<_pokemonPartyHandler.numMembers;i++)
         {
-            PokemonOperations.UpdateHealthPhase(Pokemon_party.Instance.party[i], 
-                    Pokemon_party.Instance.memberCards[i].hpSliderImage);
+            PokemonOperations.UpdateHealthPhase(_pokemonPartyHandler.party[i], 
+                    _pokemonPartyHandler.memberCards[i].hpSliderImage);
         }
     }
     public void PokemonPartyOptions()
     {
         var partyOptionsSelectables = new List<SelectableUI>
         {
-            new(Pokemon_party.Instance.partyOptions[0]
-                , ()=>Game_ui_manager.Instance.ViewPartyPokemonDetails(
-                    Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber - 1]), true),
-            new(Pokemon_party.Instance.partyOptions[1]
-                , () => Pokemon_party.Instance.SelectMemberToBeSwapped(Pokemon_party.Instance.selectedMemberNumber)
+            new(_pokemonPartyHandler.partyOptions[0]
+                , ()=>_gameUIHandler.ViewPartyPokemonDetails(
+                    _pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberNumber - 1]), true),
+            new(_pokemonPartyHandler.partyOptions[1]
+                , () => _pokemonPartyHandler.SelectMemberToBeSwapped(_pokemonPartyHandler.selectedMemberNumber)
                 , true),
-            new(Pokemon_party.Instance.partyOptions[2]
-            , Bag.Instance.OpenBagToGiveItem
-            ,!Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber - 1].hasItem),
-            new(Pokemon_party.Instance.partyOptions[3]
-                , () => Bag.Instance.TakeItem(Pokemon_party.Instance.selectedMemberNumber)
-                ,Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber - 1].hasItem)
+            new(_pokemonPartyHandler.partyOptions[2]
+            , _playerBagHandler.OpenBagToGiveItem
+            ,!_pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberNumber - 1].hasItem),
+            new(_pokemonPartyHandler.partyOptions[3]
+                , () => _playerBagHandler.TakeItem(_pokemonPartyHandler.selectedMemberNumber)
+                ,_pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberNumber - 1].hasItem)
         };
         partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
         ChangeInputState(new (InputStateName.PokemonPartyOptions,
             new[]{InputStateGroup.PokemonParty}, stateDirection:InputDirection.Vertical, selectableUis:partyOptionsSelectables
-            ,selector:Pokemon_party.Instance.optionSelector,selecting:true,display:true
-            ,onClose:Pokemon_party.Instance.ClearSelectionUI,onExit:Pokemon_party.Instance.ClearSelectionUI));
+            ,selector:_pokemonPartyHandler.optionSelector,selecting:true,display:true
+            ,onClose:_pokemonPartyHandler.ClearSelectionUI,onExit:_pokemonPartyHandler.ClearSelectionUI));
         CurrentState.selector.SetActive(true);
     }
 
     void SetupPokemonDetails()
     {
-        OnInputLeft += Pokemon_Details.Instance.PreviousPage;
-        OnInputRight += Pokemon_Details.Instance.NextPage;
-        OnInputUp += ()=>Pokemon_Details.Instance.ChangePokemon(-1);
-        OnInputDown += ()=>Pokemon_Details.Instance.ChangePokemon(1);
+        OnInputLeft += _pokemonDetailsHandler.PreviousPage;
+        OnInputRight += _pokemonDetailsHandler.NextPage;
+        OnInputUp += ()=>_pokemonDetailsHandler.ChangePokemon(-1);
+        OnInputDown += ()=>_pokemonDetailsHandler.ChangePokemon(1);
     }
 
     public void AllowMoveUiNavigation()
     {
         var moveSelectables = new List<SelectableUI>();
-        for (var i = 0; i < Pokemon_Details.Instance.currentPokemon.moveSet.Count; i++)
+        for (var i = 0; i < _pokemonDetailsHandler.currentPokemon.moveSet.Count; i++)
         {
-            moveSelectables.Add(new(Pokemon_Details.Instance.moveNamesText[i].gameObject,
-                () => Pokemon_Details.Instance.SelectMove(CurrentState.currentSelectionIndex), true));
+            moveSelectables.Add(new(_pokemonDetailsHandler.moveNamesText[i].gameObject,
+                () => _pokemonDetailsHandler.SelectMove(CurrentState.currentSelectionIndex), true));
         }
 
         Action onExit = null;
-        if (Pokemon_Details.Instance.changingMoveData) 
-            onExit = () => Pokemon_Details.Instance.OnMoveSelected?.Invoke(-1);
+        if (_pokemonDetailsHandler.changingMoveData) 
+            onExit = () => _pokemonDetailsHandler.OnMoveSelected?.Invoke(-1);
 
-        if (Pokemon_Details.Instance.learningMove)
+        if (_pokemonDetailsHandler.learningMove)
             onExit = ()=> OnStateRemoved += RemoveDetailsInputStates;
         
         ChangeInputState(new (InputStateName.PokemonDetailsMoveSelection,new[]{InputStateGroup.PokemonDetails},
             stateDirection:InputDirection.Vertical,selectableUis:moveSelectables, 
-            selector:Pokemon_Details.Instance.moveSelector, selecting:true, display:true,onExit:onExit));
+            selector:_pokemonDetailsHandler.moveSelector, selecting:true, display:true,onExit:onExit));
     }
     void RemoveDetailsInputStates(InputState state)
     {
         if (state.stateName != InputStateName.PokemonDetailsMoveSelection) return;
         OnStateRemoved -= RemoveDetailsInputStates;
         //if started learning but rejected it on move selection screen
-        Options_manager.Instance.SkipMove();
+        _dialogueOptionsHandler.SkipMove();
         ResetGroupUi(InputStateGroup.PokemonDetails);
     }
     private void ResetCoordinates()
@@ -498,7 +510,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     {
         _currentNumBoxElements = pokemon_storage.BoxCapacity;
         _currentBoxCapacity = pokemon_storage.BoxCapacity;
-        _numBoxColumns = pokemon_storage.Instance.boxColumns;
+        _numBoxColumns = _pokemonStorageHandler.boxColumns;
         _numBoxRows = pokemon_storage.BoxCapacity / _numBoxColumns;
         OnInputLeft += ()=> MoveCoordinatesFullBox(InputDirection.Horizontal,-1);
         OnInputRight += ()=> MoveCoordinatesFullBox(InputDirection.Horizontal,1);
@@ -506,20 +518,21 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         OnInputDown += ()=> MoveCoordinatesFullBox(InputDirection.Vertical,1);
         
         CurrentState.canExit = false;
-        OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
-        OnSelectionIndexChanged += pokemon_storage.Instance.UpdateBoxPosition;
+        OnSelectionIndexChanged += _pokemonStorageHandler.LoadPokemonData;
+        OnSelectionIndexChanged += _pokemonStorageHandler.UpdateBoxPosition;
     }
 
     public void SetupPokemonStorageState()
     {
-        var storageSelectables = new List<SelectableUI>();
-        storageSelectables.Add(new(pokemon_storage.Instance.storageBoxExit.gameObject,Game_ui_manager.Instance.ClosePokemonStorage, true));
+        var storageSelectables = new List<SelectableUI>{
+            new(_pokemonStorageHandler.storageBoxExit.gameObject,_gameUIHandler.ClosePokemonStorage, true)
+        };
         
         ChangeInputState(new (InputStateName.PokemonStorageExit,
-            new[] {InputStateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-            InputDirection.Vertical,storageSelectables,pokemon_storage.Instance.initialSelector, true,display:true,canManualExit:false
+            new[] {InputStateGroup.PokemonStorage }, true,_pokemonStorageHandler.storageUI,
+            InputDirection.Vertical,storageSelectables,_pokemonStorageHandler.initialSelector, true,display:true,canManualExit:false
             ));
-        pokemon_storage.Instance.initialSelector.transform.rotation = Quaternion.Euler(0, 180, 180);
+        _pokemonStorageHandler.initialSelector.transform.rotation = Quaternion.Euler(0, 180, 180);
         
         OnInputDown += PokemonStorageBoxChange;
     }
@@ -529,75 +542,75 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         var storageSelectables = new List<SelectableUI>();
         for (int i = 0; i < pokemon_storage.NumBoxes; i++)
         {
-            storageSelectables.Add(new(pokemon_storage.Instance.boxTopVisualImage.gameObject,null, true));
+            storageSelectables.Add(new(_pokemonStorageHandler.boxTopVisualImage.gameObject,null, true));
         }
-        pokemon_storage.Instance.initialSelector.transform.rotation = Quaternion.Euler(0, 0, 0);
+        _pokemonStorageHandler.initialSelector.transform.rotation = Quaternion.Euler(0, 0, 0);
         ChangeInputState(new (InputStateName.PokemonStorageBoxChange,
-            new[] {InputStateGroup.PokemonStorage }, true,pokemon_storage.Instance.storageUI,
-            InputDirection.Horizontal,storageSelectables,pokemon_storage.Instance.initialSelector, selecting:true,display:true,canManualExit:false));
+            new[] {InputStateGroup.PokemonStorage }, true,_pokemonStorageHandler.storageUI,
+            InputDirection.Horizontal,storageSelectables,_pokemonStorageHandler.initialSelector, selecting:true,display:true,canManualExit:false));
 
         OnInputUp += SwitchToExit;
         OnInputDown += PokemonStorageBoxNavigation;
-        OnInputLeft += () => pokemon_storage.Instance.ChangeBox(-1);
-        OnInputRight += () => pokemon_storage.Instance.ChangeBox(1);
+        OnInputLeft += () => _pokemonStorageHandler.ChangeBox(-1);
+        OnInputRight += () => _pokemonStorageHandler.ChangeBox(1);
     }
     private void PokemonStorageBoxNavigation()
     {
         var storageBoxSelectables = new List<SelectableUI>();
-        foreach (var icon in pokemon_storage.Instance.nonPartyIcons)
+        foreach (var icon in _pokemonStorageHandler.nonPartyIcons)
         { 
             var newSelectable = new SelectableUI(icon.gameObject,
-                ()=>pokemon_storage.Instance.SelectNonPartyPokemon(icon.GetComponent<PC_pkm>())
+                ()=>_pokemonStorageHandler.SelectNonPartyPokemon(icon.GetComponent<PC_pkm>())
                 , true);
             storageBoxSelectables.Add(newSelectable);
         }
 
         ChangeInputState(new (InputStateName.PokemonStorageBoxNavigation,new[]{InputStateGroup.PokemonStorage}
             ,stateDirection:InputDirection.OmniDirection,selectableUis:storageBoxSelectables,
-            selector:pokemon_storage.Instance.initialSelector, selecting:true,display: true,canManualExit:false,canExit:false));
+            selector:_pokemonStorageHandler.initialSelector, selecting:true,display: true,canManualExit:false,canExit:false));
         ChangeSelectionIndex(0);
     }
     private void SwitchToExit()
     {
-        if (pokemon_storage.Instance.movingPokemon) return;
+        if (_pokemonStorageHandler.movingPokemon) return;
         RemoveTopInputLayer(false);
         SetupPokemonStorageState();
     }
     private void ExitTopRow(int index)
     {
         RemoveTopInputLayer(false);
-        pokemon_storage.Instance.ClearPokemonData();
+        _pokemonStorageHandler.ClearPokemonData();
         PokemonStorageBoxChange();
     }
 
     private void PokeMartNavigation()
     {
-        OnInputUp += Poke_Mart.Instance.NavigateUp;
-        OnInputDown += Poke_Mart.Instance.NavigateDown;
-        if(Poke_Mart.Instance.numItemsForView==Poke_Mart.Instance.numItems)
+        OnInputUp += _pokeMartHandler.NavigateUp;
+        OnInputDown += _pokeMartHandler.NavigateDown;
+        if(_pokeMartHandler.numItemsForView==_pokeMartHandler.numItems)
         {//prevent selecting null item selectables
-            CurrentState.maxSelectionIndex = Poke_Mart.Instance.numItems-1;
+            CurrentState.maxSelectionIndex = _pokeMartHandler.numItems-1;
         }
         CurrentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToBuy);
     }
 
     void SelectItemToBuy()
     { 
-        Poke_Mart.Instance.quantityUI.SetActive(true);
+        _pokeMartHandler.quantityUI.SetActive(true);
         var itemQuantitySelectables = new List<SelectableUI>
         {
-            new(Poke_Mart.Instance.quantityUI,Poke_Mart.Instance.BuyItem,true)
+            new(_pokeMartHandler.quantityUI,_pokeMartHandler.BuyItem,true)
         };
         ChangeInputState(new (InputStateName.MartItemPurchase,new[]{InputStateGroup.PokeMart}
             , stateDirection:InputDirection.Vertical, selectableUis:itemQuantitySelectables
-            ,selector:Poke_Mart.Instance.quantitySelector,display: true
-            ,onExit: ()=>Poke_Mart.Instance.selectedItemQuantity=1));
+            ,selector:_pokeMartHandler.quantitySelector,display: true
+            ,onExit: ()=>_pokeMartHandler.selectedItemQuantity=1));
     }
 
     void ItemToBuyInputs()
     {
-        OnInputUp += ()=>Poke_Mart.Instance.ChangeItemQuantity(1);
-        OnInputDown += ()=>Poke_Mart.Instance.ChangeItemQuantity(-1);
+        OnInputUp += ()=>_pokeMartHandler.ChangeItemQuantity(1);
+        OnInputDown += ()=>_pokeMartHandler.ChangeItemQuantity(-1);
     }
     
     void SetupBattleOptions()
@@ -616,7 +629,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     
     void SetupMoveSelection()
     {
-        Battle_handler.Instance.battleParticipants[Battle_handler.Instance.currentEnemyIndex]
+        _battleHandler.battleParticipants[_battleHandler.currentEnemyIndex]
             .pokemonImage.color = Color.HSVToRGB(0,0,100);//reset color if cancelled selection
         CurrentState.currentSelectionIndex = 0;
         _currentNumBoxElements = CurrentState.maxSelectionIndex+1;
@@ -628,26 +641,26 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         OnInputUp += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,-2);
         OnInputDown += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,2);
         
-        OnInputLeft += ()=> Battle_handler.Instance.SelectMove(CurrentState.currentSelectionIndex);
-        OnInputRight += () => Battle_handler.Instance.SelectMove(CurrentState.currentSelectionIndex);
-        OnInputUp += () => Battle_handler.Instance.SelectMove(CurrentState.currentSelectionIndex);
-        OnInputDown += () => Battle_handler.Instance.SelectMove(CurrentState.currentSelectionIndex);
+        OnInputLeft += ()=> _battleHandler.SelectMove(CurrentState.currentSelectionIndex);
+        OnInputRight += () => _battleHandler.SelectMove(CurrentState.currentSelectionIndex);
+        OnInputUp += () => _battleHandler.SelectMove(CurrentState.currentSelectionIndex);
+        OnInputDown += () => _battleHandler.SelectMove(CurrentState.currentSelectionIndex);
     }
 
     void SetupEnemySelection()
     {
-        Battle_handler.Instance.SelectEnemy(3);
-        OnInputLeft += ()=> Battle_handler.Instance.SelectEnemy(-1);
-        OnInputRight += () => Battle_handler.Instance.SelectEnemy(1);
+        _battleHandler.SelectEnemy(3);
+        OnInputLeft += ()=> _battleHandler.SelectEnemy(-1);
+        OnInputRight += () => _battleHandler.SelectEnemy(1);
     }
 
     void LoadStoragePokemonData()
     {
-        OnSelectionIndexChanged += pokemon_storage.Instance.LoadPokemonData;
+        OnSelectionIndexChanged += _pokemonStorageHandler.LoadPokemonData;
     }
     void ShowStorageBoxCapacityData()
     {
-        OnSelectionIndexChanged += pokemon_storage.Instance.DisplayBoxCapacity;
+        OnSelectionIndexChanged += _pokemonStorageHandler.DisplayBoxCapacity;
     }
     void SetupInputEvents()
     {

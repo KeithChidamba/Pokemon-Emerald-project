@@ -39,6 +39,16 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        OnInject();
+    }
+
+    private void OnInject()
+    {
+        _inputStateHandler.OnStateChanged += CheckIfViewing;
+        _inputStateHandler.OnStateRemoved += ResetSelectionVisual;
+        
+        _startPos = pokemonFrontImage.rectTransform.anchoredPosition;
+        _targetPos = _startPos +Vector2.up * 10f;
     }
     
     public void LevelupForTesting()//testing purposes
@@ -48,15 +58,6 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
            PokemonOperations.CalculateExpForNextLevel(pokemon.currentLevel, pokemon.expGroup)-pokemon.currentExpAmount;
         pokemon.ReceiveExperience(exp+1);
         pokemon.hp=pokemon.maxHp;
-    }
-
-    private void Start()
-    {
-        _inputStateHandler.OnStateChanged += CheckIfViewing;
-        _inputStateHandler.OnStateRemoved += ResetSelectionVisual;
-        
-        _startPos = pokemonFrontImage.rectTransform.anchoredPosition;
-        _targetPos = _startPos +Vector2.up * 10f;
     }
     private void MoveInLoop()
     {
@@ -120,28 +121,34 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         statusEffectImage.gameObject.SetActive(false);
         emptySlotUI.SetActive(true);
     }
+
+    private void SetPokemonHealthUpdate()
+    {
+        _healthPhaseUpdateEvent = 
+            (attacker) => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
+        if (pokemon == null) return;
+        pokemon.OnHealthChanged += _healthPhaseUpdateEvent;
+            
+        if(pokemon.hp<=0)
+        {
+            statusEffectImage.gameObject.SetActive(true);
+            statusEffectImage.sprite = Resources.Load<Sprite>(
+                Save_manager.GetDirectory(AssetDirectory.Status)
+                + "fainted");
+        }
+    }
     void CheckIfViewing(InputState currentState)
     {
         if (isEmpty) return;
-
+        
         if (currentState.stateGroups.Contains(InputStateGroup.PokemonParty))
         {
-            _viewingParty = true;
-            _healthPhaseUpdateEvent = 
-                (attacker) => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
-            pokemon.OnHealthChanged += _healthPhaseUpdateEvent;
-            if(pokemon.hp<=0)
-            {
-                statusEffectImage.gameObject.SetActive(true);
-                statusEffectImage.sprite = Resources.Load<Sprite>(
-                    Save_manager.GetDirectory(AssetDirectory.Status)
-                    + "fainted");
-            }
+            SetPokemonHealthUpdate();
         }
         else
         {
             _viewingParty = false;
-            pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
+            if(pokemon!=null) pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
             ChangeVisibility(false);
         }
         _isViewingCard = currentState.stateName == InputStateName.PokemonPartyNavigation

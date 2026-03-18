@@ -22,21 +22,20 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     private Pokemon_party _pokemonPartyHandler;
     private BattleIntro _battleIntroHandler;
     private Battle_handler _battleHandler;
-
+    
+    private void Awake()
+    {
+        _rectTransform = GetComponent<RectTransform>();
+    }
     public void Inject(Container container)
     {
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<Battle_handler>();
+        OnInject();
     }
-    
-    private void Awake()
-    {
-        _rectTransform = GetComponent<RectTransform>();
-    }
-
-    private void Start()
+    private void OnInject()
     {
         _battleHandler.OnBattleEnd += ResetPokeballs;
     }

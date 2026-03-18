@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleVisuals : MonoBehaviour
+public class BattleVisuals : MonoBehaviour,IInjectable
 {
-    public static BattleVisuals Instance;
     public Animator playerBattleAnimator;
     public Animator swapOutAnimator;
     public GameObject pokeballImage;
@@ -19,21 +18,28 @@ public class BattleVisuals : MonoBehaviour
     public float outOfViewDitance = 400f;
     public event Action OnStatVisualDisplayed;
     private List<Coroutine> _activeSlideCoroutines = new();
-    private void Awake()
+    
+    private Dialogue_handler _dialogueHandler;
+    private Battle_handler _battleHandler;
+    private Wild_pkm _wildPokemonHandler;
+    
+    public void Inject(Container container)
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _wildPokemonHandler = container.Resolve<Wild_pkm>();
+        gameObject.SetActive(true);
+        OnInject();
+    }
+
+    private void OnInject()
+    {
+        _battleHandler.OnBattleEnd += ResetAfterBattle;
     }
 
     private void Start()
     {
-        Battle_handler.Instance.OnBattleEnd += ResetAfterBattle;
-        _defaultParticipantImageSize =
-            Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
+        _defaultParticipantImageSize = _battleHandler.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
         statChangeVisuals.Add(Stat.Attack,statChangeSprites[0]);
         statChangeVisuals.Add(Stat.Defense,statChangeSprites[1]);
         statChangeVisuals.Add(Stat.Speed,statChangeSprites[2]);
@@ -84,7 +90,7 @@ public class BattleVisuals : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f);
-        Dialogue_handler.Instance.DisplayBattleInfo(_statChangeMessage);
+        _dialogueHandler.DisplayBattleInfo(_statChangeMessage);
         
         foreach (var c in _activeSlideCoroutines)
             if (c != null) StopCoroutine(c);
@@ -96,7 +102,7 @@ public class BattleVisuals : MonoBehaviour
             image.img.rectTransform.anchoredPosition = image.pos;
         }
         yield return null;
-        yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         OnStatVisualDisplayed?.Invoke();
     }
 
@@ -235,12 +241,12 @@ public class BattleVisuals : MonoBehaviour
     {//wild battle is always single battle
         playerBattleAnimator.gameObject.SetActive(true);
         pokeballImage.SetActive(true);
-        var pkmImageRect = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform;
+        var pkmImageRect = _battleHandler.battleParticipants[0].pokemonImage.rectTransform;
         var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-pkmImageRect.rect.height);
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
         playerBattleAnimator.Play("pokemon catch");
         yield return new WaitForSeconds(1.6f);
-        Wild_pkm.Instance.participant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
+        _wildPokemonHandler.participant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
         yield return new WaitForSeconds(0.5f);
     }
     public IEnumerator DisplayPokemonCatch()
@@ -255,9 +261,9 @@ public class BattleVisuals : MonoBehaviour
     {
         playerBattleAnimator.Play("pokeball escape");
         yield return new WaitForSeconds(1f);
-        Wild_pkm.Instance.participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+        _wildPokemonHandler.participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
         
-        var pkmImageRect = Battle_handler.Instance.battleParticipants[0].pokemonImage.rectTransform;
+        var pkmImageRect = _battleHandler.battleParticipants[0].pokemonImage.rectTransform;
         var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y+pkmImageRect.rect.height);
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
         pokeballImage.SetActive(false);
@@ -280,7 +286,7 @@ public class BattleVisuals : MonoBehaviour
     {
         int positionIndex;
         int verticalPokeballPos = 300;
-        if (Battle_handler.Instance.isDoubleBattle)
+        if (_battleHandler.isDoubleBattle)
         {//magic numbers, im sorry.
             positionIndex = participant.GetPartnerIndex() > 2? 0:2;
         }
@@ -340,6 +346,6 @@ public class BattleVisuals : MonoBehaviour
     {
         pokeballImage.SetActive(false);
         //After wild battle, reset image size in-case of pokeball interaction
-        Battle_handler.Instance.battleParticipants[2].pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+        _battleHandler.battleParticipants[2].pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
     }
 }

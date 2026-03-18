@@ -18,7 +18,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     [DllImport("__Internal")] private static extern void CreateDirectories();
     [DllImport("__Internal")] private static extern void UploadZipAndStoreToIDBFS();
     [FormerlySerializedAs("party_IDs")] public List<string> partyIDs;
-    public static Save_manager Instance { get; private set; }
+
     private string _saveDataPath = "Assets/Save_data";
     private string _tempSaveDataPath = "Assets/Temp_Save_data";
     private event Action<string,Exception> OnSaveDataFail;
@@ -74,17 +74,10 @@ public class Save_manager : MonoBehaviour,IInjectable
         _playerBagHandler = container.Resolve<Bag>();
         _container = container;
         gameObject.SetActive(true);
+        OnInject();
     }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
-    private void Start()
+
+    private void OnInject()
     {
         OnSaveDataFail += HandleSaveError;
         _saveDataPath = GetSavePath();
@@ -299,7 +292,9 @@ public class Save_manager : MonoBehaviour,IInjectable
         foreach(var file in pokemonList)
         {
             var fileName = Path.GetFileName(file);//filename is the pokemon id
-            if (!_pokemonStorageHandler.IsPartyPokemon(RemoveFileExtension(fileName)))
+            var pokemonID = RemoveFileExtension(fileName);
+            var isPartyPokemon = partyIDs.Any(id => id == pokemonID);
+            if (!isPartyPokemon)
             {
                 var nonPartyPokemon = LoadPokemonFromJson(_saveDataPath+"/Pokemon/" + fileName);
                 LoadHeldItems(nonPartyPokemon);

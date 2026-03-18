@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Hondew berry",
     "berryItem": {
-        "instanceID": 25918
+        "instanceID": 25926
     },
     "treeIndex": 26,
     "minutesPerStage": 180,
@@ -16,24 +16,13 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32318
+                    "instanceID": 32446
                 },
                 {
-                    "instanceID": 32318
+                    "instanceID": 32446
                 }
             ],
             "growthStageNumber": 0
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32320
-                },
-                {
-                    "instanceID": 32322
-                }
-            ],
-            "growthStageNumber": 1
         },
         {
             "growthStageSprites": [
@@ -44,15 +33,26 @@
                     "instanceID": 32450
                 }
             ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32874
+                },
+                {
+                    "instanceID": 32876
+                }
+            ],
             "growthStageNumber": 2
         },
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32452
+                    "instanceID": 32878
                 },
                 {
-                    "instanceID": 32454
+                    "instanceID": 32880
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32456
+                    "instanceID": 32882
                 },
                 {
-                    "instanceID": 32458
+                    "instanceID": 32884
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-02-22T16:02:19.9503060+02:00"
+    "lastLogin": "2026-03-18T21:25:28.8533610+02:00"
 }

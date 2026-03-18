@@ -5,7 +5,6 @@ using UnityEngine;
 public enum ItemUsage{Withdraw,Deposit,Toss,None}
 public class ItemStorageHandler : MonoBehaviour,IInjectable
 {
-    public static ItemStorageHandler Instance;
     public ItemUsage currentUsage;
     
     private Game_ui_manager _gameUIHandler;
@@ -18,15 +17,6 @@ public class ItemStorageHandler : MonoBehaviour,IInjectable
         _playerBagHandler = container.Resolve<Bag>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         gameObject.SetActive(true);
-    }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
     }
 
     public void ViewItemsToWithdraw()

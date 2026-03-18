@@ -3,8 +3,9 @@ using UnityEngine;
 [Serializable]
 public abstract class StoryObjective : ScriptableObject
 {
-    private void LoadObjective()
+    private void LoadObjective(Container container)
     {
+        serviceContainer = container;
         OnLoad?.Invoke();
         OnObjectiveLoaded();
     }
@@ -27,10 +28,8 @@ public abstract class StoryObjective : ScriptableObject
             Debug.LogWarning("Story objective Asset: "+mainAssetName+" not found");
             return;
         }
-
-        serviceContainer = container;
         if(hasProgression) mainAsset.LoadSaveData(this);
-        mainAsset.LoadObjective();
+        mainAsset.LoadObjective(container);
     }
     public event Action OnLoad;
     public event Action OnClear;

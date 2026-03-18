@@ -12,12 +12,12 @@ public class Poke_Mart : MonoBehaviour,IInjectable
     public List<Item> currentStoreItems;
     public bool viewingStore;
     public Store_Item_ui[] storeItemsUI;
-    public int numItems = 0;
+    public int numItems;
     public int numItemsForView;
-    public int selectedItemIndex = 0;
-    public int selectedItemQuantity = 0;
+    public int selectedItemIndex;
+    public int selectedItemQuantity;
     public int numDisplayableItems=7;
-    public int topIndex = 0;
+    public int topIndex;
     public GameObject storeUI;
     public GameObject quantityUI;
     public Text quantity;    
@@ -27,7 +27,6 @@ public class Poke_Mart : MonoBehaviour,IInjectable
     public GameObject itemSelector;
     public GameObject quantitySelector;
     public Text itemDescription;
-    public static Poke_Mart Instance;
     public event Action<Item> OnItemBought;
     
     private Dialogue_handler _dialogueHandler;
@@ -44,18 +43,10 @@ public class Poke_Mart : MonoBehaviour,IInjectable
         _playerBagHandler = container.Resolve<Bag>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         gameObject.SetActive(true);
-    }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        OnInject();
     }
 
-    private void Start()
+    private void OnInject()
     {
         _dialogueOptionsHandler.OnInteractionOptionChosen += ViewStore;
     }

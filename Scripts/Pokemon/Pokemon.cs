@@ -159,14 +159,20 @@ public class Pokemon : ScriptableObject
             types[i].typeImage = Resources.Load<Sprite>(Save_manager.GetDirectory
                 (AssetDirectory.UI) + typeNames[i]);
         }
-        
+
+        Inject(serviceContainer);
+
+        _battleHandler.OnBattleEnd += ClearEvents;
+    }
+
+    public void Inject(Container serviceContainer)
+    {
         _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
         _dialogueOptionsHandler = serviceContainer.Resolve<Options_manager>(); 
         _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
         _pokemonPartyHandler = serviceContainer.Resolve<Pokemon_party>();
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
-        
-        _battleHandler.OnBattleEnd += ClearEvents;
+
     }
     public void ResetMoveData()
     {

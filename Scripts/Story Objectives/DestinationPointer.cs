@@ -21,13 +21,15 @@ public class DestinationPointer : MonoBehaviour,IInjectable
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _overworldStateHandler = container.Resolve<OverworldState>(); 
         gameObject.SetActive(true);
+        OnInject();
     }
-    private void Start()
+
+    private void OnInject()
     {
         overworldObject.SetActive(false);
         _overworldStateHandler.OnObjectivesLoaded += CheckForRequiredObjective;
-        
     }
+    
     private void CheckForRequiredObjective()
     {
         if (_overworldStateHandler.HasObjective(objectiveData.name))

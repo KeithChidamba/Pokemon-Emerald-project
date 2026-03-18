@@ -15,11 +15,13 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
   {
       _overworldStateHandler = container.Resolve<OverworldState>();
       gameObject.SetActive(true);
+      OnInject();
   }
-  void Start()
-    {
+
+  private void OnInject()
+  {
         _overworldStateHandler.OnObjectivesLoaded += CheckForRequiredObjective;
-    }
+  }
 
     private void CheckForRequiredObjective()
     {
@@ -37,7 +39,6 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
     {
         if (changeLayer)
         {
-            Debug.Log("changed");
             propsForObjective.ForEach(prop=>prop.layer=newLayer);
         }
         if(removeOnObjectiveClear)

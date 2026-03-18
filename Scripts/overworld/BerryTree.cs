@@ -24,29 +24,31 @@ public class BerryTree : MonoBehaviour,IInjectable
     private Bag _playerBag;
     private Game_ui_manager _gameUIHandler;
     private InputStateHandler _inputStateHandler;
+    private overworld_actions _overworldActions;
+    private Options_manager _dialogueOptionsHandler;
     
     public void Inject(Container container)
     {
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _overworldActions = container.Resolve<overworld_actions>();
         _playerBag = container.Resolve<Bag>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldStateHandler = container.Resolve<OverworldState>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
+        OnInject();
     }
-    
-    private void Awake()
+
+    private void OnInject()
     {
+        _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += ChooseBerryToPlant;
+        _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += HarvestBerries;
+        _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += WaterTree;
+        gameObject.SetActive(true);
         primaryInteractable = GetComponent<Overworld_interactable>();
         treeSpriteRenderer = GetComponent<SpriteRenderer>();
     }
-
-    private void Start()
-    {
-        Options_manager.Instance.OnOverworldInteractionOptionChosen += ChooseBerryToPlant;
-        Options_manager.Instance.OnOverworldInteractionOptionChosen += HarvestBerries;
-        Options_manager.Instance.OnOverworldInteractionOptionChosen += WaterTree;
-    }
-
+    
     private void SetInteraction(OverworldInteractionType type)
     {
         primaryInteractable.interaction = type switch
@@ -177,7 +179,7 @@ public class BerryTree : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("You have already watered this plant");
             return;
         }
-        StartCoroutine(overworld_actions.Instance.WaterTrees());
+        StartCoroutine(_overworldActions.WaterTrees());
         treeData.numStagesWatered++;
         treeData.currentStageNeedsWater = false;
         OnInteractionComplete?.Invoke(true);

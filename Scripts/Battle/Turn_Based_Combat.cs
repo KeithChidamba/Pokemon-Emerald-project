@@ -6,16 +6,15 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Turn_Based_Combat : MonoBehaviour
+public class Turn_Based_Combat : MonoBehaviour,IInjectable
 {
-    public static Turn_Based_Combat Instance; 
     [SerializeField]List<Turn> _turnHistory = new();
     public event Action OnNewTurn;
     public event Func<Battle_Participant,IEnumerator> OnMoveExecute;
     public event Action OnTurnsCompleted;
-    public int currentTurnIndex = 0;
+    public int currentTurnIndex;
 
-    public bool faintEventDelay = false;
+    public bool faintEventDelay;
     public WeatherCondition currentWeather;
     public WeatherCondition clearWeather;
     private event Func<IEnumerator> OnWeatherEffect;
@@ -23,38 +22,60 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private event Action<bool> OnAttackAttempted;
 
-    private void Awake()
+    private Dialogue_handler _dialogueHandler;
+    private InputStateHandler _inputStateHandler;
+    private BattleIntro _battleIntroHandler;
+    private Pokemon_party _pokemonPartyHandler;
+    private BattleVisuals _battleVisualsHandler;
+    private Battle_handler _battleHandler;
+    private Move_handler _moveUsageHandler;
+    private MoveLogicHandler _moveLogicHandler;
+    private BattleOperations _battleOperationsHandler;
+    private Game_Load _gameLoadingHandler;
+    private Options_manager _dialogueOptionsHandler;
+    
+    public void Inject(Container container)
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        _battleOperationsHandler = container.Resolve<BattleOperations>();
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleVisualsHandler = container.Resolve<BattleVisuals>();
+        _battleIntroHandler = container.Resolve<BattleIntro>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _moveUsageHandler = container.Resolve<Move_handler>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _moveLogicHandler = container.Resolve<MoveLogicHandler>();
+        gameObject.SetActive(true);
+        OnInject();
     }
+
+    private void OnInject()
+    {
+        _battleHandler.OnBattleEnd += ResetTurnState;
+        OnNewTurn += ()=> StartCoroutine(CheckParticipantCoolDown());
+        _battleHandler.OnSwitchOut += RemoveWeatherBuffReceiver;
+    }
+    
     private void Start()
     {
-        Battle_handler.Instance.OnBattleEnd += ResetTurnState;
-        
-        OnNewTurn += ()=> StartCoroutine(CheckParticipantCoolDown());
-        Battle_handler.Instance.OnSwitchOut += RemoveWeatherBuffReceiver;
-
         clearWeather = new WeatherCondition(Weather.Clear);
         currentWeather = clearWeather;
     }
     public void SaveTurn(Turn turn)
     {
         _turnHistory.Add(turn);
-        if ((Battle_handler.Instance.isDoubleBattle && IsLastParticipant())
-            || (currentTurnIndex == Battle_handler.Instance.participantCount))
+        if ((_battleHandler.isDoubleBattle && IsLastParticipant())
+            || (currentTurnIndex == _battleHandler.participantCount))
         {
-            InputStateHandler.Instance.AddPlaceHolderState();
+            _inputStateHandler.AddPlaceHolderState();
             SetPriority();
             StartCoroutine(ExecuteMoves());    
         }
         else
         {
-            InputStateHandler.Instance.ResetRelevantUi(new[]{InputStateName.PokemonBattleMoveSelection
+            _inputStateHandler.ResetRelevantUi(new[]{InputStateName.PokemonBattleMoveSelection
                 ,InputStateName.PokemonBattleEnemySelection});
             NextTurn();
         }
@@ -73,10 +94,10 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private bool IsLastParticipant()
     {
-        var livingParticipants = Battle_handler.Instance.battleParticipants.ToList();
+        var livingParticipants = _battleHandler.battleParticipants.ToList();
         livingParticipants.RemoveAll(participant => participant.pokemon==null);
         if (livingParticipants.Last() ==
-            Battle_handler.Instance.battleParticipants[currentTurnIndex])
+            _battleHandler.battleParticipants[currentTurnIndex])
             return true;
         return false;
     }
@@ -111,22 +132,22 @@ public class Turn_Based_Combat : MonoBehaviour
         {
             if (attacker.isConfused)
             {
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is confused");
-                yield return BattleVisuals.Instance.DisplayConfusionVisuals(attacker);
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " is confused");
+                yield return _battleVisualsHandler.DisplayConfusionVisuals(attacker);
                 if (Utility.RandomRange(0, 2) < 1)
                 {
-                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" hurt itself in its confusion");
-                    yield return Move_handler.Instance.DealConfusionDamage(attacker);
+                    _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" hurt itself in its confusion");
+                    yield return _moveUsageHandler.DealConfusionDamage(attacker);
                     OnAttackAttempted?.Invoke(false);
                     yield break;
                 }
             }
             if (attacker.isInfatuated)
             {
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName + " is in love ");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " is in love ");
                 if (Utility.RandomRange(0, 2) < 1)
                 {
-                    Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" can’t move because of love");
+                    _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" can’t move because of love");
                     OnAttackAttempted?.Invoke(false);
                     yield break;
                 }
@@ -134,7 +155,7 @@ public class Turn_Based_Combat : MonoBehaviour
             
             if(!attacker.semiInvulnerabilityData.executionTurn && !attacker.currentCoolDown.isCoolingDown)
             {
-                Dialogue_handler.Instance.DisplayBattleInfo(GetMoveUsageText(turn.move,attacker, victim));
+                _dialogueHandler.DisplayBattleInfo(GetMoveUsageText(turn.move,attacker, victim));
             }
 
             ModifyMoveAccuracy(turn);
@@ -148,7 +169,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 }
                 if (victim.semiInvulnerabilityData.IsInvulnerableTo(turn.move))
                 {
-                    Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName +
+                    _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonName +
                                                                 victim.semiInvulnerabilityData.displayMessage);
                     OnAttackAttempted?.Invoke(false);
                     yield break;
@@ -161,10 +182,10 @@ public class Turn_Based_Combat : MonoBehaviour
                 {
 
                     if (attacker.pokemon.accuracy >= victim.pokemon.evasion)
-                        Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName +
+                        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName +
                                                                     " missed the attack");
                     else
-                        Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName +
+                        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonName +
                                                                     " dodged the attack");
                 }
                 else
@@ -183,11 +204,11 @@ public class Turn_Based_Combat : MonoBehaviour
         else
         {
             if (attacker.isFlinched)
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" flinched!");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" flinched!");
             else if (attacker.pokemon.statusEffect != StatusEffect.None)
             {
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" is affected by "+ attacker.pokemon.statusEffect);
-                yield return BattleVisuals.Instance.DisplayStatusEffectVisuals(attacker);
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" is affected by "+ attacker.pokemon.statusEffect);
+                yield return _battleVisualsHandler.DisplayStatusEffectVisuals(attacker);
             }
         }
         OnAttackAttempted?.Invoke(false);
@@ -211,7 +232,7 @@ public class Turn_Based_Combat : MonoBehaviour
             {
                 switchTurns.Add(i);
                 yield return HandleSwap(_turnHistory[i].switchData);
-                yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+                yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
             }
         }
         var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();//prevent index out of range when removing turns
@@ -220,14 +241,14 @@ public class Turn_Based_Combat : MonoBehaviour
 //handle all attacks
         foreach (var currentTurn in _turnHistory )
         {
-            if (Battle_handler.Instance.battleOver) break;
+            if (_battleHandler.battleOver) break;
 
             if (currentTurn.isCancelled) continue;
             
             currentTurn.turnExecuted = true;
             
-            var attacker=Battle_handler.Instance.battleParticipants[currentTurn.attackerIndex];
-            var victim=Battle_handler.Instance.battleParticipants[currentTurn.victimIndex];
+            var attacker=_battleHandler.battleParticipants[currentTurn.attackerIndex];
+            var victim=_battleHandler.battleParticipants[currentTurn.victimIndex];
             
             attacker.isSemiInvulnerable = false;
             
@@ -240,8 +261,8 @@ public class Turn_Based_Combat : MonoBehaviour
             
             if (!IsValidParticipantState(victim))
             {
-                Dialogue_handler.Instance.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
-                yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
+                yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
                 continue;
             }
            
@@ -249,23 +270,23 @@ public class Turn_Based_Combat : MonoBehaviour
            
             yield return attacker.heldItemHandler.CheckForUsableItem();
 
-            yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+            yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
             
             successfulAttack = false;
             OnAttackAttempted += GetAttackResult;
             
             yield return CheckAttackSuccess(currentTurn,attacker,victim);
-            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
             
-            yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
+            yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
             CheckRepeatedMove(attacker,currentTurn.move);
             if (successfulAttack)
             {
-                Move_handler.Instance.doingMove = true;
-                Move_handler.Instance.ExecuteMove(currentTurn);
+                _moveUsageHandler.doingMove = true;
+                _moveUsageHandler.ExecuteMove(currentTurn);
                 
-                yield return new WaitUntil(() => !Move_handler.Instance.doingMove);
-                yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
+                yield return new WaitUntil(() => !_moveUsageHandler.doingMove);
+                yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
             }
             else
             {
@@ -273,19 +294,19 @@ public class Turn_Based_Combat : MonoBehaviour
                 attacker.semiInvulnerabilityData.ResetState();
             }
         }
-        yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
-        yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
+        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
         
         _turnHistory.Clear();
         OnTurnsCompleted?.Invoke();
         
-        var validList = Battle_handler.Instance.GetValidParticipants();
+        var validList = _battleHandler.GetValidParticipants();
         
         foreach (var participant in validList)
         {
             yield return participant.statusHandler.CheckStatus();
         }
-        yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
+        yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
         
         //damage from weather
         if (currentWeather.weather != Weather.Clear)
@@ -293,9 +314,9 @@ public class Turn_Based_Combat : MonoBehaviour
             ReduceWeatherDuration();
             yield return ExecuteWeatherEffect();
         }
-        yield return new WaitUntil(() => Battle_handler.Instance.faintQueue.Count == 0 && !faintEventDelay);
+        yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
         
-        yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
         
         //semi-invulnerability turn logic and cooldown check
         foreach(var participant in validList)
@@ -324,33 +345,33 @@ public class Turn_Based_Combat : MonoBehaviour
             _turnHistory.Add(new Turn(participant.semiInvulnerabilityData.turnData));
         }
         
-        yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
         NextTurn();
     }
     public IEnumerator HandleSwap(SwitchOutData swap, bool forcedSwap=false)
     {
         if (forcedSwap)
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(swap.Participant.pokemon.pokemonName
+            _dialogueHandler.DisplayBattleInfo(swap.Participant.pokemon.pokemonName
                                                         + " was blown out");
         }
         else
         {
             if (swap.Participant.isPlayer)
             {
-                Dialogue_handler.Instance.DisplayBattleInfo(Game_Load.Instance.playerData.playerName
+                _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName
                                                             + " withdrew " + swap.Participant.pokemon.pokemonName);
             }
             else
             {
-                Dialogue_handler.Instance.DisplayBattleInfo(swap.Participant.pokemonTrainerAI.trainerData.TrainerName
+                _dialogueHandler.DisplayBattleInfo(swap.Participant.pokemonTrainerAI.trainerData.TrainerName
                                                             +" withdrew "+swap.Participant.pokemon.pokemonName);
             }
         }
         
         if (swap.Participant.isPlayer || forcedSwap)
         {
-            yield return BattleVisuals.Instance.WithdrawPokemon(swap.Participant);
+            yield return _battleVisualsHandler.WithdrawPokemon(swap.Participant);
         }
         //check if move used was pursuit
         var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
@@ -358,8 +379,8 @@ public class Turn_Based_Combat : MonoBehaviour
         
         if(pursuitUsersTurn is { turnExecuted: false })
         {
-            var attacker=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.attackerIndex];
-            var victim=Battle_handler.Instance.battleParticipants[pursuitUsersTurn.victimIndex];
+            var attacker=_battleHandler.battleParticipants[pursuitUsersTurn.attackerIndex];
+            var victim=_battleHandler.battleParticipants[pursuitUsersTurn.victimIndex];
             
             if (victim == swap.Participant)
             {
@@ -375,7 +396,7 @@ public class Turn_Based_Combat : MonoBehaviour
 
                 victim.OnPokemonFainted += CancelOnFaint;
 
-                yield return MoveLogicHandler.Instance.Pursuit(attacker, victim, pursuitUsersTurn.move);
+                yield return _moveLogicHandler.Pursuit(attacker, victim, pursuitUsersTurn.move);
                 if (pokemonFainted) yield break;
             }
         }
@@ -383,19 +404,19 @@ public class Turn_Based_Combat : MonoBehaviour
         if (swap.Participant.isPlayer)
         {
             swap.Participant.ResetParticipantState();
-            var party = Pokemon_party.Instance.party;
+            var party = _pokemonPartyHandler.party;
             (party[swap.PartyPosition], party[swap.MemberToSwapWith]) = (party[swap.MemberToSwapWith], party[swap.PartyPosition]);
-            Pokemon_party.Instance.UpdateUIAfterSwap();
+            _pokemonPartyHandler.UpdateUIAfterSwap();
             
-            InputStateHandler.Instance.ResetGroupUi(InputStateGroup.PokemonParty);
-            yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,party[swap.PartyPosition]);
+            _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
+            yield return _battleIntroHandler.SwitchInPokemon(swap.Participant,party[swap.PartyPosition]);
         }
         else
         {
             swap.Participant.ResetParticipantState();
             var enemyParty = swap.Participant.pokemonTrainerAI.trainerParty;
             (enemyParty[swap.PartyPosition], enemyParty[swap.MemberToSwapWith]) = (enemyParty[swap.MemberToSwapWith], enemyParty[swap.PartyPosition]);
-            yield return BattleIntro.Instance.SwitchInPokemon(swap.Participant,enemyParty[swap.PartyPosition]);
+            yield return _battleIntroHandler.SwitchInPokemon(swap.Participant,enemyParty[swap.PartyPosition]);
         }
     }
 
@@ -423,16 +444,16 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private IEnumerator CheckParticipantCoolDown()
     {
-        if (Battle_handler.Instance.battleOver) yield break;
-        var participant = Battle_handler.Instance.GetCurrentParticipant();
+        if (_battleHandler.battleOver) yield break;
+        var participant = _battleHandler.GetCurrentParticipant();
         if (!participant.currentCoolDown.isCoolingDown) yield break;
         if (participant.currentCoolDown.ExecuteTurn) yield break;
         
         if (participant.currentCoolDown.DisplayMessage)
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(participant.pokemon.pokemonName
+            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName
                                                         +participant.currentCoolDown.Message);
-            yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+            yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
         }
         participant.currentCoolDown.NumTurns--;
         NextTurn();
@@ -471,12 +492,12 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     public void NextTurn()
     {
-        if (Battle_handler.Instance.isDoubleBattle)
+        if (_battleHandler.isDoubleBattle)
             ChangeTurn(3, 1);
         else
             ChangeTurn(2, 2);
 
-        if (Battle_handler.Instance.GetCurrentParticipant().isSemiInvulnerable)
+        if (_battleHandler.GetCurrentParticipant().isSemiInvulnerable)
             NextTurn();
     }
 
@@ -485,7 +506,7 @@ public class Turn_Based_Combat : MonoBehaviour
         //player wants to change their turn usage
         _turnHistory.RemoveAt(currentTurnIndex-1);
         currentTurnIndex --;
-        InputStateHandler.Instance.OnStateRemoved += Battle_handler.Instance.SetupOptionsInput;
+        _inputStateHandler.OnStateRemoved += _battleHandler.SetupOptionsInput;
     }
     public void ChangeTurn(int maxParticipantIndex,int step)
     {
@@ -494,7 +515,7 @@ public class Turn_Based_Combat : MonoBehaviour
         else
             currentTurnIndex = 0;
         
-        if (!Battle_handler.Instance.battleParticipants[currentTurnIndex].isActive & Options_manager.Instance.playerInBattle)
+        if (!_battleHandler.battleParticipants[currentTurnIndex].isActive & _dialogueOptionsHandler.playerInBattle)
             NextTurn();
         
         OnNewTurn?.Invoke();
@@ -503,13 +524,13 @@ public class Turn_Based_Combat : MonoBehaviour
     {
         var random = Utility.RandomRange(1, 100);
         var hitChance = turn.move.moveAccuracy *
-                           (Battle_handler.Instance.battleParticipants[turn.attackerIndex].pokemon.accuracy / 
-                            Battle_handler.Instance.battleParticipants[turn.victimIndex].pokemon.evasion);
+                           (_battleHandler.battleParticipants[turn.attackerIndex].pokemon.accuracy / 
+                            _battleHandler.battleParticipants[turn.victimIndex].pokemon.evasion);
         return hitChance>random;
     }
     private void SetPriority()
     {
-        var orderBySpeed = _turnHistory.OrderByDescending(p => Battle_handler.Instance.battleParticipants[p.attackerIndex].pokemon.speed).ToList();
+        var orderBySpeed = _turnHistory.OrderByDescending(p => _battleHandler.battleParticipants[p.attackerIndex].pokemon.speed).ToList();
         var priorityList = orderBySpeed.OrderByDescending(p => p.move.priority).ToList();
         _turnHistory.Clear();
         _turnHistory.AddRange(priorityList);
@@ -553,7 +574,7 @@ public class Turn_Based_Combat : MonoBehaviour
                 newWeather.weatherEndMessage = "The sunlight faded.";
                 break;
         }
-        Dialogue_handler.Instance.DisplayBattleInfo(newWeather.weatherBegunMessage);
+        _dialogueHandler.DisplayBattleInfo(newWeather.weatherBegunMessage);
         OnWeatherEffect += newWeather.weatherEffect;
         currentWeather = newWeather;
     }
@@ -565,7 +586,7 @@ public class Turn_Based_Combat : MonoBehaviour
         {
             OnWeatherEnd?.Invoke();
             OnWeatherEffect -= currentWeather.weatherEffect;
-            Dialogue_handler.Instance.DisplayBattleInfo(currentWeather.weatherEndMessage);
+            _dialogueHandler.DisplayBattleInfo(currentWeather.weatherEndMessage);
             currentWeather = clearWeather;
             return;
         }
@@ -574,7 +595,7 @@ public class Turn_Based_Combat : MonoBehaviour
 
     private IEnumerator ExecuteWeatherEffect()
     {
-        Dialogue_handler.Instance.DisplayBattleInfo(currentWeather.weatherTurnEndMessage);
+        _dialogueHandler.DisplayBattleInfo(currentWeather.weatherTurnEndMessage);
         yield return OnWeatherEffect?.Invoke();
     }
 
@@ -589,7 +610,7 @@ public class Turn_Based_Combat : MonoBehaviour
         var protectedTypes = new[]{
             Types.Rock, Types.Ground, Types.Steel
         };
-        var validParticipants = Battle_handler.Instance.GetValidParticipants();
+        var validParticipants = _battleHandler.GetValidParticipants();
         foreach (var participant in validParticipants)
         {
             var isProtected = false;
@@ -605,8 +626,8 @@ public class Turn_Based_Combat : MonoBehaviour
                             //buff rock types
                             var spDefBuff = new BuffDebuffData(participant,
                                 Stat.SpecialDefense, true, 1);
-                            BattleOperations.CanDisplayChange = false;
-                            Move_handler.Instance.SelectRelevantBuffOrDebuff(spDefBuff);
+                            _battleOperationsHandler.canDisplayChange = false;
+                            _moveUsageHandler.SelectRelevantBuffOrDebuff(spDefBuff);
                             currentWeather.buffedParticipants.Add(participant);
                         }
                     }
@@ -631,7 +652,7 @@ public class Turn_Based_Combat : MonoBehaviour
     }
     private IEnumerator HailEffect()
     {
-        var validParticipants = Battle_handler.Instance.GetValidParticipants();
+        var validParticipants = _battleHandler.GetValidParticipants();
         foreach (var participant in validParticipants)
         {
             if (participant.pokemon.HasType(Types.Ice)) continue;
@@ -644,16 +665,16 @@ public class Turn_Based_Combat : MonoBehaviour
         var damageModifierInfo = ScriptableObject.CreateInstance<DamageModifierInfo>();
         damageModifierInfo.typeAffected = type;
         damageModifierInfo.damageModifier = damageModifier;
-        var modifier = new OnFieldDamageModifier(damageModifierInfo,removeOnSwitch:false);
+        var modifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,this,damageModifierInfo,removeOnSwitch:false);
         OnWeatherEnd += modifier.RemoveAfterWeather;
-        Move_handler.Instance.AddFieldDamageModifier(modifier);
+        _moveUsageHandler.AddFieldDamageModifier(modifier);
     }
     private IEnumerator DealWeatherDamage(Battle_Participant victim)
     {
-        Dialogue_handler.Instance.DisplayBattleInfo(victim.pokemon.pokemonName + currentWeather.weatherDamageMessage);
+        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonName + currentWeather.weatherDamageMessage);
         var weatherDamage = victim.pokemon.maxHp * (1 / 16f);
-        Move_handler.Instance.DisplayDamage(victim,isSpecificDamage:true,
+        _moveUsageHandler.DisplayDamage(victim,isSpecificDamage:true,
             predefinedDamage:weatherDamage,displayEffectiveness:false);
-        yield return new WaitUntil(() => !Move_handler.Instance.displayingDamage);
+        yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
     }
 }

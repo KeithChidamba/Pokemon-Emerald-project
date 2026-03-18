@@ -18,36 +18,30 @@ public class Game_Load : MonoBehaviour,IInjectable
     private readonly int _minNameLength = 4;
     public GameObject world_Map;
     public Player_data playerData;
-    public static Game_Load Instance;
+
     public event Action OnGameStarted;
     private Save_manager _saveHandler;
     private Dialogue_handler _dialogueHandler;
     private Area_manager _areaHandler;
     private Player_movement _playerMovement;
     private overworld_actions _overworldActions;
-
+    private Bag _playerBagHandler;
+    
     public void Inject(Container container)
     {
+        _playerBagHandler = container.Resolve<Bag>();
         _saveHandler = container.Resolve<Save_manager>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _areaHandler = container.Resolve<Area_manager>();
         _playerMovement = container.Resolve<Player_movement>();
         _overworldActions = container.Resolve<overworld_actions>();
         gameObject.SetActive(true);
+        OnInject();
     }
-    private void Awake()
-         {
-             if (Instance != null && Instance != this)
-             {
-                 Destroy(gameObject);
-                 return;
-             }
-             Instance = this;
-         }
-    private void Start()
+
+    private void OnInject()
     {
         Start_ui.SetActive(true);
-        world_Map.SetActive(false);
         load_btn.gameObject.SetActive(true);
         newGame_btn.gameObject.SetActive(true);
     }
@@ -104,7 +98,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         Start_ui.SetActive(false);
         
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
-        _overworldActions.EquipItem(Bag.Instance.SearchForItem(playerData.equippedItemName));
+        _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
         world_Map.SetActive(true);
         _areaHandler.loadingPlayerFromSave = true;
         _areaHandler.SwitchToArea(playerData.location);

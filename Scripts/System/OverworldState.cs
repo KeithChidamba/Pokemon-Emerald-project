@@ -25,15 +25,20 @@ public class OverworldState : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _gameLoadHandler = container.Resolve<Game_Load>();
         gameObject.SetActive(true);
+        OnInject();
     }
 
+    private void OnInject()
+    {
+        StartCoroutine(LoadOverworldState());
+    }
 
     private IEnumerator LoadOverworldState()
     {
         overworldBerryTrees.Clear();
         currentStoryObjectives.Clear();
         
-        var trees = FindObjectsOfType<BerryTree>();
+        var trees = FindObjectsOfType<BerryTree>(true);
         foreach(var tree in trees)
         {
             overworldBerryTrees.Add(tree);
@@ -78,10 +83,6 @@ public class OverworldState : MonoBehaviour,IInjectable
             _gameLoadHandler.OnGameStarted += ()=>currentStoryObjectives[0].FindMainAsset(_container);
         }
         yield return null;
-    }
-    private void Start()
-    {
-        StartCoroutine(LoadOverworldState());
     }
 
     public bool HasObjective(string objectiveName)

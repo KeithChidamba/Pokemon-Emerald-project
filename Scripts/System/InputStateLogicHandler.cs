@@ -8,6 +8,7 @@ public class InputStateLogicHandler : MonoBehaviour
     private Dialogue_handler _dialogueHandler;
     private BattleIntro _battleIntroHandler;
     private Battle_handler _battleHandler;
+    private BattleOperations _battleOperationsHandler;
     private BattleVisuals _battleVisualsHandler;
     private Encounter_handler  _encounterHandler;
     private Wild_pkm _wildPokemonHandler;
@@ -31,13 +32,13 @@ public class InputStateLogicHandler : MonoBehaviour
     private Game_Load _gameLoadingHandler;
     private overworld_actions _overworldActions;
     private Item_handler _itemHandler;
-    private Move_handler _moveHandler;
     private Container container;
     void Skippy()
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
+        _battleOperationsHandler = container.Resolve<BattleOperations>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<Battle_handler>();
         _encounterHandler = container.Resolve<Encounter_handler>();

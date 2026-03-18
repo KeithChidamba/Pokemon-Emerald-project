@@ -13,7 +13,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     public bool viewingMenu;
     public bool canUseUi=true;
     public Player_Info_ui profile;
-    public static Game_ui_manager Instance;
+
     [SerializeField]private int numUIScreensOpen;
     [SerializeField]private GameObject exitButton;
     [SerializeField]private List<GameObject> menuUiOptions = new ();
@@ -61,19 +61,10 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
         gameObject.SetActive(true);
-    }
-    
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        OnInject();
     }
 
-    private void Start()
+    private void OnInject()
     {
         usingWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
         exitButton.SetActive(!usingWebGl);

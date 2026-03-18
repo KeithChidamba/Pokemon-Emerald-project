@@ -47,7 +47,6 @@ public class Bag : MonoBehaviour,IInjectable
     public Sprite[] bagCategoryTitles;
     public Image currentCategoryTitle;
     public GameObject[] bagCategoryIndicators;
-    public static Bag Instance;
     public GameObject bagUI;
     public GameObject bagOverlayUI;
     public GameObject storageOverlayUI;
@@ -83,16 +82,6 @@ public class Bag : MonoBehaviour,IInjectable
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _itemHandler = container.Resolve<Item_handler>();
         gameObject.SetActive(true);
-    }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        
     }
 
     private void Start()
@@ -316,7 +305,16 @@ public class Bag : MonoBehaviour,IInjectable
     }
     public void UseItem()
      {
-         var itemToUse = currentCategoryOfItems[topIndex + selectedItemIndex];
+         Item itemToUse;
+         try
+         {
+             itemToUse = currentCategoryOfItems[topIndex + selectedItemIndex];
+         }
+         catch
+         {
+             return;
+         }
+         
          OnItemUsed?.Invoke(itemToUse);
          if (_dialogueOptionsHandler.playerInBattle)
          {

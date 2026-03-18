@@ -25,27 +25,19 @@ public class Player_movement : MonoBehaviour,IInjectable
     public event Action OnNewTile;
     [SerializeField]private LayerMask movementBlockers;
     [SerializeField]private bool standingOnTile;
-    public static Player_movement Instance;
+
     private overworld_actions _overworldActions;
     private Dialogue_handler _dialogueHandler;
+    
     public void Inject(Container container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
         gameObject.SetActive(true);
-    }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
+        OnInject();
     }
 
-    private void Start()
+    private void OnInject()
     {
         _overworldActions.OnItemEquipped +=
             (item) => StopBikeUsage(item != Equipable.Bike);

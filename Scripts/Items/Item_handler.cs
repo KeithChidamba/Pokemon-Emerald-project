@@ -12,7 +12,6 @@ public class Item_handler : MonoBehaviour,IInjectable
     public bool usingItem;
     public Item itemInUse;
     private Battle_Participant _currentParticipant;
-    public static Item_handler Instance;
     public event Action<bool> OnItemUsageSuccessful;
     private Pokemon_Details _pokemonDetailsHandler;
     private Game_ui_manager _gameUIHandler;
@@ -45,15 +44,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         _overworldActions = container.Resolve<overworld_actions>();
         gameObject.SetActive(true);
     }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
+
     public void UseItem(Item item,[CanBeNull] Pokemon selectedPokemon)
     {
         if (_dialogueOptionsHandler.playerInBattle)

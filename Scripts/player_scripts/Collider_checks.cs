@@ -21,14 +21,15 @@ public class Collider_checks : MonoBehaviour,IInjectable
         _playerMovementHandler = container.Resolve<Player_movement>();
         _areaHandler = container.Resolve<Area_manager>();
         gameObject.SetActive(true);
+        OnInject();
     }
 
-    private void Start()
+    private void OnInject()
     {
         _playerMovementHandler.OnNewTile += CheckGrass;
         _playerMovementHandler.OnNewTile += SwitchArea;
     }
-
+    
     private void SwitchArea()
     {
         var tile = FindTileAtPosition<AreaSwitchTile>(areaSwitchTilemap,transform.position,Vector3.down);

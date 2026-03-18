@@ -6,6 +6,13 @@ using UnityEngine;
 
 public static class Obj_Instance
 {
+    private static Container _serviceContainer;
+
+    public static void GetContainer(Container container)
+    {
+        _serviceContainer = container;
+    }  
+    
     public static Move CreateMove(Move m)
     {
         var newMove = ScriptableObject.CreateInstance<Move>();
@@ -128,6 +135,7 @@ public static class Obj_Instance
         newPokemon.battleIntroFrame = pkm.battleIntroFrame;
         newPokemon.pokeballName = pkm.pokeballName;
         newPokemon.healthPhase = pkm.healthPhase;
+        newPokemon.Inject(_serviceContainer);
         return newPokemon;
     }
 
@@ -168,7 +176,8 @@ public static class Obj_Instance
     {
         var dataCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
         dataCopy.pokemon = CreatePokemon(data.pokemon);
-        PokemonOperations.Instance.SetPokemonTraits(dataCopy.pokemon);
+        var pokemonOperationsHandler = _serviceContainer.Resolve<PokemonOperations>();
+        pokemonOperationsHandler.SetPokemonTraits(dataCopy.pokemon);
         dataCopy.moveSet = data.moveSet;
         dataCopy.pokemonLevel = data.pokemonLevel;
         dataCopy.hasItem = data.hasItem;

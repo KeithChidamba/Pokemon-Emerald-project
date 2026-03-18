@@ -14,34 +14,27 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     private bool _interactionCooldown;
     public Tilemap waterTilemap;
     public Tilemap interactionTilemap;
-    public static Interaction_handler Instance;
+
     private overworld_actions _overworldActions;
     private Dialogue_handler _dialogueHandler;
     private Player_movement _playerMovementHandler;
+
     public void Inject(Container container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
         _playerMovementHandler = container.Resolve<Player_movement>();
-        gameObject.SetActive(true);
+        OnInject();
     }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
-
-    private void Start()
+    private void OnInject()
     {
         _stopInteractions = false;
         _canCheckForInteraction = true;
+        gameObject.SetActive(true);
     }
     void Update()
     {
+        
         if(!_dialogueHandler.displaying && !_stopInteractions)
         {
             if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.C))

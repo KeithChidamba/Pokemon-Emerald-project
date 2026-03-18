@@ -26,7 +26,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     public GameObject partyOptionsParent;
     public Text partyUsageText;
     public event Action<int> OnMemberSelected;
-    public static Pokemon_party Instance;
     
     private Dialogue_handler _dialogueHandler;
     private PokemonOperations _pokemonOperations;
@@ -40,6 +39,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     
     public void Inject(Container container)
     {
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
@@ -52,15 +52,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _battleIntroHandler = container.Resolve<BattleIntro>();
         gameObject.SetActive(true);
     } 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     public void UpdatePartyUsageMessage(string message)
     {

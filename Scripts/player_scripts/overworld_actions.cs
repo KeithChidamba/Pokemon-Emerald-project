@@ -13,7 +13,6 @@ public class overworld_actions : MonoBehaviour,IInjectable
     public bool usingUI;
     public Encounter_Area fishingArea;
     public Item equippedSpecialItem;
-    public static overworld_actions Instance;
     private bool _canUseEquippedItem;
     private Equipable _currentEquippedItem;
     public event Action<Equipable> OnItemEquipped;
@@ -29,23 +28,14 @@ public class overworld_actions : MonoBehaviour,IInjectable
         _encounterHandler = container.Resolve<Encounter_handler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
-        gameObject.SetActive(true);
+        OnInject();
     }
-    private void Awake()
+    private void OnInject()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        manager.OnFishingStart += StartFishingAction;
-    }
-
-    private void Start()
-    {
-        _canUseEquippedItem = false;
         _gameLoadingHandler.OnGameStarted += () => _canUseEquippedItem = true;
+        manager.OnFishingStart += StartFishingAction;
+        _canUseEquippedItem = false;
+        gameObject.SetActive(true);
     }
 
     public void EquipItem(Item item)
@@ -56,6 +46,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
         OnItemEquipped?.Invoke(_currentEquippedItem);
         if(usingUI)
             _dialogueHandler.DisplayDetails("Equipped " + equippedSpecialItem.itemName);
+     
         _gameLoadingHandler.playerData.equippedItemName = equippedSpecialItem.itemName;
     }
     public bool IsEquipped(Equipable equipable = Equipable.None

@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Enemy_trainer : MonoBehaviour
+public class Enemy_trainer : MonoBehaviour,IInjectable
 {
     public Battle_Participant participant;
     public TrainerData trainerData;
@@ -16,6 +16,24 @@ public class Enemy_trainer : MonoBehaviour
     private Dictionary<AiFlags, Func<int>> AiLogicCalculators = new();
     private Move _currentMoveCheck;
     private Battle_Participant _currentEnemy;
+    
+    private Battle_handler _battleHandler;
+    private Turn_Based_Combat _turnBasedCombatHandler;
+    private BattleIntro _battleIntroHandler;
+    public void Inject(Container container)
+    {
+        _battleIntroHandler = container.Resolve<BattleIntro>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        OnInject();
+    }
+
+    private void OnInject()
+    {
+        _turnBasedCombatHandler.OnNewTurn += ResetMoveUsage;
+        _battleHandler.OnBattleEnd += ResetAfterBattle;
+    }
+
     private void Update()
     {
         if (!inBattle) return;
@@ -23,8 +41,6 @@ public class Enemy_trainer : MonoBehaviour
     }
     private void Start()
     {
-        Turn_Based_Combat.Instance.OnNewTurn += ResetMoveUsage;
-        Battle_handler.Instance.OnBattleEnd += ResetAfterBattle;
         AiLogicCalculators.Add(AiFlags.CheckBadMove ,AiCheckBadMove);
         AiLogicCalculators.Add(AiFlags.CheckViability ,AiCheckViability);
         AiLogicCalculators.Add(AiFlags.CheckStatus ,AiCheckStatus);
@@ -60,11 +76,11 @@ public class Enemy_trainer : MonoBehaviour
         foreach (Pokemon pokemon in trainerParty)
         {
             //not already participating
-            if (pokemon != Battle_handler.Instance.battleParticipants[2].pokemon)
+            if (pokemon != _battleHandler.battleParticipants[2].pokemon)
             {
-                if (Battle_handler.Instance.isDoubleBattle)
+                if (_battleHandler.isDoubleBattle)
                 {
-                    if (pokemon != Battle_handler.Instance.battleParticipants[3].pokemon)
+                    if (pokemon != _battleHandler.battleParticipants[3].pokemon)
                     {
                         notParticipatingList.Add(pokemon);
                     }
@@ -83,12 +99,12 @@ public class Enemy_trainer : MonoBehaviour
         var numAlive = GetLivingPokemon();
         if (numAlive.Count == 0)
         {
-            Battle_handler.Instance.lastOpponent = participant.pokemon;
-            Battle_handler.Instance.EndBattle(true);
+            _battleHandler.lastOpponent = participant.pokemon;
+            _battleHandler.EndBattle(true);
         }
         else
         {
-            if (Battle_handler.Instance.isDoubleBattle)//double battle
+            if (_battleHandler.isDoubleBattle)//double battle
             {//only select the pokemon that werent in battle
                 var notParticipatingList = GetNonParticipatingList();
                 if (notParticipatingList.Count == 0)
@@ -99,22 +115,22 @@ public class Enemy_trainer : MonoBehaviour
                         participant.pokemon = null;
                         inBattle = false;
                         participant.DeactivateUI();
-                        Battle_handler.Instance.CheckParticipantStates();
+                        _battleHandler.CheckParticipantStates();
                     }
                 }
                 else
                 {
                     var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count - 1);
-                    yield return BattleIntro.Instance.SwitchInPokemon(participant,notParticipatingList[randomLeftOver],true);
+                    yield return _battleIntroHandler.SwitchInPokemon(participant,notParticipatingList[randomLeftOver],true);
                 }
             }
             else
             {
                 var randomMember = Utility.RandomRange(0, numAlive.Count - 1);
-                yield return BattleIntro.Instance.SwitchInPokemon(participant,newPokemon:numAlive[randomMember],true);
+                yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon:numAlive[randomMember],true);
             }
         }
-        Turn_Based_Combat.Instance.faintEventDelay = false;
+        _turnBasedCombatHandler.faintEventDelay = false;
     }
     public void SetupTrainerForBattle(TrainerData copyOfTrainerData)
     {
@@ -137,15 +153,15 @@ public class Enemy_trainer : MonoBehaviour
     }
     private void MakeBattleDecision()
     {
-        if (Battle_handler.Instance.battleParticipants[Turn_Based_Combat.Instance.currentTurnIndex].pokemon
+        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon
             != participant.pokemon)return;
         if (usedMove || !canAttack) return;
         
         var randomEnemy = Utility.RandomRange(0, participant.currentEnemies.Count);
-        Battle_handler.Instance.currentEnemyIndex = randomEnemy;
-        _currentEnemy = Battle_handler.Instance.battleParticipants[randomEnemy];
+        _battleHandler.currentEnemyIndex = randomEnemy;
+        _currentEnemy = _battleHandler.battleParticipants[randomEnemy];
         
-        var participatingIndex = Battle_handler.Instance.isDoubleBattle? 2:1;
+        var participatingIndex = _battleHandler.isDoubleBattle? 2:1;
         if (GetLivingPokemon().Count > participatingIndex)
         {
             if(trainerData.trainerAiFlags.Contains(AiFlags.CheckSwitching))
@@ -161,7 +177,7 @@ public class Enemy_trainer : MonoBehaviour
     {
         var selectedMove = participant.pokemon.moveSet[GetSelectedMoveIndex()];
         canAttack = false;
-        Battle_handler.Instance.UseMove(selectedMove,participant);
+        _battleHandler.UseMove(selectedMove,participant);
         usedMove = true;
     }
     private void AiCheckSwitching()
@@ -169,7 +185,7 @@ public class Enemy_trainer : MonoBehaviour
         if (participant.canEscape && BattleOperations.HardCountered(participant.pokemon,_currentEnemy.pokemon))
         {
             List<(int pokemonIndex,float effectivenessScore)> pokemonScores = new();  
-            var participatingIndex = Battle_handler.Instance.isDoubleBattle? 2:1;
+            var participatingIndex = _battleHandler.isDoubleBattle? 2:1;
             //skip participating pokemon
             for (int i=participatingIndex; i<trainerParty.Count;i++)
             {
@@ -206,14 +222,14 @@ public class Enemy_trainer : MonoBehaviour
     {
         int partyPosition = 0;
         
-        if (Battle_handler.Instance.isDoubleBattle)
+        if (_battleHandler.isDoubleBattle)
         {
-            partyPosition = Turn_Based_Combat.Instance.currentTurnIndex == 2 ? 0 : 1;
+            partyPosition = _turnBasedCombatHandler.currentTurnIndex == 2 ? 0 : 1;
         }
        
         var switchData = new SwitchOutData(partyPosition
             ,partyIndex,participant);
-        Turn_Based_Combat.Instance.SaveSwitchTurn(switchData);
+        _turnBasedCombatHandler.SaveSwitchTurn(switchData);
     }
     private int GetSelectedMoveIndex()
     {

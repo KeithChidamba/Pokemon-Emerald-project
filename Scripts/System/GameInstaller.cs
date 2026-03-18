@@ -12,6 +12,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private InputStateHandler inputStateHandler;
     [SerializeField] private Dialogue_handler dialogueHandler;
     [SerializeField] private BattleIntro battleIntroHandler;
+    [SerializeField] private BattleOperations battleOperationsHandler;
     [SerializeField] private Battle_handler battleHandler;
     [SerializeField] private BattleVisuals battleVisualsHandler;
     [SerializeField] private Encounter_handler  encounterHandler;
@@ -37,7 +38,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private overworld_actions overworldActionsHandler;
     [SerializeField] private Item_handler itemHandler;
     [SerializeField] private Move_handler moveHandler;
-    
+   
     
     void Awake()
     {
@@ -70,6 +71,8 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(() => itemHandler);
         _container.RegisterSingleton(() => battleVisualsHandler);
         _container.RegisterSingleton(() => moveHandler);
+        _container.RegisterSingleton(() => battleOperationsHandler);
+        Obj_Instance.GetContainer(_container);
         
         var injectables = FindObjectsOfType<MonoBehaviour>(true);
 

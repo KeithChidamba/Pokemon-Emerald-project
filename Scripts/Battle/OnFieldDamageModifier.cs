@@ -8,9 +8,16 @@ public class OnFieldDamageModifier
     public DamageModifierInfo modifierInfo;
     private Battle_Participant _participant;
     public bool removeOnSwitch;
-    public OnFieldDamageModifier(DamageModifierInfo info
+    private Battle_handler _battleHandler;
+    private Move_handler _moveUsageHandler;
+    private Turn_Based_Combat _turnBasedHandler;
+    
+    public OnFieldDamageModifier(Battle_handler battleHandler,Move_handler moveUsageHandler,Turn_Based_Combat turnBasedHandler,DamageModifierInfo info
         ,Battle_Participant user = null,bool removeOnSwitch = true)
     {
+        _turnBasedHandler = turnBasedHandler;
+        _battleHandler = battleHandler;
+        _moveUsageHandler = moveUsageHandler;
         modifierInfo = info;
         _participant = user;
         this.removeOnSwitch = removeOnSwitch;
@@ -19,12 +26,12 @@ public class OnFieldDamageModifier
     {
         if(!removeOnSwitch)return;
         if (participant != _participant) return;
-        Battle_handler.Instance.OnSwitchOut -= RemoveOnSwitchOut;
-        Move_handler.Instance.RemoveFieldDamageModifier(modifierInfo.typeAffected);
+        _battleHandler.OnSwitchOut -= RemoveOnSwitchOut;
+        _moveUsageHandler.RemoveFieldDamageModifier(modifierInfo.typeAffected);
     }
     public void RemoveAfterWeather()
     {
-        Turn_Based_Combat.Instance.OnWeatherEnd -= RemoveAfterWeather;
-        Move_handler.Instance.RemoveFieldDamageModifier(modifierInfo.typeAffected);
+        _turnBasedHandler.OnWeatherEnd -= RemoveAfterWeather;
+        _moveUsageHandler.RemoveFieldDamageModifier(modifierInfo.typeAffected);
     }
 }

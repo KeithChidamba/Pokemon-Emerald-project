@@ -2,14 +2,25 @@ using System.Collections;
 using UnityEngine;
 
 
-public class Held_Items : MonoBehaviour
+public class Held_Items : MonoBehaviour,IInjectable
 {
     private Battle_Participant _participant;
     private Item _heldItem;
+    
+    private Battle_handler _battleHandler;
+    private Move_handler _moveUsageHandler;
+    private Dialogue_handler _dialogueHandler;
+    
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _moveUsageHandler = container.Resolve<Move_handler>();
+    }
+    
     void Start()
     {
         _participant =  GetComponent<Battle_Participant>();
-
     }
     void DepleteHeldItem()
     {
@@ -39,7 +50,7 @@ public class Held_Items : MonoBehaviour
                 break;
             //in the future, if there's need to add special held items like focus sash, create new type of item and add it to this switch
         }
-        yield return new WaitUntil(()=> !Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
     }
     private IEnumerator DetermineBerryEffect()
     {
@@ -75,15 +86,15 @@ public class Held_Items : MonoBehaviour
     {
         if(!_participant.isConfused) yield break;
 
-        Dialogue_handler.Instance.DisplayDetails(_participant.pokemon.pokemonName+"'s Persim berry healed its confusion");
+        _dialogueHandler.DisplayDetails(_participant.pokemon.pokemonName+"'s Persim berry healed its confusion");
         _participant.isConfused = false;
 
     }
     private IEnumerator GetHealing()
     { 
-        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
-        Move_handler.Instance.HealthGainDisplay(int.Parse(_heldItem.itemEffect),healthGainer:_participant);
-        yield return new WaitUntil(() => !Move_handler.Instance.displayingHealthGain);
+        _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
+        _moveUsageHandler.HealthGainDisplay(int.Parse(_heldItem.itemEffect),healthGainer:_participant);
+        yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);
     }
     private IEnumerator GetStatusHealing()
     { 
@@ -102,8 +113,8 @@ public class Held_Items : MonoBehaviour
             yield break;
         }
         _participant.statusHandler.RemoveStatusEffect();
-        Battle_handler.Instance.RefreshStatusEffectUI();
-        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
+        _battleHandler.RefreshStatusEffectUI();
+        _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
     }
 
 }

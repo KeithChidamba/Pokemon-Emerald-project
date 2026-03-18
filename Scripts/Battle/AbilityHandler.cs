@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AbilityHandler : MonoBehaviour
+public class AbilityHandler : MonoBehaviour,IInjectable
 {
     private Battle_Participant _participant;
     public event Action OnAbilityUsed;
@@ -17,11 +17,26 @@ public class AbilityHandler : MonoBehaviour
         {"overgrow", "Grass"},
         {"swarm", "Bug"}
     };
-    private void Start()
+    private Dialogue_handler _dialogueHandler;
+    private Battle_handler _battleHandler;
+    private Turn_Based_Combat _turnBasedCombatHandler;
+    private Move_handler _moveUsageHandler;
+    private BattleOperations _battleOperationsHandler;
+    public void Inject(Container container)
+    {
+        _battleOperationsHandler = container.Resolve<BattleOperations>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _moveUsageHandler = container.Resolve<Move_handler>();
+        OnInject();
+    }
+
+    private void OnInject()
     {
         _participant =  GetComponent<Battle_Participant>();
-        Battle_handler.Instance.OnBattleEnd += ResetState;
-        Turn_Based_Combat.Instance.OnNewTurn += CheckAbilityUsability;
+        _battleHandler.OnBattleEnd += ResetState;
+        _turnBasedCombatHandler.OnNewTurn += CheckAbilityUsability;
         _abilityMethods.Add("innerfocus",InnerFocus);
         _abilityMethods.Add("pickup",PickUp);
         _abilityMethods.Add("blaze",Blaze);
@@ -57,9 +72,9 @@ public class AbilityHandler : MonoBehaviour
     {
         OnAbilityUsed = null;
         _abilityTriggered = false;
-        Move_handler.Instance.OnMoveHit -= GiveStatic;
-        Battle_handler.Instance.OnBattleEnd -= GiveItem;
-        Move_handler.Instance.OnDamageCalc -= IncreaseDamage;
+        _moveUsageHandler.OnMoveHit -= GiveStatic;
+        _battleHandler.OnBattleEnd -= GiveItem;
+        _moveUsageHandler.OnDamageCalc -= IncreaseDamage;
         _participant.statusHandler.OnStatusCheck -= HealStatusEffect;
     }
 
@@ -72,21 +87,21 @@ public class AbilityHandler : MonoBehaviour
     void PickUp()
     {
         if (_abilityTriggered) return;
-        Battle_handler.Instance.OnBattleEnd += GiveItem;
+        _battleHandler.OnBattleEnd += GiveItem;
         _abilityTriggered = true;
     }
     void ArenaTrap()
     {
         if (_abilityTriggered) return;
         TrapEnemies();//first entry in battle doesnt count as switch in, so leave this here
-        Battle_handler.Instance.OnSwitchIn += TrapEnemies;
-        Battle_handler.Instance.OnSwitchOut += RemoveTrap;
+        _battleHandler.OnSwitchIn += TrapEnemies;
+        _battleHandler.OnSwitchOut += RemoveTrap;
         _abilityTriggered = true;
     }
     void Blaze()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
+        _moveUsageHandler.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
     void Guts()
@@ -94,8 +109,8 @@ public class AbilityHandler : MonoBehaviour
         if (_abilityTriggered) return;
         if (_participant.pokemon.statusEffect == StatusEffect.None) return;
         var attackBuffData = new BuffDebuffData(_participant, Stat.Attack, true, 1);
-        BattleOperations.CanDisplayChange = false; 
-        Move_handler.Instance.SelectRelevantBuffOrDebuff(attackBuffData);
+        _battleOperationsHandler.canDisplayChange = false; 
+        _moveUsageHandler.SelectRelevantBuffOrDebuff(attackBuffData);
         _abilityTriggered = true;
     }
     void Levitate()
@@ -107,13 +122,13 @@ public class AbilityHandler : MonoBehaviour
     void Overgrow()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
+        _moveUsageHandler.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
     void ParalysisCombo()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
+        _moveUsageHandler.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
     void ShedSkin()
@@ -125,20 +140,20 @@ public class AbilityHandler : MonoBehaviour
     void Static()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnMoveHit += GiveStatic;
+        _moveUsageHandler.OnMoveHit += GiveStatic;
         _abilityTriggered = true;
     }
     
     void Swarm()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
+        _moveUsageHandler.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
     void Torrent()
     {
         if (_abilityTriggered) return;
-        Move_handler.Instance.OnDamageCalc += IncreaseDamage;
+        _moveUsageHandler.OnDamageCalc += IncreaseDamage;
         _abilityTriggered = true;
     }
 
@@ -147,8 +162,8 @@ public class AbilityHandler : MonoBehaviour
         if (participant != _participant) return;
         foreach (var enemy in _participant.currentEnemies)
             enemy.statusHandler.RemoveTrap();
-        Battle_handler.Instance.OnSwitchIn -= TrapEnemies;
-        Battle_handler.Instance.OnSwitchOut -= RemoveTrap;
+        _battleHandler.OnSwitchIn -= TrapEnemies;
+        _battleHandler.OnSwitchOut -= RemoveTrap;
     }
     private void TrapEnemies()
     {
@@ -156,7 +171,7 @@ public class AbilityHandler : MonoBehaviour
         {
             if (enemy.pokemon.HasType(Types.Flying) || enemy.pokemon.HasType(Types.Ghost))
                 continue;
-            Move_handler.Instance.ApplyTrap(enemy,false);
+            _moveUsageHandler.ApplyTrap(enemy,false);
         }
     }
     void HealStatusEffect(Battle_Participant participant)
@@ -173,7 +188,7 @@ public class AbilityHandler : MonoBehaviour
                     _participant.canAttack = true;
             }
             _participant.pokemon.statusEffect = StatusEffect.None;
-            Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
+            _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
             _participant.RefreshStatusEffectImage();
         }
     }
@@ -228,16 +243,16 @@ public class AbilityHandler : MonoBehaviour
             return;
         if(!moveUsed.isContact)return; 
         //simulate a pokemon's attack
-        Move_handler.Instance.OnStatusEffectHit+=NotifyStaticHit; 
+        _moveUsageHandler.OnStatusEffectHit+=NotifyStaticHit; 
         var placeholderMove = ScriptableObject.CreateInstance<Move>();
         placeholderMove.statusEffect = StatusEffect.Paralysis;
-        Move_handler.Instance.HandleStatusApplication(attacker, placeholderMove,false);
+        _moveUsageHandler.HandleStatusApplication(attacker, placeholderMove,false);
     }
 
     private void NotifyStaticHit(Battle_Participant attacker,StatusEffect status)//status is unused here but is required for method signature
     {
-        Move_handler.Instance.OnStatusEffectHit-=NotifyStaticHit; 
-        Dialogue_handler.Instance.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s static paralysed "+attacker.pokemon.pokemonName);
+        _moveUsageHandler.OnStatusEffectHit-=NotifyStaticHit; 
+        _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s static paralysed "+attacker.pokemon.pokemonName);
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {

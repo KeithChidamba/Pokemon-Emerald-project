@@ -25,17 +25,15 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     public Pokemon currentPokemon { get; private set; }
     public Move NewMoveAsset;
     public static Action<bool> OnEvChange;
-    public static PokemonOperations Instance;
     public event Action<Pokemon,bool> OnPokeballUsed;
     private Wild_pkm _wildPokemonHandler;
-    private Dialogue_handler _dialogueHandler;
     private Item_handler _itemHandler;
     private Pokemon_party _playerParty;
     private InputStateHandler _inputStateHandler;
     private Game_Load _gameHandler;
     private BattleVisuals _battleVisuals;
     private Pokemon_Details _pokemonDetailsHandler;
-
+    private Dialogue_handler _dialogueHandler;
     
     public void Inject(Container container)
     {
@@ -49,15 +47,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         _pokemonDetailsHandler=container.Resolve<Pokemon_Details>();
         gameObject.SetActive(true);
     }   
-    private void Awake()
-     {
-         if (Instance != null && Instance != this)
-         {
-             Destroy(gameObject);
-             return;
-         }
-         Instance = this;
-     }
+
     private long GeneratePokemonID(Pokemon pokemon)//pokemon's unique ID
     {
         int combinedIDs = _gameHandler.playerData.trainerID;
@@ -222,7 +212,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                 yield return new WaitUntil(() => SelectingMoveReplacement);
                 yield return new WaitUntil(() => !SelectingMoveReplacement);
             }
-            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         }
         yield return new WaitUntil(() => !LearningNewMove);
     }

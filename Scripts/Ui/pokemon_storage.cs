@@ -52,7 +52,6 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     public Text boxName;
     public LoopingUiAnimation[] boxChangeGreyArrows;
     public LoopingUiAnimation[] depositGreyArrows;
-    public static pokemon_storage Instance;
     private bool _viewingPC;
     private StorageBoxMovingData movingOperationData;
     public GameObject movePokemonUIOption;
@@ -89,19 +88,10 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _saveDataHandler = container.Resolve<Save_manager>();
         gameObject.SetActive(true);
-    }
-    
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        OnInject();
     }
 
-    private void Start()
+    private void OnInject()
     {
         maxPokemonCapacity = BoxCapacity * NumBoxes;
         _inputStateHandler.OnStateChanged += CheckState;
@@ -309,10 +299,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     {
         return nonPartyPokemon.FindIndex(p => p.pokemonID.ToString() == pokemonID);
     }
-    public bool IsPartyPokemon(string pokemonID)
-    {
-        return _saveDataHandler.partyIDs.Any(id => id == pokemonID);
-    }
+
     public void OpenPC(PCUsageState newState)
     {
         ClearPokemonData();

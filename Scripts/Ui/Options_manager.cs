@@ -11,7 +11,6 @@ public class Options_manager : MonoBehaviour,IInjectable
 {
     private Interaction _currentInteraction;
     public bool playerInBattle;
-    public static Options_manager Instance;
     private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
     public event Action<Interaction,int> OnInteractionOptionChosen;
     public event Action<Overworld_interactable,int> OnOverworldInteractionOptionChosen;
@@ -40,15 +39,6 @@ public class Options_manager : MonoBehaviour,IInjectable
         
         gameObject.SetActive(true);
     } 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     private void Start()
     {

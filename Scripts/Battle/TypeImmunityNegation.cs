@@ -8,9 +8,11 @@ public class TypeImmunityNegation
     public List<Types> ImmunityNegationTypes = new ();
     private Battle_Participant _participant;
     private Battle_Participant _victimOfimmunityNegation;
-    public TypeImmunityNegation(ImmunityNegationMove moveNameEnum,Battle_Participant participant
+    private Battle_handler _battleHandler;
+    public TypeImmunityNegation(Battle_handler battleHandler,ImmunityNegationMove moveNameEnum,Battle_Participant participant
         , Battle_Participant victim)
     {
+        _battleHandler = battleHandler;
         _participant =  participant;
         moveName = moveNameEnum;
         _victimOfimmunityNegation = victim;
@@ -18,7 +20,7 @@ public class TypeImmunityNegation
     public void RemoveNegationOnSwitchOut(Battle_Participant participant)
     {
         if (participant != _participant) return;
-        Battle_handler.Instance.OnSwitchOut -= RemoveNegationOnSwitchOut;
+        _battleHandler.OnSwitchOut -= RemoveNegationOnSwitchOut;
         _victimOfimmunityNegation.immunityNegations.RemoveAll(n => n.moveName == moveName);
     }
 }

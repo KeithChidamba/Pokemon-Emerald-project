@@ -6,23 +6,12 @@ public class Area_manager : MonoBehaviour,IInjectable
     public AreaData currentArea;
     public AreaData[] overworldAreas;
     public bool loadingPlayerFromSave;
-    public static Area_manager Instance;
     
     private Game_Load _gameLoadingHandler;
 
     public void Inject(Container container)
     {
         _gameLoadingHandler = container.Resolve<Game_Load>();
-        gameObject.SetActive(true);
-    }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
     }
 
     public void EscapeArea()

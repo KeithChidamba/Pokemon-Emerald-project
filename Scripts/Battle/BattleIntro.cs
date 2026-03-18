@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleIntro : MonoBehaviour
+public class BattleIntro : MonoBehaviour,IInjectable
 {
     [Header("UI References")]
     public RectTransform topBlackPanel;
@@ -40,16 +40,21 @@ public class BattleIntro : MonoBehaviour
     public PokeballRolloutUI playerPokeballs;
     public List<BattlePokeball> thrownPokeballs;
     private List<string> challengers = new ();
-    public static BattleIntro Instance;
-    private void Awake()
+    
+    private Dialogue_handler _dialogueHandler;
+    private Battle_handler _battleHandler;
+    private Wild_pkm _wildPokemonHandler;
+    private BattleVisuals _battleVisualsHandler;
+    
+    public void Inject(Container container)
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleVisualsHandler = container.Resolve<BattleVisuals>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _wildPokemonHandler = container.Resolve<Wild_pkm>();
+        gameObject.SetActive(true);
     }
+ 
     private void Start()
     {
         // Store initial positions
@@ -97,7 +102,7 @@ public class BattleIntro : MonoBehaviour
     {
         var startPos = rectTransform.anchoredPosition;
         var target = new Vector2(rectTransform.anchoredPosition.x + distance, rectTransform.anchoredPosition.y);
-         StartCoroutine(BattleVisuals.Instance.SlideRect(rectTransform, startPos, target , platformSlideSpeed*5));
+         StartCoroutine(_battleVisualsHandler.SlideRect(rectTransform, startPos, target , platformSlideSpeed*5));
     }
     private IEnumerator MainIntroSequence()
     {
@@ -108,15 +113,15 @@ public class BattleIntro : MonoBehaviour
         }
         
         dialogueBox.gameObject.SetActive(true);
-        Dialogue_handler.Instance.battleDialogueBox.gameObject.SetActive(false);
+        _dialogueHandler.battleDialogueBox.gameObject.SetActive(false);
         StartCoroutine(MovePanelsApart());
-        if(!Battle_handler.Instance.isTrainerBattle)
+        if(!_battleHandler.isTrainerBattle)
         {
             IEnumerator DropParallax(float delay)
             {
                 yield return new WaitForSeconds(delay);
                 var droppedPosition = new Vector2(parallaxObject.anchoredPosition.x + 100f,parallaxObject.anchoredPosition.y-parallaxObject.rect.height);
-                yield return BattleVisuals.Instance.SlideRect(parallaxObject, parallaxObject.anchoredPosition, droppedPosition, 200f);
+                yield return _battleVisualsHandler.SlideRect(parallaxObject, parallaxObject.anchoredPosition, droppedPosition, 200f);
                 parallaxObject.gameObject.SetActive(false);
             }
             terrainParallaxImage.rectTransform.anchoredPosition = terrainParallaxStart;
@@ -133,12 +138,12 @@ public class BattleIntro : MonoBehaviour
         leftPlatform.gameObject.SetActive(true);
         rightPlatform.gameObject.SetActive(true);
         // 5️⃣ Platforms slide from opposite sides to center
-        StartCoroutine(BattleVisuals.Instance.SlideRect(leftPlatform, leftPlatformStart, leftPlatformTarget, platformSlideSpeed));
-        yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rightPlatform, rightPlatformStart, rightPlatformTarget, platformSlideSpeed*0.96f));
+        StartCoroutine(_battleVisualsHandler.SlideRect(leftPlatform, leftPlatformStart, leftPlatformTarget, platformSlideSpeed));
+        yield return StartCoroutine(_battleVisualsHandler.SlideRect(rightPlatform, rightPlatformStart, rightPlatformTarget, platformSlideSpeed*0.96f));
     }
     public IEnumerator PlayWildIntroSequence()
     {
-        var participants = Battle_handler.Instance.battleParticipants;
+        var participants = _battleHandler.battleParticipants;
 
         for (var i=0;i<4;i++)
         {
@@ -155,15 +160,15 @@ public class BattleIntro : MonoBehaviour
 
         yield return MainIntroSequence();
         
-        var wildParticipant = Wild_pkm.Instance.participant;
-        Dialogue_handler.Instance.DisplayBattleInfo(
+        var wildParticipant = _wildPokemonHandler.participant;
+        _dialogueHandler.DisplayBattleInfo(
             $"A wild {wildParticipant.rawName} has appeared");
         
         wildParticipant.pokemonImage.gameObject.SetActive(false);
         var wildPokemonRect = wildParticipant.participantUI.GetComponent<RectTransform>();
         wildParticipant.participantUI.SetActive(true);
         var start = new Vector2(wildPokemonRect.anchoredPosition.x - 500, wildPokemonRect.anchoredPosition.y);
-        yield return StartCoroutine(BattleVisuals.Instance.SlideRect(wildPokemonRect, start, wildPokemonRect.anchoredPosition, platformSlideSpeed*5));
+        yield return StartCoroutine(_battleVisualsHandler.SlideRect(wildPokemonRect, start, wildPokemonRect.anchoredPosition, platformSlideSpeed*5));
         
         wildParticipant.pokemonImage.gameObject.SetActive(true);
         participantIntroImages[2].gameObject.SetActive(false); 
@@ -172,8 +177,8 @@ public class BattleIntro : MonoBehaviour
         StartCoroutine(PokemonIntroAnimationMovement(wildParticipant));
         yield return new WaitForSeconds(3f);
         
-        Dialogue_handler.Instance.DisplayBattleInfo( $"Go! {participants[0].pokemon.pokemonName}");
-        StartCoroutine(BattleVisuals.Instance.DisplayPokemonRelease());
+        _dialogueHandler.DisplayBattleInfo( $"Go! {participants[0].pokemon.pokemonName}");
+        StartCoroutine(_battleVisualsHandler.DisplayPokemonRelease());
         yield return new WaitForSeconds(1.5f);
         
         for (var i=0;i<2;i++)
@@ -190,9 +195,9 @@ public class BattleIntro : MonoBehaviour
     {
         string message = "";
         challengers.Clear();
-        var participants = Battle_handler.Instance.battleParticipants;
+        var participants = _battleHandler.battleParticipants;
 
-        if (Battle_handler.Instance.currentBattleType == BattleType.SingleDouble)
+        if (_battleHandler.currentBattleType == BattleType.SingleDouble)
         {
             participantIntroImages[2].sprite = participants[2].pokemonTrainerAI.trainerData.battleIntroSprite; 
             participantIntroImages[2].gameObject.SetActive(true);
@@ -228,18 +233,18 @@ public class BattleIntro : MonoBehaviour
         
         yield return MainIntroSequence();
         
-        Dialogue_handler.Instance.DisplayBattleInfo(message);
-        yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+        _dialogueHandler.DisplayBattleInfo(message);
+        yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
         //show pokeballs
         StartCoroutine(enemyPokeballs.LoadPokeballs());
         yield return playerPokeballs.LoadPokeballs();
         
         StartCoroutine(enemyPokeballs.HidePokeballs());
-        if (Battle_handler.Instance.currentBattleType != BattleType.SingleDouble)
+        if (_battleHandler.currentBattleType != BattleType.SingleDouble)
         {
             for (var i = 0; i < challengers.Count; i++)
             {
-                Dialogue_handler.Instance.DisplayBattleInfo(
+                _dialogueHandler.DisplayBattleInfo(
                     $"{challengers[i]} sent out {participants[i + 2].pokemon.pokemonName}!");
                 StartCoroutine(thrownPokeballs[i + 1].ThrowPokeball(true));
                 yield return new WaitForSeconds(1f);
@@ -248,12 +253,12 @@ public class BattleIntro : MonoBehaviour
                 StartCoroutine(PokemonIntroAnimation(participants[i + 2]));
                 StartCoroutine(PokemonIntroAnimationMovement(participants[i + 2]));
                 yield return new WaitForSeconds(3f);
-                yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+                yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
             }
         }
         else
         {
-            Dialogue_handler.Instance.DisplayBattleInfo(
+            _dialogueHandler.DisplayBattleInfo(
                 $"{challengers[0]} sent out {participants[2].pokemon.pokemonName} and {participants[3].pokemon.pokemonName}!");
 
             StartCoroutine(thrownPokeballs[1].ThrowPokeball(true));
@@ -267,18 +272,18 @@ public class BattleIntro : MonoBehaviour
             participants[2].participantUI.SetActive(true);
             participants[3].participantUI.SetActive(true);
             yield return new WaitForSeconds(3f);
-            yield return new WaitUntil(() => !Dialogue_handler.Instance.messagesLoading);
+            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         }
         
-        message = Battle_handler.Instance.isDoubleBattle
+        message = _battleHandler.isDoubleBattle
             ? $"Go! {participants[0].pokemon.pokemonName}" +
               $" and {participants[1].pokemon.pokemonName}!"
             : $"Go! {participants[0].pokemon.pokemonName}!";
         
-        Dialogue_handler.Instance.DisplayBattleInfo(message);
+        _dialogueHandler.DisplayBattleInfo(message);
 
-        StartCoroutine(BattleVisuals.Instance.DisplayPokemonRelease());
-        if (Battle_handler.Instance.isDoubleBattle)
+        StartCoroutine(_battleVisualsHandler.DisplayPokemonRelease());
+        if (_battleHandler.isDoubleBattle)
         {
             yield return new WaitForSeconds(0.5f);
             StartCoroutine(thrownPokeballs[0].ThrowPokeball(false));
@@ -291,7 +296,7 @@ public class BattleIntro : MonoBehaviour
             StartCoroutine(PokemonIntroAnimationMovement(participants[i]));
             participants[i].participantUI.SetActive(true);
         }
-        yield return new WaitUntil(()=>!Dialogue_handler.Instance.messagesLoading);
+        yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
        
         for (var i = 0; i < 4; i++)
         {
@@ -303,7 +308,7 @@ public class BattleIntro : MonoBehaviour
 
     public IEnumerator ShowEnemiesAfterBattle()
     {
-        var participants = Battle_handler.Instance.battleParticipants;
+        var participants = _battleHandler.battleParticipants;
         for (var i = 0; i < challengers.Count; i++)
         {
             participants[i + 2].participantUI.SetActive(false);
@@ -312,7 +317,7 @@ public class BattleIntro : MonoBehaviour
                 participantIntroImages[i + 2].rectTransform.anchoredPosition.y);
             var target = participantIntroImages[i + 2].rectTransform.anchoredPosition;
             
-            yield return BattleVisuals.Instance.SlideRect(participantIntroImages[i + 2].rectTransform, startPos, target , platformSlideSpeed*5);
+            yield return _battleVisualsHandler.SlideRect(participantIntroImages[i + 2].rectTransform, startPos, target , platformSlideSpeed*5);
         }
     }
 
@@ -327,17 +332,17 @@ public class BattleIntro : MonoBehaviour
         
         swapParticipant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
         
-        yield return Battle_handler.Instance.SetParticipant(swapParticipant,newPokemon:newPokemon);
+        yield return _battleHandler.SetParticipant(swapParticipant,newPokemon:newPokemon);
         
-        if(!faintSwitch) yield return BattleVisuals.Instance.RevealPokemon(swapParticipant,true);
+        if(!faintSwitch) yield return _battleVisualsHandler.RevealPokemon(swapParticipant,true);
         
         if (swapParticipant.isEnemy)
         {
-            yield return BattleVisuals.Instance.SendOutEnemyPokemon(swapParticipant);
+            yield return _battleVisualsHandler.SendOutEnemyPokemon(swapParticipant);
             yield return PokemonIntroAnimation(swapParticipant);
         }
         else
-            yield return BattleVisuals.Instance.SendOutPlayerPokemon(swapParticipant);
+            yield return _battleVisualsHandler.SendOutPlayerPokemon(swapParticipant);
     }
 
 
@@ -353,12 +358,12 @@ public class BattleIntro : MonoBehaviour
         if(participant.isEnemy)
         {//LEFT AND RIGHT SLIDE
             var target = new Vector2(rect.anchoredPosition.x + 10f, rect.anchoredPosition.y);
-            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect,
+            yield return StartCoroutine(_battleVisualsHandler.SlideRect(rect,
                 startPos, target, movementSpeed));
             target = new Vector2(startPos.x - 20f, rect.anchoredPosition.y);
-            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(_battleVisualsHandler.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
             target = new Vector2(startPos.x, rect.anchoredPosition.y);
-            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(_battleVisualsHandler.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
         }
         else
         {
@@ -366,18 +371,18 @@ public class BattleIntro : MonoBehaviour
             var yOffset = 6f;
             //LEFT AND RIGHT BOUNCE
             var target = new Vector2(startPos.x - xOffset, startPos.y + yOffset);
-            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, startPos, target, movementSpeed));
+            yield return StartCoroutine(_battleVisualsHandler.SlideRect(rect, startPos, target, movementSpeed));
             
             target = new Vector2(startPos.x - xOffset*2, startPos.y - yOffset);
-            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(_battleVisualsHandler.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
 
             target = new Vector2(startPos.x + xOffset, startPos.y + yOffset);
-            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(_battleVisualsHandler.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
     
             target = new Vector2(startPos.x + xOffset*2, startPos.y - yOffset);
-            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            yield return StartCoroutine(_battleVisualsHandler.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
             //RETURN TO POSITION    
-            yield return StartCoroutine(BattleVisuals.Instance.SlideRect(rect, rect.anchoredPosition, startPos, movementSpeed));
+            yield return StartCoroutine(_battleVisualsHandler.SlideRect(rect, rect.anchoredPosition, startPos, movementSpeed));
         }
     }
     private IEnumerator PokemonIntroAnimation(Battle_Participant participant)
@@ -410,15 +415,15 @@ public class BattleIntro : MonoBehaviour
         bottomBlackPanel.gameObject.SetActive(false);
         topBlackPanel.gameObject.SetActive(false);
         dialogueBox.gameObject.SetActive(false);
-        Dialogue_handler.Instance.battleDialogueBox.gameObject.SetActive(true);
+        _dialogueHandler.battleDialogueBox.gameObject.SetActive(true);
     }
     public IEnumerator BlackFade()
     {
         bottomBlackPanel.gameObject.SetActive(true);
         topBlackPanel.gameObject.SetActive(true);
         dialogueBox.gameObject.SetActive(true);
-        Dialogue_handler.Instance.battleDialogueBox.gameObject.SetActive(false);
-        Battle_handler.Instance.optionsUI.SetActive(false);
+        _dialogueHandler.battleDialogueBox.gameObject.SetActive(false);
+        _battleHandler.optionsUI.SetActive(false);
         topBlackTarget = topBlackPanel.anchoredPosition + Vector2.down * topBlackPanel.rect.height;
         bottomBlackTarget = bottomBlackPanel.anchoredPosition + Vector2.up * bottomBlackPanel.rect.height;
         while (Vector2.Distance(topBlackPanel.anchoredPosition, topBlackTarget) > 0.5f)

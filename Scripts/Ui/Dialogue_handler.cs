@@ -29,7 +29,6 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     
     public event Action<Overworld_interactable> OnOptionsDisplayed;
     
-    public static Dialogue_handler Instance;
     private Battle_handler _battleHandler;
     private Player_movement _playerMovementHandler;
     private InputStateHandler _inputStateHandler;
@@ -43,19 +42,10 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         _interactionHandler = container.Resolve<Interaction_handler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         gameObject.SetActive(true);
-    }
-    
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        OnInject();
     }
 
-    private void Start()
+    private void OnInject()
     {
         _dialogueOptionsManager = dialogueOptionBox.GetComponent<DialogueOptionsManager>();
         _battleHandler.OnBattleEnd += () => messagesLoading = false;
