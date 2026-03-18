@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
-public class PokeballRolloutUI : MonoBehaviour
+public class PokeballRolloutUI : MonoBehaviour,IInjectable
 {
     public List<RectTransform> pokeballs;
     public RectTransform startPos;
@@ -17,6 +17,20 @@ public class PokeballRolloutUI : MonoBehaviour
     public bool isPlayerPokeballs;
     public Sprite emptyPokeballSlot;
     public Sprite fullPokeballSlot;
+    
+    private BattleVisuals _battleVisualsHandler;
+    private Pokemon_party _pokemonPartyHandler;
+    private BattleIntro _battleIntroHandler;
+    private Battle_handler _battleHandler;
+
+    public void Inject(Container container)
+    {
+        _battleVisualsHandler = container.Resolve<BattleVisuals>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _battleIntroHandler = container.Resolve<BattleIntro>();
+        _battleHandler = container.Resolve<Battle_handler>();
+    }
+    
     private void Awake()
     {
         _rectTransform = GetComponent<RectTransform>();
@@ -24,7 +38,7 @@ public class PokeballRolloutUI : MonoBehaviour
 
     private void Start()
     {
-        Battle_handler.Instance.OnBattleEnd += ResetPokeballs;
+        _battleHandler.OnBattleEnd += ResetPokeballs;
     }
 
     public IEnumerator ShowPokeballs()
@@ -38,7 +52,7 @@ public class PokeballRolloutUI : MonoBehaviour
         }
         var distance = isPlayerPokeballs ? -500f : 500f;
         var target = new Vector2(_rectTransform.anchoredPosition.x + distance, _rectTransform.anchoredPosition.y);
-        yield return BattleVisuals.Instance.SlideRect(_rectTransform, _rectTransform.anchoredPosition, target , 600f);
+        yield return _battleVisualsHandler.SlideRect(_rectTransform, _rectTransform.anchoredPosition, target , 600f);
     }
     public IEnumerator LoadPokeballs()
     {
@@ -55,7 +69,7 @@ public class PokeballRolloutUI : MonoBehaviour
                     startPos.anchoredPosition.y);
             var pokeballPos = new Vector2(startPos.anchoredPosition.x + (i * pokeballDistanceApart),
                 startPos.anchoredPosition.y);
-            yield return BattleVisuals.Instance.SlideRect(pokeballs[i], pokeballs[i].anchoredPosition, pokeballPos,
+            yield return _battleVisualsHandler.SlideRect(pokeballs[i], pokeballs[i].anchoredPosition, pokeballPos,
                 pokeballMoveSpeed);
         }
 
@@ -67,11 +81,11 @@ public class PokeballRolloutUI : MonoBehaviour
     {
         if (isPlayerPokeballs)
         {
-            if( pokeballIndex < Pokemon_party.Instance.numMembers)
+            if( pokeballIndex < _pokemonPartyHandler.numMembers)
             {
                 pokeballImage.sprite = fullPokeballSlot;
                 pokeballImage.color =
-                    Pokemon_party.Instance.party[pokeballIndex].hp > 0 ? Color.white : new Color32(129, 129, 129,255);
+                    _pokemonPartyHandler.party[pokeballIndex].hp > 0 ? Color.white : new Color32(129, 129, 129,255);
             }
             else
             {
@@ -80,17 +94,17 @@ public class PokeballRolloutUI : MonoBehaviour
         }
         else
         {
-            if (Battle_handler.Instance.currentBattleType == BattleType.Double)
+            if (_battleHandler.currentBattleType == BattleType.Double)
             {
                 //cross this bridge when we get there
             }
             else
             {
-                var partyCount = Battle_handler.Instance.battleParticipants[2].pokemonTrainerAI.trainerParty.Count;
+                var partyCount = _battleHandler.battleParticipants[2].pokemonTrainerAI.trainerParty.Count;
                 if (pokeballIndex < partyCount)
                 {
                     pokeballImage.sprite = fullPokeballSlot;
-                    pokeballImage.color = Battle_handler.Instance.battleParticipants[2].pokemonTrainerAI.trainerParty[pokeballIndex].hp>0?
+                    pokeballImage.color = _battleHandler.battleParticipants[2].pokemonTrainerAI.trainerParty[pokeballIndex].hp>0?
                         Color.white: new Color32(129, 129, 129,255);
                 }
                 else
@@ -103,7 +117,7 @@ public class PokeballRolloutUI : MonoBehaviour
     public IEnumerator HidePokeballs()
     {
         yield return new WaitUntil(() => _finishedDisplaying);
-        BattleIntro.Instance.SlideOutOfView(_rectTransform, isPlayerPokeballs ? 500f : -500f);
+        _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? 500f : -500f);
     }
 
     private void ResetPokeballs()
@@ -113,6 +127,6 @@ public class PokeballRolloutUI : MonoBehaviour
             pokeballs[i].anchoredPosition = startPos.anchoredPosition;
         }
         gameObject.SetActive(false);
-        BattleIntro.Instance.SlideOutOfView(_rectTransform, isPlayerPokeballs ? -500f : 500f);
+        _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? -500f : 500f);
     }
 }

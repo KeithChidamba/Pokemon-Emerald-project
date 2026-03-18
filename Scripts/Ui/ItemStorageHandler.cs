@@ -3,10 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemUsage{Withdraw,Deposit,Toss,None}
-public class ItemStorageHandler : MonoBehaviour
+public class ItemStorageHandler : MonoBehaviour,IInjectable
 {
     public static ItemStorageHandler Instance;
     public ItemUsage currentUsage;
+    
+    private Game_ui_manager _gameUIHandler;
+    private Dialogue_handler _dialogueHandler;
+    private Bag _playerBagHandler;
+    
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _playerBagHandler = container.Resolve<Bag>();
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        gameObject.SetActive(true);
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -19,40 +31,40 @@ public class ItemStorageHandler : MonoBehaviour
 
     public void ViewItemsToWithdraw()
     {
-        if (Bag.Instance.storageItems.Count==0)
+        if (_playerBagHandler.storageItems.Count==0)
         {
-            Dialogue_handler.Instance.DisplayDetails("You have no items to withdraw");
+            _dialogueHandler.DisplayDetails("You have no items to withdraw");
             return;
         }
         currentUsage = ItemUsage.Withdraw;
-        Bag.Instance.OnItemSelected += Bag.Instance.WithDrawFromStorage;
-        Bag.Instance.currentBagUsage = BagUsage.SelectionOnly;
-        Bag.Instance.storageView = true;
-        Game_ui_manager.Instance.ViewBag();
+        _playerBagHandler.OnItemSelected += _playerBagHandler.WithDrawFromStorage;
+        _playerBagHandler.currentBagUsage = BagUsage.SelectionOnly;
+        _playerBagHandler.storageView = true;
+        _gameUIHandler.ViewBag();
     }
     public void OpenBagToDepositItem()
     {
         currentUsage = ItemUsage.Deposit;
-        Bag.Instance.OnItemSelected += DepositItem;
-        Bag.Instance.currentBagUsage = BagUsage.SelectionOnly;
-        Game_ui_manager.Instance.ViewBag();
+        _playerBagHandler.OnItemSelected += DepositItem;
+        _playerBagHandler.currentBagUsage = BagUsage.SelectionOnly;
+        _gameUIHandler.ViewBag();
     }
     public void OpenBagToTossItem()
     {
         currentUsage = ItemUsage.Toss;
-        Bag.Instance.OnItemSelected += TossItem;
-        Bag.Instance.currentBagUsage = BagUsage.SelectionOnly;
-        Game_ui_manager.Instance.ViewBag();
+        _playerBagHandler.OnItemSelected += TossItem;
+        _playerBagHandler.currentBagUsage = BagUsage.SelectionOnly;
+        _gameUIHandler.ViewBag();
     }
     private void DepositItem(Item item)
     {
-        Dialogue_handler.Instance.DisplayDetails("Sent "+item.itemName+" to storage");
-        Bag.Instance.DepositToStorage(item);
+        _dialogueHandler.DisplayDetails("Sent "+item.itemName+" to storage");
+        _playerBagHandler.DepositToStorage(item);
     }
     private void TossItem(Item item)
     {
-        Dialogue_handler.Instance.DisplayDetails("Threw "+item.itemName+(item.quantity==1?"":"'s ")+" away");
-        Bag.Instance.RemoveItem(item);
+        _dialogueHandler.DisplayDetails("Threw "+item.itemName+(item.quantity==1?"":"'s ")+" away");
+        _playerBagHandler.RemoveItem(item);
     }
 }
 

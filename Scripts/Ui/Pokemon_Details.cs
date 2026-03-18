@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Pokemon_Details : MonoBehaviour
+public class Pokemon_Details : MonoBehaviour,IInjectable
 {
     //too lazy to change this to camelCase because ot would take a lot of editor work
     [SerializeField]private Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID,pkm_nature,Trainer_Name;
@@ -39,6 +39,16 @@ public class Pokemon_Details : MonoBehaviour
     public GameObject moveSelector;
     public GameObject uiParent;
     public static Pokemon_Details Instance;
+    
+    private InputStateHandler _inputStateHandler;
+    private Game_Load _gameLoadingHandler;
+    
+    public void Inject(Container container)
+    {
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        gameObject.SetActive(true);
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -102,7 +112,7 @@ public class Pokemon_Details : MonoBehaviour
             OnMoveSelected?.Invoke(moveIndex);
             return;
         }
-        InputStateHandler.Instance.ChangeInputState(new (InputStateName.PokemonDetailsMoveData,
+        _inputStateHandler.ChangeInputState(new (InputStateName.PokemonDetailsMoveData,
             new[]{InputStateGroup.PokemonDetails}
             ,stateDirection:InputDirection.None, onExit:RemoveMoveDescription));
 
@@ -134,7 +144,7 @@ public class Pokemon_Details : MonoBehaviour
             typeImages[i].gameObject.SetActive(true);
         }
         pkm_ablty_desc.text = currentPokemon.ability.abilityDescription;
-        Trainer_Name.text = Game_Load.Instance.playerData.playerName;
+        Trainer_Name.text = _gameLoadingHandler.playerData.playerName;
         pkm_ablty.text = currentPokemon.ability.abilityName.ToUpper();
         pkm_nature.text = currentPokemon.nature.natureName.ToUpper();
         Ability_ui.SetActive(true);
@@ -159,7 +169,7 @@ public class Pokemon_Details : MonoBehaviour
     {
         if (learningMove || changingMoveData)
         {//simulate F click
-            InputStateHandler.Instance.CurrentState.selectableUis[2]?.eventForUi?.Invoke();
+            _inputStateHandler.CurrentState.selectableUis[2]?.eventForUi?.Invoke();
         }
 
         Ability_ui.SetActive(false);

@@ -2,12 +2,18 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Store_Item_ui : MonoBehaviour
+public class Store_Item_ui : MonoBehaviour,IInjectable
 {
     public Item item;
     public Text price;
     public Text itemName;
     public Image itemImage;
+    private Poke_Mart _pokeMartHandler;
+
+    public void Inject(Container container)
+    {
+        _pokeMartHandler = container.Resolve<Poke_Mart>();
+    }
     public void LoadItemUI()
     {
         itemName.text = item.itemName;
@@ -15,13 +21,13 @@ public class Store_Item_ui : MonoBehaviour
     }
     public void LoadItemDescription()
     {
-        Poke_Mart.Instance.itemDescription.text = item.itemDescription;
+        _pokeMartHandler.itemDescription.text = item.itemDescription;
         itemImage.sprite = item.itemImage;
     }
     public void ClearUI()
     {
         item = null;
-        Poke_Mart.Instance.itemDescription.text = "";
+        _pokeMartHandler.itemDescription.text = "";
         itemImage.sprite = null;
         gameObject.SetActive(false);
     }

@@ -1,14 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using Unity.Mathematics;
-using TMPro;
-using UnityEngine.Serialization;
 
-public class DialogueOptionsManager : MonoBehaviour
+public class DialogueOptionsManager : MonoBehaviour,IInjectable
 {
     public List<DialogueOption> currentOptions;
     [SerializeField]private int widthMultiplier = 19;
@@ -17,6 +11,12 @@ public class DialogueOptionsManager : MonoBehaviour
     [SerializeField] private float selectorPositionMultiplier = -0.9f;
     private RectTransform _rectTransform;
     private int _selectorWidth = 40;
+    
+    private Dialogue_handler _dialogueHandler;
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+    }
     private void OnEnable()
     {
         _rectTransform = GetComponent<RectTransform>();
@@ -32,7 +32,7 @@ public class DialogueOptionsManager : MonoBehaviour
         foreach (var option in currentOptions)
             option.SetWidth(width);
       
-        var selectorImage = Dialogue_handler.Instance.optionSelector.transform.GetChild(0);
+        var selectorImage = _dialogueHandler.optionSelector.transform.GetChild(0);
         var selectorRect = selectorImage.GetComponentInChildren<RectTransform>();
         var yPos = selectorRect.anchoredPosition.y;
         _rectTransform.sizeDelta = new Vector2(width + _selectorWidth*0.5f, height - currentOptions.Count);

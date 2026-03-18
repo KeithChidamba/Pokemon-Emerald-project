@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Pokemon_party_member : MonoBehaviour
+public class Pokemon_party_member : MonoBehaviour,IInjectable
 {
     public Text pokemonNameText;
     public Text pokemonLevelText;
@@ -31,6 +31,16 @@ public class Pokemon_party_member : MonoBehaviour
     private Vector2 _startPos;
     private Vector2 _targetPos;
     private bool _movingToTarget = true;
+    
+    private Pokemon_party _pokemonPartyHandler;
+    private InputStateHandler _inputStateHandler;
+    
+    public void Inject(Container container)
+    {
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+    }
+    
     public void LevelupForTesting()//testing purposes
     {
         if(pokemon==null)return;
@@ -42,8 +52,8 @@ public class Pokemon_party_member : MonoBehaviour
 
     private void Start()
     {
-        InputStateHandler.Instance.OnStateChanged += CheckIfViewing;
-        InputStateHandler.Instance.OnStateRemoved += ResetSelectionVisual;
+        _inputStateHandler.OnStateChanged += CheckIfViewing;
+        _inputStateHandler.OnStateRemoved += ResetSelectionVisual;
         
         _startPos = pokemonFrontImage.rectTransform.anchoredPosition;
         _targetPos = _startPos +Vector2.up * 10f;
@@ -98,7 +108,7 @@ public class Pokemon_party_member : MonoBehaviour
                 Save_manager.GetDirectory(AssetDirectory.Status)
                 + pokemon.statusEffect.ToString().ToLower());
         }
-        InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;
+        _inputStateHandler.OnSelectionIndexChanged += UpdateUi;
     }
     public void ResetUI()
     {
@@ -138,8 +148,8 @@ public class Pokemon_party_member : MonoBehaviour
                          || currentState.stateName == InputStateName.PokemonPartyItemUsage;
         if (_isViewingCard)
         {
-            InputStateHandler.Instance.OnSelectionIndexChanged += UpdateUi;
-            UpdateUi(InputStateHandler.Instance.CurrentState.currentSelectionIndex);
+            _inputStateHandler.OnSelectionIndexChanged += UpdateUi;
+            UpdateUi(_inputStateHandler.CurrentState.currentSelectionIndex);
         }
     }
     private void ResetSelectionVisual(InputState previousState)
@@ -158,12 +168,12 @@ public class Pokemon_party_member : MonoBehaviour
     private void UpdateUi(int currentIndex)
     {
         if (isEmpty || !_isViewingCard) return;
-        if (currentIndex == Pokemon_party.Instance.numMembers)
+        if (currentIndex == _pokemonPartyHandler.numMembers)
         {
             ChangeVisibility(false);
             return;
         }
-        ChangeVisibility(Pokemon_party.Instance.party[currentIndex] == pokemon);
+        ChangeVisibility(_pokemonPartyHandler.party[currentIndex] == pokemon);
     }
     private void Update()
     {

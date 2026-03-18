@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Game_ui_manager : MonoBehaviour
+public class Game_ui_manager : MonoBehaviour,IInjectable
 {
 
     public GameObject menuOptions;
@@ -28,7 +28,41 @@ public class Game_ui_manager : MonoBehaviour
     public bool usingWebGl;
     [SerializeField]private bool _canOpenMenu;
     public Image destinationPointerUI;
-
+    
+    private Item_handler _itemHandler;
+    private Pokemon_Details _pokemonDetailsHandler;
+    private Dialogue_handler _dialogueHandler;
+    private Player_movement _playerMovementHandler;
+    private InputStateHandler _inputStateHandler;
+    private Options_manager _dialogueOptionsHandler;
+    private Game_Load _gameLoadingHandler;
+    private overworld_actions _overworldActionsHandler;
+    private Save_manager _saveDataHandler;
+    private Bag _playerBagHandler;
+    private Poke_Mart _pokeMartHandler;
+    private Pokemon_party _pokemonPartyHandler;
+    private pokemon_storage _pokemonStorageHandler;
+    private ItemStorageHandler _itemStorageHandler;
+    
+    public void Inject(Container container)
+    {
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _playerBagHandler = container.Resolve<Bag>();
+        _pokeMartHandler = container.Resolve<Poke_Mart>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
+        _saveDataHandler = container.Resolve<Save_manager>();
+        _playerMovementHandler = container.Resolve<Player_movement>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        _overworldActionsHandler = container.Resolve<overworld_actions>();
+        _itemHandler = container.Resolve<Item_handler>();
+        _pokemonStorageHandler = container.Resolve<pokemon_storage>();
+        _itemStorageHandler = container.Resolve<ItemStorageHandler>();
+        gameObject.SetActive(true);
+    }
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -46,8 +80,8 @@ public class Game_ui_manager : MonoBehaviour
         if (usingWebGl) menuUiOptions.Remove(menuUiOptions.Last());//remove exit button
         canUseUi = false;
         _canOpenMenu = true;
-        Game_Load.Instance.OnGameStarted += () => canUseUi = true;
-        InputStateHandler.Instance.OnStateChanged += AllowMenuUsage;
+        _gameLoadingHandler.OnGameStarted += () => canUseUi = true;
+        _inputStateHandler.OnStateChanged += AllowMenuUsage;
     }
 
     private void AllowMenuUsage( InputState previousState)
@@ -56,7 +90,7 @@ public class Game_ui_manager : MonoBehaviour
     }
     private void Update()
     {
-        if (overworld_actions.Instance == null) return;
+        if (_overworldActionsHandler == null) return;
         if (!canUseUi) return;
         if (Input.GetKeyDown(KeyCode.Space) && _canOpenMenu &&!viewingMenu)
         {
@@ -70,17 +104,17 @@ public class Game_ui_manager : MonoBehaviour
     {
         numUIScreensOpen += change;
         if (numUIScreensOpen < 0) numUIScreensOpen = 0;
-        overworld_actions.Instance.usingUI = numUIScreensOpen>0;
+        _overworldActionsHandler.usingUI = numUIScreensOpen>0;
 
         if (numUIScreensOpen == 0)
         {
-            StartCoroutine(Player_movement.Instance.AllowPlayerMovement(0.3f));
+            StartCoroutine(_playerMovementHandler.AllowPlayerMovement(0.3f));
         }
         else
-            Player_movement.Instance.RestrictPlayerMovement();
-        if (Options_manager.Instance.playerInBattle)
+            _playerMovementHandler.RestrictPlayerMovement();
+        if (_dialogueOptionsHandler.playerInBattle)
         {
-            Player_movement.Instance.RestrictPlayerMovement();
+            _playerMovementHandler.RestrictPlayerMovement();
         }
     }
 
@@ -88,17 +122,17 @@ public class Game_ui_manager : MonoBehaviour
     {
         var menuOptionsMethods = new List<Action>
         {
-            ViewPokemonParty,()=>StartCoroutine(Save_manager.Instance.SaveAllData()), ViewBag, ViewProfile
+            ViewPokemonParty,()=>StartCoroutine(_saveDataHandler.SaveAllData()), ViewBag, ViewProfile
         };
         
-        if (!usingWebGl) menuOptionsMethods.Add(Options_manager.Instance.ExitGame);
+        if (!usingWebGl) menuOptionsMethods.Add(_dialogueOptionsHandler.ExitGame);
         
         var menuSelectables = new List<SelectableUI>();
             
         for (var i =0; i<menuOptionsMethods.Count;i++)
             menuSelectables.Add( new(menuUiOptions[i],menuOptionsMethods[i],true) );
             
-        InputStateHandler.Instance.ChangeInputState(new (InputStateName.PlayerMenu,
+        _inputStateHandler.ChangeInputState(new (InputStateName.PlayerMenu,
             new[] { InputStateGroup.None},true,menuOptions,
             InputDirection.Vertical, menuSelectables,menuSelector,true
             , true,CloseMenu,CloseMenu)); }
@@ -120,30 +154,30 @@ public class Game_ui_manager : MonoBehaviour
     private void ClosePokeMart()
     {
         ManageScreens(-1);
-        ActivateUiElement(Poke_Mart.Instance.storeUI, false);
-        Poke_Mart.Instance.ExitStore();
-        Dialogue_handler.Instance.DisplayDetails("Have a great day!");
+        ActivateUiElement(_pokeMartHandler.storeUI, false);
+        _pokeMartHandler.ExitStore();
+        _dialogueHandler.DisplayDetails("Have a great day!");
     }
     private void CloseBag()
     {
         ManageScreens(-1);
-        Bag.Instance.CloseBag();
-        ActivateUiElement( Bag.Instance.bagUI, false);
-        ActivateUiElement( Bag.Instance.bagOverlayUI, false);
+        _playerBagHandler.CloseBag();
+        ActivateUiElement( _playerBagHandler.bagUI, false);
+        ActivateUiElement( _playerBagHandler.bagOverlayUI, false);
     }
     private void CloseParty()
     {
         ManageScreens(-1);
-        ActivateUiElement(Pokemon_party.Instance.partyUI.gameObject, false);
-        Pokemon_party.Instance.ResetPartyState();
+        ActivateUiElement(_pokemonPartyHandler.partyUI.gameObject, false);
+        _pokemonPartyHandler.ResetPartyState();
     }
 
     private void ClosePokemonDetails()
     {
         ManageScreens(-1);
-        ActivateUiElement(Pokemon_Details.Instance.uiParent,false);
-        Pokemon_Details.Instance.ResetDetailsState();
-        Pokemon_Details.Instance.DeactivateDetailsUi();
+        ActivateUiElement(_pokemonDetailsHandler.uiParent,false);
+        _pokemonDetailsHandler.ResetDetailsState();
+        _pokemonDetailsHandler.DeactivateDetailsUi();
     }
     private void CloseMenu()
     {
@@ -156,52 +190,52 @@ public class Game_ui_manager : MonoBehaviour
     public void ClosePokemonStorage()
     {
         ManageScreens(-1);
-        ActivateUiElement(pokemon_storage.Instance.storageUI,false);
-        pokemon_storage.Instance.ClosePC();
+        ActivateUiElement(_pokemonStorageHandler.storageUI,false);
+        _pokemonStorageHandler.ClosePC();
     }
     public void ViewBag()
     {
-        if (Bag.Instance.currentBagUsage == BagUsage.SellingView)
+        if (_playerBagHandler.currentBagUsage == BagUsage.SellingView)
         {
-            var sellableItems = Bag.Instance.allItems.Count(item => item.canBeSold);
-            if (Bag.Instance.allItems.Count == 0 || sellableItems==0)
+            var sellableItems = _playerBagHandler.allItems.Count(item => item.canBeSold);
+            if (_playerBagHandler.allItems.Count == 0 || sellableItems==0)
             {
-                Bag.Instance.currentBagUsage = BagUsage.NormalView;
-                Dialogue_handler.Instance.DisplayDetails("You have no items to sell");
+                _playerBagHandler.currentBagUsage = BagUsage.NormalView;
+                _dialogueHandler.DisplayDetails("You have no items to sell");
                 return;
             }
         }
-        Dialogue_handler.Instance.EndDialogue();
-        Bag.Instance.OnBagOpened += SetBagInputState;
-        Bag.Instance.ViewBag();
+        _dialogueHandler.EndDialogue();
+        _playerBagHandler.OnBagOpened += SetBagInputState;
+        _playerBagHandler.ViewBag();
     }
 
     private void SetBagInputState()
     {
-        Bag.Instance.OnBagOpened -= SetBagInputState;
-        ActivateUiElement(Bag.Instance.bagUI,true);
+        _playerBagHandler.OnBagOpened -= SetBagInputState;
+        ActivateUiElement(_playerBagHandler.bagUI,true);
         ManageScreens(1);
         var bagSelectables = new List<SelectableUI>();
 
-        foreach (var item in Bag.Instance.bagItemsUI)
+        foreach (var item in _playerBagHandler.bagItemsUI)
         {
             bagSelectables.Add( new(item.gameObject,null,true) );
         }
         
-        InputStateHandler.Instance.ChangeInputState(new (InputStateName.PlayerBagNavigation,
+        _inputStateHandler.ChangeInputState(new (InputStateName.PlayerBagNavigation,
             new[] { InputStateGroup.Bag},true,
-            Bag.Instance.bagUI, InputDirection.Vertical, bagSelectables,
-            Bag.Instance.itemSelector,true,false,CloseBag,CloseBag));
+            _playerBagHandler.bagUI, InputDirection.Vertical, bagSelectables,
+            _playerBagHandler.itemSelector,true,false,CloseBag,CloseBag));
         
-        Bag.Instance.bagOverlayUI.SetActive(!Bag.Instance.storageView);
-        Bag.Instance.storageOverlayUI.SetActive(Bag.Instance.storageView);
+        _playerBagHandler.bagOverlayUI.SetActive(!_playerBagHandler.storageView);
+        _playerBagHandler.storageOverlayUI.SetActive(_playerBagHandler.storageView);
     }
     private void ViewProfile()
     {
         ManageScreens(1);
         ActivateUiElement(profile.gameObject,true);
-        profile.LoadProfile(Game_Load.Instance.playerData);
-        InputStateHandler.Instance.ChangeInputState(new (InputStateName.PlayerProfile
+        profile.LoadProfile(_gameLoadingHandler.playerData);
+        _inputStateHandler.ChangeInputState(new (InputStateName.PlayerProfile
             ,new[] { InputStateGroup.None},isParent:true
             ,profile.gameObject,onExit:CloseProfile,onClose:CloseProfile));
     }
@@ -209,93 +243,93 @@ public class Game_ui_manager : MonoBehaviour
     {
         ManageScreens(1);
         ActivateUiElement(keyBindsUI,true);
-        InputStateHandler.Instance.ChangeInputState(new (InputStateName.KeyBinds
+        _inputStateHandler.ChangeInputState(new (InputStateName.KeyBinds
             ,new[] { InputStateGroup.None},isParent:true
             ,keyBindsUI,onExit:CloseKeyBinds,onClose:CloseProfile));
     }
 
     public void ViewPokemonParty()
     {
-        if (Pokemon_party.Instance.numMembers < 1)
+        if (_pokemonPartyHandler.numMembers < 1)
         {
-            Dialogue_handler.Instance.DisplayDetails("There a no pokemon in your party");
+            _dialogueHandler.DisplayDetails("There a no pokemon in your party");
             return;
         }
         ManageScreens(1);
-        Dialogue_handler.Instance.EndDialogue();
-        Pokemon_party.Instance.ClearSelectionUI();
-        ActivateUiElement(Pokemon_party.Instance.partyUI, true);
+        _dialogueHandler.EndDialogue();
+        _pokemonPartyHandler.ClearSelectionUI();
+        ActivateUiElement(_pokemonPartyHandler.partyUI, true);
         
         InputStateName partyUsageState;
-        if (Item_handler.Instance.usingItem)
+        if (_itemHandler.usingItem)
         {
              partyUsageState = InputStateName.PokemonPartyItemUsage;
-            Pokemon_party.Instance.UpdatePartyUsageMessage("Use on who?");
+            _pokemonPartyHandler.UpdatePartyUsageMessage("Use on who?");
         }
         else
         {
             partyUsageState = InputStateName.PokemonPartyNavigation;
-            Pokemon_party.Instance.UpdatePartyUsageMessage(Pokemon_party.Instance.swapOutNext?
+            _pokemonPartyHandler.UpdatePartyUsageMessage(_pokemonPartyHandler.swapOutNext?
                 "Select a Pokemon to switch"
                 :"Choose a pokemon");
         }
        
         var partySelectables = new List<SelectableUI>();
 
-        for (var i = 0; i < Pokemon_party.Instance.numMembers; i++)
+        for (var i = 0; i < _pokemonPartyHandler.numMembers; i++)
         {
             var memberNumber = i + 1;
-            partySelectables.Add(new(Pokemon_party.Instance.memberCards[i].gameObject
-                , () => Pokemon_party.Instance.SelectMember(memberNumber), true));
+            partySelectables.Add(new(_pokemonPartyHandler.memberCards[i].gameObject
+                , () => _pokemonPartyHandler.SelectMember(memberNumber), true));
         }
         
         //closes the party
-        partySelectables.Add(new(Pokemon_party.Instance.cancelButton.gameObject,
-            Pokemon_party.Instance.ExitParty
+        partySelectables.Add(new(_pokemonPartyHandler.cancelButton.gameObject,
+            _pokemonPartyHandler.ExitParty
             , true));
-        InputStateHandler.Instance.OnStateChanged += Pokemon_party.Instance.CheckStateUpdate;
-        Pokemon_party.Instance.memberCards[0].ChangeVisibility(true);//initial visual set
+        _inputStateHandler.OnStateChanged += _pokemonPartyHandler.CheckStateUpdate;
+        _pokemonPartyHandler.memberCards[0].ChangeVisibility(true);//initial visual set
         
-        InputStateHandler.Instance.ChangeInputState(new (partyUsageState,
-            new[]{InputStateGroup.PokemonParty }, true,Pokemon_party.Instance.partyUI,
-            InputDirection.Vertical, partySelectables, Pokemon_party.Instance.memberSelector
+        _inputStateHandler.ChangeInputState(new (partyUsageState,
+            new[]{InputStateGroup.PokemonParty }, true,_pokemonPartyHandler.partyUI,
+            InputDirection.Vertical, partySelectables, _pokemonPartyHandler.memberSelector
             , true, true,CloseParty,CloseParty,canManualExit:false,canExit:true));
         
-        Pokemon_party.Instance.RefreshMemberCards();
+        _pokemonPartyHandler.RefreshMemberCards();
        
     }
     public void ViewOtherPokemonDetails(Pokemon selectedPokemon,List<Pokemon> pokemonToView)
     { 
         ManageScreens(1);
-        ActivateUiElement(Pokemon_Details.Instance.uiParent,true);
+        ActivateUiElement(_pokemonDetailsHandler.uiParent,true);
         var detailsSelectables = new List<SelectableUI>{
             new(null,null,true)
             ,new(null,null,true)
-            ,new(null,InputStateHandler.Instance.AllowMoveUiNavigation,true)
+            ,new(null,_inputStateHandler.AllowMoveUiNavigation,true)
         };
-        InputStateHandler.Instance.ChangeInputState(new (InputStateName.PokemonDetails
-            ,new[] { InputStateGroup.PokemonDetails}, true,Pokemon_Details.Instance.uiParent,
+        _inputStateHandler.ChangeInputState(new (InputStateName.PokemonDetails
+            ,new[] { InputStateGroup.PokemonDetails}, true,_pokemonDetailsHandler.uiParent,
             InputDirection.Horizontal,detailsSelectables, null
             , true, false,ClosePokemonDetails,ClosePokemonDetails));
         
-        Pokemon_Details.Instance.LoadDetails(selectedPokemon,pokemonToView);
+        _pokemonDetailsHandler.LoadDetails(selectedPokemon,pokemonToView);
     }
     public void ViewPartyPokemonDetails(Pokemon selectedPokemon)
     {
-        ViewOtherPokemonDetails(selectedPokemon,Pokemon_party.Instance.GetValidPokemon());
+        ViewOtherPokemonDetails(selectedPokemon,_pokemonPartyHandler.GetValidPokemon());
     }
 
     public void ViewItemStorage()
     {
-        overworld_actions.Instance.usingUI = true;
+        _overworldActionsHandler.usingUI = true;
          var pcUsageSelectables = new List<SelectableUI>
         {
-            new(pcItemOptions[0], ItemStorageHandler.Instance.ViewItemsToWithdraw, true),
-            new(pcItemOptions[1], ItemStorageHandler.Instance.OpenBagToDepositItem, true),
-            new(pcItemOptions[2], ItemStorageHandler.Instance.OpenBagToTossItem, true),
+            new(pcItemOptions[0], _itemStorageHandler.ViewItemsToWithdraw, true),
+            new(pcItemOptions[1], _itemStorageHandler.OpenBagToDepositItem, true),
+            new(pcItemOptions[2], _itemStorageHandler.OpenBagToTossItem, true),
             new(pcItemOptions[3], ()=>ClosePCOptions(pcItemOptionsUI), true),
         };
-        InputStateHandler.Instance.ChangeInputState(new  (InputStateName.ItemStorageUsage,
+        _inputStateHandler.ChangeInputState(new  (InputStateName.ItemStorageUsage,
             new[] { InputStateGroup.Bag},true,pcItemOptionsUI,
             InputDirection.Vertical, pcUsageSelectables,pcItemOptionSelector,true, true
             ,onExit:ClosePCItemOptions));
@@ -310,7 +344,7 @@ public class Game_ui_manager : MonoBehaviour
     }
     public void ViewPokemonStorage()
     {
-        overworld_actions.Instance.usingUI = true;
+        _overworldActionsHandler.usingUI = true;
         var pcUsageActions = new List<Action>
         {
             ()=>SetPcUsage(PCUsageState.Withdraw),
@@ -324,7 +358,7 @@ public class Game_ui_manager : MonoBehaviour
         for (var i =0; i<pcUsageActions.Count;i++)
             pcUsageSelectables.Add( new(pcPokemonOptions[i],pcUsageActions[i],true) );
         
-        InputStateHandler.Instance.ChangeInputState(new  (InputStateName.PokemonStorageUsage,
+        _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStorageUsage,
             new[] { InputStateGroup.PokemonStorage},false,pcPokemonOptionsUI,
             InputDirection.Vertical, pcUsageSelectables,pcOptionSelector,true, true,canManualExit:false));
         pcPokemonOptionsUI.SetActive(true);
@@ -332,7 +366,7 @@ public class Game_ui_manager : MonoBehaviour
 
     private void ClosePCOptions(GameObject ui)
     {
-        InputStateHandler.Instance.RemoveTopInputLayer(false);
+        _inputStateHandler.RemoveTopInputLayer(false);
         ui.SetActive(false);
         ManageScreens(0);
     }
@@ -340,19 +374,19 @@ public class Game_ui_manager : MonoBehaviour
     {
         pcPokemonOptionsUI.SetActive(false);
         ManageScreens(1);
-        ActivateUiElement(pokemon_storage.Instance.storageUI, true);
-        pokemon_storage.Instance.OpenPC(currentUsageState);
+        ActivateUiElement(_pokemonStorageHandler.storageUI, true);
+        _pokemonStorageHandler.OpenPC(currentUsageState);
     }
     public void ViewPokeMart()
     {
         ManageScreens(1);
-        ActivateUiElement(Poke_Mart.Instance.storeUI,true);
+        ActivateUiElement(_pokeMartHandler.storeUI,true);
         var martSelectables = new List<SelectableUI>();
-        foreach(var item in Poke_Mart.Instance.storeItemsUI) 
+        foreach(var item in _pokeMartHandler.storeItemsUI) 
             martSelectables.Add( new(item.gameObject,null,true) );
-        InputStateHandler.Instance.ChangeInputState(new  (InputStateName.MartItemNavigation
+        _inputStateHandler.ChangeInputState(new  (InputStateName.MartItemNavigation
             ,new[] { InputStateGroup.PokeMart },true,
-            Poke_Mart.Instance.storeUI, InputDirection.Vertical, martSelectables,
-            Poke_Mart.Instance.itemSelector,true,true,ClosePokeMart,ClosePokeMart));
+            _pokeMartHandler.storeUI, InputDirection.Vertical, martSelectables,
+            _pokeMartHandler.itemSelector,true,true,ClosePokeMart,ClosePokeMart));
     }
 }

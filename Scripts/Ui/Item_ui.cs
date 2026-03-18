@@ -4,12 +4,18 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Item_ui : MonoBehaviour
+public class Item_ui : MonoBehaviour,IInjectable
 {
     public Item item;
     public Text quantity;
     public Text itemName;
 
+    private Bag _playerBagHandler;
+    public void Inject(Container container)
+    {
+        _playerBagHandler = container.Resolve<Bag>();
+    }
+    
     public void LoadItemUI()
     {
         itemName.text = item.itemName;
@@ -17,12 +23,12 @@ public class Item_ui : MonoBehaviour
     }
     public void LoadItemDescription()
     {
-        Bag.Instance.currentItemDescription.text = item.itemDescription;
-        Bag.Instance.currentItemImage.sprite = item.itemImage;
+        _playerBagHandler.currentItemDescription.text = item.itemDescription;
+        _playerBagHandler.currentItemImage.sprite = item.itemImage;
     }
     public void ResetUI()
     {
-        Bag.Instance.currentItemDescription.text = "";
-        Bag.Instance.currentItemImage.sprite = null;
+        _playerBagHandler.currentItemDescription.text = "";
+        _playerBagHandler.currentItemImage.sprite = null;
     }
 }

@@ -8,6 +8,7 @@ public class InputStateLogicHandler : MonoBehaviour
     private Dialogue_handler _dialogueHandler;
     private BattleIntro _battleIntroHandler;
     private Battle_handler _battleHandler;
+    private BattleVisuals _battleVisualsHandler;
     private Encounter_handler  _encounterHandler;
     private Wild_pkm _wildPokemonHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
@@ -36,6 +37,7 @@ public class InputStateLogicHandler : MonoBehaviour
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<Battle_handler>();
         _encounterHandler = container.Resolve<Encounter_handler>();

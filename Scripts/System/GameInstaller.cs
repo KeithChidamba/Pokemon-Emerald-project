@@ -34,7 +34,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private OverworldState overworldStateHandler;
     [SerializeField] private Area_manager  areaHandler;
     [SerializeField] private Game_Load gameLoadingHandler;
-    [SerializeField] private overworld_actions overworldActions;
+    [SerializeField] private overworld_actions overworldActionsHandler;
     [SerializeField] private Item_handler itemHandler;
     [SerializeField] private Move_handler moveHandler;
     
@@ -66,7 +66,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(() => overworldStateHandler);
         _container.RegisterSingleton(() => areaHandler);
         _container.RegisterSingleton(() => gameLoadingHandler);
-        _container.RegisterSingleton(() => overworldActions);
+        _container.RegisterSingleton(() => overworldActionsHandler);
         _container.RegisterSingleton(() => itemHandler);
         _container.RegisterSingleton(() => battleVisualsHandler);
         _container.RegisterSingleton(() => moveHandler);

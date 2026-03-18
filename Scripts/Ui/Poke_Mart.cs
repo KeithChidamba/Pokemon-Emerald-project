@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Poke_Mart : MonoBehaviour
+public class Poke_Mart : MonoBehaviour,IInjectable
 {
     public List<Item> currentStoreItems;
     public bool viewingStore;
@@ -29,6 +29,22 @@ public class Poke_Mart : MonoBehaviour
     public Text itemDescription;
     public static Poke_Mart Instance;
     public event Action<Item> OnItemBought;
+    
+    private Dialogue_handler _dialogueHandler;
+    private Options_manager _dialogueOptionsHandler;
+    private Game_ui_manager _gameUIHandler;
+    private Bag _playerBagHandler;
+    private Game_Load _gameLoadingHandler;
+    
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _playerBagHandler = container.Resolve<Bag>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        gameObject.SetActive(true);
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -41,7 +57,7 @@ public class Poke_Mart : MonoBehaviour
 
     private void Start()
     {
-        Options_manager.Instance.OnInteractionOptionChosen += ViewStore;
+        _dialogueOptionsHandler.OnInteractionOptionChosen += ViewStore;
     }
     private IEnumerator SelectItemsForStore()
     {
@@ -63,7 +79,7 @@ public class Poke_Mart : MonoBehaviour
     {
         if (!viewingStore) return;
         quantity.text = selectedItemQuantity.ToString();
-        playerMoneyText.text = Game_Load.Instance.playerData.playerMoney.ToString();
+        playerMoneyText.text = _gameLoadingHandler.playerData.playerMoney.ToString();
     }
     private void SelectItem()
     {
@@ -109,17 +125,17 @@ public class Poke_Mart : MonoBehaviour
     public void BuyItem()
     {
         var item = Obj_Instance.CreateItem(currentStoreItems[topIndex + selectedItemIndex]);
-        if(Game_Load.Instance.playerData.playerMoney >= item.price)
+        if(_gameLoadingHandler.playerData.playerMoney >= item.price)
         {
             item.quantity = selectedItemQuantity;
-            Bag.Instance.AddItem(item);
-            Game_Load.Instance.playerData.playerMoney -= selectedItemQuantity * item.price;
-            Dialogue_handler.Instance.DisplayDetails("You bought "+ item.quantity+ " "+item.itemName+"'s");
+            _playerBagHandler.AddItem(item);
+            _gameLoadingHandler.playerData.playerMoney -= selectedItemQuantity * item.price;
+            _dialogueHandler.DisplayDetails("You bought "+ item.quantity+ " "+item.itemName+"'s");
             selectedItemQuantity = 1;
             OnItemBought?.Invoke(item);
         }
         else
-            Dialogue_handler.Instance.DisplayDetails("You dont have enough money for that!");
+            _dialogueHandler.DisplayDetails("You dont have enough money for that!");
     }
     public void ChangeItemQuantity(int value)
     {
@@ -132,10 +148,10 @@ public class Poke_Mart : MonoBehaviour
             if (selectedItemQuantity < 99)//below max quantity and affordable by player
             {
                 var priceOfItem = (selectedItemQuantity + 1) * currentStoreItems[topIndex + selectedItemIndex].price;
-                if (Game_Load.Instance.playerData.playerMoney >= priceOfItem)
+                if (_gameLoadingHandler.playerData.playerMoney >= priceOfItem)
                     selectedItemQuantity += value;
                 else
-                    Dialogue_handler.Instance.DisplayDetails("Not enough money to buy that much!");
+                    _dialogueHandler.DisplayDetails("Not enough money to buy that much!");
             }
             else
                 selectedItemQuantity = 99;
@@ -144,7 +160,7 @@ public class Poke_Mart : MonoBehaviour
     private void ViewStore(Interaction clerkInteraction, int optionChosen)
     {
         if (clerkInteraction.overworldInteraction != OverworldInteractionType.Clerk) return;
-        Dialogue_handler.Instance.EndDialogue();
+        _dialogueHandler.EndDialogue();
         
         if (optionChosen > 0) return;
         
@@ -179,7 +195,7 @@ public class Poke_Mart : MonoBehaviour
     private void SetUpItemView()
     {
         viewingStore = true;
-        playerMoneyText.text = Game_Load.Instance.playerData.playerMoney.ToString();
+        playerMoneyText.text = _gameLoadingHandler.playerData.playerMoney.ToString();
         topIndex = 0;
         numItems = currentStoreItems.Count;
         //if less than amount of ui elements, load that number, otherwise just load the first seven
@@ -191,7 +207,7 @@ public class Poke_Mart : MonoBehaviour
             storeItemsUI[i].LoadItemUI();
         }
         SelectItem();
-        Game_ui_manager.Instance.ViewPokeMart();
+        _gameUIHandler.ViewPokeMart();
     }
     public void ExitStore()
     {

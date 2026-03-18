@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 
 public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage}
-public class Dialogue_handler : MonoBehaviour
+public class Dialogue_handler : MonoBehaviour,IInjectable
 {
     public Interaction currentInteraction;
     public Overworld_interactable currentInteractable;
@@ -26,8 +26,25 @@ public class Dialogue_handler : MonoBehaviour
     public bool messagesLoading;
     public List<Interaction> pendingMessages = new();
     public GameObject optionSelector;
+    
     public event Action<Overworld_interactable> OnOptionsDisplayed;
+    
     public static Dialogue_handler Instance;
+    private Battle_handler _battleHandler;
+    private Player_movement _playerMovementHandler;
+    private InputStateHandler _inputStateHandler;
+    private Options_manager _dialogueOptionsHandler;
+    private Interaction_handler  _interactionHandler;
+    public void Inject(Container container)
+    {
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _interactionHandler = container.Resolve<Interaction_handler>();
+        _playerMovementHandler = container.Resolve<Player_movement>();
+        gameObject.SetActive(true);
+    }
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -41,7 +58,7 @@ public class Dialogue_handler : MonoBehaviour
     private void Start()
     {
         _dialogueOptionsManager = dialogueOptionBox.GetComponent<DialogueOptionsManager>();
-        Battle_handler.Instance.OnBattleEnd += () => messagesLoading = false;
+        _battleHandler.OnBattleEnd += () => messagesLoading = false;
         ResetText();
         dialougeText.overflowMode = TextOverflowModes.Page;
     }
@@ -50,7 +67,7 @@ public class Dialogue_handler : MonoBehaviour
     {
         if (displaying && Input.GetKeyDown(KeyCode.X) && canExitDialogue)
         {
-            StartCoroutine(Player_movement.Instance.AllowPlayerMovement(0.25f));
+            StartCoroutine(_playerMovementHandler.AllowPlayerMovement(0.25f));
             EndDialogue();
         }
     }
@@ -59,7 +76,7 @@ public class Dialogue_handler : MonoBehaviour
     { 
         if( _dialogueOptionsManager.currentOptions.Count == 0) return;  
         ActivateOptions(false);
-        InputStateHandler.Instance.RemoveTopInputLayer(true);
+        _inputStateHandler.RemoveTopInputLayer(true);
         _dialogueOptionsManager.currentOptions.Clear();
         foreach (var option in _currentDialogueOptions)
             Destroy(option);
@@ -93,7 +110,7 @@ public class Dialogue_handler : MonoBehaviour
             optionSelectables.Add( newOption);
         }
         
-        InputStateHandler.Instance.ChangeInputState(new (InputStateName.DialogueOptions
+        _inputStateHandler.ChangeInputState(new (InputStateName.DialogueOptions
             ,new[]{InputStateGroup.None},false,null,
             InputDirection.Vertical,optionSelectables,optionSelector,true,true));
         yield return null;
@@ -102,10 +119,10 @@ public class Dialogue_handler : MonoBehaviour
     {
         if (currentInteractable!=null)
         {
-            Options_manager.Instance.AlertOverworldInteraction(currentInteractable,optionIndex);
+            _dialogueOptionsHandler.AlertOverworldInteraction(currentInteractable,optionIndex);
         }else
         {
-            Options_manager.Instance.CompleteInteraction(currentInteraction,optionIndex);
+            _dialogueOptionsHandler.CompleteInteraction(currentInteraction,optionIndex);
         }
         
     }
@@ -161,7 +178,7 @@ public class Dialogue_handler : MonoBehaviour
     }
     public void DisplayBattleInfo(string info)//display plain text info to player
     {
-        if (!Options_manager.Instance.playerInBattle)
+        if (!_dialogueOptionsHandler.playerInBattle)
         {//fail-safe
             DisplayDetails(info);
             return;
@@ -176,7 +193,7 @@ public class Dialogue_handler : MonoBehaviour
         messagesLoading = true;
         while (pendingMessages.Count > 0)
         {
-            InputStateHandler.Instance.AddDialoguePlaceHolderState();
+            _inputStateHandler.AddDialoguePlaceHolderState();
             var interaction = pendingMessages[0];
             currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
             SetBattleTextBox();
@@ -198,7 +215,7 @@ public class Dialogue_handler : MonoBehaviour
         {
             DeletePreviousOptions();
         }
-        Interaction_handler.Instance.AllowInteraction();
+        _interactionHandler.AllowInteraction();
         canExitDialogue = true;
         currentInteraction = null;
         currentInteractable = null;
@@ -207,16 +224,16 @@ public class Dialogue_handler : MonoBehaviour
         ResetText();
         displaying = false;
         dialogueFinished = false;
-        Player_movement.Instance.AllowPlayerMovement();
+        _playerMovementHandler.AllowPlayerMovement();
         StopCoroutine(ProcessQueue());
     }
     public void StartInteraction(Interaction interaction)
     {
-        Interaction_handler.Instance.DisableInteraction();
+        _interactionHandler.DisableInteraction();
         currentInteraction = interaction;
         if (currentInteraction.dialogueType == DialogType.Event)
         {
-            Options_manager.Instance.CompleteEventInteraction(currentInteraction);
+            _dialogueOptionsHandler.CompleteEventInteraction(currentInteraction);
             return;
         }
         HandleInteraction();
@@ -288,7 +305,7 @@ public class Dialogue_handler : MonoBehaviour
         {
             canExitDialogue = false;
         }
-        Player_movement.Instance.RestrictPlayerMovement();
+        _playerMovementHandler.RestrictPlayerMovement();
         SetBattleTextBox();
         
         if(typeOut)
@@ -304,13 +321,13 @@ public class Dialogue_handler : MonoBehaviour
 
     private void SetBattleTextBox()
     {
-        if (!Options_manager.Instance.playerInBattle || currentInteraction.dialogueType != DialogType.BattleInfo)
+        if (!_dialogueOptionsHandler.playerInBattle || currentInteraction.dialogueType != DialogType.BattleInfo)
         {
             infoDialogueBox.SetActive(true);
             dialougeText.color=Color.black;
             battleDialogueBox.SetActive(false);
         }
-        if( (currentInteraction.dialogueType == DialogType.BattleInfo && Options_manager.Instance.playerInBattle)
+        if( (currentInteraction.dialogueType == DialogType.BattleInfo && _dialogueOptionsHandler.playerInBattle)
             || currentInteraction.dialogueType == DialogType.BattleDisplayMessage)
         {
             battleDialogueBox.SetActive(true);
