@@ -14,7 +14,7 @@ public enum BagUsage
     SellingView,
     SelectionOnly
 }
-public class Bag : MonoBehaviour
+public class Bag : MonoBehaviour,IInjectable
 {
     public List<Item> allItems;
     public List<Item> currentCategoryOfItems;
@@ -63,7 +63,27 @@ public class Bag : MonoBehaviour
     public event Action OnBagOpened;
     
     public event Action<Item> OnItemSold;
+    private Pokemon_party _pokemonPartyHandler;
+    private ItemStorageHandler _itemStorageHandler;
+    private InputStateHandler _inputStateHandler;
+    private Dialogue_handler _dialogueHandler;
+    private Options_manager _dialogueOptionsHandler;
+    private Game_ui_manager _gameUIHandler;
+    private Game_Load _gameLoadingHandler;
+    private Item_handler _itemHandler;
 
+    public void Inject(Container container)
+    {
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _itemStorageHandler = container.Resolve<ItemStorageHandler>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        _itemHandler = container.Resolve<Item_handler>();
+        gameObject.SetActive(true);
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -98,20 +118,20 @@ public class Bag : MonoBehaviour
         var itemToSell = currentCategoryOfItems[topIndex + selectedItemIndex];
         if (!itemToSell.canBeSold)
         {
-            Dialogue_handler.Instance.DisplayDetails("You cant sell that!");
+            _dialogueHandler.DisplayDetails("You cant sell that!");
             return;
         }
         OnItemSold?.Invoke(itemToSell);
-        Game_Load.Instance.playerData.playerMoney += _totalSellingAmount;
+        _gameLoadingHandler.playerData.playerMoney += _totalSellingAmount;
         itemToSell.quantity -= sellQuantity;
         if (itemToSell.quantity == 0) RemoveItem(itemToSell);
         
-        Dialogue_handler.Instance.DisplayList("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
+        _dialogueHandler.DisplayList("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
              "Sure, which item?", 
              new[]{ InteractionOptions.SellItem
                  ,InteractionOptions.LeaveStore }, new[]{"Yes", "No"});
         
-        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
+        _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
     }
     public void CheckItemQuantity(Item item)
     {
@@ -120,13 +140,13 @@ public class Bag : MonoBehaviour
             bagItemsUI[currentCategoryOfItems.IndexOf(item)].LoadItemUI();
             return;
         }
-        if (!Options_manager.Instance.playerInBattle)
+        if (!_dialogueOptionsHandler.playerInBattle)
         {
-            InputStateHandler.Instance.OnStateChanged += ResetQuantity;
+            _inputStateHandler.OnStateChanged += ResetQuantity;
         }
         else
         {
-            InputStateHandler.Instance.OnStateChanged -= ResetQuantity;
+            _inputStateHandler.OnStateChanged -= ResetQuantity;
         }
         RemoveItem(item);
         return;
@@ -250,59 +270,59 @@ public class Bag : MonoBehaviour
     }
     public void TakeItem(int memberIndex)
     {
-        if (Options_manager.Instance.playerInBattle)
+        if (_dialogueOptionsHandler.playerInBattle)
         {
-            Dialogue_handler.Instance.DisplayDetails("Can't do that in battle");
+            _dialogueHandler.DisplayDetails("Can't do that in battle");
             return;
         }
-        var partyMember = Pokemon_party.Instance.party[memberIndex - 1];
-        Dialogue_handler.Instance.DisplayDetails("You took a " + partyMember.heldItem.itemName +" from "
+        var partyMember = _pokemonPartyHandler.party[memberIndex - 1];
+        _dialogueHandler.DisplayDetails("You took a " + partyMember.heldItem.itemName +" from "
                                              + partyMember.pokemonName);
         AddItem(partyMember.heldItem);
         partyMember.RemoveHeldItem();
-        Pokemon_party.Instance.ClearSelectionUI();
-        Pokemon_party.Instance.RefreshMemberCards();
+        _pokemonPartyHandler.ClearSelectionUI();
+        _pokemonPartyHandler.RefreshMemberCards();
     }
     public void OpenBagToGiveItem()
     {
-        if (Options_manager.Instance.playerInBattle)
+        if (_dialogueOptionsHandler.playerInBattle)
         {
-            Dialogue_handler.Instance.DisplayDetails("Can't do that in battle");
+            _dialogueHandler.DisplayDetails("Can't do that in battle");
             return;
         }
         currentBagUsage = BagUsage.SelectionOnly;
         OnItemSelected += GiveItem;
-        Game_ui_manager.Instance.ViewBag();
+        _gameUIHandler.ViewBag();
     }
 
     private void GiveItem(Item itemToBeGiven)
     {
         if (!itemToBeGiven.canBeHeld)
         {
-            Dialogue_handler.Instance.DisplayDetails("Pokemon can't hold that item");
+            _dialogueHandler.DisplayDetails("Pokemon can't hold that item");
             return;
         }
-        var partyMember = Pokemon_party.Instance.party[Pokemon_party.Instance.selectedMemberNumber-1];
-        InputStateHandler.Instance.ResetRelevantUi(new[] { InputStateName.PokemonPartyOptions });
-        InputStateHandler.Instance.ResetGroupUi(InputStateGroup.Bag);
+        var partyMember = _pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberNumber-1];
+        _inputStateHandler.ResetRelevantUi(new[] { InputStateName.PokemonPartyOptions });
+        _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
         
-        Dialogue_handler.Instance.DisplayDetails(partyMember.pokemonName
+        _dialogueHandler.DisplayDetails(partyMember.pokemonName
                                                  +" received a "+itemToBeGiven.itemName);
         
         partyMember.GiveItem(Obj_Instance.CreateItem(itemToBeGiven));
         itemToBeGiven.quantity--;
         CheckItemQuantity(itemToBeGiven);
-        Pokemon_party.Instance.RefreshMemberCards();
+        _pokemonPartyHandler.RefreshMemberCards();
     }
     public void UseItem()
      {
          var itemToUse = currentCategoryOfItems[topIndex + selectedItemIndex];
          OnItemUsed?.Invoke(itemToUse);
-         if (Options_manager.Instance.playerInBattle)
+         if (_dialogueOptionsHandler.playerInBattle)
          {
              if (!itemToUse.canBeUsedInBattle)
              {
-                 Dialogue_handler.Instance.DisplayDetails("Can't use that in battle");
+                 _dialogueHandler.DisplayDetails("Can't use that in battle");
                  return;
              }
          }
@@ -310,23 +330,23 @@ public class Bag : MonoBehaviour
          {
              if (!itemToUse.canBeUsedInOverworld) 
              {
-                 Dialogue_handler.Instance.DisplayDetails("Can't use that in battle");
+                 _dialogueHandler.DisplayDetails("Can't use that in battle");
                  return;//special items for events
              }
          }
-         Item_handler.Instance.usingItem = true;
+         _itemHandler.usingItem = true;
          if(itemToUse.forPartyUse)
          {
-             Pokemon_party.Instance.ReceiveItem(itemToUse);
-             Game_ui_manager.Instance.ViewPokemonParty();
+             _pokemonPartyHandler.ReceiveItem(itemToUse);
+             _gameUIHandler.ViewPokemonParty();
          }
          else
-             Item_handler.Instance.UseItem(itemToUse,null);
+             _itemHandler.UseItem(itemToUse,null);
      }
 
     public void WithDrawFromStorage(Item itemToWithdraw)
     {
-        Dialogue_handler.Instance.DisplayDetails("withdrew "+itemToWithdraw.itemName);
+        _dialogueHandler.DisplayDetails("withdrew "+itemToWithdraw.itemName);
         AddItem(itemToWithdraw);
         storageItems.Remove(itemToWithdraw);
         ClearBagUI();
@@ -385,14 +405,14 @@ public class Bag : MonoBehaviour
         currentBagImage.sprite = bagCategoryImages[currentCategoryIndex];
         sellingItemUI.SetActive(false);
         currentBagUsage = BagUsage.NormalView;
-        ItemStorageHandler.Instance.currentUsage = ItemUsage.None;
+        _itemStorageHandler.currentUsage = ItemUsage.None;
         ClearBagUI();
         foreach (var loopingUiAnimation in redArrows)
         {
             loopingUiAnimation.viewingUI = false;
             loopingUiAnimation.gameObject.SetActive(true);
         }
-        InputStateHandler.Instance.ResetRelevantUi(InputStateName.ItemStorageUsage);
+        _inputStateHandler.ResetRelevantUi(InputStateName.ItemStorageUsage);
         OnItemSelected = null;
         OnBagOpened = null;
         
@@ -425,18 +445,18 @@ public class Bag : MonoBehaviour
         numItems = currentCategoryOfItems.Count;
         if (numItems == 0)
         {
-            if(ItemStorageHandler.Instance.currentUsage == ItemUsage.Deposit)
+            if(_itemStorageHandler.currentUsage == ItemUsage.Deposit)
             {
                 OnBagOpened = null;
-                Dialogue_handler.Instance.DisplayDetails("You have no items to deposit");
-                InputStateHandler.Instance.RemoveTopInputLayer(true);
+                _dialogueHandler.DisplayDetails("You have no items to deposit");
+                _inputStateHandler.RemoveTopInputLayer(true);
                 return;
             }
             if (storageView)
             {
                 OnBagOpened = null;
-                Dialogue_handler.Instance.DisplayDetails("You have no items to withdraw");
-                InputStateHandler.Instance.RemoveTopInputLayer(true);
+                _dialogueHandler.DisplayDetails("You have no items to withdraw");
+                _inputStateHandler.RemoveTopInputLayer(true);
                 return;
             }
         }
@@ -451,9 +471,9 @@ public class Bag : MonoBehaviour
         selectedItemIndex = 0;
         
         if (numItems > 0) SelectItem();
-        if (InputStateHandler.Instance.CurrentState.stateGroups.Contains(InputStateGroup.Bag))
+        if (_inputStateHandler.CurrentState.stateGroups.Contains(InputStateGroup.Bag))
         {
-            InputStateHandler.Instance.PlayerBagNavigationRestrictions();
+            _inputStateHandler.PlayerBagNavigationRestrictions();
         }
 
         OnBagOpened?.Invoke();

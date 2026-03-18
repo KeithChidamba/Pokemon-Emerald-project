@@ -26,6 +26,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Pokemon_party pokemonPartyHandler;
     [SerializeField] private PokemonOperations pokemonOperationsHandler;
     [SerializeField] private pokemon_storage pokemonStorageHandler;
+    [SerializeField] private ItemStorageHandler itemStorageHandler;
     [SerializeField] private Pokemon_Details pokemonDetailsHandler;
     [SerializeField] private Save_manager saveDataHandler;
     [SerializeField] private Interaction_handler  interactionHandler;
@@ -35,6 +36,8 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Game_Load gameLoadingHandler;
     [SerializeField] private overworld_actions overworldActions;
     [SerializeField] private Item_handler itemHandler;
+    [SerializeField] private Move_handler moveHandler;
+    
     
     void Awake()
     {
@@ -55,6 +58,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(() => pokemonPartyHandler);
         _container.RegisterSingleton(() => pokemonOperationsHandler);
         _container.RegisterSingleton(() => pokemonStorageHandler);
+        _container.RegisterSingleton(() => itemStorageHandler);
         _container.RegisterSingleton(() => pokemonDetailsHandler);
         _container.RegisterSingleton(() => saveDataHandler);
         _container.RegisterSingleton(() => interactionHandler);
@@ -65,7 +69,8 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(() => overworldActions);
         _container.RegisterSingleton(() => itemHandler);
         _container.RegisterSingleton(() => battleVisualsHandler);
-
+        _container.RegisterSingleton(() => moveHandler);
+        
         var injectables = FindObjectsOfType<MonoBehaviour>(true);
 
         foreach (var obj in injectables)

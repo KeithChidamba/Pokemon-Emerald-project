@@ -20,6 +20,7 @@ public class InputStateLogicHandler : MonoBehaviour
     private Pokemon_party _pokemonPartyHandler;
     private PokemonOperations _pokemonOperationsHandler;
     private pokemon_storage _pokemonStorageHandler;
+    private ItemStorageHandler _itemStorageHandler;
     private Pokemon_Details _pokemonDetailsHandler;
     private Save_manager _saveDataHandler;
     private Interaction_handler  _interactionHandler;
@@ -29,6 +30,7 @@ public class InputStateLogicHandler : MonoBehaviour
     private Game_Load _gameLoadingHandler;
     private overworld_actions _overworldActions;
     private Item_handler _itemHandler;
+    private Move_handler _moveHandler;
     private Container container;
     void Skippy()
     {
@@ -48,6 +50,7 @@ public class InputStateLogicHandler : MonoBehaviour
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
+        _itemStorageHandler = container.Resolve<ItemStorageHandler>();
         _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
         _saveDataHandler = container.Resolve<Save_manager>();
         _interactionHandler = container.Resolve<Interaction_handler>();

@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.Tilemaps;
 
-
-public class Area_manager : MonoBehaviour
+public class Area_manager : MonoBehaviour,IInjectable
 {
     public AreaData currentArea;
     public AreaData[] overworldAreas;
     public bool loadingPlayerFromSave;
     public static Area_manager Instance;
-    public Tilemap groundTileMap;
+    
+    private Game_Load _gameLoadingHandler;
+
+    public void Inject(Container container)
+    {
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        gameObject.SetActive(true);
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -45,7 +47,7 @@ public class Area_manager : MonoBehaviour
         var area = overworldAreas.First(a=>a.data.areaName == areaName);
         area.LoadNpcObjects(true);
         currentArea = area;
-        Game_Load.Instance.playerData.location = currentArea.data.areaName;
+        _gameLoadingHandler.playerData.location = currentArea.data.areaName;
     }
        
     

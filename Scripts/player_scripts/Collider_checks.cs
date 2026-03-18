@@ -4,37 +4,50 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
-public class Collider_checks : MonoBehaviour
+public class Collider_checks : MonoBehaviour,IInjectable
 {
     [SerializeField] private Transform interactionPoint;
     public static event Action<Transform> OnCollision;
     public Tilemap encounterTilemap;
     public Tilemap areaSwitchTilemap;
+   
+    private Player_movement _playerMovementHandler;
+    private Encounter_handler  _encounterHandler;
+    private Area_manager  _areaHandler;
+    
+    public void Inject(Container container)
+    {
+        _encounterHandler = container.Resolve<Encounter_handler>();
+        _playerMovementHandler = container.Resolve<Player_movement>();
+        _areaHandler = container.Resolve<Area_manager>();
+        gameObject.SetActive(true);
+    }
+
     private void Start()
     {
-        Player_movement.Instance.OnNewTile += CheckGrass;
-        Player_movement.Instance.OnNewTile += SwitchArea;
+        _playerMovementHandler.OnNewTile += CheckGrass;
+        _playerMovementHandler.OnNewTile += SwitchArea;
     }
 
     private void SwitchArea()
     {
         var tile = FindTileAtPosition<AreaSwitchTile>(areaSwitchTilemap,transform.position,Vector3.down);
         if (tile == null) return;
-        Area_manager.Instance.SwitchToArea(tile.areaTransitionData.areaName);
+        _areaHandler.SwitchToArea(tile.areaTransitionData.areaName);
     }
     private void CheckGrass()
     {
         var tile = FindTileAtPosition<EncounterTile>(encounterTilemap,transform.position,Vector3.down);
         if (tile == null) return;
         
-        if (Player_movement.Instance.runningInput) Encounter_handler.Instance.overworldEncounterChance = 5;
+        if (_playerMovementHandler.runningInput) _encounterHandler.overworldEncounterChance = 5;
         
         var randomNumber = Random.Range(1, 11);
         
-        if (randomNumber < Encounter_handler.Instance.overworldEncounterChance &
-            !Encounter_handler.Instance.encounterTriggered)
+        if (randomNumber < _encounterHandler.overworldEncounterChance &
+            !_encounterHandler.encounterTriggered)
         {
-            Encounter_handler.Instance.TriggerEncounter(tile.area);
+            _encounterHandler.TriggerEncounter(tile.area);
         }
     }
     private void OnCollisionEnter2D(Collision2D other)

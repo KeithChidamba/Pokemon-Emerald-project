@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_movement : MonoBehaviour
+public class Player_movement : MonoBehaviour,IInjectable
 {
     public float movementSpeed;
     [SerializeField] float walkSpeed = 4f;
@@ -26,8 +26,14 @@ public class Player_movement : MonoBehaviour
     [SerializeField]private LayerMask movementBlockers;
     [SerializeField]private bool standingOnTile;
     public static Player_movement Instance;
-
-
+    private overworld_actions _overworldActions;
+    private Dialogue_handler _dialogueHandler;
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _overworldActions = container.Resolve<overworld_actions>();
+        gameObject.SetActive(true);
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -41,9 +47,9 @@ public class Player_movement : MonoBehaviour
 
     private void Start()
     {
-        overworld_actions.Instance.OnItemEquipped +=
+        _overworldActions.OnItemEquipped +=
             (item) => StopBikeUsage(item != Equipable.Bike);
-        overworld_actions.Instance.OnItemUnequipped +=
+        _overworldActions.OnItemUnequipped +=
             (item) => StopBikeUsage(item == Equipable.Bike);
     }
 
@@ -91,7 +97,7 @@ public class Player_movement : MonoBehaviour
         playerObject.transform.position = movePoint.position;
         standingOnTile = true;
         
-        if (overworld_actions.Instance.doingAction && overworld_actions.Instance.fishing)
+        if (_overworldActions.doingAction && _overworldActions.fishing)
         {
             //dont want to interrupt fishing animation
             return; 
@@ -155,7 +161,7 @@ public class Player_movement : MonoBehaviour
 
         if (idle)
         {
-            if (!overworld_actions.Instance.doingAction)
+            if (!_overworldActions.doingAction)
             {
                 return currentDirection;
             }
@@ -214,7 +220,7 @@ public class Player_movement : MonoBehaviour
 
     private void HandleBikeInputs()
     {
-        if (!overworld_actions.Instance.IsEquipped(Equipable.Bike)) return;
+        if (!_overworldActions.IsEquipped(Equipable.Bike)) return;
 
         if (Input.GetKeyDown(KeyCode.C) && !usingBike && canUseBike)
         {
@@ -225,7 +231,7 @@ public class Player_movement : MonoBehaviour
             SetCurrentAnimation();
         }
         else if (Input.GetKeyDown(KeyCode.C) && !canUseBike)
-            Dialogue_handler.Instance.DisplayDetails("Cant use bike here");
+            _dialogueHandler.DisplayDetails("Cant use bike here");
 
         if (Input.GetKeyUp(KeyCode.C) && usingBike)
             _canSwitchMovement = true;

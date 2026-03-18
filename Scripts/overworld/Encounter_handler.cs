@@ -9,7 +9,7 @@ public enum BattleEncounterSource
 {
     None,Fishing,TallGrass
 }
-public class Encounter_handler : MonoBehaviour
+public class Encounter_handler : MonoBehaviour,IInjectable
 {
     public Encounter_Area currentArea;
     public bool encounterTriggered = false;
@@ -18,6 +18,15 @@ public class Encounter_handler : MonoBehaviour
     public static Encounter_handler Instance;
     public event Action<Pokemon,BattleEncounterSource> OnEncounterTriggered;
 
+    private PokemonOperations _pokemonOperationsHandler;
+    private Battle_handler _battleHandler;
+    public void Inject(Container container)
+    {
+        _battleHandler = container.Resolve<Battle_handler>();
+        _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
+        gameObject.SetActive(true);
+    }
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -84,7 +93,7 @@ public class Encounter_handler : MonoBehaviour
     void CreateWildPokemon(EncounterPokemonData pokemonData)
     {
         wildPokemon = Obj_Instance.CreatePokemon(pokemonData.pokemon);
-        PokemonOperations.Instance.SetPokemonTraits(wildPokemon);
+        _pokemonOperationsHandler.SetPokemonTraits(wildPokemon);
         if (pokemonData.evolutionFormNumber > 0)
         {
             if (pokemonData.evolutionFormNumber > wildPokemon.evolutions.Count)
@@ -97,7 +106,7 @@ public class Encounter_handler : MonoBehaviour
         wildPokemon.canEvolve = false;//prevent evolution from exp
         wildPokemon.ReceiveExperience(expForRequiredLevel); 
         wildPokemon.hp=wildPokemon.maxHp;
-        StartCoroutine(Battle_handler.Instance.StartWildBattle(wildPokemon));
+        StartCoroutine(_battleHandler.StartWildBattle(wildPokemon));
     }
     void TurnOffTrigger()
     {

@@ -32,7 +32,6 @@ public class BerryTree : MonoBehaviour,IInjectable
         _overworldStateHandler = container.Resolve<OverworldState>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        gameObject.SetActive(true);
     }
     
     private void Awake()

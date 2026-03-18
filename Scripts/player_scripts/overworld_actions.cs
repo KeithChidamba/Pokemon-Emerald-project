@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class overworld_actions : MonoBehaviour
+public class overworld_actions : MonoBehaviour,IInjectable
 {
     public Animation_manager manager;
 
@@ -18,6 +18,19 @@ public class overworld_actions : MonoBehaviour
     private Equipable _currentEquippedItem;
     public event Action<Equipable> OnItemEquipped;
     public event Action<Equipable> OnItemUnequipped;
+    private Dialogue_handler _dialogueHandler;
+    private Player_movement _playerMovementHandler;
+    private Encounter_handler _encounterHandler;
+    private Game_Load _gameLoadingHandler;
+
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _encounterHandler = container.Resolve<Encounter_handler>();
+        _playerMovementHandler = container.Resolve<Player_movement>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        gameObject.SetActive(true);
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -32,7 +45,7 @@ public class overworld_actions : MonoBehaviour
     private void Start()
     {
         _canUseEquippedItem = false;
-        Game_Load.Instance.OnGameStarted += () => _canUseEquippedItem = true;
+        _gameLoadingHandler.OnGameStarted += () => _canUseEquippedItem = true;
     }
 
     public void EquipItem(Item item)
@@ -42,8 +55,8 @@ public class overworld_actions : MonoBehaviour
         _currentEquippedItem = equippedSpecialItem.GetModule<EquipableInfoModule>().equipableItem;
         OnItemEquipped?.Invoke(_currentEquippedItem);
         if(usingUI)
-            Dialogue_handler.Instance.DisplayDetails("Equipped " + equippedSpecialItem.itemName);
-        Game_Load.Instance.playerData.equippedItemName = equippedSpecialItem.itemName;
+            _dialogueHandler.DisplayDetails("Equipped " + equippedSpecialItem.itemName);
+        _gameLoadingHandler.playerData.equippedItemName = equippedSpecialItem.itemName;
     }
     public bool IsEquipped(Equipable equipable = Equipable.None
         , Item item = null)
@@ -61,8 +74,8 @@ public class overworld_actions : MonoBehaviour
         _currentEquippedItem = Equipable.None;
         equippedSpecialItem = null;
         if(usingUI)
-            Dialogue_handler.Instance.DisplayDetails("Unequipped " + item.itemName);
-        Game_Load.Instance.playerData.equippedItemName = string.Empty;
+            _dialogueHandler.DisplayDetails("Unequipped " + item.itemName);
+        _gameLoadingHandler.playerData.equippedItemName = string.Empty;
     }
     public bool ItemEquipped()
     {
@@ -73,16 +86,16 @@ public class overworld_actions : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C) && !ItemEquipped() && !usingUI)
         {
             if (!_canUseEquippedItem) return;
-            Dialogue_handler.Instance.DisplayDetails("No item has been equipped");
+            _dialogueHandler.DisplayDetails("No item has been equipped");
         }  
-        if (Dialogue_handler.Instance.displaying || usingUI || doingAction)
+        if (_dialogueHandler.displaying || usingUI || doingAction)
         {
-            Player_movement.Instance.RestrictPlayerMovement();
+            _playerMovementHandler.RestrictPlayerMovement();
         }
         if (pokemonBitingPole & Input.GetKeyDown(KeyCode.Z))
         {
             pokemonBitingPole = false;
-            Encounter_handler.Instance.TriggerFishingEncounter(fishingArea,equippedSpecialItem);
+            _encounterHandler.TriggerFishingEncounter(fishingArea,equippedSpecialItem);
             
         }
         if (fishing)
@@ -102,11 +115,11 @@ public class overworld_actions : MonoBehaviour
         if (random < 5)
         {
             pokemonBitingPole = true;
-            Dialogue_handler.Instance.DisplayDetails("Oh!, a Bite!, Press Z");
+            _dialogueHandler.DisplayDetails("Oh!, a Bite!, Press Z");
             yield return new WaitForSeconds( (2 * (random/10f) ) + 1f);
             if (pokemonBitingPole)
             {
-                Dialogue_handler.Instance.DisplayDetails("It got away");
+                _dialogueHandler.DisplayDetails("It got away");
                 ResetFishingAction();
                 yield return new WaitForSeconds(1);
                 ActionReset();
@@ -114,7 +127,7 @@ public class overworld_actions : MonoBehaviour
         }
         else
         {
-            Dialogue_handler.Instance.DisplayDetails("Dang...nothing");
+            _dialogueHandler.DisplayDetails("Dang...nothing");
             ResetFishingAction();
             yield return new WaitForSeconds(1);
             ActionReset();
@@ -136,13 +149,13 @@ public class overworld_actions : MonoBehaviour
     public IEnumerator WaterTrees()
     {
         manager.ChangeAnimationState(manager.watering);
-        Dialogue_handler.Instance.DisplayDetails("The tree is being watered");
+        _dialogueHandler.DisplayDetails("The tree is being watered");
         yield return new WaitForSeconds(2f);
         manager.ChangeAnimationState(manager.playerWalk);
     }
     void ActionReset()
     {
         doingAction = false;
-        Player_movement.Instance.AllowPlayerMovement();
+        _playerMovementHandler.AllowPlayerMovement();
     }
 }

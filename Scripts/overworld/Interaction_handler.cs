@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
-public class Interaction_handler : MonoBehaviour
+public class Interaction_handler : MonoBehaviour,IInjectable
 {
     [SerializeField] LayerMask interactable;
     [SerializeField] Transform interactionPoint;
@@ -15,6 +15,16 @@ public class Interaction_handler : MonoBehaviour
     public Tilemap waterTilemap;
     public Tilemap interactionTilemap;
     public static Interaction_handler Instance;
+    private overworld_actions _overworldActions;
+    private Dialogue_handler _dialogueHandler;
+    private Player_movement _playerMovementHandler;
+    public void Inject(Container container)
+    {
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _overworldActions = container.Resolve<overworld_actions>();
+        _playerMovementHandler = container.Resolve<Player_movement>();
+        gameObject.SetActive(true);
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -32,7 +42,7 @@ public class Interaction_handler : MonoBehaviour
     }
     void Update()
     {
-        if(!Dialogue_handler.Instance.displaying && !_stopInteractions)
+        if(!_dialogueHandler.displaying && !_stopInteractions)
         {
             if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.C))
             {
@@ -69,7 +79,7 @@ public class Interaction_handler : MonoBehaviour
     {
         _canCheckForInteraction = false;
 
-        var directionVector = Player_movement.Instance.GetDirectionAsVector2();
+        var directionVector = _playerMovementHandler.GetDirectionAsVector2();
         
          Vector2 origin = (Vector2)interactionPoint.position + directionVector * 0.1f;
         
@@ -81,7 +91,7 @@ public class Interaction_handler : MonoBehaviour
          );
         
         
-        if (hit.transform && !Dialogue_handler.Instance.displaying && !overworld_actions.Instance.usingUI)
+        if (hit.transform && !_dialogueHandler.displaying && !_overworldActions.usingUI)
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
@@ -89,18 +99,18 @@ public class Interaction_handler : MonoBehaviour
                 var interactableTile = Collider_checks.FindTileAtPositionRadius<InteractionTile>(interactionTilemap,hit.point,Vector3.down);
                 if (interactableTile != null)
                 {
-                    Dialogue_handler.Instance.StartInteraction(interactableTile.interaction);
+                    _dialogueHandler.StartInteraction(interactableTile.interaction);
                 }
                 else
                 {
                     var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
                     if (interactableObject != null)
-                        Dialogue_handler.Instance.StartInteraction(interactableObject);
+                        _dialogueHandler.StartInteraction(interactableObject);
                 }
                
             }
             if (Input.GetKeyDown(KeyCode.C) 
-                && overworld_actions.Instance.IsEquipped(Equipable.FishingRod))
+                && _overworldActions.IsEquipped(Equipable.FishingRod))
             {
                 if (hit.transform.gameObject.CompareTag("Water"))
                 {
@@ -115,8 +125,8 @@ public class Interaction_handler : MonoBehaviour
                     {
                         areaOfEncounter = animatedWaterTile.area;
                     }
-                    overworld_actions.Instance.fishingArea = areaOfEncounter;
-                    Dialogue_handler.Instance.DisplayList("Would you like to fish for pokemon"
+                    _overworldActions.fishingArea = areaOfEncounter;
+                    _dialogueHandler.DisplayList("Would you like to fish for pokemon"
                        , "fishing...", 
                        new[]
                        {
@@ -126,15 +136,15 @@ public class Interaction_handler : MonoBehaviour
                 }
                 else
                 {
-                    Dialogue_handler.Instance.DisplayDetails("Cant fish here");
+                    _dialogueHandler.DisplayDetails("Cant fish here");
                 }
             }
         }
         if (Input.GetKeyDown(KeyCode.C) 
             && !hit.transform
-            && overworld_actions.Instance.IsEquipped(Equipable.FishingRod))
+            && _overworldActions.IsEquipped(Equipable.FishingRod))
         {
-            Dialogue_handler.Instance.DisplayDetails("Cant fish here");
+            _dialogueHandler.DisplayDetails("Cant fish here");
         }
     }
 }

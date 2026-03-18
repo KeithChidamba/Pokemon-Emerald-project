@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class NpcMovement : MonoBehaviour
+public class NpcMovement : MonoBehaviour,IInjectable
 {
     public NpcAnimationData animationData;
     [SerializeField] private Transform rayCastPoint;
@@ -28,6 +28,12 @@ public class NpcMovement : MonoBehaviour
     public event Action OnMovementPaused;
     public event Action OnMovementStarted;
     public event Action OnMovementEnded;
+    
+    private Player_movement _playerMovement;
+    public void Inject(Container container)
+    {
+        _playerMovement = container.Resolve<Player_movement>();
+    }
     private void AdjustColliderSize()
     {
         var size = interactionCollider.size;
@@ -58,7 +64,7 @@ public class NpcMovement : MonoBehaviour
     {
         StopMovement();
 
-        var playerDirection = (int)Player_movement.Instance.currentDirection;
+        var playerDirection = (int)_playerMovement.currentDirection;
         
         var directionConversions = new []{MovementDirection.Up,MovementDirection.Down
             ,MovementDirection.Right,MovementDirection.Left};

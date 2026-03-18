@@ -3,9 +3,9 @@ using System;
 
 using UnityEngine;
 
-public class NpcLogic : MonoBehaviour
+public class NpcLogic : MonoBehaviour,IInjectable
 {
-    public NpcMovement movementHandler;
+    public NpcMovement movementHandler; 
     public bool autoDetectPlayer;
     [SerializeField]private float detectDistance = 1f;
     [SerializeField] private LayerMask playerLayer;
@@ -15,6 +15,16 @@ public class NpcLogic : MonoBehaviour
     [SerializeField]private bool playerDetected;
     private Action _runDialogueInteraction;
     private bool _longDistanceDetection;
+
+    private Dialogue_handler _dialogueHandler;
+    private Player_movement _playerMovement;
+    private Options_manager _dialogueOptionsHandler;
+    public void Inject(Container container)
+    {
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _playerMovement = container.Resolve<Player_movement>();
+    }
     private void Start()
     {
         playerDetected = false;
@@ -30,7 +40,7 @@ public class NpcLogic : MonoBehaviour
                 movementHandler.OnMovementStarted += ()=> constantScan = false;
             }
         }
-        Options_manager.Instance.OnInteractionOptionChosen += PauseForInteraction;
+        _dialogueOptionsHandler.OnInteractionOptionChosen += PauseForInteraction;
     }
 
     private void Update()
@@ -70,22 +80,22 @@ public class NpcLogic : MonoBehaviour
         playerDetected = true;
         constantScan = false;
         
-        Player_movement.Instance.FaceOppositeDirection(movementHandler.GetCurrentDirection());
+        _playerMovement.FaceOppositeDirection(movementHandler.GetCurrentDirection());
         
         //positions are always locked to whole numbers
-        var distance = (int)Vector3.Distance(transform.position, Player_movement.Instance.GetPlayerPosition());
+        var distance = (int)Vector3.Distance(transform.position, _playerMovement.GetPlayerPosition());
 
         if (distance>1)
         {
             _longDistanceDetection = true;
-            _runDialogueInteraction = () => Dialogue_handler.Instance.StartInteraction(npcInteraction);
+            _runDialogueInteraction = () => _dialogueHandler.StartInteraction(npcInteraction);
             movementHandler.OnMovementEnded += _runDialogueInteraction;
             StartCoroutine(movementHandler.MoveToSpecific(movementHandler.GetCurrentDirection(),distance-1));
         }
         else
         {
             movementHandler.StopMovement(false);
-            Dialogue_handler.Instance.StartInteraction(npcInteraction);
+            _dialogueHandler.StartInteraction(npcInteraction);
         }
     }
 }
