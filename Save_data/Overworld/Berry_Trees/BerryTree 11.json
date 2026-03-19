@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Oran berry",
     "berryItem": {
-        "instanceID": 27226
+        "instanceID": 27228
     },
     "treeIndex": 11,
     "minutesPerStage": 60,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32446
+                    "instanceID": 32430
                 },
                 {
-                    "instanceID": 32446
+                    "instanceID": 32430
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32448
+                    "instanceID": 32432
                 },
                 {
-                    "instanceID": 32450
+                    "instanceID": 32434
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32470
+                    "instanceID": 32454
                 },
                 {
-                    "instanceID": 32472
+                    "instanceID": 32456
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32474
+                    "instanceID": 32458
                 },
                 {
-                    "instanceID": 32476
+                    "instanceID": 32460
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32478
+                    "instanceID": 32462
                 },
                 {
-                    "instanceID": 32480
+                    "instanceID": 32464
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-03-18T21:25:28.8537350+02:00"
+    "lastLogin": "2026-03-19T17:57:00.1971420+02:00"
 }

@@ -136,9 +136,10 @@ public class Options_manager : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("Can no longer obtain more pokemon, free up space in pc!");
             return;
         }
-        var pokemonName = _currentInteraction.resultMessage;
+        var pokemonName = _currentInteraction.additionalInfo[int.Parse(_currentInteraction.resultMessage)-1];
         var pokemon = Resources.Load<Pokemon>(Save_manager.GetDirectory(AssetDirectory.Pokemon)
                                               + pokemonName +"/"+ pokemonName);
+        
         _playerParty.AddMember(pokemon,isGiftPokemon:true);
         _dialogueHandler.EndDialogue();
         _dialogueHandler.DisplayDetails("You got a " + pokemon.pokemonName);

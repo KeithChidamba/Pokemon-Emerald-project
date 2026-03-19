@@ -52,6 +52,7 @@ public abstract class StoryObjective : ScriptableObject
             StoryObjectiveType.BerryInteraction => CreateInstance<BerryInteractionObjective>(),
             StoryObjectiveType.WildBattle => CreateInstance<WildBattleObjective>(),
             StoryObjectiveType.TrainerBattle => CreateInstance<TrainerBattleObjective>(),
+            StoryObjectiveType.GiftPokemon=> CreateInstance<GiftPokemonObjective>(),
             _ => null
         };
     }
@@ -66,5 +67,5 @@ public class ObjectiveTypeWrapper
 public enum StoryObjectiveType
 {
     Destination,Interaction,WildBattle,GeneralItemUiUsage,StoryProgress
-    ,MarketUiUsage,BerryInteraction,PokemonStorageUiUsage,TrainerBattle
+    ,MarketUiUsage,BerryInteraction,PokemonStorageUiUsage,TrainerBattle,GiftPokemon
 }

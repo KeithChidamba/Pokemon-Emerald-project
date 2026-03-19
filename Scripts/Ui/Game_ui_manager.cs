@@ -266,7 +266,9 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         }
        
         var partySelectables = new List<SelectableUI>();
-
+        
+        _pokemonPartyHandler.RefreshMemberCards();
+ 
         for (var i = 0; i < _pokemonPartyHandler.numMembers; i++)
         {
             var memberNumber = i + 1;
@@ -278,6 +280,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         partySelectables.Add(new(_pokemonPartyHandler.cancelButton.gameObject,
             _pokemonPartyHandler.ExitParty
             , true));
+        
         _inputStateHandler.OnStateChanged += _pokemonPartyHandler.CheckStateUpdate;
         _pokemonPartyHandler.memberCards[0].ChangeVisibility(true);//initial visual set
         
@@ -285,9 +288,6 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             new[]{InputStateGroup.PokemonParty }, true,_pokemonPartyHandler.partyUI,
             InputDirection.Vertical, partySelectables, _pokemonPartyHandler.memberSelector
             , true, true,CloseParty,CloseParty,canManualExit:false,canExit:true));
-        
-        _pokemonPartyHandler.RefreshMemberCards();
-       
     }
     public void ViewOtherPokemonDetails(Pokemon selectedPokemon,List<Pokemon> pokemonToView)
     { 

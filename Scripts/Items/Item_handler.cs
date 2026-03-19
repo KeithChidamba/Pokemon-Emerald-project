@@ -15,7 +15,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     public event Action<bool> OnItemUsageSuccessful;
     private Pokemon_Details _pokemonDetailsHandler;
     private Game_ui_manager _gameUIHandler;
-    private Move_handler _moveHandler;
+    private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
     private Options_manager _dialogueOptionsHandler;
     private InputStateHandler _inputStateHandler;
@@ -29,11 +29,12 @@ public class Item_handler : MonoBehaviour,IInjectable
     private Turn_Based_Combat _turnBasedCombatHandler;
     public void Inject(Container container)
     {
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _moveUsageHandler = container.Resolve<Move_handler>();
+        _dialogueOptionsHandler = container.Resolve<Options_manager>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _playerBagHandler = container.Resolve<Bag>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
@@ -268,7 +269,7 @@ public class Item_handler : MonoBehaviour,IInjectable
                 ResetItemUsage();
                 return;
             }
-            _moveHandler.ApplyStatChangeImmunity(_currentParticipant,
+            _moveUsageHandler.ApplyStatChangeImmunity(_currentParticipant,
                 StatChangeability.ImmuneToDecrease,5);
             
             string pokemonProtected = _selectedPartyPokemon.pokemonName;
@@ -278,7 +279,7 @@ public class Item_handler : MonoBehaviour,IInjectable
                 var partner = _battleHandler.battleParticipants[_currentParticipant.GetPartnerIndex()];
                 if(partner.isActive)
                 {
-                    _moveHandler.ApplyStatChangeImmunity(partner,
+                    _moveUsageHandler.ApplyStatChangeImmunity(partner,
                         StatChangeability.ImmuneToDecrease, 5);
                     pokemonProtected = _selectedPartyPokemon.pokemonName + " and " + partner.pokemon.pokemonName;
                 }
@@ -300,7 +301,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         }
         OnItemUsageSuccessful?.Invoke(true);
         var xBuffData = new BuffDebuffData(_currentParticipant, statInfo.statName, true, 1);
-        _moveHandler.SelectRelevantBuffOrDebuff(xBuffData);
+        _moveUsageHandler.SelectRelevantBuffOrDebuff(xBuffData);
         StartCoroutine(CompleteItemUsage(0));
     }
     private void RevivePokemon(ItemType itemType)
@@ -536,7 +537,7 @@ public class Item_handler : MonoBehaviour,IInjectable
              ResetItemUsage();
              return;
         }
-        StartCoroutine(CompleteItemUsage(3f));
+        StartCoroutine(CompleteItemUsage(2f));
         _pokemonPartyHandler.RefreshMemberCards();
         _dialogueHandler.EndDialogue(1f);
     }
@@ -557,9 +558,9 @@ public class Item_handler : MonoBehaviour,IInjectable
             return;
         }
         OnItemUsageSuccessful?.Invoke(true);
-        _moveHandler.HealthGainDisplay(healEffect,affectedPokemon:_selectedPartyPokemon);
+        _moveUsageHandler.HealthGainDisplay(healEffect,affectedPokemon:_selectedPartyPokemon);
         _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points");
-        StartCoroutine(CompleteItemUsage(3f));
+        StartCoroutine(CompleteItemUsage(2f));
     }
     private void CompleteItemUsage()//only call for items used outside of battle
     {

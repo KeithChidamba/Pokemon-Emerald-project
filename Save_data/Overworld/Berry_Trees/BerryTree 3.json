@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Aspear berry",
     "berryItem": {
-        "instanceID": 26316
+        "instanceID": 26318
     },
     "treeIndex": 3,
     "minutesPerStage": 45,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32446
+                    "instanceID": 32430
                 },
                 {
-                    "instanceID": 32446
+                    "instanceID": 32430
                 }
             ],
             "growthStageNumber": 0
@@ -27,13 +27,24 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32448
+                    "instanceID": 32432
                 },
                 {
-                    "instanceID": 32450
+                    "instanceID": 32434
                 }
             ],
             "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32966
+                },
+                {
+                    "instanceID": 32968
+                }
+            ],
+            "growthStageNumber": 2
         },
         {
             "growthStageSprites": [
@@ -44,7 +55,7 @@
                     "instanceID": 32972
                 }
             ],
-            "growthStageNumber": 2
+            "growthStageNumber": 3
         },
         {
             "growthStageSprites": [
@@ -55,19 +66,8 @@
                     "instanceID": 32976
                 }
             ],
-            "growthStageNumber": 3
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 32978
-                },
-                {
-                    "instanceID": 32980
-                }
-            ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-03-18T21:25:28.8574590+02:00"
+    "lastLogin": "2026-03-19T17:57:00.2023730+02:00"
 }

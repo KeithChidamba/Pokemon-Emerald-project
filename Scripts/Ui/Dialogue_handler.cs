@@ -55,7 +55,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
 
     void Update()
     {
-        if (displaying && Input.GetKeyDown(KeyCode.X) && canExitDialogue)
+        if (dialogueFinished && Input.GetKeyDown(KeyCode.X) && canExitDialogue)
         {
             StartCoroutine(_playerMovementHandler.AllowPlayerMovement(0.25f));
             EndDialogue();
@@ -252,6 +252,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     }
     private IEnumerator TypeText(string message)
     {
+        
         ResetText();
         dialogueFinished = false;
         displaying = true; 
@@ -275,6 +276,10 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
                 if (Input.GetKeyDown(KeyCode.X))
                 {
                     dialougeText.maxVisibleCharacters = lastChar + 1;
+                    var canExit = canExitDialogue;
+                    canExitDialogue = false;
+                    yield return new WaitForSeconds(1f);
+                    canExitDialogue = canExit;
                     break;
                 }
 

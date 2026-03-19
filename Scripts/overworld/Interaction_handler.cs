@@ -88,7 +88,6 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                
                 var interactableTile = Collider_checks.FindTileAtPositionRadius<InteractionTile>(interactionTilemap,hit.point,Vector3.down);
                 if (interactableTile != null)
                 {

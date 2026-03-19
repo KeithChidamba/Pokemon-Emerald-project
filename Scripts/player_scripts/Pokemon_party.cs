@@ -51,7 +51,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _itemHandler = container.Resolve<Item_handler>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         gameObject.SetActive(true);
-    } 
+    }       
 
     public void UpdatePartyUsageMessage(string message)
     {
