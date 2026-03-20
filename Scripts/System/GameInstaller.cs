@@ -75,7 +75,8 @@ public class GameInstaller : MonoBehaviour
         Obj_Instance.GetContainer(_container);
         
         var injectables = FindObjectsOfType<MonoBehaviour>(true);
-
+        
+        
         foreach (var obj in injectables)
         {
             if (obj.isActiveAndEnabled)

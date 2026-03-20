@@ -17,11 +17,13 @@ public class Save_manager : MonoBehaviour,IInjectable
     [DllImport("__Internal")] private static extern void DownloadZipAndStoreLocally();
     [DllImport("__Internal")] private static extern void CreateDirectories();
     [DllImport("__Internal")] private static extern void UploadZipAndStoreToIDBFS();
-    [FormerlySerializedAs("party_IDs")] public List<string> partyIDs;
+    
+    public List<string> partyIDs;
 
-    private string _saveDataPath = "Assets/Save_data";
-    private string _tempSaveDataPath = "Assets/Temp_Save_data";
+    private string _saveDataPath;
+    private string _tempSaveDataPath;
     private event Action<string,Exception> OnSaveDataFail;
+    public event Action OnWebGLFSLoaded;
     
     private Dialogue_handler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
@@ -80,7 +82,19 @@ public class Save_manager : MonoBehaviour,IInjectable
     private void OnInject()
     {
         OnSaveDataFail += HandleSaveError;
-        _saveDataPath = GetSavePath();
+        
+        switch (Application.platform)
+        {
+            case RuntimePlatform.WebGLPlayer:
+                _saveDataPath = "/data/Save_data";
+                _tempSaveDataPath = "/data/Temp_Save_data";
+                break;
+            default:
+                _saveDataPath = "Assets/Save_data";
+                _tempSaveDataPath="Assets/Temp_Save_data";
+                break;
+        }
+        
         CreateTemporaryDirectory();
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
@@ -135,27 +149,14 @@ public class Save_manager : MonoBehaviour,IInjectable
     private IEnumerator SyncFromIndexedDB()
     {
         _dialogueHandler.DisplayDetails("Game Loaded");
+        OnWebGLFSLoaded?.Invoke();
         LoadPlayerData(); 
         LoadItemData();
         LoadPokemonData();
         yield return new WaitForSeconds(1f);
         _gameLoadingHandler.AllowGameLoad();
     }
-    string GetSavePath()
-    {
-        string basePath;
 
-        switch (Application.platform)
-        {
-            case RuntimePlatform.WebGLPlayer:
-                basePath = "/data/Save_data"; // root of virtual FS (in-memory or IDBFS)
-                break;
-             default:
-                basePath = "Assets/Save_data";
-                break;
-        }
-        return basePath;
-    }
     public void LoadPokemonStorageData()
     {
         CreateFolder(_saveDataPath + "/PC_Storage");

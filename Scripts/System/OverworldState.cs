@@ -30,11 +30,19 @@ public class OverworldState : MonoBehaviour,IInjectable
 
     private void OnInject()
     {
-        StartCoroutine(LoadOverworldState());
+        if(Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            _saveHandler.OnWebGLFSLoaded += ()=> StartCoroutine(LoadOverworldState());
+        }
+        else
+        {
+            StartCoroutine(LoadOverworldState());
+        }
     }
 
     private IEnumerator LoadOverworldState()
     {
+        
         overworldBerryTrees.Clear();
         currentStoryObjectives.Clear();
         

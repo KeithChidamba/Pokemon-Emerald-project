@@ -4,7 +4,7 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
-public enum InputDirection { None, Horizontal, Vertical, OmniDirection}
+public enum InputDirection { None, Horizontal, Vertical, Grid}
 public enum InputStateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart }
 public enum InputStateName 
 {
@@ -144,7 +144,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     {
         state.selector?.SetActive(false);
         
-        if(state.stateDirection==InputDirection.OmniDirection) ResetCoordinates();
+        if(state.stateDirection==InputDirection.Grid) ResetCoordinates();
         
         Action method = manualExit ? state.OnExit:state.OnClose;
         method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine
@@ -218,7 +218,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     {
         onInput?.Invoke();
         
-        if (CurrentState.stateDirection != InputDirection.OmniDirection) ChangeSelectionIndex(directionIndex);
+        if (CurrentState.stateDirection != InputDirection.Grid) ChangeSelectionIndex(directionIndex);
         
         if(CanUpdateSelector(direction)) UpdateSelectorUi();
     }
@@ -287,7 +287,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         switch (CurrentState.stateDirection)
         {
             case InputDirection.None: 
-            case InputDirection.OmniDirection:
+            case InputDirection.Grid:
                 return;
             case InputDirection.Horizontal: 
                 directionSelection = new[] { 0, 0, -1, 1 };
@@ -566,7 +566,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         }
 
         ChangeInputState(new (InputStateName.PokemonStorageBoxNavigation,new[]{InputStateGroup.PokemonStorage}
-            ,stateDirection:InputDirection.OmniDirection,selectableUis:storageBoxSelectables,
+            ,stateDirection:InputDirection.Grid,selectableUis:storageBoxSelectables,
             selector:_pokemonStorageHandler.initialSelector, selecting:true,display: true,canManualExit:false,canExit:false));
         ChangeSelectionIndex(0);
     }

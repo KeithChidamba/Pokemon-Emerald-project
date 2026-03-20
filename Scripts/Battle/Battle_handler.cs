@@ -179,7 +179,7 @@ public class Battle_handler : MonoBehaviour,IInjectable
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleOptions
             , new[] { InputStateGroup.PokemonBattle }, true,
-            optionsUI, InputDirection.OmniDirection, battleOptionSelectables,
+            optionsUI, InputDirection.Grid, battleOptionSelectables,
             optionSelector,true,true
             ,onExit:_turnBasedCombatHandler.RemoveTurn, updateExit:ConditionsForExit));
     }
@@ -471,7 +471,7 @@ public class Battle_handler : MonoBehaviour,IInjectable
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleMoveSelection
             ,new[] { InputStateGroup.PokemonBattle },true,
-            movesUI, InputDirection.OmniDirection, moveSelectables,
+            movesUI, InputDirection.Grid, moveSelectables,
             moveSelector,true,true,ResetMoveUsability,ResetMoveUsability));
         
         for (var i = _currentParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves

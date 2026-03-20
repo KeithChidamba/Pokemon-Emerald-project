@@ -46,7 +46,6 @@ public class BerryTree : MonoBehaviour,IInjectable
         _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += WaterTree;
         gameObject.SetActive(true);
         primaryInteractable = GetComponent<Overworld_interactable>();
-        treeSpriteRenderer = GetComponent<SpriteRenderer>();
     }
     
     private void SetInteraction(OverworldInteractionType type)

@@ -90,8 +90,18 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
         OnInject();
     }
-
     private void OnInject()
+    {
+        if(Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            _saveDataHandler.OnWebGLFSLoaded += LoadPCStorageBoxes;
+        }
+        else
+        {
+            LoadPCStorageBoxes();
+        }
+    }
+    private void LoadPCStorageBoxes()
     {
         maxPokemonCapacity = BoxCapacity * NumBoxes;
         _inputStateHandler.OnStateChanged += CheckState;
@@ -122,6 +132,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             nonPartyIcons.Add(pokemonIcon);
         }
     }
+
     public IEnumerator SaveStorageData()
     {
         foreach (var box in storageBoxes)
