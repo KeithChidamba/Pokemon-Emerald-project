@@ -6,7 +6,7 @@ using UnityEngine;
 public class InputState
 {
     public InputStateName stateName;
-    public InputStateGroup[] stateGroups;
+    public InputStateGroup stateGroup;
     public InputDirection stateDirection;
     public List<SelectableUI> selectableUis;
     public Action OnExit;
@@ -25,7 +25,7 @@ public class InputState
     
     public InputState(
         InputStateName stateName,
-        InputStateGroup[] groups,
+        InputStateGroup group,
         bool isParent = false,
         GameObject mainView = null,
         InputDirection stateDirection = InputDirection.None,
@@ -41,7 +41,7 @@ public class InputState
     )
     {
         this.stateName = stateName;
-        stateGroups = groups;
+        stateGroup = group;
         isParentLayer = isParent;
         mainViewUI = isParent ? mainView : null;
         this.stateDirection = stateDirection;

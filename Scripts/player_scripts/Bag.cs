@@ -70,10 +70,12 @@ public class Bag : MonoBehaviour,IInjectable
     private Game_ui_manager _gameUIHandler;
     private Game_Load _gameLoadingHandler;
     private Item_handler _itemHandler;
-
+    private PlayerBagInputService _playerBagInputService;
+    
     public void Inject(Container container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
+        _playerBagInputService = container.Resolve<PlayerBagInputService>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _dialogueOptionsHandler = container.Resolve<Options_manager>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
@@ -469,9 +471,9 @@ public class Bag : MonoBehaviour,IInjectable
         selectedItemIndex = 0;
         
         if (numItems > 0) SelectItem();
-        if (_inputStateHandler.CurrentState.stateGroups.Contains(InputStateGroup.Bag))
+        if (_inputStateHandler.currentState.stateGroup==InputStateGroup.Bag)
         {
-            _inputStateHandler.PlayerBagNavigationRestrictions();
+            _playerBagInputService.PlayerBagNavigationRestrictions();
         }
 
         OnBagOpened?.Invoke();

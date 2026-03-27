@@ -79,9 +79,11 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     private InputStateHandler _inputStateHandler;
     private Pokemon_party _pokemonPartyHandler;
     private Save_manager _saveDataHandler;
+    PokemonStorageInputService _pokemonStorageInputService;
     
     public void Inject(Container container)
     {
+        _pokemonStorageInputService = container.Resolve<PokemonStorageInputService>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
@@ -94,7 +96,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     {
         if(Application.platform == RuntimePlatform.WebGLPlayer)
         {
-            _saveDataHandler.OnWebGLFSLoaded += LoadPCStorageBoxes;
+            _saveDataHandler.OnUploadedDataReady += LoadPCStorageBoxes;
         }
         else
         {
@@ -143,7 +145,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     }
     private void CheckState(InputState currentState)
     {
-        _viewingPC = currentState.stateGroups.Contains(InputStateGroup.PokemonStorage);
+        _viewingPC = currentState.stateGroup==InputStateGroup.PokemonStorage;
         switch (currentState.stateName)
         {
             case InputStateName.PokemonStorageExit:
@@ -323,7 +325,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
                 _gameUIHandler.ClosePokemonStorage();
                 return;
             }
-            _inputStateHandler.SetupPokemonStorageState();
+            _pokemonStorageInputService.SetupPokemonStorageState();
         }
         if(currentUsageState == PCUsageState.Deposit)
         {
@@ -346,8 +348,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             }
             partySelectables.Add( new(exitParty,_gameUIHandler.ClosePokemonStorage,true) );
             
-            _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStoragePartyNavigation,
-                new[]{InputStateGroup.PokemonStorage}
+            _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStoragePartyNavigation, InputStateGroup.PokemonStorage
                 , stateDirection:InputDirection.Vertical, selectableUis:partySelectables
                 ,selector: initialSelector
                 ,selecting:true,display:true, canManualExit:false));
@@ -357,7 +358,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         }
         if (currentUsageState == PCUsageState.Move)
         {
-            _inputStateHandler.SetupPokemonStorageState();
+            _pokemonStorageInputService.SetupPokemonStorageState();
         }
         StartCoroutine(ActivateSelectorAnimation());
         ChangeBox(0);
@@ -469,8 +470,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             new(storagePartyOptions[2], ()=>DeletePokemon(true,icon.partyPosition),true)
         };
 
-        _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStoragePartyOptions,
-            new[]{InputStateGroup.PokemonStorage}
+        _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStoragePartyOptions, InputStateGroup.PokemonStorage
             , stateDirection:InputDirection.Vertical,selectableUis: partyOptionsSelectables
             ,selector:boxOptionsSelector,selecting:true,display:true
             ,onClose:ResetOptions,onExit:ResetOptions));
@@ -537,7 +537,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
 
 
             _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStorageBoxOptions,
-                new[]{InputStateGroup.PokemonStorage}
+                InputStateGroup.PokemonStorage
                 , stateDirection:InputDirection.Vertical,selectableUis: boxOptionsSelectables
                 ,selector:boxOptionsSelector,selecting:true,display:true
                 ,onClose:ResetOptions,onExit:ResetOptions));
@@ -568,8 +568,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
                 var boxNumber = i + 1;
                 boxSelection.Add(new(null,()=>SendToPC(boxNumber,partyPokemon),true));
             }
-            _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStorageDepositSelection,
-                new[]{InputStateGroup.PokemonStorage}
+            _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStorageDepositSelection, InputStateGroup.PokemonStorage
                 , stateDirection:InputDirection.Horizontal,selectableUis: boxSelection,selecting:true,onExit:RemoveDeposit));
             boxDepositUI.SetActive(true);
             DisplayBoxCapacity(0);

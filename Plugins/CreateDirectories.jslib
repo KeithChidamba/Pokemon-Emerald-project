@@ -1,61 +1,54 @@
 mergeInto(LibraryManager.library, {
   CreateDirectories: function () {
-    const dbName = "data";
+    const MOUNT_PATH = "/data";
+    const SAVE_PATH = MOUNT_PATH + "/Save_data";
+    const TEMP_PATH = MOUNT_PATH + "/Temp_Save_data";
 
-    const deleteRequest = indexedDB.deleteDatabase(dbName);
-
-    deleteRequest.onsuccess = function () {
-      console.log(`✅ Deleted database "${dbName}" successfully.`);
-    };
-
-    deleteRequest.onerror = function (event) {
-      console.error(`❌ Failed to delete database "${dbName}":`, event);
-    };
-
-    deleteRequest.onblocked = function () {
-      console.warn(`⚠️ Delete blocked. Close other tabs using "${dbName}".`);
-    };
-
-    const MOUNT_PATH = '/data';
-    const SAVE_PATH = MOUNT_PATH + '/Save_data';
-
-    // Step 1: Mount IDBFS at /data if not already
     if (!FS.analyzePath(MOUNT_PATH).exists) {
       FS.mkdir(MOUNT_PATH);
       FS.mount(IDBFS, {}, MOUNT_PATH);
     }
 
-    // Step 2: Sync to load existing data (or create if first time)
     FS.syncfs(true, function (err) {
       if (err) {
         console.error("IDBFS initial sync failed:", err);
         return;
       }
 
-      // Step 3: Ensure base Save_data and subdirectories exist
-      try {
-        FS.mkdir(SAVE_PATH);
-      } catch (e) {
-        // Directory already exists
-      }
+      const allDirs = [
+        SAVE_PATH,
+        SAVE_PATH + "/Items",
+        SAVE_PATH + "/Items/Held_Items",
+        SAVE_PATH + "/Items/Storage_Items",
+        SAVE_PATH + "/Pokemon",
+        SAVE_PATH + "/Player",
+        SAVE_PATH + "/Party_Ids",
+        SAVE_PATH + "/PC_Storage",
+        SAVE_PATH + "/Overworld",
+        SAVE_PATH + "/Overworld/Story_Objectives",
+        SAVE_PATH + "/Overworld/Berry_Trees",
 
-      const baseDirs = [
-        '/Items',
-        '/Pokemon',
-        '/Player',
-        '/Party_Ids',
-        '/Items/Held_Items'
+        TEMP_PATH,
+        TEMP_PATH + "/Items",
+        TEMP_PATH + "/Items/Held_Items",
+        TEMP_PATH + "/Items/Storage_Items",
+        TEMP_PATH + "/Pokemon",
+        TEMP_PATH + "/Player",
+        TEMP_PATH + "/Party_Ids",
+        TEMP_PATH + "/PC_Storage",
+        TEMP_PATH + "/Overworld",
+        TEMP_PATH + "/Overworld/Story_Objectives",
+        TEMP_PATH + "/Overworld/Berry_Trees"
       ];
 
-      for (const dir of baseDirs) {
+      for (const dir of allDirs) {
         try {
-          FS.mkdir(SAVE_PATH + dir);
+          FS.mkdir(dir);
         } catch (e) {
-          // Directory may already exist
+          // already exists
         }
       }
 
-      // Step 4: Sync updated structure to IndexedDB
       FS.syncfs(false, function (err) {
         if (err) {
           console.error("IDBFS final sync failed:", err);

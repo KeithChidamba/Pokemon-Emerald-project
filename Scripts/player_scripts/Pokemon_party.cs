@@ -36,9 +36,10 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     private pokemon_storage _pokemonStorageHandler;
     private Item_handler _itemHandler;
     private BattleIntro _battleIntroHandler;
-    
+    private PokemonPartyInputService _partyInputService;
     public void Inject(Container container)
     {
+        _partyInputService = container.Resolve<PokemonPartyInputService>();
         _dialogueOptionsHandler = container.Resolve<Options_manager>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
@@ -191,7 +192,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
                 {
                     ClearSelectionUI();
                     partyOptionsParent.SetActive(true);
-                    _inputStateHandler.PokemonPartyOptions();
+                    _partyInputService.PokemonPartyOptions();
                 }
             }
         }
@@ -231,7 +232,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     {
         RefreshMemberCards();
         ClearSelectionUI();
-        _inputStateHandler.UpdateHealthBarColors();
+        _partyInputService.UpdateHealthBarColors();
     }
     private void SwapMembers(int partyIndex)
     {

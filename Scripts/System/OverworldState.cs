@@ -32,7 +32,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     {
         if(Application.platform == RuntimePlatform.WebGLPlayer)
         {
-            _saveHandler.OnWebGLFSLoaded += ()=> StartCoroutine(LoadOverworldState());
+            _saveHandler.OnUploadedDataReady += ()=> StartCoroutine(LoadOverworldState());
         }
         else
         {

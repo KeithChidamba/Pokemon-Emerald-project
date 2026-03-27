@@ -23,7 +23,10 @@ public class Save_manager : MonoBehaviour,IInjectable
     private string _saveDataPath;
     private string _tempSaveDataPath;
     private event Action<string,Exception> OnSaveDataFail;
-    public event Action OnWebGLFSLoaded;
+    public event Action OnUploadedDataReady;
+    public event Action OnVirtualFsCreated;
+    private bool _virtualFileStructureReady;
+    
     
     private Dialogue_handler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
@@ -82,7 +85,8 @@ public class Save_manager : MonoBehaviour,IInjectable
     private void OnInject()
     {
         OnSaveDataFail += HandleSaveError;
-        
+        _virtualFileStructureReady = false;
+        OnVirtualFsCreated += () => _virtualFileStructureReady = true;
         switch (Application.platform)
         {
             case RuntimePlatform.WebGLPlayer:
@@ -129,14 +133,22 @@ public class Save_manager : MonoBehaviour,IInjectable
     }
     public void UploadSaveZip()
     {
-        CreateDefaultWebglDirectories();
-        #if UNITY_WEBGL && !UNITY_EDITOR
-                                UploadZipAndStoreToIDBFS();
-        #endif
+        StartCoroutine(ProcessFileUpload());
     }
+    private IEnumerator ProcessFileUpload()
+    {
+        CreateDefaultWebglDirectories();
+        yield return new WaitUntil(() => _virtualFileStructureReady);
+        
+#if UNITY_WEBGL && !UNITY_EDITOR
+                                UploadZipAndStoreToIDBFS();
+#endif
+        
+    }
+    
     public void OnFileStructureCreated()//js notification
     {
-        //do something if want, in future
+        OnVirtualFsCreated?.Invoke();
     }
     public void OnDownloadComplete()//js notification
     {
@@ -149,7 +161,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     private IEnumerator SyncFromIndexedDB()
     {
         _dialogueHandler.DisplayDetails("Game Loaded");
-        OnWebGLFSLoaded?.Invoke();
+        OnUploadedDataReady?.Invoke();
         LoadPlayerData(); 
         LoadItemData();
         LoadPokemonData();
@@ -409,6 +421,15 @@ public class Save_manager : MonoBehaviour,IInjectable
     }
     public IEnumerator SaveAllData()
     {
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            _virtualFileStructureReady = false;
+            CreateDefaultWebglDirectories();
+
+            yield return new WaitUntil(() => _virtualFileStructureReady);
+        }
+
+        
         _inputStateHandler.ResetRelevantUi(InputStateName.PlayerMenu);
         _inputStateHandler.AddDialoguePlaceHolderState();
         _dialogueHandler.DisplayDetails("Saving...",false); 

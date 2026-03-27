@@ -43,8 +43,9 @@ public class GameInstaller : MonoBehaviour
     void Awake()
     {
         _container = new Container();
-        _container.RegisterSingleton(() => dialogueHandler);
+        //mono-services
         _container.RegisterSingleton(() => inputStateHandler);
+        _container.RegisterSingleton(() => dialogueHandler);
         _container.RegisterSingleton(() => battleIntroHandler);
         _container.RegisterSingleton(() => battleHandler);
         _container.RegisterSingleton(() => encounterHandler);
@@ -74,8 +75,23 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(() => battleOperationsHandler);
         Obj_Instance.GetContainer(_container);
         
-        var injectables = FindObjectsOfType<MonoBehaviour>(true);
+        //Non-Mono services
+        var playerBagInputService = new PlayerBagInputService(_container);
+        var pokemonBattleInputService = new PokemonBattleInputService(_container);
+        var pokemartInputService = new PokemartInputService(_container);
+        var pokemonDetailsInputService = new PokemonDetailsInputService(_container);
+        var pokemonStorageInputService = new PokemonStorageInputService(_container);
+        var pokemonPartyInputService = new PokemonPartyInputService(_container);
         
+        _container.RegisterSingleton(() => playerBagInputService);
+        _container.RegisterSingleton(() => pokemonBattleInputService);
+        _container.RegisterSingleton(() => pokemartInputService);
+        _container.RegisterSingleton(() => pokemonStorageInputService);
+        _container.RegisterSingleton(() => pokemonDetailsInputService);
+        _container.RegisterSingleton(() => pokemonPartyInputService);
+        
+        
+        var injectables = FindObjectsOfType<MonoBehaviour>(true);
         
         foreach (var obj in injectables)
         {

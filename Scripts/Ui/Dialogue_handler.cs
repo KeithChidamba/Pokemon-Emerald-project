@@ -101,7 +101,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         }
         
         _inputStateHandler.ChangeInputState(new (InputStateName.DialogueOptions
-            ,new[]{InputStateGroup.None},false,null,
+            ,InputStateGroup.None,false,null,
             InputDirection.Vertical,optionSelectables,optionSelector,true,true));
         yield return null;
     }

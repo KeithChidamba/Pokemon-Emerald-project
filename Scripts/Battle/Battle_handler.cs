@@ -124,7 +124,7 @@ public class Battle_handler : MonoBehaviour,IInjectable
             enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,PlayerExecuteMove,true));
         }
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleEnemySelection
-            ,new[] { InputStateGroup.PokemonBattle },
+            ,InputStateGroup.PokemonBattle,
             stateDirection:InputDirection.Horizontal, selectableUis:enemySelectables, selecting:true));
     }
     private void PlayerExecuteMove()
@@ -178,7 +178,7 @@ public class Battle_handler : MonoBehaviour,IInjectable
         };
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleOptions
-            , new[] { InputStateGroup.PokemonBattle }, true,
+            , InputStateGroup.PokemonBattle, true,
             optionsUI, InputDirection.Grid, battleOptionSelectables,
             optionSelector,true,true
             ,onExit:_turnBasedCombatHandler.RemoveTurn, updateExit:ConditionsForExit));
@@ -470,7 +470,7 @@ public class Battle_handler : MonoBehaviour,IInjectable
         }
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleMoveSelection
-            ,new[] { InputStateGroup.PokemonBattle },true,
+            ,InputStateGroup.PokemonBattle,true,
             movesUI, InputDirection.Grid, moveSelectables,
             moveSelector,true,true,ResetMoveUsability,ResetMoveUsability));
         

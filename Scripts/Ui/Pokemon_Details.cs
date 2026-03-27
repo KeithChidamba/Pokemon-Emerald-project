@@ -94,8 +94,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
             OnMoveSelected?.Invoke(moveIndex);
             return;
         }
-        _inputStateHandler.ChangeInputState(new (InputStateName.PokemonDetailsMoveData,
-            new[]{InputStateGroup.PokemonDetails}
+        _inputStateHandler.ChangeInputState(new (InputStateName.PokemonDetailsMoveData, InputStateGroup.PokemonDetails
             ,stateDirection:InputDirection.None, onExit:RemoveMoveDescription));
 
         var selectedMove = currentPokemon.moveSet[moveIndex];
@@ -154,7 +153,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     {
         if (learningMove || changingMoveData)
         {//simulate F click
-            _inputStateHandler.CurrentState.selectableUis[2]?.eventForUi?.Invoke();
+            _inputStateHandler.currentState.selectableUis[2]?.eventForUi?.Invoke();
         }
 
         Ability_ui.SetActive(false);

@@ -134,7 +134,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
     {
         if (isEmpty) return;
         
-        if (currentState.stateGroups.Contains(InputStateGroup.PokemonParty))
+        if (currentState.stateGroup==InputStateGroup.PokemonParty)
         {
             if(pokemon.hp<=0)
             {
@@ -155,7 +155,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         if (_isViewingCard)
         {
             _inputStateHandler.OnSelectionIndexChanged += UpdateUi;
-            UpdateUi(_inputStateHandler.CurrentState.currentSelectionIndex);
+            UpdateUi(_inputStateHandler.currentState.currentSelectionIndex);
         }
     }
     private void ResetSelectionVisual(InputState previousState)

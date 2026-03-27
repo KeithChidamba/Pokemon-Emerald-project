@@ -10,7 +10,7 @@ public class Game_Load : MonoBehaviour,IInjectable
 {
     public Button load_btn;
     public Button newGame_btn;
-   public Button uploadButton;
+    public Button uploadButton;
     public GameObject new_player_ui; 
     public GameObject Start_ui;
     public InputField name_input;

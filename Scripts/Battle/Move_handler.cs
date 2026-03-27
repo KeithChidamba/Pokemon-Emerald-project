@@ -281,8 +281,7 @@ public class Move_handler:MonoBehaviour,IInjectable
                 displayHp = newHp;
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
 
-                if(_inputStateHandler.CurrentState.stateGroups
-                   .Contains(InputStateGroup.PokemonParty))
+                if(_inputStateHandler.currentState.stateGroup==InputStateGroup.PokemonParty)
                 {//update party health ui
                     data.affectedPokemon.ChangeHealth(null);
                 }  
