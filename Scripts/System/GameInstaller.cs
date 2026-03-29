@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public interface IInjectable
@@ -40,7 +38,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Move_handler moveHandler;
    
     
-    void Awake()
+    private void Awake()
     {
         _container = new Container();
         //mono-services
@@ -89,7 +87,6 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(() => pokemonStorageInputService);
         _container.RegisterSingleton(() => pokemonDetailsInputService);
         _container.RegisterSingleton(() => pokemonPartyInputService);
-        
         
         var injectables = FindObjectsOfType<MonoBehaviour>(true);
         

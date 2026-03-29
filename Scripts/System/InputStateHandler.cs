@@ -274,7 +274,8 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         var currentRow = boxCoordinates[0];
         var rowCapacity = currentRow * numBoxColumns;
         rowCapacity = Mathf.Clamp(rowCapacity, 0, currentBoxCapacity);
-        return rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
+        var val = rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);;
+        return val;
     }
     public void MoveCoordinatesDynamic(InputDirection direction, int change)
     {
@@ -285,9 +286,11 @@ public class InputStateHandler : MonoBehaviour,IInjectable
             (int)math.ceil((float)currentNumBoxElements/numBoxColumns) - 1 : rowRemainder-1;
         
         boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
+        
         currentState.currentSelectionIndex = currentNumBoxElements > currentState.maxSelectionIndex?
             Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentState.maxSelectionIndex) 
             :Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentNumBoxElements);
+        
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
         UpdateSelectorUi();
     }
