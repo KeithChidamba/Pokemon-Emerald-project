@@ -163,6 +163,11 @@ public class InputStateHandler : MonoBehaviour,IInjectable
             Mathf.Clamp(currentState.currentSelectionIndex+change, 0, currentState.maxSelectionIndex);
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
     }
+    public void SetSelectionIndex(int newIndex)
+    {
+        currentState.currentSelectionIndex = Mathf.Clamp(newIndex, 0, currentState.maxSelectionIndex);
+        OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
+    }
     public void ChangeInputState(InputState newState)
     {
         if (currentState.stateName == newState.stateName) return;
@@ -357,15 +362,20 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         
         return inputStates;
     }
-    
+
     private List<InputState> GetRelevantStates(InputStateName stateName)
     {
         List<InputState> inputStates = new List<InputState>();
         foreach (var state in stateLayers)
             if (state.stateName == stateName)
                 inputStates.Add(state);
-        
+
         return inputStates;
+    }
+
+    public InputState GetState(InputStateName stateName)
+    {
+        return stateLayers.Find(state=>state.stateName == stateName);
     }
     private void RemoveInputStates(List<InputState> states)
     {

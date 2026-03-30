@@ -34,7 +34,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private Player_movement _playerMovementHandler;
     private InputStateHandler _inputStateHandler;
-    PokemonDetailsInputService _pokemonDetailsInputService;
+    private PokemonDetailsInputService _pokemonDetailsInputService;
     private Options_manager _dialogueOptionsHandler;
     private Game_Load _gameLoadingHandler;
     private overworld_actions _overworldActionsHandler;
@@ -132,7 +132,8 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _inputStateHandler.ChangeInputState(new (InputStateName.PlayerMenu,
             InputStateGroup.None,true,menuOptions,
             InputDirection.Vertical, menuSelectables,menuSelector,true
-            , true,CloseMenu,CloseMenu)); }
+            , true,CloseMenu,CloseMenu)); 
+    }
     private void ActivateUiElement(GameObject ui,bool activated)
     {
         ui.SetActive(activated);
@@ -195,13 +196,16 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _pokemonStorageHandler.ClosePC();
     }
     
-    
-    
     private void ClosePCOptions(GameObject ui)
     {
         _inputStateHandler.RemoveTopInputLayer(false);
         ui.SetActive(false);
         ManageScreens(0);
+    }
+    private void CloseSettings()
+    {
+        ManageScreens(-1);
+        ActivateUiElement(_gameSettingsHandler.mainUI, false);
     }
     public void ViewBag()
     {
@@ -392,6 +396,44 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
 
     private void ViewGameSettings()
     {
+        ManageScreens(1);
+        ActivateUiElement(_gameSettingsHandler.mainUI, true);
+        var gameSettingsSelectables = new List<SelectableUI>();
+
+        for (int i = 0; i<_gameSettingsHandler.gameSettings.Count; i++)
+        {
+            gameSettingsSelectables.Add( new(_gameSettingsHandler.gameSettingsHeading[i]
+                ,null,true) );
+        }
         
+        _inputStateHandler.ChangeInputState(new  (InputStateName.GameSettingsNavigation,
+            InputStateGroup.GameSettings,true,_gameSettingsHandler.mainUI,
+            InputDirection.Vertical, gameSettingsSelectables,_gameSettingsHandler.whiteSelector,true, true
+            ,onExit:CloseSettings));
+        
+        _gameSettingsHandler.mainUI.SetActive(true);
+    }
+    public void ViewGameSettingsOptions()
+    {
+        var gameSettingsSelectables = new List<SelectableUI>();
+        foreach (var option in _gameSettingsHandler.currentSetting.settingOptions)
+        {
+            gameSettingsSelectables.Add(new(option.gameObject, null, true));
+        }
+
+        _inputStateHandler.ChangeInputState(new(
+            InputStateName.GameSettingOptionsNavigation,
+            InputStateGroup.GameSettings,
+            false,
+            null,
+            InputDirection.Horizontal,
+            gameSettingsSelectables,
+            null,
+            true,
+            onExit: CloseSettings));
+
+        var savedOptionIndex = _gameSettingsHandler.GetCurrentOptionIndex();
+        _inputStateHandler.SetSelectionIndex(savedOptionIndex);
+        _gameSettingsHandler.SetOptionTextColor(savedOptionIndex);
     }
 }
