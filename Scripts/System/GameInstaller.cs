@@ -36,8 +36,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private overworld_actions overworldActionsHandler;
     [SerializeField] private Item_handler itemHandler;
     [SerializeField] private Move_handler moveHandler;
-   
-    
+    [SerializeField] private GameSettingsHandler gameSettingsHandler;
     private void Awake()
     {
         _container = new Container();
@@ -71,7 +70,9 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(() => battleVisualsHandler);
         _container.RegisterSingleton(() => moveHandler);
         _container.RegisterSingleton(() => battleOperationsHandler);
-        Obj_Instance.GetContainer(_container);
+        _container.RegisterSingleton(() => gameSettingsHandler);
+        
+        Obj_Instance.GetContainer(_container);//static class dependency
         
         //Non-Mono services
         var playerBagInputService = new PlayerBagInputService(_container);
@@ -80,6 +81,7 @@ public class GameInstaller : MonoBehaviour
         var pokemonDetailsInputService = new PokemonDetailsInputService(_container);
         var pokemonStorageInputService = new PokemonStorageInputService(_container);
         var pokemonPartyInputService = new PokemonPartyInputService(_container);
+        var gameSettingsInputService = new GameSettingsInputService(_container);
         
         _container.RegisterSingleton(() => playerBagInputService);
         _container.RegisterSingleton(() => pokemonBattleInputService);
@@ -87,6 +89,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(() => pokemonStorageInputService);
         _container.RegisterSingleton(() => pokemonDetailsInputService);
         _container.RegisterSingleton(() => pokemonPartyInputService);
+        _container.RegisterSingleton(() => gameSettingsInputService);
         
         var injectables = FindObjectsOfType<MonoBehaviour>(true);
         

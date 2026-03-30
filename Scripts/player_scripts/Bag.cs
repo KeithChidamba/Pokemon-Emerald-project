@@ -141,9 +141,9 @@ public class Bag : MonoBehaviour,IInjectable
         }
         RemoveItem(item);
         return;
-        void ResetQuantity(InputState state)
+        void ResetQuantity(InputState currentState)
         {
-            state.currentSelectionIndex = 0;
+            currentState.currentSelectionIndex = 0;
         }
     }
 

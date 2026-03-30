@@ -44,6 +44,8 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private Pokemon_party _pokemonPartyHandler;
     private pokemon_storage _pokemonStorageHandler;
     private ItemStorageHandler _itemStorageHandler;
+    private GameSettingsHandler _gameSettingsHandler;
+    
     
     public void Inject(Container container)
     {
@@ -62,6 +64,8 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _itemHandler = container.Resolve<Item_handler>();
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
+        _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
+            
         gameObject.SetActive(true);
         OnInject();
     }
@@ -77,9 +81,9 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _inputStateHandler.OnStateChanged += AllowMenuUsage;
     }
 
-    private void AllowMenuUsage( InputState previousState)
+    private void AllowMenuUsage(InputState currentState)
     {
-        _canOpenMenu = previousState.stateName == InputStateName.Empty;
+        _canOpenMenu = currentState.stateName == InputStateName.Empty;
     }
     private void Update()
     {
@@ -115,7 +119,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     {
         var menuOptionsMethods = new List<Action>
         {
-            ViewPokemonParty,()=>StartCoroutine(_saveDataHandler.SaveAllData()), ViewBag, ViewProfile
+            ViewPokemonParty,()=>StartCoroutine(_saveDataHandler.SaveAllData()), ViewBag, ViewProfile, ViewGameSettings
         };
         
         if (!usingWebGl) menuOptionsMethods.Add(_dialogueOptionsHandler.ExitGame);
@@ -179,12 +183,25 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         ActivateUiElement(menuOptions, false);
         viewingMenu = false;
     }
-
+    private void ClosePCItemOptions()
+    {
+        pcItemOptionsUI.SetActive(false);
+        ManageScreens(0);
+    }
     public void ClosePokemonStorage()
     {
         ManageScreens(-1);
         ActivateUiElement(_pokemonStorageHandler.storageUI,false);
         _pokemonStorageHandler.ClosePC();
+    }
+    
+    
+    
+    private void ClosePCOptions(GameObject ui)
+    {
+        _inputStateHandler.RemoveTopInputLayer(false);
+        ui.SetActive(false);
+        ManageScreens(0);
     }
     public void ViewBag()
     {
@@ -329,11 +346,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         pcItemOptionsUI.SetActive(true);
     }
 
-    private void ClosePCItemOptions()
-    {
-        pcItemOptionsUI.SetActive(false);
-        ManageScreens(0);
-    }
+
     public void ViewPokemonStorage()
     {
         _overworldActionsHandler.usingUI = true;
@@ -356,12 +369,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         pcPokemonOptionsUI.SetActive(true);
     }
 
-    private void ClosePCOptions(GameObject ui)
-    {
-        _inputStateHandler.RemoveTopInputLayer(false);
-        ui.SetActive(false);
-        ManageScreens(0);
-    }
+
     private void SetPcUsage(PCUsageState currentUsageState)
     {
         pcPokemonOptionsUI.SetActive(false);
@@ -380,5 +388,10 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             ,InputStateGroup.PokeMart,true,
             _pokeMartHandler.storeUI, InputDirection.Vertical, martSelectables,
             _pokeMartHandler.itemSelector,true,true,ClosePokeMart,ClosePokeMart));
+    }
+
+    private void ViewGameSettings()
+    {
+        
     }
 }

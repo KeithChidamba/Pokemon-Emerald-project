@@ -5,17 +5,19 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public enum InputDirection { None, Horizontal, Vertical, Grid}
-public enum InputStateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart }
+public enum InputStateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart, GameSettings}
 public enum InputStateName 
 {
-    PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
+    PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,
+    PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
     PokemonStorageBoxChange,PokemonStorageExit ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
     PokemonStorageUsage,ItemStorageUsage,PokemonStoragePartyOptions,PokemonStorageDepositSelection,
     PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
     PlayerBagItemSell,PlayerBagNavigation,
     PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
     MartItemPurchase,MartItemNavigation,
-    PlayerMenu,PlayerProfile,KeyBinds
+    PlayerMenu,PlayerProfile,KeyBinds,
+    GameSettingsNavigation,GameSettingOptionsNavigation
 }
 public class InputStateHandler : MonoBehaviour,IInjectable
 {
@@ -52,6 +54,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private PokemonDetailsInputService _pokemonDetailsInputService;
     private PokemonStorageInputService _pokemonStorageInputService;
     private PokemonPartyInputService _pokemonPartyInputService;
+    private GameSettingsInputService _gameSettingsInputService;
     public void Inject(Container container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -62,6 +65,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         _pokemartInputService = container.Resolve<PokemartInputService>();
         _pokemonDetailsInputService = container.Resolve<PokemonDetailsInputService>();
         _pokemonStorageInputService = container.Resolve<PokemonStorageInputService>();
+        _gameSettingsInputService = container.Resolve<GameSettingsInputService>();
         
         gameObject.SetActive(true);
         OnInject();
@@ -305,6 +309,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
             InputStateGroup.PokemonStorage=>_pokemonStorageInputService.DetermineOperation,
             InputStateGroup.PokemonBattle=>_pokemonBattleInputService.DetermineOperation,
             InputStateGroup.PokemonDetails=>_pokemonDetailsInputService.DetermineOperation,
+            InputStateGroup.GameSettings=>_gameSettingsInputService.DetermineOperation,
             _ => null
         };
         groupMethod?.Invoke(); 
