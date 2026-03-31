@@ -15,7 +15,7 @@ public enum AssetDirectory
 public class Save_manager : MonoBehaviour,IInjectable
 {
     [DllImport("__Internal")] private static extern void DownloadZipAndStoreLocally();
-    [DllImport("__Internal")] private static extern void CreateDirectories();
+    [DllImport("__Internal")] private static extern void CreateDirectories(string jsonPtr);
     [DllImport("__Internal")] private static extern void UploadZipAndStoreToIDBFS();
     
     public List<string> partyIDs;
@@ -114,21 +114,38 @@ public class Save_manager : MonoBehaviour,IInjectable
         }
         
     }
+
     private void CreateTemporaryDirectory()
     {
-        CreateFolder(_tempSaveDataPath+"/Player");
-        CreateFolder(_tempSaveDataPath+"/Items");
-        CreateFolder(_tempSaveDataPath+"/Items/Held_Items");
-        CreateFolder(_tempSaveDataPath+"/Items/Storage_Items");
-        CreateFolder(_tempSaveDataPath+"/Pokemon");
-        CreateFolder(_tempSaveDataPath+"/Party_Ids");
+        CreateFolder(_tempSaveDataPath + "/Player");
+        CreateFolder(_tempSaveDataPath + "/Items");
+        CreateFolder(_tempSaveDataPath + "/Items/Held_Items");
+        CreateFolder(_tempSaveDataPath + "/Items/Storage_Items");
+        CreateFolder(_tempSaveDataPath + "/Pokemon");
+        CreateFolder(_tempSaveDataPath + "/Party_Ids");
         CreateFolder(_tempSaveDataPath + "/PC_Storage");
         CreateFolder(_tempSaveDataPath + "/Overworld/Story_Objectives");
     }
+
+    [Serializable]
+    public class StringArrayWrapper
+    {
+        public string[] items;
+    }
     public void CreateDefaultWebglDirectories()
     {
+        
+        string[] myArray = { "Hello", "World", "Unity", "WebGL" };
+
+        StringArrayWrapper wrapper = new StringArrayWrapper
+        {
+            items = myArray
+        };
+
+        string json = JsonUtility.ToJson(wrapper);
+        
         #if UNITY_WEBGL && !UNITY_EDITOR
-                        CreateDirectories();
+                        CreateDirectories(json);
         #endif
     }
     public void UploadSaveZip()

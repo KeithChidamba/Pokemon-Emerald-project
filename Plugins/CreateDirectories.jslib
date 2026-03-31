@@ -1,5 +1,12 @@
+
+
+
 mergeInto(LibraryManager.library, {
-  CreateDirectories: function () {
+  CreateDirectories: function (jsonPtr) {
+
+
+
+
     const MOUNT_PATH = "/data";
     const SAVE_PATH = MOUNT_PATH + "/Save_data";
     const TEMP_PATH = MOUNT_PATH + "/Temp_Save_data";
@@ -14,7 +21,14 @@ mergeInto(LibraryManager.library, {
         console.error("IDBFS initial sync failed:", err);
         return;
       }
+    const json = UTF8ToString(jsonPtr);
+    const data = JSON.parse(json);
 
+    console.log("Received array:", data.items);
+
+    for (let i = 0; i < data.items.length; i++) {
+      console.log("Item " + i + ": " + data.items[i]);
+    }
       const allDirs = [
         SAVE_PATH,
         SAVE_PATH + "/Items",
@@ -59,4 +73,5 @@ mergeInto(LibraryManager.library, {
       });
     });
   }
-});
+}
+);
