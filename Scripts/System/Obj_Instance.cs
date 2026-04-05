@@ -6,9 +6,9 @@ using UnityEngine;
 
 public static class Obj_Instance
 {
-    private static Container _serviceContainer;
+    private static ServiceContainer _serviceContainer;
 
-    public static void GetContainer(Container container)
+    public static void GetContainer(ServiceContainer container)
     {
         _serviceContainer = container;
     }  

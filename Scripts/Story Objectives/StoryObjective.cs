@@ -3,7 +3,7 @@ using UnityEngine;
 [Serializable]
 public abstract class StoryObjective : ScriptableObject
 {
-    private void LoadObjective(Container container)
+    private void LoadObjective(ServiceContainer container)
     {
         serviceContainer = container;
         OnLoad?.Invoke();
@@ -20,7 +20,7 @@ public abstract class StoryObjective : ScriptableObject
 
     protected virtual void LoadSaveData(StoryObjective objectiveData){ }
     
-    public void FindMainAsset(Container container)
+    public void FindMainAsset(ServiceContainer container)
     {
         var mainAsset = Resources.Load<StoryObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+mainAssetName);
         if (mainAsset == null)
@@ -38,7 +38,7 @@ public abstract class StoryObjective : ScriptableObject
     public bool hasProgression;
     [HideInInspector]public int indexInList;
     public StoryObjectiveType objectiveType;
-    protected Container serviceContainer;
+    protected ServiceContainer serviceContainer;
     public static StoryObjective GetObjectiveType(StoryObjectiveType type)
     {
         return type switch

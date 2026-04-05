@@ -22,7 +22,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
     private Encounter_handler _encounterHandler;
     private Game_Load _gameLoadingHandler;
 
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _encounterHandler = container.Resolve<Encounter_handler>();

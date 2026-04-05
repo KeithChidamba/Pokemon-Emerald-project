@@ -42,7 +42,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     private InputStateHandler _inputStateHandler;
     private Game_Load _gameLoadingHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _inputStateHandler = container.Resolve<InputStateHandler>();

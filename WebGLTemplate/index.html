@@ -23,7 +23,7 @@
         <div id="unity-build-title">Pokemon Luminary</div>
       </div>
     </div>
-         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
 
       var container = document.querySelector("#unity-container");
@@ -115,10 +115,8 @@
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
           progressBarFull.style.width = 100 * progress + "%";
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight	;
               }).then((unityInstance) => {
-                 window.unityInstance = unityInstance;
+                window.unityInstance = unityInstance;
                 loadingBar.style.display = "none";
                 fullscreenButton.onclick = () => {
                   unityInstance.SetFullscreen(1);
@@ -133,3 +131,4 @@
     </script>
   </body>
 </html>
+

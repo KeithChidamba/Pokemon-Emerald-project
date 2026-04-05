@@ -19,7 +19,7 @@ public class Encounter_handler : MonoBehaviour,IInjectable
 
     private PokemonOperations _pokemonOperationsHandler;
     private Battle_handler _battleHandler;
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _battleHandler = container.Resolve<Battle_handler>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();

@@ -9,7 +9,7 @@ public class Area_manager : MonoBehaviour,IInjectable
     
     private Game_Load _gameLoadingHandler;
 
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _gameLoadingHandler = container.Resolve<Game_Load>();
     }

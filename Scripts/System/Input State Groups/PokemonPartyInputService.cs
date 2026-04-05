@@ -10,7 +10,7 @@ public class PokemonPartyInputService
     private Pokemon_party _pokemonPartyHandler;
     private InputStateHandler _inputStateHandler;
     
-    public PokemonPartyInputService(Container container)
+    public PokemonPartyInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();

@@ -25,7 +25,7 @@ public class Options_manager : MonoBehaviour,IInjectable
     private pokemon_storage _pokemonStorage;
     private Battle_handler _battleHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _playerParty = container.Resolve<Pokemon_party>();

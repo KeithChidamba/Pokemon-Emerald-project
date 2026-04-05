@@ -805,7 +805,7 @@ public class NatureEVFixer : EditorWindow
     // private Game_Load _gameLoadingHandler;
     // private overworld_actions _overworldActions;
     // private Item_handler _itemHandler;
-    // private Container container;
+    // private ServiceContainer container;
     // void Inject()
     // {
     //     _inputStateHandler = container.Resolve<InputStateHandler>();

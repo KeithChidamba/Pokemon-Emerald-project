@@ -6,7 +6,7 @@ public class PokemonBattleInputService
     private InputStateHandler _inputStateHandler;
     private Battle_handler _battleHandler;
 
-    public PokemonBattleInputService(Container container)
+    public PokemonBattleInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
        

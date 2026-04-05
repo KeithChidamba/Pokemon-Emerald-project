@@ -34,7 +34,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     private Game_Load _gameLoadingHandler;
     private Options_manager _dialogueOptionsHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueOptionsHandler = container.Resolve<Options_manager>();
         _gameLoadingHandler = container.Resolve<Game_Load>();

@@ -42,7 +42,7 @@ mergeInto(LibraryManager.library, {
 
                 const fullPath = MOUNT_PATH + '/' + filename;
                 FS.writeFile(fullPath, data);
-                console.log("Saved:", fullPath);
+            
               });
 
               fileWrites.push(promise);

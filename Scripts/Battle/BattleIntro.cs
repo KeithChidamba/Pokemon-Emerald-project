@@ -46,7 +46,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
     private Wild_pkm _wildPokemonHandler;
     private BattleVisuals _battleVisualsHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();

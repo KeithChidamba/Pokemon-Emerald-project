@@ -35,7 +35,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
     private Pokemon_party _pokemonPartyHandler;
     private InputStateHandler _inputStateHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();

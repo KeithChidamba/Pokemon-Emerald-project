@@ -11,7 +11,7 @@ public class ItemStorageHandler : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private Bag _playerBagHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _playerBagHandler = container.Resolve<Bag>();

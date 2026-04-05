@@ -72,7 +72,7 @@ public class Bag : MonoBehaviour,IInjectable
     private Item_handler _itemHandler;
     private PlayerBagInputService _playerBagInputService;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _playerBagInputService = container.Resolve<PlayerBagInputService>();

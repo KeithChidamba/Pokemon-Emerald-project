@@ -9,7 +9,7 @@ public class PlayerBagInputService
     private ItemStorageHandler _itemStorageHandler;
     private InputStateHandler _inputStateHandler;
     
-    public PlayerBagInputService(Container container)
+    public PlayerBagInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _playerBagHandler = container.Resolve<Bag>();

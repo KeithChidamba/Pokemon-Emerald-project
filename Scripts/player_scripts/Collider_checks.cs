@@ -15,7 +15,7 @@ public class Collider_checks : MonoBehaviour,IInjectable
     private Encounter_handler  _encounterHandler;
     private Area_manager  _areaHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _encounterHandler = container.Resolve<Encounter_handler>();
         _playerMovementHandler = container.Resolve<Player_movement>();

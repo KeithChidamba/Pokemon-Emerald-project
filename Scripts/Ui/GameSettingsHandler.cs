@@ -72,7 +72,7 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         //logic to make setting changes here
         //on game load, set these setting again
     }
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         gameObject.SetActive(true);
         OnInject();

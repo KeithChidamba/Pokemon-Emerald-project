@@ -35,7 +35,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private Pokemon_Details _pokemonDetailsHandler;
     private Dialogue_handler _dialogueHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _wildPokemonHandler = container.Resolve<Wild_pkm>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();

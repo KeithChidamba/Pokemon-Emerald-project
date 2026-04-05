@@ -24,7 +24,7 @@ public class Participant_Status : MonoBehaviour,IInjectable
     private overworld_actions _overworldActions;
     private BattleOperations _battleOperationsHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _battleOperationsHandler = container.Resolve<BattleOperations>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();

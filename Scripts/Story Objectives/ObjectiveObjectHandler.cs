@@ -21,7 +21,7 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
   public LayerMask newLayer;
   private OverworldState _overworldStateHandler;
 
-  public void Inject(Container container)
+  public void Inject(ServiceContainer container)
   {
       _overworldStateHandler = container.Resolve<OverworldState>();
       gameObject.SetActive(true);

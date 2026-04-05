@@ -16,9 +16,9 @@ public class OverworldState : MonoBehaviour,IInjectable
     private Save_manager _saveHandler;
     private Dialogue_handler _dialogueHandler;
     private Game_Load _gameLoadHandler;
-    private Container _container;
+    private ServiceContainer _container;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _container = container;
         _saveHandler = container.Resolve<Save_manager>();

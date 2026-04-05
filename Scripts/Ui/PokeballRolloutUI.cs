@@ -23,7 +23,7 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     private BattleIntro _battleIntroHandler;
     private Battle_handler _battleHandler;
 
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();

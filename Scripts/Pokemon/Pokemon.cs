@@ -121,7 +121,7 @@ public class Pokemon : ScriptableObject
         
         foreach (var evo in evolutions) evolutionNames.Add(evo.evolutionName);
     }
-    public void LoadDataAndDependencies(Container serviceContainer)
+    public void LoadDataAndDependencies(ServiceContainer serviceContainer)
     {//gives values to attributes that cant be deserialized, using saved values
         frontPicture = Testing.CheckImage( Save_manager.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
@@ -165,7 +165,7 @@ public class Pokemon : ScriptableObject
         _battleHandler.OnBattleEnd += ClearEvents;
     }
 
-    public void Inject(Container serviceContainer)
+    public void Inject(ServiceContainer serviceContainer)
     {
         _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
         _dialogueOptionsHandler = serviceContainer.Resolve<Options_manager>(); 

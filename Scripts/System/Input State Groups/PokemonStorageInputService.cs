@@ -9,7 +9,7 @@ public class PokemonStorageInputService
     private pokemon_storage _pokemonStorageHandler;
     private InputStateHandler _inputStateHandler;
     
-    public PokemonStorageInputService(Container container)
+    public PokemonStorageInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();

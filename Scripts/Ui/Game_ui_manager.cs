@@ -47,7 +47,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private GameSettingsHandler _gameSettingsHandler;
     
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _pokemonDetailsInputService = container.Resolve<PokemonDetailsInputService>();
         _inputStateHandler = container.Resolve<InputStateHandler>();

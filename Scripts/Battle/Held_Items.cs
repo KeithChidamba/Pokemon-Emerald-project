@@ -11,7 +11,7 @@ public class Held_Items : MonoBehaviour,IInjectable
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();

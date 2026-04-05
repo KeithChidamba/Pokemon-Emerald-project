@@ -27,7 +27,7 @@ public class Game_Load : MonoBehaviour,IInjectable
     private overworld_actions _overworldActions;
     private Bag _playerBagHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _playerBagHandler = container.Resolve<Bag>();
         _saveHandler = container.Resolve<Save_manager>();

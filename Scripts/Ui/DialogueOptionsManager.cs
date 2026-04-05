@@ -13,7 +13,7 @@ public class DialogueOptionsManager : MonoBehaviour,IInjectable
     private int _selectorWidth = 40;
     
     private Dialogue_handler _dialogueHandler;
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
     }

@@ -2,11 +2,11 @@ using UnityEngine;
 
 public interface IInjectable
 {
-    public void Inject(Container container);
+    public void Inject(ServiceContainer container);
 }
 public class GameInstaller : MonoBehaviour
 {
-    private Container _container;
+    private ServiceContainer _container;
     [SerializeField] private InputStateHandler inputStateHandler;
     [SerializeField] private Dialogue_handler dialogueHandler;
     [SerializeField] private BattleIntro battleIntroHandler;
@@ -39,38 +39,38 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private GameSettingsHandler gameSettingsHandler;
     private void Awake()
     {
-        _container = new Container();
+        _container = new ServiceContainer();
         //mono-services
-        _container.RegisterSingleton(() => inputStateHandler);
-        _container.RegisterSingleton(() => dialogueHandler);
-        _container.RegisterSingleton(() => battleIntroHandler);
-        _container.RegisterSingleton(() => battleHandler);
-        _container.RegisterSingleton(() => encounterHandler);
-        _container.RegisterSingleton(() => wildPokemonHandler);
-        _container.RegisterSingleton(() => turnBasedCombatHandler);
-        _container.RegisterSingleton(() => moveUsageHandler);
-        _container.RegisterSingleton(() => moveLogicHandler);
-        _container.RegisterSingleton(() => dialogueOptionsHandler);
-        _container.RegisterSingleton(() => gameUIHandler);
-        _container.RegisterSingleton(() => playerBagHandler);
-        _container.RegisterSingleton(() => pokeMartHandler);
-        _container.RegisterSingleton(() => pokemonPartyHandler);
-        _container.RegisterSingleton(() => pokemonOperationsHandler);
-        _container.RegisterSingleton(() => pokemonStorageHandler);
-        _container.RegisterSingleton(() => itemStorageHandler);
-        _container.RegisterSingleton(() => pokemonDetailsHandler);
-        _container.RegisterSingleton(() => saveDataHandler);
-        _container.RegisterSingleton(() => interactionHandler);
-        _container.RegisterSingleton(() => playerMovementHandler);
-        _container.RegisterSingleton(() => overworldStateHandler);
-        _container.RegisterSingleton(() => areaHandler);
-        _container.RegisterSingleton(() => gameLoadingHandler);
-        _container.RegisterSingleton(() => overworldActionsHandler);
-        _container.RegisterSingleton(() => itemHandler);
-        _container.RegisterSingleton(() => battleVisualsHandler);
-        _container.RegisterSingleton(() => moveHandler);
-        _container.RegisterSingleton(() => battleOperationsHandler);
-        _container.RegisterSingleton(() => gameSettingsHandler);
+        _container.RegisterSingleton(inputStateHandler);
+        _container.RegisterSingleton(dialogueHandler);
+        _container.RegisterSingleton(battleIntroHandler);
+        _container.RegisterSingleton(battleHandler);
+        _container.RegisterSingleton(encounterHandler);
+        _container.RegisterSingleton(wildPokemonHandler);
+        _container.RegisterSingleton(turnBasedCombatHandler);
+        _container.RegisterSingleton(moveUsageHandler);
+        _container.RegisterSingleton(moveLogicHandler);
+        _container.RegisterSingleton(dialogueOptionsHandler);
+        _container.RegisterSingleton(gameUIHandler);
+        _container.RegisterSingleton(playerBagHandler);
+        _container.RegisterSingleton(pokeMartHandler);
+        _container.RegisterSingleton(pokemonPartyHandler);
+        _container.RegisterSingleton(pokemonOperationsHandler);
+        _container.RegisterSingleton(pokemonStorageHandler);
+        _container.RegisterSingleton(itemStorageHandler);
+        _container.RegisterSingleton(pokemonDetailsHandler);
+        _container.RegisterSingleton(saveDataHandler);
+        _container.RegisterSingleton(interactionHandler);
+        _container.RegisterSingleton(playerMovementHandler);
+        _container.RegisterSingleton(overworldStateHandler);
+        _container.RegisterSingleton(areaHandler);
+        _container.RegisterSingleton(gameLoadingHandler);
+        _container.RegisterSingleton(overworldActionsHandler);
+        _container.RegisterSingleton(itemHandler);
+        _container.RegisterSingleton(battleVisualsHandler);
+        _container.RegisterSingleton(moveHandler);
+        _container.RegisterSingleton(battleOperationsHandler);
+        _container.RegisterSingleton(gameSettingsHandler);
         
         Obj_Instance.GetContainer(_container);//static class dependency
         
@@ -83,13 +83,13 @@ public class GameInstaller : MonoBehaviour
         var pokemonPartyInputService = new PokemonPartyInputService(_container);
         var gameSettingsInputService = new GameSettingsInputService(_container);
         
-        _container.RegisterSingleton(() => playerBagInputService);
-        _container.RegisterSingleton(() => pokemonBattleInputService);
-        _container.RegisterSingleton(() => pokemartInputService);
-        _container.RegisterSingleton(() => pokemonStorageInputService);
-        _container.RegisterSingleton(() => pokemonDetailsInputService);
-        _container.RegisterSingleton(() => pokemonPartyInputService);
-        _container.RegisterSingleton(() => gameSettingsInputService);
+        _container.RegisterSingleton(playerBagInputService);
+        _container.RegisterSingleton(pokemonBattleInputService);
+        _container.RegisterSingleton(pokemartInputService);
+        _container.RegisterSingleton(pokemonStorageInputService);
+        _container.RegisterSingleton(pokemonDetailsInputService);
+        _container.RegisterSingleton(pokemonPartyInputService);
+        _container.RegisterSingleton(gameSettingsInputService);
         
         var injectables = FindObjectsOfType<MonoBehaviour>(true);
         

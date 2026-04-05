@@ -27,7 +27,7 @@ public class BerryTree : MonoBehaviour,IInjectable
     private overworld_actions _overworldActions;
     private Options_manager _dialogueOptionsHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueOptionsHandler = container.Resolve<Options_manager>();
         _overworldActions = container.Resolve<overworld_actions>();

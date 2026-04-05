@@ -18,7 +18,7 @@ public class Wild_pkm : MonoBehaviour,IInjectable
     private Battle_handler _battleHandler;
     private Game_Load _gameLoadingHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();

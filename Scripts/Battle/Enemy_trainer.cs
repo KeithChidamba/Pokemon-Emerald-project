@@ -20,7 +20,7 @@ public class Enemy_trainer : MonoBehaviour,IInjectable
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private BattleIntro _battleIntroHandler;
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<Battle_handler>();

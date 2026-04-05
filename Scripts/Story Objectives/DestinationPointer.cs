@@ -16,7 +16,7 @@ public class DestinationPointer : MonoBehaviour,IInjectable
     private OverworldState _overworldStateHandler;
     private Game_ui_manager _gameUIHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _overworldStateHandler = container.Resolve<OverworldState>(); 

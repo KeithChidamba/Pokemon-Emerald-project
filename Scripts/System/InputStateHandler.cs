@@ -55,7 +55,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private PokemonStorageInputService _pokemonStorageInputService;
     private PokemonPartyInputService _pokemonPartyInputService;
     private GameSettingsInputService _gameSettingsInputService;
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         

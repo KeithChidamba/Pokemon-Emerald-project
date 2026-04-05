@@ -81,7 +81,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     private Save_manager _saveDataHandler;
     PokemonStorageInputService _pokemonStorageInputService;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _pokemonStorageInputService = container.Resolve<PokemonStorageInputService>();
         _inputStateHandler = container.Resolve<InputStateHandler>();

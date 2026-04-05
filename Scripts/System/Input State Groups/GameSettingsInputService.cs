@@ -9,7 +9,7 @@ public class GameSettingsInputService
     private GameSettingsHandler _gameSettingsHandler;
     private Game_ui_manager _gameUIHandler;
     
-    public GameSettingsInputService(Container container)
+    public GameSettingsInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();

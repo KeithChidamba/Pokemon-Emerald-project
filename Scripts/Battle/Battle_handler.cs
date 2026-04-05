@@ -62,7 +62,7 @@ public class Battle_handler : MonoBehaviour,IInjectable
     private BattleVisuals _battleVisualsHandler;
     private Player_movement _playerMovementHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();

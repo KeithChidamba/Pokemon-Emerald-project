@@ -6,7 +6,7 @@ public class PokemartInputService
     private Poke_Mart _pokeMartHandler;
     private InputStateHandler _inputStateHandler;
     
-    public PokemartInputService(Container container)
+    public PokemartInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _pokeMartHandler = container.Resolve<Poke_Mart>();

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 
-public class Container
+public class ServiceContainer
 {
     private Dictionary<System.Type, object> singletons = new();
     private Dictionary<System.Type, Func<object>> transients = new();
 
-    public void RegisterSingleton<T>(Func<T> factory)
+    public void RegisterSingleton<T>(T instance)
     {
-        singletons[typeof(T)] = factory();
+        singletons[typeof(T)] = instance;
     }
 
     public void RegisterTransient<T>(Func<T> factory)

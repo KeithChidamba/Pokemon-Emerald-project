@@ -11,7 +11,7 @@ public class Item_ui : MonoBehaviour,IInjectable
     public Text itemName;
 
     private Bag _playerBagHandler;
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _playerBagHandler = container.Resolve<Bag>();
     }

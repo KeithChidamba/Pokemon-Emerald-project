@@ -27,7 +27,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     private PokemonOperations _pokemonOperationsHandler;
     private pokemon_storage _pokemonStorageHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();

@@ -35,7 +35,7 @@ public class Poke_Mart : MonoBehaviour,IInjectable
     private Bag _playerBagHandler;
     private Game_Load _gameLoadingHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _dialogueOptionsHandler = container.Resolve<Options_manager>();

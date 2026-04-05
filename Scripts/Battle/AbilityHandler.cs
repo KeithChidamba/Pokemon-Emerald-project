@@ -22,7 +22,7 @@ public class AbilityHandler : MonoBehaviour,IInjectable
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Move_handler _moveUsageHandler;
     private BattleOperations _battleOperationsHandler;
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _battleOperationsHandler = container.Resolve<BattleOperations>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();

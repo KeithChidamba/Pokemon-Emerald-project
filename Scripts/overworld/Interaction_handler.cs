@@ -19,7 +19,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private Player_movement _playerMovementHandler;
 
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();

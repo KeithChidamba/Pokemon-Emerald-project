@@ -21,7 +21,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     private Move_handler _moveUsageHandler;
     private BattleOperations _battleOperationsHandler;
     
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _battleOperationsHandler = container.Resolve<BattleOperations>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();

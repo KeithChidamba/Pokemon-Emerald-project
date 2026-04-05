@@ -34,7 +34,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     private InputStateHandler _inputStateHandler;
     private Options_manager _dialogueOptionsHandler;
     private Interaction_handler  _interactionHandler;
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _battleHandler = container.Resolve<Battle_handler>();

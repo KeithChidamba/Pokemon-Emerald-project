@@ -9,7 +9,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
     private static BattleVisuals _battleVisualsHandler;
     private static Dialogue_handler _dialogueHandler;
 
-    public void Inject(Container container)
+    public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
