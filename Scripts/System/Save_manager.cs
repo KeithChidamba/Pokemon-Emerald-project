@@ -15,7 +15,8 @@ public enum AssetDirectory
 public enum SaveDataDirectory
 {
     Items, HeldItems, StorageItems, Pokemon, Player,
-    PartyIds, PCStorage, Overworld, StoryObjectives, BerryTrees
+    PartyIds, PCStorage, Overworld, StoryObjectives, BerryTrees,
+    GameSettings
 }
 public class Save_manager : MonoBehaviour,IInjectable
 {
@@ -33,7 +34,6 @@ public class Save_manager : MonoBehaviour,IInjectable
     public event Action OnVirtualFsCreated;
     private bool _virtualFileStructureReady;
     
-    
     private Dialogue_handler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
     private Area_manager  _areaHandler;
@@ -43,6 +43,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     private Player_movement _playerMovementHandler;
     private OverworldState _overworldStateHandler;
     private Bag _playerBagHandler;
+    private GameSettingsHandler _gameSettingsHandler;
     private ServiceContainer _container;
     
     private static readonly Dictionary<AssetDirectory, string> AssetDirectories = new()
@@ -77,7 +78,8 @@ public class Save_manager : MonoBehaviour,IInjectable
         { SaveDataDirectory.PCStorage, "/PC_Storage" },
         { SaveDataDirectory.Overworld, "/Overworld" },
         { SaveDataDirectory.StoryObjectives, "/Overworld/Story_Objectives" },
-        { SaveDataDirectory.BerryTrees, "/Overworld/Berry_Trees" }
+        { SaveDataDirectory.BerryTrees, "/Overworld/Berry_Trees" },
+        { SaveDataDirectory.GameSettings,"/GameSettings"}
     };
 
     public static string GetDirectory(AssetDirectory directoryKey)
@@ -99,6 +101,7 @@ public class Save_manager : MonoBehaviour,IInjectable
         _areaHandler = container.Resolve<Area_manager>();
         _overworldStateHandler = container.Resolve<OverworldState>();
         _playerBagHandler = container.Resolve<Bag>();
+        _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
         _container = container;
         gameObject.SetActive(true);
         OnInject();
@@ -153,7 +156,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     }
 
     [Serializable]
-    public class StringArrayWrapper
+    private class StringArrayWrapper
     {
         public string[] items;
     }
@@ -182,11 +185,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     {
         CreateDefaultWebglDirectories();
         yield return new WaitUntil(() => _virtualFileStructureReady);
-        
-#if UNITY_WEBGL && !UNITY_EDITOR
-                                UploadZipAndStoreToIDBFS();
-#endif
-        
+        UploadZipAndStoreToIDBFS();
     }
     
     public void OnFileStructureCreated()//js notification
@@ -211,34 +210,52 @@ public class Save_manager : MonoBehaviour,IInjectable
         yield return new WaitForSeconds(1f);
         _gameLoadingHandler.AllowGameLoad();
     }
-
-    public void LoadPokemonStorageData()
+    public List<SettingsConfig> LoadGameSettingsData()
+    {
+        CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings));
+        var jsonFilesFromPath = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings));
+        List<SettingsConfig> savedSettingConfigs = new();  
+        foreach (var fullPath in jsonFilesFromPath)
+        {
+            var jsonFilePath = _saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings) + Path.GetFileName(fullPath);
+            if (!File.Exists(jsonFilePath)) continue;
+              
+            var json = File.ReadAllText(jsonFilePath);
+            var configData = new SettingsConfig();
+            JsonUtility.FromJsonOverwrite(json, configData);
+            savedSettingConfigs.Add(configData);
+        }
+        return savedSettingConfigs;
+    }
+    public List<PokemonStorageBox> LoadPokemonStorageData()
     {
         CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.PCStorage));
         var storageBoxes = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.PCStorage));
-        foreach (var boxJson in storageBoxes)
-        {
-            var jsonFilePath = _saveDataPath + GetSaveDirectory(SaveDataDirectory.PCStorage) + Path.GetFileName(boxJson);
-            if (!File.Exists(jsonFilePath)) continue;
+        List<PokemonStorageBox> savedStorageBoxes = new(); 
+        foreach (var boxFullPath in storageBoxes)
+        {  
+            var jsonFilename = _saveDataPath + GetSaveDirectory(SaveDataDirectory.PCStorage) + Path.GetFileName(boxFullPath);
+            if (!File.Exists(jsonFilename)) continue;
             
-            var json = File.ReadAllText(jsonFilePath);
+            var json = File.ReadAllText(jsonFilename);
             var boxData = ScriptableObject.CreateInstance<PokemonStorageBox>();
             JsonUtility.FromJsonOverwrite(json, boxData);
-            _pokemonStorageHandler.storageBoxes[boxData.boxNumber-1].boxPokemon = boxData.boxPokemon;
-            _pokemonStorageHandler.storageBoxes[boxData.boxNumber-1].currentNumPokemon = boxData.currentNumPokemon;
+            savedStorageBoxes.Add(boxData);
         }
+
+        return savedStorageBoxes;
     }
     public void LoadOverworldData()
     {
         CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.Overworld));
         CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.BerryTrees));
         var overworldTrees = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.BerryTrees));
-        foreach (var treeFilename in overworldTrees)
+        foreach (var jsonFilePath in overworldTrees)
         {
-            var jsonFilePath = _saveDataPath + GetSaveDirectory(SaveDataDirectory.BerryTrees) + Path.GetFileName(treeFilename);
-            if (!File.Exists(jsonFilePath)) continue;
+            var treeFilename = _saveDataPath + GetSaveDirectory(SaveDataDirectory.BerryTrees) + Path.GetFileName(jsonFilePath);
+            if (!File.Exists(treeFilename)) continue;
             
-            var json = File.ReadAllText(jsonFilePath);
+            var json = File.ReadAllText(treeFilename);
             var treeData = ScriptableObject.CreateInstance<BerryTreeData>();
             JsonUtility.FromJsonOverwrite(json, treeData);
             treeData.spriteData.Clear();
@@ -253,15 +270,15 @@ public class Save_manager : MonoBehaviour,IInjectable
         }
         CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives));
         var storyObjectives = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives));
-        foreach (var objective in storyObjectives)
+        foreach (var jsonFilePath in storyObjectives)
         {
-            var jsonFilePath = _saveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives) + Path.GetFileName(objective);
-            if (!File.Exists(jsonFilePath)) continue;
-
-            var json = File.ReadAllText(jsonFilePath);
-            var wrapper = JsonUtility.FromJson<ObjectiveTypeWrapper>(json);
-            var objectiveData = StoryObjective.GetObjectiveType(wrapper.objectiveType);
-            JsonUtility.FromJsonOverwrite(json, objectiveData);
+            var objective = _saveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives) + Path.GetFileName(jsonFilePath);
+            if (!File.Exists(objective)) continue;
+ 
+            var rawJson = File.ReadAllText(objective);
+            var wrapper = JsonUtility.FromJson<ObjectiveTypeWrapper>(rawJson);
+            var objectiveData = StoryObjective.CreateObjectiveOfType(wrapper.objectiveType);
+            JsonUtility.FromJsonOverwrite(rawJson, objectiveData);
             if (objectiveData is StoryProgressObjective storyData)
             {
                 _overworldStateHandler.LoadStoryProgress(storyData);
@@ -278,7 +295,7 @@ public class Save_manager : MonoBehaviour,IInjectable
         _gameLoadingHandler.playerData = null;
         var playerList = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.Player));
         if(playerList.Count==1)
-            _gameLoadingHandler.playerData = LoadPlayerFromJson(_saveDataPath+"/Player/" + Path.GetFileName(playerList[0]));
+            _gameLoadingHandler.playerData = LoadPlayerFromJson(_saveDataPath+ GetSaveDirectory(SaveDataDirectory.Player) + Path.GetFileName(playerList[0]));
         else if (playerList.Count > 1)
         {
             _dialogueHandler.DisplayDetails("Please ensure only one player's data is in the save_data folder!");
@@ -437,7 +454,7 @@ public class Save_manager : MonoBehaviour,IInjectable
         ClearDirectory(_saveDataPath+GetSaveDirectory(SaveDataDirectory.Items));
         ClearDirectory(_saveDataPath+GetSaveDirectory(SaveDataDirectory.Player));
         ClearDirectory(_saveDataPath+GetSaveDirectory(SaveDataDirectory.PartyIds));
-        ClearDirectory(_saveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives));
+        ClearDirectory(_saveDataPath+GetSaveDirectory(SaveDataDirectory.StoryObjectives));
     }
     private void EraseTemporarySaveData()
     {
@@ -445,7 +462,7 @@ public class Save_manager : MonoBehaviour,IInjectable
         ClearDirectory(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.Items));
         ClearDirectory(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.Player));
         ClearDirectory(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.PartyIds));
-        ClearDirectory(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives));
+        ClearDirectory(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.StoryObjectives));
     }
     void SaveAllPokemonData(Pokemon pokemon)
     {
@@ -462,20 +479,20 @@ public class Save_manager : MonoBehaviour,IInjectable
         EraseTemporarySaveData();
         _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
     }
+    
     public IEnumerator SaveAllData()
     {
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
             _virtualFileStructureReady = false;
             CreateDefaultWebglDirectories();
-
             yield return new WaitUntil(() => _virtualFileStructureReady);
         }
-
         
         _inputStateHandler.ResetRelevantUi(InputStateName.PlayerMenu);
         _inputStateHandler.AddDialoguePlaceHolderState();
         _dialogueHandler.DisplayDetails("Saving...",false); 
+        
         for (int i = 0; i < _pokemonStorageHandler.numPartyMembers; i++)
         {
             try
@@ -552,11 +569,11 @@ public class Save_manager : MonoBehaviour,IInjectable
         
         yield return _pokemonStorageHandler.SaveStorageData();
         
+        yield return _gameSettingsHandler.SaveSettings();
+        
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
             DownloadZipAndStoreLocally();
-#endif
             _dialogueHandler.DisplayDetails("Game saved online but please download your save file");
         }
         else
@@ -671,6 +688,14 @@ public class Save_manager : MonoBehaviour,IInjectable
     {
         var directory = Path.Combine(_saveDataPath+GetSaveDirectory(SaveDataDirectory.PCStorage), fileName + ".json");
         var json = JsonUtility.ToJson(box, true);
+        
+        File.WriteAllText(directory, json);
+        if (!File.Exists(directory)) Debug.LogError("file blank");
+    }
+    public void SaveGameSettingsAsJson(SettingsConfig config, string fileName)
+    {
+        var directory = Path.Combine(_saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings), fileName + ".json");
+        var json = JsonUtility.ToJson(config, true);
         
         File.WriteAllText(directory, json);
         if (!File.Exists(directory)) Debug.LogError("file blank");

@@ -554,7 +554,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             waiting = true;
             _battleOperationsHandler.OnBuffApplied += AwaitBuffAddition;
             var buffData = new BuffDebuffData(_attacker, buff, true, 1);
-            _moveUsageHandler.SelectRelevantBuffOrDebuff(buffData);
+            _moveUsageHandler.ExecuteBuffOrDebuff(buffData);
             yield return new WaitUntil(() => !waiting);
         }
         
@@ -611,7 +611,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             isSpecificDamage:true,predefinedDamage:selfDamage);
         
         var buffData = new BuffDebuffData(_attacker, Stat.Attack, true, 6);
-        _moveUsageHandler.SelectRelevantBuffOrDebuff(buffData);
+        _moveUsageHandler.ExecuteBuffOrDebuff(buffData);
     }
 
     void covet()

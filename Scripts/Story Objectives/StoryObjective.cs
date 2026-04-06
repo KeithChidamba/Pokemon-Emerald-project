@@ -39,7 +39,7 @@ public abstract class StoryObjective : ScriptableObject
     [HideInInspector]public int indexInList;
     public StoryObjectiveType objectiveType;
     protected ServiceContainer serviceContainer;
-    public static StoryObjective GetObjectiveType(StoryObjectiveType type)
+    public static StoryObjective CreateObjectiveOfType(StoryObjectiveType type)
     {
         return type switch
         {

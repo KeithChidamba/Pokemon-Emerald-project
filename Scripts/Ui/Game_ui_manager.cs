@@ -204,6 +204,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     }
     private void CloseSettings()
     {
+        _gameSettingsHandler.SetCurrentSetting(0);
         ManageScreens(-1);
         ActivateUiElement(_gameSettingsHandler.mainUI, false);
     }
@@ -409,7 +410,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _inputStateHandler.ChangeInputState(new  (InputStateName.GameSettingsNavigation,
             InputStateGroup.GameSettings,true,_gameSettingsHandler.mainUI,
             InputDirection.Vertical, gameSettingsSelectables,_gameSettingsHandler.whiteSelector,true, true
-            ,onExit:CloseSettings));
+            ,onExit:CloseSettings,onClose:CloseSettings));
         
         _gameSettingsHandler.mainUI.SetActive(true);
     }
@@ -424,16 +425,18 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _inputStateHandler.ChangeInputState(new(
             InputStateName.GameSettingOptionsNavigation,
             InputStateGroup.GameSettings,
-            false,
-            null,
-            InputDirection.Horizontal,
-            gameSettingsSelectables,
-            null,
-            true,
-            onExit: CloseSettings));
-
+            stateDirection:InputDirection.Horizontal,
+            selectableUis:gameSettingsSelectables,
+            selecting:true,
+            onExit: CloseSettingsFull));
+        
         var savedOptionIndex = _gameSettingsHandler.GetCurrentOptionIndex();
         _inputStateHandler.SetSelectionIndex(savedOptionIndex);
         _gameSettingsHandler.SetOptionTextColor(savedOptionIndex);
+        
+        void CloseSettingsFull()
+        {
+            _inputStateHandler.ResetGroupUi(InputStateGroup.GameSettings);
+        }
     }
 }

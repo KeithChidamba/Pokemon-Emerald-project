@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Rawst berry",
     "berryItem": {
-        "instanceID": 26032
+        "instanceID": 26038
     },
     "treeIndex": 20,
     "minutesPerStage": 45,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32564
+                    "instanceID": 32552
                 },
                 {
-                    "instanceID": 32564
+                    "instanceID": 32552
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32566
+                    "instanceID": 32554
                 },
                 {
-                    "instanceID": 32568
+                    "instanceID": 32556
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33042
+                    "instanceID": 32910
                 },
                 {
-                    "instanceID": 33044
+                    "instanceID": 32912
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33046
+                    "instanceID": 32914
                 },
                 {
-                    "instanceID": 33048
+                    "instanceID": 32916
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33050
+                    "instanceID": 32918
                 },
                 {
-                    "instanceID": 33052
+                    "instanceID": 32920
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-03-29T12:27:58.5262080+02:00"
+    "lastLogin": "2026-04-06T12:42:24.0969440+02:00"
 }

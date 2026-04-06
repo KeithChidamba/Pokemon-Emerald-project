@@ -91,12 +91,12 @@ public class Participant_Status : MonoBehaviour,IInjectable
             case StatusEffect.Burn:
                 var atkDrop = new BuffDebuffData(_participant, Stat.Attack, false, 2);
                 _battleOperationsHandler.canDisplayChange = false; 
-                _moveUsageHandler.SelectRelevantBuffOrDebuff(atkDrop);
+                _moveUsageHandler.ExecuteBuffOrDebuff(atkDrop);
                 break;
             case StatusEffect.Paralysis:
                 var speedDrop = new BuffDebuffData(_participant, Stat.Speed, false, 6);
                 _battleOperationsHandler.canDisplayChange = false; 
-                _moveUsageHandler.SelectRelevantBuffOrDebuff(speedDrop);
+                _moveUsageHandler.ExecuteBuffOrDebuff(speedDrop);
                 break;
         }
     }

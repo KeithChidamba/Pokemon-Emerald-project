@@ -1,27 +1,28 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 [Serializable]
-public struct SettingConfig
+public class SettingsConfig
 {
     public GameSettingName settingName;
     public int currentIndex;
     public int maxIndex;
 
-    public SettingConfig(GameSettingName settingName, int currentIndex, int maxIndex)
+    public SettingsConfig(int currentIndex=0, int maxIndex=0,GameSettingName settingName=0)
     {
         this.settingName = settingName;
         this.currentIndex = currentIndex;
         this.maxIndex = maxIndex;
     }
 
-    public void SetIndex(int newIndex)
+    public void SetIndex(int change)
     {
-        currentIndex = Mathf.Clamp(currentIndex+newIndex, 0, maxIndex);
+        currentIndex = Mathf.Clamp(currentIndex + change, 0, maxIndex);
     }
 }
-public enum GameSettingName{TextSpeed,BattleScene,BattleStyle}
+public enum GameSettingName{TextSpeed,BattleStyle}
 public class GameSettingsHandler : MonoBehaviour,IInjectable
 {
     public List<GameSetting> gameSettings = new();
@@ -29,8 +30,61 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     public GameObject mainUI;
     public GameObject whiteSelector;
     public GameSetting currentSetting { get; private set; }
-    [SerializeField]private List<SettingConfig> settingConfigs = new();
+    [SerializeField]private List<SettingsConfig> settingConfigs = new();
+    private readonly Dictionary<GameSettingName, Action<int>> _settingsMethods = new ();
     
+    private Save_manager _saveDataHandler;
+    private Dialogue_handler _dialogueHandler;
+    private Battle_handler _battleHandler;
+    
+    public void Inject(ServiceContainer container)
+    {
+        _saveDataHandler = container.Resolve<Save_manager>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        gameObject.SetActive(true);
+        OnInject();
+    }
+
+    private void OnInject()
+    {
+        _settingsMethods.Add(GameSettingName.TextSpeed,_dialogueHandler.SetTextSpeed);
+        _settingsMethods.Add(GameSettingName.BattleStyle,_battleHandler.SetBattleStyle);
+        
+        if(Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            _saveDataHandler.OnUploadedDataReady += SetSetting;
+        }
+        else
+        {
+            SetSetting();
+        }
+    }
+
+    private void SetSetting()
+    {
+        var savedSettings = _saveDataHandler.LoadGameSettingsData();
+        settingConfigs.Clear();
+        if (savedSettings.Count > 0)
+        {
+            settingConfigs.AddRange(savedSettings);
+        }
+        else
+        {
+            foreach (var setting in gameSettings)
+            {
+                //set defaults
+                settingConfigs.Add(new(0,setting.settingOptions.Count-1,setting.gameSettingName));
+            }
+        }
+        foreach (var config in settingConfigs)
+        {
+            currentSetting = gameSettings.First(s=>s.gameSettingName == config.settingName);
+            SetOptionTextColor(config.currentIndex);
+            _settingsMethods[config.settingName].Invoke(config.currentIndex);
+        }
+        SetCurrentSetting(0);
+    }
     
     public void SetOptionTextColor(int optionIndex)
     {
@@ -48,49 +102,24 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     {
         return settingConfigs.First(setting=>setting.settingName == currentSetting.gameSettingName).currentIndex;
     }
-    public void SetCurrentOption(int newOptionIndex)
+    public void SetCurrentOption(int optionChangeAmount)
     {
-        var findIndex = settingConfigs.FindIndex(setting=>setting.settingName == currentSetting.gameSettingName);
-        var data = settingConfigs[findIndex];
-        data.SetIndex(newOptionIndex);
-       
-        var newConfig = new SettingConfig(data.settingName, data.currentIndex, data.maxIndex);
-        settingConfigs.RemoveAt(findIndex);
-        settingConfigs.Add(newConfig);
+        var data = settingConfigs.First(setting=>setting.settingName == currentSetting.gameSettingName);
+        data.SetIndex(optionChangeAmount);
     }
     public void ReflectChangedSetting(int newOptionIndex)
     {
-        var findIndex = settingConfigs.FindIndex(setting=>setting.settingName == currentSetting.gameSettingName);
-        var data = settingConfigs[findIndex];
+        var data = settingConfigs.First(setting=>setting.settingName == currentSetting.gameSettingName);
         data.currentIndex = newOptionIndex;
-        
-        var newConfig = new SettingConfig(data.settingName, data.currentIndex, data.maxIndex);
-        settingConfigs.RemoveAt(findIndex);
-        settingConfigs.Add(newConfig);
-
-        //ignore these comments
-        //logic to make setting changes here
-        //on game load, set these setting again
-    }
-    public void Inject(ServiceContainer container)
-    {
-        gameObject.SetActive(true);
-        OnInject();
+        _settingsMethods[data.settingName].Invoke(data.currentIndex);
     }
 
-    private void OnInject()
+    public IEnumerator SaveSettings()
     {
-        //testing at the moment
-        settingConfigs.Add(new(GameSettingName.TextSpeed,1,2));
-        settingConfigs.Add(new(GameSettingName.BattleScene,0,1));
-        settingConfigs.Add(new(GameSettingName.BattleStyle,0,1));
-        
-        for (int i = 0; i< gameSettings.Count; i++)
+        foreach (var config in settingConfigs)
         {
-            currentSetting = gameSettings[i];
-            SetOptionTextColor(settingConfigs[i].currentIndex);
+            _saveDataHandler.SaveGameSettingsAsJson(config,config.settingName.ToString());
         }
-        SetCurrentSetting(0);
-       
+        yield return null;
     }
 }

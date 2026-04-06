@@ -110,7 +110,7 @@ public class AbilityHandler : MonoBehaviour,IInjectable
         if (_participant.pokemon.statusEffect == StatusEffect.None) return;
         var attackBuffData = new BuffDebuffData(_participant, Stat.Attack, true, 1);
         _battleOperationsHandler.canDisplayChange = false; 
-        _moveUsageHandler.SelectRelevantBuffOrDebuff(attackBuffData);
+        _moveUsageHandler.ExecuteBuffOrDebuff(attackBuffData);
         _abilityTriggered = true;
     }
     void Levitate()

@@ -577,7 +577,7 @@ public class Move_handler:MonoBehaviour,IInjectable
                     else
                     {
                         var data = new BuffDebuffData(victim, buffData.stat, buffData.isIncreasing, buffData.amount);
-                        SelectRelevantBuffOrDebuff(data);
+                        ExecuteBuffOrDebuff(data);
                     }
                 } 
                 if(_currentTurn.move.isMultiTarget && _battleHandler.isDoubleBattle)
@@ -586,7 +586,7 @@ public class Move_handler:MonoBehaviour,IInjectable
             else//affecting attacker
             {
                 var data = new BuffDebuffData(attacker, buffData.stat, buffData.isIncreasing, buffData.amount);
-                SelectRelevantBuffOrDebuff(data);
+                ExecuteBuffOrDebuff(data);
             }
         }
     }
@@ -602,14 +602,14 @@ public class Move_handler:MonoBehaviour,IInjectable
             if (enemy.canBeDamaged && !victim.ProtectedFromStatChange(isIncreasing))
             {
                 var data = new BuffDebuffData(enemy, stat, isIncreasing,buffAmount);
-                SelectRelevantBuffOrDebuff(data);
+                ExecuteBuffOrDebuff(data);
             }
             else
                 _dialogueHandler.DisplayBattleInfo(enemy.pokemon.pokemonName + " protected itself");
             yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
         }
     }
-    public void SelectRelevantBuffOrDebuff(BuffDebuffData data)
+    public void ExecuteBuffOrDebuff(BuffDebuffData data)
     {
         var unModifiedStats = data.Receiver.statData;
         var affectedPokemon = data.Receiver.pokemon;

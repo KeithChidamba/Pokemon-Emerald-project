@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Battle_handler : MonoBehaviour,IInjectable
+public class Battle_handler : MonoBehaviour, IInjectable
 {
     public GameObject battleUI;
     public GameObject movesUI;
@@ -31,8 +31,10 @@ public class Battle_handler : MonoBehaviour,IInjectable
     private int _currentMoveIndex;
     public int currentEnemyIndex;
     public float participantPositionOffset = 100;
-    private List<Vector2> _defaultPokemonImagePositions = new ();
+    private List<Vector2> _defaultPokemonImagePositions = new();
     public BattleType currentBattleType;
+    public enum BattlesStyle {Switch,Set };
+    public BattlesStyle currentBattleStyle;
     public Pokemon lastOpponent;
     private Battle_Participant _currentParticipant;
     public List<EvolutionInBattleData> evolutionQueue;
@@ -61,6 +63,7 @@ public class Battle_handler : MonoBehaviour,IInjectable
     private Area_manager  _areaHandler;
     private BattleVisuals _battleVisualsHandler;
     private Player_movement _playerMovementHandler;
+    
     
     public void Inject(ServiceContainer container)
     {
@@ -92,6 +95,16 @@ public class Battle_handler : MonoBehaviour,IInjectable
         {
             currentEnemyIndex = 2;
         }
+    }
+
+    public void SetBattleStyle(int settingIndex)
+    {
+        currentBattleStyle = settingIndex switch
+        {
+            0 => BattlesStyle.Switch,
+            1 => BattlesStyle.Set,
+            _ => BattlesStyle.Switch
+        };
     }
     public Battle_Participant GetCurrentParticipant()
     {

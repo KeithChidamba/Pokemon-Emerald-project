@@ -22,7 +22,7 @@ public class InputState
     public bool canExit;
     public bool canManualExit;
     public bool persistOnExit;
-    
+   
     public InputState(
         InputStateName stateName,
         InputStateGroup group,

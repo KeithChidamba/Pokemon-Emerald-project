@@ -125,7 +125,13 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             }
             storageBoxes.Add(newBox);
         }
-        _saveDataHandler.LoadPokemonStorageData();
+        var savedBoxes = _saveDataHandler.LoadPokemonStorageData();
+        foreach (var boxData in savedBoxes)
+        {
+            storageBoxes[boxData.boxNumber-1].boxPokemon = boxData.boxPokemon;
+            storageBoxes[boxData.boxNumber-1].currentNumPokemon = boxData.currentNumPokemon;
+        }
+        
         nonPartyIcons.Clear();
         for (var i = 0; i < boxIconsParent.childCount; i++)
         {

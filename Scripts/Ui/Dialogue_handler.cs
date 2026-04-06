@@ -62,6 +62,16 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         }
     }
 
+    public void SetTextSpeed(int settingIndex)
+    {
+        typingSpeed = settingIndex switch
+        {
+            0 => 0.01f,//slow
+            1 => 0.04f,//normal
+            2 => 0.06f,//fast
+            _ => 0.04f
+        };
+    }
     public void  DeletePreviousOptions()
     { 
         if( _dialogueOptionsManager.currentOptions.Count == 0) return;  

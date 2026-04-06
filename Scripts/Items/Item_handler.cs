@@ -301,7 +301,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         }
         OnItemUsageSuccessful?.Invoke(true);
         var xBuffData = new BuffDebuffData(_currentParticipant, statInfo.statName, true, 1);
-        _moveUsageHandler.SelectRelevantBuffOrDebuff(xBuffData);
+        _moveUsageHandler.ExecuteBuffOrDebuff(xBuffData);
         StartCoroutine(CompleteItemUsage(0));
     }
     private void RevivePokemon(ItemType itemType)

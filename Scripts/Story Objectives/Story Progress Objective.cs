@@ -8,7 +8,7 @@ public class StoryProgressObjective : StoryObjective
     public int numCompleted;
     protected override void LoadSaveData(StoryObjective objectiveData)
     {
-        var requiredData = (StoryProgressObjective)GetObjectiveType(objectiveType);
+        var requiredData = (StoryProgressObjective)CreateObjectiveOfType(objectiveType);
         numCompleted = requiredData.numCompleted;
         totalObjectiveAmount = requiredData.totalObjectiveAmount;
     }

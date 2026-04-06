@@ -627,7 +627,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                             var spDefBuff = new BuffDebuffData(participant,
                                 Stat.SpecialDefense, true, 1);
                             _battleOperationsHandler.canDisplayChange = false;
-                            _moveUsageHandler.SelectRelevantBuffOrDebuff(spDefBuff);
+                            _moveUsageHandler.ExecuteBuffOrDebuff(spDefBuff);
                             currentWeather.buffedParticipants.Add(participant);
                         }
                     }
