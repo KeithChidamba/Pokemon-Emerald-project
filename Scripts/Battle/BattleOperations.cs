@@ -13,6 +13,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
+        gameObject.SetActive(true);
     }
 
     public bool canDisplayChange = true;

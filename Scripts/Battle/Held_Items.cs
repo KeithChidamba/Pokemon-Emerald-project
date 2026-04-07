@@ -2,25 +2,19 @@ using System.Collections;
 using UnityEngine;
 
 
-public class Held_Items : MonoBehaviour,IInjectable
+public class Held_Items : BattleParticipantModule
 {
-    private Battle_Participant _participant;
     private Item _heldItem;
     
     private Battle_handler _battleHandler;
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
     
-    public void Inject(ServiceContainer container)
+    public Held_Items(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
         _moveUsageHandler = container.Resolve<Move_handler>();
-    }
-    
-    void Start()
-    {
-        _participant =  GetComponent<Battle_Participant>();
     }
     void DepleteHeldItem()
     {
@@ -28,12 +22,12 @@ public class Held_Items : MonoBehaviour,IInjectable
     }
     public IEnumerator CheckForUsableItem()
     {
-        if (!_participant.pokemon.hasItem) yield break;
+        if (!participant.pokemon.hasItem) yield break;
         
-        _heldItem = _participant.pokemon.heldItem;
+        _heldItem = participant.pokemon.heldItem;
         if (_heldItem.quantity == 0 && !_heldItem.isHeldItem)
         {//remove consumable held items that are depleted, not ones that just have special functionality
-            _participant.pokemon.RemoveHeldItem(); yield break; 
+            participant.pokemon.RemoveHeldItem(); yield break; 
         }
         if (!_heldItem.canBeUsedInBattle) yield break;
         
@@ -70,30 +64,30 @@ public class Held_Items : MonoBehaviour,IInjectable
     }
     private IEnumerator CheckHealCondition()
     {
-        if(_participant.pokemon.hp >= (_participant.pokemon.maxHp/2)) yield break;
+        if(participant.pokemon.hp >= (participant.pokemon.maxHp/2)) yield break;
         
         DepleteHeldItem();
         yield return GetHealing();
     }    
     private IEnumerator CheckStatusCondition()
     {
-        if(_participant.pokemon.statusEffect == StatusEffect.None) yield break;
+        if(participant.pokemon.statusEffect == StatusEffect.None) yield break;
 
         DepleteHeldItem();
        yield return GetStatusHealing();
     }
     private IEnumerator CheckIfConfused()
     {
-        if(!_participant.isConfused) yield break;
+        if(!participant.isConfused) yield break;
 
-        _dialogueHandler.DisplayDetails(_participant.pokemon.pokemonName+"'s Persim berry healed its confusion");
-        _participant.isConfused = false;
+        _dialogueHandler.DisplayDetails(participant.pokemon.pokemonName+"'s Persim berry healed its confusion");
+        participant.isConfused = false;
 
     }
     private IEnumerator GetHealing()
     { 
-        _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
-        _moveUsageHandler.HealthGainDisplay(int.Parse(_heldItem.itemEffect),healthGainer:_participant);
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
+        _moveUsageHandler.HealthGainDisplay(int.Parse(_heldItem.itemEffect),healthGainer:participant);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);
     }
     private IEnumerator GetStatusHealing()
@@ -103,18 +97,18 @@ public class Held_Items : MonoBehaviour,IInjectable
         var curableStatus = statusInfo.statusEffect;
         
         if (curableStatus == StatusEffect.Poison &&
-            _participant.pokemon.statusEffect == StatusEffect.BadlyPoison)
+            participant.pokemon.statusEffect == StatusEffect.BadlyPoison)
         {//antidote heals all poison
             curableStatus = StatusEffect.BadlyPoison;
         }
         if (curableStatus != StatusEffect.FullHeal && 
-            _participant.pokemon.statusEffect != curableStatus)
+            participant.pokemon.statusEffect != curableStatus)
         { 
             yield break;
         }
-        _participant.statusHandler.RemoveStatusEffect();
+        participant.statusHandler.RemoveStatusEffect();
         _battleHandler.RefreshStatusEffectUI();
-        _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
     }
 
 }

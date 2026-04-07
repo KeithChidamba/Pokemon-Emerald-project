@@ -84,9 +84,10 @@ public class Bag : MonoBehaviour,IInjectable
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _itemHandler = container.Resolve<Item_handler>();
         gameObject.SetActive(true);
+        OnInject();
     }
 
-    private void Start()
+    private void OnInject()
     {
         _categories = (BagCategory[])Enum.GetValues(typeof(BagCategory));
         _rightArrow=redArrows[0];
@@ -118,9 +119,8 @@ public class Bag : MonoBehaviour,IInjectable
         if (itemToSell.quantity == 0) RemoveItem(itemToSell);
         
         _dialogueHandler.DisplayList("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
-             "Sure, which item?", 
              new[]{ InteractionOptions.SellItem
-                 ,InteractionOptions.LeaveStore }, new[]{"Yes", "No"});
+                 ,InteractionOptions.LeaveStore }, new[]{"Yes", "No"},"Sure, which item?");
         
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
     }

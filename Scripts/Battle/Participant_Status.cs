@@ -5,15 +5,14 @@ using System;
 using System.Collections;
 using System.Linq;
 
-public class Participant_Status : MonoBehaviour,IInjectable
+public class Participant_Status : BattleParticipantModule
 {
-    private Battle_Participant _participant;
     private int _statusDuration;
     private int _statusDurationInTurns;
     private bool _healed;
     private int _confusionDuration;
     private int _trapDuration;
-    [SerializeField]private TrapData _currentTrap;
+    private TrapData _currentTrap;
     private readonly Dictionary<StatusEffect, Action> _statusEffectMethods = new ();
     public event Action<Battle_Participant> OnStatusCheck;
     
@@ -24,7 +23,7 @@ public class Participant_Status : MonoBehaviour,IInjectable
     private overworld_actions _overworldActions;
     private BattleOperations _battleOperationsHandler;
     
-    public void Inject(ServiceContainer container)
+    public Participant_Status(ServiceContainer container)
     {
         _battleOperationsHandler = container.Resolve<BattleOperations>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -34,24 +33,20 @@ public class Participant_Status : MonoBehaviour,IInjectable
         _overworldActions = container.Resolve<overworld_actions>();
         OnInject();
     }
-
+    
     private void OnInject()
     {
         _battleHandler.OnBattleEnd += ()=> _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
-    }
-
-    void Start()
-    {
-        _participant = GetComponent<Battle_Participant>();
+        
         _statusEffectMethods.Add(StatusEffect.Freeze,FreezeCheck);
         _statusEffectMethods.Add(StatusEffect.Sleep,SleepCheck);
         _statusEffectMethods.Add(StatusEffect.Paralysis,ParalysisCheck);
     }
     public void GetStatusEffect(int numTurns)
     {
-        _participant.RefreshStatusEffectImage();
-        if (_participant.pokemon.statusEffect == StatusEffect.None) return;
-        if (_participant.pokemon.statusEffect == StatusEffect.Freeze)
+        participant.RefreshStatusEffectImage();
+        if (participant.pokemon.statusEffect == StatusEffect.None) return;
+        if (participant.pokemon.statusEffect == StatusEffect.Freeze)
             _moveUsageHandler.OnMoveHit += RemoveFreezeStatusWithFire;
         
         _statusDuration = 0;
@@ -61,40 +56,40 @@ public class Participant_Status : MonoBehaviour,IInjectable
     public void GetConfusion(int numTurns)
     {
         _confusionDuration = numTurns;
-        _participant.isConfused = true;
+        participant.isConfused = true;
     }
     public void SetupTrapDuration(int numTurns = 0,Move move = null,bool hasDuration = true)
     {
         if (!hasDuration)
         {
             _currentTrap = new TrapData(null,false);
-            _participant.canEscape = false;
+            participant.canEscape = false;
             return;
         }
         _trapDuration = numTurns;
         _currentTrap = new TrapData(move,true);
-        _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName + _currentTrap.OnTrapMessage);
-        _participant.canEscape = false;
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName + _currentTrap.OnTrapMessage);
+        participant.canEscape = false;
     }
     public void GetStatChangeImmunity(StatChangeability changeability,int numTurns)
     {
-        if (_participant.StatChangeEffects.Any(s => s.Changeability == changeability))
+        if (participant.StatChangeEffects.Any(s => s.Changeability == changeability))
         {
             Debug.Log("added duplicate stat change effect");
         };
-        _participant.StatChangeEffects.Add(new(changeability,numTurns));
+        participant.StatChangeEffects.Add(new(changeability,numTurns));
     }
     private void StatDrop()
     {
-        switch (_participant.pokemon.statusEffect)
+        switch (participant.pokemon.statusEffect)
         {
             case StatusEffect.Burn:
-                var atkDrop = new BuffDebuffData(_participant, Stat.Attack, false, 2);
+                var atkDrop = new BuffDebuffData(participant, Stat.Attack, false, 2);
                 _battleOperationsHandler.canDisplayChange = false; 
                 _moveUsageHandler.ExecuteBuffOrDebuff(atkDrop);
                 break;
             case StatusEffect.Paralysis:
-                var speedDrop = new BuffDebuffData(_participant, Stat.Speed, false, 6);
+                var speedDrop = new BuffDebuffData(participant, Stat.Speed, false, 6);
                 _battleOperationsHandler.canDisplayChange = false; 
                 _moveUsageHandler.ExecuteBuffOrDebuff(speedDrop);
                 break;
@@ -103,23 +98,23 @@ public class Participant_Status : MonoBehaviour,IInjectable
     public IEnumerator CheckStatus()
     {
         if (_overworldActions.usingUI) yield break; 
-        if (!_participant.isActive) yield break;
-        if(_participant.pokemon.hp<=0 )yield break;
+        if (!participant.isActive) yield break;
+        if(participant.pokemon.hp<=0 )yield break;
         if(_battleHandler.battleOver)yield break;
         
-        if (_participant.isFlinched)
+        if (participant.isFlinched)
         {
-            _participant.isFlinched = false;
-            _participant.canAttack = true;
+            participant.isFlinched = false;
+            participant.canAttack = true;
         }
-        if (!_participant.canBeDamaged)
-            _participant.canBeDamaged = true;
+        if (!participant.canBeDamaged)
+            participant.canBeDamaged = true;
         
-        if (_participant.pokemon.statusEffect == StatusEffect.None) yield break;
+        if (participant.pokemon.statusEffect == StatusEffect.None) yield break;
         
-        OnStatusCheck?.Invoke(_participant);
+        OnStatusCheck?.Invoke(participant);
         
-        _participant.RefreshStatusEffectImage();
+        participant.RefreshStatusEffectImage();
         yield return AssignStatusDamage();
     }
     private IEnumerator AssignStatusDamage()
@@ -127,7 +122,7 @@ public class Participant_Status : MonoBehaviour,IInjectable
         _statusDuration++;
         string message = "";
         float damagePercent = 0;
-        switch (_participant.pokemon.statusEffect)
+        switch (participant.pokemon.statusEffect)
         {
             case StatusEffect.Burn:
                 message=" is hurt by the burn";
@@ -147,10 +142,10 @@ public class Participant_Status : MonoBehaviour,IInjectable
 
     private IEnumerator GetDamageFromStatus(float damagePercent,string message)
     {        
-        _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+message);
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+message);
         
         var damageSource = DamageSource.Normal;
-        switch (_participant.pokemon.statusEffect)
+        switch (participant.pokemon.statusEffect)
         {
             case StatusEffect.Poison:
             case StatusEffect.BadlyPoison:
@@ -160,35 +155,35 @@ public class Participant_Status : MonoBehaviour,IInjectable
                 damageSource = DamageSource.Burn;
                 break;
         }
-        var healthLost = math.ceil(_participant.pokemon.maxHp * damagePercent);
+        var healthLost = math.ceil(participant.pokemon.maxHp * damagePercent);
         
-        _moveUsageHandler.DisplayDamage(_participant,displayEffectiveness:false,isSpecificDamage:true,healthLost,damageSource);
+        _moveUsageHandler.DisplayDamage(participant,displayEffectiveness:false,isSpecificDamage:true,healthLost,damageSource);
         
         yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
        
-        _participant.pokemon.ChangeHealth(null);  
+        participant.pokemon.ChangeHealth(null);  
         
     }
     public void StunCheck()
     {
-        if (!_participant.isActive) return;
+        if (!participant.isActive) return;
         if (_battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon !=
-            _participant.pokemon) return;
-        if (_participant.pokemon.statusEffect == StatusEffect.None) return;
+            participant.pokemon) return;
+        if (participant.pokemon.statusEffect == StatusEffect.None) return;
         
-        if (_statusEffectMethods.TryGetValue(_participant.pokemon.statusEffect,out Action method))
+        if (_statusEffectMethods.TryGetValue(participant.pokemon.statusEffect,out Action method))
             method();
     }
     public IEnumerator CheckTrapDuration(Battle_Participant participant)
     {
-        if (_participant != participant) yield break;
-        if (!_participant.isActive) yield break;
-        if (_participant.canEscape) yield break;
+        if (base.participant != participant) yield break;
+        if (!base.participant.isActive) yield break;
+        if (base.participant.canEscape) yield break;
         if (_currentTrap == null) yield break;
         if (!_currentTrap.hasDuration) yield break;
         if (_trapDuration <= 0)
         {
-            _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+_currentTrap.OnFreeMessage);
+            _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonName+_currentTrap.OnFreeMessage);
             RemoveTrap();
             yield break;
         }
@@ -197,24 +192,24 @@ public class Participant_Status : MonoBehaviour,IInjectable
     }
     public IEnumerator ConfusionCheck(Battle_Participant participant)
     {
-        if (_participant != participant) yield break;
-        if (!_participant.isActive) yield break;
-        if (!_participant.isConfused)
+        if (base.participant != participant) yield break;
+        if (!base.participant.isActive) yield break;
+        if (!base.participant.isConfused)
         {
             _confusionDuration = 0;
             yield break;
         }
-        _participant.isConfused = _confusionDuration > 0;
+        base.participant.isConfused = _confusionDuration > 0;
         
         if (_confusionDuration > 0) _confusionDuration--;
     }
     public void CheckStatDropImmunity()
     {
-        if (!_participant.isActive) return;
-        if (_participant.StatChangeEffects.Count==0) return;
+        if (!participant.isActive) return;
+        if (participant.StatChangeEffects.Count==0) return;
         
-        _participant.StatChangeEffects.ForEach(s=>s.EffectDuration--);
-        _participant.StatChangeEffects.RemoveAll(s => s.EffectDuration == 0);
+        participant.StatChangeEffects.ForEach(s=>s.EffectDuration--);
+        participant.StatChangeEffects.RemoveAll(s => s.EffectDuration == 0);
         
     }
     void FreezeCheck()
@@ -222,28 +217,28 @@ public class Participant_Status : MonoBehaviour,IInjectable
         if (Utility.RandomRange(1, 101) < 10) //10% chance
             _healed = true;
         else
-            _participant.canAttack = false;
+            participant.canAttack = false;
     }
 
     void RemoveFreezeStatusWithFire(Battle_Participant attacker, Move moveUsed)
     {
         if (moveUsed.type.typeName != nameof(Types.Fire) ) return;
         RemoveStatusEffect();
-        _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+" was thawed out!");
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+" was thawed out!");
         _healed = true;
         _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
     }
     void ParalysisCheck()
     {
-        if (_participant.isFlinched) return;
+        if (participant.isFlinched) return;
         //75% chance
-        _participant.canAttack = Utility.RandomRange(1, 101) < 75;
+        participant.canAttack = Utility.RandomRange(1, 101) < 75;
     }
     void SleepCheck()
     {
         if (_statusDuration < 1)//at least sleep for 1 turn
         {
-            _participant.canAttack = false;
+            participant.canAttack = false;
             _statusDuration++;
             return;
         }
@@ -255,28 +250,28 @@ public class Participant_Status : MonoBehaviour,IInjectable
             if (Utility.RandomRange(1, 101) < chances[_statusDuration-1])
                 _healed = true;
             else
-                _participant.canAttack = false;
+                participant.canAttack = false;
             _statusDuration++;
         }
     }
 
     public void RemoveTrap()
     {
-        _participant.canEscape = true;
+        participant.canEscape = true;
         _currentTrap = null;
     }
     public IEnumerator NotifyHealing(Battle_Participant participant)
     {//only for freeze and sleep
-        if (participant != _participant) yield break;
-        if (!_participant.isActive) yield break;
-        if (!_healed || _participant.pokemon.statusEffect==StatusEffect.None) yield break;
-        switch (_participant.pokemon.statusEffect)
+        if (participant != base.participant) yield break;
+        if (!base.participant.isActive) yield break;
+        if (!_healed || base.participant.pokemon.statusEffect==StatusEffect.None) yield break;
+        switch (base.participant.pokemon.statusEffect)
         {
             case StatusEffect.Sleep:
-                _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+" Woke UP!");
+                _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonName+" Woke UP!");
                 break;
             case StatusEffect.Freeze:
-                _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+" Unfroze!");
+                _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonName+" Unfroze!");
                 break;
         }
         RemoveStatusEffect();
@@ -285,43 +280,43 @@ public class Participant_Status : MonoBehaviour,IInjectable
     }
     public void RemoveStatusEffect(bool healAllEffects = false)
     {
-        if (_participant.pokemon.statusEffect == StatusEffect.Sleep
-            || _participant.pokemon.statusEffect == StatusEffect.Paralysis)
+        if (participant.pokemon.statusEffect == StatusEffect.Sleep
+            || participant.pokemon.statusEffect == StatusEffect.Paralysis)
         {
-                _participant.canAttack = true;
+                participant.canAttack = true;
         }
-        if(_participant.pokemon.statusEffect == StatusEffect.Freeze)
+        if(participant.pokemon.statusEffect == StatusEffect.Freeze)
         {
             _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
-            _participant.canAttack = true;
+            participant.canAttack = true;
         }
         if (healAllEffects)
         {
-            _participant.isConfused = false;
+            participant.isConfused = false;
         }
         //Remove stat drops caused by status
-        switch (_participant.pokemon.statusEffect)
+        switch (participant.pokemon.statusEffect)
         {
             case StatusEffect.Burn:
                 var currentAtkBuff =
-                    BattleOperations.SearchForBuffOrDebuff(_participant.pokemon, Stat.Attack);
+                    BattleOperations.SearchForBuffOrDebuff(participant.pokemon, Stat.Attack);
                 if (currentAtkBuff == null) return;
                 BattleOperations.ModifyBuff(currentAtkBuff,0,2);
-                _participant.pokemon.attack = _moveUsageHandler.ModifyStatValue
-                (Stat.Attack, _participant.statData.attack, currentAtkBuff.stage);
+                participant.pokemon.attack = _moveUsageHandler.ModifyStatValue
+                (Stat.Attack, participant.statData.attack, currentAtkBuff.stage);
                 break;
             
             case StatusEffect.Paralysis:
                 var currenSpdBuff =
-                    BattleOperations.SearchForBuffOrDebuff(_participant.pokemon, Stat.Speed);
+                    BattleOperations.SearchForBuffOrDebuff(participant.pokemon, Stat.Speed);
                 if (currenSpdBuff == null) return;
                 BattleOperations.ModifyBuff(currenSpdBuff,0,6);
-                _participant.pokemon.speed = _moveUsageHandler.ModifyStatValue
-                    (Stat.Speed, _participant.statData.speed, currenSpdBuff.stage);
+                participant.pokemon.speed = _moveUsageHandler.ModifyStatValue
+                    (Stat.Speed, participant.statData.speed, currenSpdBuff.stage);
                 break;
         }
-        BattleOperations.RemoveInvalidBuffsOrDebuffs(_participant.pokemon);
-        _participant.pokemon.statusEffect = StatusEffect.None; 
-        _participant.RefreshStatusEffectImage();
+        BattleOperations.RemoveInvalidBuffsOrDebuffs(participant.pokemon);
+        participant.pokemon.statusEffect = StatusEffect.None; 
+        participant.RefreshStatusEffectImage();
     }
 }

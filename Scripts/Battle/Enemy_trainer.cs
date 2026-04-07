@@ -3,16 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class Enemy_trainer : MonoBehaviour,IInjectable
+public class Enemy_trainer : BattleParticipantModule
 {
     public Battle_Participant participant;
     public TrainerData trainerData;
-    public List<Pokemon> trainerParty;
+    public List<Pokemon> trainerParty = new();
     public bool inBattle;
     public bool canAttack = true;
-    [SerializeField]private bool usedMove;
+    private bool usedMove;
     private Dictionary<AiFlags, Func<int>> AiLogicCalculators = new();
     private Move _currentMoveCheck;
     private Battle_Participant _currentEnemy;
@@ -20,7 +19,8 @@ public class Enemy_trainer : MonoBehaviour,IInjectable
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private BattleIntro _battleIntroHandler;
-    public void Inject(ServiceContainer container)
+    
+    public Enemy_trainer(ServiceContainer container)
     {
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<Battle_handler>();
@@ -31,22 +31,15 @@ public class Enemy_trainer : MonoBehaviour,IInjectable
     private void OnInject()
     {
         _turnBasedCombatHandler.OnNewTurn += ResetMoveUsage;
+        _turnBasedCombatHandler.OnNewTurn += MakeBattleDecision;
         _battleHandler.OnBattleEnd += ResetAfterBattle;
-    }
-
-    private void Update()
-    {
-        if (!inBattle) return;
-        MakeBattleDecision();
-    }
-    private void Start()
-    {
         AiLogicCalculators.Add(AiFlags.CheckBadMove ,AiCheckBadMove);
         AiLogicCalculators.Add(AiFlags.CheckViability ,AiCheckViability);
         AiLogicCalculators.Add(AiFlags.CheckStatus ,AiCheckStatus);
         AiLogicCalculators.Add(AiFlags.CheckSetup ,AiCheckSetup);
         AiLogicCalculators.Add(AiFlags.CheckPriority ,AiCheckPriority);
     }
+
     public void CanAttack()
     {
         canAttack = true;
@@ -60,7 +53,6 @@ public class Enemy_trainer : MonoBehaviour,IInjectable
     }
     void ResetMoveUsage()
     {
-        if (!inBattle) return;
         usedMove = false;
     }
     public List<Pokemon> GetLivingPokemon()
@@ -121,12 +113,16 @@ public class Enemy_trainer : MonoBehaviour,IInjectable
                 else
                 {
                     var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count - 1);
+                    var pokemonName = notParticipatingList[randomLeftOver].pokemonName;
+                    yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName,pokemonName);
                     yield return _battleIntroHandler.SwitchInPokemon(participant,notParticipatingList[randomLeftOver],true);
                 }
             }
             else
             {
                 var randomMember = Utility.RandomRange(0, numAlive.Count - 1);
+                var pokemonName = numAlive[randomMember].pokemonName;
+                yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName,pokemonName);
                 yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon:numAlive[randomMember],true);
             }
         }
@@ -134,7 +130,6 @@ public class Enemy_trainer : MonoBehaviour,IInjectable
     }
     public void SetupTrainerForBattle(TrainerData copyOfTrainerData)
     {
-        participant = GetComponent<Battle_Participant>();
         trainerData = Obj_Instance.CreateTrainer(copyOfTrainerData);
         trainerParty.Clear();
         foreach (TrainerPokemonData member in trainerData.PokemonParty)
@@ -153,8 +148,9 @@ public class Enemy_trainer : MonoBehaviour,IInjectable
     }
     private void MakeBattleDecision()
     {
-        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon
-            != participant.pokemon)return;
+        Debug.Log("turn: " + _turnBasedCombatHandler.currentTurnIndex);
+        Debug.Log("turn: " + _battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon.pokemonName);
+        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon != participant.pokemon)return;
         if (usedMove || !canAttack) return;
         
         var randomEnemy = Utility.RandomRange(0, participant.currentEnemies.Count);

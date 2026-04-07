@@ -365,7 +365,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
         for (int i = 2; i < 4; i++)
         {
             var currentEnemy = battleParticipants[i];
-            currentEnemy.pokemonTrainerAI = currentEnemy.GetComponent<Enemy_trainer>();
             currentEnemy.pokemonTrainerAI.SetupTrainerForBattle(trainerData);
         }
         //copy over team data to enemy partner

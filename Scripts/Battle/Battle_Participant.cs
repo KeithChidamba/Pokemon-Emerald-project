@@ -2,10 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+public abstract class BattleParticipantModule
+{
+    protected Battle_Participant participant;
+    public void GetParticipant(Battle_Participant participant)
+    {
+        this.participant = participant;
+    }
+}
 public class Battle_Participant : MonoBehaviour,IInjectable
 {
     public AbilityHandler abilityHandler;
@@ -13,15 +22,18 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public Held_Items heldItemHandler;
     public Enemy_trainer pokemonTrainerAI;
     public Battle_Data statData;
+
     public Pokemon pokemon;
     public string rawName;
     public List<Battle_Participant> currentEnemies;
+    
     public Image pokemonImage;
     public Image statusImage;
     public Image pokemonGenderImage;
     public Text pokemonNameText;
     public Text pokemonHealthText;
     public Text pokemonLevelText;
+    
     public bool isPlayer;
     public bool isEnemy;
     public bool isActive;
@@ -30,26 +42,31 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public bool isConfused;
     public bool isInfatuated;
     public bool canBeDamaged = true;
+    
     public SemiInvulnerabilityData semiInvulnerabilityData = new();
     public bool isSemiInvulnerable;
     public bool canEscape = true;
     public List<StatChangeData> StatChangeEffects = new();
+    
     public Slider playerHpSlider;
     [FormerlySerializedAs("hpSliderColor")] public RawImage hpSliderImage;
     public Slider playerExpSlider;
     public GameObject[] singleBattleUI;
     public GameObject[] doubleBattleUI;
     public GameObject participantUI;
+    
     public PreviousMove previousMove;
     public TurnCoolDown currentCoolDown = new ();
     public Type additionalTypeImmunity;
     public List<TypeImmunityNegation> immunityNegations = new();
+    
     public List<Pokemon> expReceivers;
     private bool _expEventDelay;
     public Action OnPokemonFainted;
     private Action OnFaintCheck;
     public List<Barrier> barriers = new();
     [SerializeField]private Battle_Participant recentAttacker;
+    
     public Animator statusEffectAnimator;
     private Vector2 _defaultImagePosition;
     
@@ -60,7 +77,8 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     private Wild_pkm _wildPokemonHandler;
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
-    
+    private ServiceContainer _container;
+    private List<BattleParticipantModule> logicModules=new();
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -70,14 +88,25 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _moveUsageHandler = container.Resolve<Move_handler>();
+        _container = container;
+        gameObject.SetActive(true);
         OnInject();
     }
     private void OnInject()
     {
-        heldItemHandler = GetComponent<Held_Items>();
-        statusHandler = GetComponent<Participant_Status>();
-        abilityHandler = GetComponent<AbilityHandler>();
-        statData = GetComponent<Battle_Data>();
+        heldItemHandler = new Held_Items(_container);
+        statusHandler = new Participant_Status(_container);
+        abilityHandler = new AbilityHandler(_container);
+        statData = new Battle_Data();
+        pokemonTrainerAI = new Enemy_trainer(_container);
+        
+        logicModules.Add(heldItemHandler);
+        logicModules.Add(statusHandler);
+        logicModules.Add(abilityHandler);
+        logicModules.Add(statData);
+        
+        logicModules.ForEach(m=>m.GetParticipant(this));
+        
         _turnBasedCombatHandler.OnNewTurn += CheckBarrierSharing;
         _turnBasedCombatHandler.OnTurnsCompleted += CheckBarrierDuration;
         currentCoolDown.UpdateCoolDown(0, null, _moveUsageHandler,"",false, false);

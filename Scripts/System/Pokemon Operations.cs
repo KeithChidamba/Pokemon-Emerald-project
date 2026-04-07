@@ -281,7 +281,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                 SelectingMoveReplacement = true;
                 _dialogueHandler.DisplayList(
                     $"{currentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn" +
-                    $" {moveName}?", "", new[] { InteractionOptions.LearnMove
+                    $" {moveName}?", new[] { InteractionOptions.LearnMove
                         , InteractionOptions.SkipMove},
                     new[] { "Yes", "No" });
                 

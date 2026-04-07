@@ -118,13 +118,12 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                         areaOfEncounter = animatedWaterTile.area;
                     }
                     _overworldActions.fishingArea = areaOfEncounter;
-                    _dialogueHandler.DisplayList("Would you like to fish for pokemon"
-                       , "fishing...", 
+                    _dialogueHandler.DisplayList("Would you like to fish for pokemon", 
                        new[]
                        {
                            InteractionOptions.Fish,InteractionOptions.None
                        }
-                       , new[]{"Yes", "No"});
+                       , new[]{"Yes", "No"},"fishing...");
                 }
                 else
                 {

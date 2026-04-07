@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Battle_Data:MonoBehaviour
+public class Battle_Data: BattleParticipantModule
 {
     public float attack;
     public float defense;
@@ -15,29 +15,25 @@ public class Battle_Data:MonoBehaviour
     public float accuracy;
     public float evasion;
     public float crit;
-    private Battle_Participant _participant;
-    private void Start()
-    {
-        _participant = GetComponent<Battle_Participant>();
-    }
+    
     public void SaveActualStats()
     {
-        attack = _participant.pokemon.attack;
-        spAtk = _participant.pokemon.specialAttack;
-        defense = _participant.pokemon.defense;
-        spDef = _participant.pokemon.specialDefense;
-        speed = _participant.pokemon.speed;
-        accuracy = _participant.pokemon.accuracy;
-        evasion = _participant.pokemon.evasion;
-        crit = _participant.pokemon.critChance;
+        attack = participant.pokemon.attack;
+        spAtk = participant.pokemon.specialAttack;
+        defense = participant.pokemon.defense;
+        spDef = participant.pokemon.specialDefense;
+        speed = participant.pokemon.speed;
+        accuracy = participant.pokemon.accuracy;
+        evasion = participant.pokemon.evasion;
+        crit = participant.pokemon.critChance;
     }
     public void LoadActualStats()
     {
-        _participant.pokemon.attack=attack;
-        _participant.pokemon.specialAttack=spAtk;
-        _participant.pokemon.defense=defense;
-        _participant.pokemon.specialDefense=spDef;
-        _participant.pokemon.speed=speed;
+        participant.pokemon.attack=attack;
+        participant.pokemon.specialAttack=spAtk;
+        participant.pokemon.defense=defense;
+        participant.pokemon.specialDefense=spDef;
+        participant.pokemon.speed=speed;
     }
     public void ResetBattleState(Pokemon pokemon,bool justLeveledUp = false)
     {
@@ -46,11 +42,11 @@ public class Battle_Data:MonoBehaviour
         pokemon.critChance = 6.25f;
         pokemon.buffAndDebuffs.Clear();
         if (justLeveledUp) return;
-        _participant.canAttack = true;
-        _participant.canBeDamaged = true;
-        _participant.isFlinched = false;
-        _participant.isConfused = false;
-        _participant.isInfatuated = false;
+        participant.canAttack = true;
+        participant.canBeDamaged = true;
+        participant.isFlinched = false;
+        participant.isConfused = false;
+        participant.isInfatuated = false;
         var rawName = pokemon.pokemonName.Replace("Foe ", "");
         pokemon.pokemonName = rawName;
     }

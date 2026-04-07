@@ -140,8 +140,8 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         newInteraction.resultMessage = result;
         return newInteraction;
     }
-    public void DisplayList(string info,string result,InteractionOptions[] options
-        , string[]optionsText)//list info
+    public void DisplayList(string info,InteractionOptions[] options
+        , string[]optionsText,string result="")//list info
     {
         canExitDialogue = false;
         var newInteraction = NewInteraction(info,DialogType.Options,result);

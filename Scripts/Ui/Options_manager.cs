@@ -5,7 +5,8 @@ using UnityEngine;
 public enum InteractionOptions
 {
     None,CloseApplication,Battle,LearnMove,SkipMove,
-    Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,ReceiveGiftPokemon,LeaveStore,ViewControls
+    Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,
+    ReceiveGiftPokemon,LeaveStore,ViewControls,
 }
 public class Options_manager : MonoBehaviour,IInjectable
 {
@@ -38,9 +39,10 @@ public class Options_manager : MonoBehaviour,IInjectable
         _playerBag = container.Resolve<Bag>();
         
         gameObject.SetActive(true);
-    } 
+        OnInject();
+    }
 
-    private void Start()
+    private void OnInject()
     {
         _interactionMethods.Add(InteractionOptions.CloseApplication,CloseApplication);
         _interactionMethods.Add(InteractionOptions.Battle,Battle);
@@ -65,9 +67,8 @@ public class Options_manager : MonoBehaviour,IInjectable
     public void ExitGame()
     {
         _dialogueHandler.DisplayList("Are you sure you want to exit?, you will lose unsaved data!",
-             "Good bye!", 
              new[]{ InteractionOptions.CloseApplication,InteractionOptions.None}
-             , new[]{"Yes", "No"});
+             , new[]{"Yes", "No"},"Good bye!");
     }
 
     void ViewControls()
@@ -180,6 +181,7 @@ public class Options_manager : MonoBehaviour,IInjectable
     public void CompleteInteraction(Interaction interaction,int optionIndex)
     {
         OnInteractionOptionChosen?.Invoke(interaction,optionIndex);
+        
         var interactionOption = interaction.interactionOptions[optionIndex];
         if (interactionOption == InteractionOptions.None)
         {

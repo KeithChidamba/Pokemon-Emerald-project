@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AbilityHandler : MonoBehaviour,IInjectable
+public class AbilityHandler : BattleParticipantModule
 {
-    private Battle_Participant _participant;
     public event Action OnAbilityUsed;
-    [SerializeField]private bool _abilityTriggered;
-    [SerializeField]private string _currentAbility;
+    private bool _abilityTriggered;
+    private string _currentAbility;
     private readonly Dictionary<string, Action> _abilityMethods = new ();
     private readonly Dictionary<string,string> _damageBuffCombinations = new()
     {
@@ -22,7 +21,8 @@ public class AbilityHandler : MonoBehaviour,IInjectable
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Move_handler _moveUsageHandler;
     private BattleOperations _battleOperationsHandler;
-    public void Inject(ServiceContainer container)
+    
+    public AbilityHandler(ServiceContainer container)
     {
         _battleOperationsHandler = container.Resolve<BattleOperations>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -34,7 +34,6 @@ public class AbilityHandler : MonoBehaviour,IInjectable
 
     private void OnInject()
     {
-        _participant =  GetComponent<Battle_Participant>();
         _battleHandler.OnBattleEnd += ResetState;
         _turnBasedCombatHandler.OnNewTurn += CheckAbilityUsability;
         _abilityMethods.Add("innerfocus",InnerFocus);
@@ -50,17 +49,16 @@ public class AbilityHandler : MonoBehaviour,IInjectable
         _abilityMethods.Add("shedskin",ShedSkin);
         _abilityMethods.Add("swarm",Swarm);
     }
-
     void CheckAbilityUsability()
     {
-        if (!_participant.isActive) return;
-        if(_participant.pokemon.hp>0)
+        if (!participant.isActive) return;
+        if(participant.pokemon.hp>0)
             OnAbilityUsed?.Invoke();
     }
 
     public void SetAbilityMethod()
     {
-        _currentAbility = _participant.pokemon.ability.abilityName.ToLower().Replace(" ","");
+        _currentAbility = participant.pokemon.ability.abilityName.ToLower().Replace(" ","");
         if (_abilityMethods.TryGetValue(_currentAbility, out Action abilityMethod))
             OnAbilityUsed += abilityMethod;
         else
@@ -75,13 +73,13 @@ public class AbilityHandler : MonoBehaviour,IInjectable
         _moveUsageHandler.OnMoveHit -= GiveStatic;
         _battleHandler.OnBattleEnd -= GiveItem;
         _moveUsageHandler.OnDamageCalc -= IncreaseDamage;
-        _participant.statusHandler.OnStatusCheck -= HealStatusEffect;
+        participant.statusHandler.OnStatusCheck -= HealStatusEffect;
     }
 
     void InnerFocus()
     {
         if (_abilityTriggered) return;
-        _participant.pokemon.canBeFlinched = false;
+        participant.pokemon.canBeFlinched = false;
         _abilityTriggered = true;
     }
     void PickUp()
@@ -107,8 +105,8 @@ public class AbilityHandler : MonoBehaviour,IInjectable
     void Guts()
     {
         if (_abilityTriggered) return;
-        if (_participant.pokemon.statusEffect == StatusEffect.None) return;
-        var attackBuffData = new BuffDebuffData(_participant, Stat.Attack, true, 1);
+        if (participant.pokemon.statusEffect == StatusEffect.None) return;
+        var attackBuffData = new BuffDebuffData(participant, Stat.Attack, true, 1);
         _battleOperationsHandler.canDisplayChange = false; 
         _moveUsageHandler.ExecuteBuffOrDebuff(attackBuffData);
         _abilityTriggered = true;
@@ -116,7 +114,7 @@ public class AbilityHandler : MonoBehaviour,IInjectable
     void Levitate()
     {
         if (_abilityTriggered) return;
-        _participant.additionalTypeImmunity = Resources.Load<Type>(AssetDirectory.Types+"Ground");
+        participant.additionalTypeImmunity = Resources.Load<Type>(AssetDirectory.Types+"Ground");
         _abilityTriggered = true;
     }
     void Overgrow()
@@ -134,7 +132,7 @@ public class AbilityHandler : MonoBehaviour,IInjectable
     void ShedSkin()
     {
         if (_abilityTriggered) return;
-        _participant.statusHandler.OnStatusCheck += HealStatusEffect;
+        participant.statusHandler.OnStatusCheck += HealStatusEffect;
         _abilityTriggered = true;
     }
     void Static()
@@ -159,15 +157,15 @@ public class AbilityHandler : MonoBehaviour,IInjectable
 
     private void RemoveTrap(Battle_Participant participant)
     {
-        if (participant != _participant) return;
-        foreach (var enemy in _participant.currentEnemies)
+        if (participant != base.participant) return;
+        foreach (var enemy in base.participant.currentEnemies)
             enemy.statusHandler.RemoveTrap();
         _battleHandler.OnSwitchIn -= TrapEnemies;
         _battleHandler.OnSwitchOut -= RemoveTrap;
     }
     private void TrapEnemies()
     {
-        foreach (var enemy in _participant.currentEnemies)
+        foreach (var enemy in participant.currentEnemies)
         {
             if (enemy.pokemon.HasType(Types.Flying) || enemy.pokemon.HasType(Types.Ghost))
                 continue;
@@ -176,7 +174,7 @@ public class AbilityHandler : MonoBehaviour,IInjectable
     }
     void HealStatusEffect(Battle_Participant participant)
     {
-        var currentStatus = _participant.pokemon.statusEffect;
+        var currentStatus = base.participant.pokemon.statusEffect;
         
         if (Utility.RandomRange(1, 4) < 2)
         {
@@ -184,20 +182,20 @@ public class AbilityHandler : MonoBehaviour,IInjectable
                 || currentStatus == StatusEffect.Freeze
                 || currentStatus == StatusEffect.Paralysis)
             {
-                if(!_participant.isFlinched)
-                    _participant.canAttack = true;
+                if(!base.participant.isFlinched)
+                    base.participant.canAttack = true;
             }
-            _participant.pokemon.statusEffect = StatusEffect.None;
-            _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s shed skin healed it");
-            _participant.RefreshStatusEffectImage();
+            base.participant.pokemon.statusEffect = StatusEffect.None;
+            _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonName+"'s shed skin healed it");
+            base.participant.RefreshStatusEffectImage();
         }
     }
     void GiveItem()
     {
-        if (_participant.pokemon.hasItem) return;
-        if (!_participant.pokemon.hasTrainer) return;//wild pokemon dont need to be picking up items when battle ends
+        if (participant.pokemon.hasItem) return;
+        if (!participant.pokemon.hasTrainer) return;//wild pokemon dont need to be picking up items when battle ends
         //Check level and 10% pickup chance
-        if (_participant.pokemon.currentLevel < 5) return;
+        if (participant.pokemon.currentLevel < 5) return;
         if (Utility.RandomRange(1, 101) > 10) return;
         //only happens at end of battle so no need to cahce list
         List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
@@ -215,7 +213,7 @@ public class AbilityHandler : MonoBehaviour,IInjectable
         string[] possibleItems = null;
         foreach (var pool in itemPools)
         {
-            if (_participant.pokemon.currentLevel >= pool.MinLevel && _participant.pokemon.currentLevel <= pool.MaxLevel)
+            if (participant.pokemon.currentLevel >= pool.MinLevel && participant.pokemon.currentLevel <= pool.MaxLevel)
             {
                 possibleItems = pool.Items;
                 break;
@@ -230,15 +228,15 @@ public class AbilityHandler : MonoBehaviour,IInjectable
             : Save_manager.GetDirectory(AssetDirectory.MartItems) + possibleItems[itemWonIndex];
         
         var itemWon = Resources.Load<Item>(assetDirectory);
-        if (Utility.RandomRange(1, 101) < _participant.pokemon.currentLevel)
+        if (Utility.RandomRange(1, 101) < participant.pokemon.currentLevel)
         {
-            _participant.pokemon.GiveItem(Obj_Instance.CreateItem(itemWon));
+            participant.pokemon.GiveItem(Obj_Instance.CreateItem(itemWon));
         }
     }
     void GiveStatic(Battle_Participant attacker,Move moveUsed)
     {
         if (attacker.pokemon.statusEffect != StatusEffect.None) return;
-        if (attacker == _participant) return;
+        if (attacker == participant) return;
         if (!attacker.canBeDamaged)
             return;
         if(!moveUsed.isContact)return; 
@@ -252,11 +250,11 @@ public class AbilityHandler : MonoBehaviour,IInjectable
     private void NotifyStaticHit(Battle_Participant attacker,StatusEffect status)//status is unused here but is required for method signature
     {
         _moveUsageHandler.OnStatusEffectHit-=NotifyStaticHit; 
-        _dialogueHandler.DisplayBattleInfo(_participant.pokemon.pokemonName+"'s static paralysed "+attacker.pokemon.pokemonName);
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s static paralysed "+attacker.pokemon.pokemonName);
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {
-        if (attacker != _participant) return damage;
+        if (attacker != participant) return damage;
         if (_currentAbility == "paralysiscombo")
         {
             if (victim.pokemon.statusEffect == StatusEffect.Paralysis)
@@ -270,7 +268,7 @@ public class AbilityHandler : MonoBehaviour,IInjectable
 
     private float GetAbilityDamageBuff(Move move, string typeName)
     {
-        if (_participant.pokemon.hp < (_participant.pokemon.maxHp * 0.33f))
+        if (participant.pokemon.hp < (participant.pokemon.maxHp * 0.33f))
             if (move.type.typeName == typeName)
                 return 1.5f;
         return 1f;

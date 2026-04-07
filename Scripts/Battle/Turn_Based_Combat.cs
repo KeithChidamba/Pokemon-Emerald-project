@@ -33,6 +33,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     private BattleOperations _battleOperationsHandler;
     private Game_Load _gameLoadingHandler;
     private Options_manager _dialogueOptionsHandler;
+    private Game_ui_manager _gameUIManager;
     
     public void Inject(ServiceContainer container)
     {
@@ -47,6 +48,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         _moveUsageHandler = container.Resolve<Move_handler>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _moveLogicHandler = container.Resolve<MoveLogicHandler>();
+        _gameUIManager = container.Resolve<Game_ui_manager>();
         gameObject.SetActive(true);
         OnInject();
     }
@@ -56,13 +58,10 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         _battleHandler.OnBattleEnd += ResetTurnState;
         OnNewTurn += ()=> StartCoroutine(CheckParticipantCoolDown());
         _battleHandler.OnSwitchOut += RemoveWeatherBuffReceiver;
-    }
-    
-    private void Start()
-    {
         clearWeather = new WeatherCondition(Weather.Clear);
         currentWeather = clearWeather;
     }
+    
     public void SaveTurn(Turn turn)
     {
         _turnHistory.Add(turn);
@@ -347,6 +346,39 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         
         yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
         NextTurn();
+    }
+    public IEnumerator AllowPlayerSwitchIn(string trainerName,string pokemonName)
+    {
+        if (_battleHandler.currentBattleStyle != Battle_handler.BattlesStyle.Switch) yield break;
+        
+        _dialogueHandler.DisplayList($"{trainerName} is about to use {pokemonName}",
+            new[] { InteractionOptions.None, InteractionOptions.None},
+            new[] { "Yes", "No" });
+ 
+        _dialogueOptionsHandler.OnInteractionOptionChosen += AwaitPartyOpen;
+        bool processing = true;
+        yield return new WaitUntil(() => !processing);
+        
+        //carry on with battle
+        
+        void AwaitPartyOpen(Interaction interaction,int optionChosen)
+        {
+            if (optionChosen > 0)
+            {
+                processing = false;
+                return;
+            }
+            processing = true;
+            _pokemonPartyHandler.swapOutNext = true;
+            _pokemonPartyHandler.OnMemberSelected += ResetEvent;
+            _gameUIManager.ViewPokemonParty();
+        }
+        void ResetEvent(int memberPosition)
+        {
+            _pokemonPartyHandler.OnMemberSelected -= ResetEvent;
+            processing = false;
+        }
+        yield return null;
     }
     public IEnumerator HandleSwap(SwitchOutData swap, bool forcedSwap=false)
     {

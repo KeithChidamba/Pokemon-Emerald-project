@@ -35,10 +35,6 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     private void OnInject()
     {
         _battleHandler.OnBattleEnd += ResetAfterBattle;
-    }
-
-    private void Start()
-    {
         _defaultParticipantImageSize = _battleHandler.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
         statChangeVisuals.Add(Stat.Attack,statChangeSprites[0]);
         statChangeVisuals.Add(Stat.Defense,statChangeSprites[1]);
