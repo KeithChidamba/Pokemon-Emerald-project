@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Linq;
-
+[Serializable]
 public class Participant_Status : BattleParticipantModule
 {
     private int _statusDuration;
@@ -73,11 +73,11 @@ public class Participant_Status : BattleParticipantModule
     }
     public void GetStatChangeImmunity(StatChangeability changeability,int numTurns)
     {
-        if (participant.StatChangeEffects.Any(s => s.Changeability == changeability))
+        if (participant.statChangeEffects.Any(s => s.Changeability == changeability))
         {
             Debug.Log("added duplicate stat change effect");
         };
-        participant.StatChangeEffects.Add(new(changeability,numTurns));
+        participant.statChangeEffects.Add(new(changeability,numTurns));
     }
     private void StatDrop()
     {
@@ -206,10 +206,10 @@ public class Participant_Status : BattleParticipantModule
     public void CheckStatDropImmunity()
     {
         if (!participant.isActive) return;
-        if (participant.StatChangeEffects.Count==0) return;
+        if (participant.statChangeEffects.Count==0) return;
         
-        participant.StatChangeEffects.ForEach(s=>s.EffectDuration--);
-        participant.StatChangeEffects.RemoveAll(s => s.EffectDuration == 0);
+        participant.statChangeEffects.ForEach(s=>s.EffectDuration--);
+        participant.statChangeEffects.RemoveAll(s => s.EffectDuration == 0);
         
     }
     void FreezeCheck()

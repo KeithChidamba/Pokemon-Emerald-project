@@ -13,7 +13,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public event Func<Battle_Participant,IEnumerator> OnMoveExecute;
     public event Action OnTurnsCompleted;
     public int currentTurnIndex;
-
     public bool faintEventDelay;
     public WeatherCondition currentWeather;
     public WeatherCondition clearWeather;
@@ -64,6 +63,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     
     public void SaveTurn(Turn turn)
     {
+        Debug.Log("saved");
         _turnHistory.Add(turn);
         if ((_battleHandler.isDoubleBattle && IsLastParticipant())
             || (currentTurnIndex == _battleHandler.participantCount))
@@ -234,8 +234,13 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                 yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
             }
         }
-        var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();//prevent index out of range when removing turns
-        orderTurns.ForEach(index => _turnHistory.RemoveAt(index));
+
+        if (switchTurns.Count > 0)
+        {
+            var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();//prevent index out of range when removing turns
+            orderTurns.ForEach(index => _turnHistory.RemoveAt(index));
+            Debug.Log("turn ortd: " + orderTurns.Count);
+        }
         
 //handle all attacks
         foreach (var currentTurn in _turnHistory )
@@ -322,7 +327,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         {
             if (participant.currentCoolDown.isCoolingDown)
             {
-                if (participant.currentCoolDown.NumTurns == 0)
+                if (participant.currentCoolDown.numTurns == 0)
                 {
                     if (participant.currentCoolDown.turnData.isCancelled)
                     {
@@ -330,7 +335,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                     }
                     else
                     {
-                        participant.currentCoolDown.ExecuteTurn = true;
+                        participant.currentCoolDown.executeTurn = true;
                         _turnHistory.Add(new(participant.currentCoolDown.turnData));
                         NextTurn();
                     }
@@ -479,15 +484,15 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         if (_battleHandler.battleOver) yield break;
         var participant = _battleHandler.GetCurrentParticipant();
         if (!participant.currentCoolDown.isCoolingDown) yield break;
-        if (participant.currentCoolDown.ExecuteTurn) yield break;
+        if (participant.currentCoolDown.executeTurn) yield break;
         
-        if (participant.currentCoolDown.DisplayMessage)
+        if (participant.currentCoolDown.displayMessage)
         {
             _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName
-                                                        +participant.currentCoolDown.Message);
+                                                        +participant.currentCoolDown.message);
             yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
         }
-        participant.currentCoolDown.NumTurns--;
+        participant.currentCoolDown.numTurns--;
         NextTurn();
         
     }
@@ -540,15 +545,14 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         currentTurnIndex --;
         _inputStateHandler.OnStateRemoved += _battleHandler.SetupOptionsInput;
     }
-    public void ChangeTurn(int maxParticipantIndex,int step)
+    private void ChangeTurn(int maxParticipantIndex,int step)
     {
         if (currentTurnIndex < maxParticipantIndex)
             currentTurnIndex+=step;
         else
             currentTurnIndex = 0;
         
-        if (!_battleHandler.battleParticipants[currentTurnIndex].isActive & _dialogueOptionsHandler.playerInBattle)
-            NextTurn();
+        if (!_battleHandler.battleParticipants[currentTurnIndex].isActive) NextTurn();
         
         OnNewTurn?.Invoke();
     }

@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[Serializable]
 public class Enemy_trainer : BattleParticipantModule
 {
-    public Battle_Participant participant;
     public TrainerData trainerData;
     public List<Pokemon> trainerParty = new();
-    public bool inBattle;
-    public bool canAttack = true;
-    private bool usedMove;
+    [SerializeField]private bool canAttack;
+    private bool _hasAttacked;
     private Dictionary<AiFlags, Func<int>> AiLogicCalculators = new();
     private Move _currentMoveCheck;
     private Battle_Participant _currentEnemy;
@@ -19,41 +18,40 @@ public class Enemy_trainer : BattleParticipantModule
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private BattleIntro _battleIntroHandler;
-    
+
+    [SerializeField]private bool isLastParticipant;
     public Enemy_trainer(ServiceContainer container)
     {
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
-        OnInject();
+       
     }
-
-    private void OnInject()
+    private void Start()
     {
-        _turnBasedCombatHandler.OnNewTurn += ResetMoveUsage;
-        _turnBasedCombatHandler.OnNewTurn += MakeBattleDecision;
-        _battleHandler.OnBattleEnd += ResetAfterBattle;
         AiLogicCalculators.Add(AiFlags.CheckBadMove ,AiCheckBadMove);
         AiLogicCalculators.Add(AiFlags.CheckViability ,AiCheckViability);
         AiLogicCalculators.Add(AiFlags.CheckStatus ,AiCheckStatus);
         AiLogicCalculators.Add(AiFlags.CheckSetup ,AiCheckSetup);
         AiLogicCalculators.Add(AiFlags.CheckPriority ,AiCheckPriority);
     }
-
-    public void CanAttack()
+    public void SetupTrainerForBattle(TrainerData copyOfTrainerData)
     {
-        canAttack = true;
-    }
-
-    void ResetAfterBattle()
-    {
-        trainerData = null;
-        canAttack = true;
-        usedMove = false;
-    }
-    void ResetMoveUsage()
-    {
-        usedMove = false;
+        trainerData = Obj_Instance.CreateTrainer(copyOfTrainerData);
+        trainerParty.Clear();
+        foreach (TrainerPokemonData member in trainerData.PokemonParty)
+        {
+            var pokemonCopy = Obj_Instance.CreatePokemon(member.pokemon);
+            trainerParty.Add(pokemonCopy);
+            var expForNextLevel = PokemonOperations.CalculateExpForNextLevel(member.pokemonLevel, pokemonCopy.expGroup)+1;
+            pokemonCopy.ReceiveExperience(expForNextLevel);
+            pokemonCopy.hp = pokemonCopy.maxHp;
+            pokemonCopy.moveSet.Clear();
+            foreach (Move move in member.moveSet)
+                pokemonCopy.moveSet.Add(Obj_Instance.CreateMove(move));
+            
+            if (member.hasItem) pokemonCopy.GiveItem(Obj_Instance.CreateItem(member.heldItem));
+        }
     }
     public List<Pokemon> GetLivingPokemon()
     {
@@ -105,7 +103,6 @@ public class Enemy_trainer : BattleParticipantModule
                     {
                         participant.DeactivateParticipant();
                         participant.pokemon = null;
-                        inBattle = false;
                         participant.DeactivateUI();
                         _battleHandler.CheckParticipantStates();
                     }
@@ -113,45 +110,49 @@ public class Enemy_trainer : BattleParticipantModule
                 else
                 {
                     var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count - 1);
-                    var pokemonName = notParticipatingList[randomLeftOver].pokemonName;
-                    yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName,pokemonName);
                     yield return _battleIntroHandler.SwitchInPokemon(participant,notParticipatingList[randomLeftOver],true);
                 }
             }
             else
             {
                 var randomMember = Utility.RandomRange(0, numAlive.Count - 1);
-                var pokemonName = numAlive[randomMember].pokemonName;
-                yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName,pokemonName);
                 yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon:numAlive[randomMember],true);
             }
         }
         _turnBasedCombatHandler.faintEventDelay = false;
     }
-    public void SetupTrainerForBattle(TrainerData copyOfTrainerData)
+
+    public void AllowNextAttack()
     {
-        trainerData = Obj_Instance.CreateTrainer(copyOfTrainerData);
-        trainerParty.Clear();
-        foreach (TrainerPokemonData member in trainerData.PokemonParty)
+        isLastParticipant = Array.IndexOf(_battleHandler.battleParticipants, participant) == _battleHandler.battleParticipants.Length-1;
+        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon
+            != participant.pokemon)return;
+        
+        if (_hasAttacked)
         {
-            var pokemonCopy = Obj_Instance.CreatePokemon(member.pokemon);
-            trainerParty.Add(pokemonCopy);
-            var expForNextLevel = PokemonOperations.CalculateExpForNextLevel(member.pokemonLevel, pokemonCopy.expGroup)+1;
-            pokemonCopy.ReceiveExperience(expForNextLevel);
-            pokemonCopy.hp = pokemonCopy.maxHp;
-            pokemonCopy.moveSet.Clear();
-            foreach (Move move in member.moveSet)
-                pokemonCopy.moveSet.Add(Obj_Instance.CreateMove(move));
-            
-            if (member.hasItem) pokemonCopy.GiveItem(Obj_Instance.CreateItem(member.heldItem));
+            Debug.Log($"{participant.pokemon.pokemonName} permitted after block");
+            _hasAttacked = false;
+            return;
         }
+        
+        canAttack = true;
+        
+        if (isLastParticipant)
+        {
+            Debug.Log($"block setup");
+            _hasAttacked = true;
+        }
+        
+        Debug.Log($"{participant.pokemon.pokemonName} allowed attacked");
+        MakeBattleDecision();
     }
     private void MakeBattleDecision()
     {
-        Debug.Log("turn: " + _turnBasedCombatHandler.currentTurnIndex);
-        Debug.Log("turn: " + _battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon.pokemonName);
-        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon != participant.pokemon)return;
-        if (usedMove || !canAttack) return;
+       
+        
+        if (!canAttack) return;
+        canAttack = false;
+        
         
         var randomEnemy = Utility.RandomRange(0, participant.currentEnemies.Count);
         _battleHandler.currentEnemyIndex = randomEnemy;
@@ -169,12 +170,10 @@ public class Enemy_trainer : BattleParticipantModule
         else UseSelectedMove();
 
     }
-    void UseSelectedMove()
+    private void UseSelectedMove()
     {
         var selectedMove = participant.pokemon.moveSet[GetSelectedMoveIndex()];
-        canAttack = false;
         _battleHandler.UseMove(selectedMove,participant);
-        usedMove = true;
     }
     private void AiCheckSwitching()
     {
@@ -198,7 +197,7 @@ public class Enemy_trainer : BattleParticipantModule
             }
             if (pokemonScores.Count > 0)
             {
-                canAttack = false;
+
                 var ordered = pokemonScores
                     .OrderByDescending(pokemon => pokemon.effectivenessScore).ToList();
                 SwitchPokemon(ordered.Last().pokemonIndex);

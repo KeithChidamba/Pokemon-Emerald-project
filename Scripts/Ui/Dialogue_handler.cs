@@ -66,9 +66,9 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     {
         typingSpeed = settingIndex switch
         {
-            0 => 0.01f,//slow
+            0 => 0.06f,//slow
             1 => 0.04f,//normal
-            2 => 0.06f,//fast
+            2 => 0.01f,//fast
             _ => 0.04f
         };
     }

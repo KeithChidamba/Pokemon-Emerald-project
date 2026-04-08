@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -10,18 +9,18 @@ using UnityEngine.UI;
 public abstract class BattleParticipantModule
 {
     protected Battle_Participant participant;
-    public void GetParticipant(Battle_Participant participant)
+    public void GetParticipant(Battle_Participant parentParticipant)
     {
-        this.participant = participant;
+        participant = parentParticipant;
     }
 }
 public class Battle_Participant : MonoBehaviour,IInjectable
 {
-    public AbilityHandler abilityHandler;
-    public Participant_Status statusHandler;
-    public Held_Items heldItemHandler;
-    public Enemy_trainer pokemonTrainerAI;
-    public Battle_Data statData;
+    [SerializeField]public AbilityHandler abilityHandler;
+    [SerializeField]public Participant_Status statusHandler;
+    [SerializeField]public Held_Items heldItemHandler;
+    [SerializeField]public Enemy_trainer pokemonTrainerAI;
+    [SerializeField]public Battle_Data statData;
 
     public Pokemon pokemon;
     public string rawName;
@@ -46,7 +45,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public SemiInvulnerabilityData semiInvulnerabilityData = new();
     public bool isSemiInvulnerable;
     public bool canEscape = true;
-    public List<StatChangeData> StatChangeEffects = new();
+    public List<StatChangeData> statChangeEffects = new();
     
     public Slider playerHpSlider;
     [FormerlySerializedAs("hpSliderColor")] public RawImage hpSliderImage;
@@ -56,14 +55,14 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public GameObject participantUI;
     
     public PreviousMove previousMove;
-    public TurnCoolDown currentCoolDown = new ();
+    public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
     public List<TypeImmunityNegation> immunityNegations = new();
     
     public List<Pokemon> expReceivers;
     private bool _expEventDelay;
-    public Action OnPokemonFainted;
-    private Action OnFaintCheck;
+    public event Action OnPokemonFainted;
+    
     public List<Barrier> barriers = new();
     [SerializeField]private Battle_Participant recentAttacker;
     
@@ -78,7 +77,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
     private ServiceContainer _container;
-    private List<BattleParticipantModule> logicModules=new();
+   
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -98,21 +97,31 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         statusHandler = new Participant_Status(_container);
         abilityHandler = new AbilityHandler(_container);
         statData = new Battle_Data();
-        pokemonTrainerAI = new Enemy_trainer(_container);
         
-        logicModules.Add(heldItemHandler);
-        logicModules.Add(statusHandler);
-        logicModules.Add(abilityHandler);
-        logicModules.Add(statData);
-        
-        logicModules.ForEach(m=>m.GetParticipant(this));
+        heldItemHandler.GetParticipant(this);
+        statusHandler.GetParticipant(this);
+        abilityHandler.GetParticipant(this);
+        statData.GetParticipant(this);
         
         _turnBasedCombatHandler.OnNewTurn += CheckBarrierSharing;
         _turnBasedCombatHandler.OnTurnsCompleted += CheckBarrierDuration;
-        currentCoolDown.UpdateCoolDown(0, null, _moveUsageHandler,"",false, false);
-        currentCoolDown.participant = this;
+        currentCoolDown =  new(this, _moveUsageHandler);
         _defaultImagePosition = pokemonImage.rectTransform.anchoredPosition;
     }
+
+    public void SetupEnemyAi(TrainerData trainerData,Battle_Participant partner = null)
+    {
+        pokemonTrainerAI = new Enemy_trainer(_container);
+        pokemonTrainerAI.GetParticipant(this);
+        pokemonTrainerAI.SetupTrainerForBattle(trainerData);
+        if (partner == null) return;
+        //copy over team data to enemy partner
+        partner.pokemonTrainerAI = new Enemy_trainer(_container);
+        partner.pokemonTrainerAI.GetParticipant(partner);
+        partner.pokemonTrainerAI.trainerParty = pokemonTrainerAI.trainerParty;
+        partner.pokemonTrainerAI.trainerData = pokemonTrainerAI.trainerData;
+    }
+    
     private void Update()
     {
         if (!isActive) return;
@@ -266,11 +275,11 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         isActive = false;
         currentEnemies.Clear();       
         barriers.Clear();
-        StatChangeEffects.Clear();
+        statChangeEffects.Clear();
         
         pokemonImage.rectTransform.anchoredPosition = _defaultImagePosition;
         pokemonImage.color = Color.white;
-        
+        pokemonTrainerAI = null;
         _turnBasedCombatHandler.OnMoveExecute -= statusHandler.CheckTrapDuration;
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.StunCheck;
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.CheckStatDropImmunity;
@@ -320,7 +329,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     {
         var protection = isIncrease? StatChangeability.ImmuneToIncrease
             :StatChangeability.ImmuneToDecrease;
-        return StatChangeEffects.Any(s => s.Changeability == protection);
+        return statChangeEffects.Any(s => s.Changeability == protection);
     }
     private void CheckBarrierDuration()
     {
@@ -408,6 +417,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         }
         _moveUsageHandler.ApplyStatusToVictim(this, pokemon.statusEffect);
         _battleHandler.OnBattleEnd += DeactivateParticipant;
+        
         _turnBasedCombatHandler.OnMoveExecute += statusHandler.CheckTrapDuration;
         _turnBasedCombatHandler.OnNewTurn += statusHandler.CheckStatDropImmunity;
         _turnBasedCombatHandler.OnMoveExecute += statusHandler.ConfusionCheck;

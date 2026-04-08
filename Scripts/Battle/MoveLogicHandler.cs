@@ -404,7 +404,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
 
     void bide()
     {
-        if (_attacker.currentCoolDown.ExecuteTurn)
+        if (_attacker.currentCoolDown.executeTurn)
         {
             _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName+" unleashed the power");
             if (_attacker.currentCoolDown.turnData.move.moveDamage > 0)

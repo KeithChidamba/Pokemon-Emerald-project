@@ -1,7 +1,8 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
-
+[Serializable]
 public class Held_Items : BattleParticipantModule
 {
     private Item _heldItem;

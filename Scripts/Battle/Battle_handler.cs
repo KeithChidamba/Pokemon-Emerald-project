@@ -82,8 +82,18 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _overworldActions = container.Resolve<overworld_actions>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         gameObject.SetActive(true);
+        OnInject();
     }
-    
+    private void OnInject()
+    {
+        Debug.Log("subbed");
+        _turnBasedCombatHandler.OnNewTurn += ResetAi;
+        _turnBasedCombatHandler.OnNewTurn += AllowPlayerInput;
+        _checkParticipantsEachTurn = ()=> CheckParticipantStates();
+        _turnBasedCombatHandler.OnNewTurn += _checkParticipantsEachTurn;
+        _turnBasedCombatHandler.OnTurnsCompleted += ResetPlayersTurnUsage;
+        _inputStateHandler.OnStateChanged += EnableBattleMessage;
+    }
     void Update()
     {
         if (!_dialogueOptionsHandler.playerInBattle) return;
@@ -145,15 +155,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
         
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
         UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant); 
-    }
-    private void ResetAi()
-    {
-        if(!isTrainerBattle)return;
-        for(var i = 2; i < 4;i++)
-            if (battleParticipants[i].pokemon != null & !battleParticipants[i].isPlayer)
-            {
-                battleParticipants[i].pokemonTrainerAI.CanAttack();
-            }
     }
 
     public void SelectEnemy(int change)
@@ -256,21 +257,20 @@ public class Battle_handler : MonoBehaviour, IInjectable
         else
             yield return StartCoroutine(_battleIntroHandler.PlayWildIntroSequence());
         
-        //Setup battle events
-        _checkParticipantsEachTurn = ()=> CheckParticipantStates();
-        _turnBasedCombatHandler.OnNewTurn += _checkParticipantsEachTurn;
         _gameLoadingHandler.playerData.playerPosition = _playerMovementHandler.GetPlayerPosition();
-        _inputStateHandler.OnStateChanged += EnableBattleMessage;
         
         SetupOptionsInput();
-        
-        _turnBasedCombatHandler.ChangeTurn(-1, 0);
-        
-        _turnBasedCombatHandler.OnTurnsCompleted += ResetPlayersTurnUsage;
-        _turnBasedCombatHandler.OnNewTurn += ResetAi;
-        _turnBasedCombatHandler.OnNewTurn += AllowPlayerInput;
-        
     }
+    private void ResetAi()
+    {
+        if(!isTrainerBattle)return;
+        for(var i = 2; i < 4;i++)
+            if (battleParticipants[i].pokemon != null & !battleParticipants[i].isPlayer)
+            {
+                battleParticipants[i].pokemonTrainerAI.AllowNextAttack();
+            }
+    }
+
     private void ResetPlayersTurnUsage()
     {
         usedTurnForItem = false;
@@ -337,11 +337,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
         player.currentEnemies.Add(enemy);
         //setup enemy AI
         enemy.currentEnemies.Add(player);
-        enemy.pokemonTrainerAI = enemy.GetComponent<Enemy_trainer>();
-        enemy.pokemonTrainerAI.SetupTrainerForBattle(trainerData);
+        enemy.SetupEnemyAi(trainerData);
         enemy.pokemon = enemy.pokemonTrainerAI.trainerParty[0];
         enemy.AddToExpList(player.pokemon);
-        enemy.pokemonTrainerAI.inBattle = true;
         //setup battle
         yield return SetValidParticipants();
         StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocationData.biome));
@@ -362,14 +360,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
         player.pokemon = alivePartyPokemon[0];
         playerPartner.pokemon = alivePartyPokemon[1];
         //setup trainer ai for enemy participants
-        for (int i = 2; i < 4; i++)
-        {
-            var currentEnemy = battleParticipants[i];
-            currentEnemy.pokemonTrainerAI.SetupTrainerForBattle(trainerData);
-        }
-        //copy over team data to enemy partner
-        enemyPartner.pokemonTrainerAI.trainerData = enemy.pokemonTrainerAI.trainerData;
-        enemyPartner.pokemonTrainerAI.trainerParty = enemy.pokemonTrainerAI.trainerParty;
+       
+        enemy.SetupEnemyAi(trainerData,enemyPartner);
+        
         //set initial pokemon for enemies
         enemy.pokemon = enemy.pokemonTrainerAI.trainerParty[0];
         enemyPartner.pokemon = enemyPartner.pokemonTrainerAI.trainerParty[1];
@@ -393,8 +386,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
         }
         //setup battle
         yield return SetValidParticipants();
-        enemy.pokemonTrainerAI.inBattle = true;
-        enemyPartner.pokemonTrainerAI.inBattle = true;
         StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocationData.biome));
     }
 
@@ -473,7 +464,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         validParticipants.ForEach(p=>p.RefreshStatusEffectImage());
     }
     void LoadMoveInputAndText()
-    {
+    { 
         var moveSelectables = new List<SelectableUI>();
         for (var i = 0; i < _currentParticipant.pokemon.moveSet.Count; i++)
         {
@@ -677,11 +668,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private IEnumerator ResetUiAfterBattle(bool playerWhiteOut)
     {
         OnBattleEnd?.Invoke();
-        _turnBasedCombatHandler.OnNewTurn -= _checkParticipantsEachTurn;;
-        _turnBasedCombatHandler.OnNewTurn -= ResetAi;
-        _turnBasedCombatHandler.OnNewTurn -= AllowPlayerInput;
-        _turnBasedCombatHandler.OnTurnsCompleted -= ResetPlayersTurnUsage;
-        _inputStateHandler.OnStateChanged -= EnableBattleMessage;
         _dialogueHandler.EndDialogue();
         _inputStateHandler.ResetRelevantUi(new[]
         {
@@ -703,8 +689,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
             {
                 battleParticipants[i].ResetParticipantState();
                 battleParticipants[i].DeactivateUI();
-                if (battleParticipants[i].pokemonTrainerAI != null)
-                    battleParticipants[i].pokemonTrainerAI.inBattle = false;
                 battleParticipants[i].pokemon = null;
             }
         }
