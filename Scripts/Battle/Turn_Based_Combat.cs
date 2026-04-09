@@ -13,6 +13,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public event Func<Battle_Participant,IEnumerator> OnMoveExecute;
     public event Action OnTurnsCompleted;
     public int currentTurnIndex;
+
     public bool faintEventDelay;
     public WeatherCondition currentWeather;
     public WeatherCondition clearWeather;
@@ -63,7 +64,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     
     public void SaveTurn(Turn turn)
     {
-        Debug.Log("saved");
         _turnHistory.Add(turn);
         if ((_battleHandler.isDoubleBattle && IsLastParticipant())
             || (currentTurnIndex == _battleHandler.participantCount))
@@ -239,7 +239,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         {
             var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();//prevent index out of range when removing turns
             orderTurns.ForEach(index => _turnHistory.RemoveAt(index));
-            Debug.Log("turn ortd: " + orderTurns.Count);
         }
         
 //handle all attacks
@@ -552,8 +551,11 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         else
             currentTurnIndex = 0;
         
-        if (!_battleHandler.battleParticipants[currentTurnIndex].isActive) NextTurn();
-        
+        if (!_battleHandler.battleParticipants[currentTurnIndex].isActive)
+        {
+            NextTurn();
+            return;
+        }
         OnNewTurn?.Invoke();
     }
     private bool MoveSuccessful(Turn turn)

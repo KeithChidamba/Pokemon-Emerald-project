@@ -2,11 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Battle_handler : MonoBehaviour, IInjectable
@@ -36,7 +32,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public enum BattlesStyle {Switch,Set };
     public BattlesStyle currentBattleStyle;
     public Pokemon lastOpponent;
-    private Battle_Participant _currentParticipant;
+    private Battle_Participant _currentPlayerParticipant;
     public List<EvolutionInBattleData> evolutionQueue;
     public GameObject optionSelector;
     public GameObject moveSelector;
@@ -86,20 +82,18 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private void OnInject()
     {
-        Debug.Log("subbed");
         _turnBasedCombatHandler.OnNewTurn += ResetAi;
         _turnBasedCombatHandler.OnNewTurn += AllowPlayerInput;
         _checkParticipantsEachTurn = ()=> CheckParticipantStates();
         _turnBasedCombatHandler.OnNewTurn += _checkParticipantsEachTurn;
         _turnBasedCombatHandler.OnTurnsCompleted += ResetPlayersTurnUsage;
-        _inputStateHandler.OnStateChanged += EnableBattleMessage;
     }
     void Update()
     {
         if (!_dialogueOptionsHandler.playerInBattle) return;
         if (_turnBasedCombatHandler.currentTurnIndex > 1) return;
         
-        _currentParticipant = GetCurrentParticipant();
+        _currentPlayerParticipant = GetCurrentParticipant();
         //if single battle, auto aim at enemy
         if (!isDoubleBattle && _turnBasedCombatHandler.currentTurnIndex == 0)
         {
@@ -134,8 +128,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
             PlayerExecuteMove();
             return;
         }
-        if (_currentParticipant.pokemon.moveSet[_currentMoveIndex].isSelfTargeted 
-            || _currentParticipant.pokemon.moveSet[_currentMoveIndex].isMultiTarget)
+        if (_currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex].isSelfTargeted 
+            || _currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex].isMultiTarget)
         {
             currentEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
             PlayerExecuteMove();
@@ -154,7 +148,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {//selecting enemy only happens in double battle
         
         battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
-        UseMove(_currentParticipant.pokemon.moveSet[_currentMoveIndex], _currentParticipant); 
+        UseMove(_currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex], _currentPlayerParticipant); 
     }
 
     public void SelectEnemy(int change)
@@ -258,17 +252,16 @@ public class Battle_handler : MonoBehaviour, IInjectable
             yield return StartCoroutine(_battleIntroHandler.PlayWildIntroSequence());
         
         _gameLoadingHandler.playerData.playerPosition = _playerMovementHandler.GetPlayerPosition();
+        _inputStateHandler.OnStateChanged += EnableBattleMessage;
         
         SetupOptionsInput();
     }
     private void ResetAi()
     {
         if(!isTrainerBattle)return;
-        for(var i = 2; i < 4;i++)
-            if (battleParticipants[i].pokemon != null & !battleParticipants[i].isPlayer)
-            {
-                battleParticipants[i].pokemonTrainerAI.AllowNextAttack();
-            }
+        var currentEnemyParticipant = GetCurrentParticipant();
+        if(currentEnemyParticipant.isPlayer)return;
+        currentEnemyParticipant.pokemonTrainerAI.MakeBattleDecision();
     }
 
     private void ResetPlayersTurnUsage()
@@ -466,9 +459,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
     void LoadMoveInputAndText()
     { 
         var moveSelectables = new List<SelectableUI>();
-        for (var i = 0; i < _currentParticipant.pokemon.moveSet.Count; i++)
+        for (var i = 0; i < _currentPlayerParticipant.pokemon.moveSet.Count; i++)
         {
-            availableMovesText[i].text = _currentParticipant.pokemon.moveSet[i].moveName;
+            availableMovesText[i].text = _currentPlayerParticipant.pokemon.moveSet[i].moveName;
             moveSelectables.Add( new (availableMovesText[i].gameObject,AllowEnemySelection,true));
         }
         
@@ -477,7 +470,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
             movesUI, InputDirection.Grid, moveSelectables,
             moveSelector,true,true,ResetMoveUsability,ResetMoveUsability));
         
-        for (var i = _currentParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
+        for (var i = _currentPlayerParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
             availableMovesText[i].text = "";
     }
     public void UseMove(Move move,Battle_Participant user)
@@ -500,7 +493,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         _currentMoveIndex = 0;
         _currentMoveIndex = moveIndex;
-        var currentMove = _currentParticipant.pokemon.moveSet[_currentMoveIndex];
+        var currentMove = _currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex];
         movePowerPointsText.text = "PP: " + currentMove.powerpoints+ "/" + currentMove.maxPowerpoints;
         movePowerPointsText.color = (currentMove.powerpoints == 0)? Color.red : Color.black;
         moveTypeText.text = currentMove.type.typeName;
@@ -576,6 +569,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         var playerWhiteOut = false;
         yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+        _inputStateHandler.AddDialoguePlaceHolderState();
         if (battleTerminated)
         {
             _dialogueHandler.DisplayBattleInfo("the battle ended");
@@ -589,7 +583,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
         }
         else
         {
-            
             if (battleWon)
             {
                 foreach (var evolution in evolutionQueue)
@@ -615,13 +608,13 @@ public class Battle_handler : MonoBehaviour, IInjectable
                     _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName + " defeated "
                         +anyEnemy.pokemonTrainerAI.trainerData.TrainerName);
                     
-                    yield return  _battleIntroHandler.ShowEnemiesAfterBattle();
-                    yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+                    yield return _battleIntroHandler.ShowEnemiesAfterBattle();
                     _dialogueHandler.DisplayBattleInfo(anyEnemy.pokemonTrainerAI.trainerData.battleLossMessage);
-                    
                     var moneyGained = baseMoneyPayout * lastOpponent.currentLevel * MoneyModifier();
                     _gameLoadingHandler.playerData.playerMoney += moneyGained;
+                    
                     _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName + " recieved P" + moneyGained);
+                    yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
                 }
             }
             else
@@ -645,11 +638,12 @@ public class Battle_handler : MonoBehaviour, IInjectable
                     _gameLoadingHandler.playerData.playerMoney -= 100 * partyPokemon.OrderByDescending(p=>p.currentLevel)
                         .First().currentLevel;//highest leveled pokemon in party
                     _dialogueHandler.DisplayBattleInfo("All your pokemon have fainted");
+                    yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
                     playerWhiteOut = true;
                 }
             }
         }
-        yield return new WaitUntil(() => _dialogueHandler.dialogueFinished);
+        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         _dialogueHandler.EndDialogue();
         yield return _battleIntroHandler.BlackFade();
         yield return ResetUiAfterBattle(playerWhiteOut);
@@ -667,6 +661,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private IEnumerator ResetUiAfterBattle(bool playerWhiteOut)
     {
+        _inputStateHandler.OnStateChanged -= EnableBattleMessage;
         OnBattleEnd?.Invoke();
         _dialogueHandler.EndDialogue();
         _inputStateHandler.ResetRelevantUi(new[]
@@ -707,8 +702,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private IEnumerator RunAway() {
         runningAway = true;
-        if(!isTrainerBattle & !_currentParticipant.canEscape)
-            _dialogueHandler.DisplayBattleInfo(_currentParticipant.pokemon.pokemonName +" is trapped");
+        if(!isTrainerBattle & !_currentPlayerParticipant.canEscape)
+            _dialogueHandler.DisplayBattleInfo(_currentPlayerParticipant.pokemon.pokemonName +" is trapped");
         else
         {
             if (isTrainerBattle)
