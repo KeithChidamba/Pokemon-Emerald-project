@@ -75,7 +75,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         pokemonFrontImage.rectTransform.anchoredPosition = Vector2.MoveTowards(
             pokemonFrontImage.rectTransform.anchoredPosition,
             target,
-            40f * Time.deltaTime
+            40f * Time.unscaledDeltaTime
         );
 
         if (Vector2.Distance(pokemonFrontImage.rectTransform.anchoredPosition, target) < 0.01f)

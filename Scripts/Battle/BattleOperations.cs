@@ -99,18 +99,17 @@ public class BattleOperations : MonoBehaviour,IInjectable
     }
     
 //Buffs
-    private static bool HasBuffOrDebuff(Pokemon pokemon, Stat stat)
-    {
-        return pokemon.buffAndDebuffs.Any(b=>b.stat==stat);
-    }
     public void ChangeOrCreateBuffOrDebuff(BuffDebuffData data)
     {
-        if (!HasBuffOrDebuff(data.Receiver.pokemon, data.Stat))
+        var desiredBuff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);
+        if (desiredBuff == null)
         {
-            data.Receiver.pokemon.buffAndDebuffs.Add(CreateNewBuff(data.Stat));
+            Debug.Log("desired buff stat: "+ data.Stat);
+            desiredBuff = CreateNewBuff(data.Stat);
+            data.Receiver.pokemon.buffAndDebuffs.Add(desiredBuff);
         }
-        var buff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);//wont ever be null
-        buff.stage = ValidateBuffLimit(data.Receiver, buff, data.IsIncreasing, data.EffectAmount);
+        
+        desiredBuff.stage = ValidateBuffLimit(data.Receiver, desiredBuff, data.IsIncreasing, data.EffectAmount);
         RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
         OnBuffApplied?.Invoke();
     }
@@ -136,6 +135,8 @@ public class BattleOperations : MonoBehaviour,IInjectable
         var message="";
         var indexLimitHigh = (buff.stat == Stat.Crit) ? 2 : 5;
         var indexLimitLow = (buff.stat ==  Stat.Crit) ? 1 : -5;
+        Debug.Log("valid buff stat: "+ buff.stat);
+        Debug.Log("valid buff stat name: "+ buff.statName);
         if (buff.stage > indexLimitHigh && increased)
         {
             buff.isAtLimit = true;
@@ -162,7 +163,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
             change = buff.stage-changeValue;
             message = participant.pokemon.pokemonName+"'s "+buff.statName+" fell!";
         }
-
+        Debug.Log(message);
         if (canDisplayChange)
         {
             _battleVisualsHandler.SelectStatChangeVisuals(buff.stat,participant,message);

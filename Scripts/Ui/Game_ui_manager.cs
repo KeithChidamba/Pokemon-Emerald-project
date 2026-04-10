@@ -117,7 +117,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
 
     private void ActivateMenuSelection()
     {
-        //Time.timeScale = 0;
+        Time.timeScale = 0;
         var menuOptionsMethods = new List<Action>
         {
             ViewPokemonParty,()=>StartCoroutine(_saveDataHandler.SaveAllData()), ViewBag, ViewProfile, ViewGameSettings
@@ -181,7 +181,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private void CloseMenu()
     {
         if (!viewingMenu) return;
-        //Time.timeScale = 1;
+        Time.timeScale = 1;
         ManageScreens(-1);
         ActivateUiElement(menuOptions, false);
         viewingMenu = false;

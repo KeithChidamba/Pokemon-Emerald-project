@@ -277,7 +277,7 @@ public class Move_handler:MonoBehaviour,IInjectable
             while (displayHp < healthAfterChange)
             {
                 float newHp = Mathf.MoveTowards(displayHp, healthAfterChange
-                    ,data.affectedPokemon.healthPhase  * 10f *Time.deltaTime);
+                    ,data.affectedPokemon.healthPhase  * 10f *Time.unscaledDeltaTime);
                 displayHp = newHp;
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
 
@@ -312,7 +312,7 @@ public class Move_handler:MonoBehaviour,IInjectable
             }
             
             StartCoroutine(_battleVisualsHandler.DisplayDamageTakenVisual(data.affectedParticipant,damageSource));
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
             
             var healthAfterChange = Mathf
                 .Clamp(data.affectedPokemon.hp - damage,0,data.affectedPokemon.maxHp);
@@ -320,7 +320,7 @@ public class Move_handler:MonoBehaviour,IInjectable
             while (displayHp > healthAfterChange)
             {
                 float newHp = Mathf.MoveTowards(displayHp, healthAfterChange,
-                    (20f/data.affectedPokemon.healthPhase) * Time.deltaTime);
+                    (20f/data.affectedPokemon.healthPhase) * Time.unscaledDeltaTime);
                 displayHp = newHp;
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
                 yield return null;
@@ -585,6 +585,7 @@ public class Move_handler:MonoBehaviour,IInjectable
             }
             else//affecting attacker
             {
+                Debug.Log("getting up stat: "+ buffData.stat);
                 var data = new BuffDebuffData(attacker, buffData.stat, buffData.isIncreasing, buffData.amount);
                 ExecuteBuffOrDebuff(data);
             }
@@ -613,6 +614,7 @@ public class Move_handler:MonoBehaviour,IInjectable
     {
         var unModifiedStats = data.Receiver.statData;
         var affectedPokemon = data.Receiver.pokemon;
+        Debug.Log("changing up stat: "+ data.Stat);
         switch (data.Stat)
         {
             case Stat.Defense:

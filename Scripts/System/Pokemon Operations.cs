@@ -270,7 +270,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                 _dialogueHandler.DisplayBattleInfo(
                     $"{currentPokemon.pokemonName} already knows {moveName}", true);
             }
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSecondsRealtime(2f);
             yield break;
         }
         
@@ -287,7 +287,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                 
                 NewMoveAsset = moveFromAsset;
                 yield return new WaitUntil(()=>!LearningNewMove);
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSecondsRealtime(2f);
             }
             else
             {//wild pokemon get generated with somewhat random moveset choices
@@ -301,7 +301,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             {
                 _dialogueHandler.DisplayBattleInfo(
                     $"{currentPokemon.pokemonName} learned {moveName}",true);
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSecondsRealtime(2f);
             }
             currentPokemon.moveSet.Add(newMove);
         }

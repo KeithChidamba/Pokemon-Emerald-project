@@ -192,9 +192,9 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         while (_currentNavState==PCNavState.ExitingPC)
         {
             storageBoxExit.sprite = storageBoxExitSprites[0];
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
             storageBoxExit.sprite = storageBoxExitSprites[1];
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
         }
         storageBoxExit.sprite = storageBoxExitSprites[0];
     }
@@ -219,7 +219,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         while (_currentNavState==PCNavState.ViewingPokemonData)
         {
             pokemonDataVisual.sprite = pokemonDataVisualSprites[_pkmDataSpriteIndex];
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
             _pkmDataSpriteIndex = _pkmDataSpriteIndex+1>2? 0 : _pkmDataSpriteIndex+1;
         }
         pokemonDataVisual.sprite = pokemonDataVisualSprites[1];
@@ -245,13 +245,13 @@ public class pokemon_storage : MonoBehaviour,IInjectable
  
              boxSelectorImage.rectTransform.anchoredPosition = Vector2.MoveTowards(
                  boxSelectorImage.rectTransform.anchoredPosition,
-                 target, 500 * Time.deltaTime
+                 target, 500 * Time.unscaledDeltaTime
              );
              
              if (Vector2.Distance(boxSelectorImage.rectTransform.anchoredPosition, target) < 0.01f)
                  movingToTarget = !movingToTarget;
              
-             yield return new WaitForSeconds(0.25f);
+             yield return new WaitForSecondsRealtime(0.25f);
          }
     }
 

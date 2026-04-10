@@ -209,7 +209,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if (_turnBasedCombatHandler.currentTurnIndex > 1) return;
         var currentParticipant = GetCurrentParticipant();
         if (currentParticipant.isSemiInvulnerable) return;
-        if (currentParticipant.currentCoolDown.isCoolingDown) return;
+        if (currentParticipant.currentCoolDown.isCoolingDown || currentParticipant.currentCoolDown.executeTurn) return;
         _inputStateHandler.ResetRelevantUi(new[]
         {
             InputStateName.PokemonBattleEnemySelection,

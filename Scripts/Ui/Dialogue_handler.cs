@@ -199,7 +199,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             SetBattleTextBox();
             yield return TypeText(currentInteraction.interactionMessage);
             yield return new WaitUntil(()=>dialogueFinished);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             pendingMessages.RemoveAt(0);
         }
         messagesLoading = false;
@@ -288,13 +288,13 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
                     dialougeText.maxVisibleCharacters = lastChar + 1;
                     var canExit = canExitDialogue;
                     canExitDialogue = false;
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSecondsRealtime(1f);
                     canExitDialogue = canExit;
                     break;
                 }
 
                 dialougeText.maxVisibleCharacters = i + 1;
-                yield return new WaitForSeconds(typingSpeed);
+                yield return new WaitForSecondsRealtime(typingSpeed);
             }
 
             // Wait for input before next page

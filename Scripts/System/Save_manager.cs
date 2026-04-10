@@ -207,7 +207,7 @@ public class Save_manager : MonoBehaviour,IInjectable
         LoadPlayerData(); 
         LoadItemData();
         LoadPokemonData();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSecondsRealtime(1f);
         _gameLoadingHandler.AllowGameLoad();
     }
     public List<SettingsConfig> LoadGameSettingsData()
@@ -579,15 +579,15 @@ public class Save_manager : MonoBehaviour,IInjectable
         else
         {
             EraseSaveData();//empty old save data
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             //copy new save data
             yield return CopyCorrectSaveData(_tempSaveDataPath,_saveDataPath,recursive: true);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             EraseTemporarySaveData();
             _dialogueHandler.DisplayDetails("Game saved",false);
         }
         _dialogueHandler.EndDialogue(1.5f);
-        yield return new WaitForSeconds(1.4f);
+        yield return new WaitForSecondsRealtime(1.4f);
         _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
     }
 

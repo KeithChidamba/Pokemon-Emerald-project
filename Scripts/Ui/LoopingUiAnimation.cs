@@ -53,7 +53,7 @@ public class LoopingUiAnimation : MonoBehaviour
         _rectTransform.anchoredPosition = Vector2.MoveTowards(
             _rectTransform.anchoredPosition,
             target,
-            moveSpeed * Time.deltaTime
+            moveSpeed * Time.unscaledDeltaTime
         );
 
         if (Vector2.Distance(_rectTransform.anchoredPosition, target) < 0.01f)

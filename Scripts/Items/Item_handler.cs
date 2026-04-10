@@ -174,7 +174,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             OnItemUsageSuccessful?.Invoke(true);
             var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup)+1;
             _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+" leveled up!");
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             _selectedPartyPokemon.ReceiveExperience(exp-_selectedPartyPokemon.currentExpAmount);
             StartCoroutine(CompleteItemUsage(0));
         }
@@ -571,7 +571,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     private IEnumerator CompleteItemUsage(float skipDelay)
     {
         CompleteItemUsage();
-        yield return new WaitForSeconds(skipDelay);
+        yield return new WaitForSecondsRealtime(skipDelay);
         if(itemInUse.forPartyUse) _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
         SkipTurn();
     }
