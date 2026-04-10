@@ -553,6 +553,8 @@ public class Move_handler:MonoBehaviour,IInjectable
         }
         victim.isInfatuated = true;
     }
+
+
     void CheckBuffOrDebuffApplicability()
     {
         if (Utility.RandomRange(1, 101) > _currentTurn.move.buffOrDebuffChance)
@@ -560,9 +562,13 @@ public class Move_handler:MonoBehaviour,IInjectable
             _processingOrder = false; 
             return;
         }
-        //allows the display of buff message, must be here in case silent buff happened
+        StartCoroutine(HandleBuffOrDebuffApplication());
+    }
+    private IEnumerator HandleBuffOrDebuffApplication()
+    {
+        //allows the display of buff message, must be here in case silent buff happened before
         _battleOperationsHandler.canDisplayChange = true;
-        _battleVisualsHandler.OnStatVisualDisplayed += NotifyBuffVisualCompletion;
+        
         foreach (var buffData in _currentTurn.move.buffOrDebuffData)
         {
             if (!_currentTurn.move.isSelfTargeted)
@@ -577,44 +583,54 @@ public class Move_handler:MonoBehaviour,IInjectable
                     else
                     {
                         var data = new BuffDebuffData(victim, buffData.stat, buffData.isIncreasing, buffData.amount);
-                        ExecuteBuffOrDebuff(data);
+                        yield return ExecuteSequentialBuffOrDebuff(data);
                     }
                 } 
                 if(_currentTurn.move.isMultiTarget && _battleHandler.isDoubleBattle)
-                    StartCoroutine(MultiTargetBuff_Debuff(buffData.stat, buffData.isIncreasing, buffData.amount));
+                {
+                    yield return MultiTargetBuff_Debuff(buffData.stat, buffData.isIncreasing, buffData.amount);
+                }
             }
             else//affecting attacker
             {
-                Debug.Log("getting up stat: "+ buffData.stat);
                 var data = new BuffDebuffData(attacker, buffData.stat, buffData.isIncreasing, buffData.amount);
-                ExecuteBuffOrDebuff(data);
+                yield return ExecuteSequentialBuffOrDebuff(data);
             }
         }
-    }
-    private void NotifyBuffVisualCompletion()
-    {
-        _battleVisualsHandler.OnStatVisualDisplayed-=NotifyBuffVisualCompletion;
         _processingOrder = false;
     }
-    IEnumerator MultiTargetBuff_Debuff(Stat stat, bool isIncreasing,int buffAmount)
+    private IEnumerator ExecuteSequentialBuffOrDebuff(BuffDebuffData data)
+    {
+        bool awaitingCompletion = true;
+        _battleVisualsHandler.OnStatVisualDisplayed += NotifyBuffVisualCompletion;
+        ExecuteBuffOrDebuff(data);
+        yield return new WaitUntil(() => !awaitingCompletion);
+        void NotifyBuffVisualCompletion()
+        {
+            _battleVisualsHandler.OnStatVisualDisplayed-=NotifyBuffVisualCompletion;
+            awaitingCompletion = false;
+        }
+    }
+    private IEnumerator MultiTargetBuff_Debuff(Stat stat, bool isIncreasing,int buffAmount)
     {
         foreach (Battle_Participant enemy in new List<Battle_Participant>(attacker.currentEnemies) )
         {
             if (enemy.canBeDamaged && !victim.ProtectedFromStatChange(isIncreasing))
             {
                 var data = new BuffDebuffData(enemy, stat, isIncreasing,buffAmount);
-                ExecuteBuffOrDebuff(data);
+                yield return ExecuteSequentialBuffOrDebuff(data);
             }
             else
                 _dialogueHandler.DisplayBattleInfo(enemy.pokemon.pokemonName + " protected itself");
             yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
         }
     }
+    
     public void ExecuteBuffOrDebuff(BuffDebuffData data)
     {
         var unModifiedStats = data.Receiver.statData;
         var affectedPokemon = data.Receiver.pokemon;
-        Debug.Log("changing up stat: "+ data.Stat);
+
         switch (data.Stat)
         {
             case Stat.Defense:

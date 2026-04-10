@@ -61,10 +61,29 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         clearWeather = new WeatherCondition(Weather.Clear);
         currentWeather = clearWeather;
     }
-    
+
+    private void AddTurn(Turn turn)
+    {
+        Debug.Log("turn added");
+        _turnHistory.Add(turn);
+    }
+    private void RemoveTurn(int index)
+    {
+        Debug.Log("turn removed");
+        _turnHistory.RemoveAt(index);
+    }
+    private void ClearTurn()
+    {
+        Debug.Log("turn cleared");
+        _turnHistory.Clear();
+    }
     public void SaveTurn(Turn turn)
     {
-        _turnHistory.Add(turn);
+        if (_turnHistory.Any(t => t.attackerID == turn.attackerID))
+        {
+            return;
+        }
+        AddTurn(turn);
         if ((_battleHandler.isDoubleBattle && IsLastParticipant())
             || (currentTurnIndex == _battleHandler.participantCount))
         {
@@ -104,7 +123,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     {
         currentTurnIndex = 0;
         currentWeather.weather = Weather.Clear;
-        _turnHistory.Clear();
+        ClearTurn();
         faintEventDelay = false;
         StopAllCoroutines();
     }
@@ -238,7 +257,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         if (switchTurns.Count > 0)
         {
             var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();//prevent index out of range when removing turns
-            orderTurns.ForEach(index => _turnHistory.RemoveAt(index));
+            orderTurns.ForEach(index => RemoveTurn(index));
         }
         
 //handle all attacks
@@ -299,8 +318,8 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         }
         yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
         yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
-        
-        _turnHistory.Clear();
+
+        ClearTurn();
         OnTurnsCompleted?.Invoke();
         
         var validList = _battleHandler.GetValidParticipants();
@@ -334,9 +353,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                     }
                     else
                     {
-                        participant.currentCoolDown.executeTurn = true;
-                        _turnHistory.Add(new(participant.currentCoolDown.turnData));
-                        NextTurn();
+                        participant.currentCoolDown.isExecutionTurn = true;
+                        Debug.Log("added execute");
+                        AddTurn(new(participant.currentCoolDown.turnData));
                     }
                 }
             }
@@ -345,7 +364,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             
             if(!participant.isSemiInvulnerable)continue;
             
-            _turnHistory.Add(new Turn(participant.semiInvulnerabilityData.turnData));
+            AddTurn(new Turn(participant.semiInvulnerabilityData.turnData));
         }
         
         yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
@@ -483,17 +502,21 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         if (_battleHandler.battleOver) yield break;
         var participant = _battleHandler.GetCurrentParticipant();
         if (!participant.currentCoolDown.isCoolingDown) yield break;
-        if (participant.currentCoolDown.executeTurn) yield break;
-        
-        if (participant.currentCoolDown.displayMessage)
+        if (participant.currentCoolDown.isExecutionTurn)
         {
+            NextTurn();
+            yield break;
+        }
+        
+        if (participant.currentCoolDown.canDisplayMessage)
+        {
+            Debug.Log("check store");
             _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName
                                                         +participant.currentCoolDown.message);
             yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
         }
         participant.currentCoolDown.numTurns--;
         NextTurn();
-        
     }
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
@@ -540,7 +563,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public void RemoveTurn()
     {
         //player wants to change their turn usage
-        _turnHistory.RemoveAt(currentTurnIndex-1);
+        RemoveTurn(currentTurnIndex-1);
         currentTurnIndex --;
         _inputStateHandler.OnStateRemoved += _battleHandler.SetupOptionsInput;
     }
@@ -570,7 +593,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     {
         var orderBySpeed = _turnHistory.OrderByDescending(p => _battleHandler.battleParticipants[p.attackerIndex].pokemon.speed).ToList();
         var priorityList = orderBySpeed.OrderByDescending(p => p.move.priority).ToList();
-        _turnHistory.Clear();
+        ClearTurn();
         _turnHistory.AddRange(priorityList);
     }
 

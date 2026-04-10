@@ -18,6 +18,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Turn_Based_Combat turnBasedCombatHandler;
     [SerializeField] private Move_handler moveUsageHandler;
     [SerializeField] private MoveLogicHandler moveLogicHandler;
+    [SerializeField] private MoveLogicDatabase moveLogicDatabase;
     [SerializeField] private Options_manager dialogueOptionsHandler;
     [SerializeField] private Game_ui_manager gameUIHandler;
     [SerializeField] private Bag playerBagHandler;
@@ -37,6 +38,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Item_handler itemHandler;
     [SerializeField] private Move_handler moveHandler;
     [SerializeField] private GameSettingsHandler gameSettingsHandler;
+
     private void Awake()
     {
         _container = new ServiceContainer();
@@ -71,6 +73,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(moveHandler);
         _container.RegisterSingleton(battleOperationsHandler);
         _container.RegisterSingleton(gameSettingsHandler);
+        _container.RegisterSingleton(moveLogicDatabase);
         
         Obj_Instance.GetContainer(_container);//static class dependency
         

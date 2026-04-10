@@ -5,10 +5,10 @@ public class TurnCoolDown
     public int numTurns;
     public Turn turnData;
     public string message;
-    public bool displayMessage;
+    public bool canDisplayMessage;
     public Battle_Participant participant;
     public bool isCoolingDown;
-    public bool executeTurn;
+    public bool isExecutionTurn;
     private Move_handler _moveUsageHandler;
 
     public TurnCoolDown(Battle_Participant participantParent,Move_handler moveUsageHandler)
@@ -23,7 +23,7 @@ public class TurnCoolDown
         turnData = turn;
         this.numTurns = numTurns;
         this.message = message;
-        displayMessage = display;
+        canDisplayMessage = display;
         isCoolingDown = coolingDown;
     }
     public void ResetState()
@@ -32,9 +32,9 @@ public class TurnCoolDown
         numTurns = 0;
         message = string.Empty;
         turnData = null;
-        displayMessage = false;
+        canDisplayMessage = false;
         isCoolingDown = false;
-        executeTurn = false;
+        isExecutionTurn = false;
     }
     public void StoreDamage(float damage,Battle_Participant victim)
     {

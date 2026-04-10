@@ -7,22 +7,22 @@
     "gender": 2,
     "ratioFemale": 0.0,
     "nature": {
-        "instanceID": 26674
+        "instanceID": 26676
     },
     "hasGender": true,
-    "hp": 79.0,
-    "maxHp": 79.0,
+    "hp": 81.0,
+    "maxHp": 81.0,
     "baseHp": 60.0,
     "baseAttack": 85.0,
     "baseDefense": 60.0,
     "baseSpecialAttack": 85.0,
     "baseSpecialDefense": 60.0,
     "baseSpeed": 55.0,
-    "attack": 51.0,
-    "defense": 47.0,
-    "specialAttack": 54.0,
-    "specialDefense": 39.0,
-    "speed": 45.0,
+    "attack": 53.0,
+    "defense": 48.0,
+    "specialAttack": 56.0,
+    "specialDefense": 40.0,
+    "speed": 47.0,
     "hpIv": 27.0,
     "attackIv": 16.0,
     "defenseIv": 30.0,
@@ -30,11 +30,11 @@
     "specialDefenseIv": 2.0,
     "speedIv": 21.0,
     "hpEv": 0.0,
-    "attackEv": 0.0,
+    "attackEv": 2.0,
     "defenseEv": 0.0,
     "specialAttackEv": 0.0,
-    "specialDefenseEv": 0.0,
-    "speedEv": 0.0,
+    "specialDefenseEv": 3.0,
+    "speedEv": 2.0,
     "effortValues": [
         {
             "stat": 1,
@@ -49,23 +49,23 @@
     "evasion": 100.0,
     "critChance": 6.25,
     "catchRate": 45.0,
-    "currentLevel": 27,
-    "currentExpAmount": 17240,
-    "currentLevelExpAmount": 9,
-    "nextLevelExpAmount": 17242,
+    "currentLevel": 29,
+    "currentExpAmount": 17513,
+    "currentLevelExpAmount": 17242,
+    "nextLevelExpAmount": 19411,
     "expGroup": 3,
     "expYield": 142,
     "canEvolve": true,
-    "friendshipLevel": 223,
+    "friendshipLevel": 226,
     "hasTrainer": true,
     "canBeFlinched": true,
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26380
+            "instanceID": 26382
         },
         {
-            "instanceID": 27602
+            "instanceID": 27604
         }
     ],
     "statusEffect": 0,
@@ -155,27 +155,27 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -5416
+            "instanceID": -9332
         },
         {
-            "instanceID": -5418
+            "instanceID": -9334
         },
         {
-            "instanceID": -5420
+            "instanceID": -9336
         },
         {
-            "instanceID": -5422
+            "instanceID": -9338
         }
     ],
     "ability": {
-        "instanceID": 27282
+        "instanceID": 27284
     },
     "evolutions": [
         {
-            "instanceID": 27964
+            "instanceID": 27966
         },
         {
-            "instanceID": 25928
+            "instanceID": 25930
         }
     ],
     "heldItem": {
@@ -183,19 +183,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 27424
+        "instanceID": 27426
     },
     "backPicture": {
-        "instanceID": 27848
+        "instanceID": 27850
     },
     "partyFrame1": {
-        "instanceID": 26192
+        "instanceID": 26194
     },
     "partyFrame2": {
-        "instanceID": 27038
+        "instanceID": 27040
     },
     "battleIntroFrame": {
-        "instanceID": 26528
+        "instanceID": 26530
     },
     "pokeballName": "Regular Pokeball",
     "healthPhase": 1,
@@ -216,7 +216,7 @@
             "maxPowerpoints": 15
         },
         {
-            "moveName": "focus energy",
+            "moveName": "bulk up",
             "powerPoints": 30,
             "maxPowerpoints": 30
         },

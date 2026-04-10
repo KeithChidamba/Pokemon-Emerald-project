@@ -5,6 +5,7 @@ public static class NameDB
     {
         return learnSetMoveNames[moveName];
     }
+
     public static Dictionary<LearnSetMoveName, string> learnSetMoveNames = new()
     {
         // 🐞 Bug-type

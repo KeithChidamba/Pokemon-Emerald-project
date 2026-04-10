@@ -209,7 +209,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if (_turnBasedCombatHandler.currentTurnIndex > 1) return;
         var currentParticipant = GetCurrentParticipant();
         if (currentParticipant.isSemiInvulnerable) return;
-        if (currentParticipant.currentCoolDown.isCoolingDown || currentParticipant.currentCoolDown.executeTurn) return;
+        if (currentParticipant.currentCoolDown.isCoolingDown) return;
         _inputStateHandler.ResetRelevantUi(new[]
         {
             InputStateName.PokemonBattleEnemySelection,
@@ -569,6 +569,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         var playerWhiteOut = false;
         yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+        _inputStateHandler.OnStateChanged -= EnableBattleMessage;
         _inputStateHandler.AddDialoguePlaceHolderState();
         if (battleTerminated)
         {
@@ -661,7 +662,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private IEnumerator ResetUiAfterBattle(bool playerWhiteOut)
     {
-        _inputStateHandler.OnStateChanged -= EnableBattleMessage;
         OnBattleEnd?.Invoke();
         _dialogueHandler.EndDialogue();
         _inputStateHandler.ResetRelevantUi(new[]

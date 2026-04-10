@@ -7,10 +7,10 @@
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 26262
+        "instanceID": 26264
     },
     "hasGender": true,
-    "hp": 1000.0,
+    "hp": 1099.0,
     "maxHp": 1099.0,
     "baseHp": 40.0,
     "baseAttack": 45.0,
@@ -30,11 +30,11 @@
     "specialDefenseIv": 14.0,
     "speedIv": 16.0,
     "hpEv": 0.0,
-    "attackEv": 0.0,
+    "attackEv": 2.0,
     "defenseEv": 0.0,
     "specialAttackEv": 0.0,
-    "specialDefenseEv": 0.0,
-    "speedEv": 0.0,
+    "specialDefenseEv": 3.0,
+    "speedEv": 2.0,
     "effortValues": [
         {
             "stat": 5,
@@ -46,7 +46,7 @@
     "critChance": 6.25,
     "catchRate": 225.0,
     "currentLevel": 21,
-    "currentExpAmount": 8001,
+    "currentExpAmount": 8274,
     "currentLevelExpAmount": 0,
     "nextLevelExpAmount": 9261,
     "expGroup": 2,
@@ -58,10 +58,10 @@
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 27804
+            "instanceID": 27806
         },
         {
-            "instanceID": 25572
+            "instanceID": 25574
         }
     ],
     "statusEffect": 0,
@@ -133,27 +133,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -5466
+            "instanceID": -9342
         },
         {
-            "instanceID": -5468
+            "instanceID": -9344
         },
         {
-            "instanceID": -5470
+            "instanceID": -9346
         },
         {
-            "instanceID": -5472
+            "instanceID": -9348
         }
     ],
     "ability": {
-        "instanceID": 25310
+        "instanceID": 25312
     },
     "evolutions": [
         {
-            "instanceID": 27494
+            "instanceID": 27496
         },
         {
-            "instanceID": 26768
+            "instanceID": 26770
         }
     ],
     "heldItem": {
@@ -161,19 +161,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 27240
+        "instanceID": 27242
     },
     "backPicture": {
-        "instanceID": 27004
+        "instanceID": 27006
     },
     "partyFrame1": {
-        "instanceID": 26124
+        "instanceID": 26126
     },
     "partyFrame2": {
-        "instanceID": 26950
+        "instanceID": 26952
     },
     "battleIntroFrame": {
-        "instanceID": 27822
+        "instanceID": 27824
     },
     "pokeballName": "Pokeball",
     "healthPhase": 1,
@@ -195,7 +195,7 @@
         },
         {
             "moveName": "fly",
-            "powerPoints": 34,
+            "powerPoints": 35,
             "maxPowerpoints": 35
         },
         {

@@ -7,10 +7,10 @@
     "gender": 2,
     "ratioFemale": 12.5,
     "nature": {
-        "instanceID": 26674
+        "instanceID": 26676
     },
     "hasGender": true,
-    "hp": 66.0,
+    "hp": 75.0,
     "maxHp": 75.0,
     "baseHp": 70.0,
     "baseAttack": 85.0,
@@ -52,16 +52,16 @@
     "expGroup": 3,
     "expYield": 143,
     "canEvolve": true,
-    "friendshipLevel": 222,
+    "friendshipLevel": 221,
     "hasTrainer": true,
     "canBeFlinched": true,
     "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26096
+            "instanceID": 26098
         },
         {
-            "instanceID": 25350
+            "instanceID": 25352
         }
     ],
     "statusEffect": 0,
@@ -158,27 +158,27 @@
     ],
     "moveSet": [
         {
-            "instanceID": -5426
+            "instanceID": -9382
         },
         {
-            "instanceID": -5428
+            "instanceID": -9384
         },
         {
-            "instanceID": -5430
+            "instanceID": -9386
         },
         {
-            "instanceID": -5432
+            "instanceID": -9388
         }
     ],
     "ability": {
-        "instanceID": 26904
+        "instanceID": 26906
     },
     "evolutions": [
         {
-            "instanceID": 27048
+            "instanceID": 27050
         },
         {
-            "instanceID": 25586
+            "instanceID": 25588
         }
     ],
     "heldItem": {
@@ -186,22 +186,22 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 27222
+        "instanceID": 27224
     },
     "backPicture": {
-        "instanceID": 25946
+        "instanceID": 25948
     },
     "partyFrame1": {
-        "instanceID": 25992
+        "instanceID": 25994
     },
     "partyFrame2": {
-        "instanceID": 26210
+        "instanceID": 26212
     },
     "battleIntroFrame": {
-        "instanceID": 25956
+        "instanceID": 25958
     },
     "pokeballName": "Pokeball",
-    "healthPhase": 1,
+    "healthPhase": 3,
     "abilityName": "Torrent",
     "natureName": "Timid",
     "evolutionNames": [
@@ -225,12 +225,12 @@
         },
         {
             "moveName": "surf",
-            "powerPoints": 23,
+            "powerPoints": 25,
             "maxPowerpoints": 25
         },
         {
             "moveName": "take down",
-            "powerPoints": 19,
+            "powerPoints": 20,
             "maxPowerpoints": 20
         }
     ]

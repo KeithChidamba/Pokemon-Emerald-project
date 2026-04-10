@@ -104,7 +104,6 @@ public class BattleOperations : MonoBehaviour,IInjectable
         var desiredBuff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);
         if (desiredBuff == null)
         {
-            Debug.Log("desired buff stat: "+ data.Stat);
             desiredBuff = CreateNewBuff(data.Stat);
             data.Receiver.pokemon.buffAndDebuffs.Add(desiredBuff);
         }
@@ -134,9 +133,8 @@ public class BattleOperations : MonoBehaviour,IInjectable
         var change = 0;
         var message="";
         var indexLimitHigh = (buff.stat == Stat.Crit) ? 2 : 5;
-        var indexLimitLow = (buff.stat ==  Stat.Crit) ? 1 : -5;
-        Debug.Log("valid buff stat: "+ buff.stat);
-        Debug.Log("valid buff stat name: "+ buff.statName);
+        var indexLimitLow = (buff.stat == Stat.Crit) ? 1 : -5;
+
         if (buff.stage > indexLimitHigh && increased)
         {
             buff.isAtLimit = true;
@@ -163,7 +161,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
             change = buff.stage-changeValue;
             message = participant.pokemon.pokemonName+"'s "+buff.statName+" fell!";
         }
-        Debug.Log(message);
+        
         if (canDisplayChange)
         {
             _battleVisualsHandler.SelectStatChangeVisuals(buff.stat,participant,message);

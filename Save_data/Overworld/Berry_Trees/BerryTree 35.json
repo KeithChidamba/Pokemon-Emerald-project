@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Sitrus berry",
     "berryItem": {
-        "instanceID": 25766
+        "instanceID": 25768
     },
     "treeIndex": 35,
     "minutesPerStage": 90,
@@ -16,13 +16,35 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32628
+                    "instanceID": 32586
+                },
+                {
+                    "instanceID": 32586
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32588
+                },
+                {
+                    "instanceID": 32590
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32626
                 },
                 {
                     "instanceID": 32628
                 }
             ],
-            "growthStageNumber": 0
+            "growthStageNumber": 2
         },
         {
             "growthStageSprites": [
@@ -33,41 +55,19 @@
                     "instanceID": 32632
                 }
             ],
-            "growthStageNumber": 1
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 33186
-                },
-                {
-                    "instanceID": 33188
-                }
-            ],
-            "growthStageNumber": 2
-        },
-        {
-            "growthStageSprites": [
-                {
-                    "instanceID": 33190
-                },
-                {
-                    "instanceID": 33192
-                }
-            ],
             "growthStageNumber": 3
         },
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33194
+                    "instanceID": 32634
                 },
                 {
-                    "instanceID": 33196
+                    "instanceID": 32636
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-04-07T13:34:33.7502520+02:00"
+    "lastLogin": "2026-04-10T13:52:37.8771410+02:00"
 }
