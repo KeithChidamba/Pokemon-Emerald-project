@@ -646,6 +646,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         }
         yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         _dialogueHandler.EndDialogue();
+        _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
         yield return _battleIntroHandler.BlackFade();
         yield return ResetUiAfterBattle(playerWhiteOut);
         //battle triggered from fishing
@@ -685,6 +686,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
                 battleParticipants[i].ResetParticipantState();
                 battleParticipants[i].DeactivateUI();
                 battleParticipants[i].pokemon = null;
+                battleParticipants[i].pokemonTrainerAI = null;
             }
         }
         OnBattleResult?.Invoke(battleWon);
@@ -695,7 +697,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if(playerWhiteOut) _dialogueOptionsHandler.HealPartyPokemon();
         _areaHandler.SwitchToArea(location);
         _dialogueHandler.canExitDialogue = true;
-        _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
         battleWon = false;
         battleOver = false;
         yield return new WaitForSeconds(1f);

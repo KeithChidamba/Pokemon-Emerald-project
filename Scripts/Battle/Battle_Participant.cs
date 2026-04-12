@@ -279,7 +279,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         
         pokemonImage.rectTransform.anchoredPosition = _defaultImagePosition;
         pokemonImage.color = Color.white;
-        pokemonTrainerAI = null;
+       
         _turnBasedCombatHandler.OnMoveExecute -= statusHandler.CheckTrapDuration;
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.StunCheck;
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.CheckStatDropImmunity;

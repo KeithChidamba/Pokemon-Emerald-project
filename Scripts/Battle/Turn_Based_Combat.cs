@@ -81,6 +81,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     {
         if (_turnHistory.Any(t => t.attackerID == turn.attackerID))
         {
+            Debug.Log("duplicate detected, index of : "+turn.attackerIndex);
             return;
         }
         AddTurn(turn);
@@ -257,7 +258,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         if (switchTurns.Count > 0)
         {
             var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();//prevent index out of range when removing turns
-            orderTurns.ForEach(index => RemoveTurn(index));
+            orderTurns.ForEach(RemoveTurn);
         }
         
 //handle all attacks
@@ -275,11 +276,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             attacker.isSemiInvulnerable = false;
             
             //check on participants
-            if (!IsValidParticipantState(attacker))
-                continue;
+            if (!IsValidParticipantState(attacker)) continue;
             
-            if (!IsValidParticipant(currentTurn,attacker))
-                continue;
+            if (!IsValidParticipant(currentTurn,attacker)) continue;
             
             if (!IsValidParticipantState(victim))
             {

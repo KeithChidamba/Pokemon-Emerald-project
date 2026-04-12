@@ -100,7 +100,6 @@ public class Enemy_trainer : BattleParticipantModule
                     if(participant.pokemon.hp<=0)
                     {
                         participant.DeactivateParticipant();
-                        participant.pokemon = null;
                         participant.DeactivateUI();
                         _battleHandler.CheckParticipantStates();
                     }

@@ -8,8 +8,8 @@ using UnityEngine;
 public class MoveLogicHandler : MonoBehaviour,IInjectable
 {
     private Turn _currentTurn;
-    [SerializeField]private Battle_Participant attacker;
-    [SerializeField]private Battle_Participant victim;
+    private Battle_Participant _attacker;
+    private Battle_Participant _victim;
     public bool moveDelay;
     
     private Dialogue_handler _dialogueHandler;
@@ -29,8 +29,8 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     
     public IEnumerator DetermineMoveLogic(Battle_Participant attacker, Battle_Participant victim, Turn currentTurn)
     {
-        this.attacker = attacker;
-        this.victim = victim;
+        _attacker = attacker;
+        _victim = victim;
         _currentTurn = currentTurn;
         
         moveDelay = true;
@@ -75,14 +75,14 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
 
     private IEnumerator HandleUniqueLogic()
     {
-        yield return _moveLogicDatabase.InvokeMoveLogic(_currentTurn.move.moveName,attacker,victim,_currentTurn);
+        yield return _moveLogicDatabase.InvokeMoveLogic(_currentTurn.move.moveName,_attacker,_victim,_currentTurn);
         moveDelay = false;
     }
     public List<Battle_Participant> TargetAllExceptSelf()
     {
         var allParticipants = _battleHandler.battleParticipants.ToList();
         allParticipants.RemoveAll(p => !p.isActive);
-        allParticipants.RemoveAll(p => p.pokemon.pokemonID == attacker.pokemon.pokemonID);
+        allParticipants.RemoveAll(p => p.pokemon.pokemonID == _attacker.pokemon.pokemonID);
         return allParticipants;
     }
     IEnumerator ExecuteConsecutiveMove()
@@ -96,23 +96,23 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         var numHits = 0;
         for (int i = 0; i < consecutiveMoveInfo.numHits; i++)
         {
-            if (!victim.canBeDamaged)
+            if (!_victim.canBeDamaged)
             {
-                _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonName+" protected itself");
+                _dialogueHandler.DisplayBattleInfo(_victim.pokemon.pokemonName+" protected itself");
                 break;
             }
-            if (victim.pokemon.hp <= 0) break;
+            if (_victim.pokemon.hp <= 0) break;
             
             _dialogueHandler.DisplayBattleInfo("Hit "+(i+1)+"!");//remove later if added animations
-            _moveUsageHandler.DisplayDamage(victim,false);
+            _moveUsageHandler.DisplayDamage(_victim,false);
             yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
             numHits++;
             yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         }
-        if (numHits>0 && consecutiveMoveInfo.displayHitCount && victim.pokemon.hp > 0)
+        if (numHits>0 && consecutiveMoveInfo.displayHitCount && _victim.pokemon.hp > 0)
         {
             _moveUsageHandler.DisplayEffectiveness
-                (BattleOperations.CheckTypeEffectiveness(victim, _currentTurn.move.type), victim);
+                (BattleOperations.CheckTypeEffectiveness(_victim, _currentTurn.move.type), _victim);
             _dialogueHandler.DisplayBattleInfo("It hit (x" + numHits + ") times");
         }
         yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
@@ -140,7 +140,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         switch (multiTargetInfo.target)
         {
             case Target.AllEnemies :
-                targets = attacker.currentEnemies;
+                targets = _attacker.currentEnemies;
                 break;
             case Target.AllExceptSelf :
                 targets = TargetAllExceptSelf();
@@ -152,21 +152,21 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     IEnumerator DrainHealth()
     {
         var healthDrainInfo = _currentTurn.move.GetModule<HealthDrainMoveInfo>();
-        var damage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move,victim);
-        var healAmount = victim.pokemon.hp-damage<=0 ? victim.pokemon.hp : damage; 
+        var damage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move,_victim);
+        var healAmount = _victim.pokemon.hp-damage<=0 ? _victim.pokemon.hp : damage; 
         healAmount *= healthDrainInfo.percentageOfDamage/100f;
         
-        _moveUsageHandler.DisplayDamage(victim,isSpecificDamage:true,predefinedDamage:damage);
+        _moveUsageHandler.DisplayDamage(_victim,isSpecificDamage:true,predefinedDamage:damage);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
 
-        if (attacker.pokemon.hp >= attacker.pokemon.maxHp)
+        if (_attacker.pokemon.hp >= _attacker.pokemon.maxHp)
         {
             moveDelay = false;
             yield break;
         }
         
-        _moveUsageHandler.HealthGainDisplay(healAmount,healthGainer:attacker);
-        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" gained health");
+        _moveUsageHandler.HealthGainDisplay(healAmount,healthGainer:_attacker);
+        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName+" gained health");
         yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);
         moveDelay = false;
@@ -174,21 +174,21 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
 
     private IEnumerator ApplyDamageProtection()
     {
-        if(attacker.previousMove.move.moveName == _currentTurn.move.moveName)
+        if(_attacker.previousMove.move.moveName == _currentTurn.move.moveName)
         {
             int chance = 100;
-            for (int i = 0; i < attacker.previousMove.numRepetitions; i++)
+            for (int i = 0; i < _attacker.previousMove.numRepetitions; i++)
                 chance /= 2;
             if (Utility.RandomRange(1, 101) <= chance)
-                attacker.canBeDamaged = false;
+                _attacker.canBeDamaged = false;
             else
             {
-                attacker.canBeDamaged = true;
+                _attacker.canBeDamaged = true;
                 _dialogueHandler.DisplayBattleInfo("It failed!");
             }
         }
         else
-            attacker.canBeDamaged = false;
+            _attacker.canBeDamaged = false;
         yield return null;
         moveDelay = false;
     }
@@ -247,63 +247,63 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             moveDelay = false;
             yield break;
         } 
-        var damageModifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,_turnBasedCombatHandler,damageModifierInfo,attacker);
-        attacker.OnPokemonFainted += ()=> damageModifier.RemoveOnSwitchOut(attacker);
+        var damageModifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,_turnBasedCombatHandler,damageModifierInfo,_attacker);
+        _attacker.OnPokemonFainted += ()=> damageModifier.RemoveOnSwitchOut(_attacker);
         _battleHandler.OnSwitchOut += damageModifier.RemoveOnSwitchOut;
         _moveUsageHandler.AddFieldDamageModifier(damageModifier);
         moveDelay = false;
     }
     private IEnumerator IdentifyTarget()
     {
-        if (victim.immunityNegations.Any(n=> 
+        if (_victim.immunityNegations.Any(n=> 
                 n.moveName==ImmunityNegationMove.Foresight))
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             moveDelay = false;
             yield break;
         }
-        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonName +" was identified!");
-        victim.pokemon.buffAndDebuffs
+        _dialogueHandler.DisplayBattleInfo(_victim.pokemon.pokemonName +" was identified!");
+        _victim.pokemon.buffAndDebuffs
             .RemoveAll(b => b.stat == Stat.Evasion);
-        victim.pokemon.evasion = 100;
-        if(victim.pokemon.HasType(Types.Ghost))
+        _victim.pokemon.evasion = 100;
+        if(_victim.pokemon.HasType(Types.Ghost))
         {
             var newImmunityNegation = new TypeImmunityNegation(_battleHandler,ImmunityNegationMove.Foresight
-                , attacker, victim);
+                , _attacker, _victim);
 
             newImmunityNegation.ImmunityNegationTypes.Add(Types.Fighting);
             newImmunityNegation.ImmunityNegationTypes.Add(Types.Normal);
-            attacker.OnPokemonFainted += () => newImmunityNegation.RemoveNegationOnSwitchOut(attacker);
+            _attacker.OnPokemonFainted += () => newImmunityNegation.RemoveNegationOnSwitchOut(_attacker);
             _battleHandler.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
-            victim.immunityNegations.Add(newImmunityNegation);
+            _victim.immunityNegations.Add(newImmunityNegation);
         }
         moveDelay = false;
     }
     private IEnumerator ExecuteSemiInvulnerableMove()
     {
-        if (attacker.semiInvulnerabilityData.executionTurn)
+        if (_attacker.semiInvulnerabilityData.executionTurn)
         {
-            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName
-                                                        + attacker.semiInvulnerabilityData.onHitMessage);
-            _moveUsageHandler.DisplayDamage(victim);
-            attacker.semiInvulnerabilityData.executionTurn = false;
+            _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName
+                                                        + _attacker.semiInvulnerabilityData.onHitMessage);
+            _moveUsageHandler.DisplayDamage(_victim);
+            _attacker.semiInvulnerabilityData.executionTurn = false;
             moveDelay = false;
             yield break;
         }
 
         var semiInvulnerableData = _currentTurn.move.GetModule<SemiInvulnerabilityInfo>();
         
-        attacker.semiInvulnerabilityData.displayMessage = semiInvulnerableData.displayMessage;
-        attacker.semiInvulnerabilityData.onHitMessage = semiInvulnerableData.onHitMessage;
-        attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
+        _attacker.semiInvulnerabilityData.displayMessage = semiInvulnerableData.displayMessage;
+        _attacker.semiInvulnerabilityData.onHitMessage = semiInvulnerableData.onHitMessage;
+        _attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
 
-        attacker.semiInvulnerabilityData.semiInvulnerabilities
+        _attacker.semiInvulnerabilityData.semiInvulnerabilities
             .AddRange(semiInvulnerableData.semiInvulnerabilities);
 
-        attacker.isSemiInvulnerable = true;
+        _attacker.isSemiInvulnerable = true;
         _currentTurn.move.isSureHit = false;
-        attacker.semiInvulnerabilityData.executionTurn = true;
-        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+semiInvulnerableData.executionMessage);
+        _attacker.semiInvulnerabilityData.executionTurn = true;
+        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName+semiInvulnerableData.executionMessage);
         moveDelay = false;
     }
     
@@ -317,9 +317,9 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     }
     private IEnumerator HealFromWeather()
     {
-        if (attacker.pokemon.hp >= attacker.pokemon.maxHp)
+        if (_attacker.pokemon.hp >= _attacker.pokemon.maxHp)
         {
-            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+"'s health is already full!");
+            _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName+"'s health is already full!");
             moveDelay = false;
             yield break;
         }
@@ -340,13 +340,13 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
                 fraction = 1f / 2f; 
                 break;
         }
-        int healthGain = Mathf.FloorToInt(attacker.pokemon.maxHp * fraction);
+        int healthGain = Mathf.FloorToInt(_attacker.pokemon.maxHp * fraction);
         
-        if (healthGain < 1 && attacker.pokemon.hp < attacker.pokemon.maxHp) healthGain = 1;
+        if (healthGain < 1 && _attacker.pokemon.hp < _attacker.pokemon.maxHp) healthGain = 1;
         
-        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" restored it's health!");
+        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName+" restored it's health!");
 
-        _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:attacker);
+        _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:_attacker);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);
         moveDelay = false;
     }

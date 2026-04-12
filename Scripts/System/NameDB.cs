@@ -172,6 +172,24 @@ public static class NameDB
             return "Special Defense";
         return stat.ToString();
     }
+    public static string GetShortStatName(Stat stat)
+    {
+        if (stat == Stat.SpecialAttack)
+            return "SpAtk";
+        if (stat == Stat.SpecialDefense)
+            return "SpDef";
+        if (stat == Stat.Defense)
+            return "Def";
+        if (stat == Stat.Attack)
+            return "Atk";
+        if (stat == Stat.Speed)
+            return "Spd";
+        if (stat == Stat.Accuracy)
+            return "Acc";
+        if (stat == Stat.Evasion)
+            return "Eva";
+        return stat.ToString();
+    }
 }
 
 public enum TM_Name

@@ -114,19 +114,25 @@ public class BattleOperations : MonoBehaviour,IInjectable
     }
     public static string GetBuffResultMessage(bool isIncreasing,Pokemon pokemon,Stat[] buffs)
     {
-        string buffNames="";
-        for (int i = 0; i < buffs.Length; i++)
+        //shorten stat names to be more readable
+        string buffNameString=""; 
+        List<string> shortBuffNames = new();
+        foreach (var buff in buffs)
         {
-            if (i == buffs.Length - 1)
-                buffNames += buffs[i];
-            else if(i == buffs.Length - 2)
-                buffNames += buffs[i] + " and ";
-            else
-                buffNames += buffs[i] + ", ";
+            shortBuffNames.Add(NameDB.GetShortStatName(buff));
         }
-        if(isIncreasing) return pokemon.pokemonName+"'s "+buffNames+" rose";
+        for (int i = 0; i < shortBuffNames.Count; i++) 
+        {
+            if (i == shortBuffNames.Count - 1)
+                buffNameString += shortBuffNames[i];
+            else if(i == shortBuffNames.Count - 2)
+                buffNameString += shortBuffNames[i] + " and ";
+            else
+                buffNameString += shortBuffNames[i] + ", ";
+        }
+        if(isIncreasing) return pokemon.pokemonName+"'s "+buffNameString+" rose";
         
-        return pokemon.pokemonName+"'s "+buffNames+" fell";
+        return pokemon.pokemonName+"'s "+buffNameString+" fell";
     }
     private int ValidateBuffLimit(Battle_Participant participant,Buff_Debuff buff,bool increased,int changeValue)
     {

@@ -21,7 +21,8 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private BattleOperations _battleOperationsHandler;
     private MoveLogicHandler _moveLogicHandler;
 
-    private readonly Dictionary<string, IEnumerator> _logicMethods = new();
+    private Dictionary<string, Func<IEnumerator>> _logicMethods = new();
+    
     public void Inject(ServiceContainer container)
     {
         _battleOperationsHandler = container.Resolve<BattleOperations>();
@@ -39,23 +40,23 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private void OnInject()
     {
-        _logicMethods.Add("brickbreak", BrickBreak());
-        _logicMethods.Add("haze", Haze());
-        _logicMethods.Add("hyperbeam", Hyperbeam());
-        _logicMethods.Add("bide", Bide());
-        _logicMethods.Add("sonicboom", Sonicboom());
-        _logicMethods.Add("takedown", TakeDown());
-        _logicMethods.Add("magnitude", Magnitude());
-        _logicMethods.Add("endeavor", Endeavor());
-        _logicMethods.Add("furycutter", FuryCutter());
-        _logicMethods.Add("silverwind", Silverwind());
-        _logicMethods.Add("flail", Flail());
-        _logicMethods.Add("falseswipe", FalseSwipe());
-        _logicMethods.Add("bellydrum", BellyDrum());
-        _logicMethods.Add("covet", Covet());
-        _logicMethods.Add("mirrormove", MirrorMove());
-        _logicMethods.Add("whirlwind", Whirlwind());
-        _logicMethods.Add("rest", Rest());
+        _logicMethods.Add("brickbreak", BrickBreak);
+        _logicMethods.Add("haze", Haze);
+        _logicMethods.Add("hyperbeam", Hyperbeam);
+        _logicMethods.Add("bide", Bide);
+        _logicMethods.Add("sonicboom", Sonicboom);
+        _logicMethods.Add("takedown", TakeDown);
+        _logicMethods.Add("magnitude", Magnitude);
+        _logicMethods.Add("endeavor", Endeavor);
+        _logicMethods.Add("furycutter", FuryCutter);
+        _logicMethods.Add("silverwind", Silverwind);
+        _logicMethods.Add("flail", Flail);
+        _logicMethods.Add("falseswipe", FalseSwipe);
+        _logicMethods.Add("bellydrum", BellyDrum);
+        _logicMethods.Add("covet", Covet);
+        _logicMethods.Add("mirrormove", MirrorMove);
+        _logicMethods.Add("whirlwind", Whirlwind);
+        _logicMethods.Add("rest", Rest);
     }
     public IEnumerator InvokeMoveLogic(string moveName,Battle_Participant attacker, Battle_Participant victim, Turn currentTurn)
     {
@@ -63,8 +64,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _victim = victim;
         _currentTurn = currentTurn;
         var formattedName = moveName.Replace(" ", "").ToLower();
+        
         if (_logicMethods.TryGetValue(formattedName, out var abilityMethod))
-            yield return abilityMethod;
+        {
+            yield return abilityMethod();
+        }
         else
             Debug.LogWarning($"Move '{formattedName}' not found!");
     }
@@ -110,7 +114,6 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Bide()
     {
-        Debug.Log("bide execute: "+_attacker.currentCoolDown.isExecutionTurn);
         if (_attacker.currentCoolDown.isExecutionTurn)
         {
             _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName+" unleashed the power");
@@ -125,16 +128,19 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             {
                 _dialogueHandler.DisplayBattleInfo("But it failed!");
             }
-            Debug.Log("bide reset");
+           
             _moveUsageHandler.OnDamageDeal -= _attacker.currentCoolDown.StoreDamage;
             _attacker.currentCoolDown.ResetState();
-            yield break;
+            yield return null;
         }
-        Debug.Log("Move store");
-        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName + " is storing power");
-        var numTurns = Utility.RandomRange(2, 3);
-        _attacker.currentCoolDown.UpdateCoolDown(numTurns,_currentTurn, " is storing power");
-        _moveUsageHandler.OnDamageDeal += _attacker.currentCoolDown.StoreDamage;
+        else
+        {
+            
+            _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName + " is storing power");
+            _attacker.currentCoolDown.UpdateCoolDown(2,_currentTurn, " is storing power");//change turns back
+            _moveUsageHandler.OnDamageDeal += _attacker.currentCoolDown.StoreDamage;
+        }
+       
     }
 
     private IEnumerator Sonicboom()

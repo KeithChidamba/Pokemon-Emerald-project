@@ -1,5 +1,5 @@
 {
-    "itemID": "Oran berry18986",
+    "itemID": "Oran berry42072",
     "itemName": "Oran berry",
     "itemType": 9,
     "itemEffect": "5",
@@ -7,7 +7,7 @@
     "price": 5,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 32468
+        "instanceID": 32474
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
