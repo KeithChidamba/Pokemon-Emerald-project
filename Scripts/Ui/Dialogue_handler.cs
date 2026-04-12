@@ -26,6 +26,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     public bool messagesLoading;
     public List<Interaction> pendingMessages = new();
     public GameObject optionSelector;
+    private Coroutine _typingRoutine;
     
     public event Action<Overworld_interactable> OnOptionsDisplayed;
     
@@ -87,6 +88,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         OnOptionsDisplayed?.Invoke(currentInteractable);
         dialogueOptionBox.gameObject.SetActive(true);
         var numOptions = currentInteraction.interactionOptions.Count;
+        
         for(var i = 0; i < numOptions; i++)
         {
             var newOption = Instantiate(dialogueOptionPrefab, dialogueUiParent);
@@ -150,6 +152,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         foreach (string txt in optionsText)
             newInteraction.optionsUiText.Add(txt);
         currentInteraction = newInteraction;
+        
         HandleInteraction();
     }
     public void DisplaySpecific(string info, DialogType type)
@@ -197,7 +200,10 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             var interaction = pendingMessages[0];
             currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
             SetBattleTextBox();
-            yield return TypeText(currentInteraction.interactionMessage);
+            
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction.interactionMessage));
+            yield return _typingRoutine;
+            
             yield return new WaitUntil(()=>dialogueFinished);
             yield return new WaitForSecondsRealtime(1f);
             pendingMessages.RemoveAt(0);
@@ -262,7 +268,6 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     }
     private IEnumerator TypeText(string message)
     {
-        
         ResetText();
         dialogueFinished = false;
         displaying = true; 
@@ -302,6 +307,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         }
         dialogueFinished = true;
         CompleteDialogueInteraction();
+        _typingRoutine = null;
     }
 
     private void HandleInteraction(bool typeOut=true)
@@ -312,10 +318,14 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         }
         _playerMovementHandler.RestrictPlayerMovement();
         SetBattleTextBox();
-        
-        if(typeOut)
+        if (typeOut)
         {
-            StartCoroutine(TypeText(currentInteraction.interactionMessage));
+            // Stop ONLY the typing coroutine
+            if (_typingRoutine != null)
+            {
+                StopCoroutine(_typingRoutine);
+            }
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction.interactionMessage));
         }
         else
         {

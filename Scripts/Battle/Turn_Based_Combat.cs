@@ -372,8 +372,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public IEnumerator AllowPlayerSwitchIn(string trainerName,string pokemonName)
     {
         if (_battleHandler.currentBattleStyle != Battle_handler.BattlesStyle.Switch) yield break;
-        
-        _dialogueHandler.DisplayList($"{trainerName} is about to use {pokemonName}",
+        Debug.Log("allow swich");
+        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+        _dialogueHandler.DisplayList($"{trainerName} is about to use {pokemonName}, change pokemon?",
             new[] { InteractionOptions.None, InteractionOptions.None},
             new[] { "Yes", "No" });
  
@@ -381,26 +382,24 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         bool processing = true;
         yield return new WaitUntil(() => !processing);
         
-        //carry on with battle
-        
         void AwaitPartyOpen(Interaction interaction,int optionChosen)
         {
+            _dialogueOptionsHandler.OnInteractionOptionChosen -= AwaitPartyOpen;
             if (optionChosen > 0)
-            {
+            {//chose no
                 processing = false;
                 return;
             }
-            processing = true;
-            _pokemonPartyHandler.swapOutNext = true;
-            _pokemonPartyHandler.OnMemberSelected += ResetEvent;
-            _gameUIManager.ViewPokemonParty();
+
+            _battleHandler.OnSwitchIn += ResetEvent;
+            var currentParticipant = _battleHandler.GetCurrentParticipant();
+            currentParticipant.SetupSwitchOut();
         }
-        void ResetEvent(int memberPosition)
+        void ResetEvent()
         {
-            _pokemonPartyHandler.OnMemberSelected -= ResetEvent;
+            _battleHandler.OnSwitchIn -= ResetEvent;
             processing = false;
         }
-        yield return null;
     }
     public IEnumerator HandleSwap(SwitchOutData swap, bool forcedSwap=false)
     {

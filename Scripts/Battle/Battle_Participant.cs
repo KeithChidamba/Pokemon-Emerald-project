@@ -248,11 +248,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
             if ( (_battleHandler.isDoubleBattle && alivePokemon.Count > 1) || 
             (!_battleHandler.isDoubleBattle && alivePokemon.Count > 0) )
             {
-                _pokemonPartyHandler.selectedMemberNumber = Array.IndexOf(_battleHandler.battleParticipants, this)+1;
-                _pokemonPartyHandler.swapOutNext = true;
-                _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
-                _gameUIHandler.ViewPokemonParty();
-                ResetParticipantState();
+                SetupSwitchOut();
             }
             else if (_battleHandler.isDoubleBattle && alivePokemon.Count == 1)//1 left
             {
@@ -262,6 +258,15 @@ public class Battle_Participant : MonoBehaviour,IInjectable
                 _turnBasedCombatHandler.faintEventDelay = false;
             }
         }
+    }
+
+    public void SetupSwitchOut()
+    {
+        _pokemonPartyHandler.selectedMemberNumber = Array.IndexOf(_battleHandler.battleParticipants, this)+1;
+        _pokemonPartyHandler.swapOutNext = true;
+        _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
+        _gameUIHandler.ViewPokemonParty();
+        ResetParticipantState();
     }
 
     private void StartPokemonPartySwap(int memberPosition)

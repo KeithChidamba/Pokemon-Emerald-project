@@ -213,13 +213,13 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     public IEnumerator SwapMemberInBattle(int partyPosition)
     {
+        Debug.Log("swap");
         partyPosition--;
         (party[selectedMemberNumber-1], party[partyPosition]) = 
             (party[partyPosition], party[selectedMemberNumber-1]);
 
         var participant = _battleHandler.battleParticipants[selectedMemberNumber - 1];
         var alivePokemon= GetLivingPokemon();
-        
         
         UpdateUIAfterSwap();
         

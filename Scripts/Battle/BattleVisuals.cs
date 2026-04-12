@@ -290,10 +290,13 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         {
             positionIndex = 1;
         }
+        swapOutAnimator.gameObject.SetActive(true);
         swapOutAnimator.GetComponent<RectTransform>().anchoredPosition = new Vector2(_enemyPokeballXPositions[positionIndex],verticalPokeballPos);
         swapOutAnimator.Play("pokemon swap");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.75f);
         participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+        yield return new WaitForSeconds(0.25f);
+        swapOutAnimator.gameObject.SetActive(false);
     }
 
     public IEnumerator RevealPokemon(Battle_Participant participant,bool withdraw=false)
