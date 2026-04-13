@@ -333,17 +333,21 @@ public class BattleIntro : MonoBehaviour,IInjectable
         
         swapParticipant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
         
-        yield return _battleHandler.SetParticipant(swapParticipant,newPokemon:newPokemon);
-        
-        if(!faintSwitch) yield return _battleVisualsHandler.RevealPokemon(swapParticipant,true);
+        yield return _battleHandler.SetupParticipant(swapParticipant,newPokemon:newPokemon);
         
         if (swapParticipant.isEnemy)
         {
             yield return _battleVisualsHandler.SendOutEnemyPokemon(swapParticipant);
-            yield return PokemonIntroAnimation(swapParticipant);
         }
         else
+        {
             yield return _battleVisualsHandler.SendOutPlayerPokemon(swapParticipant);
+        }
+        if (!faintSwitch)
+        {
+            yield return _battleVisualsHandler.RevealPokemonAfterWithdraw(swapParticipant);
+            if (swapParticipant.isEnemy) yield return PokemonIntroAnimation(swapParticipant);
+        }
     }
 
 
@@ -386,7 +390,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
             yield return StartCoroutine(_battleVisualsHandler.SlideRect(rect, rect.anchoredPosition, startPos, movementSpeed));
         }
     }
-    private IEnumerator PokemonIntroAnimation(Battle_Participant participant)
+    public IEnumerator PokemonIntroAnimation(Battle_Participant participant)
     {
         if (participant.pokemon.statusEffect == StatusEffect.Sleep)
         {

@@ -223,7 +223,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
             if (participant.pokemon != null)
                 if (participant.pokemon.hp > 0)
                 {
-                    yield return SetParticipant(participant, participant.pokemon, initialCall: true);
+                    yield return SetupParticipant(participant, participant.pokemon, initialCall: true);
                 }
         }
     }
@@ -382,7 +382,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocationData.biome));
     }
 
-    public IEnumerator SetParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)
+    public IEnumerator SetupParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)
     {
         OnSwitchOut?.Invoke(participant);
         participant.isEnemy = Array.IndexOf(battleParticipants, participant) > 1 ;
@@ -515,39 +515,46 @@ public class Battle_handler : MonoBehaviour, IInjectable
     } 
     private IEnumerator FaintSequence()
     {
-        while (faintQueue.Count > 0) 
+        while (faintQueue.Count > 0)
         {
+            var faintedParticipant = faintQueue[0];
             _turnBasedCombatHandler.faintEventDelay = true;
-            _dialogueHandler.DisplayBattleInfo(faintQueue[0].pokemon.pokemonName + " fainted!");
-            var pkmImageRect = faintQueue[0].pokemonImage.rectTransform;
+            _dialogueHandler.DisplayBattleInfo(faintedParticipant.pokemon.pokemonName + " fainted!");
+            var pkmImageRect = faintedParticipant.pokemonImage.rectTransform;
             var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-pkmImageRect.rect.height);
             yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
             
             StartCoroutine(_battleVisualsHandler.SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
             
-            var participantUIRect = faintQueue[0].participantUI.GetComponent<RectTransform>(); 
+            var participantUIRect = faintedParticipant.participantUI.GetComponent<RectTransform>(); 
             var targetForUI = new Vector2(participantUIRect.anchoredPosition.x, participantUIRect.anchoredPosition.y-400f);
             yield return StartCoroutine(_battleVisualsHandler.SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f));
             
-            if (faintQueue[0].isEnemy)
+            if (faintedParticipant.isEnemy)
             {
                 yield return new WaitForSeconds(0.05f);
-                faintQueue[0].participantUI.SetActive(false);
+                faintedParticipant.participantUI.SetActive(false);
                 yield return new WaitForSeconds(0.25f);
-                faintQueue[0].pokemonImage.color = new Color(0, 0, 0, 0);
+                faintedParticipant.pokemonImage.color = new Color(0, 0, 0, 0);
             }
             
-            StartCoroutine(faintQueue[0].HandleFaintLogic());
-            yield return new WaitUntil(() => !_turnBasedCombatHandler.faintEventDelay);
-            if(!battleOver && faintQueue[0].isActive)
+            yield return faintedParticipant.HandleFaintLogic();
+            
+            if(!battleOver)
             {
-                faintQueue[0].participantUI.SetActive(true);
+                faintedParticipant.participantUI.SetActive(true);
                 pkmImageRect.anchoredPosition =
                     new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y + pkmImageRect.rect.height);
-                if (faintQueue[0].isEnemy) faintQueue[0].pokemonImage.color = Color.white;
+                if (faintedParticipant.isEnemy)
+                {
+                    faintedParticipant.pokemonImage.color = Color.white;
+                }
             }
+            
             participantUIRect.anchoredPosition = new Vector2(participantUIRect.anchoredPosition.x,
                 participantUIRect.anchoredPosition.y + 400f);
+            
+            yield return _battleIntroHandler.PokemonIntroAnimation(faintedParticipant);
             faintQueue.RemoveAt(0);
             yield return null;
         }

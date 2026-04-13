@@ -211,9 +211,8 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         cancelButton.sprite = memberCards[0].pokeballClosedImage.sprite;
         _itemHandler.usingItem = false;//in case player closes before using item
     }
-    public IEnumerator SwapMemberInBattle(int partyPosition)
+    public IEnumerator SwapMemberWithoutTurnUsage(int partyPosition,bool switchModeSwap)
     {
-        Debug.Log("swap");
         partyPosition--;
         (party[selectedMemberNumber-1], party[partyPosition]) = 
             (party[partyPosition], party[selectedMemberNumber-1]);
@@ -224,13 +223,17 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         UpdateUIAfterSwap();
         
         _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
-        yield return _battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1],true);
+        
+        //if battle style is switch and this swap is not because of fainting,else it will be because of fainting
+        yield return _battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1],switchModeSwap);
+        
         selectedMemberNumber = 0;
         _turnBasedCombatHandler.faintEventDelay = false;
     }
     public void UpdateUIAfterSwap()
     {
         RefreshMemberCards();
+        memberCards[0].ChangeVisibility(true);
         ClearSelectionUI();
         _partyInputService.UpdateHealthBarColors();
     }

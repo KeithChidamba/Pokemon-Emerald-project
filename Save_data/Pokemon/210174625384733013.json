@@ -158,16 +158,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -11656
+            "instanceID": -18240
         },
         {
-            "instanceID": -11658
+            "instanceID": -18242
         },
         {
-            "instanceID": -11660
+            "instanceID": -18244
         },
         {
-            "instanceID": -11662
+            "instanceID": -18246
         }
     ],
     "ability": {
@@ -201,7 +201,7 @@
         "instanceID": 25958
     },
     "pokeballName": "Pokeball",
-    "healthPhase": 3,
+    "healthPhase": 1,
     "abilityName": "Torrent",
     "natureName": "Timid",
     "evolutionNames": [

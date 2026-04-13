@@ -33,7 +33,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     private BattleOperations _battleOperationsHandler;
     private Game_Load _gameLoadingHandler;
     private Options_manager _dialogueOptionsHandler;
-    private Game_ui_manager _gameUIManager;
+
     
     public void Inject(ServiceContainer container)
     {
@@ -48,7 +48,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         _moveUsageHandler = container.Resolve<Move_handler>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _moveLogicHandler = container.Resolve<MoveLogicHandler>();
-        _gameUIManager = container.Resolve<Game_ui_manager>();
         gameObject.SetActive(true);
         OnInject();
     }
@@ -106,7 +105,8 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         fakeMove.priority = 0;
             
         var switchTurn = new Turn(TurnUsage.SwitchOut,
-            attacker: currentTurnIndex,move:fakeMove);
+            attacker: currentTurnIndex,move:fakeMove
+            ,attackerID:Utility.Random16Bit());
             
         switchTurn.switchData = data;
         SaveTurn(switchTurn);
@@ -372,7 +372,12 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public IEnumerator AllowPlayerSwitchIn(string trainerName,string pokemonName)
     {
         if (_battleHandler.currentBattleStyle != Battle_handler.BattlesStyle.Switch) yield break;
-        Debug.Log("allow swich");
+        if (_battleHandler.isDoubleBattle)
+        {
+//only happens in single battles
+            yield break;
+        }
+        
         yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
         _dialogueHandler.DisplayList($"{trainerName} is about to use {pokemonName}, change pokemon?",
             new[] { InteractionOptions.None, InteractionOptions.None},
@@ -392,8 +397,8 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             }
 
             _battleHandler.OnSwitchIn += ResetEvent;
-            var currentParticipant = _battleHandler.GetCurrentParticipant();
-            currentParticipant.SetupSwitchOut();
+            var currentParticipant = _battleHandler.battleParticipants[0];
+            currentParticipant.SetupSwitchOut(true);
         }
         void ResetEvent()
         {

@@ -427,7 +427,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             wildPokemon.pokeballName = pokeball.itemName;
             _playerParty.AddMember(wildPokemon,pokeball.itemName);
             yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
-            _wildPokemonHandler.participant.EndWildBattle();
+            yield return _wildPokemonHandler.participant.EndWildBattle();
         }else
         {
             yield return StartCoroutine(_battleVisuals.DisplayPokeballEscape());

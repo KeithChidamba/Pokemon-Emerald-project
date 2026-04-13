@@ -295,18 +295,16 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         swapOutAnimator.Play("pokemon swap");
         yield return new WaitForSeconds(0.75f);
         participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
-        yield return new WaitForSeconds(0.25f);
         swapOutAnimator.gameObject.SetActive(false);
     }
 
-    public IEnumerator RevealPokemon(Battle_Participant participant,bool withdraw=false)
+    public IEnumerator RevealPokemonAfterWithdraw(Battle_Participant participant)
     {
-        var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
         participant.participantUI.SetActive(true);
-        
         if (participant.isEnemy) participant.pokemonImage.color = Color.white;
+        var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
         var direction = participant.isEnemy?outOfViewDitance:-outOfViewDitance;
-        if (withdraw && participant.isEnemy)
+        if (participant.isEnemy)
         {
             direction = 0;
         }

@@ -193,9 +193,7 @@ public class Enemy_trainer : BattleParticipantModule
         {
             partyPosition = _turnBasedCombatHandler.currentTurnIndex == 2 ? 0 : 1;
         }
-       
-        var switchData = new SwitchOutData(partyPosition
-            ,partyIndex,participant);
+        var switchData = new SwitchOutData(partyPosition,partyIndex,participant);
         _turnBasedCombatHandler.SaveSwitchTurn(switchData);
     }
     private int GetSelectedMoveIndex()

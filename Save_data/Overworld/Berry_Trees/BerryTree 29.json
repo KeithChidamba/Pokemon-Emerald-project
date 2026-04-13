@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32560
+                    "instanceID": 32592
                 },
                 {
-                    "instanceID": 32560
+                    "instanceID": 32592
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32562
+                    "instanceID": 32594
                 },
                 {
-                    "instanceID": 32564
+                    "instanceID": 32596
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33202
+                    "instanceID": 33146
                 },
                 {
-                    "instanceID": 33204
+                    "instanceID": 33148
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33206
+                    "instanceID": 33150
                 },
                 {
-                    "instanceID": 33208
+                    "instanceID": 33152
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33210
+                    "instanceID": 33154
                 },
                 {
-                    "instanceID": 33212
+                    "instanceID": 33156
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-04-12T20:03:39.9574800+02:00"
+    "lastLogin": "2026-04-13T14:37:32.4497740+02:00"
 }

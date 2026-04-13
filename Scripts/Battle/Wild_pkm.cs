@@ -59,12 +59,13 @@ public class Wild_pkm : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
         }
     }
-    public void EndWildBattle()
+    public IEnumerator EndWildBattle()
     {
         inBattle = false;
         _turnBasedCombatHandler.faintEventDelay = false;
         _battleHandler.EndBattle(true);
         _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName + " defeated " +participant.pokemon.pokemonName);
+        yield return null;
     }
     
     

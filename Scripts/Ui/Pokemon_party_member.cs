@@ -86,6 +86,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
     }
     public void ActivateUI()
     {
+        ChangeVisibility(false);
         _isViewingCard = true;
         _viewingParty = true;
         
