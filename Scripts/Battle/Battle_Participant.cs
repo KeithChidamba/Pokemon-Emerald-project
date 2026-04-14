@@ -62,7 +62,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public List<Pokemon> expReceivers;
     private bool _expEventDelay;
     public event Action OnPokemonFainted;
-    private bool _usingSwitchModeSwap;
+    private bool _isFaintSwitch;
     
     public List<Barrier> barriers = new();
     [SerializeField]private Battle_Participant recentAttacker;
@@ -232,7 +232,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         }
         else
         {
-            yield return CheckIfLoss();
+            yield return CheckIfPlayerLoss();
         }
     }
 
@@ -241,7 +241,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         statData.ResetBattleState(pokemon);
         yield return _wildPokemonHandler.EndWildBattle();
     }
-    private IEnumerator CheckIfLoss()
+    private IEnumerator CheckIfPlayerLoss()
     {
         var alivePokemon = _pokemonPartyHandler.GetLivingPokemon();
         if (alivePokemon.Count==0)
@@ -255,7 +255,14 @@ public class Battle_Participant : MonoBehaviour,IInjectable
             if ( (_battleHandler.isDoubleBattle && alivePokemon.Count > 1) || 
             (!_battleHandler.isDoubleBattle && alivePokemon.Count > 0) )
             {
-                SetupSwitchOut();
+                _battleHandler.OnSwitchIn += ResetEvent;
+                SetupSwitchOut(true);
+                yield return new WaitUntil(() => !_turnBasedCombatHandler.faintEventDelay);
+                void ResetEvent()
+                {
+                    _battleHandler.OnSwitchIn -= ResetEvent;
+                    _turnBasedCombatHandler.faintEventDelay = false;
+                }
             }
             else if (_battleHandler.isDoubleBattle && alivePokemon.Count == 1)//1 left
             {
@@ -268,11 +275,12 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    public void SetupSwitchOut(bool switchMode=false)
+    public void SetupSwitchOut(bool faintSwitch=false)
     {
         _pokemonPartyHandler.selectedMemberNumber = Array.IndexOf(_battleHandler.battleParticipants, this)+1;
         _pokemonPartyHandler.swapOutNext = true;
-        _usingSwitchModeSwap = switchMode;
+        _isFaintSwitch = faintSwitch;
+        
         _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
         _gameUIHandler.ViewPokemonParty();
         ResetParticipantState();
@@ -280,8 +288,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
 
     private void StartPokemonPartySwap(int memberPosition)
     {
-        _pokemonPartyHandler.OnMemberSelected -= StartPokemonPartySwap; 
-        StartCoroutine(_pokemonPartyHandler.SwapMemberWithoutTurnUsage(memberPosition,_usingSwitchModeSwap));
+        StartCoroutine(_pokemonPartyHandler.SwapMemberWithoutTurnUsage(memberPosition,_isFaintSwitch));
     }
     public void DeactivateParticipant()
     {

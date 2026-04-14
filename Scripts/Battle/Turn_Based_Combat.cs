@@ -398,7 +398,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 
             _battleHandler.OnSwitchIn += ResetEvent;
             var currentParticipant = _battleHandler.battleParticipants[0];
-            currentParticipant.SetupSwitchOut(true);
+            currentParticipant.SetupSwitchOut();
         }
         void ResetEvent()
         {

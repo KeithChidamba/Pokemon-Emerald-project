@@ -322,7 +322,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         }
     }
 
-    public IEnumerator SwitchInPokemon(Battle_Participant swapParticipant, Pokemon newPokemon,bool faintSwitch=false)
+    public IEnumerator SwitchInPokemon(Battle_Participant swapParticipant, Pokemon newPokemon,bool intentionalSwitch=true)
     {
         if(!swapParticipant.isPlayer)
         {
@@ -343,7 +343,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         {
             yield return _battleVisualsHandler.SendOutPlayerPokemon(swapParticipant);
         }
-        if (!faintSwitch)
+        if (intentionalSwitch)
         {
             yield return _battleVisualsHandler.RevealPokemonAfterWithdraw(swapParticipant);
             if (swapParticipant.isEnemy) yield return PokemonIntroAnimation(swapParticipant);
