@@ -23,9 +23,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public bool battleWon;
     public GameObject overWorld;
     public bool runningAway;
-    private bool battleTerminated;
+    private bool _battleTerminated;
     private int _currentMoveIndex;
-    public int currentEnemyIndex;
+    private int _currentPlayerEnemyIndex;
     public float participantPositionOffset = 100;
     private List<Vector2> _defaultPokemonImagePositions = new();
     public BattleType currentBattleType;
@@ -97,7 +97,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         //if single battle, auto aim at enemy
         if (!isDoubleBattle && _turnBasedCombatHandler.currentTurnIndex == 0)
         {
-            currentEnemyIndex = 2;
+            _currentPlayerEnemyIndex = 2;
         }
     }
 
@@ -131,7 +131,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if (_currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex].isSelfTargeted 
             || _currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex].isMultiTarget)
         {
-            currentEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
+            _currentPlayerEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
             PlayerExecuteMove();
             return;
         }
@@ -147,13 +147,18 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private void PlayerExecuteMove()
     {//selecting enemy only happens in double battle
         
-        battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
-        UseMove(_currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex], _currentPlayerParticipant); 
+        battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
+        UseMove(_currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex], _currentPlayerParticipant,_currentPlayerEnemyIndex); 
     }
 
+    public void ResetEnemyColor()
+    {
+       battleParticipants[_currentPlayerEnemyIndex]
+            .pokemonImage.color = Color.HSVToRGB(0,0,100);//reset color if cancelled
+    }
     public void SelectEnemy(int change)
     {
-        battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
+        battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
         
         var partnerIndex = GetCurrentParticipant().GetPartnerIndex(); 
         var expectedAttackables = new [] {partnerIndex,2,3}; //can attack partner and enemies
@@ -162,11 +167,11 @@ public class Battle_handler : MonoBehaviour, IInjectable
         
         var attackables = validAttackables.ToArray();
         
-        var currentPos = Array.IndexOf(attackables,currentEnemyIndex);        
+        var currentPos = Array.IndexOf(attackables,_currentPlayerEnemyIndex);        
         var choiceIndex = Mathf.Clamp(currentPos+change,0,attackables.Length-1);//index of attackables
         
-        currentEnemyIndex = attackables[choiceIndex];
-        battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(17,96,54);
+        _currentPlayerEnemyIndex = attackables[choiceIndex];
+        battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(17,96,54);
         
     }
     public void SetupOptionsInput(InputState currentState)
@@ -473,15 +478,15 @@ public class Battle_handler : MonoBehaviour, IInjectable
         for (var i = _currentPlayerParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
             availableMovesText[i].text = "";
     }
-    public void UseMove(Move move,Battle_Participant user)
+    public void UseMove(Move move,Battle_Participant user, int enemyIndex)
     {
         if(move.powerpoints==0)return;
         move.powerpoints--;
 
         Turn currentTurn = new Turn(TurnUsage.Attack,move, Array.IndexOf(battleParticipants,user)
-            ,currentEnemyIndex
+            ,enemyIndex
             , user.pokemon.pokemonID
-            ,battleParticipants[currentEnemyIndex].pokemon.pokemonID);
+            ,battleParticipants[enemyIndex].pokemon.pokemonID);
         _turnBasedCombatHandler.SaveTurn(currentTurn);
     }
     private void ResetMoveUsability()
@@ -580,11 +585,11 @@ public class Battle_handler : MonoBehaviour, IInjectable
         yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         _inputStateHandler.OnStateChanged -= EnableBattleMessage;
         _inputStateHandler.AddDialoguePlaceHolderState();
-        if (battleTerminated)
+        if (_battleTerminated)
         {
             _dialogueHandler.DisplayBattleInfo("the battle ended");
             yield return new WaitForSeconds(1f);
-            battleTerminated = false;
+            _battleTerminated = false;
         }
         else if (runningAway)
         {
@@ -662,12 +667,12 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if(_overworldActions.fishing) _overworldActions.ResetFishingAction();
     }
 
-    public void EndBattle(bool hasWon,bool battleCancelled=false)
+    public void EndBattle(bool hasWon,bool battleTerminated=false)
     {
         if (battleOver) return;
         battleWon = hasWon;
         battleOver = true;
-        battleTerminated = battleCancelled;
+        _battleTerminated = battleTerminated;
         StartCoroutine(ProcessBattleEnd());
     }
     private IEnumerator ResetUiAfterBattle(bool playerWhiteOut)

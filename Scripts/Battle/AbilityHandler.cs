@@ -155,10 +155,10 @@ public class AbilityHandler : BattleParticipantModule
         _abilityTriggered = true;
     }
 
-    private void RemoveTrap(Battle_Participant participant)
+    private void RemoveTrap(Battle_Participant thisParticipant)
     {
-        if (participant != base.participant) return;
-        foreach (var enemy in base.participant.currentEnemies)
+        if (thisParticipant != participant) return;
+        foreach (var enemy in participant.currentEnemies)
             enemy.statusHandler.RemoveTrap();
         _battleHandler.OnSwitchIn -= TrapEnemies;
         _battleHandler.OnSwitchOut -= RemoveTrap;
@@ -172,9 +172,9 @@ public class AbilityHandler : BattleParticipantModule
             _moveUsageHandler.ApplyTrap(enemy,false);
         }
     }
-    void HealStatusEffect(Battle_Participant participant)
+    void HealStatusEffect(Battle_Participant thisParticipant)
     {
-        var currentStatus = base.participant.pokemon.statusEffect;
+        var currentStatus = participant.pokemon.statusEffect;
         
         if (Utility.RandomRange(1, 4) < 2)
         {
@@ -182,12 +182,12 @@ public class AbilityHandler : BattleParticipantModule
                 || currentStatus == StatusEffect.Freeze
                 || currentStatus == StatusEffect.Paralysis)
             {
-                if(!base.participant.isFlinched)
-                    base.participant.canAttack = true;
+                if(!participant.isFlinched)
+                    participant.canAttack = true;
             }
-            base.participant.pokemon.statusEffect = StatusEffect.None;
-            _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonName+"'s shed skin healed it");
-            base.participant.RefreshStatusEffectImage();
+            participant.pokemon.statusEffect = StatusEffect.None;
+            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s shed skin healed it");
+            participant.RefreshStatusEffectImage();
         }
     }
     void GiveItem()

@@ -40,8 +40,7 @@ public class PokemonBattleInputService
     
     private void SetupMoveSelection()
     {
-        _battleHandler.battleParticipants[_battleHandler.currentEnemyIndex]
-            .pokemonImage.color = Color.HSVToRGB(0,0,100);//reset color if cancelled
+        _battleHandler.ResetEnemyColor();
         
         ref InputState currentState = ref _inputStateHandler.currentState;
         currentState.currentSelectionIndex = 0;

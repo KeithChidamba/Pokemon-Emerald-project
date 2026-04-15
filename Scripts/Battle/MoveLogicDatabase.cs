@@ -135,8 +135,6 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
         else
         {
-            
-            _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName + " is storing power");
             _attacker.currentCoolDown.UpdateCoolDown(2,_currentTurn, " is storing power");//change turns back
             _moveUsageHandler.OnDamageDeal += _attacker.currentCoolDown.StoreDamage;
         }

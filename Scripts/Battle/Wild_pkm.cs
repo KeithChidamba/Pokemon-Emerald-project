@@ -42,14 +42,12 @@ public class Wild_pkm : MonoBehaviour,IInjectable
         {
             return;
         }
-       
-        //attack player, since its single battle
-        _battleHandler.currentEnemyIndex = 0;
         
         if (Utility.RandomRange(1, 11) > 3 || !participant.canEscape)
         {
             var randMove = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
-            _battleHandler.UseMove(participant.pokemon.moveSet[randMove],participant);
+            //attack player, since its single battle
+            _battleHandler.UseMove(participant.pokemon.moveSet[randMove],participant,0);
         }
         else
         {
