@@ -300,7 +300,6 @@ public class BattleVisuals : MonoBehaviour,IInjectable
 
     public IEnumerator RevealPokemonAfterWithdraw(Battle_Participant participant)
     {
-        Debug.Log("revealed for "+participant.name);
         participant.participantUI.SetActive(true);
         if (participant.isEnemy) participant.pokemonImage.color = Color.white;
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 

@@ -106,7 +106,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     }
     public void SaveStruggleTurn(Battle_Participant attacker)
     {
-        Debug.Log("saved for struggle: ");
         var struggle = ScriptableObject.CreateInstance<Move>();
         struggle.priority = 0;
         struggle.moveName = "Struggle";    
@@ -325,10 +324,12 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 
             if (currentTurn.turnUsage == TurnUsage.UseStruggle)
             {
-                Debug.Log("struggle check");
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " is out of moves");
+                yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " used struggle");
                 yield return _moveUsageHandler.DealStruggleDamage(victim,attacker);
+                yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
+                yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
                 continue;
             }
             
@@ -415,7 +416,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 //only happens in single battles
             yield break;
         }
-        
         yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
         _dialogueHandler.DisplayList($"{trainerName} is about to use {pokemonName}, change pokemon?",
             new[] { InteractionOptions.None, InteractionOptions.None},

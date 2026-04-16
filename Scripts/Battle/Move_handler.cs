@@ -191,8 +191,6 @@ public class Move_handler:MonoBehaviour,IInjectable
         float finalDamage = AccountForVictimsBarriers(null, currentVictim, damageAfterFieldModifiers);
 
         OnDamageDeal?.Invoke(finalDamage, currentVictim);
-        OnMoveHit?.Invoke(struggleUser, null);
-        
         return finalDamage;
     }
     private bool IsInvincible(Move move,Battle_Participant currentVictim)
