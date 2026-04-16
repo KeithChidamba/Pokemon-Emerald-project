@@ -1,13 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class Wild_pkm : MonoBehaviour,IInjectable
+public class WildPokemonAiHandler : MonoBehaviour,IInjectable
 {
     public Battle_Participant participant;
     public bool inBattle;

@@ -55,7 +55,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private Pokemon_party _pokemonPartyHandler;
     private overworld_actions _overworldActions;
     private Encounter_handler  _encounterHandler;
-    private Wild_pkm _wildPokemonHandler;
+    private WildPokemonAiHandler _wildPokemonHandler;
     private Area_manager  _areaHandler;
     private BattleVisuals _battleVisualsHandler;
     private Player_movement _playerMovementHandler;
@@ -68,7 +68,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _encounterHandler = container.Resolve<Encounter_handler>();
-        _wildPokemonHandler = container.Resolve<Wild_pkm>();
+        _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _dialogueOptionsHandler = container.Resolve<Options_manager>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
@@ -264,9 +264,10 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private void ResetAi()
     {
         if(!isTrainerBattle)return;
-        var currentEnemyParticipant = GetCurrentParticipant();
-        if(currentEnemyParticipant.isPlayer)return;
-        currentEnemyParticipant.pokemonTrainerAI.MakeBattleDecision();
+        var currentParticipant = GetCurrentParticipant();
+        if(!currentParticipant.isActive) return;
+        if(currentParticipant.isPlayer)return;
+        currentParticipant.pokemonTrainerAI.MakeBattleDecision();
     }
 
     private void ResetPlayersTurnUsage()
@@ -463,6 +464,21 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     void LoadMoveInputAndText()
     { 
+        bool emptyMoves = true;
+        foreach (var move in _currentPlayerParticipant.pokemon.moveSet)
+        {
+            if(move.powerpoints>0)
+            {
+                emptyMoves = false;
+                break;
+            }
+        }
+        if (emptyMoves)
+        {
+            _turnBasedCombatHandler.SaveStruggleTurn(_currentPlayerParticipant);
+            return;
+        }
+        
         var moveSelectables = new List<SelectableUI>();
         for (var i = 0; i < _currentPlayerParticipant.pokemon.moveSet.Count; i++)
         {

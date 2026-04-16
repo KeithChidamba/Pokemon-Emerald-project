@@ -122,14 +122,7 @@ public class Move_handler:MonoBehaviour,IInjectable
         
         yield return new WaitUntil(()=> !displayingDamage);
     }
-    private bool IsInvincible(Move move,Battle_Participant currentVictim)
-    {
-        if (currentVictim.canBeDamaged || move.moveDamage == 0) return false;
-        _dialogueHandler.DisplayBattleInfo(currentVictim.pokemon.pokemonName+" protected itself");
-        
-        if (!_currentTurn.move.isMultiTarget) CancelMoveSequence();
-        return true;
-    }
+
 
     float CalculateConfusionDamage(Battle_Participant confusionVictim)
     {
@@ -148,6 +141,67 @@ public class Move_handler:MonoBehaviour,IInjectable
         if (damage < 1) damage = 1;
 
         return damage;
+    }
+    public IEnumerator DealStruggleDamage(Battle_Participant struggleVictim,Battle_Participant struggleUser)
+    {
+        var struggleDamage = CalculateStruggleDamage(struggleVictim,struggleUser);
+        
+        DisplayDamage(struggleVictim,displayEffectiveness:false,isSpecificDamage:true
+            ,predefinedDamage:struggleDamage);
+        
+        yield return new WaitUntil(()=> !displayingDamage);
+        
+        float recoil = Mathf.Floor(struggleUser.pokemon.maxHp * 0.25f);
+        
+        DisplayDamage(struggleUser,displayEffectiveness:false,isSpecificDamage:true
+            ,predefinedDamage:recoil);
+        
+        yield return new WaitUntil(()=> !displayingDamage);
+    }
+    private float CalculateStruggleDamage(Battle_Participant currentVictim,Battle_Participant struggleUser)
+    {
+        var critValue = 1;
+        var buffedCritRateIndex = Array.IndexOf(_critLevels, struggleUser.pokemon.critChance);
+        float critChance = _critLevels[buffedCritRateIndex];
+
+        if (UnityEngine.Random.Range(0f, 100f) < critChance)
+            critValue = 2;
+
+        if (critValue > 1)
+            _dialogueHandler.DisplayBattleInfo("Critical Hit!");
+        
+        float levelFactor = ((struggleUser.pokemon.currentLevel * 2f) / 5f) + 2f;
+        
+        float attackDefenseRatio = SetAtkDefRatio(critValue, false, struggleUser, currentVictim);
+        
+        float power = 50f;
+        
+        float randomFactor = Utility.RandomRange(217, 256) / 255f;
+        
+        float baseDamage = ((levelFactor * power * attackDefenseRatio) / 50f) + 2f;
+        
+        float damageModifier = critValue * randomFactor;
+
+        int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
+
+        if (damageDealt < 1) damageDealt = 1;
+        
+        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, null, damageDealt) ?? damageDealt;
+        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff, null);
+        float finalDamage = AccountForVictimsBarriers(null, currentVictim, damageAfterFieldModifiers);
+
+        OnDamageDeal?.Invoke(finalDamage, currentVictim);
+        OnMoveHit?.Invoke(struggleUser, null);
+        
+        return finalDamage;
+    }
+    private bool IsInvincible(Move move,Battle_Participant currentVictim)
+    {
+         if (currentVictim.canBeDamaged || move.moveDamage == 0) return false;
+         _dialogueHandler.DisplayBattleInfo(currentVictim.pokemon.pokemonName+" protected itself");
+         
+         if (!_currentTurn.move.isMultiTarget) CancelMoveSequence();
+         return true;
     }
     public float CalculateMoveDamage(Move move,Battle_Participant currentVictim,bool isTypeless=false)
     { 

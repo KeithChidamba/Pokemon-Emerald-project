@@ -375,16 +375,21 @@ public class Pokemon : ScriptableObject
         OnExpGainComplete?.Invoke(this);
     }
 
-    public int CalculateExperience(Pokemon enemy)
+    public int CalculateExperience()
     {
         var trainerBonus = 1f;
-        var baseExp = (enemy.expYield*enemy.currentLevel) / 7f;
+        var baseExp = (expYield*currentLevel) / 7f;
         var expItemBonus = 1f;
         if (hasItem)
-            if (heldItem.itemType == ItemType.GainExp)//lucky egg
+        {
+            if (heldItem.itemType == ItemType.GainExp)
+            {
                 expItemBonus = float.Parse(heldItem.itemEffect);
-        if (enemy.hasTrainer)
-            trainerBonus = 1.5f;
+            }
+        }
+        
+        if (hasTrainer) trainerBonus = 1.5f;
+        
         return (int)math.trunc(baseExp * trainerBonus * expItemBonus);
     }
     public void Evolve(Evolution evo)

@@ -155,16 +155,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -5120
+            "instanceID": -13076
         },
         {
-            "instanceID": -5122
+            "instanceID": -13078
         },
         {
-            "instanceID": -5124
+            "instanceID": -13080
         },
         {
-            "instanceID": -5126
+            "instanceID": -13082
         }
     ],
     "ability": {

@@ -35,4 +35,4 @@ public class Turn
      }
 }
 
-public enum TurnUsage{Attack,SwitchOut}
+public enum TurnUsage{Attack,SwitchOut,UseStruggle}

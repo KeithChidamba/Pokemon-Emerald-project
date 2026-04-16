@@ -21,13 +21,13 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     
     private Dialogue_handler _dialogueHandler;
     private Battle_handler _battleHandler;
-    private Wild_pkm _wildPokemonHandler;
+    private WildPokemonAiHandler _wildPokemonHandler;
     
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
-        _wildPokemonHandler = container.Resolve<Wild_pkm>();
+        _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         gameObject.SetActive(true);
         OnInject();
     }
@@ -300,6 +300,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
 
     public IEnumerator RevealPokemonAfterWithdraw(Battle_Participant participant)
     {
+        Debug.Log("revealed for "+participant.name);
         participant.participantUI.SetActive(true);
         if (participant.isEnemy) participant.pokemonImage.color = Color.white;
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 

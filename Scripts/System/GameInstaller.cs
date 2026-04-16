@@ -14,7 +14,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Battle_handler battleHandler;
     [SerializeField] private BattleVisuals battleVisualsHandler;
     [SerializeField] private Encounter_handler  encounterHandler;
-    [SerializeField] private Wild_pkm wildPokemonHandler;
+    [SerializeField] private WildPokemonAiHandler wildPokemonHandler;
     [SerializeField] private Turn_Based_Combat turnBasedCombatHandler;
     [SerializeField] private Move_handler moveUsageHandler;
     [SerializeField] private MoveLogicHandler moveLogicHandler;

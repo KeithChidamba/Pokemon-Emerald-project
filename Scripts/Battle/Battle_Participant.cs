@@ -62,10 +62,8 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public List<Pokemon> expReceivers;
     private bool _expEventDelay;
     public event Action OnPokemonFainted;
-    private bool _isFaintSwitch;
     
     public List<Barrier> barriers = new();
-    [SerializeField]private Battle_Participant recentAttacker;
     
     public Animator statusEffectAnimator;
     private Vector2 _defaultImagePosition;
@@ -74,7 +72,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Game_ui_manager _gameUIHandler;
     private Pokemon_party _pokemonPartyHandler;
-    private Wild_pkm _wildPokemonHandler;
+    private WildPokemonAiHandler _wildPokemonHandler;
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
     private ServiceContainer _container;
@@ -83,7 +81,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
-        _wildPokemonHandler = container.Resolve<Wild_pkm>();
+        _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
@@ -193,7 +191,6 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     }
     private void CheckIfFainted(Battle_Participant attacker)
     {
-        recentAttacker = attacker ?? recentAttacker;
         if (!isActive) return;
         if (pokemon.hp > 0) return;
         pokemon.statusEffect = StatusEffect.None;
@@ -209,10 +206,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         if (!isPlayer)
         {
-            //let the enemy that knocked you out, calculate exp 
-            var enemyResponsible = recentAttacker.pokemon;
-            
-            yield return DistributeExp(enemyResponsible.CalculateExperience(pokemon));
+            yield return DistributeExp(pokemon.CalculateExperience());
             
             yield return new WaitUntil(() => !_expEventDelay);
             
@@ -256,7 +250,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
             (!_battleHandler.isDoubleBattle && alivePokemon.Count > 0) )
             {
                 _battleHandler.OnSwitchIn += ResetEvent;
-                SetupSwitchOut(true);
+                SetupSwitchOut();
                 yield return new WaitUntil(() => !_turnBasedCombatHandler.faintEventDelay);
                 void ResetEvent()
                 {
@@ -275,11 +269,10 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    public void SetupSwitchOut(bool faintSwitch=false)
+    public void SetupSwitchOut()
     {
         _pokemonPartyHandler.selectedMemberNumber = Array.IndexOf(_battleHandler.battleParticipants, this)+1;
         _pokemonPartyHandler.swapOutNext = true;
-        _isFaintSwitch = faintSwitch;
         
         _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
         _gameUIHandler.ViewPokemonParty();
@@ -288,7 +281,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
 
     private void StartPokemonPartySwap(int memberPosition)
     {
-        StartCoroutine(_pokemonPartyHandler.SwapMemberWithoutTurnUsage(memberPosition,_isFaintSwitch));
+        StartCoroutine(_pokemonPartyHandler.SwapMemberWithoutTurnUsage(memberPosition));
     }
     public void DeactivateParticipant()
     {
@@ -311,6 +304,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         //reset move data in case of in-battle modification
         pokemon.ResetMoveData();
     }
+
     public void ResetParticipantState()
     {
         statData.LoadActualStats();
@@ -322,7 +316,6 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         previousMove = null;
         additionalTypeImmunity = null;
         OnPokemonFainted = null;
-        recentAttacker = null;
         currentCoolDown.ResetState();
         immunityNegations.Clear();
         if (isPlayer)
@@ -447,6 +440,12 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         pokemon.OnHealthChanged += CheckIfFainted;
         ActivateUI(doubleBattleUI, _battleHandler.isDoubleBattle);
         ActivateUI(singleBattleUI, !_battleHandler.isDoubleBattle);
+        
+        foreach (var move in pokemon.moveSet)
+        {
+            move.powerpoints = 0;
+        }
+        
         if (!isPlayer) return;
         pokemon.OnEvolutionSuccessful += AddToEvolutionQueue;
         pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;

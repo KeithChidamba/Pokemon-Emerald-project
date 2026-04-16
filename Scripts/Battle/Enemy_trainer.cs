@@ -180,8 +180,6 @@ public class Enemy_trainer : BattleParticipantModule
     }
     public void MakeBattleDecision()
     {
-        if (!participant.isActive) return;
-        
         var numParticipating = _battleHandler.isDoubleBattle? 2:1;
         
         if (GetLivingPokemon().Count > numParticipating)//can a switch be made?
@@ -222,6 +220,22 @@ public class Enemy_trainer : BattleParticipantModule
     }
     private void UseSelectedMove()
     {
+        bool emptyMoves = true;
+        foreach (var move in participant.pokemon.moveSet)
+        {
+            if(move.powerpoints>0)
+            {
+                emptyMoves = false;
+                break;
+            }
+        }
+
+        if (emptyMoves)
+        {
+            _turnBasedCombatHandler.SaveStruggleTurn(participant);
+            return;
+        }
+        
         var selectedMoveData = GetBestMoveDecision();
         var selectedMove = participant.pokemon.moveSet[selectedMoveData.moveIndex];
         _battleHandler.UseMove(selectedMove,participant,selectedMoveData.enemyIndex);

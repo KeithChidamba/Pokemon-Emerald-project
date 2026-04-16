@@ -76,10 +76,18 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         Debug.Log("turn cleared");
         _turnHistory.Clear();
     }
+
+    private void BeginTurnExecution()
+    {
+        _inputStateHandler.AddPlaceHolderState();
+        SetPriority();
+        StartCoroutine(ExecuteMoves()); 
+    }
     public void SaveTurn(Turn turn)
     {
         if (_turnHistory.Any(t => t.attackerID == turn.attackerID))
         {
+            //for testing incase new bug
             Debug.Log("duplicate detected, index of : "+turn.attackerIndex);
             return;
         }
@@ -87,9 +95,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         if ((_battleHandler.isDoubleBattle && IsLastParticipant())
             || (currentTurnIndex == _battleHandler.participantCount))
         {
-            _inputStateHandler.AddPlaceHolderState();
-            SetPriority();
-            StartCoroutine(ExecuteMoves());    
+            BeginTurnExecution();
         }
         else
         {
@@ -98,7 +104,31 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             NextTurn();
         }
     }
-
+    public void SaveStruggleTurn(Battle_Participant attacker)
+    {
+        Debug.Log("saved for struggle: ");
+        var struggle = ScriptableObject.CreateInstance<Move>();
+        struggle.priority = 0;
+        struggle.moveName = "Struggle";    
+        
+        var validEnemies = attacker.currentEnemies
+            .Where(enemy => enemy.isActive)
+            .Select(enemy => Array.IndexOf(_battleHandler.battleParticipants, enemy))
+            .ToList();
+        
+        var randomEnemyIndex = validEnemies[Utility.RandomRange(0, validEnemies.Count)];
+        var victim = _battleHandler.battleParticipants[randomEnemyIndex];
+        
+        var struggleTurn = new Turn(
+            TurnUsage.UseStruggle,
+            attacker : currentTurnIndex
+            ,victim : randomEnemyIndex
+            ,move : struggle
+            ,attackerID : attacker.pokemon.pokemonID
+            ,victimID : victim.pokemon.pokemonID);
+        
+        SaveTurn(struggleTurn);
+    }
     public void SaveSwitchTurn(SwitchOutData data)
     {
         var fakeMove = ScriptableObject.CreateInstance<Move>();
@@ -265,7 +295,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         foreach (var currentTurn in _turnHistory )
         {
             if (_battleHandler.battleOver) break;
-
+            
             if (currentTurn.isCancelled) continue;
             
             currentTurn.turnExecuted = true;
@@ -286,12 +316,21 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                 yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
                 continue;
             }
-           
+            
             yield return OnMoveExecute?.Invoke(attacker);
            
             yield return attacker.heldItemHandler.CheckForUsableItem();
 
             yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
+
+            if (currentTurn.turnUsage == TurnUsage.UseStruggle)
+            {
+                Debug.Log("struggle check");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " is out of moves");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " used struggle");
+                yield return _moveUsageHandler.DealStruggleDamage(victim,attacker);
+                continue;
+            }
             
             successfulAttack = false;
             OnAttackAttempted += GetAttackResult;
@@ -353,7 +392,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                     else
                     {
                         participant.currentCoolDown.isExecutionTurn = true;
-                        Debug.Log("added execute");
                         AddTurn(new(participant.currentCoolDown.turnData));
                     }
                 }
@@ -513,7 +551,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         
         if (participant.currentCoolDown.canDisplayMessage)
         {
-            Debug.Log("check store");
             _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName
                                                         +participant.currentCoolDown.message);
             yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
@@ -558,9 +595,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             ChangeTurn(3, 1);
         else
             ChangeTurn(2, 2);
-
-        if (_battleHandler.GetCurrentParticipant().isSemiInvulnerable)
-            NextTurn();
     }
 
     public void RemoveTurn()
@@ -577,12 +611,15 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         else
             currentTurnIndex = 0;
         
+        OnNewTurn?.Invoke();
+        
         if (!_battleHandler.battleParticipants[currentTurnIndex].isActive)
         {
-            NextTurn();
-            return;
+            if (_battleHandler.isDoubleBattle && IsLastParticipant())
+            {
+                BeginTurnExecution();
+            }else NextTurn();
         }
-        OnNewTurn?.Invoke();
     }
     private bool MoveSuccessful(Turn turn)
     {

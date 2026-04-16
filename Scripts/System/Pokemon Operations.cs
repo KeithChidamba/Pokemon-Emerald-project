@@ -13,7 +13,7 @@ public enum Types
 {
     Normal, Fire, Water, Electric, Grass, Ice,
     Fighting, Poison, Ground, Flying, Psychic,
-    Bug, Rock, Ghost, Dragon, Dark, Steel
+    Bug, Rock, Ghost, Dragon, Dark, Steel,Typeless
 }
 public enum Stat{None,Attack,Defense,SpecialAttack,SpecialDefense,Speed,Hp,Crit,Accuracy,Evasion,Multi}
 public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
@@ -26,7 +26,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     public Move NewMoveAsset;
     public static Action<bool> OnEvChange;
     public event Action<Pokemon,bool> OnPokeballUsed;
-    private Wild_pkm _wildPokemonHandler;
+    private WildPokemonAiHandler _wildPokemonHandler;
     private Item_handler _itemHandler;
     private Pokemon_party _playerParty;
     private InputStateHandler _inputStateHandler;
@@ -37,7 +37,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     
     public void Inject(ServiceContainer container)
     {
-        _wildPokemonHandler = container.Resolve<Wild_pkm>();
+        _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _itemHandler = container.Resolve<Item_handler>();
         _playerParty = container.Resolve<Pokemon_party>();

@@ -43,7 +43,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
     
     private Dialogue_handler _dialogueHandler;
     private Battle_handler _battleHandler;
-    private Wild_pkm _wildPokemonHandler;
+    private WildPokemonAiHandler _wildPokemonHandler;
     private BattleVisuals _battleVisualsHandler;
     
     public void Inject(ServiceContainer container)
@@ -51,7 +51,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _battleHandler = container.Resolve<Battle_handler>();
-        _wildPokemonHandler = container.Resolve<Wild_pkm>();
+        _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         gameObject.SetActive(true);
         OnInject();
     }
@@ -322,9 +322,9 @@ public class BattleIntro : MonoBehaviour,IInjectable
         }
     }
 
-    public IEnumerator SwitchInPokemon(Battle_Participant swapParticipant, Pokemon newPokemon,bool intentionalSwitch=true)
+    public IEnumerator SwitchInPokemon(Battle_Participant swapParticipant, Pokemon newPokemon,bool normalIntentionalSwitch=true)
     {
-        if(!swapParticipant.isPlayer)
+        if(swapParticipant.isEnemy)
         {
             yield return enemyPokeballs.ShowPokeballs();
             yield return new WaitForSeconds(0.5f);
@@ -343,7 +343,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         {
             yield return _battleVisualsHandler.SendOutPlayerPokemon(swapParticipant);
         }
-        if (intentionalSwitch)
+        if (normalIntentionalSwitch)
         {
             yield return _battleVisualsHandler.RevealPokemonAfterWithdraw(swapParticipant);
             if (swapParticipant.isEnemy) yield return PokemonIntroAnimation(swapParticipant);
