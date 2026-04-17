@@ -281,6 +281,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
 
     private void StartPokemonPartySwap(int memberPosition)
     {
+        _pokemonPartyHandler.OnMemberSelected -= StartPokemonPartySwap; 
         StartCoroutine(_pokemonPartyHandler.SwapMemberWithoutTurnUsage(memberPosition));
     }
     public void DeactivateParticipant()
@@ -325,6 +326,10 @@ public class Battle_Participant : MonoBehaviour,IInjectable
             pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
         }
         pokemon.OnHealthChanged -= CheckIfFainted;
+        if (pokemon.statusEffect == StatusEffect.BadlyPoison)
+        {
+            pokemon.statusEffect = StatusEffect.Poison;
+        }
     }
     private void ResetParticipantStateAfterLevelUp(Pokemon pokemonAfterLevelUp)
     {
@@ -440,11 +445,6 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         pokemon.OnHealthChanged += CheckIfFainted;
         ActivateUI(doubleBattleUI, _battleHandler.isDoubleBattle);
         ActivateUI(singleBattleUI, !_battleHandler.isDoubleBattle);
-        
-        foreach (var move in pokemon.moveSet)
-        {
-            move.powerpoints = 0;
-        }
         
         if (!isPlayer) return;
         pokemon.OnEvolutionSuccessful += AddToEvolutionQueue;

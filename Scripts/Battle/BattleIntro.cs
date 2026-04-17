@@ -188,9 +188,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
             StartCoroutine(PokemonIntroAnimationMovement(participants[i]));
             participants[i].participantUI.SetActive(true);//change to slide
         }
-        participantIntroImages[0].gameObject.SetActive(false);
-        participantIntroImages[0].sprite = playerSprite;
-        participantIntroImages[0].rectTransform.anchoredPosition = _defaultParticipantImagePositions[0];
+        ResetParticipantIntroImages();
     }
     public IEnumerator PlayTrainerIntroSequence()
     {
@@ -298,7 +296,12 @@ public class BattleIntro : MonoBehaviour,IInjectable
             participants[i].participantUI.SetActive(true);
         }
         yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
-       
+
+        ResetParticipantIntroImages();
+    }
+
+    public void ResetParticipantIntroImages()
+    {
         for (var i = 0; i < 4; i++)
         {
             participantIntroImages[i].gameObject.SetActive(false);
@@ -306,7 +309,6 @@ public class BattleIntro : MonoBehaviour,IInjectable
         }
         participantIntroImages[0].sprite = playerSprite;
     }
-
     public IEnumerator ShowEnemiesAfterBattle()
     {
         var participants = _battleHandler.battleParticipants;

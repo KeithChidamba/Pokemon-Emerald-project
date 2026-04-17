@@ -719,6 +719,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
                 battleParticipants[i].pokemonTrainerAI = null;
             }
         }
+        _battleIntroHandler.ResetParticipantIntroImages();
         OnBattleResult?.Invoke(battleWon);
         _defaultPokemonImagePositions.Clear();
         _encounterHandler.ResetTrigger();

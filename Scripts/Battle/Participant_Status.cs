@@ -142,6 +142,13 @@ public class Participant_Status : BattleParticipantModule
 
     private IEnumerator GetDamageFromStatus(float damagePercent,string message)
     {        
+        var damagingStatuses = new[] { StatusEffect.Poison, StatusEffect.BadlyPoison, StatusEffect.Burn };
+        
+        if (!damagingStatuses.Contains(participant.pokemon.statusEffect))
+        {
+            yield break;
+        }
+        
         _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+message);
         
         var damageSource = DamageSource.Normal;

@@ -124,7 +124,7 @@ public class Move_handler:MonoBehaviour,IInjectable
     }
 
 
-    float CalculateConfusionDamage(Battle_Participant confusionVictim)
+    private float CalculateConfusionDamage(Battle_Participant confusionVictim)
     {
         int level = confusionVictim.pokemon.currentLevel;
         float levelFactor = ((level * 2f) / 5f) + 2f;
@@ -142,9 +142,9 @@ public class Move_handler:MonoBehaviour,IInjectable
 
         return damage;
     }
-    public IEnumerator DealStruggleDamage(Battle_Participant struggleVictim,Battle_Participant struggleUser)
+    public IEnumerator DealStruggleDamage(Battle_Participant struggleVictim,Battle_Participant struggleUser,Move struggleMove)
     {
-        var struggleDamage = CalculateStruggleDamage(struggleVictim,struggleUser);
+        var struggleDamage = CalculateStruggleDamage(struggleVictim,struggleUser,struggleMove);
         
         DisplayDamage(struggleVictim,displayEffectiveness:false,isSpecificDamage:true
             ,predefinedDamage:struggleDamage);
@@ -158,7 +158,7 @@ public class Move_handler:MonoBehaviour,IInjectable
         
         yield return new WaitUntil(()=> !displayingDamage);
     }
-    private float CalculateStruggleDamage(Battle_Participant currentVictim,Battle_Participant struggleUser)
+    private float CalculateStruggleDamage(Battle_Participant currentVictim,Battle_Participant struggleUser,Move struggle)
     {
         var critValue = 1;
         var buffedCritRateIndex = Array.IndexOf(_critLevels, struggleUser.pokemon.critChance);
@@ -186,9 +186,9 @@ public class Move_handler:MonoBehaviour,IInjectable
 
         if (damageDealt < 1) damageDealt = 1;
         
-        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, null, damageDealt) ?? damageDealt;
-        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff, null);
-        float finalDamage = AccountForVictimsBarriers(null, currentVictim, damageAfterFieldModifiers);
+        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, struggle, damageDealt) ?? damageDealt;
+        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff, struggle.type.typeName);
+        float finalDamage = AccountForVictimsBarriers(struggle, currentVictim, damageAfterFieldModifiers);
 
         OnDamageDeal?.Invoke(finalDamage, currentVictim);
         return finalDamage;
@@ -242,17 +242,17 @@ public class Move_handler:MonoBehaviour,IInjectable
         if (damageDealt < 1) damageDealt = 1;
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
-        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type);
+        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeName);
         float finalDamage = AccountForVictimsBarriers(move,currentVictim,damageAfterFieldModifiers);
         OnDamageDeal?.Invoke(finalDamage,currentVictim);
         OnMoveHit?.Invoke(attacker,move);
         return finalDamage;
     }
-    private float ApplyFieldDamageModifiers(float currentDamage, Type moveType)
+    private float ApplyFieldDamageModifiers(float currentDamage, string moveType)
     {
         foreach (var modifier in _onFieldDamageModifiers)
         {
-            if (modifier.modifierInfo.typeAffected.ToString() == moveType.typeName)
+            if (nameof(modifier.modifierInfo.typeAffected) == moveType)
                 return currentDamage * modifier.modifierInfo.damageModifier;
         }
         return currentDamage;

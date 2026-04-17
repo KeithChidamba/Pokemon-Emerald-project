@@ -197,7 +197,7 @@ public class AbilityHandler : BattleParticipantModule
         //Check level and 10% pickup chance
         if (participant.pokemon.currentLevel < 5) return;
         if (Utility.RandomRange(1, 101) > 10) return;
-        //only happens at end of battle so no need to cahce list
+        //only happens at end of battle so no need to cache list
         List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
         {
             (5, 9, new[] { "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
@@ -261,15 +261,15 @@ public class AbilityHandler : BattleParticipantModule
                 return damage*2;
         }
         if (_damageBuffCombinations.TryGetValue(_currentAbility, out var typeName))
-            return damage * GetAbilityDamageBuff(move, typeName);
+            return damage * GetAbilityDamageBuff(move.type.typeName, typeName);
         
         return damage;
     }
 
-    private float GetAbilityDamageBuff(Move move, string typeName)
+    private float GetAbilityDamageBuff(string moveTypeName, string typeName)
     {
         if (participant.pokemon.hp < (participant.pokemon.maxHp * 0.33f))
-            if (move.type.typeName == typeName)
+            if (moveTypeName == typeName)
                 return 1.5f;
         return 1f;
     }

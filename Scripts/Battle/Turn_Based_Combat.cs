@@ -63,17 +63,17 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 
     private void AddTurn(Turn turn)
     {
-        Debug.Log("turn added");
+        //Debug.Log("turn added");
         _turnHistory.Add(turn);
     }
     private void RemoveTurn(int index)
     {
-        Debug.Log("turn removed");
+        //Debug.Log("turn removed");
         _turnHistory.RemoveAt(index);
     }
     private void ClearTurn()
     {
-        Debug.Log("turn cleared");
+        //Debug.Log("turn cleared");
         _turnHistory.Clear();
     }
 
@@ -108,7 +108,11 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     {
         var struggle = ScriptableObject.CreateInstance<Move>();
         struggle.priority = 0;
-        struggle.moveName = "Struggle";    
+        struggle.moveName = "Struggle";
+        struggle.isSpecial = false;
+        var typelessType = ScriptableObject.CreateInstance<Type>();
+        typelessType.typeName = nameof(Types.Typeless);
+        struggle.type = typelessType;
         
         var validEnemies = attacker.currentEnemies
             .Where(enemy => enemy.isActive)
@@ -327,7 +331,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " is out of moves");
                 yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " used struggle");
-                yield return _moveUsageHandler.DealStruggleDamage(victim,attacker);
+                yield return _moveUsageHandler.DealStruggleDamage(victim,attacker,currentTurn.move);
                 yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
                 yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
                 continue;
