@@ -300,7 +300,7 @@ public class Bag : MonoBehaviour,IInjectable
         _dialogueHandler.DisplayDetails(partyMember.pokemonName
                                                  +" received a "+itemToBeGiven.itemName);
         
-        partyMember.GiveItem(Obj_Instance.CreateItem(itemToBeGiven));
+        partyMember.GiveItem(InstanceFactory.CreateItem(itemToBeGiven));
         itemToBeGiven.quantity--;
         CheckItemQuantity(itemToBeGiven);
         _pokemonPartyHandler.RefreshMemberCards();
@@ -370,7 +370,7 @@ public class Bag : MonoBehaviour,IInjectable
                 {
                     var quantityGap = (maxItemCapacity - itemFound.quantity);
                     itemFound.quantity += quantityGap;
-                    var overflow = Obj_Instance.CreateItem(item);
+                    var overflow = InstanceFactory.CreateItem(item);
                     overflow.quantity = item.quantity - quantityGap;
                     allItems.Add(overflow);
                     numItems++;
@@ -378,13 +378,13 @@ public class Bag : MonoBehaviour,IInjectable
             }
             else
             {
-                allItems.Add(Obj_Instance.CreateItem(item));
+                allItems.Add(InstanceFactory.CreateItem(item));
                 numItems++;
             }
         }
         else
         {
-            allItems.Add(Obj_Instance.CreateItem(item));
+            allItems.Add(InstanceFactory.CreateItem(item));
             numItems++;
         }
     }

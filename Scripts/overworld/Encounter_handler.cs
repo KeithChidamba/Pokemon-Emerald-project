@@ -82,7 +82,7 @@ public class Encounter_handler : MonoBehaviour,IInjectable
 
     void CreateWildPokemon(EncounterPokemonData pokemonData)
     {
-        wildPokemon = Obj_Instance.CreatePokemon(pokemonData.pokemon);
+        wildPokemon = InstanceFactory.CreatePokemon(pokemonData.pokemon);
         _pokemonOperationsHandler.SetPokemonTraits(wildPokemon);
         if (pokemonData.evolutionFormNumber > 0)
         {

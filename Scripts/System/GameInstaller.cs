@@ -75,7 +75,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(gameSettingsHandler);
         _container.RegisterSingleton(moveLogicDatabase);
         
-        Obj_Instance.GetContainer(_container);//static class dependency
+        InstanceFactory.GetContainer(_container);//static class dependency
         
         //Non-Mono services
         var playerBagInputService = new PlayerBagInputService(_container);

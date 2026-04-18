@@ -48,20 +48,20 @@ public class Enemy_trainer : BattleParticipantModule
     }
     public void SetupTrainerForBattle(TrainerData copyOfTrainerData)
     {
-        trainerData = Obj_Instance.CreateTrainer(copyOfTrainerData);
+        trainerData = InstanceFactory.CreateTrainer(copyOfTrainerData);
         trainerParty.Clear();
         foreach (TrainerPokemonData member in trainerData.PokemonParty)
         {
-            var pokemonCopy = Obj_Instance.CreatePokemon(member.pokemon);
+            var pokemonCopy = InstanceFactory.CreatePokemon(member.pokemon);
             trainerParty.Add(pokemonCopy);
             var expForNextLevel = PokemonOperations.CalculateExpForNextLevel(member.pokemonLevel, pokemonCopy.expGroup)+1;
             pokemonCopy.ReceiveExperience(expForNextLevel);
             pokemonCopy.hp = pokemonCopy.maxHp;
             pokemonCopy.moveSet.Clear();
             foreach (Move move in member.moveSet)
-                pokemonCopy.moveSet.Add(Obj_Instance.CreateMove(move));
+                pokemonCopy.moveSet.Add(InstanceFactory.CreateMove(move));
             
-            if (member.hasItem) pokemonCopy.GiveItem(Obj_Instance.CreateItem(member.heldItem));
+            if (member.hasItem) pokemonCopy.GiveItem(InstanceFactory.CreateItem(member.heldItem));
         }
     }
     public List<Pokemon> GetLivingPokemon()

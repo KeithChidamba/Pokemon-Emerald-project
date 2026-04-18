@@ -187,7 +187,7 @@ public class Pokemon : ScriptableObject
         moveSet.Clear();
         foreach (var move in movesetTemplate)
         {
-            var moveCopy = Obj_Instance.CreateMove(Resources.Load<Move>(
+            var moveCopy = InstanceFactory.CreateMove(Resources.Load<Move>(
                 Save_manager.GetDirectory(AssetDirectory.Moves) + move.moveName));
             
             moveCopy.powerpoints = move.powerPoints;
@@ -204,7 +204,7 @@ public class Pokemon : ScriptableObject
     public void GiveItem(Item itemToGive)
     {
         hasItem = true;
-        heldItem = Obj_Instance.CreateItem(itemToGive);
+        heldItem = InstanceFactory.CreateItem(itemToGive);
         heldItem.quantity = 1;
     }
     public bool HasType(Types typeName)

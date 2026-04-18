@@ -230,7 +230,7 @@ public class AbilityHandler : BattleParticipantModule
         var itemWon = Resources.Load<Item>(assetDirectory);
         if (Utility.RandomRange(1, 101) < participant.pokemon.currentLevel)
         {
-            participant.pokemon.GiveItem(Obj_Instance.CreateItem(itemWon));
+            participant.pokemon.GiveItem(InstanceFactory.CreateItem(itemWon));
         }
     }
     void GiveStatic(Battle_Participant attacker,Move moveUsed)

@@ -675,7 +675,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         {
             var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
             OnPokemonWithdraw?.Invoke(nonPartyPokemon[pokemonIndex]);
-            _pokemonPartyHandler.party[_pokemonPartyHandler.numMembers] = Obj_Instance.CreatePokemon(nonPartyPokemon[pokemonIndex]);
+            _pokemonPartyHandler.party[_pokemonPartyHandler.numMembers] = InstanceFactory.CreatePokemon(nonPartyPokemon[pokemonIndex]);
             DeleteNonPartyPokemon(pokemonIndex);
             _pokemonPartyHandler.numMembers++;
             numPartyMembers++;

@@ -65,7 +65,7 @@ public class BerryTree : MonoBehaviour,IInjectable
         //loads default Asset if there's no save data, only happen when a new tree is made during dev
         if (treeData != null)
         {
-            var copy = Obj_Instance.CreateTreeData(treeData);
+            var copy = InstanceFactory.CreateTreeData(treeData);
             treeData = null;
             treeData = copy;
             treeData.isPlanted = true;
@@ -219,7 +219,7 @@ public class BerryTree : MonoBehaviour,IInjectable
         var treeDataAsset = Resources.Load<BerryTreeData>(
             Save_manager.GetDirectory(AssetDirectory.BerryTreeData)
                                                           + berryToPlant.itemName+" Data");
-        treeData = Obj_Instance.CreateTreeData(treeDataAsset);
+        treeData = InstanceFactory.CreateTreeData(treeDataAsset);
         treeData.treeIndex = _overworldStateHandler.GetTreeIndex(this);
         treeData.isPlanted = true;
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
@@ -246,7 +246,7 @@ public class BerryTree : MonoBehaviour,IInjectable
         }
         _dialogueHandler.DeletePreviousOptions();
         
-        var berries = Obj_Instance.CreateItem(treeData.berryItem);
+        var berries = InstanceFactory.CreateItem(treeData.berryItem);
         berries.quantity = GetBerryYield();
         _playerBag.AddItem(berries);
         _dialogueHandler.DisplayDetails($"You picked up {berries.quantity}" +

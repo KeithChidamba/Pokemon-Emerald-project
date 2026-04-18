@@ -15,7 +15,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public Sprite[] statChangeSprites;
     private Dictionary<Stat, Sprite> statChangeVisuals = new();
     private string _statChangeMessage;
-    public float outOfViewDitance = 400f;
+    public  readonly float outOfViewDitance = 600f;
     public event Action OnStatVisualDisplayed;
     private List<Coroutine> _activeSlideCoroutines = new();
     

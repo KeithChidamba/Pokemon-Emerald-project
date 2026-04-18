@@ -311,7 +311,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         {
             if (_victim.pokemon.heldItem.itemType == ItemType.Berry)
             {
-                _attacker.pokemon.GiveItem(Obj_Instance.CreateItem(_victim.pokemon.heldItem));
+                _attacker.pokemon.GiveItem(InstanceFactory.CreateItem(_victim.pokemon.heldItem));
                 _victim.pokemon.RemoveHeldItem();
             }
         }

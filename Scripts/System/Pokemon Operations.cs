@@ -261,7 +261,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         
         var moveFromAsset = Resources.Load<Move>(assetPath);
         
-        var newMove = Obj_Instance.CreateMove(moveFromAsset);
+        var newMove = InstanceFactory.CreateMove(moveFromAsset);
         
         if (currentPokemon.moveSet.Any(move=> move.moveName == newMove.moveName))
         {
@@ -292,7 +292,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             else
             {//wild pokemon get generated with somewhat random moveset choices
                 currentPokemon.moveSet[Utility.RandomRange(0, 4)]
-                    = Obj_Instance.CreateMove(moveFromAsset);
+                    = InstanceFactory.CreateMove(moveFromAsset);
             }
         }
         else
@@ -333,7 +333,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         _dialogueHandler.DisplayBattleInfo(currentPokemon.pokemonName + " forgot " 
             + currentPokemon.moveSet[moveIndex].moveName 
             + " and learned " + NewMoveAsset.moveName,false);
-        currentPokemon.moveSet[moveIndex] = Obj_Instance.CreateMove(NewMoveAsset);
+        currentPokemon.moveSet[moveIndex] = InstanceFactory.CreateMove(NewMoveAsset);
         SelectingMoveReplacement = false;
         LearningNewMove = false;
     }

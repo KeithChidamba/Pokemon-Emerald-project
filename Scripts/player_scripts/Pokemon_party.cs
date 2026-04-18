@@ -264,7 +264,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     public void AddMember(Pokemon pokemon, string pokeballType="Pokeball", bool isGiftPokemon=false)
     {
-        var newPokemon = Obj_Instance.CreatePokemon(pokemon); 
+        var newPokemon = InstanceFactory.CreatePokemon(pokemon); 
         newPokemon.pokeballName = pokeballType; 
         newPokemon.hasTrainer = true; 
         if (isGiftPokemon)

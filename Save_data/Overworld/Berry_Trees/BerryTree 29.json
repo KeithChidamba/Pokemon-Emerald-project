@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33076
+                    "instanceID": 33100
                 },
                 {
-                    "instanceID": 33078
+                    "instanceID": 33102
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33080
+                    "instanceID": 33104
                 },
                 {
-                    "instanceID": 33082
+                    "instanceID": 33106
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33084
+                    "instanceID": 33108
                 },
                 {
-                    "instanceID": 33086
+                    "instanceID": 33110
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-04-16T14:03:06.6452910+02:00"
+    "lastLogin": "2026-04-18T18:03:39.1474870+02:00"
 }

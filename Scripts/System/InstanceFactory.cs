@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
 
-public static class Obj_Instance
+public static class InstanceFactory
 {
     private static ServiceContainer _serviceContainer;
 

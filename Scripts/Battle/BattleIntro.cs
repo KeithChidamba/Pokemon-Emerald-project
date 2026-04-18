@@ -121,8 +121,12 @@ public class BattleIntro : MonoBehaviour,IInjectable
             IEnumerator DropParallax(float delay)
             {
                 yield return new WaitForSeconds(delay);
-                var droppedPosition = new Vector2(parallaxObject.anchoredPosition.x + 100f,parallaxObject.anchoredPosition.y-parallaxObject.rect.height);
-                yield return _battleVisualsHandler.SlideRect(parallaxObject, parallaxObject.anchoredPosition, droppedPosition, 200f);
+                var endPosX = terrainParallaxStart.x + 300f;
+                var droppedPosition = new Vector2(
+                    parallaxObject.anchoredPosition.x - endPosX
+                    ,parallaxObject.anchoredPosition.y-parallaxObject.rect.height
+                    );
+                yield return _battleVisualsHandler.SlideRect(parallaxObject, parallaxObject.anchoredPosition, droppedPosition, 700f);
                 parallaxObject.gameObject.SetActive(false);
             }
             terrainParallaxImage.rectTransform.anchoredPosition = terrainParallaxStart;

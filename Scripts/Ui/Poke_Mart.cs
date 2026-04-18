@@ -115,7 +115,7 @@ public class Poke_Mart : MonoBehaviour,IInjectable
     }
     public void BuyItem()
     {
-        var item = Obj_Instance.CreateItem(currentStoreItems[topIndex + selectedItemIndex]);
+        var item = InstanceFactory.CreateItem(currentStoreItems[topIndex + selectedItemIndex]);
         if(_gameLoadingHandler.playerData.playerMoney >= item.price)
         {
             item.quantity = selectedItemQuantity;
