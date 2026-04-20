@@ -314,7 +314,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             InputDirection.Vertical, partySelectables, _pokemonPartyHandler.memberSelector
             , true, true,CloseParty,CloseParty,canManualExit:false,canExit:true));
     }
-    public void ViewOtherPokemonDetails(Pokemon selectedPokemon,List<Pokemon> pokemonToView)
+    public void ViewPokemonDetails(Pokemon initiallySelectedPokemon,List<Pokemon> pokemonToView)
     { 
         ManageScreens(1);
         ActivateUiElement(_pokemonDetailsHandler.uiParent,true);
@@ -328,11 +328,11 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             InputDirection.Horizontal,detailsSelectables, null
             , true, false,ClosePokemonDetails,ClosePokemonDetails));
         
-        _pokemonDetailsHandler.LoadDetails(selectedPokemon,pokemonToView);
+        _pokemonDetailsHandler.LoadDetails(initiallySelectedPokemon,pokemonToView);
     }
     public void ViewPartyPokemonDetails(Pokemon selectedPokemon)
     {
-        ViewOtherPokemonDetails(selectedPokemon,_pokemonPartyHandler.GetValidPokemon());
+        ViewPokemonDetails(selectedPokemon,_pokemonPartyHandler.GetValidPokemon());
     }
 
     public void ViewItemStorage()

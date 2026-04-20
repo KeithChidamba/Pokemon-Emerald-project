@@ -362,7 +362,7 @@ public class Pokemon : ScriptableObject
                 LevelUp();
 
                 _dialogueHandler.DisplayBattleInfo(pokemonName+" grew to lv"+currentLevel);
-                currentLevelExpAmount = currentExpAmount;
+               
                 yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
                 yield return _pokemonOperationsHandler.WaitForNewMoveCheck(this);
 
@@ -461,6 +461,7 @@ public class Pokemon : ScriptableObject
         OnLevelUp?.Invoke(this);
         DetermineFriendshipLevelChange(true, FriendshipModifier.LevelUp);
         currentLevel++;
+        currentLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel-1,expGroup);
         nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel,expGroup);
         IncreaseStats();
         

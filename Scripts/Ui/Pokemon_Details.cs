@@ -35,6 +35,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     public Action<int> OnMoveSelected; 
     public bool learningMove;
     public bool changingMoveData;
+    private bool _viewingStats;
     private Dictionary<int, Action> _pages = new();
     public GameObject moveSelector;
     public GameObject uiParent;
@@ -106,8 +107,9 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         move_details.SetActive(true);
     }
 
-    private void LoadPage(int pageNumber)
+    private void  LoadPage(int pageNumber)
     {
+        _viewingStats = pageNumber == 2;
         if(_pages.TryGetValue(pageNumber,out var openPage))
             openPage();
         else
@@ -144,9 +146,6 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         pkm_CurrentExp.text = currentPokemon.currentExpAmount.ToString();
         pkm_NextLvExp.text = currentPokemon.nextLevelExpAmount.ToString();
         pkm_HeldItem.text = (currentPokemon.hasItem)? currentPokemon.heldItem.itemName: "NONE";
-        player_exp.value = currentPokemon.currentExpAmount;
-        player_exp.maxValue = currentPokemon.nextLevelExpAmount;
-        player_exp.minValue = currentPokemon.currentLevelExpAmount;
         Stats_ui.SetActive(true);
     }
     
@@ -198,9 +197,14 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         pkm_img.sprite = currentPokemon.frontPicture;
         gender_img.gameObject.SetActive(true);
         if(currentPokemon.hasGender)
-            gender_img.sprite = Resources.Load<Sprite>("Pokemon_project_assets/ui/"+currentPokemon.gender.ToString().ToLower());
+        {
+            gender_img.sprite = Resources.Load<Sprite>(Save_manager.GetDirectory(AssetDirectory.UI)
+                                                       + currentPokemon.gender.ToString().ToLower());
+        }
         else
+        {
             gender_img.gameObject.SetActive(false);
+        }
     }
     public void LoadDetails(Pokemon selectedPokemon,List<Pokemon> pokemonList)
     {
@@ -210,5 +214,13 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         LoadOverlayInfo();
         _currentPage = (learningMove || changingMoveData) ? 3 : 1;
         LoadPage(_currentPage);
+    }
+
+    private void Update()
+    {
+        if(!_viewingStats)return;
+        player_exp.value = currentPokemon.currentExpAmount;
+        player_exp.maxValue = currentPokemon.nextLevelExpAmount;
+        player_exp.minValue = currentPokemon.currentLevelExpAmount;
     }
 }

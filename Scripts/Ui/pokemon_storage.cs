@@ -464,7 +464,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     
     private void ViewNonPartyPokemonDetails()
     {
-        _gameUIHandler.ViewOtherPokemonDetails(nonPartyPokemon[SearchForPokemonIndex(selectedPokemonID)],nonPartyPokemon);
+        _gameUIHandler.ViewPokemonDetails(nonPartyPokemon[SearchForPokemonIndex(selectedPokemonID)],nonPartyPokemon);
     }
     private void SelectPartyPokemon(PC_party_pkm icon)
     {
