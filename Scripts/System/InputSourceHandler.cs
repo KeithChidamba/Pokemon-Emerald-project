@@ -17,15 +17,23 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     public static bool InputPressed(ControlEvent e) => _pressed[e];
     public static bool InputHeld(ControlEvent e) => _held[e];
     public static bool InputRelease(ControlEvent e) => !_held[e];
+    private bool _isMobile;
+    
+    private Game_Load _gameLoadingHandler;
     
     public void Inject(ServiceContainer container)
     {
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        
         gameObject.SetActive(true);
         OnInject();
     }
 
     private void OnInject()
     {
+        _isMobile = false;
+        _gameLoadingHandler.OnGameStarted += ()=> _isMobile = _gameLoadingHandler.IsMobile();
+        
         foreach (ControlEvent e in Enum.GetValues(typeof(ControlEvent)))
         {
             _held[e] = false;
@@ -34,7 +42,7 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     }
     private void Update()
     {
-        if (Application.isMobilePlatform) return;
+        if (_isMobile) return;
         if (Input.GetKeyDown(KeyCode.LeftArrow)) TriggerPress(ControlEvent.Left);
         if (Input.GetKeyUp(KeyCode.LeftArrow)) TriggerRelease(ControlEvent.Left);
 
