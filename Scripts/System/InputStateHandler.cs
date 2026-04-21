@@ -85,7 +85,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         
         bool canExitCurrentDialogue = _dialogueHandler.canExitDialogue & _dialogueHandler.displaying;
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (InputSourceHandler.InputPressed(ControlEvent.Exit))
         {
             if(currentState.stateName != InputStateName.DialogueOptions && !canExitCurrentDialogue)
             {
@@ -102,26 +102,26 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         
         if (currentState.stateName == InputStateName.Empty) return;
 
-        if (Input.GetKeyDown(KeyCode.Z) && _currentStateLoaded)
+        if (InputSourceHandler.InputPressed(ControlEvent.Confirm) && _currentStateLoaded)
         {
             InvokeSelectedEvent();
         }
         
         if (currentState.stateDirection == InputDirection.None) return;
         
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (InputSourceHandler.InputPressed(ControlEvent.Left))
         {
             HandleEvents(OnInputLeft, _directionSelection[2], InputDirection.Horizontal);
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (InputSourceHandler.InputPressed(ControlEvent.Right))
         {
             HandleEvents(OnInputRight, _directionSelection[3], InputDirection.Horizontal);
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (InputSourceHandler.InputPressed(ControlEvent.Up))
         {
             HandleEvents(OnInputUp, _directionSelection[0], InputDirection.Vertical);
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (InputSourceHandler.InputPressed(ControlEvent.Down))
         {
             HandleEvents(OnInputDown, _directionSelection[1], InputDirection.Vertical);
         }

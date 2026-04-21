@@ -303,8 +303,6 @@ public class Save_manager : MonoBehaviour,IInjectable
         }
         else
         {
-            _dialogueHandler.DisplayDetails("There was no save data found!");
-            _dialogueHandler.canExitDialogue = false;
             _gameLoadingHandler.PreventGameLoad();
         }
     }
@@ -450,19 +448,17 @@ public class Save_manager : MonoBehaviour,IInjectable
 
     public void EraseSaveData()
     {
-        ClearDirectory(_saveDataPath+GetSaveDirectory(SaveDataDirectory.Pokemon));
-        ClearDirectory(_saveDataPath+GetSaveDirectory(SaveDataDirectory.Items));
-        ClearDirectory(_saveDataPath+GetSaveDirectory(SaveDataDirectory.Player));
-        ClearDirectory(_saveDataPath+GetSaveDirectory(SaveDataDirectory.PartyIds));
-        ClearDirectory(_saveDataPath+GetSaveDirectory(SaveDataDirectory.StoryObjectives));
+        foreach (var dir in SaveDataDirectories)
+        {
+            ClearDirectory(_saveDataPath + dir.Value);
+        }
     }
     private void EraseTemporarySaveData()
     {
-        ClearDirectory(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.Pokemon));
-        ClearDirectory(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.Items));
-        ClearDirectory(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.Player));
-        ClearDirectory(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.PartyIds));
-        ClearDirectory(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.StoryObjectives));
+        foreach (var dir in SaveDataDirectories)
+        {
+            ClearDirectory(_tempSaveDataPath + dir.Value);
+        }
     }
     void SaveAllPokemonData(Pokemon pokemon)
     {

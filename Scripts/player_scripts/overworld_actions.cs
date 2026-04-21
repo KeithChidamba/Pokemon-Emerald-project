@@ -74,7 +74,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C) && !ItemEquipped() && !usingUI)
+        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem) && !ItemEquipped() && !usingUI)
         {
             if (!_canUseEquippedItem) return;
             _dialogueHandler.DisplayDetails("No item has been equipped");
@@ -83,17 +83,16 @@ public class overworld_actions : MonoBehaviour,IInjectable
         {
             _playerMovementHandler.RestrictPlayerMovement();
         }
-        if (pokemonBitingPole & Input.GetKeyDown(KeyCode.Z))
+        if (pokemonBitingPole && InputSourceHandler.InputPressed(ControlEvent.Confirm))
         {
             pokemonBitingPole = false;
             _encounterHandler.TriggerFishingEncounter(fishingArea,equippedSpecialItem);
-            
         }
         if (fishing)
         {
             doingAction = true;
             manager.ChangeAnimationState(manager.fishingIdle);
-            if (Input.GetKeyDown(KeyCode.C))
+            if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
                 ResetFishingAction();
         }
     }

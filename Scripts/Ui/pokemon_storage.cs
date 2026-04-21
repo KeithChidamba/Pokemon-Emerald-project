@@ -518,10 +518,12 @@ public class pokemon_storage : MonoBehaviour,IInjectable
                 };
                 
                 selectedPokemonID = pokemonIcon.pokemon.pokemonID.ToString();
-                movingOperationData = new StorageBoxMovingData();
-                movingOperationData.pokemonID = selectedPokemonID;
-                movingOperationData.previousBoxIndex = currentBoxIndex;
-                movingOperationData.previousBoxPosition = currentIndexOfBox;
+                movingOperationData = new StorageBoxMovingData
+                {
+                    pokemonID = selectedPokemonID,
+                    previousBoxIndex = currentBoxIndex,
+                    previousBoxPosition = currentIndexOfBox
+                };
                 selectedPokemonImage.sprite = pokemonIcon.pokemon.partyFrame1;
                 ClearPokemonData();
                 RemovePokemonIcons(false);

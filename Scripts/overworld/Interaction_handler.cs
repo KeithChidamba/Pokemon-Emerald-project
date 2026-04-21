@@ -37,13 +37,13 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         
         if(!_dialogueHandler.displaying && !_stopInteractions)
         {
-            if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.C))
+            if (InputSourceHandler.InputPressed(ControlEvent.Confirm) ||  InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
             {
                 if (_canCheckForInteraction)
                     RaycastForInteraction();
             }
             
-            if (Input.GetKeyUp(KeyCode.C) || Input.GetKeyUp(KeyCode.Z))
+            if (InputSourceHandler.InputRelease(ControlEvent.UseSpecialItem) || InputSourceHandler.InputRelease(ControlEvent.Confirm))
             {
                 _canCheckForInteraction = true;
             }
@@ -86,9 +86,9 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         
         if (hit.transform && !_dialogueHandler.displaying && !_overworldActions.usingUI)
         {
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (InputSourceHandler.InputPressed(ControlEvent.Confirm))
             {
-                var interactableTile = Collider_checks.FindTileAtPositionRadius<InteractionTile>(interactionTilemap,hit.point,Vector3.down);
+                var interactableTile = PlayerCollisionHandler.FindTileAtPositionRadius<InteractionTile>(interactionTilemap,hit.point,Vector3.down);
                 if (interactableTile != null)
                 {
                     _dialogueHandler.StartInteraction(interactableTile.interaction);
@@ -101,16 +101,16 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                 }
                
             }
-            if (Input.GetKeyDown(KeyCode.C) 
+            if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem)
                 && _overworldActions.IsEquipped(Equipable.FishingRod))
             {
                 if (hit.transform.gameObject.CompareTag("Water"))
                 {
                     Encounter_Area areaOfEncounter;
-                    var animatedWaterTile = Collider_checks.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point,Vector3.down);
+                    var animatedWaterTile = PlayerCollisionHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point,Vector3.down);
                     if (animatedWaterTile == null)
                     {
-                        var stillWaterTile = Collider_checks.FindTileAtPosition<EncounterTile>(waterTilemap,hit.point,Vector3.down);
+                        var stillWaterTile = PlayerCollisionHandler.FindTileAtPosition<EncounterTile>(waterTilemap,hit.point,Vector3.down);
                         areaOfEncounter = stillWaterTile.area;
                     }
                     else
@@ -131,7 +131,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.C) 
+        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem)
             && !hit.transform
             && _overworldActions.IsEquipped(Equipable.FishingRod))
         {

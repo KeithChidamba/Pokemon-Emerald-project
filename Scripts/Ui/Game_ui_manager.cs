@@ -89,7 +89,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     {
         if (_overworldActionsHandler == null) return;
         if (!canUseUi) return;
-        if (Input.GetKeyDown(KeyCode.Space) && _canOpenMenu &&!viewingMenu)
+        if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu)&& _canOpenMenu &&!viewingMenu)
         {
             ManageScreens(1);
             viewingMenu = true;

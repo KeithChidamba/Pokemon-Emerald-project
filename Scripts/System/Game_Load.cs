@@ -18,7 +18,8 @@ public class Game_Load : MonoBehaviour,IInjectable
     private readonly int _minNameLength = 4;
     public GameObject world_Map;
     public Player_data playerData;
-
+    public GameObject mobileControlsUI;
+    
     public event Action OnGameStarted;
     private Save_manager _saveHandler;
     private Dialogue_handler _dialogueHandler;
@@ -26,7 +27,6 @@ public class Game_Load : MonoBehaviour,IInjectable
     private Player_movement _playerMovement;
     private overworld_actions _overworldActions;
     private Bag _playerBagHandler;
-    
     public void Inject(ServiceContainer container)
     {
         _playerBagHandler = container.Resolve<Bag>();
@@ -35,6 +35,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         _areaHandler = container.Resolve<Area_manager>();
         _playerMovement = container.Resolve<Player_movement>();
         _overworldActions = container.Resolve<overworld_actions>();
+        
         gameObject.SetActive(true);
         OnInject();
     }
@@ -76,6 +77,7 @@ public class Game_Load : MonoBehaviour,IInjectable
             data.trainerID = Utility.Random16Bit();
             data.secretID = Utility.Random16Bit();
             data.location = AreaName.PlayerGarden;
+            data.playerPosition =  new Vector3(-5, -20, 0);
             playerData = data;
             StartGame();
         }
@@ -91,17 +93,22 @@ public class Game_Load : MonoBehaviour,IInjectable
         _dialogueHandler.EndDialogue();
         LoadNewPlayerPage();
     }
-    public void StartGame()
+
+    private void StartGame()
     {
+        mobileControlsUI.SetActive(Application.isMobilePlatform);
         _dialogueHandler.EndDialogue();
         new_player_ui.SetActive(false);
         Start_ui.SetActive(false);
         
-        _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
         _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
         world_Map.SetActive(true);
+        
+        _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
+        
         _areaHandler.loadingPlayerFromSave = true;
         _areaHandler.SwitchToArea(playerData.location);
+        
         OnGameStarted?.Invoke();
     }
 }

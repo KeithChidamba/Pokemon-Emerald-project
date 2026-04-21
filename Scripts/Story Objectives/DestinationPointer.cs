@@ -43,7 +43,7 @@ public class DestinationPointer : MonoBehaviour,IInjectable
         cam = Camera.main; 
         pointerUIImage = _gameUIHandler.destinationPointerUI;
         canvasRect = pointerUIImage.canvas.GetComponent<RectTransform>();
-        Collider_checks.OnCollision += ConfirmDestination;
+        PlayerCollisionHandler.OnCollision += ConfirmDestination;
         overworldObject.SetActive(true);
     }
 
@@ -51,7 +51,7 @@ public class DestinationPointer : MonoBehaviour,IInjectable
     {
         if (currentCollision.gameObject.CompareTag(objectiveData.destinationTag))
         {
-            Collider_checks.OnCollision -= ConfirmDestination;
+            PlayerCollisionHandler.OnCollision -= ConfirmDestination;
             objectiveData.ClearObjective();
             overworldObject.SetActive(false);
             pointerUIImage.gameObject.SetActive(false);

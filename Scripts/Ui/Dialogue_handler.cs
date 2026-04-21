@@ -56,7 +56,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
 
     void Update()
     {
-        if (dialogueFinished && Input.GetKeyDown(KeyCode.X) && canExitDialogue)
+        if (dialogueFinished && InputSourceHandler.InputPressed(ControlEvent.Exit) && canExitDialogue)
         {
             StartCoroutine(_playerMovementHandler.AllowPlayerMovement(0.25f));
             EndDialogue();
@@ -288,7 +288,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             for (int i = firstChar; i <= lastChar; i++)
             {
                 // Skip typing
-                if (Input.GetKeyDown(KeyCode.X))
+                if (InputSourceHandler.InputPressed(ControlEvent.Exit))
                 {
                     dialougeText.maxVisibleCharacters = lastChar + 1;
                     var canExit = canExitDialogue;
@@ -303,7 +303,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             }
 
             // Wait for input before next page
-            if(totalPages>1) yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Z));
+            if(totalPages>1) yield return new WaitUntil(() =>InputSourceHandler.InputPressed(ControlEvent.Confirm));
         }
         dialogueFinished = true;
         CompleteDialogueInteraction();

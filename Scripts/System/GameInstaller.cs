@@ -8,6 +8,7 @@ public class GameInstaller : MonoBehaviour
 {
     private ServiceContainer _container;
     [SerializeField] private InputStateHandler inputStateHandler;
+    [SerializeField] private InputSourceHandler inputSourceHandler;
     [SerializeField] private Dialogue_handler dialogueHandler;
     [SerializeField] private BattleIntro battleIntroHandler;
     [SerializeField] private BattleOperations battleOperationsHandler;
@@ -31,6 +32,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Save_manager saveDataHandler;
     [SerializeField] private Interaction_handler  interactionHandler;
     [SerializeField] private Player_movement playerMovementHandler;
+    [SerializeField] private PlayerCollisionHandler playerCollisionHandler;
     [SerializeField] private OverworldState overworldStateHandler;
     [SerializeField] private Area_manager  areaHandler;
     [SerializeField] private Game_Load gameLoadingHandler;
@@ -44,6 +46,7 @@ public class GameInstaller : MonoBehaviour
         _container = new ServiceContainer();
         //mono-services
         _container.RegisterSingleton(inputStateHandler);
+        _container.RegisterSingleton(inputSourceHandler);
         _container.RegisterSingleton(dialogueHandler);
         _container.RegisterSingleton(battleIntroHandler);
         _container.RegisterSingleton(battleHandler);
@@ -64,6 +67,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(saveDataHandler);
         _container.RegisterSingleton(interactionHandler);
         _container.RegisterSingleton(playerMovementHandler);
+        _container.RegisterSingleton(playerCollisionHandler);
         _container.RegisterSingleton(overworldStateHandler);
         _container.RegisterSingleton(areaHandler);
         _container.RegisterSingleton(gameLoadingHandler);

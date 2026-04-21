@@ -184,16 +184,16 @@ public class Player_movement : MonoBehaviour,IInjectable
     {
         if (usingBike) return;
         var idle = yAxisInput == 0 && xAxisInput == 0;
-        if (Input.GetKeyDown(KeyCode.X) && !runningInput)
+        if (InputSourceHandler.InputPressed(ControlEvent.Exit) && !runningInput)
         {
             runningInput = true;
             if (!idle) _animationManager.ChangeAnimationState(_animationManager.playerRun);
         }
 
-        if (Input.GetKeyUp(KeyCode.X) && runningInput)
+        if (InputSourceHandler.InputRelease(ControlEvent.Exit) && runningInput)
             _canSwitchMovement = true;
 
-        if (Input.GetKeyDown(KeyCode.X) && runningInput && _canSwitchMovement)
+        if (InputSourceHandler.InputPressed(ControlEvent.Exit) && runningInput && _canSwitchMovement)
         {
             runningInput = false;
             _canSwitchMovement = false;
@@ -214,7 +214,7 @@ public class Player_movement : MonoBehaviour,IInjectable
     {
         if (!_overworldActions.IsEquipped(Equipable.Bike)) return;
 
-        if (Input.GetKeyDown(KeyCode.C) && !usingBike && canUseBike)
+        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem) && !usingBike && canUseBike)
         {
             usingBike = true;
             runningInput = false;
@@ -222,13 +222,13 @@ public class Player_movement : MonoBehaviour,IInjectable
             movementSpeed = BikeSpeed;
             SetCurrentAnimation();
         }
-        else if (Input.GetKeyDown(KeyCode.C) && !canUseBike)
+        else if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem) && !canUseBike)
             _dialogueHandler.DisplayDetails("Cant use bike here");
 
-        if (Input.GetKeyUp(KeyCode.C) && usingBike)
+        if (InputSourceHandler.InputRelease(ControlEvent.UseSpecialItem)&& usingBike)
             _canSwitchMovement = true;
 
-        if (Input.GetKeyDown(KeyCode.C) && usingBike && _canSwitchMovement)
+        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem) && usingBike && _canSwitchMovement)
         {
             usingBike = false;
             _canSwitchMovement = false;
@@ -260,8 +260,9 @@ public class Player_movement : MonoBehaviour,IInjectable
                 OnNewTile?.Invoke();
                 standingOnTile = true;
             }
-            yAxisInput = (int)Input.GetAxisRaw("Vertical");
-            xAxisInput = (int)Input.GetAxisRaw("Horizontal");
+            
+            yAxisInput = GetAxisFromInput(ControlEvent.Down, ControlEvent.Up);
+            xAxisInput = GetAxisFromInput(ControlEvent.Left, ControlEvent.Right);
             
 //prevent diagonal movent and opposite inputs
             bool verticalInput = Math.Abs(yAxisInput) == 1;
@@ -310,13 +311,20 @@ public class Player_movement : MonoBehaviour,IInjectable
             SetCurrentAnimation();
         }
     }
+    int GetAxisFromInput(ControlEvent negative, ControlEvent positive)
+    {
+        bool neg = InputSourceHandler.InputHeld(negative);
+        bool pos = InputSourceHandler.InputHeld(positive);
 
+        if (neg == pos) return 0; // both pressed OR neither
+        return pos ? 1 : -1;
+    }
     public void ActivatePlayerFromSave(Vector3 position)
     {
         SetPlayerPosition(position);
         playerObject.SetActive(true);
     }
-    public void SetPlayerPosition(Vector3 position)
+    private void SetPlayerPosition(Vector3 position)
     {
         movePoint.position = position;
         playerObject.transform.position = position;
