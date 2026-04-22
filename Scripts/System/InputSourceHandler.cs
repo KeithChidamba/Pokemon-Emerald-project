@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public enum ControlEvent
 {
-    Up,Down,Left,Right,UseSpecialItem,OpenMenu,Confirm,Exit
+    Up,Down,Left,Right,UseSpecialItem,OpenMenu,Confirm,Exit,OpenSettings,Save
 }
 public class InputSourceHandler : MonoBehaviour, IInjectable
 {
@@ -18,11 +18,21 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     public static bool InputHeld(ControlEvent e) => _held[e];
     public static bool InputRelease(ControlEvent e) => !_held[e];
     private bool _isMobile;
-    
+    private bool _gameStarted;
+    public GameObject mobileControlsUI;
+
+    private overworld_actions _overworldActionsHandler;
+    private Dialogue_handler _dialogueHandler;
+    private InputStateHandler _inputStateHandler;
+    private Game_ui_manager _gameUIManager;
     private Game_Load _gameLoadingHandler;
     
     public void Inject(ServiceContainer container)
     {
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _overworldActionsHandler = container.Resolve<overworld_actions>();
+        _gameUIManager = container.Resolve<Game_ui_manager>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         
         gameObject.SetActive(true);
@@ -32,7 +42,8 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     private void OnInject()
     {
         _isMobile = false;
-        _gameLoadingHandler.OnGameStarted += ()=> _isMobile = _gameLoadingHandler.IsMobile();
+        _gameStarted = false;
+        _gameLoadingHandler.OnGameStarted += ()=> _gameStarted = true;
         
         foreach (ControlEvent e in Enum.GetValues(typeof(ControlEvent)))
         {
@@ -40,8 +51,37 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
             _pressed[e] = false;
         }
     }
+    public void DisplayMobileControls(bool canDisplay)
+    {
+        _isMobile = canDisplay;
+        mobileControlsUI.SetActive(canDisplay);
+    }
+
+    private bool CanUseQuickAction()
+    {
+        if(!_overworldActionsHandler.usingUI && !_dialogueHandler.displaying && _gameStarted)
+        {
+            return _inputStateHandler.currentState.stateName == InputStateName.Empty;
+        }
+        return false;
+    }
     private void Update()
     {
+        if (InputPressed(ControlEvent.OpenSettings))
+        {
+            if (CanUseQuickAction())
+            {
+                _gameUIManager.ViewGameSettings();
+            }
+        }
+        if (InputPressed(ControlEvent.Save))
+        {
+            if (CanUseQuickAction())
+            {
+                _gameUIManager.SaveGame();
+            }
+        }
+       
         if (_isMobile) return;
         if (Input.GetKeyDown(KeyCode.LeftArrow)) TriggerPress(ControlEvent.Left);
         if (Input.GetKeyUp(KeyCode.LeftArrow)) TriggerRelease(ControlEvent.Left);

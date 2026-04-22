@@ -2,13 +2,13 @@
     "isPlanted": true,
     "minYield": 1,
     "maxYield": 5,
-    "currentStageNeedsWater": false,
-    "currentStageProgress": 4,
+    "currentStageNeedsWater": true,
+    "currentStageProgress": 0,
     "minutesSinceLastStage": 0.0,
     "numStagesWatered": 0,
     "itemAssetName": "Tamato berry",
     "berryItem": {
-        "instanceID": 27656
+        "instanceID": 27664
     },
     "treeIndex": 18,
     "minutesPerStage": 180,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32746
+                    "instanceID": 32766
                 },
                 {
-                    "instanceID": 32746
+                    "instanceID": 32766
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32748
+                    "instanceID": 32768
                 },
                 {
-                    "instanceID": 32750
+                    "instanceID": 32770
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32916
+                    "instanceID": 33010
                 },
                 {
-                    "instanceID": 32918
+                    "instanceID": 33012
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32920
+                    "instanceID": 33014
                 },
                 {
-                    "instanceID": 32922
+                    "instanceID": 33016
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32924
+                    "instanceID": 33018
                 },
                 {
-                    "instanceID": 32926
+                    "instanceID": 33020
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-04-21T12:21:57.8442830+02:00"
+    "lastLogin": "2026-04-22T15:25:51.2890770+02:00"
 }

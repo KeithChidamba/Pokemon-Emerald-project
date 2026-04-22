@@ -9,7 +9,6 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 public class Game_Load : MonoBehaviour,IInjectable
 {
-    
     public Button load_btn;
     public Button newGame_btn;
     public Button uploadButton;
@@ -20,8 +19,7 @@ public class Game_Load : MonoBehaviour,IInjectable
     private readonly int _minNameLength = 4;
     public GameObject world_Map;
     public Player_data playerData;
-    public GameObject mobileControlsUI;
-    private bool _isMobile;
+
     public event Action OnGameStarted;
     private Save_manager _saveHandler;
     private Dialogue_handler _dialogueHandler;
@@ -29,17 +27,6 @@ public class Game_Load : MonoBehaviour,IInjectable
     private Player_movement _playerMovement;
     private overworld_actions _overworldActions;
     private Bag _playerBagHandler;
-    
-    [DllImport("__Internal")] private static extern void CheckIfMobileBrowser();
-
-    public bool IsMobile()
-    {
-        if (Application.platform != RuntimePlatform.WebGLPlayer)
-        {
-            return Application.isMobilePlatform;
-        }
-        return _isMobile;
-    }
     
     public void Inject(ServiceContainer container)
     {
@@ -56,25 +43,11 @@ public class Game_Load : MonoBehaviour,IInjectable
 
     private void OnInject()
     {
-        Debug.Log("checking");
-        CheckIfMobileBrowser();
         Start_ui.SetActive(true);
         load_btn.gameObject.SetActive(true);
         newGame_btn.gameObject.SetActive(true);
     }
-    
-    public void ConfirmIsMobile()
-    {
-        Debug.Log("con mobile");
-        _isMobile = true;
-        mobileControlsUI.SetActive(true);
-    }
-    public void DenyIsMobile()
-    {
-        Debug.LogError("deny mobile");
-        _isMobile = false;
-        mobileControlsUI.SetActive(false);
-    }
+
     private void LoadNewPlayerPage()
     {
         uploadButton.gameObject.SetActive(false);

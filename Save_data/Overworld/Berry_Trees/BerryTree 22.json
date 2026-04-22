@@ -1,25 +1,25 @@
 {
     "isPlanted": true,
-    "minYield": 2,
+    "minYield": 1,
     "maxYield": 5,
-    "currentStageNeedsWater": false,
-    "currentStageProgress": 4,
+    "currentStageNeedsWater": true,
+    "currentStageProgress": 0,
     "minutesSinceLastStage": 0.0,
     "numStagesWatered": 0,
-    "itemAssetName": "Chesto berry",
+    "itemAssetName": "Tamato berry",
     "berryItem": {
-        "instanceID": 26064
+        "instanceID": 27664
     },
     "treeIndex": 22,
-    "minutesPerStage": 45,
+    "minutesPerStage": 180,
     "spriteData": [
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32746
+                    "instanceID": 32766
                 },
                 {
-                    "instanceID": 32746
+                    "instanceID": 32766
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32748
+                    "instanceID": 32768
                 },
                 {
-                    "instanceID": 32750
+                    "instanceID": 32770
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32752
+                    "instanceID": 33010
                 },
                 {
-                    "instanceID": 32754
+                    "instanceID": 33012
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32756
+                    "instanceID": 33014
                 },
                 {
-                    "instanceID": 32758
+                    "instanceID": 33016
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32760
+                    "instanceID": 33018
                 },
                 {
-                    "instanceID": 32762
+                    "instanceID": 33020
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-04-21T12:21:57.8459520+02:00"
+    "lastLogin": "2026-04-22T15:25:51.2896700+02:00"
 }

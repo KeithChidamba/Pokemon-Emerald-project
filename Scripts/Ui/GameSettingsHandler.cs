@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+
 [Serializable]
 public class SettingsConfig
 {
@@ -22,13 +24,14 @@ public class SettingsConfig
         currentIndex = Mathf.Clamp(currentIndex + change, 0, maxIndex);
     }
 }
-public enum GameSettingName{TextSpeed,BattleStyle}
+public enum GameSettingName{TextSpeed,BattleStyle,ViewControls}
 public class GameSettingsHandler : MonoBehaviour,IInjectable
 {
     public List<GameSetting> gameSettings = new();
     public List<GameObject> gameSettingsHeading = new();
     public GameObject mainUI;
     public GameObject whiteSelector;
+    public Toggle viewGameControlsToggle;
     public GameSetting currentSetting { get; private set; }
     [SerializeField]private List<SettingsConfig> settingConfigs = new();
     private readonly Dictionary<GameSettingName, Action<int>> _settingsMethods = new ();
@@ -36,12 +39,14 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     private Save_manager _saveDataHandler;
     private Dialogue_handler _dialogueHandler;
     private Battle_handler _battleHandler;
+    private InputSourceHandler _inputSourceHandler;
     
     public void Inject(ServiceContainer container)
     {
         _saveDataHandler = container.Resolve<Save_manager>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
+        _inputSourceHandler = container.Resolve<InputSourceHandler>();
         gameObject.SetActive(true);
         OnInject();
     }
@@ -50,6 +55,8 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     {
         _settingsMethods.Add(GameSettingName.TextSpeed,_dialogueHandler.SetTextSpeed);
         _settingsMethods.Add(GameSettingName.BattleStyle,_battleHandler.SetBattleStyle);
+        viewGameControlsToggle.isOn = false;
+        viewGameControlsToggle.onValueChanged.AddListener(OnToggleChanged);
         
         if(Application.platform == RuntimePlatform.WebGLPlayer)
         {
@@ -59,8 +66,12 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         {
             SetSetting();
         }
+        
     }
-
+    private void OnToggleChanged(bool isOn)
+    {
+        _inputSourceHandler.DisplayMobileControls(isOn);
+    }
     private void SetSetting()
     {
         var savedSettings = _saveDataHandler.LoadGameSettingsData();
@@ -76,7 +87,16 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
                 //set defaults
                 settingConfigs.Add(new(0,setting.settingOptions.Count-1,setting.gameSettingName));
             }
+            settingConfigs.Add(new SettingsConfig(0, 1, GameSettingName.ViewControls));
         }
+
+        var controlsConfigIndex =
+            settingConfigs.FindIndex(setting => setting.settingName == GameSettingName.ViewControls);
+        
+        viewGameControlsToggle.isOn = settingConfigs[controlsConfigIndex].currentIndex > 0;
+        OnToggleChanged(viewGameControlsToggle.isOn);
+        settingConfigs.RemoveAt(controlsConfigIndex);
+        
         foreach (var config in settingConfigs)
         {
             currentSetting = gameSettings.First(s=>s.gameSettingName == config.settingName);
@@ -120,6 +140,12 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         {
             _saveDataHandler.SaveGameSettingsAsJson(config,config.settingName.ToString());
         }
+
+        var indexFromBool = viewGameControlsToggle.isOn ? 1 : 0;
+        
+        var viewControlsConfig = new SettingsConfig(indexFromBool, 1, GameSettingName.ViewControls);
+        
+        _saveDataHandler.SaveGameSettingsAsJson(viewControlsConfig,viewControlsConfig.settingName.ToString());
         yield return null;
     }
 }

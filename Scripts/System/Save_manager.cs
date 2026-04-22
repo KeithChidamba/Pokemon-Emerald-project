@@ -146,14 +146,10 @@ public class Save_manager : MonoBehaviour,IInjectable
 
     private void CreateTemporaryDirectory()
     {
-        CreateFolder(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.Player));
-        CreateFolder(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.Items));
-        CreateFolder(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.HeldItems));
-        CreateFolder(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.StorageItems));
-        CreateFolder(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.Pokemon));
-        CreateFolder(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.PartyIds));
-        CreateFolder(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.PCStorage));
-        CreateFolder(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives));
+        foreach (var dir in SaveDataDirectories)
+        {
+            CreateFolder(_tempSaveDataPath + dir.Value);
+        }
     }
 
     [Serializable]
@@ -214,14 +210,17 @@ public class Save_manager : MonoBehaviour,IInjectable
     public List<SettingsConfig> LoadGameSettingsData()
     {
         CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings));
+
         var jsonFilesFromPath = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings));
         List<SettingsConfig> savedSettingConfigs = new();  
         foreach (var fullPath in jsonFilesFromPath)
         {
             var jsonFilePath = _saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings) + Path.GetFileName(fullPath);
+           
             if (!File.Exists(jsonFilePath)) continue;
               
             var json = File.ReadAllText(jsonFilePath);
+           
             var configData = new SettingsConfig();
             JsonUtility.FromJsonOverwrite(json, configData);
             savedSettingConfigs.Add(configData);
@@ -329,6 +328,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     {
         List<string> jsonFiles=new();
         var files = Directory.GetFiles(path);
+       
         foreach(var file in files)
             if (GetFileExtension(file) == ".json")
                 jsonFiles.Add(file);
@@ -413,6 +413,11 @@ public class Save_manager : MonoBehaviour,IInjectable
     }
     private void ClearDirectory(string path)
     {
+        if (!Directory.Exists(path))
+        {
+            Debug.LogError("null directory");
+            return;
+        }
         var files = Directory.GetFiles(path);
         foreach (var file in files)
             File.Delete(file);
@@ -670,7 +675,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     }
     public void SaveBerryTreeDataAsJson(BerryTreeData tree, string fileName)
     {
-        var directory = Path.Combine(_saveDataPath+GetSaveDirectory(SaveDataDirectory.BerryTrees), fileName + ".json");
+        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.BerryTrees), fileName + ".json");
         tree.itemAssetName = tree.berryItem.itemName;
         var json = JsonUtility.ToJson(tree, true);
         File.WriteAllText(directory, json);
@@ -683,7 +688,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     }
     public void SaveStorageDataAsJson(PokemonStorageBox box, string fileName)
     {
-        var directory = Path.Combine(_saveDataPath+GetSaveDirectory(SaveDataDirectory.PCStorage), fileName + ".json");
+        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.PCStorage), fileName + ".json");
         var json = JsonUtility.ToJson(box, true);
         
         File.WriteAllText(directory, json);
@@ -691,11 +696,10 @@ public class Save_manager : MonoBehaviour,IInjectable
     }
     public void SaveGameSettingsAsJson(SettingsConfig config, string fileName)
     {
-        var directory = Path.Combine(_saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings), fileName + ".json");
+        string folderPath = _tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings);  
+        string fullPath = Path.Combine(folderPath, fileName + ".json");
         var json = JsonUtility.ToJson(config, true);
-        
-        File.WriteAllText(directory, json);
-        if (!File.Exists(directory)) Debug.LogError("file blank");
+        File.WriteAllText(fullPath, json);
     }
     private Pokemon LoadPokemonFromJson(string filePath)
     {

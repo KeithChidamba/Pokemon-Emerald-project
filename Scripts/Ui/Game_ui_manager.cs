@@ -120,7 +120,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         Time.timeScale = 0;
         var menuOptionsMethods = new List<Action>
         {
-            ViewPokemonParty,()=>StartCoroutine(_saveDataHandler.SaveAllData()), ViewBag, ViewProfile, ViewGameSettings
+            ViewPokemonParty, SaveGame, ViewBag, ViewProfile, ViewGameSettings
         };
         
         if (!usingWebGl) menuOptionsMethods.Add(_dialogueOptionsHandler.ExitGame);
@@ -134,6 +134,11 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             InputStateGroup.None,true,menuOptions,
             InputDirection.Vertical, menuSelectables,menuSelector,true
             , true,CloseMenu,CloseMenu)); 
+    }
+
+    public void SaveGame()
+    {
+        StartCoroutine(_saveDataHandler.SaveAllData());
     }
     private void ActivateUiElement(GameObject ui,bool activated)
     {
@@ -397,7 +402,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             _pokeMartHandler.itemSelector,true,true,ClosePokeMart,ClosePokeMart));
     }
 
-    private void ViewGameSettings()
+    public void ViewGameSettings()
     {
         ManageScreens(1);
         ActivateUiElement(_gameSettingsHandler.mainUI, true);
