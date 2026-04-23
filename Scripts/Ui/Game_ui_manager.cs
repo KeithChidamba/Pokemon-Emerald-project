@@ -87,7 +87,6 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     }
     private void Update()
     {
-        if (_overworldActionsHandler == null) return;
         if (!canUseUi) return;
         if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu)&& _canOpenMenu &&!viewingMenu)
         {

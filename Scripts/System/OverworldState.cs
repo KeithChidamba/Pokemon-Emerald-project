@@ -17,6 +17,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private Game_Load _gameLoadHandler;
     private ServiceContainer _container;
+    private Game_Load _gameLoadingHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -24,15 +25,29 @@ public class OverworldState : MonoBehaviour,IInjectable
         _saveHandler = container.Resolve<Save_manager>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _gameLoadHandler = container.Resolve<Game_Load>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        
         gameObject.SetActive(true);
         OnInject();
     }
 
     private void OnInject()
     {
+        _gameLoadingHandler.OnGameStarted += DetermineDataSource;
+    }
+
+    private void DetermineDataSource()
+    {
         if(Application.platform == RuntimePlatform.WebGLPlayer)
         {
-            _saveHandler.OnUploadedDataReady += ()=> StartCoroutine(LoadOverworldState());
+            if (_gameLoadingHandler.LoadedFromSave())
+            {
+                _saveHandler.OnUploadedDataReady += ()=> StartCoroutine(LoadOverworldState());
+            }
+            else
+            {
+                StartCoroutine(LoadOverworldState());
+            }
         }
         else
         {
@@ -42,7 +57,6 @@ public class OverworldState : MonoBehaviour,IInjectable
 
     private IEnumerator LoadOverworldState()
     {
-        
         overworldBerryTrees.Clear();
         currentStoryObjectives.Clear();
         
@@ -88,7 +102,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         OnObjectivesLoaded?.Invoke();
         if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
         {
-            _gameLoadHandler.OnGameStarted += ()=>currentStoryObjectives[0].FindMainAsset(_container);
+            currentStoryObjectives[0].FindMainAsset(_container);
         }
         yield return null;
     }

@@ -19,7 +19,8 @@ public class Game_Load : MonoBehaviour,IInjectable
     private readonly int _minNameLength = 4;
     public GameObject world_Map;
     public Player_data playerData;
-
+    private bool _loadedFromSave;
+    
     public event Action OnGameStarted;
     private Save_manager _saveHandler;
     private Dialogue_handler _dialogueHandler;
@@ -46,8 +47,13 @@ public class Game_Load : MonoBehaviour,IInjectable
         Start_ui.SetActive(true);
         load_btn.gameObject.SetActive(true);
         newGame_btn.gameObject.SetActive(true);
+        _loadedFromSave = true;
     }
 
+    public bool LoadedFromSave()
+    {
+        return _loadedFromSave;
+    }
     private void LoadNewPlayerPage()
     {
         uploadButton.gameObject.SetActive(false);
@@ -80,6 +86,7 @@ public class Game_Load : MonoBehaviour,IInjectable
             data.location = AreaName.PlayerGarden;
             data.playerPosition =  new Vector3(-5, -20, 0);
             playerData = data;
+            _loadedFromSave = false;
             StartGame();
         }
         else

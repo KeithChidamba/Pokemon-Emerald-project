@@ -36,6 +36,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public bool isPlayer;
     public bool isEnemy;
     public bool isActive;
+    public bool activeForBattle;
     public bool canAttack = true;
     public bool isFlinched;
     public bool isConfused;

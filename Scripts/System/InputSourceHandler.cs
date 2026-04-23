@@ -9,6 +9,7 @@ public enum ControlEvent
 {
     Up,Down,Left,Right,UseSpecialItem,OpenMenu,Confirm,Exit,OpenSettings,Save
 }
+[DefaultExecutionOrder(-1000)]
 public class InputSourceHandler : MonoBehaviour, IInjectable
 {
     private static Dictionary<ControlEvent, bool> _held = new();
@@ -109,7 +110,7 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     }
     public static void TriggerPress(ControlEvent e)
     {
-        if (!_held[e])
+        if (!_held[e]) 
         {
             _pressed[e] = true; // only true on first frame
         }
@@ -122,11 +123,9 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     }
     private void LateUpdate()
     {
-        // reset "pressed this frame"
         foreach (ControlEvent e in _pressed.Keys.ToList())
         {
             _pressed[e] = false;
         }
     }
-
 }

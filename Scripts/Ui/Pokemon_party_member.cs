@@ -120,12 +120,16 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
     }
     public void ResetUI()
     {
+        if(pokemon!=null)
+        {
+            pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
+            pokemon = null;
+        }
         foreach (var ui in mainUI)
             ui.SetActive(false);
         isEmpty = true;
         _viewingParty = false;
-        pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
-        pokemon = null;
+        
         heldItemImage.gameObject.SetActive(false);
         statusEffectImage.gameObject.SetActive(false);
         emptySlotUI.SetActive(true);

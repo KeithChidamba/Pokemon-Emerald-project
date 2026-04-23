@@ -34,7 +34,6 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     }
     void Update()
     {
-        
         if(!_dialogueHandler.displaying && !_stopInteractions)
         {
             if (InputSourceHandler.InputPressed(ControlEvent.Confirm) ||  InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))

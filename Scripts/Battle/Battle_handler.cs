@@ -225,6 +225,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         foreach (var participant in battleParticipants)
         {
+            if(!participant.activeForBattle)continue;
+            
             if (participant.pokemon != null)
                 if (participant.pokemon.hp > 0)
                 {
@@ -308,6 +310,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
         isDoubleBattle = false;
         var player = battleParticipants[0];
         var wildPokemon = battleParticipants[2];
+        player.activeForBattle = true;
+        wildPokemon.activeForBattle = true;
+        
         //set initial pokemon and enemy for player
         player.pokemon = _pokemonPartyHandler.party[0];
         player.currentEnemies.Add(wildPokemon);      
@@ -331,6 +336,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
         isDoubleBattle = false; 
         var player = battleParticipants[0];
         var enemy = battleParticipants[2];
+        player.activeForBattle = true;
+        enemy.activeForBattle = true;
+        
         //set initial pokemon and enemy for player
         player.pokemon = _pokemonPartyHandler.party[0];
         player.currentEnemies.Add(enemy);
@@ -351,15 +359,22 @@ public class Battle_handler : MonoBehaviour, IInjectable
         isTrainerBattle = true;
         isDoubleBattle = true; 
         var alivePartyPokemon = _pokemonPartyHandler.GetLivingPokemon();
+        var playerPartnerAvailable = alivePartyPokemon.Count > 1;
+        
         var player = battleParticipants[0];
+        player.activeForBattle = true;
         var playerPartner = battleParticipants[1];
+        playerPartner.activeForBattle = playerPartnerAvailable;
         var enemy = battleParticipants[2];
+        enemy.activeForBattle = true;
         var enemyPartner = battleParticipants[3];
+        enemyPartner.activeForBattle = true;
+        
         //set initial pokemon for player
         player.pokemon = alivePartyPokemon[0];
-        playerPartner.pokemon = alivePartyPokemon[1];
+        if(playerPartner.activeForBattle) playerPartner.pokemon = alivePartyPokemon[1];
+        
         //setup trainer ai for enemy participants
-       
         enemy.SetupEnemyAi(trainerData,enemyPartner);
         
         //set initial pokemon for enemies
@@ -372,8 +387,10 @@ public class Battle_handler : MonoBehaviour, IInjectable
             var currentPlayerParticipant = battleParticipants[i];
 
             player.currentEnemies.Add(currentEnemy);
-            playerPartner.currentEnemies.Add(currentEnemy);
-                
+            if(playerPartner.activeForBattle) playerPartner.currentEnemies.Add(currentEnemy);
+            
+            if(!currentPlayerParticipant.activeForBattle) continue;
+            
             enemy.currentEnemies.Add(currentPlayerParticipant);
             enemyPartner.currentEnemies.Add(currentPlayerParticipant);
         }
@@ -381,7 +398,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         foreach (var enemyParticipant in player.currentEnemies)//player and partner have same enemies
         {
             enemyParticipant.AddToExpList(player.pokemon);
-            enemyParticipant.AddToExpList(playerPartner.pokemon);
+            if(playerPartner.activeForBattle) enemyParticipant.AddToExpList(playerPartner.pokemon);
         }
         //setup battle
         yield return SetValidParticipants();
@@ -711,6 +728,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
         {
             battleParticipants[i].pokemonImage.rectTransform.anchoredPosition = _defaultPokemonImagePositions[i];
             battleParticipants[i].pokemonImage.color = Color.white;
+            battleParticipants[i].activeForBattle = false;
+            
             if(battleParticipants[i].pokemon!=null)
             {
                 battleParticipants[i].ResetParticipantState();

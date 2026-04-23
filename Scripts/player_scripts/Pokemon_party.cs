@@ -321,7 +321,9 @@ public class Pokemon_party : MonoBehaviour,IInjectable
                 numMembers++;
             }
             else
+            {
                 memberCards[i].ResetUI();
+            }
         }
     }
     public void RemoveMember(int partyPosition)

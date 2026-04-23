@@ -415,7 +415,6 @@ public class Save_manager : MonoBehaviour,IInjectable
     {
         if (!Directory.Exists(path))
         {
-            Debug.LogError("null directory");
             return;
         }
         var files = Directory.GetFiles(path);

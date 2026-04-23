@@ -79,6 +79,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     private InputStateHandler _inputStateHandler;
     private Pokemon_party _pokemonPartyHandler;
     private Save_manager _saveDataHandler;
+    private Game_Load _gameLoadingHandler;
     PokemonStorageInputService _pokemonStorageInputService;
     
     public void Inject(ServiceContainer container)
@@ -89,14 +90,29 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _saveDataHandler = container.Resolve<Save_manager>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
+        
         gameObject.SetActive(true);
         OnInject();
     }
+
     private void OnInject()
     {
-        if(Application.platform == RuntimePlatform.WebGLPlayer)
+        _gameLoadingHandler.OnGameStarted += DetermineDataSource;
+    }
+
+    private void DetermineDataSource()
+    {
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
-            _saveDataHandler.OnUploadedDataReady += LoadPCStorageBoxes;
+            if (_gameLoadingHandler.LoadedFromSave())
+            {
+                _saveDataHandler.OnUploadedDataReady += LoadPCStorageBoxes;
+            }
+            else
+            {
+                LoadPCStorageBoxes();
+            }
         }
         else
         {
@@ -468,6 +484,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     }
     private void SelectPartyPokemon(PC_party_pkm icon)
     {
+        if (icon.pokemon == null) return;
         //display options state
         var partyOptionsSelectables = new List<SelectableUI>
         {

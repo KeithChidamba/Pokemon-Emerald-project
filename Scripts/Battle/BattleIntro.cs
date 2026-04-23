@@ -277,16 +277,15 @@ public class BattleIntro : MonoBehaviour,IInjectable
             yield return new WaitForSeconds(3f);
             yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         }
-        
-        message = _battleHandler.isDoubleBattle
-            ? $"Go! {participants[0].pokemon.pokemonName}" +
-              $" and {participants[1].pokemon.pokemonName}!"
-            : $"Go! {participants[0].pokemon.pokemonName}!";
-        
+
+        message = $"Go! {participants[0].pokemon.pokemonName}";
+        message += _battleHandler.isDoubleBattle && participants[1].isActive?
+                $" and {participants[1].pokemon.pokemonName}!":"!";
+
         _dialogueHandler.DisplayBattleInfo(message);
 
         StartCoroutine(_battleVisualsHandler.DisplayPokemonRelease());
-        if (_battleHandler.isDoubleBattle)
+        if (_battleHandler.isDoubleBattle && participants[1].isActive)
         {
             yield return new WaitForSeconds(0.5f);
             StartCoroutine(thrownPokeballs[0].ThrowPokeball(false));

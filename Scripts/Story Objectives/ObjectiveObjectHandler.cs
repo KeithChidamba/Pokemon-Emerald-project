@@ -7,16 +7,27 @@ public enum propState
 {
     InActive,InAccessible
 }
+// public enum propStateGroup
+// {
+//     lk
+// }
 [Serializable]
 public class propStateAfterObjective
 {
     public GameObject propObject;
     public propState propState;
 }
+// [Serializable]
+// public class propStateGroups
+// {
+//     public List<propStateAfterObjective> propGroups;
+//     public propState propState;
+// }
 public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
 {
   public StoryObjective objective;
   public StoryObjectiveType objectiveType;
+  
   public List<propStateAfterObjective> propsForObjective;
   public LayerMask newLayer;
   private OverworldState _overworldStateHandler;
