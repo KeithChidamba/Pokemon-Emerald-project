@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 public class PlayerCollisionHandler : MonoBehaviour,IInjectable
 {
     [SerializeField] private Transform interactionPoint;
-    public static event Action<Transform> OnCollision;
     public Tilemap encounterTilemap;
     public Tilemap areaSwitchTilemap;
     
@@ -51,15 +50,7 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
             _encounterHandler.TriggerEncounter(tile.area);
         }
     }
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        OnCollision?.Invoke(other.transform);
-    }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        OnCollision?.Invoke(other.transform);
-    }
     public static T FindTileAtPosition<T>(Tilemap tilemap,Vector3 triggerPos,Vector3 offset) where T : TileBase
     {
         var worldPos = triggerPos + offset * 0.01f;

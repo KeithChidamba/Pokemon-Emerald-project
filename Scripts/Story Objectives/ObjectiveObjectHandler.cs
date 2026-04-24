@@ -7,28 +7,23 @@ public enum propState
 {
     InActive,InAccessible
 }
-// public enum propStateGroup
-// {
-//     lk
-// }
 [Serializable]
 public class propStateAfterObjective
 {
     public GameObject propObject;
     public propState propState;
 }
-// [Serializable]
-// public class propStateGroups
-// {
-//     public List<propStateAfterObjective> propGroups;
-//     public propState propState;
-// }
+[Serializable]
+public class propStateGroup
+{
+    public List<propStateAfterObjective> propsForObjective;
+}
 public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
 {
   public StoryObjective objective;
   public StoryObjectiveType objectiveType;
   
-  public List<propStateAfterObjective> propsForObjective;
+  public List<propStateGroup> propGroupsForObjective;
   public LayerMask newLayer;
   private OverworldState _overworldStateHandler;
 
@@ -60,25 +55,36 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
     }
     private void LoadObjects()
     {
-        propsForObjective.ForEach(prop=>prop.propObject.SetActive(true));
+        foreach (var group in propGroupsForObjective)
+        {
+            foreach (var prop in group.propsForObjective)
+            {
+                prop.propObject.SetActive(true);
+            }
+        }
     }
     private void UnLoadObjects()
     {
-        foreach (var prop in propsForObjective)
+        foreach (var group in propGroupsForObjective)
         {
-            switch (prop.propState)
+            foreach (var prop in group.propsForObjective)
             {
-                case propState.InActive:
-                    prop.propObject.SetActive(false);
-                    break;
-                case propState.InAccessible:
-                    prop.propObject.layer = newLayer;
-                    break;
+                switch (prop.propState)
+                {
+                    case propState.InActive:
+                        prop.propObject.SetActive(false);
+                        break;
+                    case propState.InAccessible:
+                        prop.propObject.layer = newLayer;
+                        break;
+                    default:
+                        prop.propObject.SetActive(false);
+                        break;
+                }
             }
         }
        
         objective.OnLoad -= LoadObjects;
         objective.OnClear -= UnLoadObjects;
     }
-
 }

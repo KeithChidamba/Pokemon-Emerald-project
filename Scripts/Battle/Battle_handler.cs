@@ -678,16 +678,23 @@ public class Battle_handler : MonoBehaviour, IInjectable
                     _gameLoadingHandler.playerData.playerMoney -= baseMoneyPayout 
                                                                    * _gameLoadingHandler.playerData.numBadges 
                                                                    * lastOpponent.currentLevel;
-                }
-                if (!_wildPokemonHandler.ranAway)
-                {
-                    var partyPokemon = _pokemonPartyHandler.party.ToList();
-                    partyPokemon.RemoveAll(p => p == null);
-                    _gameLoadingHandler.playerData.playerMoney -= 100 * partyPokemon.OrderByDescending(p=>p.currentLevel)
-                        .First().currentLevel;//highest leveled pokemon in party
                     _dialogueHandler.DisplayBattleInfo("All your pokemon have fainted");
                     yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
                     playerWhiteOut = true;
+                }
+                else
+                {
+                    if (!_wildPokemonHandler.ranAway)
+                    {
+                        var partyPokemon = _pokemonPartyHandler.party.ToList();
+                        partyPokemon.RemoveAll(p => p == null);
+                        _gameLoadingHandler.playerData.playerMoney -= 100 * partyPokemon
+                            .OrderByDescending(p => p.currentLevel)
+                            .First().currentLevel; //highest leveled pokemon in party
+                        _dialogueHandler.DisplayBattleInfo("All your pokemon have fainted");
+                        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+                        playerWhiteOut = true;
+                    }
                 }
             }
         }

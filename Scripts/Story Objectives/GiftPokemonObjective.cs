@@ -20,10 +20,12 @@ public class GiftPokemonObjective : InteractionObjective
             return;
         }
         if (interactionForObjective.overworldInteraction != interaction.overworldInteraction) return;
+
+        var pokeballProps = objectiveObjectHandler.propGroupsForObjective[0];
         
-        for(int i=0;i < objectiveObjectHandler.propsForObjective.Count;i++)
+        for(int i=0;i < pokeballProps.propsForObjective.Count;i++)
         {
-            var prop = objectiveObjectHandler.propsForObjective[i];
+            var prop = pokeballProps.propsForObjective[i];
             //de-activate selected pokeball
             if (int.Parse(interaction.resultMessage) == i + 1)
             {
