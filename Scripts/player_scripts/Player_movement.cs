@@ -324,7 +324,7 @@ public class Player_movement : MonoBehaviour,IInjectable
         SetPlayerPosition(position);
         playerObject.SetActive(true);
     }
-    private void SetPlayerPosition(Vector3 position)
+    public void SetPlayerPosition(Vector3 position)
     {
         movePoint.position = position;
         playerObject.transform.position = position;

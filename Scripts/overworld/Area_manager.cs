@@ -5,39 +5,45 @@ public class Area_manager : MonoBehaviour,IInjectable
 {
     public AreaData currentArea;
     public AreaData[] overworldAreas;
-    public bool loadingPlayerFromSave;
+
     
     private Game_Load _gameLoadingHandler;
-
+    private Player_movement _playerMovementHandler;
+    
     public void Inject(ServiceContainer container)
     {
         _gameLoadingHandler = container.Resolve<Game_Load>();
+        _playerMovementHandler = container.Resolve<Player_movement>();
     }
 
     public void EscapeArea()
     {
         //inside this method in-case there extra stuff that needs to happen when escaping
     }
-
+    public void LoadAreaFromSave(AreaName areaName)
+    {
+        var saveArea = overworldAreas.First(a=>a.data.areaName == areaName);
+        SetArea(saveArea);
+    }
+    public void TeleportToArea(AreaName areaName)
+    {
+        SwitchToArea(areaName);
+        _playerMovementHandler.SetPlayerPosition(currentArea.tileLocation);
+    }
     public void SwitchToArea(AreaName areaName)
     {
-        if(loadingPlayerFromSave)
-        {
-            var saveArea = overworldAreas.First(a=>a.data.areaName == areaName);
-            currentArea = saveArea;
-            loadingPlayerFromSave = false;
-        }
-        else
-        {
-            if (areaName == currentArea.data.areaName) return;
-        }
-        
-        currentArea.LoadNpcObjects(false);
+        if (areaName == currentArea.data.areaName) return;
         var area = overworldAreas.First(a=>a.data.areaName == areaName);
-        area.LoadNpcObjects(true);
-        currentArea = area;
+        SetArea(area);
+    }
+
+    private void SetArea(AreaData newArea)
+    {
+        currentArea.LoadNpcObjects(false);
+        newArea.LoadNpcObjects(true);
+        currentArea = newArea;
         _gameLoadingHandler.playerData.location = currentArea.data.areaName;
     }
-       
-    
+
+
 }

@@ -68,6 +68,8 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     
     public Animator statusEffectAnimator;
     private Vector2 _defaultImagePosition;
+    private Vector2 _defaultUIPosition;
+    private RectTransform _uiRect;
     
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
@@ -107,6 +109,8 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         _turnBasedCombatHandler.OnTurnsCompleted += CheckBarrierDuration;
         currentCoolDown =  new(this, _moveUsageHandler);
         _defaultImagePosition = pokemonImage.rectTransform.anchoredPosition;
+        _uiRect = participantUI.GetComponent<RectTransform>();
+        _defaultUIPosition = _uiRect.anchoredPosition; 
     }
 
     public void SetupEnemyAi(TrainerData trainerData,Battle_Participant partner = null)
@@ -294,6 +298,8 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         statChangeEffects.Clear();
         
         pokemonImage.rectTransform.anchoredPosition = _defaultImagePosition;
+        _uiRect.anchoredPosition = _defaultUIPosition;
+        
         pokemonImage.color = Color.white;
        
         _turnBasedCombatHandler.OnMoveExecute -= statusHandler.CheckTrapDuration;

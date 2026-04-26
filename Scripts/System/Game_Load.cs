@@ -84,7 +84,8 @@ public class Game_Load : MonoBehaviour,IInjectable
             data.trainerID = Utility.Random16Bit();
             data.secretID = Utility.Random16Bit();
             data.location = AreaName.PlayerGarden;
-            data.playerPosition =  new Vector3(-5, -20, 0);
+            var gardenLocation = _areaHandler.overworldAreas.First(a=>a.data.areaName == AreaName.PlayerGarden);
+            data.playerPosition = gardenLocation.tileLocation;
             playerData = data;
             _loadedFromSave = false;
             StartGame();
@@ -113,8 +114,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
         
-        _areaHandler.loadingPlayerFromSave = true;
-        _areaHandler.SwitchToArea(playerData.location);
+        _areaHandler.LoadAreaFromSave(playerData.location);
         
         OnGameStarted?.Invoke();
     }

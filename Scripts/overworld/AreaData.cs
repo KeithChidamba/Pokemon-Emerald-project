@@ -6,6 +6,7 @@ using UnityEngine;
 public class AreaData
 {
     public AreaTransitionData data;
+    public Vector3 tileLocation;
     public List<GameObject> npcList;
     
     public void LoadNpcObjects(bool enabled)
