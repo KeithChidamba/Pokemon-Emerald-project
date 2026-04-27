@@ -5,7 +5,7 @@ using UnityEngine;
 public class TypeImmunityNegation
 {
     public ImmunityNegationMove moveName;
-    public List<Types> ImmunityNegationTypes = new ();
+    public List<PokemonType> ImmunityNegationTypes = new ();
     private Battle_Participant _participant;
     private Battle_Participant _victimOfimmunityNegation;
     private Battle_handler _battleHandler;

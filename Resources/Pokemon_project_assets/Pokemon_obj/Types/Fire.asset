@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Fire
   m_EditorClassIdentifier: 
-  typeName: Fire
+  typeEnum: 1
   weaknesses: 02000000080000000c000000
   resistances: 0100000004000000050000000b00000010000000
   immunities: 

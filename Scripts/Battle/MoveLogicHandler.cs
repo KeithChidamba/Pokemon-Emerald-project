@@ -198,16 +198,16 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         var barrierName = _currentTurn.move.moveName;
         if (_battleHandler.isDoubleBattle)
         {
-            var currentParticipant = _battleHandler.battleParticipants[_currentTurn.attackerIndex];
+            var currentAttacker = _battleHandler.battleParticipants[_currentTurn.attackerIndex]; 
             
-            if (!_moveUsageHandler.HasDuplicateBarrier(currentParticipant, barrierName, true))
+            if (!_moveUsageHandler.HasDuplicateBarrier(currentAttacker, barrierName, true))
             {
                 var newBarrier = new Barrier(barrierName, 0.33f, 5);
                 
-                currentParticipant.barriers.Add(newBarrier); 
+                currentAttacker.barriers.Add(newBarrier); 
                 
                 var partner= _battleHandler
-                    .battleParticipants[currentParticipant.GetPartnerIndex()];
+                    .battleParticipants[currentAttacker.GetPartnerIndex()];
 
                 if (partner.isActive)
                 {
@@ -266,13 +266,13 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         _victim.pokemon.buffAndDebuffs
             .RemoveAll(b => b.stat == Stat.Evasion);
         _victim.pokemon.evasion = 100;
-        if(_victim.pokemon.HasType(Types.Ghost))
+        if(_victim.pokemon.HasType(PokemonType.Ghost))
         {
             var newImmunityNegation = new TypeImmunityNegation(_battleHandler,ImmunityNegationMove.Foresight
                 , _attacker, _victim);
 
-            newImmunityNegation.ImmunityNegationTypes.Add(Types.Fighting);
-            newImmunityNegation.ImmunityNegationTypes.Add(Types.Normal);
+            newImmunityNegation.ImmunityNegationTypes.Add(PokemonType.Fighting);
+            newImmunityNegation.ImmunityNegationTypes.Add(PokemonType.Normal);
             _attacker.OnPokemonFainted += () => newImmunityNegation.RemoveNegationOnSwitchOut(_attacker);
             _battleHandler.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
             _victim.immunityNegations.Add(newImmunityNegation);

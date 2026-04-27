@@ -608,12 +608,12 @@ public class Save_manager : MonoBehaviour,IInjectable
         if (item.additionalInfoModules.Any(m => m is TM))
         {
             var tm =  item.GetModule<TM>();
-            return tm.move.type.typeName.ToLower() + " tm"; 
+            return tm.move.type.GetTypeName.ToLower() + " tm"; 
         }
         if (item.additionalInfoModules.Any(m => m is HM))
         {
             var hm = item.GetModule<HM>();
-            return hm.move.type.typeName.ToLower() + " tm";     
+            return hm.move.type.GetTypeName.ToLower() + " tm";     
         }
         
         return item.itemName;

@@ -229,7 +229,7 @@ public class Participant_Status : BattleParticipantModule
 
     void RemoveFreezeStatusWithFire(Battle_Participant attacker, Move moveUsed)
     {
-        if (moveUsed.type.typeName != nameof(Types.Fire) ) return;
+        if (moveUsed.type.typeEnum != PokemonType.Fire ) return;
         RemoveStatusEffect();
         _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+" was thawed out!");
         _healed = true;

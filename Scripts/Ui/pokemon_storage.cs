@@ -98,27 +98,9 @@ public class pokemon_storage : MonoBehaviour,IInjectable
 
     private void OnInject()
     {
-        _gameLoadingHandler.OnGameStarted += DetermineDataSource;
+        _gameLoadingHandler.OnGameStarted += LoadPCStorageBoxes;
     }
-
-    private void DetermineDataSource()
-    {
-        if (Application.platform == RuntimePlatform.WebGLPlayer)
-        {
-            if (_gameLoadingHandler.LoadedFromSave())
-            {
-                _saveDataHandler.OnUploadedDataReady += LoadPCStorageBoxes;
-            }
-            else
-            {
-                LoadPCStorageBoxes();
-            }
-        }
-        else
-        {
-            LoadPCStorageBoxes();
-        }
-    }
+    
     private void LoadPCStorageBoxes()
     {
         maxPokemonCapacity = BoxCapacity * NumBoxes;
@@ -141,13 +123,17 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             }
             storageBoxes.Add(newBox);
         }
-        var savedBoxes = _saveDataHandler.LoadPokemonStorageData();
-        foreach (var boxData in savedBoxes)
+
+        if (_gameLoadingHandler.LoadedFromSave)
         {
-            storageBoxes[boxData.boxNumber-1].boxPokemon = boxData.boxPokemon;
-            storageBoxes[boxData.boxNumber-1].currentNumPokemon = boxData.currentNumPokemon;
+            var savedBoxes = _saveDataHandler.LoadPokemonStorageData();
+            foreach (var boxData in savedBoxes)
+            {
+                storageBoxes[boxData.boxNumber-1].boxPokemon = boxData.boxPokemon;
+                storageBoxes[boxData.boxNumber-1].currentNumPokemon = boxData.currentNumPokemon;
+            }
         }
-        
+            
         nonPartyIcons.Clear();
         for (var i = 0; i < boxIconsParent.childCount; i++)
         {

@@ -119,7 +119,6 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
 
     private void ResetPokeballs()
     {
-        Debug.Log("reset pokeballs");
         for (var i = 0; i < pokeballs.Count; i++)
         {
             pokeballs[i].anchoredPosition = startPos.anchoredPosition;

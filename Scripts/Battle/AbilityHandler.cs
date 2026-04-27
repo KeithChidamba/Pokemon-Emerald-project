@@ -2,6 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+[Serializable]
+public class DamageBuffAbilityData
+{
+    private float _damageBuffMultiplier;
+    public Func<Battle_Participant, Battle_Participant, Move, bool> conditionForBuff;
+
+    public DamageBuffAbilityData(
+        float damageBuffMultiplier,
+        Func<Battle_Participant, Battle_Participant, Move, bool> conditionForBuff)
+    {
+        _damageBuffMultiplier = damageBuffMultiplier;
+        this.conditionForBuff = conditionForBuff;
+    }
+
+    public float CanBuffDamage(
+        Battle_Participant attacker,
+        Battle_Participant victim,
+        Move move)
+    {
+        if (conditionForBuff(attacker, victim, move))
+            return _damageBuffMultiplier;
+
+        return 1f;
+    }
+}
+
+public class DamageBuff
+{
+    public string abilityName;
+    public PokemonType type;
+    public float multiplier;
+
+    public DamageBuff(string abilityName,float multiplier,PokemonType type=PokemonType.Typeless)
+    {
+        this.abilityName = abilityName;
+        this.multiplier = multiplier;
+        this.type = type;
+    }
+}
 [Serializable]
 public class AbilityHandler : BattleParticipantModule
 {
@@ -9,13 +49,8 @@ public class AbilityHandler : BattleParticipantModule
     private bool _abilityTriggered;
     private string _currentAbility;
     private readonly Dictionary<string, Action> _abilityMethods = new ();
-    private readonly Dictionary<string,string> _damageBuffCombinations = new()
-    {
-        {"blaze", "Fire"},
-        {"torrent", "Water"},
-        {"overgrow", "Grass"},
-        {"swarm", "Bug"}
-    };
+    private readonly Dictionary<string, DamageBuffAbilityData> _damageBuffCombinations = new();
+    
     private Dialogue_handler _dialogueHandler;
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
@@ -48,7 +83,43 @@ public class AbilityHandler : BattleParticipantModule
         _abilityMethods.Add("static",Static);
         _abilityMethods.Add("shedskin",ShedSkin);
         _abilityMethods.Add("swarm",Swarm);
+        
+        //damage buffers
+        bool HealthBased(Battle_Participant attacker, PokemonType typeRequirement)
+        {
+            return attacker.pokemon.HasType(typeRequirement) &&
+                   attacker.pokemon.hp < (attacker.pokemon.maxHp * 0.33f);
+        }
+        bool StatusEffectCheck(Battle_Participant victim, StatusEffect statusEffect)
+        {
+            return victim.pokemon.statusEffect == statusEffect;
+        }
+        
+        List<DamageBuff> healthBasedBuffs = new()
+        {
+            new ("blaze",1.5f,PokemonType.Fire),
+            new ("torrent", 1.5f,PokemonType.Water),
+            new ("overgrow", 1.5f,PokemonType.Grass),
+            new ("swarm", 1.5f,PokemonType.Bug)
+        };
+
+        foreach (var possibleBuff in healthBasedBuffs)
+        {
+            var newData = new DamageBuffAbilityData(
+                possibleBuff.multiplier,
+                (attacker, victim, move) => HealthBased(attacker, possibleBuff.type)
+            );
+            _damageBuffCombinations.Add(possibleBuff.abilityName, newData);
+        }
+
+        var paralysisCombo = new DamageBuff("paralysiscombo", 2f);
+        var parData = new DamageBuffAbilityData(
+            paralysisCombo.multiplier,
+            (attacker, victim, move) => StatusEffectCheck(victim, StatusEffect.Paralysis)
+        );
+        _damageBuffCombinations.Add(paralysisCombo.abilityName, parData);
     }
+
     void CheckAbilityUsability()
     {
         if (!participant.isActive) return;
@@ -114,7 +185,7 @@ public class AbilityHandler : BattleParticipantModule
     void Levitate()
     {
         if (_abilityTriggered) return;
-        participant.additionalTypeImmunity = Resources.Load<Type>(AssetDirectory.Types+"Ground");
+        participant.additionalTypeImmunity = Resources.Load<Type>(AssetDirectory.Types + nameof(PokemonType.Ground));
         _abilityTriggered = true;
     }
     void Overgrow()
@@ -167,7 +238,7 @@ public class AbilityHandler : BattleParticipantModule
     {
         foreach (var enemy in participant.currentEnemies)
         {
-            if (enemy.pokemon.HasType(Types.Flying) || enemy.pokemon.HasType(Types.Ghost))
+            if (enemy.pokemon.HasType(PokemonType.Flying) || enemy.pokemon.HasType(PokemonType.Ghost))
                 continue;
             _moveUsageHandler.ApplyTrap(enemy,false);
         }
@@ -255,22 +326,11 @@ public class AbilityHandler : BattleParticipantModule
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {
         if (attacker != participant) return damage;
-        if (_currentAbility == "paralysiscombo")
-        {
-            if (victim.pokemon.statusEffect == StatusEffect.Paralysis)
-                return damage*2;
-        }
-        if (_damageBuffCombinations.TryGetValue(_currentAbility, out var typeName))
-            return damage * GetAbilityDamageBuff(move.type.typeName, typeName);
         
+        if (_damageBuffCombinations.TryGetValue(_currentAbility, out var damageBuffData))
+        {
+            return damage * damageBuffData.CanBuffDamage(attacker, victim, move);
+        }
         return damage;
-    }
-
-    private float GetAbilityDamageBuff(string moveTypeName, string typeName)
-    {
-        if (participant.pokemon.hp < (participant.pokemon.maxHp * 0.33f))
-            if (moveTypeName == typeName)
-                return 1.5f;
-        return 1f;
     }
 }

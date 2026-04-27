@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Psychic
   m_EditorClassIdentifier: 
-  typeName: Psychic
+  typeEnum: 10
   weaknesses: 0b0000000d0000000f000000
   resistances: 060000000a000000
   immunities: 

@@ -15,7 +15,6 @@ public class OverworldState : MonoBehaviour,IInjectable
     public event Action OnObjectivesLoaded;
     private Save_manager _saveHandler;
     private Dialogue_handler _dialogueHandler;
-    private Game_Load _gameLoadHandler;
     private ServiceContainer _container;
     private Game_Load _gameLoadingHandler;
     
@@ -24,7 +23,6 @@ public class OverworldState : MonoBehaviour,IInjectable
         _container = container;
         _saveHandler = container.Resolve<Save_manager>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _gameLoadHandler = container.Resolve<Game_Load>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         
         gameObject.SetActive(true);
@@ -33,63 +31,59 @@ public class OverworldState : MonoBehaviour,IInjectable
 
     private void OnInject()
     {
-        _gameLoadingHandler.OnGameStarted += DetermineDataSource;
+        _gameLoadingHandler.OnGameStarted += StartDataLoad;
     }
 
-    private void DetermineDataSource()
+    private void StartDataLoad()
     {
-        if(Application.platform == RuntimePlatform.WebGLPlayer)
-        {
-            if (_gameLoadingHandler.LoadedFromSave())
-            {
-                _saveHandler.OnUploadedDataReady += ()=> StartCoroutine(LoadOverworldState());
-            }
-            else
-            {
-                StartCoroutine(LoadOverworldState());
-            }
-        }
-        else
-        {
-            StartCoroutine(LoadOverworldState());
-        }
+        StartCoroutine(LoadOverworldState());
     }
 
     private IEnumerator LoadOverworldState()
     {
         overworldBerryTrees.Clear();
         currentStoryObjectives.Clear();
+        treeDataQueue.Clear();
         
         var trees = FindObjectsOfType<BerryTree>(true);
         foreach(var tree in trees)
         {
             overworldBerryTrees.Add(tree);
         }
-        _saveHandler.LoadOverworldData();
         
-        foreach (var treeData in treeDataQueue)
+        if (_gameLoadingHandler.LoadedFromSave)
         {
-            var jsonBerryTree = overworldBerryTrees.First(tree=>tree.treeIndex==treeData.treeIndex);
-            jsonBerryTree.name = treeData.itemAssetName + " Tree";
-            jsonBerryTree.loadedFromJson = true;
-            jsonBerryTree.LoadTreeData(treeData);
+            _saveHandler.LoadOverworldData();
+            yield return new WaitUntil(() => treeDataQueue.Count == overworldBerryTrees.Count);
+            
+            foreach (var treeData in treeDataQueue)
+            {
+                var jsonBerryTree = overworldBerryTrees.First(tree=>tree.treeIndex==treeData.treeIndex);
+                jsonBerryTree.name = treeData.itemAssetName + " Tree";
+                jsonBerryTree.loadedFromJson = true;
+                jsonBerryTree.LoadTreeData(treeData);
+            }
         }
-        foreach (var tree in overworldBerryTrees)
+        else
         {
-            if(tree.loadedFromJson)continue;
-            tree.LoadDefaultAsset();
+            foreach (var tree in overworldBerryTrees)
+            {
+                if(tree.loadedFromJson)continue;
+                tree.LoadDefaultAsset();
+            }
         }
         
         if (storyProgressObjective == null)
         {
             currentStoryObjectives.AddRange(allStoryObjectives); 
+            yield return new WaitUntil(() => currentStoryObjectives.Count==allStoryObjectives.Count);
             currentStoryObjectives.ForEach(o=>o.mainAssetName=o.name);
             
             storyProgressObjective = Resources.Load<StoryProgressObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
             storyProgressObjective.mainAssetName = storyProgressObjective.name;
             storyProgressObjective.totalObjectiveAmount = allStoryObjectives.Count;
             storyProgressObjective.numCompleted = 0;
-            yield return new WaitUntil(() => currentStoryObjectives.Count==allStoryObjectives.Count);
+            
         }
         else
         {

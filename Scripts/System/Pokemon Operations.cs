@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public enum FriendshipModifier{Fainted,LevelUp,Vitamin,Berry} 
 public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep,FullHeal}
 public enum Gender{None,Male,Female}
-public enum Types
+public enum PokemonType
 {
     Normal, Fire, Water, Electric, Grass, Ice,
     Fighting, Poison, Ground, Flying, Psychic,
@@ -73,10 +73,10 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             Save_manager.GetDirectory(AssetDirectory.Abilities)
             + pokemon.abilityName.ToLower());
     }
-    public static bool ContainsType(Types[]typesList ,Type typesToCheck)
+    public static bool ContainsType(PokemonType[]typesList ,Type typesToCheck)
     {
         foreach (var type in typesList)
-            if (type.ToString() == typesToCheck.typeName)
+            if (type == typesToCheck.typeEnum)
                 return true;
         return false;
     }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Flying
   m_EditorClassIdentifier: 
-  typeName: Flying
+  typeEnum: 9
   weaknesses: 03000000050000000c000000
   resistances: 04000000060000000b000000
   immunities: 08000000

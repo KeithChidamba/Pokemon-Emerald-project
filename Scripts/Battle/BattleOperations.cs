@@ -39,7 +39,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
         float effectiveness = 1;
         if (victim.additionalTypeImmunity!=null)
         {
-            if (victim.additionalTypeImmunity.typeName == enemyType.typeName)
+            if (victim.additionalTypeImmunity.typeEnum == enemyType.typeEnum)
                 effectiveness = 0;
         }
         else{
@@ -48,7 +48,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
                 //if victim had their immunity altered by moves, like foresight
                 effectiveness = victim.immunityNegations
                     .Any(negation => negation.ImmunityNegationTypes
-                        .Any(type=>type.ToString() == enemyType.typeName)) ? 1 : 0;
+                        .Any(type=>type == enemyType.typeEnum)) ? 1 : 0;
             }
             else
             {

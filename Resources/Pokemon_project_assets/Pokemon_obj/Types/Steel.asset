@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Steel
   m_EditorClassIdentifier: 
-  typeName: Steel
+  typeEnum: 16
   weaknesses: 010000000600000008000000
   resistances: 000000000400000005000000090000000a0000000b0000000c0000000e00000010000000
   immunities: 07000000

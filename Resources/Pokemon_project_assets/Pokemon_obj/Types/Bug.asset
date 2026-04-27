@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Bug
   m_EditorClassIdentifier: 
-  typeName: Bug
+  typeEnum: 11
   weaknesses: 01000000090000000c000000
   resistances: 040000000600000008000000
   immunities: 

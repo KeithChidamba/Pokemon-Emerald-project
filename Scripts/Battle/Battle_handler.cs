@@ -534,7 +534,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         var currentMove = _currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex];
         movePowerPointsText.text = "PP: " + currentMove.powerpoints+ "/" + currentMove.maxPowerpoints;
         movePowerPointsText.color = (currentMove.powerpoints == 0)? Color.red : Color.black;
-        moveTypeText.text = currentMove.type.typeName;
+        moveTypeText.text = currentMove.type.GetTypeName;
     }
     int MoneyModifier()
     {

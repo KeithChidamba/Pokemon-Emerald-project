@@ -117,7 +117,7 @@ public class Pokemon : ScriptableObject
         {
             moveData.Add(new MoveSaveData(move.moveName.ToLower(), move.powerpoints, move.maxPowerpoints));
         }
-        foreach (var type in types) typeNames.Add(type.typeName.ToLower());
+        foreach (var type in types) typeNames.Add(type.GetTypeName.ToLower());
         
         foreach (var evo in evolutions) evolutionNames.Add(evo.evolutionName);
     }
@@ -207,9 +207,9 @@ public class Pokemon : ScriptableObject
         heldItem = InstanceFactory.CreateItem(itemToGive);
         heldItem.quantity = 1;
     }
-    public bool HasType(Types typeName)
+    public bool HasType(PokemonType typeName)
     {
-        return types.Any(type=>type.typeName==typeName.ToString());
+        return types.Any(type=>type.typeEnum == typeName);
     }
 
     private int ApplyFriendshipModifier(int currentIncrease)

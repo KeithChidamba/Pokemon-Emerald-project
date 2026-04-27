@@ -65,6 +65,7 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     
     private void GetSavedSettings()
     {
+        Debug.Log("got saved game settings");
         var savedSettings = _saveDataHandler.LoadGameSettingsData();
         settingConfigs.Clear();
         settingConfigs.AddRange(savedSettings);
@@ -72,6 +73,7 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
 
     private void LoadDefaultSettings()
     {
+        Debug.Log("got default game settings");
         settingConfigs.Clear();
         foreach (var setting in gameSettings)
         {
@@ -82,16 +84,9 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     }
     private void DetermineGameSettingsSource()
     {
-        if (_gameLoadingHandler.LoadedFromSave())
+        if (_gameLoadingHandler.LoadedFromSave)
         {
-            if(Application.platform == RuntimePlatform.WebGLPlayer)
-            {
-                _saveDataHandler.OnUploadedDataReady += GetSavedSettings;
-            }
-            else
-            {
-                GetSavedSettings();
-            }
+            GetSavedSettings();
         }
         else
         {

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Dragon
   m_EditorClassIdentifier: 
-  typeName: Dragon
+  typeEnum: 14
   weaknesses: 050000000e000000
   resistances: 01000000020000000300000004000000
   immunities: 

@@ -62,19 +62,14 @@ public class BerryTree : MonoBehaviour,IInjectable
 
     public void LoadDefaultAsset()
     {
-        //loads default Asset if there's no save data, only happen when a new tree is made during dev
-        if (treeData != null)
-        {
-            var copy = InstanceFactory.CreateTreeData(treeData);
-            treeData = null;
-            treeData = copy;
-            treeData.isPlanted = true;
-            treeData.treeIndex = _overworldStateHandler.GetTreeIndex(this);
-        }
-        else
-        {
-            SetInteraction(OverworldInteractionType.PlantBerry);
-        }
+        var copy = InstanceFactory.CreateTreeData(treeData);
+        treeData = null;
+        treeData = copy;
+        treeData.isPlanted = true;
+        treeData.treeIndex = _overworldStateHandler.GetTreeIndex(this);
+        treeData.currentStageProgress = 4;
+        treeData.currentStageNeedsWater = false;
+        SetInteraction(OverworldInteractionType.PickBerry);
     }
 
     public void LoadTreeData(BerryTreeData tree)

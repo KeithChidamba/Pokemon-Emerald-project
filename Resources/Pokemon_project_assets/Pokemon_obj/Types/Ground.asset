@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Ground
   m_EditorClassIdentifier: 
-  typeName: Ground
+  typeEnum: 8
   weaknesses: 020000000400000005000000
   resistances: 070000000c000000
   immunities: 03000000

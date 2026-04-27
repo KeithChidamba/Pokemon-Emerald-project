@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Dark
   m_EditorClassIdentifier: 
-  typeName: Dark
+  typeEnum: 15
   weaknesses: 060000000b000000
   resistances: 0d0000000f000000
   immunities: 0a000000

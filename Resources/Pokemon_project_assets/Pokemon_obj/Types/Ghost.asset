@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Ghost
   m_EditorClassIdentifier: 
-  typeName: Ghost
+  typeEnum: 13
   weaknesses: 0d0000000f000000
   resistances: 070000000b000000
   immunities: 0000000006000000

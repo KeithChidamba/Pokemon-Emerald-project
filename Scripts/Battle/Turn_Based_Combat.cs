@@ -111,7 +111,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         struggle.moveName = "Struggle";
         struggle.isSpecial = false;
         var typelessType = ScriptableObject.CreateInstance<Type>();
-        typelessType.typeName = nameof(Types.Typeless);
+        typelessType.typeEnum = PokemonType.Typeless;
         struggle.type = typelessType;
         
         var validEnemies = attacker.currentEnemies
@@ -713,7 +713,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     private IEnumerator SandStormEffect()
     {
         var protectedTypes = new[]{
-            Types.Rock, Types.Ground, Types.Steel
+            PokemonType.Rock, PokemonType.Ground, PokemonType.Steel
         };
         var validParticipants = _battleHandler.GetValidParticipants();
         foreach (var participant in validParticipants)
@@ -726,7 +726,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                     isProtected = true;
                     if(!currentWeather.buffedParticipants.Contains(participant))
                     {
-                        if (protectedType == Types.Rock)
+                        if (protectedType == PokemonType.Rock)
                         {
                             //buff rock types
                             var spDefBuff = new BuffDebuffData(participant,
@@ -745,14 +745,14 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     }
     private IEnumerator RainEffect()
     {
-        DamageModifierForWeather( Types.Fire,0.5f);
-        DamageModifierForWeather( Types.Water,1.5f);
+        DamageModifierForWeather( PokemonType.Fire,0.5f);
+        DamageModifierForWeather( PokemonType.Water,1.5f);
         yield return null;
     }
     private IEnumerator SunEffect()
     {
-        DamageModifierForWeather( Types.Fire,1.5f);
-        DamageModifierForWeather( Types.Water,0.5f);
+        DamageModifierForWeather( PokemonType.Fire,1.5f);
+        DamageModifierForWeather( PokemonType.Water,0.5f);
         yield return null;
     }
     private IEnumerator HailEffect()
@@ -760,12 +760,12 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         var validParticipants = _battleHandler.GetValidParticipants();
         foreach (var participant in validParticipants)
         {
-            if (participant.pokemon.HasType(Types.Ice)) continue;
+            if (participant.pokemon.HasType(PokemonType.Ice)) continue;
             yield return DealWeatherDamage(participant);
         }
     }
 
-    private void DamageModifierForWeather(Types type,float damageModifier)
+    private void DamageModifierForWeather(PokemonType type,float damageModifier)
     { 
         var damageModifierInfo = ScriptableObject.CreateInstance<DamageModifierInfo>();
         damageModifierInfo.typeAffected = type;

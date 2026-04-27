@@ -14,7 +14,7 @@ public class Move_handler:MonoBehaviour,IInjectable
     private readonly float[] _statLevels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
     private readonly float[] _accuracyAndEvasionLevels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
-    private Battle_event[] _dialougeOrder={null,null,null,null,null,null,null};
+    private BattleSequenceEvent[] _dialougeOrder={null,null,null,null,null,null,null};
     [SerializeField]private List<OnFieldDamageModifier> _onFieldDamageModifiers = new();
     [SerializeField]private List<DamageDisplayData> _damageDisplayQueue = new();
     [SerializeField]private List<DamageDisplayData> _healhGainQueue = new();
@@ -62,13 +62,13 @@ public class Move_handler:MonoBehaviour,IInjectable
     }
     void SetMoveSequence()
     {
-        _dialougeOrder[0] = new Battle_event(DealDamage, _currentTurn.move.moveDamage > 0);
-        _dialougeOrder[1] = new Battle_event(CheckVictimVulnerabilityToStatus, _currentTurn.move.hasStatus);
-        _dialougeOrder[2] = new Battle_event(CheckBuffOrDebuffApplicability, _currentTurn.move.isBuffOrDebuff);
-        _dialougeOrder[3] = new Battle_event(FlinchEnemy, _currentTurn.move.canCauseFlinch);
-        _dialougeOrder[4] = new Battle_event(ConfuseEnemy,_currentTurn.move.canCauseConfusion);
-        _dialougeOrder[5] = new Battle_event(TrapEnemy,_currentTurn.move.canTrap);
-        _dialougeOrder[6] = new Battle_event(InfatuateEnemy,_currentTurn.move.canInfatuate);
+        _dialougeOrder[0] = new BattleSequenceEvent(DealDamage, _currentTurn.move.moveDamage > 0);
+        _dialougeOrder[1] = new BattleSequenceEvent(CheckVictimVulnerabilityToStatus, _currentTurn.move.hasStatus);
+        _dialougeOrder[2] = new BattleSequenceEvent(CheckBuffOrDebuffApplicability, _currentTurn.move.isBuffOrDebuff);
+        _dialougeOrder[3] = new BattleSequenceEvent(FlinchEnemy, _currentTurn.move.canCauseFlinch);
+        _dialougeOrder[4] = new BattleSequenceEvent(ConfuseEnemy,_currentTurn.move.canCauseConfusion);
+        _dialougeOrder[5] = new BattleSequenceEvent(TrapEnemy,_currentTurn.move.canTrap);
+        _dialougeOrder[6] = new BattleSequenceEvent(InfatuateEnemy,_currentTurn.move.canInfatuate);
     }
     private IEnumerator MoveSequence()
     {
@@ -187,7 +187,7 @@ public class Move_handler:MonoBehaviour,IInjectable
         if (damageDealt < 1) damageDealt = 1;
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, struggle, damageDealt) ?? damageDealt;
-        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff, struggle.type.typeName);
+        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff, struggle.type.typeEnum);
         float finalDamage = AccountForVictimsBarriers(struggle, currentVictim, damageAfterFieldModifiers);
 
         OnDamageDeal?.Invoke(finalDamage, currentVictim);
@@ -242,17 +242,17 @@ public class Move_handler:MonoBehaviour,IInjectable
         if (damageDealt < 1) damageDealt = 1;
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
-        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeName);
+        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeEnum);
         float finalDamage = AccountForVictimsBarriers(move,currentVictim,damageAfterFieldModifiers);
         OnDamageDeal?.Invoke(finalDamage,currentVictim);
         OnMoveHit?.Invoke(attacker,move);
         return finalDamage;
     }
-    private float ApplyFieldDamageModifiers(float currentDamage, string moveType)
+    private float ApplyFieldDamageModifiers(float currentDamage, PokemonType moveType)
     {
         foreach (var modifier in _onFieldDamageModifiers)
         {
-            if (nameof(modifier.modifierInfo.typeAffected) == moveType)
+            if (modifier.modifierInfo.typeAffected == moveType)
                 return currentDamage * modifier.modifierInfo.damageModifier;
         }
         return currentDamage;
@@ -441,23 +441,34 @@ public class Move_handler:MonoBehaviour,IInjectable
             }
         _processingOrder = false;
     }
-    bool CheckInvalidStatusEffect(StatusEffect status,string typeName,Move move)
+    bool CheckInvalidStatusEffect(StatusEffect status,PokemonType typeName,Move move)
     {
-        string[] invalidCombinations = {
-            "poisonpoison","badlypoisonpoison", "burnfire", "paralysiselectric", "freezeice" };
-        foreach(string s in invalidCombinations)
-            if ((status + typeName).ToLower() == s)
+        List<(StatusEffect status, PokemonType type)> invalidCombinations = new()
+        {
+            new(StatusEffect.Poison, PokemonType.Poison),
+            new(StatusEffect.BadlyPoison, PokemonType.Poison),
+            new(StatusEffect.Burn, PokemonType.Fire),
+            new(StatusEffect.Paralysis, PokemonType.Electric),
+            new(StatusEffect.Freeze, PokemonType.Ice)
+        };
+        
+        foreach(var invalidCombo in invalidCombinations)
+        {
+            if (typeName == invalidCombo.type && status == invalidCombo.status)
             {
-                if(move.moveDamage==0)//if its only a status causing move
+                if (move.moveDamage == 0) 
+                {//if its only a status causing move
                     _dialogueHandler.DisplayBattleInfo("It failed");
+                }
                 return true;
             }
+        }
         return false;
     }
     public void HandleStatusApplication(Battle_Participant currentVictim,Move move, bool displayMessage)
     {
         foreach (var type in currentVictim.pokemon.types)
-            if(CheckInvalidStatusEffect(move.statusEffect, type.typeName,move))return;
+            if(CheckInvalidStatusEffect(move.statusEffect, type.typeEnum,move))return;
         OnStatusEffectHit?.Invoke(currentVictim,move.statusEffect);
         if (displayMessage)
             _dialogueHandler.DisplayBattleInfo($"{currentVictim.pokemon.pokemonName} {GetStatusMessage(move.statusEffect)}");
@@ -511,8 +522,8 @@ public class Move_handler:MonoBehaviour,IInjectable
        
         if(isMoveEffect)
         {
-            if (enemy.pokemon.HasType(Types.Ghost)
-                && !attacker.pokemon.HasType(Types.Ghost))
+            if (enemy.pokemon.HasType(PokemonType.Ghost)
+                && !attacker.pokemon.HasType(PokemonType.Ghost))
             {//only ghost can trap ghost with moves
                 _dialogueHandler.DisplayBattleInfo(enemy.pokemon.pokemonName+ "can't be trapped");
                 _processingOrder = false;
@@ -758,11 +769,11 @@ public class Move_handler:MonoBehaviour,IInjectable
     {
         _onFieldDamageModifiers.Add(newModifier);
     }
-    public void RemoveFieldDamageModifier(Types modifierTypeAffected)
+    public void RemoveFieldDamageModifier(PokemonType modifierTypeAffected)
     {
         _onFieldDamageModifiers.RemoveAll(m=>m.modifierInfo.typeAffected==modifierTypeAffected);
     }
-    public bool DamageModifierPresent(Types type)
+    public bool DamageModifierPresent(PokemonType type)
     {
         return _onFieldDamageModifiers.Any(m => m.modifierInfo.typeAffected == type);
     }

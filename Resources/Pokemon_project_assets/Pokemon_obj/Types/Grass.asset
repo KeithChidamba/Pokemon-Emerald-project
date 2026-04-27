@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Grass
   m_EditorClassIdentifier: 
-  typeName: Grass
+  typeEnum: 4
   weaknesses: 010000000500000007000000090000000b000000
   resistances: 02000000030000000400000008000000
   immunities: 

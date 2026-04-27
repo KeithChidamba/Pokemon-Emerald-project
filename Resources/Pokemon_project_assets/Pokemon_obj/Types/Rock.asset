@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36194865dd9d2942a020edc3eb87917, type: 3}
   m_Name: Rock
   m_EditorClassIdentifier: 
-  typeName: Rock
+  typeEnum: 12
   weaknesses: 0200000004000000060000000800000010000000
   resistances: 00000000010000000700000009000000
   immunities: 
