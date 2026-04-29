@@ -339,7 +339,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         {
             if (_pokemonPartyHandler.numMembers==1)
             {
-                _dialogueHandler.DisplayDetails("There must be at least 1 pokemon in your team");
+                _dialogueHandler.DisplayDetails("There must be at least 2 pokemon in your team");
                 _gameUIHandler.ClosePokemonStorage();
                 return;
             }

@@ -66,7 +66,7 @@ public class Bag : MonoBehaviour,IInjectable
     private ItemStorageHandler _itemStorageHandler;
     private InputStateHandler _inputStateHandler;
     private Dialogue_handler _dialogueHandler;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Game_ui_manager _gameUIHandler;
     private Game_Load _gameLoadingHandler;
     private Item_handler _itemHandler;
@@ -77,7 +77,7 @@ public class Bag : MonoBehaviour,IInjectable
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _playerBagInputService = container.Resolve<PlayerBagInputService>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
@@ -412,7 +412,7 @@ public class Bag : MonoBehaviour,IInjectable
             loopingUiAnimation.viewingUI = false;
             loopingUiAnimation.gameObject.SetActive(true);
         }
-        _inputStateHandler.ResetRelevantUi(InputStateName.ItemStorageUsage);
+        _inputStateHandler.ResetRelevantUi(InputStateName.ItemStorageUsage,true);
         OnItemSelected = null;
         OnBagOpened = null;
         

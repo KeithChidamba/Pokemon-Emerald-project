@@ -14,7 +14,6 @@ public class Move_handler:MonoBehaviour,IInjectable
     private readonly float[] _statLevels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
     private readonly float[] _accuracyAndEvasionLevels = {0.33f,0.375f,0.43f,0.5f,0.6f,0.75f,1f,1.33f,1.67f,2f,2.33f,2.67f,3f};
     private readonly float[] _critLevels = {6.25f,12.5f,25f,50f};
-    private BattleSequenceEvent[] _dialougeOrder={null,null,null,null,null,null,null};
     [SerializeField]private List<OnFieldDamageModifier> _onFieldDamageModifiers = new();
     [SerializeField]private List<DamageDisplayData> _damageDisplayQueue = new();
     [SerializeField]private List<DamageDisplayData> _healhGainQueue = new();
@@ -52,23 +51,13 @@ public class Move_handler:MonoBehaviour,IInjectable
     {
         _battleHandler.OnBattleEnd += ()=> _onFieldDamageModifiers.Clear();
     }
-    public void ExecuteMove(Turn turn)
+    public void BeginMoveExecution(Turn turn)
     {
         OnMoveComplete = null;
         _currentTurn = turn;
         attacker = _battleHandler.battleParticipants[turn.attackerIndex];
         victim = _battleHandler.battleParticipants[turn.victimIndex];
         StartCoroutine(MoveSequence());
-    }
-    void SetMoveSequence()
-    {
-        _dialougeOrder[0] = new BattleSequenceEvent(DealDamage, _currentTurn.move.moveDamage > 0);
-        _dialougeOrder[1] = new BattleSequenceEvent(CheckVictimVulnerabilityToStatus, _currentTurn.move.hasStatus);
-        _dialougeOrder[2] = new BattleSequenceEvent(CheckBuffOrDebuffApplicability, _currentTurn.move.isBuffOrDebuff);
-        _dialougeOrder[3] = new BattleSequenceEvent(FlinchEnemy, _currentTurn.move.canCauseFlinch);
-        _dialougeOrder[4] = new BattleSequenceEvent(ConfuseEnemy,_currentTurn.move.canCauseConfusion);
-        _dialougeOrder[5] = new BattleSequenceEvent(TrapEnemy,_currentTurn.move.canTrap);
-        _dialougeOrder[6] = new BattleSequenceEvent(InfatuateEnemy,_currentTurn.move.canInfatuate);
     }
     private IEnumerator MoveSequence()
     {
@@ -77,15 +66,24 @@ public class Move_handler:MonoBehaviour,IInjectable
             _dialogueHandler.DisplayBattleInfo("It doesn't affect "+victim.pokemon.pokemonName);
         else
         {
-            SetMoveSequence();
             if (_currentTurn.move.effectType != EffectType.PipeLine)
             {
                 yield return _moveLogicHandler.DetermineMoveLogic(attacker,victim,_currentTurn);
             }
             else
             {
+                var battleSequenceEvents = new List<BattleSequenceEvent>
+                {
+                    new (DealDamage, _currentTurn.move.moveDamage > 0),
+                    new (CheckVictimVulnerabilityToStatus, _currentTurn.move.hasStatus),
+                    new (CheckBuffOrDebuffApplicability, _currentTurn.move.isBuffOrDebuff),
+                    new (FlinchEnemy, _currentTurn.move.canCauseFlinch),
+                    new (ConfuseEnemy, _currentTurn.move.canCauseConfusion),
+                    new (TrapEnemy, _currentTurn.move.canTrap),
+                    new (InfatuateEnemy, _currentTurn.move.canInfatuate)
+                };
                 victim.OnPokemonFainted += CancelMoveSequence;//victim faints after damage so the rest of move effect is ignored
-                foreach (var battleEvent in _dialougeOrder)
+                foreach (var battleEvent in battleSequenceEvents)
                 {
                     if (_cancelMove)
                         break;

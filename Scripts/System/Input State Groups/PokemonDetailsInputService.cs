@@ -7,12 +7,12 @@ public class PokemonDetailsInputService
 {
     private Pokemon_Details _pokemonDetailsHandler;
     private InputStateHandler _inputStateHandler;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     public PokemonDetailsInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
     }
     public void DetermineOperation()
     {

@@ -30,7 +30,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private PokemonOperations _pokemonOperations;
     private InputStateHandler _inputStateHandler;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private pokemon_storage _pokemonStorageHandler;
@@ -40,7 +40,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     public void Inject(ServiceContainer container)
     {
         _partyInputService = container.Resolve<PokemonPartyInputService>();
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
         _inputStateHandler = container.Resolve<InputStateHandler>();

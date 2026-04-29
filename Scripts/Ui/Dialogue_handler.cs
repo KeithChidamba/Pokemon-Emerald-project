@@ -33,13 +33,13 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     private Battle_handler _battleHandler;
     private Player_movement _playerMovementHandler;
     private InputStateHandler _inputStateHandler;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Interaction_handler  _interactionHandler;
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _battleHandler = container.Resolve<Battle_handler>();
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _interactionHandler = container.Resolve<Interaction_handler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         gameObject.SetActive(true);

@@ -1,0 +1,11 @@
+{
+    "mainAssetName": "Buy Energy Root",
+    "objectiveHeading": "buy energy root",
+    "hasProgression": false,
+    "indexInList": 10,
+    "objectiveType": 5,
+    "itemForObjective": {
+        "instanceID": 27156
+    },
+    "marketObjectiveType": 1
+}

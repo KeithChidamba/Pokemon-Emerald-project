@@ -30,7 +30,7 @@ public class Poke_Mart : MonoBehaviour,IInjectable
     public event Action<Item> OnItemBought;
     
     private Dialogue_handler _dialogueHandler;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Game_ui_manager _gameUIHandler;
     private Bag _playerBagHandler;
     private Game_Load _gameLoadingHandler;
@@ -38,7 +38,7 @@ public class Poke_Mart : MonoBehaviour,IInjectable
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _playerBagHandler = container.Resolve<Bag>();
         _gameLoadingHandler = container.Resolve<Game_Load>();

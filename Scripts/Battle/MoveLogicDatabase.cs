@@ -333,7 +333,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             _currentTurn.move = _victim.previousMove.move;
             _dialogueHandler.DisplayBattleInfo(
                 _turnBasedCombatHandler.GetMoveUsageText(_currentTurn.move,_attacker, _victim));
-            _moveUsageHandler.OnMoveComplete += ()=> _moveUsageHandler.ExecuteMove(_currentTurn);
+            _moveUsageHandler.OnMoveComplete += ()=> _moveUsageHandler.BeginMoveExecution(_currentTurn);
         }
         else
         {

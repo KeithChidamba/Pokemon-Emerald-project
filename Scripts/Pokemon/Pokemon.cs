@@ -100,7 +100,7 @@ public class Pokemon : ScriptableObject
     
     //dependencies
     private Dialogue_handler _dialogueHandler;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Battle_handler _battleHandler;
     private Pokemon_party _pokemonPartyHandler;
     private PokemonOperations _pokemonOperationsHandler;
@@ -168,7 +168,7 @@ public class Pokemon : ScriptableObject
     public void Inject(ServiceContainer serviceContainer)
     {
         _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
-        _dialogueOptionsHandler = serviceContainer.Resolve<Options_manager>(); 
+        _dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>(); 
         _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
         _pokemonPartyHandler = serviceContainer.Resolve<Pokemon_party>();
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();

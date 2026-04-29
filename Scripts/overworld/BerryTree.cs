@@ -20,16 +20,16 @@ public class BerryTree : MonoBehaviour,IInjectable
 
     private Dialogue_handler _dialogueHandler;
     private OverworldState _overworldStateHandler;
-    private Options_manager _gameLoadHandler;
+    private DialogueOptionsEventHandler _gameLoadHandler;
     private Bag _playerBag;
     private Game_ui_manager _gameUIHandler;
     private InputStateHandler _inputStateHandler;
     private overworld_actions _overworldActions;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _overworldActions = container.Resolve<overworld_actions>();
         _playerBag = container.Resolve<Bag>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();

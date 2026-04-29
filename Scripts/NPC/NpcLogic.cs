@@ -18,10 +18,10 @@ public class NpcLogic : MonoBehaviour,IInjectable
 
     private Dialogue_handler _dialogueHandler;
     private Player_movement _playerMovement;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     public void Inject(ServiceContainer container)
     {
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _playerMovement = container.Resolve<Player_movement>();
         OnInject();

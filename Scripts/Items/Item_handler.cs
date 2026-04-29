@@ -17,7 +17,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     private Game_ui_manager _gameUIHandler;
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private InputStateHandler _inputStateHandler;
     private Battle_handler _battleHandler;
     private Area_manager  _areaHandler;
@@ -34,7 +34,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _moveUsageHandler = container.Resolve<Move_handler>();
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _playerBagHandler = container.Resolve<Bag>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();

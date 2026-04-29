@@ -32,12 +32,12 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     private MoveLogicHandler _moveLogicHandler;
     private BattleOperations _battleOperationsHandler;
     private Game_Load _gameLoadingHandler;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
 
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _battleOperationsHandler = container.Resolve<BattleOperations>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
@@ -348,7 +348,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             if (successfulAttack)
             {
                 _moveUsageHandler.doingMove = true;
-                _moveUsageHandler.ExecuteMove(currentTurn);
+                _moveUsageHandler.BeginMoveExecution(currentTurn);
                 
                 yield return new WaitUntil(() => !_moveUsageHandler.doingMove);
                 yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);

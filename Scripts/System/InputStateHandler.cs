@@ -394,7 +394,9 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine
         stateLayers.Remove(state);
         OnStateRemoved?.Invoke(state);
+        
         if (!manualExit) return;
+
         LoadNextState();
     }
 

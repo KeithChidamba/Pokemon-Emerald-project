@@ -7,12 +7,12 @@ public class InteractionObjective : StoryObjective
    public Interaction interactionForObjective;
    protected Action onObjectiveComplete;
    protected Dialogue_handler dialogueHandler;
-   protected Options_manager dialogueOptionsHandler;
+   protected DialogueOptionsEventHandler dialogueOptionsHandler;
    
    protected override void OnObjectiveLoaded()
    {
       dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
-      dialogueOptionsHandler = serviceContainer.Resolve<Options_manager>(); 
+      dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>(); 
       dialogueHandler.DisplayObjectiveText(objectiveHeading);
       dialogueOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
    }

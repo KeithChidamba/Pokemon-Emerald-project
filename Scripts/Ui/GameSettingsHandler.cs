@@ -65,7 +65,6 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     
     private void GetSavedSettings()
     {
-        Debug.Log("got saved game settings");
         var savedSettings = _saveDataHandler.LoadGameSettingsData();
         settingConfigs.Clear();
         settingConfigs.AddRange(savedSettings);
@@ -73,7 +72,6 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
 
     private void LoadDefaultSettings()
     {
-        Debug.Log("got default game settings");
         settingConfigs.Clear();
         foreach (var setting in gameSettings)
         {

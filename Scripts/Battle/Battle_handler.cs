@@ -47,7 +47,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     
     private Dialogue_handler _dialogueHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private InputStateHandler _inputStateHandler;
     private Game_ui_manager _gameUIHandler;
     private BattleIntro _battleIntroHandler;
@@ -70,7 +70,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _encounterHandler = container.Resolve<Encounter_handler>();
         _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _areaHandler = container.Resolve<Area_manager>();

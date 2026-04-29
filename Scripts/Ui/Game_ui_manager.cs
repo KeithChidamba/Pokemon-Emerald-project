@@ -27,6 +27,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     public GameObject keyBindsUI;
     public bool usingWebGl;
     [SerializeField]private bool _canOpenMenu;
+    private bool _isEmptyState;
     public Image destinationPointerUI;
     
     private Item_handler _itemHandler;
@@ -35,7 +36,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private Player_movement _playerMovementHandler;
     private InputStateHandler _inputStateHandler;
     private PokemonDetailsInputService _pokemonDetailsInputService;
-    private Options_manager _dialogueOptionsHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Game_Load _gameLoadingHandler;
     private overworld_actions _overworldActionsHandler;
     private Save_manager _saveDataHandler;
@@ -52,7 +53,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _pokemonDetailsInputService = container.Resolve<PokemonDetailsInputService>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _dialogueOptionsHandler = container.Resolve<Options_manager>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _playerBagHandler = container.Resolve<Bag>();
         _pokeMartHandler = container.Resolve<Poke_Mart>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
@@ -78,17 +79,21 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         canUseUi = false;
         _canOpenMenu = true;
         _gameLoadingHandler.OnGameStarted += () => canUseUi = true;
-        _inputStateHandler.OnStateChanged += AllowMenuUsage;
+        _inputStateHandler.OnStateChanged += CheckEmptyState;
     }
 
-    private void AllowMenuUsage(InputState currentState)
+    public void SetMenuAccessibility(bool isAccessible)
     {
-        _canOpenMenu = currentState.stateName == InputStateName.Empty;
+        _canOpenMenu = isAccessible;
+    }
+    private void CheckEmptyState(InputState currentState)
+    {
+        _isEmptyState = currentState.stateName == InputStateName.Empty;
     }
     private void Update()
     {
         if (!canUseUi) return;
-        if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu)&& _canOpenMenu &&!viewingMenu)
+        if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu) && _isEmptyState && _canOpenMenu &&!viewingMenu)
         {
             ManageScreens(1);
             viewingMenu = true;
@@ -216,13 +221,20 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     }
     public void ViewBag()
     {
+        if (_playerBagHandler.allItems.Count == 0)
+        {
+            _dialogueHandler.DisplayDetails("You have no items");
+            _playerBagHandler.CloseBag();
+            return;
+        }
+
         if (_playerBagHandler.currentBagUsage == BagUsage.SellingView)
         {
             var sellableItems = _playerBagHandler.allItems.Count(item => item.canBeSold);
-            if (_playerBagHandler.allItems.Count == 0 || sellableItems==0)
+            if (sellableItems==0)
             {
-                _playerBagHandler.currentBagUsage = BagUsage.NormalView;
                 _dialogueHandler.DisplayDetails("You have no items to sell");
+                _playerBagHandler.CloseBag();
                 return;
             }
         }
@@ -352,7 +364,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _inputStateHandler.ChangeInputState(new  (InputStateName.ItemStorageUsage,
             InputStateGroup.Bag,true,pcItemOptionsUI,
             InputDirection.Vertical, pcUsageSelectables,pcItemOptionSelector,true, true
-            ,onExit:ClosePCItemOptions));
+            ,onExit:ClosePCItemOptions,onClose:ClosePCItemOptions));
         
         pcItemOptionsUI.SetActive(true);
     }

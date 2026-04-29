@@ -8,7 +8,7 @@ public enum InteractionOptions
     Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,
     ReceiveGiftPokemon,LeaveStore,ViewControls,
 }
-public class Options_manager : MonoBehaviour,IInjectable
+public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
 {
     private Interaction _currentInteraction;
     public bool playerInBattle;

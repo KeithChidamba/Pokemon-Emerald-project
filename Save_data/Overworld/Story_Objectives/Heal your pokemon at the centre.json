@@ -1,0 +1,10 @@
+{
+    "mainAssetName": "Heal Pokemon",
+    "objectiveHeading": "Heal your pokemon at the centre",
+    "hasProgression": false,
+    "indexInList": 14,
+    "objectiveType": 1,
+    "interactionForObjective": {
+        "instanceID": 25302
+    }
+}
