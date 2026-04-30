@@ -13,7 +13,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     public List<StoryObjective> currentStoryObjectives = new();
     public StoryProgressObjective storyProgressObjective;
     public event Action OnObjectivesLoaded;
-    private Save_manager _saveHandler;
+    private SaveDataHandler _saveHandler;
     private Dialogue_handler _dialogueHandler;
     private ServiceContainer _container;
     private Game_Load _gameLoadingHandler;
@@ -21,7 +21,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     public void Inject(ServiceContainer container)
     {
         _container = container;
-        _saveHandler = container.Resolve<Save_manager>();
+        _saveHandler = container.Resolve<SaveDataHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         
@@ -79,7 +79,7 @@ public class OverworldState : MonoBehaviour,IInjectable
             yield return new WaitUntil(() => currentStoryObjectives.Count==allStoryObjectives.Count);
             currentStoryObjectives.ForEach(o=>o.mainAssetName=o.name);
             
-            storyProgressObjective = Resources.Load<StoryProgressObjective>(Save_manager.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
+            storyProgressObjective = Resources.Load<StoryProgressObjective>(SaveDataHandler.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
             storyProgressObjective.mainAssetName = storyProgressObjective.name;
             storyProgressObjective.totalObjectiveAmount = allStoryObjectives.Count;
             storyProgressObjective.numCompleted = 0;

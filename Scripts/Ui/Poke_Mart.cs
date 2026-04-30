@@ -164,7 +164,7 @@ public class Poke_Mart : MonoBehaviour,IInjectable
         }
         
         var allData = Resources.LoadAll<PokeMartData>(
-            Save_manager.GetDirectory(AssetDirectory.PokeMartData));
+            SaveDataHandler.GetDirectory(AssetDirectory.PokeMartData));
         
         foreach (var data in allData)
         {

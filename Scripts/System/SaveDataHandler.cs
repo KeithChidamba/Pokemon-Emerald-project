@@ -18,12 +18,12 @@ public enum SaveDataDirectory
     PartyIds, PCStorage, Overworld, StoryObjectives, BerryTrees,
     GameSettings
 }
-public class Save_manager : MonoBehaviour,IInjectable
+public class SaveDataHandler : MonoBehaviour,IInjectable
 {
     [DllImport("__Internal")] private static extern void DownloadZipAndStoreLocally();
     [DllImport("__Internal")] private static extern void CreateDirectories(string jsonPtr);
     [DllImport("__Internal")] private static extern void UploadZipAndStoreToIDBFS();
-
+    [DllImport("__Internal")] private static extern void ClearFileDataStore();
     
     [SerializeField]private List<string> partyIDs;
 
@@ -34,6 +34,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     public event Action OnUploadedDataReady;
     public event Action OnVirtualFsCreated;
     private bool _virtualFileStructureReady;
+    private bool _virtualDirectoriesCleared;
     
     private Dialogue_handler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
@@ -111,9 +112,7 @@ public class Save_manager : MonoBehaviour,IInjectable
     private void OnInject()
     {
         OnSaveDataFail += HandleSaveError;
-        _virtualFileStructureReady = false;
-        OnVirtualFsCreated += () => _virtualFileStructureReady = true;
-        
+     
         _rootAssetDirectory = "Pokemon_project_assets/";
         
         switch (Application.platform)
@@ -157,8 +156,12 @@ public class Save_manager : MonoBehaviour,IInjectable
     {
         public string[] items;
     }
-    public void CreateDefaultWebglDirectories()
+    public IEnumerator CreateDefaultWebglDirectories()
     {
+        ClearFileDataStore();
+        _virtualDirectoriesCleared = false;
+        yield return new WaitUntil(() => _virtualDirectoriesCleared);
+        
         List<string> directoryList = new();
         foreach (var dir in SaveDataDirectories)
         {
@@ -170,23 +173,27 @@ public class Save_manager : MonoBehaviour,IInjectable
         };
 
         string json = JsonUtility.ToJson(wrapper);
-       
-        if (Application.platform != RuntimePlatform.WebGLPlayer) return;
         CreateDirectories(json);
     }
+    
     public void UploadSaveZip()
     {
         StartCoroutine(ProcessFileUpload());
     }
     private IEnumerator ProcessFileUpload()
     {
-        CreateDefaultWebglDirectories();
+        _virtualFileStructureReady = false;
+        yield return CreateDefaultWebglDirectories();
         yield return new WaitUntil(() => _virtualFileStructureReady);
         UploadZipAndStoreToIDBFS();
     }
-    
+    public void OnFSCleared()//js notification
+    {
+        _virtualDirectoriesCleared = true;
+    }
     public void OnFileStructureCreated()//js notification
     {
+        _virtualFileStructureReady = true;
         OnVirtualFsCreated?.Invoke();
     }
     public void OnDownloadComplete()//js notification
@@ -486,7 +493,7 @@ public class Save_manager : MonoBehaviour,IInjectable
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
             _virtualFileStructureReady = false;
-            CreateDefaultWebglDirectories();
+            yield return CreateDefaultWebglDirectories();
             yield return new WaitUntil(() => _virtualFileStructureReady);
         }
         

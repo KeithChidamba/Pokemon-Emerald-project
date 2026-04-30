@@ -295,8 +295,8 @@ public class AbilityHandler : BattleParticipantModule
         var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
 
         var assetDirectory = nonMartItems.Contains(possibleItems[itemWonIndex])?
-            Save_manager.GetDirectory(AssetDirectory.NonMartItems) + possibleItems[itemWonIndex]
-            : Save_manager.GetDirectory(AssetDirectory.MartItems) + possibleItems[itemWonIndex];
+            SaveDataHandler.GetDirectory(AssetDirectory.NonMartItems) + possibleItems[itemWonIndex]
+            : SaveDataHandler.GetDirectory(AssetDirectory.MartItems) + possibleItems[itemWonIndex];
         
         var itemWon = Resources.Load<Item>(assetDirectory);
         if (Utility.RandomRange(1, 101) < participant.pokemon.currentLevel)

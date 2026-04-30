@@ -282,7 +282,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _overworldActions.doingAction = true;
         _pokemonPartyHandler.SortByFainted();
         var copyOfTrainerData = Resources.Load<TrainerData>(
-            Save_manager.GetDirectory(AssetDirectory.TrainerData)
+            SaveDataHandler.GetDirectory(AssetDirectory.TrainerData)
             + $"{trainerNames[0]}/{trainerNames[0]}");
          currentBattleType = copyOfTrainerData.battleType;
         switch (copyOfTrainerData.battleType)

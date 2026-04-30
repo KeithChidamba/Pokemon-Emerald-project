@@ -409,7 +409,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         {
             statusImage.gameObject.SetActive(true);
             statusImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(AssetDirectory.Status) 
+                SaveDataHandler.GetDirectory(AssetDirectory.Status) 
              + pokemon.statusEffect.ToString().ToLower());
         }
     }
@@ -463,7 +463,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         pokemonGenderImage.gameObject.SetActive(true);
         if(pokemon.hasGender)
             pokemonGenderImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(AssetDirectory.UI) 
+                SaveDataHandler.GetDirectory(AssetDirectory.UI) 
                 + pokemon.gender.ToString().ToLower());
         else
             pokemonGenderImage.gameObject.SetActive(false);

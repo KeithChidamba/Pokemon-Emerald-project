@@ -78,7 +78,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
     private Pokemon_party _pokemonPartyHandler;
-    private Save_manager _saveDataHandler;
+    private SaveDataHandler _saveDataHandler;
     private Game_Load _gameLoadingHandler;
     PokemonStorageInputService _pokemonStorageInputService;
     
@@ -89,7 +89,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
-        _saveDataHandler = container.Resolve<Save_manager>();
+        _saveDataHandler = container.Resolve<SaveDataHandler>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         
         gameObject.SetActive(true);
@@ -290,7 +290,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         genderImage.gameObject.SetActive(true);
         if(pokemon.hasGender)
             genderImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(AssetDirectory.UI) 
+                SaveDataHandler.GetDirectory(AssetDirectory.UI) 
                 + pokemon.gender.ToString().ToLower());
         else
             genderImage.gameObject.SetActive(false);

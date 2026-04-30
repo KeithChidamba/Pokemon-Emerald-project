@@ -198,7 +198,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         gender_img.gameObject.SetActive(true);
         if(currentPokemon.hasGender)
         {
-            gender_img.sprite = Resources.Load<Sprite>(Save_manager.GetDirectory(AssetDirectory.UI)
+            gender_img.sprite = Resources.Load<Sprite>(SaveDataHandler.GetDirectory(AssetDirectory.UI)
                                                        + currentPokemon.gender.ToString().ToLower());
         }
         else

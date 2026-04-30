@@ -70,7 +70,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
              pokemon.abilities[pokemon.personalityValue % 2] : pokemon.abilities[0];
         pokemon.abilityName = NameDB.GetAbility(abilityEnum);
         pokemon.ability = Resources.Load<Ability>(
-            Save_manager.GetDirectory(AssetDirectory.Abilities)
+            SaveDataHandler.GetDirectory(AssetDirectory.Abilities)
             + pokemon.abilityName.ToLower());
     }
     public static bool ContainsType(PokemonType[]typesList ,Type typesToCheck)
@@ -96,7 +96,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         foreach (var nature in natures)
         {
             var assignedNature = Resources.Load<Nature>(
-                Save_manager.GetDirectory(AssetDirectory.Natures)
+                SaveDataHandler.GetDirectory(AssetDirectory.Natures)
                 + nature);
             if (assignedNature.requiredNatureValue != natureValue) continue;
             pokemon.nature = assignedNature;
@@ -257,7 +257,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private IEnumerator LearnMove(string moveName,bool isPartyPokemon = true, bool isLevelUpMove = true)
     {
         _itemHandler.usingItem = false;
-        var assetPath = Save_manager.GetDirectory(AssetDirectory.Moves) + moveName;
+        var assetPath = SaveDataHandler.GetDirectory(AssetDirectory.Moves) + moveName;
         
         var moveFromAsset = Resources.Load<Move>(assetPath);
         

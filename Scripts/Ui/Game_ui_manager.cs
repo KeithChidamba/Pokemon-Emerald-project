@@ -8,10 +8,9 @@ using UnityEngine.UI;
 
 public class Game_ui_manager : MonoBehaviour,IInjectable
 {
-
     public GameObject menuOptions;
     public bool viewingMenu;
-    public bool canUseUi=true;
+    private bool _canUseUi;
     public Player_Info_ui profile;
 
     [SerializeField]private int numUIScreensOpen;
@@ -39,7 +38,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Game_Load _gameLoadingHandler;
     private overworld_actions _overworldActionsHandler;
-    private Save_manager _saveDataHandler;
+    private SaveDataHandler _saveDataHandler;
     private Bag _playerBagHandler;
     private Poke_Mart _pokeMartHandler;
     private Pokemon_party _pokemonPartyHandler;
@@ -58,7 +57,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _pokeMartHandler = container.Resolve<Poke_Mart>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
-        _saveDataHandler = container.Resolve<Save_manager>();
+        _saveDataHandler = container.Resolve<SaveDataHandler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _overworldActionsHandler = container.Resolve<overworld_actions>();
@@ -76,9 +75,10 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         usingWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
         exitButton.SetActive(!usingWebGl);
         if (usingWebGl) menuUiOptions.Remove(menuUiOptions.Last());//remove exit button
-        canUseUi = false;
+        _canUseUi = false;
         _canOpenMenu = true;
-        _gameLoadingHandler.OnGameStarted += () => canUseUi = true;
+        _isEmptyState = true;
+        _gameLoadingHandler.OnGameStarted += () => _canUseUi = true;
         _inputStateHandler.OnStateChanged += CheckEmptyState;
     }
 
@@ -92,7 +92,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     }
     private void Update()
     {
-        if (!canUseUi) return;
+        if (!_canUseUi) return;
         if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu) && _isEmptyState && _canOpenMenu &&!viewingMenu)
         {
             ManageScreens(1);

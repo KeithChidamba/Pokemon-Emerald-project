@@ -104,7 +104,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         heldItemImage.SetActive(pokemon.hasItem);
         
         genderImage.sprite = Resources.Load<Sprite>(
-            Save_manager.GetDirectory(AssetDirectory.UI) 
+            SaveDataHandler.GetDirectory(AssetDirectory.UI) 
             + pokemon.gender.ToString().ToLower());
         
         if (pokemon.statusEffect == StatusEffect.None)
@@ -113,7 +113,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         {
             statusEffectImage.gameObject.SetActive(true);
             statusEffectImage.sprite = Resources.Load<Sprite>(
-                Save_manager.GetDirectory(AssetDirectory.Status)
+                SaveDataHandler.GetDirectory(AssetDirectory.Status)
                 + pokemon.statusEffect.ToString().ToLower());
         }
         _inputStateHandler.OnSelectionIndexChanged += UpdateUi;
@@ -145,7 +145,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
             {
                 statusEffectImage.gameObject.SetActive(true);
                 statusEffectImage.sprite = Resources.Load<Sprite>(
-                    Save_manager.GetDirectory(AssetDirectory.Status)
+                    SaveDataHandler.GetDirectory(AssetDirectory.Status)
                     + "fainted");
             }
         }

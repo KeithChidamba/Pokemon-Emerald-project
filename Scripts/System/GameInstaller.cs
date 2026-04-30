@@ -29,7 +29,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private pokemon_storage pokemonStorageHandler;
     [SerializeField] private ItemStorageHandler itemStorageHandler;
     [SerializeField] private Pokemon_Details pokemonDetailsHandler;
-    [SerializeField] private Save_manager saveDataHandler;
+    [SerializeField] private SaveDataHandler saveDataHandler;
     [SerializeField] private Interaction_handler  interactionHandler;
     [SerializeField] private Player_movement playerMovementHandler;
     [SerializeField] private PlayerCollisionHandler playerCollisionHandler;

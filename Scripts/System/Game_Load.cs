@@ -25,7 +25,7 @@ public class Game_Load : MonoBehaviour,IInjectable
     } 
 
     public event Action OnGameStarted;
-    private Save_manager _saveHandler;
+    private SaveDataHandler _saveHandler;
     private Dialogue_handler _dialogueHandler;
     private Area_manager _areaHandler;
     private Player_movement _playerMovement;
@@ -35,7 +35,7 @@ public class Game_Load : MonoBehaviour,IInjectable
     public void Inject(ServiceContainer container)
     {
         _playerBagHandler = container.Resolve<Bag>();
-        _saveHandler = container.Resolve<Save_manager>();
+        _saveHandler = container.Resolve<SaveDataHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _areaHandler = container.Resolve<Area_manager>();
         _playerMovement = container.Resolve<Player_movement>();
@@ -75,7 +75,10 @@ public class Game_Load : MonoBehaviour,IInjectable
     {
         if (name_input.text.Length < _maxNameLength && name_input.text.Length > _minNameLength-1)
         {
-            _saveHandler.CreateDefaultWebglDirectories();
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+                StartCoroutine(_saveHandler.CreateDefaultWebglDirectories());
+            }
             var playerName = name_input.text;
             var data = ScriptableObject.CreateInstance<Player_data>();
             data.playerName = playerName;

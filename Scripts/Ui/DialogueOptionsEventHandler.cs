@@ -138,7 +138,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
             return;
         }
         var pokemonName = _currentInteraction.additionalInfo[int.Parse(_currentInteraction.resultMessage)-1];
-        var pokemon = Resources.Load<Pokemon>(Save_manager.GetDirectory(AssetDirectory.Pokemon)
+        var pokemon = Resources.Load<Pokemon>(SaveDataHandler.GetDirectory(AssetDirectory.Pokemon)
                                               + pokemonName +"/"+ pokemonName);
         
         _playerParty.AddMember(pokemon,isGiftPokemon:true);

@@ -123,20 +123,20 @@ public class Pokemon : ScriptableObject
     }
     public void LoadDataAndDependencies(ServiceContainer serviceContainer)
     {//gives values to attributes that cant be deserialized, using saved values
-        frontPicture = Testing.CheckImage( Save_manager.GetDirectory
+        frontPicture = Testing.CheckImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
-        backPicture =Testing.CheckImage( Save_manager.GetDirectory
+        backPicture =Testing.CheckImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_sb":"_b"));
-        partyFrame1=Testing.CheckImage( Save_manager.GetDirectory
+        partyFrame1=Testing.CheckImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonPartyImage),pokemonName+"_1");
-        partyFrame2=Testing.CheckImage( Save_manager.GetDirectory
+        partyFrame2=Testing.CheckImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonPartyImage),pokemonName+"_2");
-        battleIntroFrame=Testing.CheckImage( Save_manager.GetDirectory
+        battleIntroFrame=Testing.CheckImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_s_intro":"_intro"));
         
-        nature = Resources.Load<Nature>(Save_manager.GetDirectory
+        nature = Resources.Load<Nature>(SaveDataHandler.GetDirectory
             (AssetDirectory.Natures) + natureName.ToLower());
-        ability = Resources.Load<Ability>(Save_manager.GetDirectory
+        ability = Resources.Load<Ability>(SaveDataHandler.GetDirectory
             (AssetDirectory.Abilities) + abilityName.ToLower());
         types.Clear();
         evolutions.Clear();
@@ -145,18 +145,18 @@ public class Pokemon : ScriptableObject
         
         foreach (var typeName in typeNames)
         {
-            types.Add(Resources.Load<Type>(Save_manager.GetDirectory
+            types.Add(Resources.Load<Type>(SaveDataHandler.GetDirectory
                 (AssetDirectory.Types) + typeName));
         }
         foreach (var evolutionName in evolutionNames)
         {
-            var pokemonDirectory = Save_manager.GetDirectory
+            var pokemonDirectory = SaveDataHandler.GetDirectory
                 (AssetDirectory.Pokemon);
             evolutions.Add(Resources.Load<Evolution>($"{pokemonDirectory}{basePokemonName}/{evolutionName}"));
         }
         for (int i = 0; i < types.Count; i++)
         {
-            types[i].typeImage = Resources.Load<Sprite>(Save_manager.GetDirectory
+            types[i].typeImage = Resources.Load<Sprite>(SaveDataHandler.GetDirectory
                 (AssetDirectory.UI) + typeNames[i]);
         }
 
@@ -188,7 +188,7 @@ public class Pokemon : ScriptableObject
         foreach (var move in movesetTemplate)
         {
             var moveCopy = InstanceFactory.CreateMove(Resources.Load<Move>(
-                Save_manager.GetDirectory(AssetDirectory.Moves) + move.moveName));
+                SaveDataHandler.GetDirectory(AssetDirectory.Moves) + move.moveName));
             
             moveCopy.powerpoints = move.powerPoints;
             moveCopy.maxPowerpoints = move.maxPowerpoints;

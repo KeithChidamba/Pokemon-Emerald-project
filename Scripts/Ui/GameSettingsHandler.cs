@@ -36,7 +36,7 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     [SerializeField]private List<SettingsConfig> settingConfigs = new();
     private readonly Dictionary<GameSettingName, Action<int>> _settingsMethods = new ();
     
-    private Save_manager _saveDataHandler;
+    private SaveDataHandler _saveDataHandler;
     private Dialogue_handler _dialogueHandler;
     private Battle_handler _battleHandler;
     private InputSourceHandler _inputSourceHandler;
@@ -44,7 +44,7 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     
     public void Inject(ServiceContainer container)
     {
-        _saveDataHandler = container.Resolve<Save_manager>();
+        _saveDataHandler = container.Resolve<SaveDataHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
         _inputSourceHandler = container.Resolve<InputSourceHandler>();
