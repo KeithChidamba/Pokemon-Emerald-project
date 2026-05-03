@@ -35,4 +35,51 @@ public class Item : ScriptableObject
         }
         return additionalInfoModule as T;
     }
+
+    public void SaveModuleNames()
+    {
+        if(hasModules)
+        {
+            infoModuleAssetNames.Clear();
+            if (additionalInfoModules.Count == 0 && !isMultiModular)
+            {
+                //just in-case
+                additionalInfoModules.Add(additionalInfoModule);
+            }
+            foreach (var module in additionalInfoModules)
+            {
+                infoModuleAssetNames.Add(module.name);
+            }
+        }
+    }
+    public void DetermineImageDirectory()
+    {
+        if (additionalInfoModules.Any(m => m is TM))
+        {
+            var tm =  GetModule<TM>();
+            imageDirectory = tm.move.type.GetTypeName.ToLower() + " tm";
+            return;
+        }
+        if (additionalInfoModules.Any(m => m is HM))
+        {
+            var hm = GetModule<HM>();
+            imageDirectory = hm.move.type.GetTypeName.ToLower() + " tm";
+            return;
+        }
+        imageDirectory = itemName;
+    }
+    public void LoadData()
+    {
+        if (hasModules)
+        {
+            additionalInfoModules.Clear();
+            foreach (var assetName in infoModuleAssetNames)
+            {
+                var additionalInfo = Resources.Load<AdditionalInfoModule>(SaveDataHandler.GetDirectory(AssetDirectory.AdditionalInfo)+assetName);
+                additionalInfoModules.Add(additionalInfo);
+            }
+            additionalInfoModule = additionalInfoModules.First();
+        }
+        itemImage = Testing.CheckImage(SaveDataHandler.GetDirectory(AssetDirectory.UI),imageDirectory);
+    }
 }

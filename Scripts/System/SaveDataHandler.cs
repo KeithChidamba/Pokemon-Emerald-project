@@ -5,7 +5,7 @@ using UnityEngine;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using UnityEngine.Serialization;
+
 
 public enum AssetDirectory
 { 
@@ -14,8 +14,8 @@ public enum AssetDirectory
 }
 public enum SaveDataDirectory
 {
-    Items, HeldItems, StorageItems, Pokemon, Player,
-    PartyIds, PCStorage, Overworld, StoryObjectives, BerryTrees,
+    Items, HeldItems, StorageItems, StoragePokemon, PartyPokemon, Player,
+    PCStorage, Overworld, StoryObjectives, BerryTrees,
     GameSettings
 }
 public class SaveDataHandler : MonoBehaviour,IInjectable
@@ -24,8 +24,6 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     [DllImport("__Internal")] private static extern void CreateDirectories(string jsonPtr);
     [DllImport("__Internal")] private static extern void UploadZipAndStoreToIDBFS();
     [DllImport("__Internal")] private static extern void ClearFileDataStore();
-    
-    [SerializeField]private List<string> partyIDs;
 
     private string _saveDataPath;
     private string _tempSaveDataPath;
@@ -74,9 +72,9 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         { SaveDataDirectory.Items, "/Items" },
         { SaveDataDirectory.HeldItems, "/Items/Held_Items" },
         { SaveDataDirectory.StorageItems, "/Items/Storage_Items" },
-        { SaveDataDirectory.Pokemon, "/Pokemon" },
+        { SaveDataDirectory.StoragePokemon, "/Storage_Pokemon" },
+        { SaveDataDirectory.PartyPokemon, "/Party_Pokemon" },
         { SaveDataDirectory.Player, "/Player" },
-        { SaveDataDirectory.PartyIds, "/Party_Ids" },
         { SaveDataDirectory.PCStorage, "/PC_Storage" },
         { SaveDataDirectory.Overworld, "/Overworld" },
         { SaveDataDirectory.StoryObjectives, "/Overworld/Story_Objectives" },
@@ -127,9 +125,9 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                 break;
         }
         
-        CreateTemporaryDirectory();
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
+            CreateAllSaveDirectories();
             _gameLoadingHandler.uploadButton.interactable = false;
             LoadPlayerData(); 
             LoadItemData();
@@ -143,11 +141,18 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         
     }
 
-    private void CreateTemporaryDirectory()
+    private void CreateAllSaveDirectories()
     {
         foreach (var dir in SaveDataDirectories)
         {
-            CreateFolder(_tempSaveDataPath + dir.Value);
+            if (!Directory.Exists(_tempSaveDataPath + dir.Value))
+            {
+                Directory.CreateDirectory(_tempSaveDataPath + dir.Value);
+            }
+            if (!Directory.Exists(_saveDataPath + dir.Value))
+            {
+                Directory.CreateDirectory(_saveDataPath + dir.Value);
+            }
         }
     }
 
@@ -216,8 +221,6 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     }
     public List<SettingsConfig> LoadGameSettingsData()
     {
-        CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings));
-
         var jsonFilesFromPath = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings));
         List<SettingsConfig> savedSettingConfigs = new();  
         foreach (var fullPath in jsonFilesFromPath)
@@ -236,53 +239,34 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     }
     public List<PokemonStorageBox> LoadPokemonStorageData()
     {
-        CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.PCStorage));
         var storageBoxes = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.PCStorage));
         List<PokemonStorageBox> savedStorageBoxes = new(); 
         foreach (var boxFullPath in storageBoxes)
         {  
-            var jsonFilename = _saveDataPath + GetSaveDirectory(SaveDataDirectory.PCStorage) + Path.GetFileName(boxFullPath);
-            if (!File.Exists(jsonFilename)) continue;
-            
-            var json = File.ReadAllText(jsonFilename);
-            var boxData = ScriptableObject.CreateInstance<PokemonStorageBox>();
-            JsonUtility.FromJsonOverwrite(json, boxData);
+            var boxData = LoadObjectFromJson<PokemonStorageBox>(boxFullPath);
             savedStorageBoxes.Add(boxData);
         }
-
         return savedStorageBoxes;
     }
     public void LoadOverworldData()
     {
-        CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.Overworld));
-        CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.BerryTrees));
         var overworldTrees = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.BerryTrees));
         foreach (var jsonFilePath in overworldTrees)
         {
-            var treeFilename = _saveDataPath + GetSaveDirectory(SaveDataDirectory.BerryTrees) + Path.GetFileName(jsonFilePath);
-            if (!File.Exists(treeFilename)) continue;
-            
-            var json = File.ReadAllText(treeFilename);
-            var treeData = ScriptableObject.CreateInstance<BerryTreeData>();
-            JsonUtility.FromJsonOverwrite(json, treeData);
+            var treeData = LoadObjectFromJson<BerryTreeData>(jsonFilePath);
             treeData.spriteData.Clear();
-            
             var treeSprites = Resources.Load<BerryTreeData>(
                 GetDirectory(AssetDirectory.BerryTreeData) + $"{treeData.itemAssetName } Data").spriteData;
             treeData.spriteData = treeSprites;
             treeData.berryItem = Resources.Load<Item>(GetDirectory(AssetDirectory.Berries)
                                                       + treeData.itemAssetName);
-            
             _overworldStateHandler.StoreBerryTreeData(treeData);
         }
-        CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives));
         var storyObjectives = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives));
         foreach (var jsonFilePath in storyObjectives)
         {
-            var objective = _saveDataPath + GetSaveDirectory(SaveDataDirectory.StoryObjectives) + Path.GetFileName(jsonFilePath);
-            if (!File.Exists(objective)) continue;
- 
-            var rawJson = File.ReadAllText(objective);
+            //do not change this
+            var rawJson = File.ReadAllText(jsonFilePath);
             var wrapper = JsonUtility.FromJson<ObjectiveTypeWrapper>(rawJson);
             var objectiveData = StoryObjective.CreateObjectiveOfType(wrapper.objectiveType);
             JsonUtility.FromJsonOverwrite(rawJson, objectiveData);
@@ -298,11 +282,13 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     }
     private void LoadPlayerData()
     {
-        CreateFolder(_saveDataPath + GetSaveDirectory(SaveDataDirectory.Player));
-        _gameLoadingHandler.playerData = null;
-        var playerList = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.Player));
+        var playerPath = _saveDataPath + GetSaveDirectory(SaveDataDirectory.Player);
+        var playerList = GetJsonFilesFromPath(playerPath);
+        
         if(playerList.Count==1)
-            _gameLoadingHandler.playerData = LoadPlayerFromJson(_saveDataPath+ GetSaveDirectory(SaveDataDirectory.Player) + Path.GetFileName(playerList[0]));
+        {
+            _gameLoadingHandler.playerData  = LoadObjectFromJson<Player_data>(playerList[0]);
+        }
         else if (playerList.Count > 1)
         {
             _dialogueHandler.DisplayDetails("Please ensure only one player's data is in the save_data folder!");
@@ -315,20 +301,22 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     }
     private void LoadItemData()
     {
-        CreateFolder(_saveDataPath+GetSaveDirectory(SaveDataDirectory.Items));
-        CreateFolder(_saveDataPath+GetSaveDirectory(SaveDataDirectory.HeldItems));
-        CreateFolder(_saveDataPath+GetSaveDirectory(SaveDataDirectory.StorageItems));  
-        
         var itemList = GetJsonFilesFromPath(_saveDataPath+GetSaveDirectory(SaveDataDirectory.Items));
         var storageItemList = GetJsonFilesFromPath(_saveDataPath+GetSaveDirectory(SaveDataDirectory.StorageItems));
         _playerBagHandler.allItems.Clear();
-        foreach (var item in itemList)
+        
+        foreach (var itemPath in itemList)
         {
-            _playerBagHandler.allItems.Add(LoadItemFromJson(_saveDataPath + GetSaveDirectory(SaveDataDirectory.Items) + Path.GetFileName(item)));
+            var item = LoadObjectFromJson<Item>(_saveDataPath + GetSaveDirectory(SaveDataDirectory.Items) + Path.GetFileName(itemPath));
+            item.LoadData();
+            _playerBagHandler.allItems.Add(item);
         }
-        foreach (var item in storageItemList)
+        foreach (var itemPath in storageItemList)
         {
-            _playerBagHandler.storageItems.Add(LoadItemFromJson(_saveDataPath + GetSaveDirectory(SaveDataDirectory.StorageItems) + Path.GetFileName(item)));
+            var item   = LoadObjectFromJson<Item>(_saveDataPath + GetSaveDirectory(SaveDataDirectory.StorageItems) +
+                                                  Path.GetFileName(itemPath));
+            item.LoadData();
+            _playerBagHandler.storageItems.Add(item);
         }
     }
     private List<string> GetJsonFilesFromPath(string path)
@@ -351,35 +339,32 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     }
     private void LoadPokemonData()
     {
-        CreateFolder(_saveDataPath);
-        CreateFolder(_saveDataPath+GetSaveDirectory(SaveDataDirectory.Pokemon));
-        CreateFolder(_saveDataPath+GetSaveDirectory(SaveDataDirectory.PartyIds));
-        partyIDs.Clear();
-        GetPartyPokemonIDs();
-        _pokemonStorageHandler.numNonPartyPokemon = 0;
         _pokemonStorageHandler.totalPokemonCount = 0;
         _pokemonPartyHandler.numMembers = 0;
-        for (int i = 0; i < _pokemonStorageHandler.numPartyMembers; i++)
+        
+        var partyPokemonList = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.PartyPokemon));
+        
+        _pokemonPartyHandler.numMembers = partyPokemonList.Count; 
+        _pokemonStorageHandler.totalPokemonCount += partyPokemonList.Count;
+        
+        for (int i = 0; i < partyPokemonList.Count; i++)
         {
-            var pokemon = LoadPokemonFromJson(_saveDataPath + GetSaveDirectory(SaveDataDirectory.Pokemon) + partyIDs[i] + ".json");
+            var pokemon = LoadObjectFromJson<Pokemon>(partyPokemonList[i]);
+            pokemon.LoadDataAndDependencies(_container);
             LoadHeldItems(pokemon);
             _pokemonPartyHandler.party[i] = pokemon;
-            _pokemonPartyHandler.numMembers++;
         }
+        
         _pokemonStorageHandler.nonPartyPokemon.Clear();
-        var pokemonList = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.Pokemon));
-        foreach(var file in pokemonList)
+        var storagePokemonList = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.StoragePokemon));
+        foreach(var file in storagePokemonList)
         {
             var fileName = Path.GetFileName(file);//filename is the pokemon id
-            var pokemonID = RemoveFileExtension(fileName);
-            var isPartyPokemon = partyIDs.Any(id => id == pokemonID);
-            if (!isPartyPokemon)
-            {
-                var nonPartyPokemon = LoadPokemonFromJson(_saveDataPath+ GetSaveDirectory(SaveDataDirectory.Pokemon) + fileName);
-                LoadHeldItems(nonPartyPokemon);
-                _pokemonStorageHandler.nonPartyPokemon.Add(nonPartyPokemon);
-                _pokemonStorageHandler.numNonPartyPokemon++;
-            }
+            var nonPartyPokemon = LoadObjectFromJson<Pokemon>(_saveDataPath+ GetSaveDirectory(SaveDataDirectory.StoragePokemon) + fileName);
+            nonPartyPokemon.LoadDataAndDependencies(_container);
+            LoadHeldItems(nonPartyPokemon);
+            _pokemonStorageHandler.nonPartyPokemon.Add(nonPartyPokemon);
+            _pokemonStorageHandler.numNonPartyPokemon++;
             _pokemonStorageHandler.totalPokemonCount++;
         }
     }
@@ -389,35 +374,19 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         var heldItemList = GetJsonFilesFromPath(_saveDataPath+GetSaveDirectory(SaveDataDirectory.HeldItems));
         if (heldItemList.Count > 0)
         {
-            var heldItemID = heldItemList
-                .FirstOrDefault(id => RemoveFileExtension(Path.GetFileName(id)) 
-                                      == pokemon.pokemonID.ToString());
+            var heldItemPath = heldItemList
+                .FirstOrDefault(path => 
+                    RemoveFileExtension(Path.GetFileName(path)) 
+                    == pokemon.pokemonID.ToString());
             
-            var heldItem = (string.IsNullOrEmpty(heldItemID)) ? null : LoadItemFromJson(heldItemID);
+            if(string.IsNullOrEmpty(heldItemPath)) return;
+            
+            var heldItem = LoadObjectFromJson<Item>(heldItemPath); 
+            heldItem.LoadData();
             pokemon.GiveItem(heldItem);
         }
     }
-    private void GetPartyPokemonIDs()
-    {
-        _pokemonStorageHandler.numPartyMembers = 0;
-        var numIds = 0;
-        var files = Directory.GetFiles( _saveDataPath + GetSaveDirectory(SaveDataDirectory.PartyIds));
-        foreach(var file in files)
-            if (GetFileExtension(file) == ".txt")
-                numIds++;
-        for (int i = 0; i < numIds; i++)
-        {
-            var currentID = File.ReadAllText(_saveDataPath + GetSaveDirectory(SaveDataDirectory.PartyIds) + "pkm_" + (i + 1) + ".txt");
-            partyIDs.Add(currentID);
-            _pokemonStorageHandler.numPartyMembers++;
-        }
-    }
-    private void CreateFolder(string path)
-    {
-        if (Application.platform == RuntimePlatform.WebGLPlayer) return;
-        if (!Directory.Exists(path))
-            Directory.CreateDirectory(path);
-    }
+    
     private void ClearDirectory(string path)
     {
         if (!Directory.Exists(path))
@@ -472,14 +441,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             ClearDirectory(_tempSaveDataPath + dir.Value);
         }
     }
-    void SaveAllPokemonData(Pokemon pokemon)
-    {
-        pokemon.SaveUnserializableData();
-        if(pokemon.hasItem)
-            SaveHeldItem(pokemon.heldItem, pokemon.pokemonID.ToString());
-        SavePokemonDataAsJson(pokemon);
-    }
-
+    
     void HandleSaveError(string errorMessage, Exception exception)
     {
         Debug.LogError(errorMessage+exception);
@@ -505,7 +467,16 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         {
             try
             {
-                SaveAllPokemonData(_pokemonPartyHandler.party[i]);
+                var pokemon = _pokemonPartyHandler.party[i];
+                if(pokemon==null) throw new Exception("pokemon is null! ");
+              
+                pokemon.SaveUnserializableData();
+                if(pokemon.hasItem)
+                {
+                    if(pokemon.heldItem==null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonName); 
+                    SaveDataAsJson(pokemon.heldItem, pokemon.pokemonID.ToString(), SaveDataDirectory.HeldItems);
+                }
+                SaveDataAsJson(pokemon, pokemon.pokemonID.ToString(), SaveDataDirectory.PartyPokemon);
             }
             catch (Exception e)
             {
@@ -513,11 +484,21 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                 yield break;
             }
         }
+        
         for (int i = 0; i < _pokemonStorageHandler.numNonPartyPokemon; i++)
         {
             try
             {
-                SaveAllPokemonData(_pokemonStorageHandler.nonPartyPokemon[i]);
+                var pokemon = _pokemonStorageHandler.nonPartyPokemon[i];
+                if(pokemon==null) throw new Exception("pokemon is null! ");
+              
+                pokemon.SaveUnserializableData();
+                if(pokemon.hasItem)
+                {
+                    if(pokemon.heldItem==null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonName); 
+                    SaveDataAsJson(pokemon.heldItem, pokemon.pokemonID.ToString(), SaveDataDirectory.HeldItems);
+                }
+                SaveDataAsJson(pokemon, pokemon.pokemonID.ToString(), SaveDataDirectory.StoragePokemon);
             }
             catch (Exception e)
             {
@@ -526,21 +507,16 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             }
         }
 
-        try
+        for (var i = 0; i < _playerBagHandler.allItems.Count; i++)
         {
-            SavePartyPokemonIDs();            
-        }
-        catch (Exception e)
-        {
-            OnSaveDataFail?.Invoke("Error occured with SavePartyPokemonIDs, exception: ",e);
-            yield break;
-        }
-        
-        foreach (var item in _playerBagHandler.allItems)
-        {
+            var item = _playerBagHandler.allItems[i];
+            if(item==null) throw new Exception("Item is null! ,index: "+i); 
+            
             try
             {
-                SaveItemDataAsJson(item, item.itemID);
+                item.SaveModuleNames();
+                item.DetermineImageDirectory();
+                SaveDataAsJson(item, item.itemID,SaveDataDirectory.Items);
             }
             catch (Exception e)
             {
@@ -548,11 +524,14 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                 yield break;
             }
         }
-        foreach (var item in _playerBagHandler.storageItems)
+        
+        for (var i = 0; i < _playerBagHandler.storageItems.Count; i++)
         {
+            var item = _playerBagHandler.storageItems[i];
+            if(item==null) throw new Exception("Storage item is null! ,index: "+i);
             try
             {
-                SaveStorageItem(item, item.itemID);
+                SaveDataAsJson(item, item.itemID,SaveDataDirectory.StorageItems);
             }
             catch (Exception e)
             {
@@ -560,12 +539,15 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                 yield break;
             }
         }
-        _gameLoadingHandler.playerData.playerPosition = _playerMovementHandler.GetPlayerPosition();
-        _gameLoadingHandler.playerData.location = _areaHandler.currentArea.data.areaName;
         
         try
         {
-            SavePlayerDataAsJson(_gameLoadingHandler.playerData,_gameLoadingHandler.playerData.trainerID.ToString());
+            var player = _gameLoadingHandler.playerData;
+            if(player==null) throw new Exception("player data is null! ");
+            _gameLoadingHandler.playerData.playerPosition = _playerMovementHandler.GetPlayerPosition();
+            _gameLoadingHandler.playerData.location = _areaHandler.currentArea.data.areaName;
+            
+            SaveDataAsJson(player, player.trainerID.ToString(),SaveDataDirectory.Player);
         }
         catch (Exception e)
         {
@@ -599,149 +581,35 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
     }
 
-    private void SavePartyPokemonIDs()
+    private void SaveDataAsJson<T>(T saveSataObject, string fileName,SaveDataDirectory saveDirectory)
     {
-        for (int i = 0; i < _pokemonStorageHandler.numPartyMembers; i++)
-        {
-            if (_pokemonPartyHandler.party[i]==null) throw new Exception("party member is null! ");
-            
-            var path = Path.Combine(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.PartyIds), "pkm_" + (i + 1) + ".txt");
-            File.WriteAllText(path, _pokemonPartyHandler.party[i].pokemonID.ToString());
-        }
-    }
-
-    private string DetermineImageDirectory(Item item)
-    {
-        if (item.additionalInfoModules.Any(m => m is TM))
-        {
-            var tm =  item.GetModule<TM>();
-            return tm.move.type.GetTypeName.ToLower() + " tm"; 
-        }
-        if (item.additionalInfoModules.Any(m => m is HM))
-        {
-            var hm = item.GetModule<HM>();
-            return hm.move.type.GetTypeName.ToLower() + " tm";     
-        }
-        
-        return item.itemName;
-    }
-    private void SaveHeldItem(Item item, string fileName)
-    {
-        if(item==null) throw new Exception("Item is null! "+fileName); 
-        
-        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.HeldItems), fileName + ".json");
-        var json = JsonUtility.ToJson(item, true);
+        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(saveDirectory), fileName + ".json");
+        var json = JsonUtility.ToJson(saveSataObject, true);
         File.WriteAllText(directory, json);
     }
-    private void SaveStorageItem(Item item, string fileName)
+    private T LoadObjectFromJson<T>(string filePath) where T : ScriptableObject
     {
-        if(item==null) throw new Exception("Item is null! "+fileName); 
-        
-        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.StorageItems), fileName + ".json");
-        var json = JsonUtility.ToJson(item, true);
-        File.WriteAllText(directory, json);
+        var json = File.ReadAllText(filePath);
+        var jsonAsObject = ScriptableObject.CreateInstance<T>();
+        JsonUtility.FromJsonOverwrite(json, jsonAsObject);
+        return jsonAsObject;
     }
-    private void SavePokemonDataAsJson(Pokemon pokemon)
-    {
-        if(pokemon==null) throw new Exception("pokemon is null! ");
-        
-        var directory = Path.Combine(_tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.Pokemon), pokemon.pokemonID + ".json");
-        var json = JsonUtility.ToJson(pokemon, true);
-        File.WriteAllText(directory, json);
-    }
-    private void SavePlayerDataAsJson(Player_data player, string fileName)
-    {
-        if(player==null) throw new Exception("player data is null! ");
-        
-        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.Player), fileName + ".json");
-        var json = JsonUtility.ToJson(player, true);
-        File.WriteAllText(directory, json);
-    }
-    private void SaveItemDataAsJson(Item item, string fileName)
-    {
-        if(item==null) throw new Exception("Item is null! "+fileName); 
-        
-        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.Items), fileName + ".json");
-        if(item.hasModules)
-        {
-            item.infoModuleAssetNames.Clear();
-            if (item.additionalInfoModules.Count == 0 && !item.isMultiModular)
-            {
-                //just in-case
-                item.additionalInfoModules.Add(item.additionalInfoModule);
-            }
-            foreach (var module in item.additionalInfoModules)
-            {
-                item.infoModuleAssetNames.Add(module.name);
-            }
-        }
-        item.imageDirectory = DetermineImageDirectory(item);
-        var json = JsonUtility.ToJson(item, true);
-        File.WriteAllText(directory, json);
-    }
+    
     public void SaveBerryTreeDataAsJson(BerryTreeData tree, string fileName)
     {
-        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.BerryTrees), fileName + ".json");
-        tree.itemAssetName = tree.berryItem.itemName;
-        var json = JsonUtility.ToJson(tree, true);
-        File.WriteAllText(directory, json);
+        SaveDataAsJson(tree,fileName,SaveDataDirectory.BerryTrees);
     }
     public void SaveStoryDataAsJson(StoryObjective objective, string fileName)
     {
-        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.StoryObjectives), fileName + ".json");
-        var json = JsonUtility.ToJson(objective, true);
-        File.WriteAllText(directory, json);
+        SaveDataAsJson(objective,fileName,SaveDataDirectory.StoryObjectives);
     }
     public void SaveStorageDataAsJson(PokemonStorageBox box, string fileName)
     {
-        var directory = Path.Combine(_tempSaveDataPath+GetSaveDirectory(SaveDataDirectory.PCStorage), fileName + ".json");
-        var json = JsonUtility.ToJson(box, true);
-        
-        File.WriteAllText(directory, json);
-        if (!File.Exists(directory)) Debug.LogError("file blank");
+        SaveDataAsJson(box,fileName,SaveDataDirectory.PCStorage);
     }
     public void SaveGameSettingsAsJson(SettingsConfig config, string fileName)
     {
-        string folderPath = _tempSaveDataPath + GetSaveDirectory(SaveDataDirectory.GameSettings);  
-        string fullPath = Path.Combine(folderPath, fileName + ".json");
-        var json = JsonUtility.ToJson(config, true);
-        File.WriteAllText(fullPath, json);
-    }
-    private Pokemon LoadPokemonFromJson(string filePath)
-    {
-        if (!File.Exists(filePath))return null;
-        var json = File.ReadAllText(filePath);
-        var pokemon = ScriptableObject.CreateInstance<Pokemon>();
-        JsonUtility.FromJsonOverwrite(json, pokemon);
-        pokemon.LoadDataAndDependencies(_container);
-        return pokemon;
-    }
-    private Item LoadItemFromJson(string filePath)
-    {
-        if (!File.Exists(filePath))return null;
-        var json = File.ReadAllText(filePath);
-        var item = ScriptableObject.CreateInstance<Item>();
-        JsonUtility.FromJsonOverwrite(json, item);
-        if (item.hasModules)
-        {
-            item.additionalInfoModules.Clear();
-            foreach (var assetName in item.infoModuleAssetNames)
-            {
-                var additionalInfo = Resources.Load<AdditionalInfoModule>(GetDirectory(AssetDirectory.AdditionalInfo)+assetName);
-                item.additionalInfoModules.Add(additionalInfo);
-            }
-            item.additionalInfoModule = item.additionalInfoModules.First();
-        }
-        item.itemImage = Testing.CheckImage(GetDirectory(AssetDirectory.UI),item.imageDirectory);
-        return item;
-    }
-    private Player_data LoadPlayerFromJson(string filePath)
-    {
-        if (!File.Exists(filePath))return null;
-        var json = File.ReadAllText(filePath);
-        var player = ScriptableObject.CreateInstance<Player_data>();
-        JsonUtility.FromJsonOverwrite(json, player);
-        return player;
+        SaveDataAsJson(config,fileName,SaveDataDirectory.GameSettings);
     }
 }
 

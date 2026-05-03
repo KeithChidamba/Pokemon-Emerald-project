@@ -137,6 +137,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         foreach (var tree in overworldBerryTrees)
         {
             tree.treeData.SetLastLogin(DateTime.Now);
+            tree.treeData.itemAssetName = tree.treeData.berryItem.itemName;
             _saveHandler.SaveBerryTreeDataAsJson(tree.treeData,"BerryTree "+ tree.treeData.treeIndex);
         }
         yield return new WaitForSeconds(1f);
