@@ -1,0 +1,32 @@
+{
+    "itemID": "Sandstorm58344",
+    "itemName": "Sandstorm",
+    "itemType": 16,
+    "itemEffect": "",
+    "itemDescription": "Causes damage each turn.",
+    "price": 0,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 25852
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true,
+    "isMultiModular": false,
+    "hasModules": true,
+    "additionalInfoModule": {
+        "instanceID": 27180
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 27180
+        }
+    ],
+    "infoModuleAssetNames": [
+        "TM37"
+    ],
+    "imageDirectory": "rock tm"
+}

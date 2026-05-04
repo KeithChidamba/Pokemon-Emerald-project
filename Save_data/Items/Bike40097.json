@@ -1,0 +1,32 @@
+{
+    "itemID": "Bike40097",
+    "itemName": "Bike",
+    "itemType": 0,
+    "itemEffect": "0",
+    "itemDescription": "A fast bicycle that realiable",
+    "price": 0,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 35062
+    },
+    "forPartyUse": false,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": false,
+    "isMultiModular": false,
+    "hasModules": true,
+    "additionalInfoModule": {
+        "instanceID": 25704
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 25704
+        }
+    ],
+    "infoModuleAssetNames": [
+        "Bike"
+    ],
+    "imageDirectory": "Bike"
+}

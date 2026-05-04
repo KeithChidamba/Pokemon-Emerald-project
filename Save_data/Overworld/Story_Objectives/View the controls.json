@@ -2,9 +2,9 @@
     "mainAssetName": "View Key Binds",
     "objectiveHeading": "View the controls",
     "hasProgression": false,
-    "indexInList": 1,
+    "indexInList": 8,
     "objectiveType": 1,
     "interactionForObjective": {
-        "instanceID": 25796
+        "instanceID": 0
     }
 }

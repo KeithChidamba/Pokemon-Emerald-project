@@ -1,14 +1,14 @@
 {
-    "isPlanted": true,
+    "isPlanted": false,
     "minYield": 1,
     "maxYield": 5,
-    "currentStageNeedsWater": false,
-    "currentStageProgress": 4,
+    "currentStageNeedsWater": true,
+    "currentStageProgress": 0,
     "minutesSinceLastStage": 0.0,
     "numStagesWatered": 0,
-    "itemAssetName": "Hondew berry",
+    "itemAssetName": "Tamato berry",
     "berryItem": {
-        "instanceID": 25956
+        "instanceID": 27664
     },
     "treeIndex": 0,
     "minutesPerStage": 180,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32798
+                    "instanceID": 32736
                 },
                 {
-                    "instanceID": 32798
+                    "instanceID": 32736
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32800
+                    "instanceID": 32738
                 },
                 {
-                    "instanceID": 32802
+                    "instanceID": 32740
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32854
+                    "instanceID": 32760
                 },
                 {
-                    "instanceID": 32856
+                    "instanceID": 32762
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32858
+                    "instanceID": 32764
                 },
                 {
-                    "instanceID": 32860
+                    "instanceID": 32766
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32862
+                    "instanceID": 32768
                 },
                 {
-                    "instanceID": 32864
+                    "instanceID": 32770
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-04-29T15:02:52.0686900+02:00"
+    "lastLogin": "2026-05-04T11:33:50.4600850+02:00"
 }

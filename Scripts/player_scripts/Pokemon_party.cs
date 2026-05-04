@@ -13,6 +13,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     public int numMembers;
     public int selectedMemberNumber;
     public int memberToMove;
+    public readonly int maxNumMembers = 6;
     private bool _swappingIn;
     public bool swapOutNext;
     public bool moving;
@@ -85,7 +86,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     public  List<Pokemon> GetValidPokemon()
     {
         List<Pokemon> validPokemon = new();
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < maxNumMembers; i++)
             if (party[i] != null)
                 validPokemon.Add(party[i]);
         return validPokemon;
@@ -275,11 +276,10 @@ public class Pokemon_party : MonoBehaviour,IInjectable
                 newPokemon.LevelUp();
             newPokemon.hp = newPokemon.maxHp;
         }
-        if (numMembers<6)
+        if (numMembers<maxNumMembers)
         {
             party[numMembers] = newPokemon;
             numMembers++;
-            _pokemonStorageHandler.numPartyMembers++;
         }
         else
             _pokemonStorageHandler.AddPokemonToStorage(newPokemon);
@@ -312,7 +312,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     public void RefreshMemberCards()
     {
         numMembers = 0;
-        for (int i=0;i<6;i++)
+        for (int i=0;i<maxNumMembers;i++)
         {
             if (party[i] != null)
             {

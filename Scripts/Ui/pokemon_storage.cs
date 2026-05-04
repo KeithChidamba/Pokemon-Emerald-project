@@ -14,7 +14,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     public List<Pokemon> nonPartyPokemon = new();
     public int totalPokemonCount;
     public int numNonPartyPokemon;
-    public int numPartyMembers;
+
     public int maxPokemonCapacity;
     public GameObject[] storageOptions;
     public GameObject[] storagePartyOptions;
@@ -35,7 +35,6 @@ public class pokemon_storage : MonoBehaviour,IInjectable
 
     public GameObject initialSelector;
     public Image boxSelectorImage;
-
     public GameObject boxOptionsSelector;
     public const int BoxCapacity = 30;
     public int boxColumns = 6;
@@ -52,6 +51,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     public Text boxName;
     public LoopingUiAnimation[] boxChangeGreyArrows;
     public LoopingUiAnimation[] depositGreyArrows;
+    
     private bool _viewingPC;
     private StorageBoxMovingData movingOperationData;
     public GameObject movePokemonUIOption;
@@ -123,7 +123,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             }
             storageBoxes.Add(newBox);
         }
-
+      
         if (_gameLoadingHandler.LoadedFromSave)
         {
             var savedBoxes = _saveDataHandler.LoadPokemonStorageData();
@@ -269,9 +269,9 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         Pokemon pokemon;
         if(currentUsageState == PCUsageState.Deposit)
         {
-            if (currentPokemonIndex + 1 > _pokemonPartyHandler.numMembers)
+            if (currentPokemonIndex == _pokemonPartyHandler.numMembers)
             {
-                ClearPokemonData();
+                //the last index is the cancel button
                 return;
             }
             pokemon = _pokemonPartyHandler.party[currentPokemonIndex];
@@ -327,7 +327,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         currentUsageState = newState;
         if(currentUsageState == PCUsageState.Withdraw)
         {
-            if (_pokemonPartyHandler.numMembers==6)
+            if (_pokemonPartyHandler.numMembers == _pokemonPartyHandler.maxNumMembers)
             {
                 _dialogueHandler.DisplayDetails("Party is full");
                 _gameUIHandler.ClosePokemonStorage();
@@ -347,13 +347,12 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             partyUI.SetActive(true);
             var partySelectables = new List<SelectableUI>();
 
-            for (var i = 0 ;i < 6;i++)
+            for (var i = 0 ;i < _pokemonPartyHandler.numMembers; i++)
             {
                 var icon = partyPokemonIcons[i];
-                partySelectables.Add( new(icon.gameObject,
-                    i<_pokemonPartyHandler.numMembers?() => SelectPartyPokemon(icon):null, 
-                    i<_pokemonPartyHandler.numMembers)); 
+                partySelectables.Add( new(icon.gameObject, () => SelectPartyPokemon(icon), true)); 
             }
+            
             partySelectables.Add( new(exitParty,_gameUIHandler.ClosePokemonStorage,true) );
             
             _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStoragePartyNavigation, InputStateGroup.PokemonStorage
@@ -420,7 +419,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     {
         if (isPartyIcons)
         {
-            for (var i = 0;i < 6;i++)
+            for (var i = 0;i < _pokemonPartyHandler.maxNumMembers; i++)
             {
                 if (_pokemonPartyHandler.party[i] == null)
                 {
@@ -608,7 +607,6 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             storagePartyOptionsParent.SetActive(false);
             nonPartyPokemon.Add(partyPokemon.pokemon);
             _pokemonPartyHandler.RemoveMember(partyPokemon.partyPosition);
-            numPartyMembers--;
             numNonPartyPokemon++;
             
             selectedBox.currentNumPokemon++;
@@ -618,7 +616,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
                 ,containsPokemon = true
             };
             RefreshStorageUi(true); 
-            LoadPokemonData(partyPokemon.partyPosition-1);
+            ClearPokemonData();
         }
     }
     
@@ -648,10 +646,8 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         {
             _dialogueHandler.DisplayDetails("You released "+ _pokemonPartyHandler.party[partyPosition-1].pokemonName);
             _pokemonPartyHandler.RemoveMember(partyPosition);
-            numPartyMembers--;
             totalPokemonCount--;
             RefreshStorageUi(true);
-            LoadPokemonData(partyPosition-1);
         }
         else
         {
@@ -659,13 +655,17 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("You released "+ nonPartyPokemon[indexToDelete].pokemonName);
             DeleteNonPartyPokemon(indexToDelete);
             RefreshStorageUi(false);
-            ClearPokemonData();
         }
-        
+        ClearPokemonData();
     }
     private void DeleteNonPartyPokemon(int index)
     {
         nonPartyPokemon.Remove(nonPartyPokemon[index]);
+        storageBoxes[currentBoxIndex].boxPokemon[currentIndexOfBox] = new StorageBoxPokemon
+        {
+            pokemonID = string.Empty
+            ,containsPokemon = false
+        };
         numNonPartyPokemon--;
         totalPokemonCount--;
     }
@@ -676,14 +676,13 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     }
     private void AddPokemonToParty()
     {
-        if (_pokemonPartyHandler.numMembers < 6)
+        if (_pokemonPartyHandler.numMembers < _pokemonPartyHandler.maxNumMembers)
         {
             var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
             OnPokemonWithdraw?.Invoke(nonPartyPokemon[pokemonIndex]);
             _pokemonPartyHandler.party[_pokemonPartyHandler.numMembers] = InstanceFactory.CreatePokemon(nonPartyPokemon[pokemonIndex]);
             DeleteNonPartyPokemon(pokemonIndex);
             _pokemonPartyHandler.numMembers++;
-            numPartyMembers++;
             storageBoxes[currentBoxIndex].boxPokemon[currentIndexOfBox] = new StorageBoxPokemon
             {
                 pokemonID = string.Empty

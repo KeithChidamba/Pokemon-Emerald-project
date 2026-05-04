@@ -1,0 +1,32 @@
+{
+    "itemID": "Pecha berry53750",
+    "itemName": "Pecha berry",
+    "itemType": 9,
+    "itemEffect": "0",
+    "itemDescription": "Heals poison",
+    "price": 5,
+    "quantity": 2,
+    "itemImage": {
+        "instanceID": 32686
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": true,
+    "canBeSold": true,
+    "isMultiModular": false,
+    "hasModules": true,
+    "additionalInfoModule": {
+        "instanceID": 27078
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 27078
+        }
+    ],
+    "infoModuleAssetNames": [
+        "Poison berry"
+    ],
+    "imageDirectory": "Pecha berry"
+}

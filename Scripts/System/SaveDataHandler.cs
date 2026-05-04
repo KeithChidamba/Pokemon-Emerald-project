@@ -357,9 +357,11 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         
         _pokemonStorageHandler.nonPartyPokemon.Clear();
         var storagePokemonList = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.StoragePokemon));
-        foreach(var file in storagePokemonList)
+        
+        foreach (var file in storagePokemonList)
         {
             var fileName = Path.GetFileName(file);//filename is the pokemon id
+            
             var nonPartyPokemon = LoadObjectFromJson<Pokemon>(_saveDataPath+ GetSaveDirectory(SaveDataDirectory.StoragePokemon) + fileName);
             nonPartyPokemon.LoadDataAndDependencies(_container);
             LoadHeldItems(nonPartyPokemon);
@@ -463,7 +465,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         _inputStateHandler.AddDialoguePlaceHolderState();
         _dialogueHandler.DisplayDetails("Saving...",false); 
         
-        for (int i = 0; i < _pokemonStorageHandler.numPartyMembers; i++)
+        for (int i = 0; i < _pokemonPartyHandler.numMembers; i++)
         {
             try
             {

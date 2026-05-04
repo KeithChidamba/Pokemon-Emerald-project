@@ -2,10 +2,10 @@
     "mainAssetName": "withdraw pikachu",
     "objectiveHeading": "withdraw pikachu from pc",
     "hasProgression": false,
-    "indexInList": 6,
+    "indexInList": 15,
     "objectiveType": 7,
     "storageObjectiveType": 0,
     "pokemonForObjective": {
-        "instanceID": 25252
+        "instanceID": 0
     }
 }
