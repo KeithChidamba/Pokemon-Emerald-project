@@ -152,7 +152,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     void Fish()
     {
         _overworldActionsHandler.doingAction = true;
-        _overworldActionsHandler.manager.ChangeAnimationState(_overworldActionsHandler.manager.fishingStart);
+        _overworldActionsHandler.manager.ChangeAnimationState(PlayerAnimationState.FishingStart);
         _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
     }
     void SellItem()

@@ -16,7 +16,7 @@ public class Player_movement : MonoBehaviour,IInjectable
     [SerializeField] private int xAxisInput;
     [SerializeField] private int yAxisInput;
     public MovementDirection currentDirection;
-    [SerializeField] private Animation_manager _animationManager;
+    [SerializeField] private Animation_manager animationManager;
     [SerializeField] private bool canMove = true;
     [SerializeField] private Transform interactionPoint;
     [SerializeField] private Transform movePoint;
@@ -61,9 +61,9 @@ public class Player_movement : MonoBehaviour,IInjectable
         };
         var directionAsAnimatorParameter = (int)currentDirection;
         
-        _animationManager.animator.SetFloat(_animationManager.idleParam, directionAsAnimatorParameter);
-        _animationManager.ChangeAnimationState(_animationManager.playerIdle);
-        _animationManager.animator.SetFloat(_animationManager.moveParam, directionAsAnimatorParameter);
+        animationManager.animator.SetFloat(animationManager.idleParam, directionAsAnimatorParameter);
+        animationManager.ChangeAnimationState(PlayerAnimationState.PlayerIdle);
+        animationManager.animator.SetFloat(animationManager.moveParam, directionAsAnimatorParameter);
         
     }
     
@@ -94,7 +94,7 @@ public class Player_movement : MonoBehaviour,IInjectable
             //dont want to interrupt fishing animation
             return; 
         }
-        _animationManager.ChangeAnimationState(_animationManager.playerIdle);
+        animationManager.ChangeAnimationState(PlayerAnimationState.PlayerIdle);
     }
 
     private void Update()
@@ -102,8 +102,8 @@ public class Player_movement : MonoBehaviour,IInjectable
         if (!playerObject.activeSelf) return;
         if (canMove)
         {
-            _animationManager.animator.SetFloat(_animationManager.idleParam, (int)currentDirection);
-            _animationManager.animator.SetFloat(_animationManager.moveParam, (int)GetMovementDirection());
+            animationManager.animator.SetFloat(animationManager.idleParam, (int)currentDirection);
+            animationManager.animator.SetFloat(animationManager.moveParam, (int)GetMovementDirection());
             HandleBikeInputs();
             HandleRunInputs();
             HandlePlayerMovement();
@@ -120,21 +120,21 @@ public class Player_movement : MonoBehaviour,IInjectable
         var idle = yAxisInput == 0 && xAxisInput == 0;
         if (usingBike)
         {
-            _animationManager.ChangeAnimationState(idle
-                ? _animationManager.bikeIdle
-                : _animationManager.rideBike);
+            animationManager.ChangeAnimationState(idle
+                ? PlayerAnimationState.BikeIdle
+                : PlayerAnimationState.RideBike);
             return;
         }
 
         if (idle)
         {
-            _animationManager.ChangeAnimationState(_animationManager.playerIdle);
+            animationManager.ChangeAnimationState(PlayerAnimationState.PlayerIdle);
         }
         else
         {
-            _animationManager.ChangeAnimationState(runningInput
-                ? _animationManager.playerRun
-                : _animationManager.playerWalk);
+            animationManager.ChangeAnimationState(runningInput
+                ? PlayerAnimationState.PlayerRun
+                : PlayerAnimationState.PlayerWalk);
         }
     }
     public void ForceWalkMovement()
@@ -187,7 +187,7 @@ public class Player_movement : MonoBehaviour,IInjectable
         if (InputSourceHandler.InputPressed(ControlEvent.Exit) && !runningInput)
         {
             runningInput = true;
-            if (!idle) _animationManager.ChangeAnimationState(_animationManager.playerRun);
+            if (!idle) animationManager.ChangeAnimationState(PlayerAnimationState.PlayerRun);
         }
 
         if (InputSourceHandler.InputRelease(ControlEvent.Exit) && runningInput)
@@ -197,7 +197,7 @@ public class Player_movement : MonoBehaviour,IInjectable
         {
             runningInput = false;
             _canSwitchMovement = false;
-            if (!idle) _animationManager.ChangeAnimationState(_animationManager.playerWalk);
+            if (!idle) animationManager.ChangeAnimationState(PlayerAnimationState.PlayerWalk);
         }
 
         movementSpeed = runningInput ? runSpeed : walkSpeed;

@@ -16,7 +16,7 @@ public class BerryTreeData : ScriptableObject
      
      public string itemAssetName;
      public Item berryItem;
-     public int treeIndex;
+     public string treeObjectName;
      public int minutesPerStage;
      public List<BerrySpriteData> spriteData = new();
 

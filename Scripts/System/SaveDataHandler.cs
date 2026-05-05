@@ -248,7 +248,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         }
         return savedStorageBoxes;
     }
-    public void LoadOverworldData()
+    public IEnumerator LoadOverworldData()
     {
         var overworldTrees = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.BerryTrees));
         foreach (var jsonFilePath in overworldTrees)
@@ -279,6 +279,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                 _overworldStateHandler.currentStoryObjectives.Add(objectiveData);
             }
         }
+        yield return new WaitForSeconds(0.25f);
     }
     private void LoadPlayerData()
     {

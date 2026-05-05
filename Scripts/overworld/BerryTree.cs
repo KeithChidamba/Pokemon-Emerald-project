@@ -12,7 +12,7 @@ public class BerryTree : MonoBehaviour,IInjectable
 
     public SpriteRenderer treeSpriteRenderer;
     private int _currentSpriteIndex;
-    public bool loadedFromJson;
+
     public int treeIndex;
     [SerializeField] float secondsCounter;
 
@@ -66,7 +66,7 @@ public class BerryTree : MonoBehaviour,IInjectable
         treeData = null;
         treeData = copy;
         treeData.isPlanted = true;
-        treeData.treeIndex = _overworldStateHandler.GetTreeIndex(this);
+        treeData.treeObjectName = name;
         treeData.currentStageProgress = 4;
         treeData.currentStageNeedsWater = false;
         SetInteraction(OverworldInteractionType.PickBerry);
@@ -215,7 +215,7 @@ public class BerryTree : MonoBehaviour,IInjectable
             SaveDataHandler.GetDirectory(AssetDirectory.BerryTreeData)
                                                           + berryToPlant.itemName+" Data");
         treeData = InstanceFactory.CreateTreeData(treeDataAsset);
-        treeData.treeIndex = _overworldStateHandler.GetTreeIndex(this);
+        
         treeData.isPlanted = true;
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
         

@@ -14,6 +14,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     public int selectedMemberNumber;
     public int memberToMove;
     public readonly int maxNumMembers = 6;
+    private int _currentStepCount;
     private bool _swappingIn;
     public bool swapOutNext;
     public bool moving;
@@ -37,9 +38,13 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     private pokemon_storage _pokemonStorageHandler;
     private Item_handler _itemHandler;
     private BattleIntro _battleIntroHandler;
+    private Player_movement _playerMovementHandler;
     private PokemonPartyInputService _partyInputService;
+    
+    
     public void Inject(ServiceContainer container)
     {
+        _playerMovementHandler = container.Resolve<Player_movement>();
         _partyInputService = container.Resolve<PokemonPartyInputService>();
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -53,8 +58,34 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _itemHandler = container.Resolve<Item_handler>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         gameObject.SetActive(true);
-    }       
+        OnInject();
+    }
 
+    private void OnInject()
+    {
+        _playerMovementHandler.OnNewTile += CheckPoisonTickEffect;
+    }
+    private void CheckPoisonTickEffect()
+    {
+        _currentStepCount++;
+        if (_currentStepCount < 4) return;
+        _currentStepCount = 0;
+        
+        for (int i = 0; i < numMembers; i++)
+        {
+            if (party[i] != null)
+            {
+                if (party[i].hp == 0) continue;
+                
+                if (party[i].statusEffect == StatusEffect.Poison)
+                {
+                    //no need for hp loss animation since this only happens outside ui
+                    party[i].hp--;
+                }
+            }
+        }
+    }
+    
     public void UpdatePartyUsageMessage(string message)
     {
         partyUsageText.text = message;

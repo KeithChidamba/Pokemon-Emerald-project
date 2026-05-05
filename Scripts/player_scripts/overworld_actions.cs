@@ -91,7 +91,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
         if (fishing)
         {
             doingAction = true;
-            manager.ChangeAnimationState(manager.fishingIdle);
+            manager.ChangeAnimationState(PlayerAnimationState.FishingIdle);
             if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
                 ResetFishingAction();
         }
@@ -133,15 +133,15 @@ public class overworld_actions : MonoBehaviour,IInjectable
         fishing = false;
         pokemonBitingPole = false;
         ActionReset();
-        manager.ChangeAnimationState(manager.fishingEnd);
+        manager.ChangeAnimationState(PlayerAnimationState.FishingEnd);
     }
 
     public IEnumerator WaterTrees()
     {
-        manager.ChangeAnimationState(manager.watering);
+        manager.ChangeAnimationState(PlayerAnimationState.Watering);
         _dialogueHandler.DisplayDetails("The tree is being watered");
         yield return new WaitForSeconds(2f);
-        manager.ChangeAnimationState(manager.playerWalk);
+        manager.ChangeAnimationState(PlayerAnimationState.PlayerWalk);
     }
     void ActionReset()
     {

@@ -5,10 +5,10 @@
     "playerMoney": 11398,
     "numBadges": 0,
     "playerPosition": {
-        "x": 73.0,
-        "y": -12.0,
+        "x": 2.0,
+        "y": -19.0,
         "z": 0.0
     },
-    "location": 3,
+    "location": 1,
     "equippedItemName": "Bike"
 }

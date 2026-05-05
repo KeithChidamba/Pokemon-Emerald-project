@@ -1,33 +1,55 @@
 using System;
 using UnityEngine;
 
+public enum PlayerAnimationState
+{
+    PlayerWalk,
+    PlayerIdle,
+    PlayerRun,
+    RideBike,
+    BikeIdle,
+    FishingStart,
+    FishingEnd,
+    FishingIdle,
+    Watering
+}
+
 public class Animation_manager : MonoBehaviour
 {
     public Animator animator;
-    private string _currentState;
-    //states
-    public string playerWalk = "Player_walk";
-    public string playerIdle = "Player_idle";
-    public string playerRun = "Player_run";
-    public string rideBike = "Ride_Bike";
-    public string bikeIdle = "Bike_idle";
-    public string fishingStart = "Fishing_Start";
-    public string fishingEnd = "Fishing_End";
-    public string fishingIdle = "Fishing_idle";
-    public string watering = "Watering";
-    public string idleParam = "idleDirection";
-    public string moveParam = "moveDirection";
+    [SerializeField]private PlayerAnimationState currentState;
+    public readonly string idleParam = "idleDirection"; 
+    public readonly string moveParam = "moveDirection";
+    
+    
     public event Action OnFishingStart;
-
+    
     public void StartFishing()
-    {
+    {//Animation event
         OnFishingStart?.Invoke();
     }
-    public void ChangeAnimationState(string newState)
+    private string GetStateName(PlayerAnimationState state)
     {
-        if (_currentState == newState) return;
-        animator.Play(newState);
-        _currentState = newState;
+        return state switch
+        {
+            PlayerAnimationState.PlayerWalk => "Player_walk",
+            PlayerAnimationState.PlayerIdle => "Player_idle",
+            PlayerAnimationState.PlayerRun => "Player_run",
+            PlayerAnimationState.RideBike => "Ride_Bike",
+            PlayerAnimationState.BikeIdle => "Bike_idle",
+            PlayerAnimationState.FishingStart => "Fishing_Start",
+            PlayerAnimationState.FishingEnd => "Fishing_End",
+            PlayerAnimationState.FishingIdle => "Fishing_idle",
+            PlayerAnimationState.Watering => "Watering",
+            _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
+        };
+    }
+    public void ChangeAnimationState(PlayerAnimationState newState)
+    {
+        if (currentState == newState) return;
+        
+        animator.Play(GetStateName(newState));
+        currentState = newState;
     }
 
 }

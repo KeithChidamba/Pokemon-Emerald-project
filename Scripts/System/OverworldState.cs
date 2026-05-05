@@ -53,24 +53,25 @@ public class OverworldState : MonoBehaviour,IInjectable
         
         if (_gameLoadingHandler.LoadedFromSave)
         {
-            _saveHandler.LoadOverworldData();
-            yield return new WaitUntil(() => treeDataQueue.Count == overworldBerryTrees.Count);
+            yield return _saveHandler.LoadOverworldData();
             
-            foreach (var treeData in treeDataQueue)
+            if (treeDataQueue.Count == 0)
             {
-                var jsonBerryTree = overworldBerryTrees.First(tree=>tree.treeIndex==treeData.treeIndex);
-                jsonBerryTree.name = treeData.itemAssetName + " Tree";
-                jsonBerryTree.loadedFromJson = true;
-                jsonBerryTree.LoadTreeData(treeData);
+                overworldBerryTrees.ForEach(tree => tree.LoadDefaultAsset());
+            }
+            else
+            {
+                foreach (var treeData in treeDataQueue)
+                {
+                    var jsonBerryTree = overworldBerryTrees.First(tree=>tree.name == treeData.treeObjectName);
+                    jsonBerryTree.name = treeData.itemAssetName + " Tree";
+                    jsonBerryTree.LoadTreeData(treeData);
+                }
             }
         }
         else
         {
-            foreach (var tree in overworldBerryTrees)
-            {
-                if(tree.loadedFromJson)continue;
-                tree.LoadDefaultAsset();
-            }
+            overworldBerryTrees.ForEach(tree => tree.LoadDefaultAsset());
         }
         
         if (storyProgressObjective == null)
@@ -138,7 +139,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         {
             tree.treeData.SetLastLogin(DateTime.Now);
             tree.treeData.itemAssetName = tree.treeData.berryItem.itemName;
-            _saveHandler.SaveBerryTreeDataAsJson(tree.treeData,"BerryTree "+ tree.treeData.treeIndex);
+            _saveHandler.SaveBerryTreeDataAsJson(tree.treeData,tree.treeData.treeObjectName);
         }
         yield return new WaitForSeconds(1f);
         int objectiveIndex=0;

@@ -29,7 +29,7 @@
     "specialAttackIv": 6.0,
     "specialDefenseIv": 2.0,
     "speedIv": 21.0,
-    "hpEv": 0.0,
+    "hpEv": 1.0,
     "attackEv": 2.0,
     "defenseEv": 0.0,
     "specialAttackEv": 0.0,
@@ -50,7 +50,7 @@
     "critChance": 6.25,
     "catchRate": 45.0,
     "currentLevel": 29,
-    "currentExpAmount": 17513,
+    "currentExpAmount": 17548,
     "currentLevelExpAmount": 17242,
     "nextLevelExpAmount": 19411,
     "expGroup": 3,
@@ -155,16 +155,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -16708
+            "instanceID": -54524
         },
         {
-            "instanceID": -16710
+            "instanceID": -54526
         },
         {
-            "instanceID": -16712
+            "instanceID": -54528
         },
         {
-            "instanceID": -16714
+            "instanceID": -54530
         }
     ],
     "ability": {
@@ -222,7 +222,7 @@
         },
         {
             "moveName": "ember",
-            "powerPoints": 25,
+            "powerPoints": 24,
             "maxPowerpoints": 25
         },
         {

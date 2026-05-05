@@ -330,7 +330,7 @@ public class Bag : MonoBehaviour,IInjectable
          {
              if (!itemToUse.canBeUsedInOverworld) 
              {
-                 _dialogueHandler.DisplayDetails("Can't use that in battle");
+                 _dialogueHandler.DisplayDetails("Can't use that right now");
                  return;//special items for events
              }
          }
