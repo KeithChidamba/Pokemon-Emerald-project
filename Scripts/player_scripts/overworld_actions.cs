@@ -136,11 +136,13 @@ public class overworld_actions : MonoBehaviour,IInjectable
         manager.ChangeAnimationState(PlayerAnimationState.FishingEnd);
     }
 
-    public IEnumerator WaterTrees()
+    public IEnumerator WaterTrees(BerryTree treeToWater)
     {
         manager.ChangeAnimationState(PlayerAnimationState.Watering);
         _dialogueHandler.DisplayDetails("The tree is being watered");
         yield return new WaitForSeconds(2f);
+        _dialogueHandler.EndDialogue();
+        treeToWater.CompleteWateringEvent();
         manager.ChangeAnimationState(PlayerAnimationState.PlayerWalk);
     }
     void ActionReset()

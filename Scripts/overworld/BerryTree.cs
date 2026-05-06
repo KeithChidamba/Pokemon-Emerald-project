@@ -173,13 +173,16 @@ public class BerryTree : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("You have already watered this plant");
             return;
         }
-        StartCoroutine(_overworldActions.WaterTrees());
+        StartCoroutine(_overworldActions.WaterTrees(this));
+    }
+
+    public void CompleteWateringEvent()
+    {
         treeData.numStagesWatered++;
         treeData.currentStageNeedsWater = false;
         OnInteractionComplete?.Invoke(true);
         SetInteraction(OverworldInteractionType.None);
     }
-
     private void ChooseBerryToPlant(Overworld_interactable interactable,int optionChosen)
     {
         if (treeData.isPlanted) return;
@@ -205,6 +208,9 @@ public class BerryTree : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("Only berries can be planted");
             return;
         }
+
+        _playerBag.DepleteItem(berryToPlant);
+        
         _playerBag.OnItemSelected -= PlantBerry;
         
         treeData.numStagesWatered = 0;
@@ -244,6 +250,7 @@ public class BerryTree : MonoBehaviour,IInjectable
         var berries = InstanceFactory.CreateItem(treeData.berryItem);
         berries.quantity = GetBerryYield();
         _playerBag.AddItem(berries);
+
         _dialogueHandler.DisplayDetails($"You picked up {berries.quantity}" +
                                                  $" {berries.itemName}'s");
         

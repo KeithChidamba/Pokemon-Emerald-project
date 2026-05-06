@@ -7,7 +7,6 @@ using TMPro;
 public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage}
 public class Dialogue_handler : MonoBehaviour,IInjectable
 {
-    public Interaction currentInteraction;
     public Overworld_interactable currentInteractable;
     [SerializeField] private TMP_Text dialougeText;
     public float typingSpeed = 0.04f;
@@ -77,13 +76,13 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     { 
         if( _dialogueOptionsManager.currentOptions.Count == 0) return;  
         ActivateOptions(false);
-        _inputStateHandler.RemoveTopInputLayer(true);
+        _inputStateHandler.ResetRelevantUi(new []{InputStateName.DialogueOptions,InputStateName.DialoguePlaceHolder});
         _dialogueOptionsManager.currentOptions.Clear();
         foreach (var option in _currentDialogueOptions)
             Destroy(option);
         _currentDialogueOptions.Clear();
     }
-    private void CreateDialogueOptions()
+    private void CreateDialogueOptions(Interaction currentInteraction)
     {
         OnOptionsDisplayed?.Invoke(currentInteractable);
         dialogueOptionBox.gameObject.SetActive(true);
@@ -97,10 +96,10 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             optionScript.SetupOption(i,numOptions,currentInteraction.optionsUiText[i]);
             _dialogueOptionsManager.currentOptions.Add(optionScript);
         }
-        StartCoroutine(SetupDialogueOptionsNavigation());
+        StartCoroutine(SetupDialogueOptionsNavigation(currentInteraction));
     }
 
-    private IEnumerator SetupDialogueOptionsNavigation()
+    private IEnumerator SetupDialogueOptionsNavigation(Interaction currentInteraction)
     {
         _dialogueOptionsManager.LoadUiSize();
         ActivateOptions(true);
@@ -108,7 +107,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         
         foreach (var option in _dialogueOptionsManager.currentOptions)
         {
-            SelectableUI newOption = new (option.gameObject, () => SelectOption(option.optionIndex), true);
+            SelectableUI newOption = new (option.gameObject, () => SelectOption(option.optionIndex,currentInteraction), true);
             optionSelectables.Add( newOption);
         }
         
@@ -117,11 +116,12 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             InputDirection.Vertical,optionSelectables,optionSelector,true,true));
         yield return null;
     }
-    private void SelectOption(int optionIndex)
+    private void SelectOption(int optionIndex,Interaction currentInteraction)
     {
-        if (currentInteractable!=null)
+        if (currentInteraction.isEventTrigger)
         {
             _dialogueOptionsHandler.AlertOverworldInteraction(currentInteractable,optionIndex);
+            currentInteractable = null;
         }else
         {
             _dialogueOptionsHandler.CompleteInteraction(currentInteraction,optionIndex);
@@ -151,24 +151,21 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             newInteraction.interactionOptions.Add(option);
         foreach (string txt in optionsText)
             newInteraction.optionsUiText.Add(txt);
-        currentInteraction = newInteraction;
         
-        HandleInteraction();
+        HandleInteraction(newInteraction);
     }
     public void DisplaySpecific(string info, DialogType type)
     {
         messagesLoading = false;
         var newInteraction = NewInteraction(info,type,"");
-        currentInteraction = newInteraction;
-        HandleInteraction(false);
+        HandleInteraction(newInteraction,false);
     }    
     public void DisplayDetails(string info,bool canExit=true)
     {
         canExitDialogue = canExit;
         messagesLoading = false;
         var newInteraction = NewInteraction(info,DialogType.Details,"");
-        currentInteraction = newInteraction;
-        HandleInteraction();
+        HandleInteraction(newInteraction );
     }
 
     public void DisplayBattleInfo(string info, bool canExit)//display plain text info to player
@@ -198,10 +195,10 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         {
             _inputStateHandler.AddDialoguePlaceHolderState();
             var interaction = pendingMessages[0];
-            currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
-            SetBattleTextBox();
+            var currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
+            SetBattleTextBox(currentInteraction);
             
-            _typingRoutine = StartCoroutine(TypeText(currentInteraction.interactionMessage));
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction));
             yield return _typingRoutine;
             
             yield return new WaitUntil(()=>dialogueFinished);
@@ -223,12 +220,12 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         }
         _interactionHandler.AllowInteraction();
         canExitDialogue = true;
-        currentInteraction = null;
-        currentInteractable = null;
+        
         infoDialogueBox.SetActive(false);
         battleDialogueBox.SetActive(false);
         ResetText();
         displaying = false;
+        currentInteractable = null;
         dialogueFinished = false;
         _playerMovementHandler.AllowPlayerMovement();
         StopCoroutine(ProcessQueue());
@@ -236,13 +233,13 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     public void StartInteraction(Interaction interaction)
     {
         _interactionHandler.DisableInteraction();
-        currentInteraction = interaction;
-        if (currentInteraction.dialogueType == DialogType.Event)
+       
+        if (interaction.dialogueType == DialogType.Event)
         {
-            _dialogueOptionsHandler.CompleteEventInteraction(currentInteraction);
+            _dialogueOptionsHandler.CompleteEventInteraction(interaction);
             return;
         }
-        HandleInteraction();
+        HandleInteraction(interaction);
     }
     public void StartInteraction(Overworld_interactable interactable)
     {
@@ -266,12 +263,12 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     {
         objectiveDialogueBox.SetActive(false);
     }
-    private IEnumerator TypeText(string message)
+    private IEnumerator TypeText(Interaction currentInteraction)
     {
         ResetText();
         dialogueFinished = false;
         displaying = true; 
-        dialougeText.text = message;
+        dialougeText.text = currentInteraction.interactionMessage;
         dialougeText.ForceMeshUpdate();
         
         int totalPages = dialougeText.textInfo.pageCount;
@@ -306,18 +303,18 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             if(totalPages>1) yield return new WaitUntil(() =>InputSourceHandler.InputPressed(ControlEvent.Confirm));
         }
         dialogueFinished = true;
-        CompleteDialogueInteraction();
+        CompleteDialogueInteraction(currentInteraction);
         _typingRoutine = null;
     }
 
-    private void HandleInteraction(bool typeOut=true)
+    private void HandleInteraction(Interaction currentInteraction,bool typeOut=true)
     {
         if (currentInteraction.dialogueType == DialogType.Options)
         {
             canExitDialogue = false;
         }
         _playerMovementHandler.RestrictPlayerMovement();
-        SetBattleTextBox();
+        SetBattleTextBox(currentInteraction);
         if (typeOut)
         {
             // Stop ONLY the typing coroutine
@@ -325,7 +322,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             {
                 StopCoroutine(_typingRoutine);
             }
-            _typingRoutine = StartCoroutine(TypeText(currentInteraction.interactionMessage));
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction));
         }
         else
         {
@@ -334,7 +331,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         }
     }
 
-    private void SetBattleTextBox()
+    private void SetBattleTextBox(Interaction currentInteraction)
     {
         if (!_dialogueOptionsHandler.playerInBattle || currentInteraction.dialogueType != DialogType.BattleInfo)
         {
@@ -350,12 +347,12 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             infoDialogueBox.SetActive(false);
         }
     }
-    private void CompleteDialogueInteraction()
+    private void CompleteDialogueInteraction(Interaction currentInteraction)
     {
         if (currentInteraction == null) return;
         if (currentInteraction.dialogueType == DialogType.Options)
         {
-            CreateDialogueOptions();
+            CreateDialogueOptions(currentInteraction);
         }
     }
 }

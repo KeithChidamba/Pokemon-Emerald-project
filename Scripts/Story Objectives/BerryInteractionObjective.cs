@@ -9,7 +9,7 @@ public class BerryInteractionObjective : InteractionObjective
     private string _berryTreeName;
     protected override void OnObjectiveLoaded()
     {
-        var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
         dialogueHandler.DisplayObjectiveText(objectiveHeading);
         dialogueHandler.OnOptionsDisplayed += CheckInteractionTriggered;
     }

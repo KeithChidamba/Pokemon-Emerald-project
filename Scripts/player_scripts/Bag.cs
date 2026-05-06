@@ -32,7 +32,7 @@ public class Bag : MonoBehaviour,IInjectable
     public int topIndex;//keeps track of visible bag items
     public int sellQuantity = 1;
     public int maxNumItemsForView;
-    public int maxItemCapacity;
+    public int maxItemCapacity=99;
 
     public bool storageView;
     
@@ -250,7 +250,7 @@ public class Bag : MonoBehaviour,IInjectable
     }
     public Item SearchForItem(string itemName)
     {
-        return allItems.FirstOrDefault(item => item.itemName == itemName & item.quantity < 99);
+        return allItems.FirstOrDefault(item => item.itemName == itemName);
     }
     
     public void RemoveItem(Item item)
@@ -356,6 +356,11 @@ public class Bag : MonoBehaviour,IInjectable
     {
         storageItems.Add(itemToDeposit);
         RemoveItem(itemToDeposit);
+    }
+    public void DepleteItem(Item item)
+    {
+        item.quantity--;
+        CheckItemQuantity(item);
     }
     public void AddItem(Item item)
     {

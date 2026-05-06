@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: It's a berry tree, do you want to pick a bery?
   dialogueType: 1
+  isEventTrigger: 1
   interactionOptions: 0000000000000000
   resultMessage: 
   optionsUiText:
   - Yes
   - No thanks
   additionalInfo: []
-  hasSeparateLogicHandler: 1
+  overworldInteraction: 0
+  location: 0

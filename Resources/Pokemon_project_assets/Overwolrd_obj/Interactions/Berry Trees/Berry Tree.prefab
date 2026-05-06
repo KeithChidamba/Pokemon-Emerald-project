@@ -91,7 +91,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 6
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -122,7 +122,6 @@ MonoBehaviour:
   idleInteraction: {fileID: 11400000, guid: fa2b7b86c6c2769fea5830444690481a, type: 2}
   treeData: {fileID: 11400000, guid: 28301d94c39b308f3b1e16101fee2f59, type: 2}
   treeSpriteRenderer: {fileID: 4641104906229684179}
-  loadedFromJson: 0
   treeIndex: 0
   secondsCounter: 0
 --- !u!95 &-968395720497001184

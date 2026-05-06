@@ -9,6 +9,7 @@ public class Interaction : ScriptableObject
 {
     [FormerlySerializedAs("InteractionMsg")] public string interactionMessage = "";
     public DialogType dialogueType;
+    public bool isEventTrigger;
     public List<InteractionOptions> interactionOptions = new();
     [FormerlySerializedAs("ResultMessage")] public string resultMessage = "";
     [FormerlySerializedAs("OptionsUiText")] public List<string> optionsUiText= new();

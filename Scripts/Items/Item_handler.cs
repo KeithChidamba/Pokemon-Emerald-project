@@ -583,8 +583,7 @@ public class Item_handler : MonoBehaviour,IInjectable
 
     void DepleteItem()
     {
-        itemInUse.quantity--;
-        _playerBagHandler.CheckItemQuantity(itemInUse);
+        _playerBagHandler.DepleteItem(itemInUse);
     }
     void ResetItemUsage()
     {
