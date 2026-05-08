@@ -11,7 +11,7 @@ public class GeneralItemUiObjective : ItemUiObjective
     private Item_handler _itemHandler;
     [SerializeField] private ItemObjectiveType itemObjectiveType;
     
-    protected override void OnObjectiveLoaded()
+    protected override void LogicForObjectiveLoad()
     {
         switch(itemObjectiveType)
         {

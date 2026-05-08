@@ -5,9 +5,9 @@
     "itemEffect": "",
     "itemDescription": "Increases a pokemon's friendship but lowers defense",
     "price": 5,
-    "quantity": 1,
+    "quantity": 3,
     "itemImage": {
-        "instanceID": 33344
+        "instanceID": 32856
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

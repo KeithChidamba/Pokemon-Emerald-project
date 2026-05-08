@@ -56,7 +56,6 @@ public abstract class StoryObjective : ScriptableObject
             _ => null
         };
     }
-    
 }
 
 [Serializable]

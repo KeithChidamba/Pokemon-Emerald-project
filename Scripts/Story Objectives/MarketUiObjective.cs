@@ -9,7 +9,8 @@ public class MarketUiObjective : ItemUiObjective
         SellItem,BuyItem
     }
     [SerializeField] private MarketObjectiveType marketObjectiveType;
-    protected override void OnObjectiveLoaded()
+
+    protected override void LogicForObjectiveLoad()
     {
         switch(marketObjectiveType)
         {
@@ -17,6 +18,7 @@ public class MarketUiObjective : ItemUiObjective
             case MarketObjectiveType.BuyItem: SetupItemBuyObjective(); break;
         }
     }
+
     private void SetupItemSellObjective()
     {
         var playerBag = serviceContainer.Resolve<Bag>(); 

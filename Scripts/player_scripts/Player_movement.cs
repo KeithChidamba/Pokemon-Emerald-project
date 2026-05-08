@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player_movement : MonoBehaviour,IInjectable
 {
+    public Camera playerCamera;
     public float movementSpeed;
     [SerializeField] float walkSpeed = 4f;
     [SerializeField] float runSpeed = 6f;

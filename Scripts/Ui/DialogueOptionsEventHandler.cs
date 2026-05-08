@@ -169,8 +169,6 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     public void AlertOverworldInteraction(Overworld_interactable interactable,int optionIndex)
     {
         OnOverworldInteractionOptionChosen?.Invoke(interactable,optionIndex);
-        if (interactable.interaction.isEventTrigger) return;
-        CompleteInteraction(interactable.interaction,optionIndex);
     }
     public void CompleteEventInteraction(Interaction interaction)
     {

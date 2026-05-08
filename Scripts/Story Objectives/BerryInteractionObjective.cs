@@ -10,6 +10,7 @@ public class BerryInteractionObjective : InteractionObjective
     protected override void OnObjectiveLoaded()
     {
         dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        overworldStateHandler = serviceContainer.Resolve<OverworldState>();
         dialogueHandler.DisplayObjectiveText(objectiveHeading);
         dialogueHandler.OnOptionsDisplayed += CheckInteractionTriggered;
     }
@@ -37,5 +38,9 @@ public class BerryInteractionObjective : InteractionObjective
             onObjectiveComplete?.Invoke();
             ClearObjective();
         }
+    }
+    protected override void OnObjectiveCleared()
+    {
+        overworldStateHandler.ClearAndLoadNextObjective();
     }
 }

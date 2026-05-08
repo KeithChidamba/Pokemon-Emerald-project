@@ -615,5 +615,3 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         SaveDataAsJson(config,fileName,SaveDataDirectory.GameSettings);
     }
 }
-
-

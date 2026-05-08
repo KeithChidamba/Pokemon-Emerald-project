@@ -17,3 +17,4 @@ MonoBehaviour:
   hasProgression: 0
   indexInList: 0
   objectiveType: 0
+  destinationPosition: {x: -9, y: -19, z: 0}

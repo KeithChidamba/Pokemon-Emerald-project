@@ -126,7 +126,6 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         {
             _dialogueOptionsHandler.CompleteInteraction(currentInteraction,optionIndex);
         }
-        
     }
     private void ActivateOptions(bool display)
      {

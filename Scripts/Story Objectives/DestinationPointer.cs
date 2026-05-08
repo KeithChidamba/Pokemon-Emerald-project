@@ -7,26 +7,26 @@ public class DestinationPointer : MonoBehaviour,IInjectable
     private Image pointerUIImage;
     [SerializeField] float edgePadding = 20f;
     
-    private Camera cam;
     private RectTransform canvasRect;
     public DestinationObjective objectiveData;
-    public GameObject overworldObject;
+ 
     public bool displaying;
 
     private OverworldState _overworldStateHandler;
     private Game_ui_manager _gameUIHandler;
+    private Player_movement _playerMovementHandler;
     
     public void Inject(ServiceContainer container)
     {
         _gameUIHandler = container.Resolve<Game_ui_manager>();
-        _overworldStateHandler = container.Resolve<OverworldState>(); 
+        _overworldStateHandler = container.Resolve<OverworldState>();
+        _playerMovementHandler = container.Resolve<Player_movement>();
         gameObject.SetActive(true);
         OnInject();
     }
 
     private void OnInject()
     {
-        overworldObject.SetActive(false);
         _overworldStateHandler.OnObjectivesLoaded += CheckForRequiredObjective;
     }
     
@@ -39,21 +39,21 @@ public class DestinationPointer : MonoBehaviour,IInjectable
     }
     private void LoadPointer()
     {
+        objectiveData.OnLoad -= LoadPointer;
         displaying = true;
-        cam = Camera.main; 
         pointerUIImage = _gameUIHandler.destinationPointerUI;
         canvasRect = pointerUIImage.canvas.GetComponent<RectTransform>();
-        //PlayerCollisionHandler.OnCollision += ConfirmDestination;
-        overworldObject.SetActive(true);
+        _playerMovementHandler.OnNewTile += ConfirmDestination;
+        
     }
 
-    private void ConfirmDestination(Transform currentCollision)
+    private void ConfirmDestination()
     {
-        if (currentCollision.gameObject.CompareTag(objectiveData.destinationTag))
+        var playerPos = _playerMovementHandler.GetPlayerPosition();
+        if(playerPos == objectiveData.destinationPosition)
         {
-           // PlayerCollisionHandler.OnCollision -= ConfirmDestination;
+            _playerMovementHandler.OnNewTile -= ConfirmDestination;
             objectiveData.ClearObjective();
-            overworldObject.SetActive(false);
             pointerUIImage.gameObject.SetActive(false);
             displaying = false;
         }
@@ -61,7 +61,7 @@ public class DestinationPointer : MonoBehaviour,IInjectable
     void Update()
     {
         if(!displaying)return;
-        Vector3 viewportPos = cam.WorldToViewportPoint(transform.position);
+        Vector3 viewportPos = _playerMovementHandler.playerCamera.WorldToViewportPoint(transform.position);
 
 // Hide if inside view
         bool isInsideView =

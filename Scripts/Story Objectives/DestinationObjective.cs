@@ -3,9 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "des", menuName = "Objectives/destination objective")]
 public class DestinationObjective : StoryObjective
 {
-    public readonly string destinationTag = "Destination";
     private OverworldState _overworldStateHandler;
-
+    public Vector3 destinationPosition;
+    
     protected override void OnObjectiveLoaded()
     {
         var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 

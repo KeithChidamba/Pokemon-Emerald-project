@@ -1,10 +1,10 @@
 {
-    "isPlanted": true,
+    "isPlanted": false,
     "minYield": 2,
     "maxYield": 5,
     "currentStageNeedsWater": false,
-    "currentStageProgress": 4,
-    "minutesSinceLastStage": 0.0,
+    "currentStageProgress": 0,
+    "minutesSinceLastStage": 19.0,
     "numStagesWatered": 0,
     "itemAssetName": "Pecha berry",
     "berryItem": {
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32752
+                    "instanceID": 32806
                 },
                 {
-                    "instanceID": 32752
+                    "instanceID": 32806
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 32754
+                    "instanceID": 32808
                 },
                 {
-                    "instanceID": 32756
+                    "instanceID": 32810
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33256
+                    "instanceID": 33236
                 },
                 {
-                    "instanceID": 33258
+                    "instanceID": 33238
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33260
+                    "instanceID": 33240
                 },
                 {
-                    "instanceID": 33262
+                    "instanceID": 33242
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33264
+                    "instanceID": 33244
                 },
                 {
-                    "instanceID": 33266
+                    "instanceID": 33246
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-05-06T13:39:48.6409280+02:00"
+    "lastLogin": "2026-05-08T14:01:38.0759580+02:00"
 }

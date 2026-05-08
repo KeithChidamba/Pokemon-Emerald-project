@@ -12,7 +12,7 @@ public class TrainerBattleObjective : StoryObjective
         _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
         _dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>(); 
         _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
-        _dialogueHandler.DisplayObjectiveText(objectiveHeading);
+        _dialogueHandler.DisplayObjectiveText($"Defeat {trainer.TrainerName}");
         _dialogueOptionsHandler.OnInteractionOptionChosen += CheckBattleInteraction;
     }
     private void CheckBattleInteraction(Interaction interaction, int optionChosen)

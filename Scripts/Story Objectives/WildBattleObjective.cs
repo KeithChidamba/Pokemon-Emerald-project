@@ -20,14 +20,14 @@ public class WildBattleObjective : StoryObjective
         _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>(); 
         
-        dialogueHandler.DisplayObjectiveText(objectiveHeading);
-        
         if (objectiveOutline == BattleObjectiveOutline.BeatWildPokemon)
         {
+            dialogueHandler.DisplayObjectiveText($"Go defeat a {pokemonForObjective.pokemonName}");
             _encounterHandler.OnEncounterTriggered += CheckEncounter;
         }
-        if (objectiveOutline == BattleObjectiveOutline.CatchWildPokemon)
+        else if (objectiveOutline == BattleObjectiveOutline.CatchWildPokemon)
         {
+            dialogueHandler.DisplayObjectiveText($"Go catch a {pokemonForObjective.pokemonName}");
             _pokemonOperationsHandler.OnPokeballUsed += CheckIfPokemonCaught;
         }
     }
