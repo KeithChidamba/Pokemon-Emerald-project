@@ -48,6 +48,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         var trees = FindObjectsOfType<BerryTree>(true);
         foreach(var tree in trees)
         {
+            tree.loadedFromJSON = false;
             overworldBerryTrees.Add(tree);
         }
         
@@ -55,17 +56,18 @@ public class OverworldState : MonoBehaviour,IInjectable
         {
             yield return _saveHandler.LoadOverworldData();
             
-            if (treeDataQueue.Count == 0)
+            foreach (var treeData in treeDataQueue)
             {
-                overworldBerryTrees.ForEach(tree => tree.LoadDefaultAsset());
+                var jsonBerryTree = overworldBerryTrees.First(tree=>tree.gameObject.name == treeData.treeObjectName);
+                jsonBerryTree.name = treeData.itemAssetName + " Tree";//visual debugging purposes
+                jsonBerryTree.LoadTreeData(treeData);
             }
-            else
+
+            foreach (var tree in overworldBerryTrees)
             {
-                foreach (var treeData in treeDataQueue)
+                if (!tree.loadedFromJSON)
                 {
-                    var jsonBerryTree = overworldBerryTrees.First(tree=>tree.name == treeData.treeObjectName);
-                    jsonBerryTree.name = treeData.itemAssetName + " Tree";
-                    jsonBerryTree.LoadTreeData(treeData);
+                    tree.LoadDefaultAsset();
                 }
             }
         }

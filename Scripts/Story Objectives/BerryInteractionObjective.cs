@@ -6,7 +6,6 @@ using UnityEngine;
 public class BerryInteractionObjective : InteractionObjective
 {
     public Item berryForObjective;
-    private string _berryTreeName;
     protected override void OnObjectiveLoaded()
     {
         dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
@@ -19,25 +18,26 @@ public class BerryInteractionObjective : InteractionObjective
     {
         if (interactionForObjective.overworldInteraction != interactable.interaction.overworldInteraction) return;
         
-        var berryTree = interactable.GetComponent<BerryTree>();
-        _berryTreeName = berryTree.treeData.berryItem.itemName;
-     
+       var berryTree = interactable.GetComponent<BerryTree>();
+       
         berryTree.OnInteractionComplete += CheckEventSuccess;
         onObjectiveComplete += RemoveSubscription;
         return;
+
+        void CheckEventSuccess(bool successful)
+        {
+            if (!successful) return;
+            
+            if(berryForObjective.itemName != berryTree.treeData.berryItem.itemName) return;
+            
+            onObjectiveComplete?.Invoke();
+            ClearObjective();
+        }
         void RemoveSubscription()
         {
             berryTree.OnInteractionComplete -= CheckEventSuccess;
             onObjectiveComplete -= RemoveSubscription;
-        } 
-        void CheckEventSuccess(bool successful)
-        {
-            if (!successful) return;
-            if(berryForObjective.itemName!=_berryTreeName) return;
-      
-            onObjectiveComplete?.Invoke();
-            ClearObjective();
-        }
+        }  
     }
     protected override void OnObjectiveCleared()
     {

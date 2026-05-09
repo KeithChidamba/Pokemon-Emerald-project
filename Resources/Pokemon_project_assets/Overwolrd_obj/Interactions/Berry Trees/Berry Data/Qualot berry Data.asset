@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 612de1a428d002f8798709f5458d7511, type: 3}
   m_Name: Qualot berry Data
   m_EditorClassIdentifier: 
-  isPlanted: 0
+  isPlanted: 1
   minYield: 1
   maxYield: 5
   currentStageNeedsWater: 1
@@ -21,7 +21,7 @@ MonoBehaviour:
   numStagesWatered: 0
   itemAssetName: 
   berryItem: {fileID: 11400000, guid: 1fce3ba6c14e3fde7a1595621fe04cc2, type: 2}
-  treeIndex: 0
+  treeObjectName: 
   minutesPerStage: 180
   spriteData:
   - growthStageSprites:

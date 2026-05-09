@@ -106,20 +106,23 @@ public class Game_Load : MonoBehaviour,IInjectable
         LoadNewPlayerPage();
     }
 
+    private IEnumerator GameStartLoading()
+    {
+        _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
+        _dialogueHandler.EndDialogue();
+        OnGameStarted?.Invoke();
+        
+        yield return new WaitForSeconds(1f);//give everything time to load
+        Start_ui.SetActive(false);
+        new_player_ui.SetActive(false);
+        world_Map.SetActive(true);
+        _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
+        _areaHandler.LoadAreaFromSave(playerData.location);
+    }
     private void StartGame()
     {
-        _dialogueHandler.EndDialogue();
-        new_player_ui.SetActive(false);
-        Start_ui.SetActive(false);
-        
-        _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
-        world_Map.SetActive(true);
-        
-        _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
-        
-        _areaHandler.LoadAreaFromSave(playerData.location);
-        
-        OnGameStarted?.Invoke();
+        StartCoroutine(GameStartLoading());
+       
     }
 }
 

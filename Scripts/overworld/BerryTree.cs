@@ -12,14 +12,12 @@ public class BerryTree : MonoBehaviour,IInjectable
 
     public SpriteRenderer treeSpriteRenderer;
     private int _currentSpriteIndex;
-
-    public int treeIndex;
-    [SerializeField] float secondsCounter;
+    public bool loadedFromJSON;
+    [SerializeField] private float secondsCounter;
 
     public event Action<bool> OnInteractionComplete;
 
     private Dialogue_handler _dialogueHandler;
-    private OverworldState _overworldStateHandler;
     private DialogueOptionsEventHandler _gameLoadHandler;
     private Bag _playerBag;
     private Game_ui_manager _gameUIHandler;
@@ -33,7 +31,6 @@ public class BerryTree : MonoBehaviour,IInjectable
         _overworldActions = container.Resolve<overworld_actions>();
         _playerBag = container.Resolve<Bag>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _overworldStateHandler = container.Resolve<OverworldState>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         OnInject();
@@ -74,6 +71,7 @@ public class BerryTree : MonoBehaviour,IInjectable
 
     public void LoadTreeData(BerryTreeData tree)
     {
+        loadedFromJSON = true;
         treeData = tree;
         treeSpriteRenderer.sprite = treeData.isPlanted? treeData.GetTreeSprite()[0] : null;
         var lastLoginTime = treeData.GetLastLogin();
@@ -223,6 +221,7 @@ public class BerryTree : MonoBehaviour,IInjectable
         treeData = InstanceFactory.CreateTreeData(treeDataAsset);
         
         treeData.isPlanted = true;
+        treeData.treeObjectName = name;
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
         
         _dialogueHandler.DisplayDetails($"You planted a {berryToPlant.itemName}");
@@ -256,7 +255,11 @@ public class BerryTree : MonoBehaviour,IInjectable
         
         treeSpriteRenderer.sprite = null;
         treeData.isPlanted = false;
+        treeData.minutesSinceLastStage = 0;
+        treeData.currentStageNeedsWater = false;
         treeData.currentStageProgress = 0;
+        secondsCounter = 0;
+        
         OnInteractionComplete?.Invoke(true);
         SetInteraction(OverworldInteractionType.PlantBerry);
     }

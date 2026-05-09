@@ -461,6 +461,10 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             yield return CreateDefaultWebglDirectories();
             yield return new WaitUntil(() => _virtualFileStructureReady);
         }
+        else
+        {
+            CreateAllSaveDirectories();//just incase
+        }
         
         _inputStateHandler.ResetRelevantUi(InputStateName.PlayerMenu);
         _inputStateHandler.AddDialoguePlaceHolderState();

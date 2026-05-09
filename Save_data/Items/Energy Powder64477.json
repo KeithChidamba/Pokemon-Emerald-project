@@ -7,7 +7,7 @@
     "price": 18,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 34010
+        "instanceID": 34000
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,

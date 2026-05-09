@@ -1,17 +1,17 @@
 {
     "isPlanted": true,
-    "minYield": 1,
+    "minYield": 2,
     "maxYield": 5,
-    "currentStageNeedsWater": false,
-    "currentStageProgress": 4,
-    "minutesSinceLastStage": 0.0,
+    "currentStageNeedsWater": true,
+    "currentStageProgress": 0,
+    "minutesSinceLastStage": 1.0,
     "numStagesWatered": 0,
-    "itemAssetName": "Pomeg berry",
+    "itemAssetName": "Oran berry",
     "berryItem": {
-        "instanceID": 26412
+        "instanceID": 27258
     },
-    "treeObjectName": "Pomeg Berry Tree 2",
-    "minutesPerStage": 180,
+    "treeObjectName": "Qualot berry Tree",
+    "minutesPerStage": 60,
     "spriteData": [
         {
             "growthStageSprites": [
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33370
+                    "instanceID": 32698
                 },
                 {
-                    "instanceID": 33372
+                    "instanceID": 32700
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33374
+                    "instanceID": 32702
                 },
                 {
-                    "instanceID": 33376
+                    "instanceID": 32704
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33378
+                    "instanceID": 32706
                 },
                 {
-                    "instanceID": 33380
+                    "instanceID": 32708
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-05-09T19:51:46.7799390+02:00"
+    "lastLogin": "2026-05-09T19:51:46.7818340+02:00"
 }

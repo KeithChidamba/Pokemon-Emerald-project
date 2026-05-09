@@ -5,9 +5,9 @@
     "itemEffect": "",
     "itemDescription": "Increases a pokemon's friendship but lowers defense",
     "price": 5,
-    "quantity": 3,
+    "quantity": 9,
     "itemImage": {
-        "instanceID": 32856
+        "instanceID": 33200
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,14 +18,14 @@
     "isMultiModular": true,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 27802
+        "instanceID": 27800
     },
     "additionalInfoModules": [
         {
-            "instanceID": 27802
+            "instanceID": 27800
         },
         {
-            "instanceID": 27332
+            "instanceID": 27330
         }
     ],
     "infoModuleAssetNames": [

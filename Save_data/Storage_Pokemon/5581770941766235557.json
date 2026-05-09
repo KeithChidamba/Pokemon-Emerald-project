@@ -7,7 +7,7 @@
     "gender": 2,
     "ratioFemale": 0.0,
     "nature": {
-        "instanceID": 27952
+        "instanceID": 27950
     },
     "hasGender": true,
     "hp": 14.0,
@@ -97,18 +97,18 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -29812
+            "instanceID": -40718
         },
         {
-            "instanceID": -29814
+            "instanceID": -40720
         }
     ],
     "ability": {
-        "instanceID": 27300
+        "instanceID": 27298
     },
     "evolutions": [
         {
-            "instanceID": 27982
+            "instanceID": 27980
         },
         {
             "instanceID": 25942
@@ -128,7 +128,7 @@
         "instanceID": 25968
     },
     "partyFrame2": {
-        "instanceID": 27122
+        "instanceID": 27120
     },
     "battleIntroFrame": {
         "instanceID": 26914
