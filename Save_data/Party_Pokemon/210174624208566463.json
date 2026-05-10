@@ -10,7 +10,7 @@
         "instanceID": 26688
     },
     "hasGender": true,
-    "hp": 81.0,
+    "hp": 16.0,
     "maxHp": 81.0,
     "baseHp": 60.0,
     "baseAttack": 85.0,
@@ -155,16 +155,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -40642
+            "instanceID": -9484
         },
         {
-            "instanceID": -40644
+            "instanceID": -9486
         },
         {
-            "instanceID": -40646
+            "instanceID": -9488
         },
         {
-            "instanceID": -40648
+            "instanceID": -9490
         }
     ],
     "ability": {
@@ -198,7 +198,7 @@
         "instanceID": 26542
     },
     "pokeballName": "Regular Pokeball",
-    "healthPhase": 1,
+    "healthPhase": 3,
     "abilityName": "Blaze",
     "natureName": "Timid",
     "evolutionNames": [

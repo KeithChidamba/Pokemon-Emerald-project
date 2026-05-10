@@ -2,13 +2,13 @@
     "playerName": "keith",
     "trainerID": 746,
     "secretID": 45237,
-    "playerMoney": 12880,
+    "playerMoney": 12895,
     "numBadges": 0,
     "playerPosition": {
-        "x": 51.0,
-        "y": -65.0,
+        "x": 73.0,
+        "y": -10.0,
         "z": 0.0
     },
-    "location": 1,
+    "location": 3,
     "equippedItemName": "Bike"
 }

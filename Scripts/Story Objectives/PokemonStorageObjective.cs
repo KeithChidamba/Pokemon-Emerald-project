@@ -12,7 +12,7 @@ public class PokemonStorageObjective : UiActionObjective
     public Pokemon pokemonForObjective;
     private pokemon_storage _pokemonStorageHandler;
     
-    protected override void OnObjectiveLoaded()
+    protected override void LogicForObjectiveLoad()
     {
         _pokemonStorageHandler = serviceContainer.Resolve<pokemon_storage>(); 
         switch(storageObjectiveType)

@@ -127,10 +127,7 @@ public class OverworldState : MonoBehaviour,IInjectable
             _dialogueHandler.RemoveObjectiveText();
         }
     }
-    public int GetTreeIndex(BerryTree tree)
-    {
-        return overworldBerryTrees.IndexOf(tree);
-    }
+
     public void StoreBerryTreeData(BerryTreeData treeData)
     {
         treeDataQueue.Add(treeData);

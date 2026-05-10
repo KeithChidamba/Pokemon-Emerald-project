@@ -5,7 +5,7 @@
     "itemEffect": "5",
     "itemDescription": "Heals 5hp",
     "price": 5,
-    "quantity": 16,
+    "quantity": 15,
     "itemImage": {
         "instanceID": 32552
     },

@@ -36,6 +36,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     public GameObject initialSelector;
     public Image boxSelectorImage;
     public GameObject boxOptionsSelector;
+    public GameObject partyOptionsSelector;
     public const int BoxCapacity = 30;
     public int boxColumns = 6;
     public const int NumBoxes = 14;
@@ -480,7 +481,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
 
         _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStoragePartyOptions, InputStateGroup.PokemonStorage
             , stateDirection:InputDirection.Vertical,selectableUis: partyOptionsSelectables
-            ,selector:boxOptionsSelector,selecting:true,display:true
+            ,selector:partyOptionsSelector,selecting:true,display:true
             ,onClose:ResetOptions,onExit:ResetOptions));
         
         selectedPokemonID = icon.pokemon.pokemonID.ToString();
@@ -579,7 +580,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
                 boxSelection.Add(new(null,()=>SendToPC(boxNumber,partyPokemon),true));
             }
             _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStorageDepositSelection, InputStateGroup.PokemonStorage
-                , stateDirection:InputDirection.Horizontal,selectableUis: boxSelection,selecting:true,onExit:RemoveDeposit));
+                , stateDirection:InputDirection.Horizontal,selectableUis: boxSelection,selecting:true,onExit:RemoveDepositUI));
             boxDepositUI.SetActive(true);
             DisplayBoxCapacity(0);
         }
@@ -587,7 +588,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("There must be at least 1 pokemon in your team");
     }
 
-    private void RemoveDeposit()
+    private void RemoveDepositUI()
     {
         storageOptionsText.transform.parent.gameObject.SetActive(false);
         boxDepositUI.SetActive(false);
@@ -603,7 +604,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         if (selectedBox.currentNumPokemon < BoxCapacity)
         {
             OnPokemonDeposit?.Invoke(partyPokemon.pokemon);
-            RemoveDeposit();
+            RemoveDepositUI();
             storagePartyOptionsParent.SetActive(false);
             nonPartyPokemon.Add(partyPokemon.pokemon);
             _pokemonPartyHandler.RemoveMember(partyPokemon.partyPosition);
@@ -615,8 +616,8 @@ public class pokemon_storage : MonoBehaviour,IInjectable
                 pokemonID = partyPokemon.pokemon.pokemonID.ToString()
                 ,containsPokemon = true
             };
-            RefreshStorageUi(true); 
-            ClearPokemonData();
+            RemovePokemonIcons(true); 
+            OpenPC(PCUsageState.Deposit);
         }
     }
     
