@@ -34,11 +34,13 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     private InputStateHandler _inputStateHandler;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Interaction_handler  _interactionHandler;
+    private Game_ui_manager _gameUIManager;
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _battleHandler = container.Resolve<Battle_handler>();
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
+        _gameUIManager = container.Resolve<Game_ui_manager>();
         _interactionHandler = container.Resolve<Interaction_handler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         gameObject.SetActive(true);
@@ -55,10 +57,18 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
 
     void Update()
     {
+        if (!displaying) return;
         if (dialogueFinished && InputSourceHandler.InputPressed(ControlEvent.Exit) && canExitDialogue)
         {
-            StartCoroutine(_playerMovementHandler.AllowPlayerMovement(0.25f));
             EndDialogue();
+            if (_gameUIManager.playerInBattle)
+            {
+                _battleHandler.EnableBattleMessage(_inputStateHandler.currentState);
+            }
+            else
+            {
+                StartCoroutine(_playerMovementHandler.AllowPlayerMovement(0.25f));
+            }
         }
     }
 
@@ -167,7 +177,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         HandleInteraction(newInteraction );
     }
 
-    public void DisplayBattleInfo(string info, bool canExit)//display plain text info to player
+    public void DisplayBattleInfo(string info, bool canExit)
     {
         if(canExit)
             EndDialogue();
@@ -175,9 +185,9 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             canExitDialogue = false;
         DisplayBattleInfo(info);
     }
-    public void DisplayBattleInfo(string info)//display plain text info to player
+    public void DisplayBattleInfo(string info)
     {
-        if (!_dialogueOptionsHandler.playerInBattle)
+        if (!_gameUIManager.playerInBattle)
         {//fail-safe
             DisplayDetails(info);
             return;
@@ -332,13 +342,13 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
 
     private void SetBattleTextBox(Interaction currentInteraction)
     {
-        if (!_dialogueOptionsHandler.playerInBattle || currentInteraction.dialogueType != DialogType.BattleInfo)
+        if (!_gameUIManager.playerInBattle || currentInteraction.dialogueType != DialogType.BattleInfo)
         {
             infoDialogueBox.SetActive(true);
             dialougeText.color=Color.black;
             battleDialogueBox.SetActive(false);
         }
-        if( (currentInteraction.dialogueType == DialogType.BattleInfo && _dialogueOptionsHandler.playerInBattle)
+        if( (currentInteraction.dialogueType == DialogType.BattleInfo && _gameUIManager.playerInBattle)
             || currentInteraction.dialogueType == DialogType.BattleDisplayMessage)
         {
             battleDialogueBox.SetActive(true);

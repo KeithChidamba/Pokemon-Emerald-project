@@ -112,7 +112,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 37e389aea5cce4241b3eadeba0d90bd7, type: 2}
   heldItem: {fileID: 0}
   hasItem: 0
-  frontPicture: {fileID: 21300000, guid: fd03c0d6b3f5c853b94c441aaffc1484, type: 2}
+  frontPicture: {fileID: 21300000, guid: 26cc67a32633c52328432f34ac95926d, type: 2}
   backPicture: {fileID: 21300000, guid: 7128a8f56fa350a6a9bd3ee92c240bd5, type: 2}
   partyFrame1: {fileID: 21300000, guid: 3ff2423cdfba01302be2fe2b62280340, type: 2}
   partyFrame2: {fileID: 21300000, guid: 40d19bce4be5d9f9aa43293a549cde90, type: 2}

@@ -6,7 +6,7 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pokemon sprites_55
+  m_Name: wurmple_sb
   m_Rect:
     serializedVersion: 2
     x: 504
@@ -22,7 +22,7 @@ Sprite:
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    319ca7b30d02b4632a33f23480944d46: 1121700220
+    66cc27fae40ef420e94c9be911236146: 21300000
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:

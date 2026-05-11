@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
-using Vector2 = UnityEngine.Vector2;
+
 
 public class PokeballRolloutUI : MonoBehaviour,IInjectable
 {
@@ -47,7 +45,7 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
             SetPokeballImage(pokeballImage, i);
             yield return null;
         }
-        var distance = isPlayerPokeballs ? -_battleVisualsHandler.outOfViewDitance : _battleVisualsHandler.outOfViewDitance;
+        var distance = isPlayerPokeballs ? -_battleVisualsHandler.outOfViewDistance : _battleVisualsHandler.outOfViewDistance;
         var target = new Vector2(_rectTransform.anchoredPosition.x + distance, _rectTransform.anchoredPosition.y);
         yield return _battleVisualsHandler.SlideRect(_rectTransform, _rectTransform.anchoredPosition, target , 600f);
     }
@@ -114,7 +112,7 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     public IEnumerator HidePokeballs()
     {
         yield return new WaitUntil(() => _finishedDisplaying);
-        _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? _battleVisualsHandler.outOfViewDitance : -_battleVisualsHandler.outOfViewDitance);
+        _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? _battleVisualsHandler.outOfViewDistance : -_battleVisualsHandler.outOfViewDistance);
     }
 
     private void ResetPokeballs()
@@ -124,6 +122,6 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
             pokeballs[i].anchoredPosition = startPos.anchoredPosition;
         }
         gameObject.SetActive(false);
-        _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? -_battleVisualsHandler.outOfViewDitance :_battleVisualsHandler.outOfViewDitance);
+        _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? -_battleVisualsHandler.outOfViewDistance :_battleVisualsHandler.outOfViewDistance);
     }
 }

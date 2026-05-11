@@ -6,7 +6,7 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pokemon sprites_89
+  m_Name: pikachu_s
   m_Rect:
     serializedVersion: 2
     x: 648
@@ -22,7 +22,7 @@ Sprite:
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    319ca7b30d02b4632a33f23480944d46: 1927812664
+    29dfa23626bc817b3b58afa107d57c26: 21300000
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:

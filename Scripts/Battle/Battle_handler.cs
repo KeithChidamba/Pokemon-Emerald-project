@@ -90,7 +90,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     void Update()
     {
-        if (!_dialogueOptionsHandler.playerInBattle) return;
+        if (!_gameUIHandler.playerInBattle) return;
         if (_turnBasedCombatHandler.currentTurnIndex > 1) return;
         
         _currentPlayerParticipant = GetCurrentParticipant();
@@ -114,7 +114,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         return battleParticipants[_turnBasedCombatHandler.currentTurnIndex];
     }
-    private void EnableBattleMessage(InputState currentState)
+    public void EnableBattleMessage(InputState currentState)
     {
         if (currentState.stateName == InputStateName.PokemonBattleOptions)
         {
@@ -251,7 +251,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         //load visuals based on area
         overWorld.SetActive(false);
         battleUI.SetActive(true);
-        _dialogueOptionsHandler.playerInBattle = true;
+        _gameUIHandler.playerInBattle = true;
         
         if(isTrainerBattle)
             yield return StartCoroutine(_battleIntroHandler.PlayTrainerIntroSequence());
@@ -729,7 +729,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         });
         usedTurnForItem = false;
         usedTurnForSwap = false;
-        _dialogueOptionsHandler.playerInBattle = false;
+        _gameUIHandler.playerInBattle = false;
         _overworldActions.doingAction = false;
         battleUI.SetActive(false);
         optionsUI.SetActive(false);

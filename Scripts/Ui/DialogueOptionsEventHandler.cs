@@ -11,7 +11,7 @@ public enum InteractionOptions
 public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
 {
     private Interaction _currentInteraction;
-    public bool playerInBattle;
+
     private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
     public event Action<Interaction,int> OnInteractionOptionChosen;
     public event Action<Overworld_interactable,int> OnOverworldInteractionOptionChosen;

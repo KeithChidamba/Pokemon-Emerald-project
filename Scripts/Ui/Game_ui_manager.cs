@@ -28,6 +28,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     [SerializeField]private bool _canOpenMenu;
     private bool _isEmptyState;
     public Image destinationPointerUI;
+    public bool playerInBattle;
     
     private Item_handler _itemHandler;
     private Pokemon_Details _pokemonDetailsHandler;
@@ -113,7 +114,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         }
         else
             _playerMovementHandler.RestrictPlayerMovement();
-        if (_dialogueOptionsHandler.playerInBattle)
+        if (playerInBattle)
         {
             _playerMovementHandler.RestrictPlayerMovement();
         }

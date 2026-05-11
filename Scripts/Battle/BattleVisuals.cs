@@ -15,7 +15,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public Sprite[] statChangeSprites;
     private Dictionary<Stat, Sprite> statChangeVisuals = new();
     private string _statChangeMessage;
-    public  readonly float outOfViewDitance = 600f;
+    public  readonly float outOfViewDistance = 600f;
     public event Action OnStatVisualDisplayed;
     private List<Coroutine> _activeSlideCoroutines = new();
     
@@ -303,7 +303,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         participant.participantUI.SetActive(true);
         if (participant.isEnemy) participant.pokemonImage.color = Color.white;
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
-        var direction = participant.isEnemy?outOfViewDitance:-outOfViewDitance;
+        var direction = participant.isEnemy?outOfViewDistance:-outOfViewDistance;
         if (participant.isEnemy)
         {
             direction = 0;
@@ -316,7 +316,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public IEnumerator WithdrawPokemon(Battle_Participant participant)
     {
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
-        var direction = participant.isEnemy?-outOfViewDitance:outOfViewDitance;
+        var direction = participant.isEnemy?-outOfViewDistance:outOfViewDistance;
         var targetForUI = new Vector2(participantUIRect.anchoredPosition.x+direction, participantUIRect.anchoredPosition.y);
         
         yield return SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f);

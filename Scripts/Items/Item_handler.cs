@@ -13,11 +13,11 @@ public class Item_handler : MonoBehaviour,IInjectable
     public Item itemInUse;
     private Battle_Participant _currentParticipant;
     public event Action<bool> OnItemUsageSuccessful;
+    
     private Pokemon_Details _pokemonDetailsHandler;
     private Game_ui_manager _gameUIHandler;
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
-    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private InputStateHandler _inputStateHandler;
     private Battle_handler _battleHandler;
     private Area_manager  _areaHandler;
@@ -34,7 +34,6 @@ public class Item_handler : MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _moveUsageHandler = container.Resolve<Move_handler>();
-        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _playerBagHandler = container.Resolve<Bag>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
@@ -48,7 +47,7 @@ public class Item_handler : MonoBehaviour,IInjectable
 
     public void UseItem(Item item,[CanBeNull] Pokemon selectedPokemon)
     {
-        if (_dialogueOptionsHandler.playerInBattle)
+        if (_gameUIHandler.playerInBattle)
         {
             _currentParticipant = _battleHandler.GetCurrentParticipant();
             _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
@@ -428,7 +427,7 @@ public class Item_handler : MonoBehaviour,IInjectable
 
     private bool CanUsePokeball()
     {
-        if (!_dialogueOptionsHandler.playerInBattle)
+        if (!_gameUIHandler.playerInBattle)
         {
             _dialogueHandler.DisplayDetails("Can't use that right now!");
             return false;
@@ -463,7 +462,7 @@ public class Item_handler : MonoBehaviour,IInjectable
 
     private void CureConfusion()
     {
-        if (!_dialogueOptionsHandler.playerInBattle)
+        if (!_gameUIHandler.playerInBattle)
         {
             OnItemUsageSuccessful?.Invoke(false);
             _dialogueHandler.DisplayDetails("cant use that outside battle!");
@@ -479,7 +478,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     {
         if (_selectedPartyPokemon.statusEffect == StatusEffect.None)
         {
-            if (_dialogueOptionsHandler.playerInBattle)
+            if (_gameUIHandler.playerInBattle)
             {
                 if (!_currentParticipant.isConfused)
                 {
@@ -511,7 +510,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         }
         
         //healing
-        if (_dialogueOptionsHandler.playerInBattle)
+        if (_gameUIHandler.playerInBattle)
         {
             var healAll = curableStatus == StatusEffect.FullHeal;
             _currentParticipant.statusHandler.RemoveStatusEffect(healAll);
@@ -564,7 +563,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     }
     private void CompleteItemUsage()//only call for items used outside of battle
     {
-        _battleHandler.usedTurnForItem = _dialogueOptionsHandler.playerInBattle;
+        _battleHandler.usedTurnForItem = _gameUIHandler.playerInBattle;
             DepleteItem();
         ResetItemUsage();
      }
@@ -577,7 +576,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     }
     private void SkipTurn()
     {
-        if (!_dialogueOptionsHandler.playerInBattle) return;
+        if (!_gameUIHandler.playerInBattle) return;
         _turnBasedCombatHandler.NextTurn();
     }
 

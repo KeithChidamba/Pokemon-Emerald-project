@@ -29,14 +29,20 @@ public class PlayerBagInputService
     {
         ref InputState currentState = ref _inputStateHandler.currentState;
         currentState.currentSelectionIndex = 0;
+        if(_playerBagHandler.numItems==0)
+        {
+            currentState.displayingSelector = false;
+            _playerBagHandler.itemSelector.SetActive(false);
+            return;
+        }
         if(_playerBagHandler.numItems==_playerBagHandler.numItemsForView)
         {
             //prevent selecting null item selectables
             currentState.maxSelectionIndex = _playerBagHandler.numItems-1;
             _inputStateHandler.UpdateSelectorUi();
         }
-        currentState.displayingSelector = _playerBagHandler.numItems > 0;
-        _playerBagHandler.itemSelector.SetActive(_playerBagHandler.numItems > 0);
+        currentState.displayingSelector = true;
+        _playerBagHandler.itemSelector.SetActive(true);
         switch (_playerBagHandler.currentBagUsage)
         {
             case BagUsage.SellingView:

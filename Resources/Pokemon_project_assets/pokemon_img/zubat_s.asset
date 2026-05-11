@@ -6,7 +6,7 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pokemon sprites_61
+  m_Name: zubat_s
   m_Rect:
     serializedVersion: 2
     x: 936
@@ -22,7 +22,7 @@ Sprite:
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    319ca7b30d02b4632a33f23480944d46: -1910506234
+    2df0e61072f03e8e48482156d781203b: 21300000
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:
