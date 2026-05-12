@@ -123,15 +123,15 @@ public class Pokemon : ScriptableObject
     }
     public void LoadDataAndDependencies(ServiceContainer serviceContainer)
     {//gives values to attributes that cant be deserialized, using saved values
-        frontPicture = Testing.CheckImage( SaveDataHandler.GetDirectory
+        frontPicture = Testing.GetValidImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
-        backPicture =Testing.CheckImage( SaveDataHandler.GetDirectory
+        backPicture =Testing.GetValidImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_sb":"_b"));
-        partyFrame1=Testing.CheckImage( SaveDataHandler.GetDirectory
+        partyFrame1=Testing.GetValidImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonPartyImage),pokemonName+"_1");
-        partyFrame2=Testing.CheckImage( SaveDataHandler.GetDirectory
+        partyFrame2=Testing.GetValidImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonPartyImage),pokemonName+"_2");
-        battleIntroFrame=Testing.CheckImage( SaveDataHandler.GetDirectory
+        battleIntroFrame=Testing.GetValidImage( SaveDataHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_s_intro":"_intro"));
         
         nature = Resources.Load<Nature>(SaveDataHandler.GetDirectory

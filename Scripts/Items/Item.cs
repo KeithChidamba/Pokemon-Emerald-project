@@ -80,6 +80,6 @@ public class Item : ScriptableObject
             }
             additionalInfoModule = additionalInfoModules.First();
         }
-        itemImage = Testing.CheckImage(SaveDataHandler.GetDirectory(AssetDirectory.UI),imageDirectory);
+        itemImage = Testing.GetValidImage(SaveDataHandler.GetDirectory(AssetDirectory.UI),imageDirectory);
     }
 }

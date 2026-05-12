@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 public enum AssetDirectory
 { 
-    Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, Items, MartItems, NonMartItems
+    Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, ItemUI, Items, MartItems, NonMartItems
     ,AdditionalInfo,Berries,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData
 }
 public enum SaveDataDirectory
@@ -57,6 +57,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         {AssetDirectory.Types,"Pokemon_obj/Types/" },
         {AssetDirectory.Natures,"Pokemon_obj/Natures/" },
         {AssetDirectory.UI,"UI/" },
+        {AssetDirectory.ItemUI,"UI/Item_images" },
         {AssetDirectory.NonMartItems,"Items/NonMartItems/" },
         {AssetDirectory.MartItems,"Items/Mart_Items/" },
         {AssetDirectory.Items,"Items/" },

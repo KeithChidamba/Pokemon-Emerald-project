@@ -8,7 +8,6 @@ public class Interaction_handler : MonoBehaviour,IInjectable
 {
     [SerializeField] LayerMask interactable;
     [SerializeField] Transform interactionPoint;
-    [SerializeField] float detectDistance=0.3f;
     private bool _canCheckForInteraction;
     private bool _stopInteractions;
     private bool _interactionCooldown;
@@ -72,22 +71,22 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         _canCheckForInteraction = false;
 
         var directionVector = _playerMovementHandler.GetDirectionAsVector2();
-        
-         Vector2 origin = (Vector2)interactionPoint.position + directionVector * 0.1f;
-        
+
+        Vector2 origin = (Vector2)interactionPoint.position + directionVector * 0.1f;
        
          var hit = Physics2D.Raycast(
              origin,
              directionVector,
-             detectDistance,interactable
+             1f,interactable
          );
-        
+        var playerPos = _playerMovementHandler.GetPlayerPosition();
+        var tileInFrontOfPlayer = new Vector3(playerPos.x + directionVector.x, playerPos.y + directionVector.y, 0);
         
         if (hit.transform && !_dialogueHandler.displaying && !_overworldActions.usingUI)
         {
             if (InputSourceHandler.InputPressed(ControlEvent.Confirm))
             {
-                var interactableTile = PlayerCollisionHandler.FindTileAtPositionRadius<InteractionTile>(interactionTilemap,hit.point,Vector3.down);
+                var interactableTile = PlayerCollisionHandler.FindTileAtPosition<InteractionTile>(interactionTilemap,tileInFrontOfPlayer);
                 if (interactableTile != null)
                 {
                     _dialogueHandler.StartInteraction(interactableTile.interaction);
@@ -106,10 +105,11 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                 if (hit.transform.gameObject.CompareTag("Water"))
                 {
                     Encounter_Area areaOfEncounter;
-                    var animatedWaterTile = PlayerCollisionHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point,Vector3.down);
+                    var animatedWaterTile = PlayerCollisionHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point);
                     if (animatedWaterTile == null)
                     {
-                        var stillWaterTile = PlayerCollisionHandler.FindTileAtPosition<EncounterTile>(waterTilemap,hit.point,Vector3.down);
+                        var stillWaterTile  = PlayerCollisionHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
+                        if (stillWaterTile == null) return;
                         areaOfEncounter = stillWaterTile.area;
                     }
                     else
