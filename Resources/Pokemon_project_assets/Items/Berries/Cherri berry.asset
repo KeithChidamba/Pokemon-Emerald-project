@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Heals paralysis
   price: 5
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 7033a2133bc68beedb8ddbe5b5f8723f, type: 3}
+  itemImage: {fileID: 21300000, guid: 6e6ab7bf2ed2930a09be777634c140a4, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1

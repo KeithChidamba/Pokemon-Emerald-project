@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: Restores 10 powerpoints for a move
   price: 45
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 2fbb0427b3541fa6f9b61bc7dac669bc, type: 3}
+  itemImage: {fileID: 21300000, guid: fa1075edbca4591598a7e7979fa36122, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: 240bcc6ff0e167142ad6bd8b994f8934, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: 240bcc6ff0e167142ad6bd8b994f8934, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: 240bcc6ff0e167142ad6bd8b994f8934, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Creates rain during battle
   price: 0
   quantity: 0
-  itemImage: {fileID: 21300000, guid: 793bf201d341fd6259d43c67ff0eda04, type: 2}
+  itemImage: {fileID: 21300000, guid: 66c2fe00232bfa2c6b3e411bd5b9c984, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
   canBeSold: 1
   isMultiModular: 0
   hasModules: 1
-  additionalItemInfo: {fileID: 11400000, guid: 50d05c1dda75694cb8c04a2d085545e0, type: 2}
+  additionalInfoModule: {fileID: 11400000, guid: 50d05c1dda75694cb8c04a2d085545e0, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: 50d05c1dda75694cb8c04a2d085545e0, type: 2}
   infoModuleAssetNames: []

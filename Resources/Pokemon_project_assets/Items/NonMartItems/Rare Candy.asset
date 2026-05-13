@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Levels up a pokemon
   price: 0
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 06af913b6eb23ab46a87261623db79c9, type: 3}
+  itemImage: {fileID: 21300000, guid: 0cd64e570a6a533c4a81629110f7f7c8, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
   canBeSold: 1
   isMultiModular: 0
   hasModules: 0
-  additionalItemInfo: {fileID: 0}
+  additionalInfoModule: {fileID: 0}
   additionalInfoModules:
   - {fileID: 0}
   infoModuleAssetNames: []

@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: Causes damage each turn.
   price: 0
   quantity: 0
-  itemImage: {fileID: 21300000, guid: 31af66b341d51730e8b2dbc90d4bb1c0, type: 2}
+  itemImage: {fileID: 21300000, guid: 9255d6ca048cf4d3c9ec88258d861475, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: 4778f97ae78751d61b459f7b96aee04e, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: 4778f97ae78751d61b459f7b96aee04e, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: 4778f97ae78751d61b459f7b96aee04e, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Heals burns
   price: 5
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 00cb9c9a062b4746e89a4f90bb6d044a, type: 3}
+  itemImage: {fileID: 21300000, guid: 3f94e1b0b2e7cd3d887d50affb7fc0ce, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1

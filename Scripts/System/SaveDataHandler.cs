@@ -27,7 +27,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
 
     private string _saveDataPath;
     private string _tempSaveDataPath;
-    private static string _rootAssetDirectory;
+    private static string _rootAssetDirectory = "Pokemon_project_assets/";
     private event Action<string,Exception> OnSaveDataFail;
     public event Action OnUploadedDataReady;
     public event Action OnVirtualFsCreated;
@@ -57,7 +57,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         {AssetDirectory.Types,"Pokemon_obj/Types/" },
         {AssetDirectory.Natures,"Pokemon_obj/Natures/" },
         {AssetDirectory.UI,"UI/" },
-        {AssetDirectory.ItemUI,"UI/Item_images" },
+        {AssetDirectory.ItemUI,"UI/Item_images/" },
         {AssetDirectory.NonMartItems,"Items/NonMartItems/" },
         {AssetDirectory.MartItems,"Items/Mart_Items/" },
         {AssetDirectory.Items,"Items/" },
@@ -111,8 +111,6 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     private void OnInject()
     {
         OnSaveDataFail += HandleSaveError;
-     
-        _rootAssetDirectory = "Pokemon_project_assets/";
         
         switch (Application.platform)
         {
@@ -523,7 +521,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             try
             {
                 item.SaveModuleNames();
-                item.DetermineImageDirectory();
+                item.SetImageDirectory();
                 SaveDataAsJson(item, item.itemID,SaveDataDirectory.Items);
             }
             catch (Exception e)

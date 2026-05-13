@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: Heals frozen pokemon
   price: 20
   quantity: 1
-  itemImage: {fileID: 21300000, guid: b1da2559df80cac4ca03754574fd8d42, type: 3}
+  itemImage: {fileID: 21300000, guid: 8546bf49fd03d85d1b8ccb603270252e, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 1
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: 6198dfa1deeb1ac50a40be63b7057215, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: 6198dfa1deeb1ac50a40be63b7057215, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: 6198dfa1deeb1ac50a40be63b7057215, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Heals poison
   price: 5
   quantity: 1
-  itemImage: {fileID: 21300000, guid: cf818b59f006f586cbbec82aa6ad2141, type: 3}
+  itemImage: {fileID: 21300000, guid: 01bce7051434569b8b9682e8df0a53c3, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1

@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Allows player to escape certain areas
   price: 400
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 6d17793a393f8071581ac9e3b5e228e5, type: 3}
+  itemImage: {fileID: 21300000, guid: 67313a2dee83bb47582a5032ccc75b80, type: 2}
   forPartyUse: 0
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
   canBeSold: 1
   isMultiModular: 0
   hasModules: 0
-  additionalItemInfo: {fileID: 0}
+  additionalInfoModule: {fileID: 0}
   additionalInfoModules:
   - {fileID: 0}
   infoModuleAssetNames: []

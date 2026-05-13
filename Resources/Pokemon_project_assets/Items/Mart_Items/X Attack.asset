@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: increases a pokemon's attack during battle
   price: 100
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 022ccfd19f282cfd2bec0cdb1a2228aa, type: 3}
+  itemImage: {fileID: 21300000, guid: de76c7aeeb81fcae1bd8fec788660da8, type: 2}
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: 54b120f6e726b241d83f09ff4ec2c098, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: 54b120f6e726b241d83f09ff4ec2c098, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: 54b120f6e726b241d83f09ff4ec2c098, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

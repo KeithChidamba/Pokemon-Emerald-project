@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Gives the player some money after the battle if the pokemon participates
   price: 0
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 0068182fae9351d4581f346316c327d4, type: 3}
+  itemImage: {fileID: 21300000, guid: 2b3967cbad162b84e9486f6505d2635c, type: 2}
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
   canBeSold: 0
   isMultiModular: 0
   hasModules: 0
-  additionalItemInfo: {fileID: 0}
+  additionalInfoModule: {fileID: 0}
   additionalInfoModules:
   - {fileID: 0}
   infoModuleAssetNames: []

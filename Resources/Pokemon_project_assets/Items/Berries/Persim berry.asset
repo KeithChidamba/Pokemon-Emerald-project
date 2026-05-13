@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Heals confusion
   price: 5
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 4b10302a92dda1fa089745405f08b7b8, type: 3}
+  itemImage: {fileID: 21300000, guid: 75683275cc96d7c48abe152b7218a27f, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1

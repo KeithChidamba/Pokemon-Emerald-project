@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: 50% higher chance to catch compared to pokeball
   price: 30
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 08dc3317621433d4da311c90ec140508, type: 3}
+  itemImage: {fileID: 21300000, guid: 9ccf414883a8b31c9af6f81f098438c6, type: 2}
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 1
@@ -28,7 +28,7 @@ MonoBehaviour:
   canBeSold: 1
   isMultiModular: 0
   hasModules: 0
-  additionalItemInfo: {fileID: 0}
+  additionalInfoModule: {fileID: 0}
   additionalInfoModules:
   - {fileID: 0}
   infoModuleAssetNames: []

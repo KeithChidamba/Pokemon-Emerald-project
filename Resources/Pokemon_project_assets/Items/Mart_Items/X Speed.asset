@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: increases a pokemon's speed during battle
   price: 100
   quantity: 1
-  itemImage: {fileID: 21300000, guid: ae5e92f4e03c1c693b4660dc7e8e48e5, type: 3}
+  itemImage: {fileID: 21300000, guid: 4b492a8afc890e8bf89be21ff4c1ecc5, type: 2}
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: affbb68d647fff5959e2f916f65f2278, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: affbb68d647fff5959e2f916f65f2278, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: affbb68d647fff5959e2f916f65f2278, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

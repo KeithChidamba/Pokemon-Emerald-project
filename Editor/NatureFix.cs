@@ -7,7 +7,138 @@ using System.IO;
 using System.Linq;
 
 public class NatureEVFixer : EditorWindow
-{
+{  // Folder containing Item ScriptableObjects
+    [MenuItem("Tools/Assign Item Sprites")]
+    public static void AssignSprites()
+    {
+        // Fetch all Item ScriptableObjects
+        var ITEM_FOLDER =  "Assets/Resources/"+SaveDataHandler.GetDirectory(AssetDirectory.Items);
+
+        // Folder containing Sprites
+        var  SPRITE_FOLDER = "Assets/Resources/"+SaveDataHandler.GetDirectory(AssetDirectory.ItemUI);
+        
+        string[] itemGuids = AssetDatabase.FindAssets("t:Item", new[] { ITEM_FOLDER });
+
+        int assignedCount = 0;
+
+        foreach (string guid in itemGuids)
+        {
+            string itemPath = AssetDatabase.GUIDToAssetPath(guid);
+
+            Item item = AssetDatabase.LoadAssetAtPath<Item>(itemPath);
+
+            if (item == null)
+            {
+                Debug.LogError($"null item: {itemPath}");
+                continue;
+            }
+
+            var itemImageName = item.DetermineImageDirectory();
+           // Debug.Log($"image name: {itemImageName}");
+            // Assumes sprite name matches item name
+            string[] spriteGuids = AssetDatabase.FindAssets("t:Sprite", new[] { SPRITE_FOLDER });
+
+            Sprite matchedSprite = null;
+
+            foreach (string spriteGuid in spriteGuids)
+            {
+                string spritePath = AssetDatabase.GUIDToAssetPath(spriteGuid);
+
+                Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+                if (sprite == null)
+                {
+                    Debug.LogError($"null sprite: {spritePath}");
+                    continue;
+                }
+
+                // Exact name match only
+                if (sprite.name == itemImageName.ToLower())
+                {
+                    matchedSprite = sprite;
+                    break;
+                }
+            }
+
+            if (matchedSprite == null)
+            {
+                Debug.LogError($"Exact sprite match not found for Item: {item.name}");
+                continue;
+            }
+
+            // Assign sprite
+            item.itemImage = matchedSprite;
+
+            EditorUtility.SetDirty(item);
+
+            assignedCount++;
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        Debug.Log($"Finished assigning sprites. Assigned: {assignedCount}");
+    }
+    [MenuItem("Tools/Check Items to make")]
+    public static void CheckItemToMake()
+    {
+        // Fetch all Item ScriptableObjects
+        var ITEM_FOLDER =  "Assets/Resources/"+SaveDataHandler.GetDirectory(AssetDirectory.Items);
+
+        // Folder containing Sprites
+        var  SPRITE_FOLDER = "Assets/Resources/"+SaveDataHandler.GetDirectory(AssetDirectory.ItemUI);
+        
+        string[] itemGuids = AssetDatabase.FindAssets("t:Item", new[] { ITEM_FOLDER });
+        
+        string[] spriteGuids = AssetDatabase.FindAssets("t:Sprite", new[] { SPRITE_FOLDER });
+        
+        foreach (string spriteGuid in spriteGuids)
+        {
+            string spritePath = AssetDatabase.GUIDToAssetPath(spriteGuid);
+
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+            if (sprite == null)
+            {
+                Debug.LogError($"null sprite: {spritePath}");
+                continue;
+            }
+
+            if (sprite.name.Contains("tm") || sprite.name.Contains("hm")) continue;
+            
+            var itemFound = "";
+            foreach (string guid in itemGuids)
+            {
+                string itemPath = AssetDatabase.GUIDToAssetPath(guid);
+
+                Item item = AssetDatabase.LoadAssetAtPath<Item>(itemPath);
+
+                if (item == null)
+                {
+                    Debug.LogError($"null item: {itemPath}");
+                    continue;
+                }
+
+                var itemImageName = item.DetermineImageDirectory();
+                // Exact name match only
+                if (sprite.name == itemImageName.ToLower())
+                {
+                    itemFound = itemImageName;
+                    break;
+                }
+            }
+            if(itemFound=="")
+            {
+                
+                Debug.Log($"sprite{sprite.name} doesnt have item");
+            }
+        }
+
+        Debug.Log($"Finished assigning sprites. Checking");
+    }
+    
+    
+    
     public class PokemonImageSetter
     {
     //     [MenuItem("Tools/Set Pokemon Images")]

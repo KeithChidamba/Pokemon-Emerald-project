@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: Heals any status effect
   price: 50
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 4c14cef273360044f8359190e206c4aa, type: 3}
+  itemImage: {fileID: 21300000, guid: e9ece9e5cce85d95fa8954e939115fc5, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 1
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: 8914866011bd9500c89bce7b457a5900, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: 8914866011bd9500c89bce7b457a5900, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: 8914866011bd9500c89bce7b457a5900, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

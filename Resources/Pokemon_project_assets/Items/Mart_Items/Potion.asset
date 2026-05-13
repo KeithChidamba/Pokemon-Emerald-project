@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: Heals 5hp
   price: 18
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 12d4abae9e4225d4789382ac23092d64, type: 3}
+  itemImage: {fileID: 21300000, guid: ca8f38e3341878818951666803cecd2c, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
@@ -28,7 +28,7 @@ MonoBehaviour:
   canBeSold: 1
   isMultiModular: 0
   hasModules: 0
-  additionalItemInfo: {fileID: 0}
+  additionalInfoModule: {fileID: 0}
   additionalInfoModules:
   - {fileID: 0}
   infoModuleAssetNames: []

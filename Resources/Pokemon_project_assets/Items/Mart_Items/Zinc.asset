@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: "It increases the Special Defense of a Pok\xE9mon"
   price: 2000
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 248a642afa539fc029bf5abda9019d27, type: 3}
+  itemImage: {fileID: 21300000, guid: d0f47d9169a13e8a698b1ccf77b34071, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
@@ -27,7 +27,8 @@ MonoBehaviour:
   canBeHeld: 0
   canBeSold: 1
   isMultiModular: 0
-  additionalItemInfo: {fileID: 11400000, guid: b42e1bd1728a5a6c299dbfab6f90fc40, type: 2}
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: b42e1bd1728a5a6c299dbfab6f90fc40, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: b42e1bd1728a5a6c299dbfab6f90fc40, type: 2}
   infoModuleAssetNames: []

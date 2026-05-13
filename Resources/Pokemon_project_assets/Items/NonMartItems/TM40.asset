@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: An attack that never misses.
   price: 0
   quantity: 0
-  itemImage: {fileID: 21300000, guid: eb912e3829dd7cb8eafedefa35badb76, type: 2}
+  itemImage: {fileID: 21300000, guid: 0e0cc8fa8a3a36859a719cce93550add, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: e6bff132ad82eaeeaac2b3c8b61e2d87, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: e6bff132ad82eaeeaac2b3c8b61e2d87, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: e6bff132ad82eaeeaac2b3c8b61e2d87, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

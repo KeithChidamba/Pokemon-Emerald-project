@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: Evolve certain electric pokemon
   price: 0
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 8ae3e48c7d7c5b84592e485224dc351d, type: 3}
+  itemImage: {fileID: 21300000, guid: 96dbf618211cd9d4e9f000973bda1f22, type: 2}
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: 9651151cd342281a1973c693832aed13, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: 9651151cd342281a1973c693832aed13, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: 9651151cd342281a1973c693832aed13, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

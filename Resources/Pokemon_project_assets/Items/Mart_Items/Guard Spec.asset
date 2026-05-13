@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: temporarily prevents stat reduction
   price: 100
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 9a157e08db3cdaf18bed3b8831b6add3, type: 3}
+  itemImage: {fileID: 21300000, guid: 53809199c0903686ea6ee3fc4b60a464, type: 2}
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: fdf23e3d1670af1829b46b681216d797, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: fdf23e3d1670af1829b46b681216d797, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: fdf23e3d1670af1829b46b681216d797, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

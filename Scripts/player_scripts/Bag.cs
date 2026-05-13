@@ -42,6 +42,7 @@ public class Bag : MonoBehaviour,IInjectable
     public Text sellingAmountText;
     public Text currentItemDescription;
     public Image currentItemImage;
+    public Vector2 itemImageTargetSize = new (100, 100);
     public Sprite[] bagCategoryImages;
     public Image currentBagImage;
     public Sprite[] bagCategoryTitles;

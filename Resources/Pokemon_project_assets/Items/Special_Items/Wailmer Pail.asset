@@ -19,7 +19,7 @@ MonoBehaviour:
   itemDescription: A wailmer shaped watering tin
   price: 0
   quantity: 1
-  itemImage: {fileID: 21300000, guid: 10747e654dfa91265b2120194e51e2ee, type: 3}
+  itemImage: {fileID: 21300000, guid: 45acd55f0e7a841f4988d50ab10cd1fb, type: 2}
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 0

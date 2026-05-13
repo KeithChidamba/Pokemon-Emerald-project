@@ -19,16 +19,17 @@ MonoBehaviour:
   itemDescription: increases a pokemon's defense during battle
   price: 100
   quantity: 1
-  itemImage: {fileID: 21300000, guid: a7796d9d3c8041377ab712d630dfa9ef, type: 3}
+  itemImage: {fileID: 21300000, guid: ac14da1613139d3af95ae1cfc4ac563b, type: 2}
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalItemInfo: {fileID: 11400000, guid: 524ff08ea0d7e82dea1a29a4f84ae1e2, type: 2}
+  isMultiModular: 0
+  hasModules: 1
+  additionalInfoModule: {fileID: 11400000, guid: 524ff08ea0d7e82dea1a29a4f84ae1e2, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: 524ff08ea0d7e82dea1a29a4f84ae1e2, type: 2}
   infoModuleAssetNames: []
-  infoAssetName: 
   imageDirectory: 

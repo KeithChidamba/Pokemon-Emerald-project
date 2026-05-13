@@ -9,8 +9,8 @@ Sprite:
   m_Name: full heal
   m_Rect:
     serializedVersion: 2
-    x: 414
-    y: 362
+    x: 256
+    y: 61
     width: 13
     height: 21
   m_Offset: {x: 0, y: 0}
@@ -22,12 +22,12 @@ Sprite:
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    a65e20734490b78cf9eeb0c5bafe26fd: 1971664824
+    76ef2cf760ada9556b6abfcc7dd7f6be: -2084914912
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:
     serializedVersion: 3
-    texture: {fileID: 2800000, guid: a65e20734490b78cf9eeb0c5bafe26fd, type: 3}
+    texture: {fileID: 2800000, guid: 76ef2cf760ada9556b6abfcc7dd7f6be, type: 3}
     alphaTexture: {fileID: 0}
     secondaryTextures: []
     m_SubMeshes:
@@ -107,18 +107,18 @@ Sprite:
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 414
-      y: 362
+      x: 256
+      y: 61
       width: 13
       height: 21
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 64, y: 420.5, z: 64, w: 372.5}
+    uvTransform: {x: 64, y: 262.5, z: 64, w: 71.5}
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 3
-    texture: {fileID: 2800000, guid: a65e20734490b78cf9eeb0c5bafe26fd, type: 3}
+    texture: {fileID: 2800000, guid: 76ef2cf760ada9556b6abfcc7dd7f6be, type: 3}
     alphaTexture: {fileID: 0}
     secondaryTextures: []
     m_SubMeshes:
@@ -198,14 +198,14 @@ Sprite:
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 414
-      y: 362
+      x: 256
+      y: 61
       width: 13
       height: 21
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 64, y: 420.5, z: 64, w: 372.5}
+    uvTransform: {x: 64, y: 262.5, z: 64, w: 71.5}
     downscaleMultiplier: 1
   m_PhysicsShape:
   - - {x: -0.0390625, y: 0.1640625}
@@ -215,4 +215,4 @@ Sprite:
     - {x: 0.1015625, y: -0.1484375}
     - {x: 0.1015625, y: 0.1640625}
   m_Bones: []
-  m_SpriteID: 23721a4cc9a07da3487f6397a6ac0a93
+  m_SpriteID: d1edf845ff30140569d7c26e8d47fd9e

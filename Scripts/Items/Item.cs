@@ -27,6 +27,7 @@ public class Item : ScriptableObject
     public List<AdditionalInfoModule> additionalInfoModules;
     public List<string> infoModuleAssetNames; //only gets modified and used in code
     public string imageDirectory;//only gets modified and used in code
+
     public T GetModule<T>() where T : AdditionalInfoModule
     {
         if (isMultiModular)
@@ -52,21 +53,23 @@ public class Item : ScriptableObject
             }
         }
     }
-    public void DetermineImageDirectory()
+    public string DetermineImageDirectory()
     {
         if (additionalInfoModules.Any(m => m is TM))
         {
             var tm =  GetModule<TM>();
-            imageDirectory = tm.move.type.GetTypeName.ToLower() + " tm";
-            return;
+            return tm.move.type.GetTypeName.ToLower() + " tm";
         }
         if (additionalInfoModules.Any(m => m is HM))
         {
             var hm = GetModule<HM>();
-            imageDirectory = hm.move.type.GetTypeName.ToLower() + " tm";
-            return;
+            return hm.move.type.GetTypeName.ToLower() + " hm";
         }
-        imageDirectory = itemName;
+        return itemName;
+    }
+    public void SetImageDirectory()
+    {
+        imageDirectory = DetermineImageDirectory();
     }
     public void LoadData()
     {
@@ -80,6 +83,6 @@ public class Item : ScriptableObject
             }
             additionalInfoModule = additionalInfoModules.First();
         }
-        itemImage = Testing.GetValidImage(SaveDataHandler.GetDirectory(AssetDirectory.UI),imageDirectory);
+        itemImage = Testing.GetValidImage(SaveDataHandler.GetDirectory(AssetDirectory.ItemUI),imageDirectory);
     }
 }
