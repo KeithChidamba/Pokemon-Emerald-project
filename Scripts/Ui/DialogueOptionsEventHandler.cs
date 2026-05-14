@@ -102,10 +102,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
 
     void HealPokemon()
     {
-        _overworldActionsHandler.doingAction = true;
-        _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
         HealPartyPokemon();
-        _overworldActionsHandler.doingAction = false;
         _dialogueHandler.DisplayDetails("Your pokemon have been healed, you're welcome!");
     }
     public void HealPartyPokemon()
@@ -151,7 +148,6 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     }
     void Fish()
     {
-        _overworldActionsHandler.doingAction = true;
         _overworldActionsHandler.manager.ChangeAnimationState(PlayerAnimationState.FishingStart);
         _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
     }

@@ -100,7 +100,6 @@ public class Pokemon : ScriptableObject
     
     //dependencies
     private Dialogue_handler _dialogueHandler;
-    private Game_ui_manager _gameUIHandler;
     private Battle_handler _battleHandler;
     private Pokemon_party _pokemonPartyHandler;
     private PokemonOperations _pokemonOperationsHandler;
@@ -168,7 +167,6 @@ public class Pokemon : ScriptableObject
     public void Inject(ServiceContainer serviceContainer)
     {
         _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
-        _gameUIHandler = serviceContainer.Resolve<Game_ui_manager>(); 
         _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
         _pokemonPartyHandler = serviceContainer.Resolve<Pokemon_party>();
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
@@ -281,7 +279,7 @@ public class Pokemon : ScriptableObject
         {
             if (friendshipLevel >= friendshipEvolutionRequirement.friendshipRequirement)
             {
-                if (isPlayerPokemon && _gameUIHandler.playerInBattle)
+                if (isPlayerPokemon && _battleHandler.battleInProgress)
                 {
                     OnEvolutionSuccessful?.Invoke(friendshipEvolutionRequirement.evolutionIndex);
                 }
@@ -301,7 +299,7 @@ public class Pokemon : ScriptableObject
         
         if (currentLevel>=evolutionLineLevels[currentEvolutionLineIndex])
         {
-            if (isPlayerPokemon && _gameUIHandler.playerInBattle)
+            if (isPlayerPokemon && _battleHandler.battleInProgress)
             {
                 OnEvolutionSuccessful?.Invoke(currentEvolutionLineIndex+evoIndex);
             }
@@ -475,7 +473,7 @@ public class Pokemon : ScriptableObject
                     CheckEvolutionRequirements(0);
             }
         }
-        if (!_gameUIHandler.playerInBattle)//artificial level up
+        if (!_battleHandler.battleInProgress)//artificial level up
             _pokemonOperationsHandler.CheckForNewMove(this);
         OnNewLevel?.Invoke();
         while(currentExpAmount>nextLevelExpAmount)

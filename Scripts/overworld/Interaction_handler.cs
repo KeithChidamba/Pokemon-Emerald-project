@@ -15,6 +15,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     public Tilemap interactionTilemap;
 
     private overworld_actions _overworldActions;
+    private Game_ui_manager _gameUIManager;
     private Dialogue_handler _dialogueHandler;
     private Player_movement _playerMovementHandler;
 
@@ -22,6 +23,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
+        _gameUIManager = container.Resolve<Game_ui_manager>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         OnInject();
     }
@@ -66,11 +68,11 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         _interactionCooldown = false;
     }
     
-    void RaycastForInteraction()
+    private void RaycastForInteraction()
     {
         _canCheckForInteraction = false;
 
-        var directionVector = _playerMovementHandler.GetDirectionAsVector2();
+        var directionVector = _playerMovementHandler.GetPlayerDirectionAsVector2();
 
         Vector2 origin = (Vector2)interactionPoint.position + directionVector * 0.1f;
        
@@ -82,7 +84,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         var playerPos = _playerMovementHandler.GetPlayerPosition();
         var tileInFrontOfPlayer = new Vector3(playerPos.x + directionVector.x, playerPos.y + directionVector.y, 0);
         
-        if (hit.transform && !_dialogueHandler.displaying && !_overworldActions.usingUI)
+        if (hit.transform && !_dialogueHandler.displaying && !_gameUIManager.usingUI)
         {
             if (InputSourceHandler.InputPressed(ControlEvent.Confirm))
             {

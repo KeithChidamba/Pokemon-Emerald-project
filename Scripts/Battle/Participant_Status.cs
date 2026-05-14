@@ -20,7 +20,7 @@ public class Participant_Status : BattleParticipantModule
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Battle_handler _battleHandler;
     private Move_handler _moveUsageHandler;
-    private overworld_actions _overworldActions;
+    private Game_ui_manager _gameUIManager;
     private BattleOperations _battleOperationsHandler;
     
     public Participant_Status(ServiceContainer container)
@@ -30,7 +30,7 @@ public class Participant_Status : BattleParticipantModule
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _moveUsageHandler = container.Resolve<Move_handler>();
-        _overworldActions = container.Resolve<overworld_actions>();
+        _gameUIManager = container.Resolve<Game_ui_manager>();
         OnInject();
     }
     
@@ -97,7 +97,7 @@ public class Participant_Status : BattleParticipantModule
     }
     public IEnumerator CheckStatus()
     {
-        if (_overworldActions.usingUI) yield break; 
+        if (_gameUIManager.usingUI) yield break; 
         if (!participant.isActive) yield break;
         if(participant.pokemon.hp<=0 )yield break;
         if(_battleHandler.battleOver)yield break;

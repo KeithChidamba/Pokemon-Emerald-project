@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Player_movement : MonoBehaviour,IInjectable
@@ -21,19 +22,24 @@ public class Player_movement : MonoBehaviour,IInjectable
     [SerializeField] private bool canMove = true;
     [SerializeField] private Transform interactionPoint;
     [SerializeField] private Transform movePoint;
-    private bool _delayingMovement;
+
     [SerializeField] private GameObject playerObject;
     public event Action OnNewTile;
+    [SerializeField]private Vector3 previousValidPosition;
     [SerializeField]private LayerMask movementBlockers;
     [SerializeField]private bool standingOnTile;
 
     private overworld_actions _overworldActions;
     private Dialogue_handler _dialogueHandler;
+    private Battle_handler _battleHandler;
+    private Game_ui_manager _gameUIManager;
     
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _gameUIManager = container.Resolve<Game_ui_manager>();
         gameObject.SetActive(true);
         OnInject();
     }
@@ -44,22 +50,31 @@ public class Player_movement : MonoBehaviour,IInjectable
             (item) => StopBikeUsage(item != Equipable.Bike);
         _overworldActions.OnItemUnequipped +=
             (item) => StopBikeUsage(item == Equipable.Bike);
+        _dialogueHandler.OnDialogueEnded += AllowPlayerMovement;
+        _battleHandler.OnBattleEnd += AllowPlayerMovement;
+        _overworldActions.OnActionComplete += AllowPlayerMovement;
+        _gameUIManager.OnScreenChanged += AllowPlayerMovement;
     }
 
-    public void FaceOppositeDirection(MovementDirection direction)
+    private void SnapToPosition()
     {
         canMove = false;
-        var pos = NpcMovement.SnapToGrid(playerObject.transform.position);
-        playerObject.transform.position = pos;
         standingOnTile = true;
-        
-        currentDirection = direction switch
+        playerObject.transform.position = previousValidPosition;
+        movePoint.position = previousValidPosition;
+    }
+    public void FaceOppositeDirection(MovementDirection npcDirection)
+    {
+        SnapToPosition();
+        ForceWalkMovement();
+        currentDirection = npcDirection switch
         {
             MovementDirection.Down => MovementDirection.Up,
             MovementDirection.Up => MovementDirection.Down,
             MovementDirection.Left => MovementDirection.Right,
             _ => MovementDirection.Left
         };
+        
         var directionAsAnimatorParameter = (int)currentDirection;
         
         animationManager.animator.SetFloat(animationManager.idleParam, directionAsAnimatorParameter);
@@ -67,30 +82,27 @@ public class Player_movement : MonoBehaviour,IInjectable
         animationManager.animator.SetFloat(animationManager.moveParam, directionAsAnimatorParameter);
         
     }
-    
-    public void AllowPlayerMovement()
+    public Vector2 GetPlayerDirectionAsVector2()
     {
-        if (_delayingMovement) return;
+        var currentDirectionIndex = (int)currentDirection;
+        
+        // 1-down:   2-up:   3-left: 4-right
+        List<Vector2> directionConversions = new (){ new(0, -1), new(0, 1), new(-1, 0), new(1, 0) };
+        
+        return directionConversions[currentDirectionIndex==0? 0 : currentDirectionIndex-1]; 
+    }
+    private void AllowPlayerMovement()
+    {
+        if (_battleHandler.battleInProgress || _gameUIManager.usingUI) return;
         if (!usingBike) ForceWalkMovement();
         canMove = true;
         SetCurrentAnimation();
     }
 
-    public IEnumerator AllowPlayerMovement(float delay)
-    {
-        _delayingMovement = true;
-        yield return new WaitForSeconds(delay);
-        _delayingMovement = false;
-        AllowPlayerMovement();
-    }
-
     public void RestrictPlayerMovement()
     {
-        canMove = false;
-        playerObject.transform.position = movePoint.position;
-        standingOnTile = true;
-        
-        if (_overworldActions.doingAction && _overworldActions.fishing)
+        SnapToPosition();
+        if (_overworldActions.fishing)
         {
             //dont want to interrupt fishing animation
             return; 
@@ -138,7 +150,7 @@ public class Player_movement : MonoBehaviour,IInjectable
                 : PlayerAnimationState.PlayerWalk);
         }
     }
-    public void ForceWalkMovement()
+    private void ForceWalkMovement()
     {
         usingBike = false;
         runningInput = false;
@@ -147,38 +159,26 @@ public class Player_movement : MonoBehaviour,IInjectable
 
     private MovementDirection GetMovementDirection()
     {
-        MovementDirection direction = 0;
         yAxisInput = (xAxisInput != 0) ? 0 : yAxisInput;
         xAxisInput = (yAxisInput != 0) ? 0 : xAxisInput;
         var idle = yAxisInput == 0 && xAxisInput == 0;
-
-        if (idle)
-        {
-            if (!_overworldActions.doingAction)
-            {
-                return currentDirection;
-            }
-        }
-        else
+        if (!idle)
         {
             if (yAxisInput != 0)
             {
                 var verticalRotation = (yAxisInput > 0) ? -90 : 90;
-                direction = (yAxisInput > 0) ? MovementDirection.Up : MovementDirection.Down;
+                currentDirection = (yAxisInput > 0) ? MovementDirection.Up : MovementDirection.Down;
                 interactionPoint.rotation = Quaternion.Euler(verticalRotation, 0, 0);
             }
 
             if (xAxisInput != 0)
             {
                 var horizontalRotation = (xAxisInput > 0) ? 90 : -90;
-                direction = (xAxisInput > 0) ? MovementDirection.Right : MovementDirection.Left ;
+                currentDirection = (xAxisInput > 0) ? MovementDirection.Right : MovementDirection.Left ;
                 interactionPoint.rotation = Quaternion.Euler(0, horizontalRotation, 0);
             }
         }
-
-        currentDirection = direction;
-
-        return direction;
+        return currentDirection;
     }
 
     private void HandleRunInputs()
@@ -237,15 +237,7 @@ public class Player_movement : MonoBehaviour,IInjectable
         }
     }
 
-    public Vector2 GetDirectionAsVector2()
-    {
-        var currentDirectionIndex = (int)currentDirection;
-        
-        // 1-down:   2-up:   3-left: 4-right
-        List<Vector2> directionConversions = new (){ new(0, -1), new(0, 1), new(-1, 0), new(1, 0) };
-        
-        return directionConversions[currentDirectionIndex==0? 0 : currentDirectionIndex-1]; 
-    }
+
     private void HandlePlayerMovement()
     {
         playerObject.transform.position = Vector3.MoveTowards(playerObject.transform.position, movePoint.position,
@@ -258,8 +250,9 @@ public class Player_movement : MonoBehaviour,IInjectable
             playerObject.transform.position = movePoint.position;
             if (!standingOnTile)
             {
-                OnNewTile?.Invoke();
+                previousValidPosition = movePoint.position;
                 standingOnTile = true;
+                OnNewTile?.Invoke();
             }
             
             yAxisInput = GetAxisFromInput(ControlEvent.Down, ControlEvent.Up);

@@ -1,6 +1,6 @@
 
 using System;
-
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NpcLogic : MonoBehaviour,IInjectable
@@ -8,9 +8,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
     public NpcMovement movementHandler; 
     public bool autoDetectPlayer;
     [SerializeField]private float detectDistance = 1f;
-    [SerializeField] private LayerMask playerLayer;
     [SerializeField]private Interaction npcInteraction;
-    public Transform rayCastPoint;
     [SerializeField]private bool constantScan;
     [SerializeField]private bool playerDetected;
     private Action _runDialogueInteraction;
@@ -43,13 +41,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
             }
         }
         _dialogueOptionsHandler.OnInteractionOptionChosen += PauseForInteraction;
-    }
-
-    private void Update()
-    {
-        if (!constantScan || playerDetected) return;
-        
-        DetectPlayer(movementHandler.GetDirectionAsVector());
+        _playerMovement.OnNewTile += DetectPlayer;
     }
 
     private void PauseForInteraction(Interaction interaction,int optionChosen)
@@ -62,24 +54,40 @@ public class NpcLogic : MonoBehaviour,IInjectable
             movementHandler.OnMovementPaused -= _runDialogueInteraction;
         }
 
-        if (!playerDetected) movementHandler.FacePlayerDirection();
+        if (!playerDetected)
+        {
+            //if the player is the one who interacted with npc
+            movementHandler.FacePlayerDirection();
+        }
         
         playerDetected = false;
         _longDistanceDetection = false;
     }
 
-    private void DetectPlayer(Vector2 directionVector)
+    private void DetectPlayer()
     {
-        var hit = Physics2D.Raycast(
-            rayCastPoint.position,
-            directionVector,
-            detectDistance,
-            playerLayer
-        );       
-
-        if (!hit) return;
+        if (!constantScan || playerDetected) return;
         
-        playerDetected = true;
+        Vector2 direction = movementHandler.GetDirectionAsVector();
+        Vector3 npcPos = transform.position;
+
+        Vector3 playerPos = _playerMovement.GetPlayerPosition();
+
+        playerDetected = false;
+
+        for (int i = 1; i <= detectDistance; i++)
+        {
+            Vector3 checkPos = npcPos + (Vector3)(direction * i);
+
+            if (checkPos == playerPos)
+            {
+                playerDetected = true;
+                break;
+            }
+        }
+
+        if (!playerDetected) return;
+       
         constantScan = false;
         
         _playerMovement.FaceOppositeDirection(movementHandler.GetCurrentDirection());

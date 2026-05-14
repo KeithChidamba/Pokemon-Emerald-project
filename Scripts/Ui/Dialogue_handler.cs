@@ -28,19 +28,18 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     private Coroutine _typingRoutine;
     
     public event Action<Overworld_interactable> OnOptionsDisplayed;
-    
+    public event Action OnDialogueEnded;
     private Battle_handler _battleHandler;
     private Player_movement _playerMovementHandler;
     private InputStateHandler _inputStateHandler;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Interaction_handler  _interactionHandler;
-    private Game_ui_manager _gameUIManager;
+
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _battleHandler = container.Resolve<Battle_handler>();
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
-        _gameUIManager = container.Resolve<Game_ui_manager>();
         _interactionHandler = container.Resolve<Interaction_handler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         gameObject.SetActive(true);
@@ -61,13 +60,9 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         if (dialogueFinished && InputSourceHandler.InputPressed(ControlEvent.Exit) && canExitDialogue)
         {
             EndDialogue();
-            if (_gameUIManager.playerInBattle)
+            if (_battleHandler.battleInProgress)
             {
                 _battleHandler.EnableBattleMessage(_inputStateHandler.currentState);
-            }
-            else
-            {
-                StartCoroutine(_playerMovementHandler.AllowPlayerMovement(0.25f));
             }
         }
     }
@@ -187,7 +182,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     }
     public void DisplayBattleInfo(string info)
     {
-        if (!_gameUIManager.playerInBattle)
+        if (!_battleHandler.battleInProgress)
         {//fail-safe
             DisplayDetails(info);
             return;
@@ -236,8 +231,8 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         displaying = false;
         currentInteractable = null;
         dialogueFinished = false;
-        _playerMovementHandler.AllowPlayerMovement();
         StopCoroutine(ProcessQueue());
+        OnDialogueEnded?.Invoke();
     }
     public void StartInteraction(Interaction interaction)
     {
@@ -342,13 +337,13 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
 
     private void SetBattleTextBox(Interaction currentInteraction)
     {
-        if (!_gameUIManager.playerInBattle || currentInteraction.dialogueType != DialogType.BattleInfo)
+        if (!_battleHandler.battleInProgress || currentInteraction.dialogueType != DialogType.BattleInfo)
         {
             infoDialogueBox.SetActive(true);
             dialougeText.color=Color.black;
             battleDialogueBox.SetActive(false);
         }
-        if( (currentInteraction.dialogueType == DialogType.BattleInfo && _gameUIManager.playerInBattle)
+        if( (currentInteraction.dialogueType == DialogType.BattleInfo && _battleHandler.battleInProgress)
             || currentInteraction.dialogueType == DialogType.BattleDisplayMessage)
         {
             battleDialogueBox.SetActive(true);

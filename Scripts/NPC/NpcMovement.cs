@@ -75,7 +75,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
         
         SetSprites(_currentSpriteData.idleSprite);
     }
-    public static Vector3 SnapToGrid(Vector3 pos)
+    private Vector3 SnapToGrid(Vector3 pos)
     {
         return new Vector3(
             Mathf.Round(pos.x),
@@ -137,7 +137,6 @@ public class NpcMovement : MonoBehaviour,IInjectable
             _currentSpriteIndex = 0;
         SetSprites(_currentSpriteData.spritesForDirection[_currentSpriteIndex]);
     }
-
     public IEnumerator MoveToSpecific(MovementDirection direction,int numTiles)
     {
         StopMovement();

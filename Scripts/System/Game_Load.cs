@@ -18,7 +18,7 @@ public class Game_Load : MonoBehaviour,IInjectable
     private readonly int _maxNameLength = 14;
     private readonly int _minNameLength = 4;
     public GameObject world_Map;
-    public Player_data playerData;
+    public PlayerData playerData;
     public bool LoadedFromSave { 
         get;
         private set;
@@ -80,7 +80,7 @@ public class Game_Load : MonoBehaviour,IInjectable
                 StartCoroutine(_saveHandler.CreateDefaultWebglDirectories());
             }
             var playerName = name_input.text;
-            var data = ScriptableObject.CreateInstance<Player_data>();
+            var data = ScriptableObject.CreateInstance<PlayerData>();
             data.playerName = playerName;
             data.playerMoney = 300;
             data.numBadges = 0;

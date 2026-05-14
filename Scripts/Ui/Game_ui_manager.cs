@@ -1,17 +1,31 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
+
+[Serializable]
+public class PlayerProfileUI
+{
+    public Text playerName;
+    public Text playerMoney;
+    public Text trainerID;
+    public GameObject parentObject;
+    public void LoadProfile(PlayerData player)
+    {
+        trainerID.text = "ID: "+player.trainerID;
+        playerName.text = player.playerName;
+        playerMoney.text = player.playerMoney.ToString();
+    }
+}
 
 public class Game_ui_manager : MonoBehaviour,IInjectable
 {
     public GameObject menuOptions;
-    public bool viewingMenu;
+    [SerializeField]private bool viewingMenu;
+    public bool usingUI;
     private bool _canUseUi;
-    public Player_Info_ui profile;
+    [SerializeField]private PlayerProfileUI profile;
 
     [SerializeField]private int numUIScreensOpen;
     [SerializeField]private GameObject exitButton;
@@ -28,7 +42,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     [SerializeField]private bool _canOpenMenu;
     private bool _isEmptyState;
     public Image destinationPointerUI;
-    public bool playerInBattle;
+    public event Action OnScreenChanged;
     
     private Item_handler _itemHandler;
     private Pokemon_Details _pokemonDetailsHandler;
@@ -38,7 +52,6 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private PokemonDetailsInputService _pokemonDetailsInputService;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private Game_Load _gameLoadingHandler;
-    private overworld_actions _overworldActionsHandler;
     private SaveDataHandler _saveDataHandler;
     private Bag _playerBagHandler;
     private Poke_Mart _pokeMartHandler;
@@ -46,7 +59,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private pokemon_storage _pokemonStorageHandler;
     private ItemStorageHandler _itemStorageHandler;
     private GameSettingsHandler _gameSettingsHandler;
-    
+    private Battle_handler _battleHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -61,11 +74,11 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _saveDataHandler = container.Resolve<SaveDataHandler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
-        _overworldActionsHandler = container.Resolve<overworld_actions>();
         _itemHandler = container.Resolve<Item_handler>();
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
+        _battleHandler = container.Resolve<Battle_handler>();
             
         gameObject.SetActive(true);
         OnInject();
@@ -106,18 +119,12 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     {
         numUIScreensOpen += change;
         if (numUIScreensOpen < 0) numUIScreensOpen = 0;
-        _overworldActionsHandler.usingUI = numUIScreensOpen>0;
-
-        if (numUIScreensOpen == 0)
-        {
-            StartCoroutine(_playerMovementHandler.AllowPlayerMovement(0.3f));
-        }
-        else
-            _playerMovementHandler.RestrictPlayerMovement();
-        if (playerInBattle)
+        usingUI = numUIScreensOpen > 0;
+        if(usingUI)
         {
             _playerMovementHandler.RestrictPlayerMovement();
         }
+        OnScreenChanged?.Invoke();
     }
 
     private void ActivateMenuSelection()
@@ -152,8 +159,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private void CloseProfile()
     {
         ManageScreens(-1);
-        ActivateUiElement(profile.gameObject, false);
-        profile.viewingProfile = false;
+        ActivateUiElement(profile.parentObject, false);
     }
     private void CloseKeyBinds()
     {
@@ -267,11 +273,11 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private void ViewProfile()
     {
         ManageScreens(1);
-        ActivateUiElement(profile.gameObject,true);
+        ActivateUiElement(profile.parentObject,true);
         profile.LoadProfile(_gameLoadingHandler.playerData);
         _inputStateHandler.ChangeInputState(new (InputStateName.PlayerProfile
             ,InputStateGroup.None,isParent:true
-            ,profile.gameObject,onExit:CloseProfile,onClose:CloseProfile));
+            ,profile.parentObject,onExit:CloseProfile,onClose:CloseProfile));
     }
     public void ViewKeyBinds()
     {
@@ -354,7 +360,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
 
     public void ViewItemStorage()
     {
-        _overworldActionsHandler.usingUI = true;
+        usingUI = true;
          var pcUsageSelectables = new List<SelectableUI>
         {
             new(pcItemOptions[0], _itemStorageHandler.ViewItemsToWithdraw, true),
@@ -373,7 +379,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
 
     public void ViewPokemonStorage()
     {
-        _overworldActionsHandler.usingUI = true;
+        usingUI = true;
         var pcUsageActions = new List<Action>
         {
             ()=>SetPcUsage(PCUsageState.Withdraw),

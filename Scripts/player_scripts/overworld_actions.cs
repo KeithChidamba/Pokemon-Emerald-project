@@ -6,18 +6,19 @@ using UnityEngine;
 public class overworld_actions : MonoBehaviour,IInjectable
 {
     public Animation_manager manager;
-
     public bool fishing;
     [SerializeField] private bool pokemonBitingPole;
-    public bool doingAction;
-    public bool usingUI;
     public Encounter_Area fishingArea;
+    
     public Item equippedSpecialItem;
     private bool _canUseEquippedItem;
     private Equipable _currentEquippedItem;
     public event Action<Equipable> OnItemEquipped;
     public event Action<Equipable> OnItemUnequipped;
+    public event Action OnActionComplete;
+    
     private Dialogue_handler _dialogueHandler;
+    private Game_ui_manager _gameUIManager;
     private Player_movement _playerMovementHandler;
     private Encounter_handler _encounterHandler;
     private Game_Load _gameLoadingHandler;
@@ -27,6 +28,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _encounterHandler = container.Resolve<Encounter_handler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
+        _gameUIManager = container.Resolve<Game_ui_manager>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         OnInject();
     }
@@ -44,13 +46,12 @@ public class overworld_actions : MonoBehaviour,IInjectable
         equippedSpecialItem = item;
         _currentEquippedItem = equippedSpecialItem.GetModule<EquipableInfoModule>().equipableItem;
         OnItemEquipped?.Invoke(_currentEquippedItem);
-        if(usingUI)
+        if(_gameUIManager.usingUI)
             _dialogueHandler.DisplayDetails("Equipped " + equippedSpecialItem.itemName);
      
         _gameLoadingHandler.playerData.equippedItemName = equippedSpecialItem.itemName;
     }
-    public bool IsEquipped(Equipable equipable = Equipable.None
-        , Item item = null)
+    public bool IsEquipped(Equipable equipable = Equipable.None, Item item = null)
     {
         if (!_canUseEquippedItem || !ItemEquipped())
         {
@@ -64,7 +65,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
         OnItemUnequipped?.Invoke(_currentEquippedItem);
         _currentEquippedItem = Equipable.None;
         equippedSpecialItem = null;
-        if(usingUI)
+        if(_gameUIManager.usingUI)
             _dialogueHandler.DisplayDetails("Unequipped " + item.itemName);
         _gameLoadingHandler.playerData.equippedItemName = string.Empty;
     }
@@ -74,15 +75,11 @@ public class overworld_actions : MonoBehaviour,IInjectable
     }
     void Update()
     {
-        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem) && !ItemEquipped() && !usingUI)
+        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem) && !ItemEquipped() && !_gameUIManager.usingUI)
         {
             if (!_canUseEquippedItem) return;
             _dialogueHandler.DisplayDetails("No item has been equipped");
         }  
-        if (_dialogueHandler.displaying || usingUI || doingAction)
-        {
-            _playerMovementHandler.RestrictPlayerMovement();
-        }
         if (pokemonBitingPole && InputSourceHandler.InputPressed(ControlEvent.Confirm))
         {
             pokemonBitingPole = false;
@@ -90,7 +87,6 @@ public class overworld_actions : MonoBehaviour,IInjectable
         }
         if (fishing)
         {
-            doingAction = true;
             manager.ChangeAnimationState(PlayerAnimationState.FishingIdle);
             if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
                 ResetFishingAction();
@@ -112,7 +108,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
                 _dialogueHandler.DisplayDetails("It got away");
                 ResetFishingAction();
                 yield return new WaitForSeconds(1);
-                ActionReset();
+                OnActionComplete?.Invoke();
             }
         }
         else
@@ -120,11 +116,12 @@ public class overworld_actions : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("Dang...nothing");
             ResetFishingAction();
             yield return new WaitForSeconds(1);
-            ActionReset();
+            OnActionComplete?.Invoke();
         }
     }
     private void StartFishingAction()
     {
+        _playerMovementHandler.RestrictPlayerMovement();
         fishing = true;
         StartCoroutine(TryFishing());
     }
@@ -132,22 +129,16 @@ public class overworld_actions : MonoBehaviour,IInjectable
     {
         fishing = false;
         pokemonBitingPole = false;
-        ActionReset();
         manager.ChangeAnimationState(PlayerAnimationState.FishingEnd);
     }
 
     public IEnumerator WaterTrees(BerryTree treeToWater)
     {
         manager.ChangeAnimationState(PlayerAnimationState.Watering);
-        _dialogueHandler.DisplayDetails("The tree is being watered");
+        _dialogueHandler.DisplayDetails("The tree is being watered",false);
         yield return new WaitForSeconds(2f);
         _dialogueHandler.EndDialogue();
         treeToWater.CompleteWateringEvent();
         manager.ChangeAnimationState(PlayerAnimationState.PlayerWalk);
-    }
-    void ActionReset()
-    {
-        doingAction = false;
-        _playerMovementHandler.AllowPlayerMovement();
     }
 }

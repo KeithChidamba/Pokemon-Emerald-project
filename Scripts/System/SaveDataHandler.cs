@@ -287,7 +287,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         
         if(playerList.Count==1)
         {
-            _gameLoadingHandler.playerData  = LoadObjectFromJson<Player_data>(playerList[0]);
+            _gameLoadingHandler.playerData  = LoadObjectFromJson<PlayerData>(playerList[0]);
         }
         else if (playerList.Count > 1)
         {

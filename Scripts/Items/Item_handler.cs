@@ -15,7 +15,6 @@ public class Item_handler : MonoBehaviour,IInjectable
     public event Action<bool> OnItemUsageSuccessful;
     
     private Pokemon_Details _pokemonDetailsHandler;
-    private Game_ui_manager _gameUIHandler;
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
@@ -27,6 +26,8 @@ public class Item_handler : MonoBehaviour,IInjectable
     private PokemonOperations _pokemonOperationsHandler;
     private pokemon_storage _pokemonStorageHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
+    private Game_ui_manager _gameUIHandler;
+    
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
@@ -34,7 +35,6 @@ public class Item_handler : MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _moveUsageHandler = container.Resolve<Move_handler>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
         _playerBagHandler = container.Resolve<Bag>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
@@ -42,12 +42,13 @@ public class Item_handler : MonoBehaviour,IInjectable
         _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
         _areaHandler = container.Resolve<Area_manager>();
         _overworldActions = container.Resolve<overworld_actions>();
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
         gameObject.SetActive(true);
     }
 
     public void UseItem(Item item,[CanBeNull] Pokemon selectedPokemon)
     {
-        if (_gameUIHandler.playerInBattle)
+        if (_battleHandler.battleInProgress)
         {
             _currentParticipant = _battleHandler.GetCurrentParticipant();
             _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
@@ -427,7 +428,7 @@ public class Item_handler : MonoBehaviour,IInjectable
 
     private bool CanUsePokeball()
     {
-        if (!_gameUIHandler.playerInBattle)
+        if (!_battleHandler.battleInProgress)
         {
             _dialogueHandler.DisplayDetails("Can't use that right now!");
             return false;
@@ -462,7 +463,7 @@ public class Item_handler : MonoBehaviour,IInjectable
 
     private void CureConfusion()
     {
-        if (!_gameUIHandler.playerInBattle)
+        if (!_battleHandler.battleInProgress)
         {
             OnItemUsageSuccessful?.Invoke(false);
             _dialogueHandler.DisplayDetails("cant use that outside battle!");
@@ -478,7 +479,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     {
         if (_selectedPartyPokemon.statusEffect == StatusEffect.None)
         {
-            if (_gameUIHandler.playerInBattle)
+            if (_battleHandler.battleInProgress)
             {
                 if (!_currentParticipant.isConfused)
                 {
@@ -510,7 +511,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         }
         
         //healing
-        if (_gameUIHandler.playerInBattle)
+        if (_battleHandler.battleInProgress)
         {
             var healAll = curableStatus == StatusEffect.FullHeal;
             _currentParticipant.statusHandler.RemoveStatusEffect(healAll);
@@ -563,7 +564,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     }
     private void CompleteItemUsage()//only call for items used outside of battle
     {
-        _battleHandler.usedTurnForItem = _gameUIHandler.playerInBattle;
+        _battleHandler.usedTurnForItem = _battleHandler.battleInProgress;
             DepleteItem();
         ResetItemUsage();
      }
@@ -576,7 +577,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     }
     private void SkipTurn()
     {
-        if (!_gameUIHandler.playerInBattle) return;
+        if (!_battleHandler.battleInProgress) return;
         _turnBasedCombatHandler.NextTurn();
     }
 

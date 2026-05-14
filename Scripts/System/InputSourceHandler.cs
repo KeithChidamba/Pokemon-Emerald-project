@@ -21,8 +21,7 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     private bool _isMobile;
     private bool _gameStarted;
     public GameObject mobileControlsUI;
-
-    private overworld_actions _overworldActionsHandler;
+    
     private Dialogue_handler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
     private Game_ui_manager _gameUIManager;
@@ -32,7 +31,6 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _overworldActionsHandler = container.Resolve<overworld_actions>();
         _gameUIManager = container.Resolve<Game_ui_manager>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         
@@ -60,7 +58,7 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
 
     private bool CanUseQuickAction()
     {
-        if(!_overworldActionsHandler.usingUI && !_dialogueHandler.displaying && _gameStarted)
+        if(!_gameUIManager.usingUI && !_dialogueHandler.displaying && _gameStarted)
         {
             return _inputStateHandler.currentState.stateName == InputStateName.Empty;
         }

@@ -16,6 +16,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public Text movePowerPointsText;
     public Text moveTypeText;
     public Text[] availableMovesText;
+    public bool battleInProgress;
     public bool isTrainerBattle;
     public bool isDoubleBattle;
     public int participantCount;
@@ -90,7 +91,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     void Update()
     {
-        if (!_gameUIHandler.playerInBattle) return;
+        if (!battleInProgress) return;
         if (_turnBasedCombatHandler.currentTurnIndex > 1) return;
         
         _currentPlayerParticipant = GetCurrentParticipant();
@@ -251,7 +252,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         //load visuals based on area
         overWorld.SetActive(false);
         battleUI.SetActive(true);
-        _gameUIHandler.playerInBattle = true;
+        battleInProgress = true;
         
         if(isTrainerBattle)
             yield return StartCoroutine(_battleIntroHandler.PlayTrainerIntroSequence());
@@ -279,7 +280,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     public void SetBattleType(List<string> trainerNames)
     {
-        _overworldActions.doingAction = true;
         _pokemonPartyHandler.SortByFainted();
         var copyOfTrainerData = Resources.Load<TrainerData>(
             SaveDataHandler.GetDirectory(AssetDirectory.TrainerData)
@@ -721,6 +721,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private IEnumerator ResetUiAfterBattle(bool playerWhiteOut)
     {
+        battleInProgress = false;
         OnBattleEnd?.Invoke();
         _dialogueHandler.EndDialogue();
         _inputStateHandler.ResetRelevantUi(new[]
@@ -729,8 +730,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         });
         usedTurnForItem = false;
         usedTurnForSwap = false;
-        _gameUIHandler.playerInBattle = false;
-        _overworldActions.doingAction = false;
+        
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
         lastOpponent = null;
@@ -752,7 +752,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _battleIntroHandler.ResetParticipantIntroImages();
         OnBattleResult?.Invoke(battleWon);
         _defaultPokemonImagePositions.Clear();
-        _encounterHandler.ResetTrigger();
         overWorld.SetActive(true);
         if(playerWhiteOut)
         {

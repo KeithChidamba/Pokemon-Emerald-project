@@ -12,7 +12,6 @@ public enum BattleEncounterSource
 public class Encounter_handler : MonoBehaviour,IInjectable
 {
     public Encounter_Area currentArea;
-    public bool encounterTriggered = false;
     public Pokemon wildPokemon;
     public int overworldEncounterChance = 2;
     public event Action<Pokemon,BattleEncounterSource> OnEncounterTriggered;
@@ -28,9 +27,7 @@ public class Encounter_handler : MonoBehaviour,IInjectable
     
     public void TriggerEncounter(Encounter_Area area)
     {
-        
         currentArea = area;
-        encounterTriggered = true;
         overworldEncounterChance = 2;
         for (int i = 0; i < currentArea.availableEncounters.Length; i++)
         {
@@ -44,7 +41,6 @@ public class Encounter_handler : MonoBehaviour,IInjectable
     public void TriggerFishingEncounter(Encounter_Area area,Item fishingRod)
     {
         currentArea = area;
-        encounterTriggered = true;
         overworldEncounterChance = 2;
         area.minimumLevelOfPokemon = int.Parse(fishingRod.itemEffect.Split('/')[0]);
         area.maximumLevelOfPokemon = int.Parse(fishingRod.itemEffect.Split('/')[1]);
@@ -97,13 +93,5 @@ public class Encounter_handler : MonoBehaviour,IInjectable
         wildPokemon.ReceiveExperience(expForRequiredLevel); 
         wildPokemon.hp=wildPokemon.maxHp;
         StartCoroutine(_battleHandler.StartWildBattle(wildPokemon));
-    }
-    void TurnOffTrigger()
-    {
-        encounterTriggered = false;
-    }
-    public void ResetTrigger()
-    {
-        Invoke(nameof(TurnOffTrigger),1f);
     }
 }

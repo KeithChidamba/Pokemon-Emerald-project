@@ -30,5 +30,5 @@ public class NpcAnimationData : ScriptableObject
 public enum MovementDirection
 {
     //aligned with animator tree values
-    None=0,Down=1,Up=2,Left=3,Right=4
+    Down=1,Up=2,Left=3,Right=4
 }

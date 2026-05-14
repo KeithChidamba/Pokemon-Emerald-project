@@ -40,12 +40,13 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
         var tile = FindTileAtPosition<EncounterTile>(encounterTilemap,transform.position);
         if (tile == null) return;
         
+        _playerMovementHandler.RestrictPlayerMovement();
+        
         if (_playerMovementHandler.runningInput) _encounterHandler.overworldEncounterChance = 5;
         
         var randomNumber = Random.Range(1, 11);
         
-        if (randomNumber < _encounterHandler.overworldEncounterChance &
-            !_encounterHandler.encounterTriggered)
+        if (randomNumber < _encounterHandler.overworldEncounterChance)
         {
             _encounterHandler.TriggerEncounter(tile.area);
         }

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "player", menuName = "Player Data")]
-public class Player_data : ScriptableObject
+public class PlayerData : ScriptableObject
 {
     public string playerName;
     public ushort  trainerID;

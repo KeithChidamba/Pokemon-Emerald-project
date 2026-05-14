@@ -32,7 +32,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private PokemonOperations _pokemonOperations;
     private InputStateHandler _inputStateHandler;
-    private Game_ui_manager _gameUIHandler;
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private pokemon_storage _pokemonStorageHandler;
@@ -46,7 +45,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     {
         _playerMovementHandler = container.Resolve<Player_movement>();
         _partyInputService = container.Resolve<PokemonPartyInputService>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
@@ -152,7 +150,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     public void SelectMemberToBeSwapped(int memberPosition)
     {
-        if (_gameUIHandler.playerInBattle)
+        if (_battleHandler.battleInProgress)
         {//cant swap in a member who is already fighting
             var currentParticipant = _battleHandler.GetCurrentParticipant();
             _swappingIn = true;
@@ -194,7 +192,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         var selectedMember = memberCards[memberPosition - 1];
         if (selectedMember.isEmpty) return;
         
-        if (_gameUIHandler.playerInBattle && selectedMember.pokemon.hp <= 0)
+        if (_battleHandler.battleInProgress && selectedMember.pokemon.hp <= 0)
             if (!_itemHandler.usingItem || swapOutNext)
                 return;
         
@@ -276,7 +274,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         party[selectedMemberNumber-1] = party[partyIndex];
         party[partyIndex] = swapStore;
         moving = false;
-        if (_gameUIHandler.playerInBattle)
+        if (_battleHandler.battleInProgress)
         {
             var participant = _battleHandler.battleParticipants[selectedMemberNumber - 1];
             var alivePokemon= GetLivingPokemon();
