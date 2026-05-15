@@ -8,7 +8,7 @@
     "numStagesWatered": 0,
     "itemAssetName": "Rawst berry",
     "berryItem": {
-        "instanceID": 26082
+        "instanceID": 26080
     },
     "treeObjectName": "Rawst Berry Tree",
     "minutesPerStage": 45,
@@ -16,10 +16,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33152
+                    "instanceID": 32894
                 },
                 {
-                    "instanceID": 33152
+                    "instanceID": 32894
                 }
             ],
             "growthStageNumber": 0
@@ -27,10 +27,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33154
+                    "instanceID": 32896
                 },
                 {
-                    "instanceID": 33156
+                    "instanceID": 32898
                 }
             ],
             "growthStageNumber": 1
@@ -38,10 +38,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33222
+                    "instanceID": 33088
                 },
                 {
-                    "instanceID": 33224
+                    "instanceID": 33090
                 }
             ],
             "growthStageNumber": 2
@@ -49,10 +49,10 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33226
+                    "instanceID": 33092
                 },
                 {
-                    "instanceID": 33228
+                    "instanceID": 33094
                 }
             ],
             "growthStageNumber": 3
@@ -60,14 +60,14 @@
         {
             "growthStageSprites": [
                 {
-                    "instanceID": 33230
+                    "instanceID": 33096
                 },
                 {
-                    "instanceID": 33232
+                    "instanceID": 33098
                 }
             ],
             "growthStageNumber": 4
         }
     ],
-    "lastLogin": "2026-05-14T12:53:09.7359990+02:00"
+    "lastLogin": "2026-05-15T22:00:43.7695390+02:00"
 }

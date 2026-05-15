@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -24,30 +25,20 @@ public class NpcMovement : MonoBehaviour,IInjectable
     private WaitForSeconds movePause = new (1f);
     private WaitForSeconds animDelay = new (0.25f);
     
-    [SerializeField]private BoxCollider2D interactionCollider;
     public event Action OnMovementPaused;
     public event Action OnMovementStarted;
     public event Action OnMovementEnded;
+    [CanBeNull] public event Action<Vector3> OnNewTile;
     
     private Player_movement _playerMovement;
     public void Inject(ServiceContainer container)
     {
         _playerMovement = container.Resolve<Player_movement>();
     }
-    private void AdjustColliderSize()
+    
+    public void ResetTileEvent()
     {
-        var size = interactionCollider.size;
-        var vertSize = new Vector2(.75f, size.y);
-        var horSize = new Vector2(.5f, size.y);
-        switch (_currentMovement.direction)
-        {
-            case MovementDirection.Down:
-            case MovementDirection.Up:
-                interactionCollider.size=vertSize; break;
-            case MovementDirection.Left:
-            case MovementDirection.Right:
-                interactionCollider.size=horSize; break;
-        }
+        OnNewTile=null;
     }
 
     public MovementDirection GetCurrentDirection()
@@ -180,7 +171,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
             
             // Snap to grid
             transform.position = movePoint.position;
-
+            OnNewTile?.Invoke(transform.position);
             moving = false;
 
             if (animationRoutine != null)
@@ -224,7 +215,6 @@ public class NpcMovement : MonoBehaviour,IInjectable
     }
     private bool TrySetNextMove()
     {
-        AdjustColliderSize();
         bool isVertical = animationData.IsVerticalMovement(_currentMovement.direction);
         int totalTiles = _currentMovement.numTilesToTravel;
 

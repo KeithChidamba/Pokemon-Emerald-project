@@ -8,7 +8,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
     public NpcMovement movementHandler; 
     public bool autoDetectPlayer;
     [SerializeField]private float detectDistance = 1f;
-    [SerializeField]private Interaction npcInteraction;
+    public Overworld_interactable npcInteractable;
     [SerializeField]private bool constantScan;
     [SerializeField]private bool playerDetected;
     private Action _runDialogueInteraction;
@@ -47,7 +47,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
     private void PauseForInteraction(Interaction interaction,int optionChosen)
     {
         if(interaction.overworldInteraction!=OverworldInteractionType.Battle)return;
-        if(interaction!=npcInteraction)return;
+        if(interaction!=npcInteractable.interaction)return;
         
         if (_longDistanceDetection)
         {
@@ -98,14 +98,14 @@ public class NpcLogic : MonoBehaviour,IInjectable
         if (distance>1)
         {
             _longDistanceDetection = true;
-            _runDialogueInteraction = () => _dialogueHandler.StartInteraction(npcInteraction);
+            _runDialogueInteraction = () => _dialogueHandler.StartInteraction(npcInteractable.interaction);
             movementHandler.OnMovementEnded += _runDialogueInteraction;
             StartCoroutine(movementHandler.MoveToSpecific(movementHandler.GetCurrentDirection(),distance-1));
         }
         else
         {
             movementHandler.StopMovement(false);
-            _dialogueHandler.StartInteraction(npcInteraction);
+            _dialogueHandler.StartInteraction(npcInteractable.interaction);
         }
     }
 }

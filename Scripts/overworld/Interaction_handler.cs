@@ -18,13 +18,16 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     private Game_ui_manager _gameUIManager;
     private Dialogue_handler _dialogueHandler;
     private Player_movement _playerMovementHandler;
-
+    private Area_manager _areaManager;
+    
+    
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
         _gameUIManager = container.Resolve<Game_ui_manager>();
         _playerMovementHandler = container.Resolve<Player_movement>();
+        _areaManager = container.Resolve<Area_manager>();
         OnInject();
     }
     private void OnInject()
@@ -88,18 +91,26 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         {
             if (InputSourceHandler.InputPressed(ControlEvent.Confirm))
             {
-                var interactableTile = PlayerCollisionHandler.FindTileAtPosition<InteractionTile>(interactionTilemap,tileInFrontOfPlayer);
-                if (interactableTile != null)
+                var possibleNpcInteractable = _areaManager.currentArea.CheckForNpcPosition(tileInFrontOfPlayer);
+                if (possibleNpcInteractable != null) 
                 {
-                    _dialogueHandler.StartInteraction(interactableTile.interaction);
+                    Debug.Log("npc detected");
+                    _dialogueHandler.StartInteraction(possibleNpcInteractable); 
                 }
                 else
                 {
-                    var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
-                    if (interactableObject != null)
-                        _dialogueHandler.StartInteraction(interactableObject);
+                    var interactableTile = PlayerCollisionHandler.FindTileAtPosition<InteractionTile>(interactionTilemap,tileInFrontOfPlayer);
+                    if (interactableTile != null)
+                    {
+                        _dialogueHandler.StartInteraction(interactableTile.interaction);
+                    }
+                    else
+                    {
+                        var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
+                        if (interactableObject != null)
+                            _dialogueHandler.StartInteraction(interactableObject);
+                    }
                 }
-               
             }
             if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem)
                 && _overworldActions.IsEquipped(Equipable.FishingRod))

@@ -39,11 +39,9 @@ public class Area_manager : MonoBehaviour,IInjectable
 
     private void SetArea(AreaData newArea)
     {
-        currentArea.LoadNpcObjects(false);
-        newArea.LoadNpcObjects(true);
+        currentArea.UnloadNpcObjects();
+        newArea.LoadNpcObjects();
         currentArea = newArea;
         _gameLoadingHandler.playerData.location = currentArea.data.areaName;
     }
-
-
 }

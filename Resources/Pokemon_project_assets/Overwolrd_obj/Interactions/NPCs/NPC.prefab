@@ -284,7 +284,6 @@ MonoBehaviour:
   currentStepCount: 0
   moving: 0
   canMove: 0
-  interactionCollider: {fileID: 7905536618194702295}
 --- !u!114 &2572521372086561507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,11 +299,7 @@ MonoBehaviour:
   movementHandler: {fileID: 4411233413012720689}
   autoDetectPlayer: 0
   detectDistance: 1
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  npcInteraction: {fileID: 0}
-  rayCastPoint: {fileID: 1812086111840112092}
+  npcInteractable: {fileID: 1082195538884292952}
   constantScan: 0
   playerDetected: 0
 --- !u!1 &5433307879789985436
