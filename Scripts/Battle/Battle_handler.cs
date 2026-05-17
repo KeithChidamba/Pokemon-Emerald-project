@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -536,16 +537,19 @@ public class Battle_handler : MonoBehaviour, IInjectable
         movePowerPointsText.color = (currentMove.powerpoints == 0)? Color.red : Color.black;
         moveTypeText.text = currentMove.type.GetTypeName;
     }
-    int MoneyModifier()
+    private float PrizeMoneyModifier()
     {
         var playerParticipants = battleParticipants.ToList()
             .Where(p => p.isActive & p.isPlayer).ToList();
         foreach(var participant in playerParticipants)
-            if (participant.pokemon.hasItem)
-                if(participant.pokemon.heldItem.itemName == "Amulet Coin")
-                    return 2;
-        //in future can add another condition for abilities that increase/give money
-        return 1;
+        {
+            if (!participant.pokemon.hasItem)continue;
+            if (participant.pokemon.heldItem.itemType == ItemType.GainMoney)
+            {
+                return float.Parse(participant.pokemon.heldItem.itemEffect);
+            }
+        }
+        return 1f;
     }
     public void StartFaintEvent()
     {
@@ -662,8 +666,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
                     
                     yield return _battleIntroHandler.ShowEnemiesAfterBattle();
                     _dialogueHandler.DisplayBattleInfo(anyEnemy.pokemonTrainerAI.trainerData.battleLossMessage);
-                    var moneyGained = baseMoneyPayout * lastOpponent.currentLevel * MoneyModifier();
-                    _gameLoadingHandler.playerData.playerMoney += moneyGained;
+                    var moneyGained = baseMoneyPayout * lastOpponent.currentLevel * PrizeMoneyModifier();
+                    _gameLoadingHandler.playerData.playerMoney += (int)math.floor(moneyGained);
                     
                     _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName + " recieved P" + moneyGained);
                     yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);

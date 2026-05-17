@@ -8,9 +8,7 @@ public class AreaData
     public AreaTransitionData data;
     public Vector3 tileLocation;
     public List<GameObject> npcList;
-    [SerializeField]private List<Overworld_interactable> _npcInteractables=new();
-    [SerializeField]private List<Vector3> npcPositions = new();
-    private event Action OnNpcRemoved;
+    [SerializeField]private List<NpcLogic> npcLogicScripts = new();
     
     public void LoadNpcObjects()
     {
@@ -19,56 +17,39 @@ public class AreaData
             return;
         }
         
-        for (int i = 0; i < npcList.Capacity; i++)
+        foreach (var npc in npcList)
         {
-            var npc = npcList[i];
-            var index = i;
             npc.SetActive(true);
-            npcPositions.Add(npc.transform.position);
             var npcLogic = npc.GetComponentInChildren<NpcLogic>();
-            OnNpcRemoved += npcLogic.movementHandler.ResetTileEvent;
-            npcLogic.movementHandler.OnNewTile += (newPos) => SaveValidPositions(index,newPos);
-            _npcInteractables.Add(npcLogic.npcInteractable);
+            npcLogicScripts.Add(npcLogic);
         }
     }
-
-    private void SaveValidPositions(int index,Vector3 newNpcPosition)
-    {
-        npcPositions[index] = newNpcPosition;
-    }
+    
     public void UnloadNpcObjects()
     {
         if(npcList.Count == 0)
         {
             return;
         }
-        _npcInteractables.Clear();
-        npcPositions.Clear();
-        OnNpcRemoved?.Invoke();
+        npcLogicScripts.Clear();
         foreach (var npc in npcList)
         {
             npc.SetActive(false);
         }
-        OnNpcRemoved = null;
     }
     public Overworld_interactable CheckForNpcPosition(Vector3 positionToCheck)
     {
-        for (int i = 0; i < npcPositions.Capacity; i++)
+        foreach (var npc in npcLogicScripts)
         {
-            if (npcPositions[i] != positionToCheck)
+            if (npc.movementHandler.Moving)
             {
-                Debug.Log("far off");
                 continue;
             }
-
-            var distance = Vector3.Distance(npcPositions[i], npcList[i].transform.position);
-            Debug.Log(distance);
-            if (distance > 0.35f)
+            if (npc.transform.position != positionToCheck)
             {
-                Debug.Log("skipped for long distance");
                 continue;
             }
-            return _npcInteractables[i];
+            return npc.npcInteractable;
         }
         return null;
     }

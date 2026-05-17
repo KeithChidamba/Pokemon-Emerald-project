@@ -94,7 +94,6 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                 var possibleNpcInteractable = _areaManager.currentArea.CheckForNpcPosition(tileInFrontOfPlayer);
                 if (possibleNpcInteractable != null) 
                 {
-                    Debug.Log("npc detected");
                     _dialogueHandler.StartInteraction(possibleNpcInteractable); 
                 }
                 else

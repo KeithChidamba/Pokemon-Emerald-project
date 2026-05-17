@@ -6,11 +6,11 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: repel
+  m_Name: super repel
   m_Rect:
     serializedVersion: 2
-    x: 5
-    y: 1
+    x: 101
+    y: 289
     width: 14
     height: 22
   m_Offset: {x: 0, y: 0}
@@ -22,12 +22,12 @@ Sprite:
   m_AtlasName: 
   m_PackingTag: 
   m_RenderDataKey:
-    76ef2cf760ada9556b6abfcc7dd7f6be: 1462875415
+    a65e20734490b78cf9eeb0c5bafe26fd: 838224496
   m_AtlasTags: []
   m_SpriteAtlas: {fileID: 0}
   m_RD:
     serializedVersion: 3
-    texture: {fileID: 2800000, guid: 76ef2cf760ada9556b6abfcc7dd7f6be, type: 3}
+    texture: {fileID: 2800000, guid: a65e20734490b78cf9eeb0c5bafe26fd, type: 3}
     alphaTexture: {fileID: 0}
     secondaryTextures: []
     m_SubMeshes:
@@ -107,18 +107,18 @@ Sprite:
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 5
-      y: 1
+      x: 101
+      y: 289
       width: 14
       height: 22
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 64, y: 12, z: 64, w: 12}
+    uvTransform: {x: 64, y: 108, z: 64, w: 300}
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 3
-    texture: {fileID: 2800000, guid: 76ef2cf760ada9556b6abfcc7dd7f6be, type: 3}
+    texture: {fileID: 2800000, guid: a65e20734490b78cf9eeb0c5bafe26fd, type: 3}
     alphaTexture: {fileID: 0}
     secondaryTextures: []
     m_SubMeshes:
@@ -198,14 +198,14 @@ Sprite:
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
-      x: 5
-      y: 1
+      x: 101
+      y: 289
       width: 14
       height: 22
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 64, y: 12, z: 64, w: 12}
+    uvTransform: {x: 64, y: 108, z: 64, w: 300}
     downscaleMultiplier: 1
   m_PhysicsShape:
   - - {x: -0.109375, y: 0.171875}
@@ -213,4 +213,4 @@ Sprite:
     - {x: 0.109375, y: -0.171875}
     - {x: 0.109375, y: 0.171875}
   m_Bones: []
-  m_SpriteID: c0d609dec7ba98f799d213562350742d
+  m_SpriteID: c8f428d83be9c5aea9dc6df855c1baed

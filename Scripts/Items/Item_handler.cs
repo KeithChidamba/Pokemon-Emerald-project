@@ -27,6 +27,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     private pokemon_storage _pokemonStorageHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Game_ui_manager _gameUIHandler;
+    private PlayerCollisionHandler _playerCollisionHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -43,6 +44,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         _areaHandler = container.Resolve<Area_manager>();
         _overworldActions = container.Resolve<overworld_actions>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _playerCollisionHandler = container.Resolve<PlayerCollisionHandler>();
         gameObject.SetActive(true);
     }
 
@@ -96,8 +98,16 @@ public class Item_handler : MonoBehaviour,IInjectable
             case ItemType.RareCandy: StartCoroutine(LevelUpWithItem()); break;
             
             case ItemType.XItem: ItemBuffOrDebuff(); break;
+            
+            case ItemType.Repel: UseRepel(int.Parse(item.itemEffect)); break;
         }
     }
+
+    private void UseRepel(int numSteps)
+    {
+        _playerCollisionHandler.ActivateRepel(numSteps);
+    }
+    
     private void UseHerbs()
     {
         OnItemUsageSuccessful += ChangeFriendship;
@@ -595,5 +605,6 @@ public class Item_handler : MonoBehaviour,IInjectable
 public enum ItemType
 {
     Special,GainExp,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,Vitamin,
-    Berry,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove
+    Berry,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove,None,
+    Repel
 }

@@ -170,7 +170,6 @@ public class Pokemon : ScriptableObject
         _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
         _pokemonPartyHandler = serviceContainer.Resolve<Pokemon_party>();
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
-
     }
     public void ResetMoveData()
     {
@@ -216,7 +215,7 @@ public class Pokemon : ScriptableObject
         if (pokeballName == "Luxury Ball")
             modifier *= 1.5f;
         
-        if (hasItem)//will throw error if check item name on null helditem
+        if (hasItem)
             if(heldItem.itemName == "Soothe Bell")
                 modifier *= 1.5f;
         return (int)math.ceil(currentIncrease * modifier);

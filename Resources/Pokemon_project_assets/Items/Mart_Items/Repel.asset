@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
-  m_Name: Exp Share
+  m_Name: Repel
   m_EditorClassIdentifier: 
   itemID: 
-  itemName: Exp Share
-  itemType: 1
-  itemEffect: 
-  itemDescription: Allows pokemon to gain exp without battling
-  price: 0
+  itemName: Repel
+  itemType: 18
+  itemEffect: 100
+  itemDescription: Repels wild pokemon for 100 steps
+  price: 350
   quantity: 1
-  itemImage: {fileID: 21300000, guid: b5ac072d7339a3bac94aafa21d431db7, type: 2}
+  itemImage: {fileID: 21300000, guid: ccbd0d2b7c3973df2a6c0935f0b0fe83, type: 2}
   forPartyUse: 0
-  canBeUsedInOverworld: 0
+  canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
-  isHeldItem: 1
-  canBeHeld: 1
-  canBeSold: 0
+  isHeldItem: 0
+  canBeHeld: 0
+  canBeSold: 1
   isMultiModular: 0
   hasModules: 0
   additionalInfoModule: {fileID: 0}

@@ -9,7 +9,8 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
     [SerializeField] private Transform interactionPoint;
     public Tilemap encounterTilemap;
     public Tilemap areaSwitchTilemap;
-    
+    [SerializeField]private bool _repellingPokemon;
+    [SerializeField]private int _repelDuration;
     private Player_movement _playerMovementHandler;
     private Encounter_handler  _encounterHandler;
     private Area_manager  _areaHandler;
@@ -28,7 +29,13 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
         _playerMovementHandler.OnNewTile += CheckGrass;
         _playerMovementHandler.OnNewTile += SwitchArea;
     }
-    
+
+    public void ActivateRepel(int numSteps)
+    {
+        _repelDuration = numSteps;
+        _repellingPokemon = true;
+        
+    }
     private void SwitchArea()
     {
         var tile = FindTileAtPosition<AreaSwitchTile>(areaSwitchTilemap,transform.position);
@@ -37,6 +44,12 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
     }
     private void CheckGrass()
     {
+        if (_repellingPokemon)
+        {
+            _repelDuration--;
+            _repellingPokemon = _repelDuration == 0;
+            return;
+        }
         var tile = FindTileAtPosition<EncounterTile>(encounterTilemap,transform.position);
         if (tile == null) return;
         

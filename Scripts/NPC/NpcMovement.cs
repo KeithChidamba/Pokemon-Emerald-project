@@ -19,7 +19,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
     [SerializeField]private SpriteRenderer headSpriteRenderer;
     private int _currentSpriteIndex;
     [SerializeField]private int currentStepCount;
-    [SerializeField]private bool moving;
+    public bool Moving { get; private set; }
     [SerializeField]private bool canMove;
     private Coroutine animationRoutine;
     private WaitForSeconds movePause = new (1f);
@@ -28,17 +28,12 @@ public class NpcMovement : MonoBehaviour,IInjectable
     public event Action OnMovementPaused;
     public event Action OnMovementStarted;
     public event Action OnMovementEnded;
-    [CanBeNull] public event Action<Vector3> OnNewTile;
+    
     
     private Player_movement _playerMovement;
     public void Inject(ServiceContainer container)
     {
         _playerMovement = container.Resolve<Player_movement>();
-    }
-    
-    public void ResetTileEvent()
-    {
-        OnNewTile=null;
     }
 
     public MovementDirection GetCurrentDirection()
@@ -78,7 +73,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
     {
         StopAllCoroutines();
         canMove = false;
-        moving = false;
+        Moving = false;
         if (!snapPosition) return;
         
         Vector3 snapped = Vector3.Distance(transform.position, movePoint.position) < 0.05f
@@ -103,7 +98,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
         {
             SetSprites(_currentSpriteData.idleSprite);
             canMove = false;
-            moving = false;
+            Moving = false;
         }
         else
         {
@@ -114,7 +109,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
 
     private IEnumerator Animate()
     {
-        while (moving)
+        while (Moving)
         {
             ChangeSprite();
             yield return animDelay;
@@ -152,7 +147,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
                 continue;
             }
               
-            moving = true;
+            Moving = true;
 
             _currentSpriteIndex = 0;
 
@@ -171,8 +166,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
             
             // Snap to grid
             transform.position = movePoint.position;
-            OnNewTile?.Invoke(transform.position);
-            moving = false;
+            Moving = false;
 
             if (animationRoutine != null)
             {
