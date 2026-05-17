@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39685f58f8e8d1404985fbc74a38874d, type: 3}
+  m_Name: Garden
+  m_EditorClassIdentifier: 
+  biome: 3
+  data:
+    availableEncounters:
+    - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+      encounterChance: 20
+      evolutionFormNumber: 0
+    - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+      encounterChance: 50
+      evolutionFormNumber: 0
+    - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      encounterChance: 30
+      evolutionFormNumber: 0
+    minimumLevelOfPokemon: 2
+    maximumLevelOfPokemon: 14

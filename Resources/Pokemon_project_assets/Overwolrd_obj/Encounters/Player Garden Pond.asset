@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb7a7433040bfb9587b8b8882cf256d, type: 3}
+  m_Name: Player Garden Pond
+  m_EditorClassIdentifier: 
+  biome: 0
+  fishingTables:
+  - tableData:
+      availableEncounters:
+      - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+        encounterChance: 70
+        evolutionFormNumber: 0
+      - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+        encounterChance: 20
+        evolutionFormNumber: 1
+      - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+        encounterChance: 10
+        evolutionFormNumber: 2
+      minimumLevelOfPokemon: 2
+      maximumLevelOfPokemon: 14
+    rodType: 0
+  - tableData:
+      availableEncounters:
+      - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+        encounterChance: 65
+        evolutionFormNumber: 0
+      - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+        encounterChance: 75
+        evolutionFormNumber: 1
+      - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+        encounterChance: 85
+        evolutionFormNumber: 2
+      minimumLevelOfPokemon: 8
+      maximumLevelOfPokemon: 20
+    rodType: 1
+  - tableData:
+      availableEncounters:
+      - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+        encounterChance: 1
+        evolutionFormNumber: 0
+      - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+        encounterChance: 10
+        evolutionFormNumber: 1
+      - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+        encounterChance: 99
+        evolutionFormNumber: 2
+      minimumLevelOfPokemon: 10
+      maximumLevelOfPokemon: 40
+    rodType: 2

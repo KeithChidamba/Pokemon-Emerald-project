@@ -5,5 +5,5 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "Tiles/Animated Tile")]
 public class AnimatedEncounterTile : AnimatedTile
 {
-    public Encounter_Area area;
+    public EncounterTable table;
 }

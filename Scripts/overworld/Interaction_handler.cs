@@ -116,19 +116,19 @@ public class Interaction_handler : MonoBehaviour,IInjectable
             {
                 if (hit.transform.gameObject.CompareTag("Water"))
                 {
-                    Encounter_Area areaOfEncounter;
+                    EncounterTable tableOfEncounter;
                     var animatedWaterTile = PlayerCollisionHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point);
                     if (animatedWaterTile == null)
                     {
                         var stillWaterTile  = PlayerCollisionHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
                         if (stillWaterTile == null) return;
-                        areaOfEncounter = stillWaterTile.area;
+                        tableOfEncounter = stillWaterTile.table;
                     }
                     else
                     {
-                        areaOfEncounter = animatedWaterTile.area;
+                        tableOfEncounter = animatedWaterTile.table;
                     }
-                    _overworldActions.fishingArea = areaOfEncounter;
+                    _overworldActions.fishingTable = (FishingEncounterTable)tableOfEncounter;
                     _dialogueHandler.DisplayList("Would you like to fish for pokemon", 
                        new[]
                        {

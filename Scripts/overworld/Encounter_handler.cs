@@ -1,21 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public enum BattleEncounterSource
 {
-    None,Fishing,TallGrass
+    None,Fishing,NormalEncounter
 }
 public class Encounter_handler : MonoBehaviour,IInjectable
 {
-    public Encounter_Area currentArea;
-    public Pokemon wildPokemon;
-    public int overworldEncounterChance = 2;
     public event Action<Pokemon,BattleEncounterSource> OnEncounterTriggered;
-
     private PokemonOperations _pokemonOperationsHandler;
     private Battle_handler _battleHandler;
     public void Inject(ServiceContainer container)
@@ -25,60 +22,46 @@ public class Encounter_handler : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }
     
-    public void TriggerEncounter(Encounter_Area area)
+    public void TriggerEncounter(NormalEncounteArea table)
     {
-        currentArea = area;
-        overworldEncounterChance = 2;
-        for (int i = 0; i < currentArea.availableEncounters.Length; i++)
-        {
-            if (EncounteredPokemon(i))
-            {
-                OnEncounterTriggered?.Invoke(wildPokemon,BattleEncounterSource.TallGrass);
-                break;
-            }
-        }
+        DeterminePossibleEncounter(
+            table.data, 
+            table.data.availableEncounters.Length,
+            table.biome
+            ,BattleEncounterSource.NormalEncounter);
     }
-    public void TriggerFishingEncounter(Encounter_Area area,Item fishingRod)
+    public void TriggerFishingEncounter(FishingEncounterTable table,Item fishingRod)
     {
-        currentArea = area;
-        overworldEncounterChance = 2;
-        area.minimumLevelOfPokemon = int.Parse(fishingRod.itemEffect.Split('/')[0]);
-        area.maximumLevelOfPokemon = int.Parse(fishingRod.itemEffect.Split('/')[1]);
         //the type of rod determines available pokemon from pool
-        var rodTypeIndex = fishingRod.itemName switch 
+        var formattedRodName = fishingRod.itemName.Replace(" ", "");
+        
+        var tableForRod = table.fishingTables.First(t => t.rodType == Enum.Parse<RodType>(formattedRodName));
+        
+        DeterminePossibleEncounter(
+            tableForRod.tableData, 
+            tableForRod.tableData.availableEncounters.Length,
+            table.biome,BattleEncounterSource.Fishing);
+    }
+
+    private void DeterminePossibleEncounter(EncounterTableData tableData,int numAvailableEncounters,Biome biome,BattleEncounterSource source)
+    {
+        for (int i = 0; i < numAvailableEncounters; i++)
         {
-            "Old Rod"=>0,
-            "Good Rod"=>1,
-            "Super Rod"=>2,
-            _=>0
-        } ;
-        int availablePokemonForRod = area.pokemonIndexForRodType[rodTypeIndex];
-        for (int i = 0; i < availablePokemonForRod+1; i++)
-        {
-            if (EncounteredPokemon(i))
+            var random = Utility.RandomRange(1,101);
+            var chance = tableData.availableEncounters[i].encounterChance;
+
+            if ( i == tableData.availableEncounters.Length - 1 /*pick last option if none in range*/ 
+                 || random < chance )//pick option within chance range
             {
-                OnEncounterTriggered?.Invoke(wildPokemon,BattleEncounterSource.Fishing);
+                CreateWildPokemon(tableData.availableEncounters[i],tableData, biome,source);
                 break;
             }
         }
     }
-    bool EncounteredPokemon(int currentIndex)
+    private void CreateWildPokemon(EncounterPokemonData pokemonData,EncounterTableData tableData,Biome biome,BattleEncounterSource source)
     {
-        var random = Utility.RandomRange(1,101);
-        var chance = currentArea.availableEncounters[currentIndex].encounterChance;
-
-        if ( currentIndex == currentArea.availableEncounters.Length - 1 /*pick last option if none in range*/ 
-             || random < chance )//pick option within chance range
-        {
-            CreateWildPokemon(currentArea.availableEncounters[currentIndex]);
-            return true;
-        }
-        return false;
-    }
-
-    void CreateWildPokemon(EncounterPokemonData pokemonData)
-    {
-        wildPokemon = InstanceFactory.CreatePokemon(pokemonData.pokemon);
+        var wildPokemon = InstanceFactory.CreatePokemon(pokemonData.pokemon);
+        OnEncounterTriggered?.Invoke(wildPokemon,source);
         _pokemonOperationsHandler.SetPokemonTraits(wildPokemon);
         if (pokemonData.evolutionFormNumber > 0)
         {
@@ -87,11 +70,11 @@ public class Encounter_handler : MonoBehaviour,IInjectable
             else
                 wildPokemon.Evolve(wildPokemon.evolutions[pokemonData.evolutionFormNumber - 1]);
         }
-        var randomLevel = Utility.RandomRange(currentArea.minimumLevelOfPokemon, currentArea.maximumLevelOfPokemon);
+        var randomLevel = Utility.RandomRange(tableData.minimumLevelOfPokemon, tableData.maximumLevelOfPokemon);
         var expForRequiredLevel = PokemonOperations.CalculateExpForNextLevel(randomLevel, wildPokemon.expGroup)+1;
         wildPokemon.canEvolve = false;//prevent evolution from exp
         wildPokemon.ReceiveExperience(expForRequiredLevel); 
         wildPokemon.hp=wildPokemon.maxHp;
-        StartCoroutine(_battleHandler.StartWildBattle(wildPokemon));
+        StartCoroutine(_battleHandler.StartWildBattle(wildPokemon,biome));
     }
 }

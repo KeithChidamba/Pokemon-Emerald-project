@@ -303,7 +303,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         yield return new WaitUntil(()=>_dialogueHandler.dialogueFinished);
         _dialogueHandler.EndDialogue();
     }
-    public IEnumerator StartWildBattle(Pokemon enemy) //only ever be for wild battles
+    public IEnumerator StartWildBattle(Pokemon enemy,Biome biome)
     {
         _pokemonPartyHandler.SortByFainted();
         battleOver = false;
@@ -326,8 +326,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _wildPokemonHandler.ranAway = false;
         //setup battle
         yield return SetValidParticipants();
-        StartCoroutine(SetupBattleSequence(_encounterHandler.currentArea.biome));
-        _encounterHandler.currentArea = null;
+        StartCoroutine(SetupBattleSequence(biome));
     }
     private IEnumerator StartSingleBattle(TrainerData trainerData) //single trainer battle
     {

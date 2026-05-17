@@ -54,14 +54,13 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
         if (tile == null) return;
         
         _playerMovementHandler.RestrictPlayerMovement();
-        
-        if (_playerMovementHandler.runningInput) _encounterHandler.overworldEncounterChance = 5;
+        var encounterChance = _playerMovementHandler.runningInput ? 5 : 2;
         
         var randomNumber = Random.Range(1, 11);
         
-        if (randomNumber < _encounterHandler.overworldEncounterChance)
+        if (randomNumber < encounterChance)
         {
-            _encounterHandler.TriggerEncounter(tile.area);
+            _encounterHandler.TriggerEncounter((NormalEncounteArea)tile.table);
         }
     }
     public static T FindTileAtPosition<T>(Tilemap tilemap,Vector3 triggerPos) where T : TileBase

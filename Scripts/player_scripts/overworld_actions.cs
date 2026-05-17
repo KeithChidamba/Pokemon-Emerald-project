@@ -8,7 +8,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
     public Animation_manager manager;
     public bool fishing;
     [SerializeField] private bool pokemonBitingPole;
-    public Encounter_Area fishingArea;
+    public FishingEncounterTable fishingTable;
     
     public Item equippedSpecialItem;
     private bool _canUseEquippedItem;
@@ -83,7 +83,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
         if (pokemonBitingPole && InputSourceHandler.InputPressed(ControlEvent.Confirm))
         {
             pokemonBitingPole = false;
-            _encounterHandler.TriggerFishingEncounter(fishingArea,equippedSpecialItem);
+            _encounterHandler.TriggerFishingEncounter(fishingTable,equippedSpecialItem);
         }
         if (fishing)
         {
