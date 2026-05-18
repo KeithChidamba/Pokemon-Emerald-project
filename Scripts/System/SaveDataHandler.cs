@@ -10,13 +10,13 @@ using System.Runtime.InteropServices;
 public enum AssetDirectory
 { 
     Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, ItemUI, Items, MartItems, NonMartItems
-    ,AdditionalInfo,Berries,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData
+    ,AdditionalInfo,Berries,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData,OverworldItemPickups
 }
 public enum SaveDataDirectory
 {
     Items, HeldItems, StorageItems, StoragePokemon, PartyPokemon, Player,
     PCStorage, Overworld, StoryObjectives, BerryTrees,
-    GameSettings
+    GameSettings,OverworldItemPickups
 }
 public class SaveDataHandler : MonoBehaviour,IInjectable
 {
@@ -66,6 +66,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         {AssetDirectory.BerryTreeData,"Overwolrd_obj/Interactions/Berry Trees/Berry Data/"},
         {AssetDirectory.StoryObjectiveData,"Overwolrd_obj/Story Objectives/"},
         {AssetDirectory.PokeMartData,"Overwolrd_obj/Poke_Mart_Data"},
+        {AssetDirectory.OverworldItemPickups,"Overwolrd_obj/Interactions/Overworld_Pickups"},
         {AssetDirectory.TrainerData,"Enemies/Data/"}
     };
     private static readonly Dictionary<SaveDataDirectory, string> SaveDataDirectories = new()
@@ -79,8 +80,9 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         { SaveDataDirectory.PCStorage, "/PC_Storage" },
         { SaveDataDirectory.Overworld, "/Overworld" },
         { SaveDataDirectory.StoryObjectives, "/Overworld/Story_Objectives" },
+        { SaveDataDirectory.GameSettings,"/GameSettings"},
         { SaveDataDirectory.BerryTrees, "/Overworld/Berry_Trees" },
-        { SaveDataDirectory.GameSettings,"/GameSettings"}
+        { SaveDataDirectory.OverworldItemPickups,"/Overworld/Item_Pickups"}
     };
 
     public static string GetDirectory(AssetDirectory directoryKey)
@@ -277,6 +279,12 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             {
                 _overworldStateHandler.currentStoryObjectives.Add(objectiveData);
             }
+        }
+        var itemPickups = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.OverworldItemPickups));
+        foreach (var jsonFilePath in itemPickups)
+        {
+            var pickupData = LoadObjectFromJson<OverworldPickup>(jsonFilePath);
+            _overworldStateHandler.LoadItemPickups(pickupData);
         }
         yield return new WaitForSeconds(0.25f);
     }
@@ -616,5 +624,9 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     public void SaveGameSettingsAsJson(SettingsConfig config, string fileName)
     {
         SaveDataAsJson(config,fileName,SaveDataDirectory.GameSettings);
+    }
+    public void SaveItemPickupDataAsJson(OverworldPickup pickup, string fileName)
+    {
+        SaveDataAsJson(pickup,fileName,SaveDataDirectory.OverworldItemPickups);
     }
 }

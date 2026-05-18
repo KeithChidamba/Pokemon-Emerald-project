@@ -19,7 +19,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private Player_movement _playerMovementHandler;
     private Area_manager _areaManager;
-    
+    private OverworldState _overworldState;
     
     public void Inject(ServiceContainer container)
     {
@@ -28,6 +28,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         _gameUIManager = container.Resolve<Game_ui_manager>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         _areaManager = container.Resolve<Area_manager>();
+        _overworldState = container.Resolve<OverworldState>();
         OnInject();
     }
     private void OnInject()
@@ -107,7 +108,17 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                     {
                         var interactableObject = hit.transform.GetComponent<Overworld_interactable>();
                         if (interactableObject != null)
+                        {
                             _dialogueHandler.StartInteraction(interactableObject);
+                        }
+                        else
+                        {
+                            //item pickup prefab has -1 offset on x-axis, i don't know why
+                            if (_overworldState.PickupItemFound(new Vector2(tileInFrontOfPlayer.x + 1, tileInFrontOfPlayer.y)))
+                            {
+                                Destroy(hit.transform.gameObject); 
+                            }
+                        }
                     }
                 }
             }
@@ -121,7 +132,11 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                     if (animatedWaterTile == null)
                     {
                         var stillWaterTile  = PlayerCollisionHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
-                        if (stillWaterTile == null) return;
+                        if (stillWaterTile == null)
+                        {
+                            Debug.LogError("hit water tilemap but no tile data");
+                            return;
+                        }
                         tableOfEncounter = stillWaterTile.table;
                     }
                     else

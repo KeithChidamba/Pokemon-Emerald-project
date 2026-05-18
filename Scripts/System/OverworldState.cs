@@ -8,15 +8,23 @@ public class OverworldState : MonoBehaviour,IInjectable
 {    
     [SerializeField]private List<BerryTree> overworldBerryTrees = new();
     [SerializeField]private List<BerryTreeData> treeDataQueue = new();
-
+    
+    [SerializeField] private List<OverworldPickup> overworldPickups = new ();
+    private Dictionary<Vector2,OverworldPickup> _overworldPickupPositions = new();
+    [SerializeField] private GameObject overworldPickupPrefab;
+    [SerializeField] private Transform overworldPickupParent;
+    
     public List<StoryObjective> allStoryObjectives = new();
     public List<StoryObjective> currentStoryObjectives = new();
     public StoryProgressObjective storyProgressObjective;
+    
+    
     public event Action OnObjectivesLoaded;
     private SaveDataHandler _saveHandler;
     private Dialogue_handler _dialogueHandler;
     private ServiceContainer _container;
     private Game_Load _gameLoadingHandler;
+    private Bag _playerBag;
     
     public void Inject(ServiceContainer container)
     {
@@ -24,7 +32,8 @@ public class OverworldState : MonoBehaviour,IInjectable
         _saveHandler = container.Resolve<SaveDataHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
-        
+        _playerBag = container.Resolve<Bag>();
+            
         gameObject.SetActive(true);
         OnInject();
     }
@@ -44,6 +53,8 @@ public class OverworldState : MonoBehaviour,IInjectable
         overworldBerryTrees.Clear();
         currentStoryObjectives.Clear();
         treeDataQueue.Clear();
+        overworldPickups.Clear();
+        _overworldPickupPositions.Clear();
         
         var trees = FindObjectsOfType<BerryTree>(true);
         foreach(var tree in trees)
@@ -51,6 +62,11 @@ public class OverworldState : MonoBehaviour,IInjectable
             tree.loadedFromJSON = false;
             overworldBerryTrees.Add(tree);
         }
+
+        var pickups = Resources.LoadAll<OverworldPickup>(SaveDataHandler.GetDirectory(AssetDirectory.OverworldItemPickups));
+        overworldPickups.AddRange(pickups);
+        
+        yield return new WaitForSeconds(0.25f);
         
         if (_gameLoadingHandler.LoadedFromSave)
         {
@@ -70,6 +86,15 @@ public class OverworldState : MonoBehaviour,IInjectable
                     tree.LoadDefaultAsset();
                 }
             }
+
+            foreach (var pickup in overworldPickups)
+            {
+                if(pickup.hasBeenPicked)continue;
+                _overworldPickupPositions.Add(pickup.itemPosition,pickup);
+                var newPickupObject = Instantiate(overworldPickupPrefab,pickup.itemPosition,overworldPickupPrefab.transform.rotation, overworldPickupParent);
+                newPickupObject.SetActive(true);
+            }
+            
         }
         else
         {
@@ -95,15 +120,31 @@ public class OverworldState : MonoBehaviour,IInjectable
             currentStoryObjectives.AddRange(orderList);
             yield return new WaitUntil(() => currentStoryObjectives.Count==orderList.Count);
         }
-        yield return null;
         OnObjectivesLoaded?.Invoke();
         if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
         {
             currentStoryObjectives[0].FindMainAsset(_container);
         }
-        yield return null;
     }
 
+    public bool PickupItemFound(Vector2 interactionPosition)
+    {
+        if (_overworldPickupPositions.TryGetValue(interactionPosition, out var pickupItem))
+        {
+            pickupItem.hasBeenPicked = true;
+            var itemPicked = InstanceFactory.CreateItem(pickupItem.item);
+            _playerBag.AddItem(itemPicked);
+            _dialogueHandler.DisplayDetails($"Picked up {itemPicked.quantity} {itemPicked.itemName}'s");
+            return true;
+        }
+        return false;
+    }
+
+    public void LoadItemPickups(OverworldPickup pickUpSaveData)
+    {
+        var desiredItem = overworldPickups.First(pickup => pickup.item.itemName == pickUpSaveData.itemAssetName);
+        desiredItem.hasBeenPicked = pickUpSaveData.hasBeenPicked;
+    }
     public bool HasObjective(string objectiveName)
     {
         return currentStoryObjectives.Any(obj=>obj.mainAssetName == objectiveName);
@@ -141,6 +182,14 @@ public class OverworldState : MonoBehaviour,IInjectable
             _saveHandler.SaveBerryTreeDataAsJson(tree.treeData,tree.treeData.treeObjectName);
         }
         yield return new WaitForSeconds(1f);
+        
+        foreach (var pickup in overworldPickups)
+        {
+            pickup.itemAssetName = pickup.item.itemName;
+            _saveHandler.SaveItemPickupDataAsJson(pickup,pickup.itemAssetName);
+            yield return new WaitForSeconds(0.02f);
+        }
+        
         int objectiveIndex=0;
         foreach (var objective in currentStoryObjectives)
         {

@@ -14,6 +14,8 @@ public class Game_Load : MonoBehaviour,IInjectable
     public Button uploadButton;
     public GameObject new_player_ui; 
     public GameObject Start_ui;
+    [SerializeField] private Image _loadingScreen;
+    [SerializeField] private Camera startMenuCam;
     public InputField name_input;
     private readonly int _maxNameLength = 14;
     private readonly int _minNameLength = 4;
@@ -111,10 +113,24 @@ public class Game_Load : MonoBehaviour,IInjectable
         _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
         _dialogueHandler.EndDialogue();
         OnGameStarted?.Invoke();
-        
-        yield return new WaitForSeconds(1f);//give everything time to load
         Start_ui.SetActive(false);
         new_player_ui.SetActive(false);
+        _loadingScreen.gameObject.SetActive(true);
+        Color startColor = new Color(255, 255f, 255f,0);
+        Color endColor = Color.white;
+        float elapsed = 0f;
+        var duration = 1f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            _loadingScreen.color = Color.Lerp(startColor, endColor, t);
+            yield return null;
+        }
+        //give everything time to load
+        yield return new WaitUntil(()=>elapsed >= duration);
+        _loadingScreen.gameObject.SetActive(false);
+        startMenuCam.gameObject.SetActive(false);
         world_Map.SetActive(true);
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
         _areaHandler.LoadAreaFromSave(playerData.location);
