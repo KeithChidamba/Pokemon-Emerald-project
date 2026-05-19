@@ -72,6 +72,7 @@ public class Bag : MonoBehaviour,IInjectable
     private Game_Load _gameLoadingHandler;
     private Item_handler _itemHandler;
     private PlayerBagInputService _playerBagInputService;
+    private overworld_actions _overworldActions;
     
     public void Inject(ServiceContainer container)
     {
@@ -84,6 +85,7 @@ public class Bag : MonoBehaviour,IInjectable
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _itemHandler = container.Resolve<Item_handler>();
+        _overworldActions = container.Resolve<overworld_actions>();
         gameObject.SetActive(true);
         OnInject();
     }
@@ -95,6 +97,8 @@ public class Bag : MonoBehaviour,IInjectable
         _leftArrow=redArrows[1];
         _upArrow=redArrows[2];
         _downArrow=redArrows[3];
+        _overworldActions.OnItemEquipped += (eqp)=> ReloadEquipMarker();
+        _overworldActions.OnItemUnequipped += (eqp)=> ReloadEquipMarker();
     }
     public void SelectItemForEvent()
     {
@@ -249,6 +253,7 @@ public class Bag : MonoBehaviour,IInjectable
         _leftArrow.gameObject.SetActive(true);
         _rightArrow.gameObject.SetActive(currentCategoryIndex!=_categories.Length-1);
     }
+    
     public Item SearchForItem(string itemName)
     {
         return allItems.FirstOrDefault(item => item.itemName == itemName);
@@ -427,6 +432,18 @@ public class Bag : MonoBehaviour,IInjectable
     {
         return allItems.Where(item => item.itemType == itemType).ToList();
     }
+
+    public bool CanShowEquippedMarker(string itemName)
+    {
+        return ViewingKeyItems()
+               && _overworldActions.ItemEquipped()
+               && itemName==_overworldActions.equippedSpecialItem.itemName;
+    }
+
+    public bool ViewingKeyItems()
+    {
+        return _categories[currentCategoryIndex] == BagCategory.KeyItems;
+    }
     public void ViewBag()
     {
         numItems = 0;
@@ -481,7 +498,7 @@ public class Bag : MonoBehaviour,IInjectable
         {
             _playerBagInputService.PlayerBagNavigationRestrictions();
         }
-
+        
         OnBagOpened?.Invoke();
         
         //default visuals
@@ -493,12 +510,22 @@ public class Bag : MonoBehaviour,IInjectable
             loopingUiAnimation.viewingUI = true;
         }
     }
-
-    void ReloadItemUI()
+    
+    private void ReloadItemUI()
     {
         bagItemsUI[0].ResetUI();
         foreach (var item in bagItemsUI)
+        {
             item.LoadItemUI();
+        }
+    }
+    private void ReloadEquipMarker()
+    {
+        if (!_gameUIHandler.usingUI) return;
+        for (int i = 0; i < numItemsForView; i++)
+        {
+            bagItemsUI[i].LoadItemUI();
+        }
     }
 }
 

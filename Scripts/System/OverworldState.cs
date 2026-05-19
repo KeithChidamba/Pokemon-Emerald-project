@@ -134,7 +134,8 @@ public class OverworldState : MonoBehaviour,IInjectable
             pickupItem.hasBeenPicked = true;
             var itemPicked = InstanceFactory.CreateItem(pickupItem.item);
             _playerBag.AddItem(itemPicked);
-            _dialogueHandler.DisplayDetails($"Picked up {itemPicked.quantity} {itemPicked.itemName}'s");
+            var quantityMessage = itemPicked.quantity > 1 ? "'s" : "";
+            _dialogueHandler.DisplayDetails($"Picked up {itemPicked.quantity} {itemPicked.itemName}{quantityMessage}");
             return true;
         }
         return false;

@@ -47,19 +47,19 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
         if (_repellingPokemon)
         {
             _repelDuration--;
-            _repellingPokemon = _repelDuration == 0;
+            _repellingPokemon = _repelDuration > 0;
             return;
         }
         var tile = FindTileAtPosition<EncounterTile>(encounterTilemap,transform.position);
         if (tile == null) return;
         
-        _playerMovementHandler.RestrictPlayerMovement();
         var encounterChance = _playerMovementHandler.runningInput ? 5 : 2;
         
         var randomNumber = Random.Range(1, 11);
         
         if (randomNumber < encounterChance)
         {
+            _playerMovementHandler.RestrictPlayerMovement();
             _encounterHandler.TriggerEncounter((NormalEncounteArea)tile.table);
         }
     }

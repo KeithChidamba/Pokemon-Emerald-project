@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Pecha berry",
+    "berryItem": {
+        "instanceID": 25788
+    },
+    "treeObjectName": "Pecha Berry Tree",
+    "minutesPerStage": 45,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33374
+                },
+                {
+                    "instanceID": 33374
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33376
+                },
+                {
+                    "instanceID": 33378
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33782
+                },
+                {
+                    "instanceID": 33784
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33786
+                },
+                {
+                    "instanceID": 33788
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33790
+                },
+                {
+                    "instanceID": 33792
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "lastLogin": "2026-05-19T14:07:07.5614910+02:00"
+}

@@ -57,16 +57,23 @@ public class overworld_actions : MonoBehaviour,IInjectable
         {
             return false;
         }
-        return item == null ? _currentEquippedItem == equipable 
-            : _currentEquippedItem == item.GetModule<EquipableInfoModule>().equipableItem;
+        if (item == null)
+        {
+            return _currentEquippedItem == equipable;
+        }
+        //distinguish item of same type
+        return equippedSpecialItem.itemName == item.itemName;
     }
     public void UnequipItem(Item item)
     {
-        OnItemUnequipped?.Invoke(_currentEquippedItem);
+        var previousItem = _currentEquippedItem;
         _currentEquippedItem = Equipable.None;
         equippedSpecialItem = null;
+        OnItemUnequipped?.Invoke(previousItem);
         if(_gameUIManager.usingUI)
+        {
             _dialogueHandler.DisplayDetails("Unequipped " + item.itemName);
+        }
         _gameLoadingHandler.playerData.equippedItemName = string.Empty;
     }
     public bool ItemEquipped()
@@ -97,7 +104,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
     {
         var random = Utility.RandomRange(1, 11);
         yield return new WaitForSeconds(1f);
-        if (!fishing) yield break;
+        if (!fishing) yield break;//if fishing canceled early
         if (random < 5)
         {
             pokemonBitingPole = true;

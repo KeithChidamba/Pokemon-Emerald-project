@@ -1,0 +1,32 @@
+{
+    "itemID": "Good Rod19879",
+    "itemName": "Good Rod",
+    "itemType": 0,
+    "itemEffect": "",
+    "itemDescription": "A great fishing rod that can catch decent pokemon",
+    "price": 0,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 26712
+    },
+    "forPartyUse": false,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": false,
+    "isMultiModular": false,
+    "hasModules": true,
+    "additionalInfoModule": {
+        "instanceID": 26964
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 26964
+        }
+    ],
+    "infoModuleAssetNames": [
+        "Fishing Rod"
+    ],
+    "imageDirectory": "Good Rod"
+}

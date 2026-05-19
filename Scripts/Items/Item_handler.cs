@@ -105,7 +105,9 @@ public class Item_handler : MonoBehaviour,IInjectable
 
     private void UseRepel(int numSteps)
     {
+        _dialogueHandler.DisplayDetails("Repel has been activated");
         _playerCollisionHandler.ActivateRepel(numSteps);
+        CompleteItemUsage();
     }
     
     private void UseHerbs()
@@ -575,7 +577,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     private void CompleteItemUsage()//only call for items used outside of battle
     {
         _battleHandler.usedTurnForItem = _battleHandler.battleInProgress;
-            DepleteItem();
+        DepleteItem();
         ResetItemUsage();
      }
     private IEnumerator CompleteItemUsage(float skipDelay)

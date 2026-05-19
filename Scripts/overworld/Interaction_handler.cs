@@ -113,8 +113,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                         }
                         else
                         {
-                            //item pickup prefab has -1 offset on x-axis, i don't know why
-                            if (_overworldState.PickupItemFound(new Vector2(tileInFrontOfPlayer.x + 1, tileInFrontOfPlayer.y)))
+                            if (_overworldState.PickupItemFound(tileInFrontOfPlayer))
                             {
                                 Destroy(hit.transform.gameObject); 
                             }

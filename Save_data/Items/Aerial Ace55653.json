@@ -1,0 +1,32 @@
+{
+    "itemID": "Aerial Ace55653",
+    "itemName": "Aerial Ace",
+    "itemType": 16,
+    "itemEffect": "",
+    "itemDescription": "An attack that never misses.",
+    "price": 0,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 25966
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true,
+    "isMultiModular": false,
+    "hasModules": true,
+    "additionalInfoModule": {
+        "instanceID": 25656
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 25656
+        }
+    ],
+    "infoModuleAssetNames": [
+        "TM40"
+    ],
+    "imageDirectory": "flying tm"
+}

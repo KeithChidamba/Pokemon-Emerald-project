@@ -1,0 +1,32 @@
+{
+    "itemID": "Sitrus berry24607",
+    "itemName": "Sitrus berry",
+    "itemType": 9,
+    "itemEffect": "30",
+    "itemDescription": "Heals 30hp",
+    "price": 5,
+    "quantity": 2,
+    "itemImage": {
+        "instanceID": 25996
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": true,
+    "canBeSold": true,
+    "isMultiModular": false,
+    "hasModules": true,
+    "additionalInfoModule": {
+        "instanceID": 27770
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 27770
+        }
+    ],
+    "infoModuleAssetNames": [
+        "HP berry"
+    ],
+    "imageDirectory": "Sitrus berry"
+}
