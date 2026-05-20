@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: How would you like to use the PC?
   dialogueType: 1
-  interactionOptions: 090000000a00000000000000
+  isEventTrigger: 0
+  interactionOptions: 050000000600000000000000
   resultMessage: Booted up PC!
   optionsUiText:
   - Pokemon Storage

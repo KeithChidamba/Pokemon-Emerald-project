@@ -166,7 +166,6 @@ public static class InstanceFactory
         treeData.minutesSinceLastStage = data.minutesSinceLastStage;
         treeData.lastLogin = data.lastLogin;
         treeData.itemAssetName = data.itemAssetName;
-        treeData.treeObjectName = data.treeObjectName;
         treeData.minutesPerStage = data.minutesPerStage;
         treeData.berryItem = data.berryItem;
         treeData.spriteData = data.spriteData;

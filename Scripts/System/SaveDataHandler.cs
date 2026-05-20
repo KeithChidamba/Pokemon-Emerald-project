@@ -129,17 +129,10 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
             CreateAllSaveDirectories();
-            _gameLoadingHandler.uploadButton.interactable = false;
             LoadPlayerData(); 
             LoadItemData();
             LoadPokemonData();
         }
-        else
-        {
-            _gameLoadingHandler.uploadButton.interactable = true;
-            _gameLoadingHandler.PreventGameLoad();
-        }
-        
     }
 
     private void CreateAllSaveDirectories()
@@ -292,10 +285,10 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     {
         var playerPath = _saveDataPath + GetSaveDirectory(SaveDataDirectory.Player);
         var playerList = GetJsonFilesFromPath(playerPath);
-        
+
         if(playerList.Count==1)
         {
-            _gameLoadingHandler.playerData  = LoadObjectFromJson<PlayerData>(playerList[0]);
+            _gameLoadingHandler.playerData = LoadObjectFromJson<PlayerData>(playerList[0]);
         }
         else if (playerList.Count > 1)
         {

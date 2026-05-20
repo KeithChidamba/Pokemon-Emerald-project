@@ -48,10 +48,10 @@ public class Animation_manager : MonoBehaviour
     {
         if (currentState == newState)
         {
-            Debug.Log("Dup Anim: "+newState);
+           // Debug.Log("Dup Anim: "+newState);
             return;
         }
-        Debug.Log("New Anim: "+newState);
+       // Debug.Log("New Anim: "+newState);
         animator.Play(GetStateName(newState));
         currentState = newState;
     }

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: Would you like to view the controls?
   dialogueType: 1
-  interactionOptions: 0d00000000000000
+  isEventTrigger: 0
+  interactionOptions: 0800000000000000
   resultMessage: 
   optionsUiText:
   - Yes

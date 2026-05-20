@@ -32,12 +32,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     private MoveLogicHandler _moveLogicHandler;
     private BattleOperations _battleOperationsHandler;
     private Game_Load _gameLoadingHandler;
-    private DialogueOptionsEventHandler _dialogueOptionsHandler;
-
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _battleOperationsHandler = container.Resolve<BattleOperations>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
@@ -421,23 +418,19 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             yield break;
         }
         yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
-        _dialogueHandler.DisplayList($"{trainerName} is about to use {pokemonName}, change pokemon?",
-            new[] { InteractionOptions.None, InteractionOptions.None},
-            new[] { "Yes", "No" });
- 
-        _dialogueOptionsHandler.OnInteractionOptionChosen += AwaitPartyOpen;
+        
+        _dialogueHandler.DisplayCustomOptions($"{trainerName} is about to use {pokemonName}, change pokemon?",
+            new[] { "Yes", "No" }, new Action[] { SwitchAccepted, SwitchRejected });
+        
         bool processing = true;
         yield return new WaitUntil(() => !processing);
-        
-        void AwaitPartyOpen(Interaction interaction,int optionChosen)
-        {
-            _dialogueOptionsHandler.OnInteractionOptionChosen -= AwaitPartyOpen;
-            if (optionChosen > 0)
-            {//chose no
-                processing = false;
-                return;
-            }
 
+        void SwitchRejected()
+        {
+            processing = false;
+        }
+        void SwitchAccepted()
+        {
             _battleHandler.OnSwitchIn += ResetEvent;
             var currentParticipant = _battleHandler.battleParticipants[0];
             currentParticipant.SetupSwitchOut();

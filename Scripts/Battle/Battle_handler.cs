@@ -49,14 +49,14 @@ public class Battle_handler : MonoBehaviour, IInjectable
     
     private Dialogue_handler _dialogueHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
-    private DialogueOptionsEventHandler _dialogueOptionsHandler;
+    private Pokemon_party _playerParty;
     private InputStateHandler _inputStateHandler;
     private Game_ui_manager _gameUIHandler;
     private BattleIntro _battleIntroHandler;
     private Game_Load _gameLoadingHandler;
     private Pokemon_party _pokemonPartyHandler;
     private overworld_actions _overworldActions;
-    private Encounter_handler  _encounterHandler;
+
     private WildPokemonAiHandler _wildPokemonHandler;
     private Area_manager  _areaHandler;
     private BattleVisuals _battleVisualsHandler;
@@ -69,10 +69,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
-        _encounterHandler = container.Resolve<Encounter_handler>();
+        _playerParty = container.Resolve<Pokemon_party>();
         _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
-        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _areaHandler = container.Resolve<Area_manager>();
@@ -758,7 +757,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         overWorld.SetActive(true);
         if(playerWhiteOut)
         {
-            _dialogueOptionsHandler.HealPartyPokemon();
+            _playerParty.HealPartyPokemon();
             _areaHandler.TeleportToArea(AreaName.PokeCenter);
         }
         else

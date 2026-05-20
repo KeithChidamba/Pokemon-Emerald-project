@@ -34,6 +34,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private BattleVisuals _battleVisuals;
     private Pokemon_Details _pokemonDetailsHandler;
     private Dialogue_handler _dialogueHandler;
+    private Game_ui_manager _gameUIManager;
     
     public void Inject(ServiceContainer container)
     {
@@ -45,6 +46,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         _battleVisuals = container.Resolve<BattleVisuals>();
         _gameHandler=container.Resolve<Game_Load>();
         _pokemonDetailsHandler=container.Resolve<Pokemon_Details>();
+        _gameUIManager = container.Resolve<Game_ui_manager>();
         gameObject.SetActive(true);
     }   
 
@@ -279,11 +281,11 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             if (isPartyPokemon)
             {
                 SelectingMoveReplacement = true;
-                _dialogueHandler.DisplayList(
+                
+                _dialogueHandler.DisplayCustomOptions(
                     $"{currentPokemon.pokemonName} is trying to learn {moveName} ,do you want it to learn" +
-                    $" {moveName}?", new[] { InteractionOptions.LearnMove
-                        , InteractionOptions.SkipMove},
-                    new[] { "Yes", "No" });
+                    $" {moveName}?", new[] { "Yes", "No" }
+                    ,new Action[] { LearnMove, SkipMove });
                 
                 NewMoveAsset = moveFromAsset;
                 yield return new WaitUntil(()=>!LearningNewMove);
@@ -306,6 +308,23 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             currentPokemon.moveSet.Add(newMove);
         }
     }
+    private void LearnMove()
+    {        
+        _pokemonDetailsHandler.learningMove = true;
+        _pokemonDetailsHandler.OnMoveSelected += LearnSelectedMove;
+        _dialogueHandler.DisplayBattleInfo("Which move will you replace?",false);
+        _gameUIManager.ViewPartyPokemonDetails(currentPokemon);
+    }
+    public void SkipMove()
+    {
+        _dialogueHandler.DeletePreviousOptions();
+        _pokemonDetailsHandler.OnMoveSelected = null;
+        SelectingMoveReplacement = false;
+        LearningNewMove = false;
+        _pokemonDetailsHandler.learningMove = false;
+        _dialogueHandler.DisplayBattleInfo(currentPokemon.pokemonName +
+                                           " did not learn "+NewMoveAsset.moveName,false);
+    }
     public IEnumerator LearnTmOrHm(AdditionalInfoModule infoModule, Pokemon pokemon)
     {
         currentPokemon = pokemon;
@@ -325,7 +344,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                 break;
         }
     }
-    public void LearnSelectedMove(int moveIndex)
+    private void LearnSelectedMove(int moveIndex)
     {
         _pokemonDetailsHandler.OnMoveSelected -= LearnSelectedMove;
         _pokemonDetailsHandler.learningMove = false;

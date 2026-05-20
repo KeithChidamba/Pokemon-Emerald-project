@@ -7,12 +7,12 @@ public class PokemonDetailsInputService
 {
     private Pokemon_Details _pokemonDetailsHandler;
     private InputStateHandler _inputStateHandler;
-    private DialogueOptionsEventHandler _dialogueOptionsHandler;
+    private PokemonOperations _pokemonOperations;
     public PokemonDetailsInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
-        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
+        _pokemonOperations = container.Resolve<PokemonOperations>();
     }
     public void DetermineOperation()
     {
@@ -56,7 +56,7 @@ public class PokemonDetailsInputService
         if (state.stateName != InputStateName.PokemonDetailsMoveSelection) return;
         _inputStateHandler.OnStateRemoved -= RemoveDetailsInputStates;
         //if started learning but rejected it on move selection screen
-        _dialogueOptionsHandler.SkipMove();
+        _pokemonOperations.SkipMove();
         _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonDetails);
     }
 

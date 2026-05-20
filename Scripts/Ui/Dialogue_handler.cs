@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage}
+public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage,CustomOptions}
 public class Dialogue_handler : MonoBehaviour,IInjectable
 {
     public Overworld_interactable currentInteractable;
@@ -146,17 +146,33 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         newInteraction.resultMessage = result;
         return newInteraction;
     }
-    public void DisplayList(string info,InteractionOptions[] options
-        , string[]optionsText,string result="")//list info
+    public void DisplayCustomOptions(string info, string[]optionsText, Action[] optionEvents,string result="")
     {
+        _inputStateHandler.AddDialoguePlaceHolderState();
+        _dialogueOptionsHandler.OnInteractionOptionChosen += InvokeSelectedOption;
+        OnOptionsDisplayed += RemovePlaceholder;
+        
         canExitDialogue = false;
-        var newInteraction = NewInteraction(info,DialogType.Options,result);
-        foreach (var option in options)
-            newInteraction.interactionOptions.Add(option);
-        foreach (string txt in optionsText)
-            newInteraction.optionsUiText.Add(txt);
+        var newInteraction = NewInteraction(info,DialogType.CustomOptions,result);
+        for (var i=0;i<optionsText.Length;i++)
+        {
+            newInteraction.interactionOptions.Add(InteractionOptions.None);
+        }
+        foreach (string txt in optionsText) newInteraction.optionsUiText.Add(txt);
         
         HandleInteraction(newInteraction);
+        return;
+        
+        void RemovePlaceholder(Overworld_interactable interactable)
+        {
+            OnOptionsDisplayed -= RemovePlaceholder;
+            _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder);
+        }
+        void InvokeSelectedOption(Interaction interaction,int optionIndex)
+        {
+            optionEvents[optionIndex]?.Invoke();
+            _dialogueOptionsHandler.OnInteractionOptionChosen -= InvokeSelectedOption;
+        }
     }
     public void DisplaySpecific(string info, DialogType type)
     {
@@ -354,7 +370,8 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     private void CompleteDialogueInteraction(Interaction currentInteraction)
     {
         if (currentInteraction == null) return;
-        if (currentInteraction.dialogueType == DialogType.Options)
+        if (currentInteraction.dialogueType == DialogType.Options 
+            || currentInteraction.dialogueType == DialogType.CustomOptions)
         {
             CreateDialogueOptions(currentInteraction);
         }

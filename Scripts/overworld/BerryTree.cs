@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BerryTree : MonoBehaviour,IInjectable
+public class BerryTree : MonoBehaviour
 {
     public Overworld_interactable primaryInteractable;
     public Interaction harvestInteraction;
@@ -12,13 +12,11 @@ public class BerryTree : MonoBehaviour,IInjectable
 
     public SpriteRenderer treeSpriteRenderer;
     private int _currentSpriteIndex;
-    public bool loadedFromJSON;
     [SerializeField] private float secondsCounter;
 
     public event Action<bool> OnInteractionComplete;
 
     private Dialogue_handler _dialogueHandler;
-    private DialogueOptionsEventHandler _gameLoadHandler;
     private Bag _playerBag;
     private Game_ui_manager _gameUIHandler;
     private InputStateHandler _inputStateHandler;
@@ -27,22 +25,18 @@ public class BerryTree : MonoBehaviour,IInjectable
     
     public void Inject(ServiceContainer container)
     {
+        //this class is instantiated, so it doesn't get dependencies until later
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _overworldActions = container.Resolve<overworld_actions>();
         _playerBag = container.Resolve<Bag>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        OnInject();
-    }
-
-    private void OnInject()
-    {
         _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += ChooseBerryToPlant;
         _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += HarvestBerries;
         _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += WaterTree;
-        gameObject.SetActive(true);
         primaryInteractable = GetComponent<Overworld_interactable>();
+        gameObject.SetActive(true);
     }
     
     private void SetInteraction(OverworldInteractionType type)
@@ -57,23 +51,22 @@ public class BerryTree : MonoBehaviour,IInjectable
         primaryInteractable.interaction.overworldInteraction = type;
     }
 
-    public void LoadDefaultAsset()
+    public void LoadDefaultAsset(BerryTreeData treeDataAsset, int soilIndex)
     {
-        var copy = InstanceFactory.CreateTreeData(treeData);
-        treeData = null;
-        treeData = copy;
+        treeData = InstanceFactory.CreateTreeData(treeDataAsset);
+        treeData.itemAssetName = treeData.berryItem.itemName;
+        treeData.soilIndex = soilIndex;
         treeData.isPlanted = true;
-        treeData.treeObjectName = name;
         treeData.currentStageProgress = 4;
         treeData.currentStageNeedsWater = false;
         SetInteraction(OverworldInteractionType.PickBerry);
     }
 
-    public void LoadTreeData(BerryTreeData tree)
+    public void LoadTreeData(BerryTreeData data)
     {
-        loadedFromJSON = true;
-        treeData = tree;
-        treeSpriteRenderer.sprite = treeData.isPlanted? treeData.GetTreeSprite()[0] : null;
+        treeData = data;
+        treeData.itemAssetName = treeData.berryItem.itemName;
+        treeSpriteRenderer.sprite = treeData.isPlanted? treeData.GetTreeSprites()[0] : null;
         var lastLoginTime = treeData.GetLastLogin();
         
         TimeSpan timeDifference = DateTime.Now - lastLoginTime;
@@ -221,7 +214,6 @@ public class BerryTree : MonoBehaviour,IInjectable
         treeData = InstanceFactory.CreateTreeData(treeDataAsset);
         
         treeData.isPlanted = true;
-        treeData.treeObjectName = name;
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
         
         _dialogueHandler.DisplayDetails($"You planted a {berryToPlant.itemName}");
@@ -268,7 +260,7 @@ public class BerryTree : MonoBehaviour,IInjectable
         if (treeData is not { isPlanted: true }) return;
         
         _currentSpriteIndex = _currentSpriteIndex==1? 0 : _currentSpriteIndex+1;
-        treeSpriteRenderer.sprite = treeData.GetTreeSprite()[_currentSpriteIndex];
+        treeSpriteRenderer.sprite = treeData.GetTreeSprites()[_currentSpriteIndex];
     }
 }
 

@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Interable_obj", menuName = "interaction")]
+[CreateAssetMenu(fileName = "Interaction", menuName = "interaction")]
 public class Interaction : ScriptableObject
 {
     [FormerlySerializedAs("InteractionMsg")] public string interactionMessage = "";

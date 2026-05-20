@@ -16,10 +16,9 @@ public class BerryTreeData : ScriptableObject
      
      public string itemAssetName;
      public Item berryItem;
-     public string treeObjectName;
      public int minutesPerStage;
      public List<BerrySpriteData> spriteData = new();
-
+     public int soilIndex;
      public string lastLogin;
     
      public DateTime GetLastLogin()
@@ -32,7 +31,7 @@ public class BerryTreeData : ScriptableObject
           lastLogin = dt.ToString("o"); // "o" = ISO 8601
      }
      
-     public Sprite[] GetTreeSprite()
+     public Sprite[] GetTreeSprites()
      {
           return spriteData.First(s => s.growthStageNumber == currentStageProgress).growthStageSprites;
      }

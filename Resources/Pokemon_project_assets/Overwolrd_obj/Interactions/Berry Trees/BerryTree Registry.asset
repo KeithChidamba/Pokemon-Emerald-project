@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7eb061abeabcbb8dbf79cc866272529, type: 3}
+  m_Name: BerryTree Registry
+  m_EditorClassIdentifier: 
+  berryTrees:
+  - treePosition: {x: 8, y: -16, z: 0}
+    treeData:
+    - {fileID: 11400000, guid: 28301d94c39b308f3b1e16101fee2f59, type: 2}
+    - {fileID: 11400000, guid: 9e6245473fe028d63ae39f145b2be2e6, type: 2}
+    - {fileID: 11400000, guid: f6069d8a538e20de1a22090478f7dd77, type: 2}
+    - {fileID: 11400000, guid: 6466067630d211da894c17841e9e1f07, type: 2}
+    loadedFromJson: 0
+  - treePosition: {x: 4, y: -19, z: 0}
+    treeData:
+    - {fileID: 11400000, guid: 65bcf637fc3726b94a7b454848d83c50, type: 2}
+    - {fileID: 11400000, guid: 3f6e600b924d9622c91e4a0bc5a916ba, type: 2}
+    - {fileID: 11400000, guid: 65bcf637fc3726b94a7b454848d83c50, type: 2}
+    - {fileID: 11400000, guid: 3f6e600b924d9622c91e4a0bc5a916ba, type: 2}
+    loadedFromJson: 0
+  - treePosition: {x: 87, y: -85, z: 0}
+    treeData:
+    - {fileID: 11400000, guid: 90f4ed89be995febbb10dd41e7d68816, type: 2}
+    - {fileID: 11400000, guid: 90f4ed89be995febbb10dd41e7d68816, type: 2}
+    - {fileID: 11400000, guid: 90f4ed89be995febbb10dd41e7d68816, type: 2}
+    - {fileID: 11400000, guid: 90f4ed89be995febbb10dd41e7d68816, type: 2}
+    loadedFromJson: 0
+  - treePosition: {x: 83, y: -85, z: 0}
+    treeData:
+    - {fileID: 11400000, guid: d313bbdf23bcc6e299b392d98f17437b, type: 2}
+    - {fileID: 11400000, guid: d313bbdf23bcc6e299b392d98f17437b, type: 2}
+    - {fileID: 11400000, guid: d313bbdf23bcc6e299b392d98f17437b, type: 2}
+    - {fileID: 11400000, guid: d313bbdf23bcc6e299b392d98f17437b, type: 2}
+    loadedFromJson: 0
+  - treePosition: {x: -16, y: -16, z: 0}
+    treeData:
+    - {fileID: 11400000, guid: 3be16188c1638c2c291bc5585c0eb1ac, type: 2}
+    - {fileID: 11400000, guid: 3be16188c1638c2c291bc5585c0eb1ac, type: 2}
+    - {fileID: 11400000, guid: 3be16188c1638c2c291bc5585c0eb1ac, type: 2}
+    - {fileID: 11400000, guid: 3be16188c1638c2c291bc5585c0eb1ac, type: 2}
+    loadedFromJson: 0
+  - treePosition: {x: 56, y: -16, z: 0}
+    treeData:
+    - {fileID: 11400000, guid: 41648b944ddd664e1aa25a770858aa8e, type: 2}
+    - {fileID: 11400000, guid: 41648b944ddd664e1aa25a770858aa8e, type: 2}
+    - {fileID: 11400000, guid: 41648b944ddd664e1aa25a770858aa8e, type: 2}
+    - {fileID: 11400000, guid: 41648b944ddd664e1aa25a770858aa8e, type: 2}
+    loadedFromJson: 0
+  - treePosition: {x: 55, y: -39, z: 0}
+    treeData:
+    - {fileID: 11400000, guid: 07b527041f4bb29a996c8f694d8fa38c, type: 2}
+    - {fileID: 11400000, guid: 07b527041f4bb29a996c8f694d8fa38c, type: 2}
+    - {fileID: 11400000, guid: 07b527041f4bb29a996c8f694d8fa38c, type: 2}
+    - {fileID: 11400000, guid: 07b527041f4bb29a996c8f694d8fa38c, type: 2}
+    loadedFromJson: 0
+  - treePosition: {x: 61, y: -16, z: 0}
+    treeData:
+    - {fileID: 11400000, guid: b9127919df8d5c9c7b9ec196f2239bff, type: 2}
+    - {fileID: 11400000, guid: b9127919df8d5c9c7b9ec196f2239bff, type: 2}
+    - {fileID: 11400000, guid: b9127919df8d5c9c7b9ec196f2239bff, type: 2}
+    - {fileID: 11400000, guid: b9127919df8d5c9c7b9ec196f2239bff, type: 2}
+    loadedFromJson: 0
+  - treePosition: {x: 60, y: -39, z: 0}
+    treeData:
+    - {fileID: 11400000, guid: 0855a61cbd63af95fbbe2cc3b8a47e20, type: 2}
+    - {fileID: 11400000, guid: 4da69e411960af92a9ac7dece0344053, type: 2}
+    - {fileID: 11400000, guid: 8fdf442f8368f7e919e08b91fc944c84, type: 2}
+    - {fileID: 11400000, guid: c6efc88dfef9868b18872d8b6630b967, type: 2}
+    loadedFromJson: 0

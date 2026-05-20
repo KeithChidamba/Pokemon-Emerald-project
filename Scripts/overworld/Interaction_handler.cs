@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -143,12 +144,8 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                         tableOfEncounter = animatedWaterTile.table;
                     }
                     _overworldActions.fishingTable = (FishingEncounterTable)tableOfEncounter;
-                    _dialogueHandler.DisplayList("Would you like to fish for pokemon", 
-                       new[]
-                       {
-                           InteractionOptions.Fish,InteractionOptions.None
-                       }
-                       , new[]{"Yes", "No"},"fishing...");
+                    _dialogueHandler.DisplayCustomOptions("Would you like to fish for pokemon"
+                       , new[]{"Yes", "No"},new Action[] { _overworldActions.PlayFishingAnimation, null });
                 }
                 else
                 {

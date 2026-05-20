@@ -123,11 +123,19 @@ public class Bag : MonoBehaviour,IInjectable
         itemToSell.quantity -= sellQuantity;
         if (itemToSell.quantity == 0) RemoveItem(itemToSell);
         
-        _dialogueHandler.DisplayList("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
-             new[]{ InteractionOptions.SellItem
-                 ,InteractionOptions.LeaveStore }, new[]{"Yes", "No"},"Sure, which item?");
+        _dialogueHandler.DisplayCustomOptions("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
+              new[]{"Yes", "No"},new Action[] { SellItem, LeaveStore },"Sure, which item?");
         
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
+        void SellItem()
+        {
+            currentBagUsage = BagUsage.SellingView;
+            _gameUIHandler.ViewBag();
+        }
+        void LeaveStore()
+        {
+            _dialogueHandler.DisplayDetails("Have a great day!");
+        }
     }
     public void CheckItemQuantity(Item item)
     {

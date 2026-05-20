@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: Hey! Let's single battle
   dialogueType: 2
-  interactionOptions: 02000000
+  isEventTrigger: 0
+  interactionOptions: 01000000
   resultMessage: 
   optionsUiText: []
   additionalInfo:

@@ -126,6 +126,11 @@ public class overworld_actions : MonoBehaviour,IInjectable
             OnActionComplete?.Invoke();
         }
     }
+    public void PlayFishingAnimation()
+    {
+        manager.ChangeAnimationState(PlayerAnimationState.FishingStart);
+        _dialogueHandler.DisplayDetails("fishing...");
+    }
     private void StartFishingAction()
     {
         _playerMovementHandler.RestrictPlayerMovement();

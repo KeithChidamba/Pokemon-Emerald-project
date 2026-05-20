@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionMessage: It's a pokeball with a pokemon inside, take it?
   dialogueType: 1
-  interactionOptions: 0b00000000000000
+  isEventTrigger: 0
+  interactionOptions: 0700000000000000
   resultMessage: 3
   optionsUiText:
   - Yes

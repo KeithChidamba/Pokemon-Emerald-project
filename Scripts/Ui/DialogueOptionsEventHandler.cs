@@ -4,9 +4,9 @@ using UnityEngine;
 
 public enum InteractionOptions
 {
-    None,CloseApplication,Battle,LearnMove,SkipMove,
-    Fish,Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,
-    ReceiveGiftPokemon,LeaveStore,ViewControls,
+    None,Battle,
+    Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,
+    ReceiveGiftPokemon,ViewControls,
 }
 public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
 {
@@ -18,11 +18,8 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     
     private Dialogue_handler _dialogueHandler;
     private Pokemon_party _playerParty;
-    private PokemonOperations _pokemonOperations;
-    private Pokemon_Details _pokemonDetailsHandler;
+    private Bag _playerBagHandler;
     private Game_ui_manager _gameUIManager;
-    private overworld_actions _overworldActionsHandler;
-    private Bag _playerBag;
     private pokemon_storage _pokemonStorage;
     private Battle_handler _battleHandler;
     
@@ -31,29 +28,21 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _playerParty = container.Resolve<Pokemon_party>();
         _gameUIManager = container.Resolve<Game_ui_manager>();
-        _pokemonOperations = container.Resolve<PokemonOperations>();
-        _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
-        _overworldActionsHandler = container.Resolve<overworld_actions>();
+        _playerBagHandler = container.Resolve<Bag>();
         _battleHandler = container.Resolve<Battle_handler>();
         _pokemonStorage = container.Resolve<pokemon_storage>();
-        _playerBag = container.Resolve<Bag>();
-        
+       
         gameObject.SetActive(true);
         OnInject();
     }
 
     private void OnInject()
     {
-        _interactionMethods.Add(InteractionOptions.CloseApplication,CloseApplication);
         _interactionMethods.Add(InteractionOptions.Battle,Battle);
-        _interactionMethods.Add(InteractionOptions.LearnMove,LearnMove);
-        _interactionMethods.Add(InteractionOptions.SkipMove,SkipMove);
-        _interactionMethods.Add(InteractionOptions.Fish,Fish);
         _interactionMethods.Add(InteractionOptions.Interact,Interact);
-        _interactionMethods.Add(InteractionOptions.SellItem,SellItem);
-        _interactionMethods.Add(InteractionOptions.LeaveStore,LeaveStore);
         _interactionMethods.Add(InteractionOptions.HealPokemon,HealPokemon);
         _interactionMethods.Add(InteractionOptions.OpenPokemonStorage,OpenPokemonStorage);
+        _interactionMethods.Add(InteractionOptions.SellItem,SellItem);
         _interactionMethods.Add(InteractionOptions.OpenItemStorage,OpenItemStorage);
         _interactionMethods.Add(InteractionOptions.ReceiveGiftPokemon,ReceiveGiftPokemon);
         _interactionMethods.Add(InteractionOptions.ViewControls,ViewControls);
@@ -66,9 +55,8 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     }
     public void ExitGame()
     {
-        _dialogueHandler.DisplayList("Are you sure you want to exit?, you will lose unsaved data!",
-             new[]{ InteractionOptions.CloseApplication,InteractionOptions.None}
-             , new[]{"Yes", "No"},"Good bye!");
+        _dialogueHandler.DisplayCustomOptions("Are you sure you want to exit?, you will lose unsaved data!"
+             , new[]{"Yes", "No"},new Action[] { CloseApplication, null },"Good bye!");
     }
 
     void ViewControls()
@@ -81,40 +69,16 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
         _dialogueHandler.EndDialogue(); 
         _battleHandler.SetBattleType(_currentInteraction.additionalInfo);
     }
-
-    void LearnMove()
-    {        
-        _pokemonDetailsHandler.learningMove = true;
-        _pokemonDetailsHandler.OnMoveSelected += _pokemonOperations.LearnSelectedMove;
-        _dialogueHandler.DisplayBattleInfo("Which move will you replace?",false);
-        _gameUIManager.ViewPartyPokemonDetails(_pokemonOperations.currentPokemon);
-    }
-    public void SkipMove()
-    {
-        _dialogueHandler.DeletePreviousOptions();
-        _pokemonDetailsHandler.OnMoveSelected = null;
-        _pokemonOperations.SelectingMoveReplacement = false;
-        _pokemonOperations.LearningNewMove = false;
-        _pokemonDetailsHandler.learningMove = false;
-        _dialogueHandler.DisplayBattleInfo(_pokemonOperations.currentPokemon.pokemonName +
-                                                    " did not learn "+_pokemonOperations.NewMoveAsset.moveName,false);
-    }
-
+    
     void HealPokemon()
     {
-        HealPartyPokemon();
+        _playerParty.HealPartyPokemon();
         _dialogueHandler.DisplayDetails("Your pokemon have been healed, you're welcome!");
     }
-    public void HealPartyPokemon()
+    void SellItem()
     {
-        for (int i = 0; i < _playerParty.numMembers; i++)
-        {
-            var pokemon = _playerParty.party[i];
-            pokemon.hp = pokemon.maxHp;
-            foreach (var move in pokemon.moveSet)
-                move.powerpoints = move.maxPowerpoints;
-            pokemon.statusEffect = StatusEffect.None;
-        }
+        _playerBagHandler.currentBagUsage = BagUsage.SellingView;
+        _gameUIManager.ViewBag();
     }
     void OpenPokemonStorage()
     {
@@ -146,22 +110,6 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     {
         _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
     }
-    void Fish()
-    {
-        _overworldActionsHandler.manager.ChangeAnimationState(PlayerAnimationState.FishingStart);
-        _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
-    }
-    void SellItem()
-    {
-        _playerBag.currentBagUsage = BagUsage.SellingView;
-        _gameUIManager.ViewBag();
-    }
-
-    void LeaveStore()
-    {
-        _dialogueHandler.DisplayDetails("Have a great day!");
-    }
-
     public void AlertOverworldInteraction(Overworld_interactable interactable,int optionIndex)
     {
         OnOverworldInteractionOptionChosen?.Invoke(interactable,optionIndex);

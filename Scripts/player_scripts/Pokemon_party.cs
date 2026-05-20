@@ -368,4 +368,15 @@ public class Pokemon_party : MonoBehaviour,IInjectable
             party[^1] = null;
         }
     }
+    public void HealPartyPokemon()
+    {
+        for (int i = 0; i < numMembers; i++)
+        {
+            var pokemon = party[i];
+            pokemon.hp = pokemon.maxHp;
+            foreach (var move in pokemon.moveSet)
+                move.powerpoints = move.maxPowerpoints;
+            pokemon.statusEffect = StatusEffect.None;
+        }
+    }
 }
