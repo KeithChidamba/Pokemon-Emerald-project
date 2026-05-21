@@ -186,7 +186,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         var battleOptionSelectables = new List<SelectableUI>
         {
             new(battleOptions[0], LoadMoveInputAndText, true),
-            new(battleOptions[1], _gameUIHandler.ViewBag, true),
+            new(battleOptions[1], _gameUIHandler.ValidateBagView, true),
             new(battleOptions[2], _gameUIHandler.ViewPokemonParty, true),
             new(battleOptions[3], () => StartCoroutine(RunAway()), true)
         };
@@ -280,6 +280,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     public void SetBattleType(List<string> trainerNames)
     {
+        _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Battle);
         _pokemonPartyHandler.SortByFainted();
         var copyOfTrainerData = Resources.Load<TrainerData>(
             SaveDataHandler.GetDirectory(AssetDirectory.TrainerData)
@@ -709,8 +710,15 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
         yield return _battleIntroHandler.BlackFade();
         yield return ResetUiAfterBattle(playerWhiteOut);
-        //battle triggered from fishing
-        if(_overworldActions.fishing) _overworldActions.ResetFishingAction();
+       
+        if(_overworldActions.fishing)
+        {
+            _overworldActions.EndFishing();
+        }
+        else
+        {
+            _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.Battle);
+        }
     }
 
     public void EndBattle(bool hasWon,bool battleTerminated=false)

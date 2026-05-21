@@ -60,7 +60,7 @@ public class Bag : MonoBehaviour,IInjectable
     private int _totalSellingAmount;
     public event Action<Item> OnItemSelected;//bag managed
     public event Action<Item> OnItemUsed;//self-managed
-    public event Action OnBagOpened;
+    public event Action OnBagOpened;//bag managed, optional self
     
     public event Action<Item> OnItemSold;
     private Pokemon_party _pokemonPartyHandler;
@@ -71,13 +71,11 @@ public class Bag : MonoBehaviour,IInjectable
     private Game_ui_manager _gameUIHandler;
     private Game_Load _gameLoadingHandler;
     private Item_handler _itemHandler;
-    private PlayerBagInputService _playerBagInputService;
     private overworld_actions _overworldActions;
     
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _playerBagInputService = container.Resolve<PlayerBagInputService>();
         _battleHandler = container.Resolve<Battle_handler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
@@ -113,11 +111,6 @@ public class Bag : MonoBehaviour,IInjectable
     public void SellToMarket()
     {
         var itemToSell = currentCategoryOfItems[topIndex + selectedItemIndex];
-        if (!itemToSell.canBeSold)
-        {
-            _dialogueHandler.DisplayDetails("You cant sell that!");
-            return;
-        }
         OnItemSold?.Invoke(itemToSell);
         _gameLoadingHandler.playerData.playerMoney += _totalSellingAmount;
         itemToSell.quantity -= sellQuantity;
@@ -130,7 +123,7 @@ public class Bag : MonoBehaviour,IInjectable
         void SellItem()
         {
             currentBagUsage = BagUsage.SellingView;
-            _gameUIHandler.ViewBag();
+            _gameUIHandler.ValidateBagView();
         }
         void LeaveStore()
         {
@@ -165,6 +158,7 @@ public class Bag : MonoBehaviour,IInjectable
         sellQuantity = 1;
         sellQuantityText.text = "X0";
         sellingAmountText.text = "0";
+        SetupBagState();
     }
     public void ChangeQuantity(int value)
     {
@@ -240,7 +234,7 @@ public class Bag : MonoBehaviour,IInjectable
             currentCategoryTitle.sprite = bagCategoryTitles[currentCategoryIndex];
             currentBagImage.sprite = bagCategoryImages[currentCategoryIndex];
             ClearBagUI();
-            ViewBag();
+            SetupBagState();
         }
         _rightArrow.gameObject.SetActive(true);
         _leftArrow.gameObject.SetActive(currentCategoryIndex>0);
@@ -256,7 +250,7 @@ public class Bag : MonoBehaviour,IInjectable
             currentCategoryTitle.sprite = bagCategoryTitles[currentCategoryIndex];
             currentBagImage.sprite = bagCategoryImages[currentCategoryIndex];
             ClearBagUI();
-            ViewBag();
+            SetupBagState();
         }        
         _leftArrow.gameObject.SetActive(true);
         _rightArrow.gameObject.SetActive(currentCategoryIndex!=_categories.Length-1);
@@ -271,7 +265,7 @@ public class Bag : MonoBehaviour,IInjectable
     {
         allItems.Remove(item);
         ClearBagUI();
-        ViewBag();
+        SetupBagState();
     }
     public void TakeItem(int memberIndex)
     {
@@ -297,7 +291,7 @@ public class Bag : MonoBehaviour,IInjectable
         }
         currentBagUsage = BagUsage.SelectionOnly;
         OnItemSelected += GiveItem;
-        _gameUIHandler.ViewBag();
+        _gameUIHandler.ValidateBagView();
     }
 
     private void GiveItem(Item itemToBeGiven)
@@ -318,6 +312,11 @@ public class Bag : MonoBehaviour,IInjectable
         itemToBeGiven.quantity--;
         CheckItemQuantity(itemToBeGiven);
         _pokemonPartyHandler.RefreshMemberCards();
+    }
+
+    public Item GetCurrentItem()
+    {
+        return currentCategoryOfItems[topIndex + selectedItemIndex];
     }
     public void UseItem()
      {
@@ -364,7 +363,7 @@ public class Bag : MonoBehaviour,IInjectable
         AddItem(itemToWithdraw);
         storageItems.Remove(itemToWithdraw);
         ClearBagUI();
-        ViewBag();
+        SetupBagState();
     }
     public void DepositToStorage(Item itemToDeposit)
     {
@@ -452,7 +451,7 @@ public class Bag : MonoBehaviour,IInjectable
     {
         return _categories[currentCategoryIndex] == BagCategory.KeyItems;
     }
-    public void ViewBag()
+    public void SetupBagState()
     {
         numItems = 0;
         topIndex = 0;
@@ -500,14 +499,10 @@ public class Bag : MonoBehaviour,IInjectable
             bagItemsUI[i].LoadItemUI();
         }
         selectedItemIndex = 0;
-        
         if (numItems > 0) SelectItem();
-        if (_inputStateHandler.currentState.stateGroup==InputStateGroup.Bag)
-        {
-            _playerBagInputService.PlayerBagNavigationRestrictions();
-        }
         
         OnBagOpened?.Invoke();
+        _gameUIHandler.SetBagInputState();
         
         //default visuals
         _upArrow.gameObject.SetActive(false);

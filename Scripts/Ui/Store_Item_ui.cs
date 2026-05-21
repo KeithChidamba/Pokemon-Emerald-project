@@ -9,7 +9,8 @@ public class Store_Item_ui : MonoBehaviour,IInjectable
     public Text itemName;
     public Image itemImage;
     private Poke_Mart _pokeMartHandler;
-
+   
+    
     public void Inject(ServiceContainer container)
     {
         _pokeMartHandler = container.Resolve<Poke_Mart>();
@@ -23,6 +24,7 @@ public class Store_Item_ui : MonoBehaviour,IInjectable
     {
         _pokeMartHandler.itemDescription.text = item.itemDescription;
         itemImage.sprite = item.itemImage;
+        Utility.ResizeImageToSprite(ref itemImage, _pokeMartHandler.itemImageTargetSize);
     }
     public void ClearUI()
     {

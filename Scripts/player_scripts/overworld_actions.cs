@@ -22,7 +22,8 @@ public class overworld_actions : MonoBehaviour,IInjectable
     private Player_movement _playerMovementHandler;
     private Encounter_handler _encounterHandler;
     private Game_Load _gameLoadingHandler;
-
+    private Battle_handler _battleHandler;
+    
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -30,6 +31,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
         _playerMovementHandler = container.Resolve<Player_movement>();
         _gameUIManager = container.Resolve<Game_ui_manager>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
+        _battleHandler = container.Resolve<Battle_handler>();
         OnInject();
     }
     private void OnInject()
@@ -92,40 +94,39 @@ public class overworld_actions : MonoBehaviour,IInjectable
             pokemonBitingPole = false;
             _encounterHandler.TriggerFishingEncounter(fishingTable,equippedSpecialItem);
         }
-        if (fishing)
+        if (fishing && !_battleHandler.battleInProgress)
         {
-            manager.ChangeAnimationState(PlayerAnimationState.FishingIdle);
             if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
-                ResetFishingAction();
+            {
+                StartCoroutine(EndFishingAction());
+            }
         }
     }
 
-    IEnumerator TryFishing()
+    private IEnumerator TryFishing()
     {
+        manager.ChangeAnimationState(PlayerAnimationState.FishingIdle);
         var random = Utility.RandomRange(1, 11);
         yield return new WaitForSeconds(1f);
-        if (!fishing) yield break;//if fishing canceled early
+        if (!fishing) yield break; //if fishing canceled early
         if (random < 5)
         {
             pokemonBitingPole = true;
             _dialogueHandler.DisplayDetails("Oh!, a Bite!, Press Z");
-            yield return new WaitForSeconds( (2 * (random/10f) ) + 1f);
+            yield return new WaitForSeconds((2 * (random / 10f)) + 1f);
             if (pokemonBitingPole)
             {
                 _dialogueHandler.DisplayDetails("It got away");
-                ResetFishingAction();
-                yield return new WaitForSeconds(1);
-                OnActionComplete?.Invoke();
+                yield return EndFishingAction();
             }
         }
         else
         {
             _dialogueHandler.DisplayDetails("Dang...nothing");
-            ResetFishingAction();
-            yield return new WaitForSeconds(1);
-            OnActionComplete?.Invoke();
+            yield return EndFishingAction();
         }
     }
+
     public void PlayFishingAnimation()
     {
         manager.ChangeAnimationState(PlayerAnimationState.FishingStart);
@@ -133,17 +134,23 @@ public class overworld_actions : MonoBehaviour,IInjectable
     }
     private void StartFishingAction()
     {
-        _playerMovementHandler.RestrictPlayerMovement();
+        _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.OverworldAction);
         fishing = true;
         StartCoroutine(TryFishing());
     }
-    public void ResetFishingAction()
+
+    private IEnumerator EndFishingAction()
     {
         fishing = false;
         pokemonBitingPole = false;
         manager.ChangeAnimationState(PlayerAnimationState.FishingEnd);
+        yield return new WaitForSeconds(1f);
+        OnActionComplete?.Invoke();
     }
-
+    public void EndFishing()
+    {
+        StartCoroutine(EndFishingAction());
+    }
     public IEnumerator WaterTrees(BerryTree treeToWater)
     {
         manager.ChangeAnimationState(PlayerAnimationState.Watering);

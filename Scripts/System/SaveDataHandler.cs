@@ -211,7 +211,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         LoadItemData();
         LoadPokemonData();
         yield return new WaitForSecondsRealtime(1f);
-        _gameLoadingHandler.AllowGameLoad();
+        _gameLoadingHandler.StartGame();
     }
     public List<SettingsConfig> LoadGameSettingsData()
     {

@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 1,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Pomeg berry",
+    "berryItem": {
+        "instanceID": 26494
+    },
+    "minutesPerStage": 180,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32724
+                },
+                {
+                    "instanceID": 32724
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32726
+                },
+                {
+                    "instanceID": 32728
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32892
+                },
+                {
+                    "instanceID": 32894
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32896
+                },
+                {
+                    "instanceID": 32898
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32900
+                },
+                {
+                    "instanceID": 32902
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 7,
+    "lastLogin": "2026-05-21T09:28:14.8413930+02:00"
+}

@@ -27,6 +27,7 @@ public class Poke_Mart : MonoBehaviour,IInjectable
     public GameObject itemSelector;
     public GameObject quantitySelector;
     public Text itemDescription;
+    public Vector2 itemImageTargetSize = new (90, 90);
     public event Action<Item> OnItemBought;
     
     private Dialogue_handler _dialogueHandler;

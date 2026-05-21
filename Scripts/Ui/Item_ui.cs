@@ -35,25 +35,11 @@ public class Item_ui : MonoBehaviour,IInjectable
     {
         _playerBagHandler.currentItemDescription.text = item.itemDescription;
         _playerBagHandler.currentItemImage.sprite = item.itemImage;
-        
-        // Set to sprite's real size
-        _playerBagHandler.currentItemImage.SetNativeSize();
-        RectTransform rt = _playerBagHandler.currentItemImage.rectTransform;
 
-        float width = rt.sizeDelta.x;
-        float height = rt.sizeDelta.y;
-
-        // Find scale needed to fit inside target box
-        float scale = Mathf.Min(
-            _playerBagHandler.itemImageTargetSize.x / width,
-            _playerBagHandler.itemImageTargetSize.y / height
-        );
-
-        rt.sizeDelta = new Vector2(
-            width * scale,
-            height * scale
-        );
+        Utility.ResizeImageToSprite(ref _playerBagHandler.currentItemImage, _playerBagHandler.itemImageTargetSize);
     }
+
+    
     public void ResetUI()
     {
         _playerBagHandler.currentItemDescription.text = "";

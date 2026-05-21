@@ -189,7 +189,7 @@ public class BerryTree : MonoBehaviour
         _dialogueHandler.DeletePreviousOptions();
         _playerBag.OnItemSelected += PlantBerry;
         _playerBag.currentBagUsage = BagUsage.SelectionOnly;
-        _gameUIHandler.ViewBag();
+        _gameUIHandler.ValidateBagView();
     }
     private void PlantBerry(Item berryToPlant)
     {

@@ -59,7 +59,7 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
         
         if (randomNumber < encounterChance)
         {
-            _playerMovementHandler.RestrictPlayerMovement();
+            _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Battle);
             _encounterHandler.TriggerEncounter((NormalEncounteArea)tile.table);
         }
     }

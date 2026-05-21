@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
-
+public enum MovementRestrictor{Dialogue,UI,OverworldAction,Battle}
 public class Player_movement : MonoBehaviour,IInjectable
 {
     public Camera playerCamera;
@@ -28,32 +29,33 @@ public class Player_movement : MonoBehaviour,IInjectable
     [SerializeField]private Vector3 previousValidPosition;
     [SerializeField]private LayerMask movementBlockers;
     [SerializeField]private bool standingOnTile;
-
+    private Dictionary<MovementRestrictor, bool> _movementRestrictors = new();
+    
     private overworld_actions _overworldActions;
     private Dialogue_handler _dialogueHandler;
-    private Battle_handler _battleHandler;
-    private Game_ui_manager _gameUIManager;
     
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
-        _battleHandler = container.Resolve<Battle_handler>();
-        _gameUIManager = container.Resolve<Game_ui_manager>();
         gameObject.SetActive(true);
         OnInject();
     }
 
     private void OnInject()
     {
+        _movementRestrictors.Add(MovementRestrictor.Battle,false);
+        _movementRestrictors.Add(MovementRestrictor.Dialogue,false);
+        _movementRestrictors.Add(MovementRestrictor.UI,false);
+        _movementRestrictors.Add(MovementRestrictor.OverworldAction,false);
+        
         _overworldActions.OnItemEquipped +=
             (item) => StopBikeUsage(item != Equipable.Bike);
         _overworldActions.OnItemUnequipped +=
             (item) => StopBikeUsage(item == Equipable.Bike);
-        _dialogueHandler.OnDialogueEnded += AllowPlayerMovement;
-        _battleHandler.OnBattleEnd += AllowPlayerMovement;
-        _overworldActions.OnActionComplete += AllowPlayerMovement;
-        _gameUIManager.OnScreenChanged += AllowPlayerMovement;
+        
+        _dialogueHandler.OnDialogueEnded += () => AllowPlayerMovement(MovementRestrictor.Dialogue);
+        _overworldActions.OnActionComplete += () => AllowPlayerMovement(MovementRestrictor.OverworldAction);
     }
 
     private void SnapToPosition()
@@ -91,17 +93,23 @@ public class Player_movement : MonoBehaviour,IInjectable
         
         return directionConversions[currentDirectionIndex==0? 0 : currentDirectionIndex-1]; 
     }
-    private void AllowPlayerMovement()
+
+    public void AllowPlayerMovement(MovementRestrictor restrictor)
     {
-        if (_battleHandler.battleInProgress || _gameUIManager.usingUI) return;
+        _movementRestrictors[restrictor] = false;
+        if (_movementRestrictors.Any(r => r.Value))
+        {
+            return;
+        }
         if (!usingBike) ForceWalkMovement();
         canMove = true;
         SetCurrentAnimation();
     }
-
-    public void RestrictPlayerMovement()
+    
+    public void RestrictPlayerMovement(MovementRestrictor restrictor)
     {
         SnapToPosition();
+        _movementRestrictors[restrictor] = true;
         if (_overworldActions.fishing)
         {
             //dont want to interrupt fishing animation
@@ -320,6 +328,7 @@ public class Player_movement : MonoBehaviour,IInjectable
     }
     public void SetPlayerPosition(Vector3 position)
     {
+        previousValidPosition = position;
         movePoint.position = position;
         playerObject.transform.position = position;
     }

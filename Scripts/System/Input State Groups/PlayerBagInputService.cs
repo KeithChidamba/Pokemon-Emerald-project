@@ -8,12 +8,14 @@ public class PlayerBagInputService
     private Bag _playerBagHandler;
     private ItemStorageHandler _itemStorageHandler;
     private InputStateHandler _inputStateHandler;
+    private Dialogue_handler _dialogueHandler;
     
     public PlayerBagInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _playerBagHandler = container.Resolve<Bag>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
     }
     public void DetermineOperation()
     {
@@ -25,7 +27,7 @@ public class PlayerBagInputService
         };
         stateMethod?.Invoke();
     }
-    public void PlayerBagNavigationRestrictions()
+    private void PlayerBagNavigationRestrictions()
     {
         ref InputState currentState = ref _inputStateHandler.currentState;
         currentState.currentSelectionIndex = 0;
@@ -71,6 +73,11 @@ public class PlayerBagInputService
 
     private void CreateSellingItemState()
     {
+        if (!_playerBagHandler.GetCurrentItem().canBeSold)
+        {
+            _dialogueHandler.DisplayDetails("You cant sell that!");
+            return;
+        }
         var itemSellSelectables = new List<SelectableUI>{new(_playerBagHandler.sellingItemUI,_playerBagHandler.SellToMarket,true)};
         _inputStateHandler.ChangeInputState(new (InputStateName.PlayerBagItemSell,
             InputStateGroup.Bag, stateDirection:InputDirection.Vertical, selectableUis:itemSellSelectables

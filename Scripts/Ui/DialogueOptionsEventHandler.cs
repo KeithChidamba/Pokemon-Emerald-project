@@ -78,7 +78,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     void SellItem()
     {
         _playerBagHandler.currentBagUsage = BagUsage.SellingView;
-        _gameUIManager.ViewBag();
+        _gameUIManager.ValidateBagView();
     }
     void OpenPokemonStorage()
     {

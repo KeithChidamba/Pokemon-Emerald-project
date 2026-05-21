@@ -143,6 +143,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private void InvokeSelectedEvent()
     {
         if (currentState.selectableUis == null) return;
+        if (currentState.selectableUis.Count == 0) return;
         if (currentState.isSelecting)
         {
             if (!currentState.selectableUis[currentState.currentSelectionIndex].canBeSelected) return;
@@ -168,9 +169,9 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         currentState.currentSelectionIndex = Mathf.Clamp(newIndex, 0, currentState.maxSelectionIndex);
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
     }
-    public void ChangeInputState(InputState newState)
+    public void ChangeInputState(InputState newState,bool forceChange = false)
     {
-        if (currentState.stateName == newState.stateName) return;
+        if (currentState.stateName == newState.stateName && !forceChange) return;
         _currentStateLoaded = false;
         
         stateLayers.RemoveAll(s => s.stateName == newState.stateName);
@@ -180,7 +181,10 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         OnStateChanged?.Invoke(currentState);
         HandleStateExitability();
         SetDirectionals();
-        if (currentState.isSelecting) currentState.maxSelectionIndex = currentState.selectableUis.Count-1;
+        if (currentState.isSelecting)
+        {
+            currentState.maxSelectionIndex = currentState.selectableUis.Count>0? currentState.selectableUis.Count - 1 : 0;
+        }
         SetupInputServices();
         if (currentState.displayingSelector)
         {

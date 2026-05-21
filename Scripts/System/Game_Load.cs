@@ -53,48 +53,36 @@ public class Game_Load : MonoBehaviour,IInjectable
     private void OnInject()
     {
         menuUiParent.SetActive(true);
-        loadButton.SetActive(true);
         newGameButton.gameObject.SetActive(true);
         LoadedFromSave = true;
         _saveDataExists = true;
         var isWebgl = Application.platform == RuntimePlatform.WebGLPlayer;
         uploadButton.SetActive(isWebgl);
+        loadButton.SetActive(!isWebgl);
         
-        var menuSelectables = new List<SelectableUI>
-        {
-            new(loadButton, StartGame, !isWebgl),
-            new(newGameButton, NewGame, true)
-        };
+        var menuSelectables = new List<SelectableUI>();
         if (isWebgl)
         {
             menuSelectables.Add(new(uploadButton, _saveHandler.UploadSaveZip, true));
         }
+        else
+        {
+            menuSelectables.Add(new(loadButton, StartGame, true));
+        }
+        menuSelectables.Add(new(newGameButton, NewGame, true));
+        
         _inputStateHandler.ChangeInputState(new (InputStateName.StartMenu,
             InputStateGroup.None,false,
             menuUiParent, InputDirection.Vertical, menuSelectables,
             menuSelector,true,true,canExit:false));
-    }
-
-
-    private void LoadNewPlayerPage()
-    {
-        uploadButton.gameObject.SetActive(false);
-        loadButton.gameObject.SetActive(false);
-        newGameButton.gameObject.SetActive(false);
-        createNewPlayerUi.SetActive(true);
     }
     
     public void PreventGameLoad()
     {
         _saveDataExists = false;
         _inputStateHandler.currentState.selectableUis[0].canBeSelected = false;
-        _inputStateHandler.currentState.selectableUis[1].canBeSelected = true;
     }
-    public void AllowGameLoad()
-    {
-        _inputStateHandler.currentState.selectableUis[0].canBeSelected = true;
-        _inputStateHandler.currentState.selectableUis[1].canBeSelected = false;
-    }
+
     public void CreateNewPlayer()//button
     {
         if (name_input.text.Length < _maxNameLength && name_input.text.Length > _minNameLength - 1)
@@ -123,7 +111,7 @@ public class Game_Load : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("Name must be between 4 and 14 characters");
         }
     }
-    private void NewGame()//button
+    private void NewGame()
     {
         if (_saveDataExists)
         {
@@ -136,13 +124,17 @@ public class Game_Load : MonoBehaviour,IInjectable
             if (Application.platform != RuntimePlatform.WebGLPlayer)
                 _saveHandler.EraseSaveData();
             _dialogueHandler.EndDialogue();
-            LoadNewPlayerPage();
+           // Load New Player Page
+           uploadButton.gameObject.SetActive(false);
+           loadButton.gameObject.SetActive(false);
+           newGameButton.gameObject.SetActive(false);
+           createNewPlayerUi.SetActive(true);
         }
     }
 
     private IEnumerator GameStartLoading()
     {
-        _inputStateHandler.ResetRelevantUi(InputStateName.StartMenu);
+        _inputStateHandler.ResetRelevantUi(InputStateName.StartMenu,true);
         _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
         _dialogueHandler.EndDialogue();
         OnGameStarted?.Invoke();
@@ -168,7 +160,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
         _areaHandler.LoadAreaFromSave(playerData.location);
     }
-    private void StartGame()//button
+    public void StartGame()
     {
         StartCoroutine(GameStartLoading());
     }

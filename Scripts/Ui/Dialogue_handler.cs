@@ -333,7 +333,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         {
             canExitDialogue = false;
         }
-        _playerMovementHandler.RestrictPlayerMovement();
+        _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Dialogue);
         SetBattleTextBox(currentInteraction);
         if (typeOut)
         {

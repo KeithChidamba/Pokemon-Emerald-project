@@ -39,10 +39,9 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     public GameObject pcItemOptionsUI;
     public GameObject keyBindsUI;
     public bool usingWebGl;
-    [SerializeField]private bool _canOpenMenu;
+    [SerializeField]private bool canOpenMenu;
     private bool _isEmptyState;
     public Image destinationPointerUI;
-    public event Action OnScreenChanged;
     
     private Item_handler _itemHandler;
     private Pokemon_Details _pokemonDetailsHandler;
@@ -59,7 +58,6 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private pokemon_storage _pokemonStorageHandler;
     private ItemStorageHandler _itemStorageHandler;
     private GameSettingsHandler _gameSettingsHandler;
-    private Battle_handler _battleHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -78,7 +76,6 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
-        _battleHandler = container.Resolve<Battle_handler>();
             
         gameObject.SetActive(true);
         OnInject();
@@ -90,7 +87,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         exitButton.SetActive(!usingWebGl);
         if (usingWebGl) menuUiOptions.Remove(menuUiOptions.Last());//remove exit button
         _canUseUi = false;
-        _canOpenMenu = true;
+        canOpenMenu = true;
         _isEmptyState = true;
         _gameLoadingHandler.OnGameStarted += () => _canUseUi = true;
         _inputStateHandler.OnStateChanged += CheckEmptyState;
@@ -98,7 +95,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
 
     public void SetMenuAccessibility(bool isAccessible)
     {
-        _canOpenMenu = isAccessible;
+        canOpenMenu = isAccessible;
     }
     private void CheckEmptyState(InputState currentState)
     {
@@ -107,7 +104,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private void Update()
     {
         if (!_canUseUi) return;
-        if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu) && _isEmptyState && _canOpenMenu &&!viewingMenu)
+        if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu) && _isEmptyState && canOpenMenu &&!viewingMenu)
         {
             ManageScreens(1);
             viewingMenu = true;
@@ -122,9 +119,12 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         usingUI = numUIScreensOpen > 0;
         if(usingUI)
         {
-            _playerMovementHandler.RestrictPlayerMovement();
+            _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.UI);
         }
-        OnScreenChanged?.Invoke();
+        else
+        {
+            _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.UI);
+        }
     }
 
     private void ActivateMenuSelection()
@@ -132,7 +132,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         Time.timeScale = 0;
         var menuOptionsMethods = new List<Action>
         {
-            ViewPokemonParty, SaveGame, ViewBag, ViewProfile, ViewGameSettings
+            ViewPokemonParty, SaveGame, ValidateBagView, ViewProfile, ViewGameSettings
         };
         
         if (!usingWebGl) menuOptionsMethods.Add(_dialogueOptionsHandler.ExitGame);
@@ -226,7 +226,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         ManageScreens(-1);
         ActivateUiElement(_gameSettingsHandler.mainUI, false);
     }
-    public void ViewBag()
+    public void ValidateBagView()
     {
         if (_playerBagHandler.allItems.Count == 0)
         {
@@ -246,30 +246,33 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             }
         }
         _dialogueHandler.EndDialogue();
-        _playerBagHandler.OnBagOpened += SetBagInputState;
-        _playerBagHandler.ViewBag();
+        _playerBagHandler.OnBagOpened += ViewBagUI;
+        _playerBagHandler.SetupBagState();
     }
 
-    private void SetBagInputState()
+    private void ViewBagUI()
     {
-        _playerBagHandler.OnBagOpened -= SetBagInputState;
+        _playerBagHandler.OnBagOpened -= ViewBagUI;
         ActivateUiElement(_playerBagHandler.bagUI,true);
         ManageScreens(1);
+    }
+    public void SetBagInputState()
+    {
         var bagSelectables = new List<SelectableUI>();
-
-        foreach (var item in _playerBagHandler.bagItemsUI)
+        for(var i = 0;i < _playerBagHandler.numItems;i++)
         {
-            bagSelectables.Add( new(item.gameObject,null,true) );
+            bagSelectables.Add( new(_playerBagHandler.bagItemsUI[i].gameObject,null,true) );
         }
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PlayerBagNavigation,
             InputStateGroup.Bag,true,
             _playerBagHandler.bagUI, InputDirection.Vertical, bagSelectables,
-            _playerBagHandler.itemSelector,true,false,CloseBag,CloseBag));
+            _playerBagHandler.itemSelector,true,false,CloseBag,CloseBag),true);
         
         _playerBagHandler.bagOverlayUI.SetActive(!_playerBagHandler.storageView);
         _playerBagHandler.storageOverlayUI.SetActive(_playerBagHandler.storageView);
     }
+    
     private void ViewProfile()
     {
         ManageScreens(1);

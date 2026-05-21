@@ -30,21 +30,21 @@ public class ItemStorageHandler : MonoBehaviour,IInjectable
         _playerBagHandler.OnItemSelected += _playerBagHandler.WithDrawFromStorage;
         _playerBagHandler.currentBagUsage = BagUsage.SelectionOnly;
         _playerBagHandler.storageView = true;
-        _gameUIHandler.ViewBag();
+        _gameUIHandler.ValidateBagView();
     }
     public void OpenBagToDepositItem()
     {
         currentUsage = ItemUsage.Deposit;
         _playerBagHandler.OnItemSelected += DepositItem;
         _playerBagHandler.currentBagUsage = BagUsage.SelectionOnly;
-        _gameUIHandler.ViewBag();
+        _gameUIHandler.ValidateBagView();
     }
     public void OpenBagToTossItem()
     {
         currentUsage = ItemUsage.Toss;
         _playerBagHandler.OnItemSelected += TossItem;
         _playerBagHandler.currentBagUsage = BagUsage.SelectionOnly;
-        _gameUIHandler.ViewBag();
+        _gameUIHandler.ValidateBagView();
     }
     private void DepositItem(Item item)
     {

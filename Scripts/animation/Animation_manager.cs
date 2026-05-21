@@ -21,9 +21,7 @@ public class Animation_manager : MonoBehaviour
     public readonly string idleParam = "idleDirection"; 
     public readonly string moveParam = "moveDirection";
     
-    
     public event Action OnFishingStart;
-    
     public void StartFishing()
     {//Animation event
         OnFishingStart?.Invoke();
@@ -48,10 +46,8 @@ public class Animation_manager : MonoBehaviour
     {
         if (currentState == newState)
         {
-           // Debug.Log("Dup Anim: "+newState);
             return;
         }
-       // Debug.Log("New Anim: "+newState);
         animator.Play(GetStateName(newState));
         currentState = newState;
     }
