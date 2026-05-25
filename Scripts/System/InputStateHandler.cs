@@ -16,7 +16,7 @@ public enum InputStateName
     PlayerBagItemSell,PlayerBagNavigation,
     PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
     MartItemPurchase,MartItemNavigation,
-    PlayerMenu,PlayerProfile,KeyBinds,StartMenu,
+    PlayerMenu,PlayerProfile,KeyBinds,StartMenu,PlayerCreationMenu,
     GameSettingsNavigation,GameSettingOptionsNavigation
 }
 public class InputStateHandler : MonoBehaviour,IInjectable

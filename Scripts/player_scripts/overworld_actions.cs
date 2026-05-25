@@ -96,6 +96,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
         }
         if (fishing && !_battleHandler.battleInProgress)
         {
+            //cancel fishing
             if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
             {
                 StartCoroutine(EndFishingAction());
@@ -105,9 +106,10 @@ public class overworld_actions : MonoBehaviour,IInjectable
 
     private IEnumerator TryFishing()
     {
+        fishing = true;
         manager.ChangeAnimationState(PlayerAnimationState.FishingIdle);
         var random = Utility.RandomRange(1, 11);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f);//allow fishing cancel
         if (!fishing) yield break; //if fishing canceled early
         if (random < 5)
         {
@@ -135,7 +137,6 @@ public class overworld_actions : MonoBehaviour,IInjectable
     private void StartFishingAction()
     {
         _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.OverworldAction);
-        fishing = true;
         StartCoroutine(TryFishing());
     }
 

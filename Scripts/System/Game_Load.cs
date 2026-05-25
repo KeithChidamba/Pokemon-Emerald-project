@@ -12,8 +12,10 @@ public class Game_Load : MonoBehaviour,IInjectable
     public GameObject loadButton;
     public GameObject newGameButton;
     public GameObject uploadButton;
+    public GameObject createPlayerButton;
     public GameObject createNewPlayerUi;
     public GameObject menuSelector;
+    public GameObject createNewPlayerUiSelector;
     public GameObject menuUiParent;
     [SerializeField] private Image _loadingScreen;
     [SerializeField] private Camera startMenuCam;
@@ -47,27 +49,28 @@ public class Game_Load : MonoBehaviour,IInjectable
         _overworldActions = container.Resolve<overworld_actions>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         gameObject.SetActive(true);
-        OnInject();
     }
+    
 
-    private void OnInject()
+    public void ShowMenuUI(bool dataExists)
     {
         menuUiParent.SetActive(true);
         newGameButton.gameObject.SetActive(true);
         LoadedFromSave = true;
-        _saveDataExists = true;
-        var isWebgl = Application.platform == RuntimePlatform.WebGLPlayer;
-        uploadButton.SetActive(isWebgl);
-        loadButton.SetActive(!isWebgl);
-        
+        _saveDataExists = dataExists;
         var menuSelectables = new List<SelectableUI>();
-        if (isWebgl)
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
+            _saveDataExists = false;
+            uploadButton.SetActive(true);
+            loadButton.SetActive(false);
             menuSelectables.Add(new(uploadButton, _saveHandler.UploadSaveZip, true));
         }
         else
         {
-            menuSelectables.Add(new(loadButton, StartGame, true));
+            menuSelectables.Add(new(loadButton, StartGame, _saveDataExists));
+            uploadButton.SetActive(false);
+            loadButton.SetActive(true);
         }
         menuSelectables.Add(new(newGameButton, NewGame, true));
         
@@ -76,14 +79,12 @@ public class Game_Load : MonoBehaviour,IInjectable
             menuUiParent, InputDirection.Vertical, menuSelectables,
             menuSelector,true,true,canExit:false));
     }
-    
     public void PreventGameLoad()
     {
-        _saveDataExists = false;
-        _inputStateHandler.currentState.selectableUis[0].canBeSelected = false;
+        ShowMenuUI(false);
     }
 
-    public void CreateNewPlayer()//button
+    private void CreateNewPlayer()
     {
         if (name_input.text.Length < _maxNameLength && name_input.text.Length > _minNameLength - 1)
         {
@@ -105,6 +106,7 @@ public class Game_Load : MonoBehaviour,IInjectable
             playerData = data;
             LoadedFromSave = false;
             StartGame();
+            _inputStateHandler.ResetRelevantUi(InputStateName.PlayerCreationMenu,true);
         }
         else
         {
@@ -116,19 +118,31 @@ public class Game_Load : MonoBehaviour,IInjectable
         if (_saveDataExists)
         {
             _dialogueHandler.DisplayCustomOptions($"Save data detected!, Are you sure you want to erase it?",
-                new[] { "Yes", "No" }, new Action[] { StartNewGame, null });
+                new[] { "Yes", "No" }, new Action[] { LoadPlayerCreationMenu, null });
         }
 
-        void StartNewGame()
+        void LoadPlayerCreationMenu()
         {
-            if (Application.platform != RuntimePlatform.WebGLPlayer)
-                _saveHandler.EraseSaveData();
+            // Load New Player Page
+            uploadButton.gameObject.SetActive(false);
+            loadButton.gameObject.SetActive(false);
+            newGameButton.gameObject.SetActive(false);
+
             _dialogueHandler.EndDialogue();
-           // Load New Player Page
-           uploadButton.gameObject.SetActive(false);
-           loadButton.gameObject.SetActive(false);
-           newGameButton.gameObject.SetActive(false);
-           createNewPlayerUi.SetActive(true);
+            
+            if (Application.platform != RuntimePlatform.WebGLPlayer)
+            {
+                _saveHandler.EraseSaveData();
+            }
+            var menuSelectables = new List<SelectableUI>
+           {
+               new(createPlayerButton, CreateNewPlayer, true)
+           };
+           
+           _inputStateHandler.ChangeInputState(new (InputStateName.PlayerCreationMenu,
+               InputStateGroup.None,false,
+               createNewPlayerUi, InputDirection.Vertical, menuSelectables,
+               createNewPlayerUiSelector,true,true,canExit:false));
         }
     }
 
@@ -140,6 +154,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         OnGameStarted?.Invoke();
         menuUiParent.SetActive(false);
         createNewPlayerUi.SetActive(false);
+        //give everything time to load
         _loadingScreen.gameObject.SetActive(true);
         Color startColor = new Color(255, 255f, 255f,0);
         Color endColor = Color.white;
@@ -152,8 +167,8 @@ public class Game_Load : MonoBehaviour,IInjectable
             _loadingScreen.color = Color.Lerp(startColor, endColor, t);
             yield return null;
         }
-        //give everything time to load
         yield return new WaitUntil(()=>elapsed >= duration);
+        
         _loadingScreen.gameObject.SetActive(false);
         startMenuCam.gameObject.SetActive(false);
         world_Map.SetActive(true);

@@ -289,6 +289,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         if(playerList.Count==1)
         {
             _gameLoadingHandler.playerData = LoadObjectFromJson<PlayerData>(playerList[0]);
+            _gameLoadingHandler.ShowMenuUI(true);
         }
         else if (playerList.Count > 1)
         {
