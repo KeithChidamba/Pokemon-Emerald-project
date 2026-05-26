@@ -68,21 +68,21 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         _gameSettingsInputService = container.Resolve<GameSettingsInputService>();
         
         gameObject.SetActive(true);
-        OnInject();
     }
     
-    private void OnInject()
+    public void OnInject()
     {
         _emptyState = new InputState(InputStateName.Empty,InputStateGroup.None, canExit: false);
-        currentState = _emptyState;
-        _currentStateLoaded = false;
+        currentState  ??= _emptyState;
+        _currentStateLoaded = true;
     }
-
     private void Update()
     {
         _handlingState = stateLayers.Count > 0;
+        
         if (!_handlingState) return;
         
+       
         bool canExitCurrentDialogue = _dialogueHandler.canExitDialogue & _dialogueHandler.displaying;
 
         if (InputSourceHandler.InputPressed(ControlEvent.Exit))
@@ -101,7 +101,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         }
         
         if (currentState.stateName == InputStateName.Empty) return;
-
+       
         if (InputSourceHandler.InputPressed(ControlEvent.Confirm) && _currentStateLoaded)
         {
             InvokeSelectedEvent();
@@ -144,13 +144,16 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     {
         if (currentState.selectableUis == null) return;
         if (currentState.selectableUis.Count == 0) return;
+       
         if (currentState.isSelecting)
         {
             if (!currentState.selectableUis[currentState.currentSelectionIndex].canBeSelected) return;
             currentState.selectableUis[currentState.currentSelectionIndex]?.eventForUi?.Invoke();
         }
         else
+        {
             currentState.selectableUis[0]?.eventForUi?.Invoke();
+        }
     }
     public void UpdateSelectorUi()
     {

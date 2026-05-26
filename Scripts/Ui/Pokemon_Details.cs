@@ -48,10 +48,9 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _pages.Add(1,LoadAbilityUiPage);
         _pages.Add(2,LoadStatsUiPage);

@@ -17,6 +17,11 @@ public class DialogueOptionsManager : MonoBehaviour,IInjectable
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
     }
+    
+    public void OnInject()
+    {
+        
+    }
     private void OnEnable()
     {
         _rectTransform = GetComponent<RectTransform>();

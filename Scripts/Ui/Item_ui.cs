@@ -17,6 +17,10 @@ public class Item_ui : MonoBehaviour,IInjectable
         _playerBagHandler = container.Resolve<Bag>();
     }
     
+    public void OnInject()
+    {
+        
+    }
     public void LoadItemUI()
     {
         itemName.text = item.itemName;

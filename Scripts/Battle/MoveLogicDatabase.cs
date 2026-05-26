@@ -35,10 +35,9 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _moveUsageHandler = container.Resolve<Move_handler>();
         _moveLogicHandler = container.Resolve<MoveLogicHandler>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _logicMethods.Add("brickbreak", BrickBreak);
         _logicMethods.Add("haze", Haze);

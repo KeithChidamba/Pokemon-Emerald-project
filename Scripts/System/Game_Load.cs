@@ -50,7 +50,11 @@ public class Game_Load : MonoBehaviour,IInjectable
         _inputStateHandler = container.Resolve<InputStateHandler>();
         gameObject.SetActive(true);
     }
-    
+
+    public void OnInject()
+    {
+        
+    }
 
     public void ShowMenuUI(bool dataExists)
     {
@@ -68,9 +72,12 @@ public class Game_Load : MonoBehaviour,IInjectable
         }
         else
         {
-            menuSelectables.Add(new(loadButton, StartGame, _saveDataExists));
             uploadButton.SetActive(false);
-            loadButton.SetActive(true);
+            loadButton.SetActive(_saveDataExists);
+            if(_saveDataExists)
+            {
+                menuSelectables.Add(new(loadButton, StartGame, true));
+            }
         }
         menuSelectables.Add(new(newGameButton, NewGame, true));
         
@@ -120,6 +127,10 @@ public class Game_Load : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayCustomOptions($"Save data detected!, Are you sure you want to erase it?",
                 new[] { "Yes", "No" }, new Action[] { LoadPlayerCreationMenu, null });
         }
+        else
+        {
+            LoadPlayerCreationMenu();
+        }
 
         void LoadPlayerCreationMenu()
         {
@@ -127,7 +138,8 @@ public class Game_Load : MonoBehaviour,IInjectable
             uploadButton.gameObject.SetActive(false);
             loadButton.gameObject.SetActive(false);
             newGameButton.gameObject.SetActive(false);
-
+            menuSelector.SetActive(false);
+            createNewPlayerUi.SetActive(true);
             _dialogueHandler.EndDialogue();
             
             if (Application.platform != RuntimePlatform.WebGLPlayer)

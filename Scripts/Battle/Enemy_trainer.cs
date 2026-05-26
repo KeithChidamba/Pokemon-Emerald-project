@@ -34,10 +34,9 @@ public class Enemy_trainer : BattleParticipantModule
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         AiLogicCalculators.Add(AiFlags.CheckBadMove ,AiCheckBadMove);
         AiLogicCalculators.Add(AiFlags.CheckViability ,AiCheckViability);

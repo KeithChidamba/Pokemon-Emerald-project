@@ -31,10 +31,9 @@ public class Participant_Status : BattleParticipantModule
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _moveUsageHandler = container.Resolve<Move_handler>();
         _gameUIManager = container.Resolve<Game_ui_manager>();
-        OnInject();
     }
     
-    private void OnInject()
+    public void OnInject()
     {
         _battleHandler.OnBattleEnd += ()=> _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
         

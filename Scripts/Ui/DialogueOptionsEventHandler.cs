@@ -31,12 +31,10 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
         _playerBagHandler = container.Resolve<Bag>();
         _battleHandler = container.Resolve<Battle_handler>();
         _pokemonStorage = container.Resolve<pokemon_storage>();
-       
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _interactionMethods.Add(InteractionOptions.Battle,Battle);
         _interactionMethods.Add(InteractionOptions.Interact,Interact);

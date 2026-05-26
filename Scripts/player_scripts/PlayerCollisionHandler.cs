@@ -21,10 +21,9 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
         _playerMovementHandler = container.Resolve<Player_movement>();
         _areaHandler = container.Resolve<Area_manager>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _playerMovementHandler.OnNewTile += CheckGrass;
         _playerMovementHandler.OnNewTile += SwitchArea;

@@ -36,6 +36,10 @@ public class NpcMovement : MonoBehaviour,IInjectable
         _playerMovement = container.Resolve<Player_movement>();
     }
 
+    public void OnInject()
+    {
+        
+    }
     public MovementDirection GetCurrentDirection()
     {
         return _currentMovement.direction;

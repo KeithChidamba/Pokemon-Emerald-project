@@ -46,10 +46,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _moveLogicHandler = container.Resolve<MoveLogicHandler>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _battleHandler.OnBattleEnd += ResetTurnState;
         OnNewTurn += ()=> StartCoroutine(CheckParticipantCoolDown());

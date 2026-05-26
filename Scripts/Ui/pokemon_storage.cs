@@ -94,10 +94,9 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         _gameLoadingHandler = container.Resolve<Game_Load>();
         
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _gameLoadingHandler.OnGameStarted += LoadPCStorageBoxes;
     }

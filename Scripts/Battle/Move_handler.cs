@@ -44,10 +44,9 @@ public class Move_handler:MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<Battle_handler>();
         _moveLogicHandler = container.Resolve<MoveLogicHandler>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _battleHandler.OnBattleEnd += ()=> _onFieldDamageModifiers.Clear();
     }

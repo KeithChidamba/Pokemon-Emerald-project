@@ -5,8 +5,6 @@ public class Area_manager : MonoBehaviour,IInjectable
 {
     public AreaData currentArea;
     public AreaData[] overworldAreas;
-
-    
     private Game_Load _gameLoadingHandler;
     private Player_movement _playerMovementHandler;
     
@@ -16,6 +14,10 @@ public class Area_manager : MonoBehaviour,IInjectable
         _playerMovementHandler = container.Resolve<Player_movement>();
     }
 
+    public void OnInject()
+    {
+        
+    }
     public void EscapeArea()
     {
         //inside this method in-case there extra stuff that needs to happen when escaping

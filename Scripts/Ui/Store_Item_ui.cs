@@ -9,11 +9,15 @@ public class Store_Item_ui : MonoBehaviour,IInjectable
     public Text itemName;
     public Image itemImage;
     private Poke_Mart _pokeMartHandler;
-   
     
     public void Inject(ServiceContainer container)
     {
         _pokeMartHandler = container.Resolve<Poke_Mart>();
+    }
+    
+    public void OnInject()
+    {
+        
     }
     public void LoadItemUI()
     {

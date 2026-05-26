@@ -51,10 +51,9 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         _gameLoadingHandler = container.Resolve<Game_Load>();
         
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _settingsMethods.Add(GameSettingName.TextSpeed,_dialogueHandler.SetTextSpeed);
         _settingsMethods.Add(GameSettingName.BattleStyle,_battleHandler.SetBattleStyle);

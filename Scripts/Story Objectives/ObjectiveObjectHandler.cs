@@ -31,10 +31,9 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
   {
       _overworldStateHandler = container.Resolve<OverworldState>();
       gameObject.SetActive(true);
-      OnInject();
   }
 
-  private void OnInject()
+  public void OnInject()
   {
       _overworldStateHandler.OnObjectivesLoaded += CheckForRequiredObjective;
   }

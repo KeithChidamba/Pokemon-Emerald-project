@@ -27,6 +27,10 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }
     
+    public void OnInject()
+    {
+        
+    }
     public IEnumerator DetermineMoveLogic(Battle_Participant attacker, Battle_Participant victim, Turn currentTurn)
     {
         _attacker = attacker;

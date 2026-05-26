@@ -79,9 +79,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _overworldActions = container.Resolve<overworld_actions>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         gameObject.SetActive(true);
-        OnInject();
     }
-    private void OnInject()
+    public void OnInject()
     {
         _turnBasedCombatHandler.OnNewTurn += ResetAi;
         _turnBasedCombatHandler.OnNewTurn += AllowPlayerInput;

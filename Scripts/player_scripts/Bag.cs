@@ -85,10 +85,9 @@ public class Bag : MonoBehaviour,IInjectable
         _itemHandler = container.Resolve<Item_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _categories = (BagCategory[])Enum.GetValues(typeof(BagCategory));
         _rightArrow=redArrows[0];

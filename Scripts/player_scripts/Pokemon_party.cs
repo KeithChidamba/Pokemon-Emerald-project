@@ -56,10 +56,9 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _itemHandler = container.Resolve<Item_handler>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _playerMovementHandler.OnNewTile += CheckPoisonTickEffect;
     }

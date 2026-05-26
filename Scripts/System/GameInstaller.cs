@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 
 public interface IInjectable
 {
     public void Inject(ServiceContainer container);
+    public void OnInject();
 }
 public class GameInstaller : MonoBehaviour
 {
@@ -41,6 +43,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Move_handler moveHandler;
     [SerializeField] private GameSettingsHandler gameSettingsHandler;
 
+    private event Action OnServicesInjected;
     private void Awake()
     {
         _container = new ServiceContainer();
@@ -109,7 +112,9 @@ public class GameInstaller : MonoBehaviour
             if (obj is IInjectable injectable)
             {
                 injectable.Inject(_container);
+                OnServicesInjected += injectable.OnInject;
             }
         }
+        OnServicesInjected?.Invoke();
     }
 }

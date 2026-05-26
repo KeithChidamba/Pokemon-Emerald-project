@@ -39,10 +39,9 @@ public class Player_movement : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _movementRestrictors.Add(MovementRestrictor.Battle,false);
         _movementRestrictors.Add(MovementRestrictor.Dialogue,false);

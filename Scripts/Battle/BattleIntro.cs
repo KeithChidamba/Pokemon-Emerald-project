@@ -53,10 +53,9 @@ public class BattleIntro : MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<Battle_handler>();
         _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         // Store initial positions
         topBlackStart = GetAnchoredFromWorld(topBlackPanel);

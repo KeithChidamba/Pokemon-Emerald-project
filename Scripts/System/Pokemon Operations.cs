@@ -50,6 +50,10 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }   
 
+    public void OnInject()
+    {
+        
+    }
     private long GeneratePokemonID(Pokemon pokemon)//pokemon's unique ID
     {
         int combinedIDs = _gameHandler.playerData.trainerID;

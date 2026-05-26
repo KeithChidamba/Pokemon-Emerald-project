@@ -22,10 +22,9 @@ public class NpcLogic : MonoBehaviour,IInjectable
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _playerMovement = container.Resolve<Player_movement>();
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         playerDetected = false;
         if (autoDetectPlayer)

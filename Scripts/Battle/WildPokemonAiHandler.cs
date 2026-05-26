@@ -19,10 +19,9 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         gameObject.SetActive(true);
-        OnInject(); 
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _turnBasedCombatHandler.OnNewTurn += MakeBattleDecision;
     }

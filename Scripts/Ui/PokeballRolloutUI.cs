@@ -27,10 +27,8 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<Battle_handler>();
-        
-        OnInject();
     }
-    private void OnInject()
+    public void OnInject()
     {
         _battleHandler.OnBattleEnd += ResetPokeballs;
         _rectTransform = GetComponent<RectTransform>();

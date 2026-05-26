@@ -35,10 +35,9 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
         _gameLoadingHandler = container.Resolve<Game_Load>();
         
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _isMobile = false;
         _gameStarted = false;

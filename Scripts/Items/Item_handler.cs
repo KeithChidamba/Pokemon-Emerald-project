@@ -48,6 +48,10 @@ public class Item_handler : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }
 
+    public void OnInject()
+    {
+        
+    }
     public void UseItem(Item item,[CanBeNull] Pokemon selectedPokemon)
     {
         if (_battleHandler.battleInProgress)

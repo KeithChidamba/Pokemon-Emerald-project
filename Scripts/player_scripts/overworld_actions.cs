@@ -32,9 +32,8 @@ public class overworld_actions : MonoBehaviour,IInjectable
         _gameUIManager = container.Resolve<Game_ui_manager>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _battleHandler = container.Resolve<Battle_handler>();
-        OnInject();
     }
-    private void OnInject()
+    public void OnInject()
     {
         _gameLoadingHandler.OnGameStarted += () => _canUseEquippedItem = true;
         manager.OnFishingStart += StartFishingAction;

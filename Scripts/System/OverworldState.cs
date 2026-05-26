@@ -36,12 +36,10 @@ public class OverworldState : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _playerBag = container.Resolve<Bag>();
-            
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _gameLoadingHandler.OnGameStarted += StartDataLoad;
     }

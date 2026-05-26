@@ -91,9 +91,8 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         _moveUsageHandler = container.Resolve<Move_handler>();
         _container = container;
         gameObject.SetActive(true);
-        OnInject();
     }
-    private void OnInject()
+    public void OnInject()
     {
         heldItemHandler = new Held_Items(_container);
         statusHandler = new Participant_Status(_container);

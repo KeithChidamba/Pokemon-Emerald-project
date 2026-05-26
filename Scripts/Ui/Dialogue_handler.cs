@@ -43,10 +43,9 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         _interactionHandler = container.Resolve<Interaction_handler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _dialogueOptionsManager = dialogueOptionBox.GetComponent<DialogueOptionsManager>();
         _battleHandler.OnBattleEnd += () => messagesLoading = false;

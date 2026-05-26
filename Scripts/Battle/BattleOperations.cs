@@ -16,6 +16,11 @@ public class BattleOperations : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }
 
+    public void OnInject()
+    {
+        
+    }
+
     public bool canDisplayChange = true;
     public event Action OnBuffApplied;
 

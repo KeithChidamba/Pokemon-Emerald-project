@@ -22,6 +22,10 @@ public class Encounter_handler : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }
     
+    public void OnInject()
+    {
+        
+    }
     public void TriggerEncounter(NormalEncounteArea table)
     {
         DeterminePossibleEncounter(

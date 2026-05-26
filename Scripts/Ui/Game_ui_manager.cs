@@ -78,10 +78,9 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
             
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         usingWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
         exitButton.SetActive(!usingWebGl);

@@ -19,6 +19,10 @@ public class ItemStorageHandler : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }
 
+    public void OnInject()
+    {
+        
+    }
     public void ViewItemsToWithdraw()
     {
         if (_playerBagHandler.storageItems.Count==0)

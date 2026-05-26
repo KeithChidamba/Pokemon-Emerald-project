@@ -44,10 +44,9 @@ public class Poke_Mart : MonoBehaviour,IInjectable
         _playerBagHandler = container.Resolve<Bag>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _dialogueOptionsHandler.OnInteractionOptionChosen += ViewStore;
     }

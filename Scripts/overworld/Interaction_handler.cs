@@ -30,9 +30,8 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         _playerMovementHandler = container.Resolve<Player_movement>();
         _areaManager = container.Resolve<Area_manager>();
         _overworldState = container.Resolve<OverworldState>();
-        OnInject();
     }
-    private void OnInject()
+    public void OnInject()
     {
         _stopInteractions = false;
         _canCheckForInteraction = true;

@@ -64,7 +64,6 @@ public class AbilityHandler : BattleParticipantModule
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _moveUsageHandler = container.Resolve<Move_handler>();
-        OnInject();
     }
 
     private void OnInject()

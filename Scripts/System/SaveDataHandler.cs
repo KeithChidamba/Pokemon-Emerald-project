@@ -107,11 +107,11 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
         _container = container;
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
+       
         OnSaveDataFail += HandleSaveError;
         
         switch (Application.platform)
@@ -132,6 +132,10 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             LoadPlayerData(); 
             LoadItemData();
             LoadPokemonData();
+        }
+        else
+        {
+            _gameLoadingHandler.PreventGameLoad();
         }
     }
 

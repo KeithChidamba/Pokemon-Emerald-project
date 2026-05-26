@@ -22,10 +22,9 @@ public class DestinationPointer : MonoBehaviour,IInjectable
         _overworldStateHandler = container.Resolve<OverworldState>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         gameObject.SetActive(true);
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _overworldStateHandler.OnObjectivesLoaded += CheckForRequiredObjective;
     }

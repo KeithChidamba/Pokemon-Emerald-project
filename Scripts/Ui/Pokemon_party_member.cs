@@ -39,10 +39,9 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
-        OnInject();
     }
 
-    private void OnInject()
+    public void OnInject()
     {
         _inputStateHandler.OnStateChanged += CheckIfViewing;
         _inputStateHandler.OnStateRemoved += ResetSelectionVisual;
