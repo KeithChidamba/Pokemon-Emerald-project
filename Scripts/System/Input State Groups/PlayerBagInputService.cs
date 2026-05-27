@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBagInputService
+public class PlayerBagInputService : IInputGroup
 {
     private Bag _playerBagHandler;
     private ItemStorageHandler _itemStorageHandler;

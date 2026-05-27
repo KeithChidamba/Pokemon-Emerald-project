@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameSettingsInputService
+public class GameSettingsInputService: IInputGroup
 {
     private InputStateHandler _inputStateHandler;
     private GameSettingsHandler _gameSettingsHandler;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PokemonPartyInputService
+public class PokemonPartyInputService: IInputGroup
 {
     private Bag _playerBagHandler;
     private Game_ui_manager _gameUIHandler; 

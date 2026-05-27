@@ -466,4 +466,9 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             _inputStateHandler.ResetGroupUi(InputStateGroup.GameSettings);
         }
     }
+
+    public void ViewTypingInterface(bool inputRequired)
+    {
+        
+    }
 }

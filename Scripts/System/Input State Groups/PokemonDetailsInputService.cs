@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PokemonDetailsInputService
+public class PokemonDetailsInputService: IInputGroup
 {
     private Pokemon_Details _pokemonDetailsHandler;
     private InputStateHandler _inputStateHandler;

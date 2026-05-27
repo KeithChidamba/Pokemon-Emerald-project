@@ -4,8 +4,12 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
+public interface IInputGroup
+{
+    public void DetermineOperation();
+}
 public enum InputDirection { None, Horizontal, Vertical, Grid}
-public enum InputStateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart, GameSettings}
+public enum InputStateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart, GameSettings,TypingInterface}
 public enum InputStateName 
 {
     PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,
@@ -17,7 +21,8 @@ public enum InputStateName
     PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
     MartItemPurchase,MartItemNavigation,
     PlayerMenu,PlayerProfile,KeyBinds,StartMenu,PlayerCreationMenu,
-    GameSettingsNavigation,GameSettingOptionsNavigation
+    GameSettingsNavigation,GameSettingOptionsNavigation,
+    TypingInterface
 }
 public class InputStateHandler : MonoBehaviour,IInjectable
 {
@@ -55,6 +60,9 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private PokemonStorageInputService _pokemonStorageInputService;
     private PokemonPartyInputService _pokemonPartyInputService;
     private GameSettingsInputService _gameSettingsInputService;
+    private TypingInterfaceInputService _typingInterfaceInputService;
+    private Dictionary<InputStateGroup,IInputGroup> _inputServiceGroups;
+    
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -75,6 +83,14 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         _emptyState = new InputState(InputStateName.Empty,InputStateGroup.None, canExit: false);
         currentState  ??= _emptyState;
         _currentStateLoaded = true;
+        _inputServiceGroups.Add(InputStateGroup.Bag,_playerBagInputService);
+        _inputServiceGroups.Add(InputStateGroup.PokemonBattle,_pokemonBattleInputService);
+        _inputServiceGroups.Add(InputStateGroup.PokemonDetails,_pokemonDetailsInputService);
+        _inputServiceGroups.Add(InputStateGroup.PokemonStorage,_pokemonStorageInputService);
+        _inputServiceGroups.Add(InputStateGroup.PokemonParty,_pokemonPartyInputService);
+        _inputServiceGroups.Add(InputStateGroup.GameSettings,_gameSettingsInputService);
+        _inputServiceGroups.Add(InputStateGroup.PokeMart,_pokemartInputService);
+        _inputServiceGroups.Add(InputStateGroup.TypingInterface,_typingInterfaceInputService);
     }
     private void Update()
     {
@@ -313,18 +329,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
 
     private void SetupInputServices()
     {
-        Action groupMethod = currentState.stateGroup switch
-        {
-            InputStateGroup.Bag=>_playerBagInputService.DetermineOperation,
-            InputStateGroup.PokemonParty=>_pokemonPartyInputService.DetermineOperation,
-            InputStateGroup.PokeMart=>_pokemartInputService.DetermineOperation,
-            InputStateGroup.PokemonStorage=>_pokemonStorageInputService.DetermineOperation,
-            InputStateGroup.PokemonBattle=>_pokemonBattleInputService.DetermineOperation,
-            InputStateGroup.PokemonDetails=>_pokemonDetailsInputService.DetermineOperation,
-            InputStateGroup.GameSettings=>_gameSettingsInputService.DetermineOperation,
-            _ => null
-        };
-        groupMethod?.Invoke(); 
+        _inputServiceGroups[currentState.stateGroup].DetermineOperation();
     }
 
     public void AddPlaceHolderState()
@@ -398,7 +403,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         if(state.stateDirection==InputDirection.Grid) ResetCoordinates();
         
         Action method = manualExit ? state.OnExit:state.OnClose;
-        method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine
+        method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine,otherwise infinite loop
         stateLayers.Remove(state);
         OnStateRemoved?.Invoke(state);
         

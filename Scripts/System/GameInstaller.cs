@@ -42,7 +42,8 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Item_handler itemHandler;
     [SerializeField] private Move_handler moveHandler;
     [SerializeField] private GameSettingsHandler gameSettingsHandler;
-
+    [SerializeField] private TypingInterfaceHandler typingInterfaceHandler;
+    
     private event Action OnServicesInjected;
     private void Awake()
     {
@@ -81,6 +82,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(battleOperationsHandler);
         _container.RegisterSingleton(gameSettingsHandler);
         _container.RegisterSingleton(moveLogicDatabase);
+        _container.RegisterSingleton(typingInterfaceHandler);
         
         InstanceFactory.GetContainer(_container);//static class dependency
         
@@ -92,6 +94,7 @@ public class GameInstaller : MonoBehaviour
         var pokemonStorageInputService = new PokemonStorageInputService(_container);
         var pokemonPartyInputService = new PokemonPartyInputService(_container);
         var gameSettingsInputService = new GameSettingsInputService(_container);
+        var typingInterfaceInputService = new TypingInterfaceInputService(_container);
         
         _container.RegisterSingleton(playerBagInputService);
         _container.RegisterSingleton(pokemonBattleInputService);
@@ -100,6 +103,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(pokemonDetailsInputService);
         _container.RegisterSingleton(pokemonPartyInputService);
         _container.RegisterSingleton(gameSettingsInputService);
+        _container.RegisterSingleton(typingInterfaceInputService);
         
         var injectables = FindObjectsOfType<MonoBehaviour>(true);
         

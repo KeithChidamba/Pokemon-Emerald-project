@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public class PokemartInputService
+public class PokemartInputService: IInputGroup
 {
     private Poke_Mart _pokeMartHandler;
     private InputStateHandler _inputStateHandler;

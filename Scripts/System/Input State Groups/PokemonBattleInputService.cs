@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PokemonBattleInputService 
+public class PokemonBattleInputService : IInputGroup
 {
     private InputStateHandler _inputStateHandler;
     private Battle_handler _battleHandler;

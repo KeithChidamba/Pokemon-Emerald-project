@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PokemonStorageInputService
+public class PokemonStorageInputService: IInputGroup
 {
     private Game_ui_manager _gameUIHandler;
     private pokemon_storage _pokemonStorageHandler;
