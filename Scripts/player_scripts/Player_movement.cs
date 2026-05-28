@@ -93,16 +93,21 @@ public class Player_movement : MonoBehaviour,IInjectable
         return directionConversions[currentDirectionIndex==0? 0 : currentDirectionIndex-1]; 
     }
 
-    public void AllowPlayerMovement(MovementRestrictor restrictor)
+    public void AllowPlayerMovement(MovementRestrictor restrictor,float delay=1f)
     {
-        _movementRestrictors[restrictor] = false;
-        if (_movementRestrictors.Any(r => r.Value))
+        StartCoroutine(MovementAllowanceDelay());
+        IEnumerator MovementAllowanceDelay()
         {
-            return;
+            _movementRestrictors[restrictor] = false;
+            yield return new WaitForSeconds(delay);
+            if (_movementRestrictors.Any(r => r.Value))
+            {
+                yield break;
+            }
+            if (!usingBike) ForceWalkMovement();
+            canMove = true;
+            SetCurrentAnimation();
         }
-        if (!usingBike) ForceWalkMovement();
-        canMove = true;
-        SetCurrentAnimation();
     }
     
     public void RestrictPlayerMovement(MovementRestrictor restrictor)

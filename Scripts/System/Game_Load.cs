@@ -12,16 +12,10 @@ public class Game_Load : MonoBehaviour,IInjectable
     public GameObject loadButton;
     public GameObject newGameButton;
     public GameObject uploadButton;
-    public GameObject createPlayerButton;
-    public GameObject createNewPlayerUi;
     public GameObject menuSelector;
-    public GameObject createNewPlayerUiSelector;
     public GameObject menuUiParent;
     [SerializeField] private Image _loadingScreen;
     [SerializeField] private Camera startMenuCam;
-    public InputField name_input;
-    private readonly int _maxNameLength = 14;
-    private readonly int _minNameLength = 4;
     public GameObject world_Map;
     public PlayerData playerData;
     public bool LoadedFromSave { 
@@ -38,6 +32,7 @@ public class Game_Load : MonoBehaviour,IInjectable
     private overworld_actions _overworldActions;
     private Bag _playerBagHandler;
     private InputStateHandler _inputStateHandler;
+    private Game_ui_manager _gameUIHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -48,6 +43,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         _playerMovement = container.Resolve<Player_movement>();
         _overworldActions = container.Resolve<overworld_actions>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
         gameObject.SetActive(true);
     }
 
@@ -91,34 +87,25 @@ public class Game_Load : MonoBehaviour,IInjectable
         ShowMenuUI(false);
     }
 
-    private void CreateNewPlayer()
+    private void CreateNewPlayer(string playerName)
     {
-        if (name_input.text.Length < _maxNameLength && name_input.text.Length > _minNameLength - 1)
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-            {
-                StartCoroutine(_saveHandler.CreateDefaultWebglDirectories());
-            }
-
-            var playerName = name_input.text;
-            var data = ScriptableObject.CreateInstance<PlayerData>();
-            data.playerName = playerName;
-            data.playerMoney = 300;
-            data.numBadges = 0;
-            data.trainerID = Utility.Random16Bit();
-            data.secretID = Utility.Random16Bit();
-            data.location = AreaName.PlayerGarden;
-            var gardenLocation = _areaHandler.overworldAreas.First(a => a.data.areaName == AreaName.PlayerGarden);
-            data.playerPosition = gardenLocation.tileLocation;
-            playerData = data;
-            LoadedFromSave = false;
-            StartGame();
-            _inputStateHandler.ResetRelevantUi(InputStateName.PlayerCreationMenu,true);
+            StartCoroutine(_saveHandler.CreateDefaultWebglDirectories());
         }
-        else
-        {
-            _dialogueHandler.DisplayDetails("Name must be between 4 and 14 characters");
-        }
+        
+        var data = ScriptableObject.CreateInstance<PlayerData>();
+        data.playerName = playerName;
+        data.playerMoney = 300;
+        data.numBadges = 0;
+        data.trainerID = Utility.Random16Bit();
+        data.secretID = Utility.Random16Bit();
+        data.location = AreaName.PlayerGarden;
+        var gardenLocation = _areaHandler.overworldAreas.First(a => a.data.areaName == AreaName.PlayerGarden);
+        data.playerPosition = gardenLocation.tileLocation;
+        playerData = data;
+        LoadedFromSave = false;
+        StartGame();
     }
     private void NewGame()
     {
@@ -139,22 +126,15 @@ public class Game_Load : MonoBehaviour,IInjectable
             loadButton.gameObject.SetActive(false);
             newGameButton.gameObject.SetActive(false);
             menuSelector.SetActive(false);
-            createNewPlayerUi.SetActive(true);
+           
             _dialogueHandler.EndDialogue();
             
             if (Application.platform != RuntimePlatform.WebGLPlayer)
             {
                 _saveHandler.EraseSaveData();
             }
-            var menuSelectables = new List<SelectableUI>
-           {
-               new(createPlayerButton, CreateNewPlayer, true)
-           };
-           
-           _inputStateHandler.ChangeInputState(new (InputStateName.PlayerCreationMenu,
-               InputStateGroup.None,false,
-               createNewPlayerUi, InputDirection.Vertical, menuSelectables,
-               createNewPlayerUiSelector,true,true,canExit:false));
+
+            _gameUIHandler.ViewTypingInterface(CreateNewPlayer);
         }
     }
 
@@ -165,7 +145,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         _dialogueHandler.EndDialogue();
         OnGameStarted?.Invoke();
         menuUiParent.SetActive(false);
-        createNewPlayerUi.SetActive(false);
+       
         //give everything time to load
         _loadingScreen.gameObject.SetActive(true);
         Color startColor = new Color(255, 255f, 255f,0);

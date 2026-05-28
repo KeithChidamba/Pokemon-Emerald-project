@@ -38,7 +38,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     public GameObject boxOptionsSelector;
     public GameObject partyOptionsSelector;
     public const int BoxCapacity = 30;
-    public int boxColumns = 6;
+    public const int BoxColumns = 6;
     public const int NumBoxes = 14;
     public int currentBoxIndex;
     public int currentIndexOfBox;

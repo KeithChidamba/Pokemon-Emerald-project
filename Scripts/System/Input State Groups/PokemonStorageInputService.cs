@@ -40,7 +40,7 @@ public class PokemonStorageInputService: IInputGroup
     {
         _inputStateHandler.currentNumBoxElements = pokemon_storage.BoxCapacity;
         _inputStateHandler.currentBoxCapacity = pokemon_storage.BoxCapacity;
-        _inputStateHandler.numBoxColumns = _pokemonStorageHandler.boxColumns;
+        _inputStateHandler.numBoxColumns = pokemon_storage.BoxColumns;
         _inputStateHandler.numBoxRows = pokemon_storage.BoxCapacity / _inputStateHandler.numBoxColumns;
         _inputStateHandler.OnInputLeft += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Horizontal,-1);
         _inputStateHandler.OnInputRight += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Horizontal,1);

@@ -20,9 +20,9 @@ public enum InputStateName
     PlayerBagItemSell,PlayerBagNavigation,
     PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
     MartItemPurchase,MartItemNavigation,
-    PlayerMenu,PlayerProfile,KeyBinds,StartMenu,PlayerCreationMenu,
+    PlayerMenu,PlayerProfile,KeyBinds,StartMenu,
     GameSettingsNavigation,GameSettingOptionsNavigation,
-    TypingInterface
+    TypingInterfaceNavigation,TypingInterfaceOptions
 }
 public class InputStateHandler : MonoBehaviour,IInjectable
 {
@@ -61,7 +61,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private PokemonPartyInputService _pokemonPartyInputService;
     private GameSettingsInputService _gameSettingsInputService;
     private TypingInterfaceInputService _typingInterfaceInputService;
-    private Dictionary<InputStateGroup,IInputGroup> _inputServiceGroups;
+    private Dictionary<InputStateGroup,IInputGroup> _inputServiceGroups = new ();
     
     public void Inject(ServiceContainer container)
     {
@@ -74,6 +74,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         _pokemonDetailsInputService = container.Resolve<PokemonDetailsInputService>();
         _pokemonStorageInputService = container.Resolve<PokemonStorageInputService>();
         _gameSettingsInputService = container.Resolve<GameSettingsInputService>();
+        _typingInterfaceInputService = container.Resolve<TypingInterfaceInputService>();
         
         gameObject.SetActive(true);
     }
@@ -253,7 +254,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private int GetCurrentFullBoxPosition()
     {
         int row = Mathf.Clamp(boxCoordinates[0], 0, numBoxRows);
-        int col = Mathf.Clamp(boxCoordinates[1], 0, numBoxColumns)-row;
+        int col = Mathf.Clamp(boxCoordinates[1], 0, numBoxColumns);
 
         int pos = row * numBoxColumns + col;
 
@@ -329,7 +330,10 @@ public class InputStateHandler : MonoBehaviour,IInjectable
 
     private void SetupInputServices()
     {
-        _inputServiceGroups[currentState.stateGroup].DetermineOperation();
+        if(_inputServiceGroups.TryGetValue(currentState.stateGroup, out var serviceGroup))
+        {
+            serviceGroup.DetermineOperation();
+        }
     }
 
     public void AddPlaceHolderState()

@@ -58,6 +58,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private pokemon_storage _pokemonStorageHandler;
     private ItemStorageHandler _itemStorageHandler;
     private GameSettingsHandler _gameSettingsHandler;
+    private TypingInterfaceHandler _typingInterfaceHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -76,7 +77,8 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
-            
+        _typingInterfaceHandler = container.Resolve<TypingInterfaceHandler>();
+        
         gameObject.SetActive(true);
     }
 
@@ -204,7 +206,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private void ClosePCItemOptions()
     {
         pcItemOptionsUI.SetActive(false);
-        ManageScreens(0);
+        ManageScreens(-1);
     }
     public void ClosePokemonStorage()
     {
@@ -217,13 +219,18 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     {
         _inputStateHandler.RemoveTopInputLayer(false);
         ui.SetActive(false);
-        ManageScreens(0);
+        ManageScreens(-1);
     }
     private void CloseSettings()
     {
         _gameSettingsHandler.SetCurrentSetting(0);
         ManageScreens(-1);
         ActivateUiElement(_gameSettingsHandler.mainUI, false);
+    }
+    public void CloseTypingInterface()
+    {
+        ManageScreens(-1);
+        ActivateUiElement(_typingInterfaceHandler.mainUI, false);
     }
     public void ValidateBagView()
     {
@@ -362,7 +369,8 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
 
     public void ViewItemStorage()
     {
-        usingUI = true;
+        ManageScreens(1);
+            
          var pcUsageSelectables = new List<SelectableUI>
         {
             new(pcItemOptions[0], _itemStorageHandler.ViewItemsToWithdraw, true),
@@ -381,7 +389,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
 
     public void ViewPokemonStorage()
     {
-        usingUI = true;
+        ManageScreens(1);
         var pcUsageActions = new List<Action>
         {
             ()=>SetPcUsage(PCUsageState.Withdraw),
@@ -405,7 +413,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private void SetPcUsage(PCUsageState currentUsageState)
     {
         pcPokemonOptionsUI.SetActive(false);
-        ManageScreens(1);
+        ManageScreens(0);//can just use already open screen logic
         ActivateUiElement(_pokemonStorageHandler.storageUI, true);
         _pokemonStorageHandler.OpenPC(currentUsageState);
     }
@@ -467,8 +475,11 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         }
     }
 
-    public void ViewTypingInterface(bool inputRequired)
+    public void ViewTypingInterface(Action<string> alertTextInputReceiver)
     {
-        
+        ManageScreens(1);
+        ActivateUiElement(_typingInterfaceHandler.mainUI, true);
+        _typingInterfaceHandler.OnInputResolved += alertTextInputReceiver;
+        _typingInterfaceHandler.InitializeState();
     }
 }
