@@ -1,18 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class TypingInterfaceInputService:IInputGroup
 {
-    private Game_ui_manager _gameUIHandler;
     private TypingInterfaceHandler _typingInterfaceHandler;
     private InputStateHandler _inputStateHandler;
     
     public TypingInterfaceInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
         _typingInterfaceHandler = container.Resolve<TypingInterfaceHandler>();
     }
     public void DetermineOperation()
@@ -30,22 +25,21 @@ public class TypingInterfaceInputService:IInputGroup
     private void TypingFullBoxNavigation()
     {
         _typingInterfaceHandler.optionSelector.SetActive(false);
-        _inputStateHandler.currentNumBoxElements = _typingInterfaceHandler.currentMaxBoxElements;
-        _inputStateHandler.currentBoxCapacity = _typingInterfaceHandler.currentMaxBoxElements;
-        _inputStateHandler.numBoxColumns = _typingInterfaceHandler.GetColumnCount();
-        _inputStateHandler.numBoxRows = _typingInterfaceHandler.currentMaxBoxElements / _inputStateHandler.numBoxColumns;
+        _inputStateHandler.SetupFullBoxNavigation(
+            _typingInterfaceHandler.currentMaxBoxElements,
+            _typingInterfaceHandler.currentMaxBoxElements, 
+          _typingInterfaceHandler.GetColumnCount());
+        _inputStateHandler.OnSelectionIndexChanged += _typingInterfaceHandler.SetCurrentCharacterIndex;
         
-        _inputStateHandler.OnInputLeft += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Horizontal,-1);
-        _inputStateHandler.OnInputRight += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Horizontal,1);
-        _inputStateHandler.OnInputUp += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Vertical,-1);
-        _inputStateHandler.OnInputDown += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Vertical,1);
     }
 
-    private void CheckBoundaryEnter(int change,bool isVertical)
+    private void CheckBoundaryEnter(int indexChange,bool isVertical)
     {
         //if user moves to the right at the box boundary
         //by design boundary is always on the right 
-        if (_inputStateHandler.boxCoordinates[1]==_inputStateHandler.numBoxColumns-1 && change>0 && !isVertical)
+        var movingRight = indexChange > 0 && !isVertical;
+        var atBoundary = _inputStateHandler.GetCoordinate(false) == _typingInterfaceHandler.GetColumnCount() - 1;
+        if (atBoundary && movingRight)
         {
             _inputStateHandler.OnSelectionIndexChanged += SwitchToOptions;
         }

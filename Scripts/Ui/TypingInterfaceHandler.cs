@@ -1,14 +1,50 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public enum TypingInputInterface
 {
    Uppercase = 0,Lowercase = 1,Symbols = 2
+}
+public struct GridData
+{
+   public Vector2 startPosition;
+   public string[] gridValues;
+   public int gridSize;
+   public int colCount;
+
+   public bool hasSpecialGaps;
+   public float normalGap;
+   public float midGap;
+   public float bigGap;
+   public float verticalGap;
+
+   public GridData(string[] values,Vector2 startPosition, float normalGap,float verticalGap, int colCount,bool hasSpecialGaps, float midGap=0f, float bigGap=0f)
+   {
+      this.startPosition = startPosition;
+      this.hasSpecialGaps = hasSpecialGaps;
+      gridValues = values;
+      gridSize = values.Length;
+      this.normalGap = normalGap;
+      this.midGap = midGap;
+      this.bigGap = bigGap;
+      this.verticalGap = verticalGap;
+      this.colCount = colCount;
+   }
+   public GridData(GridData copy)
+   {
+      startPosition = copy.startPosition;
+      hasSpecialGaps = copy.hasSpecialGaps;
+      gridValues = copy.gridValues;
+      gridSize = copy.gridSize;
+      normalGap = copy.normalGap;
+      midGap = copy.midGap;
+      bigGap = copy.bigGap;
+      verticalGap = copy.verticalGap;
+      colCount = copy.colCount;
+   }
 }
 public class TypingInterfaceHandler : MonoBehaviour,IInjectable
 {
@@ -21,11 +57,12 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    [SerializeField]private List<TMP_Text> characterTexts;
    [SerializeField]private Image[] interfaceImages;
    public TypingInputInterface currentInterface;
+   [SerializeField]private int currentInputIndex;
    public int currentCharacterIndex;
-   [SerializeField]private int _maxCharacterLength = 7;
+   private const int MaxCharacterLength = 7;
    public int currentMaxBoxElements;
-   [SerializeField]private string _combinedInput;
-   private Dictionary<TypingInputInterface, string[]> _interfaceCharacters = new();
+   [SerializeField]private string combinedInput;
+   private Dictionary<TypingInputInterface, GridData> _interfaceGrids = new();
    [SerializeField]private List<GameObject> characterSelectables;
    [SerializeField]private GameObject characterPositionTemplate;
    [SerializeField]private Transform characterPositionParent;
@@ -36,14 +73,16 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    
    private InputStateHandler _inputStateHandler;
    private Game_ui_manager _gameUIHandler;
+   private Dialogue_handler _dialogueHandler;
    
    public void Inject(ServiceContainer container)
    {
       _inputStateHandler = container.Resolve<InputStateHandler>();
       _gameUIHandler = container.Resolve<Game_ui_manager>();
+      _dialogueHandler = container.Resolve<Dialogue_handler>();
       gameObject.SetActive(true);
    }
-
+   
    public void OnInject()
    {
       blackArrow.viewingUI = true;
@@ -51,88 +90,99 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       {
          characterTexts.Add(box.GetComponentInChildren<TMP_Text>());
       }
-      symbolGridPositions = new Vector2[]
+      _interfaceGrids.Add(TypingInputInterface.Uppercase,   
+         new GridData(
+            new[]
+            {
+               "A","B","C","D","E","F"," ", ".",
+               "G","H","I","J","K","L"," ", ",",
+               "M", "N","O","P","Q","R","S"," ",
+               "T","U","V","W","X","Y","Z"," "
+            }, 
+            new Vector2(-328, -45),
+            50f,
+            72f,
+            8,
+            true,
+            125f,
+            175f
+            )
+         );
+      var copyUpperCase = new GridData(_interfaceGrids[TypingInputInterface.Uppercase]);
+      copyUpperCase.gridValues = new[]
       {
-         new(-328, -45), new(-278, -45), new(-228, -45), new(-178, -45), new(-128, -45), new(-78, -45),
+         "a", "b", "c", "d", "e", "f", " ", ".",
+         "g", "h", "i", "j", "k", "l", " ", ",",
+         "m", "n", "o", "p", "q", "r", "s", " ",
+         "t", "u", "v", "w", "x", "y", "z", " "
+      }; 
+      _interfaceGrids.Add(TypingInputInterface.Lowercase, copyUpperCase);
 
-         new(-328, 27),  new(-278, 27),  new(-228, 27),  new(-178, 27),  new(-128, 27),  new(-78, 27),
-
-         new(-328, 99),  new(-278, 99),  new(-228, 99),  new(-178, 99),  new(-128, 99),  new(-78, 99),
-
-         new(-328, 171), new(-278, 171), new(-228, 171), new(-178, 171), new(-128, 171), new(-78, 171)
-      };
-      var letters = new[]
+      _interfaceGrids.Add(TypingInputInterface.Symbols,
+         new GridData(new[]
+            {
+               "0", "1", "2", "3", "4", " ",
+               "5", "6", "7", "8", "9", " ",
+               "!", "?", "♂", "♀", "/", "-",
+               "...", "“", "“", "‘", "‘", " "
+            },
+            new Vector2(-328, -45),
+            90f,
+            75f,
+            6,
+            false)
+         );
+      
+      var letterGridGaps = new[] 
       {
          "A", "B", "C-mid gap", "D", "E", "F-big gap", " ", ".",
          "G", "H", "I-mid gap", "J", "K", "L-big gap", " ", ",",
          "M", "N", "O-mid gap", "P", "Q", "R", "S-mid gap", " ",
          "T", "U", "V-mid gap", "W", "X", "Y", "Z-mid gap", " "
       };
-      var basePosition = new Vector2(-328, -45);
-      var normalGap = 50f;
-      var midGap = 125f;
-      var bigGap = 175f;
-      var verticalGap = 72f;
-      var colCount = GetColumnCount();
-      letterGridPositions = new Vector2[letters.Length];
-
-      float currentX = basePosition.x;
-      float currentY = basePosition.y;
-
-      for (int i = 0; i < letters.Length; i++)
+     
+      var letterGridData =_interfaceGrids[TypingInputInterface.Uppercase];
+      var symbolGridData = _interfaceGrids[TypingInputInterface.Symbols];
+      
+      symbolGridPositions = new Vector2[symbolGridData.gridSize];
+      LoadGridPositions(ref symbolGridPositions, symbolGridData.gridValues,symbolGridData);
+      
+      letterGridPositions = new Vector2[letterGridData.gridSize];
+      LoadGridPositions(ref letterGridPositions, letterGridGaps,letterGridData);
+     
+      void LoadGridPositions(ref Vector2[] positionList,string[] gridValueList,GridData data)
       {
-         letterGridPositions[i] = new Vector2(currentX, currentY);
+         float currentX = data.startPosition.x;
+         float currentY = data.startPosition.y;
 
-         float nextGap = normalGap;
-
-         if (letters[i].Contains("mid gap"))
-            nextGap = midGap;
-         else if (letters[i].Contains("big gap"))
-            nextGap = bigGap;
-
-         currentX += nextGap;
-
-         // next row
-         if ((i + 1) % colCount == 0)
+         for (int i = 0; i < gridValueList.Length; i++)
          {
-            currentX = basePosition.x;
-            currentY -= verticalGap;
+            positionList[i] = new Vector2(currentX, currentY);
+
+            float nextGap = data.normalGap;
+            
+            if (data.hasSpecialGaps)
+            {
+               if (gridValueList[i].Contains("mid gap"))
+                  nextGap = data.midGap;
+               else if (gridValueList[i].Contains("big gap"))
+                  nextGap = data.bigGap;
+            }
+            currentX += nextGap;
+
+            // next row
+            if ((i + 1) % data.colCount == 0)
+            {
+               currentX = data.startPosition.x;
+               currentY -= data.verticalGap;
+            }
          }
       }
-
-      _interfaceCharacters.Add(TypingInputInterface.Uppercase,       
-      new[]
-      {
-         "A","B","C","D","E","F"," ", ".",
-         "G","H","I","J","K","L"," ", ",",
-         "M", "N","O","P","Q","R","S"," ",
-         "T","U","V","W","X","Y","Z"," "
-      });
-      _interfaceCharacters.Add(TypingInputInterface.Lowercase, 
-      new[]
-      {
-         "a","b","c","d","e","f"," ", ".",
-         "g","h","i","j","k","l"," ", ",",
-         "m","n","o","p","q","r","s"," ",
-         "t","u","v","w","x","y","z"," "
-      });
-      _interfaceCharacters.Add(TypingInputInterface.Symbols,
-      new[]
-      {
-         "0","1","2","3","4"," ",
-         "5","6","7","8","9", " ",
-         "!", "?","♂","♀","/","-",
-         "...","“","“","‘","‘"," "
-      });
    }
 
    public int GetColumnCount()
    {
-      return currentInterface switch
-      {
-         TypingInputInterface.Symbols => 6,
-         _ => 8
-      };
+      return _interfaceGrids[currentInterface].colCount;
    }
    private void CreateSelectables()
    {
@@ -171,8 +221,8 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       {
          text.text = string.Empty;
       }
-      _combinedInput = string.Empty;
-      currentCharacterIndex = 0;
+      combinedInput = string.Empty;
+      currentInputIndex = 0;
       ChangeInterface(TypingInputInterface.Uppercase,false);
       TypingInterfaceNavigation();
    }
@@ -182,11 +232,11 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       CreateSelectables();
       var typingSelectables = new List<SelectableUI>();
 
-      for (int i = 0; i<characterSelectables.Count; i++)
+      foreach( var selectableObject in characterSelectables)
       {
-         typingSelectables.Add( new(characterSelectables[i], InputCharacterValue,true) );
+         typingSelectables.Add( new(selectableObject, InputCharacterValue,true) );
       }
-        
+      currentCharacterIndex = 0;
       _inputStateHandler.ChangeInputState(new  (InputStateName.TypingInterfaceNavigation,
          InputStateGroup.TypingInterface,true,mainUI,
          InputDirection.Grid, typingSelectables,characterSelector,true, true ,canExit:false),true);
@@ -200,7 +250,6 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
          new(interfaceOptions[1], ResetCharacterValue,true) ,
          new(interfaceOptions[2], FinalizeInput,true) 
       };
-     
       _inputStateHandler.ChangeInputState(new  (InputStateName.TypingInterfaceOptions,
          InputStateGroup.TypingInterface,false,null,
          InputDirection.Vertical, optionSelectables,optionSelector,true, true ,canExit:false));
@@ -211,11 +260,8 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       interfaceImages[(int)newInterface].gameObject.SetActive(true);
       
       currentInterface = newInterface;
-      currentMaxBoxElements = currentInterface switch
-      {
-         TypingInputInterface.Symbols => 24,
-         _ => 32
-      };
+      currentMaxBoxElements = _interfaceGrids[currentInterface].gridSize;
+      
       if (!refreshState) return;
       _inputStateHandler.ResetRelevantUi(InputStateName.TypingInterfaceNavigation);
    }
@@ -230,24 +276,29 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       };
       ChangeInterface(newInterface,true);
    }
-   
+
+   public void SetCurrentCharacterIndex(int newIndex)
+   {
+      currentCharacterIndex = newIndex;
+   }
    private void InputCharacterValue()
    {
-      if (currentCharacterIndex < _maxCharacterLength - 1)
+      if (currentInputIndex < MaxCharacterLength)
       {
-         characterTexts[currentCharacterIndex].text = _interfaceCharacters[currentInterface][currentCharacterIndex];
-         _combinedInput += characterTexts[currentCharacterIndex].text;
-         currentCharacterIndex++;
+         var selectedCharacter = _interfaceGrids[currentInterface].gridValues[currentCharacterIndex];
+         characterTexts[currentInputIndex].text = selectedCharacter;
+         combinedInput += selectedCharacter;
+         currentInputIndex++;
       }
    }
 
    private void ResetCharacterValue()
    {
-      if (currentCharacterIndex > 0)
+      if (currentInputIndex > 0)
       {
-         characterTexts[currentCharacterIndex-1].text = string.Empty;
-         _combinedInput = _combinedInput[..^1];//remove last input
-         currentCharacterIndex--;
+         characterTexts[currentInputIndex-1].text = string.Empty;
+         combinedInput = combinedInput[..^1];//remove last input
+         currentInputIndex--;
       }
    }
    public void FreezeCharacterBox()
@@ -261,7 +312,12 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
 
    private void FinalizeInput()
    {
-      OnInputResolved?.Invoke(_combinedInput);
+      if (currentInputIndex == 0)
+      {
+         _dialogueHandler.DisplayDetails("Input cannot be empty!");
+         return;
+      }
+      OnInputResolved?.Invoke(combinedInput);
       OnInputResolved = null;
       _gameUIHandler.CloseTypingInterface();
       _inputStateHandler.ResetGroupUi(InputStateGroup.TypingInterface);

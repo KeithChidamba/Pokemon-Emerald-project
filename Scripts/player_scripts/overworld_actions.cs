@@ -91,6 +91,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
         if (pokemonBitingPole && InputSourceHandler.InputPressed(ControlEvent.Confirm))
         {
             pokemonBitingPole = false;
+            _dialogueHandler.EndDialogue();
             _encounterHandler.TriggerFishingEncounter(fishingTable,equippedSpecialItem);
         }
         if (fishing && !_battleHandler.battleInProgress)

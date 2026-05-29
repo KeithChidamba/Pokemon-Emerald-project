@@ -27,33 +27,15 @@ public class PokemonBattleInputService : IInputGroup
     private void SetupBattleOptions()
     {
         _inputStateHandler.currentState.persistOnExit = true;
-        _inputStateHandler.currentState.currentSelectionIndex = 0;
-        _inputStateHandler.currentNumBoxElements = 4;
-        _inputStateHandler.currentBoxCapacity = 4;
-        _inputStateHandler.numBoxColumns = 2;
-        _inputStateHandler.SetRowRemainder();
-        _inputStateHandler.OnInputLeft += ()=>_inputStateHandler.MoveCoordinatesDynamic(InputDirection.Horizontal,-1);
-        _inputStateHandler.OnInputRight += ()=>_inputStateHandler.MoveCoordinatesDynamic(InputDirection.Horizontal,1);
-        _inputStateHandler.OnInputUp += ()=>_inputStateHandler.MoveCoordinatesDynamic(InputDirection.Vertical,-2);
-        _inputStateHandler.OnInputDown += ()=>_inputStateHandler.MoveCoordinatesDynamic(InputDirection.Vertical,2);
+        _inputStateHandler.SetupFullBoxNavigation(4,4,2);
     }
     
     private void SetupMoveSelection()
     {
         _battleHandler.ResetEnemyColor();
-        
         ref InputState currentState = ref _inputStateHandler.currentState;
         currentState.currentSelectionIndex = 0;
-        _inputStateHandler.currentNumBoxElements = currentState.maxSelectionIndex+1;
-        _inputStateHandler.currentBoxCapacity = 4;
-        _inputStateHandler.numBoxColumns = 2;
-        _inputStateHandler.SetRowRemainder();
-        
-        _inputStateHandler.OnInputLeft += ()=>_inputStateHandler.MoveCoordinatesDynamic(InputDirection.Horizontal,-1);
-        _inputStateHandler.OnInputRight += ()=>_inputStateHandler.MoveCoordinatesDynamic(InputDirection.Horizontal,1);
-        _inputStateHandler.OnInputUp += ()=>_inputStateHandler.MoveCoordinatesDynamic(InputDirection.Vertical,-2);
-        _inputStateHandler.OnInputDown += ()=>_inputStateHandler.MoveCoordinatesDynamic(InputDirection.Vertical,2);
-        
+        _inputStateHandler.SetupDynamicBoxNavigation(currentState.maxSelectionIndex+1,4,2);
         _inputStateHandler.OnSelectionIndexChanged += _battleHandler.SelectMove;
     }
 

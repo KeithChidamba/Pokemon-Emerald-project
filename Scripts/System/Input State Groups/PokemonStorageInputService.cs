@@ -29,8 +29,10 @@ public class PokemonStorageInputService: IInputGroup
     }
 
     private void AllowTopRowExit(int change,bool isVertical)
-    {
-        if (_inputStateHandler.boxCoordinates[0]==0 && change<0 && isVertical)
+    { 
+        var movingUp = change<0 && isVertical;
+        var atTopRow = _inputStateHandler.GetCoordinate(true) == 0;
+        if (atTopRow && movingUp)
         {
             _inputStateHandler.OnSelectionIndexChanged += ExitTopRow;
         }
@@ -38,14 +40,7 @@ public class PokemonStorageInputService: IInputGroup
     
     private void StorageFullBoxNavigation()
     {
-        _inputStateHandler.currentNumBoxElements = pokemon_storage.BoxCapacity;
-        _inputStateHandler.currentBoxCapacity = pokemon_storage.BoxCapacity;
-        _inputStateHandler.numBoxColumns = pokemon_storage.BoxColumns;
-        _inputStateHandler.numBoxRows = pokemon_storage.BoxCapacity / _inputStateHandler.numBoxColumns;
-        _inputStateHandler.OnInputLeft += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Horizontal,-1);
-        _inputStateHandler.OnInputRight += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Horizontal,1);
-        _inputStateHandler.OnInputUp += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Vertical,-1);
-        _inputStateHandler.OnInputDown += ()=> _inputStateHandler.MoveCoordinatesFullBox(InputDirection.Vertical,1);
+        _inputStateHandler.SetupFullBoxNavigation(pokemon_storage.BoxCapacity,pokemon_storage.BoxCapacity,pokemon_storage.BoxColumns);
         
         _inputStateHandler.currentState.canExit = false;
         _inputStateHandler.OnSelectionIndexChanged += _pokemonStorageHandler.LoadPokemonData;

@@ -43,12 +43,12 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private bool _handlingState;
     [SerializeField]private List<InputState> stateLayers;
 
-    public int[] boxCoordinates={0,0};
-    public int currentBoxCapacity;
-    public int numBoxRows;
-    public int numBoxColumns;
-    public int currentNumBoxElements;
-    public int rowRemainder;
+    [SerializeField]private  int[] boxCoordinates={0,0};
+    [SerializeField]private int currentBoxCapacity;
+    [SerializeField]private int numBoxRows;
+    [SerializeField]private int numBoxColumns;
+    [SerializeField]private int currentNumBoxElements;
+    [SerializeField]private int rowRemainder;
     public GameObject emptyPlaceHolder;
     
     private Dialogue_handler _dialogueHandler;
@@ -250,7 +250,11 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         boxCoordinates[0] = 0;
         boxCoordinates[1] = 0;
     }
-    
+
+    public int GetCoordinate(bool vertical)
+    {
+        return vertical ? boxCoordinates[0] : boxCoordinates[1];
+    }
     private int GetCurrentFullBoxPosition()
     {
         int row = Mathf.Clamp(boxCoordinates[0], 0, numBoxRows);
@@ -261,7 +265,18 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         return Mathf.Clamp(pos, 0, currentNumBoxElements);
     }
 
-    public void MoveCoordinatesFullBox(InputDirection direction, int change)
+    public void SetupFullBoxNavigation(int numBoxElements,int boxCapacity,int numColumns)
+    {
+        currentNumBoxElements = numBoxElements;
+        currentBoxCapacity = boxCapacity;
+        numBoxColumns = numColumns;
+        numBoxRows = boxCapacity / numColumns;
+        OnInputLeft += ()=> MoveCoordinatesFullBox(InputDirection.Horizontal,-1);
+        OnInputRight += ()=> MoveCoordinatesFullBox(InputDirection.Horizontal,1);
+        OnInputUp += ()=> MoveCoordinatesFullBox(InputDirection.Vertical,-1);
+        OnInputDown += ()=> MoveCoordinatesFullBox(InputDirection.Vertical,1);
+    }
+    private void MoveCoordinatesFullBox(InputDirection direction, int change)
     {
         bool vertical = direction == InputDirection.Vertical;
 
@@ -292,13 +307,16 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
         UpdateSelectorUi();
     }
-
-    public void SetRowRemainder()
+    public void SetupDynamicBoxNavigation(int numBoxElements,int boxCapacity,int numColumns)
     {
-        var currentRowRemainder = currentNumBoxElements - (boxCoordinates[0] * numBoxColumns);
-        rowRemainder =  (currentRowRemainder < numBoxColumns)? currentRowRemainder: numBoxColumns;
-        rowRemainder = Mathf.Clamp(rowRemainder, 0, numBoxColumns);
-        boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
+        currentNumBoxElements = numBoxElements;
+        currentBoxCapacity = boxCapacity;
+        numBoxColumns = numColumns;
+        SetRowRemainder();
+        OnInputLeft += ()=>MoveCoordinatesDynamic(InputDirection.Horizontal,-1);
+        OnInputRight += ()=>MoveCoordinatesDynamic(InputDirection.Horizontal,1);
+        OnInputUp += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,-1);
+        OnInputDown += ()=>MoveCoordinatesDynamic(InputDirection.Vertical,1);
     }
     private int GetCurrentBoxPositionDynamic()
     {
@@ -307,10 +325,10 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         var currentRow = boxCoordinates[0];
         var rowCapacity = currentRow * numBoxColumns;
         rowCapacity = Mathf.Clamp(rowCapacity, 0, currentBoxCapacity);
-        var val = rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);;
+        var val = rowCapacity + Mathf.Clamp(currentColumn, 0, rowRemainder-1);
         return val;
     }
-    public void MoveCoordinatesDynamic(InputDirection direction, int change)
+    private void MoveCoordinatesDynamic(InputDirection direction, int change)
     {
         SetRowRemainder();
         var coordinateIndex = direction == InputDirection.Vertical ? 0 : 1;
@@ -322,12 +340,18 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         
         currentState.currentSelectionIndex = currentNumBoxElements > currentState.maxSelectionIndex?
             Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentState.maxSelectionIndex) 
-            :Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentNumBoxElements);
+            :Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentNumBoxElements-1);
         
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
         UpdateSelectorUi();
     }
-
+    private void SetRowRemainder()
+    {
+        var currentRowRemainder = currentNumBoxElements - (boxCoordinates[0] * numBoxColumns);
+        rowRemainder =  (currentRowRemainder < numBoxColumns)? currentRowRemainder: numBoxColumns;
+        rowRemainder = Mathf.Clamp(rowRemainder, 0, numBoxColumns);
+        boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
+    }
     private void SetupInputServices()
     {
         if(_inputServiceGroups.TryGetValue(currentState.stateGroup, out var serviceGroup))
