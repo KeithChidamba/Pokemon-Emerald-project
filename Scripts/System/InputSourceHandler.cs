@@ -18,6 +18,11 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     public static bool InputPressed(ControlEvent e) => _pressed[e];
     public static bool InputHeld(ControlEvent e) => _held[e];
     public static bool InputRelease(ControlEvent e) => !_held[e];
+
+    //for use by non-mono classes
+    public static event Action<ControlEvent> OnInputPressed;
+    public static event Action<ControlEvent> OnInputReleased;
+    
     private bool _isMobile;
     private bool _gameStarted;
     public GameObject mobileControlsUI;
@@ -110,6 +115,7 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
         if (!_held[e]) 
         {
             _pressed[e] = true; // only true on first frame
+            OnInputPressed?.Invoke(e);
         }
         _held[e] = true;
     }
@@ -117,6 +123,7 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     public static void TriggerRelease(ControlEvent e)
     {
         _held[e] = false;
+        OnInputReleased?.Invoke(e);
     }
     private void LateUpdate()
     {

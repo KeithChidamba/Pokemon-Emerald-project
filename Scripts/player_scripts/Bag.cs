@@ -90,10 +90,16 @@ public class Bag : MonoBehaviour,IInjectable
     public void OnInject()
     {
         _categories = (BagCategory[])Enum.GetValues(typeof(BagCategory));
+        foreach (var loopingUiAnimation in redArrows)
+        {
+            loopingUiAnimation.LoadState();
+        }
+        
         _rightArrow=redArrows[0];
         _leftArrow=redArrows[1];
         _upArrow=redArrows[2];
         _downArrow=redArrows[3];
+        
         _overworldActions.OnItemEquipped += (eqp)=> ReloadEquipMarker();
         _overworldActions.OnItemUnequipped += (eqp)=> ReloadEquipMarker();
     }
@@ -426,7 +432,7 @@ public class Bag : MonoBehaviour,IInjectable
         ClearBagUI();
         foreach (var loopingUiAnimation in redArrows)
         {
-            loopingUiAnimation.viewingUI = false;
+            loopingUiAnimation.ChangeActiveState(false);
             loopingUiAnimation.gameObject.SetActive(true);
         }
         _inputStateHandler.ResetRelevantUi(InputStateName.ItemStorageUsage,true);
@@ -509,7 +515,7 @@ public class Bag : MonoBehaviour,IInjectable
         _leftArrow.gameObject.SetActive(false);
         foreach (var loopingUiAnimation in redArrows)
         {
-            loopingUiAnimation.viewingUI = true;
+            loopingUiAnimation.ChangeActiveState(true);
         }
     }
     

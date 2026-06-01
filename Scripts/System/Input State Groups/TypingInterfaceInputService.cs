@@ -29,8 +29,34 @@ public class TypingInterfaceInputService:IInputGroup
             _typingInterfaceHandler.currentMaxBoxElements,
             _typingInterfaceHandler.currentMaxBoxElements, 
           _typingInterfaceHandler.GetColumnCount());
-        _inputStateHandler.OnSelectionIndexChanged += _typingInterfaceHandler.SetCurrentCharacterIndex;
         
+        _inputStateHandler.OnSelectionIndexChanged += _typingInterfaceHandler.SetCurrentCharacterIndex;
+        InputSourceHandler.OnInputPressed += CheckQuickTypingAction;
+        _inputStateHandler.currentState.OnClose = ResetInputEvent;
+        return;
+        void ResetInputEvent()
+        {
+            InputSourceHandler.OnInputPressed -= CheckQuickTypingAction;
+        }
+        void CheckQuickTypingAction(ControlEvent e)
+        {
+            if (e==ControlEvent.Exit)//shortcut to remove last typed character
+            {
+                _typingInterfaceHandler.ResetCharacterValue();
+            }
+            if (e==ControlEvent.OpenMenu)//shortcut to finalize input
+            {
+                _inputStateHandler.OnStateLoaded += SelectLastOption;
+                SwitchToOptions();
+            }
+
+            void SelectLastOption(InputState newState)
+            {
+                _inputStateHandler.OnStateLoaded -= SelectLastOption;
+                _inputStateHandler.SetSelectionIndex(_inputStateHandler.currentState.maxSelectionIndex);
+                _inputStateHandler.UpdateSelectorUi();
+            }
+        }
     }
 
     private void CheckBoundaryEnter(int indexChange,bool isVertical)
@@ -41,14 +67,13 @@ public class TypingInterfaceInputService:IInputGroup
         var atBoundary = _inputStateHandler.GetCoordinate(false) == _typingInterfaceHandler.GetColumnCount() - 1;
         if (atBoundary && movingRight)
         {
-            _inputStateHandler.OnSelectionIndexChanged += SwitchToOptions;
+            _inputStateHandler.OnSelectionIndexChanged += (index) => SwitchToOptions();
         }
-        
-        void SwitchToOptions(int index)
-        {
-            _inputStateHandler.RemoveTopInputLayer(false);
-            _typingInterfaceHandler.InterfaceOptionsNavigation();
-        }
+    }
+    private void SwitchToOptions()
+    {
+        _inputStateHandler.ResetRelevantUi(InputStateName.TypingInterfaceNavigation);
+        _typingInterfaceHandler.InterfaceOptionsNavigation();
     }
     private void OptionsNavigation()
     {

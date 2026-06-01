@@ -114,6 +114,7 @@ public class Player_movement : MonoBehaviour,IInjectable
     
     public void RestrictPlayerMovement(MovementRestrictor restrictor)
     {
+        if (_movementRestrictors[restrictor]) return;
         SnapToPosition();
         _movementRestrictors[restrictor] = true;
         if (_overworldActions.fishing)

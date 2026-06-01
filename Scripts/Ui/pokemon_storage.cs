@@ -141,6 +141,11 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             pokemonIcon.SetImage();
             nonPartyIcons.Add(pokemonIcon);
         }
+        foreach (var arrow in boxChangeGreyArrows)
+        {
+            arrow.LoadState();
+        }
+        
     }
 
     public IEnumerator SaveStorageData()
@@ -213,7 +218,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         if (!_viewingPC) return;
         foreach (var arrow in boxChangeGreyArrows)
         {
-            arrow.viewingUI = _currentNavState == PCNavState.ViewingBoxChange;
+            arrow.ChangeActiveState(_currentNavState == PCNavState.ViewingBoxChange);
         }
     }
     private IEnumerator SwitchPkmDataAnimationSprite()
@@ -569,7 +574,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             
             foreach (var arrow in depositGreyArrows)
             {
-                arrow.viewingUI = _currentNavState == PCNavState.SelectingBoxDeposit;
+                arrow.ChangeActiveState(_currentNavState == PCNavState.SelectingBoxDeposit);
             }
 
             var boxSelection = new List<SelectableUI>();

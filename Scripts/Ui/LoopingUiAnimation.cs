@@ -23,15 +23,15 @@ public class LoopingUiAnimation : MonoBehaviour
     private Vector2 _targetPos;
     private bool _movingToTarget = true;
 
-    public bool viewingUI;
+    private bool _viewingUI;
 
-    private void Start()
+    public void LoadState(bool setDirection=true)
     {
         _rectTransform = GetComponent<RectTransform>();
         
         _startPos = _rectTransform.anchoredPosition;
         _targetPos = _startPos + GetDirectionVector() * moveDistance;
-        
+        if (!setDirection) return;
         switch (moveDirection)
         {
             case Direction.Up: _rectTransform.localRotation = Quaternion.Euler(0, 0, -90); break;
@@ -41,9 +41,17 @@ public class LoopingUiAnimation : MonoBehaviour
         }
     }
 
+    public void ChangeActiveState(bool isActive)
+    {
+        _viewingUI = isActive;
+    }
+    public void ResetPosition()
+    {
+        _rectTransform.anchoredPosition = _startPos;
+    }
     private void Update()
     {
-        if (!viewingUI) return;
+        if (!_viewingUI) return;
         MoveInLoop();
     }
 

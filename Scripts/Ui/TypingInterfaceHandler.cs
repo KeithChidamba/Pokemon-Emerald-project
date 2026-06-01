@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -53,15 +52,19 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    public GameObject optionSelector;
    [SerializeField]private GameObject[] interfaceOptions;
    [SerializeField]private LoopingUiAnimation blackArrow;
-   [SerializeField]private Image[] characterBoxes;
-   [SerializeField]private List<TMP_Text> characterTexts;
+   
+   [SerializeField]private GameObject characterBoxTemplate;
+   [SerializeField]private Transform characterBoxParent;
+   [SerializeField]private List<TypingCharacterBox> characterBoxes;
+      private int _maxCharacterLength;
+      
    [SerializeField]private Image[] interfaceImages;
    public TypingInputInterface currentInterface;
    [SerializeField]private int currentInputIndex;
    public int currentCharacterIndex;
-   private const int MaxCharacterLength = 7;
    public int currentMaxBoxElements;
    [SerializeField]private string combinedInput;
+   
    private Dictionary<TypingInputInterface, GridData> _interfaceGrids = new();
    [SerializeField]private List<GameObject> characterSelectables;
    [SerializeField]private GameObject characterPositionTemplate;
@@ -85,11 +88,6 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    
    public void OnInject()
    {
-      blackArrow.viewingUI = true;
-      foreach (var box in characterBoxes)
-      {
-         characterTexts.Add(box.GetComponentInChildren<TMP_Text>());
-      }
       _interfaceGrids.Add(TypingInputInterface.Uppercase,   
          new GridData(
             new[]
@@ -149,7 +147,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       
       letterGridPositions = new Vector2[letterGridData.gridSize];
       LoadGridPositions(ref letterGridPositions, letterGridGaps,letterGridData);
-     
+      return;
       void LoadGridPositions(ref Vector2[] positionList,string[] gridValueList,GridData data)
       {
          float currentX = data.startPosition.x;
@@ -215,18 +213,72 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       }
    }
    
-   public void InitializeState()
+   public void InitializeState(int inputLength)
    {
-      foreach (var text in characterTexts)
-      {
-         text.text = string.Empty;
-      }
       combinedInput = string.Empty;
       currentInputIndex = 0;
+      _maxCharacterLength = inputLength;
+      blackArrow.LoadState();
+      blackArrow.ChangeActiveState(true);
+      CreateCharacterBoxes();
       ChangeInterface(TypingInputInterface.Uppercase,false);
       TypingInterfaceNavigation();
+      characterBoxes[0].AnimateCharacterBox();
    }
 
+   private void CreateCharacterBoxes()
+   {
+      foreach (var box in characterBoxes)
+      {
+         Destroy(box.gameObject);
+      }
+      characterBoxes.Clear();
+
+      RectTransform templateRt = characterBoxTemplate.GetComponent<RectTransform>();
+
+      const float preferredWidth = 35f;
+      const float gap = 10f;
+
+      float laneWidth = 465f;
+
+      float boxWidth = preferredWidth;
+
+      float preferredTotal =
+         _maxCharacterLength * preferredWidth +
+         (_maxCharacterLength - 1) * gap;
+
+      if (preferredTotal > laneWidth)
+      {
+         boxWidth =
+            (laneWidth - ((_maxCharacterLength - 1) * gap))
+            / _maxCharacterLength;
+      }
+
+      float startX =
+         templateRt.anchoredPosition.x
+         - templateRt.rect.width * 0.5f
+         + boxWidth * 0.5f;
+
+      for (int i = 0; i < _maxCharacterLength; i++)
+      {
+         var newBox =
+            Instantiate(characterBoxTemplate, characterBoxParent);
+
+         var typingBox = newBox.GetComponent<TypingCharacterBox>();
+         typingBox.LoadBox();
+         characterBoxes.Add(typingBox);
+
+         RectTransform rt = newBox.GetComponent<RectTransform>();
+
+         rt.sizeDelta = new Vector2(
+            boxWidth,
+            rt.sizeDelta.y);
+
+         rt.anchoredPosition = new Vector2(
+            startX + i * (boxWidth + gap),
+            templateRt.anchoredPosition.y);
+      }
+   }
    public void TypingInterfaceNavigation()
    {
       CreateSelectables();
@@ -283,31 +335,35 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    }
    private void InputCharacterValue()
    {
-      if (currentInputIndex < MaxCharacterLength)
+      if (currentInputIndex < _maxCharacterLength)
       {
          var selectedCharacter = _interfaceGrids[currentInterface].gridValues[currentCharacterIndex];
-         characterTexts[currentInputIndex].text = selectedCharacter;
+         characterBoxes[currentInputIndex].characterText.text = selectedCharacter;
+         characterBoxes[currentInputIndex].FreezeCharacterBox();
          combinedInput += selectedCharacter;
          currentInputIndex++;
+
+         if (currentInputIndex < _maxCharacterLength)
+         {
+            characterBoxes[currentInputIndex].AnimateCharacterBox();
+         }
       }
    }
 
-   private void ResetCharacterValue()
+   public void ResetCharacterValue()
    {
       if (currentInputIndex > 0)
       {
-         characterTexts[currentInputIndex-1].text = string.Empty;
-         combinedInput = combinedInput[..^1];//remove last input
          currentInputIndex--;
+
+         characterBoxes[currentInputIndex].characterText.text = string.Empty;
+         characterBoxes[currentInputIndex].AnimateCharacterBox();
+
+         if (currentInputIndex + 1 < _maxCharacterLength)
+            characterBoxes[currentInputIndex + 1].FreezeCharacterBox();
+
+         combinedInput = combinedInput[..^1];
       }
-   }
-   public void FreezeCharacterBox()
-   {
-      
-   }
-   public void AnimateCharacterBox()
-   {
-      
    }
 
    private void FinalizeInput()

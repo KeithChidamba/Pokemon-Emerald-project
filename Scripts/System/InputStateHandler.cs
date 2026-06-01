@@ -36,6 +36,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     public event Action OnInputLeft;
     public event Action<InputState> OnStateRemoved;
     public event Action<InputState> OnStateChanged;
+    public event Action<InputState> OnStateLoaded;
     public event Action<int> OnSelectionIndexChanged;
     public event Action<int,bool> OnFullBoxNavigation;
     
@@ -213,6 +214,8 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         }
         
         _currentStateLoaded = true;
+        OnStateLoaded?.Invoke(currentState);
+        
         var parentLayers = stateLayers.Where(s => s.isParentLayer).ToList();
         if (parentLayers.Count==0) return;
         parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
@@ -287,7 +290,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
             boxCoordinates[0] = Mathf.Clamp(
                 boxCoordinates[0] + change,
                 0,
-                numBoxRows
+                numBoxRows-1
             );
         }
         else

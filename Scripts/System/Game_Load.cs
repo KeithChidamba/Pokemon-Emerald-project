@@ -134,7 +134,8 @@ public class Game_Load : MonoBehaviour,IInjectable
                 _saveHandler.EraseSaveData();
             }
 
-            _gameUIHandler.ViewTypingInterface(CreateNewPlayer);
+            var playerNameLength = 12;
+            _gameUIHandler.ViewTypingInterface(CreateNewPlayer,playerNameLength);
         }
     }
 
