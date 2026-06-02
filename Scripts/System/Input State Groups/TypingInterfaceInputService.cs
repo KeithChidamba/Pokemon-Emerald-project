@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class TypingInterfaceInputService:IInputGroup
 {
@@ -32,11 +33,16 @@ public class TypingInterfaceInputService:IInputGroup
         
         _inputStateHandler.OnSelectionIndexChanged += _typingInterfaceHandler.SetCurrentCharacterIndex;
         InputSourceHandler.OnInputPressed += CheckQuickTypingAction;
-        _inputStateHandler.currentState.OnClose = ResetInputEvent;
+        _typingInterfaceHandler.OnCharacterCaptured += SwapOnInputLimit;
         return;
-        void ResetInputEvent()
+        
+        void SwapOnInputLimit(int index)
         {
-            InputSourceHandler.OnInputPressed -= CheckQuickTypingAction;
+            //auto-trigger input finalization
+            if(index == _typingInterfaceHandler.MaxCharacterLength)
+            {
+                QuickSwapToLastOption();
+            }
         }
         void CheckQuickTypingAction(ControlEvent e)
         {
@@ -46,10 +52,15 @@ public class TypingInterfaceInputService:IInputGroup
             }
             if (e==ControlEvent.OpenMenu)//shortcut to finalize input
             {
-                _inputStateHandler.OnStateLoaded += SelectLastOption;
-                SwitchToOptions();
+                QuickSwapToLastOption();
             }
-
+        }
+        void QuickSwapToLastOption()
+        {
+            _typingInterfaceHandler.OnCharacterCaptured -= SwapOnInputLimit;
+            _inputStateHandler.OnStateLoaded += SelectLastOption;
+            InputSourceHandler.OnInputPressed -= CheckQuickTypingAction;
+            SwitchToOptions();
             void SelectLastOption(InputState newState)
             {
                 _inputStateHandler.OnStateLoaded -= SelectLastOption;

@@ -479,11 +479,11 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         }
     }
 
-    public void ViewTypingInterface(Action<string> alertTextInputReceiver,int inputLength)
+    public void ViewTypingInterface(Action<string> alertTextInputReceiver,int inputLength,TypingInterfaceGraphicData graphicData)
     {
         AddScreen();
         ActivateUiElement(_typingInterfaceHandler.mainUI, true);
         _typingInterfaceHandler.OnInputResolved += alertTextInputReceiver;
-        _typingInterfaceHandler.InitializeState(inputLength);
+        _typingInterfaceHandler.InitializeState(inputLength,graphicData);
     }
 }

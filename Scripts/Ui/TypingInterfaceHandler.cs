@@ -1,11 +1,31 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public enum TypingInputInterface
 {
    Uppercase = 0,Lowercase = 1,Symbols = 2
+}
+
+public class TypingInterfaceGraphicData
+{
+   public string displayMessage;
+   public bool isAnimated;
+   public List<Sprite> sprites;
+   public Gender displayGender;
+   public Vector2 preferredGraphicSize;
+   public TypingInterfaceGraphicData(bool isAnimated, List<Sprite> sprites,string displayMessage,
+      Vector2 preferredSize,Gender displayGender = Gender.None)
+   {
+      this.isAnimated = isAnimated;
+      this.sprites = sprites;
+      this.displayMessage = displayMessage;
+      this.displayGender = displayGender;
+      preferredGraphicSize = preferredSize;
+   }
 }
 public struct GridData
 {
@@ -56,7 +76,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    [SerializeField]private GameObject characterBoxTemplate;
    [SerializeField]private Transform characterBoxParent;
    [SerializeField]private List<TypingCharacterBox> characterBoxes;
-      private int _maxCharacterLength;
+   public int MaxCharacterLength { get; private set; }
       
    [SerializeField]private Image[] interfaceImages;
    public TypingInputInterface currentInterface;
@@ -70,9 +90,13 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    [SerializeField]private GameObject characterPositionTemplate;
    [SerializeField]private Transform characterPositionParent;
    public event Action<string> OnInputResolved;
-
+   public event Action<int> OnCharacterCaptured;
    [SerializeField]private Vector2[] symbolGridPositions;
    [SerializeField]private Vector2[] letterGridPositions;
+   
+   [SerializeField]private Image interfaceGraphic;
+   [SerializeField]private TMP_Text interfaceDisplayText;
+   [SerializeField]private Image genderGraphic;
    
    private InputStateHandler _inputStateHandler;
    private Game_ui_manager _gameUIHandler;
@@ -92,8 +116,8 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
          new GridData(
             new[]
             {
-               "A","B","C","D","E","F"," ", ".",
-               "G","H","I","J","K","L"," ", ",",
+               "A","B","C","D","E","F",".", " ",
+               "G","H","I","J","K","L",",", " ",
                "M", "N","O","P","Q","R","S"," ",
                "T","U","V","W","X","Y","Z"," "
             }, 
@@ -109,8 +133,8 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       var copyUpperCase = new GridData(_interfaceGrids[TypingInputInterface.Uppercase]);
       copyUpperCase.gridValues = new[]
       {
-         "a", "b", "c", "d", "e", "f", " ", ".",
-         "g", "h", "i", "j", "k", "l", " ", ",",
+         "a", "b", "c", "d", "e", "f", ".", " ",
+         "g", "h", "i", "j", "k", "l", ",", " ",
          "m", "n", "o", "p", "q", "r", "s", " ",
          "t", "u", "v", "w", "x", "y", "z", " "
       }; 
@@ -133,8 +157,8 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       
       var letterGridGaps = new[] 
       {
-         "A", "B", "C-mid gap", "D", "E", "F-big gap", " ", ".",
-         "G", "H", "I-mid gap", "J", "K", "L-big gap", " ", ",",
+         "A", "B", "C-mid gap", "D", "E", "F-big gap", ".", " ",
+         "G", "H", "I-mid gap", "J", "K", "L-big gap", ",", " ",
          "M", "N", "O-mid gap", "P", "Q", "R", "S-mid gap", " ",
          "T", "U", "V-mid gap", "W", "X", "Y", "Z-mid gap", " "
       };
@@ -213,19 +237,45 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       }
    }
    
-   public void InitializeState(int inputLength)
+   public void InitializeState(int inputLength,TypingInterfaceGraphicData graphicData)
    {
       combinedInput = string.Empty;
       currentInputIndex = 0;
-      _maxCharacterLength = inputLength;
+      MaxCharacterLength = inputLength;
       blackArrow.LoadState();
       blackArrow.ChangeActiveState(true);
+      interfaceDisplayText.text = graphicData.displayMessage;
+      genderGraphic.gameObject.SetActive(false);
+      if (graphicData.displayGender != Gender.None)
+      {
+         genderGraphic.gameObject.SetActive(true);
+         genderGraphic.sprite = Utility.GetGenderSprite(graphicData.displayGender);
+      }
+      
+      StartCoroutine(AnimateInterfaceGraphic(graphicData));
       CreateCharacterBoxes();
       ChangeInterface(TypingInputInterface.Uppercase,false);
       TypingInterfaceNavigation();
       characterBoxes[0].AnimateCharacterBox();
    }
 
+   private IEnumerator AnimateInterfaceGraphic(TypingInterfaceGraphicData graphicData)
+   {
+      interfaceGraphic.sprite = graphicData.sprites[0];
+      Utility.ResizeImageToSprite(ref interfaceGraphic,graphicData.preferredGraphicSize);
+      if(!graphicData.isAnimated)
+      {
+         yield break;
+      }
+      var currentSpriteIndex = 0;
+      while (currentSpriteIndex < graphicData.sprites.Count)
+      {
+         interfaceGraphic.sprite = graphicData.sprites[currentSpriteIndex];
+         yield return new WaitForSeconds(0.25f);
+         currentSpriteIndex++;
+         if (currentSpriteIndex == graphicData.sprites.Count) currentSpriteIndex = 0;
+      }
+   }
    private void CreateCharacterBoxes()
    {
       foreach (var box in characterBoxes)
@@ -244,14 +294,14 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       float boxWidth = preferredWidth;
 
       float preferredTotal =
-         _maxCharacterLength * preferredWidth +
-         (_maxCharacterLength - 1) * gap;
+         MaxCharacterLength * preferredWidth +
+         (MaxCharacterLength - 1) * gap;
 
       if (preferredTotal > laneWidth)
       {
          boxWidth =
-            (laneWidth - ((_maxCharacterLength - 1) * gap))
-            / _maxCharacterLength;
+            (laneWidth - ((MaxCharacterLength - 1) * gap))
+            / MaxCharacterLength;
       }
 
       float startX =
@@ -259,7 +309,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
          - templateRt.rect.width * 0.5f
          + boxWidth * 0.5f;
 
-      for (int i = 0; i < _maxCharacterLength; i++)
+      for (int i = 0; i < MaxCharacterLength; i++)
       {
          var newBox =
             Instantiate(characterBoxTemplate, characterBoxParent);
@@ -335,15 +385,15 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    }
    private void InputCharacterValue()
    {
-      if (currentInputIndex < _maxCharacterLength)
+      if (currentInputIndex < MaxCharacterLength)
       {
          var selectedCharacter = _interfaceGrids[currentInterface].gridValues[currentCharacterIndex];
          characterBoxes[currentInputIndex].characterText.text = selectedCharacter;
          characterBoxes[currentInputIndex].FreezeCharacterBox();
          combinedInput += selectedCharacter;
          currentInputIndex++;
-
-         if (currentInputIndex < _maxCharacterLength)
+         OnCharacterCaptured?.Invoke(currentInputIndex);
+         if (currentInputIndex < MaxCharacterLength)
          {
             characterBoxes[currentInputIndex].AnimateCharacterBox();
          }
@@ -359,7 +409,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
          characterBoxes[currentInputIndex].characterText.text = string.Empty;
          characterBoxes[currentInputIndex].AnimateCharacterBox();
 
-         if (currentInputIndex + 1 < _maxCharacterLength)
+         if (currentInputIndex + 1 < MaxCharacterLength)
             characterBoxes[currentInputIndex + 1].FreezeCharacterBox();
 
          combinedInput = combinedInput[..^1];
@@ -373,6 +423,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
          _dialogueHandler.DisplayDetails("Input cannot be empty!");
          return;
       }
+      StopAllCoroutines();
       OnInputResolved?.Invoke(combinedInput);
       OnInputResolved = null;
       _gameUIHandler.CloseTypingInterface();

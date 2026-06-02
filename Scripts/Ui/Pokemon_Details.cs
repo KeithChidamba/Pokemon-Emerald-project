@@ -190,15 +190,14 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     }
     void LoadOverlayInfo()
     {
-        pkm_name.text = currentPokemon.pokemonName;
+        pkm_name.text = currentPokemon.nickName +"\n /"+currentPokemon.pokemonName;
         pkm_ID.text = "ID: "+currentPokemon.pokemonID;
         pkm_lv.text = "Lv "+currentPokemon.currentLevel;
         pkm_img.sprite = currentPokemon.frontPicture;
         gender_img.gameObject.SetActive(true);
         if(currentPokemon.hasGender)
         {
-            gender_img.sprite = Resources.Load<Sprite>(SaveDataHandler.GetDirectory(AssetDirectory.UI)
-                                                       + currentPokemon.gender.ToString().ToLower());
+            gender_img.sprite = Utility.GetGenderSprite(currentPokemon.gender);
         }
         else
         {

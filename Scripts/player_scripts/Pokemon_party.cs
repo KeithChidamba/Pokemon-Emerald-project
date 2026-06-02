@@ -39,7 +39,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     private BattleIntro _battleIntroHandler;
     private Player_movement _playerMovementHandler;
     private PokemonPartyInputService _partyInputService;
-    
+    private PokemonOperations _pokemonOperationsHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -55,6 +55,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
         _itemHandler = container.Resolve<Item_handler>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
+        _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         gameObject.SetActive(true);
     }
 
@@ -287,15 +288,15 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         UpdateUIAfterSwap();
     }
 
-    public void AddMemberForTesting(Pokemon pokemon)
-    {
-        AddMember(pokemon,isGiftPokemon:true);
-    }
     public void AddMember(Pokemon pokemon, string pokeballType="Pokeball", bool isGiftPokemon=false)
     {
         var newPokemon = InstanceFactory.CreatePokemon(pokemon); 
         newPokemon.pokeballName = pokeballType; 
-        newPokemon.hasTrainer = true; 
+        newPokemon.hasTrainer = true;
+        if (newPokemon.nickName == string.Empty)
+        {
+            newPokemon.nickName = newPokemon.pokemonName;
+        }
         if (isGiftPokemon)
         {
             _pokemonOperations.SetPokemonTraits(newPokemon);
@@ -303,14 +304,24 @@ public class Pokemon_party : MonoBehaviour,IInjectable
             if (newPokemon.currentLevel == 0)
                 newPokemon.LevelUp();
             newPokemon.hp = newPokemon.maxHp;
+            _pokemonOperationsHandler.SetupPokemonNaming(newPokemon, (result)=>CompletePokemonAddition());
+            return;
+            void CompletePokemonAddition()
+            {
+                if (newPokemon.nickName == string.Empty)
+                {
+                    newPokemon.nickName = newPokemon.pokemonName;
+                }
+                if (numMembers<maxNumMembers)
+                {
+                    party[numMembers] = newPokemon;
+                    numMembers++;
+                }
+                else
+                    _pokemonStorageHandler.AddPokemonToStorage(newPokemon);
+                _dialogueHandler.DisplayDetails("You got a " + pokemon.pokemonName);
+            }
         }
-        if (numMembers<maxNumMembers)
-        {
-            party[numMembers] = newPokemon;
-            numMembers++;
-        }
-        else
-            _pokemonStorageHandler.AddPokemonToStorage(newPokemon);
     }
 
     public void SortByFainted()

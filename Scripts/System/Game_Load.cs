@@ -16,8 +16,9 @@ public class Game_Load : MonoBehaviour,IInjectable
     public GameObject menuUiParent;
     [SerializeField] private Image _loadingScreen;
     [SerializeField] private Camera startMenuCam;
-    public GameObject world_Map;
+    public GameObject worldMap;
     public PlayerData playerData;
+    [SerializeField] private List<Sprite> playerWalkSprites;
     public bool LoadedFromSave { 
         get;
         private set;
@@ -134,8 +135,14 @@ public class Game_Load : MonoBehaviour,IInjectable
                 _saveHandler.EraseSaveData();
             }
 
-            var playerNameLength = 12;
-            _gameUIHandler.ViewTypingInterface(CreateNewPlayer,playerNameLength);
+            var playerNameLength = 8;
+            _gameUIHandler.ViewTypingInterface(
+                CreateNewPlayer,
+                playerNameLength,
+                new TypingInterfaceGraphicData(true,
+                    playerWalkSprites,
+                    $"Your Name?",
+                    new Vector2(55,80)));
         }
     }
 
@@ -164,7 +171,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         
         _loadingScreen.gameObject.SetActive(false);
         startMenuCam.gameObject.SetActive(false);
-        world_Map.SetActive(true);
+        worldMap.SetActive(true);
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
         _areaHandler.LoadAreaFromSave(playerData.location);
     }

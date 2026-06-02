@@ -413,6 +413,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
             participant.pokemon = newPokemon;
             if (participant.isPlayer)
             {
+                participant.pokemon.currentPokemonName = participant.pokemon.pokemonName;
+                participant.pokemon.pokemonName = participant.pokemon.nickName;
+                
                 _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName
                                                             +" sent out "+participant.pokemon.pokemonName);
                 

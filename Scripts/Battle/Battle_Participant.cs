@@ -314,6 +314,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
 
     public void ResetParticipantState()
     {
+        
         statData.LoadActualStats();
         statData.ResetBattleState(pokemon);
         abilityHandler.ResetState();
@@ -327,6 +328,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         immunityNegations.Clear();
         if (isPlayer)
         {
+            pokemon.pokemonName = pokemon.currentPokemonName;
             pokemon.OnEvolutionSuccessful -= AddToEvolutionQueue;
             pokemon.OnNewLevel -= statData.SaveActualStats;
             pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;

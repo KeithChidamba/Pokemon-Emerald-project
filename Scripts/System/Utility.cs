@@ -42,4 +42,11 @@ public static class Utility
             height * scale
         );
     }
+
+    public static Sprite GetGenderSprite(Gender gender)
+    {
+        return Resources.Load<Sprite>(
+            SaveDataHandler.GetDirectory(AssetDirectory.UI) 
+            + gender.ToString().ToLower());
+    }
 }

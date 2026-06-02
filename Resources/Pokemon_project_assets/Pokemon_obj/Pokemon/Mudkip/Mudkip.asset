@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basePokemonName: Mudkip
   pokemonName: Mudkip
+  nickName: 
+  currentPokemonName: 
   pokemonID: 0
   personalityValue: 0
   isShiny: 0

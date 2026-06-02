@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basePokemonName: Torchic
   pokemonName: Torchic
+  nickName: 
+  currentPokemonName: 
   pokemonID: 0
   personalityValue: 0
   isShiny: 0

@@ -291,12 +291,10 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             pokemon = nonPartyIcons[currentPokemonIndex].pokemon;
         }
         
-        pokemonDataName.text = pokemon.pokemonName +"\n /"+pokemon.pokemonName;
+        pokemonDataName.text = pokemon.nickName +"\n /"+pokemon.pokemonName;
         genderImage.gameObject.SetActive(true);
         if(pokemon.hasGender)
-            genderImage.sprite = Resources.Load<Sprite>(
-                SaveDataHandler.GetDirectory(AssetDirectory.UI) 
-                + pokemon.gender.ToString().ToLower());
+            genderImage.sprite = Utility.GetGenderSprite(pokemon.gender);
         else
             genderImage.gameObject.SetActive(false);
         pokemonImage.sprite = pokemon.frontPicture;

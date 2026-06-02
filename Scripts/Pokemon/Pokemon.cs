@@ -12,6 +12,9 @@ public class Pokemon : ScriptableObject
 {
     [FormerlySerializedAs("Base_Pokemon_name")] public string basePokemonName;
     [FormerlySerializedAs("Pokemon_name")] public string pokemonName;
+    public string nickName;
+    public string currentPokemonName;
+    
     public long pokemonID;
     public uint personalityValue;
     public bool isShiny;

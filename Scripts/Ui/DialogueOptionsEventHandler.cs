@@ -101,8 +101,6 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
                                               + pokemonName +"/"+ pokemonName);
         
         _playerParty.AddMember(pokemon,isGiftPokemon:true);
-        _dialogueHandler.EndDialogue();
-        _dialogueHandler.DisplayDetails("You got a " + pokemon.pokemonName);
     }
     void Interact()
     {

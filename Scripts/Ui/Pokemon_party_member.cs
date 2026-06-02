@@ -101,10 +101,8 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         isEmpty = false;
         emptySlotUI.SetActive(false);
         heldItemImage.SetActive(pokemon.hasItem);
-        
-        genderImage.sprite = Resources.Load<Sprite>(
-            SaveDataHandler.GetDirectory(AssetDirectory.UI) 
-            + pokemon.gender.ToString().ToLower());
+       
+        genderImage.sprite = Utility.GetGenderSprite(pokemon.gender);
         
         if (pokemon.statusEffect == StatusEffect.None)
             statusEffectImage.gameObject.SetActive(false);
@@ -195,7 +193,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         pokemonHealthBarUI.maxValue = pokemon.maxHp;
         pokemonHealthBarUI.minValue = 0;
         pokemonLevelText.text = "Lv" + pokemon.currentLevel;
-        pokemonNameText.text = pokemon.pokemonName;
+        pokemonNameText.text = pokemon.nickName;
         pokemonFrontImage.color = ((pokemon.hp <= 0))? 
             Color.HSVToRGB(17, 96, 54)
             :Color.HSVToRGB(0,0,100);

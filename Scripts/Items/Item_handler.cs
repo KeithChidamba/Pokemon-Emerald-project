@@ -440,6 +440,17 @@ public class Item_handler : MonoBehaviour,IInjectable
 
         _pokemonOperationsHandler.OnPokeballUsed += PokemonCaughtCheck;
         StartCoroutine(_pokemonOperationsHandler.TryToCatchPokemon(pokeball));
+        
+        void PokemonCaughtCheck(Pokemon pokemon,bool isCaught)
+        {
+            _pokemonOperationsHandler.OnPokeballUsed -= PokemonCaughtCheck;
+            if (!isCaught)
+            {
+                SkipTurn();
+            }
+            OnItemUsageSuccessful?.Invoke(true);
+            ResetItemUsage();
+        }
     }
 
     private bool CanUsePokeball()
@@ -465,16 +476,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         return true;
     }
 
-    private void PokemonCaughtCheck(Pokemon pokemon,bool isCaught)
-    {
-        _pokemonOperationsHandler.OnPokeballUsed -= PokemonCaughtCheck;
-        if (!isCaught)
-        {
-            SkipTurn();
-        }
-        OnItemUsageSuccessful?.Invoke(true);
-        ResetItemUsage();
-    }
+
     
 
     private void CureConfusion()

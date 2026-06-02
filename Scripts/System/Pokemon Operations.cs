@@ -414,7 +414,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     {
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
         var isCaught = false;
-        var wildPokemon = _wildPokemonHandler.participant.pokemon;//pokemon only caught in wild
+        var wildPokemon = _wildPokemonHandler.participant.pokemon;
         yield return StartCoroutine(_battleVisuals.DisplayPokemonThrow());
         var ballRate = float.Parse(pokeball.itemEffect);
         var bracket1 = (3 * wildPokemon.maxHp - 2 * wildPokemon.hp) / (3 * wildPokemon.maxHp);
@@ -446,11 +446,17 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayBattleInfo("Well done "+wildPokemon.pokemonName+" has been caught");
             var rawName = wildPokemon.pokemonName.Replace("Foe ", "");
             wildPokemon.pokemonName = rawName;
+            
+            var nickNameOperationComplete = false;
+            SetupPokemonNaming(wildPokemon, (result) => nickNameOperationComplete = true);
+            yield return new WaitUntil(()=> nickNameOperationComplete);
+            
             wildPokemon.ChangeFriendshipLevel(70);
             wildPokemon.pokeballName = pokeball.itemName;
             _playerParty.AddMember(wildPokemon,pokeball.itemName);
             yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
             yield return _wildPokemonHandler.participant.EndWildBattle();
+
         }else
         {
             yield return StartCoroutine(_battleVisuals.DisplayPokeballEscape());
@@ -459,6 +465,35 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         }
         OnPokeballUsed?.Invoke(wildPokemon,isCaught);
     }
+
+    public void SetupPokemonNaming(Pokemon pokemon, Action<bool> callBack)
+    {
+        _dialogueHandler.DisplayCustomOptions(
+            $"Give a nickname to {pokemon.pokemonName}?", new[] { "Yes", "No" }
+            ,new Action[]
+            {
+                SetupNickNameView, () =>  callBack?.Invoke(false)
+            });
+            
+        void SetupNickNameView()
+        {
+            void SetPokemonNickName(string nickName)
+            {
+                pokemon.nickName = nickName;
+                callBack?.Invoke(true);
+            }
+            var maxPokemonNameLength = 12;
+            _gameUIManager.ViewTypingInterface(SetPokemonNickName,
+                maxPokemonNameLength,
+                new TypingInterfaceGraphicData(
+                    false,
+                    new() {pokemon.partyFrame1},
+                    $"{pokemon.pokemonName}'s nickname?",
+                    new Vector2(80,80),
+                    pokemon.gender));
+        }
+    }
+    
 }
 
 
