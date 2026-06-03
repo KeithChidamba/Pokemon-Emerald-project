@@ -27,7 +27,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     private pokemon_storage _pokemonStorageHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Game_ui_manager _gameUIHandler;
-    private PlayerCollisionHandler _playerCollisionHandler;
+    private PlayerTileHandler _playerTileHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -44,7 +44,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         _areaHandler = container.Resolve<Area_manager>();
         _overworldActions = container.Resolve<overworld_actions>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
-        _playerCollisionHandler = container.Resolve<PlayerCollisionHandler>();
+        _playerTileHandler = container.Resolve<PlayerTileHandler>();
         gameObject.SetActive(true);
     }
 
@@ -110,7 +110,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     private void UseRepel(int numSteps)
     {
         _dialogueHandler.DisplayDetails("Repel has been activated");
-        _playerCollisionHandler.ActivateRepel(numSteps);
+        _playerTileHandler.ActivateRepel(numSteps);
         CompleteItemUsage();
     }
     
@@ -188,11 +188,12 @@ public class Item_handler : MonoBehaviour,IInjectable
         else
         {
             OnItemUsageSuccessful?.Invoke(true);
-            var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup)+1;
+            var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup);
             _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+" leveled up!");
             yield return new WaitForSecondsRealtime(1f);
             _selectedPartyPokemon.ReceiveExperience(exp-_selectedPartyPokemon.currentExpAmount);
-            StartCoroutine(CompleteItemUsage(0));
+            CompleteItemUsage();
+            _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
         }
     }
 
@@ -302,7 +303,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             }
             OnItemUsageSuccessful?.Invoke(false);
             _dialogueHandler.DisplayBattleInfo("A veil of light covers "+pokemonProtected);
-            StartCoroutine(CompleteItemUsage(0));
+            StartCoroutine(CompleteItemUsage(1f));
             return;
         }
        

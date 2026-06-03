@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 1,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Grepa berry",
+    "berryItem": {
+        "instanceID": 27576
+    },
+    "minutesPerStage": 180,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32626
+                },
+                {
+                    "instanceID": 32626
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32628
+                },
+                {
+                    "instanceID": 32630
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32814
+                },
+                {
+                    "instanceID": 32816
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32818
+                },
+                {
+                    "instanceID": 32820
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32822
+                },
+                {
+                    "instanceID": 32824
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 5,
+    "lastLogin": "2026-06-03T14:10:27.9515150+02:00"
+}

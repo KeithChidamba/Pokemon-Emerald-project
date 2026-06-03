@@ -17,5 +17,5 @@ MonoBehaviour:
   hasProgression: 0
   indexInList: 0
   objectiveType: 9
-  interactionForObjective: {fileID: 11400000, guid: 2a9ae13e99aacc8468b5be2037e26cea, type: 2}
+  interactionTypeForObjective: 7
   objectiveObjectHandler: {fileID: 0}

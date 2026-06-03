@@ -426,7 +426,6 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       StopAllCoroutines();
       OnInputResolved?.Invoke(combinedInput);
       OnInputResolved = null;
-      _gameUIHandler.CloseTypingInterface();
       _inputStateHandler.ResetGroupUi(InputStateGroup.TypingInterface);
    }
 }

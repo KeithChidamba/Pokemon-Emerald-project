@@ -51,9 +51,11 @@ public static class InstanceFactory
     public static Pokemon CreatePokemon(Pokemon pkm)
     {
         Pokemon newPokemon = ScriptableObject.CreateInstance<Pokemon>();
-        newPokemon.basePokemonName = pkm.basePokemonName;;
+        newPokemon.basePokemonName = pkm.basePokemonName;
 	    newPokemon.pokemonName = pkm.pokemonName;
         newPokemon.nickName = pkm.nickName;
+        newPokemon.currentPokemonName = pkm.currentPokemonName;
+        newPokemon.captureInformation = pkm.captureInformation;
         newPokemon.pokemonID  = pkm.pokemonID ;
         newPokemon.personalityValue = pkm.personalityValue;
         newPokemon.isShiny = pkm.isShiny;

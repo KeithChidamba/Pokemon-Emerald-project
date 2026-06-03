@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,5 +49,18 @@ public static class Utility
         return Resources.Load<Sprite>(
             SaveDataHandler.GetDirectory(AssetDirectory.UI) 
             + gender.ToString().ToLower());
+    }
+
+    public static string GetAreaName(AreaName areaValue)
+    {
+        var areaNames = new Dictionary<AreaName, string>
+        {
+            {AreaName.OverWorld,"Overworld"},
+            {AreaName.PlayerGarden,"Garden"},
+            {AreaName.PokeMartCoastal,"PokeMart Coastal"},
+            {AreaName.PokeCenter,"Poke-Center"},
+            {AreaName.SouthBridge,"South Bridge"},
+        };
+        return areaNames[areaValue];
     }
 }

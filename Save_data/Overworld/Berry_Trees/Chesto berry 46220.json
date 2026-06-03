@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Chesto berry",
+    "berryItem": {
+        "instanceID": 26144
+    },
+    "minutesPerStage": 45,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32626
+                },
+                {
+                    "instanceID": 32626
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32628
+                },
+                {
+                    "instanceID": 32630
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32656
+                },
+                {
+                    "instanceID": 32658
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32660
+                },
+                {
+                    "instanceID": 32662
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32664
+                },
+                {
+                    "instanceID": 32666
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 0,
+    "lastLogin": "2026-06-03T14:10:27.9479440+02:00"
+}

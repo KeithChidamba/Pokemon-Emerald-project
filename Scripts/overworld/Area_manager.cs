@@ -5,6 +5,7 @@ public class Area_manager : MonoBehaviour,IInjectable
 {
     public AreaData currentArea;
     public AreaData[] overworldAreas;
+    
     private Game_Load _gameLoadingHandler;
     private Player_movement _playerMovementHandler;
     

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b7f36d76f0f5d3669252db41fff9a89, type: 3}
   m_Name: withdraw pikachu
   m_EditorClassIdentifier: 
-  mainAssetName: 
+  mainAssetName: withdraw pikachu
   objectiveHeading: withdraw pikachu from pc
   hasProgression: 0
   indexInList: 0
   objectiveType: 7
   storageObjectiveType: 0
-  pokemonForObjective: {fileID: 0}
+  pokemonForObjective: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}

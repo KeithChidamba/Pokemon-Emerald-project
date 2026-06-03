@@ -53,7 +53,7 @@ public class Enemy_trainer : BattleParticipantModule
         {
             var pokemonCopy = InstanceFactory.CreatePokemon(member.pokemon);
             trainerParty.Add(pokemonCopy);
-            var expForNextLevel = PokemonOperations.CalculateExpForNextLevel(member.pokemonLevel, pokemonCopy.expGroup)+1;
+            var expForNextLevel = PokemonOperations.CalculateExpForLevel(member.pokemonLevel, pokemonCopy.expGroup);
             pokemonCopy.ReceiveExperience(expForNextLevel);
             pokemonCopy.hp = pokemonCopy.maxHp;
             pokemonCopy.moveSet.Clear();

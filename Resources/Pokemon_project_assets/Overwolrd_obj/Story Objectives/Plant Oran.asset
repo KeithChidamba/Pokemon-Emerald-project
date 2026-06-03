@@ -17,5 +17,5 @@ MonoBehaviour:
   hasProgression: 0
   indexInList: 0
   objectiveType: 6
-  interactionForObjective: {fileID: 11400000, guid: 518b7ac0f955c2629916440737d821f4, type: 2}
+  interactionTypeForObjective: 2
   berryForObjective: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}

@@ -49,15 +49,6 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         _startPos = pokemonFrontImage.rectTransform.anchoredPosition;
         _targetPos = _startPos +Vector2.up * 10f;
     }
-    
-    public void LevelupForTesting()//testing purposes
-    {
-        if(pokemon==null)return;
-        var exp = 
-           PokemonOperations.CalculateExpForNextLevel(pokemon.currentLevel, pokemon.expGroup)-pokemon.currentExpAmount;
-        pokemon.ReceiveExperience(exp+1);
-        pokemon.hp=pokemon.maxHp;
-    }
     private void MoveInLoop()
     {
         Vector2 target;

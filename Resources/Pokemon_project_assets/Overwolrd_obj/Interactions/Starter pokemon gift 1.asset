@@ -10,19 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
-  m_Name: Starter pokemon gift
+  m_Name: Starter pokemon gift 1
   m_EditorClassIdentifier: 
   interactionMessage: It's a pokeball with a pokemon inside, take it?
   dialogueType: 1
   isEventTrigger: 0
   interactionOptions: 0700000000000000
-  resultMessage: 1
+  resultMessage: 0
   optionsUiText:
   - Yes
   - No
-  additionalInfo:
-  - Treecko
-  - Torchic
-  - Mudkip
+  additionalInfo: {fileID: 11400000, guid: b8a7e550b219874d8b51aa70b0eb4ad4, type: 2}
   overworldInteraction: 7
   location: 1

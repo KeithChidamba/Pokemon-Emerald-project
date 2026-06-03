@@ -15,4 +15,4 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: b223b8d7bca27df99a2980e141dc8237, type: 2}
   itemAssetName: Repel
   itemPosition: {x: 25, y: -33}
-  hasBeenPicked: 1
+  hasBeenPicked: 0

@@ -1,0 +1,36 @@
+{
+    "itemID": "Qualot berry750",
+    "itemName": "Qualot berry",
+    "itemType": 9,
+    "itemEffect": "",
+    "itemDescription": "Increases a pokemon's friendship but lowers defense",
+    "price": 5,
+    "quantity": 9,
+    "itemImage": {
+        "instanceID": 26272
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": true,
+    "isMultiModular": true,
+    "hasModules": true,
+    "additionalInfoModule": {
+        "instanceID": 28018
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 28018
+        },
+        {
+            "instanceID": 27508
+        }
+    ],
+    "infoModuleAssetNames": [
+        "Defense",
+        "Friendship berry"
+    ],
+    "imageDirectory": "Qualot berry"
+}

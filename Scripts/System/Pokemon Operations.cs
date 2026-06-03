@@ -35,6 +35,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private Pokemon_Details _pokemonDetailsHandler;
     private Dialogue_handler _dialogueHandler;
     private Game_ui_manager _gameUIManager;
+    private Game_Load _gameLoadingHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -47,6 +48,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         _gameHandler=container.Resolve<Game_Load>();
         _pokemonDetailsHandler=container.Resolve<Pokemon_Details>();
         _gameUIManager = container.Resolve<Game_ui_manager>();
+        _gameLoadingHandler = container.Resolve<Game_Load>();
         gameObject.SetActive(true);
     }   
 
@@ -109,9 +111,17 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             break;
         }
     }
+    public static int CalculateExpForLevel(int desiredLevel, ExpGroup expGroup)
+    {
+        if (desiredLevel == 0)
+        {
+            Debug.LogError("cant level up to 0");
+            return 0;
+        }
+        return CalculateExpForNextLevel(desiredLevel - 1,expGroup)+1;
+    }
     public static int CalculateExpForNextLevel(int currentLevel, ExpGroup expGroup)
     {
-        if (currentLevel == 0) return 0;
         var cube = Utility.Cube(currentLevel);
         var square = Utility.Square(currentLevel);
         switch (expGroup)
@@ -444,8 +454,15 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         if (isCaught)
         {
             _dialogueHandler.DisplayBattleInfo("Well done "+wildPokemon.pokemonName+" has been caught");
+            
+            _wildPokemonHandler.participant.DeactivateUI();
+            _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
             var rawName = wildPokemon.pokemonName.Replace("Foe ", "");
             wildPokemon.pokemonName = rawName;
+
+            wildPokemon.captureInformation.levelCaptured = wildPokemon.currentLevel;
+            wildPokemon.captureInformation.areaName = Utility.GetAreaName(_gameLoadingHandler.playerData.location);
+            yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
             
             var nickNameOperationComplete = false;
             SetupPokemonNaming(wildPokemon, (result) => nickNameOperationComplete = true);
@@ -455,7 +472,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             wildPokemon.pokeballName = pokeball.itemName;
             _playerParty.AddMember(wildPokemon,pokeball.itemName);
             yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
-            yield return _wildPokemonHandler.participant.EndWildBattle();
+            yield return _wildPokemonHandler.EndWildBattle(true);
 
         }else
         {
@@ -493,7 +510,24 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                     pokemon.gender));
         }
     }
-    
+    public Pokemon CreateSpecificPokemon(Pokemon template,int desiredLevel,int evolutionStage)
+    {
+        var newPokemon = InstanceFactory.CreatePokemon(template); 
+        SetPokemonTraits(newPokemon);
+        if (evolutionStage > 0)
+        {
+            if (evolutionStage > newPokemon.evolutions.Count)
+                Debug.LogError("Evolution number in encounter data is out of range of available evolutions");
+            else
+                newPokemon.Evolve(newPokemon.evolutions[evolutionStage - 1]);
+        }
+        
+        var expForRequiredLevel = CalculateExpForLevel(desiredLevel, newPokemon.expGroup);
+        newPokemon.canEvolve = false;//prevent evolution from exp
+        newPokemon.ReceiveExperience(expForRequiredLevel); 
+        newPokemon.hp=newPokemon.maxHp;
+        return newPokemon;
+    }
 }
 
 

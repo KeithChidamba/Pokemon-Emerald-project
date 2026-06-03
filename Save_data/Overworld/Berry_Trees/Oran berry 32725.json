@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Oran berry",
+    "berryItem": {
+        "instanceID": 27422
+    },
+    "minutesPerStage": 60,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32626
+                },
+                {
+                    "instanceID": 32626
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32628
+                },
+                {
+                    "instanceID": 32630
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32704
+                },
+                {
+                    "instanceID": 32706
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32708
+                },
+                {
+                    "instanceID": 32710
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32712
+                },
+                {
+                    "instanceID": 32714
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 1,
+    "lastLogin": "2026-06-03T14:10:27.9485750+02:00"
+}

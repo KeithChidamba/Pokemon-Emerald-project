@@ -64,21 +64,11 @@ public class Encounter_handler : MonoBehaviour,IInjectable
     }
     private void CreateWildPokemon(EncounterPokemonData pokemonData,EncounterTableData tableData,Biome biome,BattleEncounterSource source)
     {
-        var wildPokemon = InstanceFactory.CreatePokemon(pokemonData.pokemon);
-        OnEncounterTriggered?.Invoke(wildPokemon,source);
-        _pokemonOperationsHandler.SetPokemonTraits(wildPokemon);
-        if (pokemonData.evolutionFormNumber > 0)
-        {
-            if (pokemonData.evolutionFormNumber > wildPokemon.evolutions.Count)
-                Debug.LogError("Evolution number in encounter data is out of range of available evolutions");
-            else
-                wildPokemon.Evolve(wildPokemon.evolutions[pokemonData.evolutionFormNumber - 1]);
-        }
         var randomLevel = Utility.RandomRange(tableData.minimumLevelOfPokemon, tableData.maximumLevelOfPokemon);
-        var expForRequiredLevel = PokemonOperations.CalculateExpForNextLevel(randomLevel, wildPokemon.expGroup)+1;
-        wildPokemon.canEvolve = false;//prevent evolution from exp
-        wildPokemon.ReceiveExperience(expForRequiredLevel); 
-        wildPokemon.hp=wildPokemon.maxHp;
+        
+        var wildPokemon = _pokemonOperationsHandler.CreateSpecificPokemon(pokemonData.pokemon,randomLevel,pokemonData.evolutionFormNumber);
+        
+        OnEncounterTriggered?.Invoke(wildPokemon,source);
         StartCoroutine(_battleHandler.StartWildBattle(wildPokemon,biome));
     }
 }

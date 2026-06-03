@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Persim berry",
+    "berryItem": {
+        "instanceID": 26722
+    },
+    "minutesPerStage": 60,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32626
+                },
+                {
+                    "instanceID": 32626
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32628
+                },
+                {
+                    "instanceID": 32630
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32716
+                },
+                {
+                    "instanceID": 32718
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32720
+                },
+                {
+                    "instanceID": 32722
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 32724
+                },
+                {
+                    "instanceID": 32726
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 8,
+    "lastLogin": "2026-06-03T14:10:27.9543300+02:00"
+}

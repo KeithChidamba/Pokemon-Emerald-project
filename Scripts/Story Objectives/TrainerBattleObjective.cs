@@ -19,7 +19,8 @@ public class TrainerBattleObjective : StoryObjective
     {
         if (interaction.overworldInteraction == OverworldInteractionType.Battle)
         {
-            if (trainer.TrainerName == interaction.additionalInfo[0])
+            var trainerInteraction = interaction.GetModule<TrainerBattleInteractionInfo>();
+            if (trainer.TrainerName == trainerInteraction.data.TrainerName)
             {
                 _battleHandler.OnBattleResult += CheckIfWin;
             }

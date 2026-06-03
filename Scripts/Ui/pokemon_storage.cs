@@ -145,7 +145,10 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         {
             arrow.LoadState();
         }
-        
+        foreach (var arrow in depositGreyArrows)
+        {
+            arrow.LoadState();
+        }
     }
 
     public IEnumerator SaveStorageData()
@@ -333,7 +336,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             if (_pokemonPartyHandler.numMembers == _pokemonPartyHandler.maxNumMembers)
             {
                 _dialogueHandler.DisplayDetails("Party is full");
-                _gameUIHandler.ClosePokemonStorage();
+                ClosePC();
                 return;
             }
             _pokemonStorageInputService.SetupPokemonStorageState();
@@ -343,7 +346,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             if (_pokemonPartyHandler.numMembers==1)
             {
                 _dialogueHandler.DisplayDetails("There must be at least 2 pokemon in your team");
-                _gameUIHandler.ClosePokemonStorage();
+                ClosePC();
                 return;
             }
             initialSelector.transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -356,7 +359,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
                 partySelectables.Add( new(icon.gameObject, () => SelectPartyPokemon(icon), true)); 
             }
             
-            partySelectables.Add( new(exitParty,_gameUIHandler.ClosePokemonStorage,true) );
+            partySelectables.Add( new(exitParty,ClosePC,true) );
             
             _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStoragePartyNavigation, InputStateGroup.PokemonStorage
                 , stateDirection:InputDirection.Vertical, selectableUis:partySelectables
@@ -376,6 +379,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
 
     public void ClosePC()
     {
+        _gameUIHandler.ClosePokemonStorage();
         RemovePokemonIcons(true);
         RemovePokemonIcons(false);
         partyUI.SetActive(false);

@@ -277,21 +277,19 @@ public class Battle_handler : MonoBehaviour, IInjectable
         usedTurnForItem = false;
         usedTurnForSwap = false;
     }
-    public void SetBattleType(List<string> trainerNames)
+    public void SetBattleType(TrainerBattleInteractionInfo trainerInteraction)
     {
         _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Battle);
         _pokemonPartyHandler.SortByFainted();
-        var copyOfTrainerData = Resources.Load<TrainerData>(
-            SaveDataHandler.GetDirectory(AssetDirectory.TrainerData)
-            + $"{trainerNames[0]}/{trainerNames[0]}");
-         currentBattleType = copyOfTrainerData.battleType;
-        switch (copyOfTrainerData.battleType)
+        
+         currentBattleType = trainerInteraction.data.battleType;
+        switch (trainerInteraction.data.battleType)
         {
             case BattleType.Single:
-                StartCoroutine(StartSingleBattle(copyOfTrainerData));
+                StartCoroutine(StartSingleBattle(trainerInteraction.data));
                 break;
             case BattleType.SingleDouble:
-                StartCoroutine(StartSingleDoubleBattle(copyOfTrainerData));
+                StartCoroutine(StartSingleDoubleBattle(trainerInteraction.data));
                 break;
         }
     }

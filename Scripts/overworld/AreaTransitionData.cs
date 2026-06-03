@@ -10,13 +10,6 @@ public class AreaTransitionData : ScriptableObject
     public bool escapable;
     public Vector3Int entranceCell;
     public Biome biome;
-//deprecated until further notice
-    // public Vector3 GetTeleportWorldPosition(Tilemap doorTileMap)
-    // {
-    //     Vector3 pos = doorTileMap.GetCellCenterWorld(entranceCell);
-    //     return Vector3Int.RoundToInt(pos);
-    // }
-
 }
 public enum AreaName
 {

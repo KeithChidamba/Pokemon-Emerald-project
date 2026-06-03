@@ -220,7 +220,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
 
             if (!_battleHandler.isTrainerBattle)
             {
-                yield return EndWildBattle();
+                yield return _wildPokemonHandler.EndWildBattle();
             }
             else
             {
@@ -233,12 +233,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
             yield return CheckIfPlayerLoss();
         }
     }
-
-    public IEnumerator EndWildBattle()
-    {
-        statData.ResetBattleState(pokemon);
-        yield return _wildPokemonHandler.EndWildBattle();
-    }
+    
     private IEnumerator CheckIfPlayerLoss()
     {
         var alivePokemon = _pokemonPartyHandler.GetLivingPokemon();
@@ -314,7 +309,6 @@ public class Battle_Participant : MonoBehaviour,IInjectable
 
     public void ResetParticipantState()
     {
-        
         statData.LoadActualStats();
         statData.ResetBattleState(pokemon);
         abilityHandler.ResetState();

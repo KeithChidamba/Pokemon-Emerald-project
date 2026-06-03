@@ -99,7 +99,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                 }
                 else
                 {
-                    var interactableTile = PlayerCollisionHandler.FindTileAtPosition<InteractionTile>(interactionTilemap,tileInFrontOfPlayer);
+                    var interactableTile = PlayerTileHandler.FindTileAtPosition<InteractionTile>(interactionTilemap,tileInFrontOfPlayer);
                     if (interactableTile != null)
                     {
                         _dialogueHandler.StartInteraction(interactableTile.interaction);
@@ -127,10 +127,10 @@ public class Interaction_handler : MonoBehaviour,IInjectable
                 if (hit.transform.gameObject.CompareTag("Water"))
                 {
                     EncounterTable tableOfEncounter;
-                    var animatedWaterTile = PlayerCollisionHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point);
+                    var animatedWaterTile = PlayerTileHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point);
                     if (animatedWaterTile == null)
                     {
-                        var stillWaterTile  = PlayerCollisionHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
+                        var stillWaterTile  = PlayerTileHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
                         if (stillWaterTile == null)
                         {
                             Debug.LogError("hit water tilemap but no tile data");

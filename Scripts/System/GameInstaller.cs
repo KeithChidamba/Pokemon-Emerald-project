@@ -34,7 +34,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private SaveDataHandler saveDataHandler;
     [SerializeField] private Interaction_handler  interactionHandler;
     [SerializeField] private Player_movement playerMovementHandler;
-    [SerializeField] private PlayerCollisionHandler playerCollisionHandler;
+    [SerializeField] private PlayerTileHandler playerTileHandler;
     [SerializeField] private OverworldState overworldStateHandler;
     [SerializeField] private Area_manager  areaHandler;
     [SerializeField] private Game_Load gameLoadingHandler;
@@ -71,7 +71,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(saveDataHandler);
         _container.RegisterSingleton(interactionHandler);
         _container.RegisterSingleton(playerMovementHandler);
-        _container.RegisterSingleton(playerCollisionHandler);
+        _container.RegisterSingleton(playerTileHandler);
         _container.RegisterSingleton(overworldStateHandler);
         _container.RegisterSingleton(areaHandler);
         _container.RegisterSingleton(gameLoadingHandler);

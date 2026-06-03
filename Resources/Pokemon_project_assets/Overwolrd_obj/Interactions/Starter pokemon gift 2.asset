@@ -16,13 +16,10 @@ MonoBehaviour:
   dialogueType: 1
   isEventTrigger: 0
   interactionOptions: 0700000000000000
-  resultMessage: 2
+  resultMessage: 0
   optionsUiText:
   - Yes
   - No
-  additionalInfo:
-  - Treecko
-  - Torchic
-  - Mudkip
+  additionalInfo: {fileID: 11400000, guid: 2b99c9b64d0a0d4748961248c79a0e00, type: 2}
   overworldInteraction: 7
   location: 1

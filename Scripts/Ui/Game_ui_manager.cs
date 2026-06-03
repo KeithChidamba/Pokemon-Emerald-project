@@ -152,8 +152,16 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             InputStateGroup.None,true,menuOptions,
             InputDirection.Vertical, menuSelectables,menuSelector,true
             , true,CloseMenu,CloseMenu)); 
+        
+        void CloseMenu()
+        {
+            if (!viewingMenu) return;
+            Time.timeScale = 1;
+            RemoveScreen();
+            ActivateUiElement(menuOptions, false);
+            viewingMenu = false;
+        }
     }
-
     public void SaveGame()
     {
         StartCoroutine(_saveDataHandler.SaveAllData());
@@ -161,81 +169,6 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     private void ActivateUiElement(GameObject ui,bool activated)
     {
         ui.SetActive(activated);
-    }
-    private void CloseProfile()
-    {
-        RemoveScreen();
-        ActivateUiElement(profile.parentObject, false);
-    }
-    private void CloseKeyBinds()
-    {
-        RemoveScreen();
-        ActivateUiElement(keyBindsUI, false);
-    }
-    private void ClosePokeMart()
-    {
-        RemoveScreen();
-        ActivateUiElement(_pokeMartHandler.storeUI, false);
-        _pokeMartHandler.ExitStore();
-        _dialogueHandler.DisplayDetails("Have a great day!");
-    }
-    private void CloseBag()
-    {
-        RemoveScreen();
-        _playerBagHandler.CloseBag();
-        ActivateUiElement( _playerBagHandler.bagUI, false);
-        ActivateUiElement( _playerBagHandler.bagOverlayUI, false);
-    }
-    private void CloseParty()
-    {
-        RemoveScreen();
-        ActivateUiElement(_pokemonPartyHandler.partyUI.gameObject, false);
-        _pokemonPartyHandler.ResetPartyState();
-    }
-
-    private void ClosePokemonDetails()
-    {
-         RemoveScreen();
-        ActivateUiElement(_pokemonDetailsHandler.uiParent,false);
-        _pokemonDetailsHandler.ResetDetailsState();
-        _pokemonDetailsHandler.DeactivateDetailsUi();
-    }
-    private void CloseMenu()
-    {
-        if (!viewingMenu) return;
-        Time.timeScale = 1;
-         RemoveScreen();
-        ActivateUiElement(menuOptions, false);
-        viewingMenu = false;
-    }
-    private void ClosePCItemOptions()
-    {
-        pcItemOptionsUI.SetActive(false);
-         RemoveScreen();
-    }
-    public void ClosePokemonStorage()
-    {
-         RemoveScreen();
-        ActivateUiElement(_pokemonStorageHandler.storageUI,false);
-        _pokemonStorageHandler.ClosePC();
-    }
-    
-    private void ClosePCOptions(GameObject ui)
-    {
-        _inputStateHandler.RemoveTopInputLayer(false);
-        ui.SetActive(false);
-        RemoveScreen();
-    }
-    private void CloseSettings()
-    {
-        _gameSettingsHandler.SetCurrentSetting(0);
-         RemoveScreen();
-        ActivateUiElement(_gameSettingsHandler.mainUI, false);
-    }
-    public void CloseTypingInterface()
-    {
-         RemoveScreen();
-        ActivateUiElement(_typingInterfaceHandler.mainUI, false);
     }
     public void ValidateBagView()
     {
@@ -282,6 +215,14 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         
         _playerBagHandler.bagOverlayUI.SetActive(!_playerBagHandler.storageView);
         _playerBagHandler.storageOverlayUI.SetActive(_playerBagHandler.storageView);
+        
+        void CloseBag()
+        {
+            RemoveScreen();
+            _playerBagHandler.CloseBag();
+            ActivateUiElement( _playerBagHandler.bagUI, false);
+            ActivateUiElement( _playerBagHandler.bagOverlayUI, false);
+        }
     }
     
     private void ViewProfile()
@@ -292,13 +233,25 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _inputStateHandler.ChangeInputState(new (InputStateName.PlayerProfile
             ,InputStateGroup.None,isParent:true
             ,profile.parentObject,onExit:CloseProfile,onClose:CloseProfile));
+        
+        void CloseProfile()
+        {
+            RemoveScreen();
+            ActivateUiElement(profile.parentObject, false);
+        }
     }
     public void ViewKeyBinds()
     {
         AddScreen();
         ActivateUiElement(keyBindsUI,true);
         _inputStateHandler.ChangeInputState(new (InputStateName.KeyBinds,InputStateGroup.None,isParent:true
-            ,keyBindsUI,onExit:CloseKeyBinds,onClose:CloseProfile));
+            ,keyBindsUI,onExit:CloseKeyBinds,onClose:CloseKeyBinds));
+        
+        void CloseKeyBinds()
+        {
+            RemoveScreen();
+            ActivateUiElement(keyBindsUI, false);
+        }
     }
 
     public void ViewPokemonParty()
@@ -350,6 +303,13 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             InputStateGroup.PokemonParty, true,_pokemonPartyHandler.partyUI,
             InputDirection.Vertical, partySelectables, _pokemonPartyHandler.memberSelector
             , true, true,CloseParty,CloseParty,canManualExit:false,canExit:true));
+        
+        void CloseParty()
+        {
+            RemoveScreen();
+            ActivateUiElement(_pokemonPartyHandler.partyUI.gameObject, false);
+            _pokemonPartyHandler.ResetPartyState();
+        }
     }
     public void ViewPokemonDetails(Pokemon initiallySelectedPokemon,List<Pokemon> pokemonToView)
     { 
@@ -366,6 +326,14 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             , true, false,ClosePokemonDetails,ClosePokemonDetails));
         
         _pokemonDetailsHandler.LoadDetails(initiallySelectedPokemon,pokemonToView);
+        
+        void ClosePokemonDetails()
+        {
+            RemoveScreen();
+            ActivateUiElement(_pokemonDetailsHandler.uiParent,false);
+            _pokemonDetailsHandler.ResetDetailsState();
+            _pokemonDetailsHandler.DeactivateDetailsUi();
+        }
     }
     public void ViewPartyPokemonDetails(Pokemon selectedPokemon)
     {
@@ -380,14 +348,17 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             new(pcItemOptions[0], _itemStorageHandler.ViewItemsToWithdraw, true),
             new(pcItemOptions[1], _itemStorageHandler.OpenBagToDepositItem, true),
             new(pcItemOptions[2], _itemStorageHandler.OpenBagToTossItem, true),
-            new(pcItemOptions[3], ()=>ClosePCOptions(pcItemOptionsUI), true),
+            new(pcItemOptions[3], ()=>_inputStateHandler.ResetRelevantUi(InputStateName.ItemStorageUsage), true),
         };
         _inputStateHandler.ChangeInputState(new  (InputStateName.ItemStorageUsage,
             InputStateGroup.Bag,true,pcItemOptionsUI,
             InputDirection.Vertical, pcUsageSelectables,pcItemOptionSelector,true, true
             ,onExit:ClosePCItemOptions,onClose:ClosePCItemOptions));
-        
-        pcItemOptionsUI.SetActive(true);
+        void ClosePCItemOptions()
+        {
+            pcItemOptionsUI.SetActive(false);
+            RemoveScreen();
+        }
     }
 
 
@@ -396,10 +367,10 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         AddScreen();
         var pcUsageActions = new List<Action>
         {
-            ()=>SetPcUsage(PCUsageState.Withdraw),
-            ()=>SetPcUsage(PCUsageState.Deposit),
-            ()=>SetPcUsage(PCUsageState.Move),
-            ()=>ClosePCOptions(pcPokemonOptionsUI)
+            ()=>SetPokemonPcUsage(PCUsageState.Withdraw),
+            ()=>SetPokemonPcUsage(PCUsageState.Deposit),
+            ()=>SetPokemonPcUsage(PCUsageState.Move),
+            ()=>_inputStateHandler.ResetRelevantUi(InputStateName.PokemonStorageUsage)
         };
         
         var pcUsageSelectables = new List<SelectableUI>();
@@ -408,18 +379,26 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             pcUsageSelectables.Add( new(pcPokemonOptions[i],pcUsageActions[i],true) );
         
         _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStorageUsage,
-            InputStateGroup.PokemonStorage,false,pcPokemonOptionsUI,
-            InputDirection.Vertical, pcUsageSelectables,pcOptionSelector,true, true,canManualExit:false));
-        pcPokemonOptionsUI.SetActive(true);
+            InputStateGroup.PokemonStorage,true,pcPokemonOptionsUI,
+            InputDirection.Vertical, pcUsageSelectables,pcOptionSelector,true, true,
+            onClose:ClosePokemonPCOptions,onExit:ClosePokemonPCOptions));
+        
+        void ClosePokemonPCOptions()
+        {
+            pcPokemonOptionsUI.SetActive(false);
+            RemoveScreen();
+        }
     }
-
-
-    private void SetPcUsage(PCUsageState currentUsageState)
+    private void SetPokemonPcUsage(PCUsageState currentUsageState)
     {
         pcPokemonOptionsUI.SetActive(false);
-        AddScreen();//can just use already open screen logic
         ActivateUiElement(_pokemonStorageHandler.storageUI, true);
         _pokemonStorageHandler.OpenPC(currentUsageState);
+    }
+    public void ClosePokemonStorage()
+    {
+        RemoveScreen();
+        ActivateUiElement(_pokemonStorageHandler.storageUI,false);
     }
     public void ViewPokeMart()
     {
@@ -432,6 +411,13 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             ,InputStateGroup.PokeMart,true,
             _pokeMartHandler.storeUI, InputDirection.Vertical, martSelectables,
             _pokeMartHandler.itemSelector,true,true,ClosePokeMart,ClosePokeMart));
+        void ClosePokeMart()
+        {
+            RemoveScreen();
+            ActivateUiElement(_pokeMartHandler.storeUI, false);
+            _pokeMartHandler.ExitStore();
+            _dialogueHandler.DisplayDetails("Have a great day!");
+        }
     }
 
     public void ViewGameSettings()
@@ -451,7 +437,12 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             InputDirection.Vertical, gameSettingsSelectables,_gameSettingsHandler.whiteSelector,true, true
             ,onExit:CloseSettings,onClose:CloseSettings));
         
-        _gameSettingsHandler.mainUI.SetActive(true);
+        void CloseSettings()
+        {
+            _gameSettingsHandler.SetCurrentSetting(0);
+            RemoveScreen();
+            ActivateUiElement(_gameSettingsHandler.mainUI, false);
+        }
     }
     public void ViewGameSettingsOptions()
     {
@@ -484,6 +475,14 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         AddScreen();
         ActivateUiElement(_typingInterfaceHandler.mainUI, true);
         _typingInterfaceHandler.OnInputResolved += alertTextInputReceiver;
+        _typingInterfaceHandler.OnInputResolved += (input) => CloseTypingInterface();
         _typingInterfaceHandler.InitializeState(inputLength,graphicData);
+        
+        void CloseTypingInterface()
+        {
+            RemoveScreen();
+            ActivateUiElement(_typingInterfaceHandler.mainUI, false);
+        }
     }
+
 }

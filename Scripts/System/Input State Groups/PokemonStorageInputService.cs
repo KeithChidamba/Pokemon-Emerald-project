@@ -5,14 +5,12 @@ using UnityEngine;
 
 public class PokemonStorageInputService: IInputGroup
 {
-    private Game_ui_manager _gameUIHandler;
     private pokemon_storage _pokemonStorageHandler;
     private InputStateHandler _inputStateHandler;
     
     public PokemonStorageInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
     }
     public void DetermineOperation()
@@ -50,7 +48,7 @@ public class PokemonStorageInputService: IInputGroup
     public void SetupPokemonStorageState()
     {
         var storageSelectables = new List<SelectableUI>{
-            new(_pokemonStorageHandler.storageBoxExit.gameObject,_gameUIHandler.ClosePokemonStorage, true)
+            new(_pokemonStorageHandler.storageBoxExit.gameObject,_pokemonStorageHandler.ClosePC, true)
         };
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonStorageExit,

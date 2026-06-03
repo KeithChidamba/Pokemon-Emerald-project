@@ -6,7 +6,12 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
-
+[Serializable]
+public struct CaptureInformation
+{
+    public string areaName;
+    public int levelCaptured;
+}
 [CreateAssetMenu(fileName = "Pokemon", menuName = "Pokemon/Pokemon")]
 public class Pokemon : ScriptableObject
 {
@@ -14,7 +19,7 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("Pokemon_name")] public string pokemonName;
     public string nickName;
     public string currentPokemonName;
-    
+    public CaptureInformation captureInformation;
     public long pokemonID;
     public uint personalityValue;
     public bool isShiny;
@@ -456,12 +461,12 @@ public class Pokemon : ScriptableObject
         float bracket3 = bracket2 + currentLevel + 10f;
         return math.floor(bracket3);
     }
-    public void LevelUp()
+    private void LevelUp()
     {
         OnLevelUp?.Invoke(this);
         DetermineFriendshipLevelChange(true, FriendshipModifier.LevelUp);
         currentLevel++;
-        currentLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel-1,expGroup);
+        currentLevelExpAmount = PokemonOperations.CalculateExpForLevel(currentLevel,expGroup);
         nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel,expGroup);
         IncreaseStats();
         

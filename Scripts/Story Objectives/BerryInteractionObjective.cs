@@ -16,7 +16,7 @@ public class BerryInteractionObjective : InteractionObjective
     
     private void CheckInteractionTriggered(Overworld_interactable interactable)
     {
-        if (interactionForObjective.overworldInteraction != interactable.interaction.overworldInteraction) return;
+        if (interactionTypeForObjective != interactable.interaction.overworldInteraction) return;
         
        var berryTree = interactable.GetComponent<BerryTree>();
        

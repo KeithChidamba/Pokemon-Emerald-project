@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
-public class PlayerCollisionHandler : MonoBehaviour,IInjectable
+public class PlayerTileHandler : MonoBehaviour,IInjectable
 {
     [SerializeField] private Transform interactionPoint;
     public Tilemap encounterTilemap;
@@ -33,7 +33,6 @@ public class PlayerCollisionHandler : MonoBehaviour,IInjectable
     {
         _repelDuration = numSteps;
         _repellingPokemon = true;
-        
     }
     private void SwitchArea()
     {

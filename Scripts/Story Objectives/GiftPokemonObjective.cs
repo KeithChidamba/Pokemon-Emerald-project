@@ -2,7 +2,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Objectives/gift pokemon interaction objective")]
 public class GiftPokemonObjective : InteractionObjective    
 {
-    public ObjectiveObjectHandler objectiveObjectHandler;
+    [HideInInspector]public ObjectiveObjectHandler objectiveObjectHandler;//injected by object handler class
     private Game_ui_manager _gameUIManager;
     protected override void OnObjectiveLoaded()
     {
@@ -10,6 +10,7 @@ public class GiftPokemonObjective : InteractionObjective
         dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>();
         _gameUIManager = serviceContainer.Resolve<Game_ui_manager>();
         dialogueHandler.DisplayObjectiveText(objectiveHeading);
+        overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
         dialogueOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
         _gameUIManager.SetMenuAccessibility(false);
     }
@@ -21,16 +22,17 @@ public class GiftPokemonObjective : InteractionObjective
             dialogueHandler.EndDialogue(); 
             return;
         }
-        if (interactionForObjective.overworldInteraction != interaction.overworldInteraction) return;
+        if (interactionTypeForObjective != interaction.overworldInteraction) return;
 
         var pokeballProps = objectiveObjectHandler.propGroupsForObjective[0];
         
-        for(int i=0;i < pokeballProps.propsForObjective.Count;i++)
+        foreach(var prop in pokeballProps.propsForObjective)
         {
-            var prop = pokeballProps.propsForObjective[i];
-            //de-activate selected pokeball
-            if (int.Parse(interaction.resultMessage) == i + 1)
+            var interactionOnProp = prop.propObject.GetComponent<Overworld_interactable>().interaction;
+           
+            if (interactionOnProp==interaction)
             {
+                //de-activate selected pokeball
                 prop.propState = propState.InActive;
             }
             else
@@ -45,10 +47,7 @@ public class GiftPokemonObjective : InteractionObjective
    
     protected override void OnObjectiveCleared()
     {
-        var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
         dialogueOptionsHandler.OnInteractionOptionChosen -= CheckInteractionOption;
         overworldStateHandler.ClearAndLoadNextObjective();
     }
-    
-    
 }

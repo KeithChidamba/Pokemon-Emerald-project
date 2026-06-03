@@ -65,7 +65,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     void Battle()
     {
         _dialogueHandler.EndDialogue(); 
-        _battleHandler.SetBattleType(_currentInteraction.additionalInfo);
+        _battleHandler.SetBattleType(_currentInteraction.GetModule<TrainerBattleInteractionInfo>());
     }
     
     void HealPokemon()
@@ -96,11 +96,8 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("Can no longer obtain more pokemon, free up space in pc!");
             return;
         }
-        var pokemonName = _currentInteraction.additionalInfo[int.Parse(_currentInteraction.resultMessage)-1];
-        var pokemon = Resources.Load<Pokemon>(SaveDataHandler.GetDirectory(AssetDirectory.Pokemon)
-                                              + pokemonName +"/"+ pokemonName);
-        
-        _playerParty.AddMember(pokemon,isGiftPokemon:true);
+        var giftInteraction = _currentInteraction.GetModule<PokemonGiftInteractoinInfo>();
+        _playerParty.AddGiftMember(giftInteraction);
     }
     void Interact()
     {

@@ -50,12 +50,16 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
         }
     }
-    public IEnumerator EndWildBattle()
+    public IEnumerator EndWildBattle(bool wasCaught=false)
     {
+        participant.statData.ResetBattleState(participant.pokemon);
         inBattle = false;
         _turnBasedCombatHandler.faintEventDelay = false;
         _battleHandler.EndBattle(true);
-        _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName + " defeated " +participant.pokemon.pokemonName);
+        if(!wasCaught)
+        {
+           _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName + " defeated " + participant.pokemon.pokemonName);
+        }
         yield return null;
     }
     

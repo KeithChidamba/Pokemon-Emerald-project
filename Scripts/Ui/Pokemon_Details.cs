@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -8,9 +9,10 @@ using UnityEngine.UI;
 public class Pokemon_Details : MonoBehaviour,IInjectable
 {
     //too lazy to change this to camelCase because ot would take a lot of editor work
-    [SerializeField]private Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID,pkm_nature,Trainer_Name;
+    [SerializeField]private Text pkm_name,pkm_ablty, pkm_ablty_desc, pkm_lv,pkm_ID,Trainer_Name;
     [SerializeField]private Text pkm_atk, pkm_sp_atk, pkm_def, pkm_sp_def, pkm_speed, pkm_hp;
     [SerializeField]private Text move_Description,pkm_HeldItem,pkm_CurrentExp,pkm_NextLvExp;
+    [SerializeField] private TMP_Text pokemonCaptureInfo;
     [FormerlySerializedAs("moves_pp")] [SerializeField]private Text[] movesPpText;
     [FormerlySerializedAs("moves")] public Text[] moveNamesText;
     [SerializeField]private Image pkm_img;
@@ -35,7 +37,6 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     public Action<int> OnMoveSelected; 
     public bool learningMove;
     public bool changingMoveData;
-    private bool _viewingStats;
     private Dictionary<int, Action> _pages = new();
     public GameObject moveSelector;
     public GameObject uiParent;
@@ -108,7 +109,6 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
 
     private void  LoadPage(int pageNumber)
     {
-        _viewingStats = pageNumber == 2;
         if(_pages.TryGetValue(pageNumber,out var openPage))
             openPage();
         else
@@ -129,7 +129,9 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         pkm_ablty_desc.text = currentPokemon.ability.abilityDescription;
         Trainer_Name.text = _gameLoadingHandler.playerData.playerName;
         pkm_ablty.text = currentPokemon.ability.abilityName.ToUpper();
-        pkm_nature.text = currentPokemon.nature.natureName.ToUpper();
+        pokemonCaptureInfo.text = $" <color=red>{currentPokemon.nature.natureName.ToUpper()}</color> nature," +
+                                   $"\n met at lv{currentPokemon.captureInformation.levelCaptured}," +
+                                   $"\n <color=red>{currentPokemon.captureInformation.areaName.ToUpper()}</color>";
         Ability_ui.SetActive(true);
     }    
     private void LoadStatsUiPage()
@@ -143,8 +145,11 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         pkm_speed.text = currentPokemon.speed.ToString();
         pkm_sp_def.text = currentPokemon.specialDefense.ToString();
         pkm_CurrentExp.text = currentPokemon.currentExpAmount.ToString();
-        pkm_NextLvExp.text = currentPokemon.nextLevelExpAmount.ToString();
-        pkm_HeldItem.text = (currentPokemon.hasItem)? currentPokemon.heldItem.itemName: "NONE";
+        pkm_NextLvExp.text = (currentPokemon.nextLevelExpAmount - currentPokemon.currentExpAmount).ToString();
+        pkm_HeldItem.text = currentPokemon.hasItem? currentPokemon.heldItem.itemName: "NONE";
+        player_exp.maxValue = currentPokemon.nextLevelExpAmount;
+        player_exp.minValue = currentPokemon.currentLevelExpAmount;
+        player_exp.value = currentPokemon.currentExpAmount;
         Stats_ui.SetActive(true);
     }
     
@@ -183,17 +188,32 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
 
     public void ChangePokemon(int indexChange)
     {
+        var oldIndex = _currentPokemonIndex;
         _currentPokemonIndex = Mathf.Clamp(_currentPokemonIndex + indexChange, 0, pokemonToView.Count - 1);
+        if (oldIndex == _currentPokemonIndex) return;
+        
         currentPokemon = pokemonToView[_currentPokemonIndex];
+        StartCoroutine(PokemonAnimation());
         LoadOverlayInfo();
         LoadPage(_currentPage);
+    }
+    private IEnumerator PokemonAnimation()
+    {
+         pkm_img.sprite = currentPokemon.frontPicture;
+         yield return new WaitForSecondsRealtime(0.2f);
+         pkm_img.sprite = currentPokemon.battleIntroFrame;
+         yield return new WaitForSecondsRealtime(0.35f);
+         pkm_img.sprite = currentPokemon.frontPicture;
+         yield return new WaitForSecondsRealtime(0.35f);
+         pkm_img.sprite = currentPokemon.battleIntroFrame;
+         yield return new WaitForSecondsRealtime(0.35f);
+         pkm_img.sprite = currentPokemon.frontPicture;
     }
     void LoadOverlayInfo()
     {
         pkm_name.text = currentPokemon.nickName +"\n /"+currentPokemon.pokemonName;
-        pkm_ID.text = "ID: "+currentPokemon.pokemonID;
-        pkm_lv.text = "Lv "+currentPokemon.currentLevel;
-        pkm_img.sprite = currentPokemon.frontPicture;
+        pkm_ID.text = "IDNo"+currentPokemon.pokemonID;
+        pkm_lv.text = "Lv"+currentPokemon.currentLevel;
         gender_img.gameObject.SetActive(true);
         if(currentPokemon.hasGender)
         {
@@ -212,13 +232,8 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         LoadOverlayInfo();
         _currentPage = (learningMove || changingMoveData) ? 3 : 1;
         LoadPage(_currentPage);
+        StartCoroutine(PokemonAnimation());
     }
 
-    private void Update()
-    {
-        if(!_viewingStats)return;
-        player_exp.value = currentPokemon.currentExpAmount;
-        player_exp.maxValue = currentPokemon.nextLevelExpAmount;
-        player_exp.minValue = currentPokemon.currentLevelExpAmount;
-    }
+   
 }
