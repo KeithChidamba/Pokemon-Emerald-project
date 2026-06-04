@@ -26,7 +26,9 @@ public class Player_movement : MonoBehaviour,IInjectable
 
     [SerializeField] private GameObject playerObject;
     public event Action OnNewTile;
-    [SerializeField]private Vector3 previousValidPosition;
+    public SpriteRenderer characterSpriteMaskRenderer;
+    [SerializeField] private SpriteRenderer characterMainSpriteRenderer;
+    public Vector3 PreviousValidPosition { get; private set; }
     [SerializeField]private LayerMask movementBlockers;
     [SerializeField]private bool standingOnTile;
     private Dictionary<MovementRestrictor, bool> _movementRestrictors = new();
@@ -61,8 +63,8 @@ public class Player_movement : MonoBehaviour,IInjectable
     {
         canMove = false;
         standingOnTile = true;
-        playerObject.transform.position = previousValidPosition;
-        movePoint.position = previousValidPosition;
+        playerObject.transform.position = PreviousValidPosition;
+        movePoint.position = PreviousValidPosition;
     }
     public void FaceOppositeDirection(MovementDirection npcDirection)
     {
@@ -135,6 +137,8 @@ public class Player_movement : MonoBehaviour,IInjectable
             HandleBikeInputs();
             HandleRunInputs();
             HandlePlayerMovement();
+            characterSpriteMaskRenderer.sprite = characterMainSpriteRenderer.sprite;
+            characterSpriteMaskRenderer.transform.rotation = characterMainSpriteRenderer.transform.rotation;
         }
         else
         {
@@ -265,7 +269,7 @@ public class Player_movement : MonoBehaviour,IInjectable
             playerObject.transform.position = movePoint.position;
             if (!standingOnTile)
             {
-                previousValidPosition = movePoint.position;
+                PreviousValidPosition = movePoint.position;
                 standingOnTile = true;
                 OnNewTile?.Invoke();
             }
@@ -335,7 +339,7 @@ public class Player_movement : MonoBehaviour,IInjectable
     }
     public void SetPlayerPosition(Vector3 position)
     {
-        previousValidPosition = position;
+        PreviousValidPosition = position;
         movePoint.position = position;
         playerObject.transform.position = position;
     }

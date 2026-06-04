@@ -81,6 +81,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    [SerializeField]private Image[] interfaceImages;
    public TypingInputInterface currentInterface;
    [SerializeField]private int currentInputIndex;
+   private bool _isSwappingInterface;
    public int currentCharacterIndex;
    public int currentMaxBoxElements;
    [SerializeField]private string combinedInput;
@@ -99,13 +100,11 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    [SerializeField]private Image genderGraphic;
    
    private InputStateHandler _inputStateHandler;
-   private Game_ui_manager _gameUIHandler;
    private Dialogue_handler _dialogueHandler;
    
    public void Inject(ServiceContainer container)
    {
       _inputStateHandler = container.Resolve<InputStateHandler>();
-      _gameUIHandler = container.Resolve<Game_ui_manager>();
       _dialogueHandler = container.Resolve<Dialogue_handler>();
       gameObject.SetActive(true);
    }
@@ -369,16 +368,47 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    }
    private void SwapInterface()
    {
+      if (_isSwappingInterface) return;
+
       var newInterfaceIndex = (int)currentInterface == 2 ? 0 : (int)currentInterface + 1;
-      var newInterface = newInterfaceIndex switch
-      {
-         0 => TypingInputInterface.Uppercase,
-         1 => TypingInputInterface.Lowercase,
-         _ => TypingInputInterface.Symbols
-      };
-      ChangeInterface(newInterface,true);
+      var newInterface = (TypingInputInterface)newInterfaceIndex;
+      StartCoroutine(InterfaceTransitionAnimation(newInterface));
    }
 
+   private IEnumerator InterfaceTransitionAnimation(TypingInputInterface newInterface)
+   {
+      _isSwappingInterface = true;
+      _inputStateHandler.AddPlaceHolderState();
+      var newImage = interfaceImages[(int)newInterface];
+      var newRect = newImage.rectTransform;
+
+      Vector2 originalPos = newRect.anchoredPosition;
+      Vector2 raisedPos = originalPos + Vector2.up * 80f;
+
+      newImage.gameObject.SetActive(true);
+
+      // Bring new card to the front
+      newRect.SetAsLastSibling();
+
+      // Move up
+      yield return StartCoroutine(
+         BattleVisuals.SlideRect(
+            newRect,
+            originalPos,
+            raisedPos,
+            500f));
+
+      // Move back down
+      yield return BattleVisuals.SlideRect(
+            newRect,
+            raisedPos,
+            originalPos,
+            500f);
+      
+      _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder,true);
+      ChangeInterface(newInterface, true);
+      _isSwappingInterface = false;
+   }
    public void SetCurrentCharacterIndex(int newIndex)
    {
       currentCharacterIndex = newIndex;

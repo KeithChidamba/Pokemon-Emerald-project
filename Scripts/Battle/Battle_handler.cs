@@ -566,11 +566,11 @@ public class Battle_handler : MonoBehaviour, IInjectable
             var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-rectHeight);
             yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
             
-            StartCoroutine(_battleVisualsHandler.SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
+            StartCoroutine(BattleVisuals.SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
             
             var participantUIRect = faintedParticipant.participantUI.GetComponent<RectTransform>(); 
             var targetForUI = new Vector2(participantUIRect.anchoredPosition.x, participantUIRect.anchoredPosition.y-400f);
-            yield return StartCoroutine(_battleVisualsHandler.SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f));
+            yield return StartCoroutine(BattleVisuals.SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f));
             
             if (faintedParticipant.isEnemy)
             {

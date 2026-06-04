@@ -40,6 +40,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     private Dictionary<int, Action> _pages = new();
     public GameObject moveSelector;
     public GameObject uiParent;
+    private Coroutine _animationRoutine;
     
     private InputStateHandler _inputStateHandler;
     private Game_Load _gameLoadingHandler;
@@ -193,7 +194,8 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         if (oldIndex == _currentPokemonIndex) return;
         
         currentPokemon = pokemonToView[_currentPokemonIndex];
-        StartCoroutine(PokemonAnimation());
+        StopCoroutine(_animationRoutine);
+        _animationRoutine = StartCoroutine(PokemonAnimation());
         LoadOverlayInfo();
         LoadPage(_currentPage);
     }
@@ -232,7 +234,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         LoadOverlayInfo();
         _currentPage = (learningMove || changingMoveData) ? 3 : 1;
         LoadPage(_currentPage);
-        StartCoroutine(PokemonAnimation());
+        _animationRoutine = StartCoroutine(PokemonAnimation());
     }
 
    

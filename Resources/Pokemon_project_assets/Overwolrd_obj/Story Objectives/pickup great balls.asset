@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888591249c9dce0c8aa814792a20212e, type: 3}
   m_Name: pickup great balls
   m_EditorClassIdentifier: 
-  mainAssetName: 
-  objectiveHeading: Pickup the great balls
+  mainAssetName: pickup great balls
+  objectiveHeading: Pickup the item on the brown table
   hasProgression: 0
   indexInList: 0
   objectiveType: 10
-  objectiveObjectHandler: {fileID: 0}
   requiresPickupItems: 1
   itemToPickup: {fileID: 11400000, guid: cbd9f62c90df0caeba82739bd4d1195b, type: 2}

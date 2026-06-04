@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -11,10 +12,14 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
     public Tilemap areaSwitchTilemap;
     [SerializeField]private bool _repellingPokemon;
     [SerializeField]private int _repelDuration;
+    
+    public SpriteRenderer grassRenderer;
+    [SerializeField] private Sprite[] grassSprites;
+    
     private Player_movement _playerMovementHandler;
     private Encounter_handler  _encounterHandler;
     private Area_manager  _areaHandler;
-    
+   
     public void Inject(ServiceContainer container)
     {
         _encounterHandler = container.Resolve<Encounter_handler>();
@@ -26,6 +31,7 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
     public void OnInject()
     {
         _playerMovementHandler.OnNewTile += CheckGrass;
+        _playerMovementHandler.OnNewTile += UseRepel;
         _playerMovementHandler.OnNewTile += SwitchArea;
     }
 
@@ -34,22 +40,52 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
         _repelDuration = numSteps;
         _repellingPokemon = true;
     }
+
+    private void UseRepel()
+    {
+        if (_repellingPokemon)
+        {
+            _repelDuration--;
+            _repellingPokemon = _repelDuration > 0;
+        }
+    }
     private void SwitchArea()
     {
         var tile = FindTileAtPosition<AreaSwitchTile>(areaSwitchTilemap,transform.position);
         if (tile == null) return;
         _areaHandler.SwitchToArea(tile.areaTransitionData.areaName);
     }
+    
+    private IEnumerator AnimateGrass()
+    {
+        _playerMovementHandler.characterSpriteMaskRenderer.gameObject.SetActive(true);
+        grassRenderer.gameObject.SetActive(true);
+        grassRenderer.sprite = grassSprites[0];
+        yield return new WaitForSecondsRealtime(0.05f);
+        grassRenderer.sprite = grassSprites[1];
+        yield return new WaitForSecondsRealtime(0.05f);
+        grassRenderer.sprite = grassSprites[2];
+        yield return new WaitForSecondsRealtime(0.05f);
+        grassRenderer.sprite = grassSprites[3];
+        yield return new WaitForSecondsRealtime(0.05f);
+    }
     private void CheckGrass()
     {
-        if (_repellingPokemon)
+        grassRenderer.gameObject.SetActive(false);
+        _playerMovementHandler.characterSpriteMaskRenderer.gameObject.SetActive(false);
+        var tile = FindTileAtPosition<EncounterTile>(encounterTilemap,transform.position);
+        if (tile != null)
         {
-            _repelDuration--;
-            _repellingPokemon = _repelDuration > 0;
+            var playerPosition = _playerMovementHandler.GetPlayerPosition();
+            grassRenderer.transform.position = new Vector3(playerPosition.x + .5f, playerPosition.y + .35f);//accounts for sprite offset
+            StartCoroutine(AnimateGrass());
+        }
+        else
+        {
             return;
         }
-        var tile = FindTileAtPosition<EncounterTile>(encounterTilemap,transform.position);
-        if (tile == null) return;
+        
+        if (_repellingPokemon) return;
         
         var encounterChance = _playerMovementHandler.runningInput ? 5 : 2;
         

@@ -33,12 +33,13 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
   public PropBasedObjective objective;
   public List<propStateGroup> propGroupsForObjective;
   public LayerMask newLayer;
-  
+  private ServiceContainer _container;
   private OverworldState _overworldStateHandler;
 
   public void Inject(ServiceContainer container)
   {
       _overworldStateHandler = container.Resolve<OverworldState>();
+      _container = container;
       gameObject.SetActive(true);
   }
 
@@ -55,7 +56,7 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
         }
         if (_overworldStateHandler.HasObjective(objective.name))//the objective could have been completed already
         {
-            objective.Inject(this);
+            objective.Inject(this,_container);
             objective.OnLoad += LoadObjects;
             objective.OnClear += UnLoadObjects;
         }

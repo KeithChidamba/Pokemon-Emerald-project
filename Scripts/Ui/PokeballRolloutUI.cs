@@ -13,8 +13,11 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     private bool _finishedDisplaying;
     private RectTransform _rectTransform;
     public bool isPlayerPokeballs;
+    
     public Sprite emptyPokeballSlot;
-    public Sprite fullPokeballSlot;
+    public Sprite healthyPokeballSlot;
+    public Sprite afflictedPokeballSlot;
+    public Sprite faintedPokeballSlot;
     
     private BattleVisuals _battleVisualsHandler;
     private Pokemon_party _pokemonPartyHandler;
@@ -45,9 +48,9 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
         }
         var distance = isPlayerPokeballs ? -_battleVisualsHandler.outOfViewDistance : _battleVisualsHandler.outOfViewDistance;
         var target = new Vector2(_rectTransform.anchoredPosition.x + distance, _rectTransform.anchoredPosition.y);
-        yield return _battleVisualsHandler.SlideRect(_rectTransform, _rectTransform.anchoredPosition, target , 600f);
+        yield return BattleVisuals.SlideRect(_rectTransform, _rectTransform.anchoredPosition, target , 600f);
     }
-    public IEnumerator LoadPokeballs()
+    public IEnumerator LoadPokeballs()//initial load when battle starts
     {
         gameObject.SetActive(true);
         
@@ -62,7 +65,7 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
                     startPos.anchoredPosition.y);
             var pokeballPos = new Vector2(startPos.anchoredPosition.x + (i * pokeballDistanceApart),
                 startPos.anchoredPosition.y);
-            yield return _battleVisualsHandler.SlideRect(pokeballs[i], pokeballs[i].anchoredPosition, pokeballPos,
+            yield return BattleVisuals.SlideRect(pokeballs[i], pokeballs[i].anchoredPosition, pokeballPos,
                 pokeballMoveSpeed);
         }
 
@@ -74,11 +77,10 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     {
         if (isPlayerPokeballs)
         {
-            if( pokeballIndex < _pokemonPartyHandler.numMembers)
+            if (pokeballIndex < _pokemonPartyHandler.numMembers)
             {
-                pokeballImage.sprite = fullPokeballSlot;
-                pokeballImage.color =
-                    _pokemonPartyHandler.party[pokeballIndex].hp > 0 ? Color.white : new Color32(129, 129, 129,255);
+                var pokemon = _pokemonPartyHandler.party[pokeballIndex];
+                pokeballImage.sprite = DeterminePokeballImage(pokemon);
             }
             else
             {
@@ -96,9 +98,10 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
                 var partyCount = _battleHandler.battleParticipants[2].pokemonTrainerAI.trainerParty.Count;
                 if (pokeballIndex < partyCount)
                 {
-                    pokeballImage.sprite = fullPokeballSlot;
-                    pokeballImage.color = _battleHandler.battleParticipants[2].pokemonTrainerAI.trainerParty[pokeballIndex].hp>0?
-                        Color.white: new Color32(129, 129, 129,255);
+                    var enemyPokemon = _battleHandler.battleParticipants[2].pokemonTrainerAI
+                        .trainerParty[pokeballIndex];
+                    
+                    pokeballImage.sprite = DeterminePokeballImage(enemyPokemon);
                 }
                 else
                 {
@@ -106,6 +109,18 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
                 }
             }
         }
+    }
+    private Sprite DeterminePokeballImage(Pokemon pokemon)
+    {
+        if (pokemon.hp == 0)
+        {
+            return faintedPokeballSlot;
+        }
+        if (pokemon.statusEffect != StatusEffect.None)
+        {
+            return afflictedPokeballSlot;
+        }
+        return healthyPokeballSlot;
     }
     public IEnumerator HidePokeballs()
     {
@@ -115,9 +130,9 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
 
     private void ResetPokeballs()
     {
-        for (var i = 0; i < pokeballs.Count; i++)
+        foreach (var pokeball in  pokeballs)
         {
-            pokeballs[i].anchoredPosition = startPos.anchoredPosition;
+            pokeball.anchoredPosition = startPos.anchoredPosition;
         }
         gameObject.SetActive(false);
         _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? -_battleVisualsHandler.outOfViewDistance :_battleVisualsHandler.outOfViewDistance);

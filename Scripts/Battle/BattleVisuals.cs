@@ -223,7 +223,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             participant.statusEffectAnimator.gameObject.SetActive(false);
         }
     }
-    public IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)
+    public static IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)
     {
         rect.anchoredPosition = start;
         while (Vector2.Distance(rect.anchoredPosition, target) > 0.5f)

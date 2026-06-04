@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 36c25dfb636db794884f0e74e893dd6c, type: 3}
+  m_Sprite: {fileID: 889954134, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -142,8 +142,10 @@ MonoBehaviour:
   pokeballDistanceApart: 40
   pokeballMoveSpeed: 80
   isPlayerPokeballs: 0
-  emptyPokeballSlot: {fileID: 21300000, guid: 36c25dfb636db794884f0e74e893dd6c, type: 3}
-  fullPokeballSlot: {fileID: 21300000, guid: 3653bed63b2bc23bd9436fdc692f538d, type: 3}
+  emptyPokeballSlot: {fileID: 889954134, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
+  healthyPokeballSlot: {fileID: -1611619132, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
+  afflictedPokeballSlot: {fileID: -1205410588, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
+  faintedPokeballSlot: {fileID: 1357467400, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
 --- !u!1 &1771220766801185160
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,7 +255,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 36c25dfb636db794884f0e74e893dd6c, type: 3}
+  m_Sprite: {fileID: 889954134, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -328,7 +330,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 36c25dfb636db794884f0e74e893dd6c, type: 3}
+  m_Sprite: {fileID: 889954134, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -373,7 +375,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 94.3, y: -18.5}
-  m_SizeDelta: {x: 450, y: 45}
+  m_SizeDelta: {x: 450, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &407900844702452426
 CanvasRenderer:
@@ -403,7 +405,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3dd300c8a1560757fa6c2a8134166b23, type: 3}
+  m_Sprite: {fileID: 257379458, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -478,7 +480,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 36c25dfb636db794884f0e74e893dd6c, type: 3}
+  m_Sprite: {fileID: 889954134, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -553,7 +555,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 36c25dfb636db794884f0e74e893dd6c, type: 3}
+  m_Sprite: {fileID: 889954134, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -628,7 +630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 36c25dfb636db794884f0e74e893dd6c, type: 3}
+  m_Sprite: {fileID: 889954134, guid: 26b9ef77f7ce35c42a86d97f084fbb9c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

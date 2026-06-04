@@ -15,13 +15,13 @@ public class ItemPickupObjective : PropBasedObjective
         pickupObject.SetActive(false);
         itemPickupGroup.propsForObjective.Add(itemPickState);
         objectiveObjectHandler.propGroupsForObjective.Add(itemPickupGroup);
+        _overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
         _overworldStateHandler.OnPickupItemCreated -= ReceivePickupObjects;
     }
 
     protected override void OnObjectiveLoaded()
     {
         var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
-        _overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
         dialogueHandler.DisplayObjectiveText(objectiveHeading);
         _overworldStateHandler.OnItemPickedUp += CheckItem;
         return;

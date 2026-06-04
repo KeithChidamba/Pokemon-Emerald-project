@@ -15,6 +15,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     public bool displaying;
     [SerializeField] private GameObject infoDialogueBox;
     public GameObject battleDialogueBox;
+    [SerializeField] private LoopingUiAnimation endOfDialoguePointer;
     [SerializeField] private GameObject dialogueOptionPrefab;
     [SerializeField] private GameObject dialogueOptionBox;
     [SerializeField] private GameObject objectiveDialogueBox;
@@ -47,6 +48,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
 
     public void OnInject()
     {
+        endOfDialoguePointer.LoadState(false);
         _dialogueOptionsManager = dialogueOptionBox.GetComponent<DialogueOptionsManager>();
         _battleHandler.OnBattleEnd += () => messagesLoading = false;
         ResetText();
@@ -217,7 +219,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             var currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
             SetBattleTextBox(currentInteraction);
             
-            _typingRoutine = StartCoroutine(TypeText(currentInteraction));
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction,false));
             yield return _typingRoutine;
             
             yield return new WaitUntil(()=>dialogueFinished);
@@ -239,7 +241,8 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         }
         _interactionHandler.AllowInteraction();
         canExitDialogue = true;
-        
+        endOfDialoguePointer.ChangeActiveState(false);
+        endOfDialoguePointer.gameObject.SetActive(false);
         infoDialogueBox.SetActive(false);
         battleDialogueBox.SetActive(false);
         ResetText();
@@ -282,7 +285,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     {
         objectiveDialogueBox.SetActive(false);
     }
-    private IEnumerator TypeText(Interaction currentInteraction)
+    private IEnumerator TypeText(Interaction currentInteraction,bool displayPointer=true)
     {
         ResetText();
         dialogueFinished = false;
@@ -294,6 +297,12 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
 
         for (int page = 1; page <= totalPages; page++)
         {
+            if (displayPointer)
+            {
+                endOfDialoguePointer.ChangeActiveState(false);
+                endOfDialoguePointer.gameObject.SetActive(false);
+            }
+
             dialougeText.pageToDisplay = page;
             dialougeText.maxVisibleCharacters = 0;
 
@@ -318,6 +327,12 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
                 yield return new WaitForSecondsRealtime(typingSpeed);
             }
 
+            if (displayPointer)
+            {
+                endOfDialoguePointer.gameObject.SetActive(true);
+                endOfDialoguePointer.ChangeActiveState(true);
+            }
+           
             // Wait for input before next page
             if(totalPages>1) yield return new WaitUntil(() =>InputSourceHandler.InputPressed(ControlEvent.Confirm));
         }
