@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Super Rod
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: c81ed8362085ab9cabddf7c3b8a24b8d, type: 2}
-  itemAssetName: 
   itemPosition: {x: 24, y: -39}
-  hasBeenPicked: 0
+  itemQuantity: 1

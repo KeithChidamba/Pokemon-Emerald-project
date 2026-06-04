@@ -10,21 +10,30 @@ public enum propState
 [Serializable]
 public class propStateAfterObjective
 {
+    public propStateAfterObjective(GameObject propObject, propState propState)
+    {
+        this.propObject = propObject;
+        this.propState = propState;
+    }
+
     public GameObject propObject;
     public propState propState;
 }
 [Serializable]
 public class propStateGroup
 {
+    public propStateGroup(List<propStateAfterObjective> propsForObjective)
+    {
+        this.propsForObjective = propsForObjective;
+    }
     public List<propStateAfterObjective> propsForObjective;
 }
 public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
 {
-  public StoryObjective objective;
-  public StoryObjectiveType objectiveType;
-  
+  public PropBasedObjective objective;
   public List<propStateGroup> propGroupsForObjective;
   public LayerMask newLayer;
+  
   private OverworldState _overworldStateHandler;
 
   public void Inject(ServiceContainer container)
@@ -40,14 +49,13 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
 
     private void CheckForRequiredObjective()
     {
-        if (_overworldStateHandler.HasObjective(objective.name))
+        if(objective.requiresPickupItems)
         {
-            if (objectiveType == StoryObjectiveType.GiftPokemon)
-            {
-                var pokemonObjective = (GiftPokemonObjective)objective;
-                pokemonObjective.objectiveObjectHandler = this;
-            }
-            
+            _overworldStateHandler.OnPickupItemCreated += objective.ReceivePickupObjects;
+        }
+        if (_overworldStateHandler.HasObjective(objective.name))//the objective could have been completed already
+        {
+            objective.Inject(this);
             objective.OnLoad += LoadObjects;
             objective.OnClear += UnLoadObjects;
         }
@@ -82,7 +90,6 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
                 }
             }
         }
-       
         objective.OnLoad -= LoadObjects;
         objective.OnClear -= UnLoadObjects;
     }

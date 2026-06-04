@@ -5,9 +5,9 @@
     "itemEffect": "100",
     "itemDescription": "Repels wild pokemon for 100 steps",
     "price": 350,
-    "quantity": 1,
+    "quantity": 2,
     "itemImage": {
-        "instanceID": 27134
+        "instanceID": 27124
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,

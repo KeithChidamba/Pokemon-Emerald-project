@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Good rod
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 667de52996dbb3b87a89c4fdea883bc1, type: 2}
-  itemAssetName: 
   itemPosition: {x: 23, y: -39}
-  hasBeenPicked: 0
+  itemQuantity: 1

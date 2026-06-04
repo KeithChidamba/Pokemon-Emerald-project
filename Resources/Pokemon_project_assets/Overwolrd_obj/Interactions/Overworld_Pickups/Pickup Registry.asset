@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8966e7019e856bd2f9a94de18fcc1f29, type: 3}
+  m_Name: Pickup Registry
+  m_EditorClassIdentifier: 
+  overworldPickups:
+  - pickup: {fileID: 11400000, guid: 9a5e196d5e74ebc1ba6f11f88cc203d9, type: 2}
+    hasBeenPicked: 0
+  - pickup: {fileID: 11400000, guid: e73221426db8327e186a6c6974913f63, type: 2}
+    hasBeenPicked: 0
+  - pickup: {fileID: 11400000, guid: 06cb71e6f7316805da0f042221b92189, type: 2}
+    hasBeenPicked: 0
+  - pickup: {fileID: 11400000, guid: d5c73db470d3b237ca0784f7867c2e7d, type: 2}
+    hasBeenPicked: 0
+  - pickup: {fileID: 11400000, guid: cbd9f62c90df0caeba82739bd4d1195b, type: 2}
+    hasBeenPicked: 0

@@ -4,7 +4,6 @@ using UnityEngine;
 public class OverworldPickup : ScriptableObject
 {
     public Item item;
-    public string itemAssetName;
     public Vector2 itemPosition;
-    public bool hasBeenPicked;
+    public int itemQuantity;
 }

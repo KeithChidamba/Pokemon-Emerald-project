@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 888591249c9dce0c8aa814792a20212e, type: 3}
+  m_Name: pickup great balls
+  m_EditorClassIdentifier: 
+  mainAssetName: 
+  objectiveHeading: Pickup the great balls
+  hasProgression: 0
+  indexInList: 0
+  objectiveType: 10
+  objectiveObjectHandler: {fileID: 0}
+  requiresPickupItems: 1
+  itemToPickup: {fileID: 11400000, guid: cbd9f62c90df0caeba82739bd4d1195b, type: 2}

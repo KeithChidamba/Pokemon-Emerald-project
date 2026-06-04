@@ -5,9 +5,9 @@
     "itemEffect": "",
     "itemDescription": "An old fishing rod that only catch weak pokemon",
     "price": 0,
-    "quantity": 1,
+    "quantity": 2,
     "itemImage": {
-        "instanceID": 26988
+        "instanceID": 26978
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 26596
+        "instanceID": 26584
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26596
+            "instanceID": 26584
         }
     ],
     "infoModuleAssetNames": [

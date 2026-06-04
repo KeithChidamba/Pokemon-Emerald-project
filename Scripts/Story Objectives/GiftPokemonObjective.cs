@@ -1,17 +1,20 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "Objectives/gift pokemon interaction objective")]
-public class GiftPokemonObjective : InteractionObjective    
+[CreateAssetMenu(menuName = "Objectives/prop based objective/gift pokemon objective")]
+public class GiftPokemonObjective : PropBasedObjective    
 {
-    [HideInInspector]public ObjectiveObjectHandler objectiveObjectHandler;//injected by object handler class
     private Game_ui_manager _gameUIManager;
+    private Dialogue_handler _dialogueHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
+    private OverworldState _overworldStateHandler;
+    
     protected override void OnObjectiveLoaded()
     {
-        dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
-        dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>();
+        _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        _dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>();
         _gameUIManager = serviceContainer.Resolve<Game_ui_manager>();
-        dialogueHandler.DisplayObjectiveText(objectiveHeading);
-        overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
-        dialogueOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
+        _dialogueHandler.DisplayObjectiveText(objectiveHeading);
+        _overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+        _dialogueOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
         _gameUIManager.SetMenuAccessibility(false);
     }
    
@@ -19,10 +22,10 @@ public class GiftPokemonObjective : InteractionObjective
     {
         if (optionChosen>0)
         {
-            dialogueHandler.EndDialogue(); 
+            _dialogueHandler.EndDialogue(); 
             return;
         }
-        if (interactionTypeForObjective != interaction.overworldInteraction) return;
+        if (interaction.overworldInteraction != OverworldInteractionType.ReceiveGiftPokemon) return;
 
         var pokeballProps = objectiveObjectHandler.propGroupsForObjective[0];
         
@@ -47,7 +50,7 @@ public class GiftPokemonObjective : InteractionObjective
    
     protected override void OnObjectiveCleared()
     {
-        dialogueOptionsHandler.OnInteractionOptionChosen -= CheckInteractionOption;
-        overworldStateHandler.ClearAndLoadNextObjective();
+        _dialogueOptionsHandler.OnInteractionOptionChosen -= CheckInteractionOption;
+        _overworldStateHandler.ClearAndLoadNextObjective();
     }
 }

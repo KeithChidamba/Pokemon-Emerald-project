@@ -16,7 +16,7 @@ public enum SaveDataDirectory
 {
     Items, HeldItems, StorageItems, StoragePokemon, PartyPokemon, Player,
     PCStorage, Overworld, StoryObjectives, BerryTrees,
-    GameSettings,OverworldItemPickups
+    GameSettings,OverworldItemPickupRegistry
 }
 public class SaveDataHandler : MonoBehaviour,IInjectable
 {
@@ -82,7 +82,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         { SaveDataDirectory.StoryObjectives, "/Overworld/Story_Objectives" },
         { SaveDataDirectory.GameSettings,"/GameSettings"},
         { SaveDataDirectory.BerryTrees, "/Overworld/Berry_Trees" },
-        { SaveDataDirectory.OverworldItemPickups,"/Overworld/Item_Pickups"}
+        { SaveDataDirectory.OverworldItemPickupRegistry,"/Overworld/Item_Pickups"}
     };
 
     public static string GetDirectory(AssetDirectory directoryKey)
@@ -277,10 +277,11 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                 _overworldStateHandler.currentStoryObjectives.Add(objectiveData);
             }
         }
-        var itemPickups = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.OverworldItemPickups));
-        foreach (var jsonFilePath in itemPickups)
+        
+        var registryJson = GetJsonFilesFromPath(_saveDataPath + GetSaveDirectory(SaveDataDirectory.OverworldItemPickupRegistry));
+        if(registryJson.Count > 0)
         {
-            var pickupData = LoadObjectFromJson<OverworldPickup>(jsonFilePath);
+            var pickupData = LoadObjectFromJson<OverworldPickupRegistry>(registryJson[0]);
             _overworldStateHandler.LoadItemPickups(pickupData);
         }
         yield return new WaitForSeconds(0.25f);
@@ -623,8 +624,8 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     {
         SaveDataAsJson(config,fileName,SaveDataDirectory.GameSettings);
     }
-    public void SaveItemPickupDataAsJson(OverworldPickup pickup, string fileName)
+    public void SaveItemPickupDataAsJson(OverworldPickupRegistry registry, string fileName)
     {
-        SaveDataAsJson(pickup,fileName,SaveDataDirectory.OverworldItemPickups);
+        SaveDataAsJson(registry,fileName,SaveDataDirectory.OverworldItemPickupRegistry);
     }
 }
