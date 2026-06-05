@@ -29,8 +29,8 @@ public class LoopingUiAnimation : MonoBehaviour
     {
         _rectTransform = GetComponent<RectTransform>();
         
-        _startPos = _rectTransform.anchoredPosition;
-        _targetPos = _startPos + GetDirectionVector() * moveDistance;
+        SetStartPosition(_rectTransform.anchoredPosition);
+        
         if (!setDirection) return;
         switch (moveDirection)
         {
@@ -41,6 +41,12 @@ public class LoopingUiAnimation : MonoBehaviour
         }
     }
 
+    public void SetStartPosition(Vector2 newPosition)
+    {
+        _rectTransform.anchoredPosition = newPosition;
+        _startPos = newPosition;
+        _targetPos = _startPos + GetDirectionVector() * moveDistance;
+    }
     public void ChangeActiveState(bool isActive)
     {
         _viewingUI = isActive;

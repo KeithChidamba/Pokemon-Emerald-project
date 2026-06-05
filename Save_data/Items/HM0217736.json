@@ -1,0 +1,32 @@
+{
+    "itemID": "HM0217736",
+    "itemName": "HM02",
+    "itemType": 16,
+    "itemEffect": "",
+    "itemDescription": "Teaches a valid pokemon, fly",
+    "price": 0,
+    "quantity": 1,
+    "itemImage": {
+        "instanceID": 26486
+    },
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "canBeSold": false,
+    "isMultiModular": false,
+    "hasModules": true,
+    "additionalInfoModule": {
+        "instanceID": 26966
+    },
+    "additionalInfoModules": [
+        {
+            "instanceID": 26966
+        }
+    ],
+    "infoModuleAssetNames": [
+        "HM02"
+    ],
+    "imageDirectory": "flying hm"
+}

@@ -1,0 +1,39 @@
+{
+    "overworldPickups": [
+        {
+            "pickup": {
+                "instanceID": 27410
+            },
+            "hasBeenPicked": false,
+            "pickupId": 10231
+        },
+        {
+            "pickup": {
+                "instanceID": 25700
+            },
+            "hasBeenPicked": false,
+            "pickupId": 38155
+        },
+        {
+            "pickup": {
+                "instanceID": 26198
+            },
+            "hasBeenPicked": false,
+            "pickupId": 25699
+        },
+        {
+            "pickup": {
+                "instanceID": 25492
+            },
+            "hasBeenPicked": false,
+            "pickupId": 47180
+        },
+        {
+            "pickup": {
+                "instanceID": 25934
+            },
+            "hasBeenPicked": false,
+            "pickupId": 47535
+        }
+    ]
+}

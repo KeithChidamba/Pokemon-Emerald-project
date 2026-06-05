@@ -6,7 +6,7 @@ public enum InteractionOptions
 {
     None,Battle,
     Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,
-    ReceiveGiftPokemon,ViewControls,
+    ReceiveGiftPokemon,ViewControls,Custom
 }
 public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
 {
@@ -117,8 +117,11 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     public void CompleteInteraction(Interaction interaction,int optionIndex)
     {
         OnInteractionOptionChosen?.Invoke(interaction,optionIndex);
-        
         var interactionOption = interaction.interactionOptions[optionIndex];
+        if (interactionOption == InteractionOptions.Custom)
+        {
+            return;
+        }
         if (interactionOption == InteractionOptions.None)
         {
             _dialogueHandler.EndDialogue(); 

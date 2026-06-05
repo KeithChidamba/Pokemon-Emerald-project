@@ -60,11 +60,12 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
         mobileControlsUI.SetActive(canDisplay);
     }
 
-    private bool CanUseQuickAction()
+    private bool CanUseQuickAction(ControlEvent e)
     {
-        if(!_gameUIManager.usingUI && !_dialogueHandler.displaying && _gameStarted)
+        if(!_gameUIManager.usingUI && !_dialogueHandler.displaying)
         {
-            return _inputStateHandler.currentState.stateName == InputStateName.Empty;
+            if(_gameStarted && e != ControlEvent.OpenSettings)//settings is the only exception
+                return _inputStateHandler.currentState.stateName == InputStateName.Empty;
         }
         return false;
     }
@@ -72,14 +73,14 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     {
         if (InputPressed(ControlEvent.OpenSettings))
         {
-            if (CanUseQuickAction())
+            if (CanUseQuickAction(ControlEvent.OpenSettings))
             {
                 _gameUIManager.ViewGameSettings();
             }
         }
         if (InputPressed(ControlEvent.Save))
         {
-            if (CanUseQuickAction())
+            if (CanUseQuickAction(ControlEvent.Save))
             {
                 _gameUIManager.SaveGame();
             }

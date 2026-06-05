@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.Mathematics;
 
 public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage,CustomOptions}
 public class Dialogue_handler : MonoBehaviour,IInjectable
@@ -155,11 +156,11 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         
         canExitDialogue = false;
         var newInteraction = NewInteraction(info,DialogType.CustomOptions,result);
-        for (var i=0;i<optionsText.Length;i++)
+        foreach (string text in optionsText) 
         {
-            newInteraction.interactionOptions.Add(InteractionOptions.None);
+            newInteraction.interactionOptions.Add(InteractionOptions.Custom);
+            newInteraction.optionsUiText.Add(text);
         }
-        foreach (string txt in optionsText) newInteraction.optionsUiText.Add(txt);
         
         HandleInteraction(newInteraction);
         return;
@@ -171,6 +172,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         }
         void InvokeSelectedOption(Interaction interaction,int optionIndex)
         {
+            DeletePreviousOptions();
             optionEvents[optionIndex]?.Invoke();
             _dialogueOptionsHandler.OnInteractionOptionChosen -= InvokeSelectedOption;
         }
@@ -235,10 +237,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     }
     public void EndDialogue()
     {
-        if (_dialogueOptionsManager.currentOptions.Count > 0)
-        {
-            DeletePreviousOptions();
-        }
+        DeletePreviousOptions();
         _interactionHandler.AllowInteraction();
         canExitDialogue = true;
         endOfDialoguePointer.ChangeActiveState(false);
@@ -268,12 +267,6 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         currentInteractable = interactable;
         StartInteraction(interactable.interaction);
     }
-    void ResetText()
-    {
-        dialougeText.text = string.Empty;
-        dialougeText.ForceMeshUpdate();
-        dialougeText.maxVisibleCharacters = 0;
-    }
 
     public void DisplayObjectiveText(string message)
     {
@@ -284,6 +277,12 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     public void RemoveObjectiveText()
     {
         objectiveDialogueBox.SetActive(false);
+    }
+    void ResetText()
+    {
+         dialougeText.text = string.Empty;
+         dialougeText.ForceMeshUpdate();
+         dialougeText.maxVisibleCharacters = 0;
     }
     private IEnumerator TypeText(Interaction currentInteraction,bool displayPointer=true)
     {
@@ -326,9 +325,29 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
                 dialougeText.maxVisibleCharacters = i + 1;
                 yield return new WaitForSecondsRealtime(typingSpeed);
             }
+            int visibleChar = lastChar;
 
+            while (visibleChar >= firstChar && !dialougeText.textInfo.characterInfo[visibleChar].isVisible)
+            {
+                visibleChar--;
+            }
+            yield return null;
+
+            dialougeText.ForceMeshUpdate();
+
+            var charInfo = dialougeText.textInfo.characterInfo[lastChar];
+            
             if (displayPointer)
             {
+                var worldPos = dialougeText.rectTransform.TransformPoint(charInfo.bottomRight);
+                //fine-tuning visual off-sets
+                worldPos = new Vector2(worldPos.x+20f, worldPos.y + math.abs(worldPos.y*.2f));
+                
+                var parentRect = (RectTransform)dialougeText.rectTransform.parent;
+
+                var parentSpacePos = parentRect.InverseTransformPoint(worldPos);
+                
+                endOfDialoguePointer.SetStartPosition(parentSpacePos);
                 endOfDialoguePointer.gameObject.SetActive(true);
                 endOfDialoguePointer.ChangeActiveState(true);
             }

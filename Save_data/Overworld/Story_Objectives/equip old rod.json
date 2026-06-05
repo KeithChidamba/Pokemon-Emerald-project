@@ -1,0 +1,11 @@
+{
+    "mainAssetName": "Equip Rod",
+    "objectiveHeading": "equip old rod",
+    "hasProgression": false,
+    "indexInList": 13,
+    "objectiveType": 3,
+    "itemForObjective": {
+        "instanceID": 27686
+    },
+    "itemObjectiveType": 0
+}
