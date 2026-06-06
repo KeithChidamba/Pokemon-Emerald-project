@@ -6,6 +6,6 @@
     "objectiveType": 10,
     "requiresPickupItems": true,
     "itemToPickup": {
-        "instanceID": 25934
+        "instanceID": 0
     }
 }

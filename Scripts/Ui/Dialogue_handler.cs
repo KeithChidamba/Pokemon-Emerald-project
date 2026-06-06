@@ -150,9 +150,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     }
     public void DisplayCustomOptions(string info, string[]optionsText, Action[] optionEvents,string result="")
     {
-        _inputStateHandler.AddDialoguePlaceHolderState();
         _dialogueOptionsHandler.OnInteractionOptionChosen += InvokeSelectedOption;
-        OnOptionsDisplayed += RemovePlaceholder;
         
         canExitDialogue = false;
         var newInteraction = NewInteraction(info,DialogType.CustomOptions,result);
@@ -165,11 +163,6 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         HandleInteraction(newInteraction);
         return;
         
-        void RemovePlaceholder(Overworld_interactable interactable)
-        {
-            OnOptionsDisplayed -= RemovePlaceholder;
-            _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder);
-        }
         void InvokeSelectedOption(Interaction interaction,int optionIndex)
         {
             DeletePreviousOptions();
@@ -216,7 +209,6 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         messagesLoading = true;
         while (pendingMessages.Count > 0)
         {
-            _inputStateHandler.AddDialoguePlaceHolderState();
             var interaction = pendingMessages[0];
             var currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
             SetBattleTextBox(currentInteraction);
@@ -286,6 +278,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     }
     private IEnumerator TypeText(Interaction currentInteraction,bool displayPointer=true)
     {
+        _inputStateHandler.AddDialoguePlaceHolderState();
         ResetText();
         dialogueFinished = false;
         displaying = true; 
@@ -353,7 +346,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             }
            
             // Wait for input before next page
-            if(totalPages>1) yield return new WaitUntil(() =>InputSourceHandler.InputPressed(ControlEvent.Confirm));
+            if(totalPages > 1 && page < totalPages) yield return new WaitUntil(() =>InputSourceHandler.InputPressed(ControlEvent.Confirm));
         }
         dialogueFinished = true;
         CompleteDialogueInteraction(currentInteraction);
@@ -402,7 +395,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     }
     private void CompleteDialogueInteraction(Interaction currentInteraction)
     {
-        if (currentInteraction == null) return;
+        _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
         if (currentInteraction.dialogueType == DialogType.Options 
             || currentInteraction.dialogueType == DialogType.CustomOptions)
         {

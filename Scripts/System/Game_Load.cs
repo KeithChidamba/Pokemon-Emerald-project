@@ -34,6 +34,7 @@ public class Game_Load : MonoBehaviour,IInjectable
     private Bag _playerBagHandler;
     private InputStateHandler _inputStateHandler;
     private Game_ui_manager _gameUIHandler;
+    private GameSettingsHandler _gameSettingsHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -45,19 +46,20 @@ public class Game_Load : MonoBehaviour,IInjectable
         _overworldActions = container.Resolve<overworld_actions>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
         gameObject.SetActive(true);
     }
 
     public void OnInject()
     {
-        
+
     }
 
     public void ShowMenuUI(bool dataExists)
     {
+        _gameSettingsHandler.LoadDefaultState();
         menuUiParent.SetActive(true);
         newGameButton.gameObject.SetActive(true);
-        LoadedFromSave = true;
         _saveDataExists = dataExists;
         var menuSelectables = new List<SelectableUI>();
         if (Application.platform == RuntimePlatform.WebGLPlayer)
@@ -73,7 +75,7 @@ public class Game_Load : MonoBehaviour,IInjectable
             loadButton.SetActive(_saveDataExists);
             if(_saveDataExists)
             {
-                menuSelectables.Add(new(loadButton, StartGame, true));
+                menuSelectables.Add(new(loadButton, ()=>StartGame(), true));
             }
         }
         menuSelectables.Add(new(newGameButton, NewGame, true));
@@ -81,11 +83,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         _inputStateHandler.ChangeInputState(new (InputStateName.StartMenu,
             InputStateGroup.None,false,
             menuUiParent, InputDirection.Vertical, menuSelectables,
-            menuSelector,true,true,canExit:false));
-    }
-    public void PreventGameLoad()
-    {
-        ShowMenuUI(false);
+            menuSelector,true,true,canExit:false),true);
     }
 
     private void CreateNewPlayer(string playerName)
@@ -105,8 +103,7 @@ public class Game_Load : MonoBehaviour,IInjectable
         var gardenLocation = _areaHandler.overworldAreas.First(a => a.data.areaName == AreaName.PlayerGarden);
         data.playerPosition = gardenLocation.tileLocation;
         playerData = data;
-        LoadedFromSave = false;
-        StartGame();
+        StartGame(false);
     }
     private void NewGame()
     {
@@ -175,8 +172,9 @@ public class Game_Load : MonoBehaviour,IInjectable
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
         _areaHandler.LoadAreaFromSave(playerData.location);
     }
-    public void StartGame()
+    public void StartGame(bool loadFromSave=true)
     {
+        LoadedFromSave = loadFromSave;
         StartCoroutine(GameStartLoading());
     }
 }

@@ -49,7 +49,6 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<Battle_handler>();
         _inputSourceHandler = container.Resolve<InputSourceHandler>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
-        
         gameObject.SetActive(true);
     }
 
@@ -59,27 +58,22 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         _settingsMethods.Add(GameSettingName.BattleStyle,_battleHandler.SetBattleStyle);
         viewGameControlsToggle.isOn = false;
         viewGameControlsToggle.onValueChanged.AddListener(OnToggleChanged);
-        _gameLoadingHandler.OnGameStarted += DetermineGameSettingsSource;
+        _gameLoadingHandler.OnGameStarted += DetermineSettings;
     }
-    
-    private void GetSavedSettings()
+    public void LoadDefaultState()
     {
-        var savedSettings = _saveDataHandler.LoadGameSettingsData();
-        settingConfigs.Clear();
-        settingConfigs.AddRange(savedSettings);
-    }
+        LoadDefaultSettings();
 
-    private void LoadDefaultSettings()
-    {
-        settingConfigs.Clear();
-        foreach (var setting in gameSettings)
+        settingConfigs.RemoveAll(setting => setting.settingName == GameSettingName.ViewControls);
+        
+        foreach (var config in settingConfigs)
         {
-            //set defaults
-            settingConfigs.Add(new(0,setting.settingOptions.Count-1,setting.gameSettingName));
+            currentSetting = gameSettings.First(s=>s.gameSettingName == config.settingName);
+            SetOptionTextColor(config.currentIndex);
         }
-        settingConfigs.Add(new SettingsConfig(0, 1, GameSettingName.ViewControls));
+        SetCurrentSetting(0);
     }
-    private void DetermineGameSettingsSource()
+    private void DetermineSettings()
     {
         if (_gameLoadingHandler.LoadedFromSave)
         {
@@ -104,7 +98,23 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         }
         SetCurrentSetting(0);
     }
-    
+    private void GetSavedSettings()
+    {
+        var savedSettings = _saveDataHandler.LoadGameSettingsData();
+        settingConfigs.Clear();
+        settingConfigs.AddRange(savedSettings);
+    }
+
+    private void LoadDefaultSettings()
+    {
+        settingConfigs.Clear();
+        foreach (var setting in gameSettings)
+        {
+            //set defaults
+            settingConfigs.Add(new(0,setting.settingOptions.Count-1,setting.gameSettingName));
+        }
+        settingConfigs.Add(new SettingsConfig(0, 1, GameSettingName.ViewControls));
+    }
     private void OnToggleChanged(bool isOn)
     {
         _inputSourceHandler.DisplayMobileControls(isOn);

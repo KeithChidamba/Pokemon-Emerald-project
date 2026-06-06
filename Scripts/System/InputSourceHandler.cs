@@ -64,8 +64,11 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     {
         if(!_gameUIManager.usingUI && !_dialogueHandler.displaying)
         {
-            if(_gameStarted && e != ControlEvent.OpenSettings)//settings is the only exception
-                return _inputStateHandler.currentState.stateName == InputStateName.Empty;
+            if(e == ControlEvent.OpenSettings)//settings is the only exception
+            {
+                return true;
+            }
+            return _gameStarted && _inputStateHandler.currentState.stateName == InputStateName.Empty;
         }
         return false;
     }

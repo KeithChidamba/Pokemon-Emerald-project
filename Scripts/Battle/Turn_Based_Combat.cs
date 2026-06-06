@@ -89,7 +89,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         }
         AddTurn(turn);
         if ((_battleHandler.isDoubleBattle && IsLastParticipant())
-            || (currentTurnIndex == _battleHandler.participantCount))
+            || currentTurnIndex == _battleHandler.participantCount)
         {
             BeginTurnExecution();
         }

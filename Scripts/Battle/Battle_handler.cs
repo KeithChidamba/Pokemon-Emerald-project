@@ -217,8 +217,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if (currentParticipant.currentCoolDown.isCoolingDown) return;
         _inputStateHandler.ResetRelevantUi(new[]
         {
-            InputStateName.PokemonBattleEnemySelection,
-            InputStateName.PlaceHolder,InputStateName.DialoguePlaceHolder
+            InputStateName.PokemonBattleEnemySelection, InputStateName.PlaceHolder
         });
     }
     private IEnumerator SetValidParticipants()
@@ -624,7 +623,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         var playerWhiteOut = false;
         yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         _inputStateHandler.OnStateChanged -= EnableBattleMessage;
-        _inputStateHandler.AddDialoguePlaceHolderState();
+        _inputStateHandler.AddPlaceHolderState();
         if (_battleTerminated)
         {
             _dialogueHandler.DisplayBattleInfo("the battle ended");
@@ -734,10 +733,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         battleInProgress = false;
         OnBattleEnd?.Invoke();
         _dialogueHandler.EndDialogue();
-        _inputStateHandler.ResetRelevantUi(new[]
-        {
-            InputStateName.PlaceHolder,InputStateName.DialoguePlaceHolder
-        });
+        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder,true);
         usedTurnForItem = false;
         usedTurnForSwap = false;
         

@@ -130,7 +130,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         if (numUIScreensOpen == 0)
         {
             usingUI = false;
-            _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.UI);
+            _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.UI,0.25f);
         }
     }
     private void ActivateMenuSelection()

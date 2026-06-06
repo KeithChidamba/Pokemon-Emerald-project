@@ -55,8 +55,8 @@ public class Player_movement : MonoBehaviour,IInjectable
         _overworldActions.OnItemUnequipped +=
             (item) => StopBikeUsage(item == Equipable.Bike);
         
-        _dialogueHandler.OnDialogueEnded += () => AllowPlayerMovement(MovementRestrictor.Dialogue,0.75f);
-        _overworldActions.OnActionComplete += () => AllowPlayerMovement(MovementRestrictor.OverworldAction,0.75f);
+        _dialogueHandler.OnDialogueEnded += () => AllowPlayerMovement(MovementRestrictor.Dialogue,0.35f);
+        _overworldActions.OnActionComplete += () => AllowPlayerMovement(MovementRestrictor.OverworldAction,0.35f);
     }
 
     private void SnapToPosition()
@@ -95,7 +95,7 @@ public class Player_movement : MonoBehaviour,IInjectable
         return directionConversions[currentDirectionIndex==0? 0 : currentDirectionIndex-1]; 
     }
 
-    public void AllowPlayerMovement(MovementRestrictor restrictor,float delay=1f)
+    public void AllowPlayerMovement(MovementRestrictor restrictor,float delay=0.65f)
     {
         if (!_movementRestrictors[restrictor]) return;
         

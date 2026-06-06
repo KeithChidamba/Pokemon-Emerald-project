@@ -129,13 +129,13 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
             CreateAllSaveDirectories();
-            LoadPlayerData(); 
+            _gameLoadingHandler.ShowMenuUI(ValidatePlayerData());
             LoadItemData();
             LoadPokemonData();
         }
         else
         {
-            _gameLoadingHandler.PreventGameLoad();
+            _gameLoadingHandler.ShowMenuUI(false);
         }
     }
 
@@ -209,13 +209,15 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     }
     private IEnumerator SyncFromIndexedDB()
     {
-        _dialogueHandler.DisplayDetails("Game Loaded");
+        _dialogueHandler.DisplayDetails("Save Loaded");
         OnUploadedDataReady?.Invoke();
-        LoadPlayerData(); 
-        LoadItemData();
-        LoadPokemonData();
-        yield return new WaitForSecondsRealtime(1f);
-        _gameLoadingHandler.StartGame();
+        if (ValidatePlayerData())
+        {
+            LoadItemData();
+            LoadPokemonData();
+            yield return new WaitForSecondsRealtime(1f);
+            _gameLoadingHandler.StartGame();
+        }
     }
     public List<SettingsConfig> LoadGameSettingsData()
     {
@@ -286,25 +288,18 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         }
         yield return new WaitForSeconds(0.25f);
     }
-    private void LoadPlayerData()
+    private bool ValidatePlayerData()
     {
         var playerPath = _saveDataPath + GetSaveDirectory(SaveDataDirectory.Player);
         var playerList = GetJsonFilesFromPath(playerPath);
-
+        
         if(playerList.Count==1)
         {
             _gameLoadingHandler.playerData = LoadObjectFromJson<PlayerData>(playerList[0]);
-            _gameLoadingHandler.ShowMenuUI(true);
+            return true;
         }
-        else if (playerList.Count > 1)
-        {
-            _dialogueHandler.DisplayDetails("Please ensure only one player's data is in the save_data folder!");
-            _gameLoadingHandler.PreventGameLoad();
-        }
-        else
-        {
-            _gameLoadingHandler.PreventGameLoad();
-        }
+        _dialogueHandler.DisplayDetails("Please ensure one player's data is in the save_data folder!");
+        return false;
     }
     private void LoadItemData()
     {
@@ -456,7 +451,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         Debug.LogError(errorMessage+exception);
         _dialogueHandler.DisplayDetails("Error occured while saving please restart the game!");
         EraseTemporarySaveData();
-        _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
+        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder,true);
     }
     
     public IEnumerator SaveAllData()
@@ -473,7 +468,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         }
         
         _inputStateHandler.ResetRelevantUi(InputStateName.PlayerMenu);
-        _inputStateHandler.AddDialoguePlaceHolderState();
+        _inputStateHandler.AddPlaceHolderState();
         _dialogueHandler.DisplayDetails("Saving...",false); 
         
         for (int i = 0; i < _pokemonPartyHandler.numMembers; i++)
@@ -591,7 +586,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         }
         _dialogueHandler.EndDialogue(1.5f);
         yield return new WaitForSecondsRealtime(1.4f);
-        _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
+        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder,true);
     }
 
     private void SaveDataAsJson<T>(T saveSataObject, string fileName,SaveDataDirectory saveDirectory)
