@@ -2,12 +2,12 @@
     "itemID": "Sandstorm58344",
     "itemName": "Sandstorm",
     "itemType": 16,
-    "itemEffect": "",
+    "itemEffectData": 0.0,
     "itemDescription": "Causes damage each turn.",
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 26284
+        "instanceID": 26282
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 27340
+        "instanceID": 27338
     },
     "additionalInfoModules": [
         {
-            "instanceID": 27340
+            "instanceID": 27338
         }
     ],
     "infoModuleAssetNames": [

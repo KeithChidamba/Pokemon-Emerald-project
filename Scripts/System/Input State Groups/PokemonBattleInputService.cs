@@ -35,7 +35,7 @@ public class PokemonBattleInputService : IInputGroup
         _battleHandler.ResetEnemyColor();
         ref InputState currentState = ref _inputStateHandler.currentState;
         currentState.currentSelectionIndex = 0;
-        _inputStateHandler.SetupDynamicBoxNavigation(currentState.maxSelectionIndex+1,4,2);
+        _inputStateHandler.SetupDynamicBoxNavigation(currentState.maxSelectableIndex+1,4,2);
         _inputStateHandler.OnSelectionIndexChanged += _battleHandler.SelectMove;
     }
 

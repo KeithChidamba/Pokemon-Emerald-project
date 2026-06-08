@@ -27,7 +27,7 @@ public class PokemartInputService: IInputGroup
         _inputStateHandler.OnInputDown += _pokeMartHandler.NavigateDown;
         if(_pokeMartHandler.numItemsForView==_pokeMartHandler.numItems)
         {//prevent selecting null item selectables
-            _inputStateHandler.currentState.maxSelectionIndex = _pokeMartHandler.numItems-1;
+            _inputStateHandler.currentState.maxSelectableIndex = _pokeMartHandler.numItems-1;
         }
         _inputStateHandler.currentState.selectableUis.ForEach(s=>s.eventForUi = SelectItemToBuy);
     }

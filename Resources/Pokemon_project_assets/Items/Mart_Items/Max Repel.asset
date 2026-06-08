@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Max Repel
   itemType: 18
-  itemEffect: 250
+  itemEffectData: 250
   itemDescription: Repels wild pokemon for 250 steps
   price: 700
   quantity: 1

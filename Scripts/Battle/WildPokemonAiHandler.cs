@@ -4,28 +4,28 @@ using UnityEngine;
 public class WildPokemonAiHandler : MonoBehaviour,IInjectable
 {
     public Battle_Participant participant;
-    public bool inBattle;
-    public bool ranAway;
+    [SerializeField]private bool inBattle;
     
-    private Dialogue_handler _dialogueHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Battle_handler _battleHandler;
-    private Game_Load _gameLoadingHandler;
+
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
-        _gameLoadingHandler = container.Resolve<Game_Load>();
         gameObject.SetActive(true);
     }
 
     public void OnInject()
     {
         _turnBasedCombatHandler.OnNewTurn += MakeBattleDecision;
+        _battleHandler.OnBattleEnd += ()=>inBattle = false;
     }
-    
+    public void SetBattleState()
+    {
+        inBattle = true;
+    }
     private void MakeBattleDecision()
     {
         if (!inBattle) return;
@@ -45,21 +45,12 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
         else
         {
             inBattle = false;
-            ranAway = true;
-            _battleHandler.EndBattle(false);
-            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+" ran away");
+            _battleHandler.EndBattle(BattleEndState.PokemonRanAway);
         }
     }
-    public IEnumerator EndWildBattle(bool wasCaught=false)
+    public IEnumerator EndWildBattle()
     {
-        participant.statData.ResetBattleState(participant.pokemon);
-        inBattle = false;
-        _turnBasedCombatHandler.faintEventDelay = false;
-        _battleHandler.EndBattle(true);
-        if(!wasCaught)
-        {
-           _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName + " defeated " + participant.pokemon.pokemonName);
-        }
+        _battleHandler.EndBattle(BattleEndState.PlayerWon);
         yield return null;
     }
     

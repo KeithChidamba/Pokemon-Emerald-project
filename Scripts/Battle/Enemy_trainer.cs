@@ -100,7 +100,7 @@ public class Enemy_trainer : BattleParticipantModule
         if (numAlive.Count == 0)
         {
             _battleHandler.lastOpponent = participant.pokemon;
-            _battleHandler.EndBattle(true);
+            _battleHandler.EndBattle(BattleEndState.PlayerWon);
         }
         else
         {

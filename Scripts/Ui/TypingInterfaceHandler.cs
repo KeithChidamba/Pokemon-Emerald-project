@@ -238,6 +238,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    
    public void InitializeState(int inputLength,TypingInterfaceGraphicData graphicData)
    {
+      _dialogueHandler.EndDialogue();
       combinedInput = string.Empty;
       currentInputIndex = 0;
       MaxCharacterLength = inputLength;

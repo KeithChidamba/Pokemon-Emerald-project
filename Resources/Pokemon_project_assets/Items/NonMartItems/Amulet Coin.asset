@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Amulet Coin
   itemType: 14
-  itemEffect: 2
+  itemEffectData: 2
   itemDescription: Gives the player some money after the battle if the pokemon participates
   price: 0
   quantity: 1

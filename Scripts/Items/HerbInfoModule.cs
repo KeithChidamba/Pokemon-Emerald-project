@@ -14,11 +14,11 @@ public class HerbInfoModule : AdditionalInfoModule
         switch (herbType)
         {
             case Herb.EnergyPowder:
-                parentItem.itemEffect = "50";
+                parentItem.itemEffectData = 50;
                 usageIndex = 0;
                 break;
             case Herb.EnergyRoot:
-                parentItem.itemEffect = "200";
+                parentItem.itemEffectData = 200;
                 usageIndex = 0;
                 break;
             case Herb.HealPowder:

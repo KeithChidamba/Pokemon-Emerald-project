@@ -40,7 +40,6 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private Battle_handler _battleHandler;
     private InputSourceHandler _inputSourceHandler;
-    private Game_Load _gameLoadingHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -48,7 +47,6 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
         _inputSourceHandler = container.Resolve<InputSourceHandler>();
-        _gameLoadingHandler = container.Resolve<Game_Load>();
         gameObject.SetActive(true);
     }
 
@@ -58,13 +56,15 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         _settingsMethods.Add(GameSettingName.BattleStyle,_battleHandler.SetBattleStyle);
         viewGameControlsToggle.isOn = false;
         viewGameControlsToggle.onValueChanged.AddListener(OnToggleChanged);
-        _gameLoadingHandler.OnGameStarted += DetermineSettings;
     }
     public void LoadDefaultState()
     {
-        LoadDefaultSettings();
-
-        settingConfigs.RemoveAll(setting => setting.settingName == GameSettingName.ViewControls);
+        settingConfigs.Clear();
+        foreach (var setting in gameSettings)
+        {
+            //set defaults
+            settingConfigs.Add(new(0,setting.settingOptions.Count-1,setting.gameSettingName));
+        }
         
         foreach (var config in settingConfigs)
         {
@@ -73,23 +73,18 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         }
         SetCurrentSetting(0);
     }
-    private void DetermineSettings()
+    public void ConfigureSavedSettings()
     {
-        if (_gameLoadingHandler.LoadedFromSave)
-        {
-            GetSavedSettings();
-        }
-        else
-        {
-            LoadDefaultSettings();
-        }
+        GetSavedSettings();
         
         var controlsConfigIndex =
             settingConfigs.FindIndex(setting => setting.settingName == GameSettingName.ViewControls);
         
         viewGameControlsToggle.isOn = settingConfigs[controlsConfigIndex].currentIndex > 0;
         OnToggleChanged(viewGameControlsToggle.isOn);
+        
         settingConfigs.RemoveAt(controlsConfigIndex);
+        
         foreach (var config in settingConfigs)
         {
             currentSetting = gameSettings.First(s=>s.gameSettingName == config.settingName);
@@ -103,17 +98,6 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         var savedSettings = _saveDataHandler.LoadGameSettingsData();
         settingConfigs.Clear();
         settingConfigs.AddRange(savedSettings);
-    }
-
-    private void LoadDefaultSettings()
-    {
-        settingConfigs.Clear();
-        foreach (var setting in gameSettings)
-        {
-            //set defaults
-            settingConfigs.Add(new(0,setting.settingOptions.Count-1,setting.gameSettingName));
-        }
-        settingConfigs.Add(new SettingsConfig(0, 1, GameSettingName.ViewControls));
     }
     private void OnToggleChanged(bool isOn)
     {

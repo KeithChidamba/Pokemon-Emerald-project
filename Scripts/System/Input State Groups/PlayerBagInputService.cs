@@ -40,7 +40,7 @@ public class PlayerBagInputService : IInputGroup
         if(_playerBagHandler.numItems==_playerBagHandler.numItemsForView)
         {
             //prevent selecting null item selectables
-            currentState.maxSelectionIndex = _playerBagHandler.numItems-1;
+            currentState.maxSelectableIndex = _playerBagHandler.numItems-1;
             _inputStateHandler.UpdateSelectorUi();
         }
         currentState.displayingSelector = true;

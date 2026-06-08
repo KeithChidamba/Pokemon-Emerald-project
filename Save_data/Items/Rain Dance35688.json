@@ -2,12 +2,12 @@
     "itemID": "Rain Dance35688",
     "itemName": "Rain Dance",
     "itemType": 16,
-    "itemEffect": "",
+    "itemEffectData": 0.0,
     "itemDescription": "Creates rain during battle",
     "price": 0,
     "quantity": 2,
     "itemImage": {
-        "instanceID": 25814
+        "instanceID": 25812
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 26076
+        "instanceID": 26074
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26076
+            "instanceID": 26074
         }
     ],
     "infoModuleAssetNames": [

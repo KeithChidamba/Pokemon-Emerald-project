@@ -389,7 +389,7 @@ public class Pokemon : ScriptableObject
         {
             if (heldItem.itemType == ItemType.GainExp)
             {
-                expItemBonus = float.Parse(heldItem.itemEffect);
+                expItemBonus = heldItem.itemEffectData;
             }
         }
         

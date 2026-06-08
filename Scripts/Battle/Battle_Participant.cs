@@ -221,6 +221,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
             if (!_battleHandler.isTrainerBattle)
             {
                 yield return _wildPokemonHandler.EndWildBattle();
+                _turnBasedCombatHandler.faintEventDelay = false;
             }
             else
             {
@@ -239,9 +240,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         var alivePokemon = _pokemonPartyHandler.GetLivingPokemon();
         if (alivePokemon.Count==0)
         {
-            _battleHandler.EndBattle(false);
-            if(!_battleHandler.isTrainerBattle)
-                _wildPokemonHandler.inBattle = false;
+            _battleHandler.EndBattle(BattleEndState.PlayerLost);
         }
         else
         {//select next pokemon to switch in

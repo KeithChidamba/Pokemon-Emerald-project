@@ -2,12 +2,12 @@
     "itemID": "Hyper Beam46404",
     "itemName": "Hyper Beam",
     "itemType": 16,
-    "itemEffect": "",
+    "itemEffectData": 0.0,
     "itemDescription": "Powerful attack that requires recharge.",
     "price": 0,
     "quantity": 6,
     "itemImage": {
-        "instanceID": 25954
+        "instanceID": 25952
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 28028
+        "instanceID": 28026
     },
     "additionalInfoModules": [
         {
-            "instanceID": 28028
+            "instanceID": 28026
         }
     ],
     "infoModuleAssetNames": [

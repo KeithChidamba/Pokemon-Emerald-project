@@ -196,7 +196,7 @@ public static class InstanceFactory
         newItem.price = item.price;
         newItem.itemImage = item.itemImage;
         newItem.quantity = item.quantity;
-        newItem.itemEffect = item.itemEffect;
+        newItem.itemEffectData = item.itemEffectData;
         newItem.forPartyUse = item.forPartyUse;
         newItem.canBeUsedInOverworld = item.canBeUsedInOverworld;
         newItem.canBeUsedInBattle = item.canBeUsedInBattle;

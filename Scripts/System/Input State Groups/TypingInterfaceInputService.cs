@@ -64,7 +64,7 @@ public class TypingInterfaceInputService:IInputGroup
             void SelectLastOption(InputState newState)
             {
                 _inputStateHandler.OnStateLoaded -= SelectLastOption;
-                _inputStateHandler.SetSelectionIndex(_inputStateHandler.currentState.maxSelectionIndex);
+                _inputStateHandler.SetSelectionIndex(_inputStateHandler.currentState.maxSelectableIndex);
                 _inputStateHandler.UpdateSelectorUi();
             }
         }

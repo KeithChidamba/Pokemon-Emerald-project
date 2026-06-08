@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Repel
   itemType: 18
-  itemEffect: 100
+  itemEffectData: 100
   itemDescription: Repels wild pokemon for 100 steps
   price: 350
   quantity: 1

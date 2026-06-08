@@ -182,12 +182,12 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     public void ChangeSelectionIndex(int change)
     {
         currentState.currentSelectionIndex =
-            Mathf.Clamp(currentState.currentSelectionIndex+change, 0, currentState.maxSelectionIndex);
+            Mathf.Clamp(currentState.currentSelectionIndex+change, 0, currentState.maxSelectableIndex);
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
     }
     public void SetSelectionIndex(int newIndex)
     {
-        currentState.currentSelectionIndex = Mathf.Clamp(newIndex, 0, currentState.maxSelectionIndex);
+        currentState.currentSelectionIndex = Mathf.Clamp(newIndex, 0, currentState.maxSelectableIndex);
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
     }
     public void ChangeInputState(InputState newState,bool forceChange = false)
@@ -204,7 +204,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         SetDirectionals();
         if (currentState.isSelecting)
         {
-            currentState.maxSelectionIndex = currentState.selectableUis.Count>0? currentState.selectableUis.Count - 1 : 0;
+            currentState.maxSelectableIndex = currentState.selectableUis.Count>0? currentState.selectableUis.Count - 1 : 0;
         }
         SetupInputServices();
         if (currentState.displayingSelector)
@@ -305,7 +305,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         int newIndex = GetCurrentFullBoxPosition();
 
         currentState.currentSelectionIndex =
-            Mathf.Clamp(newIndex, 0, currentState.maxSelectionIndex);
+            Mathf.Clamp(newIndex, 0, currentState.maxSelectableIndex);
 
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
         UpdateSelectorUi();
@@ -341,8 +341,8 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         
         boxCoordinates[coordinateIndex] = Mathf.Clamp(boxCoordinates[coordinateIndex] + change, 0, maxIndexForCoordinate);
         
-        currentState.currentSelectionIndex = currentNumBoxElements > currentState.maxSelectionIndex?
-            Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentState.maxSelectionIndex) 
+        currentState.currentSelectionIndex = currentNumBoxElements > currentState.maxSelectableIndex?
+            Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentState.maxSelectableIndex) 
             :Mathf.Clamp(GetCurrentBoxPositionDynamic(),0,currentNumBoxElements-1);
         
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
@@ -368,10 +368,15 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         ChangeInputState(new (InputStateName.PlaceHolder,InputStateGroup.None, canExit: false
             , isParent:true,mainView: emptyPlaceHolder));
     }
+    public void AddBattleDialoguePlaceHolderState()
+    {
+        ChangeInputState(new (InputStateName.PlaceHolder,InputStateGroup.None, canExit: false
+            , isParent:true,mainView: emptyPlaceHolder),true);
+    }
     public void AddDialoguePlaceHolderState()
     {
         ChangeInputState(new (InputStateName.DialoguePlaceHolder,InputStateGroup.None, canExit: false
-            , isParent:true,mainView: emptyPlaceHolder));
+            , isParent:false,mainView: emptyPlaceHolder));
     }
     public void ResetGroupUi(InputStateGroup group)
     {

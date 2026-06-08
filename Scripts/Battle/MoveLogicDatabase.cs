@@ -14,7 +14,6 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private Dialogue_handler _dialogueHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Pokemon_party _pokemonPartyHandler;
-    private WildPokemonAiHandler _wildPokemonHandler;
     private BattleVisuals _battleVisualsHandler;
     private Battle_handler _battleHandler;
     private Move_handler _moveUsageHandler;
@@ -29,7 +28,6 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _battleHandler = container.Resolve<Battle_handler>();
-        _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _moveUsageHandler = container.Resolve<Move_handler>();
@@ -349,8 +347,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
         if (!_battleHandler.isTrainerBattle)
         {
-            _wildPokemonHandler.inBattle = false;
-            _battleHandler.EndBattle(false,true);
+            _battleHandler.EndBattle(BattleEndState.BattleTerminated);
             _moveUsageHandler.doingMove = false;
             yield break;
         }

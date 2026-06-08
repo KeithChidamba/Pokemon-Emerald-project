@@ -2,12 +2,12 @@
     "itemID": "Flamethrower25557",
     "itemName": "Flamethrower",
     "itemType": 16,
-    "itemEffect": "",
+    "itemEffectData": 0.0,
     "itemDescription": "Scorches with intense flames.",
     "price": 0,
     "quantity": 3,
     "itemImage": {
-        "instanceID": 26130
+        "instanceID": 26128
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 26410
+        "instanceID": 26408
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26410
+            "instanceID": 26408
         }
     ],
     "infoModuleAssetNames": [

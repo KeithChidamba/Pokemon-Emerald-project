@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ public class Item : ScriptableObject
     [FormerlySerializedAs("Item_ID")] public string itemID = "";
     [FormerlySerializedAs("Item_name")] public string itemName = "";
     public ItemType itemType;
-    [FormerlySerializedAs("Item_effect")] public string itemEffect = "";
+    public float itemEffectData;
     [FormerlySerializedAs("Item_desc")] public string itemDescription = "";
     public int price = 0;
     public int quantity = 0;
@@ -36,7 +37,6 @@ public class Item : ScriptableObject
         }
         return additionalInfoModule as T;
     }
-
     public void SaveModuleNames()
     {
         if(hasModules)

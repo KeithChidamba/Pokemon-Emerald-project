@@ -2,12 +2,12 @@
     "itemID": "Bike40097",
     "itemName": "Bike",
     "itemType": 0,
-    "itemEffect": "0",
+    "itemEffectData": 0.0,
     "itemDescription": "A fast bicycle that realiable",
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 26274
+        "instanceID": 26272
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 25752
+        "instanceID": 25750
     },
     "additionalInfoModules": [
         {
-            "instanceID": 25752
+            "instanceID": 25750
         }
     ],
     "infoModuleAssetNames": [

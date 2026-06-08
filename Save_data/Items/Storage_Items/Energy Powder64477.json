@@ -2,12 +2,12 @@
     "itemID": "Energy Powder64477",
     "itemName": "Energy Powder",
     "itemType": 5,
-    "itemEffect": "",
+    "itemEffectData": 0.0,
     "itemDescription": "A bitter herb that restores 50 Hp",
     "price": 18,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 27088
+        "instanceID": 27086
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 26652
+        "instanceID": 26650
     },
     "additionalInfoModules": [
         {
-            "instanceID": 26652
+            "instanceID": 26650
         }
     ],
     "infoModuleAssetNames": [

@@ -2,12 +2,12 @@
     "itemID": "Great Ball30699",
     "itemName": "Great Ball",
     "itemType": 10,
-    "itemEffect": "1,5",
+    "itemEffectData": 0.0,
     "itemDescription": "50% higher chance to catch compared to pokeball",
     "price": 30,
     "quantity": 3,
     "itemImage": {
-        "instanceID": 26150
+        "instanceID": 26148
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": false,

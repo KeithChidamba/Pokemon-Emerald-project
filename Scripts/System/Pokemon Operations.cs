@@ -426,7 +426,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         var isCaught = false;
         var wildPokemon = _wildPokemonHandler.participant.pokemon;
         yield return StartCoroutine(_battleVisuals.DisplayPokemonThrow());
-        var ballRate = float.Parse(pokeball.itemEffect);
+        var ballRate = pokeball.itemEffectData;
         var bracket1 = (3 * wildPokemon.maxHp - 2 * wildPokemon.hp) / (3 * wildPokemon.maxHp);
         var catchValue = math.trunc(bracket1 * wildPokemon.catchRate * ballRate * 
                                       BattleOperations.GetCatchRateBonusFromStatus(wildPokemon.statusEffect));
@@ -472,7 +472,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             wildPokemon.pokeballName = pokeball.itemName;
             _playerParty.AddMember(wildPokemon,pokeball.itemName);
             yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
-            yield return _wildPokemonHandler.EndWildBattle(true);
+            yield return _wildPokemonHandler.EndWildBattle();
 
         }else
         {

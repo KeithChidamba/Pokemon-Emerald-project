@@ -212,7 +212,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             var interaction = pendingMessages[0];
             var currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo, "");
             SetBattleTextBox(currentInteraction);
-            
+            _inputStateHandler.AddBattleDialoguePlaceHolderState();
             _typingRoutine = StartCoroutine(TypeText(currentInteraction,false));
             yield return _typingRoutine;
             
@@ -278,7 +278,6 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     }
     private IEnumerator TypeText(Interaction currentInteraction,bool displayPointer=true)
     {
-        _inputStateHandler.AddDialoguePlaceHolderState();
         ResetText();
         dialogueFinished = false;
         displaying = true; 
@@ -334,7 +333,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             {
                 var worldPos = dialougeText.rectTransform.TransformPoint(charInfo.bottomRight);
                 //fine-tuning visual off-sets
-                worldPos = new Vector2(worldPos.x+20f, worldPos.y + math.abs(worldPos.y*.2f));
+                worldPos = new Vector2(worldPos.x+35f, worldPos.y + math.abs(worldPos.y*.2f));
                 
                 var parentRect = (RectTransform)dialougeText.rectTransform.parent;
 
@@ -368,6 +367,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             {
                 StopCoroutine(_typingRoutine);
             }
+            _inputStateHandler.AddDialoguePlaceHolderState();
             _typingRoutine = StartCoroutine(TypeText(currentInteraction));
         }
         else

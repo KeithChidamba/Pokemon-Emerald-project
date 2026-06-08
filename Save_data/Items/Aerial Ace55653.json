@@ -2,12 +2,12 @@
     "itemID": "Aerial Ace55653",
     "itemName": "Aerial Ace",
     "itemType": 16,
-    "itemEffect": "",
+    "itemEffectData": 0.0,
     "itemDescription": "An attack that never misses.",
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 25586
+        "instanceID": 25584
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 25276
+        "instanceID": 25274
     },
     "additionalInfoModules": [
         {
-            "instanceID": 25276
+            "instanceID": 25274
         }
     ],
     "infoModuleAssetNames": [

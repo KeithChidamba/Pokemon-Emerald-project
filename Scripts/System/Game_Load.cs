@@ -175,6 +175,9 @@ public class Game_Load : MonoBehaviour,IInjectable
     public void StartGame(bool loadFromSave=true)
     {
         LoadedFromSave = loadFromSave;
+        
+        if (loadFromSave) _gameSettingsHandler.ConfigureSavedSettings();
+        
         StartCoroutine(GameStartLoading());
     }
 }

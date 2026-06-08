@@ -87,7 +87,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             
             case ItemType.Berry: UseBerries(); break;
             
-            case ItemType.HealHp: RestoreHealth(int.Parse(item.itemEffect)); break;
+            case ItemType.HealHp: RestoreHealth(item.itemEffectData); break;
             
             case ItemType.Revive: RevivePokemon(itemInUse.itemType); break;
             
@@ -103,7 +103,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             
             case ItemType.XItem: ItemBuffOrDebuff(); break;
             
-            case ItemType.Repel: UseRepel(int.Parse(item.itemEffect)); break;
+            case ItemType.Repel: UseRepel((int)item.itemEffectData); break;
         }
     }
 
@@ -121,7 +121,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         var usageIndex = herbInfo.GetHerbUsage(itemInUse);
         var herbUsages = new List<Action>
         {
-            () => RestoreHealth(int.Parse(itemInUse.itemEffect)),
+            () => RestoreHealth(itemInUse.itemEffectData),
             () => HealStatusEffect(herbInfo.statusEffect),
             () => RevivePokemon(herbInfo.itemType)
         };
@@ -135,7 +135,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         var berryUsages = new List<Action> 
         {
             GetFriendshipFromBerry,
-            () => RestoreHealth(int.Parse(itemInUse.itemEffect)),
+            () => RestoreHealth(itemInUse.itemEffectData),
             () => HealStatusEffect(berryInfo.statusEffect),
             ChangePowerpoints,
             CureConfusion
@@ -560,7 +560,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         _pokemonPartyHandler.RefreshMemberCards();
         _dialogueHandler.EndDialogue(1f);
     }
-    private void RestoreHealth(int healEffect)
+    private void RestoreHealth(float healEffect)
     {
         if (_selectedPartyPokemon.hp <= 0)
         {
@@ -583,7 +583,11 @@ public class Item_handler : MonoBehaviour,IInjectable
     }
     private void CompleteItemUsage()//only call for items used outside of battle
     {
-        _battleHandler.usedTurnForItem = _battleHandler.battleInProgress;
+        if (_battleHandler.battleInProgress)
+        {
+            _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.UseItem);
+        }
+       
         DepleteItem();
         ResetItemUsage();
      }

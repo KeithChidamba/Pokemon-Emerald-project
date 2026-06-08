@@ -2,12 +2,12 @@
     "itemID": "HM0347107",
     "itemName": "HM03",
     "itemType": 16,
-    "itemEffect": "",
+    "itemEffectData": 0.0,
     "itemDescription": "Teaches a valid pokemon, surf",
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 25574
+        "instanceID": 25572
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 27056
+        "instanceID": 27054
     },
     "additionalInfoModules": [
         {
-            "instanceID": 27056
+            "instanceID": 27054
         }
     ],
     "infoModuleAssetNames": [

@@ -21,13 +21,11 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     
     private Dialogue_handler _dialogueHandler;
     private Battle_handler _battleHandler;
-    private WildPokemonAiHandler _wildPokemonHandler;
     
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
-        _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         gameObject.SetActive(true);
     }
 
@@ -241,7 +239,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
         playerBattleAnimator.Play("pokemon catch");
         yield return new WaitForSeconds(1.6f);
-        _wildPokemonHandler.participant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
+        _battleHandler.battleParticipants[2].pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
         yield return new WaitForSeconds(0.5f);
     }
     public IEnumerator DisplayPokemonCatch()
@@ -256,7 +254,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     {
         playerBattleAnimator.Play("pokeball escape");
         yield return new WaitForSeconds(1f);
-        _wildPokemonHandler.participant.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+        _battleHandler.battleParticipants[0].pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
         
         var pkmImageRect = _battleHandler.battleParticipants[0].pokemonImage.rectTransform;
         var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y+pkmImageRect.rect.height);

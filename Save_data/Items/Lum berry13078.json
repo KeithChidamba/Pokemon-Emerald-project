@@ -2,12 +2,12 @@
     "itemID": "Lum berry13078",
     "itemName": "Lum berry",
     "itemType": 9,
-    "itemEffect": "0",
+    "itemEffectData": 0.0,
     "itemDescription": "Heals any status effect",
     "price": 5,
     "quantity": 2,
     "itemImage": {
-        "instanceID": 26326
+        "instanceID": 26324
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -18,11 +18,11 @@
     "isMultiModular": false,
     "hasModules": true,
     "additionalInfoModule": {
-        "instanceID": 28048
+        "instanceID": 28046
     },
     "additionalInfoModules": [
         {
-            "instanceID": 28048
+            "instanceID": 28046
         }
     ],
     "infoModuleAssetNames": [

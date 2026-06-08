@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Super Repel
   itemType: 18
-  itemEffect: 200
+  itemEffectData: 200
   itemDescription: Repels wild pokemon for 200 steps
   price: 500
   quantity: 1

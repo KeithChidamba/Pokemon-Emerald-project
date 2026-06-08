@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -19,7 +17,7 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
     private Player_movement _playerMovementHandler;
     private Encounter_handler  _encounterHandler;
     private Area_manager  _areaHandler;
-   
+    
     public void Inject(ServiceContainer container)
     {
         _encounterHandler = container.Resolve<Encounter_handler>();
@@ -69,28 +67,24 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
         grassRenderer.sprite = grassSprites[3];
         yield return new WaitForSecondsRealtime(0.05f);
     }
+
     private void CheckGrass()
     {
         grassRenderer.gameObject.SetActive(false);
         _playerMovementHandler.characterSpriteMaskRenderer.gameObject.SetActive(false);
-        var tile = FindTileAtPosition<EncounterTile>(encounterTilemap,transform.position);
-        if (tile != null)
-        {
-            var playerPosition = _playerMovementHandler.GetPlayerPosition();
-            grassRenderer.transform.position = new Vector3(playerPosition.x + .5f, playerPosition.y + .35f);//accounts for sprite offset
-            StartCoroutine(AnimateGrass());
-        }
-        else
-        {
-            return;
-        }
+        var tile = FindTileAtPosition<EncounterTile>(encounterTilemap, transform.position);
+        if (tile == null) return;
+        
+        var playerPosition = _playerMovementHandler.GetPlayerPosition();
+        grassRenderer.transform.position = new Vector3(playerPosition.x + .5f, playerPosition.y + .35f);//accounts for sprite offset
+        StartCoroutine(AnimateGrass());
         
         if (_repellingPokemon) return;
-        
+    
         var encounterChance = _playerMovementHandler.runningInput ? 5 : 2;
-        
+    
         var randomNumber = Random.Range(1, 11);
-        
+    
         if (randomNumber < encounterChance)
         {
             _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Battle);

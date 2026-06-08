@@ -52,7 +52,7 @@ public class GameSettingsInputService: IInputGroup
         void MoveToAdjacentSetting(int change)
         {
             var state = _inputStateHandler.GetState(InputStateName.GameSettingsNavigation);
-            state.currentSelectionIndex = Mathf.Clamp(state.currentSelectionIndex+change, 0, state.maxSelectionIndex);
+            state.currentSelectionIndex = Mathf.Clamp(state.currentSelectionIndex+change, 0, state.maxSelectableIndex);
             _gameSettingsHandler.SetCurrentSetting(state.currentSelectionIndex);
             _inputStateHandler.RemoveTopInputLayer(false);
         }

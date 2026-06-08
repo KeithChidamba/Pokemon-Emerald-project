@@ -88,6 +88,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             return;
         }
         AddTurn(turn);
+        _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.Fight);
         if ((_battleHandler.isDoubleBattle && IsLastParticipant())
             || currentTurnIndex == _battleHandler.participantCount)
         {

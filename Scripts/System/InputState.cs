@@ -16,7 +16,7 @@ public class InputState
     public bool isSelecting;
     public bool displayingSelector;
     public GameObject selector;
-    public int maxSelectionIndex;
+    public int maxSelectableIndex;
     public GameObject mainViewUI;
     public bool isParentLayer;
     public bool canExit;

@@ -28,18 +28,20 @@ public class Player_movement : MonoBehaviour,IInjectable
     public event Action OnNewTile;
     public SpriteRenderer characterSpriteMaskRenderer;
     [SerializeField] private SpriteRenderer characterMainSpriteRenderer;
-    public Vector3 PreviousValidPosition { get; private set; }
+    [SerializeField]private Vector3 previousValidPosition;
     [SerializeField]private LayerMask movementBlockers;
     [SerializeField]private bool standingOnTile;
     private Dictionary<MovementRestrictor, bool> _movementRestrictors = new();
     
     private overworld_actions _overworldActions;
     private Dialogue_handler _dialogueHandler;
+    private PlayerTileHandler _playerTileHandler;
     
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
+        _playerTileHandler = container.Resolve<PlayerTileHandler>();
         gameObject.SetActive(true);
     }
 
@@ -63,8 +65,8 @@ public class Player_movement : MonoBehaviour,IInjectable
     {
         canMove = false;
         standingOnTile = true;
-        playerObject.transform.position = PreviousValidPosition;
-        movePoint.position = PreviousValidPosition;
+        playerObject.transform.position = previousValidPosition;
+        movePoint.position = previousValidPosition;
     }
     public void FaceOppositeDirection(MovementDirection npcDirection)
     {
@@ -108,6 +110,7 @@ public class Player_movement : MonoBehaviour,IInjectable
             {
                 yield break;
             }
+            
             if (!usingBike) ForceWalkMovement();
             canMove = true;
             SetCurrentAnimation();
@@ -269,7 +272,7 @@ public class Player_movement : MonoBehaviour,IInjectable
             playerObject.transform.position = movePoint.position;
             if (!standingOnTile)
             {
-                PreviousValidPosition = movePoint.position;
+                previousValidPosition = movePoint.position;
                 standingOnTile = true;
                 OnNewTile?.Invoke();
             }
@@ -339,7 +342,7 @@ public class Player_movement : MonoBehaviour,IInjectable
     }
     public void SetPlayerPosition(Vector3 position)
     {
-        PreviousValidPosition = position;
+        previousValidPosition = position;
         movePoint.position = position;
         playerObject.transform.position = position;
     }

@@ -160,7 +160,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
             {
                 _swappingIn = false; return;
             }
-            _battleHandler.usedTurnForSwap = true;
+            _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.SwitchPokemonIn);
 
             var switchData = new SwitchOutData(_turnBasedCombatHandler.currentTurnIndex
                 ,memberPosition - 1,currentParticipant);
