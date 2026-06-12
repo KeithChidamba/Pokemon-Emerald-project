@@ -15,18 +15,15 @@
     "isHeldItem": false,
     "canBeHeld": false,
     "canBeSold": true,
-    "isMultiModular": false,
-    "hasModules": true,
-    "additionalInfoModule": {
-        "instanceID": 28072
-    },
     "additionalInfoModules": [
         {
             "instanceID": 28072
         }
     ],
-    "infoModuleAssetNames": [
-        "Heal Powder"
-    ],
-    "imageDirectory": "Heal Powder"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Heal Powder",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

@@ -81,13 +81,13 @@ public class Held_Items : BattleParticipantModule
     {
         if(!participant.isConfused) yield break;
 
-        _dialogueHandler.DisplayDetails(participant.pokemon.pokemonName+"'s Persim berry healed its confusion");
+        _dialogueHandler.DisplayDetails(participant.pokemon.pokemonDisplayName+"'s Persim berry healed its confusion");
         participant.isConfused = false;
 
     }
     private IEnumerator GetHealing()
     { 
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+_heldItem.itemName +" healed it");
         _moveUsageHandler.HealthGainDisplay(_heldItem.itemEffectData,healthGainer:participant);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);
     }
@@ -109,7 +109,7 @@ public class Held_Items : BattleParticipantModule
         }
         participant.statusHandler.RemoveStatusEffect();
         _battleHandler.RefreshStatusEffectUI();
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+_heldItem.itemName +" healed it");
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+_heldItem.itemName +" healed it");
     }
 
 }

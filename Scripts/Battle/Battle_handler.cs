@@ -61,7 +61,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private Game_Load _gameLoadingHandler;
     private Pokemon_party _pokemonPartyHandler;
     private overworld_actions _overworldActions;
-
+    private PokemonOperations _pokemonOperations;
     private WildPokemonAiHandler _wildPokemonHandler;
     private Area_manager  _areaHandler;
     private Player_movement _playerMovementHandler;
@@ -81,6 +81,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _overworldActions = container.Resolve<overworld_actions>();
         _playerMovementHandler = container.Resolve<Player_movement>();
+        _pokemonOperations = container.Resolve<PokemonOperations>();
         gameObject.SetActive(true);
     }
     public void OnInject()
@@ -409,17 +410,24 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public IEnumerator SetupParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)
     {
         OnSwitchOut?.Invoke(participant);
-        participant.isEnemy = Array.IndexOf(battleParticipants, participant) > 1 ;
+        participant.isPlayer = Array.IndexOf(battleParticipants, participant) < 2 ;
+
+        if (participant.isPlayer)
+        {
+            participant.pokemon.pokemonDisplayName = participant.pokemon.nickName;
+        }
+        else
+        {
+            participant.pokemon.pokemonDisplayName = "Foe " + participant.pokemon.pokemonName;
+        }
+        
         if(!initialCall)
         {
             participant.pokemon = newPokemon;
             if (participant.isPlayer)
             {
-                participant.pokemon.currentPokemonName = participant.pokemon.pokemonName;
-                participant.pokemon.pokemonName = participant.pokemon.nickName;
-                
                 _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName
-                                                            +" sent out "+participant.pokemon.pokemonName);
+                                                            +" sent out "+participant.pokemon.pokemonDisplayName);
                 
                 //add enemies to exp list of new player pokemon
                 foreach (var enemyParticipant in participant.currentEnemies)
@@ -428,19 +436,13 @@ public class Battle_handler : MonoBehaviour, IInjectable
             else
             {
                 _dialogueHandler.DisplayBattleInfo(participant.pokemonTrainerAI.trainerData.TrainerName
-                                                            +" sent out "+participant.pokemon.pokemonName);
+                                                            +" sent out "+participant.pokemon.pokemonDisplayName);
                 
                 //add player participants to get exp from switched in enemy
                 foreach (var playerParticipant in participant.currentEnemies)
                     participant.AddToExpList(playerParticipant.pokemon);
             }
         }
-
-        if (participant.isEnemy)
-        {
-            participant.pokemon.pokemonName = "Foe " + participant.pokemon.pokemonName;
-        }
-
         //setup participant for battle
         participant.statData.SaveActualStats();
         participant.ActivateParticipant();
@@ -564,7 +566,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         {
             var faintedParticipant = faintQueue[0];
             _turnBasedCombatHandler.faintEventDelay = true;
-            _dialogueHandler.DisplayBattleInfo(faintedParticipant.pokemon.pokemonName + " fainted!");
+            _dialogueHandler.DisplayBattleInfo(faintedParticipant.pokemon.pokemonDisplayName + " fainted!");
             var pkmImageRect = faintedParticipant.pokemonImage.rectTransform;
             var rectHeight = pkmImageRect.rect.height;
             var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-rectHeight);
@@ -576,7 +578,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
             var targetForUI = new Vector2(participantUIRect.anchoredPosition.x, participantUIRect.anchoredPosition.y-400f);
             yield return StartCoroutine(BattleVisuals.SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f));
             
-            if (faintedParticipant.isEnemy)
+            if (!faintedParticipant.isPlayer)
             {
                 yield return new WaitForSeconds(0.05f);
                 faintedParticipant.participantUI.SetActive(false);
@@ -598,7 +600,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
                     pkmImageRect.anchoredPosition =
                         new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y + rectHeight);
               
-                    if (faintedParticipant.isEnemy)
+                    if (!faintedParticipant.isPlayer)
                     {
                         faintedParticipant.pokemonImage.color = Color.white;
                         yield return _battleIntroHandler.PokemonIntroAnimation(faintedParticipant);
@@ -633,7 +635,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         string wildPokemonName = "";
         if (!isTrainerBattle)
         {
-            wildPokemonName = _wildPokemonHandler.participant.pokemon.pokemonName;
+            wildPokemonName = _wildPokemonHandler.participant.pokemon.pokemonDisplayName;
         }
         
         switch (battleEndState)
@@ -717,18 +719,13 @@ public class Battle_handler : MonoBehaviour, IInjectable
                 if (evolution.participantToEvolve.isActive)
                 {
                     var pokemon = evolution.participantToEvolve.pokemon;
-                    _dialogueHandler.DisplayBattleInfo("What? "+pokemon.pokemonName+" is evolving!");
-                    var previousName = pokemon.pokemonName;
-                    yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
-                    pokemon.Evolve(pokemon.evolutions[evolution.evolutionIndex]);
-                    _dialogueHandler.DisplayBattleInfo(previousName+" evolved into "+pokemon.pokemonName);
-                    yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+                    yield return _pokemonOperations.HandlePokemonEvolution(pokemon,evolution.evolutionIndex);
                 }
             }
             evolutionQueue.Clear();
         }
     }
-
+    
     public void EndBattle(BattleEndState state)
     {
         if (battleOver) return;
@@ -786,7 +783,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         if(!_currentPlayerParticipant.canEscape)
         {
-            _dialogueHandler.DisplayBattleInfo(_currentPlayerParticipant.pokemon.pokemonName + " is trapped");
+            _dialogueHandler.DisplayBattleInfo(_currentPlayerParticipant.pokemon.pokemonDisplayName + " is trapped");
         }
         else
         {

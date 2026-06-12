@@ -15,18 +15,15 @@
     "isHeldItem": false,
     "canBeHeld": true,
     "canBeSold": true,
-    "isMultiModular": false,
-    "hasModules": true,
-    "additionalInfoModule": {
-        "instanceID": 27236
-    },
     "additionalInfoModules": [
         {
             "instanceID": 27236
         }
     ],
-    "infoModuleAssetNames": [
-        "Poison berry"
-    ],
-    "imageDirectory": "Pecha berry"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Pecha berry",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

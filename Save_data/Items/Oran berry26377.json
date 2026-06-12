@@ -5,7 +5,7 @@
     "itemEffectData": 0.0,
     "itemDescription": "Heals 5hp",
     "price": 5,
-    "quantity": 17,
+    "quantity": 19,
     "itemImage": {
         "instanceID": 27430
     },
@@ -15,18 +15,15 @@
     "isHeldItem": false,
     "canBeHeld": true,
     "canBeSold": true,
-    "isMultiModular": false,
-    "hasModules": true,
-    "additionalInfoModule": {
-        "instanceID": 27406
-    },
     "additionalInfoModules": [
         {
             "instanceID": 27406
         }
     ],
-    "infoModuleAssetNames": [
-        "HP berry"
-    ],
-    "imageDirectory": "Oran berry"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Oran berry",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

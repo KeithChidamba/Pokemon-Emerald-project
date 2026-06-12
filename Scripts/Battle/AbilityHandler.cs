@@ -256,7 +256,7 @@ public class AbilityHandler : BattleParticipantModule
                     participant.canAttack = true;
             }
             participant.pokemon.statusEffect = StatusEffect.None;
-            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s shed skin healed it");
+            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s shed skin healed it");
             participant.RefreshStatusEffectImage();
         }
     }
@@ -290,12 +290,10 @@ public class AbilityHandler : BattleParticipantModule
             }
         }
         if (possibleItems == null) return;
-        string[] nonMartItems = { "Rare Candy", "Ether" };
+       
         var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
 
-        var assetDirectory = nonMartItems.Contains(possibleItems[itemWonIndex])?
-            SaveDataHandler.GetDirectory(AssetDirectory.NonMartItems) + possibleItems[itemWonIndex]
-            : SaveDataHandler.GetDirectory(AssetDirectory.MartItems) + possibleItems[itemWonIndex];
+        var assetDirectory = SaveDataHandler.GetDirectory(AssetDirectory.Items) + possibleItems[itemWonIndex];
         
         var itemWon = Resources.Load<Item>(assetDirectory);
         if (Utility.RandomRange(1, 101) < participant.pokemon.currentLevel)
@@ -320,7 +318,7 @@ public class AbilityHandler : BattleParticipantModule
     private void NotifyStaticHit(Battle_Participant attacker,StatusEffect status)//status is unused here but is required for method signature
     {
         _moveUsageHandler.OnStatusEffectHit-=NotifyStaticHit; 
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s static paralysed "+attacker.pokemon.pokemonName);
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s static paralysed "+attacker.pokemon.pokemonDisplayName);
     }
     float IncreaseDamage(Battle_Participant attacker,Battle_Participant victim,Move move, float damage)
     {

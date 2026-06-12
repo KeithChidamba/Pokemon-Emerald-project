@@ -298,10 +298,13 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public IEnumerator RevealPokemonAfterWithdraw(Battle_Participant participant)
     {
         participant.participantUI.SetActive(true);
-        if (participant.isEnemy) participant.pokemonImage.color = Color.white;
+        if (!participant.isPlayer)
+        {
+            participant.pokemonImage.color = Color.white;
+        }
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
-        var direction = participant.isEnemy?outOfViewDistance:-outOfViewDistance;
-        if (participant.isEnemy)
+        var direction = participant.isPlayer? -outOfViewDistance : outOfViewDistance;
+        if (!participant.isPlayer)
         {
             direction = 0;
         }
@@ -313,12 +316,12 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public IEnumerator WithdrawPokemon(Battle_Participant participant)
     {
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
-        var direction = participant.isEnemy?-outOfViewDistance:outOfViewDistance;
+        var direction = participant.isPlayer? -outOfViewDistance : outOfViewDistance;
         var targetForUI = new Vector2(participantUIRect.anchoredPosition.x+direction, participantUIRect.anchoredPosition.y);
         
         yield return SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f);
    
-        if (participant.isEnemy)
+        if (!participant.isPlayer)
         {
             yield return new WaitForSeconds(0.05f);
             participant.participantUI.SetActive(false);

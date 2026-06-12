@@ -2,7 +2,7 @@
     "basePokemonName": "Torchic",
     "pokemonName": "Torchic",
     "nickName": "l;ok",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "",
     "captureInformation": {
         "areaName": "",
         "levelCaptured": 0
@@ -103,10 +103,10 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -11700
+            "instanceID": -31282
         },
         {
-            "instanceID": -11702
+            "instanceID": -31284
         }
     ],
     "ability": {

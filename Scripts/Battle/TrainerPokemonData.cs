@@ -7,8 +7,9 @@ using UnityEngine.Serialization;
 public class TrainerPokemonData : ScriptableObject
 {
     public Pokemon pokemon;
-    public int pokemonLevel=0;
-    public bool hasItem=false;
+    public int pokemonLevel;
+    public int evolutionStageNumber;
+    public bool hasItem;
     public Item heldItem;
     public List<Move> moveSet=new();
 }

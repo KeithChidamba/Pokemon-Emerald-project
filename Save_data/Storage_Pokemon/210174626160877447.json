@@ -2,7 +2,7 @@
     "basePokemonName": "Treecko",
     "pokemonName": "Grovyle",
     "nickName": "gro",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "",
     "captureInformation": {
         "areaName": "",
         "levelCaptured": 0
@@ -153,16 +153,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -11686
+            "instanceID": -31268
         },
         {
-            "instanceID": -11688
+            "instanceID": -31270
         },
         {
-            "instanceID": -11690
+            "instanceID": -31272
         },
         {
-            "instanceID": -11692
+            "instanceID": -31274
         }
     ],
     "ability": {
@@ -177,7 +177,7 @@
         }
     ],
     "heldItem": {
-        "instanceID": -11696
+        "instanceID": -31278
     },
     "hasItem": true,
     "frontPicture": {

@@ -15,12 +15,11 @@
     "isHeldItem": false,
     "canBeHeld": false,
     "canBeSold": false,
-    "isMultiModular": false,
-    "hasModules": false,
-    "additionalInfoModule": {
-        "instanceID": 0
-    },
     "additionalInfoModules": [],
-    "infoModuleAssetNames": [],
-    "imageDirectory": "Wailmer Pail"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Wailmer Pail",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

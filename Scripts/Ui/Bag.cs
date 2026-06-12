@@ -281,7 +281,7 @@ public class Bag : MonoBehaviour,IInjectable
         }
         var partyMember = _pokemonPartyHandler.party[memberIndex - 1];
         _dialogueHandler.DisplayDetails("You took a " + partyMember.heldItem.itemName +" from "
-                                             + partyMember.pokemonName);
+                                             + partyMember.pokemonDisplayName);
         AddItem(partyMember.heldItem);
         partyMember.RemoveHeldItem();
         _pokemonPartyHandler.ClearSelectionUI();
@@ -310,7 +310,7 @@ public class Bag : MonoBehaviour,IInjectable
         _inputStateHandler.ResetRelevantUi(new[] { InputStateName.PokemonPartyOptions });
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
         
-        _dialogueHandler.DisplayDetails(partyMember.pokemonName
+        _dialogueHandler.DisplayDetails(partyMember.pokemonDisplayName
                                                  +" received a "+itemToBeGiven.itemName);
         
         partyMember.GiveItem(InstanceFactory.CreateItem(itemToBeGiven));

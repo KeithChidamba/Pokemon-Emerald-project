@@ -67,7 +67,7 @@ public class Participant_Status : BattleParticipantModule
         }
         _trapDuration = numTurns;
         _currentTrap = new TrapData(move,true);
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName + _currentTrap.OnTrapMessage);
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName + _currentTrap.OnTrapMessage);
         participant.canEscape = false;
     }
     public void GetStatChangeImmunity(StatChangeability changeability,int numTurns)
@@ -148,7 +148,7 @@ public class Participant_Status : BattleParticipantModule
             yield break;
         }
         
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+message);
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+message);
         
         var damageSource = DamageSource.Normal;
         switch (participant.pokemon.statusEffect)
@@ -189,7 +189,7 @@ public class Participant_Status : BattleParticipantModule
         if (!_currentTrap.hasDuration) yield break;
         if (_trapDuration <= 0)
         {
-            _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonName+_currentTrap.OnFreeMessage);
+            _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonDisplayName+_currentTrap.OnFreeMessage);
             RemoveTrap();
             yield break;
         }
@@ -230,7 +230,7 @@ public class Participant_Status : BattleParticipantModule
     {
         if (moveUsed.type.typeEnum != PokemonType.Fire ) return;
         RemoveStatusEffect();
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+" was thawed out!");
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+" was thawed out!");
         _healed = true;
         _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
     }
@@ -274,10 +274,10 @@ public class Participant_Status : BattleParticipantModule
         switch (base.participant.pokemon.statusEffect)
         {
             case StatusEffect.Sleep:
-                _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonName+" Woke UP!");
+                _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonDisplayName+" Woke UP!");
                 break;
             case StatusEffect.Freeze:
-                _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonName+" Unfroze!");
+                _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonDisplayName+" Unfroze!");
                 break;
         }
         RemoveStatusEffect();
@@ -305,23 +305,23 @@ public class Participant_Status : BattleParticipantModule
         {
             case StatusEffect.Burn:
                 var currentAtkBuff =
-                    BattleOperations.SearchForBuffOrDebuff(participant.pokemon, Stat.Attack);
+                    _battleOperationsHandler.SearchForBuffOrDebuff(participant.pokemon, Stat.Attack);
                 if (currentAtkBuff == null) return;
-                BattleOperations.ModifyBuff(currentAtkBuff,0,2);
+                _battleOperationsHandler.ModifyBuff(currentAtkBuff,0,2);
                 participant.pokemon.attack = _moveUsageHandler.ModifyStatValue
                 (Stat.Attack, participant.statData.attack, currentAtkBuff.stage);
                 break;
             
             case StatusEffect.Paralysis:
                 var currenSpdBuff =
-                    BattleOperations.SearchForBuffOrDebuff(participant.pokemon, Stat.Speed);
+                    _battleOperationsHandler.SearchForBuffOrDebuff(participant.pokemon, Stat.Speed);
                 if (currenSpdBuff == null) return;
-                BattleOperations.ModifyBuff(currenSpdBuff,0,6);
+                _battleOperationsHandler.ModifyBuff(currenSpdBuff,0,6);
                 participant.pokemon.speed = _moveUsageHandler.ModifyStatValue
                     (Stat.Speed, participant.statData.speed, currenSpdBuff.stage);
                 break;
         }
-        BattleOperations.RemoveInvalidBuffsOrDebuffs(participant.pokemon);
+        _battleOperationsHandler.RemoveInvalidBuffsOrDebuffs(participant.pokemon);
         participant.pokemon.statusEffect = StatusEffect.None; 
         participant.RefreshStatusEffectImage();
     }

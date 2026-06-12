@@ -2,7 +2,7 @@
     "basePokemonName": "Torchic",
     "pokemonName": "Combusken",
     "nickName": "fgf",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "",
     "captureInformation": {
         "areaName": "",
         "levelCaptured": 0
@@ -161,16 +161,16 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -11650
+            "instanceID": -31232
         },
         {
-            "instanceID": -11652
+            "instanceID": -31234
         },
         {
-            "instanceID": -11654
+            "instanceID": -31236
         },
         {
-            "instanceID": -11656
+            "instanceID": -31238
         }
     ],
     "ability": {

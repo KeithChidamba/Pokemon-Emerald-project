@@ -15,18 +15,15 @@
     "isHeldItem": false,
     "canBeHeld": true,
     "canBeSold": true,
-    "isMultiModular": false,
-    "hasModules": true,
-    "additionalInfoModule": {
-        "instanceID": 27406
-    },
     "additionalInfoModules": [
         {
             "instanceID": 27406
         }
     ],
-    "infoModuleAssetNames": [
-        "HP berry"
-    ],
-    "imageDirectory": "Sitrus berry"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Sitrus berry",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

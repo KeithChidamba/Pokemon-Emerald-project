@@ -30,7 +30,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     public event Action<int> OnMemberSelected;
     
     private Dialogue_handler _dialogueHandler;
-    private PokemonOperations _pokemonOperations;
     private InputStateHandler _inputStateHandler;
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
@@ -47,7 +46,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _playerMovementHandler = container.Resolve<Player_movement>();
         _partyInputService = container.Resolve<PokemonPartyInputService>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _pokemonOperations = container.Resolve<PokemonOperations>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -126,7 +124,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     {
         if (_turnBasedCombatHandler.ContainsSwitch(memberPosition-1))
         {
-            _dialogueHandler.DisplayDetails(party[memberPosition-1].pokemonName +
+            _dialogueHandler.DisplayDetails(party[memberPosition-1].pokemonDisplayName +
                                                      " is already going to be sent out");
             return false;
         }
@@ -134,7 +132,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         {
             var swapIn = _battleHandler.battleParticipants[memberPosition - 1];
             
-            _dialogueHandler.DisplayDetails(swapIn.pokemon.pokemonName +
+            _dialogueHandler.DisplayDetails(swapIn.pokemon.pokemonDisplayName +
                                                      " is already in battle");
             return false;
         }
@@ -144,7 +142,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         var currentParticipant = _battleHandler.battleParticipants[participantIndex];
         if (!currentParticipant.canEscape & _swappingIn)
         {
-            _dialogueHandler.DisplayDetails(currentParticipant.pokemon.pokemonName +
+            _dialogueHandler.DisplayDetails(currentParticipant.pokemon.pokemonDisplayName +
                                                      " is trapped");
             return false;
         }
@@ -272,7 +270,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     private void SwapMembers(int partyIndex)
     {
         var swapStore = party[selectedMemberNumber-1];
-        var message = $"You swapped {party[partyIndex].pokemonName} with {swapStore.pokemonName}";
+        var message = $"You swapped {party[partyIndex].pokemonDisplayName} with {swapStore.pokemonDisplayName}";
         party[selectedMemberNumber-1] = party[partyIndex];
         party[partyIndex] = swapStore;
         moving = false;
@@ -322,7 +320,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         }
         else
             _pokemonStorageHandler.AddPokemonToStorage(newPokemon);
-        _dialogueHandler.DisplayDetails("You got a " + newPokemon.pokemonName);
+        _dialogueHandler.DisplayDetails("You got a " + newPokemon.pokemonDisplayName);
     }
   
     public void SortByFainted()

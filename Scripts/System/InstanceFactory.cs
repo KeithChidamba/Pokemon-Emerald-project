@@ -52,9 +52,9 @@ public static class InstanceFactory
     {
         Pokemon newPokemon = ScriptableObject.CreateInstance<Pokemon>();
         newPokemon.basePokemonName = pkm.basePokemonName;
-	    newPokemon.pokemonName = pkm.pokemonName;
+	    newPokemon.pokemonDisplayName = pkm.pokemonDisplayName;
         newPokemon.nickName = pkm.nickName;
-        newPokemon.currentPokemonName = pkm.currentPokemonName;
+        newPokemon.pokemonName = pkm.pokemonName;
         newPokemon.captureInformation = pkm.captureInformation;
         newPokemon.pokemonID  = pkm.pokemonID ;
         newPokemon.personalityValue = pkm.personalityValue;
@@ -203,11 +203,7 @@ public static class InstanceFactory
         newItem.isHeldItem = item.isHeldItem;
         newItem.canBeSold = item.canBeSold;
         newItem.canBeHeld = item.canBeHeld;
-        newItem.hasModules = item.hasModules;
-        newItem.isMultiModular = item.isMultiModular;
-        newItem.additionalInfoModule = item.additionalInfoModule;
         newItem.additionalInfoModules = item.additionalInfoModules;
-        newItem.infoModuleAssetNames = item.infoModuleAssetNames;
         newItem.imageDirectory = item.imageDirectory;
         return newItem;
     }

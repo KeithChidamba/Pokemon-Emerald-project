@@ -1,5 +1,5 @@
 {
-    "itemID": "Oran berry27355",
+    "itemID": "Oran berry10320",
     "itemName": "Oran berry",
     "itemType": 9,
     "itemEffectData": 0.0,
@@ -15,18 +15,15 @@
     "isHeldItem": false,
     "canBeHeld": true,
     "canBeSold": true,
-    "isMultiModular": false,
-    "hasModules": true,
-    "additionalInfoModule": {
-        "instanceID": 27406
-    },
     "additionalInfoModules": [
         {
             "instanceID": 27406
         }
     ],
-    "infoModuleAssetNames": [
-        "HP berry"
-    ],
-    "imageDirectory": "Oran berry"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Oran berry",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

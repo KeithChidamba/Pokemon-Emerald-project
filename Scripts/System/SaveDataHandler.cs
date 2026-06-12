@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 
 public enum AssetDirectory
 { 
-    Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, ItemUI, Items, MartItems, NonMartItems
-    ,AdditionalInfo,Berries,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData,OverworldItemPickups
+    Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, ItemUI, Items
+    ,AdditionalInfo,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData,OverworldItemPickups
 }
 public enum SaveDataDirectory
 {
@@ -58,10 +58,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         {AssetDirectory.Natures,"Pokemon_obj/Natures/" },
         {AssetDirectory.UI,"UI/" },
         {AssetDirectory.ItemUI,"UI/Item_images/" },
-        {AssetDirectory.NonMartItems,"Items/NonMartItems/" },
-        {AssetDirectory.MartItems,"Items/Mart_Items/" },
         {AssetDirectory.Items,"Items/" },
-        {AssetDirectory.Berries,"Items/Berries/" },
         {AssetDirectory.AdditionalInfo,"Items/AdditionalInfo/" },
         {AssetDirectory.BerryTreeData,"Overwolrd_obj/Interactions/Berry Trees/Berry Data/"},
         {AssetDirectory.StoryObjectiveData,"Overwolrd_obj/Story Objectives/"},
@@ -258,7 +255,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             var treeSprites = Resources.Load<BerryTreeData>(
                 GetDirectory(AssetDirectory.BerryTreeData) + $"{treeData.itemAssetName } Data").spriteData;
             treeData.spriteData = treeSprites;
-            treeData.berryItem = Resources.Load<Item>(GetDirectory(AssetDirectory.Berries)
+            treeData.berryItem = Resources.Load<Item>(GetDirectory(AssetDirectory.Items)
                                                       + treeData.itemAssetName);
             _overworldStateHandler.StoreBerryTreeData(treeData);
         }
@@ -481,7 +478,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                 pokemon.SaveUnserializableData();
                 if(pokemon.hasItem)
                 {
-                    if(pokemon.heldItem==null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonName); 
+                    if(pokemon.heldItem==null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonDisplayName); 
                     SaveDataAsJson(pokemon.heldItem, pokemon.pokemonID.ToString(), SaveDataDirectory.HeldItems);
                 }
                 SaveDataAsJson(pokemon, pokemon.pokemonID.ToString(), SaveDataDirectory.PartyPokemon);
@@ -503,7 +500,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                 pokemon.SaveUnserializableData();
                 if(pokemon.hasItem)
                 {
-                    if(pokemon.heldItem==null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonName); 
+                    if(pokemon.heldItem==null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonDisplayName); 
                     SaveDataAsJson(pokemon.heldItem, pokemon.pokemonID.ToString(), SaveDataDirectory.HeldItems);
                 }
                 SaveDataAsJson(pokemon, pokemon.pokemonID.ToString(), SaveDataDirectory.StoragePokemon);
@@ -522,7 +519,6 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             
             try
             {
-                item.SaveModuleNames();
                 item.SetImageDirectory();
                 SaveDataAsJson(item, item.itemID,SaveDataDirectory.Items);
             }

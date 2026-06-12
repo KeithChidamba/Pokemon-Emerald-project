@@ -34,7 +34,6 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public Text pokemonLevelText;
     
     public bool isPlayer;
-    public bool isEnemy;
     public bool isActive;
     public bool activeForBattle;
     public bool canAttack = true;
@@ -79,7 +78,8 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
     private ServiceContainer _container;
-   
+    private PokemonOperations _pokemonOperationsHandler;
+    
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
@@ -89,6 +89,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _moveUsageHandler = container.Resolve<Move_handler>();
+        _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         _container = container;
         gameObject.SetActive(true);
     }
@@ -134,7 +135,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     {
         foreach (var ev in pokemon.effortValues)
         {
-            PokemonOperations.CalculateEvForStat(ev.stat,ev.eVAmount,enemy.pokemon);
+            _pokemonOperationsHandler.CalculateEvForStat(ev.stat,ev.eVAmount,enemy.pokemon);
         }
     }
     public  void AddToExpList(Pokemon pkm)
@@ -321,7 +322,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         immunityNegations.Clear();
         if (isPlayer)
         {
-            pokemon.pokemonName = pokemon.currentPokemonName;
+            pokemon.pokemonDisplayName = pokemon.pokemonName;
             pokemon.OnEvolutionSuccessful -= AddToEvolutionQueue;
             pokemon.OnNewLevel -= statData.SaveActualStats;
             pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
@@ -429,7 +430,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         playerHpSlider.minValue = 0;
         isActive = true;
         pokemonImage.sprite = isPlayer?pokemon.backPicture : pokemon.frontPicture;
-        rawName = (isEnemy)? pokemon.pokemonName.Replace("Foe ", "") : pokemon.pokemonName;
+        rawName = isPlayer? pokemon.pokemonDisplayName :  pokemon.pokemonDisplayName.Replace("Foe ", "");
         ActivateGenderImage();
         if (pokemon.statusEffect == StatusEffect.BadlyPoison)
         {

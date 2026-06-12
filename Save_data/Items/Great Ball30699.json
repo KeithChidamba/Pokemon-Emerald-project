@@ -15,16 +15,15 @@
     "isHeldItem": false,
     "canBeHeld": false,
     "canBeSold": true,
-    "isMultiModular": false,
-    "hasModules": false,
-    "additionalInfoModule": {
-        "instanceID": 0
-    },
     "additionalInfoModules": [
         {
             "instanceID": 0
         }
     ],
-    "infoModuleAssetNames": [],
-    "imageDirectory": "Great Ball"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Great Ball",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

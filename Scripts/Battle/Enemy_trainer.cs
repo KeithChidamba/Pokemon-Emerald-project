@@ -28,12 +28,16 @@ public class Enemy_trainer : BattleParticipantModule
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private BattleIntro _battleIntroHandler;
+    private BattleOperations _battleOperations;
+    private PokemonOperations _pokemonOperations;
     
     public Enemy_trainer(ServiceContainer container)
     {
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _battleOperations = container.Resolve<BattleOperations>();
+        _pokemonOperations = container.Resolve<PokemonOperations>();
     }
 
     public void OnInject()
@@ -49,17 +53,15 @@ public class Enemy_trainer : BattleParticipantModule
     {
         trainerData = InstanceFactory.CreateTrainer(copyOfTrainerData);
         trainerParty.Clear();
-        foreach (TrainerPokemonData member in trainerData.PokemonParty)
+        foreach (var member in trainerData.PokemonParty)
         {
-            var pokemonCopy = InstanceFactory.CreatePokemon(member.pokemon);
+            var pokemonCopy = _pokemonOperations.CreateSpecificPokemon(member.pokemon,member.pokemonLevel,member.evolutionStageNumber);
             trainerParty.Add(pokemonCopy);
-            var expForNextLevel = PokemonOperations.CalculateExpForLevel(member.pokemonLevel, pokemonCopy.expGroup);
-            pokemonCopy.ReceiveExperience(expForNextLevel);
-            pokemonCopy.hp = pokemonCopy.maxHp;
             pokemonCopy.moveSet.Clear();
-            foreach (Move move in member.moveSet)
+            foreach (var move in member.moveSet)
+            {
                 pokemonCopy.moveSet.Add(InstanceFactory.CreateMove(move));
-            
+            }
             if (member.hasItem) pokemonCopy.GiveItem(InstanceFactory.CreateItem(member.heldItem));
         }
     }
@@ -120,7 +122,7 @@ public class Enemy_trainer : BattleParticipantModule
                 {
                     var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count - 1);
                     yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName,
-                        notParticipatingList[randomLeftOver].pokemonName);
+                        notParticipatingList[randomLeftOver].pokemonDisplayName);
                     yield return _battleIntroHandler.SwitchInPokemon(participant,notParticipatingList[randomLeftOver],false);
                 }
             }
@@ -128,7 +130,7 @@ public class Enemy_trainer : BattleParticipantModule
             {
                 var randomMember = Utility.RandomRange(0, numAlive.Count - 1);
                 yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName, 
-                    numAlive[randomMember].pokemonName);
+                    numAlive[randomMember].pokemonDisplayName);
                 yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon:numAlive[randomMember],false);
             }
         }
@@ -136,7 +138,7 @@ public class Enemy_trainer : BattleParticipantModule
     }
     private int AiCheckValidSwitch(Battle_Participant enemy)
     {
-        if (participant.canEscape && BattleOperations.HardCountered(participant.pokemon,enemy.pokemon))
+        if (participant.canEscape && _battleOperations.HardCountered(participant.pokemon,enemy.pokemon))
         {
             List<(int pokemonIndex,float effectivenessScore)> pokemonScores = new();  
             var participatingIndex = _battleHandler.isDoubleBattle? 2:1;
@@ -145,12 +147,12 @@ public class Enemy_trainer : BattleParticipantModule
             {
                 if (trainerParty[i].hp<=0) continue;
                 
-                if (BattleOperations.HardCountered(trainerParty[i], enemy.pokemon)) continue;
+                if (_battleOperations.HardCountered(trainerParty[i], enemy.pokemon)) continue;
                 
                 float typeEffectiveness = 0;
                 foreach (var type in enemy.pokemon.types)
                 {
-                    typeEffectiveness += BattleOperations.GetTypeEffectiveness(trainerParty[i], type);
+                    typeEffectiveness += _battleOperations.GetTypeEffectiveness(trainerParty[i], type);
                 }
                 pokemonScores.Add(new(i,typeEffectiveness));
             }
@@ -322,7 +324,7 @@ public class Enemy_trainer : BattleParticipantModule
     private int AiCheckBadMove(Battle_Participant enemy,Move currentMoveCheck)
     {
         int scoreDifference = 0;
-        if (BattleOperations.HasImmunity(enemy.pokemon, currentMoveCheck.type))
+        if (_battleOperations.HasImmunity(enemy.pokemon, currentMoveCheck.type))
         {
             scoreDifference-=120;
         }
@@ -335,11 +337,11 @@ public class Enemy_trainer : BattleParticipantModule
     private int AiCheckViability(Battle_Participant enemy,Move currentMoveCheck)
     {
         int scoreDifference = 0;
-        if (BattleOperations.IsStab(participant.pokemon, currentMoveCheck.type))
+        if (_battleOperations.IsStab(participant.pokemon, currentMoveCheck.type))
         {
             scoreDifference+=12;
         }
-        var typeEffectiveness = BattleOperations.CheckTypeEffectiveness(enemy, currentMoveCheck.type);
+        var typeEffectiveness = _battleOperations.CheckTypeEffectiveness(enemy, currentMoveCheck.type);
         scoreDifference += (int)typeEffectiveness * 15;
         
         return scoreDifference;

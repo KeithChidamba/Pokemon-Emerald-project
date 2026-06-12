@@ -2,7 +2,7 @@
     "basePokemonName": "Treecko",
     "pokemonName": "Treecko",
     "nickName": "gtg",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "Treecko",
     "captureInformation": {
         "areaName": "",
         "levelCaptured": 0
@@ -140,7 +140,7 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -11614
+            "instanceID": -31196
         }
     ],
     "ability": {

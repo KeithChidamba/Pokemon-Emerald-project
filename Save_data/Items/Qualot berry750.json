@@ -15,11 +15,6 @@
     "isHeldItem": false,
     "canBeHeld": false,
     "canBeSold": true,
-    "isMultiModular": true,
-    "hasModules": true,
-    "additionalInfoModule": {
-        "instanceID": 28020
-    },
     "additionalInfoModules": [
         {
             "instanceID": 28020
@@ -28,9 +23,10 @@
             "instanceID": 27510
         }
     ],
-    "infoModuleAssetNames": [
-        "Defense",
-        "Friendship berry"
-    ],
-    "imageDirectory": "Qualot berry"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Qualot berry",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

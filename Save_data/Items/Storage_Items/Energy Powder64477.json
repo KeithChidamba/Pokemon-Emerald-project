@@ -15,18 +15,15 @@
     "isHeldItem": false,
     "canBeHeld": false,
     "canBeSold": true,
-    "isMultiModular": false,
-    "hasModules": true,
-    "additionalInfoModule": {
-        "instanceID": 26650
-    },
     "additionalInfoModules": [
         {
             "instanceID": 26650
         }
     ],
-    "infoModuleAssetNames": [
-        "Energy Powder"
-    ],
-    "imageDirectory": "Energy Powder"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Energy Powder",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

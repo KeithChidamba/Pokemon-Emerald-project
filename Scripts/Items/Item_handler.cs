@@ -28,6 +28,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Game_ui_manager _gameUIHandler;
     private PlayerTileHandler _playerTileHandler;
+    private BattleOperations _battleOperations;
     
     public void Inject(ServiceContainer container)
     {
@@ -45,6 +46,8 @@ public class Item_handler : MonoBehaviour,IInjectable
         _overworldActions = container.Resolve<overworld_actions>();
         _gameUIHandler = container.Resolve<Game_ui_manager>();
         _playerTileHandler = container.Resolve<PlayerTileHandler>();
+        _battleOperations = container.Resolve<BattleOperations>();
+        
         gameObject.SetActive(true);
     }
 
@@ -77,7 +80,7 @@ public class Item_handler : MonoBehaviour,IInjectable
 
         switch (item.itemType)
         {
-            case ItemType.LearnableMove: StartCoroutine(_pokemonOperationsHandler.LearnTmOrHm(itemInUse.additionalInfoModule,selectedPokemon)); break;
+            case ItemType.LearnableMove: StartCoroutine(_pokemonOperationsHandler.LearnTmOrHm(itemInUse,selectedPokemon)); break;
             
             case ItemType.Overworld : UseOverworldItem(); break;
             
@@ -97,7 +100,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             
             case ItemType.Pokeball: UsePokeball(item); break;
             
-            case ItemType.EvolutionStone: TriggerStoneEvolution(); break;
+            case ItemType.EvolutionStone: StartCoroutine(TriggerStoneEvolution()); break;
             
             case ItemType.RareCandy: StartCoroutine(LevelUpWithItem()); break;
             
@@ -182,34 +185,33 @@ public class Item_handler : MonoBehaviour,IInjectable
         if (_selectedPartyPokemon.currentLevel == 100)
         {
             OnItemUsageSuccessful?.Invoke(false);
-            _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+" is already max level!");
+            _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonDisplayName+" is already max level!");
             ResetItemUsage();
         }
         else
         {
             OnItemUsageSuccessful?.Invoke(true);
-            var exp = PokemonOperations.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup);
-            _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+" leveled up!");
-            yield return new WaitForSecondsRealtime(1f);
-            _selectedPartyPokemon.ReceiveExperience(exp-_selectedPartyPokemon.currentExpAmount);
+            var expForNextLevel = _pokemonOperationsHandler.CalculateExpForNextLevel(_selectedPartyPokemon.currentLevel, _selectedPartyPokemon.expGroup);
+            var expDifferenceForLevelUp = expForNextLevel - _selectedPartyPokemon.currentExpAmount;
+            yield return _selectedPartyPokemon.ReceiveExperienceOutsideBattle(expDifferenceForLevelUp,true);
             CompleteItemUsage();
             _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
         }
     }
 
-    void TriggerStoneEvolution()
+    IEnumerator TriggerStoneEvolution()
     { 
-       var stoneInfo =itemInUse.GetModule<EvolutionStoneInfoModule>();
-       if (_selectedPartyPokemon.evolutionStone == stoneInfo.stoneName)
+       var stoneInfo = itemInUse.GetModule<EvolutionStoneInfoModule>();
+       if (_selectedPartyPokemon.evolutionStone == stoneInfo.stoneName && _selectedPartyPokemon.requiresEvolutionStone)
        {
+           yield return _pokemonOperationsHandler.HandlePokemonEvolution(_selectedPartyPokemon,0);
            OnItemUsageSuccessful?.Invoke(true);
-            _selectedPartyPokemon.CheckEvolutionRequirements(0);
-            CompleteItemUsage();
+           CompleteItemUsage();
        }
        else
        {
            OnItemUsageSuccessful?.Invoke(false);
-            _dialogueHandler.DisplayDetails("Cant use that on "+_selectedPartyPokemon.pokemonName);
+            _dialogueHandler.DisplayDetails("Cant use that on "+_selectedPartyPokemon.pokemonDisplayName);
             ResetItemUsage();
        }
     }
@@ -220,16 +222,16 @@ public class Item_handler : MonoBehaviour,IInjectable
         if(_selectedPartyPokemon.friendshipLevel>254)
         {
             OnItemUsageSuccessful?.Invoke(false);
-            _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+"'s friendship is already maxed out");
+            _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonDisplayName+"'s friendship is already maxed out");
             ResetItemUsage();
         }
         else
         {
             OnItemUsageSuccessful?.Invoke(true);
-            _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+"'s friendship was increased");
-            ref float evRef = ref PokemonOperations.GetEvStatRef(statToDecrease.statName, _selectedPartyPokemon);
+            _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonDisplayName+"'s friendship was increased");
+            ref float evRef = ref _pokemonOperationsHandler.GetEvStatRef(statToDecrease.statName, _selectedPartyPokemon);
             if (evRef > 100) evRef = 100;
-            else PokemonOperations.CalculateEvForStat(statToDecrease.statName, -10, _selectedPartyPokemon);
+            else _pokemonOperationsHandler.CalculateEvForStat(statToDecrease.statName, -10, _selectedPartyPokemon);
             _selectedPartyPokemon.DetermineFriendshipLevelChange(true,FriendshipModifier.Berry);
             CompleteItemUsage();
         }
@@ -237,15 +239,15 @@ public class Item_handler : MonoBehaviour,IInjectable
     private void GetEVsFromItem() 
     {
         var statToIncrease = itemInUse.GetModule<StatInfoModule>();
-        PokemonOperations.OnEvChange += CheckEvChange;
-        PokemonOperations.CalculateEvForStat(statToIncrease.statName, 10, _selectedPartyPokemon);
+        _pokemonOperationsHandler.OnEvChange += CheckEvChange;
+        _pokemonOperationsHandler.CalculateEvForStat(statToIncrease.statName, 10, _selectedPartyPokemon);
     }
 
     private void CheckEvChange(bool hasChanged)
     {
-        PokemonOperations.OnEvChange -= CheckEvChange;
+        _pokemonOperationsHandler.OnEvChange -= CheckEvChange;
         var statToIncrease = itemInUse.GetModule<StatInfoModule>();
-        var message = _selectedPartyPokemon.pokemonName + "'s " + NameDB.GetStatName(statToIncrease.statName);
+        var message = _selectedPartyPokemon.pokemonDisplayName + "'s " + NameDB.GetStatName(statToIncrease.statName);
         
         message += (hasChanged)? " was increased" : " can't get any higher";
 
@@ -289,7 +291,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             _moveUsageHandler.ApplyStatChangeImmunity(_currentParticipant,
                 StatChangeability.ImmuneToDecrease,5);
             
-            string pokemonProtected = _selectedPartyPokemon.pokemonName;
+            string pokemonProtected = _selectedPartyPokemon.pokemonDisplayName;
             
             if (_battleHandler.isDoubleBattle)
             {
@@ -298,7 +300,7 @@ public class Item_handler : MonoBehaviour,IInjectable
                 {
                     _moveUsageHandler.ApplyStatChangeImmunity(partner,
                         StatChangeability.ImmuneToDecrease, 5);
-                    pokemonProtected = _selectedPartyPokemon.pokemonName + " and " + partner.pokemon.pokemonName;
+                    pokemonProtected = _selectedPartyPokemon.pokemonDisplayName + " and " + partner.pokemon.pokemonDisplayName;
                 }
             }
             OnItemUsageSuccessful?.Invoke(false);
@@ -307,10 +309,10 @@ public class Item_handler : MonoBehaviour,IInjectable
             return;
         }
        
-        var buff = BattleOperations.SearchForBuffOrDebuff(_selectedPartyPokemon, statInfo.statName);
+        var buff = _battleOperations.SearchForBuffOrDebuff(_selectedPartyPokemon, statInfo.statName);
         if (buff is { isAtLimit: true })
         {
-            _dialogueHandler.DisplayBattleInfo($"{_selectedPartyPokemon.pokemonName}'s " +
+            _dialogueHandler.DisplayBattleInfo($"{_selectedPartyPokemon.pokemonDisplayName}'s " +
                                                         $"{buff.statName} can't go any higher");
             ResetItemUsage();
             OnItemUsageSuccessful?.Invoke(false);
@@ -325,7 +327,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     {
         if (_selectedPartyPokemon.hp > 0)
         {
-            _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+" has not fainted!"); 
+            _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonDisplayName+" has not fainted!"); 
             OnItemUsageSuccessful?.Invoke(false);
             ResetItemUsage();
             return;
@@ -333,7 +335,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         OnItemUsageSuccessful?.Invoke(true);
         _selectedPartyPokemon.hp = itemType == ItemType.MaxRevive? 
             _selectedPartyPokemon.maxHp : math.trunc(_selectedPartyPokemon.maxHp*0.5f);
-        _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+" has been revived!");
+        _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonDisplayName+" has been revived!");
         StartCoroutine(CompleteItemUsage(2.2f));
     }
 
@@ -539,7 +541,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         else
             _selectedPartyPokemon.statusEffect = StatusEffect.None;
         
-        _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+" has been healed");
+        _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonDisplayName+" has been healed");
         OnItemUsageSuccessful?.Invoke(true);
         return true;
     }
@@ -578,7 +580,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         }
         OnItemUsageSuccessful?.Invoke(true);
         _moveUsageHandler.HealthGainDisplay(healEffect,affectedPokemon:_selectedPartyPokemon);
-        _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonName+" gained "+healEffect+" health points");
+        _dialogueHandler.DisplayDetails(_selectedPartyPokemon.pokemonDisplayName+" gained "+healEffect+" health points");
         StartCoroutine(CompleteItemUsage(2f));
     }
     private void CompleteItemUsage()//only call for items used outside of battle

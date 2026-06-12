@@ -2,7 +2,7 @@
     "basePokemonName": "Zigzagoon",
     "pokemonName": "Zigzagoon",
     "nickName": "BIG",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "",
     "captureInformation": {
         "areaName": "Garden",
         "levelCaptured": 13
@@ -148,16 +148,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -11660
+            "instanceID": -31242
         },
         {
-            "instanceID": -11662
+            "instanceID": -31244
         },
         {
-            "instanceID": -11664
+            "instanceID": -31246
         },
         {
-            "instanceID": -11666
+            "instanceID": -31248
         }
     ],
     "ability": {

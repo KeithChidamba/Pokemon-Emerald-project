@@ -2,7 +2,7 @@
     "basePokemonName": "Wurmple",
     "pokemonName": "Dustox",
     "nickName": "dup",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "",
     "captureInformation": {
         "areaName": "",
         "levelCaptured": 0
@@ -140,16 +140,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -11670
+            "instanceID": -31252
         },
         {
-            "instanceID": -11672
+            "instanceID": -31254
         },
         {
-            "instanceID": -11674
+            "instanceID": -31256
         },
         {
-            "instanceID": -11676
+            "instanceID": -31258
         }
     ],
     "ability": {

@@ -181,11 +181,11 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         {
             if (attacker.isConfused)
             {
-                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " is confused");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " is confused");
                 yield return _battleVisualsHandler.DisplayConfusionVisuals(attacker);
                 if (Utility.RandomRange(0, 2) < 1)
                 {
-                    _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" hurt itself in its confusion");
+                    _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" hurt itself in its confusion");
                     yield return _moveUsageHandler.DealConfusionDamage(attacker);
                     OnAttackAttempted?.Invoke(false);
                     yield break;
@@ -193,10 +193,10 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             }
             if (attacker.isInfatuated)
             {
-                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " is in love ");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " is in love ");
                 if (Utility.RandomRange(0, 2) < 1)
                 {
-                    _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" can’t move because of love");
+                    _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" can’t move because of love");
                     OnAttackAttempted?.Invoke(false);
                     yield break;
                 }
@@ -218,7 +218,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                 }
                 if (victim.semiInvulnerabilityData.IsInvulnerableTo(turn.move))
                 {
-                    _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonName +
+                    _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName +
                                                                 victim.semiInvulnerabilityData.displayMessage);
                     OnAttackAttempted?.Invoke(false);
                     yield break;
@@ -231,10 +231,10 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                 {
 
                     if (attacker.pokemon.accuracy >= victim.pokemon.evasion)
-                        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName +
+                        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName +
                                                                     " missed the attack");
                     else
-                        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonName +
+                        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName +
                                                                     " dodged the attack");
                 }
                 else
@@ -253,10 +253,10 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         else
         {
             if (attacker.isFlinched)
-                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" flinched!");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" flinched!");
             else if (attacker.pokemon.statusEffect != StatusEffect.None)
             {
-                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" is affected by "+ attacker.pokemon.statusEffect);
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" is affected by "+ attacker.pokemon.statusEffect);
                 yield return _battleVisualsHandler.DisplayStatusEffectVisuals(attacker);
             }
         }
@@ -312,7 +312,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             
             if (!IsValidParticipantState(victim))
             {
-                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName+" missed the attack");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" missed the attack");
                 yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
                 continue;
             }
@@ -325,9 +325,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 
             if (currentTurn.turnUsage == TurnUsage.UseStruggle)
             {
-                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " is out of moves");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " is out of moves");
                 yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
-                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonName + " used struggle");
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " used struggle");
                 yield return _moveUsageHandler.DealStruggleDamage(victim,attacker,currentTurn.move);
                 yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
                 yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
@@ -445,7 +445,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     {
         if (forcedSwap)
         {
-            _dialogueHandler.DisplayBattleInfo(swap.Participant.pokemon.pokemonName
+            _dialogueHandler.DisplayBattleInfo(swap.Participant.pokemon.pokemonDisplayName
                                                         + " was blown out");
         }
         else
@@ -453,12 +453,12 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             if (swap.Participant.isPlayer)
             {
                 _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName
-                                                            + " withdrew " + swap.Participant.pokemon.pokemonName);
+                                                            + " withdrew " + swap.Participant.pokemon.pokemonDisplayName);
             }
             else
             {
                 _dialogueHandler.DisplayBattleInfo(swap.Participant.pokemonTrainerAI.trainerData.TrainerName
-                                                            +" withdrew "+swap.Participant.pokemon.pokemonName);
+                                                            +" withdrew "+swap.Participant.pokemon.pokemonDisplayName);
             }
         }
         
@@ -530,9 +530,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public string GetMoveUsageText(Move move, Battle_Participant attacker,Battle_Participant victim)
     {
         if (move.displayTargetMessage)
-            return attacker.pokemon.pokemonName + " used " 
-                                                + move.moveName + " on " + victim.pokemon.pokemonName + "!";
-        return attacker.pokemon.pokemonName + " used " + move.moveName + "!";
+            return attacker.pokemon.pokemonDisplayName + " used " 
+                                                + move.moveName + " on " + victim.pokemon.pokemonDisplayName + "!";
+        return attacker.pokemon.pokemonDisplayName + " used " + move.moveName + "!";
     }
 
     private IEnumerator CheckParticipantCoolDown()
@@ -548,7 +548,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         
         if (participant.currentCoolDown.canDisplayMessage)
         {
-            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName
+            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName
                                                         +participant.currentCoolDown.message);
             yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
         }
@@ -769,7 +769,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     }
     private IEnumerator DealWeatherDamage(Battle_Participant victim)
     {
-        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonName + currentWeather.weatherDamageMessage);
+        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + currentWeather.weatherDamageMessage);
         var weatherDamage = victim.pokemon.maxHp * (1 / 16f);
         _moveUsageHandler.DisplayDamage(victim,isSpecificDamage:true,
             predefinedDamage:weatherDamage,displayEffectiveness:false);

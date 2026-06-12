@@ -158,8 +158,8 @@ public class BattleIntro : MonoBehaviour,IInjectable
             }
             
             participantIntroImages[i].gameObject.SetActive(true);
-            participantIntroImages[i].sprite = participants[i].isEnemy?
-                participants[i].pokemon.frontPicture: playerSprite;
+            participantIntroImages[i].sprite = participants[i].isPlayer?
+               playerSprite: participants[i].pokemon.frontPicture;
         }
 
         yield return MainIntroSequence();
@@ -181,7 +181,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         StartCoroutine(PokemonIntroAnimationMovement(wildParticipant));
         yield return new WaitForSeconds(3f);
         
-        _dialogueHandler.DisplayBattleInfo( $"Go! {participants[0].pokemon.pokemonName}");
+        _dialogueHandler.DisplayBattleInfo( $"Go! {participants[0].pokemon.pokemonDisplayName}");
         StartCoroutine(_battleVisualsHandler.DisplayPokemonRelease());
         yield return new WaitForSeconds(1.5f);
         
@@ -212,15 +212,14 @@ public class BattleIntro : MonoBehaviour,IInjectable
             for (var i=0;i<4;i++)
             {
                 participantIntroImages[i].gameObject.SetActive(true);
-                if (participants[i].isEnemy)
+                if (participants[i].isPlayer)
                 {
-                    participantIntroImages[i].sprite = participants[i].pokemonTrainerAI.trainerData.battleIntroSprite;
-                    challengers.Add(participants[i].pokemonTrainerAI.trainerData.TrainerName);
+                    participantIntroImages[i].sprite = playerSprite;
                 }
                 else
                 {
-                    participantIntroImages[i].sprite = playerSprite;
-                    
+                    participantIntroImages[i].sprite = participants[i].pokemonTrainerAI.trainerData.battleIntroSprite;
+                    challengers.Add(participants[i].pokemonTrainerAI.trainerData.TrainerName);
                 }
             }
         }
@@ -247,7 +246,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
             for (var i = 0; i < challengers.Count; i++)
             {
                 _dialogueHandler.DisplayBattleInfo(
-                    $"{challengers[i]} sent out {participants[i + 2].pokemon.pokemonName}!");
+                    $"{challengers[i]} sent out {participants[i + 2].pokemon.pokemonDisplayName}!");
                 StartCoroutine(thrownPokeballs[i + 1].ThrowPokeball(true));
                 yield return new WaitForSeconds(1f);
                 SlideOutOfView(participantIntroImages[i + 2].rectTransform, 2000f);
@@ -261,7 +260,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         else
         {
             _dialogueHandler.DisplayBattleInfo(
-                $"{challengers[0]} sent out {participants[2].pokemon.pokemonName} and {participants[3].pokemon.pokemonName}!");
+                $"{challengers[0]} sent out {participants[2].pokemon.pokemonDisplayName} and {participants[3].pokemon.pokemonDisplayName}!");
 
             StartCoroutine(thrownPokeballs[1].ThrowPokeball(true));
             StartCoroutine(thrownPokeballs[2].ThrowPokeball(true));
@@ -277,9 +276,9 @@ public class BattleIntro : MonoBehaviour,IInjectable
             yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
         }
 
-        message = $"Go! {participants[0].pokemon.pokemonName}";
+        message = $"Go! {participants[0].pokemon.pokemonDisplayName}";
         message += _battleHandler.isDoubleBattle && participants[1].isActive?
-                $" and {participants[1].pokemon.pokemonName}!":"!";
+                $" and {participants[1].pokemon.pokemonDisplayName}!":"!";
 
         _dialogueHandler.DisplayBattleInfo(message);
 
@@ -328,7 +327,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
 
     public IEnumerator SwitchInPokemon(Battle_Participant swapParticipant, Pokemon newPokemon,bool normalIntentionalSwitch=true)
     {
-        if(swapParticipant.isEnemy)
+        if(!swapParticipant.isPlayer)
         {
             yield return enemyPokeballs.ShowPokeballs();
             yield return new WaitForSeconds(0.5f);
@@ -339,18 +338,21 @@ public class BattleIntro : MonoBehaviour,IInjectable
         
         yield return _battleHandler.SetupParticipant(swapParticipant,newPokemon:newPokemon);
         
-        if (swapParticipant.isEnemy)
+        if (swapParticipant.isPlayer)
         {
-            yield return _battleVisualsHandler.SendOutEnemyPokemon(swapParticipant);
+            yield return _battleVisualsHandler.SendOutPlayerPokemon(swapParticipant);
         }
         else
         {
-            yield return _battleVisualsHandler.SendOutPlayerPokemon(swapParticipant);
+            yield return _battleVisualsHandler.SendOutEnemyPokemon(swapParticipant);
         }
         if (normalIntentionalSwitch)
         {
             yield return _battleVisualsHandler.RevealPokemonAfterWithdraw(swapParticipant);
-            if (swapParticipant.isEnemy) yield return PokemonIntroAnimation(swapParticipant);
+            if (!swapParticipant.isPlayer)
+            {
+                yield return PokemonIntroAnimation(swapParticipant);
+            }
         }
     }
 
@@ -364,17 +366,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         var rect = participant.pokemonImage.rectTransform;
         var movementSpeed = platformSlideSpeed * 0.4f;
         var startPos = rect.anchoredPosition;
-        if(participant.isEnemy)
-        {//LEFT AND RIGHT SLIDE
-            var target = new Vector2(rect.anchoredPosition.x + 10f, rect.anchoredPosition.y);
-            yield return StartCoroutine(BattleVisuals.SlideRect(rect,
-                startPos, target, movementSpeed));
-            target = new Vector2(startPos.x - 20f, rect.anchoredPosition.y);
-            yield return StartCoroutine(BattleVisuals.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
-            target = new Vector2(startPos.x, rect.anchoredPosition.y);
-            yield return StartCoroutine(BattleVisuals.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
-        }
-        else
+        if(participant.isPlayer)
         {
             var xOffset = 12f; 
             var yOffset = 6f;
@@ -392,6 +384,17 @@ public class BattleIntro : MonoBehaviour,IInjectable
             yield return StartCoroutine(BattleVisuals.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
             //RETURN TO POSITION    
             yield return StartCoroutine(BattleVisuals.SlideRect(rect, rect.anchoredPosition, startPos, movementSpeed));
+        }
+        else
+        {
+            //LEFT AND RIGHT SLIDE
+            var target = new Vector2(rect.anchoredPosition.x + 10f, rect.anchoredPosition.y);
+            yield return StartCoroutine(BattleVisuals.SlideRect(rect,
+                startPos, target, movementSpeed));
+            target = new Vector2(startPos.x - 20f, rect.anchoredPosition.y);
+            yield return StartCoroutine(BattleVisuals.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
+            target = new Vector2(startPos.x, rect.anchoredPosition.y);
+            yield return StartCoroutine(BattleVisuals.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
         }
     }
     public IEnumerator PokemonIntroAnimation(Battle_Participant participant)

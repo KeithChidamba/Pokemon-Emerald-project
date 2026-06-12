@@ -2,7 +2,7 @@
     "basePokemonName": "Mudkip",
     "pokemonName": "Marshtomp",
     "nickName": "kam",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "",
     "captureInformation": {
         "areaName": "",
         "levelCaptured": 0
@@ -164,16 +164,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -11640
+            "instanceID": -31222
         },
         {
-            "instanceID": -11642
+            "instanceID": -31224
         },
         {
-            "instanceID": -11644
+            "instanceID": -31226
         },
         {
-            "instanceID": -11646
+            "instanceID": -31228
         }
     ],
     "ability": {

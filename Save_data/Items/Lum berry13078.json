@@ -15,18 +15,15 @@
     "isHeldItem": false,
     "canBeHeld": true,
     "canBeSold": true,
-    "isMultiModular": false,
-    "hasModules": true,
-    "additionalInfoModule": {
-        "instanceID": 28046
-    },
     "additionalInfoModules": [
         {
             "instanceID": 28046
         }
     ],
-    "infoModuleAssetNames": [
-        "Full heal berry"
-    ],
-    "imageDirectory": "Lum berry"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Lum berry",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

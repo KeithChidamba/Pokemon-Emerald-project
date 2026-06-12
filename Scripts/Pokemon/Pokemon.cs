@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 [Serializable]
@@ -16,9 +15,10 @@ public struct CaptureInformation
 public class Pokemon : ScriptableObject
 {
     [FormerlySerializedAs("Base_Pokemon_name")] public string basePokemonName;
-    [FormerlySerializedAs("Pokemon_name")] public string pokemonName;
+    public string pokemonName;
     public string nickName;
-    public string currentPokemonName;
+    public string pokemonDisplayName;
+    
     public CaptureInformation captureInformation;
     public long pokemonID;
     public uint personalityValue;
@@ -111,6 +111,7 @@ public class Pokemon : ScriptableObject
     private Battle_handler _battleHandler;
     private Pokemon_party _pokemonPartyHandler;
     private PokemonOperations _pokemonOperationsHandler;
+    
     public void SaveUnserializableData()
     {
         abilityName = ability.abilityName;
@@ -219,14 +220,17 @@ public class Pokemon : ScriptableObject
 
     private int ApplyFriendshipModifier(int currentIncrease)
     {
-        float modifier = 1f;
-        if (pokeballName == "Luxury Ball")
-            modifier *= 1.5f;
+        float modifier = 0;
+        
+        var pokeballItem = Resources.Load<Item>(SaveDataHandler.GetDirectory(AssetDirectory.Items)+ pokeballName);
+        modifier += pokeballItem.GetDynamicModule<FriendshipModifierInfo>().modifier;
         
         if (hasItem)
-            if(heldItem.itemName == "Soothe Bell")
-                modifier *= 1.5f;
-        return (int)math.ceil(currentIncrease * modifier);
+        {
+            modifier += heldItem.GetDynamicModule<FriendshipModifierInfo>().modifier;
+        }
+        
+        return (int)math.ceil(currentIncrease + modifier);
     }
 
     public void ChangeFriendshipLevel(int amount)
@@ -273,27 +277,15 @@ public class Pokemon : ScriptableObject
     }
 
 
-    public void CheckEvolutionRequirements(int evoIndex)
+    private void CheckEvolutionRequirements(int evoIndex)
     {
-        if (requiresEvolutionStone)
-        {
-            Evolve(evolutions[evoIndex]); return;
-        }
-
         var isPlayerPokemon = _pokemonPartyHandler.party.Contains(this);
         
         if (requiresFriendshipEvolution)
         {
             if (friendshipLevel >= friendshipEvolutionRequirement.friendshipRequirement)
             {
-                if (isPlayerPokemon && _battleHandler.battleInProgress)
-                {
-                    OnEvolutionSuccessful?.Invoke(friendshipEvolutionRequirement.evolutionIndex);
-                }
-                else
-                {
-                    Evolve(evolutions[friendshipEvolutionRequirement.evolutionIndex]);
-                }
+                SetupEvolution();
             } 
             return;
         } 
@@ -303,8 +295,11 @@ public class Pokemon : ScriptableObject
         {
             return;//max evolution
         }
-        
         if (currentLevel>=evolutionLineLevels[currentEvolutionLineIndex])
+        {
+            SetupEvolution();
+        }
+        void SetupEvolution()
         {
             if (isPlayerPokemon && _battleHandler.battleInProgress)
             {
@@ -324,19 +319,25 @@ public class Pokemon : ScriptableObject
         else if (evolutionValue>4 & evolutionValue<10)
             CheckEvolutionRequirements(2);
     }
-    public void ReceiveExperience(int amount)
+
+    public IEnumerator ReceiveExperienceOutsideBattle(int amount,bool displayMessage)
     {
-        if (currentLevel > 99) return;
-        currentExpAmount += amount;
-        nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel,expGroup);
-        if(currentExpAmount>nextLevelExpAmount)
-            LevelUp();
+        if (currentLevel >= 100) yield break;
+        int remainingExp = amount;
+        while (remainingExp > 0 && currentLevel < 100)
+        {
+            int expToNextLevel = nextLevelExpAmount - currentExpAmount;
+            int expThisLoop = Mathf.Min(remainingExp, expToNextLevel);
+            currentExpAmount += expThisLoop;
+            remainingExp -= expThisLoop;
+            yield return LevelUpAtThreshold(displayMessage);
+        }
     }
     public IEnumerator ReceiveExperienceAndDisplay(int amount)
     {
         if (currentLevel >= 100) yield break;
-        
         int remainingExp = amount;
+        
         _battleHandler.StartExpEvent(this);
         
         while (remainingExp > 0 && currentLevel < 100)
@@ -357,29 +358,30 @@ public class Pokemon : ScriptableObject
                 currentExpAmount = (int)Mathf.Floor(displayExp);
                 yield return null;
             }
-
             // Deduct what we just gave
             remainingExp -= expThisLoop;
-
             // If we reached or passed the next level threshold > level up
-            if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
-            {
-                LevelUp();
-
-                _dialogueHandler.DisplayBattleInfo(pokemonName+" grew to lv"+currentLevel);
-               
-                yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
-                yield return _pokemonOperationsHandler.WaitForNewMoveCheck(this);
-
-                yield return _pokemonOperationsHandler.AwaitMoveOperation(moveSet.Count == 4);
-                
-                nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel, expGroup);
-            }
+            yield return LevelUpAtThreshold(true);
         }
-        _dialogueHandler.DisplayBattleInfo($"{pokemonName} gained {amount} EXP points");
+        _dialogueHandler.DisplayBattleInfo($"{pokemonDisplayName} gained {amount} EXP points");
         OnExpGainComplete?.Invoke(this);
     }
+    IEnumerator LevelUpAtThreshold(bool displayMessage)
+    {
+        if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
+        {
+            LevelUp();
 
+            if(displayMessage)_dialogueHandler.DisplayBattleInfo(pokemonDisplayName+" grew to lv"+currentLevel);
+               
+            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            yield return _pokemonOperationsHandler.WaitForNewMoveCheck(this);
+
+            yield return _pokemonOperationsHandler.AwaitMoveOperation(moveSet.Count == 4);
+                
+            nextLevelExpAmount = _pokemonOperationsHandler.CalculateExpForNextLevel(currentLevel, expGroup);
+        }
+    }
     public int CalculateExperience()
     {
         var trainerBonus = 1f;
@@ -424,8 +426,6 @@ public class Pokemon : ScriptableObject
         requiresEvolutionStone = evo.requiresEvolutionStone;
         friendshipEvolutionRequirement = evo.friendshipEvolutionRequirement;
         currentEvolutionLineIndex++;
-        if (_pokemonPartyHandler.party.Contains(this))
-            _pokemonPartyHandler.RefreshMemberCards();
     }
 
     void IncreaseStats()
@@ -436,8 +436,6 @@ public class Pokemon : ScriptableObject
         specialAttack = DetermineStatIncrease(baseSpecialAttack,specialAttackIv,specialAttackEv,Stat.SpecialAttack);
         specialDefense = DetermineStatIncrease(baseSpecialDefense,specialDefenseIv,specialDefenseEv,Stat.SpecialDefense);
         maxHp = DetermineHealthIncrease();
-        if (currentLevel == 1)
-            hp = maxHp;
     }
     float GetNatureModifier(Stat stat)
      {
@@ -447,27 +445,26 @@ public class Pokemon : ScriptableObject
              return 0.9f;
          return 1;
      }
-    float DetermineStatIncrease(float baseStat,float IV,float EV,Stat stat)
+    float DetermineStatIncrease(float baseStat,float iv,float ev,Stat stat)
     {
-        float brackets1 = (2*baseStat) + IV + (EV / 4);
-        float bracket2 = brackets1 * (currentLevel / 100f);
-        float bracket3 = bracket2 + 5f;
-        return math.floor(bracket3 * GetNatureModifier(stat));
+        float brackets1 = (2*baseStat) + iv + (ev / 4);
+        float bracket2 = currentLevel / 100f;
+        return math.floor((brackets1 * bracket2 + 5f) * GetNatureModifier(stat));
     }
     float DetermineHealthIncrease()
     {
-        float brackets1 = (2*baseHp) + hpIv + (hpEv / 4);
-        float bracket2 = brackets1 * (currentLevel / 100f);
-        float bracket3 = bracket2 + currentLevel + 10f;
-        return math.floor(bracket3);
+        float bracket1 = (2*baseHp) + hpIv + (hpEv / 4);
+        float bracket2 = currentLevel / 100f;
+        float bracket3 = currentLevel + 10f;
+        return math.floor(bracket1 * bracket2 + bracket3);
     }
     private void LevelUp()
     {
         OnLevelUp?.Invoke(this);
         DetermineFriendshipLevelChange(true, FriendshipModifier.LevelUp);
         currentLevel++;
-        currentLevelExpAmount = PokemonOperations.CalculateExpForLevel(currentLevel,expGroup);
-        nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(currentLevel,expGroup);
+        currentLevelExpAmount = _pokemonOperationsHandler.CalculateExpForLevel(currentLevel,expGroup);
+        nextLevelExpAmount = _pokemonOperationsHandler.CalculateExpForNextLevel(currentLevel,expGroup);
         IncreaseStats();
         
         if (!requiresEvolutionStone)
@@ -480,11 +477,7 @@ public class Pokemon : ScriptableObject
                     CheckEvolutionRequirements(0);
             }
         }
-        if (!_battleHandler.battleInProgress)//artificial level up
-            _pokemonOperationsHandler.CheckForNewMove(this);
         OnNewLevel?.Invoke();
-        while(currentExpAmount>nextLevelExpAmount)
-            LevelUp();
     }
 
     public void ChangeHealth(Battle_Participant attacker)

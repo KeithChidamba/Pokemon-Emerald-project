@@ -2,7 +2,7 @@
     "basePokemonName": "Zigzagoon",
     "pokemonName": "Zigzagoon",
     "nickName": "123d",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "",
     "captureInformation": {
         "areaName": "",
         "levelCaptured": 0
@@ -148,10 +148,10 @@
     ],
     "moveSet": [
         {
-            "instanceID": -11618
+            "instanceID": -31200
         },
         {
-            "instanceID": -11620
+            "instanceID": -31202
         }
     ],
     "ability": {

@@ -2,7 +2,7 @@
     "basePokemonName": "Wurmple",
     "pokemonName": "Wurmple",
     "nickName": "scxa",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "",
     "captureInformation": {
         "areaName": "",
         "levelCaptured": 0
@@ -106,10 +106,10 @@
     "learnableHms": [],
     "moveSet": [
         {
-            "instanceID": -11634
+            "instanceID": -31216
         },
         {
-            "instanceID": -11636
+            "instanceID": -31218
         }
     ],
     "ability": {

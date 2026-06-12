@@ -47,7 +47,7 @@ public class Battle_Data: BattleParticipantModule
         participant.isFlinched = false;
         participant.isConfused = false;
         participant.isInfatuated = false;
-        var rawName = pokemon.pokemonName.Replace("Foe ", "");
-        pokemon.pokemonName = rawName;
+        var rawName = pokemon.pokemonDisplayName.Replace("Foe ", "");
+        pokemon.pokemonDisplayName = rawName;
     }
 }

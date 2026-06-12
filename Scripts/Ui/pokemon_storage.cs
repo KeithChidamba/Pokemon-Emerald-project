@@ -493,7 +493,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         selectedPokemonID = icon.pokemon.pokemonID.ToString();
         storageOptionsText.transform.parent.gameObject.SetActive(true);
         storagePartyOptionsParent.SetActive(true);
-        storageOptionsText.text = icon.pokemon.pokemonName + " is selected.";
+        storageOptionsText.text = icon.pokemon.pokemonDisplayName + " is selected.";
     }
     
     public void SelectNonPartyPokemon(PC_pkm pokemonIcon)
@@ -561,7 +561,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         
             selectedPokemonID = pokemonIcon.pokemon.pokemonID.ToString();
             storageOptionsText.transform.parent.gameObject.SetActive(true);
-            storageOptionsText.text = pokemonIcon.pokemon.pokemonName + " is selected.";
+            storageOptionsText.text = pokemonIcon.pokemon.pokemonDisplayName + " is selected.";
             storageOptionsParent.SetActive(true);
         }
         
@@ -651,7 +651,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         ResetOptions();
         if (isPartyPokemon)
         {
-            _dialogueHandler.DisplayDetails("You released "+ _pokemonPartyHandler.party[partyPosition-1].pokemonName);
+            _dialogueHandler.DisplayDetails("You released "+ _pokemonPartyHandler.party[partyPosition-1].pokemonDisplayName);
             _pokemonPartyHandler.RemoveMember(partyPosition);
             totalPokemonCount--;
             RefreshStorageUi(true);
@@ -659,7 +659,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         else
         {
             var indexToDelete= SearchForPokemonIndex(selectedPokemonID);
-            _dialogueHandler.DisplayDetails("You released "+ nonPartyPokemon[indexToDelete].pokemonName);
+            _dialogueHandler.DisplayDetails("You released "+ nonPartyPokemon[indexToDelete].pokemonDisplayName);
             DeleteNonPartyPokemon(indexToDelete);
             RefreshStorageUi(false);
         }

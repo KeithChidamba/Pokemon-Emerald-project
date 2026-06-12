@@ -13,46 +13,29 @@ public class Item : ScriptableObject
     public ItemType itemType;
     public float itemEffectData;
     [FormerlySerializedAs("Item_desc")] public string itemDescription = "";
-    public int price = 0;
-    public int quantity = 0;
+    public int price;
+    public int quantity;
     [FormerlySerializedAs("Item_img")] public Sprite itemImage;
     [FormerlySerializedAs("ForPartyUse")] public bool forPartyUse = true;
     [FormerlySerializedAs("CanBeUsedInOverworld")] public bool canBeUsedInOverworld = true;
     [FormerlySerializedAs("CanBeUsedInBattle")] public bool canBeUsedInBattle = true;
-    public bool isHeldItem = false;
-    [FormerlySerializedAs("CanBeHeld")] public bool canBeHeld = false;
+    public bool isHeldItem;
+    [FormerlySerializedAs("CanBeHeld")] public bool canBeHeld;
     [FormerlySerializedAs("CanBeSold")] public bool canBeSold = true;
-    public bool isMultiModular;
-    public bool hasModules = true;
-    [FormerlySerializedAs("additionalItemInfo")] public AdditionalInfoModule additionalInfoModule;
-    public List<AdditionalInfoModule> additionalInfoModules;
-    public List<string> infoModuleAssetNames; //only gets modified and used in code
+    public List<AdditionalInfoModule> additionalInfoModules = new();
+    [SerializeReference]public List<DynamicAdditionalInfo> dynamicInfoModules = new();
+    
     public string imageDirectory;//only gets modified and used in code
 
     public T GetModule<T>() where T : AdditionalInfoModule
     {
-        if (isMultiModular)
-        {
-            return additionalInfoModules.FirstOrDefault(m => m is T) as T;
-        }
-        return additionalInfoModule as T;
+        return additionalInfoModules.FirstOrDefault(m => m is T) as T;
     }
-    public void SaveModuleNames()
+    public T GetDynamicModule<T>() where T : DynamicAdditionalInfo
     {
-        if(hasModules)
-        {
-            infoModuleAssetNames.Clear();
-            if (additionalInfoModules.Count == 0 && !isMultiModular)
-            {
-                //just in-case
-                additionalInfoModules.Add(additionalInfoModule);
-            }
-            foreach (var module in additionalInfoModules)
-            {
-                infoModuleAssetNames.Add(module.name);
-            }
-        }
+        return dynamicInfoModules.FirstOrDefault(m => m is T) as T;
     }
+    
     public string DetermineImageDirectory()
     {
         if (additionalInfoModules.Any(m => m is TM))
@@ -73,16 +56,16 @@ public class Item : ScriptableObject
     }
     public void LoadData()
     {
-        if (hasModules)
-        {
+        var sourceAsset = Resources.Load<Item>(SaveDataHandler.GetDirectory(AssetDirectory.Items)+ itemName);
+        if(sourceAsset.additionalInfoModules.Count>0){
             additionalInfoModules.Clear();
-            foreach (var assetName in infoModuleAssetNames)
-            {
-                var additionalInfo = Resources.Load<AdditionalInfoModule>(SaveDataHandler.GetDirectory(AssetDirectory.AdditionalInfo)+assetName);
-                additionalInfoModules.Add(additionalInfo);
-            }
-            additionalInfoModule = additionalInfoModules.First();
+            additionalInfoModules.AddRange(sourceAsset.additionalInfoModules);
         }
+        if(sourceAsset.dynamicInfoModules.Count>0){
+            dynamicInfoModules.Clear();
+            dynamicInfoModules.AddRange(sourceAsset.dynamicInfoModules);
+        }
+        
         itemImage = Testing.GetValidImage(SaveDataHandler.GetDirectory(AssetDirectory.ItemUI),imageDirectory);
     }
 }

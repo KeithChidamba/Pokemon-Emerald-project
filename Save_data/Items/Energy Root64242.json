@@ -15,18 +15,15 @@
     "isHeldItem": false,
     "canBeHeld": false,
     "canBeSold": true,
-    "isMultiModular": false,
-    "hasModules": true,
-    "additionalInfoModule": {
-        "instanceID": 26442
-    },
     "additionalInfoModules": [
         {
             "instanceID": 26442
         }
     ],
-    "infoModuleAssetNames": [
-        "Energy Root"
-    ],
-    "imageDirectory": "Energy Root"
+    "dynamicInfoModules": [],
+    "imageDirectory": "Energy Root",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
 }

@@ -2,7 +2,7 @@
     "basePokemonName": "Zubat",
     "pokemonName": "Zubat",
     "nickName": "misc",
-    "currentPokemonName": "",
+    "pokemonDisplayName": "",
     "captureInformation": {
         "areaName": "",
         "levelCaptured": 0
@@ -139,16 +139,16 @@
     ],
     "moveSet": [
         {
-            "instanceID": -11624
+            "instanceID": -31206
         },
         {
-            "instanceID": -11626
+            "instanceID": -31208
         },
         {
-            "instanceID": -11628
+            "instanceID": -31210
         },
         {
-            "instanceID": -11630
+            "instanceID": -31212
         }
     ],
     "ability": {

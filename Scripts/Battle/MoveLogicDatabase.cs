@@ -19,7 +19,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private Move_handler _moveUsageHandler;
     private BattleOperations _battleOperationsHandler;
     private MoveLogicHandler _moveLogicHandler;
-
+    
     private Dictionary<string, Func<IEnumerator>> _logicMethods = new();
     
     public void Inject(ServiceContainer container)
@@ -78,7 +78,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             foreach (var barrier in enemy.barriers)
             {
                 if (duplicateBarriers.Contains(barrier.barrierName)) continue;
-                _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName+" shattered "+barrier.barrierName);
+                _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+" shattered "+barrier.barrierName);
                 duplicateBarriers.Add(barrier.barrierName);
             }
             enemy.barriers.Clear();
@@ -113,7 +113,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     {
         if (_attacker.currentCoolDown.isExecutionTurn)
         {
-            _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName+" unleashed the power");
+            _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+" unleashed the power");
             if (_attacker.currentCoolDown.turnData.move.moveDamage > 0)
             {
                 _currentTurn.move.moveDamage = _attacker.currentCoolDown.turnData.move.moveDamage;
@@ -150,7 +150,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         var recoilDamage = math.floor(damage / 4f);
         _moveUsageHandler.DisplayDamage(_victim,isSpecificDamage:true,predefinedDamage:damage);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
-        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName +" was hurt by the recoil");
+        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName +" was hurt by the recoil");
         _moveUsageHandler.DisplayDamage(_attacker,isSpecificDamage:true
             ,predefinedDamage:recoilDamage,displayEffectiveness: false);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
@@ -246,7 +246,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             yield return new WaitUntil(() => !waiting);
         }
         
-        statChangeMessage = BattleOperations.GetBuffResultMessage(true,_attacker.pokemon,allBuffs);
+        statChangeMessage = _battleOperationsHandler.GetBuffResultMessage(true,_attacker.pokemon,allBuffs);
         _battleVisualsHandler.OnStatVisualDisplayed += AwaitBuffVisual;
         waiting = true;
         _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,_attacker,statChangeMessage);
@@ -403,7 +403,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private IEnumerator Rest()
     {
         var healthGain = _attacker.pokemon.maxHp - _attacker.pokemon.hp;
-        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonName+" fell asleep!");
+        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+" fell asleep!");
         yield return new WaitForSeconds(1f);
         _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:_attacker);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);

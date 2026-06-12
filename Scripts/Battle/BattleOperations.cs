@@ -6,13 +6,18 @@ using System.Linq;
 
 public class BattleOperations : MonoBehaviour,IInjectable
 {   
-    private static BattleVisuals _battleVisualsHandler;
-    private static Dialogue_handler _dialogueHandler;
-
+    public bool canDisplayChange = true;
+    public event Action OnBuffApplied;
+        
+    private BattleVisuals _battleVisualsHandler;
+    private Dialogue_handler _dialogueHandler;
+    private PokemonOperations _pokemonOperations;
+    
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
+        _pokemonOperations = container.Resolve<PokemonOperations>();
         gameObject.SetActive(true);
     }
 
@@ -20,26 +25,23 @@ public class BattleOperations : MonoBehaviour,IInjectable
     {
         
     }
-
-    public bool canDisplayChange = true;
-    public event Action OnBuffApplied;
-
-    public static bool HasImmunity(Pokemon victim,Type enemyType)
+    
+    public bool HasImmunity(Pokemon victim,Type enemyType)
     {
         foreach(var type in victim.types)
-            if (PokemonOperations.ContainsType(type.immunities,enemyType))
+            if (_pokemonOperations.ContainsType(type.immunities,enemyType))
                 return true;
         return false;
     } 
     
-    public static bool IsStab(Pokemon pokemon,Type moveType)
+    public bool IsStab(Pokemon pokemon,Type moveType)
     {
         foreach(Type t in pokemon.types)
             if (t == moveType)
                 return true;
         return false;
     }
-    public static float CheckTypeEffectiveness(Battle_Participant victim,Type enemyType)
+    public float CheckTypeEffectiveness(Battle_Participant victim,Type enemyType)
     {
         float effectiveness = 1;
         if (victim.additionalTypeImmunity!=null)
@@ -62,21 +64,21 @@ public class BattleOperations : MonoBehaviour,IInjectable
         }
         return effectiveness;
     }
-    public static float GetTypeEffectiveness(Pokemon victim,Type enemyType)
+    public float GetTypeEffectiveness(Pokemon victim,Type enemyType)
     {
         float effectiveness = 1;
         //Weakness
         foreach(Type t in victim.types)
-            if (PokemonOperations.ContainsType(t.weaknesses, enemyType))
+            if (_pokemonOperations.ContainsType(t.weaknesses, enemyType))
                 effectiveness *= 2f;
         //Resistance
         foreach(Type t in victim.types)
-            if (PokemonOperations.ContainsType(t.resistances, enemyType))
+            if (_pokemonOperations.ContainsType(t.resistances, enemyType))
                 effectiveness /= 2f;
         
         return effectiveness;
     }
-    public static bool HardCountered(Pokemon victim,Pokemon enemy)
+    public bool HardCountered(Pokemon victim,Pokemon enemy)
     {
         foreach (var type in victim.types)
         {
@@ -85,14 +87,14 @@ public class BattleOperations : MonoBehaviour,IInjectable
         return false;
     }
     //Pokeballs
-    public static float GetCatchRateBonusFromStatus(StatusEffect statusName)
+    public float GetCatchRateBonusFromStatus(StatusEffect statusName)
     {
         if (statusName == StatusEffect.None) return 1;
         if (statusName == StatusEffect.Sleep || statusName == StatusEffect.Freeze)
             return 2.5f;
         return 1.5f;
     }
-    public static bool IsImmediateCatch(float catchValue)
+    public bool IsImmediateCatch(float catchValue)
     {
         for (int i = 0; i < 4; i++)
         {
@@ -117,7 +119,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
         RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
         OnBuffApplied?.Invoke();
     }
-    public static string GetBuffResultMessage(bool isIncreasing,Pokemon pokemon,Stat[] buffs)
+    public string GetBuffResultMessage(bool isIncreasing,Pokemon pokemon,Stat[] buffs)
     {
         //shorten stat names to be more readable
         string buffNameString=""; 
@@ -135,9 +137,9 @@ public class BattleOperations : MonoBehaviour,IInjectable
             else
                 buffNameString += shortBuffNames[i] + ", ";
         }
-        if(isIncreasing) return pokemon.pokemonName+"'s "+buffNameString+" rose";
+        if(isIncreasing) return pokemon.pokemonDisplayName+"'s "+buffNameString+" rose";
         
-        return pokemon.pokemonName+"'s "+buffNameString+" fell";
+        return pokemon.pokemonDisplayName+"'s "+buffNameString+" fell";
     }
     private int ValidateBuffLimit(Battle_Participant participant,Buff_Debuff buff,bool increased,int changeValue)
     {
@@ -150,7 +152,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
         {
             buff.isAtLimit = true;
             if(canDisplayChange)
-                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+buff.statName+" cant go any higher");
+                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+buff.statName+" cant go any higher");
             _battleVisualsHandler.CancelBuffVisual();
             return buff.stage;
         }
@@ -158,19 +160,19 @@ public class BattleOperations : MonoBehaviour,IInjectable
         {
             buff.isAtLimit = true;
             if(canDisplayChange)
-                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonName+"'s "+buff.statName+" cant go any lower");
+                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+buff.statName+" cant go any lower");
             _battleVisualsHandler.CancelBuffVisual();
             return buff.stage;
         }
         if (increased)
         {
             change = buff.stage+changeValue;
-            message = participant.pokemon.pokemonName+"'s "+buff.statName+" rose!";
+            message = participant.pokemon.pokemonDisplayName+"'s "+buff.statName+" rose!";
         }
         else
         {
             change = buff.stage-changeValue;
-            message = participant.pokemon.pokemonName+"'s "+buff.statName+" fell!";
+            message = participant.pokemon.pokemonDisplayName+"'s "+buff.statName+" fell!";
         }
         
         if (canDisplayChange)
@@ -183,20 +185,20 @@ public class BattleOperations : MonoBehaviour,IInjectable
             return indexLimitLow - 1; 
         return change;
     }
-    private static Buff_Debuff CreateNewBuff( Stat statName)
+    private Buff_Debuff CreateNewBuff( Stat statName)
     {
         return new Buff_Debuff(statName,0,false);
     }
-    public static Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon, Stat stat)
+    public Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon, Stat stat)
     {
         return pokemon.buffAndDebuffs.FirstOrDefault(b=>b.stat==stat);
     }
-    public static void RemoveInvalidBuffsOrDebuffs(Pokemon pokemon)
+    public void RemoveInvalidBuffsOrDebuffs(Pokemon pokemon)
     {
         pokemon.buffAndDebuffs.RemoveAll(b=>b.stage==0);
     }
 
-    public static void ModifyBuff(Buff_Debuff buff, int limitHigh, int change)
+    public void ModifyBuff(Buff_Debuff buff, int limitHigh, int change)
     {
         buff.stage = math.clamp(buff.stage + change, buff.stage, limitHigh);
     }

@@ -62,6 +62,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     public void ResetDetailsState()
     {
         currentPokemon = null;
+        StopCoroutine(_animationRoutine);
     }
 
     public void DeactivateDetailsUi()
