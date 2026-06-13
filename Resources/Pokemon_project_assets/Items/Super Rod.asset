@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: Super Rod
   itemType: 0
-  itemEffect: 
   itemDescription: A fantastic fishing rod that can catch any pokemon
   price: 0
   quantity: 1
@@ -26,9 +25,19 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 0
-  isMultiModular: 0
-  hasModules: 1
-  additionalInfoModule: {fileID: 11400000, guid: 23774594aae2ab8698780a89641a61a2, type: 2}
   additionalInfoModules: []
-  infoModuleAssetNames: []
+  dynamicInfoModules:
+  - rid: 7301661317695799316
+  - rid: 7301661317695799320
   imageDirectory: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 7301661317695799316
+      type: {class: FishingRodInfo, ns: , asm: Assembly-CSharp}
+      data:
+        fishingRodType: 2
+    - rid: 7301661317695799320
+      type: {class: EquipableItemInfo, ns: , asm: Assembly-CSharp}
+      data:
+        equipableItem: 2

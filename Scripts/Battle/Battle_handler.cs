@@ -549,9 +549,11 @@ public class Battle_handler : MonoBehaviour, IInjectable
         foreach(var participant in playerParticipants)
         {
             if (!participant.pokemon.hasItem)continue;
-            if (participant.pokemon.heldItem.itemType == ItemType.GainMoney)
+            var heldItem = participant.pokemon.heldItem;
+            if (heldItem.itemType == ItemType.GainMoney)
             {
-                return participant.pokemon.heldItem.itemEffectData;
+                var moneyBonus = heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
+                return moneyBonus;
             }
         }
         return 1f;

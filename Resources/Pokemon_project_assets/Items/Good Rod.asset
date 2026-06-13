@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: Good Rod
   itemType: 0
-  itemEffect: 
   itemDescription: A great fishing rod that can catch decent pokemon
   price: 0
   quantity: 1
@@ -26,9 +25,19 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 0
-  isMultiModular: 0
-  hasModules: 1
-  additionalInfoModule: {fileID: 11400000, guid: 23774594aae2ab8698780a89641a61a2, type: 2}
   additionalInfoModules: []
-  infoModuleAssetNames: []
+  dynamicInfoModules:
+  - rid: 7301661317695799314
+  - rid: 7301661317695799318
   imageDirectory: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 7301661317695799314
+      type: {class: FishingRodInfo, ns: , asm: Assembly-CSharp}
+      data:
+        fishingRodType: 1
+    - rid: 7301661317695799318
+      type: {class: EquipableItemInfo, ns: , asm: Assembly-CSharp}
+      data:
+        equipableItem: 2

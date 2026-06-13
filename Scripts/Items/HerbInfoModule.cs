@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
 [CreateAssetMenu(fileName = "Herb", menuName = "Item Info Modules/herb")]
@@ -8,29 +6,21 @@ public class HerbInfoModule : AdditionalInfoModule
     public Herb herbType;
     public StatusEffect statusEffect;
     public ItemType itemType;
-    public int GetHerbUsage(Item parentItem)
+    public int GetHerbUsage()
     {
-        var usageIndex = 0;
         switch (herbType)
         {
             case Herb.EnergyPowder:
-                parentItem.itemEffectData = 50;
-                usageIndex = 0;
-                break;
             case Herb.EnergyRoot:
-                parentItem.itemEffectData = 200;
-                usageIndex = 0;
-                break;
+                return 0;
             case Herb.HealPowder:
                 statusEffect = StatusEffect.FullHeal;
-                usageIndex = 1;
-                break;
+                return 1;
             case Herb.RevivalHerb:
                 itemType = ItemType.MaxRevive;
-                usageIndex = 2;
-                break;
+                return 2;
+            default: return 0;
         }
-        return usageIndex;
     }
 }
 

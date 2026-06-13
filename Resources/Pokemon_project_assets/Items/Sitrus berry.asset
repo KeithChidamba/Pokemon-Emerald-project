@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Sitrus berry
   itemType: 9
-  itemEffect: 30
+  itemEffectData: 0
   itemDescription: Heals 30hp
   price: 5
   quantity: 1
@@ -26,10 +26,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 1
   canBeSold: 1
-  isMultiModular: 0
-  hasModules: 1
-  additionalInfoModule: {fileID: 11400000, guid: 7fbd9d0abd32224e4ae7a06219c2ade1, type: 2}
   additionalInfoModules:
   - {fileID: 11400000, guid: 7fbd9d0abd32224e4ae7a06219c2ade1, type: 2}
-  infoModuleAssetNames: []
+  dynamicInfoModules:
+  - rid: 7301661317695799301
   imageDirectory: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 7301661317695799301
+      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+      data:
+        effectValue: 30

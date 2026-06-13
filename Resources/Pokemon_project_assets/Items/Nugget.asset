@@ -15,7 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: Nugget
   itemType: 17
-  itemEffect: 0
+  itemEffectData: 0
   itemDescription: A shiny ball that could sell for a lot
   price: 5000
   quantity: 1
@@ -26,10 +26,9 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  isMultiModular: 0
-  hasModules: 0
-  additionalInfoModule: {fileID: 0}
-  additionalInfoModules:
-  - {fileID: 0}
-  infoModuleAssetNames: []
+  additionalInfoModules: []
+  dynamicInfoModules: []
   imageDirectory: 
+  references:
+    version: 2
+    RefIds: []

@@ -88,7 +88,8 @@ public class Held_Items : BattleParticipantModule
     private IEnumerator GetHealing()
     { 
         _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+_heldItem.itemName +" healed it");
-        _moveUsageHandler.HealthGainDisplay(_heldItem.itemEffectData,healthGainer:participant);
+        var healEffect = _heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
+        _moveUsageHandler.HealthGainDisplay(healEffect,healthGainer:participant);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);
     }
     private IEnumerator GetStatusHealing()

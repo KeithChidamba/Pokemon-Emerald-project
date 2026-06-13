@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Exp Share
-  itemType: 1
-  itemEffect: 
+  itemType: 17
+  itemEffectData: 0
   itemDescription: Allows pokemon to gain exp without battling
   price: 0
   quantity: 1
@@ -26,10 +26,15 @@ MonoBehaviour:
   isHeldItem: 1
   canBeHeld: 1
   canBeSold: 0
-  isMultiModular: 0
-  hasModules: 0
-  additionalInfoModule: {fileID: 0}
-  additionalInfoModules:
-  - {fileID: 0}
-  infoModuleAssetNames: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 7301661317695799313
   imageDirectory: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 7301661317695799313
+      type: {class: ExpModifierInfo, ns: , asm: Assembly-CSharp}
+      data:
+        modifier: 0
+        modifierFactor: 0

@@ -26,12 +26,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  hasModules: 1
   additionalInfoModules:
   - {fileID: 11400000, guid: e97d9152dca25d728814ed4c755b22ab, type: 2}
-  dynamicInfoModules: []
-  infoModuleAssetNames: []
+  dynamicInfoModules:
+  - rid: 7301661317695799302
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7301661317695799302
+      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+      data:
+        effectValue: 50

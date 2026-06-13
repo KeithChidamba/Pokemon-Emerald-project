@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Hyper Potion
   itemType: 2
   itemEffectData: 30
-  itemDescription: Heals 30hp
+  itemDescription: Heals 200hp
   price: 50
   quantity: 1
   itemImage: {fileID: 21300000, guid: 00bab57767312389aaabcac2964c8569, type: 2}
@@ -26,10 +26,14 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  isMultiModular: 0
-  hasModules: 0
-  additionalInfoModule: {fileID: 0}
-  additionalInfoModules:
-  - {fileID: 0}
-  infoModuleAssetNames: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 7301661317695799299
   imageDirectory: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 7301661317695799299
+      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+      data:
+        effectValue: 200

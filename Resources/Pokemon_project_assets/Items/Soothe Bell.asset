@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Soothe Bell
-  itemType: 9
+  itemType: 17
   itemEffectData: 0
   itemDescription: Increases the frinedship
   price: 0
@@ -26,17 +26,14 @@ MonoBehaviour:
   isHeldItem: 1
   canBeHeld: 1
   canBeSold: 0
-  hasModules: 0
-  additionalInfoModules:
-  - {fileID: 0}
+  additionalInfoModules: []
   dynamicInfoModules:
-  - rid: 7301661293581172738
-  infoModuleAssetNames: []
+  - rid: 7301661317695799311
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661293581172738
+    - rid: 7301661317695799311
       type: {class: FriendshipModifierInfo, ns: , asm: Assembly-CSharp}
       data:
         modifier: 2

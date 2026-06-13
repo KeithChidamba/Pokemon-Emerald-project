@@ -37,9 +37,8 @@ public class Encounter_handler : MonoBehaviour,IInjectable
     public void TriggerFishingEncounter(FishingEncounterTable table,Item fishingRod)
     {
         //the type of rod determines available pokemon from pool
-        var formattedRodName = fishingRod.itemName.Replace(" ", "");
-        
-        var tableForRod = table.fishingTables.First(t => t.rodType == Enum.Parse<RodType>(formattedRodName));
+        var rodType = fishingRod.GetDynamicModule<FishingRodInfo>().fishingRodType;
+        var tableForRod = table.fishingTables.First(t => t.rodType == rodType);
         
         DeterminePossibleEncounter(
             tableForRod.tableData, 

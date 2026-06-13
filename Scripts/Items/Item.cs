@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,7 +9,6 @@ public class Item : ScriptableObject
     [FormerlySerializedAs("Item_ID")] public string itemID = "";
     [FormerlySerializedAs("Item_name")] public string itemName = "";
     public ItemType itemType;
-    public float itemEffectData;
     [FormerlySerializedAs("Item_desc")] public string itemDescription = "";
     public int price;
     public int quantity;

@@ -26,10 +26,14 @@ MonoBehaviour:
   isHeldItem: 1
   canBeHeld: 1
   canBeSold: 0
-  isMultiModular: 0
-  hasModules: 0
-  additionalInfoModule: {fileID: 0}
-  additionalInfoModules:
-  - {fileID: 0}
-  infoModuleAssetNames: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 7301661317695799296
   imageDirectory: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 7301661317695799296
+      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+      data:
+        effectValue: 2

@@ -222,12 +222,21 @@ public class Pokemon : ScriptableObject
     {
         float modifier = 0;
         
-        var pokeballItem = Resources.Load<Item>(SaveDataHandler.GetDirectory(AssetDirectory.Items)+ pokeballName);
-        modifier += pokeballItem.GetDynamicModule<FriendshipModifierInfo>().modifier;
+        var pokeballItem = Resources.Load<Item>(SaveDataHandler.GetDirectory(AssetDirectory.Items) + pokeballName);
+        var pokeballFriendshipMod = pokeballItem.GetDynamicModule<FriendshipModifierInfo>();
+        
+        if (pokeballFriendshipMod!=null)
+        {
+            modifier += pokeballFriendshipMod.modifier;
+        }
         
         if (hasItem)
         {
-            modifier += heldItem.GetDynamicModule<FriendshipModifierInfo>().modifier;
+            var itemFriendshipMod = heldItem.GetDynamicModule<FriendshipModifierInfo>();
+            if (itemFriendshipMod!=null)
+            {
+                modifier += itemFriendshipMod.modifier;
+            }
         }
         
         return (int)math.ceil(currentIncrease + modifier);
@@ -389,9 +398,14 @@ public class Pokemon : ScriptableObject
         var expItemBonus = 1f;
         if (hasItem)
         {
-            if (heldItem.itemType == ItemType.GainExp)
+            var expModInfo = heldItem.GetDynamicModule<ExpModifierInfo>();
+            if (expModInfo != null)
             {
-                expItemBonus = heldItem.itemEffectData;
+                var hasExpGainBous = expModInfo.modifier == ExpModifier.ExpGainBonus;
+                if (hasExpGainBous)
+                {
+                    expItemBonus = expModInfo.modifierFactor;
+                }
             }
         }
         

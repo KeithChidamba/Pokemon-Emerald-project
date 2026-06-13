@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Super Repel
-  itemType: 18
+  itemType: 1
   itemEffectData: 200
   itemDescription: Repels wild pokemon for 200 steps
   price: 500
@@ -26,10 +26,14 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  isMultiModular: 0
-  hasModules: 0
-  additionalInfoModule: {fileID: 0}
-  additionalInfoModules:
-  - {fileID: 0}
-  infoModuleAssetNames: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 7301661317695799306
   imageDirectory: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 7301661317695799306
+      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+      data:
+        effectValue: 200

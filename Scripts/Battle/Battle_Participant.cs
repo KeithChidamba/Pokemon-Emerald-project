@@ -154,10 +154,22 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         if (expReceivers.Count < 1) yield break;
 
         // Separate holders and participants
-        var expShareHolders = expReceivers
-            .Where(p => p.hasItem && p.heldItem.itemName == "Exp Share")
-            .ToList();
-
+        var expShareHolders = new List<Pokemon>();
+        foreach (var receiverPokemon in expReceivers)
+        {
+            if (!receiverPokemon.hasItem) continue;
+            var expHeldItem = receiverPokemon.heldItem.GetDynamicModule<ExpModifierInfo>();
+            if (expHeldItem != null)
+            {
+                var hasExpShare = expHeldItem.modifier == ExpModifier.ExpShare;
+                if (hasExpShare)
+                {
+                    expShareHolders.Add(receiverPokemon);
+                }
+            }
+            
+        }
+        
         var participants = expReceivers
             .Where(p => !expShareHolders.Contains(p))
             .ToList();

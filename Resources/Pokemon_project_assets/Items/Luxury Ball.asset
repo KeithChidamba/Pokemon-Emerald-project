@@ -26,17 +26,19 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  hasModules: 0
-  additionalInfoModules:
-  - {fileID: 0}
+  additionalInfoModules: []
   dynamicInfoModules:
-  - rid: 7301661293581172737
-  infoModuleAssetNames: []
+  - rid: 7301661317695799308
+  - rid: 7301661317695799310
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661293581172737
+    - rid: 7301661317695799308
+      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+      data:
+        effectValue: 1
+    - rid: 7301661317695799310
       type: {class: FriendshipModifierInfo, ns: , asm: Assembly-CSharp}
       data:
         modifier: 1

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
@@ -80,7 +79,9 @@ public class Item_handler : MonoBehaviour,IInjectable
 
         switch (item.itemType)
         {
-            case ItemType.LearnableMove: StartCoroutine(_pokemonOperationsHandler.LearnTmOrHm(itemInUse,selectedPokemon)); break;
+            case ItemType.LearnableMove: 
+                StartCoroutine(_pokemonOperationsHandler.LearnTmOrHm(itemInUse,selectedPokemon)); 
+                break;
             
             case ItemType.Overworld : UseOverworldItem(); break;
             
@@ -90,7 +91,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             
             case ItemType.Berry: UseBerries(); break;
             
-            case ItemType.HealHp: RestoreHealth(item.itemEffectData); break;
+            case ItemType.HealHp: RestoreHealth(); break;
             
             case ItemType.Revive: RevivePokemon(itemInUse.itemType); break;
             
@@ -98,7 +99,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             
             case ItemType.Vitamin: GetEVsFromItem(); break;
             
-            case ItemType.Pokeball: UsePokeball(item); break;
+            case ItemType.Pokeball: UsePokeball(); break;
             
             case ItemType.EvolutionStone: StartCoroutine(TriggerStoneEvolution()); break;
             
@@ -106,29 +107,47 @@ public class Item_handler : MonoBehaviour,IInjectable
             
             case ItemType.XItem: ItemBuffOrDebuff(); break;
             
-            case ItemType.Repel: UseRepel((int)item.itemEffectData); break;
+            case ItemType.Repel: UseRepel(); break;
         }
     }
 
-    private void UseRepel(int numSteps)
+    private void UseRepel()
     {
+        var repelDuration = (int)itemInUse.GetDynamicModule<ItemEffectInfo>().effectValue;
         _dialogueHandler.DisplayDetails("Repel has been activated");
-        _playerTileHandler.ActivateRepel(numSteps);
+        _playerTileHandler.ActivateRepel(repelDuration);
         CompleteItemUsage();
     }
     
     private void UseHerbs()
     {
+        var herbInfo = itemInUse.GetModule<HerbInfoModule>();
         OnItemUsageSuccessful += ChangeFriendship;
-        var herbInfo = itemInUse.GetModule<HerbInfoModule>(); 
-        var usageIndex = herbInfo.GetHerbUsage(itemInUse);
+        var usageIndex = herbInfo.GetHerbUsage();
         var herbUsages = new List<Action>
         {
-            () => RestoreHealth(itemInUse.itemEffectData),
+            RestoreHealth,
             () => HealStatusEffect(herbInfo.statusEffect),
             () => RevivePokemon(herbInfo.itemType)
         };
         herbUsages[usageIndex].Invoke();
+        return;
+        void ChangeFriendship(bool itemUsed)
+        {
+            OnItemUsageSuccessful -= ChangeFriendship;
+            var friendshipLoss = herbInfo.herbType switch
+            {
+                Herb.EnergyPowder => -5,
+                Herb.EnergyRoot => -10,
+                Herb.HealPowder => -5,
+                Herb.RevivalHerb => -15,
+                _ => 0
+            };
+            if(itemUsed && friendshipLoss!=0)
+            {
+                _selectedPartyPokemon.ChangeFriendshipLevel(friendshipLoss);
+            }
+        }
     }
 
     private void UseBerries()
@@ -138,7 +157,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         var berryUsages = new List<Action> 
         {
             GetFriendshipFromBerry,
-            () => RestoreHealth(itemInUse.itemEffectData),
+            RestoreHealth,
             () => HealStatusEffect(berryInfo.statusEffect),
             ChangePowerpoints,
             CureConfusion
@@ -147,7 +166,8 @@ public class Item_handler : MonoBehaviour,IInjectable
     }
     private void UseOverworldItem()
     {
-        if (itemInUse.itemName == "Escape Rope")
+        var specialItem = itemInUse.GetDynamicModule<OverworldUsageItem>().specialItem;
+        if (specialItem == SpecialOverworldItem.EscapeRope)
         {
             if (_areaHandler.currentArea.data.escapable)
             {
@@ -165,21 +185,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             }
         }
     }
-    private void ChangeFriendship(bool itemUsed)
-    {
-        OnItemUsageSuccessful -= ChangeFriendship;
-        var herbInfo = itemInUse.GetModule<HerbInfoModule>();
-        var friendshipLoss = herbInfo.herbType switch
-        {
-            Herb.EnergyPowder => -5,
-            Herb.EnergyRoot => -10,
-            Herb.HealPowder => -5,
-            Herb.RevivalHerb => -15,
-            _ => 0
-        };
-        if(itemUsed && friendshipLoss!=0)
-            _selectedPartyPokemon.ChangeFriendshipLevel(friendshipLoss);
-    }
+
     IEnumerator LevelUpWithItem()
     {
         if (_selectedPartyPokemon.currentLevel == 100)
@@ -431,7 +437,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         StartCoroutine(CompleteItemUsage(2.2f));
         _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonDetails);
 }
-    private void UsePokeball(Item pokeball)
+    private void UsePokeball()
     {
         if (!CanUsePokeball()) 
         {
@@ -442,7 +448,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         DepleteItem();
 
         _pokemonOperationsHandler.OnPokeballUsed += PokemonCaughtCheck;
-        StartCoroutine(_pokemonOperationsHandler.TryToCatchPokemon(pokeball));
+        StartCoroutine(_pokemonOperationsHandler.TryToCatchPokemon(itemInUse));
         
         void PokemonCaughtCheck(Pokemon pokemon,bool isCaught)
         {
@@ -562,8 +568,9 @@ public class Item_handler : MonoBehaviour,IInjectable
         _pokemonPartyHandler.RefreshMemberCards();
         _dialogueHandler.EndDialogue(1f);
     }
-    private void RestoreHealth(float healEffect)
+    private void RestoreHealth()
     {
+        var healEffect = itemInUse.GetDynamicModule<ItemEffectInfo>().effectValue;
         if (_selectedPartyPokemon.hp <= 0)
         {
             _dialogueHandler.DisplayDetails( "Pokemon has already fainted");
@@ -619,7 +626,6 @@ public class Item_handler : MonoBehaviour,IInjectable
 
 public enum ItemType
 {
-    Special,GainExp,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,Vitamin,
-    Berry,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove,None,
-    Repel
+    Special,Repel,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,Vitamin,
+    Berry,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove,HeldItem
 }

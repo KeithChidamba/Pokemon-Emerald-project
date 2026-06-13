@@ -45,7 +45,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
     {
         if (item == null) return;//there was no item equipped in save data
         equippedSpecialItem = item;
-        _currentEquippedItem = equippedSpecialItem.GetModule<EquipableInfoModule>().equipableItem;
+        _currentEquippedItem = equippedSpecialItem.GetDynamicModule<EquipableItemInfo>().equipableItem;
         OnItemEquipped?.Invoke(_currentEquippedItem);
         if(_gameUIManager.usingUI)
             _dialogueHandler.DisplayDetails("Equipped " + equippedSpecialItem.itemName);

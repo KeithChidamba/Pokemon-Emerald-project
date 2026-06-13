@@ -295,13 +295,13 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         newPokemon.hasTrainer = true;
         CompletePokemonAddition(newPokemon);
     }
-    public void AddGiftMember(PokemonGiftInteractoinInfo giftData, string pokeballType="Pokeball")
+    public void AddGiftMember(PokemonGiftInteractoinInfo giftData)
     {
         var newPokemon = _pokemonOperationsHandler.CreateSpecificPokemon(giftData.giftPokemon,giftData.pokemonLevel
             ,giftData.evolutionStageNumber);
         
         newPokemon.hasTrainer = true;
-        newPokemon.pokeballName = pokeballType; 
+        newPokemon.pokeballName = "Pokeball"; 
         newPokemon.ChangeFriendshipLevel(120);
         newPokemon.captureInformation.levelCaptured = newPokemon.currentLevel;
         newPokemon.captureInformation.areaName = Utility.GetAreaName(_gameLoadingHandler.playerData.location);
