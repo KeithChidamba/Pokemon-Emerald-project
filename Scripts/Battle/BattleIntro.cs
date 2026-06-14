@@ -23,7 +23,8 @@ public class BattleIntro : MonoBehaviour,IInjectable
     public Image[] participantIntroImages;
     public Sprite playerSprite;
     public Biome currentBiome;
-        
+    public Image battleblackScreen;
+    
     [Header("Animation Settings")]
     public float blackPanelsSpeed = 300f;
     public float parallaxDistance = 700f;
@@ -193,6 +194,15 @@ public class BattleIntro : MonoBehaviour,IInjectable
         }
         ResetParticipantIntroImages();
     }
+    public IEnumerator FadeInBlackScreen()
+    {
+        battleblackScreen.gameObject.SetActive(true);
+        yield return Utility.FadeImage(battleblackScreen,Color.black,0.25f);
+    }
+    public void RemoveBlackScreen()
+    {
+        battleblackScreen.gameObject.SetActive(false);
+    }
     public IEnumerator PlayTrainerIntroSequence()
     {
         string message = "";
@@ -211,6 +221,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         {
             for (var i=0;i<4;i++)
             {
+                if (!participants[i].isActive) continue;
                 participantIntroImages[i].gameObject.SetActive(true);
                 if (participants[i].isPlayer)
                 {
@@ -223,11 +234,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
                 }
             }
         }
-        for (var i = 0; i < 4; i++)
-        {
-            if (!participants[i].isActive) participantIntroImages[i].gameObject.SetActive(false);
-        }
-        
+
         message = challengers.Count > 1? 
                 $"{challengers[0]} and {challengers[1]} challenge you to a battle"
                 :    $"{challengers[0]} challenges you to a battle";

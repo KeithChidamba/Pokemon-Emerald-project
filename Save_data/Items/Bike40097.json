@@ -2,12 +2,11 @@
     "itemID": "Bike40097",
     "itemName": "Bike",
     "itemType": 0,
-    "itemEffectData": 0.0,
     "itemDescription": "A fast bicycle that realiable",
     "price": 0,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 26272
+        "instanceID": 26286
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
@@ -17,13 +16,29 @@
     "canBeSold": false,
     "additionalInfoModules": [
         {
-            "instanceID": 25750
+            "instanceID": 0
         }
     ],
-    "dynamicInfoModules": [],
+    "dynamicInfoModules": [
+        {
+            "rid": 1000
+        }
+    ],
     "imageDirectory": "Bike",
     "references": {
         "version": 2,
-        "RefIds": []
+        "RefIds": [
+            {
+                "rid": 1000,
+                "type": {
+                    "class": "EquipableItemInfo",
+                    "ns": "",
+                    "asm": "Assembly-CSharp"
+                },
+                "data": {
+                    "equipableItem": 1
+                }
+            }
+        ]
     }
 }

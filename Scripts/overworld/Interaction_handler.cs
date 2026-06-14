@@ -16,7 +16,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     public Tilemap interactionTilemap;
 
     private overworld_actions _overworldActions;
-    private Game_ui_manager _gameUIManager;
+    private InputStateHandler _inputStateHandler;
     private Dialogue_handler _dialogueHandler;
     private Player_movement _playerMovementHandler;
     private Area_manager _areaManager;
@@ -26,7 +26,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
-        _gameUIManager = container.Resolve<Game_ui_manager>();
+        _inputStateHandler = container.Resolve<InputStateHandler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         _areaManager = container.Resolve<Area_manager>();
         _overworldState = container.Resolve<OverworldState>();
@@ -39,7 +39,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
     }
     void Update()
     {
-        if(!_dialogueHandler.displaying && !_stopInteractions)
+        if(_inputStateHandler.IsEmptyState && !_stopInteractions)
         {
             if (InputSourceHandler.InputPressed(ControlEvent.Confirm) ||  InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
             {
@@ -88,7 +88,7 @@ public class Interaction_handler : MonoBehaviour,IInjectable
         var playerPos = _playerMovementHandler.GetPlayerPosition();
         var tileInFrontOfPlayer = new Vector3(playerPos.x + directionVector.x, playerPos.y + directionVector.y, 0);
         
-        if (hit.transform && !_dialogueHandler.displaying && !_gameUIManager.usingUI)
+        if (hit.transform)
         {
             if (InputSourceHandler.InputPressed(ControlEvent.Confirm))
             {

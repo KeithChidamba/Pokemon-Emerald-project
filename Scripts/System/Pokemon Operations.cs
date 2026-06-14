@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.UI;
@@ -26,6 +27,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private Move _newMoveAsset;
     public event Action<bool> OnEvChange;
     public event Action<Pokemon,bool> OnPokeballUsed;
+    
     private WildPokemonAiHandler _wildPokemonHandler;
     private Item_handler _itemHandler;
     private Pokemon_party _playerParty;
@@ -507,7 +509,12 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                     pokemon.gender));
         }
     }
-    public Pokemon CreateSpecificPokemon(Pokemon template,int desiredLevel,int evolutionStage)
+
+    public void CreateSpecificPokemon(Action<Pokemon> creationCallBack,Pokemon template,int desiredLevel,int evolutionStage)
+    {
+        StartCoroutine(HandlePokemonCreation(creationCallBack,template,desiredLevel,evolutionStage));
+    }
+    public IEnumerator HandlePokemonCreation(Action<Pokemon> creationCallBack,Pokemon template,int desiredLevel,int evolutionStage)
     {
         var newPokemon = InstanceFactory.CreatePokemon(template); 
         SetPokemonTraits(newPokemon);
@@ -524,13 +531,9 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         var expForRequiredLevel = CalculateExpForLevel(desiredLevel, newPokemon.expGroup);
         newPokemon.canEvolve = false;//prevent evolution from exp
 
-        StartCoroutine(AwaitLevelUp());
-        IEnumerator AwaitLevelUp()
-        {
-            yield return newPokemon.ReceiveExperienceOutsideBattle(expForRequiredLevel,false);
-            newPokemon.hp = newPokemon.maxHp;
-        }
-        return newPokemon;
+        yield return newPokemon.ReceiveExperienceOutsideBattle(expForRequiredLevel,false);
+        newPokemon.hp = newPokemon.maxHp;
+        creationCallBack.Invoke(newPokemon);
     }
     public IEnumerator HandlePokemonEvolution(Pokemon pokemon, int evolutionIndex)
     {

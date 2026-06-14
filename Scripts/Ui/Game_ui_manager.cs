@@ -40,7 +40,6 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     public GameObject keyBindsUI;
     public bool usingWebGl;
     [SerializeField]private bool canOpenMenu;
-    private bool _isEmptyState;
     public Image destinationPointerUI;
     
     private Item_handler _itemHandler;
@@ -89,23 +88,18 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         if (usingWebGl) menuUiOptions.Remove(menuUiOptions.Last());//remove exit button
         _canUseUi = false;
         canOpenMenu = true;
-        _isEmptyState = true;
         _gameLoadingHandler.OnGameStarted += () => _canUseUi = true;
-        _inputStateHandler.OnStateChanged += CheckEmptyState;
     }
 
     public void SetMenuAccessibility(bool isAccessible)
     {
         canOpenMenu = isAccessible;
     }
-    private void CheckEmptyState(InputState currentState)
-    {
-        _isEmptyState = currentState.stateName == InputStateName.Empty;
-    }
+
     private void Update()
     {
         if (!_canUseUi) return;
-        if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu) && _isEmptyState && canOpenMenu &&!viewingMenu)
+        if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu) && _inputStateHandler.IsEmptyState && canOpenMenu &&!viewingMenu)
         {
             AddScreen();
             viewingMenu = true;

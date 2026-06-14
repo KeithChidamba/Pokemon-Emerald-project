@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -62,5 +63,19 @@ public static class Utility
             {AreaName.SouthBridge,"South Bridge"},
         };
         return areaNames[areaValue];
+    }
+
+    public static IEnumerator FadeImage(Image image,Color endColor,float duration=1f)
+    {
+        Color startColor = new Color(endColor.r, endColor.g, endColor.b,0);//invisible
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            image.color = Color.Lerp(startColor, endColor, t);
+            yield return null;
+        }
+        yield return new WaitUntil(()=>elapsed >= duration);
     }
 }

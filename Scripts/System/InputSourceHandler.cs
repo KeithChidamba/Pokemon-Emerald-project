@@ -62,13 +62,13 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
 
     private bool CanUseQuickAction(ControlEvent e)
     {
-        if(!_gameUIManager.usingUI && !_dialogueHandler.displaying)
+        if(_inputStateHandler.IsEmptyState)
         {
             if(e == ControlEvent.OpenSettings)//settings is the only exception
             {
                 return true;
             }
-            return _gameStarted && _inputStateHandler.currentState.stateName == InputStateName.Empty;
+            return _gameStarted;
         }
         return false;
     }

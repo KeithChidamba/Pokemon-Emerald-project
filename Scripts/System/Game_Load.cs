@@ -153,18 +153,7 @@ public class Game_Load : MonoBehaviour,IInjectable
        
         //give everything time to load
         _loadingScreen.gameObject.SetActive(true);
-        Color startColor = new Color(255, 255f, 255f,0);
-        Color endColor = Color.white;
-        float elapsed = 0f;
-        var duration = 1f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
-            _loadingScreen.color = Color.Lerp(startColor, endColor, t);
-            yield return null;
-        }
-        yield return new WaitUntil(()=>elapsed >= duration);
+        yield return Utility.FadeImage(_loadingScreen,Color.white,0.85f);
         
         _loadingScreen.gameObject.SetActive(false);
         startMenuCam.gameObject.SetActive(false);

@@ -2,12 +2,11 @@
     "itemID": "Luxury Ball4214",
     "itemName": "Luxury Ball",
     "itemType": 10,
-    "itemEffectData": 1.0,
     "itemDescription": "Pokeball with a friendship benefit for pokemon",
     "price": 55,
     "quantity": 2,
     "itemImage": {
-        "instanceID": -13500
+        "instanceID": 25376
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": false,
@@ -23,6 +22,9 @@
     "dynamicInfoModules": [
         {
             "rid": 1000
+        },
+        {
+            "rid": 1001
         }
     ],
     "imageDirectory": "Luxury Ball",
@@ -31,6 +33,17 @@
         "RefIds": [
             {
                 "rid": 1000,
+                "type": {
+                    "class": "ItemEffectInfo",
+                    "ns": "",
+                    "asm": "Assembly-CSharp"
+                },
+                "data": {
+                    "effectValue": 1.0
+                }
+            },
+            {
+                "rid": 1001,
                 "type": {
                     "class": "FriendshipModifierInfo",
                     "ns": "",

@@ -316,7 +316,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public IEnumerator WithdrawPokemon(Battle_Participant participant)
     {
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
-        var direction = participant.isPlayer? -outOfViewDistance : outOfViewDistance;
+        var direction = participant.isPlayer? outOfViewDistance : -outOfViewDistance;
         var targetForUI = new Vector2(participantUIRect.anchoredPosition.x+direction, participantUIRect.anchoredPosition.y);
         
         yield return SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f);

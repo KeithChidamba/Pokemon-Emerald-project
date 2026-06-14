@@ -2,12 +2,11 @@
     "itemID": "Pecha berry53750",
     "itemName": "Pecha berry",
     "itemType": 9,
-    "itemEffectData": 0.0,
     "itemDescription": "Heals poison",
     "price": 5,
     "quantity": 4,
     "itemImage": {
-        "instanceID": 26448
+        "instanceID": 26464
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -17,7 +16,7 @@
     "canBeSold": true,
     "additionalInfoModules": [
         {
-            "instanceID": 27236
+            "instanceID": 27258
         }
     ],
     "dynamicInfoModules": [],

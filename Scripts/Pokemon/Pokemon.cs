@@ -223,6 +223,7 @@ public class Pokemon : ScriptableObject
         float modifier = 0;
         
         var pokeballItem = Resources.Load<Item>(SaveDataHandler.GetDirectory(AssetDirectory.Items) + pokeballName);
+        
         var pokeballFriendshipMod = pokeballItem.GetDynamicModule<FriendshipModifierInfo>();
         
         if (pokeballFriendshipMod!=null)
@@ -339,7 +340,7 @@ public class Pokemon : ScriptableObject
             int expThisLoop = Mathf.Min(remainingExp, expToNextLevel);
             currentExpAmount += expThisLoop;
             remainingExp -= expThisLoop;
-            yield return LevelUpAtThreshold(displayMessage);
+            yield return LevelUpAtThreshold(displayMessage,false);
         }
     }
     public IEnumerator ReceiveExperienceAndDisplay(int amount)
@@ -370,16 +371,16 @@ public class Pokemon : ScriptableObject
             // Deduct what we just gave
             remainingExp -= expThisLoop;
             // If we reached or passed the next level threshold > level up
-            yield return LevelUpAtThreshold(true);
+            yield return LevelUpAtThreshold(true,true);
         }
         _dialogueHandler.DisplayBattleInfo($"{pokemonDisplayName} gained {amount} EXP points");
         OnExpGainComplete?.Invoke(this);
     }
-    IEnumerator LevelUpAtThreshold(bool displayMessage)
+    IEnumerator LevelUpAtThreshold(bool displayMessage,bool increaseFriendship)
     {
         if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
         {
-            LevelUp();
+            LevelUp(increaseFriendship);
 
             if(displayMessage)_dialogueHandler.DisplayBattleInfo(pokemonDisplayName+" grew to lv"+currentLevel);
                
@@ -472,10 +473,13 @@ public class Pokemon : ScriptableObject
         float bracket3 = currentLevel + 10f;
         return math.floor(bracket1 * bracket2 + bracket3);
     }
-    private void LevelUp()
+    private void LevelUp(bool increaseFriendship)
     {
         OnLevelUp?.Invoke(this);
-        DetermineFriendshipLevelChange(true, FriendshipModifier.LevelUp);
+        if(increaseFriendship)
+        {
+            DetermineFriendshipLevelChange(true, FriendshipModifier.LevelUp);
+        }
         currentLevel++;
         currentLevelExpAmount = _pokemonOperationsHandler.CalculateExpForLevel(currentLevel,expGroup);
         nextLevelExpAmount = _pokemonOperationsHandler.CalculateExpForNextLevel(currentLevel,expGroup);

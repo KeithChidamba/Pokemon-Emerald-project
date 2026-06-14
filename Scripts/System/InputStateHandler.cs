@@ -27,6 +27,7 @@ public enum InputStateName
 public class InputStateHandler : MonoBehaviour,IInjectable
 {
     public InputState currentState;
+    public bool IsEmptyState =>currentState.stateName == InputStateName.Empty;
     private InputState _emptyState;
     private int[] _directionSelection = { 0, 0, 0, 0 };
 
@@ -99,26 +100,24 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         _handlingState = stateLayers.Count > 0;
         
         if (!_handlingState) return;
-        
-       
-        bool canExitCurrentDialogue = _dialogueHandler.canExitDialogue & _dialogueHandler.displaying;
 
         if (InputSourceHandler.InputPressed(ControlEvent.Exit))
         {
-            if(currentState.stateName != InputStateName.DialogueOptions && !canExitCurrentDialogue)
+            if (!_dialogueHandler.HandlingStateExit(currentState))
             {
-                if(currentState.canExit)
+                //handle state normally
+                if (currentState.canExit)
                 {
                     if (currentState.persistOnExit)
                         currentState.OnExit.Invoke();
-                    
-                    else if(currentState.canManualExit)
+
+                    else if (currentState.canManualExit)
                         RemoveTopInputLayer(true);
                 }
             }
         }
         
-        if (currentState.stateName == InputStateName.Empty) return;
+        if (IsEmptyState) return;
        
         if (InputSourceHandler.InputPressed(ControlEvent.Confirm) && _currentStateLoaded)
         {

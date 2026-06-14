@@ -23,6 +23,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
     private Encounter_handler _encounterHandler;
     private Game_Load _gameLoadingHandler;
     private Battle_handler _battleHandler;
+    private InputStateHandler _inputStateHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -32,6 +33,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
         _gameUIManager = container.Resolve<Game_ui_manager>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
         _battleHandler = container.Resolve<Battle_handler>();
+        _inputStateHandler = container.Resolve<InputStateHandler>();
     }
     public void OnInject()
     {
@@ -48,7 +50,9 @@ public class overworld_actions : MonoBehaviour,IInjectable
         _currentEquippedItem = equippedSpecialItem.GetDynamicModule<EquipableItemInfo>().equipableItem;
         OnItemEquipped?.Invoke(_currentEquippedItem);
         if(_gameUIManager.usingUI)
+        {
             _dialogueHandler.DisplayDetails("Equipped " + equippedSpecialItem.itemName);
+        }
      
         _gameLoadingHandler.playerData.equippedItemName = equippedSpecialItem.itemName;
     }
@@ -83,10 +87,14 @@ public class overworld_actions : MonoBehaviour,IInjectable
     }
     void Update()
     {
-        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem) && !ItemEquipped() && !_gameUIManager.usingUI)
+        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
         {
-            if (!_canUseEquippedItem) return;
-            _dialogueHandler.DisplayDetails("No item has been equipped");
+            if (!_inputStateHandler.IsEmptyState) return;
+            if (!ItemEquipped())
+            {
+                if (!_canUseEquippedItem) return;
+                _dialogueHandler.DisplayDetails("No item has been equipped");
+            }
         }  
         if (pokemonBitingPole && InputSourceHandler.InputPressed(ControlEvent.Confirm))
         {

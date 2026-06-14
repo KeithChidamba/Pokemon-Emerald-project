@@ -2,12 +2,11 @@
     "itemID": "Repel18272",
     "itemName": "Repel",
     "itemType": 18,
-    "itemEffectData": 0.0,
     "itemDescription": "Repels wild pokemon for 100 steps",
     "price": 350,
     "quantity": 2,
     "itemImage": {
-        "instanceID": 27136
+        "instanceID": 27156
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
@@ -20,10 +19,26 @@
             "instanceID": 0
         }
     ],
-    "dynamicInfoModules": [],
+    "dynamicInfoModules": [
+        {
+            "rid": 1000
+        }
+    ],
     "imageDirectory": "Repel",
     "references": {
         "version": 2,
-        "RefIds": []
+        "RefIds": [
+            {
+                "rid": 1000,
+                "type": {
+                    "class": "ItemEffectInfo",
+                    "ns": "",
+                    "asm": "Assembly-CSharp"
+                },
+                "data": {
+                    "effectValue": 100.0
+                }
+            }
+        ]
     }
 }

@@ -16,6 +16,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     [FormerlySerializedAs("moves_pp")] [SerializeField]private Text[] movesPpText;
     [FormerlySerializedAs("moves")] public Text[] moveNamesText;
     [SerializeField]private Image pkm_img;
+    [SerializeField]private Image pokeballImage;
     [SerializeField]private Image gender_img;
     [SerializeField]private Image type1;
     [SerializeField]private Image type2;
@@ -217,6 +218,8 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         pkm_name.text = currentPokemon.nickName +"\n /"+currentPokemon.pokemonName;
         pkm_ID.text = "IDNo"+currentPokemon.pokemonID;
         pkm_lv.text = "Lv"+currentPokemon.currentLevel;
+        pokeballImage.sprite =
+            Resources.Load<Sprite>(SaveDataHandler.GetDirectory(AssetDirectory.ItemUI) + currentPokemon.pokeballName);
         gender_img.gameObject.SetActive(true);
         if(currentPokemon.hasGender)
         {

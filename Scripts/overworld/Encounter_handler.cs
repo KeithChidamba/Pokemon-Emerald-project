@@ -30,7 +30,6 @@ public class Encounter_handler : MonoBehaviour,IInjectable
     {
         DeterminePossibleEncounter(
             table.data, 
-            table.data.availableEncounters.Length,
             table.biome
             ,BattleEncounterSource.NormalEncounter);
     }
@@ -42,32 +41,34 @@ public class Encounter_handler : MonoBehaviour,IInjectable
         
         DeterminePossibleEncounter(
             tableForRod.tableData, 
-            tableForRod.tableData.availableEncounters.Length,
             table.biome,BattleEncounterSource.Fishing);
     }
 
-    private void DeterminePossibleEncounter(EncounterTableData tableData,int numAvailableEncounters,Biome biome,BattleEncounterSource source)
+    private void DeterminePossibleEncounter(EncounterTableData tableData,Biome biome,BattleEncounterSource source)
     {
-        for (int i = 0; i < numAvailableEncounters; i++)
-        {
-            var random = Utility.RandomRange(1,101);
-            var chance = tableData.availableEncounters[i].encounterChance;
+        var totalWeight= tableData.availableEncounters.Sum(enc=>enc.encounterChance);
+        
+        int roll = Utility.RandomRange(0, totalWeight);
 
-            if ( i == tableData.availableEncounters.Length - 1 /*pick last option if none in range*/ 
-                 || random < chance )//pick option within chance range
+        foreach (var encounter in tableData.availableEncounters)
+        {
+            if (roll < encounter.encounterChance)
             {
-                CreateWildPokemon(tableData.availableEncounters[i],tableData, biome,source);
-                break;
+                CreateWildPokemon(encounter, tableData, biome, source);
+                return;
             }
+            roll -= encounter.encounterChance;
         }
     }
     private void CreateWildPokemon(EncounterPokemonData pokemonData,EncounterTableData tableData,Biome biome,BattleEncounterSource source)
     {
         var randomLevel = Utility.RandomRange(tableData.minimumLevelOfPokemon, tableData.maximumLevelOfPokemon);
         
-        var wildPokemon = _pokemonOperationsHandler.CreateSpecificPokemon(pokemonData.pokemon,randomLevel,pokemonData.evolutionFormNumber);
-        
-        OnEncounterTriggered?.Invoke(wildPokemon,source);
-        StartCoroutine(_battleHandler.StartWildBattle(wildPokemon,biome));
+        _pokemonOperationsHandler.CreateSpecificPokemon(StartBattle,pokemonData.pokemon,randomLevel,pokemonData.evolutionFormNumber);
+        void StartBattle(Pokemon wildPokemon)
+        {
+            OnEncounterTriggered?.Invoke(wildPokemon,source);
+            StartCoroutine(_battleHandler.StartWildBattle(wildPokemon,biome));
+        }
     }
 }

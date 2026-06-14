@@ -113,12 +113,15 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         _defaultUIPosition = _uiRect.anchoredPosition; 
     }
 
-    public void SetupEnemyAi(TrainerData trainerData,Battle_Participant partner = null)
+    public IEnumerator SetupEnemyAi(TrainerData trainerData,Battle_Participant partner = null)
     {
         pokemonTrainerAI = new Enemy_trainer(_container);
         pokemonTrainerAI.GetParticipant(this);
-        pokemonTrainerAI.SetupTrainerForBattle(trainerData);
-        if (partner == null) return;
+        yield return pokemonTrainerAI.SetupTrainerForBattle(trainerData);
+        if (partner == null)
+        {
+            yield break;
+        }
         //copy over team data to enemy partner
         partner.pokemonTrainerAI = new Enemy_trainer(_container);
         partner.pokemonTrainerAI.GetParticipant(partner);

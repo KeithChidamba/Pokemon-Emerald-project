@@ -49,20 +49,24 @@ public class Enemy_trainer : BattleParticipantModule
         AiLogicCalculators.Add(AiFlags.CheckPriority ,AiCheckPriority);
         //switching doesnt involve calculators
     }
-    public void SetupTrainerForBattle(TrainerData copyOfTrainerData)
+    public IEnumerator SetupTrainerForBattle(TrainerData copyOfTrainerData)
     {
         trainerData = InstanceFactory.CreateTrainer(copyOfTrainerData);
         trainerParty.Clear();
         foreach (var member in trainerData.PokemonParty)
         {
-            var pokemonCopy = _pokemonOperations.CreateSpecificPokemon(member.pokemon,member.pokemonLevel,member.evolutionStageNumber);
-            trainerParty.Add(pokemonCopy);
-            pokemonCopy.moveSet.Clear();
-            foreach (var move in member.moveSet)
+            yield return _pokemonOperations.HandlePokemonCreation(GetPokemonCopy,member.pokemon,member.pokemonLevel,member.evolutionStageNumber);
+            
+            void GetPokemonCopy(Pokemon pokemonCopy)
             {
-                pokemonCopy.moveSet.Add(InstanceFactory.CreateMove(move));
+                trainerParty.Add(pokemonCopy);
+                pokemonCopy.moveSet.Clear();
+                foreach (var move in member.moveSet)
+                {
+                    pokemonCopy.moveSet.Add(InstanceFactory.CreateMove(move));
+                }
+                if (member.hasItem) pokemonCopy.GiveItem(InstanceFactory.CreateItem(member.heldItem));
             }
-            if (member.hasItem) pokemonCopy.GiveItem(InstanceFactory.CreateItem(member.heldItem));
         }
     }
     public List<Pokemon> GetLivingPokemon()

@@ -263,6 +263,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         overWorld.SetActive(false);
         battleUI.SetActive(true);
         battleInProgress = true;
+        _battleIntroHandler.RemoveBlackScreen();
         
         if(isTrainerBattle)
             yield return StartCoroutine(_battleIntroHandler.PlayTrainerIntroSequence());
@@ -273,6 +274,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _inputStateHandler.OnStateChanged += EnableBattleMessage;
         
         SetupOptionsInput();
+        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
     }
     private void ResetAi()
     {
@@ -302,12 +304,15 @@ public class Battle_handler : MonoBehaviour, IInjectable
 
     private IEnumerator DisplayTrainerMessage(string message)
     {
+        _inputStateHandler.AddPlaceHolderState();
         _dialogueHandler.DisplayDetails(message,false);
         yield return new WaitUntil(()=>_dialogueHandler.dialogueFinished);
+        yield return new WaitForSecondsRealtime(1f);
         _dialogueHandler.EndDialogue();
     }
     public IEnumerator StartWildBattle(Pokemon enemy,Biome biome)
     {
+        StartCoroutine(_battleIntroHandler.FadeInBlackScreen());
         _pokemonPartyHandler.SortByFainted();
         battleOver = false;
         isTrainerBattle = false;
@@ -328,6 +333,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _wildPokemonHandler.SetBattleState();
         //setup battle
         yield return SetValidParticipants();
+        yield return new WaitForSecondsRealtime(0.55f);
         StartCoroutine(SetupBattleSequence(biome));
     }
     private IEnumerator StartSingleBattle(TrainerData trainerData) //single trainer battle
@@ -346,7 +352,10 @@ public class Battle_handler : MonoBehaviour, IInjectable
         player.currentEnemies.Add(enemy);
         //setup enemy AI
         enemy.currentEnemies.Add(player);
-        enemy.SetupEnemyAi(trainerData);
+
+        StartCoroutine(_battleIntroHandler.FadeInBlackScreen());
+        yield return enemy.SetupEnemyAi(trainerData);
+        
         enemy.pokemon = enemy.pokemonTrainerAI.trainerParty[0];
         enemy.AddToExpList(player.pokemon);
         //setup battle
@@ -377,7 +386,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if(playerPartner.activeForBattle) playerPartner.pokemon = alivePartyPokemon[1];
         
         //setup trainer ai for enemy participants
-        enemy.SetupEnemyAi(trainerData,enemyPartner);
+        StartCoroutine(_battleIntroHandler.FadeInBlackScreen());
+        yield return enemy.SetupEnemyAi(trainerData,enemyPartner);
         
         //set initial pokemon for enemies
         enemy.pokemon = enemy.pokemonTrainerAI.trainerParty[0];
@@ -539,7 +549,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _currentMoveIndex = moveIndex;
         var currentMove = _currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex];
         movePowerPointsText.text = "PP: " + currentMove.powerpoints+ "/" + currentMove.maxPowerpoints;
-        movePowerPointsText.color = (currentMove.powerpoints == 0)? Color.red : Color.black;
+        movePowerPointsText.color = currentMove.powerpoints == 0? Color.red : Color.black;
         moveTypeText.text = currentMove.type.GetTypeName;
     }
     private float PrizeMoneyModifier()
@@ -775,8 +785,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         {
             _areaHandler.SwitchToArea(_gameLoadingHandler.playerData.location);
         }
-       
-        _dialogueHandler.canExitDialogue = true;
+        
         battleOver = false;
         battleEndState = BattleEndState.None;
         yield return new WaitForSeconds(1f);

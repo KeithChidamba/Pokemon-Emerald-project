@@ -2,12 +2,11 @@
     "itemID": "Great Ball30699",
     "itemName": "Great Ball",
     "itemType": 10,
-    "itemEffectData": 0.0,
     "itemDescription": "50% higher chance to catch compared to pokeball",
     "price": 30,
     "quantity": 3,
     "itemImage": {
-        "instanceID": 26148
+        "instanceID": 26162
     },
     "forPartyUse": false,
     "canBeUsedInOverworld": false,
@@ -20,10 +19,26 @@
             "instanceID": 0
         }
     ],
-    "dynamicInfoModules": [],
+    "dynamicInfoModules": [
+        {
+            "rid": 1000
+        }
+    ],
     "imageDirectory": "Great Ball",
     "references": {
         "version": 2,
-        "RefIds": []
+        "RefIds": [
+            {
+                "rid": 1000,
+                "type": {
+                    "class": "ItemEffectInfo",
+                    "ns": "",
+                    "asm": "Assembly-CSharp"
+                },
+                "data": {
+                    "effectValue": 1.5
+                }
+            }
+        ]
     }
 }
