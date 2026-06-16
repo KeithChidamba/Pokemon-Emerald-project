@@ -255,7 +255,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       StartCoroutine(AnimateInterfaceGraphic(graphicData));
       CreateCharacterBoxes();
       ChangeInterface(TypingInputInterface.Uppercase,false);
-      TypingInterfaceNavigation();
+      TypingInterfaceNavigation(true);
       characterBoxes[0].AnimateCharacterBox();
    }
 
@@ -329,7 +329,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
             templateRt.anchoredPosition.y);
       }
    }
-   public void TypingInterfaceNavigation()
+   public void TypingInterfaceNavigation(bool displayTransition = true)
    {
       CreateSelectables();
       var typingSelectables = new List<SelectableUI>();
@@ -341,7 +341,8 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       currentCharacterIndex = 0;
       _inputStateHandler.ChangeInputState(new  (InputStateName.TypingInterfaceNavigation,
          InputStateGroup.TypingInterface,true,mainUI,
-         InputDirection.Grid, typingSelectables,characterSelector,true, true ,canExit:false),true);
+         InputDirection.Grid, typingSelectables,characterSelector,true, true ,canExit:false
+         ,displayTransition:displayTransition),true);
    }
 
    public void InterfaceOptionsNavigation()

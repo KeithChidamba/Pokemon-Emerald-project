@@ -9,9 +9,9 @@ public class InputState
     public InputStateGroup stateGroup;
     public InputDirection stateDirection;
     public List<SelectableUI> selectableUis;
-    public Action OnExit;
-    public Action OnClose;
-    public Func<bool> UpdateExitStatus;
+    public Action onExit;
+    public Action onClose;
+    public Func<bool> updateExitStatus;
     public int currentSelectionIndex;
     public bool isSelecting;
     public bool displayingSelector;
@@ -22,7 +22,7 @@ public class InputState
     public bool canExit;
     public bool canManualExit;
     public bool persistOnExit;
-   
+    public bool displayTransition;
     public InputState(
         InputStateName stateName,
         InputStateGroup group,
@@ -37,7 +37,8 @@ public class InputState
         Action onExit = null,
         Func<bool> updateExit = null,
         bool canExit = true,
-        bool canManualExit = true
+        bool canManualExit = true,
+        bool displayTransition =false
     )
     {
         this.stateName = stateName;
@@ -50,8 +51,8 @@ public class InputState
         isSelecting = selecting;
         displayingSelector = display;
         currentSelectionIndex = 0;
-        OnClose = onClose;
-        OnExit = onExit;
+        this.onClose = onClose;
+        this.onExit = onExit;
         
         this.canManualExit = canManualExit;
         
@@ -61,8 +62,10 @@ public class InputState
         }
         
         this.canExit = canExit;
-       
-        UpdateExitStatus = updateExit;
+
+        this.displayTransition = displayTransition;
+        
+        updateExitStatus = updateExit;
     }
     
 }

@@ -263,7 +263,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         overWorld.SetActive(false);
         battleUI.SetActive(true);
         battleInProgress = true;
-        _battleIntroHandler.RemoveBlackScreen();
+        _gameUIHandler.RemoveBlackScreen();
         
         if(isTrainerBattle)
             yield return StartCoroutine(_battleIntroHandler.PlayTrainerIntroSequence());
@@ -312,7 +312,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     public IEnumerator StartWildBattle(Pokemon enemy,Biome biome)
     {
-        StartCoroutine(_battleIntroHandler.FadeInBlackScreen());
+        StartCoroutine(_gameUIHandler.FadeInBlackScreen());
         _pokemonPartyHandler.SortByFainted();
         battleOver = false;
         isTrainerBattle = false;
@@ -353,7 +353,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         //setup enemy AI
         enemy.currentEnemies.Add(player);
 
-        StartCoroutine(_battleIntroHandler.FadeInBlackScreen());
+        StartCoroutine(_gameUIHandler.FadeInBlackScreen());
         yield return enemy.SetupEnemyAi(trainerData);
         
         enemy.pokemon = enemy.pokemonTrainerAI.trainerParty[0];
@@ -386,7 +386,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if(playerPartner.activeForBattle) playerPartner.pokemon = alivePartyPokemon[1];
         
         //setup trainer ai for enemy participants
-        StartCoroutine(_battleIntroHandler.FadeInBlackScreen());
+        StartCoroutine(_gameUIHandler.FadeInBlackScreen());
         yield return enemy.SetupEnemyAi(trainerData,enemyPartner);
         
         //set initial pokemon for enemies
@@ -421,14 +421,14 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         OnSwitchOut?.Invoke(participant);
         participant.isPlayer = Array.IndexOf(battleParticipants, participant) < 2 ;
-
+        
         if (participant.isPlayer)
         {
-            participant.pokemon.pokemonDisplayName = participant.pokemon.nickName;
+            newPokemon.pokemonDisplayName = newPokemon.nickName;
         }
         else
         {
-            participant.pokemon.pokemonDisplayName = "Foe " + participant.pokemon.pokemonName;
+            newPokemon.pokemonDisplayName = "Foe " + newPokemon.pokemonName;
         }
         
         if(!initialCall)
@@ -437,16 +437,16 @@ public class Battle_handler : MonoBehaviour, IInjectable
             if (participant.isPlayer)
             {
                 _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName
-                                                            +" sent out "+participant.pokemon.pokemonDisplayName);
+                                                            +" sent out "+newPokemon.pokemonDisplayName);
                 
                 //add enemies to exp list of new player pokemon
                 foreach (var enemyParticipant in participant.currentEnemies)
-                    enemyParticipant.AddToExpList(participant.pokemon);
+                    enemyParticipant.AddToExpList(newPokemon);
             }
             else
             {
                 _dialogueHandler.DisplayBattleInfo(participant.pokemonTrainerAI.trainerData.TrainerName
-                                                            +" sent out "+participant.pokemon.pokemonDisplayName);
+                                                            +" sent out "+newPokemon.pokemonDisplayName);
                 
                 //add player participants to get exp from switched in enemy
                 foreach (var playerParticipant in participant.currentEnemies)
@@ -721,7 +721,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         }
         else
         {
-            _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.Battle);
+            _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.Battle,0.15f);
         }
 
         IEnumerator HandleEvolutions()

@@ -89,6 +89,6 @@ public class TypingInterfaceInputService:IInputGroup
     private void OptionsNavigation()
     {
         _typingInterfaceHandler.characterSelector.SetActive(false);
-        _inputStateHandler.OnInputLeft += _typingInterfaceHandler.TypingInterfaceNavigation;
+        _inputStateHandler.OnInputLeft += () => _typingInterfaceHandler.TypingInterfaceNavigation(false);
     }
 }

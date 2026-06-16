@@ -1,12 +1,12 @@
 {
-    "itemID": "Oran berry61745",
+    "itemID": "Oran berry50058",
     "itemName": "Oran berry",
     "itemType": 9,
     "itemDescription": "Heals 5hp",
     "price": 5,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 27454
+        "instanceID": 27452
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -16,7 +16,7 @@
     "canBeSold": true,
     "additionalInfoModules": [
         {
-            "instanceID": 27430
+            "instanceID": 27428
         }
     ],
     "dynamicInfoModules": [],

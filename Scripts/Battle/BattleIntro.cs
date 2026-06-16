@@ -23,7 +23,6 @@ public class BattleIntro : MonoBehaviour,IInjectable
     public Image[] participantIntroImages;
     public Sprite playerSprite;
     public Biome currentBiome;
-    public Image battleblackScreen;
     
     [Header("Animation Settings")]
     public float blackPanelsSpeed = 300f;
@@ -194,15 +193,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         }
         ResetParticipantIntroImages();
     }
-    public IEnumerator FadeInBlackScreen()
-    {
-        battleblackScreen.gameObject.SetActive(true);
-        yield return Utility.FadeImage(battleblackScreen,Color.black,0.25f);
-    }
-    public void RemoveBlackScreen()
-    {
-        battleblackScreen.gameObject.SetActive(false);
-    }
+
     public IEnumerator PlayTrainerIntroSequence()
     {
         string message = "";

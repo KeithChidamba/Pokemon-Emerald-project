@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
@@ -54,7 +55,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     public GameObject emptyPlaceHolder;
     
     private Dialogue_handler _dialogueHandler;
-
+    private Game_ui_manager _gameUIHandler;
     private PlayerBagInputService _playerBagInputService;
     private PokemonBattleInputService _pokemonBattleInputService;
     private PokemartInputService _pokemartInputService;
@@ -68,7 +69,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
-        
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
         _playerBagInputService = container.Resolve<PlayerBagInputService>();
         _pokemonPartyInputService = container.Resolve<PokemonPartyInputService>();
         _pokemonBattleInputService = container.Resolve<PokemonBattleInputService>();
@@ -83,7 +84,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     
     public void OnInject()
     {
-        _emptyState = new InputState(InputStateName.Empty,InputStateGroup.None, canExit: false);
+        _emptyState = new InputState(InputStateName.Empty,InputStateGroup.None, canExit: false,isParent:true,mainView:emptyPlaceHolder);
         currentState  ??= _emptyState;
         _currentStateLoaded = true;
         _inputServiceGroups.Add(InputStateGroup.Bag,_playerBagInputService);
@@ -109,7 +110,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
                 if (currentState.canExit)
                 {
                     if (currentState.persistOnExit)
-                        currentState.OnExit.Invoke();
+                        currentState.onExit.Invoke();
 
                     else if (currentState.canManualExit)
                         RemoveTopInputLayer(true);
@@ -211,20 +212,34 @@ public class InputStateHandler : MonoBehaviour,IInjectable
             UpdateSelectorUi();
             currentState.selector.SetActive(true);
         }
-        
         _currentStateLoaded = true;
         OnStateLoaded?.Invoke(currentState);
         
         var parentLayers = stateLayers.Where(s => s.isParentLayer).ToList();
         if (parentLayers.Count==0) return;
-        parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
-        parentLayers.Last().mainViewUI.SetActive(true);
+        
+        if (currentState.displayTransition)
+        {
+            StartCoroutine(PlayTransition());
+            IEnumerator PlayTransition()
+            {
+                yield return _gameUIHandler.FadeInBlackScreen();
+                _gameUIHandler.RemoveBlackScreen();
+                parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
+                parentLayers.Last().mainViewUI.SetActive(true);
+            }
+        }
+        else
+        {
+            parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
+            parentLayers.Last().mainViewUI.SetActive(true);
+        }
     }
 
     private void HandleStateExitability()
     {
-        if (currentState.UpdateExitStatus == null) return;
-        currentState.canExit = currentState.UpdateExitStatus.Invoke();
+        if (currentState.updateExitStatus == null) return;
+        currentState.canExit = currentState.updateExitStatus.Invoke();
     }
     private void SetDirectionals()
     {
@@ -431,29 +446,47 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         LoadNextState();
     }
 
-    private void RemoveInputState(InputState state,bool manualExit)
+    private void RemoveInputState(InputState previousState,bool manualExit)
     {
-        state.selector?.SetActive(false);
+        if (manualExit)
+        {
+            if (stateLayers.Count > 1)
+            {
+                if(previousState.displayTransition)
+                {
+                    var topLayer = stateLayers[^1];
+                    if (!topLayer.isParentLayer || !topLayer.displayTransition)
+                    {
+                        StartCoroutine(PlayTransition());
+                        IEnumerator PlayTransition()
+                        {
+                            yield return _gameUIHandler.FadeInBlackScreen();
+                            _gameUIHandler.RemoveBlackScreen();
+                            previousState.mainViewUI?.SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
         
-        if(state.stateDirection==InputDirection.Grid) ResetCoordinates();
         
-        Action method = manualExit ? state.OnExit:state.OnClose;
+        previousState.selector?.SetActive(false);
+        
+        if(previousState.stateDirection==InputDirection.Grid) ResetCoordinates();
+        
+        Action method = manualExit ? previousState.onExit:previousState.onClose;
         method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine,otherwise infinite loop
-        stateLayers.Remove(state);
-        OnStateRemoved?.Invoke(state);
-        
-        if (!manualExit) return;
-
+        stateLayers.Remove(previousState);
+        OnStateRemoved?.Invoke(previousState);
         LoadNextState();
     }
-
     private void LoadNextState()
     {
         ChangeInputState(stateLayers.Count > 0? stateLayers.Last() : _emptyState);
     }
     public void RemoveTopInputLayer(bool invokeOnExit)
     {
-        currentState.OnExit = invokeOnExit? currentState.OnExit:null;
+        currentState.onExit = invokeOnExit? currentState.onExit:null;
         RemoveInputState(stateLayers.Last() ,true);
     }
 }

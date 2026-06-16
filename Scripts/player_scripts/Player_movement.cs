@@ -102,6 +102,7 @@ public class Player_movement : MonoBehaviour,IInjectable
         if (!_movementRestrictors[restrictor]) return;
         
         StartCoroutine(MovementAllowanceDelay());
+        
         IEnumerator MovementAllowanceDelay()
         {
             _movementRestrictors[restrictor] = false;
@@ -110,8 +111,8 @@ public class Player_movement : MonoBehaviour,IInjectable
             {
                 yield break;
             }
-            
             if (!usingBike) ForceWalkMovement();
+            
             canMove = true;
             SetCurrentAnimation();
         }

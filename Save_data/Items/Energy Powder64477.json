@@ -6,7 +6,7 @@
     "price": 18,
     "quantity": 1,
     "itemImage": {
-        "instanceID": 27106
+        "instanceID": 27104
     },
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
@@ -16,7 +16,7 @@
     "canBeSold": true,
     "additionalInfoModules": [
         {
-            "instanceID": 26664
+            "instanceID": 26662
         }
     ],
     "dynamicInfoModules": [

@@ -23,7 +23,6 @@ public class Poke_Mart : MonoBehaviour,IInjectable
     public Text quantity;    
     public Text playerMoneyText;
     public PokeMartData currentMartData;
-    private bool _itemsLoaded;
     public GameObject itemSelector;
     public GameObject quantitySelector;
     public Text itemDescription;
@@ -50,22 +49,7 @@ public class Poke_Mart : MonoBehaviour,IInjectable
     {
         _dialogueOptionsHandler.OnInteractionOptionChosen += ViewStore;
     }
-    private IEnumerator SelectItemsForStore()
-    {
-        currentStoreItems.Clear();
-        var orderedItems = currentMartData.availableItems.OrderBy(item => item.price);
-        var itemProgress = 0;
-        foreach (var group in orderedItems.GroupBy(item => item.itemType).ToList())
-        {
-            foreach (var item in group)
-            {
-                currentStoreItems.Add(item);
-                itemProgress++;
-            }
-        }
-        yield return new WaitUntil(() => itemProgress == currentMartData.availableItems.Count);
-        _itemsLoaded = true;
-    }
+   
     private void Update()
     {
         if (!viewingStore) return;
@@ -162,27 +146,29 @@ public class Poke_Mart : MonoBehaviour,IInjectable
                 return;
             }
         }
-        
         var allData = Resources.LoadAll<PokeMartData>(
             SaveDataHandler.GetDirectory(AssetDirectory.PokeMartData));
         
-        foreach (var data in allData)
+        currentMartData = allData.FirstOrDefault(data => data.location == clerkInteraction.location);
+        if (currentMartData == null)
         {
-            if (data.location == clerkInteraction.location)
+            Debug.LogWarning($"No mart data for location{clerkInteraction.location}");
+            return;
+        }
+        currentStoreItems.Clear();
+        var orderedItems = currentMartData.availableItems.OrderBy(item => item.price);
+        var itemGroups = orderedItems.GroupBy(item => item.itemType).ToList();
+        
+        foreach (var group in itemGroups)
+        {
+            foreach (var item in group)
             {
-                currentMartData = data;
-                StartCoroutine(InitializeStoreData());
-                break;
+                currentStoreItems.Add(item);
             }
         }
-    }
-    private IEnumerator InitializeStoreData()
-    {
-        _itemsLoaded = false;
-        StartCoroutine(SelectItemsForStore());
-        yield return new WaitUntil(()=>_itemsLoaded);
         SetUpItemView();
     }
+   
     private void SetUpItemView()
     {
         viewingStore = true;

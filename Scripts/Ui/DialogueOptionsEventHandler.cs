@@ -54,7 +54,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     public void ExitGame()
     {
         _dialogueHandler.DisplayCustomOptions("Are you sure you want to exit?, you will lose unsaved data!"
-             , new[]{"Yes", "No"},new Action[] { CloseApplication, null },"Good bye!");
+             , new[]{"Yes", "No"},new Action[] { CloseApplication, _dialogueHandler.EndDialogue });
     }
 
     void ViewControls()
