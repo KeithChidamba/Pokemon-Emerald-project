@@ -22,7 +22,8 @@ public class InputState
     public bool canExit;
     public bool canManualExit;
     public bool persistOnExit;
-    public bool displayTransition;
+    public bool displayCloseTransition;
+    public bool displayOpenTransition;
     public InputState(
         InputStateName stateName,
         InputStateGroup group,
@@ -38,7 +39,8 @@ public class InputState
         Func<bool> updateExit = null,
         bool canExit = true,
         bool canManualExit = true,
-        bool displayTransition =false
+        bool displayOpenTransition =false,
+        bool displayCloseTransition =false
     )
     {
         this.stateName = stateName;
@@ -63,7 +65,9 @@ public class InputState
         
         this.canExit = canExit;
 
-        this.displayTransition = displayTransition;
+        this.displayOpenTransition = displayOpenTransition;
+
+        this.displayCloseTransition = displayOpenTransition || displayCloseTransition;
         
         updateExitStatus = updateExit;
     }

@@ -83,12 +83,12 @@ public class TypingInterfaceInputService:IInputGroup
     }
     private void SwitchToOptions()
     {
-        _inputStateHandler.ResetRelevantUi(InputStateName.TypingInterfaceNavigation);
+        _inputStateHandler.ResetGridUi(InputStateName.TypingInterfaceNavigation);
         _typingInterfaceHandler.InterfaceOptionsNavigation();
     }
     private void OptionsNavigation()
     {
         _typingInterfaceHandler.characterSelector.SetActive(false);
-        _inputStateHandler.OnInputLeft += () => _typingInterfaceHandler.TypingInterfaceNavigation(false);
+        _inputStateHandler.OnInputLeft += _typingInterfaceHandler.TypingInterfaceNavigation;
     }
 }

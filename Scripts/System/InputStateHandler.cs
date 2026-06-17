@@ -29,6 +29,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
 {
     public InputState currentState;
     public bool IsEmptyState =>currentState.stateName == InputStateName.Empty;
+    public bool StateExists(InputStateGroup group) => stateLayers.Any(s=>s.stateGroup==group);
     private InputState _emptyState;
     private int[] _directionSelection = { 0, 0, 0, 0 };
 
@@ -206,7 +207,12 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         {
             currentState.maxSelectableIndex = currentState.selectableUis.Count>0? currentState.selectableUis.Count - 1 : 0;
         }
-        SetupInputServices();
+        
+        if(_inputServiceGroups.TryGetValue(currentState.stateGroup, out var serviceGroup))
+        {
+            serviceGroup.DetermineOperation();
+        }
+        
         if (currentState.displayingSelector)
         {
             UpdateSelectorUi();
@@ -218,18 +224,15 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         var parentLayers = stateLayers.Where(s => s.isParentLayer).ToList();
         if (parentLayers.Count==0) return;
         
-        if (currentState.displayTransition)
+        if (currentState.displayOpenTransition)
         {
-            StartCoroutine(PlayTransition());
-            IEnumerator PlayTransition()
-            {
-                yield return _gameUIHandler.FadeInBlackScreen();
-                _gameUIHandler.RemoveBlackScreen();
-                parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
-                parentLayers.Last().mainViewUI.SetActive(true);
-            }
+            StartCoroutine(PlayTransition(HandleParentDisplay));
         }
         else
+        {
+            HandleParentDisplay();
+        }
+        void HandleParentDisplay()
         {
             parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
             parentLayers.Last().mainViewUI.SetActive(true);
@@ -241,6 +244,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         if (currentState.updateExitStatus == null) return;
         currentState.canExit = currentState.updateExitStatus.Invoke();
     }
+    
     private void SetDirectionals()
     {
         switch (currentState.stateDirection)
@@ -256,6 +260,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
                 break;
         }
     }
+    
     private void ResetInputEvents()
     {
         OnInputUp = null; OnInputDown = null; OnInputLeft = null; OnInputRight = null;
@@ -369,18 +374,14 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         rowRemainder = Mathf.Clamp(rowRemainder, 0, numBoxColumns);
         boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
     }
-    private void SetupInputServices()
-    {
-        if(_inputServiceGroups.TryGetValue(currentState.stateGroup, out var serviceGroup))
-        {
-            serviceGroup.DetermineOperation();
-        }
-    }
-
     public void AddPlaceHolderState()
     {
         ChangeInputState(new (InputStateName.PlaceHolder,InputStateGroup.None, canExit: false
             , isParent:true,mainView: emptyPlaceHolder));
+    }
+    public void AddChildPlaceHolderState()
+    {
+        ChangeInputState(new (InputStateName.PlaceHolder,InputStateGroup.None, canExit: false));
     }
     public void AddBattleDialoguePlaceHolderState()
     {
@@ -415,6 +416,12 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         if (state == null) return;
         RemoveInputState(state,manualExit);
     }
+    public void ResetGridUi(InputStateName stateName)
+    {
+        var state = stateLayers.FirstOrDefault(state => state.stateName == stateName);
+        state?.selector?.SetActive(false);
+        if(state?.stateDirection==InputDirection.Grid) ResetCoordinates();
+    }
     private List<InputState> GetRelevantStates(InputStateGroup group)
     {
         List<InputState> inputStates = new List<InputState>();
@@ -439,6 +446,12 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     {
         return stateLayers.Find(state=>state.stateName == stateName);
     }
+    public IEnumerator PlayTransition(Action callBack)
+    {
+        yield return _gameUIHandler.FadeInBlackScreen();
+        _gameUIHandler.RemoveBlackScreen();
+        callBack?.Invoke();
+    }
     private void RemoveInputStates(List<InputState> states)
     {
         foreach (var state in states)
@@ -448,38 +461,38 @@ public class InputStateHandler : MonoBehaviour,IInjectable
 
     private void RemoveInputState(InputState previousState,bool manualExit)
     {
-        if (manualExit)
+        if(stateLayers.Count > 1)
         {
-            if (stateLayers.Count > 1)
+            var nextLayer = stateLayers[^2]; //second last
+            var isSubState = !previousState.isParentLayer && previousState.stateGroup == nextLayer.stateGroup;
+            if (isSubState)
             {
-                if(previousState.displayTransition)
-                {
-                    var topLayer = stateLayers[^1];
-                    if (!topLayer.isParentLayer || !topLayer.displayTransition)
-                    {
-                        StartCoroutine(PlayTransition());
-                        IEnumerator PlayTransition()
-                        {
-                            yield return _gameUIHandler.FadeInBlackScreen();
-                            _gameUIHandler.RemoveBlackScreen();
-                            previousState.mainViewUI?.SetActive(false);
-                        }
-                    }
-                }
+                //no need since it's same group
+                nextLayer.displayOpenTransition = false;
             }
+            var canDisplayTransition = manualExit && previousState.displayCloseTransition && !nextLayer.displayOpenTransition;
+            if (canDisplayTransition)
+            {
+                StartCoroutine(PlayTransition(RemovalLogic));
+            }else RemovalLogic();
+        }else RemovalLogic();
+        
+
+        void RemovalLogic()
+        {
+            previousState.mainViewUI?.SetActive(false);
+            previousState.selector?.SetActive(false);
+        
+            if(previousState.stateDirection==InputDirection.Grid) ResetCoordinates();
+        
+            Action method = manualExit ? previousState.onExit:previousState.onClose;
+            method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine,otherwise infinite loop
+            stateLayers.Remove(previousState);
+            OnStateRemoved?.Invoke(previousState);
+            LoadNextState();
         }
-        
-        
-        previousState.selector?.SetActive(false);
-        
-        if(previousState.stateDirection==InputDirection.Grid) ResetCoordinates();
-        
-        Action method = manualExit ? previousState.onExit:previousState.onClose;
-        method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine,otherwise infinite loop
-        stateLayers.Remove(previousState);
-        OnStateRemoved?.Invoke(previousState);
-        LoadNextState();
     }
+    
     private void LoadNextState()
     {
         ChangeInputState(stateLayers.Count > 0? stateLayers.Last() : _emptyState);

@@ -254,8 +254,8 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       
       StartCoroutine(AnimateInterfaceGraphic(graphicData));
       CreateCharacterBoxes();
-      ChangeInterface(TypingInputInterface.Uppercase,false);
-      TypingInterfaceNavigation(true);
+      ChangeInterface(TypingInputInterface.Uppercase);
+      StartCoroutine(_inputStateHandler.PlayTransition(TypingInterfaceNavigation));
       characterBoxes[0].AnimateCharacterBox();
    }
 
@@ -329,7 +329,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
             templateRt.anchoredPosition.y);
       }
    }
-   public void TypingInterfaceNavigation(bool displayTransition = true)
+   public void TypingInterfaceNavigation()
    {
       CreateSelectables();
       var typingSelectables = new List<SelectableUI>();
@@ -341,8 +341,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       currentCharacterIndex = 0;
       _inputStateHandler.ChangeInputState(new  (InputStateName.TypingInterfaceNavigation,
          InputStateGroup.TypingInterface,true,mainUI,
-         InputDirection.Grid, typingSelectables,characterSelector,true, true ,canExit:false
-         ,displayTransition:displayTransition),true);
+         InputDirection.Grid, typingSelectables,characterSelector,true, true ,canExit:false),true);
    }
 
    public void InterfaceOptionsNavigation()
@@ -357,16 +356,13 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
          InputStateGroup.TypingInterface,false,null,
          InputDirection.Vertical, optionSelectables,optionSelector,true, true ,canExit:false));
    }
-   private void ChangeInterface(TypingInputInterface newInterface,bool refreshState)
+   private void ChangeInterface(TypingInputInterface newInterface)
    {
       interfaceImages[(int)currentInterface].gameObject.SetActive(false);
       interfaceImages[(int)newInterface].gameObject.SetActive(true);
       
       currentInterface = newInterface;
       currentMaxBoxElements = _interfaceGrids[currentInterface].gridSize;
-      
-      if (!refreshState) return;
-      _inputStateHandler.ResetRelevantUi(InputStateName.TypingInterfaceNavigation);
    }
    private void SwapInterface()
    {
@@ -380,7 +376,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    private IEnumerator InterfaceTransitionAnimation(TypingInputInterface newInterface)
    {
       _isSwappingInterface = true;
-      _inputStateHandler.AddPlaceHolderState();
+      _inputStateHandler.AddChildPlaceHolderState();
       var newImage = interfaceImages[(int)newInterface];
       var newRect = newImage.rectTransform;
 
@@ -408,7 +404,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
             500f);
       
       _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder,true);
-      ChangeInterface(newInterface, true);
+      ChangeInterface(newInterface);
       _isSwappingInterface = false;
    }
    public void SetCurrentCharacterIndex(int newIndex)
@@ -455,9 +451,15 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
          _dialogueHandler.DisplayDetails("Input cannot be empty!");
          return;
       }
-      StopAllCoroutines();
-      OnInputResolved?.Invoke(combinedInput);
-      OnInputResolved = null;
-      _inputStateHandler.ResetGroupUi(InputStateGroup.TypingInterface);
+      StartCoroutine(_inputStateHandler.PlayTransition(CloseInterface));
+
+      void CloseInterface()
+      {
+         OnInputResolved?.Invoke(combinedInput);
+         OnInputResolved = null;
+         _inputStateHandler.ResetGroupUi(InputStateGroup.TypingInterface);
+         StopAllCoroutines();
+      }
+     
    }
 }

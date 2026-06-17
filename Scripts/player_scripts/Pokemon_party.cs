@@ -88,10 +88,10 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     {
         partyUsageText.text = message;
     }
-    public void ExitParty()
+    public void ValidatePartyExit()
     {
         if (swapOutNext) return;
-        _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
+        _inputStateHandler.ResetRelevantUi(InputStateName.PokemonPartyNavigation,true);
     }
 
     public void CheckStateUpdate(InputState currentState)

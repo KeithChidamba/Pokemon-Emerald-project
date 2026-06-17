@@ -440,10 +440,6 @@ public class Bag : MonoBehaviour,IInjectable
         OnBagOpened = null;
         
     }
-    private List<Item> GetItems(ItemType itemType)
-    {
-        return allItems.Where(item => item.itemType == itemType).ToList();
-    }
 
     public bool CanShowEquippedMarker(string itemName)
     {
@@ -456,7 +452,8 @@ public class Bag : MonoBehaviour,IInjectable
     {
         return _categories[currentCategoryIndex] == BagCategory.KeyItems;
     }
-    public void SetupBagState()
+
+    public void SetupBagState(bool displayTransition = false)
     {
         numItems = 0;
         topIndex = 0;
@@ -470,12 +467,18 @@ public class Bag : MonoBehaviour,IInjectable
         currentCategoryOfItems = storageView? storageItems 
             : _categories[currentCategoryIndex] switch
         {
-            BagCategory.Pokeballs=>GetItems(specialCategories[0]),
-            BagCategory.KeyItems=>GetItems(specialCategories[1]),
-            BagCategory.Berries=>GetItems(specialCategories[2]),
-            BagCategory.HmsTms=>GetItems(specialCategories[3]),
+            BagCategory.Pokeballs=>GetItems(ItemType.Pokeball),
+            BagCategory.KeyItems=>GetItems(ItemType.Special),
+            BagCategory.Berries=>GetItems(ItemType.Berry),
+            BagCategory.HmsTms=>GetItems(ItemType.LearnableMove),
+            //get general items
             _=>allItems.Where(item => !specialCategories.Contains(item.itemType)).ToList()
         };
+        
+        List<Item> GetItems(ItemType itemType)
+        {
+            return allItems.Where(item => item.itemType == itemType).ToList();
+        }
         
         numItems = currentCategoryOfItems.Count;
         if (numItems == 0)
@@ -507,7 +510,7 @@ public class Bag : MonoBehaviour,IInjectable
         if (numItems > 0) SelectItem();
         
         OnBagOpened?.Invoke();
-        _gameUIHandler.SetBagInputState();
+        _gameUIHandler.SetBagInputState(displayTransition);
         
         //default visuals
         _upArrow.gameObject.SetActive(false);
