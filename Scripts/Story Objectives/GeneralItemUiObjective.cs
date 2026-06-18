@@ -38,11 +38,10 @@ public class GeneralItemUiObjective : ItemUiObjective
     private void SetupItemUsageObjective()
     {
         _itemHandler = serviceContainer.Resolve<Item_handler>();
-        _itemHandler.OnItemUsageSuccessful += CheckIfItemUsed;
+        _itemHandler.OnItemUsed += CheckIfItemUsed;
     }
-    private void CheckIfItemUsed(bool successful)
+    private void CheckIfItemUsed(Item itemUsed,bool successful)
     {
-        var itemUsed = _itemHandler.itemInUse;
         CheckForItemObjectiveClear(itemUsed);
     }
 }

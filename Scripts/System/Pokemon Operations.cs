@@ -25,7 +25,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private bool _selectingMoveReplacement;
     private Pokemon _currentPokemon;
     private Move _newMoveAsset;
-    public event Action<bool> OnEvChange;
+    public event Action<Stat,bool> OnEvChange;
     public event Action<Pokemon,bool> OnPokeballUsed;
     
     private WildPokemonAiHandler _wildPokemonHandler;
@@ -83,7 +83,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
              pokemon.abilities[pokemon.personalityValue % 2] : pokemon.abilities[0];
         pokemon.abilityName = NameDB.GetAbility(abilityEnum);
         pokemon.ability = Resources.Load<Ability>(
-            SaveDataHandler.GetDirectory(AssetDirectory.Abilities)
+            DirectoryHandler.GetDirectory(AssetDirectory.Abilities)
             + pokemon.abilityName.ToLower());
     }
     public bool ContainsType(PokemonType[]typesList ,Type typesToCheck)
@@ -109,7 +109,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         foreach (var nature in natures)
         {
             var assignedNature = Resources.Load<Nature>(
-                SaveDataHandler.GetDirectory(AssetDirectory.Natures)
+                DirectoryHandler.GetDirectory(AssetDirectory.Natures)
                 + nature);
             if (assignedNature.requiredNatureValue != natureValue) continue;
             pokemon.nature = assignedNature;
@@ -191,9 +191,9 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     public void CalculateEvForStat(Stat stat,float evAmount,Pokemon pkm)
     {
         ref float evRef = ref GetEvStatRef(stat, pkm);
-        evRef = CheckEvLimit(evRef,evAmount,pkm);
+        evRef = CheckEvLimit(evRef,evAmount,pkm,stat);
     }
-    private float CheckEvLimit(float currentEv,float amount,Pokemon pokemon)
+    private float CheckEvLimit(float currentEv,float amount,Pokemon pokemon,Stat statToChange)
     {
         var totalEv = pokemon.hpEv + pokemon.attackEv + pokemon.defenseEv +
                         pokemon.specialAttackEv + pokemon.specialDefenseEv + pokemon.speedEv;
@@ -201,7 +201,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         // Prevent over-adding if already at cap
         if (amount > 0 && (currentEv >= 252 || totalEv >= 510))
         {
-            OnEvChange?.Invoke(false);
+            OnEvChange?.Invoke(statToChange,false);
             return currentEv;
         }
 
@@ -210,7 +210,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         float clampedAmount = Math.Clamp(amount, -currentEv, maxAssignable);
         bool changed = clampedAmount != 0;
 
-        OnEvChange?.Invoke(changed);
+        OnEvChange?.Invoke(statToChange,changed);
         
         return currentEv + clampedAmount;
     }
@@ -266,8 +266,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     }
     private IEnumerator LearnMove(string moveName,bool isPartyPokemon = true, bool isLevelUpMove = true)
     {
-        _itemHandler.usingItem = false;
-        var assetPath = SaveDataHandler.GetDirectory(AssetDirectory.Moves) + moveName;
+        var assetPath = DirectoryHandler.GetDirectory(AssetDirectory.Moves) + moveName;
         
         var moveFromAsset = Resources.Load<Move>(assetPath);
         

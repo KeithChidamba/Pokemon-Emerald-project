@@ -12,10 +12,10 @@ public class NatureEVFixer : EditorWindow
     public static void AssignSprites()
     {
         // Fetch all Item ScriptableObjects
-        var ITEM_FOLDER =  "Assets/Resources/"+SaveDataHandler.GetDirectory(AssetDirectory.Items);
+        var ITEM_FOLDER =  "Assets/Resources/"+DirectoryHandler.GetDirectory(AssetDirectory.Items);
 
         // Folder containing Sprites
-        var  SPRITE_FOLDER = "Assets/Resources/"+SaveDataHandler.GetDirectory(AssetDirectory.ItemUI);
+        var  SPRITE_FOLDER = "Assets/Resources/"+DirectoryHandler.GetDirectory(AssetDirectory.ItemUI);
         
         string[] itemGuids = AssetDatabase.FindAssets("t:Item", new[] { ITEM_FOLDER });
 
@@ -83,10 +83,10 @@ public class NatureEVFixer : EditorWindow
     public static void CheckItemToMake()
     {
         // Fetch all Item ScriptableObjects
-        var ITEM_FOLDER =  "Assets/Resources/"+SaveDataHandler.GetDirectory(AssetDirectory.Items);
+        var ITEM_FOLDER =  "Assets/Resources/"+DirectoryHandler.GetDirectory(AssetDirectory.Items);
 
         // Folder containing Sprites
-        var  SPRITE_FOLDER = "Assets/Resources/"+SaveDataHandler.GetDirectory(AssetDirectory.ItemUI);
+        var  SPRITE_FOLDER = "Assets/Resources/"+DirectoryHandler.GetDirectory(AssetDirectory.ItemUI);
         
         string[] itemGuids = AssetDatabase.FindAssets("t:Item", new[] { ITEM_FOLDER });
         

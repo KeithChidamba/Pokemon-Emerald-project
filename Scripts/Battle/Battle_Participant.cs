@@ -286,10 +286,9 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public void SetupSwitchOut()
     {
         _pokemonPartyHandler.selectedMemberNumber = Array.IndexOf(_battleHandler.battleParticipants, this)+1;
-        _pokemonPartyHandler.swapOutNext = true;
         
         _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
-        _gameUIHandler.ViewPokemonParty();
+        _gameUIHandler.ViewPokemonParty(PartyUsage.SwapOut);
         ResetParticipantState();
     }
 
@@ -419,7 +418,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         {
             statusImage.gameObject.SetActive(true);
             statusImage.sprite = Resources.Load<Sprite>(
-                SaveDataHandler.GetDirectory(AssetDirectory.Status) 
+                DirectoryHandler.GetDirectory(AssetDirectory.Status) 
              + pokemon.statusEffect.ToString().ToLower());
         }
     }
@@ -473,7 +472,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         pokemonGenderImage.gameObject.SetActive(true);
         if(pokemon.hasGender)
             pokemonGenderImage.sprite = Resources.Load<Sprite>(
-                SaveDataHandler.GetDirectory(AssetDirectory.UI) 
+                DirectoryHandler.GetDirectory(AssetDirectory.UI) 
                 + pokemon.gender.ToString().ToLower());
         else
             pokemonGenderImage.gameObject.SetActive(false);

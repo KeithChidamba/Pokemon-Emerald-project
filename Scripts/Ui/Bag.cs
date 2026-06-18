@@ -352,14 +352,20 @@ public class Bag : MonoBehaviour,IInjectable
                  return;//special items for events
              }
          }
-         _itemHandler.usingItem = true;
+         
          if(itemToUse.forPartyUse)
          {
-             _pokemonPartyHandler.ReceiveItem(itemToUse);
-             _gameUIHandler.ViewPokemonParty();
+             _pokemonPartyHandler.OnMemberSelected += AllowItemUsage;
+             _gameUIHandler.ViewPokemonParty(PartyUsage.ItemUsage);
          }
          else
              _itemHandler.UseItem(itemToUse,null);
+
+         void AllowItemUsage(int memberIndex)
+         {
+             _pokemonPartyHandler.OnMemberSelected -= AllowItemUsage;
+             _itemHandler.UseItem(itemToUse,_pokemonPartyHandler.party[memberIndex]);
+         }
      }
 
     public void WithDrawFromStorage(Item itemToWithdraw)

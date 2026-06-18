@@ -190,7 +190,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         {
             new(battleOptions[0], LoadMoveInputAndText, true),
             new(battleOptions[1], _gameUIHandler.ValidateBagView, true),
-            new(battleOptions[2], _gameUIHandler.ViewPokemonParty, true),
+            new(battleOptions[2], () => _gameUIHandler.ViewPokemonParty(PartyUsage.General), true),
             new(battleOptions[3], () => StartCoroutine(RunAway()), true)
         };
         

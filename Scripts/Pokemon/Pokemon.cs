@@ -131,20 +131,20 @@ public class Pokemon : ScriptableObject
     }
     public void LoadDataAndDependencies(ServiceContainer serviceContainer)
     {//gives values to attributes that cant be deserialized, using saved values
-        frontPicture = Testing.GetValidImage( SaveDataHandler.GetDirectory
+        frontPicture = Testing.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
-        backPicture =Testing.GetValidImage( SaveDataHandler.GetDirectory
+        backPicture =Testing.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_sb":"_b"));
-        partyFrame1=Testing.GetValidImage( SaveDataHandler.GetDirectory
+        partyFrame1=Testing.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonPartyImage),pokemonName+"_1");
-        partyFrame2=Testing.GetValidImage( SaveDataHandler.GetDirectory
+        partyFrame2=Testing.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonPartyImage),pokemonName+"_2");
-        battleIntroFrame=Testing.GetValidImage( SaveDataHandler.GetDirectory
+        battleIntroFrame=Testing.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_s_intro":"_intro"));
         
-        nature = Resources.Load<Nature>(SaveDataHandler.GetDirectory
+        nature = Resources.Load<Nature>(DirectoryHandler.GetDirectory
             (AssetDirectory.Natures) + natureName.ToLower());
-        ability = Resources.Load<Ability>(SaveDataHandler.GetDirectory
+        ability = Resources.Load<Ability>(DirectoryHandler.GetDirectory
             (AssetDirectory.Abilities) + abilityName.ToLower());
         types.Clear();
         evolutions.Clear();
@@ -153,18 +153,18 @@ public class Pokemon : ScriptableObject
         
         foreach (var typeName in typeNames)
         {
-            types.Add(Resources.Load<Type>(SaveDataHandler.GetDirectory
+            types.Add(Resources.Load<Type>(DirectoryHandler.GetDirectory
                 (AssetDirectory.Types) + typeName));
         }
         foreach (var evolutionName in evolutionNames)
         {
-            var pokemonDirectory = SaveDataHandler.GetDirectory
+            var pokemonDirectory = DirectoryHandler.GetDirectory
                 (AssetDirectory.Pokemon);
             evolutions.Add(Resources.Load<Evolution>($"{pokemonDirectory}{basePokemonName}/{evolutionName}"));
         }
         for (int i = 0; i < types.Count; i++)
         {
-            types[i].typeImage = Resources.Load<Sprite>(SaveDataHandler.GetDirectory
+            types[i].typeImage = Resources.Load<Sprite>(DirectoryHandler.GetDirectory
                 (AssetDirectory.UI) + typeNames[i]);
         }
 
@@ -194,7 +194,7 @@ public class Pokemon : ScriptableObject
         foreach (var move in movesetTemplate)
         {
             var moveCopy = InstanceFactory.CreateMove(Resources.Load<Move>(
-                SaveDataHandler.GetDirectory(AssetDirectory.Moves) + move.moveName));
+                DirectoryHandler.GetDirectory(AssetDirectory.Moves) + move.moveName));
             
             moveCopy.powerpoints = move.powerPoints;
             moveCopy.maxPowerpoints = move.maxPowerpoints;
@@ -222,7 +222,7 @@ public class Pokemon : ScriptableObject
     {
         float modifier = 0;
         
-        var pokeballItem = Resources.Load<Item>(SaveDataHandler.GetDirectory(AssetDirectory.Items) + pokeballName);
+        var pokeballItem = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items) + pokeballName);
         
         var pokeballFriendshipMod = pokeballItem.GetDynamicModule<FriendshipModifierInfo>();
         

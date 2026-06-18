@@ -209,7 +209,7 @@ public class BerryTree : MonoBehaviour
         
         SetInteraction(OverworldInteractionType.WaterBerryTree);
         var treeDataAsset = Resources.Load<BerryTreeData>(
-            SaveDataHandler.GetDirectory(AssetDirectory.BerryTreeData)
+            DirectoryHandler.GetDirectory(AssetDirectory.BerryTreeData)
                                                           + berryToPlant.itemName+" Data");
         treeData = InstanceFactory.CreateTreeData(treeDataAsset);
         

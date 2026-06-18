@@ -46,7 +46,7 @@ public class PokemonPartyInputService: IInputGroup
                 , ()=>_gameUIHandler.ViewPartyPokemonDetails(
                     _pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberNumber - 1]), true),
             new(_pokemonPartyHandler.partyOptions[1]
-                , () => _pokemonPartyHandler.SelectMemberToBeSwapped(_pokemonPartyHandler.selectedMemberNumber)
+                , () => _pokemonPartyHandler.BeginMemberSwap(_pokemonPartyHandler.selectedMemberNumber)
                 , true),
             new(_pokemonPartyHandler.partyOptions[2]
                 , _playerBagHandler.OpenBagToGiveItem

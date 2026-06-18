@@ -101,7 +101,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         {
             statusEffectImage.gameObject.SetActive(true);
             statusEffectImage.sprite = Resources.Load<Sprite>(
-                SaveDataHandler.GetDirectory(AssetDirectory.Status)
+                DirectoryHandler.GetDirectory(AssetDirectory.Status)
                 + pokemon.statusEffect.ToString().ToLower());
         }
         _inputStateHandler.OnSelectionIndexChanged += UpdateUi;
@@ -133,7 +133,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
             {
                 statusEffectImage.gameObject.SetActive(true);
                 statusEffectImage.sprite = Resources.Load<Sprite>(
-                    SaveDataHandler.GetDirectory(AssetDirectory.Status)
+                    DirectoryHandler.GetDirectory(AssetDirectory.Status)
                     + "fainted");
             }
         }

@@ -153,7 +153,7 @@ public class OverworldState : MonoBehaviour,IInjectable
             yield return new WaitUntil(() => currentStoryObjectives.Count==allStoryObjectives.Count);
             currentStoryObjectives.ForEach(o=>o.mainAssetName=o.name);
             
-            storyProgressObjective = Resources.Load<StoryProgressObjective>(SaveDataHandler.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
+            storyProgressObjective = Resources.Load<StoryProgressObjective>(DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
             storyProgressObjective.mainAssetName = storyProgressObjective.name;
             storyProgressObjective.totalObjectiveAmount = allStoryObjectives.Count;
             storyProgressObjective.numCompleted = 0;

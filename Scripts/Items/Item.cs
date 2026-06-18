@@ -53,7 +53,7 @@ public class Item : ScriptableObject
     }
     public void LoadData()
     {
-        var sourceAsset = Resources.Load<Item>(SaveDataHandler.GetDirectory(AssetDirectory.Items)+ itemName);
+        var sourceAsset = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)+ itemName);
         if(sourceAsset.additionalInfoModules.Count>0){
             additionalInfoModules.Clear();
             additionalInfoModules.AddRange(sourceAsset.additionalInfoModules);
@@ -63,6 +63,6 @@ public class Item : ScriptableObject
             dynamicInfoModules.AddRange(sourceAsset.dynamicInfoModules);
         }
         
-        itemImage = Testing.GetValidImage(SaveDataHandler.GetDirectory(AssetDirectory.ItemUI),imageDirectory);
+        itemImage = Testing.GetValidImage(DirectoryHandler.GetDirectory(AssetDirectory.ItemUI),imageDirectory);
     }
 }

@@ -219,7 +219,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         pkm_ID.text = "IDNo"+currentPokemon.pokemonID;
         pkm_lv.text = "Lv"+currentPokemon.currentLevel;
         pokeballImage.sprite =
-            Resources.Load<Sprite>(SaveDataHandler.GetDirectory(AssetDirectory.ItemUI) + currentPokemon.pokeballName);
+            Resources.Load<Sprite>(DirectoryHandler.GetDirectory(AssetDirectory.ItemUI) + currentPokemon.pokeballName);
         gender_img.gameObject.SetActive(true);
         if(currentPokemon.hasGender)
         {

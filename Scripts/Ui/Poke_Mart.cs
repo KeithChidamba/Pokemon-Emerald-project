@@ -147,7 +147,7 @@ public class Poke_Mart : MonoBehaviour,IInjectable
             }
         }
         var allData = Resources.LoadAll<PokeMartData>(
-            SaveDataHandler.GetDirectory(AssetDirectory.PokeMartData));
+            DirectoryHandler.GetDirectory(AssetDirectory.PokeMartData));
         
         currentMartData = allData.FirstOrDefault(data => data.location == clerkInteraction.location);
         if (currentMartData == null)

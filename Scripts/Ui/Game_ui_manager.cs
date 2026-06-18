@@ -44,7 +44,6 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     public Image destinationPointerUI;
     public Image blackFadingScreen;
     
-    private Item_handler _itemHandler;
     private Pokemon_Details _pokemonDetailsHandler;
     private Dialogue_handler _dialogueHandler;
     private Player_movement _playerMovementHandler;
@@ -74,7 +73,6 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         _saveDataHandler = container.Resolve<SaveDataHandler>();
         _playerMovementHandler = container.Resolve<Player_movement>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
-        _itemHandler = container.Resolve<Item_handler>();
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
@@ -140,7 +138,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     {
         var menuOptionsMethods = new List<Action>
         {
-            ViewPokemonParty, SaveGame, ValidateBagView, ViewProfile, ViewGameSettings
+            ()=>ViewPokemonParty(PartyUsage.General), SaveGame, ValidateBagView, ViewProfile, ViewGameSettings
         };
         
         if (!usingWebGl) menuOptionsMethods.Add(_dialogueOptionsHandler.ExitGame);
@@ -238,7 +236,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             ,keyBindsUI,onExit:RemoveScreen,onClose:RemoveScreen));
     }
 
-    public void ViewPokemonParty()
+    public void ViewPokemonParty(PartyUsage partyUsage)
     {
         if (_pokemonPartyHandler.numMembers < 1)
         {
@@ -248,9 +246,11 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         AddScreen();
         _dialogueHandler.EndDialogue();
         _pokemonPartyHandler.ClearSelectionUI();
+
+        _pokemonPartyHandler.currentUsage = partyUsage;
         
         InputStateName partyUsageState;
-        if (_itemHandler.usingItem)
+        if (partyUsage==PartyUsage.ItemUsage)
         {
              partyUsageState = InputStateName.PokemonPartyItemUsage;
             _pokemonPartyHandler.UpdatePartyUsageMessage("Use on who?");
@@ -258,7 +258,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         else
         {
             partyUsageState = InputStateName.PokemonPartyNavigation;
-            _pokemonPartyHandler.UpdatePartyUsageMessage(_pokemonPartyHandler.swapOutNext?
+            _pokemonPartyHandler.UpdatePartyUsageMessage(partyUsage == PartyUsage.SwapOut?
                 "Select a Pokemon to switch"
                 :"Choose a pokemon");
         }

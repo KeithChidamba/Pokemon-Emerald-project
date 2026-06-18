@@ -48,7 +48,7 @@ public static class Utility
     public static Sprite GetGenderSprite(Gender gender)
     {
         return Resources.Load<Sprite>(
-            SaveDataHandler.GetDirectory(AssetDirectory.UI) 
+            DirectoryHandler.GetDirectory(AssetDirectory.UI) 
             + gender.ToString().ToLower());
     }
 
