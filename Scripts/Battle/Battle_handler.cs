@@ -750,7 +750,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         battleInProgress = false;
         OnBattleEnd?.Invoke();
         _dialogueHandler.EndDialogue();
-        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder,true);
+        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
         
         SetPlayerTurnUsage(PlayerTurnUsage.None);
         

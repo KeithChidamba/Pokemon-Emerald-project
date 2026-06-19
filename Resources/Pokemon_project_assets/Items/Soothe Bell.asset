@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Soothe Bell
-  itemType: 17
-  itemEffectData: 0
+  itemType: 7
   itemDescription: Increases the frinedship
   price: 0
   quantity: 1

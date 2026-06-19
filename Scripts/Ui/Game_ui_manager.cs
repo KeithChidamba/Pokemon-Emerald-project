@@ -266,12 +266,12 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         var partySelectables = new List<SelectableUI>();
         
         _pokemonPartyHandler.RefreshMemberCards();
- 
+        
         for (var i = 0; i < _pokemonPartyHandler.numMembers; i++)
         {
-            var memberNumber = i + 1;
+            var pokemonIndex = i;
             partySelectables.Add(new(_pokemonPartyHandler.memberCards[i].gameObject
-                , () => _pokemonPartyHandler.SelectMember(memberNumber), true));
+                , () => _pokemonPartyHandler.SelectMember(pokemonIndex), true));
         }
         
         //closes the party

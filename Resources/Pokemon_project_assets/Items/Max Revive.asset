@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Max Revive
-  itemType: 7
-  itemEffectData: 0
+  itemType: 6
   itemDescription: Revives a pokemon with 100% health
   price: 200
   quantity: 1
@@ -26,7 +25,8 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules: []
+  additionalInfoModules:
+  - {fileID: 11400000, guid: a85a63f8138a7bfe9b46f47595c044e3, type: 2}
   dynamicInfoModules: []
   imageDirectory: 
   references:

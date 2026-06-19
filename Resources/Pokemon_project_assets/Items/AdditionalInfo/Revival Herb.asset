@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   herbType: 3
   statusEffect: 0
-  itemType: 7
+  reviveType: 1

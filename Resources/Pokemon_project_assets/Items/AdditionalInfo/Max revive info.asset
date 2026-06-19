@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f65cbeef6226228bb00290d3f65febe, type: 3}
-  m_Name: Gifted Treecko
+  m_Script: {fileID: 11500000, guid: 63471f2f704988a14b066f6dadfdcecc, type: 3}
+  m_Name: Max revive info
   m_EditorClassIdentifier: 
-  giftPokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
-  pokemonLevel: 5
-  evolutionStageNumber: 0
+  reviveType: 1

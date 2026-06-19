@@ -86,7 +86,7 @@ public class Pokemon : ScriptableObject
     public Ability ability;
     public List<Evolution> evolutions;
     public Item heldItem;
-    public bool hasItem = false;
+    public bool hasItem;
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
     public Sprite partyFrame1;

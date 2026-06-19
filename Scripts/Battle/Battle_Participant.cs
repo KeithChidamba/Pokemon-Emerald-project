@@ -285,17 +285,17 @@ public class Battle_Participant : MonoBehaviour,IInjectable
 
     public void SetupSwitchOut()
     {
-        _pokemonPartyHandler.selectedMemberNumber = Array.IndexOf(_battleHandler.battleParticipants, this)+1;
+        _pokemonPartyHandler.selectedMemberIndex = Array.IndexOf(_battleHandler.battleParticipants, this);
         
         _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
         _gameUIHandler.ViewPokemonParty(PartyUsage.SwapOut);
         ResetParticipantState();
     }
 
-    private void StartPokemonPartySwap(int memberPosition)
+    private void StartPokemonPartySwap(int memberIndex)
     {
         _pokemonPartyHandler.OnMemberSelected -= StartPokemonPartySwap; 
-        StartCoroutine(_pokemonPartyHandler.SwapMemberWithoutTurnUsage(memberPosition));
+        StartCoroutine(_pokemonPartyHandler.SwapMemberWithoutTurnUsage(memberIndex));
     }
     public void DeactivateParticipant()
     {

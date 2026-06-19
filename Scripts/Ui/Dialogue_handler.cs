@@ -232,7 +232,6 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
                 pendingMessages.RemoveAt(0);
             }
             messagesLoading = false;
-            
         }
         public void EndDialogue(float delay)
         {
@@ -406,7 +405,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         }
         private void CompleteDialogueInteraction(Interaction currentInteraction)
         {
-            _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder,true);
+            _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder);
             if (currentInteraction.dialogueType == DialogType.Options 
                 || currentInteraction.dialogueType == DialogType.CustomOptions)
             {

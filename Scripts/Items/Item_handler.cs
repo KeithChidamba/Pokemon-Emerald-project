@@ -5,6 +5,11 @@ using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
 
+public enum ItemType
+{
+    Special,Repel,HealHp,Status,PowerPointModifier,Herb,Revive,HeldItem,Vitamin,
+    Berry,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove
+}
 public class Item_handler : MonoBehaviour,IInjectable
 {
     public event Action<Item,bool> OnItemUsed;
@@ -53,32 +58,33 @@ public class Item_handler : MonoBehaviour,IInjectable
 
     public void UseItem(Item itemInUse,Pokemon selectedPokemon)
     {
-        if (_battleHandler.battleInProgress)
+        OnItemUsed += CompleteItemUsage;
+        void CompleteItemUsage(Item itemUsed, bool successful)
         {
-            _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
-        }
-        if (itemInUse.itemType == ItemType.Special)
-        {
-            if (_overworldActions.IsEquipped(item:itemInUse))
+            OnItemUsed -= CompleteItemUsage;
+            _inputStateHandler.AddPlaceHolderState();
+            StartCoroutine(CompletionSequence());
+            IEnumerator CompletionSequence()
             {
-                _overworldActions.UnequipItem(itemInUse);
-                return;
-            }
-            _overworldActions.EquipItem(itemInUse);
-            return;
-        }
-
-        if (itemInUse.forPartyUse)
-        {
-            OnItemUsed += ResetPartyUI;
-        }
-
-        void ResetPartyUI(Item itemUsed,bool successful)
-        {
-            if(!successful)
-            {
-                OnItemUsed -= ResetPartyUI;
-                _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
+                yield return new WaitUntil(() => _dialogueHandler.dialogueFinished);
+                yield return new WaitForSecondsRealtime(1f);
+                
+                if (itemInUse.forPartyUse)
+                {
+                    _inputStateHandler.ResetRelevantUi(InputStateName.PokemonPartyItemUsage,true);
+                }
+                if (successful)
+                {
+                    _playerBagHandler.DepleteItem(itemInUse);
+                    if (_battleHandler.battleInProgress)
+                    {
+                        _inputStateHandler.ResetRelevantUi(InputStateName.PlayerBagNavigation,true);
+                        _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.UseItem);
+                        _turnBasedCombatHandler.NextTurn();
+                    }
+                }
+                yield return new WaitForSecondsRealtime(0.2f);
+                _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
             }
         }
         
@@ -90,20 +96,23 @@ public class Item_handler : MonoBehaviour,IInjectable
             
             case ItemType.Pokeball: UsePokeball(itemInUse); break;
             
-            //party use
+            case ItemType.Special: EquipItem(itemInUse); break;
+        //party use
             case ItemType.LearnableMove: 
                 StartCoroutine(_pokemonOperationsHandler.LearnTmOrHm(itemInUse,selectedPokemon)); 
                 break;
             
-            case ItemType.PowerPointModifier: ChangePowerpoints(itemInUse,selectedPokemon); break;
-            
+            //abstract
             case ItemType.Herb: UseHerbs(itemInUse,selectedPokemon); break;
             
             case ItemType.Berry: UseBerries(itemInUse,selectedPokemon); break;
             
+            case ItemType.PowerPointModifier: ChangePowerpoints(itemInUse,selectedPokemon); break;
+            
+            //core
             case ItemType.HealHp: RestoreHealth(itemInUse,selectedPokemon); break;
             
-            case ItemType.Revive: RevivePokemon(itemInUse,itemInUse.itemType,selectedPokemon); break;
+            case ItemType.Revive: RevivePokemon(itemInUse,selectedPokemon); break;
             
             case ItemType.Status: HealStatusEffect(itemInUse,selectedPokemon); break;
             
@@ -117,12 +126,21 @@ public class Item_handler : MonoBehaviour,IInjectable
         }
     }
 
+    void EquipItem(Item itemInUse)
+    {
+        if (_overworldActions.IsEquipped(item:itemInUse))
+        {
+            _overworldActions.UnequipItem(itemInUse);
+            return;
+        }
+        _overworldActions.EquipItem(itemInUse);
+    }
     private void UseRepel(Item itemInUse)
     {
         var repelDuration = (int)itemInUse.GetDynamicModule<ItemEffectInfo>().effectValue;
         _dialogueHandler.DisplayDetails("Repel has been activated");
         _playerTileHandler.ActivateRepel(repelDuration);
-        CompleteItemUsage(itemInUse);
+        OnItemUsed?.Invoke(itemInUse,true);
     }
     
     private void UseHerbs(Item itemInUse,Pokemon selectedPartyPokemon)
@@ -134,10 +152,15 @@ public class Item_handler : MonoBehaviour,IInjectable
         {
             RestoreHealth,
             (item,pokemon) => HealStatusEffect(item,pokemon,herbInfo.statusEffect),
-            (item,pokemon) => RevivePokemon(item,herbInfo.itemType,pokemon)
+            UseReviveHerb
         };
         herbUsages[usageIndex].Invoke(itemInUse,selectedPartyPokemon);
         return;
+        
+        void UseReviveHerb(Item itemUsed,Pokemon pokemon)
+        {
+            OnItemUsed?.Invoke(itemInUse,CanRevivePokemon(herbInfo.reviveType,pokemon));
+        }
         void ChangeFriendship(Item itemUsed,bool successful)
         {
             OnItemUsed -= ChangeFriendship;
@@ -177,16 +200,15 @@ public class Item_handler : MonoBehaviour,IInjectable
         {
             if (_areaHandler.currentArea.data.escapable)
             {
-                OnItemUsed?.Invoke(itemInUse,true);
-                CompleteItemUsage(itemInUse);
                 _areaHandler.EscapeArea();
                 _inputStateHandler.ResetRelevantUi(new[] {InputStateName.PlayerMenu
                         ,InputStateName.PlayerBagNavigation});
+                OnItemUsed?.Invoke(itemInUse,true);
             }
             else
             {
-                OnItemUsed?.Invoke(itemInUse,false);
                 _dialogueHandler.DisplayDetails("Can't use that here!");
+                OnItemUsed?.Invoke(itemInUse,false);
             }
         }
     }
@@ -195,18 +217,15 @@ public class Item_handler : MonoBehaviour,IInjectable
     {
         if (selectedPartyPokemon.currentLevel == 100)
         {
-            OnItemUsed?.Invoke(itemInUse,false);
             _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+" is already max level!");
-            
+            OnItemUsed?.Invoke(itemInUse,false);
         }
         else
         {
-            OnItemUsed?.Invoke(itemInUse,true);
             var expForNextLevel = _pokemonOperationsHandler.CalculateExpForNextLevel(selectedPartyPokemon.currentLevel, selectedPartyPokemon.expGroup);
             var expDifferenceForLevelUp = expForNextLevel - selectedPartyPokemon.currentExpAmount;
             yield return selectedPartyPokemon.ReceiveExperienceOutsideBattle(expDifferenceForLevelUp,true);
-            CompleteItemUsage(itemInUse);
-            _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
+            OnItemUsed?.Invoke(itemInUse,true);
         }
     }
 
@@ -217,13 +236,11 @@ public class Item_handler : MonoBehaviour,IInjectable
        {
            yield return _pokemonOperationsHandler.HandlePokemonEvolution(selectedPartyPokemon,0);
            OnItemUsed?.Invoke(itemInUse,true);
-           CompleteItemUsage(itemInUse);
        }
        else
        {
+           _dialogueHandler.DisplayDetails("Cant use that on "+selectedPartyPokemon.pokemonDisplayName);
            OnItemUsed?.Invoke(itemInUse,false);
-            _dialogueHandler.DisplayDetails("Cant use that on "+selectedPartyPokemon.pokemonDisplayName);
-            
        }
     }
 
@@ -232,19 +249,23 @@ public class Item_handler : MonoBehaviour,IInjectable
         var statToDecrease = itemInUse.GetModule<StatInfoModule>();
         if(selectedPartyPokemon.friendshipLevel>254)
         {
-            OnItemUsed?.Invoke(itemInUse,false);
             _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+"'s friendship is already maxed out");
-            
+            OnItemUsed?.Invoke(itemInUse,false);
         }
         else
         {
-            OnItemUsed?.Invoke(itemInUse,true);
             _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+"'s friendship was increased");
             ref float evRef = ref _pokemonOperationsHandler.GetEvStatRef(statToDecrease.statName, selectedPartyPokemon);
-            if (evRef > 100) evRef = 100;
-            else _pokemonOperationsHandler.CalculateEvForStat(statToDecrease.statName, -10, selectedPartyPokemon);
+            if (evRef > 100)
+            {
+                evRef = 100;
+            }
+            else
+            {
+                _pokemonOperationsHandler.CalculateEvForStat(statToDecrease.statName, -10, selectedPartyPokemon);
+            }
             selectedPartyPokemon.DetermineFriendshipLevelChange(true,FriendshipModifier.Berry);
-            CompleteItemUsage(itemInUse);
+            OnItemUsed?.Invoke(itemInUse,true);
         }
     }
     private void GetEVsFromItem(Item itemInUse,Pokemon selectedPartyPokemon) 
@@ -262,14 +283,11 @@ public class Item_handler : MonoBehaviour,IInjectable
 
             if (hasChanged)
             {
+                selectedPartyPokemon.DetermineFriendshipLevelChange(false, FriendshipModifier.Vitamin);
                 OnItemUsed?.Invoke(itemInUse,true);
-                selectedPartyPokemon.DetermineFriendshipLevelChange(false,
-                    FriendshipModifier.Vitamin);
-                DepleteItem(itemInUse);
             }
-            OnItemUsed?.Invoke(itemInUse,false);
             _dialogueHandler.DisplayDetails(message);
-            
+            OnItemUsed?.Invoke(itemInUse,false);
         }
     }
 
@@ -281,9 +299,8 @@ public class Item_handler : MonoBehaviour,IInjectable
         {//guard spec doesn't buff stat but remove stat reduction
             if (currentParticipant.ProtectedFromStatChange(false))
             {
-                OnItemUsed?.Invoke(itemInUse,false);
                 _dialogueHandler.DisplayDetails("Your pokemon are already protected");
-                
+                OnItemUsed?.Invoke(itemInUse,false);
                 return;
             }
             _moveUsageHandler.ApplyStatChangeImmunity(currentParticipant,
@@ -301,9 +318,8 @@ public class Item_handler : MonoBehaviour,IInjectable
                     pokemonProtected = selectedPartyPokemon.pokemonDisplayName + " and " + partner.pokemon.pokemonDisplayName;
                 }
             }
-            OnItemUsed?.Invoke(itemInUse,false);
             _dialogueHandler.DisplayBattleInfo("A veil of light covers "+pokemonProtected);
-            StartCoroutine(CompleteItemUsage(1f,itemInUse));
+            OnItemUsed?.Invoke(itemInUse,false);
             return;
         }
        
@@ -312,31 +328,36 @@ public class Item_handler : MonoBehaviour,IInjectable
         {
             _dialogueHandler.DisplayBattleInfo($"{selectedPartyPokemon.pokemonDisplayName}'s " +
                                                         $"{buff.statName} can't go any higher");
-            
             OnItemUsed?.Invoke(itemInUse,false);
             return;
         }
-        OnItemUsed?.Invoke(itemInUse,true);
+       
         var xBuffData = new BuffDebuffData(currentParticipant, statInfo.statName, true, 1);
         _moveUsageHandler.ExecuteBuffOrDebuff(xBuffData);
-        StartCoroutine(CompleteItemUsage(0,itemInUse));
+        OnItemUsed?.Invoke(itemInUse,true);
     }
-    private void RevivePokemon(Item itemInUse,ItemType reviveType,Pokemon selectedPartyPokemon)
+    private void RevivePokemon(Item itemInUse,Pokemon selectedPartyPokemon)
+    {
+        var reviveType = itemInUse.GetModule<RevivalItemInfo>().reviveType;
+        OnItemUsed?.Invoke(itemInUse,CanRevivePokemon(reviveType,selectedPartyPokemon));
+    }
+    private bool CanRevivePokemon(RevivalItemType reviveType,Pokemon selectedPartyPokemon)
     {
         if (selectedPartyPokemon.hp > 0)
         {
             _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+" has not fainted!"); 
-            OnItemUsed?.Invoke(itemInUse,false);
-            
-            return;
+            return false;
         }
-        OnItemUsed?.Invoke(itemInUse,true);
         
-        selectedPartyPokemon.hp = reviveType == ItemType.MaxRevive? 
-            selectedPartyPokemon.maxHp : math.trunc(selectedPartyPokemon.maxHp*0.5f);
+        selectedPartyPokemon.hp = reviveType switch
+       {
+           RevivalItemType.FullHealth=> selectedPartyPokemon.maxHp ,
+           RevivalItemType.HalfHealth=> math.trunc(selectedPartyPokemon.maxHp*0.5f), 
+           _=> 0f
+       };
         
         _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+" has been revived!");
-        StartCoroutine(CompleteItemUsage(2.2f,itemInUse));
+        return true;
     }
     private void ChangePowerpoints(Item itemInUse,Pokemon selectedPartyPokemon)
     {
@@ -359,7 +380,6 @@ public class Item_handler : MonoBehaviour,IInjectable
             if (moveAlterationCancelled)
             {
                 _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonDetails);
-                
                 OnItemUsed?.Invoke(itemInUse,false);
                 return; 
             }
@@ -373,7 +393,6 @@ public class Item_handler : MonoBehaviour,IInjectable
                 {
                     OnItemUsed -= CheckUsageSuccess;
                     _pokemonDetailsHandler.OnMoveSelected -= MoveOperation;
-                    StartCoroutine(CompleteItemUsage(2.2f,itemInUse));
                     _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonDetails);
                 }
             }
@@ -383,8 +402,8 @@ public class Item_handler : MonoBehaviour,IInjectable
      {
          if (currentMove.powerpoints == currentMove.maxPowerpoints)
          {
-             OnItemUsed?.Invoke(itemInUse,false);
              _dialogueHandler.DisplayDetails( currentMove.moveName+" pp is already full");
+             OnItemUsed?.Invoke(itemInUse,false);
              return;
          }
          
@@ -400,17 +419,17 @@ public class Item_handler : MonoBehaviour,IInjectable
          var sumPoints = currentMove.powerpoints + pointsToAdd;
          
          currentMove.powerpoints = (sumPoints > currentMove.maxPowerpoints) ? currentMove.maxPowerpoints : sumPoints;
-         
-         OnItemUsed?.Invoke(itemInUse,true);
+
          _dialogueHandler.DisplayDetails( currentMove.moveName+" pp was restored!");
+         OnItemUsed?.Invoke(itemInUse,true);
      }
     private void IncreasePowerpoints(int moveIndex,Item itemInUse,Move currentMove)
     {
         double powerpointRatio = (float) currentMove.maxPowerpoints / currentMove.basePowerpoints;
         if (Math.Round(powerpointRatio, 1) >= 1.6)
         {
-            OnItemUsed?.Invoke(itemInUse,false);
             _dialogueHandler.DisplayDetails( currentMove.moveName+" pp is already maxed out");
+            OnItemUsed?.Invoke(itemInUse,false);
             return;
         }
         currentMove.maxPowerpoints += (int)math.floor(0.2*currentMove.basePowerpoints);
@@ -423,14 +442,14 @@ public class Item_handler : MonoBehaviour,IInjectable
     {
         if (currentMove.maxPowerpoints >= (currentMove.basePowerpoints * 1.6))
         {
-            OnItemUsed?.Invoke(itemInUse,false);
             _dialogueHandler.DisplayDetails(currentMove.moveName + " pp is already maxed out");
+            OnItemUsed?.Invoke(itemInUse,false);
             return;
         }
         currentMove.maxPowerpoints = (int)math.floor(currentMove.basePowerpoints * 1.6);
 
+        _dialogueHandler.DisplayDetails(currentMove.moveName + "'s pp was maxed out!"); 
         OnItemUsed?.Invoke(itemInUse,true);
-        _dialogueHandler.DisplayDetails(currentMove.moveName + "'s pp was maxed out!");
 }
     private void UsePokeball(Item itemInUse)
     {
@@ -439,7 +458,6 @@ public class Item_handler : MonoBehaviour,IInjectable
             OnItemUsed?.Invoke(itemInUse,false);
             return;
         }
-        DepleteItem(itemInUse);
 
         _pokemonOperationsHandler.OnPokeballUsed += PokemonCaughtCheck;
         StartCoroutine(_pokemonOperationsHandler.TryToCatchPokemon(itemInUse));
@@ -447,43 +465,36 @@ public class Item_handler : MonoBehaviour,IInjectable
         void PokemonCaughtCheck(Pokemon pokemon,bool isCaught)
         {
             _pokemonOperationsHandler.OnPokeballUsed -= PokemonCaughtCheck;
-            if (!isCaught)
-            {
-                SkipTurn();
-            }
             OnItemUsed?.Invoke(itemInUse,true);
         }
+        bool CanUsePokeball()
+        {
+            if (!_battleHandler.battleInProgress)
+            {
+                _dialogueHandler.DisplayDetails("Can't use that right now!");
+                return false;
+            }
+            if (_battleHandler.isTrainerBattle)
+            {
+                _dialogueHandler.DisplayDetails("Can't catch someone else's Pokemon!");
+                return false;
+            }
+            if (_pokemonStorageHandler.MaxPokemonCapacity())
+            {
+                _dialogueHandler.DisplayDetails("Can no longer catch more Pokémon, free up space in PC!");
+                return false;
+            }
+            return true;
+        }
     }
-
-    private bool CanUsePokeball()
-    {
-        if (!_battleHandler.battleInProgress)
-        {
-            _dialogueHandler.DisplayDetails("Can't use that right now!");
-            return false;
-        }
-
-        if (_battleHandler.isTrainerBattle)
-        {
-            _dialogueHandler.DisplayDetails("Can't catch someone else's Pokemon!");
-            return false;
-        }
-
-        if (_pokemonStorageHandler.MaxPokemonCapacity())
-        {
-            _dialogueHandler.DisplayDetails("Can no longer catch more Pokémon, free up space in PC!");
-            return false;
-        }
-
-        return true;
-    }
+     
     private void CureConfusion(Item itemInUse)
     {
         var currentParticipant = _battleHandler.GetCurrentParticipant();
         if (!_battleHandler.battleInProgress)
         {
-            OnItemUsed?.Invoke(itemInUse,false);
             _dialogueHandler.DisplayDetails("cant use that outside battle!");
+            OnItemUsed?.Invoke(itemInUse,false);
             return;
         }
         if(!currentParticipant.isConfused)
@@ -492,7 +503,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             currentParticipant.isConfused = false;
         OnItemUsed?.Invoke(itemInUse,true);
     }
-    private bool IsValidStatusHeal(Item itemInUse,StatusEffect curableStatus,Pokemon selectedPartyPokemon)
+    private bool IsValidStatusHeal(StatusEffect curableStatus,Pokemon selectedPartyPokemon)
     {
         var currentParticipant = _battleHandler.GetCurrentParticipant();
         if (selectedPartyPokemon.statusEffect == StatusEffect.None)
@@ -539,7 +550,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             selectedPartyPokemon.statusEffect = StatusEffect.None;
         
         _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+" has been healed");
-        OnItemUsed?.Invoke(itemInUse,true);
+       
         return true;
     }
     private void HealStatusEffect(Item itemInUse,Pokemon selectedPartyPokemon,StatusEffect curableStatus = StatusEffect.None)
@@ -549,67 +560,32 @@ public class Item_handler : MonoBehaviour,IInjectable
             var statusInfo = itemInUse.GetModule<StatusHealInfoModule>();
             curableStatus = statusInfo.statusEffect;
         }
-        if (!IsValidStatusHeal(itemInUse,curableStatus,selectedPartyPokemon))
+        var validHeal = IsValidStatusHeal(curableStatus, selectedPartyPokemon);
+        if (validHeal)
         {
-             OnItemUsed?.Invoke(itemInUse,false);
-             
-             return;
+            _pokemonPartyHandler.RefreshMemberCards();
         }
-        StartCoroutine(CompleteItemUsage(2f,itemInUse));
-        _pokemonPartyHandler.RefreshMemberCards();
-        _dialogueHandler.EndDialogue(1f);
+        OnItemUsed?.Invoke(itemInUse,validHeal);
     }
     private void RestoreHealth(Item itemInUse,Pokemon selectedPartyPokemon)
     {
         var healEffect = itemInUse.GetDynamicModule<ItemEffectInfo>().effectValue;
         if (selectedPartyPokemon.hp <= 0)
         {
-            _dialogueHandler.DisplayDetails( "Pokemon has already fainted");
-            
+            _dialogueHandler.DisplayDetails( selectedPartyPokemon.pokemonDisplayName+" has already fainted");
             OnItemUsed?.Invoke(itemInUse,false);
             return;
         } 
+       
         if(selectedPartyPokemon.hp>=selectedPartyPokemon.maxHp)
         {
-            _dialogueHandler.DisplayDetails("Pokemon health already is full");
+            _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+"'s health already is full");
             OnItemUsed?.Invoke(itemInUse,false);
             return;
         }
-        OnItemUsed?.Invoke(itemInUse,true);
         _moveUsageHandler.HealthGainDisplay(healEffect,affectedPokemon:selectedPartyPokemon);
         _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+" gained "+healEffect+" health points");
-        StartCoroutine(CompleteItemUsage(2f,itemInUse));
-    }
-    private void CompleteItemUsage(Item itemInUse)//only call for items used outside of battle
-    {
-        if (_battleHandler.battleInProgress)
-        {
-            _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.UseItem);
-        }
-        DepleteItem(itemInUse);
-        
-     }
-    private IEnumerator CompleteItemUsage(float skipDelay,Item itemInUse)
-    {
-        CompleteItemUsage(itemInUse);
-        yield return new WaitForSecondsRealtime(skipDelay);
-        if(itemInUse.forPartyUse) _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
-        SkipTurn();
-    }
-    private void SkipTurn()
-    {
-        if (!_battleHandler.battleInProgress) return;
-        _turnBasedCombatHandler.NextTurn();
-    }
-
-    void DepleteItem(Item itemInUse)
-    {
-        _playerBagHandler.DepleteItem(itemInUse);
+        OnItemUsed?.Invoke(itemInUse,true);
     }
 }
 
-public enum ItemType
-{
-    Special,Repel,HealHp,Status,PowerPointModifier,Herb,Revive,MaxRevive,Vitamin,
-    Berry,Pokeball,EvolutionStone,RareCandy,XItem,GainMoney,Overworld,LearnableMove,HeldItem
-}

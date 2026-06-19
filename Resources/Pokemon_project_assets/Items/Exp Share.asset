@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Exp Share
-  itemType: 17
-  itemEffectData: 0
+  itemType: 7
   itemDescription: Allows pokemon to gain exp without battling
   price: 0
   quantity: 1

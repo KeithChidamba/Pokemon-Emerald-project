@@ -376,7 +376,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    private IEnumerator InterfaceTransitionAnimation(TypingInputInterface newInterface)
    {
       _isSwappingInterface = true;
-      _inputStateHandler.AddChildPlaceHolderState();
+      _inputStateHandler.AddPlaceHolderState();
       var newImage = interfaceImages[(int)newInterface];
       var newRect = newImage.rectTransform;
 
@@ -403,7 +403,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
             originalPos,
             500f);
       
-      _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder,true);
+      _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
       ChangeInterface(newInterface);
       _isSwappingInterface = false;
    }

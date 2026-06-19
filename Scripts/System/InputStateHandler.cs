@@ -9,6 +9,18 @@ public interface IInputGroup
 {
     public void DetermineOperation();
 }
+
+public class RemovalJob
+{
+    public InputState state;
+    public bool manualExit;
+
+    public RemovalJob(InputState state, bool manualExit)
+    {
+        this.state = state;
+        this.manualExit = manualExit;
+    }
+}
 public enum InputDirection { None, Horizontal, Vertical, Grid}
 public enum InputStateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart, GameSettings,TypingInterface}
 public enum InputStateName 
@@ -29,10 +41,9 @@ public class InputStateHandler : MonoBehaviour,IInjectable
 {
     public InputState currentState;
     public bool IsEmptyState =>currentState.stateName == InputStateName.Empty;
-    public bool StateExists(InputStateGroup group) => stateLayers.Any(s=>s.stateGroup==group);
     private InputState _emptyState;
     private int[] _directionSelection = { 0, 0, 0, 0 };
-
+    
     public event Action OnInputUp;
     public event Action OnInputDown; 
     public event Action OnInputRight; 
@@ -46,7 +57,8 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private bool _currentStateLoaded;
     private bool _handlingState;
     [SerializeField]private List<InputState> stateLayers;
-
+    [SerializeField]private List<RemovalJob> stateRemovalJobs = new();
+    private bool _processingStateRemoval;
     [SerializeField]private  int[] boxCoordinates={0,0};
     [SerializeField]private int currentBoxCapacity;
     [SerializeField]private int numBoxRows;
@@ -96,6 +108,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         _inputServiceGroups.Add(InputStateGroup.GameSettings,_gameSettingsInputService);
         _inputServiceGroups.Add(InputStateGroup.PokeMart,_pokemartInputService);
         _inputServiceGroups.Add(InputStateGroup.TypingInterface,_typingInterfaceInputService);
+        
     }
     private void Update()
     {
@@ -374,47 +387,45 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         rowRemainder = Mathf.Clamp(rowRemainder, 0, numBoxColumns);
         boxCoordinates[1] = Mathf.Clamp(boxCoordinates[1], 0, rowRemainder-1);
     }
+    // Placeholders / Input blockers
     public void AddPlaceHolderState()
     {
         ChangeInputState(new (InputStateName.PlaceHolder,InputStateGroup.None, canExit: false
-            , isParent:true,mainView: emptyPlaceHolder));
-    }
-    public void AddChildPlaceHolderState()
-    {
-        ChangeInputState(new (InputStateName.PlaceHolder,InputStateGroup.None, canExit: false));
+            , isParent:false,mainView: emptyPlaceHolder,
+            displayOpenTransition:false,displayCloseTransition:false));
     }
     public void AddBattleDialoguePlaceHolderState()
     {
         ChangeInputState(new (InputStateName.PlaceHolder,InputStateGroup.None, canExit: false
-            , isParent:true,mainView: emptyPlaceHolder),true);
+            , isParent:false,mainView: emptyPlaceHolder,displayOpenTransition:false
+            ,displayCloseTransition:false),true);
     }
     public void AddDialoguePlaceHolderState()
     {
         ChangeInputState(new (InputStateName.DialoguePlaceHolder,InputStateGroup.None, canExit: false
-            , isParent:false,mainView: emptyPlaceHolder));
+            , isParent:false,mainView: emptyPlaceHolder,displayOpenTransition:false
+            ,displayCloseTransition:false));
     }
-    public void ResetGroupUi(InputStateGroup group)
+    //utility
+    public InputState GetState(InputStateName stateName)
+    {
+        //use with context
+        return stateLayers.FirstOrDefault(state=>state.stateName == stateName);
+    }
+    public IEnumerator PlayTransition(Action callBack)
+    {
+        yield return StartCoroutine(_gameUIHandler.FadeInBlackScreen());
+        _gameUIHandler.RemoveBlackScreen();
+        callBack?.Invoke();
+    }
+    private List<InputState> GetRelevantStates(InputStateGroup group)
     {
         List<InputState> inputStates = new List<InputState>();
+        foreach (var state in stateLayers)
+            if (state.stateGroup==group)
+                inputStates.Add(state);
         
-        inputStates.AddRange(GetRelevantStates(group));
-        
-        RemoveInputStates(inputStates);
-    }
-    public void ResetRelevantUi(InputStateName[] stateNames)
-    {
-        List<InputState> inputStates = new List<InputState>();
-
-        foreach (var stateName in stateNames)
-            inputStates.AddRange(GetRelevantStates(stateName));
-        
-        RemoveInputStates(inputStates);
-    }
-    public void ResetRelevantUi(InputStateName stateName,bool manualExit=false)
-    {
-        var state = stateLayers.FirstOrDefault(state => state.stateName == stateName);
-        if (state == null) return;
-        RemoveInputState(state,manualExit);
+        return inputStates;
     }
     public void ResetGridUi(InputStateName stateName)
     {
@@ -422,85 +433,113 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         state?.selector?.SetActive(false);
         if(state?.stateDirection==InputDirection.Grid) ResetCoordinates();
     }
-    private List<InputState> GetRelevantStates(InputStateGroup group)
+    
+    //state removal
+    public void ResetGroupUi(InputStateGroup group)
     {
         List<InputState> inputStates = new List<InputState>();
-        foreach (var state in stateLayers)
-             if (state.stateGroup==group)
-                inputStates.Add(state);
         
-        return inputStates;
-    }
-
-    private List<InputState> GetRelevantStates(InputStateName stateName)
-    {
-        List<InputState> inputStates = new List<InputState>();
-        foreach (var state in stateLayers)
-            if (state.stateName == stateName)
-                inputStates.Add(state);
-
-        return inputStates;
-    }
-
-    public InputState GetState(InputStateName stateName)
-    {
-        return stateLayers.Find(state=>state.stateName == stateName);
-    }
-    public IEnumerator PlayTransition(Action callBack)
-    {
-        yield return _gameUIHandler.FadeInBlackScreen();
-        _gameUIHandler.RemoveBlackScreen();
-        callBack?.Invoke();
-    }
-    private void RemoveInputStates(List<InputState> states)
-    {
-        foreach (var state in states)
-            RemoveInputState(state,false);
-        LoadNextState();
-    }
-
-    private void RemoveInputState(InputState previousState,bool manualExit)
-    {
-        if(stateLayers.Count > 1)
+        inputStates.AddRange(GetRelevantStates(group));
+        
+        foreach (var state in inputStates)
         {
-            var nextLayer = stateLayers[^2]; //second last
-            var isSubState = !previousState.isParentLayer && previousState.stateGroup == nextLayer.stateGroup;
-            if (isSubState)
-            {
-                //no need since it's same group
-                nextLayer.displayOpenTransition = false;
-            }
-            var canDisplayTransition = manualExit && previousState.displayCloseTransition && !nextLayer.displayOpenTransition;
-            if (canDisplayTransition)
-            {
-                StartCoroutine(PlayTransition(RemovalLogic));
-            }else RemovalLogic();
-        }else RemovalLogic();
-        
-
-        void RemovalLogic()
-        {
-            previousState.mainViewUI?.SetActive(false);
-            previousState.selector?.SetActive(false);
-        
-            if(previousState.stateDirection==InputDirection.Grid) ResetCoordinates();
-        
-            Action method = manualExit ? previousState.onExit:previousState.onClose;
-            method?.Invoke();//note: state must not have onexit/onclose that also starts this coroutine,otherwise infinite loop
-            stateLayers.Remove(previousState);
-            OnStateRemoved?.Invoke(previousState);
-            LoadNextState();
+            AddRemoval(state);
         }
     }
-    
-    private void LoadNextState()
+    public void ResetRelevantUi(InputStateName[] stateNames)
     {
-        ChangeInputState(stateLayers.Count > 0? stateLayers.Last() : _emptyState);
+        var inputStates = new List<InputState>();
+
+        foreach (var stateName in stateNames)
+        {
+            var state = GetState(stateName);
+            if(state != null) inputStates.Add(state);
+        }
+        foreach (var state in inputStates)
+        {
+            AddRemoval(state);
+        }
     }
+    public void ResetRelevantUi(InputStateName stateName,bool manualExit=false)
+    {
+        var state = stateLayers.FirstOrDefault(state => state.stateName == stateName);
+        if (state == null) return;
+        AddRemoval(state,manualExit);
+    }
+
     public void RemoveTopInputLayer(bool invokeOnExit)
     {
         currentState.onExit = invokeOnExit? currentState.onExit:null;
-        RemoveInputState(stateLayers.Last() ,true);
+        AddRemoval(stateLayers.Last(),true);
+    }
+    private void AddRemoval(InputState stateToRemove,bool manualExit=false)
+    {
+        var removalExists = stateRemovalJobs.Any(s => s.state.stateName == stateToRemove.stateName);
+        if (!removalExists)
+        {
+            stateRemovalJobs.Add(new(stateToRemove,manualExit));
+            if (!_processingStateRemoval)
+            {
+                StartCoroutine(ProcessStateRemoval());
+            }
+        }
+    }
+    private IEnumerator ProcessStateRemoval()
+    {
+        _processingStateRemoval = true;
+        var waitTime = 0f;
+        var displayingBlackScreen = false;
+        
+        bool IsParentWithTransition(RemovalJob job)
+        {
+            return job.manualExit
+                   && job.state.isParentLayer
+                   && job.state.displayCloseTransition;
+        }
+        
+        while (stateRemovalJobs.Count > 0)
+        {
+            var currentJob = stateRemovalJobs[0];
+            
+            //transition
+            if (!displayingBlackScreen)
+            {
+                if(IsParentWithTransition(currentJob))
+                {
+                    waitTime = 0.2f * stateRemovalJobs.Count;
+                    if (waitTime > 1f) waitTime = 1f;
+                    displayingBlackScreen = true;
+                    yield return StartCoroutine(_gameUIHandler.FadeInBlackScreen());
+                }
+            }
+            
+            //removal
+            currentJob.state.mainViewUI?.SetActive(false);
+            currentJob.state.selector?.SetActive(false);
+            
+            if(currentJob.state.stateDirection==InputDirection.Grid) ResetCoordinates();
+        
+            Action method = currentJob.manualExit ? currentJob.state.onExit : currentJob.state.onClose;
+            method?.Invoke();
+            stateLayers.Remove(currentJob.state);
+            OnStateRemoved?.Invoke(currentJob.state);
+            stateRemovalJobs.RemoveAt(0);
+        }
+        
+        yield return new WaitForSecondsRealtime(waitTime);
+        _gameUIHandler.RemoveBlackScreen();
+        _processingStateRemoval = false;
+
+        if (stateLayers.Count > 0)
+        {
+            var nextLayer = stateLayers.Last();
+            nextLayer.displayOpenTransition = false;
+            ChangeInputState(nextLayer);
+        }
+        else
+        {
+            ChangeInputState(_emptyState);
+        }
     }
 }
 

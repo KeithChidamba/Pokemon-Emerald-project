@@ -40,20 +40,24 @@ public class PokemonPartyInputService: IInputGroup
     }
     public void PokemonPartyOptions()
     {
+        var selectedPokemon = _pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberIndex];
         var partyOptionsSelectables = new List<SelectableUI>
         {
             new(_pokemonPartyHandler.partyOptions[0]
-                , ()=>_gameUIHandler.ViewPartyPokemonDetails(
-                    _pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberNumber - 1]), true),
-            new(_pokemonPartyHandler.partyOptions[1]
-                , () => _pokemonPartyHandler.BeginMemberSwap(_pokemonPartyHandler.selectedMemberNumber)
+                , ()=>_gameUIHandler.ViewPartyPokemonDetails(selectedPokemon)
                 , true),
+            
+            new(_pokemonPartyHandler.partyOptions[1]
+                , () => _pokemonPartyHandler.BeginMemberSwap(_pokemonPartyHandler.selectedMemberIndex)
+                , true),
+            
             new(_pokemonPartyHandler.partyOptions[2]
                 , _playerBagHandler.OpenBagToGiveItem
-                ,!_pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberNumber - 1].hasItem),
+                ,!selectedPokemon.hasItem),
+            
             new(_pokemonPartyHandler.partyOptions[3]
-                , () => _playerBagHandler.TakeItem(_pokemonPartyHandler.selectedMemberNumber)
-                ,_pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberNumber - 1].hasItem)
+                , () => _playerBagHandler.TakeItem(_pokemonPartyHandler.selectedMemberIndex)
+                ,selectedPokemon.hasItem)
         };
         partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonPartyOptions,

@@ -15,8 +15,8 @@ public class Pokemon_party : MonoBehaviour,IInjectable
 {
     public Pokemon[] party;
     public int numMembers;
-    public int selectedMemberNumber;
-    public int memberToMove;
+    public int selectedMemberIndex;
+    [SerializeField]private int memberToMove;
     public readonly int maxNumMembers = 6;
     private int _currentStepCount;
     
@@ -38,7 +38,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private pokemon_storage _pokemonStorageHandler;
-    private Item_handler _itemHandler;
     private BattleIntro _battleIntroHandler;
     private Player_movement _playerMovementHandler;
     private PokemonPartyInputService _partyInputService;
@@ -56,7 +55,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _pokemonStorageHandler = container.Resolve<pokemon_storage>();
-        _itemHandler = container.Resolve<Item_handler>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
@@ -124,17 +122,17 @@ public class Pokemon_party : MonoBehaviour,IInjectable
                 validPokemon.Add(party[i]);
         return validPokemon;
     }
-    private bool IsValidSwap(int memberPosition,bool swappingIn)
+    private bool IsValidSwap(int memberIndex,bool swappingIn)
     {
-        if (_turnBasedCombatHandler.ContainsSwitch(memberPosition-1))
+        if (_turnBasedCombatHandler.ContainsSwitch(memberIndex))
         {
-            _dialogueHandler.DisplayDetails(party[memberPosition-1].pokemonDisplayName +
+            _dialogueHandler.DisplayDetails(party[memberIndex].pokemonDisplayName +
                                                      " is already going to be sent out");
             return false;
         }
-        if ( (memberPosition < 3 & _battleHandler.isDoubleBattle) || memberPosition == 1)
+        if ( (memberIndex < 2 & _battleHandler.isDoubleBattle) || memberIndex == 0)
         {
-            var swapIn = _battleHandler.battleParticipants[memberPosition - 1];
+            var swapIn = _battleHandler.battleParticipants[memberIndex];
             
             _dialogueHandler.DisplayDetails(swapIn.pokemon.pokemonDisplayName +
                                                      " is already in battle");
@@ -152,23 +150,23 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         }
         return true;
     }
-    public void BeginMemberSwap(int memberPosition)
+    public void BeginMemberSwap(int memberIndex)
     {
         if (_battleHandler.battleInProgress)
         {//cant swap in a member who is already fighting
             var currentParticipant = _battleHandler.GetCurrentParticipant();
-            if (!IsValidSwap(memberPosition,true))
+            if (!IsValidSwap(memberIndex,true))
             {
                return;
             }
             _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.SwitchPokemonIn);
 
             var switchData = new SwitchOutData(_turnBasedCombatHandler.currentTurnIndex
-                ,memberPosition - 1,currentParticipant);
+                ,memberIndex,currentParticipant);
             _turnBasedCombatHandler.SaveSwitchTurn(switchData);
             
             _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
-            selectedMemberNumber = 0;
+            selectedMemberIndex = 0;
         }
         else
         {
@@ -176,7 +174,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
             {
                 UpdatePartyUsageMessage("Select Pokemon to swap with");
                 moving = true;
-                memberToMove = memberPosition;
+                memberToMove = memberIndex;
                 partyOptionsParent.SetActive(false);
                 _inputStateHandler.RemoveTopInputLayer(false);
             }
@@ -185,9 +183,9 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         }
     }
     
-    public void SelectMember(int memberPosition)
+    public void SelectMember(int memberIndex)
     {
-        var selectedMember = memberCards[memberPosition - 1];
+        var selectedMember = memberCards[memberIndex];
         if (selectedMember.isEmpty) return;
         
         if (currentUsage == PartyUsage.SwapOut && selectedMember.pokemon.hp <= 0)
@@ -197,29 +195,32 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         switch (currentUsage)
         {
             case PartyUsage.SwapOut:
-                if (!IsValidSwap(memberPosition,false)) return;
-                OnMemberSelected?.Invoke(memberPosition);
+                if (!IsValidSwap(memberIndex,false)) return;
+                OnMemberSelected?.Invoke(memberIndex);
                 break;
             case PartyUsage.General:
                 GeneralPartyUsage();
                 break;
             case PartyUsage.ItemUsage:
-                OnMemberSelected?.Invoke(memberPosition);
+                OnMemberSelected?.Invoke(memberIndex);
                 break;
         }
 
         void GeneralPartyUsage()
         {
             if (selectedMember.isEmpty)
+            {
                 ClearSelectionUI();
+            }
             else
             {
-                selectedMemberNumber = memberPosition;
+                selectedMemberIndex = memberIndex;
                 if (moving)
                 {
-                    memberToMove--;
-                    if(party[selectedMemberNumber-1] != party[memberToMove])
+                    if(party[selectedMemberIndex] != party[memberToMove])
+                    {
                         SwapMembers(memberToMove);
+                    }
                 }
                 else
                 {
@@ -245,11 +246,10 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     public IEnumerator SwapMemberWithoutTurnUsage(int partyPosition)
     {
-        partyPosition--;
-        (party[selectedMemberNumber-1], party[partyPosition]) = 
-            (party[partyPosition], party[selectedMemberNumber-1]);
+        (party[selectedMemberIndex], party[partyPosition]) = 
+            (party[partyPosition], party[selectedMemberIndex]);
 
-        var participant = _battleHandler.battleParticipants[selectedMemberNumber - 1];
+        var participant = _battleHandler.battleParticipants[selectedMemberIndex];
         var alivePokemon= GetLivingPokemon();
         
         UpdateUIAfterSwap();
@@ -257,9 +257,9 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
         
         //this is called when ui doesnt shift so no need for changes in boolean
-        yield return _battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1],false);
+        yield return _battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberIndex],false);
         
-        selectedMemberNumber = 0;
+        selectedMemberIndex = 0;
         _turnBasedCombatHandler.faintEventDelay = false;
     }
     public void UpdateUIAfterSwap()
@@ -271,22 +271,22 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     private void SwapMembers(int partyIndex)
     {
-        var swapStore = party[selectedMemberNumber-1];
+        var swapStore = party[selectedMemberIndex];
         var message = $"You swapped {party[partyIndex].pokemonDisplayName} with {swapStore.pokemonDisplayName}";
-        party[selectedMemberNumber-1] = party[partyIndex];
+        party[selectedMemberIndex] = party[partyIndex];
         party[partyIndex] = swapStore;
         moving = false;
         if (_battleHandler.battleInProgress)
         {
-            var participant = _battleHandler.battleParticipants[selectedMemberNumber - 1];
+            var participant = _battleHandler.battleParticipants[selectedMemberIndex];
             var alivePokemon= GetLivingPokemon();
-            StartCoroutine(_battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberNumber - 1]));
+            StartCoroutine(_battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberIndex]));
         }
         else
             _dialogueHandler.DisplayDetails(message);
         UpdatePartyUsageMessage("Choose a pokemon");
         memberToMove = 0;
-        selectedMemberNumber = 0;
+        selectedMemberIndex = 0;
         UpdateUIAfterSwap();
     }
 

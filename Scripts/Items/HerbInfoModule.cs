@@ -5,7 +5,7 @@ public class HerbInfoModule : AdditionalInfoModule
 {
     public Herb herbType;
     public StatusEffect statusEffect;
-    public ItemType itemType;
+    public RevivalItemType reviveType;
     public int GetHerbUsage()
     {
         switch (herbType)
@@ -17,7 +17,7 @@ public class HerbInfoModule : AdditionalInfoModule
                 statusEffect = StatusEffect.FullHeal;
                 return 1;
             case Herb.RevivalHerb:
-                itemType = ItemType.MaxRevive;
+                reviveType = RevivalItemType.FullHealth;
                 return 2;
             default: return 0;
         }
