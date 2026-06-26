@@ -521,8 +521,9 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             EraseTemporarySaveData();
             _dialogueHandler.DisplayDetails("Game saved",false);
         }
-        _dialogueHandler.EndDialogue(1.5f);
-        yield return new WaitForSecondsRealtime(1.4f);
+        
+        yield return new WaitForSecondsRealtime(1.5f);
+        _dialogueHandler.EndDialogue();
         _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
     }
 

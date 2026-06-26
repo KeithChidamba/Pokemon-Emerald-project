@@ -329,12 +329,7 @@ public class Move_handler:MonoBehaviour,IInjectable
                     ,data.affectedPokemon.healthPhase  * 10f *Time.unscaledDeltaTime);
                 displayHp = newHp;
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
-
-                if(_inputStateHandler.currentState.stateGroup==InputStateGroup.PokemonParty)
-                {//update party health ui
-                    data.affectedPokemon.ChangeHealth(null);
-                }  
-                
+                data.affectedPokemon.ChangeHealth(null);
                 yield return null;
             }
             yield return new WaitUntil(() => data.affectedPokemon.hp >= Mathf.Floor(healthAfterChange));
@@ -344,7 +339,6 @@ public class Move_handler:MonoBehaviour,IInjectable
     }
     IEnumerator ProcessDamageDisplay(DamageSource damageSource)
     {
-       
         displayingDamage = true; 
         while (_damageDisplayQueue.Count > 0)
         {

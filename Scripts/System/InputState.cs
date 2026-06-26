@@ -46,7 +46,7 @@ public class InputState
         this.stateName = stateName;
         stateGroup = group;
         isParentLayer = isParent;
-        mainViewUI = isParent ? mainView : null;
+        mainViewUI = mainView;
         this.stateDirection = stateDirection;
         this.selectableUis = selectableUis;
         this.selector = selector;

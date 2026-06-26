@@ -185,7 +185,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
                 return;
             }
         }
-        _dialogueHandler.EndDialogue();
+        
         _playerBagHandler.OnBagOpened += ViewBagUI;
         _playerBagHandler.SetupBagState(true);
         void ViewBagUI()
@@ -244,7 +244,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             return;
         }
         AddScreen();
-        _dialogueHandler.EndDialogue();
+        
         _pokemonPartyHandler.ClearSelectionUI();
 
         _pokemonPartyHandler.currentUsage = partyUsage;

@@ -129,26 +129,26 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         if (!isDoubleBattle)
         {
-            PlayerExecuteMove();
+            ExecutePlayersMove();
             return;
         }
         if (_currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex].isSelfTargeted 
             || _currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex].isMultiTarget)
         {
             _currentPlayerEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
-            PlayerExecuteMove();
+            ExecutePlayersMove();
             return;
         }
         var enemySelectables = new List<SelectableUI>();
         for (var i = 2; i < battleParticipants.Length; i++)
         {
-            enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,PlayerExecuteMove,true));
+            enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,ExecutePlayersMove,true));
         }
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleEnemySelection
             ,InputStateGroup.PokemonBattle,
             stateDirection:InputDirection.Horizontal, selectableUis:enemySelectables, selecting:true));
     }
-    private void PlayerExecuteMove()
+    private void ExecutePlayersMove()
     {//selecting enemy only happens in double battle
         
         battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
@@ -160,45 +160,75 @@ public class Battle_handler : MonoBehaviour, IInjectable
        battleParticipants[_currentPlayerEnemyIndex]
             .pokemonImage.color = Color.HSVToRGB(0,0,100);//reset color if cancelled
     }
-    public void SelectEnemy(int change)
+    public void SelectEnemy(int indexChange)
     {
         battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
         
         var partnerIndex = GetCurrentParticipant().GetPartnerIndex(); 
-        var expectedAttackables = new [] {partnerIndex,2,3}; //can attack partner and enemies
+        var expectedTargets = new [] {partnerIndex,2,3}; //can attack partner and enemies
          
-        var validAttackables = expectedAttackables.ToList().Where(a => battleParticipants[a].isActive).ToList();
+        var validTargets = expectedTargets.Where(index => battleParticipants[index].isActive).ToArray();
         
-        var attackables = validAttackables.ToArray();
+        var currentTargetIndex = Array.IndexOf(validTargets,_currentPlayerEnemyIndex);      
         
-        var currentPos = Array.IndexOf(attackables,_currentPlayerEnemyIndex);        
-        var choiceIndex = Mathf.Clamp(currentPos+change,0,attackables.Length-1);//index of attackables
+        var choiceIndex = Mathf.Clamp(currentTargetIndex + indexChange,0,validTargets.Length-1);
         
-        _currentPlayerEnemyIndex = attackables[choiceIndex];
+        _currentPlayerEnemyIndex = validTargets[choiceIndex];
         battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(17,96,54);
-        
     }
-    public void SetupOptionsInput(InputState currentState)
+    public void SetupOptionsAfterTurnReset(InputState currentState)
     {
         if (currentState.stateName != InputStateName.PokemonBattleOptions) return;
-        _inputStateHandler.OnStateRemoved -= SetupOptionsInput;
+        _inputStateHandler.OnStateRemoved -= SetupOptionsAfterTurnReset;
         SetupOptionsInput();
     }
     private void SetupOptionsInput()
     {
         var battleOptionSelectables = new List<SelectableUI>
         {
-            new(battleOptions[0], LoadMoveInputAndText, true),
-            new(battleOptions[1], _gameUIHandler.ValidateBagView, true),
-            new(battleOptions[2], () => _gameUIHandler.ViewPokemonParty(PartyUsage.General), true),
-            new(battleOptions[3], () => StartCoroutine(RunAway()), true)
+            new(battleOptions[0],
+                LoadMoveInputAndText,
+                true),
+            new(battleOptions[1], 
+                ()=> RemoveBattleTextAndInvoke(_gameUIHandler.ValidateBagView),
+                true),
+            new(battleOptions[2], 
+                () => RemoveBattleTextAndInvoke(()=>_gameUIHandler.ViewPokemonParty(PartyUsage.General)),
+                true),
+            new(battleOptions[3], 
+                () => StartCoroutine(RunAway()),
+                true)
         };
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleOptions
-            , InputStateGroup.PokemonBattle, true,
+            , InputStateGroup.PokemonBattle, false,
             optionsUI, InputDirection.Grid, battleOptionSelectables,
             optionSelector,true,true
-            ,onExit:_turnBasedCombatHandler.RemoveTurn, updateExit:ConditionsForExit));
+            ,onExit:_turnBasedCombatHandler.RemoveTurn, updateExit:ConditionsForExit),true);
+        
+        _inputStateHandler.OnStateLoaded += HideDuringDialogue;
+        _inputStateHandler.OnStateRemoved += CleanEvents;
+        return;
+        void CleanEvents(InputState oldState)
+        {
+            if (oldState.stateName == InputStateName.PokemonBattleOptions)
+            {
+                _inputStateHandler.OnStateLoaded -= HideDuringDialogue;
+                _inputStateHandler.OnStateRemoved -= CleanEvents;
+            }
+        }
+        void HideDuringDialogue(InputState newState)
+        {
+            if (newState.stateName == InputStateName.BattleDialoguePlaceHolder)
+            {
+                optionsUI.SetActive(false);
+            }
+        }
+        void RemoveBattleTextAndInvoke(Action callBack)
+        {
+            _dialogueHandler.DisplaySpecific(string.Empty,DialogType.BattleDisplayMessage);
+            callBack.Invoke();
+        }
     }
     private bool ConditionsForExit()
     {
@@ -520,7 +550,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         }
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleMoveSelection
-            ,InputStateGroup.PokemonBattle,true,
+            ,InputStateGroup.PokemonBattle,false,
             movesUI, InputDirection.Grid, moveSelectables,
             moveSelector,true,true,ResetMoveUsability,ResetMoveUsability));
         

@@ -599,7 +599,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         //player wants to change their turn usage
         RemoveTurn(currentTurnIndex-1);
         currentTurnIndex --;
-        _inputStateHandler.OnStateRemoved += _battleHandler.SetupOptionsInput;
+        _inputStateHandler.OnStateRemoved += _battleHandler.SetupOptionsAfterTurnReset;
     }
     private void ChangeTurn(int maxParticipantIndex,int step)
     {

@@ -25,7 +25,7 @@ public enum InputDirection { None, Horizontal, Vertical, Grid}
 public enum InputStateGroup {None,Bag,PokemonParty,PokemonDetails,PokemonStorage,PokemonBattle,PokeMart, GameSettings,TypingInterface}
 public enum InputStateName 
 {
-    PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,
+    PlaceHolder,DialoguePlaceHolder,Empty,DialogueOptions,BattleDialoguePlaceHolder,
     PokemonBattleMoveSelection,PokemonBattleEnemySelection,PokemonBattleOptions,
     PokemonStorageBoxChange,PokemonStorageExit ,PokemonStorageBoxOptions,PokemonStorageBoxNavigation,PokemonStoragePartyNavigation,
     PokemonStorageUsage,ItemStorageUsage,PokemonStoragePartyOptions,PokemonStorageDepositSelection,
@@ -231,6 +231,12 @@ public class InputStateHandler : MonoBehaviour,IInjectable
             UpdateSelectorUi();
             currentState.selector.SetActive(true);
         }
+        
+        if(!currentState.isParentLayer)
+        {
+            currentState.mainViewUI?.SetActive(true);
+        }
+        
         _currentStateLoaded = true;
         OnStateLoaded?.Invoke(currentState);
         
@@ -396,9 +402,9 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     }
     public void AddBattleDialoguePlaceHolderState()
     {
-        ChangeInputState(new (InputStateName.PlaceHolder,InputStateGroup.None, canExit: false
-            , isParent:false,mainView: emptyPlaceHolder,displayOpenTransition:false
-            ,displayCloseTransition:false),true);
+        ChangeInputState(new (InputStateName.BattleDialoguePlaceHolder,InputStateGroup.None, canExit: false
+            , isParent:false,mainView: emptyPlaceHolder,
+            displayOpenTransition:false,displayCloseTransition:false),true);
     }
     public void AddDialoguePlaceHolderState()
     {

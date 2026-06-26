@@ -68,14 +68,13 @@ public class Item_handler : MonoBehaviour,IInjectable
             {
                 yield return new WaitUntil(() => _dialogueHandler.dialogueFinished);
                 yield return new WaitForSecondsRealtime(1f);
-                
-                if (itemInUse.forPartyUse)
+                if (itemUsed.forPartyUse)
                 {
                     _inputStateHandler.ResetRelevantUi(InputStateName.PokemonPartyItemUsage,true);
                 }
                 if (successful)
                 {
-                    _playerBagHandler.DepleteItem(itemInUse);
+                    _playerBagHandler.DepleteItem(itemUsed);
                     if (_battleHandler.battleInProgress)
                     {
                         _inputStateHandler.ResetRelevantUi(InputStateName.PlayerBagNavigation,true);
@@ -84,7 +83,10 @@ public class Item_handler : MonoBehaviour,IInjectable
                     }
                 }
                 yield return new WaitForSecondsRealtime(0.2f);
-                _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
+                if (!_battleHandler.battleInProgress)
+                {
+                    _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
+                }
             }
         }
         
