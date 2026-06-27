@@ -84,13 +84,11 @@ public class Participant_Status : BattleParticipantModule
         {
             case StatusEffect.Burn:
                 var atkDrop = new BuffDebuffData(participant, Stat.Attack, false, 2);
-                _battleOperationsHandler.canDisplayChange = false; 
-                _moveUsageHandler.ExecuteBuffOrDebuff(atkDrop);
+                _moveUsageHandler.ExecuteBuffOrDebuff(atkDrop,false);
                 break;
             case StatusEffect.Paralysis:
                 var speedDrop = new BuffDebuffData(participant, Stat.Speed, false, 6);
-                _battleOperationsHandler.canDisplayChange = false; 
-                _moveUsageHandler.ExecuteBuffOrDebuff(speedDrop);
+                _moveUsageHandler.ExecuteBuffOrDebuff(speedDrop,false);
                 break;
         }
     }

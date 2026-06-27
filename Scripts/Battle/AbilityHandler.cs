@@ -177,8 +177,7 @@ public class AbilityHandler : BattleParticipantModule
         if (_abilityTriggered) return;
         if (participant.pokemon.statusEffect == StatusEffect.None) return;
         var attackBuffData = new BuffDebuffData(participant, Stat.Attack, true, 1);
-        _battleOperationsHandler.canDisplayChange = false; 
-        _moveUsageHandler.ExecuteBuffOrDebuff(attackBuffData);
+        _moveUsageHandler.ExecuteBuffOrDebuff(attackBuffData,false);
         _abilityTriggered = true;
     }
     void Levitate()

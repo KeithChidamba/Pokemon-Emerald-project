@@ -81,7 +81,7 @@ public class Move_handler:MonoBehaviour,IInjectable
                     new (TrapEnemy, _currentTurn.move.canTrap),
                     new (InfatuateEnemy, _currentTurn.move.canInfatuate)
                 };
-                victim.OnPokemonFainted += CancelMoveSequence;//victim faints after damage so the rest of move effect is ignored
+                _battleHandler.OnParticipantFainted += CancelMoveSequence;
                 foreach (var battleEvent in battleSequenceEvents)
                 {
                     if (_cancelMove)
@@ -95,7 +95,7 @@ public class Move_handler:MonoBehaviour,IInjectable
                     yield return new WaitUntil(()=> !displayingDamage);
                     yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
                 } 
-                victim.OnPokemonFainted -= CancelMoveSequence;
+                _battleHandler.OnParticipantFainted -= CancelMoveSequence;
             }
         }
         
@@ -103,13 +103,16 @@ public class Move_handler:MonoBehaviour,IInjectable
         yield return new WaitUntil(()=> !displayingDamage);
         yield return new WaitUntil(()=> !displayingHealthGain);
         ResetMoveUsage();
+        void CancelMoveSequence(Battle_Participant faintedParticipant)
+        {
+            if(faintedParticipant == victim)
+            {
+                //victim faints after damage so the rest of move effect is ignored
+                _cancelMove = true;
+            }
+        }
     }
-
-    private void CancelMoveSequence()
-    {
-        _cancelMove = true;
-    }
-
+    
     public IEnumerator DealConfusionDamage(Battle_Participant confusionVictim)
     {
         var confusionDamage = CalculateConfusionDamage(confusionVictim);
@@ -195,7 +198,7 @@ public class Move_handler:MonoBehaviour,IInjectable
          if (currentVictim.canBeDamaged || move.moveDamage == 0) return false;
          _dialogueHandler.DisplayBattleInfo(currentVictim.pokemon.pokemonDisplayName+" protected itself");
          
-         if (!_currentTurn.move.isMultiTarget) CancelMoveSequence();
+         if (!_currentTurn.move.isMultiTarget) _cancelMove = true;
          return true;
     }
     public float CalculateMoveDamage(Move move,Battle_Participant currentVictim,bool isTypeless=false)
@@ -620,9 +623,6 @@ public class Move_handler:MonoBehaviour,IInjectable
     }
     private IEnumerator HandleBuffOrDebuffApplication()
     {
-        //allows the display of buff message, must be here in case silent buff happened before
-        _battleOperations.canDisplayChange = true;
-        
         foreach (var buffData in _currentTurn.move.buffOrDebuffData)
         {
             if (!_currentTurn.move.isSelfTargeted)
@@ -680,7 +680,7 @@ public class Move_handler:MonoBehaviour,IInjectable
         }
     }
     
-    public void ExecuteBuffOrDebuff(BuffDebuffData data)
+    public void ExecuteBuffOrDebuff(BuffDebuffData data,bool displayMessage = true)
     {
         var unModifiedStats = data.Receiver.statData;
         var affectedPokemon = data.Receiver.pokemon;
@@ -688,34 +688,38 @@ public class Move_handler:MonoBehaviour,IInjectable
         switch (data.Stat)
         {
             case Stat.Defense:
-                affectedPokemon.defense = GetUpdatedStat(unModifiedStats.defense,data) ?? affectedPokemon.defense;
+                affectedPokemon.defense = GetUpdatedStat(unModifiedStats.defense,data, displayMessage) ?? affectedPokemon.defense;
                 break;
             case Stat.Attack:
-                affectedPokemon.attack = GetUpdatedStat(unModifiedStats.attack,data) ?? affectedPokemon.attack;
+                affectedPokemon.attack = GetUpdatedStat(unModifiedStats.attack,data, displayMessage) ?? affectedPokemon.attack;
                 break;
             case Stat.SpecialDefense:
-                affectedPokemon.specialDefense = GetUpdatedStat(unModifiedStats.spDef,data) ?? affectedPokemon.specialDefense;
+                affectedPokemon.specialDefense = GetUpdatedStat(unModifiedStats.spDef,data, displayMessage) ?? affectedPokemon.specialDefense;
                 break;
             case Stat.SpecialAttack:
-                affectedPokemon.specialAttack = GetUpdatedStat(unModifiedStats.spAtk,data) ?? affectedPokemon.specialAttack;
+                affectedPokemon.specialAttack = GetUpdatedStat(unModifiedStats.spAtk,data, displayMessage) ?? affectedPokemon.specialAttack;
                 break;
             case Stat.Speed:
-                affectedPokemon.speed = GetUpdatedStat(unModifiedStats.speed,data) ?? affectedPokemon.speed;
+                affectedPokemon.speed = GetUpdatedStat(unModifiedStats.speed,data, displayMessage) ?? affectedPokemon.speed;
                 break;
             case Stat.Accuracy:
-                affectedPokemon.accuracy = GetUpdatedStat(unModifiedStats.accuracy,data) ?? affectedPokemon.accuracy;
+                affectedPokemon.accuracy = GetUpdatedStat(unModifiedStats.accuracy,data, displayMessage) ?? affectedPokemon.accuracy;
                 break;
             case Stat.Evasion:
-                affectedPokemon.evasion = GetUpdatedStat(unModifiedStats.evasion,data) ?? affectedPokemon.evasion;
+                affectedPokemon.evasion = GetUpdatedStat(unModifiedStats.evasion,data, displayMessage) ?? affectedPokemon.evasion;
                 break;
             case Stat.Crit:
-                affectedPokemon.critChance = GetUpdatedStat(unModifiedStats.crit,data)?? affectedPokemon.critChance;
+                affectedPokemon.critChance = GetUpdatedStat(unModifiedStats.crit,data, displayMessage) ?? affectedPokemon.critChance;
                 break; 
         }
     }
-    private float? GetUpdatedStat(float unmodifiedStatValue, BuffDebuffData data)
+    private float? GetUpdatedStat(float unmodifiedStatValue, BuffDebuffData data,bool canDisplayChange)
     {
-        _battleOperations.ChangeOrCreateBuffOrDebuff(data);
+        var resultMessage = _battleOperations.AttemptBuffOperation(data);
+        if (canDisplayChange)
+        {
+            _battleVisualsHandler.SelectStatChangeVisuals(data.Stat,data.Receiver, resultMessage);
+        }
         var buff = _battleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat)
                    ?? new Buff_Debuff(Stat.None, 0, true); // if null return same value
         if (buff.isAtLimit) return null;

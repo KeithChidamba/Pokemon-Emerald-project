@@ -6,16 +6,13 @@ using System.Linq;
 
 public class BattleOperations : MonoBehaviour,IInjectable
 {   
-    public bool canDisplayChange = true;
     public event Action OnBuffApplied;
         
     private BattleVisuals _battleVisualsHandler;
-    private Dialogue_handler _dialogueHandler;
     private PokemonOperations _pokemonOperations;
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
         gameObject.SetActive(true);
@@ -106,19 +103,67 @@ public class BattleOperations : MonoBehaviour,IInjectable
     }
     
 //Buffs
-    public void ChangeOrCreateBuffOrDebuff(BuffDebuffData data)
+public string AttemptBuffOperation(BuffDebuffData data)
+{
+    var desiredBuff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);
+    if (desiredBuff == null)
     {
-        var desiredBuff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);
-        if (desiredBuff == null)
-        {
-            desiredBuff = CreateNewBuff(data.Stat);
-            data.Receiver.pokemon.buffAndDebuffs.Add(desiredBuff);
-        }
-        
-        desiredBuff.stage = ValidateBuffLimit(data.Receiver, desiredBuff, data.IsIncreasing, data.EffectAmount);
-        RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
-        OnBuffApplied?.Invoke();
+        desiredBuff = CreateNewBuff(data.Stat);
+        data.Receiver.pokemon.buffAndDebuffs.Add(desiredBuff);
     }
+
+    string message;
+    bool increased = data.IsIncreasing;
+
+    int upperLimit = desiredBuff.stat == Stat.Crit ? 2 : 5;
+    int lowerLimit = desiredBuff.stat == Stat.Crit ? 1 : -5;
+
+    int oldStage = desiredBuff.stage;
+    int delta = increased ? data.EffectAmount : -data.EffectAmount;
+    int newStage = math.clamp(oldStage + delta, lowerLimit, upperLimit);
+
+    if (newStage == oldStage)
+    {
+        desiredBuff.isAtLimit = true;
+
+        message = increased
+            ? $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} can't go any higher!"
+            : $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} can't go any lower!";
+
+        _battleVisualsHandler.CancelBuffVisual();
+    }
+    else
+    {
+        desiredBuff.isAtLimit = false;
+        desiredBuff.stage = newStage;
+
+        int actualChange = math.abs(newStage - oldStage);
+
+        if (increased)
+        {
+            message = actualChange switch
+            {
+                1 => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} rose!",
+                2 => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} rose sharply!",
+                _ => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} rose drastically!"
+            };
+        }
+        else
+        {
+            message = actualChange switch
+            {
+                1 => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} fell!",
+                2 => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} harshly fell!",
+                _ => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} severely fell!"
+            };
+        }
+    }
+
+    RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
+    OnBuffApplied?.Invoke();
+
+    return message;
+}
     public string GetBuffResultMessage(bool isIncreasing,Pokemon pokemon,Stat[] buffs)
     {
         //shorten stat names to be more readable
@@ -141,53 +186,10 @@ public class BattleOperations : MonoBehaviour,IInjectable
         
         return pokemon.pokemonDisplayName+"'s "+buffNameString+" fell";
     }
-    private int ValidateBuffLimit(Battle_Participant participant,Buff_Debuff buff,bool increased,int changeValue)
-    {
-        var change = 0;
-        var message="";
-        var indexLimitHigh = (buff.stat == Stat.Crit) ? 2 : 5;
-        var indexLimitLow = (buff.stat == Stat.Crit) ? 1 : -5;
 
-        if (buff.stage > indexLimitHigh && increased)
-        {
-            buff.isAtLimit = true;
-            if(canDisplayChange)
-                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+buff.statName+" cant go any higher");
-            _battleVisualsHandler.CancelBuffVisual();
-            return buff.stage;
-        }
-        if (buff.stage < indexLimitLow && !increased)
-        {
-            buff.isAtLimit = true;
-            if(canDisplayChange)
-                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+buff.statName+" cant go any lower");
-            _battleVisualsHandler.CancelBuffVisual();
-            return buff.stage;
-        }
-        if (increased)
-        {
-            change = buff.stage+changeValue;
-            message = participant.pokemon.pokemonDisplayName+"'s "+buff.statName+" rose!";
-        }
-        else
-        {
-            change = buff.stage-changeValue;
-            message = participant.pokemon.pokemonDisplayName+"'s "+buff.statName+" fell!";
-        }
-        
-        if (canDisplayChange)
-        {
-            _battleVisualsHandler.SelectStatChangeVisuals(buff.stat,participant,message);
-        }
-        if(change>indexLimitHigh)
-            return indexLimitHigh + 1;
-        if(change<indexLimitLow)
-            return indexLimitLow - 1; 
-        return change;
-    }
     private Buff_Debuff CreateNewBuff( Stat statName)
     {
-        return new Buff_Debuff(statName,0,false);
+        return new Buff_Debuff(statName,0);
     }
     public Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon, Stat stat)
     {
