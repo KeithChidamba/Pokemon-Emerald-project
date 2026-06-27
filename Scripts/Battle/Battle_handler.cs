@@ -46,6 +46,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public GameObject moveSelector;
     private PlayerTurnUsage _previousTurnUsage;
     
+    public event Action<Battle_Participant> OnParticipantFainted;
     public event Action OnBattleEnd;
     public event Action<bool> OnBattleResult;
     public event Action OnSwitchIn;
@@ -601,7 +602,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public void StartFaintEvent()
     {
         StartCoroutine(FaintSequence());
-    } 
+    }
+    
     private IEnumerator FaintSequence()
     {
         while (faintQueue.Count > 0)
@@ -629,6 +631,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
             }
             
             yield return faintedParticipant.HandleFaintLogic();
+            
+            OnParticipantFainted?.Invoke(faintedParticipant);
             
             if (!battleOver)
             {

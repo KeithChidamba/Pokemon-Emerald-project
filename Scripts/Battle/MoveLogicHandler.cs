@@ -255,7 +255,16 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             yield break;
         } 
         var damageModifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,_turnBasedCombatHandler,damageModifierInfo,_attacker);
-        _attacker.OnPokemonFainted += ()=> damageModifier.RemoveOnSwitchOut(_attacker);
+        
+        _battleHandler.OnParticipantFainted += RemoveOnFaint;
+                
+        void RemoveOnFaint(Battle_Participant faintedParticipant)
+        {
+            if (faintedParticipant != _attacker) return;
+            _battleHandler.OnParticipantFainted -= RemoveOnFaint;
+            damageModifier.RemoveOnSwitchOut(_attacker);
+        }
+        
         _battleHandler.OnSwitchOut += damageModifier.RemoveOnSwitchOut;
         _moveUsageHandler.AddFieldDamageModifier(damageModifier);
         moveDelay = false;
@@ -280,7 +289,16 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
 
             newImmunityNegation.ImmunityNegationTypes.Add(PokemonType.Fighting);
             newImmunityNegation.ImmunityNegationTypes.Add(PokemonType.Normal);
-            _attacker.OnPokemonFainted += () => newImmunityNegation.RemoveNegationOnSwitchOut(_attacker);
+            
+            _battleHandler.OnParticipantFainted += RemoveOnFaint;
+                
+            void RemoveOnFaint(Battle_Participant faintedParticipant)
+            {
+                if (faintedParticipant != _attacker) return;
+                _battleHandler.OnParticipantFainted -= RemoveOnFaint;
+                newImmunityNegation.RemoveNegationOnSwitchOut(_attacker);
+            }
+
             _battleHandler.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
             _victim.immunityNegations.Add(newImmunityNegation);
         }

@@ -61,7 +61,6 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     
     public List<Pokemon> expReceivers;
     private bool _expEventDelay;
-    public event Action OnPokemonFainted;
     
     public List<Barrier> barriers = new();
     
@@ -217,9 +216,10 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         _battleHandler.faintQueue.Add(this);
         pokemon.DetermineFriendshipLevelChange(
             false, FriendshipModifier.Fainted);
-        OnPokemonFainted?.Invoke();
         if (!_turnBasedCombatHandler.faintEventDelay)
+        {
             _battleHandler.StartFaintEvent();
+        }
     }
     public IEnumerator HandleFaintLogic()
     {
@@ -331,7 +331,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         canEscape = true;
         previousMove = null;
         additionalTypeImmunity = null;
-        OnPokemonFainted = null;
+        
         currentCoolDown.ResetState();
         immunityNegations.Clear();
         if (isPlayer)

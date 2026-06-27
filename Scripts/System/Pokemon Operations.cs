@@ -25,11 +25,11 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private bool _selectingMoveReplacement;
     private Pokemon _currentPokemon;
     private Move _newMoveAsset;
+    
     public event Action<Stat,bool> OnEvChange;
     public event Action<Pokemon,bool> OnPokeballUsed;
     
     private WildPokemonAiHandler _wildPokemonHandler;
-    private Item_handler _itemHandler;
     private Pokemon_party _playerParty;
     private InputStateHandler _inputStateHandler;
     private Game_Load _gameHandler;
@@ -44,7 +44,6 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     {
         _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _itemHandler = container.Resolve<Item_handler>();
         _playerParty = container.Resolve<Pokemon_party>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _battleVisuals = container.Resolve<BattleVisuals>();

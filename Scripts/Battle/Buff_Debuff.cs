@@ -12,7 +12,7 @@ public class Buff_Debuff
     public Stat stat;
     [SerializeField]public int stage;
 
-    public Buff_Debuff(Stat stat, int stage, bool isAtLimit)
+    public Buff_Debuff(Stat stat, int stage, bool isAtLimit = false)
     {
         statName = NameDB.GetStatName(stat);
         this.stat = stat;

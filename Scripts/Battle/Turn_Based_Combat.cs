@@ -481,16 +481,20 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 
                 pursuitUsersTurn.isCancelled = true;//since it strikes here
                 
-                void CancelOnFaint()
+                _battleHandler.OnParticipantFainted += CancelOnFaint;
+                
+                void CancelOnFaint(Battle_Participant faintedParticipant)
                 {
-                    victim.OnPokemonFainted -= CancelOnFaint;
+                    if (faintedParticipant != victim) return;
+                    _battleHandler.OnParticipantFainted -= CancelOnFaint;
                     pokemonFainted = true;
                 }
-
-                victim.OnPokemonFainted += CancelOnFaint;
-
-                yield return _moveLogicHandler.Pursuit(attacker, victim, pursuitUsersTurn.move);
+                
+                yield return _moveLogicHandler.Pursuit(attacker, victim, pursuitUsersTurn.move); 
+                
                 if (pokemonFainted) yield break;
+                
+                _battleHandler.OnParticipantFainted -= CancelOnFaint;
             }
         }
         
@@ -724,8 +728,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                             //buff rock types
                             var spDefBuff = new BuffDebuffData(participant,
                                 Stat.SpecialDefense, true, 1);
-                            _battleOperationsHandler.canDisplayChange = false;
-                            _moveUsageHandler.ExecuteBuffOrDebuff(spDefBuff);
+                            _moveUsageHandler.ExecuteBuffOrDebuff(spDefBuff,false);
                             currentWeather.buffedParticipants.Add(participant);
                         }
                     }

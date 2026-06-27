@@ -198,17 +198,20 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private IEnumerator Silverwind()
     {
         bool battleEnded = false;
-        
-        void CancelOnBattleEnd()
-        {
-            battleEnded = !_battleHandler.isTrainerBattle || _battleHandler.battleOver;
-        }
-        _victim.OnPokemonFainted += CancelOnBattleEnd;
-        
+        _battleHandler.OnParticipantFainted += CancelOnBattleEnd;
         _moveUsageHandler.DisplayDamage(_victim);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
+
+        void CancelOnBattleEnd(Battle_Participant faintedParticipant)
+        {
+            if (faintedParticipant != _victim) return;
+            _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
+            battleEnded = _battleHandler.battleOver;
+        }
         
         if(battleEnded) yield break;
+        _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
+        
         if (Utility.RandomRange(0, 101) > 10)
         {
             yield return null;
@@ -223,34 +226,30 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             Stat.Speed
         };
         
-        var waiting = true;
-        void AwaitBuffAddition()
+        foreach (var buff in allBuffs)
         {
-            _battleOperationsHandler.OnBuffApplied -= AwaitBuffAddition;
-            waiting = false;
+            bool awaitingAddition = true;
+            _battleOperationsHandler.OnBuffApplied += AwaitBuffAddition;
+            var buffData = new BuffDebuffData(_attacker, buff, true, 1);
+            _moveUsageHandler.ExecuteBuffOrDebuff(buffData,false);
+            yield return new WaitUntil(() => !awaitingAddition);
+            void AwaitBuffAddition()
+            {
+                _battleOperationsHandler.OnBuffApplied -= AwaitBuffAddition;
+                awaitingAddition = false;
+            }
         }
+        
+        string statChangeMessage = _battleOperationsHandler.GetBuffResultMessage(true,_attacker.pokemon,allBuffs);
+        _battleVisualsHandler.OnStatVisualDisplayed += AwaitBuffVisual;
+        bool awaitingDisplay = true;
+        _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,_attacker,statChangeMessage);
+        yield return new WaitUntil(() => !awaitingDisplay);
         void AwaitBuffVisual()
         {
             _battleVisualsHandler.OnStatVisualDisplayed -= AwaitBuffVisual;
-            waiting = false;
+            awaitingDisplay = false;
         }
-
-        var statChangeMessage = "";
-        _battleOperationsHandler.canDisplayChange = false;
-        foreach (var buff in allBuffs)
-        {
-            waiting = true;
-            _battleOperationsHandler.OnBuffApplied += AwaitBuffAddition;
-            var buffData = new BuffDebuffData(_attacker, buff, true, 1);
-            _moveUsageHandler.ExecuteBuffOrDebuff(buffData);
-            yield return new WaitUntil(() => !waiting);
-        }
-        
-        statChangeMessage = _battleOperationsHandler.GetBuffResultMessage(true,_attacker.pokemon,allBuffs);
-        _battleVisualsHandler.OnStatVisualDisplayed += AwaitBuffVisual;
-        waiting = true;
-        _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,_attacker,statChangeMessage);
-        yield return new WaitUntil(() => !waiting);
     }
 
     private IEnumerator Flail()
