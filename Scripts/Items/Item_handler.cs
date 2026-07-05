@@ -71,6 +71,11 @@ public class Item_handler : MonoBehaviour,IInjectable
                 if (itemUsed.forPartyUse)
                 {
                     _inputStateHandler.ResetRelevantUi(InputStateName.PokemonPartyItemUsage,true);
+                    if (!successful)
+                    {
+                        //necessary to reset internal bag state
+                        _playerBagHandler.SetupBagState();
+                    }
                 }
                 if (successful)
                 {
@@ -363,10 +368,10 @@ public class Item_handler : MonoBehaviour,IInjectable
     }
     private void ChangePowerpoints(Item itemInUse,Pokemon selectedPartyPokemon)
     {
-        _pokemonDetailsHandler.changingMoveData = true;
+        _pokemonDetailsHandler.SetUsage(PokemonDetailsUsage.AlterMoves);
         var modifierInfo = itemInUse.GetModule<PowerpointModifeir>();
         
-        _pokemonDetailsHandler.OnMoveSelected += MoveOperation;
+        _pokemonDetailsHandler.onMoveSelected += MoveOperation;
         _gameUIHandler.ViewPartyPokemonDetails(selectedPartyPokemon);
 
         void MoveOperation(int moveIndex)
@@ -394,7 +399,7 @@ public class Item_handler : MonoBehaviour,IInjectable
                 if(successful)
                 {
                     OnItemUsed -= CheckUsageSuccess;
-                    _pokemonDetailsHandler.OnMoveSelected -= MoveOperation;
+                    _pokemonDetailsHandler.onMoveSelected -= MoveOperation;
                     _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonDetails);
                 }
             }

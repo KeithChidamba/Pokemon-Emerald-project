@@ -26,3 +26,4 @@ MonoBehaviour:
       evolutionFormNumber: 0
     minimumLevelOfPokemon: 2
     maximumLevelOfPokemon: 14
+  encounterChance: 25

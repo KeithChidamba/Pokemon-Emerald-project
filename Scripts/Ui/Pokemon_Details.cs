@@ -6,6 +6,12 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+public enum PokemonDetailsUsage
+{
+    LearnMoves,
+    AlterMoves,
+    ViewMoves
+}
 public class Pokemon_Details : MonoBehaviour,IInjectable
 {
     //too lazy to change this to camelCase because ot would take a lot of editor work
@@ -32,12 +38,12 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     [SerializeField]private Text move_dmg, move_acc;
     
     [SerializeField]private int _currentPage;
-    public Pokemon currentPokemon;
+    [SerializeField]private Pokemon currentPokemon;
     private int _currentPokemonIndex;
-    public List<Pokemon> pokemonToView = new();
-    public Action<int> OnMoveSelected; 
-    public bool learningMove;
-    public bool changingMoveData;
+    [SerializeField]private List<Pokemon> pokemonToView = new();
+    public Action<int> onMoveSelected;
+
+    public PokemonDetailsUsage CurrentUsage { get; private set; }
     private Dictionary<int, Action> _pages = new();
     public GameObject moveSelector;
     public GameObject uiParent;
@@ -66,9 +72,13 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         StopCoroutine(_animationRoutine);
     }
 
+    public void SetUsage(PokemonDetailsUsage newUsage)
+    {
+        CurrentUsage = newUsage;
+    }
     public void DeactivateDetailsUi()
     {
-        changingMoveData = false;
+        CurrentUsage = PokemonDetailsUsage.ViewMoves;
         OverlayUi.SetActive(false);
         Stats_ui.SetActive(false);
         Moves_ui.SetActive(false);
@@ -94,9 +104,9 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     
     public void SelectMove(int moveIndex)
     {
-        if (learningMove || changingMoveData)
+        if (CurrentUsage != PokemonDetailsUsage.ViewMoves)
         {
-            OnMoveSelected?.Invoke(moveIndex);
+            onMoveSelected?.Invoke(moveIndex);
             return;
         }
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonDetailsMoveData, InputStateGroup.PokemonDetails
@@ -110,7 +120,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         move_details.SetActive(true);
     }
 
-    private void  LoadPage(int pageNumber)
+    private void LoadPage(int pageNumber)
     {
         if(_pages.TryGetValue(pageNumber,out var openPage))
             openPage();
@@ -158,8 +168,8 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     
     private void LoadMovesUiPage()
     {
-        if (learningMove || changingMoveData)
-        {//simulate F click
+        if (CurrentUsage != PokemonDetailsUsage.ViewMoves)
+        {//auto-enter move ui state
             _inputStateHandler.currentState.selectableUis[2]?.eventForUi?.Invoke();
         }
 
@@ -236,7 +246,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         pokemonToView = pokemonList;
         currentPokemon = selectedPokemon;
         LoadOverlayInfo();
-        _currentPage = (learningMove || changingMoveData) ? 3 : 1;
+        _currentPage = ( CurrentUsage != PokemonDetailsUsage.ViewMoves) ? 3 : 1;
         LoadPage(_currentPage);
         _animationRoutine = StartCoroutine(PokemonAnimation());
     }

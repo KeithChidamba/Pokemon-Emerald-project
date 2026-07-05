@@ -198,7 +198,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     public void SetBagInputState(bool displayTransition)
     {
         var bagSelectables = new List<SelectableUI>();
-        for(var i = 0;i < _playerBagHandler.numItems;i++)
+        for(var i = 0;i < _playerBagHandler.NumItems;i++)
         {
             bagSelectables.Add( new(_playerBagHandler.bagItemsUI[i].gameObject,null,true) );
         }
@@ -300,7 +300,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         var detailsSelectables = new List<SelectableUI>{
             new(null,null,true)
             ,new(null,null,true)
-            ,new(null,_pokemonDetailsInputService.AllowMoveUiNavigation,true)
+            ,new(null, ()=> _pokemonDetailsInputService.AllowMoveUiNavigation(initiallySelectedPokemon),true)
         };
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonDetails
             ,InputStateGroup.PokemonDetails, true,_pokemonDetailsHandler.uiParent,

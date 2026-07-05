@@ -35,13 +35,11 @@ public class Player_movement : MonoBehaviour,IInjectable
     
     private overworld_actions _overworldActions;
     private Dialogue_handler _dialogueHandler;
-    private PlayerTileHandler _playerTileHandler;
     
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _overworldActions = container.Resolve<overworld_actions>();
-        _playerTileHandler = container.Resolve<PlayerTileHandler>();
         gameObject.SetActive(true);
     }
 

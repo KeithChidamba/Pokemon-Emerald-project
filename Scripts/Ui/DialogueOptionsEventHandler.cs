@@ -45,18 +45,17 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
         _interactionMethods.Add(InteractionOptions.ReceiveGiftPokemon,ReceiveGiftPokemon);
         _interactionMethods.Add(InteractionOptions.ViewControls,ViewControls);
     }
-
-    void CloseApplication()
-    {
-        _dialogueHandler.EndDialogue();
-        Application.Quit();
-    }
+    //overworld interactions
     public void ExitGame()
     {
         _dialogueHandler.DisplayCustomOptions("Are you sure you want to exit?, you will lose unsaved data!"
              , new[]{"Yes", "No"},new Action[] { CloseApplication, _dialogueHandler.EndDialogue });
+        void CloseApplication()
+        {
+            _dialogueHandler.EndDialogue();
+            Application.Quit();
+        }
     }
-
     void ViewControls()
     {
         _dialogueHandler.EndDialogue(); 

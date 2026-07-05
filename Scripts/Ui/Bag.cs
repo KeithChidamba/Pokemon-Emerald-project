@@ -23,17 +23,17 @@ public class Bag : MonoBehaviour,IInjectable
     {
         General,Pokeballs,HmsTms,Berries,KeyItems
     };
-    public int currentCategoryIndex;
+    [SerializeField]private int currentCategoryIndex;
     private BagCategory[] _categories;
     public Item_ui[] bagItemsUI;
-    public int numItems;
-    public int numItemsForView;
-    public int selectedItemIndex;
-    public int topIndex;//keeps track of visible bag items
-    public int sellQuantity = 1;
-    public int maxNumItemsForView;
-    public int maxItemCapacity=99;
-
+    public int NumItems { get; private set; }
+    public int NumItemsForView { get; private set; }
+    [SerializeField]private int selectedItemIndex;
+    [SerializeField]private int topIndex;//keeps track of visible bag items
+    [SerializeField]private int sellQuantity = 1;
+    [SerializeField]private int maxNumItemsForView;
+    [SerializeField]private int maxItemCapacity=99;
+    private int _totalSellingAmount;
     public bool storageView;
     
     public BagUsage currentBagUsage;
@@ -57,7 +57,7 @@ public class Bag : MonoBehaviour,IInjectable
     private LoopingUiAnimation _upArrow;
     private LoopingUiAnimation _downArrow;
     private LoopingUiAnimation _leftArrow;
-    private int _totalSellingAmount;
+
     public event Action<Item> OnItemSelected;//bag managed
     public event Action<Item> OnItemUsed;//self-managed
     public event Action OnBagOpened;//bag managed, optional self
@@ -183,9 +183,9 @@ public class Bag : MonoBehaviour,IInjectable
     }
     public void NavigateDown()
     {
-        if (numItems == 0) return;
-        if (numItemsForView == 1) return;
-        if (topIndex < numItems - maxNumItemsForView && selectedItemIndex == maxNumItemsForView - 1)
+        if (NumItems == 0) return;
+        if (NumItemsForView == 1) return;
+        if (topIndex < NumItems - maxNumItemsForView && selectedItemIndex == maxNumItemsForView - 1)
         {
             for (int i = 0; i < maxNumItemsForView - 1; i++)
                 bagItemsUI[i].item = bagItemsUI[i + 1].item;
@@ -196,21 +196,21 @@ public class Bag : MonoBehaviour,IInjectable
             topIndex++;
         }
         
-        if (numItems == numItemsForView && selectedItemIndex == numItems - 1)
+        if (NumItems == NumItemsForView && selectedItemIndex == NumItems - 1)
             return;
 
         selectedItemIndex++;
         selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, maxNumItemsForView - 1);
 
         _upArrow.gameObject.SetActive(selectedItemIndex > 0);
-        _downArrow.gameObject.SetActive(selectedItemIndex < numItems - 1);
+        _downArrow.gameObject.SetActive(selectedItemIndex < NumItems - 1);
 
         SelectItem();
     }
     public void NavigateUp()
     {
-        if (numItems == 0) return;
-        if (numItemsForView == 1) return;
+        if (NumItems == 0) return;
+        if (NumItemsForView == 1) return;
         if (topIndex > 0 && selectedItemIndex == 0)
         {
             for (int i = maxNumItemsForView-1; i > 0; i--)
@@ -402,19 +402,19 @@ public class Bag : MonoBehaviour,IInjectable
                     var overflow = InstanceFactory.CreateItem(item);
                     overflow.quantity = item.quantity - quantityGap;
                     allItems.Add(overflow);
-                    numItems++;
+                    NumItems++;
                 }
             }
             else
             {
                 allItems.Add(InstanceFactory.CreateItem(item));
-                numItems++;
+                NumItems++;
             }
         }
         else
         {
             allItems.Add(InstanceFactory.CreateItem(item));
-            numItems++;
+            NumItems++;
         }
     }
 
@@ -444,7 +444,6 @@ public class Bag : MonoBehaviour,IInjectable
         _inputStateHandler.ResetRelevantUi(InputStateName.ItemStorageUsage,true);
         OnItemSelected = null;
         OnBagOpened = null;
-        
     }
 
     public bool CanShowEquippedMarker(string itemName)
@@ -461,7 +460,7 @@ public class Bag : MonoBehaviour,IInjectable
 
     public void SetupBagState(bool displayTransition = false)
     {
-        numItems = 0;
+        NumItems = 0;
         topIndex = 0;
         
         var specialCategories = new[]
@@ -486,8 +485,8 @@ public class Bag : MonoBehaviour,IInjectable
             return allItems.Where(item => item.itemType == itemType).ToList();
         }
         
-        numItems = currentCategoryOfItems.Count;
-        if (numItems == 0)
+        NumItems = currentCategoryOfItems.Count;
+        if (NumItems == 0)
         {
             if(_itemStorageHandler.currentUsage == ItemUsage.Deposit)
             {
@@ -505,22 +504,22 @@ public class Bag : MonoBehaviour,IInjectable
             }
         }
         sellingItemUI.SetActive(currentBagUsage == BagUsage.SellingView);
-        numItemsForView = (numItems < maxNumItemsForView+1) ? numItems : maxNumItemsForView; 
-        for (int i = 0; i < numItemsForView; i++)
+        NumItemsForView = (NumItems < maxNumItemsForView+1) ? NumItems : maxNumItemsForView; 
+        for (int i = 0; i < NumItemsForView; i++)
         {
             bagItemsUI[i].item = currentCategoryOfItems[i];
             bagItemsUI[i].gameObject.SetActive(true);
             bagItemsUI[i].LoadItemUI();
         }
         selectedItemIndex = 0;
-        if (numItems > 0) SelectItem();
+        if (NumItems > 0) SelectItem();
         
         OnBagOpened?.Invoke();
         _gameUIHandler.SetBagInputState(displayTransition);
         
         //default visuals
         _upArrow.gameObject.SetActive(false);
-        _downArrow.gameObject.SetActive(numItems>1);
+        _downArrow.gameObject.SetActive(NumItems>1);
         _leftArrow.gameObject.SetActive(false);
         foreach (var loopingUiAnimation in redArrows)
         {
@@ -539,7 +538,7 @@ public class Bag : MonoBehaviour,IInjectable
     private void ReloadEquipMarker()
     {
         if (!_gameUIHandler.usingUI) return;
-        for (int i = 0; i < numItemsForView; i++)
+        for (int i = 0; i < NumItemsForView; i++)
         {
             bagItemsUI[i].LoadItemUI();
         }

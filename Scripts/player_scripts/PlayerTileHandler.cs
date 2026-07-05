@@ -80,10 +80,12 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
         StartCoroutine(AnimateGrass());
         
         if (_repellingPokemon) return;
+
+        var encounterTable = (NormalEncounteArea)tile.table;
+        
+        var encounterChance = _playerMovementHandler.usingBike ? 1.5f * encounterTable.encounterChance : encounterTable.encounterChance;
     
-        var encounterChance = _playerMovementHandler.runningInput ? 5 : 2;
-    
-        var randomNumber = Random.Range(1, 11);
+        var randomNumber = Random.Range(1, 101);
     
         if (randomNumber < encounterChance)
         {

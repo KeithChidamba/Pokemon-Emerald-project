@@ -31,16 +31,16 @@ public class PlayerBagInputService : IInputGroup
     {
         ref InputState currentState = ref _inputStateHandler.currentState;
         currentState.currentSelectionIndex = 0;
-        if(_playerBagHandler.numItems==0)
+        if(_playerBagHandler.NumItems==0)
         {
             currentState.displayingSelector = false;
             _playerBagHandler.itemSelector.SetActive(false);
             return;
         }
-        if(_playerBagHandler.numItems==_playerBagHandler.numItemsForView)
+        if(_playerBagHandler.NumItems==_playerBagHandler.NumItemsForView)
         {
             //prevent selecting null item selectables
-            currentState.maxSelectableIndex = _playerBagHandler.numItems-1;
+            currentState.maxSelectableIndex = _playerBagHandler.NumItems-1;
             _inputStateHandler.UpdateSelectorUi();
         }
         currentState.displayingSelector = true;
