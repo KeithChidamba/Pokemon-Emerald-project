@@ -12,14 +12,13 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public event Action OnNewTurn;
     public event Func<Battle_Participant,IEnumerator> OnMoveExecute;
     public event Action OnTurnsCompleted;
-    public int currentTurnIndex;
+    public int CurrentTurnIndex { get; private set; }
 
     public bool faintEventDelay;
     public WeatherCondition currentWeather;
     public WeatherCondition clearWeather;
     private event Func<IEnumerator> OnWeatherEffect;
     public event Action OnWeatherEnd;
-
     private event Action<bool> OnAttackAttempted;
 
     private Dialogue_handler _dialogueHandler;
@@ -30,13 +29,11 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     private Battle_handler _battleHandler;
     private Move_handler _moveUsageHandler;
     private MoveLogicHandler _moveLogicHandler;
-    private BattleOperations _battleOperationsHandler;
     private Game_Load _gameLoadingHandler;
     
     public void Inject(ServiceContainer container)
     {
         _gameLoadingHandler = container.Resolve<Game_Load>();
-        _battleOperationsHandler = container.Resolve<BattleOperations>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
@@ -90,7 +87,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         AddTurn(turn);
         _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.Fight);
         if ((_battleHandler.isDoubleBattle && IsLastParticipant())
-            || currentTurnIndex == _battleHandler.participantCount)
+            || CurrentTurnIndex == _battleHandler.validParticipantCount)
         {
             BeginTurnExecution();
         }
@@ -121,7 +118,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         
         var struggleTurn = new Turn(
             TurnUsage.UseStruggle,
-            attacker : currentTurnIndex
+            attacker : CurrentTurnIndex
             ,victim : randomEnemyIndex
             ,move : struggle
             ,attackerID : attacker.pokemon.pokemonID
@@ -135,7 +132,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         fakeMove.priority = 0;
             
         var switchTurn = new Turn(TurnUsage.SwitchOut,
-            attacker: currentTurnIndex,move:fakeMove
+            attacker: CurrentTurnIndex,move:fakeMove
             ,attackerID:Utility.Random16Bit());
             
         switchTurn.switchData = data;
@@ -146,13 +143,13 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         var livingParticipants = _battleHandler.battleParticipants.ToList();
         livingParticipants.RemoveAll(participant => participant.pokemon==null);
         if (livingParticipants.Last() ==
-            _battleHandler.battleParticipants[currentTurnIndex])
+            _battleHandler.battleParticipants[CurrentTurnIndex])
             return true;
         return false;
     }
     private void ResetTurnState()
     {
-        currentTurnIndex = 0;
+        CurrentTurnIndex = 0;
         currentWeather.weather = Weather.Clear;
         ClearTurn();
         faintEventDelay = false;
@@ -601,20 +598,20 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public void RemoveTurn()
     {
         //player wants to change their turn usage
-        RemoveTurn(currentTurnIndex-1);
-        currentTurnIndex --;
+        RemoveTurn(CurrentTurnIndex-1);
+        CurrentTurnIndex --;
         _inputStateHandler.OnStateRemoved += _battleHandler.SetupOptionsAfterTurnReset;
     }
     private void ChangeTurn(int maxParticipantIndex,int step)
     {
-        if (currentTurnIndex < maxParticipantIndex)
-            currentTurnIndex+=step;
+        if (CurrentTurnIndex < maxParticipantIndex)
+            CurrentTurnIndex+=step;
         else
-            currentTurnIndex = 0;
+            CurrentTurnIndex = 0;
         
         OnNewTurn?.Invoke();
         
-        if (!_battleHandler.battleParticipants[currentTurnIndex].isActive)
+        if (!_battleHandler.battleParticipants[CurrentTurnIndex].isActive)
         {
             if (_battleHandler.isDoubleBattle && IsLastParticipant())
             {

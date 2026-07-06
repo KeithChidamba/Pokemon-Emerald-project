@@ -19,31 +19,30 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public GameObject battleUI;
     public GameObject movesUI;
     public GameObject optionsUI;
-    public GameObject[] battleOptions;
-    public Battle_Participant[] battleParticipants;
-    public List<Battle_Participant> faintQueue = new();
+    public GameObject[] battleOptions; 
+    public GameObject optionSelector;
+    public GameObject moveSelector;
+    public GameObject overWorld;
     public Text movePowerPointsText;
     public Text moveTypeText;
     public Text[] availableMovesText;
+    
+    public Battle_Participant[] battleParticipants;
+    public List<Battle_Participant> faintQueue = new();
     public bool battleInProgress;
     public bool isTrainerBattle;
     public bool isDoubleBattle;
-    public int participantCount;
+    public int validParticipantCount;
     public bool battleOver;
     public BattleEndState battleEndState;
-    public GameObject overWorld;
-    private int _currentMoveIndex;
+    
     private int _currentPlayerEnemyIndex;
     public float participantPositionOffset = 100;
     private List<Vector2> _defaultPokemonImagePositions = new();
     public BattleType currentBattleType;
     public enum BattlesStyle {Switch,Set };
     public BattlesStyle currentBattleStyle;
-    public Pokemon lastOpponent;
-    private Battle_Participant _currentPlayerParticipant;
     public List<EvolutionInBattleData> evolutionQueue;
-    public GameObject optionSelector;
-    public GameObject moveSelector;
     private PlayerTurnUsage _previousTurnUsage;
     
     public event Action<Battle_Participant> OnParticipantFainted;
@@ -93,18 +92,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _turnBasedCombatHandler.OnNewTurn += _checkParticipantsEachTurn;
         _turnBasedCombatHandler.OnTurnsCompleted += ResetPlayersTurnUsage;
     }
-    void Update()
-    {
-        if (!battleInProgress) return;
-        if (_turnBasedCombatHandler.currentTurnIndex > 1) return;
-        
-        _currentPlayerParticipant = GetCurrentParticipant();
-        //if single battle, auto aim at enemy
-        if (!isDoubleBattle && _turnBasedCombatHandler.currentTurnIndex == 0)
-        {
-            _currentPlayerEnemyIndex = 2;
-        }
-    }
     
     public void SetBattleStyle(int settingIndex)
     {
@@ -117,7 +104,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     public Battle_Participant GetCurrentParticipant()
     {
-        return battleParticipants[_turnBasedCombatHandler.currentTurnIndex];
+        return battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex];
     }
     public void EnableBattleMessage(InputState currentState)
     {
@@ -126,34 +113,36 @@ public class Battle_handler : MonoBehaviour, IInjectable
             _dialogueHandler.DisplaySpecific("What will you do?",DialogType.BattleDisplayMessage);
         }
     }
-    private void AllowEnemySelection()
+    private void AllowEnemySelection(int currentMoveIndex)
     {
+        var currentPlayerParticipant = GetCurrentParticipant();
         if (!isDoubleBattle)
         {
-            ExecutePlayersMove();
+            ExecutePlayersMove(currentMoveIndex);
             return;
         }
-        if (_currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex].isSelfTargeted 
-            || _currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex].isMultiTarget)
+        if (currentPlayerParticipant.pokemon.moveSet[currentMoveIndex].isSelfTargeted 
+            || currentPlayerParticipant.pokemon.moveSet[currentMoveIndex].isMultiTarget)
         {
             _currentPlayerEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
-            ExecutePlayersMove();
+            ExecutePlayersMove(currentMoveIndex);
             return;
         }
         var enemySelectables = new List<SelectableUI>();
         for (var i = 2; i < battleParticipants.Length; i++)
         {
-            enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,ExecutePlayersMove,true));
+            enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,
+                ()=>ExecutePlayersMove(currentMoveIndex),true));
         }
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleEnemySelection
             ,InputStateGroup.PokemonBattle,
             stateDirection:InputDirection.Horizontal, selectableUis:enemySelectables, selecting:true));
     }
-    private void ExecutePlayersMove()
+    private void ExecutePlayersMove(int currentMoveIndex)
     {//selecting enemy only happens in double battle
-        
+        var currentPlayerParticipant = GetCurrentParticipant();
         battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
-        UseMove(_currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex], _currentPlayerParticipant,_currentPlayerEnemyIndex); 
+        UseMove(currentPlayerParticipant.pokemon.moveSet[currentMoveIndex], currentPlayerParticipant,_currentPlayerEnemyIndex); 
     }
 
     public void ResetEnemyColor()
@@ -234,14 +223,14 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private bool ConditionsForExit()
     {
         //Check if player can reset their move selection
-        return isDoubleBattle && _turnBasedCombatHandler.currentTurnIndex > 0
+        return isDoubleBattle && _turnBasedCombatHandler.CurrentTurnIndex > 0
                               //if irreversible turn usage occured, cant remove turn
                               && _previousTurnUsage == PlayerTurnUsage.Fight
                               //if partner is semi-invulnerable, cant remove turn
-                              && !battleParticipants[_turnBasedCombatHandler.currentTurnIndex - 1]
+                              && !battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex - 1]
                                   .isSemiInvulnerable
                               //if partner is cooling down, cant remove turn
-                              && !battleParticipants[_turnBasedCombatHandler.currentTurnIndex - 1]
+                              && !battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex - 1]
                                   .currentCoolDown.isCoolingDown;
     }
     public void SetPlayerTurnUsage(PlayerTurnUsage usage)
@@ -254,7 +243,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private void AllowPlayerInput()
     {
-        if (_turnBasedCombatHandler.currentTurnIndex > 1) return;
+        if (_turnBasedCombatHandler.CurrentTurnIndex > 1) return;
         var currentParticipant = GetCurrentParticipant();
         if (currentParticipant.isSemiInvulnerable) return;
         if (currentParticipant.currentCoolDown.isCoolingDown) return;
@@ -262,6 +251,11 @@ public class Battle_handler : MonoBehaviour, IInjectable
         {
             InputStateName.PokemonBattleEnemySelection, InputStateName.PlaceHolder
         });
+        //if single battle, auto aim at enemy
+        if (!isDoubleBattle && _turnBasedCombatHandler.CurrentTurnIndex == 0)
+        {
+            _currentPlayerEnemyIndex = 2;
+        }
     }
     private IEnumerator SetValidParticipants()
     {
@@ -510,11 +504,11 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     public void CheckParticipantStates(bool initialCall=false)
     {
-        participantCount = 0;
+        validParticipantCount = 0;
         foreach (var participant in battleParticipants)
         {
             if (participant.pokemon == null) continue;
-            participantCount++;
+            validParticipantCount++;
             //if revived during double battle for example
             if(initialCall)continue;
             if (participant.pokemon.hp > 0 & !participant.isActive)
@@ -528,8 +522,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     void LoadMoveInputAndText()
     { 
+        var currentPlayerParticipant = GetCurrentParticipant();
         bool emptyMoves = true;
-        foreach (var move in _currentPlayerParticipant.pokemon.moveSet)
+        foreach (var move in currentPlayerParticipant.pokemon.moveSet)
         {
             if(move.powerpoints>0)
             {
@@ -539,15 +534,15 @@ public class Battle_handler : MonoBehaviour, IInjectable
         }
         if (emptyMoves)
         {
-            _turnBasedCombatHandler.SaveStruggleTurn(_currentPlayerParticipant);
+            _turnBasedCombatHandler.SaveStruggleTurn(currentPlayerParticipant);
             return;
         }
         
         var moveSelectables = new List<SelectableUI>();
-        for (var i = 0; i < _currentPlayerParticipant.pokemon.moveSet.Count; i++)
+        for (var i = 0; i < currentPlayerParticipant.pokemon.moveSet.Count; i++)
         {
-            availableMovesText[i].text = _currentPlayerParticipant.pokemon.moveSet[i].moveName;
-            moveSelectables.Add( new (availableMovesText[i].gameObject,AllowEnemySelection,true));
+            availableMovesText[i].text = currentPlayerParticipant.pokemon.moveSet[i].moveName;
+            moveSelectables.Add( new (availableMovesText[i].gameObject,() => AllowEnemySelection(i),true));
         }
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleMoveSelection
@@ -555,8 +550,12 @@ public class Battle_handler : MonoBehaviour, IInjectable
             movesUI, InputDirection.Grid, moveSelectables,
             moveSelector,true,true,ResetMoveUsability,ResetMoveUsability));
         
-        for (var i = _currentPlayerParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
+        for (var i = currentPlayerParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
             availableMovesText[i].text = "";
+        void ResetMoveUsability()
+        {
+            movesUI.SetActive(false);
+        }
     }
     public void UseMove(Move move,Battle_Participant user, int enemyIndex)
     {
@@ -569,16 +568,11 @@ public class Battle_handler : MonoBehaviour, IInjectable
             ,battleParticipants[enemyIndex].pokemon.pokemonID);
         _turnBasedCombatHandler.SaveTurn(currentTurn);
     }
-    private void ResetMoveUsability()
-    {
-        _currentMoveIndex = 0;
-        movesUI.SetActive(false);
-    }
+
     public void SelectMove(int moveIndex)
     {
-        _currentMoveIndex = 0;
-        _currentMoveIndex = moveIndex;
-        var currentMove = _currentPlayerParticipant.pokemon.moveSet[_currentMoveIndex];
+        var currentPlayerParticipant = GetCurrentParticipant();
+        var currentMove = currentPlayerParticipant.pokemon.moveSet[moveIndex];
         movePowerPointsText.text = "PP: " + currentMove.powerpoints+ "/" + currentMove.maxPowerpoints;
         movePowerPointsText.color = currentMove.powerpoints == 0? Color.red : Color.black;
         moveTypeText.text = currentMove.type.GetTypeName;
@@ -671,113 +665,115 @@ public class Battle_handler : MonoBehaviour, IInjectable
         pokemonGainExp.OnExpGainComplete -= awaitEvent;
         yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
     }
-    private IEnumerator ProcessBattleEnd()
-    {
-        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
-        _inputStateHandler.OnStateChanged -= EnableBattleMessage;
-        _inputStateHandler.AddPlaceHolderState();
-        var playerData = _gameLoadingHandler.playerData;
-        var playerName = playerData.playerName;
-        string wildPokemonName = "";
-        if (!isTrainerBattle)
-        {
-            wildPokemonName = _wildPokemonHandler.participant.pokemon.pokemonDisplayName;
-        }
-        
-        switch (battleEndState)
-        {
-            case BattleEndState.BattleTerminated:
-                _dialogueHandler.DisplayBattleInfo("the battle ended");
-                break;
-            case BattleEndState.PlayerRanAway:
-                _dialogueHandler.DisplayBattleInfo(playerName + " ran away");
-                break;
-            case BattleEndState.PlayerWon:
-                yield return HandleEvolutions();
-                if (isTrainerBattle)
-                {
-                    var anyEnemy = battleParticipants[0].currentEnemies[0].pokemonTrainerAI.trainerData;
-                    var baseMoneyPayout = anyEnemy.BaseMoneyPayout;
-                    
-                    _dialogueHandler.DisplayBattleInfo(playerName + " defeated " + anyEnemy.TrainerName);
-                    
-                    yield return _battleIntroHandler.ShowEnemiesAfterBattle();
-                    _dialogueHandler.DisplayBattleInfo(anyEnemy.battleLossMessage);
-                    var moneyGained = baseMoneyPayout * lastOpponent.currentLevel * PrizeMoneyModifier();
-                    playerData.playerMoney += (int)math.floor(moneyGained);
-                    _dialogueHandler.DisplayBattleInfo(playerName + " recieved P" + moneyGained);
-                }
-                else
-                {
-                    _dialogueHandler.DisplayBattleInfo(playerName + " defeated " + wildPokemonName);
-                }
-                break;
-            case BattleEndState.PlayerLost:
-                if (isTrainerBattle)
-                {
-                    //last participant is always not null in this situation
-                    var anyEnemy = battleParticipants[0].currentEnemies[0];
-                    var baseMoneyPayout = anyEnemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
-                    
-                    var playersLastParticipant = battleParticipants.First(p => p.isActive & p.isPlayer);
-                    
-                    lastOpponent = playersLastParticipant.currentEnemies
-                        .First(p=>p.isActive).pokemon;
-                    playerData.playerMoney -= baseMoneyPayout * playerData.numBadges * lastOpponent.currentLevel;
-                }
-                else
-                {
-                    var partyPokemon = _pokemonPartyHandler.party
-                        .Where(pokemon => pokemon != null).ToList();
-                    
-                    var highestLevelOfParty = partyPokemon
-                        .OrderByDescending(p => p.currentLevel)
-                        .First().currentLevel;
-
-                    playerData.playerMoney -= 100 * highestLevelOfParty;
-                }
-                _dialogueHandler.DisplayBattleInfo("All your pokemon have fainted");
-                break;
-            case BattleEndState.PokemonRanAway:
-                _dialogueHandler.DisplayBattleInfo(wildPokemonName+" ran away");
-                break;
-        }
-        
-        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
-        _dialogueHandler.EndDialogue();
-        _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
-        yield return _battleIntroHandler.BlackFade();
-        yield return ResetUiAfterBattle();
-       
-        if(_overworldActions.fishing)
-        {
-            _overworldActions.EndFishing();
-        }
-        else
-        {
-            _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.Battle,0.15f);
-        }
-
-        IEnumerator HandleEvolutions()
-        {
-            foreach (var evolution in evolutionQueue)
-            {
-                if (evolution.participantToEvolve.isActive)
-                {
-                    var pokemon = evolution.participantToEvolve.pokemon;
-                    yield return _pokemonOperations.HandlePokemonEvolution(pokemon,evolution.evolutionIndex);
-                }
-            }
-            evolutionQueue.Clear();
-        }
-    }
     
-    public void EndBattle(BattleEndState state)
+    
+    public void EndBattle(BattleEndState state,Pokemon lastDefeatedOpponent)
     {
         if (battleOver) return;
         battleEndState = state;
         battleOver = true;
         StartCoroutine(ProcessBattleEnd());
+        return;
+        IEnumerator ProcessBattleEnd()
+        {
+            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            _inputStateHandler.OnStateChanged -= EnableBattleMessage;
+            _inputStateHandler.AddPlaceHolderState();
+            var playerData = _gameLoadingHandler.playerData;
+            var playerName = playerData.playerName;
+            string wildPokemonName = "";
+            if (!isTrainerBattle)
+            {
+                wildPokemonName = _wildPokemonHandler.participant.pokemon.pokemonDisplayName;
+            }
+            
+            switch (battleEndState)
+            {
+                case BattleEndState.BattleTerminated:
+                    _dialogueHandler.DisplayBattleInfo("the battle ended");
+                    break;
+                case BattleEndState.PlayerRanAway:
+                    _dialogueHandler.DisplayBattleInfo(playerName + " ran away");
+                    break;
+                case BattleEndState.PlayerWon:
+                    yield return HandleEvolutions();
+                    if (isTrainerBattle)
+                    {
+                        var anyEnemy = battleParticipants[0].currentEnemies[0].pokemonTrainerAI.trainerData;
+                        var baseMoneyPayout = anyEnemy.BaseMoneyPayout;
+                        
+                        _dialogueHandler.DisplayBattleInfo(playerName + " defeated " + anyEnemy.TrainerName);
+                        
+                        yield return _battleIntroHandler.ShowEnemiesAfterBattle();
+                        _dialogueHandler.DisplayBattleInfo(anyEnemy.battleLossMessage);
+                        var moneyGained = baseMoneyPayout * lastDefeatedOpponent.currentLevel * PrizeMoneyModifier();
+                        playerData.playerMoney += (int)math.floor(moneyGained);
+                        _dialogueHandler.DisplayBattleInfo(playerName + " received P" + moneyGained);
+                    }
+                    else
+                    {
+                        _dialogueHandler.DisplayBattleInfo(playerName + " defeated " + wildPokemonName);
+                    }
+                    break;
+                case BattleEndState.PlayerLost:
+                    if (isTrainerBattle)
+                    {
+                        //last participant is always not null in this situation
+                        var anyEnemy = battleParticipants[0].currentEnemies[0];
+                        var baseMoneyPayout = anyEnemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
+                        
+                        var playersLastParticipant = battleParticipants.First(p => p.isActive & p.isPlayer);
+                        
+                        var victoriousOpponent = playersLastParticipant.currentEnemies
+                            .First(p=>p.isActive).pokemon;
+                        playerData.playerMoney -= baseMoneyPayout * playerData.numBadges * victoriousOpponent.currentLevel;
+                    }
+                    else
+                    {
+                        var partyPokemon = _pokemonPartyHandler.party
+                            .Where(pokemon => pokemon != null).ToList();
+                        
+                        var highestLevelOfParty = partyPokemon
+                            .OrderByDescending(p => p.currentLevel)
+                            .First().currentLevel;
+
+                        playerData.playerMoney -= 100 * highestLevelOfParty;
+                    }
+                    _dialogueHandler.DisplayBattleInfo("All your pokemon have fainted");
+                    break;
+                case BattleEndState.PokemonRanAway:
+                    _dialogueHandler.DisplayBattleInfo(wildPokemonName+" ran away");
+                    break;
+            }
+            
+            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            _dialogueHandler.EndDialogue();
+            _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
+            yield return _battleIntroHandler.BlackFade();
+            yield return ResetUiAfterBattle();
+           
+            if(_overworldActions.fishing)
+            {
+                _overworldActions.EndFishing();
+            }
+            else
+            {
+                _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.Battle,0.15f);
+            }
+
+            IEnumerator HandleEvolutions()
+            {
+                foreach (var evolution in evolutionQueue)
+                {
+                    if (evolution.participantToEvolve.isActive)
+                    {
+                        var pokemon = evolution.participantToEvolve.pokemon;
+                        yield return _pokemonOperations.HandlePokemonEvolution(pokemon,evolution.evolutionIndex);
+                    }
+                }
+                evolutionQueue.Clear();
+            }
+        }
     }
     private IEnumerator ResetUiAfterBattle()
     {
@@ -790,8 +786,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
-        lastOpponent = null;
-        participantCount = 0;
+        
         for (var i=0;i<battleParticipants.Length;i++)
         {
             battleParticipants[i].pokemonImage.rectTransform.anchoredPosition = _defaultPokemonImagePositions[i];
@@ -826,9 +821,10 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private IEnumerator RunAway() 
     {
-        if(!_currentPlayerParticipant.canEscape)
+        var currentPlayerParticipant = GetCurrentParticipant();
+        if(!currentPlayerParticipant.canEscape)
         {
-            _dialogueHandler.DisplayBattleInfo(_currentPlayerParticipant.pokemon.pokemonDisplayName + " is trapped");
+            _dialogueHandler.DisplayBattleInfo(currentPlayerParticipant.pokemon.pokemonDisplayName + " is trapped");
         }
         else
         {
@@ -849,7 +845,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
                 }
                 if (random > 5) //50/50 chance to run
                 {
-                    EndBattle(BattleEndState.PlayerRanAway);
+                    EndBattle(BattleEndState.PlayerRanAway,null);
                 }
                 else
                 {

@@ -105,8 +105,7 @@ public class Enemy_trainer : BattleParticipantModule
         var numAlive = GetLivingPokemon();
         if (numAlive.Count == 0)
         {
-            _battleHandler.lastOpponent = participant.pokemon;
-            _battleHandler.EndBattle(BattleEndState.PlayerWon);
+            _battleHandler.EndBattle(BattleEndState.PlayerWon,participant.pokemon);
         }
         else
         {
@@ -178,7 +177,7 @@ public class Enemy_trainer : BattleParticipantModule
         
         if (_battleHandler.isDoubleBattle)
         {
-            partyPosition = _turnBasedCombatHandler.currentTurnIndex == 2 ? 0 : 1;
+            partyPosition = _turnBasedCombatHandler.CurrentTurnIndex == 2 ? 0 : 1;
         }
         var switchData = new SwitchOutData(partyPosition,partyIndex,participant);
         _turnBasedCombatHandler.SaveSwitchTurn(switchData);

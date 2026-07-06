@@ -139,7 +139,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
             return false;
         }
         var participantIndex = (_battleHandler.isDoubleBattle && swappingIn)
-            ?_turnBasedCombatHandler.currentTurnIndex :0;
+            ?_turnBasedCombatHandler.CurrentTurnIndex :0;
         
         var currentParticipant = _battleHandler.battleParticipants[participantIndex];
         if (!currentParticipant.canEscape && swappingIn)
@@ -161,7 +161,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
             }
             _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.SwitchPokemonIn);
 
-            var switchData = new SwitchOutData(_turnBasedCombatHandler.currentTurnIndex
+            var switchData = new SwitchOutData(_turnBasedCombatHandler.CurrentTurnIndex
                 ,memberIndex,currentParticipant);
             _turnBasedCombatHandler.SaveSwitchTurn(switchData);
             

@@ -171,7 +171,7 @@ public class Participant_Status : BattleParticipantModule
     public void StunCheck()
     {
         if (!participant.isActive) return;
-        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon !=
+        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex].pokemon !=
             participant.pokemon) return;
         if (participant.pokemon.statusEffect == StatusEffect.None) return;
         

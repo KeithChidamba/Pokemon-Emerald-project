@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public enum AssetDirectory
 { 
@@ -60,5 +62,34 @@ public class DirectoryHandler
     public static string GetDirectory(AssetDirectory directoryKey)
     {
         return RootAssetDirectory + AssetDirectories[directoryKey];
+    }
+    public static IEnumerator CopyDirectoryFiles(string sourceDir, string destinationDir, bool recursive)
+    {
+        // Ensure source exists
+        if (!Directory.Exists(sourceDir))
+            throw new DirectoryNotFoundException($"Source directory not found: {sourceDir}");
+
+        // Create destination if it doesn’t exist
+        Directory.CreateDirectory(destinationDir);
+
+        // Copy files
+        foreach (string filePath in Directory.GetFiles(sourceDir))
+        {
+            string fileName = Path.GetFileName(filePath);
+            string destPath = Path.Combine(destinationDir, fileName);
+            File.Copy(filePath, destPath, overwrite: true); // overwrite: true to replace existing files
+        }
+
+        // Copy subdirectories if recursive
+        if (recursive)
+        {
+            foreach (string directory in Directory.GetDirectories(sourceDir))
+            {
+                string dirName = Path.GetFileName(directory);
+                string destSubDir = Path.Combine(destinationDir, dirName);
+                yield return CopyDirectoryFiles(directory, destSubDir, true);
+            }
+        }
+
     }
 }

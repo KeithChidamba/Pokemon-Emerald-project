@@ -346,7 +346,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
         if (!_battleHandler.isTrainerBattle)
         {
-            _battleHandler.EndBattle(BattleEndState.BattleTerminated);
+            _battleHandler.EndBattle(BattleEndState.BattleTerminated,null);
             _moveUsageHandler.doingMove = false;
             yield break;
         }

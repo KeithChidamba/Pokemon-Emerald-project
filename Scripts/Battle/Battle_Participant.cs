@@ -256,7 +256,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         var alivePokemon = _pokemonPartyHandler.GetLivingPokemon();
         if (alivePokemon.Count==0)
         {
-            _battleHandler.EndBattle(BattleEndState.PlayerLost);
+            _battleHandler.EndBattle(BattleEndState.PlayerLost,null);
         }
         else
         {//select next pokemon to switch in

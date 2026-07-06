@@ -30,7 +30,7 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
     {
         if (!inBattle) return;
         //check if its pokemon's turn
-        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.currentTurnIndex].pokemon.pokemonID
+        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex].pokemon.pokemonID
             != participant.pokemon.pokemonID)
         {
             return;
@@ -44,12 +44,12 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
         else
         {
             inBattle = false;
-            _battleHandler.EndBattle(BattleEndState.PokemonRanAway);
+            _battleHandler.EndBattle(BattleEndState.PokemonRanAway,null);
         }
     }
     public IEnumerator EndWildBattle()
     {
-        _battleHandler.EndBattle(BattleEndState.PlayerWon);
+        _battleHandler.EndBattle(BattleEndState.PlayerWon, null);
         yield return null;
     }
     

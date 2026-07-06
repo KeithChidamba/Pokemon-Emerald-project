@@ -61,7 +61,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                 break;
             default:
                 _saveDataPath = "Assets/Save_data";
-                _tempSaveDataPath="Assets/Temp_Save_data";
+                _tempSaveDataPath ="Assets/Temp_Save_data";
                 break;
         }
         
@@ -253,7 +253,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         }
         foreach (var itemPath in storageItemList)
         {
-            var item   = LoadObjectFromJson<Item>(_saveDataPath + DirectoryHandler.GetSaveDirectory(SaveDataDirectory.StorageItems) +
+            var item = LoadObjectFromJson<Item>(_saveDataPath + DirectoryHandler.GetSaveDirectory(SaveDataDirectory.StorageItems) +
                                                   Path.GetFileName(itemPath));
             item.LoadData();
             _playerBagHandler.storageItems.Add(item);
@@ -338,35 +338,6 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         var files = Directory.GetFiles(path);
         foreach (var file in files)
             File.Delete(file);
-    }
-    private IEnumerator CopyCorrectSaveData(string sourceDir, string destinationDir, bool recursive)
-    {
-        // Ensure source exists
-        if (!Directory.Exists(sourceDir))
-            throw new DirectoryNotFoundException($"Source directory not found: {sourceDir}");
-
-        // Create destination if it doesn’t exist
-        Directory.CreateDirectory(destinationDir);
-
-        // Copy files
-        foreach (string filePath in Directory.GetFiles(sourceDir))
-        {
-            string fileName = Path.GetFileName(filePath);
-            string destPath = Path.Combine(destinationDir, fileName);
-            File.Copy(filePath, destPath, overwrite: true); // overwrite: true to replace existing files
-        }
-
-        // Copy subdirectories if recursive
-        if (recursive)
-        {
-            foreach (string directory in Directory.GetDirectories(sourceDir))
-            {
-                string dirName = Path.GetFileName(directory);
-                string destSubDir = Path.Combine(destinationDir, dirName);
-                yield return CopyCorrectSaveData(directory, destSubDir, true);
-            }
-        }
-
     }
 
     public void EraseSaveData()
@@ -516,7 +487,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             EraseSaveData();//empty old save data
             yield return new WaitForSecondsRealtime(1f);
             //copy new save data
-            yield return CopyCorrectSaveData(_tempSaveDataPath,_saveDataPath,recursive: true);
+            yield return DirectoryHandler.CopyDirectoryFiles(_tempSaveDataPath,_saveDataPath,recursive: true);
             yield return new WaitForSecondsRealtime(1f);
             EraseTemporarySaveData();
             _dialogueHandler.DisplayDetails("Game saved",false);
