@@ -12,8 +12,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public event Action OnNewTurn;
     public event Func<Battle_Participant,IEnumerator> OnMoveExecute;
     public event Action OnTurnsCompleted;
-    public int CurrentTurnIndex { get; private set; }
-
+    public int CurrentTurnIndex => currentTurnIndex;
+    [SerializeField]private int currentTurnIndex;
+    
     public bool faintEventDelay;
     public WeatherCondition currentWeather;
     public WeatherCondition clearWeather;
@@ -87,7 +88,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         AddTurn(turn);
         _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.Fight);
         if ((_battleHandler.isDoubleBattle && IsLastParticipant())
-            || CurrentTurnIndex == _battleHandler.validParticipantCount)
+            || currentTurnIndex == _battleHandler.validParticipantCount)
         {
             BeginTurnExecution();
         }
@@ -118,7 +119,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         
         var struggleTurn = new Turn(
             TurnUsage.UseStruggle,
-            attacker : CurrentTurnIndex
+            attacker : currentTurnIndex
             ,victim : randomEnemyIndex
             ,move : struggle
             ,attackerID : attacker.pokemon.pokemonID
@@ -132,7 +133,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         fakeMove.priority = 0;
             
         var switchTurn = new Turn(TurnUsage.SwitchOut,
-            attacker: CurrentTurnIndex,move:fakeMove
+            attacker: currentTurnIndex,move:fakeMove
             ,attackerID:Utility.Random16Bit());
             
         switchTurn.switchData = data;
@@ -143,13 +144,13 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         var livingParticipants = _battleHandler.battleParticipants.ToList();
         livingParticipants.RemoveAll(participant => participant.pokemon==null);
         if (livingParticipants.Last() ==
-            _battleHandler.battleParticipants[CurrentTurnIndex])
+            _battleHandler.battleParticipants[currentTurnIndex])
             return true;
         return false;
     }
     private void ResetTurnState()
     {
-        CurrentTurnIndex = 0;
+        currentTurnIndex = 0;
         currentWeather.weather = Weather.Clear;
         ClearTurn();
         faintEventDelay = false;
@@ -498,8 +499,8 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         if (swap.Participant.isPlayer)
         {
             swap.Participant.ResetParticipantState();
-            var party = _pokemonPartyHandler.party;
-            (party[swap.PartyPosition], party[swap.MemberToSwapWith]) = (party[swap.MemberToSwapWith], party[swap.PartyPosition]);
+            var party = _pokemonPartyHandler.Party;
+            _pokemonPartyHandler.SwapIndexes(swap.PartyPosition, swap.MemberToSwapWith);
             _pokemonPartyHandler.UpdateUIAfterSwap();
             
             _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
@@ -598,20 +599,20 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public void RemoveTurn()
     {
         //player wants to change their turn usage
-        RemoveTurn(CurrentTurnIndex-1);
-        CurrentTurnIndex --;
+        RemoveTurn(currentTurnIndex-1);
+        currentTurnIndex --;
         _inputStateHandler.OnStateRemoved += _battleHandler.SetupOptionsAfterTurnReset;
     }
     private void ChangeTurn(int maxParticipantIndex,int step)
     {
-        if (CurrentTurnIndex < maxParticipantIndex)
-            CurrentTurnIndex+=step;
+        if (currentTurnIndex < maxParticipantIndex)
+            currentTurnIndex+=step;
         else
-            CurrentTurnIndex = 0;
+            currentTurnIndex = 0;
         
         OnNewTurn?.Invoke();
         
-        if (!_battleHandler.battleParticipants[CurrentTurnIndex].isActive)
+        if (!_battleHandler.battleParticipants[currentTurnIndex].isActive)
         {
             if (_battleHandler.isDoubleBattle && IsLastParticipant())
             {

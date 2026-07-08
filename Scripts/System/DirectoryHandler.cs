@@ -5,7 +5,8 @@ using System.IO;
 public enum AssetDirectory
 { 
     Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, ItemUI, Items
-    ,AdditionalInfo,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData,OverworldItemPickups
+    ,AdditionalInfo,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData
+    ,OverworldItemPickups,TestAssets,TestLogs
 }
 public enum SaveDataDirectory
 {
@@ -36,7 +37,9 @@ public class DirectoryHandler
         {AssetDirectory.StoryObjectiveData,"Overwolrd_obj/Story Objectives/"},
         {AssetDirectory.PokeMartData,"Overwolrd_obj/Poke_Mart_Data"},
         {AssetDirectory.OverworldItemPickups,"Overwolrd_obj/Interactions/Overworld_Pickups"},
-        {AssetDirectory.TrainerData,"Enemies/Data/"}
+        {AssetDirectory.TrainerData,"Enemies/Data/"},
+        { AssetDirectory.TestLogs,"Tests/Logs/"},
+        {AssetDirectory.TestAssets,"Tests/Assets/"}
     };
     public static readonly Dictionary<SaveDataDirectory, string> SaveDataDirectories = new()
     {

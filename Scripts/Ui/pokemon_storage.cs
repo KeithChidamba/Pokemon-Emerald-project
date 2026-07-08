@@ -277,12 +277,12 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         Pokemon pokemon;
         if(currentUsageState == PCUsageState.Deposit)
         {
-            if (currentPokemonIndex == _pokemonPartyHandler.numMembers)
+            if (currentPokemonIndex == _pokemonPartyHandler.Party.Count)
             {
                 //the last index is the cancel button
                 return;
             }
-            pokemon = _pokemonPartyHandler.party[currentPokemonIndex];
+            pokemon = _pokemonPartyHandler.Party[currentPokemonIndex];
         }
         else
         {
@@ -333,7 +333,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         currentUsageState = newState;
         if(currentUsageState == PCUsageState.Withdraw)
         {
-            if (_pokemonPartyHandler.numMembers == _pokemonPartyHandler.maxNumMembers)
+            if (_pokemonPartyHandler.Party.Count == _pokemonPartyHandler.maxNumMembers)
             {
                 _dialogueHandler.DisplayDetails("Party is full");
                 ClosePC();
@@ -343,7 +343,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         }
         if(currentUsageState == PCUsageState.Deposit)
         {
-            if (_pokemonPartyHandler.numMembers==1)
+            if (_pokemonPartyHandler.Party.Count==1)
             {
                 _dialogueHandler.DisplayDetails("There must be at least 2 pokemon in your team");
                 ClosePC();
@@ -353,7 +353,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
             partyUI.SetActive(true);
             var partySelectables = new List<SelectableUI>();
 
-            for (var i = 0 ;i < _pokemonPartyHandler.numMembers; i++)
+            for (var i = 0 ;i < _pokemonPartyHandler.Party.Count; i++)
             {
                 var icon = partyPokemonIcons[i];
                 partySelectables.Add( new(icon.gameObject, () => SelectPartyPokemon(icon), true)); 
@@ -428,13 +428,13 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         {
             for (var i = 0;i < _pokemonPartyHandler.maxNumMembers; i++)
             {
-                if (_pokemonPartyHandler.party[i] == null)
+                if (_pokemonPartyHandler.Party[i] == null)
                 {
                     partyPokemonIcons[i].gameObject.SetActive(false);
                     continue;
                 }
                 partyPokemonIcons[i].gameObject.SetActive(true);
-                partyPokemonIcons[i].pokemon = _pokemonPartyHandler.party[i] ;
+                partyPokemonIcons[i].pokemon = _pokemonPartyHandler.Party[i] ;
                 partyPokemonIcons[i].LoadImage();
             }
             return;
@@ -568,7 +568,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     }
     private void RemoveFromParty(PC_party_pkm partyPokemon)
     {
-        if (_pokemonPartyHandler.numMembers > 1)
+        if (_pokemonPartyHandler.Party.Count > 1)
         {
             storagePartyOptionsParent.SetActive(true);
             storageOptionsText.text = "Deposit into which BOX?";
@@ -651,7 +651,7 @@ public class pokemon_storage : MonoBehaviour,IInjectable
         ResetOptions();
         if (isPartyPokemon)
         {
-            _dialogueHandler.DisplayDetails("You released "+ _pokemonPartyHandler.party[partyPosition-1].pokemonDisplayName);
+            _dialogueHandler.DisplayDetails("You released "+ _pokemonPartyHandler.Party[partyPosition-1].pokemonDisplayName);
             _pokemonPartyHandler.RemoveMember(partyPosition);
             totalPokemonCount--;
             RefreshStorageUi(true);
@@ -683,13 +683,12 @@ public class pokemon_storage : MonoBehaviour,IInjectable
     }
     private void AddPokemonToParty()
     {
-        if (_pokemonPartyHandler.numMembers < _pokemonPartyHandler.maxNumMembers)
+        if (_pokemonPartyHandler.Party.Count < _pokemonPartyHandler.maxNumMembers)
         {
             var pokemonIndex = SearchForPokemonIndex(selectedPokemonID);
             OnPokemonWithdraw?.Invoke(nonPartyPokemon[pokemonIndex]);
-            _pokemonPartyHandler.party[_pokemonPartyHandler.numMembers] = InstanceFactory.CreatePokemon(nonPartyPokemon[pokemonIndex]);
+            _pokemonPartyHandler.AddMemberFromSystemProcess(InstanceFactory.CreatePokemon(nonPartyPokemon[pokemonIndex]));
             DeleteNonPartyPokemon(pokemonIndex);
-            _pokemonPartyHandler.numMembers++;
             storageBoxes[currentBoxIndex].boxPokemon[currentIndexOfBox] = new StorageBoxPokemon
             {
                 pokemonID = string.Empty

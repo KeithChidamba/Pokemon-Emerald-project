@@ -245,7 +245,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     }
     private IEnumerator HandleMoveLearning(Pokemon currentPokemon)
     {
-        var isPartyPokemon = _playerParty.party.Contains(currentPokemon);
+        var isPartyPokemon = _playerParty.Party.Contains(currentPokemon);
         foreach (var move in currentPokemon.learnSet)
         {
             if (currentPokemon.currentLevel < move.requiredLevel)
@@ -518,11 +518,12 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                     pokemon.gender));
         }
     }
-
+//for single pokemon creation only
     public void CreateSpecificPokemon(Action<Pokemon> creationCallBack,Pokemon template,int desiredLevel,int evolutionStage)
     {
         StartCoroutine(HandlePokemonCreation(creationCallBack,template,desiredLevel,evolutionStage));
     }
+//bulk creation in a coroutine
     public IEnumerator HandlePokemonCreation(Action<Pokemon> creationCallBack,Pokemon template,int desiredLevel,int evolutionStage)
     {
         var newPokemon = InstanceFactory.CreatePokemon(template); 

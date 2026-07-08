@@ -36,7 +36,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public bool battleOver;
     public BattleEndState battleEndState;
     
-    private int _currentPlayerEnemyIndex;
     public float participantPositionOffset = 100;
     private List<Vector2> _defaultPokemonImagePositions = new();
     public BattleType currentBattleType;
@@ -50,6 +49,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public event Action<bool> OnBattleResult;
     public event Action OnSwitchIn;
     public event Action<Battle_Participant> OnSwitchOut;
+    public event Action<int> OnEnemySelected;
     private Action _checkParticipantsEachTurn;
     
     private Dialogue_handler _dialogueHandler;
@@ -118,53 +118,74 @@ public class Battle_handler : MonoBehaviour, IInjectable
         var currentPlayerParticipant = GetCurrentParticipant();
         if (!isDoubleBattle)
         {
-            ExecutePlayersMove(currentMoveIndex);
+            //if single battle, auto aim at enemy
+            ExecutePlayersMove(currentMoveIndex,2);
             return;
         }
-        if (currentPlayerParticipant.pokemon.moveSet[currentMoveIndex].isSelfTargeted 
-            || currentPlayerParticipant.pokemon.moveSet[currentMoveIndex].isMultiTarget)
+
+        var currentMove = currentPlayerParticipant.pokemon.moveSet[currentMoveIndex];
+        if (currentMove.isSelfTargeted || currentMove.isMultiTarget)
         {
-            _currentPlayerEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
-            ExecutePlayersMove(currentMoveIndex);
+            //then the enemy targeted doesn't matter so select any active one
+            var currentPlayerEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
+            ExecutePlayersMove(currentMoveIndex,currentPlayerEnemyIndex);
             return;
         }
+
+        var currentEnemyIndex = 2;
+        OnEnemySelected += ChangeSelectedEnemy;
+        void ChangeSelectedEnemy(int newIndex)
+        {
+            currentEnemyIndex = newIndex;
+        }
+        
         var enemySelectables = new List<SelectableUI>();
         for (var i = 2; i < battleParticipants.Length; i++)
         {
-            enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject,
-                ()=>ExecutePlayersMove(currentMoveIndex),true));
+            enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject, 
+               () => ExecutePlayersMove(currentMoveIndex,currentEnemyIndex),true));
         }
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleEnemySelection
             ,InputStateGroup.PokemonBattle,
-            stateDirection:InputDirection.Horizontal, selectableUis:enemySelectables, selecting:true));
+            stateDirection:InputDirection.Horizontal, selectableUis:enemySelectables, selecting:true
+            ,onExit:ResetEnemySelection,onClose:ResetEnemySelection));
     }
-    private void ExecutePlayersMove(int currentMoveIndex)
+
+    private void ResetEnemySelection()
+    {
+        OnEnemySelected = null;
+        ResetEnemyColor();
+    }
+    private void ExecutePlayersMove(int currentMoveIndex, int enemyIndex)
     {//selecting enemy only happens in double battle
         var currentPlayerParticipant = GetCurrentParticipant();
-        battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
-        UseMove(currentPlayerParticipant.pokemon.moveSet[currentMoveIndex], currentPlayerParticipant,_currentPlayerEnemyIndex); 
+        battleParticipants[enemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
+        Debug.Log($"move: {currentMoveIndex}, enemy {enemyIndex}");
+        UseMove(currentPlayerParticipant.pokemon.moveSet[currentMoveIndex], currentPlayerParticipant,enemyIndex); 
     }
 
     public void ResetEnemyColor()
     {
-       battleParticipants[_currentPlayerEnemyIndex]
-            .pokemonImage.color = Color.HSVToRGB(0,0,100);//reset color if cancelled
+        foreach (var participant in battleParticipants)
+        {
+            participant.pokemonImage.color = Color.HSVToRGB(0,0,100);
+        }
     }
-    public void SelectEnemy(int indexChange)
+    public void SelectEnemy(int indexChange,int previousIndex=2)
     {
-        battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
-        
         var partnerIndex = GetCurrentParticipant().GetPartnerIndex(); 
         var expectedTargets = new [] {partnerIndex,2,3}; //can attack partner and enemies
-         
+        
         var validTargets = expectedTargets.Where(index => battleParticipants[index].isActive).ToArray();
         
-        var currentTargetIndex = Array.IndexOf(validTargets,_currentPlayerEnemyIndex);      
+        var currentTargetIndex = Array.IndexOf(validTargets,previousIndex);      
         
         var choiceIndex = Mathf.Clamp(currentTargetIndex + indexChange,0,validTargets.Length-1);
         
-        _currentPlayerEnemyIndex = validTargets[choiceIndex];
-        battleParticipants[_currentPlayerEnemyIndex].pokemonImage.color = Color.HSVToRGB(17,96,54);
+        var currentEnemyIndex = validTargets[choiceIndex];
+        battleParticipants[currentEnemyIndex].pokemonImage.color = Color.HSVToRGB(17,96,54);
+        
+        OnEnemySelected?.Invoke(currentEnemyIndex);
     }
     public void SetupOptionsAfterTurnReset(InputState currentState)
     {
@@ -251,11 +272,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
         {
             InputStateName.PokemonBattleEnemySelection, InputStateName.PlaceHolder
         });
-        //if single battle, auto aim at enemy
-        if (!isDoubleBattle && _turnBasedCombatHandler.CurrentTurnIndex == 0)
-        {
-            _currentPlayerEnemyIndex = 2;
-        }
     }
     private IEnumerator SetValidParticipants()
     {
@@ -310,23 +326,21 @@ public class Battle_handler : MonoBehaviour, IInjectable
         currentParticipant.pokemonTrainerAI.MakeBattleDecision();
     }
     
-    public void SetBattleType(TrainerBattleInteractionInfo trainerInteraction)
+    public void SetBattleTypeAndStart(TrainerData data)
     {
         _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Battle);
         _pokemonPartyHandler.SortByFainted();
-        
-         currentBattleType = trainerInteraction.data.battleType;
-        switch (trainerInteraction.data.battleType)
+        currentBattleType = data.battleType;
+        switch (data.battleType)
         {
             case BattleType.Single:
-                StartCoroutine(StartSingleBattle(trainerInteraction.data));
+                StartCoroutine(StartSingleBattle(data));
                 break;
             case BattleType.SingleDouble:
-                StartCoroutine(StartSingleDoubleBattle(trainerInteraction.data));
+                StartCoroutine(StartSingleDoubleBattle(data));
                 break;
         }
     }
-
     private IEnumerator DisplayTrainerMessage(string message)
     {
         _inputStateHandler.AddPlaceHolderState();
@@ -348,7 +362,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         wildPokemon.activeForBattle = true;
         
         //set initial pokemon and enemy for player
-        player.pokemon = _pokemonPartyHandler.party[0];
+        player.pokemon = _pokemonPartyHandler.Party[0];
         player.currentEnemies.Add(wildPokemon);      
         //setup wild pokemon enemy AI 
         wildPokemon.pokemon = enemy;
@@ -373,7 +387,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         enemy.activeForBattle = true;
         
         //set initial pokemon and enemy for player
-        player.pokemon = _pokemonPartyHandler.party[0];
+        player.pokemon = _pokemonPartyHandler.Party[0];
         player.currentEnemies.Add(enemy);
         //setup enemy AI
         enemy.currentEnemies.Add(player);
@@ -542,7 +556,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
         for (var i = 0; i < currentPlayerParticipant.pokemon.moveSet.Count; i++)
         {
             availableMovesText[i].text = currentPlayerParticipant.pokemon.moveSet[i].moveName;
-            moveSelectables.Add( new (availableMovesText[i].gameObject,() => AllowEnemySelection(i),true));
+            var moveIndex = i;
+            moveSelectables.Add( new (availableMovesText[i].gameObject,() => AllowEnemySelection(moveIndex),true));
         }
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleMoveSelection
@@ -730,7 +745,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
                     }
                     else
                     {
-                        var partyPokemon = _pokemonPartyHandler.party
+                        var partyPokemon = _pokemonPartyHandler.Party
                             .Where(pokemon => pokemon != null).ToList();
                         
                         var highestLevelOfParty = partyPokemon

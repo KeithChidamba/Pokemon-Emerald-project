@@ -40,7 +40,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     [SerializeField]private int _currentPage;
     [SerializeField]private Pokemon currentPokemon;
     private int _currentPokemonIndex;
-    [SerializeField]private List<Pokemon> pokemonToView = new();
+    private IReadOnlyList<Pokemon> pokemonToView;
     public Action<int> onMoveSelected;
 
     public PokemonDetailsUsage CurrentUsage { get; private set; }
@@ -240,7 +240,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
             gender_img.gameObject.SetActive(false);
         }
     }
-    public void LoadDetails(Pokemon selectedPokemon,List<Pokemon> pokemonList)
+    public void LoadDetails(Pokemon selectedPokemon,IReadOnlyList<Pokemon> pokemonList)
     {
         OverlayUi.SetActive(true);
         pokemonToView = pokemonList;

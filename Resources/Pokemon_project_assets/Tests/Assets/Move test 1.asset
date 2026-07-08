@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79218e70f727cab51b39573c7a1e6e10, type: 3}
+  m_Name: Move test 1
+  m_EditorClassIdentifier: 
+  testType: 1
+  testName: Move test 1
+  playerTestData: {fileID: 11400000, guid: af15b32a21c0fb8a9ac644e964bae99a, type: 2}
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      pokemonLevel: 24
+      evolutionStageNumber: 1
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: ec2bd2bdc632c79beb9ef8d4c422f5bf, type: 2}
+      - {fileID: 11400000, guid: bf9a5e0e8dc1951d6948998c6aba2f40, type: 2}
+      - {fileID: 11400000, guid: 347e8d6b509bd8a49b47824d6d6ca87c, type: 2}
+    specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
+    specificGender: 1
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+      pokemonLevel: 12
+      evolutionStageNumber: 0
+      hasItem: 1
+      heldItem: {fileID: 11400000, guid: 0df08d4c7461bd586b88fcaf7a45cc03, type: 2}
+      moveSet: []
+    specificNature: {fileID: 11400000, guid: f8f55f13077eb0040baee3ea4cdc7b0e, type: 2}
+    specificGender: 2
+  testEnemy: {fileID: 11400000, guid: f396f0949dbbd2fffb2d3986d060d224, type: 2}

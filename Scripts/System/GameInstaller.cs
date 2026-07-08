@@ -6,6 +6,7 @@ public interface IInjectable
     public void Inject(ServiceContainer container);
     public void OnInject();
 }
+
 public class GameInstaller : MonoBehaviour
 {
     private ServiceContainer _container;
@@ -43,8 +44,10 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Move_handler moveHandler;
     [SerializeField] private GameSettingsHandler gameSettingsHandler;
     [SerializeField] private TypingInterfaceHandler typingInterfaceHandler;
+    [SerializeField] private TestingSetup testingSetupHandler;
     
     private event Action OnServicesInjected;
+    
     private void Awake()
     {
         _container = new ServiceContainer();
@@ -83,6 +86,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(gameSettingsHandler);
         _container.RegisterSingleton(moveLogicDatabase);
         _container.RegisterSingleton(typingInterfaceHandler);
+        _container.RegisterSingleton(testingSetupHandler);
         
         InstanceFactory.GetContainer(_container);//static class dependency
         
@@ -116,7 +120,7 @@ public class GameInstaller : MonoBehaviour
             if (obj is IInjectable injectable)
             {
                 injectable.Inject(_container);
-                OnServicesInjected += injectable.OnInject;
+                OnServicesInjected += () => injectable.OnInject();
             }
         }
         OnServicesInjected?.Invoke();

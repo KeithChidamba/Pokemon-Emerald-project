@@ -174,17 +174,17 @@ public static class InstanceFactory
         treeData.spriteData = data.spriteData;
         return treeData;
     }
-    private static TrainerPokemonData CreateTrainerPokemonData(TrainerPokemonData data)
+    private static TrainerPokemonData CreateTrainerPokemonData(TrainerPokemonData member)
     {
-        var dataCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
-        dataCopy.pokemon = CreatePokemon(data.pokemon);
+        var memberCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
+        memberCopy.data.pokemon = CreatePokemon(member.data.pokemon);
         var pokemonOperationsHandler = _serviceContainer.Resolve<PokemonOperations>();
-        pokemonOperationsHandler.SetPokemonTraits(dataCopy.pokemon);
-        dataCopy.moveSet = data.moveSet;
-        dataCopy.pokemonLevel = data.pokemonLevel;
-        dataCopy.hasItem = data.hasItem;
-        dataCopy.heldItem = data.heldItem;
-        return dataCopy;
+        pokemonOperationsHandler.SetPokemonTraits(memberCopy.data.pokemon);
+        memberCopy.data.moveSet = member.data.moveSet;
+        memberCopy.data.pokemonLevel = member.data.pokemonLevel;
+        memberCopy.data.hasItem = member.data.hasItem;
+        memberCopy.data.heldItem = member.data.heldItem;
+        return memberCopy;
     }
     public static Item CreateItem(Item item)
     {

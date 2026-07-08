@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
   pokemonLevel: 18
+  evolutionStageNumber: 0
   hasItem: 0
   heldItem: {fileID: 0}
   moveSet:
@@ -21,3 +22,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 598968aad070bee23b2b9e6dea464e8d, type: 2}
   - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
   - {fileID: 11400000, guid: 10a375b8cb263ba55ac9313920089a98, type: 2}
+  data:
+    pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+    pokemonLevel: 18
+    evolutionStageNumber: 0
+    hasItem: 0
+    heldItem: {fileID: 0}
+    moveSet:
+    - {fileID: 11400000, guid: 90238634db29d7fd4a2ac25996e0e971, type: 2}
+    - {fileID: 11400000, guid: 598968aad070bee23b2b9e6dea464e8d, type: 2}
+    - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+    - {fileID: 11400000, guid: 10a375b8cb263ba55ac9313920089a98, type: 2}

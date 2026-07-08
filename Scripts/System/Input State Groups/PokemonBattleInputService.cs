@@ -5,11 +5,13 @@ public class PokemonBattleInputService : IInputGroup
 {
     private InputStateHandler _inputStateHandler;
     private Battle_handler _battleHandler;
-
+    private Dialogue_handler _dialogueHandler;
+    private int _previousEnemySelectionIndex;
+    
     public PokemonBattleInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-       
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
     }
     public void DetermineOperation()
@@ -32,7 +34,7 @@ public class PokemonBattleInputService : IInputGroup
     
     private void SetupMoveSelection()
     {
-        _battleHandler.ResetEnemyColor();
+        _dialogueHandler.EndDialogue();
         ref InputState currentState = ref _inputStateHandler.currentState;
         currentState.currentSelectionIndex = 0;
         _inputStateHandler.SetupDynamicBoxNavigation(currentState.maxSelectableIndex+1,4,2);
@@ -41,8 +43,16 @@ public class PokemonBattleInputService : IInputGroup
 
     private void SetupEnemySelection()
     {
-        _battleHandler.SelectEnemy(3);
-        _inputStateHandler.OnInputLeft += ()=> _battleHandler.SelectEnemy(-1);
-        _inputStateHandler.OnInputRight += () => _battleHandler.SelectEnemy(1);
+        _battleHandler.OnEnemySelected += (index) => _previousEnemySelectionIndex = index;
+        _battleHandler.SelectEnemy(0);//select default enemy
+        
+        _inputStateHandler.OnInputLeft += ()=> SelectEnemy(-1);
+        _inputStateHandler.OnInputRight += () => SelectEnemy(1);
+        
+        void SelectEnemy(int indexChange)
+        {
+            _battleHandler.ResetEnemyColor();
+            _battleHandler.SelectEnemy(indexChange,_previousEnemySelectionIndex);
+        }
     }
 }

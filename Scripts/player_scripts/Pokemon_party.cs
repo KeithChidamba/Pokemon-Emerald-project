@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -13,8 +14,8 @@ public enum PartyUsage
 }
 public class Pokemon_party : MonoBehaviour,IInjectable
 {
-    public Pokemon[] party;
-    public int numMembers;
+    private List<Pokemon> party = new ();
+    public IReadOnlyList<Pokemon> Party => party;
     public int selectedMemberIndex;
     [SerializeField]private int memberToMove;
     public readonly int maxNumMembers = 6;
@@ -71,17 +72,14 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         if (_currentStepCount < 4) return;
         _currentStepCount = 0;
         
-        for (int i = 0; i < numMembers; i++)
+        foreach(var member in party)
         {
-            if (party[i] != null)
+            if (member.hp == 0) continue;
+            
+            if (member.statusEffect == StatusEffect.Poison)
             {
-                if (party[i].hp == 0) continue;
-                
-                if (party[i].statusEffect == StatusEffect.Poison)
-                {
-                    //no need for hp loss animation since this only happens outside ui
-                    party[i].hp--;
-                }
+                //no need for hp loss animation since this only happens outside ui
+                member.hp--;
             }
         }
     }
@@ -105,22 +103,17 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     private void UpdateCancelButton(int currentIndex)
     {
-        cancelButton.sprite = currentIndex < numMembers? memberCards[0].pokeballClosedImage.sprite
+        cancelButton.sprite = currentIndex < party.Count? memberCards[0].pokeballClosedImage.sprite
                 :memberCards[0].pokeballOpenImage.sprite;
     }
     public List<Pokemon> GetLivingPokemon()
     {
-        List<Pokemon> alivePokemon = new(GetValidPokemon());
-        alivePokemon.RemoveAll(p => p.hp <= 0);
-        return alivePokemon;
+        return Party.Where(pokemon => pokemon.hp > 0).ToList();
     }
-    public  List<Pokemon> GetValidPokemon()
+
+    public void AddMemberFromSystemProcess(Pokemon pokemon)
     {
-        List<Pokemon> validPokemon = new();
-        for (int i = 0; i < maxNumMembers; i++)
-            if (party[i] != null)
-                validPokemon.Add(party[i]);
-        return validPokemon;
+        party.Add(pokemon);
     }
     private bool IsValidSwap(int memberIndex,bool swappingIn)
     {
@@ -170,7 +163,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         }
         else
         {
-            if (numMembers > 1)
+            if (party.Count > 1)
             {
                 UpdatePartyUsageMessage("Select Pokemon to swap with");
                 moving = true;
@@ -317,10 +310,9 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         {
             newPokemon.nickName = newPokemon.pokemonName;
         }
-        if (numMembers<maxNumMembers)
+        if (party.Count<maxNumMembers)
         {
-            party[numMembers] = newPokemon;
-            numMembers++;
+            party.Add(newPokemon);
         }
         else
             _pokemonStorageHandler.AddPokemonToStorage(newPokemon);
@@ -329,11 +321,12 @@ public class Pokemon_party : MonoBehaviour,IInjectable
   
     public void SortByFainted()
     {
-        for (int i = 0; i < numMembers - 1; i++)
+        if (party.Count == 1) return;
+        for (int i = 0; i < party.Count - 1; i++)
         {
             bool swapped = false;
 
-            for (int j = 0; j < numMembers - i - 1; j++)
+            for (int j = 0; j < party.Count - i - 1; j++)
             {
                 var current = party[j];
                 var next = party[j + 1];
@@ -353,14 +346,12 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     public void RefreshMemberCards()
     {
-        numMembers = 0;
         for (int i=0;i<maxNumMembers;i++)
         {
-            if (party[i] != null)
+            if (i < party.Count)
             {
-                memberCards[numMembers].pokemon = party[i];
-                memberCards[numMembers].ActivateUI();
-                numMembers++;
+                memberCards[i].pokemon = party[i];
+                memberCards[i].ActivateUI();
             }
             else
             {
@@ -370,26 +361,25 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     public void RemoveMember(int partyPosition)
     {
-        partyPosition--;
-        party[partyPosition] = null;
-        numMembers--;
-        //sort
-        if(partyPosition < party.Length-1)
-        {
-            for (int i = partyPosition; i < party.Length - 1; i++)
-                party[i] = party[i + 1];
-            party[^1] = null;
-        }
+        party.RemoveAt(partyPosition-1);
+    }
+
+    public int GetMemberIndex(Pokemon member)
+    {
+        return party.IndexOf(member);
+    }
+    public void SwapIndexes(int partyPosition,int memberToSwapWith)
+    {
+        (party[partyPosition], party[memberToSwapWith]) = (party[memberToSwapWith], party[partyPosition]);
     }
     public void HealPartyPokemon()
     {
-        for (int i = 0; i < numMembers; i++)
+        foreach(var member in party)
         {
-            var pokemon = party[i];
-            pokemon.hp = pokemon.maxHp;
-            foreach (var move in pokemon.moveSet)
+            member.hp = member.maxHp;
+            foreach (var move in member.moveSet)
                 move.powerpoints = move.maxPowerpoints;
-            pokemon.statusEffect = StatusEffect.None;
+            member.statusEffect = StatusEffect.None;
         }
     }
 }

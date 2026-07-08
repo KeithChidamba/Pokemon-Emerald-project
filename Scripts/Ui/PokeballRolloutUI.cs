@@ -77,9 +77,9 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     {
         if (isPlayerPokeballs)
         {
-            if (pokeballIndex < _pokemonPartyHandler.numMembers)
+            if (pokeballIndex < _pokemonPartyHandler.Party.Count)
             {
-                var pokemon = _pokemonPartyHandler.party[pokeballIndex];
+                var pokemon = _pokemonPartyHandler.Party[pokeballIndex];
                 pokeballImage.sprite = DeterminePokeballImage(pokemon);
             }
             else

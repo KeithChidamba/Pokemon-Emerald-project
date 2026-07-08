@@ -367,8 +367,8 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             
             var randomIndexOfLiving = Utility
                 .RandomRange(excludedIndexes, living.Count);
-            
-            var pokemonAtIndex = Array.IndexOf(_pokemonPartyHandler.party,living[randomIndexOfLiving]);
+
+            var pokemonAtIndex = _pokemonPartyHandler.GetMemberIndex(living[randomIndexOfLiving]);
             var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,_victim);
             
             yield return _turnBasedCombatHandler.HandleSwap(switchData,true);

@@ -279,7 +279,7 @@ public class Bag : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("Can't do that in battle");
             return;
         }
-        var partyMember = _pokemonPartyHandler.party[memberIndex];
+        var partyMember = _pokemonPartyHandler.Party[memberIndex];
         _dialogueHandler.DisplayDetails("You took a " + partyMember.heldItem.itemName +" from "
                                              + partyMember.pokemonDisplayName);
         AddItem(partyMember.heldItem);
@@ -306,7 +306,7 @@ public class Bag : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("Pokemon can't hold that item");
             return;
         }
-        var partyMember = _pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberIndex];
+        var partyMember = _pokemonPartyHandler.Party[_pokemonPartyHandler.selectedMemberIndex];
         _inputStateHandler.ResetRelevantUi(new[] { InputStateName.PokemonPartyOptions });
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
         
@@ -364,7 +364,7 @@ public class Bag : MonoBehaviour,IInjectable
          void AllowItemUsage(int memberIndex)
          {
              _pokemonPartyHandler.OnMemberSelected -= AllowItemUsage;
-             _itemHandler.UseItem(itemToUse,_pokemonPartyHandler.party[memberIndex]);
+             _itemHandler.UseItem(itemToUse,_pokemonPartyHandler.Party[memberIndex]);
          }
      }
 

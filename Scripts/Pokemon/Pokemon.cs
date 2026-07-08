@@ -289,7 +289,7 @@ public class Pokemon : ScriptableObject
 
     private void CheckEvolutionRequirements(int evoIndex)
     {
-        var isPlayerPokemon = _pokemonPartyHandler.party.Contains(this);
+        var isPlayerPokemon = _pokemonPartyHandler.Party.Contains(this);
         
         if (requiresFriendshipEvolution)
         {

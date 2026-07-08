@@ -167,12 +167,12 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
     private void UpdateUi(int currentIndex)
     {
         if (isEmpty || !_isViewingCard) return;
-        if (currentIndex == _pokemonPartyHandler.numMembers)
+        if (currentIndex == _pokemonPartyHandler.Party.Count)
         {
             ChangeVisibility(false);
             return;
         }
-        ChangeVisibility(_pokemonPartyHandler.party[currentIndex] == pokemon);
+        ChangeVisibility(_pokemonPartyHandler.Party[currentIndex] == pokemon);
     }
     private void Update()
     {

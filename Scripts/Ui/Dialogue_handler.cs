@@ -21,7 +21,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     [SerializeField] private GameObject dialogueOptionBox;
     [SerializeField] private GameObject objectiveDialogueBox;
     [SerializeField] private TMP_Text objectiveDialougeText;
-    private DialogueOptionsManager _dialogueOptionsManager;
+    [SerializeField] private DialogueOptionsManager _dialogueOptionsManager;
     [SerializeField] private Transform dialogueUiParent;
     private List<GameObject> _currentDialogueOptions = new();
     public bool messagesLoading;
@@ -31,6 +31,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     
     public event Action<Overworld_interactable> OnOptionsDisplayed;
     public event Action OnDialogueEnded;
+    public event Action<string> OnDialogueDisplayed;
     private Battle_handler _battleHandler;
     private Player_movement _playerMovementHandler;
     private InputStateHandler _inputStateHandler;
@@ -50,7 +51,6 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     public void OnInject()
     {
         endOfDialoguePointer.LoadState(false);
-        _dialogueOptionsManager = dialogueOptionBox.GetComponent<DialogueOptionsManager>();
         _battleHandler.OnBattleEnd += () => messagesLoading = false;
         ResetText();
         dialougeText.overflowMode = TextOverflowModes.Page;
@@ -72,12 +72,10 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     public bool HandlingStateExit(InputState currentState)
     {
         if (!displaying) return false;
-        
         if (currentState.stateName == InputStateName.DialogueOptions)
         {
             return true;
         }
-        
         return canExitDialogue;
     }
     public void SetTextSpeed(int settingIndex)
@@ -278,7 +276,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         objectiveDialogueBox.SetActive(true);
         objectiveDialougeText.text = message;
     }
-
+    
     public void RemoveObjectiveText()
     {
         objectiveDialogueBox.SetActive(false);
@@ -295,6 +293,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         dialogueFinished = false;
         displaying = true; 
         dialougeText.text = currentInteraction.interactionMessage;
+        OnDialogueDisplayed?.Invoke(currentInteraction.interactionMessage);
         dialougeText.ForceMeshUpdate();
         RemovePointer();
         

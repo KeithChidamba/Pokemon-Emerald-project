@@ -152,7 +152,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         // Remove fainted or invalid Pokémon
         expReceivers.RemoveAll(p => p.hp <= 0);
         //only player pokemon receive exp
-        expReceivers.RemoveAll(p => !_pokemonPartyHandler.party.Contains(p));
+        expReceivers.RemoveAll(p => !_pokemonPartyHandler.Party.Contains(p));
         if (expReceivers.Count < 1) yield break;
 
         // Separate holders and participants

@@ -55,17 +55,18 @@ public class Enemy_trainer : BattleParticipantModule
         trainerParty.Clear();
         foreach (var member in trainerData.PokemonParty)
         {
-            yield return _pokemonOperations.HandlePokemonCreation(GetPokemonCopy,member.pokemon,member.pokemonLevel,member.evolutionStageNumber);
+            yield return _pokemonOperations.HandlePokemonCreation(GetPokemonCopy,member.data.pokemon
+                ,member.data.pokemonLevel,member.data.evolutionStageNumber);
             
             void GetPokemonCopy(Pokemon pokemonCopy)
             {
                 trainerParty.Add(pokemonCopy);
                 pokemonCopy.moveSet.Clear();
-                foreach (var move in member.moveSet)
+                foreach (var move in member.data.moveSet)
                 {
                     pokemonCopy.moveSet.Add(InstanceFactory.CreateMove(move));
                 }
-                if (member.hasItem) pokemonCopy.GiveItem(InstanceFactory.CreateItem(member.heldItem));
+                if (member.data.hasItem) pokemonCopy.GiveItem(InstanceFactory.CreateItem(member.data.heldItem));
             }
         }
     }
@@ -314,7 +315,7 @@ public class Enemy_trainer : BattleParticipantModule
             {//skip check switching because it's not a not calculator
                 if (flag!=AiFlags.CheckSwitching)
                 {
-                    Debug.Log($"{flag} flag has not been accounted for");
+                    //Debug.Log($"{flag} flag has not been accounted for");
                 }
                 continue;
             }

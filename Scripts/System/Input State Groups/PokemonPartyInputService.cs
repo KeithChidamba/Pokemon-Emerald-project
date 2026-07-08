@@ -32,15 +32,15 @@ public class PokemonPartyInputService: IInputGroup
 
     public void UpdateHealthBarColors()
     {
-        for (var i = 0;i<_pokemonPartyHandler.numMembers;i++)
+        for (var i = 0;i<_pokemonPartyHandler.Party.Count;i++)
         {
-            PokemonOperations.UpdateHealthPhase(_pokemonPartyHandler.party[i], 
+            PokemonOperations.UpdateHealthPhase(_pokemonPartyHandler.Party[i], 
                 _pokemonPartyHandler.memberCards[i].hpSliderImage);
         }
     }
     public void PokemonPartyOptions()
     {
-        var selectedPokemon = _pokemonPartyHandler.party[_pokemonPartyHandler.selectedMemberIndex];
+        var selectedPokemon = _pokemonPartyHandler.Party[_pokemonPartyHandler.selectedMemberIndex];
         var partyOptionsSelectables = new List<SelectableUI>
         {
             new(_pokemonPartyHandler.partyOptions[0]

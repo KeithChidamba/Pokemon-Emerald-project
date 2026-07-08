@@ -31,6 +31,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     private OverworldState _overworldStateHandler;
     private Bag _playerBagHandler;
     private GameSettingsHandler _gameSettingsHandler;
+    private TestingSetup _testingSetupHandler;
     private ServiceContainer _container;
 
     public void Inject(ServiceContainer container)
@@ -45,12 +46,15 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         _overworldStateHandler = container.Resolve<OverworldState>();
         _playerBagHandler = container.Resolve<Bag>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
+        _testingSetupHandler = container.Resolve<TestingSetup>();
         _container = container;
         gameObject.SetActive(true);
     }
 
     public void OnInject()
     {
+        if (_testingSetupHandler.environment == DevelopmentEnvironment.Testing) return;
+        
         OnSaveDataFail += HandleSaveError;
         
         switch (Application.platform)
@@ -280,19 +284,15 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     private void LoadPokemonData()
     {
         _pokemonStorageHandler.totalPokemonCount = 0;
-        _pokemonPartyHandler.numMembers = 0;
-        
         var partyPokemonList = GetJsonFilesFromPath(_saveDataPath + DirectoryHandler.GetSaveDirectory(SaveDataDirectory.PartyPokemon));
-        
-        _pokemonPartyHandler.numMembers = partyPokemonList.Count; 
         _pokemonStorageHandler.totalPokemonCount += partyPokemonList.Count;
         
-        for (int i = 0; i < partyPokemonList.Count; i++)
+        foreach (var pokemonJson in partyPokemonList)
         {
-            var pokemon = LoadObjectFromJson<Pokemon>(partyPokemonList[i]);
+            var pokemon = LoadObjectFromJson<Pokemon>(pokemonJson);
             pokemon.LoadDataAndDependencies(_container);
             LoadHeldItems(pokemon);
-            _pokemonPartyHandler.party[i] = pokemon;
+            _pokemonPartyHandler.AddMemberFromSystemProcess(pokemon);
         }
         
         _pokemonStorageHandler.nonPartyPokemon.Clear();
@@ -380,11 +380,10 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         _inputStateHandler.AddPlaceHolderState();
         _dialogueHandler.DisplayDetails("Saving...",false); 
         
-        for (int i = 0; i < _pokemonPartyHandler.numMembers; i++)
+        foreach (var pokemon in _pokemonPartyHandler.Party)
         {
             try
             {
-                var pokemon = _pokemonPartyHandler.party[i];
                 if(pokemon==null) throw new Exception("pokemon is null! ");
               
                 pokemon.SaveUnserializableData();

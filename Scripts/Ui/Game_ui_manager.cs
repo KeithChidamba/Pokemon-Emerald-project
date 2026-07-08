@@ -238,7 +238,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
 
     public void ViewPokemonParty(PartyUsage partyUsage)
     {
-        if (_pokemonPartyHandler.numMembers < 1)
+        if (_pokemonPartyHandler.Party.Count < 1)
         {
             _dialogueHandler.DisplayDetails("There a no pokemon in your party");
             return;
@@ -267,7 +267,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
         
         _pokemonPartyHandler.RefreshMemberCards();
         
-        for (var i = 0; i < _pokemonPartyHandler.numMembers; i++)
+        for (var i = 0; i < _pokemonPartyHandler.Party.Count; i++)
         {
             var pokemonIndex = i;
             partySelectables.Add(new(_pokemonPartyHandler.memberCards[i].gameObject
@@ -294,7 +294,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
             RemoveScreen();
         }
     }
-    public void ViewPokemonDetails(Pokemon initiallySelectedPokemon,List<Pokemon> pokemonToView)
+    public void ViewPokemonDetails(Pokemon initiallySelectedPokemon,IReadOnlyList<Pokemon> pokemonToView)
     { 
         AddScreen();
         var detailsSelectables = new List<SelectableUI>{
@@ -319,7 +319,7 @@ public class Game_ui_manager : MonoBehaviour,IInjectable
     }
     public void ViewPartyPokemonDetails(Pokemon selectedPokemon)
     {
-        ViewPokemonDetails(selectedPokemon,_pokemonPartyHandler.GetValidPokemon());
+        ViewPokemonDetails(selectedPokemon,_pokemonPartyHandler.Party);
     }
 
     public void ViewItemStorage()
