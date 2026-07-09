@@ -34,10 +34,10 @@ public class TestingSetup : MonoBehaviour,IInjectable
    public void OnInject()
    {
       //logging
-      _dialogueHandler.OnDialogueDisplayed += LogMessages;
+      _dialogueHandler.OnDialogueDisplayed += LogMessage;
       var playerTestData = Resources.Load<PlayerData>(DirectoryHandler.GetDirectory(AssetDirectory.TestAssets)+"Test Player");
       _gameLoadingHandler.playerData = playerTestData;
-      Debug.Log(_gameLoadingHandler.playerData.playerName);
+     
       //Add Tests
       var allTests = Resources.LoadAll<TestingData>(DirectoryHandler.GetDirectory(AssetDirectory.TestAssets));
       foreach(var testData in allTests)
@@ -47,17 +47,13 @@ public class TestingSetup : MonoBehaviour,IInjectable
          newTestLogicHandler.Inject(_container,testData);
          _tests.Add(newTestLogicHandler);
       }
-      Debug.Log(_tests.Count);
       _gameLoadingHandler.StartGame(false);
       StartCoroutine(RunTests());
-      void LogMessages(string newMessage)
-      {
-         testingLogs.Add(NextLogID,new(DateTime.Now,newMessage));
-      }
    }
-
-
-
+   private void LogMessage(string newMessage)
+   {
+      testingLogs.Add(NextLogID,new(DateTime.Now,newMessage));
+   }
    private void GetLogs()
    {
       var baseDir = "Assets/Resources/" + DirectoryHandler.GetDirectory(AssetDirectory.TestLogs) + "NewLogs.txt";
@@ -73,9 +69,10 @@ public class TestingSetup : MonoBehaviour,IInjectable
 
    private IEnumerator RunTests()
    {
-      yield return new WaitForSeconds(2f);
+      yield return new WaitForSeconds(0.5f);
       foreach (var test in _tests)
       {
+         LogMessage($"{test.testName} has begun: ");
          test.onTestResult += GetTestFeedBack;
          yield return StartCoroutine(test.BeginTest());
          if (test.testStatus == IntegrationTest.TestStatus.Failed)
@@ -86,7 +83,7 @@ public class TestingSetup : MonoBehaviour,IInjectable
          {
             test.onTestResult -= GetTestFeedBack;
             var result = test.testStatus == IntegrationTest.TestStatus.Failed? "Failed" : "Passed";
-            Debug.Log($"{test.testName} has {result}");
+            LogMessage($"{test.testName} has {result}");
          }
       }
       GetLogs();

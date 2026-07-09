@@ -103,7 +103,8 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     private void UpdateCancelButton(int currentIndex)
     {
-        cancelButton.sprite = currentIndex < party.Count? memberCards[0].pokeballClosedImage.sprite
+        cancelButton.sprite = currentIndex < party.Count? 
+            memberCards[0].pokeballClosedImage.sprite
                 :memberCards[0].pokeballOpenImage.sprite;
     }
     public List<Pokemon> GetLivingPokemon()

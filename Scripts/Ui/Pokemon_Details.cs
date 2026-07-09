@@ -8,9 +8,9 @@ using UnityEngine.UI;
 
 public enum PokemonDetailsUsage
 {
+    ViewData,
     LearnMoves,
-    AlterMoves,
-    ViewMoves
+    AlterMoves
 }
 public class Pokemon_Details : MonoBehaviour,IInjectable
 {
@@ -78,7 +78,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     }
     public void DeactivateDetailsUi()
     {
-        CurrentUsage = PokemonDetailsUsage.ViewMoves;
+        CurrentUsage = PokemonDetailsUsage.ViewData;
         OverlayUi.SetActive(false);
         Stats_ui.SetActive(false);
         Moves_ui.SetActive(false);
@@ -104,7 +104,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     
     public void SelectMove(int moveIndex)
     {
-        if (CurrentUsage != PokemonDetailsUsage.ViewMoves)
+        if (CurrentUsage != PokemonDetailsUsage.ViewData)
         {
             onMoveSelected?.Invoke(moveIndex);
             return;
@@ -168,7 +168,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
     
     private void LoadMovesUiPage()
     {
-        if (CurrentUsage != PokemonDetailsUsage.ViewMoves)
+        if (CurrentUsage != PokemonDetailsUsage.ViewData)
         {//auto-enter move ui state
             _inputStateHandler.currentState.selectableUis[2]?.eventForUi?.Invoke();
         }
@@ -246,7 +246,7 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         pokemonToView = pokemonList;
         currentPokemon = selectedPokemon;
         LoadOverlayInfo();
-        _currentPage = ( CurrentUsage != PokemonDetailsUsage.ViewMoves) ? 3 : 1;
+        _currentPage = ( CurrentUsage != PokemonDetailsUsage.ViewData) ? 3 : 1;
         LoadPage(_currentPage);
         _animationRoutine = StartCoroutine(PokemonAnimation());
     }

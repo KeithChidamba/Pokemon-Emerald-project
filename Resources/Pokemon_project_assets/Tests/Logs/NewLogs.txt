@@ -1,0 +1,14 @@
+2026/07/09 3:22:38 PM : You got a Marshtomp
+2026/07/09 3:22:39 PM : You got a Zubat
+2026/07/09 3:22:40 PM : Test Battle Begins!
+2026/07/09 3:22:45 PM : Test Grunt challenges you to a battle
+2026/07/09 3:22:50 PM : Test Grunt sent out Foe Wurmple and Foe Zigzagoon!
+2026/07/09 3:22:54 PM : Go! Marshtomp and Zubat!
+2026/07/09 3:23:15 PM : Marshtomp used Earthquake!
+2026/07/09 3:23:20 PM : It's not very effective!
+2026/07/09 3:23:23 PM : Foe Wurmple fainted!
+2026/07/09 3:23:26 PM : Marshtomp gained 15 EXP points
+2026/07/09 3:23:28 PM : Zubat gained 15 EXP points
+2026/07/09 3:23:31 PM : Critical Hit!
+2026/07/09 3:23:34 PM : Foe Zigzagoon fainted!
+2026/07/09 3:23:37 PM : Marshtomp gained 30 EXP points

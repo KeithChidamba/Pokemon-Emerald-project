@@ -122,8 +122,7 @@ public class Move_handler:MonoBehaviour,IInjectable
         
         yield return new WaitUntil(()=> !displayingDamage);
     }
-
-
+    
     private float CalculateConfusionDamage(Battle_Participant confusionVictim)
     {
         int level = confusionVictim.pokemon.currentLevel;
@@ -137,8 +136,6 @@ public class Move_handler:MonoBehaviour,IInjectable
         float baseDamage = ((levelFactor * power * attackDefenseRatio) / 50f) + 2f;
 
         int damage = Mathf.FloorToInt(baseDamage * randomFactor);
-
-        if (damage < 1) damage = 1;
 
         return damage;
     }
@@ -183,8 +180,6 @@ public class Move_handler:MonoBehaviour,IInjectable
         float damageModifier = critValue * randomFactor;
 
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
-
-        if (damageDealt < 1) damageDealt = 1;
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, struggle, damageDealt) ?? damageDealt;
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff, struggle.type.typeEnum);
@@ -238,8 +233,6 @@ public class Move_handler:MonoBehaviour,IInjectable
         float damageModifier = critValue * stab * typeEffectiveness * randomFactor;
         
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
-        
-        if (damageDealt < 1) damageDealt = 1;
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeEnum);

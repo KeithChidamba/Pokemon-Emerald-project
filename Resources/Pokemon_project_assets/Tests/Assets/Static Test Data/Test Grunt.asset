@@ -22,5 +22,5 @@ MonoBehaviour:
   battleType: 1
   trainerAiFlags: 0000000001000000
   battleIntroSprite: {fileID: 1807993842, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
-  battleLossMessage: Test Battle Begins!
-  battleIntroMessage: Test Battle Over!
+  battleLossMessage: Test Battle Over!
+  battleIntroMessage: Test Battle Begins!

@@ -160,7 +160,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {//selecting enemy only happens in double battle
         var currentPlayerParticipant = GetCurrentParticipant();
         battleParticipants[enemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
-        Debug.Log($"move: {currentMoveIndex}, enemy {enemyIndex}");
         UseMove(currentPlayerParticipant.pokemon.moveSet[currentMoveIndex], currentPlayerParticipant,enemyIndex); 
     }
 

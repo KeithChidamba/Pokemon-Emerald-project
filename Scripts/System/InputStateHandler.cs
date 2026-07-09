@@ -9,7 +9,7 @@ public interface IInputGroup
 {
     public void DetermineOperation();
 }
-
+[Serializable]
 public class RemovalJob
 {
     public InputState state;
@@ -446,11 +446,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         List<InputState> inputStates = new List<InputState>();
         
         inputStates.AddRange(GetRelevantStates(group));
-        
-        foreach (var state in inputStates)
-        {
-            AddRemoval(state);
-        }
+        AddRemovals(inputStates);
     }
     public void ResetRelevantUi(InputStateName[] stateNames)
     {
@@ -461,10 +457,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
             var state = GetState(stateName);
             if(state != null) inputStates.Add(state);
         }
-        foreach (var state in inputStates)
-        {
-            AddRemoval(state);
-        }
+        AddRemovals(inputStates);
     }
     public void ResetRelevantUi(InputStateName stateName,bool manualExit=false)
     {
@@ -472,22 +465,28 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         if (state == null) return;
         AddRemoval(state,manualExit);
     }
-
     public void RemoveTopInputLayer(bool invokeOnExit)
     {
         currentState.onExit = invokeOnExit? currentState.onExit:null;
         AddRemoval(stateLayers.Last(),true);
     }
-    private void AddRemoval(InputState stateToRemove,bool manualExit=false)
+    private void AddRemoval(InputState statesToRemove,bool manualExit=false)
     {
-        var removalExists = stateRemovalJobs.Any(s => s.state.stateName == stateToRemove.stateName);
-        if (!removalExists)
+        AddRemovals(new List<InputState>{statesToRemove},manualExit);
+    }
+    private void AddRemovals(List<InputState> statesToRemove,bool manualExit=false)
+    {
+        foreach (var stateToRemove in statesToRemove)
         {
-            stateRemovalJobs.Add(new(stateToRemove,manualExit));
-            if (!_processingStateRemoval)
+            var removalExists = stateRemovalJobs.Any(s => s.state.stateName == stateToRemove.stateName);
+            if (!removalExists)
             {
-                StartCoroutine(ProcessStateRemoval());
+                stateRemovalJobs.Add(new(stateToRemove,manualExit));
             }
+        }
+        if (!_processingStateRemoval && stateRemovalJobs.Count > 0)
+        {
+            StartCoroutine(ProcessStateRemoval());
         }
     }
     private IEnumerator ProcessStateRemoval()

@@ -1,5 +1,3 @@
-using UnityEngine.Serialization;
-
 [System.Serializable]
 public class Barrier
 {
