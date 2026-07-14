@@ -82,7 +82,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         if (_turnHistory.Any(t => t.attackerID == turn.attackerID))
         {
             //for testing incase new bug
-            Debug.Log("duplicate detected, index of : "+turn.attackerIndex);
+            Debug.Log("duplicate detected, index of : "+turn.attackerKey);
             return;
         }
         AddTurn(turn);
@@ -109,18 +109,18 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         typelessType.typeEnum = PokemonType.Typeless;
         struggle.type = typelessType;
         
-        var validEnemies = attacker.currentEnemies
+        var validEnemyKeys = attacker.currentEnemies
             .Where(enemy => enemy.isActive)
-            .Select(enemy => Array.IndexOf(_battleHandler.battleParticipants, enemy))
+            .Select(enemy => enemy.participantKey)
             .ToList();
         
-        var randomEnemyIndex = validEnemies[Utility.RandomRange(0, validEnemies.Count)];
-        var victim = _battleHandler.battleParticipants[randomEnemyIndex];
+        var randomEnemyKey = validEnemyKeys[Utility.RandomRange(0, validEnemyKeys.Count)];
+        var victim = _battleHandler.GetParticipant(randomEnemyKey);
         
         var struggleTurn = new Turn(
             TurnUsage.UseStruggle,
-            attacker : currentTurnIndex
-            ,victim : randomEnemyIndex
+            attackerKey : _battleHandler.GetCurrentParticipant().participantKey
+            ,victimKey : victim.participantKey
             ,move : struggle
             ,attackerID : attacker.pokemon.pokemonID
             ,victimID : victim.pokemon.pokemonID);
@@ -133,7 +133,8 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         fakeMove.priority = 0;
             
         var switchTurn = new Turn(TurnUsage.SwitchOut,
-            attacker: currentTurnIndex,move:fakeMove
+            attackerKey: _battleHandler.GetCurrentParticipant().participantKey
+            ,move:fakeMove
             ,attackerID:Utility.Random16Bit());
             
         switchTurn.switchData = data;
@@ -141,11 +142,14 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     }
     private bool IsLastParticipant()
     {
-        var livingParticipants = _battleHandler.battleParticipants.ToList();
-        livingParticipants.RemoveAll(participant => participant.pokemon==null);
-        if (livingParticipants.Last() ==
-            _battleHandler.battleParticipants[currentTurnIndex])
+        var livingParticipants = _battleHandler.GetParticipants
+            .Where(participant => participant.isActive)
+            .Select(p=>p.participantKey).ToList();
+        
+        if (livingParticipants.Last() == _battleHandler.GetCurrentParticipant().participantKey)
+        {
             return true;
+        }
         return false;
     }
     private void ResetTurnState()
@@ -298,8 +302,8 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             
             currentTurn.turnExecuted = true;
             
-            var attacker=_battleHandler.battleParticipants[currentTurn.attackerIndex];
-            var victim=_battleHandler.battleParticipants[currentTurn.victimIndex];
+            var attacker=_battleHandler.GetParticipant(currentTurn.attackerKey);
+            var victim=_battleHandler.GetParticipant(currentTurn.victimKey);
             
             attacker.isSemiInvulnerable = false;
             
@@ -430,8 +434,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         void SwitchAccepted()
         {
             _battleHandler.OnSwitchIn += ResetEvent;
-            var currentParticipant = _battleHandler.battleParticipants[0];
-            currentParticipant.SetupSwitchOut();
+            _battleHandler.GetParticipant(BattleParticipantKey.Player).SetupSwitchOut();
         }
         void ResetEvent()
         {
@@ -443,26 +446,26 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     {
         if (forcedSwap)
         {
-            _dialogueHandler.DisplayBattleInfo(swap.Participant.pokemon.pokemonDisplayName
+            _dialogueHandler.DisplayBattleInfo(swap.participant.pokemon.pokemonDisplayName
                                                         + " was blown out");
         }
         else
         {
-            if (swap.Participant.isPlayer)
+            if (swap.participant.isPlayer)
             {
                 _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName
-                                                            + " withdrew " + swap.Participant.pokemon.pokemonDisplayName);
+                                                            + " withdrew " + swap.participant.pokemon.pokemonDisplayName);
             }
             else
             {
-                _dialogueHandler.DisplayBattleInfo(swap.Participant.pokemonTrainerAI.trainerData.TrainerName
-                                                            +" withdrew "+swap.Participant.pokemon.pokemonDisplayName);
+                _dialogueHandler.DisplayBattleInfo(swap.participant.pokemonTrainerAI.trainerData.TrainerName
+                                                            +" withdrew "+swap.participant.pokemon.pokemonDisplayName);
             }
         }
         
-        if (swap.Participant.isPlayer || forcedSwap)
+        if (swap.participant.isPlayer || forcedSwap)
         {
-            yield return _battleVisualsHandler.WithdrawPokemon(swap.Participant);
+            yield return _battleVisualsHandler.WithdrawPokemon(swap.participant);
         }
         //check if move used was pursuit
         var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
@@ -470,10 +473,10 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         
         if(pursuitUsersTurn is { turnExecuted: false })
         {
-            var attacker=_battleHandler.battleParticipants[pursuitUsersTurn.attackerIndex];
-            var victim=_battleHandler.battleParticipants[pursuitUsersTurn.victimIndex];
+            var attacker=_battleHandler.GetParticipant(pursuitUsersTurn.attackerKey);
+            var victim=_battleHandler.GetParticipant(pursuitUsersTurn.victimKey);
             
-            if (victim == swap.Participant)
+            if (victim == swap.participant)
             {
                 bool pokemonFainted = false;
 
@@ -496,22 +499,22 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             }
         }
         
-        if (swap.Participant.isPlayer)
+        if (swap.participant.isPlayer)
         {
-            swap.Participant.ResetParticipantState();
+            swap.participant.ResetParticipantState();
             var party = _pokemonPartyHandler.Party;
-            _pokemonPartyHandler.SwapIndexes(swap.PartyPosition, swap.MemberToSwapWith);
+            _pokemonPartyHandler.SwapIndexes(swap.partyPosition, swap.memberToSwapWith);
             _pokemonPartyHandler.UpdateUIAfterSwap();
             
             _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
-            yield return _battleIntroHandler.SwitchInPokemon(swap.Participant,party[swap.PartyPosition]);
+            yield return _battleIntroHandler.SwitchInPokemon(swap.participant,party[swap.partyPosition]);
         }
         else
         {
-            swap.Participant.ResetParticipantState();
-            var enemyParty = swap.Participant.pokemonTrainerAI.trainerParty;
-            (enemyParty[swap.PartyPosition], enemyParty[swap.MemberToSwapWith]) = (enemyParty[swap.MemberToSwapWith], enemyParty[swap.PartyPosition]);
-            yield return _battleIntroHandler.SwitchInPokemon(swap.Participant,enemyParty[swap.PartyPosition]);
+            swap.participant.ResetParticipantState();
+            var enemyParty = swap.participant.pokemonTrainerAI.trainerParty;
+            (enemyParty[swap.partyPosition], enemyParty[swap.memberToSwapWith]) = (enemyParty[swap.memberToSwapWith], enemyParty[swap.partyPosition]);
+            yield return _battleIntroHandler.SwitchInPokemon(swap.participant,enemyParty[swap.partyPosition]);
         }
     }
 
@@ -521,7 +524,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         {
             if (turn.turnUsage==TurnUsage.SwitchOut)//must check this first to avoid null ref
             {
-                if (turn.switchData.MemberToSwapWith==memberPosition)
+                if (turn.switchData.memberToSwapWith==memberPosition)
                 {
                     return true;
                 }
@@ -612,7 +615,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         
         OnNewTurn?.Invoke();
         
-        if (!_battleHandler.battleParticipants[currentTurnIndex].isActive)
+        if (!_battleHandler.GetCurrentParticipant().isActive)
         {
             if (_battleHandler.isDoubleBattle && IsLastParticipant())
             {
@@ -624,14 +627,17 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     {
         var random = Utility.RandomRange(1, 100);
         var hitChance = turn.move.moveAccuracy *
-                           (_battleHandler.battleParticipants[turn.attackerIndex].pokemon.accuracy / 
-                            _battleHandler.battleParticipants[turn.victimIndex].pokemon.evasion);
+                           (_battleHandler.GetParticipant(turn.attackerKey).pokemon.accuracy / 
+                            _battleHandler.GetParticipant(turn.victimKey).pokemon.evasion);
         return hitChance>random;
     }
     private void SetPriority()
     {
-        var orderBySpeed = _turnHistory.OrderByDescending(p => _battleHandler.battleParticipants[p.attackerIndex].pokemon.speed).ToList();
-        var priorityList = orderBySpeed.OrderByDescending(p => p.move.priority).ToList();
+        var orderBySpeed = _turnHistory
+            .OrderByDescending(turn => 
+                _battleHandler.GetParticipant(turn.attackerKey).pokemon.speed).ToList();
+        
+        var priorityList = orderBySpeed.OrderByDescending(turn => turn.move.priority).ToList();
         ClearTurn();
         _turnHistory.AddRange(priorityList);
     }

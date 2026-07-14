@@ -5,8 +5,6 @@ using UnityEngine;
 [Serializable]
 public class Held_Items : BattleParticipantModule
 {
-    private Item _heldItem;
-    
     private Battle_handler _battleHandler;
     private Move_handler _moveUsageHandler;
     private Dialogue_handler _dialogueHandler;
@@ -17,65 +15,65 @@ public class Held_Items : BattleParticipantModule
         _battleHandler = container.Resolve<Battle_handler>();
         _moveUsageHandler = container.Resolve<Move_handler>();
     }
-    void DepleteHeldItem()
+    void DepleteHeldItem(Item heldItem)
     {
-        _heldItem.quantity = _heldItem.isHeldItem? 1 : _heldItem.quantity-1; 
+        heldItem.quantity = heldItem.isHeldItem? 1 : heldItem.quantity-1; 
     }
     public IEnumerator CheckForUsableItem()
     {
         if (!participant.pokemon.hasItem) yield break;
         
-        _heldItem = participant.pokemon.heldItem;
-        if (_heldItem.quantity == 0 && !_heldItem.isHeldItem)
+        var heldItem = participant.pokemon.heldItem;
+        if (heldItem.quantity == 0 && !heldItem.isHeldItem)
         {//remove consumable held items that are depleted, not ones that just have special functionality
             participant.pokemon.RemoveHeldItem(); yield break; 
         }
-        if (!_heldItem.canBeUsedInBattle) yield break;
+        if (!heldItem.canBeUsedInBattle) yield break;
         
-        switch (_heldItem.itemType)
+        switch (heldItem.itemType)
         {
             case ItemType.Berry:
-                yield return DetermineBerryEffect();
+                yield return DetermineBerryEffect(heldItem);
                 break;
             case ItemType.HealHp:
-                yield return CheckHealCondition();
+                yield return CheckHealCondition(heldItem);
                 break;
             case ItemType.Status:
-                yield return CheckStatusCondition();
+                yield return CheckStatusCondition(heldItem);
                 break;
             //in the future, if there's need to add special held items like focus sash, create new type of item and add it to this switch
         }
         yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
     }
-    private IEnumerator DetermineBerryEffect()
+    private IEnumerator DetermineBerryEffect(Item heldItem)
     {
-        var berryInfo = _heldItem.GetModule<BerryInfoModule>();
+        var berryInfo = heldItem.GetModule<BerryInfoModule>();
         switch (berryInfo.berryType)
         {
             case  Berry.HpHeal:
-                yield return CheckHealCondition();
+                yield return CheckHealCondition(heldItem);
                 break;
             case  Berry.StatusHeal:
-                yield return CheckStatusCondition();
+                yield return CheckStatusCondition(heldItem);
                 break;
             case  Berry.ConfusionHeal:
                 yield return CheckIfConfused();
                 break;
         }
     }
-    private IEnumerator CheckHealCondition()
+    private IEnumerator CheckHealCondition(Item heldItem)
     {
         if(participant.pokemon.hp >= (participant.pokemon.maxHp/2)) yield break;
         
-        DepleteHeldItem();
-        yield return GetHealing();
+        DepleteHeldItem(heldItem);
+        yield return GetHealing(heldItem);
     }    
-    private IEnumerator CheckStatusCondition()
+    private IEnumerator CheckStatusCondition(Item heldItem)
     {
         if(participant.pokemon.statusEffect == StatusEffect.None) yield break;
 
-        DepleteHeldItem();
-       yield return GetStatusHealing();
+        DepleteHeldItem(heldItem);
+       yield return GetStatusHealing(heldItem);
     }
     private IEnumerator CheckIfConfused()
     {
@@ -83,19 +81,18 @@ public class Held_Items : BattleParticipantModule
 
         _dialogueHandler.DisplayDetails(participant.pokemon.pokemonDisplayName+"'s Persim berry healed its confusion");
         participant.isConfused = false;
-
     }
-    private IEnumerator GetHealing()
+    private IEnumerator GetHealing(Item heldItem)
     { 
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+_heldItem.itemName +" healed it");
-        var healEffect = _heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+heldItem.itemName +" healed it");
+        var healEffect = heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
         _moveUsageHandler.HealthGainDisplay(healEffect,healthGainer:participant);
         yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);
     }
-    private IEnumerator GetStatusHealing()
+    private IEnumerator GetStatusHealing(Item heldItem)
     { 
         Debug.Log("triggered status held item");
-        var statusInfo = _heldItem.GetModule<StatusHealInfoModule>();
+        var statusInfo = heldItem.GetModule<StatusHealInfoModule>();
         var curableStatus = statusInfo.statusEffect;
         
         if (curableStatus == StatusEffect.Poison &&
@@ -110,7 +107,7 @@ public class Held_Items : BattleParticipantModule
         }
         participant.statusHandler.RemoveStatusEffect();
         _battleHandler.RefreshStatusEffectUI();
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+_heldItem.itemName +" healed it");
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+heldItem.itemName +" healed it");
     }
 
 }

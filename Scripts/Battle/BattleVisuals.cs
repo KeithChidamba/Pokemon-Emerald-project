@@ -10,7 +10,12 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public Animator swapOutAnimator;
     public GameObject pokeballImage;
     private Vector2 _defaultParticipantImageSize;
-    private int[] _enemyPokeballXPositions={155,250,330};
+    private Dictionary<int,int> _enemyPokeballXPositions = new()
+    {
+        {2,155},
+        {1,250},
+        {3,330}
+    };
     private List<(Image img,Vector2 pos)> _statChangeImages=new();
     public Sprite[] statChangeSprites;
     private Dictionary<Stat, Sprite> statChangeVisuals = new();
@@ -32,7 +37,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public void OnInject()
     {
         _battleHandler.OnBattleEnd += ResetAfterBattle;
-        _defaultParticipantImageSize = _battleHandler.battleParticipants[0].pokemonImage.rectTransform.sizeDelta;
+        _defaultParticipantImageSize = _battleHandler.GetParticipant(BattleParticipantKey.Player).pokemonImage.rectTransform.sizeDelta;
         statChangeVisuals.Add(Stat.Attack,statChangeSprites[0]);
         statChangeVisuals.Add(Stat.Defense,statChangeSprites[1]);
         statChangeVisuals.Add(Stat.Speed,statChangeSprites[2]);
@@ -234,12 +239,12 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     {//wild battle is always single battle
         playerBattleAnimator.gameObject.SetActive(true);
         pokeballImage.SetActive(true);
-        var pkmImageRect = _battleHandler.battleParticipants[0].pokemonImage.rectTransform;
+        var pkmImageRect = _battleHandler.GetParticipant(BattleParticipantKey.Player).pokemonImage.rectTransform;
         var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-pkmImageRect.rect.height);
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
         playerBattleAnimator.Play("pokemon catch");
         yield return new WaitForSeconds(1.6f);
-        _battleHandler.battleParticipants[2].pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
+        _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
         yield return new WaitForSeconds(0.5f);
     }
     public IEnumerator DisplayPokemonCatch()
@@ -254,9 +259,10 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     {
         playerBattleAnimator.Play("pokeball escape");
         yield return new WaitForSeconds(1f);
-        _battleHandler.battleParticipants[0].pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        player.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
         
-        var pkmImageRect = _battleHandler.battleParticipants[0].pokemonImage.rectTransform;
+        var pkmImageRect = player.pokemonImage.rectTransform;
         var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y+pkmImageRect.rect.height);
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
         pokeballImage.SetActive(false);
@@ -280,8 +286,8 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         int positionIndex;
         int verticalPokeballPos = 300;
         if (_battleHandler.isDoubleBattle)
-        {//magic numbers, im sorry.
-            positionIndex = participant.GetPartnerIndex() > 2? 0:2;
+        {
+            positionIndex = (int)participant.GetPartnerKey();
         }
         else
         {
@@ -343,6 +349,6 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     {
         pokeballImage.SetActive(false);
         //After wild battle, reset image size in-case of pokeball interaction
-        _battleHandler.battleParticipants[2].pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
+        _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
     }
 }

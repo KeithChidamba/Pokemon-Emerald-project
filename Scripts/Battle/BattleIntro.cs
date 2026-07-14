@@ -147,7 +147,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
     }
     public IEnumerator PlayWildIntroSequence()
     {
-        var participants = _battleHandler.battleParticipants;
+        var participants = _battleHandler.GetParticipants;
 
         for (var i=0;i<4;i++)
         {
@@ -198,7 +198,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
     {
         string message = "";
         challengers.Clear();
-        var participants = _battleHandler.battleParticipants;
+        var participants = _battleHandler.GetParticipants;
 
         if (_battleHandler.currentBattleType == BattleType.SingleDouble)
         {
@@ -310,7 +310,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
     }
     public IEnumerator ShowEnemiesAfterBattle()
     {
-        var participants = _battleHandler.battleParticipants;
+        var participants = _battleHandler.GetParticipants;
         for (var i = 0; i < challengers.Count; i++)
         {
             participants[i + 2].participantUI.SetActive(false);

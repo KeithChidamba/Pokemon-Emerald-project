@@ -87,7 +87,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     }
     public List<Battle_Participant> TargetAllExceptSelf()
     {
-        var allParticipants = _battleHandler.battleParticipants.ToList();
+        var allParticipants = _battleHandler.GetParticipants.ToList();
         allParticipants.RemoveAll(p => !p.isActive);
         allParticipants.RemoveAll(p => p.pokemon.pokemonID == _attacker.pokemon.pokemonID);
         return allParticipants;
@@ -205,16 +205,15 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         var barrierName = _currentTurn.move.moveName;
         if (_battleHandler.isDoubleBattle)
         {
-            var currentAttacker = _battleHandler.battleParticipants[_currentTurn.attackerIndex]; 
+            var currentAttacker = _battleHandler.GetParticipant(_currentTurn.attackerKey); 
             
             if (!_moveUsageHandler.HasDuplicateBarrier(currentAttacker, barrierName, true))
             {
                 var newBarrier = new Barrier(barrierName, 0.33f, 5);
                 
-                currentAttacker.barriers.Add(newBarrier); 
-                
-                var partner= _battleHandler
-                    .battleParticipants[currentAttacker.GetPartnerIndex()];
+                currentAttacker.barriers.Add(newBarrier);
+
+                var partner = currentAttacker.GetPartner();
 
                 if (partner.isActive)
                 {
@@ -228,7 +227,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         }
         else
         {
-            var currentParticipant = _battleHandler.battleParticipants[_currentTurn.attackerIndex];
+            var currentParticipant = _battleHandler.GetParticipant(_currentTurn.attackerKey);
 
             if (_moveUsageHandler.HasDuplicateBarrier(currentParticipant, barrierName,true))
                 yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);

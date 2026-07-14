@@ -6,7 +6,7 @@ public class PokemonBattleInputService : IInputGroup
     private InputStateHandler _inputStateHandler;
     private Battle_handler _battleHandler;
     private Dialogue_handler _dialogueHandler;
-    private int _previousEnemySelectionIndex;
+    private BattleParticipantKey _previousEnemySelection;
     
     public PokemonBattleInputService(ServiceContainer container)
     {
@@ -43,7 +43,7 @@ public class PokemonBattleInputService : IInputGroup
 
     private void SetupEnemySelection()
     {
-        _battleHandler.OnEnemySelected += (index) => _previousEnemySelectionIndex = index;
+        _battleHandler.OnEnemySelected += (index) => _previousEnemySelection = index;
         _battleHandler.SelectEnemy(0);//select default enemy
         
         _inputStateHandler.OnInputLeft += ()=> SelectEnemy(-1);
@@ -52,7 +52,7 @@ public class PokemonBattleInputService : IInputGroup
         void SelectEnemy(int indexChange)
         {
             _battleHandler.ResetEnemyColor();
-            _battleHandler.SelectEnemy(indexChange,_previousEnemySelectionIndex);
+            _battleHandler.SelectEnemy(indexChange,_previousEnemySelection);
         }
     }
 }

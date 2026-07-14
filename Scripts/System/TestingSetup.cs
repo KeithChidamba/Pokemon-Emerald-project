@@ -82,8 +82,7 @@ public class TestingSetup : MonoBehaviour,IInjectable
          void GetTestFeedBack()
          {
             test.onTestResult -= GetTestFeedBack;
-            var result = test.testStatus == IntegrationTest.TestStatus.Failed? "Failed" : "Passed";
-            LogMessage($"{test.testName} has {result}");
+            LogMessage($"{test.testName} has {test.testStatus}");
          }
       }
       GetLogs();

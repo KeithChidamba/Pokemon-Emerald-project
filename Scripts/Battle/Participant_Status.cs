@@ -17,7 +17,6 @@ public class Participant_Status : BattleParticipantModule
     public event Action<Battle_Participant> OnStatusCheck;
     
     private Dialogue_handler _dialogueHandler;
-    private Turn_Based_Combat _turnBasedCombatHandler;
     private Battle_handler _battleHandler;
     private Move_handler _moveUsageHandler;
     private Game_ui_manager _gameUIManager;
@@ -28,7 +27,6 @@ public class Participant_Status : BattleParticipantModule
         _battleOperationsHandler = container.Resolve<BattleOperations>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
-        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _moveUsageHandler = container.Resolve<Move_handler>();
         _gameUIManager = container.Resolve<Game_ui_manager>();
     }
@@ -171,39 +169,38 @@ public class Participant_Status : BattleParticipantModule
     public void StunCheck()
     {
         if (!participant.isActive) return;
-        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex].pokemon !=
-            participant.pokemon) return;
+        if (_battleHandler.GetCurrentParticipant().participantKey != participant.participantKey) return;
         if (participant.pokemon.statusEffect == StatusEffect.None) return;
         
         if (_statusEffectMethods.TryGetValue(participant.pokemon.statusEffect,out Action method))
             method();
     }
-    public IEnumerator CheckTrapDuration(Battle_Participant participant)
+    public IEnumerator CheckTrapDuration(Battle_Participant currentParticipant)
     {
-        if (base.participant != participant) yield break;
-        if (!base.participant.isActive) yield break;
-        if (base.participant.canEscape) yield break;
+        if (currentParticipant.participantKey != participant.participantKey) yield break;
+        if (!participant.isActive) yield break;
+        if (participant.canEscape) yield break;
         if (_currentTrap == null) yield break;
         if (!_currentTrap.hasDuration) yield break;
         if (_trapDuration <= 0)
         {
-            _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonDisplayName+_currentTrap.OnFreeMessage);
+            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+_currentTrap.OnFreeMessage);
             RemoveTrap();
             yield break;
         }
         yield return GetDamageFromStatus( 1 / 16f,_currentTrap.OnHitMessage);
         _trapDuration--;
     }
-    public IEnumerator ConfusionCheck(Battle_Participant participant)
+    public IEnumerator ConfusionCheck(Battle_Participant currentParticipant)
     {
-        if (base.participant != participant) yield break;
-        if (!base.participant.isActive) yield break;
-        if (!base.participant.isConfused)
+        if (currentParticipant != participant) yield break;
+        if (!participant.isActive) yield break;
+        if (!participant.isConfused)
         {
             _confusionDuration = 0;
             yield break;
         }
-        base.participant.isConfused = _confusionDuration > 0;
+        participant.isConfused = _confusionDuration > 0;
         
         if (_confusionDuration > 0) _confusionDuration--;
     }
@@ -264,18 +261,18 @@ public class Participant_Status : BattleParticipantModule
         participant.canEscape = true;
         _currentTrap = null;
     }
-    public IEnumerator NotifyHealing(Battle_Participant participant)
+    public IEnumerator NotifyHealing(Battle_Participant currentParticipant)
     {//only for freeze and sleep
-        if (participant != base.participant) yield break;
-        if (!base.participant.isActive) yield break;
-        if (!_healed || base.participant.pokemon.statusEffect==StatusEffect.None) yield break;
-        switch (base.participant.pokemon.statusEffect)
+        if (currentParticipant.participantKey != participant.participantKey) yield break;
+        if (!participant.isActive) yield break;
+        if (!_healed || participant.pokemon.statusEffect==StatusEffect.None) yield break;
+        switch (participant.pokemon.statusEffect)
         {
             case StatusEffect.Sleep:
-                _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonDisplayName+" Woke UP!");
+                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+" Woke UP!");
                 break;
             case StatusEffect.Freeze:
-                _dialogueHandler.DisplayBattleInfo(base.participant.pokemon.pokemonDisplayName+" Unfroze!");
+                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+" Unfroze!");
                 break;
         }
         RemoveStatusEffect();

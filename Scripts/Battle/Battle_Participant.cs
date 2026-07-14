@@ -16,6 +16,7 @@ public abstract class BattleParticipantModule
 }
 public class Battle_Participant : MonoBehaviour,IInjectable
 {
+    public BattleParticipantKey participantKey;
     [SerializeField]public AbilityHandler abilityHandler;
     [SerializeField]public Participant_Status statusHandler;
     [SerializeField]public Held_Items heldItemHandler;
@@ -285,7 +286,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
 
     public void SetupSwitchOut()
     {
-        _pokemonPartyHandler.selectedMemberIndex = Array.IndexOf(_battleHandler.battleParticipants, this);
+        _pokemonPartyHandler.selectedMemberIndex = (int)participantKey;
         
         _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
         _gameUIHandler.ViewPokemonParty(PartyUsage.SwapOut);
@@ -353,11 +354,22 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         //same pokemon as the one in this class
         statData.ResetBattleState(pokemonAfterLevelUp,true);
     }
-    public int GetPartnerIndex()
+    public BattleParticipantKey GetPartnerKey()
     {
-        int participantIndex = Array.IndexOf(_battleHandler.battleParticipants, this);
-        if (participantIndex == -1) return -1; // participant not found
-        return (participantIndex % 2 == 0) ? participantIndex + 1 : participantIndex - 1;
+        switch (participantKey)
+        {
+            case BattleParticipantKey.PlayerPartner:
+                return BattleParticipantKey.Player;
+            case BattleParticipantKey.Enemy:
+                return BattleParticipantKey.EnemyPartner;
+            case BattleParticipantKey.EnemyPartner:
+                return BattleParticipantKey.Enemy;
+        }
+        return BattleParticipantKey.PlayerPartner;
+    }
+    public Battle_Participant GetPartner()
+    {
+        return _battleHandler.GetParticipant(GetPartnerKey());
     }
 
     public bool ProtectedFromStatChange(bool isIncrease)
@@ -381,7 +393,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         
         if (_battleHandler.isDoubleBattle)
         {
-            var partner= _battleHandler.battleParticipants[GetPartnerIndex()];
+            var partner = GetPartner();
             if (!partner.isActive) return;
             
             foreach (var barrier in barriers)

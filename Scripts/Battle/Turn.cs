@@ -6,8 +6,8 @@ using UnityEngine.Serialization;
 [System.Serializable]
 public class Turn
 {
-     public int attackerIndex;
-     public int victimIndex;
+     public BattleParticipantKey attackerKey;
+     public BattleParticipantKey victimKey;
      public long victimID;
      public long attackerID;
      public Move move;
@@ -16,11 +16,12 @@ public class Turn
      public bool isCancelled;
      public bool turnExecuted;
      public Turn(TurnUsage turnUsage,Move move = null,
-          int attacker = 0,int victim = 0, long attackerID = 0,long victimID = 0)
+          BattleParticipantKey attackerKey = 0,BattleParticipantKey victimKey = 0,
+          long attackerID = 0,long victimID = 0)
      {
           this.move = move;
-          attackerIndex = attacker;
-          victimIndex = victim;
+          this.attackerKey = attackerKey;
+          this.victimKey = victimKey;
           this.attackerID= attackerID;
           this.victimID = victimID;
           this.turnUsage = turnUsage;
@@ -28,8 +29,8 @@ public class Turn
      public Turn(Turn copyRequest)
      {
           move = copyRequest.move;
-          attackerIndex = copyRequest.attackerIndex;
-          victimIndex = copyRequest.victimIndex;
+          attackerKey = copyRequest.attackerKey;
+          victimKey = copyRequest.victimKey;
           attackerID= copyRequest.attackerID;
           victimID = copyRequest.victimID;
      }

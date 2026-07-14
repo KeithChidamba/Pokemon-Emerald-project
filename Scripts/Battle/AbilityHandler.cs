@@ -55,11 +55,9 @@ public class AbilityHandler : BattleParticipantModule
     private Battle_handler _battleHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Move_handler _moveUsageHandler;
-    private BattleOperations _battleOperationsHandler;
     
     public AbilityHandler(ServiceContainer container)
     {
-        _battleOperationsHandler = container.Resolve<BattleOperations>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();

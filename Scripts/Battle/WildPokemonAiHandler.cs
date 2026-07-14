@@ -30,8 +30,7 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
     {
         if (!inBattle) return;
         //check if its pokemon's turn
-        if (_battleHandler.battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex].pokemon.pokemonID
-            != participant.pokemon.pokemonID)
+        if (_battleHandler.GetCurrentParticipant().participantKey != participant.participantKey)
         {
             return;
         }
@@ -39,7 +38,7 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
         {
             var randMove = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
             //attack player, since its single battle
-            _battleHandler.UseMove(participant.pokemon.moveSet[randMove],participant,0);
+            _battleHandler.UseMove(participant.pokemon.moveSet[randMove],participant,BattleParticipantKey.Player);
         }
         else
         {

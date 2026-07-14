@@ -29,7 +29,6 @@ public class Move_handler:MonoBehaviour,IInjectable
     public event Action OnMoveComplete;
 
     private Dialogue_handler _dialogueHandler;
-    private InputStateHandler _inputStateHandler;
     private BattleVisuals _battleVisualsHandler;
     private Battle_handler _battleHandler;
     private MoveLogicHandler _moveLogicHandler;
@@ -38,7 +37,6 @@ public class Move_handler:MonoBehaviour,IInjectable
     public void Inject(ServiceContainer container)
     {
         _battleOperations = container.Resolve<BattleOperations>();
-        _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _battleHandler = container.Resolve<Battle_handler>();
@@ -54,8 +52,8 @@ public class Move_handler:MonoBehaviour,IInjectable
     {
         OnMoveComplete = null;
         _currentTurn = turn;
-        attacker = _battleHandler.battleParticipants[turn.attackerIndex];
-        victim = _battleHandler.battleParticipants[turn.victimIndex];
+        attacker = _battleHandler.GetParticipant(turn.attackerKey);
+        victim = _battleHandler.GetParticipant(turn.victimKey);
         StartCoroutine(MoveSequence());
     }
     private IEnumerator MoveSequence()
@@ -738,8 +736,7 @@ public class Move_handler:MonoBehaviour,IInjectable
 
         if (_battleHandler.isDoubleBattle)
         {
-            var partner= _battleHandler
-                .battleParticipants[currentParticipant.GetPartnerIndex()];
+            var partner = currentParticipant.GetPartner();
                 
             if(partner.isActive)
                 if(partner.barriers.Any(b => b.barrierName == barrierName))

@@ -6,6 +6,10 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum BattleParticipantKey
+{
+    Player = 0,PlayerPartner = 1,Enemy = 2,EnemyPartner = 3
+}
 public enum BattleEndState
 {
     PlayerRanAway,PokemonRanAway,PlayerLost,PlayerWon,BattleTerminated,None
@@ -26,8 +30,12 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public Text movePowerPointsText;
     public Text moveTypeText;
     public Text[] availableMovesText;
+
+    private Dictionary<BattleParticipantKey, Battle_Participant> battleParticipants = new();
+    private List<Battle_Participant> currentParticipants = new();
+    public IReadOnlyList<Battle_Participant> GetParticipants => currentParticipants;
+    [SerializeField]private Battle_Participant[] battleParticipantInstances;
     
-    public Battle_Participant[] battleParticipants;
     public List<Battle_Participant> faintQueue = new();
     public bool battleInProgress;
     public bool isTrainerBattle;
@@ -49,7 +57,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public event Action<bool> OnBattleResult;
     public event Action OnSwitchIn;
     public event Action<Battle_Participant> OnSwitchOut;
-    public event Action<int> OnEnemySelected;
+    public event Action<BattleParticipantKey> OnEnemySelected;
     private Action _checkParticipantsEachTurn;
     
     private Dialogue_handler _dialogueHandler;
@@ -86,13 +94,31 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     public void OnInject()
     {
+        battleParticipants.Add(BattleParticipantKey.Player,battleParticipantInstances[0]);
+        battleParticipants.Add(BattleParticipantKey.PlayerPartner,battleParticipantInstances[1]);
+        battleParticipants.Add(BattleParticipantKey.Enemy,battleParticipantInstances[2]);
+        battleParticipants.Add(BattleParticipantKey.EnemyPartner,battleParticipantInstances[3]);
+        
+        currentParticipants.Add(battleParticipantInstances[0]);
+        currentParticipants.Add(battleParticipantInstances[1]);
+        currentParticipants.Add(battleParticipantInstances[2]);
+        currentParticipants.Add(battleParticipantInstances[3]);
+        
         _turnBasedCombatHandler.OnNewTurn += ResetAi;
         _turnBasedCombatHandler.OnNewTurn += AllowPlayerInput;
         _checkParticipantsEachTurn = ()=> CheckParticipantStates();
         _turnBasedCombatHandler.OnNewTurn += _checkParticipantsEachTurn;
         _turnBasedCombatHandler.OnTurnsCompleted += ResetPlayersTurnUsage;
     }
-    
+
+    public Battle_Participant GetParticipant(BattleParticipantKey participantKey)
+    {
+        return battleParticipants[participantKey];
+    }
+    public Battle_Participant GetCurrentParticipant()
+    {
+        return currentParticipants[_turnBasedCombatHandler.CurrentTurnIndex];
+    }
     public void SetBattleStyle(int settingIndex)
     {
         currentBattleStyle = settingIndex switch
@@ -102,10 +128,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
             _ => BattlesStyle.Switch
         };
     }
-    public Battle_Participant GetCurrentParticipant()
-    {
-        return battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex];
-    }
+
     public void EnableBattleMessage(InputState currentState)
     {
         if (currentState.stateName == InputStateName.PokemonBattleOptions)
@@ -119,7 +142,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if (!isDoubleBattle)
         {
             //if single battle, auto aim at enemy
-            ExecutePlayersMove(currentMoveIndex,2);
+            ExecutePlayersMove(currentMoveIndex,BattleParticipantKey.Enemy);
             return;
         }
 
@@ -127,23 +150,23 @@ public class Battle_handler : MonoBehaviour, IInjectable
         if (currentMove.isSelfTargeted || currentMove.isMultiTarget)
         {
             //then the enemy targeted doesn't matter so select any active one
-            var currentPlayerEnemyIndex = battleParticipants.ToList().FindIndex(a => a.isActive & !a.isPlayer);
-            ExecutePlayersMove(currentMoveIndex,currentPlayerEnemyIndex);
+            var currentPlayerEnemy = currentParticipants.First(a => a.isActive & !a.isPlayer);
+            ExecutePlayersMove(currentMoveIndex,currentPlayerEnemy.participantKey);
             return;
         }
 
-        var currentEnemyIndex = 2;
+        BattleParticipantKey currentEnemyKey = BattleParticipantKey.Enemy;
         OnEnemySelected += ChangeSelectedEnemy;
-        void ChangeSelectedEnemy(int newIndex)
+        void ChangeSelectedEnemy(BattleParticipantKey newKey)
         {
-            currentEnemyIndex = newIndex;
+            currentEnemyKey = newKey;
         }
         
         var enemySelectables = new List<SelectableUI>();
-        for (var i = 2; i < battleParticipants.Length; i++)
+        for (var i = 2; i < currentParticipants.Count; i++)
         {
-            enemySelectables.Add( new (battleParticipants[i].pokemonImage.gameObject, 
-               () => ExecutePlayersMove(currentMoveIndex,currentEnemyIndex),true));
+            enemySelectables.Add( new (currentParticipants[i].pokemonImage.gameObject, 
+               () => ExecutePlayersMove(currentMoveIndex,currentEnemyKey),true));
         }
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleEnemySelection
             ,InputStateGroup.PokemonBattle,
@@ -156,28 +179,31 @@ public class Battle_handler : MonoBehaviour, IInjectable
         OnEnemySelected = null;
         ResetEnemyColor();
     }
-    private void ExecutePlayersMove(int currentMoveIndex, int enemyIndex)
+    private void ExecutePlayersMove(int currentMoveIndex, BattleParticipantKey enemyKey)
     {//selecting enemy only happens in double battle
         var currentPlayerParticipant = GetCurrentParticipant();
-        battleParticipants[enemyIndex].pokemonImage.color = Color.HSVToRGB(0,0,100);
-        UseMove(currentPlayerParticipant.pokemon.moveSet[currentMoveIndex], currentPlayerParticipant,enemyIndex); 
+        GetParticipant(enemyKey).pokemonImage.color = Color.HSVToRGB(0,0,100);
+        UseMove(currentPlayerParticipant.pokemon.moveSet[currentMoveIndex], currentPlayerParticipant,enemyKey); 
     }
 
     public void ResetEnemyColor()
     {
-        foreach (var participant in battleParticipants)
+        foreach (var participant in currentParticipants)
         {
             participant.pokemonImage.color = Color.HSVToRGB(0,0,100);
         }
     }
-    public void SelectEnemy(int indexChange,int previousIndex=2)
+    public void SelectEnemy(int indexChange,BattleParticipantKey previousKey = BattleParticipantKey.Enemy)
     {
-        var partnerIndex = GetCurrentParticipant().GetPartnerIndex(); 
-        var expectedTargets = new [] {partnerIndex,2,3}; //can attack partner and enemies
+        var partner= GetCurrentParticipant().GetPartner(); 
+        //can attack partner and enemies
+        var expectedTargets = new [] {partner.participantKey
+            ,BattleParticipantKey.Enemy
+            ,BattleParticipantKey.EnemyPartner};
         
-        var validTargets = expectedTargets.Where(index => battleParticipants[index].isActive).ToArray();
+        var validTargets = expectedTargets.Where(key => battleParticipants[key].isActive).ToArray();
         
-        var currentTargetIndex = Array.IndexOf(validTargets,previousIndex);      
+        var currentTargetIndex = Array.IndexOf(validTargets,previousKey);      
         
         var choiceIndex = Mathf.Clamp(currentTargetIndex + indexChange,0,validTargets.Length-1);
         
@@ -247,10 +273,10 @@ public class Battle_handler : MonoBehaviour, IInjectable
                               //if irreversible turn usage occured, cant remove turn
                               && _previousTurnUsage == PlayerTurnUsage.Fight
                               //if partner is semi-invulnerable, cant remove turn
-                              && !battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex - 1]
+                              && !currentParticipants[_turnBasedCombatHandler.CurrentTurnIndex - 1]
                                   .isSemiInvulnerable
                               //if partner is cooling down, cant remove turn
-                              && !battleParticipants[_turnBasedCombatHandler.CurrentTurnIndex - 1]
+                              && !currentParticipants[_turnBasedCombatHandler.CurrentTurnIndex - 1]
                                   .currentCoolDown.isCoolingDown;
     }
     public void SetPlayerTurnUsage(PlayerTurnUsage usage)
@@ -274,7 +300,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private IEnumerator SetValidParticipants()
     {
-        foreach (var participant in battleParticipants)
+        foreach (var participant in currentParticipants)
         {
             if(!participant.activeForBattle)continue;
             
@@ -287,7 +313,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private IEnumerator SetupBattleSequence(Biome biome)
     {
-        foreach (var participant in battleParticipants)
+        foreach (var participant in currentParticipants)
         {
             var pos = participant.pokemonImage.rectTransform.anchoredPosition;
             _defaultPokemonImagePositions.Add(pos);
@@ -355,8 +381,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
         battleOver = false;
         isTrainerBattle = false;
         isDoubleBattle = false;
-        var player = battleParticipants[0];
-        var wildPokemon = battleParticipants[2];
+        var player = GetParticipant(BattleParticipantKey.Player);
+        var wildPokemon = GetParticipant(BattleParticipantKey.Enemy);
         player.activeForBattle = true;
         wildPokemon.activeForBattle = true;
         
@@ -380,8 +406,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
         battleOver = false;
         isTrainerBattle = true;
         isDoubleBattle = false; 
-        var player = battleParticipants[0];
-        var enemy = battleParticipants[2];
+        var player = GetParticipant(BattleParticipantKey.Player);
+        var enemy = GetParticipant(BattleParticipantKey.Enemy);
         player.activeForBattle = true;
         enemy.activeForBattle = true;
         
@@ -410,13 +436,13 @@ public class Battle_handler : MonoBehaviour, IInjectable
         var alivePartyPokemon = _pokemonPartyHandler.GetLivingPokemon();
         var playerPartnerAvailable = alivePartyPokemon.Count > 1;
         
-        var player = battleParticipants[0];
+        var player =GetParticipant(BattleParticipantKey.Player);
         player.activeForBattle = true;
-        var playerPartner = battleParticipants[1];
+        var playerPartner = GetParticipant(BattleParticipantKey.PlayerPartner);
         playerPartner.activeForBattle = playerPartnerAvailable;
-        var enemy = battleParticipants[2];
+        var enemy = GetParticipant(BattleParticipantKey.Enemy);
         enemy.activeForBattle = true;
-        var enemyPartner = battleParticipants[3];
+        var enemyPartner = GetParticipant(BattleParticipantKey.EnemyPartner);
         enemyPartner.activeForBattle = true;
         
         //set initial pokemon for player
@@ -430,20 +456,13 @@ public class Battle_handler : MonoBehaviour, IInjectable
         //set initial pokemon for enemies
         enemy.pokemon = enemy.pokemonTrainerAI.trainerParty[0];
         enemyPartner.pokemon = enemyPartner.pokemonTrainerAI.trainerParty[1];
+        
         //set enemies of all participants
-        for (int i = 0; i < 2; i++) 
-        {
-            var currentEnemy = battleParticipants[i + 2];
-            var currentPlayerParticipant = battleParticipants[i];
-
-            player.currentEnemies.Add(currentEnemy);
-            if(playerPartner.activeForBattle) playerPartner.currentEnemies.Add(currentEnemy);
-            
-            if(!currentPlayerParticipant.activeForBattle) continue;
-            
-            enemy.currentEnemies.Add(currentPlayerParticipant);
-            enemyPartner.currentEnemies.Add(currentPlayerParticipant);
-        }
+        SetupEnemies(GetParticipant(BattleParticipantKey.Enemy),
+            GetParticipant(BattleParticipantKey.Player));
+        SetupEnemies(GetParticipant(BattleParticipantKey.EnemyPartner),
+            GetParticipant(BattleParticipantKey.PlayerPartner));
+        
         //add player's pokemon to get exp from all current enemies
         foreach (var enemyParticipant in player.currentEnemies)//player and partner have same enemies
         {
@@ -453,12 +472,25 @@ public class Battle_handler : MonoBehaviour, IInjectable
         //setup battle
         yield return SetValidParticipants();
         StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocationData.biome));
+
+        void SetupEnemies(Battle_Participant currentEnemy,Battle_Participant currentPlayerParticipant)
+        {
+            player.currentEnemies.Add(currentEnemy);
+            if(playerPartner.activeForBattle) playerPartner.currentEnemies.Add(currentEnemy);
+            
+            if(!currentPlayerParticipant.activeForBattle) return;
+            
+            enemy.currentEnemies.Add(currentPlayerParticipant);
+            enemyPartner.currentEnemies.Add(currentPlayerParticipant);
+        }
     }
 
     public IEnumerator SetupParticipant(Battle_Participant participant,Pokemon newPokemon,bool initialCall=false)
     {
         OnSwitchOut?.Invoke(participant);
-        participant.isPlayer = Array.IndexOf(battleParticipants, participant) < 2 ;
+        
+        participant.isPlayer = participant.participantKey is BattleParticipantKey.Player
+            or BattleParticipantKey.PlayerPartner;
         
         if (participant.isPlayer)
         {
@@ -503,7 +535,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public List<Battle_Participant> GetValidParticipants()
     {
         var validList = new List<Battle_Participant>();
-        foreach (var participant in battleParticipants)
+        foreach (var participant in currentParticipants)
         {
             if (participant.isActive)
             {
@@ -518,7 +550,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public void CheckParticipantStates(bool initialCall=false)
     {
         validParticipantCount = 0;
-        foreach (var participant in battleParticipants)
+        foreach (var participant in currentParticipants)
         {
             if (participant.pokemon == null) continue;
             validParticipantCount++;
@@ -571,15 +603,15 @@ public class Battle_handler : MonoBehaviour, IInjectable
             movesUI.SetActive(false);
         }
     }
-    public void UseMove(Move move,Battle_Participant user, int enemyIndex)
+    public void UseMove(Move move,Battle_Participant user, BattleParticipantKey enemyKey)
     {
         if(move.powerpoints==0)return;
         move.powerpoints--;
 
-        Turn currentTurn = new Turn(TurnUsage.Attack,move, Array.IndexOf(battleParticipants,user)
-            ,enemyIndex
+        Turn currentTurn = new Turn(TurnUsage.Attack,move, user.participantKey
+            ,enemyKey
             , user.pokemon.pokemonID
-            ,battleParticipants[enemyIndex].pokemon.pokemonID);
+            ,GetParticipant(enemyKey).pokemon.pokemonID);
         _turnBasedCombatHandler.SaveTurn(currentTurn);
     }
 
@@ -593,7 +625,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private float PrizeMoneyModifier()
     {
-        var playerParticipants = battleParticipants.ToList()
+        var playerParticipants = currentParticipants
             .Where(p => p.isActive & p.isPlayer).ToList();
         foreach(var participant in playerParticipants)
         {
@@ -713,7 +745,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
                     yield return HandleEvolutions();
                     if (isTrainerBattle)
                     {
-                        var anyEnemy = battleParticipants[0].currentEnemies[0].pokemonTrainerAI.trainerData;
+                        var anyEnemy = GetParticipant(BattleParticipantKey.Player)
+                            .currentEnemies[0].pokemonTrainerAI.trainerData;
+                        
                         var baseMoneyPayout = anyEnemy.BaseMoneyPayout;
                         
                         _dialogueHandler.DisplayBattleInfo(playerName + " defeated " + anyEnemy.TrainerName);
@@ -733,10 +767,11 @@ public class Battle_handler : MonoBehaviour, IInjectable
                     if (isTrainerBattle)
                     {
                         //last participant is always not null in this situation
-                        var anyEnemy = battleParticipants[0].currentEnemies[0];
+                        var anyEnemy =  GetParticipant(BattleParticipantKey.Player).currentEnemies[0];
+                        
                         var baseMoneyPayout = anyEnemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
                         
-                        var playersLastParticipant = battleParticipants.First(p => p.isActive & p.isPlayer);
+                        var playersLastParticipant = currentParticipants.First(p => p.isActive & p.isPlayer);
                         
                         var victoriousOpponent = playersLastParticipant.currentEnemies
                             .First(p=>p.isActive).pokemon;
@@ -801,19 +836,19 @@ public class Battle_handler : MonoBehaviour, IInjectable
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
         
-        for (var i=0;i<battleParticipants.Length;i++)
+        for (var i=0;i<currentParticipants.Count;i++)
         {
-            battleParticipants[i].pokemonImage.rectTransform.anchoredPosition = _defaultPokemonImagePositions[i];
-            battleParticipants[i].pokemonImage.color = Color.white;
+            currentParticipants[i].pokemonImage.rectTransform.anchoredPosition = _defaultPokemonImagePositions[i];
+            currentParticipants[i].pokemonImage.color = Color.white;
             
-            if(battleParticipants[i].pokemon!=null)
+            if(currentParticipants[i].pokemon!=null)
             {
-                battleParticipants[i].ResetParticipantState();
-                battleParticipants[i].DeactivateUI();
-                battleParticipants[i].pokemon = null;
-                battleParticipants[i].pokemonTrainerAI = null;
+                currentParticipants[i].ResetParticipantState();
+                currentParticipants[i].DeactivateUI();
+                currentParticipants[i].pokemon = null;
+                currentParticipants[i].pokemonTrainerAI = null;
             }
-            battleParticipants[i].activeForBattle = false;
+            currentParticipants[i].activeForBattle = false;
         }
         _battleIntroHandler.ResetParticipantIntroImages();
         OnBattleResult?.Invoke(battleEndState == BattleEndState.PlayerWon);
@@ -850,8 +885,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
             else
             { 
                 int random = Utility.RandomRange(1,11);
-                var playerLevel = battleParticipants[0].pokemon.currentLevel;
-                var enemyLevel = battleParticipants[0].currentEnemies[0].pokemon.currentLevel;
+                var playerLevel =  GetParticipant(BattleParticipantKey.Player).pokemon.currentLevel;
+                var enemyLevel =  GetParticipant(BattleParticipantKey.Player).currentEnemies[0].pokemon.currentLevel;
                 if (playerLevel < enemyLevel)
                 {
                     //lower chance if weaker

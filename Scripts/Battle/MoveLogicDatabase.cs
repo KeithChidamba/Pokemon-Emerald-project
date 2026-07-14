@@ -339,7 +339,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Whirlwind()
     {
-        if (_attacker.pokemon.currentLevel<_victim.pokemon.currentLevel)
+        if (_attacker.pokemon.currentLevel < _victim.pokemon.currentLevel)
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             yield break;
@@ -350,51 +350,36 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             _moveUsageHandler.doingMove = false;
             yield break;
         }
+        
+        var partyPositionOfVictim = _victim.participantKey < _victim.GetPartnerKey()? 0 : 1;
         if (_victim.isPlayer)
         {
-            var living = _pokemonPartyHandler.GetLivingPokemon();
-            if (living.Count < 2)
-            {
-                _dialogueHandler.DisplayBattleInfo("but it failed!");
-                yield break;
-            }
-            
-            //exclude current participants
-            var excludedIndexes = 1;
-
-            if (_battleHandler.isDoubleBattle)
-                excludedIndexes++;
-            
-            var randomIndexOfLiving = Utility
-                .RandomRange(excludedIndexes, living.Count);
-
-            var pokemonAtIndex = _pokemonPartyHandler.GetMemberIndex(living[randomIndexOfLiving]);
-            var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,_victim);
-            
-            yield return _turnBasedCombatHandler.HandleSwap(switchData,true);
+            yield return CreateSwitchData(_pokemonPartyHandler.GetLivingPokemon(), _pokemonPartyHandler.Party.ToList());
         }
         else
         {
             var enemyTrainer = _victim.pokemonTrainerAI;
-            var living = enemyTrainer.GetLivingPokemon();
-            if (living.Count < 2)
+            yield return CreateSwitchData(enemyTrainer.GetLivingPokemon(), enemyTrainer.trainerParty);
+        }
+
+        IEnumerator CreateSwitchData(List<Pokemon> living, List<Pokemon>  fullParty)
+        {
+            if (living.Count == 1)
             {
                 _dialogueHandler.DisplayBattleInfo("but it failed!");
                 yield break;
             }
-
             //exclude current participants
             var excludedIndexes = 1;
 
             if (_battleHandler.isDoubleBattle)
                 excludedIndexes++;
             
-            var randomIndexOfLiving = Utility
-                .RandomRange(excludedIndexes, living.Count);
+            var randomIndexOfLiving = Utility.RandomRange(excludedIndexes, living.Count);
             
-            var pokemonAtIndex = enemyTrainer.trainerParty.IndexOf(living[randomIndexOfLiving]);
+            var pokemonIndex = fullParty.IndexOf(living[randomIndexOfLiving]);
             
-            var switchData = new SwitchOutData(_currentTurn.victimIndex,pokemonAtIndex,_victim);
+            var switchData = new SwitchOutData(partyPositionOfVictim,pokemonIndex,_victim);
 
             yield return _turnBasedCombatHandler.HandleSwap(switchData,true);
         }

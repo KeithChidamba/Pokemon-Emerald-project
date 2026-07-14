@@ -317,7 +317,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             
             if (_battleHandler.isDoubleBattle)
             {
-                var partner = _battleHandler.battleParticipants[currentParticipant.GetPartnerIndex()];
+                var partner = currentParticipant.GetPartner();
                 if(partner.isActive)
                 {
                     _moveUsageHandler.ApplyStatChangeImmunity(partner,

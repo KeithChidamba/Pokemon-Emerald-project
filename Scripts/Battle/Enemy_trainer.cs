@@ -9,7 +9,7 @@ class AiMoveScoreData
 { 
     public int moveIndex; 
     public int moveScore;
-    public int enemyIndex;
+    public BattleParticipantKey enemyKey;
 
     public AiMoveScoreData(int moveIndex, int moveScore)
     {
@@ -83,11 +83,11 @@ public class Enemy_trainer : BattleParticipantModule
         foreach (Pokemon pokemon in trainerParty)
         {
             //not already participating
-            if (pokemon != _battleHandler.battleParticipants[2].pokemon)
+            if (pokemon != _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemon)
             {
                 if (_battleHandler.isDoubleBattle)
                 {
-                    if (pokemon != _battleHandler.battleParticipants[3].pokemon)
+                    if (pokemon != _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner).pokemon)
                     {
                         notParticipatingList.Add(pokemon);
                     }
@@ -243,7 +243,7 @@ public class Enemy_trainer : BattleParticipantModule
         
         var selectedMoveData = GetBestMoveDecision();
         var selectedMove = participant.pokemon.moveSet[selectedMoveData.moveIndex];
-        _battleHandler.UseMove(selectedMove,participant,selectedMoveData.enemyIndex);
+        _battleHandler.UseMove(selectedMove,participant,selectedMoveData.enemyKey);
     }
 
     private bool AiOnlySwitching()
@@ -255,18 +255,18 @@ public class Enemy_trainer : BattleParticipantModule
     {
         if(AiOnlySwitching())
         {
-            var enemyIndex = 0;
+            BattleParticipantKey enemyKey = BattleParticipantKey.Player;
             if (_battleHandler.isDoubleBattle)
             {
-                var validEnemies = participant.currentEnemies
-                    .Where(e => e.isActive)
-                    .Select(e => Array.IndexOf(_battleHandler.battleParticipants, e))
+                var validEnemyKeys = participant.currentEnemies
+                    .Where(p => p.isActive)
+                    .Select(p => p.participantKey)
                     .ToList();
-                enemyIndex = validEnemies[Utility.RandomRange(0, validEnemies.Count)];
+                enemyKey = validEnemyKeys[Utility.RandomRange(0, validEnemyKeys.Count)];
             }
             var moveIndex = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
             var randomMoveData = new AiMoveScoreData(moveIndex,0);
-            randomMoveData.enemyIndex = enemyIndex;
+            randomMoveData.enemyKey = enemyKey;
             return randomMoveData;
         }
         
@@ -276,9 +276,8 @@ public class Enemy_trainer : BattleParticipantModule
             foreach (var enemy in participant.currentEnemies)
             {
                 if (!enemy.isActive) continue;
-                var currentIndex = Array.IndexOf(_battleHandler.battleParticipants, enemy);
                 var newMoveScore = GetBestMove(enemy);
-                newMoveScore.enemyIndex = currentIndex;
+                newMoveScore.enemyKey = enemy.participantKey;
                 bestMovesForEnemies.Add(newMoveScore);
             }
             var orderList = bestMovesForEnemies.OrderByDescending(move=>move.moveScore).ToList();
@@ -287,7 +286,7 @@ public class Enemy_trainer : BattleParticipantModule
             return bestAttackingDecision;
         }
         //single battle
-        var singleBattleMoveScore = GetBestMove(_battleHandler.battleParticipants[0]);
+        var singleBattleMoveScore = GetBestMove(_battleHandler.GetParticipant(BattleParticipantKey.Player));
         return singleBattleMoveScore;
     }
     private AiMoveScoreData GetBestMove(Battle_Participant enemy)

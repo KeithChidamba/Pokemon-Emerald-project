@@ -124,18 +124,23 @@ public class Pokemon_party : MonoBehaviour,IInjectable
                                                      " is already going to be sent out");
             return false;
         }
-        if ( (memberIndex < 2 & _battleHandler.isDoubleBattle) || memberIndex == 0)
+
+        var memberSelectionLimit = (int)BattleParticipantKey.PlayerPartner;
+        bool atIndexSelectionLimit = memberIndex == 0 ||
+                                     _battleHandler.isDoubleBattle &&
+                                     memberIndex <= memberSelectionLimit;
+       
+        if (atIndexSelectionLimit)
         {
-            var swapIn = _battleHandler.battleParticipants[memberIndex];
-            
+            var swapIn = GetParticipantFromIndex(memberIndex);
             _dialogueHandler.DisplayDetails(swapIn.pokemon.pokemonDisplayName +
                                                      " is already in battle");
             return false;
         }
-        var participantIndex = (_battleHandler.isDoubleBattle && swappingIn)
-            ?_turnBasedCombatHandler.CurrentTurnIndex :0;
+        var currentParticipant = (_battleHandler.isDoubleBattle && swappingIn)
+            ?_battleHandler.GetCurrentParticipant() 
+            : _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        var currentParticipant = _battleHandler.battleParticipants[participantIndex];
         if (!currentParticipant.canEscape && swappingIn)
         {
             _dialogueHandler.DisplayDetails(currentParticipant.pokemon.pokemonDisplayName +
@@ -238,12 +243,21 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _inputStateHandler.OnSelectionIndexChanged -= UpdateCancelButton;
         cancelButton.sprite = memberCards[0].pokeballClosedImage.sprite;
     }
+
+    private Battle_Participant GetParticipantFromIndex(int index)
+    {
+        var participantKey = index == 0 ? BattleParticipantKey.Player 
+            : BattleParticipantKey.PlayerPartner;
+
+        return _battleHandler.GetParticipant(participantKey);
+    }
     public IEnumerator SwapMemberWithoutTurnUsage(int partyPosition)
     {
         (party[selectedMemberIndex], party[partyPosition]) = 
             (party[partyPosition], party[selectedMemberIndex]);
 
-        var participant = _battleHandler.battleParticipants[selectedMemberIndex];
+        var participant = GetParticipantFromIndex(selectedMemberIndex);
+        
         var alivePokemon= GetLivingPokemon();
         
         UpdateUIAfterSwap();
@@ -272,7 +286,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         moving = false;
         if (_battleHandler.battleInProgress)
         {
-            var participant = _battleHandler.battleParticipants[selectedMemberIndex];
+            var participant = GetParticipantFromIndex(selectedMemberIndex);
             var alivePokemon= GetLivingPokemon();
             StartCoroutine(_battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberIndex]));
         }
@@ -364,11 +378,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     {
         party.RemoveAt(partyPosition-1);
     }
-
-    public int GetMemberIndex(Pokemon member)
-    {
-        return party.IndexOf(member);
-    }
+    
     public void SwapIndexes(int partyPosition,int memberToSwapWith)
     {
         (party[partyPosition], party[memberToSwapWith]) = (party[memberToSwapWith], party[partyPosition]);
