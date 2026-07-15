@@ -141,7 +141,8 @@ public class Pokemon_Details : MonoBehaviour,IInjectable
         }
         pkm_ablty_desc.text = currentPokemon.ability.abilityDescription;
         Trainer_Name.text = _gameLoadingHandler.playerData.playerName;
-        pkm_ablty.text = currentPokemon.ability.abilityName.ToUpper();
+        pkm_ablty.text = NameDB.GetAbility(currentPokemon.ability.abilityName).ToUpper();
+        
         pokemonCaptureInfo.text = $" <color=red>{currentPokemon.nature.natureName.ToUpper()}</color> nature," +
                                    $"\n met at lv{currentPokemon.captureInformation.levelCaptured}," +
                                    $"\n <color=red>{currentPokemon.captureInformation.areaName.ToUpper()}</color>";

@@ -233,7 +233,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         yield return MainIntroSequence();
         
         _dialogueHandler.DisplayBattleInfo(message);
-        yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
         //show pokeballs
         StartCoroutine(enemyPokeballs.LoadPokeballs());
         yield return playerPokeballs.LoadPokeballs();
@@ -252,7 +252,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
                 StartCoroutine(PokemonIntroAnimation(participants[i + 2]));
                 StartCoroutine(PokemonIntroAnimationMovement(participants[i + 2]));
                 yield return new WaitForSeconds(3f);
-                yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+                yield return _dialogueHandler.AwaitAllDialogue();
             }
         }
         else
@@ -271,7 +271,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
             participants[2].participantUI.SetActive(true);
             participants[3].participantUI.SetActive(true);
             yield return new WaitForSeconds(3f);
-            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
         }
 
         message = $"Go! {participants[0].pokemon.pokemonDisplayName}";
@@ -294,7 +294,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
             StartCoroutine(PokemonIntroAnimationMovement(participants[i]));
             participants[i].participantUI.SetActive(true);
         }
-        yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
 
         ResetParticipantIntroImages();
     }

@@ -138,7 +138,7 @@ public class Enemy_trainer : BattleParticipantModule
                 yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon:numAlive[randomMember],false);
             }
         }
-        _turnBasedCombatHandler.faintEventDelay = false;
+        participant.EndFaintEvent();
     }
     private int AiCheckValidSwitch(Battle_Participant enemy)
     {

@@ -126,7 +126,8 @@ public class AbilityHandler : BattleParticipantModule
 
     public void SetAbilityMethod()
     {
-        _currentAbility = participant.pokemon.ability.abilityName.ToLower().Replace(" ","");
+        _currentAbility = NameDB.GetAbility(participant.pokemon.ability.abilityName).ToLower().Replace(" ","");
+        
         if (_abilityMethods.TryGetValue(_currentAbility, out Action abilityMethod))
             OnAbilityUsed += abilityMethod;
         else
@@ -236,7 +237,7 @@ public class AbilityHandler : BattleParticipantModule
         {
             if (enemy.pokemon.HasType(PokemonType.Flying) || enemy.pokemon.HasType(PokemonType.Ghost))
                 continue;
-            _moveUsageHandler.ApplyTrap(enemy,false);
+            _moveUsageHandler.ApplyTrap(enemy);
         }
     }
     void HealStatusEffect(Battle_Participant thisParticipant)

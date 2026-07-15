@@ -268,7 +268,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         yield return _battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberIndex],false);
         
         selectedMemberIndex = 0;
-        _turnBasedCombatHandler.faintEventDelay = false;
+        participant.EndFaintEvent();
     }
     public void UpdateUIAfterSwap()
     {

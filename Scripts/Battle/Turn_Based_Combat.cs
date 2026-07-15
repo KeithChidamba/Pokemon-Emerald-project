@@ -15,7 +15,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public int CurrentTurnIndex => currentTurnIndex;
     [SerializeField]private int currentTurnIndex;
     
-    public bool faintEventDelay;
     public WeatherCondition currentWeather;
     public WeatherCondition clearWeather;
     private event Func<IEnumerator> OnWeatherEffect;
@@ -157,7 +156,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         currentTurnIndex = 0;
         currentWeather.weather = Weather.Clear;
         ClearTurn();
-        faintEventDelay = false;
         StopAllCoroutines();
     }
 
@@ -283,7 +281,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             {
                 switchTurns.Add(i);
                 yield return HandleSwap(_turnHistory[i].switchData);
-                yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
+                yield return _dialogueHandler.AwaitAllDialogue();
             }
         }
 
@@ -315,7 +313,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             if (!IsValidParticipantState(victim))
             {
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" missed the attack");
-                yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
+                yield return _dialogueHandler.AwaitAllDialogue();
                 continue;
             }
             
@@ -323,16 +321,16 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
            
             yield return attacker.heldItemHandler.CheckForUsableItem();
 
-            yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
 
             if (currentTurn.turnUsage == TurnUsage.UseStruggle)
             {
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " is out of moves");
-                yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+                yield return _dialogueHandler.AwaitAllDialogue();
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " used struggle");
                 yield return _moveUsageHandler.DealStruggleDamage(victim,attacker,currentTurn.move);
-                yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
-                yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+                yield return _battleHandler.AwaitFaintQueue();
+                yield return _dialogueHandler.AwaitAllDialogue();
                 continue;
             }
             
@@ -340,17 +338,17 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             OnAttackAttempted += GetAttackResult;
             
             yield return CheckAttackSuccess(currentTurn,attacker,victim);
-            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
             
-            yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
+            yield return _battleHandler.AwaitFaintQueue();
             CheckRepeatedMove(attacker,currentTurn.move);
             if (successfulAttack)
             {
-                _moveUsageHandler.doingMove = true;
                 _moveUsageHandler.BeginMoveExecution(currentTurn);
+
+                yield return _moveUsageHandler.AwaitMoveCompletion();
                 
-                yield return new WaitUntil(() => !_moveUsageHandler.doingMove);
-                yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
+                yield return _battleHandler.AwaitFaintQueue();
             }
             else
             {
@@ -358,8 +356,8 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                 attacker.semiInvulnerabilityData.ResetState();
             }
         }
-        yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
-        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+        yield return _battleHandler.AwaitFaintQueue();
+        yield return _dialogueHandler.AwaitAllDialogue();
 
         ClearTurn();
         OnTurnsCompleted?.Invoke();
@@ -370,7 +368,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         {
             yield return participant.statusHandler.CheckStatus();
         }
-        yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
+        yield return _battleHandler.AwaitFaintQueue();
         
         //damage from weather
         if (currentWeather.weather != Weather.Clear)
@@ -378,9 +376,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             ReduceWeatherDuration();
             yield return ExecuteWeatherEffect();
         }
-        yield return new WaitUntil(() => _battleHandler.faintQueue.Count == 0 && !faintEventDelay);
+        yield return _battleHandler.AwaitFaintQueue();
         
-        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
         
         //semi-invulnerability turn logic and cooldown check
         foreach(var participant in validList)
@@ -408,7 +406,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             AddTurn(new Turn(participant.semiInvulnerabilityData.turnData));
         }
         
-        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
         NextTurn();
     }
     public IEnumerator AllowPlayerSwitchIn(string trainerName,string pokemonName)
@@ -419,7 +417,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 //only happens in single battles
             yield break;
         }
-        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
         
         _dialogueHandler.DisplayCustomOptions($"{trainerName} is about to use {pokemonName}, change pokemon?",
             new[] { "Yes", "No" }, new Action[] { SwitchAccepted, SwitchRejected });
@@ -555,7 +553,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         {
             _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName
                                                         +participant.currentCoolDown.message);
-            yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
         }
         participant.currentCoolDown.numTurns--;
         NextTurn();
@@ -751,8 +749,8 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     }
     private IEnumerator SunEffect()
     {
-        DamageModifierForWeather( PokemonType.Fire,1.5f);
-        DamageModifierForWeather( PokemonType.Water,0.5f);
+        DamageModifierForWeather(PokemonType.Fire,1.5f);
+        DamageModifierForWeather(PokemonType.Water,0.5f);
         yield return null;
     }
     private IEnumerator HailEffect()
@@ -778,8 +776,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     {
         _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + currentWeather.weatherDamageMessage);
         var weatherDamage = victim.pokemon.maxHp * (1 / 16f);
-        _moveUsageHandler.DisplayDamage(victim,isSpecificDamage:true,
-            predefinedDamage:weatherDamage,displayEffectiveness:false);
-        yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
+        _moveUsageHandler.DisplaySpecialDamage(victim, predefinedDamage:weatherDamage);
+        yield return _moveUsageHandler.AwaitDamageDisplay();
     }
 }

@@ -43,7 +43,7 @@ public class Held_Items : BattleParticipantModule
                 break;
             //in the future, if there's need to add special held items like focus sash, create new type of item and add it to this switch
         }
-        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
     }
     private IEnumerator DetermineBerryEffect(Item heldItem)
     {
@@ -87,7 +87,7 @@ public class Held_Items : BattleParticipantModule
         _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+heldItem.itemName +" healed it");
         var healEffect = heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
         _moveUsageHandler.HealthGainDisplay(healEffect,healthGainer:participant);
-        yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);
+        yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
     private IEnumerator GetStatusHealing(Item heldItem)
     { 

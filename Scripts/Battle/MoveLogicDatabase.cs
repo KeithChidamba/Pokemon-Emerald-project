@@ -41,7 +41,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _logicMethods.Add("haze", Haze);
         _logicMethods.Add("hyperbeam", Hyperbeam);
         _logicMethods.Add("bide", Bide);
-        _logicMethods.Add("sonicboom", Sonicboom);
+        _logicMethods.Add("sonicboom", SonicBoom);
         _logicMethods.Add("takedown", TakeDown);
         _logicMethods.Add("magnitude", Magnitude);
         _logicMethods.Add("endeavor", Endeavor);
@@ -84,9 +84,9 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             enemy.barriers.Clear();
         }
         
-        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
-        _moveUsageHandler.DisplayDamage(_victim);
-        yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
+        yield return _dialogueHandler.AwaitAllDialogue();
+        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
+        yield return _moveUsageHandler.AwaitDamageDisplay();
     }
     
     private IEnumerator Haze()
@@ -102,7 +102,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Hyperbeam()
     {
-        _moveUsageHandler.DisplayDamage(_victim);
+        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
         var cancelledTurn = new Turn(_currentTurn);
         cancelledTurn.isCancelled = true;
         _attacker.currentCoolDown.UpdateCoolDown( 1,cancelledTurn,message: " must recharge!");
@@ -117,9 +117,8 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             if (_attacker.currentCoolDown.turnData.move.moveDamage > 0)
             {
                 _currentTurn.move.moveDamage = _attacker.currentCoolDown.turnData.move.moveDamage;
-                var typelessDamage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move, _victim, true);
-                _moveUsageHandler.DisplayDamage(_victim,displayEffectiveness:false,isSpecificDamage:true
-                    ,predefinedDamage:typelessDamage);
+                var typelessDamage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move,_attacker, _victim, true);
+                _moveUsageHandler.DisplaySpecialDamage(_victim, predefinedDamage: typelessDamage);
             }
             else
             {
@@ -138,22 +137,23 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
        
     }
 
-    private IEnumerator Sonicboom()
+    private IEnumerator SonicBoom()
     {
         var sonicBoomDamage = 20f;
-        _moveUsageHandler.DisplayDamage(_victim,isSpecificDamage:true,predefinedDamage:sonicBoomDamage);
+        _moveUsageHandler.DisplaySpecificMoveDamage(_currentTurn.move,_victim,specificDamage:sonicBoomDamage);
         yield return null;
     }    
     private IEnumerator TakeDown()
     {
-        var damage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move, _victim);
+        var damage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move,_attacker, _victim);
         var recoilDamage = math.floor(damage / 4f);
-        _moveUsageHandler.DisplayDamage(_victim,isSpecificDamage:true,predefinedDamage:damage);
-        yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
+        
+        _moveUsageHandler.DisplaySpecificMoveDamage(_currentTurn.move,_victim,damage);
+        yield return _moveUsageHandler.AwaitDamageDisplay();
+        
         _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName +" was hurt by the recoil");
-        _moveUsageHandler.DisplayDamage(_attacker,isSpecificDamage:true
-            ,predefinedDamage:recoilDamage,displayEffectiveness: false);
-        yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
+        _moveUsageHandler.DisplaySpecialDamage(_attacker,predefinedDamage:recoilDamage);
+        yield return _moveUsageHandler.AwaitDamageDisplay();
     }
 
     private IEnumerator Magnitude()
@@ -162,10 +162,14 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         var baseDamage = 10f;
         var damageIncrease = 0f;
         if(magnitudeStrength > 4)
+        {
             damageIncrease = 20f;
+        }
         baseDamage += damageIncrease * (magnitudeStrength - 4);
         if (magnitudeStrength == 10)
+        {
             baseDamage += 20f;
+        }
         _dialogueHandler.DisplayBattleInfo("Magnitude level "+magnitudeStrength);
         _currentTurn.move.moveDamage = baseDamage;
         yield return _moveLogicHandler.ApplyMultiTargetDamage(_moveLogicHandler.TargetAllExceptSelf());
@@ -179,7 +183,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             yield break;
         }
         var damage = _victim.pokemon.hp - _attacker.pokemon.hp;
-        _moveUsageHandler.DisplayDamage(_victim,isSpecificDamage:true,predefinedDamage:damage);
+        _moveUsageHandler.DisplaySpecificMoveDamage(_currentTurn.move,_victim,damage);
     }
 
     private IEnumerator FuryCutter()
@@ -192,15 +196,16 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
         else
             _currentTurn.move.moveDamage = damageLevel[0];
-        _moveUsageHandler.DisplayDamage(_victim);
+        
+        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
         yield return null;
     }
     private IEnumerator Silverwind()
     {
         bool battleEnded = false;
         _battleHandler.OnParticipantFainted += CancelOnBattleEnd;
-        _moveUsageHandler.DisplayDamage(_victim);
-        yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
+        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
+        yield return _moveUsageHandler.AwaitDamageDisplay();
 
         void CancelOnBattleEnd(Battle_Participant faintedParticipant)
         {
@@ -269,18 +274,16 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
                 break;
             }
         }
-        _moveUsageHandler.DisplayDamage(_victim);
+        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
         yield return null;
     }
 
     private IEnumerator FalseSwipe()
     {
-        var damage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move, _victim);
-        if (_victim.pokemon.hp - damage <= 0)
-        {
-            damage = _victim.pokemon.hp - 1;
-        }
-        _moveUsageHandler.DisplayDamage(_victim,isSpecificDamage:true,predefinedDamage:damage);
+        var damage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move,_attacker, _victim);
+        damage = Mathf.Min(damage, _victim.pokemon.hp - 1);
+        damage = Mathf.Max(damage, 0);
+        _moveUsageHandler.DisplaySpecificMoveDamage(_currentTurn.move,_victim,damage);
         yield return null;
     }
 
@@ -293,8 +296,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
         
         var selfDamage = math.floor(_attacker.pokemon.hp / 2f);
-        _moveUsageHandler.DisplayDamage(_attacker,displayEffectiveness:false,
-            isSpecificDamage:true,predefinedDamage:selfDamage);
+        _moveUsageHandler.DisplaySpecialDamage(_attacker,selfDamage);
         
         var buffData = new BuffDebuffData(_attacker, Stat.Attack, true, 6);
         _moveUsageHandler.ExecuteBuffOrDebuff(buffData);
@@ -302,7 +304,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Covet()
     {
-        _moveUsageHandler.DisplayDamage(_victim);
+        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
         if (_victim.pokemon.hasItem && !_attacker.pokemon.hasItem)
         {
             if (_victim.pokemon.heldItem.itemType == ItemType.Berry)
@@ -325,7 +327,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
                 _dialogueHandler.DisplayBattleInfo("But it failed!");
                 yield break;
             }
-            _moveUsageHandler.repeatingMoveCycle = true;
+            _moveUsageHandler.AllowMoveRepeat();
             _currentTurn.move = _victim.previousMove.move;
             _dialogueHandler.DisplayBattleInfo(
                 _turnBasedCombatHandler.GetMoveUsageText(_currentTurn.move,_attacker, _victim));
@@ -347,7 +349,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         if (!_battleHandler.isTrainerBattle)
         {
             _battleHandler.EndBattle(BattleEndState.BattleTerminated,null);
-            _moveUsageHandler.doingMove = false;
+            _moveUsageHandler.ResetAfterBattleTermination();
             yield break;
         }
         
@@ -390,10 +392,10 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+" fell asleep!");
         yield return new WaitForSeconds(1f);
         _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:_attacker);
-        yield return new WaitUntil(() => !_moveUsageHandler.displayingHealthGain);
+        yield return _moveUsageHandler.AwaitHealthGainDisplay();
         _attacker.statusHandler.RemoveStatusEffect(true);
         yield return new WaitUntil(()=>_attacker.pokemon.statusEffect == StatusEffect.None);
         _moveUsageHandler.ApplyStatusToVictim(_attacker, StatusEffect.Sleep, 2);
-        yield return new WaitUntil(()=>!_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
     }
 }

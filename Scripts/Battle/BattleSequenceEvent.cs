@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class BattleSequenceEvent
 {
-    private Action _onEventTriggered;
+    private Action<Move,Battle_Participant,Battle_Participant> _onEventTriggered;
     public bool Condition;
-    public BattleSequenceEvent(Action onEventMethod, bool condition)
+    public BattleSequenceEvent(Action<Move,Battle_Participant,Battle_Participant> onEventMethod, bool condition)
     {
         _onEventTriggered+=onEventMethod;
         Condition = condition;
     }
-    public void Execute()
+    public void Execute(Move move,Battle_Participant attacker, Battle_Participant victim)
     {
-        _onEventTriggered?.Invoke();
+        _onEventTriggered?.Invoke(move,attacker,victim);
     }
 }

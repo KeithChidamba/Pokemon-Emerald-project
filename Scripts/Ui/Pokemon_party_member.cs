@@ -23,7 +23,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
     public GameObject memberNotSelectedImage;
     public GameObject emptySlotUI;
     public GameObject heldItemImage;
-    private Action<Battle_Participant> _healthPhaseUpdateEvent;
+    private Action _healthPhaseUpdateEvent;
     public bool isEmpty;
     private bool _isViewingCard;
     private bool _viewingParty;
@@ -82,8 +82,7 @@ public class Pokemon_party_member : MonoBehaviour,IInjectable
         
         pokemonFrontImage.sprite = pokemon.partyFrame1;
         
-        _healthPhaseUpdateEvent = 
-            (attacker) => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
+        _healthPhaseUpdateEvent = () => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
        
         pokemon.OnHealthChanged += _healthPhaseUpdateEvent;
         

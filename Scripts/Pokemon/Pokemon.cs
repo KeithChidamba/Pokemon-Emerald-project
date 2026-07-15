@@ -97,7 +97,7 @@ public class Pokemon : ScriptableObject
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
     public event Action<Pokemon> OnExpGainComplete;
-    public event Action<Battle_Participant> OnHealthChanged;
+    public event Action OnHealthChanged;
     public event Action<int> OnEvolutionSuccessful;
     //data conversion when json to obj
     public string abilityName;
@@ -114,7 +114,7 @@ public class Pokemon : ScriptableObject
     
     public void SaveUnserializableData()
     {
-        abilityName = ability.abilityName;
+        abilityName = NameDB.GetAbility(ability.abilityName);
         natureName = nature.natureName;
         hasItem = (heldItem != null);
         moveData.Clear();
@@ -384,7 +384,8 @@ public class Pokemon : ScriptableObject
 
             if(displayMessage)_dialogueHandler.DisplayBattleInfo(pokemonDisplayName+" grew to lv"+currentLevel);
                
-            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
+            
             yield return _pokemonOperationsHandler.WaitForNewMoveCheck(this);
 
             yield return _pokemonOperationsHandler.AwaitMoveOperation(moveSet.Count == 4);
@@ -498,9 +499,9 @@ public class Pokemon : ScriptableObject
         OnNewLevel?.Invoke();
     }
 
-    public void ChangeHealth(Battle_Participant attacker)
+    public void NotifyHealthChange()
     {
-        OnHealthChanged?.Invoke(attacker);
+        OnHealthChanged?.Invoke();
     }
     private void ClearEvents()
     {

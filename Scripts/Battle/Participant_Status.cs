@@ -159,11 +159,11 @@ public class Participant_Status : BattleParticipantModule
         }
         var healthLost = math.ceil(participant.pokemon.maxHp * damagePercent);
         
-        _moveUsageHandler.DisplayDamage(participant,displayEffectiveness:false,isSpecificDamage:true,healthLost,damageSource);
+        _moveUsageHandler.DisplaySpecialDamage(participant,predefinedDamage:healthLost,damageSource);
         
-        yield return new WaitUntil(() => !_moveUsageHandler.displayingDamage);
+        yield return _moveUsageHandler.AwaitDamageDisplay();
        
-        participant.pokemon.ChangeHealth(null);  
+        participant.pokemon.NotifyHealthChange();  
         
     }
     public void StunCheck()
@@ -277,7 +277,7 @@ public class Participant_Status : BattleParticipantModule
         }
         RemoveStatusEffect();
         _healed = false;
-        yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
     }
     public void RemoveStatusEffect(bool healAllEffects = false)
     {

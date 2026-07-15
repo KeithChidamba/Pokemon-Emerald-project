@@ -100,7 +100,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             image.img.rectTransform.anchoredPosition = image.pos;
         }
         yield return null;
-        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
         OnStatVisualDisplayed?.Invoke();
     }
 

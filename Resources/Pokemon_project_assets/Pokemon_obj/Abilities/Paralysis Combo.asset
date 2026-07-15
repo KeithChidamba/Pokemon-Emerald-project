@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd94003ad6a8bc42b79e8b33a350c0d, type: 3}
   m_Name: Paralysis Combo
   m_EditorClassIdentifier: 
-  abilityName: Paralysis Combo
-  ability_description: Deals 2x damage to paralysed foes
-  AbilityType: 
+  abilityName: 6
+  abilityDescription: Deals 2x damage to paralysed foes

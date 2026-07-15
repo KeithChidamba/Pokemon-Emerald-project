@@ -36,7 +36,9 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public IReadOnlyList<Battle_Participant> GetParticipants => currentParticipants;
     [SerializeField]private Battle_Participant[] battleParticipantInstances;
     
-    public List<Battle_Participant> faintQueue = new();
+    [SerializeField]private List<Battle_Participant> faintQueue = new();
+    [SerializeField]public bool handlingFaintEvent;
+    
     public bool battleInProgress;
     public bool isTrainerBattle;
     public bool isDoubleBattle;
@@ -370,7 +372,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         _inputStateHandler.AddPlaceHolderState();
         _dialogueHandler.DisplayDetails(message,false);
-        yield return new WaitUntil(()=>_dialogueHandler.dialogueFinished);
+        yield return _dialogueHandler.WaitForDialogueCompletion();
         yield return new WaitForSecondsRealtime(1f);
         _dialogueHandler.EndDialogue();
     }
@@ -639,22 +641,33 @@ public class Battle_handler : MonoBehaviour, IInjectable
         }
         return 1f;
     }
+    public void AddFaintedParticipant(Battle_Participant participant)
+    {
+        faintQueue.Add(participant);
+    }
     public void StartFaintEvent()
     {
-        StartCoroutine(FaintSequence());
+        if(!handlingFaintEvent)
+        {
+            StartCoroutine(FaintSequence());
+        }
     }
-    
+    public IEnumerator AwaitFaintQueue()
+    {
+        yield return new WaitUntil(() => faintQueue.Count == 0);
+    }
     private IEnumerator FaintSequence()
     {
+        handlingFaintEvent = true;
         while (faintQueue.Count > 0)
         {
             var faintedParticipant = faintQueue[0];
-            _turnBasedCombatHandler.faintEventDelay = true;
+            faintedParticipant.BeginFaintEvent();
             _dialogueHandler.DisplayBattleInfo(faintedParticipant.pokemon.pokemonDisplayName + " fainted!");
             var pkmImageRect = faintedParticipant.pokemonImage.rectTransform;
             var rectHeight = pkmImageRect.rect.height;
             var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-rectHeight);
-            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
             
             StartCoroutine(BattleVisuals.SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
             
@@ -697,6 +710,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
             faintQueue.RemoveAt(0);
             yield return null;
         }
+        handlingFaintEvent = false;
     }
     public void StartExpEvent(Pokemon pokemon)
     {
@@ -709,7 +723,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         pokemonGainExp.OnExpGainComplete += awaitEvent;
         yield return new WaitUntil(() => !awaitingEventCompletion);
         pokemonGainExp.OnExpGainComplete -= awaitEvent;
-        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
     }
     
     
@@ -722,7 +736,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         return;
         IEnumerator ProcessBattleEnd()
         {
-            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
             _inputStateHandler.OnStateChanged -= EnableBattleMessage;
             _inputStateHandler.AddPlaceHolderState();
             var playerData = _gameLoadingHandler.playerData;
@@ -795,7 +809,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
                     break;
             }
             
-            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
             _dialogueHandler.EndDialogue();
             _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
             yield return _battleIntroHandler.BlackFade();
@@ -905,7 +919,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         }
         IEnumerator FailEscape()
         {
-            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
             _turnBasedCombatHandler.NextTurn();
         }
         

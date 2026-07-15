@@ -128,7 +128,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
         }
         
         _dialogueHandler.DeletePreviousOptions();
-        _dialogueHandler.canExitDialogue = true;
+        _dialogueHandler.AllowDialogueExit();
         
         _currentInteraction = interaction;
         if (_interactionMethods.TryGetValue(interactionOption,out var method))

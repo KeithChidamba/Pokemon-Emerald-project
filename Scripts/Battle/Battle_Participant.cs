@@ -62,6 +62,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     
     public List<Pokemon> expReceivers;
     private bool _expEventDelay;
+    [SerializeField]private bool handlingFaintEvent;
     
     public List<Barrier> barriers = new();
     
@@ -207,24 +208,27 @@ public class Battle_Participant : MonoBehaviour,IInjectable
 
         _expEventDelay = false;
         expReceivers.Clear();
-        
     }
-    private void CheckIfFainted(Battle_Participant attacker)
+    public void BeginFaintEvent()
+    {
+        handlingFaintEvent = true;
+    }
+    public void EndFaintEvent()
+    {
+        handlingFaintEvent = false;
+    }
+    private void CheckIfFainted()
     {
         if (!isActive) return;
         if (pokemon.hp > 0) return;
         pokemon.statusEffect = StatusEffect.None;
-        _battleHandler.faintQueue.Add(this);
-        pokemon.DetermineFriendshipLevelChange(
-            false, FriendshipModifier.Fainted);
-        if (!_turnBasedCombatHandler.faintEventDelay)
-        {
-            _battleHandler.StartFaintEvent();
-        }
+        _battleHandler.AddFaintedParticipant(this);
+        pokemon.DetermineFriendshipLevelChange(false, FriendshipModifier.Fainted);
+        _battleHandler.StartFaintEvent();
     }
     public IEnumerator HandleFaintLogic()
     {
-        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
         if (!isPlayer)
         {
             yield return DistributeExp(pokemon.CalculateExperience());
@@ -238,7 +242,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
             if (!_battleHandler.isTrainerBattle)
             {
                 yield return _wildPokemonHandler.EndWildBattle();
-                _turnBasedCombatHandler.faintEventDelay = false;
+                EndFaintEvent();
             }
             else
             {
@@ -264,21 +268,15 @@ public class Battle_Participant : MonoBehaviour,IInjectable
             if ( (_battleHandler.isDoubleBattle && alivePokemon.Count > 1) || 
             (!_battleHandler.isDoubleBattle && alivePokemon.Count > 0) )
             {
-                _battleHandler.OnSwitchIn += ResetEvent;
                 SetupSwitchOut();
-                yield return new WaitUntil(() => !_turnBasedCombatHandler.faintEventDelay);
-                void ResetEvent()
-                {
-                    _battleHandler.OnSwitchIn -= ResetEvent;
-                    _turnBasedCombatHandler.faintEventDelay = false;
-                }
+                yield return new WaitUntil(() => !handlingFaintEvent);
             }
             else if (_battleHandler.isDoubleBattle && alivePokemon.Count == 1)//1 left
             {
                 isActive = false;
                 DeactivateUI();
                 _battleHandler.CheckParticipantStates();
-                _turnBasedCombatHandler.faintEventDelay = false;
+                EndFaintEvent();
             }
         }
         yield return null;

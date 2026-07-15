@@ -66,7 +66,7 @@ public class Item_handler : MonoBehaviour,IInjectable
             StartCoroutine(CompletionSequence());
             IEnumerator CompletionSequence()
             {
-                yield return new WaitUntil(() => _dialogueHandler.dialogueFinished);
+                yield return _dialogueHandler.WaitForDialogueCompletion();
                 yield return new WaitForSecondsRealtime(1f);
                 if (itemUsed.forPartyUse)
                 {

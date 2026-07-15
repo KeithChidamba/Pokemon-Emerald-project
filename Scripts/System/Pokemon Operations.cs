@@ -239,7 +239,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                 yield return new WaitUntil(() => _selectingMoveReplacement);
                 yield return new WaitUntil(() => !_selectingMoveReplacement);
             }
-            yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
         }
         yield return new WaitUntil(() => !_learningNewMove);
     }
@@ -470,7 +470,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
 
             wildPokemon.captureInformation.levelCaptured = wildPokemon.currentLevel;
             wildPokemon.captureInformation.areaName = Utility.GetAreaName(_gameLoadingHandler.playerData.location);
-            yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
             
             var nickNameOperationComplete = false;
             SetupPokemonNaming(wildPokemon, (result) => nickNameOperationComplete = true);
@@ -479,14 +479,14 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             wildPokemon.ChangeFriendshipLevel(70);
             wildPokemon.pokeballName = pokeball.itemName;
             _playerParty.AddMember(wildPokemon,pokeball.itemName);
-            yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
             yield return _wildPokemonHandler.EndWildBattle();
 
         }else
         {
             yield return StartCoroutine(_battleVisuals.DisplayPokeballEscape());
             _dialogueHandler.DisplayBattleInfo(wildPokemon.pokemonDisplayName+" escaped the pokeball");
-            yield return new WaitUntil(()=> !_dialogueHandler.messagesLoading);
+            yield return _dialogueHandler.AwaitAllDialogue();
         }
         OnPokeballUsed?.Invoke(wildPokemon,isCaught);
     }
@@ -549,10 +549,10 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     {
         _dialogueHandler.DisplayBattleInfo("What? "+pokemon.pokemonDisplayName+" is evolving!");
         var previousName = pokemon.pokemonDisplayName;
-        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
         pokemon.Evolve(pokemon.evolutions[evolutionIndex]);
         _dialogueHandler.DisplayBattleInfo(previousName+" evolved into "+pokemon.pokemonDisplayName);
-        yield return new WaitUntil(() => !_dialogueHandler.messagesLoading);
+        yield return _dialogueHandler.AwaitAllDialogue();
     }
 }
 

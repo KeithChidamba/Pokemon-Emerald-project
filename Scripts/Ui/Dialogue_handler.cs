@@ -11,8 +11,8 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     public Overworld_interactable currentInteractable;
     [SerializeField] private TMP_Text dialougeText;
     public float typingSpeed = 0.04f;
-    public bool dialogueFinished;
-    public bool canExitDialogue = true;
+    [SerializeField] private bool dialogueFinished;
+    [SerializeField] private bool canExitDialogue = true;
     [SerializeField] private bool displaying;
     [SerializeField] private GameObject infoDialogueBox;
     public GameObject battleDialogueBox;
@@ -24,7 +24,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     [SerializeField] private DialogueOptionsManager _dialogueOptionsManager;
     [SerializeField] private Transform dialogueUiParent;
     private List<GameObject> _currentDialogueOptions = new();
-    public bool messagesLoading;
+    [SerializeField] private bool messagesLoading;
     public List<Interaction> pendingMessages = new();
     public GameObject optionSelector;
     private Coroutine _typingRoutine;
@@ -68,7 +68,18 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
             }
         }
     }
-
+    public IEnumerator AwaitAllDialogue()
+    {
+        yield return new WaitUntil(() => !messagesLoading);
+    }
+    public IEnumerator WaitForDialogueCompletion()
+    {
+        yield return new WaitUntil(() => dialogueFinished);
+    }
+    public void AllowDialogueExit()
+    {
+        canExitDialogue = true;
+    }
     public bool HandlingStateExit(InputState currentState)
     {
         if (!displaying) return false;
