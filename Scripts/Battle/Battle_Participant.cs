@@ -55,7 +55,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
     public GameObject[] doubleBattleUI;
     public GameObject participantUI;
     
-    public PreviousMove previousMove;
+    public PreviousMove previousMoveData;
     public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
     public List<TypeImmunityNegation> immunityNegations = new();
@@ -328,7 +328,7 @@ public class Battle_Participant : MonoBehaviour,IInjectable
         isSemiInvulnerable = false;
         semiInvulnerabilityData.ResetState();
         canEscape = true;
-        previousMove = null;
+        previousMoveData = null;
         additionalTypeImmunity = null;
         
         currentCoolDown.ResetState();

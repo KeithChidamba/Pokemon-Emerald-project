@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -109,7 +108,7 @@ public class AbilityHandler : BattleParticipantModule
             _damageBuffCombinations.Add(possibleBuff.abilityName, newData);
         }
 
-        var paralysisCombo = new DamageBuff("paralysiscombo", 2f);
+        var paralysisCombo = new DamageBuff(GetLowerFormat(AbilityName.ParalysisCombo), 2f);
         var parData = new DamageBuffAbilityData(
             paralysisCombo.multiplier,
             (attacker, victim, move) => StatusEffectCheck(victim, StatusEffect.Paralysis)
@@ -120,13 +119,16 @@ public class AbilityHandler : BattleParticipantModule
     void CheckAbilityUsability()
     {
         if (!participant.isActive) return;
-        if(participant.pokemon.hp>0)
-            OnAbilityUsed?.Invoke();
+        OnAbilityUsed?.Invoke();
     }
 
+    private string GetLowerFormat(AbilityName abilityName)
+    {
+        return NameDB.GetAbility(abilityName).ToLower().Replace(" ", "");
+    }
     public void SetAbilityMethod()
     {
-        _currentAbility = NameDB.GetAbility(participant.pokemon.ability.abilityName).ToLower().Replace(" ","");
+        _currentAbility = GetLowerFormat(participant.pokemon.ability.abilityName);
         
         if (_abilityMethods.TryGetValue(_currentAbility, out Action abilityMethod))
             OnAbilityUsed += abilityMethod;

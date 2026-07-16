@@ -352,7 +352,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             }
             else
             {
-                attacker.previousMove.failedAttempt = true;
+                attacker.previousMoveData.failedAttempt = true;
                 attacker.semiInvulnerabilityData.ResetState();
             }
         }
@@ -560,22 +560,22 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     }
     private void CheckRepeatedMove(Battle_Participant attacker, Move move)
     {
-        if (attacker.previousMove==null)
+        if (attacker.previousMoveData==null)
         {
             var newData = new PreviousMove(move,0);
-            attacker.previousMove = newData;
+            attacker.previousMoveData = newData;
             return;
         }
 
-        if (attacker.previousMove.move.moveName == move.moveName)
+        if (attacker.previousMoveData.move.moveName == move.moveName)
         {
-            attacker.previousMove.numRepetitions++;
-            attacker.previousMove.failedAttempt = false;
+            attacker.previousMoveData.numRepetitions++;
+            attacker.previousMoveData.failedAttempt = false;
         }
         else
         {
             var newData = new PreviousMove(move,0);
-            attacker.previousMove = newData;
+            attacker.previousMoveData = newData;
         }
     }
     private bool IsValidParticipantState(Battle_Participant participant)

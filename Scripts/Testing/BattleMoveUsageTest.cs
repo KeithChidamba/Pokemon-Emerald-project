@@ -41,7 +41,7 @@ public class BattleMoveUsageTest : IntegrationTest
                 {
                     createdPokemon.GiveItem(InstanceFactory.CreateItem(member.naturalPokemonData.heldItem));
                 }
-                _pokemonPartyHandler.AddMember(createdPokemon,"Pokeball");
+                _pokemonPartyHandler.AddTestMember(createdPokemon);
             }
         }
         yield return new WaitForSeconds(1f);

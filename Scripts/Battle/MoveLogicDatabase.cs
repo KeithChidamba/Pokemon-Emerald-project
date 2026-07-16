@@ -7,10 +7,6 @@ using UnityEngine;
 
 public class MoveLogicDatabase : MonoBehaviour,IInjectable
 {
-    private Turn _currentTurn;
-    private Battle_Participant _attacker;
-    private Battle_Participant _victim;
-    
     private Dialogue_handler _dialogueHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Pokemon_party _pokemonPartyHandler;
@@ -20,7 +16,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private BattleOperations _battleOperationsHandler;
     private MoveLogicHandler _moveLogicHandler;
     
-    private Dictionary<string, Func<IEnumerator>> _logicMethods = new();
+    private Dictionary<string, Func<Turn,Battle_Participant,Battle_Participant,IEnumerator>> _logicMethods = new();
     
     public void Inject(ServiceContainer container)
     {
@@ -55,41 +51,39 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _logicMethods.Add("whirlwind", Whirlwind);
         _logicMethods.Add("rest", Rest);
     }
-    public IEnumerator InvokeMoveLogic(string moveName,Battle_Participant attacker, Battle_Participant victim, Turn currentTurn)
+    
+    public IEnumerator InvokeMoveLogic(Battle_Participant attacker, Battle_Participant victim, Turn currentTurn)
     {
-        _attacker = attacker;
-        _victim = victim;
-        _currentTurn = currentTurn;
-        var formattedName = moveName.Replace(" ", "").ToLower();
+        var formattedName = currentTurn.move.moveName.Replace(" ", "").ToLower();
         
-        if (_logicMethods.TryGetValue(formattedName, out var abilityMethod))
+        if (_logicMethods.TryGetValue(formattedName, out var logicMethod))
         {
-            yield return abilityMethod();
+            yield return logicMethod(currentTurn,attacker,victim); 
         }
         else
             Debug.LogWarning($"Move '{formattedName}' not found!");
     }
-    private IEnumerator BrickBreak()
+    private IEnumerator BrickBreak(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
         var duplicateBarriers = new List<string>();
-        foreach (var enemy in _attacker.currentEnemies)
+        foreach (var enemy in attacker.currentEnemies)
         {
             if(!enemy.isActive)continue;
             foreach (var barrier in enemy.barriers)
             {
                 if (duplicateBarriers.Contains(barrier.barrierName)) continue;
-                _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+" shattered "+barrier.barrierName);
+                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" shattered "+barrier.barrierName);
                 duplicateBarriers.Add(barrier.barrierName);
             }
             enemy.barriers.Clear();
         }
         
         yield return _dialogueHandler.AwaitAllDialogue();
-        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
+        _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         yield return _moveUsageHandler.AwaitDamageDisplay();
     }
     
-    private IEnumerator Haze()
+    private IEnumerator Haze(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
         var validParticipants = _battleHandler.GetValidParticipants();
         foreach (var participant in validParticipants)
@@ -100,63 +94,63 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    private IEnumerator Hyperbeam()
+    private IEnumerator Hyperbeam(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
-        var cancelledTurn = new Turn(_currentTurn);
+        _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
+        var cancelledTurn = new Turn(currentTurn);
         cancelledTurn.isCancelled = true;
-        _attacker.currentCoolDown.UpdateCoolDown( 1,cancelledTurn,message: " must recharge!");
+        attacker.currentCoolDown.UpdateCoolDown( 1,cancelledTurn,message: " must recharge!");
         yield return null;
     }
 
-    private IEnumerator Bide()
+    private IEnumerator Bide(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        if (_attacker.currentCoolDown.isExecutionTurn)
+        if (attacker.currentCoolDown.isExecutionTurn)
         {
-            _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+" unleashed the power");
-            if (_attacker.currentCoolDown.turnData.move.moveDamage > 0)
+            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" unleashed the power");
+            if (attacker.currentCoolDown.turnData.move.moveDamage > 0)
             {
-                _currentTurn.move.moveDamage = _attacker.currentCoolDown.turnData.move.moveDamage;
-                var typelessDamage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move,_attacker, _victim, true);
-                _moveUsageHandler.DisplaySpecialDamage(_victim, predefinedDamage: typelessDamage);
+                currentTurn.move.moveDamage = attacker.currentCoolDown.turnData.move.moveDamage;
+                var typelessDamage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim, true);
+                _moveUsageHandler.DisplaySpecialDamage(victim, predefinedDamage: typelessDamage);
             }
             else
             {
                 _dialogueHandler.DisplayBattleInfo("But it failed!");
             }
            
-            _moveUsageHandler.OnDamageDeal -= _attacker.currentCoolDown.StoreDamage;
-            _attacker.currentCoolDown.ResetState();
+            _moveUsageHandler.OnDamageDeal -= attacker.currentCoolDown.StoreDamage;
+            attacker.currentCoolDown.ResetState();
             yield return null;
         }
         else
         {
-            _attacker.currentCoolDown.UpdateCoolDown(2,_currentTurn, " is storing power");//change turns back
-            _moveUsageHandler.OnDamageDeal += _attacker.currentCoolDown.StoreDamage;
+            attacker.currentCoolDown.UpdateCoolDown(2,currentTurn, " is storing power");//change turns back
+            _moveUsageHandler.OnDamageDeal += attacker.currentCoolDown.StoreDamage;
         }
        
     }
 
-    private IEnumerator SonicBoom()
+    private IEnumerator SonicBoom(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
         var sonicBoomDamage = 20f;
-        _moveUsageHandler.DisplaySpecificMoveDamage(_currentTurn.move,_victim,specificDamage:sonicBoomDamage);
+        _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,specificDamage:sonicBoomDamage);
         yield return null;
     }    
-    private IEnumerator TakeDown()
+    private IEnumerator TakeDown(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        var damage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move,_attacker, _victim);
+        var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
         var recoilDamage = math.floor(damage / 4f);
         
-        _moveUsageHandler.DisplaySpecificMoveDamage(_currentTurn.move,_victim,damage);
+        _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,damage);
         yield return _moveUsageHandler.AwaitDamageDisplay();
         
-        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName +" was hurt by the recoil");
-        _moveUsageHandler.DisplaySpecialDamage(_attacker,predefinedDamage:recoilDamage);
+        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName +" was hurt by the recoil");
+        _moveUsageHandler.DisplaySpecialDamage(attacker,predefinedDamage:recoilDamage);
         yield return _moveUsageHandler.AwaitDamageDisplay();
     }
 
-    private IEnumerator Magnitude()
+    private IEnumerator Magnitude(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
         var magnitudeStrength = Utility.RandomRange(4, 11);
         var baseDamage = 10f;
@@ -171,45 +165,48 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             baseDamage += 20f;
         }
         _dialogueHandler.DisplayBattleInfo("Magnitude level "+magnitudeStrength);
-        _currentTurn.move.moveDamage = baseDamage;
-        yield return _moveLogicHandler.ApplyMultiTargetDamage(_moveLogicHandler.TargetAllExceptSelf());
+        currentTurn.move.moveDamage = baseDamage;
+        
+        yield return _moveLogicHandler.ApplyMultiTargetDamage(
+            _moveLogicHandler.TargetAllExceptSelf(attacker)
+            ,currentTurn.move,attacker);
     }
 
-    private IEnumerator Endeavor()
+    private IEnumerator Endeavor(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        if (_victim.pokemon.hp < _attacker.pokemon.hp)
+        if (victim.pokemon.hp < attacker.pokemon.hp)
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             yield break;
         }
-        var damage = _victim.pokemon.hp - _attacker.pokemon.hp;
-        _moveUsageHandler.DisplaySpecificMoveDamage(_currentTurn.move,_victim,damage);
+        var damage = victim.pokemon.hp - attacker.pokemon.hp;
+        _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,damage);
     }
 
-    private IEnumerator FuryCutter()
+    private IEnumerator FuryCutter(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
         var damageLevel = new[] { 10f, 20f, 40f, 80f, 160f };
-        if (_attacker.previousMove.move.moveName == NameDB.GetMoveName(LearnSetMoveName.FuryCutter))
+        if (attacker.previousMoveData.move.moveName == NameDB.GetMoveName(LearnSetMoveName.FuryCutter))
         {
-            _currentTurn.move.moveDamage = _attacker.previousMove.numRepetitions > 4?
-                damageLevel[^1] : damageLevel[_attacker.previousMove.numRepetitions];
+            currentTurn.move.moveDamage = attacker.previousMoveData.numRepetitions > 4?
+                damageLevel[^1] : damageLevel[attacker.previousMoveData.numRepetitions];
         }
         else
-            _currentTurn.move.moveDamage = damageLevel[0];
+            currentTurn.move.moveDamage = damageLevel[0];
         
-        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
+        _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         yield return null;
     }
-    private IEnumerator Silverwind()
+    private IEnumerator Silverwind(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
         bool battleEnded = false;
         _battleHandler.OnParticipantFainted += CancelOnBattleEnd;
-        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
+        _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         yield return _moveUsageHandler.AwaitDamageDisplay();
 
         void CancelOnBattleEnd(Battle_Participant faintedParticipant)
         {
-            if (faintedParticipant != _victim) return;
+            if (faintedParticipant != victim) return;
             _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
             battleEnded = _battleHandler.battleOver;
         }
@@ -235,7 +232,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         {
             bool awaitingAddition = true;
             _battleOperationsHandler.OnBuffApplied += AwaitBuffAddition;
-            var buffData = new BuffDebuffData(_attacker, buff, true, 1);
+            var buffData = new BuffDebuffData(attacker, buff, true, 1);
             _moveUsageHandler.ExecuteBuffOrDebuff(buffData,false);
             yield return new WaitUntil(() => !awaitingAddition);
             void AwaitBuffAddition()
@@ -245,10 +242,10 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             }
         }
         
-        string statChangeMessage = _battleOperationsHandler.GetBuffResultMessage(true,_attacker.pokemon,allBuffs);
+        string statChangeMessage = _battleOperationsHandler.GetBuffResultMessage(true,attacker.pokemon,allBuffs);
         _battleVisualsHandler.OnStatVisualDisplayed += AwaitBuffVisual;
         bool awaitingDisplay = true;
-        _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,_attacker,statChangeMessage);
+        _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,attacker,statChangeMessage);
         yield return new WaitUntil(() => !awaitingDisplay);
         void AwaitBuffVisual()
         {
@@ -257,81 +254,81 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
     }
 
-    private IEnumerator Flail()
+    private IEnumerator Flail(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
         List<(int hpLevel, float damage)> damagePerLevel = new()
         {
             (32, 200f), (16, 150f), (8, 100f), (4, 80f), (2, 40f)
         };
 
-        var currentHpRatio = _attacker.pokemon.hp / _attacker.pokemon.maxHp;
+        var currentHpRatio = attacker.pokemon.hp / attacker.pokemon.maxHp;
 
         foreach (var phase in damagePerLevel)
         {
             if (currentHpRatio <= 1f / phase.hpLevel)
             {
-                _currentTurn.move.moveDamage = phase.damage;
+                currentTurn.move.moveDamage = phase.damage;
                 break;
             }
         }
-        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
+        _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         yield return null;
     }
 
-    private IEnumerator FalseSwipe()
+    private IEnumerator FalseSwipe(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        var damage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move,_attacker, _victim);
-        damage = Mathf.Min(damage, _victim.pokemon.hp - 1);
+        var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
+        damage = Mathf.Min(damage, victim.pokemon.hp - 1);
         damage = Mathf.Max(damage, 0);
-        _moveUsageHandler.DisplaySpecificMoveDamage(_currentTurn.move,_victim,damage);
+        _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,damage);
         yield return null;
     }
 
-    private IEnumerator BellyDrum()
+    private IEnumerator BellyDrum(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        if (_attacker.pokemon.hp < 2)
+        if (attacker.pokemon.hp < 2)
         {
             _dialogueHandler.DisplayBattleInfo("But it failed!");
             yield break;
         }
         
-        var selfDamage = math.floor(_attacker.pokemon.hp / 2f);
-        _moveUsageHandler.DisplaySpecialDamage(_attacker,selfDamage);
+        var selfDamage = math.floor(attacker.pokemon.hp / 2f);
+        _moveUsageHandler.DisplaySpecialDamage(attacker,selfDamage);
         
-        var buffData = new BuffDebuffData(_attacker, Stat.Attack, true, 6);
+        var buffData = new BuffDebuffData(attacker, Stat.Attack, true, 6);
         _moveUsageHandler.ExecuteBuffOrDebuff(buffData);
     }
 
-    private IEnumerator Covet()
+    private IEnumerator Covet(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
-        if (_victim.pokemon.hasItem && !_attacker.pokemon.hasItem)
+        _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
+        if (victim.pokemon.hasItem && !attacker.pokemon.hasItem)
         {
-            if (_victim.pokemon.heldItem.itemType == ItemType.Berry)
+            if (victim.pokemon.heldItem.itemType == ItemType.Berry)
             {
-                _attacker.pokemon.GiveItem(InstanceFactory.CreateItem(_victim.pokemon.heldItem));
-                _victim.pokemon.RemoveHeldItem();
+                attacker.pokemon.GiveItem(InstanceFactory.CreateItem(victim.pokemon.heldItem));
+                victim.pokemon.RemoveHeldItem();
             }
         }
         yield return null;
     }
 
-    private IEnumerator MirrorMove()
+    private IEnumerator MirrorMove(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        if (_victim.previousMove is {failedAttempt:false})
+        if (victim.previousMoveData is {failedAttempt:false})
         {
             var nonCopyableMoves = new[] {"Detect","Protect","Haze"};
-            if (_victim.previousMove.move.isSelfTargeted
-                || nonCopyableMoves.Contains(_victim.previousMove.move.moveName))
+            if (victim.previousMoveData.move.isSelfTargeted
+                || nonCopyableMoves.Contains(victim.previousMoveData.move.moveName))
             {
                 _dialogueHandler.DisplayBattleInfo("But it failed!");
                 yield break;
             }
             _moveUsageHandler.AllowMoveRepeat();
-            _currentTurn.move = _victim.previousMove.move;
+            currentTurn.move = victim.previousMoveData.move;
             _dialogueHandler.DisplayBattleInfo(
-                _turnBasedCombatHandler.GetMoveUsageText(_currentTurn.move,_attacker, _victim));
-            _moveUsageHandler.OnMoveComplete += ()=> _moveUsageHandler.BeginMoveExecution(_currentTurn);
+                _turnBasedCombatHandler.GetMoveUsageText(currentTurn.move,attacker, victim));
+            _moveUsageHandler.OnMoveComplete += ()=> _moveUsageHandler.BeginMoveExecution(currentTurn);
         }
         else
         {
@@ -339,9 +336,9 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
     }
 
-    private IEnumerator Whirlwind()
+    private IEnumerator Whirlwind(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        if (_attacker.pokemon.currentLevel < _victim.pokemon.currentLevel)
+        if (attacker.pokemon.currentLevel < victim.pokemon.currentLevel)
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             yield break;
@@ -353,14 +350,14 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             yield break;
         }
         
-        var partyPositionOfVictim = _victim.participantKey < _victim.GetPartnerKey()? 0 : 1;
-        if (_victim.isPlayer)
+        var partyPositionOfVictim = victim.participantKey < victim.GetPartnerKey()? 0 : 1;
+        if (victim.isPlayer)
         {
             yield return CreateSwitchData(_pokemonPartyHandler.GetLivingPokemon(), _pokemonPartyHandler.Party.ToList());
         }
         else
         {
-            var enemyTrainer = _victim.pokemonTrainerAI;
+            var enemyTrainer = victim.pokemonTrainerAI;
             yield return CreateSwitchData(enemyTrainer.GetLivingPokemon(), enemyTrainer.trainerParty);
         }
 
@@ -381,21 +378,21 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             
             var pokemonIndex = fullParty.IndexOf(living[randomIndexOfLiving]);
             
-            var switchData = new SwitchOutData(partyPositionOfVictim,pokemonIndex,_victim);
+            var switchData = new SwitchOutData(partyPositionOfVictim,pokemonIndex,victim);
 
             yield return _turnBasedCombatHandler.HandleSwap(switchData,true);
         }
     }
-    private IEnumerator Rest()
+    private IEnumerator Rest(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        var healthGain = _attacker.pokemon.maxHp - _attacker.pokemon.hp;
-        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+" fell asleep!");
+        var healthGain = attacker.pokemon.maxHp - attacker.pokemon.hp;
+        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" fell asleep!");
         yield return new WaitForSeconds(1f);
-        _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:_attacker);
+        _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:attacker);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
-        _attacker.statusHandler.RemoveStatusEffect(true);
-        yield return new WaitUntil(()=>_attacker.pokemon.statusEffect == StatusEffect.None);
-        _moveUsageHandler.ApplyStatusToVictim(_attacker, StatusEffect.Sleep, 2);
+        attacker.statusHandler.RemoveStatusEffect(true);
+        yield return new WaitUntil(()=>attacker.pokemon.statusEffect == StatusEffect.None);
+        _moveUsageHandler.ApplyStatusToVictim(attacker, StatusEffect.Sleep, 2);
         yield return _dialogueHandler.AwaitAllDialogue();
     }
 }

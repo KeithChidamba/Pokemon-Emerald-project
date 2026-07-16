@@ -478,7 +478,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             
             wildPokemon.ChangeFriendshipLevel(70);
             wildPokemon.pokeballName = pokeball.itemName;
-            _playerParty.AddMember(wildPokemon,pokeball.itemName);
+            _playerParty.AddMemberAfterCatch(wildPokemon,pokeball.itemName);
             yield return _dialogueHandler.AwaitAllDialogue();
             yield return _wildPokemonHandler.EndWildBattle();
 
@@ -538,6 +538,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             }
         }
         newPokemon.pokemonDisplayName = newPokemon.pokemonName;
+        
         var expForRequiredLevel = CalculateExpForLevel(desiredLevel, newPokemon.expGroup);
         newPokemon.canEvolve = false;//prevent evolution from artificial exp
 

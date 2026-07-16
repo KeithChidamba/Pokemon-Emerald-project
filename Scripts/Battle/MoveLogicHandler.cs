@@ -7,11 +7,6 @@ using UnityEngine;
 
 public class MoveLogicHandler : MonoBehaviour,IInjectable
 {
-    private Turn _currentTurn;
-    private Battle_Participant _attacker;
-    private Battle_Participant _victim;
-    public bool moveDelay;
-    
     private Dialogue_handler _dialogueHandler;
     private Turn_Based_Combat _turnBasedCombatHandler;
     private Battle_handler _battleHandler;
@@ -36,65 +31,55 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     }
     public IEnumerator DetermineMoveLogic(Battle_Participant attacker, Battle_Participant victim, Turn currentTurn)
     {
-        _attacker = attacker;
-        _victim = victim;
-        _currentTurn = currentTurn;
-        
-        moveDelay = true;
+        var move = currentTurn.move;
         switch (currentTurn.move.effectType)
         {
             case EffectType.MultiTargetDamage:
-               yield return HandleMultiTargetDamage(); 
+               yield return HandleMultiTargetDamage(move,attacker); 
                break;
             case EffectType.Consecutive:
-                yield return ExecuteConsecutiveMove(); 
+                yield return ExecuteConsecutiveMove(move,attacker,victim); 
                 break;
             case EffectType.HealthDrain:
-                yield return DrainHealth(); 
+                yield return DrainHealth(move,attacker,victim); 
                 break;
             case EffectType.DamageProtection:
-                yield return ApplyDamageProtection(); 
+                yield return ApplyDamageProtection(move,attacker); 
                 break;
             case EffectType.WeatherHealthGain:
-                yield return HealFromWeather(); 
+                yield return HealFromWeather(attacker); 
                 break;
             case EffectType.IdentifyTarget:
-                yield return IdentifyTarget(); 
+                yield return IdentifyTarget(attacker,victim); 
                 break;
             case EffectType.BarrierCreation:
-                yield return CreateBarriers(); 
+                yield return CreateBarriers(move,attacker); 
                 break;
             case EffectType.OnFieldDamageModifier:
-                yield return OnFieldDamageModLogic(); 
+                yield return OnFieldDamageModLogic(move,attacker); 
                 break;
             case EffectType.SemiInvulnerable:
-                yield return ExecuteSemiInvulnerableMove(); 
+                yield return ExecuteSemiInvulnerableMove(currentTurn,attacker,victim); 
                 break;
             case EffectType.WeatherChange:
-                yield return ChangeWeather(); 
+                yield return ChangeWeather(move); 
                 break;
             case EffectType.UniqueLogic:
-                yield return HandleUniqueLogic(); 
+                yield return _moveLogicDatabase.InvokeMoveLogic(attacker,victim,currentTurn); 
                 break;
         }
-        yield return new WaitUntil(() => !moveDelay);
     }
 
-    private IEnumerator HandleUniqueLogic()
-    {
-        yield return _moveLogicDatabase.InvokeMoveLogic(_currentTurn.move.moveName,_attacker,_victim,_currentTurn);
-        moveDelay = false;
-    }
-    public List<Battle_Participant> TargetAllExceptSelf()
+    public List<Battle_Participant> TargetAllExceptSelf(Battle_Participant attacker)
     {
         var allParticipants = _battleHandler.GetParticipants.ToList();
         allParticipants.RemoveAll(p => !p.isActive);
-        allParticipants.RemoveAll(p => p.pokemon.pokemonID == _attacker.pokemon.pokemonID);
+        allParticipants.RemoveAll(p => p.pokemon.pokemonID == attacker.pokemon.pokemonID);
         return allParticipants;
     }
-    IEnumerator ExecuteConsecutiveMove()
+    IEnumerator ExecuteConsecutiveMove(Move move,Battle_Participant attacker, Battle_Participant victim)
     {
-        var consecutiveMoveInfo = _currentTurn.move.GetModule<ConsecutiveMoveInfo>();
+        var consecutiveMoveInfo = move.GetModule<ConsecutiveMoveInfo>();
         if (consecutiveMoveInfo.isRandomHitCount)
         {
             consecutiveMoveInfo.numHits = Utility.RandomRange(1, 6);
@@ -103,117 +88,110 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         var numHits = 0;
         for (int i = 0; i < consecutiveMoveInfo.numHits; i++)
         {
-            if (!_victim.canBeDamaged)
+            if (!victim.canBeDamaged)
             {
-                _dialogueHandler.DisplayBattleInfo(_victim.pokemon.pokemonDisplayName+" protected itself");
+                _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+" protected itself");
                 break;
             }
-            if (_victim.pokemon.hp <= 0) break;
+            if (victim.pokemon.hp <= 0) break;
             
             _dialogueHandler.DisplayBattleInfo("Hit "+(i+1)+"!");//remove later if added animations
-            _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim,displayEffectiveness:false);
+            _moveUsageHandler.DisplayMoveDamage(move,attacker,victim,displayEffectiveness:false);
             yield return _moveUsageHandler.AwaitDamageDisplay();
             numHits++;
             yield return _dialogueHandler.AwaitAllDialogue();
         }
-        if (numHits>0 && consecutiveMoveInfo.displayHitCount && _victim.pokemon.hp > 0)
+        if (numHits>0 && consecutiveMoveInfo.displayHitCount && victim.pokemon.hp > 0)
         {
             _moveUsageHandler.DisplayEffectiveness
-                (_battleOperations.CheckTypeEffectiveness(_victim, _currentTurn.move.type), _victim);
+                (_battleOperations.CheckTypeEffectiveness(victim, move.type), victim);
             _dialogueHandler.DisplayBattleInfo("It hit (x" + numHits + ") times");
         }
         yield return _dialogueHandler.AwaitAllDialogue();
-        moveDelay = false;
     } 
-    public IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets)
+    public IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets,Move move,Battle_Participant attacker)
     {
         yield return _dialogueHandler.AwaitAllDialogue();
         foreach (var enemy in targets)
         {
             if (!enemy.isActive) continue;
-            _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,enemy);
+            _moveUsageHandler.DisplayMoveDamage(move,attacker,enemy);
             yield return _moveUsageHandler.AwaitDamageDisplay();
             yield return _battleHandler.AwaitFaintQueue();
             yield return _dialogueHandler.AwaitAllDialogue();
         }
         yield return _dialogueHandler.AwaitAllDialogue();
-        moveDelay = false;
     }
-    IEnumerator HandleMultiTargetDamage()
+    IEnumerator HandleMultiTargetDamage(Move move,Battle_Participant attacker)
     {
-        var multiTargetInfo = _currentTurn.move.GetModule<MultiTargetDamageInfo>();
+        var multiTargetInfo = move.GetModule<MultiTargetDamageInfo>();
         var targets = new List<Battle_Participant>();
         switch (multiTargetInfo.target)
         {
             case Target.AllEnemies :
-                targets = _attacker.currentEnemies;
+                targets = attacker.currentEnemies;
                 break;
             case Target.AllExceptSelf :
-                targets = TargetAllExceptSelf();
+                targets = TargetAllExceptSelf(attacker);
                 break;
         }
-        yield return ApplyMultiTargetDamage(targets);
+        yield return ApplyMultiTargetDamage(targets,move,attacker);
     }
 
-    IEnumerator DrainHealth()
+    IEnumerator DrainHealth(Move move,Battle_Participant attacker, Battle_Participant victim)
     {
-        var healthDrainInfo = _currentTurn.move.GetModule<HealthDrainMoveInfo>();
-        var damage = _moveUsageHandler.CalculateMoveDamage(_currentTurn.move,_attacker,_victim);
-        var healAmount = _victim.pokemon.hp-damage<=0 ? _victim.pokemon.hp : damage; 
+        var healthDrainInfo = move.GetModule<HealthDrainMoveInfo>();
+        var damage = _moveUsageHandler.CalculateMoveDamage(move,attacker,victim);
+        var healAmount = victim.pokemon.hp-damage<=0 ? victim.pokemon.hp : damage; 
         healAmount *= healthDrainInfo.percentageOfDamage/100f;
         
-        _moveUsageHandler.DisplaySpecificMoveDamage(_currentTurn.move,_victim,damage);
+        _moveUsageHandler.DisplaySpecificMoveDamage(move,victim,damage);
         
         yield return _moveUsageHandler.AwaitDamageDisplay();
 
-        if (_attacker.pokemon.hp >= _attacker.pokemon.maxHp)
+        if (attacker.pokemon.hp >= attacker.pokemon.maxHp)
         {
-            moveDelay = false;
             yield break;
         }
         
-        _moveUsageHandler.HealthGainDisplay(healAmount,healthGainer:_attacker);
-        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+" gained health");
+        _moveUsageHandler.HealthGainDisplay(healAmount,healthGainer:attacker);
+        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" gained health");
         yield return _dialogueHandler.AwaitAllDialogue();
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
-        moveDelay = false;
     }
 
-    private IEnumerator ApplyDamageProtection()
+    private IEnumerator ApplyDamageProtection(Move move,Battle_Participant attacker)
     {
-        if(_attacker.previousMove.move.moveName == _currentTurn.move.moveName)
+        if(attacker.previousMoveData.move.moveName == move.moveName)
         {
             int chance = 100;
-            for (int i = 0; i < _attacker.previousMove.numRepetitions; i++)
+            for (int i = 0; i < attacker.previousMoveData.numRepetitions; i++)
                 chance /= 2;
             if (Utility.RandomRange(1, 101) <= chance)
-                _attacker.canBeDamaged = false;
+                attacker.canBeDamaged = false;
             else
             {
-                _attacker.canBeDamaged = true;
+                attacker.canBeDamaged = true;
                 _dialogueHandler.DisplayBattleInfo("It failed!");
             }
         }
         else
-            _attacker.canBeDamaged = false;
+            attacker.canBeDamaged = false;
         yield return null;
-        moveDelay = false;
     }
 
-    private IEnumerator CreateBarriers()
+    private IEnumerator CreateBarriers(Move move,Battle_Participant attacker)
     {
-        var barrierName = _currentTurn.move.moveName;
+        var barrierName = move.moveName;
         if (_battleHandler.isDoubleBattle)
         {
-            var currentAttacker = _battleHandler.GetParticipant(_currentTurn.attackerKey); 
-            
-            if (!_moveUsageHandler.HasDuplicateBarrier(currentAttacker, barrierName, true))
+            if (!_moveUsageHandler.HasDuplicateBarrier(attacker, barrierName, true))
             {
                 var newBarrier = new Barrier(barrierName, 0.33f, 5);
                 
-                currentAttacker.barriers.Add(newBarrier);
+                attacker.barriers.Add(newBarrier);
 
-                var partner = currentAttacker.GetPartner();
+                var partner = attacker.GetPartner();
 
                 if (partner.isActive)
                 {
@@ -227,64 +205,57 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         }
         else
         {
-            var currentParticipant = _battleHandler.GetParticipant(_currentTurn.attackerKey);
-
-            if (_moveUsageHandler.HasDuplicateBarrier(currentParticipant, barrierName,true))
+            if (_moveUsageHandler.HasDuplicateBarrier(attacker, barrierName,true))
                 yield return _dialogueHandler.AwaitAllDialogue();
             else
             {
-                currentParticipant.barriers.Add(new(barrierName,0.33f,5));
+                attacker.barriers.Add(new(barrierName,0.33f,5));
                 
                 _dialogueHandler.DisplayBattleInfo(barrierName + " has been activated");
             }
         }
         
         yield return _dialogueHandler.AwaitAllDialogue();
-        
-        moveDelay = false;
     }
     
-    private IEnumerator OnFieldDamageModLogic()
+    private IEnumerator OnFieldDamageModLogic(Move move,Battle_Participant attacker)
     {
-        var damageModifierInfo = _currentTurn.move.GetModule<DamageModifierInfo>();
+        var damageModifierInfo = move.GetModule<DamageModifierInfo>();
         _dialogueHandler.DisplayBattleInfo(damageModifierInfo.damageChangeMessage);
         if (_moveUsageHandler.DamageModifierPresent(damageModifierInfo.typeAffected))
         {
-            moveDelay = false;
             yield break;
         } 
-        var damageModifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,_turnBasedCombatHandler,damageModifierInfo,_attacker);
+        var damageModifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,_turnBasedCombatHandler,damageModifierInfo,attacker);
         
         _battleHandler.OnParticipantFainted += RemoveOnFaint;
                 
         void RemoveOnFaint(Battle_Participant faintedParticipant)
         {
-            if (faintedParticipant != _attacker) return;
+            if (faintedParticipant != attacker) return;
             _battleHandler.OnParticipantFainted -= RemoveOnFaint;
-            damageModifier.RemoveOnSwitchOut(_attacker);
+            damageModifier.RemoveOnSwitchOut(attacker);
         }
         
         _battleHandler.OnSwitchOut += damageModifier.RemoveOnSwitchOut;
         _moveUsageHandler.AddFieldDamageModifier(damageModifier);
-        moveDelay = false;
     }
-    private IEnumerator IdentifyTarget()
+    private IEnumerator IdentifyTarget(Battle_Participant attacker, Battle_Participant victim)
     {
-        if (_victim.immunityNegations.Any(n=> 
+        if (victim.immunityNegations.Any(n=> 
                 n.moveName==ImmunityNegationMove.Foresight))
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
-            moveDelay = false;
             yield break;
         }
-        _dialogueHandler.DisplayBattleInfo(_victim.pokemon.pokemonDisplayName +" was identified!");
-        _victim.pokemon.buffAndDebuffs
+        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName +" was identified!");
+        victim.pokemon.buffAndDebuffs
             .RemoveAll(b => b.stat == Stat.Evasion);
-        _victim.pokemon.evasion = 100;
-        if(_victim.pokemon.HasType(PokemonType.Ghost))
+        victim.pokemon.evasion = 100;
+        if(victim.pokemon.HasType(PokemonType.Ghost))
         {
             var newImmunityNegation = new TypeImmunityNegation(_battleHandler,ImmunityNegationMove.Foresight
-                , _attacker, _victim);
+                , attacker, victim);
 
             newImmunityNegation.ImmunityNegationTypes.Add(PokemonType.Fighting);
             newImmunityNegation.ImmunityNegationTypes.Add(PokemonType.Normal);
@@ -293,58 +264,54 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
                 
             void RemoveOnFaint(Battle_Participant faintedParticipant)
             {
-                if (faintedParticipant != _attacker) return;
+                if (faintedParticipant != attacker) return;
                 _battleHandler.OnParticipantFainted -= RemoveOnFaint;
-                newImmunityNegation.RemoveNegationOnSwitchOut(_attacker);
+                newImmunityNegation.RemoveNegationOnSwitchOut(attacker);
             }
 
             _battleHandler.OnSwitchOut += newImmunityNegation.RemoveNegationOnSwitchOut;
-            _victim.immunityNegations.Add(newImmunityNegation);
+            victim.immunityNegations.Add(newImmunityNegation);
         }
-        moveDelay = false;
     }
-    private IEnumerator ExecuteSemiInvulnerableMove()
+    private IEnumerator ExecuteSemiInvulnerableMove(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        if (_attacker.semiInvulnerabilityData.executionTurn)
+        var move = currentTurn.move;
+        if (attacker.semiInvulnerabilityData.executionTurn)
         {
-            _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName
-                                                        + _attacker.semiInvulnerabilityData.onHitMessage);
-            _moveUsageHandler.DisplayMoveDamage(_currentTurn.move,_attacker,_victim);
-            _attacker.semiInvulnerabilityData.executionTurn = false;
-            moveDelay = false;
+            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName
+                                                        + attacker.semiInvulnerabilityData.onHitMessage);
+            _moveUsageHandler.DisplayMoveDamage(move,attacker,victim);
+            attacker.semiInvulnerabilityData.executionTurn = false;
             yield break;
         }
 
-        var semiInvulnerableData = _currentTurn.move.GetModule<SemiInvulnerabilityInfo>();
+        var semiInvulnerableData = move.GetModule<SemiInvulnerabilityInfo>();
         
-        _attacker.semiInvulnerabilityData.displayMessage = semiInvulnerableData.displayMessage;
-        _attacker.semiInvulnerabilityData.onHitMessage = semiInvulnerableData.onHitMessage;
-        _attacker.semiInvulnerabilityData.turnData = new Turn(_currentTurn);
+        attacker.semiInvulnerabilityData.displayMessage = semiInvulnerableData.displayMessage;
+        attacker.semiInvulnerabilityData.onHitMessage = semiInvulnerableData.onHitMessage;
+        attacker.semiInvulnerabilityData.turnData = new Turn(currentTurn);
 
-        _attacker.semiInvulnerabilityData.semiInvulnerabilities
+        attacker.semiInvulnerabilityData.semiInvulnerabilities
             .AddRange(semiInvulnerableData.semiInvulnerabilities);
 
-        _attacker.isSemiInvulnerable = true;
-        _currentTurn.move.isSureHit = false;
-        _attacker.semiInvulnerabilityData.executionTurn = true;
-        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+semiInvulnerableData.executionMessage);
-        moveDelay = false;
+        attacker.isSemiInvulnerable = true;
+        move.isSureHit = false;
+        attacker.semiInvulnerabilityData.executionTurn = true;
+        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+semiInvulnerableData.executionMessage);
     }
     
-    IEnumerator ChangeWeather()
+    IEnumerator ChangeWeather(Move move)
     {
-        var weatherInfo =_currentTurn.move.GetModule<ChangeWeatherInfo>();;
+        var weatherInfo = move.GetModule<ChangeWeatherInfo>();;
         var newWeather = new WeatherCondition(weatherInfo.newWeatherCondition);
         _turnBasedCombatHandler.ChangeWeather(newWeather);
         yield return null;
-        moveDelay = false;
     }
-    private IEnumerator HealFromWeather()
+    private IEnumerator HealFromWeather(Battle_Participant attacker)
     {
-        if (_attacker.pokemon.hp >= _attacker.pokemon.maxHp)
+        if (attacker.pokemon.hp >= attacker.pokemon.maxHp)
         {
-            _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+"'s health is already full!");
-            moveDelay = false;
+            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+"'s health is already full!");
             yield break;
         }
         float fraction;
@@ -364,15 +331,14 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
                 fraction = 1f / 2f; 
                 break;
         }
-        int healthGain = Mathf.FloorToInt(_attacker.pokemon.maxHp * fraction);
+        int healthGain = Mathf.FloorToInt(attacker.pokemon.maxHp * fraction);
         
-        if (healthGain < 1 && _attacker.pokemon.hp < _attacker.pokemon.maxHp) healthGain = 1;
+        if (healthGain < 1 && attacker.pokemon.hp < attacker.pokemon.maxHp) healthGain = 1;
         
-        _dialogueHandler.DisplayBattleInfo(_attacker.pokemon.pokemonDisplayName+" restored it's health!");
+        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" restored it's health!");
 
-        _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:_attacker);
+        _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:attacker);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
-        moveDelay = false;
     }
 
 

@@ -297,8 +297,16 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         selectedMemberIndex = 0;
         UpdateUIAfterSwap();
     }
-
-    public void AddMember(Pokemon pokemon, string pokeballType)
+    public void AddTestMember(Pokemon pokemon)
+    {
+        var newPokemon = InstanceFactory.CreatePokemon(pokemon); 
+        newPokemon.pokeballName = "Pokeball"; 
+        newPokemon.hasTrainer = true;
+        newPokemon.nickName = newPokemon.pokemonName;
+        Debug.Log($"added {newPokemon.pokemonName}");
+        CompletePokemonAddition(newPokemon);
+    }
+    public void AddMemberAfterCatch(Pokemon pokemon, string pokeballType)
     {
         var newPokemon = InstanceFactory.CreatePokemon(pokemon); 
         newPokemon.pokeballName = pokeballType; 
@@ -321,10 +329,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     private void CompletePokemonAddition(Pokemon newPokemon)
     {
-        if (newPokemon.nickName == string.Empty)
-        {
-            newPokemon.nickName = newPokemon.pokemonName;
-        }
         if (party.Count<maxNumMembers)
         {
             party.Add(newPokemon);

@@ -181,7 +181,7 @@ public class Move_handler:MonoBehaviour,IInjectable
         
         yield return AwaitDamageDisplay();
     }
-    private float CalculateStruggleDamage(Battle_Participant currentVictim,Battle_Participant struggleUser,Move struggle)
+    private float CalculateStruggleDamage(Battle_Participant victim,Battle_Participant struggleUser,Move struggle)
     {
         var critValue = 1;
         var buffedCritRateIndex = Array.IndexOf(_critLevels, struggleUser.pokemon.critChance);
@@ -195,7 +195,7 @@ public class Move_handler:MonoBehaviour,IInjectable
         
         float levelFactor = ((struggleUser.pokemon.currentLevel * 2f) / 5f) + 2f;
         
-        float attackDefenseRatio = SetAtkDefRatio(critValue, false, struggleUser, currentVictim);
+        float attackDefenseRatio = SetAtkDefRatio(critValue, false, struggleUser, victim);
         
         float power = 50f;
         
@@ -207,18 +207,18 @@ public class Move_handler:MonoBehaviour,IInjectable
 
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
         
-        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, currentVictim, struggle, damageDealt) ?? damageDealt;
+        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, struggle, damageDealt) ?? damageDealt;
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff, struggle.type.typeEnum);
-        float finalDamage = AccountForVictimsBarriers(struggle, currentVictim, damageAfterFieldModifiers);
+        float finalDamage = AccountForVictimsBarriers(struggle, victim, damageAfterFieldModifiers);
 
-        OnDamageDeal?.Invoke(finalDamage, currentVictim);
+        OnDamageDeal?.Invoke(finalDamage, victim);
         return finalDamage;
     }
-    private bool IsInvincible(Move move,Battle_Participant currentVictim)
+    private bool IsInvincible(Move move,Battle_Participant victim)
     {
-         if (currentVictim.canBeDamaged) return false;
+         if (victim.canBeDamaged) return false;
          
-         _dialogueHandler.DisplayBattleInfo(currentVictim.pokemon.pokemonDisplayName+" protected itself");
+         _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+" protected itself");
          
          if (!move.isMultiTarget)
          {
@@ -227,11 +227,11 @@ public class Move_handler:MonoBehaviour,IInjectable
          }
          return true;
     }
-    public float CalculateMoveDamage(Move move,Battle_Participant attacker,Battle_Participant currentVictim,bool isTypeless=false)
+    public float CalculateMoveDamage(Move move,Battle_Participant attacker,Battle_Participant victim,bool isTypeless=false)
     {
         if (move.moveDamage == 0) return 0;
         
-        if (IsInvincible(move, currentVictim)) return 0;
+        if (IsInvincible(move, victim)) return 0;
         
         //calc crit
         var critValue = 1;
@@ -245,20 +245,20 @@ public class Move_handler:MonoBehaviour,IInjectable
         
         float levelFactor = ((attacker.pokemon.currentLevel * 2f) / 5f) + 2f;
         
-        float attackDefenseRatio = SetAtkDefRatio(critValue, move.isSpecial, attacker, currentVictim);
+        float attackDefenseRatio = SetAtkDefRatio(critValue, move.isSpecial, attacker, victim);
 
         float stab = _battleOperations.IsStab(attacker.pokemon, move.type) ? 1.5f : 1f;
         
         float typeEffectiveness = isTypeless? 1f 
-            :_battleOperations.CheckTypeEffectiveness(currentVictim, move.type);
+            :_battleOperations.CheckTypeEffectiveness(victim, move.type);
         
         float randomFactor = Utility.RandomRange(217, 256) / 255f;
 
         float baseDamage = ((levelFactor * move.moveDamage * attackDefenseRatio) / 50f) + 2f;
                 
-        if(currentVictim.isSemiInvulnerable)
+        if(victim.isSemiInvulnerable)
         { 
-            var semiInvulnerability = currentVictim.semiInvulnerabilityData
+            var semiInvulnerability = victim.semiInvulnerabilityData
                 .semiInvulnerabilities.FirstOrDefault(s => s.GetName() == move.moveName);
             baseDamage *= semiInvulnerability?.damageMultiplier ?? 1f;
         }
@@ -267,10 +267,10 @@ public class Move_handler:MonoBehaviour,IInjectable
         
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
         
-        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,currentVictim,move,damageDealt) ?? damageDealt;
+        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeEnum);
-        float finalDamage = AccountForVictimsBarriers(move,currentVictim,damageAfterFieldModifiers);
-        OnDamageDeal?.Invoke(finalDamage,currentVictim);
+        float finalDamage = AccountForVictimsBarriers(move,victim,damageAfterFieldModifiers);
+        OnDamageDeal?.Invoke(finalDamage,victim);
         OnMoveHit?.Invoke(attacker,move);
         return finalDamage;
     }
@@ -283,9 +283,9 @@ public class Move_handler:MonoBehaviour,IInjectable
         }
         return currentDamage;
     }
-    private float AccountForVictimsBarriers(Move move,Battle_Participant currentVictim,float damage)
+    private float AccountForVictimsBarriers(Move move,Battle_Participant victim,float damage)
     {
-        foreach (var barrier in currentVictim.barriers)
+        foreach (var barrier in victim.barriers)
         {
             if ((move.isSpecial && barrier.barrierName == NameDB.GetMoveName(LearnSetMoveName.LightScreen))
                 || (!move.isSpecial && barrier.barrierName == NameDB.GetMoveName(LearnSetMoveName.Reflect)))
@@ -293,29 +293,29 @@ public class Move_handler:MonoBehaviour,IInjectable
         }
         return damage;
     }
-    public void DisplayEffectiveness(float typeEffectiveness,Battle_Participant currentVictim)
+    public void DisplayEffectiveness(float typeEffectiveness,Battle_Participant victim)
     {
         if ((int)math.trunc(typeEffectiveness) == 1) return;
         var message = "";
         if (typeEffectiveness == 0)
-            message= "It doesn't affect "+currentVictim.pokemon.pokemonDisplayName+"!";
+            message= "It doesn't affect "+victim.pokemon.pokemonDisplayName+"!";
         else
             message=(typeEffectiveness > 1)?"It's Super effective!":"It's not very effective!";
         _dialogueHandler.DisplayBattleInfo(message);
     }
-    private float SetAtkDefRatio(int crit, bool isSpecial, Battle_Participant currentAttacker, Battle_Participant currentVictim)
+    private float SetAtkDefRatio(int crit, bool isSpecial, Battle_Participant currentAttacker, Battle_Participant victim)
     {
         float atk, def;
-        bool canIgnoreStages = currentAttacker.pokemon.currentLevel >= currentVictim.pokemon.currentLevel  && crit == 2;
+        bool canIgnoreStages = currentAttacker.pokemon.currentLevel >= victim.pokemon.currentLevel  && crit == 2;
         if (!isSpecial)
         {
             atk = canIgnoreStages && currentAttacker.statData.attack < currentAttacker.pokemon.attack
                 ? currentAttacker.pokemon.attack  // Ignore debuff
                 : currentAttacker.statData.attack;
             
-            def = canIgnoreStages && currentVictim.statData.defense > currentVictim.pokemon.defense
-                ? currentVictim.pokemon.defense  // Ignore buff
-                : currentVictim.statData.defense;
+            def = canIgnoreStages && victim.statData.defense > victim.pokemon.defense
+                ? victim.pokemon.defense  // Ignore buff
+                : victim.statData.defense;
         }
         else
         {
@@ -323,9 +323,9 @@ public class Move_handler:MonoBehaviour,IInjectable
                 ? currentAttacker.pokemon.specialAttack
                 : currentAttacker.statData.spAtk;
             
-            def = canIgnoreStages && currentVictim.statData.spDef > currentVictim.pokemon.specialDefense
-                ? currentVictim.pokemon.specialDefense
-                : currentVictim.statData.spDef;
+            def = canIgnoreStages && victim.statData.spDef > victim.pokemon.specialDefense
+                ? victim.pokemon.specialDefense
+                : victim.statData.spDef;
         }
         return atk / def;
     }
@@ -340,10 +340,10 @@ public class Move_handler:MonoBehaviour,IInjectable
         if (!displayingHealthGain) StartCoroutine(ProcessHealthGainDisplay());
     }
     
-    public void DisplaySpecialDamage(Battle_Participant currentVictim, float predefinedDamage
+    public void DisplaySpecialDamage(Battle_Participant victim, float predefinedDamage
         ,DamageSource damageSource=DamageSource.Normal) 
     {
-        var data = new DamageDisplayData(damageSource,affectedParticipant:currentVictim,
+        var data = new DamageDisplayData(damageSource,affectedParticipant:victim,
             displayEffectiveness:false
             , healthChange:predefinedDamage);
         
@@ -351,20 +351,20 @@ public class Move_handler:MonoBehaviour,IInjectable
         if (!displayingDamage) StartCoroutine(ProcessDamageDisplay());
     }
     
-    public void DisplayMoveDamage(Move move,Battle_Participant attacker, Battle_Participant currentVictim
+    public void DisplayMoveDamage(Move move,Battle_Participant attacker, Battle_Participant victim
         , bool displayEffectiveness = true)
     {
-        var damage = CalculateMoveDamage(move,attacker, currentVictim);
-        DisplaySpecificMoveDamage(move,currentVictim,damage,displayEffectiveness);
+        var damage = CalculateMoveDamage(move,attacker, victim);
+        DisplaySpecificMoveDamage(move,victim,damage,displayEffectiveness);
     }
     
-    public void DisplaySpecificMoveDamage(Move move,Battle_Participant currentVictim,
+    public void DisplaySpecificMoveDamage(Move move,Battle_Participant victim,
         float specificDamage,bool displayEffectiveness = true) 
     {
-        var typeEffectiveness = _battleOperations.CheckTypeEffectiveness(currentVictim, move.type);
+        var typeEffectiveness = _battleOperations.CheckTypeEffectiveness(victim, move.type);
         
         var data = new DamageDisplayData(DamageSource.Normal,
-            affectedParticipant:currentVictim
+            affectedParticipant:victim
             ,displayEffectiveness:displayEffectiveness,healthChange:specificDamage
             ,effectivenessScore:typeEffectiveness);
         
@@ -504,14 +504,14 @@ public class Move_handler:MonoBehaviour,IInjectable
         }
         return false;
     }
-    public void HandleStatusApplication(Battle_Participant currentVictim,Move move, bool displayMessage)
+    public void HandleStatusApplication(Battle_Participant victim,Move move, bool displayMessage)
     {
-        foreach (var type in currentVictim.pokemon.types)
+        foreach (var type in victim.pokemon.types)
             if(CheckInvalidStatusEffect(move.statusEffect, type.typeEnum,move))return;
-        OnStatusEffectHit?.Invoke(currentVictim,move.statusEffect);
+        OnStatusEffectHit?.Invoke(victim,move.statusEffect);
         if (displayMessage)
-            _dialogueHandler.DisplayBattleInfo($"{currentVictim.pokemon.pokemonDisplayName} {GetStatusMessage(move.statusEffect)}");
-        ApplyStatusToVictim(currentVictim,move.statusEffect);
+            _dialogueHandler.DisplayBattleInfo($"{victim.pokemon.pokemonDisplayName} {GetStatusMessage(move.statusEffect)}");
+        ApplyStatusToVictim(victim,move.statusEffect);
     }
     private static string GetStatusMessage(StatusEffect status)
     {

@@ -1,21 +1,15 @@
-2026/07/14 8:16:38 PM : Move test 1 has begun: 
-2026/07/14 8:16:44 PM : You got a Marshtomp
-2026/07/14 8:16:44 PM : You got a Zubat
-2026/07/14 8:16:45 PM : Test Battle Begins!
-2026/07/14 8:16:51 PM : Test Grunt challenges you to a battle
-2026/07/14 8:16:56 PM : Test Grunt sent out Foe Wurmple and Foe Zigzagoon!
-2026/07/14 8:17:00 PM : Go! Marshtomp and Zubat!
-2026/07/14 8:18:27 PM : Marshtomp used Water Gun on Foe Zigzagoon!
-2026/07/14 8:18:34 PM : Foe Zigzagoon used Tackle on Zubat!
-2026/07/14 8:18:38 PM : Zubat used Wing Attack on Foe Wurmple!
-2026/07/14 8:18:43 PM : It's Super effective!
-2026/07/14 8:18:45 PM : Foe Wurmple fainted!
-2026/07/14 8:18:48 PM : Marshtomp gained 15 EXP points
-2026/07/14 8:18:51 PM : Zubat gained 15 EXP points
-2026/07/14 8:19:48 PM : Marshtomp used Water Gun on Zubat!
-2026/07/14 8:19:54 PM : Zubat fainted!
-2026/07/14 8:19:56 PM : Foe Zigzagoon missed the attack
-2026/07/14 8:22:09 PM : Marshtomp used Water Gun on Foe Zigzagoon!
-2026/07/14 8:22:14 PM : Foe Zigzagoon fainted!
-2026/07/14 8:22:17 PM : Marshtomp gained 60 EXP points
-2026/07/14 8:22:17 PM : Move test 1 has Passed
+2026/07/16 1:05:11 PM : Move test 1 has begun: 
+2026/07/16 1:05:16 PM : You got a Marshtomp
+2026/07/16 1:05:16 PM : You got a Zubat
+2026/07/16 1:05:17 PM : Test Battle Begins!
+2026/07/16 1:05:23 PM : Test Grunt challenges you to a battle
+2026/07/16 1:05:28 PM : Test Grunt sent out Foe Wurmple and Foe Zigzagoon!
+2026/07/16 1:05:32 PM : Go! Marshtomp and Zubat!
+2026/07/16 1:05:49 PM : Marshtomp used Earthquake!
+2026/07/16 1:05:54 PM : It's not very effective!
+2026/07/16 1:05:56 PM : Foe Wurmple fainted!
+2026/07/16 1:05:59 PM : Marshtomp gained 15 EXP points
+2026/07/16 1:06:02 PM : Zubat gained 15 EXP points
+2026/07/16 1:06:08 PM : Foe Zigzagoon fainted!
+2026/07/16 1:06:11 PM : Marshtomp gained 30 EXP points
+2026/07/16 1:06:12 PM : Move test 1 has Passed
