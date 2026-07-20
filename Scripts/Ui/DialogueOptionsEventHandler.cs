@@ -64,7 +64,8 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     void Battle()
     {
         _dialogueHandler.EndDialogue(); 
-        _battleHandler.SetBattleTypeAndStart(_currentInteraction.GetModule<TrainerBattleInteractionInfo>().data);
+        StartCoroutine(_battleHandler.SetBattleTypeAndStart(
+            _currentInteraction.GetModule<TrainerBattleInteractionInfo>().data));
     }
     
     void HealPokemon()

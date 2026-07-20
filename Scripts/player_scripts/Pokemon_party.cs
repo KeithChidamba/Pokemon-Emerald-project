@@ -44,6 +44,8 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     private PokemonPartyInputService _partyInputService;
     private PokemonOperations _pokemonOperationsHandler;
     private Game_Load _gameLoadingHandler;
+    private Area_manager _areaHandler;
+    private Game_ui_manager _gameUIHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -59,6 +61,9 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         _gameLoadingHandler = container.Resolve<Game_Load>();
+        _areaHandler = container.Resolve<Area_manager>();
+        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        
         gameObject.SetActive(true);
     }
 
@@ -71,17 +76,38 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         _currentStepCount++;
         if (_currentStepCount < 4) return;
         _currentStepCount = 0;
-        
-        foreach(var member in party)
+        StartCoroutine(CheckMembers());
+
+        IEnumerator CheckMembers()
         {
-            if (member.hp == 0) continue;
-            
-            if (member.statusEffect == StatusEffect.Poison)
+            foreach(var member in party)
             {
-                //no need for hp loss animation since this only happens outside ui
-                member.hp--;
+                if (member.hp == 0) continue;
+            
+                if (member.statusEffect == StatusEffect.Poison)
+                {
+                    //no need for hp loss animation since this only happens outside ui
+                    member.hp--;
+                    if (member.hp == 0)
+                    {
+                        _dialogueHandler.DisplayDetails($"{member.pokemonDisplayName} has fainted");
+                        yield return _dialogueHandler.WaitForDialogueCompletion();
+                    }
+                    if (GetLivingPokemon().Count == 0)
+                    {
+                        _dialogueHandler.DisplayDetails("All your Pokemon have fainted");
+                        yield return _dialogueHandler.WaitForDialogueCompletion();
+                        yield return _gameUIHandler.FadeInBlackScreen();
+                        HealPartyPokemon();
+                        _areaHandler.TeleportToArea(AreaName.PokeCenter);
+                        yield return new WaitForSecondsRealtime(1f);
+                        _gameUIHandler.RemoveBlackScreen();
+                        break;
+                    }
+                }
             }
         }
+       
     }
     
     public void UpdatePartyUsageMessage(string message)
@@ -297,13 +323,18 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         selectedMemberIndex = 0;
         UpdateUIAfterSwap();
     }
+
+    public void ClearTestState()
+    {
+        party.Clear();
+    }
     public void AddTestMember(Pokemon pokemon)
     {
         var newPokemon = InstanceFactory.CreatePokemon(pokemon); 
         newPokemon.pokeballName = "Pokeball"; 
         newPokemon.hasTrainer = true;
         newPokemon.nickName = newPokemon.pokemonName;
-        Debug.Log($"added {newPokemon.pokemonName}");
+        Debug.Log($"added test {newPokemon.pokemonName}");
         CompletePokemonAddition(newPokemon);
     }
     public void AddMemberAfterCatch(Pokemon pokemon, string pokeballType)

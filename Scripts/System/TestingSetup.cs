@@ -9,10 +9,6 @@ public enum DevelopmentEnvironment
    Testing,Production
 }
 
-public enum TestType
-{
-   ItemUsage,BattleMoveUsage
-}
 public class TestingSetup : MonoBehaviour,IInjectable
 { 
    public DevelopmentEnvironment environment;
@@ -35,22 +31,23 @@ public class TestingSetup : MonoBehaviour,IInjectable
    {
       //logging
       _dialogueHandler.OnDialogueDisplayed += LogMessage;
-      var playerTestData = Resources.Load<PlayerData>(DirectoryHandler.GetDirectory(AssetDirectory.TestAssets)+"Test Player");
-      _gameLoadingHandler.playerData = playerTestData;
+      
+      TestRegistry testRegistry = new();
+      
+      _gameLoadingHandler.playerData = Resources.Load<PlayerData>(DirectoryHandler
+         .GetDirectory(AssetDirectory.TestAssets) + "Test Player");
      
       //Add Tests
-      var allTests = Resources.LoadAll<TestingData>(DirectoryHandler.GetDirectory(AssetDirectory.TestAssets));
-      foreach(var testData in allTests)
+      foreach(var newTestLogicHandler in testRegistry.allTests)
       {
-         var newTestLogicHandler = CreateTestOfType(testData.testType);
-         newTestLogicHandler.testName = testData.testName;
-         newTestLogicHandler.Inject(_container,testData);
+         newTestLogicHandler.testingHandler = this;
+         newTestLogicHandler.Inject(_container);
          _tests.Add(newTestLogicHandler);
       }
       _gameLoadingHandler.StartGame(false);
       StartCoroutine(RunTests());
    }
-   private void LogMessage(string newMessage)
+   public void LogMessage(string newMessage)
    {
       testingLogs.Add(NextLogID,new(DateTime.Now,newMessage));
    }
@@ -65,14 +62,16 @@ public class TestingSetup : MonoBehaviour,IInjectable
             writer.WriteLine(logString);
          }
       }
+      Debug.Log("TEST LOGS PRINTED");
    }
-
+   
    private IEnumerator RunTests()
    {
       yield return new WaitForSeconds(0.5f);
       foreach (var test in _tests)
       {
-         LogMessage($"{test.testName} has begun: ");
+         LogMessage("----------------------------------------------------------------------------------------------------------");
+         LogMessage($"<- {test.testName} -> has begun");
          test.onTestResult += GetTestFeedBack;
          yield return StartCoroutine(test.BeginTest());
          if (test.testStatus == IntegrationTest.TestStatus.Failed)
@@ -82,19 +81,10 @@ public class TestingSetup : MonoBehaviour,IInjectable
          void GetTestFeedBack()
          {
             test.onTestResult -= GetTestFeedBack;
-            LogMessage($"{test.testName} has {test.testStatus}");
+            LogMessage($"<- {test.testName} -> has {test.testStatus}");
          }
       }
       GetLogs();
-   }
-   private static IntegrationTest CreateTestOfType(TestType type)
-   {
-      return type switch
-      {
-         TestType.ItemUsage => new ItemUsageTest(),
-         TestType.BattleMoveUsage => new BattleMoveUsageTest(),
-         _ => null
-      };
    }
 }
 
@@ -110,6 +100,7 @@ public struct MessageLog
 }
 public abstract class IntegrationTest
 {
+   public TestingSetup testingHandler;
    public string testName;
    public enum TestStatus{Passed,Failed}
    public TestStatus testStatus;
@@ -118,6 +109,15 @@ public abstract class IntegrationTest
    {
       yield return null;
    }
-   public virtual void Inject(ServiceContainer container, TestingData data) { }
+   public virtual void Inject(ServiceContainer container) { }
 }
-
+public class TestRegistry
+{
+   //tests are ran in this order
+   public IntegrationTest[] allTests =
+   {
+      //Move Based Tests
+      new ConsecutiveMoveTest(),
+      new TargetAllExceptSelfTest()
+   };
+}

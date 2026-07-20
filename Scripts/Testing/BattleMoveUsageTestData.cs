@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "test", menuName = "Tests/Battle test")]
-public class BattleMoveUsageTestData : TestingData
+[CreateAssetMenu(fileName = "test", menuName = "Tests/Battle move test")]
+public class BattleMoveUsageTestData : ScriptableObject
 {
-    public PlayerData playerTestData;
     public List<PokemonTestData> pokemonPartyData = new();
     public TrainerData testEnemy;
 }

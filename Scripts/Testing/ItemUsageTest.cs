@@ -5,7 +5,7 @@ using UnityEngine;
 public class ItemUsageTest : IntegrationTest
 {
     private Bag _playerBagHandler;
-    public override void Inject(ServiceContainer container, TestingData data)
+    public override void Inject(ServiceContainer container)
     {
         _playerBagHandler = container.Resolve<Bag>();
     }

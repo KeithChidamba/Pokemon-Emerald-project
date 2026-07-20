@@ -208,7 +208,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         {
             if (faintedParticipant != victim) return;
             _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
-            battleEnded = _battleHandler.battleOver;
+            battleEnded = _battleHandler.BattleOver;
         }
         
         if(battleEnded) yield break;

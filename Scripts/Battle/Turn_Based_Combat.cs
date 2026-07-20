@@ -294,7 +294,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 //handle all attacks
         foreach (var currentTurn in _turnHistory )
         {
-            if (_battleHandler.battleOver) break;
+            if (_battleHandler.BattleOver) break;
             
             if (currentTurn.isCancelled) continue;
             
@@ -540,7 +540,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 
     private IEnumerator CheckParticipantCoolDown()
     {
-        if (_battleHandler.battleOver) yield break;
+        if (_battleHandler.BattleOver) yield break;
         var participant = _battleHandler.GetCurrentParticipant();
         if (!participant.currentCoolDown.isCoolingDown) yield break;
         if (participant.currentCoolDown.isExecutionTurn)
@@ -581,13 +581,19 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     private bool IsValidParticipantState(Battle_Participant participant)
     {
         if (!participant.isActive) return false;
-        return participant.pokemon is { hp: >= 0 };
+        return participant.pokemon is { hp: > 0 };
     }
 
     private bool IsValidParticipant(Turn turn,Battle_Participant participant)
     {
         return turn.attackerID == participant.pokemon.pokemonID||
                 turn.victimID == participant.pokemon.pokemonID;
+    }
+
+    public void StartFreshTurn()
+    {
+        currentTurnIndex = 0;
+        OnNewTurn?.Invoke();
     }
     public void NextTurn()
     {

@@ -32,18 +32,18 @@ public class Battle_handler : MonoBehaviour, IInjectable
     public Text[] availableMovesText;
 
     private Dictionary<BattleParticipantKey, Battle_Participant> battleParticipants = new();
-    private List<Battle_Participant> currentParticipants = new();
+    [SerializeField]private List<Battle_Participant> currentParticipants = new();
     public IReadOnlyList<Battle_Participant> GetParticipants => currentParticipants;
     [SerializeField]private Battle_Participant[] battleParticipantInstances;
     
     [SerializeField]private List<Battle_Participant> faintQueue = new();
-    [SerializeField]public bool handlingFaintEvent;
+    [SerializeField]private bool handlingFaintEvent;
     
     public bool battleInProgress;
     public bool isTrainerBattle;
     public bool isDoubleBattle;
     public int validParticipantCount;
-    public bool battleOver;
+    public bool BattleOver { get; private set; }
     public BattleEndState battleEndState;
     
     public float participantPositionOffset = 100;
@@ -56,6 +56,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     
     public event Action<Battle_Participant> OnParticipantFainted;
     public event Action OnBattleEnd;
+
     public event Action<bool> OnBattleResult;
     public event Action OnSwitchIn;
     public event Action<Battle_Participant> OnSwitchOut;
@@ -73,7 +74,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private overworld_actions _overworldActions;
     private PokemonOperations _pokemonOperations;
     private WildPokemonAiHandler _wildPokemonHandler;
-    private Area_manager  _areaHandler;
+    private Area_manager _areaHandler;
     private Player_movement _playerMovementHandler;
     
     
@@ -101,10 +102,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         battleParticipants.Add(BattleParticipantKey.Enemy,battleParticipantInstances[2]);
         battleParticipants.Add(BattleParticipantKey.EnemyPartner,battleParticipantInstances[3]);
         
-        currentParticipants.Add(battleParticipantInstances[0]);
-        currentParticipants.Add(battleParticipantInstances[1]);
-        currentParticipants.Add(battleParticipantInstances[2]);
-        currentParticipants.Add(battleParticipantInstances[3]);
+        currentParticipants.AddRange(battleParticipantInstances);
         
         _turnBasedCombatHandler.OnNewTurn += ResetAi;
         _turnBasedCombatHandler.OnNewTurn += AllowPlayerInput;
@@ -113,6 +111,10 @@ public class Battle_handler : MonoBehaviour, IInjectable
         _turnBasedCombatHandler.OnTurnsCompleted += ResetPlayersTurnUsage;
     }
 
+    public IEnumerator AwaitBattleCompletion()
+    {
+        yield return new WaitUntil(() => BattleOver);
+    }
     public Battle_Participant GetParticipant(BattleParticipantKey participantKey)
     {
         return battleParticipants[participantKey];
@@ -343,6 +345,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
         
         SetupOptionsInput();
         _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
+
+        _turnBasedCombatHandler.StartFreshTurn();
     }
     private void ResetAi()
     {
@@ -353,7 +357,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         currentParticipant.pokemonTrainerAI.MakeBattleDecision();
     }
     
-    public void SetBattleTypeAndStart(TrainerData data)
+    public IEnumerator SetBattleTypeAndStart(TrainerData data)
     {
         _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Battle);
         _pokemonPartyHandler.SortByFainted();
@@ -361,10 +365,10 @@ public class Battle_handler : MonoBehaviour, IInjectable
         switch (data.battleType)
         {
             case BattleType.Single:
-                StartCoroutine(StartSingleBattle(data));
+                yield return StartCoroutine(StartSingleBattle(data));
                 break;
             case BattleType.SingleDouble:
-                StartCoroutine(StartSingleDoubleBattle(data));
+                yield return StartCoroutine(StartSingleDoubleBattle(data));
                 break;
         }
     }
@@ -380,7 +384,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         StartCoroutine(_gameUIHandler.FadeInBlackScreen());
         _pokemonPartyHandler.SortByFainted();
-        battleOver = false;
+        BattleOver = false;
         isTrainerBattle = false;
         isDoubleBattle = false;
         var player = GetParticipant(BattleParticipantKey.Player);
@@ -405,7 +409,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private IEnumerator StartSingleBattle(TrainerData trainerData) //single trainer battle
     {
         yield return DisplayTrainerMessage(trainerData.battleIntroMessage);
-        battleOver = false;
+        BattleOver = false;
         isTrainerBattle = true;
         isDoubleBattle = false; 
         var player = GetParticipant(BattleParticipantKey.Player);
@@ -432,7 +436,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private IEnumerator StartSingleDoubleBattle(TrainerData trainerData) //1v1 double battle
     {
         yield return DisplayTrainerMessage(trainerData.battleIntroMessage);
-        battleOver = false;
+        BattleOver = false;
         isTrainerBattle = true;
         isDoubleBattle = true; 
         var alivePartyPokemon = _pokemonPartyHandler.GetLivingPokemon();
@@ -687,7 +691,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
             
             OnParticipantFainted?.Invoke(faintedParticipant);
             
-            if (!battleOver)
+            if (!BattleOver)
             {
                 participantUIRect.anchoredPosition = new Vector2(participantUIRect.anchoredPosition.x,
                     participantUIRect.anchoredPosition.y + 400f);
@@ -726,12 +730,11 @@ public class Battle_handler : MonoBehaviour, IInjectable
         yield return _dialogueHandler.AwaitAllDialogue();
     }
     
-    
     public void EndBattle(BattleEndState state,Pokemon lastDefeatedOpponent)
     {
-        if (battleOver) return;
+        if (BattleOver) return;
         battleEndState = state;
-        battleOver = true;
+        BattleOver = true;
         StartCoroutine(ProcessBattleEnd());
         return;
         IEnumerator ProcessBattleEnd()
@@ -878,7 +881,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
             _areaHandler.SwitchToArea(_gameLoadingHandler.playerData.location);
         }
         
-        battleOver = false;
+        BattleOver = false;
         battleEndState = BattleEndState.None;
         yield return new WaitForSeconds(1f);
     }

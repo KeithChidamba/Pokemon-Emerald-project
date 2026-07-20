@@ -6,7 +6,7 @@ public enum AssetDirectory
 { 
     Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, ItemUI, Items
     ,AdditionalInfo,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData
-    ,OverworldItemPickups,TestAssets,TestLogs
+    ,OverworldItemPickups,Tests,TestAssets,TestLogs
 }
 public enum SaveDataDirectory
 {
@@ -38,6 +38,7 @@ public class DirectoryHandler
         {AssetDirectory.PokeMartData,"Overwolrd_obj/Poke_Mart_Data"},
         {AssetDirectory.OverworldItemPickups,"Overwolrd_obj/Interactions/Overworld_Pickups"},
         {AssetDirectory.TrainerData,"Enemies/Data/"},
+        { AssetDirectory.Tests,"Tests/"},
         { AssetDirectory.TestLogs,"Tests/Logs/"},
         {AssetDirectory.TestAssets,"Tests/Assets/"}
     };

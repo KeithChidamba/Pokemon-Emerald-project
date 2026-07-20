@@ -4,26 +4,49 @@ using UnityEngine;
 
 public class BattleMoveUsageTest : IntegrationTest
 {
-    public override void Inject(ServiceContainer container, TestingData data)
-    {
-        testData = (BattleMoveUsageTestData)data;
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _battleHandler = container.Resolve<Battle_handler>();
-        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
-        _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
-    }
-    
-    private BattleMoveUsageTestData testData;
-    private Dialogue_handler _dialogueHandler;
-    private Battle_handler _battleHandler;
+    protected Battle_handler battleHandler;
+    protected Turn_Based_Combat turnBasedCombatHandler;
+    protected ServiceContainer container;
     private Pokemon_party _pokemonPartyHandler;
-    private PokemonOperations _pokemonOperationsHandler;
-    
-    public override IEnumerator BeginTest()
+    protected virtual void DetermineSuccess() { }
+
+    private void LogSuccess()
     {
+        DetermineSuccess();
+        battleHandler.EndBattle(BattleEndState.BattleTerminated, null);
+        turnBasedCombatHandler.OnNewTurn -= DetermineMoveUsage;
+    }
+
+    protected virtual void DetermineMoveUsage() { }
+
+    protected IEnumerator HandleBattleState()
+    {
+        battleHandler = container.Resolve<Battle_handler>();
+        turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        
+        var testData = Resources.Load<BattleMoveUsageTestData>(
+            DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"{testName}/Test Data");
+       
+        yield return LoadTestData(testData);
+        
+        turnBasedCombatHandler.OnNewTurn += DetermineMoveUsage;
+        turnBasedCombatHandler.OnTurnsCompleted += LogSuccess;
+        
+        yield return battleHandler.SetBattleTypeAndStart(testData.testEnemy);
+        
+        yield return battleHandler.AwaitBattleCompletion();
+
+        _pokemonPartyHandler.ClearTestState();
+        yield return new WaitForSeconds(0.05f);
+    }
+    private IEnumerator LoadTestData(BattleMoveUsageTestData testData)
+    {
+        var pokemonOperationsHandler = container.Resolve<PokemonOperations>();
+        
         foreach (var member in testData.pokemonPartyData)
         {
-            yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember
+            yield return pokemonOperationsHandler.HandlePokemonCreation(CreateMember
                 ,member.naturalPokemonData.pokemon
                 ,member.naturalPokemonData.pokemonLevel
                 ,member.naturalPokemonData.evolutionStageNumber);
@@ -45,10 +68,5 @@ public class BattleMoveUsageTest : IntegrationTest
             }
         }
         yield return new WaitForSeconds(1f);
-        _battleHandler.SetBattleTypeAndStart(testData.testEnemy);
-        yield return new WaitForSeconds(1f);
-        yield return new WaitUntil(() => _battleHandler.battleOver);
-        yield return null;
-        onTestResult.Invoke();
     }
 }

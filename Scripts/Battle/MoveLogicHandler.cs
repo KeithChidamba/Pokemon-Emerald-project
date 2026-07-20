@@ -74,7 +74,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     {
         var allParticipants = _battleHandler.GetParticipants.ToList();
         allParticipants.RemoveAll(p => !p.isActive);
-        allParticipants.RemoveAll(p => p.pokemon.pokemonID == attacker.pokemon.pokemonID);
+        allParticipants.RemoveAll(p => p.participantKey == attacker.participantKey);
         return allParticipants;
     }
     IEnumerator ExecuteConsecutiveMove(Move move,Battle_Participant attacker, Battle_Participant victim)
@@ -302,7 +302,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     
     IEnumerator ChangeWeather(Move move)
     {
-        var weatherInfo = move.GetModule<ChangeWeatherInfo>();;
+        var weatherInfo = move.GetModule<ChangeWeatherInfo>();
         var newWeather = new WeatherCondition(weatherInfo.newWeatherCondition);
         _turnBasedCombatHandler.ChangeWeather(newWeather);
         yield return null;
