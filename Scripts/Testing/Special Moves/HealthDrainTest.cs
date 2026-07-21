@@ -24,10 +24,10 @@ public class HealthDrainTest : BattleMoveUsageTest
         
         var halfHp = Mathf.FloorToInt(playerParticipant.pokemon.maxHp / 2f);
         
-        testingHandler.LogMessage($"Health of enemy target: {enemy.pokemon.hp}/{enemy.pokemon.maxHp}",LogType.Health);
-        testingHandler.LogMessage($"Half Health of player: {halfHp}",LogType.Calculation);
+        testingHandler.LogMessage($"Health of enemy target: {enemy.pokemon.hp}/{enemy.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Half Health of player: {halfHp}",TestLogType.Calculation);
         testingHandler.LogMessage($"Health of player: {playerParticipant.pokemon.hp}" +
-                                  $"/{playerParticipant.pokemon.maxHp}",LogType.Health);
+                                  $"/{playerParticipant.pokemon.maxHp}",TestLogType.Health);
         
         var testPassed = enemy.pokemon.hp < enemy.pokemon.maxHp
             && playerParticipant.pokemon.hp > halfHp;

@@ -142,7 +142,7 @@ public class Bag : MonoBehaviour,IInjectable
             bagItemsUI[currentCategoryOfItems.IndexOf(item)].LoadItemUI();
             return;
         }
-        if (!_battleHandler.battleInProgress)
+        if (!_battleHandler.BattleInProgress)
         {
             _inputStateHandler.OnStateChanged += ResetQuantity;
         }
@@ -274,7 +274,7 @@ public class Bag : MonoBehaviour,IInjectable
     }
     public void TakeItem(int memberIndex)
     {
-        if (_battleHandler.battleInProgress)
+        if (_battleHandler.BattleInProgress)
         {
             _dialogueHandler.DisplayDetails("Can't do that in battle");
             return;
@@ -289,7 +289,7 @@ public class Bag : MonoBehaviour,IInjectable
     }
     public void OpenBagToGiveItem()
     {
-        if (_battleHandler.battleInProgress)
+        if (_battleHandler.BattleInProgress)
         {
             _dialogueHandler.DisplayDetails("Can't do that in battle");
             return;
@@ -336,7 +336,7 @@ public class Bag : MonoBehaviour,IInjectable
          }
          
          OnItemUsed?.Invoke(itemToUse);
-         if (_battleHandler.battleInProgress)
+         if (_battleHandler.BattleInProgress)
          {
              if (!itemToUse.canBeUsedInBattle)
              {

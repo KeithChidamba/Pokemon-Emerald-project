@@ -311,7 +311,7 @@ public class Pokemon : ScriptableObject
         }
         void SetupEvolution()
         {
-            if (isPlayerPokemon && _battleHandler.battleInProgress)
+            if (isPlayerPokemon && _battleHandler.BattleInProgress)
             {
                 OnEvolutionSuccessful?.Invoke(currentEvolutionLineIndex+evoIndex);
             }

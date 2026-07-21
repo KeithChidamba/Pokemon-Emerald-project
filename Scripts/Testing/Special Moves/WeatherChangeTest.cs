@@ -18,7 +18,7 @@ public class WeatherChangeTest : BattleMoveUsageTest
 
     protected override void DetermineSuccess()
     {
-        testingHandler.LogMessage($"The current weather is {turnBasedCombatHandler.CurrentWeather.weather}",LogType.Information);
+        testingHandler.LogMessage($"The current weather is {turnBasedCombatHandler.CurrentWeather.weather}",TestLogType.Information);
         
         var testPassed = turnBasedCombatHandler.CurrentWeather.weather == Weather.Rain;
         

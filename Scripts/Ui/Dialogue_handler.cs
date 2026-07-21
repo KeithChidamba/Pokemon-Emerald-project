@@ -62,7 +62,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
         if (dialogueFinished && InputSourceHandler.InputPressed(ControlEvent.Exit) && canExitDialogue)
         {
             EndDialogue();
-            if (_battleHandler.battleInProgress)
+            if (_battleHandler.BattleInProgress)
             {
                 _battleHandler.EnableBattleMessage(_inputStateHandler.currentState);
             }
@@ -214,7 +214,7 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
     }
     public void DisplayBattleInfo(string info)
     {
-        if (!_battleHandler.battleInProgress)
+        if (!_battleHandler.BattleInProgress)
         {
             Debug.LogError("Incorrect Usage of Dialogue method");
             DisplayDetails(info);
@@ -411,13 +411,13 @@ public class Dialogue_handler : MonoBehaviour,IInjectable
 
     private void SetBattleTextBox(Interaction currentInteraction)
     {
-        if (!_battleHandler.battleInProgress || currentInteraction.dialogueType != DialogType.BattleInfo)
+        if (!_battleHandler.BattleInProgress || currentInteraction.dialogueType != DialogType.BattleInfo)
         {
             infoDialogueBox.SetActive(true);
             dialougeText.color=Color.black;
             battleDialogueBox.SetActive(false);
         }
-        if( (currentInteraction.dialogueType == DialogType.BattleInfo && _battleHandler.battleInProgress)
+        if( (currentInteraction.dialogueType == DialogType.BattleInfo && _battleHandler.BattleInProgress)
             || currentInteraction.dialogueType == DialogType.BattleDisplayMessage)
         {
             battleDialogueBox.SetActive(true);

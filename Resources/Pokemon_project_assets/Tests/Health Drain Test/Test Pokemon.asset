@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
-    pokemonLevel: 8
+    pokemonLevel: 45
     evolutionStageNumber: 0
     hasItem: 0
     heldItem: {fileID: 0}

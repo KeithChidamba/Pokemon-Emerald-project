@@ -19,7 +19,7 @@ public class HealFromWeatherTest : BattleMoveUsageTest
     {
         var playerParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
         testingHandler.LogMessage($"Health of player: {playerParticipant.pokemon.hp}" +
-                                  $"/{playerParticipant.pokemon.maxHp}",LogType.Health);
+                                  $"/{playerParticipant.pokemon.maxHp}",TestLogType.Health);
         
         //initial hp
         var tenthHp = Mathf.FloorToInt(playerParticipant.pokemon.maxHp * 0.1f);
@@ -31,9 +31,9 @@ public class HealFromWeatherTest : BattleMoveUsageTest
         //so this test will never leave pokemon at full hp
         var healthGain = Mathf.FloorToInt(playerParticipant.pokemon.hp - tenthHp);
 
-        testingHandler.LogMessage($"Tenth hp of player: {tenthHp}",LogType.Calculation);
-        testingHandler.LogMessage($"base health gain: {baseHealthGain}",LogType.Calculation);
-        testingHandler.LogMessage($"health gained from move: {healthGain}",LogType.Calculation);
+        testingHandler.LogMessage($"Tenth hp of player: {tenthHp}",TestLogType.Calculation);
+        testingHandler.LogMessage($"base health gain: {baseHealthGain}",TestLogType.Calculation);
+        testingHandler.LogMessage($"health gained from move: {healthGain}",TestLogType.Calculation);
         
         //this means the weather affected gain
         var testPassed = healthGain > baseHealthGain ||

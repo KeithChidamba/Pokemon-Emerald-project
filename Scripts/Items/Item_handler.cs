@@ -80,7 +80,7 @@ public class Item_handler : MonoBehaviour,IInjectable
                 if (successful)
                 {
                     _playerBagHandler.DepleteItem(itemUsed);
-                    if (_battleHandler.battleInProgress)
+                    if (_battleHandler.BattleInProgress)
                     {
                         _inputStateHandler.ResetRelevantUi(InputStateName.PlayerBagNavigation,true);
                         _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.UseItem);
@@ -88,7 +88,7 @@ public class Item_handler : MonoBehaviour,IInjectable
                     }
                 }
                 yield return new WaitForSecondsRealtime(0.2f);
-                if (!_battleHandler.battleInProgress)
+                if (!_battleHandler.BattleInProgress)
                 {
                     _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
                 }
@@ -476,7 +476,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         }
         bool CanUsePokeball()
         {
-            if (!_battleHandler.battleInProgress)
+            if (!_battleHandler.BattleInProgress)
             {
                 _dialogueHandler.DisplayDetails("Can't use that right now!");
                 return false;
@@ -498,7 +498,7 @@ public class Item_handler : MonoBehaviour,IInjectable
     private void CureConfusion(Item itemInUse)
     {
         var currentParticipant = _battleHandler.GetCurrentParticipant();
-        if (!_battleHandler.battleInProgress)
+        if (!_battleHandler.BattleInProgress)
         {
             _dialogueHandler.DisplayDetails("cant use that outside battle!");
             OnItemUsed?.Invoke(itemInUse,false);
@@ -515,7 +515,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         var currentParticipant = _battleHandler.GetCurrentParticipant();
         if (selectedPartyPokemon.statusEffect == StatusEffect.None)
         {
-            if (_battleHandler.battleInProgress)
+            if (_battleHandler.BattleInProgress)
             {
                 if (!currentParticipant.isConfused)
                 {
@@ -547,7 +547,7 @@ public class Item_handler : MonoBehaviour,IInjectable
         }
         
         //healing
-        if (_battleHandler.battleInProgress)
+        if (_battleHandler.BattleInProgress)
         {
             var healAll = curableStatus == StatusEffect.FullHeal;
             currentParticipant.statusHandler.RemoveStatusEffect(healAll);

@@ -213,18 +213,19 @@ public class Move_handler:MonoBehaviour,IInjectable
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, struggle, damageDealt) ?? damageDealt;
+        damageAfterAbilityBuff = Mathf.FloorToInt(damageAfterAbilityBuff);
         if (damageAfterAbilityBuff > damageDealt)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
         }
         
-        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff, struggle.type.typeEnum);
+        int damageAfterFieldModifiers = Mathf.FloorToInt(ApplyFieldDamageModifiers(damageAfterAbilityBuff, struggle.type.typeEnum));
         if(damageAfterFieldModifiers > damageAfterAbilityBuff || damageAfterFieldModifiers < damageAfterAbilityBuff)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.FieldModifiers,damageAfterAbilityBuff,damageAfterFieldModifiers);
         }
         
-        float finalDamage = AccountForVictimsBarriers(struggle, victim, damageAfterFieldModifiers);
+        int finalDamage = Mathf.FloorToInt(AccountForVictimsBarriers(struggle, victim, damageAfterFieldModifiers));
         if(finalDamage > damageAfterFieldModifiers || finalDamage < damageAfterFieldModifiers)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.Barrier, damageAfterFieldModifiers, finalDamage);
@@ -287,19 +288,20 @@ public class Move_handler:MonoBehaviour,IInjectable
         
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
         
-        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
+        var damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
+        damageAfterAbilityBuff = Mathf.FloorToInt(damageAfterAbilityBuff);
         if (damageAfterAbilityBuff > damageDealt)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
         }
         
-        float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeEnum);
+        int damageAfterFieldModifiers = Mathf.FloorToInt(ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeEnum));
         if(damageAfterFieldModifiers > damageAfterAbilityBuff || damageAfterFieldModifiers < damageAfterAbilityBuff)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.FieldModifiers,damageAfterAbilityBuff,damageAfterFieldModifiers);
         }
         
-        float finalDamage = AccountForVictimsBarriers(move,victim,damageAfterFieldModifiers);
+        int finalDamage = Mathf.FloorToInt(AccountForVictimsBarriers(move,victim,damageAfterFieldModifiers));
         if(finalDamage > damageAfterFieldModifiers || finalDamage < damageAfterFieldModifiers)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.Barrier, damageAfterFieldModifiers, finalDamage);

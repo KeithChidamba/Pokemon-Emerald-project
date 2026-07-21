@@ -95,7 +95,7 @@ public class Participant_Status : BattleParticipantModule
         if (_gameUIManager.usingUI) yield break; 
         if (!participant.isActive) yield break;
         if(participant.pokemon.hp<=0 )yield break;
-        if(_battleHandler.BattleOver)yield break;
+        if(!_battleHandler.BattleInProgress)yield break;
         
         if (participant.isFlinched)
         {

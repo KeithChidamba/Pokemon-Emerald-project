@@ -34,9 +34,9 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
         {
             if( _currentBarrierToTest == BarrierType.Special)
             {
+                //start new turn and use reflect
                 _damageWasChanged = false;
                 _currentBarrierToTest = BarrierType.Physical;
-                //start new turn and use reflect
             }
             else
             {
@@ -46,7 +46,7 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
         }
         else
         {
-            testingHandler.LogMessage($"barrier Test failed at {_currentBarrierToTest}",LogType.Error);
+            testingHandler.LogMessage($"barrier Test failed at {_currentBarrierToTest}",TestLogType.Error);
             SetStatus(false);
             EndTest();
         }
@@ -78,7 +78,7 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
             treeckoParticipant1.pokemon.moveSet.Add(newMove);
             treeckoParticipant2.pokemon.moveSet.Add(newMove2);
             
-            //make sure 2 treecko enemies hit the barriers and dont miss
+            //make sure 2 treeko enemies hit the barriers and dont miss
             treeckoParticipant1.pokemon.moveSet[0].isSureHit = true; 
             treeckoParticipant2.pokemon.moveSet[0].isSureHit = true;
             
@@ -102,7 +102,7 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
             _damageWasChanged = modifiedDamage < initialDamage;
             if(_damageWasChanged)
             {
-                testingHandler.LogMessage($"barrier reduced damage from {initialDamage} to {modifiedDamage}",LogType.Calculation);
+                testingHandler.LogMessage($"barrier reduced damage from {initialDamage} to {modifiedDamage}",TestLogType.Calculation);
             }
         }
     }

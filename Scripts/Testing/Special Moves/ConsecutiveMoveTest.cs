@@ -20,7 +20,7 @@ public class ConsecutiveMoveTest : BattleMoveUsageTest
     {
         var enemy = battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        testingHandler.LogMessage($"Health of enemy target: {enemy.pokemon.hp}/{enemy.pokemon.maxHp}",LogType.Health);
+        testingHandler.LogMessage($"Health of enemy target: {enemy.pokemon.hp}/{enemy.pokemon.maxHp}",TestLogType.Health);
 
         var testPassed = enemy.pokemon.hp < enemy.pokemon.maxHp;
         

@@ -19,7 +19,7 @@ public class DamageProtectionMoveTest : BattleMoveUsageTest
         var playerParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         testingHandler.LogMessage($"Health of player: {playerParticipant.pokemon.hp}" +
-                                  $"/{playerParticipant.pokemon.maxHp}",LogType.Health);
+                                  $"/{playerParticipant.pokemon.maxHp}",TestLogType.Health);
         
         var testPassed = playerParticipant.pokemon.hp >= playerParticipant.pokemon.maxHp;
         

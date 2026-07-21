@@ -51,16 +51,42 @@ public class TestingSetup : MonoBehaviour,IInjectable
    }
    private void LogDialogueMessage(string newMessage)
    {
-      LogMessage(newMessage,LogType.Dialogue);
+      LogMessage(newMessage,TestLogType.Dialogue);
    }
-   public void LogMessage(string newMessage,LogType type)
+   public void LogMessage(string newMessage,TestLogType type)
    {
       testingLogs.Add(NextLogID,new(DateTime.Now,newMessage,type));
    }
-   private void GetLogs(string logDirectory)
+   
+   private IEnumerator RunTests()
    {
-      var baseDir = Path.Combine(
-         "Assets/Resources", DirectoryHandler.GetDirectory(AssetDirectory.TestLogs), logDirectory);
+      DirectoryHandler.ClearDirectory($"Assets/Resources/{DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)}");
+      yield return new WaitForSeconds(2f);
+      foreach (var test in _tests)
+      {
+         LogMessage($"<- {test.testName} -> has begun",TestLogType.Test);
+         test.onTestResult += GetTestFeedBack;
+         yield return StartCoroutine(test.BeginTest());
+         if (test.testStatus == IntegrationTest.TestStatus.Failed)
+         {
+            break;
+         }
+         void GetTestFeedBack()
+         {
+            test.onTestResult -= GetTestFeedBack;
+            LogMessage($"<- {test.testName} -> has {test.testStatus}"
+               ,test.testStatus == IntegrationTest.TestStatus.Failed?
+                  TestLogType.Error:TestLogType.Pass);
+         }
+      }
+      GetLogs();
+      Debug.Log($"TEST LOGS PRINTED");
+   }
+   
+   private void GetLogs()
+   {
+      var baseDir = Path.Combine("Assets/Resources", 
+          DirectoryHandler.GetDirectory(AssetDirectory.TestLogs), "Full Logs.html");
       
       string htmlHeader = @"<!DOCTYPE html>
       <html lang=""en"">
@@ -113,7 +139,7 @@ public class TestingSetup : MonoBehaviour,IInjectable
     }
 
     .health{
-        color:#ff7b72;      /* Red - HP/healing/damage */
+        color:#800080;      /* Red - HP/healing/damage */
     }
 
     .calculation{
@@ -163,6 +189,7 @@ public class TestingSetup : MonoBehaviour,IInjectable
 
       </body>
       </html>";
+
       StringBuilder rows = new();
 
       foreach (var log in testingLogs.Values)
@@ -178,46 +205,21 @@ public class TestingSetup : MonoBehaviour,IInjectable
       string html = htmlHeader + rows + htmlFooter;
       File.WriteAllText(baseDir, html);
    }
-   
-   private IEnumerator RunTests()
-   {
-      File.Delete($"Assets/Resources/{DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)}Full Logs.txt");
-      yield return new WaitForSeconds(2f);
-      foreach (var test in _tests)
-      {
-         LogMessage($"<- {test.testName} -> has begun",LogType.Test);
-         test.onTestResult += GetTestFeedBack;
-         yield return StartCoroutine(test.BeginTest());
-         if (test.testStatus == IntegrationTest.TestStatus.Failed)
-         {
-            break;
-         }
-         void GetTestFeedBack()
-         {
-            test.onTestResult -= GetTestFeedBack;
-            LogMessage($"<- {test.testName} -> has {test.testStatus}"
-               ,test.testStatus == IntegrationTest.TestStatus.Failed?
-                  LogType.Pass:LogType.Error);
-         }
-      }
-      GetLogs("Full Logs.txt");
-      Debug.Log($"TEST LOGS PRINTED");
-   }
 }
 
 public struct MessageLog
 {
    public DateTime timestamp;
-   public LogType type;
+   public TestLogType type;
    public string message;
-   public MessageLog(DateTime timestamp, string message,LogType type)
+   public MessageLog(DateTime timestamp, string message,TestLogType type)
    {
       this.timestamp = timestamp;
       this.message = message;
       this.type = type;
    }
 }
-public enum LogType
+public enum TestLogType
 {
    Dialogue,
    Health,
@@ -252,11 +254,11 @@ public class TestRegistry
    {
       //Move Based Tests
       new CreateBarrierMoveTest(),
-      // new HealthDrainTest(),
-      // new HealFromWeatherTest(),
-      // new DamageProtectionMoveTest(),
-      // new WeatherChangeTest(),
-      // new ConsecutiveMoveTest(),
-      // new TargetAllExceptSelfTest()
+      new HealthDrainTest(),
+      new HealFromWeatherTest(),
+      new DamageProtectionMoveTest(),
+      new WeatherChangeTest(),
+      new ConsecutiveMoveTest(),
+      new TargetAllExceptSelfTest()
    };
 }

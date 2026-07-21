@@ -102,7 +102,7 @@ public class overworld_actions : MonoBehaviour,IInjectable
             _dialogueHandler.EndDialogue();
             _encounterHandler.TriggerFishingEncounter(fishingTable,equippedSpecialItem);
         }
-        if (fishing && !_battleHandler.battleInProgress)
+        if (fishing && !_battleHandler.BattleInProgress)
         {
             //cancel fishing
             if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))

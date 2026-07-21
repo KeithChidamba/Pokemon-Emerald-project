@@ -177,7 +177,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
     }
     public void BeginMemberSwap(int memberIndex)
     {
-        if (_battleHandler.battleInProgress)
+        if (_battleHandler.BattleInProgress)
         {//cant swap in a member who is already fighting
             var currentParticipant = _battleHandler.GetCurrentParticipant();
             if (!IsValidSwap(memberIndex,true))
@@ -310,7 +310,7 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         party[selectedMemberIndex] = party[partyIndex];
         party[partyIndex] = swapStore;
         moving = false;
-        if (_battleHandler.battleInProgress)
+        if (_battleHandler.BattleInProgress)
         {
             var participant = GetParticipantFromIndex(selectedMemberIndex);
             var alivePokemon= GetLivingPokemon();

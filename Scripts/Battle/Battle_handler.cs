@@ -39,11 +39,13 @@ public class Battle_handler : MonoBehaviour, IInjectable
     [SerializeField]private List<Battle_Participant> faintQueue = new();
     [SerializeField]private bool handlingFaintEvent;
     
-    public bool battleInProgress;
+    public bool BattleOver { get; private set; }
+    public bool BattleInProgress{ get; private set; }
+    
     public bool isTrainerBattle;
     public bool isDoubleBattle;
     public int validParticipantCount;
-    public bool BattleOver { get; private set; }
+  
     public BattleEndState battleEndState;
     
     public float participantPositionOffset = 100;
@@ -113,7 +115,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
 
     public IEnumerator AwaitBattleCompletion()
     {
-        yield return new WaitUntil(() => BattleOver);
+        yield return new WaitUntil(() => !BattleInProgress);
     }
     public Battle_Participant GetParticipant(BattleParticipantKey participantKey)
     {
@@ -332,7 +334,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         //load visuals based on area
         overWorld.SetActive(false);
         battleUI.SetActive(true);
-        battleInProgress = true;
+        BattleInProgress = true;
         _gameUIHandler.RemoveBlackScreen();
         
         if(isTrainerBattle)
@@ -384,7 +386,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     {
         StartCoroutine(_gameUIHandler.FadeInBlackScreen());
         _pokemonPartyHandler.SortByFainted();
-        BattleOver = false;
+        
         isTrainerBattle = false;
         isDoubleBattle = false;
         var player = GetParticipant(BattleParticipantKey.Player);
@@ -409,7 +411,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private IEnumerator StartSingleBattle(TrainerData trainerData) //single trainer battle
     {
         yield return DisplayTrainerMessage(trainerData.battleIntroMessage);
-        BattleOver = false;
         isTrainerBattle = true;
         isDoubleBattle = false; 
         var player = GetParticipant(BattleParticipantKey.Player);
@@ -436,7 +437,6 @@ public class Battle_handler : MonoBehaviour, IInjectable
     private IEnumerator StartSingleDoubleBattle(TrainerData trainerData) //1v1 double battle
     {
         yield return DisplayTrainerMessage(trainerData.battleIntroMessage);
-        BattleOver = false;
         isTrainerBattle = true;
         isDoubleBattle = true; 
         var alivePartyPokemon = _pokemonPartyHandler.GetLivingPokemon();
@@ -691,8 +691,8 @@ public class Battle_handler : MonoBehaviour, IInjectable
             
             OnParticipantFainted?.Invoke(faintedParticipant);
             
-            if (!BattleOver)
-            {
+            if (BattleInProgress)
+            {   
                 participantUIRect.anchoredPosition = new Vector2(participantUIRect.anchoredPosition.x,
                     participantUIRect.anchoredPosition.y + 400f);
                 
@@ -843,7 +843,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
     }
     private IEnumerator ResetUiAfterBattle()
     {
-        battleInProgress = false;
+        BattleInProgress = false;
         OnBattleEnd?.Invoke();
         _dialogueHandler.EndDialogue();
         _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);

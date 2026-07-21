@@ -9,6 +9,7 @@ public class BattleMoveUsageTest : IntegrationTest
     protected ServiceContainer container;
     private Pokemon_party _pokemonPartyHandler;
     private Dialogue_handler _dialogueHandler;
+    
     protected TestCompletionCondition testExitCondition;
 
     protected enum TestCompletionCondition

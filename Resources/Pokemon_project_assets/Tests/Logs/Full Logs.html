@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <title>Test Log</title>
+
+      <style>
+      body{
+          background:#1e1e1e;
+          color:#d4d4d4;
+          font-family:Consolas, monospace;
+          margin:20px;
+      }
+
+      h1{
+          color:white;
+      }
+
+      table{
+          width:100%;
+          border-collapse:collapse;
+      }
+
+      th{
+          text-align:left;
+          padding:8px;
+          border-bottom:2px solid #666;
+          color:white;
+      }
+
+      td{
+          padding:4px 8px;
+          border-bottom:1px solid #333;
+          vertical-align:top;
+      }
+
+      .time{
+          color:#888;
+          width:220px;
+      }
+
+      .type{
+          width:120px;
+          font-weight:bold;
+      }
+
+    .dialogue{
+    color:#dcdcaa;      /* Soft yellow - character dialogue */
+    }
+
+    .health{
+        color:#800080;      /* Red - HP/healing/damage */
+    }
+
+    .calculation{
+        color:#c586c0;      /* Purple - formulas and calculations */
+    }
+
+    .information{
+        color:#58a6ff;      /* Blue - general information */
+    }
+
+    .error{
+        color:#f85149;      /* Bright red - errors */
+        font-weight:bold;
+    }
+
+    .test{
+        color:#79c0ff;      /* Cyan - test start/status */
+        font-weight:bold;
+    }
+
+    .pass{
+        color:#3fb950;      /* Green - successful test */
+        font-weight:bold;
+    }
+
+      .separator td{
+          border-bottom:2px solid #666;
+      }
+      </style>
+
+      </head>
+
+      <body>
+
+      <h1>Test Logs</h1>
+
+      <table>
+
+      <tr>
+          <th>Timestamp</th>
+          <th>Type</th>
+          <th>Message</th>
+      </tr>
+        <tr>
+            <td class="time">2026/07/21 2:28:36 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Create Barrier Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:28:48 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Marshtomp</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:28:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Pikachu</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:28:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt barrier creation challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:05 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt barrier creation sent out Foe Treecko and Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:10 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Marshtomp and Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Light Screen!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Light Screen has been activated</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pikachu used Thunderbolt on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:21 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s not very effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:24 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leaf Blade on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:27 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 25 to 16</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leaf Blade on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:33 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 28 to 18</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:35 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:37 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Reflect!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Reflect has been activated</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:42 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pikachu used Thunderbolt on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s not very effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:48 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tackle on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:51 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 2 to 1</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tackle on Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:55 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 4 to 2</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:56 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:59 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Create Barrier Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:29:59 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Health Drain Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Zubat</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:01 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Health Drain challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:13 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Health Drain sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Zubat!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:19 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Zubat!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zubat&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:25 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zubat used Leech Life on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zubat gained health</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:33 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy target: 90/98</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:33 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>Half Health of player: 26</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:33 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 30/53</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:36 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Health Drain Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:36 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Heal From Weather Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:37 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Wurmple</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:38 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:43 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Heal From Weather challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Heal From Weather sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:53 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Wurmple!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sunlight got bright!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wurmple used Moonlight!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:30:59 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wurmple restored it&#39;s health!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Wurmple!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wurmple&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:09 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 62/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:09 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>Tenth hp of player: 8</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:09 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>base health gain: 41</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:09 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>health gained from move: 54</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:09 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:10 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sunlight is strong.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:14 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Heal From Weather Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:14 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Damage Protection Move Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Zigzagoon</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:21 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Damage Protection challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Damage Protection sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:32 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zigzagoon used Protect!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:35 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tackle on Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:38 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zigzagoon protected itself</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:40 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 56/56</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:43 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Damage Protection Move Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:43 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Weather Change Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Swampert</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:31:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Change Weather challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Change Weather sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:04 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Swampert!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Swampert used Rain Dance!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It started to rain!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:10 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Swampert!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Swampert&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:16 PM</td>
+            <td class="type information">Information</td>
+            <td>The current weather is Rain</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Rain continues to fall.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:22 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Weather Change Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:22 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Consecutive Move Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:23 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Zigzagoon</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:24 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Consecutive challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:34 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Consecutive sent out Foe Zubat!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:38 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zigzagoon used Pin Missile on Foe Zubat!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:43 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Hit 1!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s not very effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:47 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It hit (x1) times</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Zubat used Wing Attack on Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Critical Hit!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:54 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy target: 22/24</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:57 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Consecutive Move Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:32:57 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Target All Except Self Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:02 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Marshtomp</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:02 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Pikachu</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:09 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Target all challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Target all sent out Foe Zubat and Foe Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Marshtomp and Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:21 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Earthquake!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pikachu fainted!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Critical Hit!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Zigzagoon fainted!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp gained 60 EXP points</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:42 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Zubat used Wing Attack on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:47 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy target(Flying Type): 24/24</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:47 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy partner target: 0/35</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:47 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of partner: 0/32</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:47 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 2:33:50 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Target All Except Self Test -&gt; has Passed</td>
+        </tr>
+
+      </table>
+
+      </body>
+      </html>
