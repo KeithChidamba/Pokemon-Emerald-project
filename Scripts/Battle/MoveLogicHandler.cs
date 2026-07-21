@@ -315,7 +315,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             yield break;
         }
         float fraction;
-        var currentWeather = _turnBasedCombatHandler.currentWeather.weather;
+        var currentWeather = _turnBasedCombatHandler.CurrentWeather.weather;
         
         switch (currentWeather)
         {

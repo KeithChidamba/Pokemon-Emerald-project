@@ -14,16 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemonPartyData:
   - naturalPokemonData:
-      pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
-      pokemonLevel: 24
+      pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      pokemonLevel: 33
       evolutionStageNumber: 0
       hasItem: 0
       heldItem: {fileID: 0}
       moveSet:
-      - {fileID: 11400000, guid: d99a410915ce463339cf77ff4f0b7413, type: 2}
+      - {fileID: 11400000, guid: 5dd6f376614217631b4de43865226d00, type: 2}
     specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
     specificGender: 1
   testEnemyData:
-    trainerDisplayName: Test Grunt Consecutive
+    trainerDisplayName: Test Grunt Heal From Weather
+    battleType: 0
     pokemonParty:
-    - {fileID: 11400000, guid: 44517f57d598f40d7a8405ed4c9896bc, type: 2}
+    - {fileID: 11400000, guid: f6af0968442a5eaaab422599a9a929aa, type: 2}

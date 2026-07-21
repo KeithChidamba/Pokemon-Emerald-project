@@ -20,7 +20,8 @@ MonoBehaviour:
       hasItem: 0
       heldItem: {fileID: 0}
       moveSet:
-      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: fa20c81c0974b47ef8883906ac1e8f32, type: 2}
+      - {fileID: 11400000, guid: dcb89a088b4a3d61d87164f0a80cd456, type: 2}
     specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
     specificGender: 1
   - naturalPokemonData:
@@ -34,8 +35,8 @@ MonoBehaviour:
     specificNature: {fileID: 11400000, guid: f8f55f13077eb0040baee3ea4cdc7b0e, type: 2}
     specificGender: 2
   testEnemyData:
-    trainerDisplayName: Test Grunt Target all
+    trainerDisplayName: Test Grunt barrier creation
     battleType: 1
     pokemonParty:
-    - {fileID: 11400000, guid: 889f5932bbe7b82b0b7007b297d837dd, type: 2}
-    - {fileID: 11400000, guid: 5348e78acb5a6c516bb473a8b843fee5, type: 2}
+    - {fileID: 11400000, guid: 82021bdfa0a13cc52979b8bbc717d2ee, type: 2}
+    - {fileID: 11400000, guid: ca478ee0772085055bf63e584752feb4, type: 2}

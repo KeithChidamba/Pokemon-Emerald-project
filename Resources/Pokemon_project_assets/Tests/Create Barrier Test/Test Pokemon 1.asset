@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff1b1c629dc4d92448879b10db63290f, type: 3}
-  m_Name: Test Pokemon
+  m_Name: Test Pokemon 1
   m_EditorClassIdentifier: 
   data:
-    pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+    pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
     pokemonLevel: 8
     evolutionStageNumber: 0
     hasItem: 0
     heldItem: {fileID: 0}
-    moveSet:
-    - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
-    - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
+    moveSet: []

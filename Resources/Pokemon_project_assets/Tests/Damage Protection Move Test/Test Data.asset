@@ -20,10 +20,10 @@ MonoBehaviour:
       hasItem: 0
       heldItem: {fileID: 0}
       moveSet:
-      - {fileID: 11400000, guid: d99a410915ce463339cf77ff4f0b7413, type: 2}
+      - {fileID: 11400000, guid: 7a19dc867aad2ed4faaf1e7bac06304f, type: 2}
     specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
     specificGender: 1
   testEnemyData:
-    trainerDisplayName: Test Grunt Consecutive
+    trainerDisplayName: Test Grunt Damage Protection
     pokemonParty:
-    - {fileID: 11400000, guid: 44517f57d598f40d7a8405ed4c9896bc, type: 2}
+    - {fileID: 11400000, guid: 1ce854ee836223d8eaecc04e869e3ee0, type: 2}

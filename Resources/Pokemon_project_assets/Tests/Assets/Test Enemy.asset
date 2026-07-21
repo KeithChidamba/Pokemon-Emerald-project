@@ -10,16 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 725247cf13cf23248b7b0f1b93c618c0, type: 3}
-  m_Name: Test Grunt
+  m_Name: Test Enemy
   m_EditorClassIdentifier: 
-  TrainerName: Test Grunt <Target all>
+  TrainerName: Test Grunt
   trainerType: 0
   BaseMoneyPayout: 1
   TrainerLocationData: {fileID: 11400000, guid: 39aacde872dcad918a65db68090ff209, type: 2}
-  PokemonParty:
-  - {fileID: 11400000, guid: 889f5932bbe7b82b0b7007b297d837dd, type: 2}
-  - {fileID: 11400000, guid: 5348e78acb5a6c516bb473a8b843fee5, type: 2}
-  battleType: 1
+  PokemonParty: []
+  battleType: 0
   trainerAiFlags: 0000000001000000
   battleIntroSprite: {fileID: 1807993842, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
   battleLossMessage: Test Battle Over!

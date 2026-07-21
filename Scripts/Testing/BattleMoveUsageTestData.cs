@@ -5,7 +5,15 @@ using UnityEngine;
 public class BattleMoveUsageTestData : ScriptableObject
 {
     public List<PokemonTestData> pokemonPartyData = new();
-    public TrainerData testEnemy;
+    public TestTrainerData testEnemyData;
+}
+
+[Serializable]
+public struct TestTrainerData
+{
+    public string trainerDisplayName;
+    public BattleType battleType; 
+    public List<TrainerPokemonData> pokemonParty;
 }
 [Serializable]
 public struct PokemonTestData

@@ -5,6 +5,10 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
+public enum DamageCalculationModifier
+{
+    Barrier,Ability,FieldModifiers
+}
 public class Move_handler:MonoBehaviour,IInjectable
 {
     private readonly float[] _statLevels = {0.25f,0.29f,0.33f,0.4f,0.5f,0.67f,1f,1.5f,2f,2.5f,3f,3.5f,4f};
@@ -23,6 +27,7 @@ public class Move_handler:MonoBehaviour,IInjectable
     [SerializeField]private bool displayingHealthGain;
     
     public event Func<Battle_Participant,Battle_Participant,Move,float,float> OnDamageCalc;
+    public event Action<DamageCalculationModifier,float, float> OnDamageModified;
     public event Action<float,Battle_Participant> OnDamageDeal;
     public event Action<Battle_Participant,Move> OnMoveHit;
     public event Action<Battle_Participant,StatusEffect> OnStatusEffectHit;
@@ -208,10 +213,25 @@ public class Move_handler:MonoBehaviour,IInjectable
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, struggle, damageDealt) ?? damageDealt;
+        if (damageAfterAbilityBuff > damageDealt)
+        {
+            OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
+        }
+        
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff, struggle.type.typeEnum);
+        if(damageAfterFieldModifiers > damageAfterAbilityBuff || damageAfterFieldModifiers < damageAfterAbilityBuff)
+        {
+            OnDamageModified?.Invoke(DamageCalculationModifier.FieldModifiers,damageAfterAbilityBuff,damageAfterFieldModifiers);
+        }
+        
         float finalDamage = AccountForVictimsBarriers(struggle, victim, damageAfterFieldModifiers);
-
+        if(finalDamage > damageAfterFieldModifiers || finalDamage < damageAfterFieldModifiers)
+        {
+            OnDamageModified?.Invoke(DamageCalculationModifier.Barrier, damageAfterFieldModifiers, finalDamage);
+        }
+        
         OnDamageDeal?.Invoke(finalDamage, victim);
+        OnMoveHit?.Invoke(struggleUser,struggle);
         return finalDamage;
     }
     private bool IsInvincible(Move move,Battle_Participant victim)
@@ -268,8 +288,23 @@ public class Move_handler:MonoBehaviour,IInjectable
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
+        if (damageAfterAbilityBuff > damageDealt)
+        {
+            OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
+        }
+        
         float damageAfterFieldModifiers = ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeEnum);
+        if(damageAfterFieldModifiers > damageAfterAbilityBuff || damageAfterFieldModifiers < damageAfterAbilityBuff)
+        {
+            OnDamageModified?.Invoke(DamageCalculationModifier.FieldModifiers,damageAfterAbilityBuff,damageAfterFieldModifiers);
+        }
+        
         float finalDamage = AccountForVictimsBarriers(move,victim,damageAfterFieldModifiers);
+        if(finalDamage > damageAfterFieldModifiers || finalDamage < damageAfterFieldModifiers)
+        {
+            OnDamageModified?.Invoke(DamageCalculationModifier.Barrier, damageAfterFieldModifiers, finalDamage);
+        }
+        
         OnDamageDeal?.Invoke(finalDamage,victim);
         OnMoveHit?.Invoke(attacker,move);
         return finalDamage;
@@ -480,7 +515,7 @@ public class Move_handler:MonoBehaviour,IInjectable
             }
         _processingOrder = false;
     }
-    bool CheckInvalidStatusEffect(StatusEffect status,PokemonType typeName,Move move)
+    private bool CheckInvalidStatusEffect(StatusEffect status,PokemonType typeName,Move move)
     {
         List<(StatusEffect status, PokemonType type)> invalidCombinations = new()
         {
@@ -507,10 +542,17 @@ public class Move_handler:MonoBehaviour,IInjectable
     public void HandleStatusApplication(Battle_Participant victim,Move move, bool displayMessage)
     {
         foreach (var type in victim.pokemon.types)
-            if(CheckInvalidStatusEffect(move.statusEffect, type.typeEnum,move))return;
+        {
+            if (CheckInvalidStatusEffect(move.statusEffect, type.typeEnum, move))
+            {
+                return;
+            }
+        }
         OnStatusEffectHit?.Invoke(victim,move.statusEffect);
         if (displayMessage)
+        {
             _dialogueHandler.DisplayBattleInfo($"{victim.pokemon.pokemonDisplayName} {GetStatusMessage(move.statusEffect)}");
+        }
         ApplyStatusToVictim(victim,move.statusEffect);
     }
     private static string GetStatusMessage(StatusEffect status)
@@ -532,11 +574,15 @@ public class Move_handler:MonoBehaviour,IInjectable
         participant.pokemon.statusEffect = status;
         var numTurnsOfStatus = 0;
         if (numTurns != 0)
+        {
             participant.statusHandler.GetStatusEffect(numTurns);
+        }
         else
         {
             if(status==StatusEffect.Sleep)
+            {
                 numTurnsOfStatus = Utility.RandomRange(1, 5);
+            }
         }
         participant.statusHandler.GetStatusEffect(numTurnsOfStatus);
     }

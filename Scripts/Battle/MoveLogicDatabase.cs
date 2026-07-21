@@ -50,6 +50,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _logicMethods.Add("mirrormove", MirrorMove);
         _logicMethods.Add("whirlwind", Whirlwind);
         _logicMethods.Add("rest", Rest);
+        _logicMethods.Add("thunder", Thunder);
     }
     
     public IEnumerator InvokeMoveLogic(Battle_Participant attacker, Battle_Participant victim, Turn currentTurn)
@@ -395,4 +396,32 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _moveUsageHandler.ApplyStatusToVictim(attacker, StatusEffect.Sleep, 2);
         yield return _dialogueHandler.AwaitAllDialogue();
     }
+
+    private IEnumerator Thunder(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    {        
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
+        var currentWeather = _turnBasedCombatHandler.CurrentWeather;
+        if (currentWeather.weather == Weather.Rain)
+        {
+            currentTurn.move.isSureHit = true;
+        }
+        if (currentWeather.weather == Weather.Sunlight)
+        {
+            currentTurn.move.moveAccuracy = 50f;
+        }
+        _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
+        yield return _moveUsageHandler.AwaitDamageDisplay();
+        
+        if (Utility.RandomRange(1, 101) < currentTurn.move.statusChance)
+        {
+            _moveUsageHandler.HandleStatusApplication(victim,currentTurn.move,true);
+        }
+        
+        yield return null;
+    }
+   
 }

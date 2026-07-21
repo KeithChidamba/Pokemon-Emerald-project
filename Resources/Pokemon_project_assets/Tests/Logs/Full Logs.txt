@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <title>Test Log</title>
+
+      <style>
+      body{
+          background:#1e1e1e;
+          color:#d4d4d4;
+          font-family:Consolas, monospace;
+          margin:20px;
+      }
+
+      h1{
+          color:white;
+      }
+
+      table{
+          width:100%;
+          border-collapse:collapse;
+      }
+
+      th{
+          text-align:left;
+          padding:8px;
+          border-bottom:2px solid #666;
+          color:white;
+      }
+
+      td{
+          padding:4px 8px;
+          border-bottom:1px solid #333;
+          vertical-align:top;
+      }
+
+      .time{
+          color:#888;
+          width:220px;
+      }
+
+      .type{
+          width:120px;
+          font-weight:bold;
+      }
+
+    .dialogue{
+    color:#dcdcaa;      /* Soft yellow - character dialogue */
+    }
+
+    .health{
+        color:#ff7b72;      /* Red - HP/healing/damage */
+    }
+
+    .calculation{
+        color:#c586c0;      /* Purple - formulas and calculations */
+    }
+
+    .information{
+        color:#58a6ff;      /* Blue - general information */
+    }
+
+    .error{
+        color:#f85149;      /* Bright red - errors */
+        font-weight:bold;
+    }
+
+    .test{
+        color:#79c0ff;      /* Cyan - test start/status */
+        font-weight:bold;
+    }
+
+    .pass{
+        color:#3fb950;      /* Green - successful test */
+        font-weight:bold;
+    }
+
+      .separator td{
+          border-bottom:2px solid #666;
+      }
+      </style>
+
+      </head>
+
+      <body>
+
+      <h1>Test Logs</h1>
+
+      <table>
+
+      <tr>
+          <th>Timestamp</th>
+          <th>Type</th>
+          <th>Message</th>
+      </tr>
+        <tr>
+            <td class="time">2026/07/21 1:41:24 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Create Barrier Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Marshtomp</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Pikachu</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt barrier creation challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:41 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt barrier creation sent out Foe Treecko and Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Marshtomp and Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:48 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Light Screen!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Light Screen has been activated</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:53 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pikachu used Thunderbolt on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:41:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s not very effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leaf Blade on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:03 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 26 to 17,42</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:04 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leaf Blade on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:10 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 28 to 18,76</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:11 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Reflect!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Reflect has been activated</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pikachu used Thunderbolt on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s not very effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:24 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was paralyzed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:27 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tackle on Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:30 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 5 to 3,35</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tackle on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:33 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 2 to 1,34</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:34 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/07/21 1:42:34 PM</td>
+            <td class="type error">Error</td>
+            <td>&lt;- Create Barrier Test -&gt; has Passed</td>
+        </tr>
+
+      </table>
+
+      </body>
+      </html>

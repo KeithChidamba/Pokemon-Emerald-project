@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 public enum DevelopmentEnvironment
@@ -30,7 +32,7 @@ public class TestingSetup : MonoBehaviour,IInjectable
    public void OnInject()
    {
       //logging
-      _dialogueHandler.OnDialogueDisplayed += LogMessage;
+      _dialogueHandler.OnDialogueDisplayed += LogDialogueMessage;
       
       TestRegistry testRegistry = new();
       
@@ -38,40 +40,152 @@ public class TestingSetup : MonoBehaviour,IInjectable
          .GetDirectory(AssetDirectory.TestAssets) + "Test Player");
      
       //Add Tests
-      foreach(var newTestLogicHandler in testRegistry.allTests)
+      foreach(var integrationTest in testRegistry.allTests)
       {
-         newTestLogicHandler.testingHandler = this;
-         newTestLogicHandler.Inject(_container);
-         _tests.Add(newTestLogicHandler);
+         integrationTest.testingHandler = this;
+         integrationTest.Inject(_container);
+         _tests.Add(integrationTest);
       }
       _gameLoadingHandler.StartGame(false);
       StartCoroutine(RunTests());
    }
-   public void LogMessage(string newMessage)
+   private void LogDialogueMessage(string newMessage)
    {
-      testingLogs.Add(NextLogID,new(DateTime.Now,newMessage));
+      LogMessage(newMessage,LogType.Dialogue);
    }
-   private void GetLogs()
+   public void LogMessage(string newMessage,LogType type)
    {
-      var baseDir = "Assets/Resources/" + DirectoryHandler.GetDirectory(AssetDirectory.TestLogs) + "NewLogs.txt";
-      using (StreamWriter writer = new StreamWriter(baseDir))
-      {
-         foreach (var log in testingLogs)
-         {
-            var logString = $"{log.Value.timestamp} : {log.Value.message}";
-            writer.WriteLine(logString);
-         }
+      testingLogs.Add(NextLogID,new(DateTime.Now,newMessage,type));
+   }
+   private void GetLogs(string logDirectory)
+   {
+      var baseDir = Path.Combine(
+         "Assets/Resources", DirectoryHandler.GetDirectory(AssetDirectory.TestLogs), logDirectory);
+      
+      string htmlHeader = @"<!DOCTYPE html>
+      <html lang=""en"">
+      <head>
+      <meta charset=""UTF-8"">
+      <title>Test Log</title>
+
+      <style>
+      body{
+          background:#1e1e1e;
+          color:#d4d4d4;
+          font-family:Consolas, monospace;
+          margin:20px;
       }
-      Debug.Log("TEST LOGS PRINTED");
+
+      h1{
+          color:white;
+      }
+
+      table{
+          width:100%;
+          border-collapse:collapse;
+      }
+
+      th{
+          text-align:left;
+          padding:8px;
+          border-bottom:2px solid #666;
+          color:white;
+      }
+
+      td{
+          padding:4px 8px;
+          border-bottom:1px solid #333;
+          vertical-align:top;
+      }
+
+      .time{
+          color:#888;
+          width:220px;
+      }
+
+      .type{
+          width:120px;
+          font-weight:bold;
+      }
+
+    .dialogue{
+    color:#dcdcaa;      /* Soft yellow - character dialogue */
+    }
+
+    .health{
+        color:#ff7b72;      /* Red - HP/healing/damage */
+    }
+
+    .calculation{
+        color:#c586c0;      /* Purple - formulas and calculations */
+    }
+
+    .information{
+        color:#58a6ff;      /* Blue - general information */
+    }
+
+    .error{
+        color:#f85149;      /* Bright red - errors */
+        font-weight:bold;
+    }
+
+    .test{
+        color:#79c0ff;      /* Cyan - test start/status */
+        font-weight:bold;
+    }
+
+    .pass{
+        color:#3fb950;      /* Green - successful test */
+        font-weight:bold;
+    }
+
+      .separator td{
+          border-bottom:2px solid #666;
+      }
+      </style>
+
+      </head>
+
+      <body>
+
+      <h1>Test Logs</h1>
+
+      <table>
+
+      <tr>
+          <th>Timestamp</th>
+          <th>Type</th>
+          <th>Message</th>
+      </tr>";
+
+      string htmlFooter = @"
+      </table>
+
+      </body>
+      </html>";
+      StringBuilder rows = new();
+
+      foreach (var log in testingLogs.Values)
+      {
+         rows.AppendLine($@"
+        <tr>
+            <td class=""time"">{log.timestamp}</td>
+            <td class=""type {log.type.ToString().ToLowerInvariant()}"">{log.type}</td>
+            <td>{System.Net.WebUtility.HtmlEncode(log.message)}</td>
+        </tr>");
+      }
+      
+      string html = htmlHeader + rows + htmlFooter;
+      File.WriteAllText(baseDir, html);
    }
    
    private IEnumerator RunTests()
    {
-      yield return new WaitForSeconds(0.5f);
+      File.Delete($"Assets/Resources/{DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)}Full Logs.txt");
+      yield return new WaitForSeconds(2f);
       foreach (var test in _tests)
       {
-         LogMessage("----------------------------------------------------------------------------------------------------------");
-         LogMessage($"<- {test.testName} -> has begun");
+         LogMessage($"<- {test.testName} -> has begun",LogType.Test);
          test.onTestResult += GetTestFeedBack;
          yield return StartCoroutine(test.BeginTest());
          if (test.testStatus == IntegrationTest.TestStatus.Failed)
@@ -81,22 +195,37 @@ public class TestingSetup : MonoBehaviour,IInjectable
          void GetTestFeedBack()
          {
             test.onTestResult -= GetTestFeedBack;
-            LogMessage($"<- {test.testName} -> has {test.testStatus}");
+            LogMessage($"<- {test.testName} -> has {test.testStatus}"
+               ,test.testStatus == IntegrationTest.TestStatus.Failed?
+                  LogType.Pass:LogType.Error);
          }
       }
-      GetLogs();
+      GetLogs("Full Logs.txt");
+      Debug.Log($"TEST LOGS PRINTED");
    }
 }
 
 public struct MessageLog
 {
    public DateTime timestamp;
+   public LogType type;
    public string message;
-   public MessageLog(DateTime timestamp, string message)
+   public MessageLog(DateTime timestamp, string message,LogType type)
    {
       this.timestamp = timestamp;
       this.message = message;
+      this.type = type;
    }
+}
+public enum LogType
+{
+   Dialogue,
+   Health,
+   Calculation,
+   Information,
+   Error,
+   Test,
+   Pass
 }
 public abstract class IntegrationTest
 {
@@ -110,6 +239,11 @@ public abstract class IntegrationTest
       yield return null;
    }
    public virtual void Inject(ServiceContainer container) { }
+
+   public void SetStatus(bool condition)
+   {
+      testStatus = condition ? TestStatus.Passed : TestStatus.Failed;
+   }
 }
 public class TestRegistry
 {
@@ -117,7 +251,12 @@ public class TestRegistry
    public IntegrationTest[] allTests =
    {
       //Move Based Tests
-      new ConsecutiveMoveTest(),
-      new TargetAllExceptSelfTest()
+      new CreateBarrierMoveTest(),
+      // new HealthDrainTest(),
+      // new HealFromWeatherTest(),
+      // new DamageProtectionMoveTest(),
+      // new WeatherChangeTest(),
+      // new ConsecutiveMoveTest(),
+      // new TargetAllExceptSelfTest()
    };
 }

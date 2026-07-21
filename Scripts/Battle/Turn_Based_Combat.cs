@@ -15,8 +15,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public int CurrentTurnIndex => currentTurnIndex;
     [SerializeField]private int currentTurnIndex;
     
-    public WeatherCondition currentWeather;
-    public WeatherCondition clearWeather;
+    public WeatherCondition CurrentWeather { get; private set; }
+    
+    [SerializeField]private WeatherCondition clearWeather;
     private event Func<IEnumerator> OnWeatherEffect;
     public event Action OnWeatherEnd;
     private event Action<bool> OnAttackAttempted;
@@ -51,7 +52,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         OnNewTurn += ()=> StartCoroutine(CheckParticipantCoolDown());
         _battleHandler.OnSwitchOut += RemoveWeatherBuffReceiver;
         clearWeather = new WeatherCondition(Weather.Clear);
-        currentWeather = clearWeather;
+        CurrentWeather = clearWeather;
     }
 
     private void AddTurn(Turn turn)
@@ -154,22 +155,11 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     private void ResetTurnState()
     {
         currentTurnIndex = 0;
-        currentWeather.weather = Weather.Clear;
+        CurrentWeather = clearWeather;
         ClearTurn();
         StopAllCoroutines();
     }
-
-    private void ModifyMoveAccuracy(Turn turn)
-    {
-        if (turn.move.moveName == NameDB.GetMoveName(LearnSetMoveName.Thunder))
-        {
-            if (currentWeather.weather == Weather.Rain)
-                turn.move.isSureHit = true;
-            if (currentWeather.weather == Weather.Sunlight)
-                turn.move.moveAccuracy = 50f;
-        }
-        //add more when more moves need it
-    }
+    
     private IEnumerator CheckAttackSuccess(Turn turn, Battle_Participant attacker,Battle_Participant victim)
     {
         if(attacker.pokemon.hp<=0)
@@ -206,8 +196,6 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             {
                 _dialogueHandler.DisplayBattleInfo(GetMoveUsageText(turn.move,attacker, victim));
             }
-
-            ModifyMoveAccuracy(turn);
             
             if (victim.isSemiInvulnerable)
             {
@@ -371,7 +359,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         yield return _battleHandler.AwaitFaintQueue();
         
         //damage from weather
-        if (currentWeather.weather != Weather.Clear)
+        if (CurrentWeather.weather != Weather.Clear)
         {
             ReduceWeatherDuration();
             yield return ExecuteWeatherEffect();
@@ -648,7 +636,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
 
     public void ChangeWeather(WeatherCondition newWeather,bool fromAbility=false)
     {
-        OnWeatherEffect -= currentWeather.weatherEffect;
+        OnWeatherEffect -= CurrentWeather.weatherEffect;
         
         if (fromAbility)
             newWeather.isInfinite = true;
@@ -686,34 +674,34 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         }
         _dialogueHandler.DisplayBattleInfo(newWeather.weatherBegunMessage);
         OnWeatherEffect += newWeather.weatherEffect;
-        currentWeather = newWeather;
+        CurrentWeather = newWeather;
     }
 
     private void ReduceWeatherDuration()
     {
-        if (currentWeather.isInfinite) return;
-        if (currentWeather.turnDuration == 0)
+        if (CurrentWeather.isInfinite) return;
+        if (CurrentWeather.turnDuration == 0)
         {
             OnWeatherEnd?.Invoke();
-            OnWeatherEffect -= currentWeather.weatherEffect;
-            _dialogueHandler.DisplayBattleInfo(currentWeather.weatherEndMessage);
-            currentWeather = clearWeather;
+            OnWeatherEffect -= CurrentWeather.weatherEffect;
+            _dialogueHandler.DisplayBattleInfo(CurrentWeather.weatherEndMessage);
+            CurrentWeather = clearWeather;
             return;
         }
-        currentWeather.turnDuration--;
+        CurrentWeather.turnDuration--;
     }
 
     private IEnumerator ExecuteWeatherEffect()
     {
-        _dialogueHandler.DisplayBattleInfo(currentWeather.weatherTurnEndMessage);
+        _dialogueHandler.DisplayBattleInfo(CurrentWeather.weatherTurnEndMessage);
         yield return OnWeatherEffect?.Invoke();
     }
 
     private void RemoveWeatherBuffReceiver(Battle_Participant participant)
     {
-        if (currentWeather.weather == Weather.Clear) return;
-        if (!currentWeather.buffedParticipants.Contains(participant)) return;
-        currentWeather.buffedParticipants.Remove(participant);
+        if (CurrentWeather.weather == Weather.Clear) return;
+        if (!CurrentWeather.buffedParticipants.Contains(participant)) return;
+        CurrentWeather.buffedParticipants.Remove(participant);
     }
     private IEnumerator SandStormEffect()
     {
@@ -729,7 +717,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                 if (participant.pokemon.HasType(protectedType))
                 {
                     isProtected = true;
-                    if(!currentWeather.buffedParticipants.Contains(participant))
+                    if(!CurrentWeather.buffedParticipants.Contains(participant))
                     {
                         if (protectedType == PokemonType.Rock)
                         {
@@ -737,7 +725,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                             var spDefBuff = new BuffDebuffData(participant,
                                 Stat.SpecialDefense, true, 1);
                             _moveUsageHandler.ExecuteBuffOrDebuff(spDefBuff,false);
-                            currentWeather.buffedParticipants.Add(participant);
+                            CurrentWeather.buffedParticipants.Add(participant);
                         }
                     }
                     break;
@@ -780,7 +768,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     }
     private IEnumerator DealWeatherDamage(Battle_Participant victim)
     {
-        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + currentWeather.weatherDamageMessage);
+        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + CurrentWeather.weatherDamageMessage);
         var weatherDamage = victim.pokemon.maxHp * (1 / 16f);
         _moveUsageHandler.DisplaySpecialDamage(victim, predefinedDamage:weatherDamage);
         yield return _moveUsageHandler.AwaitDamageDisplay();

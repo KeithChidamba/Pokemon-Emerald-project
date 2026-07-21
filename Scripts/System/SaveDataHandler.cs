@@ -329,29 +329,20 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         }
     }
     
-    private void ClearDirectory(string path)
-    {
-        if (!Directory.Exists(path))
-        {
-            return;
-        }
-        var files = Directory.GetFiles(path);
-        foreach (var file in files)
-            File.Delete(file);
-    }
+    
 
     public void EraseSaveData()
     {
         foreach (var dir in DirectoryHandler.SaveDataDirectories)
         {
-            ClearDirectory(_saveDataPath + dir.Value);
+            DirectoryHandler.ClearDirectory(_saveDataPath + dir.Value);
         }
     }
     private void EraseTemporarySaveData()
     {
         foreach (var dir in DirectoryHandler.SaveDataDirectories)
         {
-            ClearDirectory(_tempSaveDataPath + dir.Value);
+            DirectoryHandler.ClearDirectory(_tempSaveDataPath + dir.Value);
         }
     }
     

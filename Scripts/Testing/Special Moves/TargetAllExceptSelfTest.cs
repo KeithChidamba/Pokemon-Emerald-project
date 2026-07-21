@@ -23,15 +23,15 @@ public class TargetAllExceptSelfTest : BattleMoveUsageTest
         var partnerParticipant = battleHandler.GetParticipant(BattleParticipantKey.PlayerPartner);
         
         //for this test, the enemies are weak enough to faint after 1 hit so that becomes the test condition
-        testingHandler.LogMessage($"Health of enemy target(Flying Type): {enemy.pokemon.hp}/{enemy.pokemon.maxHp}");
-        testingHandler.LogMessage($"Health of enemy partner target: {enemyPartner.pokemon.hp}/{enemyPartner.pokemon.maxHp}");
-        testingHandler.LogMessage($"Health of partner: {partnerParticipant.pokemon.hp}/{partnerParticipant.pokemon.maxHp}");
+        testingHandler.LogMessage($"Health of enemy target(Flying Type): {enemy.pokemon.hp}/{enemy.pokemon.maxHp}",LogType.Health);
+        testingHandler.LogMessage($"Health of enemy partner target: {enemyPartner.pokemon.hp}/{enemyPartner.pokemon.maxHp}",LogType.Health);
+        testingHandler.LogMessage($"Health of partner: {partnerParticipant.pokemon.hp}/{partnerParticipant.pokemon.maxHp}",LogType.Health);
 
         var testPassed = enemy.pokemon.hp >= enemy.pokemon.maxHp && 
                          enemyPartner.pokemon.hp <= 0 && 
                          partnerParticipant.pokemon.hp <= 0;
         
-        testStatus = testPassed ? TestStatus.Passed : TestStatus.Failed;
+        SetStatus(testPassed);
     }
 
     protected override void DetermineMoveUsage()

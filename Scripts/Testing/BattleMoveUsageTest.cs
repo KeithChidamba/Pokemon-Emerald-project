@@ -8,15 +8,30 @@ public class BattleMoveUsageTest : IntegrationTest
     protected Turn_Based_Combat turnBasedCombatHandler;
     protected ServiceContainer container;
     private Pokemon_party _pokemonPartyHandler;
+    private Dialogue_handler _dialogueHandler;
+    protected TestCompletionCondition testExitCondition;
+
+    protected enum TestCompletionCondition
+    {
+        EndAfterTurns,EndManually
+    };
     protected virtual void DetermineSuccess() { }
 
     private void LogSuccess()
     {
         DetermineSuccess();
-        battleHandler.EndBattle(BattleEndState.BattleTerminated, null);
-        turnBasedCombatHandler.OnNewTurn -= DetermineMoveUsage;
+        if (testExitCondition == TestCompletionCondition.EndAfterTurns)
+        {
+            EndTest();
+        }
     }
 
+    protected void EndTest()
+    {
+        battleHandler.EndBattle(BattleEndState.BattleTerminated, null);
+        turnBasedCombatHandler.OnNewTurn -= DetermineMoveUsage;
+        turnBasedCombatHandler.OnTurnsCompleted -= LogSuccess;
+    }
     protected virtual void DetermineMoveUsage() { }
 
     protected IEnumerator HandleBattleState()
@@ -24,16 +39,26 @@ public class BattleMoveUsageTest : IntegrationTest
         battleHandler = container.Resolve<Battle_handler>();
         turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _dialogueHandler = container.Resolve<Dialogue_handler>();
         
         var testData = Resources.Load<BattleMoveUsageTestData>(
             DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"{testName}/Test Data");
-       
+
+        var testEnemy = Resources.Load<TrainerData>(
+            DirectoryHandler.GetDirectory(AssetDirectory.TestAssets) + "Test Enemy");
+
+        testEnemy.TrainerName = testData.testEnemyData.trainerDisplayName;
+        testEnemy.PokemonParty = testData.testEnemyData.pokemonParty;
+        testEnemy.battleType = testData.testEnemyData.battleType;
+        
         yield return LoadTestData(testData);
         
         turnBasedCombatHandler.OnNewTurn += DetermineMoveUsage;
         turnBasedCombatHandler.OnTurnsCompleted += LogSuccess;
         
-        yield return battleHandler.SetBattleTypeAndStart(testData.testEnemy);
+        yield return battleHandler.SetBattleTypeAndStart(testEnemy);
+        
+        yield return _dialogueHandler.AwaitAllDialogue();      
         
         yield return battleHandler.AwaitBattleCompletion();
 

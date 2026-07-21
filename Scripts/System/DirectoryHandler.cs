@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 
 public enum AssetDirectory
 { 
@@ -66,6 +67,17 @@ public class DirectoryHandler
     public static string GetDirectory(AssetDirectory directoryKey)
     {
         return RootAssetDirectory + AssetDirectories[directoryKey];
+    }
+    public static void ClearDirectory(string path)
+    {
+        if (!Directory.Exists(path))
+        {
+            Debug.LogWarning(path+ " :doesnt exit");
+            return;
+        }
+        var files = Directory.GetFiles(path);
+        foreach (var file in files)
+            File.Delete(file);
     }
     public static IEnumerator CopyDirectoryFiles(string sourceDir, string destinationDir, bool recursive)
     {
