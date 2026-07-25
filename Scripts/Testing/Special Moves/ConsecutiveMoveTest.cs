@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class ConsecutiveMoveTest : BattleMoveUsageTest
 {
+    private Battle_handler _battleHandler;
+    
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
+        _battleHandler = container.Resolve<Battle_handler>();
         testName = "Consecutive Move Test";
     }
     
@@ -18,7 +21,7 @@ public class ConsecutiveMoveTest : BattleMoveUsageTest
 
     protected override void DetermineSuccess()
     {
-        var enemy = battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
         testingHandler.LogMessage($"Health of enemy target: {enemy.pokemon.hp}/{enemy.pokemon.maxHp}",TestLogType.Health);
 
@@ -27,15 +30,15 @@ public class ConsecutiveMoveTest : BattleMoveUsageTest
         SetStatus(testPassed);
     }
 
-    protected override void DetermineMoveUsage()
+    protected override void DetermineTurnUsage()
     {
-        if (battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
+        if (_battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
         {
             //use consecutive move : pin-missile
-            var zigzagoonParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
+            var zigzagoonParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             var pinMissile = zigzagoonParticipant.pokemon.moveSet[0];
             pinMissile.isSureHit = true;
-            battleHandler.UseMove(pinMissile,zigzagoonParticipant, BattleParticipantKey.Enemy);
+            _battleHandler.UseMove(pinMissile,zigzagoonParticipant, BattleParticipantKey.Enemy);
         }
     }
 }

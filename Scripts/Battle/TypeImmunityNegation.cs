@@ -4,25 +4,28 @@ using UnityEngine;
 
 public class TypeImmunityNegation
 {
-    public ImmunityNegationMove moveName;
+    public LearnSetMoveName moveName;
     public List<PokemonType> ImmunityNegationTypes = new ();
     private Battle_Participant _participant;
-    private Battle_Participant _victimOfimmunityNegation;
+    private Battle_Participant _victimOfImmunityNegation;
     private Battle_handler _battleHandler;
-    public TypeImmunityNegation(Battle_handler battleHandler,ImmunityNegationMove moveNameEnum,Battle_Participant participant
+    
+    public TypeImmunityNegation(Battle_handler battleHandler,LearnSetMoveName moveNameEnum,Battle_Participant participant
         , Battle_Participant victim)
     {
         _battleHandler = battleHandler;
         _participant =  participant;
         moveName = moveNameEnum;
-        _victimOfimmunityNegation = victim;
+        _victimOfImmunityNegation = victim;
     }
-    public void RemoveNegationOnSwitchOut(Battle_Participant participant)
+    public void RemoveNegationOnSwitchOut(Battle_Participant swapParticipant)
     {
-        if (participant != _participant) return;
-        _battleHandler.OnSwitchOut -= RemoveNegationOnSwitchOut;
-        _victimOfimmunityNegation.immunityNegations.RemoveAll(n => n.moveName == moveName);
+        if (swapParticipant.participantKey == _victimOfImmunityNegation.participantKey
+            || swapParticipant.participantKey == _participant.participantKey)
+        {
+            _battleHandler.OnSwitchOut -= RemoveNegationOnSwitchOut;
+            _victimOfImmunityNegation.immunityNegations.RemoveAll(n => n.moveName == moveName);
+        }
     }
 }
 
-public enum ImmunityNegationMove{Foresight}

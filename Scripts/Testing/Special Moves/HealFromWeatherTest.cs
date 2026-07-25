@@ -3,9 +3,14 @@ using UnityEngine;
 
 public class HealFromWeatherTest : BattleMoveUsageTest
 {
+    private Battle_handler _battleHandler;
+    private Turn_Based_Combat _turnBasedCombatHandler;
+    
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
+        _battleHandler = container.Resolve<Battle_handler>();
+        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         testName = "Heal From Weather Test";
     }
     
@@ -17,7 +22,7 @@ public class HealFromWeatherTest : BattleMoveUsageTest
 
     protected override void DetermineSuccess()
     {
-        var playerParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
+        var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         testingHandler.LogMessage($"Health of player: {playerParticipant.pokemon.hp}" +
                                   $"/{playerParticipant.pokemon.maxHp}",TestLogType.Health);
         
@@ -42,23 +47,23 @@ public class HealFromWeatherTest : BattleMoveUsageTest
         SetStatus(testPassed);
     }
 
-    protected override void DetermineMoveUsage()
+    protected override void DetermineTurnUsage()
     {
         //only allow enemy to use a no-damage move
         //so the healing can accurately be accounted for as a test result
         
-        if (battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
+        if (_battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
         {
-            turnBasedCombatHandler.ChangeWeather(new WeatherCondition(Weather.Sunlight));
+            _turnBasedCombatHandler.ChangeWeather(new WeatherCondition(Weather.Sunlight));
             
-            var wurmpleParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
+            var wurmpleParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             
             //decrease hp to half so healing is allowed
             wurmpleParticipant.pokemon.hp = Mathf.FloorToInt(wurmpleParticipant.pokemon.maxHp * 0.1f);
             
             //use heal from weather move : moonlight
             var moonlight = wurmpleParticipant.pokemon.moveSet[0];
-            battleHandler.UseMove(moonlight,wurmpleParticipant, BattleParticipantKey.Enemy);
+            _battleHandler.UseMove(moonlight,wurmpleParticipant, BattleParticipantKey.Enemy);
         }
     }
 }

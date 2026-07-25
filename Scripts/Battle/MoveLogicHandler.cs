@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class MoveLogicHandler : MonoBehaviour,IInjectable
@@ -50,7 +49,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
                 yield return HealFromWeather(attacker); 
                 break;
             case EffectType.IdentifyTarget:
-                yield return IdentifyTarget(attacker,victim); 
+                yield return IdentifyTarget(currentTurn,attacker,victim); 
                 break;
             case EffectType.BarrierCreation:
                 yield return CreateBarriers(move,attacker); 
@@ -240,21 +239,31 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         _battleHandler.OnSwitchOut += damageModifier.RemoveOnSwitchOut;
         _moveUsageHandler.AddFieldDamageModifier(damageModifier);
     }
-    private IEnumerator IdentifyTarget(Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator IdentifyTarget(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
-        if (victim.immunityNegations.Any(n=> 
-                n.moveName==ImmunityNegationMove.Foresight))
+        var move = currentTurn.move;
+        LearnSetMoveName currentMoveEnum = NameDB.ParseMoveName(move.moveName);
+        
+        if (victim.immunityNegations.Any(negation => negation.moveName == currentMoveEnum))
         {
+            //already in effect
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             yield break;
         }
+        
         _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName +" was identified!");
-        victim.pokemon.buffAndDebuffs
-            .RemoveAll(b => b.stat == Stat.Evasion);
-        victim.pokemon.evasion = 100;
+        
+        if(currentMoveEnum == LearnSetMoveName.Foresight)
+        {
+            victim.pokemon.buffAndDebuffs
+                .RemoveAll(b => b.stat == Stat.Evasion);
+            victim.pokemon.evasion = 100;
+        }
+        
         if(victim.pokemon.HasType(PokemonType.Ghost))
         {
-            var newImmunityNegation = new TypeImmunityNegation(_battleHandler,ImmunityNegationMove.Foresight
+            var newImmunityNegation = new TypeImmunityNegation(_battleHandler
+                ,currentMoveEnum
                 , attacker, victim);
 
             newImmunityNegation.ImmunityNegationTypes.Add(PokemonType.Fighting);

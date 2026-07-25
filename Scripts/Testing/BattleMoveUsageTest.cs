@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BattleMoveUsageTest : IntegrationTest
 {
-    protected Battle_handler battleHandler;
-    protected Turn_Based_Combat turnBasedCombatHandler;
+    private Battle_handler _battleHandler;
+    private Turn_Based_Combat _turnBasedCombatHandler;
     protected ServiceContainer container;
     private Pokemon_party _pokemonPartyHandler;
     private Dialogue_handler _dialogueHandler;
@@ -29,16 +29,16 @@ public class BattleMoveUsageTest : IntegrationTest
 
     protected void EndTest()
     {
-        battleHandler.EndBattle(BattleEndState.BattleTerminated, null);
-        turnBasedCombatHandler.OnNewTurn -= DetermineMoveUsage;
-        turnBasedCombatHandler.OnTurnsCompleted -= LogSuccess;
+        _battleHandler.EndBattle(BattleEndState.BattleTerminated, null);
+        _turnBasedCombatHandler.OnNewTurn -= DetermineTurnUsage;
+        _turnBasedCombatHandler.OnTurnsCompleted -= LogSuccess;
     }
-    protected virtual void DetermineMoveUsage() { }
+    protected virtual void DetermineTurnUsage() { }
 
     protected IEnumerator HandleBattleState()
     {
-        battleHandler = container.Resolve<Battle_handler>();
-        turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         
@@ -54,14 +54,14 @@ public class BattleMoveUsageTest : IntegrationTest
         
         yield return LoadTestData(testData);
         
-        turnBasedCombatHandler.OnNewTurn += DetermineMoveUsage;
-        turnBasedCombatHandler.OnTurnsCompleted += LogSuccess;
+        _turnBasedCombatHandler.OnNewTurn += DetermineTurnUsage;
+        _turnBasedCombatHandler.OnTurnsCompleted += LogSuccess;
         
-        yield return battleHandler.SetBattleTypeAndStart(testEnemy);
+        yield return _battleHandler.SetBattleTypeAndStart(testEnemy);
         
         yield return _dialogueHandler.AwaitAllDialogue();      
         
-        yield return battleHandler.AwaitBattleCompletion();
+        yield return _battleHandler.AwaitBattleCompletion();
 
         _pokemonPartyHandler.ClearTestState();
         yield return new WaitForSeconds(0.05f);

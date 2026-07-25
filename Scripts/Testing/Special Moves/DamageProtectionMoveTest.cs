@@ -2,9 +2,12 @@ using System.Collections;
 
 public class DamageProtectionMoveTest : BattleMoveUsageTest
 {
+    private Battle_handler _battleHandler;
+    
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
+        _battleHandler = container.Resolve<Battle_handler>();
         testName = "Damage Protection Move Test";
     }
     
@@ -16,7 +19,7 @@ public class DamageProtectionMoveTest : BattleMoveUsageTest
 
     protected override void DetermineSuccess()
     {
-        var playerParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
+        var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         testingHandler.LogMessage($"Health of player: {playerParticipant.pokemon.hp}" +
                                   $"/{playerParticipant.pokemon.maxHp}",TestLogType.Health);
@@ -26,19 +29,19 @@ public class DamageProtectionMoveTest : BattleMoveUsageTest
         SetStatus(testPassed);
     }
 
-    protected override void DetermineMoveUsage()
+    protected override void DetermineTurnUsage()
     {
-        if (battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
+        if (_battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
         {
             //use damage protection move : protect
-            var zigzagoonParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
-            var treeckoParticipant = battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+            var zigzagoonParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+            var treeckoParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
 
             var tackle = treeckoParticipant.pokemon.moveSet[0];
             tackle.isSureHit = true;//make sure it doesnt miss
             
             var protect = zigzagoonParticipant.pokemon.moveSet[0];//protect never misses
-            battleHandler.UseMove(protect,zigzagoonParticipant, BattleParticipantKey.Enemy);
+            _battleHandler.UseMove(protect,zigzagoonParticipant, BattleParticipantKey.Enemy);
         }
     }
 }

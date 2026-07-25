@@ -8,6 +8,85 @@ using System.Linq;
 
 public class NatureEVFixer : EditorWindow
 {  // Folder containing Item ScriptableObjects
+    [MenuItem("Tools/Fix Move typeless")]
+    public static void FixMoveTypelessEffect()
+    {
+        HashSet<LearnSetMoveName> unaffectedMoves = new()
+        {
+            LearnSetMoveName.Agility,
+            LearnSetMoveName.Attract,
+            LearnSetMoveName.BellyDrum,
+            LearnSetMoveName.Bide,
+            LearnSetMoveName.BulkUp,
+            LearnSetMoveName.ConfuseRay,
+            LearnSetMoveName.Detect,
+            LearnSetMoveName.DoubleTeam,
+            LearnSetMoveName.FocusEnergy,
+            LearnSetMoveName.Foresight,
+            LearnSetMoveName.Growl,
+            LearnSetMoveName.Harden,
+            LearnSetMoveName.Haze,
+            LearnSetMoveName.Leer,
+            LearnSetMoveName.LightScreen,
+            LearnSetMoveName.MeanLook,
+            LearnSetMoveName.MirrorMove,
+            LearnSetMoveName.MoonLight,
+            LearnSetMoveName.MorningSun,
+            LearnSetMoveName.MudSport,
+            LearnSetMoveName.OdorSleuth,
+            LearnSetMoveName.Protect,
+            LearnSetMoveName.RainDance,
+            LearnSetMoveName.Reflect,
+            LearnSetMoveName.Rest,
+            LearnSetMoveName.SandStorm,
+            LearnSetMoveName.Screech,
+            LearnSetMoveName.Supersonic,
+            LearnSetMoveName.TailWhip,
+            LearnSetMoveName.Whirlwind
+        };
+
+        Debug.Log($"Typeless-effect moves array length: {unaffectedMoves.Count}");
+
+        string folderPath = "Assets/Resources/Pokemon_project_assets/Pokemon_obj/Moves/";
+        string[] guids = AssetDatabase.FindAssets("t:Move", new[] { folderPath });
+
+        int counter = 0;
+
+        foreach (string guid in guids)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            Move move = AssetDatabase.LoadAssetAtPath<Move>(assetPath);
+
+            if (move == null)
+            {
+                Debug.LogError($"[ERROR] Move asset not found at: {assetPath}");
+                continue;
+            }
+
+            bool hasTypelessEffect = unaffectedMoves.Contains(NameDB.ParseMoveName(move.moveName));
+
+            move.hasTypelessEffect = hasTypelessEffect;
+
+            if (hasTypelessEffect)
+            {
+                counter++;
+                Debug.Log($"[TYPELESS EFFECT] {move.moveName}");
+            }
+
+            EditorUtility.SetDirty(move);
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        Debug.Log($"Total moves with typeless effects: {counter}");
+        Debug.Log("Move typeless-effect updates complete.");
+    }
+    
+    
+    
+    
+    
     [MenuItem("Tools/Assign Item Sprites")]
     public static void AssignSprites()
     {

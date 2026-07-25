@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class HealthDrainTest : BattleMoveUsageTest
 {
+    private Battle_handler _battleHandler;
+    
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
+        _battleHandler = container.Resolve<Battle_handler>();
         testName = "Health Drain Test";
     }
     
@@ -19,8 +22,8 @@ public class HealthDrainTest : BattleMoveUsageTest
 
     protected override void DetermineSuccess()
     {
-        var enemy = battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        var playerParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         var halfHp = Mathf.FloorToInt(playerParticipant.pokemon.maxHp / 2f);
         
@@ -35,21 +38,21 @@ public class HealthDrainTest : BattleMoveUsageTest
         SetStatus(testPassed);
     }
 
-    protected override void DetermineMoveUsage()
+    protected override void DetermineTurnUsage()
     {
         //only allow enemy to use a no-damage move
         //so the healing can accurately be accounted for as a test result
         
-        if (battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
+        if (_battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
         {
             //use health drain move : leech-life
-            var zubatParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
+            var zubatParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             
             zubatParticipant.pokemon.hp = Mathf.FloorToInt(zubatParticipant.pokemon.maxHp / 2f);
             
             var leechLife = zubatParticipant.pokemon.moveSet[0];
             leechLife.isSureHit = true;
-            battleHandler.UseMove(leechLife,zubatParticipant, BattleParticipantKey.Enemy);
+            _battleHandler.UseMove(leechLife,zubatParticipant, BattleParticipantKey.Enemy);
         }
     }
 }

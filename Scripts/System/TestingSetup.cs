@@ -253,6 +253,7 @@ public class TestRegistry
    public IntegrationTest[] allTests =
    {
       //Move Based Tests
+      new IdentifyTargetMoveTest(),
       new CreateBarrierMoveTest(),
       new HealthDrainTest(),
       new HealFromWeatherTest(),

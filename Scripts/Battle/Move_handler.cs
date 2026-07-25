@@ -65,8 +65,12 @@ public class Move_handler:MonoBehaviour,IInjectable
     {
         var move = currentTurn.move;
         var moveEffectiveness = _battleOperations.CheckTypeEffectiveness(victim, move.type);
-        if (moveEffectiveness == 0 && !move.isMultiTarget && !move.hasTypelessEffect && !move.isSelfTargeted)
-            _dialogueHandler.DisplayBattleInfo("It doesn't affect "+victim.pokemon.pokemonDisplayName);
+        if (moveEffectiveness == 0 && !move.isMultiTarget
+                                   && !move.hasTypelessEffect 
+                                   && !move.isSelfTargeted)
+        {
+            _dialogueHandler.DisplayBattleInfo("It doesn't affect " + victim.pokemon.pokemonDisplayName);
+        }
         else
         {
             if (move.effectType != EffectType.PipeLine)
@@ -399,7 +403,6 @@ public class Move_handler:MonoBehaviour,IInjectable
         float specificDamage,bool displayEffectiveness = true) 
     {
         var typeEffectiveness = _battleOperations.CheckTypeEffectiveness(victim, move.type);
-        
         var data = new DamageDisplayData(DamageSource.Normal,
             affectedParticipant:victim
             ,displayEffectiveness:displayEffectiveness,healthChange:specificDamage

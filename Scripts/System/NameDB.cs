@@ -1,12 +1,18 @@
 using System.Collections.Generic;
+using System.Linq;
+
 public static class NameDB
 {
     public static string GetMoveName(LearnSetMoveName moveName)
     {
         return learnSetMoveNames[moveName];
     }
-
-    public static Dictionary<LearnSetMoveName, string> learnSetMoveNames = new()
+    public static LearnSetMoveName ParseMoveName(string moveName)
+    {
+        var pair = learnSetMoveNames.FirstOrDefault(x => x.Value == moveName);
+        return pair.Key;
+    }
+    private static Dictionary<LearnSetMoveName, string> learnSetMoveNames = new()
     {
         // 🐞 Bug-type
         { LearnSetMoveName.FuryCutter, "Fury Cutter" },
@@ -116,6 +122,7 @@ public static class NameDB
         { LearnSetMoveName.MuddyWater, "Muddy Water" },
         { LearnSetMoveName.WaterGun, "Water Gun" },
         { LearnSetMoveName.Whirlpool, "Whirlpool" },
+        { LearnSetMoveName.RainDance, "Rain Dance" },
 
         // 👻 Ghost-type
         { LearnSetMoveName.Astonish, "Astonish" },
@@ -304,8 +311,8 @@ public enum LearnSetMoveName
     HyperBeam,
     Leer, 
     MeanLook,
-    MorningSun, // needs making after weather
-    MoonLight,// needs making after weather    
+    MorningSun,
+    MoonLight,
     OdorSleuth,
     Pound,
     Protect,
@@ -338,7 +345,8 @@ public enum LearnSetMoveName
     MuddyWater,
     WaterGun,
     Whirlpool,
-        
+    RainDance,
+    
     // 👻 Ghost-type
     Astonish,
     ConfuseRay,

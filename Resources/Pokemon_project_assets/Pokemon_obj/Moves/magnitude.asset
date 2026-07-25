@@ -22,7 +22,6 @@ MonoBehaviour:
   isContact: 0
   isBuffOrDebuff: 0
   hasStatus: 0
-  hasSpecialEffect: 1
   effectType: 1
   effectInfoModule: {fileID: 0}
   canCauseFlinch: 0

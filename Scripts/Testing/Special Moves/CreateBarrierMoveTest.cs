@@ -4,6 +4,8 @@ using UnityEngine;
 public class CreateBarrierMoveTest : BattleMoveUsageTest
 {
     private Move_handler _moveUsageHandler;
+    private Battle_handler _battleHandler;
+    
     private bool _damageWasChanged;
 
     private enum BarrierType
@@ -15,6 +17,8 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
     public override void Inject(ServiceContainer serviceContainer)
     {
         _moveUsageHandler = serviceContainer.Resolve<Move_handler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        
         container = serviceContainer;
         testName = "Create Barrier Test";
         testExitCondition = TestCompletionCondition.EndManually;
@@ -52,18 +56,18 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
         }
     }
     
-    protected override void DetermineMoveUsage()
+    protected override void DetermineTurnUsage()
     {
-        if (battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
+        if (_battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
         {
             //use barrier creation move : light screen or reflect
-            var mudkipParticipant = battleHandler.GetParticipant(BattleParticipantKey.Player);
+            var mudkipParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             var barrierMove = _currentBarrierToTest == BarrierType.Special
                 ? mudkipParticipant.pokemon.moveSet[0] //light screen
                 : mudkipParticipant.pokemon.moveSet[1];//reflect
             
-            var treeckoParticipant1 = battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-            var treeckoParticipant2 = battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
+            var treeckoParticipant1 = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+            var treeckoParticipant2 = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
             treeckoParticipant1.pokemon.moveSet.Clear();
             treeckoParticipant2.pokemon.moveSet.Clear();
 
@@ -83,15 +87,15 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
             treeckoParticipant2.pokemon.moveSet[0].isSureHit = true;
             
             _moveUsageHandler.OnDamageModified += CheckForBarrierEffect;
-            battleHandler.UseMove(barrierMove,mudkipParticipant, BattleParticipantKey.Enemy);
+            _battleHandler.UseMove(barrierMove,mudkipParticipant, BattleParticipantKey.Enemy);
         }
         
-        if (battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.PlayerPartner)
+        if (_battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.PlayerPartner)
         {
-            var partnerParticipant = battleHandler.GetParticipant(BattleParticipantKey.PlayerPartner);
+            var partnerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.PlayerPartner);
             var thunderBolt = partnerParticipant.pokemon.moveSet[0];
             thunderBolt.moveDamage = 1f;//don't kill enemy
-            battleHandler.UseMove(thunderBolt,partnerParticipant,BattleParticipantKey.EnemyPartner);
+            _battleHandler.UseMove(thunderBolt,partnerParticipant,BattleParticipantKey.EnemyPartner);
         }
     }
 

@@ -42,7 +42,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _logicMethods.Add("magnitude", Magnitude);
         _logicMethods.Add("endeavor", Endeavor);
         _logicMethods.Add("furycutter", FuryCutter);
-        _logicMethods.Add("silverwind", Silverwind);
+        _logicMethods.Add("silverwind", SilverWind);
         _logicMethods.Add("flail", Flail);
         _logicMethods.Add("falseswipe", FalseSwipe);
         _logicMethods.Add("bellydrum", BellyDrum);
@@ -198,7 +198,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         yield return null;
     }
-    private IEnumerator Silverwind(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator SilverWind(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
     {
         bool battleEnded = false;
         _battleHandler.OnParticipantFainted += CancelOnBattleEnd;
