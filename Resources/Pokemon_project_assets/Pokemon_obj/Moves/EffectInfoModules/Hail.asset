@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d518d6ba603e3b5a08dd6874bf89fab6, type: 3}
-  m_Name: Weaken Electric
+  m_Script: {fileID: 11500000, guid: e545362bfef8367bd9dd3812e8f57d18, type: 3}
+  m_Name: Hail
   m_EditorClassIdentifier: 
-  damageChangeMessage: The power of electric type moves was weakened
-  typeAffected: 3
-  damageModifier: 0.5
-  modifierSource: 1
+  newWeatherCondition: 2

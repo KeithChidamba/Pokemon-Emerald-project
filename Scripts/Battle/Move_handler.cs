@@ -865,15 +865,25 @@ public class Move_handler:MonoBehaviour,IInjectable
     }
     public void AddFieldDamageModifier(OnFieldDamageModifier newModifier)
     {
-        _onFieldDamageModifiers.Add(newModifier);
+        var existingMod = _onFieldDamageModifiers
+            .FirstOrDefault(m => m.modifierInfo.typeAffected == newModifier.modifierInfo.typeAffected);
+        if (existingMod != null)
+        {
+            //stack or decrease
+            existingMod.modifierInfo.damageModifier *= newModifier.modifierInfo.damageModifier;
+        }
+        else
+        {
+            _onFieldDamageModifiers.Add(newModifier);
+        }
     }
     public void RemoveFieldDamageModifier(PokemonType modifierTypeAffected)
     {
         _onFieldDamageModifiers.RemoveAll(m=>m.modifierInfo.typeAffected==modifierTypeAffected);
     }
-    public bool DamageModifierPresent(PokemonType type)
+    public bool FieldDamageSourceExists(DamageModifierSource source)
     {
-        return _onFieldDamageModifiers.Any(m => m.modifierInfo.typeAffected == type);
+       return _onFieldDamageModifiers.Any(m=>m.modifierInfo.modifierSource == source);
     }
 }
 

@@ -8,4 +8,6 @@ public class DamageModifierInfo : AdditionalInfoModule
     public string damageChangeMessage;
     public PokemonType typeAffected;
     public float damageModifier;
+    public DamageModifierSource modifierSource;
 }
+public enum DamageModifierSource{WaterSport,MudSport}

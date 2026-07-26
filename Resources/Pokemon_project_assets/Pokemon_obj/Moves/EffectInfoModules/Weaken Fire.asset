@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d518d6ba603e3b5a08dd6874bf89fab6, type: 3}
-  m_Name: Weaken Electric
+  m_Name: Weaken Fire
   m_EditorClassIdentifier: 
-  damageChangeMessage: The power of electric type moves was weakened
-  typeAffected: 3
+  damageChangeMessage: The power of fire type moves was weakened
+  typeAffected: 1
   damageModifier: 0.5
-  modifierSource: 1
+  damageIncrease: 0

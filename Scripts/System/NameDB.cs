@@ -41,7 +41,8 @@ public static class NameDB
         { LearnSetMoveName.FirePunch, "Fire Punch" },
         { LearnSetMoveName.FireSpin, "Fire Spin" },
         { LearnSetMoveName.Flamethrower, "Flamethrower" },
-
+        { LearnSetMoveName.SunnyDay, "Sunny Day" },
+        
         // 🛫 Flying-type
         { LearnSetMoveName.AirCutter, "Air Cutter" },
         { LearnSetMoveName.Gust, "Gust" },
@@ -123,14 +124,16 @@ public static class NameDB
         { LearnSetMoveName.WaterGun, "Water Gun" },
         { LearnSetMoveName.Whirlpool, "Whirlpool" },
         { LearnSetMoveName.RainDance, "Rain Dance" },
-
+        { LearnSetMoveName.WaterSport, "Water Sport" },
+        
         // 👻 Ghost-type
         { LearnSetMoveName.Astonish, "Astonish" },
         { LearnSetMoveName.ConfuseRay, "Confuse Ray" },
 
         // ❄️ Ice-type
         { LearnSetMoveName.Haze, "Haze" },
-
+        { LearnSetMoveName.Hail, "Hail" },
+        
         // 🌑 Dark-type
         { LearnSetMoveName.Bite, "Bite" },
         { LearnSetMoveName.Crunch, "Crunch" },
@@ -264,7 +267,8 @@ public enum LearnSetMoveName
     FirePunch,
     FireSpin,
     Flamethrower,
-        
+    SunnyDay,
+
     // 🛫 Flying-type
     AirCutter,
     Gust,
@@ -346,6 +350,7 @@ public enum LearnSetMoveName
     WaterGun,
     Whirlpool,
     RainDance,
+    WaterSport,
     
     // 👻 Ghost-type
     Astonish,
@@ -353,7 +358,8 @@ public enum LearnSetMoveName
         
     //Ice-type
     Haze,
-
+    Hail,
+   
     // 🌑 Dark-type
     Bite,
     Crunch,

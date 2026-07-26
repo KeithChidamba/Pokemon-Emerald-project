@@ -762,7 +762,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         var damageModifierInfo = ScriptableObject.CreateInstance<DamageModifierInfo>();
         damageModifierInfo.typeAffected = type;
         damageModifierInfo.damageModifier = damageModifier;
-        var modifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,this,damageModifierInfo,removeOnSwitch:false);
+        
+        var modifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,this
+            ,damageModifierInfo,removeOnSwitch:false);
         OnWeatherEnd += modifier.RemoveAfterWeather;
         _moveUsageHandler.AddFieldDamageModifier(modifier);
     }

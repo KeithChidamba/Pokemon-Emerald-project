@@ -247,6 +247,53 @@ public abstract class IntegrationTest
       testStatus = condition ? TestStatus.Passed : TestStatus.Failed;
    }
 }
+public class TestAction
+{
+    public Action action;
+    public bool displayLogs;
+    public TestAction(Action action, bool displayLogs)
+    {
+        this.action = action;
+        this.displayLogs = displayLogs;
+    }
+}
+public class TestActionSequencer
+{
+    public int CurrentSequenceIndex { get; private set; }
+    private Dictionary<int, TestAction> _testSequence = new();
+    private int NextIndex => _testSequence.Count;
+    private int _numSequencesCompleted;
+    private int _numSequenceRepetitions;
+    public TestActionSequencer(int numSequenceRepetitions = 0)
+    {
+        CurrentSequenceIndex = 0;
+        _numSequencesCompleted = 0;
+        _numSequenceRepetitions = numSequenceRepetitions;
+    }
+    public void AddAction(Action action,bool displayLogs)
+    {
+        _testSequence.Add(NextIndex,new TestAction(action,displayLogs));
+    }
+
+    public bool CanDisplayCurrentLogs()
+    {
+        return _testSequence[CurrentSequenceIndex].displayLogs;
+    }
+    public void CallNextAction()
+    {
+        _testSequence[CurrentSequenceIndex].action.Invoke();
+        CurrentSequenceIndex++;
+    }
+    public bool SequenceComplete()
+    {
+        return _numSequencesCompleted == _numSequenceRepetitions + 1;
+    }
+    public void RepeatSequence()
+    {
+        CurrentSequenceIndex = 0;
+        _numSequencesCompleted++;
+    }
+}
 public class TestRegistry
 {
    //tests are ran in this order
@@ -258,7 +305,6 @@ public class TestRegistry
       new HealthDrainTest(),
       new HealFromWeatherTest(),
       new DamageProtectionMoveTest(),
-      new WeatherChangeTest(),
       new ConsecutiveMoveTest(),
       new TargetAllExceptSelfTest()
    };

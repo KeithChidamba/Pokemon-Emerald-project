@@ -49,7 +49,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
                 yield return HealFromWeather(attacker); 
                 break;
             case EffectType.IdentifyTarget:
-                yield return IdentifyTarget(currentTurn,attacker,victim); 
+                yield return IdentifyTarget(move,attacker,victim); 
                 break;
             case EffectType.BarrierCreation:
                 yield return CreateBarriers(move,attacker); 
@@ -220,12 +220,17 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     private IEnumerator OnFieldDamageModLogic(Move move,Battle_Participant attacker)
     {
         var damageModifierInfo = move.GetModule<DamageModifierInfo>();
-        _dialogueHandler.DisplayBattleInfo(damageModifierInfo.damageChangeMessage);
-        if (_moveUsageHandler.DamageModifierPresent(damageModifierInfo.typeAffected))
+        
+        if (_moveUsageHandler.FieldDamageSourceExists(damageModifierInfo.modifierSource))
         {
+            _dialogueHandler.DisplayBattleInfo("But it failed!");
             yield break;
-        } 
-        var damageModifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,_turnBasedCombatHandler,damageModifierInfo,attacker);
+        }
+        
+        var damageModifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,
+            _turnBasedCombatHandler,damageModifierInfo,attacker);
+        
+        _dialogueHandler.DisplayBattleInfo(damageModifierInfo.damageChangeMessage);
         
         _battleHandler.OnParticipantFainted += RemoveOnFaint;
                 
@@ -238,10 +243,11 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         
         _battleHandler.OnSwitchOut += damageModifier.RemoveOnSwitchOut;
         _moveUsageHandler.AddFieldDamageModifier(damageModifier);
+        
+        yield return null;
     }
-    private IEnumerator IdentifyTarget(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator IdentifyTarget(Move move,Battle_Participant attacker, Battle_Participant victim)
     {
-        var move = currentTurn.move;
         LearnSetMoveName currentMoveEnum = NameDB.ParseMoveName(move.moveName);
         
         if (victim.immunityNegations.Any(negation => negation.moveName == currentMoveEnum))

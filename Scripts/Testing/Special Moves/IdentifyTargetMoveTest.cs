@@ -3,23 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestAction
-{
-    public Action action;
-    public bool displayLogs;
-    public TestAction(Action action, bool displayLogs)
-    {
-        this.action = action;
-        this.displayLogs = displayLogs;
-    }
-}
-
 public class IdentifyTargetMoveTest : BattleMoveUsageTest
 {
-    private Dictionary<int, TestAction> _testSequence = new();
-    private int _currentSequenceIndex;
-    private int NextIndex => _testSequence.Count;
-    private int _numSequencesCompleted;
+    private TestActionSequencer _sequencer;
+    
     private Battle_handler _battleHandler;
     private Pokemon_party _pokemonPartyHandler;
     
@@ -28,17 +15,15 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
         container = serviceContainer;
         _battleHandler = container.Resolve<Battle_handler>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
-        
+        _sequencer = new TestActionSequencer(1);
         testName = "Identify Target Test";
         testExitCondition = TestCompletionCondition.EndManually;
-        _currentSequenceIndex = 0;
-        _numSequencesCompleted = 0;
         
-        AddAction(() => UseMove(1),false);//brick break,should fail because of ghost type
-        AddAction(() => UseMove(0),false);//odor-sleuth
-        AddAction(() => UseMove(1),true);//brick break,should hit
-        AddAction(() => UseMove(0),false);//test odor sleuth move repeat, should fail
-        AddAction(SwitchToPartner,false);
+        _sequencer.AddAction(() => UseMove(1),false);//brick break,should fail because of ghost type
+        _sequencer.AddAction(() => UseMove(0),false);//odor-sleuth
+        _sequencer.AddAction(() => UseMove(1),true);//brick break,should hit
+        _sequencer.AddAction(() => UseMove(0),false);//test odor sleuth move repeat, should fail
+        _sequencer.AddAction(SwitchToPartner,false);
     }
     
     public override IEnumerator BeginTest()
@@ -62,25 +47,20 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
         testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
                                   $"/{enemy.pokemon.maxHp}",TestLogType.Health);
         
-        if (_numSequencesCompleted == 2)
+        if (_sequencer.SequenceComplete())
         {
             SetStatus(true);
             EndTest();
         }
     }
-
-    private void AddAction(Action action,bool displayLogs)
-    {
-        _testSequence.Add(NextIndex,new TestAction(action,displayLogs));
-    }
+    
     private void SwitchToPartner()
     {
         //swap with your partner
         _battleHandler.OnSwitchOut += CheckMoveEffectRemoval;
         _pokemonPartyHandler.BeginMemberSwap(1);
         //repeat everything but with tackle and foresight
-        _currentSequenceIndex = 0;
-        _numSequencesCompleted++;
+        _sequencer.RepeatSequence();
     }
     private void UseMove(int currentMoveUsageIndex)
     {
@@ -120,7 +100,7 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
        
-        if (_currentSequenceIndex == 0)
+        if (_sequencer.CurrentSequenceIndex == 0)
         {
             //first turn
             enemy.pokemon.types.Clear();
@@ -129,27 +109,25 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
             enemy.pokemon.buffAndDebuffs.Add(new Buff_Debuff(Stat.Evasion,1));
             enemy.pokemon.evasion = 133f;
         }
-        if (_testSequence[_currentSequenceIndex].displayLogs)
+        if (_sequencer.CanDisplayCurrentLogs())
         { 
             LogImmunityState(enemy);
-            if (enemy.immunityNegations.Count > 0)
+        }
+        if (enemy.immunityNegations.Count > 0)
+        {
+            bool testSuccessful = true;
+            if (enemy.immunityNegations[0].moveName == LearnSetMoveName.Foresight)
             {
-                bool testSuccessful = true;
-                if (enemy.immunityNegations[0].moveName == LearnSetMoveName.Foresight)
-                {
-                    testSuccessful = enemy.pokemon.evasion <= 100;
-                }
-
-                if (!testSuccessful)
-                {
-                    //fail if any section of test fails
-                    SetStatus(false);
-                    EndTest();
-                    return;
-                }
+                testSuccessful = enemy.pokemon.evasion <= 100;
+            }
+            if (!testSuccessful)
+            {
+                //fail if any section of test fails
+                SetStatus(false);
+                EndTest();
+                return;
             }
         }
-        _testSequence[_currentSequenceIndex].action.Invoke();
-        _currentSequenceIndex++;
+        _sequencer.CallNextAction();
     }
 }

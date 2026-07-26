@@ -12,7 +12,8 @@ public class OnFieldDamageModifier
     private Move_handler _moveUsageHandler;
     private Turn_Based_Combat _turnBasedHandler;
     
-    public OnFieldDamageModifier(Battle_handler battleHandler,Move_handler moveUsageHandler,Turn_Based_Combat turnBasedHandler,DamageModifierInfo info
+    public OnFieldDamageModifier(Battle_handler battleHandler,Move_handler moveUsageHandler,Turn_Based_Combat turnBasedHandler
+        ,DamageModifierInfo info
         ,Battle_Participant user = null,bool removeOnSwitch = true)
     {
         _turnBasedHandler = turnBasedHandler;

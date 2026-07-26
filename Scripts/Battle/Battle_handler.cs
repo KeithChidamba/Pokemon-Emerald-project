@@ -883,6 +883,7 @@ public class Battle_handler : MonoBehaviour, IInjectable
         
         BattleOver = false;
         battleEndState = BattleEndState.None;
+        OnParticipantFainted = null;
         yield return new WaitForSeconds(1f);
     }
     private IEnumerator RunAway() 
