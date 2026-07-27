@@ -82,6 +82,9 @@ public class BattleMoveUsageTest : IntegrationTest
                 createdPokemon.nature = member.specificNature;
                 createdPokemon.gender = member.specificGender;
                 createdPokemon.moveSet.Clear();
+                createdPokemon.nickName = member.nickName == string.Empty?
+                    member.nickName : createdPokemon.pokemonName;
+                
                 foreach (var move in member.naturalPokemonData.moveSet)
                 {
                     createdPokemon.moveSet.Add(InstanceFactory.CreateMove(move));

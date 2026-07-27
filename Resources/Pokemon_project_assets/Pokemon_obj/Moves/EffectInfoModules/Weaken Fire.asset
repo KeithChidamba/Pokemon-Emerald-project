@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Weaken Fire
   m_EditorClassIdentifier: 
   damageChangeMessage: The power of fire type moves was weakened
-  typeAffected: 1
-  damageModifier: 0.5
-  damageIncrease: 0
+  damageModifiers:
+  - typeAffected: 1
+    damageFactor: 0.5
+  modifierSource: 0

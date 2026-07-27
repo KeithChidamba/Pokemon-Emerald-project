@@ -16,10 +16,11 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
     
     public override void Inject(ServiceContainer serviceContainer)
     {
+        container = serviceContainer;
         _moveUsageHandler = serviceContainer.Resolve<Move_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
         
-        container = serviceContainer;
+        
         testName = "Create Barrier Test";
         testExitCondition = TestCompletionCondition.EndManually;
     }

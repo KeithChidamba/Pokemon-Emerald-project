@@ -637,6 +637,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     public void ChangeWeather(WeatherCondition newWeather,bool fromAbility=false)
     {
         OnWeatherEffect -= CurrentWeather.weatherEffect;
+        OnWeatherEnd?.Invoke();//clean weather damage modifications
         
         if (fromAbility)
             newWeather.isInfinite = true;
@@ -737,14 +738,22 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
     }
     private IEnumerator RainEffect()
     {
-        DamageModifierForWeather( PokemonType.Fire,0.5f);
-        DamageModifierForWeather( PokemonType.Water,1.5f);
+        if (_moveUsageHandler.FieldDamageSourceExists(DamageModifierSource.Rain))
+        {
+            yield break;
+        }
+        DamageModifierForWeather( PokemonType.Fire,0.5f,DamageModifierSource.Rain);
+        DamageModifierForWeather( PokemonType.Water,1.5f,DamageModifierSource.Rain);
         yield return null;
     }
     private IEnumerator SunEffect()
     {
-        DamageModifierForWeather(PokemonType.Fire,1.5f);
-        DamageModifierForWeather(PokemonType.Water,0.5f);
+        if (_moveUsageHandler.FieldDamageSourceExists(DamageModifierSource.Sunlight))
+        {
+            yield break;
+        }
+        DamageModifierForWeather(PokemonType.Fire,1.5f,DamageModifierSource.Sunlight);
+        DamageModifierForWeather(PokemonType.Water,0.5f,DamageModifierSource.Sunlight);
         yield return null;
     }
     private IEnumerator HailEffect()
@@ -757,16 +766,19 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         }
     }
 
-    private void DamageModifierForWeather(PokemonType type,float damageModifier)
+    private void DamageModifierForWeather(PokemonType type,float damageFactor,DamageModifierSource source)
     { 
         var damageModifierInfo = ScriptableObject.CreateInstance<DamageModifierInfo>();
-        damageModifierInfo.typeAffected = type;
-        damageModifierInfo.damageModifier = damageModifier;
+        var damageModForType = new DamageModifierForType(type,damageFactor);
+        damageModifierInfo.damageModifiers.Add(damageModForType);
+        damageModifierInfo.modifierSource = source;
         
-        var modifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,this
+        var fieldModifier = new OnFieldDamageModifier(_battleHandler,_moveUsageHandler,
+            this
             ,damageModifierInfo,removeOnSwitch:false);
-        OnWeatherEnd += modifier.RemoveAfterWeather;
-        _moveUsageHandler.AddFieldDamageModifier(modifier);
+        
+        OnWeatherEnd += fieldModifier.RemoveAfterWeather;
+        _moveUsageHandler.AddFieldDamageModifier(fieldModifier);
     }
     private IEnumerator DealWeatherDamage(Battle_Participant victim)
     {

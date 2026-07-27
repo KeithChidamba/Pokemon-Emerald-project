@@ -175,6 +175,11 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         }
         return true;
     }
+
+    public void SwapToPartner()
+    {
+        BeginMemberSwap(1);
+    }
     public void BeginMemberSwap(int memberIndex)
     {
         if (_battleHandler.BattleInProgress)
@@ -333,7 +338,6 @@ public class Pokemon_party : MonoBehaviour,IInjectable
         var newPokemon = InstanceFactory.CreatePokemon(pokemon); 
         newPokemon.pokeballName = "Pokeball"; 
         newPokemon.hasTrainer = true;
-        newPokemon.nickName = newPokemon.pokemonName;
         Debug.Log($"added test {newPokemon.pokemonName}");
         CompletePokemonAddition(newPokemon);
     }

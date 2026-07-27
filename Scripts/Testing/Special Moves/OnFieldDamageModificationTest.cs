@@ -4,85 +4,109 @@ using UnityEngine;
 
 public class OnFieldDamageModificationTest : BattleMoveUsageTest
 {
-    private TestActionSequencer _sequencer;
+    private MoveTestActionSequencer _sequencer;
     private Move_handler _moveUsageHandler;
     private Battle_handler _battleHandler;
+    private Pokemon_party _pokemonPartyHandler;
     
     private bool _damageWasChanged;
+    
     public override void Inject(ServiceContainer serviceContainer)
     {
-        _moveUsageHandler = serviceContainer.Resolve<Move_handler>();
-        _battleHandler = container.Resolve<Battle_handler>();
-        
         container = serviceContainer;
+        _moveUsageHandler = container.Resolve<Move_handler>();
+        _battleHandler = container.Resolve<Battle_handler>();
+        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        
         testName = "On Field Damage Modification Test";
         testExitCondition = TestCompletionCondition.EndManually;
-        _sequencer = new TestActionSequencer();
-       // _sequencer.AddAction(() => UseMove(1),false);
+        _sequencer = new MoveTestActionSequencer(container);
+        
+        //Mud sport while enemy uses thunderbolt
+        _sequencer.AddAction(() => _sequencer.UseMove());
+        //swap to clear mud sport
+        _sequencer.AddAction(_pokemonPartyHandler.SwapToPartner);
+        //give enemy flamethrower
+        _sequencer.AddAction(SetEnemyMoveAndAttack);
+        //tail whip used as turn buffer to test rain effect
+        _sequencer.AddAction(() => _sequencer.UseMove(1));
+        //Water sport during rain
+        _sequencer.AddAction(() => _sequencer.UseMove(2));
+        //Sunny day during water sport
+        _sequencer.AddAction(() => _sequencer.UseMove(3));
+        //test solo damage increase from sunny day
+        _sequencer.AddAction(RemoveWaterSport);
+        
+        _moveUsageHandler.OnDamageModified += CheckForFieldEffect;
     }
-    
+   
     public override IEnumerator BeginTest()
     {
-      
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
 
+    private void RemoveWaterSport()
+    {
+        testingHandler.LogMessage("Manually removed water sport",  TestLogType.Information);
+        _moveUsageHandler.RemoveFieldDamageModifier(DamageModifierSource.WaterSport);
+        //tail whip used as turn buffer
+        _sequencer.UseMove(1);
+    }
+    private void SetEnemyMoveAndAttack()
+    {
+        var moveName = NameDB.GetMoveName(LearnSetMoveName.Flamethrower);
+        var assetPath = DirectoryHandler.GetDirectory(AssetDirectory.Moves) + moveName;
+        var moveFromAsset = Resources.Load<Move>(assetPath);
+        var newMove = InstanceFactory.CreateMove(moveFromAsset);
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemon.moveSet.RemoveAt(0);
+        enemy.pokemon.moveSet.Add(newMove);
+        //prevent burn to keep accurate damage values for test success 
+        newMove.hasStatus = false;
+        _sequencer.UseMove();//Rain dance
+    }
+    void CheckForFieldEffect(DamageCalculationModifier modifier,float initialDamage,float modifiedDamage)
+    {
+        if (modifier == DamageCalculationModifier.FieldModifiers)
+        {
+            _damageWasChanged = modifiedDamage < initialDamage || modifiedDamage > initialDamage;
+            
+            var increase = modifiedDamage > initialDamage;
+            
+            var message = increase
+                ? $"field mod increased damage from {initialDamage} to {modifiedDamage}"
+                : $"field mod reduced damage from {initialDamage} to {modifiedDamage}";
+            
+            testingHandler.LogMessage( message,  TestLogType.Calculation);
+        }
+    }
+
     protected override void DetermineSuccess()
     {
-        //_moveUsageHandler.OnDamageModified -= CheckForBarrierEffect;
         if (_sequencer.SequenceComplete())
         {
-            SetStatus(true);
+            _moveUsageHandler.OnDamageModified -= CheckForFieldEffect;
+            SetStatus(_damageWasChanged);
             EndTest();
         }
-        // if (_damageWasChanged)
-        // {
-        //     if( _currentBarrierToTest == BarrierType.Special)
-        //     {
-        //         //start new turn and use reflect
-        //         _damageWasChanged = false;
-        //         _currentBarrierToTest = BarrierType.Physical;
-        //     }
-        //     else
-        //     {
-        //         SetStatus(true);
-        //         EndTest();
-        //     }
-        // }
-        // else
-        // {
-        //     testingHandler.LogMessage($"barrier Test failed at {_currentBarrierToTest}",TestLogType.Error);
-        //     SetStatus(false);
-        //     EndTest();
-        // }
     }
-    
+
     protected override void DetermineTurnUsage()
     {
-        _sequencer.RepeatSequence();
-        // if (_sequencer.CurrentSequenceIndex == 0)
-        // {
-        //     //first turn
-        //     enemy.pokemon.types.Clear();
-        //     var ghostType = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ghost);
-        //     enemy.pokemon.types.Add(ghostType);
-        //     enemy.pokemon.buffAndDebuffs.Add(new Buff_Debuff(Stat.Evasion,1));
-        //     enemy.pokemon.evasion = 133f;
-        // }
-        // if (_sequencer.CanDisplayCurrentLogs())
-        // { 
-        //     LogImmunityState(enemy);
-        // }
-        // if (_battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.Player)
-        // {
-        //     //use barrier creation move : light screen or reflect
-        //     var mudkipParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        //     var move = mudkipParticipant.pokemon.moveSet[0];
-        //     move.isSureHit = true;
-        //     _moveUsageHandler.OnDamageModified += CheckForBarrierEffect;
-        //     _battleHandler.UseMove(move,mudkipParticipant, BattleParticipantKey.Enemy);
-        // }
+        var currentParticipant = _battleHandler.GetCurrentParticipant();
+        if (currentParticipant.participantKey != BattleParticipantKey.Player) return;
+        
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        
+        //prevent paralysis from thunderbolt 
+        enemy.pokemon.moveSet[0].hasStatus = false;
+        enemy.pokemon.moveSet[0].isSureHit = true;
+        
+        testingHandler.LogMessage($"Health of player: {currentParticipant.pokemon.hp}" +
+                                  $"/{currentParticipant.pokemon.maxHp}",TestLogType.Health);
+        
+        _sequencer.CallNextAction();
     }
     
 }

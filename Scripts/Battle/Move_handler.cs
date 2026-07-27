@@ -317,12 +317,19 @@ public class Move_handler:MonoBehaviour,IInjectable
     }
     private float ApplyFieldDamageModifiers(float currentDamage, PokemonType moveType)
     {
-        foreach (var modifier in _onFieldDamageModifiers)
+        float modifier = 1f;
+
+        foreach (var fieldEffect in _onFieldDamageModifiers)
         {
-            if (modifier.modifierInfo.typeAffected == moveType)
-                return currentDamage * modifier.modifierInfo.damageModifier;
+            foreach (var damageModifier in fieldEffect.modifierInfo.damageModifiers)
+            {
+                if (damageModifier.typeAffected == moveType)
+                {
+                    modifier *= damageModifier.damageFactor;
+                }
+            }
         }
-        return currentDamage;
+        return currentDamage * modifier;
     }
     private float AccountForVictimsBarriers(Move move,Battle_Participant victim,float damage)
     {
@@ -863,23 +870,14 @@ public class Move_handler:MonoBehaviour,IInjectable
         
         return duplicateBarrier;
     }
-    public void AddFieldDamageModifier(OnFieldDamageModifier newModifier)
+
+    public void AddFieldDamageModifier(OnFieldDamageModifier newFieldModifier)
     {
-        var existingMod = _onFieldDamageModifiers
-            .FirstOrDefault(m => m.modifierInfo.typeAffected == newModifier.modifierInfo.typeAffected);
-        if (existingMod != null)
-        {
-            //stack or decrease
-            existingMod.modifierInfo.damageModifier *= newModifier.modifierInfo.damageModifier;
-        }
-        else
-        {
-            _onFieldDamageModifiers.Add(newModifier);
-        }
+        _onFieldDamageModifiers.Add(newFieldModifier);
     }
-    public void RemoveFieldDamageModifier(PokemonType modifierTypeAffected)
+    public void RemoveFieldDamageModifier(DamageModifierSource source)
     {
-        _onFieldDamageModifiers.RemoveAll(m=>m.modifierInfo.typeAffected==modifierTypeAffected);
+        _onFieldDamageModifiers.RemoveAll(m=>m.modifierInfo.modifierSource == source);
     }
     public bool FieldDamageSourceExists(DamageModifierSource source)
     {

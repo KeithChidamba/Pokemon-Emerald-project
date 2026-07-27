@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Weaken Electric
   m_EditorClassIdentifier: 
   damageChangeMessage: The power of electric type moves was weakened
-  typeAffected: 3
-  damageModifier: 0.5
+  damageModifiers:
+  - typeAffected: 3
+    damageFactor: 0.5
   modifierSource: 1

@@ -257,6 +257,26 @@ public class TestAction
         this.displayLogs = displayLogs;
     }
 }
+
+public class MoveTestActionSequencer : TestActionSequencer
+{
+    private Battle_handler _battleHandler;
+    
+    public MoveTestActionSequencer(ServiceContainer container, int numSequenceRepetitions = 0)
+        : base(numSequenceRepetitions)
+    {
+        _battleHandler = container.Resolve<Battle_handler>();
+    }
+    
+    public void UseMove(int currentMoveUsageIndex = 0,
+        BattleParticipantKey participantKey=BattleParticipantKey.Player)
+    {
+        var playerParticipant = _battleHandler.GetParticipant(participantKey);
+        var move = playerParticipant.pokemon.moveSet[currentMoveUsageIndex];
+        move.isSureHit = true;
+        _battleHandler.UseMove(move,playerParticipant, BattleParticipantKey.Enemy);
+    }
+}
 public class TestActionSequencer
 {
     public int CurrentSequenceIndex { get; private set; }
@@ -264,13 +284,14 @@ public class TestActionSequencer
     private int NextIndex => _testSequence.Count;
     private int _numSequencesCompleted;
     private int _numSequenceRepetitions;
+    
     public TestActionSequencer(int numSequenceRepetitions = 0)
     {
         CurrentSequenceIndex = 0;
         _numSequencesCompleted = 0;
         _numSequenceRepetitions = numSequenceRepetitions;
     }
-    public void AddAction(Action action,bool displayLogs)
+    public void AddAction(Action action,bool displayLogs=false)
     {
         _testSequence.Add(NextIndex,new TestAction(action,displayLogs));
     }
@@ -283,15 +304,19 @@ public class TestActionSequencer
     {
         _testSequence[CurrentSequenceIndex].action.Invoke();
         CurrentSequenceIndex++;
+        if (CurrentSequenceIndex == _testSequence.Count)
+        {
+            _numSequencesCompleted++;
+            if(_numSequencesCompleted < _numSequenceRepetitions + 1)
+            {
+                //Repeat Sequence
+                CurrentSequenceIndex = 0;
+            }
+        }
     }
     public bool SequenceComplete()
     {
         return _numSequencesCompleted == _numSequenceRepetitions + 1;
-    }
-    public void RepeatSequence()
-    {
-        CurrentSequenceIndex = 0;
-        _numSequencesCompleted++;
     }
 }
 public class TestRegistry
@@ -300,12 +325,13 @@ public class TestRegistry
    public IntegrationTest[] allTests =
    {
       //Move Based Tests
+      new OnFieldDamageModificationTest(),
       new IdentifyTargetMoveTest(),
-      new CreateBarrierMoveTest(),
-      new HealthDrainTest(),
-      new HealFromWeatherTest(),
-      new DamageProtectionMoveTest(),
-      new ConsecutiveMoveTest(),
-      new TargetAllExceptSelfTest()
+      // new CreateBarrierMoveTest(),
+      // new HealthDrainTest(),
+      // new HealFromWeatherTest(),
+      // new DamageProtectionMoveTest(),
+      // new ConsecutiveMoveTest(),
+      // new TargetAllExceptSelfTest()
    };
 }

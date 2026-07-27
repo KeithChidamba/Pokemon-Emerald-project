@@ -21,4 +21,5 @@ public struct PokemonTestData
     public NaturalPokemonCreationData naturalPokemonData;
     public Nature specificNature;
     public Gender specificGender;
+    public string nickName;
 }

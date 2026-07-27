@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class IdentifyTargetMoveTest : BattleMoveUsageTest
 {
-    private TestActionSequencer _sequencer;
+    private MoveTestActionSequencer _sequencer;
     
     private Battle_handler _battleHandler;
     private Pokemon_party _pokemonPartyHandler;
@@ -15,15 +15,19 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
         container = serviceContainer;
         _battleHandler = container.Resolve<Battle_handler>();
         _pokemonPartyHandler = container.Resolve<Pokemon_party>();
-        _sequencer = new TestActionSequencer(1);
+        _sequencer = new MoveTestActionSequencer(container,1);
         testName = "Identify Target Test";
         testExitCondition = TestCompletionCondition.EndManually;
+        //brick break,should fail because of ghost type
+        _sequencer.AddAction(() => _sequencer.UseMove(1));
+        //odor-sleuth
+        _sequencer.AddAction(() => _sequencer.UseMove());
+        //brick break,should hit
+        _sequencer.AddAction(() => _sequencer.UseMove(1),true);
+        //test odor sleuth move repeat, should fail
+        _sequencer.AddAction(() => _sequencer.UseMove());
         
-        _sequencer.AddAction(() => UseMove(1),false);//brick break,should fail because of ghost type
-        _sequencer.AddAction(() => UseMove(0),false);//odor-sleuth
-        _sequencer.AddAction(() => UseMove(1),true);//brick break,should hit
-        _sequencer.AddAction(() => UseMove(0),false);//test odor sleuth move repeat, should fail
-        _sequencer.AddAction(SwitchToPartner,false);
+        _sequencer.AddAction(SwitchToPartner);
     }
     
     public override IEnumerator BeginTest()
@@ -58,18 +62,9 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
     {
         //swap with your partner
         _battleHandler.OnSwitchOut += CheckMoveEffectRemoval;
-        _pokemonPartyHandler.BeginMemberSwap(1);
-        //repeat everything but with tackle and foresight
-        _sequencer.RepeatSequence();
+        _pokemonPartyHandler.SwapToPartner();
     }
-    private void UseMove(int currentMoveUsageIndex)
-    {
-        var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        //use immunity negation move : odor-sleuth or foresight
-        var move = playerParticipant.pokemon.moveSet[currentMoveUsageIndex];
-        move.isSureHit = true;
-        _battleHandler.UseMove(move,playerParticipant, BattleParticipantKey.Enemy);
-    }
+
 
     private void LogImmunityState(Battle_Participant enemy)
     {

@@ -28,11 +28,11 @@ public class OnFieldDamageModifier
         if(!removeOnSwitch)return;
         if (participant != _participant) return;
         _battleHandler.OnSwitchOut -= RemoveOnSwitchOut;
-        _moveUsageHandler.RemoveFieldDamageModifier(modifierInfo.typeAffected);
+        _moveUsageHandler.RemoveFieldDamageModifier(modifierInfo.modifierSource);
     }
     public void RemoveAfterWeather()
     {
         _turnBasedHandler.OnWeatherEnd -= RemoveAfterWeather;
-        _moveUsageHandler.RemoveFieldDamageModifier(modifierInfo.typeAffected);
+        _moveUsageHandler.RemoveFieldDamageModifier(modifierInfo.modifierSource);
     }
 }
