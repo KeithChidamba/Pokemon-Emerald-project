@@ -155,8 +155,23 @@ public static class InstanceFactory
         trainerCopy.battleType = data.battleType;
         trainerCopy.battleIntroMessage = data.battleIntroMessage;
         foreach (var member in data.PokemonParty)
+        {
             trainerCopy.PokemonParty.Add(CreateTrainerPokemonData(member));
+        }
         return trainerCopy;
+    }
+    private static TrainerPokemonData CreateTrainerPokemonData(TrainerPokemonData member)
+    {
+        var memberCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
+        memberCopy.data.pokemon = CreatePokemon(member.data.pokemon);
+        var pokemonOperationsHandler = _serviceContainer.Resolve<PokemonOperations>();
+        pokemonOperationsHandler.SetPokemonTraits(memberCopy.data.pokemon);
+        memberCopy.data.moveSet = member.data.moveSet;
+        memberCopy.data.pokemonLevel = member.data.pokemonLevel;
+        memberCopy.data.hasItem = member.data.hasItem;
+        memberCopy.data.heldItem = member.data.heldItem;
+        memberCopy.data.evolutionStageNumber = member.data.evolutionStageNumber;
+        return memberCopy;
     }
     public static BerryTreeData CreateTreeData(BerryTreeData data)
     {
@@ -173,18 +188,6 @@ public static class InstanceFactory
         treeData.berryItem = data.berryItem;
         treeData.spriteData = data.spriteData;
         return treeData;
-    }
-    private static TrainerPokemonData CreateTrainerPokemonData(TrainerPokemonData member)
-    {
-        var memberCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
-        memberCopy.data.pokemon = CreatePokemon(member.data.pokemon);
-        var pokemonOperationsHandler = _serviceContainer.Resolve<PokemonOperations>();
-        pokemonOperationsHandler.SetPokemonTraits(memberCopy.data.pokemon);
-        memberCopy.data.moveSet = member.data.moveSet;
-        memberCopy.data.pokemonLevel = member.data.pokemonLevel;
-        memberCopy.data.hasItem = member.data.hasItem;
-        memberCopy.data.heldItem = member.data.heldItem;
-        return memberCopy;
     }
     public static Item CreateItem(Item item)
     {

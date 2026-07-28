@@ -15,17 +15,19 @@ MonoBehaviour:
   pokemonPartyData:
   - naturalPokemonData:
       pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
-      pokemonLevel: 24
+      pokemonLevel: 25
       evolutionStageNumber: 1
       hasItem: 0
       heldItem: {fileID: 0}
       moveSet:
       - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
     specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
     specificGender: 1
+    nickName: 
   - naturalPokemonData:
       pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
-      pokemonLevel: 12
+      pokemonLevel: 28
       evolutionStageNumber: 0
       hasItem: 1
       heldItem: {fileID: 11400000, guid: 0df08d4c7461bd586b88fcaf7a45cc03, type: 2}
@@ -33,8 +35,9 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 53fed834b2f80124ba1a685c0ffcbe2b, type: 2}
     specificNature: {fileID: 11400000, guid: f8f55f13077eb0040baee3ea4cdc7b0e, type: 2}
     specificGender: 2
+    nickName: 
   testEnemyData:
-    trainerDisplayName: Test Grunt Target all
+    trainerDisplayName: Test Grunt Multi Target
     battleType: 1
     pokemonParty:
     - {fileID: 11400000, guid: 889f5932bbe7b82b0b7007b297d837dd, type: 2}

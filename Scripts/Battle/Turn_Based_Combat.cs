@@ -146,7 +146,12 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
             .Where(participant => participant.isActive)
             .Select(p=>p.participantKey).ToList();
         
-        if (livingParticipants.Last() == _battleHandler.GetCurrentParticipant().participantKey)
+        var lastKeyInTurnOrder = livingParticipants
+            .OrderByDescending(key => key)
+            .ToList()
+            .First();
+        
+        if (lastKeyInTurnOrder == _battleHandler.GetCurrentParticipant().participantKey)
         {
             return true;
         }
@@ -605,14 +610,20 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         else
             currentTurnIndex = 0;
         
-        OnNewTurn?.Invoke();
-        
         if (!_battleHandler.GetCurrentParticipant().isActive)
         {
             if (_battleHandler.isDoubleBattle && IsLastParticipant())
             {
                 BeginTurnExecution();
-            }else NextTurn();
+            }
+            else
+            {
+                NextTurn();
+            }
+        }
+        else
+        {
+            OnNewTurn?.Invoke();
         }
     }
     private bool MoveSuccessful(Turn turn)
@@ -647,6 +658,7 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         switch (newWeather.weather)
         {
             case Weather.Sandstorm:
+                OnWeatherEnd += ResetWeatherBuffs;
                 newWeather.weatherEffect = SandStormEffect;
                 newWeather.weatherBegunMessage = "A sandstorm brewed!";
                 newWeather.weatherTurnEndMessage = "The sandstorm rages.";
@@ -677,7 +689,16 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         OnWeatherEffect += newWeather.weatherEffect;
         CurrentWeather = newWeather;
     }
-
+    private void ResetWeatherBuffs()
+    {
+        OnWeatherEnd -= ResetWeatherBuffs;
+        foreach (var participant in CurrentWeather.buffedParticipants)
+        {
+            var spDefBuff = new BuffDebuffData(participant, Stat.SpecialDefense, false, 1);
+            _moveUsageHandler.ExecuteBuffOrDebuff(spDefBuff,false);
+        }
+        CurrentWeather.buffedParticipants.Clear();
+    }
     private void ReduceWeatherDuration()
     {
         if (CurrentWeather.isInfinite) return;
@@ -718,7 +739,11 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
                 if (participant.pokemon.HasType(protectedType))
                 {
                     isProtected = true;
-                    if(!CurrentWeather.buffedParticipants.Contains(participant))
+                    
+                    var participantIsBuffed = CurrentWeather.buffedParticipants
+                        .Any(p=>p.participantKey == participant.participantKey);
+                    
+                    if(!participantIsBuffed)
                     {
                         if (protectedType == PokemonType.Rock)
                         {

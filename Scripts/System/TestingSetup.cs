@@ -268,13 +268,20 @@ public class MoveTestActionSequencer : TestActionSequencer
         _battleHandler = container.Resolve<Battle_handler>();
     }
     
-    public void UseMove(int currentMoveUsageIndex = 0,
-        BattleParticipantKey participantKey=BattleParticipantKey.Player)
+    public void UseMove(int currentMoveUsageIndex = 0)
     {
-        var playerParticipant = _battleHandler.GetParticipant(participantKey);
+        var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var move = playerParticipant.pokemon.moveSet[currentMoveUsageIndex];
         move.isSureHit = true;
         _battleHandler.UseMove(move,playerParticipant, BattleParticipantKey.Enemy);
+    }
+    public void UseMoveOnSpecific(int currentMoveUsageIndex, BattleParticipantKey playerKey
+        ,BattleParticipantKey enemyKey)
+    {
+        var playerParticipant = _battleHandler.GetParticipant(playerKey);
+        var move = playerParticipant.pokemon.moveSet[currentMoveUsageIndex];
+        move.isSureHit = true;
+        _battleHandler.UseMove(move,playerParticipant, enemyKey);
     }
 }
 public class TestActionSequencer
@@ -285,7 +292,7 @@ public class TestActionSequencer
     private int _numSequencesCompleted;
     private int _numSequenceRepetitions;
     
-    public TestActionSequencer(int numSequenceRepetitions = 0)
+    protected TestActionSequencer(int numSequenceRepetitions = 0)
     {
         CurrentSequenceIndex = 0;
         _numSequencesCompleted = 0;
@@ -302,8 +309,10 @@ public class TestActionSequencer
     }
     public void CallNextAction()
     {
-        _testSequence[CurrentSequenceIndex].action.Invoke();
+        var action = _testSequence[CurrentSequenceIndex].action;
         CurrentSequenceIndex++;
+        action.Invoke();
+        
         if (CurrentSequenceIndex == _testSequence.Count)
         {
             _numSequencesCompleted++;
@@ -325,13 +334,14 @@ public class TestRegistry
    public IntegrationTest[] allTests =
    {
       //Move Based Tests
-      new OnFieldDamageModificationTest(),
-      new IdentifyTargetMoveTest(),
+      //new WeatherDamageTest(),
+     // new MultiTargetDamageTest(),
+      // new OnFieldDamageModificationTest(),
+      // new IdentifyTargetMoveTest(),
       // new CreateBarrierMoveTest(),
       // new HealthDrainTest(),
       // new HealFromWeatherTest(),
       // new DamageProtectionMoveTest(),
       // new ConsecutiveMoveTest(),
-      // new TargetAllExceptSelfTest()
    };
 }

@@ -236,7 +236,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             var buffData = new BuffDebuffData(attacker, buff, true, 1);
             _moveUsageHandler.ExecuteBuffOrDebuff(buffData,false);
             yield return new WaitUntil(() => !awaitingAddition);
-            void AwaitBuffAddition()
+            void AwaitBuffAddition(BuffOperationData operationData)
             {
                 _battleOperationsHandler.OnBuffApplied -= AwaitBuffAddition;
                 awaitingAddition = false;

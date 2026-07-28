@@ -133,7 +133,9 @@ public class AbilityHandler : BattleParticipantModule
         if (_abilityMethods.TryGetValue(_currentAbility, out Action abilityMethod))
             OnAbilityUsed += abilityMethod;
         else
-            Debug.Log($"Ability '{_currentAbility}' not found!");
+        {
+            //Debug.Log($"Ability '{_currentAbility}' not found!");
+        }
         _abilityTriggered = false;
     }
 

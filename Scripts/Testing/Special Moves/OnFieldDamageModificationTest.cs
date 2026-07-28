@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class OnFieldDamageModificationTest : BattleMoveUsageTest
@@ -9,7 +10,7 @@ public class OnFieldDamageModificationTest : BattleMoveUsageTest
     private Battle_handler _battleHandler;
     private Pokemon_party _pokemonPartyHandler;
     
-    private bool _damageWasChanged;
+    private List<bool> _damageChecks = new();
     
     public override void Inject(ServiceContainer serviceContainer)
     {
@@ -21,7 +22,7 @@ public class OnFieldDamageModificationTest : BattleMoveUsageTest
         testName = "On Field Damage Modification Test";
         testExitCondition = TestCompletionCondition.EndManually;
         _sequencer = new MoveTestActionSequencer(container);
-        
+
         //Mud sport while enemy uses thunderbolt
         _sequencer.AddAction(() => _sequencer.UseMove());
         //swap to clear mud sport
@@ -70,7 +71,10 @@ public class OnFieldDamageModificationTest : BattleMoveUsageTest
     {
         if (modifier == DamageCalculationModifier.FieldModifiers)
         {
-            _damageWasChanged = modifiedDamage < initialDamage || modifiedDamage > initialDamage;
+            var damageWasChanged = modifiedDamage < initialDamage || modifiedDamage > initialDamage;
+            
+            testingHandler.LogMessage(damageWasChanged? "Damage was changed":"Damage remained the same",  TestLogType.Information);
+            _damageChecks.Add(damageWasChanged);
             
             var increase = modifiedDamage > initialDamage;
             
@@ -87,7 +91,8 @@ public class OnFieldDamageModificationTest : BattleMoveUsageTest
         if (_sequencer.SequenceComplete())
         {
             _moveUsageHandler.OnDamageModified -= CheckForFieldEffect;
-            SetStatus(_damageWasChanged);
+            var checksPassed = _damageChecks.All(check => check);
+            SetStatus(checksPassed);
             EndTest();
         }
     }

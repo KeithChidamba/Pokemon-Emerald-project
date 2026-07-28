@@ -4,9 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+[Serializable]
+public class BuffOperationData
+{
+    public BuffDebuffData buffData;
+    public Buff_Debuff finalBuff;
+
+    public BuffOperationData(BuffDebuffData buffData, Buff_Debuff finalBuff)
+    {
+        this.buffData = buffData;
+        this.finalBuff = finalBuff;
+    }
+}
+
 public class BattleOperations : MonoBehaviour,IInjectable
 {   
-    public event Action OnBuffApplied;
+    public event Action<BuffOperationData> OnBuffApplied;
         
     private BattleVisuals _battleVisualsHandler;
     private PokemonOperations _pokemonOperations;
@@ -117,11 +130,13 @@ public string AttemptBuffOperation(BuffDebuffData data)
 
     int upperLimit = desiredBuff.stat == Stat.Crit ? 2 : 5;
     int lowerLimit = desiredBuff.stat == Stat.Crit ? 1 : -5;
-
+    
     int oldStage = desiredBuff.stage;
+   
     int delta = increased ? data.EffectAmount : -data.EffectAmount;
+    
     int newStage = math.clamp(oldStage + delta, lowerLimit, upperLimit);
-
+    
     if (newStage == oldStage)
     {
         desiredBuff.isAtLimit = true;
@@ -158,9 +173,8 @@ public string AttemptBuffOperation(BuffDebuffData data)
             };
         }
     }
-
-    RemoveInvalidBuffsOrDebuffs(data.Receiver.pokemon);
-    OnBuffApplied?.Invoke();
+    
+    OnBuffApplied?.Invoke(new(data,desiredBuff));
 
     return message;
 }
@@ -194,14 +208,5 @@ public string AttemptBuffOperation(BuffDebuffData data)
     public Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon, Stat stat)
     {
         return pokemon.buffAndDebuffs.FirstOrDefault(b=>b.stat==stat);
-    }
-    public void RemoveInvalidBuffsOrDebuffs(Pokemon pokemon)
-    {
-        pokemon.buffAndDebuffs.RemoveAll(b=>b.stage==0);
-    }
-
-    public void ModifyBuff(Buff_Debuff buff, int limitHigh, int change)
-    {
-        buff.stage = math.clamp(buff.stage + change, buff.stage, limitHigh);
     }
 }

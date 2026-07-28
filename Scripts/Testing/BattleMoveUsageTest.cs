@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -83,7 +84,7 @@ public class BattleMoveUsageTest : IntegrationTest
                 createdPokemon.gender = member.specificGender;
                 createdPokemon.moveSet.Clear();
                 createdPokemon.nickName = member.nickName == string.Empty?
-                    member.nickName : createdPokemon.pokemonName;
+                     createdPokemon.pokemonName : member.nickName;
                 
                 foreach (var move in member.naturalPokemonData.moveSet)
                 {

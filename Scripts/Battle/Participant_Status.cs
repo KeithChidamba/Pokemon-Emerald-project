@@ -7,7 +7,7 @@ using System.Linq;
 [Serializable]
 public class Participant_Status : BattleParticipantModule
 {
-    private int _statusDuration;
+    private int _currentStatusTurnCount;
     private int _statusDurationInTurns;
     private bool _healed;
     private int _confusionDuration;
@@ -19,7 +19,7 @@ public class Participant_Status : BattleParticipantModule
     private Dialogue_handler _dialogueHandler;
     private Battle_handler _battleHandler;
     private Move_handler _moveUsageHandler;
-    private Game_ui_manager _gameUIManager;
+  
     private BattleOperations _battleOperationsHandler;
     
     public Participant_Status(ServiceContainer container)
@@ -28,7 +28,6 @@ public class Participant_Status : BattleParticipantModule
         _dialogueHandler = container.Resolve<Dialogue_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
         _moveUsageHandler = container.Resolve<Move_handler>();
-        _gameUIManager = container.Resolve<Game_ui_manager>();
     }
     
     public void OnInject()
@@ -39,16 +38,28 @@ public class Participant_Status : BattleParticipantModule
         _statusEffectMethods.Add(StatusEffect.Sleep,SleepCheck);
         _statusEffectMethods.Add(StatusEffect.Paralysis,ParalysisCheck);
     }
-    public void GetStatusEffect(int numTurns)
+    public void GetStatusEffect(StatusEffect effect,int numTurns)
     {
+        participant.pokemon.statusEffect = effect;
         participant.RefreshStatusEffectImage();
-        if (participant.pokemon.statusEffect == StatusEffect.None) return;
-        if (participant.pokemon.statusEffect == StatusEffect.Freeze)
-            _moveUsageHandler.OnMoveHit += RemoveFreezeStatusWithFire;
         
-        _statusDuration = 0;
+        _currentStatusTurnCount = 0;
         _statusDurationInTurns = numTurns;
-        StatDrop();
+        
+        switch (participant.pokemon.statusEffect)
+        {
+            case StatusEffect.Burn:
+                _moveUsageHandler.RefreshStat(Stat.Attack, participant);
+                break;
+
+            case StatusEffect.Paralysis:
+                _moveUsageHandler.RefreshStat(Stat.Speed, participant);
+                break;
+            
+            case StatusEffect.Freeze:
+                _moveUsageHandler.OnMoveHit += RemoveFreezeStatusWithFire;
+                break;
+        }
     }
     public void GetConfusion(int numTurns)
     {
@@ -76,23 +87,8 @@ public class Participant_Status : BattleParticipantModule
         };
         participant.statChangeEffects.Add(new(changeability,numTurns));
     }
-    private void StatDrop()
-    {
-        switch (participant.pokemon.statusEffect)
-        {
-            case StatusEffect.Burn:
-                var atkDrop = new BuffDebuffData(participant, Stat.Attack, false, 2);
-                _moveUsageHandler.ExecuteBuffOrDebuff(atkDrop,false);
-                break;
-            case StatusEffect.Paralysis:
-                var speedDrop = new BuffDebuffData(participant, Stat.Speed, false, 6);
-                _moveUsageHandler.ExecuteBuffOrDebuff(speedDrop,false);
-                break;
-        }
-    }
     public IEnumerator CheckStatus()
     {
-        if (_gameUIManager.usingUI) yield break; 
         if (!participant.isActive) yield break;
         if(participant.pokemon.hp<=0 )yield break;
         if(!_battleHandler.BattleInProgress)yield break;
@@ -114,7 +110,7 @@ public class Participant_Status : BattleParticipantModule
     }
     private IEnumerator AssignStatusDamage()
     {
-        _statusDuration++;
+        _currentStatusTurnCount++;
         string message = "";
         float damagePercent = 0;
         switch (participant.pokemon.statusEffect)
@@ -129,7 +125,7 @@ public class Participant_Status : BattleParticipantModule
                 break;
             case StatusEffect.BadlyPoison:
                 message = " is badly poisoned";
-                damagePercent = _statusDuration / 16f ;
+                damagePercent = _currentStatusTurnCount / 16f ;
                 break;
         }
         yield return GetDamageFromStatus(damagePercent, message);
@@ -237,22 +233,22 @@ public class Participant_Status : BattleParticipantModule
     }
     void SleepCheck()
     {
-        if (_statusDuration < 1)//at least sleep for 1 turn
+        if (_currentStatusTurnCount < 1)//at least sleep for 1 turn
         {
             participant.canAttack = false;
-            _statusDuration++;
+            _currentStatusTurnCount++;
             return;
         }
-        if (_statusDurationInTurns == _statusDuration)//after 4 turns wake up
+        if (_statusDurationInTurns == _currentStatusTurnCount)//after 4 turns wake up
             _healed = true;
         else //wake up early if lucky
         {
             int[] chances = { 25, 33, 50, 100 };
-            if (Utility.RandomRange(1, 101) < chances[_statusDuration-1])
+            if (Utility.RandomRange(1, 101) < chances[_currentStatusTurnCount-1])
                 _healed = true;
             else
                 participant.canAttack = false;
-            _statusDuration++;
+            _currentStatusTurnCount++;
         }
     }
 
@@ -295,29 +291,20 @@ public class Participant_Status : BattleParticipantModule
         {
             participant.isConfused = false;
         }
-        //Remove stat drops caused by status
-        switch (participant.pokemon.statusEffect)
+        StatusEffect previousStatus = participant.pokemon.statusEffect;
+        
+        participant.pokemon.statusEffect = StatusEffect.None; 
+        
+        switch (previousStatus)
         {
             case StatusEffect.Burn:
-                var currentAtkBuff =
-                    _battleOperationsHandler.SearchForBuffOrDebuff(participant.pokemon, Stat.Attack);
-                if (currentAtkBuff == null) return;
-                _battleOperationsHandler.ModifyBuff(currentAtkBuff,0,2);
-                participant.pokemon.attack = _moveUsageHandler.ModifyStatValue
-                (Stat.Attack, participant.statData.attack, currentAtkBuff.stage);
+                _moveUsageHandler.RefreshStat(Stat.Attack, participant);
                 break;
-            
             case StatusEffect.Paralysis:
-                var currenSpdBuff =
-                    _battleOperationsHandler.SearchForBuffOrDebuff(participant.pokemon, Stat.Speed);
-                if (currenSpdBuff == null) return;
-                _battleOperationsHandler.ModifyBuff(currenSpdBuff,0,6);
-                participant.pokemon.speed = _moveUsageHandler.ModifyStatValue
-                    (Stat.Speed, participant.statData.speed, currenSpdBuff.stage);
+                _moveUsageHandler.RefreshStat(Stat.Speed, participant);
                 break;
         }
-        _battleOperationsHandler.RemoveInvalidBuffsOrDebuffs(participant.pokemon);
-        participant.pokemon.statusEffect = StatusEffect.None; 
+        
         participant.RefreshStatusEffectImage();
     }
 }

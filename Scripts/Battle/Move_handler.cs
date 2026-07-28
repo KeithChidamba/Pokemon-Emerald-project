@@ -583,11 +583,10 @@ public class Move_handler:MonoBehaviour,IInjectable
     }
     public void ApplyStatusToVictim(Battle_Participant participant,StatusEffect status, int numTurns=0)
     {
-        participant.pokemon.statusEffect = status;
         var numTurnsOfStatus = 0;
         if (numTurns != 0)
         {
-            participant.statusHandler.GetStatusEffect(numTurns);
+            participant.statusHandler.GetStatusEffect(status,numTurns);
         }
         else
         {
@@ -596,7 +595,7 @@ public class Move_handler:MonoBehaviour,IInjectable
                 numTurnsOfStatus = Utility.RandomRange(1, 5);
             }
         }
-        participant.statusHandler.GetStatusEffect(numTurnsOfStatus);
+        participant.statusHandler.GetStatusEffect(status,numTurnsOfStatus);
     }
 
     public void ApplyStatChangeImmunity(Battle_Participant participant,StatChangeability changeability,int numTurns)
@@ -799,45 +798,82 @@ public class Move_handler:MonoBehaviour,IInjectable
         switch (data.Stat)
         {
             case Stat.Defense:
-                affectedPokemon.defense = GetUpdatedStat(unModifiedStats.defense,data, displayMessage) ?? affectedPokemon.defense;
+                affectedPokemon.defense = GetUpdatedStat(unModifiedStats.defense,data, displayMessage);
                 break;
             case Stat.Attack:
-                affectedPokemon.attack = GetUpdatedStat(unModifiedStats.attack,data, displayMessage) ?? affectedPokemon.attack;
+                affectedPokemon.attack = GetUpdatedStat(unModifiedStats.attack,data, displayMessage);
                 break;
             case Stat.SpecialDefense:
-                affectedPokemon.specialDefense = GetUpdatedStat(unModifiedStats.spDef,data, displayMessage) ?? affectedPokemon.specialDefense;
+                affectedPokemon.specialDefense = GetUpdatedStat(unModifiedStats.spDef,data, displayMessage);
                 break;
             case Stat.SpecialAttack:
-                affectedPokemon.specialAttack = GetUpdatedStat(unModifiedStats.spAtk,data, displayMessage) ?? affectedPokemon.specialAttack;
+                affectedPokemon.specialAttack = GetUpdatedStat(unModifiedStats.spAtk,data, displayMessage);
                 break;
             case Stat.Speed:
-                affectedPokemon.speed = GetUpdatedStat(unModifiedStats.speed,data, displayMessage) ?? affectedPokemon.speed;
+                affectedPokemon.speed = GetUpdatedStat(unModifiedStats.speed,data, displayMessage);
                 break;
             case Stat.Accuracy:
-                affectedPokemon.accuracy = GetUpdatedStat(unModifiedStats.accuracy,data, displayMessage) ?? affectedPokemon.accuracy;
+                affectedPokemon.accuracy = GetUpdatedStat(unModifiedStats.accuracy,data, displayMessage);
                 break;
             case Stat.Evasion:
-                affectedPokemon.evasion = GetUpdatedStat(unModifiedStats.evasion,data, displayMessage) ?? affectedPokemon.evasion;
+                affectedPokemon.evasion = GetUpdatedStat(unModifiedStats.evasion,data, displayMessage);
                 break;
             case Stat.Crit:
-                affectedPokemon.critChance = GetUpdatedStat(unModifiedStats.crit,data, displayMessage) ?? affectedPokemon.critChance;
+                affectedPokemon.critChance = GetUpdatedStat(unModifiedStats.crit,data, displayMessage);
                 break; 
         }
     }
-    private float? GetUpdatedStat(float unmodifiedStatValue, BuffDebuffData data,bool canDisplayChange)
+
+    public void RefreshStat(Stat stat, Battle_Participant receiver)
+    {
+        var buffData = new BuffDebuffData(receiver, stat, true, 0);
+        switch (stat)
+        {
+            case Stat.Attack:
+                receiver.pokemon.attack = GetUpdatedStat(receiver.statData.attack,buffData,false);
+                break;
+
+            case Stat.Speed:
+                receiver.pokemon.speed = GetUpdatedStat(receiver.statData.speed, buffData, false);
+                break;
+        }
+    }
+
+    private float GetUpdatedStat(float unmodifiedStatValue, BuffDebuffData data,bool canDisplayChange)
     {
         var resultMessage = _battleOperations.AttemptBuffOperation(data);
         if (canDisplayChange)
         {
             _battleVisualsHandler.SelectStatChangeVisuals(data.Stat,data.Receiver, resultMessage);
         }
-        var buff = _battleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat)
-                   ?? new Buff_Debuff(Stat.None, 0, true); // if null return same value
-        if (buff.isAtLimit) return null;
-        return ModifyStatValue(data.Stat, unmodifiedStatValue, buff.stage);
+        var buff = _battleOperations.SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);
+        if(buff.stage == 0)
+        {
+            //remove because it's neutral, but still return that neutral stat value
+            data.Receiver.pokemon.buffAndDebuffs.RemoveAll(b => b.stat == data.Stat);
+        }
+        var updatedStat =  ModifyStatValue(data.Stat, unmodifiedStatValue, buff.stage);
+        
+        //Account for stat drops caused by status
+        switch (data.Receiver.pokemon.statusEffect)
+        {
+            case StatusEffect.Burn:
+                if (data.Stat == Stat.Attack)
+                {
+                    updatedStat /= 2f;
+                }
+                break;
+            case StatusEffect.Paralysis:
+                if (data.Stat == Stat.Speed)
+                {
+                    updatedStat /= 4f;
+                }
+                break;
+        }
+        return updatedStat;
     }
 
-    public float ModifyStatValue(Stat stat, float unmodifiedStatValue ,int buffStage)
+    private float ModifyStatValue(Stat stat, float unmodifiedStatValue ,int buffStage)
     {
         switch (stat)
         {
