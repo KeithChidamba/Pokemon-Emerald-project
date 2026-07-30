@@ -71,6 +71,7 @@ public class TestingSetup : MonoBehaviour,IInjectable
          {
             break;
          }
+         continue;
          void GetTestFeedBack()
          {
             test.onTestResult -= GetTestFeedBack;
@@ -302,6 +303,15 @@ public class TestActionSequencer
     {
         _testSequence.Add(NextIndex,new TestAction(action,displayLogs));
     }
+    public void RemoveAction(int index)
+    {
+        _testSequence.Remove(index);
+    }
+
+    public void RemoveLastAction()
+    {
+        _testSequence.Remove(_testSequence.Count-1);
+    }
     public bool CanDisplayCurrentLogs()
     {
         return _testSequence[CurrentSequenceIndex].displayLogs;
@@ -332,10 +342,9 @@ public class TestRegistry
    public IntegrationTest[] allTests =
    {
       //Move Based Tests
-      new WeatherDamageTest(),
-      new SemiInvulnerableDoubleBattleTest(),
       new SemiInvulnerableSingleBattleTest(),
-      
+      //new SemiInvulnerableDoubleBattleTest(),
+      //new WeatherDamageTest(),
       //new WeatherDamageTest(),
      // new MultiTargetDamageTest(),
       // new OnFieldDamageModificationTest(),

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,18 +15,26 @@ public class SemiInvulnerableDoubleBattleTest : BattleMoveUsageTest
         container = serviceContainer;
         _battleHandler = container.Resolve<Battle_handler>();
         _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        /*This test exists to just test that single battle logic doesn't
+        break here*/
         testName = "Semi Invulnerability Double Battle Test";
 
         testExitCondition = TestCompletionCondition.EndManually;
         _sequencer = new MoveTestActionSequencer(container);
-
-        _sequencer.AddAction(() => _sequencer.UseMove()); //fly
-        _sequencer.AddAction(() => _sequencer.UseMoveOnSpecific(0,
+        
+        //fly
+        _sequencer.AddAction(() => _sequencer.UseMove());
+        //dig
+        _sequencer.AddAction(() => _sequencer.UseMoveOnSpecific(
+            0,
             BattleParticipantKey.PlayerPartner,
-            BattleParticipantKey.EnemyPartner)); //dig
+            BattleParticipantKey.EnemyPartner));
+        //handle turn logic
         _sequencer.AddAction(EnsureHitAndSkipTurn);
         _sequencer.AddAction(EnsureHitAndSkipTurn);
     }
+
+
     private void EnsureHitAndSkipTurn()
     {
         //because of sequence logic, this will always be a player or partner
@@ -33,7 +42,7 @@ public class SemiInvulnerableDoubleBattleTest : BattleMoveUsageTest
         /*semi-invulnerable logic removes sure hit when it's about to
         deal damage, so revert it for testing purposes*/
         currentParticipant.semiInvulnerabilityData.turnData.move.isSureHit = true;
-        currentParticipant.semiInvulnerabilityData.turnData.move.priority = 0;
+        currentParticipant.semiInvulnerabilityData.turnData.move.priority = 100;
         _turnBasedCombatHandler.NextTurn();
     }
     public override IEnumerator BeginTest()

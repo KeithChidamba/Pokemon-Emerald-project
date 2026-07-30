@@ -22,7 +22,6 @@ public class Enemy_trainer : BattleParticipantModule
 {
     public TrainerData trainerData;
     public List<Pokemon> trainerParty = new();
-    
     private Dictionary<AiFlags, Func<Battle_Participant,Move,int>> AiLogicCalculators = new();
     
     private Battle_handler _battleHandler;
@@ -30,6 +29,12 @@ public class Enemy_trainer : BattleParticipantModule
     private BattleIntro _battleIntroHandler;
     private BattleOperations _battleOperations;
     private PokemonOperations _pokemonOperations;
+
+    private int _hijackedTurns;
+    public void HighJackTurn()
+    {
+        _hijackedTurns++;
+    } 
     
     public Enemy_trainer(ServiceContainer container)
     {
@@ -185,6 +190,12 @@ public class Enemy_trainer : BattleParticipantModule
     }
     public void MakeBattleDecision()
     {
+        if (_hijackedTurns > 0)
+        {
+            _hijackedTurns--;
+            _turnBasedCombatHandler.NextTurn();
+            return;
+        }
         var numParticipating = _battleHandler.isDoubleBattle? 2:1;
         
         if (GetLivingPokemon().Count > numParticipating)//can a switch be made?

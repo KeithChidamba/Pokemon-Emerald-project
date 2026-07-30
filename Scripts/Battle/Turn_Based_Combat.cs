@@ -54,10 +54,9 @@ public class Turn_Based_Combat : MonoBehaviour,IInjectable
         clearWeather = new WeatherCondition(Weather.Clear);
         CurrentWeather = clearWeather;
     }
-
     private void AddTurn(Turn turn)
     {
-        //Debug.Log("turn added");
+        Debug.Log($"turn added {turn.turnUsage}");
         _turnHistory.Add(turn);
     }
     private void RemoveTurn(int index)

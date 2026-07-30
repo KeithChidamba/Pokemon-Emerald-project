@@ -20,7 +20,6 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
         _moveUsageHandler = serviceContainer.Resolve<Move_handler>();
         _battleHandler = container.Resolve<Battle_handler>();
         
-        
         testName = "Create Barrier Test";
         testExitCondition = TestCompletionCondition.EndManually;
     }

@@ -7,7 +7,7 @@ using UnityEngine;
 
 public enum DamageCalculationModifier
 {
-    Barrier,Ability,FieldModifiers
+    Barrier,Ability,FieldModifiers,SemiInvulnerable
 }
 public class Move_handler:MonoBehaviour,IInjectable
 {
@@ -223,16 +223,10 @@ public class Move_handler:MonoBehaviour,IInjectable
             OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
         }
         
-        int damageAfterFieldModifiers = Mathf.FloorToInt(ApplyFieldDamageModifiers(damageAfterAbilityBuff, struggle.type.typeEnum));
-        if(damageAfterFieldModifiers > damageAfterAbilityBuff || damageAfterFieldModifiers < damageAfterAbilityBuff)
+        int finalDamage = Mathf.FloorToInt(AccountForVictimsBarriers(struggle, victim, damageAfterAbilityBuff));
+        if(finalDamage > damageAfterAbilityBuff || finalDamage < damageAfterAbilityBuff)
         {
-            OnDamageModified?.Invoke(DamageCalculationModifier.FieldModifiers,damageAfterAbilityBuff,damageAfterFieldModifiers);
-        }
-        
-        int finalDamage = Mathf.FloorToInt(AccountForVictimsBarriers(struggle, victim, damageAfterFieldModifiers));
-        if(finalDamage > damageAfterFieldModifiers || finalDamage < damageAfterFieldModifiers)
-        {
-            OnDamageModified?.Invoke(DamageCalculationModifier.Barrier, damageAfterFieldModifiers, finalDamage);
+            OnDamageModified?.Invoke(DamageCalculationModifier.Barrier, damageAfterAbilityBuff, finalDamage);
         }
         
         OnDamageDeal?.Invoke(finalDamage, victim);
@@ -280,13 +274,14 @@ public class Move_handler:MonoBehaviour,IInjectable
         float randomFactor = Utility.RandomRange(217, 256) / 255f;
 
         float baseDamage = ((levelFactor * move.moveDamage * attackDefenseRatio) / 50f) + 2f;
-                
-        if(victim.isSemiInvulnerable)
-        { 
-            var semiInvulnerability = victim.semiInvulnerabilityData
-                .semiInvulnerabilities.FirstOrDefault(s => s.GetName() == move.moveName);
-            baseDamage *= semiInvulnerability?.damageMultiplier ?? 1f;
+        
+        var semiInvulnerableMod = GetSemiInvulnerableModifiers(baseDamage, victim, move.moveName);
+        var damageAfterSemiBuff = baseDamage * semiInvulnerableMod;
+        if (semiInvulnerableMod > 1f || semiInvulnerableMod < 1f)
+        {
+            OnDamageModified?.Invoke(DamageCalculationModifier.SemiInvulnerable,baseDamage,damageAfterSemiBuff);
         }
+        baseDamage = damageAfterSemiBuff;
         
         float damageModifier = critValue * stab * typeEffectiveness * randomFactor;
         
@@ -300,10 +295,10 @@ public class Move_handler:MonoBehaviour,IInjectable
         }
         
         int damageAfterFieldModifiers = Mathf.FloorToInt(ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeEnum));
-        if(damageAfterFieldModifiers > damageAfterAbilityBuff || damageAfterFieldModifiers < damageAfterAbilityBuff)
-        {
-            OnDamageModified?.Invoke(DamageCalculationModifier.FieldModifiers,damageAfterAbilityBuff,damageAfterFieldModifiers);
-        }
+        
+        //Users of this specific event will check if the damage changed themselves
+        OnDamageModified?.Invoke(DamageCalculationModifier.FieldModifiers,damageAfterAbilityBuff,damageAfterFieldModifiers);
+        
         
         int finalDamage = Mathf.FloorToInt(AccountForVictimsBarriers(move,victim,damageAfterFieldModifiers));
         if(finalDamage > damageAfterFieldModifiers || finalDamage < damageAfterFieldModifiers)
@@ -314,6 +309,19 @@ public class Move_handler:MonoBehaviour,IInjectable
         OnDamageDeal?.Invoke(finalDamage,victim);
         OnMoveHit?.Invoke(attacker,move);
         return finalDamage;
+    }
+
+    private float GetSemiInvulnerableModifiers(float baseDamage,Battle_Participant victim,string moveName)
+    {
+        if(victim.isSemiInvulnerable)
+        { 
+            var semiInvulnerability = victim.semiInvulnerabilityData
+                .semiInvulnerabilities.FirstOrDefault(s => s.GetName() == moveName);
+            
+            var buff = semiInvulnerability?.damageMultiplier ?? 1f;
+            return buff;
+        }
+        return 1f;
     }
     private float ApplyFieldDamageModifiers(float currentDamage, PokemonType moveType)
     {
