@@ -18,7 +18,7 @@ MonoBehaviour:
   semiInvulnerabilities:
   - moveName: 19
     damageMultiplier: 2
-    isSureHit: 0
+    isSureHit: 1
   - moveName: 8
     damageMultiplier: 1
     isSureHit: 0

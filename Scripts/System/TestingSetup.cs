@@ -302,7 +302,6 @@ public class TestActionSequencer
     {
         _testSequence.Add(NextIndex,new TestAction(action,displayLogs));
     }
-
     public bool CanDisplayCurrentLogs()
     {
         return _testSequence[CurrentSequenceIndex].displayLogs;
@@ -310,10 +309,7 @@ public class TestActionSequencer
     public void CallNextAction()
     {
         var action = _testSequence[CurrentSequenceIndex].action;
-        CurrentSequenceIndex++;
-        action.Invoke();
-        
-        if (CurrentSequenceIndex == _testSequence.Count)
+        if (CurrentSequenceIndex == _testSequence.Count-1)
         {
             _numSequencesCompleted++;
             if(_numSequencesCompleted < _numSequenceRepetitions + 1)
@@ -322,6 +318,8 @@ public class TestActionSequencer
                 CurrentSequenceIndex = 0;
             }
         }
+        CurrentSequenceIndex++;
+        action?.Invoke();
     }
     public bool SequenceComplete()
     {
@@ -334,6 +332,10 @@ public class TestRegistry
    public IntegrationTest[] allTests =
    {
       //Move Based Tests
+      new WeatherDamageTest(),
+      new SemiInvulnerableDoubleBattleTest(),
+      new SemiInvulnerableSingleBattleTest(),
+      
       //new WeatherDamageTest(),
      // new MultiTargetDamageTest(),
       // new OnFieldDamageModificationTest(),

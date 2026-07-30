@@ -238,6 +238,7 @@ public enum EvolutionStone
     None,ThunderStone,FireStone,WaterStone,LeafStone
 }
 
+//ONLY ADD NEW MOVES AT THE BOTTOM
 public enum LearnSetMoveName
 {
     // 🐞 Bug-type
@@ -267,8 +268,7 @@ public enum LearnSetMoveName
     FirePunch,
     FireSpin,
     Flamethrower,
-    SunnyDay,
-
+        
     // 🛫 Flying-type
     AirCutter,
     Gust,
@@ -315,8 +315,8 @@ public enum LearnSetMoveName
     HyperBeam,
     Leer, 
     MeanLook,
-    MorningSun,
-    MoonLight,
+    MorningSun, // needs making after weather
+    MoonLight,// needs making after weather    
     OdorSleuth,
     Pound,
     Protect,
@@ -349,22 +349,19 @@ public enum LearnSetMoveName
     MuddyWater,
     WaterGun,
     Whirlpool,
-    RainDance,
-    WaterSport,
-    
+        
     // 👻 Ghost-type
     Astonish,
     ConfuseRay,
         
     //Ice-type
     Haze,
-    Hail,
-   
+
     // 🌑 Dark-type
     Bite,
     Crunch,
     FaintAttack,
     Pursuit,
-    //forgot
-    PinMissile
+    //new
+    PinMissile,SunnyDay, Hail,WaterSport,RainDance
 }
