@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class CreateBarrierMoveTest : BattleMoveUsageTest
 {
-    private Move_handler _moveUsageHandler;
-    private Battle_handler _battleHandler;
+    private MoveSequenceHandler _moveUsageHandler;
+    private BattleHandler _battleHandler;
     
     private bool _damageWasChanged;
 
@@ -17,8 +17,8 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
-        _moveUsageHandler = serviceContainer.Resolve<Move_handler>();
-        _battleHandler = container.Resolve<Battle_handler>();
+        _moveUsageHandler = serviceContainer.Resolve<MoveSequenceHandler>();
+        _battleHandler = container.Resolve<BattleHandler>();
         
         testName = "Create Barrier Test";
         testExitCondition = TestCompletionCondition.EndManually;

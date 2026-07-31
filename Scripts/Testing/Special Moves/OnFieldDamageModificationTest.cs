@@ -6,18 +6,18 @@ using UnityEngine;
 public class OnFieldDamageModificationTest : BattleMoveUsageTest
 {
     private MoveTestActionSequencer _sequencer;
-    private Move_handler _moveUsageHandler;
-    private Battle_handler _battleHandler;
-    private Pokemon_party _pokemonPartyHandler;
+    private MoveSequenceHandler _moveUsageHandler;
+    private BattleHandler _battleHandler;
+    private PokemonPartyHandler _pokemonPartyHandler;
     
     private List<bool> _damageChecks = new();
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
-        _moveUsageHandler = container.Resolve<Move_handler>();
-        _battleHandler = container.Resolve<Battle_handler>();
-        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         
         testName = "On Field Damage Modification Test";
         testExitCondition = TestCompletionCondition.EndManually;

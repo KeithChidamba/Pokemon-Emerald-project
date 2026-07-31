@@ -8,7 +8,7 @@ public class DestinationObjective : StoryObjective
     
     protected override void OnObjectiveLoaded()
     {
-        var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        var dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
         _overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
         dialogueHandler.DisplayObjectiveText(objectiveHeading);
     }

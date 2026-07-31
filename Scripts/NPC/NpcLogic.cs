@@ -8,20 +8,20 @@ public class NpcLogic : MonoBehaviour,IInjectable
     public NpcMovement movementHandler; 
     public bool autoDetectPlayer;
     [SerializeField]private float detectDistance = 1f;
-    public Overworld_interactable npcInteractable;
+    public OverworldInteractable npcInteractable;
     [SerializeField]private bool constantScan;
     [SerializeField]private bool playerDetected;
     private Action _runDialogueInteraction;
     private bool _longDistanceDetection;
 
-    private Dialogue_handler _dialogueHandler;
-    private Player_movement _playerMovement;
+    private DialogueHandler _dialogueHandler;
+    private PlayerMovementHandler _playerMovement;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     public void Inject(ServiceContainer container)
     {
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _playerMovement = container.Resolve<Player_movement>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _playerMovement = container.Resolve<PlayerMovementHandler>();
     }
 
     public void OnInject()

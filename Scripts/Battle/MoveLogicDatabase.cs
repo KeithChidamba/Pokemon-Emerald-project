@@ -7,26 +7,26 @@ using UnityEngine;
 
 public class MoveLogicDatabase : MonoBehaviour,IInjectable
 {
-    private Dialogue_handler _dialogueHandler;
-    private Turn_Based_Combat _turnBasedCombatHandler;
-    private Pokemon_party _pokemonPartyHandler;
+    private DialogueHandler _dialogueHandler;
+    private TurnBasedCombatHandler _turnBasedCombatHandler;
+    private PokemonPartyHandler _pokemonPartyHandler;
     private BattleVisuals _battleVisualsHandler;
-    private Battle_handler _battleHandler;
-    private Move_handler _moveUsageHandler;
+    private BattleHandler _battleHandler;
+    private MoveSequenceHandler _moveUsageHandler;
     private BattleOperations _battleOperationsHandler;
     private MoveLogicHandler _moveLogicHandler;
     
-    private Dictionary<string, Func<Turn,Battle_Participant,Battle_Participant,IEnumerator>> _logicMethods = new();
+    private Dictionary<string, Func<Turn,BattleParticipant,BattleParticipant,IEnumerator>> _logicMethods = new();
     
     public void Inject(ServiceContainer container)
     {
         _battleOperationsHandler = container.Resolve<BattleOperations>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
-        _battleHandler = container.Resolve<Battle_handler>();
-        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
-        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
-        _moveUsageHandler = container.Resolve<Move_handler>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
+        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
+        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         _moveLogicHandler = container.Resolve<MoveLogicHandler>();
         gameObject.SetActive(true);
     }
@@ -53,7 +53,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _logicMethods.Add("thunder", Thunder);
     }
     
-    public IEnumerator InvokeMoveLogic(Battle_Participant attacker, Battle_Participant victim, Turn currentTurn)
+    public IEnumerator InvokeMoveLogic(BattleParticipant attacker, BattleParticipant victim, Turn currentTurn)
     {
         var formattedName = currentTurn.move.moveName.Replace(" ", "").ToLower();
         
@@ -64,7 +64,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         else
             Debug.LogWarning($"Move '{formattedName}' not found!");
     }
-    private IEnumerator BrickBreak(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator BrickBreak(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var duplicateBarriers = new List<string>();
         foreach (var enemy in attacker.currentEnemies)
@@ -84,18 +84,18 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         yield return _moveUsageHandler.AwaitDamageDisplay();
     }
     
-    private IEnumerator Haze(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Haze(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var validParticipants = _battleHandler.GetValidParticipants();
         foreach (var participant in validParticipants)
         {
-            participant.pokemon.buffAndDebuffs.Clear();
+            participant.pokemon.statModifiers.Clear();
             participant.statData.LoadActualStats();
         }
         yield return null;
     }
 
-    private IEnumerator Hyperbeam(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Hyperbeam(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         var cancelledTurn = new Turn(currentTurn);
@@ -104,7 +104,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    private IEnumerator Bide(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Bide(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         if (attacker.currentCoolDown.isExecutionTurn)
         {
@@ -132,13 +132,13 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
        
     }
 
-    private IEnumerator SonicBoom(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator SonicBoom(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var sonicBoomDamage = 20f;
         _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,specificDamage:sonicBoomDamage);
         yield return null;
     }    
-    private IEnumerator TakeDown(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator TakeDown(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
         var recoilDamage = math.floor(damage / 4f);
@@ -151,7 +151,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         yield return _moveUsageHandler.AwaitDamageDisplay();
     }
 
-    private IEnumerator Magnitude(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Magnitude(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var magnitudeStrength = Utility.RandomRange(4, 11);
         var baseDamage = 10f;
@@ -173,7 +173,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             ,currentTurn.move,attacker);
     }
 
-    private IEnumerator Endeavor(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Endeavor(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         if (victim.pokemon.hp < attacker.pokemon.hp)
         {
@@ -184,7 +184,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,damage);
     }
 
-    private IEnumerator FuryCutter(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator FuryCutter(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var damageLevel = new[] { 10f, 20f, 40f, 80f, 160f };
         if (attacker.previousMoveData.move.moveName == NameDB.GetMoveName(LearnSetMoveName.FuryCutter))
@@ -198,14 +198,14 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         yield return null;
     }
-    private IEnumerator SilverWind(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator SilverWind(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         bool battleEnded = false;
         _battleHandler.OnParticipantFainted += CancelOnBattleEnd;
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         yield return _moveUsageHandler.AwaitDamageDisplay();
 
-        void CancelOnBattleEnd(Battle_Participant faintedParticipant)
+        void CancelOnBattleEnd(BattleParticipant faintedParticipant)
         {
             if (faintedParticipant != victim) return;
             _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
@@ -232,18 +232,18 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         foreach (var buff in allBuffs)
         {
             bool awaitingAddition = true;
-            _battleOperationsHandler.OnBuffApplied += AwaitBuffAddition;
-            var buffData = new BuffDebuffData(attacker, buff, true, 1);
-            _moveUsageHandler.ExecuteBuffOrDebuff(buffData,false);
+            _battleOperationsHandler.OnStatChangeApplied += AwaitBuffAddition;
+            var buffData = new StatChangeTransitData(attacker, buff, true, 1);
+            _moveUsageHandler.InitiateStatChange(buffData,false);
             yield return new WaitUntil(() => !awaitingAddition);
-            void AwaitBuffAddition(BuffOperationData operationData)
+            void AwaitBuffAddition(StatChangeOperationData operationData)
             {
-                _battleOperationsHandler.OnBuffApplied -= AwaitBuffAddition;
+                _battleOperationsHandler.OnStatChangeApplied -= AwaitBuffAddition;
                 awaitingAddition = false;
             }
         }
         
-        string statChangeMessage = _battleOperationsHandler.GetBuffResultMessage(true,attacker.pokemon,allBuffs);
+        string statChangeMessage = _battleOperationsHandler.GetStatModResultMessage(true,attacker.pokemon,allBuffs);
         _battleVisualsHandler.OnStatVisualDisplayed += AwaitBuffVisual;
         bool awaitingDisplay = true;
         _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,attacker,statChangeMessage);
@@ -255,7 +255,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
     }
 
-    private IEnumerator Flail(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Flail(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         List<(int hpLevel, float damage)> damagePerLevel = new()
         {
@@ -276,7 +276,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    private IEnumerator FalseSwipe(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator FalseSwipe(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
         damage = Mathf.Min(damage, victim.pokemon.hp - 1);
@@ -285,7 +285,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    private IEnumerator BellyDrum(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator BellyDrum(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         if (attacker.pokemon.hp < 2)
         {
@@ -296,11 +296,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         var selfDamage = math.floor(attacker.pokemon.hp / 2f);
         _moveUsageHandler.DisplaySpecialDamage(attacker,selfDamage);
         
-        var buffData = new BuffDebuffData(attacker, Stat.Attack, true, 6);
-        _moveUsageHandler.ExecuteBuffOrDebuff(buffData);
+        var buffData = new StatChangeTransitData(attacker, Stat.Attack, true, 6);
+        _moveUsageHandler.InitiateStatChange(buffData);
     }
 
-    private IEnumerator Covet(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Covet(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         if (victim.pokemon.hasItem && !attacker.pokemon.hasItem)
@@ -314,7 +314,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    private IEnumerator MirrorMove(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator MirrorMove(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         if (victim.previousMoveData is {failedAttempt:false})
         {
@@ -337,7 +337,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
     }
 
-    private IEnumerator Whirlwind(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Whirlwind(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         if (attacker.pokemon.currentLevel < victim.pokemon.currentLevel)
         {
@@ -384,7 +384,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             yield return _turnBasedCombatHandler.HandleSwap(switchData,true);
         }
     }
-    private IEnumerator Rest(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Rest(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var healthGain = attacker.pokemon.maxHp - attacker.pokemon.hp;
         _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" fell asleep!");
@@ -397,7 +397,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         yield return _dialogueHandler.AwaitAllDialogue();
     }
 
-    private IEnumerator Thunder(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator Thunder(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {        
         if (!victim.canBeDamaged)
         { 

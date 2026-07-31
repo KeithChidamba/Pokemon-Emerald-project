@@ -26,17 +26,17 @@ public class OverworldState : MonoBehaviour,IInjectable
     
     public event Action OnObjectivesLoaded;
     private SaveDataHandler _saveHandler;
-    private Dialogue_handler _dialogueHandler;
+    private DialogueHandler _dialogueHandler;
     private ServiceContainer _container;
-    private Game_Load _gameLoadingHandler;
+    private GameLoadingHandler _gameLoadingHandler;
     private Bag _playerBag;
     
     public void Inject(ServiceContainer container)
     {
         _container = container;
         _saveHandler = container.Resolve<SaveDataHandler>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _gameLoadingHandler = container.Resolve<Game_Load>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         _playerBag = container.Resolve<Bag>();
         gameObject.SetActive(true);
     }

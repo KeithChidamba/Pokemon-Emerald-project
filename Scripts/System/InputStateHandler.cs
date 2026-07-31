@@ -67,8 +67,8 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     [SerializeField]private int rowRemainder;
     public GameObject emptyPlaceHolder;
     
-    private Dialogue_handler _dialogueHandler;
-    private Game_ui_manager _gameUIHandler;
+    private DialogueHandler _dialogueHandler;
+    private GameUiHandler _gameUIHandler;
     private PlayerBagInputService _playerBagInputService;
     private PokemonBattleInputService _pokemonBattleInputService;
     private PokemartInputService _pokemartInputService;
@@ -81,8 +81,8 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _gameUIHandler = container.Resolve<GameUiHandler>();
         _playerBagInputService = container.Resolve<PlayerBagInputService>();
         _pokemonPartyInputService = container.Resolve<PokemonPartyInputService>();
         _pokemonBattleInputService = container.Resolve<PokemonBattleInputService>();

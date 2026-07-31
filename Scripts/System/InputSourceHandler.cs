@@ -27,17 +27,17 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     private bool _gameStarted;
     public GameObject mobileControlsUI;
     
-    private Dialogue_handler _dialogueHandler;
+    private DialogueHandler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
-    private Game_ui_manager _gameUIManager;
-    private Game_Load _gameLoadingHandler;
+    private GameUiHandler gameUiHandler;
+    private GameLoadingHandler _gameLoadingHandler;
     
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _gameUIManager = container.Resolve<Game_ui_manager>();
-        _gameLoadingHandler = container.Resolve<Game_Load>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        gameUiHandler = container.Resolve<GameUiHandler>();
+        _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         
         gameObject.SetActive(true);
     }
@@ -78,14 +78,14 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
         {
             if (CanUseQuickAction(ControlEvent.OpenSettings))
             {
-                _gameUIManager.ViewGameSettings();
+                gameUiHandler.ViewGameSettings();
             }
         }
         if (InputPressed(ControlEvent.Save))
         {
             if (CanUseQuickAction(ControlEvent.Save))
             {
-                _gameUIManager.SaveGame();
+                gameUiHandler.SaveGame();
             }
         }
        

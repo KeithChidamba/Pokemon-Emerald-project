@@ -100,12 +100,12 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
    [SerializeField]private Image genderGraphic;
    
    private InputStateHandler _inputStateHandler;
-   private Dialogue_handler _dialogueHandler;
+   private DialogueHandler _dialogueHandler;
    
    public void Inject(ServiceContainer container)
    {
       _inputStateHandler = container.Resolve<InputStateHandler>();
-      _dialogueHandler = container.Resolve<Dialogue_handler>();
+      _dialogueHandler = container.Resolve<DialogueHandler>();
       gameObject.SetActive(true);
    }
    

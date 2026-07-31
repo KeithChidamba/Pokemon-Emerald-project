@@ -3,15 +3,15 @@ using UnityEngine;
 public class TrainerBattleObjective : StoryObjective
 {
     public TrainerData trainer;
-    private Dialogue_handler _dialogueHandler;
+    private DialogueHandler _dialogueHandler;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
-    private Battle_handler _battleHandler;
+    private BattleHandler _battleHandler;
     
     protected override void OnObjectiveLoaded()
     {
-        _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
         _dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>(); 
-        _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
+        _battleHandler = serviceContainer.Resolve<BattleHandler>(); 
         _dialogueHandler.DisplayObjectiveText($"Defeat {trainer.TrainerName}");
         _dialogueOptionsHandler.OnInteractionOptionChosen += CheckBattleInteraction;
     }

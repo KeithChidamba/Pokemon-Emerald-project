@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class PokemonDetailsInputService: IInputGroup
 {
-    private Pokemon_Details _pokemonDetailsHandler;
+    private PokemonDetailsHandler _pokemonDetailsHandler;
     private InputStateHandler _inputStateHandler;
     private PokemonOperations _pokemonOperations;
     public PokemonDetailsInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _pokemonDetailsHandler = container.Resolve<Pokemon_Details>();
+        _pokemonDetailsHandler = container.Resolve<PokemonDetailsHandler>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
     }
     public void DetermineOperation()

@@ -21,39 +21,39 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     private bool _virtualFileStructureReady;
     private bool _virtualDirectoriesCleared;
     
-    private Dialogue_handler _dialogueHandler;
+    private DialogueHandler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
-    private Area_manager  _areaHandler;
-    private pokemon_storage _pokemonStorageHandler;
-    private Game_Load _gameLoadingHandler;
-    private Pokemon_party _pokemonPartyHandler;
-    private Player_movement _playerMovementHandler;
+    private AreaManager  _areaHandler;
+    private PokemonStorageHandler _pokemonStorageHandler;
+    private GameLoadingHandler _gameLoadingHandler;
+    private PokemonPartyHandler _pokemonPartyHandler;
+    private PlayerMovementHandler _playerMovementHandler;
     private OverworldState _overworldStateHandler;
     private Bag _playerBagHandler;
     private GameSettingsHandler _gameSettingsHandler;
-    private TestingSetup _testingSetupHandler;
+    private TestingEnvironmentHandler _testingHandler;
     private ServiceContainer _container;
 
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _gameLoadingHandler = container.Resolve<Game_Load>();
-        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
-        _pokemonStorageHandler = container.Resolve<pokemon_storage>();
-        _playerMovementHandler = container.Resolve<Player_movement>();
-        _areaHandler = container.Resolve<Area_manager>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
+        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
+        _pokemonStorageHandler = container.Resolve<PokemonStorageHandler>();
+        _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
+        _areaHandler = container.Resolve<AreaManager>();
         _overworldStateHandler = container.Resolve<OverworldState>();
         _playerBagHandler = container.Resolve<Bag>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
-        _testingSetupHandler = container.Resolve<TestingSetup>();
+        _testingHandler = container.Resolve<TestingEnvironmentHandler>();
         _container = container;
         gameObject.SetActive(true);
     }
 
     public void OnInject()
     {
-        if (_testingSetupHandler.environment == DevelopmentEnvironment.Testing) return;
+        if (_testingHandler.environment == DevelopmentEnvironment.Testing) return;
         
         OnSaveDataFail += HandleSaveError;
         

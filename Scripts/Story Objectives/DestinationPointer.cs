@@ -13,14 +13,14 @@ public class DestinationPointer : MonoBehaviour,IInjectable
     public bool displaying;
 
     private OverworldState _overworldStateHandler;
-    private Game_ui_manager _gameUIHandler;
-    private Player_movement _playerMovementHandler;
+    private GameUiHandler _gameUIHandler;
+    private PlayerMovementHandler _playerMovementHandler;
     
     public void Inject(ServiceContainer container)
     {
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _gameUIHandler = container.Resolve<GameUiHandler>();
         _overworldStateHandler = container.Resolve<OverworldState>();
-        _playerMovementHandler = container.Resolve<Player_movement>();
+        _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
         gameObject.SetActive(true);
     }
 

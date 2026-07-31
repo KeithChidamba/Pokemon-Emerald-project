@@ -14,7 +14,11 @@ public class Move : ScriptableObject
     public bool hasTypelessEffect;
     public bool isSpecial;
     public bool isContact;
-    [FormerlySerializedAs("is_Buff_Debuff")] public bool isBuffOrDebuff;
+    
+    [FormerlySerializedAs("isBuffOrDebuff")] 
+    [FormerlySerializedAs("is_Buff_Debuff")] 
+    public bool canChangeStats;
+    
     [FormerlySerializedAs("Has_status")] public bool hasStatus;
     public EffectType effectType;
     public AdditionalInfoModule effectInfoModule;
@@ -32,7 +36,7 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("BasePowerpoints")] public int basePowerpoints;
     [FormerlySerializedAs("max_Powerpoints")] public int maxPowerpoints;
     public StatusEffect statusEffect;
-    public List<MoveBuffData> buffOrDebuffData = new();
+    public List<MoveStatChangeData> buffOrDebuffData = new();
     [FormerlySerializedAs("Status_chance")] public float statusChance;
     [FormerlySerializedAs("Debuff_chance")] public float buffOrDebuffChance;
     [FormerlySerializedAs("Description")] public string description;

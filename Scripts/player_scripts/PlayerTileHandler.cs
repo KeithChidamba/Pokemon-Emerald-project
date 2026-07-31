@@ -14,15 +14,15 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
     public SpriteRenderer grassRenderer;
     [SerializeField] private Sprite[] grassSprites;
     
-    private Player_movement _playerMovementHandler;
-    private Encounter_handler  _encounterHandler;
-    private Area_manager  _areaHandler;
+    private PlayerMovementHandler _playerMovementHandler;
+    private EncounterHandler  _encounterHandler;
+    private AreaManager  _areaHandler;
     
     public void Inject(ServiceContainer container)
     {
-        _encounterHandler = container.Resolve<Encounter_handler>();
-        _playerMovementHandler = container.Resolve<Player_movement>();
-        _areaHandler = container.Resolve<Area_manager>();
+        _encounterHandler = container.Resolve<EncounterHandler>();
+        _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
+        _areaHandler = container.Resolve<AreaManager>();
         gameObject.SetActive(true);
     }
 

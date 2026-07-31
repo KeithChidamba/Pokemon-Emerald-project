@@ -7,13 +7,13 @@ public class InteractionObjective : StoryObjective
    public OverworldInteractionType interactionTypeForObjective;
    protected Action onObjectiveComplete;
    
-   protected Dialogue_handler dialogueHandler;
+   protected DialogueHandler dialogueHandler;
    protected DialogueOptionsEventHandler dialogueOptionsHandler;
    protected OverworldState overworldStateHandler;
    
    protected override void OnObjectiveLoaded()
    {
-      dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+      dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
       dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>(); 
       overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
       dialogueHandler.DisplayObjectiveText(objectiveHeading);

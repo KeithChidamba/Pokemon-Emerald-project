@@ -14,23 +14,23 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
 
     private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
     public event Action<Interaction,int> OnInteractionOptionChosen;
-    public event Action<Overworld_interactable,int> OnOverworldInteractionOptionChosen;
+    public event Action<OverworldInteractable,int> OnOverworldInteractionOptionChosen;
     
-    private Dialogue_handler _dialogueHandler;
-    private Pokemon_party _playerParty;
+    private DialogueHandler _dialogueHandler;
+    private PokemonPartyHandler _playerParty;
     private Bag _playerBagHandler;
-    private Game_ui_manager _gameUIManager;
-    private pokemon_storage _pokemonStorage;
-    private Battle_handler _battleHandler;
+    private GameUiHandler gameUiHandler;
+    private PokemonStorageHandler _pokemonStorage;
+    private BattleHandler _battleHandler;
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _playerParty = container.Resolve<Pokemon_party>();
-        _gameUIManager = container.Resolve<Game_ui_manager>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _playerParty = container.Resolve<PokemonPartyHandler>();
+        gameUiHandler = container.Resolve<GameUiHandler>();
         _playerBagHandler = container.Resolve<Bag>();
-        _battleHandler = container.Resolve<Battle_handler>();
-        _pokemonStorage = container.Resolve<pokemon_storage>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _pokemonStorage = container.Resolve<PokemonStorageHandler>();
         gameObject.SetActive(true);
     }
 
@@ -59,7 +59,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     void ViewControls()
     {
         _dialogueHandler.EndDialogue(); 
-        _gameUIManager.ViewKeyBinds();
+        gameUiHandler.ViewKeyBinds();
     }
     void Battle()
     {
@@ -76,18 +76,18 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     void SellItem()
     {
         _playerBagHandler.currentBagUsage = BagUsage.SellingView;
-        _gameUIManager.ValidateBagView();
+        gameUiHandler.ValidateBagView();
     }
     void OpenPokemonStorage()
     {
         _dialogueHandler.EndDialogue(); 
-        _gameUIManager.ViewPokemonStorage();
+        gameUiHandler.ViewPokemonStorage();
     }
 
     void OpenItemStorage()
     {
         _dialogueHandler.EndDialogue(); 
-        _gameUIManager.ViewItemStorage();
+        gameUiHandler.ViewItemStorage();
     }
     void ReceiveGiftPokemon()
     {
@@ -103,7 +103,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     {
         _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
     }
-    public void AlertOverworldInteraction(Overworld_interactable interactable,int optionIndex)
+    public void AlertOverworldInteraction(OverworldInteractable interactable,int optionIndex)
     {
         OnOverworldInteractionOptionChosen?.Invoke(interactable,optionIndex);
     }

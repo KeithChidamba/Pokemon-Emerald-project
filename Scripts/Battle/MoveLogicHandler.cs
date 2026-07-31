@@ -6,19 +6,19 @@ using UnityEngine;
 
 public class MoveLogicHandler : MonoBehaviour,IInjectable
 {
-    private Dialogue_handler _dialogueHandler;
-    private Turn_Based_Combat _turnBasedCombatHandler;
-    private Battle_handler _battleHandler;
-    private Move_handler _moveUsageHandler;
+    private DialogueHandler _dialogueHandler;
+    private TurnBasedCombatHandler _turnBasedCombatHandler;
+    private BattleHandler _battleHandler;
+    private MoveSequenceHandler _moveUsageHandler;
     private MoveLogicDatabase _moveLogicDatabase;
     private BattleOperations _battleOperations;
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _battleHandler = container.Resolve<Battle_handler>();
-        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
-        _moveUsageHandler = container.Resolve<Move_handler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
+        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         _moveLogicDatabase = container.Resolve<MoveLogicDatabase>();
         _battleOperations = container.Resolve<BattleOperations>();
         gameObject.SetActive(true);
@@ -28,7 +28,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     {
         
     }
-    public IEnumerator DetermineMoveLogic(Battle_Participant attacker, Battle_Participant victim, Turn currentTurn)
+    public IEnumerator DetermineMoveLogic(BattleParticipant attacker, BattleParticipant victim, Turn currentTurn)
     {
         var move = currentTurn.move;
         switch (currentTurn.move.effectType)
@@ -69,14 +69,14 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         }
     }
 
-    public List<Battle_Participant> TargetAllExceptSelf(Battle_Participant attacker)
+    public List<BattleParticipant> TargetAllExceptSelf(BattleParticipant attacker)
     {
         var allParticipants = _battleHandler.GetParticipants.ToList();
         allParticipants.RemoveAll(p => !p.isActive);
         allParticipants.RemoveAll(p => p.participantKey == attacker.participantKey);
         return allParticipants;
     }
-    IEnumerator ExecuteConsecutiveMove(Move move,Battle_Participant attacker, Battle_Participant victim)
+    IEnumerator ExecuteConsecutiveMove(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
         var consecutiveMoveInfo = move.GetModule<ConsecutiveMoveInfo>();
         if (consecutiveMoveInfo.isRandomHitCount)
@@ -108,7 +108,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         }
         yield return _dialogueHandler.AwaitAllDialogue();
     } 
-    public IEnumerator ApplyMultiTargetDamage(List<Battle_Participant> targets,Move move,Battle_Participant attacker)
+    public IEnumerator ApplyMultiTargetDamage(List<BattleParticipant> targets,Move move,BattleParticipant attacker)
     {
         yield return _dialogueHandler.AwaitAllDialogue();
         foreach (var enemy in targets)
@@ -121,10 +121,10 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         }
         yield return _dialogueHandler.AwaitAllDialogue();
     }
-    IEnumerator HandleMultiTargetDamage(Move move,Battle_Participant attacker)
+    IEnumerator HandleMultiTargetDamage(Move move,BattleParticipant attacker)
     {
         var multiTargetInfo = move.GetModule<MultiTargetDamageInfo>();
-        var targets = new List<Battle_Participant>();
+        var targets = new List<BattleParticipant>();
         switch (multiTargetInfo.target)
         {
             case Target.AllEnemies :
@@ -137,7 +137,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         yield return ApplyMultiTargetDamage(targets,move,attacker);
     }
 
-    IEnumerator DrainHealth(Move move,Battle_Participant attacker, Battle_Participant victim)
+    IEnumerator DrainHealth(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
         var healthDrainInfo = move.GetModule<HealthDrainMoveInfo>();
         var damage = _moveUsageHandler.CalculateMoveDamage(move,attacker,victim);
@@ -159,7 +159,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
 
-    private IEnumerator ApplyDamageProtection(Move move,Battle_Participant attacker)
+    private IEnumerator ApplyDamageProtection(Move move,BattleParticipant attacker)
     {
         if(attacker.previousMoveData.move.moveName == move.moveName)
         {
@@ -179,7 +179,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    private IEnumerator CreateBarriers(Move move,Battle_Participant attacker)
+    private IEnumerator CreateBarriers(Move move,BattleParticipant attacker)
     {
         var barrierName = move.moveName;
         if (_battleHandler.isDoubleBattle)
@@ -217,7 +217,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         yield return _dialogueHandler.AwaitAllDialogue();
     }
     
-    private IEnumerator OnFieldDamageModLogic(Move move,Battle_Participant attacker)
+    private IEnumerator OnFieldDamageModLogic(Move move,BattleParticipant attacker)
     {
         var damageModifierInfo = move.GetModule<DamageModifierInfo>();
         
@@ -234,7 +234,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         
         _battleHandler.OnParticipantFainted += RemoveOnFaint;
                 
-        void RemoveOnFaint(Battle_Participant faintedParticipant)
+        void RemoveOnFaint(BattleParticipant faintedParticipant)
         {
             if (faintedParticipant != attacker) return;
             _battleHandler.OnParticipantFainted -= RemoveOnFaint;
@@ -246,7 +246,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         
         yield return null;
     }
-    private IEnumerator IdentifyTarget(Move move,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator IdentifyTarget(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
         LearnSetMoveName currentMoveEnum = NameDB.ParseMoveName(move.moveName);
         
@@ -261,7 +261,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         
         if(currentMoveEnum == LearnSetMoveName.Foresight)
         {
-            victim.pokemon.buffAndDebuffs
+            victim.pokemon.statModifiers
                 .RemoveAll(b => b.stat == Stat.Evasion);
             victim.pokemon.evasion = 100;
         }
@@ -277,7 +277,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             
             _battleHandler.OnParticipantFainted += RemoveOnFaint;
                 
-            void RemoveOnFaint(Battle_Participant faintedParticipant)
+            void RemoveOnFaint(BattleParticipant faintedParticipant)
             {
                 if (faintedParticipant != attacker) return;
                 _battleHandler.OnParticipantFainted -= RemoveOnFaint;
@@ -288,7 +288,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             victim.immunityNegations.Add(newImmunityNegation);
         }
     }
-    private IEnumerator ExecuteSemiInvulnerableMove(Turn currentTurn,Battle_Participant attacker, Battle_Participant victim)
+    private IEnumerator ExecuteSemiInvulnerableMove(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var move = currentTurn.move;
         if (attacker.semiInvulnerabilityData.executionTurn)
@@ -322,7 +322,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         _turnBasedCombatHandler.ChangeWeather(newWeather);
         yield return null;
     }
-    private IEnumerator HealFromWeather(Battle_Participant attacker)
+    private IEnumerator HealFromWeather(BattleParticipant attacker)
     {
         if (attacker.pokemon.hp >= attacker.pokemon.maxHp)
         {
@@ -357,7 +357,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     }
 
 
-    public IEnumerator Pursuit(Battle_Participant pursuitUser,Battle_Participant switchOutVictim,Move pursuit)
+    public IEnumerator Pursuit(BattleParticipant pursuitUser,BattleParticipant switchOutVictim,Move pursuit)
     {
         _dialogueHandler.DisplayBattleInfo(pursuitUser.pokemon.pokemonDisplayName+" used "+pursuit.moveName
                                                     +" on "+switchOutVictim.pokemon.pokemonDisplayName+"!");

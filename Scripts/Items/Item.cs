@@ -63,6 +63,6 @@ public class Item : ScriptableObject
             dynamicInfoModules.AddRange(sourceAsset.dynamicInfoModules);
         }
         
-        itemImage = Testing.GetValidImage(DirectoryHandler.GetDirectory(AssetDirectory.ItemUI),imageDirectory);
+        itemImage = AssetHealthChecks.GetValidImage(DirectoryHandler.GetDirectory(AssetDirectory.ItemUI),imageDirectory);
     }
 }

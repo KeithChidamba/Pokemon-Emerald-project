@@ -70,7 +70,7 @@ public class Pokemon : ScriptableObject
     public bool canBeInfatuated = true;
     public List<Type> types;
     public StatusEffect statusEffect;
-    public List<Buff_Debuff> buffAndDebuffs = new();
+    public List<StatChangeData> statModifiers = new();
     [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
     public int currentEvolutionLineIndex;
     public FriendShipEvolutionData friendshipEvolutionRequirement;
@@ -107,9 +107,9 @@ public class Pokemon : ScriptableObject
     public List<MoveSaveData> moveData=new();
     
     //dependencies
-    private Dialogue_handler _dialogueHandler;
-    private Battle_handler _battleHandler;
-    private Pokemon_party _pokemonPartyHandler;
+    private DialogueHandler _dialogueHandler;
+    private BattleHandler _battleHandler;
+    private PokemonPartyHandler _pokemonPartyHandler;
     private PokemonOperations _pokemonOperationsHandler;
     
     public void SaveUnserializableData()
@@ -131,15 +131,15 @@ public class Pokemon : ScriptableObject
     }
     public void LoadDataAndDependencies(ServiceContainer serviceContainer)
     {//gives values to attributes that cant be deserialized, using saved values
-        frontPicture = Testing.GetValidImage( DirectoryHandler.GetDirectory
+        frontPicture = AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
-        backPicture =Testing.GetValidImage( DirectoryHandler.GetDirectory
+        backPicture =AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_sb":"_b"));
-        partyFrame1=Testing.GetValidImage( DirectoryHandler.GetDirectory
+        partyFrame1=AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonPartyImage),pokemonName+"_1");
-        partyFrame2=Testing.GetValidImage( DirectoryHandler.GetDirectory
+        partyFrame2=AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonPartyImage),pokemonName+"_2");
-        battleIntroFrame=Testing.GetValidImage( DirectoryHandler.GetDirectory
+        battleIntroFrame=AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
             (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_s_intro":"_intro"));
         
         nature = Resources.Load<Nature>(DirectoryHandler.GetDirectory
@@ -175,9 +175,9 @@ public class Pokemon : ScriptableObject
 
     public void Inject(ServiceContainer serviceContainer)
     {
-        _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
-        _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
-        _pokemonPartyHandler = serviceContainer.Resolve<Pokemon_party>();
+        _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
+        _battleHandler = serviceContainer.Resolve<BattleHandler>(); 
+        _pokemonPartyHandler = serviceContainer.Resolve<PokemonPartyHandler>();
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
     }
     public void ResetMoveData()

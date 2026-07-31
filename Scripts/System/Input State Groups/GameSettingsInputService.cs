@@ -7,12 +7,12 @@ public class GameSettingsInputService: IInputGroup
 {
     private InputStateHandler _inputStateHandler;
     private GameSettingsHandler _gameSettingsHandler;
-    private Game_ui_manager _gameUIHandler;
+    private GameUiHandler _gameUIHandler;
     
     public GameSettingsInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _gameUIHandler = container.Resolve<GameUiHandler>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
     }
 

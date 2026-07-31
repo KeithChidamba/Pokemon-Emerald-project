@@ -1,0 +1,203 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
+
+public class PokeMartHandler : MonoBehaviour,IInjectable
+{
+    public List<Item> currentStoreItems;
+    public bool viewingStore;
+    public StoreItemUi[] storeItemsUI;
+    public int numItems;
+    public int numItemsForView;
+    public int selectedItemIndex;
+    public int selectedItemQuantity;
+    public int numDisplayableItems=7;
+    public int topIndex;
+    public GameObject storeUI;
+    public GameObject quantityUI;
+    public Text quantity;    
+    public Text playerMoneyText;
+    public PokeMartData currentMartData;
+    public GameObject itemSelector;
+    public GameObject quantitySelector;
+    public Text itemDescription;
+    public Vector2 itemImageTargetSize = new (90, 90);
+    public event Action<Item> OnItemBought;
+    
+    private DialogueHandler _dialogueHandler;
+    private DialogueOptionsEventHandler _dialogueOptionsHandler;
+    private GameUiHandler _gameUIHandler;
+    private Bag _playerBagHandler;
+    private GameLoadingHandler _gameLoadingHandler;
+    
+    public void Inject(ServiceContainer container)
+    {
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
+        _gameUIHandler = container.Resolve<GameUiHandler>();
+        _playerBagHandler = container.Resolve<Bag>();
+        _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
+        gameObject.SetActive(true);
+    }
+
+    public void OnInject()
+    {
+        _dialogueOptionsHandler.OnInteractionOptionChosen += ViewStore;
+    }
+   
+    private void Update()
+    {
+        if (!viewingStore) return;
+        quantity.text = selectedItemQuantity.ToString();
+        playerMoneyText.text = _gameLoadingHandler.playerData.playerMoney.ToString();
+    }
+    private void SelectItem()
+    {
+        selectedItemQuantity = 1;
+        storeItemsUI[selectedItemIndex].LoadItemDescription();
+    }
+    public void NavigateDown()
+    {
+        if (topIndex < numItems - numDisplayableItems && selectedItemIndex == numDisplayableItems-1)
+        {
+            for (int i = 0; i < numDisplayableItems-1; i++)
+                storeItemsUI[i].item = storeItemsUI[i + 1].item;
+            
+            storeItemsUI[numDisplayableItems-1].item = currentStoreItems[topIndex + numDisplayableItems];
+            selectedItemIndex = numDisplayableItems-2;
+            ReloadItems();
+            topIndex++;
+        }
+
+        if (numItems == numItemsForView && selectedItemIndex == numItems-1)
+            return;
+        
+        selectedItemIndex++;
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, numDisplayableItems-1);
+        SelectItem();
+    }
+    public void NavigateUp()
+    {
+        if (topIndex > 0 && selectedItemIndex == 0)
+        {
+            for (int i = numDisplayableItems-1; i > 0; i--)
+                storeItemsUI[i].item = storeItemsUI[i - 1].item;
+            
+            storeItemsUI[0].item = currentStoreItems[topIndex - 1];
+            ReloadItems();
+            selectedItemIndex = 1;
+            topIndex--;
+        }
+        selectedItemIndex--;
+        selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, numDisplayableItems-1);
+        SelectItem();
+    }
+    public void BuyItem()
+    {
+        var item = InstanceFactory.CreateItem(currentStoreItems[topIndex + selectedItemIndex]);
+        if(_gameLoadingHandler.playerData.playerMoney >= item.price)
+        {
+            item.quantity = selectedItemQuantity;
+            _playerBagHandler.AddItem(item);
+            _gameLoadingHandler.playerData.playerMoney -= selectedItemQuantity * item.price;
+            _dialogueHandler.DisplayDetails("You bought "+ item.quantity+ " "+item.itemName+"'s");
+            selectedItemQuantity = 1;
+            OnItemBought?.Invoke(item);
+        }
+        else
+            _dialogueHandler.DisplayDetails("You dont have enough money for that!");
+    }
+    public void ChangeItemQuantity(int value)
+    {
+        if (value < 0)//lower quantity
+        {
+            selectedItemQuantity = (selectedItemQuantity > 1)? selectedItemQuantity + value : 1;
+        }
+        else if(value > 0)//increase quantity
+        {
+            if (selectedItemQuantity < 99)//below max quantity and affordable by player
+            {
+                var priceOfItem = (selectedItemQuantity + 1) * currentStoreItems[topIndex + selectedItemIndex].price;
+                if (_gameLoadingHandler.playerData.playerMoney >= priceOfItem)
+                    selectedItemQuantity += value;
+                else
+                    _dialogueHandler.DisplayDetails("Not enough money to buy that much!");
+            }
+            else
+                selectedItemQuantity = 99;
+        }
+    }
+    private void ViewStore(Interaction clerkInteraction, int optionChosen)
+    {
+        if (clerkInteraction.overworldInteraction != OverworldInteractionType.Clerk) return;
+        _dialogueHandler.EndDialogue();
+        
+        if (optionChosen > 0) return;
+        
+        if(currentMartData!=null){
+            if (currentMartData.location == clerkInteraction.location)
+            {//basically caching
+                SetUpItemView();
+                return;
+            }
+        }
+        var allData = Resources.LoadAll<PokeMartData>(
+            DirectoryHandler.GetDirectory(AssetDirectory.PokeMartData));
+        
+        currentMartData = allData.FirstOrDefault(data => data.location == clerkInteraction.location);
+        if (currentMartData == null)
+        {
+            Debug.LogWarning($"No mart data for location{clerkInteraction.location}");
+            return;
+        }
+        currentStoreItems.Clear();
+        var orderedItems = currentMartData.availableItems.OrderBy(item => item.price);
+        var itemGroups = orderedItems.GroupBy(item => item.itemType).ToList();
+        
+        foreach (var group in itemGroups)
+        {
+            foreach (var item in group)
+            {
+                currentStoreItems.Add(item);
+            }
+        }
+        SetUpItemView();
+    }
+   
+    private void SetUpItemView()
+    {
+        viewingStore = true;
+        playerMoneyText.text = _gameLoadingHandler.playerData.playerMoney.ToString();
+        topIndex = 0;
+        numItems = currentStoreItems.Count;
+        //if less than amount of ui elements, load that number, otherwise just load the first seven
+        numItemsForView = (numItems < numDisplayableItems+1) ? numItems : numDisplayableItems; 
+        for (int i = 0; i < numItemsForView; i++)
+        {
+            storeItemsUI[i].item = currentStoreItems[i];
+            storeItemsUI[i].gameObject.SetActive(true);
+            storeItemsUI[i].LoadItemUI();
+        }
+        SelectItem();
+        _gameUIHandler.ViewPokeMart();
+    }
+    public void ExitStore()
+    {
+        selectedItemIndex = 0;
+        quantityUI.SetActive(false);
+        foreach (var item in storeItemsUI)
+            item.ClearUI();
+        viewingStore = false;
+    }
+    void ReloadItems()
+    {
+        foreach (var item in storeItemsUI)
+            item.LoadItemUI();
+        SelectItem();
+    }
+}

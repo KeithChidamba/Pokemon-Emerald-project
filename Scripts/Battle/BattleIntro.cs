@@ -41,16 +41,16 @@ public class BattleIntro : MonoBehaviour,IInjectable
     public List<BattlePokeball> thrownPokeballs;
     private List<string> challengers = new ();
     
-    private Dialogue_handler _dialogueHandler;
-    private Battle_handler _battleHandler;
+    private DialogueHandler _dialogueHandler;
+    private BattleHandler _battleHandler;
     private WildPokemonAiHandler _wildPokemonHandler;
     private BattleVisuals _battleVisualsHandler;
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
-        _battleHandler = container.Resolve<Battle_handler>();
+        _battleHandler = container.Resolve<BattleHandler>();
         _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         gameObject.SetActive(true);
     }
@@ -323,7 +323,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         }
     }
 
-    public IEnumerator SwitchInPokemon(Battle_Participant swapParticipant, Pokemon newPokemon,bool normalIntentionalSwitch=true)
+    public IEnumerator SwitchInPokemon(BattleParticipant swapParticipant, Pokemon newPokemon,bool normalIntentionalSwitch=true)
     {
         if(!swapParticipant.isPlayer)
         {
@@ -355,7 +355,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
     }
 
 
-    private IEnumerator PokemonIntroAnimationMovement(Battle_Participant participant)
+    private IEnumerator PokemonIntroAnimationMovement(BattleParticipant participant)
     {
         if (participant.pokemon.statusEffect == StatusEffect.Sleep)
         {
@@ -395,7 +395,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
             yield return StartCoroutine(BattleVisuals.SlideRect(rect, rect.anchoredPosition, target, movementSpeed));
         }
     }
-    public IEnumerator PokemonIntroAnimation(Battle_Participant participant)
+    public IEnumerator PokemonIntroAnimation(BattleParticipant participant)
     {
         if (participant.pokemon.statusEffect == StatusEffect.Sleep)
         {

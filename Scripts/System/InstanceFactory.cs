@@ -32,7 +32,7 @@ public static class InstanceFactory
         newMove.canCauseConfusion = m.canCauseConfusion;
         newMove.canTrap = m.canTrap;
         newMove.canInfatuate = m.canInfatuate;
-        newMove.isBuffOrDebuff = m.isBuffOrDebuff;
+        newMove.canChangeStats = m.canChangeStats;
         newMove.isConsecutive = m.isConsecutive;
         newMove.isSelfTargeted = m.isSelfTargeted;
         newMove.isMultiTarget = m.isMultiTarget;
@@ -107,11 +107,11 @@ public static class InstanceFactory
         newPokemon.types = pkm.types;
         newPokemon.statusEffect = pkm.statusEffect;
         
-        foreach (var buff in pkm.buffAndDebuffs)
+        foreach (var mod in pkm.statModifiers)
         {
-            newPokemon.buffAndDebuffs.Clear();
-            var copyBuff = new Buff_Debuff(buff.stat, buff.stage, buff.isAtLimit);
-            newPokemon.buffAndDebuffs.Add(copyBuff);
+            newPokemon.statModifiers.Clear();
+            var copyMod = new StatChangeData(mod.stat, mod.stage, mod.isAtLimit);
+            newPokemon.statModifiers.Add(copyMod);
         }
         
         newPokemon.currentEvolutionLineIndex = pkm.currentEvolutionLineIndex;

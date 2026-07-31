@@ -8,7 +8,7 @@ public class GeneralItemUiObjective : ItemUiObjective
     {
         EquipItem,UseItem
     }
-    private Item_handler _itemHandler;
+    private ItemHandler _itemHandler;
     [SerializeField] private ItemObjectiveType itemObjectiveType;
     
     protected override void LogicForObjectiveLoad()
@@ -21,7 +21,7 @@ public class GeneralItemUiObjective : ItemUiObjective
     }
     private void SetupItemEquipObjective()
     {
-        var overworldActions = serviceContainer.Resolve<overworld_actions>();
+        var overworldActions = serviceContainer.Resolve<OverworldActionsHandler>();
         var playerBag = serviceContainer.Resolve<Bag>();
         var inputStateHandler = serviceContainer.Resolve<InputStateHandler>();
         if (overworldActions.ItemEquipped())
@@ -37,7 +37,7 @@ public class GeneralItemUiObjective : ItemUiObjective
     }
     private void SetupItemUsageObjective()
     {
-        _itemHandler = serviceContainer.Resolve<Item_handler>();
+        _itemHandler = serviceContainer.Resolve<ItemHandler>();
         _itemHandler.OnItemUsed += CheckIfItemUsed;
     }
     private void CheckIfItemUsed(Item itemUsed,bool successful)

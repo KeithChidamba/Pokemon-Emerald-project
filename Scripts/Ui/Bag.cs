@@ -25,7 +25,7 @@ public class Bag : MonoBehaviour,IInjectable
     };
     [SerializeField]private int currentCategoryIndex;
     private BagCategory[] _categories;
-    public Item_ui[] bagItemsUI;
+    public ItemUi[] bagItemsUI;
     public int NumItems { get; private set; }
     public int NumItemsForView { get; private set; }
     [SerializeField]private int selectedItemIndex;
@@ -63,27 +63,27 @@ public class Bag : MonoBehaviour,IInjectable
     public event Action OnBagOpened;//bag managed, optional self
     
     public event Action<Item> OnItemSold;
-    private Pokemon_party _pokemonPartyHandler;
+    private PokemonPartyHandler _pokemonPartyHandler;
     private ItemStorageHandler _itemStorageHandler;
     private InputStateHandler _inputStateHandler;
-    private Dialogue_handler _dialogueHandler;
-    private Battle_handler _battleHandler;
-    private Game_ui_manager _gameUIHandler;
-    private Game_Load _gameLoadingHandler;
-    private Item_handler _itemHandler;
-    private overworld_actions _overworldActions;
+    private DialogueHandler _dialogueHandler;
+    private BattleHandler _battleHandler;
+    private GameUiHandler _gameUIHandler;
+    private GameLoadingHandler _gameLoadingHandler;
+    private ItemHandler _itemHandler;
+    private OverworldActionsHandler _overworldActions;
     
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _battleHandler = container.Resolve<Battle_handler>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
-        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _gameUIHandler = container.Resolve<GameUiHandler>();
+        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
-        _gameLoadingHandler = container.Resolve<Game_Load>();
-        _itemHandler = container.Resolve<Item_handler>();
-        _overworldActions = container.Resolve<overworld_actions>();
+        _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
+        _itemHandler = container.Resolve<ItemHandler>();
+        _overworldActions = container.Resolve<OverworldActionsHandler>();
         gameObject.SetActive(true);
     }
 

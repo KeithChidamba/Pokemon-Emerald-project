@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 public class PokemartInputService: IInputGroup
 {
-    private Poke_Mart _pokeMartHandler;
+    private PokeMartHandler _pokeMartHandler;
     private InputStateHandler _inputStateHandler;
     
     public PokemartInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _pokeMartHandler = container.Resolve<Poke_Mart>();
+        _pokeMartHandler = container.Resolve<PokeMartHandler>();
     }
     public void DetermineOperation()
     {

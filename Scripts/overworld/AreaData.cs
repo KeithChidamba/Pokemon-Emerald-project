@@ -37,7 +37,7 @@ public class AreaData
             npc.SetActive(false);
         }
     }
-    public Overworld_interactable CheckForNpcPosition(Vector3 positionToCheck)
+    public OverworldInteractable CheckForNpcPosition(Vector3 positionToCheck)
     {
         foreach (var npc in npcLogicScripts)
         {

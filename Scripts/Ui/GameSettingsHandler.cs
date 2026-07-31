@@ -37,15 +37,15 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     private readonly Dictionary<GameSettingName, Action<int>> _settingsMethods = new ();
     
     private SaveDataHandler _saveDataHandler;
-    private Dialogue_handler _dialogueHandler;
-    private Battle_handler _battleHandler;
+    private DialogueHandler _dialogueHandler;
+    private BattleHandler _battleHandler;
     private InputSourceHandler _inputSourceHandler;
     
     public void Inject(ServiceContainer container)
     {
         _saveDataHandler = container.Resolve<SaveDataHandler>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _battleHandler = container.Resolve<Battle_handler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _battleHandler = container.Resolve<BattleHandler>();
         _inputSourceHandler = container.Resolve<InputSourceHandler>();
         gameObject.SetActive(true);
     }

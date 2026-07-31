@@ -27,7 +27,7 @@ public class MarketUiObjective : ItemUiObjective
 
     private void SetupItemBuyObjective()
     {
-        var pokeMartHandler = serviceContainer.Resolve<Poke_Mart>(); 
+        var pokeMartHandler = serviceContainer.Resolve<PokeMartHandler>(); 
        pokeMartHandler.OnItemBought += CheckForItemObjectiveClear;
     }
   

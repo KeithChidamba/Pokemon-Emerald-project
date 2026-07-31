@@ -9,15 +9,15 @@ public class WildBattleObjective : StoryObjective
     public BattleObjectiveOutline objectiveOutline;
     public BattleEncounterSource encounterSourceForObjective;
     public Pokemon pokemonForObjective;
-    private Battle_handler _battleHandler;
-    private Encounter_handler  _encounterHandler;
+    private BattleHandler _battleHandler;
+    private EncounterHandler  _encounterHandler;
     private PokemonOperations _pokemonOperationsHandler;
     
     protected override void OnObjectiveLoaded()
     {
-        var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
-        _encounterHandler = serviceContainer.Resolve<Encounter_handler>(); 
-        _battleHandler = serviceContainer.Resolve<Battle_handler>(); 
+        var dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
+        _encounterHandler = serviceContainer.Resolve<EncounterHandler>(); 
+        _battleHandler = serviceContainer.Resolve<BattleHandler>(); 
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>(); 
         
         if (objectiveOutline == BattleObjectiveOutline.BeatWildPokemon)

@@ -20,16 +20,16 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     public Sprite faintedPokeballSlot;
     
     private BattleVisuals _battleVisualsHandler;
-    private Pokemon_party _pokemonPartyHandler;
+    private PokemonPartyHandler _pokemonPartyHandler;
     private BattleIntro _battleIntroHandler;
-    private Battle_handler _battleHandler;
+    private BattleHandler _battleHandler;
 
     public void Inject(ServiceContainer container)
     {
         _battleVisualsHandler = container.Resolve<BattleVisuals>();
-        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
-        _battleHandler = container.Resolve<Battle_handler>();
+        _battleHandler = container.Resolve<BattleHandler>();
     }
     public void OnInject()
     {

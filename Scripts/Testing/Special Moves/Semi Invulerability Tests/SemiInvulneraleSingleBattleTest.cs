@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
 {
-    private Battle_handler _battleHandler;
-    private Pokemon_party _pokemonPartyHandler;
-    private Turn_Based_Combat _turnBasedCombatHandler;
-    private Move_handler _moveUsageHandler;
+    private BattleHandler _battleHandler;
+    private PokemonPartyHandler _pokemonPartyHandler;
+    private TurnBasedCombatHandler _turnBasedCombatHandler;
+    private MoveSequenceHandler _moveUsageHandler;
     
     private MoveTestActionSequencer _sequencer;
     private bool _testPassing;
@@ -18,10 +18,10 @@ public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
-        _battleHandler = container.Resolve<Battle_handler>();
-        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
-        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
-        _moveUsageHandler = container.Resolve<Move_handler>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
+        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
+        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
         _sequencer = new MoveTestActionSequencer(container,1);
         testName = "Semi Invulnerability Single Battle Test";
@@ -59,7 +59,6 @@ public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
         var semiData = player.pokemon.moveSet[0].GetModule<SemiInvulnerabilityInfo>().semiInvulnerabilities;
         semiData[0].damageMultiplier = 2f;//just for testing damage change
         var movesThatCounter = semiData.Select(data => data.moveName).ToList();
-        Debug.Log($"using {movesThatCounter[0]} as counter");
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         //enemy will use tackle but disguised as a counter viable move

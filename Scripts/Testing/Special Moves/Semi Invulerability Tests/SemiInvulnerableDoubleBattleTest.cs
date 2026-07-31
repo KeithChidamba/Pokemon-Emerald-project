@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class SemiInvulnerableDoubleBattleTest : BattleMoveUsageTest
 {
-    private Battle_handler _battleHandler;
-    private Turn_Based_Combat _turnBasedCombatHandler;
+    private BattleHandler _battleHandler;
+    private TurnBasedCombatHandler _turnBasedCombatHandler;
     
     private MoveTestActionSequencer _sequencer;
 
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
-        _battleHandler = container.Resolve<Battle_handler>();
-        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         /*This test exists to just test that single battle logic doesn't
         break here*/
         testName = "Semi Invulnerability Double Battle Test";

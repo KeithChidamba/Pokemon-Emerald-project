@@ -8029,15 +8029,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _turnHistory: []
   currentTurnIndex: 0
-  currentWeather:
-    turnDuration: 0
-    isInfinite: 0
-    weather: 0
-    weatherBegunMessage: 
-    weatherTurnEndMessage: 
-    weatherDamageMessage: 
-    weatherEndMessage: 
-    buffedParticipants: []
   clearWeather:
     turnDuration: 0
     isInfinite: 0
@@ -424255,8 +424246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7816aa2006983482e93c480d1f51bb74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  environment: 0
-  testRegistry: {fileID: 11400000, guid: 5ec6dc3c8ed0b1568b957f73492d3665, type: 2}
+  environment: 1
 --- !u!1 &1321770489
 GameObject:
   m_ObjectHideFlags: 0
@@ -446553,7 +446543,6 @@ MonoBehaviour:
   - {fileID: 2033618204}
   faintQueue: []
   handlingFaintEvent: 0
-  battleInProgress: 0
   isTrainerBattle: 0
   isDoubleBattle: 0
   validParticipantCount: 0

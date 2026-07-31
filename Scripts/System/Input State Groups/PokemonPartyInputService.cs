@@ -6,16 +6,16 @@ using UnityEngine;
 public class PokemonPartyInputService: IInputGroup
 {
     private Bag _playerBagHandler;
-    private Game_ui_manager _gameUIHandler; 
-    private Pokemon_party _pokemonPartyHandler;
+    private GameUiHandler _gameUIHandler; 
+    private PokemonPartyHandler _pokemonPartyHandler;
     private InputStateHandler _inputStateHandler;
     
     public PokemonPartyInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _gameUIHandler = container.Resolve<GameUiHandler>();
         _playerBagHandler = container.Resolve<Bag>();
-        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
     }
 
     public void DetermineOperation()

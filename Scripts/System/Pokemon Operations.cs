@@ -28,27 +28,27 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     public event Action<Pokemon,bool> OnPokeballUsed;
     
     private WildPokemonAiHandler _wildPokemonHandler;
-    private Pokemon_party _playerParty;
+    private PokemonPartyHandler _playerParty;
     private InputStateHandler _inputStateHandler;
-    private Game_Load _gameHandler;
+    private GameLoadingHandler _gameHandler;
     private BattleVisuals _battleVisuals;
-    private Pokemon_Details _pokemonDetailsHandler;
-    private Dialogue_handler _dialogueHandler;
-    private Game_ui_manager _gameUIManager;
-    private Game_Load _gameLoadingHandler;
+    private PokemonDetailsHandler _pokemonDetailsHandler;
+    private DialogueHandler _dialogueHandler;
+    private GameUiHandler gameUiHandler;
+    private GameLoadingHandler _gameLoadingHandler;
     private BattleOperations _battleOperations;
     
     public void Inject(ServiceContainer container)
     {
         _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _playerParty = container.Resolve<Pokemon_party>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _playerParty = container.Resolve<PokemonPartyHandler>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _battleVisuals = container.Resolve<BattleVisuals>();
-        _gameHandler=container.Resolve<Game_Load>();
-        _pokemonDetailsHandler=container.Resolve<Pokemon_Details>();
-        _gameUIManager = container.Resolve<Game_ui_manager>();
-        _gameLoadingHandler = container.Resolve<Game_Load>();
+        _gameHandler=container.Resolve<GameLoadingHandler>();
+        _pokemonDetailsHandler=container.Resolve<PokemonDetailsHandler>();
+        gameUiHandler = container.Resolve<GameUiHandler>();
+        _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         _battleOperations = container.Resolve<BattleOperations>();
         
         gameObject.SetActive(true);
@@ -317,7 +317,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         _pokemonDetailsHandler.SetUsage(PokemonDetailsUsage.LearnMoves);
         _pokemonDetailsHandler.onMoveSelected += LearnSelectedMoveOperation;
         _dialogueHandler.DisplayBattleInfo("Which move will you replace?",false);
-        _gameUIManager.ViewPartyPokemonDetails(currentPokemon);
+        gameUiHandler.ViewPartyPokemonDetails(currentPokemon);
         _inputStateHandler.OnStateRemoved += SKipMoveCallBack;
         return;
         void LearnSelectedMoveOperation(int moveIndex)
@@ -508,7 +508,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                 callBack?.Invoke(true);
             }
             var maxPokemonNameLength = 12;
-            _gameUIManager.ViewTypingInterface(SetPokemonNickName,
+            gameUiHandler.ViewTypingInterface(SetPokemonNickName,
                 maxPokemonNameLength,
                 new TypingInterfaceGraphicData(
                     false,

@@ -2,20 +2,20 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Objectives/prop based objective/gift pokemon objective")]
 public class GiftPokemonObjective : PropBasedObjective    
 {
-    private Game_ui_manager _gameUIManager;
-    private Dialogue_handler _dialogueHandler;
+    private GameUiHandler gameUiHandler;
+    private DialogueHandler _dialogueHandler;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private OverworldState _overworldStateHandler;
     
     protected override void OnObjectiveLoaded()
     {
-        _dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
         _dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>();
-        _gameUIManager = serviceContainer.Resolve<Game_ui_manager>();
+        gameUiHandler = serviceContainer.Resolve<GameUiHandler>();
         _dialogueHandler.DisplayObjectiveText(objectiveHeading);
         _overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
         _dialogueOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
-        _gameUIManager.SetMenuAccessibility(false);
+        gameUiHandler.SetMenuAccessibility(false);
     }
    
     private void CheckInteractionOption(Interaction interaction, int optionChosen)
@@ -31,7 +31,7 @@ public class GiftPokemonObjective : PropBasedObjective
         
         foreach(var prop in pokeballProps.propsForObjective)
         {
-            var interactionOnProp = prop.propObject.GetComponent<Overworld_interactable>().interaction;
+            var interactionOnProp = prop.propObject.GetComponent<OverworldInteractable>().interaction;
            
             if (interactionOnProp==interaction)
             {
@@ -44,7 +44,7 @@ public class GiftPokemonObjective : PropBasedObjective
                 prop.propState = propState.InAccessible;
             }
         }
-        _gameUIManager.SetMenuAccessibility(true);
+        gameUiHandler.SetMenuAccessibility(true);
         ClearObjective();
     }
    

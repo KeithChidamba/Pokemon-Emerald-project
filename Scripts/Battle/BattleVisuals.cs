@@ -24,13 +24,13 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public event Action OnStatVisualDisplayed;
     private List<Coroutine> _activeSlideCoroutines = new();
     
-    private Dialogue_handler _dialogueHandler;
-    private Battle_handler _battleHandler;
+    private DialogueHandler _dialogueHandler;
+    private BattleHandler _battleHandler;
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _battleHandler = container.Resolve<Battle_handler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _battleHandler = container.Resolve<BattleHandler>();
         gameObject.SetActive(true);
     }
 
@@ -48,16 +48,16 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         statChangeVisuals.Add(Stat.Multi,statChangeSprites[7]);
     }
 
-    public void CancelBuffVisual()
+    public void CancelStatChangeVisual()
     {
         OnStatVisualDisplayed?.Invoke();
     }
-    public void SelectStatChangeVisuals(Stat statChanged,Battle_Participant participant,string message)
+    public void SelectStatChangeVisuals(Stat statChanged,BattleParticipant participant,string message)
     {
         _statChangeMessage = message;
         if (statChanged == Stat.Crit)
         {
-            CancelBuffVisual();
+            CancelStatChangeVisual();
             return;
         }
         _statChangeImages.Clear();
@@ -104,7 +104,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         OnStatVisualDisplayed?.Invoke();
     }
 
-    public IEnumerator DisplayConfusionVisuals(Battle_Participant participant)
+    public IEnumerator DisplayConfusionVisuals(BattleParticipant participant)
     {
         participant.statusEffectAnimator.gameObject.SetActive(true);
         var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
@@ -130,7 +130,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         participant.statusEffectAnimator.gameObject.SetActive(false);
     }
 
-    public IEnumerator DisplayStatusEffectVisuals(Battle_Participant participant)
+    public IEnumerator DisplayStatusEffectVisuals(BattleParticipant participant)
     {
         participant.statusEffectAnimator.gameObject.SetActive(true);
         var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
@@ -174,7 +174,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         participant.statusEffectAnimator.gameObject.SetActive(false);
         yield return null;
     }
-    public IEnumerator DisplayDamageTakenVisual(Battle_Participant participant,DamageSource damageSource)
+    public IEnumerator DisplayDamageTakenVisual(BattleParticipant participant,DamageSource damageSource)
     {
         if(damageSource == DamageSource.Normal)
         {
@@ -281,7 +281,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         yield return new WaitForSeconds(1.6f);
         pokeballImage.SetActive(false);
     }
-    public IEnumerator SendOutEnemyPokemon(Battle_Participant participant)
+    public IEnumerator SendOutEnemyPokemon(BattleParticipant participant)
     {
         int positionIndex;
         int verticalPokeballPos = 300;
@@ -301,7 +301,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         swapOutAnimator.gameObject.SetActive(false);
     }
 
-    public IEnumerator RevealPokemonAfterWithdraw(Battle_Participant participant)
+    public IEnumerator RevealPokemonAfterWithdraw(BattleParticipant participant)
     {
         participant.participantUI.SetActive(true);
         if (!participant.isPlayer)
@@ -319,7 +319,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    public IEnumerator WithdrawPokemon(Battle_Participant participant)
+    public IEnumerator WithdrawPokemon(BattleParticipant participant)
     {
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
         var direction = participant.isPlayer? outOfViewDistance : -outOfViewDistance;
@@ -335,7 +335,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             participant.pokemonImage.color = new Color(0, 0, 0, 0);
         }
     }
-    public IEnumerator SendOutPlayerPokemon(Battle_Participant participant)
+    public IEnumerator SendOutPlayerPokemon(BattleParticipant participant)
     {
         playerBattleAnimator.gameObject.SetActive(true);
         pokeballImage.SetActive(true);

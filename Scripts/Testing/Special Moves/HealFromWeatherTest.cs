@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class HealFromWeatherTest : BattleMoveUsageTest
 {
-    private Battle_handler _battleHandler;
-    private Turn_Based_Combat _turnBasedCombatHandler;
+    private BattleHandler _battleHandler;
+    private TurnBasedCombatHandler _turnBasedCombatHandler;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
-        _battleHandler = container.Resolve<Battle_handler>();
-        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         testName = "Heal From Weather Test";
     }
     

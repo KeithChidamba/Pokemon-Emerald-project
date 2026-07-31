@@ -8,13 +8,13 @@ public class BerryInteractionObjective : InteractionObjective
     public Item berryForObjective;
     protected override void OnObjectiveLoaded()
     {
-        dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
         overworldStateHandler = serviceContainer.Resolve<OverworldState>();
         dialogueHandler.DisplayObjectiveText(objectiveHeading);
         dialogueHandler.OnOptionsDisplayed += CheckInteractionTriggered;
     }
     
-    private void CheckInteractionTriggered(Overworld_interactable interactable)
+    private void CheckInteractionTriggered(OverworldInteractable interactable)
     {
         if (interactionTypeForObjective != interactable.interaction.overworldInteraction) return;
         

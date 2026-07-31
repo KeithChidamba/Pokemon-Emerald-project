@@ -4,15 +4,15 @@ using UnityEngine;
 public class PokemonBattleInputService : IInputGroup
 {
     private InputStateHandler _inputStateHandler;
-    private Battle_handler _battleHandler;
-    private Dialogue_handler _dialogueHandler;
+    private BattleHandler _battleHandler;
+    private DialogueHandler _dialogueHandler;
     private BattleParticipantKey _previousEnemySelection;
     
     public PokemonBattleInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _battleHandler = container.Resolve<Battle_handler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _battleHandler = container.Resolve<BattleHandler>();
     }
     public void DetermineOperation()
     {

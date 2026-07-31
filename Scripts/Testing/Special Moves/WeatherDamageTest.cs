@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class WeatherDamageTest : BattleMoveUsageTest
 {
-    private Battle_handler _battleHandler;
+    private BattleHandler _battleHandler;
     private BattleOperations _battleOperations;
-    private Turn_Based_Combat _turnBasedCombatHandler;
+    private TurnBasedCombatHandler _turnBasedCombatHandler;
     
     private MoveTestActionSequencer _sequencer;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
-        _battleHandler = container.Resolve<Battle_handler>();
+        _battleHandler = container.Resolve<BattleHandler>();
         _battleOperations = container.Resolve<BattleOperations>();
-        _turnBasedCombatHandler = container.Resolve<Turn_Based_Combat>();
+        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         testName = "Weather Damage Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
@@ -59,21 +59,21 @@ public class WeatherDamageTest : BattleMoveUsageTest
         enemy.pokemon.types.Add(rockType);//to test special defense boost from sandstorm
         enemy.pokemon.types.Add(groundType);
         enemyPartner.pokemon.types.Add(steelType);
-        _battleOperations.OnBuffApplied += AwaitBuffAddition;
+        _battleOperations.OnStatChangeApplied += AwaitStatChangeAddition;
         _sequencer.UseMove(1);//Sandstorm
 
     }
-    void AwaitBuffAddition(BuffOperationData operationData)
+    void AwaitStatChangeAddition(StatChangeOperationData operationData)
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        if (operationData.buffData.Receiver.participantKey != enemy.participantKey)
+        if (operationData.statChangeData.receiver.participantKey != enemy.participantKey)
         {
             //only this enemy will receive the rock type buff for special defense
             return;
         }
         
-        testingHandler.LogMessage($"The {operationData.finalBuff.statName} stat is at stage {operationData.finalBuff.stage}" +
-                                  $" and is affecting {operationData.buffData.Receiver.pokemon.pokemonName}"
+        testingHandler.LogMessage($"The {operationData.finalStatData.statName} stat is at stage {operationData.finalStatData.stage}" +
+                                  $" and is affecting {operationData.statChangeData.receiver.pokemon.pokemonName}"
             ,TestLogType.Information);
     }
     public override IEnumerator BeginTest()
@@ -85,7 +85,7 @@ public class WeatherDamageTest : BattleMoveUsageTest
     {
         if (_sequencer.SequenceComplete())
         {
-            _battleOperations.OnBuffApplied -= AwaitBuffAddition;
+            _battleOperations.OnStatChangeApplied -= AwaitStatChangeAddition;
             
             var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
             var enemyPartner = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);

@@ -1,0 +1,173 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
+public class GameLoadingHandler : MonoBehaviour,IInjectable
+{
+    public GameObject loadButton;
+    public GameObject newGameButton;
+    public GameObject uploadButton;
+    public GameObject menuSelector;
+    public GameObject menuUiParent;
+    [SerializeField] private Image _loadingScreen;
+    [SerializeField] private Camera startMenuCam;
+    public GameObject worldMap;
+    public PlayerData playerData;
+    [SerializeField] private List<Sprite> playerWalkSprites;
+    public bool LoadedFromSave { 
+        get;
+        private set;
+    }
+    private bool _saveDataExists;
+    
+    public event Action OnGameStarted;
+    private SaveDataHandler _saveHandler;
+    private DialogueHandler _dialogueHandler;
+    private AreaManager _areaHandler;
+    private PlayerMovementHandler _playerMovement;
+    private OverworldActionsHandler _overworldActions;
+    private Bag _playerBagHandler;
+    private InputStateHandler _inputStateHandler;
+    private GameUiHandler _gameUIHandler;
+    private GameSettingsHandler _gameSettingsHandler;
+    
+    public void Inject(ServiceContainer container)
+    {
+        _playerBagHandler = container.Resolve<Bag>();
+        _saveHandler = container.Resolve<SaveDataHandler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _areaHandler = container.Resolve<AreaManager>();
+        _playerMovement = container.Resolve<PlayerMovementHandler>();
+        _overworldActions = container.Resolve<OverworldActionsHandler>();
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _gameUIHandler = container.Resolve<GameUiHandler>();
+        _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
+        gameObject.SetActive(true);
+    }
+
+    public void OnInject()
+    {
+
+    }
+
+    public void ShowMenuUI(bool dataExists)
+    {
+        _gameSettingsHandler.LoadDefaultState();
+        menuUiParent.SetActive(true);
+        newGameButton.gameObject.SetActive(true);
+        _saveDataExists = dataExists;
+        var menuSelectables = new List<SelectableUI>();
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            _saveDataExists = false;
+            uploadButton.SetActive(true);
+            loadButton.SetActive(false);
+            menuSelectables.Add(new(uploadButton, _saveHandler.UploadSaveZip, true));
+        }
+        else
+        {
+            uploadButton.SetActive(false);
+            loadButton.SetActive(_saveDataExists);
+            if(_saveDataExists)
+            {
+                menuSelectables.Add(new(loadButton, ()=>StartGame(), true));
+            }
+        }
+        menuSelectables.Add(new(newGameButton, NewGame, true));
+        
+        _inputStateHandler.ChangeInputState(new (InputStateName.StartMenu,
+            InputStateGroup.None,false,
+            menuUiParent, InputDirection.Vertical, menuSelectables,
+            menuSelector,true,true,canExit:false),true);
+    }
+
+    private void CreateNewPlayer(string playerName)
+    {
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            StartCoroutine(_saveHandler.CreateDefaultWebglDirectories());
+        }
+        
+        var data = ScriptableObject.CreateInstance<PlayerData>();
+        data.playerName = playerName;
+        data.playerMoney = 300;
+        data.numBadges = 0;
+        data.trainerID = Utility.Random16Bit();
+        data.secretID = Utility.Random16Bit();
+        data.location = AreaName.PlayerGarden;
+        var gardenLocation = _areaHandler.overworldAreas.First(a => a.data.areaName == AreaName.PlayerGarden);
+        data.playerPosition = gardenLocation.tileLocation;
+        playerData = data;
+        StartGame(false);
+    }
+    private void NewGame()
+    {
+        if (_saveDataExists)
+        {
+            _dialogueHandler.DisplayCustomOptions($"Save data detected!, Are you sure you want to erase it?",
+                new[] { "Yes", "No" }, new Action[] { LoadPlayerCreationMenu, null });
+        }
+        else
+        {
+            LoadPlayerCreationMenu();
+        }
+
+        void LoadPlayerCreationMenu()
+        {
+            // Load New Player Page
+            uploadButton.gameObject.SetActive(false);
+            loadButton.gameObject.SetActive(false);
+            newGameButton.gameObject.SetActive(false);
+            menuSelector.SetActive(false);
+           
+            _dialogueHandler.EndDialogue();
+            
+            if (Application.platform != RuntimePlatform.WebGLPlayer)
+            {
+                _saveHandler.EraseSaveData();
+            }
+
+            var playerNameLength = 8;
+            _gameUIHandler.ViewTypingInterface(
+                CreateNewPlayer,
+                playerNameLength,
+                new TypingInterfaceGraphicData(true,
+                    playerWalkSprites,
+                    $"Your Name?",
+                    new Vector2(55,80)));
+        }
+    }
+
+    private IEnumerator GameStartLoading()
+    {
+        _inputStateHandler.ResetRelevantUi(InputStateName.StartMenu,true);
+        _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
+        _dialogueHandler.EndDialogue();
+        OnGameStarted?.Invoke();
+        menuUiParent.SetActive(false);
+       
+        //give everything time to load
+        _loadingScreen.gameObject.SetActive(true);
+        yield return Utility.FadeImage(_loadingScreen,Color.white,0.85f);
+        
+        _loadingScreen.gameObject.SetActive(false);
+        startMenuCam.gameObject.SetActive(false);
+        worldMap.SetActive(true);
+        _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
+        _areaHandler.LoadAreaFromSave(playerData.location);
+    }
+    public void StartGame(bool loadFromSave=true)
+    {
+        LoadedFromSave = loadFromSave;
+        
+        if (loadFromSave) _gameSettingsHandler.ConfigureSavedSettings();
+        
+        StartCoroutine(GameStartLoading());
+    }
+}
+

@@ -30,10 +30,10 @@ public class NpcMovement : MonoBehaviour,IInjectable
     public event Action OnMovementEnded;
     
     
-    private Player_movement _playerMovement;
+    private PlayerMovementHandler _playerMovement;
     public void Inject(ServiceContainer container)
     {
-        _playerMovement = container.Resolve<Player_movement>();
+        _playerMovement = container.Resolve<PlayerMovementHandler>();
     }
 
     public void OnInject()

@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class MultiTargetDamageTest : BattleMoveUsageTest
 {
-    private Battle_handler _battleHandler;
+    private BattleHandler _battleHandler;
     private MoveTestActionSequencer _sequencer;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
-        _battleHandler = container.Resolve<Battle_handler>();
+        _battleHandler = container.Resolve<BattleHandler>();
         testName = "Multi Target Damage Test";
         
         testExitCondition = TestCompletionCondition.EndManually;

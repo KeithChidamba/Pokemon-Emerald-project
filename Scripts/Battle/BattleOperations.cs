@@ -5,21 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 
 [Serializable]
-public class BuffOperationData
+public class StatChangeOperationData
 {
-    public BuffDebuffData buffData;
-    public Buff_Debuff finalBuff;
+    public StatChangeTransitData statChangeData;
+    public StatChangeData finalStatData;
 
-    public BuffOperationData(BuffDebuffData buffData, Buff_Debuff finalBuff)
+    public StatChangeOperationData(StatChangeTransitData statChangeData, StatChangeData finalStatData)
     {
-        this.buffData = buffData;
-        this.finalBuff = finalBuff;
+        this.statChangeData = statChangeData;
+        this.finalStatData = finalStatData;
     }
 }
 
 public class BattleOperations : MonoBehaviour,IInjectable
 {   
-    public event Action<BuffOperationData> OnBuffApplied;
+    public event Action<StatChangeOperationData> OnStatChangeApplied;
         
     private BattleVisuals _battleVisualsHandler;
     private PokemonOperations _pokemonOperations;
@@ -51,7 +51,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
                 return true;
         return false;
     }
-    public float CheckTypeEffectiveness(Battle_Participant victim,Type enemyType)
+    public float CheckTypeEffectiveness(BattleParticipant victim,Type enemyType)
     {
         float effectiveness = 1;
         if (victim.additionalTypeImmunity!=null)
@@ -115,42 +115,41 @@ public class BattleOperations : MonoBehaviour,IInjectable
         return true;
     }
     
-//Buffs
-public string AttemptBuffOperation(BuffDebuffData data)
+public string AttemptStatChangeOperation(StatChangeTransitData data)
 {
-    var desiredBuff = SearchForBuffOrDebuff(data.Receiver.pokemon, data.Stat);
-    if (desiredBuff == null)
+    var desiredModifier = SearchForStatModifier(data.receiver.pokemon, data.stat);
+    if (desiredModifier == null)
     {
-        desiredBuff = CreateNewBuff(data.Stat);
-        data.Receiver.pokemon.buffAndDebuffs.Add(desiredBuff);
+        desiredModifier = CreateNewStatModifier(data.stat); 
+        data.receiver.pokemon.statModifiers.Add(desiredModifier);
     }
 
     string message;
-    bool increased = data.IsIncreasing;
+    bool increased = data.isIncreasing;
 
-    int upperLimit = desiredBuff.stat == Stat.Crit ? 2 : 5;
-    int lowerLimit = desiredBuff.stat == Stat.Crit ? 1 : -5;
+    int upperLimit = desiredModifier.stat == Stat.Crit ? 2 : 5;
+    int lowerLimit = desiredModifier.stat == Stat.Crit ? 1 : -5;
     
-    int oldStage = desiredBuff.stage;
+    int oldStage = desiredModifier.stage;
    
-    int delta = increased ? data.EffectAmount : -data.EffectAmount;
+    int delta = increased ? data.effectAmount : -data.effectAmount;
     
     int newStage = math.clamp(oldStage + delta, lowerLimit, upperLimit);
     
     if (newStage == oldStage)
     {
-        desiredBuff.isAtLimit = true;
+        desiredModifier.isAtLimit = true;
 
         message = increased
-            ? $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} can't go any higher!"
-            : $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} can't go any lower!";
+            ? $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any higher!"
+            : $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any lower!";
 
-        _battleVisualsHandler.CancelBuffVisual();
+        _battleVisualsHandler.CancelStatChangeVisual();
     }
     else
     {
-        desiredBuff.isAtLimit = false;
-        desiredBuff.stage = newStage;
+        desiredModifier.isAtLimit = false;
+        desiredModifier.stage = newStage;
 
         int actualChange = math.abs(newStage - oldStage);
 
@@ -158,55 +157,55 @@ public string AttemptBuffOperation(BuffDebuffData data)
         {
             message = actualChange switch
             {
-                1 => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} rose!",
-                2 => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} rose sharply!",
-                _ => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} rose drastically!"
+                1 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose!",
+                2 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose sharply!",
+                _ => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose drastically!"
             };
         }
         else
         {
             message = actualChange switch
             {
-                1 => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} fell!",
-                2 => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} harshly fell!",
-                _ => $"{data.Receiver.pokemon.pokemonDisplayName}'s {desiredBuff.statName} severely fell!"
+                1 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} fell!",
+                2 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} harshly fell!",
+                _ => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} severely fell!"
             };
         }
     }
     
-    OnBuffApplied?.Invoke(new(data,desiredBuff));
+    OnStatChangeApplied?.Invoke(new(data,desiredModifier));
 
     return message;
 }
-    public string GetBuffResultMessage(bool isIncreasing,Pokemon pokemon,Stat[] buffs)
+    public string GetStatModResultMessage(bool isIncreasing,Pokemon pokemon,Stat[] stats)
     {
         //shorten stat names to be more readable
-        string buffNameString=""; 
-        List<string> shortBuffNames = new();
-        foreach (var buff in buffs)
+        string statNameString = ""; 
+        List<string> shortStatNames = new();
+        foreach (var stat in stats)
         {
-            shortBuffNames.Add(NameDB.GetShortStatName(buff));
+            shortStatNames.Add(NameDB.GetShortStatName(stat));
         }
-        for (int i = 0; i < shortBuffNames.Count; i++) 
+        for (int i = 0; i < shortStatNames.Count; i++) 
         {
-            if (i == shortBuffNames.Count - 1)
-                buffNameString += shortBuffNames[i];
-            else if(i == shortBuffNames.Count - 2)
-                buffNameString += shortBuffNames[i] + " and ";
+            if (i == shortStatNames.Count - 1) 
+                statNameString += shortStatNames[i];
+            else if(i == shortStatNames.Count - 2)
+                statNameString += shortStatNames[i] + " and ";
             else
-                buffNameString += shortBuffNames[i] + ", ";
+                statNameString += shortStatNames[i] + ", ";
         }
-        if(isIncreasing) return pokemon.pokemonDisplayName+"'s "+buffNameString+" rose";
+        if(isIncreasing) return pokemon.pokemonDisplayName+"'s "+statNameString+" rose";
         
-        return pokemon.pokemonDisplayName+"'s "+buffNameString+" fell";
+        return pokemon.pokemonDisplayName+"'s "+statNameString+" fell";
     }
 
-    private Buff_Debuff CreateNewBuff( Stat statName)
+    private StatChangeData CreateNewStatModifier( Stat statName)
     {
-        return new Buff_Debuff(statName,0);
+        return new StatChangeData(statName,0);
     }
-    public Buff_Debuff SearchForBuffOrDebuff(Pokemon pokemon, Stat stat)
+    public StatChangeData SearchForStatModifier(Pokemon pokemon, Stat stat)
     {
-        return pokemon.buffAndDebuffs.FirstOrDefault(b=>b.stat==stat);
+        return pokemon.statModifiers.FirstOrDefault(b=>b.stat==stat);
     }
 }

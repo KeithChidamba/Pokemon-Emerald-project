@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class HealthDrainTest : BattleMoveUsageTest
 {
-    private Battle_handler _battleHandler;
+    private BattleHandler _battleHandler;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
-        _battleHandler = container.Resolve<Battle_handler>();
+        _battleHandler = container.Resolve<BattleHandler>();
         testName = "Health Drain Test";
     }
     

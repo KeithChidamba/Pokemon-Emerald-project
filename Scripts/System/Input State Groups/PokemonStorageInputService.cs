@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class PokemonStorageInputService: IInputGroup
 {
-    private pokemon_storage _pokemonStorageHandler;
+    private PokemonStorageHandler _pokemonStorageHandler;
     private InputStateHandler _inputStateHandler;
     
     public PokemonStorageInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _pokemonStorageHandler = container.Resolve<pokemon_storage>();
+        _pokemonStorageHandler = container.Resolve<PokemonStorageHandler>();
     }
     public void DetermineOperation()
     {
@@ -38,7 +38,7 @@ public class PokemonStorageInputService: IInputGroup
     
     private void StorageFullBoxNavigation()
     {
-        _inputStateHandler.SetupFullBoxNavigation(pokemon_storage.BoxCapacity,pokemon_storage.BoxCapacity,pokemon_storage.BoxColumns);
+        _inputStateHandler.SetupFullBoxNavigation(PokemonStorageHandler.BoxCapacity,PokemonStorageHandler.BoxCapacity,PokemonStorageHandler.BoxColumns);
         
         _inputStateHandler.currentState.canExit = false;
         _inputStateHandler.OnSelectionIndexChanged += _pokemonStorageHandler.LoadPokemonData;
@@ -63,7 +63,7 @@ public class PokemonStorageInputService: IInputGroup
     private void PokemonStorageBoxChange()
     {
         var storageSelectables = new List<SelectableUI>();
-        for (int i = 0; i < pokemon_storage.NumBoxes; i++)
+        for (int i = 0; i < PokemonStorageHandler.NumBoxes; i++)
         {
             storageSelectables.Add(new(_pokemonStorageHandler.boxTopVisualImage.gameObject,null, true));
         }
@@ -83,7 +83,7 @@ public class PokemonStorageInputService: IInputGroup
         foreach (var icon in _pokemonStorageHandler.nonPartyIcons)
         { 
             var newSelectable = new SelectableUI(icon.gameObject,
-                ()=>_pokemonStorageHandler.SelectNonPartyPokemon(icon.GetComponent<PC_pkm>())
+                ()=>_pokemonStorageHandler.SelectNonPartyPokemon(icon.GetComponent<PcStoragePokemon>())
                 , true);
             storageBoxSelectables.Add(newSelectable);
         }

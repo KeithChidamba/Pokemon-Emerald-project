@@ -7,14 +7,14 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
 {
     private MoveTestActionSequencer _sequencer;
     
-    private Battle_handler _battleHandler;
-    private Pokemon_party _pokemonPartyHandler;
+    private BattleHandler _battleHandler;
+    private PokemonPartyHandler _pokemonPartyHandler;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
-        _battleHandler = container.Resolve<Battle_handler>();
-        _pokemonPartyHandler = container.Resolve<Pokemon_party>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _sequencer = new MoveTestActionSequencer(container,1);
         testName = "Identify Target Test";
         testExitCondition = TestCompletionCondition.EndManually;
@@ -35,7 +35,7 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
-    private void CheckMoveEffectRemoval(Battle_Participant swapParticipant)
+    private void CheckMoveEffectRemoval(BattleParticipant swapParticipant)
     {
         if(swapParticipant.participantKey == BattleParticipantKey.Player)
         {
@@ -66,7 +66,7 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
     }
 
 
-    private void LogImmunityState(Battle_Participant enemy)
+    private void LogImmunityState(BattleParticipant enemy)
     {
         if (enemy.immunityNegations.Count > 0)
         {
@@ -80,7 +80,7 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
             testingHandler.LogMessage($"Victim has an evasion of: {enemy.pokemon.evasion}",
                 TestLogType.Information);
 
-            testingHandler.LogMessage($"Victim has buff count: {enemy.pokemon.buffAndDebuffs.Count}",
+            testingHandler.LogMessage($"Victim has buff count: {enemy.pokemon.statModifiers.Count}",
                 TestLogType.Information);
         }            
         else
@@ -101,7 +101,7 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
             enemy.pokemon.types.Clear();
             var ghostType = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ghost);
             enemy.pokemon.types.Add(ghostType);
-            enemy.pokemon.buffAndDebuffs.Add(new Buff_Debuff(Stat.Evasion,1));
+            enemy.pokemon.statModifiers.Add(new StatChangeData(Stat.Evasion,1));
             enemy.pokemon.evasion = 133f;
         }
         if (_sequencer.CanDisplayCurrentLogs())

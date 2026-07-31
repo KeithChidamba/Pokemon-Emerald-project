@@ -1,0 +1,162 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+
+public class InteractionHandler : MonoBehaviour,IInjectable
+{
+    [SerializeField] LayerMask interactable;
+    [SerializeField] Transform interactionPoint;
+    private bool _canCheckForInteraction;
+    private bool _stopInteractions;
+    private bool _interactionCooldown;
+    public Tilemap waterTilemap;
+    public Tilemap interactionTilemap;
+
+    private OverworldActionsHandler _overworldActions;
+    private InputStateHandler _inputStateHandler;
+    private DialogueHandler _dialogueHandler;
+    private PlayerMovementHandler _playerMovementHandler;
+    private AreaManager _areaManager;
+    private OverworldState _overworldState;
+    
+    public void Inject(ServiceContainer container)
+    {
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _overworldActions = container.Resolve<OverworldActionsHandler>();
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
+        _areaManager = container.Resolve<AreaManager>();
+        _overworldState = container.Resolve<OverworldState>();
+    }
+    public void OnInject()
+    {
+        _stopInteractions = false;
+        _canCheckForInteraction = true;
+        gameObject.SetActive(true);
+    }
+    void Update()
+    {
+        if(_inputStateHandler.IsEmptyState && !_stopInteractions)
+        {
+            if (InputSourceHandler.InputPressed(ControlEvent.Confirm) ||  InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
+            {
+                if (_canCheckForInteraction)
+                    RaycastForInteraction();
+            }
+            
+            if (InputSourceHandler.InputRelease(ControlEvent.UseSpecialItem) || InputSourceHandler.InputRelease(ControlEvent.Confirm))
+            {
+                _canCheckForInteraction = true;
+            }
+        }
+
+    }
+    public void DisableInteraction()
+    {
+        _stopInteractions = true;
+    }
+    public void AllowInteraction()
+    {
+        if (_interactionCooldown) return;
+        _interactionCooldown = true;
+        StartCoroutine(SetInteractionAllowed());
+    }
+
+    private IEnumerator SetInteractionAllowed()
+    {
+        yield return new WaitForSeconds(1f);
+        _stopInteractions = false;
+        _interactionCooldown = false;
+    }
+    
+    private void RaycastForInteraction()
+    {
+        _canCheckForInteraction = false;
+
+        var directionVector = _playerMovementHandler.GetPlayerDirectionAsVector2();
+
+        Vector2 origin = (Vector2)interactionPoint.position + directionVector * 0.1f;
+       
+         var hit = Physics2D.Raycast(
+             origin,
+             directionVector,
+             1f,interactable
+         );
+        var playerPos = _playerMovementHandler.GetPlayerPosition();
+        var tileInFrontOfPlayer = new Vector3(playerPos.x + directionVector.x, playerPos.y + directionVector.y, 0);
+        
+        if (hit.transform)
+        {
+            if (InputSourceHandler.InputPressed(ControlEvent.Confirm))
+            {
+                var possibleNpcInteractable = _areaManager.currentArea.CheckForNpcPosition(tileInFrontOfPlayer);
+                if (possibleNpcInteractable != null) 
+                {
+                    _dialogueHandler.StartInteraction(possibleNpcInteractable); 
+                }
+                else
+                {
+                    var interactableTile = PlayerTileHandler.FindTileAtPosition<InteractionTile>(interactionTilemap,tileInFrontOfPlayer);
+                    if (interactableTile != null)
+                    {
+                        _dialogueHandler.StartInteraction(interactableTile.interaction);
+                    }
+                    else
+                    {
+                        var interactableObject = hit.transform.GetComponent<OverworldInteractable>();
+                        if (interactableObject != null)
+                        {
+                            _dialogueHandler.StartInteraction(interactableObject);
+                        }
+                        else
+                        {
+                            if (_overworldState.PickupItemFound(tileInFrontOfPlayer))
+                            {
+                                Destroy(hit.transform.gameObject); 
+                            }
+                        }
+                    }
+                }
+            }
+            if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem)
+                && _overworldActions.IsEquipped(Equipable.FishingRod))
+            {
+                if (hit.transform.gameObject.CompareTag("Water"))
+                {
+                    EncounterTable tableOfEncounter;
+                    var animatedWaterTile = PlayerTileHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point);
+                    if (animatedWaterTile == null)
+                    {
+                        var stillWaterTile  = PlayerTileHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
+                        if (stillWaterTile == null)
+                        {
+                            Debug.LogError("hit water tilemap but no tile data");
+                            return;
+                        }
+                        tableOfEncounter = stillWaterTile.table;
+                    }
+                    else
+                    {
+                        tableOfEncounter = animatedWaterTile.table;
+                    }
+                    _overworldActions.fishingTable = (FishingEncounterTable)tableOfEncounter;
+                    _dialogueHandler.DisplayCustomOptions("Would you like to fish for pokemon"
+                       , new[]{"Yes", "No"},new Action[] { _overworldActions.PlayFishingAnimation, null });
+                }
+                else
+                {
+                    _dialogueHandler.DisplayDetails("Cant fish here");
+                }
+            }
+        }
+        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem)
+            && !hit.transform
+            && _overworldActions.IsEquipped(Equipable.FishingRod))
+        {
+            _dialogueHandler.DisplayDetails("Cant fish here");
+        }
+    }
+}

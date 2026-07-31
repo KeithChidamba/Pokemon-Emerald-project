@@ -8,14 +8,14 @@ public class PlayerBagInputService : IInputGroup
     private Bag _playerBagHandler;
     private ItemStorageHandler _itemStorageHandler;
     private InputStateHandler _inputStateHandler;
-    private Dialogue_handler _dialogueHandler;
+    private DialogueHandler _dialogueHandler;
     
     public PlayerBagInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _playerBagHandler = container.Resolve<Bag>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
     }
     public void DetermineOperation()
     {

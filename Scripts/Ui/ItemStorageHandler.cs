@@ -7,15 +7,15 @@ public class ItemStorageHandler : MonoBehaviour,IInjectable
 {
     public ItemUsage currentUsage;
     
-    private Game_ui_manager _gameUIHandler;
-    private Dialogue_handler _dialogueHandler;
+    private GameUiHandler _gameUIHandler;
+    private DialogueHandler _dialogueHandler;
     private Bag _playerBagHandler;
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
         _playerBagHandler = container.Resolve<Bag>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _gameUIHandler = container.Resolve<GameUiHandler>();
         gameObject.SetActive(true);
     }
 

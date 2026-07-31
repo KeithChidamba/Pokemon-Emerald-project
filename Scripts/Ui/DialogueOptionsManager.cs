@@ -12,10 +12,10 @@ public class DialogueOptionsManager : MonoBehaviour,IInjectable
     private RectTransform _rectTransform;
     private int _selectorWidth = 40;
     
-    private Dialogue_handler _dialogueHandler;
+    private DialogueHandler _dialogueHandler;
     public void Inject(ServiceContainer container)
     {
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
     }
     
     public void OnInject()

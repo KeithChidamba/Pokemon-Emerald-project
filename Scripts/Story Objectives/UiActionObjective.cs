@@ -2,7 +2,7 @@ public class UiActionObjective : StoryObjective
 {
     protected override void OnObjectiveLoaded()
     {
-        var dialogueHandler = serviceContainer.Resolve<Dialogue_handler>(); 
+        var dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
         dialogueHandler.DisplayObjectiveText(objectiveHeading);
         LogicForObjectiveLoad();
     }

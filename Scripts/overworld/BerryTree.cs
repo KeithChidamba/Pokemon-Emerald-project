@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BerryTree : MonoBehaviour
 {
-    public Overworld_interactable primaryInteractable;
+    public OverworldInteractable primaryInteractable;
     public Interaction harvestInteraction;
     public Interaction plantInteraction;
     public Interaction waterInteraction;
@@ -16,26 +16,26 @@ public class BerryTree : MonoBehaviour
 
     public event Action<bool> OnInteractionComplete;
 
-    private Dialogue_handler _dialogueHandler;
+    private DialogueHandler _dialogueHandler;
     private Bag _playerBag;
-    private Game_ui_manager _gameUIHandler;
+    private GameUiHandler _gameUIHandler;
     private InputStateHandler _inputStateHandler;
-    private overworld_actions _overworldActions;
+    private OverworldActionsHandler _overworldActions;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     
     public void Inject(ServiceContainer container)
     {
         //this class is instantiated, so it doesn't get dependencies until later
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
-        _overworldActions = container.Resolve<overworld_actions>();
+        _overworldActions = container.Resolve<OverworldActionsHandler>();
         _playerBag = container.Resolve<Bag>();
-        _dialogueHandler = container.Resolve<Dialogue_handler>();
-        _gameUIHandler = container.Resolve<Game_ui_manager>();
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _gameUIHandler = container.Resolve<GameUiHandler>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += ChooseBerryToPlant;
         _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += HarvestBerries;
         _dialogueOptionsHandler.OnOverworldInteractionOptionChosen += WaterTree;
-        primaryInteractable = GetComponent<Overworld_interactable>();
+        primaryInteractable = GetComponent<OverworldInteractable>();
         gameObject.SetActive(true);
     }
     
@@ -139,7 +139,7 @@ public class BerryTree : MonoBehaviour
         }
     }
 
-    private void WaterTree(Overworld_interactable interactable,int optionChosen)
+    private void WaterTree(OverworldInteractable interactable,int optionChosen)
     {
         if (interactable != primaryInteractable) return;
         if (interactable.interaction.overworldInteraction != OverworldInteractionType.WaterBerryTree) return;
@@ -174,7 +174,7 @@ public class BerryTree : MonoBehaviour
         OnInteractionComplete?.Invoke(true);
         SetInteraction(OverworldInteractionType.None);
     }
-    private void ChooseBerryToPlant(Overworld_interactable interactable,int optionChosen)
+    private void ChooseBerryToPlant(OverworldInteractable interactable,int optionChosen)
     {
         if (treeData.isPlanted) return;
         if (interactable != primaryInteractable) return;
@@ -225,7 +225,7 @@ public class BerryTree : MonoBehaviour
         var bracket2= bracket1 * treeData.numStagesWatered;
         return treeData.minYield + bracket2 + Utility.RandomRange(0,bracket1);
     }
-    private void HarvestBerries(Overworld_interactable interactable, int optionChosen)
+    private void HarvestBerries(OverworldInteractable interactable, int optionChosen)
     {
         if (interactable != primaryInteractable) return;
         if (interactable.interaction.overworldInteraction != OverworldInteractionType.PickBerry) return;

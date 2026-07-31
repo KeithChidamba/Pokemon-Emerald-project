@@ -10,11 +10,11 @@ public class PokemonStorageObjective : UiActionObjective
     }
     [SerializeField] private StorageObjectiveType storageObjectiveType;
     public Pokemon pokemonForObjective;
-    private pokemon_storage _pokemonStorageHandler;
+    private PokemonStorageHandler _pokemonStorageHandler;
     
     protected override void LogicForObjectiveLoad()
     {
-        _pokemonStorageHandler = serviceContainer.Resolve<pokemon_storage>(); 
+        _pokemonStorageHandler = serviceContainer.Resolve<PokemonStorageHandler>(); 
         switch(storageObjectiveType)
         {
             case StorageObjectiveType.WithdrawPokemonFromPC: WithdrawObjective(); break;
