@@ -566,11 +566,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
                 participant.ActivateParticipant();
         }
     }
-    public void RefreshStatusEffectUI()
-    {
-        var validParticipants = GetValidParticipants();
-        validParticipants.ForEach(p=>p.RefreshStatusEffectImage());
-    }
+
     void LoadMoveInputAndText()
     { 
         var currentPlayerParticipant = GetCurrentParticipant();

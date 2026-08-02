@@ -5,14 +5,12 @@ using UnityEngine;
 [Serializable]
 public class Held_Items : BattleParticipantModule
 {
-    private BattleHandler _battleHandler;
     private MoveSequenceHandler _moveUsageHandler;
     private DialogueHandler _dialogueHandler;
     
     public Held_Items(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<DialogueHandler>();
-        _battleHandler = container.Resolve<BattleHandler>();
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
     }
     void DepleteHeldItem(Item heldItem)
@@ -105,8 +103,8 @@ public class Held_Items : BattleParticipantModule
         { 
             yield break;
         }
-        participant.statusHandler.RemoveStatusEffect();
-        _battleHandler.RefreshStatusEffectUI();
+        participant.statusHandler.RemoveStatusEffect(curableStatus == StatusEffect.FullHeal);
+        participant.RefreshStatusEffectImage();
         _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+heldItem.itemName +" healed it");
     }
 

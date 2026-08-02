@@ -17,24 +17,25 @@ class AiMoveScoreData
         this.moveScore = moveScore;
     }
 }
+
+public enum BehaviorMode
+{
+    Natural,Controlled
+}
 [Serializable]
 public class EnemyAiHandler : BattleParticipantModule
 {
     public TrainerData trainerData;
     public List<Pokemon> trainerParty = new();
     private Dictionary<AiFlags, Func<BattleParticipant,Move,int>> AiLogicCalculators = new();
+    private Action _currentBehaviorAction;
+    private BehaviorMode _behaviorMode;
     
     private BattleHandler _battleHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
     private BattleIntro _battleIntroHandler;
     private BattleOperations _battleOperations;
     private PokemonOperations _pokemonOperations;
-
-    private int _hijackedTurns;
-    public void HighJackTurn()
-    {
-        _hijackedTurns++;
-    } 
     
     public EnemyAiHandler(ServiceContainer container)
     {
@@ -54,6 +55,7 @@ public class EnemyAiHandler : BattleParticipantModule
         AiLogicCalculators.Add(AiFlags.CheckPriority ,AiCheckPriority);
         //switching doesnt involve calculators
     }
+
     public IEnumerator SetupTrainerForBattle(TrainerData copyOfTrainerData)
     {
         trainerData = InstanceFactory.CreateTrainer(copyOfTrainerData);
@@ -177,7 +179,7 @@ public class EnemyAiHandler : BattleParticipantModule
         return -1;
     }
 
-    private void SwitchPokemon(int partyIndex)
+    public void SwitchPokemon(int partyIndex)
     {
         int partyPosition = 0;
         
@@ -188,12 +190,20 @@ public class EnemyAiHandler : BattleParticipantModule
         var switchData = new SwitchOutData(partyPosition,partyIndex,participant);
         _turnBasedCombatHandler.SaveSwitchTurn(switchData);
     }
+
+    public void SetBehavior(BehaviorMode behaviorMode)
+    {
+        _behaviorMode = behaviorMode;
+    }
+    public void AssignBehaviorAction(Action action)
+    {
+        _currentBehaviorAction = action;
+    }
     public void MakeBattleDecision()
     {
-        if (_hijackedTurns > 0)
+        if (_behaviorMode==BehaviorMode.Controlled)
         {
-            _hijackedTurns--;
-            _turnBasedCombatHandler.NextTurn();
+            _currentBehaviorAction?.Invoke();
             return;
         }
         var numParticipating = _battleHandler.isDoubleBattle? 2:1;

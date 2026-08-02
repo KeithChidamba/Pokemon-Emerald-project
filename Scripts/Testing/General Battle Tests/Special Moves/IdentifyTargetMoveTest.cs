@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdentifyTargetMoveTest : BattleMoveUsageTest
+public class IdentifyTargetMoveTest : BattleBasedTest
 {
     private MoveTestActionSequencer _sequencer;
     
@@ -53,8 +53,7 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
         
         if (_sequencer.SequenceComplete())
         {
-            SetStatus(true);
-            EndTest();
+            EndTest(true);
         }
     }
     
@@ -118,8 +117,7 @@ public class IdentifyTargetMoveTest : BattleMoveUsageTest
             if (!testSuccessful)
             {
                 //fail if any section of test fails
-                SetStatus(false);
-                EndTest();
+                EndTest(false);
                 return;
             }
         }

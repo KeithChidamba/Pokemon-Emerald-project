@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SemiInvulnerableDoubleBattleTest : BattleMoveUsageTest
+public class SemiInvulnerableDoubleBattleTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
@@ -55,8 +55,7 @@ public class SemiInvulnerableDoubleBattleTest : BattleMoveUsageTest
     {
         if (_sequencer.SequenceComplete())
         {
-            SetStatus(true);
-            EndTest();
+            EndTest(true);
         }
     }
 

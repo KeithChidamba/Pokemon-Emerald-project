@@ -551,7 +551,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
         {
             var healAll = curableStatus == StatusEffect.FullHeal;
             currentParticipant.statusHandler.RemoveStatusEffect(healAll);
-            _battleHandler.RefreshStatusEffectUI();
+            currentParticipant.RefreshStatusEffectImage();
         }
         else
             selectedPartyPokemon.statusEffect = StatusEffect.None;

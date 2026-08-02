@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class OnFieldDamageModificationTest : BattleMoveUsageTest
+public class OnFieldDamageModificationTest : BattleBasedTest
 {
     private MoveTestActionSequencer _sequencer;
     private MoveSequenceHandler _moveUsageHandler;
@@ -92,8 +92,7 @@ public class OnFieldDamageModificationTest : BattleMoveUsageTest
         {
             _moveUsageHandler.OnDamageModified -= CheckForFieldEffect;
             var checksPassed = _damageChecks.All(check => check);
-            SetStatus(checksPassed);
-            EndTest();
+            EndTest(checksPassed);
         }
     }
 

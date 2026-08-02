@@ -45,17 +45,19 @@ public class TestActionSequencer
     public void CallNextAction()
     {
         var action = _testSequence[CurrentSequenceIndex].action;
-        if (CurrentSequenceIndex == _testSequence.Count-1)
+        action?.Invoke();
+        if (CurrentSequenceIndex == _testSequence.Count - 1)
         {
             _numSequencesCompleted++;
-            if(_numSequencesCompleted < _numSequenceRepetitions + 1)
+            if (_numSequencesCompleted < _numSequenceRepetitions + 1)
             {
-                //Repeat Sequence
                 CurrentSequenceIndex = 0;
             }
         }
-        CurrentSequenceIndex++;
-        action?.Invoke();
+        else
+        {
+            CurrentSequenceIndex++;
+        }
     }
     public bool SequenceComplete()
     {

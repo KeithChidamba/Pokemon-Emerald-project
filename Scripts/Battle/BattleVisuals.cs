@@ -48,6 +48,10 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         statChangeVisuals.Add(Stat.Multi,statChangeSprites[7]);
     }
 
+    private void ResetAnimator(Animator statusEffectAnimator)
+    {
+        statusEffectAnimator.gameObject.SetActive(false);
+    }
     public void CancelStatChangeVisual()
     {
         OnStatVisualDisplayed?.Invoke();
@@ -127,21 +131,23 @@ public class BattleVisuals : MonoBehaviour,IInjectable
            }
         }
         participant.pokemonImage.GetComponent<Canvas>().overrideSorting = false;
-        participant.statusEffectAnimator.gameObject.SetActive(false);
+        ResetAnimator(participant.statusEffectAnimator);
     }
 
     public IEnumerator DisplayStatusEffectVisuals(BattleParticipant participant)
     {
         participant.statusEffectAnimator.gameObject.SetActive(true);
         var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
+        rect.anchoredPosition = participant.pokemonImage.rectTransform.anchoredPosition;
         
         if (participant.pokemon.statusEffect == StatusEffect.Sleep)
         {
             var start = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x
-                , participant.pokemonImage.rectTransform.anchoredPosition.y+80f);
+                , participant.pokemonImage.rectTransform.rect.height*0.5f);
+            
             var target = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x -
                                      (participant.pokemonImage.rectTransform.rect.width*0.25f)
-                , participant.pokemonImage.rectTransform.anchoredPosition.y+200f);
+                , participant.pokemonImage.rectTransform.rect.height*2f);
             
             participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
             yield return SlideRect(rect,start,target,165f);
@@ -167,11 +173,10 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         }
         else
         {
-            rect.anchoredPosition = participant.pokemonImage.rectTransform.anchoredPosition;
             participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
             yield return new WaitForSeconds(1.75f);
         }
-        participant.statusEffectAnimator.gameObject.SetActive(false);
+        ResetAnimator(participant.statusEffectAnimator);
         yield return null;
     }
     public IEnumerator DisplayDamageTakenVisual(BattleParticipant participant,DamageSource damageSource)
@@ -223,7 +228,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             
             participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
             yield return StartCoroutine(SlideRect(rect,start,target,165f));
-            participant.statusEffectAnimator.gameObject.SetActive(false);
+            ResetAnimator(participant.statusEffectAnimator);
         }
     }
     public static IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)

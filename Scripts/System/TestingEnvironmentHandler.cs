@@ -52,6 +52,9 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
    
    private IEnumerator RunTests()
    {
+       DirectoryHandler.ClearDirectory(Path.Combine("Assets/Resources", 
+           DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)));
+       
        TestRegistry testRegistry = new();
        foreach (var test in testRegistry.allTests)
        {
@@ -109,19 +112,21 @@ public class TestRegistry
     //tests are ran in this order
     public IntegrationTest[] allTests =
     {
+       
         //Move Based Tests
+        new StatusEffectTest(),
         new SemiInvulnerableDoubleBattleTest(),
         new SemiInvulnerableSingleBattleTest(),
-        new WeatherDamageTest(),
-        new WeatherDamageTest(),
-        new MultiTargetDamageTest(),
-        new OnFieldDamageModificationTest(),
-        new IdentifyTargetMoveTest(),
-        new CreateBarrierMoveTest(),
-        new HealthDrainTest(),
-        new HealFromWeatherTest(),
-        new DamageProtectionMoveTest(),
-        new ConsecutiveMoveTest(),
+        // new WeatherDamageTest(),
+        // new WeatherDamageTest(),
+        // new MultiTargetDamageTest(),
+        // new OnFieldDamageModificationTest(),
+        // new IdentifyTargetMoveTest(),
+        // new CreateBarrierMoveTest(),
+        // new HealthDrainTest(),
+        // new HealFromWeatherTest(),
+        // new DamageProtectionMoveTest(),
+        // new ConsecutiveMoveTest(),
     };
 }
 

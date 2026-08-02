@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class CreateBarrierMoveTest : BattleMoveUsageTest
+public class CreateBarrierMoveTest : BattleBasedTest
 {
     private MoveSequenceHandler _moveUsageHandler;
     private BattleHandler _battleHandler;
@@ -44,15 +44,13 @@ public class CreateBarrierMoveTest : BattleMoveUsageTest
             }
             else
             {
-                SetStatus(true);
-                EndTest();
+                EndTest(true);
             }
         }
         else
         {
             testingHandler.LogMessage($"barrier Test failed at {_currentBarrierToTest}",TestLogType.Error);
-            SetStatus(false);
-            EndTest();
+            EndTest(false);
         }
     }
     

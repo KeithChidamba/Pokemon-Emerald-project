@@ -12,6 +12,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     public event Action OnNewTurn;
     public event Func<BattleParticipant,IEnumerator> OnMoveExecute;
     public event Action OnTurnsCompleted;
+    public event Action OnTurnEventsCompleted;
     public int CurrentTurnIndex => currentTurnIndex;
     [SerializeField]private int currentTurnIndex;
     
@@ -137,6 +138,19 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             ,attackerID:Utility.Random16Bit());
             
         switchTurn.switchData = data;
+        SaveTurn(switchTurn);
+    }
+    public void SaveEmptyTurn()
+    {
+        var fakeMove = ScriptableObject.CreateInstance<Move>();
+        fakeMove.priority = 0;
+            
+        var switchTurn = new Turn(TurnUsage.Empty,
+            attackerKey: _battleHandler.GetCurrentParticipant().participantKey
+            ,move:fakeMove
+            ,attackerID:Utility.Random16Bit());
+
+        switchTurn.isCancelled = true;
         SaveTurn(switchTurn);
     }
     private bool IsLastParticipant()
@@ -397,7 +411,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             
             AddTurn(new Turn(participant.semiInvulnerabilityData.turnData));
         }
-        
+        OnTurnEventsCompleted?.Invoke();
         yield return _dialogueHandler.AwaitAllDialogue();
         NextTurn();
     }

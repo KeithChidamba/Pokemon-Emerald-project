@@ -1,6 +1,6 @@
 using System.Collections;
 
-public class DamageProtectionMoveTest : BattleMoveUsageTest
+public class DamageProtectionMoveTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     

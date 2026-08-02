@@ -20,6 +20,8 @@ public static class NameDB
         { LearnSetMoveName.SilverWind, "Silverwind" },
         { LearnSetMoveName.StringShot, "String Shot" },
         { LearnSetMoveName.PinMissile, "Pin Missile" },
+        {LearnSetMoveName.SleepPowder,"Sleep Powder"},
+        
         // 🐉 Dragon-type
         { LearnSetMoveName.DragonBreath, "Dragon Breath" },
 
@@ -133,6 +135,7 @@ public static class NameDB
         // ❄️ Ice-type
         { LearnSetMoveName.Haze, "Haze" },
         { LearnSetMoveName.Hail, "Hail" },
+        { LearnSetMoveName.IceBeam,"Ice Beam" },
         
         // 🌑 Dark-type
         { LearnSetMoveName.Bite, "Bite" },
@@ -363,5 +366,6 @@ public enum LearnSetMoveName
     FaintAttack,
     Pursuit,
     //new
-    PinMissile,SunnyDay, Hail,WaterSport,RainDance
+    PinMissile,SunnyDay, Hail,WaterSport,RainDance,SleepPowder
+    ,IceBeam
 }

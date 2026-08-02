@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
+public class SemiInvulnerableSingleBattleTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
@@ -12,8 +12,7 @@ public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
     private MoveSequenceHandler _moveUsageHandler;
     
     private MoveTestActionSequencer _sequencer;
-    private bool _testPassing;
-    private List<Func<(string message,bool result)>> testCases = new();
+    private TestCaseHandler _testCaseHandler;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
@@ -24,6 +23,8 @@ public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
         _sequencer = new MoveTestActionSequencer(container,1);
+        _testCaseHandler = new TestCaseHandler(testingHandler);
+        
         testName = "Semi Invulnerability Single Battle Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
@@ -37,13 +38,19 @@ public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
         
         _moveUsageHandler.OnDamageModified += CheckForInvulnerableDamageEffect;
     }
-
+   
     private void HijackEnemyForFreeSwitch()
     {
         _sequencer.RemoveLastAction();
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.HighJackTurn();
+        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
         _pokemonPartyHandler.SwapToPartner();
+        return;
+        void ForceEnemySkip()
+        {
+            _turnBasedCombatHandler.SaveEmptyTurn();
+        }
     }
     private void AttackFirst()
     {
@@ -57,7 +64,6 @@ public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
         //give enemy a move that can negate 
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var semiData = player.pokemon.moveSet[0].GetModule<SemiInvulnerabilityInfo>().semiInvulnerabilities;
-        semiData[0].damageMultiplier = 2f;//just for testing damage change
         var movesThatCounter = semiData.Select(data => data.moveName).ToList();
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
@@ -95,9 +101,9 @@ public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        
-        testCases.Add(() => ("Player has full health",player.pokemon.hp >= player.pokemon.maxHp));
-        testCases.Add(() => ("Player has been damaged",player.pokemon.hp < player.pokemon.maxHp));
+      
+        _testCaseHandler.AddTestCase(0,"Player has full health",() => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(2,"Player has been damaged",() => player.pokemon.hp < player.pokemon.maxHp);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -113,31 +119,27 @@ public class SemiInvulnerableSingleBattleTest : BattleMoveUsageTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
         
-        var testCaseIndex = _sequencer.CurrentSequenceIndex - 1;
-        testCaseIndex = Math.Clamp(testCaseIndex, 0, testCases.Count-1);//account for index refresh of sequencer
-       
-        var testCaseResult = testCases[testCaseIndex].Invoke();
+        var caseExists = _testCaseHandler
+            .HandleCurrentTestCase(_sequencer.CurrentSequenceIndex
+                ,CheckTestEnd,TestCaseFailed);
         
-        if (!testCaseResult.result)
+        if (!caseExists)
         {
-            testingHandler.LogMessage($"Test case({testCaseIndex+1}) Failed due to violation" +
-                                      $" of {testCaseResult.message}",TestLogType.Information);
-            
-            _moveUsageHandler.OnDamageModified -= CheckForInvulnerableDamageEffect;
-            //test case failed
-            SetStatus(false);
-            EndTest();
+            CheckTestEnd();
         }
-        else
+        void CheckTestEnd()
         {
             if (_sequencer.SequenceComplete())
             {
                 _moveUsageHandler.OnDamageModified -= CheckForInvulnerableDamageEffect;
-                SetStatus(true);
-                EndTest();
+                EndTest(true);
             }
         }
-        
+        void TestCaseFailed()
+        {
+            _moveUsageHandler.OnDamageModified -= CheckForInvulnerableDamageEffect;
+            EndTest(false);
+        }
     }
     protected override void DetermineTurnUsage()
     {

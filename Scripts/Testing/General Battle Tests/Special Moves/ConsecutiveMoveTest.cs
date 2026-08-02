@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConsecutiveMoveTest : BattleMoveUsageTest
+public class ConsecutiveMoveTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     

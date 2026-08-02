@@ -4,6 +4,12 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Linq;
+
+
+public enum StatusHandlingState
+{
+    Normal,Permanent
+}
 [Serializable]
 public class BattleParticipantStatusHandler : BattleParticipantModule
 {
@@ -12,6 +18,9 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
     private bool _healed;
     private int _confusionDuration;
     private int _trapDuration;
+    
+    private StatusHandlingState _stateControl;
+    
     private TrapData _currentTrap;
     private readonly Dictionary<StatusEffect, Action> _statusEffectMethods = new ();
     public event Action<BattleParticipant> OnStatusCheck;
@@ -37,6 +46,12 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         _statusEffectMethods.Add(StatusEffect.Freeze,FreezeCheck);
         _statusEffectMethods.Add(StatusEffect.Sleep,SleepCheck);
         _statusEffectMethods.Add(StatusEffect.Paralysis,ParalysisCheck);
+        _stateControl = StatusHandlingState.Normal;
+    }
+
+    public void ChangeToTestingState(StatusHandlingState state)
+    {
+        _stateControl = state;
     }
     public void GetStatusEffect(StatusEffect effect,int numTurns)
     {
@@ -51,13 +66,16 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
             case StatusEffect.Burn:
                 _moveUsageHandler.RefreshStat(Stat.Attack, participant);
                 break;
-
             case StatusEffect.Paralysis:
                 _moveUsageHandler.RefreshStat(Stat.Speed, participant);
+                ParalysisCheck();
                 break;
-            
             case StatusEffect.Freeze:
                 _moveUsageHandler.OnMoveHit += RemoveFreezeStatusWithFire;
+                FreezeCheck();
+                break;
+            case StatusEffect.Sleep:
+                SleepCheck();
                 break;
         }
     }
@@ -160,7 +178,6 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         yield return _moveUsageHandler.AwaitDamageDisplay();
        
         participant.pokemon.NotifyHealthChange();  
-        
     }
     public void StunCheck()
     {
@@ -207,32 +224,45 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         
         participant.statChangeEffects.ForEach(s=>s.effectDuration--);
         participant.statChangeEffects.RemoveAll(s => s.effectDuration == 0);
-        
     }
-    void FreezeCheck()
+    private void FreezeCheck()
     {
+        if (_stateControl == StatusHandlingState.Permanent)
+        {
+            participant.canAttack = false;
+            return;
+        }
         if (Utility.RandomRange(1, 101) < 10) //10% chance
             _healed = true;
         else
             participant.canAttack = false;
     }
 
-    void RemoveFreezeStatusWithFire(BattleParticipant attacker, Move moveUsed)
+    private void RemoveFreezeStatusWithFire(BattleParticipant attacker, Move moveUsed)
     {
         if (moveUsed.type.typeEnum != PokemonType.Fire ) return;
-        RemoveStatusEffect();
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+" was thawed out!");
-        _healed = true;
         _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
+        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+" was thawed out!");
+        RemoveStatusEffect();
     }
-    void ParalysisCheck()
+    private void ParalysisCheck()
     {
+        if (_stateControl == StatusHandlingState.Permanent)
+        {
+            participant.canAttack = false;
+            return;
+        }
         if (participant.isFlinched) return;
         //75% chance
         participant.canAttack = Utility.RandomRange(1, 101) < 75;
     }
-    void SleepCheck()
+    private void SleepCheck()
     {
+        if (_stateControl == StatusHandlingState.Permanent)
+        {
+            participant.canAttack = false;
+            return;
+        }
         if (_currentStatusTurnCount < 1)//at least sleep for 1 turn
         {
             participant.canAttack = false;
@@ -272,15 +302,20 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
                 break;
         }
         RemoveStatusEffect();
-        _healed = false;
         yield return _dialogueHandler.AwaitAllDialogue();
     }
     public void RemoveStatusEffect(bool healAllEffects = false)
     {
-        if (participant.pokemon.statusEffect == StatusEffect.Sleep
-            || participant.pokemon.statusEffect == StatusEffect.Paralysis)
+        _healed = false;
+        if (participant.pokemon.statusEffect == StatusEffect.Sleep)
         {
-                participant.canAttack = true;
+            _statusDurationInTurns = 0;
+            _currentStatusTurnCount = 0;
+            participant.canAttack = true;
+        }
+        if (participant.pokemon.statusEffect == StatusEffect.Paralysis)
+        {
+            participant.canAttack = true;
         }
         if(participant.pokemon.statusEffect == StatusEffect.Freeze)
         {

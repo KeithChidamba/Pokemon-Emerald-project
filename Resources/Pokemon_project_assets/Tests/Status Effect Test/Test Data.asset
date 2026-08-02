@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79218e70f727cab51b39573c7a1e6e10, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+      pokemonLevel: 33
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+    specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
+    specificGender: 1
+    nickName: Dummy
+  testEnemyData:
+    trainerDisplayName: Test Grunt Status Effects
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: 19612caceb9e8247dad767265e14dc2d, type: 2}
+    - {fileID: 11400000, guid: d47c4073189ac67b78642348b2f5cd18, type: 2}

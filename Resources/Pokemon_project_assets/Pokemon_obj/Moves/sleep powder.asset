@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
-  m_Name: silverwind
+  m_Name: sleep powder
   m_EditorClassIdentifier: 
-  moveName: Silverwind
-  moveDamage: 60
-  moveAccuracy: 100
+  moveName: Sleep Powder
+  moveDamage: 0
+  moveAccuracy: 75
   critModifierIndex: 0
-  type: {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
+  type: {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
   hasTypelessEffect: 0
-  isSpecial: 0
+  isSpecial: 1
   isContact: 0
   canChangeStats: 0
-  hasStatus: 0
-  effectType: 1
+  hasStatus: 1
+  effectType: 0
   effectInfoModule: {fileID: 0}
   canCauseFlinch: 0
   canTrap: 0
@@ -34,11 +34,11 @@ MonoBehaviour:
   isSureHit: 0
   displayTargetMessage: 1
   priority: 0
-  powerpoints: 5
-  basePowerpoints: 5
-  maxPowerpoints: 5
-  statusEffect: 0
+  powerpoints: 15
+  basePowerpoints: 15
+  maxPowerpoints: 15
+  statusEffect: 6
   buffOrDebuffData: []
-  statusChance: 10
+  statusChance: 100
   buffOrDebuffChance: 0
-  description: A powdery attack that may raise abilities.
+  description: 'Scatters a powder that may cause the foe to sleep. '

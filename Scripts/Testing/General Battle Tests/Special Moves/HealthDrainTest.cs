@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class HealthDrainTest : BattleMoveUsageTest
+public class HealthDrainTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     

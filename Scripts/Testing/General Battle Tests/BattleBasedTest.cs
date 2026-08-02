@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleMoveUsageTest : IntegrationTest
+public class BattleBasedTest : IntegrationTest
 {
     private BattleHandler _battleHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
@@ -27,12 +27,16 @@ public class BattleMoveUsageTest : IntegrationTest
             EndTest();
         }
     }
-
     protected void EndTest()
     {
         _battleHandler.EndBattle(BattleEndState.BattleTerminated, null);
         _turnBasedCombatHandler.OnNewTurn -= DetermineTurnUsage;
-        _turnBasedCombatHandler.OnTurnsCompleted -= LogSuccess;
+        _turnBasedCombatHandler.OnTurnEventsCompleted -= LogSuccess;
+    }
+    protected void EndTest(bool testPassed)
+    {
+        SetStatus(testPassed);
+        EndTest();
     }
     protected virtual void DetermineTurnUsage() { }
 
@@ -43,7 +47,7 @@ public class BattleMoveUsageTest : IntegrationTest
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         
-        var testData = Resources.Load<BattleMoveUsageTestData>(
+        var testData = Resources.Load<BattleBasedeTestData>(
             DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"{testName}/Test Data");
 
         var testEnemy = Resources.Load<TrainerData>(
@@ -56,7 +60,7 @@ public class BattleMoveUsageTest : IntegrationTest
         yield return LoadTestData(testData);
         
         _turnBasedCombatHandler.OnNewTurn += DetermineTurnUsage;
-        _turnBasedCombatHandler.OnTurnsCompleted += LogSuccess;
+        _turnBasedCombatHandler.OnTurnEventsCompleted += LogSuccess;
         
         yield return _battleHandler.SetBattleTypeAndStart(testEnemy);
         
@@ -67,7 +71,7 @@ public class BattleMoveUsageTest : IntegrationTest
         _pokemonPartyHandler.ClearTestState();
         yield return new WaitForSeconds(0.05f);
     }
-    private IEnumerator LoadTestData(BattleMoveUsageTestData testData)
+    private IEnumerator LoadTestData(BattleBasedeTestData testData)
     {
         var pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         

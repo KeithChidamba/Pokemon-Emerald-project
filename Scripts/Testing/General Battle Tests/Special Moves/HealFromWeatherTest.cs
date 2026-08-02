@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class HealFromWeatherTest : BattleMoveUsageTest
+public class HealFromWeatherTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;

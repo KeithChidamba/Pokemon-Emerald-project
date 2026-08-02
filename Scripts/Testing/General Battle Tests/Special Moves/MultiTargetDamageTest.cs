@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MultiTargetDamageTest : BattleMoveUsageTest
+public class MultiTargetDamageTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     private MoveTestActionSequencer _sequencer;
@@ -46,8 +46,7 @@ public class MultiTargetDamageTest : BattleMoveUsageTest
            var testPassed = enemy.pokemon.hp <= enemy.pokemon.maxHp && 
                              enemyPartner.pokemon.hp <= enemyPartner.pokemon.maxHp && 
                              partnerParticipant.pokemon.hp <= partnerParticipant.pokemon.maxHp;
-            SetStatus(testPassed);
-            EndTest();
+            EndTest(testPassed);
         }
     }
 

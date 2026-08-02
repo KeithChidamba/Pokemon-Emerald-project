@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class WeatherDamageTest : BattleMoveUsageTest
+public class WeatherDamageTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     private BattleOperations _battleOperations;
@@ -93,8 +93,8 @@ public class WeatherDamageTest : BattleMoveUsageTest
             var testPassed = enemy.pokemon.hp >= enemy.pokemon.maxHp //should be unaffected
                              && enemyPartner.pokemon.hp < enemyPartner.pokemon.maxHp //hail damage
                              && player.pokemon.hp < player.pokemon.maxHp; //both weather damage cases
-            SetStatus(testPassed);
-            EndTest();
+           
+            EndTest(testPassed);
         }
     }
 
