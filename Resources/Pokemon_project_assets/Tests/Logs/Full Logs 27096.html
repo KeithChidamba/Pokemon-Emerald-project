@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <title>Test Log</title>
+
+      <style>
+      body{
+          background:#1e1e1e;
+          color:#d4d4d4;
+          font-family:Consolas, monospace;
+          margin:20px;
+      }
+
+      h1{
+          color:white;
+      }
+
+      table{
+          width:100%;
+          border-collapse:collapse;
+      }
+
+      th{
+          text-align:left;
+          padding:8px;
+          border-bottom:2px solid #666;
+          color:white;
+      }
+
+      td{
+          padding:4px 8px;
+          border-bottom:1px solid #333;
+          vertical-align:top;
+      }
+
+      .time{
+          color:#888;
+          width:220px;
+      }
+
+      .type{
+          width:120px;
+          font-weight:bold;
+      }
+
+    .dialogue{
+    color:#dcdcaa;      /* Soft yellow - character dialogue */
+    }
+
+    .health{
+        color:#800080;      /* Red - HP/healing/damage */
+    }
+
+    .calculation{
+        color:#c586c0;      /* Purple - formulas and calculations */
+    }
+
+    .information{
+        color:#58a6ff;      /* Blue - general information */
+    }
+
+    .error{
+        color:#f85149;      /* Bright red - errors */
+        font-weight:bold;
+    }
+
+    .test{
+        color:#79c0ff;      /* Cyan - test start/status */
+        font-weight:bold;
+    }
+
+    .pass{
+        color:#3fb950;      /* Green - successful test */
+        font-weight:bold;
+    }
+
+      .separator td{
+          border-bottom:2px solid #666;
+      }
+      </style>
+
+      </head>
+
+      <body>
+
+      <h1>Test Logs</h1>
+
+      <table>
+
+      <tr>
+          <th>Timestamp</th>
+          <th>Type</th>
+          <th>Message</th>
+      </tr>
+        <tr>
+            <td class="time">2026/08/03 2:42:53 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Status Effect Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:42:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Zigzagoon</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:42:56 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:02 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Status Effects challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Status Effects sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Ember!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was burned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Growl on Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy&#39;s Attack fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:24 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is hurt by the burn</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:27 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Ice Beam on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was frozen</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:32 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is affected by Freeze</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:35 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Flamethrower on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:38 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was thawed out!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:43 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:48 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Sleep Powder on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko fell fast asleep</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is affected by Sleep</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:43:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Poison Sting on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was poisoned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is poisoned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:11 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Thunder Wave on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was paralyzed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is affected by Paralysis</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:19 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Toxic on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was badly poisoned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:25 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is badly poisoned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Status Effects withdrew Foe Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Status Effects sent out Foe Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Tail Whip on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/03 2:44:49 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Status Effect Test -&gt; has Passed</td>
+        </tr>
+
+      </table>
+
+      </body>
+      </html>

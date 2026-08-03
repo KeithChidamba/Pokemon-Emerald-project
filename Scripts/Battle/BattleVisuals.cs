@@ -47,11 +47,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         statChangeVisuals.Add(Stat.Evasion,statChangeSprites[6]);
         statChangeVisuals.Add(Stat.Multi,statChangeSprites[7]);
     }
-
-    private void ResetAnimator(Animator statusEffectAnimator)
-    {
-        statusEffectAnimator.gameObject.SetActive(false);
-    }
+    
     public void CancelStatChangeVisual()
     {
         OnStatVisualDisplayed?.Invoke();
@@ -110,13 +106,13 @@ public class BattleVisuals : MonoBehaviour,IInjectable
 
     public IEnumerator DisplayConfusionVisuals(BattleParticipant participant)
     {
-        participant.statusEffectAnimator.gameObject.SetActive(true);
-        var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
+        var rect = participant.statusAnimationHandler.GetImageRect;
         participant.pokemonImage.GetComponent<Canvas>().overrideSorting = true;
         
         var start = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x - (participant.pokemonImage.rectTransform.rect.width*0.5f)
             , participant.pokemonImage.rectTransform.anchoredPosition.y+30f);
-        participant.statusEffectAnimator.Play("Confusion"); 
+        participant.statusAnimationHandler.PlayConfusionAnimation();
+        
         for (int i = 0; i < 2; i++)
         {
             var target = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x + (participant.pokemonImage.rectTransform.rect.width*0.5f)
@@ -131,27 +127,27 @@ public class BattleVisuals : MonoBehaviour,IInjectable
            }
         }
         participant.pokemonImage.GetComponent<Canvas>().overrideSorting = false;
-        ResetAnimator(participant.statusEffectAnimator);
     }
 
     public IEnumerator DisplayStatusEffectVisuals(BattleParticipant participant)
     {
-        participant.statusEffectAnimator.gameObject.SetActive(true);
-        var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
+        var rect = participant.statusAnimationHandler.GetImageRect;
         rect.anchoredPosition = participant.pokemonImage.rectTransform.anchoredPosition;
+        var imagePos = participant.pokemonImage.rectTransform.anchoredPosition;
+        var imageRectDimensions = participant.pokemonImage.rectTransform.rect;
         
         if (participant.pokemon.statusEffect == StatusEffect.Sleep)
         {
-            var start = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x
-                , participant.pokemonImage.rectTransform.rect.height*0.5f);
+            var start = new Vector2(imagePos.x,
+                imagePos.y + imageRectDimensions.height*0.5f);
             
-            var target = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x -
-                                     (participant.pokemonImage.rectTransform.rect.width*0.25f)
-                , participant.pokemonImage.rectTransform.rect.height*2f);
+            var target = new Vector2(imagePos.x - imageRectDimensions.width * 0.25f
+                , imagePos.y + imageRectDimensions.height);
             
-            participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
+            participant.statusAnimationHandler.PlayStatusEffectAnimation();
             yield return SlideRect(rect,start,target,165f);
             yield return SlideRect(rect,start,target,165f);
+            participant.statusAnimationHandler.PlayEmptyAnimation();
         }
         else 
         if (participant.pokemon.statusEffect == StatusEffect.Paralysis)
@@ -162,7 +158,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             var startPos = imageRect.anchoredPosition;
             var target = new Vector2(imageRect.anchoredPosition.x + 10f, imageRect.anchoredPosition.y);
             
-            participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
+            participant.statusAnimationHandler.PlayStatusEffectAnimation();
             
             yield return SlideRect(imageRect, startPos, target, movementSpeed);
             target = new Vector2(startPos.x - 20f, imageRect.anchoredPosition.y);
@@ -173,11 +169,9 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         }
         else
         {
-            participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
+            participant.statusAnimationHandler.PlayStatusEffectAnimation();
             yield return new WaitForSeconds(1.75f);
         }
-        ResetAnimator(participant.statusEffectAnimator);
-        yield return null;
     }
     public IEnumerator DisplayDamageTakenVisual(BattleParticipant participant,DamageSource damageSource)
     {
@@ -217,18 +211,17 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         }
         if (damageSource == DamageSource.Burn)
         {
-            participant.statusEffectAnimator.gameObject.SetActive(true);
-            var rect = participant.statusEffectAnimator.GetComponent<RectTransform>();
+            var rect = participant.statusAnimationHandler.GetImageRect;
             var start = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x -
                                     (participant.pokemonImage.rectTransform.rect.width*0.5f)
                 , participant.pokemonImage.rectTransform.anchoredPosition.y+20f);
+           
             var target = new Vector2(participant.pokemonImage.rectTransform.anchoredPosition.x +
                                      (participant.pokemonImage.rectTransform.rect.width*0.5f)
                 , participant.pokemonImage.rectTransform.anchoredPosition.y+20f);
-            
-            participant.statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
+       
+            participant.statusAnimationHandler.PlayStatusEffectAnimation();
             yield return StartCoroutine(SlideRect(rect,start,target,165f));
-            ResetAnimator(participant.statusEffectAnimator);
         }
     }
     public static IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)

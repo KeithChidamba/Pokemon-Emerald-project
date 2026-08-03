@@ -20,6 +20,7 @@ public class StatusEffectTest : BattleBasedTest
         LearnSetMoveName.PoisonSting,
         LearnSetMoveName.ThunderWave,
         LearnSetMoveName.Toxic,
+        //Turn placeholder for toxic test cases
         LearnSetMoveName.TailWhip,
         LearnSetMoveName.TailWhip
     };
@@ -48,14 +49,19 @@ public class StatusEffectTest : BattleBasedTest
         var newMove = InstanceFactory.CreateMove(moveFromAsset);
         newMove.priority = 100;
         
-        /*give flamethrower 5 damage to comply with move pipeline
-        and allow it to remove freeze effect, while not fainting enemy*/
-        newMove.moveDamage = _statusMoves[_currentMoveIndex] != LearnSetMoveName.Flamethrower? 
-                0 : 5;
-        
-        newMove.statusChance = 100;
+        /*give flamethrower 5 damage to comply with the move pipeline
+        and allow it to remove freeze effect, while not fainting the enemy*/
+        if (_statusMoves[_currentMoveIndex] != LearnSetMoveName.Flamethrower)
+        {
+            newMove.moveDamage = 0;
+            newMove.statusChance = 100;
+        }
+        else
+        {
+            newMove.moveDamage = 5;
+            newMove.statusChance = 0;
+        }
         currentParticipant.pokemon.moveSet[0] = newMove;
-        
         _sequencer.UseMove();
     }
 
@@ -93,7 +99,7 @@ public class StatusEffectTest : BattleBasedTest
             () => enemy.pokemon.hp < enemy.pokemon.maxHp
                   && enemy.pokemon.statusEffect == StatusEffect.BadlyPoison);
         
-        _testCaseHandler.AddTestCase(7, "Victim's poisoned status should be reduced after switching out", 
+        _testCaseHandler.AddTestCase(7, "Victim's poisoned status should be reduced after it switches out", 
             () => enemy.pokemonTrainerAI.trainerParty[1].hp < enemy.pokemonTrainerAI.trainerParty[1].maxHp
                   && enemy.pokemonTrainerAI.trainerParty[1].statusEffect == StatusEffect.Poison);
         
@@ -122,7 +128,8 @@ public class StatusEffectTest : BattleBasedTest
                     //swap to partner to test poison change
                     enemy.pokemonTrainerAI.SwitchPokemon(1);
                 }
-            }
+            } 
+            //freeze has a test case that requires it's status to remain
             else if (enemy.pokemon.statusEffect != StatusEffect.Freeze)
             {
                 enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Natural);

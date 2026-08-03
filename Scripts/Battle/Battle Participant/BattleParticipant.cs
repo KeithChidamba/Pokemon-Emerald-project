@@ -14,6 +14,7 @@ public abstract class BattleParticipantModule
         participant = parentParticipant;
     }
 }
+
 public class BattleParticipant : MonoBehaviour,IInjectable
 {
     public BattleParticipantKey participantKey;
@@ -65,8 +66,8 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     [SerializeField]private bool handlingFaintEvent;
     
     public List<Barrier> barriers = new();
+    public StatusEffectAnimationHandler statusAnimationHandler;
     
-    public Animator statusEffectAnimator;
     private Vector2 _defaultImagePosition;
     private Vector2 _defaultUIPosition;
     private RectTransform _uiRect;
@@ -112,6 +113,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         _defaultImagePosition = pokemonImage.rectTransform.anchoredPosition;
         _uiRect = participantUI.GetComponent<RectTransform>();
         _defaultUIPosition = _uiRect.anchoredPosition; 
+        statusAnimationHandler.participant = this;
     }
 
     public IEnumerator SetupEnemyAi(TrainerData trainerData,BattleParticipant partner = null)

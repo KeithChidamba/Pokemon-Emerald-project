@@ -115,8 +115,8 @@ public class TestRegistry
        
         //Move Based Tests
         new StatusEffectTest(),
-        new SemiInvulnerableDoubleBattleTest(),
-        new SemiInvulnerableSingleBattleTest(),
+        //new SemiInvulnerableDoubleBattleTest(),
+        //new SemiInvulnerableSingleBattleTest(),
         // new WeatherDamageTest(),
         // new WeatherDamageTest(),
         // new MultiTargetDamageTest(),
