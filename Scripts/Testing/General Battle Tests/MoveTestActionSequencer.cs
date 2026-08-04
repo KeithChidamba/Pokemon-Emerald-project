@@ -10,7 +10,13 @@ public class MoveTestActionSequencer : TestActionSequencer
     {
         _battleHandler = container.Resolve<BattleHandler>();
     }
-    
+
+    public override int GetTestCaseIndex()
+    {
+        //test cases are check at the end of a turn
+        //this makes sequence index +1, so reduce it
+        return CurrentSequenceIndex - 1;
+    }
     public void UseMove(int currentMoveUsageIndex = 0)
     {
         var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);

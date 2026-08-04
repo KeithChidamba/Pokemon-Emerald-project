@@ -18,7 +18,11 @@ public class TestActionSequencer
     private int NextIndex => _testSequence.Count;
     private int _numSequencesCompleted;
     private int _numSequenceRepetitions;
-    
+
+    public virtual int GetTestCaseIndex()
+    {
+        return CurrentSequenceIndex;
+    }
     protected TestActionSequencer(int numSequenceRepetitions = 0)
     {
         CurrentSequenceIndex = 0;
@@ -45,12 +49,12 @@ public class TestActionSequencer
     public void CallNextAction()
     {
         var action = _testSequence[CurrentSequenceIndex].action;
-        action?.Invoke();
         if (CurrentSequenceIndex == _testSequence.Count - 1)
         {
             _numSequencesCompleted++;
             if (_numSequencesCompleted < _numSequenceRepetitions + 1)
             {
+                
                 CurrentSequenceIndex = 0;
             }
         }
@@ -58,6 +62,7 @@ public class TestActionSequencer
         {
             CurrentSequenceIndex++;
         }
+        action?.Invoke();
     }
     public bool SequenceComplete()
     {

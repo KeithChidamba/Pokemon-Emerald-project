@@ -63,7 +63,7 @@ public class WeatherDamageTest : BattleBasedTest
         _sequencer.UseMove(1);//Sandstorm
 
     }
-    void AwaitStatChangeAddition(StatChangeOperationData operationData)
+    private void AwaitStatChangeAddition(StatChangeOperationData operationData)
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         if (operationData.statChangeData.receiver.participantKey != enemy.participantKey)

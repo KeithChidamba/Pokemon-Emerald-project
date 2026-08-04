@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
  
-public class TestTemplate : BattleBasedTest
+public class HeldItemUsageTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
@@ -13,7 +13,6 @@ public class TestTemplate : BattleBasedTest
     
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
-    
     
     public override void Inject(ServiceContainer serviceContainer)
     {
@@ -25,7 +24,7 @@ public class TestTemplate : BattleBasedTest
         
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "Test";
+        testName = "Held Item Usage Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
         
@@ -42,7 +41,7 @@ public class TestTemplate : BattleBasedTest
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        _testCaseHandler.AddTestCase("Example Condition",() => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(0,"Example Condition",() => player.pokemon.hp >= player.pokemon.maxHp);
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
@@ -58,6 +57,7 @@ public class TestTemplate : BattleBasedTest
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
 
         var caseExists = _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        
         if (!caseExists)
         {
             CheckTestEnd();
@@ -86,4 +86,3 @@ public class TestTemplate : BattleBasedTest
         _sequencer.CallNextAction();
     }
 }
-

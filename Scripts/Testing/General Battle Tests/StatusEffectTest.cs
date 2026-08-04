@@ -9,8 +9,7 @@ public class StatusEffectTest : BattleBasedTest
 
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
-
-    private int _currentMoveIndex;
+    
     private LearnSetMoveName[] _statusMoves =
     {
         LearnSetMoveName.Ember,
@@ -21,7 +20,6 @@ public class StatusEffectTest : BattleBasedTest
         LearnSetMoveName.ThunderWave,
         LearnSetMoveName.Toxic,
         //Turn placeholder for toxic test cases
-        LearnSetMoveName.TailWhip,
         LearnSetMoveName.TailWhip
     };
     public override void Inject(ServiceContainer serviceContainer)
@@ -29,20 +27,23 @@ public class StatusEffectTest : BattleBasedTest
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
         
-        _sequencer = new MoveTestActionSequencer(container,7);
-        _testCaseHandler = new TestCaseHandler(testingHandler);
+        _sequencer = new MoveTestActionSequencer(container);
+        _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
         testName = "Status Effect Test";
 
         testExitCondition = TestCompletionCondition.EndManually;
         
         //use status effects
-        _sequencer.AddAction(UseStatusMove);
+        for (int i = 0; i < _statusMoves.Length; i++)
+        {
+            _sequencer.AddAction(UseStatusMove);
+        }
     }
     private void UseStatusMove()
     {
         var currentParticipant = _battleHandler.GetCurrentParticipant();
         
-        var moveName = NameDB.GetMoveName(_statusMoves[_currentMoveIndex]);
+        var moveName = NameDB.GetMoveName(_statusMoves[_sequencer.GetTestCaseIndex()]);
         
         var assetPath = DirectoryHandler.GetDirectory(AssetDirectory.Moves) + moveName;
         var moveFromAsset = Resources.Load<Move>(assetPath);
@@ -51,7 +52,7 @@ public class StatusEffectTest : BattleBasedTest
         
         /*give flamethrower 5 damage to comply with the move pipeline
         and allow it to remove freeze effect, while not fainting the enemy*/
-        if (_statusMoves[_currentMoveIndex] != LearnSetMoveName.Flamethrower)
+        if (_statusMoves[_sequencer.GetTestCaseIndex()] != LearnSetMoveName.Flamethrower)
         {
             newMove.moveDamage = 0;
             newMove.statusChance = 100;
@@ -70,36 +71,36 @@ public class StatusEffectTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         enemy.statusHandler.ChangeToTestingState(StatusHandlingState.Permanent);
         
-        _testCaseHandler.AddTestCase(0, "Victim has to suffer burn", 
+        _testCaseHandler.AddTestCase( "Victim has to suffer burn", 
             () => enemy.pokemon.hp < enemy.pokemon.maxHp
                   && enemy.pokemon.attack < enemy.statData.attack
                   && enemy.pokemon.statusEffect == StatusEffect.Burn);
         
-        _testCaseHandler.AddTestCase(1, "Victim has to be frozen", 
+        _testCaseHandler.AddTestCase("Victim has to be frozen", 
             () => !enemy.canAttack
                  && enemy.pokemon.statusEffect == StatusEffect.Freeze);
         
-        _testCaseHandler.AddTestCase(2, "Victim has to be unfrozen", 
+        _testCaseHandler.AddTestCase( "Victim has to be unfrozen", 
             () => enemy.canAttack
                   && enemy.pokemon.statusEffect == StatusEffect.None);
         
-        _testCaseHandler.AddTestCase(3, "Victim has to be asleep", 
+        _testCaseHandler.AddTestCase( "Victim has to be asleep", 
             () => !enemy.canAttack
             && enemy.pokemon.statusEffect == StatusEffect.Sleep);
         
-        _testCaseHandler.AddTestCase(4, "Victim has to be poisoned", 
+        _testCaseHandler.AddTestCase( "Victim has to be poisoned", 
             () => enemy.pokemon.hp < enemy.pokemon.maxHp
             &&  enemy.pokemon.statusEffect == StatusEffect.Poison);
         
-        _testCaseHandler.AddTestCase(5, "Victim has to be paralyzed", 
+        _testCaseHandler.AddTestCase( "Victim has to be paralyzed", 
             () => enemy.pokemon.speed < enemy.statData.speed
             &&  enemy.pokemon.statusEffect == StatusEffect.Paralysis);
         
-        _testCaseHandler.AddTestCase(6, "Victim has to be poisoned badly", 
+        _testCaseHandler.AddTestCase("Victim has to be poisoned badly", 
             () => enemy.pokemon.hp < enemy.pokemon.maxHp
                   && enemy.pokemon.statusEffect == StatusEffect.BadlyPoison);
         
-        _testCaseHandler.AddTestCase(7, "Victim's poisoned status should be reduced after it switches out", 
+        _testCaseHandler.AddTestCase( "Victim's poisoned status should be reduced after it switches out", 
             () => enemy.pokemonTrainerAI.trainerParty[1].hp < enemy.pokemonTrainerAI.trainerParty[1].maxHp
                   && enemy.pokemonTrainerAI.trainerParty[1].statusEffect == StatusEffect.Poison);
         
@@ -111,11 +112,11 @@ public class StatusEffectTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        var caseExists = _testCaseHandler
-            .HandleCurrentTestCase(_currentMoveIndex
-                , CheckTestEnd, TestCaseFailed);
-        
-        _currentMoveIndex++;
+        var caseExists = _testCaseHandler.HandleCurrentTestCase(CheckTestEnd, TestCaseFailed);
+        if (!caseExists)
+        {
+            CheckTestEnd();
+        }
         return;
         void CheckTestEnd()
         {

@@ -17,28 +17,37 @@ public class TestCase
       this.condition = condition;
    }
 }
+
 public class TestCaseHandler
 {
    private Dictionary<int,TestCase> testCases = new();
    private TestingEnvironmentHandler _testHandler;
+   private TestActionSequencer _sequencer;
+   private int NextIndex => testCases.Count;
    
-   public TestCaseHandler(TestingEnvironmentHandler testHandler)
+   public TestCaseHandler(TestingEnvironmentHandler testHandler,TestActionSequencer sequencer)
    {
       _testHandler = testHandler;
+      _sequencer = sequencer;
    }
 
-   public void AddTestCase(int testCaseIndex,string message,Func<bool> condition)
+   public void AddTestCase(string message,Func<bool> condition)
    {
-      testCases.Add(testCaseIndex,new TestCase(testCaseIndex,message,condition));
+      testCases.Add(NextIndex,new TestCase(NextIndex,message,condition));
    }
+   public void AddTestCase(int caseIndex,string message,Func<bool> condition)
+   {
+      testCases.Add(caseIndex,new TestCase(caseIndex,message,condition));
+   }
+   
    private TestCase GetCurrentTestCase(int currentIndex)
    {
       return testCases.FirstOrDefault(c=>c.Key == currentIndex).Value;
    }
 
-   public bool HandleCurrentTestCase(int currentSequenceIndex,Action successCallBack,Action failureCallBack)
+   public bool HandleCurrentTestCase(Action successCallBack,Action failureCallBack)
    {
-      var testCaseResult = GetCurrentTestCase(currentSequenceIndex);
+      var testCaseResult = GetCurrentTestCase(_sequencer.GetTestCaseIndex());
       if (testCaseResult != null)
       {
          if (!testCaseResult.condition.Invoke())

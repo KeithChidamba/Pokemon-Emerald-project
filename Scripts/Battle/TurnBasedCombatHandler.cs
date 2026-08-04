@@ -79,7 +79,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     public void SaveTurn(Turn turn)
     {
-        if (_turnHistory.Any(t => t.attackerID == turn.attackerID))
+        if (_turnHistory.Any(t => t.attackerID == turn.attackerID
+            || turn.attackerKey == t.attackerKey))
         {
             //for testing incase new bug
             Debug.Log("duplicate detected, index of : "+turn.attackerKey);
@@ -140,13 +141,13 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         switchTurn.switchData = data;
         SaveTurn(switchTurn);
     }
-    public void SaveEmptyTurn()
+    public void SaveEmptyTurn(BattleParticipantKey participantKey)
     {
         var fakeMove = ScriptableObject.CreateInstance<Move>();
         fakeMove.priority = 0;
             
         var switchTurn = new Turn(TurnUsage.Empty,
-            attackerKey: _battleHandler.GetCurrentParticipant().participantKey
+            attackerKey: participantKey
             ,move:fakeMove
             ,attackerID:Utility.Random16Bit());
 

@@ -56,22 +56,23 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
            DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)));
        
        TestRegistry testRegistry = new();
-       foreach (var test in testRegistry.allTests)
+       yield return new WaitForSeconds(0.1f);
+       
+       for (int i = 0; i < testRegistry.allTests.Count; i++)
        {
+           var test = testRegistry.allTests[i];
            test.testingHandler = this;
            test.Inject(_container);
-       }
-       
-       yield return new WaitForSeconds(2f);
-      
-       foreach(var test in testRegistry.allTests)
-       {
+           
+           yield return new WaitForSeconds(0.5f);
+           
            LogMessage($"<- {test.testName} -> has begun",TestLogType.Test);
            test.onTestResult += GetTestFeedBack;
            yield return new WaitForSeconds(0.01f);
            yield return StartCoroutine(test.BeginTest());
            if (test.testStatus == IntegrationTest.TestStatus.Failed)
            { 
+               Debug.Log($"-------------TEST Failed---------------");
                break;
            }
            continue;
@@ -80,9 +81,9 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
                test.onTestResult -= GetTestFeedBack; 
                LogMessage($"<- {test.testName} -> has {test.testStatus}"
                    ,test.testStatus == IntegrationTest.TestStatus.Failed?
-                  TestLogType.Error:TestLogType.Pass);
+                       TestLogType.Error:TestLogType.Pass);
            }
-       } 
+       }
        GetLogs(); 
        Debug.Log($"TEST LOGS PRINTED");
    }
@@ -110,13 +111,14 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
 public class TestRegistry
 {
     //tests are ran in this order
-    public IntegrationTest[] allTests =
+    public List<IntegrationTest> allTests = new()
     {
-       
         //Move Based Tests
-        new StatusEffectTest(),
+        new SemiInvulnerableSingleBattleTest(),
         //new SemiInvulnerableDoubleBattleTest(),
-        //new SemiInvulnerableSingleBattleTest(),
+        //new StatChangeApplicationTest(),
+        //new StatusEffectTest(),
+        
         // new WeatherDamageTest(),
         // new WeatherDamageTest(),
         // new MultiTargetDamageTest(),

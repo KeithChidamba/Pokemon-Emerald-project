@@ -22,20 +22,24 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
-        _sequencer = new MoveTestActionSequencer(container,1);
-        _testCaseHandler = new TestCaseHandler(testingHandler);
+        _sequencer = new MoveTestActionSequencer(container);
+        _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
         
         testName = "Semi Invulnerability Single Battle Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
         
-        //first fly, then on second iteration dig
+        //first fly
         _sequencer.AddAction(AttackFirst);
         _sequencer.AddAction(EnsureHitAndSkipTurn);
         _sequencer.AddAction(AllowEnemyToCounter);
         _sequencer.AddAction(EnsureHitAndSkipTurn);
         _sequencer.AddAction(HijackEnemyForFreeSwitch);
-        
+        //then dig
+        _sequencer.AddAction(AttackFirst);
+        _sequencer.AddAction(EnsureHitAndSkipTurn);
+        _sequencer.AddAction(AllowEnemyToCounter);
+        _sequencer.AddAction(EnsureHitAndSkipTurn);
         _moveUsageHandler.OnDamageModified += CheckForInvulnerableDamageEffect;
     }
    
@@ -49,7 +53,7 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         return;
         void ForceEnemySkip()
         {
-            _turnBasedCombatHandler.SaveEmptyTurn();
+            _turnBasedCombatHandler.SaveEmptyTurn(_battleHandler.GetCurrentParticipant().participantKey);
         }
     }
     private void AttackFirst()
@@ -71,8 +75,6 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         enemy.pokemon.moveSet[0].moveName = NameDB.GetMoveName(movesThatCounter[0]);
         enemy.pokemon.moveSet[0].isSureHit = true;
         testingHandler.LogMessage($"changed enemy move to {enemy.pokemon.moveSet[0].moveName}",TestLogType.Information);
-        //just in-case
-        enemy.pokemon.hp = enemy.pokemon.maxHp * .75f;
         AttackFirst();
     }
     
@@ -103,8 +105,10 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
       
         _testCaseHandler.AddTestCase(0,"Player has full health",() => player.pokemon.hp >= player.pokemon.maxHp);
-        _testCaseHandler.AddTestCase(2,"Player has been damaged",() => player.pokemon.hp < player.pokemon.maxHp);
-        
+        _testCaseHandler.AddTestCase(2,"Player has to be damaged",() => player.pokemon.hp < player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(5,"Player has full health",() => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(7,"Player has to be damaged",() => player.pokemon.hp < player.pokemon.maxHp);
+
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
@@ -119,16 +123,16 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
         
-        var caseExists = _testCaseHandler
-            .HandleCurrentTestCase(_sequencer.CurrentSequenceIndex
-                ,CheckTestEnd,TestCaseFailed);
-        
+        var caseExists = _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)
         {
             CheckTestEnd();
         }
         void CheckTestEnd()
         {
+            //make test more reliable,prevent conflicting outcomes
+            enemy.pokemon.hp = enemy.pokemon.maxHp;
+            player.pokemon.hp = player.pokemon.maxHp;
             if (_sequencer.SequenceComplete())
             {
                 _moveUsageHandler.OnDamageModified -= CheckForInvulnerableDamageEffect;
