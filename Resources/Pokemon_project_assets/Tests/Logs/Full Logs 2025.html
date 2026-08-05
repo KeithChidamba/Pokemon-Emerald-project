@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <title>Test Log</title>
+
+      <style>
+      body{
+          background:#1e1e1e;
+          color:#d4d4d4;
+          font-family:Consolas, monospace;
+          margin:20px;
+      }
+
+      h1{
+          color:white;
+      }
+
+      table{
+          width:100%;
+          border-collapse:collapse;
+      }
+
+      th{
+          text-align:left;
+          padding:8px;
+          border-bottom:2px solid #666;
+          color:white;
+      }
+
+      td{
+          padding:4px 8px;
+          border-bottom:1px solid #333;
+          vertical-align:top;
+      }
+
+      .time{
+          color:#888;
+          width:220px;
+      }
+
+      .type{
+          width:120px;
+          font-weight:bold;
+      }
+
+    .dialogue{
+    color:#dcdcaa;      /* Soft yellow - character dialogue */
+    }
+
+    .health{
+        color:#800080;      /* Red - HP/healing/damage */
+    }
+
+    .calculation{
+        color:#c586c0;      /* Purple - formulas and calculations */
+    }
+
+    .information{
+        color:#58a6ff;      /* Blue - general information */
+    }
+
+    .error{
+        color:#f85149;      /* Bright red - errors */
+        font-weight:bold;
+    }
+
+    .test{
+        color:#79c0ff;      /* Cyan - test start/status */
+        font-weight:bold;
+    }
+
+    .pass{
+        color:#3fb950;      /* Green - successful test */
+        font-weight:bold;
+    }
+
+      .separator td{
+          border-bottom:2px solid #666;
+      }
+      </style>
+
+      </head>
+
+      <body>
+
+      <h1>Test Logs</h1>
+
+      <table>
+
+      <tr>
+          <th>Timestamp</th>
+          <th>Type</th>
+          <th>Message</th>
+      </tr>
+        <tr>
+            <td class="time">2026/08/05 10:18:39 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- On Field Damage Modification Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:18:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Linoone</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:18:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Linoone</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:18:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:18:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Damage Mod challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Damage Mod sent out Foe Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:04 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Muddy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:06 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 76/76</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Muddy used Mud Sport!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The power of electric type moves was weakened</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Thunderbolt on Muddy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:15 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage was changed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:15 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 8 to 4</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:16 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 72/76</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile withdrew Muddy</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile sent out Weather boy</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:21 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Thunderbolt on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:24 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage remained the same</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:24 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 9 to 9</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:26 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 66/75</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Weather boy used Rain Dance!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It started to rain!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Flamethrower on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:34 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage remained the same</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:34 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 5 to 5</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:35 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Rain continues to fall.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:37 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 61/75</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:37 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Weather boy used Tail Whip on Foe Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:41 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Flamethrower on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:47 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Critical Hit!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:47 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage was changed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:47 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 12 to 6</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Rain continues to fall.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:51 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 55/75</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Weather boy used Water Sport!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The power of fire type moves was weakened</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:19:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Flamethrower on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:00 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage was changed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:00 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 5 to 1</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:01 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Rain continues to fall.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:03 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 54/75</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Weather boy used Sunny Day!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sunlight got bright!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Flamethrower on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:11 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage was changed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:11 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 5 to 2</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sunlight is strong.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:18 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- On Field Damage Modification Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:18 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Semi Invulnerability Double Battle Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Golbat</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Vibrava</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:20:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Semi-Invul Double challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:09 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Semi-Invul Double sent out Foe Golbat and Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:13 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Zor and Pinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Aerial Ace on Pinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Critical Hit!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor used Fly!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:24 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor flew up high!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch used Dig!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:27 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch dug underground!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Golbat used Wing Attack on Pinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch is underground</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:35 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor flew down</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:39 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Golbat fainted!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:43 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor gained 73 EXP points</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch gained 73 EXP points</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:47 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch dug back up!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Aerial Ace on Zor!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/05 10:21:57 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Semi Invulnerability Double Battle Test -&gt; has Passed</td>
+        </tr>
+
+      </table>
+
+      </body>
+      </html>

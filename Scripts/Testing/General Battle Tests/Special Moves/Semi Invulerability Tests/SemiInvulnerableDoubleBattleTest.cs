@@ -9,7 +9,8 @@ public class SemiInvulnerableDoubleBattleTest : BattleBasedTest
     private TurnBasedCombatHandler _turnBasedCombatHandler;
     
     private MoveTestActionSequencer _sequencer;
-
+    private TestCaseHandler _testCaseHandler;
+    
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
@@ -20,7 +21,8 @@ public class SemiInvulnerableDoubleBattleTest : BattleBasedTest
         testName = "Semi Invulnerability Double Battle Test";
 
         testExitCondition = TestCompletionCondition.EndManually;
-        _sequencer = new MoveTestActionSequencer(container);
+        _sequencer = new MoveTestActionSequencer(container,true);
+        _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
         
         //fly
         _sequencer.AddAction(() => _sequencer.UseMove());
@@ -34,7 +36,6 @@ public class SemiInvulnerableDoubleBattleTest : BattleBasedTest
         _sequencer.AddAction(EnsureHitAndSkipTurn);
     }
 
-
     private void EnsureHitAndSkipTurn()
     {
         //because of sequence logic, this will always be a player or partner
@@ -47,15 +48,35 @@ public class SemiInvulnerableDoubleBattleTest : BattleBasedTest
     }
     public override IEnumerator BeginTest()
     {
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        var enemyPartner = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
+        
+        _testCaseHandler.AddTestCase(3,"Enemies were attacked",
+            () => enemy.pokemon.hp < enemy.pokemon.maxHp
+            && enemyPartner.pokemon.hp < enemyPartner.pokemon.maxHp);
+
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
 
     protected override void DetermineSuccess()
     {
-        if (_sequencer.SequenceComplete())
+        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        if (!caseExists)
         {
-            EndTest(true);
+            CheckTestEnd();
+        }
+        return;
+        void CheckTestEnd()
+        {
+            if (_sequencer.SequenceComplete())
+            {
+                EndTest(true);
+            }
+        }
+        void TestCaseFailed()
+        {
+            EndTest(false);
         }
     }
 
@@ -67,7 +88,6 @@ public class SemiInvulnerableDoubleBattleTest : BattleBasedTest
             return;
         }
         
-        if (_sequencer.SequenceComplete()) return;
         _sequencer.CallNextAction();
     }
 }

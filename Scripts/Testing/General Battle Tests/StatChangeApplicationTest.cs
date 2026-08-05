@@ -96,12 +96,7 @@ public class StatChangeApplicationTest : BattleBasedTest
     }
     protected override void DetermineSuccess()
     {
-        var caseExists = _testCaseHandler
-            .HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
-        if (!caseExists)
-        {
-            CheckTestEnd();
-        }
+        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {

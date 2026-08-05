@@ -112,11 +112,7 @@ public class StatusEffectTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        var caseExists = _testCaseHandler.HandleCurrentTestCase(CheckTestEnd, TestCaseFailed);
-        if (!caseExists)
-        {
-            CheckTestEnd();
-        }
+         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd, TestCaseFailed);
         return;
         void CheckTestEnd()
         {

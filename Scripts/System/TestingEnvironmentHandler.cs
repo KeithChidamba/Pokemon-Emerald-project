@@ -58,9 +58,8 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
        TestRegistry testRegistry = new();
        yield return new WaitForSeconds(0.1f);
        
-       for (int i = 0; i < testRegistry.allTests.Count; i++)
+       foreach(var test in testRegistry.allTests)
        {
-           var test = testRegistry.allTests[i];
            test.testingHandler = this;
            test.Inject(_container);
            
@@ -72,7 +71,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
            yield return StartCoroutine(test.BeginTest());
            if (test.testStatus == IntegrationTest.TestStatus.Failed)
            { 
-               Debug.Log($"-------------TEST Failed---------------");
+               Debug.LogWarning($"-------------TEST FAILED---------------");
                break;
            }
            continue;
@@ -114,15 +113,15 @@ public class TestRegistry
     public List<IntegrationTest> allTests = new()
     {
         //Move Based Tests
-        new SemiInvulnerableSingleBattleTest(),
+        //new SemiInvulnerableSingleBattleTest(),
+        //new OnFieldDamageModificationTest(),
         //new SemiInvulnerableDoubleBattleTest(),
         //new StatChangeApplicationTest(),
         //new StatusEffectTest(),
-        
+        //new IdentifyTargetMoveTest(),
         // new WeatherDamageTest(),
         // new WeatherDamageTest(),
         // new MultiTargetDamageTest(),
-        // new OnFieldDamageModificationTest(),
         // new IdentifyTargetMoveTest(),
         // new CreateBarrierMoveTest(),
         // new HealthDrainTest(),

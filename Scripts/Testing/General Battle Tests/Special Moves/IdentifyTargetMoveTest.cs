@@ -6,34 +6,59 @@ using UnityEngine;
 public class IdentifyTargetMoveTest : BattleBasedTest
 {
     private MoveTestActionSequencer _sequencer;
+    private TestCaseHandler _testCaseHandler;
     
     private BattleHandler _battleHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
+    private TurnBasedCombatHandler _turnBasedCombatHandler;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _sequencer = new MoveTestActionSequencer(container,1);
+        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
+        
         testName = "Identify Target Test";
         testExitCondition = TestCompletionCondition.EndManually;
+        
+        _sequencer = new MoveTestActionSequencer(container);
+        _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
+        
         //brick break,should fail because of ghost type
         _sequencer.AddAction(() => _sequencer.UseMove(1));
         //odor-sleuth
         _sequencer.AddAction(() => _sequencer.UseMove());
         //brick break,should hit
-        _sequencer.AddAction(() => _sequencer.UseMove(1),true);
+        _sequencer.AddAction(() => _sequencer.UseMove(1));
         //test odor sleuth move repeat, should fail
         _sequencer.AddAction(() => _sequencer.UseMove());
         
-        _sequencer.AddAction(SwitchToPartner);
+        _sequencer.AddAction(HijackEnemyForFreeSwitch);
+        
+        //tackle,should fail because of ghost type
+        _sequencer.AddAction(() => _sequencer.UseMove(1));
+        //Foresight
+        _sequencer.AddAction(() => _sequencer.UseMove());
+        //tackle,should hit
+        _sequencer.AddAction(() => _sequencer.UseMove(1));
+        //Foresight move repeat, should fail
+        _sequencer.AddAction(() => _sequencer.UseMove());
     }
-    
-    public override IEnumerator BeginTest()
+    private void HijackEnemyForFreeSwitch()
     {
-        yield return HandleBattleState();
-        onTestResult.Invoke();
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
+        _battleHandler.OnSwitchOut += CheckMoveEffectRemoval;
+        _pokemonPartyHandler.SwapToPartner();
+        //test case index 5
+        enemy.pokemon.hp = enemy.pokemon.maxHp;
+        return;
+        void ForceEnemySkip()
+        {
+            _turnBasedCombatHandler.SaveEmptyTurn(BattleParticipantKey.Enemy);
+        }
     }
     private void CheckMoveEffectRemoval(BattleParticipant swapParticipant)
     {
@@ -44,6 +69,40 @@ public class IdentifyTargetMoveTest : BattleBasedTest
             LogImmunityState(enemy);
         }
     }
+    public override IEnumerator BeginTest()
+    {
+        _turnBasedCombatHandler.OnNewTurn += SetupEnemyPokemonState;
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        
+        _testCaseHandler.AddTestCase(0,"Enemies should be immune to Brick Break",
+            () => enemy.pokemon.hp >= enemy.pokemon.maxHp);
+        
+        _testCaseHandler.AddTestCase(2,"Enemies should be hit by Brick Break",
+            () => enemy.pokemon.hp < enemy.pokemon.maxHp);
+        
+        _testCaseHandler.AddTestCase(5,"Enemies should be immune to Brick Break",
+            () => enemy.pokemon.hp >= enemy.pokemon.maxHp);
+        
+        _testCaseHandler.AddTestCase(6,"Foresight should remove evasion buff",
+            () => enemy.pokemon.evasion <= 100);
+        
+        _testCaseHandler.AddTestCase(7,"Enemies should be hit by Brick Break",
+            () => enemy.pokemon.hp < enemy.pokemon.maxHp);
+
+        yield return HandleBattleState();
+        onTestResult.Invoke();
+    }
+    private void SetupEnemyPokemonState()
+    {
+        _turnBasedCombatHandler.OnNewTurn -= SetupEnemyPokemonState;
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemon.types.Clear();
+        var ghostType = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ghost);
+        enemy.pokemon.types.Add(ghostType);
+        enemy.pokemon.statModifiers.Add(new StatChangeData(Stat.Evasion,1));
+        enemy.pokemon.evasion = 133f;
+    }
+    
     protected override void DetermineSuccess()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
@@ -51,19 +110,24 @@ public class IdentifyTargetMoveTest : BattleBasedTest
         testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
                                   $"/{enemy.pokemon.maxHp}",TestLogType.Health);
         
-        if (_sequencer.SequenceComplete())
+        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        if (!caseExists)
         {
-            EndTest(true);
+            CheckTestEnd();
+        }
+        return;
+        void CheckTestEnd()
+        {
+            if (_sequencer.SequenceComplete())
+            {
+                EndTest(true);
+            }
+        }
+        void TestCaseFailed()
+        {
+            EndTest(false);
         }
     }
-    
-    private void SwitchToPartner()
-    {
-        //swap with your partner
-        _battleHandler.OnSwitchOut += CheckMoveEffectRemoval;
-        _pokemonPartyHandler.SwapToPartner();
-    }
-
 
     private void LogImmunityState(BattleParticipant enemy)
     {
@@ -87,40 +151,15 @@ public class IdentifyTargetMoveTest : BattleBasedTest
             testingHandler.LogMessage($"Victim has no negation ", TestLogType.Information);
         }
     }
+    
     protected override void DetermineTurnUsage()
     {
         var currentParticipant = _battleHandler.GetCurrentParticipant();
         if (currentParticipant.participantKey != BattleParticipantKey.Player) return;
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-       
-        if (_sequencer.CurrentSequenceIndex == 0)
-        {
-            //first turn
-            enemy.pokemon.types.Clear();
-            var ghostType = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ghost);
-            enemy.pokemon.types.Add(ghostType);
-            enemy.pokemon.statModifiers.Add(new StatChangeData(Stat.Evasion,1));
-            enemy.pokemon.evasion = 133f;
-        }
-        if (_sequencer.CanDisplayCurrentLogs())
-        { 
-            LogImmunityState(enemy);
-        }
-        if (enemy.immunityNegations.Count > 0)
-        {
-            bool testSuccessful = true;
-            if (enemy.immunityNegations[0].moveName == LearnSetMoveName.Foresight)
-            {
-                testSuccessful = enemy.pokemon.evasion <= 100;
-            }
-            if (!testSuccessful)
-            {
-                //fail if any section of test fails
-                EndTest(false);
-                return;
-            }
-        }
+        LogImmunityState(enemy);
+        
         _sequencer.CallNextAction();
     }
 }

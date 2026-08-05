@@ -56,7 +56,7 @@ public class HeldItemUsageTest : BattleBasedTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
 
-        var caseExists = _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         
         if (!caseExists)
         {

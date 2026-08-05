@@ -1,71 +1,53 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class TestAction
 {
     public Action action;
-    public bool displayLogs;
-    public TestAction(Action action, bool displayLogs)
+    public TestAction(Action action)
     {
         this.action = action;
-        this.displayLogs = displayLogs;
     }
 }
+
 public class TestActionSequencer
 {
     public int CurrentSequenceIndex { get; private set; }
     private Dictionary<int, TestAction> _testSequence = new();
     private int NextIndex => _testSequence.Count;
-    private int _numSequencesCompleted;
-    private int _numSequenceRepetitions;
-
+    private bool endOnMaxIndex;
     public virtual int GetTestCaseIndex()
     {
         return CurrentSequenceIndex;
     }
-    protected TestActionSequencer(int numSequenceRepetitions = 0)
+    protected TestActionSequencer(bool endOnMaxIndex=false)
     {
+        this.endOnMaxIndex = endOnMaxIndex;
         CurrentSequenceIndex = 0;
-        _numSequencesCompleted = 0;
-        _numSequenceRepetitions = numSequenceRepetitions;
     }
-    public void AddAction(Action action,bool displayLogs=false)
+    public void AddAction(Action action)
     {
-        _testSequence.Add(NextIndex,new TestAction(action,displayLogs));
+        _testSequence.Add(NextIndex,new TestAction(action));
     }
     public void RemoveAction(int index)
     {
         _testSequence.Remove(index);
     }
-
-    public void RemoveLastAction()
-    {
-        _testSequence.Remove(_testSequence.Count-1);
-    }
-    public bool CanDisplayCurrentLogs()
-    {
-        return _testSequence[CurrentSequenceIndex].displayLogs;
-    }
     public void CallNextAction()
     {
+        if (CurrentSequenceIndex == _testSequence.Count)
+        {
+            Debug.LogWarning("attempted out of range hit on action access");
+            return;
+        }
         var action = _testSequence[CurrentSequenceIndex].action;
-        if (CurrentSequenceIndex == _testSequence.Count - 1)
-        {
-            _numSequencesCompleted++;
-            if (_numSequencesCompleted < _numSequenceRepetitions + 1)
-            {
-                
-                CurrentSequenceIndex = 0;
-            }
-        }
-        else
-        {
-            CurrentSequenceIndex++;
-        }
+        CurrentSequenceIndex++;
         action?.Invoke();
     }
     public bool SequenceComplete()
     {
-        return _numSequencesCompleted == _numSequenceRepetitions + 1;
+        if(endOnMaxIndex)return CurrentSequenceIndex == _testSequence.Count;
+        return CurrentSequenceIndex == _testSequence.Count - 1;
     }
 }

@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class OnFieldDamageModificationTest : BattleBasedTest
 {
-    private MoveTestActionSequencer _sequencer;
     private MoveSequenceHandler _moveUsageHandler;
     private BattleHandler _battleHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
+   
+    private MoveTestActionSequencer _sequencer;
+    private TestCaseHandler _testCaseHandler;
     
-    private List<bool> _damageChecks = new();
+    private Dictionary<int,bool> damageModifications = new ();
     
     public override void Inject(ServiceContainer serviceContainer)
     {
@@ -22,7 +24,8 @@ public class OnFieldDamageModificationTest : BattleBasedTest
         testName = "On Field Damage Modification Test";
         testExitCondition = TestCompletionCondition.EndManually;
         _sequencer = new MoveTestActionSequencer(container);
-
+        _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
+        
         //Mud sport while enemy uses thunderbolt
         _sequencer.AddAction(() => _sequencer.UseMove());
         //swap to clear mud sport
@@ -43,6 +46,17 @@ public class OnFieldDamageModificationTest : BattleBasedTest
    
     public override IEnumerator BeginTest()
     {
+        for (int i = 0; i < 7; i++)
+        {
+            var index = i;
+            if (index == 1 || index == 2)
+            {
+                //skip turns that dont concern damage change
+                //from field mods
+                continue;
+            }
+            _testCaseHandler.AddTestCase(index,"field must modify Damage", () => damageModifications[index]);
+        }
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
@@ -74,7 +88,7 @@ public class OnFieldDamageModificationTest : BattleBasedTest
             var damageWasChanged = modifiedDamage < initialDamage || modifiedDamage > initialDamage;
             
             testingHandler.LogMessage(damageWasChanged? "Damage was changed":"Damage remained the same",  TestLogType.Information);
-            _damageChecks.Add(damageWasChanged);
+            damageModifications.Add(_sequencer.CurrentSequenceIndex-1,damageWasChanged);
             
             var increase = modifiedDamage > initialDamage;
             
@@ -88,11 +102,24 @@ public class OnFieldDamageModificationTest : BattleBasedTest
 
     protected override void DetermineSuccess()
     {
-        if (_sequencer.SequenceComplete())
+        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        if (!caseExists)
+        {
+            CheckTestEnd();
+        }
+        return;
+        void CheckTestEnd()
+        {
+            if (_sequencer.SequenceComplete())
+            {
+                _moveUsageHandler.OnDamageModified -= CheckForFieldEffect;
+                EndTest(true);
+            }
+        }
+        void TestCaseFailed()
         {
             _moveUsageHandler.OnDamageModified -= CheckForFieldEffect;
-            var checksPassed = _damageChecks.All(check => check);
-            EndTest(checksPassed);
+            EndTest(false);
         }
     }
 
@@ -112,5 +139,4 @@ public class OnFieldDamageModificationTest : BattleBasedTest
         
         _sequencer.CallNextAction();
     }
-    
 }

@@ -44,8 +44,14 @@ public class TestCaseHandler
    {
       return testCases.FirstOrDefault(c=>c.Key == currentIndex).Value;
    }
-
-   public bool HandleCurrentTestCase(Action successCallBack,Action failureCallBack)
+   /// <summary>
+   /// Should only be used when test cases are guaranteed to exist at every possible index
+   /// </summary>
+   public void HandleCurrentTestCase(Action successCallBack,Action failureCallBack)
+   {
+      var result = CheckForCurrentTestCase(successCallBack, failureCallBack);
+   }
+   public bool CheckForCurrentTestCase(Action successCallBack,Action failureCallBack)
    {
       var testCaseResult = GetCurrentTestCase(_sequencer.GetTestCaseIndex());
       if (testCaseResult != null)

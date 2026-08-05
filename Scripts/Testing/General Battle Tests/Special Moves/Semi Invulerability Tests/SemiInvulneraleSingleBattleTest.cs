@@ -45,7 +45,6 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
    
     private void HijackEnemyForFreeSwitch()
     {
-        _sequencer.RemoveLastAction();
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
@@ -71,6 +70,9 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         var movesThatCounter = semiData.Select(data => data.moveName).ToList();
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        //Remove effect of hijacked turn
+        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Natural);
+        
         //enemy will use tackle but disguised as a counter viable move
         enemy.pokemon.moveSet[0].moveName = NameDB.GetMoveName(movesThatCounter[0]);
         enemy.pokemon.moveSet[0].isSureHit = true;
@@ -123,7 +125,7 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
         
-        var caseExists = _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)
         {
             CheckTestEnd();
