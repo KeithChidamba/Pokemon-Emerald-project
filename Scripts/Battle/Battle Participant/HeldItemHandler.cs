@@ -3,12 +3,12 @@ using System.Collections;
 using UnityEngine;
 
 [Serializable]
-public class Held_Items : BattleParticipantModule
+public class HeldItemHandler : BattleParticipantModule
 {
     private MoveSequenceHandler _moveUsageHandler;
     private DialogueHandler _dialogueHandler;
     
-    public Held_Items(ServiceContainer container)
+    public HeldItemHandler(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
@@ -55,13 +55,13 @@ public class Held_Items : BattleParticipantModule
                 yield return CheckStatusCondition(heldItem);
                 break;
             case  Berry.ConfusionHeal:
-                yield return CheckIfConfused();
+                yield return CheckIfConfused(heldItem);
                 break;
         }
     }
     private IEnumerator CheckHealCondition(Item heldItem)
     {
-        if(participant.pokemon.hp >= (participant.pokemon.maxHp/2)) yield break;
+        if(participant.pokemon.hp >= participant.pokemon.maxHp/2f) yield break;
         
         DepleteHeldItem(heldItem);
         yield return GetHealing(heldItem);
@@ -73,25 +73,34 @@ public class Held_Items : BattleParticipantModule
         DepleteHeldItem(heldItem);
        yield return GetStatusHealing(heldItem);
     }
-    private IEnumerator CheckIfConfused()
+    private IEnumerator CheckIfConfused(Item heldItem)
     {
         if(!participant.isConfused) yield break;
 
-        _dialogueHandler.DisplayDetails(participant.pokemon.pokemonDisplayName+"'s Persim berry healed its confusion");
+        _dialogueHandler.DisplayBattleInfo($"{participant.pokemon.pokemonDisplayName}'s {heldItem.itemName} healed its confusion");
         participant.isConfused = false;
     }
     private IEnumerator GetHealing(Item heldItem)
     { 
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+heldItem.itemName +" healed it");
+        _dialogueHandler.DisplayBattleInfo($"{participant.pokemon.pokemonDisplayName}'s {heldItem.itemName} healed it");
         var healEffect = heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
         _moveUsageHandler.HealthGainDisplay(healEffect,healthGainer:participant);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
     private IEnumerator GetStatusHealing(Item heldItem)
-    { 
-        Debug.Log("triggered status held item");
-        var statusInfo = heldItem.GetModule<StatusHealInfoModule>();
-        var curableStatus = statusInfo.statusEffect;
+    {
+        StatusEffect curableStatus;
+        
+        if (heldItem.itemType == ItemType.Berry)
+        {
+            var berryInfo = heldItem.GetModule<BerryInfoModule>();
+            curableStatus = berryInfo.statusEffect;
+        }
+        else
+        {
+            var statusInfo = heldItem.GetModule<StatusHealInfoModule>();
+            curableStatus = statusInfo.statusEffect;
+        }
         
         if (curableStatus == StatusEffect.Poison &&
             participant.pokemon.statusEffect == StatusEffect.BadlyPoison)
@@ -105,7 +114,7 @@ public class Held_Items : BattleParticipantModule
         }
         participant.statusHandler.RemoveStatusEffect(curableStatus == StatusEffect.FullHeal);
         participant.RefreshStatusEffectImage();
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s "+heldItem.itemName +" healed it");
+        _dialogueHandler.DisplayBattleInfo($"{participant.pokemon.pokemonDisplayName}'s {heldItem.itemName} healed it");
     }
 
 }

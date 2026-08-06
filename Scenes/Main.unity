@@ -1412,7 +1412,6 @@ MonoBehaviour:
   statusAnimationHandler:
     statusEffectAnimator: {fileID: 1906379550}
     statusEffectImage: {fileID: 1906379553}
-    imageRect: {fileID: 0}
     participant: {fileID: 0}
 --- !u!1 &51419307
 GameObject:
@@ -4492,7 +4491,6 @@ MonoBehaviour:
   statusAnimationHandler:
     statusEffectAnimator: {fileID: 1694388127}
     statusEffectImage: {fileID: 1694388130}
-    imageRect: {fileID: 0}
     participant: {fileID: 0}
 --- !u!114 &191196048 stripped
 MonoBehaviour:
@@ -430500,7 +430498,6 @@ MonoBehaviour:
   statusAnimationHandler:
     statusEffectAnimator: {fileID: 682361081}
     statusEffectImage: {fileID: 1003833862}
-    imageRect: {fileID: 0}
     participant: {fileID: 0}
 --- !u!1001 &1638915953
 PrefabInstance:
@@ -450389,7 +450386,6 @@ MonoBehaviour:
   statusAnimationHandler:
     statusEffectAnimator: {fileID: 5691125292314108464}
     statusEffectImage: {fileID: 5691125292314108467}
-    imageRect: {fileID: 0}
     participant: {fileID: 0}
 --- !u!1 &2033643100
 GameObject:

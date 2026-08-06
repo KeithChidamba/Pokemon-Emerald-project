@@ -21,7 +21,7 @@ public class SemiInvulnerableDoubleBattleTest : BattleBasedTest
         testName = "Semi Invulnerability Double Battle Test";
 
         testExitCondition = TestCompletionCondition.EndManually;
-        _sequencer = new MoveTestActionSequencer(container,true);
+        _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
         
         //fly

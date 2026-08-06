@@ -206,6 +206,7 @@ public static class InstanceFactory
         newItem.canBeSold = item.canBeSold;
         newItem.canBeHeld = item.canBeHeld;
         newItem.additionalInfoModules = item.additionalInfoModules;
+        newItem.dynamicInfoModules = item.dynamicInfoModules;
         newItem.imageDirectory = item.imageDirectory;
         return newItem;
     }

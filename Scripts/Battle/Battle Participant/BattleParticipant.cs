@@ -20,7 +20,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public BattleParticipantKey participantKey;
     [SerializeField]public AbilityHandler abilityHandler;
     [SerializeField]public BattleParticipantStatusHandler statusHandler;
-    [SerializeField]public Held_Items heldItemHandler;
+    [SerializeField]public HeldItemHandler heldItemHandler;
     [SerializeField]public EnemyAiHandler pokemonTrainerAI;
     [SerializeField]public BattleParticipantStatData statData;
 
@@ -97,7 +97,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     }
     public void OnInject()
     {
-        heldItemHandler = new Held_Items(_container);
+        heldItemHandler = new HeldItemHandler(_container);
         statusHandler = new BattleParticipantStatusHandler(_container);
         abilityHandler = new AbilityHandler(_container);
         statData = new BattleParticipantStatData();

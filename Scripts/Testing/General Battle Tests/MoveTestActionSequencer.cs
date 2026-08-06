@@ -5,8 +5,7 @@ public class MoveTestActionSequencer : TestActionSequencer
 {
     private BattleHandler _battleHandler;
     
-    public MoveTestActionSequencer(ServiceContainer container,bool endOnMaxIndex=false)
-    :base(endOnMaxIndex)
+    public MoveTestActionSequencer(ServiceContainer container)
     {
         _battleHandler = container.Resolve<BattleHandler>();
     }

@@ -1,0 +1,2877 @@
+<!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <title>Test Log</title>
+
+      <style>
+      body{
+          background:#1e1e1e;
+          color:#d4d4d4;
+          font-family:Consolas, monospace;
+          margin:20px;
+      }
+
+      h1{
+          color:white;
+      }
+
+      table{
+          width:100%;
+          border-collapse:collapse;
+      }
+
+      th{
+          text-align:left;
+          padding:8px;
+          border-bottom:2px solid #666;
+          color:white;
+      }
+
+      td{
+          padding:4px 8px;
+          border-bottom:1px solid #333;
+          vertical-align:top;
+      }
+
+      .time{
+          color:#888;
+          width:220px;
+      }
+
+      .type{
+          width:120px;
+          font-weight:bold;
+      }
+
+    .dialogue{
+    color:#dcdcaa;      /* Soft yellow - character dialogue */
+    }
+
+    .health{
+        color:#800080;      /* Red - HP/healing/damage */
+    }
+
+    .calculation{
+        color:#c586c0;      /* Purple - formulas and calculations */
+    }
+
+    .information{
+        color:#58a6ff;      /* Blue - general information */
+    }
+
+    .error{
+        color:#f85149;      /* Bright red - errors */
+        font-weight:bold;
+    }
+
+    .test{
+        color:#79c0ff;      /* Cyan - test start/status */
+        font-weight:bold;
+    }
+
+    .pass{
+        color:#3fb950;      /* Green - successful test */
+        font-weight:bold;
+    }
+
+      .separator td{
+          border-bottom:2px solid #666;
+      }
+      </style>
+
+      </head>
+
+      <body>
+
+      <h1>Test Logs</h1>
+
+      <table>
+
+      <tr>
+          <th>Timestamp</th>
+          <th>Type</th>
+          <th>Message</th>
+      </tr>
+        <tr>
+            <td class="time">2026/08/06 2:30:16 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Held Item Usage Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Wurmple</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:19 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:24 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Held Item challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Held Item sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Wormy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:35 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Sonic Boom on Wormy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wormy&#39;s Oran berry healed it</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:43 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wormy used Tail Whip on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:49 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 26/26</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:49 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 15/50</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Thunder Wave on Wormy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wormy was paralyzed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wormy&#39;s Cherri berry healed it</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:30:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wormy used Tail Whip on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:01 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:04 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 26/26</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:04 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 15/50</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:04 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Confuse Ray on Wormy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:07 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wormy was confused</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:09 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wormy&#39;s Persim berry healed its confusion</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wormy used Tail Whip on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:18 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 26/26</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:18 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 15/50</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:21 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Held Item Usage Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:22 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Semi Invulnerability Single Battle Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:27 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Golbat</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:35 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Flygon</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Semi-Invul challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Semi-Invul sent out Foe Linoone!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Zor!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor used Fly!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:31:59 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor flew up high!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:01 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Linoone used Tackle on Zor!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor is in the air</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:05 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 82/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:05 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 80/80</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:05 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor flew down</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Linoone used Tackle on Zor!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:13 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 38/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:13 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 63/80</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:13 PM</td>
+            <td class="type information">Information</td>
+            <td>changed enemy move to Gust</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:13 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor used Fly!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor flew up high!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Linoone used Gust on Zor!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:19 PM</td>
+            <td class="type information">Information</td>
+            <td>Semi-Invulnerability damage change is in effect</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:19 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>vulnerability increased damage from 13,31789 to 26,63579</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:22 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 82/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:22 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 45/80</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor flew down</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:25 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Linoone used Gust on Zor!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:29 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 37/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:29 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 71/80</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile withdrew Zor</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:32 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile sent out Pinch</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:34 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 82/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:34 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 106/106</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:34 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch used Dig!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch dug underground!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:39 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 82/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:39 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 106/106</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:39 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch dug back up!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:44 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 18/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:44 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 106/106</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:44 PM</td>
+            <td class="type information">Information</td>
+            <td>changed enemy move to Magnitude</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch used Dig!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch dug underground!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:48 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Linoone used Magnitude on Pinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:51 PM</td>
+            <td class="type information">Information</td>
+            <td>Semi-Invulnerability damage change is in effect</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:51 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>vulnerability increased damage from 7,872941 to 15,74588</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:53 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 82/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:53 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 93/106</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:53 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch dug back up!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:32:58 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Linoone used Magnitude on Pinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Linoone missed the attack</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:03 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 21/82</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:03 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 106/106</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:06 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Semi Invulnerability Single Battle Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:07 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- On Field Damage Modification Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Linoone</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Linoone</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:23 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Damage Mod challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Damage Mod sent out Foe Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Muddy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:35 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 76/76</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:35 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Muddy used Mud Sport!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:38 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The power of electric type moves was weakened</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:41 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Thunderbolt on Muddy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:44 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage was changed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:44 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 8 to 4</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:45 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 72/76</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile withdrew Muddy</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:48 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile sent out Weather boy</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Thunderbolt on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:54 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage remained the same</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:54 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 9 to 9</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:55 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 64/73</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Weather boy used Rain Dance!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:33:58 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It started to rain!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Flamethrower on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:03 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage remained the same</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:03 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 6 to 6</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:05 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Rain continues to fall.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:07 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 58/73</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:07 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Weather boy used Tail Whip on Foe Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:11 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Flamethrower on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:17 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage was changed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:17 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 6 to 3</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Rain continues to fall.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:20 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 55/73</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:20 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Weather boy used Water Sport!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:23 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The power of fire type moves was weakened</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Flamethrower on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:29 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage was changed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:29 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 5 to 1</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Rain continues to fall.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:33 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 54/73</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Weather boy used Sunny Day!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:35 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sunlight got bright!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:37 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Flamethrower on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:41 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage was changed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:41 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod reduced damage from 5 to 2</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:42 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sunlight is strong.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:44 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 52/73</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:44 PM</td>
+            <td class="type information">Information</td>
+            <td>Manually removed water sport</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Weather boy used Tail Whip on Foe Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:48 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Pikachu used Flamethrower on Weather boy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:54 PM</td>
+            <td class="type information">Information</td>
+            <td>Damage was changed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:54 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>field mod increased damage from 6 to 9</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sunlight is strong.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:34:58 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:01 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- On Field Damage Modification Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:01 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Semi Invulnerability Double Battle Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Golbat</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Vibrava</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Semi-Invul Double challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Semi-Invul Double sent out Foe Golbat and Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Zor and Pinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:38 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Aerial Ace on Pinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:43 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor used Fly!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor flew up high!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch used Dig!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:48 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch dug underground!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Golbat used Wing Attack on Zor!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:53 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor is in the air</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:35:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor flew down</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Golbat fainted!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zor gained 73 EXP points</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:05 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch gained 73 EXP points</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pinch dug back up!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:10 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s not very effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Aerial Ace on Pinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:21 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Semi Invulnerability Double Battle Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:22 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Stat Change Application Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:27 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Combusken</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:34 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Stat Change challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:39 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Stat Change sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! StrongBro!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>StrongBro used Bulk Up!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:48 PM</td>
+            <td class="type information">Information</td>
+            <td>The Attack stat is at stage 1 and is affecting Combusken</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>StrongBro&#39;s Attack rose!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:51 PM</td>
+            <td class="type information">Information</td>
+            <td>The Defense stat is at stage 1 and is affecting Combusken</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>StrongBro&#39;s Defense rose!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on StrongBro!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:57 PM</td>
+            <td class="type information">Information</td>
+            <td>The Defense stat is at stage 0 and is affecting Combusken</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:36:58 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>StrongBro&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:01 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Growl on StrongBro!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:04 PM</td>
+            <td class="type information">Information</td>
+            <td>The Attack stat is at stage 0 and is affecting Combusken</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:05 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>StrongBro&#39;s Attack fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:07 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:10 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Stat Change Application Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:11 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Status Effect Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Zigzagoon</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:13 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:20 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Status Effects challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Status Effects sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Ember!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was burned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Growl on Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:39 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy&#39;s Attack fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:42 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is hurt by the burn</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Ice Beam on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:47 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was frozen</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is affected by Freeze</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:53 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Flamethrower on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:37:56 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was thawed out!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:02 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:09 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Sleep Powder on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko fell fast asleep</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is affected by Sleep</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Poison Sting on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:20 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was poisoned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:23 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is poisoned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Thunder Wave on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:34 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was paralyzed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:37 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is affected by Paralysis</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Toxic on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:42 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was badly poisoned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is badly poisoned</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Status Effects withdrew Foe Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:38:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Status Effects sent out Foe Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Tail Whip on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:04 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:07 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Confuse Ray on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:10 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was confused</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:13 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko is confused</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko hurt itself in its confusion</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy used Tail Whip on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:24 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Dummy!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Dummy&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:33 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Status Effect Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:34 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Identify Target Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:39 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Marshtomp</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Grovyle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Identify Target challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:39:58 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Identify Target sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:02 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:04 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has no negation </td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:04 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:07 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:10 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Brick Break on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:13 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It doesn&#39;t affect Foe Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:16 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 94/94</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:16 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has no negation </td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:20 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Odor Sleuth on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:25 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was identified!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:29 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 94/94</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:29 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has negation caused by: OdorSleuth</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:29 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim is vulnerable to: Fighting and Normal</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:29 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has an evasion of: 133</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:29 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has buff count: 1</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Brick Break on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:40 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 80/94</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:40 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has negation caused by: OdorSleuth</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:40 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim is vulnerable to: Fighting and Normal</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:40 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has an evasion of: 133</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:40 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has buff count: 1</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:47 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Odor Sleuth on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>but it failed!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:52 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 80/94</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:52 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has negation caused by: OdorSleuth</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:52 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim is vulnerable to: Fighting and Normal</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:52 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has an evasion of: 133</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:52 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has buff count: 1</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile withdrew Marshtomp</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:53 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has no negation </td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile sent out Grovyle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:57 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 94/94</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:57 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has no negation </td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:40:58 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Grovyle used Tackle on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It doesn&#39;t affect Foe Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:03 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 94/94</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:03 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has no negation </td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Grovyle used Foresight on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko was identified!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:09 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 94/94</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:09 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has negation caused by: Foresight</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:09 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim is vulnerable to: Fighting and Normal</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:09 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has an evasion of: 100</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:09 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has buff count: 0</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:09 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Grovyle used Tackle on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:13 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 84/94</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:13 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has negation caused by: Foresight</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:13 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim is vulnerable to: Fighting and Normal</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:13 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has an evasion of: 100</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:13 PM</td>
+            <td class="type information">Information</td>
+            <td>Victim has buff count: 0</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:13 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Grovyle used Foresight on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>but it failed!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:18 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 84/94</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:18 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:21 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Identify Target Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:22 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Weather Damage Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Linoone</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Weather Damage challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:43 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Weather Damage sent out Foe Treecko and Foe Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:47 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Jamal!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:49 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 137/137</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal used Hail!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It started to hail!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:53 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tail Whip on Jamal!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:41:59 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Zigzagoon used Growl on Jamal!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal&#39;s Attack fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:05 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Hail continues to fall.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:07 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal is pelted by hail!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:09 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Zigzagoon is pelted by hail!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:12 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 128/137</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal used Sandstorm!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>A sandstorm brewed!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tail Whip on Jamal!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:20 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:23 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Zigzagoon used Growl on Jamal!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal&#39;s Attack fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:29 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sandstorm rages.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal is buffeted by the sandstorm!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:34 PM</td>
+            <td class="type information">Information</td>
+            <td>The Special Defense stat is at stage 1 and is affecting Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:34 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 119/137</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:34 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal used Tail Whip on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:37 PM</td>
+            <td class="type information">Information</td>
+            <td>The Defense stat is at stage -1 and is affecting Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:37 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tail Whip on Jamal!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Zigzagoon used Growl on Jamal!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal&#39;s Attack fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sandstorm rages.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal is buffeted by the sandstorm!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:57 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 110/137</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:57 PM</td>
+            <td class="type information">Information</td>
+            <td>The Special Defense stat is at stage 0 and is affecting Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:42:58 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal used Tail Whip on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:01 PM</td>
+            <td class="type information">Information</td>
+            <td>The Defense stat is at stage -2 and is affecting Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:02 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:05 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tail Whip on Jamal!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:11 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Zigzagoon used Growl on Jamal!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Jamal&#39;s Attack fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:20 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Weather Damage Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:20 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Multi Target Damage Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Marshtomp</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:27 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Pikachu</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:39 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Multi Target challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Multi Target sent out Foe Golbat and Foe Trapinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:49 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Marshtomp and Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pikachu used Thunderbolt on Foe Trapinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It doesn&#39;t affect Foe Trapinch</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:43:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Earthquake!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pikachu fainted!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:12 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Golbat used Wing Attack on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Trapinch missed the attack</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:20 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy target(Flying Type): 40/40</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:20 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy partner target: 48/81</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:20 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of partner: 0/61</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:20 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Surf!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Golbat fainted!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp gained 147 EXP points</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:39 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:41 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Trapinch fainted!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:46 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp gained 183 EXP points</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:48 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile defeated Test Grunt Multi Target</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:52 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Over!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Testing profile received P35</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:56 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy target(Flying Type): 0/40</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:56 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy partner target: 0/81</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:56 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of partner: 0/61</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:57 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Multi Target Damage Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:44:58 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Create Barrier Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Marshtomp</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:04 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Pikachu</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:05 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:10 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt barrier creation challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt barrier creation sent out Foe Treecko and Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:20 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Marshtomp and Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Light Screen!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:25 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Light Screen has been activated</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:28 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pikachu used Thunderbolt on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It doesn&#39;t affect Foe Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leaf Blade on Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Critical Hit!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:36 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 16 to 10</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:38 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leaf Blade on Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:41 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 9 to 6</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:43 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Marshtomp used Reflect!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Reflect has been activated</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Pikachu used Thunderbolt on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:53 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It doesn&#39;t affect Foe Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:56 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tackle on Pikachu!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:45:58 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 4 to 2</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tackle on Marshtomp!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:02 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>barrier reduced damage from 2 to 1</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:04 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:06 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Create Barrier Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:07 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Health Drain Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Zubat</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:09 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:16 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Health Drain challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Health Drain sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Zubat!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:27 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Zubat!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zubat&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zubat used Leech Life on Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:37 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zubat gained health</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:39 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy target: 87/92</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:39 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>Half Health of player: 29</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:39 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 31/59</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:39 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:42 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Health Drain Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:43 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Heal From Weather Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:44 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Wurmple</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:46:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Heal From Weather challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Heal From Weather sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:04 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Wurmple!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sunlight got bright!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:08 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wurmple used Moonlight!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:10 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wurmple restored it&#39;s health!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:14 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Leer on Wurmple!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Wurmple&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:53 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>The sunlight is strong.</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:55 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 58/77</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:55 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>Tenth hp of player: 7</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:55 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>base health gain: 38</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:55 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>health gained from move: 51</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:58 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Heal From Weather Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:47:58 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Damage Protection Move Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:00 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Zigzagoon</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:01 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Damage Protection challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:11 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Damage Protection sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:17 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zigzagoon used Protect!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:19 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tackle on Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:22 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zigzagoon protected itself</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:25 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 54/54</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:25 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:28 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Damage Protection Move Test -&gt; has Passed</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:28 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Consecutive Move Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Zigzagoon</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:31 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:36 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Consecutive challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:41 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Consecutive sent out Foe Zubat!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:47 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Zigzagoon used Pin Missile on Foe Zubat!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:50 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Hit 1!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Hit 2!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:53 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s not very effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:55 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It hit (x2) times</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:48:57 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Zubat used Wing Attack on Zigzagoon!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:49:01 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s not very effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:49:03 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy target: 24/26</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:49:03 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/06 2:49:06 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Consecutive Move Test -&gt; has Passed</td>
+        </tr>
+
+      </table>
+
+      </body>
+      </html>

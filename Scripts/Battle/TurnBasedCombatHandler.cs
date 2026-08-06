@@ -317,6 +317,9 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             
             if (!IsValidParticipant(currentTurn,attacker)) continue;
             
+            yield return attacker.heldItemHandler.CheckForUsableItem();
+            yield return victim.heldItemHandler.CheckForUsableItem();
+            
             if (!IsValidParticipantState(victim))
             {
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" missed the attack");
@@ -325,9 +328,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             }
             
             yield return OnMoveExecute?.Invoke(attacker);
-           
-            yield return attacker.heldItemHandler.CheckForUsableItem();
-
+            
             yield return _dialogueHandler.AwaitAllDialogue();
 
             if (currentTurn.turnUsage == TurnUsage.UseStruggle)
@@ -354,8 +355,10 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 _moveUsageHandler.BeginMoveExecution(currentTurn);
 
                 yield return _moveUsageHandler.AwaitMoveCompletion();
-                
                 yield return _battleHandler.AwaitFaintQueue();
+                
+                yield return attacker.heldItemHandler.CheckForUsableItem();
+                yield return victim.heldItemHandler.CheckForUsableItem();
             }
             else
             {
@@ -363,9 +366,10 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 attacker.semiInvulnerabilityData.ResetState();
             }
         }
+        
         yield return _battleHandler.AwaitFaintQueue();
         yield return _dialogueHandler.AwaitAllDialogue();
-
+        
         ClearTurn();
         OnTurnsCompleted?.Invoke();
         
@@ -373,6 +377,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         
         foreach (var participant in validList)
         {
+            yield return participant.heldItemHandler.CheckForUsableItem();
             yield return participant.statusHandler.CheckStatus();
         }
         yield return _battleHandler.AwaitFaintQueue();

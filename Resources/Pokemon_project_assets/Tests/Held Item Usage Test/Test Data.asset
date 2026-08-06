@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79218e70f727cab51b39573c7a1e6e10, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      pokemonLevel: 25
+      evolutionStageNumber: 0
+      hasItem: 1
+      heldItem: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}
+      moveSet:
+      - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+    specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
+    specificGender: 1
+    nickName: Wormy
+  testEnemyData:
+    trainerDisplayName: Test Grunt Held Item
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: 71c498e201168dc69a8e1e9cf94329b9, type: 2}

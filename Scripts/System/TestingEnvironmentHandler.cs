@@ -113,21 +113,20 @@ public class TestRegistry
     public List<IntegrationTest> allTests = new()
     {
         //Move Based Tests
-        //new SemiInvulnerableSingleBattleTest(),
-        //new OnFieldDamageModificationTest(),
-        //new SemiInvulnerableDoubleBattleTest(),
-        //new StatChangeApplicationTest(),
-        //new StatusEffectTest(),
-        //new IdentifyTargetMoveTest(),
-        // new WeatherDamageTest(),
-        // new WeatherDamageTest(),
-        // new MultiTargetDamageTest(),
-        // new IdentifyTargetMoveTest(),
-        // new CreateBarrierMoveTest(),
-        // new HealthDrainTest(),
-        // new HealFromWeatherTest(),
-        // new DamageProtectionMoveTest(),
-        // new ConsecutiveMoveTest(),
+        new HeldItemUsageTest(),
+        new SemiInvulnerableSingleBattleTest(),
+        new OnFieldDamageModificationTest(),
+        new SemiInvulnerableDoubleBattleTest(),
+        new StatChangeApplicationTest(),
+        new StatusEffectTest(),
+        new IdentifyTargetMoveTest(),
+         new WeatherDamageTest(),
+         new MultiTargetDamageTest(),
+         new CreateBarrierMoveTest(),
+         new HealthDrainTest(),
+         new HealFromWeatherTest(),
+         new DamageProtectionMoveTest(),
+         new ConsecutiveMoveTest(),
     };
 }
 

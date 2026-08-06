@@ -20,6 +20,9 @@ public class StatusEffectTest : BattleBasedTest
         LearnSetMoveName.ThunderWave,
         LearnSetMoveName.Toxic,
         //Turn placeholder for toxic test cases
+        LearnSetMoveName.TailWhip,
+        LearnSetMoveName.ConfuseRay,
+        //Turn placeholder for confusion test cases
         LearnSetMoveName.TailWhip
     };
     public override void Inject(ServiceContainer serviceContainer)
@@ -104,6 +107,12 @@ public class StatusEffectTest : BattleBasedTest
             () => enemy.pokemonTrainerAI.trainerParty[1].hp < enemy.pokemonTrainerAI.trainerParty[1].maxHp
                   && enemy.pokemonTrainerAI.trainerParty[1].statusEffect == StatusEffect.Poison);
         
+        _testCaseHandler.AddTestCase( "Victim should be in confusion", 
+            () => enemy.isConfused);
+        
+        _testCaseHandler.AddTestCase( "Victim should be healed from confusion", 
+            () => !enemy.isConfused);
+        
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
@@ -131,7 +140,7 @@ public class StatusEffectTest : BattleBasedTest
             {
                 enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Natural);
                 enemy.pokemon.hp = enemy.pokemon.maxHp;
-                enemy.statusHandler.RemoveStatusEffect();
+                enemy.statusHandler.RemoveStatusEffect(true);
             }
             
             if (_sequencer.SequenceComplete())

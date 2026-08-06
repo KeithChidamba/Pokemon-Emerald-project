@@ -7,10 +7,7 @@ using UnityEngine;
 public class HeldItemUsageTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private MoveSequenceHandler _moveUsageHandler;
-    
+
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
     
@@ -18,30 +15,65 @@ public class HeldItemUsageTest : BattleBasedTest
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
-        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
-        
+       
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
         testName = "Held Item Usage Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
         
-        _sequencer.AddAction(AttackFirst);
+        _sequencer.AddAction(SetupPlayerHealthAndAttack);
+        _sequencer.AddAction(()=>SetupEnemyMoveAndBerry("Cherri berry",1));
+        _sequencer.AddAction(()=>SetupEnemyMoveAndBerry("Persim berry",2));
     }
-
-    private void AttackFirst()
+    
+    private void ForceSpecificMove(int moveIndex=0)
     {
-        //To make test case reliable
-        var currentParticipant = _battleHandler.GetCurrentParticipant();
-        currentParticipant.pokemon.moveSet[0].priority = 100;
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemon.moveSet[moveIndex].isSureHit = true;
+        enemy.pokemon.moveSet[moveIndex].priority = 100;
+        _battleHandler.UseMove(enemy.pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
+    }
+    private void SetupPlayerHealthAndAttack()
+    {
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        //sonic boom
+        enemy.pokemonTrainerAI.AssignBehaviorAction(()=>ForceSpecificMove());
+        
+        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        //The enemy will use sonic boom to take health from 30 to 10
+        player.pokemon.maxHp = 50f;
+        player.pokemon.hp = 30;
+        
+        //tailwhip
+        _sequencer.UseMove();
+    }
+    private void SetupEnemyMoveAndBerry(string berryName,int moveIndex)
+    {
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemonTrainerAI.AssignBehaviorAction(()=>ForceSpecificMove(moveIndex));
+        
+        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + berryName;
+        var persimBerry = InstanceFactory.CreateItem(Resources.Load<Item>(assetDirectory));
+        player.pokemon.GiveItem(persimBerry);
+        
+        //tailwhip
         _sequencer.UseMove();
     }
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        _testCaseHandler.AddTestCase(0,"Example Condition",() => player.pokemon.hp >= player.pokemon.maxHp);
+        
+        _testCaseHandler.AddTestCase("Oran berry must heal player from damage", () => player.pokemon.hp > 10f);
+        
+        _testCaseHandler.AddTestCase("Cherri berry must heal player from paralysis", 
+            () => player.pokemon.statusEffect == StatusEffect.None);
+        
+        _testCaseHandler.AddTestCase( "Player should be healed from confusion", 
+            () => !player.isConfused);
+        
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
@@ -56,12 +88,7 @@ public class HeldItemUsageTest : BattleBasedTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
 
-        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
-        
-        if (!caseExists)
-        {
-            CheckTestEnd();
-        }
+        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {

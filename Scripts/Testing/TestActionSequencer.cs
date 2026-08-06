@@ -16,14 +16,13 @@ public class TestActionSequencer
     public int CurrentSequenceIndex { get; private set; }
     private Dictionary<int, TestAction> _testSequence = new();
     private int NextIndex => _testSequence.Count;
-    private bool endOnMaxIndex;
+
     public virtual int GetTestCaseIndex()
     {
         return CurrentSequenceIndex;
     }
-    protected TestActionSequencer(bool endOnMaxIndex=false)
+    protected TestActionSequencer()
     {
-        this.endOnMaxIndex = endOnMaxIndex;
         CurrentSequenceIndex = 0;
     }
     public void AddAction(Action action)
@@ -46,8 +45,7 @@ public class TestActionSequencer
         action?.Invoke();
     }
     public bool SequenceComplete()
-    {
-        if(endOnMaxIndex)return CurrentSequenceIndex == _testSequence.Count;
-        return CurrentSequenceIndex == _testSequence.Count - 1;
+    { 
+        return CurrentSequenceIndex == _testSequence.Count;
     }
 }
