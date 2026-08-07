@@ -152,7 +152,7 @@ public class AbilityHandler : BattleParticipantModule
     void InnerFocus()
     {
         if (_abilityTriggered) return;
-        participant.pokemon.canBeFlinched = false;
+        participant.canBeFlinched = false;
         _abilityTriggered = true;
     }
     void PickUp()

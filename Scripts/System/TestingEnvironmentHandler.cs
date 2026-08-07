@@ -112,21 +112,25 @@ public class TestRegistry
     //tests are ran in this order
     public List<IntegrationTest> allTests = new()
     {
-        //Move Based Tests
+        //Battle system tests
+        new InfatuationEffectTest(),
+        new FlinchEffectTest(),
         new HeldItemUsageTest(),
-        new SemiInvulnerableSingleBattleTest(),
-        new OnFieldDamageModificationTest(),
-        new SemiInvulnerableDoubleBattleTest(),
         new StatChangeApplicationTest(),
         new StatusEffectTest(),
+        new WeatherDamageTest(),
+        new OnFieldDamageModificationTest(),
+        
+        //Move Based Tests
+        new SemiInvulnerableSingleBattleTest(),
+        new SemiInvulnerableDoubleBattleTest(),
         new IdentifyTargetMoveTest(),
-         new WeatherDamageTest(),
-         new MultiTargetDamageTest(),
-         new CreateBarrierMoveTest(),
-         new HealthDrainTest(),
-         new HealFromWeatherTest(),
-         new DamageProtectionMoveTest(),
-         new ConsecutiveMoveTest(),
+        new MultiTargetDamageTest(),
+        new CreateBarrierMoveTest(),
+        new HealthDrainTest(),
+        new HealFromWeatherTest(),
+        new DamageProtectionMoveTest(),
+        new ConsecutiveMoveTest(),
     };
 }
 

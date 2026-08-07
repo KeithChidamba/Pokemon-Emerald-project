@@ -102,8 +102,6 @@ public static class InstanceFactory
         newPokemon.canEvolve = pkm.canEvolve;
         newPokemon.friendshipLevel = pkm.friendshipLevel;
         newPokemon.hasTrainer = pkm.hasTrainer;
-        newPokemon.canBeFlinched = pkm.canBeFlinched;
-        newPokemon.canBeInfatuated = pkm.canBeInfatuated;
         newPokemon.types = pkm.types;
         newPokemon.statusEffect = pkm.statusEffect;
         

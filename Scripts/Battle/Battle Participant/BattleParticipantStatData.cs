@@ -41,11 +41,18 @@ public class BattleParticipantStatData: BattleParticipantModule
         pokemon.critChance = 6.25f;
         pokemon.statModifiers.Clear();
         if (justLeveledUp) return;
+        
         participant.canAttack = true;
         participant.canBeDamaged = true;
+        
         participant.isFlinched = false;
+        participant.canBeFlinched = true;
+        
         participant.isConfused = false;
+        
         participant.isInfatuated = false;
+        participant.canBeInfatuated = true;
+        
         var rawName = pokemon.pokemonDisplayName.Replace("Foe ", "");
         pokemon.pokemonDisplayName = rawName;
     }

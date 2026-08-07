@@ -38,11 +38,17 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public bool isPlayer;
     public bool isActive;
     public bool activeForBattle;
+    
     public bool canAttack = true;
-    public bool isFlinched;
-    public bool isConfused;
-    public bool isInfatuated;
     public bool canBeDamaged = true;
+        
+    public bool isFlinched;
+    public bool canBeFlinched = true;
+    
+    public bool isConfused;
+    
+    public bool canBeInfatuated = true;
+    public bool isInfatuated;
     
     public SemiInvulnerabilityData semiInvulnerabilityData = new();
     public bool isSemiInvulnerable;

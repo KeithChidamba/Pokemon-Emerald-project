@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79218e70f727cab51b39573c7a1e6e10, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      pokemonLevel: 33
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: 2d03686e73c8a174e8f1dd31d6ebdc76, type: 2}
+      - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+    specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
+    specificGender: 2
+    nickName: Scary bug
+  testEnemyData:
+    trainerDisplayName: Test Grunt Flinch
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: 37de84e4709243e83a9e41bfaeb0fa19, type: 2}

@@ -511,9 +511,10 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         if (victim.pokemon.statusEffect != StatusEffect.None)
         {
             if (move.moveDamage == 0)
-            {//only display message for status-condition-only moves
+            {
+                //only display message for status-condition-only moves
                 var statusRejectionMessage = move.statusEffect == victim.pokemon.statusEffect?
-                    victim.pokemon.pokemonDisplayName+" already has a "+victim.pokemon.statusEffect+" effect!"
+                    $"{victim.pokemon.pokemonDisplayName} already has a {victim.pokemon.statusEffect} effect!"
                     :"but it failed!";
                 _dialogueHandler.DisplayBattleInfo(statusRejectionMessage);
             }
@@ -530,15 +531,23 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         if (!victim.canBeDamaged)
         {
             _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+" protected itself");
-            _processingOrder = false;return;
+            _processingOrder = false;
+            return;
         }
-        if (Utility.RandomRange(1, 101) < move.statusChance)
-            if(move.isMultiTarget)
+        if (Utility.RandomRange(1, 101) <= move.statusChance)
+        {
+            if (move.isMultiTarget)
+            {
                 foreach (BattleParticipant enemy in attacker.currentEnemies)
-                    HandleStatusApplication(enemy,move,true);
-            else{
-                HandleStatusApplication(victim,move,true);
+                {
+                    HandleStatusApplication(enemy, move, true);
+                }
             }
+            else
+            {
+                HandleStatusApplication(victim, move, true);
+            }
+        }
         _processingOrder = false;
     }
     private bool CheckInvalidStatusEffect(StatusEffect status,PokemonType typeName,Move move)
@@ -697,12 +706,12 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     }
     void FlinchEnemy(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        if (!victim.canBeDamaged || !victim.pokemon.canBeFlinched)
+        if (!victim.canBeDamaged || !victim.canBeFlinched)
         {
             _processingOrder = false;
             return;
         }
-        if (Utility.RandomRange(1, 101) < move.statusChance)
+        if (Utility.RandomRange(1, 101) <= move.statusChance)
         {
             victim.canAttack = false;
             victim.isFlinched = true;
@@ -718,7 +727,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             _processingOrder = false;
             return;
         }
-        if (!victim.canBeDamaged || !victim.pokemon.canBeInfatuated)
+        if (!victim.canBeDamaged || !victim.canBeInfatuated)
         {
             _processingOrder = false;
             return;
@@ -731,18 +740,32 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             _processingOrder = false;
             return;
         }
+
+        _battleHandler.OnSwitchOut += RemoveOnSwitchOrFaint;
         victim.isInfatuated = true;
+        _processingOrder = false;
+        return;
+        void RemoveOnSwitchOrFaint(BattleParticipant switcher)
+        {
+            if (switcher.participantKey == attacker.participantKey)
+            {
+                _battleHandler.OnSwitchOut -= RemoveOnSwitchOrFaint;
+                victim.isInfatuated = false;
+            }
+        }
     }
 
 
     void CheckStatChangeApplicability(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        if (Utility.RandomRange(1, 101) > move.buffOrDebuffChance)
+        if (Utility.RandomRange(1, 101) <= move.buffOrDebuffChance)
+        {
+            StartCoroutine(HandleStatChangeApplication(move, attacker, victim));
+        }
+        else
         {
             _processingOrder = false; 
-            return;
         }
-        StartCoroutine(HandleStatChangeApplication(move,attacker, victim));
     }
     private IEnumerator HandleStatChangeApplication(Move move,BattleParticipant attacker, BattleParticipant victim)
     {

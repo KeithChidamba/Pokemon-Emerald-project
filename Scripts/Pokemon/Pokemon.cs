@@ -66,8 +66,7 @@ public class Pokemon : ScriptableObject
     public bool canEvolve = true;
     public int friendshipLevel;
     public bool hasTrainer;
-    public bool canBeFlinched = true;
-    public bool canBeInfatuated = true;
+    
     public List<Type> types;
     public StatusEffect statusEffect;
     public List<StatChangeData> statModifiers = new();
