@@ -627,53 +627,39 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         participant.statusHandler.GetStatChangeImmunity(changeability,numTurns);
     }
 
-    private bool CanTrapEnemy(BattleParticipant victim)
-    {
-        if (victim.pokemon.ability.abilityName == AbilityName.Levitate)
-        {
-            _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+ "can't be trapped");
-            return false;
-        }
-        return true;
-    }
     private void TrapEnemy(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        if (!CanTrapEnemy(victim))
-        {
-            _processingOrder = false;
-            return;
-        }
-        
-        if (victim.pokemon.HasType(PokemonType.Ghost)
-            && !attacker.pokemon.HasType(PokemonType.Ghost))
-        {//only ghost can trap ghost with moves
-            _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+ "can't be trapped");
-            _processingOrder = false;
-            return;
-        }
+        var trapData = move.GetDynamicModule<TrapData>();
 
-        if (!victim.canEscape)
+        if(trapData.trapType==TrapData.TrapType.RandomDurationFromMove)
         {
-            _processingOrder = false;
-            _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + " is already trapped");
-            return;
+            if (victim.pokemon.HasType(PokemonType.Ghost))
+            {
+                if(!attacker.pokemon.HasType(PokemonType.Ghost))
+                {
+                    //only ghost can trap ghost with moves
+                    _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + "can't be trapped");
+                    _processingOrder = false;
+                    return;
+                }
+                trapData.SetRandomDuration();
+            }
+            else
+            {
+                trapData.SetRandomDuration();
+            }
         }
-       
-        if (move.statusChance == 0)
-        {
-            victim.statusHandler.SetupTrapDuration(hasDuration: false);
-        }
-        else
-        {
-            var numTurnsOfTrap = Utility.RandomRange(2, (int)move.statusChance+1);
-            victim.statusHandler.SetupTrapDuration(numTurnsOfTrap,move);
-        }
+        victim.statusHandler.SetupTrapDuration(trapData);
         _processingOrder = false;
     }
-    public void ApplyTrap(BattleParticipant victim)
+    
+    /// <summary>
+    /// For use in general trapping logic, outside move sequence
+    /// </summary>
+    public void ApplyTrap(BattleParticipant victim,TrapData.TrapType type, int numTurns=0)
     {
-        if (!CanTrapEnemy(victim)) return;
-        victim.statusHandler.SetupTrapDuration(hasDuration:false);
+        var trapData = new TrapData { trapType = type ,trapDuration = numTurns};
+        victim.statusHandler.SetupTrapDuration(trapData,false);
     }
     void ConfuseEnemy(Move move,BattleParticipant attacker, BattleParticipant victim)
     {

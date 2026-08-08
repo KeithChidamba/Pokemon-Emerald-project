@@ -231,7 +231,7 @@ public class AbilityHandler : BattleParticipantModule
     {
         if (thisParticipant != participant) return;
         foreach (var enemy in participant.currentEnemies)
-            enemy.statusHandler.RemoveTrap();
+            enemy.statusHandler.RemoveTrap(TrapData.TrapType.PersistentFromAbility);
         _battleHandler.OnSwitchIn -= TrapEnemies;
         _battleHandler.OnSwitchOut -= RemoveTrap;
     }
@@ -239,9 +239,15 @@ public class AbilityHandler : BattleParticipantModule
     {
         foreach (var enemy in participant.currentEnemies)
         {
-            if (enemy.pokemon.HasType(PokemonType.Flying) || enemy.pokemon.HasType(PokemonType.Ghost))
+            if (enemy.pokemon.ability.abilityName == AbilityName.Levitate)
+            {
                 continue;
-            _moveUsageHandler.ApplyTrap(enemy);
+            }
+            if (enemy.pokemon.HasType(PokemonType.Flying))
+            {
+                continue;
+            }
+            _moveUsageHandler.ApplyTrap(enemy,TrapData.TrapType.PersistentFromAbility);
         }
     }
     void HealStatusEffect(BattleParticipant thisParticipant)

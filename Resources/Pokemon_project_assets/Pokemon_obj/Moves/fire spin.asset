@@ -20,7 +20,7 @@ MonoBehaviour:
   hasTypelessEffect: 0
   isSpecial: 1
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
   effectType: 0
   effectInfoModule: {fileID: 0}
@@ -42,3 +42,18 @@ MonoBehaviour:
   statusChance: 5
   buffOrDebuffChance: 0
   description: traps the foe in a fire
+  dynamicInfoModules:
+  - rid: 6968282678780231680
+  references:
+    version: 2
+    RefIds:
+    - rid: 6968282678780231680
+      type: {class: TrapData, ns: , asm: Assembly-CSharp}
+      data:
+        trapType: 1
+        trapDuration: 0
+        maxTrapDuration: 5
+        minTrapDuration: 2
+        onTrapMessage: ' was trapped in the vortex!'
+        onHitMessage: ' is hurt by Fire Spin!'
+        onFreeMessage: ' was freed from the Fire Spin!'

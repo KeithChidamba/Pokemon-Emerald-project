@@ -20,7 +20,7 @@ MonoBehaviour:
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
   effectType: 0
   effectInfoModule: {fileID: 0}
@@ -42,3 +42,18 @@ MonoBehaviour:
   statusChance: 5
   buffOrDebuffChance: 0
   description: traps the foe in a sand tomb
+  dynamicInfoModules:
+  - rid: 6968282678780231683
+  references:
+    version: 2
+    RefIds:
+    - rid: 6968282678780231683
+      type: {class: TrapData, ns: , asm: Assembly-CSharp}
+      data:
+        trapType: 1
+        trapDuration: 0
+        maxTrapDuration: 5
+        minTrapDuration: 2
+        onTrapMessage: ' became trapped by Sand Tomb!'
+        onHitMessage: ' is hurt by Sand Tomb!'
+        onFreeMessage: ' was freed from the Sand Tomb!'

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -40,9 +41,16 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("Status_chance")] public float statusChance;
     [FormerlySerializedAs("Debuff_chance")] public float buffOrDebuffChance;
     [FormerlySerializedAs("Description")] public string description;
+    
+    [SerializeReference]public List<DynamicAdditionalInfo> dynamicInfoModules = new();
+
     public T GetModule<T>() where T : AdditionalInfoModule
     {
         return effectInfoModule as T;
+    }
+    public T GetDynamicModule<T>() where T : DynamicAdditionalInfo
+    {
+        return dynamicInfoModules.FirstOrDefault(m => m is T) as T;
     }
 }
 

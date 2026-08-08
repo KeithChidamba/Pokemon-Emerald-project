@@ -20,7 +20,7 @@ MonoBehaviour:
   hasTypelessEffect: 1
   isSpecial: 0
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
   effectType: 0
   effectInfoModule: {fileID: 0}
@@ -42,3 +42,18 @@ MonoBehaviour:
   statusChance: 0
   buffOrDebuffChance: 0
   description: prevents the foe from switching
+  dynamicInfoModules:
+  - rid: 6968282678780231681
+  references:
+    version: 2
+    RefIds:
+    - rid: 6968282678780231681
+      type: {class: TrapData, ns: , asm: Assembly-CSharp}
+      data:
+        trapType: 0
+        trapDuration: 0
+        maxTrapDuration: 0
+        minTrapDuration: 0
+        onTrapMessage: 
+        onHitMessage: 
+        onFreeMessage: 

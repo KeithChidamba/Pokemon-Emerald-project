@@ -46,6 +46,7 @@ public static class InstanceFactory
         newMove.statusChance = m.statusChance;
         newMove.buffOrDebuffChance = m.buffOrDebuffChance;
         newMove.description = m.description;
+        newMove.dynamicInfoModules = m.dynamicInfoModules;
         return newMove;
     }
     public static Pokemon CreatePokemon(Pokemon pkm)

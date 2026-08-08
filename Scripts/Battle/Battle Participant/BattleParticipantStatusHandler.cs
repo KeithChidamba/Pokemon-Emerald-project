@@ -17,11 +17,10 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
     private int _statusDurationInTurns;
     private bool _healed;
     private int _confusionDuration;
-    private int _trapDuration;
     
     private StatusHandlingState _stateControl;
     
-    private TrapData _currentTrap;
+    private List<TrapData> _currentTraps = new();
     private readonly Dictionary<StatusEffect, Action> _statusEffectMethods = new ();
     public event Action<BattleParticipant> OnStatusCheck;
     
@@ -84,19 +83,27 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         _confusionDuration = numTurns;
         participant.isConfused = true;
     }
-    public void SetupTrapDuration(int numTurns = 0,Move move = null,bool hasDuration = true)
+
+    public void SetupTrapDuration(TrapData trapData,bool displayMessage = true)
     {
-        if (!hasDuration)
+        var existingTrap = _currentTraps.FirstOrDefault(trap => trap.trapType == trapData.trapType);
+        if (existingTrap != null)
         {
-            _currentTrap = new TrapData(null,false);
-            participant.canEscape = false;
-            return;
+            _currentTraps.Remove(existingTrap);
         }
-        _trapDuration = numTurns;
-        _currentTrap = new TrapData(move,true);
-        _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName + _currentTrap.OnTrapMessage);
+        _currentTraps.Add(trapData);
         participant.canEscape = false;
+        
+        if (!displayMessage) return;
+        
+        var isPersistent = trapData.trapType == TrapData.TrapType.PersistentFromMove;
+
+        _dialogueHandler.DisplayBattleInfo(
+            participant.pokemon.pokemonDisplayName
+            + (isPersistent? "can’t escape!" 
+                : trapData.onTrapMessage));
     }
+
     public void GetStatChangeImmunity(StatChangeability changeability,int numTurns)
     {
         if (participant.statChangeEffects.Any(s => s.changeability == changeability))
@@ -188,22 +195,31 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         if (_statusEffectMethods.TryGetValue(participant.pokemon.statusEffect,out Action method))
             method();
     }
+
     public IEnumerator CheckTrapDuration(BattleParticipant currentParticipant)
     {
         if (currentParticipant.participantKey != participant.participantKey) yield break;
         if (!participant.isActive) yield break;
         if (participant.canEscape) yield break;
-        if (_currentTrap == null) yield break;
-        if (!_currentTrap.hasDuration) yield break;
-        if (_trapDuration <= 0)
+        if (_currentTraps.Count == 0) yield break;
+
+        var existingTrapWithDuration =
+            _currentTraps.FirstOrDefault(trap => 
+                trap.trapType == TrapData.TrapType.RandomDurationFromMove);
+
+        if (existingTrapWithDuration != null)
         {
-            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+_currentTrap.OnFreeMessage);
-            RemoveTrap();
-            yield break;
+            if (existingTrapWithDuration.trapDuration <= 0)
+            {
+                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName + existingTrapWithDuration.onFreeMessage);
+                RemoveTrap(existingTrapWithDuration.trapType);
+                yield break;
+            }
+            yield return GetDamageFromStatus(1 / 16f, existingTrapWithDuration.onHitMessage);
+            existingTrapWithDuration.trapDuration--;
         }
-        yield return GetDamageFromStatus( 1 / 16f,_currentTrap.OnHitMessage);
-        _trapDuration--;
     }
+
     public IEnumerator ConfusionCheck(BattleParticipant currentParticipant)
     {
         if (currentParticipant != participant) yield break;
@@ -282,10 +298,10 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         }
     }
 
-    public void RemoveTrap()
+    public void RemoveTrap(TrapData.TrapType type)
     {
         participant.canEscape = true;
-        _currentTrap = null;
+        _currentTraps.RemoveAll(trap=>trap.trapType == type);
     }
     public IEnumerator NotifyHealing(BattleParticipant currentParticipant)
     {//only for freeze and sleep

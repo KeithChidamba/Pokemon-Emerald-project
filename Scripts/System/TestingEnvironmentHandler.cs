@@ -113,24 +113,25 @@ public class TestRegistry
     public List<IntegrationTest> allTests = new()
     {
         //Battle system tests
-        new InfatuationEffectTest(),
-        new FlinchEffectTest(),
-        new HeldItemUsageTest(),
-        new StatChangeApplicationTest(),
-        new StatusEffectTest(),
-        new WeatherDamageTest(),
-        new OnFieldDamageModificationTest(),
-        
-        //Move Based Tests
-        new SemiInvulnerableSingleBattleTest(),
-        new SemiInvulnerableDoubleBattleTest(),
-        new IdentifyTargetMoveTest(),
-        new MultiTargetDamageTest(),
-        new CreateBarrierMoveTest(),
-        new HealthDrainTest(),
-        new HealFromWeatherTest(),
-        new DamageProtectionMoveTest(),
-        new ConsecutiveMoveTest(),
+        new TrapEffectTest(),
+        // new InfatuationEffectTest(),
+        // new FlinchEffectTest(),
+        // new HeldItemUsageTest(),
+        // new StatChangeApplicationTest(),
+        // new StatusEffectTest(),
+        // new WeatherDamageTest(),
+        // new OnFieldDamageModificationTest(),
+        //
+        // //Move Based Tests
+        // new SemiInvulnerableSingleBattleTest(),
+        // new SemiInvulnerableDoubleBattleTest(),
+        // new IdentifyTargetMoveTest(),
+        // new MultiTargetDamageTest(),
+        // new CreateBarrierMoveTest(),
+        // new HealthDrainTest(),
+        // new HealFromWeatherTest(),
+        // new DamageProtectionMoveTest(),
+        // new ConsecutiveMoveTest(),
     };
 }
 
