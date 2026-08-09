@@ -44,10 +44,7 @@ public class EnemyAiHandler : BattleParticipantModule
         _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         _battleOperations = container.Resolve<BattleOperations>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
-    }
-
-    public void OnInject()
-    {
+        
         AiLogicCalculators.Add(AiFlags.CheckBadMove ,AiCheckBadMove);
         AiLogicCalculators.Add(AiFlags.CheckViability ,AiCheckViability);
         AiLogicCalculators.Add(AiFlags.CheckStatus ,AiCheckStatus);
@@ -55,7 +52,6 @@ public class EnemyAiHandler : BattleParticipantModule
         AiLogicCalculators.Add(AiFlags.CheckPriority ,AiCheckPriority);
         //switching doesnt involve calculators
     }
-
     public IEnumerator SetupTrainerForBattle(TrainerData copyOfTrainerData)
     {
         trainerData = InstanceFactory.CreateTrainer(copyOfTrainerData);

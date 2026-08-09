@@ -7,5 +7,7 @@ using UnityEngine.Serialization;
 public class Ability : ScriptableObject
 {
     public AbilityName abilityName;
-    [FormerlySerializedAs("ability_description")] public string abilityDescription = "";
+    [FormerlySerializedAs("ability_description")] 
+    public string abilityDescription = "";
+    
 }

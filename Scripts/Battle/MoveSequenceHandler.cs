@@ -631,17 +631,18 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     {
         var trapData = move.GetDynamicModule<TrapData>();
 
-        if(trapData.trapType==TrapData.TrapType.RandomDurationFromMove)
+        if (trapData.trapType == TrapData.TrapType.RandomDurationFromMove)
         {
             if (victim.pokemon.HasType(PokemonType.Ghost))
             {
-                if(!attacker.pokemon.HasType(PokemonType.Ghost))
+                if (!attacker.pokemon.HasType(PokemonType.Ghost))
                 {
                     //only ghost can trap ghost with moves
                     _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + "can't be trapped");
                     _processingOrder = false;
                     return;
                 }
+
                 trapData.SetRandomDuration();
             }
             else
@@ -649,8 +650,19 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                 trapData.SetRandomDuration();
             }
         }
+
+        _battleHandler.OnSwitchOut += RemoveOnSwitchOrFaint;
         victim.statusHandler.SetupTrapDuration(trapData);
         _processingOrder = false;
+        return;
+        void RemoveOnSwitchOrFaint(BattleParticipant switcher)
+        {
+            if (switcher.participantKey == attacker.participantKey)
+            {
+                _battleHandler.OnSwitchOut -= RemoveOnSwitchOrFaint;
+                victim.statusHandler.RemoveTrap(trapData.trapType);
+            }
+        }
     }
     
     /// <summary>

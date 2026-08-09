@@ -21,6 +21,8 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
     private StatusHandlingState _stateControl;
     
     private List<TrapData> _currentTraps = new();
+    public IReadOnlyList<TrapData> CurrentTraps => _currentTraps;
+    
     private readonly Dictionary<StatusEffect, Action> _statusEffectMethods = new ();
     public event Action<BattleParticipant> OnStatusCheck;
     
@@ -36,10 +38,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _battleHandler = container.Resolve<BattleHandler>();
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
-    }
-    
-    public void OnInject()
-    {
+        
         _battleHandler.OnBattleEnd += ()=> _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
         
         _statusEffectMethods.Add(StatusEffect.Freeze,FreezeCheck);
@@ -47,7 +46,16 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         _statusEffectMethods.Add(StatusEffect.Paralysis,ParalysisCheck);
         _stateControl = StatusHandlingState.Normal;
     }
-
+    
+    public void StunCheck()
+    {
+        if (!participant.isActive) return;
+        if (_battleHandler.GetCurrentParticipant().participantKey != participant.participantKey) return;
+        if (participant.pokemon.statusEffect == StatusEffect.None) return;
+        
+        if (_statusEffectMethods.TryGetValue(participant.pokemon.statusEffect,out Action method))
+            method();
+    }
     public void ChangeToTestingState(StatusHandlingState state)
     {
         _stateControl = state;
@@ -78,32 +86,6 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
                 break;
         }
     }
-    public void GetConfusion(int numTurns)
-    {
-        _confusionDuration = numTurns;
-        participant.isConfused = true;
-    }
-
-    public void SetupTrapDuration(TrapData trapData,bool displayMessage = true)
-    {
-        var existingTrap = _currentTraps.FirstOrDefault(trap => trap.trapType == trapData.trapType);
-        if (existingTrap != null)
-        {
-            _currentTraps.Remove(existingTrap);
-        }
-        _currentTraps.Add(trapData);
-        participant.canEscape = false;
-        
-        if (!displayMessage) return;
-        
-        var isPersistent = trapData.trapType == TrapData.TrapType.PersistentFromMove;
-
-        _dialogueHandler.DisplayBattleInfo(
-            participant.pokemon.pokemonDisplayName
-            + (isPersistent? "can’t escape!" 
-                : trapData.onTrapMessage));
-    }
-
     public void GetStatChangeImmunity(StatChangeability changeability,int numTurns)
     {
         if (participant.statChangeEffects.Any(s => s.changeability == changeability))
@@ -155,7 +137,6 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         }
         yield return GetDamageFromStatus(damagePercent, message);
     }
-
     private IEnumerator GetDamageFromStatus(float damagePercent,string message)
     {        
         var damagingStatuses = new[] { StatusEffect.Poison, StatusEffect.BadlyPoison, StatusEffect.Burn };
@@ -186,16 +167,31 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
        
         participant.pokemon.NotifyHealthChange();  
     }
-    public void StunCheck()
-    {
-        if (!participant.isActive) return;
-        if (_battleHandler.GetCurrentParticipant().participantKey != participant.participantKey) return;
-        if (participant.pokemon.statusEffect == StatusEffect.None) return;
-        
-        if (_statusEffectMethods.TryGetValue(participant.pokemon.statusEffect,out Action method))
-            method();
-    }
 
+    public void SetupTrapDuration(TrapData trapData,bool displayMessage = true)
+    {
+        var existingTrap = _currentTraps.FirstOrDefault(trap => trap.trapType == trapData.trapType);
+        if (existingTrap != null)
+        {
+            _currentTraps.Remove(existingTrap);
+        }
+        _currentTraps.Add(trapData);
+        participant.canEscape = false;
+        
+        if (!displayMessage) return;
+        
+        var isPersistent = trapData.trapType == TrapData.TrapType.PersistentFromMove;
+
+        _dialogueHandler.DisplayBattleInfo(
+            participant.pokemon.pokemonDisplayName
+            + (isPersistent? "can’t escape!" 
+                : trapData.onTrapMessage));
+    }
+    public void RemoveTrap(TrapData.TrapType type)
+    {
+        _currentTraps.RemoveAll(trap=>trap.trapType == type);
+        participant.canEscape = _currentTraps.Count == 0;
+    }
     public IEnumerator CheckTrapDuration(BattleParticipant currentParticipant)
     {
         if (currentParticipant.participantKey != participant.participantKey) yield break;
@@ -219,7 +215,11 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
             existingTrapWithDuration.trapDuration--;
         }
     }
-
+    public void GetConfusion(int numTurns)
+    {
+        _confusionDuration = numTurns;
+        participant.isConfused = true;
+    }
     public IEnumerator ConfusionCheck(BattleParticipant currentParticipant)
     {
         if (currentParticipant != participant) yield break;
@@ -253,7 +253,6 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         else
             participant.canAttack = false;
     }
-
     private void RemoveFreezeStatusWithFire(BattleParticipant attacker, Move moveUsed)
     {
         if (moveUsed.type.typeEnum != PokemonType.Fire ) return;
@@ -296,12 +295,6 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
                 participant.canAttack = false;
             _currentStatusTurnCount++;
         }
-    }
-
-    public void RemoveTrap(TrapData.TrapType type)
-    {
-        participant.canEscape = true;
-        _currentTraps.RemoveAll(trap=>trap.trapType == type);
     }
     public IEnumerator NotifyHealing(BattleParticipant currentParticipant)
     {//only for freeze and sleep

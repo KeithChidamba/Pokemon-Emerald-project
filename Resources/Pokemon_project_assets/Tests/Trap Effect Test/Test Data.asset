@@ -20,7 +20,7 @@ MonoBehaviour:
       hasItem: 0
       heldItem: {fileID: 0}
       moveSet:
-      - {fileID: 11400000, guid: 2b31d8109d88a540bae4e94af03c833c, type: 2}
+      - {fileID: 11400000, guid: b3f0196b5669dc2949185e8d17e0cb7f, type: 2}
     specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
     specificGender: 2
     nickName: love bug

@@ -30,7 +30,6 @@ public class TrapEffectTest : BattleBasedTest
         testExitCondition = TestCompletionCondition.EndManually;
         
         _sequencer.AddAction(AttackFirst);
-        
     }
 
     private void AttackFirst()
@@ -43,7 +42,7 @@ public class TrapEffectTest : BattleBasedTest
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        _testCaseHandler.AddTestCase("Example Condition",() => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase("Arena trap",() => !player.canEscape);
         yield return HandleBattleState();
         onTestResult.Invoke();
     }

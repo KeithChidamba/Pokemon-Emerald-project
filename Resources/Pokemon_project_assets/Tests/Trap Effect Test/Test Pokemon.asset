@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Test Pokemon
   m_EditorClassIdentifier: 
   data:
-    pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+    pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
     pokemonLevel: 30
-    evolutionStageNumber: 1
+    evolutionStageNumber: 0
     hasItem: 0
     heldItem: {fileID: 0}
     moveSet:
