@@ -650,7 +650,6 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                 trapData.SetRandomDuration();
             }
         }
-
         _battleHandler.OnSwitchOut += RemoveOnSwitchOrFaint;
         victim.statusHandler.SetupTrapDuration(trapData);
         _processingOrder = false;

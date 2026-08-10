@@ -224,6 +224,8 @@ public class AbilityHandler : BattleParticipantModule
                 {
                     continue;
                 }
+
+                Debug.Log("arena trap hit");
                 _moveUsageHandler.ApplyTrap(enemy,TrapData.TrapType.PersistentFromAbility);
             }
         }

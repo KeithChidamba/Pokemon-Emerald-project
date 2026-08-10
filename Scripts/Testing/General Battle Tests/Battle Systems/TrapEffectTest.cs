@@ -9,7 +9,6 @@ public class TrapEffectTest : BattleBasedTest
     private BattleHandler _battleHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private MoveSequenceHandler _moveUsageHandler;
     
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
@@ -20,7 +19,6 @@ public class TrapEffectTest : BattleBasedTest
         _battleHandler = container.Resolve<BattleHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
-        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
@@ -28,35 +26,101 @@ public class TrapEffectTest : BattleBasedTest
         testName = "Trap Effect Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
-        
-        _sequencer.AddAction(AttackFirst);
+        //tackle, and mean look
+        _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(0,0));
+        //tailwhip, sand tomb
+        _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(1,1));
+        //setup fast trap removal
+        _sequencer.AddAction(HijackEnemyTurnAndSetupSandTomb);
+        //enemy switch out to free player
+        _sequencer.AddAction(ForceEnemySwitch);
     }
 
-    private void AttackFirst()
+    private void ForceEnemySwitch()
     {
-        //To make test case reliable
-        var currentParticipant = _battleHandler.GetCurrentParticipant();
-        currentParticipant.pokemon.moveSet[0].priority = 100;
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySwap);
+        _turnBasedCombatHandler.SaveEmptyTurn(BattleParticipantKey.Player);
+        return;
+        void ForceEnemySwap()
+        {
+            enemy.pokemonTrainerAI.SwitchPokemon(1);
+        }
+    }
+    private void ForceEnemyMove(int moveIndex)
+    {
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
+        return;
+        void UseSpecificMove()
+        {
+            enemy.pokemon.moveSet[moveIndex].priority = 100;
+            enemy.pokemon.moveSet[moveIndex].isSureHit = true;
+            _battleHandler.UseMove(enemy.pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
+        }
+    }
+
+    private void HijackEnemyTurnAndSetupSandTomb()
+    {
+        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player); 
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
+        
+        var copyOfSandTomb = player.statusHandler.CurrentTraps[2];
+        copyOfSandTomb.trapDuration = 0;
+        player.statusHandler.SetupTrapDuration(copyOfSandTomb, false);
         _sequencer.UseMove();
+        
+        return;
+        void ForceEnemySkip()
+        {
+            _turnBasedCombatHandler.SaveEmptyTurn(BattleParticipantKey.Enemy);
+        }
+    }
+    private bool PlayerSwitchIsPrevented()
+    {
+        return !_pokemonPartyHandler.IsValidSwap(1, true,false);
+    }
+    private void ForceEnemyMoveAndAttack(int moveIndex,int enemyMoveIndex)
+    {
+        ForceEnemyMove(enemyMoveIndex);
+        _sequencer.UseMove(moveIndex);
     }
     public override IEnumerator BeginTest()
     {
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        _testCaseHandler.AddTestCase("Arena trap",() => !player.canEscape);
+        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player); 
+        
+        _testCaseHandler.AddTestCase("Arena trap And Mean look",
+            () => player.statusHandler.CurrentTraps[0].trapType
+                  == TrapData.TrapType.PersistentFromAbility
+                  && player.statusHandler.CurrentTraps[1].trapType
+                  == TrapData.TrapType.PersistentFromMove 
+                  && PlayerSwitchIsPrevented());
+        
+        _testCaseHandler.AddTestCase("Player can't switch due to sand Tomb",
+            () => player.statusHandler.CurrentTraps[2].trapType 
+                  == TrapData.TrapType.RandomDurationFromMove
+                  && PlayerSwitchIsPrevented());
+        
+        _testCaseHandler.AddTestCase("Sand tomb should be gone",
+            () => 
+                player.statusHandler.CurrentTraps.Count == 2
+                && !player.canEscape);
+        
+        _testCaseHandler.AddTestCase("Player should be freed",
+            () => 
+                player.statusHandler.CurrentTraps.Count == 0 
+                && player.canEscape);
+        
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
   
     protected override void DetermineSuccess()
     {
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
-
         var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)
         {
@@ -65,6 +129,14 @@ public class TrapEffectTest : BattleBasedTest
         return;
         void CheckTestEnd()
         {
+            var player = _battleHandler.GetParticipant(BattleParticipantKey.Player); 
+            var currentTraps = player.statusHandler.CurrentTraps;
+            
+            testingHandler.LogMessage($"Number of traps on player: {currentTraps.Count}", TestLogType.Information);
+            foreach (var trap in currentTraps)
+            {
+                testingHandler.LogMessage($"Trap type: {trap.trapType}", TestLogType.Information);
+            }
             if (_sequencer.SequenceComplete())
             {
                 EndTest(true);
@@ -72,7 +144,6 @@ public class TrapEffectTest : BattleBasedTest
         }
         void TestCaseFailed()
         {
-            //add extra logic here
             EndTest(false);
         }
     }

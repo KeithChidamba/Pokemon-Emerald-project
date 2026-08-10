@@ -142,12 +142,15 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     {
         party.Add(pokemon);
     }
-    private bool IsValidSwap(int memberIndex,bool swappingIn)
+    public bool IsValidSwap(int memberIndex,bool swappingIn,bool displayMessage=true)
     {
         if (_turnBasedCombatHandler.ContainsSwitch(memberIndex))
         {
-            _dialogueHandler.DisplayDetails(party[memberIndex].pokemonDisplayName +
-                                                     " is already going to be sent out");
+            if(displayMessage)
+            {
+                _dialogueHandler.DisplayDetails(party[memberIndex].pokemonDisplayName +
+                                                " is already going to be sent out");
+            }
             return false;
         }
 
@@ -159,8 +162,11 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         if (atIndexSelectionLimit)
         {
             var swapIn = GetParticipantFromIndex(memberIndex);
-            _dialogueHandler.DisplayDetails(swapIn.pokemon.pokemonDisplayName +
-                                                     " is already in battle");
+            if (displayMessage)
+            {
+                _dialogueHandler.DisplayDetails(swapIn.pokemon.pokemonDisplayName +
+                                                " is already in battle");
+            }
             return false;
         }
         var currentParticipant = (_battleHandler.isDoubleBattle && swappingIn)
@@ -169,8 +175,11 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         
         if (!currentParticipant.canEscape && swappingIn)
         {
-            _dialogueHandler.DisplayDetails(currentParticipant.pokemon.pokemonDisplayName +
-                                                     " is trapped");
+            if (displayMessage)
+            {
+                _dialogueHandler.DisplayDetails(currentParticipant.pokemon.pokemonDisplayName +
+                                                " is trapped");
+            }
             return false;
         }
         return true;

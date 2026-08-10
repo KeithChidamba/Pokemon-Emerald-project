@@ -184,7 +184,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
 
         _dialogueHandler.DisplayBattleInfo(
             participant.pokemon.pokemonDisplayName
-            + (isPersistent? "can’t escape!" 
+            + (isPersistent? " can’t escape!" 
                 : trapData.onTrapMessage));
     }
     public void RemoveTrap(TrapData.TrapType type)
@@ -198,11 +198,11 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         if (!participant.isActive) yield break;
         if (participant.canEscape) yield break;
         if (_currentTraps.Count == 0) yield break;
-
+        
         var existingTrapWithDuration =
             _currentTraps.FirstOrDefault(trap => 
                 trap.trapType == TrapData.TrapType.RandomDurationFromMove);
-
+        
         if (existingTrapWithDuration != null)
         {
             if (existingTrapWithDuration.trapDuration <= 0)
@@ -211,8 +211,8 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
                 RemoveTrap(existingTrapWithDuration.trapType);
                 yield break;
             }
-            yield return GetDamageFromStatus(1 / 16f, existingTrapWithDuration.onHitMessage);
             existingTrapWithDuration.trapDuration--;
+            yield return GetDamageFromStatus(1 / 16f, existingTrapWithDuration.onHitMessage);
         }
     }
     public void GetConfusion(int numTurns)

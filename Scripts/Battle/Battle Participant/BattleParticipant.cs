@@ -57,8 +57,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     
     public Slider playerHpSlider;
     [FormerlySerializedAs("hpSliderColor")] public RawImage hpSliderImage;
-    public Slider playerExpSlider;
-    public GameObject[] singleBattleUI;
     public GameObject[] doubleBattleUI;
     public GameObject participantUI;
     
@@ -66,6 +64,8 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
     public List<TypeImmunityNegation> immunityNegations = new();
+    public Slider playerExpSlider;
+    public GameObject[] singleBattleUI;
     
     public List<Pokemon> expReceivers;
     private bool _expEventDelay;
@@ -325,11 +325,11 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         ResetUiPosition();
         pokemonImage.color = Color.white;
        
-        _turnBasedCombatHandler.OnMoveExecute -= statusHandler.CheckTrapDuration;
+        _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.CheckTrapDuration);
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.StunCheck;
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.CheckStatDropImmunity;
-        _turnBasedCombatHandler.OnMoveExecute -= statusHandler.ConfusionCheck;
-        _turnBasedCombatHandler.OnMoveExecute -= statusHandler.NotifyHealing;
+        _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.ConfusionCheck);
+        _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.NotifyHealing);
         _battleHandler.OnBattleEnd -= DeactivateParticipant;
         pokemon.OnHealthChanged -= CheckIfFainted;
         //reset move data in case of in-battle modification
@@ -456,7 +456,9 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     private void AddToEvolutionQueue(int evolutionIndex)
     {
         if (_battleHandler.evolutionQueue.Any(evo=> evo.participantToEvolve==this))
-        {//in-case of instant multi-level up
+        {
+            Debug.LogWarning($"multi level up on {participantKey}, check logic");
+            //in-case of instant multi-level up
             return;
         }
         var evoData = new EvolutionInBattleData();
@@ -464,7 +466,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         evoData.evolutionIndex = evolutionIndex;
         _battleHandler.evolutionQueue.Add(evoData);
     }
-    public void ActivateParticipant()
+    public void ActivateParticipant(bool initialCall)
     {
         RefreshStatusEffectImage();
         playerHpSlider.minValue = 0;
@@ -477,31 +479,44 @@ public class BattleParticipant : MonoBehaviour,IInjectable
             pokemon.statusEffect = StatusEffect.Poison;
         }
         _moveUsageHandler.ApplyStatusToVictim(this, pokemon.statusEffect);
-        _battleHandler.OnBattleEnd += DeactivateParticipant;
         
-        _turnBasedCombatHandler.OnMoveExecute += statusHandler.CheckTrapDuration;
-        _turnBasedCombatHandler.OnNewTurn += statusHandler.CheckStatDropImmunity;
-        _turnBasedCombatHandler.OnMoveExecute += statusHandler.ConfusionCheck;
-        _turnBasedCombatHandler.OnNewTurn += statusHandler.StunCheck;
-        _turnBasedCombatHandler.OnMoveExecute += statusHandler.NotifyHealing;
-        pokemon.OnHealthChanged += CheckIfFainted;
+        if (initialCall)
+        {
+            //only reset when deactivated
+            _battleHandler.OnBattleEnd += DeactivateParticipant;
+            _turnBasedCombatHandler.SubToMoveExecution(statusHandler.CheckTrapDuration);
+            _turnBasedCombatHandler.OnNewTurn += statusHandler.CheckStatDropImmunity;
+            _turnBasedCombatHandler.SubToMoveExecution(statusHandler.ConfusionCheck);
+            _turnBasedCombatHandler.OnNewTurn += statusHandler.StunCheck;
+            _turnBasedCombatHandler.SubToMoveExecution(statusHandler.NotifyHealing);
+        }
+        
         ActivateUI(doubleBattleUI, _battleHandler.isDoubleBattle);
         ActivateUI(singleBattleUI, !_battleHandler.isDoubleBattle);
         
-        if (!isPlayer) return;
-        pokemon.OnEvolutionSuccessful += AddToEvolutionQueue;
-        pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
-        pokemon.OnNewLevel += statData.SaveActualStats;
+        //these are reset each time participant is reset
+        pokemon.OnHealthChanged += CheckIfFainted;
+        if (isPlayer)
+        {
+            pokemon.OnEvolutionSuccessful += AddToEvolutionQueue;
+            pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
+            pokemon.OnNewLevel += statData.SaveActualStats;
+        }
     }
+
     private void ActivateGenderImage()
     {
         pokemonGenderImage.gameObject.SetActive(true);
         if(pokemon.hasGender)
+        {
             pokemonGenderImage.sprite = Resources.Load<Sprite>(
-                DirectoryHandler.GetDirectory(AssetDirectory.UI) 
+                DirectoryHandler.GetDirectory(AssetDirectory.UI)
                 + pokemon.gender.ToString().ToLower());
+        }
         else
+        {
             pokemonGenderImage.gameObject.SetActive(false);
+        }
     }
     public void DeactivateUI()
     {

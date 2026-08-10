@@ -531,7 +531,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         }
         //setup participant for battle
         participant.statData.SaveActualStats();
-        participant.ActivateParticipant();
+        participant.ActivateParticipant(initialCall);
         participant.abilityHandler.SetAbilityMethod();
         CheckParticipantStates(initialCall);
         OnSwitchIn?.Invoke();
@@ -563,7 +563,9 @@ public class BattleHandler : MonoBehaviour, IInjectable
             //if revived during double battle for example
             if(initialCall)continue;
             if (participant.pokemon.hp > 0 & !participant.isActive)
-                participant.ActivateParticipant();
+            {
+                participant.ActivateParticipant(false);
+            }
         }
     }
 

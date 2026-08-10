@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <title>Test Log</title>
+
+      <style>
+      body{
+          background:#1e1e1e;
+          color:#d4d4d4;
+          font-family:Consolas, monospace;
+          margin:20px;
+      }
+
+      h1{
+          color:white;
+      }
+
+      table{
+          width:100%;
+          border-collapse:collapse;
+      }
+
+      th{
+          text-align:left;
+          padding:8px;
+          border-bottom:2px solid #666;
+          color:white;
+      }
+
+      td{
+          padding:4px 8px;
+          border-bottom:1px solid #333;
+          vertical-align:top;
+      }
+
+      .time{
+          color:#888;
+          width:220px;
+      }
+
+      .type{
+          width:120px;
+          font-weight:bold;
+      }
+
+    .dialogue{
+    color:#dcdcaa;      /* Soft yellow - character dialogue */
+    }
+
+    .health{
+        color:#800080;      /* Red - HP/healing/damage */
+    }
+
+    .calculation{
+        color:#c586c0;      /* Purple - formulas and calculations */
+    }
+
+    .information{
+        color:#58a6ff;      /* Blue - general information */
+    }
+
+    .error{
+        color:#f85149;      /* Bright red - errors */
+        font-weight:bold;
+    }
+
+    .test{
+        color:#79c0ff;      /* Cyan - test start/status */
+        font-weight:bold;
+    }
+
+    .pass{
+        color:#3fb950;      /* Green - successful test */
+        font-weight:bold;
+    }
+
+      .separator td{
+          border-bottom:2px solid #666;
+      }
+      </style>
+
+      </head>
+
+      <body>
+
+      <h1>Test Logs</h1>
+
+      <table>
+
+      <tr>
+          <th>Timestamp</th>
+          <th>Type</th>
+          <th>Message</th>
+      </tr>
+        <tr>
+            <td class="time">2026/08/10 11:12:57 AM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Trap Effect Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:02 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Silcoon</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:04 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Treecko</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:05 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:12 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Traps challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:17 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Traps sent out Foe Trapinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:21 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! trapped bug!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:23 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Trapinch used Mean Look on trapped bug!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:27 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>trapped bug can&#8217;t escape!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:29 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>trapped bug used Tackle on Foe Trapinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:32 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Critical Hit!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:34 AM</td>
+            <td class="type information">Information</td>
+            <td>Number of traps on player: 2</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:34 AM</td>
+            <td class="type information">Information</td>
+            <td>Trap type: PersistentFromAbility</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:34 AM</td>
+            <td class="type information">Information</td>
+            <td>Trap type: PersistentFromMove</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:35 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Trapinch used Sand Tomb on trapped bug!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:39 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s not very effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:41 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>trapped bug became trapped by Sand Tomb!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:44 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>trapped bug used Tail Whip on Foe Trapinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:48 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Trapinch&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:51 AM</td>
+            <td class="type information">Information</td>
+            <td>Number of traps on player: 3</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:51 AM</td>
+            <td class="type information">Information</td>
+            <td>Trap type: PersistentFromAbility</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:51 AM</td>
+            <td class="type information">Information</td>
+            <td>Trap type: PersistentFromMove</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:51 AM</td>
+            <td class="type information">Information</td>
+            <td>Trap type: RandomDurationFromMove</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:51 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>trapped bug was freed from the Sand Tomb!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:54 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>trapped bug used Tackle on Foe Trapinch!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:59 AM</td>
+            <td class="type information">Information</td>
+            <td>Number of traps on player: 2</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:59 AM</td>
+            <td class="type information">Information</td>
+            <td>Trap type: PersistentFromAbility</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:59 AM</td>
+            <td class="type information">Information</td>
+            <td>Trap type: PersistentFromMove</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:13:59 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Traps withdrew Foe Trapinch</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:14:02 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Traps sent out Foe Mudkip</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:14:05 AM</td>
+            <td class="type information">Information</td>
+            <td>Number of traps on player: 0</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:14:05 AM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/10 11:14:08 AM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Trap Effect Test -&gt; has Passed</td>
+        </tr>
+
+      </table>
+
+      </body>
+      </html>

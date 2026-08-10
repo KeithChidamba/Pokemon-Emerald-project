@@ -10,7 +10,9 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
 {
     [SerializeField]List<Turn> _turnHistory = new();
     public event Action OnNewTurn;
-    public event Func<BattleParticipant,IEnumerator> OnMoveExecute;
+    
+    private List<Func<BattleParticipant, IEnumerator>> _moveExecuteHandlers = new();
+    
     public event Action OnTurnsCompleted;
     public event Action OnTurnEventsCompleted;
     public int CurrentTurnIndex => currentTurnIndex;
@@ -54,6 +56,22 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         _battleHandler.OnSwitchOut += RemoveWeatherBuffReceiver;
         clearWeather = new WeatherCondition(Weather.Clear);
         CurrentWeather = clearWeather;
+    }
+
+    public void SubToMoveExecution(Func<BattleParticipant,IEnumerator> subscriber)
+    {
+        if (!_moveExecuteHandlers.Contains(subscriber))
+        {
+            _moveExecuteHandlers.Add(subscriber);
+        }
+        else
+        {
+            Debug.LogError("Duplicate Subscriber for move execution");
+        }
+    }
+    public void UnsubscribeFromMoveExecution(Func<BattleParticipant,IEnumerator> subscriber)
+    {
+        _moveExecuteHandlers.Remove(subscriber);
     }
     private void AddTurn(Turn turn)
     {
@@ -327,7 +345,14 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 continue;
             }
             
-            yield return OnMoveExecute?.Invoke(attacker);
+            foreach (var handler in _moveExecuteHandlers)
+            {
+                IEnumerator routine = handler(attacker);
+                if (routine != null)
+                {
+                    yield return StartCoroutine(routine);
+                }
+            }
             
             yield return _dialogueHandler.AwaitAllDialogue();
 
