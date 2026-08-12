@@ -81,7 +81,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         var consecutiveMoveInfo = move.GetModule<ConsecutiveMoveInfo>();
         if (consecutiveMoveInfo.isRandomHitCount)
         {
-            consecutiveMoveInfo.numHits = Utility.RandomRange(1, 6);
+            consecutiveMoveInfo.numHits = Utility.GetRandomChance(CommonRandom.Rnd5);
         }
         
         var numHits = 0;
@@ -166,7 +166,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             int chance = 100;
             for (int i = 0; i < attacker.previousMoveData.numRepetitions; i++)
                 chance /= 2;
-            if (Utility.RandomRange(1, 101) <= chance)
+            if (Utility.RandomRange100() <= chance)
                 attacker.canBeDamaged = false;
             else
             {

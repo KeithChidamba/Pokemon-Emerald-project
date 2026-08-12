@@ -137,7 +137,8 @@ public class AbilityHandler : BattleParticipantModule
             if (!participant.pokemon.hasTrainer) return;
             //Check level and 10% pickup chance
             if (participant.pokemon.currentLevel < 5) return;
-            if (Utility.RandomRange(1, 101) > 10) return;
+            
+            if (Utility.RandomChance(CommonRandom.Rnd90)) return;
             
             //only happens at end of battle so no need to cache list
             List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
@@ -168,7 +169,7 @@ public class AbilityHandler : BattleParticipantModule
             var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + possibleItems[itemWonIndex];
             
             var itemWon = Resources.Load<Item>(assetDirectory);
-            if (Utility.RandomRange(1, 101) < participant.pokemon.currentLevel)
+            if (Utility.RandomRange100() < participant.pokemon.currentLevel)
             {
                 participant.pokemon.GiveItem(InstanceFactory.CreateItem(itemWon));
             }
@@ -240,7 +241,7 @@ public class AbilityHandler : BattleParticipantModule
         void HealStatusEffect(BattleParticipant thisParticipant)
         {
             var currentStatus = participant.pokemon.statusEffect;
-            if (Utility.RandomRange(0, 3) == 0)
+            if (Utility.RandomChance(CommonRandom.Rnd33))
             {
                 if (currentStatus is StatusEffect.Sleep
                     or StatusEffect.Freeze

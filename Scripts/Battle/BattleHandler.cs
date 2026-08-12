@@ -898,15 +898,16 @@ public class BattleHandler : MonoBehaviour, IInjectable
             }
             else
             { 
-                int random = Utility.RandomRange(1,11);
+                int random = Utility.RandomRange10();
                 var playerLevel =  GetParticipant(BattleParticipantKey.Player).pokemon.currentLevel;
                 var enemyLevel =  GetParticipant(BattleParticipantKey.Player).currentEnemies[0].pokemon.currentLevel;
+                
                 if (playerLevel < enemyLevel)
                 {
                     //lower chance if weaker
-                    random--;
+                    random --;
                 }
-                if (random > 5) //50/50 chance to run
+                if (random < 5)
                 {
                     EndBattle(BattleEndState.PlayerRanAway,null);
                 }

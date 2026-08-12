@@ -85,7 +85,7 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
         
         var encounterChance = _playerMovementHandler.usingBike ? 1.5f * encounterTable.encounterChance : encounterTable.encounterChance;
     
-        var randomNumber = Random.Range(1, 101);
+        var randomNumber = Utility.RandomRange100();
     
         if (randomNumber < encounterChance)
         {

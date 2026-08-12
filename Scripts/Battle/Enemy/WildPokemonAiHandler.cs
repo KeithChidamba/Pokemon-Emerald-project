@@ -34,7 +34,7 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
         {
             return;
         }
-        if (Utility.RandomRange(1, 11) > 3 || !participant.canEscape)
+        if (Utility.RandomChance(CommonRandom.Rnd70) || !participant.canEscape)
         {
             var randMove = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
             //attack player, since its single battle

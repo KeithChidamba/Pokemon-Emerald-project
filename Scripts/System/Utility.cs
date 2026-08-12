@@ -3,13 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum CommonRandom
+{
+    Rnd100 = 100,
+    Rnd90 = 90,
+    Rnd75 = 75,
+    Rnd70 = 70,
+    Rnd50 = 50,
+    Rnd33 = 33,
+    Rnd25 = 25,
+    Rnd20 = 20,
+    Rnd15 = 15,
+    Rnd10 = 10,
+    Rnd5 = 5
+}
 public static class Utility
 {
     public static int RandomRange(int min,int exclusiveLimit)
     {
         return Random.Range(min, exclusiveLimit);
     }
-
+    public static int RandomRange100()
+    {
+        return RandomRange(1, 101);
+    }
+    public static int RandomRange10()
+    {
+        return RandomRange(1, 11);
+    }
+    /// <summary>
+    /// Ranges from 1 to your selected random and returns that number back.
+    /// Accounts for exclusive limit
+    /// </summary>
+    public static int GetRandomChance(CommonRandom random)
+    {
+        return RandomRange(1,  (int)random + 1);
+    }
+    /// <summary>
+    /// Ranges from 1-100, using common random chances like 50/50
+    /// </summary>
+    public static bool RandomChance(CommonRandom random)
+    {
+        return RandomRange100() <= (int)random;
+    }
+    
     public static ushort Random16Bit()
     {
         var rand = new System.Random();

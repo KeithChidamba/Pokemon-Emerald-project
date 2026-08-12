@@ -215,7 +215,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         if(battleEnded) yield break;
         _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
         
-        if (Utility.RandomRange(0, 101) > currentTurn.move.statusChance)
+        if (Utility.RandomRange100() > currentTurn.move.statusChance)
         {
             yield return null;
             yield break;
@@ -416,7 +416,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         yield return _moveUsageHandler.AwaitDamageDisplay();
         
-        if (Utility.RandomRange(1, 101) < currentTurn.move.statusChance)
+        if (Utility.RandomRange100() < currentTurn.move.statusChance)
         {
             _moveUsageHandler.HandleStatusApplication(victim,currentTurn.move,true);
         }

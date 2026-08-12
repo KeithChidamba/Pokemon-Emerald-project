@@ -135,17 +135,21 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
                 damagePercent = _currentStatusTurnCount / 16f ;
                 break;
         }
-        yield return GetDamageFromStatus(damagePercent, message);
+        yield return ValidateDamageFromStatus(damagePercent, message);
     }
-    private IEnumerator GetDamageFromStatus(float damagePercent,string message)
-    {        
+
+    private IEnumerator ValidateDamageFromStatus(float damagePercent,string message)
+    {
         var damagingStatuses = new[] { StatusEffect.Poison, StatusEffect.BadlyPoison, StatusEffect.Burn };
         
         if (!damagingStatuses.Contains(participant.pokemon.statusEffect))
         {
             yield break;
         }
-        
+        yield return GetDamageFromStatus(damagePercent, message);
+    }
+    private IEnumerator GetDamageFromStatus(float damagePercent,string message)
+    {        
         _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+message);
         
         var damageSource = DamageSource.Normal;
@@ -248,7 +252,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
             participant.canAttack = false;
             return;
         }
-        if (Utility.RandomRange(1, 101) < 10) //10% chance
+        if (Utility.RandomChance(CommonRandom.Rnd10))
             _healed = true;
         else
             participant.canAttack = false;
@@ -268,8 +272,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
             return;
         }
         if (participant.isFlinched) return;
-        //75% chance
-        participant.canAttack = Utility.RandomRange(1, 101) < 75;
+        participant.canAttack = Utility.RandomChance(CommonRandom.Rnd75);
     }
     private void SleepCheck()
     {
@@ -288,8 +291,8 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
             _healed = true;
         else //wake up early if lucky
         {
-            int[] chances = { 25, 33, 50, 100 };
-            if (Utility.RandomRange(1, 101) < chances[_currentStatusTurnCount-1])
+            CommonRandom[] chances = { CommonRandom.Rnd25, CommonRandom.Rnd33, CommonRandom.Rnd50, CommonRandom.Rnd100 };
+            if (Utility.RandomChance(chances[_currentStatusTurnCount-1]))
                 _healed = true;
             else
                 participant.canAttack = false;

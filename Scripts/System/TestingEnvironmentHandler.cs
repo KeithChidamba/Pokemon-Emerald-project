@@ -122,7 +122,7 @@ public class TestRegistry
         // new WeatherDamageTest(),
         // new OnFieldDamageModificationTest(),
         //
-        // //Move Based Tests
+        //Move Based Tests
         // new SemiInvulnerableSingleBattleTest(),
         // new SemiInvulnerableDoubleBattleTest(),
         // new IdentifyTargetMoveTest(),

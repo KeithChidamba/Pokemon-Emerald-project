@@ -26,16 +26,18 @@ public class TrapEffectTest : BattleBasedTest
         testName = "Trap Effect Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
-        //tackle, and mean look
+        
+        //tailwhip, mean look
         _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(0,0));
         //tailwhip, sand tomb
-        _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(1,1));
+        _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(0,1));
         //setup fast trap removal
         _sequencer.AddAction(HijackEnemyTurnAndSetupSandTomb);
+        //turn buffer [tailwhip and tailwhip]
+        _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(0,2));
         //enemy switch out to free player
         _sequencer.AddAction(ForceEnemySwitch);
     }
-
     private void ForceEnemySwitch()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
@@ -56,6 +58,8 @@ public class TrapEffectTest : BattleBasedTest
         return;
         void UseSpecificMove()
         {
+            //modified for test case reliability
+            enemy.pokemon.moveSet[moveIndex].moveDamage = 0;
             enemy.pokemon.moveSet[moveIndex].priority = 100;
             enemy.pokemon.moveSet[moveIndex].isSureHit = true;
             _battleHandler.UseMove(enemy.pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
@@ -70,8 +74,9 @@ public class TrapEffectTest : BattleBasedTest
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
         
         var copyOfSandTomb = player.statusHandler.CurrentTraps[2];
-        copyOfSandTomb.trapDuration = 0;
+        copyOfSandTomb.trapDuration = 1;
         player.statusHandler.SetupTrapDuration(copyOfSandTomb, false);
+        
         _sequencer.UseMove();
         
         return;
@@ -100,10 +105,13 @@ public class TrapEffectTest : BattleBasedTest
                   == TrapData.TrapType.PersistentFromMove 
                   && PlayerSwitchIsPrevented());
         
-        _testCaseHandler.AddTestCase("Player can't switch due to sand Tomb",
-            () => player.statusHandler.CurrentTraps[2].trapType 
+        _testCaseHandler.AddTestCase("Sand Tomb should be active,player can't switch due to sand Tomb",
+            () => player.statusHandler.CurrentTraps.Last().trapType
                   == TrapData.TrapType.RandomDurationFromMove
                   && PlayerSwitchIsPrevented());
+        
+        _testCaseHandler.AddTestCase("Player should be damaged due to sand Tomb",
+            () => player.pokemon.hp < player.pokemon.maxHp);
         
         _testCaseHandler.AddTestCase("Sand tomb should be gone",
             () => 

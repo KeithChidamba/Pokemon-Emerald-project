@@ -196,7 +196,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         var buffedCritRateIndex = Array.IndexOf(_critLevels, struggleUser.pokemon.critChance);
         float critChance = _critLevels[buffedCritRateIndex];
 
-        if (UnityEngine.Random.Range(0f, 100f) < critChance)
+        if (Utility.RandomRange100() < critChance)
             critValue = 2;
 
         if (critValue > 1)
@@ -257,7 +257,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         var buffedCritRateIndex = Array.IndexOf(_critLevels, attacker.pokemon.critChance)
                                   + move.critModifierIndex;
         float critChance = _critLevels[buffedCritRateIndex];
-        if (UnityEngine.Random.Range(0f, 100f) < critChance)
+        if (Utility.RandomRange100() < critChance)
             critValue =  2;
         
         if (critValue > 1f) _dialogueHandler.DisplayBattleInfo("Critical Hit!");
@@ -534,7 +534,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             _processingOrder = false;
             return;
         }
-        if (Utility.RandomRange(1, 101) <= move.statusChance)
+        if (Utility.RandomRange100() <= move.statusChance)
         {
             if (move.isMultiTarget)
             {
@@ -615,7 +615,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         {
             if(status==StatusEffect.Sleep)
             {
-                numTurnsOfStatus = Utility.RandomRange(1, 5);
+                numTurnsOfStatus = Utility.GetRandomChance(CommonRandom.Rnd5);
             }
         }
         participant.statusHandler.GetStatusEffect(status,numTurnsOfStatus);
@@ -633,23 +633,9 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
 
         if (trapData.trapType == TrapData.TrapType.RandomDurationFromMove)
         {
-            if (victim.pokemon.HasType(PokemonType.Ghost))
-            {
-                if (!attacker.pokemon.HasType(PokemonType.Ghost))
-                {
-                    //only ghost can trap ghost with moves
-                    _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + "can't be trapped");
-                    _processingOrder = false;
-                    return;
-                }
-
-                trapData.SetRandomDuration();
-            }
-            else
-            {
-                trapData.SetRandomDuration();
-            }
+            trapData.SetRandomDuration();
         }
+        
         _battleHandler.OnSwitchOut += RemoveOnSwitchOrFaint;
         victim.statusHandler.SetupTrapDuration(trapData);
         _processingOrder = false;
@@ -665,7 +651,8 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     }
     
     /// <summary>
-    /// For use in general trapping logic, outside move sequence
+    /// For use in general trapping logic, outside move sequence.
+    /// Does not have dedicated trap messages.
     /// </summary>
     public void ApplyTrap(BattleParticipant victim,TrapData.TrapType type, int numTurns=0)
     {
@@ -693,9 +680,9 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
 
     void ApplyConfusion(BattleParticipant victimOfConfusion,Move move)
     {
-        if (Utility.RandomRange(1, 101) <= move.statusChance)
+        if (Utility.RandomRange100() <= move.statusChance)
         {
-            var randomNumTurns = Utility.RandomRange(1, 6);
+            var randomNumTurns = Utility.GetRandomChance(CommonRandom.Rnd5);
             _dialogueHandler.DisplayBattleInfo(victimOfConfusion.pokemon.pokemonDisplayName
                                                         + " was confused");
             victimOfConfusion.statusHandler.GetConfusion(randomNumTurns);
@@ -708,7 +695,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             _processingOrder = false;
             return;
         }
-        if (Utility.RandomRange(1, 101) <= move.statusChance)
+        if (Utility.RandomRange100() <= move.statusChance)
         {
             victim.canAttack = false;
             victim.isFlinched = true;
@@ -755,7 +742,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
 
     void CheckStatChangeApplicability(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        if (Utility.RandomRange(1, 101) <= move.buffOrDebuffChance)
+        if (Utility.RandomRange100() <= move.buffOrDebuffChance)
         {
             StartCoroutine(HandleStatChangeApplication(move, attacker, victim));
         }

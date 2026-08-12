@@ -277,8 +277,9 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             yield return new WaitForSecondsRealtime(2f);
             yield break;
         }
-        
-        if (currentPokemon.moveSet.Count == 4) 
+
+        var maxMoveCount = 4;
+        if (currentPokemon.moveSet.Count == maxMoveCount) 
         {
             if (isPartyPokemon)
             {
@@ -297,7 +298,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             }
             else
             {//wild pokemon get generated with somewhat random moveset choices
-                currentPokemon.moveSet[Utility.RandomRange(0, 4)]
+                currentPokemon.moveSet[Utility.RandomRange(0, maxMoveCount)]
                     = InstanceFactory.CreateMove(moveFromAsset);
             }
         }

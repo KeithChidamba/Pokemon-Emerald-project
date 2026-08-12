@@ -116,7 +116,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
     {
         fishing = true;
         manager.ChangeAnimationState(PlayerAnimationState.FishingIdle);
-        var random = Utility.RandomRange(1, 11);
+        var random = Utility.RandomRange10();
         yield return new WaitForSeconds(1f);//allow fishing cancel
         if (!fishing) yield break; //if fishing canceled early
         if (random < 5)

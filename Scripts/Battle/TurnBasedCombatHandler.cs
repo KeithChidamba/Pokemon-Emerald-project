@@ -210,7 +210,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             {
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " is confused");
                 yield return _battleVisualsHandler.DisplayConfusionVisuals(attacker);
-                if (Utility.RandomRange(0, 2) < 1)
+                if (Utility.RandomChance(CommonRandom.Rnd50))
                 {
                     _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" hurt itself in its confusion");
                     yield return _moveUsageHandler.DealConfusionDamage(attacker);
@@ -221,7 +221,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             if (attacker.isInfatuated)
             {
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " is in love ");
-                if (Utility.RandomRange(0, 2) < 1)
+                if (Utility.RandomChance(CommonRandom.Rnd50))
                 {
                     _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" can’t move because of love");
                     OnAttackAttempted?.Invoke(false);
@@ -672,7 +672,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     private bool MoveSuccessful(Turn turn)
     {
-        var random = Utility.RandomRange(1, 100);
+        var random = Utility.RandomRange100();
         var hitChance = turn.move.moveAccuracy *
                            (_battleHandler.GetParticipant(turn.attackerKey).pokemon.accuracy / 
                             _battleHandler.GetParticipant(turn.victimKey).pokemon.evasion);
