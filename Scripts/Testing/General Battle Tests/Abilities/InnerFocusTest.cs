@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
  
-public class TestTemplate : BattleBasedTest
+public class InnerFocusTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
@@ -13,7 +13,6 @@ public class TestTemplate : BattleBasedTest
     
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
-    
     
     public override void Inject(ServiceContainer serviceContainer)
     {
@@ -25,7 +24,7 @@ public class TestTemplate : BattleBasedTest
         
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "Test";
+        testName = "Inner Focus Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
         
