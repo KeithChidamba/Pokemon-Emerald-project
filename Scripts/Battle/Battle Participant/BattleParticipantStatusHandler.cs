@@ -24,7 +24,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
     public IReadOnlyList<TrapData> CurrentTraps => _currentTraps;
     
     private readonly Dictionary<StatusEffect, Action> _statusEffectMethods = new ();
-    public event Action<BattleParticipant> OnStatusCheck;
+    public event Action OnStatusCheck;
     
     private DialogueHandler _dialogueHandler;
     private BattleHandler _battleHandler;
@@ -110,7 +110,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         
         if (participant.pokemon.statusEffect == StatusEffect.None) yield break;
         
-        OnStatusCheck?.Invoke(participant);
+        OnStatusCheck?.Invoke();
         
         participant.RefreshStatusEffectImage();
         yield return AssignStatusDamage();

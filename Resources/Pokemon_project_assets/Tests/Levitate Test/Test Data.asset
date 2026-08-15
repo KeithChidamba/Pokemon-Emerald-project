@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemonPartyData:
   - naturalPokemonData:
-      pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
-      pokemonLevel: 24
+      pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+      pokemonLevel: 35
       evolutionStageNumber: 0
       hasItem: 0
       heldItem: {fileID: 0}
       moveSet:
-      - {fileID: 11400000, guid: 2e60bcfe1431e981fab9ce9c8bcffc17, type: 2}
+      - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
     specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
     specificGender: 1
-    nickName: 
+    nickName: ziggy
   testEnemyData:
-    trainerDisplayName: Test Grunt Health Drain
+    trainerDisplayName: Test Grunt Levitate
     battleType: 0
     pokemonParty:
-    - {fileID: 11400000, guid: ad2cc4d2bd1e51d6ca2f3d74ce3aa624, type: 2}
+    - {fileID: 11400000, guid: 2908300b86c49200197b834f4a48c99a, type: 2}

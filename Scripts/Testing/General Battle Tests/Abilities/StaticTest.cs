@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
  
-public class InnerFocusTest : BattleBasedTest
+public class StaticTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     
@@ -18,42 +18,28 @@ public class InnerFocusTest : BattleBasedTest
        
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "Inner Focus Test";
+        testName = "Static Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
         
-        _sequencer.AddAction(TryFlinch);
+        _sequencer.AddAction(AttackFirst);
     }
-    
-    private void TryFlinch()
+
+    private void AttackFirst()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         player.pokemon.moveSet[0].priority = 100;
-        //100% flinch rate but should fail because of enemy's ability
-        player.pokemon.moveSet[0].statusChance = 100;
-        _sequencer.UseMove();//bite
-        
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
-        enemy.pokemonTrainerAI.AssignBehaviorAction(UseMove);
-        return;
-        void UseMove()
-        {
-            //tackle
-            enemy.pokemon.moveSet[0].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
-        }
-        
+        _sequencer.UseMove();
     }
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        _testCaseHandler.AddTestCase("Player must be attacked because enemy can't be flinched",
-            () => player.pokemon.hp < player.pokemon.maxHp
-                  && !enemy.canBeFlinched);
-       
+        _testCaseHandler.AddTestCase("Static ability should paralyze player after enemy is attacked",
+            () => player.pokemon.statusEffect == StatusEffect.Paralysis
+                && enemy.pokemon.hp < enemy.pokemon.maxHp);
+        
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
@@ -61,14 +47,10 @@ public class InnerFocusTest : BattleBasedTest
     protected override void DetermineSuccess()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        
         testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
                                   $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
 
-       _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {

@@ -14,18 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemonPartyData:
   - naturalPokemonData:
-      pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
-      pokemonLevel: 24
-      evolutionStageNumber: 0
+      pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+      pokemonLevel: 33
+      evolutionStageNumber: 1
       hasItem: 0
       heldItem: {fileID: 0}
       moveSet:
-      - {fileID: 11400000, guid: 2e60bcfe1431e981fab9ce9c8bcffc17, type: 2}
+      - {fileID: 11400000, guid: e589d376f63838b43abf8c4492ec17ce, type: 2}
     specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
     specificGender: 1
-    nickName: 
+    specificAbility: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}
+    nickName: hot head
   testEnemyData:
-    trainerDisplayName: Test Grunt Health Drain
+    trainerDisplayName: Test Grunt Health Damage Buff
     battleType: 0
     pokemonParty:
-    - {fileID: 11400000, guid: ad2cc4d2bd1e51d6ca2f3d74ce3aa624, type: 2}
+    - {fileID: 11400000, guid: 9945a61276c1393d0aa7c53908719f05, type: 2}

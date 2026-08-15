@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <title>Test Log</title>
+
+      <style>
+      body{
+          background:#1e1e1e;
+          color:#d4d4d4;
+          font-family:Consolas, monospace;
+          margin:20px;
+      }
+
+      h1{
+          color:white;
+      }
+
+      table{
+          width:100%;
+          border-collapse:collapse;
+      }
+
+      th{
+          text-align:left;
+          padding:8px;
+          border-bottom:2px solid #666;
+          color:white;
+      }
+
+      td{
+          padding:4px 8px;
+          border-bottom:1px solid #333;
+          vertical-align:top;
+      }
+
+      .time{
+          color:#888;
+          width:220px;
+      }
+
+      .type{
+          width:120px;
+          font-weight:bold;
+      }
+
+    .dialogue{
+    color:#dcdcaa;      /* Soft yellow - character dialogue */
+    }
+
+    .health{
+        color:#800080;      /* Red - HP/healing/damage */
+    }
+
+    .calculation{
+        color:#c586c0;      /* Purple - formulas and calculations */
+    }
+
+    .information{
+        color:#58a6ff;      /* Blue - general information */
+    }
+
+    .error{
+        color:#f85149;      /* Bright red - errors */
+        font-weight:bold;
+    }
+
+    .test{
+        color:#79c0ff;      /* Cyan - test start/status */
+        font-weight:bold;
+    }
+
+    .pass{
+        color:#3fb950;      /* Green - successful test */
+        font-weight:bold;
+    }
+
+      .separator td{
+          border-bottom:2px solid #666;
+      }
+      </style>
+
+      </head>
+
+      <body>
+
+      <h1>Test Logs</h1>
+
+      <table>
+
+      <tr>
+          <th>Timestamp</th>
+          <th>Type</th>
+          <th>Message</th>
+      </tr>
+        <tr>
+            <td class="time">2026/08/15 10:24:00 PM</td>
+            <td class="type test">Test</td>
+            <td>&lt;- Health Based Damage Buff Test -&gt; has begun</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:06 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>You got a Combusken</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:07 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Battle Begins!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:15 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Health Damage Buff challenges you to a battle</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:20 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Test Grunt Health Damage Buff sent out Foe Treecko!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:24 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Go! hot head!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:26 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tail Whip on hot head!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:30 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>hot head&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:33 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>hot head used Ember!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:37 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:40 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 96/127</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:40 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 87/87</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:40 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>hot head used Ember!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:42 PM</td>
+            <td class="type information">Information</td>
+            <td>Blaze increased the damage of Fire type move Ember</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:42 PM</td>
+            <td class="type calculation">Calculation</td>
+            <td>Increased damage from 28 to 42</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:45 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>It&#39;s Super effective!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:47 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>Foe Treecko used Tail Whip on hot head!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:51 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>hot head&#39;s Defense fell!</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:54 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of enemy: 54/127</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:54 PM</td>
+            <td class="type health">Health</td>
+            <td>Health of player: 21,75/87</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:54 PM</td>
+            <td class="type dialogue">Dialogue</td>
+            <td>the battle ended</td>
+        </tr>
+
+        <tr>
+            <td class="time">2026/08/15 10:24:57 PM</td>
+            <td class="type pass">Pass</td>
+            <td>&lt;- Health Based Damage Buff Test -&gt; has Passed</td>
+        </tr>
+
+      </table>
+
+      </body>
+      </html>

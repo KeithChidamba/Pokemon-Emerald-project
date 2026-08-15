@@ -76,8 +76,10 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private void AssignPokemonAbility(Pokemon pokemon)
     { 
         pokemon.ability = null;
-        var abilityEnum = (pokemon.abilities.Length > 1)? 
+        
+        var abilityEnum = pokemon.abilities.Length > 1?
              pokemon.abilities[pokemon.personalityValue % 2] : pokemon.abilities[0];
+        
         pokemon.abilityName = NameDB.GetAbility(abilityEnum);
         pokemon.ability = Resources.Load<Ability>(
             DirectoryHandler.GetDirectory(AssetDirectory.Abilities)

@@ -14,18 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemonPartyData:
   - naturalPokemonData:
-      pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
-      pokemonLevel: 24
-      evolutionStageNumber: 0
+      pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      pokemonLevel: 40
+      evolutionStageNumber: 2
       hasItem: 0
       heldItem: {fileID: 0}
       moveSet:
-      - {fileID: 11400000, guid: 2e60bcfe1431e981fab9ce9c8bcffc17, type: 2}
+      - {fileID: 11400000, guid: b777dec5f205a61448873e7760324510, type: 2}
+      - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
     specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
     specificGender: 1
+    specificAbility: {fileID: 11400000, guid: 2753225943009a84284482e1ea9aae6b, type: 2}
     nickName: 
   testEnemyData:
-    trainerDisplayName: Test Grunt Health Drain
+    trainerDisplayName: Test Grunt Ability Damage Buff
     battleType: 0
     pokemonParty:
-    - {fileID: 11400000, guid: ad2cc4d2bd1e51d6ca2f3d74ce3aa624, type: 2}
+    - {fileID: 11400000, guid: 730c19ea045b169a89cb1d3261a680c5, type: 2}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,6 +28,11 @@ public class AbilityHandler : BattleParticipantModule
         
         _battleHandler.OnBattleEnd += ResetState;
         _turnBasedCombatHandler.OnNewTurn += CheckAbilityUsability;
+        void CheckAbilityUsability()
+        {
+            if (!participant.isActive) return;
+            OnAbilityUsed?.Invoke();
+        }
         
         _abilityMethods.Add(AbilityName.InnerFocus,InnerFocus);
         _abilityMethods.Add(AbilityName.PickUp,PickUp);
@@ -76,12 +82,6 @@ public class AbilityHandler : BattleParticipantModule
         );
         _damageBuffCombinations.Add(paralysisCombo.abilityName, parData);
     }
-
-    void CheckAbilityUsability()
-    {
-        if (!participant.isActive) return;
-        OnAbilityUsed?.Invoke();
-    }
     
     public void SetAbilityMethod()
     {
@@ -112,15 +112,32 @@ public class AbilityHandler : BattleParticipantModule
     private void Guts()
     {
         if (_abilityTriggered) return;
-        if (participant.pokemon.statusEffect == StatusEffect.None) return;
-        var attackBuffData = new StatChangeTransitData(participant, Stat.Attack, true, 1);
-        _moveUsageHandler.InitiateStatChange(attackBuffData,false);
+        _turnBasedCombatHandler.SubToMoveExecution(ActivateGuts);
         _abilityTriggered = true;
+        return;
+        IEnumerator ActivateGuts(BattleParticipant currentParticipant)
+        {
+            if (currentParticipant.participantKey != participant.participantKey) yield break;
+            
+            if (participant.pokemon.statusEffect == StatusEffect.None) yield break;
+            
+            var attackBuffData = new StatChangeTransitData(participant, Stat.Attack, true, 1);
+            
+            _moveUsageHandler.InitiateStatChange(attackBuffData,false);
+            _turnBasedCombatHandler.OnTurnEventsCompleted += RemoveSubscription;
+            
+            yield break;
+            void RemoveSubscription()
+            {
+                _turnBasedCombatHandler.OnTurnEventsCompleted -= RemoveSubscription;
+                _turnBasedCombatHandler.UnsubscribeFromMoveExecution(ActivateGuts);
+            }
+        }
     }
     private void Levitate()
     {
         if (_abilityTriggered) return;
-        participant.additionalTypeImmunity = Resources.Load<Type>(AssetDirectory.Types + nameof(PokemonType.Ground));
+        participant.additionalTypeImmunity = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + nameof(PokemonType.Ground));
         _abilityTriggered = true;
     }
     private void PickUp()
@@ -132,48 +149,51 @@ public class AbilityHandler : BattleParticipantModule
         return;
         void GiveItem()
         {
-            if (participant.pokemon.hasItem) return;
-            //wild pokemon dont need to be picking up items when battle ends
-            if (!participant.pokemon.hasTrainer) return;
-            //Check level and 10% pickup chance
-            if (participant.pokemon.currentLevel < 5) return;
-            
             if (Utility.RandomChance(CommonRandom.Rnd90)) return;
-            
-            //only happens at end of battle so no need to cache list
-            List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
+            if (Utility.RandomRange100() < participant.pokemon.currentLevel) return;
+            CheckItemForPickUpAbility(participant);
+        }
+    }
+    public void CheckItemForPickUpAbility(BattleParticipant currentParticipant)
+    {
+        if (currentParticipant.pokemon.hasItem) return;
+        if (!currentParticipant.pokemon.hasTrainer) return;
+        if (currentParticipant.pokemon.currentLevel < 5) return;
+        
+        List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
+        {
+            (5, 9, new[] { "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (10, 19, new[] { "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (20, 29, new[] { "Hyper Potion", "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (30, 39, new[] { "Ether", "Full Heal", "Hyper Potion", "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (40, 49, new[] { "Rare Candy", "Full Heal", "Ether", "Hyper Potion", "Super Potion", "Escape Rope", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (50, 59, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion", "Escape Rope", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (60, 69, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "Escape Rope" }),
+            (70, 100, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "PP Up" })
+        };
+        
+        string[] possibleItems = null;
+        foreach (var pool in itemPools)
+        {
+            if (currentParticipant.pokemon.currentLevel >= pool.MinLevel && currentParticipant.pokemon.currentLevel <= pool.MaxLevel)
             {
-                (5, 9, new[] { "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-                (10, 19, new[] { "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-                (20, 29, new[] { "Hyper Potion", "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-                (30, 39, new[] { "Ether", "Full Heal", "Hyper Potion", "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-                (40, 49, new[] { "Rare Candy", "Full Heal", "Ether", "Hyper Potion", "Super Potion", "Escape Rope", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-                (50, 59, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion", "Escape Rope", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-                (60, 69, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "Escape Rope" }),
-                (70, 100, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "PP Up" })
-            };
-            
-            string[] possibleItems = null;
-            foreach (var pool in itemPools)
-            {
-                if (participant.pokemon.currentLevel >= pool.MinLevel && participant.pokemon.currentLevel <= pool.MaxLevel)
-                {
-                    possibleItems = pool.Items;
-                    break;
-                }
-            }
-            if (possibleItems == null) return;
-           
-            var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
-
-            var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + possibleItems[itemWonIndex];
-            
-            var itemWon = Resources.Load<Item>(assetDirectory);
-            if (Utility.RandomRange100() < participant.pokemon.currentLevel)
-            {
-                participant.pokemon.GiveItem(InstanceFactory.CreateItem(itemWon));
+                possibleItems = pool.Items;
+                break;
             }
         }
+        if (possibleItems == null) return;
+       
+        var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
+
+        var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + possibleItems[itemWonIndex];
+        
+        var itemWon = Resources.Load<Item>(assetDirectory);
+        if (itemWon == null)
+        {
+            Debug.LogError($"[Pickup Ability],{assetDirectory} doesnt exist, check item name in pool");
+            return;
+        }
+        currentParticipant.pokemon.GiveItem(InstanceFactory.CreateItem(itemWon));
     }
     private void ApplyDamageBuffAbility()
     {
@@ -225,8 +245,6 @@ public class AbilityHandler : BattleParticipantModule
                 {
                     continue;
                 }
-
-                Debug.Log("arena trap hit");
                 _moveUsageHandler.ApplyTrap(enemy,TrapData.TrapType.PersistentFromAbility);
             }
         }
@@ -238,22 +256,28 @@ public class AbilityHandler : BattleParticipantModule
         _abilityTriggered = true;
         _onAbilityReset += ()=> participant.statusHandler.OnStatusCheck -= HealStatusEffect;
         return;
-        void HealStatusEffect(BattleParticipant thisParticipant)
+        void HealStatusEffect()
         {
-            var currentStatus = participant.pokemon.statusEffect;
-            if (Utility.RandomChance(CommonRandom.Rnd33))
+            ShedSkinAbilityEffect(CommonRandom.Rnd33,participant);
+        }
+    }
+    public void ShedSkinAbilityEffect(CommonRandom chance,BattleParticipant currentParticipant)
+    {
+        if (currentParticipant.pokemon.statusEffect == StatusEffect.None)return;
+        
+        var currentStatus = currentParticipant.pokemon.statusEffect;
+        if (Utility.RandomChance(chance))
+        {
+            if (currentStatus is StatusEffect.Sleep
+                or StatusEffect.Freeze
+                or StatusEffect.Paralysis)
             {
-                if (currentStatus is StatusEffect.Sleep
-                    or StatusEffect.Freeze
-                    or StatusEffect.Paralysis)
-                {
-                    if(!participant.isFlinched)
-                        participant.canAttack = true;
-                }
-                participant.pokemon.statusEffect = StatusEffect.None;
-                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s shed skin healed it");
-                participant.RefreshStatusEffectImage();
+                if(!currentParticipant.isFlinched)
+                    currentParticipant.canAttack = true;
             }
+            currentParticipant.pokemon.statusEffect = StatusEffect.None;
+            _dialogueHandler.DisplayBattleInfo(currentParticipant.pokemon.pokemonDisplayName+"'s shed skin healed it");
+            currentParticipant.RefreshStatusEffectImage();
         }
     }
     private void Static()
@@ -266,9 +290,9 @@ public class AbilityHandler : BattleParticipantModule
         void GiveStatic(BattleParticipant attacker,Move moveUsed)
         {
             if (attacker.pokemon.statusEffect != StatusEffect.None) return;
-            if (attacker == participant) return;
+            if (attacker.participantKey == participant.participantKey) return;
             if (!attacker.canBeDamaged) return;
-            if(!moveUsed.isContact)return; 
+            if (!moveUsed.isContact)return;
             
             //simulate a pokemon's attack
             _moveUsageHandler.OnStatusEffectHit += NotifyStaticHit; 

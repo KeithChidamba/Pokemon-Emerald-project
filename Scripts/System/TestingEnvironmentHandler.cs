@@ -107,13 +107,24 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
       File.WriteAllText(baseDir, html);
    }
 }
+
 public class TestRegistry
 {
     //tests are ran in this order
     public List<IntegrationTest> allTests = new()
-    {
-        //Battle system tests
-        new TrapEffectTest(),
+    { 
+    //Abilities
+        //new HealthBasedDamageBuffTest(),
+        //new StatusEffectDamageBuffTest(),
+        //new ShedSkinTest(),
+        //new StaticTest(),
+        //new ArenaTrapTest(),
+        //new LevitateTest(),
+        //new GutsTest(),
+        //new PickupTest(),
+        //new InnerFocusTest(),
+    //Battle system tests
+        //new TrapEffectTest(),
         // new InfatuationEffectTest(),
         // new FlinchEffectTest(),
         // new HeldItemUsageTest(),
@@ -122,7 +133,7 @@ public class TestRegistry
         // new WeatherDamageTest(),
         // new OnFieldDamageModificationTest(),
         //
-        //Move Based Tests
+    //Move Based Tests
         // new SemiInvulnerableSingleBattleTest(),
         // new SemiInvulnerableDoubleBattleTest(),
         // new IdentifyTargetMoveTest(),

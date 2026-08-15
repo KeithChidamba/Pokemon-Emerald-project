@@ -19,9 +19,8 @@ public class DamageBuffAbilityData
         BattleParticipant victim,
         Move move)
     {
-        if (conditionForBuff(attacker, victim, move))
+        if (conditionForBuff.Invoke(attacker, victim, move))
             return _damageBuffMultiplier;
-
         return 1f;
     }
 }

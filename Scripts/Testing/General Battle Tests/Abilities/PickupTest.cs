@@ -4,12 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
  
-public class BattleTestTemplate : BattleBasedTest
+public class PickupTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private MoveSequenceHandler _moveUsageHandler;
     
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
@@ -18,54 +15,48 @@ public class BattleTestTemplate : BattleBasedTest
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
-        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "TestNameVariable";
+        testName = "Pickup Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
         
-        _sequencer.AddAction(AttackFirst);
+        _sequencer.AddAction(SetupItemReceival);
     }
 
-    private void AttackFirst()
+    private void SetupItemReceival()
     {
-        //To make test case reliable
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
+        player.pokemon.heldItem = null;
+        player.pokemon.hasItem = false;
+        //pickup triggers when the battle ends, which can't be tested using test cases
+        //so rather test the method logic individually
+        player.abilityHandler.CheckItemForPickUpAbility(player);
         _sequencer.UseMove();
     }
+    
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        _testCaseHandler.AddTestCase("Example Condition",() => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase("Player must have item",
+            () => player.pokemon.hasItem 
+            && player.pokemon.heldItem != null);
+        
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
   
     protected override void DetermineSuccess()
     {
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
-
-        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
-        if (!caseExists)
-        {
-            CheckTestEnd();
-        }
+        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {
             if (_sequencer.SequenceComplete())
             {
+                var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+                testingHandler.LogMessage($"Item picked up: {player.pokemon.heldItem.itemName}" ,TestLogType.Information);
                 EndTest(true);
             }
         }

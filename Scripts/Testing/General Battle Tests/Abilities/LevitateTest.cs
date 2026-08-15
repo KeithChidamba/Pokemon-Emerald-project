@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
  
-public class InnerFocusTest : BattleBasedTest
+public class LevitateTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     
@@ -18,20 +18,17 @@ public class InnerFocusTest : BattleBasedTest
        
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "Inner Focus Test";
+        testName = "Levitate Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
+        //player use tackle, enemy use mud slap
         
-        _sequencer.AddAction(TryFlinch);
+        _sequencer.AddAction(AttackNormally);
+        _sequencer.AddAction(SetupAbilityChange);
     }
-    
-    private void TryFlinch()
-    {
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
-        //100% flinch rate but should fail because of enemy's ability
-        player.pokemon.moveSet[0].statusChance = 100;
-        _sequencer.UseMove();//bite
+    private void AttackNormally()
+    { 
+        _sequencer.UseMove();//tackle
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
@@ -39,39 +36,50 @@ public class InnerFocusTest : BattleBasedTest
         return;
         void UseMove()
         {
-            //tackle
+            //mud slap
             enemy.pokemon.moveSet[0].isSureHit = true;
             _battleHandler.UseMove(enemy.pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
         }
-        
+    }
+    private void SetupAbilityChange()
+    {
+        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        var levitateAsset = Resources.Load<Ability>(DirectoryHandler.GetDirectory(AssetDirectory.Abilities) + nameof(AbilityName.Levitate));
+        player.pokemon.ability = levitateAsset;
+        player.abilityHandler.ResetState();
+        player.abilityHandler.SetAbilityMethod();
+        _sequencer.UseMove();
+        testingHandler.LogMessage($"player participant artificially received ability {player.pokemon.ability.abilityName}" +
+                                  $", which grants additional immunity to {player.additionalTypeImmunity.typeEnum}",TestLogType.Information);
     }
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        _testCaseHandler.AddTestCase("Player should be damaged by ground move",
+            () => player.pokemon.hp < player.pokemon.maxHp);
         
-        _testCaseHandler.AddTestCase("Player must be attacked because enemy can't be flinched",
-            () => player.pokemon.hp < player.pokemon.maxHp
-                  && !enemy.canBeFlinched);
-       
+        _testCaseHandler.AddTestCase("Player should be immune to ground move, and have levitate",
+            () => player.pokemon.hp >= player.pokemon.maxHp
+            && player.pokemon.ability.abilityName == AbilityName.Levitate
+            && player.additionalTypeImmunity.typeEnum == PokemonType.Ground);
+        
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
   
     protected override void DetermineSuccess()
     {
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+       var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
+       testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
 
-       _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {
+            //for test cases
+            player.pokemon.hp = player.pokemon.maxHp;
             if (_sequencer.SequenceComplete())
             {
                 EndTest(true);

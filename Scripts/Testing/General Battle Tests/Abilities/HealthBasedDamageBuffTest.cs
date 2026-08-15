@@ -4,56 +4,62 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
  
-public class InnerFocusTest : BattleBasedTest
+public class HealthBasedDamageBuffTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
+    private MoveSequenceHandler _moveUsageHandler;
     
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
+    private bool _damageWasChanged;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-       
+        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
+        
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "Inner Focus Test";
+        testName = "Health Based Damage Buff Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
+        //ember
+        _sequencer.AddAction(()=> _sequencer.UseMove());
+        //ember
+        _sequencer.AddAction(AttackWithBuffedDamage);
         
-        _sequencer.AddAction(TryFlinch);
+        _moveUsageHandler.OnDamageModified += CheckForAbilityEffect;
     }
-    
-    private void TryFlinch()
+    private void AttackWithBuffedDamage()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        player.pokemon.hp = player.pokemon.maxHp * 0.25f;
         player.pokemon.moveSet[0].priority = 100;
-        //100% flinch rate but should fail because of enemy's ability
-        player.pokemon.moveSet[0].statusChance = 100;
-        _sequencer.UseMove();//bite
-        
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
-        enemy.pokemonTrainerAI.AssignBehaviorAction(UseMove);
-        return;
-        void UseMove()
+        _sequencer.UseMove();
+    }
+    private void CheckForAbilityEffect(DamageCalculationModifier modifier,float initialDamage,float modifiedDamage)
+    {
+        if (modifier == DamageCalculationModifier.Ability)
         {
-            //tackle
-            enemy.pokemon.moveSet[0].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
+            var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+            
+            testingHandler.LogMessage($"{player.pokemon.ability.abilityName} increased the damage of " +
+                                      $"{player.pokemon.moveSet[0].type.typeEnum}" +
+                                      $" type move {player.pokemon.moveSet[0].moveName}",  TestLogType.Information);
+            
+            testingHandler.LogMessage($"Increased damage from {initialDamage} to {modifiedDamage}"
+                ,  TestLogType.Calculation);
+            _damageWasChanged = true;
         }
-        
     }
     public override IEnumerator BeginTest()
     {
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        
-        _testCaseHandler.AddTestCase("Player must be attacked because enemy can't be flinched",
-            () => player.pokemon.hp < player.pokemon.maxHp
-                  && !enemy.canBeFlinched);
-       
+
+        _testCaseHandler.AddTestCase(1,"ability should increase damage",
+            () => _damageWasChanged && enemy.pokemon.hp < enemy.pokemon.maxHp);
+
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
@@ -68,18 +74,23 @@ public class InnerFocusTest : BattleBasedTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
 
-       _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        var caseExists= _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        if (!caseExists)
+        {
+            CheckTestEnd();
+        }
         return;
         void CheckTestEnd()
         {
             if (_sequencer.SequenceComplete())
             {
+                _moveUsageHandler.OnDamageModified -= CheckForAbilityEffect;
                 EndTest(true);
             }
         }
         void TestCaseFailed()
         {
-            //add extra logic here
+            _moveUsageHandler.OnDamageModified -= CheckForAbilityEffect;
             EndTest(false);
         }
     }

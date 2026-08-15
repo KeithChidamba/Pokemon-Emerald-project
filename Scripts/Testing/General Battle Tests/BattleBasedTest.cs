@@ -86,6 +86,8 @@ public class BattleBasedTest : IntegrationTest
             {
                 createdPokemon.nature = member.specificNature;
                 createdPokemon.gender = member.specificGender;
+                createdPokemon.ability = member.specificAbility ?? createdPokemon.ability;
+                
                 createdPokemon.moveSet.Clear();
 
                 var invalidNickname = string.IsNullOrEmpty(member.nickName) ||

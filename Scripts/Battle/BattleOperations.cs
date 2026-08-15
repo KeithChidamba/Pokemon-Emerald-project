@@ -51,25 +51,25 @@ public class BattleOperations : MonoBehaviour,IInjectable
                 return true;
         return false;
     }
-    public float CheckTypeEffectiveness(BattleParticipant victim,Type enemyType)
+    public float CheckTypeEffectiveness(BattleParticipant victim,Type moveType)
     {
         float effectiveness = 1;
         if (victim.additionalTypeImmunity!=null)
         {
-            if (victim.additionalTypeImmunity.typeEnum == enemyType.typeEnum)
+            if (victim.additionalTypeImmunity.typeEnum == moveType.typeEnum)
                 effectiveness = 0;
         }
         else{
-            if (HasImmunity(victim.pokemon, enemyType)) 
+            if (HasImmunity(victim.pokemon, moveType)) 
             {
                 //if victim had their immunity altered by moves, like foresight
                 effectiveness = victim.immunityNegations
                     .Any(negation => negation.ImmunityNegationTypes
-                        .Any(type=>type == enemyType.typeEnum)) ? 1 : 0;
+                        .Any(type=>type == moveType.typeEnum)) ? 1 : 0;
             }
             else
             {
-                effectiveness = GetTypeEffectiveness(victim.pokemon, enemyType);
+                effectiveness = GetTypeEffectiveness(victim.pokemon, moveType);
             }
         }
         return effectiveness;
