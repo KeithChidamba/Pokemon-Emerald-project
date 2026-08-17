@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class TypeImmunityNegation
 {
-    public LearnSetMoveName moveName;
+    public MoveName moveName;
     public List<PokemonType> ImmunityNegationTypes = new ();
     private BattleParticipant _participant;
     private BattleParticipant _victimOfImmunityNegation;
     private BattleHandler _battleHandler;
     
-    public TypeImmunityNegation(BattleHandler battleHandler,LearnSetMoveName moveNameEnum,BattleParticipant participant
+    public TypeImmunityNegation(BattleHandler battleHandler,MoveName moveNameEnum,BattleParticipant participant
         , BattleParticipant victim)
     {
         _battleHandler = battleHandler;

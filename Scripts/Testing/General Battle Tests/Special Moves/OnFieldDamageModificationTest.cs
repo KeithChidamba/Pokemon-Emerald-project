@@ -70,7 +70,7 @@ public class OnFieldDamageModificationTest : BattleBasedTest
     }
     private void SetEnemyMoveAndAttack()
     {
-        var moveName = NameDB.GetMoveName(LearnSetMoveName.Flamethrower);
+        var moveName = NameDB.GetMoveName(MoveName.Flamethrower);
         var assetPath = DirectoryHandler.GetDirectory(AssetDirectory.Moves) + moveName;
         var moveFromAsset = Resources.Load<Move>(assetPath);
         var newMove = InstanceFactory.CreateMove(moveFromAsset);

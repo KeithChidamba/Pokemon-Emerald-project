@@ -16,7 +16,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private BattleOperations _battleOperationsHandler;
     private MoveLogicHandler _moveLogicHandler;
     
-    private Dictionary<string, Func<Turn,BattleParticipant,BattleParticipant,IEnumerator>> _logicMethods = new();
+    private Dictionary<MoveName, Func<Turn,BattleParticipant,BattleParticipant,IEnumerator>> _logicMethods = new();
     
     public void Inject(ServiceContainer container)
     {
@@ -33,36 +33,36 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     public void OnInject()
     {
-        _logicMethods.Add("brickbreak", BrickBreak);
-        _logicMethods.Add("haze", Haze);
-        _logicMethods.Add("hyperbeam", Hyperbeam);
-        _logicMethods.Add("bide", Bide);
-        _logicMethods.Add("sonicboom", SonicBoom);
-        _logicMethods.Add("takedown", TakeDown);
-        _logicMethods.Add("magnitude", Magnitude);
-        _logicMethods.Add("endeavor", Endeavor);
-        _logicMethods.Add("furycutter", FuryCutter);
-        _logicMethods.Add("silverwind", SilverWind);
-        _logicMethods.Add("flail", Flail);
-        _logicMethods.Add("falseswipe", FalseSwipe);
-        _logicMethods.Add("bellydrum", BellyDrum);
-        _logicMethods.Add("covet", Covet);
-        _logicMethods.Add("mirrormove", MirrorMove);
-        _logicMethods.Add("whirlwind", Whirlwind);
-        _logicMethods.Add("rest", Rest);
-        _logicMethods.Add("thunder", Thunder);
+        _logicMethods.Add(MoveName.BrickBreak, BrickBreak);
+        _logicMethods.Add(MoveName.Haze, Haze);
+        _logicMethods.Add(MoveName.HyperBeam, Hyperbeam);
+        _logicMethods.Add(MoveName.Bide, Bide);
+        _logicMethods.Add(MoveName.SonicBoom, SonicBoom);
+        _logicMethods.Add(MoveName.TakeDown, TakeDown);
+        _logicMethods.Add(MoveName.Magnitude, Magnitude);
+        _logicMethods.Add(MoveName.Endeavor, Endeavor);
+        _logicMethods.Add(MoveName.FuryCutter, FuryCutter);
+        _logicMethods.Add(MoveName.SilverWind, SilverWind);
+        _logicMethods.Add(MoveName.Flail, Flail);
+        _logicMethods.Add(MoveName.FalseSwipe, FalseSwipe);
+        _logicMethods.Add(MoveName.BellyDrum, BellyDrum);
+        _logicMethods.Add(MoveName.Covet, Covet);
+        _logicMethods.Add(MoveName.MirrorMove, MirrorMove);
+        _logicMethods.Add(MoveName.Whirlwind, Whirlwind);
+        _logicMethods.Add(MoveName.Rest, Rest);
+        _logicMethods.Add(MoveName.Thunder, Thunder);
     }
     
     public IEnumerator InvokeMoveLogic(BattleParticipant attacker, BattleParticipant victim, Turn currentTurn)
     {
-        var formattedName = currentTurn.move.moveName.Replace(" ", "").ToLower();
+        var moveNameEnum = NameDB.ParseMoveName(currentTurn.move.moveName);
         
-        if (_logicMethods.TryGetValue(formattedName, out var logicMethod))
+        if (_logicMethods.TryGetValue(moveNameEnum, out var logicMethod))
         {
             yield return logicMethod(currentTurn,attacker,victim); 
         }
         else
-            Debug.LogWarning($"Move '{formattedName}' not found!");
+            Debug.LogWarning($"Move '{moveNameEnum}' not found!");
     }
     private IEnumerator BrickBreak(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
@@ -187,7 +187,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private IEnumerator FuryCutter(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var damageLevel = new[] { 10f, 20f, 40f, 80f, 160f };
-        if (attacker.previousMoveData.move.moveName == NameDB.GetMoveName(LearnSetMoveName.FuryCutter))
+        if (attacker.previousMoveData.move.moveName == NameDB.GetMoveName(MoveName.FuryCutter))
         {
             currentTurn.move.moveDamage = attacker.previousMoveData.numRepetitions > 4?
                 damageLevel[^1] : damageLevel[attacker.previousMoveData.numRepetitions];
@@ -420,8 +420,6 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         {
             _moveUsageHandler.HandleStatusApplication(victim,currentTurn.move,true);
         }
-        
         yield return null;
     }
-   
 }

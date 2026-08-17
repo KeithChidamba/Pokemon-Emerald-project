@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public enum PartyUsage
 {
-    SwapOut,ItemUsage,General
+    SwapOut,ItemUsage,General,SwitchOutFromBattleStyle
 }
 public class PokemonPartyHandler : MonoBehaviour,IInjectable
 {
@@ -144,7 +144,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     }
     public bool IsValidSwap(int memberIndex,bool swappingIn,bool displayMessage=true)
     {
-        if (_turnBasedCombatHandler.ContainsSwitch(memberIndex))
+        if (_turnBasedCombatHandler.ContainsSwitch(memberIndex,true))
         {
             if(displayMessage)
             {
@@ -227,12 +227,15 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         var selectedMember = memberCards[memberIndex];
         if (selectedMember.isEmpty) return;
         
-        if (currentUsage == PartyUsage.SwapOut && selectedMember.pokemon.hp <= 0)
+        if (currentUsage is PartyUsage.SwapOut 
+            or PartyUsage.SwitchOutFromBattleStyle 
+            && selectedMember.pokemon.hp <= 0)
         {
             return;
         }
         switch (currentUsage)
         {
+            case PartyUsage.SwitchOutFromBattleStyle:
             case PartyUsage.SwapOut:
                 if (!IsValidSwap(memberIndex,false)) return;
                 OnMemberSelected?.Invoke(memberIndex);

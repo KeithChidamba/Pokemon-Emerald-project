@@ -106,8 +106,8 @@ public class EnemyAiHandler : BattleParticipantModule
     }
     public IEnumerator CheckIfLoss()
     {
-        var numAlive = GetLivingPokemon();
-        if (numAlive.Count == 0)
+        var livingPokemon = GetLivingPokemon();
+        if (livingPokemon.Count == 0)
         {
             _battleHandler.EndBattle(BattleEndState.PlayerWon,participant.pokemon);
         }
@@ -135,10 +135,10 @@ public class EnemyAiHandler : BattleParticipantModule
             }
             else
             {
-                var randomMember = Utility.RandomRange(0, numAlive.Count - 1);
+                var randomMember = Utility.RandomRange(0, livingPokemon.Count - 1);
                 yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName, 
-                    numAlive[randomMember].pokemonDisplayName);
-                yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon:numAlive[randomMember],false);
+                    livingPokemon[randomMember].pokemonDisplayName);
+                yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon:livingPokemon[randomMember],false);
             }
         }
         participant.EndFaintEvent();

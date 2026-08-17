@@ -258,7 +258,9 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         else
         {
             partyUsageState = InputStateName.PokemonPartyNavigation;
-            _pokemonPartyHandler.UpdatePartyUsageMessage(partyUsage == PartyUsage.SwapOut?
+            _pokemonPartyHandler.UpdatePartyUsageMessage(
+                partyUsage is PartyUsage.SwapOut
+                    or PartyUsage.SwitchOutFromBattleStyle?
                 "Select a Pokemon to switch"
                 :"Choose a pokemon");
         }

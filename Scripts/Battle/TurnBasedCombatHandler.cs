@@ -11,7 +11,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     [SerializeField]List<Turn> _turnHistory = new();
     public event Action OnNewTurn;
     
-    private List<Func<BattleParticipant, IEnumerator>> _moveExecuteHandlers = new();
+    private List<Func<BattleParticipant, IEnumerator>> _moveExecutionHandlers = new();
     
     public event Action OnTurnsCompleted;
     public event Action OnTurnEventsCompleted;
@@ -32,7 +32,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     private BattleVisuals _battleVisualsHandler;
     private BattleHandler _battleHandler;
     private MoveSequenceHandler _moveUsageHandler;
-    private MoveLogicHandler _moveLogicHandler;
     private GameLoadingHandler _gameLoadingHandler;
     
     public void Inject(ServiceContainer container)
@@ -45,7 +44,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<BattleHandler>();
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _moveLogicHandler = container.Resolve<MoveLogicHandler>();
         gameObject.SetActive(true);
     }
 
@@ -60,9 +58,9 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
 
     public void SubToMoveExecution(Func<BattleParticipant,IEnumerator> subscriber)
     {
-        if (!_moveExecuteHandlers.Contains(subscriber))
+        if (!_moveExecutionHandlers.Contains(subscriber))
         {
-            _moveExecuteHandlers.Add(subscriber);
+            _moveExecutionHandlers.Add(subscriber);
         }
         else
         {
@@ -71,7 +69,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     public void UnsubscribeFromMoveExecution(Func<BattleParticipant,IEnumerator> subscriber)
     {
-        _moveExecuteHandlers.Remove(subscriber);
+        _moveExecutionHandlers.Remove(subscriber);
     }
     private void AddTurn(Turn turn)
     {
@@ -92,7 +90,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     private void BeginTurnExecution()
     {
         _inputStateHandler.AddPlaceHolderState();
-        SetPriority();
         StartCoroutine(ExecuteMoves()); 
     }
     public void SaveTurn(Turn turn)
@@ -289,15 +286,17 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     
     private IEnumerator ExecuteMoves()
-    {            
-        bool successfulAttack = false;
-        void GetAttackResult(bool result)
-        {
-             OnAttackAttempted -= GetAttackResult;
-             successfulAttack = result;
-        }
+    {   
+        //Set priority
+        var orderBySpeed = _turnHistory
+            .OrderByDescending(turn => 
+                _battleHandler.GetParticipant(turn.attackerKey).pokemon.speed).ToList();
         
-//handle all swaps
+        var priorityList = orderBySpeed.OrderByDescending(turn => turn.move.priority).ToList();
+        ClearTurn();
+        _turnHistory.AddRange(priorityList);
+        
+        //handle all swaps turns
         var switchTurns = new List<int>();
         
         for(var i = 0;i < _turnHistory.Count;i++)
@@ -306,17 +305,19 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             {
                 switchTurns.Add(i);
                 yield return HandleSwap(_turnHistory[i].switchData);
+                yield return _battleHandler.AwaitFaintQueue();
                 yield return _dialogueHandler.AwaitAllDialogue();
             }
         }
-
+        //remove swap turns from history
         if (switchTurns.Count > 0)
         {
-            var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();//prevent index out of range when removing turns
+            //use ordering to prevent [index out of range] when removing turns
+            var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();
             orderTurns.ForEach(RemoveTurn);
         }
         
-//handle all attacks
+        //handle all attack turns
         foreach (var currentTurn in _turnHistory )
         {
             if (_battleHandler.BattleOver) break;
@@ -345,8 +346,9 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 continue;
             }
             
-            foreach (var handler in _moveExecuteHandlers)
+            foreach (var handler in _moveExecutionHandlers)
             {
+                //handle all event subscribers for [Move Execution]
                 IEnumerator routine = handler(attacker);
                 if (routine != null)
                 {
@@ -367,8 +369,13 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 continue;
             }
             
-            successfulAttack = false;
+            bool successfulAttack = false;
             OnAttackAttempted += GetAttackResult;
+            void GetAttackResult(bool result)
+            {
+                OnAttackAttempted -= GetAttackResult;
+                successfulAttack = result;
+            }
             
             yield return CheckAttackSuccess(currentTurn,attacker,victim);
             yield return _dialogueHandler.AwaitAllDialogue();
@@ -398,8 +405,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         ClearTurn();
         OnTurnsCompleted?.Invoke();
         
+        //check held item and status effect
         var validList = _battleHandler.GetValidParticipants();
-        
         foreach (var participant in validList)
         {
             yield return participant.heldItemHandler.CheckForUsableItem();
@@ -454,6 +461,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
 //only happens in single battles
             yield break;
         }
+        
         yield return _dialogueHandler.AwaitAllDialogue();
         
         _dialogueHandler.DisplayCustomOptions($"{trainerName} is about to use {pokemonName}, change pokemon?",
@@ -461,7 +469,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         
         bool processing = true;
         yield return new WaitUntil(() => !processing);
-
+        yield break;
         void SwitchRejected()
         {
             processing = false;
@@ -469,10 +477,20 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         void SwitchAccepted()
         {
             _battleHandler.OnSwitchIn += ResetEvent;
-            _battleHandler.GetParticipant(BattleParticipantKey.Player).SetupSwitchOut();
+            _inputStateHandler.OnStateRemoved += SwitchRejectedInUI;
+            _dialogueHandler.EndDialogue();
+            _battleHandler.GetParticipant(BattleParticipantKey.Player).SetupSwitchOut(PartyUsage.SwitchOutFromBattleStyle);
         }
         void ResetEvent()
         {
+            _inputStateHandler.OnStateRemoved -= SwitchRejectedInUI;
+            _battleHandler.OnSwitchIn -= ResetEvent;
+            processing = false;
+        }
+        void SwitchRejectedInUI(InputState previousState)
+        {
+            if (previousState.stateName != InputStateName.PokemonPartyNavigation) return;
+            _inputStateHandler.OnStateRemoved -= SwitchRejectedInUI;
             _battleHandler.OnSwitchIn -= ResetEvent;
             processing = false;
         }
@@ -497,14 +515,11 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                                                             +" withdrew "+swap.participant.pokemon.pokemonDisplayName);
             }
         }
+        yield return _dialogueHandler.AwaitAllDialogue();
         
-        if (swap.participant.isPlayer || forcedSwap)
-        {
-            yield return _battleVisualsHandler.WithdrawPokemon(swap.participant);
-        }
-        //check if move used was pursuit
+        //check if the move used was pursuit
         var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
-            turn.move.moveName == NameDB.GetMoveName(LearnSetMoveName.Pursuit));
+            turn.move.moveName == NameDB.GetMoveName(MoveName.Pursuit));
         
         if(pursuitUsersTurn is { turnExecuted: false })
         {
@@ -513,27 +528,28 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             
             if (victim == swap.participant)
             {
-                bool pokemonFainted = false;
-
                 pursuitUsersTurn.isCancelled = true;//since it strikes here
                 
-                _battleHandler.OnParticipantFainted += CancelOnFaint;
-                
-                void CancelOnFaint(BattleParticipant faintedParticipant)
+                //pursuit damage
+                var pursuit = pursuitUsersTurn.move;
+                _dialogueHandler.DisplayBattleInfo($"{attacker.pokemon.pokemonDisplayName} used Pursuit on {victim.pokemon.pokemonDisplayName}!");
+
+                var pursuitDamage = _moveUsageHandler.CalculateMoveDamage(pursuit,attacker, victim) * 2;
+                _moveUsageHandler.DisplaySpecialDamage(victim,predefinedDamage:pursuitDamage);
+                yield return _moveUsageHandler.AwaitDamageDisplay();
+                if (victim.pokemon.hp <= 0)
                 {
-                    if (faintedParticipant != victim) return;
-                    _battleHandler.OnParticipantFainted -= CancelOnFaint;
-                    pokemonFainted = true;
+                    yield break;
                 }
-                
-                yield return _moveLogicHandler.Pursuit(attacker, victim, pursuitUsersTurn.move); 
-                
-                if (pokemonFainted) yield break;
-                
-                _battleHandler.OnParticipantFainted -= CancelOnFaint;
             }
         }
+        yield return _dialogueHandler.AwaitAllDialogue();
         
+        //Complete the swap
+        if (swap.participant.isPlayer || forcedSwap)
+        {
+            yield return _battleVisualsHandler.WithdrawPokemon(swap.participant);
+        }
         if (swap.participant.isPlayer)
         {
             swap.participant.ResetParticipantState();
@@ -553,15 +569,23 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         }
     }
 
-    public bool ContainsSwitch(int memberPosition)
+    public bool ContainsSwitch(int memberPosition,bool isPlayerSwitch)
     {
         foreach (var turn in _turnHistory)
         {
             if (turn.turnUsage==TurnUsage.SwitchOut)//must check this first to avoid null ref
             {
-                if (turn.switchData.memberToSwapWith==memberPosition)
+                var hasPlayerKey = turn.switchData.participant.participantKey
+                    is BattleParticipantKey.Player
+                    or BattleParticipantKey.PlayerPartner;
+                
+                var isCorrectParticipant = isPlayerSwitch ? hasPlayerKey : !hasPlayerKey;
+                if(isCorrectParticipant)
                 {
-                    return true;
+                    if (turn.switchData.memberToSwapWith == memberPosition)
+                    {
+                        return true;
+                    }
                 }
             }
         }
@@ -677,16 +701,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                            (_battleHandler.GetParticipant(turn.attackerKey).pokemon.accuracy / 
                             _battleHandler.GetParticipant(turn.victimKey).pokemon.evasion);
         return hitChance>random;
-    }
-    private void SetPriority()
-    {
-        var orderBySpeed = _turnHistory
-            .OrderByDescending(turn => 
-                _battleHandler.GetParticipant(turn.attackerKey).pokemon.speed).ToList();
-        
-        var priorityList = orderBySpeed.OrderByDescending(turn => turn.move.priority).ToList();
-        ClearTurn();
-        _turnHistory.AddRange(priorityList);
     }
 
     public void ChangeWeather(WeatherCondition newWeather,bool fromAbility=false)

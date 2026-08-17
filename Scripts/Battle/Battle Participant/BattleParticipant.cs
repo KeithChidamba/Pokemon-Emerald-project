@@ -232,7 +232,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         pokemon.statusEffect = StatusEffect.None;
         _battleHandler.AddFaintedParticipant(this);
         pokemon.DetermineFriendshipLevelChange(false, FriendshipModifier.Fainted);
-        _battleHandler.StartFaintEvent();
     }
     public IEnumerator HandleFaintLogic()
     {
@@ -290,12 +289,12 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         yield return null;
     }
 
-    public void SetupSwitchOut()
+    public void SetupSwitchOut(PartyUsage usage = PartyUsage.SwapOut)
     {
         _pokemonPartyHandler.selectedMemberIndex = (int)participantKey;
         
         _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
-        _gameUIHandler.ViewPokemonParty(PartyUsage.SwapOut);
+        _gameUIHandler.ViewPokemonParty(usage);
         ResetParticipantState();
     }
 

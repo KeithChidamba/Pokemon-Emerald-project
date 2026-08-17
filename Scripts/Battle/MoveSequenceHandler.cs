@@ -349,8 +349,8 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     {
         foreach (var barrier in victim.barriers)
         {
-            if ((move.isSpecial && barrier.barrierName == NameDB.GetMoveName(LearnSetMoveName.LightScreen))
-                || (!move.isSpecial && barrier.barrierName == NameDB.GetMoveName(LearnSetMoveName.Reflect)))
+            if ((move.isSpecial && barrier.barrierName == NameDB.GetMoveName(MoveName.LightScreen))
+                || (!move.isSpecial && barrier.barrierName == NameDB.GetMoveName(MoveName.Reflect)))
                 return  damage-(damage*barrier.barrierEffect);
         }
         return damage;

@@ -10,20 +10,20 @@ public class StatusEffectTest : BattleBasedTest
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
     
-    private LearnSetMoveName[] _statusMoves =
+    private MoveName[] _statusMoves =
     {
-        LearnSetMoveName.Ember,
-        LearnSetMoveName.IceBeam,
-        LearnSetMoveName.Flamethrower,
-        LearnSetMoveName.SleepPowder,
-        LearnSetMoveName.PoisonSting,
-        LearnSetMoveName.ThunderWave,
-        LearnSetMoveName.Toxic,
+        MoveName.Ember,
+        MoveName.IceBeam,
+        MoveName.Flamethrower,
+        MoveName.SleepPowder,
+        MoveName.PoisonSting,
+        MoveName.ThunderWave,
+        MoveName.Toxic,
         //Turn placeholder for toxic test cases
-        LearnSetMoveName.TailWhip,
-        LearnSetMoveName.ConfuseRay,
+        MoveName.TailWhip,
+        MoveName.ConfuseRay,
         //Turn placeholder for confusion test cases
-        LearnSetMoveName.TailWhip
+        MoveName.TailWhip
     };
     public override void Inject(ServiceContainer serviceContainer)
     {
@@ -55,7 +55,7 @@ public class StatusEffectTest : BattleBasedTest
         
         /*give flamethrower 5 damage to comply with the move pipeline
         and allow it to remove freeze effect, while not fainting the enemy*/
-        if (_statusMoves[_sequencer.GetTestCaseIndex()] != LearnSetMoveName.Flamethrower)
+        if (_statusMoves[_sequencer.GetTestCaseIndex()] != MoveName.Flamethrower)
         {
             newMove.moveDamage = 0;
             newMove.statusChance = 100;

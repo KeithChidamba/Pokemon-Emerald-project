@@ -424,14 +424,12 @@ public class BattleIntro : MonoBehaviour,IInjectable
         }
         bottomBlackPanel.gameObject.SetActive(false);
         topBlackPanel.gameObject.SetActive(false);
-        dialogueBox.gameObject.SetActive(false);
         _dialogueHandler.battleDialogueBox.gameObject.SetActive(true);
     }
     public IEnumerator BlackFade()
     {
         bottomBlackPanel.gameObject.SetActive(true);
         topBlackPanel.gameObject.SetActive(true);
-        dialogueBox.gameObject.SetActive(true);
         _dialogueHandler.battleDialogueBox.gameObject.SetActive(false);
         _battleHandler.optionsUI.SetActive(false);
         topBlackTarget = topBlackPanel.anchoredPosition + Vector2.down * topBlackPanel.rect.height;

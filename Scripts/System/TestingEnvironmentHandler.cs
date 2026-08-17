@@ -113,6 +113,8 @@ public class TestRegistry
     //tests are ran in this order
     public List<IntegrationTest> allTests = new()
     { 
+    //Special Move Logic
+        new PursuitTest(),
     //Abilities
         //new HealthBasedDamageBuffTest(),
         //new StatusEffectDamageBuffTest(),

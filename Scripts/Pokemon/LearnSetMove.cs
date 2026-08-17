@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 [Serializable]
 public struct LearnSetMove
 {
-    public LearnSetMoveName learnSetMove;
+    public MoveName learnSetMove;
     public int requiredLevel;
 
     public string GetName()

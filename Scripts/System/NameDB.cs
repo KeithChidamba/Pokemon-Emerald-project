@@ -3,145 +3,150 @@ using System.Linq;
 
 public static class NameDB
 {
-    public static string GetMoveName(LearnSetMoveName moveName)
+    public static string GetMoveName(MoveName moveName)
     {
         return learnSetMoveNames[moveName];
     }
-    public static LearnSetMoveName ParseMoveName(string moveName)
+    public static MoveName ParseMoveName(string moveName)
     {
         var pair = learnSetMoveNames.FirstOrDefault(x => x.Value == moveName);
         return pair.Key;
     }
-    private static Dictionary<LearnSetMoveName, string> learnSetMoveNames = new()
+    private static Dictionary<MoveName, string> learnSetMoveNames = new()
     {
         // 🐞 Bug-type
-        { LearnSetMoveName.FuryCutter, "Fury Cutter" },
-        { LearnSetMoveName.LeechLife, "Leech Life" },
-        { LearnSetMoveName.SilverWind, "Silverwind" },
-        { LearnSetMoveName.StringShot, "String Shot" },
-        { LearnSetMoveName.PinMissile, "Pin Missile" },
-        {LearnSetMoveName.SleepPowder,"Sleep Powder"},
+        { MoveName.FuryCutter, "Fury Cutter" },
+        { MoveName.LeechLife, "Leech Life" },
+        { MoveName.SilverWind, "Silver Wind" },
+        { MoveName.StringShot, "String Shot" },
+        { MoveName.PinMissile, "Pin Missile" },
+        { MoveName.SleepPowder,"Sleep Powder"},
         
         // 🐉 Dragon-type
-        { LearnSetMoveName.DragonBreath, "Dragon Breath" },
+        { MoveName.DragonBreath, "Dragon Breath" },
 
         // ⚡ Electric-type
-        { LearnSetMoveName.Thundershock, "Thundershock" },
-        { LearnSetMoveName.ThunderWave, "Thunder Wave" },
-        { LearnSetMoveName.Thunderbolt, "Thunderbolt" },
-        { LearnSetMoveName.Thunder, "Thunder" },
+        { MoveName.Thundershock, "Thundershock" },
+        { MoveName.ThunderWave, "Thunder Wave" },
+        { MoveName.Thunderbolt, "Thunderbolt" },
+        { MoveName.Thunder, "Thunder" },
 
         // 🥋 Fighting-type
-        { LearnSetMoveName.BulkUp, "Bulk Up" },
-        { LearnSetMoveName.Detect, "Detect" },
-        { LearnSetMoveName.DoubleKick, "Double Kick" },
-        { LearnSetMoveName.SkyUppercut, "Sky Uppercut" },
-
+        { MoveName.BulkUp, "Bulk Up" },
+        { MoveName.Detect, "Detect" },
+        { MoveName.DoubleKick, "Double Kick" },
+        { MoveName.SkyUppercut, "Sky Uppercut" },
+        { MoveName.BrickBreak, "Brick Break" },
+      
         // 🔥 Fire-type
-        { LearnSetMoveName.BlazeKick, "Blaze Kick" },
-        { LearnSetMoveName.Ember, "Ember" },
-        { LearnSetMoveName.FirePunch, "Fire Punch" },
-        { LearnSetMoveName.FireSpin, "Fire Spin" },
-        { LearnSetMoveName.Flamethrower, "Flamethrower" },
-        { LearnSetMoveName.SunnyDay, "Sunny Day" },
+        { MoveName.BlazeKick, "Blaze Kick" },
+        { MoveName.Ember, "Ember" },
+        { MoveName.FirePunch, "Fire Punch" },
+        { MoveName.FireSpin, "Fire Spin" },
+        { MoveName.Flamethrower, "Flamethrower" },
+        { MoveName.SunnyDay, "Sunny Day" },
         
         // 🛫 Flying-type
-        { LearnSetMoveName.AirCutter, "Air Cutter" },
-        { LearnSetMoveName.Gust, "Gust" },
-        { LearnSetMoveName.MirrorMove, "Mirror Move" },
-        { LearnSetMoveName.Peck, "Peck" },
-        { LearnSetMoveName.WingAttack, "Wing Attack" },
-
+        { MoveName.AirCutter, "Air Cutter" },
+        { MoveName.Gust, "Gust" },
+        { MoveName.MirrorMove, "Mirror Move" },
+        { MoveName.Peck, "Peck" },
+        { MoveName.WingAttack, "Wing Attack" },
+        { MoveName.Fly, "Fly" },
+        { MoveName.AerialAce, "Aerial Ace" },
+        
         // 🌿 Grass-type
-        { LearnSetMoveName.Absorb, "Absorb" },
-        { LearnSetMoveName.GigaDrain, "Giga Drain" },
-        { LearnSetMoveName.LeafBlade, "Leaf Blade" },
-        { LearnSetMoveName.MegaDrain, "Mega Drain" },
-        { LearnSetMoveName.StunSpore, "Stun Spore" },
-
+        { MoveName.Absorb, "Absorb" },
+        { MoveName.GigaDrain, "Giga Drain" },
+        { MoveName.LeafBlade, "Leaf Blade" },
+        { MoveName.MegaDrain, "Mega Drain" },
+        { MoveName.StunSpore, "Stun Spore" },
+        { MoveName.BulletSeed, "Bullet Seed" },
+        
         // 🌍 Ground-type
-        { LearnSetMoveName.Dig, "Dig" },
-        { LearnSetMoveName.Earthquake, "Earthquake" },
-        { LearnSetMoveName.Magnitude, "Magnitude" },
-        { LearnSetMoveName.MudSlap, "Mud-Slap" },
-        { LearnSetMoveName.MudShot, "Mud Shot" },
-        { LearnSetMoveName.MudSport, "Mud Sport" },
-        { LearnSetMoveName.SandAttack, "Sand-Attack" },
-        { LearnSetMoveName.SandTomb, "Sand Tomb" },
+        { MoveName.Dig, "Dig" },
+        { MoveName.Earthquake, "Earthquake" },
+        { MoveName.Magnitude, "Magnitude" },
+        { MoveName.MudSlap, "Mud-Slap" },
+        { MoveName.MudShot, "Mud Shot" },
+        { MoveName.MudSport, "Mud Sport" },
+        { MoveName.SandAttack, "Sand-Attack" },
+        { MoveName.SandTomb, "Sand Tomb" },
 
         // 🪨 Rock-type
-        { LearnSetMoveName.SandStorm, "Sandstorm" },
-
+        { MoveName.SandStorm, "Sandstorm" },
+       
         // 💜 Normal-type
-        { LearnSetMoveName.Attract, "Attract" },
-        { LearnSetMoveName.SonicBoom, "Sonic Boom" },
-        { LearnSetMoveName.Harden, "Harden" },
-        { LearnSetMoveName.BellyDrum, "Belly Drum" },
-        { LearnSetMoveName.Bide, "Bide" },
-        { LearnSetMoveName.Covet, "Covet" },
-        { LearnSetMoveName.DoubleTeam, "Double Team" },
-        { LearnSetMoveName.Endeavor, "Endeavor" },
-        { LearnSetMoveName.Foresight, "Foresight" },
-        { LearnSetMoveName.FocusEnergy, "Focus Energy" },
-        { LearnSetMoveName.FalseSwipe, "False Swipe" },
-        { LearnSetMoveName.Flail, "Flail" },
-        { LearnSetMoveName.FurySwipes, "Fury Swipes" },
-        { LearnSetMoveName.Growl, "Growl" },
-        { LearnSetMoveName.Headbutt, "Headbutt" },
-        { LearnSetMoveName.HyperBeam, "Hyper Beam" },
-        { LearnSetMoveName.Leer, "Leer" },
-        { LearnSetMoveName.MeanLook, "Mean Look" },
-        { LearnSetMoveName.MorningSun, "Morning Sun" },
-        { LearnSetMoveName.MoonLight, "Moonlight" },
-        { LearnSetMoveName.OdorSleuth, "Odor Sleuth" },
-        { LearnSetMoveName.Pound, "Pound" },
-        { LearnSetMoveName.Protect, "Protect" },
-        { LearnSetMoveName.QuickAttack, "Quick Attack" },
-        { LearnSetMoveName.Scratch, "Scratch" },
-        { LearnSetMoveName.Screech, "Screech" },
-        { LearnSetMoveName.Slam, "Slam" },
-        { LearnSetMoveName.Slash, "Slash" },
-        { LearnSetMoveName.Supersonic, "Supersonic" },
-        { LearnSetMoveName.TailWhip, "Tail Whip" },
-        { LearnSetMoveName.Tackle, "Tackle" },
-        { LearnSetMoveName.TakeDown, "Take Down" },
-        { LearnSetMoveName.Whirlwind, "Whirlwind" },
+        { MoveName.Attract, "Attract" },
+        { MoveName.SonicBoom, "Sonic Boom" },
+        { MoveName.Harden, "Harden" },
+        { MoveName.BellyDrum, "Belly Drum" },
+        { MoveName.Bide, "Bide" },
+        { MoveName.Covet, "Covet" },
+        { MoveName.DoubleTeam, "Double Team" },
+        { MoveName.Endeavor, "Endeavor" },
+        { MoveName.Foresight, "Foresight" },
+        { MoveName.FocusEnergy, "Focus Energy" },
+        { MoveName.FalseSwipe, "False Swipe" },
+        { MoveName.Flail, "Flail" },
+        { MoveName.FurySwipes, "Fury Swipes" },
+        { MoveName.Growl, "Growl" },
+        { MoveName.Headbutt, "Headbutt" },
+        { MoveName.HyperBeam, "Hyper Beam" },
+        { MoveName.Leer, "Leer" },
+        { MoveName.MeanLook, "Mean Look" },
+        { MoveName.MorningSun, "Morning Sun" },
+        { MoveName.MoonLight, "Moonlight" },
+        { MoveName.OdorSleuth, "Odor Sleuth" },
+        { MoveName.Pound, "Pound" },
+        { MoveName.Protect, "Protect" },
+        { MoveName.QuickAttack, "Quick Attack" },
+        { MoveName.Scratch, "Scratch" },
+        { MoveName.Screech, "Screech" },
+        { MoveName.Slam, "Slam" },
+        { MoveName.Slash, "Slash" },
+        { MoveName.Supersonic, "Supersonic" },
+        { MoveName.TailWhip, "Tail Whip" },
+        { MoveName.Tackle, "Tackle" },
+        { MoveName.TakeDown, "Take Down" },
+        { MoveName.Whirlwind, "Whirlwind" },
 
         // 💀 Poison-type
-        { LearnSetMoveName.PoisonFang, "Poison Fang" },
-        { LearnSetMoveName.PoisonSting, "Poison Sting" },
-        { LearnSetMoveName.Toxic, "Toxic" },
+        { MoveName.PoisonFang, "Poison Fang" },
+        { MoveName.PoisonSting, "Poison Sting" },
+        { MoveName.Toxic, "Toxic" },
 
         // 🔮 Psychic-type
-        { LearnSetMoveName.Agility, "Agility" },
-        { LearnSetMoveName.Confusion, "Confusion" },
-        { LearnSetMoveName.LightScreen, "Light Screen" },
-        { LearnSetMoveName.Psybeam, "Psybeam" },
-        { LearnSetMoveName.Reflect, "Reflect" },
-        { LearnSetMoveName.Rest, "Rest" },
+        { MoveName.Agility, "Agility" },
+        { MoveName.Confusion, "Confusion" },
+        { MoveName.LightScreen, "Light Screen" },
+        { MoveName.Psybeam, "Psybeam" },
+        { MoveName.Reflect, "Reflect" },
+        { MoveName.Rest, "Rest" },
 
         // 🌊 Water-type
-        { LearnSetMoveName.HydroPump, "Hydro Pump" },
-        { LearnSetMoveName.MuddyWater, "Muddy Water" },
-        { LearnSetMoveName.WaterGun, "Water Gun" },
-        { LearnSetMoveName.Whirlpool, "Whirlpool" },
-        { LearnSetMoveName.RainDance, "Rain Dance" },
-        { LearnSetMoveName.WaterSport, "Water Sport" },
+        { MoveName.HydroPump, "Hydro Pump" },
+        { MoveName.MuddyWater, "Muddy Water" },
+        { MoveName.WaterGun, "Water Gun" },
+        { MoveName.Whirlpool, "Whirlpool" },
+        { MoveName.RainDance, "Rain Dance" },
+        { MoveName.WaterSport, "Water Sport" },
+        { MoveName.Surf, "Surf" },
         
         // 👻 Ghost-type
-        { LearnSetMoveName.Astonish, "Astonish" },
-        { LearnSetMoveName.ConfuseRay, "Confuse Ray" },
+        { MoveName.Astonish, "Astonish" },
+        { MoveName.ConfuseRay, "Confuse Ray" },
 
         // ❄️ Ice-type
-        { LearnSetMoveName.Haze, "Haze" },
-        { LearnSetMoveName.Hail, "Hail" },
-        { LearnSetMoveName.IceBeam,"Ice Beam" },
+        { MoveName.Haze, "Haze" },
+        { MoveName.Hail, "Hail" },
+        { MoveName.IceBeam,"Ice Beam" },
         
         // 🌑 Dark-type
-        { LearnSetMoveName.Bite, "Bite" },
-        { LearnSetMoveName.Crunch, "Crunch" },
-        { LearnSetMoveName.FaintAttack, "Faint Attack" },
-        { LearnSetMoveName.Pursuit, "Pursuit" }
+        { MoveName.Bite, "Bite" },
+        { MoveName.Crunch, "Crunch" },
+        { MoveName.FaintAttack, "Faint Attack" },
+        { MoveName.Pursuit, "Pursuit" }
     };
 
 
@@ -217,7 +222,7 @@ public enum TM_Name
     GigaDrain,
     Dig,
     Earthquake,
-    Sandstorm,
+    SandStorm,
     HyperBeam,
     Toxic,
     IceBeam,
@@ -242,7 +247,7 @@ public enum EvolutionStone
 }
 
 //ONLY ADD NEW MOVES AT THE BOTTOM
-public enum LearnSetMoveName
+public enum MoveName
 {
     // 🐞 Bug-type
     FuryCutter,
@@ -367,5 +372,10 @@ public enum LearnSetMoveName
     Pursuit,
     //new
     PinMissile,SunnyDay, Hail,WaterSport,RainDance,SleepPowder
-    ,IceBeam
+    ,IceBeam,
+    BulletSeed,
+    BrickBreak,
+    AerialAce,
+    Surf,
+    Fly
 }

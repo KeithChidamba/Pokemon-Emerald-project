@@ -61,6 +61,9 @@ public class BattleBasedTest : IntegrationTest
         
         _turnBasedCombatHandler.OnNewTurn += DetermineTurnUsage;
         _turnBasedCombatHandler.OnTurnEventsCompleted += LogSuccess;
+
+        //for testing purposes, disable the switch style
+        _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Set);
         
         yield return _battleHandler.SetBattleTypeAndStart(testEnemy);
         

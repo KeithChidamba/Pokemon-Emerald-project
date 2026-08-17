@@ -70,8 +70,8 @@ public class CreateBarrierMoveTest : BattleBasedTest
             treeckoParticipant2.pokemon.moveSet.Clear();
 
             var moveName = _currentBarrierToTest == BarrierType.Physical
-                ? NameDB.GetMoveName(LearnSetMoveName.Tackle)
-                : NameDB.GetMoveName(LearnSetMoveName.LeafBlade);
+                ? NameDB.GetMoveName(MoveName.Tackle)
+                : NameDB.GetMoveName(MoveName.LeafBlade);
             
             var assetPath = DirectoryHandler.GetDirectory(AssetDirectory.Moves) + moveName;
             var moveFromAsset = Resources.Load<Move>(assetPath);

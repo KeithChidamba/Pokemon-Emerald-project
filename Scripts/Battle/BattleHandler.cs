@@ -51,7 +51,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     public float participantPositionOffset = 100;
     
     public BattleType currentBattleType;
-    public enum BattlesStyle {Switch,Set };
+    public enum BattlesStyle {Switch=0,Set=1 };
     public BattlesStyle currentBattleStyle;
     public List<EvolutionInBattleData> evolutionQueue;
     private PlayerTurnUsage _previousTurnUsage;
@@ -646,9 +646,6 @@ public class BattleHandler : MonoBehaviour, IInjectable
     public void AddFaintedParticipant(BattleParticipant participant)
     {
         faintQueue.Add(participant);
-    }
-    public void StartFaintEvent()
-    {
         if(!handlingFaintEvent)
         {
             StartCoroutine(FaintSequence());
@@ -879,7 +876,6 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         BattleOver = false;
         battleEndState = BattleEndState.None;
-        OnParticipantFainted = null;
         yield return new WaitForSeconds(1f);
     }
     private IEnumerator RunAway() 

@@ -248,7 +248,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     }
     private IEnumerator IdentifyTarget(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        LearnSetMoveName currentMoveEnum = NameDB.ParseMoveName(move.moveName);
+        MoveName currentMoveEnum = NameDB.ParseMoveName(move.moveName);
         
         if (victim.immunityNegations.Any(negation => negation.moveName == currentMoveEnum))
         {
@@ -259,7 +259,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         
         _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName +" was identified!");
         
-        if(currentMoveEnum == LearnSetMoveName.Foresight)
+        if(currentMoveEnum == MoveName.Foresight)
         {
             victim.pokemon.statModifiers
                 .RemoveAll(b => b.stat == Stat.Evasion);
@@ -355,18 +355,4 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:attacker);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
-
-
-    public IEnumerator Pursuit(BattleParticipant pursuitUser,BattleParticipant switchOutVictim,Move pursuit)
-    {
-        _dialogueHandler.DisplayBattleInfo(pursuitUser.pokemon.pokemonDisplayName+" used "+pursuit.moveName
-                                                    +" on "+switchOutVictim.pokemon.pokemonDisplayName+"!");
-
-        var pursuitDamage = _moveUsageHandler.CalculateMoveDamage(pursuit,pursuitUser, switchOutVictim) * 2;
-        
-        _moveUsageHandler.DisplaySpecialDamage(switchOutVictim,predefinedDamage:pursuitDamage);
-        yield return _moveUsageHandler.AwaitDamageDisplay();
-        yield return _dialogueHandler.AwaitAllDialogue();      
-    }
-
 }
