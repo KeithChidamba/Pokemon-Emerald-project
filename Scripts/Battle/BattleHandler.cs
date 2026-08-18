@@ -427,7 +427,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         StartCoroutine(_gameUIHandler.FadeInBlackScreen());
         yield return enemy.SetupEnemyAi(trainerData);
         
-        enemy.pokemon = enemy.pokemonTrainerAI.trainerParty[0];
+        enemy.pokemon = enemy.pokemonTrainerAI.TrainerParty[0];
         enemy.AddToExpList(player.pokemon);
         //setup battle
         yield return SetValidParticipants();
@@ -439,29 +439,30 @@ public class BattleHandler : MonoBehaviour, IInjectable
         yield return DisplayTrainerMessage(trainerData.battleIntroMessage);
         isTrainerBattle = true;
         isDoubleBattle = true; 
-        var alivePartyPokemon = _pokemonPartyHandler.GetLivingPokemon();
-        var playerPartnerAvailable = alivePartyPokemon.Count > 1;
+        var alivePartyPokemon = _pokemonPartyHandler.GetLivingPokemonCount();
+        var playerPartnerAvailable = alivePartyPokemon > 1;
         
         var player =GetParticipant(BattleParticipantKey.Player);
         player.activeForBattle = true;
         var playerPartner = GetParticipant(BattleParticipantKey.PlayerPartner);
         playerPartner.activeForBattle = playerPartnerAvailable;
+        
         var enemy = GetParticipant(BattleParticipantKey.Enemy);
         enemy.activeForBattle = true;
         var enemyPartner = GetParticipant(BattleParticipantKey.EnemyPartner);
         enemyPartner.activeForBattle = true;
         
         //set initial pokemon for player
-        player.pokemon = alivePartyPokemon[0];
-        if(playerPartner.activeForBattle) playerPartner.pokemon = alivePartyPokemon[1];
+        player.pokemon = _pokemonPartyHandler.Party[0];
+        if(playerPartner.activeForBattle) playerPartner.pokemon = _pokemonPartyHandler.Party[1];
         
         //setup trainer ai for enemy participants
         StartCoroutine(_gameUIHandler.FadeInBlackScreen());
         yield return enemy.SetupEnemyAi(trainerData,enemyPartner);
         
         //set initial pokemon for enemies
-        enemy.pokemon = enemy.pokemonTrainerAI.trainerParty[0];
-        enemyPartner.pokemon = enemyPartner.pokemonTrainerAI.trainerParty[1];
+        enemy.pokemon = enemy.pokemonTrainerAI.TrainerParty[0];
+        enemyPartner.pokemon = enemy.pokemonTrainerAI.TrainerParty[1];
         
         //set enemies of all participants
         SetupEnemies(GetParticipant(BattleParticipantKey.Enemy),

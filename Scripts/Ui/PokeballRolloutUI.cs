@@ -96,12 +96,11 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
             else
             {
                 var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-                var partyCount = enemy.pokemonTrainerAI.trainerParty.Count;
+                var partyCount = enemy.pokemonTrainerAI.TrainerParty.Count;
                 if (pokeballIndex < partyCount)
                 {
                     var enemyPokemon = enemy.pokemonTrainerAI
-                        .trainerParty[pokeballIndex];
-                    
+                        .TrainerParty[pokeballIndex];
                     pokeballImage.sprite = DeterminePokeballImage(enemyPokemon);
                 }
                 else

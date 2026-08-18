@@ -87,7 +87,7 @@ public class TrapEffectTest : BattleBasedTest
     }
     private bool PlayerSwitchIsPrevented()
     {
-        return !_pokemonPartyHandler.IsValidSwap(1, true,false);
+        return !_pokemonPartyHandler.IsValidSwap(1,BattleParticipantKey.Player,true,false);
     }
     private void ForceEnemyMoveAndAttack(int moveIndex,int enemyMoveIndex)
     {

@@ -104,8 +104,8 @@ public class StatusEffectTest : BattleBasedTest
                   && enemy.pokemon.statusEffect == StatusEffect.BadlyPoison);
         
         _testCaseHandler.AddTestCase( "Victim's poisoned status should be reduced after it switches out", 
-            () => enemy.pokemonTrainerAI.trainerParty[1].hp < enemy.pokemonTrainerAI.trainerParty[1].maxHp
-                  && enemy.pokemonTrainerAI.trainerParty[1].statusEffect == StatusEffect.Poison);
+            () => enemy.pokemonTrainerAI.TrainerParty[1].hp < enemy.pokemonTrainerAI.TrainerParty[1].maxHp
+                  && enemy.pokemonTrainerAI.TrainerParty[1].statusEffect == StatusEffect.Poison);
         
         _testCaseHandler.AddTestCase( "Victim should be in confusion", 
             () => enemy.isConfused);
@@ -121,6 +121,12 @@ public class StatusEffectTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
+        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
+                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Status of enemy: {enemy.pokemon.statusEffect}" +
+                                  $"/ Status of enemy partner:{enemy.pokemonTrainerAI.TrainerParty[1].statusEffect}"
+            ,TestLogType.Information);
+
          _testCaseHandler.HandleCurrentTestCase(CheckTestEnd, TestCaseFailed);
         return;
         void CheckTestEnd()

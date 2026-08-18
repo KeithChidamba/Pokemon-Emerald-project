@@ -134,8 +134,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         //copy over team data to enemy partner
         partner.pokemonTrainerAI = new EnemyAiHandler(_container);
         partner.pokemonTrainerAI.GetParticipant(partner);
-        partner.pokemonTrainerAI.trainerParty = pokemonTrainerAI.trainerParty;
-        partner.pokemonTrainerAI.trainerData = pokemonTrainerAI.trainerData;
+        partner.pokemonTrainerAI.CopyPartnerData(pokemonTrainerAI.GetPartyLink(), pokemonTrainerAI.trainerData);
     }
     
     private void Update()
@@ -179,7 +178,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
                     expShareHolders.Add(receiverPokemon);
                 }
             }
-            
         }
         
         var participants = expReceivers
@@ -265,20 +263,20 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     
     private IEnumerator CheckIfPlayerLoss()
     {
-        var alivePokemon = _pokemonPartyHandler.GetLivingPokemon();
-        if (alivePokemon.Count==0)
+        var alivePokemon = _pokemonPartyHandler.GetLivingPokemonCount();
+        if (alivePokemon==0)
         {
             _battleHandler.EndBattle(BattleEndState.PlayerLost,null);
         }
         else
         {//select next pokemon to switch in
-            if ( (_battleHandler.isDoubleBattle && alivePokemon.Count > 1) || 
-            (!_battleHandler.isDoubleBattle && alivePokemon.Count > 0) )
+            if ( (_battleHandler.isDoubleBattle && alivePokemon > 1) || 
+            (!_battleHandler.isDoubleBattle && alivePokemon > 0) )
             {
                 SetupSwitchOut();
                 yield return new WaitUntil(() => !handlingFaintEvent);
             }
-            else if (_battleHandler.isDoubleBattle && alivePokemon.Count == 1)//1 left
+            else if (_battleHandler.isDoubleBattle && alivePokemon == 1)//1 left
             {
                 isActive = false;
                 DeactivateUI();
@@ -301,7 +299,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     private void StartPokemonPartySwap(int memberIndex)
     {
         _pokemonPartyHandler.OnMemberSelected -= StartPokemonPartySwap; 
-        StartCoroutine(_pokemonPartyHandler.SwapMemberWithoutTurnUsage(memberIndex));
+        StartCoroutine(_pokemonPartyHandler.SwapMemberWithoutTurnUsage(memberIndex,participantKey));
     }
 
     public void ResetImagePosition()

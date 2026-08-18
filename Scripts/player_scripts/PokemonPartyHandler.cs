@@ -93,7 +93,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                         _dialogueHandler.DisplayDetails($"{member.pokemonDisplayName} has fainted");
                         yield return _dialogueHandler.WaitForDialogueCompletion();
                     }
-                    if (GetLivingPokemon().Count == 0)
+                    if (GetLivingPokemonCount() == 0)
                     {
                         _dialogueHandler.DisplayDetails("All your Pokemon have fainted");
                         yield return _dialogueHandler.WaitForDialogueCompletion();
@@ -133,36 +133,41 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
             memberCards[0].pokeballClosedImage.sprite
                 :memberCards[0].pokeballOpenImage.sprite;
     }
-    public List<Pokemon> GetLivingPokemon()
+    public int GetLivingPokemonCount()
     {
-        return Party.Where(pokemon => pokemon.hp > 0).ToList();
+        return party.Count(pokemon => pokemon.hp > 0);
     }
-
+    public List<int> GetLivingPokemonIndexes()
+    {
+        return Enumerable.Range(0, party.Count)
+            .Where(i => party[i].hp > 0)
+            .ToList();
+    }
     public void AddMemberFromSystemProcess(Pokemon pokemon)
     {
         party.Add(pokemon);
     }
-    public bool IsValidSwap(int memberIndex,bool swappingIn,bool displayMessage=true)
+    public bool IsValidSwap(int memberIndex,BattleParticipantKey participantKey,bool swappingIn,bool canDisplayMessage=true)
     {
         if (_turnBasedCombatHandler.ContainsSwitch(memberIndex,true))
         {
-            if(displayMessage)
+            if(canDisplayMessage)
             {
                 _dialogueHandler.DisplayDetails(party[memberIndex].pokemonDisplayName +
                                                 " is already going to be sent out");
             }
             return false;
         }
-
-        var memberSelectionLimit = (int)BattleParticipantKey.PlayerPartner;
-        bool atIndexSelectionLimit = memberIndex == 0 ||
-                                     _battleHandler.isDoubleBattle &&
-                                     memberIndex <= memberSelectionLimit;
-       
+        
+        var memberSelectionLimit = _battleHandler.isDoubleBattle?
+            (int)BattleParticipantKey.PlayerPartner:(int)BattleParticipantKey.Player;
+        
+        bool atIndexSelectionLimit = memberIndex <= memberSelectionLimit;
+        
         if (atIndexSelectionLimit)
         {
-            var swapIn = GetParticipantFromIndex(memberIndex);
-            if (displayMessage)
+            var swapIn = _battleHandler.GetParticipant(participantKey);
+            if (canDisplayMessage)
             {
                 _dialogueHandler.DisplayDetails(swapIn.pokemon.pokemonDisplayName +
                                                 " is already in battle");
@@ -175,7 +180,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         
         if (!currentParticipant.canEscape && swappingIn)
         {
-            if (displayMessage)
+            if (canDisplayMessage)
             {
                 _dialogueHandler.DisplayDetails(currentParticipant.pokemon.pokemonDisplayName +
                                                 " is trapped");
@@ -192,9 +197,10 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     public void BeginMemberSwap(int memberIndex)
     {
         if (_battleHandler.BattleInProgress)
-        {//cant swap in a member who is already fighting
+        {
+            //cant swap in a member who is already fighting
             var currentParticipant = _battleHandler.GetCurrentParticipant();
-            if (!IsValidSwap(memberIndex,true))
+            if (!IsValidSwap(memberIndex,currentParticipant.participantKey,true))
             {
                return;
             }
@@ -237,7 +243,10 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         {
             case PartyUsage.SwitchOutFromBattleStyle:
             case PartyUsage.SwapOut:
-                if (!IsValidSwap(memberIndex,false)) return;
+                if (!IsValidSwap(memberIndex,_battleHandler.GetCurrentParticipant().participantKey,false))
+                {
+                    return;
+                }
                 OnMemberSelected?.Invoke(memberIndex);
                 break;
             case PartyUsage.General:
@@ -259,9 +268,19 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                 selectedMemberIndex = memberIndex;
                 if (moving)
                 {
+                    //move the members
                     if(party[selectedMemberIndex] != party[memberToMove])
                     {
-                        SwapMembers(memberToMove);
+                        var swapStore = party[selectedMemberIndex];
+                        party[selectedMemberIndex] = party[memberToMove];
+                        party[memberToMove] = swapStore;
+                        moving = false;
+                        _dialogueHandler.DisplayDetails($"You swapped {party[memberToMove].pokemonDisplayName}" +
+                                                        $" with {swapStore.pokemonDisplayName}");
+                        UpdatePartyUsageMessage("Choose a pokemon");
+                        memberToMove = 0;
+                        selectedMemberIndex = 0;
+                        UpdateUIAfterSwap();
                     }
                 }
                 else
@@ -286,29 +305,20 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         _inputStateHandler.OnSelectionIndexChanged -= UpdateCancelButton;
         cancelButton.sprite = memberCards[0].pokeballClosedImage.sprite;
     }
-
-    private BattleParticipant GetParticipantFromIndex(int index)
-    {
-        var participantKey = index == 0 ? BattleParticipantKey.Player 
-            : BattleParticipantKey.PlayerPartner;
-
-        return _battleHandler.GetParticipant(participantKey);
-    }
-    public IEnumerator SwapMemberWithoutTurnUsage(int partyPosition)
+    
+    public IEnumerator SwapMemberWithoutTurnUsage(int partyPosition,BattleParticipantKey participantKey)
     {
         (party[selectedMemberIndex], party[partyPosition]) = 
             (party[partyPosition], party[selectedMemberIndex]);
 
-        var participant = GetParticipantFromIndex(selectedMemberIndex);
-        
-        var alivePokemon= GetLivingPokemon();
+        var participant = _battleHandler.GetParticipant(participantKey);
         
         UpdateUIAfterSwap();
         
         _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonParty);
         
         //this is called when ui doesnt shift so no need for changes in boolean
-        yield return _battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberIndex],false);
+        yield return _battleIntroHandler.SwitchInPokemon(participant,party[selectedMemberIndex],false);
         
         selectedMemberIndex = 0;
         participant.EndFaintEvent();
@@ -319,26 +329,6 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         memberCards[0].ChangeVisibility(true);
         ClearSelectionUI();
         _partyInputService.UpdateHealthBarColors();
-    }
-    private void SwapMembers(int partyIndex)
-    {
-        var swapStore = party[selectedMemberIndex];
-        var message = $"You swapped {party[partyIndex].pokemonDisplayName} with {swapStore.pokemonDisplayName}";
-        party[selectedMemberIndex] = party[partyIndex];
-        party[partyIndex] = swapStore;
-        moving = false;
-        if (_battleHandler.BattleInProgress)
-        {
-            var participant = GetParticipantFromIndex(selectedMemberIndex);
-            var alivePokemon= GetLivingPokemon();
-            StartCoroutine(_battleIntroHandler.SwitchInPokemon(participant,alivePokemon[selectedMemberIndex]));
-        }
-        else
-            _dialogueHandler.DisplayDetails(message);
-        UpdatePartyUsageMessage("Choose a pokemon");
-        memberToMove = 0;
-        selectedMemberIndex = 0;
-        UpdateUIAfterSwap();
     }
 
     public void ClearTestState()

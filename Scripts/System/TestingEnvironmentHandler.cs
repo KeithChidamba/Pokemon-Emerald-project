@@ -115,6 +115,7 @@ public class TestRegistry
     { 
     //Special Move Logic
         new PursuitTest(),
+        new StatusEffectTest()
     //Abilities
         //new HealthBasedDamageBuffTest(),
         //new StatusEffectDamageBuffTest(),

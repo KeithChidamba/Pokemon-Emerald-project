@@ -563,8 +563,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         else
         {
             swap.participant.ResetParticipantState();
-            var enemyParty = swap.participant.pokemonTrainerAI.trainerParty;
-            (enemyParty[swap.partyPosition], enemyParty[swap.memberToSwapWith]) = (enemyParty[swap.memberToSwapWith], enemyParty[swap.partyPosition]);
+            swap.participant.pokemonTrainerAI.SwapIndexes(swap.partyPosition, swap.memberToSwapWith);
+            var enemyParty = swap.participant.pokemonTrainerAI.TrainerParty;
             yield return _battleIntroHandler.SwitchInPokemon(swap.participant,enemyParty[swap.partyPosition]);
         }
     }

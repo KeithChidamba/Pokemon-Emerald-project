@@ -318,9 +318,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     {
         if (victim.previousMoveData is {failedAttempt:false})
         {
-            var nonCopyableMoves = new[] {"Detect","Protect","Haze"};
-            if (victim.previousMoveData.move.isSelfTargeted
-                || nonCopyableMoves.Contains(victim.previousMoveData.move.moveName))
+            var nonCopyableMoves = new[] {MoveName.Detect,MoveName.Protect,MoveName.Haze};
+            
+            var invalidMove = nonCopyableMoves.Contains(NameDB.ParseMoveName(victim.previousMoveData.move.moveName));
+            
+            if (victim.previousMoveData.move.isSelfTargeted || invalidMove)
             {
                 _dialogueHandler.DisplayBattleInfo("But it failed!");
                 yield break;
@@ -350,34 +352,50 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             _moveUsageHandler.ResetAfterBattleTermination();
             yield break;
         }
+
+        int partyPositionOfVictim;
+        int partyPositionOfPartner;
         
-        var partyPositionOfVictim = victim.participantKey < victim.GetPartnerKey()? 0 : 1;
+        if (victim.participantKey < victim.GetPartnerKey())
+        {
+            partyPositionOfVictim = 0;
+            partyPositionOfPartner = 1;
+        }
+        else
+        {
+            partyPositionOfVictim = 1;
+            partyPositionOfPartner = 0;
+        }
+        
         if (victim.isPlayer)
         {
-            yield return CreateSwitchData(_pokemonPartyHandler.GetLivingPokemon(), _pokemonPartyHandler.Party.ToList());
+            yield return CreateSwitchData(_pokemonPartyHandler.GetLivingPokemonIndexes());
         }
         else
         {
             var enemyTrainer = victim.pokemonTrainerAI;
-            yield return CreateSwitchData(enemyTrainer.GetLivingPokemon(), enemyTrainer.trainerParty);
+            yield return CreateSwitchData(enemyTrainer.GetLivingPokemonIndexes());
         }
 
-        IEnumerator CreateSwitchData(List<Pokemon> living, List<Pokemon>  fullParty)
+        IEnumerator CreateSwitchData(List<int> living)
         {
-            if (living.Count == 1)
+            //exclude current participants
+            var available = living
+                .Where(index => index != partyPositionOfVictim)
+                .ToList();
+            if (_battleHandler.isDoubleBattle)
+            {
+                // Also exclude the other active Pokémon's party position
+                available.RemoveAll(index => index == partyPositionOfPartner);
+            }
+
+            if (available.Count == 0)
             {
                 _dialogueHandler.DisplayBattleInfo("but it failed!");
                 yield break;
             }
-            //exclude current participants
-            var excludedIndexes = 1;
-
-            if (_battleHandler.isDoubleBattle)
-                excludedIndexes++;
             
-            var randomIndexOfLiving = Utility.RandomRange(excludedIndexes, living.Count);
-            
-            var pokemonIndex = fullParty.IndexOf(living[randomIndexOfLiving]);
+            var pokemonIndex = available[Utility.RandomRange(0, available.Count)];
             
             var switchData = new SwitchOutData(partyPositionOfVictim,pokemonIndex,victim);
 

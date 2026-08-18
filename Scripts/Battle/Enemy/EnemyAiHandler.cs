@@ -26,8 +26,11 @@ public enum BehaviorMode
 public class EnemyAiHandler : BattleParticipantModule
 {
     public TrainerData trainerData;
-    public List<Pokemon> trainerParty = new();
-    private Dictionary<AiFlags, Func<BattleParticipant,Move,int>> AiLogicCalculators = new();
+    public IReadOnlyList<Pokemon> TrainerParty => trainerParty;
+    
+    [SerializeField]private List<Pokemon> trainerParty = new();
+    
+    private Dictionary<AiFlags, Func<BattleParticipant,Move,int>> _aiLogicCalculators = new();
     private Action _currentBehaviorAction;
     private BehaviorMode _behaviorMode;
     
@@ -45,12 +48,22 @@ public class EnemyAiHandler : BattleParticipantModule
         _battleOperations = container.Resolve<BattleOperations>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
         
-        AiLogicCalculators.Add(AiFlags.CheckBadMove ,AiCheckBadMove);
-        AiLogicCalculators.Add(AiFlags.CheckViability ,AiCheckViability);
-        AiLogicCalculators.Add(AiFlags.CheckStatus ,AiCheckStatus);
-        AiLogicCalculators.Add(AiFlags.CheckSetup ,AiCheckSetup);
-        AiLogicCalculators.Add(AiFlags.CheckPriority ,AiCheckPriority);
+        _aiLogicCalculators.Add(AiFlags.CheckBadMove ,AiCheckBadMove);
+        _aiLogicCalculators.Add(AiFlags.CheckViability ,AiCheckViability);
+        _aiLogicCalculators.Add(AiFlags.CheckStatus ,AiCheckStatus);
+        _aiLogicCalculators.Add(AiFlags.CheckSetup ,AiCheckSetup);
+        _aiLogicCalculators.Add(AiFlags.CheckPriority ,AiCheckPriority);
         //switching doesnt involve calculators
+    }
+
+    public List<Pokemon> GetPartyLink()
+    {
+        return trainerParty;
+    }
+    public void CopyPartnerData(List<Pokemon> party, TrainerData data)
+    {
+        trainerParty = party;
+        trainerData = data;
     }
     public IEnumerator SetupTrainerForBattle(TrainerData copyOfTrainerData)
     {
@@ -73,41 +86,41 @@ public class EnemyAiHandler : BattleParticipantModule
             }
         }
     }
-    public List<Pokemon> GetLivingPokemon()
+    public void SwapIndexes(int partyPosition,int memberToSwapWith)
     {
-        List<Pokemon> alivePokemon = new(trainerParty);
-        alivePokemon.RemoveAll(p => p.hp <= 0);
-        return alivePokemon;
+        (trainerParty[partyPosition], trainerParty[memberToSwapWith]) = (trainerParty[memberToSwapWith], trainerParty[partyPosition]);
+    }
+    public int GetLivingPokemonCount()
+    {
+        return trainerParty.Count(pokemon => pokemon.hp > 0);
+    }
+    public List<int> GetLivingPokemonIndexes()
+    {
+        return Enumerable.Range(0, trainerParty.Count)
+            .Where(i => trainerParty[i].hp > 0)
+            .ToList();
     }
 
-    private List<Pokemon> GetNonParticipatingList()
+    private List<int> GetNonParticipatingList()
     {
-        List<Pokemon> notParticipatingList = new();
-        foreach (Pokemon pokemon in trainerParty)
+        var activePokemon = new List<Pokemon>
         {
-            //not already participating
-            if (pokemon != _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemon)
-            {
-                if (_battleHandler.isDoubleBattle)
-                {
-                    if (pokemon != _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner).pokemon)
-                    {
-                        notParticipatingList.Add(pokemon);
-                    }
-                }
-                else
-                {
-                    notParticipatingList.Add(pokemon);
-                }
-            }
-        }
-        notParticipatingList.RemoveAll(p => p.hp <= 0);
-        return notParticipatingList;
+            _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemon
+        };
+
+        if (_battleHandler.isDoubleBattle)
+            activePokemon.Add(
+                _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner).pokemon
+            );
+
+        return Enumerable.Range(0, trainerParty.Count)
+            .Where(i => trainerParty[i].hp > 0)
+            .Where(i => !activePokemon.Contains(trainerParty[i]))
+            .ToList();
     }
     public IEnumerator CheckIfLoss()
     {
-        var livingPokemon = GetLivingPokemon();
-        if (livingPokemon.Count == 0)
+        if (GetLivingPokemonCount() == 0)
         {
             _battleHandler.EndBattle(BattleEndState.PlayerWon,participant.pokemon);
         }
@@ -127,18 +140,29 @@ public class EnemyAiHandler : BattleParticipantModule
                 }
                 else
                 {
-                    var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count - 1);
+                    var randomLeftOver = Utility.RandomRange(0, notParticipatingList.Count);
+                    var pokemonIndex = notParticipatingList[randomLeftOver];
+                    var participantPartyIndex = participant.participantKey < participant.GetPartnerKey() ? 0 : 1;
+                    SwapIndexes(pokemonIndex,participantPartyIndex);
+                    
                     yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName,
-                        notParticipatingList[randomLeftOver].pokemonDisplayName);
-                    yield return _battleIntroHandler.SwitchInPokemon(participant,notParticipatingList[randomLeftOver],false);
+                        trainerParty[participantPartyIndex].pokemonDisplayName);
+                    
+                    yield return _battleIntroHandler.SwitchInPokemon(participant,trainerParty[participantPartyIndex],false);
                 }
             }
             else
             {
-                var randomMember = Utility.RandomRange(0, livingPokemon.Count - 1);
+                var livingList = GetLivingPokemonIndexes();
+                var randomMember = Utility.RandomRange(0, livingList.Count);
+                var pokemonIndex = livingList[randomMember];
+                var participantPartyIndex = 0;
+                SwapIndexes(pokemonIndex,participantPartyIndex);
+                
                 yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName, 
-                    livingPokemon[randomMember].pokemonDisplayName);
-                yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon:livingPokemon[randomMember],false);
+                    trainerParty[participantPartyIndex].pokemonDisplayName);
+                
+                yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon: trainerParty[participantPartyIndex],false);
             }
         }
         participant.EndFaintEvent();
@@ -178,10 +202,9 @@ public class EnemyAiHandler : BattleParticipantModule
     public void SwitchPokemon(int partyIndex)
     {
         int partyPosition = 0;
-        
         if (_battleHandler.isDoubleBattle)
         {
-            partyPosition = _turnBasedCombatHandler.CurrentTurnIndex == 2 ? 0 : 1;
+            partyPosition = participant.participantKey < participant.GetPartnerKey() ? 0 : 1;
         }
         var switchData = new SwitchOutData(partyPosition,partyIndex,participant);
         _turnBasedCombatHandler.SaveSwitchTurn(switchData);
@@ -204,7 +227,7 @@ public class EnemyAiHandler : BattleParticipantModule
         }
         var numParticipating = _battleHandler.isDoubleBattle? 2:1;
         
-        if (GetLivingPokemon().Count > numParticipating)//can a switch be made?
+        if (GetLivingPokemonCount() > numParticipating)//can a switch be made?
         {
             if(trainerData.trainerAiFlags.Contains(AiFlags.CheckSwitching))
             {
@@ -327,7 +350,7 @@ public class EnemyAiHandler : BattleParticipantModule
        
         foreach (var flag in trainerData.trainerAiFlags)
         {
-            if (!AiLogicCalculators.ContainsKey(flag))
+            if (!_aiLogicCalculators.ContainsKey(flag))
             {//skip check switching because it's not a not calculator
                 if (flag!=AiFlags.CheckSwitching)
                 {
@@ -335,7 +358,7 @@ public class EnemyAiHandler : BattleParticipantModule
                 }
                 continue;
             }
-            currentScore += AiLogicCalculators[flag].Invoke(enemy,currentMoveCheck);
+            currentScore += _aiLogicCalculators[flag].Invoke(enemy,currentMoveCheck);
         }
         currentScore += Utility.RandomRange(-3, 4);//variable difference
         return currentScore;

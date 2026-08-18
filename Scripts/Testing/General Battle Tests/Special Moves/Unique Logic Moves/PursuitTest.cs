@@ -1,5 +1,6 @@
 using System.Collections;
- 
+using UnityEngine;
+
 public class PursuitTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
@@ -50,11 +51,14 @@ public class PursuitTest : BattleBasedTest
     public override IEnumerator BeginTest()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        _testCaseHandler.AddTestCase(0,"Pursuit must faint previous enemy on switch",
-            () => enemy.pokemonTrainerAI.trainerParty[0].hp <= 0);
+        _testCaseHandler.AddTestCase(0,$"Pursuit must faint previous enemy on switch",
+            () => enemy.pokemonTrainerAI.TrainerParty[1].hp <= 0);
         
         _testCaseHandler.AddTestCase(1,"Pursuit must hit player on switch",
             () => _pokemonPartyHandler.Party[1].hp < _pokemonPartyHandler.Party[1].maxHp);
+        
+        //for testing purposes, disable the switch style
+        _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Set);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -80,11 +84,14 @@ public class PursuitTest : BattleBasedTest
         {
             if (_sequencer.SequenceComplete())
             {
+                _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Switch);
                 EndTest(true);
             }
         }
         void TestCaseFailed()
         {
+            _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Switch);
+
             EndTest(false);
         }
     }

@@ -42,7 +42,7 @@ public class ArenaTrapTest : BattleBasedTest
         yield break;
         bool PlayerSwitchIsPrevented()
         {
-            return !_pokemonPartyHandler.IsValidSwap(1, true,false);
+            return !_pokemonPartyHandler.IsValidSwap(1,BattleParticipantKey.Player ,true,false);
         }
     }
   
