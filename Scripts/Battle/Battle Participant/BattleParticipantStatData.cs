@@ -26,13 +26,19 @@ public class BattleParticipantStatData: BattleParticipantModule
         evasion = participant.pokemon.evasion;
         crit = participant.pokemon.critChance;
     }
-    public void LoadActualStats()
+    public void LoadActualStats(bool fullReset=false)
     {
         participant.pokemon.attack=attack;
         participant.pokemon.specialAttack=spAtk;
         participant.pokemon.defense=defense;
         participant.pokemon.specialDefense=spDef;
         participant.pokemon.speed=speed;
+        if (fullReset)
+        {
+            participant.pokemon.accuracy = 100;
+            participant.pokemon.evasion = 100;
+            participant.pokemon.critChance = 6.25f;
+        }
     }
     public void ResetBattleState(Pokemon pokemon,bool justLeveledUp = false)
     {

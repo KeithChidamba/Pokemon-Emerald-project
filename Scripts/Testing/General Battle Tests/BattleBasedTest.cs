@@ -84,7 +84,7 @@ public class BattleBasedTest : IntegrationTest
             
             void CreateMember(Pokemon createdPokemon)
             {
-                createdPokemon.nature = member.specificNature;
+                createdPokemon.nature = member.specificNature ?? createdPokemon.nature;
                 createdPokemon.gender = member.specificGender;
                 createdPokemon.ability = member.specificAbility ?? createdPokemon.ability;
                 

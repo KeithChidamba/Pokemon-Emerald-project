@@ -204,8 +204,7 @@ public class AbilityHandler : BattleParticipantModule
         return;
         float IncreaseDamage(BattleParticipant attacker,BattleParticipant victim,Move move, float damage)
         {
-            if (attacker != participant) return damage;
-        
+            if (attacker.participantKey != participant.participantKey) return damage;
             if (_damageBuffCombinations.TryGetValue(_currentAbility, out var damageBuffData))
             {
                 return damage * damageBuffData.CanBuffDamage(attacker, victim, move);
@@ -229,7 +228,7 @@ public class AbilityHandler : BattleParticipantModule
         {
             if (thisParticipant != participant) return;
             foreach (var enemy in participant.currentEnemies)
-                enemy.statusHandler.RemoveTrap(TrapData.TrapType.PersistentFromAbility);
+                enemy.statusHandler.RemoveTrap(TrapDataInfo.TrapType.PersistentFromAbility);
             _battleHandler.OnSwitchIn -= TrapEnemies;
             _battleHandler.OnSwitchOut -= RemoveTrap;
         } 
@@ -245,7 +244,7 @@ public class AbilityHandler : BattleParticipantModule
                 {
                     continue;
                 }
-                _moveUsageHandler.ApplyTrap(enemy,TrapData.TrapType.PersistentFromAbility);
+                _moveUsageHandler.ApplyTrap(enemy,TrapDataInfo.TrapType.PersistentFromAbility);
             }
         }
     }
@@ -287,10 +286,11 @@ public class AbilityHandler : BattleParticipantModule
         _abilityTriggered = true;
         _onAbilityReset += ()=> _moveUsageHandler.OnMoveHit -= GiveStatic;
         return;
-        void GiveStatic(BattleParticipant attacker,Move moveUsed)
+        void GiveStatic(BattleParticipant attacker,BattleParticipant victim,Move moveUsed)
         {
-            if (attacker.pokemon.statusEffect != StatusEffect.None) return;
+            if (victim.participantKey != participant.participantKey) return;
             if (attacker.participantKey == participant.participantKey) return;
+            if (attacker.pokemon.statusEffect != StatusEffect.None) return;
             if (!attacker.canBeDamaged) return;
             if (!moveUsed.isContact)return;
             

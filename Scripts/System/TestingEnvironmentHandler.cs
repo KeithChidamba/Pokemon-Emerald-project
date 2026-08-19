@@ -114,8 +114,14 @@ public class TestRegistry
     public List<IntegrationTest> allTests = new()
     { 
     //Special Move Logic
-        new PursuitTest(),
-        new StatusEffectTest()
+        //new FalseSwipeTest(),
+        //new FlailTest(),
+        //new FuryCutter(),
+        //new TakeDownTest(),
+        //new HazeTest(),
+        //new PursuitTest(),
+        //new BrickBreakTest(),
+        
     //Abilities
         //new HealthBasedDamageBuffTest(),
         //new StatusEffectDamageBuffTest(),
@@ -127,7 +133,7 @@ public class TestRegistry
         //new PickupTest(),
         //new InnerFocusTest(),
     //Battle system tests
-        //new TrapEffectTest(),
+        // new TrapEffectTest(),
         // new InfatuationEffectTest(),
         // new FlinchEffectTest(),
         // new HeldItemUsageTest(),
@@ -135,8 +141,8 @@ public class TestRegistry
         // new StatusEffectTest(),
         // new WeatherDamageTest(),
         // new OnFieldDamageModificationTest(),
-        //
     //Move Based Tests
+        // new SpecificMoveDamageTest()
         // new SemiInvulnerableSingleBattleTest(),
         // new SemiInvulnerableDoubleBattleTest(),
         // new IdentifyTargetMoveTest(),

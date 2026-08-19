@@ -324,7 +324,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
        
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.CheckTrapDuration);
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.StunCheck;
-        _turnBasedCombatHandler.OnNewTurn -= statusHandler.CheckStatDropImmunity;
+        _turnBasedCombatHandler.OnNewTurn -= statusHandler.CheckStatChangeImmunity;
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.ConfusionCheck);
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.NotifyHealing);
         _battleHandler.OnBattleEnd -= DeactivateParticipant;
@@ -482,7 +482,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
             //only reset when deactivated
             _battleHandler.OnBattleEnd += DeactivateParticipant;
             _turnBasedCombatHandler.SubToMoveExecution(statusHandler.CheckTrapDuration);
-            _turnBasedCombatHandler.OnNewTurn += statusHandler.CheckStatDropImmunity;
+            _turnBasedCombatHandler.OnNewTurn += statusHandler.CheckStatChangeImmunity;
             _turnBasedCombatHandler.SubToMoveExecution(statusHandler.ConfusionCheck);
             _turnBasedCombatHandler.OnNewTurn += statusHandler.StunCheck;
             _turnBasedCombatHandler.SubToMoveExecution(statusHandler.NotifyHealing);

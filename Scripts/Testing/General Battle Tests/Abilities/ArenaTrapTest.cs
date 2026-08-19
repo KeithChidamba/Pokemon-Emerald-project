@@ -34,7 +34,7 @@ public class ArenaTrapTest : BattleBasedTest
         
         _testCaseHandler.AddTestCase("Arena trap Activated",
             () => player.statusHandler.CurrentTraps[0].trapType
-                  == TrapData.TrapType.PersistentFromAbility
+                  == TrapDataInfo.TrapType.PersistentFromAbility
                   && PlayerSwitchIsPrevented());
         
         yield return HandleBattleState();

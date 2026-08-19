@@ -100,14 +100,14 @@ public class TrapEffectTest : BattleBasedTest
         
         _testCaseHandler.AddTestCase("Arena trap And Mean look",
             () => player.statusHandler.CurrentTraps[0].trapType
-                  == TrapData.TrapType.PersistentFromAbility
+                  == TrapDataInfo.TrapType.PersistentFromAbility
                   && player.statusHandler.CurrentTraps[1].trapType
-                  == TrapData.TrapType.PersistentFromMove 
+                  == TrapDataInfo.TrapType.PersistentFromMove 
                   && PlayerSwitchIsPrevented());
         
         _testCaseHandler.AddTestCase("Sand Tomb should be active,player can't switch due to sand Tomb",
             () => player.statusHandler.CurrentTraps.Last().trapType
-                  == TrapData.TrapType.RandomDurationFromMove
+                  == TrapDataInfo.TrapType.RandomDurationFromMove
                   && PlayerSwitchIsPrevented());
         
         _testCaseHandler.AddTestCase("Player should be damaged due to sand Tomb",

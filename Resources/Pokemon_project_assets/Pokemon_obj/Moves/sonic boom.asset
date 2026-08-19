@@ -20,9 +20,9 @@ MonoBehaviour:
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
-  effectType: 1
+  effectType: 12
   effectInfoModule: {fileID: 0}
   canCauseFlinch: 0
   canTrap: 0
@@ -42,3 +42,12 @@ MonoBehaviour:
   statusChance: 0
   buffOrDebuffChance: 0
   description: An air attack that always deals 20 damage
+  dynamicInfoModules:
+  - rid: 6968282922685562882
+  references:
+    version: 2
+    RefIds:
+    - rid: 6968282922685562882
+      type: {class: MoveEffectInfo, ns: , asm: Assembly-CSharp}
+      data:
+        effectValue: 20

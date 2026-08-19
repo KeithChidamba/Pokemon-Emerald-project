@@ -20,8 +20,8 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
     
     private StatusHandlingState _stateControl;
     
-    private List<TrapData> _currentTraps = new();
-    public IReadOnlyList<TrapData> CurrentTraps => _currentTraps;
+    private List<TrapDataInfo> _currentTraps = new();
+    public IReadOnlyList<TrapDataInfo> CurrentTraps => _currentTraps;
     
     private readonly Dictionary<StatusEffect, Action> _statusEffectMethods = new ();
     public event Action OnStatusCheck;
@@ -93,6 +93,14 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
             Debug.Log("added duplicate stat change effect");
         };
         participant.statChangeEffects.Add(new(changeability,numTurns));
+    }
+    public void CheckStatChangeImmunity()
+    {
+        if (!participant.isActive) return;
+        if (participant.statChangeEffects.Count==0) return;
+        
+        participant.statChangeEffects.ForEach(s=>s.effectDuration--);
+        participant.statChangeEffects.RemoveAll(s => s.effectDuration == 0);
     }
     public IEnumerator CheckStatus()
     {
@@ -172,7 +180,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         participant.pokemon.NotifyHealthChange();  
     }
 
-    public void SetupTrapDuration(TrapData trapData,bool displayMessage = true)
+    public void SetupTrapDuration(TrapDataInfo trapData,bool displayMessage = true)
     {
         var existingTrap = _currentTraps.FirstOrDefault(trap => trap.trapType == trapData.trapType);
         if (existingTrap != null)
@@ -184,14 +192,14 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         
         if (!displayMessage) return;
         
-        var isPersistent = trapData.trapType == TrapData.TrapType.PersistentFromMove;
+        var isPersistent = trapData.trapType == TrapDataInfo.TrapType.PersistentFromMove;
 
         _dialogueHandler.DisplayBattleInfo(
             participant.pokemon.pokemonDisplayName
             + (isPersistent? " can’t escape!" 
                 : trapData.onTrapMessage));
     }
-    public void RemoveTrap(TrapData.TrapType type)
+    public void RemoveTrap(TrapDataInfo.TrapType type)
     {
         _currentTraps.RemoveAll(trap=>trap.trapType == type);
         participant.canEscape = _currentTraps.Count == 0;
@@ -205,7 +213,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         
         var existingTrapWithDuration =
             _currentTraps.FirstOrDefault(trap => 
-                trap.trapType == TrapData.TrapType.RandomDurationFromMove);
+                trap.trapType == TrapDataInfo.TrapType.RandomDurationFromMove);
         
         if (existingTrapWithDuration != null)
         {
@@ -237,14 +245,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         
         if (_confusionDuration > 0) _confusionDuration--;
     }
-    public void CheckStatDropImmunity()
-    {
-        if (!participant.isActive) return;
-        if (participant.statChangeEffects.Count==0) return;
-        
-        participant.statChangeEffects.ForEach(s=>s.effectDuration--);
-        participant.statChangeEffects.RemoveAll(s => s.effectDuration == 0);
-    }
+
     private void FreezeCheck()
     {
         if (_stateControl == StatusHandlingState.Permanent)
@@ -257,9 +258,10 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         else
             participant.canAttack = false;
     }
-    private void RemoveFreezeStatusWithFire(BattleParticipant attacker, Move moveUsed)
+    private void RemoveFreezeStatusWithFire(BattleParticipant attacker,BattleParticipant victim, Move moveUsed)
     {
-        if (moveUsed.type.typeEnum != PokemonType.Fire ) return;
+        if (victim.participantKey != participant.participantKey) return;
+        if (moveUsed.type.typeEnum != PokemonType.Fire) return;
         _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
         _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+" was thawed out!");
         RemoveStatusEffect();

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class TrapData : DynamicAdditionalInfo
+public class TrapDataInfo : DynamicAdditionalInfo
 {
     public enum TrapType
     {

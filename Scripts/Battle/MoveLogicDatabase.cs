@@ -35,22 +35,25 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     {
         _logicMethods.Add(MoveName.BrickBreak, BrickBreak);
         _logicMethods.Add(MoveName.Haze, Haze);
-        _logicMethods.Add(MoveName.HyperBeam, Hyperbeam);
-        _logicMethods.Add(MoveName.Bide, Bide);
-        _logicMethods.Add(MoveName.SonicBoom, SonicBoom);
         _logicMethods.Add(MoveName.TakeDown, TakeDown);
         _logicMethods.Add(MoveName.Magnitude, Magnitude);
-        _logicMethods.Add(MoveName.Endeavor, Endeavor);
         _logicMethods.Add(MoveName.FuryCutter, FuryCutter);
-        _logicMethods.Add(MoveName.SilverWind, SilverWind);
         _logicMethods.Add(MoveName.Flail, Flail);
         _logicMethods.Add(MoveName.FalseSwipe, FalseSwipe);
+        
         _logicMethods.Add(MoveName.BellyDrum, BellyDrum);
         _logicMethods.Add(MoveName.Covet, Covet);
-        _logicMethods.Add(MoveName.MirrorMove, MirrorMove);
-        _logicMethods.Add(MoveName.Whirlwind, Whirlwind);
         _logicMethods.Add(MoveName.Rest, Rest);
+        _logicMethods.Add(MoveName.Whirlwind, Whirlwind);
+        
+        _logicMethods.Add(MoveName.Endeavor, Endeavor);
         _logicMethods.Add(MoveName.Thunder, Thunder);
+        
+        _logicMethods.Add(MoveName.HyperBeam, Hyperbeam);
+        _logicMethods.Add(MoveName.Bide, Bide);
+        
+        _logicMethods.Add(MoveName.SilverWind, SilverWind);
+        _logicMethods.Add(MoveName.MirrorMove, MirrorMove);
     }
     
     public IEnumerator InvokeMoveLogic(BattleParticipant attacker, BattleParticipant victim, Turn currentTurn)
@@ -72,7 +75,12 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             if(!enemy.isActive)continue;
             foreach (var barrier in enemy.barriers)
             {
-                if (duplicateBarriers.Contains(barrier.barrierName)) continue;
+                if (duplicateBarriers.Contains(barrier.barrierName))
+                {
+                    //participants share barriers, so only display the message the first time 
+                    //and not again when partner's barrier is broken
+                    continue;
+                }
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" shattered "+barrier.barrierName);
                 duplicateBarriers.Add(barrier.barrierName);
             }
@@ -90,7 +98,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         foreach (var participant in validParticipants)
         {
             participant.pokemon.statModifiers.Clear();
-            participant.statData.LoadActualStats();
+            participant.statData.LoadActualStats(true);
         }
         yield return null;
     }
@@ -131,13 +139,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
        
     }
-
-    private IEnumerator SonicBoom(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
-    {
-        var sonicBoomDamage = 20f;
-        _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,specificDamage:sonicBoomDamage);
-        yield return null;
-    }    
+    
     private IEnumerator TakeDown(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
@@ -150,10 +152,12 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _moveUsageHandler.DisplaySpecialDamage(attacker,predefinedDamage:recoilDamage);
         yield return _moveUsageHandler.AwaitDamageDisplay();
     }
-
-    private IEnumerator Magnitude(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
+    
+    public float MagnitudeDamageEffect(int predefinedStrength = 0)
     {
-        var magnitudeStrength = Utility.RandomRange(4, 11);
+        int magnitudeStrength = predefinedStrength != 0? predefinedStrength
+                    : Utility.RandomRange(4, 11);
+        
         var baseDamage = 10f;
         var damageIncrease = 0f;
         if(magnitudeStrength > 4)
@@ -165,6 +169,14 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         {
             baseDamage += 20f;
         }
+        return baseDamage;
+    }
+    private IEnumerator Magnitude(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
+    {
+        int magnitudeStrength = Utility.RandomRange(4, 11);
+
+        var baseDamage = MagnitudeDamageEffect(magnitudeStrength);
+        
         _dialogueHandler.DisplayBattleInfo("Magnitude level "+magnitudeStrength);
         currentTurn.move.moveDamage = baseDamage;
         
@@ -189,7 +201,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         var damageLevel = new[] { 10f, 20f, 40f, 80f, 160f };
         if (attacker.previousMoveData.move.moveName == NameDB.GetMoveName(MoveName.FuryCutter))
         {
-            currentTurn.move.moveDamage = attacker.previousMoveData.numRepetitions > 4?
+            currentTurn.move.moveDamage = attacker.previousMoveData.numRepetitions > 3?
                 damageLevel[^1] : damageLevel[attacker.previousMoveData.numRepetitions];
         }
         else
@@ -405,6 +417,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private IEnumerator Rest(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var healthGain = attacker.pokemon.maxHp - attacker.pokemon.hp;
+        if (healthGain <= 0)
+        {
+            _dialogueHandler.DisplayBattleInfo("but it failed!");
+            yield break;
+        }
         _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" fell asleep!");
         yield return new WaitForSeconds(1f);
         _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:attacker);

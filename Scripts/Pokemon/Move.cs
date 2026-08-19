@@ -57,5 +57,5 @@ public class Move : ScriptableObject
 public enum EffectType
 {
     PipeLine,UniqueLogic,MultiTargetDamage,Consecutive,HealthDrain,WeatherHealthGain,WeatherChange
-    ,IdentifyTarget, BarrierCreation,DamageProtection,OnFieldDamageModifier,SemiInvulnerable
+    ,IdentifyTarget, BarrierCreation,DamageProtection,OnFieldDamageModifier,SemiInvulnerable,SpecificDamage
 };

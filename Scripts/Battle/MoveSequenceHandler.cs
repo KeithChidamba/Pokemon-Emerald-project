@@ -29,7 +29,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     public event Func<BattleParticipant,BattleParticipant,Move,float,float> OnDamageCalc;
     public event Action<DamageCalculationModifier,float, float> OnDamageModified;
     public event Action<float,BattleParticipant> OnDamageDeal;
-    public event Action<BattleParticipant,Move> OnMoveHit;
+    public event Action<BattleParticipant,BattleParticipant,Move> OnMoveHit;
     public event Action<BattleParticipant,StatusEffect> OnStatusEffectHit;
     public event Action OnMoveComplete;
 
@@ -192,15 +192,11 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     }
     private float CalculateStruggleDamage(BattleParticipant victim,BattleParticipant struggleUser,Move struggle)
     {
-        var critValue = 1;
-        var buffedCritRateIndex = Array.IndexOf(_critLevels, struggleUser.pokemon.critChance);
-        float critChance = _critLevels[buffedCritRateIndex];
-
-        if (Utility.RandomRange100() < critChance)
-            critValue = 2;
-
+        var critValue = GetCritValue(struggleUser.pokemon);
         if (critValue > 1)
+        {
             _dialogueHandler.DisplayBattleInfo("Critical Hit!");
+        }
         
         float levelFactor = ((struggleUser.pokemon.currentLevel * 2f) / 5f) + 2f;
         
@@ -230,8 +226,21 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         }
         
         OnDamageDeal?.Invoke(finalDamage, victim);
-        OnMoveHit?.Invoke(struggleUser,struggle);
+        OnMoveHit?.Invoke(struggleUser,victim,struggle);
         return finalDamage;
+    }
+
+    private int GetCritValue(Pokemon pokemon)
+    {
+        if (!_critLevels.Contains(pokemon.critChance))
+        {
+            return 1;
+        }
+        if (Utility.RandomRange100() < pokemon.critChance)
+        {
+            return 2;
+        }
+        return 1;
     }
     private bool IsInvincible(Move move,BattleParticipant victim)
     {
@@ -253,12 +262,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         if (IsInvincible(move, victim)) return 0;
         
         //calc crit
-        var critValue = 1;
-        var buffedCritRateIndex = Array.IndexOf(_critLevels, attacker.pokemon.critChance)
-                                  + move.critModifierIndex;
-        float critChance = _critLevels[buffedCritRateIndex];
-        if (Utility.RandomRange100() < critChance)
-            critValue =  2;
+        var critValue = GetCritValue(attacker.pokemon);
         
         if (critValue > 1f) _dialogueHandler.DisplayBattleInfo("Critical Hit!");
         
@@ -312,7 +316,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         }
         
         OnDamageDeal?.Invoke(finalDamage,victim);
-        OnMoveHit?.Invoke(attacker,move);
+        OnMoveHit?.Invoke(attacker,victim,move);
         return finalDamage;
     }
 
@@ -629,9 +633,9 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
 
     private void TrapEnemy(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        var trapData = move.GetDynamicModule<TrapData>();
+        var trapData = move.GetDynamicModule<TrapDataInfo>();
 
-        if (trapData.trapType == TrapData.TrapType.RandomDurationFromMove)
+        if (trapData.trapType == TrapDataInfo.TrapType.RandomDurationFromMove)
         {
             trapData.SetRandomDuration();
         }
@@ -654,9 +658,9 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     /// For use in general trapping logic, outside move sequence.
     /// Does not have dedicated trap messages.
     /// </summary>
-    public void ApplyTrap(BattleParticipant victim,TrapData.TrapType type, int numTurns=0)
+    public void ApplyTrap(BattleParticipant victim,TrapDataInfo.TrapType type, int numTurns=0)
     {
-        var trapData = new TrapData { trapType = type ,trapDuration = numTurns};
+        var trapData = new TrapDataInfo { trapType = type ,trapDuration = numTurns};
         victim.statusHandler.SetupTrapDuration(trapData,false);
     }
     void ConfuseEnemy(Move move,BattleParticipant attacker, BattleParticipant victim)

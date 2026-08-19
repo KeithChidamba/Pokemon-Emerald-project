@@ -63,6 +63,9 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             case EffectType.WeatherChange:
                 yield return ChangeWeather(move); 
                 break;
+            case EffectType.SpecificDamage:
+                yield return DealSpecificDamage(move,victim); 
+                break;
             case EffectType.UniqueLogic:
                 yield return _moveLogicDatabase.InvokeMoveLogic(attacker,victim,currentTurn); 
                 break;
@@ -181,12 +184,12 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
 
     private IEnumerator CreateBarriers(Move move,BattleParticipant attacker)
     {
-        var barrierName = move.moveName;
+        var barrierInfo = move.GetDynamicModule<BarrierInfo>();
         if (_battleHandler.isDoubleBattle)
         {
-            if (!_moveUsageHandler.HasDuplicateBarrier(attacker, barrierName, true))
+            if (!_moveUsageHandler.HasDuplicateBarrier(attacker, move.moveName, true))
             {
-                var newBarrier = new Barrier(barrierName, 0.33f, 5);
+                var newBarrier = new Barrier(move.moveName, barrierInfo.barrierEffect, barrierInfo.turnDuration);
                 
                 attacker.barriers.Add(newBarrier);
 
@@ -198,19 +201,19 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
                     partner.barriers.Add(barrierCopy);
                 }
                 
-                _dialogueHandler.DisplayBattleInfo(barrierName + " has been activated");
+                _dialogueHandler.DisplayBattleInfo(move.moveName + " has been activated");
                 yield return _dialogueHandler.AwaitAllDialogue();
             }
         }
         else
         {
-            if (_moveUsageHandler.HasDuplicateBarrier(attacker, barrierName,true))
+            if (_moveUsageHandler.HasDuplicateBarrier(attacker, move.moveName,true))
                 yield return _dialogueHandler.AwaitAllDialogue();
             else
             {
-                attacker.barriers.Add(new(barrierName,0.33f,5));
+                attacker.barriers.Add(new Barrier(move.moveName,barrierInfo.barrierEffect,barrierInfo.turnDuration));
                 
-                _dialogueHandler.DisplayBattleInfo(barrierName + " has been activated");
+                _dialogueHandler.DisplayBattleInfo(move.moveName + " has been activated");
             }
         }
         
@@ -355,4 +358,10 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:attacker);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
+    private IEnumerator DealSpecificDamage(Move move, BattleParticipant victim)
+    {
+        var specificDamage = move.GetDynamicModule<MoveEffectInfo>().effectValue;
+        _moveUsageHandler.DisplaySpecificMoveDamage(move,victim,specificDamage:specificDamage);
+        yield return null;
+    }  
 }

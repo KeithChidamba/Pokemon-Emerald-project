@@ -20,7 +20,7 @@ MonoBehaviour:
   hasTypelessEffect: 1
   isSpecial: 1
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
   effectType: 8
   effectInfoModule: {fileID: 0}
@@ -42,3 +42,13 @@ MonoBehaviour:
   statusChance: 0
   buffOrDebuffChance: 0
   description: Reduces special damage taken by the user's side of the field
+  dynamicInfoModules:
+  - rid: 6968282922685562881
+  references:
+    version: 2
+    RefIds:
+    - rid: 6968282922685562881
+      type: {class: BarrierInfo, ns: , asm: Assembly-CSharp}
+      data:
+        barrierEffect: 0.33
+        turnDuration: 5
