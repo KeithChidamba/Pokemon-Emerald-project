@@ -1,16 +1,9 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
- 
-public class BattleTestTemplate : BattleBasedTest
+
+public class RestTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private MoveSequenceHandler _moveUsageHandler;
-    
+
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
     
@@ -18,32 +11,47 @@ public class BattleTestTemplate : BattleBasedTest
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
-        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
-        
+      
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "TestNameVariable";
+        testName = "Rest Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
         
-        _sequencer.AddAction(AttackFirst);
+        //Rest,should fail -> enemy uses flamethrower
+        _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(0,0));
+        //Rest,should work -> enemy uses tail whip
+        _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(0,1));
     }
 
-    private void AttackFirst()
+    private void ForceEnemyMoveAndAttack(int moveIndex,int enemyMoveIndex)
     {
-        //To make test case reliable
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
-        _sequencer.UseMove();
+
+        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
+        
+        player.pokemon.moveSet[moveIndex].priority = 100;
+        _sequencer.UseMove(moveIndex);
+        return;
+        void UseSpecificMove()
+        {
+            enemy.pokemon.moveSet[enemyMoveIndex].statusChance = 100;
+            enemy.pokemon.moveSet[enemyMoveIndex].isSureHit = true;
+            _battleHandler.UseMove(enemy.pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
+        }
     }
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        _testCaseHandler.AddTestCase("Example Condition",
-            () => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase("Player must get hit by enemy",
+            () => player.pokemon.hp < player.pokemon.maxHp);
+        
+        _testCaseHandler.AddTestCase("Player be healed by rest, and asleep",
+            () => player.pokemon.hp >= player.pokemon.maxHp
+            && player.pokemon.statusEffect == StatusEffect.Sleep);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -59,11 +67,7 @@ public class BattleTestTemplate : BattleBasedTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
 
-        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
-        if (!caseExists)
-        {
-            CheckTestEnd();
-        }
+        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {
@@ -74,7 +78,6 @@ public class BattleTestTemplate : BattleBasedTest
         }
         void TestCaseFailed()
         {
-            //add extra logic here
             EndTest(false);
         }
     }

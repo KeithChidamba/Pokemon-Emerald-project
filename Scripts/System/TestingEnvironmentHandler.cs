@@ -114,6 +114,11 @@ public class TestRegistry
     public List<IntegrationTest> allTests = new()
     { 
     //Special Move Logic
+        //new ThunderTest(),
+        //new Endeavor(),
+        //new RestTest(),
+        //new BellyDrumTest(),
+        //new CovetTest(),
         //new FalseSwipeTest(),
         //new FlailTest(),
         //new FuryCutter(),
@@ -121,7 +126,6 @@ public class TestRegistry
         //new HazeTest(),
         //new PursuitTest(),
         //new BrickBreakTest(),
-        
     //Abilities
         //new HealthBasedDamageBuffTest(),
         //new StatusEffectDamageBuffTest(),

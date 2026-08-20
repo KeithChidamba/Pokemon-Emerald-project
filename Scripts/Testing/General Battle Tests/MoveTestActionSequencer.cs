@@ -16,11 +16,11 @@ public class MoveTestActionSequencer : TestActionSequencer
         //this makes sequence index +1, so reduce it
         return CurrentSequenceIndex - 1;
     }
-    public void UseMove(int currentMoveUsageIndex = 0)
+    public void UseMove(int currentMoveUsageIndex = 0,bool isSureHit=true)
     {
         var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var move = playerParticipant.pokemon.moveSet[currentMoveUsageIndex];
-        move.isSureHit = true;
+        move.isSureHit = isSureHit;
         _battleHandler.UseMove(move,playerParticipant, BattleParticipantKey.Enemy);
     }
     public void UseMoveOnSpecific(int currentMoveUsageIndex, BattleParticipantKey playerKey

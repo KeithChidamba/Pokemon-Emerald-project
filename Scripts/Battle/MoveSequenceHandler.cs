@@ -115,7 +115,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         {
             if(faintedParticipant == victim)
             {
-                //victim faints after damage so the rest of move effect is ignored
+                //victim faints after damage, so the rest of move effect is ignored
                 _cancelMove = true;
             }
         }

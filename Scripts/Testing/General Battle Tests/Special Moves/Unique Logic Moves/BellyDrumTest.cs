@@ -1,16 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
- 
-public class BattleTestTemplate : BattleBasedTest
+
+public class BellyDrumTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private MoveSequenceHandler _moveUsageHandler;
-    
+
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
     
@@ -18,32 +13,37 @@ public class BattleTestTemplate : BattleBasedTest
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
-        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
-        
+       
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "TestNameVariable";
+        testName = "Belly Drum Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
-        
-        _sequencer.AddAction(AttackFirst);
+        //use belly drum, should fail
+        _sequencer.AddAction(AttackWithLowHp);
+        //use belly drum, should work
+        _sequencer.AddAction(()=>_sequencer.UseMove());
     }
 
-    private void AttackFirst()
+    private void AttackWithLowHp()
     {
-        //To make test case reliable
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        player.pokemon.hp = 1;
         player.pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
     }
+    
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        _testCaseHandler.AddTestCase("Example Condition",
-            () => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase("Belly drum should fail[No attack buffs]",
+            () =>  player.pokemon.statModifiers.Count == 0);
+        
+        _testCaseHandler.AddTestCase("Belly drum buff attack and lower hp",
+            () => player.pokemon.statModifiers.Count>0
+            &&  player.pokemon.hp <= Mathf.FloorToInt(player.pokemon.maxHp / 2f)
+            &&  player.pokemon.attack > player.statData.attack);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -59,14 +59,11 @@ public class BattleTestTemplate : BattleBasedTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
 
-        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
-        if (!caseExists)
-        {
-            CheckTestEnd();
-        }
+        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {
+            player.pokemon.hp = player.pokemon.maxHp;
             if (_sequencer.SequenceComplete())
             {
                 EndTest(true);
@@ -74,7 +71,6 @@ public class BattleTestTemplate : BattleBasedTest
         }
         void TestCaseFailed()
         {
-            //add extra logic here
             EndTest(false);
         }
     }

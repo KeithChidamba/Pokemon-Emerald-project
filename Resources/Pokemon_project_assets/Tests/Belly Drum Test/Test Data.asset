@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79218e70f727cab51b39573c7a1e6e10, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+      pokemonLevel: 24
+      evolutionStageNumber: 1
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: ddbf5455dec93675c85feb5130d51197, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 1
+    specificAbility: {fileID: 0}
+    nickName: lin
+  testEnemyData:
+    trainerDisplayName: Test Grunt Belly drum
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: 6dada11d6b47e00b0a3d9f31fc17fde1, type: 2}

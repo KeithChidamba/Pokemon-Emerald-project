@@ -40,19 +40,17 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _logicMethods.Add(MoveName.FuryCutter, FuryCutter);
         _logicMethods.Add(MoveName.Flail, Flail);
         _logicMethods.Add(MoveName.FalseSwipe, FalseSwipe);
-        
         _logicMethods.Add(MoveName.BellyDrum, BellyDrum);
         _logicMethods.Add(MoveName.Covet, Covet);
         _logicMethods.Add(MoveName.Rest, Rest);
-        _logicMethods.Add(MoveName.Whirlwind, Whirlwind);
-        
         _logicMethods.Add(MoveName.Endeavor, Endeavor);
         _logicMethods.Add(MoveName.Thunder, Thunder);
         
+        //still need tests
+        _logicMethods.Add(MoveName.Whirlwind, Whirlwind);
+        _logicMethods.Add(MoveName.SilverWind, SilverWind);
         _logicMethods.Add(MoveName.HyperBeam, Hyperbeam);
         _logicMethods.Add(MoveName.Bide, Bide);
-        
-        _logicMethods.Add(MoveName.SilverWind, SilverWind);
         _logicMethods.Add(MoveName.MirrorMove, MirrorMove);
     }
     
@@ -212,24 +210,31 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     }
     private IEnumerator SilverWind(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
-        bool battleEnded = false;
-        _battleHandler.OnParticipantFainted += CancelOnBattleEnd;
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         yield return _moveUsageHandler.AwaitDamageDisplay();
-
-        void CancelOnBattleEnd(BattleParticipant faintedParticipant)
+        
+        bool battleEnded = false;
+        bool awaitingFaint = true;
+        
+        if (victim.pokemon.hp <= 0)
         {
-            if (faintedParticipant != victim) return;
-            _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
-            battleEnded = _battleHandler.BattleOver;
+            _battleHandler.OnParticipantFainted += CancelOnBattleEnd;
+            void CancelOnBattleEnd(BattleParticipant faintedParticipant)
+            {
+                if (faintedParticipant.participantKey != victim.participantKey) return;
+                _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
+                battleEnded = _battleHandler.BattleOver;
+                awaitingFaint = false;
+            }
         }
+        else awaitingFaint = false;
+        
+        yield return new WaitUntil(() => !awaitingFaint);
         
         if(battleEnded) yield break;
-        _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
         
         if (Utility.RandomRange100() > currentTurn.move.statusChance)
         {
-            yield return null;
             yield break;
         }
         
@@ -248,6 +253,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             var buffData = new StatChangeTransitData(attacker, buff, true, 1);
             _moveUsageHandler.InitiateStatChange(buffData,false);
             yield return new WaitUntil(() => !awaitingAddition);
+            continue;
             void AwaitBuffAddition(StatChangeOperationData operationData)
             {
                 _battleOperationsHandler.OnStatChangeApplied -= AwaitBuffAddition;
@@ -260,6 +266,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         bool awaitingDisplay = true;
         _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,attacker,statChangeMessage);
         yield return new WaitUntil(() => !awaitingDisplay);
+        yield break;
         void AwaitBuffVisual()
         {
             _battleVisualsHandler.OnStatVisualDisplayed -= AwaitBuffVisual;
@@ -305,7 +312,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             yield break;
         }
         
-        var selfDamage = math.floor(attacker.pokemon.hp / 2f);
+        var selfDamage = Mathf.FloorToInt(attacker.pokemon.maxHp / 2f);
         _moveUsageHandler.DisplaySpecialDamage(attacker,selfDamage);
         
         var buffData = new StatChangeTransitData(attacker, Stat.Attack, true, 6);
@@ -423,11 +430,10 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             yield break;
         }
         _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" fell asleep!");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.25f);
         _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:attacker);
-        yield return _moveUsageHandler.AwaitHealthGainDisplay();
         attacker.statusHandler.RemoveStatusEffect(true);
-        yield return new WaitUntil(()=>attacker.pokemon.statusEffect == StatusEffect.None);
+        yield return _moveUsageHandler.AwaitHealthGainDisplay();
         _moveUsageHandler.ApplyStatusToVictim(attacker, StatusEffect.Sleep, 2);
         yield return _dialogueHandler.AwaitAllDialogue();
     }

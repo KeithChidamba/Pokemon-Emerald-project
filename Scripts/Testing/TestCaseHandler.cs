@@ -30,11 +30,18 @@ public class TestCaseHandler
       _testHandler = testHandler;
       _sequencer = sequencer;
    }
-
+   /// <summary>
+   /// Use this if every test action has a test case.
+   /// Don't use both overloads together
+   /// </summary>
    public void AddTestCase(string message,Func<bool> condition)
    {
       testCases.Add(NextIndex,new TestCase(NextIndex,message,condition));
    }
+   /// <summary>
+   /// Use this if you need exact index matching for test cases and test actions.
+   /// Only if certain actions don't have a test case
+   /// </summary>
    public void AddTestCase(int caseIndex,string message,Func<bool> condition)
    {
       testCases.Add(caseIndex,new TestCase(caseIndex,message,condition));

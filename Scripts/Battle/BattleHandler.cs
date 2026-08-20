@@ -38,8 +38,13 @@ public class BattleHandler : MonoBehaviour, IInjectable
     
     [SerializeField]private List<BattleParticipant> faintQueue = new();
     [SerializeField]private bool handlingFaintEvent;
-    
+    /// <summary>
+    /// Marks the immediate end of a battle,excluding post-battle proceedings
+    /// </summary>
     public bool BattleOver { get; private set; }
+    /// <summary>
+    /// Marks the [active nature] or [end] of the entire battle state
+    /// </summary>
     public bool BattleInProgress{ get; private set; }
     
     public bool isTrainerBattle;
@@ -55,7 +60,10 @@ public class BattleHandler : MonoBehaviour, IInjectable
     public BattlesStyle currentBattleStyle;
     public List<EvolutionInBattleData> evolutionQueue;
     private PlayerTurnUsage _previousTurnUsage;
-    
+    /// <summary>
+    /// Should only be used when notification that a faint has occured
+    /// is not urgent
+    /// </summary>
     public event Action<BattleParticipant> OnParticipantFainted;
     public event Action OnBattleEnd;
 

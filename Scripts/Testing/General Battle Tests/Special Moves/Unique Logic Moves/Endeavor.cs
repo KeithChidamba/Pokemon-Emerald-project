@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
  
-public class BattleTestTemplate : BattleBasedTest
+public class Endeavor : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private MoveSequenceHandler _moveUsageHandler;
-    
+
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
     
@@ -18,33 +15,46 @@ public class BattleTestTemplate : BattleBasedTest
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
-        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
-        
+       
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "TestNameVariable";
+        testName = "Endeavor";
         
         testExitCondition = TestCompletionCondition.EndManually;
         
-        _sequencer.AddAction(AttackFirst);
+        //Endeavor -> tailwhip
+        _sequencer.AddAction(()=>SetHealthForEndeavorEffect(1f,0.65f));
+        _sequencer.AddAction(()=>SetHealthForEndeavorEffect(0.45f,0.85f));
     }
 
-    private void AttackFirst()
+    private void SetHealthForEndeavorEffect(float playerHealthRatio, float enemyHealthRatio)
     {
-        //To make test case reliable
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
+        
+        player.pokemon.maxHp = enemy.pokemon.maxHp;
+        
+        enemy.pokemon.hp = Mathf.FloorToInt(enemy.pokemon.maxHp * enemyHealthRatio);
+        player.pokemon.hp = Mathf.FloorToInt(player.pokemon.maxHp * playerHealthRatio);
+        
         _sequencer.UseMove();
     }
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        _testCaseHandler.AddTestCase("Example Condition",
-            () => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase("Endeavor should fail",
+            () => player.pokemon.hp >= player.pokemon.maxHp
+            && (int)enemy.pokemon.hp == Mathf.FloorToInt(enemy.pokemon.maxHp * .65f));
         
+        //endeavor = victim.hp - attacker.hp
+        //on the second action, enemy was given full hp
+        _testCaseHandler.AddTestCase("Endeavor should work",
+            () => (int)player.pokemon.hp ==
+                  Mathf.FloorToInt(player.pokemon.maxHp * .45f)
+                  && (int)enemy.pokemon.hp == (int)player.pokemon.hp);
+       
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
@@ -59,11 +69,7 @@ public class BattleTestTemplate : BattleBasedTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
 
-        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
-        if (!caseExists)
-        {
-            CheckTestEnd();
-        }
+        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {
@@ -74,7 +80,6 @@ public class BattleTestTemplate : BattleBasedTest
         }
         void TestCaseFailed()
         {
-            //add extra logic here
             EndTest(false);
         }
     }

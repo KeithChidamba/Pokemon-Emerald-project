@@ -4,46 +4,63 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
  
-public class BattleTestTemplate : BattleBasedTest
+public class CovetTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private MoveSequenceHandler _moveUsageHandler;
-    
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
+    private string _berryName;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
-        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "TestNameVariable";
+        testName = "Covet Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
+        _berryName = "Oran berry";
         
-        _sequencer.AddAction(AttackFirst);
+        //Covet, should fail if enemy has no item
+        _sequencer.AddAction(()=>_sequencer.UseMove());
+        //Covet, should fail because enemy Item is not a berry
+        _sequencer.AddAction(()=>AttackAndTakePotion("Potion"));
+        //Covet, should take enemy berry
+        _sequencer.AddAction(()=>AttackAndTakePotion(_berryName));
     }
-
-    private void AttackFirst()
+    private void AttackAndTakePotion(string itemName)
     {
-        //To make test case reliable
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + itemName;
+        var oranBerry = Resources.Load<Item>(assetDirectory);
+        if (oranBerry == null)
+        {
+            Debug.LogError($"item not found: {assetDirectory}");
+            EndTest(false);
+        }
+        enemy.pokemon.GiveItem(oranBerry);
+        
         _sequencer.UseMove();
     }
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        _testCaseHandler.AddTestCase("Example Condition",
-            () => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase("Covet should not take item from enemy, but deal damage",
+            () => !player.pokemon.hasItem
+            && enemy.pokemon.hp<enemy.pokemon.maxHp);
+        
+        _testCaseHandler.AddTestCase("Covet should not take item from enemy because the item is not a berry",
+            () => !player.pokemon.hasItem
+                  && enemy.pokemon.hasItem);
+        
+        _testCaseHandler.AddTestCase($"Covet should take {_berryName} from enemy",
+            () => player.pokemon.hasItem
+                  &&  !enemy.pokemon.hasItem
+                  && player.pokemon.heldItem.itemName==_berryName);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -59,11 +76,7 @@ public class BattleTestTemplate : BattleBasedTest
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
 
-        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
-        if (!caseExists)
-        {
-            CheckTestEnd();
-        }
+        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {
