@@ -266,7 +266,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         var alivePokemon = _pokemonPartyHandler.GetLivingPokemonCount();
         if (alivePokemon==0)
         {
-            _battleHandler.EndBattle(BattleEndState.PlayerLost,null);
+            _battleHandler.EndBattle(BattleEndState.PlayerLost);
         }
         else
         {//select next pokemon to switch in
@@ -321,15 +321,14 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         ResetImagePosition();
         ResetUiPosition();
         pokemonImage.color = Color.white;
-       
-        _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.CheckTrapDuration);
+        
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.StunCheck;
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.CheckStatChangeImmunity;
+        _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.CheckTrapDuration);
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.ConfusionCheck);
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.NotifyHealing);
-        _battleHandler.OnBattleEnd -= DeactivateParticipant;
+        
         pokemon.OnHealthChanged -= CheckIfFainted;
-        //reset move data in case of in-battle modification
         pokemon.ResetMoveData();
     }
 
@@ -479,8 +478,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         
         if (initialCall)
         {
-            //only reset when deactivated
-            _battleHandler.OnBattleEnd += DeactivateParticipant;
             _turnBasedCombatHandler.SubToMoveExecution(statusHandler.CheckTrapDuration);
             _turnBasedCombatHandler.OnNewTurn += statusHandler.CheckStatChangeImmunity;
             _turnBasedCombatHandler.SubToMoveExecution(statusHandler.ConfusionCheck);

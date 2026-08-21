@@ -299,7 +299,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         swapOutAnimator.gameObject.SetActive(false);
     }
 
-    public IEnumerator RevealPokemonAfterWithdraw(BattleParticipant participant)
+    public IEnumerator RevealPokemonAfterWithdraw(BattleParticipant participant,bool intentionalSwitch=true)
     {
         participant.participantUI.SetActive(true);
         if (!participant.isPlayer)
@@ -308,7 +308,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         }
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
         var direction = participant.isPlayer? -outOfViewDistance : outOfViewDistance;
-        if (!participant.isPlayer)
+        if (!participant.isPlayer && intentionalSwitch)
         {
             direction = 0;
         }

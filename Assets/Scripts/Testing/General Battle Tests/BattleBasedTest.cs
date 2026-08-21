@@ -19,7 +19,7 @@ public class BattleBasedTest : IntegrationTest
     };
     protected virtual void DetermineSuccess() { }
 
-    private void LogSuccess()
+    protected void LogSuccess()
     {
         DetermineSuccess();
         if (testExitCondition == TestCompletionCondition.EndAfterTurns)
@@ -27,27 +27,27 @@ public class BattleBasedTest : IntegrationTest
             EndTest();
         }
     }
-    protected void EndTest()
+    protected virtual void EndTest()
     {
-        _battleHandler.EndBattle(BattleEndState.BattleTerminated, null);
+        _battleHandler.EndBattle(BattleEndState.BattleTerminated);
         _turnBasedCombatHandler.OnNewTurn -= DetermineTurnUsage;
         _turnBasedCombatHandler.OnTurnEventsCompleted -= LogSuccess;
     }
     protected void EndTest(bool testPassed)
     {
-        SetStatus(testPassed);
+        SetTestStatus(testPassed);
         EndTest();
     }
     protected virtual void DetermineTurnUsage() { }
 
-    protected IEnumerator HandleBattleState()
+    protected virtual IEnumerator HandleBattleState()
     {
         _battleHandler = container.Resolve<BattleHandler>();
         _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         
-        var testData = Resources.Load<BattleBasedeTestData>(
+        var testData = Resources.Load<BattleBasedTestData>(
             DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"{testName}/Test Data");
 
         var testEnemy = Resources.Load<TrainerData>(
@@ -57,7 +57,7 @@ public class BattleBasedTest : IntegrationTest
         testEnemy.PokemonParty = testData.testEnemyData.pokemonParty;
         testEnemy.battleType = testData.testEnemyData.battleType;
         
-        yield return LoadTestData(testData);
+        yield return LoadTestData(testData,_pokemonPartyHandler);
         
         _turnBasedCombatHandler.OnNewTurn += DetermineTurnUsage;
         _turnBasedCombatHandler.OnTurnEventsCompleted += LogSuccess;
@@ -71,7 +71,7 @@ public class BattleBasedTest : IntegrationTest
         _pokemonPartyHandler.ClearTestState();
         yield return new WaitForSeconds(0.05f);
     }
-    private IEnumerator LoadTestData(BattleBasedeTestData testData)
+    protected IEnumerator LoadTestData(BattleBasedTestData testData, PokemonPartyHandler pokemonPartyHandler)
     {
         var pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         
@@ -103,7 +103,7 @@ public class BattleBasedTest : IntegrationTest
                 {
                     createdPokemon.GiveItem(InstanceFactory.CreateItem(member.naturalPokemonData.heldItem));
                 }
-                _pokemonPartyHandler.AddTestMember(createdPokemon);
+                pokemonPartyHandler.AddTestMember(createdPokemon);
             }
         }
         yield return new WaitForSeconds(1f);

@@ -41,7 +41,7 @@ public class TrapEffectTest : BattleBasedTest
     private void ForceEnemySwitch()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySwap);
         _turnBasedCombatHandler.SaveEmptyTurn(BattleParticipantKey.Player);
         return;
@@ -53,7 +53,7 @@ public class TrapEffectTest : BattleBasedTest
     private void ForceEnemyMove(int moveIndex)
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
         return;
         void UseSpecificMove()
@@ -70,7 +70,7 @@ public class TrapEffectTest : BattleBasedTest
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player); 
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
         
         var copyOfSandTomb = player.statusHandler.CurrentTraps[2];

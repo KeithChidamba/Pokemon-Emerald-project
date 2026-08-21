@@ -44,7 +44,7 @@ public class HealFromWeatherTest : BattleBasedTest
         var testPassed = healthGain > baseHealthGain ||
                          healthGain < baseHealthGain;
         
-        SetStatus(testPassed);
+        SetTestStatus(testPassed);
     }
 
     protected override void DetermineTurnUsage()

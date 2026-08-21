@@ -43,12 +43,12 @@ MonoBehaviour:
   buffOrDebuffChance: 0
   description: prevents the foe from switching
   dynamicInfoModules:
-  - rid: 6968282678780231681
+  - rid: 6968282970268368896
   references:
     version: 2
     RefIds:
-    - rid: 6968282678780231681
-      type: {class: TrapData, ns: , asm: Assembly-CSharp}
+    - rid: 6968282970268368896
+      type: {class: TrapDataInfo, ns: , asm: Assembly-CSharp}
       data:
         trapType: 0
         trapDuration: 0

@@ -108,30 +108,48 @@ public class AbilityHandler : BattleParticipantModule
         participant.canBeFlinched = false;
         _abilityTriggered = true;
     }
-    
     private void Guts()
     {
         if (_abilityTriggered) return;
-        _turnBasedCombatHandler.SubToMoveExecution(ActivateGuts);
+        
+        _moveUsageHandler.RefreshStat(Stat.Attack, participant);
+        
+        _moveUsageHandler.OnStatusEffectHit += CheckForGutsCondition;
+        _moveUsageHandler.SubToMoveStatUpdate(AccountForGuts);
+        
+        _onAbilityReset += () =>
+        {
+            _moveUsageHandler.OnStatusEffectHit -= CheckForGutsCondition;
+            _moveUsageHandler.UnsubscribeFromStatUpdate(AccountForGuts);
+        }; 
+        
         _abilityTriggered = true;
         return;
-        IEnumerator ActivateGuts(BattleParticipant currentParticipant)
+        void CheckForGutsCondition(BattleParticipant currentParticipant, StatusEffect statusEffect)
         {
-            if (currentParticipant.participantKey != participant.participantKey) yield break;
-            
-            if (participant.pokemon.statusEffect == StatusEffect.None) yield break;
-            
-            var attackBuffData = new StatChangeTransitData(participant, Stat.Attack, true, 1);
-            
-            _moveUsageHandler.InitiateStatChange(attackBuffData,false);
-            _turnBasedCombatHandler.OnTurnEventsCompleted += RemoveSubscription;
-            
-            yield break;
-            void RemoveSubscription()
+            if (currentParticipant.participantKey != participant.participantKey)
             {
-                _turnBasedCombatHandler.OnTurnEventsCompleted -= RemoveSubscription;
-                _turnBasedCombatHandler.UnsubscribeFromMoveExecution(ActivateGuts);
+                return;
             }
+            _moveUsageHandler.RefreshStat(Stat.Attack, participant);
+        }
+        float AccountForGuts(BattleParticipant currentParticipant,float unmodifiedStat,Stat stat)
+        {
+            if (currentParticipant.participantKey != participant.participantKey)
+            {
+                Debug.Log($"guts checked for participant {currentParticipant.participantKey}");
+                return unmodifiedStat;
+            }
+            if (participant.pokemon.statusEffect != StatusEffect.None)
+            {
+                Debug.Log($"guts checked for {stat}");
+                if (stat == Stat.Attack)
+                {
+                    return unmodifiedStat * 1.5f;
+                }
+            }
+            Debug.Log($"guts saw no status");
+            return unmodifiedStat;
         }
     }
     private void Levitate()

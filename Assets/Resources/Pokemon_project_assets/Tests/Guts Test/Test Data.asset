@@ -23,9 +23,19 @@ MonoBehaviour:
       - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
     specificNature: {fileID: 11400000, guid: e0f6390577d6c2748a9b90e74bd07a44, type: 2}
     specificGender: 1
-    nickName: 
+    specificAbility: {fileID: 0}
+    nickName: gutsy
   testEnemyData:
     trainerDisplayName: Test Grunt Guts
     battleType: 0
     pokemonParty:
     - {fileID: 11400000, guid: a55872cf1e6c61ca6b3ace0f143ef30b, type: 2}
+  wildPokemonData:
+    naturalPokemonData:
+      pokemon: {fileID: 0}
+      pokemonLevel: 0
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet: []
+    biome: 0

@@ -48,7 +48,7 @@ public class IdentifyTargetMoveTest : BattleBasedTest
     private void HijackEnemyForFreeSwitch()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
         _battleHandler.OnSwitchOut += CheckMoveEffectRemoval;
         _pokemonPartyHandler.SwapToPartner();

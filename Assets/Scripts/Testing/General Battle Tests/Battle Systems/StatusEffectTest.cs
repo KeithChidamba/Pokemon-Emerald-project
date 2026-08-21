@@ -133,7 +133,7 @@ public class StatusEffectTest : BattleBasedTest
         {
             if (enemy.pokemon.statusEffect==StatusEffect.BadlyPoison)
             {
-                enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+                enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
                 enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySwap);
                 void ForceEnemySwap()
                 {
@@ -144,7 +144,7 @@ public class StatusEffectTest : BattleBasedTest
             //freeze has a test case that requires it's status to remain
             else if (enemy.pokemon.statusEffect != StatusEffect.Freeze)
             {
-                enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Natural);
+                enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Natural);
                 enemy.pokemon.hp = enemy.pokemon.maxHp;
                 enemy.statusHandler.RemoveStatusEffect(true);
             }

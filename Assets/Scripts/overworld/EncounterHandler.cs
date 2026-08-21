@@ -65,10 +65,11 @@ public class EncounterHandler : MonoBehaviour,IInjectable
         var randomLevel = Utility.RandomRange(tableData.minimumLevelOfPokemon, tableData.maximumLevelOfPokemon);
         
         _pokemonOperationsHandler.CreateSpecificPokemon(StartBattle,pokemonData.pokemon,randomLevel,pokemonData.evolutionFormNumber);
+        return;
         void StartBattle(Pokemon wildPokemon)
         {
             OnEncounterTriggered?.Invoke(wildPokemon,source);
-            StartCoroutine(_battleHandler.StartWildBattle(wildPokemon,biome));
+            _battleHandler.StartWildBattle(wildPokemon,biome);
         }
     }
 }

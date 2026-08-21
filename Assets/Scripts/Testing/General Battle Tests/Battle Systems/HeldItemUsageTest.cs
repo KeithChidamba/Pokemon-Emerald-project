@@ -37,7 +37,7 @@ public class HeldItemUsageTest : BattleBasedTest
     private void SetupPlayerHealthAndAttack()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         //sonic boom
         enemy.pokemonTrainerAI.AssignBehaviorAction(()=>ForceSpecificMove());
         

@@ -34,7 +34,7 @@ public class InnerFocusTest : BattleBasedTest
         _sequencer.UseMove();//bite
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseMove);
         return;
         void UseMove()

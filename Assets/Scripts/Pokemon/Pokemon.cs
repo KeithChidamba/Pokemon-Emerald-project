@@ -179,6 +179,9 @@ public class Pokemon : ScriptableObject
         _pokemonPartyHandler = serviceContainer.Resolve<PokemonPartyHandler>();
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
     }
+    /// <summary>
+    /// Resets move data in case of in-battle modification
+    /// </summary>
     public void ResetMoveData()
     {
         List<MoveSaveData> uniqueMoveData = new ();

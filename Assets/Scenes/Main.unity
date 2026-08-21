@@ -1355,10 +1355,12 @@ MonoBehaviour:
   isActive: 0
   activeForBattle: 0
   canAttack: 1
-  isFlinched: 0
-  isConfused: 0
-  isInfatuated: 0
   canBeDamaged: 1
+  isFlinched: 0
+  canBeFlinched: 1
+  isConfused: 0
+  canBeInfatuated: 1
+  isInfatuated: 0
   semiInvulnerabilityData:
     semiInvulnerabilities: []
     displayMessage: 
@@ -1381,8 +1383,6 @@ MonoBehaviour:
   canEscape: 1
   playerHpSlider: {fileID: 1011505838}
   hpSliderImage: {fileID: 112600289}
-  playerExpSlider: {fileID: 0}
-  singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 1440765415}
   currentCoolDown:
@@ -1406,6 +1406,8 @@ MonoBehaviour:
     isCoolingDown: 0
     isExecutionTurn: 0
   additionalTypeImmunity: {fileID: 0}
+  playerExpSlider: {fileID: 0}
+  singleBattleUI: []
   expReceivers: []
   handlingFaintEvent: 0
   barriers: []
@@ -4434,10 +4436,12 @@ MonoBehaviour:
   isActive: 0
   activeForBattle: 0
   canAttack: 1
-  isFlinched: 0
-  isConfused: 0
-  isInfatuated: 0
   canBeDamaged: 1
+  isFlinched: 0
+  canBeFlinched: 1
+  isConfused: 0
+  canBeInfatuated: 1
+  isInfatuated: 0
   semiInvulnerabilityData:
     semiInvulnerabilities: []
     displayMessage: 
@@ -4460,8 +4464,6 @@ MonoBehaviour:
   canEscape: 1
   playerHpSlider: {fileID: 149919497}
   hpSliderImage: {fileID: 300664127}
-  playerExpSlider: {fileID: 0}
-  singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 702047357}
   currentCoolDown:
@@ -4485,6 +4487,8 @@ MonoBehaviour:
     isCoolingDown: 0
     isExecutionTurn: 0
   additionalTypeImmunity: {fileID: 0}
+  playerExpSlider: {fileID: 0}
+  singleBattleUI: []
   expReceivers: []
   handlingFaintEvent: 0
   barriers: []
@@ -430439,10 +430443,12 @@ MonoBehaviour:
   isActive: 0
   activeForBattle: 0
   canAttack: 1
-  isFlinched: 0
-  isConfused: 0
-  isInfatuated: 0
   canBeDamaged: 1
+  isFlinched: 0
+  canBeFlinched: 1
+  isConfused: 0
+  canBeInfatuated: 1
+  isInfatuated: 0
   semiInvulnerabilityData:
     semiInvulnerabilities: []
     displayMessage: 
@@ -430465,10 +430471,6 @@ MonoBehaviour:
   canEscape: 1
   playerHpSlider: {fileID: 811033647}
   hpSliderImage: {fileID: 938515349}
-  playerExpSlider: {fileID: 752174744}
-  singleBattleUI:
-  - {fileID: 752174742}
-  - {fileID: 152226811}
   doubleBattleUI: []
   participantUI: {fileID: 443644594}
   currentCoolDown:
@@ -430492,6 +430494,10 @@ MonoBehaviour:
     isCoolingDown: 0
     isExecutionTurn: 0
   additionalTypeImmunity: {fileID: 0}
+  playerExpSlider: {fileID: 752174744}
+  singleBattleUI:
+  - {fileID: 752174742}
+  - {fileID: 152226811}
   expReceivers: []
   handlingFaintEvent: 0
   barriers: []
@@ -449969,25 +449975,26 @@ MonoBehaviour:
   rightPlatform: {fileID: 1284502079}
   introTerrainBiomes: 0500000000000000010000000200000003000000040000000600000007000000
   terrainForPlatforms:
-  - {fileID: -874010096, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: 583273198, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: -1777833594, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
   - {fileID: -1777833594, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
   - {fileID: 702271055, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
-  - {fileID: -1437694016, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: -1623062410, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
   - {fileID: -1806613335, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
-  - {fileID: 137755491, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  - {fileID: 732398849, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
   - {fileID: -874010096, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
-  - {fileID: 1121865899, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
+  indoorPlatFormSprite: {fileID: 1121865899, guid: 42970c510e12392c2afdcffe242547f1, type: 3}
   playerPlatform: {fileID: 1284502080}
   enemyPlatform: {fileID: 1660854729}
   introTerrains:
-  - {fileID: -805280080, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
-  - {fileID: -1910507102, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
+  - {fileID: -664134776, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
   - {fileID: 1769414126, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
+  - {fileID: -1910507102, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
+  - {fileID: -1809845009, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
   - {fileID: -1038670608, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
   - {fileID: 442527204, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
-  - {fileID: -664134776, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
-  - {fileID: -1910507102, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
-  - {fileID: 455125190, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
+  - {fileID: -805280080, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
+  - {fileID: 1769414126, guid: 3736587372faeaf8da1f5d6937533e74, type: 3}
   terrainParallaxImage: {fileID: 19292949}
   participantIntroImages:
   - {fileID: 639456345}
@@ -450329,10 +450336,12 @@ MonoBehaviour:
   isActive: 0
   activeForBattle: 0
   canAttack: 1
-  isFlinched: 0
-  isConfused: 0
-  isInfatuated: 0
   canBeDamaged: 1
+  isFlinched: 0
+  canBeFlinched: 1
+  isConfused: 0
+  canBeInfatuated: 1
+  isInfatuated: 0
   semiInvulnerabilityData:
     semiInvulnerabilities: []
     displayMessage: 
@@ -450355,8 +450364,6 @@ MonoBehaviour:
   canEscape: 1
   playerHpSlider: {fileID: 274821928}
   hpSliderImage: {fileID: 1544117819}
-  playerExpSlider: {fileID: 0}
-  singleBattleUI: []
   doubleBattleUI: []
   participantUI: {fileID: 1656265309}
   currentCoolDown:
@@ -450380,6 +450387,8 @@ MonoBehaviour:
     isCoolingDown: 0
     isExecutionTurn: 0
   additionalTypeImmunity: {fileID: 0}
+  playerExpSlider: {fileID: 0}
+  singleBattleUI: []
   expReceivers: []
   handlingFaintEvent: 0
   barriers: []

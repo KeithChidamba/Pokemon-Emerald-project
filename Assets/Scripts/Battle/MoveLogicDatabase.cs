@@ -218,11 +218,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         
         if (victim.pokemon.hp <= 0)
         {
-            _battleHandler.OnParticipantFainted += CancelOnBattleEnd;
+            _battleHandler.OnFaintSequenceComplete += CancelOnBattleEnd;
             void CancelOnBattleEnd(BattleParticipant faintedParticipant)
             {
                 if (faintedParticipant.participantKey != victim.participantKey) return;
-                _battleHandler.OnParticipantFainted -= CancelOnBattleEnd;
+                _battleHandler.OnFaintSequenceComplete -= CancelOnBattleEnd;
                 battleEnded = _battleHandler.BattleOver;
                 awaitingFaint = false;
             }
@@ -367,7 +367,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
         if (!_battleHandler.isTrainerBattle)
         {
-            _battleHandler.EndBattle(BattleEndState.BattleTerminated,null);
+            _battleHandler.EndBattle(BattleEndState.BattleTerminated);
             _moveUsageHandler.ResetAfterBattleTermination();
             yield break;
         }

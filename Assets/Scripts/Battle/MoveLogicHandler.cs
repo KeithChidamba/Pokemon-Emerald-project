@@ -235,12 +235,12 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         
         _dialogueHandler.DisplayBattleInfo(damageModifierInfo.damageChangeMessage);
         
-        _battleHandler.OnParticipantFainted += RemoveOnFaint;
+        _battleHandler.OnFaintSequenceComplete += RemoveOnFaint;
                 
         void RemoveOnFaint(BattleParticipant faintedParticipant)
         {
             if (faintedParticipant != attacker) return;
-            _battleHandler.OnParticipantFainted -= RemoveOnFaint;
+            _battleHandler.OnFaintSequenceComplete -= RemoveOnFaint;
             damageModifier.RemoveOnSwitchOut(attacker);
         }
         
@@ -278,12 +278,12 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             newImmunityNegation.ImmunityNegationTypes.Add(PokemonType.Fighting);
             newImmunityNegation.ImmunityNegationTypes.Add(PokemonType.Normal);
             
-            _battleHandler.OnParticipantFainted += RemoveOnFaint;
+            _battleHandler.OnFaintSequenceComplete += RemoveOnFaint;
                 
             void RemoveOnFaint(BattleParticipant faintedParticipant)
             {
                 if (faintedParticipant != attacker) return;
-                _battleHandler.OnParticipantFainted -= RemoveOnFaint;
+                _battleHandler.OnFaintSequenceComplete -= RemoveOnFaint;
                 newImmunityNegation.RemoveNegationOnSwitchOut(attacker);
             }
 

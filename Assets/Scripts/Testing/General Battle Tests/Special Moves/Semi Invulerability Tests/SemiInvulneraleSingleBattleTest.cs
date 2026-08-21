@@ -46,7 +46,7 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
     private void HijackEnemyForFreeSwitch()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
         _pokemonPartyHandler.SwapToPartner();
         return;
@@ -71,7 +71,7 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         //Remove effect of hijacked turn
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Natural);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Natural);
         
         //enemy will use tackle but disguised as a counter viable move
         enemy.pokemon.moveSet[0].moveName = NameDB.GetMoveName(movesThatCounter[0]);

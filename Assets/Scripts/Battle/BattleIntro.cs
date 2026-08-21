@@ -16,6 +16,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
     public RectTransform rightPlatform;
     [SerializeField]private Biome[] introTerrainBiomes;
     public Sprite[] terrainForPlatforms;
+    public Sprite indoorPlatFormSprite;
     public Image playerPlatform;
     public Image enemyPlatform;
     public Sprite[] introTerrains;
@@ -79,6 +80,12 @@ public class BattleIntro : MonoBehaviour,IInjectable
 
     public void SetPlatformSprite()
     {
+        if (_battleHandler.isTrainerBattle)
+        {
+            playerPlatform.sprite = indoorPlatFormSprite;
+            enemyPlatform.sprite = indoorPlatFormSprite;
+            return;
+        }
         playerPlatform.sprite = terrainForPlatforms[Array.IndexOf(introTerrainBiomes, currentBiome)];
         enemyPlatform.sprite = terrainForPlatforms[Array.IndexOf(introTerrainBiomes, currentBiome)];
     }
@@ -196,7 +203,6 @@ public class BattleIntro : MonoBehaviour,IInjectable
 
     public IEnumerator PlayTrainerIntroSequence()
     {
-        string message = "";
         challengers.Clear();
         var participants = _battleHandler.GetParticipants;
 
@@ -226,7 +232,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
             }
         }
 
-        message = challengers.Count > 1? 
+        string message = challengers.Count > 1? 
                 $"{challengers[0]} and {challengers[1]} challenge you to a battle"
                 :    $"{challengers[0]} challenges you to a battle";
         
@@ -344,17 +350,16 @@ public class BattleIntro : MonoBehaviour,IInjectable
         {
             yield return _battleVisualsHandler.SendOutEnemyPokemon(swapParticipant);
         }
-        if (normalIntentionalSwitch)
+        
+        Debug.Log($"intent switch: {normalIntentionalSwitch}");
+        yield return _battleVisualsHandler.RevealPokemonAfterWithdraw(swapParticipant,normalIntentionalSwitch);
+        
+        if (!swapParticipant.isPlayer)
         {
-            yield return _battleVisualsHandler.RevealPokemonAfterWithdraw(swapParticipant);
-            if (!swapParticipant.isPlayer)
-            {
-                yield return PokemonIntroAnimation(swapParticipant);
-            }
+            yield return PokemonIntroAnimation(swapParticipant);
         }
     }
-
-
+    
     private IEnumerator PokemonIntroAnimationMovement(BattleParticipant participant)
     {
         if (participant.pokemon.statusEffect == StatusEffect.Sleep)

@@ -43,17 +43,17 @@ MonoBehaviour:
   buffOrDebuffChance: 0
   description: traps the foe in a sand tomb
   dynamicInfoModules:
-  - rid: 6968282678780231683
+  - rid: 6968282970268368899
   references:
     version: 2
     RefIds:
-    - rid: 6968282678780231683
-      type: {class: TrapData, ns: , asm: Assembly-CSharp}
+    - rid: 6968282970268368899
+      type: {class: TrapDataInfo, ns: , asm: Assembly-CSharp}
       data:
         trapType: 1
         trapDuration: 0
-        maxTrapDuration: 5
-        minTrapDuration: 2
-        onTrapMessage: ' became trapped by Sand Tomb!'
-        onHitMessage: ' is hurt by Sand Tomb!'
-        onFreeMessage: ' was freed from the Sand Tomb!'
+        maxTrapDuration: 2
+        minTrapDuration: 5
+        onTrapMessage: ' was trapped by SAND TOMB!'
+        onHitMessage: ' was hurt by Sand Tomb!'
+        onFreeMessage: ' was freed from Sand Tomb!'

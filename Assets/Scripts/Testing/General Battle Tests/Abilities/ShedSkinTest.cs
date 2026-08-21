@@ -28,7 +28,7 @@ public class ShedSkinTest : BattleBasedTest
     private void AttackNormally()
     { 
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseMove);
         _sequencer.UseMove();
         return;

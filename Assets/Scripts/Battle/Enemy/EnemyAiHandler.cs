@@ -18,7 +18,7 @@ class AiMoveScoreData
     }
 }
 
-public enum BehaviorMode
+public enum BattleAiBehaviorMode
 {
     Natural,Controlled
 }
@@ -32,7 +32,7 @@ public class EnemyAiHandler : BattleParticipantModule
     
     private Dictionary<AiFlags, Func<BattleParticipant,Move,int>> _aiLogicCalculators = new();
     private Action _currentBehaviorAction;
-    private BehaviorMode _behaviorMode;
+    private BattleAiBehaviorMode _behaviorMode;
     
     private BattleHandler _battleHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
@@ -210,7 +210,7 @@ public class EnemyAiHandler : BattleParticipantModule
         _turnBasedCombatHandler.SaveSwitchTurn(switchData);
     }
 
-    public void SetBehavior(BehaviorMode behaviorMode)
+    public void SetBehavior(BattleAiBehaviorMode behaviorMode)
     {
         _behaviorMode = behaviorMode;
     }
@@ -220,7 +220,7 @@ public class EnemyAiHandler : BattleParticipantModule
     }
     public void MakeBattleDecision()
     {
-        if (_behaviorMode==BehaviorMode.Controlled)
+        if (_behaviorMode==BattleAiBehaviorMode.Controlled)
         {
             _currentBehaviorAction?.Invoke();
             return;

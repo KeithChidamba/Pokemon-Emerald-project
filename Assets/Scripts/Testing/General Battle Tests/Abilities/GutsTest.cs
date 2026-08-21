@@ -7,10 +7,7 @@ using UnityEngine;
 public class GutsTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private MoveSequenceHandler _moveUsageHandler;
-    
+
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
     
@@ -18,9 +15,6 @@ public class GutsTest : BattleBasedTest
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
-        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
@@ -33,7 +27,7 @@ public class GutsTest : BattleBasedTest
     private void ForceSpecificMove()
     {        
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseMove);
         _sequencer.UseMove();
         return;
@@ -52,9 +46,9 @@ public class GutsTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         _testCaseHandler.AddTestCase("Player must have status and attack buff from guts",
-            () => player.pokemon.statModifiers[0].stat == Stat.Attack 
-                  && player.pokemon.attack > player.statData.attack
-                  && player.pokemon.statusEffect == StatusEffect.Paralysis);
+            () =>
+                player.pokemon.attack > player.statData.attack
+                  && player.pokemon.statusEffect == StatusEffect.BadlyPoison);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -65,7 +59,8 @@ public class GutsTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
 
         testingHandler.LogMessage($"Status effect on player: { player.pokemon.statusEffect}",TestLogType.Information);
-
+        testingHandler.LogMessage($"Attack on player: { player.pokemon.attack}/{player.statData.attack}",TestLogType.Information);
+        
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()

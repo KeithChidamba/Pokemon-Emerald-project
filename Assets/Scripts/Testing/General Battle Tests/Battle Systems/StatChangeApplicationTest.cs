@@ -36,7 +36,7 @@ public class StatChangeApplicationTest : BattleBasedTest
     {
         //don't allow enemy attack
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(()=>
             _turnBasedCombatHandler.SaveEmptyTurn(BattleParticipantKey.Enemy));
         
@@ -57,7 +57,7 @@ public class StatChangeApplicationTest : BattleBasedTest
     private void ForceEnemyMove(int moveIndex)
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
         return;
         void UseSpecificMove()

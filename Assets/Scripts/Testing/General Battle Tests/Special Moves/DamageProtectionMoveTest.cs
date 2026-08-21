@@ -26,7 +26,7 @@ public class DamageProtectionMoveTest : BattleBasedTest
         
         var testPassed = playerParticipant.pokemon.hp >= playerParticipant.pokemon.maxHp;
         
-        SetStatus(testPassed);
+        SetTestStatus(testPassed);
     }
 
     protected override void DetermineTurnUsage()

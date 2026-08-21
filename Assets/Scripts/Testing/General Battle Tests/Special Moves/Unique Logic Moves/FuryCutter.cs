@@ -45,7 +45,7 @@ public class FuryCutter : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
         //make damage test case more reliable
         player.pokemon.critChance = 0;

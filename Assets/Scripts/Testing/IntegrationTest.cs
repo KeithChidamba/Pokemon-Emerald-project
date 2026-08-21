@@ -14,7 +14,7 @@ public abstract class IntegrationTest
     }
     public virtual void Inject(ServiceContainer container) { }
 
-    public void SetStatus(bool condition)
+    public void SetTestStatus(bool condition)
     {
         testStatus = condition ? TestStatus.Passed : TestStatus.Failed;
     }

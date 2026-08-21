@@ -35,7 +35,7 @@ public class HealthDrainTest : BattleBasedTest
         var testPassed = enemy.pokemon.hp < enemy.pokemon.maxHp
             && playerParticipant.pokemon.hp > halfHp;
         
-        SetStatus(testPassed);
+        SetTestStatus(testPassed);
     }
 
     protected override void DetermineTurnUsage()

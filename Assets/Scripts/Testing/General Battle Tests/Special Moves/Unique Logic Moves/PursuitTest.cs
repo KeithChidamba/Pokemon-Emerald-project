@@ -30,14 +30,14 @@ public class PursuitTest : BattleBasedTest
     private void SwapPlayerToTriggerPursuit()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Natural);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Natural);
         _pokemonPartyHandler.SwapToPartner();
         //enemy only has pursuit so that will trigger
     }
     private void ForceEnemySwitch()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySwap);
         
         //pursuit

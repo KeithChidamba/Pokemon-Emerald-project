@@ -55,9 +55,10 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         clearWeather = new WeatherCondition(Weather.Clear);
         CurrentWeather = clearWeather;
     }
-
+    
     public void SubToMoveExecution(Func<BattleParticipant,IEnumerator> subscriber)
     {
+        //Debug.Log($"Added - {subscriber.Method.Name}/{subscriber.GetHashCode()}");
         if (!_moveExecutionHandlers.Contains(subscriber))
         {
             _moveExecutionHandlers.Add(subscriber);
@@ -65,11 +66,14 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         else
         {
             Debug.LogError("Duplicate Subscriber for move execution");
-        }
+        } 
+        //Debug.Log($"Move execution subscribers: {_moveExecutionHandlers.Count}");
     }
     public void UnsubscribeFromMoveExecution(Func<BattleParticipant,IEnumerator> subscriber)
     {
+        //Debug.Log($"Removed - {subscriber.Method.Name}/{subscriber.GetHashCode()}");
         _moveExecutionHandlers.Remove(subscriber);
+        //Debug.Log($"Move execution subscribers: {_moveExecutionHandlers.Count}");
     }
     private void AddTurn(Turn turn)
     {
@@ -191,6 +195,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         currentTurnIndex = 0;
         CurrentWeather = clearWeather;
         ClearTurn();
+        _moveExecutionHandlers.Clear();
         StopAllCoroutines();
     }
     
@@ -565,7 +570,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             swap.participant.ResetParticipantState();
             swap.participant.pokemonTrainerAI.SwapIndexes(swap.partyPosition, swap.memberToSwapWith);
             var enemyParty = swap.participant.pokemonTrainerAI.TrainerParty;
-            yield return _battleIntroHandler.SwitchInPokemon(swap.participant,enemyParty[swap.partyPosition]);
+            yield return _battleIntroHandler.SwitchInPokemon(swap.participant,enemyParty[swap.partyPosition],!forcedSwap);
         }
     }
 

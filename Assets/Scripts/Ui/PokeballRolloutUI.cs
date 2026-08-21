@@ -18,6 +18,7 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     public Sprite healthyPokeballSlot;
     public Sprite afflictedPokeballSlot;
     public Sprite faintedPokeballSlot;
+    private Vector2 _defaultPosition;
     
     private BattleVisuals _battleVisualsHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
@@ -33,8 +34,9 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     }
     public void OnInject()
     {
-        _battleHandler.OnBattleEnd += ResetPokeballs;
         _rectTransform = GetComponent<RectTransform>();
+        _defaultPosition = _rectTransform.anchoredPosition;
+        _battleHandler.OnBattleEnd += ResetPokeballs;
     }
 
     public IEnumerator ShowPokeballs()
@@ -135,6 +137,6 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
             pokeball.anchoredPosition = startPos.anchoredPosition;
         }
         gameObject.SetActive(false);
-        _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? -_battleVisualsHandler.outOfViewDistance :_battleVisualsHandler.outOfViewDistance);
+        _rectTransform.anchoredPosition = _defaultPosition;
     }
 }

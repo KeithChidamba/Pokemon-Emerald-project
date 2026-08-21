@@ -45,7 +45,7 @@ public class InfatuationEffectTest : BattleBasedTest
     private void AttackNormally()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Natural);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Natural);
         enemy.pokemon.moveSet[0].isSureHit = true;
         _sequencer.UseMove();//tackle
     }
@@ -56,7 +56,7 @@ public class InfatuationEffectTest : BattleBasedTest
         enemy.pokemon.gender = gender;
         player.pokemon.gender = Gender.Female;
         
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
         
         player.pokemon.moveSet[0].priority = 100;
@@ -69,7 +69,7 @@ public class InfatuationEffectTest : BattleBasedTest
     private void HijackEnemyForFreeSwitch()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
         _pokemonPartyHandler.SwapToPartner();
     }

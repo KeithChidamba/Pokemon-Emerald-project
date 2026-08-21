@@ -61,10 +61,9 @@ public class BattleHandler : MonoBehaviour, IInjectable
     public List<EvolutionInBattleData> evolutionQueue;
     private PlayerTurnUsage _previousTurnUsage;
     /// <summary>
-    /// Should only be used when notification that a faint has occured
-    /// is not urgent
+    /// Used when checking the state of a specific participant after fainting
     /// </summary>
-    public event Action<BattleParticipant> OnParticipantFainted;
+    public event Action<BattleParticipant> OnFaintSequenceComplete;
     public event Action OnBattleEnd;
 
     public event Action<bool> OnBattleResult;
@@ -390,7 +389,12 @@ public class BattleHandler : MonoBehaviour, IInjectable
         yield return new WaitForSecondsRealtime(1f);
         _dialogueHandler.EndDialogue();
     }
-    public IEnumerator StartWildBattle(Pokemon enemy,Biome biome)
+
+    public void StartWildBattle(Pokemon enemy,Biome biome)
+    {
+        StartCoroutine(ProcessWildBattle(enemy,biome));
+    }
+    public IEnumerator ProcessWildBattle(Pokemon enemy,Biome biome)
     {
         StartCoroutine(_gameUIHandler.FadeInBlackScreen());
         _pokemonPartyHandler.SortByFainted();
@@ -693,7 +697,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
             
             yield return faintedParticipant.HandleFaintLogic();
             
-            OnParticipantFainted?.Invoke(faintedParticipant);
+            OnFaintSequenceComplete?.Invoke(faintedParticipant);
             
             if (BattleInProgress)
             {   
@@ -732,7 +736,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         yield return _dialogueHandler.AwaitAllDialogue();
     }
     
-    public void EndBattle(BattleEndState state,Pokemon lastDefeatedOpponent)
+    public void EndBattle(BattleEndState state,Pokemon lastDefeatedOpponent = null)
     {
         if (BattleOver) return;
         battleEndState = state;
@@ -773,7 +777,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
                         
                         yield return _battleIntroHandler.ShowEnemiesAfterBattle();
                         _dialogueHandler.DisplayBattleInfo(anyEnemy.battleLossMessage);
-                        var moneyGained = baseMoneyPayout * lastDefeatedOpponent.currentLevel * PrizeMoneyModifier();
+                        var moneyGained = baseMoneyPayout * lastDefeatedOpponent?.currentLevel * PrizeMoneyModifier() ?? 0;
                         playerData.playerMoney += (int)math.floor(moneyGained);
                         _dialogueHandler.DisplayBattleInfo(playerName + " received P" + moneyGained);
                     }
@@ -855,19 +859,20 @@ public class BattleHandler : MonoBehaviour, IInjectable
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
         
-        for (var i=0;i<currentParticipants.Count;i++)
+        foreach (var participant in currentParticipants)
         {
-            currentParticipants[i].ResetImagePosition();
-            currentParticipants[i].pokemonImage.color = Color.white;
+            participant.ResetImagePosition();
+            participant.pokemonImage.color = Color.white;
             
-            if(currentParticipants[i].pokemon!=null)
+            if(participant.activeForBattle)
             {
-                currentParticipants[i].ResetParticipantState();
-                currentParticipants[i].DeactivateUI();
-                currentParticipants[i].pokemon = null;
-                currentParticipants[i].pokemonTrainerAI = null;
+                participant.DeactivateParticipant();
+                participant.ResetParticipantState();
+                participant.DeactivateUI();
+                participant.pokemon = null;
+                participant.pokemonTrainerAI = null;
             }
-            currentParticipants[i].activeForBattle = false;
+            participant.activeForBattle = false;
         }
         _battleIntroHandler.ResetParticipantIntroImages();
         OnBattleResult?.Invoke(battleEndState == BattleEndState.PlayerWon);
@@ -914,7 +919,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
                 }
                 if (random < 5)
                 {
-                    EndBattle(BattleEndState.PlayerRanAway,null);
+                    EndBattle(BattleEndState.PlayerRanAway);
                 }
                 else
                 {

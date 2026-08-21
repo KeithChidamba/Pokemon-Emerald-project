@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -5,6 +6,9 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
 {
     public BattleParticipant participant;
     [SerializeField]private bool inBattle;
+    
+    private Action _currentBehaviorAction;
+    private BattleAiBehaviorMode _behaviorMode;
     
     private TurnBasedCombatHandler _turnBasedCombatHandler;
     private BattleHandler _battleHandler;
@@ -20,12 +24,27 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
     public void OnInject()
     {
         _turnBasedCombatHandler.OnNewTurn += MakeBattleDecision;
-        _battleHandler.OnBattleEnd += ()=>inBattle = false;
+        _battleHandler.OnBattleEnd += ()=>
+        {
+            _currentBehaviorAction = null;
+            _behaviorMode = BattleAiBehaviorMode.Natural;
+            inBattle = false;
+        };
     }
+
     public void SetBattleState()
     {
         inBattle = true;
     }
+    public void SetBehavior(BattleAiBehaviorMode behaviorMode)
+    {
+        _behaviorMode = behaviorMode;
+    }
+    public void AssignBehaviorAction(Action action)
+    {
+        _currentBehaviorAction = action;
+    }
+    
     private void MakeBattleDecision()
     {
         if (!inBattle) return;
@@ -34,23 +53,26 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
         {
             return;
         }
-        if (Utility.RandomChance(CommonRandom.Rnd70) || !participant.canEscape)
+        if (_behaviorMode == BattleAiBehaviorMode.Controlled)
+        {
+            _currentBehaviorAction?.Invoke();
+            return;
+        }
+        if(Utility.RandomChance(CommonRandom.Rnd30) || participant.canEscape)
+        {
+            inBattle = false;
+            _battleHandler.EndBattle(BattleEndState.PokemonRanAway);
+        }
+        else
         {
             var randMove = Utility.RandomRange(0, participant.pokemon.moveSet.Count);
             //attack player, since its single battle
             _battleHandler.UseMove(participant.pokemon.moveSet[randMove],participant,BattleParticipantKey.Player);
         }
-        else
-        {
-            inBattle = false;
-            _battleHandler.EndBattle(BattleEndState.PokemonRanAway,null);
-        }
     }
     public IEnumerator EndWildBattle()
     {
-        _battleHandler.EndBattle(BattleEndState.PlayerWon, null);
+        _battleHandler.EndBattle(BattleEndState.PlayerWon);
         yield return null;
     }
-    
-    
 }

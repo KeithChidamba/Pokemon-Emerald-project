@@ -12,9 +12,6 @@ public class ThunderTest : BattleBasedTest
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
     
-    private Func<Move,bool>[] _thunderTestCases = new Func<Move,bool>[2];
-    private bool[] _thunderTestResults = {false,false};
-    
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
@@ -28,10 +25,9 @@ public class ThunderTest : BattleBasedTest
         testExitCondition = TestCompletionCondition.EndManually;
         //Thunder -> Rain, sure hit is part of test case, so remove modification
         _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(0,0,false));
-        _thunderTestCases[0] = (move) => move.isSureHit;
+        
         //Thunder -> Sunlight, needs sure hit modification
         _sequencer.AddAction(()=>ForceEnemyMoveAndAttack(0,1,true));
-        _thunderTestCases[1] = (move) => move.moveAccuracy<=50f;
         
         _moveUsageHandler.OnMoveHit += CheckThunderMoveState;
     }
@@ -39,14 +35,23 @@ public class ThunderTest : BattleBasedTest
     {
         if(attacker.participantKey==BattleParticipantKey.Player)
         {
-            var index = _sequencer.GetTestCaseIndex();
-            _thunderTestResults[index] = _thunderTestCases[index].Invoke(moveUsed);
+            var caseIndex = _sequencer.GetTestCaseIndex();
+            if (caseIndex == 0)
+            {
+                _testCaseHandler.AddTestCase("Rain must ensure thunder hits",
+                    () => moveUsed.isSureHit);
+            }
+            else
+            {
+                _testCaseHandler.AddTestCase("Sunlight must lower accuracy of thunder",
+                    () => moveUsed.moveAccuracy <= 50f);
+            }
         }
     }
     private void ForceEnemyMoveAndAttack(int moveIndex,int enemyMoveIndex,bool isSureHit)
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
         
         _sequencer.UseMove(moveIndex,isSureHit);
@@ -61,12 +66,6 @@ public class ThunderTest : BattleBasedTest
     }
     public override IEnumerator BeginTest()
     {
-        _testCaseHandler.AddTestCase("Rain must ensure thunder hits",
-            () => _thunderTestResults[0]);
-        
-        _testCaseHandler.AddTestCase("Sunlight must lower accuracy of thunder",
-            () => _thunderTestResults[1]);
-        
         yield return HandleBattleState();
         onTestResult.Invoke();
     }
@@ -80,8 +79,12 @@ public class ThunderTest : BattleBasedTest
                                   $"/{enemy.pokemon.maxHp}",TestLogType.Health);
         testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
                                   $"/{player.pokemon.maxHp}",TestLogType.Health);
-
-        _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        
+        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        if (!caseExists)
+        {
+            CheckTestEnd();
+        }
         return;
         void CheckTestEnd()
         {

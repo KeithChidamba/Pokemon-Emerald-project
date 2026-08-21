@@ -65,12 +65,13 @@ public class TestCaseHandler
       {
          if (!testCaseResult.condition.Invoke())
          {
-            _testHandler.LogMessage($"Test case({testCaseResult.caseIndex + 1}) failed due to violation" +
-                                    $" of rule ({testCaseResult.message})", TestLogType.Error);
+            _testHandler.LogMessage($"Test case({testCaseResult.caseIndex + 1}) FAILED due to violation" +
+                                    $" of case ({testCaseResult.message})", TestLogType.Error);
             failureCallBack?.Invoke();
          }
          else
          {
+            _testHandler.LogMessage($"Test case({testCaseResult.caseIndex + 1}) PASSED ({testCaseResult.message})", TestLogType.TestCase);
             successCallBack?.Invoke();
          }
          return true;

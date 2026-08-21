@@ -40,13 +40,37 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
         _battleHandler.OnBattleEnd += ()=> _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
+
+        _moveUsageHandler.SubToMoveStatUpdate(CheckStatModifiers);
         
         _statusEffectMethods.Add(StatusEffect.Freeze,FreezeCheck);
         _statusEffectMethods.Add(StatusEffect.Sleep,SleepCheck);
         _statusEffectMethods.Add(StatusEffect.Paralysis,ParalysisCheck);
         _stateControl = StatusHandlingState.Normal;
     }
-    
+
+    private float CheckStatModifiers(BattleParticipant currentParticipant,float unmodifiedStat,Stat stat)
+    {
+        if (currentParticipant.participantKey != participant.participantKey) return unmodifiedStat;
+        
+        //Account for stat drops caused by status
+        switch (participant.pokemon.statusEffect)
+        {
+            case StatusEffect.Burn:
+                if (stat == Stat.Attack)
+                {
+                    return unmodifiedStat / 2f;
+                }
+                break;
+            case StatusEffect.Paralysis:
+                if (stat == Stat.Speed)
+                {
+                    return unmodifiedStat / 4f;
+                }
+                break;
+        }
+        return unmodifiedStat;
+    }
     public void StunCheck()
     {
         if (!participant.isActive) return;
@@ -302,10 +326,11 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         }
     }
     public IEnumerator NotifyHealing(BattleParticipant currentParticipant)
-    {//only for freeze and sleep
+    {
         if (currentParticipant.participantKey != participant.participantKey) yield break;
         if (!participant.isActive) yield break;
         if (!_healed || participant.pokemon.statusEffect==StatusEffect.None) yield break;
+        
         switch (participant.pokemon.statusEffect)
         {
             case StatusEffect.Sleep:

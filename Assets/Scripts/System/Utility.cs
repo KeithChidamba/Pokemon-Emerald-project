@@ -12,7 +12,7 @@ public enum CommonRandom
     Rnd50 = 50,
     Rnd33 = 33,
     Rnd25 = 25,
-    Rnd20 = 20,
+    Rnd30 = 30,
     Rnd15 = 15,
     Rnd10 = 10,
     Rnd5 = 5

@@ -30,7 +30,7 @@ public class HazeTest : BattleBasedTest
     private void ForceEnemyMoveAndAttack(int moveIndex,int enemyMoveIndex)
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemonTrainerAI.SetBehavior(BehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
         
         _sequencer.UseMove(moveIndex);

@@ -27,7 +27,7 @@ public class ConsecutiveMoveTest : BattleBasedTest
 
         var testPassed = enemy.pokemon.hp < enemy.pokemon.maxHp;
         
-        SetStatus(testPassed);
+        SetTestStatus(testPassed);
     }
 
     protected override void DetermineTurnUsage()

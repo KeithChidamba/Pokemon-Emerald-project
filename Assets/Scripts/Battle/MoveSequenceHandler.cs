@@ -32,7 +32,8 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     public event Action<BattleParticipant,BattleParticipant,Move> OnMoveHit;
     public event Action<BattleParticipant,StatusEffect> OnStatusEffectHit;
     public event Action OnMoveComplete;
-
+    private List<Func<BattleParticipant, float, Stat, float>> _statModifiers = new();
+    
     private DialogueHandler _dialogueHandler;
     private BattleVisuals _battleVisualsHandler;
     private BattleHandler _battleHandler;
@@ -51,8 +52,33 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
 
     public void OnInject()
     {
-        _battleHandler.OnBattleEnd += ()=> _onFieldDamageModifiers.Clear();
+        _battleHandler.OnBattleEnd += ClearState;
     }
+
+    private void ClearState()
+    {
+        _onFieldDamageModifiers.Clear();
+    }
+    public void SubToMoveStatUpdate(Func<BattleParticipant, float, Stat, float> subscriber)
+    {
+        Debug.Log($"stat update : Added - {subscriber.Method.Name}/{subscriber.GetHashCode()}");
+        if (!_statModifiers.Contains(subscriber))
+        {
+            _statModifiers.Add(subscriber);
+        }
+        else
+        {
+            Debug.LogError("Duplicate Subscriber for stat update");
+        } 
+        Debug.Log($"stat update subscribers: {_statModifiers.Count}");
+    }
+    public void UnsubscribeFromStatUpdate(Func<BattleParticipant, float, Stat, float> subscriber)
+    {
+        Debug.Log($"stat update : Removed - {subscriber.Method.Name}/{subscriber.GetHashCode()}");
+        _statModifiers.Remove(subscriber);
+        Debug.Log($"Stat Update subscribers: {_statModifiers.Count}");
+    }
+    
     public void BeginMoveExecution(Turn turn)
     {
         doingMove = true;
@@ -89,7 +115,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                     new (TrapEnemy, move.canTrap),
                     new (InfatuateEnemy, move.canInfatuate)
                 };
-                _battleHandler.OnParticipantFainted += CancelMoveSequence;
+                _battleHandler.OnFaintSequenceComplete += CancelMoveSequence;
                 foreach (var battleEvent in battleSequenceEvents)
                 {
                     if (_cancelMove)
@@ -103,7 +129,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                     yield return AwaitDamageDisplay();
                     yield return _dialogueHandler.AwaitAllDialogue();
                 } 
-                _battleHandler.OnParticipantFainted -= CancelMoveSequence;
+                _battleHandler.OnFaintSequenceComplete -= CancelMoveSequence;
             }
         }
         
@@ -855,11 +881,43 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         switch (stat)
         {
             case Stat.Attack:
-                receiver.pokemon.attack = GetUpdatedStat(receiver.statData.attack,statChangeData,false);
+                receiver.pokemon.attack = GetUpdatedStat(
+                    receiver.statData.attack, statChangeData, false);
+                break;
+
+            case Stat.Defense:
+                receiver.pokemon.defense = GetUpdatedStat(
+                    receiver.statData.defense, statChangeData, false);
+                break;
+
+            case Stat.SpecialAttack:
+                receiver.pokemon.specialAttack = GetUpdatedStat(
+                    receiver.statData.spAtk, statChangeData, false);
+                break;
+
+            case Stat.SpecialDefense:
+                receiver.pokemon.specialDefense = GetUpdatedStat(
+                    receiver.statData.spDef, statChangeData, false);
                 break;
 
             case Stat.Speed:
-                receiver.pokemon.speed = GetUpdatedStat(receiver.statData.speed, statChangeData, false);
+                receiver.pokemon.speed = GetUpdatedStat(
+                    receiver.statData.speed, statChangeData, false);
+                break;
+
+            case Stat.Accuracy:
+                receiver.pokemon.accuracy = GetUpdatedStat(
+                    receiver.statData.accuracy, statChangeData, false);
+                break;
+
+            case Stat.Evasion:
+                receiver.pokemon.evasion = GetUpdatedStat(
+                    receiver.statData.evasion, statChangeData, false);
+                break;
+
+            case Stat.Crit:
+                receiver.pokemon.critChance = GetUpdatedStat(
+                    receiver.statData.crit, statChangeData, false);
                 break;
         }
     }
@@ -877,25 +935,21 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             //remove because it's neutral, but still return that neutral stat value
             data.receiver.pokemon.statModifiers.RemoveAll(b => b.stat == data.stat);
         }
-        var updatedStat =  ModifyStatValue(data.stat, unmodifiedStatValue, statChange.stage);
+        var updatedStat= ModifyStatValue(data.stat, unmodifiedStatValue, statChange.stage);
         
-        //Account for stat drops caused by status
-        switch (data.receiver.pokemon.statusEffect)
+        float statAfterExternalModifiers = updatedStat;
+        Debug.Log($"Initial stat value: {statAfterExternalModifiers}");
+        foreach (var handler in _statModifiers)
         {
-            case StatusEffect.Burn:
-                if (data.stat == Stat.Attack)
-                {
-                    updatedStat /= 2f;
-                }
-                break;
-            case StatusEffect.Paralysis:
-                if (data.stat == Stat.Speed)
-                {
-                    updatedStat /= 4f;
-                }
-                break;
+            var currentUpdate = handler.Invoke(data.receiver,statAfterExternalModifiers,data.stat);
+            if(statAfterExternalModifiers > currentUpdate || statAfterExternalModifiers < currentUpdate)
+            {
+                Debug.Log($"accounted for {data.stat}");
+            }
+            statAfterExternalModifiers = currentUpdate;
         }
-        return updatedStat;
+        Debug.Log($"Final stat value: {statAfterExternalModifiers}");
+        return Mathf.FloorToInt(statAfterExternalModifiers);
     }
 
     private float ModifyStatValue(Stat stat, float unmodifiedStatValue ,int stage)
@@ -904,11 +958,11 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         {
             case Stat.Accuracy:
             case Stat.Evasion:
-                return math.trunc(unmodifiedStatValue * _accuracyAndEvasionLevels[stage+6]);
+                return Mathf.FloorToInt(unmodifiedStatValue * _accuracyAndEvasionLevels[stage+6]);
             case Stat.Crit:
                 return _critLevels[stage];
             default:
-                return math.trunc(unmodifiedStatValue * _statLevels[stage+6]); 
+                return Mathf.FloorToInt(unmodifiedStatValue * _statLevels[stage+6]); 
         }
     }
     public bool HasDuplicateBarrier(BattleParticipant currentParticipant,string  barrierName,bool displayMessage)
