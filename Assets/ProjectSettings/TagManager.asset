@@ -4,18 +4,20 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Switch_Area
   - Water
+  - Encounter
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Door
   - Water
   - UI
   - Interactable
-  - Movement blockers
-  - Player
-  - NPC
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -41,10 +43,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: npc body
-    uniqueID: 120089069
-    locked: 0
-  - name: npc head
-    uniqueID: 914418801
     locked: 0
