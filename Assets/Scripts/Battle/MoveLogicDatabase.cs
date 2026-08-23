@@ -126,14 +126,14 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
                 _dialogueHandler.DisplayBattleInfo("But it failed!");
             }
            
-            _moveUsageHandler.OnDamageDeal -= attacker.currentCoolDown.StoreDamage;
+            _moveUsageHandler.OnMoveHit -= attacker.currentCoolDown.StoreDamage;
             attacker.currentCoolDown.ResetState();
             yield return null;
         }
         else
         {
             attacker.currentCoolDown.UpdateCoolDown(2,currentTurn, " is storing power");//change turns back
-            _moveUsageHandler.OnDamageDeal += attacker.currentCoolDown.StoreDamage;
+            _moveUsageHandler.OnMoveHit += attacker.currentCoolDown.StoreDamage;
         }
        
     }

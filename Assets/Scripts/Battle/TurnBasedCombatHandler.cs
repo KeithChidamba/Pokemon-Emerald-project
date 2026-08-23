@@ -15,6 +15,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     
     public event Action OnTurnsCompleted;
     public event Action OnTurnEventsCompleted;
+    
     public int CurrentTurnIndex => currentTurnIndex;
     [SerializeField]private int currentTurnIndex;
     
@@ -341,8 +342,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             
             if (!IsValidParticipant(currentTurn,attacker)) continue;
             
-            yield return attacker.heldItemHandler.CheckForUsableItem();
-            yield return victim.heldItemHandler.CheckForUsableItem();
+            yield return attacker.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.BeforeMoveExecution);
+            yield return victim.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.BeforeMoveExecution);
             
             if (!IsValidParticipantState(victim))
             {
@@ -394,8 +395,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 yield return _moveUsageHandler.AwaitMoveCompletion();
                 yield return _battleHandler.AwaitFaintQueue();
                 
-                yield return attacker.heldItemHandler.CheckForUsableItem();
-                yield return victim.heldItemHandler.CheckForUsableItem();
+                yield return attacker.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.AfterMoveExecution);
+                yield return victim.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.AfterMoveExecution);
             }
             else
             {
@@ -414,7 +415,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         var validList = _battleHandler.GetValidParticipants();
         foreach (var participant in validList)
         {
-            yield return participant.heldItemHandler.CheckForUsableItem();
+            yield return participant.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.OnTurnsComplete);
             yield return participant.statusHandler.CheckStatus();
         }
         yield return _battleHandler.AwaitFaintQueue();

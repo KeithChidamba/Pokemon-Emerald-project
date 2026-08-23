@@ -13,6 +13,10 @@ public class AbilityHandler : BattleParticipantModule
     private AbilityName _currentAbility;
     private readonly Dictionary<AbilityName, Action> _abilityMethods = new ();
     private readonly Dictionary<AbilityName, DamageBuffAbilityData> _damageBuffCombinations = new();
+    /// <summary>
+    /// Stat -> initial stat value -> final stat value
+    /// </summary>
+    public event Func<Stat,float, float> OnStatModified;
     
     private DialogueHandler _dialogueHandler;
     private BattleHandler _battleHandler;
@@ -108,23 +112,36 @@ public class AbilityHandler : BattleParticipantModule
         participant.canBeFlinched = false;
         _abilityTriggered = true;
     }
+    public float AccountForStatChange(Stat statToModify,float initialStat)
+    {
+        return OnStatModified?.Invoke(statToModify, initialStat) ?? initialStat;
+    }
     private void Guts()
     {
         if (_abilityTriggered) return;
-        
-        _moveUsageHandler.RefreshStat(Stat.Attack, participant);
-        
+
+        OnStatModified += AccountForGuts;
         _moveUsageHandler.OnStatusEffectHit += CheckForGutsCondition;
-        _moveUsageHandler.SubToMoveStatUpdate(AccountForGuts);
         
         _onAbilityReset += () =>
         {
             _moveUsageHandler.OnStatusEffectHit -= CheckForGutsCondition;
-            _moveUsageHandler.UnsubscribeFromStatUpdate(AccountForGuts);
+            OnStatModified -= AccountForGuts;
         }; 
         
         _abilityTriggered = true;
         return;
+        float AccountForGuts(Stat statToModify,float initialStat)
+        {
+            if (statToModify == Stat.Attack)
+            {
+                if (participant.pokemon.statusEffect != StatusEffect.None)
+                {
+                    return initialStat * 1.5f;
+                }
+            }
+            return initialStat;
+        }
         void CheckForGutsCondition(BattleParticipant currentParticipant, StatusEffect statusEffect)
         {
             if (currentParticipant.participantKey != participant.participantKey)
@@ -132,24 +149,6 @@ public class AbilityHandler : BattleParticipantModule
                 return;
             }
             _moveUsageHandler.RefreshStat(Stat.Attack, participant);
-        }
-        float AccountForGuts(BattleParticipant currentParticipant,float unmodifiedStat,Stat stat)
-        {
-            if (currentParticipant.participantKey != participant.participantKey)
-            {
-                Debug.Log($"guts checked for participant {currentParticipant.participantKey}");
-                return unmodifiedStat;
-            }
-            if (participant.pokemon.statusEffect != StatusEffect.None)
-            {
-                Debug.Log($"guts checked for {stat}");
-                if (stat == Stat.Attack)
-                {
-                    return unmodifiedStat * 1.5f;
-                }
-            }
-            Debug.Log($"guts saw no status");
-            return unmodifiedStat;
         }
     }
     private void Levitate()
@@ -304,7 +303,7 @@ public class AbilityHandler : BattleParticipantModule
         _abilityTriggered = true;
         _onAbilityReset += ()=> _moveUsageHandler.OnMoveHit -= GiveStatic;
         return;
-        void GiveStatic(BattleParticipant attacker,BattleParticipant victim,Move moveUsed)
+        void GiveStatic(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
         {
             if (victim.participantKey != participant.participantKey) return;
             if (attacker.participantKey == participant.participantKey) return;

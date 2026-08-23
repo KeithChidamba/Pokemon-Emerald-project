@@ -43,11 +43,11 @@ public class FlailTest : BattleBasedTest
         _moveUsageHandler.OnMoveHit += TrackDamage;
     }
 
-    private void TrackDamage(BattleParticipant attacker,BattleParticipant victim,Move move)
+    private void TrackDamage(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
     {
         if(attacker.participantKey==BattleParticipantKey.Player)
         {
-            _moveDamageList.Add(move.moveDamage);
+            _moveDamageList.Add(moveUsed.moveDamage);
         }
     }
     private void ForceEnemyMoveAndAttack(int moveIndex,int enemyMoveIndex, float hpLevel)

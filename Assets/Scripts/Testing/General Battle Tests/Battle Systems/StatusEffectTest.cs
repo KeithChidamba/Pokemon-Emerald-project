@@ -76,7 +76,6 @@ public class StatusEffectTest : BattleBasedTest
         
         _testCaseHandler.AddTestCase( "Victim has to suffer burn", 
             () => enemy.pokemon.hp < enemy.pokemon.maxHp
-                  && enemy.pokemon.attack < enemy.statData.attack
                   && enemy.pokemon.statusEffect == StatusEffect.Burn);
         
         _testCaseHandler.AddTestCase("Victim has to be frozen", 

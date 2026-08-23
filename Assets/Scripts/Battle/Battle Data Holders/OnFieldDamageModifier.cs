@@ -26,7 +26,7 @@ public class OnFieldDamageModifier
     public void RemoveOnSwitchOut(BattleParticipant participant)
     {
         if(!removeOnSwitch)return;
-        if (participant != _participant) return;
+        if (participant.participantKey != _participant.participantKey) return;
         _battleHandler.OnSwitchOut -= RemoveOnSwitchOut;
         _moveUsageHandler.RemoveFieldDamageModifier(modifierInfo.modifierSource);
     }

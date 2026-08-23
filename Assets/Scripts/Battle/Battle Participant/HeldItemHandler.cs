@@ -2,28 +2,46 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+public enum HeldItemEffectExecution
+{
+    BeforeMoveExecution,
+    AfterMoveExecution,
+    OnTurnsComplete
+}
 [Serializable]
 public class HeldItemHandler : BattleParticipantModule
 {
     private MoveSequenceHandler _moveUsageHandler;
     private DialogueHandler _dialogueHandler;
+    private BattleHandler _battleHandler;
+    /// <summary>
+    /// Stat -> initial stat value -> final stat value
+    /// </summary>
+    public event Func<Stat,float, float> OnStatModified;
+
+    private bool _itemEffectActivated;
     
     public HeldItemHandler(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        
+        
     }
+
     void DepleteHeldItem(Item heldItem)
     {
         heldItem.quantity = heldItem.isHeldItem? 1 : heldItem.quantity-1; 
     }
-    public IEnumerator CheckForUsableItem()
+    public IEnumerator CheckForUsableItem(HeldItemEffectExecution effectExecution)
     {
         if (!participant.pokemon.hasItem) yield break;
         
         var heldItem = participant.pokemon.heldItem;
         if (heldItem.quantity == 0 && !heldItem.isHeldItem)
-        {//remove consumable held items that are depleted, not ones that just have special functionality
+        {
+            //remove consumable held items that are depleted, not ones that just have special functionality
             participant.pokemon.RemoveHeldItem(); yield break; 
         }
         if (!heldItem.canBeUsedInBattle) yield break;
@@ -39,9 +57,47 @@ public class HeldItemHandler : BattleParticipantModule
             case ItemType.Status:
                 yield return CheckStatusCondition(heldItem);
                 break;
-            //in the future, if there's need to add special held items like focus sash, create new type of item and add it to this switch
+            case ItemType.HeldItem:
+                yield return ResolveItemLogic(heldItem);
+                break;
         }
         yield return _dialogueHandler.AwaitAllDialogue();
+    }
+    public float AccountForStatChange(Stat statToModify,float initialStat)
+    {
+        return OnStatModified?.Invoke(statToModify, initialStat) ?? initialStat;
+    }
+    private IEnumerator ResolveItemLogic(Item heldItem)
+    {
+        var type = heldItem.GetDynamicModule<BattleHeldItemTypeInfo>().heldItemType;
+        switch (type)
+        {
+            case BattleHeldItem.ChoiceBand:
+            {
+                OnStatModified += AccountForChoiceBand;
+                _battleHandler.OnSwitchOut += RemoveOnSwitchOut;
+                _moveUsageHandler.RefreshStat(Stat.Attack, participant);
+                break;
+                void RemoveOnSwitchOut(BattleParticipant switchOutParticipant)
+                {
+                    if (participant.participantKey != switchOutParticipant.participantKey) return;
+                    _battleHandler.OnSwitchOut -= RemoveOnSwitchOut;
+                    OnStatModified -= AccountForChoiceBand;
+                }
+                float AccountForChoiceBand(Stat statToModify,float initialStat)
+                {
+                    if (statToModify == Stat.Attack)
+                    {
+                        if (participant.pokemon.statusEffect != StatusEffect.None)
+                        {
+                            return initialStat * 1.5f;
+                        }
+                    }
+                    return initialStat;
+                }
+            }
+        }
+        yield return null;
     }
     private IEnumerator DetermineBerryEffect(Item heldItem)
     {

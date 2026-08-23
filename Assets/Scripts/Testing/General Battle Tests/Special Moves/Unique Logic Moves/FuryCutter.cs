@@ -34,11 +34,11 @@ public class FuryCutter : BattleBasedTest
         _moveUsageHandler.OnMoveHit += TrackDamage;
     }
 
-    private void TrackDamage(BattleParticipant attacker,BattleParticipant victim,Move move)
+    private void TrackDamage(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
     {
         if(attacker.participantKey == BattleParticipantKey.Player)
         {
-            _previousDamageList.Add(move.moveDamage);
+            _previousDamageList.Add(moveUsed.moveDamage);
         }
     }
     private void ForceEnemyMoveAndAttack(int moveIndex,int enemyMoveIndex)

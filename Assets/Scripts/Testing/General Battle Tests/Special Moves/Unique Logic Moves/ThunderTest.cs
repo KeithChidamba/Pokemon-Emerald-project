@@ -31,7 +31,7 @@ public class ThunderTest : BattleBasedTest
         
         _moveUsageHandler.OnMoveHit += CheckThunderMoveState;
     }
-    private void CheckThunderMoveState(BattleParticipant attacker,BattleParticipant victim,Move moveUsed)
+    private void CheckThunderMoveState(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
     {
         if(attacker.participantKey==BattleParticipantKey.Player)
         {

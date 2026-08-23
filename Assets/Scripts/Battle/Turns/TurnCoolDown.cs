@@ -28,7 +28,7 @@ public class TurnCoolDown
     }
     public void ResetState()
     {
-        _moveUsageHandler.OnDamageDeal -= StoreDamage;
+        _moveUsageHandler.OnMoveHit -= StoreDamage;
         numTurns = 0;
         message = string.Empty;
         turnData = null;
@@ -36,9 +36,9 @@ public class TurnCoolDown
         isCoolingDown = false;
         isExecutionTurn = false;
     }
-    public void StoreDamage(float damage,BattleParticipant victim)
+    public void StoreDamage(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
     {
         if (victim != participant) return;
-       turnData.move.moveDamage += damage;
+       turnData.move.moveDamage += finalDamage;
     }
 }

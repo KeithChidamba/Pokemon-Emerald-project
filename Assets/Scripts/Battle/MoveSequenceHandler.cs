@@ -7,7 +7,11 @@ using UnityEngine;
 
 public enum DamageCalculationModifier
 {
-    Barrier,Ability,FieldModifiers,SemiInvulnerable
+    Barrier,Ability,FieldModifiers,SemiInvulnerable,StatusEffect
+}
+public enum StatChangeModifier
+{
+    Ability,HeldItem,StatusEffect
 }
 public class MoveSequenceHandler:MonoBehaviour,IInjectable
 {
@@ -25,14 +29,26 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     private bool _processingOrder;
     [SerializeField]private bool displayingDamage;
     [SerializeField]private bool displayingHealthGain;
-    
+    /// <summary>
+    /// Represents the initial damage value before modifiers, used for
+    /// allowing abilities to influence damage
+    /// </summary>
     public event Func<BattleParticipant,BattleParticipant,Move,float,float> OnDamageCalc;
+    /// <summary>
+    /// [For Testing] Modifier source -> initial damage -> final damage.
+    /// Users of this specific event (Tests) will check if the damage changed themselves
+    /// </summary>
     public event Action<DamageCalculationModifier,float, float> OnDamageModified;
-    public event Action<float,BattleParticipant> OnDamageDeal;
-    public event Action<BattleParticipant,BattleParticipant,Move> OnMoveHit;
+    /// <summary>
+    /// [For Testing] Modifier source -> Stat -> initial stat value -> final stat value
+    /// </summary>
+    public event Action<BattleParticipant,StatChangeModifier,Stat,float,float> OnStatModified;
+    /// <summary>
+    /// End of damage calculation -> attacker,victim,move,final move damage
+    /// </summary>
+    public event Action<BattleParticipant,BattleParticipant,Move,float> OnMoveHit;
     public event Action<BattleParticipant,StatusEffect> OnStatusEffectHit;
     public event Action OnMoveComplete;
-    private List<Func<BattleParticipant, float, Stat, float>> _statModifiers = new();
     
     private DialogueHandler _dialogueHandler;
     private BattleVisuals _battleVisualsHandler;
@@ -59,26 +75,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     {
         _onFieldDamageModifiers.Clear();
     }
-    public void SubToMoveStatUpdate(Func<BattleParticipant, float, Stat, float> subscriber)
-    {
-        Debug.Log($"stat update : Added - {subscriber.Method.Name}/{subscriber.GetHashCode()}");
-        if (!_statModifiers.Contains(subscriber))
-        {
-            _statModifiers.Add(subscriber);
-        }
-        else
-        {
-            Debug.LogError("Duplicate Subscriber for stat update");
-        } 
-        Debug.Log($"stat update subscribers: {_statModifiers.Count}");
-    }
-    public void UnsubscribeFromStatUpdate(Func<BattleParticipant, float, Stat, float> subscriber)
-    {
-        Debug.Log($"stat update : Removed - {subscriber.Method.Name}/{subscriber.GetHashCode()}");
-        _statModifiers.Remove(subscriber);
-        Debug.Log($"Stat Update subscribers: {_statModifiers.Count}");
-    }
-    
+
     public void BeginMoveExecution(Turn turn)
     {
         doingMove = true;
@@ -240,19 +237,25 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, struggle, damageDealt) ?? damageDealt;
         damageAfterAbilityBuff = Mathf.FloorToInt(damageAfterAbilityBuff);
+        
         if (damageAfterAbilityBuff > damageDealt)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
         }
-        
-        int finalDamage = Mathf.FloorToInt(AccountForVictimsBarriers(struggle, victim, damageAfterAbilityBuff));
-        if(finalDamage > damageAfterAbilityBuff || finalDamage < damageAfterAbilityBuff)
+
+        float damageAfterStatusEffect = struggleUser.statusHandler.AccountForStatusInDamage(struggle,damageAfterAbilityBuff);
+        if (damageAfterStatusEffect > damageAfterAbilityBuff || damageAfterStatusEffect < damageAfterAbilityBuff)
         {
-            OnDamageModified?.Invoke(DamageCalculationModifier.Barrier, damageAfterAbilityBuff, finalDamage);
+            OnDamageModified?.Invoke(DamageCalculationModifier.StatusEffect,damageAfterAbilityBuff,damageAfterStatusEffect);
         }
         
-        OnDamageDeal?.Invoke(finalDamage, victim);
-        OnMoveHit?.Invoke(struggleUser,victim,struggle);
+        int finalDamage = Mathf.FloorToInt(AccountForVictimsBarriers(struggle, victim, damageAfterStatusEffect));
+        if(finalDamage > damageAfterStatusEffect || finalDamage < damageAfterStatusEffect)
+        {
+            OnDamageModified?.Invoke(DamageCalculationModifier.Barrier, damageAfterStatusEffect, finalDamage);
+        }
+
+        OnMoveHit?.Invoke(struggleUser,victim,struggle,finalDamage);
         return finalDamage;
     }
 
@@ -329,11 +332,15 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
         }
         
-        int damageAfterFieldModifiers = Mathf.FloorToInt(ApplyFieldDamageModifiers(damageAfterAbilityBuff,move.type.typeEnum));
+        float damageAfterStatusEffect = attacker.statusHandler.AccountForStatusInDamage(move,damageAfterAbilityBuff);
+        if (damageAfterStatusEffect > damageAfterAbilityBuff || damageAfterStatusEffect < damageAfterAbilityBuff)
+        {
+            OnDamageModified?.Invoke(DamageCalculationModifier.StatusEffect,damageAfterAbilityBuff,damageAfterStatusEffect);
+        }
         
-        //Users of this specific event will check if the damage changed themselves
-        OnDamageModified?.Invoke(DamageCalculationModifier.FieldModifiers,damageAfterAbilityBuff,damageAfterFieldModifiers);
+        int damageAfterFieldModifiers = Mathf.FloorToInt(ApplyFieldDamageModifiers(damageAfterStatusEffect,move.type.typeEnum));
         
+        OnDamageModified?.Invoke(DamageCalculationModifier.FieldModifiers,damageAfterStatusEffect,damageAfterFieldModifiers);
         
         int finalDamage = Mathf.FloorToInt(AccountForVictimsBarriers(move,victim,damageAfterFieldModifiers));
         if(finalDamage > damageAfterFieldModifiers || finalDamage < damageAfterFieldModifiers)
@@ -341,8 +348,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             OnDamageModified?.Invoke(DamageCalculationModifier.Barrier, damageAfterFieldModifiers, finalDamage);
         }
         
-        OnDamageDeal?.Invoke(finalDamage,victim);
-        OnMoveHit?.Invoke(attacker,victim,move);
+        OnMoveHit?.Invoke(attacker,victim,move,finalDamage);
         return finalDamage;
     }
 
@@ -375,6 +381,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         }
         return currentDamage * modifier;
     }
+    
     private float AccountForVictimsBarriers(Move move,BattleParticipant victim,float damage)
     {
         foreach (var barrier in victim.barriers)
@@ -388,11 +395,11 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     public void DisplayEffectiveness(float typeEffectiveness,BattleParticipant victim)
     {
         if ((int)math.trunc(typeEffectiveness) == 1) return;
-        var message = "";
+        string message;
         if (typeEffectiveness == 0)
-            message= "It doesn't affect "+victim.pokemon.pokemonDisplayName+"!";
+            message = "It doesn't affect "+victim.pokemon.pokemonDisplayName+"!";
         else
-            message=(typeEffectiveness > 1)?"It's Super effective!":"It's not very effective!";
+            message = typeEffectiveness > 1? "It's Super effective!":"It's not very effective!";
         _dialogueHandler.DisplayBattleInfo(message);
     }
     private float SetAtkDefRatio(int crit, bool isSpecial, BattleParticipant currentAttacker, BattleParticipant victim)
@@ -878,48 +885,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     public void RefreshStat(Stat stat, BattleParticipant receiver)
     {
         var statChangeData = new StatChangeTransitData(receiver, stat, true, 0);
-        switch (stat)
-        {
-            case Stat.Attack:
-                receiver.pokemon.attack = GetUpdatedStat(
-                    receiver.statData.attack, statChangeData, false);
-                break;
-
-            case Stat.Defense:
-                receiver.pokemon.defense = GetUpdatedStat(
-                    receiver.statData.defense, statChangeData, false);
-                break;
-
-            case Stat.SpecialAttack:
-                receiver.pokemon.specialAttack = GetUpdatedStat(
-                    receiver.statData.spAtk, statChangeData, false);
-                break;
-
-            case Stat.SpecialDefense:
-                receiver.pokemon.specialDefense = GetUpdatedStat(
-                    receiver.statData.spDef, statChangeData, false);
-                break;
-
-            case Stat.Speed:
-                receiver.pokemon.speed = GetUpdatedStat(
-                    receiver.statData.speed, statChangeData, false);
-                break;
-
-            case Stat.Accuracy:
-                receiver.pokemon.accuracy = GetUpdatedStat(
-                    receiver.statData.accuracy, statChangeData, false);
-                break;
-
-            case Stat.Evasion:
-                receiver.pokemon.evasion = GetUpdatedStat(
-                    receiver.statData.evasion, statChangeData, false);
-                break;
-
-            case Stat.Crit:
-                receiver.pokemon.critChance = GetUpdatedStat(
-                    receiver.statData.crit, statChangeData, false);
-                break;
-        }
+        InitiateStatChange(statChangeData, false);
     }
 
     private float GetUpdatedStat(float unmodifiedStatValue, StatChangeTransitData data,bool canDisplayChange)
@@ -935,21 +901,19 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             //remove because it's neutral, but still return that neutral stat value
             data.receiver.pokemon.statModifiers.RemoveAll(b => b.stat == data.stat);
         }
+        //stat stage modifiers
         var updatedStat= ModifyStatValue(data.stat, unmodifiedStatValue, statChange.stage);
-        
-        float statAfterExternalModifiers = updatedStat;
-        Debug.Log($"Initial stat value: {statAfterExternalModifiers}");
-        foreach (var handler in _statModifiers)
-        {
-            var currentUpdate = handler.Invoke(data.receiver,statAfterExternalModifiers,data.stat);
-            if(statAfterExternalModifiers > currentUpdate || statAfterExternalModifiers < currentUpdate)
-            {
-                Debug.Log($"accounted for {data.stat}");
-            }
-            statAfterExternalModifiers = currentUpdate;
-        }
-        Debug.Log($"Final stat value: {statAfterExternalModifiers}");
-        return Mathf.FloorToInt(statAfterExternalModifiers);
+        //Ability modifiers
+        float statAfterAbilityModifiers = Mathf.FloorToInt(data.receiver.abilityHandler.AccountForStatChange(data.stat,updatedStat));
+        OnStatModified?.Invoke(data.receiver,StatChangeModifier.Ability,data.stat,updatedStat,statAfterAbilityModifiers);
+        //held items
+        float statAfterHeldItemModifiers = Mathf.FloorToInt(data.receiver.heldItemHandler.AccountForStatChange(data.stat, statAfterAbilityModifiers));
+        OnStatModified?.Invoke(data.receiver,StatChangeModifier.HeldItem,data.stat,statAfterAbilityModifiers,statAfterHeldItemModifiers);
+        //Status Effects
+        float statAfterStatusEffectModifiers = Mathf.FloorToInt(data.receiver.statusHandler.AccountForStatChange(data.stat,statAfterHeldItemModifiers));
+        OnStatModified?.Invoke(data.receiver,StatChangeModifier.StatusEffect,data.stat,statAfterHeldItemModifiers,statAfterStatusEffectModifiers);
+            
+        return statAfterStatusEffectModifiers;
     }
 
     private float ModifyStatValue(Stat stat, float unmodifiedStatValue ,int stage)
