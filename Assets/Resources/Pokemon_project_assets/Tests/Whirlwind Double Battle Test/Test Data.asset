@@ -26,6 +26,18 @@ MonoBehaviour:
     specificGender: 1
     specificAbility: {fileID: 0}
     nickName: wolfy
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+      pokemonLevel: 24
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: b04f3b4b7d66f9c5f8f97d31bcdd878a, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 2
+    specificAbility: {fileID: 0}
+    nickName: fox
   testEnemyData:
     trainerDisplayName: Test Grunt Whirlwind
     battleType: 1
@@ -33,6 +45,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: f693d13ce010e5ea39304f484814ff03, type: 2}
     - {fileID: 11400000, guid: 3849ce03276a344cb992421da6fb1c03, type: 2}
     - {fileID: 11400000, guid: 67ebbf3e6497503c7914376f89655083, type: 2}
+    - {fileID: 11400000, guid: 634f0c44895f890baaefb3f256f03cfd, type: 2}
   wildPokemonData:
     naturalPokemonData:
       pokemon: {fileID: 0}

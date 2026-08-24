@@ -23,7 +23,7 @@ public enum BattleAiBehaviorMode
     Natural,Controlled
 }
 [Serializable]
-public class EnemyAiHandler : BattleParticipantModule
+public class EnemyAiHandler
 {
     public TrainerData trainerData;
     public IReadOnlyList<Pokemon> TrainerParty => trainerParty;
@@ -33,6 +33,7 @@ public class EnemyAiHandler : BattleParticipantModule
     private Dictionary<AiFlags, Func<BattleParticipant,Move,int>> _aiLogicCalculators = new();
     private Action _currentBehaviorAction;
     private BattleAiBehaviorMode _behaviorMode;
+    public BattleParticipant participant;
     
     private BattleHandler _battleHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
@@ -40,14 +41,15 @@ public class EnemyAiHandler : BattleParticipantModule
     private BattleOperations _battleOperations;
     private PokemonOperations _pokemonOperations;
     
-    public EnemyAiHandler(ServiceContainer container)
+    public EnemyAiHandler(ServiceContainer container,BattleParticipant parentParticipant)
     {
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<BattleHandler>();
         _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         _battleOperations = container.Resolve<BattleOperations>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
-        
+
+        participant = parentParticipant;
         _aiLogicCalculators.Add(AiFlags.CheckBadMove ,AiCheckBadMove);
         _aiLogicCalculators.Add(AiFlags.CheckViability ,AiCheckViability);
         _aiLogicCalculators.Add(AiFlags.CheckStatus ,AiCheckStatus);
@@ -265,16 +267,8 @@ public class EnemyAiHandler : BattleParticipantModule
     }
     private void UseSelectedMove()
     {
-        bool emptyMoves = true;
-        foreach (var move in participant.pokemon.moveSet)
-        {
-            if(move.powerpoints>0)
-            {
-                emptyMoves = false;
-                break;
-            }
-        }
-
+        bool emptyMoves = participant.pokemon.moveSet.Count(m=>m.powerpoints > 0) == 0;
+       
         if (emptyMoves)
         {
             _turnBasedCombatHandler.SaveStruggleTurn(participant);

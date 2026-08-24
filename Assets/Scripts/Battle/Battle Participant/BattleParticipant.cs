@@ -6,15 +6,6 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public abstract class BattleParticipantModule
-{
-    protected BattleParticipant participant;
-    public void GetParticipant(BattleParticipant parentParticipant)
-    {
-        participant = parentParticipant;
-    }
-}
-
 public class BattleParticipant : MonoBehaviour,IInjectable
 {
     public BattleParticipantKey participantKey;
@@ -103,15 +94,10 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     }
     public void OnInject()
     {
-        heldItemHandler = new HeldItemHandler(_container);
-        statusHandler = new BattleParticipantStatusHandler(_container);
-        abilityHandler = new AbilityHandler(_container);
-        statData = new BattleParticipantStatData();
-        
-        heldItemHandler.GetParticipant(this);
-        statusHandler.GetParticipant(this);
-        abilityHandler.GetParticipant(this);
-        statData.GetParticipant(this);
+        heldItemHandler = new HeldItemHandler(_container,this);
+        statusHandler = new BattleParticipantStatusHandler(_container,this);
+        abilityHandler = new AbilityHandler(_container,this);
+        statData = new BattleParticipantStatData(this);
         
         _turnBasedCombatHandler.OnNewTurn += CheckBarrierSharing;
         _turnBasedCombatHandler.OnTurnsCompleted += CheckBarrierDuration;
@@ -124,16 +110,15 @@ public class BattleParticipant : MonoBehaviour,IInjectable
 
     public IEnumerator SetupEnemyAi(TrainerData trainerData,BattleParticipant partner = null)
     {
-        pokemonTrainerAI = new EnemyAiHandler(_container);
-        pokemonTrainerAI.GetParticipant(this);
+        pokemonTrainerAI = new EnemyAiHandler(_container,this);
+        
         yield return pokemonTrainerAI.SetupTrainerForBattle(trainerData);
         if (partner == null)
         {
             yield break;
         }
         //copy over team data to enemy partner
-        partner.pokemonTrainerAI = new EnemyAiHandler(_container);
-        partner.pokemonTrainerAI.GetParticipant(partner);
+        partner.pokemonTrainerAI = new EnemyAiHandler(_container,this);
         partner.pokemonTrainerAI.CopyPartnerData(pokemonTrainerAI.GetPartyLink(), pokemonTrainerAI.trainerData);
     }
     

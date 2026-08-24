@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class AbilityHandler : BattleParticipantModule
+public class AbilityHandler
 {
-    public event Action OnAbilityUsed;
     private Action _onAbilityReset;
-    
-    private bool _abilityTriggered;
+
     private AbilityName _currentAbility;
     private readonly Dictionary<AbilityName, Action> _abilityMethods = new ();
     private readonly Dictionary<AbilityName, DamageBuffAbilityData> _damageBuffCombinations = new();
@@ -17,13 +15,14 @@ public class AbilityHandler : BattleParticipantModule
     /// Stat -> initial stat value -> final stat value
     /// </summary>
     public event Func<Stat,float, float> OnStatModified;
+    public BattleParticipant participant;
     
     private DialogueHandler _dialogueHandler;
     private BattleHandler _battleHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
     private MoveSequenceHandler _moveUsageHandler;
     
-    public AbilityHandler(ServiceContainer container)
+    public AbilityHandler(ServiceContainer container,BattleParticipant parentParticipant)
     {
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _battleHandler = container.Resolve<BattleHandler>();
@@ -31,13 +30,8 @@ public class AbilityHandler : BattleParticipantModule
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
         _battleHandler.OnBattleEnd += ResetState;
-        _turnBasedCombatHandler.OnNewTurn += CheckAbilityUsability;
-        void CheckAbilityUsability()
-        {
-            if (!participant.isActive) return;
-            OnAbilityUsed?.Invoke();
-        }
         
+        participant = parentParticipant;
         _abilityMethods.Add(AbilityName.InnerFocus,InnerFocus);
         _abilityMethods.Add(AbilityName.PickUp,PickUp);
         _abilityMethods.Add(AbilityName.Guts,Guts);
@@ -89,10 +83,9 @@ public class AbilityHandler : BattleParticipantModule
     
     public void SetAbilityMethod()
     {
-        _abilityTriggered = false;
         _currentAbility = participant.pokemon.ability.abilityName;
         if (_abilityMethods.TryGetValue(_currentAbility, out Action abilityMethod))
-            OnAbilityUsed += abilityMethod;
+            abilityMethod();
         else
         {
             Debug.Log($"Ability '{_currentAbility}' not found!");
@@ -101,16 +94,12 @@ public class AbilityHandler : BattleParticipantModule
 
     public void ResetState()
     {
-        OnAbilityUsed = null;
-        _abilityTriggered = false;
         _onAbilityReset?.Invoke();
         _onAbilityReset = null;
     }
     private void InnerFocus()
     {
-        if (_abilityTriggered) return;
         participant.canBeFlinched = false;
-        _abilityTriggered = true;
     }
     public float AccountForStatChange(Stat statToModify,float initialStat)
     {
@@ -118,18 +107,13 @@ public class AbilityHandler : BattleParticipantModule
     }
     private void Guts()
     {
-        if (_abilityTriggered) return;
-
         OnStatModified += AccountForGuts;
-        _moveUsageHandler.OnStatusEffectHit += CheckForGutsCondition;
-        
+        participant.statusHandler.OnStatusEffectReceived += CheckForGutsCondition; 
         _onAbilityReset += () =>
         {
-            _moveUsageHandler.OnStatusEffectHit -= CheckForGutsCondition;
+            participant.statusHandler.OnStatusEffectReceived -= CheckForGutsCondition; 
             OnStatModified -= AccountForGuts;
         }; 
-        
-        _abilityTriggered = true;
         return;
         float AccountForGuts(Stat statToModify,float initialStat)
         {
@@ -142,26 +126,18 @@ public class AbilityHandler : BattleParticipantModule
             }
             return initialStat;
         }
-        void CheckForGutsCondition(BattleParticipant currentParticipant, StatusEffect statusEffect)
+        void CheckForGutsCondition(StatusEffect statusEffect)
         {
-            if (currentParticipant.participantKey != participant.participantKey)
-            {
-                return;
-            }
             _moveUsageHandler.RefreshStat(Stat.Attack, participant);
         }
     }
     private void Levitate()
     {
-        if (_abilityTriggered) return;
         participant.additionalTypeImmunity = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + nameof(PokemonType.Ground));
-        _abilityTriggered = true;
     }
     private void PickUp()
     {
-        if (_abilityTriggered) return;
         _battleHandler.OnBattleEnd += GiveItem;
-        _abilityTriggered = true;
         _onAbilityReset += ()=> _battleHandler.OnBattleEnd -= GiveItem;
         return;
         void GiveItem()
@@ -214,9 +190,7 @@ public class AbilityHandler : BattleParticipantModule
     }
     private void ApplyDamageBuffAbility()
     {
-        if (_abilityTriggered) return;
         _moveUsageHandler.OnDamageCalc += IncreaseDamage;
-        _abilityTriggered = true;
         _onAbilityReset += ()=> _moveUsageHandler.OnDamageCalc -= IncreaseDamage;
         return;
         float IncreaseDamage(BattleParticipant attacker,BattleParticipant victim,Move move, float damage)
@@ -232,14 +206,10 @@ public class AbilityHandler : BattleParticipantModule
 
     private void ArenaTrap()
     {
-        if (_abilityTriggered) return;
-        
         //first entry in battle doesn't count as switch in, so leave this here
         TrapEnemies();
-        
         _battleHandler.OnSwitchIn += TrapEnemies;
         _battleHandler.OnSwitchOut += RemoveTrap;
-        _abilityTriggered = true;
         return;
         void RemoveTrap(BattleParticipant thisParticipant)
         {
@@ -267,9 +237,7 @@ public class AbilityHandler : BattleParticipantModule
     }
     private void ShedSkin()
     {
-        if (_abilityTriggered) return;
         participant.statusHandler.OnStatusCheck += HealStatusEffect;
-        _abilityTriggered = true;
         _onAbilityReset += ()=> participant.statusHandler.OnStatusCheck -= HealStatusEffect;
         return;
         void HealStatusEffect()
@@ -298,30 +266,27 @@ public class AbilityHandler : BattleParticipantModule
     }
     private void Static()
     {
-        if (_abilityTriggered) return;
         _moveUsageHandler.OnMoveHit += GiveStatic;
-        _abilityTriggered = true;
         _onAbilityReset += ()=> _moveUsageHandler.OnMoveHit -= GiveStatic;
         return;
         void GiveStatic(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
         {
-            if (victim.participantKey != participant.participantKey) return;
             if (attacker.participantKey == participant.participantKey) return;
             if (attacker.pokemon.statusEffect != StatusEffect.None) return;
             if (!attacker.canBeDamaged) return;
             if (!moveUsed.isContact)return;
             
             //simulate a pokemon's attack
-            _moveUsageHandler.OnStatusEffectHit += NotifyStaticHit; 
+            victim.statusHandler.OnStatusEffectReceived += NotifyStaticHit; 
             var placeholderMove = ScriptableObject.CreateInstance<Move>();
             placeholderMove.statusEffect = StatusEffect.Paralysis;
             _moveUsageHandler.HandleStatusApplication(attacker, placeholderMove,false);
-        }
-        //status is unused here but is required for method signature
-        void NotifyStaticHit(BattleParticipant attacker,StatusEffect status)
-        {
-            _moveUsageHandler.OnStatusEffectHit-=NotifyStaticHit; 
-            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s static paralysed "+attacker.pokemon.pokemonDisplayName);
+            return;
+            void NotifyStaticHit(StatusEffect status)
+            {
+                victim.statusHandler.OnStatusEffectReceived -= NotifyStaticHit; 
+                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s static paralysed "+attacker.pokemon.pokemonDisplayName);
+            }
         }
     }
 }

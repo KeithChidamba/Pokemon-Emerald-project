@@ -45,9 +45,9 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _logicMethods.Add(MoveName.Rest, Rest);
         _logicMethods.Add(MoveName.Endeavor, Endeavor);
         _logicMethods.Add(MoveName.Thunder, Thunder);
+        _logicMethods.Add(MoveName.Whirlwind, Whirlwind);
         
         //still need tests
-        _logicMethods.Add(MoveName.Whirlwind, Whirlwind);
         _logicMethods.Add(MoveName.SilverWind, SilverWind);
         _logicMethods.Add(MoveName.HyperBeam, Hyperbeam);
         _logicMethods.Add(MoveName.Bide, Bide);
@@ -360,6 +360,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Whirlwind(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (_battleHandler.isDoubleBattle && victim.GetPartner().participantKey == attacker.participantKey)
+        {
+            _dialogueHandler.DisplayBattleInfo("but it failed!");
+            yield break;
+        }
         if (attacker.pokemon.currentLevel < victim.pokemon.currentLevel)
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");

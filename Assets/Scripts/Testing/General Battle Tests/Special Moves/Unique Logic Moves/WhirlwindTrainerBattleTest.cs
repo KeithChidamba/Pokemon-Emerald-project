@@ -10,8 +10,8 @@ public class WhirlwindTrainerBattleTest : BattleBasedTest
     
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
-    private long _currentEnemyID;
     
+    private long _currentEnemyID;
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
@@ -23,18 +23,17 @@ public class WhirlwindTrainerBattleTest : BattleBasedTest
         
         testExitCondition = TestCompletionCondition.EndManually;
         
-         //whirlwind[should fail] -> tailwhip
-         _sequencer.AddAction(UseWhirlWind);
-         //tackle[should faint enemy] -> tailwhip
-         _sequencer.AddAction(ForceEnemyFaint);
-         //whirlwind[should work] -> tailwhip
-         _sequencer.AddAction(UseWhirlWind);
-         //tackle[should faint enemy] -> tailwhip
-         _sequencer.AddAction(ForceEnemyFaint);
-         //whirlwind[should fail -  no more available swaps] -> tailwhip
-         _sequencer.AddAction(UseWhirlWind);
-    }
-
+        //whirlwind[should fail] -> tailwhip
+        _sequencer.AddAction(UseWhirlWind);
+        //tackle[should faint enemy] -> tailwhip
+        _sequencer.AddAction(ForceEnemyFaint);
+        //whirlwind[should work] -> tailwhip
+        _sequencer.AddAction(UseWhirlWind);
+        //tackle[should faint enemy] -> tailwhip
+        _sequencer.AddAction(ForceEnemyFaint);
+        //whirlwind[should fail -  no more available swaps] -> tailwhip
+        _sequencer.AddAction(UseWhirlWind);
+    } 
     private void UseWhirlWind()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);

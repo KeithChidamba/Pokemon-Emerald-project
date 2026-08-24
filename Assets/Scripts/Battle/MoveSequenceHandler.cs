@@ -47,7 +47,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     /// End of damage calculation -> attacker,victim,move,final move damage
     /// </summary>
     public event Action<BattleParticipant,BattleParticipant,Move,float> OnMoveHit;
-    public event Action<BattleParticipant,StatusEffect> OnStatusEffectHit;
+
     public event Action OnMoveComplete;
     
     private DialogueHandler _dialogueHandler;
@@ -238,7 +238,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, struggle, damageDealt) ?? damageDealt;
         damageAfterAbilityBuff = Mathf.FloorToInt(damageAfterAbilityBuff);
         
-        if (damageAfterAbilityBuff > damageDealt)
+        if (damageAfterAbilityBuff > damageDealt || damageAfterAbilityBuff < damageDealt)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
         }
@@ -327,7 +327,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         
         var damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
         damageAfterAbilityBuff = Mathf.FloorToInt(damageAfterAbilityBuff);
-        if (damageAfterAbilityBuff > damageDealt)
+        if (damageAfterAbilityBuff > damageDealt || damageAfterAbilityBuff < damageDealt)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
         }
@@ -620,7 +620,6 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                 return;
             }
         }
-        OnStatusEffectHit?.Invoke(victim,move.statusEffect);
         if (displayMessage)
         {
             _dialogueHandler.DisplayBattleInfo($"{victim.pokemon.pokemonDisplayName} {GetStatusMessage(move.statusEffect)}");

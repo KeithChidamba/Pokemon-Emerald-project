@@ -58,9 +58,13 @@ public class StatusEffectDamageBuffTest : BattleBasedTest
         if (modifier == DamageCalculationModifier.Ability)
         {
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            testingHandler.LogMessage($"{player.pokemon.ability.abilityName} increased damage from {initialDamage} to {modifiedDamage}"
-                ,  TestLogType.Information);
-            _damageWasChanged = true;
+            _damageWasChanged = modifiedDamage < initialDamage || modifiedDamage > initialDamage;
+            if(_damageWasChanged)
+            {
+                var result = modifiedDamage > initialDamage? "increased":"decreased";
+                testingHandler.LogMessage($"{player.pokemon.ability.abilityName} {result} damage from {initialDamage} to {modifiedDamage}"
+                    ,  TestLogType.Information);
+            }
         }
     }
     protected override void DetermineSuccess()

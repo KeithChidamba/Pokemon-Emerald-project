@@ -59,7 +59,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     
     public void SubToMoveExecution(Func<BattleParticipant,IEnumerator> subscriber)
     {
-        //Debug.Log($"Added - {subscriber.Method.Name}/{subscriber.GetHashCode()}");
         if (!_moveExecutionHandlers.Contains(subscriber))
         {
             _moveExecutionHandlers.Add(subscriber);
@@ -68,13 +67,10 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         {
             Debug.LogError("Duplicate Subscriber for move execution");
         } 
-        //Debug.Log($"Move execution subscribers: {_moveExecutionHandlers.Count}");
     }
     public void UnsubscribeFromMoveExecution(Func<BattleParticipant,IEnumerator> subscriber)
     {
-        //Debug.Log($"Removed - {subscriber.Method.Name}/{subscriber.GetHashCode()}");
         _moveExecutionHandlers.Remove(subscriber);
-        //Debug.Log($"Move execution subscribers: {_moveExecutionHandlers.Count}");
     }
     private void AddTurn(Turn turn)
     {
@@ -213,7 +209,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             {
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " is confused");
                 yield return _battleVisualsHandler.DisplayConfusionVisuals(attacker);
-                if (Utility.RandomChance(CommonRandom.Rnd50))
+                if (attacker.statusHandler.AffectedByMinorStatus())
                 {
                     _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" hurt itself in its confusion");
                     yield return _moveUsageHandler.DealConfusionDamage(attacker);
@@ -224,7 +220,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             if (attacker.isInfatuated)
             {
                 _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName + " is in love ");
-                if (Utility.RandomChance(CommonRandom.Rnd50))
+                if (attacker.statusHandler.AffectedByMinorStatus())
                 {
                     _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" can’t move because of love");
                     OnAttackAttempted?.Invoke(false);
@@ -342,8 +338,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             
             if (!IsValidParticipant(currentTurn,attacker)) continue;
             
-            yield return attacker.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.BeforeMoveExecution);
-            yield return victim.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.BeforeMoveExecution);
+            yield return attacker.heldItemHandler.CheckForConsumableItem();
+            yield return victim.heldItemHandler.CheckForConsumableItem();
             
             if (!IsValidParticipantState(victim))
             {
@@ -395,8 +391,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 yield return _moveUsageHandler.AwaitMoveCompletion();
                 yield return _battleHandler.AwaitFaintQueue();
                 
-                yield return attacker.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.AfterMoveExecution);
-                yield return victim.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.AfterMoveExecution);
+                yield return attacker.heldItemHandler.CheckForConsumableItem();
+                yield return victim.heldItemHandler.CheckForConsumableItem();
             }
             else
             {
@@ -415,7 +411,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         var validList = _battleHandler.GetValidParticipants();
         foreach (var participant in validList)
         {
-            yield return participant.heldItemHandler.CheckForUsableItem(HeldItemEffectExecution.OnTurnsComplete);
+            yield return participant.heldItemHandler.CheckForConsumableItem();
             yield return participant.statusHandler.CheckStatus();
         }
         yield return _battleHandler.AwaitFaintQueue();

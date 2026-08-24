@@ -113,13 +113,13 @@ public class TestRegistry
     //tests are ran in this order
     public List<IntegrationTest> allTests = new()
     { 
-        //  new GutsTest(),
-        //  new StatusEffectTest(),
-        
+       
+    //Held Items
+        //new ConsumableHeldItemUsageTest(),
     //Special Move Logic
         //new WhirlwindWildBattleTest(),
         //new WhirlwindTrainerBattleTest(),
-        new WhirlwindDoubleBattleTest(),
+        //new WhirlwindDoubleBattleTest(),
         //new ThunderTest(),
         //new Endeavor(),
         //new RestTest(),
@@ -146,7 +146,7 @@ public class TestRegistry
         // new TrapEffectTest(),
         // new InfatuationEffectTest(),
         // new FlinchEffectTest(),
-        // new HeldItemUsageTest(),
+        
         // new StatChangeApplicationTest(),
         // new StatusEffectTest(),
         // new WeatherDamageTest(),

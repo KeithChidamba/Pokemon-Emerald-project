@@ -334,8 +334,11 @@ public class Bag : MonoBehaviour,IInjectable
          {
              return;
          }
-         
-         OnItemUsed?.Invoke(itemToUse);
+         if (itemToUse.isHeldItem)
+         {
+             _dialogueHandler.DisplayDetails("Can't use that");
+             return;
+         }
          if (_battleHandler.BattleInProgress)
          {
              if (!itemToUse.canBeUsedInBattle)
@@ -353,14 +356,17 @@ public class Bag : MonoBehaviour,IInjectable
              }
          }
          
+         OnItemUsed?.Invoke(itemToUse);
          if(itemToUse.forPartyUse)
          {
              _pokemonPartyHandler.OnMemberSelected += AllowItemUsage;
              _gameUIHandler.ViewPokemonParty(PartyUsage.ItemUsage);
          }
          else
-             _itemHandler.UseItem(itemToUse,null);
-
+         {
+             _itemHandler.UseItem(itemToUse, null);
+         }
+         return;
          void AllowItemUsage(int memberIndex)
          {
              _pokemonPartyHandler.OnMemberSelected -= AllowItemUsage;

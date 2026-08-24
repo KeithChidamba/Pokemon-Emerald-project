@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 [Serializable]
-public class BattleParticipantStatData: BattleParticipantModule
+public class BattleParticipantStatData
 {
     public float attack;
     public float defense;
@@ -14,7 +14,13 @@ public class BattleParticipantStatData: BattleParticipantModule
     public float accuracy;
     public float evasion;
     public float crit;
+
+    public BattleParticipant participant;
     
+    public BattleParticipantStatData(BattleParticipant parentParticipant)
+    {
+        participant = parentParticipant;
+    }
     public void SaveActualStats()
     {
         attack = participant.pokemon.attack;

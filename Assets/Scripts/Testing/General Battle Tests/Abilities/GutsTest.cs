@@ -7,7 +7,7 @@ using UnityEngine;
 public class GutsTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-
+    
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
     
@@ -33,7 +33,7 @@ public class GutsTest : BattleBasedTest
         return;
         void UseMove()
         {
-            //thunder wave
+            //toxic
             enemy.pokemon.moveSet[0].priority = 100;
             enemy.pokemon.moveSet[0].statusChance = 100;
             enemy.pokemon.moveSet[0].isSureHit = true;

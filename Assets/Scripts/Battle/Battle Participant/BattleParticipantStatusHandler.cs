@@ -11,7 +11,7 @@ public enum StatusHandlingState
     Normal,Permanent
 }
 [Serializable]
-public class BattleParticipantStatusHandler : BattleParticipantModule
+public class BattleParticipantStatusHandler
 {
     private int _currentStatusTurnCount;
     private int _statusDurationInTurns;
@@ -27,6 +27,8 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
     
     private readonly Dictionary<StatusEffect, Action> _statusEffectMethods = new ();
     public event Action OnStatusCheck;
+    public event Action<StatusEffect> OnStatusEffectReceived;
+    public BattleParticipant participant;
     
     private DialogueHandler _dialogueHandler;
     private BattleHandler _battleHandler;
@@ -34,7 +36,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
   
     private BattleOperations _battleOperationsHandler;
     
-    public BattleParticipantStatusHandler(ServiceContainer container)
+    public BattleParticipantStatusHandler(ServiceContainer container,BattleParticipant parentParticipant)
     {
         _battleOperationsHandler = container.Resolve<BattleOperations>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
@@ -43,6 +45,7 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         
         _battleHandler.OnBattleEnd += ()=> _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
         
+        participant = parentParticipant;
         _statusEffectMethods.Add(StatusEffect.Freeze,FreezeCheck);
         _statusEffectMethods.Add(StatusEffect.Sleep,SleepCheck);
         _statusEffectMethods.Add(StatusEffect.Paralysis,ParalysisCheck);
@@ -80,9 +83,9 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
         if (_statusEffectMethods.TryGetValue(participant.pokemon.statusEffect,out Action method))
             method();
     }
-    public void ChangeToTestingState(StatusHandlingState state)
+    public void ChangeToTestingState()
     {
-        _stateControl = state;
+        _stateControl = StatusHandlingState.Permanent;
     }
     public void GetStatusEffect(StatusEffect effect,int numTurns)
     {
@@ -106,6 +109,16 @@ public class BattleParticipantStatusHandler : BattleParticipantModule
                 SleepCheck();
                 break;
         }
+        OnStatusEffectReceived?.Invoke(participant.pokemon.statusEffect);
+    }
+
+    public bool AffectedByMinorStatus()
+    {
+        if (_stateControl != StatusHandlingState.Permanent)
+        {
+            return Utility.RandomChance(CommonRandom.Rnd50);
+        }
+        return true;
     }
     public void GetStatChangeImmunity(StatChangeability changeability,int numTurns)
     {

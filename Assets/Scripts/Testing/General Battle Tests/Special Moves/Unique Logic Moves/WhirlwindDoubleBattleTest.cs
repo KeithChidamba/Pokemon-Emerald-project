@@ -1,49 +1,77 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
  
 public class WhirlwindDoubleBattleTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private MoveSequenceHandler _moveUsageHandler;
-    
+
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
+    private long _currentEnemyID;
     
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
-        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
-        
+       
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
         testName = "Whirlwind Double Battle Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
-        
-        _sequencer.AddAction(AttackFirst);
+        //whirlwind[should fail] -> tailwhip
+        _sequencer.AddAction(()=>_sequencer.UseMove());
+        //whirlwind from team-mate [should fail] -> tailwhip
+        _sequencer.AddAction(() => _sequencer.UseMoveOnSpecific(0,
+            BattleParticipantKey.PlayerPartner,
+            BattleParticipantKey.Player));
+         
+        //tackle[should faint enemy] -> tailwhip
+        _sequencer.AddAction(ForceEnemyFaint);
+        //whirlwind on next enemy[should work] -> tailwhip
+        _sequencer.AddAction(PartnerUseWhirlwind);
+         
+        //tackle[should faint enemy] -> tailwhip
+        _sequencer.AddAction(ForceEnemyFaint);
+        //whirlwind[should fail -  no more available swaps] -> tailwhip
+        _sequencer.AddAction(PartnerUseWhirlwind);
     }
 
-    private void AttackFirst()
+    private void PartnerUseWhirlwind()
     {
-        //To make test case reliable
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
-        _sequencer.UseMove();
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
+        _currentEnemyID = enemy.pokemon.pokemonID;
+        _sequencer.UseMoveOnSpecific(0,
+            BattleParticipantKey.PlayerPartner,
+            BattleParticipantKey.EnemyPartner);
+    }
+    private void ForceEnemyFaint()
+    {
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        //ensure faint
+        enemy.pokemon.hp = 2;
+        //tackle
+        _sequencer.UseMove(1);
     }
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        var enemyPartner = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
         
-        _testCaseHandler.AddTestCase("Example Condition",
-            () => player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase("Whirlwind should fail due to level gap," +
+                                     "partner's whirlwind should fail as well",
+            () => player.pokemon.currentLevel < enemyPartner.pokemon.currentLevel);
+        
+        _testCaseHandler.AddTestCase("Enemy was fainted and partner successfully used whirlwind",
+            () => enemyPartner.pokemonTrainerAI.GetLivingPokemonCount() < enemyPartner.pokemonTrainerAI.TrainerParty.Count
+            && enemyPartner.pokemon.pokemonID != _currentEnemyID);
+        
+        _testCaseHandler.AddTestCase("Whirlwind should fail",
+            () => _currentEnemyID == enemyPartner.pokemon.pokemonID);
+        
+        //for testing purposes, disable the switch style
+        _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Set);
+
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -51,14 +79,6 @@ public class WhirlwindDoubleBattleTest : BattleBasedTest
   
     protected override void DetermineSuccess()
     {
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
-
         var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)
         {
@@ -74,7 +94,6 @@ public class WhirlwindDoubleBattleTest : BattleBasedTest
         }
         void TestCaseFailed()
         {
-            //add extra logic here
             EndTest(false);
         }
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
  
-public class HeldItemUsageTest : BattleBasedTest
+public class ConsumableHeldItemUsageTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
 
@@ -18,7 +18,7 @@ public class HeldItemUsageTest : BattleBasedTest
        
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "Held Item Usage Test";
+        testName = "Consumable Held Item Usage Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
         

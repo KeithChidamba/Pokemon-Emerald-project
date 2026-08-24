@@ -2,14 +2,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public enum HeldItemEffectExecution
-{
-    BeforeMoveExecution,
-    AfterMoveExecution,
-    OnTurnsComplete
-}
 [Serializable]
-public class HeldItemHandler : BattleParticipantModule
+public class HeldItemHandler
 {
     private MoveSequenceHandler _moveUsageHandler;
     private DialogueHandler _dialogueHandler;
@@ -18,30 +12,71 @@ public class HeldItemHandler : BattleParticipantModule
     /// Stat -> initial stat value -> final stat value
     /// </summary>
     public event Func<Stat,float, float> OnStatModified;
-
-    private bool _itemEffectActivated;
+    public BattleParticipant participant;
     
-    public HeldItemHandler(ServiceContainer container)
+    public HeldItemHandler(ServiceContainer container,BattleParticipant parentParticipant)
     {
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         _battleHandler = container.Resolve<BattleHandler>();
-        
-        
+        participant = parentParticipant;
     }
 
-    void DepleteHeldItem(Item heldItem)
+    public void SetHeldItemEffect()
     {
-        heldItem.quantity = heldItem.isHeldItem? 1 : heldItem.quantity-1; 
+        if (!participant.pokemon.hasItem) return;
+        var heldItem = participant.pokemon.heldItem;
+        if (!heldItem.canBeUsedInBattle) return;
+        if (heldItem.isHeldItem)
+        {
+            ResolveItemLogic(heldItem);
+        }
     }
-    public IEnumerator CheckForUsableItem(HeldItemEffectExecution effectExecution)
+    private void ResolveItemLogic(Item heldItem)
+    {
+        var type = heldItem.GetDynamicModule<BattleHeldItemTypeInfo>().heldItemType;
+        switch (type)
+        {
+            case BattleHeldItem.ChoiceBand:
+            {
+                OnStatModified += AccountForChoiceBand;
+                _battleHandler.OnSwitchOut += RemoveOnSwitchOut;
+                _moveUsageHandler.RefreshStat(Stat.Attack, participant);
+                break;
+
+                void RemoveOnSwitchOut(BattleParticipant switchOutParticipant)
+                {
+                    if (participant.participantKey != switchOutParticipant.participantKey) return;
+                    _battleHandler.OnSwitchOut -= RemoveOnSwitchOut;
+                    OnStatModified -= AccountForChoiceBand;
+                }
+                float AccountForChoiceBand(Stat statToModify, float initialStat)
+                {
+                    if (statToModify == Stat.Attack)
+                    {
+                        if (participant.pokemon.statusEffect != StatusEffect.None)
+                        {
+                            return initialStat * 1.5f;
+                        }
+                    }
+                    return initialStat;
+                }
+            }
+        }
+    }
+    public IEnumerator CheckForConsumableItem()
     {
         if (!participant.pokemon.hasItem) yield break;
         
         var heldItem = participant.pokemon.heldItem;
-        if (heldItem.quantity == 0 && !heldItem.isHeldItem)
+        if (heldItem.isHeldItem)
         {
-            //remove consumable held items that are depleted, not ones that just have special functionality
+            //this method is only for consumables
+            yield break;
+        }
+        
+        if (heldItem.quantity == 0)
+        {
             participant.pokemon.RemoveHeldItem(); yield break; 
         }
         if (!heldItem.canBeUsedInBattle) yield break;
@@ -57,47 +92,12 @@ public class HeldItemHandler : BattleParticipantModule
             case ItemType.Status:
                 yield return CheckStatusCondition(heldItem);
                 break;
-            case ItemType.HeldItem:
-                yield return ResolveItemLogic(heldItem);
-                break;
         }
         yield return _dialogueHandler.AwaitAllDialogue();
     }
     public float AccountForStatChange(Stat statToModify,float initialStat)
     {
         return OnStatModified?.Invoke(statToModify, initialStat) ?? initialStat;
-    }
-    private IEnumerator ResolveItemLogic(Item heldItem)
-    {
-        var type = heldItem.GetDynamicModule<BattleHeldItemTypeInfo>().heldItemType;
-        switch (type)
-        {
-            case BattleHeldItem.ChoiceBand:
-            {
-                OnStatModified += AccountForChoiceBand;
-                _battleHandler.OnSwitchOut += RemoveOnSwitchOut;
-                _moveUsageHandler.RefreshStat(Stat.Attack, participant);
-                break;
-                void RemoveOnSwitchOut(BattleParticipant switchOutParticipant)
-                {
-                    if (participant.participantKey != switchOutParticipant.participantKey) return;
-                    _battleHandler.OnSwitchOut -= RemoveOnSwitchOut;
-                    OnStatModified -= AccountForChoiceBand;
-                }
-                float AccountForChoiceBand(Stat statToModify,float initialStat)
-                {
-                    if (statToModify == Stat.Attack)
-                    {
-                        if (participant.pokemon.statusEffect != StatusEffect.None)
-                        {
-                            return initialStat * 1.5f;
-                        }
-                    }
-                    return initialStat;
-                }
-            }
-        }
-        yield return null;
     }
     private IEnumerator DetermineBerryEffect(Item heldItem)
     {
@@ -118,16 +118,16 @@ public class HeldItemHandler : BattleParticipantModule
     private IEnumerator CheckHealCondition(Item heldItem)
     {
         if(participant.pokemon.hp >= participant.pokemon.maxHp/2f) yield break;
-        
-        DepleteHeldItem(heldItem);
+
+        heldItem.quantity--;
         yield return GetHealing(heldItem);
     }    
     private IEnumerator CheckStatusCondition(Item heldItem)
     {
         if(participant.pokemon.statusEffect == StatusEffect.None) yield break;
 
-        DepleteHeldItem(heldItem);
-       yield return GetStatusHealing(heldItem);
+        heldItem.quantity--;
+        yield return GetStatusHealing(heldItem);
     }
     private IEnumerator CheckIfConfused(Item heldItem)
     {

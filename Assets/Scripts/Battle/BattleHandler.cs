@@ -546,6 +546,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         participant.statData.SaveActualStats();
         participant.ActivateParticipant(initialCall);
         participant.abilityHandler.SetAbilityMethod();
+        participant.heldItemHandler.SetHeldItemEffect();
         CheckParticipantStates(initialCall);
         OnSwitchIn?.Invoke();
         yield return null;

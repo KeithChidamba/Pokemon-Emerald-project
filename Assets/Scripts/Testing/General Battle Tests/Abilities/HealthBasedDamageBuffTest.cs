@@ -44,13 +44,18 @@ public class HealthBasedDamageBuffTest : BattleBasedTest
         {
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             
-            testingHandler.LogMessage($"{player.pokemon.ability.abilityName} increased the damage of " +
-                                      $"{player.pokemon.moveSet[0].type.typeEnum}" +
-                                      $" type move {player.pokemon.moveSet[0].moveName}",  TestLogType.Information);
+            _damageWasChanged = modifiedDamage < initialDamage || modifiedDamage > initialDamage;
+            if(_damageWasChanged)
+            {
+                var result = modifiedDamage > initialDamage? "increased":"decreased";
+                testingHandler.LogMessage($"{player.pokemon.ability.abilityName} {result} the damage of " +
+                                          $"{player.pokemon.moveSet[0].type.typeEnum}" +
+                                          $" type move {player.pokemon.moveSet[0].moveName}",  TestLogType.Information);
+                testingHandler.LogMessage($"{result} damage from {initialDamage} to {modifiedDamage}"
+                    ,  TestLogType.Calculation);
+            }
             
-            testingHandler.LogMessage($"Increased damage from {initialDamage} to {modifiedDamage}"
-                ,  TestLogType.Calculation);
-            _damageWasChanged = true;
+          
         }
     }
     public override IEnumerator BeginTest()

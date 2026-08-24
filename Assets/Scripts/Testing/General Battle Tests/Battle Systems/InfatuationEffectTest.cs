@@ -77,12 +77,18 @@ public class InfatuationEffectTest : BattleBasedTest
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.statusHandler.ChangeToTestingState();
         
-        _testCaseHandler.AddTestCase(0,"Enemy must not be infatuated",() => !enemy.isInfatuated);
-        _testCaseHandler.AddTestCase(1,"Enemy must not be infatuated",() => !enemy.isInfatuated);
-        _testCaseHandler.AddTestCase(2,"Enemy must be infatuated",() => enemy.isInfatuated);
-        _testCaseHandler.AddTestCase(4,"Enemy must not be infatuated",() => !enemy.isInfatuated);
-        _testCaseHandler.AddTestCase(5,"Player must be damaged",
+        _testCaseHandler.AddTestCase("Enemy must not be infatuated",() => !enemy.isInfatuated);
+        _testCaseHandler.AddTestCase("Enemy must not be infatuated",() => !enemy.isInfatuated);
+        _testCaseHandler.AddTestCase("Enemy must be infatuated", () => enemy.isInfatuated);
+        
+        _testCaseHandler.AddTestCase("Enemy must be infatuated and be immobilized by it(can't attack player)",
+            () => enemy.isInfatuated && player.pokemon.hp >= player.pokemon.maxHp);
+        
+        _testCaseHandler.AddTestCase("Enemy must not be infatuated(After player switch out)",
+            () => !enemy.isInfatuated);
+        _testCaseHandler.AddTestCase("Player must be damaged(No more infatuation immobilization of enemy)",
             () => player.pokemon.hp < player.pokemon.maxHp);
 
         yield return HandleBattleState();
