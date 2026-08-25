@@ -51,7 +51,7 @@ public class SemiInvulnerableDoubleBattleTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var enemyPartner = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
         
-        _testCaseHandler.AddTestCase(3,"Enemies were attacked",
+        _testCaseHandler.AddTestCase(1,"Enemies were attacked",
             () => enemy.pokemon.hp < enemy.pokemon.maxHp
             && enemyPartner.pokemon.hp < enemyPartner.pokemon.maxHp);
 

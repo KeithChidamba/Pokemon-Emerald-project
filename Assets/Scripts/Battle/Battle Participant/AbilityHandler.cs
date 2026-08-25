@@ -271,7 +271,10 @@ public class AbilityHandler
         return;
         void GiveStatic(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
         {
+            //only activates if this specific participant is hit by an enemy
             if (attacker.participantKey == participant.participantKey) return;
+            if (victim.participantKey != participant.participantKey) return;
+            
             if (attacker.pokemon.statusEffect != StatusEffect.None) return;
             if (!attacker.canBeDamaged) return;
             if (!moveUsed.isContact)return;

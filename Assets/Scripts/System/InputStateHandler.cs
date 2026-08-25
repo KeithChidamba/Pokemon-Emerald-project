@@ -40,7 +40,7 @@ public enum InputStateName
 public class InputStateHandler : MonoBehaviour,IInjectable
 {
     public InputState currentState;
-    public bool IsEmptyState =>currentState.stateName == InputStateName.Empty;
+    public bool IsEmptyState => currentState.stateName == InputStateName.Empty;
     private InputState _emptyState;
     private int[] _directionSelection = { 0, 0, 0, 0 };
     
@@ -55,7 +55,6 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     public event Action<int,bool> OnFullBoxNavigation;
     
     private bool _currentStateLoaded;
-    private bool _handlingState;
     [SerializeField]private List<InputState> stateLayers;
     [SerializeField]private List<RemovalJob> stateRemovalJobs = new();
     private bool _processingStateRemoval;
@@ -112,9 +111,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     }
     private void Update()
     {
-        _handlingState = stateLayers.Count > 0;
-        
-        if (!_handlingState) return;
+        if (stateLayers.Count == 0) return;
 
         if (InputSourceHandler.InputPressed(ControlEvent.Exit))
         {

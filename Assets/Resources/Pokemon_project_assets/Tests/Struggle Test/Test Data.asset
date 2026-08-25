@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79218e70f727cab51b39573c7a1e6e10, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+      pokemonLevel: 24
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
+      - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 1
+    specificAbility: {fileID: 0}
+    nickName: 
+  testEnemyData:
+    trainerDisplayName: Test Grunt Struggle
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: 05024d12111d1795e91a309e6b9f0bfd, type: 2}
+  wildPokemonData:
+    naturalPokemonData:
+      pokemon: {fileID: 0}
+      pokemonLevel: 0
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet: []
+    biome: 0

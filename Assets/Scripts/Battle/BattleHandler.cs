@@ -583,18 +583,10 @@ public class BattleHandler : MonoBehaviour, IInjectable
         }
     }
 
-    void LoadMoveInputAndText()
+    public void LoadMoveInputAndText()
     { 
         var currentPlayerParticipant = GetCurrentParticipant();
-        bool emptyMoves = true;
-        foreach (var move in currentPlayerParticipant.pokemon.moveSet)
-        {
-            if(move.powerpoints>0)
-            {
-                emptyMoves = false;
-                break;
-            }
-        }
+        bool emptyMoves = currentPlayerParticipant.pokemon.moveSet.Count(m=>m.powerpoints > 0) == 0;
         if (emptyMoves)
         {
             _turnBasedCombatHandler.SaveStruggleTurn(currentPlayerParticipant);
@@ -616,6 +608,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         for (var i = currentPlayerParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
             availableMovesText[i].text = "";
+        return;
         void ResetMoveUsability()
         {
             movesUI.SetActive(false);

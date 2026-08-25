@@ -118,7 +118,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
             yield break;
         }
         //copy over team data to enemy partner
-        partner.pokemonTrainerAI = new EnemyAiHandler(_container,this);
+        partner.pokemonTrainerAI = new EnemyAiHandler(_container,GetPartner());
         partner.pokemonTrainerAI.CopyPartnerData(pokemonTrainerAI.GetPartyLink(), pokemonTrainerAI.trainerData);
     }
     

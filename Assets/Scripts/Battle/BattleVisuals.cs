@@ -12,9 +12,9 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     private Vector2 _defaultParticipantImageSize;
     private Dictionary<int,int> _enemyPokeballXPositions = new()
     {
-        {2,155},
+        {2,330},
         {1,250},
-        {3,330}
+        {3,155}
     };
     private List<(Image img,Vector2 pos)> _statChangeImages=new();
     public Sprite[] statChangeSprites;
