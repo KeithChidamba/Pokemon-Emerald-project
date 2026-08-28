@@ -55,6 +55,8 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
     public List<TypeImmunityNegation> immunityNegations = new();
+    public MoveLockData currentMoveLock;
+    
     public Slider playerExpSlider;
     public GameObject[] singleBattleUI;
     

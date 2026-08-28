@@ -42,13 +42,21 @@ public class HeldItemHandler
                 OnStatModified += AccountForChoiceBand;
                 _battleHandler.OnSwitchOut += RemoveOnSwitchOut;
                 _moveUsageHandler.RefreshStat(Stat.Attack, participant);
+                _moveUsageHandler.OnMoveHit += LockFirstSuccessfulMove;
                 break;
-
+                void LockFirstSuccessfulMove(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
+                {
+                    if (attacker.participantKey != participant.participantKey) return;
+                    _moveUsageHandler.OnMoveHit -= LockFirstSuccessfulMove;
+                    participant.currentMoveLock = new MoveLockData(moveUsed);
+                }
                 void RemoveOnSwitchOut(BattleParticipant switchOutParticipant)
                 {
                     if (participant.participantKey != switchOutParticipant.participantKey) return;
                     _battleHandler.OnSwitchOut -= RemoveOnSwitchOut;
                     OnStatModified -= AccountForChoiceBand;
+                    participant.currentMoveLock.moveLocked = false;
+                    participant.currentMoveLock.moveToLock = null;
                 }
                 float AccountForChoiceBand(Stat statToModify, float initialStat)
                 {

@@ -30,21 +30,23 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     [SerializeField]private bool displayingDamage;
     [SerializeField]private bool displayingHealthGain;
     /// <summary>
-    /// Represents the initial damage value before modifiers, used for
-    /// allowing abilities to influence damage
+    /// signature(attacker,victim,moveUsed,currentDamage)
+    /// returns modified damage.
+    /// mainly used for allowing abilities to influence damage. 
     /// </summary>
     public event Func<BattleParticipant,BattleParticipant,Move,float,float> OnDamageCalc;
     /// <summary>
-    /// [For Testing] Modifier source -> initial damage -> final damage.
+    /// [For Testing] signature(Modifier source -> initial damage -> final damage).
     /// Users of this specific event (Tests) will check if the damage changed themselves
     /// </summary>
     public event Action<DamageCalculationModifier,float, float> OnDamageModified;
     /// <summary>
-    /// [For Testing] Modifier source -> Stat -> initial stat value -> final stat value
+    /// [For Testing] signature(Modifier source -> Stat -> initial stat value -> final stat value)
     /// </summary>
     public event Action<BattleParticipant,StatChangeModifier,Stat,float,float> OnStatModified;
     /// <summary>
-    /// End of damage calculation -> attacker,victim,move,final move damage
+    /// End of damage calculation -> signature(attacker,victim,move,final move damage).
+    /// This event also represents a reliable way to know a move has hit
     /// </summary>
     public event Action<BattleParticipant,BattleParticipant,Move,float> OnMoveHit;
 

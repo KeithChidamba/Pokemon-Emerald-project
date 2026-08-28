@@ -268,14 +268,25 @@ public class EnemyAiHandler
     private void UseSelectedMove()
     {
         bool emptyMoves = participant.pokemon.moveSet.Count(m=>m.powerpoints > 0) == 0;
-       
         if (emptyMoves)
         {
             _turnBasedCombatHandler.SaveStruggleTurn(participant);
             return;
         }
-        
-        var selectedMoveData = GetBestMoveDecision();
+
+        AiMoveScoreData selectedMoveData;
+        if (participant.currentMoveLock.moveLocked)
+        {
+            var listOfLockedMove = new  List<Move>
+            {
+                participant.currentMoveLock.moveToLock
+            };
+            selectedMoveData = GetBestMoveDecision(listOfLockedMove);
+        }
+        else
+        {
+            selectedMoveData = GetBestMoveDecision(participant.pokemon.moveSet);
+        }
         var selectedMove = participant.pokemon.moveSet[selectedMoveData.moveIndex];
         _battleHandler.UseMove(selectedMove,participant,selectedMoveData.enemyKey);
     }
@@ -285,7 +296,7 @@ public class EnemyAiHandler
         return trainerData.trainerAiFlags.Count == 1
                && trainerData.trainerAiFlags[0] == AiFlags.CheckSwitching;
     }
-    private AiMoveScoreData GetBestMoveDecision()
+    private AiMoveScoreData GetBestMoveDecision(List<Move> currentMoveSet)
     {
         if(AiOnlySwitching())
         {
@@ -310,7 +321,7 @@ public class EnemyAiHandler
             foreach (var enemy in participant.currentEnemies)
             {
                 if (!enemy.isActive) continue;
-                var newMoveScore = GetBestMove(enemy);
+                var newMoveScore = GetBestMove(enemy,currentMoveSet);
                 newMoveScore.enemyKey = enemy.participantKey;
                 bestMovesForEnemies.Add(newMoveScore);
             }
@@ -320,16 +331,18 @@ public class EnemyAiHandler
             return bestAttackingDecision;
         }
         //single battle
-        var singleBattleMoveScore = GetBestMove(_battleHandler.GetParticipant(BattleParticipantKey.Player));
+        var singleBattleMoveScore = GetBestMove(
+            _battleHandler.GetParticipant(BattleParticipantKey.Player)
+            ,currentMoveSet);
         return singleBattleMoveScore;
     }
-    private AiMoveScoreData GetBestMove(BattleParticipant enemy)
+    private AiMoveScoreData GetBestMove(BattleParticipant enemy,List<Move> currentMoveSet)
     {
         List<AiMoveScoreData> moveScores = new();
     
-        for (int i=0; i<participant.pokemon.moveSet.Count;i++)
+        for (int i=0; i < currentMoveSet.Count;i++)
         {
-            var currentMoveCheck = participant.pokemon.moveSet[i];
+            var currentMoveCheck = currentMoveSet[i];
             moveScores.Add(new AiMoveScoreData(i,GetMoveScore(enemy,currentMoveCheck)));
         }
     

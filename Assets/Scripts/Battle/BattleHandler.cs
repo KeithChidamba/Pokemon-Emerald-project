@@ -582,7 +582,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
             }
         }
     }
-
+    
     public void LoadMoveInputAndText()
     { 
         var currentPlayerParticipant = GetCurrentParticipant();
@@ -590,6 +590,14 @@ public class BattleHandler : MonoBehaviour, IInjectable
         if (emptyMoves)
         {
             _turnBasedCombatHandler.SaveStruggleTurn(currentPlayerParticipant);
+            return;
+        }
+        
+        if (currentPlayerParticipant.currentMoveLock.moveLocked)
+        {
+            var move = currentPlayerParticipant.currentMoveLock.moveToLock;
+            var moveIndex = currentPlayerParticipant.pokemon.moveSet.IndexOf(move);
+            AllowEnemySelection(moveIndex);
             return;
         }
         
