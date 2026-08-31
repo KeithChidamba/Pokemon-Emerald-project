@@ -54,6 +54,14 @@ public class InnerFocusTest : BattleBasedTest
             () => player.pokemon.hp < player.pokemon.maxHp
                   && !enemy.canBeFlinched);
        
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("enemy can't be flinched",
+                ()=>!enemy.canBeFlinched),
+            new("Player must be attacked because enemy can't be flinched",
+                ()=>player.pokemon.hp < player.pokemon.maxHp)
+        });
+        
         yield return HandleBattleState();
         onTestResult.Invoke();
     }

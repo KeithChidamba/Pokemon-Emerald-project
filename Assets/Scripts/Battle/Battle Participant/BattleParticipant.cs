@@ -103,7 +103,8 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         
         _turnBasedCombatHandler.OnNewTurn += CheckBarrierSharing;
         _turnBasedCombatHandler.OnTurnsCompleted += CheckBarrierDuration;
-        currentCoolDown =  new(this, _moveUsageHandler);
+        currentCoolDown = new TurnCoolDown(this, _moveUsageHandler);
+        currentMoveLock = new MoveLockData { moveLocked = false,moveToLock = null};
         _defaultImagePosition = pokemonImage.rectTransform.anchoredPosition;
         _uiRect = participantUI.GetComponent<RectTransform>();
         _defaultUIPosition = _uiRect.anchoredPosition; 

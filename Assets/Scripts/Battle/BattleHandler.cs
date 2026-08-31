@@ -175,12 +175,16 @@ public class BattleHandler : MonoBehaviour, IInjectable
             currentEnemyKey = newKey;
         }
         
-        var enemySelectables = new List<SelectableUI>();
-        for (var i = 2; i < currentParticipants.Count; i++)
+        var enemySelectables = new List<SelectableUI>
         {
-            enemySelectables.Add( new (currentParticipants[i].pokemonImage.gameObject, 
-               () => ExecutePlayersMove(currentMoveIndex,currentEnemyKey),true));
-        }
+            new(GetParticipant(BattleParticipantKey.Enemy).pokemonImage.gameObject,
+                () => ExecutePlayersMove(currentMoveIndex, currentEnemyKey)
+                , true),
+            new (GetParticipant(BattleParticipantKey.EnemyPartner).pokemonImage.gameObject, 
+                () => ExecutePlayersMove(currentMoveIndex,currentEnemyKey)
+                ,true)
+        };
+        
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleEnemySelection
             ,InputStateGroup.PokemonBattle,
             stateDirection:InputDirection.Horizontal, selectableUis:enemySelectables, selecting:true
@@ -596,7 +600,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         if (currentPlayerParticipant.currentMoveLock.moveLocked)
         {
             var move = currentPlayerParticipant.currentMoveLock.moveToLock;
-            var moveIndex = currentPlayerParticipant.pokemon.moveSet.IndexOf(move);
+            var moveIndex = currentPlayerParticipant.pokemon.moveSet.FindIndex(m=>m.moveName==move.moveName);
             AllowEnemySelection(moveIndex);
             return;
         }

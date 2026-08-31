@@ -113,10 +113,15 @@ public class StatusEffectTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         enemy.statusHandler.ChangeToTestingState();
         
-        _testCaseHandler.AddTestCase( "Victim has to suffer burn and deal reduced physical damage because of burn", 
-            () => enemy.pokemon.hp < enemy.pokemon.maxHp
-                  && enemy.pokemon.statusEffect == StatusEffect.Burn
-                  && _damageDecreased);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Victim has to suffer burn",
+                ()=> enemy.pokemon.statusEffect == StatusEffect.Burn),
+            new("Victim has to be hurt by burn",
+                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+            new("Victim deals reduced physical damage because of burn",
+                ()=> _damageDecreased)
+        });
         
         _testCaseHandler.AddTestCase("Victim has to be frozen", 
             () => !enemy.canAttack
@@ -130,24 +135,40 @@ public class StatusEffectTest : BattleBasedTest
             () => !enemy.canAttack
             && enemy.pokemon.statusEffect == StatusEffect.Sleep);
         
-        _testCaseHandler.AddTestCase( "Victim has to be poisoned", 
-            () => enemy.pokemon.hp < enemy.pokemon.maxHp
-            &&  enemy.pokemon.statusEffect == StatusEffect.Poison);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Victim has to be poisoned",
+                ()=> enemy.pokemon.statusEffect == StatusEffect.Poison),
+            new("Victim has to be hurt by poison",
+                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+        });
         
-        _testCaseHandler.AddTestCase( "Victim has to be paralyzed", 
-            () => enemy.pokemon.speed < enemy.statData.speed
-            &&  enemy.pokemon.statusEffect == StatusEffect.Paralysis);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Victim has to be paralyzed",
+                ()=> enemy.pokemon.statusEffect == StatusEffect.Paralysis),
+            new("Victim has to be slowed down",
+                ()=> enemy.pokemon.speed < enemy.statData.speed),
+        });
         
-        _testCaseHandler.AddTestCase("Victim has to be poisoned badly", 
-            () => enemy.pokemon.hp < enemy.pokemon.maxHp
-                  && enemy.pokemon.statusEffect == StatusEffect.BadlyPoison);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Victim has to be poisoned badly",
+                ()=> enemy.pokemon.statusEffect == StatusEffect.BadlyPoison),
+            new("Victim has to be hurt by poison",
+                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+        });
         
         _testCaseHandler.AddTestCase( "Victim's [Badly Poisoned] status should be reduced to [Poisoned] after it switches out", 
-            () => enemy.pokemonTrainerAI.TrainerParty[1].hp < enemy.pokemonTrainerAI.TrainerParty[1].maxHp
-                  && enemy.pokemonTrainerAI.TrainerParty[1].statusEffect == StatusEffect.Poison);
+            () => enemy.pokemonTrainerAI.TrainerParty[1].statusEffect == StatusEffect.Poison);
         
-        _testCaseHandler.AddTestCase( "Victim should be in confusion and take damage", 
-            () => enemy.isConfused && enemy.pokemon.hp < enemy.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Victim should be in confusion",
+                ()=> enemy.isConfused),
+            new("Confusion should hurt victim",
+                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+        });
         
         _testCaseHandler.AddTestCase( "Victim should be healed from confusion", 
             () => !enemy.isConfused);

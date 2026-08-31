@@ -32,11 +32,15 @@ public class ArenaTrapTest : BattleBasedTest
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        _testCaseHandler.AddTestCase("Arena trap Activated",
-            () => player.statusHandler.CurrentTraps[0].trapType
-                  == TrapDataInfo.TrapType.PersistentFromAbility
-                  && PlayerSwitchIsPrevented());
-        
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Arena trap Activated",
+                ()=>player.statusHandler.CurrentTraps[0].trapType
+                    == TrapDataInfo.TrapType.PersistentFromAbility),
+            
+            new("Player must be restricted from switching",PlayerSwitchIsPrevented),
+        });
+
         yield return HandleBattleState();
         onTestResult.Invoke();
         yield break;

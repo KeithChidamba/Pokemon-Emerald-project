@@ -21,7 +21,10 @@ public class HeldItemHandler
         _battleHandler = container.Resolve<BattleHandler>();
         participant = parentParticipant;
     }
-
+    public float AccountForStatChange(Stat statToModify,float initialStat)
+    {
+        return OnStatModified?.Invoke(statToModify, initialStat) ?? initialStat;
+    }
     public void SetHeldItemEffect()
     {
         if (!participant.pokemon.hasItem) return;
@@ -48,7 +51,7 @@ public class HeldItemHandler
                 {
                     if (attacker.participantKey != participant.participantKey) return;
                     _moveUsageHandler.OnMoveHit -= LockFirstSuccessfulMove;
-                    participant.currentMoveLock = new MoveLockData(moveUsed);
+                    participant.currentMoveLock = new MoveLockData { moveLocked = true,moveToLock = moveUsed};
                 }
                 void RemoveOnSwitchOut(BattleParticipant switchOutParticipant)
                 {
@@ -62,10 +65,7 @@ public class HeldItemHandler
                 {
                     if (statToModify == Stat.Attack)
                     {
-                        if (participant.pokemon.statusEffect != StatusEffect.None)
-                        {
-                            return initialStat * 1.5f;
-                        }
+                        return initialStat * 1.5f;
                     }
                     return initialStat;
                 }
@@ -103,10 +103,7 @@ public class HeldItemHandler
         }
         yield return _dialogueHandler.AwaitAllDialogue();
     }
-    public float AccountForStatChange(Stat statToModify,float initialStat)
-    {
-        return OnStatModified?.Invoke(statToModify, initialStat) ?? initialStat;
-    }
+
     private IEnumerator DetermineBerryEffect(Item heldItem)
     {
         var berryInfo = heldItem.GetModule<BerryInfoModule>();

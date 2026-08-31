@@ -55,13 +55,19 @@ public class LevitateTest : BattleBasedTest
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        
         _testCaseHandler.AddTestCase("Player should be damaged by ground move",
             () => player.pokemon.hp < player.pokemon.maxHp);
         
-        _testCaseHandler.AddTestCase("Player should be immune to ground move, and have levitate",
-            () => player.pokemon.hp >= player.pokemon.maxHp
-            && player.pokemon.ability.abilityName == AbilityName.Levitate
-            && player.additionalTypeImmunity.typeEnum == PokemonType.Ground);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Player should have levitate",
+                () => player.pokemon.ability.abilityName == AbilityName.Levitate),
+            new("Player should be immune to ground move",
+                () => player.additionalTypeImmunity.typeEnum == PokemonType.Ground),
+            new("Player's immunity should keep it at full health",
+                () => player.pokemon.hp >= player.pokemon.maxHp)
+        });
         
         yield return HandleBattleState();
         onTestResult.Invoke();

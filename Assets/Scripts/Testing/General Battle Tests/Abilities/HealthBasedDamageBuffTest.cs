@@ -61,7 +61,7 @@ public class HealthBasedDamageBuffTest : BattleBasedTest
     public override IEnumerator BeginTest()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-
+        
         _testCaseHandler.AddTestCase(1,"ability should increase damage",
             () => _damageWasChanged && enemy.pokemon.hp < enemy.pokemon.maxHp);
 

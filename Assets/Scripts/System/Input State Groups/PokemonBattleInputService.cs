@@ -48,7 +48,7 @@ public class PokemonBattleInputService : IInputGroup
         
         _inputStateHandler.OnInputLeft += ()=> SelectEnemy(-1);
         _inputStateHandler.OnInputRight += () => SelectEnemy(1);
-        
+        return;
         void SelectEnemy(int indexChange)
         {
             _battleHandler.ResetEnemyColor();

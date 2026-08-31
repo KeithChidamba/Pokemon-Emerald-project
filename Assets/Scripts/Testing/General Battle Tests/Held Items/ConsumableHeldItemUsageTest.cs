@@ -66,7 +66,8 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        _testCaseHandler.AddTestCase("Oran berry must heal player from damage", () => player.pokemon.hp > 10f);
+        _testCaseHandler.AddTestCase("Oran berry must heal player from damage", 
+            () => player.pokemon.hp > 10f);
         
         _testCaseHandler.AddTestCase("Cherri berry must heal player from paralysis", 
             () => player.pokemon.statusEffect == StatusEffect.None);

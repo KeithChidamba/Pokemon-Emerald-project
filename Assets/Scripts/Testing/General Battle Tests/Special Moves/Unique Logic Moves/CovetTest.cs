@@ -51,16 +51,27 @@ public class CovetTest : BattleBasedTest
         
         _testCaseHandler.AddTestCase("Covet should not take item from enemy, but deal damage",
             () => !player.pokemon.hasItem
-            && enemy.pokemon.hp<enemy.pokemon.maxHp);
+            && enemy.pokemon.hp < enemy.pokemon.maxHp);
         
-        _testCaseHandler.AddTestCase("Covet should not take item from enemy because the item is not a berry",
-            () => !player.pokemon.hasItem
-                  && enemy.pokemon.hasItem);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Covet should not take item from enemy",()=> !player.pokemon.hasItem),
+            new("Covet should hurt enemy",()=> enemy.pokemon.hp<enemy.pokemon.maxHp),
+        });
         
-        _testCaseHandler.AddTestCase($"Covet should take {_berryName} from enemy",
-            () => player.pokemon.hasItem
-                  &&  !enemy.pokemon.hasItem
-                  && player.pokemon.heldItem.itemName==_berryName);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Covet should not take item from enemy because the item is not a berry",()=> !player.pokemon.hasItem),
+            new("Enemy should still have item",()=> enemy.pokemon.hasItem),
+        });
+        
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new($"Covet should take {_berryName} from enemy",()=>  player.pokemon.hasItem),
+            new("Enemy should not have item",()=> !enemy.pokemon.hasItem),
+            new($"Player's item should be the specified berry {_berryName}",
+                () => player.pokemon.heldItem.itemName==_berryName)
+        });
         
         yield return HandleBattleState();
         onTestResult.Invoke();

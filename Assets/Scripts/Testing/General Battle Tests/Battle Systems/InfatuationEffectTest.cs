@@ -83,8 +83,12 @@ public class InfatuationEffectTest : BattleBasedTest
         _testCaseHandler.AddTestCase("Enemy must not be infatuated",() => !enemy.isInfatuated);
         _testCaseHandler.AddTestCase("Enemy must be infatuated", () => enemy.isInfatuated);
         
-        _testCaseHandler.AddTestCase("Enemy must be infatuated and be immobilized by it(can't attack player)",
-            () => enemy.isInfatuated && player.pokemon.hp >= player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Enemy must be infatuated",()=> enemy.isInfatuated),
+            new("Enemy must be immobilized by it so it can't attack player",
+                ()=> player.pokemon.hp >= player.pokemon.maxHp)
+        });
         
         _testCaseHandler.AddTestCase("Enemy must not be infatuated(After player switch out)",
             () => !enemy.isInfatuated);

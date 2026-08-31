@@ -36,9 +36,13 @@ public class StaticTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        _testCaseHandler.AddTestCase("Static ability should paralyze player after enemy is attacked",
-            () => player.pokemon.statusEffect == StatusEffect.Paralysis
-                && enemy.pokemon.hp < enemy.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("enemy should be attacked",
+                () => enemy.pokemon.hp < enemy.pokemon.maxHp),
+            new("Enemy's static ability should paralyze player",
+                ()=> player.pokemon.statusEffect == StatusEffect.Paralysis)
+        });
         
         yield return HandleBattleState();
         onTestResult.Invoke();

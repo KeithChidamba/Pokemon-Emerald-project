@@ -64,17 +64,27 @@ public class FuryCutter : BattleBasedTest
         for (int i = 1; i < 5; i++)
         {
             int repetitionCount = i;
-            _testCaseHandler.AddTestCase(i,$"Fury Cutter damage increased, count({i})",
-                () => _previousDamageList[^1] > _previousDamageList[^2]
-                      && player.previousMoveData.move.moveName == NameDB.GetMoveName(MoveName.FuryCutter)
-                      && player.previousMoveData.numRepetitions == repetitionCount);
+            
+            _testCaseHandler.AddTestCase(i,new List<TestCaseCondition>
+            {
+                new($"Fury Cutter damage increased, count({i})",
+                    () => _previousDamageList[^1] > _previousDamageList[^2]),
+                new("Check that previous is fury cutter",
+                    () => player.previousMoveData.move.moveName == NameDB.GetMoveName(MoveName.FuryCutter)),
+                new("Check that the current repetition count is correct",
+                    ()=> player.previousMoveData.numRepetitions == repetitionCount)
+            });
         }
-        _testCaseHandler.AddTestCase(5,$"Fury Cutter damage should remain the same",
-            () => Mathf.FloorToInt( _previousDamageList[^1])
-                  == Mathf.FloorToInt( _previousDamageList[^2])
-                  && player.previousMoveData.move.moveName == NameDB.GetMoveName(MoveName.FuryCutter)
-                  && player.previousMoveData.numRepetitions == 5);
-        
+        _testCaseHandler.AddTestCase(5,new List<TestCaseCondition>
+        {
+            new($"Fury Cutter damage should remain the same",
+                () => Mathf.FloorToInt( _previousDamageList[^1])
+                      == Mathf.FloorToInt( _previousDamageList[^2])),
+            new("Check that previous is fury cutter",
+                () => player.previousMoveData.move.moveName == NameDB.GetMoveName(MoveName.FuryCutter)),
+            new("Check that the current repetition count is 5",
+                ()=> player.previousMoveData.numRepetitions == 5)
+        });
         yield return HandleBattleState();
         onTestResult.Invoke();
     }

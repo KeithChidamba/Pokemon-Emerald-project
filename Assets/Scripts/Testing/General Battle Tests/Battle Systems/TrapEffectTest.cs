@@ -97,31 +97,41 @@ public class TrapEffectTest : BattleBasedTest
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player); 
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Arena trap must be in effect",
+                ()=> player.statusHandler.CurrentTraps[0].trapType
+                     == TrapDataInfo.TrapType.PersistentFromAbility),
+            new("Mean Look should be in effect",
+                ()=> player.statusHandler.CurrentTraps[1].trapType
+                     == TrapDataInfo.TrapType.PersistentFromMove),
+            new("Player must be restricted from switching",PlayerSwitchIsPrevented),
+        });
         
-        _testCaseHandler.AddTestCase("Arena trap And Mean look",
-            () => player.statusHandler.CurrentTraps[0].trapType
-                  == TrapDataInfo.TrapType.PersistentFromAbility
-                  && player.statusHandler.CurrentTraps[1].trapType
-                  == TrapDataInfo.TrapType.PersistentFromMove 
-                  && PlayerSwitchIsPrevented());
-        
-        _testCaseHandler.AddTestCase("Sand Tomb should be active,player can't switch due to sand Tomb",
-            () => player.statusHandler.CurrentTraps.Last().trapType
-                  == TrapDataInfo.TrapType.RandomDurationFromMove
-                  && PlayerSwitchIsPrevented());
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Sand Tomb should be active",
+                ()=> player.statusHandler.CurrentTraps.Last().trapType
+                     == TrapDataInfo.TrapType.RandomDurationFromMove),
+            new("player can't switch due to sand Tomb",PlayerSwitchIsPrevented),
+        });
         
         _testCaseHandler.AddTestCase("Player should be damaged due to sand Tomb",
             () => player.pokemon.hp < player.pokemon.maxHp);
         
-        _testCaseHandler.AddTestCase("Sand tomb should be gone",
-            () => 
-                player.statusHandler.CurrentTraps.Count == 2
-                && !player.canEscape);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Sand tomb should be gone, so 2 traps remain",
+                ()=> player.statusHandler.CurrentTraps.Count == 2),
+            new("Player should still be restricted",()=> !player.canEscape),
+        });
         
-        _testCaseHandler.AddTestCase("Player should be freed",
-            () => 
-                player.statusHandler.CurrentTraps.Count == 0 
-                && player.canEscape);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("All traps should be gone",
+                ()=> player.statusHandler.CurrentTraps.Count == 0),
+            new("Player should be free",()=> player.canEscape),
+        });
         
         yield return HandleBattleState();
         onTestResult.Invoke();

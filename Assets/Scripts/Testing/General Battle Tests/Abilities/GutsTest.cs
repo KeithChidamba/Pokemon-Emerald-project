@@ -45,10 +45,13 @@ public class GutsTest : BattleBasedTest
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        _testCaseHandler.AddTestCase("Player must have status and attack buff from guts",
-            () =>
-                player.pokemon.attack > player.statData.attack
-                  && player.pokemon.statusEffect == StatusEffect.BadlyPoison);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Player must be badly poisoned",
+                ()=>player.pokemon.statusEffect == StatusEffect.BadlyPoison),
+            new("Player must have status and attack buff from guts",
+                ()=>player.pokemon.attack > player.statData.attack),
+        });
         
         yield return HandleBattleState();
         onTestResult.Invoke();

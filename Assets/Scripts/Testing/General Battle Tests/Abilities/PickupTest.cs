@@ -39,6 +39,7 @@ public class PickupTest : BattleBasedTest
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        
         _testCaseHandler.AddTestCase("Player must have item",
             () => player.pokemon.hasItem 
             && player.pokemon.heldItem != null);

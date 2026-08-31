@@ -49,19 +49,30 @@ public class HazeTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
 
-        _testCaseHandler.AddTestCase("Player must have stat buffs",
-            () => player.pokemon.attack > player.statData.attack &&
-            player.pokemon.defense > player.statData.defense
-            && player.pokemon.statModifiers.Count > 0);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Player must have attack buff",
+                () => player.pokemon.attack > player.statData.attack),
+                new ("Player must have defense buff",
+                () =>   player.pokemon.defense > player.statData.defense),
+            new("Player must have stat modifiers",
+                () => player.pokemon.statModifiers.Count > 0)
+        });
         
-        _testCaseHandler.AddTestCase("Player must have no stat buff",
-            () => player.pokemon.attack <= player.statData.attack &&
-                  player.pokemon.defense <= player.statData.defense
-                  && player.pokemon.statModifiers.Count == 0
-                  
-                  && enemy.pokemon.defense >= enemy.statData.defense
-                  && enemy.pokemon.statModifiers.Count == 0);
-        
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Player must have no stat modifiers",
+                () => player.pokemon.statModifiers.Count == 0),
+            new ("Player must have no defense buff",
+                () =>  Mathf.FloorToInt(player.pokemon.defense) == Mathf.FloorToInt(player.statData.defense)),
+            new ("Player must have no attack buff",
+                () =>   Mathf.FloorToInt(player.pokemon.attack) == Mathf.FloorToInt(player.statData.attack)),
+            
+            new("Enemy must have no defense reduction",
+                () => Mathf.FloorToInt(enemy.pokemon.defense) == Mathf.FloorToInt(enemy.statData.defense)),
+            new("Enemy must have no stat modifiers",
+                () => enemy.pokemon.statModifiers.Count == 0)
+        });
         yield return HandleBattleState();
         onTestResult.Invoke();
     }

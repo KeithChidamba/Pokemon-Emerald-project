@@ -73,17 +73,27 @@ public class StruggleTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        _testCaseHandler.AddTestCase("Player and enemy must hurt each other",
-            () => player.pokemon.hp < player.pokemon.maxHp
-            && enemy.pokemon.hp < enemy.pokemon.maxHp);
-        
-        _testCaseHandler.AddTestCase("Player must hurt enemy and receive recoil",
-            () => player.pokemon.hp < player.pokemon.maxHp
-            &&  enemy.pokemon.hp < enemy.pokemon.maxHp);
-        
-        _testCaseHandler.AddTestCase("Enemy must hurt player and receive recoil",
-            () => player.pokemon.hp < player.pokemon.maxHp
-                  &&  enemy.pokemon.hp < enemy.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Player must be hurt",
+                ()=> player.pokemon.hp < player.pokemon.maxHp),
+            new("Enemy must be hurt",
+                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+        });
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Player must hurt enemy",
+                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+            new("Player must be hurt by recoil",
+                ()=> player.pokemon.hp < player.pokemon.maxHp)
+        });
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Enemy must hurt player",
+                ()=> player.pokemon.hp < player.pokemon.maxHp),
+            new("Enemy must be hurt by recoil",
+                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp)
+        });
         
         yield return HandleBattleState();
         onTestResult.Invoke();

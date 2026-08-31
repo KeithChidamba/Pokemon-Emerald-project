@@ -71,9 +71,13 @@ public class StatChangeApplicationTest : BattleBasedTest
         
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        _testCaseHandler.AddTestCase("Player has higher Attack and Defense",
-            () => player.pokemon.attack > player.statData.attack
-                && player.pokemon.defense > player.statData.defense);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Player has higher Attack",
+                ()=> player.pokemon.attack > player.statData.attack),
+            new("Player has higher Defense",
+                ()=>  player.pokemon.defense > player.statData.defense)
+        });
         
         _testCaseHandler.AddTestCase("Player has regular Defense",
             () => (int)player.pokemon.defense == (int)player.statData.defense);

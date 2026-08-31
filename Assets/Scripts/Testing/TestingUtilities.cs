@@ -77,6 +77,9 @@ public class TestingUtilities
     .testcase{
         color:#FFC0CB;      /* Pink */
     }
+    .testcasecondition{
+        color:#808080;      /* Grey */
+    }
     .test{
         color:#79c0ff;      /* Cyan - test start/status */
         font-weight:bold;
@@ -133,5 +136,6 @@ public enum TestLogType
     Error,
     Test,
     Pass,
-    TestCase
+    TestCase,
+    TestCaseCondition
 }

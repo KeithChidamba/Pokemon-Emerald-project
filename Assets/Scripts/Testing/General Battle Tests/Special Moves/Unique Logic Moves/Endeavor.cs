@@ -44,17 +44,25 @@ public class Endeavor : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        _testCaseHandler.AddTestCase("Endeavor should fail",
-            () => player.pokemon.hp >= player.pokemon.maxHp
-            && (int)enemy.pokemon.hp == Mathf.FloorToInt(enemy.pokemon.maxHp * .65f));
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Endeavor should fail,Player's health should be unchanged",
+                ()=>  player.pokemon.hp >= player.pokemon.maxHp),
+            new("Enemy's health should be unchanged",
+                ()=> (int)enemy.pokemon.hp == Mathf.FloorToInt(enemy.pokemon.maxHp * .65f)),
+        });
         
         //endeavor = victim.hp - attacker.hp
         //on the second action, enemy was given full hp
-        _testCaseHandler.AddTestCase("Endeavor should work",
-            () => (int)player.pokemon.hp ==
-                  Mathf.FloorToInt(player.pokemon.maxHp * .45f)
-                  && (int)enemy.pokemon.hp == (int)player.pokemon.hp);
-       
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Endeavor should work, Player's health should be unchanged",
+                ()=> (int)player.pokemon.hp ==
+                     Mathf.FloorToInt(player.pokemon.maxHp * .45f)),
+            new("Endeavor should work, Enemy's health should decrease and match player's health",
+                ()=> (int)enemy.pokemon.hp == (int)player.pokemon.hp),
+        });
+  
         yield return HandleBattleState();
         onTestResult.Invoke();
     }

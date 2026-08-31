@@ -116,6 +116,7 @@ public class TestRegistry
         
     //Held Items
         //new ConsumableHeldItemUsageTest(),
+        //new ChoiceBandTest(),
     //Special Move Logic
     
         //new WhirlwindWildBattleTest(),

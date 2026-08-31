@@ -51,9 +51,13 @@ public class TakeDownTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        _testCaseHandler.AddTestCase("Enemy must be hit and player must get recoil",
-            () => player.pokemon.hp < player.pokemon.maxHp
-            && enemy.pokemon.hp < enemy.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Enemy must be hit",
+                () => enemy.pokemon.hp < enemy.pokemon.maxHp),
+            new("player must get recoil",
+                () => player.pokemon.hp < player.pokemon.maxHp)
+        });
         
         yield return HandleBattleState();
         onTestResult.Invoke();

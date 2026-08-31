@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 
 public class RestTest : BattleBasedTest
 {
@@ -49,9 +50,13 @@ public class RestTest : BattleBasedTest
         _testCaseHandler.AddTestCase("Player must get hit by enemy",
             () => player.pokemon.hp < player.pokemon.maxHp);
         
-        _testCaseHandler.AddTestCase("Player be healed by rest, and asleep",
-            () => player.pokemon.hp >= player.pokemon.maxHp
-            && player.pokemon.statusEffect == StatusEffect.Sleep);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("Player must be healed by rest",
+                () =>  player.pokemon.hp >= player.pokemon.maxHp),
+            new ("Player must be asleep",
+                () => player.pokemon.statusEffect == StatusEffect.Sleep),
+        });
         
         yield return HandleBattleState();
         onTestResult.Invoke();

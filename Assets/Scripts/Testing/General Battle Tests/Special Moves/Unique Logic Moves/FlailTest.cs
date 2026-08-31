@@ -80,8 +80,8 @@ public class FlailTest : BattleBasedTest
         {
             var currentCheck = i;
             var currentLevel = damagePerLevel[currentCheck];
-            _testCaseHandler.AddTestCase($"Move damage must match hp Level {currentLevel.hpLevel} " +
-                                         $"and damage [{currentLevel.damage}]",
+            _testCaseHandler.AddTestCase($"Move damage must match hp Level {currentLevel.hpLevel} "
+                                         + $"and damage [{currentLevel.damage}]",
                 () => Mathf.FloorToInt(_moveDamageList[currentCheck])
                     == Mathf.FloorToInt(currentLevel.damage));
         }

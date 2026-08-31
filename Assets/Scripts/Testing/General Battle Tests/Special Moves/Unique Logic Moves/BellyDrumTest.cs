@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -40,10 +41,13 @@ public class BellyDrumTest : BattleBasedTest
         _testCaseHandler.AddTestCase("Belly drum should fail[No attack buffs]",
             () =>  player.pokemon.statModifiers.Count == 0);
         
-        _testCaseHandler.AddTestCase("Belly drum buff attack and lower hp",
-            () => player.pokemon.statModifiers.Count>0
-            &&  player.pokemon.hp <= Mathf.FloorToInt(player.pokemon.maxHp / 2f)
-            &&  player.pokemon.attack > player.statData.attack);
+        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
+        {
+            new("belly drum should buff attack",()=>player.pokemon.attack > player.statData.attack),
+            new("Player should have stat modifiers",()=>player.pokemon.statModifiers.Count>0),
+            new("belly drum should half player's health",
+                ()=>player.pokemon.hp <= Mathf.FloorToInt(player.pokemon.maxHp / 2f)),
+        });
         
         yield return HandleBattleState();
         onTestResult.Invoke();
