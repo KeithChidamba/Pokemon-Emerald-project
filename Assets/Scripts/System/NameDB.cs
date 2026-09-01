@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,15 +10,21 @@ public static class NameDB
     }
     public static MoveName ParseMoveName(string moveName)
     {
-        var pair = learnSetMoveNames.FirstOrDefault(x => x.Value == moveName);
-        return pair.Key;
+        foreach (var pair in learnSetMoveNames)
+        {
+            if (pair.Value.ToLower() == moveName.ToLower())
+            {
+                return pair.Key;
+            }
+        }
+        throw new Exception($"Move name {moveName} has no matching enum in dictionary");
     }
     private static Dictionary<MoveName, string> learnSetMoveNames = new()
     {
         // 🐞 Bug-type
         { MoveName.FuryCutter, "Fury Cutter" },
         { MoveName.LeechLife, "Leech Life" },
-        { MoveName.SilverWind, "Silver Wind" },
+        { MoveName.Silverwind, "Silverwind" },
         { MoveName.StringShot, "String Shot" },
         { MoveName.PinMissile, "Pin Missile" },
         { MoveName.SleepPowder,"Sleep Powder"},
@@ -252,7 +259,7 @@ public enum MoveName
     // 🐞 Bug-type
     FuryCutter,
     LeechLife,
-    SilverWind,
+    Silverwind,
     StringShot,
         
     // 🐉 Dragon-type

@@ -137,7 +137,6 @@ public class TestCaseHandler
             }
             _testHandler.LogMessage($"Test case condition({i + 1}) PASSED({condition.message})", TestLogType.TestCaseCondition);
          }
-         _testHandler.LogMessage($"Test case({testCaseResult.caseIndex + 1}) PASSED", TestLogType.TestCase);
          successCallBack?.Invoke();
          return true;
       }

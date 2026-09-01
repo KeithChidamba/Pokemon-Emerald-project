@@ -42,3 +42,7 @@ MonoBehaviour:
   statusChance: 10
   buffOrDebuffChance: 0
   description: A powdery attack that may raise abilities.
+  dynamicInfoModules: []
+  references:
+    version: 2
+    RefIds: []

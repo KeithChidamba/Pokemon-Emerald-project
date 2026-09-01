@@ -46,12 +46,12 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _logicMethods.Add(MoveName.Endeavor, Endeavor);
         _logicMethods.Add(MoveName.Thunder, Thunder);
         _logicMethods.Add(MoveName.Whirlwind, Whirlwind);
+        _logicMethods.Add(MoveName.Silverwind, SilverWind);
+        _logicMethods.Add(MoveName.MirrorMove, MirrorMove);
         
         //still need tests
-        _logicMethods.Add(MoveName.SilverWind, SilverWind);
         _logicMethods.Add(MoveName.HyperBeam, Hyperbeam);
         _logicMethods.Add(MoveName.Bide, Bide);
-        _logicMethods.Add(MoveName.MirrorMove, MirrorMove);
     }
     
     public IEnumerator InvokeMoveLogic(BattleParticipant attacker, BattleParticipant victim, Turn currentTurn)
@@ -210,13 +210,12 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     }
     private IEnumerator SilverWind(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
-        _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
-        yield return _moveUsageHandler.AwaitDamageDisplay();
-        
         bool battleEnded = false;
         bool awaitingFaint = true;
         
-        if (victim.pokemon.hp <= 0)
+        var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
+      
+        if (victim.pokemon.hp - damage <= 0)
         {
             _battleHandler.OnFaintSequenceComplete += CancelOnBattleEnd;
             void CancelOnBattleEnd(BattleParticipant faintedParticipant)
@@ -226,8 +225,10 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
                 battleEnded = _battleHandler.BattleOver;
                 awaitingFaint = false;
             }
-        }
-        else awaitingFaint = false;
+        }else awaitingFaint = false;
+        
+        _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,damage);
+        yield return _moveUsageHandler.AwaitDamageDisplay();
         
         yield return new WaitUntil(() => !awaitingFaint);
         
@@ -237,20 +238,19 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         {
             yield break;
         }
-        
         //get buffs
-        var allBuffs = new[]
+        var stats = new[]
         {
             Stat.Attack, Stat.Defense, 
             Stat.SpecialAttack, Stat.SpecialDefense,
             Stat.Speed
         };
         
-        foreach (var buff in allBuffs)
+        foreach (var statToBuff in stats)
         {
             bool awaitingAddition = true;
             _battleOperationsHandler.OnStatChangeApplied += AwaitBuffAddition;
-            var buffData = new StatChangeTransitData(attacker, buff, true, 1);
+            var buffData = new StatChangeTransitData(attacker, statToBuff, true, 1);
             _moveUsageHandler.InitiateStatChange(buffData,false);
             yield return new WaitUntil(() => !awaitingAddition);
             continue;
@@ -261,7 +261,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             }
         }
         
-        string statChangeMessage = _battleOperationsHandler.GetStatModResultMessage(true,attacker.pokemon,allBuffs);
+        string statChangeMessage = _battleOperationsHandler.GetStatModResultMessage(true,attacker.pokemon,stats);
         _battleVisualsHandler.OnStatVisualDisplayed += AwaitBuffVisual;
         bool awaitingDisplay = true;
         _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,attacker,statChangeMessage);
@@ -400,7 +400,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             var enemyTrainer = victim.pokemonTrainerAI;
             yield return CreateSwitchData(enemyTrainer.GetLivingPokemonIndexes());
         }
-
+        yield break;
         IEnumerator CreateSwitchData(List<int> living)
         {
             //exclude current participants
