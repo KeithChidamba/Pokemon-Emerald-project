@@ -20,7 +20,9 @@ public class DamageBuffAbilityData
         Move move)
     {
         if (conditionForBuff.Invoke(attacker, victim, move))
+        {
             return _damageBuffMultiplier;
+        }
         return 1f;
     }
 }

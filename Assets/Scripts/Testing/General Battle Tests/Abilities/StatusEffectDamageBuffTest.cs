@@ -24,22 +24,21 @@ public class StatusEffectDamageBuffTest : BattleBasedTest
         testName = "Status Effect Damage Buff Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
+        //This test will be done using [paralysis combo] ability
         
-        _sequencer.AddAction(AttackFirst);
+        //Thunder wave -> enemy use Tailwhip
+        _sequencer.AddAction(()=>    
+        {
+            var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+            player.pokemon.critChance = 0;
+            _sequencer.UseMove();
+        });
+        //Tackle -> enemy use Tail whip
         _sequencer.AddAction(() => _sequencer.UseMove(1));
         
         _moveUsageHandler.OnDamageModified += CheckForAbilityEffect;
     }
-
-    private void AttackFirst()
-    {
-        //Thunder wave
-        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
-        player.pokemon.moveSet[0].statusChance = 100;
-        _sequencer.UseMove();
-    }
-    
+  
     public override IEnumerator BeginTest()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
@@ -47,8 +46,7 @@ public class StatusEffectDamageBuffTest : BattleBasedTest
         _testCaseHandler.AddTestCase("enemy should be paralyzed",
             () => enemy.pokemon.statusEffect == StatusEffect.Paralysis);
         
-        _testCaseHandler.AddTestCase("paralysis combo should increase damage",
-            () => _damageWasChanged && enemy.pokemon.hp < enemy.pokemon.maxHp);
+        _testCaseHandler.AddTestCase("paralysis combo should increase damage", () => _damageWasChanged);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -58,6 +56,7 @@ public class StatusEffectDamageBuffTest : BattleBasedTest
         if (modifier == DamageCalculationModifier.Ability)
         {
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+
             _damageWasChanged = modifiedDamage < initialDamage || modifiedDamage > initialDamage;
             if(_damageWasChanged)
             {

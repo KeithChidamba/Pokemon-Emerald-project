@@ -26,7 +26,16 @@ MonoBehaviour:
     specificAbility: {fileID: 0}
     nickName: bat
   testEnemyData:
-    trainerDisplayName: Test Grunt Sopnic boom
+    trainerDisplayName: Test Grunt Sonic boom
     battleType: 0
     pokemonParty:
     - {fileID: 11400000, guid: 9c025e682b81303f7a54b349a4130861, type: 2}
+  wildPokemonData:
+    naturalPokemonData:
+      pokemon: {fileID: 0}
+      pokemonLevel: 0
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet: []
+    biome: 0

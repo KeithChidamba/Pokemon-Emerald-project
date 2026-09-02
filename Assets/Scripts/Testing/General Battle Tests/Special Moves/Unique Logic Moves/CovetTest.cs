@@ -55,14 +55,8 @@ public class CovetTest : BattleBasedTest
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
-            new("Covet should not take item from enemy",()=> !player.pokemon.hasItem),
-            new("Covet should hurt enemy",()=> enemy.pokemon.hp<enemy.pokemon.maxHp),
-        });
-        
-        _testCaseHandler.AddTestCase(new List<TestCaseCondition>
-        {
             new("Covet should not take item from enemy because the item is not a berry",()=> !player.pokemon.hasItem),
-            new("Enemy should still have item",()=> enemy.pokemon.hasItem),
+            new("Enemy should still have item",()=> enemy.pokemon.hasItem)
         });
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>

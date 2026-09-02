@@ -29,12 +29,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     private bool _processingOrder;
     [SerializeField]private bool displayingDamage;
     [SerializeField]private bool displayingHealthGain;
-    /// <summary>
-    /// signature(attacker,victim,moveUsed,currentDamage)
-    /// returns modified damage.
-    /// mainly used for allowing abilities to influence damage. 
-    /// </summary>
-    public event Func<BattleParticipant,BattleParticipant,Move,float,float> OnDamageCalc;
+
     /// <summary>
     /// [For Testing] signature(Modifier source -> initial damage -> final damage).
     /// Users of this specific event (Tests) will check if the damage changed themselves
@@ -238,15 +233,10 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
 
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
         
-        float damageAfterAbilityBuff = OnDamageCalc?.Invoke(struggleUser, victim, struggle, damageDealt) ?? damageDealt;
-        damageAfterAbilityBuff = Mathf.FloorToInt(damageAfterAbilityBuff);
-        
-        if (damageAfterAbilityBuff > damageDealt || damageAfterAbilityBuff < damageDealt)
-        {
-            OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
-        }
+        var damageAfterAbilityBuff = Mathf.FloorToInt(struggleUser.abilityHandler.AccountForAbilityModifiers(victim, struggle, damageDealt));
+        OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
 
-        float damageAfterStatusEffect = struggleUser.statusHandler.AccountForStatusInDamage(struggle,damageAfterAbilityBuff);
+        float damageAfterStatusEffect = Mathf.FloorToInt(struggleUser.statusHandler.AccountForStatusInDamage(struggle,damageAfterAbilityBuff));
         if (damageAfterStatusEffect > damageAfterAbilityBuff || damageAfterStatusEffect < damageAfterAbilityBuff)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.StatusEffect,damageAfterAbilityBuff,damageAfterStatusEffect);
@@ -328,14 +318,10 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         
         int damageDealt = Mathf.FloorToInt(baseDamage * damageModifier);
         
-        var damageAfterAbilityBuff = OnDamageCalc?.Invoke(attacker,victim,move,damageDealt) ?? damageDealt;
-        damageAfterAbilityBuff = Mathf.FloorToInt(damageAfterAbilityBuff);
-        if (damageAfterAbilityBuff > damageDealt || damageAfterAbilityBuff < damageDealt)
-        {
-            OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
-        }
+        var damageAfterAbilityBuff = Mathf.FloorToInt(attacker.abilityHandler.AccountForAbilityModifiers(victim,move,damageDealt));
+        OnDamageModified?.Invoke(DamageCalculationModifier.Ability,damageDealt,damageAfterAbilityBuff);
         
-        float damageAfterStatusEffect = attacker.statusHandler.AccountForStatusInDamage(move,damageAfterAbilityBuff);
+        float damageAfterStatusEffect = Mathf.FloorToInt(attacker.statusHandler.AccountForStatusInDamage(move,damageAfterAbilityBuff));
         if (damageAfterStatusEffect > damageAfterAbilityBuff || damageAfterStatusEffect < damageAfterAbilityBuff)
         {
             OnDamageModified?.Invoke(DamageCalculationModifier.StatusEffect,damageAfterAbilityBuff,damageAfterStatusEffect);

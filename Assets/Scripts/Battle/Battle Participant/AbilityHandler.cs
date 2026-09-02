@@ -15,6 +15,13 @@ public class AbilityHandler
     /// Stat -> initial stat value -> final stat value
     /// </summary>
     public event Func<Stat,float, float> OnStatModified;
+    /// <summary>
+    /// signature(victim,moveUsed,currentDamage)
+    /// returns modified damage.
+    /// used for allowing abilities to influence damage. 
+    /// </summary>
+    public event Func<BattleParticipant,Move,float,float> OnDamageCalc;
+    
     public BattleParticipant participant;
     
     private DialogueHandler _dialogueHandler;
@@ -72,13 +79,11 @@ public class AbilityHandler
             );
             _damageBuffCombinations.Add(possibleBuff.abilityName, newData);
         }
-
-        var paralysisCombo = new DamageBuff(AbilityName.ParalysisCombo, 2f);
-        var parData = new DamageBuffAbilityData(
-            paralysisCombo.multiplier,
+        
+        var parData = new DamageBuffAbilityData(2f,
             (attacker, victim, move) => StatusEffectCheck(victim, StatusEffect.Paralysis)
         );
-        _damageBuffCombinations.Add(paralysisCombo.abilityName, parData);
+        _damageBuffCombinations.Add(AbilityName.ParalysisCombo, parData);
     }
     
     public void SetAbilityMethod()
@@ -104,6 +109,10 @@ public class AbilityHandler
     public float AccountForStatChange(Stat statToModify,float initialStat)
     {
         return OnStatModified?.Invoke(statToModify, initialStat) ?? initialStat;
+    }
+    public float AccountForAbilityModifiers(BattleParticipant victim,Move move,float initialDamage)
+    {
+        return OnDamageCalc?.Invoke(victim, move, initialDamage) ?? initialDamage;
     }
     private void Guts()
     {
@@ -190,15 +199,14 @@ public class AbilityHandler
     }
     private void ApplyDamageBuffAbility()
     {
-        _moveUsageHandler.OnDamageCalc += IncreaseDamage;
-        _onAbilityReset += ()=> _moveUsageHandler.OnDamageCalc -= IncreaseDamage;
+        OnDamageCalc += IncreaseDamage;
+        _onAbilityReset += ()=> OnDamageCalc -= IncreaseDamage;
         return;
-        float IncreaseDamage(BattleParticipant attacker,BattleParticipant victim,Move move, float damage)
+        float IncreaseDamage(BattleParticipant victim,Move move, float damage)
         {
-            if (attacker.participantKey != participant.participantKey) return damage;
             if (_damageBuffCombinations.TryGetValue(_currentAbility, out var damageBuffData))
             {
-                return damage * damageBuffData.CanBuffDamage(attacker, victim, move);
+                return damage * damageBuffData.CanBuffDamage(participant, victim, move);
             }
             return damage;
         }

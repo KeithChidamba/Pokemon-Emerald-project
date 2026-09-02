@@ -31,3 +31,12 @@ MonoBehaviour:
     battleType: 0
     pokemonParty:
     - {fileID: 11400000, guid: 730c19ea045b169a89cb1d3261a680c5, type: 2}
+  wildPokemonData:
+    naturalPokemonData:
+      pokemon: {fileID: 0}
+      pokemonLevel: 0
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet: []
+    biome: 0

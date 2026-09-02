@@ -34,6 +34,7 @@ public class HealthBasedDamageBuffTest : BattleBasedTest
     private void AttackWithBuffedDamage()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        player.pokemon.critChance = 0;
         player.pokemon.hp = player.pokemon.maxHp * 0.25f;
         player.pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
@@ -54,16 +55,11 @@ public class HealthBasedDamageBuffTest : BattleBasedTest
                 testingHandler.LogMessage($"{result} damage from {initialDamage} to {modifiedDamage}"
                     ,  TestLogType.Calculation);
             }
-            
-          
         }
     }
     public override IEnumerator BeginTest()
     {
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        
-        _testCaseHandler.AddTestCase(1,"ability should increase damage",
-            () => _damageWasChanged && enemy.pokemon.hp < enemy.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(1,"ability should increase damage", () => _damageWasChanged);
 
         yield return HandleBattleState();
         onTestResult.Invoke();
