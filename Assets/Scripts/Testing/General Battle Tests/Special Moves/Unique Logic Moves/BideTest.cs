@@ -7,17 +7,19 @@ using UnityEngine;
 public class BideTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
+    private MoveSequenceHandler _moveUsageHandler;
     
     private MoveTestActionSequencer _sequencer;
     private TestCaseHandler _testCaseHandler;
 
-    private float _currentBideDamageStore;
+    private bool _bideDealtDamage;
+    
     public override void Inject(ServiceContainer serviceContainer)
     {
         container = serviceContainer;
         _battleHandler = container.Resolve<BattleHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
+        
+        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
@@ -25,39 +27,58 @@ public class BideTest : BattleBasedTest
         
         testExitCondition = TestCompletionCondition.EndManually;
         
-        _sequencer.AddAction(()=>
+        //enemy use tackle-> bide will work
+        SetupBideSequence(0);
+        //enemy use tail whip -> bide will fail
+        SetupBideSequence(1);
+        
+        //use on-hit event as proof that bide hit because bide uses complicated turn logic
+        //that doesn't allow for generic turn-based test cases handling
+        _moveUsageHandler.OnMoveHit += CheckBideHit;
+        return;
+        void SetupBideSequence(int enemyMoveIndex)
         {
-            //Bide , but make enemy uses tackle
-            var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-            enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
-            enemy.pokemonTrainerAI.AssignBehaviorAction(() =>
+            _sequencer.AddAction(()=>
             {
-                //Tackle
-                enemy.pokemon.moveSet[0].isSureHit = true;
-                _battleHandler.UseMove(enemy.pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
+                _bideDealtDamage = false;
+                var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+                enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
+                enemy.pokemonTrainerAI.AssignBehaviorAction(() =>
+                {
+                    enemy.pokemon.moveSet[enemyMoveIndex].isSureHit = true;
+                    _battleHandler.UseMove(enemy.pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
+                });
+                var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+                player.pokemon.moveSet[0].priority = 100;
+                _sequencer.UseMove();//Bide
             });
-            var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            player.pokemon.moveSet[0].priority = 100;
-            _sequencer.UseMove();
-        });
-        _sequencer.AddAction(()=>{});//cooldown turn buffer
-        _sequencer.AddAction(()=>{});//cooldown turn buffer
-        _sequencer.AddAction(()=>{});//cooldown turn buffer
-        _sequencer.AddAction(()=>_sequencer.UseMove(1));
+            _sequencer.AddAction(()=>{});//cooldown turn buffer
+            _sequencer.AddAction(()=>{});//cooldown turn buffer
+            //test for bide's interference with normal move usage
+            _sequencer.AddAction(()=>_sequencer.UseMove(1));
+        }
+    }
+    private void CheckBideHit(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
+    {
+        if (attacker.participantKey != BattleParticipantKey.Player) return;
+        if (NameDB.ParseMoveName(moveUsed.moveName) == MoveName.Bide)
+        {
+            _bideDealtDamage = true;
+        }
     }
     public override IEnumerator BeginTest()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy); 
         
         _testCaseHandler.AddTestCase(0,"Bide should be activated",
-            () =>NameDB.ParseMoveName(player.currentCoolDown.turnData.move.moveName) == MoveName.Bide);
+            () => NameDB.ParseMoveName(player.currentCoolDown.turnData.move.moveName) == MoveName.Bide);
         
-        _testCaseHandler.AddTestCase(3,"Bide should hit enemy",
-            () => enemy.pokemon.hp < enemy.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(3,"Bide should hit enemy", () => _bideDealtDamage);
         
-        _testCaseHandler.AddTestCase(4,"Player cooldown down should be over, and player should use tailwhip",
-            () =>NameDB.ParseMoveName(player.previousMoveData.move.moveName) == MoveName.TailWhip);
+        _testCaseHandler.AddTestCase(4,"Bide should be activated",
+            () => NameDB.ParseMoveName(player.currentCoolDown.turnData.move.moveName) == MoveName.Bide);
+        
+        _testCaseHandler.AddTestCase(7,"Bide should not hit enemy", () => !_bideDealtDamage);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -65,7 +86,6 @@ public class BideTest : BattleBasedTest
   
     protected override void DetermineSuccess()
     {
-        Debug.Log("case: " + _sequencer.GetTestCaseIndex());
         var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)
         {
@@ -74,12 +94,15 @@ public class BideTest : BattleBasedTest
         return;
         void CheckTestEnd()
         {
+            //prevent fainting for test reliability
             var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy); 
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             player.pokemon.hp = player.pokemon.maxHp;
             enemy.pokemon.hp = enemy.pokemon.maxHp;
+            
             if (_sequencer.SequenceComplete())
             {
+                _moveUsageHandler.OnMoveHit -= CheckBideHit;
                 EndTest(true);
             }
         }

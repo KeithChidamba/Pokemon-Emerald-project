@@ -113,11 +113,12 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         currentParticipants.AddRange(battleParticipantInstances);
         
-        _turnBasedCombatHandler.OnNewTurn += ResetAi;
-        _turnBasedCombatHandler.OnNewTurn += AllowPlayerInput;
         _checkParticipantsEachTurn = ()=> CheckParticipantStates();
         _turnBasedCombatHandler.OnNewTurn += _checkParticipantsEachTurn;
-        _turnBasedCombatHandler.OnTurnsCompleted += ResetPlayersTurnUsage;
+        _turnBasedCombatHandler.OnTurnsCompleted += ()=>
+        {
+            SetPlayerTurnUsage(PlayerTurnUsage.None);
+        };
     }
 
     public IEnumerator AwaitBattleCompletion()
@@ -300,21 +301,6 @@ public class BattleHandler : MonoBehaviour, IInjectable
     {
         _previousTurnUsage = usage;
     }
-    private void ResetPlayersTurnUsage()
-    {
-        SetPlayerTurnUsage(PlayerTurnUsage.None);
-    }
-    private void AllowPlayerInput()
-    {
-        if (_turnBasedCombatHandler.CurrentTurnIndex > 1) return;
-        var currentParticipant = GetCurrentParticipant();
-        if (currentParticipant.isSemiInvulnerable) return;
-        if (currentParticipant.currentCoolDown.isCoolingDown) return;
-        _inputStateHandler.ResetRelevantUi(new[]
-        {
-            InputStateName.PokemonBattleEnemySelection, InputStateName.PlaceHolder
-        });
-    }
     
     private IEnumerator SetValidParticipants()
     {
@@ -360,14 +346,6 @@ public class BattleHandler : MonoBehaviour, IInjectable
         _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
 
         _turnBasedCombatHandler.StartFreshTurn();
-    }
-    private void ResetAi()
-    {
-        if(!isTrainerBattle)return;
-        var currentParticipant = GetCurrentParticipant();
-        if(!currentParticipant.isActive) return;
-        if(currentParticipant.isPlayer)return;
-        currentParticipant.pokemonTrainerAI.MakeBattleDecision();
     }
     
     public IEnumerator SetBattleTypeAndStart(TrainerData data)
@@ -418,7 +396,6 @@ public class BattleHandler : MonoBehaviour, IInjectable
         wildPokemon.currentEnemies.Add(player);
         _wildPokemonHandler.participant = wildPokemon;
         wildPokemon.AddToExpList(player.pokemon);
-        _wildPokemonHandler.SetBattleState();
         //setup battle
         yield return SetValidParticipants();
         yield return new WaitForSecondsRealtime(0.55f);

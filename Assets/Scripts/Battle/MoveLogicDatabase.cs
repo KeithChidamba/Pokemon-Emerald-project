@@ -115,9 +115,10 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         if (attacker.currentCoolDown.isExecutionTurn)
         {
             _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" unleashed the power");
-            if (attacker.currentCoolDown.turnData.move.moveDamage > 0)
+            var storedDamage = attacker.currentCoolDown.turnData.move.moveDamage;
+            if (storedDamage > 0)
             {
-                currentTurn.move.moveDamage = attacker.currentCoolDown.turnData.move.moveDamage;
+                currentTurn.move.moveDamage = storedDamage;
                 var typelessDamage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim, true);
                 _moveUsageHandler.DisplaySpecialDamage(victim, predefinedDamage: typelessDamage);
             }
@@ -132,7 +133,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
         else
         {
-            attacker.currentCoolDown.UpdateCoolDown(2,currentTurn, " is storing power");//change turns back
+            attacker.currentCoolDown.UpdateCoolDown(2,currentTurn, " is storing power");
             _moveUsageHandler.OnMoveHit += attacker.currentCoolDown.StoreDamage;
         }
     }

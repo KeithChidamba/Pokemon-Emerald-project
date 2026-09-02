@@ -34,7 +34,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     private BattleHandler _battleHandler;
     private MoveSequenceHandler _moveUsageHandler;
     private GameLoadingHandler _gameLoadingHandler;
-    
+    private WildPokemonAiHandler _wildPokemonAI;
     public void Inject(ServiceContainer container)
     {
         _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
@@ -45,13 +45,15 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<BattleHandler>();
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
+        _wildPokemonAI = container.Resolve<WildPokemonAiHandler>();
+        
         gameObject.SetActive(true);
     }
 
     public void OnInject()
     {
         _battleHandler.OnBattleEnd += ResetTurnState;
-        OnNewTurn += ()=> StartCoroutine(CheckParticipantCoolDown());
+        OnNewTurn += ResolveTurnStateForParticipants;
         _battleHandler.OnSwitchOut += RemoveWeatherBuffReceiver;
         clearWeather = new WeatherCondition(Weather.Clear);
         CurrentWeather = clearWeather;
@@ -73,10 +75,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         _moveExecutionHandlers.Remove(subscriber);
     }
 
-    public Turn GetTurn(BattleParticipantKey key)
-    {
-        return _turnHistory.FirstOrDefault(t =>key == t.attackerKey);
-    }
     private void AddTurn(Turn turn)
     {
         //Debug.Log($"turn added {turn.turnUsage}");
@@ -604,27 +602,58 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                                                 + move.moveName + " on " + victim.pokemon.pokemonDisplayName + "!";
         return attacker.pokemon.pokemonDisplayName + " used " + move.moveName + "!";
     }
-
-    private IEnumerator CheckParticipantCoolDown()
+    private void ResolveTurnStateForParticipants()
     {
-        if (_battleHandler.BattleOver) yield break;
-        var participant = _battleHandler.GetCurrentParticipant();
-        if (!participant.currentCoolDown.isCoolingDown) yield break;
-        if (participant.currentCoolDown.isExecutionTurn)
-        {
-            Debug.LogError(currentTurnIndex);
-            SaveTurn(new(participant.currentCoolDown.turnData));
-            yield break;
-        }
+        var currentParticipant = _battleHandler.GetCurrentParticipant();
+        if(!currentParticipant.isActive) return;
         
-        if (participant.currentCoolDown.canDisplayMessage)
+        StartCoroutine(DetermineTurnHandling());
+        return;
+        IEnumerator DetermineTurnHandling()
         {
-            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName
-                                                        +participant.currentCoolDown.coolDownMessage);
-            yield return _dialogueHandler.AwaitAllDialogue();
+            if (currentParticipant.currentCoolDown.isCoolingDown)
+            {
+                if (currentParticipant.currentCoolDown.isExecutionTurn)
+                {
+                    SaveTurn(new(currentParticipant.currentCoolDown.turnData));
+                    yield break;
+                }
+            
+                if (currentParticipant.currentCoolDown.canDisplayMessage)
+                {
+                    _dialogueHandler.DisplayBattleInfo(currentParticipant.pokemon.pokemonDisplayName
+                                                       +currentParticipant.currentCoolDown.coolDownMessage);
+                    yield return _dialogueHandler.AwaitAllDialogue();
+                }
+                currentParticipant.currentCoolDown.numTurns--;
+                NextTurn();
+                yield break;
+            }
+            if (currentParticipant.isSemiInvulnerable)
+            {
+                yield break;
+            }
+            if (currentParticipant.isPlayer)
+            {
+                //allow player input
+                _inputStateHandler.ResetRelevantUi(new[]
+                {
+                    InputStateName.PokemonBattleEnemySelection, InputStateName.PlaceHolder
+                });
+            }
+            else
+            {
+                //allow enemy AI decision
+                if(_battleHandler.isTrainerBattle)
+                {
+                    currentParticipant.pokemonTrainerAI.MakeBattleDecision();
+                }
+                else
+                {
+                    _wildPokemonAI.MakeBattleDecision();
+                }
+            }
         }
-        participant.currentCoolDown.numTurns--;
-        NextTurn();
     }
     private void CheckRepeatedMove(BattleParticipant attacker, Move move)
     {
@@ -665,7 +694,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     public void NextTurn()
     {
-        Debug.LogWarning($"NEXT----------------------------");
         if (_battleHandler.isDoubleBattle)
             ChangeTurn(3, 1);
         else
@@ -681,14 +709,10 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     private void ChangeTurn(int maxParticipantIndex,int step)
     {
-        Debug.LogWarning($"turn changed before {currentTurnIndex}");
-        
         if (currentTurnIndex < maxParticipantIndex)
             currentTurnIndex+=step;
         else
             currentTurnIndex = 0;
-        
-        Debug.LogWarning($"after {currentTurnIndex}");
         
         if (!_battleHandler.GetCurrentParticipant().isActive)
         {

@@ -5,37 +5,27 @@ using UnityEngine;
 public class WildPokemonAiHandler : MonoBehaviour,IInjectable
 {
     public BattleParticipant participant;
-    [SerializeField]private bool inBattle;
-    
+
     private Action _currentBehaviorAction;
     private BattleAiBehaviorMode _behaviorMode;
     
-    private TurnBasedCombatHandler _turnBasedCombatHandler;
     private BattleHandler _battleHandler;
-
     
     public void Inject(ServiceContainer container)
     {
         _battleHandler = container.Resolve<BattleHandler>();
-        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         gameObject.SetActive(true);
     }
 
     public void OnInject()
     {
-        _turnBasedCombatHandler.OnNewTurn += MakeBattleDecision;
         _battleHandler.OnBattleEnd += ()=>
         {
             _currentBehaviorAction = null;
             _behaviorMode = BattleAiBehaviorMode.Natural;
-            inBattle = false;
         };
     }
 
-    public void SetBattleState()
-    {
-        inBattle = true;
-    }
     public void SetBehavior(BattleAiBehaviorMode behaviorMode)
     {
         _behaviorMode = behaviorMode;
@@ -45,14 +35,8 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
         _currentBehaviorAction = action;
     }
     
-    private void MakeBattleDecision()
+    public void MakeBattleDecision()
     {
-        if (!inBattle) return;
-        //check if its pokemon's turn
-        if (_battleHandler.GetCurrentParticipant().participantKey != participant.participantKey)
-        {
-            return;
-        }
         if (_behaviorMode == BattleAiBehaviorMode.Controlled)
         {
             _currentBehaviorAction?.Invoke();
@@ -60,7 +44,6 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
         }
         if(Utility.RandomChance(CommonRandom.Rnd30) || participant.canEscape)
         {
-            inBattle = false;
             _battleHandler.EndBattle(BattleEndState.PokemonRanAway);
         }
         else
