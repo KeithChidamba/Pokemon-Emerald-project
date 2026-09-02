@@ -118,6 +118,8 @@ public class TestRegistry
         //new ConsumableHeldItemUsageTest(),
         //new ChoiceBandTest(),
     //Special Move Logic
+        new BideTest(),
+        //new HyperBeamTest(),
         //new MirrorMoveTest(),
         //new SilverwindBattleEndTest(),
         //new SilverwindSwapTest(),

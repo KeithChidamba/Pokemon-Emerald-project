@@ -224,6 +224,7 @@ public class EnemyAiHandler
     {
         if (_behaviorMode==BattleAiBehaviorMode.Controlled)
         {
+            Debug.LogError("Enemy can act");
             _currentBehaviorAction?.Invoke();
             return;
         }

@@ -135,7 +135,6 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             attacker.currentCoolDown.UpdateCoolDown(2,currentTurn, " is storing power");//change turns back
             _moveUsageHandler.OnMoveHit += attacker.currentCoolDown.StoreDamage;
         }
-       
     }
     
     private IEnumerator TakeDown(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)

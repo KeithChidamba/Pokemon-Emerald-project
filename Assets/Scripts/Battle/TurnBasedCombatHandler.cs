@@ -72,6 +72,11 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     {
         _moveExecutionHandlers.Remove(subscriber);
     }
+
+    public Turn GetTurn(BattleParticipantKey key)
+    {
+        return _turnHistory.FirstOrDefault(t =>key == t.attackerKey);
+    }
     private void AddTurn(Turn turn)
     {
         //Debug.Log($"turn added {turn.turnUsage}");
@@ -440,7 +445,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                     else
                     {
                         participant.currentCoolDown.isExecutionTurn = true;
-                        AddTurn(new(participant.currentCoolDown.turnData));
                     }
                 }
             }
@@ -608,14 +612,15 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         if (!participant.currentCoolDown.isCoolingDown) yield break;
         if (participant.currentCoolDown.isExecutionTurn)
         {
-            NextTurn();
+            Debug.LogError(currentTurnIndex);
+            SaveTurn(new(participant.currentCoolDown.turnData));
             yield break;
         }
         
         if (participant.currentCoolDown.canDisplayMessage)
         {
             _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName
-                                                        +participant.currentCoolDown.message);
+                                                        +participant.currentCoolDown.coolDownMessage);
             yield return _dialogueHandler.AwaitAllDialogue();
         }
         participant.currentCoolDown.numTurns--;
@@ -660,6 +665,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     public void NextTurn()
     {
+        Debug.LogWarning($"NEXT----------------------------");
         if (_battleHandler.isDoubleBattle)
             ChangeTurn(3, 1);
         else
@@ -675,10 +681,14 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     private void ChangeTurn(int maxParticipantIndex,int step)
     {
+        Debug.LogWarning($"turn changed before {currentTurnIndex}");
+        
         if (currentTurnIndex < maxParticipantIndex)
             currentTurnIndex+=step;
         else
             currentTurnIndex = 0;
+        
+        Debug.LogWarning($"after {currentTurnIndex}");
         
         if (!_battleHandler.GetCurrentParticipant().isActive)
         {

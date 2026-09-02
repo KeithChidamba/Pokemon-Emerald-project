@@ -4,7 +4,7 @@ public class TurnCoolDown
 {
     public int numTurns;
     public Turn turnData;
-    public string message;
+    public string coolDownMessage;
     public bool canDisplayMessage;
     public BattleParticipant participant;
     public bool isCoolingDown;
@@ -17,12 +17,12 @@ public class TurnCoolDown
         _moveUsageHandler = moveUsageHandler;
         participant = participantParent;
     }
-    public void UpdateCoolDown(int numTurns,Turn turn, string message=""
+    public void UpdateCoolDown(int turns,Turn turn, string message=""
         , bool display = true,bool coolingDown=true)
     {
         turnData = turn;
-        this.numTurns = numTurns;
-        this.message = message;
+        numTurns = turns;
+        coolDownMessage = message;
         canDisplayMessage = display;
         isCoolingDown = coolingDown;
     }
@@ -30,7 +30,7 @@ public class TurnCoolDown
     {
         _moveUsageHandler.OnMoveHit -= StoreDamage;
         numTurns = 0;
-        message = string.Empty;
+        coolDownMessage = string.Empty;
         turnData = null;
         canDisplayMessage = false;
         isCoolingDown = false;

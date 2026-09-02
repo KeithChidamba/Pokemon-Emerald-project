@@ -70,6 +70,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
 
     public void OnInject()
     {
+        OnMoveHit = null;
         _battleHandler.OnBattleEnd += ClearState;
     }
 
