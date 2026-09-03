@@ -521,12 +521,16 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                     pokemon.gender));
         }
     }
-//for single pokemon creation only
+    /// <summary>
+    /// for single pokemon creation only
+    /// </summary>
     public void CreateSpecificPokemon(Action<Pokemon> creationCallBack,Pokemon template,int desiredLevel,int evolutionStage)
     {
         StartCoroutine(HandlePokemonCreation(creationCallBack,template,desiredLevel,evolutionStage));
     }
-//bulk creation in a coroutine
+/// <summary>
+/// bulk creation in a coroutine
+/// </summary>
     public IEnumerator HandlePokemonCreation(Action<Pokemon> creationCallBack,Pokemon template,int desiredLevel,int evolutionStage)
     {
         var newPokemon = InstanceFactory.CreatePokemon(template); 

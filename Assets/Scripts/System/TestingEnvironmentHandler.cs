@@ -54,7 +54,15 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
    {
        DirectoryHandler.ClearDirectory(Path.Combine("Assets/Resources", 
            DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)));
+
+       var unitTestHandler = new UnitTestHandler(_container);
+       yield return unitTestHandler.RunTests();
+       GetLogs("Unit Test Logs.html"); 
+       testingLogs.Clear();
+       Debug.Log($"UNIT TEST LOGS PRINTED");
+       yield return new WaitForSeconds(5f);
        
+       //Integration Tests
        TestRegistry testRegistry = new();
        yield return new WaitForSeconds(0.1f);
        
@@ -83,14 +91,13 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
                        TestLogType.Error:TestLogType.Pass);
            }
        }
-       GetLogs(); 
-       Debug.Log($"TEST LOGS PRINTED");
+       GetLogs("Integration Test Logs.html"); 
+       Debug.Log($"Integration TEST LOGS PRINTED");
    }
-   
-   private void GetLogs()
+   private void GetLogs(string logName)
    {
       var baseDir = Path.Combine("Assets/Resources", 
-          DirectoryHandler.GetDirectory(AssetDirectory.TestLogs), $"Full Logs {Utility.Random16Bit()}.html");
+          DirectoryHandler.GetDirectory(AssetDirectory.TestLogs), logName);
       
       StringBuilder rows = new();
       foreach (var log in testingLogs.Values)

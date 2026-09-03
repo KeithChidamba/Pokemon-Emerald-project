@@ -152,15 +152,14 @@ public class AbilityHandler
         void GiveItem()
         {
             if (Utility.RandomChance(CommonRandom.Rnd90)) return;
-            if (Utility.RandomRange100() < participant.pokemon.currentLevel) return;
-            CheckItemForPickUpAbility(participant);
+            CheckItemForPickUpAbility(participant.pokemon);
         }
     }
-    public void CheckItemForPickUpAbility(BattleParticipant currentParticipant)
+    public static void CheckItemForPickUpAbility(Pokemon pokemon)
     {
-        if (currentParticipant.pokemon.hasItem) return;
-        if (!currentParticipant.pokemon.hasTrainer) return;
-        if (currentParticipant.pokemon.currentLevel < 5) return;
+        if (pokemon.hasItem) return;
+        if (!pokemon.hasTrainer) return;
+        if (pokemon.currentLevel < 5) return;
         
         List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
         {
@@ -177,13 +176,16 @@ public class AbilityHandler
         string[] possibleItems = null;
         foreach (var pool in itemPools)
         {
-            if (currentParticipant.pokemon.currentLevel >= pool.MinLevel && currentParticipant.pokemon.currentLevel <= pool.MaxLevel)
+            if (pokemon.currentLevel >= pool.MinLevel && pokemon.currentLevel <= pool.MaxLevel)
             {
                 possibleItems = pool.Items;
                 break;
             }
         }
-        if (possibleItems == null) return;
+        if (possibleItems == null)
+        {
+            throw new Exception($"Item pool logic has an edge case, pokemon level: {pokemon.currentLevel}");
+        }
        
         var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
 
@@ -192,10 +194,9 @@ public class AbilityHandler
         var itemWon = Resources.Load<Item>(assetDirectory);
         if (itemWon == null)
         {
-            Debug.LogError($"[Pickup Ability],{assetDirectory} doesnt exist, check item name in pool");
-            return;
+            throw new Exception($"[Pickup Ability],{assetDirectory} doesnt exist, check item name in pool");
         }
-        currentParticipant.pokemon.GiveItem(InstanceFactory.CreateItem(itemWon));
+        pokemon.GiveItem(InstanceFactory.CreateItem(itemWon));
     }
     private void ApplyDamageBuffAbility()
     {

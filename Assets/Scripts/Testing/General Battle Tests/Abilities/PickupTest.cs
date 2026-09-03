@@ -32,7 +32,7 @@ public class PickupTest : BattleBasedTest
         player.pokemon.hasItem = false;
         //pickup triggers when the battle ends, which can't be tested using test cases
         //so rather test the method logic individually
-        player.abilityHandler.CheckItemForPickUpAbility(player);
+        AbilityHandler.CheckItemForPickUpAbility(player.pokemon);
         _sequencer.UseMove();
     }
     

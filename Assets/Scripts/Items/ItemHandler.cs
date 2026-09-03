@@ -64,6 +64,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             OnItemUsed -= CompleteItemUsage;
             _inputStateHandler.AddPlaceHolderState();
             StartCoroutine(CompletionSequence());
+            return;
             IEnumerator CompletionSequence()
             {
                 yield return _dialogueHandler.WaitForDialogueCompletion();
@@ -457,7 +458,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
         _dialogueHandler.DisplayDetails(currentMove.moveName + "'s pp was maxed out!"); 
         OnItemUsed?.Invoke(itemInUse,true);
-}
+    }
     private void UsePokeball(Item itemInUse)
     {
         if (!CanUsePokeball()) 
