@@ -77,7 +77,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         if (_currentStepCount < 4) return;
         _currentStepCount = 0;
         StartCoroutine(CheckMembers());
-
+        return;
         IEnumerator CheckMembers()
         {
             foreach(var member in party)

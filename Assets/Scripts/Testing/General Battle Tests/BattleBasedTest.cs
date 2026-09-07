@@ -46,6 +46,7 @@ public class BattleBasedTest : IntegrationTest
         _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
+        var pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         
         var testData = Resources.Load<BattleBasedTestData>(
             DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"{testName}/Test Data");
@@ -57,7 +58,8 @@ public class BattleBasedTest : IntegrationTest
         testEnemy.PokemonParty = testData.testEnemyData.pokemonParty;
         testEnemy.battleType = testData.testEnemyData.battleType;
         
-        yield return LoadTestData(testData,_pokemonPartyHandler);
+
+        yield return TestingUtilities.LoadPokemonPartyTestData(testData.pokemonPartyData,_pokemonPartyHandler,pokemonOperationsHandler);
         
         _turnBasedCombatHandler.OnNewTurn += DetermineTurnUsage;
         _turnBasedCombatHandler.OnTurnEventsCompleted += LogSuccess;
@@ -71,41 +73,5 @@ public class BattleBasedTest : IntegrationTest
         _pokemonPartyHandler.ClearTestState();
         yield return new WaitForSeconds(0.05f);
     }
-    protected IEnumerator LoadTestData(BattleBasedTestData testData, PokemonPartyHandler pokemonPartyHandler)
-    {
-        var pokemonOperationsHandler = container.Resolve<PokemonOperations>();
-        
-        foreach (var member in testData.pokemonPartyData)
-        {
-            yield return pokemonOperationsHandler.HandlePokemonCreation(CreateMember
-                ,member.naturalPokemonData.pokemon
-                ,member.naturalPokemonData.pokemonLevel
-                ,member.naturalPokemonData.evolutionStageNumber);
-            
-            void CreateMember(Pokemon createdPokemon)
-            {
-                createdPokemon.nature = member.specificNature ?? createdPokemon.nature;
-                createdPokemon.gender = member.specificGender;
-                createdPokemon.ability = member.specificAbility ?? createdPokemon.ability;
-                
-                createdPokemon.moveSet.Clear();
-
-                var invalidNickname = string.IsNullOrEmpty(member.nickName) ||
-                                      string.IsNullOrWhiteSpace(member.nickName);
-                
-                createdPokemon.nickName = invalidNickname? createdPokemon.pokemonName : member.nickName;
-                
-                foreach (var move in member.naturalPokemonData.moveSet)
-                {
-                    createdPokemon.moveSet.Add(InstanceFactory.CreateMove(move));
-                }
-                if(member.naturalPokemonData.hasItem)
-                {
-                    createdPokemon.GiveItem(InstanceFactory.CreateItem(member.naturalPokemonData.heldItem));
-                }
-                pokemonPartyHandler.AddTestMember(createdPokemon);
-            }
-        }
-        yield return new WaitForSeconds(1f);
-    }
+   
 }

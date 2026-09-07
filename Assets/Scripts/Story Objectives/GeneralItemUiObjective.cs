@@ -22,7 +22,7 @@ public class GeneralItemUiObjective : ItemUiObjective
     private void SetupItemEquipObjective()
     {
         var overworldActions = serviceContainer.Resolve<OverworldActionsHandler>();
-        var playerBag = serviceContainer.Resolve<Bag>();
+        var playerBag = serviceContainer.Resolve<PlayerBagHandler>();
         var inputStateHandler = serviceContainer.Resolve<InputStateHandler>();
         if (overworldActions.ItemEquipped())
         {

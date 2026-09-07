@@ -11,7 +11,6 @@ public class TestGeneratorWindow : EditorWindow
 {
     private const string TemplateFolder = "Assets/Scripts/Testing/TestTemplates/";
     private const string TestDataDestinationFolder = "Assets/Resources/Pokemon_project_assets/Tests/";
-    private const string TestDataTemplateFolder = "Assets/Resources/Pokemon_project_assets/Tests/Template";
     
     private string className = "";
     private string destinationFolder = "Assets/Scripts/Testing";
@@ -26,6 +25,10 @@ public class TestGeneratorWindow : EditorWindow
         GetWindow<TestGeneratorWindow>("Class Generator");
     }
 
+    private string GetTemplateDataPath()
+    {
+        return $"Assets/Resources/Pokemon_project_assets/Tests/{templateNames[selectedTemplateIndex]}";
+    }
     private void OnEnable()
     {
         RefreshTemplates();
@@ -441,11 +444,12 @@ public class TestGeneratorWindow : EditorWindow
     }
     private void CopyTestDataTemplate(string formattedTestName)
     {
-        if (!AssetDatabase.IsValidFolder(TestDataTemplateFolder))
+        var testDataTemplateFolder = GetTemplateDataPath();
+        if (!AssetDatabase.IsValidFolder(testDataTemplateFolder))
         {
             EditorUtility.DisplayDialog(
                 "Error",
-                $"Test data template folder was not found:\n{TestDataTemplateFolder}",
+                $"Test data template folder was not found:\n{testDataTemplateFolder}",
                 "OK"
             );
 
@@ -476,7 +480,7 @@ public class TestGeneratorWindow : EditorWindow
 
         string sourceAbsolutePath = Path.Combine(
             Directory.GetParent(Application.dataPath).FullName,
-            TestDataTemplateFolder
+            testDataTemplateFolder
         );
 
         string destinationAbsolutePath = Path.Combine(

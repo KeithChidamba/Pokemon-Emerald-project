@@ -14,7 +14,7 @@ public enum BagUsage
     SellingView,
     SelectionOnly
 }
-public class Bag : MonoBehaviour,IInjectable
+public class PlayerBagHandler : MonoBehaviour,IInjectable
 {
     public List<Item> allItems;
     public List<Item> currentCategoryOfItems;

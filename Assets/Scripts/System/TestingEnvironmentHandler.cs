@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum DevelopmentEnvironment
 {
@@ -17,6 +18,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
    private Dictionary<int, MessageLog> testingLogs = new();
    private int NextLogID => testingLogs.Count+1;
    private TestingUtilities _testUtils;
+   private EndToEndTest currenEndToEndTest;
    
    private DialogueHandler _dialogueHandler;
    private GameLoadingHandler _gameLoadingHandler;
@@ -41,32 +43,85 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
       _gameLoadingHandler.StartGame(false);
       StartCoroutine(RunTests());
    }
+
+   public void ValidateEndToEndTest()
+   {
+       if (currenEndToEndTest == null)
+       {
+           Debug.LogError("Can't use that right now. Only for use during [End-To-End] tests");
+           return;
+       }
+       currenEndToEndTest.ValidateTestAndEnd(this);
+   }
    private void LogDialogueMessage(string newMessage)
    {
       LogMessage(newMessage,TestLogType.Dialogue);
    }
    public void LogMessage(string newMessage,TestLogType type)
    {
-      testingLogs.Add(NextLogID,new(DateTime.Now,newMessage,type));
+      testingLogs.Add(NextLogID,new MessageLog(DateTime.Now,newMessage,type));
    }
    
    private IEnumerator RunTests()
    {
-       DirectoryHandler.ClearDirectory(Path.Combine("Assets/Resources", 
-           DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)));
-
-       var unitTestHandler = new UnitTestHandler(_container);
-       yield return unitTestHandler.RunTests();
-       GetLogs("Unit Test Logs.html"); 
-       testingLogs.Clear();
-       Debug.Log($"UNIT TEST LOGS PRINTED");
-       yield return new WaitForSeconds(5f);
-       
-       //Integration Tests
        TestRegistry testRegistry = new();
        yield return new WaitForSeconds(0.1f);
        
-       foreach(var test in testRegistry.allTests)
+       DirectoryHandler.ClearDirectory(Path.Combine("Assets/Resources", 
+           DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)));
+
+       //End to End Tests
+       foreach (var endToEndTest in testRegistry.endToEndTests)
+       {
+           currenEndToEndTest = endToEndTest;
+           
+           endToEndTest.Inject(_container);
+           yield return new WaitForSeconds(0.5f);
+            
+           LogMessage($"Running [End-to-End] Test {endToEndTest.testName}",TestLogType.Test);
+            
+           var testData = Resources.Load<EndToEndTestData>(
+               DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"{endToEndTest.testName}/Test Data");
+            
+           _dialogueHandler.DisplayObjectiveText(testData.testDescription);
+           
+           var pokemonOperationsHandler = _container.Resolve<PokemonOperations>();
+           var pokemonPartyHandler = _container.Resolve<PokemonPartyHandler>();
+           yield return TestingUtilities.LoadPokemonPartyTestData(testData.pokemonPartyData,pokemonPartyHandler,pokemonOperationsHandler);
+           _dialogueHandler.EndDialogue();
+           
+           yield return endToEndTest.BeginTest(testData);
+           endToEndTest.testOperationStarted = true;
+           yield return new WaitUntil(()=>endToEndTest.testOperationsComplete);
+            
+           var testResult = endToEndTest.testStatus == TestStatus.Passed? "passed":"failed";
+            
+           LogMessage($"[End-to-End] Test {testResult}",endToEndTest.testStatus == TestStatus.Passed
+               ? TestLogType.Pass:TestLogType.Error);
+            
+           if (endToEndTest.testStatus == TestStatus.Failed)
+           { 
+               Debug.LogWarning($"-------------TEST FAILED---------------");
+               break;
+           }
+           yield return new WaitForSeconds(0.01f);
+       }
+       GetLogs("End To End Test Logs.html"); 
+       testingLogs.Clear();
+       Debug.Log($"[End To End] TEST LOGS PRINTED");
+       yield return new WaitForSeconds(1f);
+       
+       //Unit Tests
+       // var unitTestHandler = new UnitTestHandler(_container);
+       // yield return unitTestHandler.RunTests();
+       // GetLogs("Unit Test Logs.html"); 
+       // testingLogs.Clear();
+       // Debug.Log($"UNIT TEST LOGS PRINTED");
+       // yield return new WaitForSeconds(5f);
+       
+       //Integration Tests
+       
+       foreach(var test in testRegistry.integrationTests)
        {
            test.testingHandler = this;
            test.Inject(_container);
@@ -77,7 +132,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
            test.onTestResult += GetTestFeedBack;
            yield return new WaitForSeconds(0.01f);
            yield return StartCoroutine(test.BeginTest());
-           if (test.testStatus == IntegrationTest.TestStatus.Failed)
+           if (test.testStatus == TestStatus.Failed)
            { 
                Debug.LogWarning($"-------------TEST FAILED---------------");
                break;
@@ -87,7 +142,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
            { 
                test.onTestResult -= GetTestFeedBack; 
                LogMessage($"<- {test.testName} -> has {test.testStatus}"
-                   ,test.testStatus == IntegrationTest.TestStatus.Failed?
+                   ,test.testStatus == TestStatus.Failed?
                        TestLogType.Error:TestLogType.Pass);
            }
        }
@@ -118,7 +173,13 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
 public class TestRegistry
 {
     //tests are ran in this order
-    public List<IntegrationTest> allTests = new()
+    public EndToEndTest[] endToEndTests =
+    {
+        // new RareCandyTest(),
+        new FriendshipBerryTest(),
+    };
+    
+    public List<IntegrationTest> integrationTests = new()
     { 
     //Held Items
         // new ConsumableHeldItemUsageTest(),

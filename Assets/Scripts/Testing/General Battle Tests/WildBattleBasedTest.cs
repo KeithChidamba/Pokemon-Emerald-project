@@ -27,7 +27,7 @@ public class WildBattleBasedTest : BattleBasedTest
         var testData = Resources.Load<BattleBasedTestData>(
             DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"{testName}/Test Data");
 
-        yield return LoadTestData(testData,_pokemonPartyHandler);
+        yield return TestingUtilities.LoadPokemonPartyTestData(testData.pokemonPartyData,_pokemonPartyHandler,pokemonOperationsHandler);
         
         _turnBasedCombatHandler.OnNewTurn += DetermineTurnUsage;
         _turnBasedCombatHandler.OnTurnEventsCompleted += LogSuccess;

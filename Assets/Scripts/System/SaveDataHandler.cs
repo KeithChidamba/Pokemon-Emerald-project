@@ -29,7 +29,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     private PokemonPartyHandler _pokemonPartyHandler;
     private PlayerMovementHandler _playerMovementHandler;
     private OverworldState _overworldStateHandler;
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     private GameSettingsHandler _gameSettingsHandler;
     private TestingEnvironmentHandler _testingHandler;
     private ServiceContainer _container;
@@ -44,7 +44,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
         _areaHandler = container.Resolve<AreaManager>();
         _overworldStateHandler = container.Resolve<OverworldState>();
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
         _testingHandler = container.Resolve<TestingEnvironmentHandler>();
         _container = container;

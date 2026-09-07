@@ -21,7 +21,7 @@ public class MarketUiObjective : ItemUiObjective
 
     private void SetupItemSellObjective()
     {
-        var playerBag = serviceContainer.Resolve<Bag>(); 
+        var playerBag = serviceContainer.Resolve<PlayerBagHandler>(); 
         playerBag.OnItemSold += CheckForItemObjectiveClear;
     }
 

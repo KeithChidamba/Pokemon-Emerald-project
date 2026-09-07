@@ -52,7 +52,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private GameLoadingHandler _gameLoadingHandler;
     private SaveDataHandler _saveDataHandler;
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     private PokeMartHandler _pokeMartHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
     private PokemonStorageHandler _pokemonStorageHandler;
@@ -66,7 +66,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _pokeMartHandler = container.Resolve<PokeMartHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _pokemonDetailsHandler = container.Resolve<PokemonDetailsHandler>();

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PokemonPartyInputService: IInputGroup
 {
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     private GameUiHandler _gameUIHandler; 
     private PokemonPartyHandler _pokemonPartyHandler;
     private InputStateHandler _inputStateHandler;
@@ -14,7 +14,7 @@ public class PokemonPartyInputService: IInputGroup
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _gameUIHandler = container.Resolve<GameUiHandler>();
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
     }
 

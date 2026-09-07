@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerBagInputService : IInputGroup
 {
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     private ItemStorageHandler _itemStorageHandler;
     private InputStateHandler _inputStateHandler;
     private DialogueHandler _dialogueHandler;
@@ -13,7 +13,7 @@ public class PlayerBagInputService : IInputGroup
     public PlayerBagInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _itemStorageHandler = container.Resolve<ItemStorageHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
     }

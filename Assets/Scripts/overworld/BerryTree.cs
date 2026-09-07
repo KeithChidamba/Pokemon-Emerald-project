@@ -17,7 +17,7 @@ public class BerryTree : MonoBehaviour
     public event Action<bool> OnInteractionComplete;
 
     private DialogueHandler _dialogueHandler;
-    private Bag _playerBag;
+    private PlayerBagHandler _playerBag;
     private GameUiHandler _gameUIHandler;
     private InputStateHandler _inputStateHandler;
     private OverworldActionsHandler _overworldActions;
@@ -28,7 +28,7 @@ public class BerryTree : MonoBehaviour
         //this class is instantiated, so it doesn't get dependencies until later
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _overworldActions = container.Resolve<OverworldActionsHandler>();
-        _playerBag = container.Resolve<Bag>();
+        _playerBag = container.Resolve<PlayerBagHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _gameUIHandler = container.Resolve<GameUiHandler>();
         _inputStateHandler = container.Resolve<InputStateHandler>();

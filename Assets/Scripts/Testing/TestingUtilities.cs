@@ -113,6 +113,43 @@ public class TestingUtilities
 
       </body>
       </html>";
+   public static IEnumerator LoadPokemonPartyTestData(List<PokemonTestData> pokemonPartyData, PokemonPartyHandler pokemonPartyHandler,
+       PokemonOperations pokemonOperationsHandler)
+   {
+        
+       foreach (var member in pokemonPartyData)
+       {
+           yield return pokemonOperationsHandler.HandlePokemonCreation(CreateMember
+               ,member.naturalPokemonData.pokemon
+               ,member.naturalPokemonData.pokemonLevel
+               ,member.naturalPokemonData.evolutionStageNumber);
+            
+           void CreateMember(Pokemon createdPokemon)
+           {
+               createdPokemon.nature = member.specificNature ?? createdPokemon.nature;
+               createdPokemon.gender = member.specificGender;
+               createdPokemon.ability = member.specificAbility ?? createdPokemon.ability;
+                
+               createdPokemon.moveSet.Clear();
+
+               var invalidNickname = string.IsNullOrEmpty(member.nickName) ||
+                                     string.IsNullOrWhiteSpace(member.nickName);
+                
+               createdPokemon.nickName = invalidNickname? createdPokemon.pokemonName : member.nickName;
+                
+               foreach (var move in member.naturalPokemonData.moveSet)
+               {
+                   createdPokemon.moveSet.Add(InstanceFactory.CreateMove(move));
+               }
+               if(member.naturalPokemonData.hasItem)
+               {
+                   createdPokemon.GiveItem(InstanceFactory.CreateItem(member.naturalPokemonData.heldItem));
+               }
+               pokemonPartyHandler.AddTestMember(createdPokemon);
+           }
+       }
+       yield return new WaitForSeconds(1f);
+   }
 }
 
 public struct MessageLog

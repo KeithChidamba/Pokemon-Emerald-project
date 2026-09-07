@@ -31,14 +31,14 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
     private AreaManager _areaHandler;
     private PlayerMovementHandler _playerMovement;
     private OverworldActionsHandler _overworldActions;
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     private InputStateHandler _inputStateHandler;
     private GameUiHandler _gameUIHandler;
     private GameSettingsHandler _gameSettingsHandler;
     
     public void Inject(ServiceContainer container)
     {
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _saveHandler = container.Resolve<SaveDataHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _areaHandler = container.Resolve<AreaManager>();

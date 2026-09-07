@@ -18,7 +18,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     
     private DialogueHandler _dialogueHandler;
     private PokemonPartyHandler _playerParty;
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     private GameUiHandler gameUiHandler;
     private PokemonStorageHandler _pokemonStorage;
     private BattleHandler _battleHandler;
@@ -28,7 +28,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _playerParty = container.Resolve<PokemonPartyHandler>();
         gameUiHandler = container.Resolve<GameUiHandler>();
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _battleHandler = container.Resolve<BattleHandler>();
         _pokemonStorage = container.Resolve<PokemonStorageHandler>();
         gameObject.SetActive(true);

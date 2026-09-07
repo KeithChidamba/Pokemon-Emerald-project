@@ -20,7 +20,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
     private InputStateHandler _inputStateHandler;
     private BattleHandler _battleHandler;
     private AreaManager  _areaHandler;
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     private OverworldActionsHandler _overworldActions;
     private PokemonPartyHandler _pokemonPartyHandler;
     private PokemonOperations _pokemonOperationsHandler;
@@ -37,7 +37,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
         _battleHandler = container.Resolve<BattleHandler>();
         _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         _pokemonStorageHandler = container.Resolve<PokemonStorageHandler>();

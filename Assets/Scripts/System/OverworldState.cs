@@ -29,7 +29,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     private DialogueHandler _dialogueHandler;
     private ServiceContainer _container;
     private GameLoadingHandler _gameLoadingHandler;
-    private Bag _playerBag;
+    private PlayerBagHandler _playerBag;
     
     public void Inject(ServiceContainer container)
     {
@@ -37,7 +37,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         _saveHandler = container.Resolve<SaveDataHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
-        _playerBag = container.Resolve<Bag>();
+        _playerBag = container.Resolve<PlayerBagHandler>();
         gameObject.SetActive(true);
     }
 

@@ -5,7 +5,6 @@ public abstract class IntegrationTest
 {
     public TestingEnvironmentHandler testingHandler;
     public string testName;
-    public enum TestStatus{Passed,Failed}
     public TestStatus testStatus;
     public Action onTestResult;
     public virtual IEnumerator BeginTest()
@@ -14,8 +13,10 @@ public abstract class IntegrationTest
     }
     public virtual void Inject(ServiceContainer container) { }
 
-    public void SetTestStatus(bool condition)
+    protected void SetTestStatus(bool condition)
     {
         testStatus = condition ? TestStatus.Passed : TestStatus.Failed;
     }
 }
+
+public enum TestStatus{Passed,Failed}

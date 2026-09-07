@@ -9,12 +9,12 @@ public class ItemStorageHandler : MonoBehaviour,IInjectable
     
     private GameUiHandler _gameUIHandler;
     private DialogueHandler _dialogueHandler;
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     
     public void Inject(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<DialogueHandler>();
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _gameUIHandler = container.Resolve<GameUiHandler>();
         gameObject.SetActive(true);
     }

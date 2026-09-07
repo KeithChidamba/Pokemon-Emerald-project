@@ -212,11 +212,14 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             canExitDialogue = false;
         DisplayBattleInfo(info);
     }
+    /// <summary>
+    /// Can be used for battle dialogue but also situations where that specific
+    /// dialogue could occur inside or outside battle
+    /// </summary>
     public void DisplayBattleInfo(string info)
     {
         if (!_battleHandler.BattleInProgress)
         {
-            Debug.LogError("Incorrect Usage of Dialogue method");
             DisplayDetails(info);
             return;
         }

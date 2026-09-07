@@ -116,7 +116,32 @@ public class TestCaseHandler
    /// </summary>
    public void HandleCurrentTestCase(Action successCallBack,Action failureCallBack)
    {
-      var result = CheckForCurrentTestCase(successCallBack, failureCallBack);
+      ValidateTestCases(
+         _testHandler,
+         GetCurrentTestCase(_sequencer.GetTestCaseIndex()),
+         successCallBack, failureCallBack);
+   }
+
+   public static void ValidateTestCases(TestingEnvironmentHandler testHandler,TestCase testCaseResult,
+   Action successCallBack,Action failureCallBack)
+   {
+      if(testCaseResult==null)return;
+      
+      testHandler.LogMessage($"Test case({testCaseResult.caseIndex + 1}) Conditions :", TestLogType.TestCase);
+      for (int i=0;i< testCaseResult.conditions.Count;i++)
+      {
+         var condition = testCaseResult.conditions[i];
+            
+         if (!condition.requirement.Invoke())
+         {
+            testHandler.LogMessage($"Test case condition({i + 1}) FAILED due to violation" +
+                                    $" of case ({condition.message})", TestLogType.Error);
+            failureCallBack?.Invoke();
+            return;
+         }
+         testHandler.LogMessage($"Test case condition({i + 1}) PASSED({condition.message})", TestLogType.TestCaseCondition);
+      }
+      successCallBack?.Invoke();
    }
    public bool CheckForCurrentTestCase(Action successCallBack,Action failureCallBack)
    {

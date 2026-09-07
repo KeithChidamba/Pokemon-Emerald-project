@@ -25,7 +25,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private MoveLogicDatabase moveLogicDatabase;
     [SerializeField] private DialogueOptionsEventHandler dialogueOptionsHandler;
     [SerializeField] private GameUiHandler gameUIHandler;
-    [SerializeField] private Bag playerBagHandler;
+    [SerializeField] private PlayerBagHandler playerBagHandler;
     [SerializeField] private PokeMartHandler pokeMartHandler;
     [SerializeField] private PokemonPartyHandler pokemonPartyHandler;
     [SerializeField] private PokemonOperations pokemonOperationsHandler;

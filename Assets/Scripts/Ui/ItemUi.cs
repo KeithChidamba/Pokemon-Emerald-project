@@ -11,10 +11,10 @@ public class ItemUi : MonoBehaviour,IInjectable
     public Text itemName;
     public GameObject equippedMarker;
     
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     public void Inject(ServiceContainer container)
     {
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
     }
     
     public void OnInject()

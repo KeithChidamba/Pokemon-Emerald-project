@@ -32,7 +32,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
     private DialogueHandler _dialogueHandler;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private GameUiHandler _gameUIHandler;
-    private Bag _playerBagHandler;
+    private PlayerBagHandler _playerBagHandler;
     private GameLoadingHandler _gameLoadingHandler;
     
     public void Inject(ServiceContainer container)
@@ -40,7 +40,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _gameUIHandler = container.Resolve<GameUiHandler>();
-        _playerBagHandler = container.Resolve<Bag>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         gameObject.SetActive(true);
     }
