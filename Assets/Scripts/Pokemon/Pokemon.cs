@@ -275,7 +275,7 @@ public class Pokemon : ScriptableObject
             {
                 < 100 => 5,
                 < 200 => 3,
-                < 255 => 2,
+                < 256 => 2,
                 _ => 0
             };
             var amount = ApplyFriendshipModifier(increaseAmount);

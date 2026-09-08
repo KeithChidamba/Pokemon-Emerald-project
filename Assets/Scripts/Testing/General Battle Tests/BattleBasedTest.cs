@@ -49,8 +49,11 @@ public class BattleBasedTest : IntegrationTest
         var pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         
         var testData = Resources.Load<BattleBasedTestData>(
-            DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"{testName}/Test Data");
-
+            DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"Integration/{testName}/Test Data");
+        if (testData == null)
+        {
+            Debug.LogWarning("Make sure test data is in [test/Integration] folder not just in [Test] folder");
+        }
         var testEnemy = Resources.Load<TrainerData>(
             DirectoryHandler.GetDirectory(AssetDirectory.TestAssets) + "Test Enemy");
 

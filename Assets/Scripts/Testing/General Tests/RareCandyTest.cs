@@ -12,19 +12,22 @@ public class RareCandyTest : ItemEndToEndTest
     {
         var itemData = (ItemEndToEndTestData)testData;
         LoadItems(itemData.testItems);
+        
         expectedLevel = _pokemonPartyHandler.Party[0].currentLevel+1;
+        
+        AddTestCaseScenario(1,()=>
+        {
+            //nothing important here, just taking advantage
+            //of the existing logic to display after test case check
+            _testHandler.LogMessage($"Pokemon level: {_pokemonPartyHandler.Party[0].currentLevel}" +
+                                    $", expected {expectedLevel}",TestLogType.Information);
+        });
         
         AddTestCase("Pokemon must level up by 1",() => 
             _pokemonPartyHandler.Party[0].currentLevel == expectedLevel);
         
         _gameUiHandler.ValidateBagView();
         yield return null;
-    }
-
-    protected override void OnTestCasesChecked()
-    {
-        _testHandler.LogMessage($"Pokemon level: {_pokemonPartyHandler.Party[0].currentLevel}" +
-                                $", expected {expectedLevel}",TestLogType.Information);
     }
 
     public override void Inject(ServiceContainer container)

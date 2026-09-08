@@ -15,7 +15,7 @@ MonoBehaviour:
   pokemonPartyData:
   - naturalPokemonData:
       pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
-      pokemonLevel: 5
+      pokemonLevel: 35
       evolutionStageNumber: 0
       hasItem: 0
       heldItem: {fileID: 0}
@@ -23,6 +23,7 @@ MonoBehaviour:
     specificNature: {fileID: 0}
     specificGender: 0
     specificAbility: {fileID: 0}
-    nickName: 
-  testDescription: 
-  testItems: []
+    nickName: friendo
+  testDescription: Use a kelpsy berry on mudkip
+  testItems:
+  - {fileID: 11400000, guid: e3c0178b98b30173393da9415886cffa, type: 2}

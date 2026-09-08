@@ -5,5 +5,4 @@ using UnityEngine;
 public class EndToEndTestData : ScriptableObject
 {
     public List<PokemonTestData> pokemonPartyData = new();
-    public string testDescription;
 }

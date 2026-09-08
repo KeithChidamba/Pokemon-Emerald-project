@@ -438,6 +438,13 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     }
     
     //state removal
+    /// <summary>
+    /// [For Testing] Remove all current ui screens
+    /// </summary>
+    public void RemoveAllUi()
+    {
+        AddRemovals(stateLayers);
+    }
     public void ResetGroupUi(InputStateGroup group)
     {
         List<InputState> inputStates = new List<InputState>();

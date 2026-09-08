@@ -9,6 +9,7 @@ public class ItemEndToEndTest : EndToEndTest
     protected void LoadItems(List<Item>itemAssets)
     {
         _playerBag = serviceContainer.Resolve<PlayerBagHandler>();
+        _playerBag.allItems.Clear();
         foreach (var asset in itemAssets)
         {
             _playerBag.AddItem(asset);

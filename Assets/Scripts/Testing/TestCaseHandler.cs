@@ -4,27 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TestCase
-{
-   public int caseIndex;
-   public List<TestCaseCondition> conditions;
-
-   public TestCase(int caseIndex, List<TestCaseCondition> conditions)
-   {
-      this.caseIndex = caseIndex;
-      this.conditions = conditions;
-   }
-}
-public class TestCaseCondition
-{
-   public string message;
-   public Func<bool> requirement;
-   public TestCaseCondition(string message, Func<bool> requirement)
-   {
-      this.message = message;
-      this.requirement = requirement;
-   }
-}
 public class TestCaseHandler
 {
    private enum TestCaseIndexHandling

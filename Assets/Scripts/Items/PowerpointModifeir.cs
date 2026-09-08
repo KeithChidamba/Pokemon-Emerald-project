@@ -7,8 +7,9 @@ public class PowerpointModifeir : AdditionalInfoModule
 {
     public ModiferType  modiferType;
     public ModiferItemType  itemType;
+    public enum ModiferItemType{Ether,MaxEther,Vitamin}
+    
+    public enum ModiferType{ IncreasePp,MaximisePp,RestorePp}
 }
 
-public enum ModiferItemType{Ether,MaxEther,Vitamin}
 
-public enum ModiferType{ IncreasePp,MaximisePp,RestorePp}

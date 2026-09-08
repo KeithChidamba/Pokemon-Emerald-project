@@ -13,16 +13,16 @@ public class EndToEndItemTestTesmplate: ItemEndToEndTest
         var itemData = (ItemEndToEndTestData)testData;
         LoadItems(itemData.testItems);
         
+        AddTestCaseScenario(()=>
+        {
+            //example scenario
+        });
+        
         AddTestCase("Example condition",() => 
             _pokemonPartyHandler.Party[0].currentLevel == 1);
         
         _gameUiHandler.ValidateBagView();
         yield return null;
-    }
-
-    protected override void OnTestCasesChecked()
-    {
-        _testHandler.LogMessage($"Pokemon level: {_pokemonPartyHandler.Party[0].currentLevel}",TestLogType.Information);
     }
 
     public override void Inject(ServiceContainer container)

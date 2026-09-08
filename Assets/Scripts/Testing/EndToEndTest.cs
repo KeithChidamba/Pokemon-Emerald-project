@@ -1,20 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class EndToEndTest
 {
     public string testName;
     public TestStatus testStatus;
     
-    private Dictionary<int,TestCase> testCases = new(); 
+    private List<TestCase> testCases = new();
+    private Dictionary<int,Action> testScenarios = new();
     private TestingEnvironmentHandler _testingHandler;
 
+    private int NextIndex => testCases.Count;
+    
     public bool testOperationsComplete;
     public bool testOperationStarted;
-    private int NextIndex => testCases.Count;
-
+    
+    private int currentTestCaseIndex;
+    
     protected ServiceContainer serviceContainer;
     
     public virtual void Inject(ServiceContainer container) { }
@@ -22,6 +25,37 @@ public class EndToEndTest
     public virtual IEnumerator BeginTest(EndToEndTestData testData)
     {
         yield return null;
+    }
+/// <summary>
+/// This is for manipulating the current test state to align
+/// with test cases
+/// </summary>
+    protected void AddTestCaseScenario(int caseIndex,Action scenario)
+    {
+        testScenarios.Add(caseIndex,scenario);
+    }
+    /// <summary>
+    /// This is for manipulating the current test state to align
+    /// with test cases. This overload works with automatic indexing
+    /// </summary>
+    protected void AddTestCaseScenario(Action scenario)
+    {
+        testScenarios.Add(testScenarios.Count,scenario);
+    }
+/// <summary>
+/// Run the current scenario action to prepare for
+/// the test case
+/// </summary>
+    public void SetupCurrentScenario()
+    {
+        serviceContainer.Resolve<DialogueHandler>()
+            .DisplayTestCaseText(
+                testCases[currentTestCaseIndex].GetCaseMessages());
+        
+        if(testScenarios.TryGetValue(testCases[currentTestCaseIndex].caseIndex, out var action))
+        {
+            action();
+        }
     }
     protected void AddTestCase(string message,Func<bool> condition)
     {
@@ -32,27 +66,49 @@ public class EndToEndTest
     }
     protected void AddTestCase(List<TestCaseCondition> conditions)
     {
-        testCases.Add(NextIndex,new TestCase(NextIndex, conditions));
+        testCases.Add(new TestCase(NextIndex, conditions));
     }
-    protected virtual void OnTestCasesChecked() { }
-    public void ValidateTestAndEnd(TestingEnvironmentHandler testHandler)
+
+    /// <summary>
+    /// Occurs once a test case is checked. At this point
+    /// [currentTestCaseIndex] is +1 the index of the test case that was
+    /// just checked. By default, this method runs the current scenario, unless overloaded
+    /// </summary>
+    protected virtual void OnTestCaseChecked()
+    {
+        SetupCurrentScenario();
+    }
+    protected virtual void OnTestCaseFailed() { }
+    public void ValidateCurrentTestCase(TestingEnvironmentHandler testHandler)
     {
         if (!testOperationStarted) return;
-        foreach(var testCase in testCases)
-        {
-            TestCaseHandler.ValidateTestCases(
-                testHandler,
-                testCase.Value,
-                () =>
+        TestCaseHandler.ValidateTestCases(
+            testHandler,
+            testCases[currentTestCaseIndex],
+            () =>
+            {
+                testStatus = TestStatus.Passed;
+                currentTestCaseIndex++;
+                if (currentTestCaseIndex == testCases.Count)
                 {
-                    testStatus = TestStatus.Passed;
+                    EndTest();
                 }
-                , () =>
+                else
                 {
-                    testStatus = TestStatus.Failed;
-                });
-        }
-        OnTestCasesChecked();
+                    OnTestCaseChecked();
+                }
+            }
+            , () =>
+            {
+                testStatus = TestStatus.Failed;
+                EndTest();
+                OnTestCaseFailed();
+            });
+    }
+    private void EndTest()
+    {
+        serviceContainer.Resolve<DialogueHandler>()
+            .DisplayTestCaseText(string.Empty);
         testOperationStarted = false;
         testOperationsComplete = true;
     }

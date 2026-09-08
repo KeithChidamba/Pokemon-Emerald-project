@@ -556,10 +556,13 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     public IEnumerator HandlePokemonEvolution(Pokemon pokemon, int evolutionIndex)
     {
         _dialogueHandler.DisplayBattleInfo("What? "+pokemon.pokemonDisplayName+" is evolving!");
-        var previousName = pokemon.pokemonDisplayName;
+        
+        var previousName = pokemon.pokemonDisplayName == pokemon.pokemonName?//means it has no nickname
+            pokemon.pokemonName : pokemon.pokemonDisplayName;
+        
         yield return _dialogueHandler.AwaitAllDialogue();
         pokemon.Evolve(pokemon.evolutions[evolutionIndex]);
-        _dialogueHandler.DisplayBattleInfo(previousName+" evolved into "+pokemon.pokemonDisplayName);
+        _dialogueHandler.DisplayBattleInfo(previousName+" evolved into "+pokemon.pokemonName);
         yield return _dialogueHandler.AwaitAllDialogue();
     }
 }

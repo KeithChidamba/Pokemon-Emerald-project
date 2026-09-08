@@ -14,6 +14,7 @@ public enum DevelopmentEnvironment
 
 public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
 { 
+   public GameObject testControlsView;
    public DevelopmentEnvironment environment;
    private Dictionary<int, MessageLog> testingLogs = new();
    private int NextLogID => testingLogs.Count+1;
@@ -22,36 +23,46 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
    
    private DialogueHandler _dialogueHandler;
    private GameLoadingHandler _gameLoadingHandler;
+   private InputStateHandler _inputStateHandler;
+   private PokemonPartyHandler _pokemonPartyHandler;
    private ServiceContainer _container;
    
    public void Inject(ServiceContainer container)
    {
       _dialogueHandler = container.Resolve<DialogueHandler>();
       _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
+      _inputStateHandler = container.Resolve<InputStateHandler>();
+      _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
+      
       _container = container;
       gameObject.SetActive(true);
    }
    public void OnInject()
    {
-       _testUtils = new TestingUtilities();
-      //logging
-      _dialogueHandler.OnDialogueDisplayed += LogDialogueMessage;
+       if (environment == DevelopmentEnvironment.Testing)
+       {
+           testControlsView.SetActive(true);
+       
+           _testUtils = new TestingUtilities();
+           //logging
+           _dialogueHandler.OnDialogueDisplayed += LogDialogueMessage;
       
-      _gameLoadingHandler.playerData = Resources.Load<PlayerData>(DirectoryHandler
-         .GetDirectory(AssetDirectory.TestAssets) + "Test Player");
+           _gameLoadingHandler.playerData = Resources.Load<PlayerData>(DirectoryHandler
+               .GetDirectory(AssetDirectory.TestAssets) + "Test Player");
       
-      _gameLoadingHandler.StartGame(false);
-      StartCoroutine(RunTests());
+           _gameLoadingHandler.StartGame(false);
+           StartCoroutine(RunTests());
+       }
    }
 
-   public void ValidateEndToEndTest()
+   public void ValidateEndToEndTestCase()
    {
        if (currenEndToEndTest == null)
        {
            Debug.LogError("Can't use that right now. Only for use during [End-To-End] tests");
            return;
        }
-       currenEndToEndTest.ValidateTestAndEnd(this);
+       currenEndToEndTest.ValidateCurrentTestCase(this);
    }
    private void LogDialogueMessage(string newMessage)
    {
@@ -81,17 +92,20 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
            LogMessage($"Running [End-to-End] Test {endToEndTest.testName}",TestLogType.Test);
             
            var testData = Resources.Load<EndToEndTestData>(
-               DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"{endToEndTest.testName}/Test Data");
-            
-           _dialogueHandler.DisplayObjectiveText(testData.testDescription);
-           
+               DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"End To End/{endToEndTest.testName}/Test Data");
+           if (testData == null)
+           {
+               Debug.LogWarning("Make sure test data is in [test/End To End] folder not just in [Test] folder");
+           }
            var pokemonOperationsHandler = _container.Resolve<PokemonOperations>();
-           var pokemonPartyHandler = _container.Resolve<PokemonPartyHandler>();
-           yield return TestingUtilities.LoadPokemonPartyTestData(testData.pokemonPartyData,pokemonPartyHandler,pokemonOperationsHandler);
+           yield return TestingUtilities.LoadPokemonPartyTestData(testData.pokemonPartyData,_pokemonPartyHandler,pokemonOperationsHandler);
            _dialogueHandler.EndDialogue();
            
            yield return endToEndTest.BeginTest(testData);
            endToEndTest.testOperationStarted = true;
+           //setup initial scenario
+           endToEndTest.SetupCurrentScenario();
+           
            yield return new WaitUntil(()=>endToEndTest.testOperationsComplete);
             
            var testResult = endToEndTest.testStatus == TestStatus.Passed? "passed":"failed";
@@ -104,7 +118,9 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
                Debug.LogWarning($"-------------TEST FAILED---------------");
                break;
            }
-           yield return new WaitForSeconds(0.01f);
+           _pokemonPartyHandler.ClearTestState();
+           _inputStateHandler.RemoveAllUi();
+           yield return new WaitForSeconds(2f);
        }
        GetLogs("End To End Test Logs.html"); 
        testingLogs.Clear();
@@ -168,73 +184,5 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
       string html =  _testUtils.htmlHeader + rows + _testUtils.htmlFooter;
       File.WriteAllText(baseDir, html);
    }
-}
-
-public class TestRegistry
-{
-    //tests are ran in this order
-    public EndToEndTest[] endToEndTests =
-    {
-        // new RareCandyTest(),
-        new FriendshipBerryTest(),
-    };
-    
-    public List<IntegrationTest> integrationTests = new()
-    { 
-    //Held Items
-        // new ConsumableHeldItemUsageTest(),
-        // new ChoiceBandTest(),
-    //Special Move Logic
-        // new BideTest(),
-        // new HyperBeamTest(),
-        // new MirrorMoveTest(),
-        // new SilverwindBattleEndTest(),
-        // new SilverwindSwapTest(),
-        // new WhirlwindWildBattleTest(),
-        // new WhirlwindTrainerBattleTest(),
-        // new WhirlwindDoubleBattleTest(),
-        // new ThunderTest(),
-        // new Endeavor(),
-        // new RestTest(),
-        // new BellyDrumTest(),
-        // new CovetTest(),
-        // new FalseSwipeTest(),
-        // new FlailTest(),
-        // new FuryCutter(),
-        // new TakeDownTest(),
-        // new HazeTest(),
-        // new PursuitTest(),
-        // new BrickBreakTest(),
-    //Abilities
-        // new HealthBasedDamageBuffTest(),
-        // new StatusEffectDamageBuffTest(),
-        // new ShedSkinTest(),
-        // new StaticTest(),
-        // new ArenaTrapTest(),
-        // new LevitateTest(),
-        // new GutsTest(),
-        // new PickupTest(),
-        // new InnerFocusTest(),
-    //Battle system tests
-        // new TrapEffectTest(),
-        // new InfatuationEffectTest(),
-        // new FlinchEffectTest(),
-        // new StruggleTest(),
-        // new StatChangeApplicationTest(),
-        // new StatusEffectTest(),
-        // new WeatherDamageTest(),
-        // new OnFieldDamageModificationTest(),
-    //Move Based Tests
-        // new SpecificMoveDamageTest(),
-        // new SemiInvulnerableSingleBattleTest(),
-        // new SemiInvulnerableDoubleBattleTest(),
-        // new IdentifyTargetMoveTest(),
-        // new MultiTargetDamageTest(),
-        // new CreateBarrierMoveTest(),
-        // new HealthDrainTest(),
-        // new HealFromWeatherTest(),
-        // new DamageProtectionMoveTest(),
-        // new ConsecutiveMoveTest()
-    };
 }
 

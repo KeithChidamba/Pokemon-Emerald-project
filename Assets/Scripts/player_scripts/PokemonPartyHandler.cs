@@ -330,7 +330,9 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         ClearSelectionUI();
         _partyInputService.UpdateHealthBarColors();
     }
-
+/// <summary>
+/// [For Testing] Removes all party members
+/// </summary>
     public void ClearTestState()
     {
         party.Clear();

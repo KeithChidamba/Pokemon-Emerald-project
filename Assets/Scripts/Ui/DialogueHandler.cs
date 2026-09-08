@@ -20,7 +20,11 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     [SerializeField] private GameObject dialogueOptionPrefab;
     [SerializeField] private GameObject dialogueOptionBox;
     [SerializeField] private GameObject objectiveDialogueBox;
+    [SerializeField] private GameObject testCaseDialogueBox;
     [SerializeField] private TMP_Text objectiveDialougeText;
+    
+    [SerializeField] private TMP_Text testCaseDialougeText;
+    
     [SerializeField] private DialogueOptionsManager _dialogueOptionsManager;
     [SerializeField] private Transform dialogueUiParent;
     private List<GameObject> _currentDialogueOptions = new();
@@ -290,7 +294,11 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         objectiveDialogueBox.SetActive(true);
         objectiveDialougeText.text = message;
     }
-    
+    public void DisplayTestCaseText(string message)
+    {
+        testCaseDialogueBox.SetActive(true);
+        testCaseDialougeText.text = message;
+    }
     public void RemoveObjectiveText()
     {
         objectiveDialogueBox.SetActive(false);
