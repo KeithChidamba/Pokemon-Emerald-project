@@ -248,7 +248,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             yield return new WaitForSecondsRealtime(1f);
             pendingMessages.RemoveAt(0);
         }
-        _inputStateHandler.ResetRelevantUi(InputStateName.BattleDialoguePlaceHolder);
+        _inputStateHandler.ResetSpecificUi(InputStateName.BattleDialoguePlaceHolder);
         messagesLoading = false;
     }
     public void EndDialogue()
@@ -382,7 +382,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         }
         dialogueFinished = true;
         
-        _inputStateHandler.ResetRelevantUi(InputStateName.DialoguePlaceHolder);
+        _inputStateHandler.ResetSpecificUi(InputStateName.DialoguePlaceHolder);
         
         if (currentInteraction.dialogueType == DialogType.Options 
             || currentInteraction.dialogueType == DialogType.CustomOptions)

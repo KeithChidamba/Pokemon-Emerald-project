@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM37
   itemType: 16
-  itemEffectData: 0
   itemDescription: Causes damage each turn.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 4778f97ae78751d61b459f7b96aee04e, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118607
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118607
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 37
+        move: {fileID: 11400000, guid: c965c685cf276a756962f0e80782ef1d, type: 2}

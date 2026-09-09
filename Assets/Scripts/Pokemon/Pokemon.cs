@@ -67,7 +67,7 @@ public class Pokemon : ScriptableObject
     public int friendshipLevel;
     public bool hasTrainer;
     
-    public List<Type> types;
+    public List<Type> types = new();
     public StatusEffect statusEffect;
     public List<StatChangeData> statModifiers = new();
     [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
@@ -79,11 +79,13 @@ public class Pokemon : ScriptableObject
     [FormerlySerializedAs("split_evolution")] public bool splitEvolution = false;
     public bool requiresFriendshipEvolution = false;
     public LearnSetMove[] learnSet;
-    public List<TM_Name> learnableTms;
-    public List<HM_Name> learnableHms;
+    
+    public List<MoveName> learnableTms = new();
+    public List<MoveName> learnableHms = new();
+    
     public List<Move> moveSet=new();
     public Ability ability;
-    public List<Evolution> evolutions;
+    public List<Evolution> evolutions = new();
     public Item heldItem;
     public bool hasItem;
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
@@ -423,8 +425,11 @@ public class Pokemon : ScriptableObject
         effortValues=evo.effortValues;
         types = evo.types;
         ability = evo.ability;
-        learnableTms = new List<TM_Name>(evo.learnableTms);
-        learnableHms = new List<HM_Name>(evo.learnableHms);
+        
+        //edit this
+        learnableTms = new List<MoveName>(evo.learnableTms);
+        learnableHms = new List<MoveName>(evo.learnableHms);
+        
         learnSet = (LearnSetMove[])evo.learnSet.Clone();
         frontPicture = evo.frontPicture;
         backPicture = evo.backPicture;

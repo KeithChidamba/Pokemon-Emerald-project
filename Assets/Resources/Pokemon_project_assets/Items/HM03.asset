@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: HM03
   itemType: 16
-  itemEffect: 
   itemDescription: Teaches a valid pokemon, surf
   price: 0
   quantity: 1
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 0
-  isMultiModular: 0
-  hasModules: 1
-  additionalInfoModule: {fileID: 11400000, guid: a50c9819f40ea990dbe0082d84843d2e, type: 2}
-  additionalInfoModules:
-  - {fileID: 11400000, guid: a50c9819f40ea990dbe0082d84843d2e, type: 2}
-  infoModuleAssetNames: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118593
   imageDirectory: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 5308325803627118593
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 3
+        move: {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}

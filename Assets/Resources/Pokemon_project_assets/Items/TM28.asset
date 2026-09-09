@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM28
   itemType: 16
-  itemEffectData: 0
   itemDescription: Digs underground on first turn, strikes next.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: cd319195ea6ba2b47b1617c31b88330a, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118604
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118604
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 28
+        move: {fileID: 11400000, guid: c91be8b80ec1736ac80d7e41b6801ade, type: 2}

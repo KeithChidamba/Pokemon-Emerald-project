@@ -8,6 +8,16 @@ public static class NameDB
     {
         return learnSetMoveNames[moveName];
     }
+/// <summary>
+/// Chek the name of a move without string literal
+/// </summary>
+/// <param name="move"></param>
+/// <param name="moveName"></param>
+/// <returns></returns>
+    public static bool NameMatch(Move move,MoveName moveName)
+    {
+        return ParseMoveName(move.moveName) == moveName;
+    }
     public static MoveName ParseMoveName(string moveName)
     {
         foreach (var pair in learnSetMoveNames)
@@ -215,31 +225,6 @@ public static class NameDB
             return "Eva";
         return stat.ToString();
     }
-}
-
-public enum TM_Name
-{
-    BulletSeed,
-    BrickBreak,
-    BulkUp,
-    AerialAce,
-    Thunderbolt,
-    Thunder,
-    Flamethrower,
-    GigaDrain,
-    Dig,
-    Earthquake,
-    SandStorm,
-    HyperBeam,
-    Toxic,
-    IceBeam,
-    RainDance
-}
-
-public enum HM_Name
-{
-    Surf,
-    Fly
 }
 
 public enum AbilityName

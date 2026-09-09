@@ -332,7 +332,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             new(pcItemOptions[0], _itemStorageHandler.ViewItemsToWithdraw, true),
             new(pcItemOptions[1], _itemStorageHandler.OpenBagToDepositItem, true),
             new(pcItemOptions[2], _itemStorageHandler.OpenBagToTossItem, true),
-            new(pcItemOptions[3], ()=>_inputStateHandler.ResetRelevantUi(InputStateName.ItemStorageUsage), true),
+            new(pcItemOptions[3], ()=>_inputStateHandler.ResetSpecificUi(InputStateName.ItemStorageUsage), true),
         };
         _inputStateHandler.ChangeInputState(new  (InputStateName.ItemStorageUsage,
             InputStateGroup.Bag,true,pcItemOptionsUI,
@@ -354,7 +354,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             ()=>SetPokemonPcUsage(PCUsageState.Withdraw),
             ()=>SetPokemonPcUsage(PCUsageState.Deposit),
             ()=>SetPokemonPcUsage(PCUsageState.Move),
-            ()=>_inputStateHandler.ResetRelevantUi(InputStateName.PokemonStorageUsage)
+            ()=>_inputStateHandler.ResetSpecificUi(InputStateName.PokemonStorageUsage)
         };
         
         var pcUsageSelectables = new List<SelectableUI>();

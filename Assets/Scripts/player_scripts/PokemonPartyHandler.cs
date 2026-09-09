@@ -117,7 +117,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     public void ValidatePartyExit()
     {
         if (currentUsage==PartyUsage.SwapOut) return;
-        _inputStateHandler.ResetRelevantUi(InputStateName.PokemonPartyNavigation,true);
+        _inputStateHandler.ResetSpecificUi(InputStateName.PokemonPartyNavigation,true);
     }
 
     public void CheckStateUpdate(InputState currentState)

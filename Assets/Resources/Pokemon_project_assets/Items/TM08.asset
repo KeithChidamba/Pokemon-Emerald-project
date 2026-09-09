@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM08
   itemType: 16
-  itemEffectData: 0
   itemDescription: Boosts Attack and Defense.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 6bc725559c3a2647cb6f9788a95aa8d0, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118595
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118595
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 8
+        move: {fileID: 11400000, guid: aabea0c5799a559ea85d7f906e739090, type: 2}

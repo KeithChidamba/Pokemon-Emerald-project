@@ -522,8 +522,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         yield return _dialogueHandler.AwaitAllDialogue();
         
         //check if the move used was pursuit
-        var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => 
-            turn.move.moveName == NameDB.GetMoveName(MoveName.Pursuit));
+        var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => NameDB.NameMatch(turn.move,MoveName.Pursuit));
         
         if(pursuitUsersTurn is { turnExecuted: false })
         {

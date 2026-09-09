@@ -392,6 +392,12 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         item.quantity--;
         CheckItemQuantity(item);
     }
+    /// <summary>
+    /// Adds an item to the bag. Make sure the item being added
+    /// has a logical quantity. The item parsed here will be passed through
+    /// the Instance Factory first, not directly added as an object to the bag item list
+    /// </summary>
+    /// <param name="item"></param>
     public void AddItem(Item item)
     {
         if (allItems.Any(i=> i.itemName == item.itemName))
@@ -447,7 +453,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
             loopingUiAnimation.ChangeActiveState(false);
             loopingUiAnimation.gameObject.SetActive(true);
         }
-        _inputStateHandler.ResetRelevantUi(InputStateName.ItemStorageUsage,true);
+        _inputStateHandler.ResetSpecificUi(InputStateName.ItemStorageUsage,true);
         OnItemSelected = null;
         OnBagOpened = null;
     }

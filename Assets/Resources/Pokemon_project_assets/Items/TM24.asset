@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM24
   itemType: 16
-  itemEffectData: 0
   itemDescription: A strong electric blast.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 518553f7f9bf2bb1d95212cf623f2be7, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118601
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118601
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 24
+        move: {fileID: 11400000, guid: 53fed834b2f80124ba1a685c0ffcbe2b, type: 2}

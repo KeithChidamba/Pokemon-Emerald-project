@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basePokemonName: Zubat
   pokemonName: Zubat
+  nickName: 
+  pokemonDisplayName: 
+  captureInformation:
+    areaName: 
+    levelCaptured: 0
   pokemonID: 0
   personalityValue: 0
   isShiny: 0
@@ -62,13 +67,11 @@ MonoBehaviour:
   canEvolve: 1
   friendshipLevel: 0
   hasTrainer: 0
-  canBeFlinched: 1
-  canBeInfatuated: 1
   types:
   - {fileID: 11400000, guid: 3185f3c7151af7d48b86d9e6f6b6c269, type: 2}
   - {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
   statusEffect: 0
-  buffAndDebuffs: []
+  statModifiers: []
   evolutionLineLevels: 16000000
   currentEvolutionLineIndex: 0
   friendshipEvolutionRequirement:
@@ -100,8 +103,8 @@ MonoBehaviour:
     requiredLevel: 41
   - learnSetMove: 85
     requiredLevel: 46
-  learnableTms: 030000000b0000000c000000
-  learnableHms: 01000000
+  learnableTms: 630000003400000048000000
+  learnableHms: 65000000
   moveSet: []
   ability: {fileID: 11400000, guid: fff028b013d1cd93aa0054f0072675bd, type: 2}
   evolutions:

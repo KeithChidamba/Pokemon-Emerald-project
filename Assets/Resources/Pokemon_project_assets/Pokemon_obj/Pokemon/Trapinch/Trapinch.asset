@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basePokemonName: Trapinch
   pokemonName: Trapinch
+  nickName: 
+  pokemonDisplayName: 
+  captureInformation:
+    areaName: 
+    levelCaptured: 0
   pokemonID: 0
   personalityValue: 0
   isShiny: 0
@@ -62,12 +67,10 @@ MonoBehaviour:
   canEvolve: 1
   friendshipLevel: 0
   hasTrainer: 0
-  canBeFlinched: 1
-  canBeInfatuated: 1
   types:
   - {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
   statusEffect: 0
-  buffAndDebuffs: []
+  statModifiers: []
   evolutionLineLevels: 140000002d000000
   currentEvolutionLineIndex: 0
   friendshipEvolutionRequirement:
@@ -95,7 +98,7 @@ MonoBehaviour:
     requiredLevel: 49
   - learnSetMove: 52
     requiredLevel: 57
-  learnableTms: 08000000090000000a0000000b000000
+  learnableTms: 1c0000001d0000002400000034000000
   learnableHms: 
   moveSet: []
   ability: {fileID: 11400000, guid: 6e3a5205ac780de4499e796e8ba8dce9, type: 2}

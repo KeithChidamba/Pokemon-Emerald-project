@@ -15,8 +15,7 @@ MonoBehaviour:
   itemID: 
   itemName: TM06
   itemType: 16
-  itemEffectData: 0
-  itemDescription: Badly poisons the foe.
+  itemDescription: badly poisons a pokemon
   price: 0
   quantity: 0
   itemImage: {fileID: 21300000, guid: 25834f95f1a061082a55df2a2699d4c1, type: 2}
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 94d10ae0172f6c6ecb0e7e4976c52452, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118594
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118594
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 6
+        move: {fileID: 11400000, guid: bec17202b9e1e5d429f6d064467dc625, type: 2}

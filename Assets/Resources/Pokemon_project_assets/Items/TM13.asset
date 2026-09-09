@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM13
   itemType: 16
-  itemEffectData: 0
   itemDescription: A powerful ice attack that may freeze the foe
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 6c9f29538aab0401994aea6b7931743c, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118597
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118597
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 13
+        move: {fileID: 11400000, guid: 06e84a4a3f982024aa61d9f4898ded85, type: 2}

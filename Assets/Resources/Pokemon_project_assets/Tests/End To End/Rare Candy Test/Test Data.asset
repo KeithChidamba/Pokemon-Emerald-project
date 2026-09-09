@@ -24,7 +24,7 @@ MonoBehaviour:
     specificNature: {fileID: 0}
     specificGender: 0
     specificAbility: {fileID: 0}
-    nickName: 
-  testDescription: Use rare candy from bag on pokemon in party
+    nickName: fish
   testItems:
-  - {fileID: 11400000, guid: 14d2ac3b1e4f41a519d2a238e94fd866, type: 2}
+  - itemAsset: {fileID: 11400000, guid: 14d2ac3b1e4f41a519d2a238e94fd866, type: 2}
+    quantity: 2

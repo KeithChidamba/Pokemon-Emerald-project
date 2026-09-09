@@ -26,5 +26,7 @@ MonoBehaviour:
     specificAbility: {fileID: 0}
     nickName: fishy
   testItems:
-  - {fileID: 11400000, guid: a9e80ce5b26eb8b4db5a9eb0aa81bd85, type: 2}
-  - {fileID: 11400000, guid: 020ab9a5917bd82959a94d8fe330a63a, type: 2}
+  - itemAsset: {fileID: 11400000, guid: a9e80ce5b26eb8b4db5a9eb0aa81bd85, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 020ab9a5917bd82959a94d8fe330a63a, type: 2}
+    quantity: 1

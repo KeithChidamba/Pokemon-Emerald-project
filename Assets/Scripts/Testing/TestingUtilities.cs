@@ -127,7 +127,7 @@ public class TestingUtilities
            void CreateMember(Pokemon createdPokemon)
            {
                createdPokemon.nature = member.specificNature ?? createdPokemon.nature;
-               createdPokemon.gender = member.specificGender;
+               createdPokemon.gender = member.specificGender == Gender.None? createdPokemon.gender : member.specificGender;
                createdPokemon.ability = member.specificAbility ?? createdPokemon.ability;
                 
                createdPokemon.moveSet.Clear();

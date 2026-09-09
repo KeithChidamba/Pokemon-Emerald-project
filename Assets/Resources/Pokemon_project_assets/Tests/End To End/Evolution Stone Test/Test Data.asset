@@ -25,4 +25,5 @@ MonoBehaviour:
     specificAbility: {fileID: 0}
     nickName: lighty
   testItems:
-  - {fileID: 11400000, guid: f119188b4200e601a85c9ce3fa256f00, type: 2}
+  - itemAsset: {fileID: 11400000, guid: f119188b4200e601a85c9ce3fa256f00, type: 2}
+    quantity: 1

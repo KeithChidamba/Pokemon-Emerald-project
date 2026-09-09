@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -218,83 +219,60 @@ public class NatureEVFixer : EditorWindow
     
     
     
-    public class PokemonImageSetter
-    {
-    //     [MenuItem("Tools/Set Pokemon Images")]
-    //     public static void ForceImages()
+    // public class PokemonMoveLearningFix
+    // {
+    // [MenuItem("Tools/Pokemon Move Learning Fix")]
+    // public static void ForceImages()
+    // {
+    //     var pokemonList = new[]
     //     {
-    //         var pokemonList = new[]
+    //         "mudkip", "pikachu", "trapinch", "torchic",
+    //         "treecko", "wurmple", "zigzagoon", "zubat"
+    //     };
+    //
+    //     foreach (var pokemonName in pokemonList)
+    //     {
+    //         // Path to Pokémon ScriptableObject folder
+    //         string folderPath = $"Assets/Resources/Pokemon_project_assets/Pokemon_obj/Pokemon/{pokemonName}";
+    //         string[] guids = AssetDatabase.FindAssets("t:Pokemon", new[] { folderPath });
+    //
+    //         if (guids.Length == 0)
     //         {
-    //             "mudkip", "pikachu", "trapinch", "torchic",
-    //             "treecko", "wurmple", "zigzagoon", "zubat"
-    //         };
-    //
-    //         foreach (var pokemonName in pokemonList)
-    //         {
-    //             // Path to Pokémon ScriptableObject folder
-    //             string folderPath = $"Assets/Resources/Pokemon_project_assets/Pokemon_obj/Pokemon/{pokemonName}";
-    //             string[] guids = AssetDatabase.FindAssets("t:Pokemon", new[] { folderPath });
-    //
-    //             if (guids.Length == 0)
-    //             {
-    //                 Debug.LogWarning($"⚠️ No Pokémon asset found for {pokemonName}");
-    //                 continue;
-    //             }
-    //
-    //             // Load the Pokémon ScriptableObject (assuming only one per folder)
-    //             string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
-    //             Pokemon pokemon = AssetDatabase.LoadAssetAtPath<Pokemon>(assetPath);
-    //
-    //             if (pokemon == null)
-    //             {
-    //                 Debug.LogWarning($"⚠️ Could not load Pokémon asset for {pokemonName}");
-    //                 continue;
-    //             }
-    //             // Path to the sprite folder
-    //             string spriteFolder = $"Assets/Resources/Pokemon_project_assets/Pokemon_img";
-    //
-    //             // Find the specific sprites by name
-    //             string frame1GUID =
-    //                 AssetDatabase.FindAssets($"{pokemonName}_intro t:Sprite", new[] { spriteFolder }).Length > 0
-    //                     ? AssetDatabase.FindAssets($"{pokemonName}_intro t:Sprite", new[] { spriteFolder })[0]
-    //                     : null;
-    //
-    //             // string frame2GUID =
-    //             //     AssetDatabase.FindAssets($"{e.evolutionName}_b t:Sprite", new[] { spriteFolder }).Length > 0
-    //             //         ? AssetDatabase.FindAssets($"{e.evolutionName}_b t:Sprite", new[] { spriteFolder })[0]
-    //             //         : null;
-    //
-    //             if (frame1GUID == null)// || frame2GUID == null)
-    //             {
-    //                 Debug.LogWarning($"⚠️ Missing one or both sprites for {pokemonName}");
-    //                 continue;
-    //             }
-    //
-    //             // Load the actual sprites
-    //             string frame1Path = AssetDatabase.GUIDToAssetPath(frame1GUID);
-    //             // string frame2Path = AssetDatabase.GUIDToAssetPath(frame2GUID);
-    //
-    //             Sprite sprite1 = AssetDatabase.LoadAssetAtPath<Sprite>(frame1Path);
-    //             //Sprite sprite2 = AssetDatabase.LoadAssetAtPath<Sprite>(frame2Path);
-    //
-    //             // Assign and mark dirty
-    //             pokemon.battleIntroFrame = sprite1;
-    //             //e.backPicture = sprite2;
-    //
-    //            // EditorUtility.SetDirty(e);
-    //             //  Debug.Log($"✅ {e.evolutionName}: Frame1='{sprite1?.name}', Frame2='{sprite2?.name}'");
-    //             // foreach(var e in pokemon.evolutions)
-    //             // {
-    //             //    
-    //             // }
-    //             EditorUtility.SetDirty(pokemon);
+    //             Debug.LogWarning($"⚠️ No Pokémon asset found for {pokemonName}");
+    //             continue;
     //         }
     //
-    //         AssetDatabase.SaveAssets();
-    //         AssetDatabase.Refresh();
-    //         Debug.Log("🎉 All Pokémon images updated successfully!");
+    //         // Load the Pokémon ScriptableObject (assuming only one per folder)
+    //         string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
+    //         Pokemon pokemon = AssetDatabase.LoadAssetAtPath<Pokemon>(assetPath);
+    //
+    //         if (pokemon == null)
+    //         {
+    //             Debug.LogWarning($"⚠️ Could not load Pokémon asset for {pokemonName}");
+    //             continue;
+    //         }
+    //
+    //         // foreach (var evo in pokemon.evolutions)
+    //         // {
+    //         //     evo.learnableTms.Clear();
+    //         //     foreach (var tmName in evo.learnTms)
+    //         //     {
+    //         //         if (Enum.TryParse<MoveName>(tmName.ToString(), out var moveName)
+    //         //             && !evo.learnableTms.Contains(moveName))
+    //         //         {
+    //         //             evo.learnableTms.Add(moveName);
+    //         //         }
+    //         //     }
+    //         //     EditorUtility.SetDirty(evo);
+    //         // }
+    //         EditorUtility.SetDirty(pokemon);
     //     }
-     }
+    //
+    //     AssetDatabase.SaveAssets();
+    //     AssetDatabase.Refresh();
+    //     Debug.Log("Done setting enum names");
+    // }
+    //  }
 }
 
 // private static readonly string directoryPath = "Assets/Resources/Pokemon_project_assets/pokemon_img/pl";

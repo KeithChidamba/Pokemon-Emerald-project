@@ -351,7 +351,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         Debug.LogError(errorMessage+exception);
         _dialogueHandler.DisplayDetails("Error occured while saving please restart the game!");
         EraseTemporarySaveData();
-        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
     }
     
     public IEnumerator SaveAllData()
@@ -367,7 +367,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             CreateAllSaveDirectories();//just incase
         }
         
-        _inputStateHandler.ResetRelevantUi(InputStateName.PlayerMenu);
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlayerMenu);
         _inputStateHandler.AddPlaceHolderState();
         _dialogueHandler.DisplayDetails("Saving...",false); 
         
@@ -485,7 +485,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         
         yield return new WaitForSecondsRealtime(1.5f);
         _dialogueHandler.EndDialogue();
-        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
     }
 
     private void SaveDataAsJson<T>(T saveSataObject, string fileName,SaveDataDirectory saveDirectory)

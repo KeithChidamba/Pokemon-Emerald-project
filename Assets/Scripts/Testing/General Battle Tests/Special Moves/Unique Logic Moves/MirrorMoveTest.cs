@@ -97,22 +97,21 @@ public class MirrorMoveTest : BattleBasedTest
             {
                 new("Enemy should be un-harmed", ()=> enemy.pokemon.hp >= enemy.pokemon.maxHp),
                 new($"Mirror move should fail due to invalid previous move({nonCopyableMoves[index]}) used by enemy",
-                    ()=> NameDB.ParseMoveName(enemy.previousMoveData.move.moveName)
-                         == nonCopyableMoves[index])
+                    ()=> NameDB.NameMatch(enemy.previousMoveData.move,nonCopyableMoves[index]))
             });
         }
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Enemy should be un-harmed", ()=> enemy.pokemon.hp >= enemy.pokemon.maxHp),
             new("Mirror move should fail due to self-targeting previous move (Bulk up) used by enemy",
-                ()=> NameDB.ParseMoveName(enemy.previousMoveData.move.moveName) == MoveName.BulkUp)
+                    ()=> NameDB.NameMatch(enemy.previousMoveData.move,MoveName.BulkUp))
         });
         
         _testCaseHandler.AddTestCase("Enemy should be hurt because Player copied tackle from enemy"
             , ()=> enemy.pokemon.hp < enemy.pokemon.maxHp);
-        
+
         _testCaseHandler.AddTestCase("Player used regular move tailwhip",
-                ()=> NameDB.ParseMoveName(player.previousMoveData.move.moveName) == MoveName.TailWhip);
+            () => NameDB.NameMatch(player.previousMoveData.move, MoveName.TailWhip));
         
         yield return HandleBattleState();
         onTestResult.Invoke();

@@ -28,7 +28,8 @@ MonoBehaviour:
     requiredLevel: 1
   - learnSetMove: 7
     requiredLevel: 1
-  learnableTms: 01000000030000000400000005000000080000000b000000
+  learnTms: 01000000030000000400000005000000080000000b000000
+  learnableTms: 620000006300000007000000080000001c00000034000000
   learnableHms: 
   frontPicture: {fileID: 21300000, guid: 059f4784eda9a245fab0f186a4115cba, type: 2}
   backPicture: {fileID: 21300000, guid: b13c4944d3d58644ca46ab4d0f076775, type: 2}

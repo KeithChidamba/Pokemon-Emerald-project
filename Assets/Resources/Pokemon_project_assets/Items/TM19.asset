@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM19
   itemType: 16
-  itemEffectData: 0
   itemDescription: Absorbs half the damage inflicted.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 8217bbe684bdaf7d4a28b5c506dcf6b4, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118600
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118600
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 19
+        move: {fileID: 11400000, guid: 10a375b8cb263ba55ac9313920089a98, type: 2}

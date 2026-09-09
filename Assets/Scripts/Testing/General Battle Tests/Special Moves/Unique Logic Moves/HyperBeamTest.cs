@@ -39,7 +39,7 @@ public class HyperBeamTest : BattleBasedTest
             () => enemy.pokemon.hp < enemy.pokemon.maxHp);
         
         _testCaseHandler.AddTestCase(2,"Player cooldown down should be over, and player should use tailwhip",
-            () =>NameDB.ParseMoveName(player.previousMoveData.move.moveName) == MoveName.TailWhip);
+            () => NameDB.NameMatch(player.previousMoveData.move,MoveName.TailWhip));
         
         yield return HandleBattleState();
         onTestResult.Invoke();

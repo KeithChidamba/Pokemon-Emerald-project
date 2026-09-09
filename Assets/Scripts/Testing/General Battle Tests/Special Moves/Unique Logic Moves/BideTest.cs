@@ -61,7 +61,7 @@ public class BideTest : BattleBasedTest
     private void CheckBideHit(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
     {
         if (attacker.participantKey != BattleParticipantKey.Player) return;
-        if (NameDB.ParseMoveName(moveUsed.moveName) == MoveName.Bide)
+        if(NameDB.NameMatch(moveUsed,MoveName.Bide))
         {
             _bideDealtDamage = true;
         }
@@ -71,12 +71,12 @@ public class BideTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         _testCaseHandler.AddTestCase(0,"Bide should be activated",
-            () => NameDB.ParseMoveName(player.currentCoolDown.turnData.move.moveName) == MoveName.Bide);
+            () => NameDB.NameMatch(player.currentCoolDown.turnData.move,MoveName.Bide));
         
         _testCaseHandler.AddTestCase(3,"Bide should hit enemy", () => _bideDealtDamage);
         
         _testCaseHandler.AddTestCase(4,"Bide should be activated",
-            () => NameDB.ParseMoveName(player.currentCoolDown.turnData.move.moveName) == MoveName.Bide);
+            () => NameDB.NameMatch(player.currentCoolDown.turnData.move,MoveName.Bide));
         
         _testCaseHandler.AddTestCase(7,"Bide should not hit enemy", () => !_bideDealtDamage);
         

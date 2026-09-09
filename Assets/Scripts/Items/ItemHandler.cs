@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -13,6 +12,7 @@ public enum ItemType
 public class ItemHandler : MonoBehaviour,IInjectable
 {
     public event Action<Item,bool> OnItemUsed;
+    private Action scheduledInputStateRemoval;
     
     private PokemonDetailsHandler _pokemonDetailsHandler;
     private MoveSequenceHandler _moveUsageHandler;
@@ -50,11 +50,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
         
         gameObject.SetActive(true);
     }
-
-    public void OnInject()
-    {
-        
-    }
+    public void OnInject() { }
 
     public void UseItem(Item itemInUse,Pokemon selectedPokemon)
     {
@@ -68,10 +64,18 @@ public class ItemHandler : MonoBehaviour,IInjectable
             IEnumerator CompletionSequence()
             {
                 yield return _dialogueHandler.WaitForDialogueCompletion();
-                yield return new WaitForSecondsRealtime(1f);
+                
+                scheduledInputStateRemoval?.Invoke();
+                yield return new WaitForSecondsRealtime(0.1f);
+                
+                if (_battleHandler.BattleInProgress)
+                {
+                    yield return new WaitForSecondsRealtime(1f);
+                }
+                
                 if (itemUsed.forPartyUse)
                 {
-                    _inputStateHandler.ResetRelevantUi(InputStateName.PokemonPartyItemUsage,true);
+                    _inputStateHandler.ResetSpecificUi(InputStateName.PokemonPartyItemUsage,true);
                     if (!successful)
                     {
                         //necessary to reset internal bag state
@@ -83,7 +87,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
                     _playerBagHandler.DepleteItem(itemUsed);
                     if (_battleHandler.BattleInProgress)
                     {
-                        _inputStateHandler.ResetRelevantUi(InputStateName.PlayerBagNavigation,true);
+                        _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagNavigation,true);
                         _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.UseItem);
                         _turnBasedCombatHandler.NextTurn();
                     }
@@ -91,8 +95,9 @@ public class ItemHandler : MonoBehaviour,IInjectable
                 yield return new WaitForSecondsRealtime(0.2f);
                 if (!_battleHandler.BattleInProgress)
                 {
-                    _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
+                    _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
                 }
+                scheduledInputStateRemoval = null;
             }
         }
         
@@ -106,9 +111,8 @@ public class ItemHandler : MonoBehaviour,IInjectable
             
             case ItemType.Special: EquipItem(itemInUse); break;
         //party use
-            case ItemType.LearnableMove: 
-                StartCoroutine(_pokemonOperationsHandler.LearnTmOrHm(itemInUse,selectedPokemon)); 
-                break;
+            case ItemType.LearnableMove:
+                StartCoroutine(HandleMoveLearning(itemInUse,selectedPokemon)); break;
             
             //abstract
             case ItemType.Herb: UseHerbs(itemInUse,selectedPokemon); break;
@@ -134,6 +138,39 @@ public class ItemHandler : MonoBehaviour,IInjectable
         }
     }
 
+    private IEnumerator HandleMoveLearning(Item itemInUse,Pokemon pokemon)
+    {
+        var moveInfo = itemInUse.GetDynamicModule<MoveLearningMachineInfo>();
+        var moveNameEnum = NameDB.ParseMoveName(moveInfo.move.moveName);
+        var pokemonCanLearnMove = pokemon.learnableHms.Contains(moveNameEnum) ||
+                                  pokemon.learnableTms.Contains(moveNameEnum);
+        bool operationSuccessful = false;
+        if (pokemonCanLearnMove)
+        {
+            _pokemonOperationsHandler.OnMoveLearnOperationComplete += CheckMoveLearnSuccess;
+            scheduledInputStateRemoval = () =>
+            {
+                _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetailsMoveSelection);
+                _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetails, true);
+            };
+            yield return _pokemonOperationsHandler.LearnTmOrHm(moveInfo,pokemon);
+            OnItemUsed?.Invoke(itemInUse,operationSuccessful);
+        }
+        else
+        {
+            _dialogueHandler.DisplayDetails(pokemon.pokemonDisplayName + " cant learn that!");
+            OnItemUsed?.Invoke(itemInUse,false);
+        }
+        yield break;
+        void CheckMoveLearnSuccess(Pokemon subject,bool success)
+        {
+            if (subject.pokemonID == pokemon.pokemonID)
+            {
+                _pokemonOperationsHandler.OnMoveLearnOperationComplete -= CheckMoveLearnSuccess;
+                operationSuccessful = success;
+            }
+        }
+    }
     void EquipItem(Item itemInUse)
     {
         if (_overworldActions.IsEquipped(item:itemInUse))
@@ -392,6 +429,11 @@ public class ItemHandler : MonoBehaviour,IInjectable
             }
             
             OnItemUsed += ResetUsageState;
+            scheduledInputStateRemoval = () =>
+            {
+                _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetailsMoveSelection);
+                _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetails, true);
+            };
             
             var currentMove = selectedPartyPokemon.moveSet[moveIndex];
                         
@@ -408,18 +450,6 @@ public class ItemHandler : MonoBehaviour,IInjectable
             {
                 OnItemUsed -= ResetUsageState;
                 _pokemonDetailsHandler.onMoveSelected -= MoveOperation;
-                if(successful)
-                {
-                    _inputStateHandler.OnStateChanged += RemoveDetailsAfterBagOpen;
-                    void RemoveDetailsAfterBagOpen(InputState newState)
-                    {
-                        if(newState.stateName == InputStateName.PlayerBagNavigation)
-                        {
-                            _inputStateHandler.OnStateChanged -= RemoveDetailsAfterBagOpen;
-                            _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonDetails);
-                        }
-                    }
-                }
             }
         }
     }

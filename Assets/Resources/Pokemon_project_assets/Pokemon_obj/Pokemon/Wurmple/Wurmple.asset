@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basePokemonName: Wurmple
   pokemonName: Wurmple
+  nickName: 
+  pokemonDisplayName: 
+  captureInformation:
+    areaName: 
+    levelCaptured: 0
   pokemonID: 0
   personalityValue: 0
   isShiny: 0
@@ -62,12 +67,10 @@ MonoBehaviour:
   canEvolve: 1
   friendshipLevel: 0
   hasTrainer: 0
-  canBeFlinched: 1
-  canBeInfatuated: 1
   types:
   - {fileID: 11400000, guid: f44a59272e2ffa740a8c12c2ef9442a5, type: 2}
   statusEffect: 0
-  buffAndDebuffs: []
+  statModifiers: []
   evolutionLineLevels: 050000000d000000
   currentEvolutionLineIndex: 0
   friendshipEvolutionRequirement:
@@ -85,7 +88,7 @@ MonoBehaviour:
     requiredLevel: 1
   - learnSetMove: 71
     requiredLevel: 5
-  learnableTms: 0c00000008000000
+  learnableTms: 480000001c000000
   learnableHms: 
   moveSet: []
   ability: {fileID: 11400000, guid: 2753225943009a84284482e1ea9aae6b, type: 2}

@@ -24,6 +24,7 @@ MonoBehaviour:
     requiredLevel: 1
   - learnSetMove: 39
     requiredLevel: 7
+  learnTms: 
   learnableTms: 
   learnableHms: 
   frontPicture: {fileID: 21300000, guid: 1e285ae15ce359cdcb0b2a4b95ec6eea, type: 2}

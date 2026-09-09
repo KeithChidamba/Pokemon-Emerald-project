@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM15
   itemType: 16
-  itemEffectData: 0
   itemDescription: Powerful attack that requires recharge.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 403916d829d0cb655b881edb415142c2, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118598
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118598
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 15
+        move: {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}

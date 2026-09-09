@@ -7,6 +7,8 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using System.Text.RegularExpressions;
 
+public enum TestType { Integration, EndToEnd }
+
 public class TestGeneratorWindow : EditorWindow
 {
     private const string TemplateFolder = "Assets/Scripts/Testing/TestTemplates/";
@@ -19,6 +21,8 @@ public class TestGeneratorWindow : EditorWindow
     private string[] templatePaths;
     private int selectedTemplateIndex;
 
+    private TestType selectedTestType = TestType.Integration;
+    
     [MenuItem("Tools/Test Class Generator")]
     public static void ShowWindow()
     {
@@ -68,7 +72,11 @@ public class TestGeneratorWindow : EditorWindow
         }
 
         EditorGUILayout.Space();
-
+        
+        GUILayout.Label("Test Type", EditorStyles.boldLabel);
+        selectedTestType = (TestType)EditorGUILayout.EnumPopup( "Test Type", selectedTestType);
+        
+        EditorGUILayout.Space();
         // -------------------------
         // Class Name
         // -------------------------
@@ -442,57 +450,41 @@ public class TestGeneratorWindow : EditorWindow
 
         return !keywords.Contains(className);
     }
+
+    private string GetTestDataDestinationPath()
+    {
+        switch (selectedTestType)
+        {
+            case TestType.EndToEnd:
+                return "End To End";
+            default: return selectedTestType.ToString();
+        }
+    }
     private void CopyTestDataTemplate(string formattedTestName)
     {
         var testDataTemplateFolder = GetTemplateDataPath();
         if (!AssetDatabase.IsValidFolder(testDataTemplateFolder))
         {
-            EditorUtility.DisplayDialog(
-                "Error",
-                $"Test data template folder was not found:\n{testDataTemplateFolder}",
-                "OK"
-            );
-
+            EditorUtility.DisplayDialog("Error", $"Test data template folder was not found:\n{testDataTemplateFolder}",
+                "OK");
             return;
         }
 
-        string destinationPath = Path.Combine(
-            TestDataDestinationFolder,
-            formattedTestName
-        );
-
+        var destinationPath = Path.Combine(TestDataDestinationFolder, GetTestDataDestinationPath(), formattedTestName);
         destinationPath = destinationPath.Replace("\\", "/");
-
         if (Directory.Exists(destinationPath))
         {
-            bool overwrite = EditorUtility.DisplayDialog(
-                "Test Data Folder Already Exists",
-                $"A test data folder already exists at:\n\n{destinationPath}\n\nDo you want to replace it?",
-                "Replace",
-                "Cancel"
-            );
-
-            if (!overwrite)
-                return;
-
+            var overwrite = EditorUtility.DisplayDialog("Test Data Folder Already Exists",
+                $"A test data folder already exists at:\n\n{destinationPath}\n\nDo you want to replace it?", "Replace",
+                "Cancel");
+            if (!overwrite) return;
             Directory.Delete(destinationPath, true);
         }
 
-        string sourceAbsolutePath = Path.Combine(
-            Directory.GetParent(Application.dataPath).FullName,
-            testDataTemplateFolder
-        );
-
-        string destinationAbsolutePath = Path.Combine(
-            Directory.GetParent(Application.dataPath).FullName,
-            destinationPath
-        );
-
-        FileUtil.CopyFileOrDirectory(
-            sourceAbsolutePath,
-            destinationAbsolutePath
-        );
-
+        var sourceAbsolutePath =
+            Path.Combine(Directory.GetParent(Application.dataPath).FullName, testDataTemplateFolder);
+        var destinationAbsolutePath = Path.Combine(Directory.GetParent(Application.dataPath).FullName, destinationPath);
+        FileUtil.CopyFileOrDirectory(sourceAbsolutePath, destinationAbsolutePath);
         AssetDatabase.Refresh();
     }
 }

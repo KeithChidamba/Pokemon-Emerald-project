@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basePokemonName: Treecko
   pokemonName: Treecko
+  nickName: 
+  pokemonDisplayName: 
+  captureInformation:
+    areaName: 
+    levelCaptured: 0
   pokemonID: 0
   personalityValue: 0
   isShiny: 0
@@ -62,12 +67,10 @@ MonoBehaviour:
   canEvolve: 1
   friendshipLevel: 0
   hasTrainer: 0
-  canBeFlinched: 1
-  canBeInfatuated: 1
   types:
   - {fileID: 11400000, guid: 3a2aa4e24a0125040b29a62f85aaf722, type: 2}
   statusEffect: 0
-  buffAndDebuffs: []
+  statModifiers: []
   evolutionLineLevels: 1000000024000000
   currentEvolutionLineIndex: 0
   friendshipEvolutionRequirement:
@@ -101,7 +104,7 @@ MonoBehaviour:
     requiredLevel: 41
   - learnSetMove: 24
     requiredLevel: 46
-  learnableTms: 01000000030000000b0000000c000000
+  learnableTms: 62000000630000003400000048000000
   learnableHms: 
   moveSet: []
   ability: {fileID: 11400000, guid: 3a050f274b7d49d49aec9bd3ce16bbf1, type: 2}

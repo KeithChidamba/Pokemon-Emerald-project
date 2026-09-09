@@ -70,7 +70,7 @@ public class FuryCutter : BattleBasedTest
                 new($"Fury Cutter damage increased, count({i})",
                     () => _previousDamageList[^1] > _previousDamageList[^2]),
                 new("Check that previous is fury cutter",
-                    () => player.previousMoveData.move.moveName == NameDB.GetMoveName(MoveName.FuryCutter)),
+                    () => NameDB.NameMatch(player.previousMoveData.move,MoveName.FuryCutter)),
                 new("Check that the current repetition count is correct",
                     ()=> player.previousMoveData.numRepetitions == repetitionCount)
             });
@@ -81,7 +81,7 @@ public class FuryCutter : BattleBasedTest
                 () => Mathf.FloorToInt( _previousDamageList[^1])
                       == Mathf.FloorToInt( _previousDamageList[^2])),
             new("Check that previous is fury cutter",
-                () => player.previousMoveData.move.moveName == NameDB.GetMoveName(MoveName.FuryCutter)),
+                () => NameDB.NameMatch(player.previousMoveData.move,MoveName.FuryCutter)),
             new("Check that the current repetition count is 5",
                 ()=> player.previousMoveData.numRepetitions == 5)
         });

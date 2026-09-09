@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM09
   itemType: 16
-  itemEffectData: 0
   itemDescription: Shoots 2 to 5 seeds in a row.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: dc07d896e9be3020cb336500bdc5326b, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118596
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118596
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 9
+        move: {fileID: 11400000, guid: 359e5c8587c85634d826bfeca51ae78e, type: 2}

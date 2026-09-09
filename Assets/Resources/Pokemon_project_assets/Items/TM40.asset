@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM40
   itemType: 16
-  itemEffectData: 0
   itemDescription: An attack that never misses.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: e6bff132ad82eaeeaac2b3c8b61e2d87, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118608
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118608
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 40
+        move: {fileID: 11400000, guid: 88bd6685312db15438e092430c87989c, type: 2}

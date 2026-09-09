@@ -21,7 +21,7 @@ MonoBehaviour:
       heldItem: {fileID: 0}
       moveSet: []
     specificNature: {fileID: 0}
-    specificGender: 1
+    specificGender: 0
     specificAbility: {fileID: 0}
     nickName: 
   testEnemyData:

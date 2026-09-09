@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM26
   itemType: 16
-  itemEffectData: 0
   itemDescription: Powerful quake that hits all.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 9713682419725f7508a7ffeed0ede2e7, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118603
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118603
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 26
+        move: {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}

@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM31
   itemType: 16
-  itemEffectData: 0
   itemDescription: Breaks barriers like Light Screen.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: c186850c4abae18f0880c11727fd8792, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118605
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118605
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 31
+        move: {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}

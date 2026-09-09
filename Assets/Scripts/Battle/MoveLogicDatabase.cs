@@ -197,7 +197,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private IEnumerator FuryCutter(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var damageLevel = new[] { 10f, 20f, 40f, 80f, 160f };
-        if (attacker.previousMoveData.move.moveName == NameDB.GetMoveName(MoveName.FuryCutter))
+        if(NameDB.NameMatch(attacker.previousMoveData.move,MoveName.FuryCutter))
         {
             currentTurn.move.moveDamage = attacker.previousMoveData.numRepetitions > 3?
                 damageLevel[^1] : damageLevel[attacker.previousMoveData.numRepetitions];

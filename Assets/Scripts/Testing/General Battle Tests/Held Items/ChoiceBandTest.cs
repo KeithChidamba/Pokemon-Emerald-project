@@ -110,7 +110,7 @@ public class ChoiceBandTest : BattleBasedTest
         {
            new("Check if player used tackle",()=>_moveUsageHistory[BattleParticipantKey.Player] == MoveName.Tackle),
            new("Choice band locked move",()=>player.currentMoveLock.moveLocked),
-           new("Check if the locked move is tackle",()=>player.currentMoveLock.moveToLock.moveName == NameDB.GetMoveName(MoveName.Tackle)),
+           new("Check if the locked move is tackle", () => NameDB.NameMatch(player.currentMoveLock.moveToLock,MoveName.Tackle)),
            new("check if player got attack buff from choice band",()=>player.pokemon.attack > player.statData.attack)
         });
         
@@ -133,7 +133,7 @@ public class ChoiceBandTest : BattleBasedTest
             new("Choice band locked move", ()=> enemy.currentMoveLock.moveLocked),
             
             new("Locked move is tackle",
-                ()=> enemy.currentMoveLock.moveToLock.moveName == NameDB.GetMoveName(MoveName.Tackle)),
+                ()=> NameDB.NameMatch(enemy.currentMoveLock.moveToLock,MoveName.Tackle)),
             
             new("check if enemy got attack buff from choice band",
                 ()=> enemy.pokemon.attack > enemy.statData.attack)

@@ -145,7 +145,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
 
     private IEnumerator GameStartLoading()
     {
-        _inputStateHandler.ResetRelevantUi(InputStateName.StartMenu,true);
+        _inputStateHandler.ResetSpecificUi(InputStateName.StartMenu,true);
         _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
         _dialogueHandler.EndDialogue();
         OnGameStarted?.Invoke();

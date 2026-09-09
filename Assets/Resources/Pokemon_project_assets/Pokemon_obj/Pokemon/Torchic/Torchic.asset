@@ -15,7 +15,10 @@ MonoBehaviour:
   basePokemonName: Torchic
   pokemonName: Torchic
   nickName: 
-  currentPokemonName: 
+  pokemonDisplayName: 
+  captureInformation:
+    areaName: 
+    levelCaptured: 0
   pokemonID: 0
   personalityValue: 0
   isShiny: 0
@@ -64,12 +67,10 @@ MonoBehaviour:
   canEvolve: 1
   friendshipLevel: 0
   hasTrainer: 0
-  canBeFlinched: 1
-  canBeInfatuated: 1
   types:
   - {fileID: 11400000, guid: 4b6d442457e220147bf2a47f64fdc76d, type: 2}
   statusEffect: 0
-  buffAndDebuffs: []
+  statModifiers: []
   evolutionLineLevels: 1000000024000000
   currentEvolutionLineIndex: 0
   friendshipEvolutionRequirement:
@@ -103,7 +104,7 @@ MonoBehaviour:
     requiredLevel: 37
   - learnSetMove: 17
     requiredLevel: 43
-  learnableTms: 0300000006000000080000000b000000
+  learnableTms: 63000000110000001c00000034000000
   learnableHms: 
   moveSet: []
   ability: {fileID: 11400000, guid: 14d8a32498c02b24d99480656822aa5a, type: 2}

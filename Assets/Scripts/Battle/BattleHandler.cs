@@ -343,7 +343,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         _inputStateHandler.OnStateChanged += EnableBattleMessage;
         
         SetupOptionsInput();
-        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
 
         _turnBasedCombatHandler.StartFreshTurn();
     }
@@ -835,7 +835,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         BattleInProgress = false;
         OnBattleEnd?.Invoke();
         _dialogueHandler.EndDialogue();
-        _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
         
         SetPlayerTurnUsage(PlayerTurnUsage.None);
         

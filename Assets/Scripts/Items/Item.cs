@@ -32,18 +32,14 @@ public class Item : ScriptableObject
     {
         return dynamicInfoModules.FirstOrDefault(m => m is T) as T;
     }
-    
     public string DetermineImageDirectory()
     {
-        if (additionalInfoModules.Any(m => m is TM))
+        if (dynamicInfoModules.Any(m => m is MoveLearningMachineInfo))
         {
-            var tm =  GetModule<TM>();
-            return tm.move.type.GetTypeName.ToLower() + " tm";
-        }
-        if (additionalInfoModules.Any(m => m is HM))
-        {
-            var hm = GetModule<HM>();
-            return hm.move.type.GetTypeName.ToLower() + " hm";
+            var machine = GetDynamicModule<MoveLearningMachineInfo>();
+            //nameSub = tm or hm
+            string nameSub = itemName.Substring(0, 2);
+            return machine.move.type.GetTypeName.ToLower() + $" {nameSub.ToLower()}";
         }
         return itemName;
     }

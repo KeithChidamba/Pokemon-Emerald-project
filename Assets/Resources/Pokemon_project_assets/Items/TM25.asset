@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM25
   itemType: 16
-  itemEffectData: 0
   itemDescription: A powerful but inaccurate jolt.
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 39353c043a5d8bb2fbe022455ae11374, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118602
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118602
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 25
+        move: {fileID: 11400000, guid: 312137888a92a95e59d8a8ce6b213e95, type: 2}

@@ -15,15 +15,24 @@ MonoBehaviour:
   pokemonPartyData:
   - naturalPokemonData:
       pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
-      pokemonLevel: 35
-      evolutionStageNumber: 0
+      pokemonLevel: 30
+      evolutionStageNumber: 1
       hasItem: 0
       heldItem: {fileID: 0}
-      moveSet: []
+      moveSet:
+      - {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}
     specificNature: {fileID: 0}
     specificGender: 0
     specificAbility: {fileID: 0}
-    nickName: friendo
+    nickName: zig
   testItems:
-  - itemAsset: {fileID: 11400000, guid: e3c0178b98b30173393da9415886cffa, type: 2}
+  - itemAsset: {fileID: 11400000, guid: 7bf1aec9878f2b6c39acc9f1448c3640, type: 2}
+    quantity: 2
+  - itemAsset: {fileID: 11400000, guid: ef53cf71efed79497a86d6dc17dde0e4, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 4ea7cf33a1a86c14db58e25a95d06737, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 322a48724931acd24ad58d84d074d4c0, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: bb4c512722d9e95b2949b432ffa97cd7, type: 2}
     quantity: 1

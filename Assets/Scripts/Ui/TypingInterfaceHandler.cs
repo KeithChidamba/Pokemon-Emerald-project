@@ -403,7 +403,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
             originalPos,
             500f);
       
-      _inputStateHandler.ResetRelevantUi(InputStateName.PlaceHolder);
+      _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
       ChangeInterface(newInterface);
       _isSwappingInterface = false;
    }

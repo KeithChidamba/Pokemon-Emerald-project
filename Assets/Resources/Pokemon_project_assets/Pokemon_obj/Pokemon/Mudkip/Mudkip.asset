@@ -15,7 +15,10 @@ MonoBehaviour:
   basePokemonName: Mudkip
   pokemonName: Mudkip
   nickName: 
-  currentPokemonName: 
+  pokemonDisplayName: 
+  captureInformation:
+    areaName: 
+    levelCaptured: 0
   pokemonID: 0
   personalityValue: 0
   isShiny: 0
@@ -64,12 +67,10 @@ MonoBehaviour:
   canEvolve: 1
   friendshipLevel: 0
   hasTrainer: 0
-  canBeFlinched: 1
-  canBeInfatuated: 1
   types:
   - {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
   statusEffect: 0
-  buffAndDebuffs: []
+  statModifiers: []
   evolutionLineLevels: 1000000024000000
   currentEvolutionLineIndex: 0
   friendshipEvolutionRequirement:
@@ -105,8 +106,8 @@ MonoBehaviour:
     requiredLevel: 42
   - learnSetMove: 44
     requiredLevel: 46
-  learnableTms: 010000000300000008000000090000000b0000000d0000000e000000
-  learnableHms: 00000000
+  learnableTms: 62000000630000001c0000001d00000034000000600000005e000000
+  learnableHms: 64000000
   moveSet: []
   ability: {fileID: 11400000, guid: 2d3aa5da1ed7a734cb1c25d192217a25, type: 2}
   evolutions:

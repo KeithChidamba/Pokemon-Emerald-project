@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basePokemonName: Zigzagoon
   pokemonName: Zigzagoon
+  nickName: 
+  pokemonDisplayName: 
+  captureInformation:
+    areaName: 
+    levelCaptured: 0
   pokemonID: 0
   personalityValue: 0
   isShiny: 0
@@ -62,12 +67,10 @@ MonoBehaviour:
   canEvolve: 1
   friendshipLevel: 0
   hasTrainer: 0
-  canBeFlinched: 1
-  canBeInfatuated: 1
   types:
   - {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
   statusEffect: 0
-  buffAndDebuffs: []
+  statModifiers: []
   evolutionLineLevels: 14000000
   currentEvolutionLineIndex: 0
   friendshipEvolutionRequirement:
@@ -103,8 +106,8 @@ MonoBehaviour:
     requiredLevel: 37
   - learnSetMove: 40
     requiredLevel: 41
-  learnableTms: 030000000400000005000000080000000b000000090000000c000000
-  learnableHms: 00000000
+  learnableTms: 6300000007000000080000001c000000340000001d00000048000000
+  learnableHms: 64000000
   moveSet: []
   ability: {fileID: 11400000, guid: ed27e4020d5e6e94f93577121b591bf1, type: 2}
   evolutions:

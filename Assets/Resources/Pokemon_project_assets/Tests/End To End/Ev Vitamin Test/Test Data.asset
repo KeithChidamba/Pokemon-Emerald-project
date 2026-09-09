@@ -25,4 +25,5 @@ MonoBehaviour:
     specificAbility: {fileID: 0}
     nickName: healthBoy
   testItems:
-  - {fileID: 11400000, guid: fc2c0e5967a2fd4e8ae2a56e0dff6ae5, type: 2}
+  - itemAsset: {fileID: 11400000, guid: fc2c0e5967a2fd4e8ae2a56e0dff6ae5, type: 2}
+    quantity: 1

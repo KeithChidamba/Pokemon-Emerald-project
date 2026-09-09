@@ -463,7 +463,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         }
         AddRemovals(inputStates);
     }
-    public void ResetRelevantUi(InputStateName stateName,bool manualExit=false)
+    public void ResetSpecificUi(InputStateName stateName,bool manualExit=false)
     {
         var state = stateLayers.FirstOrDefault(state => state.stateName == stateName);
         if (state == null) return;

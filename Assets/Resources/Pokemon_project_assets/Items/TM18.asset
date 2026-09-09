@@ -15,7 +15,6 @@ MonoBehaviour:
   itemID: 
   itemName: TM18
   itemType: 16
-  itemEffectData: 0
   itemDescription: Creates rain during battle
   price: 0
   quantity: 0
@@ -26,10 +25,15 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 50d05c1dda75694cb8c04a2d085545e0, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 5308325803627118599
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5308325803627118599
+      type: {class: MoveLearningMachineInfo, ns: , asm: Assembly-CSharp}
+      data:
+        machineNumber: 18
+        move: {fileID: 11400000, guid: bf6910db525a07c5aae49ce2a3ae2ab7, type: 2}
