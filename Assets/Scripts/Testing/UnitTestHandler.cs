@@ -74,7 +74,7 @@ public class UnitTestHandler
             createdPokemon.hasTrainer = true;
             createdPokemon.currentLevel = 5;
             AbilityHandler.CheckItemForPickUpAbility(createdPokemon);
-            _currentTestPassed = createdPokemon.heldItem == null;
+            _currentTestPassed = createdPokemon.heldItem is null;
             
             if (!_currentTestPassed)
             {
@@ -87,7 +87,7 @@ public class UnitTestHandler
             createdPokemon.hasTrainer = false;//should fail
             createdPokemon.currentLevel = 5;
             AbilityHandler.CheckItemForPickUpAbility(createdPokemon);
-            _currentTestPassed = createdPokemon.heldItem == null;
+            _currentTestPassed = createdPokemon.heldItem is null;
             if (!_currentTestPassed)
             {
                 _testingHandler.LogMessage("Test Should fail when pokemon doesn't have a trainer",TestLogType.TestCase);
@@ -99,7 +99,7 @@ public class UnitTestHandler
             createdPokemon.hasTrainer = true;
             createdPokemon.currentLevel = 4;//should fail
             AbilityHandler.CheckItemForPickUpAbility(createdPokemon);
-            _currentTestPassed = createdPokemon.heldItem == null;
+            _currentTestPassed = createdPokemon.heldItem is null;
             if (!_currentTestPassed)
             {
                 _testingHandler.LogMessage("Test Should fail when pokemon has level below 5",TestLogType.TestCase);

@@ -13,7 +13,7 @@ public class AssetHealthChecks
 
         var itemSprite = Resources.Load<Sprite>(fullPath);
 
-        if (itemSprite == null)
+        if (itemSprite is null)
         {
             Debug.LogWarning("image not found for: " + fullPath+itemName);
             return null;

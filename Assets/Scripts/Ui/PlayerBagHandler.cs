@@ -403,7 +403,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         if (allItems.Any(i=> i.itemName == item.itemName))
         {
             var itemFound = SearchForItem(item.itemName);
-            if (itemFound != null)
+            if (itemFound is not null)
             {
                 if ( item.quantity < (maxItemCapacity - itemFound.quantity))
                     itemFound.quantity += item.quantity;

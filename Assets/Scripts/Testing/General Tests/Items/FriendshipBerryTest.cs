@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FriendshipBerryTest: ItemEndToEndTest
+public class FriendshipBerryTest: EndToEndTest,IItemTestable
 {
     private PokemonPartyHandler _pokemonPartyHandler;
     private GameUiHandler _gameUiHandler;
@@ -10,7 +10,7 @@ public class FriendshipBerryTest: ItemEndToEndTest
     public override IEnumerator BeginTest(EndToEndTestData testData)
     {
         var itemData = (ItemEndToEndTestData)testData;
-        LoadItems(itemData.testItems);
+        this.LoadItems(itemData.testItems);
         
         //causes initial item usage to fail
         AddTestCaseScenario(()=>

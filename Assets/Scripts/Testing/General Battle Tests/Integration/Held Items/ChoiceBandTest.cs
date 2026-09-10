@@ -62,7 +62,7 @@ public class ChoiceBandTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var choiceBand = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)+"Choice Band");
-        if (choiceBand == null)
+        if (choiceBand is null)
         {
             Debug.LogError($"Choice band not found at {DirectoryHandler.GetDirectory(AssetDirectory.Items)+"Choice Band"}");
             EndTest(false);

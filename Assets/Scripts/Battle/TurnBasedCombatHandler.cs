@@ -355,7 +355,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             {
                 //handle all event subscribers for [Move Execution]
                 IEnumerator routine = handler(attacker);
-                if (routine != null)
+                if (routine is not null)
                 {
                     yield return StartCoroutine(routine);
                 }
@@ -392,8 +392,9 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 _moveUsageHandler.BeginMoveExecution(currentTurn);
 
                 yield return _moveUsageHandler.AwaitMoveCompletion();
+                yield return _dialogueHandler.AwaitAllDialogue();
                 yield return _battleHandler.AwaitFaintQueue();
-                
+                yield return _dialogueHandler.AwaitAllDialogue();
                 yield return attacker.heldItemHandler.CheckForConsumableItem();
                 yield return victim.heldItemHandler.CheckForConsumableItem();
             }
@@ -656,7 +657,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     private void CheckRepeatedMove(BattleParticipant attacker, Move move)
     {
-        if (attacker.previousMoveData==null)
+        if (attacker.previousMoveData is null)
         {
             var newData = new PreviousMove(move,0);
             attacker.previousMoveData = newData;

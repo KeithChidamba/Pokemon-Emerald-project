@@ -50,7 +50,7 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
     private void SwitchArea()
     {
         var tile = FindTileAtPosition<AreaSwitchTile>(areaSwitchTilemap,transform.position);
-        if (tile == null) return;
+        if (tile is null) return;
         _areaHandler.SwitchToArea(tile.areaTransitionData.areaName);
     }
     
@@ -73,7 +73,7 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
         grassRenderer.gameObject.SetActive(false);
         _playerMovementHandler.characterSpriteMaskRenderer.gameObject.SetActive(false);
         var tile = FindTileAtPosition<EncounterTile>(encounterTilemap, transform.position);
-        if (tile == null) return;
+        if (tile is null) return;
         
         var playerPosition = _playerMovementHandler.GetPlayerPosition();
         grassRenderer.transform.position = new Vector3(playerPosition.x + .5f, playerPosition.y + .35f);//accounts for sprite offset

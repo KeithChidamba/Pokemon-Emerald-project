@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RareCandyTest : ItemEndToEndTest
+public class RareCandyTest : EndToEndTest,IItemTestable
 {
     private PokemonPartyHandler _pokemonPartyHandler;
     private GameUiHandler _gameUiHandler;
@@ -12,7 +12,7 @@ public class RareCandyTest : ItemEndToEndTest
     public override IEnumerator BeginTest(EndToEndTestData testData)
     {
         var itemData = (ItemEndToEndTestData)testData;
-        LoadItems(itemData.testItems);
+        this.LoadItems(itemData.testItems);
         
         //the test data has a pokemon of level 5, with 1 move [Ariel ace]
         AddTestCaseScenario(()=>

@@ -117,7 +117,7 @@ public class Pokemon : ScriptableObject
     {
         abilityName = NameDB.GetAbility(ability.abilityName);
         natureName = nature.natureName;
-        hasItem = (heldItem != null);
+        hasItem = heldItem is not null;
         moveData.Clear();
         typeNames.Clear();
         evolutionNames.Clear();
@@ -230,7 +230,7 @@ public class Pokemon : ScriptableObject
         
         var pokeballFriendshipMod = pokeballItem.GetDynamicModule<FriendshipModifierInfo>();
         
-        if (pokeballFriendshipMod!=null)
+        if (pokeballFriendshipMod is not null)
         {
             modifier += pokeballFriendshipMod.modifier;
         }
@@ -238,7 +238,7 @@ public class Pokemon : ScriptableObject
         if (hasItem)
         {
             var itemFriendshipMod = heldItem.GetDynamicModule<FriendshipModifierInfo>();
-            if (itemFriendshipMod!=null)
+            if (itemFriendshipMod is not null)
             {
                 modifier += itemFriendshipMod.modifier;
             }
@@ -405,7 +405,7 @@ public class Pokemon : ScriptableObject
         if (hasItem)
         {
             var expModInfo = heldItem.GetDynamicModule<ExpModifierInfo>();
-            if (expModInfo != null)
+            if (expModInfo is not null)
             {
                 var hasExpGainBous = expModInfo.modifier == ExpModifier.ExpGainBonus;
                 if (hasExpGainBous)

@@ -91,7 +91,6 @@ public class BattleParticipantStatusHandler
     {
         participant.pokemon.statusEffect = effect;
         participant.RefreshStatusEffectImage();
-        
         _currentStatusTurnCount = 0;
         _statusDurationInTurns = numTurns;
         
@@ -217,7 +216,7 @@ public class BattleParticipantStatusHandler
     public void SetupTrapDuration(TrapDataInfo trapData,bool displayMessage = true)
     {
         var existingTrap = _currentTraps.FirstOrDefault(trap => trap.trapType == trapData.trapType);
-        if (existingTrap != null)
+        if (existingTrap is not null)
         {
             _currentTraps.Remove(existingTrap);
         }
@@ -249,7 +248,7 @@ public class BattleParticipantStatusHandler
             _currentTraps.FirstOrDefault(trap => 
                 trap.trapType == TrapDataInfo.TrapType.RandomDurationFromMove);
         
-        if (existingTrapWithDuration != null)
+        if (existingTrapWithDuration is not null)
         {
             if (existingTrapWithDuration.trapDuration <= 0)
             {

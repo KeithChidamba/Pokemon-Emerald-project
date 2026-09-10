@@ -10,7 +10,9 @@ public class TestRegistry
         // new EvVitaminTest(),
         // new ModifyPowerpointsTest(),
         // new HmAndTmTest(),
-        
+        // new ReviveOverworldTest(),
+        // new EtherTest(),
+        new ReviveBattleTest(),
     };
 
     public IntegrationTest[] integrationTests = 

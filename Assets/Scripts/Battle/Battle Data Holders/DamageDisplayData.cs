@@ -17,7 +17,7 @@ public class DamageDisplayData
     {
         this.affectedParticipant = affectedParticipant;
         
-        if(affectedPokemon==null && affectedParticipant != null)
+        if(affectedPokemon is null && affectedParticipant is not null)
             this.affectedPokemon = affectedParticipant.pokemon;
         else
             this.affectedPokemon = affectedPokemon;

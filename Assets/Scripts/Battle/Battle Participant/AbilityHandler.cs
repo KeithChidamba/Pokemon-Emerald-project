@@ -182,7 +182,7 @@ public class AbilityHandler
                 break;
             }
         }
-        if (possibleItems == null)
+        if (possibleItems is null)
         {
             throw new Exception($"Item pool logic has an edge case, pokemon level: {pokemon.currentLevel}");
         }
@@ -192,7 +192,7 @@ public class AbilityHandler
         var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + possibleItems[itemWonIndex];
         
         var itemWon = Resources.Load<Item>(assetDirectory);
-        if (itemWon == null)
+        if (itemWon is null)
         {
             throw new Exception($"[Pickup Ability],{assetDirectory} doesnt exist, check item name in pool");
         }
@@ -280,6 +280,8 @@ public class AbilityHandler
         return;
         void GiveStatic(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
         {
+            if (Utility.RandomChance(CommonRandom.Rnd70)) return;
+            
             //only activates if this specific participant is hit by an enemy
             if (attacker.participantKey == participant.participantKey) return;
             if (victim.participantKey != participant.participantKey) return;
@@ -289,14 +291,14 @@ public class AbilityHandler
             if (!moveUsed.isContact)return;
             
             //simulate a pokemon's attack
-            victim.statusHandler.OnStatusEffectReceived += NotifyStaticHit; 
+            attacker.statusHandler.OnStatusEffectReceived += NotifyStaticHit; 
             var placeholderMove = ScriptableObject.CreateInstance<Move>();
             placeholderMove.statusEffect = StatusEffect.Paralysis;
             _moveUsageHandler.HandleStatusApplication(attacker, placeholderMove,false);
             return;
             void NotifyStaticHit(StatusEffect status)
             {
-                victim.statusHandler.OnStatusEffectReceived -= NotifyStaticHit; 
+                attacker.statusHandler.OnStatusEffectReceived -= NotifyStaticHit; 
                 _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s static paralysed "+attacker.pokemon.pokemonDisplayName);
             }
         }

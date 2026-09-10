@@ -123,7 +123,7 @@ public class TestingUtilities
                ,member.naturalPokemonData.pokemon
                ,member.naturalPokemonData.pokemonLevel
                ,member.naturalPokemonData.evolutionStageNumber);
-            
+           continue;
            void CreateMember(Pokemon createdPokemon)
            {
                createdPokemon.nature = member.specificNature ?? createdPokemon.nature;

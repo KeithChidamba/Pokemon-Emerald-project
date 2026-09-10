@@ -70,7 +70,6 @@ public class BattleHandler : MonoBehaviour, IInjectable
     public event Action OnSwitchIn;
     public event Action<BattleParticipant> OnSwitchOut;
     public event Action<BattleParticipantKey> OnEnemySelected;
-    private Action _checkParticipantsEachTurn;
     
     private DialogueHandler _dialogueHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
@@ -113,8 +112,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         currentParticipants.AddRange(battleParticipantInstances);
         
-        _checkParticipantsEachTurn = ()=> CheckParticipantStates();
-        _turnBasedCombatHandler.OnNewTurn += _checkParticipantsEachTurn;
+        _turnBasedCombatHandler.OnNewTurn += CountValidParticipants;
         _turnBasedCombatHandler.OnTurnsCompleted += ()=>
         {
             SetPlayerTurnUsage(PlayerTurnUsage.None);
@@ -304,13 +302,17 @@ public class BattleHandler : MonoBehaviour, IInjectable
     
     private IEnumerator SetValidParticipants()
     {
+        validParticipantCount = 0;
         foreach (var participant in currentParticipants)
         {
             if(!participant.activeForBattle)continue;
             
             if (participant.pokemon is {hp: > 0})
             {
-                yield return SetupParticipant(participant, participant.pokemon, initialCall: true);
+                validParticipantCount++;
+                SetParticipantName(participant, participant.pokemon);
+                ActivateParticipantState(participant,true);
+                yield return null;
             }
         }
     }
@@ -347,7 +349,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
 
         _turnBasedCombatHandler.StartFreshTurn();
     }
-    
+
+    public void StartTestBattle(TrainerData data)
+    {
+        StartCoroutine(SetBattleTypeAndStart(data));
+    }
     public IEnumerator SetBattleTypeAndStart(TrainerData data)
     {
         _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Battle);
@@ -447,7 +453,10 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         //set initial pokemon for player
         player.pokemon = _pokemonPartyHandler.Party[0];
-        if(playerPartner.activeForBattle) playerPartner.pokemon = _pokemonPartyHandler.Party[1];
+        if(playerPartner.activeForBattle)
+        {
+            playerPartner.pokemon = _pokemonPartyHandler.Party[1];
+        }
         
         //setup trainer ai for enemy participants
         StartCoroutine(_gameUIHandler.FadeInBlackScreen());
@@ -485,13 +494,44 @@ public class BattleHandler : MonoBehaviour, IInjectable
         }
     }
 
-    public IEnumerator SetupParticipant(BattleParticipant participant,Pokemon newPokemon,bool initialCall=false)
+    public IEnumerator SetupParticipantAfterSwitch(BattleParticipant participant,Pokemon newPokemon)
     {
         OnSwitchOut?.Invoke(participant);
         
         participant.isPlayer = participant.participantKey is BattleParticipantKey.Player
             or BattleParticipantKey.PlayerPartner;
+
+        SetParticipantName(participant, newPokemon);
+
+        participant.pokemon = newPokemon;
+        if (participant.isPlayer)
+        {
+            _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName
+                                                        +" sent out "+newPokemon.pokemonDisplayName);
+            
+            //add enemies to exp list of new player pokemon
+            foreach (var enemyParticipant in participant.currentEnemies)
+                enemyParticipant.AddToExpList(newPokemon);
+        }
+        else
+        {
+            _dialogueHandler.DisplayBattleInfo(participant.pokemonTrainerAI.trainerData.TrainerName
+                                                        +" sent out "+newPokemon.pokemonDisplayName);
+            
+            //add player participants to get exp from switched in enemy
+            foreach (var playerParticipant in participant.currentEnemies)
+                participant.AddToExpList(playerParticipant.pokemon);
+        }
         
+        //setup participant for battle
+        ActivateParticipantState(participant, false);
+        CountValidParticipants();
+        OnSwitchIn?.Invoke();
+        yield return null;
+    }
+
+    private void SetParticipantName(BattleParticipant participant,Pokemon newPokemon)
+    {
         if (participant.isPlayer)
         {
             newPokemon.pokemonDisplayName = newPokemon.nickName;
@@ -500,39 +540,44 @@ public class BattleHandler : MonoBehaviour, IInjectable
         {
             newPokemon.pokemonDisplayName = "Foe " + newPokemon.pokemonName;
         }
-        
-        if(!initialCall)
-        {
-            participant.pokemon = newPokemon;
-            if (participant.isPlayer)
-            {
-                _dialogueHandler.DisplayBattleInfo(_gameLoadingHandler.playerData.playerName
-                                                            +" sent out "+newPokemon.pokemonDisplayName);
-                
-                //add enemies to exp list of new player pokemon
-                foreach (var enemyParticipant in participant.currentEnemies)
-                    enemyParticipant.AddToExpList(newPokemon);
-            }
-            else
-            {
-                _dialogueHandler.DisplayBattleInfo(participant.pokemonTrainerAI.trainerData.TrainerName
-                                                            +" sent out "+newPokemon.pokemonDisplayName);
-                
-                //add player participants to get exp from switched in enemy
-                foreach (var playerParticipant in participant.currentEnemies)
-                    participant.AddToExpList(playerParticipant.pokemon);
-            }
-        }
-        //setup participant for battle
+    }
+    private void ActivateParticipantState(BattleParticipant participant,bool initialCall)
+    {
         participant.statData.SaveActualStats();
         participant.ActivateParticipant(initialCall);
         participant.abilityHandler.SetAbilityMethod();
         participant.heldItemHandler.SetHeldItemEffect();
-        CheckParticipantStates(initialCall);
-        OnSwitchIn?.Invoke();
-        yield return null;
+    }
+    public void CountValidParticipants()
+    {
+        validParticipantCount = currentParticipants.Count(p=>p.pokemon is not null);
     }
 
+    public void ReviveParticipant()
+    {
+        _turnBasedCombatHandler.OnNewTurn -= ReviveParticipant;
+        _inputStateHandler.AddPlaceHolderState();
+        CountValidParticipants();
+        StartCoroutine(AwaitSwitch());
+        return;
+        IEnumerator AwaitSwitch()
+        {
+            foreach (var participant in currentParticipants)
+            {
+                if (participant.pokemon is not null)
+                {
+                    //if revived during double battle for example
+                    if (participant.pokemon.hp > 0 && !participant.isActive)
+                    {
+                        yield return _battleIntroHandler.DisplayPokemonRevival(participant, participant.pokemon);
+                        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
+                        break;
+                    }
+                }
+            }
+        }
+        
+    }
     public List<BattleParticipant> GetValidParticipants()
     {
         var validList = new List<BattleParticipant>();
@@ -548,22 +593,6 @@ public class BattleHandler : MonoBehaviour, IInjectable
         }
         return validList;
     }
-    public void CheckParticipantStates(bool initialCall=false)
-    {
-        validParticipantCount = 0;
-        foreach (var participant in currentParticipants)
-        {
-            if (participant.pokemon == null) continue;
-            validParticipantCount++;
-            //if revived during double battle for example
-            if(initialCall)continue;
-            if (participant.pokemon.hp > 0 & !participant.isActive)
-            {
-                participant.ActivateParticipant(false);
-            }
-        }
-    }
-    
     public void LoadMoveInputAndText()
     { 
         var currentPlayerParticipant = GetCurrentParticipant();
@@ -667,7 +696,10 @@ public class BattleHandler : MonoBehaviour, IInjectable
             StartCoroutine(BattleVisuals.SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
             
             var participantUIRect = faintedParticipant.participantUI.GetComponent<RectTransform>(); 
-            var targetForUI = new Vector2(participantUIRect.anchoredPosition.x, participantUIRect.anchoredPosition.y-400f);
+            var targetForUI = new Vector2(
+                participantUIRect.anchoredPosition.x,
+                participantUIRect.anchoredPosition.y - BattleVisuals.OutOfViewFaintDistance);
+            
             yield return StartCoroutine(BattleVisuals.SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f));
             
             if (!faintedParticipant.isPlayer)
@@ -786,7 +818,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
                     else
                     {
                         var partyPokemon = _pokemonPartyHandler.Party
-                            .Where(pokemon => pokemon != null).ToList();
+                            .Where(pokemon => pokemon is not null).ToList();
                         
                         var highestLevelOfParty = partyPokemon
                             .OrderByDescending(p => p.currentLevel)

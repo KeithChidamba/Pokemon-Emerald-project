@@ -20,7 +20,8 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public Sprite[] statChangeSprites;
     private Dictionary<Stat, Sprite> statChangeVisuals = new();
     private string _statChangeMessage;
-    public  readonly float outOfViewDistance = 600f;
+    public  static readonly float OutOfViewDistance = 600f;
+    public  static readonly float OutOfViewFaintDistance = 400f;
     public event Action OnStatVisualDisplayed;
     private List<Coroutine> _activeSlideCoroutines = new();
     
@@ -91,7 +92,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         _dialogueHandler.DisplayBattleInfo(_statChangeMessage);
         
         foreach (var c in _activeSlideCoroutines)
-            if (c != null) StopCoroutine(c);
+            if (c is not null) StopCoroutine(c);
         
         _activeSlideCoroutines.Clear();
         foreach (var image in _statChangeImages)
@@ -307,7 +308,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             participant.pokemonImage.color = Color.white;
         }
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
-        var direction = participant.isPlayer? -outOfViewDistance : outOfViewDistance;
+        var direction = participant.isPlayer? -OutOfViewDistance : OutOfViewDistance;
         if (!participant.isPlayer && intentionalSwitch)
         {
             direction = 0;
@@ -316,11 +317,25 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             participantUIRect.anchoredPosition.y);
         yield return null;
     }
-
+    public IEnumerator RevealPokemonAfterRevive(BattleParticipant participant)
+    {
+        participant.participantUI.SetActive(true);
+        
+        var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
+        var pkmImageRect = participant.pokemonImage.rectTransform;
+        var rectHeight = pkmImageRect.rect.height;
+        
+        pkmImageRect.anchoredPosition = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y + rectHeight);
+        
+        participantUIRect.anchoredPosition = new Vector2(participantUIRect.anchoredPosition.x,
+            participantUIRect.anchoredPosition.y);
+        
+        yield return null;
+    }
     public IEnumerator WithdrawPokemon(BattleParticipant participant)
     {
         var participantUIRect = participant.participantUI.GetComponent<RectTransform>(); 
-        var direction = participant.isPlayer? outOfViewDistance : -outOfViewDistance;
+        var direction = participant.isPlayer? OutOfViewDistance : -OutOfViewDistance;
         var targetForUI = new Vector2(participantUIRect.anchoredPosition.x+direction, participantUIRect.anchoredPosition.y);
         
         yield return SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f);

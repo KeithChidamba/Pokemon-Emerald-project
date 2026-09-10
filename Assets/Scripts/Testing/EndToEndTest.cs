@@ -19,6 +19,7 @@ public class EndToEndTest
     private int currentTestCaseIndex;
     
     protected ServiceContainer serviceContainer;
+    public ServiceContainer GetContainer => serviceContainer;
     
     public virtual void Inject(ServiceContainer container) { }
     

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class ModifyPowerpointsTest: ItemEndToEndTest
+public class ModifyPowerpointsTest: EndToEndTest,IItemTestable
 {
     private PokemonPartyHandler _pokemonPartyHandler;
     private TestingEnvironmentHandler _testHandler;
@@ -14,7 +14,7 @@ public class ModifyPowerpointsTest: ItemEndToEndTest
     public override IEnumerator BeginTest(EndToEndTestData testData)
     {
         var itemData = (ItemEndToEndTestData)testData;
-        LoadItems(itemData.testItems);
+        this.LoadItems(itemData.testItems);
 
         var currentMove = _pokemonPartyHandler.Party[0].moveSet[0];
         var maxPp = Mathf.FloorToInt(_pokemonPartyHandler.Party[0].moveSet[0].basePowerpoints * 1.6f);

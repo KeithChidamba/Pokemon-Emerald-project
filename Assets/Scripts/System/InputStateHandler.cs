@@ -171,7 +171,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     }
     private void InvokeSelectedEvent()
     {
-        if (currentState.selectableUis == null) return;
+        if (currentState.selectableUis is null) return;
         if (currentState.selectableUis.Count == 0) return;
        
         if (currentState.isSelecting)
@@ -257,7 +257,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
 
     private void HandleStateExitability()
     {
-        if (currentState.updateExitStatus == null) return;
+        if (currentState.updateExitStatus is null) return;
         currentState.canExit = currentState.updateExitStatus.Invoke();
     }
     
@@ -466,7 +466,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     public void ResetSpecificUi(InputStateName stateName,bool manualExit=false)
     {
         var state = stateLayers.FirstOrDefault(state => state.stateName == stateName);
-        if (state == null) return;
+        if (state is null) return;
         AddRemoval(state,manualExit);
     }
     public void RemoveTopInputLayer(bool invokeOnExit)

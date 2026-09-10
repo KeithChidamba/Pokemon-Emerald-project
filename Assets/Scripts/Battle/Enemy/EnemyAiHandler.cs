@@ -137,7 +137,7 @@ public class EnemyAiHandler
                     {
                         participant.DeactivateParticipant();
                         participant.DeactivateUI();
-                        _battleHandler.CheckParticipantStates();
+                        _battleHandler.CountValidParticipants();
                     }
                 }
                 else

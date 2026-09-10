@@ -23,7 +23,7 @@ public abstract class StoryObjective : ScriptableObject
     public void FindMainAsset(ServiceContainer container)
     {
         var mainAsset = Resources.Load<StoryObjective>(DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData)+mainAssetName);
-        if (mainAsset == null)
+        if (mainAsset is null)
         {
             Debug.LogWarning("Story objective Asset: "+mainAssetName+" not found");
             return;

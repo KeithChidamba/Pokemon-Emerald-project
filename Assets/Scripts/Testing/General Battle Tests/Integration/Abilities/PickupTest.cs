@@ -42,7 +42,7 @@ public class PickupTest : BattleBasedTest
         
         _testCaseHandler.AddTestCase("Player must have item",
             () => player.pokemon.hasItem 
-            && player.pokemon.heldItem != null);
+            && player.pokemon.heldItem is not null);
         
         yield return HandleBattleState();
         onTestResult.Invoke();

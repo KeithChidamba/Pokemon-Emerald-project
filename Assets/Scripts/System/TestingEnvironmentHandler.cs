@@ -57,7 +57,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
 
    public void ValidateEndToEndTestCase()
    {
-       if (currenEndToEndTest == null)
+       if (currenEndToEndTest is null)
        {
            Debug.LogError("Can't use that right now. Only for use during [End-To-End] tests");
            return;
@@ -93,9 +93,10 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
             
            var testData = Resources.Load<EndToEndTestData>(
                DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"End To End/{endToEndTest.testName}/Test Data");
-           if (testData == null)
+           if (testData is null)
            {
                Debug.LogWarning("Make sure test data is in [test/End To End] folder not just in [Test] folder");
+               yield break;
            }
            var pokemonOperationsHandler = _container.Resolve<PokemonOperations>();
            yield return TestingUtilities.LoadPokemonPartyTestData(testData.pokemonPartyData,_pokemonPartyHandler,pokemonOperationsHandler);

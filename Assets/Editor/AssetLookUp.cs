@@ -17,7 +17,7 @@ public class AssetLookUp : EditorWindow
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
             Move move = AssetDatabase.LoadAssetAtPath<Move>(assetPath);
 
-            if (move == null)
+            if (move is null)
             {
                 Debug.LogError($"[ERROR] Move asset not found at: {assetPath}");
                 continue;

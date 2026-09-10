@@ -325,14 +325,14 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private void LearnMove(Pokemon currentPokemon,Move newMoveAsset,bool removeDetailsUi = true)
     {        
         _pokemonDetailsHandler.SetUsage(PokemonDetailsUsage.LearnMoves);
-        _pokemonDetailsHandler.onMoveSelected += LearnSelectedMoveOperation;
+        _pokemonDetailsHandler.OnMoveSelected += LearnSelectedMoveOperation;
         _dialogueHandler.DisplayBattleInfo("Which move will you replace?",false);
         gameUiHandler.ViewPartyPokemonDetails(currentPokemon);
         _inputStateHandler.OnStateRemoved += SKipMoveCallBack;
         return;
         void LearnSelectedMoveOperation(int moveIndex)
         {
-            _pokemonDetailsHandler.onMoveSelected -= LearnSelectedMoveOperation;
+            _pokemonDetailsHandler.OnMoveSelected -= LearnSelectedMoveOperation;
             _inputStateHandler.OnStateRemoved -= SKipMoveCallBack;
             if (removeDetailsUi)
             {
@@ -345,6 +345,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         {
             if (state.stateName != InputStateName.PokemonDetailsMoveSelection) return;
             _inputStateHandler.OnStateRemoved -= SKipMoveCallBack;
+            _pokemonDetailsHandler.OnMoveSelected -= LearnSelectedMoveOperation;
             //if started learning but rejected it on move selection screen
             SkipMove(currentPokemon,newMoveAsset);
             if (removeDetailsUi)
@@ -357,7 +358,6 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private void SkipMove(Pokemon currentPokemon,Move newMoveAsset)
     {
         _dialogueHandler.DeletePreviousOptions();
-        _pokemonDetailsHandler.onMoveSelected = null;
         _selectingMoveReplacement = false;
         _learningNewMove = false;
         _dialogueHandler.DisplayBattleInfo(currentPokemon.pokemonDisplayName +

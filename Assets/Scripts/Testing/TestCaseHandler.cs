@@ -104,7 +104,7 @@ public class TestCaseHandler
    public static void ValidateTestCases(TestingEnvironmentHandler testHandler,TestCase testCaseResult,
    Action successCallBack,Action failureCallBack)
    {
-      if(testCaseResult==null)return;
+      if(testCaseResult is null)return;
       
       testHandler.LogMessage($"Test case({testCaseResult.caseIndex + 1}) Conditions :", TestLogType.TestCase);
       for (int i=0;i< testCaseResult.conditions.Count;i++)
@@ -125,7 +125,7 @@ public class TestCaseHandler
    public bool CheckForCurrentTestCase(Action successCallBack,Action failureCallBack)
    {
       var testCaseResult = GetCurrentTestCase(_sequencer.GetTestCaseIndex());
-      if (testCaseResult != null)
+      if (testCaseResult is not null)
       {
          _testHandler.LogMessage($"Test case({testCaseResult.caseIndex + 1}) Conditions :", TestLogType.TestCase);
          for (int i=0;i< testCaseResult.conditions.Count;i++)

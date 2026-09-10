@@ -41,7 +41,7 @@ public class PokemonDetailsHandler : MonoBehaviour,IInjectable
     [SerializeField]private Pokemon currentPokemon;
     private int _currentPokemonIndex;
     private IReadOnlyList<Pokemon> pokemonToView;
-    public Action<int> onMoveSelected;
+    public event Action<int> OnMoveSelected;
 
     public PokemonDetailsUsage CurrentUsage { get; private set; }
     private Dictionary<int, Action> _pages = new();
@@ -106,7 +106,7 @@ public class PokemonDetailsHandler : MonoBehaviour,IInjectable
     {
         if (CurrentUsage != PokemonDetailsUsage.ViewData)
         {
-            onMoveSelected?.Invoke(moveIndex);
+            OnMoveSelected?.Invoke(moveIndex);
             return;
         }
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonDetailsMoveData, InputStateGroup.PokemonDetails

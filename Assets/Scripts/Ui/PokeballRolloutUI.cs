@@ -20,14 +20,12 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     public Sprite faintedPokeballSlot;
     private Vector2 _defaultPosition;
     
-    private BattleVisuals _battleVisualsHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
     private BattleIntro _battleIntroHandler;
     private BattleHandler _battleHandler;
 
     public void Inject(ServiceContainer container)
     {
-        _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _battleIntroHandler = container.Resolve<BattleIntro>();
         _battleHandler = container.Resolve<BattleHandler>();
@@ -48,7 +46,7 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
             SetPokeballImage(pokeballImage, i);
             yield return null;
         }
-        var distance = isPlayerPokeballs ? -_battleVisualsHandler.outOfViewDistance : _battleVisualsHandler.outOfViewDistance;
+        var distance = isPlayerPokeballs ? -BattleVisuals.OutOfViewDistance : BattleVisuals.OutOfViewDistance;
         var target = new Vector2(_rectTransform.anchoredPosition.x + distance, _rectTransform.anchoredPosition.y);
         yield return BattleVisuals.SlideRect(_rectTransform, _rectTransform.anchoredPosition, target , 600f);
     }
@@ -127,7 +125,7 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
     public IEnumerator HidePokeballs()
     {
         yield return new WaitUntil(() => _finishedDisplaying);
-        _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? _battleVisualsHandler.outOfViewDistance : -_battleVisualsHandler.outOfViewDistance);
+        _battleIntroHandler.SlideOutOfView(_rectTransform, isPlayerPokeballs ? BattleVisuals.OutOfViewDistance : -BattleVisuals.OutOfViewDistance);
     }
 
     private void ResetPokeballs()

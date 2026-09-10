@@ -328,7 +328,23 @@ public class BattleIntro : MonoBehaviour,IInjectable
             yield return BattleVisuals.SlideRect(participantIntroImages[i + 2].rectTransform, startPos, target , platformSlideSpeed*5);
         }
     }
+/// <summary>
+/// Only the player can use revive items, keep in mind when using this
+/// </summary>
+/// <param name="swapParticipant"></param>
+/// <param name="newPokemon"></param>
+/// <returns></returns>
+    public IEnumerator DisplayPokemonRevival(BattleParticipant swapParticipant, Pokemon newPokemon)
+    {
+        swapParticipant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
+        
+        yield return _battleHandler.SetupParticipantAfterSwitch(swapParticipant,newPokemon);
+        
+        yield return _battleVisualsHandler.SendOutPlayerPokemon(swapParticipant);
+        
+        yield return _battleVisualsHandler.RevealPokemonAfterRevive(swapParticipant);
 
+    }
     public IEnumerator SwitchInPokemon(BattleParticipant swapParticipant, Pokemon newPokemon,bool normalIntentionalSwitch=true)
     {
         if(!swapParticipant.isPlayer)
@@ -340,7 +356,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         
         swapParticipant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
         
-        yield return _battleHandler.SetupParticipant(swapParticipant,newPokemon:newPokemon);
+        yield return _battleHandler.SetupParticipantAfterSwitch(swapParticipant,newPokemon);
         
         if (swapParticipant.isPlayer)
         {
@@ -351,7 +367,6 @@ public class BattleIntro : MonoBehaviour,IInjectable
             yield return _battleVisualsHandler.SendOutEnemyPokemon(swapParticipant);
         }
         
-        Debug.Log($"intent switch: {normalIntentionalSwitch}");
         yield return _battleVisualsHandler.RevealPokemonAfterWithdraw(swapParticipant,normalIntentionalSwitch);
         
         if (!swapParticipant.isPlayer)

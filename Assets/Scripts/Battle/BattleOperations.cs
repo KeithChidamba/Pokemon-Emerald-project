@@ -54,7 +54,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
     public float CheckTypeEffectiveness(BattleParticipant victim,Type moveType)
     {
         float effectiveness = 1;
-        if (victim.additionalTypeImmunity!=null)
+        if (victim.additionalTypeImmunity is not null)
         {
             if (victim.additionalTypeImmunity.typeEnum == moveType.typeEnum)
                 effectiveness = 0;
@@ -118,7 +118,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
 public string AttemptStatChangeOperation(StatChangeTransitData data)
 {
     var desiredModifier = SearchForStatModifier(data.receiver.pokemon, data.stat);
-    if (desiredModifier == null)
+    if (desiredModifier is null)
     {
         desiredModifier = CreateNewStatModifier(data.stat); 
         data.receiver.pokemon.statModifiers.Add(desiredModifier);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndToEndItemTestTesmplate: ItemEndToEndTest
+public class EndToEndItemTestTesmplate: EndToEndTest,IItemTestable
 {
     private PokemonPartyHandler _pokemonPartyHandler;
     private TestingEnvironmentHandler _testHandler;
@@ -11,15 +11,15 @@ public class EndToEndItemTestTesmplate: ItemEndToEndTest
     public override IEnumerator BeginTest(EndToEndTestData testData)
     {
         var itemData = (ItemEndToEndTestData)testData;
-        LoadItems(itemData.testItems);
+        this.LoadItems(itemData.testItems);
         
         AddTestCaseScenario(()=>
         {
             //example scenario
         });
         
-        AddTestCase("Example condition",() => 
-            _pokemonPartyHandler.Party[0].currentLevel == 1);
+        AddTestCase("Example condition",
+            () => _pokemonPartyHandler.Party[0].currentLevel == 1);
         
         _gameUiHandler.ValidateBagView();
         yield return null;

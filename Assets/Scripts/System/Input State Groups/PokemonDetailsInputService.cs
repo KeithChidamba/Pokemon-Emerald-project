@@ -39,15 +39,9 @@ public class PokemonDetailsInputService: IInputGroup
             moveSelectables.Add(new(_pokemonDetailsHandler.moveNamesText[i].gameObject,
                 () => _pokemonDetailsHandler.SelectMove(_inputStateHandler.currentState.currentSelectionIndex), true));
         }
-
-        Action onExit = null;
-        if (_pokemonDetailsHandler.CurrentUsage == PokemonDetailsUsage.AlterMoves)
-        {
-             onExit = () => _pokemonDetailsHandler.onMoveSelected?.Invoke(-1);
-        }
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonDetailsMoveSelection,InputStateGroup.PokemonDetails,
             stateDirection:InputDirection.Vertical,selectableUis:moveSelectables, 
-            selector:_pokemonDetailsHandler.moveSelector, selecting:true, display:true,onExit:onExit));
+            selector:_pokemonDetailsHandler.moveSelector, selecting:true, display:true));
     }
 }

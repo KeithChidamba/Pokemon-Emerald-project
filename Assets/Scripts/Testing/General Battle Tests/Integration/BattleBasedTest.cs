@@ -50,9 +50,10 @@ public class BattleBasedTest : IntegrationTest
         
         var testData = Resources.Load<BattleBasedTestData>(
             DirectoryHandler.GetDirectory(AssetDirectory.Tests) + $"Integration/{testName}/Test Data");
-        if (testData == null)
+        if (testData is null)
         {
             Debug.LogWarning("Make sure test data is in [test/Integration] folder not just in [Test] folder");
+            yield break;
         }
         var testEnemy = Resources.Load<TrainerData>(
             DirectoryHandler.GetDirectory(AssetDirectory.TestAssets) + "Test Enemy");

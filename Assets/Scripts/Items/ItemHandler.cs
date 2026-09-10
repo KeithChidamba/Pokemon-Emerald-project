@@ -54,6 +54,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
     public void UseItem(Item itemInUse,Pokemon selectedPokemon)
     {
+        scheduledInputStateRemoval = null;
         OnItemUsed += CompleteItemUsage;
         void CompleteItemUsage(Item itemUsed, bool successful)
         {
@@ -63,7 +64,10 @@ public class ItemHandler : MonoBehaviour,IInjectable
             return;
             IEnumerator CompletionSequence()
             {
-                yield return _dialogueHandler.WaitForDialogueCompletion();
+                if(_dialogueHandler.Displaying)
+                {
+                    yield return _dialogueHandler.WaitForDialogueCompletion();
+                }
                 
                 scheduledInputStateRemoval?.Invoke();
                 yield return new WaitForSecondsRealtime(0.1f);
@@ -97,7 +101,6 @@ public class ItemHandler : MonoBehaviour,IInjectable
                 {
                     _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
                 }
-                scheduledInputStateRemoval = null;
             }
         }
         
@@ -204,7 +207,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
         
         void UseReviveHerb(Item itemUsed,Pokemon pokemon)
         {
-            OnItemUsed?.Invoke(itemInUse,CanRevivePokemon(herbInfo.reviveType,pokemon));
+            HandlePokemonRevive(itemInUse,herbInfo.reviveType, pokemon);
         }
         void ChangeFriendship(Item itemUsed,bool successful)
         {
@@ -387,56 +390,51 @@ public class ItemHandler : MonoBehaviour,IInjectable
         _moveUsageHandler.InitiateStatChange(xBuffData);
         OnItemUsed?.Invoke(itemInUse,true);
     }
-    private void RevivePokemon(Item itemInUse,Pokemon selectedPartyPokemon)
+
+    private void RevivePokemon(Item itemInUse,Pokemon pokemon)
     {
         var reviveType = itemInUse.GetModule<RevivalItemInfo>().reviveType;
-        OnItemUsed?.Invoke(itemInUse,CanRevivePokemon(reviveType,selectedPartyPokemon));
+        HandlePokemonRevive(itemInUse,reviveType, pokemon);
     }
-    private bool CanRevivePokemon(RevivalItemType reviveType,Pokemon selectedPartyPokemon)
+    private void HandlePokemonRevive(Item itemInUse,RevivalItemType reviveType,Pokemon selectedPartyPokemon)
     {
         if (selectedPartyPokemon.hp > 0)
         {
             _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+" has not fainted!"); 
-            return false;
+            OnItemUsed?.Invoke(itemInUse,false);
         }
-        
         selectedPartyPokemon.hp = reviveType switch
         { 
             RevivalItemType.FullHealth=> selectedPartyPokemon.maxHp , 
             RevivalItemType.HalfHealth=> math.trunc(selectedPartyPokemon.maxHp*0.5f), 
             _=> 0f
         };
-        
+        selectedPartyPokemon.NotifyHealthChange();
+        _battleHandler.CountValidParticipants();
         _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+" has been revived!");
-        return true;
+        _turnBasedCombatHandler.OnNewTurn += _battleHandler.ReviveParticipant;
+        OnItemUsed?.Invoke(itemInUse,true);
     }
     private void ChangePowerpoints(Item itemInUse,Pokemon selectedPartyPokemon)
     {
+        scheduledInputStateRemoval = () =>
+        {
+            _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetailsMoveSelection);
+            _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetails, true);
+        };
         _pokemonDetailsHandler.SetUsage(PokemonDetailsUsage.AlterMoves);
-        var modifierInfo = itemInUse.GetModule<PowerpointModifeir>();
-        
-        _pokemonDetailsHandler.onMoveSelected += MoveOperation;
+        _pokemonDetailsHandler.OnMoveSelected += MoveOperation;
+        _inputStateHandler.OnStateRemoved += ExitOperation;
         _gameUIHandler.ViewPartyPokemonDetails(selectedPartyPokemon);
+        
         return;
         void MoveOperation(int moveIndex)
         {
-            var moveAlterationCancelled = moveIndex == -1;
-            if (moveAlterationCancelled)
-            {
-                _pokemonDetailsHandler.onMoveSelected -= MoveOperation;
-                OnItemUsed?.Invoke(itemInUse,false);
-                return; 
-            }
-            
-            OnItemUsed += ResetUsageState;
-            scheduledInputStateRemoval = () =>
-            {
-                _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetailsMoveSelection);
-                _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetails, true);
-            };
+            _pokemonDetailsHandler.OnMoveSelected -= MoveOperation;
+            _inputStateHandler.OnStateRemoved -= ExitOperation;
             
             var currentMove = selectedPartyPokemon.moveSet[moveIndex];
-                        
+            var modifierInfo = itemInUse.GetModule<PowerpointModifeir>();
             Action<int, Item, Move> powerPointOperation = modifierInfo.modiferType switch
             {
                 PowerpointModifeir.ModiferType.RestorePp => RestorePowerpoints,
@@ -444,13 +442,13 @@ public class ItemHandler : MonoBehaviour,IInjectable
                 _ => IncreasePowerpoints
             };
             powerPointOperation.Invoke(moveIndex, itemInUse,currentMove);
-            
-            return;
-            void ResetUsageState(Item itemUsed,bool successful)
-            {
-                OnItemUsed -= ResetUsageState;
-                _pokemonDetailsHandler.onMoveSelected -= MoveOperation;
-            }
+        }
+        void ExitOperation(InputState state)
+        {
+            if (state.stateName != InputStateName.PokemonDetailsMoveSelection) return;
+            _pokemonDetailsHandler.OnMoveSelected -= MoveOperation;
+            _inputStateHandler.OnStateRemoved -= ExitOperation;
+            OnItemUsed?.Invoke(itemInUse,false);
         }
     }
     private void RestorePowerpoints(int moveIndex,Item itemInUse,Move currentMove)
@@ -473,7 +471,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
          
          var sumPoints = currentMove.powerpoints + pointsToAdd;
          
-         currentMove.powerpoints = (sumPoints > currentMove.maxPowerpoints) ? currentMove.maxPowerpoints : sumPoints;
+         currentMove.powerpoints = sumPoints > currentMove.maxPowerpoints ? currentMove.maxPowerpoints : sumPoints;
 
          _dialogueHandler.DisplayDetails( currentMove.moveName+" pp was restored!");
          OnItemUsed?.Invoke(itemInUse,true);

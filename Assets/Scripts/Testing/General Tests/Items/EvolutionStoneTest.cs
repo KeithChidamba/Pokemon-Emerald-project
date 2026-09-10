@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EvolutionStoneTest: ItemEndToEndTest
+public class EvolutionStoneTest: EndToEndTest,IItemTestable
 {
     private PokemonPartyHandler _pokemonPartyHandler;
     private GameUiHandler _gameUiHandler;
@@ -11,7 +11,7 @@ public class EvolutionStoneTest: ItemEndToEndTest
     public override IEnumerator BeginTest(EndToEndTestData testData)
     {
         var itemData = (ItemEndToEndTestData)testData;
-        LoadItems(itemData.testItems);
+        this.LoadItems(itemData.testItems);
 
         previousName = _pokemonPartyHandler.Party[0].pokemonName;
         

@@ -428,7 +428,7 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
         {
             for (var i = 0;i < _pokemonPartyHandler.maxNumMembers; i++)
             {
-                if (_pokemonPartyHandler.Party[i] == null)
+                if (_pokemonPartyHandler.Party[i] is null)
                 {
                     partyPokemonIcons[i].gameObject.SetActive(false);
                     continue;
@@ -476,7 +476,7 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
     }
     private void SelectPartyPokemon(PcPartyPokemon icon)
     {
-        if (icon.pokemon == null) return;
+        if (icon.pokemon is null) return;
         //display options state
         var partyOptionsSelectables = new List<SelectableUI>
         {

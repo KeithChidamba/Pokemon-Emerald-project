@@ -116,7 +116,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         pokemonTrainerAI = new EnemyAiHandler(_container,this);
         
         yield return pokemonTrainerAI.SetupTrainerForBattle(trainerData);
-        if (partner == null)
+        if (partner is null)
         {
             yield break;
         }
@@ -158,7 +158,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         {
             if (!receiverPokemon.hasItem) continue;
             var expHeldItem = receiverPokemon.heldItem.GetDynamicModule<ExpModifierInfo>();
-            if (expHeldItem != null)
+            if (expHeldItem is not null)
             {
                 var hasExpShare = expHeldItem.modifier == ExpModifier.ExpShare;
                 if (hasExpShare)
@@ -268,7 +268,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
             {
                 isActive = false;
                 DeactivateUI();
-                _battleHandler.CheckParticipantStates();
+                _battleHandler.CountValidParticipants();
                 EndFaintEvent();
             }
         }
@@ -452,7 +452,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     }
     public void ActivateParticipant(bool initialCall)
     {
-        RefreshStatusEffectImage();
         playerHpSlider.minValue = 0;
         isActive = true;
         pokemonImage.sprite = isPlayer?pokemon.backPicture : pokemon.frontPicture;
@@ -462,6 +461,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         {
             pokemon.statusEffect = StatusEffect.Poison;
         }
+        
         _moveUsageHandler.ApplyStatusToVictim(this, pokemon.statusEffect);
         
         if (initialCall)

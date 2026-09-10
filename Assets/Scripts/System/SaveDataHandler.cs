@@ -375,12 +375,12 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         {
             try
             {
-                if(pokemon==null) throw new Exception("pokemon is null! ");
+                if(pokemon is null) throw new Exception("pokemon is null! ");
               
                 pokemon.SaveUnserializableData();
                 if(pokemon.hasItem)
                 {
-                    if(pokemon.heldItem==null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonDisplayName); 
+                    if(pokemon.heldItem is null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonDisplayName); 
                     SaveDataAsJson(pokemon.heldItem, pokemon.pokemonID.ToString(), SaveDataDirectory.HeldItems);
                 }
                 SaveDataAsJson(pokemon, pokemon.pokemonID.ToString(), SaveDataDirectory.PartyPokemon);
@@ -397,12 +397,12 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             try
             {
                 var pokemon = _pokemonStorageHandler.nonPartyPokemon[i];
-                if(pokemon==null) throw new Exception("pokemon is null! ");
+                if(pokemon is null) throw new Exception("pokemon is null! ");
               
                 pokemon.SaveUnserializableData();
                 if(pokemon.hasItem)
                 {
-                    if(pokemon.heldItem==null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonDisplayName); 
+                    if(pokemon.heldItem is null) throw new Exception("held Item is null! , for pokemon: "+pokemon.pokemonDisplayName); 
                     SaveDataAsJson(pokemon.heldItem, pokemon.pokemonID.ToString(), SaveDataDirectory.HeldItems);
                 }
                 SaveDataAsJson(pokemon, pokemon.pokemonID.ToString(), SaveDataDirectory.StoragePokemon);
@@ -417,7 +417,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         for (var i = 0; i < _playerBagHandler.allItems.Count; i++)
         {
             var item = _playerBagHandler.allItems[i];
-            if(item==null) throw new Exception("Item is null! ,index: "+i); 
+            if(item is null) throw new Exception("Item is null! ,index: "+i); 
             
             try
             {
@@ -434,7 +434,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         for (var i = 0; i < _playerBagHandler.storageItems.Count; i++)
         {
             var item = _playerBagHandler.storageItems[i];
-            if(item==null) throw new Exception("Storage item is null! ,index: "+i);
+            if(item is null) throw new Exception("Storage item is null! ,index: "+i);
             try
             {
                 SaveDataAsJson(item, item.itemID,SaveDataDirectory.StorageItems);
@@ -449,7 +449,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         try
         {
             var player = _gameLoadingHandler.playerData;
-            if(player==null) throw new Exception("player data is null! ");
+            if(player is null) throw new Exception("player data is null! ");
             _gameLoadingHandler.playerData.playerPosition = _playerMovementHandler.GetPlayerPosition();
             _gameLoadingHandler.playerData.location = _areaHandler.currentArea.data.areaName;
             

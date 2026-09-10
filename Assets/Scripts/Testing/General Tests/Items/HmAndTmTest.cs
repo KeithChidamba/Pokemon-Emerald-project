@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HmAndTmTest: ItemEndToEndTest
+public class HmAndTmTest: EndToEndTest,IItemTestable
 {
     private PokemonPartyHandler _pokemonPartyHandler;
     private GameUiHandler _gameUiHandler;
@@ -10,7 +10,7 @@ public class HmAndTmTest: ItemEndToEndTest
     public override IEnumerator BeginTest(EndToEndTestData testData)
     {
         var itemData = (ItemEndToEndTestData)testData;
-        LoadItems(itemData.testItems);
+        this.LoadItems(itemData.testItems);
         
         //the pokemon in the data only has the move [brick break]
         

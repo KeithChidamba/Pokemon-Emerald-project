@@ -382,7 +382,7 @@ public class TestGeneratorWindow : EditorWindow
         // Select the newly created file.
         Object asset = AssetDatabase.LoadAssetAtPath<Object>(filePath);
 
-        if (asset != null)
+        if (asset is not null)
         {
             Selection.activeObject = asset;
             EditorGUIUtility.PingObject(asset);

@@ -10,11 +10,11 @@ using UnityEngine.UI;
 
 public enum PartyUsage
 {
-    SwapOut,ItemUsage,General,SwitchOutFromBattleStyle
+    General,SwapOut,ItemUsage,SwitchOutFromBattleStyle
 }
 public class PokemonPartyHandler : MonoBehaviour,IInjectable
 {
-    private List<Pokemon> party = new ();
+    [SerializeField]private List<Pokemon> party = new ();
     public IReadOnlyList<Pokemon> Party => party;
     public int selectedMemberIndex;
     [SerializeField]private int memberToMove;
@@ -337,9 +337,8 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     {
         party.Clear();
     }
-    public void AddTestMember(Pokemon pokemon)
+    public void AddTestMember(Pokemon newPokemon)
     {
-        var newPokemon = InstanceFactory.CreatePokemon(pokemon); 
         newPokemon.pokeballName = "Pokeball"; 
         newPokemon.hasTrainer = true;
         Debug.Log($"added test {newPokemon.pokemonName}");
@@ -356,6 +355,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     {
         _pokemonOperationsHandler.CreateSpecificPokemon(GetNewMember,giftData.giftPokemon,giftData.pokemonLevel
             ,giftData.evolutionStageNumber);
+        return;
         void GetNewMember(Pokemon newPokemon)
         {
             newPokemon.hasTrainer = true;

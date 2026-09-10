@@ -139,7 +139,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
         
         if (optionChosen > 0) return;
         
-        if(currentMartData!=null){
+        if(currentMartData is not null){
             if (currentMartData.location == clerkInteraction.location)
             {//basically caching
                 SetUpItemView();
@@ -150,7 +150,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
             DirectoryHandler.GetDirectory(AssetDirectory.PokeMartData));
         
         currentMartData = allData.FirstOrDefault(data => data.location == clerkInteraction.location);
-        if (currentMartData == null)
+        if (currentMartData is null)
         {
             Debug.LogWarning($"No mart data for location{clerkInteraction.location}");
             return;

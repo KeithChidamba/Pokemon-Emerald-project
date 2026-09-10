@@ -134,7 +134,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         else LoadDefaultTrees();
         
         //overworld pickups
-        if (_loadedPickupRegistry == null)
+        if (_loadedPickupRegistry is null)
         {
             _loadedPickupRegistry = ScriptableObject.CreateInstance<OverworldPickupRegistry>();
             for (var i=0; i< overworldPickupRegistry.overworldPickups.Count;i++)
@@ -147,7 +147,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         }
         
         //story objectives
-        if (storyProgressObjective == null)
+        if (storyProgressObjective is null)
         {
             currentStoryObjectives.AddRange(allStoryObjectives); 
             yield return new WaitUntil(() => currentStoryObjectives.Count==allStoryObjectives.Count);
@@ -184,7 +184,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     public bool PickupItemFound(Vector2 interactionPosition)
     {
         var itemPicked = _loadedPickupRegistry.GetItemPickup(interactionPosition);
-        if (itemPicked!=null)
+        if (itemPicked is not null)
         {
             _playerBag.AddItem(itemPicked);
             var quantityMessage = itemPicked.quantity > 1 ? "'s" : "";

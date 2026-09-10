@@ -172,7 +172,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
             transform.position = movePoint.position;
             Moving = false;
 
-            if (animationRoutine != null)
+            if (animationRoutine is not null)
             {
                 StopCoroutine(animationRoutine);
                 animationRoutine = null;

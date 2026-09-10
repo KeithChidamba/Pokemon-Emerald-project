@@ -347,7 +347,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         { 
             var semiInvulnerability = victim.semiInvulnerabilityData
                 .semiInvulnerabilities.FirstOrDefault(s => s.GetName() == moveName);
-            if (semiInvulnerability != null)
+            if (semiInvulnerability is not null)
             {
                 return semiInvulnerability.damageMultiplier;
             }

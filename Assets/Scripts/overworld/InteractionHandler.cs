@@ -93,21 +93,21 @@ public class InteractionHandler : MonoBehaviour,IInjectable
             if (InputSourceHandler.InputPressed(ControlEvent.Confirm))
             {
                 var possibleNpcInteractable = _areaManager.currentArea.CheckForNpcPosition(tileInFrontOfPlayer);
-                if (possibleNpcInteractable != null) 
+                if (possibleNpcInteractable is not null) 
                 {
                     _dialogueHandler.StartInteraction(possibleNpcInteractable); 
                 }
                 else
                 {
                     var interactableTile = PlayerTileHandler.FindTileAtPosition<InteractionTile>(interactionTilemap,tileInFrontOfPlayer);
-                    if (interactableTile != null)
+                    if (interactableTile is not null)
                     {
                         _dialogueHandler.StartInteraction(interactableTile.interaction);
                     }
                     else
                     {
                         var interactableObject = hit.transform.GetComponent<OverworldInteractable>();
-                        if (interactableObject != null)
+                        if (interactableObject is not null)
                         {
                             _dialogueHandler.StartInteraction(interactableObject);
                         }
@@ -128,10 +128,10 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                 {
                     EncounterTable tableOfEncounter;
                     var animatedWaterTile = PlayerTileHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point);
-                    if (animatedWaterTile == null)
+                    if (animatedWaterTile is null)
                     {
                         var stillWaterTile  = PlayerTileHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
-                        if (stillWaterTile == null)
+                        if (stillWaterTile is null)
                         {
                             Debug.LogError("hit water tilemap but no tile data");
                             return;

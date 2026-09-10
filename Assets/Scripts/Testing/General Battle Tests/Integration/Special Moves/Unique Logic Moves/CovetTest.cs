@@ -35,7 +35,7 @@ public class CovetTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + itemName;
         var oranBerry = Resources.Load<Item>(assetDirectory);
-        if (oranBerry == null)
+        if (oranBerry is null)
         {
             Debug.LogError($"item not found: {assetDirectory}");
             EndTest(false);

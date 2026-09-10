@@ -13,7 +13,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     public float typingSpeed = 0.04f;
     [SerializeField] private bool dialogueFinished;
     [SerializeField] private bool canExitDialogue = true;
-    [SerializeField] private bool displaying;
+    public bool Displaying { get; private set; }
     [SerializeField] private GameObject infoDialogueBox;
     public GameObject battleDialogueBox;
     [SerializeField] private LoopingUiAnimation endOfDialoguePointer;
@@ -62,7 +62,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
 
     void Update()
     {
-        if (!displaying) return;
+        if (!Displaying) return;
         if (dialogueFinished && InputSourceHandler.InputPressed(ControlEvent.Exit) && canExitDialogue)
         {
             EndDialogue();
@@ -76,6 +76,11 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     {
         yield return new WaitUntil(() => !messagesLoading);
     }
+    /// <summary>
+    /// Only use this if you're sure dialogue
+    /// has/is displaying
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator WaitForDialogueCompletion()
     {
         yield return new WaitUntil(() => dialogueFinished);
@@ -86,7 +91,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     }
     public bool HandlingStateExit(InputState currentState)
     {
-        if (!displaying) return false;
+        if (!Displaying) return false;
         if (currentState.stateName == InputStateName.DialogueOptions)
         {
             return true;
@@ -260,7 +265,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         infoDialogueBox.SetActive(false);
         battleDialogueBox.SetActive(false);
         ResetText();
-        displaying = false;
+        Displaying = false;
         currentInteractable = null;
         dialogueFinished = false;
         StopCoroutine(ProcessQueue());
@@ -313,7 +318,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     {
         ResetText();
         dialogueFinished = false;
-        displaying = true; 
+        Displaying = true; 
         dialougeText.text = currentInteraction.interactionMessage;
         OnDialogueDisplayed?.Invoke(currentInteraction.interactionMessage);
         dialougeText.ForceMeshUpdate();
@@ -405,7 +410,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         if (typeOut)
         {
             // Stop ONLY the typing coroutine
-            if (_typingRoutine != null)
+            if (_typingRoutine is not null)
             {
                 StopCoroutine(_typingRoutine);
             }

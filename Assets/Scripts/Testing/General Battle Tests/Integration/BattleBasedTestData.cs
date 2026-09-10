@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "test", menuName = "Tests/Battle based test data")]
+[CreateAssetMenu(fileName = "test", menuName = "Tests/Integration/Battle based test data")]
 public class BattleBasedTestData : ScriptableObject
 {
     public List<PokemonTestData> pokemonPartyData = new();

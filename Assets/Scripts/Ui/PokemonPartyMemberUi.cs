@@ -107,7 +107,7 @@ public class PokemonPartyMemberUi : MonoBehaviour,IInjectable
     }
     public void ResetUI()
     {
-        if(pokemon!=null)
+        if(pokemon is not null)
         {
             pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
             pokemon = null;
