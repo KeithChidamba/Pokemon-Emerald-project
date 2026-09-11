@@ -27,7 +27,7 @@ MonoBehaviour:
     nickName: Kip
   testItems:
   - itemAsset: {fileID: 11400000, guid: fb8230fc4d8a73fa2924ec2c4011d812, type: 2}
-    quantity: 1
+    quantity: 2
   testEnemyData:
     trainerDisplayName: Test grunt X items
     battleType: 0

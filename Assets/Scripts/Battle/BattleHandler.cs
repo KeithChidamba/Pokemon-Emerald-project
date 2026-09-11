@@ -36,7 +36,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     [SerializeField]private List<BattleParticipant> currentParticipants = new();
     public IReadOnlyList<BattleParticipant> GetParticipants => currentParticipants;
     [SerializeField]private BattleParticipant[] battleParticipantInstances;
-    private Dictionary<BattleTeam, TeamEffects> teamEffects = new();
+    [SerializeField]private List<TeamEffects> teamEffects = new();
     
     [SerializeField]private List<BattleParticipant> faintQueue = new();
     [SerializeField]private bool handlingFaintEvent;
@@ -104,8 +104,8 @@ public class BattleHandler : MonoBehaviour, IInjectable
         _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
         
-        teamEffects.Add(BattleTeam.PlayerTeam,new TeamEffects(container,BattleTeam.PlayerTeam));
-        teamEffects.Add(BattleTeam.EnemyTeam,new TeamEffects(container,BattleTeam.EnemyTeam));
+        teamEffects.Add(new TeamEffects(container,BattleTeam.PlayerTeam));
+        teamEffects.Add(new TeamEffects(container,BattleTeam.EnemyTeam));
         
         gameObject.SetActive(true);
     }
@@ -130,12 +130,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
         {
             case BattleParticipantKey.Player:
             case BattleParticipantKey.PlayerPartner:
-                return teamEffects[BattleTeam.PlayerTeam];
+                return teamEffects[0];
             case BattleParticipantKey.Enemy:
             case BattleParticipantKey.EnemyPartner:
-                return teamEffects[BattleTeam.EnemyTeam];
-            
-            default:  return teamEffects[BattleTeam.PlayerTeam];
+                return teamEffects[1];
+            default:  return teamEffects[0];
         }
     }
     public IEnumerator AwaitBattleCompletion()
@@ -942,7 +941,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         }
         foreach (var team in teamEffects)
         {
-            team.Value.ClearEffects();
+            team.ClearEffects();
         }
         
         _battleIntroHandler.ResetParticipantIntroImages();

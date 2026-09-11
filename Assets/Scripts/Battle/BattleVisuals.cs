@@ -16,13 +16,13 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         {1,250},
         {3,155}
     };
-    private List<(Image img,Vector2 pos)> _statChangeImages=new();
+ 
     public Sprite[] statChangeSprites;
     private Dictionary<Stat, Sprite> statChangeVisuals = new();
-    private string _statChangeMessage;
+
     public  static readonly float OutOfViewDistance = 600f;
     public  static readonly float OutOfViewFaintDistance = 400f;
-    public event Action OnStatVisualDisplayed;
+    
     private List<Coroutine> _activeSlideCoroutines = new();
     
     private DialogueHandler _dialogueHandler;
@@ -49,36 +49,27 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         statChangeVisuals.Add(Stat.Multi,statChangeSprites[7]);
     }
     
-    public void CancelStatChangeVisual()
+    public IEnumerator SelectStatChangeVisuals(Stat statChanged,BattleParticipant participant)
     {
-        OnStatVisualDisplayed?.Invoke();
-    }
-    public void SelectStatChangeVisuals(Stat statChanged,BattleParticipant participant,string message)
-    {
-        _statChangeMessage = message;
         if (statChanged == Stat.Crit)
         {
-            CancelStatChangeVisual();
-            return;
+            yield break;
         }
-        _statChangeImages.Clear();
+        List<(Image img,Vector2 pos)> statChangeImages = new();
         for(int i =0; i < 3;i++)
         {
             var visualImages = participant.pokemonImage.transform.GetChild(i).GetComponent<Image>();
-            _statChangeImages.Add(new(visualImages,visualImages.rectTransform.anchoredPosition));
-            _statChangeImages[i].img.sprite = statChangeVisuals[statChanged];
-            _statChangeImages[i].img.gameObject.SetActive(true);
+            statChangeImages.Add(new(visualImages,visualImages.rectTransform.anchoredPosition));
+            statChangeImages[i].img.sprite = statChangeVisuals[statChanged];
+            statChangeImages[i].img.gameObject.SetActive(true);
         }
-        StartCoroutine(DisplayStatChangeVisuals());
-    }
-    
-    private IEnumerator DisplayStatChangeVisuals()
-    {
+        yield return new WaitForSeconds(0.05f);
+        
         float speed = 300f;
-        for (int i = 0; i < _statChangeImages.Count; i++)
+        for (int i = 0; i < statChangeImages.Count; i++)
         {
-            RectTransform rect = _statChangeImages[i].img.rectTransform;
-            Vector2 basePos = _statChangeImages[i].pos;
+            RectTransform rect = statChangeImages[i].img.rectTransform;
+            Vector2 basePos = statChangeImages[i].pos;
 
             Vector2 topPos = basePos + Vector2.up * (0.5f * rect.rect.height);
             Vector2 target = basePos + Vector2.down * (0.5f * rect.rect.height);
@@ -89,20 +80,17 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         }
 
         yield return new WaitForSeconds(0.5f);
-        _dialogueHandler.DisplayBattleInfo(_statChangeMessage);
         
         foreach (var c in _activeSlideCoroutines)
             if (c is not null) StopCoroutine(c);
         
         _activeSlideCoroutines.Clear();
-        foreach (var image in _statChangeImages)
+        foreach (var image in statChangeImages)
         {
             image.img.gameObject.SetActive(false);
             image.img.rectTransform.anchoredPosition = image.pos;
         }
         yield return null;
-        yield return _dialogueHandler.AwaitAllDialogue();
-        OnStatVisualDisplayed?.Invoke();
     }
 
     public IEnumerator DisplayConfusionVisuals(BattleParticipant participant)

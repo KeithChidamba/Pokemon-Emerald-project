@@ -783,117 +783,130 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     {
         foreach (var buffData in move.buffOrDebuffData)
         {
-            if (!move.isSelfTargeted)
-            {//affecting enemy
-                if ( (move.isMultiTarget && !_battleHandler.isDoubleBattle) 
-                     || !move.isMultiTarget)
-                {
-                    if (!victim.canBeDamaged || victim.ProtectedFromStatChange(buffData.isIncreasing))
-                    {
-                        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + " protected itself");
-                    }
-                    else
-                    {
-                        var data = new StatChangeTransitData(victim, buffData.stat, buffData.isIncreasing, buffData.amount);
-                        yield return ExecuteSequentialStatChange(data);
-                    }
-                } 
-                if(move.isMultiTarget && _battleHandler.isDoubleBattle)
-                {
-                    yield return MultiTargetStatChange(attacker,victim,buffData.stat, buffData.isIncreasing, buffData.amount);
-                }
-            }
-            else//affecting attacker
+            if(move.isSelfTargeted)
             {
                 var data = new StatChangeTransitData(attacker, buffData.stat, buffData.isIncreasing, buffData.amount);
                 yield return ExecuteSequentialStatChange(data);
             }
+            else
+            {
+                if (!move.isMultiTarget)
+                {
+                    yield return HandleStatChange(victim,buffData.stat, buffData.isIncreasing, buffData.amount);
+                } 
+                if(move.isMultiTarget && _battleHandler.isDoubleBattle)
+                {
+                    foreach (var enemy in attacker.currentEnemies)
+                    {
+                        yield return HandleStatChange(enemy, buffData.stat, buffData.isIncreasing, buffData.amount);
+                        yield return _dialogueHandler.AwaitAllDialogue();
+                    }
+                }
+            }
         }
         _processingOrder = false;
     }
-    private IEnumerator ExecuteSequentialStatChange(StatChangeTransitData data)
+    private IEnumerator HandleStatChange(BattleParticipant enemy,Stat stat, bool isIncreasing,int changeAmount)
     {
-        bool awaitingCompletion = true;
-        _battleVisualsHandler.OnStatVisualDisplayed += NotifyStatVisualCompletion;
-        InitiateStatChange(data);
-        yield return new WaitUntil(() => !awaitingCompletion);
-        void NotifyStatVisualCompletion()
+        if (!enemy.canBeDamaged)
         {
-            _battleVisualsHandler.OnStatVisualDisplayed-=NotifyStatVisualCompletion;
-            awaitingCompletion = false;
+            _dialogueHandler.DisplayBattleInfo(enemy.pokemon.pokemonDisplayName + " protected itself");
+        }
+        else if (enemy.ProtectedFromStatChange(isIncreasing))
+        {
+            _dialogueHandler.DisplayBattleInfo(enemy.pokemon.pokemonDisplayName + " is protected by Mist!");
+        }
+        else
+        {
+            var data = new StatChangeTransitData(enemy, stat, isIncreasing,changeAmount);
+            yield return ExecuteSequentialStatChange(data);
         }
     }
-    private IEnumerator MultiTargetStatChange(BattleParticipant attacker, BattleParticipant victim
-        ,Stat stat, bool isIncreasing,int changeAmount)
+    /// <summary>
+    /// Sequentially complete stat change operation with optional visuals and result dialogue
+    /// </summary>
+    public IEnumerator ExecuteSequentialStatChange(StatChangeTransitData data,bool displayVisuals=true)
     {
-        foreach (var enemy in new List<BattleParticipant>(attacker.currentEnemies) )
+        bool awaitingStatChange = true;
+        bool canDisplayVisual = false;
+
+        _battleOperations.OnStatChangeApplied += GetResult;
+        
+        BeginStatChangeOperation(data);
+        
+        yield return new WaitUntil(() => !awaitingStatChange);
+        if (canDisplayVisual)
         {
-            if (enemy.canBeDamaged && !victim.ProtectedFromStatChange(isIncreasing))
-            {
-                var data = new StatChangeTransitData(enemy, stat, isIncreasing,changeAmount);
-                yield return ExecuteSequentialStatChange(data);
-            }
-            else
-                _dialogueHandler.DisplayBattleInfo(enemy.pokemon.pokemonDisplayName + " protected itself");
+            yield return _battleVisualsHandler.SelectStatChangeVisuals(data.stat,data.receiver);
             yield return _dialogueHandler.AwaitAllDialogue();
         }
+        yield break;
+        void GetResult(StatChangeOperationData result)
+        {
+            _battleOperations.OnStatChangeApplied -= GetResult;
+            if(displayVisuals)
+            {
+                canDisplayVisual = !result.finalStatData.isAtLimit;
+                _dialogueHandler.DisplayBattleInfo(result.resultMessage);
+            }
+            awaitingStatChange = false;
+        }
     }
-    
-    public void InitiateStatChange(StatChangeTransitData data,bool displayMessage = true)
+    /// <summary>
+    /// Complete stat change operation with no visuals or result dialogue
+    /// </summary>
+    public void InitiateStatChange(StatChangeTransitData data)
+    {
+        BeginStatChangeOperation(data);
+    }
+    private void BeginStatChangeOperation(StatChangeTransitData data)
     {
         var unModifiedStats = data.receiver.statData;
         var affectedPokemon = data.receiver.pokemon;
-
         switch (data.stat)
         {
             case Stat.Defense:
-                affectedPokemon.defense = GetUpdatedStat(unModifiedStats.defense,data, displayMessage);
+                affectedPokemon.defense = GetUpdatedStat(unModifiedStats.defense,data);
                 break;
             case Stat.Attack:
-                affectedPokemon.attack = GetUpdatedStat(unModifiedStats.attack,data, displayMessage);
+                affectedPokemon.attack = GetUpdatedStat(unModifiedStats.attack,data);
                 break;
             case Stat.SpecialDefense:
-                affectedPokemon.specialDefense = GetUpdatedStat(unModifiedStats.spDef,data, displayMessage);
+                affectedPokemon.specialDefense = GetUpdatedStat(unModifiedStats.spDef,data);
                 break;
             case Stat.SpecialAttack:
-                affectedPokemon.specialAttack = GetUpdatedStat(unModifiedStats.spAtk,data, displayMessage);
+                affectedPokemon.specialAttack = GetUpdatedStat(unModifiedStats.spAtk,data);
                 break;
             case Stat.Speed:
-                affectedPokemon.speed = GetUpdatedStat(unModifiedStats.speed,data, displayMessage);
+                affectedPokemon.speed = GetUpdatedStat(unModifiedStats.speed,data);
                 break;
             case Stat.Accuracy:
-                affectedPokemon.accuracy = GetUpdatedStat(unModifiedStats.accuracy,data, displayMessage);
+                affectedPokemon.accuracy = GetUpdatedStat(unModifiedStats.accuracy,data);
                 break;
             case Stat.Evasion:
-                affectedPokemon.evasion = GetUpdatedStat(unModifiedStats.evasion,data, displayMessage);
+                affectedPokemon.evasion = GetUpdatedStat(unModifiedStats.evasion,data);
                 break;
             case Stat.Crit:
-                affectedPokemon.critChance = GetUpdatedStat(unModifiedStats.crit,data, displayMessage);
+                affectedPokemon.critChance = GetUpdatedStat(unModifiedStats.crit,data);
                 break; 
         }
     }
-
     public void RefreshStat(Stat stat, BattleParticipant receiver)
     {
         var statChangeData = new StatChangeTransitData(receiver, stat, true, 0);
-        InitiateStatChange(statChangeData, false);
+        InitiateStatChange(statChangeData);
     }
 
-    private float GetUpdatedStat(float unmodifiedStatValue, StatChangeTransitData data,bool canDisplayChange)
+    private float GetUpdatedStat(float unmodifiedStatValue, StatChangeTransitData data)
     {
-        var resultMessage = _battleOperations.AttemptStatChangeOperation(data);
-        if (canDisplayChange)
-        {
-            _battleVisualsHandler.SelectStatChangeVisuals(data.stat,data.receiver, resultMessage);
-        }
-        var statChange = _battleOperations.SearchForStatModifier(data.receiver.pokemon, data.stat);
-        if(statChange.stage == 0)
+        var result = _battleOperations.AttemptStatChangeOperation(data);
+        if(result.finalStatData.stage == 0)
         {
             //remove because it's neutral, but still return that neutral stat value
-            data.receiver.pokemon.statModifiers.RemoveAll(b => b.stat == data.stat);
+            data.receiver.pokemon.statModifiers.RemoveAll(s => s.stat == data.stat);
         }
         //stat stage modifiers
-        var updatedStat= ModifyStatValue(data.stat, unmodifiedStatValue, statChange.stage);
+        var updatedStat= ModifyStatValue(data.stat, unmodifiedStatValue, result.finalStatData.stage);
         //Ability modifiers
         float statAfterAbilityModifiers = Mathf.FloorToInt(data.receiver.abilityHandler.AccountForStatChange(data.stat,updatedStat));
         OnStatModified?.Invoke(data.receiver,StatChangeModifier.Ability,data.stat,updatedStat,statAfterAbilityModifiers);

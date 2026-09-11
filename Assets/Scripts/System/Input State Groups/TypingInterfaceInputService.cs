@@ -27,7 +27,6 @@ public class TypingInterfaceInputService:IInputGroup
     {
         _typingInterfaceHandler.optionSelector.SetActive(false);
         _inputStateHandler.SetupFullBoxNavigation(
-            _typingInterfaceHandler.currentMaxBoxElements,
             _typingInterfaceHandler.currentMaxBoxElements, 
           _typingInterfaceHandler.GetColumnCount());
         
@@ -83,7 +82,8 @@ public class TypingInterfaceInputService:IInputGroup
     }
     private void SwitchToOptions()
     {
-        _inputStateHandler.ResetGridUi(InputStateName.TypingInterfaceNavigation);
+        _inputStateHandler.GetState(InputStateName.TypingInterfaceNavigation).selector.SetActive(false);
+        _inputStateHandler.ResetGridCoordinates();
         _typingInterfaceHandler.InterfaceOptionsNavigation();
     }
     private void OptionsNavigation()

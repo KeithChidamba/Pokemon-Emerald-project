@@ -16,7 +16,7 @@ public class GuardSpecItemTest: EndToEndTest,IItemTestable,IBattleTestable
         var playerPartner = _battleHandler.GetParticipant(BattleParticipantKey.PlayerPartner);
         var playerTeam = _battleHandler.GetTeam(BattleParticipantKey.Player);
         
-        AddTestCaseScenario(1,()=>
+        AddTestCaseScenario(2,()=>
         {
             playerTeam.statChangeEffects.ForEach(s=>s.effectDuration = 0);
         });
@@ -31,6 +31,10 @@ public class GuardSpecItemTest: EndToEndTest,IItemTestable,IBattleTestable
             new("Partner must have no stat decrease after a full turn of attacks from enemy", 
                 () => playerPartner.pokemon.statModifiers.Count == 0),
         });
+        
+        AddTestCase("Use Guard Spec to refresh protection", 
+                ()=>  playerTeam.statChangeEffects.Any(m=>m.effectDuration == 5));
+        
         AddTestCase(new List<TestCaseCondition>{
             new("Player team must have  no immunity", 
                 () => playerTeam.statChangeEffects.Count == 0),

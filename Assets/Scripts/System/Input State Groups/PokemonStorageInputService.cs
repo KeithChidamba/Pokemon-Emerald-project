@@ -38,7 +38,7 @@ public class PokemonStorageInputService: IInputGroup
     
     private void StorageFullBoxNavigation()
     {
-        _inputStateHandler.SetupFullBoxNavigation(PokemonStorageHandler.BoxCapacity,PokemonStorageHandler.BoxCapacity,PokemonStorageHandler.BoxColumns);
+        _inputStateHandler.SetupFullBoxNavigation(PokemonStorageHandler.BoxCapacity,PokemonStorageHandler.BoxColumns);
         
         _inputStateHandler.currentState.canExit = false;
         _inputStateHandler.OnSelectionIndexChanged += _pokemonStorageHandler.LoadPokemonData;

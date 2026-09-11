@@ -237,30 +237,14 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         
         foreach (var statToBuff in stats)
         {
-            bool awaitingAddition = true;
-            _battleOperationsHandler.OnStatChangeApplied += AwaitBuffAddition;
             var buffData = new StatChangeTransitData(attacker, statToBuff, true, 1);
-            _moveUsageHandler.InitiateStatChange(buffData,false);
-            yield return new WaitUntil(() => !awaitingAddition);
-            continue;
-            void AwaitBuffAddition(StatChangeOperationData operationData)
-            {
-                _battleOperationsHandler.OnStatChangeApplied -= AwaitBuffAddition;
-                awaitingAddition = false;
-            }
+            yield return _moveUsageHandler.ExecuteSequentialStatChange(buffData,false);
         }
         
-        string statChangeMessage = _battleOperationsHandler.GetStatModResultMessage(true,attacker.pokemon,stats);
-        _battleVisualsHandler.OnStatVisualDisplayed += AwaitBuffVisual;
-        bool awaitingDisplay = true;
-        _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,attacker,statChangeMessage);
-        yield return new WaitUntil(() => !awaitingDisplay);
-        yield break;
-        void AwaitBuffVisual()
-        {
-            _battleVisualsHandler.OnStatVisualDisplayed -= AwaitBuffVisual;
-            awaitingDisplay = false;
-        }
+        var statChangeMessage = _battleOperationsHandler.GetStatModResultMessage(true,attacker.pokemon,stats);
+        _dialogueHandler.DisplayBattleInfo(statChangeMessage);
+        yield return _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,attacker);
+        yield return _dialogueHandler.AwaitAllDialogue();
     }
 
     private IEnumerator Flail(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)

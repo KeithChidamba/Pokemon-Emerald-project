@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -80,16 +81,19 @@ public class ItemHandler : MonoBehaviour,IInjectable
                 {
                     yield return new WaitForSecondsRealtime(1f);
                 }
-                
-                if (itemUsed.forPartyUse)
-                {
+                if (itemUsed.forPartyUse) 
+                { 
                     _inputStateHandler.ResetSpecificUi(InputStateName.PokemonPartyItemUsage,true);
-                    if (!successful)
+                }
+                if (!successful)
+                {
+                    if (itemUsed.forPartyUse || itemUsed.canBeUsedInBattle)
                     {
                         //necessary to reset internal bag state
                         _playerBagHandler.SetupBagState();
                     }
                 }
+
                 if (successful)
                 {
                     _playerBagHandler.DepleteItem(itemUsed);
@@ -146,7 +150,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             
             case ItemType.RareCandy: StartCoroutine(LevelUpWithItem(itemInUse,selectedPokemon)); break;
             
-            case ItemType.XItem: UseStatModifyingBattleItem(itemInUse,selectedPokemon); break;
+            case ItemType.XItem: UseStatModifyingBattleItem(itemInUse); break;
             
             case ItemType.SpecificLogic: HandleSpecific(itemInUse,selectedPokemon); break;
         }
@@ -166,7 +170,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
                 StatusFullHeal(itemInUse, selectedPartyPokemon);
                 break;
             case ItemName.GuardSpec:
-                GuardSpecItem(itemInUse, selectedPartyPokemon);
+                GuardSpecItem(itemInUse);
                 break;
         }
     }
@@ -375,46 +379,52 @@ public class ItemHandler : MonoBehaviour,IInjectable
         }
     }
 
-    private void GuardSpecItem(Item itemInUse,Pokemon selectedPartyPokemon)
+    private void GuardSpecItem(Item itemInUse)
     {
         //guard spec prevents stat reduction
         var currentParticipant = _battleHandler.GetCurrentParticipant();
-        if (currentParticipant.ProtectedFromStatChange(false))
-        {
-            _dialogueHandler.DisplayDetails("Your pokemon are already protected");
-            OnItemUsed?.Invoke(itemInUse,false);
-            return;
-        }
         
         _battleHandler.GetTeam(currentParticipant.participantKey)
             .GetStatChangeImmunity(StatChangeability.ImmuneToDecrease,5);
         
-        string pokemonProtected = selectedPartyPokemon.pokemonDisplayName;
+        string pokemonProtected = currentParticipant.pokemon.pokemonDisplayName;
         if (_battleHandler.isDoubleBattle)
         {
             var partner = currentParticipant.GetPartner();
-            pokemonProtected = selectedPartyPokemon.pokemonDisplayName + " and " + partner.pokemon.pokemonDisplayName;
+            pokemonProtected = currentParticipant.pokemon.pokemonDisplayName 
+                               + " and " + partner.pokemon.pokemonDisplayName;
         }
-        _dialogueHandler.DisplayBattleInfo("A veil of light covers "+pokemonProtected);
+        _dialogueHandler.DisplayDetails("A veil of light covers "+pokemonProtected);
         OnItemUsed?.Invoke(itemInUse,true);
     }
-    private void UseStatModifyingBattleItem(Item itemInUse,Pokemon selectedPartyPokemon)
+    private void UseStatModifyingBattleItem(Item itemInUse)
     {
         var statInfo = itemInUse.GetModule<StatInfoModule>();
         var currentParticipant = _battleHandler.GetCurrentParticipant();
-       
-        var buff = _battleOperations.SearchForStatModifier(selectedPartyPokemon, statInfo.statName);
-        if (buff is { isAtLimit: true })
+        
+        var existingBuff = currentParticipant.pokemon.statModifiers
+            .FirstOrDefault(b=>b.stat == statInfo.statName);
+     
+        if (existingBuff is { isAtLimit: true })
         {
-            _dialogueHandler.DisplayBattleInfo($"{selectedPartyPokemon.pokemonDisplayName}'s " +
-                                                        $"{buff.statName} can't go any higher");
+            _dialogueHandler.DisplayDetails($"{currentParticipant.pokemon.pokemonDisplayName}'s " +
+                                            $"{existingBuff.statName} can't go any higher");
             OnItemUsed?.Invoke(itemInUse,false);
             return;
         }
-       
-        var xBuffData = new StatChangeTransitData(currentParticipant, statInfo.statName, true, 1);
-        _moveUsageHandler.InitiateStatChange(xBuffData);
-        OnItemUsed?.Invoke(itemInUse,true);
+        StartCoroutine(CompleteItemUsage());
+        return;
+        IEnumerator CompleteItemUsage()
+        {
+            var xBuffData = new StatChangeTransitData(currentParticipant, statInfo.statName, true, 1);
+            yield return _moveUsageHandler.ExecuteSequentialStatChange(xBuffData,false);
+            
+            _dialogueHandler.DisplayDetails($"{currentParticipant.pokemon.pokemonDisplayName}'s " +
+                                            $"{statInfo.statName} Increased");
+            
+            OnItemUsed?.Invoke(itemInUse,true);
+        }
+        
     }
 
     private void RevivePokemon(Item itemInUse,Pokemon pokemon)

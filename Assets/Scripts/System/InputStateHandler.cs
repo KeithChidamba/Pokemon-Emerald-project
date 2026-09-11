@@ -254,6 +254,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         {
             HandleParentDisplay();
         }
+        return;
         void HandleParentDisplay()
         {
             parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
@@ -283,7 +284,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         OnSelectionIndexChanged = null;
     }
     
-    private void ResetCoordinates()
+    public void ResetGridCoordinates()
     {
         boxCoordinates[0] = 0;
         boxCoordinates[1] = 0;
@@ -303,9 +304,9 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         return Mathf.Clamp(pos, 0, currentNumBoxElements);
     }
 
-    public void SetupFullBoxNavigation(int numBoxElements,int boxCapacity,int numColumns)
+    public void SetupFullBoxNavigation(int boxCapacity,int numColumns)
     {
-        currentNumBoxElements = numBoxElements;
+        currentNumBoxElements = boxCapacity;
         currentBoxCapacity = boxCapacity;
         numBoxColumns = numColumns;
         numBoxRows = boxCapacity / numColumns;
@@ -430,13 +431,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         
         return inputStates;
     }
-    public void ResetGridUi(InputStateName stateName)
-    {
-        var state = stateLayers.FirstOrDefault(state => state.stateName == stateName);
-        state?.selector?.SetActive(false);
-        if(state?.stateDirection==InputDirection.Grid) ResetCoordinates();
-    }
-    
+
     //state removal
     /// <summary>
     /// [For Testing] Remove all current ui screens
@@ -526,7 +521,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
             currentJob.state.mainViewUI?.SetActive(false);
             currentJob.state.selector?.SetActive(false);
             
-            if(currentJob.state.stateDirection==InputDirection.Grid) ResetCoordinates();
+            if(currentJob.state.stateDirection==InputDirection.Grid) ResetGridCoordinates();
         
             Action method = currentJob.manualExit ? currentJob.state.onExit : currentJob.state.onClose;
             method?.Invoke();

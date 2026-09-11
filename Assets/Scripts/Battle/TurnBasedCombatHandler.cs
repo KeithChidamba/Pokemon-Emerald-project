@@ -790,7 +790,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         foreach (var participant in CurrentWeather.buffedParticipants)
         {
             var spDefBuff = new StatChangeTransitData(participant, Stat.SpecialDefense, false, 1);
-            _moveUsageHandler.InitiateStatChange(spDefBuff,false);
+            _moveUsageHandler.InitiateStatChange(spDefBuff);
         }
         CurrentWeather.buffedParticipants.Clear();
     }
@@ -845,7 +845,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                             //buff rock types
                             var spDefBuff = new StatChangeTransitData(participant,
                                 Stat.SpecialDefense, true, 1);
-                            _moveUsageHandler.InitiateStatChange(spDefBuff,false);
+                            _moveUsageHandler.InitiateStatChange(spDefBuff);
                             CurrentWeather.buffedParticipants.Add(participant);
                         }
                     }

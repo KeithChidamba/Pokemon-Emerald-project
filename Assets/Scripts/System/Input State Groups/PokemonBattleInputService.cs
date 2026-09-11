@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 public class PokemonBattleInputService : IInputGroup
 {
@@ -28,8 +27,12 @@ public class PokemonBattleInputService : IInputGroup
     
     private void SetupBattleOptions()
     {
-        _inputStateHandler.currentState.persistOnExit = true;
-        _inputStateHandler.SetupFullBoxNavigation(4,4,2);
+        //this state reset is necessary because this state persists
+        //unlike [move selection] with is removed and recreated every time it's needed
+        _inputStateHandler.ResetGridCoordinates();
+        _inputStateHandler.currentState.currentSelectionIndex = 0;
+        _inputStateHandler.currentState.persistOnExit = true;//for turn re-use logic
+        _inputStateHandler.SetupFullBoxNavigation(4,2);
     }
     
     private void SetupMoveSelection()

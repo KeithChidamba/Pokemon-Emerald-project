@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 [Serializable]
 public class TeamEffects
@@ -30,18 +29,23 @@ public class TeamEffects
     
     public void GetStatChangeImmunity(StatChangeability changeability,int numTurns)
     {
-        if (statChangeEffects.Any(s => s.changeability == changeability))
+        var existingProtection = statChangeEffects
+            .FirstOrDefault(s => s.changeability == changeability);
+        if (existingProtection is not null)
         {
-            Debug.LogWarning("added duplicate stat change effect");
-        };
+            existingProtection.effectDuration = numTurns;
+            return;
+        }
         statChangeEffects.Add(new StatChangeabilityData(changeability,numTurns));
     }
     private void CheckStatChangeImmunityDuration()
     {
         if (statChangeEffects.Count==0) return;
-        
-        statChangeEffects.ForEach(s=>s.effectDuration--);
-        statChangeEffects.RemoveAll(s => s.effectDuration == 0);
+        foreach (var protection in statChangeEffects)
+        {
+            protection.effectDuration--;
+        }
+        statChangeEffects.RemoveAll(s => s.effectDuration < 1);
     }
     private void CheckBarrierDuration()
     {
@@ -51,6 +55,6 @@ public class TeamEffects
         {
             barrier.barrierDuration--;
         }
-        barriers.RemoveAll(b => b.barrierDuration == 0);
+        barriers.RemoveAll(b => b.barrierDuration < 1);
     }
 }

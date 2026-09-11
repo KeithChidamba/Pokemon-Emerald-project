@@ -1,32 +1,34 @@
 using Unity.Mathematics;
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 [Serializable]
 public class StatChangeOperationData
 {
     public StatChangeTransitData statChangeData;
     public StatChangeData finalStatData;
-
-    public StatChangeOperationData(StatChangeTransitData statChangeData, StatChangeData finalStatData)
+    public string resultMessage;
+    
+    public StatChangeOperationData(StatChangeTransitData statChangeData, StatChangeData finalStatData
+    , string message)
     {
         this.statChangeData = statChangeData;
         this.finalStatData = finalStatData;
+        resultMessage = message;
     }
 }
 
 public class BattleOperations : MonoBehaviour,IInjectable
 {   
     public event Action<StatChangeOperationData> OnStatChangeApplied;
-        
-    private BattleVisuals _battleVisualsHandler;
     private PokemonOperations _pokemonOperations;
     
     public void Inject(ServiceContainer container)
     {
-        _battleVisualsHandler = container.Resolve<BattleVisuals>();
         _pokemonOperations = container.Resolve<PokemonOperations>();
         gameObject.SetActive(true);
     }
@@ -115,68 +117,65 @@ public class BattleOperations : MonoBehaviour,IInjectable
         return true;
     }
     
-public string AttemptStatChangeOperation(StatChangeTransitData data)
-{
-    var desiredModifier = SearchForStatModifier(data.receiver.pokemon, data.stat);
-    if (desiredModifier is null)
+    public StatChangeOperationData AttemptStatChangeOperation(StatChangeTransitData data)
     {
-        desiredModifier = CreateNewStatModifier(data.stat); 
-        data.receiver.pokemon.statModifiers.Add(desiredModifier);
-    }
-
-    string message;
-    bool increased = data.isIncreasing;
-
-    int upperLimit = desiredModifier.stat == Stat.Crit ? 2 : 5;
-    int lowerLimit = desiredModifier.stat == Stat.Crit ? 1 : -5;
-    
-    int oldStage = desiredModifier.stage;
-   
-    int delta = increased ? data.effectAmount : -data.effectAmount;
-    
-    int newStage = math.clamp(oldStage + delta, lowerLimit, upperLimit);
-    
-    if (newStage == oldStage)
-    {
-        desiredModifier.isAtLimit = true;
-
-        message = increased
-            ? $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any higher!"
-            : $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any lower!";
-
-        _battleVisualsHandler.CancelStatChangeVisual();
-    }
-    else
-    {
-        desiredModifier.isAtLimit = false;
-        desiredModifier.stage = newStage;
-
-        int actualChange = math.abs(newStage - oldStage);
-
-        if (increased)
+        var desiredModifier = data.receiver.pokemon.statModifiers.FirstOrDefault(b=>b.stat==data.stat);
+        if (desiredModifier is null)
         {
-            message = actualChange switch
-            {
-                1 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose!",
-                2 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose sharply!",
-                _ => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose drastically!"
-            };
+            desiredModifier = CreateNewStatModifier(data.stat); 
+            data.receiver.pokemon.statModifiers.Add(desiredModifier);
+        }
+
+        string message;
+        bool increased = data.isIncreasing;
+
+        int upperLimit = desiredModifier.stat == Stat.Crit ? 2 : 5;
+        int lowerLimit = desiredModifier.stat == Stat.Crit ? 1 : -5;
+        
+        int oldStage = desiredModifier.stage;
+       
+        int delta = increased ? data.effectAmount : -data.effectAmount;
+        
+        int newStage = math.clamp(oldStage + delta, lowerLimit, upperLimit);
+        
+        if (newStage == oldStage)
+        {
+            desiredModifier.isAtLimit = true;
+
+            message = increased
+                ? $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any higher!"
+                : $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any lower!";
         }
         else
         {
-            message = actualChange switch
-            {
-                1 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} fell!",
-                2 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} harshly fell!",
-                _ => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} severely fell!"
-            };
-        }
-    }
-    
-    OnStatChangeApplied?.Invoke(new(data,desiredModifier));
+            desiredModifier.isAtLimit = false;
+            desiredModifier.stage = newStage;
 
-    return message;
-}
+            int actualChange = math.abs(newStage - oldStage);
+
+            if (increased)
+            {
+                message = actualChange switch
+                {
+                    1 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose!",
+                    2 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose sharply!",
+                    _ => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose drastically!"
+                };
+            }
+            else
+            {
+                message = actualChange switch
+                {
+                    1 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} fell!",
+                    2 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} harshly fell!",
+                    _ => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} severely fell!"
+                };
+            }
+        }
+        var result = new StatChangeOperationData(data, desiredModifier, message);
+        OnStatChangeApplied?.Invoke(result);
+        return result;
+    }
     public string GetStatModResultMessage(bool isIncreasing,Pokemon pokemon,Stat[] stats)
     {
         //shorten stat names to be more readable
@@ -203,9 +202,5 @@ public string AttemptStatChangeOperation(StatChangeTransitData data)
     private StatChangeData CreateNewStatModifier( Stat statName)
     {
         return new StatChangeData(statName,0);
-    }
-    public StatChangeData SearchForStatModifier(Pokemon pokemon, Stat stat)
-    {
-        return pokemon.statModifiers.FirstOrDefault(b=>b.stat==stat);
     }
 }
