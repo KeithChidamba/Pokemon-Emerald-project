@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a113dd0e13549dc9bf31d4592e3e483, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      pokemonLevel: 24
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: kip
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+      pokemonLevel: 11
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: toy
+  testItems:
+  - itemAsset: {fileID: 11400000, guid: 36789e0736a832f86899315df2104325, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 1b316d4fb5fa016ff98dcf899f6f943d, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 9a9afdabef3eff9c4b3323a87873fc70, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 463bf6744281013bca00b4224ce60637, type: 2}
+    quantity: 1
+  testEnemyData:
+    trainerDisplayName: test grunt Herbs
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: 69a55a40a4203b30aae4f49a729be5c7, type: 2}

@@ -165,8 +165,29 @@ public static class NameDB
         { MoveName.FaintAttack, "Faint Attack" },
         { MoveName.Pursuit, "Pursuit" }
     };
-
-
+    private static Dictionary<ItemName, string> _itemNames = new()
+    {
+        { ItemName.FullRestore, "Full Restore" },
+        { ItemName.MaxPotion, "Max Potion" },
+        { ItemName.FullHeal, "Full Heal" },
+        { ItemName.LeppaBerry, "Leppa Berry" },
+        { ItemName.GuardSpec, "Guard Spec" }
+    };
+    public static ItemName ParseItemName(string itemName)
+    {
+        foreach (var pair in _itemNames)
+        {
+            if (pair.Value.ToLower() == itemName.ToLower())
+            {
+                return pair.Key;
+            }
+        }
+        throw new Exception($"Item name {itemName} has no matching enum in dictionary");
+    }
+    public static string GetItem(ItemName itemName)
+    {
+        return _itemNames[itemName];
+    }
     private static Dictionary<AbilityName, string> _abilityNames = new()
     {
         { AbilityName.Guts, "Guts" },
@@ -195,6 +216,7 @@ public static class NameDB
         { EvolutionStone.WaterStone, "Water Stone" },
         { EvolutionStone.LeafStone, "Leaf Stone" },
     };
+    
     public static string GetStoneName(EvolutionStone stone)
     {
         return _stoneNames[stone];
@@ -225,6 +247,12 @@ public static class NameDB
             return "Eva";
         return stat.ToString();
     }
+}
+
+
+public enum ItemName
+{
+    FullRestore,MaxPotion,FullHeal,LeppaBerry,GuardSpec
 }
 
 public enum AbilityName

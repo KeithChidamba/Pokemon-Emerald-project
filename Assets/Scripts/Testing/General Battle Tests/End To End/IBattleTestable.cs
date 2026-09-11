@@ -8,7 +8,7 @@ public interface IBattleTestable
 }
 public static class BattleTestableExtensions
 {
-    public static void StartBattle(this IBattleTestable target,BattleItemUsageEndToEndTestData testData)
+    public static void StartBattle(this IBattleTestable target,BattleItemUsageEndToEndTestData testData,EndToEndTest test)
     {
         var testEnemy = Resources.Load<TrainerData>(
             DirectoryHandler.GetDirectory(AssetDirectory.TestAssets) + "Test Enemy");
@@ -17,6 +17,12 @@ public static class BattleTestableExtensions
         testEnemy.PokemonParty = testData.testEnemyData.pokemonParty;
         testEnemy.battleType = testData.testEnemyData.battleType;
 
+        test.testOperationsComplete = target.GetContainer.Resolve<BattleHandler>().AwaitBattleCompletion;
         target.GetContainer.Resolve<BattleHandler>().StartTestBattle(testEnemy);
+    }
+
+    public static void EndBattle(this IBattleTestable target)
+    {
+        target.GetContainer.Resolve<BattleHandler>().EndBattle(BattleEndState.BattleTerminated);
     }
 }

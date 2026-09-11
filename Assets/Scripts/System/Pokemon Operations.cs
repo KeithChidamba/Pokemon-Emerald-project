@@ -8,7 +8,7 @@ using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.UI;
 public enum FriendshipModifier{Fainted,LevelUp,Vitamin,Berry} 
-public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep,FullHeal}
+public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep}
 public enum Gender{None,Male,Female}
 public enum PokemonType
 {

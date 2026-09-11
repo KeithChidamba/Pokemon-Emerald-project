@@ -47,16 +47,16 @@ public class BrickBreakTest : BattleBasedTest
     }
     public override IEnumerator BeginTest()
     {
-        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        var enemyTeam = _battleHandler.GetTeam(BattleParticipantKey.Enemy);
         
         _testCaseHandler.AddTestCase("Enemy must have physical barrier from reflect",
-            () => enemy.barriers.Any(b=>b.barrierName == NameDB.GetMoveName(MoveName.Reflect)));
+            () => enemyTeam.barriers.Any(b=>b.barrierName == NameDB.GetMoveName(MoveName.Reflect)));
         
         _testCaseHandler.AddTestCase("Enemy must have special barrier from light screen",
-            () => enemy.barriers.Any(b=>b.barrierName == NameDB.GetMoveName(MoveName.LightScreen)));
+            () => enemyTeam.barriers.Any(b=>b.barrierName == NameDB.GetMoveName(MoveName.LightScreen)));
         
         _testCaseHandler.AddTestCase("Enemy must have no barriers",
-            () => enemy.barriers.Count==0);
+            () => enemyTeam.barriers.Count==0);
         
         yield return HandleBattleState();
         onTestResult.Invoke();

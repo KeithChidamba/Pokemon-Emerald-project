@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a113dd0e13549dc9bf31d4592e3e483, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      pokemonLevel: 15
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: 2cd67b76891307349b0ee315a2a7b669, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: kip
+  testItems:
+  - itemAsset: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 0df08d4c7461bd586b88fcaf7a45cc03, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 7298a7b079827c389b31d00d1ce27533, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 7b37371d9d839b5888e3f44ead53396a, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: cbe40772bf60e71cf93c019b27628198, type: 2}
+    quantity: 1
+  testEnemyData:
+    trainerDisplayName: Test grunt berry
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: c43fc4743b33bf2c2860a3f480d9abc9, type: 2}

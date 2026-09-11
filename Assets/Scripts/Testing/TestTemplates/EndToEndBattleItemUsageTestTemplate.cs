@@ -20,10 +20,13 @@ public class EndToEndBattleItemUsageTestTemplate: EndToEndTest,IItemTestable,IBa
         AddTestCase("Example condition",
             () => _pokemonPartyHandler.Party[0].currentLevel == 1);
 
-        this.StartBattle(battleTestData);
+        this.StartBattle(battleTestData,this);
         yield return null;
     }
-
+    protected override void EndTest()
+    { 
+        this.EndBattle();
+    }
     public override void Inject(ServiceContainer container)
     {
         serviceContainer = container;

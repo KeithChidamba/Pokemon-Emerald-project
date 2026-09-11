@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class EndToEndTest
 {
@@ -13,8 +14,9 @@ public class EndToEndTest
 
     private int NextIndex => testCases.Count;
     
-    public bool testOperationsComplete;
+    public Func<IEnumerator> testOperationsComplete;
     public bool testOperationStarted;
+    public bool testCasesCovered;
     
     private int currentTestCaseIndex;
     
@@ -83,6 +85,10 @@ public class EndToEndTest
     public void ValidateCurrentTestCase(TestingEnvironmentHandler testHandler)
     {
         if (!testOperationStarted) return;
+        
+        serviceContainer.Resolve<DialogueHandler>()
+            .DisplayTestCaseText(string.Empty);
+        
         TestCaseHandler.ValidateTestCases(
             testHandler,
             testCases[currentTestCaseIndex],
@@ -92,7 +98,8 @@ public class EndToEndTest
                 currentTestCaseIndex++;
                 if (currentTestCaseIndex == testCases.Count)
                 {
-                    EndTest();
+                   testCasesCovered = true;
+                   EndTest();
                 }
                 else
                 {
@@ -102,15 +109,22 @@ public class EndToEndTest
             , () =>
             {
                 testStatus = TestStatus.Failed;
+                testCasesCovered = true;
                 EndTest();
                 OnTestCaseFailed();
             });
     }
-    private void EndTest()
+
+    /// <summary>
+    /// optionally override can be used to end test manually
+    /// </summary>
+    protected virtual void EndTest()
     {
-        serviceContainer.Resolve<DialogueHandler>()
-            .DisplayTestCaseText(string.Empty);
-        testOperationStarted = false;
-        testOperationsComplete = true;
+        testOperationsComplete = EndTestRoutine;
+        return;
+        IEnumerator EndTestRoutine()
+        {
+            yield return null;
+        }
     }
 }

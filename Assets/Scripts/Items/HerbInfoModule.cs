@@ -4,8 +4,6 @@ using UnityEngine;
 public class HerbInfoModule : AdditionalInfoModule
 {
     public Herb herbType;
-    public StatusEffect statusEffect;
-    public RevivalItemType reviveType;
     public int GetHerbUsage()
     {
         switch (herbType)
@@ -14,10 +12,8 @@ public class HerbInfoModule : AdditionalInfoModule
             case Herb.EnergyRoot:
                 return 0;
             case Herb.HealPowder:
-                statusEffect = StatusEffect.FullHeal;
                 return 1;
             case Herb.RevivalHerb:
-                reviveType = RevivalItemType.FullHealth;
                 return 2;
             default: return 0;
         }

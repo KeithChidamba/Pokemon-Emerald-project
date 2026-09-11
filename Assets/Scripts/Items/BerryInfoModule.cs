@@ -8,33 +8,10 @@ public class BerryInfoModule : AdditionalInfoModule
 {
     [FormerlySerializedAs("herbType")] public Berry berryType;
     public StatusEffect statusEffect;
-
-    public int GetBerryUsage()
-    {
-        var usageIndex = 0;
-        switch (berryType)
-        {
-            case Berry.FriendshipIncrease:
-                usageIndex = 0;
-                break;
-            case Berry.HpHeal:
-                usageIndex = 1;
-                break;
-            case Berry.StatusHeal:
-                usageIndex = 2;
-                break;
-            case Berry.PpRestore:
-                usageIndex = 3;
-                break;
-            case Berry.ConfusionHeal:
-                usageIndex = 4;
-                break;
-        }
-        return usageIndex;
-    }
 }
 
 public enum Berry
 {
-    FriendshipIncrease, HpHeal, StatusHeal, PpRestore, ConfusionHeal
+    FriendshipIncrease = 0, HpHeal = 1, StatusHeal = 2,
+    PpRestore = 3, ConfusionHeal = 4, FullStatusHeal = 5
 }

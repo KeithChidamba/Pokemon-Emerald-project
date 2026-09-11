@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a113dd0e13549dc9bf31d4592e3e483, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      pokemonLevel: 12
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: kip
+  testItems:
+  - itemAsset: {fileID: 11400000, guid: 2971f0d1ef85ba44a874a6e765631d6b, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 8952e5b58dd013d368d8f7219849709a, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 5b2f5db9c17a5343fb475691182fdc1d, type: 2}
+    quantity: 1
+  testEnemyData:
+    trainerDisplayName: Test Grunt Potion
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: 2c5757ffa1f427855aead865ae8a0a86, type: 2}

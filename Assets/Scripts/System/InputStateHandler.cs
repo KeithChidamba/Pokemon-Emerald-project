@@ -117,14 +117,21 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         {
             if (!_dialogueHandler.HandlingStateExit(currentState))
             {
+                if (currentState.updateExitStatus is not null)
+                {
+                    currentState.canExit = currentState.updateExitStatus.Invoke();
+                }
                 //handle state normally
                 if (currentState.canExit)
                 {
                     if (currentState.persistOnExit)
+                    {
                         currentState.onExit.Invoke();
-
+                    }
                     else if (currentState.canManualExit)
+                    {
                         RemoveTopInputLayer(true);
+                    }
                 }
             }
         }
@@ -211,7 +218,6 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         ResetInputEvents();
         currentState = newState;
         OnStateChanged?.Invoke(currentState);
-        HandleStateExitability();
         SetDirectionals();
         if (currentState.isSelecting)
         {
@@ -253,12 +259,6 @@ public class InputStateHandler : MonoBehaviour,IInjectable
             parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
             parentLayers.Last().mainViewUI.SetActive(true);
         }
-    }
-
-    private void HandleStateExitability()
-    {
-        if (currentState.updateExitStatus is null) return;
-        currentState.canExit = currentState.updateExitStatus.Invoke();
     }
     
     private void SetDirectionals()

@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Guard Spec
-  itemType: 13
-  itemEffect: 
+  itemType: 17
   itemDescription: temporarily prevents stat reduction
   price: 100
   quantity: 1
@@ -26,10 +25,9 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 0
   canBeSold: 1
-  isMultiModular: 0
-  hasModules: 1
-  additionalInfoModule: {fileID: 11400000, guid: fdf23e3d1670af1829b46b681216d797, type: 2}
-  additionalInfoModules:
-  - {fileID: 11400000, guid: fdf23e3d1670af1829b46b681216d797, type: 2}
-  infoModuleAssetNames: []
+  additionalInfoModules: []
+  dynamicInfoModules: []
   imageDirectory: 
+  references:
+    version: 2
+    RefIds: []

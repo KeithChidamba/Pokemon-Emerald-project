@@ -25,6 +25,12 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         _sequencer.AddAction(SetupPlayerHealthAndAttack);
         _sequencer.AddAction(()=>SetupEnemyMoveAndBerry("Cherri berry",1));
         _sequencer.AddAction(()=>SetupEnemyMoveAndBerry("Persim berry",2));
+        _sequencer.AddAction(()=>
+        {
+            var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+            player.pokemon.moveSet[0].powerpoints = 0;
+            SetupEnemyMoveAndBerry("Leppa berry", 2);
+        });
     }
     
     private void ForceSpecificMove(int moveIndex=0)
@@ -56,8 +62,8 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + berryName;
-        var persimBerry = InstanceFactory.CreateItem(Resources.Load<Item>(assetDirectory));
-        player.pokemon.GiveItem(persimBerry);
+        var berry = InstanceFactory.CreateItem(Resources.Load<Item>(assetDirectory));
+        player.pokemon.GiveItem(berry);
         
         //tailwhip
         _sequencer.UseMove();
@@ -74,6 +80,9 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         
         _testCaseHandler.AddTestCase( "Player should be healed from confusion", 
             () => !player.isConfused);
+        
+        _testCaseHandler.AddTestCase( "Player should have their first move powerpoints restored from leppa berry held item", 
+            () => player.pokemon.moveSet[0].powerpoints==10);
         
         yield return HandleBattleState();
         onTestResult.Invoke();

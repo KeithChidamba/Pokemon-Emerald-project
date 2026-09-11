@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea4f436939a765d15b0b437ed9862eee, type: 3}
   m_Name: Full heal berry
   m_EditorClassIdentifier: 
-  berryType: 2
-  statusEffect: 7
+  berryType: 5
+  statusEffect: 0

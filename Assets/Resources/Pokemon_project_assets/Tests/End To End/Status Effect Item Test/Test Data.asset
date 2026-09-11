@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a113dd0e13549dc9bf31d4592e3e483, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      pokemonLevel: 12
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: Kyp
+  testItems:
+  - itemAsset: {fileID: 11400000, guid: bbf8f3c9e78a1f545b93d07924e0b10c, type: 2}
+    quantity: 1
+  - itemAsset: {fileID: 11400000, guid: 2f70d8cf599d161449cf3b248842013d, type: 2}
+    quantity: 1
+  testEnemyData:
+    trainerDisplayName: Test Grunt status
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: 0f6c1a6c4f5644595ac225404f738598, type: 2}

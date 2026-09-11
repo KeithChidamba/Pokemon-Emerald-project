@@ -373,7 +373,8 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     
     private float AccountForVictimsBarriers(Move move,BattleParticipant victim,float damage)
     {
-        foreach (var barrier in victim.barriers)
+        var victimTeam = _battleHandler.GetTeam(victim.participantKey);
+        foreach (var barrier in victimTeam.barriers)
         {
             if ((move.isSpecial && barrier.barrierName == NameDB.GetMoveName(MoveName.LightScreen))
                 || (!move.isSpecial && barrier.barrierName == NameDB.GetMoveName(MoveName.Reflect)))
@@ -465,14 +466,22 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         while (_healhGainQueue.Count > 0)
         {
             var data = _healhGainQueue[0];
-            var healthAfterChange = Mathf.Clamp(data.affectedPokemon.hp 
-                                                + data.healthChange,0,data.affectedPokemon.maxHp);
+            var healthAfterChange = Mathf.Clamp(
+                data.affectedPokemon.hp + data.healthChange
+                ,0,data.affectedPokemon.maxHp);
             
             float displayHp = data.affectedPokemon.hp;
+            
+            //visual speed of hp bar[values are based on visual feel]
+            float healthDifference = healthAfterChange - displayHp;
+            float t = Mathf.InverseLerp(1f, 300f, healthDifference);
+            t = Mathf.Sqrt(t);
+            float healthGainSpeed = Mathf.Lerp(5f, 75f, t);
+            
             while (displayHp < healthAfterChange)
             {
                 float newHp = Mathf.MoveTowards(displayHp, healthAfterChange
-                    ,data.affectedPokemon.healthPhase  * 10f *Time.unscaledDeltaTime);
+                    ,data.affectedPokemon.healthPhase  * healthGainSpeed * Time.unscaledDeltaTime);
                 displayHp = newHp;
                 data.affectedPokemon.hp =  Mathf.Floor(displayHp);
                 data.affectedPokemon.NotifyHealthChange();
@@ -644,12 +653,6 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             }
         }
         participant.statusHandler.GetStatusEffect(status,numTurnsOfStatus);
-    }
-
-    public void ApplyStatChangeImmunity(BattleParticipant participant,StatChangeability changeability,int numTurns)
-    {
-        if (!participant.isActive) return;
-        participant.statusHandler.GetStatChangeImmunity(changeability,numTurns);
     }
 
     private void TrapEnemy(Move move,BattleParticipant attacker, BattleParticipant victim)
@@ -917,27 +920,6 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                 return Mathf.FloorToInt(unmodifiedStatValue * _statLevels[stage+6]); 
         }
     }
-    public bool HasDuplicateBarrier(BattleParticipant currentParticipant,string  barrierName,bool displayMessage)
-    {
-        var duplicateBarrier = currentParticipant.barriers.Any(b => b.barrierName == barrierName); 
-
-        if (_battleHandler.isDoubleBattle)
-        {
-            var partner = currentParticipant.GetPartner();
-                
-            if(partner.isActive)
-                if(partner.barriers.Any(b => b.barrierName == barrierName))
-                {
-                    duplicateBarrier = true;
-                }
-        }
-
-        if (duplicateBarrier && displayMessage)
-            _dialogueHandler.DisplayBattleInfo(barrierName + " is already activated");
-        
-        return duplicateBarrier;
-    }
-
     public void AddFieldDamageModifier(OnFieldDamageModifier newFieldModifier)
     {
         _onFieldDamageModifiers.Add(newFieldModifier);

@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 
   itemName: Full Heal
-  itemType: 3
-  itemEffect: 
+  itemType: 17
   itemDescription: Heals any status effect
   price: 50
   quantity: 1
@@ -26,10 +25,9 @@ MonoBehaviour:
   isHeldItem: 0
   canBeHeld: 1
   canBeSold: 1
-  isMultiModular: 0
-  hasModules: 1
-  additionalInfoModule: {fileID: 11400000, guid: 8914866011bd9500c89bce7b457a5900, type: 2}
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 8914866011bd9500c89bce7b457a5900, type: 2}
-  infoModuleAssetNames: []
+  additionalInfoModules: []
+  dynamicInfoModules: []
   imageDirectory: 
+  references:
+    version: 2
+    RefIds: []

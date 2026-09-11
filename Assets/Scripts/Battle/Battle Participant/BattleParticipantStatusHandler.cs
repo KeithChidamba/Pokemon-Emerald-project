@@ -87,7 +87,7 @@ public class BattleParticipantStatusHandler
     {
         _stateControl = StatusHandlingState.Permanent;
     }
-    public void GetStatusEffect(StatusEffect effect,int numTurns)
+    public void GetStatusEffect(StatusEffect effect,int numTurns = 0)
     {
         participant.pokemon.statusEffect = effect;
         participant.RefreshStatusEffectImage();
@@ -118,22 +118,6 @@ public class BattleParticipantStatusHandler
             return Utility.RandomChance(CommonRandom.Rnd50);
         }
         return true;
-    }
-    public void GetStatChangeImmunity(StatChangeability changeability,int numTurns)
-    {
-        if (participant.statChangeEffects.Any(s => s.changeability == changeability))
-        {
-            Debug.Log("added duplicate stat change effect");
-        };
-        participant.statChangeEffects.Add(new(changeability,numTurns));
-    }
-    public void CheckStatChangeImmunity()
-    {
-        if (!participant.isActive) return;
-        if (participant.statChangeEffects.Count==0) return;
-        
-        participant.statChangeEffects.ForEach(s=>s.effectDuration--);
-        participant.statChangeEffects.RemoveAll(s => s.effectDuration == 0);
     }
     public IEnumerator CheckStatus()
     {
@@ -209,8 +193,6 @@ public class BattleParticipantStatusHandler
         _moveUsageHandler.DisplaySpecialDamage(participant,predefinedDamage:healthLost,damageSource);
         
         yield return _moveUsageHandler.AwaitDamageDisplay();
-       
-        participant.pokemon.NotifyHealthChange();  
     }
 
     public void SetupTrapDuration(TrapDataInfo trapData,bool displayMessage = true)
@@ -352,7 +334,7 @@ public class BattleParticipantStatusHandler
         RemoveStatusEffect();
         yield return _dialogueHandler.AwaitAllDialogue();
     }
-    public void RemoveStatusEffect(bool healAllEffects = false)
+    public void RemoveStatusEffect(bool heaConfusion = false)
     {
         _healed = false;
         if (participant.pokemon.statusEffect == StatusEffect.Sleep)
@@ -370,7 +352,7 @@ public class BattleParticipantStatusHandler
             _moveUsageHandler.OnMoveHit -= RemoveFreezeStatusWithFire;
             participant.canAttack = true;
         }
-        if (healAllEffects)
+        if (heaConfusion)
         {
             participant.isConfused = false;
         }

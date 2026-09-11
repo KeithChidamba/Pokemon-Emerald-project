@@ -713,8 +713,9 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             currentTurnIndex+=step;
         else
             currentTurnIndex = 0;
-        
-        if (!_battleHandler.GetCurrentParticipant().isActive)
+
+        var currentParticipant = _battleHandler.GetCurrentParticipant();
+        if (!currentParticipant.isActive && !currentParticipant.awaitingRevival)
         {
             if (_battleHandler.isDoubleBattle && IsLastParticipant())
             {

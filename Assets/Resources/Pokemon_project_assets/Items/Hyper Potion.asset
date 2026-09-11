@@ -15,9 +15,8 @@ MonoBehaviour:
   itemID: 
   itemName: Hyper Potion
   itemType: 2
-  itemEffectData: 30
   itemDescription: Heals 200hp
-  price: 50
+  price: 1200
   quantity: 1
   itemImage: {fileID: 21300000, guid: 00bab57767312389aaabcac2964c8569, type: 2}
   forPartyUse: 1

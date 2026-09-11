@@ -185,37 +185,13 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     private IEnumerator CreateBarriers(Move move,BattleParticipant attacker)
     {
         var barrierInfo = move.GetDynamicModule<BarrierInfo>();
-        if (_battleHandler.isDoubleBattle)
-        {
-            if (!_moveUsageHandler.HasDuplicateBarrier(attacker, move.moveName, true))
-            {
-                var newBarrier = new Barrier(move.moveName, barrierInfo.barrierEffect, barrierInfo.turnDuration);
-                
-                attacker.barriers.Add(newBarrier);
-
-                var partner = attacker.GetPartner();
-
-                if (partner.isActive)
-                {
-                    var barrierCopy = new Barrier(newBarrier.barrierName, newBarrier.barrierEffect, newBarrier.barrierDuration);
-                    partner.barriers.Add(barrierCopy);
-                }
-                
-                _dialogueHandler.DisplayBattleInfo(move.moveName + " has been activated");
-                yield return _dialogueHandler.AwaitAllDialogue();
-            }
-        }
-        else
-        {
-            if (_moveUsageHandler.HasDuplicateBarrier(attacker, move.moveName,true))
-                yield return _dialogueHandler.AwaitAllDialogue();
-            else
-            {
-                attacker.barriers.Add(new Barrier(move.moveName,barrierInfo.barrierEffect,barrierInfo.turnDuration));
-                
-                _dialogueHandler.DisplayBattleInfo(move.moveName + " has been activated");
-            }
-        }
+        var attackerTeam = _battleHandler.GetTeam(attacker.participantKey);
+       
+        var newBarrier = new Barrier(move.moveName, barrierInfo.barrierEffect, barrierInfo.turnDuration);
+        attackerTeam.barriers.Add(newBarrier);
+        _dialogueHandler.DisplayBattleInfo(move.moveName + " has been activated");
+        
+        yield return _dialogueHandler.AwaitAllDialogue();
         
         yield return _dialogueHandler.AwaitAllDialogue();
     }

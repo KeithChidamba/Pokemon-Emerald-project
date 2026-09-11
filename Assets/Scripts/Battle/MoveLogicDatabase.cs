@@ -67,23 +67,12 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     }
     private IEnumerator BrickBreak(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
-        var duplicateBarriers = new List<string>();
-        foreach (var enemy in attacker.currentEnemies)
+        var enemyTeam = _battleHandler.GetTeam(attacker.currentEnemies[0].participantKey);
+        foreach (var barrier in enemyTeam.barriers)
         {
-            if(!enemy.isActive)continue;
-            foreach (var barrier in enemy.barriers)
-            {
-                if (duplicateBarriers.Contains(barrier.barrierName))
-                {
-                    //participants share barriers, so only display the message the first time 
-                    //and not again when partner's barrier is broken
-                    continue;
-                }
-                _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" shattered "+barrier.barrierName);
-                duplicateBarriers.Add(barrier.barrierName);
-            }
-            enemy.barriers.Clear();
+            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" shattered "+barrier.barrierName);
         }
+        enemyTeam.barriers.Clear();
         
         yield return _dialogueHandler.AwaitAllDialogue();
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);

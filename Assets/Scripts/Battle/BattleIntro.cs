@@ -336,14 +336,8 @@ public class BattleIntro : MonoBehaviour,IInjectable
 /// <returns></returns>
     public IEnumerator DisplayPokemonRevival(BattleParticipant swapParticipant, Pokemon newPokemon)
     {
-        swapParticipant.pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
-        
-        yield return _battleHandler.SetupParticipantAfterSwitch(swapParticipant,newPokemon);
-        
-        yield return _battleVisualsHandler.SendOutPlayerPokemon(swapParticipant);
-        
+        yield return _battleHandler.SetupParticipantAfterSwitch(swapParticipant,newPokemon,false);
         yield return _battleVisualsHandler.RevealPokemonAfterRevive(swapParticipant);
-
     }
     public IEnumerator SwitchInPokemon(BattleParticipant swapParticipant, Pokemon newPokemon,bool normalIntentionalSwitch=true)
     {

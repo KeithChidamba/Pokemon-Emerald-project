@@ -102,12 +102,14 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
            yield return TestingUtilities.LoadPokemonPartyTestData(testData.pokemonPartyData,_pokemonPartyHandler,pokemonOperationsHandler);
            _dialogueHandler.EndDialogue();
            
+           
            yield return endToEndTest.BeginTest(testData);
            endToEndTest.testOperationStarted = true;
            //setup initial scenario
            endToEndTest.SetupCurrentScenario();
-           
-           yield return new WaitUntil(()=>endToEndTest.testOperationsComplete);
+
+           yield return new WaitUntil(() => endToEndTest.testCasesCovered);
+           yield return endToEndTest.testOperationsComplete;
             
            var testResult = endToEndTest.testStatus == TestStatus.Passed? "passed":"failed";
             

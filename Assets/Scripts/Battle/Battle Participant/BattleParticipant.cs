@@ -29,6 +29,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public bool isPlayer;
     public bool isActive;
     public bool activeForBattle;
+    public bool awaitingRevival;
     
     public bool canAttack = true;
     public bool canBeDamaged = true;
@@ -41,16 +42,15 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public bool canBeInfatuated = true;
     public bool isInfatuated;
     
-    public SemiInvulnerabilityData semiInvulnerabilityData = new();
-    public bool isSemiInvulnerable;
     public bool canEscape = true;
-    public List<StatChangeabilityData> statChangeEffects = new();
-    
+     
     public Slider playerHpSlider;
     [FormerlySerializedAs("hpSliderColor")] public RawImage hpSliderImage;
     public GameObject[] doubleBattleUI;
     public GameObject participantUI;
     
+    public SemiInvulnerabilityData semiInvulnerabilityData = new();
+    public bool isSemiInvulnerable;
     public PreviousMove previousMoveData;
     public TurnCoolDown currentCoolDown;
     public Type additionalTypeImmunity;
@@ -64,7 +64,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     private bool _expEventDelay;
     [SerializeField]private bool handlingFaintEvent;
     
-    public List<Barrier> barriers = new();
     public StatusEffectAnimationHandler statusAnimationHandler;
     
     private Vector2 _defaultImagePosition;
@@ -101,8 +100,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         abilityHandler = new AbilityHandler(_container,this);
         statData = new BattleParticipantStatData(this);
         
-        _turnBasedCombatHandler.OnNewTurn += CheckBarrierSharing;
-        _turnBasedCombatHandler.OnTurnsCompleted += CheckBarrierDuration;
         currentCoolDown = new TurnCoolDown(this, _moveUsageHandler);
         currentMoveLock = new MoveLockData { moveLocked = false,moveToLock = null};
         _defaultImagePosition = pokemonImage.rectTransform.anchoredPosition;
@@ -215,6 +212,9 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     {
         if (!isActive) return;
         if (pokemon.hp > 0) return;
+        
+        if (_battleHandler.HasFaintedParticipant(this)) return;
+        
         pokemon.statusEffect = StatusEffect.None;
         _battleHandler.AddFaintedParticipant(this);
         pokemon.DetermineFriendshipLevelChange(false, FriendshipModifier.Fainted);
@@ -302,16 +302,14 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     {
         if (!isActive) return;
         isActive = false;
-        currentEnemies.Clear();       
-        barriers.Clear();
-        statChangeEffects.Clear();
-
+        currentEnemies.Clear();
+        
         ResetImagePosition();
         ResetUiPosition();
         pokemonImage.color = Color.white;
         
         _turnBasedCombatHandler.OnNewTurn -= statusHandler.StunCheck;
-        _turnBasedCombatHandler.OnNewTurn -= statusHandler.CheckStatChangeImmunity;
+        
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.CheckTrapDuration);
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.ConfusionCheck);
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.NotifyHealing);
@@ -374,36 +372,10 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     {
         var protection = isIncrease? StatChangeability.ImmuneToIncrease
             :StatChangeability.ImmuneToDecrease;
-        return statChangeEffects.Any(s => s.changeability == protection);
+        return _battleHandler.GetTeam(participantKey)
+            .statChangeEffects.Any(s => s.changeability == protection);
     }
-    private void CheckBarrierDuration()
-    {
-        if (barriers.Count == 0) return;
-
-        foreach (var barrier in barriers)
-            barrier.barrierDuration--;
-
-        barriers.RemoveAll(b => b.barrierDuration < 1);
-    }
-    private void CheckBarrierSharing()
-    {
-        if (barriers.Count == 0) return;
-        
-        if (_battleHandler.isDoubleBattle)
-        {
-            var partner = GetPartner();
-            if (!partner.isActive) return;
-            
-            foreach (var barrier in barriers)
-            {
-                if (!_moveUsageHandler.HasDuplicateBarrier(partner, barrier.barrierName, false))
-                {
-                    var barrierCopy = new Barrier(barrier.barrierName, barrier.barrierEffect, barrier.barrierDuration);
-                    partner.barriers.Add(barrierCopy);
-                }
-            }
-        }
-    }
+    
     private void UpdateUI()
     {
         PokemonOperations.UpdateHealthPhase(pokemon,hpSliderImage); 
@@ -467,7 +439,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         if (initialCall)
         {
             _turnBasedCombatHandler.SubToMoveExecution(statusHandler.CheckTrapDuration);
-            _turnBasedCombatHandler.OnNewTurn += statusHandler.CheckStatChangeImmunity;
+            
             _turnBasedCombatHandler.SubToMoveExecution(statusHandler.ConfusionCheck);
             _turnBasedCombatHandler.OnNewTurn += statusHandler.StunCheck;
             _turnBasedCombatHandler.SubToMoveExecution(statusHandler.NotifyHealing);

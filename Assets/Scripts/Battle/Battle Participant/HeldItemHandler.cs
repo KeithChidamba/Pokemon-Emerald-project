@@ -98,7 +98,7 @@ public class HeldItemHandler
                 yield return CheckHealCondition(heldItem);
                 break;
             case ItemType.Status:
-                yield return CheckStatusCondition(heldItem);
+                yield return HealStatusCondition(heldItem,false);
                 break;
         }
         yield return _dialogueHandler.AwaitAllDialogue();
@@ -113,7 +113,10 @@ public class HeldItemHandler
                 yield return CheckHealCondition(heldItem);
                 break;
             case  Berry.StatusHeal:
-                yield return CheckStatusCondition(heldItem);
+                yield return HealStatusCondition(heldItem,false);
+                break;
+            case  Berry.FullStatusHeal:
+                yield return HealStatusCondition(heldItem,true);
                 break;
             case  Berry.ConfusionHeal:
                 yield return CheckIfConfused(heldItem);
@@ -127,12 +130,42 @@ public class HeldItemHandler
         heldItem.quantity--;
         yield return GetHealing(heldItem);
     }    
-    private IEnumerator CheckStatusCondition(Item heldItem)
+    private IEnumerator HealStatusCondition(Item heldItem,bool fullHeal)
     {
-        if(participant.pokemon.statusEffect == StatusEffect.None) yield break;
-
+        if (!fullHeal)
+        {
+            if(participant.pokemon.statusEffect==StatusEffect.None)yield break;
+            StatusEffect curableStatus;
+        
+            if (heldItem.itemType == ItemType.Berry)
+            {
+                var berryInfo = heldItem.GetModule<BerryInfoModule>();
+                curableStatus = berryInfo.statusEffect;
+            }
+            else
+            {
+                var statusInfo = heldItem.GetModule<StatusHealInfoModule>();
+                curableStatus = statusInfo.statusEffect;
+            }
+        
+            if (curableStatus == StatusEffect.Poison &&
+                participant.pokemon.statusEffect == StatusEffect.BadlyPoison)
+            {//antidote heals all poison
+                curableStatus = StatusEffect.BadlyPoison;
+            }
+            if (participant.pokemon.statusEffect != curableStatus)
+            { 
+                yield break;
+            }
+        }
+        else
+        {
+            if(!participant.isConfused)yield break;
+        }
+        participant.statusHandler.RemoveStatusEffect(fullHeal);
+        participant.RefreshStatusEffectImage();
+        _dialogueHandler.DisplayBattleInfo($"{participant.pokemon.pokemonDisplayName}'s {heldItem.itemName} healed it");
         heldItem.quantity--;
-        yield return GetStatusHealing(heldItem);
     }
     private IEnumerator CheckIfConfused(Item heldItem)
     {
@@ -148,34 +181,5 @@ public class HeldItemHandler
         _moveUsageHandler.HealthGainDisplay(healEffect,healthGainer:participant);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
-    private IEnumerator GetStatusHealing(Item heldItem)
-    {
-        StatusEffect curableStatus;
-        
-        if (heldItem.itemType == ItemType.Berry)
-        {
-            var berryInfo = heldItem.GetModule<BerryInfoModule>();
-            curableStatus = berryInfo.statusEffect;
-        }
-        else
-        {
-            var statusInfo = heldItem.GetModule<StatusHealInfoModule>();
-            curableStatus = statusInfo.statusEffect;
-        }
-        
-        if (curableStatus == StatusEffect.Poison &&
-            participant.pokemon.statusEffect == StatusEffect.BadlyPoison)
-        {//antidote heals all poison
-            curableStatus = StatusEffect.BadlyPoison;
-        }
-        if (curableStatus != StatusEffect.FullHeal && 
-            participant.pokemon.statusEffect != curableStatus)
-        { 
-            yield break;
-        }
-        participant.statusHandler.RemoveStatusEffect(curableStatus == StatusEffect.FullHeal);
-        participant.RefreshStatusEffectImage();
-        _dialogueHandler.DisplayBattleInfo($"{participant.pokemon.pokemonDisplayName}'s {heldItem.itemName} healed it");
-    }
-
+ 
 }
