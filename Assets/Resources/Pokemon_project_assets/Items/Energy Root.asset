@@ -15,17 +15,18 @@ MonoBehaviour:
   itemID: 
   itemName: Energy Root
   itemType: 5
-  itemEffectData: 0
   itemDescription: A bitter herb that restores 200 Hp
-  price: 18
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 852002d4436a453b9b60b1cd612c7f6a, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 800
   canBeSold: 1
+  sellPrice: 400
+  priceCurrency: 0
   additionalInfoModules:
   - {fileID: 11400000, guid: 2f80d1f5243a6ff4b999b8e5cf6e08cb, type: 2}
   dynamicInfoModules:

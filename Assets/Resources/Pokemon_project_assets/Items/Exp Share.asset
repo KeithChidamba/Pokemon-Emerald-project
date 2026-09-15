@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: Exp Share
   itemType: 7
   itemDescription: Allows pokemon to gain exp without battling
-  price: 0
-  quantity: 1
   itemImage: {fileID: 21300000, guid: b5ac072d7339a3bac94aafa21d431db7, type: 2}
+  quantity: 1
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 0
   isHeldItem: 1
   canBeHeld: 1
+  buyPrice: 0
   canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 7301661317695799313

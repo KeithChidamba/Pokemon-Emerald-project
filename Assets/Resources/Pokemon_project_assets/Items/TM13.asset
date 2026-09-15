@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: TM13
   itemType: 16
   itemDescription: A powerful ice attack that may freeze the foe
-  price: 0
-  quantity: 0
   itemImage: {fileID: 21300000, guid: 7df25999d5ee94774a276faa99ae8fe1, type: 2}
+  quantity: 0
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 4000
   canBeSold: 1
+  sellPrice: 2000
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 5308325803627118597

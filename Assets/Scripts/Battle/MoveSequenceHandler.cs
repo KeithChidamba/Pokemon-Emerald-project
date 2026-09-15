@@ -790,17 +790,10 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             }
             else
             {
-                if (!move.isMultiTarget)
+                foreach (var enemy in attacker.currentEnemies)
                 {
-                    yield return HandleStatChange(victim,buffData.stat, buffData.isIncreasing, buffData.amount);
-                } 
-                if(move.isMultiTarget && _battleHandler.isDoubleBattle)
-                {
-                    foreach (var enemy in attacker.currentEnemies)
-                    {
-                        yield return HandleStatChange(enemy, buffData.stat, buffData.isIncreasing, buffData.amount);
-                        yield return _dialogueHandler.AwaitAllDialogue();
-                    }
+                    yield return HandleStatChange(enemy, buffData.stat, buffData.isIncreasing, buffData.amount);
+                    yield return _dialogueHandler.AwaitAllDialogue();
                 }
             }
         }

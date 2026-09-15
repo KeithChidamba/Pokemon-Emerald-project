@@ -15,17 +15,18 @@ MonoBehaviour:
   itemID: 
   itemName: Rare Candy
   itemType: 12
-  itemEffectData: 0
   itemDescription: Levels up a pokemon
-  price: 0
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 0cd64e570a6a533c4a81629110f7f7c8, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
-  canBeSold: 1
+  buyPrice: 0
+  canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules: []
   dynamicInfoModules: []
   imageDirectory: 

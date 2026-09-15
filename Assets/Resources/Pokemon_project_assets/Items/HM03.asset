@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: HM03
   itemType: 16
   itemDescription: Teaches a valid pokemon, surf
-  price: 0
-  quantity: 1
   itemImage: {fileID: 21300000, guid: e34de3c4c3aeb6717a46b3b7469f60e2, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 0
   canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 5308325803627118593

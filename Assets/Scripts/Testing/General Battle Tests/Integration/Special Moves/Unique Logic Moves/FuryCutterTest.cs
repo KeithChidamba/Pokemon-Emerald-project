@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FuryCutter : BattleBasedTest
+public class FuryCutterTest : BattleBasedTest
 {
     private BattleHandler _battleHandler;
     private MoveSequenceHandler _moveUsageHandler;
@@ -20,7 +20,7 @@ public class FuryCutter : BattleBasedTest
         
         _sequencer = new MoveTestActionSequencer(container);
         _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
-        testName = "Fury Cutter";
+        testName = "Fury Cutter Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
         //fury cutter -> tailwhip

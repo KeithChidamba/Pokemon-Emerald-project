@@ -22,7 +22,7 @@ public class StoreItemUi : MonoBehaviour,IInjectable
     public void LoadItemUI()
     {
         itemName.text = item.itemName;
-        price.text = item.price.ToString();
+        price.text = item.buyPrice.ToString();
     }
     public void LoadItemDescription()
     {

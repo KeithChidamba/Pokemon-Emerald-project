@@ -15,17 +15,18 @@ MonoBehaviour:
   itemID: 
   itemName: Sitrus berry
   itemType: 9
-  itemEffectData: 0
   itemDescription: Heals 30hp
-  price: 5
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 2cc9375dfd9b1565d8d186771bbbdb8c, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 1
-  canBeSold: 1
+  buyPrice: 0
+  canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules:
   - {fileID: 11400000, guid: 7fbd9d0abd32224e4ae7a06219c2ade1, type: 2}
   dynamicInfoModules:

@@ -177,7 +177,10 @@ public class GameUiHandler : MonoBehaviour,IInjectable
 
         if (_playerBagHandler.currentBagUsage == BagUsage.SellingView)
         {
-            var sellableItems = _playerBagHandler.allItems.Count(item => item.canBeSold);
+            var sellableItems = _playerBagHandler.allItems.Count(item => 
+                item.priceCurrency == ItemPriceCurrency.Money
+                && item.canBeSold);
+            
             if (sellableItems==0)
             {
                 _dialogueHandler.DisplayDetails("You have no items to sell");

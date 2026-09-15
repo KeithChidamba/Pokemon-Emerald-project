@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: Soothe Bell
   itemType: 7
   itemDescription: Increases the frinedship
-  price: 0
-  quantity: 1
   itemImage: {fileID: 21300000, guid: ebf148d344f899748ab90c7874b71d15, type: 2}
+  quantity: 1
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 0
   isHeldItem: 1
   canBeHeld: 1
+  buyPrice: 0
   canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 7301661317695799311

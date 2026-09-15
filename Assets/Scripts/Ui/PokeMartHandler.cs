@@ -100,11 +100,12 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
     public void BuyItem()
     {
         var item = InstanceFactory.CreateItem(currentStoreItems[topIndex + selectedItemIndex]);
-        if(_gameLoadingHandler.playerData.playerMoney >= item.price)
+        
+        if(_gameLoadingHandler.playerData.playerMoney >= item.buyPrice)
         {
             item.quantity = selectedItemQuantity;
             _playerBagHandler.AddItem(item);
-            _gameLoadingHandler.playerData.playerMoney -= selectedItemQuantity * item.price;
+            _gameLoadingHandler.playerData.playerMoney -= selectedItemQuantity * item.buyPrice;
             _dialogueHandler.DisplayDetails("You bought "+ item.quantity+ " "+item.itemName+"'s");
             selectedItemQuantity = 1;
             OnItemBought?.Invoke(item);
@@ -122,7 +123,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
         {
             if (selectedItemQuantity < 99)//below max quantity and affordable by player
             {
-                var priceOfItem = (selectedItemQuantity + 1) * currentStoreItems[topIndex + selectedItemIndex].price;
+                var priceOfItem = (selectedItemQuantity + 1) * currentStoreItems[topIndex + selectedItemIndex].buyPrice;
                 if (_gameLoadingHandler.playerData.playerMoney >= priceOfItem)
                     selectedItemQuantity += value;
                 else
@@ -156,7 +157,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
             return;
         }
         currentStoreItems.Clear();
-        var orderedItems = currentMartData.availableItems.OrderBy(item => item.price);
+        var orderedItems = currentMartData.availableItems.OrderBy(item => item.buyPrice);
         var itemGroups = orderedItems.GroupBy(item => item.itemType).ToList();
         
         foreach (var group in itemGroups)

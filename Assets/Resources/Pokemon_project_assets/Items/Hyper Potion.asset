@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: Hyper Potion
   itemType: 2
   itemDescription: Heals 200hp
-  price: 1200
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 00bab57767312389aaabcac2964c8569, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 1200
   canBeSold: 1
+  sellPrice: 600
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 7301661317695799299

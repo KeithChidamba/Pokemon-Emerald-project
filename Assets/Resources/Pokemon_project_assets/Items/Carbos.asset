@@ -15,21 +15,22 @@ MonoBehaviour:
   itemID: 
   itemName: Carbos
   itemType: 8
-  itemEffect: 
   itemDescription: "It increases the Speed of a Pok\xE9mon"
-  price: 2000
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 36b5e0136006e81c2a53b4be7b98ee24, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 9800
   canBeSold: 1
-  isMultiModular: 0
-  hasModules: 1
-  additionalInfoModule: {fileID: 11400000, guid: affbb68d647fff5959e2f916f65f2278, type: 2}
+  sellPrice: 4900
+  priceCurrency: 0
   additionalInfoModules:
   - {fileID: 11400000, guid: affbb68d647fff5959e2f916f65f2278, type: 2}
-  infoModuleAssetNames: []
+  dynamicInfoModules: []
   imageDirectory: 
+  references:
+    version: 2
+    RefIds: []

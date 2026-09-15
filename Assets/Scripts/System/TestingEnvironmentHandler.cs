@@ -41,8 +41,6 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
    {
        if (environment == DevelopmentEnvironment.Testing)
        {
-           testControlsView.SetActive(true);
-       
            _testUtils = new TestingUtilities();
            //logging
            _dialogueHandler.OnDialogueDisplayed += LogDialogueMessage;
@@ -82,6 +80,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
            DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)));
 
        //End to End Tests
+       testControlsView.SetActive(true);
        foreach (var endToEndTest in testRegistry.endToEndTests)
        {
            currenEndToEndTest = endToEndTest;
@@ -128,6 +127,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
        GetLogs("End To End Test Logs.html"); 
        testingLogs.Clear();
        Debug.Log($"[End To End] TEST LOGS PRINTED");
+       testControlsView.SetActive(false);
        yield return new WaitForSeconds(1f);
        
        //Unit Tests

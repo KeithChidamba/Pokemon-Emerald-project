@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: TM40
   itemType: 16
   itemDescription: An attack that never misses.
-  price: 0
-  quantity: 0
   itemImage: {fileID: 21300000, guid: 0e0cc8fa8a3a36859a719cce93550add, type: 2}
+  quantity: 0
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 2500
   canBeSold: 1
+  sellPrice: 1250
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 5308325803627118608

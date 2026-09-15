@@ -16,6 +16,10 @@ public static class NameDB
 /// <returns></returns>
     public static bool NameMatch(Move move,MoveName moveName)
     {
+        if (move is null)
+        {
+            throw new NullReferenceException($"Move is null, checked for {moveName}");
+        }
         return ParseMoveName(move.moveName) == moveName;
     }
     public static MoveName ParseMoveName(string moveName)

@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: HM02
   itemType: 16
   itemDescription: Teaches a valid pokemon, fly
-  price: 0
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 5988c964cc12aac9bbc89d4cf127709b, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 0
   canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 5308325803627118592

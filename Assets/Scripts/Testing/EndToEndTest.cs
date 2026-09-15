@@ -39,7 +39,8 @@ public class EndToEndTest
     }
     /// <summary>
     /// This is for manipulating the current test state to align
-    /// with test cases. This overload works with automatic indexing
+    /// with test cases. This overload works with automatic indexing.
+    /// The first Scenario gets run automatically upon test creation, unless specific indexing is used[Other overload]
     /// </summary>
     protected void AddTestCaseScenario(Action scenario)
     {
@@ -53,7 +54,9 @@ public class EndToEndTest
     {
         serviceContainer.Resolve<DialogueHandler>()
             .DisplayTestCaseText(
-                testCases[currentTestCaseIndex].GetCaseMessages());
+                testCases.Count > 0
+                    ? testCases[currentTestCaseIndex].GetCaseMessages() 
+                    : string.Empty);
         
         if(testScenarios.TryGetValue(testCases[currentTestCaseIndex].caseIndex, out var action))
         {

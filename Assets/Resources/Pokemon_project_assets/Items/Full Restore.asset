@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: Full Restore
   itemType: 17
   itemDescription: Heals a pokemon's health fully
-  price: 3000
-  quantity: 1
   itemImage: {fileID: 21300000, guid: c49a2ec46a206b07aa2a44d9dda3b2be, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 3000
   canBeSold: 1
+  sellPrice: 1500
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules: []
   imageDirectory: 

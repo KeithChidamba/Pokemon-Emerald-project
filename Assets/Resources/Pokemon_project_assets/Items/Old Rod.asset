@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: Old Rod
   itemType: 0
   itemDescription: An old fishing rod that only catch weak pokemon
-  price: 0
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 7622bf840728ffdda8b7f2db99c2e718, type: 2}
+  quantity: 1
   forPartyUse: 0
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 0
   canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 7301661317695799315

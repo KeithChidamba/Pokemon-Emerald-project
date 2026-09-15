@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: TM37
   itemType: 16
   itemDescription: Causes damage each turn.
-  price: 0
-  quantity: 0
   itemImage: {fileID: 21300000, guid: 9255d6ca048cf4d3c9ec88258d861475, type: 2}
+  quantity: 0
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 2500
   canBeSold: 1
+  sellPrice: 1250
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 5308325803627118607

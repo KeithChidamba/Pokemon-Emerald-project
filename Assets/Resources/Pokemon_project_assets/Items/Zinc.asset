@@ -15,21 +15,22 @@ MonoBehaviour:
   itemID: 
   itemName: Zinc
   itemType: 8
-  itemEffect: 
   itemDescription: "It increases the Special Defense of a Pok\xE9mon"
-  price: 2000
-  quantity: 1
   itemImage: {fileID: 21300000, guid: d0f47d9169a13e8a698b1ccf77b34071, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 9800
   canBeSold: 1
-  isMultiModular: 0
-  hasModules: 1
-  additionalInfoModule: {fileID: 11400000, guid: b42e1bd1728a5a6c299dbfab6f90fc40, type: 2}
+  sellPrice: 4900
+  priceCurrency: 0
   additionalInfoModules:
   - {fileID: 11400000, guid: b42e1bd1728a5a6c299dbfab6f90fc40, type: 2}
-  infoModuleAssetNames: []
+  dynamicInfoModules: []
   imageDirectory: 
+  references:
+    version: 2
+    RefIds: []

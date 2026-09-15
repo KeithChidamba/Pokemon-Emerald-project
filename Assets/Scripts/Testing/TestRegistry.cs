@@ -19,19 +19,20 @@ public class TestRegistry
         // new HerbItemTest(),
         // new XItemTest(),
         // new GuardSpecItemTest(),
+        new MoveLockTest(),
     };
 
     public IntegrationTest[] integrationTests = 
     {
         // //Held Items
-        // new ConsumableHeldItemUsageTest(),
+        //  new ConsumableHeldItemUsageTest(),
         //  new ChoiceBandTest(),
         // //Special Move Logic
         //  new BideTest(),
         //  new HyperBeamTest(),
         //  new MirrorMoveTest(),
-                                            //new SilverwindBattleEndTest(),
-                                                //new SilverwindSwapTest(),
+        //  new SilverwindBattleEndTest(),
+        //  new SilverwindSwapTest(),
         //  new WhirlwindWildBattleTest(),
         //  new WhirlwindTrainerBattleTest(),
         //  new WhirlwindDoubleBattleTest(),
@@ -45,8 +46,9 @@ public class TestRegistry
         //  new FuryCutter(),
         //  new TakeDownTest(),
         //  new HazeTest(),
-        //  new PursuitTest(),
-                                    //new BrickBreakTest(),
+        new PursuitTest(),
+        new PursuitDoubleTargetTest(),
+        //  new BrickBreakTest(),
         // //Abilities
         //  new HealthBasedDamageBuffTest(),
         //  new StatusEffectDamageBuffTest(),
@@ -62,7 +64,7 @@ public class TestRegistry
         //  new InfatuationEffectTest(),
         //  new FlinchEffectTest(),
         //  new StruggleTest(),
-                                        //  new StatChangeApplicationTest(),
+        //  new StatChangeApplicationTest(),
         //  new StatusEffectTest(),
         //  new WeatherDamageTest(),
         //  new OnFieldDamageModificationTest(),
@@ -72,7 +74,7 @@ public class TestRegistry
         //  new SemiInvulnerableDoubleBattleTest(),
         //  new IdentifyTargetMoveTest(),
         //  new MultiTargetDamageTest(),
-                                            //new CreateBarrierMoveTest(),
+        //  new CreateBarrierMoveTest(),
         //  new HealthDrainTest(),
         //  new HealFromWeatherTest(),
         //  new DamageProtectionMoveTest(),

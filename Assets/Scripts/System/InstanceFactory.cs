@@ -195,7 +195,10 @@ public static class InstanceFactory
         newItem.itemID = newItem.itemName + Utility.Random16Bit();
         newItem.itemType = item.itemType;
         newItem.itemDescription = item.itemDescription;
-        newItem.price = item.price;
+        newItem.buyPrice = item.buyPrice;
+        newItem.canBeSold = item.canBeSold;
+        newItem.sellPrice = item.sellPrice;
+        newItem.priceCurrency = item.priceCurrency;
         newItem.itemImage = item.itemImage;
         newItem.quantity = item.quantity;
         newItem.forPartyUse = item.forPartyUse;

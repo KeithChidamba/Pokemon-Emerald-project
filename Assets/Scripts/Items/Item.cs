@@ -6,19 +6,27 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "Item", menuName = "PokeMart/Item")]
 public class Item : ScriptableObject
 {
+    [Header("Information")]
     [FormerlySerializedAs("Item_ID")] public string itemID = "";
     [FormerlySerializedAs("Item_name")] public string itemName = "";
     public ItemType itemType;
     [FormerlySerializedAs("Item_desc")] public string itemDescription = "";
-    public int price;
-    public int quantity;
     [FormerlySerializedAs("Item_img")] public Sprite itemImage;
+    [Header("Usage")]
+    public int quantity;
     [FormerlySerializedAs("ForPartyUse")] public bool forPartyUse = true;
     [FormerlySerializedAs("CanBeUsedInOverworld")] public bool canBeUsedInOverworld = true;
     [FormerlySerializedAs("CanBeUsedInBattle")] public bool canBeUsedInBattle = true;
     public bool isHeldItem;
     [FormerlySerializedAs("CanBeHeld")] public bool canBeHeld;
-    [FormerlySerializedAs("CanBeSold")] public bool canBeSold = true;
+    
+    [Header("Economy")]
+    public int buyPrice;
+    public bool canBeSold;
+    public int sellPrice;
+    public ItemPriceCurrency priceCurrency;
+    
+    [Header("Data")]
     public List<AdditionalInfoModule> additionalInfoModules = new();
     [SerializeReference]public List<DynamicAdditionalInfo> dynamicInfoModules = new();
     
@@ -61,4 +69,9 @@ public class Item : ScriptableObject
         
         itemImage = AssetHealthChecks.GetValidImage(DirectoryHandler.GetDirectory(AssetDirectory.ItemUI),imageDirectory);
     }
+}
+public enum ItemPriceCurrency
+{
+    Money,
+    None
 }

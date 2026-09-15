@@ -1,0 +1,121 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+ 
+public class PursuitDoubleTargetTest : BattleBasedTest
+{
+    private BattleHandler _battleHandler;
+    private PokemonPartyHandler _pokemonPartyHandler;
+    private TurnBasedCombatHandler _turnBasedCombatHandler;
+    private MoveSequenceHandler _moveUsageHandler;
+    
+    private MoveTestActionSequencer _sequencer;
+    private TestCaseHandler _testCaseHandler;
+    
+    public override void Inject(ServiceContainer serviceContainer)
+    {
+        container = serviceContainer;
+        _battleHandler = container.Resolve<BattleHandler>();
+        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
+        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
+        _moveUsageHandler = container.Resolve<MoveSequenceHandler>();
+        
+        _sequencer = new MoveTestActionSequencer(container);
+        _testCaseHandler = new TestCaseHandler(testingHandler,_sequencer);
+        testName = "Pursuit Double Target Test";
+        
+        testExitCondition = TestCompletionCondition.EndManually;
+        
+        //player use pursuit on enemy 
+        _sequencer.AddAction(() => _sequencer.UseMoveOnSpecific(
+            0, BattleParticipantKey.Player,
+            BattleParticipantKey.Enemy));
+        //partner use pursuit on enemy 
+        _sequencer.AddAction(() => _sequencer.UseMoveOnSpecific(
+            0, BattleParticipantKey.PlayerPartner,
+            BattleParticipantKey.Enemy));
+        
+        _sequencer.AddAction(SwapPlayerToTriggerPursuit);
+        _sequencer.AddAction(() => _sequencer.UseMove());
+    }
+  private void SwapPlayerToTriggerPursuit()
+    {
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Natural);
+        _pokemonPartyHandler.SwapToPartner();
+        //enemy only has pursuit so that will trigger
+    }
+    private void ForceEnemySwitch()
+    {
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
+        enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySwap);
+        
+        //pursuit
+        _sequencer.UseMove();
+        return;
+        void ForceEnemySwap()
+        {
+            enemy.pokemonTrainerAI.SwitchPokemon(1);
+        }
+    }
+    public override IEnumerator BeginTest()
+    {
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        _testCaseHandler.AddTestCase(0,$"Pursuit must faint previous enemy on switch",
+            () => enemy.pokemonTrainerAI.TrainerParty[1].hp <= 0);
+        
+        _testCaseHandler.AddTestCase(1,"Pursuit must hit player on switch",
+            () => _pokemonPartyHandler.Party[1].hp < _pokemonPartyHandler.Party[1].maxHp);
+        
+        //for testing purposes, disable the switch style
+        _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Set);
+        
+        yield return HandleBattleState();
+        onTestResult.Invoke();
+    }
+  
+    protected override void DetermineSuccess()
+    {
+        var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
+        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+        
+        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
+                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
+                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+
+        var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
+        if (!caseExists)
+        {
+            CheckTestEnd();
+        }
+        return;
+        void CheckTestEnd()
+        {
+            if (_sequencer.SequenceComplete())
+            {
+                _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Switch);
+                EndTest(true);
+            }
+        }
+        void TestCaseFailed()
+        {
+            _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Switch);
+
+            EndTest(false);
+        }
+    }
+    protected override void DetermineTurnUsage()
+    {
+        var currentParticipant = _battleHandler.GetCurrentParticipant();
+        if (currentParticipant.participantKey is BattleParticipantKey.Enemy or BattleParticipantKey.EnemyPartner)
+        {
+            return;
+        }
+        _sequencer.CallNextAction();
+    }
+}
+

@@ -176,8 +176,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
             var currentItem = currentCategoryOfItems[topIndex + selectedItemIndex];
             sellQuantity = (sellQuantity < currentItem.quantity) ? sellQuantity + value : currentItem.quantity;
         }
-        _totalSellingAmount = (int)math.trunc((sellQuantity 
-                                               * currentCategoryOfItems[topIndex + selectedItemIndex].price)/ 2f);
+        _totalSellingAmount = sellQuantity * currentCategoryOfItems[topIndex + selectedItemIndex].sellPrice;
         sellQuantityText.text = "X" + sellQuantity;
         sellingAmountText.text = _totalSellingAmount.ToString();
     }

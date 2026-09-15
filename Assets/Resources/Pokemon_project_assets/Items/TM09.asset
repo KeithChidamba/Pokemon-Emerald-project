@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: TM09
   itemType: 16
   itemDescription: Shoots 2 to 5 seeds in a row.
-  price: 0
-  quantity: 0
   itemImage: {fileID: 21300000, guid: 4e82fb593ff39ad47b95053605b21bc2, type: 2}
+  quantity: 0
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 2000
   canBeSold: 1
+  sellPrice: 1000
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 5308325803627118596

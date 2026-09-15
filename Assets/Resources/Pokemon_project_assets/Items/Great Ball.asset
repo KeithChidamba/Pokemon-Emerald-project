@@ -15,17 +15,18 @@ MonoBehaviour:
   itemID: 
   itemName: Great Ball
   itemType: 10
-  itemEffectData: 1.5
   itemDescription: 50% higher chance to catch compared to pokeball
-  price: 30
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 9ccf414883a8b31c9af6f81f098438c6, type: 2}
+  quantity: 1
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 600
   canBeSold: 1
+  sellPrice: 300
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 7301661317695799307

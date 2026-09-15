@@ -15,17 +15,18 @@ MonoBehaviour:
   itemID: 
   itemName: Oran berry
   itemType: 9
-  itemEffectData: 0
   itemDescription: Heals 5hp
-  price: 5
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 64be49b9c4996ba5b9f384023971fd58, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 1
-  canBeSold: 1
+  buyPrice: 0
+  canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules:
   - {fileID: 11400000, guid: 7fbd9d0abd32224e4ae7a06219c2ade1, type: 2}
   dynamicInfoModules:

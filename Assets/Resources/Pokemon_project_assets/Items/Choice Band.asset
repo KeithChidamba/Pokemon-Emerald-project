@@ -17,15 +17,17 @@ MonoBehaviour:
   itemType: 7
   itemDescription: "When held by a Pok\xE9mon, it boosts the Pok\xE9mon's Attack
     by 50%, but only allows the use of the first move selected"
-  price: 50
-  quantity: 1
   itemImage: {fileID: 21300000, guid: c826e175d55083c148dccb215b21e5a6, type: 2}
+  quantity: 1
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 1
   isHeldItem: 1
   canBeHeld: 1
+  buyPrice: 0
   canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 6968283009035796480

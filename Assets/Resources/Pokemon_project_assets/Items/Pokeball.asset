@@ -15,17 +15,18 @@ MonoBehaviour:
   itemID: 
   itemName: Pokeball
   itemType: 10
-  itemEffectData: 1
   itemDescription: Basic pokeball
-  price: 15
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 93eec57f26ab6ea478e51ff76b4a2ede, type: 2}
+  quantity: 1
   forPartyUse: 0
   canBeUsedInOverworld: 0
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 200
   canBeSold: 1
+  sellPrice: 100
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 7301661317695799309

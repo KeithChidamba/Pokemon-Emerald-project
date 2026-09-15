@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: Max Potion
   itemType: 17
   itemDescription: Heals a pokemon's health fully
-  price: 2500
-  quantity: 1
   itemImage: {fileID: 21300000, guid: c4a7cb961c016119ab73200e0589e3c8, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 2500
   canBeSold: 1
+  sellPrice: 1250
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules: []
   imageDirectory: 

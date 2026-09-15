@@ -522,31 +522,31 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         }
         yield return _dialogueHandler.AwaitAllDialogue();
         
-        //check if the move used was pursuit
-        var pursuitUsersTurn = _turnHistory.FirstOrDefault(turn => NameDB.NameMatch(turn.move,MoveName.Pursuit));
-        
-        if(pursuitUsersTurn is { turnExecuted: false })
-        {
-            var attacker=_battleHandler.GetParticipant(pursuitUsersTurn.attackerKey);
-            var victim=_battleHandler.GetParticipant(pursuitUsersTurn.victimKey);
+        foreach (var turn in _turnHistory)
+        { 
+            //check if the move used was pursuit
+            if (turn.move is null) continue; 
+            if (!NameDB.NameMatch(turn.move, MoveName.Pursuit)) continue;
+           
+            var victim= _battleHandler.GetParticipant(turn.victimKey);
+            if (victim != swap.participant) continue;
             
-            if (victim == swap.participant)
-            {
-                pursuitUsersTurn.isCancelled = true;//since it strikes here
-                
-                //pursuit damage
-                var pursuit = pursuitUsersTurn.move;
-                _dialogueHandler.DisplayBattleInfo($"{attacker.pokemon.pokemonDisplayName} used Pursuit on {victim.pokemon.pokemonDisplayName}!");
+            var attacker= _battleHandler.GetParticipant(turn.attackerKey);
+            turn.isCancelled = true;//since it strikes here
 
-                var pursuitDamage = _moveUsageHandler.CalculateMoveDamage(pursuit,attacker, victim) * 2;
-                _moveUsageHandler.DisplaySpecialDamage(victim,predefinedDamage:pursuitDamage);
-                yield return _moveUsageHandler.AwaitDamageDisplay();
-                if (victim.pokemon.hp <= 0)
-                {
-                    yield break;
-                }
+            //pursuit damage
+            var pursuit = turn.move;
+            _dialogueHandler.DisplayBattleInfo($"{attacker.pokemon.pokemonDisplayName} used Pursuit on {victim.pokemon.pokemonDisplayName}!");
+
+            var pursuitDamage = _moveUsageHandler.CalculateMoveDamage(pursuit,attacker, victim) * 2;
+            _moveUsageHandler.DisplaySpecialDamage(victim,predefinedDamage:pursuitDamage);
+            yield return _moveUsageHandler.AwaitDamageDisplay();
+            if (victim.pokemon.hp <= 0)
+            {
+                yield break;
             }
         }
+        
         yield return _dialogueHandler.AwaitAllDialogue();
         
         //Complete the swap

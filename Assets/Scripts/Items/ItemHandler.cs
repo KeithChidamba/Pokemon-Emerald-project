@@ -207,7 +207,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             }
         }
     }
-    void EquipItem(Item itemInUse)
+    private void EquipItem(Item itemInUse)
     {
         if (_overworldActions.IsEquipped(item:itemInUse))
         {
@@ -391,10 +391,13 @@ public class ItemHandler : MonoBehaviour,IInjectable
         if (_battleHandler.isDoubleBattle)
         {
             var partner = currentParticipant.GetPartner();
+            partner.pokemon.ChangeFriendshipLevel(1);
             pokemonProtected = currentParticipant.pokemon.pokemonDisplayName 
                                + " and " + partner.pokemon.pokemonDisplayName;
         }
+        currentParticipant.pokemon.ChangeFriendshipLevel(1);
         _dialogueHandler.DisplayDetails("A veil of light covers "+pokemonProtected);
+        
         OnItemUsed?.Invoke(itemInUse,true);
     }
     private void UseStatModifyingBattleItem(Item itemInUse)
@@ -421,7 +424,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             
             _dialogueHandler.DisplayDetails($"{currentParticipant.pokemon.pokemonDisplayName}'s " +
                                             $"{statInfo.statName} Increased");
-            
+            currentParticipant.pokemon.ChangeFriendshipLevel(1);
             OnItemUsed?.Invoke(itemInUse,true);
         }
         

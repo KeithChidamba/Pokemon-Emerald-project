@@ -16,15 +16,17 @@ MonoBehaviour:
   itemName: TM15
   itemType: 16
   itemDescription: Powerful attack that requires recharge.
-  price: 0
-  quantity: 0
   itemImage: {fileID: 21300000, guid: 98546340953116b02b02ef0115bfa9da, type: 2}
+  quantity: 0
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 0
   isHeldItem: 0
   canBeHeld: 0
+  buyPrice: 7500
   canBeSold: 1
+  sellPrice: 3750
+  priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules:
   - rid: 5308325803627118598

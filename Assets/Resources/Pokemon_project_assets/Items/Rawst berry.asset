@@ -15,21 +15,22 @@ MonoBehaviour:
   itemID: 
   itemName: Rawst berry
   itemType: 9
-  itemEffect: 0
   itemDescription: Heals burns
-  price: 5
-  quantity: 1
   itemImage: {fileID: 21300000, guid: 3f94e1b0b2e7cd3d887d50affb7fc0ce, type: 2}
+  quantity: 1
   forPartyUse: 1
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
   canBeHeld: 1
-  canBeSold: 1
-  isMultiModular: 0
-  hasModules: 1
-  additionalInfoModule: {fileID: 11400000, guid: 536668b5fbef4731da1b168f96946df3, type: 2}
+  buyPrice: 0
+  canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
   additionalInfoModules:
   - {fileID: 11400000, guid: 536668b5fbef4731da1b168f96946df3, type: 2}
-  infoModuleAssetNames: []
+  dynamicInfoModules: []
   imageDirectory: 
+  references:
+    version: 2
+    RefIds: []

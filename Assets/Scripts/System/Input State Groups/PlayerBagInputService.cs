@@ -73,16 +73,24 @@ public class PlayerBagInputService : IInputGroup
 
     private void CreateSellingItemState()
     {
-        if (!_playerBagHandler.GetCurrentItem().canBeSold)
+        if(_playerBagHandler.GetCurrentItem().priceCurrency == ItemPriceCurrency.Money
+           && _playerBagHandler.GetCurrentItem().canBeSold)
+        {
+            var itemSellSelectables = new List<SelectableUI>
+            {
+                new(_playerBagHandler.sellingItemUI, _playerBagHandler.SellToMarket, true)
+            };
+            
+            _inputStateHandler.ChangeInputState(new(InputStateName.PlayerBagItemSell,
+                InputStateGroup.Bag, stateDirection: InputDirection.Vertical, selectableUis: itemSellSelectables
+                , selecting: false, onExit: _playerBagHandler.ResetItemSellingUi,
+                onClose: _playerBagHandler.ResetItemSellingUi));
+            
+            _playerBagHandler.ChangeQuantity(0); //initial set for visuals
+        }else
         {
             _dialogueHandler.DisplayDetails("You cant sell that!");
-            return;
         }
-        var itemSellSelectables = new List<SelectableUI>{new(_playerBagHandler.sellingItemUI,_playerBagHandler.SellToMarket,true)};
-        _inputStateHandler.ChangeInputState(new (InputStateName.PlayerBagItemSell,
-            InputStateGroup.Bag, stateDirection:InputDirection.Vertical, selectableUis:itemSellSelectables
-            ,selecting:false,onExit:_playerBagHandler.ResetItemSellingUi,onClose:_playerBagHandler.ResetItemSellingUi));
-        _playerBagHandler.ChangeQuantity(0);//initial set for visuals
     }
 
     private void ItemToSellInputs()
