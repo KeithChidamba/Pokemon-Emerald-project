@@ -52,8 +52,8 @@ public abstract class StoryObjective : ScriptableObject
             StoryObjectiveType.BerryInteraction => CreateInstance<BerryInteractionObjective>(),
             StoryObjectiveType.WildBattle => CreateInstance<WildBattleObjective>(),
             StoryObjectiveType.TrainerBattle => CreateInstance<TrainerBattleObjective>(),
-            StoryObjectiveType.GiftPokemon=> CreateInstance<GiftPokemonObjective>(),
-            StoryObjectiveType.PickupItem=> CreateInstance<ItemPickupObjective>(),
+            StoryObjectiveType.GiftPokemon => CreateInstance<GiftPokemonObjective>(),
+            StoryObjectiveType.PickupItem => CreateInstance<ItemPickupObjective>(),
             _ => null
         };
     }

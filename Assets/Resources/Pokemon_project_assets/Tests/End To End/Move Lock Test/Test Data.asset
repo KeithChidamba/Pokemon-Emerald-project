@@ -31,8 +31,8 @@ MonoBehaviour:
       pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
       pokemonLevel: 25
       evolutionStageNumber: 0
-      hasItem: 1
-      heldItem: {fileID: 11400000, guid: f1fc6ae018b940e5b81deaa7f5a12098, type: 2}
+      hasItem: 0
+      heldItem: {fileID: 0}
       moveSet:
       - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
       - {fileID: 11400000, guid: 88bd6685312db15438e092430c87989c, type: 2}
@@ -40,7 +40,7 @@ MonoBehaviour:
     specificNature: {fileID: 0}
     specificGender: 1
     specificAbility: {fileID: 0}
-    nickName: batty
+    nickName: fish
   testItems: []
   testEnemyData:
     trainerDisplayName: Test grunt Move Lock

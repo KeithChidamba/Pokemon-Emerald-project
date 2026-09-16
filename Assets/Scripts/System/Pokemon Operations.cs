@@ -529,7 +529,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         StartCoroutine(HandlePokemonCreation(creationCallBack,template,desiredLevel,evolutionStage));
     }
 /// <summary>
-/// bulk creation in a coroutine
+/// for bulk async creation in a coroutine
 /// </summary>
     public IEnumerator HandlePokemonCreation(Action<Pokemon> creationCallBack,Pokemon template,int desiredLevel,int evolutionStage)
     {

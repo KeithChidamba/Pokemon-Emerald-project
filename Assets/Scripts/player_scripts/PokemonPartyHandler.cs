@@ -256,7 +256,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                 OnMemberSelected?.Invoke(memberIndex);
                 break;
         }
-
+        return;
         void GeneralPartyUsage()
         {
             if (selectedMember.isEmpty)

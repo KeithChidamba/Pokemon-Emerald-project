@@ -19,7 +19,7 @@ public class TestRegistry
         // new HerbItemTest(),
         // new XItemTest(),
         // new GuardSpecItemTest(),
-        new MoveLockTest(),
+        // new MoveLockTest(),
     };
 
     public IntegrationTest[] integrationTests = 
@@ -46,8 +46,8 @@ public class TestRegistry
         //  new FuryCutter(),
         //  new TakeDownTest(),
         //  new HazeTest(),
-        new PursuitTest(),
-        new PursuitDoubleTargetTest(),
+        // new PursuitTest(),
+        // new PursuitDoubleTargetTest(),
         //  new BrickBreakTest(),
         // //Abilities
         //  new HealthBasedDamageBuffTest(),

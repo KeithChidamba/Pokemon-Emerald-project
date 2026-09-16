@@ -149,12 +149,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     public void SaveSwitchTurn(SwitchOutData data)
     {
-        var fakeMove = ScriptableObject.CreateInstance<Move>();
-        fakeMove.priority = 0;
-            
         var switchTurn = new Turn(TurnUsage.SwitchOut,
             attackerKey: _battleHandler.GetCurrentParticipant().participantKey
-            ,move:fakeMove
             ,attackerID:Utility.Random16Bit());
             
         switchTurn.switchData = data;
@@ -162,12 +158,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     public void SaveEmptyTurn(BattleParticipantKey participantKey)
     {
-        var fakeMove = ScriptableObject.CreateInstance<Move>();
-        fakeMove.priority = 0;
-            
         var switchTurn = new Turn(TurnUsage.Empty,
             attackerKey: participantKey
-            ,move:fakeMove
             ,attackerID:Utility.Random16Bit());
 
         switchTurn.isCancelled = true;
@@ -292,18 +284,19 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     
     private IEnumerator ExecuteMoves()
     {   
-        //Set priority
-        var orderBySpeed = _turnHistory
-            .OrderByDescending(turn => 
-                _battleHandler.GetParticipant(turn.attackerKey).pokemon.speed).ToList();
-        
-        var priorityList = orderBySpeed.OrderByDescending(turn => turn.move.priority).ToList();
+        //Set priority (switch turns treated as priority 0), speed as tiebreaker
+        var priorityList = _turnHistory
+            .OrderByDescending(turn => turn.move?.priority ?? 0)
+            .ThenByDescending(turn => 
+                _battleHandler.GetParticipant(turn.attackerKey).pokemon.speed)
+            .ToList();
+    
         ClearTurn();
         _turnHistory.AddRange(priorityList);
-        
+    
         //handle all swaps turns
         var switchTurns = new List<int>();
-        
+    
         for(var i = 0;i < _turnHistory.Count;i++)
         { 
             if (_turnHistory[i].turnUsage == TurnUsage.SwitchOut)
@@ -321,7 +314,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();
             orderTurns.ForEach(RemoveTurn);
         }
-        
+    
         //handle all attack turns
         foreach (var currentTurn in _turnHistory )
         {

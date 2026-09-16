@@ -51,10 +51,10 @@ public class PursuitTest : BattleBasedTest
     public override IEnumerator BeginTest()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        _testCaseHandler.AddTestCase(0,$"Pursuit must faint previous enemy on switch",
+        _testCaseHandler.AddTestCase("Pursuit must faint previous enemy on switch",
             () => enemy.pokemonTrainerAI.TrainerParty[1].hp <= 0);
         
-        _testCaseHandler.AddTestCase(1,"Pursuit must hit player on switch",
+        _testCaseHandler.AddTestCase("Pursuit must hit player on switch",
             () => _pokemonPartyHandler.Party[1].hp < _pokemonPartyHandler.Party[1].maxHp);
         
         //for testing purposes, disable the switch style

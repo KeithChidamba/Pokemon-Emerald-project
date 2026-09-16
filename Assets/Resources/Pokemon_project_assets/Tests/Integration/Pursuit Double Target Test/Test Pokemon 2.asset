@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff1b1c629dc4d92448879b10db63290f, type: 3}
-  m_Name: Test Pokemon
+  m_Name: Test Pokemon 2
   m_EditorClassIdentifier: 
   data:
-    pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
-    pokemonLevel: 4
+    pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+    pokemonLevel: 45
     evolutionStageNumber: 0
     hasItem: 0
     heldItem: {fileID: 0}

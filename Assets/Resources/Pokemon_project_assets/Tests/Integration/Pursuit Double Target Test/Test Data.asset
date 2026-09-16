@@ -19,15 +19,32 @@ MonoBehaviour:
       evolutionStageNumber: 0
       hasItem: 0
       heldItem: {fileID: 0}
-      moveSet: []
+      moveSet:
+      - {fileID: 11400000, guid: 90238634db29d7fd4a2ac25996e0e971, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: 
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+      pokemonLevel: 24
+      evolutionStageNumber: 1
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: 90238634db29d7fd4a2ac25996e0e971, type: 2}
     specificNature: {fileID: 0}
     specificGender: 0
     specificAbility: {fileID: 0}
     nickName: 
   testEnemyData:
-    trainerDisplayName: Test Grunt
-    battleType: 0
-    pokemonParty: []
+    trainerDisplayName: Test Grunt Pursuit Double
+    battleType: 1
+    pokemonParty:
+    - {fileID: 11400000, guid: 14ba1292c36ec36818b89e0fb4c936d2, type: 2}
+    - {fileID: 11400000, guid: c93c12a259cb3266ab1293e996c4f480, type: 2}
+    - {fileID: 11400000, guid: 0ba49871bf24f0b6db57fee2a437c615, type: 2}
+    - {fileID: 11400000, guid: a6909aa1e1dc73f868a7a3299fa7b007, type: 2}
   wildPokemonData:
     naturalPokemonData:
       pokemon: {fileID: 0}

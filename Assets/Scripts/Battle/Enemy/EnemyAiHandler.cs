@@ -75,7 +75,7 @@ public class EnemyAiHandler
         {
             yield return _pokemonOperations.HandlePokemonCreation(GetPokemonCopy,member.data.pokemon
                 ,member.data.pokemonLevel,member.data.evolutionStageNumber);
-            
+            continue;
             void GetPokemonCopy(Pokemon pokemonCopy)
             {
                 trainerParty.Add(pokemonCopy);
@@ -208,6 +208,7 @@ public class EnemyAiHandler
         {
             partyPosition = participant.participantKey < participant.GetPartnerKey() ? 0 : 1;
         }
+        
         var switchData = new SwitchOutData(partyPosition,partyIndex,participant);
         _turnBasedCombatHandler.SaveSwitchTurn(switchData);
     }
