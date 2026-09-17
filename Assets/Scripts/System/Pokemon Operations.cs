@@ -22,15 +22,15 @@ public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
 public class PokemonOperations : MonoBehaviour,IInjectable
 {
     private bool _learningNewMove;
-    private bool _selectingMoveReplacement;            
     
     public event Action<Stat,bool> OnEvChange;
     public event Action<Pokemon,bool> OnPokeballUsed;
     /// <summary>
-    /// Used to notify when a move has been learned or skipped
+    /// [Item usage]Used to notify when a move has been learned or skipped
     /// </summary>
     public event Action<Pokemon, bool> OnMoveLearnOperationComplete;
     
+    private BattleHandler _battleHandler;
     private WildPokemonAiHandler _wildPokemonHandler;
     private PokemonPartyHandler _playerParty;
     private InputStateHandler _inputStateHandler;
@@ -38,12 +38,13 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private BattleVisuals _battleVisuals;
     private PokemonDetailsHandler _pokemonDetailsHandler;
     private DialogueHandler _dialogueHandler;
-    private GameUiHandler gameUiHandler;
+    private GameUiHandler _gameUiHandler;
     private GameLoadingHandler _gameLoadingHandler;
     private BattleOperations _battleOperations;
     
     public void Inject(ServiceContainer container)
     {
+        _battleHandler = container.Resolve<BattleHandler>();
         _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _playerParty = container.Resolve<PokemonPartyHandler>();
@@ -51,7 +52,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         _battleVisuals = container.Resolve<BattleVisuals>();
         _gameHandler=container.Resolve<GameLoadingHandler>();
         _pokemonDetailsHandler=container.Resolve<PokemonDetailsHandler>();
-        gameUiHandler = container.Resolve<GameUiHandler>();
+        _gameUiHandler = container.Resolve<GameUiHandler>();
         _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         _battleOperations = container.Resolve<BattleOperations>();
         
@@ -226,63 +227,45 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         pokemon.specialDefenseIv =  Utility.RandomRange(0,32);
         pokemon.speedIv =  Utility.RandomRange(0,32);
     }
+    public IEnumerator LearnTmOrHm(MoveLearningMachineInfo moveInfo, Pokemon currentPokemon)
+    {
+        yield return LearnMove(moveInfo.move, currentPokemon,true,false);
+    }
     public IEnumerator WaitForNewMoveCheck(Pokemon currentPokemon)
     {
-        _learningNewMove = true;
         if (currentPokemon.currentLevel > currentPokemon.learnSet[^1].requiredLevel)
         {//No more moves to learn
-            _learningNewMove = false;
             yield break;
         }
-        yield return HandleMoveLearning(currentPokemon);
-    }
-    public IEnumerator AwaitMoveOperation(bool maxNumMoves)
-    {
-        if (_learningNewMove)
-        {
-            if (maxNumMoves)
-            {
-                yield return new WaitUntil(() => _selectingMoveReplacement);
-                yield return new WaitUntil(() => !_selectingMoveReplacement);
-            }
-            yield return _dialogueHandler.AwaitAllDialogue();
-        }
-        yield return new WaitUntil(() => !_learningNewMove);
-    }
-    private IEnumerator HandleMoveLearning(Pokemon currentPokemon)
-    {
-        var isPartyPokemon = _playerParty.Party.Contains(currentPokemon);
+        //Handle move learning
+        var isPartyPokemon = _playerParty.Party.Any(p=>p.pokemonID==currentPokemon.pokemonID);
         foreach (var move in currentPokemon.learnSet)
         {
             if (currentPokemon.currentLevel < move.requiredLevel)
                 break;
             if (currentPokemon.currentLevel > move.requiredLevel)
                 continue;
-            _learningNewMove = true;
             
             var moveName = move.GetName().ToLower();
             var assetPath = DirectoryHandler.GetDirectory(AssetDirectory.Moves) + moveName;
             var moveFromAsset = Resources.Load<Move>(assetPath);
             
-            yield return LearnMove(moveFromAsset,currentPokemon, isPartyPokemon);
+            yield return LearnMove(moveFromAsset,currentPokemon,isPartyPokemon,true);
+            yield return _dialogueHandler.AwaitAllDialogue();
         }
-        if(!_selectingMoveReplacement)
-            _learningNewMove = false;
     }
-    private IEnumerator LearnMove(Move moveFromAsset,Pokemon currentPokemon,
-        bool isPartyPokemon = true, bool isLevelUpMove = true,bool removeDetailsUi = true)
+    private IEnumerator LearnMove(Move moveFromAsset,Pokemon currentPokemon, bool isPartyPokemon,bool removeDetailsUi)
     {
         var newMove = InstanceFactory.CreateMove(moveFromAsset);
         
         if (currentPokemon.moveSet.Any(move=> move.moveName == newMove.moveName))
         {
-            if (isPartyPokemon && !isLevelUpMove)
-            {
-                _dialogueHandler.DisplayBattleInfo(
-                    $"{currentPokemon.pokemonDisplayName} already knows {newMove.moveName}", true);
-            }
+            //this will only ever happen because of the player
+            //Tm move already teaching an already taught move
+            _dialogueHandler.DisplayDetails(
+                    $"{currentPokemon.pokemonDisplayName} already knows {newMove.moveName}");
+            
             OnMoveLearnOperationComplete?.Invoke(currentPokemon,false);
-            yield return new WaitForSecondsRealtime(2f);
             yield break;
         }
 
@@ -291,7 +274,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         {
             if (isPartyPokemon)
             {
-                _selectingMoveReplacement = true;
+                _learningNewMove = true;
                 
                 _dialogueHandler.DisplayCustomOptions(
                     $"{currentPokemon.pokemonDisplayName} is trying to learn {newMove.moveName} ,do you want it to learn" +
@@ -301,11 +284,12 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                         () => LearnMove(currentPokemon,moveFromAsset,removeDetailsUi), () => SkipMove(currentPokemon,moveFromAsset)
                     });
                 
+                //Await move learning events
                 yield return new WaitUntil(()=>!_learningNewMove);
-                yield return new WaitForSecondsRealtime(2f);
             }
             else
-            {//wild pokemon get generated with somewhat random moveset choices
+            {
+                //wild pokemon get generated with somewhat random moveset choices
                 currentPokemon.moveSet[Utility.RandomRange(0, maxMoveCount)]
                     = InstanceFactory.CreateMove(moveFromAsset);
             }
@@ -315,9 +299,8 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             if (isPartyPokemon)
             {
                 _dialogueHandler.DisplayBattleInfo(
-                    $"{currentPokemon.pokemonDisplayName} learned {newMove.moveName}",true);
+                    $"{currentPokemon.pokemonDisplayName} learned {newMove.moveName}");
                 OnMoveLearnOperationComplete?.Invoke(currentPokemon,true);
-                yield return new WaitForSecondsRealtime(2f);
             }
             currentPokemon.moveSet.Add(newMove);
         }
@@ -326,61 +309,91 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     {        
         _pokemonDetailsHandler.SetUsage(PokemonDetailsUsage.LearnMoves);
         _pokemonDetailsHandler.OnMoveSelected += LearnSelectedMoveOperation;
-        _dialogueHandler.DisplayBattleInfo("Which move will you replace?",false);
-        gameUiHandler.ViewPartyPokemonDetails(currentPokemon);
-        _inputStateHandler.OnStateRemoved += SKipMoveCallBack;
+        _gameUiHandler.ViewPartyPokemonDetails(currentPokemon);
+        _dialogueHandler.EndDialogue();
+        _inputStateHandler.OnStateRemoved += SkipMoveCallBack;
         return;
         void LearnSelectedMoveOperation(int moveIndex)
         {
             _pokemonDetailsHandler.OnMoveSelected -= LearnSelectedMoveOperation;
-            _inputStateHandler.OnStateRemoved -= SKipMoveCallBack;
+            _inputStateHandler.OnStateRemoved -= SkipMoveCallBack;
+            
+            if (_battleHandler.BattleInProgress)
+            {
+                _inputStateHandler.OnStateRemoved += DisplayLearnText;
+            }
+            else
+            {
+                _dialogueHandler.DisplayDetails(
+                    currentPokemon.pokemonDisplayName + " forgot " +
+                    currentPokemon.moveSet[moveIndex].moveName 
+                    + " and learned " + newMoveAsset.moveName);
+                
+                currentPokemon.moveSet[moveIndex] = InstanceFactory.CreateMove(newMoveAsset);
+                OnMoveLearnOperationComplete?.Invoke(currentPokemon,true);
+                _learningNewMove = false;
+            }
             if (removeDetailsUi)
             {
                 _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetailsMoveSelection);
                 _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetails,true);
             }
-            LearnSelectedMove(moveIndex,currentPokemon,newMoveAsset);
+            return;
+            void DisplayLearnText(InputState state)
+            {
+                if (state.stateName != InputStateName.PokemonDetails) return;
+                _inputStateHandler.OnStateRemoved -= DisplayLearnText;
+                
+                _dialogueHandler.DisplayBattleInfo(currentPokemon.pokemonDisplayName + " forgot " 
+                    + currentPokemon.moveSet[moveIndex].moveName 
+                    + " and learned " + newMoveAsset.moveName);
+                
+                currentPokemon.moveSet[moveIndex] = InstanceFactory.CreateMove(newMoveAsset);
+                _learningNewMove = false;
+            }
         }
-        void SKipMoveCallBack(InputState state)
+        void SkipMoveCallBack(InputState state)
         {
             if (state.stateName != InputStateName.PokemonDetailsMoveSelection) return;
-            _inputStateHandler.OnStateRemoved -= SKipMoveCallBack;
+            _inputStateHandler.OnStateRemoved -= SkipMoveCallBack;
             _pokemonDetailsHandler.OnMoveSelected -= LearnSelectedMoveOperation;
             //if started learning but rejected it on move selection screen
-            SkipMove(currentPokemon,newMoveAsset);
+            
+            if (_battleHandler.BattleInProgress)
+            {
+                _inputStateHandler.OnStateRemoved += DisplaySkipText;
+            }else
+            {
+                _dialogueHandler.DisplayDetails(currentPokemon.pokemonDisplayName +
+                                                " did not learn "+newMoveAsset.moveName);
+                OnMoveLearnOperationComplete?.Invoke(currentPokemon,false);   
+                _learningNewMove = false;             
+            }
             if (removeDetailsUi)
             {
                 _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetailsMoveSelection);
                 _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetails,true);
+            }
+            return;
+            void DisplaySkipText(InputState newState)
+            {
+                if (newState.stateName != InputStateName.PokemonDetails) return;
+                _inputStateHandler.OnStateRemoved -= DisplaySkipText;
+                
+                _dialogueHandler.DisplayBattleInfo(currentPokemon.pokemonDisplayName +
+                                                   " did not learn "+newMoveAsset.moveName);
+                _learningNewMove = false;
             }
         }
     }
     private void SkipMove(Pokemon currentPokemon,Move newMoveAsset)
     {
         _dialogueHandler.DeletePreviousOptions();
-        _selectingMoveReplacement = false;
-        _learningNewMove = false;
         _dialogueHandler.DisplayBattleInfo(currentPokemon.pokemonDisplayName +
-                                           " did not learn "+newMoveAsset.moveName,false);
+                                           " did not learn "+newMoveAsset.moveName);
         OnMoveLearnOperationComplete?.Invoke(currentPokemon,false);
-    }
-    private void LearnSelectedMove(int moveIndex,Pokemon currentPokemon,Move newMoveAsset)
-    {
-        _dialogueHandler.DisplayBattleInfo(currentPokemon.pokemonDisplayName + " forgot " 
-                                                                             + currentPokemon.moveSet[moveIndex].moveName 
-                                                                             + " and learned " + newMoveAsset.moveName,false);
-        currentPokemon.moveSet[moveIndex] = InstanceFactory.CreateMove(newMoveAsset);
-        _selectingMoveReplacement = false;
         _learningNewMove = false;
-        OnMoveLearnOperationComplete?.Invoke(currentPokemon,true);
     }
-    
-    public IEnumerator LearnTmOrHm(MoveLearningMachineInfo moveInfo, Pokemon currentPokemon)
-    {
-        _learningNewMove = true;
-        yield return LearnMove(moveInfo.move, currentPokemon, isLevelUpMove: false,removeDetailsUi:false);
-    }
-
     public static void UpdateHealthPhase(Pokemon pokemon,RawImage hpSliderColor)
     {
         List<(float threshold, Color color, int phase)> healthPhases = new()
@@ -511,7 +524,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
                 callBack?.Invoke(true);
             }
             var maxPokemonNameLength = 12;
-            gameUiHandler.ViewTypingInterface(SetPokemonNickName,
+            _gameUiHandler.ViewTypingInterface(SetPokemonNickName,
                 maxPokemonNameLength,
                 new TypingInterfaceGraphicData(
                     false,

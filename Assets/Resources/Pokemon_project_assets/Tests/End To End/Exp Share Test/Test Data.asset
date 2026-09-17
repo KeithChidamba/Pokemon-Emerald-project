@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a113dd0e13549dc9bf31d4592e3e483, type: 3}
+  m_Name: Test Data
+  m_EditorClassIdentifier: 
+  pokemonPartyData:
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      pokemonLevel: 12
+      evolutionStageNumber: 0
+      hasItem: 1
+      heldItem: {fileID: 11400000, guid: d7e6273f7fe679d379aa0982e5be21df, type: 2}
+      moveSet:
+      - {fileID: 11400000, guid: 2d03686e73c8a174e8f1dd31d6ebdc76, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: Kip
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+      pokemonLevel: 12
+      evolutionStageNumber: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      moveSet:
+      - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: Kip
+  testItems: []
+  testEnemyData:
+    trainerDisplayName: Test grunt exp share
+    battleType: 0
+    pokemonParty:
+    - {fileID: 11400000, guid: b2ddad4305809dcf38247e6ae446ddb8, type: 2}

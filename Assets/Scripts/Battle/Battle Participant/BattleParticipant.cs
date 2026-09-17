@@ -241,6 +241,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
             {
                 ResetParticipantState();
                 yield return pokemonTrainerAI.CheckIfLoss();
+                EndFaintEvent();
             }
         }
         else

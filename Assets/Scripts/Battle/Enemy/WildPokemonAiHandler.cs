@@ -56,6 +56,6 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
     public IEnumerator EndWildBattle()
     {
         _battleHandler.EndBattle(BattleEndState.PlayerWon);
-        yield return null;
+        yield return new WaitForSeconds(0.15f);
     }
 }

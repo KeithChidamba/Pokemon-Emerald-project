@@ -20,6 +20,10 @@ public class TestRegistry
         // new XItemTest(),
         // new GuardSpecItemTest(),
         // new MoveLockTest(),
+        // new ExpGainTest(),
+        new ExpShareTest(),
+        new BonusExpGainTest(),
+        new  EvolutionInBattleTest(),
     };
 
     public IntegrationTest[] integrationTests = 

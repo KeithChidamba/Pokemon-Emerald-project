@@ -125,6 +125,7 @@ public class EnemyAiHandler
         if (GetLivingPokemonCount() == 0)
         {
             _battleHandler.EndBattle(BattleEndState.PlayerWon,participant.pokemon);
+            yield return new WaitForSeconds(0.15f);
         }
         else
         {
@@ -167,7 +168,6 @@ public class EnemyAiHandler
                 yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon: trainerParty[participantPartyIndex],false);
             }
         }
-        participant.EndFaintEvent();
     }
     private int AiCheckValidSwitch(BattleParticipant enemy)
     {

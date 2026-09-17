@@ -210,16 +210,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         canExitDialogue = canExit;
         messagesLoading = false;
         var newInteraction = NewInteraction(info,DialogType.Details);
-        HandleInteraction(newInteraction );
-    }
-
-    public void DisplayBattleInfo(string info, bool canExit)
-    {
-        if(canExit)
-            EndDialogue();
-        else
-            canExitDialogue = false;
-        DisplayBattleInfo(info);
+        HandleInteraction(newInteraction);
     }
     /// <summary>
     /// Can be used for battle dialogue but also situations where that specific

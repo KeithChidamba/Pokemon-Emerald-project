@@ -491,48 +491,56 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     private IEnumerator ProcessStateRemoval()
     {
         _processingStateRemoval = true;
+
+        bool IsParentWithTransition(RemovalJob job) => 
+            job.manualExit && job.state.isParentLayer
+                           && job.state.displayCloseTransition;
+
         var waitTime = 0f;
         var displayingBlackScreen = false;
-        
-        bool IsParentWithTransition(RemovalJob job)
+
+        while (true)
         {
-            return job.manualExit
-                   && job.state.isParentLayer
-                   && job.state.displayCloseTransition;
-        }
-        
-        while (stateRemovalJobs.Count > 0)
-        {
-            var currentJob = stateRemovalJobs[0];
-            
-            //transition
-            if (!displayingBlackScreen)
+            while (stateRemovalJobs.Count > 0)
             {
-                if(IsParentWithTransition(currentJob))
+                var currentJob = stateRemovalJobs[0];
+
+                if (!displayingBlackScreen && IsParentWithTransition(currentJob))
                 {
-                    waitTime = 0.2f * stateRemovalJobs.Count;
-                    if (waitTime > 1f) waitTime = 1f;
+                    waitTime = Mathf.Min(0.2f * stateRemovalJobs.Count, 1f);
                     displayingBlackScreen = true;
                     yield return StartCoroutine(_gameUIHandler.FadeInBlackScreen());
                 }
+                else if (displayingBlackScreen)
+                {
+                    // screen's already up; a later-arriving job can still extend the hold time
+                    waitTime = Mathf.Max(waitTime, Mathf.Min(0.2f * stateRemovalJobs.Count, 1f));
+                }
+
+                currentJob.state.mainViewUI?.SetActive(false);
+                currentJob.state.selector?.SetActive(false);
+                if (currentJob.state.stateDirection == InputDirection.Grid) ResetGridCoordinates();
+
+                Action method = currentJob.manualExit ? currentJob.state.onExit : currentJob.state.onClose;
+                method?.Invoke();
+
+                stateLayers.Remove(currentJob.state);
+                OnStateRemoved?.Invoke(currentJob.state);
+                stateRemovalJobs.RemoveAt(0);
             }
-            
-            //removal
-            currentJob.state.mainViewUI?.SetActive(false);
-            currentJob.state.selector?.SetActive(false);
-            
-            if(currentJob.state.stateDirection==InputDirection.Grid) ResetGridCoordinates();
-        
-            Action method = currentJob.manualExit ? currentJob.state.onExit : currentJob.state.onClose;
-            method?.Invoke();
-            stateLayers.Remove(currentJob.state);
-            OnStateRemoved?.Invoke(currentJob.state);
-            stateRemovalJobs.RemoveAt(0);
+
+            yield return new WaitForSecondsRealtime(waitTime);
+            waitTime = 0f;
+
+            if (stateRemovalJobs.Count > 0)
+                continue; // more jobs arrived during the wait — screen stays black, no re-fade
+
+            if (displayingBlackScreen)
+                _gameUIHandler.RemoveBlackScreen();
+
+            _processingStateRemoval = false;
+            break;
         }
-        
-        yield return new WaitForSecondsRealtime(waitTime);
-        _gameUIHandler.RemoveBlackScreen();
-        _processingStateRemoval = false;
 
         if (stateLayers.Count > 0)
         {
@@ -546,8 +554,6 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         }
     }
 }
-
-
 
 
 

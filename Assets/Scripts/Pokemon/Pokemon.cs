@@ -391,9 +391,7 @@ public class Pokemon : ScriptableObject
             yield return _dialogueHandler.AwaitAllDialogue();
             
             yield return _pokemonOperationsHandler.WaitForNewMoveCheck(this);
-
-            yield return _pokemonOperationsHandler.AwaitMoveOperation(moveSet.Count == 4);
-                
+   
             nextLevelExpAmount = _pokemonOperationsHandler.CalculateExpForNextLevel(currentLevel, expGroup);
         }
     }

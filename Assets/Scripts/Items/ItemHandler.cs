@@ -190,6 +190,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
                 _inputStateHandler.ResetSpecificUi(InputStateName.PokemonDetails, true);
             };
             yield return _pokemonOperationsHandler.LearnTmOrHm(moveInfo,pokemon);
+           
             OnItemUsed?.Invoke(itemInUse,operationSuccessful);
         }
         else

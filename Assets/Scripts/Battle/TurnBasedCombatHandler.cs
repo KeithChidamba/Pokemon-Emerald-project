@@ -456,10 +456,14 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         if (_battleHandler.currentBattleStyle != BattleHandler.BattlesStyle.Switch) yield break;
         if (_battleHandler.isDoubleBattle)
         {
-//only happens in single battles
+            //only happens in single battles
             yield break;
         }
-        
+        if (_pokemonPartyHandler.GetLivingPokemonCount() < 2)
+        {
+            //Don't have a valid switch
+            yield break;
+        }
         yield return _dialogueHandler.AwaitAllDialogue();
         
         _dialogueHandler.DisplayCustomOptions($"{trainerName} is about to use {pokemonName}, change pokemon?",

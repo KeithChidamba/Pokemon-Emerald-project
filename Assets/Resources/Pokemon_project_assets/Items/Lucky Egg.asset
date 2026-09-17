@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
+  m_Name: Lucky Egg
+  m_EditorClassIdentifier: 
+  itemID: 
+  itemName: Lucky Egg
+  itemType: 7
+  itemDescription: "When the Pok\xE9mon holding this item gains EXP, the EXP gained
+    is increased by 50%"
+  itemImage: {fileID: 21300000, guid: 314bdad61f4529fd49686df4e2677d92, type: 2}
+  quantity: 1
+  forPartyUse: 0
+  canBeUsedInOverworld: 0
+  canBeUsedInBattle: 0
+  isHeldItem: 1
+  canBeHeld: 1
+  buyPrice: 0
+  canBeSold: 0
+  sellPrice: 0
+  priceCurrency: 1
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 7301661317695799313
+  imageDirectory: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 7301661317695799313
+      type: {class: ExpModifierInfo, ns: , asm: Assembly-CSharp}
+      data:
+        modifier: 1
+        modifierFactor: 1.5

@@ -764,12 +764,12 @@ public class BattleHandler : MonoBehaviour, IInjectable
             
             OnFaintSequenceComplete?.Invoke(faintedParticipant);
             
-            if (BattleInProgress)
+            if (!BattleOver)
             {   
+                //new participant has been switched in
                 faintedParticipant.ResetUiPosition();
                 if(faintedParticipant.isActive)
                 {
-
                     faintedParticipant.participantUI.SetActive(true);
                     pkmImageRect.anchoredPosition =
                         new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y + rectHeight);
