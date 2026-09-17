@@ -419,7 +419,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     public IEnumerator PlayTransition(Action callBack)
     {
         yield return StartCoroutine(_gameUIHandler.FadeInBlackScreen());
-        _gameUIHandler.RemoveBlackScreen();
+        _gameUIHandler.RemoveColorScreen();
         callBack?.Invoke();
     }
     private List<InputState> GetRelevantStates(InputStateGroup group)
@@ -536,7 +536,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
                 continue; // more jobs arrived during the wait — screen stays black, no re-fade
 
             if (displayingBlackScreen)
-                _gameUIHandler.RemoveBlackScreen();
+                _gameUIHandler.RemoveColorScreen();
 
             _processingStateRemoval = false;
             break;

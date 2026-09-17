@@ -6,4 +6,5 @@ public class BattleItemUsageEndToEndTestData : EndToEndTestData
 {
     public List<TestItem> testItems = new();
     public TestTrainerData testEnemyData;
+    public WildPokemonTestData wildPokemonData;
 }

@@ -95,6 +95,11 @@ public class Pokemon : ScriptableObject
     public Sprite battleIntroFrame;
     public string pokeballName;
     public int healthPhase;
+
+    /// <summary>
+    /// [Testing] Notify when exp is gained
+    /// </summary>
+    public event Action<int> OnExpGained;
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
     public event Action<Pokemon> OnExpGainComplete;
@@ -289,8 +294,7 @@ public class Pokemon : ScriptableObject
             ChangeFriendshipLevel(ApplyFriendshipModifier(10) );
         }
     }
-
-
+    
     private void CheckEvolutionRequirements(int evoIndex)
     {
         var isPlayerPokemon = _pokemonPartyHandler.Party.Contains(this);
@@ -313,6 +317,7 @@ public class Pokemon : ScriptableObject
         {
             SetupEvolution();
         }
+        return;
         void SetupEvolution()
         {
             if (isPlayerPokemon && _battleHandler.BattleInProgress)
@@ -347,10 +352,33 @@ public class Pokemon : ScriptableObject
             yield return LevelUpAtThreshold(displayMessage,false);
         }
     }
+    public float AccountForExpGainModifier()
+    {
+        if (hasItem)
+        {
+            var expModInfo = heldItem.GetDynamicModule<ExpModifierInfo>();
+            if (expModInfo is not null)
+            {
+                var hasExpGainBous = expModInfo.modifier == ExpModifier.ExpGainBonus;
+                if (hasExpGainBous)
+                {
+                    return expModInfo.modifierFactor;
+                }
+            }
+        }
+        return 1f;
+    }
+    /// <summary>
+    /// Use to give a pokemon exp from battle
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator ReceiveExperienceAndDisplay(int amount)
     {
         if (currentLevel >= 100) yield break;
-        int remainingExp = amount;
+        
+        int remainingExp = Mathf.FloorToInt(AccountForExpGainModifier() * amount);
+        
+        OnExpGained?.Invoke(remainingExp);
         
         _battleHandler.StartExpEvent(this);
         
@@ -397,25 +425,9 @@ public class Pokemon : ScriptableObject
     }
     public int CalculateExperience()
     {
-        var trainerBonus = 1f;
-        var baseExp = (expYield*currentLevel) / 7f;
-        var expItemBonus = 1f;
-        if (hasItem)
-        {
-            var expModInfo = heldItem.GetDynamicModule<ExpModifierInfo>();
-            if (expModInfo is not null)
-            {
-                var hasExpGainBous = expModInfo.modifier == ExpModifier.ExpGainBonus;
-                if (hasExpGainBous)
-                {
-                    expItemBonus = expModInfo.modifierFactor;
-                }
-            }
-        }
-        
-        if (hasTrainer) trainerBonus = 1.5f;
-        
-        return (int)math.trunc(baseExp * trainerBonus * expItemBonus);
+        var trainerBonus = hasTrainer? 1.5f : 1f;
+        var baseExp = (expYield * currentLevel) / 7f;
+        return (int)math.trunc(baseExp * trainerBonus);
     }
     public void Evolve(Evolution evo)
     {
@@ -513,5 +525,6 @@ public class Pokemon : ScriptableObject
         OnLevelUp = null;
         OnNewLevel = null;
         OnEvolutionSuccessful = null;
+        OnExpGained = null;
     }
 }

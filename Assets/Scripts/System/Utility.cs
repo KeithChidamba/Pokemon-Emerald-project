@@ -101,10 +101,58 @@ public static class Utility
         };
         return areaNames[areaValue];
     }
+    public static IEnumerator PokemonIntroAnimation(Image pokemonImage, Pokemon pokemon)
+    {
+        yield return new WaitForSeconds(0.2f);
+        pokemonImage.sprite = pokemon.battleIntroFrame;
+        yield return new WaitForSeconds(0.45f);
+        pokemonImage.sprite = pokemon.frontPicture;
+        yield return new WaitForSeconds(0.45f);
+        pokemonImage.sprite = pokemon.battleIntroFrame;
+        yield return new WaitForSeconds(0.45f);
+        pokemonImage.sprite = pokemon.frontPicture;
+    }
+    
+    public static IEnumerator PokemonEvolutionAnimation(
+        Image pokemonImage,
+        Sprite oldSprite,
+        Sprite newSprite,
+        int flickerCycles = 15,      // how many old/new swaps before settling
+        float startInterval = 0.35f, // wait time between swaps at the start (slow)
+        float endInterval = 0.015f    // wait time between swaps by the end (fast)
+    )
+    {
+        // Initial beat on the old sprite before anything starts happening
+        pokemonImage.sprite = oldSprite;
+        yield return new WaitForSeconds(0.2f);
 
+        // Flicker back and forth: flat pace for the first half, then eases into acceleration
+        for (int i = 0; i < flickerCycles; i++)
+        {
+            float t = (float)i / Mathf.Max(1, flickerCycles - 1); // 0 -> 1
+
+            // Hold steady until the midpoint, then ease-in from there to the end
+            float localT = Mathf.Clamp01((t - 0.5f) / 0.5f); // 0 for t<0.5, ramps 0->1 after
+            float eased = localT * localT;                    // ease-in curve for the back half
+
+            float interval = Mathf.Lerp(startInterval, endInterval, eased);
+
+            pokemonImage.sprite = (i % 2 == 0) ? newSprite : oldSprite;
+            yield return new WaitForSeconds(interval);
+        }
+
+        // Final hold on the fully evolved sprite
+        pokemonImage.sprite = newSprite;
+        yield return new WaitForSeconds(0.5f);
+    }
+    
     public static IEnumerator FadeImage(Image image,Color endColor,float duration=1f)
     {
         Color startColor = new Color(endColor.r, endColor.g, endColor.b,0);//invisible
+        yield return FadeImage(image, startColor, endColor, duration);
+    }
+    public static IEnumerator FadeImage(Image image,Color startColor,Color endColor,float duration=1f)
+    {
         float elapsed = 0f;
         while (elapsed < duration)
         {

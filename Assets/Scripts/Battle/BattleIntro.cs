@@ -415,15 +415,9 @@ public class BattleIntro : MonoBehaviour,IInjectable
         {
             yield break;
         }
-        yield return new WaitForSeconds(0.2f);
-        participant.pokemonImage.sprite = participant.pokemon.battleIntroFrame;
-        yield return new WaitForSeconds(0.45f);
-        participant.pokemonImage.sprite = participant.pokemon.frontPicture;
-        yield return new WaitForSeconds(0.45f);
-        participant.pokemonImage.sprite = participant.pokemon.battleIntroFrame;
-        yield return new WaitForSeconds(0.45f);
-        participant.pokemonImage.sprite = participant.pokemon.frontPicture;
+        yield return Utility.PokemonIntroAnimation(participant.pokemonImage, participant.pokemon);
     }
+    
     private IEnumerator MovePanelsApart()
     {
         topBlackPanel.gameObject.SetActive(true);

@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using Unity.Mathematics;
 
-public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage,CustomOptions}
+public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage,CustomOptions,TextOnly}
 public class DialogueHandler : MonoBehaviour,IInjectable
 {
     public OverworldInteractable currentInteractable;
@@ -189,7 +189,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             newInteraction.optionsUiText.Add(text);
         }
         
-        HandleInteraction(newInteraction);
+        HandleInteraction(newInteraction,true,true);
         return;
         
         void InvokeSelectedOption(Interaction interaction,int optionIndex)
@@ -203,14 +203,23 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     {
         messagesLoading = false;
         var newInteraction = NewInteraction(info,type);
-        HandleInteraction(newInteraction,false);
+        HandleInteraction(newInteraction,true,false);
     }    
     public void DisplayDetails(string info,bool canExit=true)
     {
         canExitDialogue = canExit;
         messagesLoading = false;
         var newInteraction = NewInteraction(info,DialogType.Details);
-        HandleInteraction(newInteraction);
+        HandleInteraction(newInteraction,true,true);
+    }
+    public void DisplayTextOnly(string info,bool canExit)
+    {
+        if (canExitDialogue)
+        {
+            canExitDialogue = canExit;
+        }
+        var newInteraction = NewInteraction(info,DialogType.TextOnly);
+        HandleInteraction(newInteraction,false,true);
     }
     /// <summary>
     /// Can be used for battle dialogue but also situations where that specific
@@ -277,7 +286,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             _dialogueOptionsHandler.CompleteEventInteraction(interaction);
             return;
         }
-        HandleInteraction(interaction);
+        HandleInteraction(interaction,true,true);
     }
     public void StartInteraction(OverworldInteractable interactable)
     {
@@ -305,7 +314,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
          dialougeText.ForceMeshUpdate();
          dialougeText.maxVisibleCharacters = 0;
     }
-    private IEnumerator TypeText(Interaction currentInteraction,bool displayPointer=true)
+    private IEnumerator TypeText(Interaction currentInteraction,bool displayPointer)
     {
         ResetText();
         dialogueFinished = false;
@@ -389,7 +398,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         _typingRoutine = null;
     }
 
-    private void HandleInteraction(Interaction currentInteraction,bool typeOut=true)
+    private void HandleInteraction(Interaction currentInteraction,bool displayPointer,bool typeOut)
     {
         if (currentInteraction.dialogueType == DialogType.Options)
         {
@@ -406,7 +415,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
                 StopCoroutine(_typingRoutine);
             }
             _inputStateHandler.AddDialoguePlaceHolderState();
-            _typingRoutine = StartCoroutine(TypeText(currentInteraction));
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction,displayPointer));
         }
         else
         {
@@ -430,6 +439,12 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             battleDialogueBox.SetActive(true);
             dialougeText.color=Color.white;
             infoDialogueBox.SetActive(false);
+        }
+        if (currentInteraction.dialogueType == DialogType.TextOnly)
+        {
+            dialougeText.color = Color.white;
+            infoDialogueBox.SetActive(false);
+            battleDialogueBox.SetActive(false);
         }
     }
 }

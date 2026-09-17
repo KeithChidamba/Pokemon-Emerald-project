@@ -101,7 +101,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                         HealPartyPokemon();
                         _areaHandler.TeleportToArea(AreaName.PokeCenter);
                         yield return new WaitForSecondsRealtime(1f);
-                        _gameUIHandler.RemoveBlackScreen();
+                        _gameUIHandler.RemoveColorScreen();
                         break;
                     }
                 }

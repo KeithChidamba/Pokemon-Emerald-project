@@ -21,6 +21,10 @@ public enum ExpGroup{Erratic,Fast,MediumFast,MediumSlow,Slow,Fluctuating}
 
 public class PokemonOperations : MonoBehaviour,IInjectable
 {
+    [SerializeField] private GameObject evolutionUi;
+    [SerializeField] private Image evolutionImage;
+    [SerializeField] private Image evolutionImageMask;
+    [SerializeField] private Image evolutionBackground;
     private bool _learningNewMove;
     
     public event Action<Stat,bool> OnEvChange;
@@ -564,19 +568,82 @@ public class PokemonOperations : MonoBehaviour,IInjectable
 
         yield return newPokemon.ReceiveExperienceOutsideBattle(expForRequiredLevel,false);
         newPokemon.hp = newPokemon.maxHp;
+        newPokemon.canEvolve = true;
         creationCallBack.Invoke(newPokemon);
     }
     public IEnumerator HandlePokemonEvolution(Pokemon pokemon, int evolutionIndex)
     {
-        _dialogueHandler.DisplayBattleInfo("What? "+pokemon.pokemonDisplayName+" is evolving!");
+        _inputStateHandler.AddPlaceHolderState();
+        yield return _gameUiHandler.FadeInBlackScreen();
+        _gameUiHandler.RemoveColorScreen();
         
+        evolutionImage.sprite = pokemon.frontPicture;
+        
+        evolutionUi.SetActive(true);
+        
+        _dialogueHandler.DisplayTextOnly("What? "+pokemon.pokemonDisplayName+" is evolving!",false);
+        StartCoroutine(Utility.PokemonIntroAnimation(evolutionImage, pokemon));
+        
+        if (_battleHandler.BattleInProgress)
+        {
+            yield return _dialogueHandler.AwaitAllDialogue();
+        }
+        else
+        {
+            yield return _dialogueHandler.WaitForDialogueCompletion();
+        }
+        yield return Utility.FadeImage(evolutionBackground,Color.white,new Color(255,255,255,0));
+        
+        evolutionImageMask.gameObject.SetActive(true);
+        yield return Utility.FadeImage(evolutionImageMask,Color.white);
+        
+        var evoSprite = pokemon.evolutions[evolutionIndex].frontPicture;
+        yield return Utility.PokemonEvolutionAnimation(evolutionImage, pokemon.frontPicture, evoSprite);
+
         var previousName = pokemon.pokemonDisplayName == pokemon.pokemonName?//means it has no nickname
             pokemon.pokemonName : pokemon.pokemonDisplayName;
-        
-        yield return _dialogueHandler.AwaitAllDialogue();
         pokemon.Evolve(pokemon.evolutions[evolutionIndex]);
-        _dialogueHandler.DisplayBattleInfo(previousName+" evolved into "+pokemon.pokemonName);
-        yield return _dialogueHandler.AwaitAllDialogue();
+        
+        StartCoroutine(Utility.FadeImage(evolutionImageMask,Color.white,new Color(255,255,255,0)));
+        yield return _gameUiHandler.FadeInColorScreen(Color.white);
+        evolutionImageMask.gameObject.SetActive(false);
+        _gameUiHandler.RemoveColorScreen();
+        
+        StartCoroutine(Utility.PokemonIntroAnimation(evolutionImage, pokemon));
+        if (_battleHandler.BattleInProgress)
+        {
+            _dialogueHandler.DisplayBattleInfo($"Congratulations! Your {previousName} evolved into {pokemon.pokemonName}");
+        }
+        else
+        {
+            _dialogueHandler.DisplayTextOnly($"Congratulations! Your {previousName} evolved into {pokemon.pokemonName}",
+                false);
+        }
+
+        if (_battleHandler.BattleInProgress)
+        {
+            var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+            if(player.isActive)player.pokemonImage.sprite = pokemon.backPicture;
+            var partner = _battleHandler.GetParticipant(BattleParticipantKey.PlayerPartner);
+            if(partner.isActive)partner.pokemonImage.sprite = pokemon.backPicture;
+        }
+        
+        if (_battleHandler.BattleInProgress)
+        {
+            yield return _dialogueHandler.AwaitAllDialogue();
+        }
+        else
+        {
+            yield return _dialogueHandler.WaitForDialogueCompletion();
+            yield return new WaitForSecondsRealtime(1f);
+        }
+        
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
+        yield return _gameUiHandler.FadeInBlackScreen();
+        _dialogueHandler.EndDialogue();
+        evolutionUi.SetActive(false);
+        evolutionImageMask.gameObject.SetActive(false);
+        _gameUiHandler.RemoveColorScreen();
     }
 }
 

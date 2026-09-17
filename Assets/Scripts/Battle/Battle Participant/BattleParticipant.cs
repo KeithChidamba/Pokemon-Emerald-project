@@ -61,7 +61,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public GameObject[] singleBattleUI;
     
     public List<Pokemon> expReceivers;
-    private bool _expEventDelay;
     [SerializeField]private bool handlingFaintEvent;
     
     public StatusEffectAnimationHandler statusAnimationHandler;
@@ -139,9 +138,9 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         if(!expReceivers.Contains(pkm))
             expReceivers.Add(pkm);
     }
-    private IEnumerator DistributeExp(int expFromEnemy)
+    private IEnumerator DistributeExp()
     {
-        _expEventDelay = true;
+        var expFromEnemy = pokemon.CalculateExperience();
         
         // Remove fainted or invalid Pokémon
         expReceivers.RemoveAll(p => p.hp <= 0);
@@ -183,6 +182,10 @@ public class BattleParticipant : MonoBehaviour,IInjectable
                 expShareHolders.RemoveAt(0);
             }
         }
+        else
+        {
+            expShareTotal = 0;
+        }
 
         // Distribute remaining 50% among participants
         var participantTotalExp = totalExp - expShareTotal; 
@@ -196,8 +199,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
                 participants.RemoveAt(0);
             }
         }
-
-        _expEventDelay = false;
         expReceivers.Clear();
     }
     public void BeginFaintEvent()
@@ -224,9 +225,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         yield return _dialogueHandler.AwaitAllDialogue();
         if (!isPlayer)
         {
-            yield return DistributeExp(pokemon.CalculateExperience());
-            
-            yield return new WaitUntil(() => !_expEventDelay);
+            yield return DistributeExp();
             
             foreach (var enemy in currentEnemies)
                 if(enemy.isActive)
@@ -418,6 +417,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
             //in-case of instant multi-level up
             return;
         }
+       
         var evoData = new EvolutionInBattleData();
         evoData.participantToEvolve = this;
         evoData.evolutionIndex = evolutionIndex;

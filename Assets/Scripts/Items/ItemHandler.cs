@@ -72,6 +72,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
                 if(_dialogueHandler.Displaying)
                 {
                     yield return _dialogueHandler.WaitForDialogueCompletion();
+                    yield return new WaitForSecondsRealtime(0.5f);
                 }
                 
                 scheduledInputStateRemoval?.Invoke();

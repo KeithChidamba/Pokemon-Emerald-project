@@ -29,6 +29,18 @@ MonoBehaviour:
       pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
       pokemonLevel: 12
       evolutionStageNumber: 0
+      hasItem: 1
+      heldItem: {fileID: 11400000, guid: d7e6273f7fe679d379aa0982e5be21df, type: 2}
+      moveSet:
+      - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: elec
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+      pokemonLevel: 12
+      evolutionStageNumber: 0
       hasItem: 0
       heldItem: {fileID: 0}
       moveSet:
@@ -36,7 +48,7 @@ MonoBehaviour:
     specificNature: {fileID: 0}
     specificGender: 0
     specificAbility: {fileID: 0}
-    nickName: Kip
+    nickName: pinch
   testItems: []
   testEnemyData:
     trainerDisplayName: Test grunt exp share

@@ -95,7 +95,12 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         blackFadingScreen.gameObject.SetActive(true);
         yield return Utility.FadeImage(blackFadingScreen,Color.black,duration);
     }
-    public void RemoveBlackScreen()
+    public IEnumerator FadeInColorScreen(Color color,float duration=0.25f)
+    {
+        blackFadingScreen.gameObject.SetActive(true);
+        yield return Utility.FadeImage(blackFadingScreen,color,duration);
+    }
+    public void RemoveColorScreen()
     {
         blackFadingScreen.gameObject.SetActive(false);
     }
@@ -152,7 +157,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             InputStateGroup.None,true,menuOptions,
             InputDirection.Vertical, menuSelectables,menuSelector,true
             , true,CloseMenu,CloseMenu)); 
-        
+        return;
         void CloseMenu()
         {
             if (!viewingMenu) return;
@@ -191,6 +196,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         
         _playerBagHandler.OnBagOpened += ViewBagUI;
         _playerBagHandler.SetupBagState(true);
+        return;
         void ViewBagUI()
         {
             _playerBagHandler.OnBagOpened -= ViewBagUI;
@@ -214,7 +220,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         
         _playerBagHandler.bagOverlayUI.SetActive(!_playerBagHandler.storageView);
         _playerBagHandler.storageOverlayUI.SetActive(_playerBagHandler.storageView);
-
+        return;
         void CloseBag()
         {
             RemoveScreen();
@@ -292,7 +298,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             InputDirection.Vertical, partySelectables, _pokemonPartyHandler.memberSelector
             , true, true,CloseParty,CloseParty,canManualExit:false,canExit:true
             ,displayOpenTransition:true));
-        
+        return;
         void CloseParty()
         {
             _pokemonPartyHandler.ResetPartyState();
@@ -314,7 +320,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             ,displayOpenTransition:true));
         
         _pokemonDetailsHandler.LoadDetails(initiallySelectedPokemon,pokemonToView);
-        
+        return;
         void ClosePokemonDetails()
         {
             RemoveScreen();
@@ -341,6 +347,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             InputStateGroup.Bag,true,pcItemOptionsUI,
             InputDirection.Vertical, pcUsageSelectables,pcItemOptionSelector,true, true
             ,onExit:ClosePCItemOptions,onClose:ClosePCItemOptions));
+        return;
         void ClosePCItemOptions()
         {
             pcItemOptionsUI.SetActive(false);
@@ -369,7 +376,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             InputStateGroup.PokemonStorage,true,pcPokemonOptionsUI,
             InputDirection.Vertical, pcUsageSelectables,pcOptionSelector,true, true,
             onClose:ClosePokemonPCOptions,onExit:ClosePokemonPCOptions,displayOpenTransition:true));
-        
+        return;
         void ClosePokemonPCOptions()
         {
             pcPokemonOptionsUI.SetActive(false);
@@ -397,6 +404,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             ,InputStateGroup.PokeMart,true,
             _pokeMartHandler.storeUI, InputDirection.Vertical, martSelectables,
             _pokeMartHandler.itemSelector,true,true,ClosePokeMart,ClosePokeMart));
+        return;
         void ClosePokeMart()
         {
             _pokeMartHandler.ExitStore();
@@ -420,7 +428,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             InputStateGroup.GameSettings,true,_gameSettingsHandler.mainUI,
             InputDirection.Vertical, gameSettingsSelectables,_gameSettingsHandler.whiteSelector,true, true
             ,onExit:CloseSettings,onClose:CloseSettings));
-        
+        return;
         void CloseSettings()
         {
             _gameSettingsHandler.SetCurrentSetting(0);
@@ -446,7 +454,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         var savedOptionIndex = _gameSettingsHandler.GetCurrentOptionIndex();
         _inputStateHandler.SetSelectionIndex(savedOptionIndex);
         _gameSettingsHandler.SetOptionTextColor(savedOptionIndex);
-        
+        return;
         void CloseSettingsFull()
         {
             _inputStateHandler.ResetGroupUi(InputStateGroup.GameSettings);

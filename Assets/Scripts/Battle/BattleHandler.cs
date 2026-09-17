@@ -62,6 +62,8 @@ public class BattleHandler : MonoBehaviour, IInjectable
     public BattlesStyle currentBattleStyle;
     public List<EvolutionInBattleData> evolutionQueue;
     private PlayerTurnUsage _previousTurnUsage;
+    
+    public event Action OnBattleStarted;
     /// <summary>
     /// Used when checking the state of a specific participant after fainting
     /// </summary>
@@ -352,7 +354,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         overWorld.SetActive(false);
         battleUI.SetActive(true);
         BattleInProgress = true;
-        _gameUIHandler.RemoveBlackScreen();
+        _gameUIHandler.RemoveColorScreen();
         
         if(isTrainerBattle)
             yield return StartCoroutine(_battleIntroHandler.PlayTrainerIntroSequence());
@@ -364,7 +366,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         SetupOptionsInput();
         _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
-
+        OnBattleStarted?.Invoke();
         _turnBasedCombatHandler.StartFreshTurn();
     }
 
@@ -499,7 +501,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         //setup battle
         yield return SetValidParticipants();
         StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocationData.biome));
-
+        yield break;
         void SetupEnemies(BattleParticipant currentEnemy,BattleParticipant currentPlayerParticipant)
         {
             player.currentEnemies.Add(currentEnemy);
@@ -897,7 +899,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
             {
                 _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.Battle,0.15f);
             }
-
+            yield break;
             IEnumerator HandleEvolutions()
             {
                 foreach (var evolution in evolutionQueue)

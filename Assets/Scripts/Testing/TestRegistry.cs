@@ -6,7 +6,6 @@ public class TestRegistry
     {
         // new RareCandyTest(),
         // new FriendshipBerryTest(),
-        // new EvolutionStoneTest(),
         // new EvVitaminTest(),
         // new ModifyPowerpointsTest(),
         // new HmAndTmTest(),
@@ -21,9 +20,11 @@ public class TestRegistry
         // new GuardSpecItemTest(),
         // new MoveLockTest(),
         // new ExpGainTest(),
-        new ExpShareTest(),
-        new BonusExpGainTest(),
-        new  EvolutionInBattleTest(),
+        // new ExpShareTest(),
+        // new BonusExpGainTest(),
+        // new EvolutionInBattleTest(),
+        // new EvolutionStoneTest(),
+        new PokeballTest()
     };
 
     public IntegrationTest[] integrationTests = 

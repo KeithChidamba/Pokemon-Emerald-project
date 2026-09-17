@@ -601,6 +601,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     private void ResolveTurnStateForParticipants()
     {
+        if (_battleHandler.BattleOver) return;
         var currentParticipant = _battleHandler.GetCurrentParticipant();
         if(!currentParticipant.isActive) return;
         
