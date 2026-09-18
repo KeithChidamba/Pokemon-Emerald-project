@@ -102,6 +102,9 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         
         _overworldActions.OnItemEquipped += (eqp)=> ReloadEquipMarker();
         _overworldActions.OnItemUnequipped += (eqp)=> ReloadEquipMarker();
+
+        currentItemImage.sprite = null;
+        currentItemDescription.text = string.Empty;
     }
     public void SelectItemForEvent()
     {
@@ -142,20 +145,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
             bagItemsUI[currentCategoryOfItems.IndexOf(item)].LoadItemUI();
             return;
         }
-        if (!_battleHandler.BattleInProgress)
-        {
-            _inputStateHandler.OnStateChanged += ResetQuantity;
-        }
-        else
-        {
-            _inputStateHandler.OnStateChanged -= ResetQuantity;
-        }
-        RemoveItem(item);
-        return;
-        void ResetQuantity(InputState currentState)
-        {
-            currentState.currentSelectionIndex = 0;
-        }
+        allItems.Remove(item);
     }
 
     public void ResetItemSellingUi()
@@ -278,6 +268,8 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("Can't do that in battle");
             return;
         }
+        _inputStateHandler.ResetSpecificUi(InputStateName.PokemonPartyOptions);
+        
         var partyMember = _pokemonPartyHandler.Party[memberIndex];
         _dialogueHandler.DisplayDetails("You took a " + partyMember.heldItem.itemName +" from "
                                              + partyMember.pokemonDisplayName);
@@ -297,7 +289,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         OnItemSelected += GiveItem;
         _gameUIHandler.ValidateBagView();
     }
-
+ 
     private void GiveItem(Item itemToBeGiven)
     {
         if (!itemToBeGiven.canBeHeld)
@@ -306,8 +298,12 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
             return;
         }
         var partyMember = _pokemonPartyHandler.Party[_pokemonPartyHandler.selectedMemberIndex];
-        _inputStateHandler.ResetRelevantUi(new[] { InputStateName.PokemonPartyOptions });
-        _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
+        
+        _inputStateHandler.ResetSpecificUi(InputStateName.PokemonPartyOptions);
+        
+        _gameUIHandler.ViewPokemonParty(PartyUsage.General);
+        
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagNavigation);
         
         _dialogueHandler.DisplayDetails(partyMember.pokemonDisplayName
                                                  +" received a "+itemToBeGiven.itemName);

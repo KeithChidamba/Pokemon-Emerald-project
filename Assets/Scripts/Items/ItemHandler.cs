@@ -33,7 +33,6 @@ public class ItemHandler : MonoBehaviour,IInjectable
     private TurnBasedCombatHandler _turnBasedCombatHandler;
     private GameUiHandler _gameUIHandler;
     private PlayerTileHandler _playerTileHandler;
-    private BattleOperations _battleOperations;
     
     public void Inject(ServiceContainer container)
     {
@@ -51,64 +50,52 @@ public class ItemHandler : MonoBehaviour,IInjectable
         _overworldActions = container.Resolve<OverworldActionsHandler>();
         _gameUIHandler = container.Resolve<GameUiHandler>();
         _playerTileHandler = container.Resolve<PlayerTileHandler>();
-        _battleOperations = container.Resolve<BattleOperations>();
         
         gameObject.SetActive(true);
     }
     public void OnInject() { }
 
-    public void UseItem(Item itemInUse,Pokemon selectedPokemon)
+    private void CompleteItemUsage(Item itemUsed, bool successful)
     {
-        scheduledInputStateRemoval = null;
-        OnItemUsed += CompleteItemUsage;
-        void CompleteItemUsage(Item itemUsed, bool successful)
+        OnItemUsed -= CompleteItemUsage;
+        _inputStateHandler.AddPlaceHolderState();
+        StartCoroutine(CompletionSequence());
+        return;
+        IEnumerator CompletionSequence()
         {
-            OnItemUsed -= CompleteItemUsage;
-            _inputStateHandler.AddPlaceHolderState();
-            StartCoroutine(CompletionSequence());
-            return;
-            IEnumerator CompletionSequence()
+            if(_dialogueHandler.Displaying)
             {
-                if(_dialogueHandler.Displaying)
+                yield return _dialogueHandler.WaitForDialogueCompletion();
+                yield return new WaitForSecondsRealtime(0.5f);
+            }
+            scheduledInputStateRemoval?.Invoke();
+            yield return new WaitForSecondsRealtime(0.1f);
+            
+            if (_battleHandler.BattleInProgress)
+            {
+                yield return new WaitForSecondsRealtime(1f);
+            }
+            if (itemUsed.forPartyUse) 
+            { 
+                _inputStateHandler.ResetSpecificUi(InputStateName.PokemonPartyItemUsage,true);
+            }
+            if (!successful)
+            {
+                if (itemUsed.forPartyUse || itemUsed.canBeUsedInBattle)
                 {
-                    yield return _dialogueHandler.WaitForDialogueCompletion();
-                    yield return new WaitForSecondsRealtime(0.5f);
+                    //necessary to reset internal bag state
+                    _playerBagHandler.SetupBagState();
                 }
-                
-                scheduledInputStateRemoval?.Invoke();
-                yield return new WaitForSecondsRealtime(0.1f);
-                
+            }
+
+            if (successful)
+            {
+                _playerBagHandler.DepleteItem(itemUsed);
                 if (_battleHandler.BattleInProgress)
                 {
-                    yield return new WaitForSecondsRealtime(1f);
-                }
-                if (itemUsed.forPartyUse) 
-                { 
-                    _inputStateHandler.ResetSpecificUi(InputStateName.PokemonPartyItemUsage,true);
-                }
-                if (!successful)
-                {
-                    if (itemUsed.forPartyUse || itemUsed.canBeUsedInBattle)
-                    {
-                        //necessary to reset internal bag state
-                        _playerBagHandler.SetupBagState();
-                    }
-                }
-
-                if (successful)
-                {
-                    _playerBagHandler.DepleteItem(itemUsed);
-                    if (_battleHandler.BattleInProgress)
-                    {
-                        _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagNavigation,true);
-                        _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.UseItem);
-                        _turnBasedCombatHandler.NextTurn();
-                    }
-                    else
-                    {
-                        yield return new WaitForSecondsRealtime(0.2f);
-                        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
-                    }
+                    _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagNavigation,true);
+                    _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.UseItem);
+                    _turnBasedCombatHandler.NextTurn();
                 }
                 else
                 {
@@ -116,8 +103,24 @@ public class ItemHandler : MonoBehaviour,IInjectable
                     _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
                 }
             }
+            else
+            {
+                yield return new WaitForSecondsRealtime(0.2f);
+                _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
+            }
         }
-        
+    }
+    private void QuickExit(Item itemInUse)
+    {
+        OnItemUsed -= CompleteItemUsage;
+        _playerBagHandler.DepleteItem(itemInUse);
+        _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.UseItem);
+        _turnBasedCombatHandler.NextTurn();
+    }
+    public void UseItem(Item itemInUse,Pokemon selectedPokemon)
+    {
+        scheduledInputStateRemoval = null;
+        OnItemUsed += CompleteItemUsage;
         switch (itemInUse.itemType)
         {
             case ItemType.Overworld : UseOverworldItem(itemInUse); break;
@@ -565,11 +568,11 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
         _pokemonOperationsHandler.OnPokeballUsed += PokemonCaughtCheck;
         StartCoroutine(_pokemonOperationsHandler.TryToCatchPokemon(itemInUse));
-        
+        return;
         void PokemonCaughtCheck(Pokemon pokemon,bool isCaught)
         {
             _pokemonOperationsHandler.OnPokeballUsed -= PokemonCaughtCheck;
-            OnItemUsed?.Invoke(itemInUse,true);
+            QuickExit(itemInUse);
         }
         bool CanUsePokeball()
         {

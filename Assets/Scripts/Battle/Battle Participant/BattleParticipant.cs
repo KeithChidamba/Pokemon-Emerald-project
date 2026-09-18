@@ -233,7 +233,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
 
             if (!_battleHandler.isTrainerBattle)
             {
-                yield return _wildPokemonHandler.EndWildBattle();
+                yield return _wildPokemonHandler.EndWildBattle(BattleEndState.PlayerWon);
                 EndFaintEvent();
             }
             else

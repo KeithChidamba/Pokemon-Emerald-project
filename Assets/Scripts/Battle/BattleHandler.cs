@@ -13,7 +13,7 @@ public enum BattleParticipantKey
 public enum BattleTeam{PlayerTeam,EnemyTeam}
 public enum BattleEndState
 {
-    PlayerRanAway,PokemonRanAway,PlayerLost,PlayerWon,BattleTerminated,None
+    PlayerRanAway,PokemonRanAway,PokemonWasCaught,PlayerLost,PlayerWon,BattleTerminated,None
 }
 public enum PlayerTurnUsage
 {
@@ -852,6 +852,9 @@ public class BattleHandler : MonoBehaviour, IInjectable
                     {
                         _dialogueHandler.DisplayBattleInfo(playerName + " defeated " + wildPokemonName);
                     }
+                    break;
+                case BattleEndState.PokemonWasCaught:
+                    //Display nothing
                     break;
                 case BattleEndState.PlayerLost:
                     if (isTrainerBattle)

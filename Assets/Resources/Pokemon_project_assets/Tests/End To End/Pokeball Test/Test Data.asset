@@ -40,5 +40,6 @@ MonoBehaviour:
       evolutionStageNumber: 0
       hasItem: 0
       heldItem: {fileID: 0}
-      moveSet: []
+      moveSet:
+      - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
     biome: 5

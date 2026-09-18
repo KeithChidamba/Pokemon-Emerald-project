@@ -53,9 +53,9 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
             _battleHandler.UseMove(participant.pokemon.moveSet[randMove],participant,BattleParticipantKey.Player);
         }
     }
-    public IEnumerator EndWildBattle()
+    public IEnumerator EndWildBattle(BattleEndState endState)
     {
-        _battleHandler.EndBattle(BattleEndState.PlayerWon);
+        _battleHandler.EndBattle(endState);
         yield return new WaitForSeconds(0.15f);
     }
 }

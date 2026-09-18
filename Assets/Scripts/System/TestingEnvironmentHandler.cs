@@ -130,12 +130,12 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
        yield return new WaitForSeconds(1f);
        
        //Unit Tests
-       // var unitTestHandler = new UnitTestHandler(_container);
-       // yield return unitTestHandler.RunTests();
-       // GetLogs("Unit Test Logs.html"); 
-       // testingLogs.Clear();
-       // Debug.Log($"UNIT TEST LOGS PRINTED");
-       // yield return new WaitForSeconds(5f);
+       var unitTestHandler = new UnitTestHandler(_container);
+       yield return unitTestHandler.RunTests();
+       GetLogs("Unit Test Logs.html"); 
+       testingLogs.Clear();
+       Debug.Log($"UNIT TEST LOGS PRINTED");
+       yield return new WaitForSeconds(5f);
        
        //Integration Tests
        

@@ -268,7 +268,10 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         Displaying = false;
         currentInteractable = null;
         dialogueFinished = false;
-        StopCoroutine(ProcessQueue());
+        if (_typingRoutine is not null)
+        {
+            StopCoroutine(_typingRoutine);
+        }
         OnDialogueEnded?.Invoke();
     }
 

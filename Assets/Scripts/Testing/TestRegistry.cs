@@ -24,7 +24,8 @@ public class TestRegistry
         // new BonusExpGainTest(),
         // new EvolutionInBattleTest(),
         // new EvolutionStoneTest(),
-        new PokeballTest()
+        // new PokeballTest()
+        // new GiveAndTakeItemTest()
     };
 
     public IntegrationTest[] integrationTests = 

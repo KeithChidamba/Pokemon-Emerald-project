@@ -45,10 +45,12 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private GameUiHandler _gameUiHandler;
     private GameLoadingHandler _gameLoadingHandler;
     private BattleOperations _battleOperations;
+    private TurnBasedCombatHandler _turnBasedCombatHandler;
     
     public void Inject(ServiceContainer container)
     {
         _battleHandler = container.Resolve<BattleHandler>();
+        _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _playerParty = container.Resolve<PokemonPartyHandler>();
@@ -266,9 +268,12 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         {
             //this will only ever happen because of the player
             //Tm move already teaching an already taught move
-            _dialogueHandler.DisplayDetails(
+            if (isPartyPokemon)
+            {
+                _dialogueHandler.DisplayDetails(
                     $"{currentPokemon.pokemonDisplayName} already knows {newMove.moveName}");
-            
+            }
+
             OnMoveLearnOperationComplete?.Invoke(currentPokemon,false);
             yield break;
         }
@@ -451,6 +456,10 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     public IEnumerator TryToCatchPokemon(Item pokeball)
     {
         _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
+        
+        _dialogueHandler.DisplayBattleInfo(" ");
+        _inputStateHandler.AddPlaceHolderState();
+        
         var isCaught = false;
         var wildPokemon = _wildPokemonHandler.participant.pokemon;
         yield return StartCoroutine(_battleVisuals.DisplayPokemonThrow());
@@ -458,29 +467,35 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         var bracket1 = (3 * wildPokemon.maxHp - 2 * wildPokemon.hp) / (3 * wildPokemon.maxHp);
         var catchValue = math.trunc(bracket1 * wildPokemon.catchRate * ballRate * 
                                     _battleOperations.GetCatchRateBonusFromStatus(wildPokemon.statusEffect));
-
-        if (_battleOperations.IsImmediateCatch(catchValue))
+        
+        if (catchValue > 0)
         {
-            yield return StartCoroutine(_battleVisuals.DisplayPokemonCatch());
-            isCaught = true;
-        }
-        else
-        {
-            float shakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchValue));
-            for (int i = 0; i < 3; i++)
+            if (_battleOperations.IsImmediateCatch(catchValue))
             {
-                yield return StartCoroutine(_battleVisuals.DisplayPokeballShake());
-                int rand = Utility.Random16Bit();
-                if (rand < (shakeProbability * (i + 1)))
+                yield return StartCoroutine(_battleVisuals.DisplayPokemonCatch());
+                isCaught = true;
+            }
+            else
+            {
+                float shakeProbability = 65536 / math.sqrt( math.sqrt(16711680/catchValue));
+                for (int i = 0; i < 3; i++)
                 {
-                    yield return StartCoroutine(_battleVisuals.DisplayPokemonCatch());
-                    isCaught = true;
-                    break;
+                    yield return StartCoroutine(_battleVisuals.DisplayPokeballShake());
+                    int rand = Utility.Random16Bit();
+                    if (rand < (shakeProbability * (i + 1)))
+                    {
+                        yield return StartCoroutine(_battleVisuals.DisplayPokemonCatch());
+                        isCaught = true;
+                        break;
+                    }
                 }
             }
         }
+        
         if (isCaught)
         {
+            _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
+            
             _dialogueHandler.DisplayBattleInfo("Well done "+wildPokemon.pokemonDisplayName+" has been caught");
             
             _wildPokemonHandler.participant.DeactivateUI();
@@ -500,13 +515,21 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             wildPokemon.pokeballName = pokeball.itemName;
             _playerParty.AddMemberAfterCatch(wildPokemon,pokeball.itemName);
             yield return _dialogueHandler.AwaitAllDialogue();
-            yield return _wildPokemonHandler.EndWildBattle();
+            yield return _wildPokemonHandler.EndWildBattle(BattleEndState.PokemonWasCaught);
 
         }else
         {
             yield return StartCoroutine(_battleVisuals.DisplayPokeballEscape());
             _dialogueHandler.DisplayBattleInfo(wildPokemon.pokemonDisplayName+" escaped the pokeball");
             yield return _dialogueHandler.AwaitAllDialogue();
+            
+            //Prevent player action until wild pokemon turn
+            _turnBasedCombatHandler.OnTurnsCompleted += RemoveAfterPokeballFailure;
+            void RemoveAfterPokeballFailure()
+            {
+                _turnBasedCombatHandler.OnTurnsCompleted -= RemoveAfterPokeballFailure;
+                _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
+            }
         }
         OnPokeballUsed?.Invoke(wildPokemon,isCaught);
     }
@@ -519,7 +542,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             {
                 SetupNickNameView, () =>  callBack?.Invoke(false)
             });
-            
+        return;    
         void SetupNickNameView()
         {
             void SetPokemonNickName(string nickName)

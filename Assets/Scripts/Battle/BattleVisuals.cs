@@ -246,6 +246,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     {
         playerBattleAnimator.Play("pokeball escape");
         yield return new WaitForSeconds(1f);
+        _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         player.pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
         
@@ -260,6 +261,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         playerBattleAnimator.Play("pokeball shake");
         yield return new WaitForSeconds(0.8f);
     }
+    
     public IEnumerator DisplayPokemonRelease()
     {
         pokeballImage.SetActive(true);

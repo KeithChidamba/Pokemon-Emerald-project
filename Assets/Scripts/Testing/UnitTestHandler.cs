@@ -117,7 +117,7 @@ public class UnitTestHandler
             {
                 _testingHandler.LogMessage("Test Should fail when pokemon doesnt receive a held item",TestLogType.TestCase);
             }
-            _testingHandler.LogMessage($"pokemon received a {createdPokemon.heldItem.itemName}",
+            _testingHandler.LogMessage($"pokemon received a {createdPokemon.heldItem?.itemName}",
                 TestLogType.Information);
             testComplete = true;
         }
