@@ -90,6 +90,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
             if (successful)
             {
+                SoundManager.Play(UiId.UseItem);
                 _playerBagHandler.DepleteItem(itemUsed);
                 if (_battleHandler.BattleInProgress)
                 {

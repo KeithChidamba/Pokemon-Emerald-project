@@ -6535,6 +6535,921 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 269040206}
   m_CullTransparentMesh: 1
+--- !u!1 &270317413
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 270317414}
+  - component: {fileID: 270317416}
+  - component: {fileID: 270317415}
+  m_Layer: 0
+  m_Name: Sound Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &270317414
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270317413}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1922618926}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &270317415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270317413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e69debdcd0c35bbcd9142a396f5517c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mixer: {fileID: 0}
+  musicMixerGroup: {fileID: 0}
+  jingleMixerGroup: {fileID: 0}
+  uiMixerGroup: {fileID: 0}
+  sfxMixerGroup: {fileID: 0}
+  musicSounds:
+  - id: 1
+    data:
+      clips:
+      - {fileID: 8300000, guid: 68984a7684d04b5c88641909f0e1dfde, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 13
+    data:
+      clips:
+      - {fileID: 8300000, guid: 9375537d6b8e73cda9f1b97d346d86fb, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 14
+    data:
+      clips:
+      - {fileID: 8300000, guid: 006e333de5fbdb48db1d5c8544970af1, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 8
+    data:
+      clips:
+      - {fileID: 8300000, guid: 65f9fe35a3d91ca36abeffc4461d9805, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 11
+    data:
+      clips:
+      - {fileID: 8300000, guid: c01e3bf7d8b8da94589febaf74512a4e, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 4
+    data:
+      clips:
+      - {fileID: 8300000, guid: e5339f40fa12d212e96825c2e36aea8d, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 2
+    data:
+      clips:
+      - {fileID: 8300000, guid: 6bd100510e6686d55af74b5eb3aa6884, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 6
+    data:
+      clips:
+      - {fileID: 8300000, guid: a03dbfe17fb1c6fd287448035836acfe, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 15
+    data:
+      clips:
+      - {fileID: 8300000, guid: 5565a5d595989d1eba22b580bc7a7390, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 16
+    data:
+      clips:
+      - {fileID: 8300000, guid: 640b05684927eeba8b5577a728caacec, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 9
+    data:
+      clips:
+      - {fileID: 8300000, guid: d97eb1dc87659b512a911a5d821149e4, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 12
+    data:
+      clips:
+      - {fileID: 8300000, guid: 86031ac5217a4738792d5ce56759630b, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 3
+    data:
+      clips:
+      - {fileID: 8300000, guid: 40470bc59ed72b2cdbba4f53d05b39b0, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  - id: 5
+    data:
+      clips:
+      - {fileID: 8300000, guid: f20fc54d87280558caa7b65111e96c38, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
+  jingleSounds:
+  - id: 3
+    data:
+      clips:
+      - {fileID: 8300000, guid: 5fe996f2c4b856095947dc28249f7ae3, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 0
+    data:
+      clips:
+      - {fileID: 8300000, guid: 861d145e5e6bb23cdb79803bf093197b, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  uiSounds:
+  - id: 12
+    data:
+      clips:
+      - {fileID: 8300000, guid: 5509e434650991594b1f57520c721a19, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 13
+    data:
+      clips:
+      - {fileID: 8300000, guid: 991ca56a42e689ff2b8dae5786e6dede, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 6
+    data:
+      clips:
+      - {fileID: 8300000, guid: 54c2bcd96989e11af8fe6128bcf4e040, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 5
+    data:
+      clips:
+      - {fileID: 8300000, guid: b02e360c9b80ce59c95e1b0a69697b6d, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 0
+    data:
+      clips:
+      - {fileID: 8300000, guid: 1f54b190bad274cfabca3f3d4b39a99b, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 1
+    data:
+      clips:
+      - {fileID: 8300000, guid: bbd7d7a6a2f229fae96dc41e07ef62c8, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 10
+    data:
+      clips:
+      - {fileID: 8300000, guid: c796a6fdfef4eb2b18d57f30714122a4, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 2
+    data:
+      clips:
+      - {fileID: 8300000, guid: 6a5bf86cfab5e068ab70eaf34be26756, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 11
+    data:
+      clips:
+      - {fileID: 8300000, guid: 8c135a31af6a77a75aa1ddea6b624c21, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 9
+    data:
+      clips:
+      - {fileID: 8300000, guid: 75e75d821cd425fecbc6a19af7e18da9, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 8
+    data:
+      clips:
+      - {fileID: 8300000, guid: bb2bd8b10b749314a8d8ba5b8d433a28, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 3
+    data:
+      clips:
+      - {fileID: 8300000, guid: e957c83ac672bd6d69d97701b876c9e2, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 4
+    data:
+      clips:
+      - {fileID: 8300000, guid: d36712cddad13a9a49ba68093375541e, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 14
+    data:
+      clips:
+      - {fileID: 8300000, guid: 7ed3abdc8846ee1a881a596bc9bb613d, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 15
+    data:
+      clips:
+      - {fileID: 8300000, guid: c11ff5fcb56074d1a9b73c6054aef606, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 16
+    data:
+      clips:
+      - {fileID: 8300000, guid: 540288051d188d57b9d3cd8670fcef77, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 17
+    data:
+      clips:
+      - {fileID: 8300000, guid: 5b3456661a09207dfbf5bbe58152cbfd, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 7
+    data:
+      clips:
+      - {fileID: 8300000, guid: 83dac5ecd351998df9e19bb4d03976e1, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 18
+    data:
+      clips:
+      - {fileID: 8300000, guid: 498c9753bf3095529aaa196adcabc448, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 19
+    data:
+      clips:
+      - {fileID: 8300000, guid: 8bffa8f796d612296ab5cc9b00407b85, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 20
+    data:
+      clips:
+      - {fileID: 8300000, guid: 19748e070c62b39eaa545f230f0d282d, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 21
+    data:
+      clips:
+      - {fileID: 8300000, guid: ef1d460e416e950d0a13918430d68dc8, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 22
+    data:
+      clips:
+      - {fileID: 8300000, guid: 746b5fa4b4093855aaf3694de80e96b9, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 23
+    data:
+      clips:
+      - {fileID: 8300000, guid: a2a39cc703cf1853588f9805a8f00348, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  sfxSounds:
+  - id: 0
+    data:
+      clips:
+      - {fileID: 8300000, guid: aead73d091f42e33d959f94b00821ff0, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 1
+    data:
+      clips:
+      - {fileID: 8300000, guid: e9342acb499491d97941265d35795535, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 15
+    data:
+      clips:
+      - {fileID: 8300000, guid: 410954df1c3374aa2be464f6643a6509, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 2
+    data:
+      clips:
+      - {fileID: 8300000, guid: 86442414abea802d79b546f8ee59d0aa, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 3
+    data:
+      clips:
+      - {fileID: 8300000, guid: 3c5ef39f029f5de6e8da2c3cdb2f6a50, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 9
+    data:
+      clips:
+      - {fileID: 8300000, guid: 73e11b3089bfc62c682961413e9b7162, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 7
+    data:
+      clips:
+      - {fileID: 8300000, guid: 0bb5cdda8a5c9c80596e9e8aa8a8aa33, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 8
+    data:
+      clips:
+      - {fileID: 8300000, guid: 49654ec7528364a36beae7dd90197eab, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 6
+    data:
+      clips:
+      - {fileID: 8300000, guid: 73029e4ef9ba56feb91a447c3af0da14, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 10
+    data:
+      clips:
+      - {fileID: 8300000, guid: 93778ece860031e288439bccb6ae045e, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 11
+    data:
+      clips:
+      - {fileID: 8300000, guid: 5481eba4a31481cf5813609fc7f87fb1, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 16
+    data:
+      clips:
+      - {fileID: 8300000, guid: 770c131aaf45e1f9584dc575d7d3770f, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 5
+    data:
+      clips:
+      - {fileID: 8300000, guid: 9358feed86e68ca2c9d2615648ca1c1b, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 32
+    data:
+      clips:
+      - {fileID: 8300000, guid: 5bcec791e169d3469af6e3e1731af444, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 17
+    data:
+      clips:
+      - {fileID: 8300000, guid: f44f8aab2680da239bc650fd7b82a76e, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 18
+    data:
+      clips:
+      - {fileID: 8300000, guid: d565dc4f3bb824f7c889a669d2b74fd0, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 19
+    data:
+      clips:
+      - {fileID: 8300000, guid: 07bb51392b5a168fa8eef0a35f7dc849, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 20
+    data:
+      clips:
+      - {fileID: 8300000, guid: f203c7aa7ec55cf5ba29bfa1efdda38e, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 24
+    data:
+      clips:
+      - {fileID: 8300000, guid: 347cc7ee7ad7391eea1d2ad4ee74fc08, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 25
+    data:
+      clips:
+      - {fileID: 8300000, guid: b6ec1888994e582f68673f9a164a9f35, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 26
+    data:
+      clips:
+      - {fileID: 8300000, guid: 3eacd85d7ed51f809bd548a34ac20c4a, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 27
+    data:
+      clips:
+      - {fileID: 8300000, guid: d0031af1b784d3d90b3a845817a18402, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 28
+    data:
+      clips:
+      - {fileID: 8300000, guid: d276f76390f867144b7f5e18baeee11e, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 4
+    data:
+      clips:
+      - {fileID: 8300000, guid: aabb59c26f77e69d8b56e977616b3e16, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 22
+    data:
+      clips:
+      - {fileID: 8300000, guid: b691a20ef53115a488e046ec4924b42b, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 23
+    data:
+      clips:
+      - {fileID: 8300000, guid: 7f4fa120004d310c4849bee2fac2c56c, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 21
+    data:
+      clips:
+      - {fileID: 8300000, guid: fd5c4331d60a9dd46a650ef316c3ef81, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 31
+    data:
+      clips:
+      - {fileID: 8300000, guid: c98115da39f1b0d22bf25601b640199f, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 29
+    data:
+      clips:
+      - {fileID: 8300000, guid: 8b5420630a87df7808db6822cea81b9e, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 30
+    data:
+      clips:
+      - {fileID: 8300000, guid: 1bda88399f0acc058bf4a04d40420aae, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 12
+    data:
+      clips:
+      - {fileID: 8300000, guid: 4c9f39c37cd5d690d92aa9f8ee731f46, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 14
+    data:
+      clips:
+      - {fileID: 8300000, guid: d6fbf07ce214fe4a4a59f3efa838c931, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 13
+    data:
+      clips:
+      - {fileID: 8300000, guid: 342a2d9a6606ae77a8b48757c361f028, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 35
+    data:
+      clips:
+      - {fileID: 8300000, guid: 48c73febc62de3a9abcffad2581bbe7d, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 33
+    data:
+      clips:
+      - {fileID: 8300000, guid: 0a0e9d2f521e81e90b6920ccca17fe64, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 34
+    data:
+      clips:
+      - {fileID: 8300000, guid: 1354e0b7cb2964222933d2afa2f5277c, type: 3}
+      volume: 1
+      pitchVariance: 0.03
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  uiVoices: 4
+  sfxVoices: 8
+  duckedMusicVolume: 0.35
+  maxMusicHistory: 4
+  resumeFromCachedPosition: 1
+--- !u!82 &270317416
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270317413}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &274821928 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5560776755989514386, guid: e18315c73d15d833a9d38cd29749759f, type: 3}
@@ -448857,6 +449772,7 @@ Transform:
   - {fileID: 1163787316}
   - {fileID: 2105458974}
   - {fileID: 1321360744}
+  - {fileID: 270317414}
   m_Father: {fileID: 2087000829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1926750167

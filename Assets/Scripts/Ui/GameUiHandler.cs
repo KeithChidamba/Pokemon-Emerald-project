@@ -381,6 +381,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         {
             pcPokemonOptionsUI.SetActive(false);
             RemoveScreen();
+            SoundManager.Play(UiId.PcOff);
         }
     }
     private void SetPokemonPcUsage(PCUsageState currentUsageState)

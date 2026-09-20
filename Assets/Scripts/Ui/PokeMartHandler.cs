@@ -106,6 +106,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
             item.quantity = selectedItemQuantity;
             _playerBagHandler.AddItem(item);
             _gameLoadingHandler.playerData.playerMoney -= selectedItemQuantity * item.buyPrice;
+            SoundManager.Play(UiId.Shop);
             _dialogueHandler.DisplayDetails("You bought "+ item.quantity+ " "+item.itemName+"'s");
             selectedItemQuantity = 1;
             OnItemBought?.Invoke(item);

@@ -142,7 +142,7 @@ public class AbilityHandler
     }
     private void Levitate()
     {
-        participant.additionalTypeImmunity = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + nameof(PokemonType.Ground));
+        participant.additionalTypeImmunity = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + nameof(PokemonType.Ground));
     }
     private void PickUp()
     {

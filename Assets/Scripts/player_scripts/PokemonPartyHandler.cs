@@ -80,13 +80,18 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         return;
         IEnumerator CheckMembers()
         {
+            var tookDamage = false;
             foreach(var member in party)
             {
                 if (member.hp == 0) continue;
-            
                 if (member.statusEffect == StatusEffect.Poison)
                 {
                     //no need for hp loss animation since this only happens outside ui
+                    if(!tookDamage)
+                    {
+                        SoundManager.Play(SfxId.PoisonDamageOverworld);
+                        tookDamage = true;
+                    }
                     member.hp--;
                     if (member.hp == 0)
                     {
@@ -104,10 +109,9 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                         _gameUIHandler.RemoveColorScreen();
                         break;
                     }
-                }
-            }
+                } 
+            } 
         }
-       
     }
     
     public void UpdatePartyUsageMessage(string message)

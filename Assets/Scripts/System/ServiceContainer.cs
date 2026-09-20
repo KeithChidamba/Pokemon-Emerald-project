@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class ServiceContainer
 {
-    private Dictionary<System.Type, object> singletons = new();
-    private Dictionary<System.Type, Func<object>> transients = new();
+    private Dictionary<Type, object> singletons = new();
+    private Dictionary<Type, Func<object>> transients = new();
 
     public void RegisterSingleton<T>(T instance)
     {
@@ -18,7 +18,7 @@ public class ServiceContainer
 
     public T Resolve<T>()
     {
-        System.Type type = typeof(T);
+        Type type = typeof(T);
 
         if (singletons.TryGetValue(type, out var val))
         {

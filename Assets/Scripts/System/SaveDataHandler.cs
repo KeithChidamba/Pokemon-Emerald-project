@@ -479,6 +479,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             //copy new save data
             yield return DirectoryHandler.CopyDirectoryFiles(_tempSaveDataPath,_saveDataPath,recursive: true);
             yield return new WaitForSecondsRealtime(1f);
+            SoundManager.Play(UiId.Save);
             EraseTemporarySaveData();
             _dialogueHandler.DisplayDetails("Game saved",false);
         }

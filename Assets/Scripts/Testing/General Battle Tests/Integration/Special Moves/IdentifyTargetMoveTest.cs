@@ -97,7 +97,7 @@ public class IdentifyTargetMoveTest : BattleBasedTest
         _turnBasedCombatHandler.OnNewTurn -= SetupEnemyPokemonState;
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         enemy.pokemon.types.Clear();
-        var ghostType = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ghost);
+        var ghostType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ghost);
         enemy.pokemon.types.Add(ghostType);
         enemy.pokemon.statModifiers.Add(new StatChangeData(Stat.Evasion,1));
         enemy.pokemon.evasion = 133f;

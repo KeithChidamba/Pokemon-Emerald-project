@@ -6,7 +6,7 @@ using UnityEngine;
 [CustomEditor(typeof(Move))]
 public class MoveEditor : Editor
 {
-    private System.Type[] _moduleTypes;
+    private Type[] _moduleTypes;
 
     private void OnEnable()
     {

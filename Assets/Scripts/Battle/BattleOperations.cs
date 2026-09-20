@@ -38,7 +38,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
         
     }
     
-    public bool HasImmunity(Pokemon victim,Type enemyType)
+    public bool HasImmunity(Pokemon victim,PokemonTypeData enemyType)
     {
         foreach(var type in victim.types)
             if (_pokemonOperations.ContainsType(type.immunities,enemyType))
@@ -46,14 +46,14 @@ public class BattleOperations : MonoBehaviour,IInjectable
         return false;
     } 
     
-    public bool IsStab(Pokemon pokemon,Type moveType)
+    public bool IsStab(Pokemon pokemon,PokemonTypeData moveType)
     {
-        foreach(Type t in pokemon.types)
+        foreach(PokemonTypeData t in pokemon.types)
             if (t == moveType)
                 return true;
         return false;
     }
-    public float CheckTypeEffectiveness(BattleParticipant victim,Type moveType)
+    public float CheckTypeEffectiveness(BattleParticipant victim,PokemonTypeData moveType)
     {
         float effectiveness = 1;
         if (victim.additionalTypeImmunity is not null)
@@ -76,15 +76,15 @@ public class BattleOperations : MonoBehaviour,IInjectable
         }
         return effectiveness;
     }
-    public float GetTypeEffectiveness(Pokemon victim,Type enemyType)
+    public float GetTypeEffectiveness(Pokemon victim,PokemonTypeData enemyType)
     {
         float effectiveness = 1;
         //Weakness
-        foreach(Type t in victim.types)
+        foreach(PokemonTypeData t in victim.types)
             if (_pokemonOperations.ContainsType(t.weaknesses, enemyType))
                 effectiveness *= 2f;
         //Resistance
-        foreach(Type t in victim.types)
+        foreach(PokemonTypeData t in victim.types)
             if (_pokemonOperations.ContainsType(t.resistances, enemyType))
                 effectiveness /= 2f;
         

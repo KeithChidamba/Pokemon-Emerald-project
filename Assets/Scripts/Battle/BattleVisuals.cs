@@ -49,8 +49,9 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         statChangeVisuals.Add(Stat.Multi,statChangeSprites[7]);
     }
     
-    public IEnumerator SelectStatChangeVisuals(Stat statChanged,BattleParticipant participant)
+    public IEnumerator SelectStatChangeVisuals(Stat statChanged,bool increased,BattleParticipant participant)
     {
+        SoundManager.Play(increased? SfxId.StatIncrease:SfxId.StatDecrease);
         if (statChanged == Stat.Crit)
         {
             yield break;
@@ -148,6 +149,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             var target = new Vector2(imageRect.anchoredPosition.x + 10f, imageRect.anchoredPosition.y);
             
             participant.statusAnimationHandler.PlayStatusEffectAnimation();
+            SoundManager.Play(SfxId.StatusParalysis);
             
             yield return SlideRect(imageRect, startPos, target, movementSpeed);
             target = new Vector2(startPos.x - 20f, imageRect.anchoredPosition.y);
@@ -176,6 +178,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         }
         if (damageSource == DamageSource.Poison)
         {
+            SoundManager.Play(SfxId.StatusPoison);
             Color startColor = Color.white;
             Color endColor = new Color(0.29f, 0f, 0.51f);
             float elapsed = 0f;
@@ -210,6 +213,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
                 , participant.pokemonImage.rectTransform.anchoredPosition.y+20f);
        
             participant.statusAnimationHandler.PlayStatusEffectAnimation();
+            SoundManager.Play(SfxId.StatusBurn);
             yield return StartCoroutine(SlideRect(rect,start,target,165f));
         }
     }
@@ -231,6 +235,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         yield return StartCoroutine(SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
         playerBattleAnimator.Play("pokemon catch");
         yield return new WaitForSeconds(1.6f);
+        SoundManager.Play(SfxId.BallPullInTrade);
         _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemonImage.rectTransform.sizeDelta = new Vector2(0,0);
         yield return new WaitForSeconds(0.5f);
     }
@@ -245,6 +250,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     public IEnumerator DisplayPokeballEscape()
     {
         playerBattleAnimator.Play("pokeball escape");
+        SoundManager.Play(SfxId.BallOpen);
         yield return new WaitForSeconds(1f);
         _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemonImage.rectTransform.sizeDelta = _defaultParticipantImageSize;
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
@@ -258,8 +264,9 @@ public class BattleVisuals : MonoBehaviour,IInjectable
     }
     public IEnumerator DisplayPokeballShake()
     {
+        SoundManager.Play(SfxId.BallShake);
         playerBattleAnimator.Play("pokeball shake");
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1.5f);
     }
     
     public IEnumerator DisplayPokemonRelease()

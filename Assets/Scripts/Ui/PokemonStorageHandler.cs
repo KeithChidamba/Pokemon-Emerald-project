@@ -329,6 +329,7 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
 
     public void OpenPC(PCUsageState newState)
     {
+        SoundManager.Play(UiId.PcLogin);
         ClearPokemonData();
         currentUsageState = newState;
         if(currentUsageState == PCUsageState.Withdraw)

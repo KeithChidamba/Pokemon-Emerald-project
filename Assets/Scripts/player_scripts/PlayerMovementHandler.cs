@@ -100,7 +100,7 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
         if (!_movementRestrictors[restrictor]) return;
         
         StartCoroutine(MovementAllowanceDelay());
-        
+        return;
         IEnumerator MovementAllowanceDelay()
         {
             _movementRestrictors[restrictor] = false;
@@ -238,6 +238,7 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
 
         if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem) && !usingBike && canUseBike)
         {
+            SoundManager.Play(SfxId.BikeBell);
             usingBike = true;
             runningInput = false;
             _canSwitchMovement = false;
@@ -257,7 +258,6 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
             SetCurrentAnimation();
         }
     }
-
 
     private void HandlePlayerMovement()
     {
@@ -306,6 +306,10 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
                     movePoint.position += positionModifierY;
                     standingOnTile = false;
                 }
+                else
+                {
+                    SoundManager.Play(SfxId.WallBump);
+                }
             }
             
             if (Math.Abs(xAxisInput) == 1)
@@ -320,6 +324,10 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
                 {//check blockers
                     movePoint.position += positionModifierX;
                     standingOnTile = false;
+                }                
+                else
+                {
+                    SoundManager.Play(SfxId.WallBump);
                 }
             }
 

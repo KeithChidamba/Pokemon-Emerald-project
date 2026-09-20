@@ -382,14 +382,34 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         }
         return damage;
     }
+    /// <summary>
+    /// Displays the effectiveness of a move and plays the appropriate sound
+    /// </summary>
     public void DisplayEffectiveness(float typeEffectiveness,BattleParticipant victim)
     {
-        if ((int)math.trunc(typeEffectiveness) == 1) return;
+        if ((int)math.trunc(typeEffectiveness) == 1)
+        {
+            SoundManager.Play(SfxId.HitNormal);
+            return;
+        }
         string message;
         if (typeEffectiveness == 0)
-            message = "It doesn't affect "+victim.pokemon.pokemonDisplayName+"!";
+        {
+            message = "It doesn't affect " + victim.pokemon.pokemonDisplayName + "!";
+        }
         else
-            message = typeEffectiveness > 1? "It's Super effective!":"It's not very effective!";
+        {
+            if (typeEffectiveness > 1)
+            {
+                message = "It's Super effective!";
+                SoundManager.Play(SfxId.HitSuperEffective);
+            }
+            else
+            {
+                message = "It's not very effective!";
+                SoundManager.Play(SfxId.HitNotVeryEffective);
+            }
+        }
         _dialogueHandler.DisplayBattleInfo(message);
     }
     private float SetAtkDefRatio(int crit, bool isSpecial, BattleParticipant currentAttacker, BattleParticipant victim)
@@ -838,7 +858,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         yield return new WaitUntil(() => !awaitingStatChange);
         if (canDisplayVisual)
         {
-            yield return _battleVisualsHandler.SelectStatChangeVisuals(data.stat,data.receiver);
+            yield return _battleVisualsHandler.SelectStatChangeVisuals(data.stat,data.isIncreasing,data.receiver);
             yield return _dialogueHandler.AwaitAllDialogue();
         }
         yield break;

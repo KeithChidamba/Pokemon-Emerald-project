@@ -96,7 +96,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             DirectoryHandler.GetDirectory(AssetDirectory.Abilities)
             + pokemon.abilityName.ToLower());
     }
-    public bool ContainsType(PokemonType[]typesList ,Type typesToCheck)
+    public bool ContainsType(PokemonType[]typesList ,PokemonTypeData typesToCheck)
     {
         foreach (var type in typesList)
             if (type == typesToCheck.typeEnum)
@@ -462,6 +462,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         
         var isCaught = false;
         var wildPokemon = _wildPokemonHandler.participant.pokemon;
+        SoundManager.Play(SfxId.BallThrow);
         yield return StartCoroutine(_battleVisuals.DisplayPokemonThrow());
         var ballRate = pokeball.GetDynamicModule<ItemEffectInfo>().effectValue;
         var bracket1 = (3 * wildPokemon.maxHp - 2 * wildPokemon.hp) / (3 * wildPokemon.maxHp);
@@ -495,7 +496,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         if (isCaught)
         {
             _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
-            
+            SoundManager.Play(UiId.Success);
             _dialogueHandler.DisplayBattleInfo("Well done "+wildPokemon.pokemonDisplayName+" has been caught");
             
             _wildPokemonHandler.participant.DeactivateUI();

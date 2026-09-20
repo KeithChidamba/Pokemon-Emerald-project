@@ -67,7 +67,7 @@ public class Pokemon : ScriptableObject
     public int friendshipLevel;
     public bool hasTrainer;
     
-    public List<Type> types = new();
+    public List<PokemonTypeData> types = new();
     public StatusEffect statusEffect;
     public List<StatChangeData> statModifiers = new();
     [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
@@ -159,7 +159,7 @@ public class Pokemon : ScriptableObject
         
         foreach (var typeName in typeNames)
         {
-            types.Add(Resources.Load<Type>(DirectoryHandler.GetDirectory
+            types.Add(Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory
                 (AssetDirectory.Types) + typeName));
         }
         foreach (var evolutionName in evolutionNames)
@@ -393,6 +393,7 @@ public class Pokemon : ScriptableObject
             
             // Animate EXP bar filling
             var increaseDeltaMultiplier = expThisLoop / 100f > 3? expThisLoop / 100f: 3;
+            SoundManager.Play(SfxId.ExpGain);
             while (displayExp < expAfterChange)
             {
                 displayExp = Mathf.MoveTowards(displayExp,expAfterChange , 
@@ -413,7 +414,9 @@ public class Pokemon : ScriptableObject
         if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
         {
             LevelUp(increaseFriendship);
-
+            
+            SoundManager.Play(JingleId.LevelUp);
+            
             if(displayMessage)_dialogueHandler.DisplayBattleInfo(pokemonDisplayName+" grew to lv"+currentLevel);
                
             yield return _dialogueHandler.AwaitAllDialogue();

@@ -70,6 +70,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     
     void HealPokemon()
     {
+        SoundManager.Play(JingleId.Healed);
         _playerParty.HealPartyPokemon();
         _dialogueHandler.DisplayDetails("Your pokemon have been healed, you're welcome!");
     }
@@ -81,6 +82,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     void OpenPokemonStorage()
     {
         _dialogueHandler.EndDialogue(); 
+        SoundManager.Play(UiId.PcOn);
         gameUiHandler.ViewPokemonStorage();
     }
 

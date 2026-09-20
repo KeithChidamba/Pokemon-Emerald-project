@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 public class Evolution : ScriptableObject
 {
     [FormerlySerializedAs("Evo_name")] public string evolutionName;
-    public List<Type> types;
+    public List<PokemonTypeData> types;
     public Ability ability;
     public ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield=0;

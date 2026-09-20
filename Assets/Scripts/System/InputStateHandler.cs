@@ -183,11 +183,17 @@ public class InputStateHandler : MonoBehaviour,IInjectable
        
         if (currentState.isSelecting)
         {
-            if (!currentState.selectableUis[currentState.currentSelectionIndex].canBeSelected) return;
+            if (!currentState.selectableUis[currentState.currentSelectionIndex].canBeSelected)
+            {
+                SoundManager.Play(UiId.Error);
+                return;
+            }
+            SoundManager.Play(UiId.Select);
             currentState.selectableUis[currentState.currentSelectionIndex]?.eventForUi?.Invoke();
         }
         else
         {
+            SoundManager.Play(UiId.Select);
             currentState.selectableUis[0]?.eventForUi?.Invoke();
         }
     }
@@ -237,6 +243,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         
         if(!currentState.isParentLayer)
         {
+            SoundManager.Play(UiId.WindowOpen);
             currentState.mainViewUI?.SetActive(true);
         }
         

@@ -2,29 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PokeballTest: EndToEndTest,IItemTestable,IBattleTestable
+public class PokeballTest: EndToEndTest,IBattleTestable
 {
     private PokemonPartyHandler _pokemonPartyHandler;
     private PlayerBagHandler _playerBag;
-    private BattleHandler _battleHandler;
     private PokemonStorageHandler _pokemonStorageHandler;
     
     public override IEnumerator BeginTest(EndToEndTestData testData)
     {
         var battleTestData = (BattleItemUsageEndToEndTestData)testData;
         
-        _battleHandler.OnBattleEnd += ResetAssetData;
-        void ResetAssetData()
-        {
-            _battleHandler.OnBattleEnd -= ResetAssetData;
-            var pokeballAssetReference = battleTestData.testItems[0].itemAsset;
-            //reset Asset data
-            pokeballAssetReference.GetDynamicModule<ItemEffectInfo>().effectValue = 1;
-        };
+        _playerBag.allItems.Clear();
         
-        this.LoadItems(battleTestData.testItems);
-
-        var pokeball = _playerBag.allItems[0].GetDynamicModule<ItemEffectInfo>();
+        //Avoiding modification of source asset
+        var newItem = InstanceFactory.CreateItem(battleTestData.testItems[0].itemAsset);
+        newItem.quantity = battleTestData.testItems[0].quantity;
+        newItem.dynamicInfoModules = null;
+        newItem.dynamicInfoModules = new() { new ItemEffectInfo() };
+        _playerBag.AddItem(newItem);
+        var pokeball = newItem.GetDynamicModule<ItemEffectInfo>();
         
         AddTestCaseScenario(()=>
         {
@@ -63,7 +59,6 @@ public class PokeballTest: EndToEndTest,IItemTestable,IBattleTestable
         testName = "Pokeball Test";
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
         _playerBag = container.Resolve<PlayerBagHandler>();
-        _battleHandler = container.Resolve<BattleHandler>();
         _pokemonStorageHandler = container.Resolve<PokemonStorageHandler>();
     }
 }

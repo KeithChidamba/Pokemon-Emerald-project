@@ -11,7 +11,7 @@ public class Move : ScriptableObject
     [FormerlySerializedAs("Move_damage")] public float moveDamage;
     [FormerlySerializedAs("Move_accuracy")] public float moveAccuracy;
     public int critModifierIndex;
-    public Type type;
+    public PokemonTypeData type;
     public bool hasTypelessEffect;
     public bool isSpecial;
     public bool isContact;

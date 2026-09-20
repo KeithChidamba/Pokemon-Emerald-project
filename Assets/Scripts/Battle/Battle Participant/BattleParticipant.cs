@@ -53,7 +53,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public bool isSemiInvulnerable;
     public PreviousMove previousMoveData;
     public TurnCoolDown currentCoolDown;
-    public Type additionalTypeImmunity;
+    public PokemonTypeData additionalTypeImmunity;
     public List<TypeImmunityNegation> immunityNegations = new();
     public MoveLockData currentMoveLock;
     
@@ -391,6 +391,10 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         playerHpSlider.value = pokemon.hp;
         playerHpSlider.maxValue = pokemon.maxHp;
         if(pokemon.hp<=0) pokemon.hp = 0;
+        if (hpSliderImage.color == Color.red)
+        {
+            SoundManager.Play(SfxId.LowHealthBeep);
+        }
     }
     public void RefreshStatusEffectImage()
     {

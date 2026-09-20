@@ -125,7 +125,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         struggle.priority = 0;
         struggle.moveName = "Struggle";
         struggle.isSpecial = false;
-        var typelessType = ScriptableObject.CreateInstance<Type>();
+        var typelessType = ScriptableObject.CreateInstance<PokemonTypeData>();
         typelessType.typeEnum = PokemonType.Typeless;
         struggle.type = typelessType;
         

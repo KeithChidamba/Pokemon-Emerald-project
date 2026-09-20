@@ -6,7 +6,7 @@ using UnityEngine;
 [CustomEditor(typeof(Item))]
 public class ItemEditor : Editor
 {
-    private System.Type[] _moduleTypes;
+    private Type[] _moduleTypes;
 
     private void OnEnable()
     {

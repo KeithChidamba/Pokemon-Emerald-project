@@ -29,12 +29,12 @@ MonoBehaviour:
   priceCurrency: 0
   additionalInfoModules: []
   dynamicInfoModules:
-  - rid: 7301661317695799309
+  - rid: 5308326063223341057
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799309
+    - rid: 5308326063223341057
       type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 1

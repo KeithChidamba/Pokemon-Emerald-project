@@ -42,7 +42,7 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
             _currentBehaviorAction?.Invoke();
             return;
         }
-        if(Utility.RandomChance(CommonRandom.Rnd30) || participant.canEscape)
+        if(Utility.RandomChance(CommonRandom.Rnd30) && participant.canEscape)
         {
             _battleHandler.EndBattle(BattleEndState.PokemonRanAway);
         }

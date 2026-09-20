@@ -40,7 +40,7 @@ public class WeatherDamageTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         enemy.pokemon.types.Clear();
-        var iceType = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ice);
+        var iceType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ice);
         enemy.pokemon.types.Add(iceType);
         
         _sequencer.UseMove();//Hail
@@ -53,9 +53,9 @@ public class WeatherDamageTest : BattleBasedTest
         enemy.pokemon.types.Clear();
         enemyPartner.pokemon.types.Clear();
         
-        var rockType = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Rock);
-        var groundType = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ground);
-        var steelType = Resources.Load<Type>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Steel);
+        var rockType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Rock);
+        var groundType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ground);
+        var steelType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Steel);
         enemy.pokemon.types.Add(rockType);//to test special defense boost from sandstorm
         enemy.pokemon.types.Add(groundType);
         enemyPartner.pokemon.types.Add(steelType);

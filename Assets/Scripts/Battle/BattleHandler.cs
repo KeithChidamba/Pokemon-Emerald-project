@@ -404,6 +404,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     }
     public IEnumerator ProcessWildBattle(Pokemon enemy,Biome biome)
     {
+        SoundManager.PushMusic(MusicId.BattleWild);
         StartCoroutine(_gameUIHandler.FadeInBlackScreen());
         _pokemonPartyHandler.SortByFainted();
         
@@ -429,6 +430,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     }
     private IEnumerator StartSingleBattle(TrainerData trainerData) //single trainer battle
     {
+        SoundManager.PushMusic(MusicId.BattleTrainer);
         yield return DisplayTrainerMessage(trainerData.battleIntroMessage);
         isTrainerBattle = true;
         isDoubleBattle = false; 
@@ -455,6 +457,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
 
     private IEnumerator StartSingleDoubleBattle(TrainerData trainerData) //1v1 double battle
     {
+        SoundManager.PushMusic(MusicId.BattleTrainer);
         yield return DisplayTrainerMessage(trainerData.battleIntroMessage);
         isTrainerBattle = true;
         isDoubleBattle = true; 
@@ -739,6 +742,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         {
             var faintedParticipant = faintQueue[0];
             faintedParticipant.BeginFaintEvent();
+            SoundManager.Play(SfxId.Faint);
             _dialogueHandler.DisplayBattleInfo(faintedParticipant.pokemon.pokemonDisplayName + " fainted!");
             var pkmImageRect = faintedParticipant.pokemonImage.rectTransform;
             var rectHeight = pkmImageRect.rect.height;
@@ -829,12 +833,14 @@ public class BattleHandler : MonoBehaviour, IInjectable
                     _dialogueHandler.DisplayBattleInfo("the battle ended");
                     break;
                 case BattleEndState.PlayerRanAway:
+                    SoundManager.Play(SfxId.Flee);
                     _dialogueHandler.DisplayBattleInfo(playerName + " ran away");
                     break;
                 case BattleEndState.PlayerWon:
                     yield return HandleEvolutions();
                     if (isTrainerBattle)
                     {
+                        SoundManager.PlayMusic(MusicId.VictoryTrainer);
                         var anyEnemy = GetParticipant(BattleParticipantKey.Player)
                             .currentEnemies[0].pokemonTrainerAI.trainerData;
                         
@@ -850,6 +856,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
                     }
                     else
                     {
+                        SoundManager.PlayMusic(MusicId.VictoryWild);
                         _dialogueHandler.DisplayBattleInfo(playerName + " defeated " + wildPokemonName);
                     }
                     break;
@@ -887,13 +894,12 @@ public class BattleHandler : MonoBehaviour, IInjectable
                     _dialogueHandler.DisplayBattleInfo(wildPokemonName+" ran away");
                     break;
             }
-            
+            SoundManager.PopMusicWhenFinished(); 
             yield return _dialogueHandler.AwaitAllDialogue();
             _dialogueHandler.EndDialogue();
             _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
             yield return _battleIntroHandler.BlackFade();
             yield return ResetUiAfterBattle();
-           
             if(_overworldActions.fishing)
             {
                 _overworldActions.EndFishing();
@@ -1003,6 +1009,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
                 }
             }
         }
+        yield break;
         IEnumerator FailEscape()
         {
             yield return _dialogueHandler.AwaitAllDialogue();

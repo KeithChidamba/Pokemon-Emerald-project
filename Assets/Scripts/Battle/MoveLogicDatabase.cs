@@ -243,7 +243,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         
         var statChangeMessage = _battleOperationsHandler.GetStatModResultMessage(true,attacker.pokemon,stats);
         _dialogueHandler.DisplayBattleInfo(statChangeMessage);
-        yield return _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,attacker);
+        yield return _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,true,attacker);
         yield return _dialogueHandler.AwaitAllDialogue();
     }
 

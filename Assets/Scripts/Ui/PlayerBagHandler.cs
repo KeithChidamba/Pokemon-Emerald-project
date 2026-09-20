@@ -174,6 +174,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
     {
         if (NumItems == 0) return;
         if (NumItemsForView == 1) return;
+        SoundManager.Play(UiId.BagCursor);
         if (topIndex < NumItems - maxNumItemsForView && selectedItemIndex == maxNumItemsForView - 1)
         {
             for (int i = 0; i < maxNumItemsForView - 1; i++)
@@ -200,6 +201,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
     {
         if (NumItems == 0) return;
         if (NumItemsForView == 1) return;
+        SoundManager.Play(UiId.BagCursor);
         if (topIndex > 0 && selectedItemIndex == 0)
         {
             for (int i = maxNumItemsForView-1; i > 0; i--)
@@ -222,6 +224,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         if (storageView) return;
         if (currentCategoryIndex > 0)
         {
+            SoundManager.Play(UiId.BagPocketSwitch);
             bagCategoryIndicators[currentCategoryIndex].SetActive(false);
             currentCategoryIndex--;
             bagCategoryIndicators[currentCategoryIndex].SetActive(true);
@@ -238,6 +241,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         if (storageView) return;
         if (currentCategoryIndex < _categories.Length-1)
         {
+            SoundManager.Play(UiId.BagPocketSwitch);
             bagCategoryIndicators[currentCategoryIndex].SetActive(false);
             currentCategoryIndex++;
             bagCategoryIndicators[currentCategoryIndex].SetActive(true);
@@ -360,6 +364,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
          else
          {
              _itemHandler.UseItem(itemToUse, null);
+             SoundManager.Play(UiId.UseItem);
          }
          return;
          void AllowItemUsage(int memberIndex)
