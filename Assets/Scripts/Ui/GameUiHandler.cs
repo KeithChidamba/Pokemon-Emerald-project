@@ -48,7 +48,6 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     private DialogueHandler _dialogueHandler;
     private PlayerMovementHandler _playerMovementHandler;
     private InputStateHandler _inputStateHandler;
-    private PokemonDetailsInputService _pokemonDetailsInputService;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private GameLoadingHandler _gameLoadingHandler;
     private SaveDataHandler _saveDataHandler;
@@ -62,7 +61,6 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     
     public void Inject(ServiceContainer container)
     {
-        _pokemonDetailsInputService = container.Resolve<PokemonDetailsInputService>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
@@ -152,7 +150,9 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             
         for (var i =0; i<menuOptionsMethods.Count;i++)
             menuSelectables.Add( new(menuUiOptions[i],menuOptionsMethods[i],true) );
-            
+         
+        SoundManager.Play(UiId.WindowOpen);
+        
         _inputStateHandler.ChangeInputState(new (InputStateName.PlayerMenu,
             InputStateGroup.None,true,menuOptions,
             InputDirection.Vertical, menuSelectables,menuSelector,true

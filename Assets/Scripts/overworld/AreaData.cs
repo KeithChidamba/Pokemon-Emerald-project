@@ -16,7 +16,6 @@ public class AreaData
         {
             return;
         }
-        
         foreach (var npc in npcList)
         {
             npc.SetActive(true);

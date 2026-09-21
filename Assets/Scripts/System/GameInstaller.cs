@@ -90,23 +90,14 @@ public class GameInstaller : MonoBehaviour
         InstanceFactory.GetContainer(_container);//static class dependency
         
         //Non-Mono services
-        var playerBagInputService = new PlayerBagInputService(_container);
-        var pokemonBattleInputService = new PokemonBattleInputService(_container);
-        var pokemartInputService = new PokemartInputService(_container);
-        var pokemonDetailsInputService = new PokemonDetailsInputService(_container);
-        var pokemonStorageInputService = new PokemonStorageInputService(_container);
-        var pokemonPartyInputService = new PokemonPartyInputService(_container);
-        var gameSettingsInputService = new GameSettingsInputService(_container);
-        var typingInterfaceInputService = new TypingInterfaceInputService(_container);
-        
-        _container.RegisterSingleton(playerBagInputService);
-        _container.RegisterSingleton(pokemonBattleInputService);
-        _container.RegisterSingleton(pokemartInputService);
-        _container.RegisterSingleton(pokemonStorageInputService);
-        _container.RegisterSingleton(pokemonDetailsInputService);
-        _container.RegisterSingleton(pokemonPartyInputService);
-        _container.RegisterSingleton(gameSettingsInputService);
-        _container.RegisterSingleton(typingInterfaceInputService);
+        _container.RegisterSingleton(new PlayerBagInputService(_container));
+        _container.RegisterSingleton(new PokemonBattleInputService(_container));
+        _container.RegisterSingleton(new PokemartInputService(_container));
+        _container.RegisterSingleton(new PokemonDetailsInputService(_container));
+        _container.RegisterSingleton(new PokemonStorageInputService(_container));
+        _container.RegisterSingleton(new PokemonPartyInputService(_container));
+        _container.RegisterSingleton(new GameSettingsInputService(_container));
+        _container.RegisterSingleton(new TypingInterfaceInputService(_container));
         
         var injectables = FindObjectsOfType<MonoBehaviour>(true);
         

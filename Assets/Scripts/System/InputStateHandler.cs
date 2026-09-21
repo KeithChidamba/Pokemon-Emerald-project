@@ -68,6 +68,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     
     private DialogueHandler _dialogueHandler;
     private GameUiHandler _gameUIHandler;
+    
     private PlayerBagInputService _playerBagInputService;
     private PokemonBattleInputService _pokemonBattleInputService;
     private PokemartInputService _pokemartInputService;
@@ -107,7 +108,6 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         _inputServiceGroups.Add(InputStateGroup.GameSettings,_gameSettingsInputService);
         _inputServiceGroups.Add(InputStateGroup.PokeMart,_pokemartInputService);
         _inputServiceGroups.Add(InputStateGroup.TypingInterface,_typingInterfaceInputService);
-        
     }
     private void Update()
     {
