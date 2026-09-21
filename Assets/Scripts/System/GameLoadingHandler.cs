@@ -83,7 +83,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         _inputStateHandler.ChangeInputState(new (InputStateName.StartMenu,
             InputStateGroup.None,false,
             menuUiParent, InputDirection.Vertical, menuSelectables,
-            menuSelector,true,true,canExit:false),true);
+            menuSelector,true,true,canExit:false));
     }
 
     private void CreateNewPlayer(string playerName)

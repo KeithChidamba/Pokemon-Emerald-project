@@ -2,7 +2,7 @@
     "mainAssetName": "Sell super potion",
     "objectiveHeading": "sell super potion",
     "hasProgression": false,
-    "indexInList": 9,
+    "indexInList": 7,
     "objectiveType": 5,
     "itemForObjective": {
         "instanceID": 0

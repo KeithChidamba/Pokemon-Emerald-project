@@ -3,20 +3,22 @@
     "itemName": "Heal Powder",
     "itemType": 5,
     "itemDescription": "A bitter herb that heals all status effects",
-    "price": 18,
-    "quantity": 4,
     "itemImage": {
-        "instanceID": 27204
+        "instanceID": 27612
     },
+    "quantity": 4,
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": true,
     "isHeldItem": false,
     "canBeHeld": false,
+    "buyPrice": 0,
     "canBeSold": true,
+    "sellPrice": 0,
+    "priceCurrency": 0,
     "additionalInfoModules": [
         {
-            "instanceID": 28090
+            "instanceID": 28592
         }
     ],
     "dynamicInfoModules": [],

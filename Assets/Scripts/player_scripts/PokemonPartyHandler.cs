@@ -24,7 +24,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     public bool moving;
     public PokemonPartyMemberUi[] memberCards;
     public GameObject partyUI;
-    public GameObject memberSelector;
+   
     public GameObject optionSelector;
     public Image cancelButton;
 
@@ -35,13 +35,13 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     public PartyUsage currentUsage;
     
     private DialogueHandler _dialogueHandler;
+    private PlayerBagHandler _playerBagHandler;
     private InputStateHandler _inputStateHandler;
     private BattleHandler _battleHandler;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
     private PokemonStorageHandler _pokemonStorageHandler;
     private BattleIntro _battleIntroHandler;
     private PlayerMovementHandler _playerMovementHandler;
-    private PokemonPartyInputService _partyInputService;
     private PokemonOperations _pokemonOperationsHandler;
     private GameLoadingHandler _gameLoadingHandler;
     private AreaManager _areaHandler;
@@ -50,7 +50,6 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     public void Inject(ServiceContainer container)
     {
         _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
-        _partyInputService = container.Resolve<PokemonPartyInputService>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
@@ -63,6 +62,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         _areaHandler = container.Resolve<AreaManager>();
         _gameUIHandler = container.Resolve<GameUiHandler>();
+        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         
         gameObject.SetActive(true);
     }
@@ -291,7 +291,29 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                 {
                     ClearSelectionUI();
                     partyOptionsParent.SetActive(true);
-                    _partyInputService.PokemonPartyOptions();
+                    
+                    var selectedPokemon = Party[selectedMemberIndex];
+                    var partyOptionsSelectables = new List<SelectableUI>
+                    {
+                        new(partyOptions[0]
+                            , ()=>_gameUIHandler.ViewPokemonDetails(selectedMemberIndex,Party),true),
+        
+                        new(partyOptions[1]
+                            , () => BeginMemberSwap(selectedMemberIndex),true),
+        
+                        new(partyOptions[2], _playerBagHandler.OpenBagToGiveItem,!selectedPokemon.hasItem),
+        
+                        new(partyOptions[3]
+                            , () => _playerBagHandler.TakeItem(selectedMemberIndex),selectedPokemon.hasItem)
+                    };
+                    
+                    partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
+                    
+                    _inputStateHandler.ChangeInputState(new (InputStateName.PokemonPartyOptions,
+                        InputStateGroup.PokemonParty, stateDirection:InputDirection.Vertical, selectableUis:partyOptionsSelectables
+                        ,selector:optionSelector,selecting:true,display:true
+                        ,onClose:ClearSelectionUI,onExit:ClearSelectionUI));
+                    _inputStateHandler.currentState.selector.SetActive(true);
                 }
             }
         }
@@ -332,8 +354,16 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         RefreshMemberCards();
         memberCards[0].ChangeVisibility(true);
         ClearSelectionUI();
-        _partyInputService.UpdateHealthBarColors();
+        UpdateHealthBarColors();
     }
+    public void UpdateHealthBarColors()
+    {
+        for (var i = 0;i<party.Count;i++)
+        {
+            PokemonOperations.UpdateHealthPhase(party[i],memberCards[i].hpSliderImage);
+        }
+    }
+ 
 /// <summary>
 /// [For Testing] Removes all party members
 /// </summary>

@@ -3,17 +3,19 @@
     "itemName": "Great Ball",
     "itemType": 10,
     "itemDescription": "50% higher chance to catch compared to pokeball",
-    "price": 30,
-    "quantity": 6,
     "itemImage": {
-        "instanceID": 26160
+        "instanceID": 26452
     },
+    "quantity": 6,
     "forPartyUse": false,
     "canBeUsedInOverworld": false,
     "canBeUsedInBattle": true,
     "isHeldItem": false,
     "canBeHeld": false,
+    "buyPrice": 0,
     "canBeSold": true,
+    "sellPrice": 0,
+    "priceCurrency": 0,
     "additionalInfoModules": [
         {
             "instanceID": 0

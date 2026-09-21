@@ -341,7 +341,7 @@ public class TypingInterfaceHandler : MonoBehaviour,IInjectable
       currentCharacterIndex = 0;
       _inputStateHandler.ChangeInputState(new  (InputStateName.TypingInterfaceNavigation,
          InputStateGroup.TypingInterface,true,mainUI,
-         InputDirection.Grid, typingSelectables,characterSelector,true, true ,canExit:false),true);
+         InputDirection.Grid, typingSelectables,characterSelector,true, true ,canExit:false));
    }
 
    public void InterfaceOptionsNavigation()

@@ -13,7 +13,6 @@ public class TypingInterfaceInputService:IInputGroup
     }
     public void DetermineOperation()
     {
-        _inputStateHandler.OnFullBoxNavigation += CheckBoundaryEnter;
         Action stateMethod = _inputStateHandler.currentState.stateName switch
         {
             InputStateName.TypingInterfaceNavigation => TypingFullBoxNavigation,
@@ -22,7 +21,11 @@ public class TypingInterfaceInputService:IInputGroup
         };
         stateMethod?.Invoke();
     }
-
+    private void OptionsNavigation()
+    {
+        _typingInterfaceHandler.characterSelector.SetActive(false);
+        _inputStateHandler.OnInputLeft += _typingInterfaceHandler.TypingInterfaceNavigation;
+    }
     private void TypingFullBoxNavigation()
     {
         _typingInterfaceHandler.optionSelector.SetActive(false);
@@ -30,11 +33,11 @@ public class TypingInterfaceInputService:IInputGroup
             _typingInterfaceHandler.currentMaxBoxElements, 
           _typingInterfaceHandler.GetColumnCount());
         
+        _inputStateHandler.OnFullBoxNavigation += CheckBoundaryEnter;
         _inputStateHandler.OnSelectionIndexChanged += _typingInterfaceHandler.SetCurrentCharacterIndex;
         InputSourceHandler.OnInputPressed += CheckQuickTypingAction;
         _typingInterfaceHandler.OnCharacterCaptured += SwapOnInputLimit;
         return;
-        
         void SwapOnInputLimit(int index)
         {
             //auto-trigger input finalization
@@ -60,6 +63,7 @@ public class TypingInterfaceInputService:IInputGroup
             _inputStateHandler.OnStateLoaded += SelectLastOption;
             InputSourceHandler.OnInputPressed -= CheckQuickTypingAction;
             SwitchToOptions();
+            return;
             void SelectLastOption(InputState newState)
             {
                 _inputStateHandler.OnStateLoaded -= SelectLastOption;
@@ -67,28 +71,22 @@ public class TypingInterfaceInputService:IInputGroup
                 _inputStateHandler.UpdateSelectorUi();
             }
         }
-    }
-
-    private void CheckBoundaryEnter(int indexChange,bool isVertical)
-    {
-        //if user moves to the right at the box boundary
-        //by design boundary is always on the right 
-        var movingRight = indexChange > 0 && !isVertical;
-        var atBoundary = _inputStateHandler.GetCoordinate(false) == _typingInterfaceHandler.GetColumnCount() - 1;
-        if (atBoundary && movingRight)
+        void CheckBoundaryEnter(int indexChange,bool isVertical)
         {
-            _inputStateHandler.OnSelectionIndexChanged += (index) => SwitchToOptions();
+            //if user moves to the right at the box boundary
+            //by design boundary is always on the right 
+            var movingRight = indexChange > 0 && !isVertical;
+            var atBoundary = _inputStateHandler.GetCoordinate(false) == _typingInterfaceHandler.GetColumnCount() - 1;
+            if (atBoundary && movingRight)
+            {
+                _inputStateHandler.OnSelectionIndexChanged += (index) => SwitchToOptions();
+            }
         }
-    }
-    private void SwitchToOptions()
-    {
-        _inputStateHandler.GetState(InputStateName.TypingInterfaceNavigation).selector.SetActive(false);
-        _inputStateHandler.ResetGridCoordinates();
-        _typingInterfaceHandler.InterfaceOptionsNavigation();
-    }
-    private void OptionsNavigation()
-    {
-        _typingInterfaceHandler.characterSelector.SetActive(false);
-        _inputStateHandler.OnInputLeft += _typingInterfaceHandler.TypingInterfaceNavigation;
+        void SwitchToOptions()
+        {
+            _inputStateHandler.GetState(InputStateName.TypingInterfaceNavigation).selector.SetActive(false);
+            _inputStateHandler.ResetGridCoordinates();
+            _typingInterfaceHandler.InterfaceOptionsNavigation();
+        }
     }
 }

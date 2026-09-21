@@ -3,20 +3,22 @@
     "itemName": "Lum berry",
     "itemType": 9,
     "itemDescription": "Heals any status effect",
-    "price": 5,
-    "quantity": 2,
     "itemImage": {
-        "instanceID": 26332
+        "instanceID": 26642
     },
+    "quantity": 2,
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": true,
     "isHeldItem": false,
     "canBeHeld": true,
+    "buyPrice": 0,
     "canBeSold": true,
+    "sellPrice": 0,
+    "priceCurrency": 0,
     "additionalInfoModules": [
         {
-            "instanceID": 28060
+            "instanceID": 28562
         }
     ],
     "dynamicInfoModules": [],

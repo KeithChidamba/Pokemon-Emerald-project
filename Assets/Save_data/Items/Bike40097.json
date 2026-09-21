@@ -3,17 +3,19 @@
     "itemName": "Bike",
     "itemType": 0,
     "itemDescription": "A fast bicycle that realiable",
-    "price": 0,
-    "quantity": 1,
     "itemImage": {
-        "instanceID": 26284
+        "instanceID": 26586
     },
+    "quantity": 1,
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": false,
     "isHeldItem": false,
     "canBeHeld": false,
+    "buyPrice": 0,
     "canBeSold": false,
+    "sellPrice": 0,
+    "priceCurrency": 0,
     "additionalInfoModules": [
         {
             "instanceID": 0

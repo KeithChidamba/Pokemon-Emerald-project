@@ -3,17 +3,19 @@
     "itemName": "Luxury Ball",
     "itemType": 10,
     "itemDescription": "Pokeball with a friendship benefit for pokemon",
-    "price": 55,
-    "quantity": 2,
     "itemImage": {
-        "instanceID": 25374
+        "instanceID": 25592
     },
+    "quantity": 2,
     "forPartyUse": false,
     "canBeUsedInOverworld": false,
     "canBeUsedInBattle": true,
     "isHeldItem": false,
     "canBeHeld": false,
+    "buyPrice": 0,
     "canBeSold": true,
+    "sellPrice": 0,
+    "priceCurrency": 0,
     "additionalInfoModules": [
         {
             "instanceID": 0

@@ -27,8 +27,21 @@ public class PlayerBagInputService : IInputGroup
         };
         stateMethod?.Invoke();
     }
-    private void PlayerBagNavigationRestrictions()
+    private void ItemToSellInputs()
     {
+        _inputStateHandler.OnInputUp += ()=>_playerBagHandler.ChangeQuantity(1);
+        _inputStateHandler.OnInputDown += ()=>_playerBagHandler.ChangeQuantity(-1);
+    }
+    private void PlayerBagNavigation()
+    {
+        if(_itemStorageHandler.currentUsage != ItemUsage.Deposit)
+        {
+            _inputStateHandler.OnInputLeft += _playerBagHandler.ChangeCategoryLeft;
+            _inputStateHandler.OnInputRight += _playerBagHandler.ChangeCategoryRight;
+        }
+        _inputStateHandler.OnInputUp += _playerBagHandler.NavigateUp;
+        _inputStateHandler.OnInputDown += _playerBagHandler.NavigateDown;
+        
         ref InputState currentState = ref _inputStateHandler.currentState;
         currentState.currentSelectionIndex = 0;
         if(_playerBagHandler.NumItems==0)
@@ -57,45 +70,27 @@ public class PlayerBagInputService : IInputGroup
                 currentState.selectableUis.ForEach(s=>s.eventForUi = _playerBagHandler.SelectItemForEvent);
                 break;
         }
-    }
-
-    private void PlayerBagNavigation()
-    {
-        if(_itemStorageHandler.currentUsage != ItemUsage.Deposit)
+        return;
+        void CreateSellingItemState()
         {
-            _inputStateHandler.OnInputLeft += _playerBagHandler.ChangeCategoryLeft;
-            _inputStateHandler.OnInputRight += _playerBagHandler.ChangeCategoryRight;
-        }
-        _inputStateHandler.OnInputUp += _playerBagHandler.NavigateUp;
-        _inputStateHandler.OnInputDown += _playerBagHandler.NavigateDown;
-        PlayerBagNavigationRestrictions();
-    }
-
-    private void CreateSellingItemState()
-    {
-        if(_playerBagHandler.GetCurrentItem().priceCurrency == ItemPriceCurrency.Money
-           && _playerBagHandler.GetCurrentItem().canBeSold)
-        {
-            var itemSellSelectables = new List<SelectableUI>
+            if(_playerBagHandler.GetCurrentItem().priceCurrency == ItemPriceCurrency.Money
+               && _playerBagHandler.GetCurrentItem().canBeSold)
             {
-                new(_playerBagHandler.sellingItemUI, _playerBagHandler.SellToMarket, true)
-            };
+                var itemSellSelectables = new List<SelectableUI>
+                {
+                    new(_playerBagHandler.sellingItemUI, _playerBagHandler.SellToMarket, true)
+                };
             
-            _inputStateHandler.ChangeInputState(new(InputStateName.PlayerBagItemSell,
-                InputStateGroup.Bag, stateDirection: InputDirection.Vertical, selectableUis: itemSellSelectables
-                , selecting: false, onExit: _playerBagHandler.ResetItemSellingUi,
-                onClose: _playerBagHandler.ResetItemSellingUi));
+                _inputStateHandler.ChangeInputState(new(InputStateName.PlayerBagItemSell,
+                    InputStateGroup.Bag, stateDirection: InputDirection.Vertical, selectableUis: itemSellSelectables
+                    , selecting: false, onExit: _playerBagHandler.ResetItemSellingUi,
+                    onClose: _playerBagHandler.ResetItemSellingUi));
             
-            _playerBagHandler.ChangeQuantity(0); //initial set for visuals
-        }else
-        {
-            _dialogueHandler.DisplayDetails("You cant sell that!");
+                _playerBagHandler.ChangeQuantity(0); //initial set for visuals
+            }else
+            {
+                _dialogueHandler.DisplayDetails("You cant sell that!");
+            }
         }
-    }
-
-    private void ItemToSellInputs()
-    {
-        _inputStateHandler.OnInputUp += ()=>_playerBagHandler.ChangeQuantity(1);
-        _inputStateHandler.OnInputDown += ()=>_playerBagHandler.ChangeQuantity(-1);
     }
 }

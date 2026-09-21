@@ -3,17 +3,19 @@
     "itemName": "Repel",
     "itemType": 18,
     "itemDescription": "Repels wild pokemon for 100 steps",
-    "price": 350,
-    "quantity": 2,
     "itemImage": {
-        "instanceID": 27154
+        "instanceID": 27550
     },
+    "quantity": 4,
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": false,
     "isHeldItem": false,
     "canBeHeld": false,
+    "buyPrice": 0,
     "canBeSold": true,
+    "sellPrice": 0,
+    "priceCurrency": 0,
     "additionalInfoModules": [
         {
             "instanceID": 0

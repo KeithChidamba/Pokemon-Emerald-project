@@ -3,20 +3,22 @@
     "itemName": "Oran berry",
     "itemType": 9,
     "itemDescription": "Heals 5hp",
-    "price": 5,
-    "quantity": 19,
     "itemImage": {
-        "instanceID": 27452
+        "instanceID": 27886
     },
+    "quantity": 19,
     "forPartyUse": true,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": true,
     "isHeldItem": false,
     "canBeHeld": true,
+    "buyPrice": 0,
     "canBeSold": true,
+    "sellPrice": 0,
+    "priceCurrency": 0,
     "additionalInfoModules": [
         {
-            "instanceID": 27428
+            "instanceID": 27862
         }
     ],
     "dynamicInfoModules": [

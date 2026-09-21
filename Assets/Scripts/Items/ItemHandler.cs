@@ -480,7 +480,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
         _pokemonDetailsHandler.SetUsage(PokemonDetailsUsage.AlterMoves);
         _pokemonDetailsHandler.OnMoveSelected += MoveOperation;
         _inputStateHandler.OnStateRemoved += ExitOperation;
-        _gameUIHandler.ViewPartyPokemonDetails(selectedPartyPokemon);
+        _gameUIHandler.ViewPokemonDetails(selectedPartyPokemon);
         
         return;
         void MoveOperation(int moveIndex)

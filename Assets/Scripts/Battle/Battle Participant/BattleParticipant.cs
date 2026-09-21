@@ -391,10 +391,6 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         playerHpSlider.value = pokemon.hp;
         playerHpSlider.maxValue = pokemon.maxHp;
         if(pokemon.hp<=0) pokemon.hp = 0;
-        if (hpSliderImage.color == Color.red)
-        {
-            SoundManager.Play(SfxId.LowHealthBeep);
-        }
     }
     public void RefreshStatusEffectImage()
     {

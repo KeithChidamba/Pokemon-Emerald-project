@@ -185,7 +185,6 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         {
             if (!currentState.selectableUis[currentState.currentSelectionIndex].canBeSelected)
             {
-                SoundManager.Play(UiId.Error);
                 return;
             }
             SoundManager.Play(UiId.Select);
@@ -214,11 +213,9 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         currentState.currentSelectionIndex = Mathf.Clamp(newIndex, 0, currentState.maxSelectableIndex);
         OnSelectionIndexChanged?.Invoke(currentState.currentSelectionIndex);
     }
-    public void ChangeInputState(InputState newState,bool forceChange = false)
+    public void ChangeInputState(InputState newState)
     {
-        if (currentState.stateName == newState.stateName && !forceChange) return;
         _currentStateLoaded = false;
-        
         stateLayers.RemoveAll(s => s.stateName == newState.stateName);
         stateLayers.Add(newState);
         ResetInputEvents();
@@ -243,7 +240,6 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         
         if(!currentState.isParentLayer)
         {
-            SoundManager.Play(UiId.WindowOpen);
             currentState.mainViewUI?.SetActive(true);
         }
         
@@ -409,7 +405,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     {
         ChangeInputState(new (InputStateName.BattleDialoguePlaceHolder,InputStateGroup.None, canExit: false
             , isParent:false,mainView: emptyPlaceHolder,
-            displayOpenTransition:false,displayCloseTransition:false),true);
+            displayOpenTransition:false,displayCloseTransition:false));
     }
     public void AddDialoguePlaceHolderState()
     {

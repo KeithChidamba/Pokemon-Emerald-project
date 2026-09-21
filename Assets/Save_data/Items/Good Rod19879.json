@@ -3,17 +3,19 @@
     "itemName": "Good Rod",
     "itemType": 0,
     "itemDescription": "A great fishing rod that can catch decent pokemon",
-    "price": 0,
-    "quantity": 1,
     "itemImage": {
-        "instanceID": 26348
+        "instanceID": 26662
     },
+    "quantity": 1,
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": false,
     "isHeldItem": false,
     "canBeHeld": false,
+    "buyPrice": 0,
     "canBeSold": false,
+    "sellPrice": 0,
+    "priceCurrency": 0,
     "additionalInfoModules": [
         {
             "instanceID": 0

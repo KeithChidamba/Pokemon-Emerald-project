@@ -3,17 +3,19 @@
     "itemName": "Super Rod",
     "itemType": 0,
     "itemDescription": "A fantastic fishing rod that can catch any pokemon",
-    "price": 0,
-    "quantity": 1,
     "itemImage": {
-        "instanceID": 27542
+        "instanceID": 27978
     },
+    "quantity": 1,
     "forPartyUse": false,
     "canBeUsedInOverworld": true,
     "canBeUsedInBattle": false,
     "isHeldItem": false,
     "canBeHeld": false,
+    "buyPrice": 0,
     "canBeSold": false,
+    "sellPrice": 0,
+    "priceCurrency": 0,
     "additionalInfoModules": [
         {
             "instanceID": 0

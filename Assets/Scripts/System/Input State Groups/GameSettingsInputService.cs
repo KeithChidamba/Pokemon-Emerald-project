@@ -33,7 +33,7 @@ public class GameSettingsInputService: IInputGroup
 
         _inputStateHandler.OnInputLeft += () => OpenCurrentSettingOptions(-1);
         _inputStateHandler.OnInputRight += () => OpenCurrentSettingOptions(1);
-
+        return;
         void OpenCurrentSettingOptions(int change)
         {
             _gameSettingsHandler.SetCurrentOption(change);
@@ -48,7 +48,7 @@ public class GameSettingsInputService: IInputGroup
 
         _inputStateHandler.OnSelectionIndexChanged += _gameSettingsHandler.ReflectChangedSetting;
         _inputStateHandler.OnSelectionIndexChanged += (index) => _gameSettingsHandler.SetOptionTextColor(index);
-
+        return;
         void MoveToAdjacentSetting(int change)
         {
             var state = _inputStateHandler.GetState(InputStateName.GameSettingsNavigation);

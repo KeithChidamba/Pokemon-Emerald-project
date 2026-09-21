@@ -2,8 +2,8 @@
     "boxNumber": 14,
     "boxPokemon": [
         {
-            "pokemonID": "",
-            "containsPokemon": false
+            "pokemonID": "210174625985981233",
+            "containsPokemon": true
         },
         {
             "pokemonID": "",
@@ -122,11 +122,11 @@
             "containsPokemon": false
         }
     ],
-    "currentNumPokemon": 0,
+    "currentNumPokemon": 1,
     "boxTopVisual": {
-        "instanceID": 32280
+        "instanceID": 33082
     },
     "boxVisual": {
-        "instanceID": 32306
+        "instanceID": 33108
     }
 }

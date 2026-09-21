@@ -1,0 +1,209 @@
+{
+    "basePokemonName": "Mudkip",
+    "pokemonName": "Mudkip",
+    "nickName": "",
+    "pokemonDisplayName": "Mudkip",
+    "captureInformation": {
+        "areaName": "Garden",
+        "levelCaptured": 5
+    },
+    "pokemonID": 210174625511188939,
+    "personalityValue": 1449470411,
+    "isShiny": false,
+    "gender": 2,
+    "ratioFemale": 12.5,
+    "nature": {
+        "instanceID": 26862
+    },
+    "hasGender": true,
+    "hp": 20.0,
+    "maxHp": 20.0,
+    "baseHp": 50.0,
+    "baseAttack": 70.0,
+    "baseDefense": 50.0,
+    "baseSpecialAttack": 50.0,
+    "baseSpecialDefense": 50.0,
+    "baseSpeed": 40.0,
+    "attack": 12.0,
+    "defense": 10.0,
+    "specialAttack": 11.0,
+    "specialDefense": 11.0,
+    "speed": 10.0,
+    "hpIv": 6.0,
+    "attackIv": 11.0,
+    "defenseIv": 27.0,
+    "specialAttackIv": 30.0,
+    "specialDefenseIv": 24.0,
+    "speedIv": 2.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "effortValues": [
+        {
+            "stat": 1,
+            "eVAmount": 1
+        }
+    ],
+    "accuracy": 100.0,
+    "evasion": 100.0,
+    "critChance": 6.25,
+    "catchRate": 45.0,
+    "currentLevel": 5,
+    "currentExpAmount": 97,
+    "currentLevelExpAmount": 97,
+    "nextLevelExpAmount": 135,
+    "expGroup": 3,
+    "expYield": 65,
+    "canEvolve": true,
+    "friendshipLevel": 120,
+    "hasTrainer": true,
+    "types": [
+        {
+            "instanceID": 26484
+        }
+    ],
+    "statusEffect": 0,
+    "statModifiers": [],
+    "evolutionLineLevels": [
+        16,
+        36
+    ],
+    "currentEvolutionLineIndex": 0,
+    "friendshipEvolutionRequirement": {
+        "friendshipRequirement": 0,
+        "evolutionIndex": 0
+    },
+    "requiresEvolutionStone": false,
+    "evolutionStone": 0,
+    "abilities": [
+        5
+    ],
+    "splitEvolution": false,
+    "requiresFriendshipEvolution": false,
+    "learnSet": [
+        {
+            "learnSetMove": 50,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 67,
+            "requiredLevel": 1
+        },
+        {
+            "learnSetMove": 31,
+            "requiredLevel": 6
+        },
+        {
+            "learnSetMove": 81,
+            "requiredLevel": 10
+        },
+        {
+            "learnSetMove": 41,
+            "requiredLevel": 15
+        },
+        {
+            "learnSetMove": 46,
+            "requiredLevel": 19
+        },
+        {
+            "learnSetMove": 33,
+            "requiredLevel": 24
+        },
+        {
+            "learnSetMove": 68,
+            "requiredLevel": 28
+        },
+        {
+            "learnSetMove": 82,
+            "requiredLevel": 33
+        },
+        {
+            "learnSetMove": 59,
+            "requiredLevel": 37
+        },
+        {
+            "learnSetMove": 79,
+            "requiredLevel": 42
+        },
+        {
+            "learnSetMove": 44,
+            "requiredLevel": 46
+        }
+    ],
+    "learnableTms": [
+        98,
+        99,
+        28,
+        29,
+        52,
+        96,
+        94
+    ],
+    "learnableHms": [
+        100
+    ],
+    "moveSet": [
+        {
+            "instanceID": -58702
+        },
+        {
+            "instanceID": -58704
+        }
+    ],
+    "ability": {
+        "instanceID": 27474
+    },
+    "evolutions": [
+        {
+            "instanceID": 27652
+        },
+        {
+            "instanceID": 25908
+        }
+    ],
+    "heldItem": {
+        "instanceID": 0
+    },
+    "hasItem": false,
+    "frontPicture": {
+        "instanceID": 26614
+    },
+    "backPicture": {
+        "instanceID": 25582
+    },
+    "partyFrame1": {
+        "instanceID": 26650
+    },
+    "partyFrame2": {
+        "instanceID": 27948
+    },
+    "battleIntroFrame": {
+        "instanceID": 27798
+    },
+    "pokeballName": "Pokeball",
+    "healthPhase": 1,
+    "abilityName": "Torrent",
+    "natureName": "Hasty",
+    "evolutionNames": [
+        "Marshtomp",
+        "Swampert"
+    ],
+    "typeNames": [
+        "water"
+    ],
+    "moveData": [
+        {
+            "moveName": "growl",
+            "powerPoints": 40,
+            "maxPowerpoints": 40
+        },
+        {
+            "moveName": "tackle",
+            "powerPoints": 35,
+            "maxPowerpoints": 35
+        }
+    ]
+}

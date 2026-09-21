@@ -13,7 +13,7 @@
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 27830
+        "instanceID": 28308
     },
     "hasGender": true,
     "hp": 91.0,
@@ -60,18 +60,16 @@
     "canEvolve": true,
     "friendshipLevel": 201,
     "hasTrainer": true,
-    "canBeFlinched": true,
-    "canBeInfatuated": true,
     "types": [
         {
-            "instanceID": 26642
+            "instanceID": 26986
         },
         {
-            "instanceID": 28056
+            "instanceID": 28558
         }
     ],
     "statusEffect": 0,
-    "buffAndDebuffs": [],
+    "statModifiers": [],
     "evolutionLineLevels": [
         5,
         13
@@ -140,33 +138,33 @@
     ],
     "moveSet": [
         {
-            "instanceID": -44166
+            "instanceID": -58738
         },
         {
-            "instanceID": -44168
+            "instanceID": -58740
         },
         {
-            "instanceID": -44170
+            "instanceID": -58742
         },
         {
-            "instanceID": -44172
+            "instanceID": -58744
         }
     ],
     "ability": {
-        "instanceID": 27176
+        "instanceID": 27578
     },
     "evolutions": [
         {
-            "instanceID": 26166
+            "instanceID": 26458
         },
         {
-            "instanceID": 26246
+            "instanceID": 26550
         },
         {
-            "instanceID": 26070
+            "instanceID": 26364
         },
         {
-            "instanceID": 27754
+            "instanceID": 28220
         }
     ],
     "heldItem": {
@@ -174,19 +172,19 @@
     },
     "hasItem": false,
     "frontPicture": {
-        "instanceID": 28228
+        "instanceID": 28758
     },
     "backPicture": {
-        "instanceID": 25518
+        "instanceID": 25752
     },
     "partyFrame1": {
-        "instanceID": 25562
+        "instanceID": 25796
     },
     "partyFrame2": {
-        "instanceID": 26022
+        "instanceID": 26310
     },
     "battleIntroFrame": {
-        "instanceID": 25368
+        "instanceID": 25586
     },
     "pokeballName": "Great Ball",
     "healthPhase": 1,

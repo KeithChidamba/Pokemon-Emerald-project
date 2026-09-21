@@ -5,6 +5,18 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 public enum MovementRestrictor{Dialogue,UI,OverworldAction,Battle}
+[Serializable]
+public class MovementRestrictionState
+{
+    public MovementRestrictor restrictor;
+    public bool isRestricted;
+
+    public MovementRestrictionState(MovementRestrictor restrictor, bool isRestricted)
+    {
+        this.restrictor = restrictor;
+        this.isRestricted = isRestricted;
+    }
+}
 public class PlayerMovementHandler : MonoBehaviour,IInjectable
 {
     public Camera playerCamera;
@@ -23,7 +35,7 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
     [SerializeField] private bool canMove = true;
     [SerializeField] private Transform interactionPoint;
     [SerializeField] private Transform movePoint;
-
+    private bool canPlayBumpSound;
     [SerializeField] private GameObject playerObject;
     public event Action OnNewTile;
     public SpriteRenderer characterSpriteMaskRenderer;
@@ -31,7 +43,8 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
     [SerializeField]private Vector3 previousValidPosition;
     [SerializeField]private LayerMask movementBlockers;
     [SerializeField]private bool standingOnTile;
-    private Dictionary<MovementRestrictor, bool> _movementRestrictors = new();
+    
+    [SerializeField]private List<MovementRestrictionState> movementRestrictors = new();
     
     private OverworldActionsHandler _overworldActions;
     private DialogueHandler _dialogueHandler;
@@ -45,10 +58,10 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
 
     public void OnInject()
     {
-        _movementRestrictors.Add(MovementRestrictor.Battle,false);
-        _movementRestrictors.Add(MovementRestrictor.Dialogue,false);
-        _movementRestrictors.Add(MovementRestrictor.UI,false);
-        _movementRestrictors.Add(MovementRestrictor.OverworldAction,false);
+        movementRestrictors.Add( new (MovementRestrictor.Battle, false));
+        movementRestrictors.Add( new (MovementRestrictor.Dialogue, false));
+        movementRestrictors.Add( new (MovementRestrictor.UI, false));
+        movementRestrictors.Add( new (MovementRestrictor.OverworldAction, false));
         
         _overworldActions.OnItemEquipped +=
             (item) => StopBikeUsage(item != Equipable.Bike);
@@ -97,15 +110,15 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
 
     public void AllowPlayerMovement(MovementRestrictor restrictor,float delay=0.65f)
     {
-        if (!_movementRestrictors[restrictor]) return;
-        
+        var currentRestriction = movementRestrictors.First(r => r.restrictor == restrictor);
+        if (!currentRestriction.isRestricted) return;
         StartCoroutine(MovementAllowanceDelay());
         return;
         IEnumerator MovementAllowanceDelay()
         {
-            _movementRestrictors[restrictor] = false;
+            currentRestriction.isRestricted = false;
             yield return new WaitForSeconds(delay);
-            if (_movementRestrictors.Any(r => r.Value))
+            if (movementRestrictors.Any(r=>r.isRestricted))
             {
                 yield break;
             }
@@ -118,9 +131,11 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
     
     public void RestrictPlayerMovement(MovementRestrictor restrictor)
     {
-        if (_movementRestrictors[restrictor]) return;
+        var currentRestriction = movementRestrictors.First(r => r.restrictor == restrictor);
+        if (currentRestriction.isRestricted) return;
         SnapToPosition();
-        _movementRestrictors[restrictor] = true;
+        currentRestriction.isRestricted = true;
+        
         if (_overworldActions.fishing)
         {
             //dont want to interrupt fishing animation
@@ -273,6 +288,7 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
             {
                 previousValidPosition = movePoint.position;
                 standingOnTile = true;
+                canPlayBumpSound = true;
                 OnNewTile?.Invoke();
             }
             
@@ -308,7 +324,11 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
                 }
                 else
                 {
-                    SoundManager.Play(SfxId.WallBump);
+                    if(canPlayBumpSound)
+                    {
+                        canPlayBumpSound = false;
+                        SoundManager.Play(SfxId.WallBump);
+                    }
                 }
             }
             
@@ -327,7 +347,11 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
                 }                
                 else
                 {
-                    SoundManager.Play(SfxId.WallBump);
+                    if(canPlayBumpSound)
+                    {
+                        canPlayBumpSound = false;
+                        SoundManager.Play(SfxId.WallBump);
+                    }
                 }
             }
 

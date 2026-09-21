@@ -318,7 +318,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     {        
         _pokemonDetailsHandler.SetUsage(PokemonDetailsUsage.LearnMoves);
         _pokemonDetailsHandler.OnMoveSelected += LearnSelectedMoveOperation;
-        _gameUiHandler.ViewPartyPokemonDetails(currentPokemon);
+        _gameUiHandler.ViewPokemonDetails(currentPokemon);
         _dialogueHandler.EndDialogue();
         _inputStateHandler.OnStateRemoved += SkipMoveCallBack;
         return;

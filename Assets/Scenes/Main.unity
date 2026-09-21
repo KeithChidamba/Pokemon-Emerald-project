@@ -424922,6 +424922,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 640
   standingOnTile: 0
+  movementRestrictors: []
 --- !u!4 &1267862428
 Transform:
   m_ObjectHideFlags: 0

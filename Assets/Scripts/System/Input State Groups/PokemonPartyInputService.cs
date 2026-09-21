@@ -5,16 +5,12 @@ using UnityEngine;
 
 public class PokemonPartyInputService: IInputGroup
 {
-    private PlayerBagHandler _playerBagHandler;
-    private GameUiHandler _gameUIHandler; 
     private PokemonPartyHandler _pokemonPartyHandler;
     private InputStateHandler _inputStateHandler;
     
     public PokemonPartyInputService(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _gameUIHandler = container.Resolve<GameUiHandler>();
-        _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
     }
 
@@ -22,48 +18,11 @@ public class PokemonPartyInputService: IInputGroup
     {
         Action stateMethod = _inputStateHandler.currentState.stateName switch
         {
-            InputStateName.PokemonPartyItemUsage => UpdateHealthBarColors,
-            InputStateName.PokemonPartyNavigation => UpdateHealthBarColors,
+            InputStateName.PokemonPartyItemUsage => _pokemonPartyHandler.UpdateHealthBarColors,
+            InputStateName.PokemonPartyNavigation => _pokemonPartyHandler.UpdateHealthBarColors,
 
             _ => null
         };
         stateMethod?.Invoke();
-    }
-
-    public void UpdateHealthBarColors()
-    {
-        for (var i = 0;i<_pokemonPartyHandler.Party.Count;i++)
-        {
-            PokemonOperations.UpdateHealthPhase(_pokemonPartyHandler.Party[i], 
-                _pokemonPartyHandler.memberCards[i].hpSliderImage);
-        }
-    }
-    public void PokemonPartyOptions()
-    {
-        var selectedPokemon = _pokemonPartyHandler.Party[_pokemonPartyHandler.selectedMemberIndex];
-        var partyOptionsSelectables = new List<SelectableUI>
-        {
-            new(_pokemonPartyHandler.partyOptions[0]
-                , ()=>_gameUIHandler.ViewPartyPokemonDetails(selectedPokemon)
-                , true),
-            
-            new(_pokemonPartyHandler.partyOptions[1]
-                , () => _pokemonPartyHandler.BeginMemberSwap(_pokemonPartyHandler.selectedMemberIndex)
-                , true),
-            
-            new(_pokemonPartyHandler.partyOptions[2]
-                , _playerBagHandler.OpenBagToGiveItem
-                ,!selectedPokemon.hasItem),
-            
-            new(_pokemonPartyHandler.partyOptions[3]
-                , () => _playerBagHandler.TakeItem(_pokemonPartyHandler.selectedMemberIndex)
-                ,selectedPokemon.hasItem)
-        };
-        partyOptionsSelectables.RemoveAll(s=>!s.canBeSelected);
-        _inputStateHandler.ChangeInputState(new (InputStateName.PokemonPartyOptions,
-            InputStateGroup.PokemonParty, stateDirection:InputDirection.Vertical, selectableUis:partyOptionsSelectables
-            ,selector:_pokemonPartyHandler.optionSelector,selecting:true,display:true
-            ,onClose:_pokemonPartyHandler.ClearSelectionUI,onExit:_pokemonPartyHandler.ClearSelectionUI));
-        _inputStateHandler.currentState.selector.SetActive(true);
     }
 }

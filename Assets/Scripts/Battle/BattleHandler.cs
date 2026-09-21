@@ -276,7 +276,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
             , InputStateGroup.PokemonBattle, false,
             optionsUI, InputDirection.Grid, battleOptionSelectables,
             optionSelector,true,true
-            ,onExit:_turnBasedCombatHandler.RemoveTurn, updateExit:ConditionsForExit),true);
+            ,onExit:_turnBasedCombatHandler.RemoveTurn, updateExit:ConditionsForExit));
         
         _inputStateHandler.OnStateLoaded += HideDuringDialogue;
         _inputStateHandler.OnStateRemoved += CleanEvents;
