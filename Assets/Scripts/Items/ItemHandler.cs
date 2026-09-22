@@ -286,7 +286,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
         var specialItem = itemInUse.GetDynamicModule<OverworldUsageItem>().specialItem;
         if (specialItem == SpecialOverworldItem.EscapeRope)
         {
-            if (_areaHandler.currentArea.data.escapable)
+            if (_areaHandler.currentArea.locationData.escapable)
             {
                 _areaHandler.EscapeArea();
                 _inputStateHandler.ResetRelevantUi(new[] {InputStateName.PlayerMenu

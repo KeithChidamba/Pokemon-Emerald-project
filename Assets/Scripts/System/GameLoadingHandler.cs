@@ -99,9 +99,9 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         data.numBadges = 0;
         data.trainerID = Utility.Random16Bit();
         data.secretID = Utility.Random16Bit();
-        data.location = AreaName.PlayerGarden;
-        var gardenLocation = _areaHandler.overworldAreas.First(a => a.data.areaName == AreaName.PlayerGarden);
-        data.playerPosition = gardenLocation.tileLocation;
+        data.location = AreaName.LittleRootTown;
+        var gardenLocation = _areaHandler.overworldAreas.First(a => a.locationData.areaName == AreaName.LittleRootTown);
+        data.playerPosition = new Vector3(0,0,0);
         playerData = data;
         StartGame(false);
     }
@@ -116,7 +116,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         {
             LoadPlayerCreationMenu();
         }
-
+        return;
         void LoadPlayerCreationMenu()
         {
             // Load New Player Page
@@ -159,7 +159,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         startMenuCam.gameObject.SetActive(false);
         worldMap.SetActive(true);
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
-        _areaHandler.LoadAreaFromSave(playerData.location);
+        _areaHandler.SwitchToArea(playerData.location);
     }
     public void StartGame(bool loadFromSave=true)
     {

@@ -4,7 +4,7 @@
     "itemType": 9,
     "itemDescription": "Increases a pokemon's friendship but lowers defense",
     "itemImage": {
-        "instanceID": 26582
+        "instanceID": 26584
     },
     "quantity": 9,
     "forPartyUse": true,
@@ -18,10 +18,10 @@
     "priceCurrency": 0,
     "additionalInfoModules": [
         {
-            "instanceID": 28540
+            "instanceID": 28548
         },
         {
-            "instanceID": 27966
+            "instanceID": 27974
         }
     ],
     "dynamicInfoModules": [],

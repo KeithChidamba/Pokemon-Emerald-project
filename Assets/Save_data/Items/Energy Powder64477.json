@@ -4,7 +4,7 @@
     "itemType": 5,
     "itemDescription": "A bitter herb that restores 50 Hp",
     "itemImage": {
-        "instanceID": 27492
+        "instanceID": 27496
     },
     "quantity": 1,
     "forPartyUse": true,
@@ -18,7 +18,7 @@
     "priceCurrency": 0,
     "additionalInfoModules": [
         {
-            "instanceID": 27008
+            "instanceID": 27012
         }
     ],
     "dynamicInfoModules": [

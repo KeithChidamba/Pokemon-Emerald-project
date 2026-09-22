@@ -962,7 +962,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         if(battleEndState == BattleEndState.PlayerLost)
         {
             _playerParty.HealPartyPokemon();
-            _areaHandler.TeleportToArea(AreaName.PokeCenter);
+            _areaHandler.TeleportToArea(AreaName.PokeCenterOldale);
         }
         else
         {

@@ -89,18 +89,6 @@ public static class Utility
             + gender.ToString().ToLower());
     }
 
-    public static string GetAreaName(AreaName areaValue)
-    {
-        var areaNames = new Dictionary<AreaName, string>
-        {
-            {AreaName.OverWorld,"Overworld"},
-            {AreaName.PlayerGarden,"Garden"},
-            {AreaName.PokeMartCoastal,"PokeMart Coastal"},
-            {AreaName.PokeCenter,"Poke-Center"},
-            {AreaName.SouthBridge,"South Bridge"},
-        };
-        return areaNames[areaValue];
-    }
     public static IEnumerator PokemonIntroAnimation(Image pokemonImage, Pokemon pokemon)
     {
         yield return new WaitForSeconds(0.2f);

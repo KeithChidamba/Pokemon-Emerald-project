@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 8
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -108,7 +108,154 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_0
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 421
+        width: 224
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c2ecc29e193614e48527de1e30ee99d
+      internalID: -1253846768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_1
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 421
+        width: 224
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b03e1bc2a41fa397ca0066ede0497d0f
+      internalID: -1647093689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_2
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 222
+        width: 224
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a89dd3543383cdf08d9c43138c077f5
+      internalID: 898760803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_3
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 236
+        width: 176
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 177a0d0ec724be10c9b78367c827cc19
+      internalID: -720168431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_4
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 88
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be4a244fdb0e1efa68882ba1ec1c818e
+      internalID: -291926798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_5
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 60
+        width: 6
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad54c990c58a8d9a997f4a722545c990
+      internalID: 915191921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_6
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 50
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2275c2e26cb33e8288892e81136cf56
+      internalID: -17369857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +266,14 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_0: -1253846768
+      Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_1: -1647093689
+      Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_2: 898760803
+      Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_3: -720168431
+      Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_4: -291926798
+      Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_5: 915191921
+      Game Boy Advance - Pokemon Emerald - Locations - Pokemon Centre & Mart_6: -17369857
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

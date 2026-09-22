@@ -505,7 +505,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             wildPokemon.pokemonDisplayName = rawName;
 
             wildPokemon.captureInformation.levelCaptured = wildPokemon.currentLevel;
-            wildPokemon.captureInformation.areaName = Utility.GetAreaName(_gameLoadingHandler.playerData.location);
+            wildPokemon.captureInformation.areaName = AreaManager.GetAreaName(_gameLoadingHandler.playerData.location);
             yield return _dialogueHandler.AwaitAllDialogue();
             
             var nickNameOperationComplete = false;

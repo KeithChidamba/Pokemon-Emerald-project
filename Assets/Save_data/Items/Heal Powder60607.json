@@ -4,7 +4,7 @@
     "itemType": 5,
     "itemDescription": "A bitter herb that heals all status effects",
     "itemImage": {
-        "instanceID": 27612
+        "instanceID": 27618
     },
     "quantity": 4,
     "forPartyUse": true,
@@ -18,7 +18,7 @@
     "priceCurrency": 0,
     "additionalInfoModules": [
         {
-            "instanceID": 28592
+            "instanceID": 28600
         }
     ],
     "dynamicInfoModules": [],

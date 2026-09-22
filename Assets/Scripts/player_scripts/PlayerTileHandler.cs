@@ -51,7 +51,10 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
     {
         var tile = FindTileAtPosition<AreaSwitchTile>(areaSwitchTilemap,transform.position);
         if (tile is null) return;
-        _areaHandler.SwitchToArea(tile.areaTransitionData.areaName);
+        if (tile.areaTransitionData.isBuidlingEntrance)
+        {
+            _areaHandler.TeleportToArea(tile.areaTransitionData.areaName);
+        }else _areaHandler.SwitchToAreaNoTeleport(tile.areaTransitionData.areaName);
     }
     
     private IEnumerator AnimateGrass()

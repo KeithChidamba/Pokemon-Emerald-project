@@ -8,10 +8,9 @@ public class AreaTransitionData : ScriptableObject
 {
     public AreaName areaName;
     public bool escapable;
-    public Vector3Int entranceCell;
+    public bool isBuidlingEntrance;
+    public Vector3 entranceCell;
+    public Vector3 exitCell;
+    public AreaName overworldAreaName;
     public Biome biome;
-}
-public enum AreaName
-{
-    OverWorld,PlayerGarden,PokeMartCoastal,PokeCenter,SouthBridge
 }

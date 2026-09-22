@@ -4,7 +4,7 @@
     "itemType": 9,
     "itemDescription": "Heals 5hp",
     "itemImage": {
-        "instanceID": 27886
+        "instanceID": 27892
     },
     "quantity": 19,
     "forPartyUse": true,
@@ -18,7 +18,7 @@
     "priceCurrency": 0,
     "additionalInfoModules": [
         {
-            "instanceID": 27862
+            "instanceID": 27868
         }
     ],
     "dynamicInfoModules": [

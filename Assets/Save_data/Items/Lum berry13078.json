@@ -4,7 +4,7 @@
     "itemType": 9,
     "itemDescription": "Heals any status effect",
     "itemImage": {
-        "instanceID": 26642
+        "instanceID": 26644
     },
     "quantity": 2,
     "forPartyUse": true,
@@ -18,7 +18,7 @@
     "priceCurrency": 0,
     "additionalInfoModules": [
         {
-            "instanceID": 28562
+            "instanceID": 28570
         }
     ],
     "dynamicInfoModules": [],

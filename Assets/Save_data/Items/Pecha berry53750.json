@@ -4,7 +4,7 @@
     "itemType": 9,
     "itemDescription": "Heals poison",
     "itemImage": {
-        "instanceID": 26778
+        "instanceID": 26780
     },
     "quantity": 4,
     "forPartyUse": true,
@@ -18,7 +18,7 @@
     "priceCurrency": 0,
     "additionalInfoModules": [
         {
-            "instanceID": 27668
+            "instanceID": 27674
         }
     ],
     "dynamicInfoModules": [],

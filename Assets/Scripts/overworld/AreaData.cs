@@ -5,8 +5,7 @@ using UnityEngine;
 [Serializable]
 public class AreaData
 {
-    public AreaTransitionData data;
-    public Vector3 tileLocation;
+    public AreaTransitionData locationData;
     public List<GameObject> npcList;
     [SerializeField]private List<NpcLogic> npcLogicScripts = new();
     

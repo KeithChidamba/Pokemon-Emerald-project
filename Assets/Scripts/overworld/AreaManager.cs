@@ -1,6 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public enum AreaName
+{
+    PlayerHome,LittleRootTown,OldaleTown,PokeMartOldale,PokeCenterOldale,Route101,Route102,Route104
+}
 public class AreaManager : MonoBehaviour,IInjectable
 {
     public AreaData currentArea;
@@ -21,30 +26,59 @@ public class AreaManager : MonoBehaviour,IInjectable
     }
     public void EscapeArea()
     {
-        //inside this method in-case there extra stuff that needs to happen when escaping
-    }
-    public void LoadAreaFromSave(AreaName areaName)
-    {
-        var saveArea = overworldAreas.First(a=>a.data.areaName == areaName);
-        SetArea(saveArea);
+        if (currentArea.locationData.escapable)
+        {
+            SwitchToArea(currentArea.locationData.overworldAreaName);
+            _playerMovementHandler.SetPlayerPosition(currentArea.locationData.entranceCell);
+        }
     }
     public void TeleportToArea(AreaName areaName)
     {
+        var exiting = currentArea.locationData.areaName == areaName;
+        var area = overworldAreas.First(a=>a.locationData.areaName == areaName);
+        if (exiting)
+        {
+            SwitchToArea(area.locationData.overworldAreaName);
+            _playerMovementHandler.SetPlayerPosition(currentArea.locationData.entranceCell);
+        }
+        else
+        {
+            SetArea(area);
+            _playerMovementHandler.SetPlayerPosition(currentArea.locationData.exitCell);
+        }
+    }
+    /// <summary>
+    /// prevent repeated area loading when touching adjacent tiles
+    /// </summary>
+    public void SwitchToAreaNoTeleport(AreaName areaName)
+    {
+        if (currentArea.locationData.areaName == areaName)
+        {
+            return;
+        }
         SwitchToArea(areaName);
-        _playerMovementHandler.SetPlayerPosition(currentArea.tileLocation);
     }
     public void SwitchToArea(AreaName areaName)
     {
-        if (areaName == currentArea.data.areaName) return;
-        var area = overworldAreas.First(a=>a.data.areaName == areaName);
+        var area = overworldAreas.First(a=>a.locationData.areaName == areaName);
         SetArea(area);
     }
-
     private void SetArea(AreaData newArea)
     {
         currentArea.UnloadNpcObjects();
-        newArea.LoadNpcObjects();
         currentArea = newArea;
-        _gameLoadingHandler.playerData.location = currentArea.data.areaName;
+        currentArea.LoadNpcObjects();
+        _gameLoadingHandler.playerData.location = currentArea.locationData.areaName;
+    }
+    
+    public static string GetAreaName(AreaName areaValue)
+    {
+        var areaNames = new Dictionary<AreaName, string>
+        {
+            {AreaName.LittleRootTown,"Garden"},
+            {AreaName.PokeMartOldale,"PokeMart Oldale"},
+            {AreaName.PokeCenterOldale,"Poke-Center"},
+        };
+        return areaNames[areaValue];
     }
 }

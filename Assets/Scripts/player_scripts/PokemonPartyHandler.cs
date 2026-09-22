@@ -104,7 +104,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                         yield return _dialogueHandler.WaitForDialogueCompletion();
                         yield return _gameUIHandler.FadeInBlackScreen();
                         HealPartyPokemon();
-                        _areaHandler.TeleportToArea(AreaName.PokeCenter);
+                        _areaHandler.TeleportToArea(AreaName.PokeCenterOldale);
                         yield return new WaitForSecondsRealtime(1f);
                         _gameUIHandler.RemoveColorScreen();
                         break;
@@ -396,7 +396,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
             newPokemon.pokeballName = "Pokeball"; 
             newPokemon.ChangeFriendshipLevel(120);
             newPokemon.captureInformation.levelCaptured = newPokemon.currentLevel;
-            newPokemon.captureInformation.areaName = Utility.GetAreaName(_gameLoadingHandler.playerData.location);
+            newPokemon.captureInformation.areaName = AreaManager.GetAreaName(_gameLoadingHandler.playerData.location);
             _pokemonOperationsHandler.SetupPokemonNaming(newPokemon, (result)=>CompletePokemonAddition(newPokemon));
         }
     }

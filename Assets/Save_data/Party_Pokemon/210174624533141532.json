@@ -13,7 +13,7 @@
     "gender": 1,
     "ratioFemale": 50.0,
     "nature": {
-        "instanceID": 27594
+        "instanceID": 27600
     },
     "hasGender": true,
     "hp": 1000.0,
@@ -62,7 +62,7 @@
     "hasTrainer": true,
     "types": [
         {
-            "instanceID": 28310
+            "instanceID": 28318
         }
     ],
     "statusEffect": 0,
@@ -146,14 +146,14 @@
     ],
     "moveSet": [
         {
-            "instanceID": -58680
+            "instanceID": -17668
         },
         {
-            "instanceID": -58682
+            "instanceID": -17670
         }
     ],
     "ability": {
-        "instanceID": 27558
+        "instanceID": 27562
     },
     "evolutions": [
         {
@@ -168,7 +168,7 @@
         "instanceID": 26070
     },
     "backPicture": {
-        "instanceID": 28316
+        "instanceID": 28324
     },
     "partyFrame1": {
         "instanceID": 25518
