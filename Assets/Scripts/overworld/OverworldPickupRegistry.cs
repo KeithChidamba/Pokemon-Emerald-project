@@ -24,8 +24,10 @@ public class OverworldPickupRegistry : ScriptableObject
     {
         if (_overworldPickupPositions.TryGetValue(interactionPosition, out var pickupData))
         {
+            if (pickupData.pickup.item is null) throw new Exception($"Item Pickup registry has null item at [{pickupData.pickup.itemPosition}]");
+            
+            var itemCopy = InstanceFactory.CreateItem(pickupData.pickup.item);
             pickupData.hasBeenPicked = true;
-            var itemCopy = InstanceFactory.CreateItem(pickupData.pickup.item); 
             itemCopy.quantity = pickupData.pickup.itemQuantity;
             return itemCopy;
         }

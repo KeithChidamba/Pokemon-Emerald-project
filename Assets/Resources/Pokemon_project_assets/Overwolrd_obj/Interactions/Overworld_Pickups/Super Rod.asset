@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0f1feb8cf0fc09191cff51de96c7be, type: 3}
   m_Name: Super Rod
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: c81ed8362085ab9cabddf7c3b8a24b8d, type: 2}
+  item: {fileID: 11400000, guid: a625612c815d2d6efab8456a8cc2f43c, type: 2}
   itemPosition: {x: 24, y: -39}
   itemQuantity: 1

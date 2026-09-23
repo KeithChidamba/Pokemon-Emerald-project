@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Rawst berry",
+    "berryItem": {
+        "instanceID": 26416
+    },
+    "minutesPerStage": 45,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33540
+                },
+                {
+                    "instanceID": 33540
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33542
+                },
+                {
+                    "instanceID": 33544
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33722
+                },
+                {
+                    "instanceID": 33724
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33726
+                },
+                {
+                    "instanceID": 33728
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33730
+                },
+                {
+                    "instanceID": 33732
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 0,
+    "lastLogin": "2026-09-23T15:49:50.4720560+02:00"
+}

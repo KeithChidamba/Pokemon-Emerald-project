@@ -404,6 +404,7 @@ public class Pokemon : ScriptableObject
             // Deduct what we just gave
             remainingExp -= expThisLoop;
             // If we reached or passed the next level threshold > level up
+            SoundManager.Play(JingleId.LevelUp);
             yield return LevelUpAtThreshold(true,true);
         }
         _dialogueHandler.DisplayBattleInfo($"{pokemonDisplayName} gained {amount} EXP points");
@@ -414,8 +415,6 @@ public class Pokemon : ScriptableObject
         if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
         {
             LevelUp(increaseFriendship);
-            
-            SoundManager.Play(JingleId.LevelUp);
             
             if(displayMessage)_dialogueHandler.DisplayBattleInfo(pokemonDisplayName+" grew to lv"+currentLevel);
                

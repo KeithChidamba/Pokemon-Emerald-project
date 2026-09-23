@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0f1feb8cf0fc09191cff51de96c7be, type: 3}
   m_Name: Old rod
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 024640736495ea6488988d378acc6fa0, type: 2}
+  item: {fileID: 11400000, guid: a4ce207886b912f9495af32c6dc1d01c, type: 2}
   itemPosition: {x: 22, y: -39}
   itemQuantity: 1

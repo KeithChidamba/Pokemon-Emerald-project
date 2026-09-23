@@ -13,9 +13,9 @@ public class TrainerBattleObjective : StoryObjective
         _dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>(); 
         _battleHandler = serviceContainer.Resolve<BattleHandler>(); 
         _dialogueHandler.DisplayObjectiveText($"Defeat {trainer.TrainerName}");
-        _dialogueOptionsHandler.OnInteractionOptionChosen += CheckBattleInteraction;
+        _dialogueOptionsHandler.OnEventInteraction += CheckBattleInteraction;
     }
-    private void CheckBattleInteraction(Interaction interaction, int optionChosen)
+    private void CheckBattleInteraction(Interaction interaction)
     {
         if (interaction.overworldInteraction == OverworldInteractionType.Battle)
         {
@@ -30,7 +30,7 @@ public class TrainerBattleObjective : StoryObjective
     private void CheckIfWin(bool hasWon)
     {
         if (!hasWon) return;
-        _dialogueOptionsHandler.OnInteractionOptionChosen -= CheckBattleInteraction;
+        _dialogueOptionsHandler.OnEventInteraction -= CheckBattleInteraction;
        
         _battleHandler.OnBattleResult -= CheckIfWin;
         ClearObjective();

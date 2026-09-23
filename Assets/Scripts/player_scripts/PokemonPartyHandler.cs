@@ -104,7 +104,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                         yield return _dialogueHandler.WaitForDialogueCompletion();
                         yield return _gameUIHandler.FadeInBlackScreen();
                         HealPartyPokemon();
-                        _areaHandler.TeleportToArea(AreaName.PokeCenterOldale);
+                        _areaHandler.TeleportToArea(AreaName.PokeCenter);
                         yield return new WaitForSecondsRealtime(1f);
                         _gameUIHandler.RemoveColorScreen();
                         break;

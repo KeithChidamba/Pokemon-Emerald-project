@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0f1feb8cf0fc09191cff51de96c7be, type: 3}
   m_Name: Good rod
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 667de52996dbb3b87a89c4fdea883bc1, type: 2}
+  item: {fileID: 11400000, guid: a438cc01eea9340eda5629c0740700ac, type: 2}
   itemPosition: {x: 23, y: -39}
   itemQuantity: 1

@@ -891,10 +891,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
                     _dialogueHandler.DisplayBattleInfo("All your pokemon have fainted");
                     break;
                 case BattleEndState.PokemonRanAway:
+                    SoundManager.Play(SfxId.Flee);
                     _dialogueHandler.DisplayBattleInfo(wildPokemonName+" ran away");
                     break;
             }
-            SoundManager.PopMusicWhenFinished(); 
+            
             yield return _dialogueHandler.AwaitAllDialogue();
             _dialogueHandler.EndDialogue();
             _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
@@ -957,12 +958,13 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         _battleIntroHandler.ResetParticipantIntroImages();
         OnBattleResult?.Invoke(battleEndState == BattleEndState.PlayerWon);
+        SoundManager.PopMusicWhenFinished(); 
         
         overWorld.SetActive(true);
         if(battleEndState == BattleEndState.PlayerLost)
         {
             _playerParty.HealPartyPokemon();
-            _areaHandler.TeleportToArea(AreaName.PokeCenterOldale);
+            _areaHandler.TeleportToArea(AreaName.PokeCenter);
         }
         else
         {

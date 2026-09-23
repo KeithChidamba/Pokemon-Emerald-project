@@ -192,7 +192,7 @@ public static class InstanceFactory
     {
         var newItem = ScriptableObject.CreateInstance<Item>();
         newItem.itemName = item.itemName;
-        newItem.itemID = newItem.itemName + Utility.Random16Bit();
+        newItem.itemID = item.itemName + Utility.Random16Bit();
         newItem.itemType = item.itemType;
         newItem.itemDescription = item.itemDescription;
         newItem.buyPrice = item.buyPrice;

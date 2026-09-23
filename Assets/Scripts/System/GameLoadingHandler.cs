@@ -14,7 +14,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
     public GameObject uploadButton;
     public GameObject menuSelector;
     public GameObject menuUiParent;
-    [SerializeField] private Image _loadingScreen;
+    [SerializeField] private Image loadingScreen;
     [SerializeField] private Camera startMenuCam;
     public GameObject worldMap;
     public PlayerData playerData;
@@ -99,9 +99,9 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         data.numBadges = 0;
         data.trainerID = Utility.Random16Bit();
         data.secretID = Utility.Random16Bit();
-        data.location = AreaName.LittleRootTown;
-        var gardenLocation = _areaHandler.overworldAreas.First(a => a.locationData.areaName == AreaName.LittleRootTown);
-        data.playerPosition = new Vector3(0,0,0);
+        var gardenLocation = _areaHandler.overworldAreas.First(a => a.locationData.areaName == AreaName.OpenGarden);
+        data.playerPosition = gardenLocation.locationData.entranceCell;
+        data.location = gardenLocation.locationData.areaName;
         playerData = data;
         StartGame(false);
     }
@@ -152,10 +152,10 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         menuUiParent.SetActive(false);
        
         //give everything time to load
-        _loadingScreen.gameObject.SetActive(true);
-        yield return Utility.FadeImage(_loadingScreen,Color.white,0.85f);
+        loadingScreen.gameObject.SetActive(true);
+        yield return Utility.FadeImage(loadingScreen,Color.white,0.85f);
         
-        _loadingScreen.gameObject.SetActive(false);
+        loadingScreen.gameObject.SetActive(false);
         startMenuCam.gameObject.SetActive(false);
         worldMap.SetActive(true);
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);

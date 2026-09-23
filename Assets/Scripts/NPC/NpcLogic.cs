@@ -39,11 +39,11 @@ public class NpcLogic : MonoBehaviour,IInjectable
                 movementHandler.OnMovementStarted += ()=> constantScan = false;
             }
         }
-        _dialogueOptionsHandler.OnInteractionOptionChosen += PauseForInteraction;
+        _dialogueOptionsHandler.OnEventInteraction += PauseForInteraction;
         _playerMovement.OnNewTile += DetectPlayer;
     }
 
-    private void PauseForInteraction(Interaction interaction,int optionChosen)
+    private void PauseForInteraction(Interaction interaction)
     {
         if(interaction.overworldInteraction!=OverworldInteractionType.Battle)return;
         if(interaction!=npcInteractable.interaction)return;

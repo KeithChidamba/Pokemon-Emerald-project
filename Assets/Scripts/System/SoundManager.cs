@@ -315,8 +315,6 @@ public class SoundManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-
         BuildLookups();
         BuildAudioSources();
     }

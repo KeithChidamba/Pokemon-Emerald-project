@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum InteractionOptions
 {
@@ -10,10 +12,13 @@ public enum InteractionOptions
 }
 public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
 {
+    public GameObject pokeballPrefab;
+    
     private Interaction _currentInteraction;
 
     private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
     public event Action<Interaction,int> OnInteractionOptionChosen;
+    public event Action<Interaction> OnEventInteraction;
     public event Action<OverworldInteractable,int> OnOverworldInteractionOptionChosen;
     
     private DialogueHandler _dialogueHandler;
@@ -22,6 +27,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     private GameUiHandler gameUiHandler;
     private PokemonStorageHandler _pokemonStorage;
     private BattleHandler _battleHandler;
+    private PlayerMovementHandler _playerMovementHandler;
     
     public void Inject(ServiceContainer container)
     {
@@ -31,6 +37,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
         _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _battleHandler = container.Resolve<BattleHandler>();
         _pokemonStorage = container.Resolve<PokemonStorageHandler>();
+        _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
         gameObject.SetActive(true);
     }
 
@@ -70,9 +77,81 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     
     void HealPokemon()
     {
+        _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.OverworldAction);
         SoundManager.Play(JingleId.Healed);
         _playerParty.HealPartyPokemon();
-        _dialogueHandler.DisplayDetails("Your pokemon have been healed, you're welcome!");
+        StartCoroutine(PlayPokeballAnimation());
+        return;
+        IEnumerator PlayPokeballAnimation()
+        {
+            var pokeballFlashImages = new List<Image>();
+            var pokeballobjects = new List<GameObject>();
+            const int columns = 2;
+
+            RectTransform parent = pokeballPrefab.transform.parent.GetComponent<RectTransform>();
+            RectTransform prefabRect = pokeballPrefab.GetComponent<RectTransform>();
+
+            float width = prefabRect.rect.width;
+            float height = prefabRect.rect.height;
+
+            for (int i = 0; i < _playerParty.Party.Count; i++)
+            {
+                var newPokeball = Instantiate(pokeballPrefab, parent);
+                newPokeball.SetActive(true);
+                pokeballobjects.Add(newPokeball);
+            
+                RectTransform rect = newPokeball.GetComponent<RectTransform>();
+
+                int row = i / columns;
+                int column = i % columns;
+
+                if (i > 0)
+                {
+                    rect.anchoredPosition = prefabRect.anchoredPosition 
+                                            + new Vector2(column * width, -row * height);
+                }
+                pokeballFlashImages.Add(newPokeball.transform.GetChild(0).GetComponent<Image>());
+                yield return new WaitForSeconds(.25f);
+            }
+            //Flashing
+            const int flashCount = 4;
+            const float totalDuration = 4f;
+            const float fadeDuration = totalDuration / (flashCount * 2);
+
+            for (int i = 0; i < flashCount; i++)
+            {
+                // White -> Yellow
+                foreach (var image in pokeballFlashImages)
+                {
+                    StartCoroutine(Utility.FadeImage(
+                        image,
+                        new Color(1,1,1,0),
+                        new Color(1,1,0,1),
+                        fadeDuration
+                    ));
+                }
+                yield return new WaitForSeconds(fadeDuration);
+
+                // Yellow -> White
+                foreach (var image in pokeballFlashImages)
+                {
+                    StartCoroutine(Utility.FadeImage(
+                        image,
+                        new Color(1,1,0,1),
+                        new Color(1,1,1,0),
+                        fadeDuration
+                    ));
+                }
+
+                yield return new WaitForSeconds(fadeDuration);
+            }
+            _dialogueHandler.DisplayDetails("Your pokemon have been healed, you're welcome!");
+            foreach (var obj in pokeballobjects)
+            {
+                Destroy(obj);
+            }
+            _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.OverworldAction);
+        }
     }
     void SellItem()
     {
@@ -113,12 +192,13 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
     {
         var interactionOption = interaction.interactionOptions[0];
         _currentInteraction = interaction;
-        OnInteractionOptionChosen?.Invoke(interaction,0);
+        OnEventInteraction?.Invoke(interaction);
         if (_interactionMethods.TryGetValue(interactionOption,out var method)) method();
     }
     public void CompleteInteraction(Interaction interaction,int optionIndex)
     {
         OnInteractionOptionChosen?.Invoke(interaction,optionIndex);
+        SoundManager.Play(UiId.Select);
         var interactionOption = interaction.interactionOptions[optionIndex];
         if (interactionOption == InteractionOptions.Custom)
         {

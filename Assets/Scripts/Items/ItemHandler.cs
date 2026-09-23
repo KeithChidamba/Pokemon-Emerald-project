@@ -124,8 +124,6 @@ public class ItemHandler : MonoBehaviour,IInjectable
         OnItemUsed += CompleteItemUsage;
         switch (itemInUse.itemType)
         {
-            case ItemType.Overworld : UseOverworldItem(itemInUse); break;
-            
             case ItemType.Repel: UseRepel(itemInUse); break;
             
             case ItemType.Pokeball: UsePokeball(itemInUse); break;
@@ -281,26 +279,6 @@ public class ItemHandler : MonoBehaviour,IInjectable
         };
         berryUsages[usageIndex].Invoke(itemInUse,selectedPartyPokemon);
     }
-    private void UseOverworldItem(Item itemInUse)
-    {
-        var specialItem = itemInUse.GetDynamicModule<OverworldUsageItem>().specialItem;
-        if (specialItem == SpecialOverworldItem.EscapeRope)
-        {
-            if (_areaHandler.currentArea.locationData.escapable)
-            {
-                _areaHandler.EscapeArea();
-                _inputStateHandler.ResetRelevantUi(new[] {InputStateName.PlayerMenu
-                        ,InputStateName.PlayerBagNavigation});
-                OnItemUsed?.Invoke(itemInUse,true);
-            }
-            else
-            {
-                _dialogueHandler.DisplayDetails("Can't use that here!");
-                OnItemUsed?.Invoke(itemInUse,false);
-            }
-        }
-    }
-
     IEnumerator LevelUpWithItem(Item itemInUse,Pokemon selectedPartyPokemon)
     {
         if (selectedPartyPokemon.currentLevel == 100)

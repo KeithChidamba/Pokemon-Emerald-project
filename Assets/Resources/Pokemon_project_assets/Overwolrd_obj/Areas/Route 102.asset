@@ -12,10 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a848611f2809f51b3ae63e394f264e3a, type: 3}
   m_Name: Route 102
   m_EditorClassIdentifier: 
-  areaName: 6
-  escapable: 0
-  isBuidlingEntrance: 0
-  entranceCell: {x: 49, y: -69, z: 0}
-  exitCell: {x: 0, y: 0, z: 0}
-  overworldAreaName: 6
-  biome: 4
+  areaName: 5
+  entranceCell: {x: 85, y: -81, z: 0}
+  biome: 7

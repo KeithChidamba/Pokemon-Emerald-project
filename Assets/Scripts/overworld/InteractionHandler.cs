@@ -95,6 +95,7 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                 var possibleNpcInteractable = _areaManager.currentArea.CheckForNpcPosition(tileInFrontOfPlayer);
                 if (possibleNpcInteractable is not null) 
                 {
+                    SoundManager.Play(UiId.Select);
                     _dialogueHandler.StartInteraction(possibleNpcInteractable); 
                 }
                 else
@@ -102,6 +103,7 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                     var interactableTile = PlayerTileHandler.FindTileAtPosition<InteractionTile>(interactionTilemap,tileInFrontOfPlayer);
                     if (interactableTile is not null)
                     {
+                        SoundManager.Play(UiId.Select);
                         _dialogueHandler.StartInteraction(interactableTile.interaction);
                     }
                     else
@@ -109,12 +111,14 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                         var interactableObject = hit.transform.GetComponent<OverworldInteractable>();
                         if (interactableObject is not null)
                         {
+                            SoundManager.Play(UiId.Select);
                             _dialogueHandler.StartInteraction(interactableObject);
                         }
                         else
                         {
                             if (_overworldState.PickupItemFound(tileInFrontOfPlayer))
                             {
+                                SoundManager.Play(JingleId.LevelUp);
                                 Destroy(hit.transform.gameObject); 
                             }
                         }
@@ -142,6 +146,7 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                     {
                         tableOfEncounter = animatedWaterTile.table;
                     }
+                    SoundManager.Play(UiId.Select);
                     _overworldActions.fishingTable = (FishingEncounterTable)tableOfEncounter;
                     _dialogueHandler.DisplayCustomOptions("Would you like to fish for pokemon"
                        , new[]{"Yes", "No"},new Action[] { _overworldActions.PlayFishingAnimation, null });

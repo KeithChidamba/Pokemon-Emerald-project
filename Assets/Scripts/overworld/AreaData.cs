@@ -6,8 +6,8 @@ using UnityEngine;
 public class AreaData
 {
     public AreaTransitionData locationData;
-    public List<GameObject> npcList;
-    [SerializeField]private List<NpcLogic> npcLogicScripts = new();
+    public List<GameObject> npcList = new();
+    private List<NpcLogic> npcLogicScripts = new();
     
     public void LoadNpcObjects()
     {

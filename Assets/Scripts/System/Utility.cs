@@ -149,6 +149,6 @@ public static class Utility
             image.color = Color.Lerp(startColor, endColor, t);
             yield return null;
         }
-        yield return new WaitUntil(()=>elapsed >= duration);
+        image.color = endColor;
     }
 }
