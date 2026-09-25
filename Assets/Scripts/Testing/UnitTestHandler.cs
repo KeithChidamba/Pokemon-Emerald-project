@@ -6,29 +6,33 @@ using UnityEngine;
 
 public class UnitTestHandler
 {
-    public enum UnitTestName{MagnitudeDamageTest,PickupAbilityItemPoolTest}
+    public enum UnitTestName{MagnitudeDamageTest,PickupAbilityItemPoolTest,AmuletCoinTest}
 
     public Dictionary<UnitTestName, Func<IEnumerator>> unitTests = new();
 
     private MoveLogicDatabase _moveLogicDatabase;
     private PokemonOperations _pokemonOperationsHandler;
     private TestingEnvironmentHandler _testingHandler;
-
+    private BattleHandler _battleHandler;
+    
     private bool _currentTestPassed;
     public UnitTestHandler(ServiceContainer container)
     {
         _moveLogicDatabase= container.Resolve<MoveLogicDatabase>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         _testingHandler = container.Resolve<TestingEnvironmentHandler>();
-            
+        _battleHandler = container.Resolve<BattleHandler>();    
+        
         unitTests.Add(UnitTestName.MagnitudeDamageTest,MagnitudeDamageTest);
         unitTests.Add(UnitTestName.PickupAbilityItemPoolTest,PickupAbilityItemPoolTest);
+        unitTests.Add(UnitTestName.AmuletCoinTest,AmuletCoinTest);
     }
 
     public IEnumerator RunTests()
     {
         foreach (var test in unitTests)
         {
+            _currentTestPassed = false;
             _testingHandler.LogMessage($"Running Unit Test {test.Key}",TestLogType.Test);
             yield return test.Value.Invoke();
             
@@ -119,6 +123,37 @@ public class UnitTestHandler
             }
             _testingHandler.LogMessage($"pokemon received a {createdPokemon.heldItem?.itemName}",
                 TestLogType.Information);
+            testComplete = true;
+        }
+    }
+
+    private IEnumerator AmuletCoinTest()
+    {
+        bool testComplete = false;
+        
+        var participants = new List<BattleParticipant>
+        {
+            new BattleParticipant{ isActive = true,isPlayer = true},
+            new BattleParticipant{ isActive = true,isPlayer = false},
+            new BattleParticipant{ isActive = true,isPlayer = true},
+            new BattleParticipant{ isActive = false,isPlayer = false},
+        }; 
+      
+        var pokemonAsset = Resources.Load<Pokemon>(DirectoryHandler.GetDirectory(AssetDirectory.Pokemon) + "Zigzagoon/Zigzagoon");
+        var amuletCoin = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)
+        + NameDB.GetItem(ItemName.AmuletCoin));
+        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,pokemonAsset,5,1);
+        
+        yield return new WaitUntil(()=>testComplete);
+        yield break;
+        void CreateMember(Pokemon createdPokemon)
+        {
+            createdPokemon.GiveItem(amuletCoin);
+            participants[0].pokemon = createdPokemon;
+            var moneyBonus = _battleHandler.PrizeMoneyModifier(participants);
+            _testingHandler.LogMessage("Test Requires money bonus greater than 1",TestLogType.TestCase);
+            _testingHandler.LogMessage($"Money bonus: {moneyBonus}",TestLogType.Calculation);
+            _currentTestPassed = moneyBonus > 1f;
             testComplete = true;
         }
     }

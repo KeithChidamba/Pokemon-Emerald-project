@@ -15,6 +15,7 @@ MonoBehaviour:
   mainAssetName: 
   objectiveHeading: equip old rod
   hasProgression: 0
+  indexInList: 0
   objectiveType: 3
-  itemForObjective: {fileID: 11400000, guid: 024640736495ea6488988d378acc6fa0, type: 2}
+  itemForObjective: {fileID: 11400000, guid: a4ce207886b912f9495af32c6dc1d01c, type: 2}
   itemObjectiveType: 0

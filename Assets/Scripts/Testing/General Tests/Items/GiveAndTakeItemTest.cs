@@ -17,7 +17,8 @@ public class GiveAndTakeItemTest: EndToEndTest,IItemTestable
             new("Give mudkip a item",
                 () => _pokemonPartyHandler.Party[0].hasItem),
             new("Item must be oran berry",
-                ()=>_pokemonPartyHandler.Party[0].heldItem.itemName.ToLower() == "oran berry"),
+                ()=>_pokemonPartyHandler.Party[0].heldItem.itemName.ToLower() 
+                    == NameDB.GetItem(ItemName.OranBerry).ToLower()),
             new("Bag must have 1 berry",
                 ()=> _playerBag.allItems[0].quantity==1)
         });

@@ -33,7 +33,7 @@ public class ExpShareTest: EndToEndTest,IBattleTestable
             _pokemonPartyHandler.Party[2].moveSet[0].isSureHit = true;
         }
         //Run test case before battle ends
-        AddTestCase("Exp gained = base exp gain * modifier", ExpGainWorked);
+        AddTestCase("Swap to pikachu then trapinch[Attack] then Validate test during battle victory message", ExpGainWorked);
         
         this.StartBattle(battleTestData,this);
         yield return null;

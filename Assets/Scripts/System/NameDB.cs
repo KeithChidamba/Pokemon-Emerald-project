@@ -174,8 +174,14 @@ public static class NameDB
         { ItemName.FullRestore, "Full Restore" },
         { ItemName.MaxPotion, "Max Potion" },
         { ItemName.FullHeal, "Full Heal" },
-        { ItemName.LeppaBerry, "Leppa Berry" },
-        { ItemName.GuardSpec, "Guard Spec" }
+        { ItemName.LeppaBerry, "Leppa berry" },
+        { ItemName.OranBerry, "Oran berry" },
+        { ItemName.PersimBerry, "Persim berry" },
+        { ItemName.CherriBerry, "Cherri berry" },
+        { ItemName.GuardSpec, "Guard Spec" },
+        { ItemName.Potion, "Potion" },
+        { ItemName.ChoiceBand, "Choice Band" },
+        { ItemName.AmuletCoin, "Amulet Coin" }
     };
     public static ItemName ParseItemName(string itemName)
     {
@@ -212,19 +218,7 @@ public static class NameDB
     {
         return _abilityNames[ability];
     }
-
-    private static Dictionary<EvolutionStone, string> _stoneNames = new()
-    {
-        { EvolutionStone.ThunderStone, "Thunder Stone" },
-        { EvolutionStone.FireStone, "Fire Stone" },
-        { EvolutionStone.WaterStone, "Water Stone" },
-        { EvolutionStone.LeafStone, "Leaf Stone" },
-    };
     
-    public static string GetStoneName(EvolutionStone stone)
-    {
-        return _stoneNames[stone];
-    }
     public static string GetStatName(Stat stat)
     {
         if (stat == Stat.SpecialAttack)
@@ -256,7 +250,8 @@ public static class NameDB
 
 public enum ItemName
 {
-    FullRestore,MaxPotion,FullHeal,LeppaBerry,GuardSpec
+    FullRestore,MaxPotion,FullHeal,LeppaBerry,OranBerry,CherriBerry,PersimBerry,GuardSpec
+    ,Potion,ChoiceBand,AmuletCoin
 }
 
 public enum AbilityName

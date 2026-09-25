@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Test Pokemon
   m_EditorClassIdentifier: 
   data:
-    pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+    pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
     pokemonLevel: 32
     evolutionStageNumber: 0
     hasItem: 0

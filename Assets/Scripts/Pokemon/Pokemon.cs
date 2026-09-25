@@ -349,7 +349,7 @@ public class Pokemon : ScriptableObject
             int expThisLoop = Mathf.Min(remainingExp, expToNextLevel);
             currentExpAmount += expThisLoop;
             remainingExp -= expThisLoop;
-            yield return LevelUpAtThreshold(displayMessage,false);
+            yield return LevelUpAtThreshold(displayMessage,false,false);
         }
     }
     public float AccountForExpGainModifier()
@@ -404,16 +404,20 @@ public class Pokemon : ScriptableObject
             // Deduct what we just gave
             remainingExp -= expThisLoop;
             // If we reached or passed the next level threshold > level up
-            SoundManager.Play(JingleId.LevelUp);
+            
             yield return LevelUpAtThreshold(true,true);
         }
         _dialogueHandler.DisplayBattleInfo($"{pokemonDisplayName} gained {amount} EXP points");
         OnExpGainComplete?.Invoke(this);
     }
-    IEnumerator LevelUpAtThreshold(bool displayMessage,bool increaseFriendship)
+    IEnumerator LevelUpAtThreshold(bool displayMessage,bool increaseFriendship,bool playSound=true)
     {
         if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
         {
+            if (playSound)
+            {
+                SoundManager.Play(JingleId.LevelUp);
+            }
             LevelUp(increaseFriendship);
             
             if(displayMessage)_dialogueHandler.DisplayBattleInfo(pokemonDisplayName+" grew to lv"+currentLevel);

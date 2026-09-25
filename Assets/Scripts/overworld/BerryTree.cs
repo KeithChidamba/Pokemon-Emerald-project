@@ -200,12 +200,11 @@ public class BerryTree : MonoBehaviour
             return;
         }
 
-        _playerBag.DepleteItem(berryToPlant);
+        _playerBag.DepleteItem(berryToPlant,false);
         
         _playerBag.OnItemSelected -= PlantBerry;
         
         treeData.numStagesWatered = 0;
-        
         
         SetInteraction(OverworldInteractionType.WaterBerryTree);
         var treeDataAsset = Resources.Load<BerryTreeData>(

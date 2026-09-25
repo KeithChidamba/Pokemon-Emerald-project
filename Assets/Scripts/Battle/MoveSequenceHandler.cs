@@ -382,36 +382,6 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         }
         return damage;
     }
-    /// <summary>
-    /// Displays the effectiveness of a move and plays the appropriate sound
-    /// </summary>
-    public void DisplayEffectiveness(float typeEffectiveness,BattleParticipant victim)
-    {
-        if ((int)math.trunc(typeEffectiveness) == 1)
-        {
-            SoundManager.Play(SfxId.HitNormal);
-            return;
-        }
-        string message;
-        if (typeEffectiveness == 0)
-        {
-            message = "It doesn't affect " + victim.pokemon.pokemonDisplayName + "!";
-        }
-        else
-        {
-            if (typeEffectiveness > 1)
-            {
-                message = "It's Super effective!";
-                SoundManager.Play(SfxId.HitSuperEffective);
-            }
-            else
-            {
-                message = "It's not very effective!";
-                SoundManager.Play(SfxId.HitNotVeryEffective);
-            }
-        }
-        _dialogueHandler.DisplayBattleInfo(message);
-    }
     private float SetAtkDefRatio(int crit, bool isSpecial, BattleParticipant currentAttacker, BattleParticipant victim)
     {
         float atk, def;
@@ -527,6 +497,9 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                     continue;
                 }
             }
+
+            PlayEffectivenessSound(data.effectivenessScore);
+            
             StartCoroutine(_battleVisualsHandler.DisplayDamageTakenVisual(data.affectedParticipant,data.damageSource));
             yield return new WaitForSecondsRealtime(0.5f);
             
@@ -555,6 +528,32 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         }
         displayingDamage = false;
     }
+    public void DisplayEffectiveness(float typeEffectiveness,BattleParticipant victim)
+    {
+        if (Mathf.FloorToInt(typeEffectiveness) == 1) return;
+        string message;
+        if (typeEffectiveness == 0)
+        {
+            message = "It doesn't affect " + victim.pokemon.pokemonDisplayName + "!";
+        }
+        else
+        {
+            message = typeEffectiveness > 1? "It's Super effective!"
+                :"It's not very effective!";
+        }
+        _dialogueHandler.DisplayBattleInfo(message);
+    }
+    private void PlayEffectivenessSound(float typeEffectiveness)
+    {
+        if (Mathf.FloorToInt(typeEffectiveness) == 1)
+        {
+            SoundManager.Play(SfxId.HitNormal);
+            return;
+        }
+        SoundManager.Play(typeEffectiveness > 1? SfxId.HitSuperEffective
+            :SfxId.HitNotVeryEffective);
+    }
+    
     private void DealDamage(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
         DisplayMoveDamage(move,attacker,victim);

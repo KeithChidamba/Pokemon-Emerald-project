@@ -103,12 +103,18 @@ public static class InstanceFactory
         newPokemon.canEvolve = pkm.canEvolve;
         newPokemon.friendshipLevel = pkm.friendshipLevel;
         newPokemon.hasTrainer = pkm.hasTrainer;
-        newPokemon.types = pkm.types;
+        
+        newPokemon.types.Clear();
+        foreach (var type in pkm.types)
+        {
+            newPokemon.types.Add(type);
+        }
+        
         newPokemon.statusEffect = pkm.statusEffect;
         
+        newPokemon.statModifiers.Clear();
         foreach (var mod in pkm.statModifiers)
         {
-            newPokemon.statModifiers.Clear();
             var copyMod = new StatChangeData(mod.stat, mod.stage, mod.isAtLimit);
             newPokemon.statModifiers.Add(copyMod);
         }
@@ -125,7 +131,9 @@ public static class InstanceFactory
         newPokemon.learnableTms = pkm.learnableTms;
         newPokemon.learnableHms = pkm.learnableHms;
         foreach (var move in pkm.moveSet)
+        {
             newPokemon.moveSet.Add(CreateMove(move));
+        }
         newPokemon.ability = pkm.ability;
         newPokemon.evolutions = pkm.evolutions;
         newPokemon.heldItem = pkm.heldItem;

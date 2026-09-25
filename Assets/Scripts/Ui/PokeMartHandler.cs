@@ -136,7 +136,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
     }
     private void ViewStore(Interaction clerkInteraction, int optionChosen)
     {
-        if (clerkInteraction.overworldInteraction != OverworldInteractionType.Clerk) return;
+        if (clerkInteraction.overworldInteraction != OverworldInteractionType.PokemartClerk) return;
         _dialogueHandler.EndDialogue();
         
         if (optionChosen > 0) return;

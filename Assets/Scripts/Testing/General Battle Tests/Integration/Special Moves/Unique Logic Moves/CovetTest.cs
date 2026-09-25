@@ -21,12 +21,12 @@ public class CovetTest : BattleBasedTest
         testName = "Covet Test";
         
         testExitCondition = TestCompletionCondition.EndManually;
-        _berryName = "Oran berry";
+        _berryName = NameDB.GetItem(ItemName.OranBerry);
         
         //Covet, should fail if enemy has no item
         _sequencer.AddAction(()=>_sequencer.UseMove());
         //Covet, should fail because enemy Item is not a berry
-        _sequencer.AddAction(()=>AttackAndTakePotion("Potion"));
+        _sequencer.AddAction(()=>AttackAndTakePotion(NameDB.GetItem(ItemName.Potion)));
         //Covet, should take enemy berry
         _sequencer.AddAction(()=>AttackAndTakePotion(_berryName));
     }

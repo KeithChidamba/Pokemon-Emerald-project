@@ -668,7 +668,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     }
     public void UseMove(Move move,BattleParticipant user, BattleParticipantKey enemyKey)
     {
-        if(move.powerpoints==0)
+        if (move.powerpoints == 0)
         {
             var leppaBerry = NameDB.GetItem(ItemName.LeppaBerry);
             if (user.pokemon.hasItem)
@@ -697,19 +697,19 @@ public class BattleHandler : MonoBehaviour, IInjectable
         movePowerPointsText.color = currentMove.powerpoints == 0? Color.red : Color.black;
         moveTypeText.text = currentMove.type.GetTypeName;
     }
-    private float PrizeMoneyModifier()
+    public float PrizeMoneyModifier(List<BattleParticipant> participants)
     {
-        var playerParticipants = currentParticipants
+        var playerParticipants = participants
             .Where(p => p.isActive & p.isPlayer).ToList();
         foreach(var participant in playerParticipants)
         {
             if (!participant.pokemon.hasItem)continue;
+            
             var heldItem = participant.pokemon.heldItem;
-            if (heldItem.itemType == ItemType.GainMoney)
-            {
-                var moneyBonus = heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
-                return moneyBonus;
-            }
+            if (heldItem.itemType != ItemType.GainMoney)continue;
+            
+            var moneyBonus = heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
+            return moneyBonus;
         }
         return 1f;
     }
@@ -742,13 +742,14 @@ public class BattleHandler : MonoBehaviour, IInjectable
         {
             var faintedParticipant = faintQueue[0];
             faintedParticipant.BeginFaintEvent();
-            SoundManager.Play(SfxId.Faint);
+            
             _dialogueHandler.DisplayBattleInfo(faintedParticipant.pokemon.pokemonDisplayName + " fainted!");
             var pkmImageRect = faintedParticipant.pokemonImage.rectTransform;
             var rectHeight = pkmImageRect.rect.height;
             var target = new Vector2(pkmImageRect.anchoredPosition.x, pkmImageRect.anchoredPosition.y-rectHeight);
             yield return _dialogueHandler.AwaitAllDialogue();
             
+            SoundManager.Play(SfxId.Faint);
             StartCoroutine(BattleVisuals.SlideRect(pkmImageRect, pkmImageRect.anchoredPosition, target, 300f));
             
             var participantUIRect = faintedParticipant.participantUI.GetComponent<RectTransform>(); 
@@ -840,6 +841,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
                     yield return HandleEvolutions();
                     if (isTrainerBattle)
                     {
+                        if (lastDefeatedOpponent is null)
+                        {
+                            Debug.LogError("Trainer battle victory requires EndBattle() call to pass last opponent");
+                        }
+                        
                         SoundManager.PlayMusic(MusicId.VictoryTrainer);
                         var anyEnemy = GetParticipant(BattleParticipantKey.Player)
                             .currentEnemies[0].pokemonTrainerAI.trainerData;
@@ -850,7 +856,8 @@ public class BattleHandler : MonoBehaviour, IInjectable
                         
                         yield return _battleIntroHandler.ShowEnemiesAfterBattle();
                         _dialogueHandler.DisplayBattleInfo(anyEnemy.battleLossMessage);
-                        var moneyGained = baseMoneyPayout * lastDefeatedOpponent?.currentLevel * PrizeMoneyModifier() ?? 0;
+                        
+                        var moneyGained = baseMoneyPayout * lastDefeatedOpponent?.currentLevel * PrizeMoneyModifier(currentParticipants) ?? 0;
                         playerData.playerMoney += (int)math.floor(moneyGained);
                         _dialogueHandler.DisplayBattleInfo(playerName + " received P" + moneyGained);
                     }
@@ -866,27 +873,25 @@ public class BattleHandler : MonoBehaviour, IInjectable
                 case BattleEndState.PlayerLost:
                     if (isTrainerBattle)
                     {
-                        //last participant is always not null in this situation
-                        var anyEnemy =  GetParticipant(BattleParticipantKey.Player).currentEnemies[0];
+                        var enemy =  GetParticipant(BattleParticipantKey.Player).currentEnemies[0];
                         
-                        var baseMoneyPayout = anyEnemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
+                        var baseMoneyPayout = enemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
                         
                         var playersLastParticipant = currentParticipants.First(p => p.isActive & p.isPlayer);
                         
                         var victoriousOpponent = playersLastParticipant.currentEnemies
                             .First(p=>p.isActive).pokemon;
-                        playerData.playerMoney -= baseMoneyPayout * playerData.numBadges * victoriousOpponent.currentLevel;
+                       
+                        var moneyLost = baseMoneyPayout * playerData.numBadges * victoriousOpponent.currentLevel;
+                        playerData.playerMoney = Mathf.Clamp(playerData.playerMoney - moneyLost,0,playerData.playerMoney);
                     }
                     else
                     {
-                        var partyPokemon = _pokemonPartyHandler.Party
-                            .Where(pokemon => pokemon is not null).ToList();
-                        
-                        var highestLevelOfParty = partyPokemon
+                        var highestLevelOfParty = _pokemonPartyHandler.Party
                             .OrderByDescending(p => p.currentLevel)
                             .First().currentLevel;
-
-                        playerData.playerMoney -= 100 * highestLevelOfParty;
+                        var moneyLost = 100 * highestLevelOfParty;
+                        playerData.playerMoney = Mathf.Clamp(playerData.playerMoney - moneyLost,0,playerData.playerMoney);
                     }
                     _dialogueHandler.DisplayBattleInfo("All your pokemon have fainted");
                     break;

@@ -142,7 +142,8 @@ public class AbilityHandler
     }
     private void Levitate()
     {
-        participant.additionalTypeImmunity = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + nameof(PokemonType.Ground));
+        participant.additionalTypeImmunity = Resources.Load<PokemonTypeData>
+            (DirectoryHandler.GetDirectory(AssetDirectory.Types) + nameof(PokemonType.Ground));
     }
     private void PickUp()
     {
@@ -164,11 +165,11 @@ public class AbilityHandler
         List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
         {
             (5, 9, new[] { "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (10, 19, new[] { "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (20, 29, new[] { "Hyper Potion", "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (30, 39, new[] { "Ether", "Full Heal", "Hyper Potion", "Super Potion", "Escape Rope", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (40, 49, new[] { "Rare Candy", "Full Heal", "Ether", "Hyper Potion", "Super Potion", "Escape Rope", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (50, 59, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion", "Escape Rope", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (10, 19, new[] { "Super Potion", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (20, 29, new[] { "Hyper Potion", "Super Potion", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (30, 39, new[] { "Ether", "Full Heal", "Hyper Potion", "Super Potion", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (40, 49, new[] { "Rare Candy", "Full Heal", "Ether", "Hyper Potion", "Super Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
+            (50, 59, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
             (60, 69, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "Escape Rope" }),
             (70, 100, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "PP Up" })
         };
@@ -275,32 +276,35 @@ public class AbilityHandler
     }
     private void Static()
     {
-        _moveUsageHandler.OnMoveHit += GiveStatic;
-        _onAbilityReset += ()=> _moveUsageHandler.OnMoveHit -= GiveStatic;
+        _moveUsageHandler.OnMoveHit += CheckStaticApplication;
+        _onAbilityReset += ()=> _moveUsageHandler.OnMoveHit -= CheckStaticApplication;
         return;
-        void GiveStatic(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
+        void CheckStaticApplication(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
         {
             if (Utility.RandomChance(CommonRandom.Rnd70)) return;
+            GiveStatic(attacker, victim, moveUsed, finalDamage);
+        }
+    }
+    public void GiveStatic(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
+    {
+        //only activates if this specific participant is hit by an enemy
+        if (attacker.participantKey == participant.participantKey) return;
+        if (victim.participantKey != participant.participantKey) return;
             
-            //only activates if this specific participant is hit by an enemy
-            if (attacker.participantKey == participant.participantKey) return;
-            if (victim.participantKey != participant.participantKey) return;
+        if (attacker.pokemon.statusEffect != StatusEffect.None) return;
+        if (!attacker.canBeDamaged) return;
+        if (!moveUsed.isContact)return;
             
-            if (attacker.pokemon.statusEffect != StatusEffect.None) return;
-            if (!attacker.canBeDamaged) return;
-            if (!moveUsed.isContact)return;
-            
-            //simulate a pokemon's attack
-            attacker.statusHandler.OnStatusEffectReceived += NotifyStaticHit; 
-            var placeholderMove = ScriptableObject.CreateInstance<Move>();
-            placeholderMove.statusEffect = StatusEffect.Paralysis;
-            _moveUsageHandler.HandleStatusApplication(attacker, placeholderMove,false);
-            return;
-            void NotifyStaticHit(StatusEffect status)
-            {
-                attacker.statusHandler.OnStatusEffectReceived -= NotifyStaticHit; 
-                _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s static paralysed "+attacker.pokemon.pokemonDisplayName);
-            }
+        //simulate a pokemon's attack
+        attacker.statusHandler.OnStatusEffectReceived += NotifyStaticHit; 
+        var placeholderMove = ScriptableObject.CreateInstance<Move>();
+        placeholderMove.statusEffect = StatusEffect.Paralysis;
+        _moveUsageHandler.HandleStatusApplication(attacker, placeholderMove,false);
+        return;
+        void NotifyStaticHit(StatusEffect status)
+        {
+            attacker.statusHandler.OnStatusEffectReceived -= NotifyStaticHit; 
+            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s static paralysed "+attacker.pokemon.pokemonDisplayName);
         }
     }
 }

@@ -61,10 +61,12 @@ public class ChoiceBandTest : BattleBasedTest
     private void SetupEnemyChoiceBand()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        var choiceBand = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)+"Choice Band");
+        var choiceBand = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)
+                                              +NameDB.GetItem(ItemName.ChoiceBand));
         if (choiceBand is null)
         {
-            Debug.LogError($"Choice band not found at {DirectoryHandler.GetDirectory(AssetDirectory.Items)+"Choice Band"}");
+            Debug.LogError($"Choice band not found at {DirectoryHandler.GetDirectory(AssetDirectory.Items)}"
+                                                       +NameDB.GetItem(ItemName.ChoiceBand));
             EndTest(false);
         }
         enemy.pokemon.GiveItem(InstanceFactory.CreateItem(choiceBand));

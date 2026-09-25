@@ -387,10 +387,20 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         storageItems.Add(itemToDeposit);
         RemoveItem(itemToDeposit);
     }
-    public void DepleteItem(Item item)
+    public void DepleteItem(Item item,bool refreshUI)
     {
         item.quantity--;
-        CheckItemQuantity(item);
+        if (item.quantity > 0)
+        {
+            bagItemsUI[currentCategoryOfItems.IndexOf(item)].LoadItemUI();
+        }
+        else
+        {
+            allItems.Remove(item);
+            if (!refreshUI) return;
+            ClearBagUI();
+            SetupBagState();
+        }
     }
     /// <summary>
     /// Adds an item to the bag. Make sure the item being added

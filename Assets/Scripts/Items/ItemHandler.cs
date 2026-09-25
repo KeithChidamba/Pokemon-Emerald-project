@@ -57,6 +57,10 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
     private void CompleteItemUsage(Item itemUsed, bool successful)
     {
+        if (successful)
+        {
+            SoundManager.Play(UiId.UseItem);
+        }
         OnItemUsed -= CompleteItemUsage;
         _inputStateHandler.AddPlaceHolderState();
         StartCoroutine(CompletionSequence());
@@ -70,7 +74,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             }
             scheduledInputStateRemoval?.Invoke();
             yield return new WaitForSecondsRealtime(0.1f);
-            
+
             if (_battleHandler.BattleInProgress)
             {
                 yield return new WaitForSecondsRealtime(1f);
@@ -90,8 +94,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
             if (successful)
             {
-                SoundManager.Play(UiId.UseItem);
-                _playerBagHandler.DepleteItem(itemUsed);
+                _playerBagHandler.DepleteItem(itemUsed,true);
                 if (_battleHandler.BattleInProgress)
                 {
                     _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagNavigation,true);
@@ -114,7 +117,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
     private void QuickExit(Item itemInUse)
     {
         OnItemUsed -= CompleteItemUsage;
-        _playerBagHandler.DepleteItem(itemInUse);
+        _playerBagHandler.DepleteItem(itemInUse,false);
         _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.UseItem);
         _turnBasedCombatHandler.NextTurn();
     }
@@ -397,11 +400,13 @@ public class ItemHandler : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails($"{currentParticipant.pokemon.pokemonDisplayName}'s " +
                                             $"{existingBuff.statName} can't go any higher");
             OnItemUsed?.Invoke(itemInUse,false);
-            return;
         }
-        StartCoroutine(CompleteItemUsage());
+        else
+        {
+            StartCoroutine(CompleteUsage());
+        }
         return;
-        IEnumerator CompleteItemUsage()
+        IEnumerator CompleteUsage()
         {
             var xBuffData = new StatChangeTransitData(currentParticipant, statInfo.statName, true, 1);
             yield return _moveUsageHandler.ExecuteSequentialStatChange(xBuffData,false);
@@ -411,7 +416,6 @@ public class ItemHandler : MonoBehaviour,IInjectable
             currentParticipant.pokemon.ChangeFriendshipLevel(1);
             OnItemUsed?.Invoke(itemInUse,true);
         }
-        
     }
 
     private void RevivePokemon(Item itemInUse,Pokemon pokemon)

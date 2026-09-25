@@ -26,7 +26,7 @@ public class Interaction : ScriptableObject
 public enum OverworldInteractionType
 {
     None,
-    Clerk,
+    PokemartClerk,
     PlantBerry,
     PickBerry,
     WaterBerryTree,

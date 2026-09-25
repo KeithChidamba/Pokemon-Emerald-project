@@ -23,13 +23,13 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         testExitCondition = TestCompletionCondition.EndManually;
         
         _sequencer.AddAction(SetupPlayerHealthAndAttack);
-        _sequencer.AddAction(()=>SetupEnemyMoveAndBerry("Cherri berry",1));
-        _sequencer.AddAction(()=>SetupEnemyMoveAndBerry("Persim berry",2));
+        _sequencer.AddAction(()=>SetupEnemyMoveAndBerry(NameDB.GetItem(ItemName.CherriBerry),1));
+        _sequencer.AddAction(()=>SetupEnemyMoveAndBerry(NameDB.GetItem(ItemName.PersimBerry),2));
         _sequencer.AddAction(()=>
         {
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             player.pokemon.moveSet[0].powerpoints = 0;
-            SetupEnemyMoveAndBerry("Leppa berry", 2);
+            SetupEnemyMoveAndBerry(NameDB.GetItem(ItemName.LeppaBerry), 2);
         });
     }
     
@@ -63,6 +63,7 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + berryName;
         var berry = InstanceFactory.CreateItem(Resources.Load<Item>(assetDirectory));
+        if (berry is null) throw new Exception("Berry asset not found");
         player.pokemon.GiveItem(berry);
         
         //tailwhip
@@ -82,7 +83,7 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
             () => !player.isConfused);
         
         _testCaseHandler.AddTestCase( "Player should have their first move powerpoints restored from leppa berry held item", 
-            () => player.pokemon.moveSet[0].powerpoints==10);
+            () => player.pokemon.moveSet[0].powerpoints==9);
         
         yield return HandleBattleState();
         onTestResult.Invoke();

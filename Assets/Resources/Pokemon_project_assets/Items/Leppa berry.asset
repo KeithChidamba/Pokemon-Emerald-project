@@ -22,7 +22,7 @@ MonoBehaviour:
   canBeUsedInOverworld: 1
   canBeUsedInBattle: 1
   isHeldItem: 0
-  canBeHeld: 0
+  canBeHeld: 1
   buyPrice: 0
   canBeSold: 0
   sellPrice: 0

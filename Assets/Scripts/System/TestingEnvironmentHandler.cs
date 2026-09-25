@@ -39,6 +39,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
    }
    public void OnInject()
    {
+      
        if (environment == DevelopmentEnvironment.Testing)
        {
            _testUtils = new TestingUtilities();

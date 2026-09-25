@@ -15,7 +15,7 @@ MonoBehaviour:
   TrainerName: Trevor
   trainerType: 0
   BaseMoneyPayout: 300
-  TrainerLocationData: {fileID: 11400000, guid: 39aacde872dcad918a65db68090ff209, type: 2}
+  TrainerLocationData: {fileID: 11400000, guid: 5e4c5700d75b088b6812151c47fa4b5b, type: 2}
   PokemonParty:
   - {fileID: 11400000, guid: bb66aba008e4eca4587156e14fe1a2c5, type: 2}
   - {fileID: 11400000, guid: 9eb0e87105e0d414fa4bc876b40a71de, type: 2}
