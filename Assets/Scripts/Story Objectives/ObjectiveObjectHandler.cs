@@ -15,7 +15,6 @@ public class propStateAfterObjective
         this.propObject = propObject;
         this.propState = propState;
     }
-
     public GameObject propObject;
     public propState propState;
 }
@@ -33,13 +32,11 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
   public PropBasedObjective objective;
   public List<propStateGroup> propGroupsForObjective;
   public LayerMask newLayer;
-  private ServiceContainer _container;
   private OverworldState _overworldStateHandler;
 
   public void Inject(ServiceContainer container)
   {
       _overworldStateHandler = container.Resolve<OverworldState>();
-      _container = container;
       gameObject.SetActive(true);
   }
 
@@ -50,13 +47,9 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
 
     private void CheckForRequiredObjective()
     {
-        if(objective.requiresPickupItems)
-        {
-            _overworldStateHandler.OnPickupItemCreated += objective.ReceivePickupObjects;
-        }
         if (_overworldStateHandler.HasObjective(objective.name))//the objective could have been completed already
         {
-            objective.Inject(this,_container);
+            objective.Inject(this);
             objective.OnLoad += LoadObjects;
             objective.OnClear += UnLoadObjects;
         }

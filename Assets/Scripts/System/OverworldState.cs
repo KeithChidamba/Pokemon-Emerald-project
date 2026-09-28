@@ -14,15 +14,14 @@ public class OverworldState : MonoBehaviour,IInjectable
 
     [SerializeField] private OverworldPickupRegistry overworldPickupRegistry;
     private OverworldPickupRegistry _loadedPickupRegistry;
+    private OverworldPickupRegistry _objectivePickupRegistry;
     [SerializeField] private GameObject overworldPickupPrefab;
     [SerializeField] private Transform overworldPickupParent;
     public event Action<Item> OnItemPickedUp;
-    public event Action<PickupData> OnPickupItemCreated;
-    
-    public List<StoryObjective> allStoryObjectives = new();
+
+    [SerializeField] private StoryObjectiveRegistry storyObjectiveRegistry;
     public List<StoryObjective> currentStoryObjectives = new();
-    public StoryProgressObjective storyProgressObjective;
-    
+    [SerializeField]private StoryProgressObjective storyProgressObjective;
     
     public event Action OnObjectivesLoaded;
     private SaveDataHandler _saveHandler;
@@ -80,6 +79,12 @@ public class OverworldState : MonoBehaviour,IInjectable
         jsonLoadedTreeData.Clear();
         overworldBerryTrees.Clear();
         
+        _loadedPickupRegistry = null;
+        foreach (Transform child in overworldPickupParent)
+        {
+            Destroy(child.gameObject);
+        }
+        
         if (_gameLoadingHandler.LoadedFromSave)
         {
             yield return _saveHandler.LoadOverworldData();
@@ -117,7 +122,6 @@ public class OverworldState : MonoBehaviour,IInjectable
                         overworldBerryTrees.AddRange(berryTrees);
                         berryTrees[0].Inject(_container);
                         berryTrees[0].LoadTreeData(treeData); 
-                        overworldSoilData.numTreesLoaded++;
                     }
                     else
                     {
@@ -125,8 +129,8 @@ public class OverworldState : MonoBehaviour,IInjectable
                         var currentTree = overworldBerryTrees[((soilCreated - 1) * treesPerSoil) + overworldSoilData.numTreesLoaded];
                         currentTree.Inject(_container);
                         currentTree.LoadTreeData(treeData); 
-                        overworldSoilData.numTreesLoaded++;
                     }
+                    overworldSoilData.numTreesLoaded++;
                 }
             }
             else LoadDefaultTrees();
@@ -134,28 +138,29 @@ public class OverworldState : MonoBehaviour,IInjectable
         else LoadDefaultTrees();
         
         //overworld pickups
+        _objectivePickupRegistry = ScriptableObject.CreateInstance<OverworldPickupRegistry>();
         if (_loadedPickupRegistry is null)
         {
             _loadedPickupRegistry = ScriptableObject.CreateInstance<OverworldPickupRegistry>();
-            for (var i=0; i< overworldPickupRegistry.overworldPickups.Count;i++)
+            foreach (var authored in overworldPickupRegistry.overworldPickups)
             {
-                _loadedPickupRegistry.overworldPickups.Add(new PickupData(
-                    overworldPickupRegistry.overworldPickups[i].pickup,
-                    false,_loadedPickupRegistry
-                ));
+                _loadedPickupRegistry.overworldPickups.Add(new PickupData(authored.pickup, false));
             }
         }
-        
+        _loadedPickupRegistry.LoadLookup(overworldPickupPrefab, overworldPickupParent);
+        // empty; just stores prefab/parent
+        _objectivePickupRegistry.LoadLookup(overworldPickupPrefab, overworldPickupParent); 
+
         //story objectives
         if (storyProgressObjective is null)
         {
-            currentStoryObjectives.AddRange(allStoryObjectives); 
-            yield return new WaitUntil(() => currentStoryObjectives.Count==allStoryObjectives.Count);
+            currentStoryObjectives.AddRange(storyObjectiveRegistry.allStoryObjectives); 
+            yield return new WaitUntil(() => currentStoryObjectives.Count==storyObjectiveRegistry.allStoryObjectives.Count);
             currentStoryObjectives.ForEach(o=>o.mainAssetName=o.name);
             
             storyProgressObjective = Resources.Load<StoryProgressObjective>(DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
             storyProgressObjective.mainAssetName = storyProgressObjective.name;
-            storyProgressObjective.totalObjectiveAmount = allStoryObjectives.Count;
+            storyProgressObjective.totalObjectiveAmount = storyObjectiveRegistry.allStoryObjectives.Count;
             storyProgressObjective.numCompleted = 0;
             
         }
@@ -171,19 +176,22 @@ public class OverworldState : MonoBehaviour,IInjectable
         {
             currentStoryObjectives[0].FindMainAsset(_container);
         }
-        
-        //item pickups
-        _loadedPickupRegistry.LoadLookup(overworldPickupPrefab, overworldPickupParent,this);
         yield return new WaitForSeconds(0.025f);
+    }
 
-    }
-    public void AlertPickupItemCreation(PickupData newPickupData)
-    {
-        OnPickupItemCreated?.Invoke(newPickupData);
-    }
     public bool PickupItemFound(Vector2 interactionPosition)
     {
-        var itemPicked = _loadedPickupRegistry.GetItemPickup(interactionPosition);
+        var handlingPickupObjective = false;
+        if (currentStoryObjectives.Count > 0)
+        {
+            handlingPickupObjective = currentStoryObjectives[0].objectiveType == StoryObjectiveType.PickupItem;
+        }
+        
+        var itemPicked = handlingPickupObjective
+            ? _objectivePickupRegistry.TakeItemPickup(interactionPosition)
+              ?? _loadedPickupRegistry.TakeItemPickup(interactionPosition)
+            : _loadedPickupRegistry.TakeItemPickup(interactionPosition);        
+        
         if (itemPicked is not null)
         {
             _playerBag.AddItem(itemPicked);
@@ -194,18 +202,23 @@ public class OverworldState : MonoBehaviour,IInjectable
         }
         return false;
     }
-
-    public void LoadItemPickups(OverworldPickupRegistry pickUpSaveData)
+    public void LoadItemPickups(OverworldPickupRegistry saved)
     {
+        var pickedIds = new HashSet<string>(
+            saved.overworldPickups
+                .Where(p => p.hasBeenPicked).Select(p => p.pickupId));
+
         _loadedPickupRegistry = ScriptableObject.CreateInstance<OverworldPickupRegistry>();
-        
-        for (var i=0; i< pickUpSaveData.overworldPickups.Count;i++)
+        foreach (var authored in overworldPickupRegistry.overworldPickups)
         {
-            _loadedPickupRegistry.overworldPickups.Add(new PickupData(
-                overworldPickupRegistry.overworldPickups[i].pickup,
-                pickUpSaveData.overworldPickups[i].hasBeenPicked,_loadedPickupRegistry
-                ));
+            _loadedPickupRegistry.overworldPickups.Add(
+                new PickupData(authored.pickup, pickedIds.Contains(authored.pickup.name)));
         }
+    }
+    public void AddPickup(OverworldPickup pickup)
+    {
+        var newPickupData = new PickupData(pickup, false);
+        _objectivePickupRegistry.AddToLookUp(newPickupData);
     }
     public bool HasObjective(string objectiveName)
     {

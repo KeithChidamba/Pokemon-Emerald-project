@@ -1,26 +1,51 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 [CreateAssetMenu(fileName = "registry", menuName = "Overworld/Overworld Item Registry")]
 public class OverworldPickupRegistry : ScriptableObject
 {
     public List<PickupData> overworldPickups = new ();
     private Dictionary<Vector2,PickupData> _overworldPickupPositions = new();
-    private Dictionary<int,GameObject> _overworldPickupObjects = new();
-    public void LoadLookup(GameObject overworldPickupPrefab, Transform overworldPickupParent,OverworldState state)
+    private GameObject _overworldPickupPrefab;
+    private Transform _overworldPickupParent;
+    private readonly Dictionary<Vector2, GameObject> _spawned = new();
+    
+    public void LoadLookup(GameObject overworldPickupPrefab, Transform overworldPickupParent)
     {
+        _overworldPickupPositions.Clear();
+        _overworldPickupPrefab = overworldPickupPrefab;
+        _overworldPickupParent = overworldPickupParent;
+       
         foreach (var currentPickupData in overworldPickups)
         {
             if(currentPickupData.hasBeenPicked)continue;
-            _overworldPickupPositions.Add(currentPickupData.pickup.itemPosition,currentPickupData);
-            var newPickupObject = Instantiate(overworldPickupPrefab,currentPickupData.pickup.itemPosition,overworldPickupPrefab.transform.rotation, overworldPickupParent);
-            newPickupObject.SetActive(true);
-            _overworldPickupObjects.Add(currentPickupData.pickupId,newPickupObject);
-            state.AlertPickupItemCreation(currentPickupData);
+            SetupPickup(currentPickupData);
         }
     }
-
-    public Item GetItemPickup(Vector2 interactionPosition)
+    private void SetupPickup(PickupData currentPickupData)
+    {
+        var pos = currentPickupData.pickup.itemPosition;
+        if (!_overworldPickupPositions.TryAdd(pos, currentPickupData))
+        {
+            Debug.LogError($"Duplicate pickup position {pos} in registry");
+            return;
+        }
+        var newPickupObject = Instantiate(_overworldPickupPrefab, pos, _overworldPickupPrefab.transform.rotation, _overworldPickupParent);
+        newPickupObject.SetActive(true);
+        _spawned[pos] = newPickupObject;
+    }
+    public void AddToLookUp(PickupData newPickupData)
+    {
+        overworldPickups.Add(newPickupData);
+        SetupPickup(newPickupData);
+    }
+    
+    /// <summary>
+    /// Item position is treated as a unique identifier, because 2 items should never overlap
+    /// </summary>
+    [CanBeNull]
+    public Item TakeItemPickup(Vector2 interactionPosition)
     {
         if (_overworldPickupPositions.TryGetValue(interactionPosition, out var pickupData))
         {
@@ -29,32 +54,26 @@ public class OverworldPickupRegistry : ScriptableObject
             var itemCopy = InstanceFactory.CreateItem(pickupData.pickup.item);
             pickupData.hasBeenPicked = true;
             itemCopy.quantity = pickupData.pickup.itemQuantity;
+            _overworldPickupPositions.Remove(interactionPosition);
+            if (_spawned.Remove(interactionPosition, out var pickupObject))
+            {
+                Destroy(pickupObject);
+            }
             return itemCopy;
         }
         return null;
-    }
-    public GameObject FindPickupObject(int id)
-    {
-        return _overworldPickupObjects[id];
     }
 }
 [Serializable]
 public class PickupData
 {
     public OverworldPickup pickup;
+    [HideInInspector]public string pickupId;
     public bool hasBeenPicked;
-    private OverworldPickupRegistry _registry;
-    [HideInInspector]public int pickupId;
-    
-    public PickupData(OverworldPickup pickup, bool hasBeenPicked,OverworldPickupRegistry registry)
+    public PickupData(OverworldPickup pickup, bool hasBeenPicked)
     {
         this.pickup = pickup;
+        pickupId = pickup.name;
         this.hasBeenPicked = hasBeenPicked;
-        pickupId = Utility.Random16Bit();
-        _registry = registry;
-    }
-    public GameObject GetPickupObject()
-    {
-        return _registry.FindPickupObject(pickupId);
     }
 }

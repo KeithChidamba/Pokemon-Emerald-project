@@ -119,7 +119,6 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                             if (_overworldState.PickupItemFound(tileInFrontOfPlayer))
                             {
                                 SoundManager.Play(JingleId.LevelUp);
-                                Destroy(hit.transform.gameObject); 
                             }
                         }
                     }

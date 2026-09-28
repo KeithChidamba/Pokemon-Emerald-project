@@ -2,45 +2,38 @@
     "overworldPickups": [
         {
             "pickup": {
-                "instanceID": 27862
+                "instanceID": 27866
             },
-            "hasBeenPicked": false,
-            "pickupId": 48283
+            "pickupId": "Good rod",
+            "hasBeenPicked": false
         },
         {
             "pickup": {
-                "instanceID": 25954
+                "instanceID": 25956
             },
-            "hasBeenPicked": false,
-            "pickupId": 38749
+            "pickupId": "Old rod",
+            "hasBeenPicked": false
         },
         {
             "pickup": {
-                "instanceID": 26500
+                "instanceID": 26502
             },
-            "hasBeenPicked": false,
-            "pickupId": 64602
+            "pickupId": "Super Rod",
+            "hasBeenPicked": false
         },
         {
             "pickup": {
-                "instanceID": 25738
+                "instanceID": 25740
             },
-            "hasBeenPicked": true,
-            "pickupId": 51820
+            "pickupId": "Repel",
+            "hasBeenPicked": false
         },
         {
             "pickup": {
-                "instanceID": 26218
+                "instanceID": 26754
             },
-            "hasBeenPicked": true,
-            "pickupId": 5310
-        },
-        {
-            "pickup": {
-                "instanceID": 26750
-            },
-            "hasBeenPicked": true,
-            "pickupId": 50281
+            "pickupId": "Luxury Balls",
+            "hasBeenPicked": true
         }
     ]
 }
