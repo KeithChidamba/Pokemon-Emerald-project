@@ -43,16 +43,14 @@ public class InteractionHandler : MonoBehaviour,IInjectable
         {
             if (InputSourceHandler.InputPressed(ControlEvent.Confirm) ||  InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
             {
-                if (_canCheckForInteraction)
-                    RaycastForInteraction();
+                if (_canCheckForInteraction) RaycastForInteraction();
             }
             
-            if (InputSourceHandler.InputRelease(ControlEvent.UseSpecialItem) || InputSourceHandler.InputRelease(ControlEvent.Confirm))
+            if (InputSourceHandler.InputRelease(ControlEvent.Confirm) || InputSourceHandler.InputRelease(ControlEvent.UseSpecialItem))
             {
                 _canCheckForInteraction = true;
             }
         }
-
     }
     public void DisableInteraction()
     {
@@ -116,10 +114,7 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                         }
                         else
                         {
-                            if (_overworldState.PickupItemFound(tileInFrontOfPlayer))
-                            {
-                                SoundManager.Play(JingleId.LevelUp);
-                            }
+                            _overworldState.CheckForItemAtPosition(tileInFrontOfPlayer);
                         }
                     }
                 }
@@ -136,7 +131,7 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                         var stillWaterTile  = PlayerTileHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
                         if (stillWaterTile is null)
                         {
-                            Debug.LogError("hit water tilemap but no tile data");
+                            Debug.LogError($"hit water tilemap but no tile data, position:{tileInFrontOfPlayer}");
                             return;
                         }
                         tableOfEncounter = stillWaterTile.table;
@@ -148,7 +143,7 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                     SoundManager.Play(UiId.Select);
                     _overworldActions.fishingTable = (FishingEncounterTable)tableOfEncounter;
                     _dialogueHandler.DisplayCustomOptions("Would you like to fish for pokemon"
-                       , new[]{"Yes", "No"},new Action[] { _overworldActions.PlayFishingAnimation, null });
+                       , new[]{"Yes", "No"},new Action[] { _overworldActions.PlayFishingAnimation, _dialogueHandler.EndDialogue });
                 }
                 else
                 {
@@ -156,11 +151,14 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                 }
             }
         }
-        if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem)
-            && !hit.transform
-            && _overworldActions.IsEquipped(Equipable.FishingRod))
+        else
         {
-            _dialogueHandler.DisplayDetails("Cant fish here");
+            if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem)
+                && _overworldActions.IsEquipped(Equipable.FishingRod))
+            {
+                _dialogueHandler.DisplayDetails("Cant fish here");
+            }
         }
+        
     }
 }

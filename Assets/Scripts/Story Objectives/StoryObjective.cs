@@ -54,6 +54,9 @@ public abstract class StoryObjective : ScriptableObject
             StoryObjectiveType.TrainerBattle => CreateInstance<TrainerBattleObjective>(),
             StoryObjectiveType.GiftPokemon => CreateInstance<GiftPokemonObjective>(),
             StoryObjectiveType.PickupItem => CreateInstance<ItemPickupObjective>(),
+            StoryObjectiveType.NpcInteraction => CreateInstance<NpcStoryObjective>(),
+            StoryObjectiveType.NpcMovement => CreateInstance<NpcMovementObjective>(),
+            
             _ => null
         };
     }
@@ -68,5 +71,5 @@ public enum StoryObjectiveType
 {
     Destination,Interaction,WildBattle,GeneralItemUiUsage,StoryProgress,
     MarketUiUsage,BerryInteraction,PokemonStorageUiUsage,TrainerBattle,GiftPokemon,
-    PickupItem
+    PickupItem,NpcInteraction,NpcMovement
 }

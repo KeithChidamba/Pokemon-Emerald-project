@@ -1,0 +1,33 @@
+{
+    "mainAssetName": "Follow keith",
+    "objectiveHeading": "Follow keith",
+    "hasProgression": false,
+    "indexInList": 2,
+    "objectiveType": 12,
+    "npcName": "keith",
+    "npcPosition": {
+        "x": 2.0,
+        "y": -21.0,
+        "z": 0.0
+    },
+    "npcPrefab": {
+        "instanceID": 32670
+    },
+    "npcSprites": {
+        "instanceID": -8512
+    },
+    "npcInteraction": {
+        "instanceID": 0
+    },
+    "removeAfterInteraction": true,
+    "movementDirections": [
+        {
+            "direction": 4,
+            "numTilesToTravel": 16
+        },
+        {
+            "direction": 1,
+            "numTilesToTravel": 3
+        }
+    ]
+}

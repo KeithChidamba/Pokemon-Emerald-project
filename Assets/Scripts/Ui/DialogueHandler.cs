@@ -25,7 +25,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     
     [SerializeField] private TMP_Text testCaseDialougeText;
     
-    [SerializeField] private DialogueOptionsManager _dialogueOptionsManager;
+    [SerializeField] private DialogueOptionsManager dialogueOptionsManager;
     [SerializeField] private Transform dialogueUiParent;
     private List<GameObject> _currentDialogueOptions = new();
     [SerializeField] private bool messagesLoading;
@@ -34,7 +34,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     private Coroutine _typingRoutine;
     
     public event Action<OverworldInteractable> OnOptionsDisplayed;
-    public event Action OnDialogueEnded;
+    public event Action<Interaction> OnDialogueEnded;
     public event Action<string> OnDialogueDisplayed;
     private BattleHandler _battleHandler;
     private PlayerMovementHandler _playerMovementHandler;
@@ -110,10 +110,10 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     }
     public void  DeletePreviousOptions()
     { 
-        if( _dialogueOptionsManager.currentOptions.Count == 0) return;  
+        if( dialogueOptionsManager.currentOptions.Count == 0) return;  
         ActivateOptions(false);
         _inputStateHandler.ResetRelevantUi(new []{InputStateName.DialogueOptions,InputStateName.DialoguePlaceHolder});
-        _dialogueOptionsManager.currentOptions.Clear();
+        dialogueOptionsManager.currentOptions.Clear();
         foreach (var option in _currentDialogueOptions)
             Destroy(option);
         _currentDialogueOptions.Clear();
@@ -130,18 +130,18 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             var optionScript = newOption.GetComponent<DialogueOption>();
             _currentDialogueOptions.Add(newOption);
             optionScript.SetupOption(i,numOptions,currentInteraction.optionsUiText[i]);
-            _dialogueOptionsManager.currentOptions.Add(optionScript);
+            dialogueOptionsManager.currentOptions.Add(optionScript);
         }
         StartCoroutine(SetupDialogueOptionsNavigation(currentInteraction));
     }
 
     private IEnumerator SetupDialogueOptionsNavigation(Interaction currentInteraction)
     {
-        _dialogueOptionsManager.LoadUiSize();
+        dialogueOptionsManager.LoadUiSize();
         ActivateOptions(true);
         var optionSelectables = new List<SelectableUI>();
         
-        foreach (var option in _dialogueOptionsManager.currentOptions)
+        foreach (var option in dialogueOptionsManager.currentOptions)
         {
             SelectableUI newOption = new (option.gameObject, () => SelectOption(option.optionIndex,currentInteraction), true);
             optionSelectables.Add( newOption);
@@ -166,7 +166,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     private void ActivateOptions(bool display)
      {
          dialogueOptionBox.gameObject.SetActive(display);
-         foreach (var obj in _dialogueOptionsManager.currentOptions)
+         foreach (var obj in dialogueOptionsManager.currentOptions)
              obj.gameObject.SetActive(display);
      }
     Interaction NewInteraction(string info,DialogType type,string result = "")
@@ -266,13 +266,13 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         battleDialogueBox.SetActive(false);
         ResetText();
         Displaying = false;
-        currentInteractable = null;
         dialogueFinished = false;
         if (_typingRoutine is not null)
         {
             StopCoroutine(_typingRoutine);
         }
-        OnDialogueEnded?.Invoke();
+        OnDialogueEnded?.Invoke(currentInteractable?.interaction);
+        currentInteractable = null;
     }
 
     private void RemovePointer()
@@ -282,6 +282,8 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     }
     public void StartInteraction(Interaction interaction)
     {
+        interaction.SetRuntimeID();
+        
         _interactionHandler.DisableInteraction();
        
         if (interaction.dialogueType == DialogType.Event)
@@ -311,7 +313,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     {
         objectiveDialogueBox.SetActive(false);
     }
-    void ResetText()
+    private void ResetText()
     {
          dialougeText.text = string.Empty;
          dialougeText.ForceMeshUpdate();

@@ -158,18 +158,18 @@ public class OverworldState : MonoBehaviour,IInjectable
             yield return new WaitUntil(() => currentStoryObjectives.Count==storyObjectiveRegistry.allStoryObjectives.Count);
             currentStoryObjectives.ForEach(o=>o.mainAssetName=o.name);
             
-            storyProgressObjective = Resources.Load<StoryProgressObjective>(DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
+            storyProgressObjective = Resources.Load<StoryProgressObjective>(
+                DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
+            
             storyProgressObjective.mainAssetName = storyProgressObjective.name;
             storyProgressObjective.totalObjectiveAmount = storyObjectiveRegistry.allStoryObjectives.Count;
             storyProgressObjective.numCompleted = 0;
-            
         }
         else
         {
             var orderList = currentStoryObjectives.OrderBy(obj => obj.indexInList).ToList();
             currentStoryObjectives.Clear();
             currentStoryObjectives.AddRange(orderList);
-            yield return new WaitUntil(() => currentStoryObjectives.Count==orderList.Count);
         }
         OnObjectivesLoaded?.Invoke();
         if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
@@ -179,7 +179,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         yield return new WaitForSeconds(0.025f);
     }
 
-    public bool PickupItemFound(Vector2 interactionPosition)
+    public void CheckForItemAtPosition(Vector2 interactionPosition)
     {
         var handlingPickupObjective = false;
         if (currentStoryObjectives.Count > 0)
@@ -198,15 +198,15 @@ public class OverworldState : MonoBehaviour,IInjectable
             var quantityMessage = itemPicked.quantity > 1 ? "'s" : "";
             _dialogueHandler.DisplayDetails($"Picked up {itemPicked.quantity} {itemPicked.itemName}{quantityMessage}");
             OnItemPickedUp?.Invoke(itemPicked);
-            return true;
+            SoundManager.Play(JingleId.LevelUp);
         }
-        return false;
     }
     public void LoadItemPickups(OverworldPickupRegistry saved)
     {
         var pickedIds = new HashSet<string>(
             saved.overworldPickups
-                .Where(p => p.hasBeenPicked).Select(p => p.pickupId));
+                .Where(p => p.hasBeenPicked)
+                .Select(p => p.pickupId));
 
         _loadedPickupRegistry = ScriptableObject.CreateInstance<OverworldPickupRegistry>();
         foreach (var authored in overworldPickupRegistry.overworldPickups)
@@ -267,7 +267,7 @@ public class OverworldState : MonoBehaviour,IInjectable
             objective.mainAssetName = objective.mainAssetName==string.Empty? objective.name:objective.mainAssetName;
             objective.indexInList = objectiveIndex;
             objectiveIndex++;
-            _saveHandler.SaveStoryDataAsJson(objective,objective.objectiveHeading);
+            _saveHandler.SaveStoryDataAsJson(objective,objective.mainAssetName);
             yield return new WaitForSeconds(0.025f);
         }
         storyProgressObjective.mainAssetName = storyProgressObjective.mainAssetName==string.Empty? storyProgressObjective.name:storyProgressObjective.mainAssetName;

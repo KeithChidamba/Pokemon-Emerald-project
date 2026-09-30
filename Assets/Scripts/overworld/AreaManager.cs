@@ -10,6 +10,7 @@ public class AreaManager : MonoBehaviour,IInjectable
 {
     public AreaData currentArea;
     public AreaData[] overworldAreas;
+    public Transform overworldNpcParent;
     
     private GameLoadingHandler _gameLoadingHandler;
     private PlayerMovementHandler _playerMovementHandler;

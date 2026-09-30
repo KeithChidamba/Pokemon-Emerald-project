@@ -1,0 +1,10 @@
+{
+    "mainAssetName": "pickup master ball",
+    "objectiveHeading": "Pickup the item on the brown table",
+    "hasProgression": false,
+    "indexInList": 0,
+    "objectiveType": 10,
+    "itemToPickup": {
+        "instanceID": 26220
+    }
+}

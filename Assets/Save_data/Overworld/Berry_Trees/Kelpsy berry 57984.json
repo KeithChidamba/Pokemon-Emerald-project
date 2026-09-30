@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 1,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Kelpsy berry",
+    "berryItem": {
+        "instanceID": 27250
+    },
+    "minutesPerStage": 180,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33544
+                },
+                {
+                    "instanceID": 33544
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33546
+                },
+                {
+                    "instanceID": 33548
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33670
+                },
+                {
+                    "instanceID": 33672
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33674
+                },
+                {
+                    "instanceID": 33676
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33678
+                },
+                {
+                    "instanceID": 33680
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 2,
+    "lastLogin": "2026-09-30T15:52:32.9038400+02:00"
+}

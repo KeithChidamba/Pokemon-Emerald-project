@@ -1,0 +1,23 @@
+{
+    "mainAssetName": "Speak to keith",
+    "objectiveHeading": "",
+    "hasProgression": false,
+    "indexInList": 1,
+    "objectiveType": 11,
+    "npcName": "Keith",
+    "npcPosition": {
+        "x": 0.0,
+        "y": -16.0,
+        "z": 0.0
+    },
+    "npcPrefab": {
+        "instanceID": 32670
+    },
+    "npcSprites": {
+        "instanceID": -8512
+    },
+    "npcInteraction": {
+        "instanceID": -12482
+    },
+    "removeAfterInteraction": true
+}

@@ -16,9 +16,6 @@ MonoBehaviour:
   - pickup: {fileID: 11400000, guid: 9a5e196d5e74ebc1ba6f11f88cc203d9, type: 2}
     pickupId: 0
     hasBeenPicked: 0
-  - pickup: {fileID: 11400000, guid: e73221426db8327e186a6c6974913f63, type: 2}
-    pickupId: 0
-    hasBeenPicked: 0
   - pickup: {fileID: 11400000, guid: 06cb71e6f7316805da0f042221b92189, type: 2}
     pickupId: 0
     hasBeenPicked: 0

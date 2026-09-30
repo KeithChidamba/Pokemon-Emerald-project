@@ -8,6 +8,8 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "Interaction", menuName = "interaction")]
 public class Interaction : ScriptableObject
 {
+    private string runtimeID = "";
+    
     [FormerlySerializedAs("InteractionMsg")] public string interactionMessage = "";
     public DialogType dialogueType;
     public bool isEventTrigger;
@@ -21,6 +23,15 @@ public class Interaction : ScriptableObject
     {
         return additionalInfo as T;
     }
+
+/// <summary>
+/// give interactions a random unique ID
+/// </summary>
+    public void SetRuntimeID()
+    {
+        runtimeID = $"{Utility.Random16Bit() * 256 - interactionMessage.Length}";
+    }
+    public string GetID => runtimeID;
 }
 
 public enum OverworldInteractionType

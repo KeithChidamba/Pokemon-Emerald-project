@@ -25,6 +25,7 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
     [SerializeField] float runSpeed = 6f;
     private const float BikeSpeed = 10f;
     public bool runningInput;
+    public bool canRun = true;
     public bool usingBike;
     public bool canUseBike = true;
     private bool _canSwitchMovement;
@@ -68,8 +69,10 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
         _overworldActions.OnItemUnequipped +=
             (item) => StopBikeUsage(item == Equipable.Bike);
         
-        _dialogueHandler.OnDialogueEnded += () => AllowPlayerMovement(MovementRestrictor.Dialogue,0.35f);
+        _dialogueHandler.OnDialogueEnded += (interaction) => AllowPlayerMovement(MovementRestrictor.Dialogue,0.35f);
         _overworldActions.OnActionComplete += () => AllowPlayerMovement(MovementRestrictor.OverworldAction,0.35f);
+
+        canRun = true;
     }
 
     private void SnapToPosition()
@@ -219,7 +222,7 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
 
     private void HandleRunInputs()
     {
-        if (usingBike) return;
+        if (usingBike || !canRun) return;
         var idle = yAxisInput == 0 && xAxisInput == 0;
         if (InputSourceHandler.InputPressed(ControlEvent.Exit) && !runningInput)
         {

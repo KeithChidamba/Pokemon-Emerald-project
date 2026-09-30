@@ -110,7 +110,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         if (_saveDataExists)
         {
             _dialogueHandler.DisplayCustomOptions($"Save data detected!, Are you sure you want to erase it?",
-                new[] { "Yes", "No" }, new Action[] { LoadPlayerCreationMenu, null });
+                new[] { "Yes", "No" }, new Action[] { LoadPlayerCreationMenu, _dialogueHandler.EndDialogue });
         }
         else
         {

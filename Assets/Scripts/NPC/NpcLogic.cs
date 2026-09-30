@@ -17,6 +17,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
     private DialogueHandler _dialogueHandler;
     private PlayerMovementHandler _playerMovement;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
+    
     public void Inject(ServiceContainer container)
     {
         _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
@@ -98,8 +99,8 @@ public class NpcLogic : MonoBehaviour,IInjectable
         {
             _longDistanceDetection = true;
             _runDialogueInteraction = () => _dialogueHandler.StartInteraction(npcInteractable.interaction);
-            movementHandler.OnMovementEnded += _runDialogueInteraction;
-            StartCoroutine(movementHandler.MoveToSpecific(movementHandler.GetCurrentDirection(),distance-1));
+            movementHandler.OnMovementEnded += _runDialogueInteraction; 
+            movementHandler.MoveToSpecific(movementHandler.GetCurrentDirection(),distance-1);
         }
         else
         {

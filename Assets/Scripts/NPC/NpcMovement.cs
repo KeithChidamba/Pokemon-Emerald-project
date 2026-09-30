@@ -19,6 +19,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
     [SerializeField]private SpriteRenderer headSpriteRenderer;
     private int _currentSpriteIndex;
     [SerializeField]private int currentStepCount;
+    public bool isControlled;
     public bool Moving { get; private set; }
     [SerializeField]private bool canMove;
     private Coroutine animationRoutine;
@@ -75,7 +76,6 @@ public class NpcMovement : MonoBehaviour,IInjectable
     }
     public void StopMovement(bool snapPosition=true)
     {
-        StopAllCoroutines();
         canMove = false;
         Moving = false;
         if (!snapPosition) return;
@@ -97,6 +97,14 @@ public class NpcMovement : MonoBehaviour,IInjectable
 
     private void OnEnable()
     {
+        if (isControlled)
+        {
+            _currentSpriteData = animationData.spriteData.GetSpriteData(MovementDirection.Down);
+            SetSprites(_currentSpriteData.idleSprite);
+            canMove = false;
+            Moving = false;
+            return;
+        }
         SwitchMove();
         if (animationData.isIdle)
         {
@@ -127,19 +135,26 @@ public class NpcMovement : MonoBehaviour,IInjectable
             _currentSpriteIndex = 0;
         SetSprites(_currentSpriteData.spritesForDirection[_currentSpriteIndex]);
     }
-    public IEnumerator MoveToSpecific(MovementDirection direction,int numTiles)
+
+    public void MoveToSpecific(MovementDirection direction,int numTiles)
     {
-        StopMovement();
+        StartCoroutine(Move());
+        return;
+        IEnumerator Move()
+        {
+            StopMovement();
         
-        canMove = true;
-        _currentMovement = new NpcMovementDirection(direction,numTiles);
-        _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);
+            canMove = true;
+            _currentMovement = new NpcMovementDirection(direction,numTiles);
+            _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);
         
-        yield return MovementLoop(true);
-        
-        StopMovement(false);
-        OnMovementEnded?.Invoke();
+            yield return MovementLoop(true);
+            
+            StopMovement(false);
+            OnMovementEnded?.Invoke();
+        }
     }
+     
     private IEnumerator MovementLoop(bool specificMovement=false)
     {
         while (canMove)

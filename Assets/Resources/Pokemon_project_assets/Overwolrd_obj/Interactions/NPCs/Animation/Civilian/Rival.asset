@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b52ef104b933d22c993d755f9cc0bf23, type: 3}
+  m_Name: Rival
+  m_EditorClassIdentifier: 
+  spriteDataList:
+  - idleSprite: {fileID: -50627383, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: -751479817, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -50627383, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 1812383625, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 1
+  - idleSprite: {fileID: -2031203348, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: 983880674, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -2031203348, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 2131932650, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 2
+  - idleSprite: {fileID: 686963427, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: -1506551445, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 686963427, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -1279478389, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 3
+  - idleSprite: {fileID: -822635285, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: -833240120, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -822635285, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -618376034, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 4

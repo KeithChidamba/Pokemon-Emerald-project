@@ -15,3 +15,7 @@ MonoBehaviour:
   allStoryObjectives:
   - {fileID: 11400000, guid: 27d169542d043ac44a4544d4db934417, type: 2}
   - {fileID: 11400000, guid: 9929998728a3d18a695b5fcb4a0e75f9, type: 2}
+  - {fileID: 11400000, guid: 04230ab95d8e5b6b6b6b9e66fda768e1, type: 2}
+  - {fileID: 11400000, guid: 551ed5cb086d6713f993276c7ef2b40e, type: 2}
+  - {fileID: 11400000, guid: 48ef58bad764d59fdbce628a700845c8, type: 2}
+  - {fileID: 11400000, guid: 0bf8c4836020e8613932e7a5aa8387aa, type: 2}

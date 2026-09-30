@@ -4,7 +4,7 @@
     "itemType": 10,
     "itemDescription": "50% higher chance to catch compared to pokeball",
     "itemImage": {
-        "instanceID": 26448
+        "instanceID": 26450
     },
     "quantity": 3,
     "forPartyUse": false,
