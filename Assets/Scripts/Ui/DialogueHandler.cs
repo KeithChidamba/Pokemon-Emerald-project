@@ -34,6 +34,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     private Coroutine _typingRoutine;
     
     public event Action<OverworldInteractable> OnOptionsDisplayed;
+    public event Action<Interaction> OnDialogueStarted;
     public event Action<Interaction> OnDialogueEnded;
     public event Action<string> OnDialogueDisplayed;
     private BattleHandler _battleHandler;
@@ -189,7 +190,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             newInteraction.optionsUiText.Add(text);
         }
         
-        HandleInteraction(newInteraction,true,true);
+        HandleInteraction(newInteraction,true);
         return;
         
         void InvokeSelectedOption(Interaction interaction,int optionIndex)
@@ -203,14 +204,14 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     {
         messagesLoading = false;
         var newInteraction = NewInteraction(info,type);
-        HandleInteraction(newInteraction,true,false);
+        HandleInteraction(newInteraction,false);
     }    
     public void DisplayDetails(string info,bool canExit=true)
     {
         canExitDialogue = canExit;
         messagesLoading = false;
         var newInteraction = NewInteraction(info,DialogType.Details);
-        HandleInteraction(newInteraction,true,true);
+        HandleInteraction(newInteraction,true);
     }
     public void DisplayTextOnly(string info,bool canExit)
     {
@@ -219,7 +220,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             canExitDialogue = canExit;
         }
         var newInteraction = NewInteraction(info,DialogType.TextOnly);
-        HandleInteraction(newInteraction,false,true);
+        HandleInteraction(newInteraction,true);
     }
     /// <summary>
     /// Can be used for battle dialogue but also situations where that specific
@@ -246,7 +247,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             var currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo);
             SetBattleTextBox(currentInteraction);
             _inputStateHandler.AddBattleDialoguePlaceHolderState();
-            _typingRoutine = StartCoroutine(TypeText(currentInteraction,false));
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction));
             yield return _typingRoutine;
             
             yield return new WaitUntil(()=>dialogueFinished);
@@ -283,6 +284,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     public void StartInteraction(Interaction interaction)
     {
         interaction.SetRuntimeID();
+        OnDialogueStarted?.Invoke(interaction);
         
         _interactionHandler.DisableInteraction();
        
@@ -291,7 +293,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             _dialogueOptionsHandler.CompleteEventInteraction(interaction);
             return;
         }
-        HandleInteraction(interaction,true,true);
+        HandleInteraction(interaction,true);
     }
     public void StartInteraction(OverworldInteractable interactable)
     {
@@ -301,7 +303,11 @@ public class DialogueHandler : MonoBehaviour,IInjectable
 
     public void DisplayObjectiveText(string message)
     {
-        if (message == string.Empty) return;
+        if (message == string.Empty)
+        {
+            objectiveDialogueBox.SetActive(false);
+            return;
+        }
         objectiveDialogueBox.SetActive(true);
         objectiveDialougeText.text = message;
     }
@@ -320,7 +326,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
          dialougeText.ForceMeshUpdate();
          dialougeText.maxVisibleCharacters = 0;
     }
-    private IEnumerator TypeText(Interaction currentInteraction,bool displayPointer)
+    private IEnumerator TypeText(Interaction currentInteraction)
     {
         ResetText();
         dialogueFinished = false;
@@ -334,10 +340,8 @@ public class DialogueHandler : MonoBehaviour,IInjectable
 
         for (int page = 1; page <= totalPages; page++)
         {
-            if (displayPointer)
-            {
-                RemovePointer();
-            }
+            RemovePointer();
+            
             dialougeText.pageToDisplay = page;
             dialougeText.maxVisibleCharacters = 0;
 
@@ -372,24 +376,24 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             dialougeText.ForceMeshUpdate();
 
             var charInfo = dialougeText.textInfo.characterInfo[lastChar];
-            
-            if (displayPointer)
+          
+            if(totalPages > 1 && page < totalPages)
             {
+                //Display pointer
                 var worldPos = dialougeText.rectTransform.TransformPoint(charInfo.bottomRight);
                 //fine-tuning visual off-sets
                 worldPos = new Vector2(worldPos.x+35f, worldPos.y + math.abs(worldPos.y*.2f));
                 
                 var parentRect = (RectTransform)dialougeText.rectTransform.parent;
-
                 var parentSpacePos = parentRect.InverseTransformPoint(worldPos);
                 
                 endOfDialoguePointer.SetStartPosition(parentSpacePos);
                 endOfDialoguePointer.gameObject.SetActive(true);
                 endOfDialoguePointer.ChangeActiveState(true);
+                
+                // Wait for input before next page
+                yield return new WaitUntil(() => InputSourceHandler.InputPressed(ControlEvent.Confirm));
             }
-           
-            // Wait for input before next page
-            if(totalPages > 1 && page < totalPages) yield return new WaitUntil(() =>InputSourceHandler.InputPressed(ControlEvent.Confirm));
         }
         dialogueFinished = true;
         
@@ -404,7 +408,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         _typingRoutine = null;
     }
 
-    private void HandleInteraction(Interaction currentInteraction,bool displayPointer,bool typeOut)
+    private void HandleInteraction(Interaction currentInteraction,bool typeOut)
     {
         if (currentInteraction.dialogueType == DialogType.Options)
         {
@@ -415,13 +419,12 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         SetBattleTextBox(currentInteraction);
         if (typeOut)
         {
-            // Stop ONLY the typing coroutine
             if (_typingRoutine is not null)
             {
                 StopCoroutine(_typingRoutine);
             }
             _inputStateHandler.AddDialoguePlaceHolderState();
-            _typingRoutine = StartCoroutine(TypeText(currentInteraction,displayPointer));
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction));
         }
         else
         {

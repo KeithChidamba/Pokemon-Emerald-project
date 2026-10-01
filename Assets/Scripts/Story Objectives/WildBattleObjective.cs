@@ -8,7 +8,10 @@ public class WildBattleObjective : StoryObjective
     }
     public BattleObjectiveOutline objectiveOutline;
     public BattleEncounterSource encounterSourceForObjective;
+    public bool blockFighting;
+    public bool catchExactPokemon;
     public Pokemon pokemonForObjective;
+    
     private BattleHandler _battleHandler;
     private EncounterHandler  _encounterHandler;
     private PokemonOperations _pokemonOperationsHandler;
@@ -18,7 +21,12 @@ public class WildBattleObjective : StoryObjective
         var dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
         _encounterHandler = serviceContainer.Resolve<EncounterHandler>(); 
         _battleHandler = serviceContainer.Resolve<BattleHandler>(); 
-        _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>(); 
+        _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
+        
+        if(blockFighting)
+        {
+            _battleHandler.SetBattleOptionPermission(BattleOption.Fight, false);
+        }
         
         if (objectiveOutline == BattleObjectiveOutline.BeatWildPokemon)
         {
@@ -33,7 +41,11 @@ public class WildBattleObjective : StoryObjective
     }
     private void CheckIfPokemonCaught(Pokemon pokemon,bool isCaught)
     {
-        if (!isCaught || pokemonForObjective.pokemonName!=pokemon.pokemonName)
+        var condition = catchExactPokemon?
+            pokemonForObjective.pokemonName == pokemon.pokemonName
+            : pokemonForObjective.basePokemonName == pokemon.basePokemonName;
+      
+        if (!isCaught || !condition)
         {
             return;
         }

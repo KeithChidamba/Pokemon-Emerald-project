@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5de6c4f45531cfbabe3a0b40548abf4, type: 3}
   m_Name: Learn To Fish From keith
   m_EditorClassIdentifier: 
-  mainAssetName: Speak to keith
+  mainAssetName: Learn To Fish From keith
   objectiveHeading: 
   hasProgression: 0
   indexInList: 0
@@ -23,3 +23,4 @@ MonoBehaviour:
   npcSprites: {fileID: 11400000, guid: 9bea254fcb98118c4a5d93967d943c36, type: 2}
   npcInteraction: {fileID: 11400000, guid: b97abfa682c1f987082abec919cad73e, type: 2}
   removeAfterInteraction: 0
+  facePlayer: 1

@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class NpcMovement : MonoBehaviour,IInjectable
+public class NpcMovement : MonoBehaviour
 {
     public NpcAnimationData animationData;
     [SerializeField] private Transform rayCastPoint;
@@ -30,17 +30,6 @@ public class NpcMovement : MonoBehaviour,IInjectable
     public event Action OnMovementStarted;
     public event Action OnMovementEnded;
     
-    
-    private PlayerMovementHandler _playerMovement;
-    public void Inject(ServiceContainer container)
-    {
-        _playerMovement = container.Resolve<PlayerMovementHandler>();
-    }
-
-    public void OnInject()
-    {
-        
-    }
     public MovementDirection GetCurrentDirection()
     {
         return _currentMovement.direction;
@@ -51,11 +40,11 @@ public class NpcMovement : MonoBehaviour,IInjectable
         headSpriteRenderer.sprite = newSprite;
         bodySpriteRenderer.sprite = newSprite;
     }
-    public void FacePlayerDirection()
+    public void FacePlayerDirection(PlayerMovementHandler playerMovement)
     {
         StopMovement();
 
-        var playerDirection = (int)_playerMovement.currentDirection;
+        var playerDirection = (int)playerMovement.currentDirection;
         
         var directionConversions = new []{MovementDirection.Up,MovementDirection.Down
             ,MovementDirection.Right,MovementDirection.Left};

@@ -125,10 +125,10 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                 if (hit.transform.gameObject.CompareTag("Water"))
                 {
                     EncounterTable tableOfEncounter;
-                    var animatedWaterTile = PlayerTileHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,hit.point);
+                    var animatedWaterTile = PlayerTileHandler.FindTileAtPosition<AnimatedEncounterTile>(waterTilemap,tileInFrontOfPlayer);
                     if (animatedWaterTile is null)
                     {
-                        var stillWaterTile  = PlayerTileHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
+                        var stillWaterTile = PlayerTileHandler.FindTileAtPosition<EncounterTile>(waterTilemap,tileInFrontOfPlayer);
                         if (stillWaterTile is null)
                         {
                             Debug.LogError($"hit water tilemap but no tile data, position:{tileInFrontOfPlayer}");
@@ -141,7 +141,14 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                         tableOfEncounter = animatedWaterTile.table;
                     }
                     SoundManager.Play(UiId.Select);
+                    
                     _overworldActions.fishingTable = (FishingEncounterTable)tableOfEncounter;
+                    if (_overworldActions.fishingTable.fishingTables.Length == 0)
+                    {
+                        _dialogueHandler.DisplayDetails("Cant fish here");
+                        Debug.LogError($"Fishing table found at tile has no entries for any required rod. tile position {tileInFrontOfPlayer}");
+                        return;
+                    }
                     _dialogueHandler.DisplayCustomOptions("Would you like to fish for pokemon"
                        , new[]{"Yes", "No"},new Action[] { _overworldActions.PlayFishingAnimation, _dialogueHandler.EndDialogue });
                 }

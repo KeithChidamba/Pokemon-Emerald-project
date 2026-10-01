@@ -19,6 +19,10 @@ public enum PlayerTurnUsage
 {
     UseItem,SwitchPokemonIn,Fight,None
 }
+public enum BattleOption
+{
+Fight,Bag,Party,Run
+}
 public class BattleHandler : MonoBehaviour, IInjectable
 {
     public GameObject battleUI;
@@ -56,6 +60,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     public BattleEndState battleEndState;
     
     public float participantPositionOffset = 100;
+    private Dictionary<BattleOption,bool> _permittedBattleOptions = new();
     
     public BattleType currentBattleType;
     public enum BattlesStyle {Switch=0,Set=1 };
@@ -118,6 +123,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
         battleParticipants.Add(BattleParticipantKey.Enemy,battleParticipantInstances[2]);
         battleParticipants.Add(BattleParticipantKey.EnemyPartner,battleParticipantInstances[3]);
         
+        _permittedBattleOptions.Add(BattleOption.Fight,true);
+        _permittedBattleOptions.Add(BattleOption.Bag,true);
+        _permittedBattleOptions.Add(BattleOption.Party,true);
+        _permittedBattleOptions.Add(BattleOption.Run,true);
+        
         currentParticipants.AddRange(battleParticipantInstances);
         
         _turnBasedCombatHandler.OnNewTurn += CountValidParticipants;
@@ -125,6 +135,10 @@ public class BattleHandler : MonoBehaviour, IInjectable
         {
             SetPlayerTurnUsage(PlayerTurnUsage.None);
         };
+    }
+    public void SetBattleOptionPermission(BattleOption option, bool access)
+    {
+        _permittedBattleOptions[option] = access;
     }
     public TeamEffects GetTeam(BattleParticipantKey participantKey)
     {
@@ -260,16 +274,16 @@ public class BattleHandler : MonoBehaviour, IInjectable
         {
             new(battleOptions[0],
                 LoadMoveInputAndText,
-                true),
+                _permittedBattleOptions[BattleOption.Fight]),
             new(battleOptions[1], 
                 ()=> RemoveBattleTextAndInvoke(_gameUIHandler.ValidateBagView),
-                true),
+                _permittedBattleOptions[BattleOption.Bag]),
             new(battleOptions[2], 
                 () => RemoveBattleTextAndInvoke(()=>_gameUIHandler.ViewPokemonParty(PartyUsage.General)),
-                true),
+                _permittedBattleOptions[BattleOption.Party]),
             new(battleOptions[3], 
                 () => StartCoroutine(RunAway()),
-                true)
+                _permittedBattleOptions[BattleOption.Run])
         };
         
         _inputStateHandler.ChangeInputState(new (InputStateName.PokemonBattleOptions
@@ -627,6 +641,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     }
     public void LoadMoveInputAndText()
     { 
+        
         var currentPlayerParticipant = GetCurrentParticipant();
         bool emptyMoves = currentPlayerParticipant.pokemon.moveSet.Count(m=>m.powerpoints > 0) == 0;
         if (emptyMoves)
@@ -658,8 +673,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
             movesUI, InputDirection.Grid, moveSelectables,
             moveSelector,true,true,ResetMoveUsability,ResetMoveUsability));
         
-        for (var i = currentPlayerParticipant.pokemon.moveSet.Count; i < 4; i++)//only show available moves
+        for (var i = currentPlayerParticipant.pokemon.moveSet.Count; i < 4; i++)
+        {
+            //only show available moves
             availableMovesText[i].text = "";
+        }
         return;
         void ResetMoveUsability()
         {
@@ -938,6 +956,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         SetPlayerTurnUsage(PlayerTurnUsage.None);
         
+        SetBattleOptionPermission(BattleOption.Fight, true);
+        SetBattleOptionPermission(BattleOption.Bag, true);
+        SetBattleOptionPermission(BattleOption.Party, true);
+        SetBattleOptionPermission(BattleOption.Run, true);
+
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
         

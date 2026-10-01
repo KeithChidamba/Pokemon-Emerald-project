@@ -5,26 +5,25 @@ using UnityEngine;
 public class InteractionObjective : StoryObjective
 {
    public OverworldInteractionType interactionTypeForObjective;
-   protected Action onObjectiveComplete;
    
-   protected DialogueHandler dialogueHandler;
-   protected DialogueOptionsEventHandler dialogueOptionsHandler;
-   protected OverworldState overworldStateHandler;
+   private DialogueHandler _dialogueHandler;
+   private DialogueOptionsEventHandler _dialogueOptionsHandler;
+   private OverworldState _overworldStateHandler;
    
    protected override void OnObjectiveLoaded()
    {
-      dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
-      dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>(); 
-      overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
-      dialogueHandler.DisplayObjectiveText(objectiveHeading);
-      dialogueOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
+      _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
+      _dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>(); 
+      _overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+      _dialogueHandler.DisplayObjectiveText(objectiveHeading);
+      _dialogueOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
    }
    
    private void CheckInteractionOption(Interaction interaction, int optionChosen)
    {
       if (optionChosen>0)
       {
-         dialogueHandler.EndDialogue(); 
+         _dialogueHandler.EndDialogue(); 
          return;
       }
       if (interactionTypeForObjective != interaction.overworldInteraction) return;
@@ -33,7 +32,7 @@ public class InteractionObjective : StoryObjective
    
    protected override void OnObjectiveCleared()
    {
-      dialogueOptionsHandler.OnInteractionOptionChosen -= CheckInteractionOption;
-      overworldStateHandler.ClearAndLoadNextObjective();
+      _dialogueOptionsHandler.OnInteractionOptionChosen -= CheckInteractionOption;
+      _overworldStateHandler.ClearAndLoadNextObjective();
    }
 }

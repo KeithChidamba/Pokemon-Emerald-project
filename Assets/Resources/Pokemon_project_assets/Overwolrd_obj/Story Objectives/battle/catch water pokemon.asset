@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c1c4ae4dc57cc27f9db49f6981bebaf, type: 3}
   m_Name: catch water pokemon
   m_EditorClassIdentifier: 
-  mainAssetName: 
+  mainAssetName: catch water pokemon
   objectiveHeading: Use your master ball to catch a mudkip from fishing
   hasProgression: 0
   indexInList: 0
   objectiveType: 2
   objectiveOutline: 1
   encounterSourceForObjective: 1
+  blockFighting: 1
   pokemonForObjective: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}

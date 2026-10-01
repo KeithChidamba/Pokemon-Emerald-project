@@ -12,13 +12,15 @@ public class NpcStoryObjective : StoryObjective
     public SpriteDataForNpc npcSprites;
     public Interaction npcInteraction;
     public bool removeAfterInteraction;
-
+    public bool facePlayer;
+    
     private GameObject npcInstance;
     protected NpcLogic npcLogic;
     
     protected DialogueHandler dialogueHandler;
     protected AreaManager areaManager;
-
+    private PlayerMovementHandler _playerMovement;
+    
     protected void SetupNpc()
     {
         var hasChild = areaManager.storyNpcParent.childCount > 0;
@@ -33,12 +35,26 @@ public class NpcStoryObjective : StoryObjective
         npcLogic.movementHandler.animationData.spriteData = npcSprites;
         npcLogic.npcInteractable.interaction = npcInteraction;
         npcInstance.SetActive(true);
+
+        if (facePlayer)
+        {
+            dialogueHandler.OnDialogueStarted += FacePlayer;
+            npcLogic.OnObjectDestroy += () =>
+            {
+                dialogueHandler.OnDialogueStarted -= FacePlayer;
+            };
+        }
     }
-    
+    private void FacePlayer(Interaction interaction)
+    {
+        if (interaction.GetID != npcInteraction.GetID) return; 
+        npcLogic.movementHandler.FacePlayerDirection(_playerMovement);
+    }
     protected override void OnObjectiveLoaded()
     {
         dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
         areaManager = serviceContainer.Resolve<AreaManager>(); 
+        _playerMovement = serviceContainer.Resolve<PlayerMovementHandler>();
         dialogueHandler.DisplayObjectiveText($"Speak to {npcName}");
         SetupNpc();
         dialogueHandler.OnDialogueEnded += ClearAfterInteractionDialogue;

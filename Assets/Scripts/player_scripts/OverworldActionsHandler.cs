@@ -16,6 +16,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
     public event Action<Equipable> OnItemEquipped;
     public event Action<Equipable> OnItemUnequipped;
     public event Action OnActionComplete;
+    private Coroutine _fishingRoutine;
     
     private DialogueHandler _dialogueHandler;
     private GameUiHandler gameUiHandler;
@@ -98,6 +99,10 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
         }  
         if (pokemonBitingPole && InputSourceHandler.InputPressed(ControlEvent.Confirm))
         {
+            if (_fishingRoutine is not null)
+            {
+                StopCoroutine(_fishingRoutine);
+            }
             pokemonBitingPole = false;
             _dialogueHandler.EndDialogue();
             _encounterHandler.TriggerFishingEncounter(fishingTable,equippedSpecialItem);
@@ -117,13 +122,13 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
         fishing = true;
         manager.ChangeAnimationState(PlayerAnimationState.FishingIdle);
         var random = Utility.RandomRange10();
-        yield return new WaitForSeconds(1f);//allow fishing cancel
+        yield return new WaitForSeconds(2f);//allow fishing cancel
         if (!fishing) yield break; //if fishing canceled early
         if (random < 5)
         {
             pokemonBitingPole = true;
             _dialogueHandler.DisplayDetails("Oh!, a Bite!, Press Z");
-            yield return new WaitForSeconds((2 * (random / 10f)) + 1f);
+            yield return new WaitForSeconds((2 * (random / 10f)) + 2f);
             if (pokemonBitingPole)
             {
                 _dialogueHandler.DisplayDetails("It got away");
@@ -135,6 +140,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayDetails("Dang...nothing");
             yield return EndFishingAction();
         }
+        _fishingRoutine = null;
     }
 
     public void PlayFishingAnimation()
@@ -145,7 +151,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
     private void StartFishingAction()
     {
         _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.OverworldAction);
-        StartCoroutine(TryFishing());
+        _fishingRoutine = StartCoroutine(TryFishing());
     }
 
     private IEnumerator EndFishingAction()

@@ -13,7 +13,11 @@ public class NpcLogic : MonoBehaviour,IInjectable
     [SerializeField]private bool playerDetected;
     private Action _runDialogueInteraction;
     private bool _longDistanceDetection;
-
+    /// <summary>
+    /// Called when the npc is destroyed, is nullified after invoke
+    /// </summary>
+    public event Action OnObjectDestroy;
+    
     private DialogueHandler _dialogueHandler;
     private PlayerMovementHandler _playerMovement;
     private DialogueOptionsEventHandler _dialogueOptionsHandler;
@@ -57,7 +61,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
         if (!playerDetected)
         {
             //if the player is the one who interacted with npc
-            movementHandler.FacePlayerDirection();
+            movementHandler.FacePlayerDirection(_playerMovement);
         }
         
         playerDetected = false;
@@ -107,5 +111,11 @@ public class NpcLogic : MonoBehaviour,IInjectable
             movementHandler.StopMovement(false);
             _dialogueHandler.StartInteraction(npcInteractable.interaction);
         }
+    }
+
+    private void OnDestroy()
+    {
+        OnObjectDestroy?.Invoke();
+        OnObjectDestroy = null;
     }
 }
