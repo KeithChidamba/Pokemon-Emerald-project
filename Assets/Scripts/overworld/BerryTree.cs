@@ -186,7 +186,7 @@ public class BerryTree : MonoBehaviour
             _dialogueHandler.EndDialogue(); 
             return;
         }
-        _dialogueHandler.DeletePreviousOptions();
+        _dialogueHandler.EndDialogue(); 
         _playerBag.OnItemSelected += PlantBerry;
         _playerBag.currentBagUsage = BagUsage.SelectionOnly;
         _gameUIHandler.ValidateBagView();

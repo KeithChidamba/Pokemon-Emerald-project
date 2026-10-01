@@ -402,6 +402,12 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     }
     private void CompletePokemonAddition(Pokemon newPokemon)
     {
+        var invalidNickname = string.IsNullOrEmpty(newPokemon.nickName) ||
+                              string.IsNullOrWhiteSpace(newPokemon.nickName);
+                
+        newPokemon.nickName = invalidNickname? newPokemon.pokemonName : newPokemon.nickName;
+
+        
         if (party.Count<maxNumMembers)
         {
             party.Add(newPokemon);

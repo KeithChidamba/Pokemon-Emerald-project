@@ -21,7 +21,12 @@ public class NpcStoryObjective : StoryObjective
 
     protected void SetupNpc()
     {
-        npcInstance = Instantiate(npcPrefab, npcPosition,npcPrefab.transform.rotation,areaManager.overworldNpcParent);
+        var hasChild = areaManager.storyNpcParent.childCount > 0;
+        if (hasChild)
+        {
+            Destroy(areaManager.storyNpcParent.GetChild(0).gameObject);
+        }
+        npcInstance = Instantiate(npcPrefab, npcPosition,npcPrefab.transform.rotation,areaManager.storyNpcParent);
         npcLogic = npcInstance.GetComponentInChildren<NpcLogic>();
         npcLogic.movementHandler.isControlled = true;
         npcLogic.movementHandler.animationData.isIdle = true;

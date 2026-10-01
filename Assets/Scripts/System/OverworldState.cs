@@ -85,6 +85,8 @@ public class OverworldState : MonoBehaviour,IInjectable
             Destroy(child.gameObject);
         }
         
+        storyObjectiveRegistry.allStoryObjectives.ForEach(o=>o.mainAssetName=o.name);
+        
         if (_gameLoadingHandler.LoadedFromSave)
         {
             yield return _saveHandler.LoadOverworldData();
@@ -222,7 +224,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     }
     public bool HasObjective(string objectiveName)
     {
-        return currentStoryObjectives.Any(obj=>obj.mainAssetName == objectiveName);
+        return currentStoryObjectives.Any(obj=>obj.name == objectiveName);
     }
 
     public void LoadStoryProgress(StoryProgressObjective storyData)

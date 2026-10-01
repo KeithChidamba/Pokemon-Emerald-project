@@ -5,7 +5,7 @@ using UnityEngine;
 public class NpcMovementObjective : NpcStoryObjective
 {
    public List<NpcMovementDirection> movementDirections = new ();
-   
+   public int npcSpeed = 2;
    private PlayerMovementHandler _playerMovementHandler;
    
    protected override void OnObjectiveLoaded()
@@ -23,7 +23,7 @@ public class NpcMovementObjective : NpcStoryObjective
       _playerMovementHandler.canRun = false;
       int movementIndex = 1;
       npcLogic.movementHandler.OnMovementEnded += StartNextMovement;
-      npcLogic.movementHandler.MoveToSpecific(movementDirections[0].direction, movementDirections[0].numTilesToTravel);
+      npcLogic.movementHandler.MoveToSpecific(movementDirections[0].direction, movementDirections[0].numTilesToTravel,npcSpeed);
       return;
       void StartNextMovement()
       {
@@ -35,9 +35,8 @@ public class NpcMovementObjective : NpcStoryObjective
             return;
          }
          npcLogic.movementHandler.MoveToSpecific(movementDirections[movementIndex].direction,
-            movementDirections[movementIndex].numTilesToTravel);
+            movementDirections[movementIndex].numTilesToTravel,npcSpeed);
          movementIndex++;
-         
       }
    }
 }

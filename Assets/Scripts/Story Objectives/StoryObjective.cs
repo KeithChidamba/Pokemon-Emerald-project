@@ -22,10 +22,12 @@ public abstract class StoryObjective : ScriptableObject
     
     public void FindMainAsset(ServiceContainer container)
     {
-        var mainAsset = Resources.Load<StoryObjective>(DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData)+mainAssetName);
+        string dir = DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData);
+        StoryObjective[] all = Resources.LoadAll<StoryObjective>(dir);
+        var mainAsset = Array.Find(all, o => o.name == mainAssetName);
         if (mainAsset is null)
         {
-            Debug.LogWarning("Story objective Asset: "+mainAssetName+" not found");
+            Debug.LogError("Story objective Asset: "+mainAssetName+" not found");
             return;
         }
         if(hasProgression) mainAsset.LoadSaveData(this);
@@ -43,7 +45,6 @@ public abstract class StoryObjective : ScriptableObject
     {
         return type switch
         {
-            StoryObjectiveType.Destination => CreateInstance<DestinationObjective>(),
             StoryObjectiveType.StoryProgress => CreateInstance<StoryProgressObjective>(),
             StoryObjectiveType.MarketUiUsage => CreateInstance<MarketUiObjective>(),
             StoryObjectiveType.GeneralItemUiUsage => CreateInstance<GeneralItemUiObjective>(),
@@ -56,7 +57,6 @@ public abstract class StoryObjective : ScriptableObject
             StoryObjectiveType.PickupItem => CreateInstance<ItemPickupObjective>(),
             StoryObjectiveType.NpcInteraction => CreateInstance<NpcStoryObjective>(),
             StoryObjectiveType.NpcMovement => CreateInstance<NpcMovementObjective>(),
-            
             _ => null
         };
     }
@@ -69,7 +69,7 @@ public class ObjectiveTypeWrapper
 }
 public enum StoryObjectiveType
 {
-    Destination,Interaction,WildBattle,GeneralItemUiUsage,StoryProgress,
+    Placeholder,Interaction,WildBattle,GeneralItemUiUsage,StoryProgress,
     MarketUiUsage,BerryInteraction,PokemonStorageUiUsage,TrainerBattle,GiftPokemon,
     PickupItem,NpcInteraction,NpcMovement
 }

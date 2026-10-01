@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 888591249c9dce0c8aa814792a20212e, type: 3}
+  m_Name: pickup wailmer pail
+  m_EditorClassIdentifier: 
+  mainAssetName: pickup wailmer pail
+  objectiveHeading: Pickup the item next to the soil
+  hasProgression: 0
+  indexInList: 0
+  objectiveType: 10
+  itemToPickup: {fileID: 11400000, guid: a5ad488316e62bf7dbfb38fddc47ed74, type: 2}

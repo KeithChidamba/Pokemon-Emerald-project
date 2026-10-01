@@ -25,7 +25,6 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     public GameObject menuOptions;
     [SerializeField]private bool viewingMenu;
     public bool usingUI;
-    private bool _canUseUi;
     [SerializeField]private PlayerProfileUI profile;
 
     [SerializeField]private int numUIScreensOpen;
@@ -84,9 +83,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         usingWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
         exitButton.SetActive(!usingWebGl);
         if (usingWebGl) menuUiOptions.Remove(menuUiOptions.Last());//remove exit button
-        _canUseUi = false;
         canOpenMenu = true;
-        _gameLoadingHandler.OnGameStarted += () => _canUseUi = true;
     }
     public IEnumerator FadeInBlackScreen(float duration=0.25f)
     {
@@ -106,15 +103,18 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     {
         canOpenMenu = isAccessible;
     }
-
     private void Update()
     {
-        if (!_canUseUi) return;
+       
         if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu) && _inputStateHandler.IsEmptyState && canOpenMenu &&!viewingMenu)
         {
             AddScreen();
             viewingMenu = true;
             ActivateMenuSelection();
+        }
+        if (InputSourceHandler.InputPressed(ControlEvent.ViewControls) && _inputStateHandler.IsEmptyState)
+        {
+            ViewKeyBinds();
         }
     }
     private void AddScreen()
@@ -238,7 +238,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             ,InputStateGroup.None,isParent:true
             ,profile.parentObject,onExit:RemoveScreen,onClose:RemoveScreen,displayOpenTransition:true));
     }
-    public void ViewKeyBinds()
+    private void ViewKeyBinds()
     {
         AddScreen();
         _inputStateHandler.ChangeInputState(new (InputStateName.KeyBinds,InputStateGroup.None,isParent:true

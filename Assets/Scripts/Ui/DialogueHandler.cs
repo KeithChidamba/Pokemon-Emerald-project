@@ -301,6 +301,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
 
     public void DisplayObjectiveText(string message)
     {
+        if (message == string.Empty) return;
         objectiveDialogueBox.SetActive(true);
         objectiveDialougeText.text = message;
     }

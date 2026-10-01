@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public enum ControlEvent
 {
-    Up,Down,Left,Right,UseSpecialItem,OpenMenu,Confirm,Exit,OpenSettings,Save
+    Up,Down,Left,Right,UseSpecialItem,OpenMenu,ViewControls,Confirm,Exit,OpenSettings,Save
 }
 [DefaultExecutionOrder(-1000)]
 public class InputSourceHandler : MonoBehaviour, IInjectable
@@ -27,7 +27,6 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     private bool _gameStarted;
     public GameObject mobileControlsUI;
     
-    private DialogueHandler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
     private GameUiHandler gameUiHandler;
     private GameLoadingHandler _gameLoadingHandler;
@@ -35,7 +34,6 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
-        _dialogueHandler = container.Resolve<DialogueHandler>();
         gameUiHandler = container.Resolve<GameUiHandler>();
         _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         
@@ -113,6 +111,9 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
         
         if (Input.GetKeyDown(KeyCode.Space)) TriggerPress(ControlEvent.OpenMenu);
         if (Input.GetKeyUp(KeyCode.Space)) TriggerRelease(ControlEvent.OpenMenu);
+        
+        if (Input.GetKeyDown(KeyCode.Escape)) TriggerPress(ControlEvent.ViewControls);
+        if (Input.GetKeyUp(KeyCode.Escape)) TriggerRelease(ControlEvent.ViewControls);
     }
     public static void TriggerPress(ControlEvent e)
     {

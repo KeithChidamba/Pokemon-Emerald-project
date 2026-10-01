@@ -240,7 +240,10 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             _gameLoadingHandler.playerData = LoadObjectFromJson<PlayerData>(playerList[0]);
             return true;
         }
-        _dialogueHandler.DisplayDetails("Please ensure one player's data is in the save_data folder!");
+        if(playerList.Count > 1)
+        {
+            _dialogueHandler.DisplayDetails("Please ensure one player's data is in the save_data folder!");
+        }
         return false;
     }
     private void LoadItemData()

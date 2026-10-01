@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5de6c4f45531cfbabe3a0b40548abf4, type: 3}
+  m_Name: After pick berry
+  m_EditorClassIdentifier: 
+  mainAssetName: Speak to keith
+  objectiveHeading: 
+  hasProgression: 0
+  indexInList: 0
+  objectiveType: 11
+  npcName: Keith
+  npcPosition: {x: 5, y: -20, z: 0}
+  npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}
+  npcSprites: {fileID: 11400000, guid: 9bea254fcb98118c4a5d93967d943c36, type: 2}
+  npcInteraction: {fileID: 11400000, guid: 4522ab2ab8926831e8411308a529c157, type: 2}
+  removeAfterInteraction: 0

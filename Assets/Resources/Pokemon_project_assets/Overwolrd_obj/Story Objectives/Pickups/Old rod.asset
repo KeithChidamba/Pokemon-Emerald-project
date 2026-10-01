@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Old rod
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: a4ce207886b912f9495af32c6dc1d01c, type: 2}
-  itemPosition: {x: 18, y: -24}
+  itemPosition: {x: 16, y: -25}
   itemQuantity: 1

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 public enum MovementRestrictor{Dialogue,UI,OverworldAction,Battle}
@@ -45,7 +46,13 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
     [SerializeField]private LayerMask movementBlockers;
     [SerializeField]private bool standingOnTile;
     
-    [SerializeField]private List<MovementRestrictionState> movementRestrictors = new();
+    [SerializeField]private List<MovementRestrictionState> movementRestrictors = new()
+    { 
+        new (MovementRestrictor.Battle, false), 
+        new (MovementRestrictor.UI, false),
+        new (MovementRestrictor.OverworldAction, false),
+        new (MovementRestrictor.Dialogue, false)
+    };
     
     private OverworldActionsHandler _overworldActions;
     private DialogueHandler _dialogueHandler;
@@ -59,11 +66,6 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
 
     public void OnInject()
     {
-        movementRestrictors.Add( new (MovementRestrictor.Battle, false));
-        movementRestrictors.Add( new (MovementRestrictor.Dialogue, false));
-        movementRestrictors.Add( new (MovementRestrictor.UI, false));
-        movementRestrictors.Add( new (MovementRestrictor.OverworldAction, false));
-        
         _overworldActions.OnItemEquipped +=
             (item) => StopBikeUsage(item != Equipable.Bike);
         _overworldActions.OnItemUnequipped +=

@@ -6,9 +6,8 @@ using UnityEngine.UI;
 
 public enum InteractionOptions
 {
-    None,Battle,
-    Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,
-    ReceiveGiftPokemon,ViewControls,Custom
+    None,Battle, Interact,SellItem,HealPokemon,OpenPokemonStorage,OpenItemStorage,
+    ReceiveGiftPokemon,Custom
 }
 public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
 {
@@ -50,7 +49,6 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
         _interactionMethods.Add(InteractionOptions.SellItem,SellItem);
         _interactionMethods.Add(InteractionOptions.OpenItemStorage,OpenItemStorage);
         _interactionMethods.Add(InteractionOptions.ReceiveGiftPokemon,ReceiveGiftPokemon);
-        _interactionMethods.Add(InteractionOptions.ViewControls,ViewControls);
     }
     //overworld interactions
     public void ExitGame()
@@ -63,11 +61,7 @@ public class DialogueOptionsEventHandler : MonoBehaviour,IInjectable
             Application.Quit();
         }
     }
-    void ViewControls()
-    {
-        _dialogueHandler.EndDialogue(); 
-        gameUiHandler.ViewKeyBinds();
-    }
+   
     void Battle()
     {
         _dialogueHandler.EndDialogue(); 

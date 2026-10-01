@@ -159,6 +159,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
     public void EndFishing()
     {
         StartCoroutine(EndFishingAction());
+        _inputStateHandler.ResetSpecificUi(InputStateName.DialoguePlaceHolder);
     }
     public IEnumerator WaterTrees(BerryTree treeToWater)
     {

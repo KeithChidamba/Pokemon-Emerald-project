@@ -10,7 +10,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
     public NpcAnimationData animationData;
     [SerializeField] private Transform rayCastPoint;
     [SerializeField] private Transform movePoint;
-    public float movementSpeed;
+    public int movementSpeed;
     [SerializeField] private LayerMask movementBlockers;
     [SerializeField] private int currentAnimationIndex;
     private NpcMovementDirection _currentMovement;
@@ -136,7 +136,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
         SetSprites(_currentSpriteData.spritesForDirection[_currentSpriteIndex]);
     }
 
-    public void MoveToSpecific(MovementDirection direction,int numTiles)
+    public void MoveToSpecific(MovementDirection direction,int numTiles, int moveSpeed = 2)
     {
         StartCoroutine(Move());
         return;
@@ -148,15 +148,16 @@ public class NpcMovement : MonoBehaviour,IInjectable
             _currentMovement = new NpcMovementDirection(direction,numTiles);
             _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);
         
-            yield return MovementLoop(true);
+            yield return MovementLoop(true,moveSpeed);
             
             StopMovement(false);
             OnMovementEnded?.Invoke();
         }
     }
      
-    private IEnumerator MovementLoop(bool specificMovement=false)
+    private IEnumerator MovementLoop(bool specificMovement = false,int moveSpeed = 2)
     {
+        var currentSpeed = moveSpeed != 2 ? moveSpeed : movementSpeed;
         while (canMove)
         {
             // Try to set next move
@@ -178,7 +179,7 @@ public class NpcMovement : MonoBehaviour,IInjectable
                 transform.position = Vector3.MoveTowards(
                     transform.position,
                     movePoint.position,
-                    movementSpeed * Time.deltaTime
+                    currentSpeed * Time.deltaTime
                 );
                 yield return null;
             }
