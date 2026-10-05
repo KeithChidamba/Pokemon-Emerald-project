@@ -12,10 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c27a711ced1182a77a61e79e3d82f4cb, type: 3}
   m_Name: Water Oran berry soil
   m_EditorClassIdentifier: 
-  mainAssetName: 
+  mainAssetName: Water Oran berry soil
   objectiveHeading: Water the soil
   hasProgression: 0
   indexInList: 0
   objectiveType: 6
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -22
+    - direction: 3
+      limit: 1
+    - direction: 2
+      limit: -17
+    - direction: 4
+      limit: 7
   interactionTypeForObjective: 4
   berryForObjective: {fileID: 11400000, guid: be91a46c50e93ba4ab4eb873696ca8c2, type: 2}

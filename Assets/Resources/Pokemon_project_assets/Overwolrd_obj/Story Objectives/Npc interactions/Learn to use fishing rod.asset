@@ -17,6 +17,15 @@ MonoBehaviour:
   hasProgression: 0
   indexInList: 0
   objectiveType: 11
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 3
+      limit: 14
+    - direction: 2
+      limit: -20
+    - direction: 4
+      limit: 19
   npcName: Keith
   npcPosition: {x: 17, y: -24, z: 0}
   npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}

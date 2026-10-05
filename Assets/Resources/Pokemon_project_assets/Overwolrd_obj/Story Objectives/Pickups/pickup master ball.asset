@@ -17,4 +17,11 @@ MonoBehaviour:
   hasProgression: 0
   indexInList: 0
   objectiveType: 10
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -24
+    - direction: 4
+      limit: 2
   itemToPickup: {fileID: 11400000, guid: cbd9f62c90df0caeba82739bd4d1195b, type: 2}

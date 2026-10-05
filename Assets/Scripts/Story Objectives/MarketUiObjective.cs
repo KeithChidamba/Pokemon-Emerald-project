@@ -2,33 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "market ui obj", menuName = "Objectives/market ui objective")]
-public class MarketUiObjective : ItemUiObjective
+public class MarketUiObjective : StoryObjective
 {
+    public Item itemForObjective;
+    
     private enum MarketObjectiveType
     {
         SellItem,BuyItem
     }
     [SerializeField] private MarketObjectiveType marketObjectiveType;
-
-    protected override void LogicForObjectiveLoad()
+    
+    private PokeMartHandler _pokeMartHandler; 
+    private PlayerBagHandler _playerBag; 
+    
+    protected override void OnObjectiveLoaded()
     {
+        var dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
+        dialogueHandler.DisplayObjectiveText(objectiveHeading);
+        _pokeMartHandler = serviceContainer.Resolve<PokeMartHandler>(); 
+        _playerBag = serviceContainer.Resolve<PlayerBagHandler>();
+        
         switch(marketObjectiveType)
         {
-            case MarketObjectiveType.SellItem: SetupItemSellObjective(); break;
-            case MarketObjectiveType.BuyItem: SetupItemBuyObjective(); break;
+            case MarketObjectiveType.SellItem: 
+                _playerBag.OnItemSold += CheckForItemObjectiveClear; 
+                break;
+            case MarketObjectiveType.BuyItem: 
+                _pokeMartHandler.OnItemBought += CheckForItemObjectiveClear;
+                break;
         }
     }
 
-    private void SetupItemSellObjective()
+    private void CheckForItemObjectiveClear(Item item)
     {
-        var playerBag = serviceContainer.Resolve<PlayerBagHandler>(); 
-        playerBag.OnItemSold += CheckForItemObjectiveClear;
+        if (itemForObjective.itemName == item.itemName)
+        {
+            _pokeMartHandler.OnItemBought -= CheckForItemObjectiveClear;
+            _playerBag.OnItemSold -= CheckForItemObjectiveClear; 
+            ClearObjective();
+        }
     }
-
-    private void SetupItemBuyObjective()
+    protected override void OnObjectiveCleared()
     {
-        var pokeMartHandler = serviceContainer.Resolve<PokeMartHandler>(); 
-       pokeMartHandler.OnItemBought += CheckForItemObjectiveClear;
+        var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+        overworldStateHandler.ClearAndLoadNextObjective();
     }
-  
 }

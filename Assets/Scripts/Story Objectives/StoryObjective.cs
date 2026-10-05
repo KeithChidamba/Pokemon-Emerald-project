@@ -6,11 +6,19 @@ public abstract class StoryObjective : ScriptableObject
     private void LoadObjective(ServiceContainer container)
     {
         serviceContainer = container;
+        if (playerBoundary.isRestricting)
+        {
+            serviceContainer.Resolve<PlayerMovementHandler>().SetPositionBoundary(playerBoundary);
+        }
         OnLoad?.Invoke();
         OnObjectiveLoaded();
     }
     public void ClearObjective()
     {
+        if (playerBoundary.isRestricting)
+        {
+            serviceContainer.Resolve<PlayerMovementHandler>().RemovePositionBoundary();
+        }
         OnClear?.Invoke();
         OnObjectiveCleared();
     }
@@ -22,6 +30,8 @@ public abstract class StoryObjective : ScriptableObject
     
     public void FindMainAsset(ServiceContainer container)
     {
+        //because story objective aren't loaded in a performance heavy context
+        //we can get away with loading the main asset this way each time
         string dir = DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData);
         StoryObjective[] all = Resources.LoadAll<StoryObjective>(dir);
         var mainAsset = Array.Find(all, o => o.name == mainAssetName);
@@ -40,7 +50,9 @@ public abstract class StoryObjective : ScriptableObject
     public bool hasProgression;
     [HideInInspector]public int indexInList;
     public StoryObjectiveType objectiveType;
+    public PlayerBoundary playerBoundary;
     protected ServiceContainer serviceContainer;
+    
     public static StoryObjective CreateObjectiveOfType(StoryObjectiveType type)
     {
         return type switch

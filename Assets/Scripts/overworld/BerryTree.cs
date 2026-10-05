@@ -152,7 +152,7 @@ public class BerryTree : MonoBehaviour
         }
         _dialogueHandler.DeletePreviousOptions();
         
-        if (!_playerBag.SearchForItem("Wailmer Pail"))
+        if (!_playerBag.SearchForItem(NameDB.GetItem(ItemName.WailmerPail)))
         {
             OnInteractionComplete?.Invoke(false);
             _dialogueHandler.DisplayDetails("You need the correct item for this");
@@ -186,10 +186,21 @@ public class BerryTree : MonoBehaviour
             _dialogueHandler.EndDialogue(); 
             return;
         }
-        _dialogueHandler.EndDialogue(); 
+        _dialogueHandler.EndDialogue();
+        _inputStateHandler.OnStateRemoved += FailOnBagExit;
         _playerBag.OnItemSelected += PlantBerry;
         _playerBag.currentBagUsage = BagUsage.SelectionOnly;
         _gameUIHandler.ValidateBagView();
+        return;
+        void FailOnBagExit(InputState removedState)
+        {
+            if (removedState.stateName != InputStateName.PlayerBagNavigation) return;
+            if (!treeData.isPlanted)
+            {
+                OnInteractionComplete?.Invoke(false);
+            }
+            _inputStateHandler.OnStateRemoved -= FailOnBagExit;
+        }
     }
     private void PlantBerry(Item berryToPlant)
     {
@@ -213,7 +224,8 @@ public class BerryTree : MonoBehaviour
         treeData = InstanceFactory.CreateTreeData(treeDataAsset);
         
         treeData.isPlanted = true;
-        _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
+        
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagNavigation,true);
         
         _dialogueHandler.DisplayDetails($"You planted a {berryToPlant.itemName}");
         OnInteractionComplete?.Invoke(true);

@@ -181,7 +181,8 @@ public static class NameDB
         { ItemName.GuardSpec, "Guard Spec" },
         { ItemName.Potion, "Potion" },
         { ItemName.ChoiceBand, "Choice Band" },
-        { ItemName.AmuletCoin, "Amulet Coin" }
+        { ItemName.AmuletCoin, "Amulet Coin" },
+        { ItemName.WailmerPail,"Wailmer Pail" }
     };
     public static ItemName ParseItemName(string itemName)
     {
@@ -251,7 +252,7 @@ public static class NameDB
 public enum ItemName
 {
     FullRestore,MaxPotion,FullHeal,LeppaBerry,OranBerry,CherriBerry,PersimBerry,GuardSpec
-    ,Potion,ChoiceBand,AmuletCoin
+    ,Potion,ChoiceBand,AmuletCoin,WailmerPail
 }
 
 public enum AbilityName

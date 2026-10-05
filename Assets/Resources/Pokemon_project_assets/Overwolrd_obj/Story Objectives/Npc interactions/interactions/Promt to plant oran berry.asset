@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Promt to plant oran berry
   m_EditorClassIdentifier: 
-  interactionMessage: Ok, now open your bag. In the berry section, you'll see a few
-    oran berries. Interact with the soil to plant one
+  interactionMessage: Ok, now Interact with the soil to plant one of your berries.
+    Once the bag is open, navigate to the berry section and pick one.
   dialogueType: 0
   isEventTrigger: 0
   interactionOptions: 

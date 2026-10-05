@@ -55,7 +55,7 @@ public class NpcStoryObjective : StoryObjective
         dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
         areaManager = serviceContainer.Resolve<AreaManager>(); 
         _playerMovement = serviceContainer.Resolve<PlayerMovementHandler>();
-        dialogueHandler.DisplayObjectiveText($"Speak to {npcName}");
+        dialogueHandler.DisplayObjectiveText(objectiveHeading==string.Empty?$"Speak to {npcName}":objectiveHeading);
         SetupNpc();
         dialogueHandler.OnDialogueEnded += ClearAfterInteractionDialogue;
     }

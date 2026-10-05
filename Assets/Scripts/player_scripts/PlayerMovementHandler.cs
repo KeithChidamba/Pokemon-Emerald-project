@@ -20,7 +20,6 @@ public class MovementRestrictionState
 }
 public class PlayerMovementHandler : MonoBehaviour,IInjectable
 {
-    public Camera playerCamera;
     public float movementSpeed;
     [SerializeField] float walkSpeed = 4f;
     [SerializeField] float runSpeed = 6f;
@@ -53,6 +52,8 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
         new (MovementRestrictor.OverworldAction, false),
         new (MovementRestrictor.Dialogue, false)
     };
+
+    [SerializeField]private PlayerBoundary positionBoundary;
     
     private OverworldActionsHandler _overworldActions;
     private DialogueHandler _dialogueHandler;
@@ -73,10 +74,9 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
         
         _dialogueHandler.OnDialogueEnded += (interaction) => AllowPlayerMovement(MovementRestrictor.Dialogue,0.35f);
         _overworldActions.OnActionComplete += () => AllowPlayerMovement(MovementRestrictor.OverworldAction,0.35f);
-
+        positionBoundary = new PlayerBoundary { isRestricting = false };
         canRun = true;
     }
-
     private void SnapToPosition()
     {
         canMove = false;
@@ -300,7 +300,7 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
             yAxisInput = GetAxisFromInput(ControlEvent.Down, ControlEvent.Up);
             xAxisInput = GetAxisFromInput(ControlEvent.Left, ControlEvent.Right);
             
-//prevent diagonal movent and opposite inputs
+//prevent diagonal movement and opposite inputs
             bool verticalInput = Math.Abs(yAxisInput) == 1;
             bool horizontalInput = Math.Abs(xAxisInput) == 1;
             
@@ -322,19 +322,15 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
                     positionModifierY,
                     1f,movementBlockers
                 );
-                if (!hit)
-                {//check blockers
-                    movePoint.position += positionModifierY;
-                    standingOnTile = false;
-                }
-                else
+                if (!hit)//check blockers
                 {
-                    if(canPlayBumpSound)
+                    if (AtBoundary(positionModifierY)) HandleBump();
+                    else
                     {
-                        canPlayBumpSound = false;
-                        SoundManager.Play(SfxId.WallBump);
+                        movePoint.position += positionModifierY;
+                        standingOnTile = false;
                     }
-                }
+                }else HandleBump();
             }
             
             if (Math.Abs(xAxisInput) == 1)
@@ -345,25 +341,63 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
                     positionModifierX,
                     1f,movementBlockers
                 );
-                if (!hit)
-                {//check blockers
-                    movePoint.position += positionModifierX;
-                    standingOnTile = false;
-                }                
-                else
+                if (!hit)//check blockers
                 {
-                    if(canPlayBumpSound)
+                    if (AtBoundary(positionModifierX)) HandleBump();
+                    else
                     {
-                        canPlayBumpSound = false;
-                        SoundManager.Play(SfxId.WallBump);
+                        movePoint.position += positionModifierX;
+                        standingOnTile = false;
                     }
-                }
+                } else HandleBump();
             }
-
             SetCurrentAnimation();
         }
     }
-    int GetAxisFromInput(ControlEvent negative, ControlEvent positive)
+
+    private void HandleBump()
+    {
+        if(canPlayBumpSound)
+        {
+            canPlayBumpSound = false;
+            SoundManager.Play(SfxId.WallBump);
+        }
+    }
+    public void SetPositionBoundary(PlayerBoundary playerBoundary)
+    {
+        positionBoundary = playerBoundary;
+    }
+    public void RemovePositionBoundary()
+    {
+        positionBoundary.isRestricting = false;
+    }
+    private bool AtBoundary(Vector3 positionChange)
+    {
+        if (!positionBoundary.isRestricting) return false;
+        
+        var newPos = movePoint.position + positionChange;
+        
+        foreach (var boundary in positionBoundary.boundaries)
+        {
+            switch (boundary.direction)
+            {
+                case MovementDirection.Down:
+                    if(newPos.y <= boundary.limit) return true;
+                    break;
+                case MovementDirection.Up:
+                    if(newPos.y >= boundary.limit) return true;
+                    break;
+                case MovementDirection.Left:
+                    if(newPos.x <= boundary.limit) return true;
+                    break;
+                case MovementDirection.Right:
+                    if(newPos.x >= boundary.limit) return true;
+                    break;
+            }
+        }
+        return false;
+    }
+    private int GetAxisFromInput(ControlEvent negative, ControlEvent positive)
     {
         bool neg = InputSourceHandler.InputHeld(negative);
         bool pos = InputSourceHandler.InputHeld(positive);

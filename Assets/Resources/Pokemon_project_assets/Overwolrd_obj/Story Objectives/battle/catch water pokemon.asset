@@ -17,7 +17,17 @@ MonoBehaviour:
   hasProgression: 0
   indexInList: 0
   objectiveType: 2
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 3
+      limit: 14
+    - direction: 2
+      limit: -20
+    - direction: 4
+      limit: 19
   objectiveOutline: 1
   encounterSourceForObjective: 1
   blockFighting: 1
+  catchExactPokemon: 0
   pokemonForObjective: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}

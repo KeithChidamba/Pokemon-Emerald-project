@@ -59,10 +59,9 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
     private LoopingUiAnimation _leftArrow;
 
     public event Action<Item> OnItemSelected;//bag managed
-    public event Action<Item> OnItemUsed;//self-managed
     public event Action OnBagOpened;//bag managed, optional self
-    
     public event Action<Item> OnItemSold;
+    
     private PokemonPartyHandler _pokemonPartyHandler;
     private ItemStorageHandler _itemStorageHandler;
     private InputStateHandler _inputStateHandler;
@@ -355,7 +354,6 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
              }
          }
          
-         OnItemUsed?.Invoke(itemToUse);
          if(itemToUse.forPartyUse)
          {
              _pokemonPartyHandler.OnMemberSelected += AllowItemUsage;

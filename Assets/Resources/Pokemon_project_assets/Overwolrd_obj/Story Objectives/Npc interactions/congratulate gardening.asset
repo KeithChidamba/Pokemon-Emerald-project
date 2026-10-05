@@ -12,11 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5de6c4f45531cfbabe3a0b40548abf4, type: 3}
   m_Name: congratulate gardening
   m_EditorClassIdentifier: 
-  mainAssetName: Speak to keith
+  mainAssetName: congratulate gardening
   objectiveHeading: 
   hasProgression: 0
   indexInList: 0
   objectiveType: 11
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -22
+    - direction: 3
+      limit: 1
+    - direction: 2
+      limit: -17
+    - direction: 4
+      limit: 7
   npcName: Keith
   npcPosition: {x: 5, y: -20, z: 0}
   npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}

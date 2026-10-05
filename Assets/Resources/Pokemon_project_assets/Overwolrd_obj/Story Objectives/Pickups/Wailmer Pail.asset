@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Wailmer Pail
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 4551e7c3201f48068982381f8248f617, type: 2}
-  itemPosition: {x: 6, y: -19}
+  itemPosition: {x: 5, y: -18}
   itemQuantity: 1

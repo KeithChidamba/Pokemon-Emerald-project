@@ -76,6 +76,10 @@ public class NpcMovement : MonoBehaviour
         movePoint.position = snapped;
         transform.position = snapped;
     }
+    public void SetPauseDelay(float delay)
+    {
+        movePause = new WaitForSeconds(delay);
+    }
     private void OnDisable()
     {
         if (animationData.isIdle) return;

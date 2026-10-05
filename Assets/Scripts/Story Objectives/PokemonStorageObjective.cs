@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "storage ui obj", menuName = "Objectives/storage ui objective")]
-public class PokemonStorageObjective : UiActionObjective
+public class PokemonStorageObjective : StoryObjective
 {
     private enum StorageObjectiveType
     {
@@ -12,8 +12,11 @@ public class PokemonStorageObjective : UiActionObjective
     public Pokemon pokemonForObjective;
     private PokemonStorageHandler _pokemonStorageHandler;
     
-    protected override void LogicForObjectiveLoad()
+    protected override void OnObjectiveLoaded()
     {
+        var dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
+        dialogueHandler.DisplayObjectiveText(objectiveHeading);
+        
         _pokemonStorageHandler = serviceContainer.Resolve<PokemonStorageHandler>(); 
         switch(storageObjectiveType)
         {
@@ -21,6 +24,7 @@ public class PokemonStorageObjective : UiActionObjective
             case StorageObjectiveType.DepositPokemonIntoPC: DepositObjective(); break;
         }
     }
+    
     private void WithdrawObjective()
     {
         _pokemonStorageHandler.OnPokemonWithdraw += CheckForStorageObjectiveClear;
@@ -38,6 +42,12 @@ public class PokemonStorageObjective : UiActionObjective
             else _pokemonStorageHandler.OnPokemonDeposit -= CheckForStorageObjectiveClear;
             ClearObjective();
         }
+    }
+    
+    protected override void OnObjectiveCleared()
+    {
+        var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+        overworldStateHandler.ClearAndLoadNextObjective();
     }
 }
 

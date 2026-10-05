@@ -34,6 +34,7 @@ public class BerryInteractionObjective : InteractionObjective
             
             if(berryForObjective.itemName != berryTree.treeData.berryItem.itemName) return;
             
+            _dialogueHandler.OnOptionsDisplayed -= CheckInteractionTriggered;
             ClearObjective();
         }
     }

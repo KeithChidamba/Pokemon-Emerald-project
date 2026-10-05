@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "general ui obj", menuName = "Objectives/general ui objective")]
-public class GeneralItemUiObjective : ItemUiObjective
+public class GeneralItemUiObjective : StoryObjective
 {
+    public Item itemForObjective;
+    
     private enum ItemObjectiveType
     {
         EquipItem,UseItem
@@ -11,37 +13,56 @@ public class GeneralItemUiObjective : ItemUiObjective
     private ItemHandler _itemHandler;
     [SerializeField] private ItemObjectiveType itemObjectiveType;
     
-    protected override void LogicForObjectiveLoad()
+    protected override void OnObjectiveLoaded()
     {
+        var dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
+        dialogueHandler.DisplayObjectiveText(objectiveHeading);
+        
+        _itemHandler = serviceContainer.Resolve<ItemHandler>();
+       
         switch(itemObjectiveType)
         {
-            case ItemObjectiveType.EquipItem: SetupItemEquipObjective(); break;
-            case ItemObjectiveType.UseItem: SetupItemUsageObjective(); break;
+            case ItemObjectiveType.EquipItem:
+            {
+                var overworldActions = serviceContainer.Resolve<OverworldActionsHandler>();
+                if (overworldActions.ItemEquipped())
+                {
+                    if (itemForObjective.itemName == overworldActions.equippedSpecialItem.itemName)
+                    {
+                        ClearObjective();
+                        return;
+                    }
+                } 
+                overworldActions.OnItemEquipped += CheckEquip;
+                void CheckEquip(Equipable equipable)
+                {
+                    if (overworldActions.equippedSpecialItem.itemName == itemForObjective.itemName)
+                    {
+                        overworldActions.OnItemEquipped -= CheckEquip; 
+                        ClearObjective();
+                    }
+                }
+                break;
+            }
+            case ItemObjectiveType.UseItem:
+            {
+                _itemHandler.OnItemUsed += CheckIfItemUsed;
+                void CheckIfItemUsed(Item itemUsed,bool successful)
+                {
+                    if (!successful) return;
+                    if (itemForObjective.itemName == itemUsed.itemName)
+                    {
+                        _itemHandler.OnItemUsed -= CheckIfItemUsed;
+                        ClearObjective();
+                    }
+                }
+                break;
+            }
         }
     }
-    private void SetupItemEquipObjective()
+    protected override void OnObjectiveCleared()
     {
-        var overworldActions = serviceContainer.Resolve<OverworldActionsHandler>();
-        var playerBag = serviceContainer.Resolve<PlayerBagHandler>();
-        var inputStateHandler = serviceContainer.Resolve<InputStateHandler>();
-        if (overworldActions.ItemEquipped())
-        {
-            if (itemForObjective.itemName == overworldActions.equippedSpecialItem.itemName)
-            {
-                inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
-                ClearObjective();
-                return;
-            }
-        } 
-        playerBag.OnItemUsed += CheckForItemObjectiveClear;
-    }
-    private void SetupItemUsageObjective()
-    {
-        _itemHandler = serviceContainer.Resolve<ItemHandler>();
-        _itemHandler.OnItemUsed += CheckIfItemUsed;
-    }
-    private void CheckIfItemUsed(Item itemUsed,bool successful)
-    {
-        CheckForItemObjectiveClear(itemUsed);
+        var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+        overworldStateHandler.ClearAndLoadNextObjective();
     }
 }

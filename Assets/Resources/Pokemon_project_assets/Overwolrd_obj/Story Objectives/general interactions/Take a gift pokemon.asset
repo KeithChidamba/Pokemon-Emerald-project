@@ -17,5 +17,10 @@ MonoBehaviour:
   hasProgression: 0
   indexInList: 0
   objectiveType: 9
-  interactionTypeForObjective: 7
-  objectiveObjectHandler: {fileID: 0}
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -24
+    - direction: 4
+      limit: 2
