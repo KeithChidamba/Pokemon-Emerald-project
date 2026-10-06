@@ -27,7 +27,7 @@ public class NpcMovementObjective : NpcStoryObjective
       {
          _playerMovementHandler.OnNewTile += CheckPlayerPosition;
       }
-      _playerMovementHandler.canRun = false;
+      _playerMovementHandler.PreventRunning();
       npcLogic.movementHandler.SetPauseDelay(pauseDelay);
       npcLogic.movementHandler.OnMovementEnded += StartNextMovement;
       npcLogic.movementHandler.MoveToSpecific(movementDirections[0].direction, movementDirections[0].numTilesToTravel,npcSpeed);
@@ -37,7 +37,7 @@ public class NpcMovementObjective : NpcStoryObjective
          if (movementIndex >= movementDirections.Count)
          {
             npcLogic.movementHandler.OnMovementEnded -= StartNextMovement;
-            _playerMovementHandler.canRun = true;
+            _playerMovementHandler.AllowRunning();
             if (!waitForPlayer)
             {
                ClearAndHandleRemoval();

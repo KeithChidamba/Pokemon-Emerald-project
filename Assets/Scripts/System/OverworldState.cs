@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class OverworldState : MonoBehaviour,IInjectable
 {    
-    [SerializeField]private List<BerryTreeData> jsonLoadedTreeData = new();
+    [SerializeField] private List<BerryTreeData> jsonLoadedTreeData = new();
     [SerializeField] private List<BerryTree> overworldBerryTrees = new();
     [SerializeField] private BerryTreeRegistry treeRegistry;
     [SerializeField] private GameObject berrySoilPrefab;
@@ -20,8 +21,13 @@ public class OverworldState : MonoBehaviour,IInjectable
     public event Action<Item> OnItemPickedUp;
 
     [SerializeField] private StoryObjectiveRegistry storyObjectiveRegistry;
-    public List<StoryObjective> currentStoryObjectives = new();
-    [SerializeField]private StoryProgressObjective storyProgressObjective;
+    [HideInInspector] public StoryProgress storyProgress;
+    private Dictionary<StoryObjectiveSection,List<StoryObjectiveSave>> _storyObjectiveGroups = new();
+    [SerializeField] private StoryObjectiveSection currentObjectiveGroup;
+    /// <summary>
+    /// For debugging view
+    /// </summary>
+    [SerializeField] private List<StoryObjectiveSave> currentStoryObjectives;
     
     public event Action OnObjectivesLoaded;
     private SaveDataHandler _saveHandler;
@@ -73,9 +79,49 @@ public class OverworldState : MonoBehaviour,IInjectable
             }
         }
     }
+
+    private void LoadSavedTrees()
+    {
+        var soilCreated = 0;
+        foreach (var treeData in jsonLoadedTreeData)
+        {
+            var overworldSoilData = treeRegistry.soilGroups[treeData.soilIndex];
+                    
+            if(!overworldSoilData.loadedFromJson)
+            {
+                overworldSoilData.numTreesLoaded = 0;
+                overworldSoilData.loadedFromJson = true;
+                soilCreated++;
+                var newSoilObject = Instantiate(berrySoilPrefab, overworldSoilData.treePosition,
+                    berryTreesParent.rotation, berryTreesParent);
+                newSoilObject.SetActive(true);
+                var berryTrees = newSoilObject
+                    .GetComponentsInChildren<BerryTree>(true)
+                    .OrderBy(t => t.transform.GetSiblingIndex())
+                    .ToArray();
+                overworldBerryTrees.AddRange(berryTrees);
+                berryTrees[0].Inject(_container);
+                berryTrees[0].LoadTreeData(treeData); 
+            }
+            else
+            {
+                var treesPerSoil = 4;//always 4
+                var currentTree = overworldBerryTrees[((soilCreated - 1) * treesPerSoil) + overworldSoilData.numTreesLoaded];
+                currentTree.Inject(_container);
+                currentTree.LoadTreeData(treeData); 
+            }
+            overworldSoilData.numTreesLoaded++;
+        }
+    }
     private IEnumerator LoadOverworldState()
     {
-        currentStoryObjectives.Clear();
+        storyProgress = null;
+        _storyObjectiveGroups.Clear();
+        foreach (var group in storyObjectiveRegistry.storyObjectiveGroups)
+        {
+            _storyObjectiveGroups.Add(group.section, new List<StoryObjectiveSave>());
+        }
+        
         jsonLoadedTreeData.Clear();
         overworldBerryTrees.Clear();
         
@@ -85,8 +131,7 @@ public class OverworldState : MonoBehaviour,IInjectable
             Destroy(child.gameObject);
         }
         
-        storyObjectiveRegistry.allStoryObjectives.ForEach(o=>o.mainAssetName=o.name);
-        
+        yield return new WaitForSeconds(0.025f);
         if (_gameLoadingHandler.LoadedFromSave)
         {
             yield return _saveHandler.LoadOverworldData();
@@ -102,42 +147,12 @@ public class OverworldState : MonoBehaviour,IInjectable
             jsonLoadedTreeData = jsonLoadedTreeData
                 .OrderBy(x => x.soilIndex)
                 .ToList();
-            if(jsonLoadedTreeData.Count>0)
+            if(jsonLoadedTreeData.Count > 0)
             {
-                var soilCreated = 0;
-                foreach (var treeData in jsonLoadedTreeData)
-                {
-                    var overworldSoilData = treeRegistry.soilGroups[treeData.soilIndex];
-                    
-                    if(!overworldSoilData.loadedFromJson)
-                    {
-                        overworldSoilData.numTreesLoaded = 0;
-                        overworldSoilData.loadedFromJson = true;
-                        soilCreated++;
-                        var newSoilObject = Instantiate(berrySoilPrefab, overworldSoilData.treePosition,
-                            berryTreesParent.rotation, berryTreesParent);
-                        newSoilObject.SetActive(true);
-                        var berryTrees = newSoilObject
-                            .GetComponentsInChildren<BerryTree>(true)
-                            .OrderBy(t => t.transform.GetSiblingIndex())
-                            .ToArray();
-                        overworldBerryTrees.AddRange(berryTrees);
-                        berryTrees[0].Inject(_container);
-                        berryTrees[0].LoadTreeData(treeData); 
-                    }
-                    else
-                    {
-                        var treesPerSoil = 4;//always 4
-                        var currentTree = overworldBerryTrees[((soilCreated - 1) * treesPerSoil) + overworldSoilData.numTreesLoaded];
-                        currentTree.Inject(_container);
-                        currentTree.LoadTreeData(treeData); 
-                    }
-                    overworldSoilData.numTreesLoaded++;
-                }
+                LoadSavedTrees();
             }
             else LoadDefaultTrees();
-        }
-        else LoadDefaultTrees();
+        }else LoadDefaultTrees();
         
         //overworld pickups
         _objectivePickupRegistry = ScriptableObject.CreateInstance<OverworldPickupRegistry>();
@@ -154,39 +169,83 @@ public class OverworldState : MonoBehaviour,IInjectable
         _objectivePickupRegistry.LoadLookup(overworldPickupPrefab, overworldPickupParent); 
 
         //story objectives
-        if (storyProgressObjective is null)
+        if (storyProgress is null)
         {
-            currentStoryObjectives.AddRange(storyObjectiveRegistry.allStoryObjectives); 
-            yield return new WaitUntil(() => currentStoryObjectives.Count==storyObjectiveRegistry.allStoryObjectives.Count);
-            currentStoryObjectives.ForEach(o=>o.mainAssetName=o.name);
-            
-            storyProgressObjective = Resources.Load<StoryProgressObjective>(
-                DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData)+"Story Progress");
-            
-            storyProgressObjective.mainAssetName = storyProgressObjective.name;
-            storyProgressObjective.totalObjectiveAmount = storyObjectiveRegistry.allStoryObjectives.Count;
-            storyProgressObjective.numCompleted = 0;
+            //load default story objectives
+            foreach (var group in storyObjectiveRegistry.storyObjectiveGroups)
+            {
+                _storyObjectiveGroups[group.section] = new List<StoryObjectiveSave>();
+                foreach (var objective in group.storyObjectives)
+                {
+                    var objectiveSaveData = new StoryObjectiveSave
+                    {
+                        mainAssetName = objective.name,
+                        objectiveType = objective.objectiveType,
+                        groupSection = group.section
+                    };
+                    _storyObjectiveGroups[group.section].Add(objectiveSaveData);
+                }
+            }
+            storyProgress = new StoryProgress { allObjectivesComplete = false };
+            currentObjectiveGroup = _storyObjectiveGroups.First().Key;
         }
         else
         {
-            var orderList = currentStoryObjectives.OrderBy(obj => obj.indexInList).ToList();
-            currentStoryObjectives.Clear();
-            currentStoryObjectives.AddRange(orderList);
+            //remove completed objectives
+            var sections = (StoryObjectiveSection[])Enum.GetValues(typeof(StoryObjectiveSection));
+            foreach (var section in sections)
+            {
+                if (section < storyProgress.lastActiveGroup)
+                {
+                    _storyObjectiveGroups.Remove(section);
+                }
+            }
+            foreach (var pair in _storyObjectiveGroups)
+            {
+                //sort objectives in order
+                var currentGroup = pair.Value;
+                var orderList = currentGroup.OrderBy(obj => obj.indexInList).ToList();
+                currentGroup.Clear();
+                currentGroup.AddRange(orderList);
+            }
+            currentObjectiveGroup = storyProgress.lastActiveGroup;
         }
+        yield return new WaitForSeconds(0.025f);
+        
+        //load current objective
         OnObjectivesLoaded?.Invoke();
-        if (storyProgressObjective.numCompleted < storyProgressObjective.totalObjectiveAmount)
+        if(!storyProgress.allObjectivesComplete)
         {
-            currentStoryObjectives[0].FindMainAsset(_container);
+            FindMainStoryAsset(_container, _storyObjectiveGroups[currentObjectiveGroup][0].mainAssetName);
+            currentStoryObjectives = _storyObjectiveGroups[currentObjectiveGroup];
         }
         yield return new WaitForSeconds(0.025f);
     }
-
+    private void FindMainStoryAsset(ServiceContainer container,string mainAssetName)
+    {
+        //because story objective aren't loaded in a performance heavy context
+        //we can get away with loading the main asset this way each time
+        string dir = DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData);
+        StoryObjective[] all = Resources.LoadAll<StoryObjective>(dir);
+        var mainAsset = Array.Find(all, o => o.name == mainAssetName);
+        if (mainAsset is null)
+        {
+            Debug.LogError("Story objective Asset: "+mainAssetName+" not found");
+            return;
+        }
+        mainAsset.LoadObjective(container);
+    }
+    public void LoadStoryObjective(StoryObjectiveSave objectiveSave)
+    {
+        _storyObjectiveGroups[objectiveSave.groupSection].Add(objectiveSave);
+    }
     public void CheckForItemAtPosition(Vector2 interactionPosition)
     {
         var handlingPickupObjective = false;
-        if (currentStoryObjectives.Count > 0)
+        if (_storyObjectiveGroups.Count > 0)
         {
-            handlingPickupObjective = currentStoryObjectives[0].objectiveType == StoryObjectiveType.PickupItem;
+            handlingPickupObjective = _storyObjectiveGroups[currentObjectiveGroup][0]
+                .objectiveType == StoryObjectiveType.PickupItem;
         }
         
         var itemPicked = handlingPickupObjective
@@ -217,28 +276,43 @@ public class OverworldState : MonoBehaviour,IInjectable
                 new PickupData(authored.pickup, pickedIds.Contains(authored.pickup.name)));
         }
     }
+    
     public void AddPickup(OverworldPickup pickup)
     {
         var newPickupData = new PickupData(pickup, false);
         _objectivePickupRegistry.AddToLookUp(newPickupData);
     }
-    public bool HasObjective(string objectiveName)
+    
+    public bool HasObjective(StoryObjective objectiveData)
     {
-        return currentStoryObjectives.Any(obj=>obj.name == objectiveName);
+        foreach (var pair in _storyObjectiveGroups)
+        {
+            var group = pair.Value;
+            foreach (var save in group)
+            {
+                if (save.mainAssetName == objectiveData.name)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
-
-    public void LoadStoryProgress(StoryProgressObjective storyData)
-    {
-        storyProgressObjective = storyData;
-        storyProgressObjective.FindMainAsset(_container);
-    }
+    
     public void ClearAndLoadNextObjective()
     {
-        currentStoryObjectives.RemoveAt(0);
-        storyProgressObjective.numCompleted++;
-        if (currentStoryObjectives.Count > 0)
+        _storyObjectiveGroups[currentObjectiveGroup].RemoveAt(0);
+       
+        if (_storyObjectiveGroups[currentObjectiveGroup].Count == 0)
         {
-            currentStoryObjectives[0].FindMainAsset(_container);
+            _storyObjectiveGroups.Remove(currentObjectiveGroup);
+        }
+      
+        if (_storyObjectiveGroups.Count > 0)
+        {
+            currentObjectiveGroup = _storyObjectiveGroups.First().Key;
+            FindMainStoryAsset(_container, _storyObjectiveGroups[currentObjectiveGroup][0].mainAssetName);
+            currentStoryObjectives = _storyObjectiveGroups[currentObjectiveGroup];
         }
         else
         {
@@ -256,24 +330,31 @@ public class OverworldState : MonoBehaviour,IInjectable
         {
             tree.treeData.SetLastLogin(DateTime.Now);
             var randomID = Utility.Random16Bit();//prevent duplicate json file names
-            _saveHandler.SaveBerryTreeDataAsJson(tree.treeData,$"{tree.treeData.berryItem.itemName} {randomID}");
+            _saveHandler.SaveDataAsJson(tree.treeData,$"{tree.treeData.berryItem.itemName} {randomID}",SaveDataDirectory.BerryTrees);
         }
         yield return new WaitForSeconds(1f);
         
-        _saveHandler.SaveItemPickupDataAsJson(_loadedPickupRegistry,"Item pickup registry");
+        _saveHandler.SaveDataAsJson(_loadedPickupRegistry,"Item pickup registry",SaveDataDirectory.OverworldItemPickupRegistry);
         yield return new WaitForSeconds(0.02f);
 
-        int objectiveIndex=0;
-        foreach (var objective in currentStoryObjectives)
+        int objectiveIndex = 0;
+        foreach (var pair in _storyObjectiveGroups)
         {
-            objective.mainAssetName = objective.mainAssetName==string.Empty? objective.name:objective.mainAssetName;
-            objective.indexInList = objectiveIndex;
-            objectiveIndex++;
-            _saveHandler.SaveStoryDataAsJson(objective,objective.mainAssetName);
-            yield return new WaitForSeconds(0.025f);
+            var group = pair.Value;
+            foreach (var save in group)
+            {
+                save.indexInList = objectiveIndex;
+                save.groupSection = pair.Key;
+                _saveHandler.SaveDataAsJson(save,save.mainAssetName,SaveDataDirectory.StoryObjectives);
+                yield return new WaitForSeconds(0.025f);
+                objectiveIndex++;
+            }
         }
-        storyProgressObjective.mainAssetName = storyProgressObjective.mainAssetName==string.Empty? storyProgressObjective.name:storyProgressObjective.mainAssetName;
-        _saveHandler.SaveStoryDataAsJson(storyProgressObjective,"Story Progress");
+
+        storyProgress.allObjectivesComplete = objectiveIndex == 0;
+        storyProgress.lastActiveGroup = currentObjectiveGroup;
+        _saveHandler.SaveDataAsJson(storyProgress,"Story Progress",SaveDataDirectory.StoryObjectiveProgress);
+        
         yield return null;
     }
 }

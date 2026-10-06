@@ -21,11 +21,11 @@ public class MovementRestrictionState
 public class PlayerMovementHandler : MonoBehaviour,IInjectable
 {
     public float movementSpeed;
-    [SerializeField] float walkSpeed = 4f;
-    [SerializeField] float runSpeed = 6f;
+    [SerializeField] private float walkSpeed = 4f;
+    [SerializeField] private float runSpeed = 6f;
     private const float BikeSpeed = 10f;
     public bool runningInput;
-    public bool canRun = true;
+    [SerializeField] bool canRun = true;
     public bool usingBike;
     public bool canUseBike = true;
     private bool _canSwitchMovement;
@@ -76,6 +76,20 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
         _overworldActions.OnActionComplete += () => AllowPlayerMovement(MovementRestrictor.OverworldAction,0.35f);
         positionBoundary = new PlayerBoundary { isRestricting = false };
         canRun = true;
+    }
+
+    public void AllowRunning()
+    {
+        canRun = true;
+    }
+    public void PreventRunning()
+    {
+        canRun = false;
+        runningInput = false;
+        _canSwitchMovement = false;
+        var idle = yAxisInput == 0 && xAxisInput == 0;
+        if (!idle) animationManager.ChangeAnimationState(PlayerAnimationState.PlayerWalk);
+        movementSpeed = walkSpeed;
     }
     private void SnapToPosition()
     {

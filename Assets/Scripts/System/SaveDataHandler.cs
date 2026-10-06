@@ -5,6 +5,7 @@ using UnityEngine;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 
 public class SaveDataHandler : MonoBehaviour,IInjectable
 {
@@ -198,7 +199,8 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         {
             var treeData = LoadObjectFromJson<BerryTreeData>(jsonFilePath);
             treeData.spriteData.Clear();
-            var treeSprites = Resources.Load<BerryTreeData>(DirectoryHandler.GetDirectory(AssetDirectory.BerryTreeData) + $"{treeData.itemAssetName } Data").spriteData;
+            var treeSprites = Resources.Load<BerryTreeData>(DirectoryHandler.GetDirectory(AssetDirectory.BerryTreeData) 
+                                                            + $"{treeData.itemAssetName} Data").spriteData;
             treeData.spriteData = treeSprites;
             treeData.berryItem = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)
                                                       + treeData.itemAssetName);
@@ -209,17 +211,19 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         {
             //do not change this
             var rawJson = File.ReadAllText(jsonFilePath);
-            var wrapper = JsonUtility.FromJson<ObjectiveTypeWrapper>(rawJson);
-            var objectiveData = StoryObjective.CreateObjectiveOfType(wrapper.objectiveType);
-            JsonUtility.FromJsonOverwrite(rawJson, objectiveData);
-            if (objectiveData is StoryProgressObjective storyData)
-            {
-                _overworldStateHandler.LoadStoryProgress(storyData);
-            }
-            else
-            {
-                _overworldStateHandler.currentStoryObjectives.Add(objectiveData);
-            }
+            var save = new StoryObjectiveSave();
+            JsonUtility.FromJsonOverwrite(rawJson,save);
+            _overworldStateHandler.LoadStoryObjective(save);
+        }
+        
+        var storyProgressJson = GetJsonFilesFromPath(_saveDataPath + 
+                                                   DirectoryHandler.GetSaveDirectory(SaveDataDirectory.StoryObjectiveProgress));
+        if (storyProgressJson.Count > 0)
+        {
+            StoryProgress storyProgress = new();
+            var json = File.ReadAllText(storyProgressJson[0]);
+            JsonUtility.FromJsonOverwrite(json, storyProgress);
+            _overworldStateHandler.storyProgress = storyProgress;
         }
         
         var registryJson = GetJsonFilesFromPath(_saveDataPath + DirectoryHandler.GetSaveDirectory(SaveDataDirectory.OverworldItemPickupRegistry));
@@ -297,7 +301,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             LoadHeldItems(pokemon);
             _pokemonPartyHandler.AddMemberFromSystemProcess(pokemon);
         }
-        
+    
         _pokemonStorageHandler.nonPartyPokemon.Clear();
         var storagePokemonList = GetJsonFilesFromPath(_saveDataPath + DirectoryHandler.GetSaveDirectory(SaveDataDirectory.StoragePokemon));
         
@@ -331,11 +335,15 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             pokemon.GiveItem(heldItem);
         }
     }
-    
-    
 
     public void EraseSaveData()
     {
+        _playerBagHandler.allItems.Clear();
+        _playerBagHandler.storageItems.Clear();
+        _pokemonPartyHandler.ClearPartyMembers();
+        _pokemonStorageHandler.numNonPartyPokemon = 0;
+        _pokemonStorageHandler.totalPokemonCount = 0;
+        _pokemonStorageHandler.nonPartyPokemon.Clear();
         foreach (var dir in DirectoryHandler.SaveDataDirectories)
         {
             DirectoryHandler.ClearDirectory(_saveDataPath + dir.Value);
@@ -477,7 +485,11 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         }
         else
         {
-            EraseSaveData();//empty old save data
+            //empty old save data
+            foreach (var dir in DirectoryHandler.SaveDataDirectories)
+            {
+                DirectoryHandler.ClearDirectory(_saveDataPath + dir.Value);
+            }
             yield return new WaitForSecondsRealtime(1f);
             //copy new save data
             yield return DirectoryHandler.CopyDirectoryFiles(_tempSaveDataPath,_saveDataPath,recursive: true);
@@ -492,7 +504,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
     }
 
-    private void SaveDataAsJson<T>(T saveSataObject, string fileName,SaveDataDirectory saveDirectory)
+    public void SaveDataAsJson<T>(T saveSataObject, string fileName,SaveDataDirectory saveDirectory)
     {
         var directory = Path.Combine(_tempSaveDataPath+DirectoryHandler.GetSaveDirectory(saveDirectory), fileName + ".json");
         var json = JsonUtility.ToJson(saveSataObject, true);
@@ -504,26 +516,5 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         var jsonAsObject = ScriptableObject.CreateInstance<T>();
         JsonUtility.FromJsonOverwrite(json, jsonAsObject);
         return jsonAsObject;
-    }
-    
-    public void SaveBerryTreeDataAsJson(BerryTreeData tree, string fileName)
-    {
-        SaveDataAsJson(tree,fileName,SaveDataDirectory.BerryTrees);
-    }
-    public void SaveStoryDataAsJson(StoryObjective objective, string fileName)
-    {
-        SaveDataAsJson(objective,fileName,SaveDataDirectory.StoryObjectives);
-    }
-    public void SaveStorageDataAsJson(PokemonStorageBox box, string fileName)
-    {
-        SaveDataAsJson(box,fileName,SaveDataDirectory.PCStorage);
-    }
-    public void SaveGameSettingsAsJson(SettingsConfig config, string fileName)
-    {
-        SaveDataAsJson(config,fileName,SaveDataDirectory.GameSettings);
-    }
-    public void SaveItemPickupDataAsJson(OverworldPickupRegistry registry, string fileName)
-    {
-        SaveDataAsJson(registry,fileName,SaveDataDirectory.OverworldItemPickupRegistry);
     }
 }

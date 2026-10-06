@@ -47,7 +47,7 @@ public class ObjectiveObjectHandler : MonoBehaviour,IInjectable
 
     private void CheckForRequiredObjective()
     {
-        if (_overworldStateHandler.HasObjective(objective.name))//the objective could have been completed already
+        if (_overworldStateHandler.HasObjective(objective))//the objective could have been completed already
         {
             objective.Inject(this);
             objective.OnLoad += LoadObjects;

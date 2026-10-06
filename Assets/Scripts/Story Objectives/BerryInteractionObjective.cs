@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "berry obj", menuName = "Objectives/berry interaction objective")]
-public class BerryInteractionObjective : InteractionObjective
+public class BerryInteractionObjective : StoryObjective
 {
     private DialogueHandler _dialogueHandler;
     private OverworldState _overworldState;
     
     public Item berryForObjective;
+    public OverworldInteractionType interactionTypeForObjective;
     
     protected override void OnObjectiveLoaded()
     {

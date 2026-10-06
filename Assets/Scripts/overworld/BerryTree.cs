@@ -221,9 +221,14 @@ public class BerryTree : MonoBehaviour
         var treeDataAsset = Resources.Load<BerryTreeData>(
             DirectoryHandler.GetDirectory(AssetDirectory.BerryTreeData)
                                                           + berryToPlant.itemName+" Data");
+        
+        var previousSoilIndex = treeData.soilIndex;
+        
         treeData = InstanceFactory.CreateTreeData(treeDataAsset);
         
+        treeData.soilIndex = previousSoilIndex;
         treeData.isPlanted = true;
+        treeData.itemAssetName = berryToPlant.itemName;
         
         _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagNavigation,true);
         

@@ -365,9 +365,9 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     }
  
 /// <summary>
-/// [For Testing] Removes all party members
+/// [Mainly For Testing] Removes all party members
 /// </summary>
-    public void ClearTestState()
+    public void ClearPartyMembers()
     {
         party.Clear();
     }
@@ -406,14 +406,16 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                               string.IsNullOrWhiteSpace(newPokemon.nickName);
                 
         newPokemon.nickName = invalidNickname? newPokemon.pokemonName : newPokemon.nickName;
-
         
-        if (party.Count<maxNumMembers)
+        if (party.Count < maxNumMembers)
         {
+            _pokemonStorageHandler.totalPokemonCount++;
             party.Add(newPokemon);
         }
         else
+        {
             _pokemonStorageHandler.AddPokemonToStorage(newPokemon);
+        }
         _dialogueHandler.DisplayDetails("You got a " + newPokemon.pokemonDisplayName);
     }
   

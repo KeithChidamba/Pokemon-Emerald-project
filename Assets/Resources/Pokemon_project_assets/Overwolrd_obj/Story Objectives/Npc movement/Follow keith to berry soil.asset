@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainAssetName: Follow keith to berry soil
   objectiveHeading: Catch up with keith
-  hasProgression: 0
-  indexInList: 2
+  indexInList: 10
   objectiveType: 12
+  groupSection: 1
   playerBoundary:
     isRestricting: 1
     boundaries:
@@ -29,17 +29,15 @@ MonoBehaviour:
     - direction: 1
       limit: -25
   npcName: keith
-  npcPosition: {x: 17, y: -24, z: 0}
+  npcPosition: {x: 17, y: -20, z: 0}
   npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}
   npcSprites: {fileID: 11400000, guid: 9bea254fcb98118c4a5d93967d943c36, type: 2}
   npcInteraction: {fileID: 0}
   removeAfterInteraction: 1
   facePlayer: 0
   movementDirections:
-  - direction: 2
-    numTilesToTravel: 4
   - direction: 3
     numTilesToTravel: 12
-  npcSpeed: 5
+  npcSpeed: 6
   pauseDelay: 0
   waitForPlayer: 1

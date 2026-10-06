@@ -158,7 +158,7 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
     {
         foreach (var box in storageBoxes)
         {
-            _saveDataHandler.SaveStorageDataAsJson(box,"Box "+ box.boxNumber);
+            _saveDataHandler.SaveDataAsJson(box,"Box "+ box.boxNumber,SaveDataDirectory.PCStorage);
         }
         yield return null;
     }

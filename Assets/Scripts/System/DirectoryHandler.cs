@@ -12,7 +12,7 @@ public enum AssetDirectory
 public enum SaveDataDirectory
 {
     Items, HeldItems, StorageItems, StoragePokemon, PartyPokemon, Player,
-    PCStorage, Overworld, StoryObjectives, BerryTrees,
+    PCStorage, Overworld, StoryObjectives,StoryObjectiveProgress, BerryTrees,
     GameSettings,OverworldItemPickupRegistry
 }
 
@@ -53,6 +53,7 @@ public class DirectoryHandler
         { SaveDataDirectory.Player, "/Player" },
         { SaveDataDirectory.PCStorage, "/PC_Storage" },
         { SaveDataDirectory.Overworld, "/Overworld" },
+        { SaveDataDirectory.StoryObjectiveProgress,"/Overworld/Story_Objectives/Progress"},
         { SaveDataDirectory.StoryObjectives, "/Overworld/Story_Objectives" },
         { SaveDataDirectory.GameSettings,"/GameSettings"},
         { SaveDataDirectory.BerryTrees, "/Overworld/Berry_Trees" },

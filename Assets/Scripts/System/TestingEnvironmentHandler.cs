@@ -120,7 +120,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
                Debug.LogWarning($"-------------TEST FAILED---------------");
                break;
            }
-           _pokemonPartyHandler.ClearTestState();
+           _pokemonPartyHandler.ClearPartyMembers();
            _inputStateHandler.RemoveAllUi();
            yield return new WaitForSeconds(2f);
        }

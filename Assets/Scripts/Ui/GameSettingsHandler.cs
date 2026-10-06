@@ -136,14 +136,14 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     {
         foreach (var config in settingConfigs)
         {
-            _saveDataHandler.SaveGameSettingsAsJson(config,config.settingName.ToString());
+            _saveDataHandler.SaveDataAsJson(config,config.settingName.ToString(),SaveDataDirectory.GameSettings);
         }
 
         var indexFromBool = viewGameControlsToggle.isOn ? 1 : 0;
         
         var viewControlsConfig = new SettingsConfig(indexFromBool, 1, GameSettingName.ViewControls);
         
-        _saveDataHandler.SaveGameSettingsAsJson(viewControlsConfig,viewControlsConfig.settingName.ToString());
+        _saveDataHandler.SaveDataAsJson(viewControlsConfig,viewControlsConfig.settingName.ToString(),SaveDataDirectory.GameSettings);
         yield return null;
     }
 }

@@ -74,7 +74,7 @@ public class BattleBasedTest : IntegrationTest
         
         yield return _battleHandler.AwaitBattleCompletion();
 
-        _pokemonPartyHandler.ClearTestState();
+        _pokemonPartyHandler.ClearPartyMembers();
         yield return new WaitForSeconds(0.05f);
     }
    

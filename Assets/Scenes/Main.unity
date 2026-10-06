@@ -306445,8 +306445,11 @@ MonoBehaviour:
   overworldPickupPrefab: {fileID: 5812656484865897074, guid: cf7190142c6b4d48590e7fe862c231e2, type: 3}
   overworldPickupParent: {fileID: 1570249890}
   storyObjectiveRegistry: {fileID: 11400000, guid: 8adee6dad20761e3091a8e4fc97419ff, type: 2}
+  storyProgress:
+    lastActiveGroup: 0
+    allObjectivesComplete: 0
+  currentObjectiveGroup: 0
   currentStoryObjectives: []
-  storyProgressObjective: {fileID: 0}
 --- !u!4 &1163787316
 Transform:
   m_ObjectHideFlags: 0
@@ -308467,6 +308470,9 @@ MonoBehaviour:
     isRestricted: 0
   - restrictor: 3
     isRestricted: 0
+  positionBoundary:
+    isRestricting: 0
+    boundaries: []
 --- !u!4 &1267862428
 Transform:
   m_ObjectHideFlags: 0

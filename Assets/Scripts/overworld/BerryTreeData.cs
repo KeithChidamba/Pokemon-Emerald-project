@@ -18,7 +18,7 @@ public class BerryTreeData : ScriptableObject
      public Item berryItem;
      public int minutesPerStage;
      public List<BerrySpriteData> spriteData = new();
-     public int soilIndex;
+     [HideInInspector]public int soilIndex;
      public string lastLogin;
     
      public DateTime GetLastLogin()
