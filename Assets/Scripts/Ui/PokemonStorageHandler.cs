@@ -16,6 +16,11 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
     public int numNonPartyPokemon;
 
     public int maxPokemonCapacity;
+    
+    public GameObject[] pcPokemonOptions;
+    public GameObject pcPokemonOptionsUI;
+    public GameObject pcOptionSelector;
+    
     public GameObject[] storageOptions;
     public GameObject[] storagePartyOptions;
     public GameObject storagePartyOptionsParent;
@@ -60,6 +65,7 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
     public bool movingPokemon;
     public event Action<Pokemon> OnPokemonWithdraw;
     public event Action<Pokemon> OnPokemonDeposit;
+    public event Action OnPcClosed;
     private enum PCNavState
     {
         ViewingPokemonData,ExitingPC,ViewingBoxChange,SelectingBoxDeposit,ViewingParty
@@ -129,7 +135,7 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
       
         if (_gameLoadingHandler.LoadedFromSave)
         {
-            var savedBoxes = _saveDataHandler.LoadPokemonStorageData();
+            var savedBoxes = _saveDataHandler.GetSavedPokemonStorageData();
             foreach (var boxData in savedBoxes)
             {
                 storageBoxes[boxData.boxNumber-1].boxPokemon = boxData.boxPokemon;
@@ -273,8 +279,6 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
         }
         pokemonDataVisual.sprite = pokemonDataVisualSprites[1];
     } 
-
-
     public void ClearPokemonData()
     {
         pokemonDataName.text = string.Empty;
@@ -336,7 +340,7 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
     {
         return nonPartyPokemon.FindIndex(p => p.pokemonID.ToString() == pokemonID);
     }
-
+    
     public void OpenPC(PCUsageState newState)
     {
         currentUsageState = newState;
@@ -354,8 +358,7 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
         if (currentUsageState is PCUsageState.Move or PCUsageState.Withdraw)
         {
             var storageSelectables = new List<SelectableUI>{
-                new(storageBoxExit.gameObject,
-                    ClosePC, true)
+                new(storageBoxExit.gameObject, ClosePC, true)
             };
             storageUI.SetActive(true);
             _inputStateHandler.ChangeInputState(new (InputStateName.PokemonStorageExit,
@@ -371,7 +374,6 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
                 ClosePC();
                 return;
             }
-
             initialSelector.transform.rotation = Quaternion.Euler(0, 0, 0);
             partyUI.SetActive(true);
             storageUI.SetActive(true);
@@ -397,10 +399,11 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
         }
         ChangeBox(0);
     }
-
+    
     public void ClosePC()
     {
-        _gameUIHandler.ClosePokemonStorage();
+        SoundManager.Play(UiId.PcOff);
+        OnPcClosed?.Invoke();
         RemovePokemonIcons(true);
         RemovePokemonIcons(false);
         partyUI.SetActive(false);

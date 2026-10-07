@@ -95,7 +95,7 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     }
     private void GetSavedSettings()
     {
-        var savedSettings = _saveDataHandler.LoadGameSettingsData();
+        var savedSettings = _saveDataHandler.GetSavedGameSettingsData();
         settingConfigs.Clear();
         settingConfigs.AddRange(savedSettings);
     }

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f7fac36ad80352aabd94c96a07251be, type: 3}
+  m_Name: Poke mart Clerk
+  m_EditorClassIdentifier: 
+  availableItems:
+  - {fileID: 11400000, guid: 74de7d2c2ec6cf04a94d924a69fb7677, type: 2}
+  - {fileID: 11400000, guid: 298b4b511499bc5bab4e6536cc5e2db0, type: 2}
+  - {fileID: 11400000, guid: bbf8f3c9e78a1f545b93d07924e0b10c, type: 2}
+  - {fileID: 11400000, guid: 068a8fce4f2bf1675ad92edc8cc0e97e, type: 2}
+  - {fileID: 11400000, guid: 7ad6c5da8379d1444a6d58684a5a3ebe, type: 2}
+  - {fileID: 11400000, guid: 2f70d8cf599d161449cf3b248842013d, type: 2}
+  - {fileID: 11400000, guid: ba1d78b859371bf48a68f1fa3df43b27, type: 2}
+  - {fileID: 11400000, guid: 7bd06e7fd82ccd84287ad4082f2768cd, type: 2}
+  - {fileID: 11400000, guid: b5c5fea330546694b9375ab834137de9, type: 2}
+  - {fileID: 11400000, guid: f119188b4200e601a85c9ce3fa256f00, type: 2}
+  - {fileID: 11400000, guid: b223b8d7bca27df99a2980e141dc8237, type: 2}
+  - {fileID: 11400000, guid: 7645fdc1a79a807c29c26c5dc6352748, type: 2}
+  - {fileID: 11400000, guid: cbda8cd53a97a4ebead5a9aa832c7d88, type: 2}
+  - {fileID: 11400000, guid: 2971f0d1ef85ba44a874a6e765631d6b, type: 2}
+  - {fileID: 11400000, guid: ed582cc298cf1af429facd2f75ef230f, type: 2}
+  - {fileID: 11400000, guid: 7888205ce0e84d443b42a52129737d64, type: 2}
+  - {fileID: 11400000, guid: 8952e5b58dd013d368d8f7219849709a, type: 2}
+  - {fileID: 11400000, guid: 5b2f5db9c17a5343fb475691182fdc1d, type: 2}

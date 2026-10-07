@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Leppa berry",
+    "berryItem": {
+        "instanceID": 25800
+    },
+    "minutesPerStage": 60,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33524
+                },
+                {
+                    "instanceID": 33524
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33526
+                },
+                {
+                    "instanceID": 33528
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33638
+                },
+                {
+                    "instanceID": 33640
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33642
+                },
+                {
+                    "instanceID": 33644
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33646
+                },
+                {
+                    "instanceID": 33648
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 8,
+    "lastLogin": "2026-10-07T15:54:36.0105220+02:00"
+}

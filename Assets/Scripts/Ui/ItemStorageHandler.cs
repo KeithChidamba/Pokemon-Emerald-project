@@ -1,11 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemUsage{Withdraw,Deposit,Toss,None}
 public class ItemStorageHandler : MonoBehaviour,IInjectable
 {
     public ItemUsage currentUsage;
+    
+    public GameObject pcItemOptionSelector;
+    public GameObject[] pcItemOptions;
+    public GameObject pcItemOptionsUI;
     
     private GameUiHandler _gameUIHandler;
     private DialogueHandler _dialogueHandler;
@@ -19,13 +21,11 @@ public class ItemStorageHandler : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }
 
-    public void OnInject()
-    {
-        
-    }
+    public void OnInject() { }
+    
     public void ViewItemsToWithdraw()
     {
-        if (_playerBagHandler.storageItems.Count==0)
+        if (_playerBagHandler.storageItems.Count == 0)
         {
             _dialogueHandler.DisplayDetails("You have no items to withdraw");
             return;

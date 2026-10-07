@@ -75,7 +75,9 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
         }
 
         if (numItems == numItemsForView && selectedItemIndex == numItems-1)
+        {
             return;
+        }
         
         selectedItemIndex++;
         selectedItemIndex = Mathf.Clamp(selectedItemIndex, 0, numDisplayableItems-1);
@@ -140,27 +142,16 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
         _dialogueHandler.EndDialogue();
         
         if (optionChosen > 0) return;
-        
-        if(currentMartData is not null){
-            if (currentMartData.location == clerkInteraction.location)
-            {//basically caching
-                SetUpItemView();
-                return;
-            }
-        }
-        var allData = Resources.LoadAll<PokeMartData>(
-            DirectoryHandler.GetDirectory(AssetDirectory.PokeMartData));
-        
-        currentMartData = allData.FirstOrDefault(data => data.location == clerkInteraction.location);
+       
+        currentMartData = clerkInteraction.GetModule<PokeMartData>();
         if (currentMartData is null)
         {
-            Debug.LogWarning($"No mart data for location{clerkInteraction.location}");
+            Debug.LogWarning($"No mart data for {clerkInteraction.name}");
             return;
         }
         currentStoreItems.Clear();
         var orderedItems = currentMartData.availableItems.OrderBy(item => item.buyPrice);
         var itemGroups = orderedItems.GroupBy(item => item.itemType).ToList();
-        
         foreach (var group in itemGroups)
         {
             foreach (var item in group)
@@ -190,13 +181,17 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
     }
     public void ExitStore()
     {
+        Debug.Log("Ui off");
+        storeUI.SetActive(false);
         selectedItemIndex = 0;
         quantityUI.SetActive(false);
         foreach (var item in storeItemsUI)
+        {
             item.ClearUI();
+        }
         viewingStore = false;
     }
-    void ReloadItems()
+    private void ReloadItems()
     {
         foreach (var item in storeItemsUI)
             item.LoadItemUI();

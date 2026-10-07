@@ -44,6 +44,7 @@ public class Animation_manager : MonoBehaviour
     }
     public void ChangeAnimationState(PlayerAnimationState newState)
     {
+        if (!isActiveAndEnabled) return;
         if (currentState == newState)
         {
             return;

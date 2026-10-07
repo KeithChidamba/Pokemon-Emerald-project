@@ -16,9 +16,10 @@ public class Interaction : ScriptableObject
     public List<InteractionOptions> interactionOptions = new();
     [FormerlySerializedAs("ResultMessage")] public string resultMessage = "";
     [FormerlySerializedAs("OptionsUiText")] public List<string> optionsUiText= new();
+    
     public AdditionalInfoModule additionalInfo;
     public OverworldInteractionType overworldInteraction;
-    public AreaName location;
+   
     public T GetModule<T>() where T : AdditionalInfoModule
     {
         return additionalInfo as T;

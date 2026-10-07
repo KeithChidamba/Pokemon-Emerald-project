@@ -24,7 +24,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         private set;
     }
     private bool _saveDataExists;
-    
+
     public event Action OnGameStarted;
     private SaveDataHandler _saveHandler;
     private DialogueHandler _dialogueHandler;
@@ -49,11 +49,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
         gameObject.SetActive(true);
     }
-
-    public void OnInject()
-    {
-
-    }
+    public void OnInject() { }
 
     public void ShowMenuUI(bool dataExists)
     {
@@ -85,26 +81,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
             menuUiParent, InputDirection.Vertical, menuSelectables,
             menuSelector,true,true,canExit:false));
     }
-
-    private void CreateNewPlayer(string playerName)
-    {
-        if (Application.platform == RuntimePlatform.WebGLPlayer)
-        {
-            StartCoroutine(_saveHandler.CreateDefaultWebglDirectories());
-        }
-        
-        var data = ScriptableObject.CreateInstance<PlayerData>();
-        data.playerName = playerName;
-        data.playerMoney = 300;
-        data.numBadges = 0;
-        data.trainerID = Utility.Random16Bit();
-        data.secretID = Utility.Random16Bit();
-        var gardenLocation = _areaHandler.overworldAreas.First(a => a.locationData.areaName == AreaName.OpenGarden);
-        data.playerPosition = gardenLocation.locationData.entranceCell;
-        data.location = gardenLocation.locationData.areaName;
-        playerData = data;
-        StartGame(false);
-    }
+    
     private void NewGame()
     {
         if (_saveDataExists)
@@ -112,10 +89,8 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayCustomOptions($"Save data detected!, Are you sure you want to erase it?",
                 new[] { "Yes", "No" }, new Action[] { LoadPlayerCreationMenu, _dialogueHandler.EndDialogue });
         }
-        else
-        {
-            LoadPlayerCreationMenu();
-        }
+        else LoadPlayerCreationMenu();
+        
         return;
         void LoadPlayerCreationMenu()
         {
@@ -124,14 +99,15 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
             loadButton.gameObject.SetActive(false);
             newGameButton.gameObject.SetActive(false);
             menuSelector.SetActive(false);
-           
+            _inputStateHandler.ResetSpecificUi(InputStateName.StartMenu,true);
+            
             _dialogueHandler.EndDialogue();
             
             if (Application.platform != RuntimePlatform.WebGLPlayer)
             {
                 _saveHandler.EraseSaveData();
             }
-
+            
             var playerNameLength = 8;
             _gameUIHandler.ViewTypingInterface(
                 CreateNewPlayer,
@@ -141,33 +117,65 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
                     $"Your Name?",
                     new Vector2(55,80)));
         }
+        void CreateNewPlayer(string playerName)
+        {
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+                StartCoroutine(_saveHandler.CreateDefaultWebglDirectories());
+            }
+        
+            var data = ScriptableObject.CreateInstance<PlayerData>();
+            data.playerName = playerName;
+            data.playerMoney = 300;
+            data.numBadges = 0;
+            data.trainerID = Utility.Random16Bit();
+            data.secretID = Utility.Random16Bit();
+            var gardenLocation = _areaHandler.overworldAreas.First(a => a.locationData.areaName == AreaName.OpenGarden);
+            data.playerPosition = gardenLocation.locationData.entranceCell;
+            data.location = gardenLocation.locationData.areaName;
+            playerData = data;
+            StartGame(false);
+        }
     }
 
-    private IEnumerator GameStartLoading()
+    private IEnumerator GameStartLoading(float gameStartDelay)
     {
-        _inputStateHandler.ResetSpecificUi(InputStateName.StartMenu,true);
+        loadingScreen.gameObject.SetActive(true);
+        menuUiParent.SetActive(false);
+        yield return Utility.FadeImage(loadingScreen,Color.white,0.85f);
+        yield return new WaitForSeconds(gameStartDelay);
+        
         _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
         _dialogueHandler.EndDialogue();
         OnGameStarted?.Invoke();
-        menuUiParent.SetActive(false);
        
-        //give everything time to load
-        loadingScreen.gameObject.SetActive(true);
-        yield return Utility.FadeImage(loadingScreen,Color.white,0.85f);
+        //just in-case
+        yield return new WaitForSeconds(1f);
         
         loadingScreen.gameObject.SetActive(false);
         startMenuCam.gameObject.SetActive(false);
         worldMap.SetActive(true);
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
         _areaHandler.SwitchToArea(playerData.location);
+        
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
     }
     public void StartGame(bool loadFromSave=true)
     {
+        _inputStateHandler.AddPlaceHolderState();
         LoadedFromSave = loadFromSave;
-        
-        if (loadFromSave) _gameSettingsHandler.ConfigureSavedSettings();
-        
-        StartCoroutine(GameStartLoading());
+        var gameStartDelay = 1f;
+        if (loadFromSave)
+        {
+            _inputStateHandler.ResetSpecificUi(InputStateName.StartMenu,true);
+            if (Application.platform != RuntimePlatform.WebGLPlayer)
+            {
+                _saveHandler.LoadAllSaveData();
+                gameStartDelay = 4f;
+            }
+            _gameSettingsHandler.ConfigureSavedSettings();
+        }
+        StartCoroutine(GameStartLoading(gameStartDelay));
     }
 }
 

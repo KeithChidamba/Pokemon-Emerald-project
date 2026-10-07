@@ -31,16 +31,9 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     [SerializeField]private GameObject exitButton;
     [SerializeField]private List<GameObject> menuUiOptions = new ();
     public GameObject menuSelector;
-    public GameObject pcOptionSelector;
-    public GameObject pcItemOptionSelector;
-    public GameObject[] pcPokemonOptions;
-    public GameObject[] pcItemOptions;
-    public GameObject pcPokemonOptionsUI;
-    public GameObject pcItemOptionsUI;
     public GameObject keyBindsUI;
     public bool usingWebGl;
     [SerializeField]private bool canOpenMenu;
-    public Image destinationPointerUI;
     public Image blackFadingScreen;
     
     private PokemonDetailsHandler _pokemonDetailsHandler;
@@ -362,21 +355,22 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     public void ViewItemStorage()
     {
         AddScreen();
-         var pcUsageSelectables = new List<SelectableUI>
+    
+        var pcUsageSelectables = new List<SelectableUI>
         {
-            new(pcItemOptions[0], _itemStorageHandler.ViewItemsToWithdraw, true),
-            new(pcItemOptions[1], _itemStorageHandler.OpenBagToDepositItem, true),
-            new(pcItemOptions[2], _itemStorageHandler.OpenBagToTossItem, true),
-            new(pcItemOptions[3], ()=>_inputStateHandler.ResetSpecificUi(InputStateName.ItemStorageUsage), true),
+            new(_itemStorageHandler.pcItemOptions[0], _itemStorageHandler.ViewItemsToWithdraw, true),
+            new(_itemStorageHandler.pcItemOptions[1], _itemStorageHandler.OpenBagToDepositItem, true),
+            new(_itemStorageHandler.pcItemOptions[2], _itemStorageHandler.OpenBagToTossItem, true),
+            new(_itemStorageHandler.pcItemOptions[3], ()=>_inputStateHandler.ResetSpecificUi(InputStateName.ItemStorageUsage), true),
         };
         _inputStateHandler.ChangeInputState(new  (InputStateName.ItemStorageUsage,
-            InputStateGroup.Bag,true,pcItemOptionsUI,
-            InputDirection.Vertical, pcUsageSelectables,pcItemOptionSelector,true, true
+            InputStateGroup.Bag,true,_itemStorageHandler.pcItemOptionsUI,
+            InputDirection.Vertical, pcUsageSelectables,_itemStorageHandler.pcItemOptionSelector,true, true
             ,onExit:ClosePCItemOptions,onClose:ClosePCItemOptions));
         return;
         void ClosePCItemOptions()
         {
-            pcItemOptionsUI.SetActive(false);
+            _itemStorageHandler.pcItemOptionsUI.SetActive(false);
             RemoveScreen();
         }
     }
@@ -397,29 +391,33 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         };
         
         var pcUsageSelectables = new List<SelectableUI>();
-        
         for (var i =0; i<pcUsageActions.Count;i++)
-            pcUsageSelectables.Add( new(pcPokemonOptions[i],pcUsageActions[i],true) );
+            pcUsageSelectables.Add( new(_pokemonStorageHandler.pcPokemonOptions[i],pcUsageActions[i],true) );
         
         _inputStateHandler.ChangeInputState(new  (InputStateName.PokemonStorageUsage,
-            InputStateGroup.PokemonStorage,true,pcPokemonOptionsUI,
-            InputDirection.Vertical, pcUsageSelectables,pcOptionSelector,true, true,
+            InputStateGroup.PokemonStorage,true,_pokemonStorageHandler.pcPokemonOptionsUI,
+            InputDirection.Vertical, pcUsageSelectables,_pokemonStorageHandler.pcOptionSelector,true, true,
             onClose:ClosePokemonPCOptions,onExit:ClosePokemonPCOptions,displayOpenTransition:true));
+        
         return;
         void ClosePokemonPCOptions()
         {
-            pcPokemonOptionsUI.SetActive(false);
+            _pokemonStorageHandler.pcPokemonOptionsUI.SetActive(false);
             SoundManager.Play(UiId.PcOff);
         }
-        void SetPokemonPcUsage(PCUsageState currentUsageState)
+        void SetPokemonPcUsage(PCUsageState usageState)
         {
-            pcPokemonOptionsUI.SetActive(false);
-            _pokemonStorageHandler.OpenPC(currentUsageState);
+            _pokemonStorageHandler.OnPcClosed += RemoveScreen;
+            _pokemonStorageHandler.OnPcClosed += Cleanup;
+            _pokemonStorageHandler.pcPokemonOptionsUI.SetActive(false);
+            _pokemonStorageHandler.OpenPC(usageState);
+            return;
+            void Cleanup()
+            {
+                _pokemonStorageHandler.OnPcClosed -= RemoveScreen;
+                _pokemonStorageHandler.OnPcClosed -= Cleanup;
+            }
         }
-    }
-    public void ClosePokemonStorage()
-    {
-        RemoveScreen();
     }
     public void ViewPokeMart()
     {
@@ -497,5 +495,4 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         _typingInterfaceHandler.OnInputResolved += (input) => RemoveScreen();
         _typingInterfaceHandler.InitializeState(inputLength,graphicData);
     }
-
 }

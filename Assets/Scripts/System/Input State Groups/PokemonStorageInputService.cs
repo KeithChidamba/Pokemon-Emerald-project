@@ -31,6 +31,7 @@ public class PokemonStorageInputService: IInputGroup
         };
         stateMethod?.Invoke();
     }
+    
     private void StorageFullBoxNavigation()
     {
         _inputStateHandler.SetupFullBoxNavigation(PokemonStorageHandler.BoxCapacity,PokemonStorageHandler.BoxColumns);

@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 1,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Tamato berry",
+    "berryItem": {
+        "instanceID": 28398
+    },
+    "minutesPerStage": 180,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33524
+                },
+                {
+                    "instanceID": 33524
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33526
+                },
+                {
+                    "instanceID": 33528
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33674
+                },
+                {
+                    "instanceID": 33676
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33678
+                },
+                {
+                    "instanceID": 33680
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33682
+                },
+                {
+                    "instanceID": 33684
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 3,
+    "lastLogin": "2026-10-07T15:54:36.0068230+02:00"
+}

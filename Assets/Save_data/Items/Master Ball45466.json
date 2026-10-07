@@ -1,0 +1,42 @@
+{
+    "itemID": "Master Ball45466",
+    "itemName": "Master Ball",
+    "itemType": 10,
+    "itemDescription": "Can catch any pokemon",
+    "itemImage": {
+        "instanceID": 27838
+    },
+    "quantity": 1,
+    "forPartyUse": false,
+    "canBeUsedInOverworld": false,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "buyPrice": 0,
+    "canBeSold": false,
+    "sellPrice": 0,
+    "priceCurrency": 0,
+    "additionalInfoModules": [],
+    "dynamicInfoModules": [
+        {
+            "rid": 1000
+        }
+    ],
+    "imageDirectory": "Master Ball",
+    "references": {
+        "version": 2,
+        "RefIds": [
+            {
+                "rid": 1000,
+                "type": {
+                    "class": "ItemEffectInfo",
+                    "ns": "",
+                    "asm": "Assembly-CSharp"
+                },
+                "data": {
+                    "effectValue": 255.0
+                }
+            }
+        ]
+    }
+}

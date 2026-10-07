@@ -191,24 +191,31 @@ public class OverworldState : MonoBehaviour,IInjectable
         }
         else
         {
-            //remove completed objectives
-            var sections = (StoryObjectiveSection[])Enum.GetValues(typeof(StoryObjectiveSection));
-            foreach (var section in sections)
+            if (storyProgress.allObjectivesComplete)
             {
-                if (section < storyProgress.lastActiveGroup)
+                _storyObjectiveGroups.Clear();
+            }
+            else
+            {
+                //remove completed objectives
+                var sections = (StoryObjectiveSection[])Enum.GetValues(typeof(StoryObjectiveSection));
+                foreach (var section in sections)
                 {
-                    _storyObjectiveGroups.Remove(section);
+                    if (section < storyProgress.lastActiveGroup)
+                    {
+                        _storyObjectiveGroups.Remove(section);
+                    }
                 }
+                foreach (var pair in _storyObjectiveGroups)
+                {
+                    //sort objectives in order
+                    var currentGroup = pair.Value;
+                    var orderList = currentGroup.OrderBy(obj => obj.indexInList).ToList();
+                    currentGroup.Clear();
+                    currentGroup.AddRange(orderList);
+                }
+                currentObjectiveGroup = storyProgress.lastActiveGroup;
             }
-            foreach (var pair in _storyObjectiveGroups)
-            {
-                //sort objectives in order
-                var currentGroup = pair.Value;
-                var orderList = currentGroup.OrderBy(obj => obj.indexInList).ToList();
-                currentGroup.Clear();
-                currentGroup.AddRange(orderList);
-            }
-            currentObjectiveGroup = storyProgress.lastActiveGroup;
         }
         yield return new WaitForSeconds(0.025f);
         
