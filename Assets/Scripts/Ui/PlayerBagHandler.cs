@@ -557,7 +557,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
     }
     private void ReloadEquipMarker()
     {
-        if (!_gameUIHandler.usingUI) return;
+        if (!_gameUIHandler.UsingUI) return;
         for (int i = 0; i < NumItemsForView; i++)
         {
             bagItemsUI[i].LoadItemUI();

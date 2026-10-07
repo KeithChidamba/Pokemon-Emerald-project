@@ -139,6 +139,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
     private void ViewStore(Interaction clerkInteraction, int optionChosen)
     {
         if (clerkInteraction.overworldInteraction != OverworldInteractionType.PokemartClerk) return;
+      
         _dialogueHandler.EndDialogue();
         
         if (optionChosen > 0) return;
@@ -181,8 +182,6 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
     }
     public void ExitStore()
     {
-        Debug.Log("Ui off");
-        storeUI.SetActive(false);
         selectedItemIndex = 0;
         quantityUI.SetActive(false);
         foreach (var item in storeItemsUI)

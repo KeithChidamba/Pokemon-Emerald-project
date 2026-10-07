@@ -26,8 +26,12 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     public GameObject partyUI;
    
     public GameObject optionSelector;
-    public Image cancelButton;
-
+    public Image cancelButtonImage;
+    public Image cancelButtonPokeballImage;
+    public Sprite cancelButtonHover;
+    public Sprite cancelButtonSprite;
+    public GameObject cancelButton;
+    
     public GameObject[] partyOptions;
     public GameObject partyOptionsParent;
     public Text partyUsageText;
@@ -133,9 +137,16 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     }
     private void UpdateCancelButton(int currentIndex)
     {
-        cancelButton.sprite = currentIndex < party.Count? 
-            memberCards[0].pokeballClosedImage.sprite
-                :memberCards[0].pokeballOpenImage.sprite;
+        if ( currentIndex < party.Count)
+        {
+            cancelButtonImage.sprite = memberCards[0].pokeballClosedImage.sprite;
+            cancelButtonPokeballImage.sprite = cancelButtonSprite;
+        }
+        else
+        {
+            cancelButtonImage.sprite = memberCards[0].pokeballOpenImage.sprite;
+            cancelButtonPokeballImage.sprite = cancelButtonHover;
+        }
     }
     public int GetLivingPokemonCount()
     {
@@ -329,7 +340,8 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         currentUsage = PartyUsage.General;
         _inputStateHandler.OnStateChanged -= CheckStateUpdate;
         _inputStateHandler.OnSelectionIndexChanged -= UpdateCancelButton;
-        cancelButton.sprite = memberCards[0].pokeballClosedImage.sprite;
+        cancelButtonImage.sprite = memberCards[0].pokeballClosedImage.sprite;
+        cancelButtonPokeballImage.sprite = cancelButtonSprite;
     }
     
     public IEnumerator SwapMemberWithoutTurnUsage(int partyPosition,BattleParticipantKey participantKey)

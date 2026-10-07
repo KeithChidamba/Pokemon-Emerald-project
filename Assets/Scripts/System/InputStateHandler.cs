@@ -260,8 +260,8 @@ public class InputStateHandler : MonoBehaviour,IInjectable
         return;
         void HandleParentDisplay()
         {
-            parentLayers.ForEach(l=>l.mainViewUI.SetActive(false));
-            parentLayers.Last().mainViewUI.SetActive(true);
+            parentLayers.ForEach(l=>l.mainViewUI?.SetActive(false));
+            parentLayers.Last().mainViewUI?.SetActive(true);
         }
     }
     

@@ -50,7 +50,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
         equippedSpecialItem = item;
         _currentEquippedItem = equippedSpecialItem.GetDynamicModule<EquipableItemInfo>().equipableItem;
         OnItemEquipped?.Invoke(_currentEquippedItem);
-        if(gameUiHandler.usingUI)
+        if(gameUiHandler.UsingUI)
         {
             _dialogueHandler.DisplayDetails("Equipped " + equippedSpecialItem.itemName);
         }
@@ -76,7 +76,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
         _currentEquippedItem = Equipable.None;
         equippedSpecialItem = null;
         OnItemUnequipped?.Invoke(previousItem);
-        if(gameUiHandler.usingUI)
+        if(gameUiHandler.UsingUI)
         {
             _dialogueHandler.DisplayDetails("Unequipped " + item.itemName);
         }

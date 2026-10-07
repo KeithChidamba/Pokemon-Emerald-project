@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public enum ControlEvent
 {
-    Up,Down,Left,Right,UseSpecialItem,OpenMenu,ViewControls,Confirm,Exit,OpenSettings,Save
+    Up,Down,Left,Right,UseSpecialItem,OpenMenu,ViewControls,Confirm,Exit
 }
 [DefaultExecutionOrder(-1000)]
 public class InputSourceHandler : MonoBehaviour, IInjectable
@@ -23,71 +23,19 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
     public static event Action<ControlEvent> OnInputPressed;
     public static event Action<ControlEvent> OnInputReleased;
     
-    private bool _isMobile;
-    private bool _gameStarted;
-    public GameObject mobileControlsUI;
-    
-    private InputStateHandler _inputStateHandler;
-    private GameUiHandler gameUiHandler;
-    private GameLoadingHandler _gameLoadingHandler;
-    
     public void Inject(ServiceContainer container)
     {
-        _inputStateHandler = container.Resolve<InputStateHandler>();
-        gameUiHandler = container.Resolve<GameUiHandler>();
-        _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
-        
-        gameObject.SetActive(true);
-    }
-
-    public void OnInject()
-    {
-        _isMobile = false;
-        _gameStarted = false;
-        _gameLoadingHandler.OnGameStarted += ()=> _gameStarted = true;
-        
         foreach (ControlEvent e in Enum.GetValues(typeof(ControlEvent)))
         {
             _held[e] = false;
             _pressed[e] = false;
         }
+        gameObject.SetActive(true);
     }
-    public void DisplayMobileControls(bool canDisplay)
-    {
-        _isMobile = canDisplay;
-        mobileControlsUI.SetActive(canDisplay);
-    }
+    public void OnInject() { }
 
-    private bool CanUseQuickAction(ControlEvent e)
-    {
-        if(_inputStateHandler.IsEmptyState)
-        {
-            if(e == ControlEvent.OpenSettings)//settings is the only exception
-            {
-                return true;
-            }
-            return _gameStarted;
-        }
-        return false;
-    }
     private void Update()
     {
-        if (InputPressed(ControlEvent.OpenSettings))
-        {
-            if (CanUseQuickAction(ControlEvent.OpenSettings))
-            {
-                gameUiHandler.ViewGameSettings();
-            }
-        }
-        if (InputPressed(ControlEvent.Save))
-        {
-            if (CanUseQuickAction(ControlEvent.Save))
-            {
-                gameUiHandler.SaveGame();
-            }
-        }
-       
-        if (_isMobile) return;
         if (Input.GetKeyDown(KeyCode.LeftArrow)) TriggerPress(ControlEvent.Left);
         if (Input.GetKeyUp(KeyCode.LeftArrow)) TriggerRelease(ControlEvent.Left);
 
@@ -115,7 +63,7 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
         if (Input.GetKeyDown(KeyCode.Escape)) TriggerPress(ControlEvent.ViewControls);
         if (Input.GetKeyUp(KeyCode.Escape)) TriggerRelease(ControlEvent.ViewControls);
     }
-    public static void TriggerPress(ControlEvent e)
+    private static void TriggerPress(ControlEvent e)
     {
         if (!_held[e]) 
         {
@@ -124,8 +72,7 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
         }
         _held[e] = true;
     }
-
-    public static void TriggerRelease(ControlEvent e)
+    private static void TriggerRelease(ControlEvent e)
     {
         _held[e] = false;
         OnInputReleased?.Invoke(e);

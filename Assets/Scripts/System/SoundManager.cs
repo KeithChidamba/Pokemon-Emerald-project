@@ -235,7 +235,7 @@ public class SoundEntry<TEnum> where TEnum : Enum
 /// </summary>
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager Instance { get; private set; }
+    private static SoundManager Instance;
 
     [Header("Mixer (optional)")]
     [Tooltip("Assign an AudioMixer with Music/Jingle/UI/Sfx groups to route layers separately. Optional -- works without one.")]
@@ -295,7 +295,7 @@ public class SoundManager : MonoBehaviour
             Time = time;
         }
     }
-    private readonly List<MusicSnapshot> _musicHistory = new List<MusicSnapshot>();
+    private readonly List<MusicSnapshot> _musicHistory = new ();
 
     // Pooled sources for UI and SFX, since those need overlapping playback.
     private AudioSource[] _uiPool;
@@ -309,7 +309,7 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance is not null && Instance != this)
         {
             Destroy(gameObject);
             return;
@@ -354,9 +354,9 @@ public class SoundManager : MonoBehaviour
         _sfxPool = CreatePool("Sfx", sfxVoices, sfxMixerGroup, loop: false);
     }
 
-    private AudioSource CreateSource(string name, AudioMixerGroup group, bool loop)
+    private AudioSource CreateSource(string objName, AudioMixerGroup group, bool loop)
     {
-        var go = new GameObject(name);
+        var go = new GameObject(objName);
         go.transform.SetParent(transform);
         var src = go.AddComponent<AudioSource>();
         src.playOnAwake = false;
@@ -376,37 +376,37 @@ public class SoundManager : MonoBehaviour
     #region Public static API
 
     /// <summary>Play a looping music track, crossfading out whatever is currently playing.</summary>
-    public static void PlayMusic(MusicId id) => Instance?.PlayMusicInternal(id);
+    public static void PlayMusic(MusicId id) => Instance.PlayMusicInternal(id);
 
     /// <summary>Stop music (crossfades to silence).</summary>
-    public static void StopMusic() => Instance?.PlayMusicInternal(MusicId.None);
+    public static void StopMusic() => Instance.PlayMusicInternal(MusicId.None);
 
     /// <summary>
     /// Cache whatever is playing now (track + position), then crossfade to a new track.
     /// Pair with PopMusic() to crossfade back. Typical use: field theme -> battle theme.
     /// </summary>
-    public static void PushMusic(MusicId id) => Instance?.PushMusicInternal(id);
+    public static void PushMusic(MusicId id) => Instance.PushMusicInternal(id);
 
     /// <summary>Crossfade back to the most recently cached track. Does nothing if the cache is empty.</summary>
-    public static void PopMusic() => Instance?.PopMusicInternal(Instance.resumeFromCachedPosition);
+    public static void PopMusic() => Instance.PopMusicInternal(Instance.resumeFromCachedPosition);
 
     /// <summary>Same as PopMusic(), but choose whether to resume from the cached position or restart the track.</summary>
-    public static void PopMusic(bool resumeFromPosition) => Instance?.PopMusicInternal(resumeFromPosition);
+    public static void PopMusic(bool resumeFromPosition) => Instance.PopMusicInternal(resumeFromPosition);
 
     /// <summary>
     /// Wait for the current (non-looping) track to finish, then PopMusic(). Use after a victory fanfare
     /// so the field music returns exactly when the fanfare ends. If the current track loops, pops immediately.
     /// </summary>
-    public static void PopMusicWhenFinished() => Instance?.PopMusicWhenFinishedInternal(Instance.resumeFromCachedPosition);
+    public static void PopMusicWhenFinished() => Instance.PopMusicWhenFinishedInternal(Instance.resumeFromCachedPosition);
 
     /// <summary>
     /// Crossfade back to the OLDEST cached track and clear the whole cache. Use when several tracks were
     /// pushed in a row (field -> trainer-spotted -> battle) and you want to jump straight back to the field theme.
     /// </summary>
-    public static void PopAllMusic() => Instance?.PopAllMusicInternal(Instance.resumeFromCachedPosition);
+    public static void PopAllMusic() => Instance.PopAllMusicInternal(Instance.resumeFromCachedPosition);
 
     /// <summary>Forget all cached tracks without changing what's playing (e.g. when loading a new area).</summary>
-    public static void ClearMusicHistory() => Instance?._musicHistory.Clear();
+    public static void ClearMusicHistory() => Instance._musicHistory.Clear();
 
     /// <summary>The track that PopMusic() would return to, or MusicId.None if nothing is cached.</summary>
     public static MusicId PreviousMusic
@@ -414,12 +414,12 @@ public class SoundManager : MonoBehaviour
         get
         {
             var i = Instance;
-            return (i != null && i._musicHistory.Count > 0) ? i._musicHistory[i._musicHistory.Count - 1].Id : MusicId.None;
+            return (i is not null && i._musicHistory.Count > 0) ? i._musicHistory[^1].Id : MusicId.None;
         }
     }
 
     /// <summary>The track currently playing (or fading in).</summary>
-    public static MusicId CurrentMusic => Instance != null ? Instance._currentMusic : MusicId.None;
+    public static MusicId CurrentMusic => Instance?._currentMusic ?? MusicId.None;
 
     /// <summary>Play a one-shot jingle, ducking or pausing music per its SoundData settings.</summary>
     public static void Play(JingleId id) => Instance?.PlayJingleInternal(id);
@@ -440,19 +440,24 @@ public class SoundManager : MonoBehaviour
     private void PlayMusicInternal(MusicId id, float startTime = 0f)
     {
         if (id == _currentMusic) return; // already playing, mirrors Emerald not restarting a track that's already looping
-
-        SoundData data = null;
-        if (id != MusicId.None && !_musicMap.TryGetValue(id, out data))
+        if (id == MusicId.None)
         {
-            Debug.LogWarning($"[SoundManager] No SoundData mapped for MusicId.{id}");
+            Debug.LogWarning($"[SoundManager] Tried playing Id None");
             return;
         }
+        
+        if (_musicMap.TryGetValue(id, out var data))
+        {
+            _currentMusic = id;
+            _musicBaseVolume = data?.volume ?? 1f;
 
-        _currentMusic = id;
-        _musicBaseVolume = data?.volume ?? 1f;
-
-        if (_musicFadeRoutine != null) StopCoroutine(_musicFadeRoutine);
-        _musicFadeRoutine = StartCoroutine(CrossfadeMusicRoutine(data, startTime));
+            if (_musicFadeRoutine != null) StopCoroutine(_musicFadeRoutine);
+            _musicFadeRoutine = StartCoroutine(CrossfadeMusicRoutine(data, startTime));
+        }
+        else
+        {
+            Debug.LogWarning($"[SoundManager] No SoundData mapped for MusicId.{id}");
+        }
     }
 
     private IEnumerator CrossfadeMusicRoutine(SoundData data, float startTime)
@@ -463,8 +468,14 @@ public class SoundManager : MonoBehaviour
 
         float fadeTime = data?.fadeSeconds ?? 0.5f;
         AudioClip clip = data?.GetClip();
-
-        if (clip != null)
+        
+        if (clip != null && clip.loadState != AudioDataLoadState.Loaded)
+        {
+            if (clip.loadState == AudioDataLoadState.Unloaded) clip.LoadAudioData();
+            while (clip.loadState == AudioDataLoadState.Loading) yield return null;
+        }
+        
+        if (clip is not null)
         {
             incoming.clip = clip;
             incoming.loop = data.loop;
@@ -493,13 +504,13 @@ public class SoundManager : MonoBehaviour
             t += Time.unscaledDeltaTime;
             float p = t / fadeTime;
             outgoing.volume = Mathf.Lerp(outgoingStartVolume, 0f, p);
-            if (clip != null) incoming.volume = Mathf.Lerp(0f, targetVolume, p);
+            if (clip is not null) incoming.volume = Mathf.Lerp(0f, targetVolume, p);
             yield return null;
         }
 
         outgoing.Stop();
         outgoing.volume = 0f;
-        if (clip != null) incoming.volume = targetVolume;
+        if (clip is not null) incoming.volume = targetVolume;
 
         _musicFadeRoutine = null;
     }

@@ -5,36 +5,21 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-[Serializable]
-public class PlayerProfileUI
-{
-    public Text playerName;
-    public Text playerMoney;
-    public Text trainerID;
-    public GameObject parentObject;
-    public void LoadProfile(PlayerData player)
-    {
-        trainerID.text = "ID: "+player.trainerID;
-        playerName.text = player.playerName;
-        playerMoney.text = player.playerMoney.ToString();
-    }
-}
-
 public class GameUiHandler : MonoBehaviour,IInjectable
 {
     public GameObject menuOptions;
-    [SerializeField]private bool viewingMenu;
-    public bool usingUI;
     [SerializeField]private PlayerProfileUI profile;
-
-    [SerializeField]private int numUIScreensOpen;
     [SerializeField]private GameObject exitButton;
     [SerializeField]private List<GameObject> menuUiOptions = new ();
     public GameObject menuSelector;
     public GameObject keyBindsUI;
+     public Image blackFadingScreen;
+     
     public bool usingWebGl;
     [SerializeField]private bool canOpenMenu;
-    public Image blackFadingScreen;
+    [SerializeField]private bool viewingMenu;
+    public bool UsingUI { get;private set; } 
+    [SerializeField]private int numUIScreensOpen;
     
     private PokemonDetailsHandler _pokemonDetailsHandler;
     private DialogueHandler _dialogueHandler;
@@ -98,7 +83,6 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     }
     private void Update()
     {
-       
         if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu) && _inputStateHandler.IsEmptyState && canOpenMenu &&!viewingMenu)
         {
             AddScreen();
@@ -113,7 +97,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     private void AddScreen()
     {
         numUIScreensOpen++;
-        usingUI = true;
+        UsingUI = true;
         _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.UI);
     }
     private void RemoveScreen()
@@ -126,7 +110,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         }
         if (numUIScreensOpen == 0)
         {
-            usingUI = false;
+            UsingUI = false;
             _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.UI,0.25f);
         }
     }
@@ -134,7 +118,8 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     {
         var menuOptionsMethods = new List<Action>
         {
-            ()=>ViewPokemonParty(PartyUsage.General), SaveGame, ValidateBagView, ViewProfile, ViewGameSettings
+            ()=>ViewPokemonParty(PartyUsage.General), ()=> StartCoroutine(_saveDataHandler.SaveAllData())
+            , ValidateBagView, ViewProfile, ViewGameSettings
         };
         
         if (!usingWebGl) menuOptionsMethods.Add(_dialogueOptionsHandler.ExitGame);
@@ -157,11 +142,6 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             RemoveScreen();
             viewingMenu = false;
         }
-    }
-
-    public void SaveGame()
-    {
-        StartCoroutine(_saveDataHandler.SaveAllData());
     }
 
     public void ValidateBagView()
@@ -279,7 +259,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         }
         
         //closes the party
-        partySelectables.Add(new(_pokemonPartyHandler.cancelButton.gameObject,
+        partySelectables.Add(new(_pokemonPartyHandler.cancelButton,
             _pokemonPartyHandler.ValidatePartyExit
             , true));
         
@@ -429,18 +409,22 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         }
         _inputStateHandler.ChangeInputState(new  (InputStateName.MartItemNavigation
             ,InputStateGroup.PokeMart,true,
-            _pokeMartHandler.storeUI, InputDirection.Vertical, martSelectables,
+            null, InputDirection.Vertical, martSelectables,
             _pokeMartHandler.itemSelector,true,true,ClosePokeMart,ClosePokeMart));
+        
+        _pokeMartHandler.storeUI.SetActive(true);
+        
         return;
         void ClosePokeMart()
         {
+            _pokeMartHandler.storeUI.SetActive(false);
             _pokeMartHandler.ExitStore();
             _dialogueHandler.DisplayDetails("Have a great day!");
             RemoveScreen(); 
         }
     }
 
-    public void ViewGameSettings()
+    private void ViewGameSettings()
     {
         AddScreen();
         var gameSettingsSelectables = new List<SelectableUI>();
