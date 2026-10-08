@@ -22,13 +22,49 @@ public class NpcMovement : MonoBehaviour
     public bool isControlled;
     public bool Moving { get; private set; }
     [SerializeField]private bool canMove;
-    private Coroutine animationRoutine;
+  
     private WaitForSeconds movePause = new (1f);
     private WaitForSeconds animDelay = new (0.25f);
     
     public event Action OnMovementPaused;
     public event Action OnMovementStarted;
     public event Action OnMovementEnded;
+    
+    private Coroutine animationRoutine;
+    private Coroutine _patrolRoutine;
+    private Coroutine _specificRoutine;
+    
+    private void OnDisable()
+    {
+        if (animationData.isIdle) return;
+        
+        StopMovement();
+        SetSprites(_currentSpriteData.idleSprite);
+    }
+
+    private void OnEnable()
+    {
+        if (isControlled)
+        {
+            _currentSpriteData = animationData.spriteData.GetSpriteData(MovementDirection.Down);
+            SetSprites(_currentSpriteData.idleSprite);
+            canMove = false;
+            Moving = false;
+            return;
+        }
+        SwitchMove();
+        if (animationData.isIdle)
+        {
+            SetSprites(_currentSpriteData.idleSprite);
+            canMove = false;
+            Moving = false;
+        }
+        else
+        {
+            canMove = true;
+            _patrolRoutine = StartCoroutine(MovementLoop());
+        }
+    }
     
     public MovementDirection GetCurrentDirection()
     {
@@ -63,54 +99,39 @@ public class NpcMovement : MonoBehaviour
             0f
         );
     }
-    public void StopMovement(bool snapPosition=true)
+    private void CancelRoutines()
+    {
+        if (_patrolRoutine != null)   { StopCoroutine(_patrolRoutine);   _patrolRoutine = null; }
+        if (_specificRoutine != null) { StopCoroutine(_specificRoutine); _specificRoutine = null; }
+        if (animationRoutine != null) { StopCoroutine(animationRoutine); animationRoutine = null; }
+    }
+
+    public void StopMovement(bool snapPosition = true)
+    {
+        CancelRoutines();
+        HaltMotion(snapPosition);
+    }
+
+    private void HaltMotion(bool snapPosition)
     {
         canMove = false;
         Moving = false;
         if (!snapPosition) return;
-        
+
         Vector3 snapped = Vector3.Distance(transform.position, movePoint.position) < 0.05f
             ? movePoint.position
             : SnapToGrid(transform.position);
-        
+
         movePoint.position = snapped;
         transform.position = snapped;
     }
+
+  
     public void SetPauseDelay(float delay)
     {
         movePause = new WaitForSeconds(delay);
     }
-    private void OnDisable()
-    {
-        if (animationData.isIdle) return;
-        
-        StopMovement();
-        SetSprites(_currentSpriteData.idleSprite);
-    }
-
-    private void OnEnable()
-    {
-        if (isControlled)
-        {
-            _currentSpriteData = animationData.spriteData.GetSpriteData(MovementDirection.Down);
-            SetSprites(_currentSpriteData.idleSprite);
-            canMove = false;
-            Moving = false;
-            return;
-        }
-        SwitchMove();
-        if (animationData.isIdle)
-        {
-            SetSprites(_currentSpriteData.idleSprite);
-            canMove = false;
-            Moving = false;
-        }
-        else
-        {
-            canMove = true;
-            StartCoroutine(MovementLoop());
-        }
-    }
+   
 
     private IEnumerator Animate()
     {
@@ -129,21 +150,23 @@ public class NpcMovement : MonoBehaviour
         SetSprites(_currentSpriteData.spritesForDirection[_currentSpriteIndex]);
     }
 
-    public void MoveToSpecific(MovementDirection direction,int numTiles, int moveSpeed = 2)
+    public void MoveToSpecific(MovementDirection direction, int numTiles, int moveSpeed = 2)
     {
-        StartCoroutine(Move());
+        CancelRoutines();
+        HaltMotion(true);
+        _specificRoutine = StartCoroutine(Move());
         return;
+
         IEnumerator Move()
         {
-            StopMovement();
-        
             canMove = true;
-            _currentMovement = new NpcMovementDirection(direction,numTiles);
+            _currentMovement = new NpcMovementDirection(direction, numTiles);
             _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);
-        
-            yield return MovementLoop(true,moveSpeed);
-            
-            StopMovement(false);
+
+            yield return MovementLoop(true, moveSpeed);
+
+            HaltMotion(false);          // not StopMovement, so it doesn't cancel itself
+            _specificRoutine = null;
             OnMovementEnded?.Invoke();
         }
     }
@@ -156,6 +179,12 @@ public class NpcMovement : MonoBehaviour
             // Try to set next move
             if (!TrySetNextMove())
             {
+                if (specificMovement)
+                {
+                    canMove = false;
+                    yield break;        // MoveToSpecific fires OnMovementEnded
+                }
+                SwitchMove();           // patrol blocked: try the next segment
                 yield return movePause;
                 continue;
             }
@@ -220,42 +249,27 @@ public class NpcMovement : MonoBehaviour
         }
         return Vector2.right;
     }
+    
+    /// <summary>How many consecutive tiles in `dir` (up to maxTiles) are free of blockers.</summary>
+    public int CountClearTiles(Vector2 dir, int maxTiles)
+    {
+        for (int i = 0; i < maxTiles; i++)
+        {
+            // ray covers exactly the gap between tile i and tile i+1
+            Vector2 origin = (Vector2)rayCastPoint.position + dir * i;
+            if (Physics2D.Raycast(origin, dir, 1f, movementBlockers).transform)
+                return i;
+        }
+        return maxTiles;
+    }
+
     private bool TrySetNextMove()
     {
-        bool isVertical = animationData.IsVerticalMovement(_currentMovement.direction);
-        int totalTiles = _currentMovement.numTilesToTravel;
+        var dir = GetDirectionAsVector();
+        int clear = CountClearTiles(dir, _currentMovement.numTilesToTravel);
+        if (clear == 0) return false;
 
-        var sign = Mathf.Sign(animationData.GetDirectionAsMagnitude(_currentMovement));
-        
-        Vector3 step = isVertical? 
-            new Vector3(0, sign, 0)
-            : new Vector3(sign, 0, 0);
-        
-        Vector3 lastValidPos = movePoint.position;
-
-        for (int i = 1; i <= totalTiles; i++)
-        { 
-            Vector3 checkPos = movePoint.position + step * i;
-            
-            var hit = Physics2D.Raycast(
-                rayCastPoint.position,GetDirectionAsVector(),
-                1f,movementBlockers
-            );
-            
-            if (hit.transform)
-            {
-                SwitchMove();
-                break;
-            }
-            
-            lastValidPos = SnapToGrid(checkPos);
-        }
-        
-        // No movement possible at all
-        if (lastValidPos == movePoint.position)
-            return false;
-        
-        movePoint.position = lastValidPos;
+        movePoint.position = SnapToGrid(movePoint.position + (Vector3)dir * clear);
         return true;
     }
 

@@ -449,11 +449,13 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     public void ViewGameSettingsOptions()
     {
         var gameSettingsSelectables = new List<SelectableUI>();
-        foreach (var option in _gameSettingsHandler.CurrentSetting.settingOptions)
+        foreach (var option in _gameSettingsHandler.currentSetting.settingOptions)
         {
             gameSettingsSelectables.Add(new(option.gameObject, null, true));
         }
 
+        _inputStateHandler.OnStateLoaded += SetSavedSetting;
+        
         _inputStateHandler.ChangeInputState(new(
             InputStateName.GameSettingOptionsNavigation,
             InputStateGroup.GameSettings,
@@ -462,10 +464,17 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             selecting:true,
             onExit: CloseSettingsFull));
         
-        var savedOptionIndex = _gameSettingsHandler.GetCurrentOptionIndex();
-        _inputStateHandler.SetSelectionIndex(savedOptionIndex);
-        _gameSettingsHandler.SetOptionTextColor(savedOptionIndex);
         return;
+        void SetSavedSetting(InputState state)
+        {
+            if (state.stateName != InputStateName.GameSettingOptionsNavigation) return;
+
+            _inputStateHandler.OnStateLoaded -= SetSavedSetting;
+            var savedOptionIndex = _gameSettingsHandler.GetCurrentOptionIndex();
+
+            // fires OnSelectionIndexChanged -> ReflectChangedSetting + SetOptionTextColor
+            _inputStateHandler.SetSelectionIndex(savedOptionIndex);
+        }
         void CloseSettingsFull()
         {
             _inputStateHandler.ResetGroupUi(InputStateGroup.GameSettings);

@@ -23,6 +23,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     [SerializeField] private StoryObjectiveRegistry storyObjectiveRegistry;
     [HideInInspector] public StoryProgress storyProgress;
     private Dictionary<StoryObjectiveSection,List<StoryObjectiveSave>> _storyObjectiveGroups = new();
+    private Dictionary<string,StoryObjective> _cachedObjectives = new();
     [SerializeField] private StoryObjectiveSection currentObjectiveGroup;
     /// <summary>
     /// For debugging view
@@ -48,6 +49,14 @@ public class OverworldState : MonoBehaviour,IInjectable
 
     public void OnInject()
     {
+        _cachedObjectives.Clear();
+        foreach (var group in storyObjectiveRegistry.storyObjectiveGroups)
+        {
+            foreach (var objective in group.storyObjectives)
+            { 
+                _cachedObjectives.Add(objective.name,objective);
+            }
+        }
         _gameLoadingHandler.OnGameStarted += StartDataLoad;
     }
 
@@ -159,9 +168,9 @@ public class OverworldState : MonoBehaviour,IInjectable
         if (_loadedPickupRegistry is null)
         {
             _loadedPickupRegistry = ScriptableObject.CreateInstance<OverworldPickupRegistry>();
-            foreach (var authored in overworldPickupRegistry.overworldPickups)
+            foreach (var pickupData in overworldPickupRegistry.overworldPickups)
             {
-                _loadedPickupRegistry.overworldPickups.Add(new PickupData(authored.pickup, false));
+                _loadedPickupRegistry.overworldPickups.Add(new PickupData(pickupData.pickup, false));
             }
         }
         _loadedPickupRegistry.LoadLookup(overworldPickupPrefab, overworldPickupParent);
@@ -230,17 +239,14 @@ public class OverworldState : MonoBehaviour,IInjectable
     }
     private void FindMainStoryAsset(ServiceContainer container,string mainAssetName)
     {
-        //because story objective aren't loaded in a performance heavy context
-        //we can get away with loading the main asset this way each time
-        string dir = DirectoryHandler.GetDirectory(AssetDirectory.StoryObjectiveData);
-        StoryObjective[] all = Resources.LoadAll<StoryObjective>(dir);
-        var mainAsset = Array.Find(all, o => o.name == mainAssetName);
-        if (mainAsset is null)
+        if (_cachedObjectives.TryGetValue(mainAssetName, out var mainAsset))
+        {
+            mainAsset.LoadObjective(container);
+        }
+        else
         {
             Debug.LogError("Story objective Asset: "+mainAssetName+" not found");
-            return;
         }
-        mainAsset.LoadObjective(container);
     }
     public void LoadStoryObjective(StoryObjectiveSave objectiveSave)
     {

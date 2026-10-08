@@ -187,26 +187,29 @@ public class BerryTree : MonoBehaviour
             return;
         }
         _dialogueHandler.EndDialogue();
+        
         _inputStateHandler.OnStateRemoved += FailOnBagExit;
-        _playerBag.OnItemSelected += PlantBerry;
+        _playerBag.OnItemSelected += PlantBerry; 
         _playerBag.currentBagUsage = BagUsage.SelectionOnly;
         _gameUIHandler.ValidateBagView();
-        return;
-        void FailOnBagExit(InputState removedState)
+
+        if (_inputStateHandler.GetState(InputStateName.PlayerBagNavigation) == null)
         {
-            if (removedState.stateName != InputStateName.PlayerBagNavigation) return;
-            if (!treeData.isPlanted)
-            {
-                OnInteractionComplete?.Invoke(false);
-            }
+            // bag refused to open (empty bag); no state will ever be removed
             _inputStateHandler.OnStateRemoved -= FailOnBagExit;
+            OnInteractionComplete?.Invoke(false);
         }
+    }
+    private void FailOnBagExit(InputState removedState)
+    {
+        if (removedState.stateName != InputStateName.PlayerBagNavigation) return;
+        _inputStateHandler.OnStateRemoved -= FailOnBagExit;
+        if (!treeData.isPlanted) OnInteractionComplete?.Invoke(false);
     }
     private void PlantBerry(Item berryToPlant)
     {
         if (berryToPlant.itemType != ItemType.Berry)
         {
-            OnInteractionComplete?.Invoke(false);
             _dialogueHandler.DisplayDetails("Only berries can be planted");
             return;
         }

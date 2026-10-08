@@ -43,16 +43,24 @@ public class GameSettingsInputService: IInputGroup
     
     private void NavigateGameSettingOptions()
     {
+        var leaving = false;
+
         _inputStateHandler.OnInputUp += () => MoveToAdjacentSetting(-1);
         _inputStateHandler.OnInputDown += () => MoveToAdjacentSetting(1);
 
-        _inputStateHandler.OnSelectionIndexChanged += _gameSettingsHandler.ReflectChangedSetting;
-        _inputStateHandler.OnSelectionIndexChanged += (index) => _gameSettingsHandler.SetOptionTextColor(index);
+        _inputStateHandler.OnSelectionIndexChanged += index =>
+        {
+            if (leaving) return;
+            _gameSettingsHandler.ReflectChangedSetting(index);
+            _gameSettingsHandler.SetOptionTextColor(index);
+        };
         return;
+
         void MoveToAdjacentSetting(int change)
         {
+            leaving = true;
             var state = _inputStateHandler.GetState(InputStateName.GameSettingsNavigation);
-            state.currentSelectionIndex = Mathf.Clamp(state.currentSelectionIndex+change, 0, state.maxSelectableIndex);
+            state.currentSelectionIndex = Mathf.Clamp(state.currentSelectionIndex + change, 0, state.maxSelectableIndex);
             _gameSettingsHandler.SetCurrentSetting(state.currentSelectionIndex);
             _inputStateHandler.RemoveTopInputLayer(false);
         }

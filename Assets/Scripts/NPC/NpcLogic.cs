@@ -85,6 +85,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
 
             if (checkPos == playerPos)
             {
+                if (movementHandler.CountClearTiles(direction, i - 1) < i - 1) continue;
                 playerDetected = true;
                 break;
             }
@@ -102,8 +103,13 @@ public class NpcLogic : MonoBehaviour,IInjectable
         if (distance>1)
         {
             _longDistanceDetection = true;
-            _runDialogueInteraction = () => _dialogueHandler.StartInteraction(npcInteractable.interaction);
-            movementHandler.OnMovementEnded += _runDialogueInteraction; 
+            _runDialogueInteraction = () =>
+            {
+                movementHandler.OnMovementEnded -= _runDialogueInteraction;
+                _dialogueHandler.StartInteraction(npcInteractable.interaction);
+            };
+            movementHandler.OnMovementEnded += _runDialogueInteraction;
+            
             movementHandler.MoveToSpecific(movementHandler.GetCurrentDirection(),distance-1);
         }
         else

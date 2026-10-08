@@ -309,6 +309,7 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
                 standingOnTile = true;
                 canPlayBumpSound = true;
                 OnNewTile?.Invoke();
+                if (!canMove) return;
             }
             
             yAxisInput = GetAxisFromInput(ControlEvent.Down, ControlEvent.Up);

@@ -148,9 +148,8 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
         _dialogueHandler.EndDialogue();
         OnGameStarted?.Invoke();
-       
-        //just in-case
-        yield return new WaitForSeconds(1f);
+        
+        yield return new WaitForSeconds(0.5f);//just in-case
         
         loadingScreen.gameObject.SetActive(false);
         startMenuCam.gameObject.SetActive(false);
@@ -164,14 +163,14 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
     {
         _inputStateHandler.AddPlaceHolderState();
         LoadedFromSave = loadFromSave;
-        var gameStartDelay = 1f;
+        var gameStartDelay = 0.5f;
         if (loadFromSave)
         {
             _inputStateHandler.ResetSpecificUi(InputStateName.StartMenu,true);
             if (Application.platform != RuntimePlatform.WebGLPlayer)
             {
                 _saveHandler.LoadAllSaveData();
-                gameStartDelay = 4f;
+                gameStartDelay = 2f;
             }
             _gameSettingsHandler.ConfigureSavedSettings();
         }

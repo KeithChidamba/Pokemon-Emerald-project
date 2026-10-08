@@ -11,36 +11,51 @@ public class BerryInteractionObjective : StoryObjective
     public Item berryForObjective;
     public OverworldInteractionType interactionTypeForObjective;
     
+    private BerryTree _watchedTree;
+
     protected override void OnObjectiveLoaded()
     {
-        _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
+        _dialogueHandler = serviceContainer.Resolve<DialogueHandler>();
         _overworldState = serviceContainer.Resolve<OverworldState>();
+        _watchedTree = null;
         _dialogueHandler.DisplayObjectiveText(objectiveHeading);
         _dialogueHandler.OnOptionsDisplayed += CheckInteractionTriggered;
     }
-    
+
     private void CheckInteractionTriggered(OverworldInteractable interactable)
     {
         if (interactionTypeForObjective != interactable.interaction.overworldInteraction) return;
-        
+
         var berryTree = interactable.GetComponent<BerryTree>();
-        
-        berryTree.OnInteractionComplete += CheckEventSuccess;
-        return;
-        void CheckEventSuccess(bool successful)
-        {
-            berryTree.OnInteractionComplete -= CheckEventSuccess;
-            
-            if (!successful) return;
-            
-            if(berryForObjective.itemName != berryTree.treeData.berryItem.itemName) return;
-            
-            _dialogueHandler.OnOptionsDisplayed -= CheckInteractionTriggered;
-            ClearObjective();
-        }
+        if (berryTree is null) return;
+
+        StopWatchingTree();
+        _watchedTree = berryTree;
+        _watchedTree.OnInteractionComplete += CheckEventSuccess;
     }
+
+    private void CheckEventSuccess(bool successful)
+    {
+        var tree = _watchedTree;
+        StopWatchingTree();
+
+        if (!successful || tree is null) return;
+        if (berryForObjective.itemName != tree.treeData.berryItem.itemName) return;
+
+        ClearObjective();
+    }
+
+    private void StopWatchingTree()
+    {
+        if (_watchedTree is null) return;
+        _watchedTree.OnInteractionComplete -= CheckEventSuccess;
+        _watchedTree = null;
+    }
+
     protected override void OnObjectiveCleared()
     {
+        _dialogueHandler.OnOptionsDisplayed -= CheckInteractionTriggered;
+        StopWatchingTree();
         _overworldState.ClearAndLoadNextObjective();
     }
 }

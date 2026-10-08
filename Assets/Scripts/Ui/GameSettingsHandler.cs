@@ -31,7 +31,7 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
     public List<GameObject> gameSettingsHeading = new();
     public GameObject mainUI;
     public GameObject whiteSelector;
-    public GameSetting CurrentSetting { get; private set; }
+    public GameSetting currentSetting;
     [SerializeField]private List<SettingsConfig> settingConfigs = new();
     private readonly Dictionary<GameSettingName, Action<int>> _settingsMethods = new ();
     
@@ -63,7 +63,7 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         
         foreach (var config in settingConfigs)
         {
-            CurrentSetting = gameSettings.First(s=>s.gameSettingName == config.settingName);
+            currentSetting = gameSettings.First(s=>s.gameSettingName == config.settingName);
             SetOptionTextColor(config.currentIndex);
         }
         SetCurrentSetting(0);
@@ -74,7 +74,7 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         
         foreach (var config in settingConfigs)
         {
-            CurrentSetting = gameSettings.First(s=>s.gameSettingName == config.settingName);
+            currentSetting = gameSettings.First(s=>s.gameSettingName == config.settingName);
             SetOptionTextColor(config.currentIndex);
             _settingsMethods[config.settingName].Invoke(config.currentIndex);
         }
@@ -89,28 +89,28 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
  
     public void SetOptionTextColor(int optionIndex)
     {
-        CurrentSetting.settingOptions.ForEach(o=>o.color=Color.black);
-        var text = CurrentSetting.settingOptions[optionIndex];
+        currentSetting.settingOptions.ForEach(o=>o.color=Color.black);
+        var text = currentSetting.settingOptions[optionIndex];
         text.color = Color.red;
     }
 
     public void SetCurrentSetting(int newIndex)
     {
-        CurrentSetting = gameSettings[newIndex];
+        currentSetting = gameSettings[newIndex];
     }
 
     public int GetCurrentOptionIndex()
     {
-        return settingConfigs.First(setting=>setting.settingName == CurrentSetting.gameSettingName).currentIndex;
+        return settingConfigs.First(setting=>setting.settingName == currentSetting.gameSettingName).currentIndex;
     }
     public void SetCurrentOption(int optionChangeAmount)
     {
-        var data = settingConfigs.First(setting=>setting.settingName == CurrentSetting.gameSettingName);
+        var data = settingConfigs.First(setting=>setting.settingName == currentSetting.gameSettingName);
         data.SetIndex(optionChangeAmount);
     }
     public void ReflectChangedSetting(int newOptionIndex)
     {
-        var data = settingConfigs.First(setting=>setting.settingName == CurrentSetting.gameSettingName);
+        var data = settingConfigs.First(setting=>setting.settingName == currentSetting.gameSettingName);
         data.currentIndex = newOptionIndex;
         _settingsMethods[data.settingName].Invoke(data.currentIndex);
     }
