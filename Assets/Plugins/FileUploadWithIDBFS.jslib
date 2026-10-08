@@ -1,72 +1,94 @@
 mergeInto(LibraryManager.library, {
   UploadZipAndStoreToIDBFS: function () {
-    const MOUNT_PATH = '/data';
-    // Ensure IDBFS is mounted once only
+    var MOUNT_PATH = "/data";
+
+    function notify(method) {
+      try {
+        if (typeof unityInstance !== "undefined" && unityInstance) unityInstance.SendMessage("Save_Manager", method, "");
+        else if (typeof Module !== "undefined" && Module.SendMessage) Module.SendMessage("Save_Manager", method, "");
+        else console.error("No Unity instance available for SendMessage");
+      } catch (e) { console.error("SendMessage failed:", e); }
+    }
+
+    function mkdirp(path) {
+      var parts = path.split("/").filter(function (p) { return p.length > 0; });
+      var cur = "";
+      for (var i = 0; i < parts.length; i++) {
+        cur += "/" + parts[i];
+        if (!FS.analyzePath(cur).exists) {
+          try { FS.mkdir(cur); }
+          catch (e) { console.error("mkdir failed for", cur, e); }
+        }
+      }
+    }
+
+    if (typeof JSZip === "undefined") {
+      console.error("JSZip is not loaded - add it to index.html");
+      notify("OnUploadFailed");
+      return;
+    }
+
+    // Normally already mounted by CreateDirectories (called from C# first)
     if (!FS.analyzePath(MOUNT_PATH).exists) {
       FS.mkdir(MOUNT_PATH);
       FS.mount(IDBFS, {}, MOUNT_PATH);
-      FS.syncfs(true, function (err) {
-        if (err) console.error("IDBFS mount failed:", err);
-        else console.log("IDBFS mounted at", MOUNT_PATH);
-      });
     }
 
-    // THIS function should be called directly by a Unity UI button click
-    const input = document.createElement("input");
+    // MUST run synchronously inside the click handler that triggered this call
+    var input = document.createElement("input");
     input.type = "file";
     input.accept = ".zip";
     input.style.display = "none";
 
-    input.onchange = (e) => {
-      const file = e.target.files[0];
+    input.onchange = function (e) {
+      var file = e.target.files[0];
+      input.remove();
       if (!file) return;
 
-      const reader = new FileReader();
+      var reader = new FileReader();
+      reader.onerror = function () { console.error("File read failed"); notify("OnUploadFailed"); };
       reader.onload = function (event) {
-        JSZip.loadAsync(event.target.result).then((zip) => {
-          const fileWrites = [];
+        JSZip.loadAsync(event.target.result).then(function (zip) {
+          var writes = [];
 
-          Object.keys(zip.files).forEach((filename) => {
-            const entry = zip.files[filename];
+          Object.keys(zip.files).forEach(function (filename) {
+            var entry = zip.files[filename];
+            if (filename.indexOf("__MACOSX/") === 0) return;
+
+            // Back-compat: zips made before the fix contain Temp_Save_data/
+            var target = filename.replace(/^Temp_Save_data\//, "Save_data/");
+            var fullPath = MOUNT_PATH + "/" + target;
 
             if (entry.dir) {
-              const dirPath = MOUNT_PATH + '/' + filename;
-              try { FS.mkdir(dirPath); } catch (e) {}
+              mkdirp(fullPath);
             } else {
-              const promise = entry.async("uint8array").then((data) => {
-                const pathParts = filename.split('/');
-                for (let i = 1; i < pathParts.length; i++) {
-                  const dir = MOUNT_PATH + '/' + pathParts.slice(0, i).join('/');
-                  try { FS.mkdir(dir); } catch (e) {}
-                }
-
-                const fullPath = MOUNT_PATH + '/' + filename;
+              writes.push(entry.async("uint8array").then(function (data) {
+                mkdirp(fullPath.substring(0, fullPath.lastIndexOf("/")));
                 FS.writeFile(fullPath, data);
-            
-              });
-
-              fileWrites.push(promise);
+              }));
             }
           });
 
-          Promise.all(fileWrites).then(() => {
-            FS.syncfs(false, function (err) {
-              if (err) console.error("Sync after upload failed:", err);
-              else {
-                console.log("All files synced to IndexedDB");
-                unityInstance.SendMessage("Save_Manager", "OnIDBFSReady", "");    
-           }
-            });
+          return Promise.all(writes);
+        }).then(function () {
+          FS.syncfs(false, function (err) {
+            if (err) {
+              console.error("Sync after upload failed:", err);
+              notify("OnUploadFailed");
+            } else {
+              console.log("All files synced to IndexedDB");
+              notify("OnIDBFSReady");
+            }
           });
+        }).catch(function (err) {
+          console.error("Zip upload failed:", err);
+          notify("OnUploadFailed");
         });
       };
-
       reader.readAsArrayBuffer(file);
     };
 
-    // ✅ This must be called during a Unity click event
     document.body.appendChild(input);
     input.click();
-    document.body.removeChild(input); // clean up
   }
 });

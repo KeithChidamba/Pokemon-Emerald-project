@@ -167,6 +167,19 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     {
         _dialogueHandler.DisplayDetails("Save data downloaded successfully!");
     }
+//js notifications
+    public void OnDownloadFailed()
+    {
+        _dialogueHandler.DisplayDetails("Download failed, check the browser console");
+    }
+    public void OnUploadFailed()
+    {
+        _dialogueHandler.DisplayDetails("Upload failed, check the browser console");
+    }
+    public void OnDirectoryCreationFailed()
+    {
+        _dialogueHandler.DisplayDetails("Could not create save folders");
+    }
     public void OnIDBFSReady()//js notification
     {
         StartCoroutine(SyncFromIndexedDB());
@@ -476,7 +489,6 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
             DownloadZipAndStoreLocally();
-            _dialogueHandler.DisplayDetails("Game saved online but please download your save file");
         }
         else
         {
@@ -499,6 +511,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
     public void SaveDataAsJson<T>(T saveSataObject, string fileName,SaveDataDirectory saveDirectory)
     {
         var directory = Path.Combine(_tempSaveDataPath+DirectoryHandler.GetSaveDirectory(saveDirectory), fileName + ".json");
+        Directory.CreateDirectory(Path.GetDirectoryName(directory) ?? "");//fail safe
         var json = JsonUtility.ToJson(saveSataObject, true);
         File.WriteAllText(directory, json);
     }

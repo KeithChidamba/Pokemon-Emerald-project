@@ -8132,14 +8132,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuOptions: {fileID: 1316003124}
-  viewingMenu: 0
-  usingUI: 0
   profile:
     playerName: {fileID: 1832286414}
     playerMoney: {fileID: 1841323215}
     trainerID: {fileID: 1921761837}
     parentObject: {fileID: 690814247}
-  numUIScreensOpen: 0
   exitButton: {fileID: 51419307}
   menuUiOptions:
   - {fileID: 1997834760}
@@ -8150,9 +8147,11 @@ MonoBehaviour:
   - {fileID: 51419307}
   menuSelector: {fileID: 981086145}
   keyBindsUI: {fileID: 235178771}
+  blackFadingScreen: {fileID: 1298382683}
   usingWebGl: 0
   canOpenMenu: 0
-  blackFadingScreen: {fileID: 1298382683}
+  viewingMenu: 0
+  numUIScreensOpen: 0
 --- !u!1 &317272282
 GameObject:
   m_ObjectHideFlags: 0
@@ -336952,6 +336951,9 @@ MonoBehaviour:
   - {fileID: 282890268}
   mainUI: {fileID: 1380687383}
   whiteSelector: {fileID: 402000059}
+  currentSetting:
+    gameSettingName: 0
+    settingOptions: []
   settingConfigs: []
 --- !u!4 &1990631063
 Transform:

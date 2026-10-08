@@ -1,18 +1,43 @@
 mergeInto(LibraryManager.library, {
   CreateDirectories: function (jsonPtr) {
 
-    const MOUNT_PATH = "/data";
-    const SAVE_PATH = MOUNT_PATH + "/Save_data";
-    const TEMP_PATH = MOUNT_PATH + "/Temp_Save_data";
+    var MOUNT_PATH = "/data";
+    var SAVE_PATH = MOUNT_PATH + "/Save_data";
+    var TEMP_PATH = MOUNT_PATH + "/Temp_Save_data";
 
-    const json = UTF8ToString(jsonPtr);
-    const data = JSON.parse(json);
+    function notify(method) {
+      try {
+        if (typeof unityInstance !== "undefined" && unityInstance) unityInstance.SendMessage("Save_Manager", method, "");
+        else if (typeof Module !== "undefined" && Module.SendMessage) Module.SendMessage("Save_Manager", method, "");
+        else console.error("No Unity instance available for SendMessage");
+      } catch (e) { console.error("SendMessage failed:", e); }
+    }
 
-    const allDirs = [];
-    allDirs.push(SAVE_PATH);
-    allDirs.push(TEMP_PATH);
+    // FS.mkdir is NOT recursive (unlike Directory.CreateDirectory in C#), so create each segment.
+    function mkdirp(path) {
+      var parts = path.split("/").filter(function (p) { return p.length > 0; });
+      var cur = "";
+      for (var i = 0; i < parts.length; i++) {
+        cur += "/" + parts[i];
+        if (!FS.analyzePath(cur).exists) {
+          try { FS.mkdir(cur); }
+          catch (e) { console.error("mkdir failed for", cur, e); }
+        }
+      }
+    }
 
-    data.items.forEach(item => {
+    var data;
+    try {
+      data = JSON.parse(UTF8ToString(jsonPtr));
+    } catch (e) {
+      console.error("CreateDirectories: bad JSON", e);
+      notify("OnDirectoryCreationFailed");
+      return;
+    }
+
+    var allDirs = [SAVE_PATH, TEMP_PATH];
+    (data.items || []).forEach(function (item) {
+      if (item.charAt(0) !== "/") item = "/" + item;
       allDirs.push(SAVE_PATH + item);
       allDirs.push(TEMP_PATH + item);
     });
@@ -25,26 +50,21 @@ mergeInto(LibraryManager.library, {
     FS.syncfs(true, function (err) {
       if (err) {
         console.error("IDBFS initial sync failed:", err);
+        notify("OnDirectoryCreationFailed");
         return;
       }
 
-      for (const dir of allDirs) {
-        try {
-          FS.mkdir(dir);
-        } catch (e) {
-          // already exists
-        }
-      }
+      allDirs.forEach(mkdirp);
 
       FS.syncfs(false, function (err) {
         if (err) {
           console.error("IDBFS final sync failed:", err);
+          notify("OnDirectoryCreationFailed");
         } else {
-          console.log("Default directory structure created.");
-          unityInstance.SendMessage("Save_Manager", "OnFileStructureCreated", "");
+          console.log("Default directory structure created (" + allDirs.length + " dirs).");
+          notify("OnFileStructureCreated");
         }
       });
     });
   }
-}
-);
+});
