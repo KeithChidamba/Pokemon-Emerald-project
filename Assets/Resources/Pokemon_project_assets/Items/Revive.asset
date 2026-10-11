@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Revive
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071541
   itemID: 
   itemName: Revive
   itemType: 6
@@ -27,10 +30,11 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 750
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 9bf6c81eb427934e8a85f82200a6a89b, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071541
+      type: {class: RevivalItemInfo, ns: , asm: Assembly-CSharp}
+      data:
+        reviveType: 0

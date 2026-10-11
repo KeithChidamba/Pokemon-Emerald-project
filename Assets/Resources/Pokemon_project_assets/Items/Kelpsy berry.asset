@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Kelpsy berry
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071514
+  - rid: 1021519129163071558
   itemID: 
   itemName: Kelpsy berry
   itemType: 9
@@ -27,11 +31,15 @@ MonoBehaviour:
   canBeSold: 0
   sellPrice: 0
   priceCurrency: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 54b120f6e726b241d83f09ff4ec2c098, type: 2}
-  - {fileID: 11400000, guid: 078fca6fe33c43e3c946fee7c2f71f69, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071514
+      type: {class: BerryInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        berryType: 0
+    - rid: 1021519129163071558
+      type: {class: StatInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        statName: 1

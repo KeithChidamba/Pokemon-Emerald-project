@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: pin missile
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071492
   moveName: Pin Missile
   moveDamage: 14
   moveAccuracy: 85
@@ -20,10 +22,10 @@ MonoBehaviour:
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
   effectType: 3
-  effectInfoModule: {fileID: 11400000, guid: b4de3f94c11da2bd0a3cf729390d10a5, type: 2}
+  effectInfoModule: {fileID: 0}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
@@ -42,3 +44,12 @@ MonoBehaviour:
   statusChance: 0
   buffOrDebuffChance: 0
   description: Fires pins that strike 2 to 5 times
+  references:
+    version: 2
+    RefIds:
+    - rid: 1021519129163071492
+      type: {class: ConsecutiveMoveInfo, ns: , asm: Assembly-CSharp}
+      data:
+        isRandomHitCount: 1
+        numHits: 0
+        displayHitCount: 1

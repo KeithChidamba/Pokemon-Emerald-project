@@ -20,6 +20,16 @@ MonoBehaviour:
   optionsUiText:
   - Yes
   - No
-  additionalInfo: {fileID: 11400000, guid: 2b99c9b64d0a0d4748961248c79a0e00, type: 2}
-  overworldInteraction: 7
-  location: 0
+  additionalInfoModules: []
+  overworldInteraction: 0
+  dynamicInfoModules:
+  - rid: 1021519129163071489
+  references:
+    version: 2
+    RefIds:
+    - rid: 1021519129163071489
+      type: {class: PokemonGiftInteractoinInfo, ns: , asm: Assembly-CSharp}
+      data:
+        giftPokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+        pokemonLevel: 5
+        evolutionStageNumber: 0

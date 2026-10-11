@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Chesto berry
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071511
+  - rid: 1021519129163071572
   itemID: 
   itemName: Chesto berry
   itemType: 9
@@ -27,10 +31,15 @@ MonoBehaviour:
   canBeSold: 0
   sellPrice: 0
   priceCurrency: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 8252ab3300462ac2595844d94b48a1b5, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071511
+      type: {class: BerryInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        berryType: 2
+    - rid: 1021519129163071572
+      type: {class: StatusHealInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        statusEffect: 6

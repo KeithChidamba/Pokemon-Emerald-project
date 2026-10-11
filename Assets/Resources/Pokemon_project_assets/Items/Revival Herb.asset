@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Revival Herb
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071508
   itemID: 
   itemName: Revival Herb
   itemType: 5
@@ -27,10 +29,12 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 1400
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 090a2400acb69b790b36e762b955245d, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071508
+      type: {class: HerbInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        herbType: 3

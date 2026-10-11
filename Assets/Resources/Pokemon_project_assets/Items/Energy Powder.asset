@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Energy Powder
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071503
+  - rid: 1021519129163071504
   itemID: 
   itemName: Energy Powder
   itemType: 5
@@ -27,15 +30,16 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 250
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: e97d9152dca25d728814ed4c755b22ab, type: 2}
-  dynamicInfoModules:
-  - rid: 7301661317695799302
+  additionalInfoModules: []
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799302
-      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071503
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 50
+    - rid: 1021519129163071504
+      type: {class: HerbInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        herbType: 0

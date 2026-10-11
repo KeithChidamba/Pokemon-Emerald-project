@@ -5,53 +5,42 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Move", menuName = "Pokemon/Move")]
-public class Move : ScriptableObject
+public class Move : InfoModuleHolder
 {
     [FormerlySerializedAs("Move_name")] public string moveName;
-    [FormerlySerializedAs("Move_damage")] public float moveDamage;
-    [FormerlySerializedAs("Move_accuracy")] public float moveAccuracy;
-    public int critModifierIndex;
+    [FormerlySerializedAs("Description")] public string description;
     public PokemonTypeData type;
-    public bool hasTypelessEffect;
-    public bool isSpecial;
-    public bool isContact;
+    public EffectType effectType;
     
+    public bool hasTypelessEffect;
+    public bool isSpecial; 
+    public bool isContact;
+        
     [FormerlySerializedAs("isBuffOrDebuff")] 
     [FormerlySerializedAs("is_Buff_Debuff")] 
     public bool canChangeStats;
-    
     [FormerlySerializedAs("Has_status")] public bool hasStatus;
-    public EffectType effectType;
-    public AdditionalInfoModule effectInfoModule;
     [FormerlySerializedAs("Can_flinch")] public bool canCauseFlinch;
     public bool canTrap;
     public bool canCauseConfusion;
     public bool canInfatuate;
-    [FormerlySerializedAs("is_Consecutive")] public bool isConsecutive;
     public bool isMultiTarget;
     public bool isSelfTargeted;
     public bool isSureHit;
     public bool displayTargetMessage;
+    
+    [FormerlySerializedAs("Move_damage")] public float moveDamage;
+    [FormerlySerializedAs("Move_accuracy")] public float moveAccuracy;
+    public int critModifierIndex;
     [FormerlySerializedAs("Priority")] public int priority;
     [FormerlySerializedAs("Powerpoints")] public int powerpoints;
     [FormerlySerializedAs("BasePowerpoints")] public int basePowerpoints;
     [FormerlySerializedAs("max_Powerpoints")] public int maxPowerpoints;
+    
     public StatusEffect statusEffect;
     public List<MoveStatChangeData> buffOrDebuffData = new();
     [FormerlySerializedAs("Status_chance")] public float statusChance;
     [FormerlySerializedAs("Debuff_chance")] public float buffOrDebuffChance;
-    [FormerlySerializedAs("Description")] public string description;
-    
-    [SerializeReference]public List<DynamicAdditionalInfo> dynamicInfoModules = new();
-
-    public T GetModule<T>() where T : AdditionalInfoModule
-    {
-        return effectInfoModule as T;
-    }
-    public T GetDynamicModule<T>() where T : DynamicAdditionalInfo
-    {
-        return dynamicInfoModules.FirstOrDefault(m => m is T) as T;
-    }
 }
 
 public enum EffectType

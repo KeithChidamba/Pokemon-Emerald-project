@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Dire Hit
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071552
   itemID: 
   itemName: Dire Hit
   itemType: 13
@@ -27,10 +30,11 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 325
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: a2f5e73373450da5da70a8f26b1491b8, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071552
+      type: {class: StatInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        statName: 7

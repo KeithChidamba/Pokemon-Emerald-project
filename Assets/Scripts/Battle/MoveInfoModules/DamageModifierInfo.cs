@@ -1,11 +1,8 @@
-
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-[CreateAssetMenu(fileName = "dmgModInfo", menuName = "Move Info Modules/dmgModInfo")]
-
-public class DamageModifierInfo : AdditionalInfoModule
+[Serializable]
+public class DamageModifierInfo : DynamicAdditionalInfo
 {
     public string damageChangeMessage;
     public List<DamageModifierForType> damageModifiers = new();

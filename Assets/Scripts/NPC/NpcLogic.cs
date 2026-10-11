@@ -20,11 +20,11 @@ public class NpcLogic : MonoBehaviour,IInjectable
     
     private DialogueHandler _dialogueHandler;
     private PlayerMovementHandler _playerMovement;
-    private DialogueOptionsEventHandler _dialogueOptionsHandler;
+    private InteractionOptionsEventHandler interactionOptionsHandler;
     
     public void Inject(ServiceContainer container)
     {
-        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
+        interactionOptionsHandler = container.Resolve<InteractionOptionsEventHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _playerMovement = container.Resolve<PlayerMovementHandler>();
     }
@@ -44,7 +44,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
                 movementHandler.OnMovementStarted += ()=> constantScan = false;
             }
         }
-        _dialogueOptionsHandler.OnEventInteraction += PauseForInteraction;
+        interactionOptionsHandler.OnEventInteraction += PauseForInteraction;
         _playerMovement.OnNewTile += DetectPlayer;
     }
 

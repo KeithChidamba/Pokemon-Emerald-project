@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Item", menuName = "PokeMart/Item")]
-public class Item : ScriptableObject
+public class Item : InfoModuleHolder
 {
     [Header("Information")]
     [FormerlySerializedAs("Item_ID")] public string itemID = "";
@@ -26,20 +26,8 @@ public class Item : ScriptableObject
     public int sellPrice;
     public ItemPriceCurrency priceCurrency;
     
-    [Header("Data")]
-    public List<AdditionalInfoModule> additionalInfoModules = new();
-    [SerializeReference]public List<DynamicAdditionalInfo> dynamicInfoModules = new();
+    [HideInInspector]public string imageDirectory;
     
-    public string imageDirectory;//only gets modified and used in code
-
-    public T GetModule<T>() where T : AdditionalInfoModule
-    {
-        return additionalInfoModules.FirstOrDefault(m => m is T) as T;
-    }
-    public T GetDynamicModule<T>() where T : DynamicAdditionalInfo
-    {
-        return dynamicInfoModules.FirstOrDefault(m => m is T) as T;
-    }
     public string DetermineImageDirectory()
     {
         if (dynamicInfoModules.Any(m => m is MoveLearningMachineInfo))
@@ -58,10 +46,6 @@ public class Item : ScriptableObject
     public void LoadData()
     {
         var sourceAsset = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)+ itemName);
-        if(sourceAsset.additionalInfoModules.Count>0){
-            additionalInfoModules.Clear();
-            additionalInfoModules.AddRange(sourceAsset.additionalInfoModules);
-        }
         if(sourceAsset.dynamicInfoModules.Count>0){
             dynamicInfoModules.Clear();
             dynamicInfoModules.AddRange(sourceAsset.dynamicInfoModules);

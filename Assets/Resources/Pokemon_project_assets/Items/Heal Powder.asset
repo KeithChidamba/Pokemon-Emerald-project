@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Heal Powder
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071507
   itemID: 
   itemName: Heal Powder
   itemType: 5
@@ -27,10 +29,12 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 225
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: d9dbfbbb386687ad081685101f1bf034, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071507
+      type: {class: HerbInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        herbType: 2

@@ -23,7 +23,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private MoveSequenceHandler moveUsageHandler;
     [SerializeField] private MoveLogicHandler moveLogicHandler;
     [SerializeField] private MoveLogicDatabase moveLogicDatabase;
-    [SerializeField] private DialogueOptionsEventHandler dialogueOptionsHandler;
+    [SerializeField] private InteractionOptionsEventHandler interactionOptionsHandler;
     [SerializeField] private GameUiHandler gameUIHandler;
     [SerializeField] private PlayerBagHandler playerBagHandler;
     [SerializeField] private PokeMartHandler pokeMartHandler;
@@ -62,7 +62,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(turnBasedCombatHandler);
         _container.RegisterSingleton(moveUsageHandler);
         _container.RegisterSingleton(moveLogicHandler);
-        _container.RegisterSingleton(dialogueOptionsHandler);
+        _container.RegisterSingleton(interactionOptionsHandler);
         _container.RegisterSingleton(gameUIHandler);
         _container.RegisterSingleton(playerBagHandler);
         _container.RegisterSingleton(pokeMartHandler);

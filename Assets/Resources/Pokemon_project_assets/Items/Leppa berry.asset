@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Leppa berry
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071515
+  - rid: 1021519129163071542
   itemID: 
   itemName: Leppa berry
   itemType: 9
@@ -27,11 +31,17 @@ MonoBehaviour:
   canBeSold: 0
   sellPrice: 0
   priceCurrency: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 240bcc6ff0e167142ad6bd8b994f8934, type: 2}
-  - {fileID: 11400000, guid: 138a97ba805a6f9c895f81f5c42f0c89, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071515
+      type: {class: BerryInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        berryType: 3
+        statusEffect: 0
+    - rid: 1021519129163071542
+      type: {class: PowerpointModifeir, ns: , asm: Assembly-CSharp}
+      data:
+        modiferType: 2
+        itemType: 0

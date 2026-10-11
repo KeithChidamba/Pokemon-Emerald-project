@@ -12,27 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: sonic boom
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071502
   moveName: Sonic Boom
-  moveDamage: 20
-  moveAccuracy: 90
-  critModifierIndex: 0
+  description: An air attack that always deals 20 damage
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
+  effectType: 12
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 0
   canChangeStats: 0
   hasStatus: 0
-  effectType: 12
-  effectInfoModule: {fileID: 0}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   canInfatuate: 0
-  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 0
   displayTargetMessage: 1
+  moveDamage: 20
+  moveAccuracy: 90
+  critModifierIndex: 0
   priority: 0
   powerpoints: 20
   basePowerpoints: 20
@@ -41,13 +42,11 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: An air attack that always deals 20 damage
-  dynamicInfoModules:
-  - rid: 6968282922685562882
+  additionalInfoModules: []
   references:
     version: 2
     RefIds:
-    - rid: 6968282922685562882
-      type: {class: MoveEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071502
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 20

@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Great Ball
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071531
   itemID: 
   itemName: Great Ball
   itemType: 10
@@ -27,14 +30,11 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 300
   priceCurrency: 0
-  additionalInfoModules: []
-  dynamicInfoModules:
-  - rid: 7301661317695799307
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799307
-      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071531
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 1.5

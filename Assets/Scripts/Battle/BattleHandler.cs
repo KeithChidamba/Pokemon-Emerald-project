@@ -726,7 +726,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
             var heldItem = participant.pokemon.heldItem;
             if (heldItem.itemType != ItemType.GainMoney)continue;
             
-            var moneyBonus = heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
+            var moneyBonus = heldItem.GetDynamicModule<EffectValueInfo>().effectValue;
             return moneyBonus;
         }
         return 1f;

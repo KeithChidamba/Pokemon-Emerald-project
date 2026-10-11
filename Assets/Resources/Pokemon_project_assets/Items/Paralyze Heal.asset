@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Paralyze Heal
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071559
   itemID: 
   itemName: Paralyze Heal
   itemType: 3
@@ -27,10 +30,11 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 100
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: c4454d8e5d12e1b22a7f7c0d610d5b4b, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071559
+      type: {class: StatusHealInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        statusEffect: 1

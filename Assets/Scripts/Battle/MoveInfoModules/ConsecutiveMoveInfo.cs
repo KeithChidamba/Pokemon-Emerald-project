@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-[CreateAssetMenu(fileName = "ConsecutiveMoveInfo", menuName = "Move Info Modules/ConsecutiveMoveInfo")]
-public class ConsecutiveMoveInfo : AdditionalInfoModule
+using System;
+[Serializable]
+public class ConsecutiveMoveInfo : DynamicAdditionalInfo
 {
     public bool isRandomHitCount;
     public int numHits;

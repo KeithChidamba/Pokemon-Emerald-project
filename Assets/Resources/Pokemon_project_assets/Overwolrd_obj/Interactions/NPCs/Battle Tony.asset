@@ -18,6 +18,9 @@ MonoBehaviour:
   interactionOptions: 01000000
   resultMessage: 
   optionsUiText: []
-  additionalInfo: {fileID: 11400000, guid: 322182ff4867b10a5860184ea7b9dacd, type: 2}
+  additionalInfoModules: []
   overworldInteraction: 6
-  location: 4
+  dynamicInfoModules: []
+  references:
+    version: 2
+    RefIds: []

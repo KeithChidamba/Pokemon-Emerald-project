@@ -886,7 +886,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
 
     private void DamageModifierForWeather(PokemonType type,float damageFactor,DamageModifierSource source)
     { 
-        var damageModifierInfo = ScriptableObject.CreateInstance<DamageModifierInfo>();
+        var damageModifierInfo = new DamageModifierInfo();
         var damageModForType = new DamageModifierForType(type,damageFactor);
         damageModifierInfo.damageModifiers.Add(damageModForType);
         damageModifierInfo.modifierSource = source;

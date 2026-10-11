@@ -106,7 +106,7 @@ public class HeldItemHandler
 
     private IEnumerator DetermineBerryEffect(Item heldItem)
     {
-        var berryInfo = heldItem.GetModule<BerryInfoModule>();
+        var berryInfo = heldItem.GetDynamicModule<BerryInfoModule>();
         switch (berryInfo.berryType)
         {
             case  Berry.HpHeal:
@@ -135,18 +135,10 @@ public class HeldItemHandler
         if (!fullHeal)
         {
             if(participant.pokemon.statusEffect==StatusEffect.None)yield break;
-            StatusEffect curableStatus;
-        
-            if (heldItem.itemType == ItemType.Berry)
-            {
-                var berryInfo = heldItem.GetModule<BerryInfoModule>();
-                curableStatus = berryInfo.statusEffect;
-            }
-            else
-            {
-                var statusInfo = heldItem.GetModule<StatusHealInfoModule>();
-                curableStatus = statusInfo.statusEffect;
-            }
+            
+            var statusInfo = heldItem.GetDynamicModule<StatusHealInfoModule>();
+            
+            var curableStatus = statusInfo.statusEffect;
         
             if (curableStatus == StatusEffect.Poison &&
                 participant.pokemon.statusEffect == StatusEffect.BadlyPoison)
@@ -177,7 +169,7 @@ public class HeldItemHandler
     private IEnumerator GetHealing(Item heldItem)
     { 
         _dialogueHandler.DisplayBattleInfo($"{participant.pokemon.pokemonDisplayName}'s {heldItem.itemName} healed it");
-        var healEffect = heldItem.GetDynamicModule<ItemEffectInfo>().effectValue;
+        var healEffect = heldItem.GetDynamicModule<EffectValueInfo>().effectValue;
         _moveUsageHandler.HealthGainDisplay(healEffect,healthGainer:participant);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }

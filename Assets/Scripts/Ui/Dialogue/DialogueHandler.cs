@@ -1,0 +1,461 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using Unity.Mathematics;
+
+public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage,CustomOptions,TextOnly}
+public class DialogueHandler : MonoBehaviour,IInjectable
+{
+    public OverworldInteractable currentInteractable;
+    [SerializeField] private TMP_Text dialougeText;
+    public float typingSpeed = 0.04f;
+    [SerializeField] private bool dialogueFinished;
+    [SerializeField] private bool canExitDialogue = true;
+    public bool Displaying { get; private set; }
+    [SerializeField] private GameObject infoDialogueBox;
+    public GameObject battleDialogueBox;
+    [SerializeField] private LoopingUiAnimation endOfDialoguePointer;
+    [SerializeField] private GameObject dialogueOptionPrefab;
+    [SerializeField] private GameObject dialogueOptionBox;
+    [SerializeField] private GameObject objectiveDialogueBox;
+    [SerializeField] private GameObject testCaseDialogueBox;
+    [SerializeField] private TMP_Text objectiveDialougeText;
+    
+    [SerializeField] private TMP_Text testCaseDialougeText;
+    
+    [SerializeField] private DialogueOptionsManager dialogueOptionsManager;
+    [SerializeField] private Transform dialogueUiParent;
+    private List<GameObject> _currentDialogueOptions = new();
+    [SerializeField] private bool messagesLoading;
+    public List<Interaction> pendingMessages = new();
+    public GameObject optionSelector;
+    private Coroutine _typingRoutine;
+    
+    public event Action<OverworldInteractable> OnOptionsDisplayed;
+    public event Action<Interaction> OnDialogueStarted;
+    public event Action<Interaction> OnDialogueEnded;
+    public event Action<string> OnDialogueDisplayed;
+    private BattleHandler _battleHandler;
+    private PlayerMovementHandler _playerMovementHandler;
+    private InputStateHandler _inputStateHandler;
+    private InteractionOptionsEventHandler interactionOptionsHandler;
+    private InteractionHandler  _interactionHandler;
+
+    public void Inject(ServiceContainer container)
+    {
+        _inputStateHandler = container.Resolve<InputStateHandler>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        interactionOptionsHandler = container.Resolve<InteractionOptionsEventHandler>();
+        _interactionHandler = container.Resolve<InteractionHandler>();
+        _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
+        gameObject.SetActive(true);
+    }
+
+    public void OnInject()
+    {
+        endOfDialoguePointer.LoadState(false);
+        _battleHandler.OnBattleEnd += () => messagesLoading = false;
+        ResetText();
+        dialougeText.overflowMode = TextOverflowModes.Page;
+    }
+
+    void Update()
+    {
+        if (!Displaying) return;
+        if (dialogueFinished && InputSourceHandler.InputPressed(ControlEvent.Exit) && canExitDialogue)
+        {
+            EndDialogue();
+            if (_battleHandler.BattleInProgress)
+            {
+                _battleHandler.EnableBattleMessage(_inputStateHandler.currentState);
+            }
+        }
+    }
+    public IEnumerator AwaitAllDialogue()
+    {
+        yield return new WaitUntil(() => !messagesLoading);
+    }
+    /// <summary>
+    /// Only use this if you're sure dialogue
+    /// has/is displaying
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator WaitForDialogueCompletion()
+    {
+        yield return new WaitUntil(() => dialogueFinished);
+    }
+    public void AllowDialogueExit()
+    {
+        canExitDialogue = true;
+    }
+    public bool HandlingStateExit(InputState currentState)
+    {
+        if (!Displaying) return false;
+        if (currentState.stateName == InputStateName.DialogueOptions)
+        {
+            return true;
+        }
+        return canExitDialogue;
+    }
+    public void SetTextSpeed(int settingIndex)
+    {
+        typingSpeed = settingIndex switch
+        {
+            0 => 0.06f,//slow
+            1 => 0.04f,//normal
+            2 => 0.01f,//fast
+            _ => 0.04f
+        };
+    }
+    public void  DeletePreviousOptions()
+    { 
+        if( dialogueOptionsManager.currentOptions.Count == 0) return;  
+        ActivateOptions(false);
+        _inputStateHandler.ResetRelevantUi(new []{InputStateName.DialogueOptions,InputStateName.DialoguePlaceHolder});
+        dialogueOptionsManager.currentOptions.Clear();
+        foreach (var option in _currentDialogueOptions)
+            Destroy(option);
+        _currentDialogueOptions.Clear();
+    }
+    private void CreateDialogueOptions(Interaction currentInteraction)
+    {
+        OnOptionsDisplayed?.Invoke(currentInteractable);
+        dialogueOptionBox.gameObject.SetActive(true);
+        var numOptions = currentInteraction.interactionOptions.Count;
+        
+        for(var i = 0; i < numOptions; i++)
+        {
+            var newOption = Instantiate(dialogueOptionPrefab, dialogueUiParent);
+            var optionScript = newOption.GetComponent<DialogueOption>();
+            _currentDialogueOptions.Add(newOption);
+            optionScript.SetupOption(i,numOptions,currentInteraction.optionsUiText[i]);
+            dialogueOptionsManager.currentOptions.Add(optionScript);
+        }
+        StartCoroutine(SetupDialogueOptionsNavigation(currentInteraction));
+    }
+
+    private IEnumerator SetupDialogueOptionsNavigation(Interaction currentInteraction)
+    {
+        dialogueOptionsManager.LoadUiSize();
+        ActivateOptions(true);
+        var optionSelectables = new List<SelectableUI>();
+        
+        foreach (var option in dialogueOptionsManager.currentOptions)
+        {
+            SelectableUI newOption = new (option.gameObject, () => SelectOption(option.optionIndex,currentInteraction), true);
+            optionSelectables.Add( newOption);
+        }
+        
+        _inputStateHandler.ChangeInputState(new (InputStateName.DialogueOptions
+            ,InputStateGroup.None,false,null,
+            InputDirection.Vertical,optionSelectables,optionSelector,true,true));
+        yield return null;
+    }
+    private void SelectOption(int optionIndex,Interaction currentInteraction)
+    {
+        if (currentInteraction.isEventTrigger)
+        {
+            interactionOptionsHandler.AlertOverworldInteraction(currentInteractable,optionIndex);
+            currentInteractable = null;
+        }else
+        {
+            interactionOptionsHandler.CompleteInteraction(currentInteraction,optionIndex);
+        }
+    }
+    private void ActivateOptions(bool display)
+     {
+         dialogueOptionBox.gameObject.SetActive(display);
+         foreach (var obj in dialogueOptionsManager.currentOptions)
+             obj.gameObject.SetActive(display);
+     }
+    Interaction NewInteraction(string info,DialogType type,string result = "")
+    {
+        var newInteraction = ScriptableObject.CreateInstance<Interaction>();
+        newInteraction.interactionMessage = info;
+        newInteraction.dialogueType = type;
+        newInteraction.resultMessage = result;
+        return newInteraction;
+    }
+    public void DisplayCustomOptions(string info, string[]optionsText, Action[] optionEvents,string result="")
+    {
+        interactionOptionsHandler.OnInteractionOptionChosen += InvokeSelectedOption;
+        
+        canExitDialogue = false;
+        var newInteraction = NewInteraction(info,DialogType.CustomOptions,result);
+        foreach (string text in optionsText) 
+        {
+            newInteraction.interactionOptions.Add(InteractionOptions.Custom);
+            newInteraction.optionsUiText.Add(text);
+        }
+        
+        HandleInteraction(newInteraction,true);
+        return;
+        
+        void InvokeSelectedOption(Interaction interaction,int optionIndex)
+        {
+            DeletePreviousOptions();
+            optionEvents[optionIndex]?.Invoke();
+            interactionOptionsHandler.OnInteractionOptionChosen -= InvokeSelectedOption;
+        }
+    }
+    public void DisplaySpecific(string info, DialogType type)
+    {
+        messagesLoading = false;
+        var newInteraction = NewInteraction(info,type);
+        HandleInteraction(newInteraction,false);
+    }    
+    public void DisplayDetails(string info,bool canExit=true)
+    {
+        canExitDialogue = canExit;
+        messagesLoading = false;
+        var newInteraction = NewInteraction(info,DialogType.Details);
+        HandleInteraction(newInteraction,true);
+    }
+    public void DisplayTextOnly(string info,bool canExit)
+    {
+        if (canExitDialogue)
+        {
+            canExitDialogue = canExit;
+        }
+        var newInteraction = NewInteraction(info,DialogType.TextOnly);
+        HandleInteraction(newInteraction,true);
+    }
+    /// <summary>
+    /// Can be used for battle dialogue but also situations where that specific
+    /// dialogue could occur inside or outside battle
+    /// </summary>
+    public void DisplayBattleInfo(string info)
+    {
+        if (!_battleHandler.BattleInProgress)
+        {
+            DisplayDetails(info);
+            return;
+        }
+        canExitDialogue = false;
+        var newInteraction = NewInteraction(info,DialogType.BattleInfo);
+        pendingMessages.Add(newInteraction);
+        if (!messagesLoading) StartCoroutine(ProcessQueue());
+    }
+    private IEnumerator ProcessQueue()
+    {
+        messagesLoading = true;
+        while (pendingMessages.Count > 0)
+        {
+            var interaction = pendingMessages[0];
+            var currentInteraction = NewInteraction(interaction.interactionMessage, DialogType.BattleInfo);
+            SetBattleTextBox(currentInteraction);
+            _inputStateHandler.AddBattleDialoguePlaceHolderState();
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction));
+            yield return _typingRoutine;
+            
+            yield return new WaitUntil(()=>dialogueFinished);
+            yield return new WaitForSecondsRealtime(1f);
+            pendingMessages.RemoveAt(0);
+        }
+        _inputStateHandler.ResetSpecificUi(InputStateName.BattleDialoguePlaceHolder);
+        messagesLoading = false;
+    }
+    public void EndDialogue()
+    {
+        DeletePreviousOptions();
+        _interactionHandler.AllowInteraction();
+        canExitDialogue = true;
+        RemovePointer();
+        infoDialogueBox.SetActive(false);
+        battleDialogueBox.SetActive(false);
+        ResetText();
+        Displaying = false;
+        dialogueFinished = false;
+        if (_typingRoutine is not null)
+        {
+            StopCoroutine(_typingRoutine);
+        }
+        OnDialogueEnded?.Invoke(currentInteractable?.interaction);
+        currentInteractable = null;
+    }
+
+    private void RemovePointer()
+    {
+        endOfDialoguePointer.ChangeActiveState(false);
+        endOfDialoguePointer.gameObject.SetActive(false);
+    }
+    public void StartInteraction(Interaction interaction)
+    {
+        interaction.SetRuntimeID();
+        OnDialogueStarted?.Invoke(interaction);
+        
+        _interactionHandler.DisableInteraction();
+       
+        if (interaction.dialogueType == DialogType.Event)
+        {
+            interactionOptionsHandler.CompleteEventInteraction(interaction);
+            return;
+        }
+        HandleInteraction(interaction,true);
+    }
+    public void StartInteraction(OverworldInteractable interactable)
+    {
+        currentInteractable = interactable;
+        StartInteraction(interactable.interaction);
+    }
+
+    public void DisplayObjectiveText(string message)
+    {
+        if (message == string.Empty)
+        {
+            objectiveDialogueBox.SetActive(false);
+            return;
+        }
+        objectiveDialogueBox.SetActive(true);
+        objectiveDialougeText.text = message;
+    }
+    public void DisplayTestCaseText(string message)
+    {
+        testCaseDialogueBox.SetActive(true);
+        testCaseDialougeText.text = message;
+    }
+    public void RemoveObjectiveText()
+    {
+        objectiveDialogueBox.SetActive(false);
+    }
+    private void ResetText()
+    {
+         dialougeText.text = string.Empty;
+         dialougeText.ForceMeshUpdate();
+         dialougeText.maxVisibleCharacters = 0;
+    }
+    private IEnumerator TypeText(Interaction currentInteraction)
+    {
+        ResetText();
+        dialogueFinished = false;
+        Displaying = true; 
+        dialougeText.text = currentInteraction.interactionMessage;
+        OnDialogueDisplayed?.Invoke(currentInteraction.interactionMessage);
+        dialougeText.ForceMeshUpdate();
+        RemovePointer();
+        
+        int totalPages = dialougeText.textInfo.pageCount;
+
+        for (int page = 1; page <= totalPages; page++)
+        {
+            RemovePointer();
+            
+            dialougeText.pageToDisplay = page;
+            dialougeText.maxVisibleCharacters = 0;
+
+            TMP_PageInfo pageInfo = dialougeText.textInfo.pageInfo[page - 1];
+            int firstChar = pageInfo.firstCharacterIndex;
+            int lastChar = pageInfo.lastCharacterIndex;
+
+            for (int i = firstChar; i <= lastChar; i++)
+            {
+                // Skip typing
+                if (InputSourceHandler.InputPressed(ControlEvent.Exit))
+                {
+                    dialougeText.maxVisibleCharacters = lastChar + 1;
+                    var canExit = canExitDialogue;
+                    canExitDialogue = false;
+                    yield return new WaitForSecondsRealtime(1f);
+                    canExitDialogue = canExit;
+                    break;
+                }
+
+                dialougeText.maxVisibleCharacters = i + 1;
+                yield return new WaitForSecondsRealtime(typingSpeed);
+            }
+            int visibleChar = lastChar;
+
+            while (visibleChar >= firstChar && !dialougeText.textInfo.characterInfo[visibleChar].isVisible)
+            {
+                visibleChar--;
+            }
+            yield return null;
+
+            dialougeText.ForceMeshUpdate();
+
+            var charInfo = dialougeText.textInfo.characterInfo[lastChar];
+          
+            if(totalPages > 1 && page < totalPages)
+            {
+                //Display pointer
+                var worldPos = dialougeText.rectTransform.TransformPoint(charInfo.bottomRight);
+                //fine-tuning visual off-sets
+                worldPos = new Vector2(worldPos.x+35f, worldPos.y + math.abs(worldPos.y*.2f));
+                
+                var parentRect = (RectTransform)dialougeText.rectTransform.parent;
+                var parentSpacePos = parentRect.InverseTransformPoint(worldPos);
+                
+                endOfDialoguePointer.SetStartPosition(parentSpacePos);
+                endOfDialoguePointer.gameObject.SetActive(true);
+                endOfDialoguePointer.ChangeActiveState(true);
+                
+                // Wait for input before next page
+                yield return new WaitUntil(() => InputSourceHandler.InputPressed(ControlEvent.Confirm));
+            }
+        }
+        dialogueFinished = true;
+        
+        _inputStateHandler.ResetSpecificUi(InputStateName.DialoguePlaceHolder);
+        
+        if (currentInteraction.dialogueType == DialogType.Options 
+            || currentInteraction.dialogueType == DialogType.CustomOptions)
+        {
+            CreateDialogueOptions(currentInteraction);
+        }
+        
+        _typingRoutine = null;
+    }
+
+    private void HandleInteraction(Interaction currentInteraction,bool typeOut)
+    {
+        if (currentInteraction.dialogueType == DialogType.Options)
+        {
+            canExitDialogue = false;
+        }
+        _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Dialogue);
+        
+        SetBattleTextBox(currentInteraction);
+        if (typeOut)
+        {
+            if (_typingRoutine is not null)
+            {
+                StopCoroutine(_typingRoutine);
+            }
+            _inputStateHandler.AddDialoguePlaceHolderState();
+            _typingRoutine = StartCoroutine(TypeText(currentInteraction));
+        }
+        else
+        {
+            RemovePointer();
+            dialougeText.text = currentInteraction.interactionMessage;
+            dialougeText.maxVisibleCharacters = dialougeText.text.Length;
+        }
+    }
+
+    private void SetBattleTextBox(Interaction currentInteraction)
+    {
+        if (!_battleHandler.BattleInProgress || currentInteraction.dialogueType != DialogType.BattleInfo)
+        {
+            infoDialogueBox.SetActive(true);
+            dialougeText.color=Color.black;
+            battleDialogueBox.SetActive(false);
+        }
+        if( (currentInteraction.dialogueType == DialogType.BattleInfo && _battleHandler.BattleInProgress)
+            || currentInteraction.dialogueType == DialogType.BattleDisplayMessage)
+        {
+            battleDialogueBox.SetActive(true);
+            dialougeText.color=Color.white;
+            infoDialogueBox.SetActive(false);
+        }
+        if (currentInteraction.dialogueType == DialogType.TextOnly)
+        {
+            dialougeText.color = Color.white;
+            infoDialogueBox.SetActive(false);
+            battleDialogueBox.SetActive(false);
+        }
+    }
+}
+
+

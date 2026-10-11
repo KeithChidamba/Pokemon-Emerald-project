@@ -66,7 +66,7 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
     {
         //give enemy a move that can negate 
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        var semiData = player.pokemon.moveSet[0].GetModule<SemiInvulnerabilityInfo>().semiInvulnerabilities;
+        var semiData = player.pokemon.moveSet[0].GetDynamicModule<SemiInvulnerabilityInfo>().semiInvulnerabilities;
         var movesThatCounter = semiData.Select(data => data.moveName).ToList();
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);

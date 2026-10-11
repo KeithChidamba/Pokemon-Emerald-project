@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: PP Up
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071544
   itemID: 
   itemName: PP Up
   itemType: 4
@@ -27,10 +30,12 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 1250
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: de40e13a7f0536f2fa21a62de0a4b2e2, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071544
+      type: {class: PowerpointModifeir, ns: , asm: Assembly-CSharp}
+      data:
+        modiferType: 0
+        itemType: 2

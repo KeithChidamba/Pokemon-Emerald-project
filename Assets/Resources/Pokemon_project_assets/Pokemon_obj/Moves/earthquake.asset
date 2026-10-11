@@ -12,27 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: earthquake
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071499
   moveName: Earthquake
-  moveDamage: 100
-  moveAccuracy: 100
-  critModifierIndex: 0
+  description: cause a violent earthquake
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
+  effectType: 2
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
-  effectType: 2
-  effectInfoModule: {fileID: 11400000, guid: 8c52b4b1549e37962b6f92f2dc0eed2c, type: 2}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   canInfatuate: 0
-  isConsecutive: 0
   isMultiTarget: 1
   isSelfTargeted: 0
   isSureHit: 0
   displayTargetMessage: 0
+  moveDamage: 100
+  moveAccuracy: 100
+  critModifierIndex: 0
   priority: 0
   powerpoints: 10
   basePowerpoints: 10
@@ -41,4 +42,11 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: cause a violent earthquake
+  effectInfoModule: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1021519129163071499
+      type: {class: MultiTargetDamageInfo, ns: , asm: Assembly-CSharp}
+      data:
+        target: 0

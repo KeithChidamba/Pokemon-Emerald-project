@@ -56,13 +56,13 @@ public class Pokemon : ScriptableObject
     public float accuracy = 100;
     public float evasion = 100;
     public float critChance = 6.25f;
-    [FormerlySerializedAs("CatchRate")] public float catchRate = 0;
+    [FormerlySerializedAs("CatchRate")] public float catchRate;
     public int currentLevel = 1;
     public int currentExpAmount;
     public int currentLevelExpAmount;
     public int nextLevelExpAmount;
     [FormerlySerializedAs("EXPGroup")] public ExpGroup expGroup;
-    [FormerlySerializedAs("exp_yield")] public int expYield=0;
+    [FormerlySerializedAs("exp_yield")] public int expYield;
     public bool canEvolve = true;
     public int friendshipLevel;
     public bool hasTrainer;
@@ -231,22 +231,22 @@ public class Pokemon : ScriptableObject
     {
         float modifier = 0;
         
+        if (hasItem)
+        {
+            var itemFriendshipMod = heldItem.GetDynamicModule<FriendshipModifierInfo>();
+            if (itemFriendshipMod is not null)
+            {
+                modifier *= itemFriendshipMod.modifier;
+            }
+        }
+        
         var pokeballItem = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items) + pokeballName);
         
         var pokeballFriendshipMod = pokeballItem.GetDynamicModule<FriendshipModifierInfo>();
         
         if (pokeballFriendshipMod is not null)
         {
-            modifier += pokeballFriendshipMod.modifier;
-        }
-        
-        if (hasItem)
-        {
-            var itemFriendshipMod = heldItem.GetDynamicModule<FriendshipModifierInfo>();
-            if (itemFriendshipMod is not null)
-            {
-                modifier += itemFriendshipMod.modifier;
-            }
+            modifier *= pokeballFriendshipMod.modifier;
         }
         
         return (int)math.ceil(currentIncrease + modifier);

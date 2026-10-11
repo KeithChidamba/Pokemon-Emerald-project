@@ -1,8 +1,7 @@
-using UnityEngine;
+using System;
 
-[CreateAssetMenu(fileName = "weatherChange", menuName = "Move Info Modules/weatherChange")]
-
-public class ChangeWeatherInfo : AdditionalInfoModule
+[Serializable]
+public class ChangeWeatherInfo : DynamicAdditionalInfo
 {
     public Weather newWeatherCondition;
 }

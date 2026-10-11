@@ -18,9 +18,9 @@ public class PokeballTest: EndToEndTest,IBattleTestable
         var newItem = InstanceFactory.CreateItem(battleTestData.testItems[0].itemAsset);
         newItem.quantity = battleTestData.testItems[0].quantity;
         newItem.dynamicInfoModules = null;
-        newItem.dynamicInfoModules = new() { new ItemEffectInfo() };
+        newItem.dynamicInfoModules = new() { new EffectValueInfo() };
         _playerBag.AddItem(newItem);
-        var pokeball = newItem.GetDynamicModule<ItemEffectInfo>();
+        var pokeball = newItem.GetDynamicModule<EffectValueInfo>();
         
         AddTestCaseScenario(()=>
         {

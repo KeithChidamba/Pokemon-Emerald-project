@@ -48,8 +48,6 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _logicMethods.Add(MoveName.Whirlwind, Whirlwind);
         _logicMethods.Add(MoveName.Silverwind, SilverWind);
         _logicMethods.Add(MoveName.MirrorMove, MirrorMove);
-        
-        //still need tests
         _logicMethods.Add(MoveName.HyperBeam, Hyperbeam);
         _logicMethods.Add(MoveName.Bide, Bide);
     }

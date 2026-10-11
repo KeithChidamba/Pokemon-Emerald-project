@@ -25,7 +25,6 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     private DialogueHandler _dialogueHandler;
     private PlayerMovementHandler _playerMovementHandler;
     private InputStateHandler _inputStateHandler;
-    private DialogueOptionsEventHandler _dialogueOptionsHandler;
     private GameLoadingHandler _gameLoadingHandler;
     private SaveDataHandler _saveDataHandler;
     private PlayerBagHandler _playerBagHandler;
@@ -40,7 +39,6 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
-        _dialogueOptionsHandler = container.Resolve<DialogueOptionsEventHandler>();
         _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _pokeMartHandler = container.Resolve<PokeMartHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
@@ -122,7 +120,19 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             , ValidateBagView, ViewProfile, ViewGameSettings
         };
         
-        if (!usingWebGl) menuOptionsMethods.Add(_dialogueOptionsHandler.ExitGame);
+        if (!usingWebGl) menuOptionsMethods.Add(()=>
+        {
+            _dialogueHandler.DisplayCustomOptions("Are you sure you want to exit?, you will lose unsaved data!"
+                , new[]{"Yes", "No"},new Action[]
+                {
+                    ()=> 
+                    {
+                        _dialogueHandler.EndDialogue();
+                        Application.Quit();
+                    },
+                    _dialogueHandler.EndDialogue
+                });
+        });
         
         var menuSelectables = new List<SelectableUI>();
             

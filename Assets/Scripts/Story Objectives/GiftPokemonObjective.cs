@@ -4,17 +4,17 @@ public class GiftPokemonObjective : PropBasedObjective
 {
     private GameUiHandler gameUiHandler;
     private DialogueHandler _dialogueHandler;
-    private DialogueOptionsEventHandler _dialogueOptionsHandler;
+    private InteractionOptionsEventHandler interactionOptionsHandler;
     private OverworldState _overworldStateHandler;
     
     protected override void OnObjectiveLoaded()
     {
         _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
-        _dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>();
+        interactionOptionsHandler = serviceContainer.Resolve<InteractionOptionsEventHandler>();
         gameUiHandler = serviceContainer.Resolve<GameUiHandler>();
         _dialogueHandler.DisplayObjectiveText(objectiveHeading);
         _overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
-        _dialogueOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
+        interactionOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
         gameUiHandler.SetMenuAccessibility(false);
     }
    
@@ -25,8 +25,10 @@ public class GiftPokemonObjective : PropBasedObjective
             _dialogueHandler.EndDialogue(); 
             return;
         }
-        if (interaction.overworldInteraction != OverworldInteractionType.ReceiveGiftPokemon) return;
 
+        var isGiftInteraction = interaction.GetDynamicModule<PokemonGiftInteractoinInfo>() is not null;
+        if (!isGiftInteraction) return;
+        
         var pokeballProps = objectiveObjectHandler.propGroupsForObjective[0];
         
         foreach(var prop in pokeballProps.propsForObjective)
@@ -50,7 +52,7 @@ public class GiftPokemonObjective : PropBasedObjective
    
     protected override void OnObjectiveCleared()
     {
-        _dialogueOptionsHandler.OnInteractionOptionChosen -= CheckInteractionOption;
+        interactionOptionsHandler.OnInteractionOptionChosen -= CheckInteractionOption;
         _overworldStateHandler.ClearAndLoadNextObjective();
     }
 }

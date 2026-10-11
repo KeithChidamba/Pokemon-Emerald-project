@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "Trainer Data", menuName = "Battle/Trainer/trainer data")]
+[CreateAssetMenu(fileName = "Trainer Data", menuName = "Additional Info Module/trainer data")]
 
-public class TrainerData : ScriptableObject
+public class TrainerData : AdditionalInfoModule
 {
     public string TrainerName;
     public TrainerType trainerType;

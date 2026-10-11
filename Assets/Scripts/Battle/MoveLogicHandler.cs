@@ -81,7 +81,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     }
     IEnumerator ExecuteConsecutiveMove(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        var consecutiveMoveInfo = move.GetModule<ConsecutiveMoveInfo>();
+        var consecutiveMoveInfo = move.GetDynamicModule<ConsecutiveMoveInfo>();
         if (consecutiveMoveInfo.isRandomHitCount)
         {
             consecutiveMoveInfo.numHits = Utility.GetRandomChance(CommonRandom.Rnd5);
@@ -126,7 +126,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     }
     IEnumerator HandleMultiTargetDamage(Move move,BattleParticipant attacker)
     {
-        var multiTargetInfo = move.GetModule<MultiTargetDamageInfo>();
+        var multiTargetInfo = move.GetDynamicModule<MultiTargetDamageInfo>();
         var targets = new List<BattleParticipant>();
         switch (multiTargetInfo.target)
         {
@@ -142,10 +142,11 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
 
     IEnumerator DrainHealth(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        var healthDrainInfo = move.GetModule<HealthDrainMoveInfo>();
+        var healthDrainInfo = move.GetDynamicModule<EffectValueInfo>();
         var damage = _moveUsageHandler.CalculateMoveDamage(move,attacker,victim);
-        var healAmount = victim.pokemon.hp-damage<=0 ? victim.pokemon.hp : damage; 
-        healAmount *= healthDrainInfo.percentageOfDamage/100f;
+        var healAmount = victim.pokemon.hp-damage<=0 ? victim.pokemon.hp : damage;
+        var percentageOfDamage = healthDrainInfo.effectValue;
+        healAmount *= percentageOfDamage/100f;
         
         _moveUsageHandler.DisplaySpecificMoveDamage(move,victim,damage);
         
@@ -198,7 +199,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     
     private IEnumerator OnFieldDamageModLogic(Move move,BattleParticipant attacker)
     {
-        var damageModifierInfo = move.GetModule<DamageModifierInfo>();
+        var damageModifierInfo = move.GetDynamicModule<DamageModifierInfo>();
         
         if (_moveUsageHandler.FieldDamageSourceExists(damageModifierInfo.modifierSource))
         {
@@ -279,7 +280,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             yield break;
         }
 
-        var semiInvulnerableData = move.GetModule<SemiInvulnerabilityInfo>();
+        var semiInvulnerableData = move.GetDynamicModule<SemiInvulnerabilityInfo>();
         
         attacker.semiInvulnerabilityData.displayMessage = semiInvulnerableData.displayMessage;
         attacker.semiInvulnerabilityData.onHitMessage = semiInvulnerableData.onHitMessage;
@@ -296,7 +297,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     
     IEnumerator ChangeWeather(Move move)
     {
-        var weatherInfo = move.GetModule<ChangeWeatherInfo>();
+        var weatherInfo = move.GetDynamicModule<ChangeWeatherInfo>();
         var newWeather = new WeatherCondition(weatherInfo.newWeatherCondition);
         _turnBasedCombatHandler.ChangeWeather(newWeather);
         yield return null;
@@ -336,7 +337,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     }
     private IEnumerator DealSpecificDamage(Move move, BattleParticipant victim)
     {
-        var specificDamage = move.GetDynamicModule<MoveEffectInfo>().effectValue;
+        var specificDamage = move.GetDynamicModule<EffectValueInfo>().effectValue;
         _moveUsageHandler.DisplaySpecificMoveDamage(move,victim,specificDamage:specificDamage);
         yield return null;
     }  

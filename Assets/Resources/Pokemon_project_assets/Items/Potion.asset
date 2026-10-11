@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Potion
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071537
   itemID: 
   itemName: Potion
   itemType: 2
@@ -27,14 +30,11 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 150
   priceCurrency: 0
-  additionalInfoModules: []
-  dynamicInfoModules:
-  - rid: 7301661317695799297
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799297
-      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071537
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 20

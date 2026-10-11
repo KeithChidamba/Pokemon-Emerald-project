@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Hyper Potion
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071536
   itemID: 
   itemName: Hyper Potion
   itemType: 2
@@ -27,14 +30,11 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 600
   priceCurrency: 0
-  additionalInfoModules: []
-  dynamicInfoModules:
-  - rid: 7301661317695799299
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799299
-      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071536
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 200

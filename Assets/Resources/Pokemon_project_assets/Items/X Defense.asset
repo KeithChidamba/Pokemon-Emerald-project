@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: X Defense
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071566
   itemID: 
   itemName: X Defense
   itemType: 13
@@ -27,10 +30,11 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 275
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 524ff08ea0d7e82dea1a29a4f84ae1e2, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071566
+      type: {class: StatInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        statName: 2

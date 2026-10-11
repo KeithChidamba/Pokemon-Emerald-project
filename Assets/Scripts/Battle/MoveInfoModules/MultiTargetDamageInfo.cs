@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-[CreateAssetMenu(fileName = "MultiTargetDMG", menuName = "Move Info Modules/MultiTargetDMG")]
-public class MultiTargetDamageInfo : AdditionalInfoModule
+using System;
+
+[Serializable]
+public class MultiTargetDamageInfo : DynamicAdditionalInfo
 {
     public Target target;
 }

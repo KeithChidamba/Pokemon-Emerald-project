@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Thunder Stone
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071501
   itemID: 
   itemName: Thunder Stone
   itemType: 11
@@ -27,10 +29,12 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 525
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 9651151cd342281a1973c693832aed13, type: 2}
-  dynamicInfoModules: []
+  additionalInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071501
+      type: {class: EvolutionStoneInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        stoneName: 1

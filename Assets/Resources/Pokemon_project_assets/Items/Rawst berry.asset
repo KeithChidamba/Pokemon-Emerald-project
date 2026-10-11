@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Rawst berry
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071524
+  - rid: 1021519129163071574
   itemID: 
   itemName: Rawst berry
   itemType: 9
@@ -27,10 +31,15 @@ MonoBehaviour:
   canBeSold: 0
   sellPrice: 0
   priceCurrency: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 536668b5fbef4731da1b168f96946df3, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071524
+      type: {class: BerryInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        berryType: 2
+    - rid: 1021519129163071574
+      type: {class: StatusHealInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        statusEffect: 2

@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Super Repel
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071530
   itemID: 
   itemName: Super Repel
   itemType: 1
@@ -27,14 +30,11 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 250
   priceCurrency: 0
-  additionalInfoModules: []
-  dynamicInfoModules:
-  - rid: 7301661317695799306
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799306
-      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071530
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 200

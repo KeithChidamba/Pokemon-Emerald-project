@@ -464,7 +464,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         var wildPokemon = _wildPokemonHandler.participant.pokemon;
         SoundManager.Play(SfxId.BallThrow);
         yield return StartCoroutine(_battleVisuals.DisplayPokemonThrow());
-        var ballRate = pokeball.GetDynamicModule<ItemEffectInfo>().effectValue;
+        var ballRate = pokeball.GetDynamicModule<EffectValueInfo>().effectValue;
         var bracket1 = (3 * wildPokemon.maxHp - 2 * wildPokemon.hp) / (3 * wildPokemon.maxHp);
         var catchValue = math.trunc(bracket1 * wildPokemon.catchRate * ballRate * 
                                     _battleOperations.GetCatchRateBonusFromStatus(wildPokemon.statusEffect));

@@ -28,12 +28,10 @@ public static class InstanceFactory
         newMove.isContact = m.isContact;
         newMove.canCauseFlinch = m.canCauseFlinch;
         newMove.effectType = m.effectType;
-        newMove.effectInfoModule = m.effectInfoModule;
         newMove.canCauseConfusion = m.canCauseConfusion;
         newMove.canTrap = m.canTrap;
         newMove.canInfatuate = m.canInfatuate;
         newMove.canChangeStats = m.canChangeStats;
-        newMove.isConsecutive = m.isConsecutive;
         newMove.isSelfTargeted = m.isSelfTargeted;
         newMove.isMultiTarget = m.isMultiTarget;
         newMove.isSureHit = m.isSureHit;
@@ -215,7 +213,6 @@ public static class InstanceFactory
         newItem.isHeldItem = item.isHeldItem;
         newItem.canBeSold = item.canBeSold;
         newItem.canBeHeld = item.canBeHeld;
-        newItem.additionalInfoModules = item.additionalInfoModules;
         newItem.dynamicInfoModules = item.dynamicInfoModules;
         newItem.imageDirectory = item.imageDirectory;
         return newItem;

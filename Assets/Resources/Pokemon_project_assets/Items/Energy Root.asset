@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Energy Root
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071505
+  - rid: 1021519129163071506
   itemID: 
   itemName: Energy Root
   itemType: 5
@@ -27,15 +30,16 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 400
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 2f80d1f5243a6ff4b999b8e5cf6e08cb, type: 2}
-  dynamicInfoModules:
-  - rid: 7301661317695799303
+  additionalInfoModules: []
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799303
-      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071505
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 200
+    - rid: 1021519129163071506
+      type: {class: HerbInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        herbType: 1

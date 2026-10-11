@@ -12,27 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: surf
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071500
   moveName: Surf
-  moveDamage: 90
-  moveAccuracy: 90
-  critModifierIndex: 0
+  description: Launches a large wave at the foe
   type: {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
+  effectType: 2
   hasTypelessEffect: 0
   isSpecial: 1
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
-  effectType: 2
-  effectInfoModule: {fileID: 11400000, guid: 2d56b96adece89519b5177c5f5c37118, type: 2}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   canInfatuate: 0
-  isConsecutive: 0
   isMultiTarget: 1
   isSelfTargeted: 0
   isSureHit: 0
   displayTargetMessage: 0
+  moveDamage: 90
+  moveAccuracy: 90
+  critModifierIndex: 0
   priority: 0
   powerpoints: 25
   basePowerpoints: 25
@@ -41,4 +42,11 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: Launches a large wave at the foe
+  effectInfoModule: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1021519129163071500
+      type: {class: MultiTargetDamageInfo, ns: , asm: Assembly-CSharp}
+      data:
+        target: 1

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: double kick
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071491
   moveName: Double Kick
   moveDamage: 30
   moveAccuracy: 100
@@ -20,10 +22,10 @@ MonoBehaviour:
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 1
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
   effectType: 3
-  effectInfoModule: {fileID: 11400000, guid: 66796e0fe53ff9a97b236af136bc5e6e, type: 2}
+  effectInfoModule: {fileID: 0}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
@@ -42,3 +44,12 @@ MonoBehaviour:
   statusChance: 0
   buffOrDebuffChance: 0
   description: A strong succession of kicks
+  references:
+    version: 2
+    RefIds:
+    - rid: 1021519129163071491
+      type: {class: ConsecutiveMoveInfo, ns: , asm: Assembly-CSharp}
+      data:
+        isRandomHitCount: 0
+        numHits: 2
+        displayHitCount: 0

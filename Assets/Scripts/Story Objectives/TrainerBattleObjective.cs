@@ -4,23 +4,23 @@ public class TrainerBattleObjective : StoryObjective
 {
     public TrainerData trainer;
     private DialogueHandler _dialogueHandler;
-    private DialogueOptionsEventHandler _dialogueOptionsHandler;
+    private InteractionOptionsEventHandler interactionOptionsHandler;
     private BattleHandler _battleHandler;
     
     protected override void OnObjectiveLoaded()
     {
         _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
-        _dialogueOptionsHandler = serviceContainer.Resolve<DialogueOptionsEventHandler>(); 
+        interactionOptionsHandler = serviceContainer.Resolve<InteractionOptionsEventHandler>(); 
         _battleHandler = serviceContainer.Resolve<BattleHandler>(); 
         _dialogueHandler.DisplayObjectiveText($"Defeat {trainer.TrainerName}");
-        _dialogueOptionsHandler.OnEventInteraction += CheckBattleInteraction;
+        interactionOptionsHandler.OnEventInteraction += CheckBattleInteraction;
     }
     private void CheckBattleInteraction(Interaction interaction)
     {
         if (interaction.overworldInteraction == OverworldInteractionType.Battle)
         {
-            var trainerInteraction = interaction.GetModule<TrainerBattleInteractionInfo>();
-            if (trainer.TrainerName == trainerInteraction.data.TrainerName)
+            var trainerInteraction = interaction.GetModule<TrainerData>();
+            if (trainer.TrainerName == trainerInteraction.TrainerName)
             {
                 _battleHandler.OnBattleResult += CheckIfWin;
             }
@@ -30,7 +30,7 @@ public class TrainerBattleObjective : StoryObjective
     private void CheckIfWin(bool hasWon)
     {
         if (!hasWon) return;
-        _dialogueOptionsHandler.OnEventInteraction -= CheckBattleInteraction;
+        interactionOptionsHandler.OnEventInteraction -= CheckBattleInteraction;
        
         _battleHandler.OnBattleResult -= CheckIfWin;
         ClearObjective();

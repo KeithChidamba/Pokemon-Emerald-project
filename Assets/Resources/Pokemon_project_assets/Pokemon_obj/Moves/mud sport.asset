@@ -12,27 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: mud sport
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519132769910784
   moveName: Mud Sport
-  moveDamage: 0
-  moveAccuracy: 100
-  critModifierIndex: 0
+  description: "Lowers the power of Electric-type moves by 50% for all Pok\xE9mon
+    on the field"
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
+  effectType: 10
   hasTypelessEffect: 1
   isSpecial: 0
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 1
-  effectType: 10
-  effectInfoModule: {fileID: 11400000, guid: 46708bf89b220a57fa37a5a650e77563, type: 2}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   canInfatuate: 0
-  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 1
   displayTargetMessage: 0
+  moveDamage: 0
+  moveAccuracy: 100
+  critModifierIndex: 0
   priority: 0
   powerpoints: 15
   basePowerpoints: 15
@@ -41,5 +43,14 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: "Lowers the power of Electric-type moves by 50% for all Pok\xE9mon
-    on the field"
+  references:
+    version: 2
+    RefIds:
+    - rid: 1021519132769910784
+      type: {class: DamageModifierInfo, ns: , asm: Assembly-CSharp}
+      data:
+        damageChangeMessage: The power of electric types moves was weakened
+        damageModifiers:
+        - typeAffected: 3
+          damageFactor: 0.5
+        modifierSource: 1

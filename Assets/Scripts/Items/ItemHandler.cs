@@ -225,7 +225,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
     }
     private void UseRepel(Item itemInUse)
     {
-        var repelDuration = (int)itemInUse.GetDynamicModule<ItemEffectInfo>().effectValue;
+        var repelDuration = (int)itemInUse.GetDynamicModule<EffectValueInfo>().effectValue;
         _dialogueHandler.DisplayDetails("Repel has been activated");
         _playerTileHandler.ActivateRepel(repelDuration);
         OnItemUsed?.Invoke(itemInUse,true);
@@ -233,7 +233,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
     
     private void UseHerbs(Item itemInUse,Pokemon selectedPartyPokemon)
     {
-        var herbInfo = itemInUse.GetModule<HerbInfoModule>();
+        var herbInfo = itemInUse.GetDynamicModule<HerbInfoModule>();
         OnItemUsed += ChangeFriendship;
         var usageIndex = herbInfo.GetHerbUsage();
         var herbUsages = new List<Action<Item,Pokemon>> 
@@ -269,13 +269,17 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
     private void UseBerries(Item itemInUse,Pokemon selectedPartyPokemon)
     {
-        var berryInfo = itemInUse.GetModule<BerryInfoModule>();
+        var berryInfo = itemInUse.GetDynamicModule<BerryInfoModule>();
         var usageIndex = (int)berryInfo.berryType;
         var berryUsages = new List<Action<Item,Pokemon>> 
         {
             GetFriendshipFromBerry,
             RestoreHealth,
-            (item,pokemon) => HealMajorStatusEffect(item,pokemon,berryInfo.statusEffect),
+            (item,pokemon) =>
+            {
+                var statusInfo = itemInUse.GetDynamicModule<StatusHealInfoModule>();
+                HealMajorStatusEffect(item, pokemon,statusInfo.statusEffect);
+            },
             ChangePowerpoints,
             CureConfusion,
             StatusFullHeal
@@ -300,7 +304,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
     private IEnumerator TriggerStoneEvolution(Item itemInUse,Pokemon selectedPartyPokemon)
     { 
-       var stoneInfo = itemInUse.GetModule<EvolutionStoneInfoModule>();
+       var stoneInfo = itemInUse.GetDynamicModule<EvolutionStoneInfoModule>();
        
        if (!selectedPartyPokemon.requiresEvolutionStone)
        {
@@ -321,7 +325,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
     private void GetFriendshipFromBerry(Item itemInUse,Pokemon selectedPartyPokemon)
     {
-        var statToDecrease = itemInUse.GetModule<StatInfoModule>();
+        var statToDecrease = itemInUse.GetDynamicModule<StatInfoModule>();
         if(selectedPartyPokemon.friendshipLevel>254)
         {
             _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+"'s friendship is already maxed out");
@@ -345,7 +349,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
     }
     private void GetEVsFromItem(Item itemInUse,Pokemon selectedPartyPokemon) 
     {
-        var statToIncrease = itemInUse.GetModule<StatInfoModule>();
+        var statToIncrease = itemInUse.GetDynamicModule<StatInfoModule>();
         _pokemonOperationsHandler.OnEvChange += CheckEvChange;
         _pokemonOperationsHandler.CalculateEvForStat(statToIncrease.statName, 10, selectedPartyPokemon);
         return;
@@ -389,7 +393,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
     }
     private void UseStatModifyingBattleItem(Item itemInUse)
     {
-        var statInfo = itemInUse.GetModule<StatInfoModule>();
+        var statInfo = itemInUse.GetDynamicModule<StatInfoModule>();
         var currentParticipant = _battleHandler.GetCurrentParticipant();
         
         var existingBuff = currentParticipant.pokemon.statModifiers
@@ -420,7 +424,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
     private void RevivePokemon(Item itemInUse,Pokemon pokemon)
     {
-        var reviveType = itemInUse.GetModule<RevivalItemInfo>().reviveType;
+        var reviveType = itemInUse.GetDynamicModule<RevivalItemInfo>().reviveType;
         HandlePokemonRevive(itemInUse,reviveType, pokemon);
     }
     private void HandlePokemonRevive(Item itemInUse,RevivalItemType reviveType,Pokemon selectedPartyPokemon)
@@ -471,7 +475,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             _inputStateHandler.OnStateRemoved -= ExitOperation;
             
             var currentMove = selectedPartyPokemon.moveSet[moveIndex];
-            var modifierInfo = itemInUse.GetModule<PowerpointModifeir>();
+            var modifierInfo = itemInUse.GetDynamicModule<PowerpointModifeir>();
             Action<int, Item, Move> powerPointOperation = modifierInfo.modiferType switch
             {
                 PowerpointModifeir.ModiferType.RestorePp => RestorePowerpoints,
@@ -497,7 +501,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
              return;
          }
          
-         var modifierInfo = itemInUse.GetModule<PowerpointModifeir>();
+         var modifierInfo = itemInUse.GetDynamicModule<PowerpointModifeir>();
          var pointsToAdd = 0;
          
          if (modifierInfo.itemType == PowerpointModifeir.ModiferItemType.Ether)
@@ -600,7 +604,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
     {
         if (curableStatus == StatusEffect.None)
         {
-            var statusInfo = itemInUse.GetModule<StatusHealInfoModule>();
+            var statusInfo = itemInUse.GetDynamicModule<StatusHealInfoModule>();
             curableStatus = statusInfo.statusEffect;
         }
         
@@ -643,7 +647,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
     }
     private void RestoreHealth(Item itemInUse,Pokemon selectedPartyPokemon)
     {
-        var healEffect = itemInUse.GetDynamicModule<ItemEffectInfo>().effectValue;
+        var healEffect = itemInUse.GetDynamicModule<EffectValueInfo>().effectValue;
         RestoreHealth(healEffect, itemInUse, selectedPartyPokemon);
     }
     private void RestoreHealth(float healAmount,Item itemInUse,Pokemon selectedPartyPokemon)

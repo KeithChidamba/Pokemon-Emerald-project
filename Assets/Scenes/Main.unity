@@ -313096,7 +313096,7 @@ MonoBehaviour:
   moveUsageHandler: {fileID: 1148144461}
   moveLogicHandler: {fileID: 991027251}
   moveLogicDatabase: {fileID: 1217309157}
-  dialogueOptionsHandler: {fileID: 1295631326}
+  interactionOptionsHandler: {fileID: 1295631326}
   gameUIHandler: {fileID: 316697657}
   playerBagHandler: {fileID: 1926750168}
   pokeMartHandler: {fileID: 261260552}

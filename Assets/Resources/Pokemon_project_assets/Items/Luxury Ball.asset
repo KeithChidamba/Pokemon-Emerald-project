@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Luxury Ball
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 7301661317695799310
+  - rid: 1021519129163071532
   itemID: 
   itemName: Luxury Ball
   itemType: 10
@@ -27,19 +31,15 @@ MonoBehaviour:
   canBeSold: 0
   sellPrice: 0
   priceCurrency: 1
-  additionalInfoModules: []
-  dynamicInfoModules:
-  - rid: 7301661317695799308
-  - rid: 7301661317695799310
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799308
-      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071532
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 1
     - rid: 7301661317695799310
       type: {class: FriendshipModifierInfo, ns: , asm: Assembly-CSharp}
       data:
-        modifier: 1
+        modifier: 2

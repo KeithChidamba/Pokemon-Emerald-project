@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Max Ether
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071545
   itemID: 
   itemName: Max Ether
   itemType: 4
@@ -27,10 +30,12 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 500
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: c8ab2ad7b000209fb8d9ff3cae07be79, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071545
+      type: {class: PowerpointModifeir, ns: , asm: Assembly-CSharp}
+      data:
+        modiferType: 2
+        itemType: 1

@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Amulet Coin
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071539
   itemID: 
   itemName: Amulet Coin
   itemType: 14
@@ -27,14 +30,11 @@ MonoBehaviour:
   canBeSold: 0
   sellPrice: 0
   priceCurrency: 1
-  additionalInfoModules: []
-  dynamicInfoModules:
-  - rid: 7301661317695799296
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799296
-      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071539
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 2

@@ -12,27 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: fly
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519132769910787
   moveName: Fly
-  moveDamage: 75
-  moveAccuracy: 65
-  critModifierIndex: 0
+  description: 
   type: {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
+  effectType: 11
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 1
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
-  effectType: 11
-  effectInfoModule: {fileID: 11400000, guid: ffd4b2fe841fd728788c144ade55ca22, type: 2}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   canInfatuate: 0
-  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 1
   displayTargetMessage: 0
+  moveDamage: 75
+  moveAccuracy: 65
+  critModifierIndex: 0
   priority: 0
   powerpoints: 35
   basePowerpoints: 35
@@ -41,4 +42,22 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 1021519132769910787
+      type: {class: SemiInvulnerabilityInfo, ns: , asm: Assembly-CSharp}
+      data:
+        displayMessage: ' is in the air'
+        onHitMessage: ' flew down!'
+        executionMessage: ' flew up high!'
+        semiInvulnerabilities:
+        - moveName: 19
+          damageMultiplier: 2
+          isSureHit: 1
+        - moveName: 8
+          damageMultiplier: 1
+          isSureHit: 0
+        - moveName: 12
+          damageMultiplier: 1
+          isSureHit: 0

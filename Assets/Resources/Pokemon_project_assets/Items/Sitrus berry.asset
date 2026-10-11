@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: Sitrus berry
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071525
+  - rid: 1021519129163071526
   itemID: 
   itemName: Sitrus berry
   itemType: 9
@@ -27,15 +30,17 @@ MonoBehaviour:
   canBeSold: 0
   sellPrice: 0
   priceCurrency: 1
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 7fbd9d0abd32224e4ae7a06219c2ade1, type: 2}
-  dynamicInfoModules:
-  - rid: 7301661317695799301
+  additionalInfoModules: []
   imageDirectory: 
   references:
     version: 2
     RefIds:
-    - rid: 7301661317695799301
-      type: {class: ItemEffectInfo, ns: , asm: Assembly-CSharp}
+    - rid: 1021519129163071525
+      type: {class: EffectValueInfo, ns: , asm: Assembly-CSharp}
       data:
         effectValue: 30
+    - rid: 1021519129163071526
+      type: {class: BerryInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        berryType: 1
+        statusEffect: 0

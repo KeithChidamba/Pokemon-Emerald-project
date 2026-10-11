@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4752b325a905e3e478edd6520bb6efa8, type: 3}
   m_Name: X Accuracy
   m_EditorClassIdentifier: 
+  additionalInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519129163071564
   itemID: 
   itemName: X Accuracy
   itemType: 13
@@ -27,10 +30,11 @@ MonoBehaviour:
   canBeSold: 1
   sellPrice: 475
   priceCurrency: 0
-  additionalInfoModules:
-  - {fileID: 11400000, guid: 1c00558e9304212d399073ff6078bcb5, type: 2}
-  dynamicInfoModules: []
   imageDirectory: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519129163071564
+      type: {class: StatInfoModule, ns: , asm: Assembly-CSharp}
+      data:
+        statName: 8
