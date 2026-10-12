@@ -141,6 +141,4 @@ public class AssetLookUp : EditorWindow
         }
         Debug.Log(summary.ToString());
     }
-
-
 }

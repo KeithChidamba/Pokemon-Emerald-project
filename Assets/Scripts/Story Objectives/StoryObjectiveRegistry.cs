@@ -15,5 +15,6 @@ public struct StoryObjectiveGroup
 }
 public enum StoryObjectiveSection
 {
-    FishingTutorial,BerryTutorial,CombatTutorial
+    FishingTutorial,BerryTutorial,CombatTutorial,StorageTutorial,PokeMartTutorial
+    ,HuntWildPokemonTutorial
 }

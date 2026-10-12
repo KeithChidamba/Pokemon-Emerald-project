@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b7f36d76f0f5d3669252db41fff9a89, type: 3}
+  m_Name: Withdraw pikachu
+  m_EditorClassIdentifier: 
+  objectiveHeading: withdraw pikachu from pc
+  objectiveType: 7
+  playerBoundary:
+    isRestricting: 0
+    boundaries: []
+  storageObjectiveType: 0
+  spawnPokemonInPc: 1
+  pokemonForObjective:
+    giftPokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+    pokemonLevel: 12
+    evolutionStageNumber: 0

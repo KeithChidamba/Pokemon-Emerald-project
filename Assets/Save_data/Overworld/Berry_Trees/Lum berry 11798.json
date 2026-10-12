@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Lum berry",
+    "berryItem": {
+        "instanceID": 28242
+    },
+    "minutesPerStage": 180,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33264
+                },
+                {
+                    "instanceID": 33264
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33266
+                },
+                {
+                    "instanceID": 33268
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33318
+                },
+                {
+                    "instanceID": 33320
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33322
+                },
+                {
+                    "instanceID": 33324
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33326
+                },
+                {
+                    "instanceID": 33328
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 8,
+    "lastLogin": "2026-10-12T13:55:23.9280210+02:00"
+}

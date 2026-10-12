@@ -11,6 +11,7 @@ public class NpcStoryObjective : StoryObjective
     public GameObject npcPrefab;
     public SpriteDataForNpc npcSprites;
     public Interaction npcInteraction;
+    public string npcInteractionMessage;
     public bool removeAfterInteraction;
     public bool facePlayer;
     
@@ -33,7 +34,16 @@ public class NpcStoryObjective : StoryObjective
         npcLogic.movementHandler.isControlled = true;
         npcLogic.movementHandler.animationData.isIdle = true;
         npcLogic.movementHandler.animationData.spriteData = npcSprites;
+        
+        if (npcInteraction is null)
+        {
+            npcInteraction = CreateInstance<Interaction>();
+            npcInteraction.dialogueType = DialogType.Details;
+            npcInteraction.interactionMessage = npcInteractionMessage;
+        }
+        
         npcLogic.npcInteractable.interaction = npcInteraction;
+        
         npcInstance.SetActive(true);
 
         if (facePlayer)
@@ -56,6 +66,7 @@ public class NpcStoryObjective : StoryObjective
         areaManager = serviceContainer.Resolve<AreaManager>(); 
         _playerMovement = serviceContainer.Resolve<PlayerMovementHandler>();
         dialogueHandler.DisplayObjectiveText(objectiveHeading==string.Empty?$"Speak to {npcName}":objectiveHeading);
+      
         SetupNpc();
         dialogueHandler.OnDialogueEnded += ClearAfterInteractionDialogue;
     }

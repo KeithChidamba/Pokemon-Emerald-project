@@ -148,7 +148,7 @@ public class EnemyAiHandler
                     var participantPartyIndex = participant.participantKey < participant.GetPartnerKey() ? 0 : 1;
                     SwapIndexes(pokemonIndex,participantPartyIndex);
                     
-                    yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName,
+                    yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.trainerName,
                         trainerParty[participantPartyIndex].pokemonDisplayName);
                     
                     yield return _battleIntroHandler.SwitchInPokemon(participant,trainerParty[participantPartyIndex],false);
@@ -162,7 +162,7 @@ public class EnemyAiHandler
                 var participantPartyIndex = 0;
                 SwapIndexes(pokemonIndex,participantPartyIndex);
                 
-                yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.TrainerName, 
+                yield return _turnBasedCombatHandler.AllowPlayerSwitchIn(trainerData.trainerName, 
                     trainerParty[participantPartyIndex].pokemonDisplayName);
                 
                 yield return _battleIntroHandler.SwitchInPokemon(participant,newPokemon: trainerParty[participantPartyIndex],false);

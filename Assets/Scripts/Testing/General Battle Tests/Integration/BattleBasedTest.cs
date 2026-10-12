@@ -58,7 +58,7 @@ public class BattleBasedTest : IntegrationTest
         var testEnemy = Resources.Load<TrainerData>(
             DirectoryHandler.GetDirectory(AssetDirectory.TestAssets) + "Test Enemy");
 
-        testEnemy.TrainerName = testData.testEnemyData.trainerDisplayName;
+        testEnemy.trainerName = testData.testEnemyData.trainerDisplayName;
         testEnemy.PokemonParty = testData.testEnemyData.pokemonParty;
         testEnemy.battleType = testData.testEnemyData.battleType;
         

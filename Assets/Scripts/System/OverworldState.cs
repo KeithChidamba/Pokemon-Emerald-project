@@ -22,13 +22,13 @@ public class OverworldState : MonoBehaviour,IInjectable
 
     [SerializeField] private StoryObjectiveRegistry storyObjectiveRegistry;
     [HideInInspector] public StoryProgress storyProgress;
-    private Dictionary<StoryObjectiveSection,List<StoryObjectiveSave>> _storyObjectiveGroups = new();
+    private Dictionary<StoryObjectiveSection,List<StoryObjective>> _storyObjectiveGroups = new();
     private Dictionary<string,StoryObjective> _cachedObjectives = new();
     [SerializeField] private StoryObjectiveSection currentObjectiveGroup;
     /// <summary>
     /// For debugging view
     /// </summary>
-    [SerializeField] private List<StoryObjectiveSave> currentStoryObjectives;
+    [SerializeField] private List<StoryObjective> currentStoryObjectives;
     
     public event Action OnObjectivesLoaded;
     private SaveDataHandler _saveHandler;
@@ -125,10 +125,13 @@ public class OverworldState : MonoBehaviour,IInjectable
     private IEnumerator LoadOverworldState()
     {
         storyProgress = null;
+        
+        //load default story objectives
         _storyObjectiveGroups.Clear();
         foreach (var group in storyObjectiveRegistry.storyObjectiveGroups)
         {
-            _storyObjectiveGroups.Add(group.section, new List<StoryObjectiveSave>());
+            _storyObjectiveGroups[group.section] = new List<StoryObjective>();
+            _storyObjectiveGroups[group.section].AddRange(group.storyObjectives);
         }
         
         jsonLoadedTreeData.Clear();
@@ -180,21 +183,6 @@ public class OverworldState : MonoBehaviour,IInjectable
         //story objectives
         if (storyProgress is null)
         {
-            //load default story objectives
-            foreach (var group in storyObjectiveRegistry.storyObjectiveGroups)
-            {
-                _storyObjectiveGroups[group.section] = new List<StoryObjectiveSave>();
-                foreach (var objective in group.storyObjectives)
-                {
-                    var objectiveSaveData = new StoryObjectiveSave
-                    {
-                        mainAssetName = objective.name,
-                        objectiveType = objective.objectiveType,
-                        groupSection = group.section
-                    };
-                    _storyObjectiveGroups[group.section].Add(objectiveSaveData);
-                }
-            }
             storyProgress = new StoryProgress { allObjectivesComplete = false };
             currentObjectiveGroup = _storyObjectiveGroups.First().Key;
         }
@@ -215,15 +203,8 @@ public class OverworldState : MonoBehaviour,IInjectable
                         _storyObjectiveGroups.Remove(section);
                     }
                 }
-                foreach (var pair in _storyObjectiveGroups)
-                {
-                    //sort objectives in order
-                    var currentGroup = pair.Value;
-                    var orderList = currentGroup.OrderBy(obj => obj.indexInList).ToList();
-                    currentGroup.Clear();
-                    currentGroup.AddRange(orderList);
-                }
                 currentObjectiveGroup = storyProgress.lastActiveGroup;
+                _storyObjectiveGroups[currentObjectiveGroup].RemoveRange(0,storyProgress.numRemainingInGroup);
             }
         }
         yield return new WaitForSeconds(0.025f);
@@ -232,7 +213,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         OnObjectivesLoaded?.Invoke();
         if(!storyProgress.allObjectivesComplete)
         {
-            FindMainStoryAsset(_container, _storyObjectiveGroups[currentObjectiveGroup][0].mainAssetName);
+            FindMainStoryAsset(_container, _storyObjectiveGroups[currentObjectiveGroup][0].name);
             currentStoryObjectives = _storyObjectiveGroups[currentObjectiveGroup];
         }
         yield return new WaitForSeconds(0.025f);
@@ -247,10 +228,6 @@ public class OverworldState : MonoBehaviour,IInjectable
         {
             Debug.LogError("Story objective Asset: "+mainAssetName+" not found");
         }
-    }
-    public void LoadStoryObjective(StoryObjectiveSave objectiveSave)
-    {
-        _storyObjectiveGroups[objectiveSave.groupSection].Add(objectiveSave);
     }
     public void CheckForItemAtPosition(Vector2 interactionPosition)
     {
@@ -298,18 +275,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     
     public bool HasObjective(StoryObjective objectiveData)
     {
-        foreach (var pair in _storyObjectiveGroups)
-        {
-            var group = pair.Value;
-            foreach (var save in group)
-            {
-                if (save.mainAssetName == objectiveData.name)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return _cachedObjectives.ContainsKey(objectiveData.name);
     }
     
     public void ClearAndLoadNextObjective()
@@ -324,7 +290,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         if (_storyObjectiveGroups.Count > 0)
         {
             currentObjectiveGroup = _storyObjectiveGroups.First().Key;
-            FindMainStoryAsset(_container, _storyObjectiveGroups[currentObjectiveGroup][0].mainAssetName);
+            FindMainStoryAsset(_container, _storyObjectiveGroups[currentObjectiveGroup][0].name);
             currentStoryObjectives = _storyObjectiveGroups[currentObjectiveGroup];
         }
         else
@@ -350,22 +316,24 @@ public class OverworldState : MonoBehaviour,IInjectable
         _saveHandler.SaveDataAsJson(_loadedPickupRegistry,"Item pickup registry",SaveDataDirectory.OverworldItemPickupRegistry);
         yield return new WaitForSeconds(0.02f);
 
-        int objectiveIndex = 0;
+        int objectiveCount = 0;
         foreach (var pair in _storyObjectiveGroups)
         {
             var group = pair.Value;
-            foreach (var save in group)
-            {
-                save.indexInList = objectiveIndex;
-                save.groupSection = pair.Key;
-                _saveHandler.SaveDataAsJson(save,save.mainAssetName,SaveDataDirectory.StoryObjectives);
-                yield return new WaitForSeconds(0.025f);
-                objectiveIndex++;
-            }
+            objectiveCount += group.Count;
         }
-
-        storyProgress.allObjectivesComplete = objectiveIndex == 0;
+        
+        storyProgress.allObjectivesComplete = objectiveCount == 0;
+        
+        var fullSize =
+            storyObjectiveRegistry.storyObjectiveGroups
+                .First(group => group.section == currentObjectiveGroup).storyObjectives.Count;
+        var currentGroupCount = _storyObjectiveGroups[currentObjectiveGroup].Count;
+        
+        storyProgress.numRemainingInGroup = fullSize - currentGroupCount;
+        
         storyProgress.lastActiveGroup = currentObjectiveGroup;
+        
         _saveHandler.SaveDataAsJson(storyProgress,"Story Progress",SaveDataDirectory.StoryObjectiveProgress);
         
         yield return null;

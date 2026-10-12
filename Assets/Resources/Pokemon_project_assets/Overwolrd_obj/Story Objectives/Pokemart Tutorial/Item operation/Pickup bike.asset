@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 888591249c9dce0c8aa814792a20212e, type: 3}
+  m_Name: Pickup bike
+  m_EditorClassIdentifier: 
+  objectiveHeading: 
+  objectiveType: 10
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -17
+  itemToPickup: {fileID: 11400000, guid: 9609db42823e121c6af99578f3efe888, type: 2}

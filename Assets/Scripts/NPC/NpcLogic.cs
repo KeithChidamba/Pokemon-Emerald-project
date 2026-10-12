@@ -51,7 +51,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
     private void PauseForInteraction(Interaction interaction)
     {
         if(interaction.overworldInteraction!=OverworldInteractionType.Battle)return;
-        if(interaction!=npcInteractable.interaction)return;
+        if(interaction.GetID != npcInteractable.interaction.GetID) return;
         
         if (_longDistanceDetection)
         {

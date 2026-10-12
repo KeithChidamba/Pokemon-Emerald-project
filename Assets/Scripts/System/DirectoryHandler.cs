@@ -6,17 +6,16 @@ using UnityEngine;
 public enum AssetDirectory
 { 
     Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, ItemUI, Items
-    ,AdditionalInfo,BerryTreeData,PokeMartData,TrainerData,PokemonPartyImage,StoryObjectiveData
-    ,OverworldItemPickups,Tests,TestAssets,TestLogs
+    ,BerryTreeData,PokemonPartyImage, Tests,TestAssets,TestLogs
 }
 public enum SaveDataDirectory
 {
     Items, HeldItems, StorageItems, StoragePokemon, PartyPokemon, Player,
-    PCStorage, Overworld, StoryObjectives,StoryObjectiveProgress, BerryTrees,
+    PCStorage, Overworld, StoryObjectiveProgress, BerryTrees,
     GameSettings,OverworldItemPickupRegistry
 }
 
-public class DirectoryHandler
+public static class DirectoryHandler
 {
     private const string RootAssetDirectory = "Pokemon_project_assets/";
     
@@ -33,16 +32,12 @@ public class DirectoryHandler
         {AssetDirectory.UI,"UI/" },
         {AssetDirectory.ItemUI,"UI/Item_images/" },
         {AssetDirectory.Items,"Items/" },
-        {AssetDirectory.AdditionalInfo,"Items/AdditionalInfo/" },
         {AssetDirectory.BerryTreeData,"Overwolrd_obj/Interactions/Berry Trees/Berry Data/"},
-        {AssetDirectory.StoryObjectiveData,"Overwolrd_obj/Story Objectives/"},
-        {AssetDirectory.PokeMartData,"Overwolrd_obj/Poke_Mart_Data"},
-        {AssetDirectory.OverworldItemPickups,"Overwolrd_obj/Interactions/Overworld_Pickups"},
-        {AssetDirectory.TrainerData,"Enemies/Data/"},
-        { AssetDirectory.Tests,"Tests/"},
-        { AssetDirectory.TestLogs,"Tests/Logs/"},
+        {AssetDirectory.Tests,"Tests/"},
+        {AssetDirectory.TestLogs,"Tests/Logs/"},
         {AssetDirectory.TestAssets,"Tests/Assets/"}
     };
+    
     public static readonly Dictionary<SaveDataDirectory, string> SaveDataDirectories = new()
     {
         { SaveDataDirectory.Items, "/Items" },
@@ -53,8 +48,7 @@ public class DirectoryHandler
         { SaveDataDirectory.Player, "/Player" },
         { SaveDataDirectory.PCStorage, "/PC_Storage" },
         { SaveDataDirectory.Overworld, "/Overworld" },
-        { SaveDataDirectory.StoryObjectiveProgress,"/Overworld/Story_Objectives/Progress"},
-        { SaveDataDirectory.StoryObjectives, "/Overworld/Story_Objectives" },
+        { SaveDataDirectory.StoryObjectiveProgress,"/Overworld/Story_Objectives/"},
         { SaveDataDirectory.GameSettings,"/GameSettings"},
         { SaveDataDirectory.BerryTrees, "/Overworld/Berry_Trees" },
         { SaveDataDirectory.OverworldItemPickupRegistry,"/Overworld/Item_Pickups"}

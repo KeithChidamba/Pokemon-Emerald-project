@@ -513,7 +513,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             }
             else
             {
-                _dialogueHandler.DisplayBattleInfo(swap.participant.pokemonTrainerAI.trainerData.TrainerName
+                _dialogueHandler.DisplayBattleInfo(swap.participant.pokemonTrainerAI.trainerData.trainerName
                                                             +" withdrew "+swap.participant.pokemon.pokemonDisplayName);
             }
         }

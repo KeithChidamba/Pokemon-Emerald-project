@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class TrainerData : AdditionalInfoModule
 {
-    public string TrainerName;
+    public string trainerName;
     public TrainerType trainerType;
-    public int BaseMoneyPayout;
-    public AreaTransitionData TrainerLocationData;
+    public int baseMoneyPayout;
+    public AreaTransitionData trainerLocationData;
     public List<TrainerPokemonData> PokemonParty = new();
     public BattleType battleType;
     public List<AiFlags> trainerAiFlags = new();
@@ -28,5 +28,5 @@ public enum AiFlags
 
 public enum TrainerType
 {
-    RocketGrunt
+    None
 }

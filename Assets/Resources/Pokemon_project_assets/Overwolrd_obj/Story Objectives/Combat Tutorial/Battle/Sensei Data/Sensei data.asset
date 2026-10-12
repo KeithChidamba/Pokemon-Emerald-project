@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 725247cf13cf23248b7b0f1b93c618c0, type: 3}
+  m_Name: Sensei data
+  m_EditorClassIdentifier: 
+  trainerName: Sensei
+  trainerType: 0
+  baseMoneyPayout: 1
+  trainerLocationData: {fileID: 11400000, guid: b8be1bcdee331a853b4299901ae81e19, type: 2}
+  PokemonParty:
+  - {fileID: 11400000, guid: 6f47bd907e8d827bc87a52e4cf2beb3a, type: 2}
+  battleType: 0
+  trainerAiFlags: 000000000100000005000000
+  battleIntroSprite: {fileID: -1639878714, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
+  battleLossMessage: Impossible, How!
+  battleIntroMessage: This is what it means to be strong, now observe

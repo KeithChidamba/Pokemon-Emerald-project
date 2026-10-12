@@ -209,7 +209,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     {
         BeginMemberSwap(1);
     }
-    public void BeginMemberSwap(int memberIndex)
+    private void BeginMemberSwap(int memberIndex)
     {
         if (_battleHandler.BattleInProgress)
         {

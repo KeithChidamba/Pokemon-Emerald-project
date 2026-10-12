@@ -466,7 +466,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         enemy.AddToExpList(player.pokemon);
         //setup battle
         yield return SetValidParticipants();
-        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocationData.biome));
+        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.trainerLocationData.biome));
     }
 
     private IEnumerator StartSingleDoubleBattle(TrainerData trainerData) //1v1 double battle
@@ -517,7 +517,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         }
         //setup battle
         yield return SetValidParticipants();
-        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.TrainerLocationData.biome));
+        StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.trainerLocationData.biome));
         yield break;
         void SetupEnemies(BattleParticipant currentEnemy,BattleParticipant currentPlayerParticipant)
         {
@@ -557,7 +557,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         {
             if(displayMessage)
             {
-                _dialogueHandler.DisplayBattleInfo(participant.pokemonTrainerAI.trainerData.TrainerName
+                _dialogueHandler.DisplayBattleInfo(participant.pokemonTrainerAI.trainerData.trainerName
                                                    + " sent out " + newPokemon.pokemonDisplayName);
             }
             
@@ -868,9 +868,9 @@ public class BattleHandler : MonoBehaviour, IInjectable
                         var anyEnemy = GetParticipant(BattleParticipantKey.Player)
                             .currentEnemies[0].pokemonTrainerAI.trainerData;
                         
-                        var baseMoneyPayout = anyEnemy.BaseMoneyPayout;
+                        var baseMoneyPayout = anyEnemy.baseMoneyPayout;
                         
-                        _dialogueHandler.DisplayBattleInfo(playerName + " defeated " + anyEnemy.TrainerName);
+                        _dialogueHandler.DisplayBattleInfo(playerName + " defeated " + anyEnemy.trainerName);
                         
                         yield return _battleIntroHandler.ShowEnemiesAfterBattle();
                         _dialogueHandler.DisplayBattleInfo(anyEnemy.battleLossMessage);
@@ -893,7 +893,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
                     {
                         var enemy =  GetParticipant(BattleParticipantKey.Player).currentEnemies[0];
                         
-                        var baseMoneyPayout = enemy.pokemonTrainerAI.trainerData.BaseMoneyPayout;
+                        var baseMoneyPayout = enemy.pokemonTrainerAI.trainerData.baseMoneyPayout;
                         
                         var playersLastParticipant = currentParticipants.First(p => p.isActive & p.isPlayer);
                         

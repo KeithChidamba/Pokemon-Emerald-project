@@ -210,7 +210,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         {
             participantIntroImages[2].sprite = participants[2].pokemonTrainerAI.trainerData.battleIntroSprite; 
             participantIntroImages[2].gameObject.SetActive(true);
-            challengers.Add(participants[2].pokemonTrainerAI.trainerData.TrainerName);
+            challengers.Add(participants[2].pokemonTrainerAI.trainerData.trainerName);
             participantIntroImages[0].sprite = playerSprite;
             participantIntroImages[0].gameObject.SetActive(true);
         }
@@ -227,7 +227,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
                 else
                 {
                     participantIntroImages[i].sprite = participants[i].pokemonTrainerAI.trainerData.battleIntroSprite;
-                    challengers.Add(participants[i].pokemonTrainerAI.trainerData.TrainerName);
+                    challengers.Add(participants[i].pokemonTrainerAI.trainerData.trainerName);
                 }
             }
         }

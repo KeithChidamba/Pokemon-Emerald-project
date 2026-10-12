@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 2,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Sitrus berry",
+    "berryItem": {
+        "instanceID": 26102
+    },
+    "minutesPerStage": 90,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33264
+                },
+                {
+                    "instanceID": 33264
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33266
+                },
+                {
+                    "instanceID": 33268
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33270
+                },
+                {
+                    "instanceID": 33272
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33274
+                },
+                {
+                    "instanceID": 33276
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33278
+                },
+                {
+                    "instanceID": 33280
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 1,
+    "lastLogin": "2026-10-12T13:55:23.9234530+02:00"
+}

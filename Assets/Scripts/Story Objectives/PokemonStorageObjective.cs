@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 [CreateAssetMenu(fileName = "storage ui obj", menuName = "Objectives/storage ui objective")]
 public class PokemonStorageObjective : StoryObjective
@@ -8,16 +7,30 @@ public class PokemonStorageObjective : StoryObjective
     {
         WithdrawPokemonFromPC,DepositPokemonIntoPC
     }
+    
     [SerializeField] private StorageObjectiveType storageObjectiveType;
-    public Pokemon pokemonForObjective;
+    public bool spawnPokemonInPc;
+    public PokemonGiftInteractoinInfo pokemonForObjective;
     private PokemonStorageHandler _pokemonStorageHandler;
+    private PokemonOperations _pokemonOperationsHandler;
     
     protected override void OnObjectiveLoaded()
     {
         var dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
         dialogueHandler.DisplayObjectiveText(objectiveHeading);
         
-        _pokemonStorageHandler = serviceContainer.Resolve<PokemonStorageHandler>(); 
+        _pokemonStorageHandler = serviceContainer.Resolve<PokemonStorageHandler>();
+        _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
+        
+        if (spawnPokemonInPc)
+        {
+            _pokemonOperationsHandler.CreateSpecificPokemon(
+                _pokemonStorageHandler.AddPokemonToStorage
+                ,pokemonForObjective.giftPokemon
+                ,pokemonForObjective.pokemonLevel
+                ,pokemonForObjective.evolutionStageNumber);
+        }
+        
         switch(storageObjectiveType)
         {
             case StorageObjectiveType.WithdrawPokemonFromPC: WithdrawObjective(); break;
@@ -35,7 +48,7 @@ public class PokemonStorageObjective : StoryObjective
     }
     private void CheckForStorageObjectiveClear(Pokemon pokemon)
     {
-        if (pokemon.pokemonName == pokemonForObjective.pokemonName)
+        if (pokemon.pokemonName == pokemonForObjective.giftPokemon.pokemonName)
         {
             if(storageObjectiveType == StorageObjectiveType.WithdrawPokemonFromPC)
                 _pokemonStorageHandler.OnPokemonWithdraw -= CheckForStorageObjectiveClear;

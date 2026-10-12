@@ -150,10 +150,10 @@ public static class InstanceFactory
     public static TrainerData CreateTrainer(TrainerData data)
     {
         var trainerCopy = ScriptableObject.CreateInstance<TrainerData>();
-        trainerCopy.TrainerName = data.TrainerName;
+        trainerCopy.trainerName = data.trainerName;
         trainerCopy.trainerType = data.trainerType;        
-        trainerCopy.BaseMoneyPayout = data.BaseMoneyPayout;
-        trainerCopy.TrainerLocationData = data.TrainerLocationData;
+        trainerCopy.baseMoneyPayout = data.baseMoneyPayout;
+        trainerCopy.trainerLocationData = data.trainerLocationData;
         trainerCopy.battleIntroSprite = data.battleIntroSprite;
         trainerCopy.battleLossMessage = data.battleLossMessage;
         trainerCopy.trainerAiFlags = data.trainerAiFlags;

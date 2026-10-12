@@ -321,15 +321,6 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
                                                       + treeData.itemAssetName);
             _overworldStateHandler.StoreBerryTreeData(treeData);
         }
-        var storyObjectives = GetJsonFilesFromPath(_saveDataPath + DirectoryHandler.GetSaveDirectory(SaveDataDirectory.StoryObjectives));
-        foreach (var jsonFilePath in storyObjectives)
-        {
-            //do not change this
-            var rawJson = File.ReadAllText(jsonFilePath);
-            var save = new StoryObjectiveSave();
-            JsonUtility.FromJsonOverwrite(rawJson,save);
-            _overworldStateHandler.LoadStoryObjective(save);
-        }
         
         var storyProgressJson = GetJsonFilesFromPath(_saveDataPath + 
                                                    DirectoryHandler.GetSaveDirectory(SaveDataDirectory.StoryObjectiveProgress));
