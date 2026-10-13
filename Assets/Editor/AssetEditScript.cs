@@ -405,4 +405,82 @@ public class AssetEditScript : EditorWindow
             item.priceCurrency = ItemPriceCurrency.Money;
         }
     }
+        private const string ObjectivesDir =
+        "Assets/Resources/Pokemon_project_assets/Overwolrd_obj/";
+
+    // Both folders live inside ObjectivesDir (siblings of each other)
+    private const string OldFolder = ObjectivesDir + "Story Objectives previous";
+    private const string NewFolder = ObjectivesDir + "Story Objectives";
+ 
+    [MenuItem("Tools/NPC/Copy npcInteractionMessage From Previous Objectives")]
+    private static void MigrateInteractionMessages()
+    {
+        if (!AssetDatabase.IsValidFolder(OldFolder))
+        {
+            Debug.LogError($"Old folder not found: {OldFolder}");
+            return;
+        }
+ 
+        if (!AssetDatabase.IsValidFolder(NewFolder))
+        {
+            Debug.LogError($"New folder not found: {NewFolder}");
+            return;
+        }
+ 
+        // 1) Index old assets by filename (without extension)
+        var oldByName = new Dictionary<string, NpcStoryObjective>();
+        foreach (var guid in AssetDatabase.FindAssets("t:NpcStoryObjective", new[] { OldFolder }))
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            var asset = AssetDatabase.LoadAssetAtPath<NpcStoryObjective>(path);
+            if (asset == null) continue;
+ 
+            var key = Path.GetFileNameWithoutExtension(path);
+            if (oldByName.ContainsKey(key))
+            {
+                Debug.LogWarning($"Duplicate old objective name '{key}' at {path}. Keeping the first one found.");
+                continue;
+            }
+ 
+            oldByName.Add(key, asset);
+        }
+ 
+        // 2) Walk the new assets and copy across where filenames match
+        int migrated = 0, noMatch = 0, skipped = 0;
+ 
+        foreach (var guid in AssetDatabase.FindAssets("t:NpcStoryObjective", new[] { NewFolder }))
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            var newObjective = AssetDatabase.LoadAssetAtPath<NpcStoryObjective>(path);
+            if (newObjective == null) continue;
+ 
+            var key = Path.GetFileNameWithoutExtension(path);
+ 
+            if (!oldByName.TryGetValue(key, out var oldObjective))
+            {
+                Debug.LogWarning($"No matching old objective for '{key}' ({path})");
+                noMatch++;
+                continue;
+            }
+ 
+            if (oldObjective.npcData == null || newObjective.npcData == null)
+            {
+                Debug.LogWarning($"npcData is null on old or new objective '{key}', skipping.");
+                skipped++;
+                continue;
+            }
+ 
+            Undo.RecordObject(newObjective, "Migrate npcInteractionMessage");
+            newObjective.npcData.npcInteractionMessage = oldObjective.npcData.npcInteractionMessage;
+            EditorUtility.SetDirty(newObjective);
+            migrated++;
+        }
+ 
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+ 
+        Debug.Log($"npcInteractionMessage migration complete. Migrated: {migrated}, no match: {noMatch}, skipped: {skipped}");
+    }
+
 }
+

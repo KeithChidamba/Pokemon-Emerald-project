@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94b6633adc97ef929f385a1db57e01d, type: 3}
   m_Name: Sell Nugget
   m_EditorClassIdentifier: 
-  objectiveHeading: Go to the mart and sell your nugget to the lady
+  objectiveHeading: Go to the mart and sell your nugget.
   objectiveType: 5
   playerBoundary:
     isRestricting: 0

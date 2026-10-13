@@ -24,13 +24,16 @@ MonoBehaviour:
     - direction: 4
       limit: 19
   npcName: Keith
-  npcPosition: {x: 17, y: -24, z: 0}
-  npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}
-  npcSprites: {fileID: 11400000, guid: 9bea254fcb98118c4a5d93967d943c36, type: 2}
-  npcInteraction: {fileID: 11400000, guid: 1491180e274c01c83be490746b613417, type: 2}
-  npcInteractionMessage: Press [Use Equipped Item] when infront of water to start
-    fishing. You might fail a few times but keep going. Once you get a bite, press
-    Interact and the battle with start. Once inside the battle, open your bag->Pokeballs->Master
-    ball. Click on that master ball to catch the mudkip.
+  npcData:
+    npcPosition: {x: 17, y: -24, z: 0}
+    npcAnimationData:
+      spriteData: {fileID: 11400000, guid: 9bea254fcb98118c4a5d93967d943c36, type: 2}
+      movementDirections: []
+      isIdle: 0
+    npcInteraction: {fileID: 0}
+    npcInteractionMessage: Press [Use Equipped Item] when infront of water to start
+      fishing. You might fail a few times but keep going. Once you get a bite, press
+      Interact and the battle with start. Once inside the battle, open your bag->Pokeballs->Master
+      ball. Click on that master ball to catch the mudkip.
   removeAfterInteraction: 0
   facePlayer: 1

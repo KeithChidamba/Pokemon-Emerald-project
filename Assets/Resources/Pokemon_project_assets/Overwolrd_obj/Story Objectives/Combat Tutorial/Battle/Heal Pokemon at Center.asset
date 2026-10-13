@@ -18,5 +18,5 @@ MonoBehaviour:
     isRestricting: 1
     boundaries:
     - direction: 1
-      limit: -17
+      limit: -16
   interactionTypeForObjective: 5

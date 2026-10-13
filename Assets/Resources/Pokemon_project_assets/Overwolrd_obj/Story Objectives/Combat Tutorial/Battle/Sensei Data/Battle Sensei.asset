@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Battle Sensei
   m_EditorClassIdentifier: 
   dynamicInfoModules: []
-  interactionMessage: Ever got beat up because you didn't know how to fight? Don't
-    worry i can whip you into shape. Fear is the first thing to conquer.
+  interactionMessage: 
   dialogueType: 2
   isEventTrigger: 0
   interactionOptions: 01000000

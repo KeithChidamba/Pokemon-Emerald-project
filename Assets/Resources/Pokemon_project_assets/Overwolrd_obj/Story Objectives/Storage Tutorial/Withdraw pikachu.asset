@@ -15,8 +15,10 @@ MonoBehaviour:
   objectiveHeading: withdraw pikachu from pc
   objectiveType: 7
   playerBoundary:
-    isRestricting: 0
-    boundaries: []
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -16
   storageObjectiveType: 0
   spawnPokemonInPc: 1
   pokemonForObjective:

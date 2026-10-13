@@ -34,4 +34,4 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
   m_ColliderType: 1
-  areaTransitionData: {fileID: 11400000, guid: b8be1bcdee331a853b4299901ae81e19, type: 2}
+  areaData: {fileID: 11400000, guid: b8be1bcdee331a853b4299901ae81e19, type: 2}

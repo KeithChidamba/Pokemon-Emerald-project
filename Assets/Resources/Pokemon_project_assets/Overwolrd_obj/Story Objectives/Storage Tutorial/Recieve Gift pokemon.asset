@@ -18,15 +18,18 @@ MonoBehaviour:
     isRestricting: 1
     boundaries:
     - direction: 1
-      limit: -17
+      limit: -16
   npcName: Sensei
-  npcPosition: {x: 67, y: -14, z: 0}
-  npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}
-  npcSprites: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
-  npcInteraction: {fileID: 0}
-  npcInteractionMessage: As a reward for your bravery, i'll let you keep a pikachu
-    i caught a while back. To retrieve it, use the PC in the right corner. Start
-    it and navigate [Pokemon Storage->Withdraw pokemon] and navigate until you can
-    click on the pokemon in the box.
+  npcData:
+    npcPosition: {x: 67, y: -14, z: 0}
+    npcAnimationData:
+      spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+      movementDirections: []
+      isIdle: 0
+    npcInteraction: {fileID: 0}
+    npcInteractionMessage: As a reward for your bravery, i'll let you keep a pikachu
+      i caught a while back. To retrieve it, use the PC in the right corner. Start
+      it and navigate [Pokemon Storage->Withdraw pokemon] and navigate until you
+      can click on the pokemon in the box.
   removeAfterInteraction: 0
   facePlayer: 1

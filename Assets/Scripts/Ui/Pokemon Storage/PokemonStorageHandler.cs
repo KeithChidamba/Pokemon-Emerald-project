@@ -619,6 +619,7 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
     {
         boxDepositText.text = $"BOX {boxIndex+1}\n"+storageBoxes[boxIndex].currentNumPokemon + "/" + BoxCapacity;
     }
+
     private void SendToPC(int boxNumber,PcPartyPokemon partyPokemon)
     {
         var selectedBox = storageBoxes[boxNumber-1];
@@ -633,14 +634,21 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
             numNonPartyPokemon++;
             
             selectedBox.currentNumPokemon++;
-            selectedBox.boxPokemon[selectedBox.currentNumPokemon-1] = new StorageBoxPokemon
+            for(int i =0;i < BoxCapacity;i++)
             {
-                pokemonID = partyPokemon.pokemon.pokemonID.ToString()
-                ,containsPokemon = true
-            };
+                if(selectedBox.boxPokemon[i].containsPokemon)continue;
+                //fill at nearest possible position
+                selectedBox.boxPokemon[i] = new StorageBoxPokemon
+                {
+                    pokemonID = partyPokemon.pokemon.pokemonID.ToString()
+                    ,containsPokemon = true
+                };
+                break;
+            }
             RemovePokemonIcons(true); 
             OpenPC(PCUsageState.Deposit);
         }
+        else _dialogueHandler.DisplayDetails("That box is full");
     }
     
     private void StartMovingOperation()
@@ -723,6 +731,25 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
        nonPartyPokemon.Add(newPokemon);
        numNonPartyPokemon++;
        totalPokemonCount++;
+    
+       //will always return at least 1 box, storage will never be allowed to fill up
+       var selectedBox = storageBoxes.First(box=>box.currentNumPokemon < BoxCapacity);
+       if (selectedBox.currentNumPokemon < BoxCapacity)
+       {
+           OnPokemonDeposit?.Invoke(newPokemon);
+           selectedBox.currentNumPokemon++;
+           for(int i =0;i < BoxCapacity;i++)
+           {
+               if(selectedBox.boxPokemon[i].containsPokemon)continue;
+               //fill at nearest possible position
+               selectedBox.boxPokemon[i] = new StorageBoxPokemon
+               {
+                   pokemonID = newPokemon.pokemonID.ToString()
+                   ,containsPokemon = true
+               };
+               break;
+           }
+       }
     }
 }
 

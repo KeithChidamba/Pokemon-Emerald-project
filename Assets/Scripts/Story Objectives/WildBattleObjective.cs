@@ -60,7 +60,7 @@ public class WildBattleObjective : StoryObjective
         }
         if (battleEncounterSource == encounterSourceForObjective)
         {
-            _battleHandler.OnBattleResult += CheckIfWin;
+            _battleHandler.OnWildBattleResult += CheckIfWin;
         }
     }
 
@@ -68,7 +68,7 @@ public class WildBattleObjective : StoryObjective
     {
         if (!hasWon) return;
         _encounterHandler.OnEncounterTriggered -= CheckEncounter;
-        _battleHandler.OnBattleResult -= CheckIfWin;
+        _battleHandler.OnWildBattleResult -= CheckIfWin;
         ClearObjective();
     }
     protected override void OnObjectiveCleared()

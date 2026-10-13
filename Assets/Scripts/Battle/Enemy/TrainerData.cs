@@ -7,7 +7,7 @@ public class TrainerData : AdditionalInfoModule
     public string trainerName;
     public TrainerType trainerType;
     public int baseMoneyPayout;
-    public AreaTransitionData trainerLocationData;
+    public AreaData trainerLocationData;
     public List<TrainerPokemonData> PokemonParty = new();
     public BattleType battleType;
     public List<AiFlags> trainerAiFlags = new();

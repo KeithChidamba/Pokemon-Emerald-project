@@ -6,7 +6,7 @@ using UnityEngine;
 public enum AssetDirectory
 { 
     Status, Moves, Abilities, Types, Natures, Pokemon, PokemonImage, UI, ItemUI, Items
-    ,BerryTreeData,PokemonPartyImage, Tests,TestAssets,TestLogs
+    ,BerryTreeData,PokemonPartyImage, Tests,TestAssets,TestLogs,Areas
 }
 public enum SaveDataDirectory
 {
@@ -33,6 +33,7 @@ public static class DirectoryHandler
         {AssetDirectory.ItemUI,"UI/Item_images/" },
         {AssetDirectory.Items,"Items/" },
         {AssetDirectory.BerryTreeData,"Overwolrd_obj/Interactions/Berry Trees/Berry Data/"},
+        {AssetDirectory.Areas,"Overwolrd_obj/Areas/"},
         {AssetDirectory.Tests,"Tests/"},
         {AssetDirectory.TestLogs,"Tests/Logs/"},
         {AssetDirectory.TestAssets,"Tests/Assets/"}

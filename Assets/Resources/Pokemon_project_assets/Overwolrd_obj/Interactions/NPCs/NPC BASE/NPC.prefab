@@ -271,7 +271,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d724bea1513171a29c6413e3b6fcaf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationData: {fileID: 11400000, guid: 6c7a7e61e02f63bb18a8cd60b0aa2b7c, type: 2}
+  animationData:
+    spriteData: {fileID: 11400000, guid: 903dc3fb71c92d3d3b1bd0e1962fca8d, type: 2}
+    movementDirections:
+    - direction: 3
+      numTilesToTravel: 1
+    - direction: 4
+      numTilesToTravel: 1
+    isIdle: 0
   rayCastPoint: {fileID: 1812086111840112092}
   movePoint: {fileID: 7003710654981526514}
   movementSpeed: 2
@@ -376,13 +383,13 @@ SpriteMask:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_MaskAlphaCutoff: 0.1
+  m_MaskAlphaCutoff: 1
   m_FrontSortingLayerID: 914418801
   m_BackSortingLayerID: 120089069
   m_FrontSortingLayer: 2
   m_BackSortingLayer: 1
-  m_FrontSortingOrder: 6
-  m_BackSortingOrder: 4
+  m_FrontSortingOrder: 9
+  m_BackSortingOrder: 8
   m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 1
 --- !u!1 &5627494518572133874
@@ -521,7 +528,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 914418801
   m_SortingLayer: 2
-  m_SortingOrder: 6
+  m_SortingOrder: 9
   m_Sprite: {fileID: 874044496, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

@@ -9,8 +9,10 @@ public enum AreaName
 public class AreaManager : MonoBehaviour,IInjectable
 {
     public AreaData currentArea;
-    public AreaData[] overworldAreas;
+    public List<AreaData> overworldAreas = new();
     public Transform storyNpcParent;
+    public Transform overworldNpcParent;
+    public GameObject npcPrefab;
     
     private GameLoadingHandler _gameLoadingHandler;
     private PlayerMovementHandler _playerMovementHandler;
@@ -23,28 +25,32 @@ public class AreaManager : MonoBehaviour,IInjectable
 
     public void OnInject()
     {
-        
+        gameObject.SetActive(true);
+        overworldAreas.Clear();
+        var areas =  Resources.LoadAll<AreaData>(DirectoryHandler.GetDirectory(AssetDirectory.Areas));
+        overworldAreas.AddRange(areas);
     }
+    
     public void TeleportToArea(AreaName areaName)
     {
         SwitchToArea(areaName);
-        _playerMovementHandler.SetPlayerPosition(currentArea.locationData.entranceCell);
+        _playerMovementHandler.SetPlayerPosition(currentArea.entranceCell);
     }
     public void SwitchToArea(AreaName areaName)
     {
-        var area = overworldAreas.First(a=>a.locationData.areaName == areaName);
+        var area = overworldAreas.First(a=>a.areaName == areaName);
         SetArea(area);
     }
     private void SetArea(AreaData newArea)
     {
-        currentArea.UnloadNpcObjects();
+        currentArea?.UnloadNpcObjects();
         currentArea = newArea;
-        currentArea.LoadNpcObjects();
-        _gameLoadingHandler.playerData.location = currentArea.locationData.areaName;
-        DetermineSongForArea(currentArea.locationData.areaName);
+        currentArea.LoadNpcObjects(npcPrefab,overworldNpcParent);
+        _gameLoadingHandler.playerData.location = currentArea.areaName;
+        DetermineSongForArea(currentArea.areaName);
     }
 
-    public static void DetermineSongForArea(AreaName areaName)
+    private static void DetermineSongForArea(AreaName areaName)
     {
         var choice = areaName switch
         {

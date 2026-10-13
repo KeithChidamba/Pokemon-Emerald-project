@@ -1,0 +1,25 @@
+{
+    "dynamicInfoModules": [],
+    "itemID": "Wailmer Pail54248",
+    "itemName": "Wailmer Pail",
+    "itemType": 15,
+    "itemDescription": "A wailmer shaped watering tin",
+    "itemImage": {
+        "instanceID": 25560
+    },
+    "quantity": 1,
+    "forPartyUse": false,
+    "canBeUsedInOverworld": false,
+    "canBeUsedInBattle": false,
+    "isHeldItem": false,
+    "canBeHeld": false,
+    "buyPrice": 0,
+    "canBeSold": false,
+    "sellPrice": 0,
+    "priceCurrency": 1,
+    "imageDirectory": "Wailmer Pail",
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
+}

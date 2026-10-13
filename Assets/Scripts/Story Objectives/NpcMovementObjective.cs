@@ -1,23 +1,26 @@
-
 using System.Collections.Generic;
 using UnityEngine;
+
 [CreateAssetMenu(fileName = "npc obj", menuName = "Objectives/Npc Movement objective")]
 public class NpcMovementObjective : NpcStoryObjective
 {
    public List<NpcMovementDirection> movementDirections = new ();
    public int npcSpeed = 2;
-   private PlayerMovementHandler _playerMovementHandler;
    public float pauseDelay = 1f;
    public bool waitForPlayer;
    
+   private DialogueHandler _dialogueHandler;
+   private PlayerMovementHandler _playerMovementHandler;
+   private AreaManager _areaManager;
+   
    protected override void OnObjectiveLoaded()
    {
-      dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
-      areaManager = serviceContainer.Resolve<AreaManager>();
+      _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
       _playerMovementHandler = serviceContainer.Resolve<PlayerMovementHandler>();
+      _areaManager = serviceContainer.Resolve<AreaManager>(); 
       
-      dialogueHandler.DisplayObjectiveText(objectiveHeading);
-      SetupNpc();
+      _dialogueHandler.DisplayObjectiveText(objectiveHeading);
+      SetupNpc(_areaManager);
       HandleMovement();
    }
    private void HandleMovement()

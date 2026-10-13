@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a72a23789ab2c769c92c8555b1fc1298, type: 3}
   m_Name: Take a gift pokemon
   m_EditorClassIdentifier: 
-  mainAssetName: Take a gift pokemon
   objectiveHeading: Take a pokemon from the table
-  hasProgression: 0
-  indexInList: 0
   objectiveType: 9
   playerBoundary:
     isRestricting: 1
@@ -24,3 +21,21 @@ MonoBehaviour:
       limit: -24
     - direction: 4
       limit: 2
+  propsForObjective:
+  - propPosition: {x: -12, y: -21, z: 0}
+    propObject: {fileID: 0}
+    propState: 0
+  - propPosition: {x: -11, y: -21, z: 0}
+    propObject: {fileID: 0}
+    propState: 0
+  - propPosition: {x: -10, y: -21, z: 0}
+    propObject: {fileID: 0}
+    propState: 0
+  propPrefab: {fileID: 2521020586117318579, guid: 6db4897e6df66d2feaa86c116769fc78, type: 3}
+  newLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  giftInteractions:
+  - {fileID: 11400000, guid: 2a9ae13e99aacc8468b5be2037e26cea, type: 2}
+  - {fileID: 11400000, guid: b83ef4859091b106492b211ad33c9c9f, type: 2}
+  - {fileID: 11400000, guid: 93b8a216bf633484e840ed8ff4c72e87, type: 2}

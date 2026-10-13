@@ -1,0 +1,55 @@
+{
+    "dynamicInfoModules": [
+        {
+            "rid": 1000
+        },
+        {
+            "rid": 1001
+        }
+    ],
+    "itemID": "Oran berry41256",
+    "itemName": "Oran berry",
+    "itemType": 9,
+    "itemDescription": "Heals 5hp",
+    "itemImage": {
+        "instanceID": 27842
+    },
+    "quantity": 1,
+    "forPartyUse": true,
+    "canBeUsedInOverworld": true,
+    "canBeUsedInBattle": true,
+    "isHeldItem": false,
+    "canBeHeld": true,
+    "buyPrice": 0,
+    "canBeSold": false,
+    "sellPrice": 0,
+    "priceCurrency": 1,
+    "imageDirectory": "Oran berry",
+    "references": {
+        "version": 2,
+        "RefIds": [
+            {
+                "rid": 1000,
+                "type": {
+                    "class": "BerryInfoModule",
+                    "ns": "",
+                    "asm": "Assembly-CSharp"
+                },
+                "data": {
+                    "berryType": 1
+                }
+            },
+            {
+                "rid": 1001,
+                "type": {
+                    "class": "EffectValueInfo",
+                    "ns": "",
+                    "asm": "Assembly-CSharp"
+                },
+                "data": {
+                    "effectValue": 5.0
+                }
+            }
+        ]
+    }
+}

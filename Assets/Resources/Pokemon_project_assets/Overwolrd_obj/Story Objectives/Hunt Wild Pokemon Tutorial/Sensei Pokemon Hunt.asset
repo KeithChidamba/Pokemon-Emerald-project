@@ -20,11 +20,14 @@ MonoBehaviour:
     - direction: 1
       limit: -71
   npcName: Sensei
-  npcPosition: {x: 50, y: -69, z: 0}
-  npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}
-  npcSprites: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
-  npcInteraction: {fileID: 0}
-  npcInteractionMessage: Your raichu look strong good job. Ok now we are set to setup
-    your first pokemon fight in the tall grass. Ride your bike back to garden
+  npcData:
+    npcPosition: {x: 50, y: -69, z: 0}
+    npcAnimationData:
+      spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+      movementDirections: []
+      isIdle: 0
+    npcInteraction: {fileID: 0}
+    npcInteractionMessage: Your raichu look strong good job. Ok now we are set to
+      setup your first pokemon fight in the tall grass. Ride your bike back to garden
   removeAfterInteraction: 0
   facePlayer: 1

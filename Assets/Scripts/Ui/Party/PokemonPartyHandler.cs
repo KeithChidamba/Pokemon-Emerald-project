@@ -164,6 +164,13 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     }
     public bool IsValidSwap(int memberIndex,BattleParticipantKey participantKey,bool swappingIn,bool canDisplayMessage=true)
     {
+        if (party[memberIndex].hp <= 0)
+        {
+            _dialogueHandler.DisplayDetails(party[memberIndex].pokemonDisplayName +
+                                            " has fainted");
+            return false;
+        }
+        
         if (_turnBasedCombatHandler.ContainsSwitch(memberIndex,true))
         {
             if(canDisplayMessage)
@@ -385,7 +392,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     }
     public void AddTestMember(Pokemon newPokemon)
     {
-        newPokemon.pokeballName = "Pokeball"; 
+        newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball); 
         newPokemon.hasTrainer = true;
         Debug.Log($"added test {newPokemon.pokemonName}");
         CompletePokemonAddition(newPokemon);
@@ -405,7 +412,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         void GetNewMember(Pokemon newPokemon)
         {
             newPokemon.hasTrainer = true;
-            newPokemon.pokeballName = "Pokeball"; 
+            newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball); 
             newPokemon.ChangeFriendshipLevel(120);
             newPokemon.captureInformation.levelCaptured = newPokemon.currentLevel;
             newPokemon.captureInformation.areaName = AreaManager.GetAreaName(_gameLoadingHandler.playerData.location);

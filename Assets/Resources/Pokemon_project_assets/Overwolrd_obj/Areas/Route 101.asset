@@ -15,3 +15,4 @@ MonoBehaviour:
   areaName: 4
   entranceCell: {x: 64, y: -44, z: 0}
   biome: 6
+  npcList: []

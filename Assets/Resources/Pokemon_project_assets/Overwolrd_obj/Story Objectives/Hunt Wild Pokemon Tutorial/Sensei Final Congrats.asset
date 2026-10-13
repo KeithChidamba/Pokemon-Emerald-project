@@ -26,12 +26,15 @@ MonoBehaviour:
     - direction: 4
       limit: 42
   npcName: Sensei
-  npcPosition: {x: 38, y: -43, z: 0}
-  npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}
-  npcSprites: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
-  npcInteraction: {fileID: 0}
-  npcInteractionMessage: Wow, even in this short amount of time, you've grown so
-    much. This concludes my teachings. Explore more if you like, there might be special
-    happening down south.
+  npcData:
+    npcPosition: {x: 38, y: -43, z: 0}
+    npcAnimationData:
+      spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+      movementDirections: []
+      isIdle: 0
+    npcInteraction: {fileID: 0}
+    npcInteractionMessage: Wow, even in this short amount of time, you've grown so
+      much. This concludes my teachings. Explore more if you like, there might be
+      special happening down south.
   removeAfterInteraction: 0
   facePlayer: 1

@@ -1,15 +1,16 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class AreaData
+[CreateAssetMenu(menuName = "Overworld/Area Transition Data")]
+public class AreaData : ScriptableObject
 {
-    public AreaTransitionData locationData;
-    public List<GameObject> npcList = new();
-    private List<NpcLogic> npcLogicScripts = new();
+    public AreaName areaName;
+    public Vector3 entranceCell;
+    public Biome biome;
+    public List<NpcCreationData> npcList = new();
+    [SerializeField]private List<NpcLogic> npcLogicScripts = new();
     
-    public void LoadNpcObjects()
+    public void LoadNpcObjects(GameObject npcPrefab,Transform storyNpcParent)
     {
         if(npcList.Count == 0)
         {
@@ -17,23 +18,35 @@ public class AreaData
         }
         foreach (var npc in npcList)
         {
-            npc.SetActive(true);
-            var npcLogic = npc.GetComponentInChildren<NpcLogic>();
+            var npcInstance = Instantiate(npcPrefab, npc.npcPosition,npcPrefab.transform.rotation,storyNpcParent);
+            var npcLogic = npcInstance.GetComponentInChildren<NpcLogic>();
             npcLogicScripts.Add(npcLogic);
+            npcLogic.movementHandler.animationData = npc.npcAnimationData;
+            if (npc.npcInteraction is null)
+            {
+                var newInteraction = CreateInstance<Interaction>();
+                newInteraction.dialogueType = DialogType.Details;
+                newInteraction.interactionMessage =  npc.npcInteractionMessage;
+                npcLogic.npcInteractable.interaction = newInteraction;
+            }
+            else
+            {
+                npcLogic.npcInteractable.interaction = npc.npcInteraction;
+            }
+            npcInstance.SetActive(true);
         }
     }
-    
     public void UnloadNpcObjects()
     {
         if(npcList.Count == 0)
         {
             return;
         }
-        npcLogicScripts.Clear();
-        foreach (var npc in npcList)
+        foreach (var npc in npcLogicScripts)
         {
-            npc.SetActive(false);
+            Destroy(npc.gameObject);
         }
+        npcLogicScripts.Clear();
     }
     public OverworldInteractable CheckForNpcPosition(Vector3 positionToCheck)
     {

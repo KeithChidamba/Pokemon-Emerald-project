@@ -24,10 +24,13 @@ MonoBehaviour:
     - direction: 3
       limit: 21
   npcName: Sensei
-  npcPosition: {x: 24, y: -39, z: 0}
-  npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}
-  npcSprites: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
-  npcInteraction: {fileID: 11400000, guid: ddb85caf72dea1e4882d8b00cb2adbd6, type: 2}
-  npcInteractionMessage: 
+  npcData:
+    npcPosition: {x: 24, y: -39, z: 0}
+    npcAnimationData:
+      spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+      movementDirections: []
+      isIdle: 0
+    npcInteraction: {fileID: 11400000, guid: ddb85caf72dea1e4882d8b00cb2adbd6, type: 2}
+    npcInteractionMessage: 
   removeAfterInteraction: 0
   facePlayer: 1

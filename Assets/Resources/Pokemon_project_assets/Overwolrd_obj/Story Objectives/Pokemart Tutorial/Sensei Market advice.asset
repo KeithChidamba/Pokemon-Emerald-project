@@ -18,13 +18,16 @@ MonoBehaviour:
     isRestricting: 1
     boundaries:
     - direction: 1
-      limit: -17
+      limit: -16
   npcName: Sensei
-  npcPosition: {x: 67, y: -14, z: 0}
-  npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}
-  npcSprites: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
-  npcInteraction: {fileID: 0}
-  npcInteractionMessage: Cool, take this gold nugget as well. It's really valuable
-    and can be sold at the market. Speak to the lady on the left to sell something.
+  npcData:
+    npcPosition: {x: 67, y: -14, z: 0}
+    npcAnimationData:
+      spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+      movementDirections: []
+      isIdle: 0
+    npcInteraction: {fileID: 0}
+    npcInteractionMessage: Cool, take this gold nugget as well. It's really valuable
+      and can be sold at the market. Speak to the lady on the left to sell something.
   removeAfterInteraction: 0
   facePlayer: 1

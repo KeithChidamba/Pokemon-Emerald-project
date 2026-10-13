@@ -461,7 +461,7 @@ public class SaveDataHandler : MonoBehaviour,IInjectable
             var player = _gameLoadingHandler.playerData;
             if(player is null) throw new Exception("player data is null! ");
             _gameLoadingHandler.playerData.playerPosition = _playerMovementHandler.GetPlayerPosition();
-            _gameLoadingHandler.playerData.location = _areaHandler.currentArea.locationData.areaName;
+            _gameLoadingHandler.playerData.location = _areaHandler.currentArea.areaName;
             
             SaveDataAsJson(player, player.trainerID.ToString(),SaveDataDirectory.Player);
         }

@@ -81,11 +81,17 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     }
     private void Update()
     {
-        if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu) && _inputStateHandler.IsEmptyState && canOpenMenu &&!viewingMenu)
+        if (InputSourceHandler.InputPressed(ControlEvent.OpenMenu))
         {
-            AddScreen();
-            viewingMenu = true;
-            ActivateMenuSelection();
+            if (canOpenMenu)
+            {
+                if(_inputStateHandler.IsEmptyState && !viewingMenu)
+                {
+                    AddScreen();
+                    viewingMenu = true;
+                    ActivateMenuSelection();
+                }
+            }else _dialogueHandler.DisplayDetails("Can't open Menu during this event");
         }
         if (InputSourceHandler.InputPressed(ControlEvent.ViewControls) && _inputStateHandler.IsEmptyState)
         {

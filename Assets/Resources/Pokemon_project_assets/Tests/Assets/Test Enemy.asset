@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725247cf13cf23248b7b0f1b93c618c0, type: 3}
   m_Name: Test Enemy
   m_EditorClassIdentifier: 
-  TrainerName: Test Grunt Held Item
+  trainerName: 
   trainerType: 0
-  BaseMoneyPayout: 1
-  TrainerLocationData: {fileID: 11400000, guid: 7313abad95799272cbf6b7ccdd21a708, type: 2}
+  baseMoneyPayout: 0
+  trainerLocationData: {fileID: 11400000, guid: 7313abad95799272cbf6b7ccdd21a708, type: 2}
   PokemonParty:
   - {fileID: 11400000, guid: 71c498e201168dc69a8e1e9cf94329b9, type: 2}
   battleType: 0

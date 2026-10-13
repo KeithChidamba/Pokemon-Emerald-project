@@ -1,9 +1,45 @@
+using System.Collections.Generic;
+using UnityEngine;
 
-public class PropBasedObjective : StoryObjective
+public abstract class PropBasedObjective : StoryObjective
 {
-    protected ObjectiveObjectHandler objectiveObjectHandler;
-    public void Inject(ObjectiveObjectHandler objectHandler)
+    public List<PropStateAfterObjective> propsForObjective = new();
+    public GameObject propPrefab;
+    public LayerMask newLayer;
+
+    protected virtual void OnPropsCreated() { }
+    
+    protected void LoadObjects(OverworldState overworldStateHandler)
     {
-        objectiveObjectHandler = objectHandler;
+        foreach (var prop in propsForObjective)
+        { 
+            prop.propObject 
+                = Instantiate(propPrefab, prop.propPosition, 
+                    propPrefab.transform.rotation,overworldStateHandler.overworldPickupParent);
+            prop.propObject.SetActive(true);
+        }
+        OnPropsCreated();
+    }
+    
+    protected void UnLoadObjects()
+    {
+        foreach (var prop in propsForObjective)
+        {
+            switch (prop.propState)
+            {
+                case propState.InActive:
+                    prop.propObject.SetActive(false);
+                    break;
+                case propState.InAccessible:
+                    prop.propObject.layer = newLayer;
+                    break;
+                case propState.Destroyed:
+                    Destroy(prop.propObject);
+                    break;
+                default:
+                    prop.propObject.SetActive(false);
+                    break;
+            }
+        }
     }
 }

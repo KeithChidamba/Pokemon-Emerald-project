@@ -17,7 +17,7 @@ public class OverworldState : MonoBehaviour,IInjectable
     private OverworldPickupRegistry _loadedPickupRegistry;
     private OverworldPickupRegistry _objectivePickupRegistry;
     [SerializeField] private GameObject overworldPickupPrefab;
-    [SerializeField] private Transform overworldPickupParent;
+    public Transform overworldPickupParent;
     public event Action<Item> OnItemPickedUp;
 
     [SerializeField] private StoryObjectiveRegistry storyObjectiveRegistry;

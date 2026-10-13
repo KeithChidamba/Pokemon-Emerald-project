@@ -69,13 +69,15 @@ public class BattleHandler : MonoBehaviour, IInjectable
     private PlayerTurnUsage _previousTurnUsage;
     
     public event Action OnBattleStarted;
+    
     /// <summary>
     /// Used when checking the state of a specific participant after fainting
     /// </summary>
     public event Action<BattleParticipant> OnFaintSequenceComplete;
     public event Action OnBattleEnd;
 
-    public event Action<bool> OnBattleResult;
+    public event Action<bool,List<TrainerData>> OnTrainerBattleResult;
+    public event Action<bool> OnWildBattleResult;
     public event Action OnSwitchIn;
     public event Action<BattleParticipant> OnSwitchOut;
     public event Action<BattleParticipantKey> OnEnemySelected;
@@ -964,6 +966,17 @@ public class BattleHandler : MonoBehaviour, IInjectable
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
         
+        if(isTrainerBattle)
+        {
+            OnTrainerBattleResult?.Invoke(battleEndState == BattleEndState.PlayerWon,
+                currentParticipants.Where(p=>!p.isPlayer && p.activeForBattle)
+                    .Select(p=>p.pokemonTrainerAI.trainerData).ToList());
+        }
+        else
+        {
+            OnWildBattleResult?.Invoke(battleEndState == BattleEndState.PlayerWon);
+        }
+        
         foreach (var participant in currentParticipants)
         {
             participant.ResetImagePosition();
@@ -985,7 +998,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         }
         
         _battleIntroHandler.ResetParticipantIntroImages();
-        OnBattleResult?.Invoke(battleEndState == BattleEndState.PlayerWon);
+      
         SoundManager.PopMusicWhenFinished(); 
         
         overWorld.SetActive(true);

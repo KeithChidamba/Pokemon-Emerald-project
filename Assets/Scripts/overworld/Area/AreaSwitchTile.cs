@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(menuName = "Tiles/Area switch Tile")]
 public class AreaSwitchTile : Tile
 {
-    public AreaTransitionData areaTransitionData;
+    public AreaData areaData;
 }

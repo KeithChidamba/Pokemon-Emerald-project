@@ -278,7 +278,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public void SetupSwitchOut(PartyUsage usage = PartyUsage.SwapOut)
     {
         _pokemonPartyHandler.selectedMemberIndex = (int)participantKey;
-        
+        _dialogueHandler.EndDialogue();
         _pokemonPartyHandler.OnMemberSelected += StartPokemonPartySwap; 
         _gameUIHandler.ViewPokemonParty(usage);
         ResetParticipantState();

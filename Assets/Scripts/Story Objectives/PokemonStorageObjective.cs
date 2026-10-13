@@ -11,8 +11,11 @@ public class PokemonStorageObjective : StoryObjective
     [SerializeField] private StorageObjectiveType storageObjectiveType;
     public bool spawnPokemonInPc;
     public PokemonGiftInteractoinInfo pokemonForObjective;
+   
     private PokemonStorageHandler _pokemonStorageHandler;
     private PokemonOperations _pokemonOperationsHandler;
+    private GameUiHandler _gameUiHandler;
+    private GameLoadingHandler _gameLoadingHandler;
     
     protected override void OnObjectiveLoaded()
     {
@@ -21,14 +24,25 @@ public class PokemonStorageObjective : StoryObjective
         
         _pokemonStorageHandler = serviceContainer.Resolve<PokemonStorageHandler>();
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
+        _gameUiHandler = serviceContainer.Resolve<GameUiHandler>();
+        _gameLoadingHandler = serviceContainer.Resolve<GameLoadingHandler>();
         
         if (spawnPokemonInPc)
         {
+            _gameUiHandler.SetMenuAccessibility(false); 
             _pokemonOperationsHandler.CreateSpecificPokemon(
-                _pokemonStorageHandler.AddPokemonToStorage
-                ,pokemonForObjective.giftPokemon
-                ,pokemonForObjective.pokemonLevel
-                ,pokemonForObjective.evolutionStageNumber);
+            newPokemon =>
+            {
+                newPokemon.hasTrainer = true;
+                newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball); 
+                newPokemon.ChangeFriendshipLevel(120);
+                newPokemon.captureInformation.levelCaptured = newPokemon.currentLevel;
+                newPokemon.captureInformation.areaName = AreaManager.GetAreaName(_gameLoadingHandler.playerData.location);
+                _pokemonStorageHandler.AddPokemonToStorage(newPokemon);
+            }
+            ,pokemonForObjective.giftPokemon
+            ,pokemonForObjective.pokemonLevel
+            ,pokemonForObjective.evolutionStageNumber);
         }
         
         switch(storageObjectiveType)
@@ -59,6 +73,11 @@ public class PokemonStorageObjective : StoryObjective
     
     protected override void OnObjectiveCleared()
     {
+        if (spawnPokemonInPc)
+        {
+            _gameUiHandler.SetMenuAccessibility(true);
+        }
+        
         var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
         overworldStateHandler.ClearAndLoadNextObjective();
     }
