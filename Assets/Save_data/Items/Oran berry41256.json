@@ -12,7 +12,7 @@
     "itemType": 9,
     "itemDescription": "Heals 5hp",
     "itemImage": {
-        "instanceID": 27842
+        "instanceID": 27840
     },
     "quantity": 1,
     "forPartyUse": true,

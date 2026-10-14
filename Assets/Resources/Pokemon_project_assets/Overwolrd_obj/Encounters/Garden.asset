@@ -16,14 +16,14 @@ MonoBehaviour:
   data:
     availableEncounters:
     - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
-      encounterChance: 20
+      encounterChance: 25
       evolutionFormNumber: 0
     - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
-      encounterChance: 50
+      encounterChance: 55
       evolutionFormNumber: 0
     - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
-      encounterChance: 30
+      encounterChance: 35
       evolutionFormNumber: 0
-    minimumLevelOfPokemon: 2
+    minimumLevelOfPokemon: 4
     maximumLevelOfPokemon: 14
   encounterChance: 25

@@ -124,9 +124,9 @@
     ],
     "currentNumPokemon": 0,
     "boxTopVisual": {
-        "instanceID": 32780
+        "instanceID": 32754
     },
     "boxVisual": {
-        "instanceID": 32806
+        "instanceID": 32780
     }
 }

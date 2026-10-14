@@ -115,12 +115,11 @@ public class GameSettingsHandler : MonoBehaviour,IInjectable
         _settingsMethods[data.settingName].Invoke(data.currentIndex);
     }
 
-    public IEnumerator SaveSettings()
+    public void SaveSettings()
     {
         foreach (var config in settingConfigs)
         {
             _saveDataHandler.SaveDataAsJson(config,config.settingName.ToString(),SaveDataDirectory.GameSettings);
         }
-        yield return null;
     }
 }

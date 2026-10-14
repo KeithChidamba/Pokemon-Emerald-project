@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 1,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Hondew berry",
+    "berryItem": {
+        "instanceID": 26312
+    },
+    "minutesPerStage": 180,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33204
+                },
+                {
+                    "instanceID": 33204
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33206
+                },
+                {
+                    "instanceID": 33208
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33270
+                },
+                {
+                    "instanceID": 33272
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33274
+                },
+                {
+                    "instanceID": 33276
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33278
+                },
+                {
+                    "instanceID": 33280
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 4,
+    "lastLogin": "2026-10-14T16:37:43.3581630+02:00"
+}

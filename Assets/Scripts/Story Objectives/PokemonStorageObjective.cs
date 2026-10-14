@@ -33,6 +33,7 @@ public class PokemonStorageObjective : StoryObjective
             _pokemonOperationsHandler.CreateSpecificPokemon(
             newPokemon =>
             {
+                PokemonOperations.ResolvePokemonNickName(newPokemon);
                 newPokemon.hasTrainer = true;
                 newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball); 
                 newPokemon.ChangeFriendshipLevel(120);

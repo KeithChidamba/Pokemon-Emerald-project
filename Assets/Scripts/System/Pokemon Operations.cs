@@ -624,8 +624,8 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         var evoSprite = pokemon.evolutions[evolutionIndex].frontPicture;
         yield return Utility.PokemonEvolutionAnimation(evolutionImage, pokemon.frontPicture, evoSprite);
 
-        var previousName = pokemon.pokemonDisplayName == pokemon.pokemonName?//means it has no nickname
-            pokemon.pokemonName : pokemon.pokemonDisplayName;
+        var previousName = pokemon.pokemonDisplayName;
+        
         pokemon.Evolve(pokemon.evolutions[evolutionIndex]);
         
         StartCoroutine(Utility.FadeImage(evolutionImageMask,Color.white,new Color(255,255,255,0)));
@@ -643,7 +643,8 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayTextOnly($"Congratulations! Your {previousName} evolved into {pokemon.pokemonName}",
                 false);
         }
-
+       
+        
         if (_battleHandler.BattleInProgress)
         {
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
@@ -668,6 +669,23 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         evolutionUi.SetActive(false);
         evolutionImageMask.gameObject.SetActive(false);
         _gameUiHandler.RemoveColorScreen();
+    }
+
+    public static void ResolvePokemonNickName(Pokemon newPokemon)
+    {
+        var invalidNickname = string.IsNullOrEmpty(newPokemon.nickName) ||
+                              string.IsNullOrWhiteSpace(newPokemon.nickName);
+        newPokemon.nickName = invalidNickname? newPokemon.pokemonName : newPokemon.nickName;
+    }
+    
+    public static void UpdatePokemonDisplayName(Pokemon newPokemon,string previousName)
+    {
+        var noNickname = newPokemon.pokemonDisplayName == previousName;
+        if (noNickname)
+        {
+            newPokemon.pokemonDisplayName = newPokemon.pokemonName;
+            newPokemon.nickName = newPokemon.pokemonName;
+        }
     }
 }
 

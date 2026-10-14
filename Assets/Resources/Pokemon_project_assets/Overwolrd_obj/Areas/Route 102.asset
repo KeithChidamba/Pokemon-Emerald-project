@@ -16,18 +16,35 @@ MonoBehaviour:
   entranceCell: {x: 85, y: -81, z: 0}
   biome: 7
   npcList:
-  - npcPosition: {x: 47, y: -85, z: 0}
-    npcAnimationData:
-      spriteData: {fileID: 11400000, guid: f7d1263152928bb618a7a923040f3045, type: 2}
-      movementDirections:
-      - direction: 3
-        numTilesToTravel: 3
-      - direction: 2
-        numTilesToTravel: 2
-      - direction: 1
-        numTilesToTravel: 2
-      - direction: 4
-        numTilesToTravel: 3
-      isIdle: 0
-    npcInteraction: {fileID: 0}
-    npcInteractionMessage: Hey, Im on vacation. Nothing to see here.
+  - npcData:
+      npcPosition: {x: 44, y: -85, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: f7d1263152928bb618a7a923040f3045, type: 2}
+        movementDirections:
+        - direction: 3
+          numTilesToTravel: 3
+        - direction: 2
+          numTilesToTravel: 2
+        - direction: 1
+          numTilesToTravel: 2
+        - direction: 4
+          numTilesToTravel: 3
+        isIdle: 0
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: Isn't this water amazing
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 1
+    detectDistance: 1
+  - npcData:
+      npcPosition: {x: 51, y: -81, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: f7d1263152928bb618a7a923040f3045, type: 2}
+        movementDirections:
+        - direction: 4
+          numTilesToTravel: 0
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: Bill gates is watching!
+    autoDetectPlayer: 1
+    resumeMovementAfterPause: 0
+    detectDistance: 1

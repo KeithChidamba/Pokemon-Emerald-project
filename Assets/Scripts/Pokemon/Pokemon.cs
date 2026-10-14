@@ -437,7 +437,11 @@ public class Pokemon : ScriptableObject
     }
     public void Evolve(Evolution evo)
     {
+        var previousName = pokemonName;
+
         pokemonName = evo.evolutionName;
+        PokemonOperations.UpdatePokemonDisplayName(this,previousName);
+        
         effortValues=evo.effortValues;
         types = evo.types;
         ability = evo.ability;

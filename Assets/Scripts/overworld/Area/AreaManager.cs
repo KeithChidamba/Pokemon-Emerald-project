@@ -14,11 +14,15 @@ public class AreaManager : MonoBehaviour,IInjectable
     public Transform overworldNpcParent;
     public GameObject npcPrefab;
     
+    [SerializeField]private List<NpcLogic> npcLogicScripts = new();
+    [SerializeField]private List<GameObject> npcObjects = new();
+    
     private GameLoadingHandler _gameLoadingHandler;
     private PlayerMovementHandler _playerMovementHandler;
-    
+    private ServiceContainer _container;
     public void Inject(ServiceContainer container)
     {
+        _container = container;
         _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
     }
@@ -29,6 +33,23 @@ public class AreaManager : MonoBehaviour,IInjectable
         overworldAreas.Clear();
         var areas =  Resources.LoadAll<AreaData>(DirectoryHandler.GetDirectory(AssetDirectory.Areas));
         overworldAreas.AddRange(areas);
+    }
+    
+    public OverworldInteractable CheckForNpcPosition(Vector3 positionToCheck)
+    {
+        foreach (var npc in npcLogicScripts)
+        {
+            if (npc.movementHandler.Moving)
+            {
+                continue;
+            }
+            if (npc.transform.position != positionToCheck)
+            {
+                continue;
+            }
+            return npc.npcInteractable;
+        }
+        return null;
     }
     
     public void TeleportToArea(AreaName areaName)
@@ -43,9 +64,36 @@ public class AreaManager : MonoBehaviour,IInjectable
     }
     private void SetArea(AreaData newArea)
     {
-        currentArea?.UnloadNpcObjects();
+        if (currentArea is not null)
+        {
+            if (currentArea.npcList.Count > 0)
+            {
+                foreach (var obj in npcObjects)
+                {
+                    Destroy(obj);
+                }
+                npcObjects.Clear();
+                npcLogicScripts.Clear();
+            }
+        }
+        
         currentArea = newArea;
-        currentArea.LoadNpcObjects(npcPrefab,overworldNpcParent);
+        if (currentArea.npcList.Count > 0)
+        {
+            foreach (var npc in currentArea.npcList)
+            {
+                var npcInstance = Instantiate(npcPrefab, npc.npcData.npcPosition, npcPrefab.transform.rotation,
+                    overworldNpcParent);
+                var npcLogic = npcInstance.GetComponentInChildren<NpcLogic>();
+                
+                npcLogic.Inject(_container,npc);
+                
+                npcLogicScripts.Add(npcLogic);
+                npcObjects.Add(npcInstance);
+                npcInstance.SetActive(true);
+            }
+        }
+
         _gameLoadingHandler.playerData.location = currentArea.areaName;
         DetermineSongForArea(currentArea.areaName);
     }

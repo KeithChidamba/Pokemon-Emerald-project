@@ -90,7 +90,7 @@ public class InteractionHandler : MonoBehaviour,IInjectable
         {
             if (InputSourceHandler.InputPressed(ControlEvent.Confirm))
             {
-                var possibleNpcInteractable = _areaManager.currentArea.CheckForNpcPosition(tileInFrontOfPlayer);
+                var possibleNpcInteractable = _areaManager.CheckForNpcPosition(tileInFrontOfPlayer);
                 if (possibleNpcInteractable is not null) 
                 {
                     SoundManager.Play(UiId.Select);

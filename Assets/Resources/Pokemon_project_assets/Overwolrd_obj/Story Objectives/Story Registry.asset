@@ -54,12 +54,13 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 9b3b4e0b68ad6be848e7d3432b70e894, type: 2}
     - {fileID: 11400000, guid: ad3a00490c73c17359540aacd2d57ae2, type: 2}
     - {fileID: 11400000, guid: f069e0704149c3a1bbcf79007a255d66, type: 2}
+    - {fileID: 11400000, guid: 033cf4dbaead1c177af00b0ad77189b9, type: 2}
     - {fileID: 11400000, guid: 68b92328912dfa0e8bfb81565bbfd0c4, type: 2}
     - {fileID: 11400000, guid: 2d7753e9efc706007a3370714ccdef96, type: 2}
     - {fileID: 11400000, guid: 97bd36b9797dbca06bdcfdc57c6fd235, type: 2}
     - {fileID: 11400000, guid: 7c58ee7aafd2da1d287b019b6553af15, type: 2}
-    - {fileID: 11400000, guid: ae400c71242c28d6f80f34f9b2d42d6f, type: 2}
     - {fileID: 11400000, guid: d20ce8b01d181c41481ed7d8b40ab273, type: 2}
+    - {fileID: 11400000, guid: ae400c71242c28d6f80f34f9b2d42d6f, type: 2}
   - section: 5
     storyObjectives:
     - {fileID: 11400000, guid: a85fc1b5e0b23823c8feb0764d3d687e, type: 2}

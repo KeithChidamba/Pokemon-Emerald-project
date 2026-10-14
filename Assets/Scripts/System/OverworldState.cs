@@ -303,19 +303,18 @@ public class OverworldState : MonoBehaviour,IInjectable
     {
         jsonLoadedTreeData.Add(treeData);
     }
-    public IEnumerator SaveOverworldData()
+    public void SaveOverworldData()
     {
         foreach (var tree in overworldBerryTrees)
         {
             tree.treeData.SetLastLogin(DateTime.Now);
-            var randomID = Utility.Random16Bit();//prevent duplicate json file names
+            //prevent duplicate json file names
+            var randomID = Utility.Random16Bit();
             _saveHandler.SaveDataAsJson(tree.treeData,$"{tree.treeData.berryItem.itemName} {randomID}",SaveDataDirectory.BerryTrees);
         }
-        yield return new WaitForSeconds(1f);
-        
+       
         _saveHandler.SaveDataAsJson(_loadedPickupRegistry,"Item pickup registry",SaveDataDirectory.OverworldItemPickupRegistry);
-        yield return new WaitForSeconds(0.02f);
-
+       
         int objectiveCount = 0;
         foreach (var pair in _storyObjectiveGroups)
         {
@@ -325,17 +324,20 @@ public class OverworldState : MonoBehaviour,IInjectable
         
         storyProgress.allObjectivesComplete = objectiveCount == 0;
         
-        var fullSize =
-            storyObjectiveRegistry.storyObjectiveGroups
-                .First(group => group.section == currentObjectiveGroup).storyObjectives.Count;
-        var currentGroupCount = _storyObjectiveGroups[currentObjectiveGroup].Count;
-        
-        storyProgress.numRemainingInGroup = fullSize - currentGroupCount;
-        
+        if (storyProgress.allObjectivesComplete)
+        {
+            storyProgress.lastActiveGroup = currentObjectiveGroup;
+            storyProgress.numRemainingInGroup = 0;
+        }
+        else
+        {
+            var fullSize =
+                storyObjectiveRegistry.storyObjectiveGroups
+                    .First(group => group.section == currentObjectiveGroup).storyObjectives.Count;
+            var currentGroupCount = _storyObjectiveGroups[currentObjectiveGroup].Count;
+            storyProgress.numRemainingInGroup = fullSize - currentGroupCount;
+        }
         storyProgress.lastActiveGroup = currentObjectiveGroup;
-        
         _saveHandler.SaveDataAsJson(storyProgress,"Story Progress",SaveDataDirectory.StoryObjectiveProgress);
-        
-        yield return null;
     }
 }

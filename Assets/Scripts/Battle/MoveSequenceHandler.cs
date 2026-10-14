@@ -498,9 +498,8 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                 }
             }
 
-            PlayEffectivenessSound(data.effectivenessScore);
+            StartCoroutine(_battleVisualsHandler.DisplayDamageTakenVisual(data));
             
-            StartCoroutine(_battleVisualsHandler.DisplayDamageTakenVisual(data.affectedParticipant,data.damageSource));
             yield return new WaitForSecondsRealtime(0.5f);
             
             var healthAfterChange = Mathf
@@ -542,16 +541,6 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                 :"It's not very effective!";
         }
         _dialogueHandler.DisplayBattleInfo(message);
-    }
-    private void PlayEffectivenessSound(float typeEffectiveness)
-    {
-        if (Mathf.FloorToInt(typeEffectiveness) == 1)
-        {
-            SoundManager.Play(SfxId.HitNormal);
-            return;
-        }
-        SoundManager.Play(typeEffectiveness > 1? SfxId.HitSuperEffective
-            :SfxId.HitNotVeryEffective);
     }
     
     private void DealDamage(Move move,BattleParticipant attacker, BattleParticipant victim)

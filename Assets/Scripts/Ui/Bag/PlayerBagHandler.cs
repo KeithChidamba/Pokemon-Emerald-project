@@ -126,7 +126,9 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         _dialogueHandler.DisplayCustomOptions("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
               new[]{"Yes", "No"},new Action[] { SellItem, LeaveStore },"Sure, which item?");
         
-        _inputStateHandler.ResetGroupUi(InputStateGroup.Bag);
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagItemSell,true);
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagNavigation,true);
+        return;
         void SellItem()
         {
             currentBagUsage = BagUsage.SellingView;

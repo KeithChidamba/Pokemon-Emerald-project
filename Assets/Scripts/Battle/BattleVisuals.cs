@@ -164,10 +164,15 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             yield return new WaitForSeconds(1.75f);
         }
     }
-    public IEnumerator DisplayDamageTakenVisual(BattleParticipant participant,DamageSource damageSource)
+    
+    public IEnumerator DisplayDamageTakenVisual(DamageDisplayData data)
     {
+        BattleParticipant participant = data.affectedParticipant;
+        DamageSource damageSource = data.damageSource;
+        
         if(damageSource == DamageSource.Normal)
         {
+            PlayEffectivenessSound(data.effectivenessScore);
             for (int i = 0; i < 4; i++)
             {
                 yield return new WaitForSeconds(0.2f);
@@ -216,6 +221,16 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             SoundManager.Play(SfxId.StatusBurn);
             yield return StartCoroutine(SlideRect(rect,start,target,165f));
         }
+    }
+    private void PlayEffectivenessSound(float typeEffectiveness)
+    {
+        if (Mathf.FloorToInt(typeEffectiveness) == 1)
+        {
+            SoundManager.Play(SfxId.HitNormal);
+            return;
+        }
+        SoundManager.Play(typeEffectiveness > 1? SfxId.HitSuperEffective
+            :SfxId.HitNotVeryEffective);
     }
     public static IEnumerator SlideRect(RectTransform rect, Vector2 start, Vector2 target, float speed)
     {

@@ -160,13 +160,12 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
         }
     }
 
-    public IEnumerator SaveStorageData()
+    public void SaveStorageData()
     {
         foreach (var box in storageBoxes)
         {
             _saveDataHandler.SaveDataAsJson(box,"Box "+ box.boxNumber,SaveDataDirectory.PCStorage);
         }
-        yield return null;
     }
     private IEnumerator ActivateSelectorAnimation()
     {

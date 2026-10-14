@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5de6c4f45531cfbabe3a0b40548abf4, type: 3}
+  m_Name: Get nugget from Sensei
+  m_EditorClassIdentifier: 
+  objectiveHeading: 
+  objectiveType: 11
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -16
+  npcName: Sensei
+  npcData:
+    npcPosition: {x: 67, y: -14, z: 0}
+    npcAnimationData:
+      spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+      movementDirections: []
+      isIdle: 0
+    npcInteraction: {fileID: 0}
+    npcInteractionMessage: And take this nugget as well, it's ver valuabe and will
+      sell for a lot. Speak to the lady at the market
+  removeAfterInteraction: 0
+  facePlayer: 1

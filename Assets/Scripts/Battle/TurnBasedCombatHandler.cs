@@ -404,6 +404,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         ClearTurn();
         OnTurnsCompleted?.Invoke();
         
+        if (_battleHandler.BattleOver) yield break;
+        
         //check held item and status effect
         var validList = _battleHandler.GetValidParticipants();
         foreach (var participant in validList)

@@ -6073,6 +6073,16 @@ MonoBehaviour:
       duckMusicInstead: 1
       loop: 1
       lastClipIndex: -1
+  - id: 7
+    data:
+      clips:
+      - {fileID: 8300000, guid: 4cfda847293112f4ca444cc9f5e28a9f, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 1
+      lastClipIndex: -1
   jingleSounds:
   - id: 3
     data:
@@ -306933,7 +306943,7 @@ MonoBehaviour:
   canUseBike: 1
   xAxisInput: 0
   yAxisInput: 0
-  currentDirection: 0
+  currentDirection: 1
   animationManager: {fileID: 1606520307}
   canMove: 1
   interactionPoint: {fileID: 1418617663}
@@ -312672,6 +312682,8 @@ MonoBehaviour:
   storyNpcParent: {fileID: 1788304974}
   overworldNpcParent: {fileID: 512971112}
   npcPrefab: {fileID: 5931035006789077960, guid: f34cef32b6fa90dce85a1e1f57055848, type: 3}
+  npcLogicScripts: []
+  npcObjects: []
 --- !u!1 &1560667608
 GameObject:
   m_ObjectHideFlags: 0

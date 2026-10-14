@@ -34,14 +34,6 @@ public class NpcMovement : MonoBehaviour
     private Coroutine _patrolRoutine;
     private Coroutine _specificRoutine;
     
-    private void OnDisable()
-    {
-        if (animationData.isIdle) return;
-        
-        StopMovement();
-        SetSprites(_currentSpriteData.idleSprite);
-    }
-
     private void OnEnable()
     {
         if (isControlled)
@@ -106,6 +98,12 @@ public class NpcMovement : MonoBehaviour
         if (animationRoutine != null) { StopCoroutine(animationRoutine); animationRoutine = null; }
     }
 
+    public void ResumeMovement()
+    {
+        SwitchMove();
+        canMove = true;
+        _patrolRoutine = StartCoroutine(MovementLoop());
+    }
     public void StopMovement(bool snapPosition = true)
     {
         CancelRoutines();
@@ -125,14 +123,10 @@ public class NpcMovement : MonoBehaviour
         movePoint.position = snapped;
         transform.position = snapped;
     }
-
-  
     public void SetPauseDelay(float delay)
     {
         movePause = new WaitForSeconds(delay);
     }
-   
-
     private IEnumerator Animate()
     {
         while (Moving)

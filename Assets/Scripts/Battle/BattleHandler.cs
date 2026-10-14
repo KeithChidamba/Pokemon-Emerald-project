@@ -888,7 +888,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
                     }
                     break;
                 case BattleEndState.PokemonWasCaught:
-                    //Display nothing
+                    SoundManager.PlayMusic(MusicId.VictoryWild);
                     break;
                 case BattleEndState.PlayerLost:
                     if (isTrainerBattle)

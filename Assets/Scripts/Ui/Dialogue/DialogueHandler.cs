@@ -35,6 +35,9 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     
     public event Action<OverworldInteractable> OnOptionsDisplayed;
     public event Action<Interaction> OnDialogueStarted;
+    /// <summary>
+    /// The interaction exposed here can be null, so self validate it
+    /// </summary>
     public event Action<Interaction> OnDialogueEnded;
     public event Action<string> OnDialogueDisplayed;
     private BattleHandler _battleHandler;

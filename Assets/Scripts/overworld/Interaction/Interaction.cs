@@ -40,6 +40,5 @@ public enum OverworldInteractionType
     PlantBerry,
     PickBerry,
     WaterBerryTree,
-    PokemonCenter,
-    Battle
+    PokemonCenter,Battle
 }

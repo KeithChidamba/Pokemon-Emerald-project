@@ -27,7 +27,7 @@ MonoBehaviour:
       movementDirections: []
       isIdle: 0
     npcInteraction: {fileID: 0}
-    npcInteractionMessage: Your raichu look strong good job. Ok now we are set to
+    npcInteractionMessage: Your raichu looks strong good job. Ok now we are set to
       setup your first pokemon fight in the tall grass. Ride your bike back to garden
   removeAfterInteraction: 0
   facePlayer: 1

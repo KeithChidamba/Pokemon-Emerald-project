@@ -1,0 +1,73 @@
+{
+    "isPlanted": true,
+    "minYield": 1,
+    "maxYield": 5,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Qualot berry",
+    "berryItem": {
+        "instanceID": 26946
+    },
+    "minutesPerStage": 180,
+    "spriteData": [
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33204
+                },
+                {
+                    "instanceID": 33204
+                }
+            ],
+            "growthStageNumber": 0
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33206
+                },
+                {
+                    "instanceID": 33208
+                }
+            ],
+            "growthStageNumber": 1
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33344
+                },
+                {
+                    "instanceID": 33346
+                }
+            ],
+            "growthStageNumber": 2
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33348
+                },
+                {
+                    "instanceID": 33350
+                }
+            ],
+            "growthStageNumber": 3
+        },
+        {
+            "growthStageSprites": [
+                {
+                    "instanceID": 33352
+                },
+                {
+                    "instanceID": 33354
+                }
+            ],
+            "growthStageNumber": 4
+        }
+    ],
+    "soilIndex": 6,
+    "lastLogin": "2026-10-14T16:37:43.3599500+02:00"
+}

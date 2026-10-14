@@ -131,7 +131,7 @@ public class TestingUtilities
                createdPokemon.ability = member.specificAbility ?? createdPokemon.ability;
                 
                createdPokemon.moveSet.Clear();
-
+               
                var invalidNickname = string.IsNullOrEmpty(member.nickName) ||
                                      string.IsNullOrWhiteSpace(member.nickName);
                 

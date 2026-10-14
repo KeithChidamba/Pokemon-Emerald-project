@@ -294,11 +294,14 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                     if(party[selectedMemberIndex] != party[memberToMove])
                     {
                         var swapStore = party[selectedMemberIndex];
+                        
+                        _dialogueHandler.DisplayDetails($"You swapped {party[memberToMove].pokemonDisplayName}" +
+                                                        $" with {swapStore.pokemonDisplayName}");
+                        
                         party[selectedMemberIndex] = party[memberToMove];
                         party[memberToMove] = swapStore;
                         moving = false;
-                        _dialogueHandler.DisplayDetails($"You swapped {party[memberToMove].pokemonDisplayName}" +
-                                                        $" with {swapStore.pokemonDisplayName}");
+                       
                         UpdatePartyUsageMessage("Choose a pokemon");
                         memberToMove = 0;
                         selectedMemberIndex = 0;
@@ -421,10 +424,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     }
     private void CompletePokemonAddition(Pokemon newPokemon)
     {
-        var invalidNickname = string.IsNullOrEmpty(newPokemon.nickName) ||
-                              string.IsNullOrWhiteSpace(newPokemon.nickName);
-                
-        newPokemon.nickName = invalidNickname? newPokemon.pokemonName : newPokemon.nickName;
+        PokemonOperations.ResolvePokemonNickName(newPokemon);
         
         if (party.Count < maxNumMembers)
         {

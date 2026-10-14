@@ -43,7 +43,7 @@ public class PlayerBagInputService : IInputGroup
         _inputStateHandler.OnInputDown += _playerBagHandler.NavigateDown;
         
         ref InputState currentState = ref _inputStateHandler.currentState;
-        currentState.currentSelectionIndex = 0;
+        
         if(_playerBagHandler.NumItems==0)
         {
             currentState.displayingSelector = false;
@@ -54,10 +54,13 @@ public class PlayerBagInputService : IInputGroup
         {
             //prevent selecting null item selectables
             currentState.maxSelectableIndex = _playerBagHandler.NumItems-1;
-            _inputStateHandler.UpdateSelectorUi();
         }
+        
+        _inputStateHandler.ChangeSelectionIndex(0);//clamp index, just in-case
+        _inputStateHandler.UpdateSelectorUi();
         currentState.displayingSelector = true;
         _playerBagHandler.itemSelector.SetActive(true);
+        
         switch (_playerBagHandler.currentBagUsage)
         {
             case BagUsage.SellingView:

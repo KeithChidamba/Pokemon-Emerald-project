@@ -3,16 +3,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NpcLogic : MonoBehaviour,IInjectable
+public class NpcLogic : MonoBehaviour
 {
-    public NpcMovement movementHandler; 
-    public bool autoDetectPlayer;
-    [SerializeField]private float detectDistance = 1f;
-    public OverworldInteractable npcInteractable;
-    [SerializeField]private bool constantScan;
+    public NpcMovement movementHandler;
+    public OverwolrdNpcData overworldData;
     [SerializeField]private bool playerDetected;
-    private Action _runDialogueInteraction;
+    [SerializeField]private bool constantScan;
     private bool _longDistanceDetection;
+    private Action _runDialogueInteraction;
+    
+    public OverworldInteractable npcInteractable;
+    
     /// <summary>
     /// Called when the npc is destroyed, is nullified after invoke
     /// </summary>
@@ -20,19 +21,30 @@ public class NpcLogic : MonoBehaviour,IInjectable
     
     private DialogueHandler _dialogueHandler;
     private PlayerMovementHandler _playerMovement;
-    private InteractionOptionsEventHandler interactionOptionsHandler;
+    private BattleHandler _battleHandler;
     
-    public void Inject(ServiceContainer container)
+    public void Inject(ServiceContainer container,OverwolrdNpcData data)
     {
-        interactionOptionsHandler = container.Resolve<InteractionOptionsEventHandler>();
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _playerMovement = container.Resolve<PlayerMovementHandler>();
-    }
-
-    public void OnInject()
-    {
+        _battleHandler = container.Resolve<BattleHandler>();
+        
+        overworldData = data;
+        movementHandler.animationData = data.npcData.npcAnimationData;
+        if (data.npcData.npcInteraction is null)
+        {
+            var newInteraction = ScriptableObject.CreateInstance<Interaction>();
+            newInteraction.dialogueType = DialogType.Details;
+            newInteraction.interactionMessage = data.npcData.npcInteractionMessage;
+            npcInteractable.interaction = newInteraction;
+        }
+        else
+        {
+            npcInteractable.interaction = data.npcData.npcInteraction;
+        }
+        
         playerDetected = false;
-        if (autoDetectPlayer)
+        if (overworldData.autoDetectPlayer)
         {
             if (movementHandler.animationData.isIdle)
             {
@@ -44,20 +56,45 @@ public class NpcLogic : MonoBehaviour,IInjectable
                 movementHandler.OnMovementStarted += ()=> constantScan = false;
             }
         }
-        interactionOptionsHandler.OnEventInteraction += PauseForInteraction;
+        _dialogueHandler.OnDialogueStarted += PauseForInteraction;
+        _dialogueHandler.OnDialogueEnded += ResumeAfterInteraction;
         _playerMovement.OnNewTile += DetectPlayer;
+        
+        OnObjectDestroy += () =>
+        {
+            _dialogueHandler.OnDialogueStarted -= PauseForInteraction;
+            _dialogueHandler.OnDialogueEnded -= ResumeAfterInteraction;
+            _playerMovement.OnNewTile -= DetectPlayer;
+        };
     }
 
+    private void ResumeAfterInteraction(Interaction interaction)
+    {
+        if(!overworldData.resumeMovementAfterPause)return;
+        if(interaction is null) return;
+        if(interaction.GetID != npcInteractable.interaction.GetID) return;
+        if(interaction.overworldInteraction == OverworldInteractionType.Battle)
+        {
+            _battleHandler.OnBattleEnd += ResumeAfterBattle;
+            return;
+            void ResumeAfterBattle()
+            {
+                _battleHandler.OnBattleEnd -= ResumeAfterBattle;
+                movementHandler.ResumeMovement();
+            }
+        }
+        movementHandler.ResumeMovement();
+    }
+    
     private void PauseForInteraction(Interaction interaction)
     {
-        if(interaction.overworldInteraction!=OverworldInteractionType.Battle)return;
         if(interaction.GetID != npcInteractable.interaction.GetID) return;
         
         if (_longDistanceDetection)
         {
             movementHandler.OnMovementPaused -= _runDialogueInteraction;
         }
-
+        
         if (!playerDetected)
         {
             //if the player is the one who interacted with npc
@@ -79,7 +116,7 @@ public class NpcLogic : MonoBehaviour,IInjectable
 
         playerDetected = false;
 
-        for (int i = 1; i <= detectDistance; i++)
+        for (int i = 1; i <= overworldData.detectDistance; i++)
         {
             Vector3 checkPos = npcPos + (Vector3)(direction * i);
 
@@ -109,7 +146,6 @@ public class NpcLogic : MonoBehaviour,IInjectable
                 _dialogueHandler.StartInteraction(npcInteractable.interaction);
             };
             movementHandler.OnMovementEnded += _runDialogueInteraction;
-            
             movementHandler.MoveToSpecific(movementHandler.GetCurrentDirection(),distance-1);
         }
         else
